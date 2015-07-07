@@ -55,6 +55,9 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
     }
 
     function getData() {
+
+        $scope.isGettingStrategies = true;
+
         var name = $scope.name != undefined ? $scope.name : '';
         var description = $scope.description != undefined ? $scope.description : '';
         var pageInfo = mainGridAPI.getPageInfo();
@@ -65,6 +68,8 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
                 itm.IsDefaultText = itm.IsDefault ? "Default" : "Not Default";
                 $scope.strategies.push(itm);
             });
+        }).finally(function () {
+            $scope.isGettingStrategies = false;
         });
     }
 

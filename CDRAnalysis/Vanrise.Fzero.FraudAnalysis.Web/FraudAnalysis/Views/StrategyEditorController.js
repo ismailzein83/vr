@@ -7,15 +7,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     defineScope();
     load();
 
-
-
-
-
-
-
-
-
-
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
         $scope.strategyId = undefined;
@@ -28,9 +19,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         else
             editMode = false;
     }
-
-
-
 
     function defineScope() {
         $scope.strategyFilters = [];
@@ -48,8 +36,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
         $scope.hours = [
-                         { id: 0, name: '12:00 AM' }, { id: 1, name: '01:00 AM' },   { id: 2, name: '02:00 AM' },  { id: 3, name: '03:00 AM' }, { id: 4, name: '04:00 AM' }, { id: 5, name: '05:00 AM' },
-                         { id: 6, name: '06:00 AM' }, { id: 7, name: '07:00 AM' },   { id: 8, name: '08:00 AM' },  { id: 9, name: '09:00 AM' }, { id: 10, name: '10:00 AM' }, { id: 11, name: '11:00 AM' },
+                         { id: 0, name: '12:00 AM' }, { id: 1, name: '01:00 AM' }, { id: 2, name: '02:00 AM' }, { id: 3, name: '03:00 AM' }, { id: 4, name: '04:00 AM' }, { id: 5, name: '05:00 AM' },
+                         { id: 6, name: '06:00 AM' }, { id: 7, name: '07:00 AM' }, { id: 8, name: '08:00 AM' }, { id: 9, name: '09:00 AM' }, { id: 10, name: '10:00 AM' }, { id: 11, name: '11:00 AM' },
                          { id: 12, name: '12:00 PM' }, { id: 13, name: '01:00 PM' }, { id: 14, name: '02:00 PM' }, { id: 15, name: '03:00 PM' }, { id: 16, name: '04:00 PM' }, { id: 17, name: '05:00 PM' },
                          { id: 18, name: '06:00 PM' }, { id: 19, name: '07:00 PM' }, { id: 20, name: '08:00 PM' }, { id: 21, name: '09:00 PM' }, { id: 22, name: '10:00 PM' }, { id: 23, name: '11:00 PM' }
 
@@ -57,7 +45,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
 
-       
+
 
         $scope.strategyLevels = [];
 
@@ -70,12 +58,12 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
             angular.forEach($scope.strategyFilters, function (filter) {
 
-                    var levelCriteriaItem = {
-                        filterId: filter.filterId,
-                        percentage: $scope.percentages[3]
-                    };
-                    strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem);
-               
+                var levelCriteriaItem = {
+                    filterId: filter.filterId,
+                    percentage: $scope.percentages[3]
+                };
+                strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem);
+
             });
 
             $scope.strategyLevels.push(strategyLevelItem);
@@ -134,14 +122,14 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
     function buildStrategyObjFromScope() {
-        
+
         var strategyObject = {
             Id: ($scope.strategyId != null) ? $scope.strategyId : 0,
             Name: $scope.name,
             Description: $scope.description,
             IsDefault: $scope.isDefault,
-            GapBetweenConsecutiveCalls:$scope.gapbetweenconsecutivecalls,
-            MaxLowDurationCall:$scope.maxLowDurationCall,
+            GapBetweenConsecutiveCalls: $scope.gapbetweenconsecutivecalls,
+            MaxLowDurationCall: $scope.maxLowDurationCall,
             MinimumCountofCallsinActiveHour: $scope.minCountofCallsinActiveHour,
             PeakHours: $scope.selectedPeakHours,
             StrategyFilters: [],
@@ -152,8 +140,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
         angular.forEach($scope.strategyFilters, function (filter) {
-            if (filter.isSelected)
-            {
+            if (filter.isSelected) {
                 var filterItem = {
                     FilterId: filter.filterId,
                     Description: filter.description,
@@ -168,7 +155,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
                 strategyObject.StrategyFilters.push(filterItem);
             }
-           
+
         });
 
 
@@ -176,7 +163,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
         angular.forEach($scope.strategyLevels, function (level) {
-           
+
             var strategyLevelItem = {
                 SuspicionLevelId: level.suspicionLevel.id,
                 StrategyLevelCriterias: []
@@ -184,14 +171,14 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
 
-           
+
 
             var index = 0;
             angular.forEach(level.StrategyLevelCriterias, function (levelCriteria) {
 
                 if ($scope.strategyFilters[index].isSelected && levelCriteria.isSelected) {
 
-                   
+
 
                     var levelCriteriaItem = {
                         FilterId: $scope.strategyFilters[index].filterId
@@ -213,7 +200,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
         });
-       
+
         return strategyObject;
     }
 
@@ -227,15 +214,13 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             };
             $scope.strategyFilters.push(filterItem);
         });
-
-
     }
 
     function fillScopeFromStrategyObj(strategyObject) {
         $scope.name = strategyObject.Name;
         $scope.description = strategyObject.Description;
         $scope.isDefault = strategyObject.IsDefault;
-        $scope.gapbetweenconsecutivecalls=strategyObject.GapBetweenConsecutiveCalls;
+        $scope.gapbetweenconsecutivecalls = strategyObject.GapBetweenConsecutiveCalls;
         $scope.maxLowDurationCall = strategyObject.MaxLowDurationCall;
         $scope.minCountofCallsinActiveHour = strategyObject.MinimumCountofCallsinActiveHour;
 
@@ -249,7 +234,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             $scope.selectedPeakHours.push(peakHourItem);
         });
 
-
+        $scope.isGettingFilters = true;
         angular.forEach($scope.filterDefinitions, function (filterDef) {
 
             var filterItem = {
@@ -267,12 +252,13 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                     filterItem.period = UtilsService.getItemByVal($scope.periods, existingItem.PeriodId, "Id");
             }
             $scope.strategyFilters.push(filterItem);
-            
+
         });
 
-       
+
+        $scope.isGettingSuspicionLevels = true;
         angular.forEach(strategyObject.StrategyLevels, function (level) {
-            
+
             var strategyLevelItem = {
                 suspicionLevel: UtilsService.getItemByVal($scope.suspicionLevels, level.SuspicionLevelId, "id"),
                 StrategyLevelCriterias: []
@@ -287,7 +273,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
                 var existingItem = UtilsService.getItemByVal(level.StrategyLevelCriterias, filterDef.filterId, "FilterId");
                 if (existingItem != undefined && existingItem != null) {
-                    levelCriteriaItem.isSelected = true ;
+                    levelCriteriaItem.isSelected = true;
 
                     if (existingItem.Percentage != undefined)
                         levelCriteriaItem.percentage = UtilsService.getItemByVal($scope.percentages, existingItem.Percentage, "value");
@@ -298,9 +284,9 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
             $scope.strategyLevels.push(strategyLevelItem);
         });
-              
 
-        
+
+
 
     }
 
@@ -372,7 +358,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     StrategyEditorController.isLevelsTabShow = false;
 
     StrategyEditorController.viewVisibilityChanged = function () {
-      
+
         isFilterTabShown = !isFilterTabShown;
         isLevelsTabShow = !isLevelsTabShow;
     };

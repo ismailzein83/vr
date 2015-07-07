@@ -121,6 +121,7 @@
     <None Include="Properties\PublishProfiles\New.pubxml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\SuspicionAnalysisController.cs" />
     <Compile Include="Controllers\StrategyController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

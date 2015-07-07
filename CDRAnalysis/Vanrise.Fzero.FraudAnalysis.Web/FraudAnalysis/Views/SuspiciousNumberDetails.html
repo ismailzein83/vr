@@ -45,7 +45,7 @@
                                 <div ng-show="ctrl.isNormalCDRTabShown" vr-loader="isGettingNormalCDRs">
                                     <vr-datagrid datasource="normalCDRs" maxheight="300px" loadmoredata="loadMoreDataNormalCDRs" on-ready="onNormalCDRsGridReady">
                                         <vr-datagridcolumn headertext="'IMSI'" field="'IMSI'" widthfactor="13">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Connect'" field="'ConnectDateTime'" widthfactor="17">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Connect'" field="'ConnectDateTime'" type="'Datetime'" widthfactor="17"></vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Duration'" field="'DurationInSeconds'" widthfactor="5">  </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Class'" field="'CallClass'" widthfactor="10">  </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Type'" field="'CallType'" widthfactor="10">  </vr-datagridcolumn>
@@ -61,10 +61,8 @@
                                 </div>
                                 <div ng-show="ctrl.isNumberProfileTabShown" vr-loader="isGettingNumberProfiles">
                                     <vr-datagrid datasource="numberProfiles" maxheight="300px" rotate="true" loadmoredata="loadMoreDataNumberProfiles" on-ready="onNumberProfilesGridReady">
-
-                                        <vr-datagridcolumn headertext="'From Date'" widthfactor="25">{{dataItem.FromDate | date:'yyyy-MM-dd hh:mm' }}</vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'To Date'" widthfactor="25">{{dataItem.ToDate | date:'yyyy-MM-dd hh:mm' }}</vr-datagridcolumn>
-
+                                        <vr-datagridcolumn headertext="'From Date'" field="'FromDate'" type="'Datetime'" widthfactor="25"></vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'To Date'" field="'ToDate'" type="'Datetime'" widthfactor="25"></vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'CountOutCalls'" field="'CountOutCalls'">  </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'DiffOutputNumb'" field="'DiffOutputNumb'">  </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'CountOutInter'" field="'CountOutInter'">  </vr-datagridcolumn>

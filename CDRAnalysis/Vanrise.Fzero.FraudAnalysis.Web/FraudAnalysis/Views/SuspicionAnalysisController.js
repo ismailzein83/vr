@@ -4,12 +4,12 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
     var mainGridAPI;
     var arrMenuAction = [];
-    
+
     defineScope();
     load();
 
-       
-   
+
+
 
     function defineScope() {
 
@@ -62,7 +62,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
         };
 
         $scope.loadMoreData = function () {
-           return getData();
+            return getData();
         }
 
         $scope.searchClicked = function () {
@@ -77,7 +77,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
             var Yesterday = new Date();
             Yesterday.setDate(Yesterday.getDate() - 1);
-           
+
 
             $scope.fromDate = Yesterday;
             $scope.toDate = Now;
@@ -90,7 +90,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
     }
 
     function load() {
-        
+
     }
 
 
@@ -133,6 +133,9 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
 
     function getData() {
+
+        $scope.isGettingFraudResults = true;
+
         var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
         var toDate = $scope.toDate != undefined ? $scope.toDate : '';
 
@@ -143,11 +146,11 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
             strategyId = 0;
 
         var suspicionLevelsList = '';
-        
+
         angular.forEach($scope.selectedSuspicionLevels, function (itm) {
             suspicionLevelsList = suspicionLevelsList + itm.id + ','
         });
-        
+
 
         var pageInfo = mainGridAPI.getPageInfo();
 
@@ -156,15 +159,16 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
         console.log('suspicionLevelsList.slice(0, -1)')
         console.log(suspicionLevelsList.slice(0, -1))
 
-        //return SuspicionAnalysisAPIService.GetFilteredSuspiciousNumbers(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, null, null).then(function (response) {
 
-            return SuspicionAnalysisAPIService.GetFilteredSuspiciousNumbers(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, strategyId, suspicionLevelsList.slice(0, -1)).then(function (response) {
+        return SuspicionAnalysisAPIService.GetFilteredSuspiciousNumbers(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, strategyId, suspicionLevelsList.slice(0, -1)).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.fraudResults.push(itm);
             });
+        }).finally(function () {
+            $scope.isGettingStrategies = false;
         });
     }
 
-   
+
 }
 appControllers.controller('FraudAnalysis_SuspicionAnalysisController', SuspicionAnalysisController);

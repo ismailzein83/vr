@@ -7,7 +7,7 @@
     });
 
     function GetNormalCDRs(fromRow, toRow, fromDate, toDate, msisdn) {
-        return BaseAPIService.get("/api/Strategy/GetNormalCDRs",
+        return BaseAPIService.get("/api/SuspicionAnalysis/GetNormalCDRs",
             {
                 fromRow: fromRow,
                 toRow: toRow,
@@ -21,7 +21,7 @@
 
 
     function GetNumberProfiles(fromRow, toRow, fromDate, toDate, subscriberNumber) {
-        return BaseAPIService.get("/api/Strategy/GetNumberProfiles",
+        return BaseAPIService.get("/api/SuspicionAnalysis/GetNumberProfiles",
         {
             fromRow: fromRow,
             toRow: toRow,
@@ -34,16 +34,14 @@
 
     function GetFilteredSuspiciousNumbers(fromRow, toRow, fromDate, toDate, strategyId, suspicionLevelsList) {
 
-        alert('fix here GetFilteredSuspiciousNumbers (Service)')
-
-        return BaseAPIService.get("/api/Strategy/GetFilteredSuspiciousNumbers",
+        return BaseAPIService.get("/api/SuspicionAnalysis/GetFilteredSuspiciousNumbers",
             {
                 fromRow: fromRow,
                 toRow: toRow,
                 fromDate: fromDate,
                 toDate: toDate,
-                strategyId: 4,
-                suspicionLevelsList: '4,3,2',
+                strategyId: strategyId,
+                suspicionLevelsList: suspicionLevelsList,
             }
            );
     }
