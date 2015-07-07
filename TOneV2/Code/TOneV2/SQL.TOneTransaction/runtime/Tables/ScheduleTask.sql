@@ -2,6 +2,7 @@
     [ID]            INT            IDENTITY (1, 1) NOT NULL,
     [Name]          VARCHAR (255)  NOT NULL,
     [IsEnabled]     BIT            NOT NULL,
+    [TaskType]      INT            NOT NULL,
     [Status]        INT            NOT NULL,
     [LastRunTime]   DATETIME       NULL,
     [NextRunTime]   DATETIME       NULL,
@@ -13,6 +14,8 @@
     CONSTRAINT [FK_ScheduleTask_SchedulerTaskActionType] FOREIGN KEY ([ActionTypeId]) REFERENCES [runtime].[SchedulerTaskActionType] ([ID]),
     CONSTRAINT [FK_ScheduleTask_SchedulerTaskTriggerType] FOREIGN KEY ([TriggerTypeId]) REFERENCES [runtime].[SchedulerTaskTriggerType] ([ID])
 );
+
+
 
 
 

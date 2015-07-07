@@ -6,6 +6,7 @@
 CREATE PROCEDURE [runtime].[sp_SchedulerTask_Insert] 
 	@Name Nvarchar(255),
 	@IsEnabled bit,
+	@TaskType int,
 	@Status bit,
 	@TriggerTypeId int,
 	@TaskTrigger varchar(1000),
@@ -14,8 +15,8 @@ CREATE PROCEDURE [runtime].[sp_SchedulerTask_Insert]
 	@Id int out
 AS
 BEGIN
-	Insert into runtime.ScheduleTask([Name], IsEnabled, [Status], TriggerTypeId, TaskTrigger, ActionTypeId, TaskAction)
-	values(@Name, @IsEnabled, @Status, @TriggerTypeId, @TaskTrigger, @ActionTypeId, @TaskAction)
+	Insert into runtime.ScheduleTask([Name], IsEnabled, [TaskType], [Status], TriggerTypeId, TaskTrigger, ActionTypeId, TaskAction)
+	values(@Name, @IsEnabled, @TaskType, @Status, @TriggerTypeId, @TaskTrigger, @ActionTypeId, @TaskAction)
 	
 	SET @Id = @@IDENTITY
 END
