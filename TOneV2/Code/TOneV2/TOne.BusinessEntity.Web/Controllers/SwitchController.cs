@@ -41,6 +41,12 @@ namespace TOne.BusinessEntity.Web.Controllers
             SwitchManager manager = new SwitchManager();
             return manager.InsertSwitch(switchObject);
         }
+         [HttpGet]
+        public string GetSwitchName(int switchId)
+        {
+            SwitchManager manager = new SwitchManager();
+            return manager.GetSwitchName(switchId);
+        }
 
 
     }

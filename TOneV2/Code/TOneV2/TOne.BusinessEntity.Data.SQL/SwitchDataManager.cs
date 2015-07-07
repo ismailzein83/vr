@@ -88,6 +88,13 @@ namespace TOne.BusinessEntity.Data.SQL
                                 NominalTrunkCapacityInE1s = GetReaderValue<Int32>(reader, "NominalTrunkCapacityInE1s"),// Convert.ToInt32(reader["NominalTrunkCapacityInE1s"]),
                                 NominalVoipCapacityInE1s = GetReaderValue<Int32>(reader, "NominalVoipCapacityInE1s")//Convert.ToInt32(reader["NominalVoipCapacityInE1s"])
                             };
+
         }
+
+        public string GetSwitchName(int switchId)
+        {
+            return ExecuteScalarSP("[BEntity].[sp_Switch_GetName]", switchId) as string;
+        }
+
     }
 }

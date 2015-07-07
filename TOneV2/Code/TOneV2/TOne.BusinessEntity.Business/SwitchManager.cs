@@ -65,5 +65,10 @@ namespace TOne.BusinessEntity.Business
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             return insertOperationOutput;
         }
+        public string GetSwitchName(int switchId)
+        {
+            ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
+            return dataManager.GetSwitchName(switchId);
+        }
     }
 }

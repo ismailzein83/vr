@@ -12,5 +12,7 @@ namespace TOne.BusinessEntity.Data
         bool UpdateSwitch(Switch switchObject);
 
         bool InsertSwitch(Switch switchObject, out int insertedId);
+        string GetSwitchName(int switchId);
+
     }
 }

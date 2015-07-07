@@ -43,5 +43,20 @@ namespace TOne.BusinessEntity.Business
             }
             return zoneName;
         }
+        public string GetSwitchName(int switchId)
+        {
+            TOneCacheManager cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<TOneCacheManager>();
+            ConcurrentDictionary<int, string> switcNames = cacheManager.GetOrCreateObject("SwitcNames",
+                TOne.Entities.CacheObjectType.Switch,
+                () => new ConcurrentDictionary<int, string>());
+            string switchName;
+            if (!switcNames.TryGetValue(switchId, out switchName))
+            {
+                ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
+                switchName = dataManager.GetSwitchName(switchId);
+                switcNames.TryAdd(switchId, switchName);
+            }
+            return switchName;
+        }
     }
 }

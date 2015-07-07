@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TOne.Entities
 {
-    public enum CacheObjectType { SupplierCodes, Pricing, TempObjects, SharedMemoryQueue, Zone, CarrierAccount, FlaggedService }
+    public enum CacheObjectType { SupplierCodes, Pricing, TempObjects, SharedMemoryQueue, Zone, CarrierAccount, FlaggedService,Switch }
     //public class CacheObjectTypes : ICacheObjectType
     //{
     //    public CacheObjectTypes(CacheObjectType objectType)
