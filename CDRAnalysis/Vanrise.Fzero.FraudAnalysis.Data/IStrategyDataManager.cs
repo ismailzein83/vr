@@ -11,7 +11,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         List<Strategy> GetAllStrategies();
 
-        BigResult<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate,  int? strategyId, string suspicionLevelsList);
+        IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int? strategyId, string suspicionLevelsList);
 
         List<Strategy> GetFilteredStrategies(int fromRow, int toRow, string name, string description);
 

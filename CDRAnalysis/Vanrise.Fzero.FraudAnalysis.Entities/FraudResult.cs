@@ -9,6 +9,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public string SubscriberNumber { get; set; }
 
+        public Enums.SuspicionLevel SuspicionLevel { get; set; }
+
         public string SuspicionLevelName { get; set; }
 
         public string StrategyName { get; set; }

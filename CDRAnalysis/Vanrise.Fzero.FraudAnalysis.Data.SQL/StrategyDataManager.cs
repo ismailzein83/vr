@@ -44,25 +44,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
 
 
-        //public List<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int? strategyId, string suspicionLevelsList)
-        //{
-        //    return GetItemsSP("FraudAnalysis.sp_FraudResult_GetFilteredSuspiciousNumbers", FraudResultMapper, fromRow, toRow, fromDate, toDate, strategyId, suspicionLevelsList);
-        //}
-
 
 
 
       // to be removed ////////////////////////////////////////////////////////////////////////
 
-        public TempTableName GenerateTempTableName()
-        {
-            string tableName = Guid.NewGuid().ToString().Replace("-", "");
-            return new TempTableName
-            {
-                Key = tableName,
-                TableName = String.Format("tempdb.dbo.t_{0}", tableName)
-            };
-        }
 
         public TempTableName GetTempTableName(string tableNameKey)
         {
@@ -100,7 +86,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         //New///////////////////////////////////////////////////////////////////////////////////
 
 
-        public BigResult<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int? strategyId, string suspicionLevelsList)
+        public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int? strategyId, string suspicionLevelsList)
         {
             TempTableName tempTableName = GetTempTableName("FraudResult");
           
@@ -114,7 +100,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             int totalDataCount;
             rslt.Data = GetData<FraudResult>(tempTableName.TableName, fromRow, toRow, "SubscriberNumber", false, FraudResultMapper, out totalDataCount);
             rslt.TotalCount = totalDataCount;
-            return rslt;
+            return rslt.Data;
         }
 
         //New///////////////////////////////////////////////////////////////////////////////////
@@ -226,7 +212,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             var fraudResult = new FraudResult();
             fraudResult.LastOccurance = (DateTime)reader["LastOccurance"];
             fraudResult.SubscriberNumber = reader["SubscriberNumber"] as string;
-            fraudResult.SuspicionLevelName = reader["SuspicionLevelName"] as string;
+            fraudResult.SuspicionLevelName = ((Enums.SuspicionLevel)Enum.ToObject(typeof(Enums.SuspicionLevel), GetReaderValue<int>(reader, "SuspicionLevelId"))).ToString();
             fraudResult.StrategyName = reader["StrategyName"] as string;
             fraudResult.NumberofOccurances = (int) reader["NumberofOccurances"];
             return fraudResult;

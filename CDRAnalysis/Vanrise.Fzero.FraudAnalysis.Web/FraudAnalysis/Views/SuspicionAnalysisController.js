@@ -154,18 +154,13 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
         var pageInfo = mainGridAPI.getPageInfo();
 
-        console.log('strategyId')
-        console.log(strategyId)
-        console.log('suspicionLevelsList.slice(0, -1)')
-        console.log(suspicionLevelsList.slice(0, -1))
-
 
         return SuspicionAnalysisAPIService.GetFilteredSuspiciousNumbers(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, strategyId, suspicionLevelsList.slice(0, -1)).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.fraudResults.push(itm);
             });
         }).finally(function () {
-            $scope.isGettingStrategies = false;
+            $scope.isGettingFraudResults = false;
         });
     }
 

@@ -11,6 +11,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         };
 
 
+
+        public enum SuspicionLevel
+        {
+            Suspicious = 2,
+            Highly_Suspicious = 3,
+            Fraud = 4
+        };
+
         public enum CallType
         {
             OutgoingVoiceCall = 1,
