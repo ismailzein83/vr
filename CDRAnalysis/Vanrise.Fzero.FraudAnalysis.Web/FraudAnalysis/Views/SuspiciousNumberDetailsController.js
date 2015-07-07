@@ -25,18 +25,20 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
 
     function getNormalCDRs() {
         $scope.normalCDRs.length = 0;
-        
+
         var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
         var toDate = $scope.toDate != undefined ? $scope.toDate : '';
 
 
         var pageInfo = normalCDRGridAPI.getPageInfo();
 
-
+        $scope.isGettingNormalCDRs = true;
         return SuspicionAnalysisAPIService.GetNormalCDRs(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, $scope.subscriberNumber).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.normalCDRs.push(itm);
             });
+        }).finally(function () {
+            $scope.isGettingNormalCDRs = false;
         });
     }
 
@@ -49,11 +51,13 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
 
         var pageInfo = numberProfileGridAPI.getPageInfo();
 
-
+        $scope.isGettingNumberProfiles = true;
         return SuspicionAnalysisAPIService.GetNumberProfiles(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, $scope.subscriberNumber).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.numberProfiles.push(itm);
             });
+        }).finally(function () {
+            $scope.isGettingNumberProfiles = false;
         });
     }
 

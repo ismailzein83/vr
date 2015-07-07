@@ -136,7 +136,12 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
         var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
         var toDate = $scope.toDate != undefined ? $scope.toDate : '';
 
-        var strategyId = $scope.selectedStrategies.id;
+        var strategyId;
+        if ($scope.selectedStrategies != undefined && $scope.selectedStrategies.id != undefined)
+            strategyId = $scope.selectedStrategies.id;
+        else
+            strategyId = 0;
+
         var suspicionLevelsList = '';
         
         angular.forEach($scope.selectedSuspicionLevels, function (itm) {
