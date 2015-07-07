@@ -40,6 +40,27 @@ namespace TOne.Analytics.Business
             return FormatDailySummaries(_datamanager.GetDailySummary(fromDate, toDate, customerAMUId, supplierAMUId));
         }
 
+        public List<SupplierCostDetailsFormatted> GetSupplierCostDetails(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        {
+            List<SupplierCostDetails> lstSuppplierCostDetails = _datamanager.GetSupplierCostDetails(fromDate, toDate, customerAMUId, supplierAMUId);
+            lstSuppplierCostDetails.OrderBy(cs => cs.Customer).ToList();
+
+            return FormatSupplierCostDetails(lstSuppplierCostDetails);
+        }
+
+        public List<SaleZoneCostSummaryFormatted> GetSaleZoneCostSummary(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        {
+            return FormatSaleZoneCostSummary(_datamanager.GetSaleZoneCostSummary(fromDate, toDate, supplierAMUId, customerAMUId));
+        }
+        public List<SaleZoneCostSummaryServiceFormatted> GetSaleZoneCostSummaryService(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        {
+            return FormatSaleZoneCostSummaryService(_datamanager.GetSaleZoneCostSummaryService(fromDate, toDate, supplierAMUId, customerAMUId));
+        }
+        public List<SaleZoneCostSummarySupplierFormatted> GetSaleZoneCostSummarySupplier(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        {
+            return FormatSaleZoneCostSummarySupplier(_datamanager.GetSaleZoneCostSummarySupplier(fromDate, toDate, supplierAMUId, customerAMUId));
+        }
+
         public List<ZoneSummaryFormatted> GetZoneSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier)
         {
             return FormatZoneSummaries(_datamanager.GetZoneSummary(fromDate, toDate, customerId, supplierId, isCost, currencyId, supplierGroup, customerGroup, customerAMUId, supplierAMUId, groupBySupplier));
@@ -504,6 +525,68 @@ namespace TOne.Analytics.Business
             };
         }
 
+        private SupplierCostDetailsFormatted FormatSupplierCostDetails(SupplierCostDetails supplierCostDetails)
+        {
+            return new SupplierCostDetailsFormatted
+            {
+                Customer = (supplierCostDetails.Customer != null) ? _bemanager.GetCarrirAccountName(supplierCostDetails.Customer) : null,
+                Carrier = (supplierCostDetails.Carrier != null) ? _bemanager.GetCarrirAccountName(supplierCostDetails.Carrier) : null,
+                Duration = supplierCostDetails.Duration,
+                DurationFormatted = FormatNumber(supplierCostDetails.Duration),
+                Amount = supplierCostDetails.Amount,
+                AmountFormatted = FormatNumber(supplierCostDetails.Amount,5)
+            };
+        }
+
+        private SaleZoneCostSummaryFormatted FormatSaleZoneCostSummary(SaleZoneCostSummary saleZoneCostSummary)
+        {
+            return new SaleZoneCostSummaryFormatted
+            {
+                AvgCost = saleZoneCostSummary.AvgCost,
+                AvgCostFormatted = FormatNumber(saleZoneCostSummary.AvgCost,5),
+                salezoneID = saleZoneCostSummary.salezoneID,
+                salezoneIDFormatted = (saleZoneCostSummary.salezoneID != null) ? _bemanager.GetZoneName(saleZoneCostSummary.salezoneID) : null,
+                AvgDuration = saleZoneCostSummary.AvgDuration,
+                AvgDurationFormatted = FormatNumber(saleZoneCostSummary.AvgDuration)
+            };
+        }
+
+        private SaleZoneCostSummaryServiceFormatted FormatSaleZoneCostSummaryService(SaleZoneCostSummaryService saleZoneCostSummaryService)
+        {
+            return new SaleZoneCostSummaryServiceFormatted
+            {
+                AvgServiceCost = saleZoneCostSummaryService.AvgServiceCost,
+                AvgServiceCostFormatted = FormatNumber(saleZoneCostSummaryService.AvgServiceCost, 5),
+
+                salezoneID = saleZoneCostSummaryService.salezoneID,
+                salezoneIDFormatted = (saleZoneCostSummaryService.salezoneID != null) ? _bemanager.GetZoneName(saleZoneCostSummaryService.salezoneID) : null,
+                Service = saleZoneCostSummaryService.Service,
+
+                AvgDuration = saleZoneCostSummaryService.AvgDuration,
+                AvgDurationFormatted = FormatNumber(saleZoneCostSummaryService.AvgDuration)
+            };
+        }
+
+
+        private SaleZoneCostSummarySupplierFormatted FormatSaleZoneCostSummarySupplier(SaleZoneCostSummarySupplier saleZoneCostSummarySupplier)
+        {
+            return new SaleZoneCostSummarySupplierFormatted
+            {
+                SupplierID = (saleZoneCostSummarySupplier.SupplierID != null) ? _bemanager.GetCarrirAccountName(saleZoneCostSummarySupplier.SupplierID) : null,
+
+                HighestRate = saleZoneCostSummarySupplier.HighestRate,
+                HighestRateFormatted = FormatNumber(saleZoneCostSummarySupplier.HighestRate, 5),
+                
+                salezoneID = saleZoneCostSummarySupplier.salezoneID,
+
+                salezoneIDFormatted = (saleZoneCostSummarySupplier.salezoneID != null) ? _bemanager.GetZoneName(saleZoneCostSummarySupplier.salezoneID) : null,
+
+                AvgDuration = saleZoneCostSummarySupplier.AvgDuration,
+                AvgDurationFormatted = FormatNumber(saleZoneCostSummarySupplier.AvgDuration)
+            };
+        }
+
+
         private CarrierLostFormatted FormatCarrierLost(CarrierLost carrierLost)
         {
 
@@ -622,6 +705,49 @@ namespace TOne.Analytics.Business
                 foreach (var z in dailySummary)
                 {
                     models.Add(FormatDailySummary(z));
+                }
+            return models;
+        }
+
+        private List<SupplierCostDetailsFormatted> FormatSupplierCostDetails(List<SupplierCostDetails> supplierCostDetails)
+        {
+            List<SupplierCostDetailsFormatted> models = new List<SupplierCostDetailsFormatted>();
+            if (supplierCostDetails != null)
+                foreach (var z in supplierCostDetails)
+                {
+                    models.Add(FormatSupplierCostDetails(z));
+                }
+            return models;
+        }
+
+        private List<SaleZoneCostSummaryFormatted> FormatSaleZoneCostSummary(List<SaleZoneCostSummary> saleZoneCostSummary)
+        {
+            List<SaleZoneCostSummaryFormatted> models = new List<SaleZoneCostSummaryFormatted>();
+            if (saleZoneCostSummary != null)
+                foreach (var z in saleZoneCostSummary)
+                {
+                    models.Add(FormatSaleZoneCostSummary(z));
+                }
+            return models;
+        }
+
+        private List<SaleZoneCostSummaryServiceFormatted> FormatSaleZoneCostSummaryService(List<SaleZoneCostSummaryService> saleZoneCostSummaryService)
+        {
+            List<SaleZoneCostSummaryServiceFormatted> models = new List<SaleZoneCostSummaryServiceFormatted>();
+            if (saleZoneCostSummaryService != null)
+                foreach (var z in saleZoneCostSummaryService)
+                {
+                    models.Add(FormatSaleZoneCostSummaryService(z));
+                }
+            return models;
+        }
+        private List<SaleZoneCostSummarySupplierFormatted> FormatSaleZoneCostSummarySupplier(List<SaleZoneCostSummarySupplier> saleZoneCostSummarySupplier)
+        {
+            List<SaleZoneCostSummarySupplierFormatted> models = new List<SaleZoneCostSummarySupplierFormatted>();
+            if (saleZoneCostSummarySupplier != null)
+                foreach (var z in saleZoneCostSummarySupplier)
+                {
+                    models.Add(FormatSaleZoneCostSummarySupplier(z));
                 }
             return models;
         }

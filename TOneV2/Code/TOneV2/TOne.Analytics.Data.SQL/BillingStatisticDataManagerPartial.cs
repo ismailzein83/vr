@@ -55,6 +55,49 @@ namespace TOne.Analytics.Data.SQL
                );
         }
 
+        public List<SupplierCostDetails> GetSupplierCostDetails(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        {
+            return GetItemsSP("Analytics.SP_Billing_SupplierCostDetails", SupplierCostDetailsMapper,
+               fromDate,
+               toDate,
+               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
+               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
+               );
+        }
+
+        public List<SaleZoneCostSummary> GetSaleZoneCostSummary(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        {
+            return GetItemsSP("Analytics.SP_Billing_SaleZoneCostSummary", SaleZoneCostSummaryMapper,
+               fromDate,
+               toDate,
+               "AverageCost",
+               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
+               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
+               );
+        }
+
+        public List<SaleZoneCostSummaryService> GetSaleZoneCostSummaryService(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        {
+            return GetItemsSP("Analytics.SP_Billing_SaleZoneCostSummary", SaleZoneCostSummaryServiceMapper,
+               fromDate,
+               toDate,
+               "Service",
+               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
+               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
+               );
+        }
+
+        public List<SaleZoneCostSummarySupplier> GetSaleZoneCostSummarySupplier(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        {
+            return GetItemsSP("Analytics.SP_Billing_SaleZoneCostSummary", SaleZoneCostSummarySupplierMapper,
+               fromDate,
+               toDate,
+               "Supplier",
+               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
+               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
+               );
+        }
+
 
         #region privateMethods
 
@@ -112,6 +155,53 @@ namespace TOne.Analytics.Data.SQL
                 SaleZoneID = GetReaderValue<int>(reader, "SaleZoneID"),
                 ACD = GetReaderValue<decimal>(reader, "ACD"),
                 ASR = GetReaderValue<decimal>(reader, "ASR")
+            };
+            return instance;
+        }
+
+        private SupplierCostDetails SupplierCostDetailsMapper(IDataReader reader)
+        {
+            SupplierCostDetails instance = new SupplierCostDetails
+            {
+                Customer = reader["Customer"] as string,
+                Carrier = reader["Carrier"] as string,
+                Duration = GetReaderValue<decimal>(reader, "Duration"),
+                Amount = GetReaderValue<double>(reader, "Amount")
+            };
+            return instance;
+        }
+
+        private SaleZoneCostSummary SaleZoneCostSummaryMapper(IDataReader reader)
+        {
+            SaleZoneCostSummary instance = new SaleZoneCostSummary
+            {
+                AvgCost = GetReaderValue<double>(reader, "AvgCost"),
+                salezoneID = GetReaderValue<int>(reader, "salezoneID"),
+                AvgDuration = GetReaderValue<decimal>(reader, "AvgDuration")
+            };
+            return instance;
+        }
+
+        private SaleZoneCostSummaryService SaleZoneCostSummaryServiceMapper(IDataReader reader)
+        {
+            SaleZoneCostSummaryService instance = new SaleZoneCostSummaryService
+            {
+                AvgServiceCost = GetReaderValue<double>(reader, "AvgServiceCost"),
+                salezoneID = GetReaderValue<int>(reader, "salezoneID"),
+                Service = reader["Service"] as string,
+                AvgDuration = GetReaderValue<decimal>(reader, "AvgDuration")
+            };
+            return instance;
+        }
+
+        private SaleZoneCostSummarySupplier SaleZoneCostSummarySupplierMapper(IDataReader reader)
+        {
+            SaleZoneCostSummarySupplier instance = new SaleZoneCostSummarySupplier
+            {
+                SupplierID = reader["SupplierID"] as string,
+                HighestRate = GetReaderValue<double>(reader, "HighestRate"),
+                salezoneID = GetReaderValue<int>(reader, "salezoneID"),
+                AvgDuration = GetReaderValue<decimal>(reader, "AvgDuration")
             };
             return instance;
         }

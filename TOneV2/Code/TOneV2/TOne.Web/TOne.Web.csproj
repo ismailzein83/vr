@@ -432,7 +432,11 @@
     <EmbeddedResource Include="Reports\Analytics\rdlCustomerSummary.rdlc" />
     <EmbeddedResource Include="Reports\Analytics\rdlDailySummary.rdlc" />
     <EmbeddedResource Include="Reports\Analytics\rdlDailySummaryForcasting.rdlc" />
+    <EmbeddedResource Include="Reports\Analytics\rdlOutCustomerCostDetails.rdlc" />
     <EmbeddedResource Include="Reports\Analytics\rdlRateLoss.rdlc" />
+    <EmbeddedResource Include="Reports\Analytics\rdlSaleCostSummary.rdlc" />
+    <EmbeddedResource Include="Reports\Analytics\rdlSaleCostSummaryByService.rdlc" />
+    <EmbeddedResource Include="Reports\Analytics\rdlSaleCostSummaryBySupplier.rdlc" />
     <EmbeddedResource Include="Reports\Analytics\rdlZoneProfits.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>

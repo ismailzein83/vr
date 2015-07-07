@@ -73,6 +73,14 @@
     <Compile Include="Billing\MonthTraffic.cs" />
     <Compile Include="Billing\RateLoss.cs" />
     <Compile Include="Billing\RateLossFormatted.cs" />
+    <Compile Include="Billing\SaleZoneCostSummary.cs" />
+    <Compile Include="Billing\SaleZoneCostSummaryFormatted.cs" />
+    <Compile Include="Billing\SaleZoneCostSummaryService.cs" />
+    <Compile Include="Billing\SaleZoneCostSummaryServiceFormatted.cs" />
+    <Compile Include="Billing\SaleZoneCostSummarySupplier.cs" />
+    <Compile Include="Billing\SaleZoneCostSummarySupplierFormatted.cs" />
+    <Compile Include="Billing\SupplierCostDetails.cs" />
+    <Compile Include="Billing\SupplierCostDetailsFormatted.cs" />
     <Compile Include="Billing\TimeRange.cs" />
     <Compile Include="Billing\TotalDurationPerDate.cs" />
     <Compile Include="Billing\VariationReportResult.cs" />
