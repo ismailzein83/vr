@@ -84,7 +84,9 @@ namespace TOne.BusinessEntity.Data.SQL
                                 LastAttempt = GetReaderValue<DateTime?>(reader, "LastAttempt"),
                                 EnableCDRImport = GetReaderValue<string>(reader, "Enable_CDR_Import") == "Y" ? true : false,
                                 EnableRouting = GetReaderValue<string>(reader, "Enable_Routing") == "Y" ? true : false,
-                                LastRouteUpdate = GetReaderValue<DateTime?>(reader, "LastRouteUpdate")
+                                LastRouteUpdate = GetReaderValue<DateTime?>(reader, "LastRouteUpdate"),
+                                NominalTrunkCapacityInE1s = GetReaderValue<Int32>(reader, "NominalTrunkCapacityInE1s"),// Convert.ToInt32(reader["NominalTrunkCapacityInE1s"]),
+                                NominalVoipCapacityInE1s = GetReaderValue<Int32>(reader, "NominalVoipCapacityInE1s")//Convert.ToInt32(reader["NominalVoipCapacityInE1s"])
                             };
         }
     }
