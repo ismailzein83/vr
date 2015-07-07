@@ -298,8 +298,7 @@
                 lastSelectedRow.addClass('vr-datagrid-datacells-click');
                 ctrl.menuLeft = evnt.clientX;// evnt.offsetX == undefined ? evnt.originalEvent.layerX : evnt.offsetX;
                 ctrl.menuTop = evnt.clientY;// evnt.offsetY == undefined ? evnt.originalEvent.layerY : evnt.offsetY;
-                console.log(ctrl.menuLeft + ',' + ctrl.menuTop);
-                console.log(evnt);
+               
             };
         }
         
