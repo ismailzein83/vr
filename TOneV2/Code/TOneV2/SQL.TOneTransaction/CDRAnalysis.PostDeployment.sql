@@ -56,3 +56,45 @@ VALUES ([Name], [Title], [FQTN], [Config])
 WHEN NOT MATCHED BY SOURCE THEN 
 DELETE
 ;
+
+
+MERGE INTO runtime.[SchedulerTaskTriggerType] AS Target 
+USING (VALUES 
+	(1, N'Timer', N'{"URL":"/Client/Modules/Runtime/Views/TriggerTemplates/TimerTriggerTemplate.html"}')
+) 
+AS Source ([ID], [Name], [TriggerTypeInfo])
+ON Target.[ID] = Source.[ID] 
+-- update matched rows 
+WHEN MATCHED THEN 
+UPDATE SET	[ID] = Source.[ID],
+			[Name] = Source.[Name],
+			[TriggerTypeInfo]  = Source.[TriggerTypeInfo]
+-- insert new rows 
+WHEN NOT MATCHED BY TARGET THEN 
+INSERT ([ID], [Name], [TriggerTypeInfo])
+VALUES ([ID], [Name], [TriggerTypeInfo])
+---- delete rows that are in the target but not the source 
+WHEN NOT MATCHED BY SOURCE THEN 
+DELETE
+;
+
+MERGE INTO runtime.[SchedulerTaskActionType] AS Target 
+USING (VALUES 
+	(1, N'Workflow', N'{"URL":"/Client/Modules/Runtime/Views/ActionTemplates/WFActionTemplate.html"}')
+) 
+AS Source ([ID], [Name], [ActionTypeInfo])
+ON Target.[ID] = Source.[ID] 
+-- update matched rows 
+WHEN MATCHED THEN 
+UPDATE SET	[ID] = Source.[ID],
+			[Name] = Source.[Name],
+			[ActionTypeInfo]  = Source.[ActionTypeInfo]
+-- insert new rows 
+WHEN NOT MATCHED BY TARGET THEN 
+INSERT ([ID], [Name], [ActionTypeInfo])
+VALUES ([ID], [Name], [ActionTypeInfo])
+---- delete rows that are in the target but not the source 
+WHEN NOT MATCHED BY SOURCE THEN 
+DELETE
+;
+
