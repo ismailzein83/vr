@@ -181,6 +181,9 @@
     <Reference Include="Vanrise.Integration.Entities">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Integration.Extensions">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.Web">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Web.dll</HintPath>
     </Reference>
