@@ -174,7 +174,7 @@ label{
 .modal-header {
     min-height: 16.4286px;
     padding: 2px 15px;    
-    border-radius: 6px 6px 0px 0px;
+    border-radius: 5px 5px 0px 0px;
     border-bottom: 1px solid #E5E5E5;
     background-color: #20407D;
     color: #FFF;
@@ -409,7 +409,7 @@ vr-modalcontent .action-bar{
     margin: 10px -15px 0px !important;
     position: relative;
     top: 5px;
-    border-radius: 0px 0px 6px 6px;
+    border-radius: 0px 0px 5px 5px;
 }
 .action-bar-left{   
     width:49%;
