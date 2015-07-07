@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.BusinessEntity.Data;
 using TOne.BusinessEntity.Entities;
+using TOne.Caching;
 
 namespace TOne.BusinessEntity.Business
 {
@@ -33,6 +34,26 @@ namespace TOne.BusinessEntity.Business
             return _dataManager.GetZones(supplierId, nameFilter);
         }
 
+        public Dictionary<int, Zone> GetAllZones()
+        {
+            TOneCacheManager cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<TOneCacheManager>();
+            return cacheManager.GetOrCreateObject("AllZones",
+                TOne.Entities.CacheObjectType.Zone,
+                () =>
+                {
+                    return _dataManager.GetAllZones();
+                });
+        }
 
+        public Zone GetZone(int zoneId)
+        {
+            Zone zone;
+            var allZones = GetAllZones();
+            if (allZones != null)
+                allZones.TryGetValue(zoneId, out zone);
+            else
+                zone = null;
+            return zone;
+        }
     }
 }

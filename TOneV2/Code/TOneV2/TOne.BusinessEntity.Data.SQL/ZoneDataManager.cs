@@ -101,5 +101,11 @@ namespace TOne.BusinessEntity.Data.SQL
 
 
         #endregion
+
+
+        public Dictionary<int, Zone> GetAllZones()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

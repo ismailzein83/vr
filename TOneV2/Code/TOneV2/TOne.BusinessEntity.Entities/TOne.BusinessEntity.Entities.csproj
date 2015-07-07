@@ -63,6 +63,7 @@
     <Compile Include="SwitchInfo.cs" />
     <Compile Include="Tariff.cs" />
     <Compile Include="ToDConsideration.cs" />
+    <Compile Include="Zone.cs" />
     <Compile Include="ZoneInfo.cs" />
     <Compile Include="ZoneRate.cs" />
     <Compile Include="ZoneRateBatch.cs" />

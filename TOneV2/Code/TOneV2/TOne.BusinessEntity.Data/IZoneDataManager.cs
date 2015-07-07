@@ -14,5 +14,7 @@ namespace TOne.BusinessEntity.Data
 
         List<ZoneInfo> GetZoneList(IEnumerable<int> zonesIds);
         string GetZoneName(int zoneId);
+
+        Dictionary<int, Zone> GetAllZones();
     }
 }
