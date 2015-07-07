@@ -638,11 +638,22 @@ namespace TOne.Analytics.Data.SQL
 
                     else
                     {
+                        if (groupingBy == GroupingBy.Customers)
+                        {
 
-                        query.Replace("#IDColumn#", " BS.CustomerID ");
-                        query.Replace("#BSIDColumn#", " BS.CustomerID ");
-                        query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
+                            query.Replace("#IDColumn#", " BS.CustomerID ");
+                            query.Replace("#BSIDColumn#", " BS.CustomerID ");
+                            query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
                                                         JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
+                        }
+                        if (groupingBy == GroupingBy.Suppliers)
+                        {
+
+                            query.Replace("#IDColumn#", " BS.SupplierID ");
+                            query.Replace("#BSIDColumn#", " BS.SupplierID ");
+                            query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.SupplierID
+                                                        JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
+                        }
                     }
 
                     query.Replace("#WhereStatement#", " ");
@@ -679,7 +690,11 @@ namespace TOne.Analytics.Data.SQL
                     query.Replace("#BSIDColumn#", "BS.SaleZoneID");
                     query.Replace("#JoinStatement#", @" JOIN Zone Z With(Nolock) ON Z.ZoneID=BS.SaleZoneID ");
                     query.Replace("#WhereStatement#", @" ");
-                    if (entityType != EntityType.none)
+                    if (entityType == EntityType.Customer)
+                    {
+                        query.Replace("#additionalStatement#", " , BS.CustomerID");
+                    }
+                    else if (entityType == EntityType.Supplier)
                     {
                         query.Replace("#additionalStatement#", " , BS.SupplierID");
                     }
@@ -697,10 +712,21 @@ namespace TOne.Analytics.Data.SQL
                     }
                     else
                     {
-                        query.Replace("#IDColumn#", " BS.CustomerID ");
-                        query.Replace("#BSIDColumn#", "BS.CustomerID ");
-                        query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
+                        if (groupingBy == GroupingBy.Customers)
+                        {
+                            query.Replace("#IDColumn#", " BS.CustomerID ");
+                            query.Replace("#BSIDColumn#", "BS.CustomerID ");
+                            query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
                                                         JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
+                        }
+                        else if (groupingBy == GroupingBy.Suppliers)
+                        {
+
+                            query.Replace("#IDColumn#", " BS.SupplierID ");
+                            query.Replace("#BSIDColumn#", " BS.SupplierID ");
+                            query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.SupplierID
+                                                        JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
+                        }
                     }
                     query.Replace("#WhereStatement#", @" ");
                     break;
@@ -734,6 +760,14 @@ namespace TOne.Analytics.Data.SQL
                     query.Replace("#IDColumn#", " Z.ZoneID ");
                     query.Replace("#BSIDColumn#", "BS.SaleZoneID");
                     query.Replace("#JoinStatement#", @" JOIN Zone Z With(Nolock) ON Z.ZoneID=BS.SaleZoneID ");
+                    if (entityType == EntityType.Customer)
+                    {
+                        query.Replace("#additionalStatement#", " , BS.CustomerID");
+                    }
+                    else if (entityType == EntityType.Supplier)
+                    {
+                        query.Replace("#additionalStatement#", " , BS.SupplierID");
+                    }
                     query.Replace("#WhereStatement#", @" ");
                     break;
 
@@ -757,18 +791,15 @@ namespace TOne.Analytics.Data.SQL
                     switch (groupingBy)
                     {
                         case GroupingBy.Customers: query.Replace("#additionalStatement#", " ,BS.CustomerID "); break;
-                        case GroupingBy.Suppliers:
-                            query.Replace("#additionalStatement#", " ,BS.SupplierID ");
-                            break;
-                        default: query.Replace("#additionalStatement#", " ");
-                            break;
+                        case GroupingBy.Suppliers: query.Replace("#additionalStatement#", " ,BS.SupplierID "); break;
+                        default: query.Replace("#additionalStatement#", " "); break;
                     }
                     break;
                 case EntityType.Customer:
                     query.Replace("#SecondWhereStatement#", " AND BS.CustomerID = @EntityID ");
                     billingStatsFilterBuilder.Append(" WHERE BS.CustomerID = @EntityID");
                     //query.Replace("#additionalStatement#", " ,BS.CustomerID ");
-                     switch (groupingBy)
+                    switch (groupingBy)
                     {
                         case GroupingBy.Customers: query.Replace("#additionalStatement#", " ,BS.CustomerID "); break;
                         case GroupingBy.Suppliers:
@@ -777,13 +808,13 @@ namespace TOne.Analytics.Data.SQL
                         default: query.Replace("#additionalStatement#", " ");
                             break;
                     }
-                   
+
                     break;
                 case EntityType.Supplier:
                     query.Replace("#SecondWhereStatement#", " AND BS.SupplierID = @EntityID ");
                     billingStatsFilterBuilder.Append(" WHERE BS.SupplierID = @EntityID");
                     //query.Replace("#additionalStatement#", " ,BS.SupplierID ");
-                     switch (groupingBy)
+                    switch (groupingBy)
                     {
                         case GroupingBy.Customers: query.Replace("#additionalStatement#", " ,BS.CustomerID "); break;
                         case GroupingBy.Suppliers:
@@ -792,7 +823,7 @@ namespace TOne.Analytics.Data.SQL
                         default: query.Replace("#additionalStatement#", " ");
                             break;
                     }
-                     break;
+                    break;
                 default:
                     query.Replace("#SecondWhereStatement#", " ");
                     query.Replace("#additionalStatement#", " ");

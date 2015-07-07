@@ -34,9 +34,9 @@
                 <vr-datagrid datasource="data" pagersettings="mainGridPagerSettings" data-on-ready="onMainGridReady">
                     <!--ng-grid="gridOptions"-->
                     <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'_AVG'" field="'PeriodTypeValueAverage'" type="'Number'" summaryfield="'TotalAverage'"></vr-datagridcolumn><!--periodTypeValue+-->
-                    <vr-datagridcolumn headertext="'_%'" field="'PeriodTypeValuePercentage'" type="'Number'" summaryfield="'TotalPercentage'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Previous_%'" field="'PreviousPeriodTypeValuePercentage'" type="'Number'" summaryfield="'TotalPreviousPercentage'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext= "'{{selectedTimePeriod.description}} AVG'" field="'PeriodTypeValueAverage'" type="'Number'" summaryfield="'TotalAverage'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'{{selectedTimePeriod.description}} %'" field="'PeriodTypeValuePercentage'" type="'Number'" summaryfield="'TotalPercentage'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Previous {{selectedTimePeriod.description}} %'" field="'PreviousPeriodTypeValuePercentage'" type="'Number'" summaryfield="'TotalPreviousPercentage'"></vr-datagridcolumn>
                     <vr-datagridcolumn ng-repeat="item in timeRanges" field="'Values[' + $index + ']'" headertext="item" type="'Number'" summaryfield="'TotalValues[' + $index + ']'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'CarrierAccountID/ZoneID'" field="'ID'" ng-show="false"></vr-datagridcolumn> <!--ng-if="selectedReportOption.value==3 || selectedReportOption.value==7  "-->
                     <vr-datagridexpandablerow>

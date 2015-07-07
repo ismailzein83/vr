@@ -19,6 +19,7 @@ function VariationReportsDestinationsController($scope, BillingStatisticsAPIServ
         $scope.timeRanges = [];
         $scope.TotalValues = [];
         $scope.periodValuesArray = [];
+        $scope.showCustomersSuppliersSection = true;
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
         }
@@ -34,8 +35,9 @@ function VariationReportsDestinationsController($scope, BillingStatisticsAPIServ
         fromDate = $scope.viewScope.filterObject.SelectedDate;
         periodCount = $scope.viewScope.filterObject.PeriodCount;
         timePeriod = $scope.viewScope.filterObject.TimePeriod;
+        $scope.timePeriod = timePeriod;
         reportOption = $scope.viewScope.filterObject.ReportOption;
-        
+
         //  console.log($scope.viewScope.filterObject.SelectedDate);
         //  fromDate = getPropValuesFromArray($scope.viewScope.filterObject, 'SelectedDate');
     }
@@ -45,22 +47,27 @@ function VariationReportsDestinationsController($scope, BillingStatisticsAPIServ
         $scope.isGettingData = true;
        // console.log($scope.dataItem);
         // console.log($scope.dataItem.ID);
+        
         console.log(reportOption);
         var selectedReportOption = reportOption;//$scope.viewScope.selectedReportOption;
+      //  $scope.showCustomersSuppliersSection = selectedReportOption == VariationReportOptionsEnum.InBoundMinutes;
    //     console.log(selectedReportOption);
         var entityType;
         switch (selectedReportOption) {
             case VariationReportOptionsEnum.InBoundMinutes:
                 selectedReportOption = VariationReportOptionsEnum.TopDestinationMinutes;
                 entityType = EntityTypeEnum.Customer;
+                $scope.showCustomersSuppliersSection = true;
                 break;
             case VariationReportOptionsEnum.OutBoundMinutes:
                 selectedReportOption = VariationReportOptionsEnum.TopDestinationMinutes;
                 entityType = EntityTypeEnum.Supplier;
+                $scope.showCustomersSuppliersSection = false;
                 break;
             case VariationReportOptionsEnum.InOutBoundMinutes:
                 selectedReportOption = VariationReportOptionsEnum.TopDestinationMinutes;
-              //  entityType = EntityTypeEnum.Customers;
+                //  entityType = EntityTypeEnum.Customers;
+                //$scope.show = true;
                 break;
             //case VariationReportOptionsEnum.TopDestinationMinutes:
             //    selectedReportOption = VariationReportOptionsEnum.InBoundMinutes;
@@ -69,14 +76,17 @@ function VariationReportsDestinationsController($scope, BillingStatisticsAPIServ
             case VariationReportOptionsEnum.InBoundAmount:
                 selectedReportOption = VariationReportOptionsEnum.TopDestinationAmount
                 entityType = EntityTypeEnum.Customer;
+                $scope.showCustomersSuppliersSection = true;
                 break;
             case VariationReportOptionsEnum.OutBoundAmount:
                 selectedReportOption = VariationReportOptionsEnum.TopDestinationAmount
                 entityType = EntityTypeEnum.Supplier;
+                $scope.showCustomersSuppliersSection = false;
                 break;
             case VariationReportOptionsEnum.InOutBoundAmount:
                 selectedReportOption = VariationReportOptionsEnum.TopDestinationAmount
                 //  entityType = EntityTypeEnum.Customers;
+                // $scope.show = true;
                 break;
             //case VariationReportOptionsEnum.TopDestinationAmount:
             //    selectedReportOption = VariationReportOptionsEnum.InBoundAmount;
@@ -86,12 +96,14 @@ function VariationReportsDestinationsController($scope, BillingStatisticsAPIServ
             case VariationReportOptionsEnum.Profit:
                 selectedReportOption = VariationReportOptionsEnum.TopDestinationAmount
                 entityType = EntityTypeEnum.Customer;
+                $scope.showCustomersSuppliersSection = true;
                 break;           
         }
         $scope.selectedReportOption = selectedReportOption;
         $scope.entityType = entityType;
       //  console.log(selectedReportOption);
-       // console.log(entityType);
+        // console.log(entityType);
+        console.log($scope.showCustomersSuppliersSection);
         return BillingStatisticsAPIService.GetVariationReport(fromDate, periodCount, timePeriod.value, selectedReportOption.value, 0, 10, entityType.value, $scope.dataItem.ID, GroupingByEnum.none.value).then(function (response) {
             $scope.timeRanges.length = 0;
             $scope.data.length = 0;
