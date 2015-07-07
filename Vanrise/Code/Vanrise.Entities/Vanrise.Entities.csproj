@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeleteOperationOutput.cs" />
     <Compile Include="InsertOperationOutput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UpdateOperationResult.cs" />
