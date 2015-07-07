@@ -84,6 +84,10 @@
       <Project>{107DC891-2169-409F-9617-6D52723D05CE}</Project>
       <Name>Vanrise.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resource.resx">

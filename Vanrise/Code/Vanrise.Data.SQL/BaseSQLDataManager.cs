@@ -9,6 +9,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Configuration;
+using Vanrise.Entities;
 
 namespace Vanrise.Data.SQL
 {
@@ -439,6 +440,45 @@ namespace Vanrise.Data.SQL
             return cmd;
         }
 
+        #endregion
+
+        #region Temp Table
+
+
+        protected TempTableName GenerateTempTableName()
+        {
+            string tableName = Guid.NewGuid().ToString().Replace("-", "");
+            return new TempTableName
+            {
+                Key = tableName,
+                TableName = String.Format("tempdb.dbo.t_{0}", tableName)
+            };
+        }
+
+        protected TempTableName GetTempTableName(string tableNameKey)
+        {
+            return new TempTableName
+            {
+                Key = tableNameKey,
+                TableName = String.Format("tempdb.dbo.t_{0}", tableNameKey)
+            };
+        }
+
+        protected IEnumerable<T> GetData<T>(string tempTableName, int fromRow, int toRow, string orderByColumnName, bool isDescending, Func<IDataReader, T> objectBuilder, out int totalCount)
+        {
+            string query = String.Format(@"WITH OrderedResult AS (SELECT *, ROW_NUMBER()  OVER ( ORDER BY {1} {2}) AS rowNumber FROM {0})
+	                                    SELECT * FROM OrderedResult WHERE rowNumber between @FromRow AND @ToRow", tempTableName, orderByColumnName, isDescending ? "DESC" : "ASC");
+
+            totalCount = (int)ExecuteScalarText(String.Format("SELECT COUNT(*) FROM {0}", tempTableName), null);
+            return GetItemsText(query,
+                objectBuilder,
+                (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@FromRow", fromRow));
+                    cmd.Parameters.Add(new SqlParameter("@ToRow", toRow));
+                });
+        }
+        
         #endregion
     }
 }

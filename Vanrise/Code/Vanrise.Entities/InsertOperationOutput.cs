@@ -13,4 +13,22 @@ namespace Vanrise.Entities
 
         public T InsertedObject { get; set; }
     }
+
+    public class TempTableName
+    {
+        public string Key { get; set; }
+
+        public string TableName { get; set; }
+    }
+
+
+
+    public class BigResult<T>
+    {
+        public string ResultKey { get; set; }
+
+        public IEnumerable<T> Data { get; set; }
+
+        public int TotalCount { get; set; }
+    }
 }
