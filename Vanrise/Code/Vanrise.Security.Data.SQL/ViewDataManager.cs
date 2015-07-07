@@ -70,6 +70,11 @@ namespace Vanrise.Security.Data.SQL
 
             return GetItemsSP("sec.sp_View_GetByType", DynamicPageMapper, ViewType.Dynamic);
         }
+        public List<View> GetFilteredDynamicViews(string filter)
+        {
+
+            return GetItemsSP("sec.sp_View_GetFiltered", DynamicPageMapper, filter,ViewType.Dynamic);
+        }
         private View DynamicPageMapper(IDataReader reader)
         {
             View instance = new View

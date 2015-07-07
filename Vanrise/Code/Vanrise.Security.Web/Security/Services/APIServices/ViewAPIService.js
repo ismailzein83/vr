@@ -5,7 +5,8 @@
         UpdateView:UpdateView,
         SaveView: SaveView,
         DeleteView:DeleteView,
-        GetView: GetView
+        GetView: GetView,
+        GetFilteredDynamicPages: GetFilteredDynamicPages
     });
 
     function GetDynamicPages() {
@@ -28,5 +29,11 @@
                 ViewId: ViewId
             });
        
+    }
+    function GetFilteredDynamicPages(filter) {
+        return BaseAPIService.get("/api/View/GetFilteredDynamicViews",
+                   {
+                       filter: filter
+                   });
     }
 });

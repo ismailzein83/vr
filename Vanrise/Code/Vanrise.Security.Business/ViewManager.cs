@@ -79,5 +79,11 @@ namespace Vanrise.Security.Business
 
             return updateOperationOutput;
         }
+        public List<View> GetFilteredDynamicViews(string filter)
+        {
+            IViewDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
+            return dataManager.GetFilteredDynamicViews(filter);
+        }
+  
     }
 }                               

@@ -66,6 +66,12 @@ namespace Vanrise.Security.Business
             IWidgetsDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IWidgetsDataManager>();
             return dataManager.GetAllWidgets();
         }
+
+        public List<WidgetDetails> GetFilteredWidgets(string filter)
+        {
+            IWidgetsDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IWidgetsDataManager>();
+            return dataManager.GetFilteredWidgets(filter);
+        }
       
     }
 }

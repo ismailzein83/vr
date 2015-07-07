@@ -15,5 +15,6 @@ namespace Vanrise.Security.Data
         bool UpdateView(View view);
         bool DeleteView(int viewId);
         View GetView(int viewId);
+        List<View> GetFilteredDynamicViews(string filter);
     }
 }

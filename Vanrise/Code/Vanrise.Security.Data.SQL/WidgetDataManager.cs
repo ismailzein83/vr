@@ -70,6 +70,11 @@ namespace Vanrise.Security.Data.SQL
             return GetItemSP("sec.sp_Widget_GetById", WidgetMapper, widgetId);
         }
 
+        public List<WidgetDetails> GetFilteredWidgets(string filter)
+        {
+            return GetItemsSP("sec.sp_Widget_GetFiltered", WidgetMapper, filter);
+        }
+
       
     }
 }

@@ -4,7 +4,8 @@
         GetWidgetsDefinition: GetWidgetsDefinition,
         SaveWidget: SaveWidget,
         GetAllWidgets: GetAllWidgets,
-        UpdateWidget: UpdateWidget
+        UpdateWidget: UpdateWidget,
+        GetFilteredWidgets: GetFilteredWidgets
     });
 
     function GetWidgetsDefinition() {
@@ -18,6 +19,12 @@
     }
     function GetAllWidgets() {
         return BaseAPIService.get("/api/Widgets/GetAllWidgets");
+    }
+    function GetFilteredWidgets(filter)
+    {
+        return BaseAPIService.get("/api/Widgets/GetFilteredWidgets", {
+            filter: filter
+        });
     }
    
 });

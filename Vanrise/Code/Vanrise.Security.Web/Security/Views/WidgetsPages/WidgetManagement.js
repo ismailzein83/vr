@@ -6,6 +6,7 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
     load();
 
     function defineScope() {
+        $scope.filterValue="";
         $scope.widgets = [];
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
@@ -28,7 +29,25 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
         $scope.Add = function () {
             addNewWidget();
         };
+        $scope.searchClicked=function(){
+            if ($scope.filterValue != undefined && $scope.filterValue) {
+                $scope.isGettingData = true;
+                return WidgetAPIService.GetFilteredWidgets($scope.filterValue).then(function (response) {
+                    $scope.widgets.length = 0;
+                    angular.forEach(response, function (itm) {
+                        $scope.widgets.push(itm);
+                    });
+                }).finally(function () {
+                    $scope.isGettingData = false;
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope)
+                });
 
+            }
+            else
+                loadData();
+
+        }
 
     }
 
@@ -62,6 +81,7 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
     function loadData() {
         $scope.isGettingData = true;
         return WidgetAPIService.GetAllWidgets().then(function (response) {
+            $scope.widgets.length = 0;
             angular.forEach(response, function (itm) {
                 $scope.widgets.push(itm);
             });

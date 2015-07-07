@@ -42,6 +42,14 @@ namespace Vanrise.Security.Web.Controllers
             ViewManager manager = new ViewManager();
             return manager.DeleteView(viewId);
         }
+           [HttpGet]
+        public List<View> GetFilteredDynamicViews(string filter)
+        {
+            ViewManager manager = new ViewManager();
+            return manager.GetFilteredDynamicViews(filter);
+        }
+
+         
 
 
     }

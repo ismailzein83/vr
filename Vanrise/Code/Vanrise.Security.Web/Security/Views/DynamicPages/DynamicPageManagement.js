@@ -5,6 +5,7 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
     defineScope();
     load();
     function defineScope() {
+        $scope.filterValue;
         $scope.dynamicViews = [];
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
@@ -32,6 +33,25 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
         $scope.Add = function () {
             addPage()
         };
+        $scope.searchClicked = function () {
+          
+            if ($scope.filterValue != undefined && $scope.filterValue) {
+                $scope.isGettingData = true;
+                return ViewAPIService.GetFilteredDynamicPages($scope.filterValue).then(function (response) {
+                    $scope.dynamicViews.length = 0;
+                    angular.forEach(response, function (itm) {
+                        $scope.dynamicViews.push(itm);
+                    });
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                }).finally(function () {
+                    $scope.isGettingData = false;
+                });
+            }
+            else
+            loadData();
+                
+        }
     }
 
     function addPage() {
@@ -80,8 +100,9 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
     }
 
     function loadDynamicViews() {
-         $scope.isInitializing = true;
-         return ViewAPIService.GetDynamicPages().then(function (response) {
+        $scope.isInitializing = true;
+        return ViewAPIService.GetDynamicPages().then(function (response) {
+            $scope.dynamicViews.length = 0;
             angular.forEach(response, function (itm) {   
                 $scope.dynamicViews.push(itm);
                 });
