@@ -14,7 +14,7 @@ namespace TOne.Analytics.Data.SQL
     {
         public List<CustomerSummary> GetCustomerSummary(DateTime fromDate, DateTime toDate, string customerId, int? customerAMUId, int? supplierAMUId)
         {
-            return GetItemsSP("Analytics.SP_Billing_CustomerSummary", CustomerSummaryMapper,
+            return GetItemsSP("Analytics.SP_BillingRep_GetCustomerSummary", CustomerSummaryMapper,
                (customerId == null || customerId == "") ? null : customerId,
                fromDate,
                toDate,
@@ -24,7 +24,7 @@ namespace TOne.Analytics.Data.SQL
         }
         public List<CustomerServices> GetCustomerServices(DateTime fromDate, DateTime toDate)
         {
-            return GetItemsSP("Analytics.SP_Billing_CustomerServices", CustomerServicesMapper,
+            return GetItemsSP("Analytics.SP_BillingRep_GetCustomerServices", CustomerServicesMapper,
               fromDate,
               toDate
             );
@@ -32,7 +32,7 @@ namespace TOne.Analytics.Data.SQL
 
         public List<CustomerRouting> GetCustomerRouting(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? customerAMUId, int? supplierAMUId)
         {
-            return GetItemsSP("Analytics.SP_Billing_CustomerRouting", CustomerRoutingMapper,               
+            return GetItemsSP("Analytics.SP_BillingRep_GetCustomerRouting", CustomerRoutingMapper,               
                fromDate,
                toDate,
                (customerId == null || customerId == "") ? null : customerId,
@@ -44,7 +44,7 @@ namespace TOne.Analytics.Data.SQL
 
         public List<RoutingAnalysis> GetRoutingAnalysis(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? top, int? customerAMUId, int? supplierAMUId)
         {
-            return GetItemsSP("Analytics.SP_Billing_RoutingAnalysis", RoutingAnalysisMapper,
+            return GetItemsSP("Analytics.SP_BillingRep_GetRoutingAnalysis", RoutingAnalysisMapper,
                fromDate,
                toDate,
                (customerId == null || customerId == "") ? null : customerId,
@@ -57,7 +57,7 @@ namespace TOne.Analytics.Data.SQL
 
         public List<SupplierCostDetails> GetSupplierCostDetails(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
         {
-            return GetItemsSP("Analytics.SP_Billing_SupplierCostDetails", SupplierCostDetailsMapper,
+            return GetItemsSP("Analytics.SP_BillingRep_GetSupplierCostDetails", SupplierCostDetailsMapper,
                fromDate,
                toDate,
                (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
@@ -67,7 +67,7 @@ namespace TOne.Analytics.Data.SQL
 
         public List<SaleZoneCostSummary> GetSaleZoneCostSummary(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
         {
-            return GetItemsSP("Analytics.SP_Billing_SaleZoneCostSummary", SaleZoneCostSummaryMapper,
+            return GetItemsSP("Analytics.SP_BillingRep_GetSaleZoneCostSummary", SaleZoneCostSummaryMapper,
                fromDate,
                toDate,
                "AverageCost",
@@ -78,7 +78,7 @@ namespace TOne.Analytics.Data.SQL
 
         public List<SaleZoneCostSummaryService> GetSaleZoneCostSummaryService(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
         {
-            return GetItemsSP("Analytics.SP_Billing_SaleZoneCostSummary", SaleZoneCostSummaryServiceMapper,
+            return GetItemsSP("Analytics.SP_BillingRep_GetSaleZoneCostSummary", SaleZoneCostSummaryServiceMapper,
                fromDate,
                toDate,
                "Service",
@@ -89,7 +89,7 @@ namespace TOne.Analytics.Data.SQL
 
         public List<SaleZoneCostSummarySupplier> GetSaleZoneCostSummarySupplier(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
         {
-            return GetItemsSP("Analytics.SP_Billing_SaleZoneCostSummary", SaleZoneCostSummarySupplierMapper,
+            return GetItemsSP("Analytics.SP_BillingRep_GetSaleZoneCostSummary", SaleZoneCostSummarySupplierMapper,
                fromDate,
                toDate,
                "Supplier",

@@ -15,7 +15,7 @@ namespace TOne.Analytics.Data.SQL
     {
         public List<ZoneProfit> GetZoneProfit(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool groupByCustomer, int? supplierAMUId, int? customerAMUId)
         {
-            return GetItemsSP("Analytics.SP_Billing_GetZoneProfits", (reader) => ZoneProfitMapper(reader, groupByCustomer),
+            return GetItemsSP("Analytics.SP_BillingRep_GetZoneProfits", (reader) => ZoneProfitMapper(reader, groupByCustomer),
                 fromDate,
                 toDate,
                 (customerId == null || customerId == "") ? null : customerId,
@@ -26,7 +26,7 @@ namespace TOne.Analytics.Data.SQL
         }
         public List<ZoneSummary> GetZoneSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier)
         {
-            return GetItemsSP("Analytics.SP_Billing_GetZoneSummary", (reader) => ZoneSummaryMapper(reader, groupBySupplier),
+            return GetItemsSP("Analytics.SP_BillingRep_GetZoneSummary", (reader) => ZoneSummaryMapper(reader, groupBySupplier),
                fromDate,
                toDate,
                (customerId == null || customerId == "") ? null : customerId,
@@ -42,7 +42,7 @@ namespace TOne.Analytics.Data.SQL
         }
         public List<ZoneSummaryDetailed> GetZoneSummaryDetailed(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier)
         {
-            return GetItemsSP("Analytics.SP_Billing_GetZoneSummaryDetailed", (reader) => ZoneSummaryDetailedMapper(reader, groupBySupplier),
+            return GetItemsSP("Analytics.SP_BillingRep_GetZoneSummaryDetailed", (reader) => ZoneSummaryDetailedMapper(reader, groupBySupplier),
                fromDate,
                toDate,
                (customerId == null || customerId == "") ? null : customerId,
@@ -137,7 +137,7 @@ namespace TOne.Analytics.Data.SQL
         }
         public List<CarrierLost> GetCarrierLost(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int margin, int? supplierAMUId, int? customerAMUId)
         {
-            return GetItemsSP("Analytics.SP_Billing_CarrierLostReport", CarrierLostMapper,
+            return GetItemsSP("Analytics.SP_BillingRep_GetCarrierLostReport", CarrierLostMapper,
             fromDate,
             toDate,
             (customerId == null || customerId == "") ? null : customerId,
@@ -150,7 +150,7 @@ namespace TOne.Analytics.Data.SQL
         }
         public List<CarrierSummaryDaily> GetDailyCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, bool isGroupedByDay, int? customerAMUId, int? supplierAMUId)
         {
-            return GetItemsSP("Analytics.SP_billing_DailyCarrierSummary", CarrierSummaryDailyMapper,
+            return GetItemsSP("Analytics.SP_billingRep_GetDailyCarrierSummary", CarrierSummaryDailyMapper,
                  fromDate,
                  toDate,
                  (customerId == null || customerId == "") ? null : customerId,
@@ -218,7 +218,7 @@ namespace TOne.Analytics.Data.SQL
 
         public List<DailySummary> GetDailySummary(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
         {
-            return GetItemsSP("Analytics.SP_Billing_GetDailySummary", DailySummaryMapper,
+            return GetItemsSP("Analytics.SP_BillingRep_GetDailySummary", DailySummaryMapper,
               fromDate,
               toDate,
               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
@@ -228,7 +228,7 @@ namespace TOne.Analytics.Data.SQL
         public List<RateLoss> GetRateLoss(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? zoneId, int? customerAMUId, int? supplierAMUId)
         {
 
-            return GetItemsSP("Analytics.SP_Billing_RateLoss", RateLossMapper,
+            return GetItemsSP("Analytics.SP_BillingRep_GetRateLoss", RateLossMapper,
               fromDate,
               toDate,
               (customerId == null || customerId == "") ? null : customerId,
@@ -240,7 +240,7 @@ namespace TOne.Analytics.Data.SQL
         }
         public List<CarrierSummary> GetCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? customerAMUId, int? supplierAMUId)
         {
-            return GetItemsSP("Analytics.SP_Billing_CarrierSummary", CarrierSummaryMapper,
+            return GetItemsSP("Analytics.SP_BillingRep_GetCarrierSummary", CarrierSummaryMapper,
               fromDate,
               toDate,
               (customerId == null || customerId == "") ? null : customerId,
@@ -251,7 +251,7 @@ namespace TOne.Analytics.Data.SQL
         }
         public List<DetailedCarrierSummary> GetCarrierDetailedSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? customerAMUId, int? supplierAMUId)
         {
-            return GetItemsSP("Analytics.SP_Billing_DetailedCarrierSummary", CarrierDetailedSummaryMapper,
+            return GetItemsSP("Analytics.SP_BillingRep_GetDetailedCarrierSummary", CarrierDetailedSummaryMapper,
               fromDate,
               toDate,
               (customerId == null || customerId == "") ? null : customerId,
@@ -263,7 +263,7 @@ namespace TOne.Analytics.Data.SQL
         public List<DailyForcasting> GetDailyForcasting(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
         {
 
-            return GetItemsSP("Analytics.SP_Billing_DailySummaryForcasting", DailyForcastingMapper,
+            return GetItemsSP("Analytics.SP_BillingRep_GetDailySummaryForcasting", DailyForcastingMapper,
               fromDate,
               toDate,
               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
@@ -272,7 +272,7 @@ namespace TOne.Analytics.Data.SQL
         public List<ExchangeCarriers> GetExchangeCarriers(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
         {
 
-            return GetItemsSP("Analytics.SP_Billing_ExchangeCarriersSummary", ExchangeCarriersMapper,
+            return GetItemsSP("Analytics.SP_BillingRep_GetExchangeCarriersSummary", ExchangeCarriersMapper,
            fromDate,
            toDate,
            (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
