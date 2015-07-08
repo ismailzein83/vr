@@ -11,6 +11,8 @@ namespace Vanrise.Security.Entities
         public int ModuleId { get; set; }
         
         public string Name { get; set; }
+
+        public string Title { get; set; }
         
         public string Url { get; set; }
 

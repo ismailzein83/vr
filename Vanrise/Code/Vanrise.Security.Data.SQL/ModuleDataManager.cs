@@ -27,6 +27,7 @@ namespace Vanrise.Security.Data.SQL
             {
                 ModuleId = (int)reader["Id"],
                 Name = reader["Name"] as string,
+                Title = reader["Title"] as string,
                 Url = reader["Url"] as string,
                 ParentId = GetReaderValue<int>(reader, "ParentId"),
                 Icon = reader["Icon"] as string

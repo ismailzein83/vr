@@ -139,6 +139,7 @@ namespace Vanrise.Security.Data.SQL
             {
                 ViewId = (int)reader["Id"],
                 Name = reader["Name"] as string,
+                Title = reader["Title"] as string,
                 Url = reader["Url"] as string,
                 ModuleId = (int) reader["Module"],
                 RequiredPermissions = this.ParseRequiredPermissionsString(GetReaderValue<string>(reader, "RequiredPermissions")),

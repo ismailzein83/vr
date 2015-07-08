@@ -56,7 +56,7 @@ namespace Vanrise.Security.Business
 
         private MenuItem GetModuleMenu(Module module, List<Module> modules, List<View> views, Dictionary<string, Dictionary<string, Flag>> effectivePermissions, HashSet<string> breakInheritanceEntities)
         {
-            MenuItem menu = new MenuItem() { Id = module.ModuleId, Name = module.Name, Location = module.Url, Icon = module.Icon };
+            MenuItem menu = new MenuItem() { Id = module.ModuleId, Name = module.Name, Title = module.Title, Location = module.Url, Icon = module.Icon };
 
             List<Module> subModules = modules.FindAll(x => x.ParentId == module.ModuleId);
 
@@ -69,7 +69,7 @@ namespace Vanrise.Security.Business
                 {
                     if(viewItem.RequiredPermissions == null || isAllowed(viewItem.RequiredPermissions, effectivePermissions, breakInheritanceEntities))
                     {
-                        MenuItem viewMenu = new MenuItem() { Id=viewItem.ViewId,Name = viewItem.Name, Location = viewItem.Url, Type = viewItem.Type };
+                        MenuItem viewMenu = new MenuItem() { Id = viewItem.ViewId, Name = viewItem.Name, Title = viewItem.Title, Location = viewItem.Url, Type = viewItem.Type };
                         menu.Childs.Add(viewMenu);
                     }
                 }
