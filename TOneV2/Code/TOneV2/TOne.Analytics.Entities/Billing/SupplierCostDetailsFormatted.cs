@@ -14,6 +14,7 @@ namespace TOne.Analytics.Entities
         public string DurationFormatted { get; set; }
         public double? Amount { get; set; }
         public string AmountFormatted { get; set; }
+        public string CustomerGroupName { get; set; }
 
     }
 }

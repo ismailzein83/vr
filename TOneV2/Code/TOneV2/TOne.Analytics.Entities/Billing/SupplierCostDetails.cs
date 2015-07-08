@@ -12,6 +12,6 @@ namespace TOne.Analytics.Entities
         public string Customer { get; set; }
         public decimal? Duration { get; set; }
         public double? Amount { get; set; }
-
+        public string CustomerGroupName { get; set; }
     }
 }

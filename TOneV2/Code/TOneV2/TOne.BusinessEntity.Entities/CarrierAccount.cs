@@ -18,5 +18,7 @@ namespace TOne.BusinessEntity.Entities
         public byte CustomerPaymentType { get; set; }
         public byte SupplierPaymentType { get; set; }
         public string NameSuffix { get; set; }
+        public int? CarrierGroupID { get; set; }
+        public string CarrierGroupName { get; set; }
     }
 }

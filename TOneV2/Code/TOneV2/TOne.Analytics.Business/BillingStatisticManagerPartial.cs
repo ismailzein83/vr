@@ -218,15 +218,12 @@ namespace TOne.Analytics.Business
                 ASR = obj.ASR,
                 ASRFormatted = FormatNumber(obj.ASR, 5),
 
-                Profit = FormatNumber((double)((double)obj.SaleNet- (double)obj.CostNet) , 2),
+                Profit = FormatNumber((double)obj.SaleNet - (double)obj.CostNet),
 
-                AVGCost = FormatNumber((double)((double)obj.CostNet / (double)obj.Duration), 5),
-
-                AVGSale = FormatNumber((double)((double)obj.SaleNet / (double)obj.Duration), 5)
-                
-
-                
-            
+                AVGCost = ((double)obj.Duration == 0 || (double)obj.CostNet == 0) ? 0 : (double)((double)obj.CostNet / (double)obj.Duration),
+                AVGCostFormatted = ((double)obj.Duration == 0 || (double)obj.CostNet == 0) ? "0" : FormatNumber((double)((double)obj.CostNet / (double)obj.Duration), 5),
+                AVGSale = ((double)obj.Duration == 0 || (double)obj.SaleNet == 0) ? 0 : (double)((double)obj.SaleNet / (double)obj.Duration),
+                AVGSaleFormatted = ((double)obj.Duration == 0 || (double)obj.SaleNet == 0) ? "0" : FormatNumber((double)((double)obj.SaleNet / (double)obj.Duration), 5),
             };
         }
         #endregion 

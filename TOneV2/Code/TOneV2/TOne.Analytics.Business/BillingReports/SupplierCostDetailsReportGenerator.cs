@@ -26,7 +26,7 @@ namespace TOne.Analytics.Business.BillingReports
             list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.ToString(), IsVisible = true });
             list.Add("Title", new RdlcParameter { Value = "Out Carrier Cost Report Details", IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
-            list.Add("DigitRate", new RdlcParameter { Value = "2", IsVisible = true });
+            list.Add("DigitRate", new RdlcParameter { Value = "4", IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value = "[USD] United States Dollars", IsVisible = true });
 
             return list;

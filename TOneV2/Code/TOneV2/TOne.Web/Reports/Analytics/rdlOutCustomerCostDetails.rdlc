@@ -51,14 +51,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Supplier">
+                    <Textbox Name="Carrier">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Customer.Value</Value>
+                              <Value>=Fields!Carrier.Value</Value>
                               <Style>
                                 <FontSize>12pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -69,7 +69,7 @@
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Supplier</rd:DefaultName>
+                      <rd:DefaultName>Carrier</rd:DefaultName>
                       <ZIndex>16</ZIndex>
                       <Style>
                         <BackgroundColor>SlateGray</BackgroundColor>
@@ -245,14 +245,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Carrier">
+                    <Textbox Name="CustomerGroupName">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Carrier.Value</Value>
+                              <Value>=Fields!CustomerGroupName.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -261,7 +261,7 @@
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Carrier</rd:DefaultName>
+                      <rd:DefaultName>CustomerGroupName</rd:DefaultName>
                       <ZIndex>2</ZIndex>
                       <Style>
                         <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
@@ -592,12 +592,12 @@
             <TablixMember>
               <Group Name="table1_Group1">
                 <GroupExpressions>
-                  <GroupExpression>=Fields!Customer.Value</GroupExpression>
+                  <GroupExpression>=Fields!Carrier.Value</GroupExpression>
                 </GroupExpressions>
               </Group>
               <SortExpressions>
                 <SortExpression>
-                  <Value>=Fields!Customer.Value</Value>
+                  <Value>=Fields!Carrier.Value</Value>
                 </SortExpression>
               </SortExpressions>
               <TablixMembers>
@@ -617,7 +617,7 @@
                   </Group>
                   <SortExpressions>
                     <SortExpression>
-                      <Value>=Fields!Customer.Value</Value>
+                      <Value>=Fields!CustomerGroupName.Value</Value>
                     </SortExpression>
                   </SortExpressions>
                   <TablixMembers>
@@ -1004,6 +1004,10 @@
         </Field>
         <Field Name="AmountFormatted">
           <DataField>AmountFormatted</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CustomerGroupName">
+          <DataField>CustomerGroupName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>

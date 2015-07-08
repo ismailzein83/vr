@@ -93,7 +93,8 @@ namespace TOne.BusinessEntity.Data.SQL
                         AccountType = (byte)reader["AccountType"],
                         CustomerPaymentType = (byte)reader["CustomerPaymentType"],
                         SupplierPaymentType = (byte)reader["SupplierPaymentType"],
-                        NameSuffix = reader["NameSuffix"] as string
+                        NameSuffix = reader["NameSuffix"] as string,
+                        CarrierGroupName = reader["CarrierGroupName"] as string
                     };
                 }, carrierAccountId);
         }

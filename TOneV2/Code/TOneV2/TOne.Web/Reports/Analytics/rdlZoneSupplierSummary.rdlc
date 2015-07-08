@@ -761,7 +761,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -1029,7 +1028,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Avg(Fields!CostNet.Value/Fields!Duration.Value),2)</Value>
+                              <Value>=FormatNumber(Sum(Fields!AVGCost.Value),2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1060,7 +1059,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Avg(Fields!SaleNet.Value/Fields!Duration.Value),2)</Value>
+                              <Value>=FormatNumber(Sum(Fields!AVGSale.Value),2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>

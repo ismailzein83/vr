@@ -245,8 +245,9 @@ namespace TOne.Analytics.Business
 
         public List<DetailedCarrierSummaryFormatted> GetDetailedCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? customerAMUId, int? supplierAMUId)
         {
-
-            return FormatDetailedCarrierSummaries(_datamanager.GetCarrierDetailedSummary(fromDate, toDate, customerId, supplierId, supplierAMUId, customerAMUId));
+            List<DetailedCarrierSummary> lstDetailedCarrierSummary = _datamanager.GetCarrierDetailedSummary(fromDate, toDate, customerId, supplierId, supplierAMUId, customerAMUId);
+            lstDetailedCarrierSummary = lstDetailedCarrierSummary.OrderBy(x => x.SaleZoneName).ToList();
+            return FormatDetailedCarrierSummaries(lstDetailedCarrierSummary);
         }
 
         public List<CustomerSummaryFormatted> GetCustomerSummary(DateTime fromDate, DateTime toDate, string customerId, int? customerAMUId, int? supplierAMUId)
@@ -340,22 +341,23 @@ namespace TOne.Analytics.Business
         public List<ExchangeCarrierFormatted> GetExchangeCarriers(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId, bool IsExchange)
         {
             List<ExchangeCarriers> baseList = _datamanager.GetExchangeCarriers(fromDate, toDate, supplierAMUId, customerAMUId);
+
             List<ExchangeCarrierProfit> ecpList = new List<ExchangeCarrierProfit>();
-            CarrierManager ca = new CarrierManager();
-            List<CarrierAccount> list = ca.GetAllCarriers();
-            List<ExchangeCarrierFormatted> result = new List<ExchangeCarrierFormatted>();
             foreach (var row in baseList)
             {
 
                 ExchangeCarrierProfit ecp = new ExchangeCarrierProfit()
                 {
-                    CarrierAccount = ca.GetCarrierAccount(row.CustomerID),// list.Where(s => s.CarrierAccountId == row.CustomerID ).FirstOrDefault(),
+                    CarrierAccount = _cmanager.GetCarrierAccount(row.CustomerID),
                     CustomerProfit = row.CustomerProfit != null ? (double)row.CustomerProfit : 0,
                     SupplierProfit = row.SupplierProfit != null ? (double)row.SupplierProfit : 0
 
                 };
                 ecpList.Add(ecp);
             }
+
+            List<ExchangeCarrierFormatted> result = new List<ExchangeCarrierFormatted>();
+            
             var test = ecpList;
             if (IsExchange == true)
             {
@@ -363,7 +365,7 @@ namespace TOne.Analytics.Business
                 .Select(c =>
                 new ExchangeCarrierFormatted
                 {
-                    Customer = c.CarrierAccount.NameSuffix,
+                    Customer = c.CarrierAccount.ProfileName,
                     CustomerProfit = c.CustomerProfit,
                     SupplierProfit = c.SupplierProfit,
                     FormattedCustomerProfit = FormatNumber(c.CustomerProfit),
@@ -562,7 +564,7 @@ namespace TOne.Analytics.Business
                 Duration = supplierCostDetails.Duration,
                 DurationFormatted = FormatNumber(supplierCostDetails.Duration),
                 Amount = supplierCostDetails.Amount,
-                AmountFormatted = FormatNumber(supplierCostDetails.Amount,5),
+                AmountFormatted = FormatNumber(supplierCostDetails.Amount, 4),
                 CustomerGroupName = supplierCostDetails.CustomerGroupName
             };
         }
@@ -585,7 +587,7 @@ namespace TOne.Analytics.Business
             return new SaleZoneCostSummaryServiceFormatted
             {
                 AvgServiceCost = saleZoneCostSummaryService.AvgServiceCost,
-                AvgServiceCostFormatted = FormatNumber(saleZoneCostSummaryService.AvgServiceCost, 5),
+                AvgServiceCostFormatted = FormatNumber(saleZoneCostSummaryService.AvgServiceCost),
 
                 salezoneID = saleZoneCostSummaryService.salezoneID,
                 salezoneIDFormatted = (saleZoneCostSummaryService.salezoneID != null) ? _bemanager.GetZoneName(saleZoneCostSummaryService.salezoneID) : null,
@@ -604,7 +606,7 @@ namespace TOne.Analytics.Business
                 SupplierID = (saleZoneCostSummarySupplier.SupplierID != null) ? _bemanager.GetCarrirAccountName(saleZoneCostSummarySupplier.SupplierID) : null,
 
                 HighestRate = saleZoneCostSummarySupplier.HighestRate,
-                HighestRateFormatted = FormatNumber(saleZoneCostSummarySupplier.HighestRate, 5),
+                HighestRateFormatted = FormatNumber(saleZoneCostSummarySupplier.HighestRate),
                 
                 salezoneID = saleZoneCostSummarySupplier.salezoneID,
 
@@ -688,12 +690,12 @@ namespace TOne.Analytics.Business
 
         private string FormatNumber(Decimal? number)
         {
-            return String.Format("{0:#0.00}", number);
+            return String.Format("{0:#,###0.00}", number);
         }
 
         private string FormatNumber(Double? number)
         {
-            return String.Format("{0:#0.00}", number);
+            return String.Format("{0:#,###0.00}", number);
         }
         private List<ZoneProfitFormatted> FormatZoneProfits(List<ZoneProfit> zoneProfits)
         {
@@ -902,9 +904,9 @@ namespace TOne.Analytics.Business
                 CostDuration = carrierSummary.CostDuration,
                 CostDurationFormatted = FormatNumber(carrierSummary.CostDuration),
                 CostNet = carrierSummary.CostNet,
-                CostNetFormatted = (carrierSummary.CostNet == 0.00) ? "0.00" : FormatNumber(carrierSummary.CostNet, 5),
+                CostNetFormatted = (carrierSummary.CostNet == 0.00) ? "0.00" : FormatNumber(carrierSummary.CostNet),
                 SaleNet = carrierSummary.SaleNet,
-                SaleNetFormatted = (carrierSummary.SaleNet == 0.00) ? "0.00" : FormatNumber(carrierSummary.SaleNet, 5),
+                SaleNetFormatted = (carrierSummary.SaleNet == 0.00) ? "0.00" : FormatNumber(carrierSummary.SaleNet, 4),
                 CostCommissionValue = carrierSummary.CostCommissionValue,
                 CostCommissionValueFormatted = FormatNumber(Convert.ToDouble(Math.Abs(carrierSummary.CostCommissionValue.Value))),
                 SaleCommissionValue = carrierSummary.SaleCommissionValue,
@@ -932,12 +934,12 @@ namespace TOne.Analytics.Business
                 SaleDuration = detailedCarrier.SaleDuration,
                 SaleDurationFormatted = FormatNumber(detailedCarrier.SaleDuration),
                 SaleRate = detailedCarrier.SaleRate,
-                SaleRateFormatted = FormatNumber(detailedCarrier.SaleRate, 5),
+                SaleRateFormatted = FormatNumber(detailedCarrier.SaleRate, 4),
                 SaleRateChange = detailedCarrier.SaleRateChange,
                 SaleRateChangeFormatted = ((TOne.Analytics.Entities.Change)detailedCarrier.SaleRateChange).ToString(),
                 SaleRateEffectiveDate = detailedCarrier.SaleRateEffectiveDate,
                 SaleAmount = detailedCarrier.SaleAmount,
-                SaleAmountFormatted = FormatNumber(detailedCarrier.SaleAmount, 5),
+                SaleAmountFormatted = FormatNumber(detailedCarrier.SaleAmount),
                 SupplierID = detailedCarrier.SupplierID,
                 Supplier = (detailedCarrier.SupplierID != null) ? _bemanager.GetCarrirAccountName(detailedCarrier.SupplierID) : null,
                 CostZoneID = detailedCarrier.CostZoneID,
@@ -945,14 +947,14 @@ namespace TOne.Analytics.Business
                 CostDuration = detailedCarrier.CostDuration,
                 CostDurationFormatted = FormatNumber(detailedCarrier.CostDuration),
                 CostRate = detailedCarrier.CostRate,
-                CostRateFormatted = FormatNumber(detailedCarrier.CostRate, 5),
+                CostRateFormatted = FormatNumber(detailedCarrier.CostRate, 4),
                 CostRateChange = detailedCarrier.CostRateChange,
                 CostRateChangeFormatted = ((TOne.Analytics.Entities.Change)detailedCarrier.CostRateChange).ToString(),
                 CostRateEffectiveDate = detailedCarrier.CostRateEffectiveDate,
                 CostAmount = detailedCarrier.CostAmount,
-                CostAmountFormatted = FormatNumber(detailedCarrier.CostAmount, 5),
+                CostAmountFormatted = FormatNumber(detailedCarrier.CostAmount, 4),
                 Profit = detailedCarrier.Profit,
-                ProfitFormatted = FormatNumber(detailedCarrier.Profit, 5),
+                ProfitFormatted = FormatNumber(detailedCarrier.Profit),
                 ProfitPercentage = (detailedCarrier.SaleAmount > 0) ? String.Format("{0:#,##0.00%}", (1 - detailedCarrier.CostAmount / detailedCarrier.SaleAmount)) : "-100%"
             };
         }
