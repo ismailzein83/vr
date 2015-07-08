@@ -120,7 +120,7 @@
                 getAlign: function () {
                     var align = '';
                     if (col.type == "Number") 
-                        align = 'vr-align-rigth';                   
+                        align = 'vr-grid-cell-number';                   
                         return align;
 
                 },
@@ -478,7 +478,7 @@
         }
 
         function getPageSize() {
-            return 20;
+            return 25;
         }
 
         function getPageInfo() {

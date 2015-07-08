@@ -1283,8 +1283,9 @@ input.ui-grid-filter-input[type="text"] {
 .vr-datagrid-celltext div{
     min-height:17px;
 }
-.vr-align-rigth{
+.vr-grid-cell-number{
     text-align: right !important;   
+    padding-right:2px !important;
 } 
 .divLoading {
         pointer-events: none;
