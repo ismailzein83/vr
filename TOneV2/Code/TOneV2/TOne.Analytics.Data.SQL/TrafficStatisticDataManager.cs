@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.Analytics.Entities;
+using TOne.BusinessEntity.Business;
+using TOne.BusinessEntity.Entities;
 using TOne.Data.SQL;
 using TOne.Entities;
 
@@ -62,6 +64,7 @@ namespace TOne.Analytics.Data.SQL
                     cmd.Parameters.Add(new SqlParameter("@ToDate", to));
                 });
         }
+   
 
         #region Private Methods
 
@@ -73,11 +76,7 @@ namespace TOne.Analytics.Data.SQL
 	                            BEGIN
 
                             WITH OurZones AS (SELECT ZoneID, Name, CodeGroup FROM Zone z WITH (NOLOCK) WHERE SupplierID = 'SYS'),
-                           
-                            CarrierInfo AS
-                            (
-                                Select P.Name + ' (' + A.NameSuffix + ')' AS Name, A.CarrierAccountID AS CarrierAccountID from CarrierAccount A LEFT JOIN CarrierProfile P on P.ProfileID=A.ProfileID
-                            ),
+
 		                        AllResult AS
 		                        (
 			                        SELECT
@@ -96,7 +95,7 @@ namespace TOne.Analytics.Data.SQL
 				                           , AVG(ts.PGAD) AS PGAD
 
 			                        FROM TrafficStats ts WITH(NOLOCK ,INDEX(IX_TrafficStats_DateTimeFirst))
-                                    #JOINPART# 
+                                 
 			                        WHERE
 			                        FirstCDRAttempt BETWEEN @FromDate AND @ToDate
                                     #FILTER#
@@ -105,7 +104,7 @@ namespace TOne.Analytics.Data.SQL
 		                        SELECT * INTO #TEMPTABLE# FROM AllResult
                             END");
             StringBuilder groupKeysSelectPart = new StringBuilder();
-            StringBuilder groupKeysJoinPart = new StringBuilder();
+            //StringBuilder groupKeysJoinPart = new StringBuilder();
             StringBuilder groupKeysGroupByPart = new StringBuilder();
             HashSet<string> joinStatement = new HashSet<string>();
             foreach(var groupKey in groupKeys)
@@ -123,13 +122,13 @@ namespace TOne.Analytics.Data.SQL
             
                 queryBuilder.Replace("#TEMPTABLE#", tempTableName);
                 AddFilterToQuery(filter, whereBuilder, joinStatement);
-            foreach (string join in joinStatement)
-            {
-                groupKeysJoinPart.Append(join);
-            }
+            //foreach (string join in joinStatement)
+            //{
+            //    groupKeysJoinPart.Append(join);
+            //}
             queryBuilder.Replace("#FILTER#", whereBuilder.ToString());
             queryBuilder.Replace("#SELECTPART#", groupKeysSelectPart.ToString());
-            queryBuilder.Replace("#JOINPART#", groupKeysJoinPart.ToString());
+          //  queryBuilder.Replace("#JOINPART#", groupKeysJoinPart.ToString());
             queryBuilder.Replace("#GROUPBYPART#", groupKeysGroupByPart.ToString());
 
             ExecuteNonQueryText(queryBuilder.ToString(), (cmd) =>
@@ -144,12 +143,12 @@ namespace TOne.Analytics.Data.SQL
             AddFilter(whereBuilder, filter.SwitchIds, "ts.SwitchId");
             AddFilter(whereBuilder, filter.CustomerIds, "ts.CustomerID");
             AddFilter(whereBuilder, filter.SupplierIds, "ts.SupplierID");
-            if (filter.CodeGroup != null && filter.CodeGroup.Count > 0)
-            {
-                joinStatement.Add(OurZonesJoinQuery);
-                AddFilter(whereBuilder, filter.CodeGroup, "z.CodeGroup");
+            //if (filter.CodeGroup != null && filter.CodeGroup.Count > 0)
+            //{
+               // joinStatement.Add(OurZonesJoinQuery);
+            AddFilter(whereBuilder, filter.CodeGroup, "ts.OurZoneID");
 
-            }
+            //}
             AddFilter(whereBuilder, filter.PortIn, "ts.Port_IN");
             AddFilter(whereBuilder, filter.PortOut, "ts.Port_OUT");
             AddFilter(whereBuilder, filter.ZoneIds, "ts.OurZoneID");
@@ -167,15 +166,14 @@ namespace TOne.Analytics.Data.SQL
             }
         }
 
-
-
         private IEnumerable<TrafficStatisticGroupSummary> GetData(string tempTableName, TrafficStatisticGroupKeys[] groupKeys, int fromRow, int toRow, TrafficStatisticMeasures orderBy, bool isDescending, out int totalCount)
         {
             string query = String.Format(@"WITH OrderedResult AS (SELECT *, ROW_NUMBER()  OVER ( ORDER BY {1} {2}) AS rowNumber FROM {0})
 	                                    SELECT * FROM OrderedResult WHERE rowNumber between @FromRow AND @ToRow", tempTableName, GetColumnName(orderBy), isDescending ? "DESC" : "ASC");
 
             totalCount = (int)ExecuteScalarText(String.Format("SELECT COUNT(*) FROM {0}", tempTableName), null);
-            return GetItemsText(query,
+          
+            List<TrafficStatisticGroupSummary> TrafficStatisticData= GetItemsText(query,
                 (reader) =>
                 {
                     var obj = new TrafficStatisticGroupSummary
@@ -193,7 +191,7 @@ namespace TOne.Analytics.Data.SQL
                         obj.GroupKeyValues[i] = new KeyColumn
                         {
                             Id = id != DBNull.Value ? id.ToString() : null,
-                            Name = reader[nameColumn] as string
+                           // Name = reader[nameColumn] as string
                         };
                     }
 
@@ -204,8 +202,46 @@ namespace TOne.Analytics.Data.SQL
                     cmd.Parameters.Add(new SqlParameter("@FromRow", fromRow));
                     cmd.Parameters.Add(new SqlParameter("@ToRow", toRow));
                 });
+            FillTrafficStatisticData(TrafficStatisticData, groupKeys);
+            return TrafficStatisticData;
         }
+        private void FillTrafficStatisticData(List<TrafficStatisticGroupSummary> TrafficStatisticData, TrafficStatisticGroupKeys[] groupKeys)
+        {
+            BusinessEntityInfoManager manager = new BusinessEntityInfoManager();
 
+            
+            foreach (TrafficStatisticGroupSummary data in TrafficStatisticData)
+            {
+
+                for (int i = 0; i < groupKeys.Length;i++ )
+                {
+                    switch (groupKeys[i])
+                    {
+                        case TrafficStatisticGroupKeys.OurZone:
+                            data.GroupKeyValues[i].Name = manager.GetZoneName(Convert.ToInt32(data.GroupKeyValues[i].Id));break;
+                        case TrafficStatisticGroupKeys.CustomerId:
+                            data.GroupKeyValues[i].Name = manager.GetCarrirAccountName(data.GroupKeyValues[i].Id);break;
+                        case TrafficStatisticGroupKeys.SupplierId:
+                            data.GroupKeyValues[i].Name = manager.GetCarrirAccountName(data.GroupKeyValues[i].Id);break;
+                        case TrafficStatisticGroupKeys.Switch:
+                            data.GroupKeyValues[i].Name = manager.GetSwitchName(Convert.ToInt32(data.GroupKeyValues[i].Id));break;
+                        case TrafficStatisticGroupKeys.CodeGroup:
+                            ZoneManager zoneManager = new ZoneManager();
+                            data.GroupKeyValues[i].Name=zoneManager.GetZone((Convert.ToInt32(data.GroupKeyValues[i].Id))).CodeGroupName;
+                            break;
+                        case TrafficStatisticGroupKeys.SupplierZoneId:
+                            data.GroupKeyValues[i].Name = manager.GetZoneName(Convert.ToInt32(data.GroupKeyValues[i].Id));break;
+                        case TrafficStatisticGroupKeys.PortIn:
+                           data.GroupKeyValues[i].Name=data.GroupKeyValues[i].Id;break;
+                        case TrafficStatisticGroupKeys.PortOut:
+                           data.GroupKeyValues[i].Name = data.GroupKeyValues[i].Id;break;
+                        default: break;
+                    }
+
+                }
+              
+            }
+        }
         private TrafficStatistic GetSummary(string tempTableName)
         {
             String query = String.Format(@"SELECT
@@ -330,31 +366,46 @@ namespace TOne.Analytics.Data.SQL
             switch (column)
             {
                 case TrafficStatisticGroupKeys.OurZone:
-                    selectStatement = String.Format(" ts.OurZoneID as {0}, z.Name as {1}, ", OurZoneIDColumnName, OurZoneNameColumnName);
-                    joinStatement.Add(String.Format("{0}", OurZonesJoinQuery));
+                   // selectStatement = String.Format(" ts.OurZoneID as {0}, z.Name as {1}, ", OurZoneIDColumnName, OurZoneNameColumnName);
+                    selectStatement = String.Format(" ts.OurZoneID as {0},  ", OurZoneIDColumnName);
+                   // joinStatement.Add(String.Format("{0}", OurZonesJoinQuery));
+                    joinStatement = null;
                     //joinStatement = " LEFT JOIN OurZones z ON ts.OurZoneID = z.ZoneID";
-                    groupByStatement = "ts.OurZoneID, z.Name";
+                    groupByStatement = "ts.OurZoneID";
+                    //groupByStatement = "ts.OurZoneID, z.Name";
                     break;
                 case TrafficStatisticGroupKeys.CustomerId:
-                    selectStatement = String.Format(" ts.CustomerID as {0}, cust.Name as {1}, ", CustomerIDColumnName, CustomerNameColumnName);
-                    joinStatement.Add(" LEFT JOIN CarrierInfo cust ON ts.CustomerID = cust.CarrierAccountID");
-                    groupByStatement = "ts.CustomerID, cust.Name";
+                     selectStatement = String.Format(" ts.CustomerID as {0}, ", CustomerIDColumnName);
+                     joinStatement = null;
+                    groupByStatement = "ts.CustomerID";
+                    //selectStatement = String.Format(" ts.CustomerID as {0}, cust.Name as {1}, ", CustomerIDColumnName, CustomerNameColumnName);
+                    //joinStatement.Add(" LEFT JOIN CarrierInfo cust ON ts.CustomerID = cust.CarrierAccountID");
+                    //groupByStatement = "ts.CustomerID, cust.Name";
                     break;
 
                 case TrafficStatisticGroupKeys.SupplierId:
-                    selectStatement = String.Format(" ts.SupplierID as {0}, supp.Name as {1}, ", SupplierIDColumnName, SupplierNameColumnName);
-                    joinStatement.Add( " LEFT JOIN CarrierInfo supp ON ts.SupplierID = supp.CarrierAccountID");
-                    groupByStatement = "ts.SupplierID, supp.Name";
+                    selectStatement = String.Format(" ts.SupplierID as {0}, ", SupplierIDColumnName);
+                    joinStatement = null;
+                    groupByStatement = "ts.SupplierID";
+                    //selectStatement = String.Format(" ts.SupplierID as {0}, supp.Name as {1}, ", SupplierIDColumnName, SupplierNameColumnName);
+                    //joinStatement.Add( " LEFT JOIN CarrierInfo supp ON ts.SupplierID = supp.CarrierAccountID");
+                    //groupByStatement = "ts.SupplierID, supp.Name";
                     break;
                 case TrafficStatisticGroupKeys.Switch:
-                    selectStatement = String.Format(" ts.SwitchId as {0}, swit.Name as {1}, ", SwitchIdColumnName, SwitchNameColumnName);
-                    joinStatement.Add(" LEFT JOIN Switch swit ON ts.SwitchId = swit.SwitchID ");
-                    groupByStatement = "ts.SwitchId, swit.Name";
+                    selectStatement = String.Format(" ts.SwitchId as {0}, ", SwitchIdColumnName);
+                    joinStatement = null;
+                    groupByStatement = "ts.SwitchId";
+                    //selectStatement = String.Format(" ts.SwitchId as {0}, swit.Name as {1}, ", SwitchIdColumnName, SwitchNameColumnName);
+                    //joinStatement.Add(" LEFT JOIN Switch swit ON ts.SwitchId = swit.SwitchID ");
+                    //groupByStatement = "ts.SwitchId, swit.Name";
                     break;
                 case TrafficStatisticGroupKeys.CodeGroup:
-                    selectStatement = String.Format(" z.CodeGroup as {0}, c.Name as {1}, ", CodeGroupIDColumnName, CodeGroupNameColumnName);
-                    joinStatement.Add(String.Format("{0} LEFT JOIN CodeGroup c ON z.CodeGroup=c.Code", OurZonesJoinQuery));
-                    groupByStatement = "z.CodeGroup, c.Name";
+                    selectStatement = String.Format("ts.OurZoneID as {0}, ", CodeGroupIDColumnName);
+                      joinStatement = null;
+                    groupByStatement = "ts.OurZoneID";
+                    //selectStatement = String.Format(" z.CodeGroup as {0}, c.Name as {1}, ", CodeGroupIDColumnName, CodeGroupNameColumnName);
+                    //joinStatement.Add(String.Format("{0} LEFT JOIN CodeGroup c ON z.CodeGroup=c.Code", OurZonesJoinQuery));
+                    //groupByStatement = "z.CodeGroup, c.Name";
                     break;
                 case TrafficStatisticGroupKeys.PortIn:
                     selectStatement = String.Format(" ts.Port_IN as {0}, ", Port_INColumnName);
@@ -367,9 +418,12 @@ namespace TOne.Analytics.Data.SQL
                     groupByStatement = "ts.Port_OUT";
                     break;
                 case TrafficStatisticGroupKeys.SupplierZoneId:
-                    selectStatement = String.Format(" ts.SupplierZoneID as {0}, supplierZones.Name as {1}, ", SupplierZoneIDColumnName, SupplierZoneNameColumnName);
-                    joinStatement.Add(" LEFT JOIN Zone supplierZones WITH (NOLOCK) ON ts.SupplierZoneID = supplierZones.ZoneID ");
-                    groupByStatement = "ts.SupplierZoneID,  supplierZones.Name";
+                    selectStatement = String.Format(" ts.SupplierZoneID as {0}, ", SupplierZoneIDColumnName);
+                    joinStatement = null;
+                    groupByStatement = "ts.SupplierZoneID";
+                    //selectStatement = String.Format(" ts.SupplierZoneID as {0}, supplierZones.Name as {1}, ", SupplierZoneIDColumnName, SupplierZoneNameColumnName);
+                    //joinStatement.Add(" LEFT JOIN Zone supplierZones WITH (NOLOCK) ON ts.SupplierZoneID = supplierZones.ZoneID ");
+                    //groupByStatement = "ts.SupplierZoneID,  supplierZones.Name";
                     break;
                 default:
                     selectStatement = null;
