@@ -4,7 +4,7 @@
 
 
 
-CREATE PROCEDURE [Analytics].[SP_Billing_CustomerServices](
+CREATE PROCEDURE [Analytics].[SP_BillingRep_GetCustomerServices](
 	@FromDate Datetime ,
 	@ToDate Datetime
 )

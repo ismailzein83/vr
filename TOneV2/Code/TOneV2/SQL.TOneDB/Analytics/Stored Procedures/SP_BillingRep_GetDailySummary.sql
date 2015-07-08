@@ -1,5 +1,5 @@
 ﻿
-create PROCEDURE [Analytics].[SP_Billing_GetDailySummary](
+create PROCEDURE [Analytics].[SP_BillingRep_GetDailySummary](
 	@FromDate Datetime ,
 	@ToDate Datetime ,
 	@CustomerAmuID int = NULL,

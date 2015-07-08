@@ -5,7 +5,11 @@
     [Module]              INT             NOT NULL,
     [RequiredPermissions] NVARCHAR (1000) NULL,
     [Audience]            NVARCHAR (255)  NULL,
+    [Content]             NVARCHAR (1000) NULL,
+    [Type]                INT             NOT NULL,
     CONSTRAINT [PK_Views] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Module_View] FOREIGN KEY ([Module]) REFERENCES [sec].[Module] ([Id])
 );
+
+
 

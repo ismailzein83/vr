@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-Create PROCEDURE [BEntity].[sp_CarrierAccount_GetByCarrierAccountId]
+CREATE PROCEDURE [BEntity].[sp_CarrierAccount_GetByCarrierAccountId]
 	 (@CarrierAccountId VARCHAR(30) =  NULL)
 AS
 BEGIN
@@ -18,9 +18,14 @@ SELECT ca.CarrierAccountId,
 	ca.AccountType,
 	ca.CustomerPaymentType,
 	ca.SupplierPaymentType,
-	ca.NameSuffix
+	ca.NameSuffix,
+	ca.CarrierGroupID,
+	cg.CarrierGroupName
 FROM CarrierAccount ca
 		INNER JOIN CarrierProfile cp on ca.ProfileID = cp.ProfileID
+		LEFT OUTER JOIN
+                   CarrierGroup cg ON ca.CarrierGroupID = cg.CarrierGroupID
+                      
 			WHERE 
 				ca.CarrierAccountID = @CarrierAccountId
 

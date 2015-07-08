@@ -1,7 +1,3 @@
-﻿CREATE SCHEMA [BI]
+﻿CREATE SCHEMA [main]
     AUTHORIZATION [development];
-
-
-
-
 

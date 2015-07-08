@@ -14,6 +14,8 @@ BEGIN
 	S.LastAttempt,
 	S.Enable_CDR_Import,
 	S.Enable_Routing,
-	S.LastRouteUpdate
+	S.LastRouteUpdate,
+	S.NominalTrunkCapacityInE1s,
+	S.NominalVoipCapacityInE1s
 	From Switch S where S.SwitchID=@switchID
 END

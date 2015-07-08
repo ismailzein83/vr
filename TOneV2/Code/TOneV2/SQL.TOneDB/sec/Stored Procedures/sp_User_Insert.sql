@@ -8,8 +8,11 @@
 	@Id int out
 AS
 BEGIN
-	Insert into sec.[User] ([Name],[Password],[Email], [Status], [Description])
-	values(@Name, @Password, @Email, @Status, @Description)
-	
-	SET @Id = @@IDENTITY
+IF NOT EXISTS(select 1 from sec.[User] where Email = @Email)
+	BEGIN
+		Insert into sec.[User] ([Name],[Password],[Email], [Status], [Description])
+		values(@Name, @Password, @Email, @Status, @Description)
+		
+		SET @Id = @@IDENTITY
+	END
 END

@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [Analytics].[SP_Billing_DailySummaryForcasting](
+CREATE PROCEDURE [Analytics].[SP_BillingRep_GetDailySummaryForcasting](
 	@FromDate Datetime ,
 	@ToDate Datetime ,
 	@CustomerAmuID int = NULL,

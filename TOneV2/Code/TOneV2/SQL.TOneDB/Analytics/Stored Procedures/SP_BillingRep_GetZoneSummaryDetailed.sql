@@ -2,7 +2,7 @@
 
 
 
-create PROCEDURE [Analytics].[SP_Billing_GetZoneSummaryDetailed](
+create PROCEDURE [Analytics].[SP_BillingRep_GetZoneSummaryDetailed](
 	@FromDate Datetime ,
 	@ToDate Datetime ,
 	@CustomerID varchar(5)=NULL,

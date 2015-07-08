@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [Analytics].[SP_Billing_CustomerSummary](
+CREATE PROCEDURE [Analytics].[SP_BillingRep_GetCustomerSummary](
 	@CustomerID varchar(10) = NULL,
 	@FromDate Datetime ,
 	@ToDate Datetime,

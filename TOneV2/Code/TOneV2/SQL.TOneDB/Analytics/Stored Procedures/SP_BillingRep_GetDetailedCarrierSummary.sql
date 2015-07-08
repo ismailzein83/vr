@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [Analytics].[SP_Billing_DetailedCarrierSummary](
+CREATE PROCEDURE [Analytics].[SP_BillingRep_GetDetailedCarrierSummary](
 	@FromDate DATETIME,
 	@ToDate DATETIME,
 	@CustomerID VARCHAR(5) = NULL,

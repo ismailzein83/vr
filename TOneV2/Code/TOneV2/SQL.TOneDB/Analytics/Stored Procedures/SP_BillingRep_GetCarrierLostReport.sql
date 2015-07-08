@@ -1,5 +1,5 @@
 ﻿
-Create PROCEDURE [Analytics].[SP_Billing_CarrierLostReport]
+Create PROCEDURE [Analytics].[SP_BillingRep_GetCarrierLostReport]
 (
 	@FromDate Datetime,
 	@ToDate Datetime,

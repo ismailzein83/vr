@@ -16,5 +16,5 @@ BEGIN
       ,[Url]
       ,[Module]
       ,[RequiredPermissions]
-      ,[Audience] from sec.[View]
+      ,[Audience],[Type] from sec.[View]
 END

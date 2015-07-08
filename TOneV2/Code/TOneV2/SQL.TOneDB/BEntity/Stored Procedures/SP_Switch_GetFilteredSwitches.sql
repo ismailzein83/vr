@@ -25,6 +25,8 @@ SELECT S.SwitchID,
 	S.Enable_CDR_Import,
 	S.Enable_Routing,
 	S.LastRouteUpdate,
+	S.NominalTrunkCapacityInE1s,
+	S.NominalVoipCapacityInE1s,
 	ROW_NUMBER() OVER(ORDER BY S.SwitchID ASC) as  RowNumber
 	From Switch S 
 	where  S.Name like '%' + isnull(@switchName,S.Name) + '%' 

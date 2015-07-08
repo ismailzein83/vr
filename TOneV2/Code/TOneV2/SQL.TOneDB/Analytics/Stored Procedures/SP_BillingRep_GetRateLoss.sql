@@ -1,7 +1,7 @@
 ﻿
 
 
-CREATE  PROCEDURE [Analytics].[SP_Billing_RateLoss](
+CREATE  PROCEDURE [Analytics].[SP_BillingRep_GetRateLoss](
 	@FromDate Datetime,
 	@ToDate Datetime,
 	@CustomerID varchar(5)=NULL,

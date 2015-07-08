@@ -2,7 +2,7 @@
 
 
 
-CREATE    PROCEDURE [Analytics].[SP_Billing_ExchangeCarriersSummary](
+CREATE    PROCEDURE [Analytics].[SP_BillingRep_GetExchangeCarriersSummary](
 	@FromDate DATETIME, 
 	@ToDate DATETIME,	
 	@CustomerAmuID int = NULL,

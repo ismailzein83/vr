@@ -1,8 +1,4 @@
-﻿-- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,
--- Description:	<Description,,
-CREATE PROCEDURE [LCR].[sp_RoutingDatabase_Insert] 
+﻿CREATE PROCEDURE [LCR].[sp_RoutingDatabase_Insert] 
    @Title nvarchar(255),
    @Type int,
    @EffectiveTime datetime,
