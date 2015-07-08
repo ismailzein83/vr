@@ -1,3 +1,2 @@
-﻿CREATE SCHEMA [main]
-    AUTHORIZATION [development];
+﻿CREATE SCHEMA [main];
 
