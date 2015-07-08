@@ -127,7 +127,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "Suspicious Number Details & Related Numbers";
         };
-        VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/SuspiciousNumberDetails.html", params, settings);
+        VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/SuspiciousAnalysis/SuspiciousNumberDetails.html", params, settings);
     }
 
 

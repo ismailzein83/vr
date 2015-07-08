@@ -83,7 +83,7 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
                 mainGridAPI.itemAdded(strategy);
             };
         };
-        VRModalService.showModal('/Client/Modules/FraudAnalysis/Views/StrategyEditor.html', null, settings);
+        VRModalService.showModal('/Client/Modules/FraudAnalysis/Views/Strategy/StrategyEditor.html', null, settings);
     }
 
     function editStrategy(strategy) {
@@ -102,7 +102,7 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
                 mainGridAPI.itemUpdated(strategy);
             };
         };
-        VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/StrategyEditor.html", params, settings);
+        VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/Strategy/StrategyEditor.html", params, settings);
     }
 }
 appControllers.controller('FraudAnalysis_StrategyManagementController', StrategyManagementController);

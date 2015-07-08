@@ -154,27 +154,28 @@
   <ItemGroup>
     <Content Include="FraudAnalysis\Services\APIServices\SuspicionAnalysisAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyAPIService.js" />
-    <Content Include="FraudAnalysis\Views\ExecuteStrategyProcessInput_Scheduled.html" />
-    <Content Include="FraudAnalysis\Views\SaveCDRToDBProcessInput_Scheduled.html" />
-    <Content Include="FraudAnalysis\Views\CDRImportProcessInput_Scheduled.html" />
-    <Content Include="FraudAnalysis\Views\ExecuteStrategyProcessInput_ScheduledController.js" />
-    <Content Include="FraudAnalysis\Views\SaveCDRToDBProcessInput_ScheduledController.js" />
-    <Content Include="FraudAnalysis\Views\CDRImportProcessInput_ScheduledController.js" />
-    <Content Include="FraudAnalysis\Views\SaveCDRToDBProcessInput.html" />
-    <Content Include="FraudAnalysis\Views\CDRImportProcessInput.html" />
-    <Content Include="FraudAnalysis\Views\SaveCDRToDBProcessInputController.js" />
-    <Content Include="FraudAnalysis\Views\CDRImportProcessInputController.js" />
-    <Content Include="FraudAnalysis\Views\StrategyEditor.html" />
-    <Content Include="FraudAnalysis\Views\ExecuteStrategyProcessInput.html" />
-    <Content Include="FraudAnalysis\Views\ExecuteStrategyProcessInputController.js" />
-    <Content Include="FraudAnalysis\Views\SuspicionAnalysis.html" />
-    <Content Include="FraudAnalysis\Views\SuspicionAnalysisController.js" />
-    <Content Include="FraudAnalysis\Views\SuspiciousNumberDetails.html" />
-    <Content Include="FraudAnalysis\Views\SuspiciousNumberDetailsController.js" />
-    <Content Include="FraudAnalysis\Views\StrategyManagement.html" />
-    <Content Include="FraudAnalysis\Views\StrategyManagementController.js" />
-    <Content Include="FraudAnalysis\Views\StrategyEditorController.js" />
+    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\ExecuteStrategyProcessInput_Scheduled.html" />
+    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\SaveCDRToDBProcessInput_Scheduled.html" />
+    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\CDRImportProcessInput_Scheduled.html" />
+    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\ExecuteStrategyProcessInput_ScheduledController.js" />
+    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\SaveCDRToDBProcessInput_ScheduledController.js" />
+    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\CDRImportProcessInput_ScheduledController.js" />
+    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\SaveCDRToDBProcessInput.html" />
+    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\CDRImportProcessInput.html" />
+    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\SaveCDRToDBProcessInputController.js" />
+    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\CDRImportProcessInputController.js" />
+    <Content Include="FraudAnalysis\Views\Strategy\StrategyEditor.html" />
+    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\ExecuteStrategyProcessInput.html" />
+    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\ExecuteStrategyProcessInputController.js" />
+    <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\SuspicionAnalysis.html" />
+    <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\SuspicionAnalysisController.js" />
+    <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\SuspiciousNumberDetails.html" />
+    <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\SuspiciousNumberDetailsController.js" />
+    <Content Include="FraudAnalysis\Views\Strategy\StrategyManagement.html" />
+    <Content Include="FraudAnalysis\Views\Strategy\StrategyManagementController.js" />
+    <Content Include="FraudAnalysis\Views\Strategy\StrategyEditorController.js" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
