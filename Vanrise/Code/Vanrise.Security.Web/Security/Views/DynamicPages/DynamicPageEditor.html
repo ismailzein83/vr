@@ -52,16 +52,15 @@
                         <vr-columns width="normal">
                             <vr-select datasource="columnWidth" datatextfield="description" datavaluefield="value" label="Row Space" selectedvalues="selectedColumnWidth" isrequired hidefilterbox></vr-select>
                         </vr-columns>
+                        <vr-columns width="small" vr-disabled="selectedWidget==undefined">
+                            <vr-label></vr-label>
+                            <vr-button type="Add" formname="formDesigningSelectionModel" data-onclick="addViewContent" standalone></vr-button>
+                        </vr-columns>
                     </vr-row>
                     <vr-row>
                         <div ng-include="selectedWidget.Setting.DirectiveTemplateURL"></div>
                     </vr-row>
                 </vr-form>
-                <vr-actionbar showcollapsebutton="false" issectioncollapsed="false" ng-if="selectedWidget!=undefined || selectedWidget!=null">
-                    <div transclude-to="buttons">
-                        <vr-button type="Add" formname="formDesigningSelectionModel" data-onclick="addViewContent"></vr-button>
-                    </div>
-                </vr-actionbar>
                 <div>
                     <vr-row ng-if="addedSummaryWidgets.length>0">
                         <vr-section title="Summary">

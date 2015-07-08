@@ -80,7 +80,7 @@ app.directive('vrButton', ['ButtonDirService', 'SecurityService', function (Butt
         },
         template: function (element, attrs) {
             if (attrs.permissions === undefined || SecurityService.isAllowed(attrs.permissions))
-                return ButtonDirService.getTemplate(attrs.type);
+                return ButtonDirService.getTemplate(attrs);
             else
                 return "";
         }
