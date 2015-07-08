@@ -33,7 +33,6 @@
     }
 
     function GetFilteredSuspiciousNumbers(fromRow, toRow, fromDate, toDate, strategiesList, suspicionLevelsList) {
-
         return BaseAPIService.get("/api/SuspicionAnalysis/GetFilteredSuspiciousNumbers",
             {
                 fromRow: fromRow,

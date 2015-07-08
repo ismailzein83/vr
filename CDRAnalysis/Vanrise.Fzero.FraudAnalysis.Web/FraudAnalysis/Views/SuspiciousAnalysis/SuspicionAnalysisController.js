@@ -152,11 +152,12 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
             strategiesList = strategiesList + itm.id + ','
         });
 
+      
 
         var pageInfo = mainGridAPI.getPageInfo();
 
 
-        return SuspicionAnalysisAPIService.GetFilteredSuspiciousNumbers(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, strategiesList, suspicionLevelsList.slice(0, -1)).then(function (response) {
+        return SuspicionAnalysisAPIService.GetFilteredSuspiciousNumbers(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, strategiesList.slice(0, -1), suspicionLevelsList.slice(0, -1)).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.fraudResults.push(itm);
             });
