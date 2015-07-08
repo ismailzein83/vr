@@ -464,7 +464,7 @@ namespace Vanrise.Data.SQL
             };
         }
 
-        protected IEnumerable<T> GetData<T>(string tempTableName, int fromRow, int toRow, string orderByColumnName, bool isDescending, Func<IDataReader, T> objectBuilder, out int totalCount)
+        protected IEnumerable<T> GetDataFromTempTable<T>(string tempTableName, int fromRow, int toRow, string orderByColumnName, bool isDescending, Func<IDataReader, T> objectBuilder, out int totalCount)
         {
             string query = String.Format(@"WITH OrderedResult AS (SELECT *, ROW_NUMBER()  OVER ( ORDER BY {1} {2}) AS rowNumber FROM {0})
 	                                    SELECT * FROM OrderedResult WHERE rowNumber between @FromRow AND @ToRow", tempTableName, orderByColumnName, isDescending ? "DESC" : "ASC");
