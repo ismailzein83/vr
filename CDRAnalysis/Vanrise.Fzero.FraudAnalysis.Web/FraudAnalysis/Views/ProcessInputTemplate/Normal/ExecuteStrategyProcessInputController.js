@@ -83,7 +83,6 @@
             }
             
            
-            console.log($scope.createProcessInputObjects)
 
             return $scope.createProcessInputObjects;
 

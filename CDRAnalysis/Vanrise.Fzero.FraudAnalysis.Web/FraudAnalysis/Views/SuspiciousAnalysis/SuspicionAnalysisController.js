@@ -164,8 +164,6 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
         var pageInfo = mainGridAPI.getPageInfo();
 
-        console.log('$scope.Guid')
-        console.log($scope.Guid)
 
         return SuspicionAnalysisAPIService.GetFilteredSuspiciousNumbers($scope.Guid, pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, strategiesList.slice(0, -1), suspicionLevelsList.slice(0, -1)).then(function (response) {
             angular.forEach(response, function (itm) {
