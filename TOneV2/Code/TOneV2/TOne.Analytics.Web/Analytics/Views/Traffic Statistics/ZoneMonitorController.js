@@ -138,6 +138,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                 mainGridAPI.resetSorting();
                 resetSorting();
                 var filter = buildFilter();
+
                 var groupKeys = [];
 
                 angular.forEach($scope.selectedGroupKeys, function (group) {
@@ -228,27 +229,27 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                 switch (groupKey.value) {
                     case TrafficStatisticGroupKeysEnum.OurZone.value:
                         parameters.zoneIds = [dataItem.GroupKeyValues[i].Id];
-                        console.log(parameters.zoneIds);
+                       // console.log(parameters.zoneIds);
                         break;
                     case TrafficStatisticGroupKeysEnum.CustomerId.value:
                         parameters.customerIds = [dataItem.GroupKeyValues[i].Id];
-                        console.log(parameters.customerIds);
+                       // console.log(parameters.customerIds);
                         break;
                     case TrafficStatisticGroupKeysEnum.SupplierId.value:
                         parameters.supplierIds = [dataItem.GroupKeyValues[i].Id];
-                        console.log(parameters.supplierIds);
+                      //  console.log(parameters.supplierIds);
                         break;
                     case TrafficStatisticGroupKeysEnum.Switch.value:
                         parameters.switchIds = [dataItem.GroupKeyValues[i].Id];
-                        console.log(parameters.switchIds);
+                      //  console.log(parameters.switchIds);
                         break;
                     case TrafficStatisticGroupKeysEnum.PortIn.value:
                         parameters.PortIn = [dataItem.GroupKeyValues[i].Id];
-                        console.log(parameters.PortIn);
+                      //  console.log(parameters.PortIn);
                         break;
                     case TrafficStatisticGroupKeysEnum.PortOut.value:
                         parameters.PortOut = [dataItem.GroupKeyValues[i].Id];
-                        console.log(parameters.PortOut);
+                      //  console.log(parameters.PortOut);
                         break;
                 }
             }
@@ -340,8 +341,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
             var count = $scope.mainGridPagerSettings.itemsPerPage;
           
             var pageInfo = $scope.mainGridPagerSettings.getPageInfo();            
-            
-           
+
             var getTrafficStatisticSummaryInput = {
                 TempTableKey: $scope.filter.resultKey,
                 Filter: $scope.filter.filter,
@@ -455,9 +455,8 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
         }
 
         function getFilterIds(values, idProp) {
-            var filterIds;
+            var filterIds=[];
             if (values.length > 0) {
-                filterIds = [];
                 angular.forEach(values, function (val) {
                     filterIds.push(val[idProp]);
                 });

@@ -2,31 +2,21 @@
 
 function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, VRNavigationService, $q, BusinessEntityAPIService, CarrierAPIService, BillingCDRMeasureEnum, TrafficStatisticsMeasureEnum, CarrierTypeEnum, VRModalService, VRNotificationService, ZonesService, BillingCDROptionMeasureEnum) {
 
-    $scope.name = "test";
-    $scope.isInitializing = false;
     var receivedCustomerIds;
     var receivedSupplierIds;
     var receivedZoneIds;
     var receivedSwitchIds;
     var getDataAfterLoading;
     var mainGridAPI;
-   
-    //$scope.CDROption = [];
-    $scope.fromDate = '2015/06/02';
-    $scope.toDate = '2015/06/06';
-    $scope.nRecords = '100'
     var measures = [];
     var CDROption = [];
     var sortDescending = true;
     var currentSortedColDef;
-    $scope.ZoneIds = [];
-    
+    var sortColumn;
+    var resultKey;
     defineScope();
     loadParameters();
-    var sortColumn;
     load();
-    defineScopeMethods();
-
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
         if (parameters != undefined && parameters != null) {
@@ -36,9 +26,7 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
             receivedZoneIds = parameters.zoneIds;
             receivedSupplierIds = parameters.supplierIds;
             receivedSwitchIds = parameters.switchIds;
-            getDataAfterLoading = true;
-
-            console.log(receivedSwitchIds);
+            getDataAfterLoading = true;   
         }
             
 
@@ -48,7 +36,12 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
             editMode = false;
     }
     function defineScope() {
-        
+        $scope.ZoneIds = [];
+        $scope.fromDate = '2015/06/02';
+        $scope.toDate = '2015/06/06';
+        $scope.nRecords = '100'
+        $scope.name = "test";
+        $scope.isInitializing = false;
         $scope.showResult = false;
         $scope.switches = [];
         $scope.selectedSwitches = [];
@@ -105,8 +98,6 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
         };
         $scope.GetCDRData = GetCDRData;
 
-    }
-    function defineScopeMethods() {
         $scope.searchZones = function (text) {
             return ZonesService.getSalesZones(text);
         }
@@ -139,7 +130,6 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
         sortColumn = BillingCDRMeasureEnum.Attempt;
         sortDescending = true;
     }
-
     function loadZonesFromReceivedIds() {
         if (receivedZoneIds != undefined && receivedZoneIds.length > 0) {
             return ZonesService.getZoneList(receivedZoneIds).then(function (response) {
@@ -149,12 +139,9 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
             });
         }
     }
-
     function loadSwitches() {
         return BusinessEntityAPIService.GetSwitches().then(function (response) {
             angular.forEach(response, function (itm) {
-                //console.log(itm);
-                //console.log(receivedSwitchIds.indexOf(itm.SwitchId.toString()));
                 $scope.switches.push(itm);
                 if (receivedSwitchIds != undefined && receivedSwitchIds.indexOf(itm.SwitchId.toString()) > -1)
                     $scope.selectedSwitches.push(itm);
@@ -179,8 +166,6 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
             });
         });
     }
-
-
     function loadMeasures() {
         for (var prop in BillingCDRMeasureEnum) {
             measures.push(BillingCDRMeasureEnum[prop]);
@@ -192,25 +177,13 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
         }
         $scope.selectedCDROption = CDROption[2];
     }
-    //function loadZones() {
-    //    return BusinessEntityAPIService.GetZones("1","MTN").then(function (response) {
-    //        angular.forEach(response, function (itm) {
-    //            $scope.zones.push(itm);
-    //        });
-    //    });
-    //}
     function GetCDRData() {
-      
         if (sortColumn == undefined)
             return;
-        //if (sortColumn == undefined)
-        //    return;
-        
         var pageInfo = $scope.mainGridPagerSettings.getPageInfo();
         var count = $scope.mainGridPagerSettings.itemsPerPage;
         var getCDRLogSummaryInput = {
-            //ZoneIDs: $scope.zoneIDs,
-            TempTableKey: null,
+            TempTableKey: resultKey,
             Filter: $scope.filter.filter,
             From: $scope.filter.fromDate,
             To: $scope.filter.toDate,
@@ -226,7 +199,6 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
         $scope.isGettingData = true;
         
         return CDRAPIService.GetCDRData(getCDRLogSummaryInput).then(function (response) {
-            //  alert(response);
             if (currentSortedColDef != undefined)
                 currentSortedColDef.currentSorting = sortDescending ? 'DESC' : 'ASC';
             $scope.data.length = 0;
@@ -235,29 +207,24 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
             $scope.mainGridPagerSettings.totalDataCount = response.TotalCount;
             console.log(response);
             $scope.isInitializing = false;
-            //angular.forEach(response.Data, function (itm) {
-            //    $scope.data.push(itm);
-            //});
             mainGridAPI.addItemsToSource(response.Data);
-
         }).finally(function () {
             $scope.isGettingData = false;
         });
     }
-   
+    function getFilterIds(values, idProp) {
+        var filterIds;
+        if (values.length > 0) {
+            filterIds = [];
+            angular.forEach(values, function (val) {
+                filterIds.push(val[idProp]);
+            });
+        }
+        return filterIds;
+    }
 
 };
 
-function getFilterIds(values, idProp) {
-    var filterIds;
-    if (values.length > 0) {
-        filterIds = [];
-        angular.forEach(values, function (val) {
-            filterIds.push(val[idProp]);
-        });
-    }
-    return filterIds;
-}
 
 
 appControllers.controller('Analytics_CDRLogController', CDRLogController);

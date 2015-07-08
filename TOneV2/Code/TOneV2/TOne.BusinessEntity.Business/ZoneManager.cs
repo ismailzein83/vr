@@ -55,5 +55,23 @@ namespace TOne.BusinessEntity.Business
                 zone = null;
             return zone;
         }
+        public List<int> GetCodeGroupZones(List<string> codeGroups)
+        {
+            List<int> zoneIds = new List<int>();
+            var allZones = GetAllZones();
+            if (allZones != null)
+            {      
+                for (int i = 0; i < codeGroups.Count; i++)
+                {
+                    foreach (KeyValuePair<int, Zone> keyValue in allZones)
+                    {
+                        if (keyValue.Value.CodeGroupId == codeGroups[i])
+                            zoneIds.Add(keyValue.Value.ZoneId);
+                    }
+                }
+
+            }
+            return zoneIds;
+        }
     }
 }

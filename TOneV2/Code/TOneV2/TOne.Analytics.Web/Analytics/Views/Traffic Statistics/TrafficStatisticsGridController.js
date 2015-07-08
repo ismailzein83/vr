@@ -221,8 +221,9 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         var withSummary = false;
         var fromRow = 1;
         var toRow = 100;
+        buildFilterFromViewScope();
         buildFilter($scope);
-        console.log(filter);
+      //  console.log(filter);
         var getTrafficStatisticSummaryInput = {
             TempTableKey: null,
             Filter: filter,
@@ -243,7 +244,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             $scope.currentSearchCriteria.groupKeys.push(group);
         });
         return AnalyticsAPIService.GetTrafficStatisticSummary(getTrafficStatisticSummaryInput).then(function (response) {
-            console.log(response);
+           // console.log(response);
             $scope.selectedGroupKey.data = [];
             angular.forEach(response.Data, function (itm) {
                 $scope.selectedGroupKey.data.push(itm);
@@ -256,6 +257,10 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             .finally(function () {
                 $scope.isGettingData = false;
             });
+    }
+    function buildFilterFromViewScope() {
+        filter = $scope.viewScope.filter.filter;
+       // console.log(filter);
     }
     function buildFilter(scope) {
        
@@ -272,19 +277,19 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             switch (groupKey.value)
             {
                 case TrafficStatisticGroupKeysEnum.OurZone.value:
-                    filter.ZoneIds = [scope.dataItem.GroupKeyValues[i].Id];
+                    filter.ZoneIds=[scope.dataItem.GroupKeyValues[i].Id];
                     break;
                 case TrafficStatisticGroupKeysEnum.CustomerId.value: 
-                    filter.CustomerIds=[scope.dataItem.GroupKeyValues[i].Id];
+                    filter.CustomerIds.push(scope.dataItem.GroupKeyValues[i].Id);
                     break;
                 case TrafficStatisticGroupKeysEnum.SupplierId.value: 
-                    filter.SupplierIds = [scope.dataItem.GroupKeyValues[i].Id];
+                    filter.SupplierIds.push(scope.dataItem.GroupKeyValues[i].Id);
                     break;
                 case TrafficStatisticGroupKeysEnum.Switch.value:
-                    filter.SwitchIds = [scope.dataItem.GroupKeyValues[i].Id];
+                    filter.SwitchIds.push(scope.dataItem.GroupKeyValues[i].Id);
                     break;
                 case TrafficStatisticGroupKeysEnum.CodeGroup.value:
-                    filter.CodeGroup = [scope.dataItem.GroupKeyValues[i].Id];
+                    filter.CodeGroups.push(scope.dataItem.GroupKeyValues[i].Id);
                     break;
                 case TrafficStatisticGroupKeysEnum.PortIn.value:
                     filter.PortIn = [scope.dataItem.GroupKeyValues[i].Id];
