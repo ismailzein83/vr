@@ -21,6 +21,12 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     }
 
     function defineScope() {
+
+        $scope.gapbetweenconsecutivecalls = 10;
+        $scope.maxLowDurationCall = 8;
+        $scope.minCountofCallsinActiveHour = 5;
+
+
         $scope.strategyFilters = [];
         $scope.selectedPeakHours = [];
 
