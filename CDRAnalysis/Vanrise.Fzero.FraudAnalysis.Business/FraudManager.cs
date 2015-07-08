@@ -140,11 +140,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return IsSuspicious;
         }
 
-         public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(string tempTableKey, int fromRow, int toRow, DateTime fromDate, DateTime toDate, int? strategyId, string suspicionLevelsList)
+        public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(string tempTableKey, int fromRow, int toRow, DateTime fromDate, DateTime toDate, string strategiesList, string suspicionLevelsList)
         {
             ISuspiciousNumberDataManager manager = FraudDataManagerFactory.GetDataManager<ISuspiciousNumberDataManager>();
 
-            return manager.GetFilteredSuspiciousNumbers(fromRow, toRow, fromDate, toDate, strategyId, suspicionLevelsList);
+            return manager.GetFilteredSuspiciousNumbers(fromRow, toRow, fromDate, toDate, strategiesList, suspicionLevelsList);
         }
 
         #region Private Classes

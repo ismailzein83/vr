@@ -127,7 +127,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             mySqlConnection.Close();
         }
 
-        public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int? strategyId, string suspicionLevelsList)
+        public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string strategiesList, string suspicionLevelsList)
         {
             throw new NotImplementedException();
         }

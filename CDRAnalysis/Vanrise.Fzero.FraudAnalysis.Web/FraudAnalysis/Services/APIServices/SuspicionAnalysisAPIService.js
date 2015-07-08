@@ -32,7 +32,7 @@
        );
     }
 
-    function GetFilteredSuspiciousNumbers(fromRow, toRow, fromDate, toDate, strategyId, suspicionLevelsList) {
+    function GetFilteredSuspiciousNumbers(fromRow, toRow, fromDate, toDate, strategiesList, suspicionLevelsList) {
 
         return BaseAPIService.get("/api/SuspicionAnalysis/GetFilteredSuspiciousNumbers",
             {
@@ -40,7 +40,7 @@
                 toRow: toRow,
                 fromDate: fromDate,
                 toDate: toDate,
-                strategyId: strategyId,
+                strategiesList: strategiesList,
                 suspicionLevelsList: suspicionLevelsList,
             }
            );
