@@ -212,7 +212,7 @@ namespace TOne.BI.Data.SQL
            string[] additionalFilters = new string[] { BuildQueryColumnFilter(entityIdColumn, entityId) };
            return GetTimeValuesRecord(timeDimensionType, fromDate, toDate, additionalFilters, measureTypesNames);
         }
-        public IEnumerable<EntityRecord> GetTopEntities(string entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, params string[] measureTypesNames)
+        public IEnumerable<EntityRecord> GetTopEntities(string entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, List<String> queryFilter, params string[] measureTypesNames)
         {
             List<EntityRecord> rslt = new List<EntityRecord>();
             string topMeasureColExp;
@@ -236,7 +236,11 @@ namespace TOne.BI.Data.SQL
             }
 
             string columnsPart = BuildQueryColumnsPart(measureColumns);
-            string rowsPart = BuildQueryTopRowsPart(topMeasureColumn, topCount, entityIdColumn, entityNameColumn);
+            string rowsPart="";
+            if (queryFilter != null)
+                rowsPart = BuildQueryTopRows(topMeasureColumn, topCount, queryFilter, entityIdColumn, entityNameColumn);
+            else
+                 rowsPart = BuildQueryTopRowsPart(topMeasureColumn, topCount, entityIdColumn, entityNameColumn);
             string filtersPart = GetDateFilter(fromDate, toDate);
             string query = BuildQuery(columnsPart, rowsPart, filtersPart, expressionsPart);
             string entityName=GetEntityName(entityTypeName, out entityName);
@@ -260,6 +264,32 @@ namespace TOne.BI.Data.SQL
             });
             return rslt;
         }
+        protected string BuildQueryTopRows(string columnBy, int count, List<String> queryFilter, string entityIdColumn, string entityNameColumn)
+        {
+            return String.Format(@"TopCount({0}, {1}, {2})", BuildQueryRows(queryFilter, entityIdColumn, entityNameColumn), count, columnBy);
+        }
+        protected string BuildQueryRows(List<String> queryFilter, string entityIdColumn, string entityNameColumn)
+        {
+            StringBuilder queryBuilder = null;
+            String FilterValue = BuildQueryRowsFilter(entityIdColumn, queryFilter);
+            queryBuilder = new StringBuilder();
+            queryBuilder.AppendFormat("Filter({0}.CHILDREN as FilterValue,{1} ) * {2}.CHILDREN", entityIdColumn, FilterValue,entityNameColumn);
+            return queryBuilder.ToString();
+        }
+        protected string BuildQueryRowsFilter(string entityIdColumn, List<String> queryFilter)
+        {
+            StringBuilder queryBuilder = null;
+            foreach (var value in queryFilter)
+            {
+                if (queryBuilder == null)
+                    queryBuilder = new StringBuilder();
+                else
+                    queryBuilder.Append(" or ");
+                queryBuilder.AppendFormat("FilterValue.currentmember =   {0}.&[{1}] ", entityIdColumn, value);
+            }
+            return queryBuilder.ToString();
+        }
+
 
        private string GetEntityName(string entityTypeName,out string entityName){
            entityName = null;
