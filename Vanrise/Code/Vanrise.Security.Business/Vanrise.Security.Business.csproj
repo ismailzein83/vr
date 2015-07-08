@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessEntityManager.cs" />
+    <Compile Include="OrgChartManager.cs" />
     <Compile Include="SecurityContext.cs" />
     <Compile Include="ViewManager.cs" />
     <Compile Include="MenuManager.cs" />

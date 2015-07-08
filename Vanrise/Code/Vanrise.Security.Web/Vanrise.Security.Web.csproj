@@ -118,6 +118,7 @@
     <Content Include="Security\Constants\PermissionFlagEnum.js" />
     <Content Include="Security\Constants\WidgetSectionEnum.js" />
     <Content Include="Security\Services\APIServices\BusinessEntityAPIService.js" />
+    <Content Include="Security\Services\APIServices\OrgChartsAPIService.js" />
     <Content Include="Security\Services\APIServices\SecurityApiService.js" />
     <Content Include="Security\Services\APIServices\MenuAPIService.js" />
     <Content Include="Security\Services\APIServices\PermissionApiService.js" />
@@ -138,6 +139,8 @@
     <Content Include="Security\Views\DynamicPages\DynamicPageManagement.js" />
     <Content Include="Security\Views\Login.html" />
     <Content Include="Security\Views\LoginController.js" />
+    <Content Include="Security\Views\OrgChartManagementController.js" />
+    <Content Include="Security\Views\OrgChartManagement.html" />
     <Content Include="Security\Views\PermissionEditor.html" />
     <Content Include="Security\Views\PermissionEditorController.js" />
     <Content Include="Security\Views\ResetPasswordEditor.html" />
