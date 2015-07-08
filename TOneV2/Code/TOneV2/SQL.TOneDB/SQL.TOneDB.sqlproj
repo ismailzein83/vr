@@ -240,5 +240,19 @@
     <Build Include="Analytics\Stored Procedures\SP_BillingRep_GetCarrierSummary.sql" />
     <Build Include="Analytics\Stored Procedures\SP_BillingRep_GetCarrierLostReport.sql" />
     <Build Include="Security\main.sql" />
+    <Build Include="sec\Tables\WidgetDefinition.sql" />
+    <Build Include="sec\Tables\Widget.sql" />
+    <Build Include="sec\Stored Procedures\sp_WidgetDefinition_Get.sql" />
+    <Build Include="sec\Stored Procedures\sp_Widget_Update.sql" />
+    <Build Include="sec\Stored Procedures\sp_Widget_Insert.sql" />
+    <Build Include="sec\Stored Procedures\sp_Widget_GetFiltered.sql" />
+    <Build Include="sec\Stored Procedures\sp_Widget_GetById.sql" />
+    <Build Include="sec\Stored Procedures\sp_Widget_GetAll.sql" />
+    <Build Include="sec\Stored Procedures\sp_View_Update.sql" />
+    <Build Include="sec\Stored Procedures\sp_View_Insert.sql" />
+    <Build Include="sec\Stored Procedures\sp_View_GetFiltered.sql" />
+    <Build Include="sec\Stored Procedures\sp_View_GetByType.sql" />
+    <Build Include="sec\Stored Procedures\sp_View_GetById.sql" />
+    <Build Include="sec\Stored Procedures\sp_View_Delete.sql" />
   </ItemGroup>
 </Project>
