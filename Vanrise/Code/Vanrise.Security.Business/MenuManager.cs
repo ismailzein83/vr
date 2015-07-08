@@ -77,6 +77,8 @@ namespace Vanrise.Security.Business
 
             if (subModules.Count > 0)
             {
+                if (menu.Childs == null)
+                    menu.Childs = new List<MenuItem>();
                 foreach (Module item in subModules)
                 {
                     menu.Childs.Add(GetModuleMenu(item, modules, views, effectivePermissions, breakInheritanceEntities));
