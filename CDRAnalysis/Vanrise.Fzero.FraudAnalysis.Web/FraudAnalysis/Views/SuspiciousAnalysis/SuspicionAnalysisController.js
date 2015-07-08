@@ -152,7 +152,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
             strategiesList = strategiesList + itm.id + ','
         });
 
-      
+
 
         var pageInfo = mainGridAPI.getPageInfo();
 

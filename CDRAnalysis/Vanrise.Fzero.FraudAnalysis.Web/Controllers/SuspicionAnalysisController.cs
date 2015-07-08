@@ -6,6 +6,7 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Entities;
 using Vanrise.Web.Base;
 using System;
+using System.Linq;
 
 namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 {
@@ -34,7 +35,19 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         {
             FraudManager manager = new FraudManager();
 
-            return manager.GetFilteredSuspiciousNumbers("FraudResult", fromRow, toRow, fromDate, toDate, strategiesList, suspicionLevelsList);
+            List<int> strategiesIntList = new List<int>();
+            if (strategiesList!=null)
+                strategiesIntList =strategiesList.Split(',').Select(h => int.Parse(h)).ToList();
+
+
+
+            List<int> suspicionLevelsIntList = new List<int>();
+            if (suspicionLevelsList != null)
+                suspicionLevelsIntList = suspicionLevelsList.Split(',').Select(h => int.Parse(h)).ToList();
+
+
+
+            return manager.GetFilteredSuspiciousNumbers("FraudResult", fromRow, toRow, fromDate, toDate, strategiesIntList, suspicionLevelsIntList);
         }
 
 
