@@ -35,6 +35,12 @@ function RouteRuleEditorController($scope, RoutingRulesAPIService, VRModalServic
         $scope.BED = '';
         $scope.EED = '';
 
+        $scope.FromTime = "";
+        $scope.ToTime = "";
+
+        $scope.daysOfWeek = [];
+        $scope.selectedDaysOfWeek = [];
+
         $scope.ruleTypes = [];
         $scope.customerSets = [];
         $scope.codeSets = [];
@@ -55,12 +61,31 @@ function RouteRuleEditorController($scope, RoutingRulesAPIService, VRModalServic
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };
+
+        $scope.getSelectedDays = function () {
+            var selectedDays = [];
+            $.each($scope.selectedDaysOfWeek, function (i, value) {
+                selectedDays.push(i);
+            });
+            return selectedDays;
+        }
+
+        $scope.getSchecduleSettingData = function () {
+            return {
+                Days: $scope.getSelectedDays(),
+                FromTime: $scope.FromTime,
+                ToTime: $scope.ToTime,
+                BeginEffectiveDate: $scope.BED,
+                EndEffectiveDate: $scope.EED
+            }
+        }
     }
 
     function load() {
-       
+
         loadCodeSets();
         loadCustomerSets();
+        loadDaysOfWeek();
         if (editMode) {
             $scope.isGettingData = true;
             getRouteRule().finally(function () {
@@ -80,7 +105,7 @@ function RouteRuleEditorController($scope, RoutingRulesAPIService, VRModalServic
     }
 
     function buildRouteRuleObjFromScope() {
-        var settings = $scope.subViewTimeSettingConnector.getData();
+        var settings = $scope.getSchecduleSettingData();
         var routeRuleObject = {
             CodeSet: $scope.subViewCodeSetConnector.getData(),
             CarrierAccountSet: $scope.subViewCustomerSetConnector.getData(),
@@ -109,7 +134,8 @@ function RouteRuleEditorController($scope, RoutingRulesAPIService, VRModalServic
         $scope.EED = routeRuleObject.EndEffectiveDate;
         $scope.subViewCodeSetConnector.data = routeRuleObject.CodeSet;
         $scope.subViewCustomerSetConnector.data = routeRuleObject.CarrierAccountSet;
-        $scope.subViewTimeSettingConnector.setData(routeRuleObject.TimeExecutionSetting);
+        fillScheduleSetting(routeRuleObject.TimeExecutionSetting);
+
     }
 
     function insertRouteRule() {
@@ -155,6 +181,31 @@ function RouteRuleEditorController($scope, RoutingRulesAPIService, VRModalServic
     function loadCustomerSets() {
         for (var prop in CustomerSetsEnum) {
             $scope.customerSets.push(CustomerSetsEnum[prop]);
+        }
+    }
+
+    function loadDaysOfWeek() {
+        for (var prop in DaysOfWeekEnum) {
+            $scope.daysOfWeek.push(DaysOfWeekEnum[prop]);
+        }
+    }
+
+    function loadSelectedDays(days) {
+        if (days != undefined)
+            $.each(days, function (i, value) {
+                var existobj = UtilsService.getItemByVal($scope.daysOfWeek, value, 'value');
+                if (existobj != null)
+                    $scope.selectedDaysOfWeek.push(existobj);
+            });
+    }
+
+    function fillScheduleSetting(scheduleSettingData) {
+        if (scheduleSettingData != undefined && scheduleSettingData != null) {
+            $scope.BEDDate = scheduleSettingData.BeginEffectiveDate;
+            $scope.EEDDate = scheduleSettingData.EndEffectiveDate;
+            $scope.FromTime = scheduleSettingData.FromTime;
+            $scope.ToTime = scheduleSettingData.ToTime;
+            loadSelectedDays(scheduleSettingData.Days);
         }
     }
 

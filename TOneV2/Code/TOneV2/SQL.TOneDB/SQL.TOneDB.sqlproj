@@ -232,5 +232,6 @@
     <Build Include="BEntity\Stored Procedures\SP_Carriers_GetAllCarriers.sql" />
     <Build Include="Analytics\Stored Procedures\SP_Billing_ExchangeCarriersSummary.sql" />
     <Build Include="Analytics\User Defined Types\TimeRangeType.sql" />
+    <Build Include="LCR\Stored Procedures\sp_RouteRuleDefinition_Delete.sql" />
   </ItemGroup>
 </Project>

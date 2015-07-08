@@ -28,6 +28,9 @@ function RoutingManagementController($scope, RoutingAPIService, CarrierAPIServic
             return BusinessEntityAPIService.GetSalesZones(text);
         }
 
+        $scope.getRouteRulesItems = function (dataItem, fromRow, ToRow) {
+            return dataItem.Rules;
+        };
 
         $scope.searchClicked = function () {
             mainGridAPI.clearDataAndContinuePaging();
@@ -141,50 +144,7 @@ function RoutingManagementController($scope, RoutingAPIService, CarrierAPIServic
         }
         ];
 
-        $scope.gridRulesMenuActions = [
-            {
-                name: "Edit",
-                clicked: editRule
-            },
-            {
-                name: "End",
-                clicked: endRule
-            }
-        ];
     }
-
-    function editRule(rule) {
-        var modalSettings = {
-            useModalTemplate: true,
-            width: "80%",
-            maxHeight: "800px"
-        };
-        var parameters = {
-            ruleId: rule.RouteRuleId
-        };
-        modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Rule Info(" + rule.RouteRuleId + ")";
-            modalScope.onRouteRuleUpdated = function (ruleUpdated) {
-                mainGridAPI.itemUpdated(ruleUpdated);
-
-            };
-        };
-        VRModalService.showModal('/Client/Modules/Routing/Views/RoutingRules/RouteRuleEditor.html', parameters, modalSettings);
-    }
-
-    function endRule(routeRuleObject) {
-        routeRuleObject.EndEffectiveDate = Date.now();
-        return RoutingRulesAPIService.UpdateRouteRule(routeRuleObject).then(function (response) {
-            if (VRNotificationService.notifyOnItemUpdated("RouteRule", response)) {
-                if ($scope.onRouteRuleUpdated != undefined)
-                    $scope.onRouteRuleUpdated(response.UpdatedObject);
-                $scope.modalContext.closeModal();
-            }
-        }).catch(function (error) {
-            VRNotificationService.notifyException(error);
-        });
-    }
-
 
     function addRouteRule(ruleType) {
         var modalSettings = {
@@ -214,6 +174,27 @@ function RoutingManagementController($scope, RoutingAPIService, CarrierAPIServic
             $scope.ruleTypes.push(RoutingRulesTemplatesEnum[prop]);
         }
     }
+
+    function editRule(ruleObj) {
+        var modalSettings = {
+            useModalTemplate: true,
+            width: "80%",
+            maxHeight: "800px"
+        };
+        var parameters = {
+            ruleId: ruleObj.RouteRuleId
+        };
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.title = "Rule Info(" + ruleObj.RouteRuleId + ")";
+            modalScope.onRouteRuleUpdated = function (ruleUpdated) {
+                mainGridAPI.itemUpdated(ruleUpdated);
+
+            };
+        };
+        VRModalService.showModal('/Client/Modules/Routing/Views/RoutingRules/RouteRuleEditor.html', parameters, modalSettings);
+    }
+
+
 }
 
 appControllers.controller('Routing_RoutingManagementController', RoutingManagementController);

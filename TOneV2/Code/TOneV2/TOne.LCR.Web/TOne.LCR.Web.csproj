@@ -158,6 +158,8 @@
     <Content Include="Routing\Views\RoutingRules\EditorTemplates\ZoneTemplate.html" />
     <Content Include="Routing\Views\RoutingRules\RouteRuleEditor.html" />
     <Content Include="Routing\Views\RoutingRules\RouteRuleEditorController.js" />
+    <Content Include="Routing\Views\RoutingRules\RoutingRulesGrid.html" />
+    <Content Include="Routing\Views\RoutingRules\RoutingRulesGridController.js" />
     <Content Include="Routing\Views\RoutingRules\RoutingRulesManagement.html" />
     <Content Include="Routing\Views\RoutingRules\RoutingRulesManagementController.js" />
   </ItemGroup>

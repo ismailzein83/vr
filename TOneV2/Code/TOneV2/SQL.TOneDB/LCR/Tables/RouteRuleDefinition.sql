@@ -8,6 +8,7 @@
     [EndEffectiveDate]     DATETIME       NULL,
     [Reason]               NVARCHAR (MAX) NULL,
     [TimeExecutionSetting] NVARCHAR (MAX) NULL,
+    [IsDeleted] BIT NULL DEFAULT 0, 
     CONSTRAINT [PK_RouteRuleDefinition] PRIMARY KEY CLUSTERED ([RouteRuleId] ASC)
 );
 

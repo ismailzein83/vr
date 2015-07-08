@@ -14,6 +14,8 @@ namespace TOne.LCR.Data
 
         bool UpdateRouteRule(RouteRule rule);
 
+        bool DeleteRouteRule(int ruleId);
+
         List<RouteRule> GetAllRouteRule();
 
         RouteRule GetRouteRuleDetails(int RouteRuleId);

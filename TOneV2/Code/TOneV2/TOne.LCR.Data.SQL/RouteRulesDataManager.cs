@@ -73,6 +73,16 @@ namespace TOne.LCR.Data.SQL
             return false;
         }
 
+
+        public bool DeleteRouteRule(int ruleId)
+        {
+
+            int recordesEffected = ExecuteNonQuerySP("[LCR].[sp_RouteRuleDefinition_Delete]", ruleId);
+            if (recordesEffected > 0)
+                return true;
+            return false;
+        }
+
         #region Private Methods
         private DataTable BuildZoneIdsTable(IEnumerable<int> zoneIds)
         {
@@ -574,5 +584,7 @@ namespace TOne.LCR.Data.SQL
 
 
         #endregion
+
+
     }
 }

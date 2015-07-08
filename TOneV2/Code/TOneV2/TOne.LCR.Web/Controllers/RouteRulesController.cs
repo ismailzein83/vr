@@ -38,6 +38,14 @@ namespace TOne.LCR.Web.Controllers
         }
 
         [HttpPost]
+        public TOne.Entities.DeleteOperationOutput<RouteRule> DeleteRouteRule(RouteRule rule)
+        {
+            RouteRuleManager manager = new RouteRuleManager();
+            TOne.Entities.DeleteOperationOutput<RouteRule> routeRuleSummaryModel = manager.DeleteRouteRule(rule.RouteRuleId);
+            return routeRuleSummaryModel;
+        }
+
+        [HttpPost]
         public IEnumerable<RouteRuleSummaryModel> GetFilteredRouteRules(GetFilteredRoutingRulesInput input)
         {
             RouteRuleManager manager = new RouteRuleManager();

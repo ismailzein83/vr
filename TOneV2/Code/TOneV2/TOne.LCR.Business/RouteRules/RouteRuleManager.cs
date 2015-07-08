@@ -79,6 +79,20 @@ namespace TOne.LCR.Business
             return updateOperationOutput;
         }
 
+        public TOne.Entities.DeleteOperationOutput<RouteRule> DeleteRouteRule(int ruleId)
+        {
+            IRouteRulesDataManager dataManager = LCRDataManagerFactory.GetDataManager<IRouteRulesDataManager>();
+            TOne.Entities.DeleteOperationOutput<RouteRule> deleteOperationOutput = new TOne.Entities.DeleteOperationOutput<RouteRule>();
+            bool updateActionSucc = dataManager.DeleteRouteRule(ruleId);
+            if (updateActionSucc)
+            {
+                deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Succeeded;
+            }
+            else
+                deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Failed;
+            return deleteOperationOutput;
+        }
+
         public List<RouteRule> GetAllRouteRule()
         {
             IRouteRulesDataManager dataManager = LCRDataManagerFactory.GetDataManager<IRouteRulesDataManager>();

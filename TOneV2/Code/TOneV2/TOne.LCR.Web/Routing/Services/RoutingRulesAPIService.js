@@ -5,7 +5,8 @@ var RoutingRulesAPIService = function (BaseAPIService) {
         getRouteRuleDetails: getRouteRuleDetails,
         InsertRouteRule: InsertRouteRule,
         GetFilteredRouteRules: GetFilteredRouteRules,
-        UpdateRouteRule: UpdateRouteRule
+        UpdateRouteRule: UpdateRouteRule,
+        DeleteRouteRule: DeleteRouteRule
     });
     function getRouteRuleDetails(RouteRuleId) {
         return BaseAPIService.get("/api/RouteRules/GetRouteRuleDetails",
@@ -22,6 +23,10 @@ var RoutingRulesAPIService = function (BaseAPIService) {
     }
     function GetFilteredRouteRules(input) {
         return BaseAPIService.post("/api/RouteRules/GetFilteredRouteRules", input);
+    }
+
+    function DeleteRouteRule(routeRule) {
+        return BaseAPIService.post("/api/RouteRules/DeleteRouteRule", routeRule);
     }
 
 }

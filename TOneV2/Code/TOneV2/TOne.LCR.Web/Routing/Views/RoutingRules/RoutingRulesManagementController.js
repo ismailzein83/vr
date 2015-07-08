@@ -1,5 +1,5 @@
-﻿RoutingRulesManagementController.$inject = ['$scope', 'RoutingRulesAPIService', 'BusinessEntityAPIService_temp', 'CarrierAPIService', 'VRModalService', 'CarrierTypeEnum', 'RoutingRulesTemplatesEnum'];
-function RoutingRulesManagementController($scope, RoutingRulesAPIService, BusinessEntityAPIService, CarrierAPIService, VRModalService, CarrierTypeEnum, RoutingRulesTemplatesEnum) {
+﻿RoutingRulesManagementController.$inject = ['$scope', 'RoutingRulesAPIService', 'BusinessEntityAPIService_temp', 'CarrierAPIService', 'VRModalService', 'CarrierTypeEnum', 'RoutingRulesTemplatesEnum', 'VRNotificationService'];
+function RoutingRulesManagementController($scope, RoutingRulesAPIService, BusinessEntityAPIService, CarrierAPIService, VRModalService, CarrierTypeEnum, RoutingRulesTemplatesEnum, VRNotificationService) {
     var mainGridAPI;
     var sortColumn;
     var resultKey;
@@ -41,13 +41,12 @@ function RoutingRulesManagementController($scope, RoutingRulesAPIService, Busine
         };
 
         $scope.ruleGridReady = function (api) {
-        
+
         };
 
         $scope.loadMoreData = function () {
             return getData();
         }
-        defineMenuActions();
 
         $scope.filter = {
             resultKey: resultKey,
@@ -65,13 +64,6 @@ function RoutingRulesManagementController($scope, RoutingRulesAPIService, Busine
         });
     }
 
-    function defineMenuActions() {
-        $scope.gridMenuActions = [{
-            name: "Edit",
-            clicked: editRule
-        }
-        ];
-    }
 
     function addRouteRule() {
         var modalSettings = {
@@ -88,24 +80,6 @@ function RoutingRulesManagementController($scope, RoutingRulesAPIService, Busine
         VRModalService.showModal('/Client/Modules/Routing/Views/RoutingRules/RouteRuleEditor.html', null, modalSettings);
     }
 
-    function editRule(ruleObj) {
-        var modalSettings = {
-            useModalTemplate: true,
-            width: "80%",
-            maxHeight: "800px"
-        };
-        var parameters = {
-            ruleId: ruleObj.RouteRuleId
-        };
-        modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Rule Info(" + ruleObj.RouteRuleId + ")";
-            modalScope.onRouteRuleUpdated = function (ruleUpdated) {
-                mainGridAPI.itemUpdated(ruleUpdated);
-
-            };
-        };
-        VRModalService.showModal('/Client/Modules/Routing/Views/RoutingRules/RouteRuleEditor.html', parameters, modalSettings);
-    }
 
     function getData() {
         var filter = buildFilter();

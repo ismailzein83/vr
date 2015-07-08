@@ -40,19 +40,7 @@
     <div>
         <vr-row>
             <vr-columns colnum="12" simplecol>
-                <vr-datagrid datasource="routingRulesDataSource" loadmoredata="loadMoreData" on-ready="gridReady" menuactions="gridMenuActions">
-                    <vr-datagridcolumn headertext="'Carriers'" field="'CarrierAccountDescription'">
-                    </vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Rule Data Set'" field="'CodeSetDescription'">
-                    </vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Rule Type'" field="'ActionDescription'">
-                    </vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Start Date'" field="'BeginEffectiveDate'">
-                    </vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'End date'" field="'EndEffectiveDate'">
-                    </vr-datagridcolumn>
-                </vr-datagrid>
-            </vr-columns>
+                <div ng-include="'/Client/Modules/Routing/Views/RoutingRules/RoutingRulesGrid.html'"</vr-columns>
         </vr-row>
         <div>
         </div>

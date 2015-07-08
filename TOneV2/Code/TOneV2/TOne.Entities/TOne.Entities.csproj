@@ -111,6 +111,7 @@
     <Compile Include="Enumerations.cs" />
     <Compile Include="GenericEntity.cs" />
     <Compile Include="GenericEntityStatus.cs" />
+    <Compile Include="OperationResults\DeleteOperationOutput.cs" />
     <Compile Include="OperationResults\InsertOperationOutput.cs" />
     <Compile Include="OperationResults\UpdateOperationOutput.cs" />
     <Compile Include="Report\IReportGenerator.cs" />
