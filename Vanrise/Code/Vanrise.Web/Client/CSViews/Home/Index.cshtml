@@ -22,10 +22,10 @@
             <div class="navbar-header">
                 <img src="Client/Images/logoonheader.png" class="minilogo" />
                 <div class="vr-logout-span">
-                    @*Welcome {{::userDisplayName}} - <a href="#" ng-click="logout()">Logout</a>*@
+                  
                     <div class="dropdown" ng-mouseenter="showMenu($event)" ng-mouseleave="hideMenu($event)">
-                        <div class="dropdown-toggle " id="dropdownMenuCu-test" aria-expanded="true" data-toggle="dropdown">
-                         Welcome {{::userDisplayName}}
+                        <div class="dropdown-toggle "style="text-decoration:underline;" id="dropdownMenuCu-test" aria-expanded="true" data-toggle="dropdown">
+                            Welcome {{::userDisplayName}} @*<span class="caret-down"></span>*@
                         </div>
                         <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenuCu-test">
                             <li role="presentation">

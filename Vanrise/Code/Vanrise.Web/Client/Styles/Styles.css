@@ -447,7 +447,7 @@ vr-modalcontent .action-bar{
 }
 .style-row{
     padding: 10px;
-    border-bottom: 1px solid #F0F0F0;
+    /*border-bottom: 1px solid #F0F0F0;*/
     
 } 
 .emptycol{
