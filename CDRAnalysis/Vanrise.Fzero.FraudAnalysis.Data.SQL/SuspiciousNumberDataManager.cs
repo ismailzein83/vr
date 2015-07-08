@@ -165,7 +165,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             ExecuteNonQuerySP("[FraudAnalysis].[sp_FraudResult_CreateTempForFilteredSuspiciousNumbers]", tempTableName.TableName, fromDate, toDate, string.Join(",", strategiesList), string.Join(",",suspicionLevelsList));
             int totalDataCount;
-            rslt.Data = GetData<FraudResult>(tempTableName.TableName, fromRow, toRow, "SubscriberNumber", false, FraudResultMapper, out totalDataCount);
+            rslt.Data = GetDataFromTempTable<FraudResult>(tempTableName.TableName, fromRow, toRow, "SubscriberNumber", false, FraudResultMapper, out totalDataCount);
             rslt.TotalCount = totalDataCount;
             return rslt.Data;
         }
