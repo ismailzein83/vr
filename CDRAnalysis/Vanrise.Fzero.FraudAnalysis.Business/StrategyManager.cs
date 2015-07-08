@@ -31,7 +31,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
 
-            return ((IEnumerable<CDR>)(manager.GetNormalCDRs(fromRow, toRow, fromDate, toDate, msisdn)));
+            return manager.GetNormalCDRs(fromRow, toRow, fromDate, toDate, msisdn);
 
         }
 
@@ -41,7 +41,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
 
-            return ((IEnumerable<NumberProfile>)(manager.GetNumberProfiles(fromRow, toRow, fromDate, toDate, subscriberNumber)));
+            return manager.GetNumberProfiles(fromRow, toRow, fromDate, toDate, subscriberNumber);
 
         }
 
@@ -55,7 +55,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
 
-            return ((IEnumerable<Strategy>)(manager.GetAllStrategies()));
+            return manager.GetAllStrategies();
 
         }
 
@@ -65,7 +65,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
 
-            return ((IEnumerable<Strategy>)(manager.GetFilteredStrategies(fromRow, toRow, name, description)));
+            return manager.GetFilteredStrategies(fromRow, toRow, name, description);
 
         }
 
