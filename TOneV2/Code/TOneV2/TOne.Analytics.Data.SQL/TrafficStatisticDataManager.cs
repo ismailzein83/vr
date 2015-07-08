@@ -10,6 +10,7 @@ using TOne.BusinessEntity.Business;
 using TOne.BusinessEntity.Entities;
 using TOne.Data.SQL;
 using TOne.Entities;
+using Vanrise.Entities;
 
 namespace TOne.Analytics.Data.SQL
 {

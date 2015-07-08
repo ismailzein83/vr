@@ -337,6 +337,10 @@
       <Project>{a8389de1-6f10-470d-8364-cba3a3f14286}</Project>
       <Name>TOne.CDR.Data.SQL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.CDR.Entities\TOne.CDR.Entities.csproj">
+      <Project>{33bba8af-e925-4354-b05c-39e623a21da9}</Project>
+      <Name>TOne.CDR.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.CDRProcess.Activities\TOne.CDRProcess.Activities.csproj">
       <Project>{85d05a41-8510-40ce-a2aa-e0cd39099eac}</Project>
       <Name>TOne.CDRProcess.Activities</Name>

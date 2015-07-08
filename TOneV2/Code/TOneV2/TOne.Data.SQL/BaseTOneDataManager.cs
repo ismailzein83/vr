@@ -22,25 +22,6 @@ namespace TOne.Data.SQL
         {
         }
 
-        public TempTableName GenerateTempTableName()
-        {
-            string tableName = Guid.NewGuid().ToString().Replace("-", "");
-            return new TempTableName
-            {
-                Key = tableName,
-                TableName = String.Format("tempdb.dbo.t_{0}", tableName)
-            };
-        }
-
-        public TempTableName GetTempTableName(string tableNameKey)
-        {
-            return new TempTableName
-            {
-                Key = tableNameKey,
-                TableName = String.Format("tempdb.dbo.t_{0}", tableNameKey)
-            };
-        }
-
         public IEnumerable<T> GetPagedItemsText<T>(string cmdText, Func<IDataReader, T> objectBuilder, Action<DbCommand> prepareCommand, int fromRow, int toRow, bool isDescending, string orderBy)
         {
 

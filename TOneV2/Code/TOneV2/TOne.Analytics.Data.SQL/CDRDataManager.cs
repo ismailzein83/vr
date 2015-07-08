@@ -10,6 +10,7 @@ using System.Data;
 using System.Data.SqlClient;
 using TOne.Entities;
 using TOne.BusinessEntity.Business;
+using Vanrise.Entities;
 namespace TOne.Analytics.Data.SQL
 {
     class CDRDataManager : BaseTOneDataManager, ICDRDataManager
