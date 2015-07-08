@@ -147,9 +147,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
-        public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList)
+        public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(string tempTableKey, int fromRow, int toRow, DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList)
         {
-            TempTableName tempTableName = GetTempTableName("FraudResult");
+
+            TempTableName tempTableName = null;
+            if (tempTableKey != null)
+                tempTableName = GetTempTableName(tempTableKey);
+            else
+                tempTableName = GenerateTempTableName();
+
 
             BigResult<FraudResult> rslt = new BigResult<FraudResult>()
             {

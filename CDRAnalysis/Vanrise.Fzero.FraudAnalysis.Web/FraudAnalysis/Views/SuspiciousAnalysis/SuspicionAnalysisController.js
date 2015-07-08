@@ -58,6 +58,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
+            $scope.Guid = "t_FraudResult" + guid();
             getData();
         };
 
@@ -67,6 +68,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
         $scope.searchClicked = function () {
             mainGridAPI.clearDataAndContinuePaging();
+            $scope.Guid = "t_FraudResult" + guid();
             return getData();
         };
 
@@ -130,7 +132,13 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
         VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/SuspiciousAnalysis/SuspiciousNumberDetails.html", params, settings);
     }
 
-
+    function guid() {
+        function _p8(s) {
+            var p = (Math.random().toString(16) + "000000000").substr(2, 8);
+            return s ? "_" + p.substr(0, 4) + "_" + p.substr(4, 4) : p;
+        }
+        return _p8() + _p8(true) + _p8(true) + _p8();
+    }
 
     function getData() {
 
@@ -156,8 +164,10 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
         var pageInfo = mainGridAPI.getPageInfo();
 
+        console.log('$scope.Guid')
+        console.log($scope.Guid)
 
-        return SuspicionAnalysisAPIService.GetFilteredSuspiciousNumbers(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, strategiesList.slice(0, -1), suspicionLevelsList.slice(0, -1)).then(function (response) {
+        return SuspicionAnalysisAPIService.GetFilteredSuspiciousNumbers($scope.Guid, pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, strategiesList.slice(0, -1), suspicionLevelsList.slice(0, -1)).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.fraudResults.push(itm);
             });

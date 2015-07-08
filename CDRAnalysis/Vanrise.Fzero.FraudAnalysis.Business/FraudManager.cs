@@ -149,7 +149,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         {
             ISuspiciousNumberDataManager manager = FraudDataManagerFactory.GetDataManager<ISuspiciousNumberDataManager>();
 
-            return manager.GetFilteredSuspiciousNumbers(fromRow, toRow, fromDate, toDate, strategiesList, suspicionLevelsList);
+            return manager.GetFilteredSuspiciousNumbers(tempTableKey,fromRow, toRow, fromDate, toDate, strategiesList, suspicionLevelsList);
         }
 
         #region Private Classes

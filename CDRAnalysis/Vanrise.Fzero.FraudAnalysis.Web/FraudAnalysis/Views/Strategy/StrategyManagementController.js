@@ -31,12 +31,6 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
             return getData();
         };
 
-        $scope.resetClicked = function () {            
-            $scope.name = '';
-            $scope.description = '';
-            mainGridAPI.clearDataAndContinuePaging();
-            return getData();
-        };
 
         $scope.addNewStrategy = addNewStrategy;
 

@@ -31,7 +31,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
 
         [HttpGet]
-        public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string strategiesList, string suspicionLevelsList)
+        public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(string tempTableKey, int fromRow, int toRow, DateTime fromDate, DateTime toDate, string strategiesList, string suspicionLevelsList)
         {
             FraudManager manager = new FraudManager();
 
@@ -47,7 +47,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
 
 
-            return manager.GetFilteredSuspiciousNumbers("FraudResult", fromRow, toRow, fromDate, toDate, strategiesIntList, suspicionLevelsIntList);
+            return manager.GetFilteredSuspiciousNumbers( tempTableKey, fromRow, toRow, fromDate, toDate, strategiesIntList, suspicionLevelsIntList);
         }
 
 
