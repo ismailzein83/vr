@@ -586,7 +586,7 @@ namespace TOne.Analytics.Data.SQL
             LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
             LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate        
             #JoinStatement#           
-            WHERE BS.CallDate >= @BeginTime AND BS.CallDate < @EndTime  #WhereStatement#  
+            WHERE BS.CallDate >= @BeginTime AND BS.CallDate < @EndTime  #WhereStatement# #BillingStatsFilter# 
             GROUP BY #IDColumn#, #NameColumn#,ERC.Rate,ERS.Rate;
             
             WITH FilteredEntities AS (SELECT * FROM #OrderedEntities WHERE RowNumber BETWEEN @FromRow AND @ToRow)
@@ -605,9 +605,8 @@ namespace TOne.Analytics.Data.SQL
             LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
             LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate        
             JOIN FilteredEntities Ent ON Ent.ID = #BSIDColumn#
-            #BillingStatsFilter#
+            #SecondBillingStatsFilter#
             GROUP BY Ent.ID, Ent.Name, Ent.rowNumber, tr.FromDate, tr.ToDate, ERC.Rate,ERS.Rate #additionalStatement#     
-            ORDER BY Ent.RowNumber, tr.FromDate, tr.ToDate;
 
             SELECT * FROM #Results
 
@@ -692,9 +691,11 @@ namespace TOne.Analytics.Data.SQL
 
                 case VariationReportOptions.InBoundAmount:
                     query.Replace("#NameColumn#", " cpc.Name ");
-                    query.Replace("#ValueColumn#", " SUM(Sale_Nets)/ ISNULL(ERS.Rate,1) ");
+                   
                     if (entityType == EntityType.none)
                     {
+
+                        query.Replace("#ValueColumn#", " SUM(Sale_Nets)/ ISNULL(ERS.Rate,1) "); 
                         query.Replace("#IDColumn#", " cac.CarrierAccountID ");
                         query.Replace("#BSIDColumn#", "BS.CustomerID ");
                         query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
@@ -704,6 +705,7 @@ namespace TOne.Analytics.Data.SQL
                     {
                         if (groupingBy == GroupingBy.Customers)
                         {
+                            query.Replace("#ValueColumn#", " SUM(Cost_Nets)/ ISNULL(ERS.Rate,1) ");
                             query.Replace("#IDColumn#", " BS.CustomerID ");
                             query.Replace("#BSIDColumn#", "BS.CustomerID ");
                             query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
@@ -711,7 +713,7 @@ namespace TOne.Analytics.Data.SQL
                         }
                         else if (groupingBy == GroupingBy.Suppliers)
                         {
-
+                            query.Replace("#ValueColumn#", " SUM(Cost_Nets)/ ISNULL(ERS.Rate,1) ");
                             query.Replace("#IDColumn#", " BS.SupplierID ");
                             query.Replace("#BSIDColumn#", " BS.SupplierID ");
                             query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.SupplierID
@@ -763,11 +765,12 @@ namespace TOne.Analytics.Data.SQL
 
             }
             StringBuilder billingStatsFilterBuilder = new StringBuilder();
+            StringBuilder SecondBillingStatsFilter = new StringBuilder();
             switch (entityType)
             {
                 case EntityType.Zone:
-                    query.Replace("#SecondWhereStatement#", " AND BS.SaleZoneID = @EntityID ");
-                    billingStatsFilterBuilder.Append(" WHERE BS.SaleZoneID = @EntityID");
+                    query.Replace("#SecondBillingStatsFilter#", " WHERE BS.SaleZoneID = @EntityID ");      
+                    billingStatsFilterBuilder.Append(" AND BS.SaleZoneID = @EntityID");
                     switch (groupingBy)
                     {
                         case GroupingBy.Customers: query.Replace("#additionalStatement#", " ,BS.CustomerID "); break;
@@ -777,8 +780,8 @@ namespace TOne.Analytics.Data.SQL
                     break;
 
                 case EntityType.Customer:
-                    query.Replace("#SecondWhereStatement#", " AND BS.CustomerID = @EntityID ");
-                    billingStatsFilterBuilder.Append(" WHERE BS.CustomerID = @EntityID");
+                    query.Replace("#SecondBillingStatsFilter#", " WHERE BS.CustomerID = @EntityID "); 
+                    billingStatsFilterBuilder.Append(" AND BS.CustomerID = @EntityID");
                     //query.Replace("#additionalStatement#", " ,BS.CustomerID ");
                     switch (groupingBy)
                     {
@@ -788,8 +791,8 @@ namespace TOne.Analytics.Data.SQL
                     }
                     break;
                 case EntityType.Supplier:
-                    query.Replace("#SecondWhereStatement#", " AND BS.SupplierID = @EntityID ");
-                    billingStatsFilterBuilder.Append(" WHERE BS.SupplierID = @EntityID");
+                    query.Replace("#SecondBillingStatsFilter#", " WHERE BS.SupplierID = @EntityID ");
+                    billingStatsFilterBuilder.Append(" AND BS.SupplierID = @EntityID");
                     //query.Replace("#additionalStatement#", " ,BS.SupplierID ");
                     switch (groupingBy)
                     {
@@ -800,7 +803,7 @@ namespace TOne.Analytics.Data.SQL
                     break;
 
                 default:
-                    query.Replace("#SecondWhereStatement#", " ");
+                    query.Replace("#SecondBillingStatsFilter#", " ");
                     query.Replace("#additionalStatement#", " ");
                     break;
 
@@ -809,6 +812,10 @@ namespace TOne.Analytics.Data.SQL
                 query.Replace("#BillingStatsFilter#", billingStatsFilterBuilder.ToString());
             else
                 query.Replace("#BillingStatsFilter#", "");
+            if (SecondBillingStatsFilter.Length > 0)
+                query.Replace("#SecondBillingStatsFilter#", SecondBillingStatsFilter.ToString());
+            else
+                query.Replace("#SecondBillingStatsFilter#", "");
             return query.ToString();
         }
         private static DataTable ToDataTable<T>(List<T> items)

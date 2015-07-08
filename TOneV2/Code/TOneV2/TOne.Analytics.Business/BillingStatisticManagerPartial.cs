@@ -59,6 +59,97 @@ namespace TOne.Analytics.Business
             return FormatRoutingsAnalyics(_datamanager.GetRoutingAnalysis(fromDate, toDate, customerId, supplierId, top, supplierAMUId, customerAMUId));
         }
 
+        public VariationReportResult GetInOutReportsData(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions, int fromRow, int toRow, EntityType entityType, string entityID, GroupingBy groupingBy)
+        {
+            List<VariationReportsData> customersList = new List<VariationReportsData>();
+            List<VariationReportsData> onlyCustomersList = new List<VariationReportsData>();
+            List<VariationReportsData> suppliersList = new List<VariationReportsData>();
+            List<VariationReportsData> customersAndSuppliersList = new List<VariationReportsData>();
+            List<TimeRange> timeRanges;
+
+
+
+         //   switch (variationReportOptions)
+        //    {
+              //  case VariationReportOptions.InOutBoundMinutes:
+                    var customersResult = GetVariationReportsData(selectedDate, periodCount, timePeriod, VariationReportOptions.InBoundMinutes, fromRow, toRow, entityType, entityID, groupingBy);
+                   timeRanges = customersResult.TimeRange;
+                    foreach (var customer in customersResult.VariationReportsData)
+                    {
+                        customersList.Add(customer);
+                    
+                    }
+                    var suppliersResult = GetVariationReportsData(selectedDate, periodCount, timePeriod, VariationReportOptions.OutBoundMinutes, fromRow, toRow, entityType, entityID, groupingBy);
+                    foreach (var supplier in suppliersResult.VariationReportsData)
+                    {
+                        suppliersList.Add(supplier);
+                    
+                    }
+                    
+                    foreach (var customer in customersList)
+                    { 
+                        var matchedSupplier = suppliersList.FirstOrDefault(s=>s.ID==customer.ID);
+                        if (matchedSupplier!=null)
+                            {                            
+                               //create 3 item in reslut list : IN, Out ,Total
+                                var name = customer.Name;
+                              customer.Name = string.Format("{0}/IN",name);  
+                              customersAndSuppliersList.Add(customer); 
+                              matchedSupplier.Name = string.Format("{0}/OUT",name);
+                              customersAndSuppliersList.Add(matchedSupplier);
+                            
+                            //Total:
+                            var total = new VariationReportsData();
+                            total.Name = string.Format("{0}/TOTAL", name);  
+                            total.PeriodTypeValueAverage = customer.PeriodTypeValueAverage - matchedSupplier.PeriodTypeValueAverage  ;
+                            total.PeriodTypeValuePercentage =  customer.PeriodTypeValuePercentage - matchedSupplier.PeriodTypeValuePercentage ;
+                            total.PreviousPeriodTypeValuePercentage = matchedSupplier.PreviousPeriodTypeValuePercentage - customer.PreviousPeriodTypeValuePercentage;
+                           // List<float> totalValues = new List<float>();
+                            List<decimal> totalValues = new List<decimal>();
+                            for(int i=0; i<customer.Values.Count;i++)
+                            // totalValues.Add( float.Parse(matchedSupplier.Values[i].ToString()) - float.Parse(customer.Values[i].ToString() ) );
+                            totalValues.Add(customer.Values[i] - matchedSupplier.Values[i] );
+                            total.Values = totalValues;
+                            customersAndSuppliersList.Add(total);
+
+                            //remove out element from out list
+                            suppliersList.Remove(matchedSupplier);
+
+                            }
+                            else {//add item to in list
+                                   onlyCustomersList.Add(customer); }
+                       }
+                     customersAndSuppliersList =  customersAndSuppliersList.OrderBy(item=>item.Name).ToList();
+
+                        //add items in in list
+                        //add items remaining in out list
+                    foreach(var item in onlyCustomersList)
+                          item.Name = string.Format("{0}/IN",item.Name);
+                    foreach (var item in suppliersList)
+                        item.Name = string.Format("{0}/OUT", item.Name);
+
+                    customersAndSuppliersList.AddRange(onlyCustomersList.OrderBy(customer => customer.Name).ToList());
+
+                    customersAndSuppliersList.AddRange(suppliersList.OrderBy(supplier=>supplier.Name).ToList());
+                   
+                 // return //  VariationReportResult inOutData = 
+               //     break;
+
+                 
+
+                    
+
+
+                //case VariationReportOptions.InOutBoundAmount:
+                //    resultInList.Add(GetVariationReportsData(selectedDate, periodCount, timePeriod, VariationReportOptions.InBoundAmount, fromRow, toRow, entityType, entityID, groupingBy));
+                //    resultOutList.Add(GetVariationReportsData(selectedDate, periodCount, timePeriod, VariationReportOptions.OutBoundAmount, fromRow, toRow, entityType, entityID, groupingBy));
+                //    break;
+          //  }
+            return new VariationReportResult() { VariationReportsData = customersAndSuppliersList, TimeRange = timeRanges };
+
+           
+        }
+
         #region PrivateMethode
         private List<CustomerSummaryFormatted> FormatCustomerSummaries(List<CustomerSummary> zoneSummariesDetailed)
         {
