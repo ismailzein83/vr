@@ -43,9 +43,22 @@ namespace TOne.Analytics.Business
         public List<SupplierCostDetailsFormatted> GetSupplierCostDetails(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
         {
             List<SupplierCostDetails> lstSuppplierCostDetails = _datamanager.GetSupplierCostDetails(fromDate, toDate, customerAMUId, supplierAMUId);
-            lstSuppplierCostDetails.OrderBy(cs => cs.Customer).ToList();
+            List<SupplierCostDetails> lstSuppplierCostDetailsGrouped = AddGroupNames(lstSuppplierCostDetails);
 
-            return FormatSupplierCostDetails(lstSuppplierCostDetails);
+
+            var grouped = lstSuppplierCostDetailsGrouped.GroupBy(c => new { supplier = c.Carrier, subKey = c.CustomerGroupName })
+              .Select(r => new SupplierCostDetails
+              {
+                  Carrier= r.First().Carrier,
+                   CustomerGroupName = r.Key.subKey,
+                  Duration = r.Sum(rr => (decimal)(string.IsNullOrEmpty(rr.Duration.ToString()) ? 0 : rr.Duration)),
+                  Amount = r.Sum(rr => (double)(string.IsNullOrEmpty(rr.Amount.ToString()) ? 0 : rr.Amount))
+              });
+
+            
+            List<SupplierCostDetails> selectedCollection = grouped.ToList();
+            List<SupplierCostDetailsFormatted> lstSupplierCostDetailsFormatted = FormatSupplierCostDetails(selectedCollection);
+            return lstSupplierCostDetailsFormatted;
         }
 
         public List<SaleZoneCostSummaryFormatted> GetSaleZoneCostSummary(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
@@ -525,16 +538,32 @@ namespace TOne.Analytics.Business
             };
         }
 
-        private SupplierCostDetailsFormatted FormatSupplierCostDetails(SupplierCostDetails supplierCostDetails)
+        private SupplierCostDetails AddGroupName(SupplierCostDetails supplierCostDetails)
         {
-            return new SupplierCostDetailsFormatted
+            String customerGroupName = (supplierCostDetails.Customer == null) ? null : _cmanager.GetCarrierAccount(supplierCostDetails.Customer).CarrierGroupName;
+
+            return new SupplierCostDetails
             {
                 Customer = (supplierCostDetails.Customer != null) ? _bemanager.GetCarrirAccountName(supplierCostDetails.Customer) : null,
                 Carrier = (supplierCostDetails.Carrier != null) ? _bemanager.GetCarrirAccountName(supplierCostDetails.Carrier) : null,
                 Duration = supplierCostDetails.Duration,
+                Amount = supplierCostDetails.Amount,
+                CustomerGroupName = customerGroupName == null ? "Others" : customerGroupName
+            };
+        }
+
+
+        private SupplierCostDetailsFormatted FormatSupplierCostDetails(SupplierCostDetails supplierCostDetails)
+        {
+            return new SupplierCostDetailsFormatted
+            {
+                Customer = supplierCostDetails.Customer,
+                Carrier = supplierCostDetails.Carrier,
+                Duration = supplierCostDetails.Duration,
                 DurationFormatted = FormatNumber(supplierCostDetails.Duration),
                 Amount = supplierCostDetails.Amount,
-                AmountFormatted = FormatNumber(supplierCostDetails.Amount,5)
+                AmountFormatted = FormatNumber(supplierCostDetails.Amount,5),
+                CustomerGroupName = supplierCostDetails.CustomerGroupName
             };
         }
 
@@ -705,6 +734,17 @@ namespace TOne.Analytics.Business
                 foreach (var z in dailySummary)
                 {
                     models.Add(FormatDailySummary(z));
+                }
+            return models;
+        }
+
+        private List<SupplierCostDetails> AddGroupNames(List<SupplierCostDetails> supplierCostDetails)
+        {
+            List<SupplierCostDetails> models = new List<SupplierCostDetails>();
+            if (supplierCostDetails != null)
+                foreach (var z in supplierCostDetails)
+                {
+                    models.Add(AddGroupName(z));
                 }
             return models;
         }
