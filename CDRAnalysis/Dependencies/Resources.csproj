@@ -78,27 +78,6 @@
     <Content Include="Libraries\Telerik.Web.UI.xml" />
     <Content Include="Libraries\Vanrise.CommonLibrary.dll" />
     <Content Include="Notes\Web Virtual Directories.txt" />
-    <Content Include="VanriseFramework\Vanrise.BusinessProcess.Client.dll" />
-    <Content Include="VanriseFramework\Vanrise.BusinessProcess.Data.dll" />
-    <Content Include="VanriseFramework\Vanrise.BusinessProcess.Data.SQL.dll" />
-    <Content Include="VanriseFramework\Vanrise.BusinessProcess.dll" />
-    <Content Include="VanriseFramework\Vanrise.BusinessProcess.Entities.dll" />
-    <Content Include="VanriseFramework\Vanrise.BusinessProcess.WFActivities.dll" />
-    <Content Include="VanriseFramework\Vanrise.Caching.dll" />
-    <Content Include="VanriseFramework\Vanrise.Common.dll" />
-    <Content Include="VanriseFramework\Vanrise.Data.dll" />
-    <Content Include="VanriseFramework\Vanrise.Data.MySQL.dll" />
-    <Content Include="VanriseFramework\Vanrise.Data.SQL.dll" />
-    <Content Include="VanriseFramework\Vanrise.Logging.SQL.dll" />
-    <Content Include="VanriseFramework\Vanrise.Queueing.Data.dll" />
-    <Content Include="VanriseFramework\Vanrise.Queueing.Data.SQL.dll" />
-    <Content Include="VanriseFramework\Vanrise.Queueing.dll" />
-    <Content Include="VanriseFramework\Vanrise.Queueing.Entities.dll" />
-    <Content Include="VanriseFramework\Vanrise.Queueing.Extensions.dll" />
-    <Content Include="VanriseFramework\Vanrise.Runtime.Data.dll" />
-    <Content Include="VanriseFramework\Vanrise.Runtime.Data.SQL.dll" />
-    <Content Include="VanriseFramework\Vanrise.Runtime.dll" />
-    <Content Include="VanriseFramework\Vanrise.Runtime.Entities.dll" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Libraries\Vanrise.CommonLibrary.dll.config" />

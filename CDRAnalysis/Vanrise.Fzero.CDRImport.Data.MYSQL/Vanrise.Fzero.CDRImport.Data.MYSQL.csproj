@@ -45,11 +45,13 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.Data">
-      <HintPath>..\Dependencies\VanriseFramework\Vanrise.Data.dll</HintPath>
+    <Reference Include="Vanrise.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Data.MySQL">
-      <HintPath>..\Dependencies\VanriseFramework\Vanrise.Data.MySQL.dll</HintPath>
+    <Reference Include="Vanrise.Data.MySQL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Data.MySQL.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
