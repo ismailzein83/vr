@@ -16,7 +16,8 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
     }
     );
 
-    $scope.userDisplayName = $cookies['TOne_LoginUserDisplayNameCookie'];
+    var userInfo = JSON.parse(cookieUserToken);
+    $scope.userDisplayName = userInfo.UserDisplayName;
 
     Waves.displayEffect();
     var dropdownHidingTimeoutHandlerc;
@@ -65,12 +66,12 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         var $this = angular.element(e.currentTarget);
          
         if ($scope.menuItemsCurrent != null && $scope.menuItemsCurrent.Id == item.Id) {
-            $($this).parent().find('.panel-body').first().stop(true, true).slideUp(500);
+           // $($this).parent().find('.panel-body').first().stop(true, true).slideUp(500);
             $scope.menuItemsCurrent = null;
 
         }
         else {           
-            $($this).parent().find('.panel-body').first().stop(true, true).slideDown(500);
+            $($this).parent().find('.panel-body').first().stop(true, true).slideDown(300);
             $scope.menuItemsCurrent = item;
         }
 

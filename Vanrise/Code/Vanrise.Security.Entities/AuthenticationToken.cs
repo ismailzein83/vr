@@ -10,9 +10,7 @@ namespace Vanrise.Security.Entities
     {
         public string TokenName { get; set; }
 
-        public int ExpirationIntervalInMinutes { get; set; }
-
-        public string Username { get; set; }
+        public string UserName { get; set; }
 
         public string UserDisplayName { get; set; }
 

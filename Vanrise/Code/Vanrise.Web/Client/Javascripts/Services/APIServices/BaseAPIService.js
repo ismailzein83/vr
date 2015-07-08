@@ -3,7 +3,17 @@ app.config(['$httpProvider', function ($httpProvider) {
     $httpProvider.interceptors.push(function ($q, $cookies) {
         return {
             'request': function (config) {
-                config.headers['Auth-Token'] = $cookies['TOne_LoginTokenCookie'];
+                var userInfoCookie = $cookies['TOne_LoginTokenCookie'];
+                if (userInfoCookie != undefined)
+                {
+                    var userInfo = JSON.parse(userInfoCookie);
+                    config.headers['Auth-Token'] = userInfo.Token;
+                }
+                else
+                {
+                    config.headers['Auth-Token'] = "";
+                }
+                
                 return config;
             }
         };

@@ -22,9 +22,9 @@ function LoginController($scope, SecurityAPIService) {
 
         return SecurityAPIService.Authenticate(credentialsObject)
             .then(function (response) {
-
-                setCookie('TOne_LoginTokenCookie', response.Token, '', '', '');
-                setCookie('TOne_LoginUserDisplayNameCookie', response.UserDisplayName, '', '', '');
+                var userInfo = JSON.stringify(response);
+                console.log(userInfo);
+                setCookie('TOne_LoginTokenCookie', userInfo, '', '', '');
 
                 window.location.href = '/';
         }
