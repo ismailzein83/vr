@@ -4,12 +4,12 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
 
     var mainGridAPI;
     var arrMenuAction = [];
-    
+
     defineScope();
     load();
 
-       
-   
+
+
 
     function defineScope() {
 
@@ -23,7 +23,7 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
         };
 
         $scope.loadMoreData = function () {
-           return getData();
+            return getData();
         }
 
         $scope.searchClicked = function () {
@@ -38,7 +38,7 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
     }
 
     function load() {
-        
+
     }
 
     function defineMenuActions() {
@@ -58,7 +58,7 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
 
         return StrategyAPIService.GetFilteredStrategies(pageInfo.fromRow, pageInfo.toRow, name, description).then(function (response) {
             angular.forEach(response, function (itm) {
-               
+
                 itm.IsDefaultText = itm.IsDefault ? "Default" : "Not Default";
                 $scope.strategies.push(itm);
             });
@@ -86,7 +86,7 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
         };
 
         var settings = {
-           
+
         };
 
         settings.onScopeReady = function (modalScope) {

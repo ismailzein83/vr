@@ -45,11 +45,12 @@
                             <vr-columns colnum="3">
                                 <vr-section title="Strategy Parameters">
                                     <div style="max-height:285px;overflow-y:auto;overflow-x:hidden">
-                                        <vr-row ng-if="strategyFilters[13].isSelected">
+
+                                        <vr-row ng-show="strategyFilters[13].isSelected">
 
                                             <vr-columns colnum="11">
 
-                                                <vr-select datasource="hours" datatextfield="name" datavaluefield="id" label="Peak Hours" selectedvalues="selectedPeakHours" ismultipleselection></vr-select>
+                                                <vr-select datasource="hours" datatextfield="name" datavaluefield="id" label="Peak Hours" selectedvalues="selectedPeakHours" ismultipleselection isrequired></vr-select>
                                             </vr-columns>
                                         </vr-row>
                                         <vr-row ng-if="strategyFilters[15].isSelected  || strategyFilters[16].isSelected ">
@@ -119,7 +120,7 @@
 
 
             </vr-row>
-
+            {{selectedPeakHours}}
         </vr-form>
     </vr-modalbody>
     <div>
@@ -132,3 +133,5 @@
 
     </div>
 </div>
+
+

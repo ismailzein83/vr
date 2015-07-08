@@ -44,7 +44,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         ];
 
 
-
+        $scope.selectedPeakHours = $scope.hours;
 
 
         $scope.strategyLevels = [];
