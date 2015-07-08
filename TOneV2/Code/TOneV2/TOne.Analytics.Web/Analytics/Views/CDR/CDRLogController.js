@@ -201,7 +201,6 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
             currentData = response.Data;
             resultKey = response.ResultKey;
             $scope.mainGridPagerSettings.totalDataCount = response.TotalCount;
-            console.log(response);
             $scope.isInitializing = false;
             mainGridAPI.addItemsToSource(response.Data);
         }).finally(function () {
