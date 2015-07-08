@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Vanrise.Fzero.FraudAnalysis.Entities;
-using Vanrise.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data
 {
@@ -11,7 +10,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         List<Strategy> GetAllStrategies();
 
-        IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int? strategyId, string suspicionLevelsList);
+        
 
         List<Strategy> GetFilteredStrategies(int fromRow, int toRow, string name, string description);
 

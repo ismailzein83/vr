@@ -61,7 +61,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             mySqlConnection.Close();
         }
 
-
         public void SaveNumberProfiles(List<NumberProfile> numberProfiles)
         {
             string filename = GetFilePathForBulkInsert();
@@ -128,6 +127,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             mySqlConnection.Close();
         }
 
-
+        public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int? strategyId, string suspicionLevelsList)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

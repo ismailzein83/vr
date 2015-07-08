@@ -45,11 +45,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\VanriseFramework\Vanrise.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Data">
-      <HintPath>..\Dependencies\VanriseFramework\Vanrise.Data.dll</HintPath>
+    <Reference Include="Vanrise.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Data.SQL">
-      <HintPath>..\Dependencies\VanriseFramework\Vanrise.Data.SQL.dll</HintPath>
+    <Reference Include="Vanrise.Data.SQL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Vanrise.Data.SQL;
+using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
@@ -142,6 +144,35 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     KeepIdentity = false,
                     FieldSeparator = ','
                 });
+        }
+
+
+        public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int? strategyId, string suspicionLevelsList)
+        {
+            TempTableName tempTableName = GetTempTableName("FraudResult");
+
+            BigResult<FraudResult> rslt = new BigResult<FraudResult>()
+            {
+                ResultKey = tempTableName.Key
+            };
+
+
+            ExecuteNonQuerySP("[FraudAnalysis].[sp_FraudResult_CreateTempForFilteredSuspiciousNumbers]", tempTableName.TableName, fromDate, toDate, strategyId, suspicionLevelsList);
+            int totalDataCount;
+            rslt.Data = GetData<FraudResult>(tempTableName.TableName, fromRow, toRow, "SubscriberNumber", false, FraudResultMapper, out totalDataCount);
+            rslt.TotalCount = totalDataCount;
+            return rslt.Data;
+        }
+
+        private FraudResult FraudResultMapper(IDataReader reader)
+        {
+            var fraudResult = new FraudResult();
+            fraudResult.LastOccurance = (DateTime)reader["LastOccurance"];
+            fraudResult.SubscriberNumber = reader["SubscriberNumber"] as string;
+            fraudResult.SuspicionLevelName = ((Enums.SuspicionLevel)Enum.ToObject(typeof(Enums.SuspicionLevel), GetReaderValue<int>(reader, "SuspicionLevelId"))).ToString();
+            fraudResult.StrategyName = reader["StrategyName"] as string;
+            fraudResult.NumberofOccurances = (int)reader["NumberofOccurances"];
+            return fraudResult;
         }
 
     }

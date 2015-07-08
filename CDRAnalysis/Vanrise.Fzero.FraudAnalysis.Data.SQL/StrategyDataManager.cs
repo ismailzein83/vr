@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using Vanrise.Data.SQL;
-using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
@@ -42,68 +40,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return GetItemsSP("FraudAnalysis.sp_FraudResult_GetNumberProfile", NumberProfileMapper, fromRow, toRow, fromDate, toDate, subscriberNumber);
         }
 
-
-
-
-
-
-      // to be removed ////////////////////////////////////////////////////////////////////////
-
-
-        public TempTableName GetTempTableName(string tableNameKey)
-        {
-            return new TempTableName
-            {
-                Key = tableNameKey,
-                TableName = String.Format("tempdb.dbo.t_{0}", tableNameKey)
-            };
-        }
-
-
-        protected IEnumerable<T> GetData<T>(string tempTableName, int fromRow, int toRow, string orderByColumnName, bool isDescending, Func<IDataReader, T> objectBuilder, out int totalCount)
-        {
-            string query = String.Format(@"WITH OrderedResult AS (SELECT *, ROW_NUMBER()  OVER ( ORDER BY {1} {2}) AS rowNumber FROM {0})
-	                                    SELECT * FROM OrderedResult WHERE rowNumber between @FromRow AND @ToRow", tempTableName, orderByColumnName, isDescending ? "DESC" : "ASC");
-
-            totalCount = (int)ExecuteScalarText(String.Format("SELECT COUNT(*) FROM {0}", tempTableName), null);
-            return GetItemsText(query,
-                objectBuilder,
-                (cmd) =>
-                {
-                    cmd.Parameters.Add(new SqlParameter("@FromRow", fromRow));
-                    cmd.Parameters.Add(new SqlParameter("@ToRow", toRow));
-                });
-        }
-
-
-
-        // to be removed ////////////////////////////////////////////////////////////////////////
-
         
-
-
-
-        //New///////////////////////////////////////////////////////////////////////////////////
-
-
-        public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int? strategyId, string suspicionLevelsList)
-        {
-            TempTableName tempTableName = GetTempTableName("FraudResult");
-          
-            BigResult<FraudResult> rslt = new BigResult<FraudResult>()
-            {
-                ResultKey = tempTableName.Key
-            };
-
-
-            ExecuteNonQuerySP("[FraudAnalysis].[sp_FraudResult_CreateTempForFilteredSuspiciousNumbers]", tempTableName.TableName, fromDate,  toDate, strategyId, suspicionLevelsList);
-            int totalDataCount;
-            rslt.Data = GetData<FraudResult>(tempTableName.TableName, fromRow, toRow, "SubscriberNumber", false, FraudResultMapper, out totalDataCount);
-            rslt.TotalCount = totalDataCount;
-            return rslt.Data;
-        }
-
-        //New///////////////////////////////////////////////////////////////////////////////////
 
         
         public List<Strategy> GetFilteredStrategies(int fromRow, int toRow, string name, string description)
@@ -207,16 +144,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
-        private FraudResult FraudResultMapper(IDataReader reader)
-        {
-            var fraudResult = new FraudResult();
-            fraudResult.LastOccurance = (DateTime)reader["LastOccurance"];
-            fraudResult.SubscriberNumber = reader["SubscriberNumber"] as string;
-            fraudResult.SuspicionLevelName = ((Enums.SuspicionLevel)Enum.ToObject(typeof(Enums.SuspicionLevel), GetReaderValue<int>(reader, "SuspicionLevelId"))).ToString();
-            fraudResult.StrategyName = reader["StrategyName"] as string;
-            fraudResult.NumberofOccurances = (int) reader["NumberofOccurances"];
-            return fraudResult;
-        }
+        
 
         private Strategy StrategyMapper(IDataReader reader)
         {

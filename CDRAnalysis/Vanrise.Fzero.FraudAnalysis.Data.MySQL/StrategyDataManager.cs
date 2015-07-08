@@ -112,9 +112,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         }
 
 
-        IEnumerable<FraudResult> IStrategyDataManager.GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int? strategyId, string suspicionLevelsList)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }
