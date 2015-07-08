@@ -44,42 +44,40 @@ appControllers.directive('numberFiled', function () {
         }
     };
 });
-appControllers.directive('resizer', function($document) {
-
-    return function($scope, $element, $attrs) {
-
-        $element.on('mousedown', function(event) {
+appControllers.directive('draggable', function ($document) {
+    "use strict";
+    return function (scope, element) {
+        var startX = 0,
+          startY = 0,
+          x = 0,
+          y = 0;
+        element.css({
+            position: 'fixed'
+        });
+        element.find('.modal-header').css({
+            cursor: 'move'
+        });
+        element.find('.modal-header').on('mousedown', function (event) {
+            // Prevent default dragging of selected content
             event.preventDefault();
-
+            startX = event.screenX - x;
+            startY = event.screenY - y;
             $document.on('mousemove', mousemove);
             $document.on('mouseup', mouseup);
         });
-        var x; 
+
         function mousemove(event) {
-            console.log($attrs.ind)
-            if ($attrs.resizer == 'vertical') {
-               var  x = event.pageX -  $element.parent().width();
-            } 
+            y = event.screenY - startY;
+            x = event.screenX - startX;
+            element.css({
+                top: y + 'px',
+                left: x + 'px'
+            });
         }
 
-        function mouseup(event) {
-            if ($attrs.resizer == 'vertical') {
-                x = event.pageX - $element.parent().width();
-            }
-            //var nextdivwidth = $scope.columns[parseInt($attrs.ind + 1)].colwidth - (x - ($scope.columns[parseInt($attrs.ind + 1)].colwidth));
-            $scope.$apply(function () {
-               console.log(x)
-                $element.parent().css({
-                    width: x + 'px'
-                });
-               // console.log($scope.columns[parseInt($attrs.ind + 1)].colwidth + " befor ")
-                $scope.columns[$attrs.ind].colwidth = x;
-              //  $scope.columns[parseInt($attrs.ind + 1)].colwidth = nextdivwidth;
-               // console.log($scope.columns[parseInt($attrs.ind + 1)].colwidth  + " after ")
-            });
+        function mouseup() {
             $document.unbind('mousemove', mousemove);
             $document.unbind('mouseup', mouseup);
         }
     };
 });
-
