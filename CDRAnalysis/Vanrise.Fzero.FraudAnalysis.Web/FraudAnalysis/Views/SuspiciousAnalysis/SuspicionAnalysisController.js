@@ -58,7 +58,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
-            //getData();
+            getData();
         };
 
         $scope.loadMoreData = function () {

@@ -19,6 +19,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             LoadLevelsByPriority(strategy);
         }
 
+        public FraudManager()
+        {
+            
+        }
+
         void LoadLevelsByPriority(Strategy strategy)
         {
             if (strategy == null)
