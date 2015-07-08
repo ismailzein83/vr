@@ -7,7 +7,6 @@ function InstanceEditorController($scope, BusinessProcessAPIService, $routeParam
 
     function defineScope() {
 
-        console.log(555555)
 
         $scope.createProcessInput = {};
         $scope.close = function () {
@@ -50,6 +49,7 @@ function InstanceEditorController($scope, BusinessProcessAPIService, $routeParam
 
 
     function buildInstanceObjFromScope() {
+        console.log('buildInstanceObjFromScope')
         var createProcessInputs = $scope.createProcessInput.getData();
         return createProcessInputs;
     }

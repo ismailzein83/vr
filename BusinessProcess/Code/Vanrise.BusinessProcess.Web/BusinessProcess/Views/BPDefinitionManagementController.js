@@ -7,7 +7,6 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
 
 
     function showStartNewInstance(BPDefinitionObj) {
-        console.log(888888888)
         VRModalService.showModal('/Client/Modules/BusinessProcess/Views/InstanceEditor.html', {
             BPDefinitionID: BPDefinitionObj.BPDefinitionID
         },
@@ -15,13 +14,13 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
             onScopeReady: function (modalScope) {
                 modalScope.title = "Start New Instance";
                 modalScope.onProcessInputCreated = function (processInstanceId) {
-                    $scope.searchClicked();
+                    getOpenedInstancesData();
                     showBPTrackingModal(processInstanceId);
                 };
 
                 modalScope.onProcessInputsCreated = function () {
                     VRNotificationService.showSuccess("Bussiness Instances created succesfully;  Open nested grid to see the created instances");
-                    $scope.searchClicked();
+                    getOpenedInstancesData();
                 };
             }
         });
@@ -43,6 +42,7 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
         if (angular.isDefined(interval)) return;
         interval = $interval(function callAtInterval() {
             getOpenedInstancesData();
+            getScheduledTasksData();
         }, 60000);
     }
 
@@ -148,7 +148,6 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
 
 
     $scope.schedulerTaskClicked = function (dataItem) {
-        console.log(dataItem)
         showEditTaskModal(dataItem);
     }
 
