@@ -21,9 +21,26 @@
         <div class="container">
             <div class="navbar-header">
                 <img src="Client/Images/logoonheader.png" class="minilogo" />
-                <span class="vr-logout-span">
-                    Welcome {{::userDisplayName}} - <a href="#" ng-click="logout()">Logout</a>
-                </span>
+                <div class="vr-logout-span">
+                    @*Welcome {{::userDisplayName}} - <a href="#" ng-click="logout()">Logout</a>*@
+                    <div class="dropdown" ng-mouseenter="showMenu($event)" ng-mouseleave="hideMenu($event)">
+                        <div class="dropdown-toggle " id="dropdownMenuCu-test" aria-expanded="true" data-toggle="dropdown">
+                         Welcome {{::userDisplayName}}
+                        </div>
+                        <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenuCu-test">
+                            <li role="presentation">
+                                <a href="#" >Edit profile</a>
+                            </li>
+                            <li role="presentation">
+                                <a href="#" >Change password</a>
+                            </li>
+                            <li role="presentation">
+                                <a href="#" ng-click="logout()">Logout</a>
+                            </li>                          
+                        </ul>
+                    </div>
+                </div>
+
                 <div class="menu-icon">
                     <img src="Client/Images/01.png" class="img1" />
                     <span class="badge bg-lightred">10</span>
@@ -32,48 +49,15 @@
                     <img src="Client/Images/02.png" class="img2" />
                     <span class="badge bg-lightred">5</span>
                 </div>
-                
-                
             </div>
         </div>
     </nav>
     <div class="sub-header" ng-class="toogled==true?'sub-header-open':'sub-header-closed'">
         <div class="inner-sub ">
             <h4>
-                {{breadcrumb.leaf.Name}}
-            </h4>           
-
-            @*<div class="dropdown " ng-mouseenter="showMenu($event)" ng-mouseleave="hideMenu($event)">
-                <div class="dropdown-toggle " id="dropdownMenuCu-test" aria-expanded="true" data-toggle="dropdown">
-                    drop down
-                </div>
-                <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenuCu-test">
-                    <li role="presentation">
-                        <label class="titel-groupe"> test 1</label>
-                    </li>
-                    <li role="presentation">
-                        <label class="titel-groupe"> test 2</label>
-                    </li>
-                    <li role="presentation">
-                        <label class="titel-groupe"> test 3</label>
-                    </li>
-                    <li role="presentation">
-                        <label class="titel-groupe"> test 4</label>
-                    </li>
-                    <li role="presentation">
-                        <label class="titel-groupe"> test 5</label>
-                    </li>
-                 </ul>
-            </div>*@
-        </div>
-        @*<div>
-            <ol class="breadcrumb vr-breadcrumb">
-                <li><a href="#/default">Home</a></li>
-                <li><label >{{breadcrumb.parent.Name}}</label></li>
-                <li ng-if="menusubItemsCurrent!=null"><label>{{breadcrumb.subparent.Name}}</label></li>
-                <li class="active"><label>{{breadcrumb.leaf.Name}}</label></li>
-            </ol>
-        </div>*@
+                {{currentPage.Title}}
+            </h4>
+        </div>        
     </div>
     <div id="wrapper" ng-style="toogled==true?{'padding-left':'210px'}:{'padding-left':'25px'}">
         <!-- Sidebar -->

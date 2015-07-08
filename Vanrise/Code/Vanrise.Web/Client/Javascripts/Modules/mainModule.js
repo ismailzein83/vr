@@ -180,23 +180,25 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             setMenuItemSelectedFlag(selectedMenuItem, true);
         }
     }
-    $scope.breadcrumb = {};
-
+   
+    $scope.currentPage = null;
     function setMenuItemSelectedFlag(menuItem, isSelected) {
         $scope.menusubItemsCurrent = null;
         menuItem.isSelected = isSelected;       
         if (menuItem.parent != null)
             setMenuItemSelectedFlag(menuItem.parent, isSelected);
-        if (menuItem.isSelected == true)
-            $scope.breadcrumb.leaf = menuItem;
+        if (menuItem.isSelected == true && menuItem.Childs == null) {
+            $scope.currentPage = menuItem;
+            $scope.currentPage.Title = ($scope.currentPage.Title != null) ? $scope.currentPage.Title : $scope.currentPage.Name;
+        }
+            $scope.currentPage = menuItem;
         if (menuItem.parent == null && isSelected == true) {
             $scope.menuItemsCurrent = menuItem;
-            $scope.breadcrumb.parent = menuItem;
         }
            
         if (menuItem.parent != null && menuItem.Childs != null && isSelected == true) {
             $scope.menusubItemsCurrent = menuItem;
-            $scope.breadcrumb.subparent = menuItem;
+            
         }
             
         
