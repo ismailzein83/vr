@@ -72,26 +72,19 @@ namespace TOne.Analytics.Data.SQL
         }
         private IEnumerable<BillingCDR> GetData(string tempTableName, int fromRow, int toRow, BillingCDRMeasures orderBy, bool isDescending, out int totalCount)
         {
-            string query = String.Format(@"WITH OrderedResult AS (SELECT *, ROW_NUMBER()  OVER(ORDER BY {1} {2})  AS rowNumber FROM {0})
-	                                    SELECT * FROM OrderedResult WHERE rowNumber between @FromRow AND @ToRow", tempTableName,GetColumnName(orderBy), isDescending ? "DESC" : "ASC");
-
-            totalCount = (int)ExecuteScalarText(String.Format("SELECT COUNT(*) FROM {0}", tempTableName), null);
-            List<BillingCDR> cdrData=GetItemsText(query,
+            string orderByColumnName=GetColumnName(orderBy);
+            IEnumerable<BillingCDR> cdrData = base.GetDataFromTempTable<BillingCDR>(tempTableName, fromRow, toRow, orderByColumnName, isDescending,
                 (reader) =>
                 {
                     var obj = new BillingCDR();
                     FillCDRDataFromReader(obj, reader);
                     return obj;
                 },
-                (cmd) =>
-                {
-                    cmd.Parameters.Add(new SqlParameter("@FromRow", fromRow));
-                    cmd.Parameters.Add(new SqlParameter("@ToRow", toRow));
-                });
+                out totalCount);
             FillCDRList(cdrData);
             return cdrData;
         }
-        private void FillCDRList(List<BillingCDR> cdrData)
+        private void FillCDRList(IEnumerable<BillingCDR> cdrData)
         {
             BusinessEntityInfoManager manager = new BusinessEntityInfoManager();
             foreach(BillingCDR data in cdrData)
@@ -115,6 +108,20 @@ namespace TOne.Analytics.Data.SQL
         {
             switch (column)
             {
+                case BillingCDRMeasures.Attempt: return "Attempt";
+                case BillingCDRMeasures.CDPN: return "CDPN";
+                case BillingCDRMeasures.CDPNOut: return "CDPNOut";
+                case BillingCDRMeasures.CGPN: return "CGPN";
+                case BillingCDRMeasures.CustomerInfo: return "CustomerInfo";
+                case BillingCDRMeasures.DurationInSeconds: return "DurationInSeconds";
+                case BillingCDRMeasures.OriginatingZoneName: return "OriginatingZoneName";
+                case BillingCDRMeasures.OurZoneName: return "OurZoneName";
+                case BillingCDRMeasures.PDD: return "PDD";
+                case BillingCDRMeasures.ReleaseCode: return "ReleaseCode";
+                case BillingCDRMeasures.ReleaseSource : return "ReleaseSource";
+                case BillingCDRMeasures.SupplierName: return "SupplierName";
+                case BillingCDRMeasures.SupplierZoneName: return "SupplierZoneName";
+                case BillingCDRMeasures.SwitchName: return "SwitchName";
                 default: return column.ToString();
             }
         }

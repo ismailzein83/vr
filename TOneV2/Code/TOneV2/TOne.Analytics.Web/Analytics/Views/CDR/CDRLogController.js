@@ -40,7 +40,6 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
         $scope.fromDate = '2015/06/02';
         $scope.toDate = '2015/06/06';
         $scope.nRecords = '100'
-        $scope.name = "test";
         $scope.isInitializing = false;
         $scope.showResult = false;
         $scope.switches = [];
@@ -69,7 +68,7 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
         $scope.onMainGridSortChanged = function (colDef, sortDirection) {
             sortColumn = colDef.tag;
             sortDescending = (sortDirection == "DESC");
-            return GetCDRData();
+            return getData();
         }
 
         
@@ -86,17 +85,15 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
                 nRecords: $scope.nRecords,
                 selectedCDROption: $scope.selectedCDROption.value
             };
-            //  return getData(true);
-            return GetCDRData();
+            return getData();
         };
         $scope.mainGridPagerSettings = {
             currentPage: 1,
             totalDataCount: 0,
             pageChanged: function () {
-                return GetCDRData();
+                return getData();
             }
         };
-        $scope.GetCDRData = GetCDRData;
 
         $scope.searchZones = function (text) {
             return ZonesService.getSalesZones(text);
@@ -105,7 +102,6 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
     function load() {
         loadCDROption();
         loadMeasures();
-        overallSelectedMeasure = BillingCDRMeasureEnum.Attempt;
         $scope.isInitializing = true;
         UtilsService.waitMultipleAsyncOperations([loadSwitches, loadCustomers, loadSuppliers, loadZonesFromReceivedIds])
             .then(function () {
@@ -177,7 +173,7 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
         }
         $scope.selectedCDROption = CDROption[2];
     }
-    function GetCDRData() {
+    function getData() {
         if (sortColumn == undefined)
             return;
         var pageInfo = $scope.mainGridPagerSettings.getPageInfo();
