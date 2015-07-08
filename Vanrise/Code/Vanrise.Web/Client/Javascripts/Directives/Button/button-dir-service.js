@@ -13,7 +13,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
             return '<button style="width:100%" type="button" class="btn btn-danger login-btn"'
             + 'aria-label="Left Align" ng-click="ctrl.onInternalClick()" ng-disabled="ctrl.isDisabled()">' + buttonAttributes.text
                 + '<span style="padding-left:4px"  aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
-                + '<img src="Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin-left:3px" ng-show="ctrl.showLoader()" />'
+                + '<img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin-left:3px" ng-show="ctrl.showLoader()" />'
                 + '</button>';
 
         }
