@@ -37,7 +37,7 @@
                                 </vr-datagrid>
                             </div>
                             <div ng-show="dataItem.isScheduledTabShow">
-                                <vr-datagrid datasource="dataItem.scheduledTasks">
+                                <vr-datagrid datasource="dataItem.scheduledTasks"    >
                                     <vr-datagridcolumn headertext="'Name'" field="'Name'" isclickable="true" onclicked="viewScope.schedulerTaskClicked"></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'"></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'Last Run Time'" field="'LastRunTime'"></vr-datagridcolumn>
@@ -61,7 +61,6 @@
 
     </vr-form>
 
-    {{}}
 
 
 </vr-panel>
