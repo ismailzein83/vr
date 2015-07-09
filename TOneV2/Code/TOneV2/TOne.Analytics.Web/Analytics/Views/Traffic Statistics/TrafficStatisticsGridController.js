@@ -221,8 +221,9 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         var withSummary = false;
         var fromRow = 1;
         var toRow = 100;
-        buildFilterFromViewScope();
+       
         buildFilter($scope);
+        buildFilterFromViewScope();
       //  console.log(filter);
         var getTrafficStatisticSummaryInput = {
             TempTableKey: null,
@@ -259,9 +260,42 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             });
     }
     function buildFilterFromViewScope() {
-        filter = $scope.viewScope.filter.filter;
-       // console.log(filter);
+        if ($scope.viewScope.filter.filter.CustomerIds != null);
+        {
+            if (filter.CustomerIds == undefined)
+                filter.CustomerIds = [];
+            fillArray(filter.CustomerIds, $scope.viewScope.filter.filter.CustomerIds);
+        }
+        
+        if ($scope.viewScope.filter.filter.SupplierIds != null);
+        {
+            if (filter.SupplierIds == undefined)
+                filter.SupplierIds = [];
+            fillArray(filter.SupplierIds, $scope.viewScope.filter.filter.SupplierIds);
+        }
+    
+        if ($scope.viewScope.filter.filter.SwitchIds != null);
+        {
+            if (filter.SwitchIds == undefined)
+                filter.SwitchIds = [];
+            fillArray(filter.SwitchIds, $scope.viewScope.filter.filter.SwitchIds);
+        }
+        
+        if ($scope.viewScope.filter.filter.CodeGroups != null);
+        {
+            if (filter.CodeGroups == undefined)
+                filter.CodeGroups = [];
+            fillArray(filter.CodeGroups, $scope.viewScope.filter.filter.CodeGroups);
+        }
+       
     }
+    function fillArray(array, data) {
+            for (var i = 0; i < data.length; i++) {
+                array.push(data[i]);
+            }
+       
+    }
+
     function buildFilter(scope) {
        
         if (scope == $scope.viewScope)
@@ -280,16 +314,16 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
                     filter.ZoneIds=[scope.dataItem.GroupKeyValues[i].Id];
                     break;
                 case TrafficStatisticGroupKeysEnum.CustomerId.value: 
-                    filter.CustomerIds.push(scope.dataItem.GroupKeyValues[i].Id);
+                    filter.CustomerIds=[scope.dataItem.GroupKeyValues[i].Id];
                     break;
                 case TrafficStatisticGroupKeysEnum.SupplierId.value: 
-                    filter.SupplierIds.push(scope.dataItem.GroupKeyValues[i].Id);
+                    filter.SupplierIds=[scope.dataItem.GroupKeyValues[i].Id];
                     break;
                 case TrafficStatisticGroupKeysEnum.Switch.value:
-                    filter.SwitchIds.push(scope.dataItem.GroupKeyValues[i].Id);
+                    filter.SwitchIds=[scope.dataItem.GroupKeyValues[i].Id];
                     break;
                 case TrafficStatisticGroupKeysEnum.CodeGroup.value:
-                    filter.CodeGroups.push(scope.dataItem.GroupKeyValues[i].Id);
+                    filter.CodeGroups=[scope.dataItem.GroupKeyValues[i].Id];
                     break;
                 case TrafficStatisticGroupKeysEnum.PortIn.value:
                     filter.PortIn = [scope.dataItem.GroupKeyValues[i].Id];

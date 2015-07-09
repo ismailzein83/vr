@@ -81,17 +81,21 @@ namespace TOne.Analytics.Data.SQL
 			                        SELECT
                                             #SELECTPART#
                                            Min(FirstCDRAttempt) AS FirstCDRAttempt
-				                           , Max(ts.LastCDRAttempt) AS LastCDRAttempt
 				                           , Sum(ts.Attempts) AS Attempts
 				                           , Sum(ts.DeliveredAttempts) AS DeliveredAttempts
-				                           , Sum(ts.SuccessfulAttempts) AS SuccessfulAttempts
+				                           
 				                           , Sum(ts.DurationsInSeconds) AS DurationsInSeconds
-				                           , Max(ts.MaxDurationInSeconds) AS MaxDurationInSeconds
 				                           , AVG(ts.PDDInSeconds) AS PDDInSeconds
 				                           , AVG(ts.UtilizationInSeconds) AS UtilizationInSeconds
 				                           , Sum(ts.NumberOfCalls) AS NumberOfCalls
 				                           , SUM(ts.DeliveredNumberOfCalls) AS DeliveredNumberOfCalls
-				                           , AVG(ts.PGAD) AS PGAD
+
+                                           , Sum(ts.SuccessfulAttempts) AS SuccessfulAttempts
+                                           , DATEADD(ms,-datepart(ms,Max(LastCDRAttempt)),Max(LastCDRAttempt)) as LastCDRAttempt
+                                           ,CONVERT(DECIMAL(10,2),Max (ts.MaxDurationInSeconds)/60.0) as MaxDurationInSeconds
+				                           ,CONVERT(DECIMAL(10,2),Avg(ts.PGAD)) as PGAD
+                                           ,CONVERT(DECIMAL(10,2),Avg(ts.PDDinSeconds)) as AveragePDD
+
 
 			                        FROM TrafficStats ts WITH(NOLOCK ,INDEX(IX_TrafficStats_DateTimeFirst))
                                  
@@ -106,13 +110,14 @@ namespace TOne.Analytics.Data.SQL
             StringBuilder groupKeysGroupByPart = new StringBuilder();
             foreach(var groupKey in groupKeys)
             {
-                string selectStatement ;
-                string groupByStatement;
-                GetColumnStatements(groupKey, out selectStatement, out groupByStatement);
-                groupKeysSelectPart.Append(selectStatement);
+                string columnName;
+                GetColumnNames(groupKey, out columnName);
+               
+               groupKeysSelectPart.Append(columnName);
+               groupKeysSelectPart.Append(",");
                if (groupKeysGroupByPart.Length > 0)
                     groupKeysGroupByPart.Append(",");
-                groupKeysGroupByPart.Append(groupByStatement);
+               groupKeysGroupByPart.Append(columnName);
             }
             queryBuilder.Replace("#TEMPTABLE#", tempTableName);
             AddFilterToQuery(filter, whereBuilder);
@@ -156,44 +161,34 @@ namespace TOne.Analytics.Data.SQL
         }
         private IEnumerable<TrafficStatisticGroupSummary> GetData(string tempTableName, TrafficStatisticGroupKeys[] groupKeys, int fromRow, int toRow, TrafficStatisticMeasures orderBy, bool isDescending, out int totalCount)
         {
-      
+            string orderByColumnName = GetColumnName(orderBy);
+            IEnumerable<TrafficStatisticGroupSummary> trafficStatisticrData = base.GetDataFromTempTable<TrafficStatisticGroupSummary>(tempTableName, fromRow, toRow, orderByColumnName, isDescending,
+               (reader) =>
+               {
+                   var obj = new TrafficStatisticGroupSummary
+                   {
+                       GroupKeyValues = new KeyColumn[groupKeys.Count()]
+                   };
+                   FillTrafficStatisticFromReader(obj, reader);
 
-            string query = String.Format(@"WITH OrderedResult AS (SELECT *, ROW_NUMBER()  OVER ( ORDER BY {1} {2}) AS rowNumber FROM {0})
-	                                    SELECT * FROM OrderedResult WHERE rowNumber between @FromRow AND @ToRow", tempTableName, GetColumnName(orderBy), isDescending ? "DESC" : "ASC");
+                   for (int i = 0; i < groupKeys.Count(); i++)
+                   {
+                       string idColumn;
+                       GetColumnNames(groupKeys[i], out idColumn);
+                       object id = reader[idColumn];
+                       obj.GroupKeyValues[i] = new KeyColumn
+                       {
+                           Id = id != DBNull.Value ? id.ToString() : null,
+                       };
+                   }
 
-            totalCount = (int)ExecuteScalarText(String.Format("SELECT COUNT(*) FROM {0}", tempTableName), null);
-          
-            List<TrafficStatisticGroupSummary> TrafficStatisticData= GetItemsText(query,
-                (reader) =>
-                {
-                    var obj = new TrafficStatisticGroupSummary
-                    {
-                        GroupKeyValues = new KeyColumn[groupKeys.Count()]
-                    };
-                    FillTrafficStatisticFromReader(obj, reader);
-                    
-                    for (int i = 0; i < groupKeys.Count(); i++)
-                    {
-                        string idColumn;
-                        GetColumnNames(groupKeys[i], out idColumn);
-                        object id = reader[idColumn];
-                        obj.GroupKeyValues[i] = new KeyColumn
-                        {
-                            Id = id != DBNull.Value ? id.ToString() : null,
-                        };
-                    }
-
-                    return obj;
-                },
-                (cmd) =>
-                {
-                    cmd.Parameters.Add(new SqlParameter("@FromRow", fromRow));
-                    cmd.Parameters.Add(new SqlParameter("@ToRow", toRow));
-                });
-            FillBEProperties(TrafficStatisticData, groupKeys);
-            return TrafficStatisticData;
+                   return obj;
+               },
+                out totalCount);
+            FillBEProperties(trafficStatisticrData, groupKeys);
+            return trafficStatisticrData;
         }
-        private void FillBEProperties(List<TrafficStatisticGroupSummary> TrafficStatisticData, TrafficStatisticGroupKeys[] groupKeys)
+        private void FillBEProperties(IEnumerable<TrafficStatisticGroupSummary> TrafficStatisticData, TrafficStatisticGroupKeys[] groupKeys)
         {
             BusinessEntityInfoManager manager = new BusinessEntityInfoManager();
             foreach (TrafficStatisticGroupSummary data in TrafficStatisticData)
@@ -302,8 +297,18 @@ namespace TOne.Analytics.Data.SQL
         {
             switch(column)
             {
-                case TrafficStatisticMeasures.DurationsInMinutes: return "DurationsInSeconds";
-                case TrafficStatisticMeasures.MaxDurationInMinutes: return "MaxDurationsInSeconds";
+              case TrafficStatisticMeasures.FirstCDRAttempt:return "FirstCDRAttempt";
+              case TrafficStatisticMeasures.LastCDRAttempt: return "LastCDRAttempt";
+              case TrafficStatisticMeasures.Attempts: return "Attempts";
+              case TrafficStatisticMeasures.DeliveredAttempts: return "DeliveredAttempts";
+              case TrafficStatisticMeasures.SuccessfulAttempts: return "SuccessfulAttempts";
+              case TrafficStatisticMeasures.DurationsInMinutes: return "DurationsInSeconds";
+              case TrafficStatisticMeasures.MaxDurationInMinutes: return "MaxDurationsInSeconds";
+              case TrafficStatisticMeasures.PDDInSeconds: return "PDDInSeconds";
+              case TrafficStatisticMeasures.UtilizationInSeconds: return "UtilizationInSeconds";
+              case TrafficStatisticMeasures.NumberOfCalls:return "NumberOfCalls";
+              case TrafficStatisticMeasures.DeliveredNumberOfCalls: return "DeliveredNumberOfCalls";
+              case TrafficStatisticMeasures.PGAD: return "PGAD";
                 default: return column.ToString();
             }            
         }
@@ -343,49 +348,49 @@ namespace TOne.Analytics.Data.SQL
             }
         }
 
-        private void GetColumnStatements(TrafficStatisticGroupKeys column, out string selectStatement, out string groupByStatement)
-        {
-            switch (column)
-            {
-                case TrafficStatisticGroupKeys.OurZone:
-                    selectStatement = String.Format(" ts.OurZoneID as {0},  ", OurZoneIDColumnName);
-                    groupByStatement = "ts.OurZoneID";
-                    break;
-                case TrafficStatisticGroupKeys.CustomerId:
-                     selectStatement = String.Format(" ts.CustomerID as {0}, ", CustomerIDColumnName);
-                    groupByStatement = "ts.CustomerID";
-                    break;
+        //private void GetColumnStatements(TrafficStatisticGroupKeys column, out string selectStatement, out string groupByStatement)
+        //{
+        //    switch (column)
+        //    {
+        //        case TrafficStatisticGroupKeys.OurZone:
+        //            selectStatement = String.Format(" ts.OurZoneID as {0},  ", OurZoneIDColumnName);
+        //            groupByStatement = "ts.OurZoneID";
+        //            break;
+        //        case TrafficStatisticGroupKeys.CustomerId:
+        //             selectStatement = String.Format(" ts.CustomerID as {0}, ", CustomerIDColumnName);
+        //            groupByStatement = "ts.CustomerID";
+        //            break;
 
-                case TrafficStatisticGroupKeys.SupplierId:
-                    selectStatement = String.Format(" ts.SupplierID as {0}, ", SupplierIDColumnName);
-                    groupByStatement = "ts.SupplierID";
-                    break;
-                case TrafficStatisticGroupKeys.Switch:
-                    selectStatement = String.Format(" ts.SwitchId as {0}, ", SwitchIdColumnName);
-                    groupByStatement = "ts.SwitchId";
-                    break;
-                case TrafficStatisticGroupKeys.CodeGroup:
-                    selectStatement = String.Format("ts.OurZoneID as {0}, ", CodeGroupIDColumnName);
-                    groupByStatement = "ts.OurZoneID";
-                    break;
-                case TrafficStatisticGroupKeys.PortIn:
-                    selectStatement = String.Format(" ts.Port_IN as {0}, ", Port_INColumnName);
-                    groupByStatement = "ts.Port_IN";
-                    break;
-                case TrafficStatisticGroupKeys.PortOut:
-                    selectStatement = String.Format(" ts.Port_OUT as {0}, ", Port_OutColumnName);
-                    groupByStatement = "ts.Port_OUT";
-                    break;
-                case TrafficStatisticGroupKeys.SupplierZoneId:
-                    selectStatement = String.Format(" ts.SupplierZoneID as {0}, ", SupplierZoneIDColumnName);
-                    groupByStatement = "ts.SupplierZoneID";
-                    break;
-                default:
-                    selectStatement = null;
-                    groupByStatement = null;
-                    break;
-            }
-        }
+        //        case TrafficStatisticGroupKeys.SupplierId:
+        //            selectStatement = String.Format(" ts.SupplierID as {0}, ", SupplierIDColumnName);
+        //            groupByStatement = "ts.SupplierID";
+        //            break;
+        //        case TrafficStatisticGroupKeys.Switch:
+        //            selectStatement = String.Format(" ts.SwitchId as {0}, ", SwitchIdColumnName);
+        //            groupByStatement = "ts.SwitchId";
+        //            break;
+        //        case TrafficStatisticGroupKeys.CodeGroup:
+        //            selectStatement = String.Format("ts.OurZoneID as {0}, ", CodeGroupIDColumnName);
+        //            groupByStatement = "ts.OurZoneID";
+        //            break;
+        //        case TrafficStatisticGroupKeys.PortIn:
+        //            selectStatement = String.Format(" ts.Port_IN as {0}, ", Port_INColumnName);
+        //            groupByStatement = "ts.Port_IN";
+        //            break;
+        //        case TrafficStatisticGroupKeys.PortOut:
+        //            selectStatement = String.Format(" ts.Port_OUT as {0}, ", Port_OutColumnName);
+        //            groupByStatement = "ts.Port_OUT";
+        //            break;
+        //        case TrafficStatisticGroupKeys.SupplierZoneId:
+        //            selectStatement = String.Format(" ts.SupplierZoneID as {0}, ", SupplierZoneIDColumnName);
+        //            groupByStatement = "ts.SupplierZoneID";
+        //            break;
+        //        default:
+        //            selectStatement = null;
+        //            groupByStatement = null;
+        //            break;
+        //    }
+        //}
 
         #endregion
         const string SwitchIdColumnName = "SwitchId";
