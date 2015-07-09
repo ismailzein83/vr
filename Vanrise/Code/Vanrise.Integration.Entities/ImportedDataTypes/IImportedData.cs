@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Integration.Entities
 {
-    public abstract class BaseReceiveAdapter
+    public interface IImportedData
     {
-        public abstract void ImportData(Action<IImportedData> receiveData);
+        string Description { get; }
     }
 }

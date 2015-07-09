@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Integration.Entities
 {
-    public abstract class BaseReceiveAdapter
+    public class ExcelFileImportedData : IImportedData
     {
-        public abstract void ImportData(Action<IImportedData> receiveData);
+        public string Description
+        {
+            get { return null; }
+        }
     }
 }

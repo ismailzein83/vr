@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Integration.Business;
+using Vanrise.Integration.Entities;
 using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Integration.Extensions
@@ -18,7 +19,7 @@ namespace Vanrise.Integration.Extensions
             dataSource.Settings.Adapter.ImportData(ReceiveData);
         }
 
-        private void ReceiveData(object data)
+        private void ReceiveData(IImportedData data)
         {
 
         }

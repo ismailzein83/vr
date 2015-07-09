@@ -46,7 +46,11 @@
     <Compile Include="BaseReceiveAdapter.cs" />
     <Compile Include="DataSource.cs" />
     <Compile Include="DataSourceAdapterType.cs" />
+    <Compile Include="ImportedDataTypes\DBReaderImportedData.cs" />
+    <Compile Include="ImportedDataTypes\ExcelFileImportedData.cs" />
+    <Compile Include="ImportedDataTypes\IImportedData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ImportedDataTypes\TextImportedData.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
