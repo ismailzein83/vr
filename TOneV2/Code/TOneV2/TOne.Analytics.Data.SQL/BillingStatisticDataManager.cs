@@ -181,7 +181,7 @@ namespace TOne.Analytics.Data.SQL
                         variationReportList.Add(VariationReportsMapper(reader));
                     reader.NextResult();
                     reader.Read();
-                    totalCount_Internal = (int)reader["TotalCount"];
+                    totalCount_Internal = reader["TotalCount"]!= DBNull.Value ? (int) reader["TotalCount"] : 0;
                     reader.NextResult();
                     while (reader.Read())
                     {
@@ -461,10 +461,10 @@ namespace TOne.Analytics.Data.SQL
                 PeriodTypeValuePercentage = GetReaderValue<decimal>(reader, "%"),
                 FromDate = GetReaderValue<DateTime>(reader, "FromDate"),
                 ToDate = GetReaderValue<DateTime>(reader, "ToDate"),
-                TotalDuration = Convert.ToDecimal(reader["Total"]),
+                TotalDuration = reader["Total"]!=DBNull.Value? Convert.ToDecimal(reader["Total"]) : 0,
                 PreviousPeriodTypeValuePercentage = GetReaderValue<decimal>(reader, "Prev %"),
-                ID = reader["ID"] != null ? reader["ID"].ToString() : string.Empty,
-                RowNumber = (long)reader["RowNumber"]
+                ID = reader["ID"] != DBNull.Value ? reader["ID"].ToString() : string.Empty,
+                RowNumber = reader["RowNumber"]!= DBNull.Value ? (long) reader["RowNumber"] :0
             };
 
             return instance;
@@ -589,10 +589,8 @@ namespace TOne.Analytics.Data.SQL
             WHERE BS.CallDate >= @BeginTime AND BS.CallDate < @EndTime  #WhereStatement# #BillingStatsFilter# 
             GROUP BY #IDColumn#, #NameColumn#,ERC.Rate,ERS.Rate;
             
-            IF(@FromRow==0 AND @ToRow==0)
-            WITH FilteredEntities AS (SELECT * FROM #OrderedEntities WHERE RowNumber BETWEEN @FromRow AND @ToRow)
-            ELSE
-            WITH FilteredEntities AS (SELECT * FROM #OrderedEntities)
+           
+            WITH FilteredEntities AS (SELECT * FROM #OrderedEntities WHERE @ToRow=0 OR RowNumber BETWEEN @FromRow AND @ToRow)
 
             SELECT  Ent.Name , Ent.RowNumber,
             0.0 as [AVG],
@@ -785,7 +783,6 @@ namespace TOne.Analytics.Data.SQL
                 case EntityType.Customer:
                     query.Replace("#SecondBillingStatsFilter#", " WHERE BS.CustomerID = @EntityID "); 
                     billingStatsFilterBuilder.Append(" AND BS.CustomerID = @EntityID");
-                    //query.Replace("#additionalStatement#", " ,BS.CustomerID ");
                     switch (groupingBy)
                     {
                         case GroupingBy.Customers: query.Replace("#additionalStatement#", " ,BS.CustomerID "); break;
@@ -796,7 +793,6 @@ namespace TOne.Analytics.Data.SQL
                 case EntityType.Supplier:
                     query.Replace("#SecondBillingStatsFilter#", " WHERE BS.SupplierID = @EntityID ");
                     billingStatsFilterBuilder.Append(" AND BS.SupplierID = @EntityID");
-                    //query.Replace("#additionalStatement#", " ,BS.SupplierID ");
                     switch (groupingBy)
                     {
                         case GroupingBy.Customers: query.Replace("#additionalStatement#", " ,BS.CustomerID "); break;

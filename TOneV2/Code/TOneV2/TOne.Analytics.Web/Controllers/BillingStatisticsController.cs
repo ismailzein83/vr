@@ -25,7 +25,7 @@ namespace TOne.Analytics.Web.Controllers
         [HttpGet]
         public VariationReportResult GetVariationReport(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOption, int fromRow, int toRow, EntityType entityType, string entityID,GroupingBy groupingBy)
         {
-            if (variationReportOption == VariationReportOptions.InOutBoundMinutes)
+            if (variationReportOption == VariationReportOptions.InOutBoundMinutes || variationReportOption == VariationReportOptions.InOutBoundAmount)
             {
                 return __billingStatisticsManager.GetInOutVariationReportsData(selectedDate, periodCount, timePeriod, variationReportOption, entityType, entityID, groupingBy);
               

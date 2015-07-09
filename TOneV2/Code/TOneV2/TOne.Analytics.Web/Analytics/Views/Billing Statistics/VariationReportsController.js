@@ -68,22 +68,12 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
             return filter;
     }
 
-    //function getFilterIds(values, idProp) {
-    //    var filterIds;
-    //    if (values.length > 0) {
-    //        filterIds = [];
-    //        angular.forEach(values, function (val) {
-    //            filterIds.push(val[idProp]);
-    //        });
-    //    }
-    //    return filterIds;
-    //}
-
     function getVariationReportsData() {
         $scope.isLoading = true;
+        $scope.filterObject = buildFilter();
         var pageInfo = $scope.mainGridPagerSettings.getPageInfo();  
-        $scope.show = $scope.selectedReportOption.value == 3 || $scope.selectedReportOption.value == 7;
-        console.log($scope.show);
+        $scope.show = $scope.selectedReportOption == VariationReportOptionsEnum.TopDestinationMinutes || $scope.selectedReportOption == VariationReportOptionsEnum.TopDestinationAmount;// || $scope.selectedReportOption.value == 7;
+        $scope.hideChart = $scope.selectedReportOption == VariationReportOptionsEnum.InOutBoundMinutes || $scope.selectedReportOption == VariationReportOptionsEnum.InOutBoundAmount;
         return BillingStatisticsAPIService.GetVariationReport($scope.fromDate, $scope.periodCount, $scope.selectedTimePeriod.value, $scope.selectedReportOption.value, pageInfo.fromRow, pageInfo.toRow,EntityTypeEnum.none.value,'',GroupingByEnum.none.value).then(function (response) {
             $scope.timeRanges.length = 0;
             $scope.data.length = 0;
@@ -102,10 +92,13 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
             setTimeout(function () {
                 $scope.$apply(function () {
                     angular.forEach(response.VariationReportsData, function (item) { $scope.data.push(item); $scope.periodValuesArray.push(item.Values); });
-                    $scope.summarydata = response;
-                    $scope.TotalValues = response.TotalValues;
-                    console.log($scope.summarydata);
-                    mainGridAPI.setSummary($scope.summarydata); 
+                    if (response.TotalValues != null) {
+                        $scope.summarydata = response;
+                        $scope.TotalValues = response.TotalValues;
+                        console.log($scope.summarydata);
+                        mainGridAPI.setSummary($scope.summarydata);
+                    }
+                     
                 });
             }, 1);
           
@@ -113,10 +106,6 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
 
         }).finally(function () {
             $scope.isLoading = false;
-            $scope.filterObject = buildFilter();
-            console.log($scope.filterObject);
-            //  console.log($scope.filterObject);
-            console.log($scope.selectedReportOption.value);
         });
     }
 

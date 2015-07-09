@@ -15,7 +15,6 @@ function VariationReportsCustomersSuppliersController($scope, BillingStatisticsA
         $scope.customersData = [];
         $scope.suppliersData = [];
         $scope.totalData = [];
-       // $scope.timeRanges = [];
         $scope.TotalValues = [];
         $scope.periodValuesArray = [];
         $scope.onMainCustomersGridReady = function (api) {
@@ -53,31 +52,48 @@ function VariationReportsCustomersSuppliersController($scope, BillingStatisticsA
     }
 
     function getCustomersData() {
-     //   console.log(reportOption);
         $scope.isGettingData = true;
-    //    console.log($scope.dataItem.ID);
-      
-    //    console.log(selectedReportOption);
-       
-     //   console.log(selectedReportOption);
-       
+        switch (reportOption) {
+
+            case VariationReportOptionsEnum.InOutBoundMinutes:
+                reportOption = VariationReportOptionsEnum.InBoundMinutes;
+                var name = $scope.dataItem.Name;
+                if (name.match("/IN$")) {
+                    entityType = EntityTypeEnum.Customer;
+               }
+                else if (name.match("/OUT$")) {
+                    entityType = EntityTypeEnum.Supplier;
+                }
+                break;
+            case VariationReportOptionsEnum.InOutBoundAmount:
+                reportOption = VariationReportOptionsEnum.InBoundAmount;
+                var name = $scope.dataItem.Name;
+                if (name.match("/IN$")) {
+                    entityType = EntityTypeEnum.Customer;
+                }
+                else if (name.match("/OUT$")) {
+                    entityType = EntityTypeEnum.Supplier;
+                }
+                break;
+           
+        }
+
         BillingStatisticsAPIService.GetVariationReport(fromDate, periodCount, timePeriod.value, reportOption.value, 0, 10, EntityTypeEnum.Zone.value, $scope.dataItem.ID, GroupingByEnum.Customers.value).then(function (response) {
-        //    $scope.timeRanges.length = 0;
             $scope.customersData.length = 0;
             $scope.totalData.length = 0;
             $scope.TotalValues.length = 0;
-     //       $scope.timeRanges = $scope.viewScope.timeRanges;
             setTimeout(function () {
                 $scope.$apply(function () {
                     angular.forEach(response.VariationReportsData, function (item) { $scope.customersData.push(item); $scope.periodValuesArray.push(item.Values); });
-                    $scope.summarydata = response;
-                    $scope.TotalValues = response.TotalValues;
-                    mainGridCustomersAPI.setSummary($scope.summarydata);
+                    if (response.TotalValues != null) {
+                        $scope.summarydata = response;
+                        $scope.TotalValues = response.TotalValues;
+                        mainGridCustomersAPI.setSummary($scope.summarydata);
+                    }
                 });
             }, 1);
         }).finally(function () {
             $scope.isGettingData = false;
-            //     console.log($scope.data);
         });
     }
 
@@ -85,17 +101,17 @@ function VariationReportsCustomersSuppliersController($scope, BillingStatisticsA
         $scope.isGettingData = true;
 
         BillingStatisticsAPIService.GetVariationReport(fromDate, periodCount, timePeriod.value, reportOption.value, 0, 10, EntityTypeEnum.Zone.value, $scope.dataItem.ID, GroupingByEnum.Suppliers.value).then(function (secondresponse) {
-    //        $scope.timeRanges.length = 0;
             $scope.suppliersData.length = 0;
             $scope.totalData.length = 0;
             $scope.TotalValues.length = 0;
-           // $scope.timeRanges = $scope.viewScope.timeRanges;
             setTimeout(function () {
                 $scope.$apply(function () {
                     angular.forEach(secondresponse.VariationReportsData, function (item) { $scope.suppliersData.push(item); $scope.periodValuesArray.push(item.Values); });
-                    $scope.summarydata = secondresponse;
-                    $scope.TotalValues = secondresponse.TotalValues;
-                    mainGridSuppliersAPI.setSummary($scope.summarydata);
+                    if (secondresponse.TotalValues != null) {
+                        $scope.summarydata = secondresponse;
+                        $scope.TotalValues = secondresponse.TotalValues;
+                        mainGridSuppliersAPI.setSummary($scope.summarydata);
+                    }
                 });
             }, 1);
         }).finally(function () {
@@ -103,10 +119,6 @@ function VariationReportsCustomersSuppliersController($scope, BillingStatisticsA
             console.log($scope.data);
         });
     }
-
-
-
-
 };
 
 appControllers.controller('VariationReportsCustomersSuppliersController', VariationReportsCustomersSuppliersController);
