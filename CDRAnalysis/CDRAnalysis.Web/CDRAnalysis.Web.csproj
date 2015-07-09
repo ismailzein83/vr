@@ -172,6 +172,10 @@
     <Reference Include="Vanrise.Integration.Adapters.FileReceiveAdapter">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.FileReceiveAdapter.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Integration.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.Data">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Data.dll</HintPath>
     </Reference>
@@ -180,9 +184,6 @@
     </Reference>
     <Reference Include="Vanrise.Integration.Entities">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Integration.Extensions">
-      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Integration.Web">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Web.dll</HintPath>
