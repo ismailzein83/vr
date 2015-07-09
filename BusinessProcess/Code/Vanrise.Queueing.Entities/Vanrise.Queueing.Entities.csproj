@@ -46,8 +46,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IPersistentQueue.cs" />
     <Compile Include="QueueActivator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueueGroup.cs" />
     <Compile Include="QueueInstance.cs" />
     <Compile Include="QueueItem.cs" />
     <Compile Include="QueueItemHeader.cs" />

@@ -10,8 +10,8 @@ using Vanrise.Runtime;
 using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Queueing
-{
-    public class PersistentQueue<T> : BaseQueue<T> where T : PersistentQueueItem
+{    
+    public class PersistentQueue<T> : BaseQueue<T>, IPersistentQueue where T : PersistentQueueItem
     {
         #region ctor/Fields
 
@@ -208,6 +208,18 @@ namespace Vanrise.Queueing
             }
         }
 
+
+        #endregion
+
+        #region IPersistentQueue
+
+        public void Enqueue(object item)
+        {
+            T typedItem = item as T;
+            if (typedItem == null)
+                throw new Exception(String.Format("item is not of type '{0}'", typeof(T)));
+            this.Enqueue(typedItem);
+        }
 
         #endregion
     }

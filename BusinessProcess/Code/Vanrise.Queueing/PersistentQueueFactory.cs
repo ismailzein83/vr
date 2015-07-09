@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -47,6 +48,19 @@ namespace Vanrise.Queueing
                 throw new Exception(String.Format("Queue '{0}' is of item type {1}. Expected Item Type {2}", queueName, queueItemType, typeof(T)));
 
             return new PersistentQueue<T>(queueInstance.QueueInstanceId, queueInstance.Settings);
+        }
+
+        public IPersistentQueue GetQueue(string queueName)
+        {
+            IQueueDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueDataManager>();
+            QueueInstance queueInstance = dataManager.GetQueueInstance(queueName);
+            if (queueInstance == null || queueInstance.Status != QueueInstanceStatus.ReadyToUse)
+                return null;
+
+            Type queueItemType = Type.GetType(queueInstance.ItemFQTN);
+            Type[] typeArgs = { queueItemType };
+            var queueType = typeof(PersistentQueue<>).MakeGenericType(typeArgs);
+            return Activator.CreateInstance(queueType, BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { queueInstance.QueueInstanceId, queueInstance.Settings }, null) as IPersistentQueue;
         }
 
         public bool QueueExists(string queueName)
