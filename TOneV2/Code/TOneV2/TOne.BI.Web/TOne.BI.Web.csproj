@@ -127,6 +127,8 @@
     <Content Include="BI\Constants\BIEntityTypeEnum.js" />
     <Content Include="BI\Constants\BIMeasureTypeEnum.js" />
     <Content Include="BI\Constants\BITimeDimensionTypeEnum.js" />
+    <Content Include="BI\Directives\Images\bichartpermission.jpg" />
+    <Content Include="BI\Directives\Images\chartpermission.jpg" />
     <Content Include="BI\Directives\Templates\vr-chart-bi-directive-template.html" />
     <Content Include="BI\Directives\Templates\vr-chart-bi-directive-template.js" />
     <Content Include="BI\Directives\Templates\vr-datagrid-bi-directive-template.html" />

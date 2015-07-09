@@ -1376,3 +1376,25 @@ input.ui-grid-filter-input[type="text"] {
     font-weight:bold;
     font-size:smaller;
 }
+
+.permmesion-background{
+    background:url("../../Client/Images/bichartpermission.jpg") center no-repeat;
+    background-size: contain   ;
+    width:100%;
+    height:300px;
+}
+
+
+.piechart {
+    background:url("../../Client/Modules/BI/Directives/Images/bichartpermission.jpg") center no-repeat;
+    background-size: contain   ;
+    width:100%;
+    height:300px;
+}
+.chart {
+    background:url("../../Client/Modules/BI/Directives/Images/chartpermission.jpg") center no-repeat;
+    background-size: contain   ;
+    width:100%;
+    height:300px;
+}
+ 
