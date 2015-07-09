@@ -702,14 +702,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="AVGCost">
+                    <Textbox Name="AVGCostFormatted">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!AVGCost.Value</Value>
+                              <Value>=Fields!AVGCostFormatted.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -720,7 +720,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>AVGCost</rd:DefaultName>
+                      <rd:DefaultName>AVGCostFormatted</rd:DefaultName>
                       <ZIndex>1</ZIndex>
                       <Style>
                         <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
@@ -734,14 +734,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="AVGSale">
+                    <Textbox Name="AVGSaleFormatted">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!AVGSale.Value</Value>
+                              <Value>=Fields!AVGSaleFormatted.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -752,7 +752,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>AVGSale</rd:DefaultName>
+                      <rd:DefaultName>AVGSaleFormatted</rd:DefaultName>
                       <Style>
                         <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -2198,7 +2198,7 @@
         </Field>
         <Field Name="ASR">
           <DataField>ASR</DataField>
-          <rd:TypeName>System.Double</rd:TypeName>
+          <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
         <Field Name="ASRFormatted">
           <DataField>ASRFormatted</DataField>
@@ -2206,7 +2206,7 @@
         </Field>
         <Field Name="ACD">
           <DataField>ACD</DataField>
-          <rd:TypeName>System.Double</rd:TypeName>
+          <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
         <Field Name="ACDFormatted">
           <DataField>ACDFormatted</DataField>
@@ -2218,10 +2218,18 @@
         </Field>
         <Field Name="AVGCost">
           <DataField>AVGCost</DataField>
+          <rd:TypeName>System.Double</rd:TypeName>
+        </Field>
+        <Field Name="AVGCostFormatted">
+          <DataField>AVGCostFormatted</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="AVGSale">
           <DataField>AVGSale</DataField>
+          <rd:TypeName>System.Double</rd:TypeName>
+        </Field>
+        <Field Name="AVGSaleFormatted">
+          <DataField>AVGSaleFormatted</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>

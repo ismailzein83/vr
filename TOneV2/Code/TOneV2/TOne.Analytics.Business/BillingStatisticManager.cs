@@ -359,11 +359,11 @@ namespace TOne.Analytics.Business
                     SaleDuration = cs.SaleDuration,
                     SaleDurationFormatted = FormatNumber(cs.SaleDuration),
                     SaleNet = cs.SaleNet,
-                    SaleNetFormatted = FormatNumber(cs.SaleNet, 5),
+                    SaleNetFormatted = FormatNumber(cs.SaleNet, 4),
                     CostDuration = cs.CostDuration,
                     CostDurationFormatted = FormatNumber(cs.CostDuration),
                     CostNet = cs.CostNet,
-                    CostNetFormatted = FormatNumber(cs.CostNet),
+                    CostNetFormatted = FormatNumber(cs.CostNet, 4),
                     ProfitFormatted = FormatNumber(cs.SaleNet - cs.CostNet),
                     ProfitPercentageFormatted = (cs.SaleNet > 0) ? String.Format("{0:#,##0.00%}", ((cs.SaleNet - cs.CostNet) / cs.SaleNet)) : String.Format("{0:#,##0.00%}", 0),
 
@@ -611,15 +611,15 @@ namespace TOne.Analytics.Business
                 DurationNetFormatted = FormatNumber(dailySummary.DurationNet),
 
                 SaleDuration = dailySummary.SaleDuration,
-                SaleDurationFormatted = FormatNumber(dailySummary.SaleDuration, 2),
+                SaleDurationFormatted = FormatNumber(dailySummary.SaleDuration),
 
                 SaleNet = dailySummary.SaleNet,
-                SaleNetFormatted = FormatNumber(dailySummary.SaleNet, 5),
+                SaleNetFormatted = FormatNumber(dailySummary.SaleNet, 4),
 
                 CostNet = dailySummary.CostNet,
-                CostNetFormatted = FormatNumber(dailySummary.CostNet, 2),
+                CostNetFormatted = FormatNumber(dailySummary.CostNet),
 
-                ProfitFormatted = FormatNumber(dailySummary.SaleNet - dailySummary.CostNet, 2),
+                ProfitFormatted = FormatNumber(dailySummary.SaleNet - dailySummary.CostNet),
 
 
                 ProfitPercentageFormatted = (dailySummary.SaleNet.HasValue) ? String.Format("{0:#,##0.00%}", (1 - dailySummary.CostNet / dailySummary.SaleNet)) : "-100%",
@@ -968,10 +968,10 @@ namespace TOne.Analytics.Business
             {
                 Day = daily.Day,
                 SaleNet = daily.SaleNet,
-                SaleNetFormatted = FormatNumber(daily.SaleNet, 5),
+                SaleNetFormatted = FormatNumber(daily.SaleNet),
                 CostNet = daily.CostNet,
-                CostNetFormatted = FormatNumber(daily.CostNet, 5),
-                ProfitFormatted = FormatNumber(daily.SaleNet - daily.CostNet, 2),
+                CostNetFormatted = FormatNumber(daily.CostNet),
+                ProfitFormatted = FormatNumber(daily.SaleNet - daily.CostNet),
                 ProfitPercentageFormatted = (daily.SaleNet > 0) ? String.Format("{0:#,##0.00%}", ((daily.SaleNet - daily.CostNet) / daily.SaleNet)) : "0.00%"
 
             };
@@ -1038,7 +1038,7 @@ namespace TOne.Analytics.Business
                 CostRateChangeFormatted = ((TOne.Analytics.Entities.Change)detailedCarrier.CostRateChange).ToString(),
                 CostRateEffectiveDate = detailedCarrier.CostRateEffectiveDate,
                 CostAmount = detailedCarrier.CostAmount,
-                CostAmountFormatted = FormatNumber(detailedCarrier.CostAmount, 4),
+                CostAmountFormatted = FormatNumber(detailedCarrier.CostAmount),
                 Profit = detailedCarrier.Profit,
                 ProfitFormatted = FormatNumber(detailedCarrier.Profit),
                 ProfitPercentage = (detailedCarrier.SaleAmount > 0) ? String.Format("{0:#,##0.00%}", (1 - detailedCarrier.CostAmount / detailedCarrier.SaleAmount)) : "-100%"

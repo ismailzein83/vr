@@ -22,7 +22,8 @@ namespace TOne.Analytics.Entities
         public string ASRFormatted { get; set; }
         public decimal ACD { get; set; }
         public string ACDFormatted { get; set; }
-        public string Profit { get; set; }
+        public double Profit { get; set; }
+        public string ProfitFormatted { get; set; }
         public double AVGCost { get; set; }
         public string AVGCostFormatted { get; set; }
         public double AVGSale { get; set; }
