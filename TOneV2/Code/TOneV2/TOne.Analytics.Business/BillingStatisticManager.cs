@@ -231,6 +231,92 @@ namespace TOne.Analytics.Business
             return new VariationReportResult() { VariationReportsData = variationReportsData.OrderBy(itm => itm.RowNumber), TimeRange = timeRanges };
 
         }
+
+        public VariationReportResult GetInOutVariationReportsData(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions, EntityType entityType, string entityID, GroupingBy groupingBy)
+        {
+            List<VariationReportsData> customersList = new List<VariationReportsData>();
+            List<VariationReportsData> onlyCustomersList = new List<VariationReportsData>();
+            List<VariationReportsData> suppliersList = new List<VariationReportsData>();
+            List<VariationReportsData> customersAndSuppliersList = new List<VariationReportsData>();
+            List<TimeRange> timeRanges;
+            VariationReportOptions customersreport;
+            VariationReportOptions suppliersReport;
+
+
+            if (variationReportOptions == VariationReportOptions.InOutBoundMinutes)
+            {
+                 customersreport = VariationReportOptions.InBoundMinutes;
+                 suppliersReport = VariationReportOptions.OutBoundMinutes;
+            }
+            else {
+
+                 customersreport = VariationReportOptions.InBoundAmount;
+                 suppliersReport = VariationReportOptions.OutBoundAmount;
+            }
+            var customersResult = GetVariationReportsData(selectedDate, periodCount, timePeriod, customersreport,0,0, entityType, entityID, groupingBy);
+            timeRanges = customersResult.TimeRange;
+            foreach (var customer in customersResult.VariationReportsData)
+            {
+                customersList.Add(customer);
+
+            }
+            var suppliersResult = GetVariationReportsData(selectedDate, periodCount, timePeriod, suppliersReport, 0,0, entityType, entityID, groupingBy);
+            foreach (var supplier in suppliersResult.VariationReportsData)
+            {
+                suppliersList.Add(supplier);
+
+            }
+
+            foreach (var customer in customersList)
+            {
+                var matchedSupplier = suppliersList.FirstOrDefault(s => s.ID == customer.ID);
+                if (matchedSupplier != null)
+                {
+                    //create 3 item in reslut list : IN, Out ,Total
+                    var name = customer.Name;
+                    customer.Name = string.Format("{0}/IN", name);
+                    customersAndSuppliersList.Add(customer);
+                    matchedSupplier.Name = string.Format("{0}/OUT", name);
+                    customersAndSuppliersList.Add(matchedSupplier);
+
+                    //Total:
+                    var total = new VariationReportsData();
+                    total.Name = string.Format("{0}/TOTAL", name);
+                    total.PeriodTypeValueAverage = customer.PeriodTypeValueAverage - matchedSupplier.PeriodTypeValueAverage;
+                    total.PeriodTypeValuePercentage = customer.PeriodTypeValuePercentage - matchedSupplier.PeriodTypeValuePercentage;
+                    total.PreviousPeriodTypeValuePercentage = matchedSupplier.PreviousPeriodTypeValuePercentage - customer.PreviousPeriodTypeValuePercentage;
+                    List<decimal> totalValues = new List<decimal>();
+                    for (int i = 0; i < customer.Values.Count; i++)
+                        totalValues.Add(customer.Values[i] - matchedSupplier.Values[i]);
+                    total.Values = totalValues;
+                    customersAndSuppliersList.Add(total);
+
+                    //remove out element from out list
+                    suppliersList.Remove(matchedSupplier);
+
+                }
+                else
+                  //add item to in list
+                    onlyCustomersList.Add(customer);
+                
+            }
+            customersAndSuppliersList = customersAndSuppliersList.OrderBy(item => item.Name).ToList();
+
+            //add items in in list
+            //add items remaining in out list
+            foreach (var item in onlyCustomersList)
+                item.Name = string.Format("{0}/IN", item.Name);
+            foreach (var item in suppliersList)
+                item.Name = string.Format("{0}/OUT", item.Name);
+
+            customersAndSuppliersList.AddRange(onlyCustomersList.OrderBy(customer => customer.Name).ToList());
+
+            customersAndSuppliersList.AddRange(suppliersList.OrderBy(supplier => supplier.Name).ToList());
+
+            return new VariationReportResult() { VariationReportsData = customersAndSuppliersList, TimeRange = timeRanges };
+
+
+        }
         public List<RateLossFormatted> GetRateLoss(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? zoneId, int? customerAMUId, int? supplierAMUId)
         {
 
