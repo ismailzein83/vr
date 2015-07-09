@@ -15,7 +15,7 @@ namespace Vanrise.BusinessProcess.Extensions
 
         public BaseProcessInputArgument ProcessInputArguments { get; set; }
 
-        public override void Execute(Dictionary<string, object> evaluatedExpressions)
+        public override void Execute(SchedulerTask task, Dictionary<string, object> evaluatedExpressions)
         {
             Console.WriteLine("WFSchedulerTaskAction started...");
 
