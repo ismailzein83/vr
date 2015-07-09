@@ -9,7 +9,7 @@ using Vanrise.Security.Entities;
 
 namespace Vanrise.Security.Data.SQL
 {
-    public class OrgChartDataManager : BaseSQLDataManager, IUserDataManager
+    public class OrgChartDataManager : BaseSQLDataManager, IOrgChartDataManager
     {
         public OrgChartDataManager()
             : base(GetConnectionStringName("SecurityDBConnStringKey", "SecurityDBConnString"))
