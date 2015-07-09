@@ -156,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ITask.cs" />
+    <Compile Include="Tasks\MortadaTask.cs" />
     <Compile Include="WF.cs">
       <SubType>Form</SubType>
     </Compile>

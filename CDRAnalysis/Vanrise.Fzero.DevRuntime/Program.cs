@@ -10,15 +10,15 @@ namespace Vanrise.Fzero.DevRuntime
     {
         static void Main(string[] args)
         {
-            //MainForm f = new MainForm();
-            //f.ShowDialog();
-            //Console.ReadKey();
-            //return;
-
-            WF f = new WF();
+            MainForm f = new MainForm();
             f.ShowDialog();
             Console.ReadKey();
             return;
+
+            //WF f = new WF();
+            //f.ShowDialog();
+            //Console.ReadKey();
+            //return;
         }
     }
 }
