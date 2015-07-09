@@ -1,25 +1,30 @@
 ﻿<vr-form name="formNavigation">
-    <vr-row removeline>
-        <vr-columns colnum="2" simplecol>
-            <vr-label style="float: left; margin-top: 4px">
-                <span style=" ">Page Size: </span>
-            </vr-label>
-            <div style="float: left; ">
-                <vr-select datasource="ctrl.topCounts" selectedvalues="ctrl.pagersettings.itemsPerPage" data-onselectionchanged="ctrl.pageSizeChanged" nocaret noborder openup></vr-select>
-            </div>
+    <div class="vr-pager-container">
+        <vr-row removeline>
+
+            <vr-columns colnum="2" simplecol>
+                <vr-label style="float: left; margin-top: 4px">
+                    <span style=" ">Page Size: </span>
+                </vr-label>
+                <div style="float: left; ">
+                    <vr-select datasource="ctrl.topCounts" selectedvalues="ctrl.pagersettings.itemsPerPage" data-onselectionchanged="ctrl.pageSizeChanged" nocaret noborder openup></vr-select>
+                </div>
 
 
-        </vr-columns>
-        <vr-columns colnum="8" simplecol>
-            <div style=" margin-top: 4px;text-align:center " ng-init="ctrl.pagersettings.currentPage = 1" ng-show="ctrl.numberOfPages > 1">
-                <pagination total-items="ctrl.pagersettings.totalDataCount" ng-model="ctrl.pagersettings.currentPage" max-size="10" class="pagination-sm" num-pages="ctrl.numberOfPages"
-                            items-per-page="ctrl.pagersettings.itemsPerPage" direction-links="true" boundary-links="true" rotate="false" ng-change="ctrl.pageChanged()"></pagination>
-            </div>
-        </vr-columns>
-        <vr-columns colnum="2" simplecol>
-            <vr-label style="float:right; margin-top: 4px">
-                <span style="">Page {{ctrl.pagersettings.currentPage}} of {{ctrl.numberOfPages}}</span>
-            </vr-label>
-        </vr-columns>
-    </vr-row>
+            </vr-columns>
+            <vr-columns colnum="8" simplecol>
+                <div style=" margin-top: 4px;text-align:center " ng-init="ctrl.pagersettings.currentPage = 1" ng-show="ctrl.numberOfPages > 1">
+                    <pagination total-items="ctrl.pagersettings.totalDataCount" ng-model="ctrl.pagersettings.currentPage" max-size="10" class="pagination-sm vr-custom-pagination" num-pages="ctrl.numberOfPages"
+                                items-per-page="ctrl.pagersettings.itemsPerPage" direction-links="true" boundary-links="true" rotate="false" ng-change="ctrl.pageChanged()"
+                                previous-text="‹" next-text="›" first-text="«" last-text="»"></pagination>
+                </div>
+            </vr-columns>
+            <vr-columns colnum="2" simplecol>
+                <vr-label style="float:right; margin-top: 4px">
+                    <span style="">Page {{ctrl.pagersettings.currentPage}} of {{ctrl.numberOfPages}}</span>
+                </vr-label>
+            </vr-columns>
+
+        </vr-row>
+    </div>    
 </vr-form>

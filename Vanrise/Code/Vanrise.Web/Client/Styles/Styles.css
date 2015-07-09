@@ -1071,10 +1071,10 @@ input.ui-grid-filter-input[type="text"] {
 }
 
 .panel-vr > .panel-heading {
-    background-color: #20407d;
+    background-color: #272264;
     border-style: solid;
     text-transform:uppercase ;
-    border-color: #20407D;
+    border-color: #272264;
     font-weight:bold ;
     font-size:12px;
     border-radius:0px ;
@@ -1167,6 +1167,10 @@ input.ui-grid-filter-input[type="text"] {
     transform: rotate(270deg);
     margin: 135px 0px 20px 0px;
 }
+.vr-custom-pagination >li >a{
+    border-radius: 3px;
+    padding: 5px 5px;
+}
 .btn-group-custom >button {
     height: 24px !important;
     padding: 2px 12px !important;
@@ -1241,12 +1245,12 @@ input.ui-grid-filter-input[type="text"] {
 }
 .vr-datagrid-header{
     background-color:#829EBF;
-    color:#FFF;
-    font-weight:bolder;
+    color:#FFF;   
     cursor:pointer;
     height:auto;
-    white-space:nowrap;
     overflow:hidden;
+    font-size: 10px;
+    text-transform:uppercase;
 }
 
 .vr-datagrid-body{
@@ -1287,6 +1291,10 @@ input.ui-grid-filter-input[type="text"] {
     text-align: right !important;   
     padding-right:2px !important;
 } 
+.vr-pager-container{
+    border: 1px  #D0D0D0 solid  !important;
+    border-top: transparent !important;
+}
 .divLoading {
         pointer-events: none;
         opacity: 0.5;
