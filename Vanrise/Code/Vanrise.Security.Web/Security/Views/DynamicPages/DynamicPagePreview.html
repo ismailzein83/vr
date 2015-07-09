@@ -3,10 +3,10 @@
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-datetimepicker type="date" value="fromDate" label="From:" isrequired></vr-datetimepicker>
+                    <vr-datetimepicker type="date" value="fromDate" label="From" isrequired></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-datetimepicker type="date" value="toDate" label="To:" isrequired></vr-datetimepicker>
+                    <vr-datetimepicker type="date" value="toDate" label="To" isrequired></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Grouped By"
@@ -25,7 +25,7 @@
 
     <div vr-loader="isGettingData">
             <vr-row ng-if="summaryWidgets.length>0">
-                    <div class="list-group dragbelzone" ng-sortable="itemsSortable">
+                    <div class="list-group">
                         <vr-columns ng-repeat="summaryWidget in summaryWidgets" colnum="{{summaryWidget.NumberOfColumns}}">
                             <vr-directivewrapper directive="summaryWidget.Setting.Directive" on-ready="summaryWidget.onElementReady" settings="summaryWidget.Setting.Settings"
                                                  retrievedataonload="true" filter="filter"></vr-directivewrapper>
@@ -33,7 +33,7 @@
                     </div>
             </vr-row>
             <vr-row ng-if="bodyWidgets.length>0">
-                <div class="list-group dragbelzone" ng-sortable="itemsSortable">
+                <div class="list-group " >
                     <vr-columns ng-repeat="bodyWidget in bodyWidgets" colnum="{{bodyWidget.NumberOfColumns}}">
                         <vr-directivewrapper directive="bodyWidget.Setting.Directive" on-ready="bodyWidget.onElementReady" settings="bodyWidget.Setting.Settings"
                                              retrievedataonload="true" filter="filter"></vr-directivewrapper>
