@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ActionTypes">
           <Key>
             <PropertyRef Name="ID" />
@@ -470,7 +470,6 @@ warning 6002: The table/view 'FMS.dbo.ViewGeneratedCalls' does not have a primar
             <PropertyRef Name="SourceID" />
             <PropertyRef Name="StatusID" />
             <PropertyRef Name="ReportingStatusID" />
-            <PropertyRef Name="DurationInSeconds" />
             <PropertyRef Name="AttemptDateTime" />
             <PropertyRef Name="b_number" />
             <PropertyRef Name="ID" />
@@ -482,9 +481,9 @@ warning 6002: The table/view 'FMS.dbo.ViewGeneratedCalls' does not have a primar
           <Property Name="StatusID" Type="int" Nullable="false" />
           <Property Name="PriorityID" Type="int" />
           <Property Name="ReportingStatusID" Type="int" Nullable="false" />
-          <Property Name="DurationInSeconds" Type="int" Nullable="false" />
+          <Property Name="DurationInSeconds" Type="int" />
           <Property Name="MobileOperatorFeedbackID" Type="int" />
-          <Property Name="OriginationNetwork" Type="varchar" MaxLength="50" />
+          <Property Name="OriginationNetwork" Type="varchar" MaxLength="100" />
           <Property Name="AssignedTo" Type="int" />
           <Property Name="AssignedBy" Type="int" />
           <Property Name="ReportID" Type="int" />
@@ -497,8 +496,8 @@ warning 6002: The table/view 'FMS.dbo.ViewGeneratedCalls' does not have a primar
           <Property Name="SourceName" Type="varchar" MaxLength="100" />
           <Property Name="StatusName" Type="varchar" MaxLength="20" />
           <Property Name="AssignedToFullName" Type="nvarchar" MaxLength="100" />
-          <Property Name="a_number" Type="varchar" MaxLength="20" />
-          <Property Name="b_number" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="a_number" Type="varchar" MaxLength="100" />
+          <Property Name="b_number" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="MobileOperatorName" Type="nvarchar" MaxLength="100" />
           <Property Name="RecommendedActionName" Type="nvarchar" MaxLength="50" />
           <Property Name="ReportingDateTime" Type="datetime2" Precision="0" />
@@ -509,7 +508,7 @@ warning 6002: The table/view 'FMS.dbo.ViewGeneratedCalls' does not have a primar
           <Property Name="Level2Comparison" Type="bit" />
           <Property Name="ReceivedSourceName" Type="varchar" MaxLength="100" />
           <Property Name="ReceivedSourceID" Type="int" />
-          <Property Name="CLI" Type="varchar" MaxLength="20" />
+          <Property Name="CLI" Type="varchar" MaxLength="100" />
           <Property Name="ToneFeedbackID" Type="int" />
           <Property Name="LevelOneComparisonDateTime" Type="datetime2" Precision="0" />
           <Property Name="LevelTwoComparisonDateTime" Type="datetime2" Precision="0" />
@@ -521,7 +520,7 @@ warning 6002: The table/view 'FMS.dbo.ViewGeneratedCalls' does not have a primar
           <Property Name="ToBeReportedBefore" Type="bit" />
           <Property Name="FeedbackNotes" Type="varchar" MaxLength="5000" />
           <Property Name="MobileOperatorFeedbackName" Type="varchar" MaxLength="20" />
-          <Property Name="Carrier" Type="varchar" MaxLength="50" />
+          <Property Name="Carrier" Type="varchar" MaxLength="100" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'FMS.dbo.ViewSummary' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -1192,6 +1191,19 @@ warning 6002: The table/view 'FMS.dbo.vwRepeatedCase' does not have a primary ke
         </Function>
         <Function Name="prGetRepeatedCases" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MobileOperatorID" Type="int" Mode="In" />
+          <Parameter Name="ClientID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="prGetReportedCalls" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CaseID" Type="varchar" Mode="In" />
+          <Parameter Name="b_number" Type="varchar" Mode="In" />
+          <Parameter Name="CLI" Type="varchar" Mode="In" />
+          <Parameter Name="FromSentDateTime" Type="datetime" Mode="In" />
+          <Parameter Name="ToSentDateTime" Type="datetime" Mode="In" />
+          <Parameter Name="ReportID" Type="varchar" Mode="In" />
+          <Parameter Name="CLIMobileOperatorID" Type="int" Mode="In" />
+          <Parameter Name="B_NumberMobileOperatorID" Type="int" Mode="In" />
+          <Parameter Name="MobileOperatorFeedbackID" Type="int" Mode="In" />
+          <Parameter Name="RecommendedActionID" Type="int" Mode="In" />
           <Parameter Name="ClientID" Type="int" Mode="In" />
         </Function>
         <Function Name="prGetSummaryClient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -2209,6 +2221,19 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
             <End Role="WebsiteMenu" EntitySet="WebsiteMenus" />
             <End Role="WebsiteMenu1" EntitySet="WebsiteMenus" />
           </AssociationSet>
+          <FunctionImport Name="prGetReportedCalls" ReturnType="Collection(Model.prGetReportedCalls_Result)">
+            <Parameter Name="CaseID" Mode="In" Type="String" />
+            <Parameter Name="b_number" Mode="In" Type="String" />
+            <Parameter Name="CLI" Mode="In" Type="String" />
+            <Parameter Name="FromSentDateTime" Mode="In" Type="DateTime" />
+            <Parameter Name="ToSentDateTime" Mode="In" Type="DateTime" />
+            <Parameter Name="ReportID" Mode="In" Type="String" />
+            <Parameter Name="CLIMobileOperatorID" Mode="In" Type="Int32" />
+            <Parameter Name="B_NumberMobileOperatorID" Mode="In" Type="Int32" />
+            <Parameter Name="MobileOperatorFeedbackID" Mode="In" Type="Int32" />
+            <Parameter Name="RecommendedActionID" Mode="In" Type="Int32" />
+            <Parameter Name="ClientID" Mode="In" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="delete_prSummary_Admin_Result">
           <Property Type="Int32" Name="ordered" Nullable="false" />
@@ -3027,7 +3052,6 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
             <PropertyRef Name="SourceID" />
             <PropertyRef Name="StatusID" />
             <PropertyRef Name="ReportingStatusID" />
-            <PropertyRef Name="DurationInSeconds" />
             <PropertyRef Name="AttemptDateTime" />
             <PropertyRef Name="b_number" />
             <PropertyRef Name="ID" />
@@ -3039,9 +3063,9 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <Property Name="StatusID" Type="Int32" Nullable="false" />
           <Property Name="PriorityID" Type="Int32" />
           <Property Name="ReportingStatusID" Type="Int32" Nullable="false" />
-          <Property Name="DurationInSeconds" Type="Int32" Nullable="false" />
+          <Property Name="DurationInSeconds" Type="Int32" />
           <Property Name="MobileOperatorFeedbackID" Type="Int32" />
-          <Property Name="OriginationNetwork" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OriginationNetwork" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="AssignedTo" Type="Int32" />
           <Property Name="AssignedBy" Type="Int32" />
           <Property Name="ReportID" Type="Int32" />
@@ -3054,8 +3078,8 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <Property Name="SourceName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="StatusName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="AssignedToFullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="a_number" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="b_number" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="a_number" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="b_number" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="MobileOperatorName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="RecommendedActionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ReportingDateTime" Type="DateTime" Precision="0" />
@@ -3066,7 +3090,7 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <Property Name="Level2Comparison" Type="Boolean" />
           <Property Name="ReceivedSourceName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="ReceivedSourceID" Type="Int32" />
-          <Property Name="CLI" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CLI" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="ToneFeedbackID" Type="Int32" />
           <Property Name="LevelOneComparisonDateTime" Type="DateTime" Precision="0" />
           <Property Name="LevelTwoComparisonDateTime" Type="DateTime" Precision="0" />
@@ -3078,7 +3102,7 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <Property Name="ToBeReportedBefore" Type="Boolean" />
           <Property Name="FeedbackNotes" Type="String" MaxLength="5000" FixedLength="false" Unicode="false" />
           <Property Name="MobileOperatorFeedbackName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Carrier" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Carrier" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="ViewSummary">
           <Key>
@@ -3659,6 +3683,21 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="prGetReportedCalls_Result">
+          <Property Type="String" Name="CaseID" Nullable="true" MaxLength="24" />
+          <Property Type="Int32" Name="ReportingStatusID" Nullable="false" />
+          <Property Type="Int32" Name="MobileOperatorFeedbackID" Nullable="true" />
+          <Property Type="DateTime" Name="AttemptDateTime" Nullable="false" />
+          <Property Type="DateTime" Name="FeedbackDateTime" Nullable="true" />
+          <Property Type="String" Name="b_number" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="DurationInSeconds" Nullable="true" />
+          <Property Type="String" Name="CLI" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="ReportingStatusName" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="ReportRealID" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="RecommendedActionName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="MobileOperatorFeedbackName" Nullable="true" MaxLength="20" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4640,6 +4679,25 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="prGetReportedCalls" FunctionName="Model.Store.prGetReportedCalls">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Model.prGetReportedCalls_Result">
+                <ScalarProperty Name="CaseID" ColumnName="CaseID" />
+                <ScalarProperty Name="ReportingStatusID" ColumnName="ReportingStatusID" />
+                <ScalarProperty Name="MobileOperatorFeedbackID" ColumnName="MobileOperatorFeedbackID" />
+                <ScalarProperty Name="AttemptDateTime" ColumnName="AttemptDateTime" />
+                <ScalarProperty Name="FeedbackDateTime" ColumnName="FeedbackDateTime" />
+                <ScalarProperty Name="b_number" ColumnName="b_number" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DurationInSeconds" ColumnName="DurationInSeconds" />
+                <ScalarProperty Name="CLI" ColumnName="CLI" />
+                <ScalarProperty Name="ReportingStatusName" ColumnName="ReportingStatusName" />
+                <ScalarProperty Name="ReportRealID" ColumnName="ReportRealID" />
+                <ScalarProperty Name="RecommendedActionName" ColumnName="RecommendedActionName" />
+                <ScalarProperty Name="MobileOperatorFeedbackName" ColumnName="MobileOperatorFeedbackName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

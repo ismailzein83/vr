@@ -203,6 +203,9 @@
     <Compile Include="prGetEmails_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="prGetReportedCalls_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="prGetSummaryClient_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>

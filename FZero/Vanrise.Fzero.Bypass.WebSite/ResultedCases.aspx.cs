@@ -601,10 +601,11 @@ public partial class ResultedCases : BasePage
                 break;
 
             case "7"://Last Month
-                int lastyear = DateTime.Now.Year - 1;
-                DateTime lastyear_firstDay = new DateTime(lastyear, 1, 1);
-                rdtpSearchFromAttemptDate.SelectedDate = lastyear_firstDay;
-                rdtpSearchToAttemptDate.SelectedDate = DateTime.Now.Date.AddSeconds(-1);
+                DateTime LastMonthLastDate = DateTime.Today.AddDays(0 - DateTime.Today.Day).AddHours(12).AddSeconds(-1);
+                DateTime LastMonthFirstDate = DateTime.Today.AddDays(0 - DateTime.Today.Day).AddDays(1 - DateTime.Today.AddDays(0 - DateTime.Today.Day).Day);
+
+                rdtpSearchFromAttemptDate.SelectedDate = LastMonthFirstDate;
+                rdtpSearchToAttemptDate.SelectedDate = LastMonthLastDate;
                 break;
 
 

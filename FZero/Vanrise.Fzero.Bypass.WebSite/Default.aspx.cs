@@ -363,10 +363,13 @@ public partial class Default : BasePage
                 break;
 
             case "7"://Last Month
-                int lastyear = DateTime.Now.Year - 1;
-                DateTime lastyear_firstDay = new DateTime(lastyear, 1, 1);
-                rdpFromLogDate.SelectedDate = lastyear_firstDay;
-                rdpToLogDate.SelectedDate = DateTime.Now.Date.AddSeconds(-1);
+                DateTime LastMonthLastDate = DateTime.Today.AddDays(0 - DateTime.Today.Day).AddHours(12).AddSeconds(-1);
+                DateTime LastMonthFirstDate = DateTime.Today.AddDays(0 - DateTime.Today.Day).AddDays(1 - DateTime.Today.AddDays(0 - DateTime.Today.Day).Day);
+
+                rdpFromLogDate.SelectedDate = LastMonthFirstDate;
+                rdpToLogDate.SelectedDate = LastMonthLastDate;
+
+           
                 gvCases.Rebind();
                 gvCompares.Rebind();
                 gvGeneratedCalls.Rebind();

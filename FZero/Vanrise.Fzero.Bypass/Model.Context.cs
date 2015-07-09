@@ -1177,5 +1177,54 @@ namespace Vanrise.Fzero.Bypass
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<prVwGeneratedCall_Result>("prVwGeneratedCall", iDParameter);
         }
+    
+        public virtual ObjectResult<prGetReportedCalls_Result> prGetReportedCalls(string caseID, string b_number, string cLI, Nullable<System.DateTime> fromSentDateTime, Nullable<System.DateTime> toSentDateTime, string reportID, Nullable<int> cLIMobileOperatorID, Nullable<int> b_NumberMobileOperatorID, Nullable<int> mobileOperatorFeedbackID, Nullable<int> recommendedActionID, Nullable<int> clientID)
+        {
+            var caseIDParameter = caseID != null ?
+                new ObjectParameter("CaseID", caseID) :
+                new ObjectParameter("CaseID", typeof(string));
+    
+            var b_numberParameter = b_number != null ?
+                new ObjectParameter("b_number", b_number) :
+                new ObjectParameter("b_number", typeof(string));
+    
+            var cLIParameter = cLI != null ?
+                new ObjectParameter("CLI", cLI) :
+                new ObjectParameter("CLI", typeof(string));
+    
+            var fromSentDateTimeParameter = fromSentDateTime.HasValue ?
+                new ObjectParameter("FromSentDateTime", fromSentDateTime) :
+                new ObjectParameter("FromSentDateTime", typeof(System.DateTime));
+    
+            var toSentDateTimeParameter = toSentDateTime.HasValue ?
+                new ObjectParameter("ToSentDateTime", toSentDateTime) :
+                new ObjectParameter("ToSentDateTime", typeof(System.DateTime));
+    
+            var reportIDParameter = reportID != null ?
+                new ObjectParameter("ReportID", reportID) :
+                new ObjectParameter("ReportID", typeof(string));
+    
+            var cLIMobileOperatorIDParameter = cLIMobileOperatorID.HasValue ?
+                new ObjectParameter("CLIMobileOperatorID", cLIMobileOperatorID) :
+                new ObjectParameter("CLIMobileOperatorID", typeof(int));
+    
+            var b_NumberMobileOperatorIDParameter = b_NumberMobileOperatorID.HasValue ?
+                new ObjectParameter("B_NumberMobileOperatorID", b_NumberMobileOperatorID) :
+                new ObjectParameter("B_NumberMobileOperatorID", typeof(int));
+    
+            var mobileOperatorFeedbackIDParameter = mobileOperatorFeedbackID.HasValue ?
+                new ObjectParameter("MobileOperatorFeedbackID", mobileOperatorFeedbackID) :
+                new ObjectParameter("MobileOperatorFeedbackID", typeof(int));
+    
+            var recommendedActionIDParameter = recommendedActionID.HasValue ?
+                new ObjectParameter("RecommendedActionID", recommendedActionID) :
+                new ObjectParameter("RecommendedActionID", typeof(int));
+    
+            var clientIDParameter = clientID.HasValue ?
+                new ObjectParameter("ClientID", clientID) :
+                new ObjectParameter("ClientID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<prGetReportedCalls_Result>("prGetReportedCalls", caseIDParameter, b_numberParameter, cLIParameter, fromSentDateTimeParameter, toSentDateTimeParameter, reportIDParameter, cLIMobileOperatorIDParameter, b_NumberMobileOperatorIDParameter, mobileOperatorFeedbackIDParameter, recommendedActionIDParameter, clientIDParameter);
+        }
     }
 }

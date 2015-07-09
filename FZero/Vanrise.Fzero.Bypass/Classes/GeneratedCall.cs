@@ -1717,8 +1717,62 @@ namespace Vanrise.Fzero.Bypass
         }
 
 
-        public static List<ViewGeneratedCall> GetReportedCalls
-          (
+        //public static List<ViewGeneratedCall> GetReportedCalls
+        //  (
+        //      string CaseID,
+        //      string b_number,
+        //      string CLI,
+        //      DateTime? FromSentDateTime,
+        //      DateTime? ToSentDateTime,
+        //      string ReportID,
+        //      int CLIMobileOperatorID,
+        //      int B_NumberMobileOperatorID,
+        //      int MobileOperatorFeedbackID,
+        //      int RecommendedActionID,
+        //      int ClientID,
+        //      int DifferenceInGMT
+        //  )
+        //{
+        //    List<ViewGeneratedCall> GeneratedCallsList = new List<ViewGeneratedCall>();
+
+        //    try
+        //    {
+
+        //        using (Entities context = new Entities())
+        //        {
+        //            var _CaseID = new SqlParameter("@CaseID", CaseID);
+        //            var _b_number = new SqlParameter("@b_number", b_number);
+        //            var _CLI = new SqlParameter("@CLI", CLI);
+        //            var _FromSentDateTime = new SqlParameter("@FromSentDateTime", FromSentDateTime);
+        //            var _ToSentDateTime = new SqlParameter("@ToSentDateTime", ToSentDateTime);
+        //            var _ReportID = new SqlParameter("@ReportID", ReportID);
+        //            var _CLIMobileOperatorID = new SqlParameter("@CLIMobileOperatorID", CLIMobileOperatorID);
+        //            var _B_NumberMobileOperatorID = new SqlParameter("@B_NumberMobileOperatorID", B_NumberMobileOperatorID);
+        //            var _MobileOperatorFeedbackID = new SqlParameter("@MobileOperatorFeedbackID", MobileOperatorFeedbackID);
+        //            var _RecommendedActionID = new SqlParameter("@RecommendedActionID", RecommendedActionID);
+        //            var _ClientID = new SqlParameter("@ClientID", ClientID);
+        //            var _DifferenceInGMT = new SqlParameter("@DifferenceInGMT", DifferenceInGMT);
+
+        //            GeneratedCallsList = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<ViewGeneratedCall>("prGetReportedCalls @CaseID,  @b_number, @CLI, @FromSentDateTime, @ToSentDateTime, @ReportID, @CLIMobileOperatorID, @B_NumberMobileOperatorID, @MobileOperatorFeedbackID, @RecommendedActionID, @ClientID ", _CaseID, _b_number, _CLI, _FromSentDateTime, _ToSentDateTime, _ReportID, _CLIMobileOperatorID, _B_NumberMobileOperatorID, _MobileOperatorFeedbackID, _RecommendedActionID, _ClientID).ToList();
+        //        }
+
+        //        if (DifferenceInGMT != 0)
+
+        //            foreach (ViewGeneratedCall vgc in GeneratedCallsList)
+        //            {
+        //                vgc.AttemptDateTime = vgc.AttemptDateTime.AddHours(DifferenceInGMT);
+        //            }
+        //    }
+        //    catch (Exception err)
+        //    {
+        //        FileLogger.Write("Error in Vanrise.Fzero.Bypass.GeneratedCall.GetGeneratedCalls()", err);
+        //    }
+
+        //    return GeneratedCallsList;
+        //}
+
+
+        public static List<prGetReportedCalls_Result> GetReportedCalls(
               string CaseID,
               string b_number,
               string CLI,
@@ -1733,48 +1787,21 @@ namespace Vanrise.Fzero.Bypass
               int DifferenceInGMT
           )
         {
-            List<ViewGeneratedCall> GeneratedCallsList = new List<ViewGeneratedCall>();
-
             try
             {
                 using (Entities context = new Entities())
                 {
-                    ((IObjectContextAdapter)context).ObjectContext.CommandTimeout = 18000;
-                    GeneratedCallsList = context.ViewGeneratedCalls
-                                          .Where(u => u.ID > 0
-                                            && (u.CaseID.Contains(CaseID))
-                                            && (u.ReportRealID.Contains(ReportID))
-                                            && (CLIMobileOperatorID == 0 || u.ReceivedMobileOperatorID == CLIMobileOperatorID)
-                                            && (B_NumberMobileOperatorID == 0 || u.MobileOperatorID == B_NumberMobileOperatorID)
-                                            && (MobileOperatorFeedbackID == 0 || u.MobileOperatorFeedbackID == MobileOperatorFeedbackID)
-                                            && (RecommendedActionID == 0 || u.RecommendedActionID == RecommendedActionID)
-                                            && (ClientID == 0 || u.ClientID == ClientID)
-                                            && (u.b_number.Contains(b_number))
-                                            && (!FromSentDateTime.HasValue || u.ReportingDateTime >= FromSentDateTime)
-                                            && (!ToSentDateTime.HasValue || u.ReportingDateTime <= ToSentDateTime)
-
-                                            )
-
-                                            .OrderByDescending(u => u.AttemptDateTime)
-                                            .ToList();
-              if (DifferenceInGMT!=0)
-
-                    foreach (ViewGeneratedCall vgc in GeneratedCallsList)
-                    {
-                        vgc.AttemptDateTime=vgc.AttemptDateTime.AddHours(DifferenceInGMT);
-                    }
-
-
-
+                    return context.prGetReportedCalls(CaseID, b_number, CLI, FromSentDateTime, ToSentDateTime, ReportID, CLIMobileOperatorID, B_NumberMobileOperatorID, MobileOperatorFeedbackID, RecommendedActionID, ClientID).ToList();
                 }
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.Bypass.GeneratedCall.GetGeneratedCalls()", err);
+                FileLogger.Write("Error in Vanrise.Fzero.Bypass.ViewSourceRecieve.GetReportedCalls()", err);
             }
 
-            return GeneratedCallsList;
+            return null;
         }
+
 
         public static List<GeneratedCall> GetCallsDidNotPassLevelTwo(bool LevelTwoComparisonIsObligatory)
         {

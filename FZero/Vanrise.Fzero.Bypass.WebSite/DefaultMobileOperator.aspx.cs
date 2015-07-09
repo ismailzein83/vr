@@ -212,10 +212,11 @@ public partial class DefaultMobileOperator : BasePage
                 break;
 
             case "7"://Last Month
-                int lastyear = DateTime.Now.Year - 1;
-                DateTime lastyear_firstDay = new DateTime(lastyear, 1, 1);
-                rdpFrom.SelectedDate = lastyear_firstDay;
-                rdpTo.SelectedDate = DateTime.Now.Date.AddSeconds(-1);
+                DateTime LastMonthLastDate = DateTime.Today.AddDays(0 - DateTime.Today.Day).AddHours(12).AddSeconds(-1);
+                DateTime LastMonthFirstDate = DateTime.Today.AddDays(0 - DateTime.Today.Day).AddDays(1 - DateTime.Today.AddDays(0 - DateTime.Today.Day).Day);
+
+                rdpFrom.SelectedDate = LastMonthFirstDate;
+                rdpTo.SelectedDate = LastMonthLastDate;
                 Populate();
                 break;
 

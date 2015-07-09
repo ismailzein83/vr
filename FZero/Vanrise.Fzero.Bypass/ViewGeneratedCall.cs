@@ -21,7 +21,7 @@ namespace Vanrise.Fzero.Bypass
         public int StatusID { get; set; }
         public Nullable<int> PriorityID { get; set; }
         public int ReportingStatusID { get; set; }
-        public int DurationInSeconds { get; set; }
+        public Nullable<int> DurationInSeconds { get; set; }
         public Nullable<int> MobileOperatorFeedbackID { get; set; }
         public string OriginationNetwork { get; set; }
         public Nullable<int> AssignedTo { get; set; }
