@@ -1,14 +1,7 @@
 ﻿
-var appControllers = angular.module('appControllers', ['ui.grid',
+var appControllers = angular.module('appControllers', [
     'ui.bootstrap',
     'ngAnimate',
-    'ui.grid.saveState',
-    'ui.grid.pagination',
-    'ui.grid.selection',
-    'ui.grid.infiniteScroll',
-    'ui.grid.resizeColumns',
-    'ui.grid.expandable',
-    'ui.grid.autoResize',
     'ng-sortable',
     'ngSanitize',
     'mgcrea.ngStrap',
