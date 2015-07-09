@@ -14,7 +14,7 @@ app.directive('vrLabel', [function () {
         compile: function (tElement, tAttrs) {
             var isStandalone = tAttrs.standalone;
             var isValue = tAttrs.isvalue != undefined;
-            var newElement = '<label class="control-label" style="' + (isStandalone == "true" ? 'padding-top:6px;' : '') + (isValue ? 'font-weight:bold;' : '') + '" >'
+            var newElement = '<label class="control-label vr-control-label" style="' + (isStandalone == "true" ? 'padding-top:6px;' : '') + (isValue ? 'font-weight:bold;' : '') + '" >'
                 + tElement.context.innerHTML + '</label>';
             tElement.html(newElement);
         }//,

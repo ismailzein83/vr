@@ -1372,3 +1372,7 @@ input.ui-grid-filter-input[type="text"] {
     padding: 2px 12px !important;
 }
 
+.vr-control-label {
+    font-weight:bold;
+    font-size:smaller;
+}
