@@ -96,7 +96,7 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
         var dataSourceData = {
             DataSourceId: (dataSourceId != null) ? dataSourceId : 0,
             AdapterTypeId: $scope.selectedAdapterType.AdapterTypeId,
-            Settings: { Adapter: $scope.dataSourceAdapter.getData() }
+            Settings: { Adapter: $scope.dataSourceAdapter.getData(), MapperCustomCode: $scope.customCode }
         };
 
         var taskData = {
@@ -116,6 +116,7 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
     function fillScopeFromDataSourceObj(dataSourceObject) {
         $scope.selectedAdapterType = UtilsService.getItemByVal($scope.adapterTypes, dataSourceObject.DataSourceData.AdapterTypeId, "AdapterTypeId");
         $scope.dataSourceAdapter.data = dataSourceObject.DataSourceData.Settings.Adapter;
+        $scope.customCode = dataSourceObject.DataSourceData.Settings.MapperCustomCode;
         $scope.schedulerTaskTrigger.data = dataSourceObject.TaskData.TaskTrigger;
     }
 

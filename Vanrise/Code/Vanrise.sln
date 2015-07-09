@@ -79,13 +79,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Web", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Adapters.FileReceiveAdapter", "Vanrise.Integration.Adapters.FileReceiverAdapter\Vanrise.Integration.Adapters.FileReceiveAdapter.csproj", "{A2BA285E-4F1B-4015-95DA-DBFE41701966}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Extensions", "Vanrise.Integration.Extensions\Vanrise.Integration.Extensions.csproj", "{E7916244-0EF5-4578-9DF6-C2FD29F72B9A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Adapters.FtpReceiveAdapter", "Vanrise.Integration.Adapters.FtpReceiveAdapter\Vanrise.Integration.Adapters.FtpReceiveAdapter.csproj", "{FB7F11A8-5A64-4C59-B72F-26EC95C07AEB}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 34
+		SccNumberOfProjects = 33
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -213,14 +211,10 @@ Global
 		SccProjectTopLevelParentUniqueName31 = Vanrise.sln
 		SccProjectName31 = Vanrise.Integration.Adapters.FileReceiverAdapter
 		SccLocalPath31 = Vanrise.Integration.Adapters.FileReceiverAdapter
-		SccProjectUniqueName32 = Vanrise.Integration.Extensions\\Vanrise.Integration.Extensions.csproj
+		SccProjectUniqueName32 = Vanrise.Integration.Adapters.FtpReceiveAdapter\\Vanrise.Integration.Adapters.FtpReceiveAdapter.csproj
 		SccProjectTopLevelParentUniqueName32 = Vanrise.sln
-		SccProjectName32 = Vanrise.Integration.Extensions
-		SccLocalPath32 = Vanrise.Integration.Extensions
-		SccProjectUniqueName33 = Vanrise.Integration.Adapters.FtpReceiveAdapter\\Vanrise.Integration.Adapters.FtpReceiveAdapter.csproj
-		SccProjectTopLevelParentUniqueName33 = Vanrise.sln
-		SccProjectName33 = Vanrise.Integration.Adapters.FtpReceiveAdapter
-		SccLocalPath33 = Vanrise.Integration.Adapters.FtpReceiveAdapter
+		SccProjectName32 = Vanrise.Integration.Adapters.FtpReceiveAdapter
+		SccLocalPath32 = Vanrise.Integration.Adapters.FtpReceiveAdapter
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -499,14 +493,6 @@ Global
 		{A2BA285E-4F1B-4015-95DA-DBFE41701966}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A2BA285E-4F1B-4015-95DA-DBFE41701966}.Release|x64.ActiveCfg = Release|Any CPU
 		{A2BA285E-4F1B-4015-95DA-DBFE41701966}.Release|x86.ActiveCfg = Release|Any CPU
-		{E7916244-0EF5-4578-9DF6-C2FD29F72B9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E7916244-0EF5-4578-9DF6-C2FD29F72B9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E7916244-0EF5-4578-9DF6-C2FD29F72B9A}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{E7916244-0EF5-4578-9DF6-C2FD29F72B9A}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E7916244-0EF5-4578-9DF6-C2FD29F72B9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E7916244-0EF5-4578-9DF6-C2FD29F72B9A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E7916244-0EF5-4578-9DF6-C2FD29F72B9A}.Release|x64.ActiveCfg = Release|Any CPU
-		{E7916244-0EF5-4578-9DF6-C2FD29F72B9A}.Release|x86.ActiveCfg = Release|Any CPU
 		{FB7F11A8-5A64-4C59-B72F-26EC95C07AEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FB7F11A8-5A64-4C59-B72F-26EC95C07AEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB7F11A8-5A64-4C59-B72F-26EC95C07AEB}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -551,7 +537,6 @@ Global
 		{BC343C8C-A1BA-4D9E-B4DA-C59029594D50} = {A79B5E8C-36E5-408B-87E2-E7C54FA52810}
 		{070CB7FA-00D4-4BDB-AB37-5F972B5F2F0D} = {A79B5E8C-36E5-408B-87E2-E7C54FA52810}
 		{A2BA285E-4F1B-4015-95DA-DBFE41701966} = {A79B5E8C-36E5-408B-87E2-E7C54FA52810}
-		{E7916244-0EF5-4578-9DF6-C2FD29F72B9A} = {A79B5E8C-36E5-408B-87E2-E7C54FA52810}
 		{FB7F11A8-5A64-4C59-B72F-26EC95C07AEB} = {A79B5E8C-36E5-408B-87E2-E7C54FA52810}
 	EndGlobalSection
 EndGlobal

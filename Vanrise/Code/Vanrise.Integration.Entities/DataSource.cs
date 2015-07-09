@@ -17,11 +17,12 @@ namespace Vanrise.Integration.Entities
         public string AdapterName { get; set; }
 
         public DataSourceSettings Settings { get; set; }
-
     }
 
     public class DataSourceSettings
     {
         public BaseReceiveAdapter Adapter { get; set; }
+
+        public string MapperCustomCode { get; set; }
     }
 }

@@ -41,11 +41,15 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Queueing">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseReceiveAdapter.cs" />
     <Compile Include="DataSource.cs" />
     <Compile Include="DataSourceAdapterType.cs" />
+    <Compile Include="IDataMapper.cs" />
     <Compile Include="ImportedDataTypes\DBReaderImportedData.cs" />
     <Compile Include="ImportedDataTypes\ExcelFileImportedData.cs" />
     <Compile Include="ImportedDataTypes\IImportedData.cs" />
