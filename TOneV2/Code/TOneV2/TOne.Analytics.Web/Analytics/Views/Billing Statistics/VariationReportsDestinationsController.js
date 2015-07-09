@@ -47,6 +47,7 @@ function VariationReportsDestinationsController($scope, BillingStatisticsAPIServ
         $scope.isGettingData = true; 
        // console.log($scope.dataItem);
         // console.log($scope.dataItem.ID);
+        console.log($scope.dataItem.Name);
         
         console.log(reportOption);
         var selectedReportOption = reportOption;//$scope.viewScope.selectedReportOption;
@@ -69,10 +70,6 @@ function VariationReportsDestinationsController($scope, BillingStatisticsAPIServ
                 //  entityType = EntityTypeEnum.Customers;
                 //$scope.show = true;
                 break;
-            //case VariationReportOptionsEnum.TopDestinationMinutes:
-            //    selectedReportOption = VariationReportOptionsEnum.InBoundMinutes;
-            //    entityType = EntityTypeEnum.Zone;
-            //    break;
             case VariationReportOptionsEnum.InBoundAmount:
                 selectedReportOption = VariationReportOptionsEnum.TopDestinationAmount
                 entityType = EntityTypeEnum.Customer;
@@ -88,11 +85,6 @@ function VariationReportsDestinationsController($scope, BillingStatisticsAPIServ
                 //  entityType = EntityTypeEnum.Customers;
                 // $scope.show = true;
                 break;
-            //case VariationReportOptionsEnum.TopDestinationAmount:
-            //    selectedReportOption = VariationReportOptionsEnum.InBoundAmount;
-            //    entityType = EntityTypeEnum.Zone;
-            //    break;
-
             case VariationReportOptionsEnum.Profit:
                 selectedReportOption = VariationReportOptionsEnum.TopDestinationAmount
                 entityType = EntityTypeEnum.Customer;

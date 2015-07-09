@@ -589,7 +589,10 @@ namespace TOne.Analytics.Data.SQL
             WHERE BS.CallDate >= @BeginTime AND BS.CallDate < @EndTime  #WhereStatement# #BillingStatsFilter# 
             GROUP BY #IDColumn#, #NameColumn#,ERC.Rate,ERS.Rate;
             
+            IF(@FromRow==0 AND @ToRow==0)
             WITH FilteredEntities AS (SELECT * FROM #OrderedEntities WHERE RowNumber BETWEEN @FromRow AND @ToRow)
+            ELSE
+            WITH FilteredEntities AS (SELECT * FROM #OrderedEntities)
 
             SELECT  Ent.Name , Ent.RowNumber,
             0.0 as [AVG],
