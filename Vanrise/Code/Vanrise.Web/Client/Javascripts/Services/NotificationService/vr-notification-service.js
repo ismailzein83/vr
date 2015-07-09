@@ -81,9 +81,17 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
             case InsertOperationResultEnum.Succeeded.value: showSuccess(itemType + " added successfully");
                 return true;
                 break;
-            case InsertOperationResultEnum.Failed.value: showError("Failed to add " + itemType); break;
-            case InsertOperationResultEnum.SameExists.value:
+            case InsertOperationResultEnum.Failed.value: console.log(insertOperationOutput.Message);
+                if (insertOperationOutput.Message != undefined) {
+                    showError(insertOperationOutput.Message); break;
+                }
+
+                else {
+                    showError("Failed to add " + itemType); break;
+                }
+            case InsertOperationResultEnum.SameExists.value: 
                 switch (itemType) {
+                    case "Widget": showWarning("Same Widget Name already exists"); break;
                     case "User": showWarning("Same Email already exists"); break;
                     default: showWarning(itemType + " with the same key already exists"); break;
                 }

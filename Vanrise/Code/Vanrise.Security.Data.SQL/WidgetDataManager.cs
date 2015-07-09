@@ -34,7 +34,8 @@ namespace Vanrise.Security.Data.SQL
                 serialziedSetting = Common.Serializer.Serialize(widget.Setting);
             object widgetId;
             int recordesEffected = ExecuteNonQuerySP("sec.sp_Widget_Insert", out widgetId,widget.WidgetDefinitionId, widget.Name, serialziedSetting);
-            insertedId = (int)widgetId;
+            insertedId = (recordesEffected > 0) ? (int)widgetId : -1;
+
             return (recordesEffected > 0);
             //  return false;
         }
@@ -74,7 +75,13 @@ namespace Vanrise.Security.Data.SQL
         {
             return GetItemsSP("sec.sp_Widget_GetFiltered", WidgetMapper, filter);
         }
+        public int CheckWidgetSetting(WidgetSetting setting){
+             string serialziedSetting = null;
+             if (setting != null)
+                serialziedSetting = Common.Serializer.Serialize(setting);
 
+             return (int)ExecuteScalarSP("sec.sp_Widget_CheckSetting", serialziedSetting);
+        }
       
     }
 }

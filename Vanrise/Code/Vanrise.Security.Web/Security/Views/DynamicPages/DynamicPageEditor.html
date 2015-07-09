@@ -12,7 +12,7 @@
                         <vr-textbox value="pageName" label="Page Name" isrequired></vr-textbox>
                     </vr-columns>
                     <vr-columns width="1/3row">
-                        <vr-section title="Module">
+                        <vr-section title="Menu Location">
                             <div data-tree-id="beTree"
                                  data-angular-treeview="true"
                                  data-tree-model="menuList"
@@ -25,12 +25,12 @@
                     <vr-columns width="1/3row">
                         <vr-section title="Audiences">
                             <vr-columns width="fullrow">
-                                <vr-select ismultipleselection label="Users:" datasource="users" selectedvalues="selectedUsers" datatextfield="Name" datavaluefield="UserId"
+                                <vr-select ismultipleselection label="Users" datasource="users" selectedvalues="selectedUsers" datatextfield="Name" datavaluefield="UserId"
                                            entityname="Users">
                                 </vr-select>
                             </vr-columns>
                             <vr-columns width="fullrow">
-                                <vr-select ismultipleselection label="Groups:" datasource="roles" selectedvalues="selectedRoles" datatextfield="Name" datavaluefield="RoleId"
+                                <vr-select ismultipleselection label="Groups" datasource="roles" selectedvalues="selectedRoles" datatextfield="Name" datavaluefield="RoleId"
                                            entityname="Roles">
                                 </vr-select>
                             </vr-columns>

@@ -75,8 +75,8 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         $scope.onSectionChanged = function () {
 
             switch ($scope.selectedSection.value) {
-                case WidgetSectionEnum.Summary.value: $scope.widgets = $scope.summaryWidgets; break;
-                case WidgetSectionEnum.Body.value: $scope.widgets = $scope.bodyWidgets; break;
+                case WidgetSectionEnum.Summary.value: $scope.widgets = $scope.summaryWidgets; $scope.selectedColumnWidth = $scope.columnWidth[3]; break;
+                case WidgetSectionEnum.Body.value: $scope.widgets = $scope.bodyWidgets; $scope.selectedColumnWidth = $scope.columnWidth[1]; break;
             }
             $scope.selectedWidget = null;
         }
@@ -304,7 +304,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             }
         ];
 
-        $scope.selectedColumnWidth = $scope.columnWidth[0];
+        $scope.selectedColumnWidth = $scope.columnWidth[3];
     }
 
     function loadUsers() {

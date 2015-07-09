@@ -12,5 +12,7 @@ namespace Vanrise.Entities
         public InsertOperationResult Result { get; set; }
 
         public T InsertedObject { get; set; }
+
+        public string Message { get; set; }
     }
 }

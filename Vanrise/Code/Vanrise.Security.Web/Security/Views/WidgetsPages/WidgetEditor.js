@@ -31,7 +31,12 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, BIVisu
             $scope.modalContext.closeModal()
         };
         $scope.save = function () {
-            buildWidgetObjFromScope();
+            if (!buildWidgetObjFromScope())
+            {
+                VRNotificationService.showWarning("Please enter all required data!!");
+                return;
+            }
+                
             if ($scope.isEditMode)
                return updateWidget();
             else

@@ -25,6 +25,13 @@ namespace Vanrise.Security.Business
             int widgetId = -1;
             IWidgetsDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IWidgetsDataManager>();
 
+            int checkSetting = dataManager.CheckWidgetSetting(widget.Setting);
+            if (checkSetting == 1)
+            {
+                insertOperationOutput.Message="Same widget settings exist !!";
+                return insertOperationOutput;
+            }
+
             bool insertActionSucc = dataManager.SaveWidget(widget, out widgetId);
 
 
@@ -38,7 +45,10 @@ namespace Vanrise.Security.Business
                 WidgetDetails widgetDetail = dataManager.GetWidgetById(widgetId);
                 insertOperationOutput.InsertedObject = widgetDetail;
             }
-
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
             return insertOperationOutput;
 
         }
