@@ -8,6 +8,8 @@ namespace Vanrise.Integration.Entities
 {
     public class ExcelFileImportedData : IImportedData
     {
+        public byte[] Content { get; set; }
+
         public string Description
         {
             get { return null; }
