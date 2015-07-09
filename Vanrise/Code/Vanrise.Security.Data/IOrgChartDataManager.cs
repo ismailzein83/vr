@@ -7,8 +7,8 @@ using Vanrise.Security.Entities;
 
 namespace Vanrise.Security.Data
 {
-    public class IOrgChartDataManager : IDataManager
+    public interface IOrgChartDataManager : IDataManager
     {
-        public List<OrgChart> GetFilteredOrgCharts(int fromRow, int toRow, string name);
+        List<OrgChart> GetFilteredOrgCharts(int fromRow, int toRow, string name);
     }
 }
