@@ -112,6 +112,18 @@
     <Content Include="DLLs\Microsoft.Practices.Unity.Interception.dll" />
     <Content Include="DLLs\Newtonsoft.Json.dll" />
     <Content Include="DLLs\protobuf-net.dll" />
+    <Content Include="DLLs\Rebex.Net.Ftp.dll" />
+    <Content Include="DLLs\Rebex.Net.ProxySocket.dll" />
+    <Content Include="DLLs\Rebex.Net.ProxySocket.xml" />
+    <Content Include="DLLs\Rebex.Net.SecureSocket.dll" />
+    <Content Include="DLLs\Rebex.Net.Sftp.dll" />
+    <Content Include="DLLs\Rebex.Net.Ssh.dll" />
+    <Content Include="DLLs\Rebex.Net.SshShell.dll" />
+    <Content Include="DLLs\Rebex.Net.Telnet.dll" />
+    <Content Include="DLLs\Rebex.Net.Telnet.xml" />
+    <Content Include="DLLs\Rebex.Security.dll" />
+    <Content Include="DLLs\Rebex.TerminalEmulation.dll" />
+    <Content Include="DLLs\Rebex.TerminalEmulation.xml" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
