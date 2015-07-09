@@ -34,31 +34,25 @@ namespace Vanrise.Integration.Web.Controllers
 
 
         [HttpPost]
-        public Vanrise.Entities.InsertOperationOutput<Vanrise.Integration.Entities.DataSource> AddDataSource(Vanrise.Integration.Entities.DataSource dataSourceObject)
+        public Vanrise.Entities.InsertOperationOutput<Vanrise.Integration.Entities.DataSource> AddDataSource(DataSourceWrapper dataSourceWrapper)
         {
             DataSourceManager manager = new DataSourceManager();
-            return manager.AddDataSource(dataSourceObject);
+            return manager.AddDataSource(dataSourceWrapper.DataSourceData, dataSourceWrapper.TaskData);
         }
 
         [HttpPost]
-        public Vanrise.Entities.UpdateOperationOutput<Vanrise.Integration.Entities.DataSource> UpdateDataSource(Vanrise.Integration.Entities.DataSource dataSourceObject)
+        public Vanrise.Entities.UpdateOperationOutput<Vanrise.Integration.Entities.DataSource> UpdateDataSource(DataSourceWrapper dataSourceWrapper)
         {
             DataSourceManager manager = new DataSourceManager();
-            return manager.UpdateDataSource(dataSourceObject);
+            return manager.UpdateDataSource(dataSourceWrapper.DataSourceData, dataSourceWrapper.TaskData);
         }
 
-        [HttpPost]
-        public Vanrise.Entities.UpdateOperationOutput<object> AddDataSourceTask(DataSourceTask dataSourceTaskObject)
-        {
-            DataSourceManager manager = new DataSourceManager();
-            return manager.AddDataSourceTask(dataSourceTaskObject.DataSourceId, dataSourceTaskObject.Task);
-        }
     }
 
-    public class DataSourceTask
+    public class DataSourceWrapper
     {
-        public int DataSourceId { get; set; }
+        public Vanrise.Integration.Entities.DataSource DataSourceData { get; set; }
 
-        public Vanrise.Runtime.Entities.SchedulerTask Task { get; set; }
+        public Vanrise.Runtime.Entities.SchedulerTask TaskData { get; set; }
     }
 }

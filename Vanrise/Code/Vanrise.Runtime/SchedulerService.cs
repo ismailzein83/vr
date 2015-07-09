@@ -29,7 +29,7 @@ namespace Vanrise.Runtime
                         item.Status = Entities.SchedulerTaskStatus.Started;
                         dataManager.UpdateTask(item);
 
-                        item.TaskAction.Execute(evaluatedExpressions);
+                        item.TaskAction.Execute(item, evaluatedExpressions);
 
                         item.Status = Entities.SchedulerTaskStatus.NotStarted;
                         item.NextRunTime = item.TaskTrigger.CalculateNextTimeToRun();

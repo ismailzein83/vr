@@ -106,8 +106,6 @@
     <Content Include="Integration\Views\DataSourceEditorController.js" />
     <Content Include="Integration\Views\DataSourceManagement.html" />
     <Content Include="Integration\Views\DataSourceManagementController.js" />
-    <Content Include="Integration\Views\DataSourceTaskEditor.html" />
-    <Content Include="Integration\Views\DataSourceTaskEditorController.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">

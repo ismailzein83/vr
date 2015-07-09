@@ -1,9 +1,10 @@
-﻿DataSourceEditorController.$inject = ['$scope', 'DataSourceAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿DataSourceEditorController.$inject = ['$scope', 'DataSourceAPIService', 'SchedulerTaskAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function DataSourceEditorController($scope, DataSourceAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
+function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
 
     var editMode;
     var dataSourceId;
+    var taskId;
     loadParameters();
     defineScope();
     load();
@@ -11,11 +12,12 @@ function DataSourceEditorController($scope, DataSourceAPIService, UtilsService, 
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
         dataSourceId = undefined;
+        taskId = undefined;
 
         if (parameters != undefined && parameters != null) {
             dataSourceId = parameters.dataSourceId;
+            taskId = parameters.taskId;
         }
-
 
         if (dataSourceId != undefined)
             editMode = true;
@@ -39,6 +41,8 @@ function DataSourceEditorController($scope, DataSourceAPIService, UtilsService, 
 
         $scope.adapterTypes = [];
         $scope.dataSourceAdapter = {};
+
+        $scope.schedulerTaskTrigger = {};
 
     }
 
@@ -64,8 +68,15 @@ function DataSourceEditorController($scope, DataSourceAPIService, UtilsService, 
 
     function getDataSource() {
         return DataSourceAPIService.GetDataSource(dataSourceId)
-           .then(function (response) {
-               fillScopeFromDataSourceObj(response);
+           .then(function (dataSourceResponse) {
+               SchedulerTaskAPIService.GetTask(dataSourceResponse.TaskId)
+               .then(function (taskResponse) {
+                   var dataSourceObj = { DataSourceData: dataSourceResponse, TaskData: taskResponse }
+                   fillScopeFromDataSourceObj(dataSourceObj);
+               })
+               .catch(function (error) {
+                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+               });
            })
             .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -82,21 +93,33 @@ function DataSourceEditorController($scope, DataSourceAPIService, UtilsService, 
 
     function buildDataSourceObjFromScope() {
 
-        var dataSourceObject = {
+        var dataSourceData = {
             DataSourceId: (dataSourceId != null) ? dataSourceId : 0,
             AdapterTypeId: $scope.selectedAdapterType.AdapterTypeId,
             Settings: { Adapter: $scope.dataSourceAdapter.getData() }
         };
-        return dataSourceObject;
+
+        var taskData = {
+            TaskId: (taskId != null) ? taskId : 0,
+            Name: 'Data Source Task',
+            IsEnabled: $scope.isEnabled,
+            TaskType: 0,
+            TriggerTypeId: 1,
+            TaskTrigger: $scope.schedulerTaskTrigger.getData(),
+            ActionTypeId: 2,
+            TaskAction: { $type: "Vanrise.Integration.Extensions.DSSchedulerTaskAction, Vanrise.Integration.Extensions" }
+        };
+
+        return { DataSourceData: dataSourceData, TaskData: taskData };
     }
 
     function fillScopeFromDataSourceObj(dataSourceObject) {
-        $scope.selectedAdapterType = UtilsService.getItemByVal($scope.adapterTypes, dataSourceObject.AdapterTypeId, "AdapterTypeId");
-        $scope.dataSourceAdapter.data = dataSourceObject.Settings.Adapter;
+        $scope.selectedAdapterType = UtilsService.getItemByVal($scope.adapterTypes, dataSourceObject.DataSourceData.AdapterTypeId, "AdapterTypeId");
+        $scope.dataSourceAdapter.data = dataSourceObject.DataSourceData.Settings.Adapter;
+        $scope.schedulerTaskTrigger.data = dataSourceObject.TaskData.TaskTrigger;
     }
 
     function insertDataSource() {
-        $scope.issaving = true;
         var dataSourceObject = buildDataSourceObjFromScope();
         return DataSourceAPIService.AddDataSource(dataSourceObject)
         .then(function (response) {

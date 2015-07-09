@@ -26,11 +26,16 @@ namespace Vanrise.Integration.Data.SQL
             return GetItemSP("integration.sp_DataSource_Get", DataSourceMapper, dataSourceId);
         }
 
+        public Entities.DataSource GetDataSourcebyTaskId(int taskId)
+        {
+            return GetItemSP("integration.sp_DataSource_GetByTaskId", DataSourceMapper, taskId);
+        }
+
         public bool AddDataSource(Entities.DataSource dataSourceObject, out int insertedId)
         {
             object dataSourceId;
 
-            int recordesEffected = ExecuteNonQuerySP("integration.sp_DataSource_Insert", out dataSourceId, dataSourceObject.AdapterTypeId,
+            int recordesEffected = ExecuteNonQuerySP("integration.sp_DataSource_Insert", out dataSourceId, dataSourceObject.AdapterTypeId, dataSourceObject.TaskId,
                 Common.Serializer.Serialize(dataSourceObject.Settings));
             insertedId = (int)dataSourceId;
             return (recordesEffected > 0);
@@ -56,6 +61,7 @@ namespace Vanrise.Integration.Data.SQL
                 DataSourceId = (int)reader["ID"],
                 AdapterTypeId = (int)reader["AdapterID"],
                 AdapterName = reader["AdapterName"] as string,
+                TaskId = (int)reader["TaskId"],
                 Settings = Common.Serializer.Deserialize<Vanrise.Integration.Entities.DataSourceSettings>(reader["Settings"] as string),
                
             };

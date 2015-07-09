@@ -10,6 +10,6 @@ namespace Vanrise.Runtime.Entities
     {
         public Dictionary<string, object> RawExpressions { get; set; }
 
-        public abstract void Execute(Dictionary<string, object> evaluatedExpressions);
+        public abstract void Execute(SchedulerTask task, Dictionary<string, object> evaluatedExpressions);
     }
 }

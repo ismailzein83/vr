@@ -4,6 +4,7 @@
             <vr-choices selectedindex="0">
                 <vr-choice isselected="adapterSettignsSelected">Adapter</vr-choice>
                 <vr-choice isselected="mappperSettignsSelected">Mapper</vr-choice>
+                <vr-choice isselected="schedulerSettignsSelected">Scheduler</vr-choice>
             </vr-choices>
             <div ng-show="adapterSettignsSelected">
                 <vr-row>
@@ -18,6 +19,14 @@
             </div>
             <div ng-show="actionSettingsSelected">
                <p> To be implemented</p>
+            </div>
+            <div ng-show="schedulerSettignsSelected">
+                <vr-row>
+                    <vr-switch value="isEnabled" label="Is Enabled"></vr-switch>
+                </vr-row>
+                <vr-row>
+                    <div ng-include="'/Client/Modules/Runtime/Views/TriggerTemplates/TimerTriggerTemplate.html'"></div>
+                </vr-row>
             </div>
         </vr-form>
     </vr-modalbody>

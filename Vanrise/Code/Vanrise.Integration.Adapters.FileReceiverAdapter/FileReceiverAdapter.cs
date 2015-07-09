@@ -14,10 +14,12 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
 
         public override void ImportData(Action<object> receiveData)
         {
-            foreach (var fileObj in Directory.EnumerateFiles(this.FolderPath, "*.DAT"))
-            {
+            //foreach (var fileObj in Directory.EnumerateFiles(this.FolderPath, "*.txt"))
+            //{
                 
-            }
+            //}
+
+            receiveData("Extracted Data");
         }
     }
 }
