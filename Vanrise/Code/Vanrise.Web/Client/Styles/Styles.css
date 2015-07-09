@@ -1385,14 +1385,20 @@ input.ui-grid-filter-input[type="text"] {
 }
 
 
-.piechart {
-    background:url("../../Client/Modules/BI/Directives/Images/bichartpermission.jpg") center no-repeat;
+.piechartpermission {
+    background:url("../../Client/Modules/BI/Directives/Images/bichartpermission.png") center no-repeat;
     background-size: contain   ;
     width:100%;
     height:300px;
 }
-.chart {
-    background:url("../../Client/Modules/BI/Directives/Images/chartpermission.jpg") center no-repeat;
+.chartpermission {
+    background:url("../../Client/Modules/BI/Directives/Images/chartpermission.png") center no-repeat;
+    background-size: contain   ;
+    width:100%;
+    height:300px;
+}
+.gridpermission {
+    background:url("../../Client/Modules/BI/Directives/Images/gridpermission.png") center no-repeat;
     background-size: contain   ;
     width:100%;
     height:300px;

@@ -135,7 +135,6 @@
   <ItemGroup>
     <Content Include="Client\Images\01.png" />
     <Content Include="Client\Images\02.png" />
-    <Content Include="Client\Images\bichartpermission.jpg" />
     <Content Include="Client\Images\login.png" />
     <Content Include="Client\Images\logoonheader.png" />
     <Content Include="Client\Javascripts\Constants\DaysOfWeekEnum.js" />
