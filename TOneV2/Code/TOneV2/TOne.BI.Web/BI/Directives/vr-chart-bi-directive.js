@@ -37,7 +37,7 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
     };
     function getBIChartTemplate(previewmode) {
         if (previewmode!='true') {
-            return '<vr-section title="{{ctrl.settings.Title}}"><div ng-if="!ctrl.isAllowed"  class="alert alert-danger" role="alert" > <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> You Don\'t Have Permission To See This Widget..!!</div><div ng-if="ctrl.isAllowed"><vr-chart on-ready="ctrl.onChartReady" menuactions="ctrl.chartMenuActions"></vr-chart></div></vr-section>';
+            return '<vr-section title="{{ctrl.settings.Title}}"><div ng-if="!ctrl.isAllowed"> <img src="/Client/Images/bichartpermission.jpg" width="100%"/></div><div ng-if="ctrl.isAllowed"><vr-chart on-ready="ctrl.onChartReady" menuactions="ctrl.chartMenuActions"></vr-chart></div></vr-section>';
         }
         else
             return '</br><vr-textbox value="ctrl.settings.OperationType" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.settings.EntityType" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.settings.MeasureTypes" vr-disabled="true"></vr-textbox>'
