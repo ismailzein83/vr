@@ -300,26 +300,32 @@
                 ctrl.menuTop = evnt.clientY;// evnt.offsetY == undefined ? evnt.originalEvent.layerY : evnt.offsetY;
                
             };
+
+            ctrl.headerSortableListener = {
+                onSort: function (event) {
+                    ctrl.rowHtml += ' ';
+                    scope.$apply(function () {
+                        
+                    });
+                     
+                }
+            };
         }
         
         function buildRowHtml() {
-            ctrl.rowHtml = '<table style="border:0px;width:100%;table-layout:fixed"><tr>';
+            ctrl.rowHtml = '';
             for (var i = 0; i < ctrl.columnDefs.length; i++) {
                 var currentColumn = ctrl.columnDefs[i];
                 var currentColumnHtml = '$parent.ctrl.columnDefs[' + i + ']';
-                ctrl.rowHtml +=
-                    '<td ng-if="!' + currentColumnHtml + '.isHidden" ng-style="{ \'width\': ' + currentColumnHtml + '.width, \'overflow\': \'hidden\' ' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}" >'
-              +  '<div style="overflow:hidden">'
-            + '<div class="vr-datagrid-cell">'
-            + '    <div class="vr-datagrid-celltext">'
-              + UtilsService.replaceAll(ctrl.columnDefs[i].cellTemplate, "colDef", currentColumnHtml)
+                ctrl.rowHtml += '<div ng-if="!' + currentColumnHtml + '.isHidden" ng-style="{ \'width\': ' + currentColumnHtml + '.width, \'display\':\'inline-block\'' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}">'
+                + '<div class="vr-datagrid-cell">'
+                + '    <div class="vr-datagrid-celltext">'
+                  + UtilsService.replaceAll(ctrl.columnDefs[i].cellTemplate, "colDef", currentColumnHtml)
+                    + '</div>'
                 + '</div>'
-            + '</div>'
 
-        + '</div>'
-            + '</td>';
+            + '</div>';
             }
-            ctrl.rowHtml += '</tr></table>';
             buildSummaryRowHtml();
         }
 
@@ -336,7 +342,7 @@
                         + '</div>'
                     + '</div>'
 
-                + '</div>'
+                + '</div>';
                 }
             }
         }
