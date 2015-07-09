@@ -1169,11 +1169,30 @@ input.ui-grid-filter-input[type="text"] {
 }
 .vr-custom-pagination >li >a{
     border-radius: 3px;
-    padding: 5px 5px;
+    padding: 0 5px ;
+    font-size:11px;
+
+}
+
+.vr-custom-pagination > .disabled > span, .pagination > .disabled > span:hover, .pagination > .disabled > span:focus, .pagination > .disabled > a, .pagination > .disabled > a:hover, .pagination > .disabled > a:focus {
+    color: #fff;
+    cursor: not-allowed;
+    background-color: transparent;
+    border-color:  transparent;
+}
+.vr-custom-pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+    z-index: 2;
+    color: #FFF;
+    cursor: default;
+    background-color:#0074D9;
+}
+.pagination > li > a, .pagination > li > span {   
+    color: #FFF;
 }
 .btn-group-custom >button {
     height: 24px !important;
     padding: 2px 12px !important;
+    background-color:#0074D9;
 }
 .btn-group-custom > label{
    
@@ -1251,6 +1270,8 @@ input.ui-grid-filter-input[type="text"] {
     overflow:hidden;
     font-size: 10px;
     text-transform:uppercase;
+    padding-top:3px;
+    height:25px;
 }
 
 .vr-datagrid-body{
@@ -1294,6 +1315,25 @@ input.ui-grid-filter-input[type="text"] {
 .vr-pager-container{
     border: 1px  #D0D0D0 solid  !important;
     border-top: transparent !important;
+    background-color:#8dc641;
+}
+.vr-pager-container .btn{
+    height: 21px !important;
+    background-color: #0074D9;
+    padding: 0px 4px 0px 2px !important;
+}
+.vr-pager-container .dropdown{
+    top:2px;
+    left:2px;
+}
+.vr-pager-container .vr-control-label {
+    font-weight: normal;
+    font-size: 11px;
+    color:#fff ;
+}
+.vr-pager-container .dropdown-toggle > span {
+    font-size: 11px !important;
+    color:#fff;
 }
 .divLoading {
         pointer-events: none;

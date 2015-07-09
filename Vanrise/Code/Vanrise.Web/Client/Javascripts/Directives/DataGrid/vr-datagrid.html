@@ -45,10 +45,10 @@
     <div style="white-space:nowrap" ng-style="{'background-color': isRowExpanded ? '#F5F5F5' : 'Transparent', 'font-weight' :isRowExpanded ? 'bolder' : 'normal', 'border-right': '1px solid #D0D0D0', 'border-left': '1px solid #D0D0D0'}">
         <div style="margin:-2px" ng-style="{'width': $parent.ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-show="$parent.ctrl.expandableColumnWidth != undefined" ng-init="isRowExpanded = false">
             <label style="height: 9px;" class=" hand-cursor" ng-click="$parent.ctrl.expandRow($index, dataItem);isRowExpanded = true" ng-show="!isRowExpanded">
-                <span class="glyphicon glyphicon-plus" style="top: 0px; left: 4px"></span>
+                <span class="glyphicon glyphicon-plus" style="top: -2px; left: 4px"></span>
             </label>
             <label style="height: 9px;" class=" hand-cursor" ng-click="$parent.ctrl.collapseRow($index, dataItem);isRowExpanded = false" ng-show="isRowExpanded">
-                <span class="glyphicon glyphicon-minus" style="top: 0px; left: 4px"></span>
+                <span class="glyphicon glyphicon-minus" style="top: -2px; left: 4px"></span>
             </label>
         </div>
         <div ng-style="{'display':'inline-block', 'width': $parent.ctrl.dataColumnsSectionWidth}" class="vr-datagrid-row" ng-click="$parent.ctrl.onRowClicked($event);showMenu=$parent.ctrl.isActionMenuVisible(dataItem) ; " ng-mouseleave="showMenu = false">
