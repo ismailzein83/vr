@@ -79,7 +79,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Web", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Adapters.FileReceiveAdapter", "Vanrise.Integration.Adapters.FileReceiverAdapter\Vanrise.Integration.Adapters.FileReceiveAdapter.csproj", "{A2BA285E-4F1B-4015-95DA-DBFE41701966}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Adapters.FtpReceiveAdapter", "Vanrise.Integration.Adapters.FtpReceiveAdapter\Vanrise.Integration.Adapters.FtpReceiveAdapter.csproj", "{FB7F11A8-5A64-4C59-B72F-26EC95C07AEB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Adapters.FTPReceiveAdapter", "Vanrise.Integration.Adapters.FtpReceiveAdapter\Vanrise.Integration.Adapters.FTPReceiveAdapter.csproj", "{FB7F11A8-5A64-4C59-B72F-26EC95C07AEB}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
