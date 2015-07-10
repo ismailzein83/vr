@@ -53,6 +53,7 @@
     <Compile Include="ImportedDataTypes\DBReaderImportedData.cs" />
     <Compile Include="ImportedDataTypes\ExcelFileImportedData.cs" />
     <Compile Include="ImportedDataTypes\IImportedData.cs" />
+    <Compile Include="ImportedDataTypes\StreamReaderImportedData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ImportedDataTypes\TextImportedData.cs" />
   </ItemGroup>
