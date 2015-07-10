@@ -30,6 +30,7 @@ namespace Vanrise.Integration.Adapters.FtpReceiverAdapter
 
     public class FileReceiveAdapter : BaseReceiveAdapter
     {
+        #region Properties
         public string Extension { get; set; }
 
         public string Directory { get; set; }
@@ -47,68 +48,9 @@ namespace Vanrise.Integration.Adapters.FtpReceiverAdapter
         public Actions ActionAfterImport { get; set; }
 
         public ServerInfo ServerInfo { get; set; }
-
-        public override void ImportData(Action<IImportedData> receiveData)
-        {
-
-            if (AllowSSH)
-            {
-                var sftp = new Rebex.Net.Sftp();
-
-                EstablishConnection(sftp);
-                if (sftp.GetConnectionState().Connected)
-                {
-                    GetServerInfo(sftp);
-                    sftp.ChangeDirectory(Directory);
-                    SftpItemCollection currentItems = sftp.GetList();
-                    if (currentItems.Count > 0)
-                    {
-                        foreach (var fileObj in currentItems)
-                        {
-                            if (!fileObj.IsDirectory && fileObj.Name.ToUpper().Contains(Extension))
-                            {
-                                String filePath = Directory + "/" + fileObj.Name;
-                                CreateStreamReader(receiveData, sftp, fileObj, filePath);
-                                AfterImport(sftp, fileObj, filePath);
-                            }
-                        }
-                    }
-                    CloseConnection(sftp);
-                }
-            }
-            else
-            {
-                var ftp = new Rebex.Net.Ftp();
-
-                EstablishConnection(ftp);
-                if (ftp.GetConnectionState().Connected)
-                {
-                    GetServerInfo(ftp);
-                    ftp.ChangeDirectory(Directory);
-                    FtpList currentItems = ftp.GetList();
-                    if (currentItems.Count > 0)
-                    {
-                        foreach (var fileObj in currentItems)
-                        {
-                            if (!fileObj.IsDirectory && fileObj.Name.ToUpper().Contains(Extension))
-                            {
-                                String filePath = Directory + "/" + fileObj.Name;
-                                CreateStreamReader(receiveData, ftp, fileObj, filePath);
-                                AfterImport(ftp, fileObj, filePath);
-                            }
-                        }
-                    }
-                    CloseConnection(ftp);
-                }
-            }
-
-
-
-
-
-
-        }
-
+        # endregion 
+       
+        #region Private Functions
         private void GetServerInfo(Ftp ftp)
         {
             ServerInfo.ServerName = ftp.ServerName;
@@ -218,10 +160,68 @@ namespace Vanrise.Integration.Adapters.FtpReceiverAdapter
                 ftp.Rename(filePath, DirectorytoMoveFile + "/" + fileObj.Name);
             }
         }
+        #endregion
+
+        public override void ImportData(Action<IImportedData> receiveData)
+        {
+
+            if (AllowSSH)
+            {
+                var sftp = new Rebex.Net.Sftp();
+
+                EstablishConnection(sftp);
+                if (sftp.GetConnectionState().Connected)
+                {
+                    GetServerInfo(sftp);
+                    sftp.ChangeDirectory(Directory);
+                    SftpItemCollection currentItems = sftp.GetList();
+                    if (currentItems.Count > 0)
+                    {
+                        foreach (var fileObj in currentItems)
+                        {
+                            if (!fileObj.IsDirectory && fileObj.Name.ToUpper().Contains(Extension))
+                            {
+                                String filePath = Directory + "/" + fileObj.Name;
+                                CreateStreamReader(receiveData, sftp, fileObj, filePath);
+                                AfterImport(sftp, fileObj, filePath);
+                            }
+                        }
+                    }
+                    CloseConnection(sftp);
+                }
+            }
+            else
+            {
+                var ftp = new Rebex.Net.Ftp();
+
+                EstablishConnection(ftp);
+                if (ftp.GetConnectionState().Connected)
+                {
+                    GetServerInfo(ftp);
+                    ftp.ChangeDirectory(Directory);
+                    FtpList currentItems = ftp.GetList();
+                    if (currentItems.Count > 0)
+                    {
+                        foreach (var fileObj in currentItems)
+                        {
+                            if (!fileObj.IsDirectory && fileObj.Name.ToUpper().Contains(Extension))
+                            {
+                                String filePath = Directory + "/" + fileObj.Name;
+                                CreateStreamReader(receiveData, ftp, fileObj, filePath);
+                                AfterImport(ftp, fileObj, filePath);
+                            }
+                        }
+                    }
+                    CloseConnection(ftp);
+                }
+            }
 
 
 
 
+
+
+        }
 
     }
 }
