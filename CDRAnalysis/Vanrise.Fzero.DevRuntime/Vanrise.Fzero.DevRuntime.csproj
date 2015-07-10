@@ -123,6 +123,19 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.FileReceiveAdapter">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.FileReceiveAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Business">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Data.SQL">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Data.SQL.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Logging.SQL">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
     </Reference>
