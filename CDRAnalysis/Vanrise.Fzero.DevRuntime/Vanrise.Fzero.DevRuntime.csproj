@@ -66,6 +66,37 @@
     <Reference Include="protobuf-net">
       <HintPath>..\Dependencies\Libraries\protobuf-net.dll</HintPath>
     </Reference>
+    <Reference Include="Rebex.Net.Ftp">
+      <HintPath>..\Dependencies\Libraries\Rebex.Net.Ftp.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.ProxySocket, Version=2.0.3854.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dependencies\Libraries\Rebex.Net.ProxySocket.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.SecureSocket">
+      <HintPath>..\Dependencies\Libraries\Rebex.Net.SecureSocket.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.Sftp, Version=2.0.3854.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dependencies\Libraries\Rebex.Net.Sftp.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.Ssh, Version=2.0.3854.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dependencies\Libraries\Rebex.Net.Ssh.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.SshShell">
+      <HintPath>..\Dependencies\Libraries\Rebex.Net.SshShell.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.Telnet">
+      <HintPath>..\Dependencies\Libraries\Rebex.Net.Telnet.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Security, Version=1.5.3854.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dependencies\Libraries\Rebex.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.TerminalEmulation">
+      <HintPath>..\Dependencies\Libraries\Rebex.TerminalEmulation.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -123,8 +154,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.Adapters.FileReceiveAdapter">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.FileReceiveAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.FTPReceiveAdapter">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.FTPReceiveAdapter.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Integration.Business">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Business.dll</HintPath>
@@ -135,6 +173,9 @@
     </Reference>
     <Reference Include="Vanrise.Integration.Data.SQL">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Entities">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Logging.SQL">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
