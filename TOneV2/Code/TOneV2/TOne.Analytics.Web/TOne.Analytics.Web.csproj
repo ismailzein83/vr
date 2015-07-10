@@ -119,6 +119,7 @@
     <Compile Include="Controllers\AnalyticsController.cs" />
     <Compile Include="Controllers\BillingStatisticsController.cs" />
     <Compile Include="Controllers\CDRController.cs" />
+    <Compile Include="Controllers\VolumeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +131,8 @@
     <Content Include="Analytics\Constants\TrafficStatisticGroupKeysEnum.js" />
     <Content Include="Analytics\Constants\TrafficStatisticsMeasureEnum.js" />
     <Content Include="Analytics\Constants\VariationReportOptionsEnum.js" />
+    <Content Include="Analytics\Constants\VolumeReportsOptionsEnum.js" />
+    <Content Include="Analytics\Constants\VolumeReportsTimePeriodEnum.js" />
     <Content Include="Analytics\Services\APIServices\AnalyticsAPIService.js" />
     <Content Include="Analytics\Services\APIServices\BillingStatisticsAPIService.js" />
     <Content Include="Analytics\Services\APIServices\CDRAPIService.js" />
