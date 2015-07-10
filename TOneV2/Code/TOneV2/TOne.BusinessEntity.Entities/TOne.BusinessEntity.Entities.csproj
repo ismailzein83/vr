@@ -46,6 +46,7 @@
     <Compile Include="CarrierAccount.cs" />
     <Compile Include="CarrierAccountInfo.cs" />
     <Compile Include="CarrierInfo.cs" />
+    <Compile Include="CarrierProfile.cs" />
     <Compile Include="Code.cs" />
     <Compile Include="CodeGroupInfo.cs" />
     <Compile Include="FlaggedService.cs" />
