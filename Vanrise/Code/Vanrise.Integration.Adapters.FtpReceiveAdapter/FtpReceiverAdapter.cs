@@ -21,6 +21,13 @@ namespace Vanrise.Integration.Adapters.FtpReceiverAdapter
         public int ServerPort { get; set; }
     }
 
+    public enum Actions
+    {
+        Rename = 0,
+        Delete = 1,
+        Move = 2 // Move to Folder
+    }
+
     public class FileReceiveAdapter : BaseReceiveAdapter
     {
         public string Extension { get; set; }
@@ -38,13 +45,6 @@ namespace Vanrise.Integration.Adapters.FtpReceiverAdapter
         public string DirectorytoMoveFile { get; set; }
 
         public Actions ActionAfterImport { get; set; }
-
-        enum Actions
-        {
-            Rename = 0,
-            Delete = 1,
-            Move = 2 // Move to Folder
-        }
 
         public ServerInfo ServerInfo { get; set; }
 
