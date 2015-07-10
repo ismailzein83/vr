@@ -133,6 +133,7 @@
     <Content Include="Analytics\Services\APIServices\AnalyticsAPIService.js" />
     <Content Include="Analytics\Services\APIServices\BillingStatisticsAPIService.js" />
     <Content Include="Analytics\Services\APIServices\CDRAPIService.js" />
+    <Content Include="Analytics\Services\APIServices\VolumeReportsAPIService.js" />
     <Content Include="Analytics\Views\Billing Reports\BillingReports.html" />
     <Content Include="Analytics\Views\Billing Reports\BillingReportsController.js" />
     <Content Include="Analytics\Views\Billing Statistics\VariationReportsCustomersSuppliers.html" />
@@ -148,6 +149,8 @@
     <Content Include="Analytics\Views\Traffic Statistics\TrafficStatisticsGridController.js" />
     <Content Include="Analytics\Views\Traffic Statistics\ZoneMonitor.html" />
     <Content Include="Analytics\Views\Traffic Statistics\ZoneMonitorController.js" />
+    <Content Include="Analytics\Views\Volume Reports\VolumeReports.html" />
+    <Content Include="Analytics\Views\Volume Reports\VolumeReportsController.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
