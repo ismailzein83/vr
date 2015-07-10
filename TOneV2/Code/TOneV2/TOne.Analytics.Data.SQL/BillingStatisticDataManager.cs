@@ -478,7 +478,7 @@ namespace TOne.Analytics.Data.SQL
                 CarrierID = reader["CarrierID"] as string,
                 Attempts = GetReaderValue<int>(reader, "Attempts"),
                 DurationNet = GetReaderValue<decimal>(reader, "DurationNet"),
-                Duration = GetReaderValue<decimal>(reader, "DurationNet"),
+                Duration = GetReaderValue<decimal>(reader, "Duration"),
                 Net = GetReaderValue<double>(reader, "Net")
             };
 

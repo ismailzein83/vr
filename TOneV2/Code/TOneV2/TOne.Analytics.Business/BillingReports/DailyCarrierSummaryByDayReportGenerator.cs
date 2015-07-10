@@ -29,7 +29,7 @@ namespace TOne.Analytics.Business.BillingReports
             list.Add("Title", new RdlcParameter { Value = string.Format("{0} Summary", parameters.IsCost ? "Suppliers" : "Customers"), IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value = "[USD] United States Dollars", IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
-            list.Add("DigitRate", new RdlcParameter { Value = "2", IsVisible = true });
+            list.Add("DigitRate", new RdlcParameter { Value = "4", IsVisible = true });
 
             return list;
         }
