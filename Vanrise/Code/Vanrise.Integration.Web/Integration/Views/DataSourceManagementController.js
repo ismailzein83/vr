@@ -64,7 +64,8 @@ function DataSourceManagementController($scope, DataSourceAPIService, VRModalSer
         var modalSettings = {
         };
         var parameters = {
-            dataSourceId: dataSourceObj.DataSourceId
+            dataSourceId: dataSourceObj.DataSourceId,
+            taskId: dataSourceObj.TaskId
         };
 
         modalSettings.onScopeReady = function (modalScope) {

@@ -41,11 +41,7 @@ namespace Vanrise.Integration.Business
 
             this._classSettings.ClassDefinition = (new StringBuilder()).Append(@"
                 using System;
-                using System.Collections.Generic;
-                using System.Linq;
-                using System.Runtime.InteropServices;
-                using System.Drawing;
-                using System.IO;
+                using Vanrise.Integration.Entities;
 
                 namespace Vanrise.Integration.Business
                 {
@@ -70,14 +66,8 @@ namespace Vanrise.Integration.Business
             parameters.GenerateInMemory = true;
             parameters.IncludeDebugInformation = true;
             parameters.ReferencedAssemblies.Add("System.dll");
-            parameters.ReferencedAssemblies.Add("System.Data.dll");
-            parameters.ReferencedAssemblies.Add("System.Web.dll");
-            parameters.ReferencedAssemblies.Add(typeof(System.Linq.Enumerable).Assembly.Location);
-            parameters.ReferencedAssemblies.Add(typeof(System.IO.Stream).Assembly.Location);
-            parameters.ReferencedAssemblies.Add("System.Data.dll");
-            parameters.ReferencedAssemblies.Add("System.Drawing.dll");
-
-
+            parameters.ReferencedAssemblies.Add(typeof(IDataMapper).Assembly.Location);
+            parameters.ReferencedAssemblies.Add(typeof(Vanrise.Queueing.PersistentQueueItem).Assembly.Location);
 
             parameters.ReferencedAssemblies.Add(Assembly.GetCallingAssembly().Location);
             parameters.ReferencedAssemblies.Add(Assembly.GetExecutingAssembly().Location);
@@ -86,7 +76,7 @@ namespace Vanrise.Integration.Business
 
             if (results.Errors.Count == 0)
             {
-                Type generated = results.CompiledAssembly.GetType("TestConsole." + this._classSettings.ClassName);
+                Type generated = results.CompiledAssembly.GetType("Vanrise.Integration.Business." + this._classSettings.ClassName);
                 IDataMapper mapper = (IDataMapper)generated.GetConstructor(Type.EmptyTypes).Invoke(null);
                 result = mapper.MapData(data);
             }

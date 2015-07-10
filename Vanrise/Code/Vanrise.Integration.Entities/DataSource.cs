@@ -10,11 +10,11 @@ namespace Vanrise.Integration.Entities
     {
         public int DataSourceId { get; set; }
 
+        public string Name { get; set; }
+
         public int AdapterTypeId { get; set; }
 
         public int TaskId { get; set; }
-
-        public string AdapterName { get; set; }
 
         public DataSourceSettings Settings { get; set; }
     }

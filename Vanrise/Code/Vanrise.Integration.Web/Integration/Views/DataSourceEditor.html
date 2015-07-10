@@ -2,10 +2,18 @@
     <vr-modalbody width="'50%'" vr-loader="isGettingData">
         <vr-form name="formDataSourceEditor">
             <vr-choices selectedindex="0">
+                <vr-choice isselected="definitionSettignsSelected">Definition</vr-choice>
                 <vr-choice isselected="adapterSettignsSelected">Adapter</vr-choice>
                 <vr-choice isselected="mappperSettignsSelected">Mapper</vr-choice>
                 <vr-choice isselected="schedulerSettignsSelected">Scheduler</vr-choice>
             </vr-choices>
+            <div ng-show="definitionSettignsSelected">
+                <vr-row>
+                    <vr-column colmun="6">
+                        <vr-textbox value="dataSourceName" label="Data Source Name" isrequired></vr-textbox>
+                    </vr-column>
+                </vr-row>
+            </div>
             <div ng-show="adapterSettignsSelected">
                 <vr-row>
                     <vr-column colmun="6">

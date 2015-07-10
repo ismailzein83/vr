@@ -95,6 +95,7 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
 
         var dataSourceData = {
             DataSourceId: (dataSourceId != null) ? dataSourceId : 0,
+            Name: $scope.dataSourceName,
             AdapterTypeId: $scope.selectedAdapterType.AdapterTypeId,
             Settings: { Adapter: $scope.dataSourceAdapter.getData(), MapperCustomCode: $scope.customCode }
         };
@@ -107,7 +108,7 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
             TriggerTypeId: 1,
             TaskTrigger: $scope.schedulerTaskTrigger.getData(),
             ActionTypeId: 2,
-            TaskAction: { $type: "Vanrise.Integration.Extensions.DSSchedulerTaskAction, Vanrise.Integration.Extensions" }
+            TaskAction: { $type: "Vanrise.Integration.Business.DSSchedulerTaskAction, Vanrise.Integration.Business" }
         };
 
         return { DataSourceData: dataSourceData, TaskData: taskData };
@@ -115,6 +116,7 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
 
     function fillScopeFromDataSourceObj(dataSourceObject) {
         $scope.selectedAdapterType = UtilsService.getItemByVal($scope.adapterTypes, dataSourceObject.DataSourceData.AdapterTypeId, "AdapterTypeId");
+        $scope.dataSourceName = dataSourceObject.DataSourceData.Name;
         $scope.dataSourceAdapter.data = dataSourceObject.DataSourceData.Settings.Adapter;
         $scope.customCode = dataSourceObject.DataSourceData.Settings.MapperCustomCode;
         $scope.schedulerTaskTrigger.data = dataSourceObject.TaskData.TaskTrigger;

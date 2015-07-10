@@ -35,7 +35,7 @@ namespace Vanrise.Integration.Data.SQL
         {
             object dataSourceId;
 
-            int recordesEffected = ExecuteNonQuerySP("integration.sp_DataSource_Insert", out dataSourceId, dataSourceObject.AdapterTypeId, dataSourceObject.TaskId,
+            int recordesEffected = ExecuteNonQuerySP("integration.sp_DataSource_Insert", out dataSourceId, dataSourceObject.AdapterTypeId, dataSourceObject.Name, dataSourceObject.TaskId,
                 Common.Serializer.Serialize(dataSourceObject.Settings));
             insertedId = (int)dataSourceId;
             return (recordesEffected > 0);
@@ -43,7 +43,7 @@ namespace Vanrise.Integration.Data.SQL
 
         public bool UpdateDataSource(Entities.DataSource dataSourceObject)
         {
-            int recordesEffected = ExecuteNonQuerySP("integration.sp_DataSource_Update", dataSourceObject.DataSourceId, dataSourceObject.AdapterTypeId,
+            int recordesEffected = ExecuteNonQuerySP("integration.sp_DataSource_Update", dataSourceObject.DataSourceId, dataSourceObject.AdapterTypeId, dataSourceObject.Name,
                 Common.Serializer.Serialize(dataSourceObject.Settings));
             return (recordesEffected > 0);
         }
@@ -59,8 +59,8 @@ namespace Vanrise.Integration.Data.SQL
             Vanrise.Integration.Entities.DataSource dataSource = new Vanrise.Integration.Entities.DataSource
             {
                 DataSourceId = (int)reader["ID"],
+                Name = reader["Name"] as string,
                 AdapterTypeId = (int)reader["AdapterID"],
-                AdapterName = reader["AdapterName"] as string,
                 TaskId = (int)reader["TaskId"],
                 Settings = Common.Serializer.Deserialize<Vanrise.Integration.Entities.DataSourceSettings>(reader["Settings"] as string),
                
