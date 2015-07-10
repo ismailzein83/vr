@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Integration.Entities;
 
-namespace Vanrise.Integration.Adapters.FtpReceiverAdapter
+namespace Vanrise.Integration.Adapters.FTPReceiverAdapter
 {
 
     public class ServerInfo
@@ -28,7 +28,7 @@ namespace Vanrise.Integration.Adapters.FtpReceiverAdapter
         Move = 2 // Move to Folder
     }
 
-    public class FileReceiveAdapter : BaseReceiveAdapter
+    public class FTPReceiveAdapter : BaseReceiveAdapter
     {
         #region Properties
         public string Extension { get; set; }
