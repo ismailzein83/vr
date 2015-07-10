@@ -20,6 +20,20 @@ namespace Vanrise.Integration.Entities
 
     public class StreamReaderImportedData : IImportedData
     {
+
+        public DateTime Accessed { get; set; }
+
+        public DateTime Created { get; set; }
+
+        public DateTime Modified { get; set; }
+
+        public string Name { get; set; }
+
+        public long Size { get; set; }
+
+        public object Type { get; set; }
+
+
         public StreamReader StreamReader { get; set; }
 
         public string Description
