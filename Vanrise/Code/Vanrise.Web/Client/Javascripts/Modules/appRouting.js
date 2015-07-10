@@ -167,6 +167,9 @@ appRouting.config(['$routeProvider',
           when('/BusinessEntity/CarrierAccount Managments', {
               templateUrl: '/Client/Modules/BusinessEntity/Views/CarrierAccountManagement.html'
           }).
+          when('/NOC/VolumeReports', {
+              templateUrl: '/Client/Modules/Analytics/Views/Volume Reports/VolumeReports.html'
+          }).
         otherwise({
             redirectTo: '/default'
         });
