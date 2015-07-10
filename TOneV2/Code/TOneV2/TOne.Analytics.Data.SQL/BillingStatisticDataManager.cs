@@ -88,7 +88,7 @@ namespace TOne.Analytics.Data.SQL
             });
 
         }
-        public List<CarrierProfile> GetCarrierProfile(DateTime fromDate, DateTime toDate, string carrierAccountID, int TopDestinations, bool isSale, bool IsAmount)
+        public List<CarrierProfileReport> GetCarrierProfile(DateTime fromDate, DateTime toDate, string carrierAccountID, int TopDestinations, bool isSale, bool IsAmount)
         {
             int DaysInTillDays = DateTime.DaysInMonth(toDate.Year, toDate.Month);
 
@@ -301,9 +301,9 @@ namespace TOne.Analytics.Data.SQL
             }
             return instance;
         }
-        private CarrierProfile CarrierProfileMapper(IDataReader reader, bool IsAmount)
+        private CarrierProfileReport CarrierProfileMapper(IDataReader reader, bool IsAmount)
         {
-            CarrierProfile instance = new CarrierProfile
+            CarrierProfileReport instance = new CarrierProfileReport
             {
                 Zone = reader["Zone"] as string,
 

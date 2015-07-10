@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.Analytics.Entities
 {
-    public class CarrierProfile
+    public class CarrierProfileReport
     {
     
         public string Zone { get; set; }

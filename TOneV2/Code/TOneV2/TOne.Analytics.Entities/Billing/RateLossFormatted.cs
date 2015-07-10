@@ -27,6 +27,9 @@ namespace TOne.Analytics.Entities
         public double? SaleNet { get; set; }
         public string SaleNetFormatted { get; set; }
         public int SaleZoneID { get; set; }
+        public double Loss { get; set; }
         public string LossFormatted { get; set; }
+        public string LossPerFormatted { get; set; }
+        public string CarrierGroupsNames { get; set; }
     }
 }

@@ -419,6 +419,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Reports\Analytics\CarrierProfile.rdlc" />
+    <EmbeddedResource Include="Reports\Analytics\rdlCarrierDailyTrafficByDay.rdlc" />
     <EmbeddedResource Include="Reports\Analytics\rdlCarrierDetailedSummary.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>

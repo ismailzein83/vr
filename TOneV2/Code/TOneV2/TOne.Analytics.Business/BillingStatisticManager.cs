@@ -93,7 +93,7 @@ namespace TOne.Analytics.Business
             return _datamanager.GetMonthTraffic(fromDate, toDate, carrierAccountID, isSale);
         }
 
-        public List<CarrierProfile> GetCarrierProfile(DateTime fromDate, DateTime toDate, string carrierAccountID, int TopDestinations, bool isSale, bool IsAmount)
+        public List<CarrierProfileReport> GetCarrierProfile(DateTime fromDate, DateTime toDate, string carrierAccountID, int TopDestinations, bool isSale, bool IsAmount)
         {
             return _datamanager.GetCarrierProfile(fromDate, toDate, carrierAccountID, TopDestinations, isSale, IsAmount);
         }
@@ -319,14 +319,14 @@ namespace TOne.Analytics.Business
         }
         public List<RateLossFormatted> GetRateLoss(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? zoneId, int? customerAMUId, int? supplierAMUId)
         {
-
             return FormatRateLosses(_datamanager.GetRateLoss(fromDate, toDate, customerId, supplierId, zoneId, supplierAMUId, customerAMUId));
         }
 
         public List<CarrierSummaryFormatted> GetCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? customerAMUId, int? supplierAMUId)
         {
-
-            return FormatCarrierSummaries(_datamanager.GetCarrierSummary(fromDate, toDate, customerId, supplierId, supplierAMUId, customerAMUId));
+            List<CarrierSummaryFormatted> lstCarrierSummaryFormatted = FormatCarrierSummaries(_datamanager.GetCarrierSummary(fromDate, toDate, customerId, supplierId, supplierAMUId, customerAMUId));
+            lstCarrierSummaryFormatted = lstCarrierSummaryFormatted.OrderBy(x => x.Customer).ToList<CarrierSummaryFormatted>();
+            return lstCarrierSummaryFormatted;
         }
 
         public List<DetailedCarrierSummaryFormatted> GetDetailedCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? customerAMUId, int? supplierAMUId)
@@ -703,7 +703,6 @@ namespace TOne.Analytics.Business
             };
         }
 
-
         private CarrierLostFormatted FormatCarrierLost(CarrierLost carrierLost)
         {
 
@@ -731,11 +730,32 @@ namespace TOne.Analytics.Business
         private List<RateLossFormatted> FormatRateLosses(List<RateLoss> rateLosses)
         {
             List<RateLossFormatted> models = new List<RateLossFormatted>();
+            
+            Dictionary<string,CarrierAccount> carrierAccounts =  _cmanager.GetAllCarrierAccounts();
+
+            Dictionary<int, CarrierGroup> carrierGroups = _cmanager.GetAllCarrierGroups();
+
             if (rateLosses != null)
-                foreach (var z in rateLosses)
+                for(int j = 0; j < rateLosses.Count(); j++)
                 {
-                    models.Add(FormatRateLoss(z));
+                    if (carrierAccounts.ContainsKey(rateLosses[j].CustomerID))
+                    {
+                        CarrierAccount carrierAccount = carrierAccounts[rateLosses[j].CustomerID];
+
+                        if (carrierAccount.GroupIds != null)
+                            //for (int i = 0; i < carrierAccount.GroupIds.Count(); i++)
+                                if (carrierGroups.ContainsKey(carrierAccount.GroupIds[0]))
+                                {
+                                    CarrierGroup carrierGroup = carrierGroups[carrierAccount.GroupIds[0]];
+                                    //if (i == 0)
+                                        rateLosses[j].CarrierGroupsNames = carrierGroup.CarrierGroupName;
+                                    //else
+                                    //    rateLosses[j].CarrierGroupsNames = rateLosses[j].CarrierGroupsNames + ", " + carrierGroup.CarrierGroupName;
+                                }
+                    }
+                    models.Add(FormatRateLoss(rateLosses[j]));
                 }
+            models = models.OrderByDescending(x => x.Loss).ToList<RateLossFormatted>();
             return models;
         }
         private RateLossFormatted FormatRateLoss(RateLoss rateLoss)
@@ -749,20 +769,22 @@ namespace TOne.Analytics.Business
                SupplierID = rateLoss.SupplierID,
                Supplier = (rateLoss.SupplierID != null) ? _bemanager.GetCarrirAccountName(rateLoss.SupplierID) : null,
                SaleRate = rateLoss.SaleRate,
-               SaleRateFormatted = FormatNumber(rateLoss.SaleRate, 5),
+               SaleRateFormatted = FormatNumber(rateLoss.SaleRate, 4),
                CostRate = rateLoss.CostRate,
-               CostRateFormatted = FormatNumber(rateLoss.CostRate, 5),
+               CostRateFormatted = FormatNumber(rateLoss.CostRate, 4),
                CostDuration = rateLoss.CostDuration,
                CostDurationFormatted = FormatNumber(rateLoss.CostDuration),
                SaleDuration = rateLoss.SaleDuration,
                SaleDurationFormatted = FormatNumber(rateLoss.SaleDuration),
                CostNet = rateLoss.CostNet,
-               CostNetFormatted = FormatNumber(rateLoss.CostNet, 5),
+               CostNetFormatted = FormatNumber(rateLoss.CostNet, 4),
                SaleNet = rateLoss.SaleNet,
-               SaleNetFormatted = FormatNumber(rateLoss.SaleNet, 5),
+               SaleNetFormatted = FormatNumber(rateLoss.SaleNet, 4),
                SaleZoneID = rateLoss.SaleZoneID,
-               LossFormatted = FormatNumber(rateLoss.CostNet - rateLoss.SaleNet)
-
+               Loss = rateLoss.CostNet.Value - rateLoss.SaleNet.Value,
+               LossFormatted = FormatNumber(rateLoss.CostNet - rateLoss.SaleNet),
+               LossPerFormatted = FormatNumber(((rateLoss.CostNet - rateLoss.SaleNet) * 100)/rateLoss.CostNet),
+               CarrierGroupsNames = rateLoss.CarrierGroupsNames
            };
         }
         private string FormatNumber(Decimal? number, int precision)
@@ -932,7 +954,7 @@ namespace TOne.Analytics.Business
                 Duration = carrierSummaryDaily.Duration,
                 DurationFormatted = FormatNumber(carrierSummaryDaily.Duration),
                 Net = carrierSummaryDaily.Net,
-                NetFormatted = FormatNumber(carrierSummaryDaily.Net, 5)
+                NetFormatted = FormatNumber(carrierSummaryDaily.Net, 4)
 
             };
             if (isGroupeByday)
@@ -990,7 +1012,7 @@ namespace TOne.Analytics.Business
                 CostDuration = carrierSummary.CostDuration,
                 CostDurationFormatted = FormatNumber(carrierSummary.CostDuration),
                 CostNet = carrierSummary.CostNet,
-                CostNetFormatted = (carrierSummary.CostNet == 0.00) ? "0.00" : FormatNumber(carrierSummary.CostNet),
+                CostNetFormatted = (carrierSummary.CostNet == 0.00) ? "0.00" : FormatNumber(carrierSummary.CostNet, 4),
                 SaleNet = carrierSummary.SaleNet,
                 SaleNetFormatted = (carrierSummary.SaleNet == 0.00) ? "0.00" : FormatNumber(carrierSummary.SaleNet, 4),
                 CostCommissionValue = carrierSummary.CostCommissionValue,
@@ -1002,7 +1024,7 @@ namespace TOne.Analytics.Business
                 SaleExtraChargeValue = carrierSummary.SaleExtraChargeValue,
                 SaleExtraChargeValueFormatted = FormatNumber(Convert.ToDouble(Math.Abs(carrierSummary.SaleExtraChargeValue.Value))),
                 Profit = FormatNumber(carrierSummary.SaleNet - carrierSummary.CostNet),
-                AvgMin = (carrierSummary.SaleDuration.Value != 0 && carrierSummary.SaleDuration.Value != 0) ? FormatNumber((decimal)carrierSummary.SaleNet / carrierSummary.SaleDuration - (decimal)carrierSummary.CostNet / carrierSummary.SaleDuration) : "0.00"
+                AvgMin = (carrierSummary.SaleDuration.Value != 0 && carrierSummary.SaleDuration.Value != 0) ? FormatNumber((decimal)carrierSummary.SaleNet / carrierSummary.SaleDuration - (decimal)carrierSummary.CostNet / carrierSummary.SaleDuration, 4) : "0.00"
 
 
             };

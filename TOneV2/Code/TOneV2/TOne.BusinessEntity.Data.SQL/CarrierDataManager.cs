@@ -27,25 +27,6 @@ namespace TOne.BusinessEntity.Data.SQL
                 };
             }, carrierType.ToString());
         }
-        public List<CarrierAccount> GetAllCarriers()
-        {
-            return GetItemsSP("BEntity.SP_Carriers_GetAllCarriers", (reader) =>
-            {
-                return new CarrierAccount
-                {
-                    CarrierAccountId = reader["CarrierAccountId"] as string,
-                    ProfileId = (Int16)reader["ProfileId"],
-                    ProfileName = reader["ProfileName"] as string,
-                    ProfileCompanyName = reader["ProfileCompanyName"] as string,
-                    ActivationStatus = (byte)reader["ActivationStatus"],
-                    RoutingStatus = (byte)reader["RoutingStatus"],
-                    AccountType = (byte)reader["AccountType"],
-                    CustomerPaymentType = (byte)reader["CustomerPaymentType"],
-                    SupplierPaymentType = (byte)reader["SupplierPaymentType"],
-                    NameSuffix = reader["NameSuffix"] as string
-                };
-            });
-        }
 
         public string GetCarrierAccountName(string carrierAccountId)
         {
@@ -94,10 +75,12 @@ namespace TOne.BusinessEntity.Data.SQL
                         CustomerPaymentType = (byte)reader["CustomerPaymentType"],
                         SupplierPaymentType = (byte)reader["SupplierPaymentType"],
                         NameSuffix = reader["NameSuffix"] as string,
-                        CarrierGroupName = reader["CarrierGroupName"] as string
+                        CarrierGroupName = reader["CarrierGroupName"] as string,
+                        CarrierGroups = reader["CarrierGroups"] as string
                     };
                 }, carrierAccountId);
         }
+
         public int InsertCarrierTest(string carrierAccountID, string Name)
         {
 
@@ -113,6 +96,7 @@ namespace TOne.BusinessEntity.Data.SQL
                 carrierAccount.ProfileId,carrierAccount.ProfileName,carrierAccount.RoutingStatus,carrierAccount.SupplierPaymentType);
             return rowEffected;
         }
+
 
         #region Private Methods
 
@@ -140,5 +124,67 @@ namespace TOne.BusinessEntity.Data.SQL
         }
 
         #endregion
+
+        private List<int> SplitGroups(string CarrierGroups)
+        {
+            char[] seperator = { ',' };
+            List<int> lstcarrierGroups = new List<int>();
+            int carrierGroupId;
+
+            if (CarrierGroups == null || CarrierGroups == "") return null;
+            if (CarrierGroups.ToString().Split(seperator).Length == 0) return null;
+
+            foreach (string CarrierGroupID in CarrierGroups.ToString().Split(seperator))
+            {
+                carrierGroupId = int.Parse(CarrierGroupID);
+                lstcarrierGroups.Add(carrierGroupId);
+            }
+            return lstcarrierGroups;
+        }
+
+        Dictionary<string, CarrierAccount> ICarrierDataManager.GetAllCarrierAccounts()
+        {
+            Dictionary<string, CarrierAccount> dic = new Dictionary<string, CarrierAccount>();
+
+            ExecuteReaderSP("BEntity.SP_Carriers_GetAllCarriers", (reader) =>
+            {
+                while (reader.Read())
+                    dic.Add(reader["CarrierAccountId"] as string, new CarrierAccount
+                    {
+                        CarrierAccountId = reader["CarrierAccountId"] as string,
+                        ProfileId = (Int16)reader["ProfileId"],
+                        ProfileName = reader["ProfileName"] as string,
+                        ProfileCompanyName = reader["ProfileCompanyName"] as string,
+                        ActivationStatus = (byte)reader["ActivationStatus"],
+                        RoutingStatus = (byte)reader["RoutingStatus"],
+                        AccountType = (byte)reader["AccountType"],
+                        CustomerPaymentType = (byte)reader["CustomerPaymentType"],
+                        SupplierPaymentType = (byte)reader["SupplierPaymentType"],
+                        NameSuffix = reader["NameSuffix"] as string,
+                        GroupIds = SplitGroups(reader["CarrierGroups"] as string)
+                    });
+            });
+            return dic;
+        }
+
+        Dictionary<int, CarrierGroup> ICarrierDataManager.GetAllCarrierGroups()
+        {
+            Dictionary<int, CarrierGroup> dic = new Dictionary<int, CarrierGroup>();
+
+            ExecuteReaderSP("BEntity.sp_CarrierGroup_GetAllCarrierGroup", (reader) =>
+            {
+                while (reader.Read())
+                    dic.Add((int)reader["CarrierGroupID"], new CarrierGroup
+                    {
+                        CarrierGroupID = (int)reader["CarrierGroupID"],
+                        CarrierGroupName = reader["CarrierGroupName"] as string,
+                        ParentID =GetReaderValue<int?>(reader,"ParentID"),
+                        ParentPath = reader["ParentPath"] as string,
+                        Path = reader["Path"] as string
+                    });
+                
+            });
+            return dic;
+        }
     }
 }

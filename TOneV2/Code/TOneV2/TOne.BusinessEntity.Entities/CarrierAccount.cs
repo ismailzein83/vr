@@ -20,5 +20,7 @@ namespace TOne.BusinessEntity.Entities
         public string NameSuffix { get; set; }
         public int? CarrierGroupID { get; set; }
         public string CarrierGroupName { get; set; }
+        public string CarrierGroups { get; set; }
+        public List<int> GroupIds { get; set; }
     }
 }

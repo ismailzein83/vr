@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="CarrierAccount.cs" />
     <Compile Include="CarrierAccountInfo.cs" />
+    <Compile Include="CarrierGroup.cs" />
     <Compile Include="CarrierInfo.cs" />
     <Compile Include="CarrierProfile.cs" />
     <Compile Include="Code.cs" />
