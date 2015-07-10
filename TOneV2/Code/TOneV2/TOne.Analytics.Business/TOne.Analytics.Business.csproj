@@ -68,6 +68,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AnalyticsManager.cs" />
     <Compile Include="TrafficStatisticManager.cs" />
+    <Compile Include="VolumeReportsManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.Analytics.Data\TOne.Analytics.Data.csproj">

@@ -1,6 +1,7 @@
 ﻿VolumeReportsController.$inject = ['$scope', 'VolumeReportsAPIService', 'VolumeReportsTimePeriodEnum', 'VolumeReportsOptionsEnum', 'CarrierTypeEnum', 'CarrierAPIService', 'ZonesService'];
 function VolumeReportsController($scope, VolumeReportsAPIService, VolumeReportsTimePeriodEnum, VolumeReportsOptionsEnum, CarrierTypeEnum, CarrierAPIService, ZonesService) {
 
+    var chartAPI;
     defineScope();
     load();
 
@@ -22,21 +23,35 @@ function VolumeReportsController($scope, VolumeReportsAPIService, VolumeReportsT
         loadSuppliers();
         loadTimePeriods();
         loadVolumeReportsOptions();
-
+        
 
         $scope.data = [];
         $scope.chartData = [];
         $scope.filterObject = [];
 
-       
-
         $scope.onSearch = function () {
-            // return getVolumeReportsData();
-            alert('search clicked');
+             return getVolumeReportsData();         
         }
-        //$scope.chartReady = function (api) {
-        //    chartAPI = api;
-        //};
+        $scope.chartReady = function (api) {
+            chartAPI = api;
+        };
+    }
+    function buildFilter() {
+        var filter = {};
+        filter.CustomerIds = getFilterIds($scope.selectedCustomers, "CarrierAccountID");
+        filter.SupplierIds = getFilterIds($scope.selectedSuppliers, "CarrierAccountID");
+        filter.ZoneIds = getFilterIds($scope.selectedZones, "ZoneId");
+        return filter;
+    }
+
+    function getFilterIds(values, idProp) {
+        var filterIds = [];
+        if (values.length > 0) {
+            angular.forEach(values, function (val) {
+                filterIds.push(val[idProp]);
+            });
+        }
+        return filterIds;
     }
 
     function load() { }
@@ -69,9 +84,76 @@ function VolumeReportsController($scope, VolumeReportsAPIService, VolumeReportsT
         });
     }
     function getVolumeReportsData() {
+         $scope.isLoading = true;
+        var filter = buildFilter();
+        console.log(filter.CustomerIds);
+        console.log(filter.SupplierIds);
+        console.log(filter.ZoneIds);
+        return VolumeReportsAPIService.GetVolumeReportData($scope.fromDate, $scope.toDate, filter.CustomerIds, filter.SupplierIds, filter.ZoneIds, $scope.attempts, $scope.selectedTimePeriod.description).then(function (response) {
+            angular.forEach(response, function (item) {
+                var attempts = item.Attempts;
+                var Duration = item.Duration;
+                $scope.chartData.push(item);
+                console.log($scope.chartData);
+              });
+            console.log(response);
+            updateChart( $scope.chartData);
+
+        }).finally(function () {
+            $scope.isLoading = false;
+        });
+    }
 
 
+    function updateChart(chartData) {
 
+        //if ($scope.chartSaleCostProfitAPI == undefined)
+        //    return;
+
+        //if ($scope.chartProfitAPI == undefined)
+        //    return;
+        var fromDate = $scope.fromDate;
+        var toDate = $scope.toDate;
+        if (fromDate == undefined || toDate == undefined)
+            return;
+
+      //  $scope.chartData.length = 0;
+        $scope.isGettingData = true;
+       // var selectedTimeDimension = $scope.timeDimensionTypesOption.lastselectedvalue;
+       
+        var data = chartData;
+        var chartDefinition = {
+                    type: "column",
+                    //    title: "Cost/Sale/Profit",
+                    yAxisTitle: "Value"
+        };
+        var xAxisDefinition = { titlePath: "xValue" };
+         //       var xAxisDefinition = { titlePath: "dateTimeValue", groupNamePath: "dateTimeGroupValue" };
+                //var seriesDefinitions = [{
+                //    title: "PROFIT",
+                //    valuePath: "Values[2]",
+                //    type: "spline"
+                //}
+        //];
+        var seriesDefinitions = [];
+        for (var i = 0; i < data.length; i++) {
+            var dataItem = data[i];
+            seriesDefinitions.push({
+                title: dataItem.Name,
+                valuePath: "Values[" + i + "]",
+                type: "column"
+            });
+
+            for (var j = 1; j < data.length + 1; j++) {
+                chartData.Values[i] = dataItem.Values[j - 1];
+            }
+        }
+
+        
+                chartAPI.renderChart(chartData, chartDefinition, seriesDefinitions, xAxisDefinition);
+            
+                $scope.isGettingData = false;
+            
     }
    
 };

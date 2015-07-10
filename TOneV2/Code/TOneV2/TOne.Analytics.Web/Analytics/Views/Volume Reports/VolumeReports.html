@@ -23,6 +23,9 @@
                 <vr-columns width="normal">
                     <vr-select label="Zones: " datasource="searchZones" datatextfield="Name" datavaluefield="ZoneId" selectedvalues="selectedZones" entityname="Zones" isrequired ismultipleselection></vr-select>
                 </vr-columns>
+                <vr-columns colnum="2">
+                    <vr-textbox value="attempts" label="Attempts > " isrequired />
+                </vr-columns>
             </vr-row>
         </div>
     </vr-form>
@@ -32,5 +35,15 @@
                 <vr-button type="Search" formname="formFilter" data-onclick="onSearch"></vr-button>
             </div>
         </vr-actionbar>
+
+        <div vr-loader="isLoading" >
+            <vr-row>
+                <vr-columns colnum="12" simplecol>
+                    <!--<vr-section title={{selectedReportOption.description}}>-->
+                        <vr-chart data-on-ready="chartReady"></vr-chart>
+                    <!--</vr-section>-->
+                </vr-columns>
+            </vr-row>
+        </div>
     </vr-row>
 </vr-panel>

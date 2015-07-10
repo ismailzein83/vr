@@ -111,6 +111,7 @@
     <Compile Include="TrafficStatisticGroupSummary.cs" />
     <Compile Include="Mobile\TrafficSummaryView.cs" />
     <Compile Include="TrafficStatisticSummaryBigResult.cs" />
+    <Compile Include="VolumeTraffic.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.BusinessEntity.Entities\TOne.BusinessEntity.Entities.csproj">
