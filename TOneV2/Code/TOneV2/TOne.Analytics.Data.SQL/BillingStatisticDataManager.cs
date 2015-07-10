@@ -739,17 +739,24 @@ namespace TOne.Analytics.Data.SQL
 
                 case VariationReportOptions.TopDestinationAmount:
                     query.Replace("#NameColumn#", " Z.Name ");
-                    query.Replace("#ValueColumn#", " SUM(BS.Sale_Nets)/ISNULL(ERS.Rate,1) ");
-                    query.Replace("#IDColumn#", " Z.ZoneID ");
-                    query.Replace("#BSIDColumn#", "BS.SaleZoneID");
-                    query.Replace("#JoinStatement#", @" JOIN Zone Z With(Nolock) ON Z.ZoneID=BS.SaleZoneID ");
+                     query.Replace("#IDColumn#", " Z.ZoneID ");
+                        query.Replace("#BSIDColumn#", "BS.SaleZoneID");
+                        query.Replace("#JoinStatement#", @" JOIN Zone Z With(Nolock) ON Z.ZoneID=BS.SaleZoneID ");
+                        
+                    if (entityType == EntityType.none)
+                    {
+                        query.Replace("#ValueColumn#", " SUM(BS.Sale_Nets)/ISNULL(ERS.Rate,1) ");
+                       
+                    }
                     if (entityType == EntityType.Customer)
                     {
                         query.Replace("#additionalStatement#", " , BS.CustomerID");
+                        query.Replace("#ValueColumn#", " SUM( (Sale_Nets/ISNULL(ERS.Rate,1)) - (Cost_Nets/ISNULL(ERC.Rate,1)) ) ");
                     }
                     else if (entityType == EntityType.Supplier)
                     {
                         query.Replace("#additionalStatement#", " , BS.SupplierID");
+                        query.Replace("#ValueColumn#", " SUM(BS.Sale_Nets)/ISNULL(ERS.Rate,1) ");
                     }
                     query.Replace("#WhereStatement#", @" ");
                     break;
@@ -758,9 +765,27 @@ namespace TOne.Analytics.Data.SQL
                     query.Replace("#NameColumn#", " cpc.Name ");
                     query.Replace("#ValueColumn#", " SUM( (Sale_Nets/ISNULL(ERS.Rate,1)) - (Cost_Nets/ISNULL(ERC.Rate,1)) ) ");
                     query.Replace("#IDColumn#", " cac.CarrierAccountID ");
-                    query.Replace("#BSIDColumn#", " BS.CustomerID ");
-                    query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
+                    if (entityType == EntityType.none)
+                    {
+                        query.Replace("#BSIDColumn#", " BS.CustomerID ");
+                        query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
                                                         JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
+                    }
+                    else
+                    {
+                        if (groupingBy == GroupingBy.Customers)
+                        {
+                            query.Replace("#BSIDColumn#", " BS.CustomerID ");
+                            query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
+                                                        JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
+                        }
+                        if (groupingBy == GroupingBy.Suppliers)
+                        {
+                            query.Replace("#BSIDColumn#", " BS.SupplierID ");
+                            query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.SupplierID
+                                                        JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
+                        }
+                    }
                     query.Replace("#WhereStatement#", @" ");
                     break;
 
