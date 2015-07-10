@@ -11,6 +11,7 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, BIVisu
             $scope.filter = {
                 WidgetID: parameters.Id,
                 WidgetName: parameters.Name,
+                Title:parameters.Title,
                 selectedWidget: parameters.WidgetDefinitionId,
                 Setting: parameters.Setting
             }
@@ -26,6 +27,7 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, BIVisu
         $scope.selectedWidget;
         $scope.widgetName;
         $scope.widget;
+        $scope.widgetTitle;
         $scope.subViewConnector = {};
         $scope.close = function () {
             $scope.modalContext.closeModal()
@@ -67,6 +69,7 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, BIVisu
             $scope.widget = {
                 WidgetDefinitionId: $scope.selectedWidget.ID,
                 Name: $scope.widgetName,
+                Title: $scope.widgetTitle,
                 Setting: widgetSetting,
             };
             $scope.widget.onElementReady = function (api) {
@@ -124,7 +127,8 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, BIVisu
     }
 
     function loadEditModeData() {
-         $scope.widgetName = $scope.filter.WidgetName;
+        $scope.widgetName = $scope.filter.WidgetName;
+        $scope.widgetTitle = $scope.filter.Title;
             for (var i = 0; i < $scope.widgets.length; i++) {
                 var widget = $scope.widgets[i];
                 if (widget.ID == $scope.filter.selectedWidget) {

@@ -8,8 +8,10 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
         scope: {
             onReady: '=',
             settings: '=',
+            title: '=',
             filter: '=',
             previewmode: '@',
+           
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -37,7 +39,7 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
     };
     function getBIChartTemplate(previewmode) {
         if (previewmode!='true') {
-            return '<vr-section title="{{ctrl.settings.Title}}"><div ng-if="!ctrl.isAllowed"  ng-class="\'{{ctrl.class}}\'"  >  ' +
+            return '<vr-section title="{{ctrl.title}}"><div ng-if="!ctrl.isAllowed"  ng-class="\'{{ctrl.class}}\'"  >  ' +
                '<div style="padding-top:115px;" > <div class="alert alert-danger ng-scope" role="alert" style=""> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> You Don\'t Have Permission To See This Widget..!!</div> </div>' +
                 '</div><div ng-if="!ctrl.isAllowed && ctrl.chart"> <img src="/Client/Images/chartpermission.jpg" width="100%"/></div><div ng-if="ctrl.isAllowed"><vr-chart on-ready="ctrl.onChartReady" menuactions="ctrl.chartMenuActions"></vr-chart></div></vr-section>';
         }
@@ -58,7 +60,7 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
                 case "MeasuresGroupedByTime": ctrl.class = "chartpermission"; break;
             }
 
-            console.log(settings);
+           
         }
         function initializeController() {
             UtilsService.waitMultipleAsyncOperations([loadMeasures, loadEntities])

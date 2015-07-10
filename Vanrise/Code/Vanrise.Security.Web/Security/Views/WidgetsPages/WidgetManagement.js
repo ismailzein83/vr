@@ -1,6 +1,6 @@
 ﻿'use strict'
-WidgetManagementController.$inject = ['$scope', 'UtilsService', 'WidgetAPIService', 'VRModalService', 'VRNotificationService'];
-function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRModalService, VRNotificationService) {
+WidgetManagementController.$inject = ['$scope', 'UtilsService', 'WidgetAPIService', 'VRModalService', 'VRNotificationService','DeleteOperationResultEnum'];
+function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRModalService, VRNotificationService, DeleteOperationResultEnum) {
     var mainGridAPI;
     defineScope();
     load();
@@ -16,6 +16,11 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
                 clicked: function (dataItem) {
                  updateWidget(dataItem);
                 }
+        }, {
+            name: "Delete",
+            clicked: function (dataItem) {
+                deleteWidget(dataItem);
+            }
         }];
 
         $scope.mainGridPagerSettings = {
@@ -50,7 +55,27 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
         }
 
     }
+    function deleteWidget(dataItem) {
+        var message = "Do you want to delete " + dataItem.Name;
+        VRNotificationService.showConfirmation(message).then(function (response) {
+            if (response == true) {
+                return WidgetAPIService.DeleteWidget(dataItem.Id).then(function (responseObject) {
+                    if (responseObject.Result == DeleteOperationResultEnum.Succeeded.value)
+                        mainGridAPI.itemDeleted(dataItem);
+                    VRNotificationService.notifyOnItemDeleted("Widget", responseObject);
+                    $scope.isGettingData = false;
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                }).finally(function () {
+                    
+                   
+                });
+            }
 
+        });
+
+
+    }
     function addNewWidget() {
         var settings = {};
         settings.onScopeReady = function (modalScope) {

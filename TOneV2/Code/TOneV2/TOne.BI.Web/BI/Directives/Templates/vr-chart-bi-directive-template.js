@@ -15,7 +15,6 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum,BICha
         $scope.toDate = "2015-04-30";
         $scope.selectedEntityType ;
         $scope.selectedTopMeasure;
-        $scope.widgetTitle;
         $scope.definitionTypes = [];
         $scope.selectedDefinitionType;
         $scope.selectedMeasureTypes = [];
@@ -54,7 +53,6 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum,BICha
             MeasureTypes: measureTypes,
             TopMeasure: topMeasure,
             DefinitionType: $scope.selectedDefinitionType.value,
-            Title: $scope.widgetTitle
         };
     }
     function setSubViewValue(settings) {
@@ -83,7 +81,7 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum,BICha
                 if($scope.operationTypes[i].value==settings.OperationType)
                     $scope.selectedOperationType=$scope.operationTypes[i];
         }
-        $scope.widgetTitle = settings.Title;
+
 
     }
     function defineTimeDimensionTypes() {

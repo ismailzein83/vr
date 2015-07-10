@@ -17,16 +17,15 @@ function WidgetPreviewController($scope, BITimeDimensionTypeEnum) {
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };
-       
+        $scope.widget = $scope.$parent.widget;
         $scope.onElementReady = function (api) {
             widgetAPI = api;
             updateDashboard();
         };
-        $scope.widget = $scope.$parent.widget;
+       
         $scope.Search = function () {
                 updateDashboard();
         };
-     
     }
 
     function defineTimeDimensionTypes() {

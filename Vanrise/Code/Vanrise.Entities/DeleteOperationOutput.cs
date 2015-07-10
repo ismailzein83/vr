@@ -10,6 +10,6 @@ namespace Vanrise.Entities
     public class DeleteOperationOutput<T>
     {
         public DeleteOperationResult Result { get; set; }
-
+        public string Message { get; set; }
     }
 }

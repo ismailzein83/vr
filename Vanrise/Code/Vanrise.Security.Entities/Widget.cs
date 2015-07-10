@@ -11,6 +11,7 @@ namespace Vanrise.Security.Entities
         public int Id { get; set;}
         public int WidgetDefinitionId { get; set; }
         public string Name { get; set; }
+        public string Title { get; set; }
         public WidgetSetting Setting { get; set; }
     }
     public class WidgetDetails
@@ -19,6 +20,7 @@ namespace Vanrise.Security.Entities
         public int WidgetDefinitionId { get; set; }
         public string WidgetDefinitionName { get; set; }
         public string Name { get; set; }
+        public string Title { get; set; }
         public string DirectiveName { get; set; }
         public WidgetDefinitionSetting WidgetDefinitionSetting { get; set; }
         public WidgetSetting Setting { get; set; }

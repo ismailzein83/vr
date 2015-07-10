@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Web; 
 using System.Web.Http;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
@@ -44,6 +44,12 @@ namespace Vanrise.Security.Web.Controllers
          {
              WidgetsManager manager = new WidgetsManager();
              return manager.GetFilteredWidgets(filter);
+         }
+         [HttpGet]
+         public Vanrise.Entities.DeleteOperationOutput<WidgetDetails> DeleteWidget(int widgetId)
+         {
+             WidgetsManager manager = new WidgetsManager();
+             return manager.DeleteWidget(widgetId);
          }
     }
 }

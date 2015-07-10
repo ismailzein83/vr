@@ -5,7 +5,8 @@
         SaveWidget: SaveWidget,
         GetAllWidgets: GetAllWidgets,
         UpdateWidget: UpdateWidget,
-        GetFilteredWidgets: GetFilteredWidgets
+        GetFilteredWidgets: GetFilteredWidgets,
+        DeleteWidget: DeleteWidget
     });
 
     function GetWidgetsDefinition() {
@@ -24,6 +25,11 @@
     {
         return BaseAPIService.get("/api/Widgets/GetFilteredWidgets", {
             filter: filter
+        });
+    }
+    function DeleteWidget(widgetId) {
+        return BaseAPIService.get("/api/Widgets/DeleteWidget", {
+            widgetId: widgetId
         });
     }
    

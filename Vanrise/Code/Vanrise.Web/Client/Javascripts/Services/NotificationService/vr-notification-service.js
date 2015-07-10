@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.service('VRNotificationService', function (VRModalService, VRNavigationService, InsertOperationResultEnum, UpdateOperationResultEnum, $q, notify, $location) {
+app.service('VRNotificationService', function (VRModalService, VRNavigationService, InsertOperationResultEnum, UpdateOperationResultEnum, DeleteOperationResultEnum,$q, notify, $location) {
 
     return ({
         showConfirmation: showConfirmation,
@@ -11,7 +11,8 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
         notifyException: notifyException,
         notifyExceptionWithClose: notifyExceptionWithClose,
         notifyOnItemAdded: notifyOnItemAdded,
-        notifyOnItemUpdated: notifyOnItemUpdated
+        notifyOnItemUpdated: notifyOnItemUpdated,
+        notifyOnItemDeleted: notifyOnItemDeleted
     });
 
     function showConfirmation(message) {
@@ -81,7 +82,7 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
             case InsertOperationResultEnum.Succeeded.value: showSuccess(itemType + " added successfully");
                 return true;
                 break;
-            case InsertOperationResultEnum.Failed.value: console.log(insertOperationOutput.Message);
+            case InsertOperationResultEnum.Failed.value:
                 if (insertOperationOutput.Message != undefined) {
                     showError(insertOperationOutput.Message); break;
                 }
@@ -99,7 +100,22 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
         }
         return false;
     }
-
+    function notifyOnItemDeleted(itemType, deleteOperationOutput) {//updateOperationOutput is of type UpdateOperationOutput
+        switch (deleteOperationOutput.Result) {
+            case DeleteOperationResultEnum.Succeeded.value: showSuccess(itemType + " deleted successfully");
+                return true;
+                break;
+            case DeleteOperationResultEnum.Failed.value:
+                if (deleteOperationOutput.Message != null) {
+                    showError(deleteOperationOutput.Message); break;
+                }
+                else {
+                    showError("Failed to update " + itemType); break;
+                }
+               
+        }
+        return false;
+    }
     function notifyOnItemUpdated(itemType, updateOperationOutput) {//updateOperationOutput is of type UpdateOperationOutput
         switch (updateOperationOutput.Result) {
             case UpdateOperationResultEnum.Succeeded.value: showSuccess(itemType + " updated successfully");

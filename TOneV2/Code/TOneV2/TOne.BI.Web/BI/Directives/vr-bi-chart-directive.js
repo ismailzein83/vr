@@ -10,7 +10,8 @@ app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEleme
             settings: '=',
             timedimensiontype: '=',
             fromdate: '=',
-            todate: '='
+            todate: '=',
+           
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;

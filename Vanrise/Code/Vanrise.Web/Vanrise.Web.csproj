@@ -138,6 +138,7 @@
     <Content Include="Client\Images\login.png" />
     <Content Include="Client\Images\logoonheader.png" />
     <Content Include="Client\Javascripts\Constants\DaysOfWeekEnum.js" />
+    <Content Include="Client\Javascripts\Constants\DeleteOperationResultEnum.js" />
     <Content Include="Client\Javascripts\Constants\InsertOperationResultEnum.js" />
     <Content Include="Client\Javascripts\Constants\LabelColorsEnum.js" />
     <Content Include="Client\Javascripts\Constants\MenuItemTypeEnum.js" />

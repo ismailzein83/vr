@@ -22,6 +22,7 @@ namespace Vanrise.Security.Data.SQL
             {
                 ID = (int)reader["ID"],
                 Name = reader["Name"] as string,
+
                 DirectiveName = reader["DirectiveName"] as string,
                 Setting = Vanrise.Common.Serializer.Deserialize<WidgetDefinitionSetting>(reader["Setting"] as string)
             };
@@ -33,7 +34,7 @@ namespace Vanrise.Security.Data.SQL
             if (widget.Setting != null)
                 serialziedSetting = Common.Serializer.Serialize(widget.Setting);
             object widgetId;
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_Widget_Insert", out widgetId,widget.WidgetDefinitionId, widget.Name, serialziedSetting);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Widget_Insert", out widgetId,widget.WidgetDefinitionId, widget.Name,widget.Title, serialziedSetting);
             insertedId = (recordesEffected > 0) ? (int)widgetId : -1;
 
             return (recordesEffected > 0);
@@ -44,7 +45,12 @@ namespace Vanrise.Security.Data.SQL
             string serialziedSetting = null;
             if (widget.Setting != null)
                 serialziedSetting = Common.Serializer.Serialize(widget.Setting);
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_Widget_Update", widget.Id, widget.WidgetDefinitionId, widget.Name, serialziedSetting);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Widget_Update", widget.Id, widget.WidgetDefinitionId, widget.Name,widget.Title, serialziedSetting);
+            return (recordesEffected > 0);
+        }
+        public bool DeleteWidget(int widgetId)
+        {
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Widget_Delete", widgetId);
             return (recordesEffected > 0);
         }
         public List<WidgetDetails> GetAllWidgets()
@@ -58,6 +64,7 @@ namespace Vanrise.Security.Data.SQL
             {
                 Id = (int)reader["Id"],
                 Name = reader["WidgetName"] as string,
+                Title = reader["Title"] as string,
                 WidgetDefinitionId = GetReaderValue<int>(reader, "WidgetDefinitionId"),
                 WidgetDefinitionName = reader["WidgetDefinitionName"] as string,
                 DirectiveName = reader["DirectiveName"] as string,

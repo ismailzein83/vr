@@ -18,6 +18,7 @@ namespace Vanrise.Security.Data
 
             List<WidgetDetails> GetFilteredWidgets(string filter);
              int CheckWidgetSetting(WidgetSetting setting);
+             bool DeleteWidget(int widgetId);
         }
     
 }

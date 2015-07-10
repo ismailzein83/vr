@@ -28,7 +28,7 @@ namespace Vanrise.Security.Business
             int checkSetting = dataManager.CheckWidgetSetting(widget.Setting);
             if (checkSetting == 1)
             {
-                insertOperationOutput.Message="Same widget settings exist !!";
+                insertOperationOutput.Message = "Widget with same  settings exist !!";
                 return insertOperationOutput;
             }
 
@@ -69,6 +69,46 @@ namespace Vanrise.Security.Business
             }
 
             return updateOperationOutput;
+
+        }
+
+        public Vanrise.Entities.DeleteOperationOutput<WidgetDetails> DeleteWidget(int widgetId)
+        {
+            DeleteOperationOutput<WidgetDetails> deleteOperationOutput = new DeleteOperationOutput<WidgetDetails>();
+
+            deleteOperationOutput.Result = DeleteOperationResult.Failed;
+            IViewDataManager viewdataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
+
+            List<View> dynamicViews=viewdataManager.GetDynamicPages();
+            foreach (View dynamicView in dynamicViews)
+            {
+                foreach (Content bodyContent in dynamicView.ViewContent.BodyContents)
+                {
+                    if (bodyContent.WidgetId == widgetId)
+                    {
+                        deleteOperationOutput.Message="This Widget is used in dynamic pages!!";
+                        return deleteOperationOutput;
+                    }
+                }
+                foreach (Content summaryContent in dynamicView.ViewContent.SummaryContents)
+                {
+                    if (summaryContent.WidgetId == widgetId)
+                    {
+                        deleteOperationOutput.Message = "This Widget is used in dynamic pages!!";
+                        return deleteOperationOutput;
+                    }
+                }
+                
+            }
+            IWidgetsDataManager widgetdataManager = SecurityDataManagerFactory.GetDataManager<IWidgetsDataManager>();
+            bool deleteActionSucc = widgetdataManager.DeleteWidget(widgetId);
+
+            if (deleteActionSucc)
+            {
+                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+            }
+
+            return deleteOperationOutput;
 
         }
         public List<WidgetDetails> GetAllWidgets()

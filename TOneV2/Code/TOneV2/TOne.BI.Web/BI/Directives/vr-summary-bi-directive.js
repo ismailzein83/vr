@@ -7,6 +7,7 @@ app.directive('vrSummaryBi', ['UtilsService','BIConfigurationAPIService', 'BIDat
             onReady: '=',
             settings: '=',
             filter: '=',
+            title: '=',
             previewmode: '@'
         },
         controller: function ($scope, $element, $attrs) {

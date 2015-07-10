@@ -9,6 +9,7 @@ app.directive('vrDatagridBi', ['UtilsService','BIDataAPIService', 'BIUtilitiesSe
             onReady: '=',
             settings: '=',
             filter: '=',
+            title: '=',
             previewmode: '@'
         },
         controller: function ($scope, $element, $attrs) {
