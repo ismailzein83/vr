@@ -158,6 +158,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.BaseTP">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.BaseTP.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.Adapters.FileReceiveAdapter">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.FileReceiveAdapter.dll</HintPath>
     </Reference>

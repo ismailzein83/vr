@@ -12,10 +12,11 @@ using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
 using Vanrise.Fzero.FraudAnalysis.Data.MySQL;
-using Vanrise.Integration.Adapters.FtpReceiverAdapter;
+using Vanrise.Integration.Adapters.FTPReceiveAdapter;
 using Vanrise.Integration.Entities;
 using Vanrise.Integration.Data;
 using System.Globalization;
+using Vanrise.Integration.Adapters.BaseTP;
 
 
 namespace Vanrise.Fzero.DevRuntime.Tasks
@@ -26,9 +27,8 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
         {
             Console.WriteLine("Walid Task started");
 
-            var adapter = new FileReceiveAdapter();
-            adapter.ActionAfterImport = Actions.Rename;
-            adapter.AllowSSH = true;
+            var adapter = new FTPReceiveAdapter();
+            adapter.ActionAfterImport = TPReceiveAdapter.Actions.Rename;
             adapter.Directory = "/var/mysql/5.5/data";
             adapter.Extension = ".DAT";
             adapter.Password = "P@ssw0rd";
