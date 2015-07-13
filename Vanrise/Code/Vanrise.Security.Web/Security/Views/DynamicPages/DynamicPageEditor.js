@@ -1,6 +1,6 @@
-﻿DynamicPageEditorController.$inject = ['$scope', 'MenuAPIService', 'WidgetAPIService', 'RoleAPIService', 'UsersAPIService', 'ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService','WidgetSectionEnum','BIPeriodEnum','BITimeDimensionTypeEnum'];
+﻿DynamicPageEditorController.$inject = ['$scope', 'MenuAPIService', 'WidgetAPIService', 'RoleAPIService', 'UsersAPIService', 'ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WidgetSectionEnum', 'PeriodEnum', 'TimeDimensionTypeEnum', 'ColumnWidthEnum'];
 
-function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, RoleAPIService, UsersAPIService, ViewAPIService, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, BIPeriodEnum, BITimeDimensionTypeEnum) {
+function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, RoleAPIService, UsersAPIService, ViewAPIService, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, PeriodEnum, TimeDimensionTypeEnum, ColumnWidthEnum) {
     loadParameters();
     defineScope();
     load();
@@ -84,8 +84,8 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         $scope.onSectionChanged = function () {
 
             switch ($scope.selectedSection.value) {
-                case WidgetSectionEnum.Summary.value: $scope.widgets = $scope.summaryWidgets; $scope.selectedColumnWidth = $scope.columnWidth[3]; break;
-                case WidgetSectionEnum.Body.value: $scope.widgets = $scope.bodyWidgets; $scope.selectedColumnWidth = $scope.columnWidth[1]; break;
+                case WidgetSectionEnum.Summary.value: $scope.widgets = $scope.summaryWidgets; $scope.columnWidth = $scope.summaryColumnWidth; $scope.selectedColumnWidth = $scope.columnWidth[0]; break;
+                case WidgetSectionEnum.Body.value: $scope.widgets = $scope.bodyWidgets; $scope.columnWidth = $scope.bodyColumnWidth; $scope.selectedColumnWidth = $scope.columnWidth[0]; break;
             }
             $scope.selectedWidget = null;
         }
@@ -125,8 +125,8 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
     }
     function definePeriods() {
         $scope.periods = [];
-        for (var p in BIPeriodEnum)
-            $scope.periods.push(BIPeriodEnum[p]);
+        for (var p in PeriodEnum)
+            $scope.periods.push(PeriodEnum[p]);
         $scope.selectedPeriod = $scope.periods[0];
 
 
@@ -134,11 +134,11 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
 
     function defineTimeDimensionTypes() {
         $scope.timeDimensionTypes = [];
-        for (var td in BITimeDimensionTypeEnum)
-            $scope.timeDimensionTypes.push(BITimeDimensionTypeEnum[td]);
+        for (var td in TimeDimensionTypeEnum)
+            $scope.timeDimensionTypes.push(TimeDimensionTypeEnum[td]);
 
         $scope.selectedTimeDimensionType = $.grep($scope.timeDimensionTypes, function (t) {
-            return t == BITimeDimensionTypeEnum.Daily;
+            return t == TimeDimensionTypeEnum.Daily;
         })[0];
     }
     function saveView() {
@@ -260,7 +260,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             
             var bodyContent = $scope.filter.BodyContents[i];
             var value = UtilsService.getItemByVal($scope.bodyWidgets, bodyContent.WidgetId, 'Id');
-            console.log(bodyContent);
+         
             if (value != null)
             {
                 var viewWidget = {
@@ -327,26 +327,17 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
     }
 
     function defineColumnWidth() {
-        $scope.columnWidth = [
-            {
-                value: "12",
-                description: "Full Row"
-            },
-            {
-                value: "6",
-                description: "Half Row"
-            },
-            {
-                value: "4",
-                description: "1/3 Row"
-            },
-            {
-                value: "2",
-                description: "Quarter Row"
-            }
-        ];
+        $scope.columnWidth = [];
+        for (var td in ColumnWidthEnum)
+            $scope.columnWidth.push(ColumnWidthEnum[td]);
 
-        $scope.selectedColumnWidth = $scope.columnWidth[3];
+        $scope.summaryColumnWidth = $scope.columnWidth;
+        $scope.bodyColumnWidth = [];
+        for (var i = 0; i < $scope.columnWidth.length; i++) {
+            if ($scope.columnWidth[i].value != ColumnWidthEnum.QuarterRow.value)
+             $scope.bodyColumnWidth.push($scope.columnWidth[i])
+        }
+        $scope.selectedColumnWidth = $scope.columnWidth[0];
     }
 
     function loadUsers() {

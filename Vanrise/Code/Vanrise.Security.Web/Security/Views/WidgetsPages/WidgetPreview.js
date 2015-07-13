@@ -42,7 +42,7 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum) {
     }
 
     function getPeriod(periodType) {
-        console.log(periodType);
+       
         switch (periodType.value) {
             case PeriodEnum.LastYear.value: return getLastYearInterval();
             case PeriodEnum.LastMonth.value: return getLastMonthInterval();
@@ -65,7 +65,6 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum) {
     function getCurrentWeekInterval() {
         var thisWeek = new Date(new Date().getTime() - 60 * 60 * 24 * 1000)
         var day = thisWeek.getDay();
-        console.log(day);
         var LastMonday;
         if (day === 0) {
             LastMonday = new Date();
@@ -150,7 +149,6 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum) {
         for (var p in PeriodEnum)
             $scope.periods.push(PeriodEnum[p]);
         $scope.selectedPeriod = $scope.periods[0];
-       // console.log($scope.selectedPeriod);
     }
     
     function load() {
