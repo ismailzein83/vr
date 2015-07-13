@@ -1,8 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Data.SqlClient;
-using Vanrise.Integration.Entities;
 using Vanrise.Integration.Adapters.BaseDB;
+using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.Adapters.MSQLReceiveAdapter
 {

@@ -33,5 +33,7 @@ namespace Vanrise.Integration.Adapters.BaseTP
         public Actions ActionAfterImport { get; set; }
 
         # endregion 
+
+
     }
 }
