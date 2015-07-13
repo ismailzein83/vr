@@ -57,7 +57,7 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
                 });
             }
             else
-            loadData();
+                loadDynamicViews();
                 
         }
     }
@@ -133,7 +133,6 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
     }
    
     function fillNeededData(itm) {
-        console.log(itm);
         itm.ViewContent.DefaultPeriodDescription = UtilsService.getItemByVal($scope.periods, itm.ViewContent.DefaultPeriod, 'value').description;
         itm.ViewContent.DefaultGroupingDescription = UtilsService.getItemByVal($scope.timeDimensionTypes, itm.ViewContent.DefaultGrouping, 'value').description;
         if (itm.Audience!=null) {
@@ -167,7 +166,6 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
                 GroupsName: 'null',
             }
         }
-        console.log(itm);
         return itm;
     }
     function definePeriods() {

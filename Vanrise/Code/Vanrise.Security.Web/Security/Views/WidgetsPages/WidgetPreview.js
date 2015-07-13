@@ -1,6 +1,6 @@
-﻿WidgetPreviewController.$inject = ['$scope', 'BITimeDimensionTypeEnum','BIPeriodEnum'];
+﻿WidgetPreviewController.$inject = ['$scope', 'TimeDimensionTypeEnum','PeriodEnum'];
 
-function WidgetPreviewController($scope, BITimeDimensionTypeEnum, BIPeriodEnum) {
+function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum) {
     var widgetAPI;
     defineScope();
     load();
@@ -44,14 +44,14 @@ function WidgetPreviewController($scope, BITimeDimensionTypeEnum, BIPeriodEnum) 
     function getPeriod(periodType) {
         console.log(periodType);
         switch (periodType.value) {
-            case BIPeriodEnum.LastYear.value: return getLastYearInterval();
-            case BIPeriodEnum.LastMonth.value: return getLastMonthInterval();
-            case BIPeriodEnum.LastWeek.value: return getLastWeekInterval();
-            case BIPeriodEnum.Yesterday.value: return getYesterdayInterval();
-            case BIPeriodEnum.Today.value: return getTodayInterval();
-            case BIPeriodEnum.CurrentWeek.value: return getCurrentWeekInterval();
-            case BIPeriodEnum.CurrentMonth.value: return getCurrentMonthInterval();
-            case BIPeriodEnum.CurrentYear.value: return getCurrentYearInterval();
+            case PeriodEnum.LastYear.value: return getLastYearInterval();
+            case PeriodEnum.LastMonth.value: return getLastMonthInterval();
+            case PeriodEnum.LastWeek.value: return getLastWeekInterval();
+            case PeriodEnum.Yesterday.value: return getYesterdayInterval();
+            case PeriodEnum.Today.value: return getTodayInterval();
+            case PeriodEnum.CurrentWeek.value: return getCurrentWeekInterval();
+            case PeriodEnum.CurrentMonth.value: return getCurrentMonthInterval();
+            case PeriodEnum.CurrentYear.value: return getCurrentYearInterval();
         }
     }
     function getCurrentYearInterval() {
@@ -138,17 +138,17 @@ function WidgetPreviewController($scope, BITimeDimensionTypeEnum, BIPeriodEnum) 
     }
     function defineTimeDimensionTypes() {
         $scope.timeDimensionTypes = [];
-        for (var td in BITimeDimensionTypeEnum)
-            $scope.timeDimensionTypes.push(BITimeDimensionTypeEnum[td]);
+        for (var td in TimeDimensionTypeEnum)
+            $scope.timeDimensionTypes.push(TimeDimensionTypeEnum[td]);
 
         $scope.selectedTimeDimensionType = $.grep($scope.timeDimensionTypes, function (t) {
-            return t == BITimeDimensionTypeEnum.Daily;
+            return t == TimeDimensionTypeEnum.Daily;
         })[0];
     }
     function definePeriods() {
         $scope.periods = [];
-        for (var p in BIPeriodEnum)
-            $scope.periods.push(BIPeriodEnum[p]);
+        for (var p in PeriodEnum)
+            $scope.periods.push(PeriodEnum[p]);
         $scope.selectedPeriod = $scope.periods[0];
        // console.log($scope.selectedPeriod);
     }

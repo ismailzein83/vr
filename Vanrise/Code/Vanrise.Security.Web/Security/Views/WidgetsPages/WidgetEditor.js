@@ -1,6 +1,6 @@
-﻿WidgetEditorController.$inject = ['$scope', 'WidgetAPIService', 'MenuAPIService', 'BIVisualElementService1', 'BIConfigurationAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿WidgetEditorController.$inject = ['$scope', 'WidgetAPIService', 'MenuAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, BIVisualElementService1, BIConfigurationAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
+function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
     loadParameters();
     defineScope();
     load();
