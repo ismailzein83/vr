@@ -20,9 +20,10 @@ function WidgetPreviewController($scope, BITimeDimensionTypeEnum, BIPeriodEnum) 
             $scope.modalContext.closeModal()
         };
         $scope.widget = $scope.$parent.widget;
+        $scope.widget.SectionTitle = $scope.widget.Name;
         $scope.onElementReady = function (api) {
             widgetAPI = api;
-            updateDashboard();
+            widgetAPI.retrieveData($scope.filter);
         };
        
         $scope.Search = function () {
@@ -158,15 +159,7 @@ function WidgetPreviewController($scope, BITimeDimensionTypeEnum, BIPeriodEnum) 
         
     }
 
-    function updateDashboard() {
-        if (widgetAPI == undefined)
-            return;
-        $scope.isGettingData = true;
-        return widgetAPI.retrieveData()
-            .finally(function () {
-                $scope.isGettingData = false;
-            });
-    }
+   
 
 }
 appControllers.controller('Security_WidgetPreviewController', WidgetPreviewController);
