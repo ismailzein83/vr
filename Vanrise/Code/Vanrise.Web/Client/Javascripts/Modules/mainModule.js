@@ -2,7 +2,7 @@
 
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
-.controller('mainCtrl', function mainCtrl($scope, $rootScope, MenuAPIService, PermissionAPIService, notify, $animate, $cookies, $timeout, MenuItemTypeEnum, UtilsService) {
+.controller('mainCtrl', function mainCtrl($scope, $rootScope, MenuAPIService, PermissionAPIService, notify, $animate, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService) {
     
     var cookieUserToken = $cookies['TOne_LoginTokenCookie'];
 
@@ -54,19 +54,25 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         }, 200);
 
     }
-    $(window).resize(function () {
-        var w = window.innerWidth;
-        if (w >= 1200)
-            $scope.toogled = true;
-        else
-            $scope.toogled = false;
-    });
+ 
+    $scope.openSupportModal = function () {
+
+        var modalSettings = {
+        };
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.title = "TOne Support";
+           
+        };
+        VRModalService.showModal('/Client/Modules/Common/Views/Support.html', null, modalSettings);
+    }
+   
+
+
     $scope.menuItemsCurrent = null;
     $scope.setIndex = function (item, e) {
         var $this = angular.element(e.currentTarget);
          
         if ($scope.menuItemsCurrent != null && $scope.menuItemsCurrent.Id == item.Id) {
-           // $($this).parent().find('.panel-body').first().stop(true, true).slideUp(500);
             $scope.menuItemsCurrent = null;
 
         }
