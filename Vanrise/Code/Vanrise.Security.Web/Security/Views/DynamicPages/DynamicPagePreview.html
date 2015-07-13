@@ -31,7 +31,7 @@
             <vr-row ng-if="summaryWidgets.length>0">
                     <div class="list-group">
                         <vr-columns ng-repeat="summaryWidget in summaryWidgets" colnum="{{summaryWidget.NumberOfColumns}}">
-                            <vr-directivewrapper directive="summaryWidget.Setting.Directive" title="summaryWidget.Title"  on-ready="summaryWidget.onElementReady" settings="summaryWidget.Setting.Settings"
+                            <vr-directivewrapper directive="summaryWidget.Setting.Directive" title="summaryWidget.SectionTitle" on-ready="summaryWidget.onElementReady" settings="summaryWidget.Setting.Settings"
                                                  retrievedataonload="true" filter="filter"></vr-directivewrapper>
                         </vr-columns>
                     </div>
@@ -39,7 +39,7 @@
             <vr-row ng-if="bodyWidgets.length>0">
                 <div class="list-group " >
                     <vr-columns ng-repeat="bodyWidget in bodyWidgets" colnum="{{bodyWidget.NumberOfColumns}}">
-                        <vr-directivewrapper directive="bodyWidget.Setting.Directive" title="bodyWidget.Title"  on-ready="bodyWidget.onElementReady" settings="bodyWidget.Setting.Settings"
+                        <vr-directivewrapper directive="bodyWidget.Setting.Directive" title="bodyWidget.SectionTitle" on-ready="bodyWidget.onElementReady" settings="bodyWidget.Setting.Settings"
                                              retrievedataonload="true" filter="filter"></vr-directivewrapper>
                     </vr-columns>
                 </div>

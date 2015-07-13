@@ -41,7 +41,7 @@ app.directive('vrSummaryBi', ['UtilsService','BIConfigurationAPIService', 'BIDat
 
     function getSummaryTemplate(previewmode) {
         if (previewmode != 'true') {
-            return '<vr-section title="{{ctrl.title}}"><div ng-if="!ctrl.isAllowed"  class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> You Don\'t Have Permission To See This Widget..!!</div><div ng-if="ctrl.isAllowed"><div width="normal"><table class="table  table-striped" ><tr ng-repeat="value in ctrl.dataSource" ><td><vr-label isValue="{{value.description.DisplayName}}">{{value.description.DisplayName}}</vr-label></td><td><vr-label isValue="{{value.value}}">{{value.value}}</vr-label></td></tr></table></div></div></vr-section>';
+            return '<vr-section title="{{ctrl.title}}"><div ng-if="!ctrl.isAllowed"  class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> You Don\'t Have Permission To See This Widget..!!</div><div ng-if="ctrl.isAllowed" vr-loader="ctrl.isGettingData"><div width="normal"><table class="table  table-striped" ><tr ng-repeat="value in ctrl.dataSource" ><td><vr-label isValue="{{value.description.DisplayName}}">{{value.description.DisplayName}}</vr-label></td><td><vr-label isValue="{{value.value}}">{{value.value}}</vr-label></td></tr></table></div></div></vr-section>';
         }
         else
             return '<div><table class="table  table-striped" ><tr ng-repeat="value in ctrl.measureTypes" ><td><vr-label isValue="{{value}}">{{value.DisplayName}}</vr-label></td></tr></table>';
@@ -69,8 +69,8 @@ app.directive('vrSummaryBi', ['UtilsService','BIConfigurationAPIService', 'BIDat
                ctrl.measureTypes = measures;
 
 
-               if (retrieveDataOnLoad)
-                   retrieveData();
+               //if (retrieveDataOnLoad)
+               //    retrieveData();
                ctrl.measureTypes = measures;
                ctrl.dataSource = [];
 
@@ -94,10 +94,11 @@ app.directive('vrSummaryBi', ['UtilsService','BIConfigurationAPIService', 'BIDat
                 ctrl.onReady(api);
         }
 
-        function retrieveData() {
+        function retrieveData(filter) {
             if (!ctrl.isAllowed)
                 return;
-            return BIDataAPIService.GetMeasureValues1(ctrl.filter.fromDate, ctrl.filter.toDate, settings.MeasureTypes)
+            ctrl.isGettingData = true;
+            return BIDataAPIService.GetMeasureValues1(filter.fromDate, filter.toDate, settings.MeasureTypes)
                         .then(function (response) {
                           
                             for (var i = 0; i < response.length; i++) {
@@ -108,6 +109,8 @@ app.directive('vrSummaryBi', ['UtilsService','BIConfigurationAPIService', 'BIDat
                             }
                            
                            
+                        }).finally(function () {
+                            ctrl.isGettingData = false;
                         });
         }
         function loadMeasures() {

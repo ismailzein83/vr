@@ -8,8 +8,8 @@ namespace Vanrise.Security.Entities
 {
     public class ViewContent
     {
-        public List<Content> SummaryContents { get; set; }
-        public List<Content> BodyContents { get; set; }
+        public List<ViewContentItem> SummaryContents { get; set; }
+        public List<ViewContentItem> BodyContents { get; set; }
         public int DefaultGrouping { get; set; }
         public int DefaultPeriod { get; set; }
     }

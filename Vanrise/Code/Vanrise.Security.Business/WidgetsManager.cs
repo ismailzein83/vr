@@ -82,7 +82,7 @@ namespace Vanrise.Security.Business
             List<View> dynamicViews=viewdataManager.GetDynamicPages();
             foreach (View dynamicView in dynamicViews)
             {
-                foreach (Content bodyContent in dynamicView.ViewContent.BodyContents)
+                foreach (ViewContentItem bodyContent in dynamicView.ViewContent.BodyContents)
                 {
                     if (bodyContent.WidgetId == widgetId)
                     {
@@ -90,7 +90,7 @@ namespace Vanrise.Security.Business
                         return deleteOperationOutput;
                     }
                 }
-                foreach (Content summaryContent in dynamicView.ViewContent.SummaryContents)
+                foreach (ViewContentItem summaryContent in dynamicView.ViewContent.SummaryContents)
                 {
                     if (summaryContent.WidgetId == widgetId)
                     {
