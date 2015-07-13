@@ -37,7 +37,7 @@ namespace Vanrise.Security.Web.Controllers
             return manager.GetView(viewId);
         }
         [HttpGet]
-        public Vanrise.Entities.UpdateOperationOutput<object> DeleteView(int viewId)
+        public Vanrise.Entities.DeleteOperationOutput<object> DeleteView(int viewId)
         {
             ViewManager manager = new ViewManager();
             return manager.DeleteView(viewId);
@@ -48,9 +48,5 @@ namespace Vanrise.Security.Web.Controllers
             ViewManager manager = new ViewManager();
             return manager.GetFilteredDynamicViews(filter);
         }
-
-         
-
-
     }
 }

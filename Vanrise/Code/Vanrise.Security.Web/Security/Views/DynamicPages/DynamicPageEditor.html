@@ -9,8 +9,23 @@
             <div ng-show="settingSelected">
                 <vr-row>
                     <vr-columns width="1/3row">
-                        <vr-textbox value="pageName" label="Page Name" isrequired></vr-textbox>
+                        <vr-section title="Page Setting">
+                            <vr-row removeLine>
+                                <vr-textbox value="pageName" label="Page Name" isrequired></vr-textbox>
+                            </vr-row>
+                            <vr-row>
+                                <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Default Period"
+                                           selectedvalues="selectedPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
+
+                            </vr-row>
+                            <vr-row>
+                                <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Default Grouping"
+                                           selectedvalues="selectedTimeDimensionType" isrequired hidefilterbox></vr-select>
+
+                            </vr-row>
+                        </vr-section>
                     </vr-columns>
+
                     <vr-columns width="1/3row">
                         <vr-section title="Menu Location">
                             <div data-tree-id="beTree"
@@ -24,19 +39,19 @@
                     </vr-columns>
                     <vr-columns width="1/3row">
                         <vr-section title="Audiences">
-                            <vr-columns width="fullrow">
+                            <vr-row removeline>
                                 <vr-select ismultipleselection label="Users" datasource="users" selectedvalues="selectedUsers" datatextfield="Name" datavaluefield="UserId"
                                            entityname="Users">
                                 </vr-select>
-                            </vr-columns>
-                            <vr-columns width="fullrow">
+                            </vr-row>
+                            <vr-row width="fullrow">
                                 <vr-select ismultipleselection label="Groups" datasource="roles" selectedvalues="selectedRoles" datatextfield="Name" datavaluefield="RoleId"
                                            entityname="Roles">
                                 </vr-select>
-                            </vr-columns>
+                            </vr-row>
                         </vr-section>
                     </vr-columns>
-                </vr-row>
+                </vr-columns>
             </div>
             <div ng-show="designSelected">
                 <vr-form name="formDesigningSelectionModel">
@@ -52,10 +67,12 @@
                         <vr-columns width="normal">
                             <vr-select datasource="columnWidth" datatextfield="description" datavaluefield="value" label="Row Space" selectedvalues="selectedColumnWidth" isrequired hidefilterbox></vr-select>
                         </vr-columns>
+                      
                         <vr-columns width="small" vr-disabled="selectedWidget==undefined">
                             <vr-label></vr-label>
                             <vr-button type="Add" formname="formDesigningSelectionModel" data-onclick="addViewContent" standalone></vr-button>
                         </vr-columns>
+                       
                     </vr-row>
                     <vr-row>
                         <div ng-include="selectedWidget.Setting.DirectiveTemplateURL"></div>

@@ -1,6 +1,6 @@
-﻿DynamicPagePreviewController.$inject = ['$scope', 'ViewAPIService', 'WidgetAPIService', 'BITimeDimensionTypeEnum', 'UtilsService', 'VRNotificationService', 'VRNavigationService','WidgetSectionEnum'];
+﻿DynamicPagePreviewController.$inject = ['$scope', 'ViewAPIService', 'WidgetAPIService', 'BITimeDimensionTypeEnum', 'UtilsService', 'VRNotificationService', 'VRNavigationService','WidgetSectionEnum','BIPeriodEnum'];
 
-function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, BITimeDimensionTypeEnum, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum) {
+function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, BITimeDimensionTypeEnum, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, BIPeriodEnum) {
     var viewId;
     loadParameters();
     defineScope();
@@ -13,6 +13,10 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
     }
 
     function defineScope() {
+        definePeriods();
+        var date;
+        $scope.fromDate;
+        $scope.toDate;
         $scope.allWidgets = [];
         $scope.viewContent = [];
 
@@ -21,8 +25,11 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         $scope.summaryWidgets = [];
         $scope.bodyWidgets = [];
         $scope.viewWidgets = [];
-        $scope.fromDate = "2015-04-01";
-        $scope.toDate = "2015-04-30";
+        $scope.periodSelectionChanged = function () {
+            var date = getPeriod($scope.selectedPeriod.value);
+            $scope.fromDate = date.from;
+            $scope.toDate = date.to;
+        }
         defineTimeDimensionTypes();
         $scope.filter = {
             timeDimensionType: $scope.selectedTimeDimensionType,
@@ -41,8 +48,9 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
                 getData();
             }    
         };
+        fillDateAndPeriod();
         getData();
-        
+
     }
 
     function defineTimeDimensionTypes() {
@@ -56,10 +64,15 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
     }
 
     function load() {
+       
         $scope.isGettingData = false;
 
     }
-    
+    function fillDateAndPeriod(){
+        date = getPeriod($scope.selectedPeriod.value);
+        $scope.fromDate = date.from;
+        $scope.toDate = date.to;
+    }
     function updateDashboard() {
         $scope.filter = {
             timeDimensionType: $scope.selectedTimeDimensionType,
@@ -87,12 +100,15 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             $scope.isGettingData = true;
             UtilsService.waitMultipleAsyncOperations([loadAllWidgets, loadViewByID])
                  .finally(function () {
+                     
                      loadViewWidgets($scope.allWidgets, $scope.bodyContents, $scope.summaryContents);
                      $scope.isGettingData = false;
                  });
         }
         else {
             $scope.isGettingData = true;
+            $scope.selectedPeriod = $scope.$parent.selectedPeriod;
+            $scope.selectedTimeDimensionType = $scope.$parent.selectedTimeDimensionType;
             UtilsService.waitMultipleAsyncOperations([loadAllWidgets])
                 .finally(function () {
                     loadViewWidgets($scope.allWidgets, $scope.$parent.bodyContents, $scope.$parent.summaryContents);
@@ -103,6 +119,12 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
     }
 
     function loadViewWidgets(allWidgets, BodyContents, SummaryContents) {
+
+        $scope.filter = {
+            timeDimensionType: $scope.selectedTimeDimensionType,
+            fromDate: $scope.fromDate,
+            toDate: $scope.toDate
+        }
         for (var i = 0; i < BodyContents.length; i++) {
             var bodyContent = BodyContents[i];
             var value = UtilsService.getItemByVal(allWidgets, bodyContent.WidgetId, 'Id');
@@ -133,7 +155,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             bodyWidget.API = api;
         };
         $scope.bodyWidgets.push(bodyWidget);
-        console.log($scope.bodyWidgets);
+       // console.log($scope.bodyWidgets);
     }
     function addSummaryWidget(summaryWidget) {
         summaryWidget.onElementReady = function (api) {
@@ -153,14 +175,112 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
 
     function loadViewByID() {
         return ViewAPIService.GetView(viewId).then(function (response) {
-         
             $scope.summaryContents = response.ViewContent.SummaryContents;
-         
             $scope.bodyContents = response.ViewContent.BodyContents;
-            
-           
+            $scope.selectedPeriod = UtilsService.getItemByVal($scope.periods, response.ViewContent.DefaultPeriod, 'value');
+            $scope.selectedTimeDimensionType = UtilsService.getItemByVal($scope.timeDimensionTypes, response.ViewContent.DefaultGrouping, 'value');
         });
     }
 
+    function getPeriod(periodType) {
+        switch (periodType) {
+            case BIPeriodEnum.LastYear.value: return getLastYearInterval();
+            case BIPeriodEnum.LastMonth.value: return getLastMonthInterval();
+            case BIPeriodEnum.LastWeek.value: return getLastWeekInterval();
+            case BIPeriodEnum.Yesterday.value: return getYesterdayInterval();
+            case BIPeriodEnum.Today.value: return getTodayInterval();
+            case BIPeriodEnum.CurrentWeek.value: return getCurrentWeekInterval();
+            case BIPeriodEnum.CurrentMonth.value: return getCurrentMonthInterval();
+            case BIPeriodEnum.CurrentYear.value: return getCurrentYearInterval();
+        }
+    }
+    function getCurrentYearInterval() {
+        var date = new Date();
+        var interval = {
+            from: new Date(date.getFullYear(), 0, 1),
+            to: new Date(),
+        }
+        return interval;
+    }
+    function getCurrentWeekInterval() {
+        var thisWeek = new Date(new Date().getTime() - 60 * 60 * 24 * 1000)
+        var day = thisWeek.getDay();
+        //console.log(day);
+        var LastMonday;
+        if (day === 0) {
+            LastMonday = new Date();
+        }
+        else {
+            var diffToMonday = thisWeek.getDate() - day + (day === 0 ? -6 : 1);
+            var LastMonday = new Date(thisWeek.setDate(diffToMonday));
+        }
+
+
+        var interval = {
+            from: LastMonday,
+            to: new Date(),
+        }
+        return interval;
+    }
+    function getLastWeekInterval() {
+        var beforeOneWeek = new Date(new Date().getTime() - 60 * 60 * 24 * 7 * 1000)
+        var day = beforeOneWeek.getDay();
+
+        var diffToMonday = beforeOneWeek.getDate() - day + (day === 0 ? -6 : 1);
+        var beforeLastMonday = new Date(beforeOneWeek.setDate(diffToMonday));
+        var lastSunday = new Date(beforeOneWeek.setDate(diffToMonday + 6));
+        var interval = {
+            from: beforeLastMonday,
+            to: lastSunday,
+        }
+        return interval;
+    }
+    function getCurrentMonthInterval() {
+        var date = new Date();
+        var interval = {
+            from: new Date(date.getFullYear(), date.getMonth(), 1),
+            to: new Date(),
+        }
+        return interval;
+    }
+    function getTodayInterval() {
+        var date = new Date();
+        var interval = {
+            from: date,
+            to: date
+        }
+        return interval;
+    }
+    function getYesterdayInterval() {
+        var date = new Date();
+        date.setDate(date.getDate() - 1);
+        var interval = {
+            from: date,
+            to: date,
+        }
+        return interval;
+    }
+    function getLastMonthInterval() {
+        var date = new Date();
+        var interval = {
+            from: new Date(date.getFullYear(), date.getMonth() - 1, 1),
+            to: new Date(date.getFullYear(), date.getMonth(), 0),
+        }
+        return interval;
+    }
+    function getLastYearInterval() {
+        var date = new Date();
+        var interval = {
+            from: new Date(date.getFullYear() - 1, 0, 1),
+            to: new Date(date.getFullYear() - 1, 11, 31)
+        }
+        return interval;
+    }
+    function definePeriods() {
+        $scope.periods = [];
+        for (var p in BIPeriodEnum)
+            $scope.periods.push(BIPeriodEnum[p]);
+        $scope.selectedPeriod = $scope.periods[0];
+    }
 }
 appControllers.controller('Security_DynamicPagePreviewController', DynamicPagePreviewController);

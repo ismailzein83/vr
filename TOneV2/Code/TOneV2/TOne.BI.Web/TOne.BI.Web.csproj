@@ -126,6 +126,7 @@
     <Content Include="BI\Constants\BIChartDefinitionTypeEnum.js" />
     <Content Include="BI\Constants\BIEntityTypeEnum.js" />
     <Content Include="BI\Constants\BIMeasureTypeEnum.js" />
+    <Content Include="BI\Constants\BIPeriodEnum.js" />
     <Content Include="BI\Constants\BITimeDimensionTypeEnum.js" />
     <Content Include="BI\Directives\Images\bichartpermission.png" />
     <Content Include="BI\Directives\Images\chartpermission.png" />

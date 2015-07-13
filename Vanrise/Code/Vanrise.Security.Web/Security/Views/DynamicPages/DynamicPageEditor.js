@@ -1,6 +1,6 @@
-﻿DynamicPageEditorController.$inject = ['$scope', 'MenuAPIService', 'WidgetAPIService', 'RoleAPIService', 'UsersAPIService', 'ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService','WidgetSectionEnum'];
+﻿DynamicPageEditorController.$inject = ['$scope', 'MenuAPIService', 'WidgetAPIService', 'RoleAPIService', 'UsersAPIService', 'ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService','WidgetSectionEnum','BIPeriodEnum','BITimeDimensionTypeEnum'];
 
-function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, RoleAPIService, UsersAPIService, ViewAPIService, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum) {
+function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, RoleAPIService, UsersAPIService, ViewAPIService, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, BIPeriodEnum, BITimeDimensionTypeEnum) {
     loadParameters();
     defineScope();
     load();
@@ -14,7 +14,9 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
                 Audience: parameters.Audience,
                 ViewId: parameters.ViewId,
                 BodyContents: parameters.ViewContent.BodyContents,
-                SummaryContents: parameters.ViewContent.SummaryContents
+                SummaryContents: parameters.ViewContent.SummaryContents,
+                DefaultPeriod: parameters.ViewContent.DefaultPeriod,
+                DefaultGrouping: parameters.ViewContent.DefaultGrouping
             }
             $scope.isEditMode = true;
         }
@@ -23,6 +25,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
     }
 
     function defineScope() {
+
         $scope.widgets = [];
         $scope.selectedWidget;
         $scope.users = [];
@@ -100,15 +103,15 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         };
         $scope.itemsSortable = { handle: '.handeldrag', animation: 150 };
         $scope.removeViewContent = function (viewContent) {
-            switch ($scope.selectedSection.value) {
-                case WidgetSectionEnum.Summary.value: $scope.addedSummaryWidgets.splice($scope.addedSummaryWidgets.indexOf(viewContent), 1);
-                  //  $scope.summaryContents.splice($scope.summaryContents.indexOf(viewContent), 1);
-                    $scope.widgets.push(viewContent.Widget); break;
-                case WidgetSectionEnum.Body.value: $scope.addedBodyWidgets.splice($scope.addedBodyWidgets.indexOf(viewContent), 1);
-                   // $scope.bodyContents.splice($scope.bodyContents.indexOf(viewContent), 1);
-                    $scope.widgets.push(viewContent.Widget); break;
+            var sections=viewContent.Widget.WidgetDefinitionSetting.Sections;
+            for (var i = 0; i < sections.length; i++) {
+                switch (sections[i]) {
+                    case WidgetSectionEnum.Summary.value: $scope.addedSummaryWidgets.splice($scope.addedSummaryWidgets.indexOf(viewContent), 1); 
+                        $scope.summaryWidgets.push(viewContent.Widget); break;
+                    case WidgetSectionEnum.Body.value: $scope.addedBodyWidgets.splice($scope.addedBodyWidgets.indexOf(viewContent), 1);
+                        $scope.bodyWidgets.push(viewContent.Widget); break;
+                }
             }
-            
 
         };
         $scope.$watch('beTree.currentNode', function (newObj, oldObj) {
@@ -117,10 +120,27 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             }
         }, false);
     }
+    function definePeriods() {
+        $scope.periods = [];
+        for (var p in BIPeriodEnum)
+            $scope.periods.push(BIPeriodEnum[p]);
+        $scope.selectedPeriod = $scope.periods[0];
 
+        // console.log($scope.selectedPeriod);
+    }
+
+    function defineTimeDimensionTypes() {
+        $scope.timeDimensionTypes = [];
+        for (var td in BITimeDimensionTypeEnum)
+            $scope.timeDimensionTypes.push(BITimeDimensionTypeEnum[td]);
+
+        $scope.selectedTimeDimensionType = $.grep($scope.timeDimensionTypes, function (t) {
+            return t == BITimeDimensionTypeEnum.Daily;
+        })[0];
+    }
     function saveView() {
         return ViewAPIService.SaveView($scope.View).then(function (response) {
-            if (VRNotificationService.notifyOnItemAdded("Page", response)) {
+            if (VRNotificationService.notifyOnItemAdded("View", response)) {
                 if ($scope.onPageAdded != undefined)
                     $scope.onPageAdded(response.InsertedObject);
                 $scope.modalContext.closeModal();
@@ -178,7 +198,9 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         
         var ViewContent = {
             SummaryContents: $scope.summaryContents,
-            BodyContents: $scope.bodyContents
+            BodyContents: $scope.bodyContents,
+            DefaultPeriod: $scope.selectedPeriod.value,
+            DefaultGrouping: $scope.selectedTimeDimensionType.value
         }
         $scope.View = {
             Name: $scope.pageName,
@@ -191,6 +213,8 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
     }
 
     function load() {
+        definePeriods();
+        defineTimeDimensionTypes();
         defineColumnWidth();
         defineWidgetSections();
         $scope.isGettingData = true;
@@ -237,6 +261,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
                     Widget: value,
                     NumberOfColumns: bodyContent.NumberOfColumns
                 }
+
                 $scope.addedBodyWidgets.push(viewWidget);
                 $scope.bodyWidgets.splice($scope.bodyWidgets.indexOf(value), 1);
             }
@@ -251,12 +276,21 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
                     Widget: value,
                     NumberOfColumns: summaryContent.NumberOfColumns
                 }
+               
                 $scope.addedSummaryWidgets.push(viewWidget);
                 $scope.summaryWidgets.splice($scope.summaryWidgets.indexOf(value), 1);
             }
 
         }
-        $scope.beTree.currentNode = UtilsService.getItemByVal($scope.menuList, $scope.filter.ModuleId, 'Id');   
+        $scope.beTree.currentNode = UtilsService.getItemByVal($scope.menuList, $scope.filter.ModuleId, 'Id');
+        $scope.selectedPeriod = getPeriod($scope.filter.DefaultPeriod);
+        $scope.selectedTimeDimensionType = getTimeDimentionType($scope.filter.DefaultGrouping);
+    }
+    function getTimeDimentionType(defaultGrouping) {
+        return UtilsService.getItemByVal($scope.timeDimensionTypes, defaultGrouping, 'value');
+    }
+    function getPeriod(defaultPeriod) {
+       return UtilsService.getItemByVal($scope.periods, defaultPeriod, 'value');
     }
 
     function loadTree() {

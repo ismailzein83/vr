@@ -92,6 +92,7 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
                 }
             case InsertOperationResultEnum.SameExists.value: 
                 switch (itemType) {
+                    case "View": showWarning("Same View Name already exists"); break;
                     case "Widget": showWarning("Same Widget Name already exists"); break;
                     case "User": showWarning("Same Email already exists"); break;
                     default: showWarning(itemType + " with the same key already exists"); break;

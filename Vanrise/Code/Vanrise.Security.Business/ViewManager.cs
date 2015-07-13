@@ -34,6 +34,10 @@ namespace Vanrise.Security.Business
                  view.ViewId = viewId;
                  insertOperationOutput.InsertedObject = view;
              }
+             else
+             {
+                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+             }
 
              return insertOperationOutput; 
         }
@@ -63,21 +67,19 @@ namespace Vanrise.Security.Business
             IViewDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
             return dataManager.GetView(viewId);
         }
-        public Vanrise.Entities.UpdateOperationOutput<object> DeleteView(int viewId)
+        public Vanrise.Entities.DeleteOperationOutput<object> DeleteView(int viewId)
         {
-            UpdateOperationOutput<object> updateOperationOutput = new UpdateOperationOutput<object>();
-
-            updateOperationOutput.Result = UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
+            DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
+            deleteOperationOutput.Result = DeleteOperationResult.Failed;
             IViewDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
-            bool updateActionSucc = dataManager.DeleteView(viewId);
+            bool deleteActionSucc = dataManager.DeleteView(viewId);
 
-            if (updateActionSucc)
+            if (deleteActionSucc)
             {
-                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
             }
 
-            return updateOperationOutput;
+            return deleteOperationOutput;
         }
         public List<View> GetFilteredDynamicViews(string filter)
         {

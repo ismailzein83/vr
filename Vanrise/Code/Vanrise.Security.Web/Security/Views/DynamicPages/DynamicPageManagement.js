@@ -1,6 +1,6 @@
 ﻿'use strict'
-DynamicPageManagementController.$inject = ['$scope', 'ViewAPIService', 'VRModalService', 'VRNotificationService'];
-function DynamicPageManagementController($scope, ViewAPIService, VRModalService, VRNotificationService) {
+DynamicPageManagementController.$inject = ['$scope', 'ViewAPIService', 'VRModalService', 'VRNotificationService','DeleteOperationResultEnum'];
+function DynamicPageManagementController($scope, ViewAPIService, VRModalService, VRNotificationService, DeleteOperationResultEnum) {
     var mainGridAPI;
     defineScope();
     load();
@@ -81,12 +81,14 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
         var message = "Do you want to delete " + dataItem.Name;
         VRNotificationService.showConfirmation(message).then(function (response) {
             if (response == true) {
-                return ViewAPIService.DeleteView(dataItem.ViewId).then(function (response) {
+                return ViewAPIService.DeleteView(dataItem.ViewId).then(function (responseObject) {
+                    if (responseObject.Result == DeleteOperationResultEnum.Succeeded.value)
+                        mainGridAPI.itemDeleted(dataItem);
+                    VRNotificationService.notifyOnItemDeleted("View", responseObject);
+                    $scope.isGettingData = false;
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 }).finally(function () {
-                    VRNotificationService.showSuccess("Item Deleted Successfully");
-                    $scope.isGettingData = false;
                 });
           }
 

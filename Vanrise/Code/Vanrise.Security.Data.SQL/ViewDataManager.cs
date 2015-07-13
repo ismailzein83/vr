@@ -104,7 +104,7 @@ namespace Vanrise.Security.Data.SQL
             string url = "#/viewwithparams/Security/Views/DynamicPages/DynamicPagePreview";
             int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Insert", out viewId, view.Name, url, view.ModuleId, null,
                serialziedAudience, serialziedContent, ViewType.Dynamic);
-            insertedId = (int)viewId;
+            insertedId  = (recordesEffected > 0) ? (int)viewId : -1;
             return (recordesEffected > 0);
             //  return false;
         }

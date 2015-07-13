@@ -12,6 +12,10 @@
                     <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Grouped By"
                                selectedvalues="selectedTimeDimensionType" isrequired hidefilterbox></vr-select>
                 </vr-columns>
+                <vr-columns width="normal">
+                    <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Period"
+                               selectedvalues="selectedPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
+                </vr-columns>
             </vr-row>
            </div>
         <vr-row removeline>
