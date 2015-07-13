@@ -66,16 +66,17 @@ function VariationReportsDestinationsController($scope, BillingStatisticsAPIServ
                 }
                 break;
             case VariationReportOptionsEnum.InBoundAmount:
-                selectedReportOption = VariationReportOptionsEnum.TopDestinationAmount
+                selectedReportOption = VariationReportOptionsEnum.TopDestinationAmount;
+                entityType = EntityTypeEnum.Customer;
                 $scope.showCustomersSuppliersSection = true;
                 break;
             case VariationReportOptionsEnum.OutBoundAmount:
-                selectedReportOption = VariationReportOptionsEnum.TopDestinationAmount
+                selectedReportOption = VariationReportOptionsEnum.TopDestinationAmount;
                 entityType = EntityTypeEnum.Supplier;
                 $scope.showCustomersSuppliersSection = false;
                 break;
             case VariationReportOptionsEnum.InOutBoundAmount:
-                selectedReportOption = VariationReportOptionsEnum.TopDestinationAmount
+                selectedReportOption = VariationReportOptionsEnum.TopDestinationAmount;
                 var name = $scope.dataItem.Name;
                 if (name.match("/IN$")) {
                     entityType = EntityTypeEnum.Customer;
@@ -87,8 +88,8 @@ function VariationReportsDestinationsController($scope, BillingStatisticsAPIServ
                 }
                 break;
             case VariationReportOptionsEnum.Profit:
-                selectedReportOption = VariationReportOptionsEnum.TopDestinationAmount
-                entityType = EntityTypeEnum.Customer;
+                selectedReportOption = VariationReportOptionsEnum.TopDestinationAmount;
+                entityType = EntityTypeEnum.Profit;
                 $scope.showCustomersSuppliersSection = true;
                 break;           
         }
