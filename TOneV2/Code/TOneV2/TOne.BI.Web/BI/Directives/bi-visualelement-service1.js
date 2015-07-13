@@ -5,16 +5,16 @@ app.service('BIVisualElementService1', function (BIDataAPIService) {
         retrieveWidgetData: retrieveWidgetData
     });
 
-    function retrieveWidgetData(visualElementController, visualElementSettings) {
-       
+    function retrieveWidgetData(visualElementController, visualElementSettings, filter) {
+    
         if(visualElementSettings.OperationType!=undefined)
         switch (visualElementSettings.OperationType) {
             case "TopEntities":
                 visualElementController.isTopEntities = true;
-                return BIDataAPIService.GetTopEntities(visualElementSettings.EntityType, visualElementSettings.TopMeasure, visualElementController.filter.fromDate, visualElementController.filter.toDate, 10, visualElementSettings.MeasureTypes);
+                return BIDataAPIService.GetTopEntities(visualElementSettings.EntityType, visualElementSettings.TopMeasure, filter.fromDate, filter.toDate, 10, visualElementSettings.MeasureTypes);
             case "MeasuresGroupedByTime":
                 visualElementController.isDateTimeGroupedData = true;
-                return BIDataAPIService.GetMeasureValues(visualElementController.filter.timeDimensionType.value, visualElementController.filter.fromDate, visualElementController.filter.toDate, visualElementSettings.MeasureTypes);
+                return BIDataAPIService.GetMeasureValues(filter.timeDimensionType.value, filter.fromDate, filter.toDate, visualElementSettings.MeasureTypes);
                 break;
 
         }

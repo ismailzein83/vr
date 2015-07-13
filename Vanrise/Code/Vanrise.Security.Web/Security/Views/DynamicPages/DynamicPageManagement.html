@@ -21,7 +21,11 @@
             <vr-columns colnum="12">
                 <vr-datagrid datasource="dynamicViews" menuactions="menuActions" on-ready="onMainGridReady">
                     <vr-datagridcolumn headertext="'Page Name'" field="'Name'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Module Name'" field="'ModuleName'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Menu Location'" field="'ModuleName'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Audiences/Users'" field="'Audience.UsersName'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Audiences/Group Users'" field="'Audience.GroupsName'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Default Period'" field="'ViewContent.DefaultPeriodDescription'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Default Grouping'" field="'ViewContent.DefaultGroupingDescription'"></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
         </vr-row>

@@ -42,7 +42,7 @@ app.directive('vrDatagridBi', ['UtilsService','BIDataAPIService', 'BIUtilitiesSe
 
     function getDataGridTemplate(previewmode) {
         if (previewmode != 'true') {
-            return '<vr-section title="{{ctrl.title}}"><div ng-if="!ctrl.isAllowed" ng-class="\'gridpermission\'"><div  style="padding-top:115px;"><div   class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> You Don\'t Have Permission To See This Widget..!!</div></div></div><div ng-if="ctrl.isAllowed"><vr-datagrid datasource="ctrl.data" on-ready="ctrl.onGridReady" maxheight="300px"></vr-section>'
+            return '<vr-section title="{{ctrl.title}}"><div ng-if="!ctrl.isAllowed" ng-class="\'gridpermission\'"><div  style="padding-top:115px;"><div   class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> You Don\'t Have Permission To See This Widget..!!</div></div></div><div ng-if="ctrl.isAllowed" vr-loader="ctrl.isGettingData"><vr-datagrid datasource="ctrl.data" on-ready="ctrl.onGridReady" maxheight="300px"></vr-section>'
                                         + '<vr-datagridcolumn ng-show="ctrl.isTopEntities" headertext="ctrl.entityType.description" field="\'EntityName\'" isclickable="\'true\'" \ onclicked="openReportEntityModal"></vr-datagridcolumn>'
                                         + '<vr-datagridcolumn ng-show="ctrl.isDateTimeGroupedData" headertext="\'Time\'" field="\'dateTimeValue\'"></vr-datagridcolumn>'
                                         + '<vr-datagridcolumn ng-repeat="measureType in ctrl.measureTypes" headertext="measureType.DisplayName" field="\'Values[\' + $index + \']\'" type="\'Number\'"></vr-datagridcolumn>'
@@ -69,8 +69,8 @@ app.directive('vrDatagridBi', ['UtilsService','BIDataAPIService', 'BIUtilitiesSe
                ctrl.isAllowed = true;
                ctrl.onGridReady = function (api) {
                    gridAPI = api;
-                   if (retrieveDataOnLoad)
-                       retrieveData();
+                   //if (retrieveDataOnLoad)
+                   //    retrieveData();
                }
                ctrl.entityType = entity;
                ctrl.measureTypes = measures;
@@ -92,15 +92,18 @@ app.directive('vrDatagridBi', ['UtilsService','BIDataAPIService', 'BIUtilitiesSe
                 ctrl.onReady(api);
         }
 
-        function retrieveData() {
+        function retrieveData(filter) {
             if (!ctrl.isAllowed)
                 return;
-            return BIVisualElementService1.retrieveWidgetData(ctrl, settings)
+            ctrl.isGettingData = true;
+            return BIVisualElementService1.retrieveWidgetData(ctrl, settings, filter)
                         .then(function (response) {
                             if (ctrl.isDateTimeGroupedData)
-                                BIUtilitiesService.fillDateTimeProperties(response, ctrl.filter.timeDimensionType.value, ctrl.filter.fromDate, ctrl.filter.toDate, true);
+                                BIUtilitiesService.fillDateTimeProperties(response, filter.timeDimensionType.value, filter.fromDate, filter.toDate, true);
                             refreshDataGrid(response);
                           
+                        }).finally(function () {
+                            ctrl.isGettingData = false;
                         });
         }
 

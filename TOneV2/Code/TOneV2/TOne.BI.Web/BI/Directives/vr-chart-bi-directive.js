@@ -41,7 +41,7 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
         if (previewmode!='true') {
             return '<vr-section title="{{ctrl.title}}"><div ng-if="!ctrl.isAllowed"  ng-class="\'{{ctrl.class}}\'"  >  ' +
                '<div style="padding-top:115px;" > <div class="alert alert-danger ng-scope" role="alert" style=""> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> You Don\'t Have Permission To See This Widget..!!</div> </div>' +
-                '</div><div ng-if="!ctrl.isAllowed && ctrl.chart"> <img src="/Client/Images/chartpermission.jpg" width="100%"/></div><div ng-if="ctrl.isAllowed"><vr-chart on-ready="ctrl.onChartReady" menuactions="ctrl.chartMenuActions"></vr-chart></div></vr-section>';
+                '</div><div ng-if="!ctrl.isAllowed && ctrl.chart"> <img src="/Client/Images/chartpermission.jpg" width="100%"/></div><div ng-if="ctrl.isAllowed" vr-loader="ctrl.isGettingData"><vr-chart on-ready="ctrl.onChartReady" menuactions="ctrl.chartMenuActions"></vr-chart></div></vr-section>';
         }
         else
             return '</br><vr-textbox value="ctrl.settings.OperationType" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.settings.EntityType" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.settings.MeasureTypes" vr-disabled="true"></vr-textbox>'
@@ -80,8 +80,8 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
                     chartAPI.onDataItemClicked = function (item) {
                         BIUtilitiesService.openEntityReport(item.EntityType, item.EntityId, item.EntityName);
                     };
-                    if (retrieveDataOnLoad)
-                        retrieveData();
+                    //if (retrieveDataOnLoad)
+                    //    retrieveData();
                 };
                defineAPI();
 
@@ -99,19 +99,22 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
                 ctrl.onReady(api);
         }
 
-        function retrieveData() {
+        function retrieveData(filter) {
             if (!ctrl.isAllowed)
                 return;
-            return BIVisualElementService1.retrieveWidgetData(ctrl, settings)
+            ctrl.isGettingData = true;
+            return BIVisualElementService1.retrieveWidgetData(ctrl, settings,filter)
 
                 .then(function (response) {
                            
                     if (ctrl.isDateTimeGroupedData) {
-                                BIUtilitiesService.fillDateTimeProperties(response, ctrl.filter.timeDimensionType.value, ctrl.filter.fromDate, ctrl.filter.toDate, false);
+                                BIUtilitiesService.fillDateTimeProperties(response, filter.timeDimensionType.value, filter.fromDate, filter.toDate, false);
                                 refreshChart(response);
                             }
                             else
                                 refreshPIEChart(response);
+                }).finally(function () {
+                    ctrl.isGettingData = false;
                 });
 
         }

@@ -33,6 +33,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         $scope.selectedUsers = [];
         $scope.roles = [];
         $scope.pageName;
+        $scope.sectionTitle;
         $scope.selectedRoles = [];
         $scope.subViewConnector = {};
         $scope.moduleId;
@@ -46,6 +47,11 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         $scope.addedBodyWidgets = [];
         $scope.onSelectionChanged = function () {
             buildContentsFromScope();
+        }
+        $scope.onWidgetSelectionChanged = function () {
+            if ($scope.selectedWidget != undefined)
+                $scope.sectionTitle = $scope.selectedWidget.Name;
+            
         }
         $scope.save = function () {
            
@@ -84,14 +90,11 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             $scope.selectedWidget = null;
         }
         $scope.addViewContent = function () {
-            //var viewContent = {
-            //    WidgetId: $scope.selectedWidget.Id,
-            //    NumberOfColumns: $scope.selectedColumnWidth.value
-            //}
-            
+
             var viewWidget = {
                 Widget: $scope.selectedWidget,
-                NumberOfColumns: $scope.selectedColumnWidth.value
+                NumberOfColumns: $scope.selectedColumnWidth.value,
+                SectionTitle:$scope.sectionTitle
             }
             switch($scope.selectedSection.value)
             {
@@ -126,7 +129,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             $scope.periods.push(BIPeriodEnum[p]);
         $scope.selectedPeriod = $scope.periods[0];
 
-        // console.log($scope.selectedPeriod);
+
     }
 
     function defineTimeDimensionTypes() {
@@ -139,6 +142,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         })[0];
     }
     function saveView() {
+       
         return ViewAPIService.SaveView($scope.View).then(function (response) {
             if (VRNotificationService.notifyOnItemAdded("View", response)) {
                 if ($scope.onPageAdded != undefined)
@@ -169,7 +173,8 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             var Widget = $scope.addedSummaryWidgets[i];
             var viewSummaryContent = {
                 WidgetId: Widget.Widget.Id,
-                NumberOfColumns: Widget.NumberOfColumns
+                NumberOfColumns: Widget.NumberOfColumns,
+                SectionTitle: Widget.SectionTitle
             }
             $scope.summaryContents.push(viewSummaryContent);
         }
@@ -177,7 +182,8 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             var Widget = $scope.addedBodyWidgets[i];
             var viewBodyContent = {
                 WidgetId: Widget.Widget.Id,
-                NumberOfColumns: Widget.NumberOfColumns
+                NumberOfColumns: Widget.NumberOfColumns,
+                SectionTitle: Widget.SectionTitle
             }
             $scope.bodyContents.push(viewBodyContent);
         }
@@ -236,7 +242,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
     function fillEditModeData() {
         
         $scope.pageName = $scope.filter.Name;
-        if ($scope.filter.Audience != null || $scope.filter.Audience != undefined) {
+        if ($scope.filter.Audience.Users != undefined || $scope.filter.Audience.Groups != undefined ) {
             for (var i = 0; i < $scope.filter.Audience.Users.length; i++) {
                 var value = UtilsService.getItemByVal($scope.users, $scope.filter.Audience.Users[i], 'UserId');
                 if (value != null)

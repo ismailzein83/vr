@@ -31,25 +31,31 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             $scope.toDate = date.to;
         }
         defineTimeDimensionTypes();
-        $scope.filter = {
-            timeDimensionType: $scope.selectedTimeDimensionType,
-            fromDate:$scope.fromDate,
-            toDate:$scope.toDate 
-        }
+      
         
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };
         $scope.Search = function () {
+            $scope.filter = {
+                timeDimensionType: $scope.selectedTimeDimensionType,
+                fromDate: $scope.fromDate,
+                toDate: $scope.toDate
+            }
             if (($scope.bodyWidgets != null && $scope.bodyWidgets != undefined) || ($scope.summaryWidgets != null && $scope.summaryWidgets != undefined)) {
-                updateDashboard();
+                refreshData();
             }
             else {
-                getData();
+                loadWidgets();
             }    
         };
         fillDateAndPeriod();
-        getData();
+        $scope.filter = {
+            timeDimensionType: $scope.selectedTimeDimensionType,
+            fromDate: $scope.fromDate,
+            toDate: $scope.toDate
+        }
+        loadWidgets();
 
     }
 
@@ -73,28 +79,16 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         $scope.fromDate = date.from;
         $scope.toDate = date.to;
     }
-    function updateDashboard() {
-        $scope.filter = {
-            timeDimensionType: $scope.selectedTimeDimensionType,
-            fromDate: $scope.fromDate,
-            toDate: $scope.toDate
-        }
+    function refreshData() {
         var refreshDataOperations = [];
         angular.forEach($scope.bodyWidgets, function (bodyWidget) {
-            refreshDataOperations.push(bodyWidget.API.retrieveData);
+            refreshDataOperations.push(bodyWidget.API.retrieveData($scope.filter));
         });
         angular.forEach($scope.summaryWidgets, function (summaryWidget) {
-            refreshDataOperations.push(summaryWidget.API.retrieveData);
-        });
-        $scope.isGettingData = true;
-        return UtilsService.waitMultipleAsyncOperations(refreshDataOperations)
-            .finally(function () {
-                $scope.isGettingData = false;
-            });
-        
+            refreshDataOperations.push(summaryWidget.API.retrieveData($scope.filter));
+        }); 
     }
-
-    function getData() {
+    function loadWidgets() {
 
         if (viewId != undefined) {
             $scope.isGettingData = true;
@@ -119,29 +113,24 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
     }
 
     function loadViewWidgets(allWidgets, BodyContents, SummaryContents) {
-
-        $scope.filter = {
-            timeDimensionType: $scope.selectedTimeDimensionType,
-            fromDate: $scope.fromDate,
-            toDate: $scope.toDate
-        }
         for (var i = 0; i < BodyContents.length; i++) {
             var bodyContent = BodyContents[i];
             var value = UtilsService.getItemByVal(allWidgets, bodyContent.WidgetId, 'Id');
             if (value != null)
             {
                 value.NumberOfColumns = bodyContent.NumberOfColumns;
+                value.SectionTitle = bodyContent.SectionTitle;
                 addBodyWidget(value);
             }
             
 
         }
-    
      for (var i = 0; i < SummaryContents.length; i++) {
             var summaryContent = SummaryContents[i];
             var value = UtilsService.getItemByVal(allWidgets, summaryContent.WidgetId, 'Id');
             if (value != null) {
                 value.NumberOfColumns = summaryContent.NumberOfColumns;
+                value.SectionTitle = summaryContent.SectionTitle;
                 addSummaryWidget(value);
             }
 
@@ -153,17 +142,16 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
     function addBodyWidget(bodyWidget) {
         bodyWidget.onElementReady = function (api) {
             bodyWidget.API = api;
+            bodyWidget.API.retrieveData($scope.filter);
         };
         $scope.bodyWidgets.push(bodyWidget);
-       // console.log($scope.bodyWidgets);
     }
     function addSummaryWidget(summaryWidget) {
         summaryWidget.onElementReady = function (api) {
-            
             summaryWidget.API = api;
+            summaryWidget.API.retrieveData($scope.filter);
         };
         $scope.summaryWidgets.push(summaryWidget);
-        
     }
 
     function loadAllWidgets() {
@@ -205,7 +193,6 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
     function getCurrentWeekInterval() {
         var thisWeek = new Date(new Date().getTime() - 60 * 60 * 24 * 1000)
         var day = thisWeek.getDay();
-        //console.log(day);
         var LastMonday;
         if (day === 0) {
             LastMonday = new Date();
