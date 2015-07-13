@@ -260,12 +260,13 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             
             var bodyContent = $scope.filter.BodyContents[i];
             var value = UtilsService.getItemByVal($scope.bodyWidgets, bodyContent.WidgetId, 'Id');
-          
+            console.log(bodyContent);
             if (value != null)
             {
                 var viewWidget = {
                     Widget: value,
-                    NumberOfColumns: bodyContent.NumberOfColumns
+                    NumberOfColumns: bodyContent.NumberOfColumns,
+                    SectionTitle: bodyContent.SectionTitle
                 }
 
                 $scope.addedBodyWidgets.push(viewWidget);
@@ -280,7 +281,8 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             if (value != null) {
                 var viewWidget = {
                     Widget: value,
-                    NumberOfColumns: summaryContent.NumberOfColumns
+                    NumberOfColumns: summaryContent.NumberOfColumns,
+                    SectionTitle: summaryContent.SectionTitle
                 }
                
                 $scope.addedSummaryWidgets.push(viewWidget);
