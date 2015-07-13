@@ -31,7 +31,8 @@ namespace TOne.Analytics.Entities
         none = 0,
         Customer = 1,
         Supplier = 2,
-        Zone = 3
+        Zone = 3,
+        Profit =4
 
     }
 
