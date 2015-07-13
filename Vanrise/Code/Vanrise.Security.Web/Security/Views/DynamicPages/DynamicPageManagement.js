@@ -107,9 +107,11 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
     }
 
     function load() {
-        UtilsService.waitMultipleAsyncOperations([loadUsers, loadRoles])
+        UtilsService.waitMultipleAsyncOperations([loadUsers, loadRoles]).then(function () {
+            loadDynamicViews();
+        })
                 .finally(function () {
-                    loadDynamicViews();
+                   
                     $scope.isGettingData = false;
                 });
      
@@ -131,31 +133,33 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
     }
    
     function fillNeededData(itm) {
-    
+        console.log(itm);
         itm.ViewContent.DefaultPeriodDescription = UtilsService.getItemByVal($scope.periods, itm.ViewContent.DefaultPeriod, 'value').description;
         itm.ViewContent.DefaultGroupingDescription = UtilsService.getItemByVal($scope.timeDimensionTypes, itm.ViewContent.DefaultGrouping, 'value').description;
         if (itm.Audience!=null) {
-            itm.Audience.UsersName = "";
+            itm.Audience.UsersName = [];
+            var usersArray = [];
             var value;
             for (var i = 0; i < itm.Audience.Users.length; i++) {
-                if (itm.Audience.UsersName != "")
-                    itm.Audience.UsersName += ",";
-                for (var j = 0; j < $scope.users.length; j++) {
-                    if(itm.Audience.Users[i]==$scope.users[i].UserId)
-                        value = $scope.users[i]
-                }
+
+                value = UtilsService.getItemByVal($scope.users, itm.Audience.Users[i], 'UserId');
                 if (value != null)
-                itm.Audience.UsersName += value.Name;
+                    usersArray.push(value.Name);
+                
             }
+            itm.Audience.UsersName = usersArray.toString();
             itm.Audience.GroupsName = "";
+            var groupsArray = [];
             for (var j = 0; j < itm.Audience.Groups.length; j++) {
                 if (itm.Audience.GroupsName != "")
                     itm.Audience.GroupsName += ",";
                 value = UtilsService.getItemByVal($scope.roles, itm.Audience.Groups[j], 'RoleId');
                 if (value != null)
-                    itm.Audience.GroupsName += value.Name;
+                    groupsArray.push(value.Name);
+                
 
             }
+            itm.Audience.GroupsName = groupsArray.toString();
         }
         else {
             itm.Audience = {
@@ -163,6 +167,7 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
                 GroupsName: 'null',
             }
         }
+        console.log(itm);
         return itm;
     }
     function definePeriods() {

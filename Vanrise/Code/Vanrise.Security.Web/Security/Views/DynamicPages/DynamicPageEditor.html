@@ -57,11 +57,11 @@
                 <vr-form name="formDesigningSelectionModel">
                     <vr-row removeLine>
                         <vr-columns width="normal">
-                            <vr-select label="Section:" datatextfield="description" datavaluefield="value" label="Section" onselectionchanged="onSectionChanged"
+                            <vr-select label="Section" datatextfield="description" datavaluefield="value" label="Section" onselectionchanged="onSectionChanged"
                                        datasource="sections" selectedvalues="selectedSection" isrequired></vr-select>
                         </vr-columns>
                         <vr-columns width="normal">
-                            <vr-select label="Widget:" datatextfield="Name" datavaluefield="ID"
+                            <vr-select label="Widget" datatextfield="Name" datavaluefield="ID"
                                        datasource="widgets" selectedvalues="selectedWidget" onselectionchanged="onWidgetSelectionChanged"></vr-select>
                         </vr-columns>
                         <vr-columns width="normal" ng-if="selectedWidget">
