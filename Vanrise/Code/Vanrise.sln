@@ -87,9 +87,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Adapter
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Adapters.MySQLReceiveAdapter", "Vanrise.Integration.Adapters.MySQLReceiveAdapter\Vanrise.Integration.Adapters.MySQLReceiveAdapter.csproj", "{E2203FA3-5489-4C2C-B3D7-EE183E1E73B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Adapters.IBaseTP", "Vanrise.Integration.Adapters.IBaseTP\Vanrise.Integration.Adapters.IBaseTP.csproj", "{5C10F5E7-BF0A-4003-B6E1-54B97A0C50F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Adapters.BaseTP", "Vanrise.Integration.Adapters.IBaseTP\Vanrise.Integration.Adapters.BaseTP.csproj", "{5C10F5E7-BF0A-4003-B6E1-54B97A0C50F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Adapters.IBaseDB", "Vanrise.Integration.Adapters.IBaseDB\Vanrise.Integration.Adapters.IBaseDB.csproj", "{84145F69-2C71-4548-9D5D-3B8BD93BBDD0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Adapters.BaseDB", "Vanrise.Integration.Adapters.IBaseDB\Vanrise.Integration.Adapters.BaseDB.csproj", "{84145F69-2C71-4548-9D5D-3B8BD93BBDD0}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -237,14 +237,14 @@ Global
 		SccProjectTopLevelParentUniqueName35 = Vanrise.sln
 		SccProjectName35 = Vanrise.Integration.Adapters.MySQLReceiveAdapter
 		SccLocalPath35 = Vanrise.Integration.Adapters.MySQLReceiveAdapter
-		SccProjectUniqueName36 = Vanrise.Integration.Adapters.IBaseTP\\Vanrise.Integration.Adapters.IBaseTP.csproj
+		SccProjectUniqueName36 = Vanrise.Integration.Adapters.IBaseDB\\Vanrise.Integration.Adapters.BaseDB.csproj
 		SccProjectTopLevelParentUniqueName36 = Vanrise.sln
-		SccProjectName36 = Vanrise.Integration.Adapters.IBaseTP
-		SccLocalPath36 = Vanrise.Integration.Adapters.IBaseTP
-		SccProjectUniqueName37 = Vanrise.Integration.Adapters.IBaseDB\\Vanrise.Integration.Adapters.IBaseDB.csproj
+		SccProjectName36 = Vanrise.Integration.Adapters.IBaseDB
+		SccLocalPath36 = Vanrise.Integration.Adapters.IBaseDB
+		SccProjectUniqueName37 = Vanrise.Integration.Adapters.IBaseTP\\Vanrise.Integration.Adapters.BaseTP.csproj
 		SccProjectTopLevelParentUniqueName37 = Vanrise.sln
-		SccProjectName37 = Vanrise.Integration.Adapters.IBaseDB
-		SccLocalPath37 = Vanrise.Integration.Adapters.IBaseDB
+		SccProjectName37 = Vanrise.Integration.Adapters.IBaseTP
+		SccLocalPath37 = Vanrise.Integration.Adapters.IBaseTP
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
