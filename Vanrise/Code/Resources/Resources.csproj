@@ -110,6 +110,11 @@
     <Content Include="DLLs\Microsoft.Practices.ServiceLocation.dll" />
     <Content Include="DLLs\Microsoft.Practices.Unity.dll" />
     <Content Include="DLLs\Microsoft.Practices.Unity.Interception.dll" />
+    <Content Include="DLLs\MySql.Data.dll" />
+    <Content Include="DLLs\MySql.Data.Entity.EF5.dll" />
+    <Content Include="DLLs\MySql.Data.Entity.EF6.dll" />
+    <Content Include="DLLs\MySql.Fabric.Plugin.dll" />
+    <Content Include="DLLs\MySql.Web.dll" />
     <Content Include="DLLs\Newtonsoft.Json.dll" />
     <Content Include="DLLs\protobuf-net.dll" />
     <Content Include="DLLs\Rebex.Net.Ftp.dll" />
