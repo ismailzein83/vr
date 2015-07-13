@@ -1,41 +1,13 @@
 ﻿using Rebex.Net;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Vanrise.Integration.Adapters.BaseTP;
 using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
 {
-
-    public enum Actions
+    public class FTPReceiveAdapter : TPReceiveAdapter
     {
-        Rename = 0,
-        Delete = 1,
-        Move = 2 // Move to Folder
-    }
-
-    public class FTPReceiveAdapter : BaseReceiveAdapter
-    {
-        #region Properties
-        public string Extension { get; set; }
-
-        public string Directory { get; set; }
-
-        public string ServerIP { get; set; }
-
-        public string UserName { get; set; }
-
-        public string Password { get; set; }
-
-        public string DirectorytoMoveFile { get; set; }
-
-        public Actions ActionAfterImport { get; set; }
-
-        # endregion 
-       
         #region Private Functions
 
         private static void CreateStreamReader(Action<IImportedData> receiveData, Ftp ftp, FtpItem fileObj, String filePath)
