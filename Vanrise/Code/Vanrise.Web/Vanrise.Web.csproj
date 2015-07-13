@@ -142,6 +142,8 @@
     <Content Include="Client\Javascripts\Constants\InsertOperationResultEnum.js" />
     <Content Include="Client\Javascripts\Constants\LabelColorsEnum.js" />
     <Content Include="Client\Javascripts\Constants\MenuItemTypeEnum.js" />
+    <Content Include="Client\Javascripts\Constants\PeriodEnum.js" />
+    <Content Include="Client\Javascripts\Constants\TimeDimensionTypeEnum.js" />
     <Content Include="Client\Javascripts\Constants\UpdateOperationResultEnum.js" />
     <Content Include="Client\Javascripts\Constants\ValidationMessagesEnum.js" />
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\AMChartController.js" />
