@@ -142,6 +142,7 @@
     <Content Include="Client\Images\logoonheader.png" />
     <Content Include="Client\Images\member.png" />
     <Content Include="Client\Images\support.png" />
+    <Content Include="Client\Javascripts\Constants\ColumnWidthEnum.js" />
     <Content Include="Client\Javascripts\Constants\DaysOfWeekEnum.js" />
     <Content Include="Client\Javascripts\Constants\DeleteOperationResultEnum.js" />
     <Content Include="Client\Javascripts\Constants\InsertOperationResultEnum.js" />
