@@ -11,10 +11,10 @@ namespace Vanrise.Integration.Adapters.MSQLReceiveAdapter
       
         public override void ImportData(Action<IImportedData> receiveData)
         {
-            using (var connection = new MySqlConnection(base.ConnectionString))
+            using (var connection = new MySqlConnection(ConnectionString))
             {
                 connection.Open();
-                var command = new MySqlCommand(base.Query, connection);
+                var command = new MySqlCommand(Query, connection);
                 DBReaderImportedData data = new DBReaderImportedData();
                 data.Reader = command.ExecuteReader();
                 Description = data.Description;
@@ -23,5 +23,10 @@ namespace Vanrise.Integration.Adapters.MSQLReceiveAdapter
 
         }
 
+        public override string ConnectionString { get; set; }
+
+        public override string Description { get; set; }
+
+        public override string Query { get; set; }
     }
 }

@@ -6,11 +6,11 @@ namespace Vanrise.Integration.Adapters.BaseDB
     {
         #region Properties
 
-        public string ConnectionString { get; set; }
+            public abstract string ConnectionString { get; set; }
 
-        public string Description { get; set; }
+            public abstract string Description { get; set; }
 
-        public string Query { get; set; }
+            public abstract string Query { get; set; }
 
 
         # endregion

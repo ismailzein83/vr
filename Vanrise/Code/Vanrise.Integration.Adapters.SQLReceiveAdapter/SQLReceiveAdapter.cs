@@ -22,5 +22,10 @@ namespace Vanrise.Integration.Adapters.SQLReceiveAdapter
 
         }
 
+        public override string ConnectionString { get;set;}
+
+        public override string Description { get; set; }
+
+        public override string Query { get; set; }
     }
 }

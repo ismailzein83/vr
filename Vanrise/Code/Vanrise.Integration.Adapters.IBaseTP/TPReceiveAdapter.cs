@@ -18,19 +18,19 @@ namespace Vanrise.Integration.Adapters.BaseTP
         }
 
         #region Properties
-        public string Extension { get; set; }
+            public abstract string Extension { get; set; }
 
-        public string Directory { get; set; }
+            public abstract string Directory { get; set; }
 
-        public string ServerIP { get; set; }
+            public abstract string ServerIP { get; set; }
 
-        public string UserName { get; set; }
+            public abstract string UserName { get; set; }
 
-        public string Password { get; set; }
+            public abstract string Password { get; set; }
 
-        public string DirectorytoMoveFile { get; set; }
+            public abstract string DirectorytoMoveFile { get; set; }
 
-        public Actions ActionAfterImport { get; set; }
+            public abstract Actions ActionAfterImport { get; set; }
 
         # endregion 
 

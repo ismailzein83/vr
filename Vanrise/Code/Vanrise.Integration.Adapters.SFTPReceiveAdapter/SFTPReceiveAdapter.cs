@@ -10,54 +10,54 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
     {
         #region Private Functions
 
-        private static void CreateStreamReader(Action<IImportedData> receiveData, Sftp sftp, SftpItem fileObj, String filePath)
-        {
-            var stream = new MemoryStream();
-            sftp.GetFile(filePath, stream);
-            byte[] data = stream.ToArray();
-            using (var ms = stream)
+            private static void CreateStreamReader(Action<IImportedData> receiveData, Sftp sftp, SftpItem fileObj, String filePath)
             {
-                ms.Position = 0;
-                var sr = new StreamReader(ms);
-                receiveData(new StreamReaderImportedData()
+                var stream = new MemoryStream();
+                sftp.GetFile(filePath, stream);
+                byte[] data = stream.ToArray();
+                using (var ms = stream)
                 {
-                    StreamReader = new StreamReader(ms),
-                    Modified = fileObj.Modified,
-                    Name = fileObj.Name,
-                    Size = fileObj.Size
-                });
+                    ms.Position = 0;
+                    var sr = new StreamReader(ms);
+                    receiveData(new StreamReaderImportedData()
+                    {
+                        StreamReader = new StreamReader(ms),
+                        Modified = fileObj.Modified,
+                        Name = fileObj.Name,
+                        Size = fileObj.Size
+                    });
+                }
             }
-        }
         
-        private static void CloseConnection(Sftp sftp)
-        {
-            sftp.Dispose();
-        }
+            private static void CloseConnection(Sftp sftp)
+            {
+                sftp.Dispose();
+            }
       
-        private void EstablishConnection(Sftp sftp)
-        {
-            sftp.Connect(ServerIP);
-            sftp.Login(UserName, Password);
-        }
+            private void EstablishConnection(Sftp sftp)
+            {
+                sftp.Connect(ServerIP);
+                sftp.Login(UserName, Password);
+            }
 
-        private void AfterImport(Sftp sftp, SftpItem fileObj, String filePath)
-        {
-            if (ActionAfterImport == Actions.Rename)
+            private void AfterImport(Sftp sftp, SftpItem fileObj, String filePath)
             {
-                sftp.Rename(filePath, filePath.Replace(Extension, ".Imported"));
-            }
-            else if (ActionAfterImport == Actions.Delete)
-            {
-                sftp.DeleteFile(filePath);
-            }
-            else if (ActionAfterImport == Actions.Move)
-            {
-                if (!sftp.DirectoryExists(DirectorytoMoveFile))
-                    sftp.CreateDirectory(DirectorytoMoveFile);
+                if (ActionAfterImport == Actions.Rename)
+                {
+                    sftp.Rename(filePath, filePath.Replace(Extension, ".Imported"));
+                }
+                else if (ActionAfterImport == Actions.Delete)
+                {
+                    sftp.DeleteFile(filePath);
+                }
+                else if (ActionAfterImport == Actions.Move)
+                {
+                    if (!sftp.DirectoryExists(DirectorytoMoveFile))
+                        sftp.CreateDirectory(DirectorytoMoveFile);
 
-                sftp.Rename(filePath, DirectorytoMoveFile + "/" + fileObj.Name);
+                    sftp.Rename(filePath, DirectorytoMoveFile + "/" + fileObj.Name);
+                }
             }
-        }
 
        
         #endregion
@@ -89,5 +89,19 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
 
         }
 
+
+        public override string Extension { get; set; }
+
+        public override string Directory { get; set; }
+
+        public override string ServerIP { get; set; }
+
+        public override string UserName { get; set; }
+
+        public override string Password { get; set; }
+
+        public override string DirectorytoMoveFile { get; set; }
+
+        public override TPReceiveAdapter.Actions ActionAfterImport { get; set; }
     }
 }
