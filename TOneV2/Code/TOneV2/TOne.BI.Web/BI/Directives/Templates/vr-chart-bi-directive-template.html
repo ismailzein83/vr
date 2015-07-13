@@ -5,10 +5,8 @@
     <vr-columns width="normal" ng-show=" selectedOperationType.value == 'TopEntities'">
         <vr-select datasource="Entities" datatextfield="Name" datavaluefield="DisplayName" label="Entity" selectedvalues="selectedEntityType" isrequired hidefilterbox></vr-select>
     </vr-columns>
-    <vr-columns width="normal" ng-show=" selectedOperationType.value == 'TopEntities'">
-        <vr-select datasource="Measures" datatextfield="Name" datavaluefield="DisplayName" label="Measures" selectedvalues="selectedMeasureTypes" onselectionchanged="onSelectionChanged" isrequired  hidefilterbox></vr-select>
-    </vr-columns>
-    <vr-columns width="normal" ng-show=" selectedOperationType.value == 'MeasuresGroupedByTime'">
+
+    <vr-columns width="normal">
         <vr-select datasource="Measures" datatextfield="Name" datavaluefield="DisplayName" label="Measures" selectedvalues="selectedMeasureTypes" onselectionchanged="onSelectionChanged" isrequired ismultipleselection hidefilterbox></vr-select>
     </vr-columns>
     <vr-columns width="normal" ng-show=" selectedOperationType.value == 'TopEntities'">
