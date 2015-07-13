@@ -10,17 +10,6 @@ using Vanrise.Integration.Entities;
 namespace Vanrise.Integration.Adapters.FTPReceiverAdapter
 {
 
-    public class ServerInfo
-    {
-        public ServerInfo(string serverName, int serverPort)
-        {
-            ServerName = serverName;
-            ServerPort = serverPort;
-        }
-        public string ServerName { get; set; }
-        public int ServerPort { get; set; }
-    }
-
     public enum Actions
     {
         Rename = 0,
@@ -47,21 +36,9 @@ namespace Vanrise.Integration.Adapters.FTPReceiverAdapter
 
         public Actions ActionAfterImport { get; set; }
 
-        public ServerInfo ServerInfo { get; set; }
         # endregion 
        
         #region Private Functions
-        private void GetServerInfo(Ftp ftp)
-        {
-            ServerInfo.ServerName = ftp.ServerName;
-            ServerInfo.ServerPort = ftp.ServerPort;
-        }
-
-        private void GetServerInfo(Sftp sftp)
-        {
-            ServerInfo.ServerName = sftp.ServerName;
-            ServerInfo.ServerPort = sftp.ServerPort;
-        }
 
         private static void CreateStreamReader(Action<IImportedData> receiveData, Sftp sftp, SftpItem fileObj, String filePath)
         {
@@ -172,7 +149,6 @@ namespace Vanrise.Integration.Adapters.FTPReceiverAdapter
                 EstablishConnection(sftp);
                 if (sftp.GetConnectionState().Connected)
                 {
-                    GetServerInfo(sftp);
                     sftp.ChangeDirectory(Directory);
                     SftpItemCollection currentItems = sftp.GetList();
                     if (currentItems.Count > 0)
@@ -197,7 +173,6 @@ namespace Vanrise.Integration.Adapters.FTPReceiverAdapter
                 EstablishConnection(ftp);
                 if (ftp.GetConnectionState().Connected)
                 {
-                    GetServerInfo(ftp);
                     ftp.ChangeDirectory(Directory);
                     FtpList currentItems = ftp.GetList();
                     if (currentItems.Count > 0)
