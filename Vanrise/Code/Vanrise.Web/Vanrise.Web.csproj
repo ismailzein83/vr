@@ -137,7 +137,7 @@
     <Content Include="Client\Images\02.png" />
     <Content Include="Client\Images\doruknet-logo.png" />
     <Content Include="Client\Images\log in.png" />
-    <Content Include="Client\Images\log out.png" />
+    <Content Include="Client\Images\logout.png" />
     <Content Include="Client\Images\login.png" />
     <Content Include="Client\Images\logoonheader.png" />
     <Content Include="Client\Images\member.png" />
@@ -507,6 +507,7 @@
     <Content Include="Client\Libraries\Semantic\themes\default\assets\fonts\icons.svg" />
     <Content Include="Client\Libraries\Semantic\themes\default\assets\images\flags.png" />
     <Content Include="Client\Libraries\waves\waves.js" />
+    <Content Include="Client\Modules\Common\Views\Support.html" />
     <Content Include="Client\Modules\Common\Views\Error.html" />
     <Content Include="Client\Modules\Common\Views\ErrorController.js" />
     <Content Include="Client\Modules\Common\Views\StartupPage.html" />
