@@ -2,31 +2,20 @@
 using System;
 using System.Data.SqlClient;
 using Vanrise.Integration.Entities;
+using Vanrise.Integration.Adapters.BaseDB;
 
 namespace Vanrise.Integration.Adapters.MSQLReceiveAdapter
 {
 
-    public class MySQLReceiveAdapter : BaseReceiveAdapter
+    public class MySQLReceiveAdapter :  DBReceiveAdapter
     {
-        #region Properties
-
-        public string ConnectionString { get; set; }
-
-        public string Description { get; set; }
-
-        public string Query { get; set; }
-
-
-        # endregion
-
-
-
+      
         public override void ImportData(Action<IImportedData> receiveData)
         {
-            using (var connection = new MySqlConnection(this.ConnectionString))
+            using (var connection = new MySqlConnection(base.ConnectionString))
             {
                 connection.Open();
-                var command = new MySqlCommand(Query, connection);
+                var command = new MySqlCommand(base.Query, connection);
                 DBReaderImportedData data = new DBReaderImportedData();
                 data.Reader = command.ExecuteReader();
                 Description = data.Description;
