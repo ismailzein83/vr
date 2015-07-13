@@ -64,7 +64,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
                
             else
             {
-                if ($scope.summaryContents.length == 0 && $scope.bodyContents.length) {
+                if ($scope.summaryContents.length == 0 && $scope.bodyContents.length==0) {
                     return VRNotificationService.showError("You Should Add Widgets Before Saving!!");
 
                 }
