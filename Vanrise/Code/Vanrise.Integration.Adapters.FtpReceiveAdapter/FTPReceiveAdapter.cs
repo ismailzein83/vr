@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Integration.Entities;
 
-namespace Vanrise.Integration.Adapters.FTPReceiverAdapter
+namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
 {
 
     public enum Actions
