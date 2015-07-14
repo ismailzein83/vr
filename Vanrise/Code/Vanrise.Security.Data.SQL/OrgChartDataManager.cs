@@ -17,6 +17,11 @@ namespace Vanrise.Security.Data.SQL
 
         }
 
+        public List<OrgChart> GetOrgCharts()
+        {
+            return GetItemsSP("sec.sp_OrgChart_GetAll", OrgChartMapper);
+        }
+
         public List<OrgChart> GetFilteredOrgCharts(int fromRow, int toRow, string name)
         {
             return GetItemsSP("sec.sp_OrgChart_GetFiltered", OrgChartMapper, fromRow, toRow, name);

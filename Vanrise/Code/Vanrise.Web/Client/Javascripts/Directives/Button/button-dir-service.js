@@ -96,7 +96,17 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 return {
                     text: 'Apply Changes',
                     class: 'glyphicon glyphicon-ok-circle'
-                }
+                };
+            case 'AssignOrgChart':
+                return {
+                    text: 'Assign Org Chart',
+                    class: 'glyphicon glyphicon-ok-circle'
+                };
+            case 'AssignCarriers':
+                return {
+                    text: 'Assign Carriers',
+                    class: 'glyphicon glyphicon-ok-circle'
+                };
         }
     }
 }]);

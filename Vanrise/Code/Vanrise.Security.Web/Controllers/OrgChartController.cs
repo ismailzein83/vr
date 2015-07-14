@@ -11,12 +11,19 @@ namespace Vanrise.Security.Web.Controllers
     public class OrgChartController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpGet]
+        public IEnumerable<OrgChart> GetOrgCharts()
+        {
+            OrgChartManager manager = new OrgChartManager();
+            return manager.GetOrgCharts();
+        }
+
+        [HttpGet]
         public IEnumerable<OrgChart> GetFilteredOrgCharts(int fromRow, int toRow, string name)
         {
             OrgChartManager manager = new OrgChartManager();
             return manager.GetFilteredOrgCharts(fromRow, toRow, name);
         }
-
+        
         [HttpGet]
         public OrgChart GetOrgChartById(int orgChartId)
         {

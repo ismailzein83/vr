@@ -2,6 +2,7 @@
 var serviceObj = function (BaseAPIService) {
     return ({
         GetCarriers: GetCarriers,
+        //GetRelevantCarriers: GetRelevantCarriers,
         insertCarrierTest: insertCarrierTest,
         GetCarrierAccounts: GetCarrierAccounts,
         GetCarrierAccount: GetCarrierAccount,
@@ -13,6 +14,12 @@ var serviceObj = function (BaseAPIService) {
                 carrierType: carrierType
             });
     }
+    //function GetRelevantCarriers(from, to) {
+    //    return BaseAPIService.get('/api/Carrier/GetRelevantCarriers', {
+    //        from: from,
+    //        to: to
+    //    });
+    //}
     function insertCarrierTest(CarrierAccountID, Name) {
         return BaseAPIService.post("/api/Carrier/insertCarrierTest",
             {

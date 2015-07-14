@@ -1,0 +1,22 @@
+﻿<div vr-modalcontent ng-controller="BusinessEntity_CarrierAssignmentEditorController" draggable="true">
+    <vr-modalbody width="'50%'" vr-loader="isGettingData">
+        <vr-form name="AssignCarriersForm">
+            <vr-row>
+                <vr-columns colnum="6">
+                    
+                    <!--<vr-datagrid datasource="carriers" menuactions="gridMenuActions" loadmoredata="loadMoreData" on-ready="onGridReady">
+                        <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
+                    </vr-datagrid>-->
+
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+
+    <vr-actionbar>
+        <div transclude-to="buttons">
+            <vr-button type="AssignCarriers" data-onclick="assignCarriers"></vr-button>
+            <vr-button type="Close" data-onclick="closeModal"></vr-button>
+        </div>
+    </vr-actionbar>
+</div>

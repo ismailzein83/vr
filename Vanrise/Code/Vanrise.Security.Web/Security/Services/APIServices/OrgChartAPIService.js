@@ -1,11 +1,16 @@
 ﻿app.service('OrgChartAPIService', function (BaseAPIService) {
     return ({
+        GetOrgCharts: GetOrgCharts,
         GetFilteredOrgCharts: GetFilteredOrgCharts,
         GetOrgChartById: GetOrgChartById,
         AddOrgChart: AddOrgChart,
         UpdateOrgChart: UpdateOrgChart,
         DeleteOrgChart: DeleteOrgChart
     });
+
+    function GetOrgCharts() {
+        return BaseAPIService.get('/api/OrgChart/GetOrgCharts');
+    }
 
     function GetFilteredOrgCharts(fromRow, toRow, name) {
         return BaseAPIService.get(

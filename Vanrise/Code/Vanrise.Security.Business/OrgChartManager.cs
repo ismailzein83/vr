@@ -11,6 +11,12 @@ namespace Vanrise.Security.Business
 {
     public class OrgChartManager
     {
+        public List<OrgChart> GetOrgCharts()
+        {
+            IOrgChartDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IOrgChartDataManager>();
+            return dataManager.GetOrgCharts();
+        }
+
         public List<OrgChart> GetFilteredOrgCharts(int fromRow, int toRow, string name)
         {
             IOrgChartDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IOrgChartDataManager>();

@@ -19,6 +19,13 @@ namespace TOne.BusinessEntity.Web.Controllers
             return manager.GetCarriers(carrierType);
         }
 
+        //[HttpGet]
+        //public List<CarrierAccount> GetRelevantCarriers(int from, int to)
+        //{
+        //    CarrierManager manager = new CarrierManager();
+        //    return manager.GetCarrierAccounts(from, to);
+        //}
+
         [HttpPost]
         public int insertCarrierTest(CarrierInfo carrierInfo)
         {

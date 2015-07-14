@@ -144,6 +144,12 @@
     <Content Include="BusinessEntity\Services\APIServices\PriceListAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\ProfileAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\SwitchManagmentAPIService.js" />
+    <Content Include="BusinessEntity\Views\AccountManager\AccountManagerManagement.html" />
+    <Content Include="BusinessEntity\Views\AccountManager\AccountManagerManagementController.js" />
+    <Content Include="BusinessEntity\Views\AccountManager\CarrierAssignmentEditor.html" />
+    <Content Include="BusinessEntity\Views\AccountManager\CarrierAssignmentEditorController.js" />
+    <Content Include="BusinessEntity\Views\AccountManager\OrgChartAssignmentEditor.html" />
+    <Content Include="BusinessEntity\Views\AccountManager\OrgChartAssignmentEditorController.js" />
     <Content Include="BusinessEntity\Views\CarrierAccountEditor.html" />
     <Content Include="BusinessEntity\Views\CarrierAccountEditorController.js" />
     <Content Include="BusinessEntity\Views\CarrierAccountManagement.html" />
