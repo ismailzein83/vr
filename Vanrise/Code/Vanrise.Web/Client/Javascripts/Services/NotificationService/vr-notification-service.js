@@ -122,7 +122,21 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
             case UpdateOperationResultEnum.Succeeded.value: showSuccess(itemType + " updated successfully");
                 return true;
                 break;
-            case UpdateOperationResultEnum.Failed.value: showError("Failed to update " + itemType); break;
+            case UpdateOperationResultEnum.Failed.value:
+                if (updateOperationOutput.Message != undefined) {
+                    showError(updateOperationOutput.Message); break;
+                }
+
+                else {
+                    showError("Failed to update " + itemType); break;
+                }
+            case UpdateOperationResultEnum.SameExists.value:
+                switch (itemType) {
+                    case "View": showWarning("Same View Name already exists"); break;
+                    case "Widget": showWarning("Same Widget Name already exists"); break;
+                    default: showWarning(itemType + " with the same key already exists"); break;
+                }
+                break;
         }
         return false;
     }
