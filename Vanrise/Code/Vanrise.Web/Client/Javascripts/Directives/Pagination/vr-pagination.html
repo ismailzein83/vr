@@ -16,7 +16,7 @@
                 <div style=" margin-top: 4px;text-align:center " ng-init="ctrl.pagersettings.currentPage = 1" ng-show="ctrl.numberOfPages > 1">
                     <pagination total-items="ctrl.pagersettings.totalDataCount" ng-model="ctrl.pagersettings.currentPage" max-size="10" class="pagination-sm vr-custom-pagination" num-pages="ctrl.numberOfPages"
                                 items-per-page="ctrl.pagersettings.itemsPerPage" direction-links="true" boundary-links="true" rotate="false" ng-change="ctrl.pageChanged()"
-                                previous-text="‹" next-text="›" first-text="«" last-text="»"></pagination>
+                                previous-text="&lt;" next-text="&gt;" first-text="&lt;&lt;" last-text="&gt;&gt;"></pagination>
                 </div>
             </vr-columns>
             <vr-columns colnum="2" simplecol>

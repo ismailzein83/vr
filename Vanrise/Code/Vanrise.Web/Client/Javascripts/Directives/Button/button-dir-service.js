@@ -95,7 +95,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
             case 'ApplyChanges':
                 return {
                     text: 'Apply Changes',
-                    class: 'glyphicon glyphicon-ok'
+                    class: 'glyphicon glyphicon-ok-circle'
                 }
         }
     }
