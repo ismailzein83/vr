@@ -26,8 +26,8 @@
                 </div>
                 <div class="col-md-6" ng-show="tree.currentNode">
                     <form class="form-inline" style="margin-top: 15px;">
-                        <vr-select label="Manager:" datasource="validManagers" selectedvalues="selectedManager" datatextfield="Name" onselectionchanged="filterUsers" datavaluefield="UserId"></vr-select>
-                        <vr-select ismultipleselection label="Users:" datasource="validUsers" selectedvalues="selectedUsers" datatextfield="Name" datavaluefield="UserId"></vr-select>
+                        <vr-select label="Manager" datasource="validManagers" selectedvalues="selectedManager" datatextfield="Name" onselectionchanged="filterUsers" datavaluefield="UserId"></vr-select>
+                        <vr-select ismultipleselection label="Users" datasource="validUsers" selectedvalues="selectedUsers" datatextfield="Name" datavaluefield="UserId"></vr-select>
 
                         <vr-button type="ApplyChanges" formname="orgChartEditorForm" data-onclick="applyChange" standalone></vr-button>
                     </form>
