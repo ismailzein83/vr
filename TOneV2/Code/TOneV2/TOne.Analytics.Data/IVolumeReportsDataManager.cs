@@ -9,6 +9,6 @@ namespace TOne.Analytics.Data
 {
     public interface IVolumeReportsDataManager : IDataManager
     {
-        List<VolumeTraffic> GetVolumeReportData(DateTime fromDate, DateTime toDate, string customerID, string supplierID, string ZoneID, int attempts, string selectedTimePeriod);
+        List<VolumeTrafficResult> GetVolumeReportData(DateTime fromDate, DateTime toDate, string customerID, string supplierID, string ZoneID, int attempts, string selectedTimePeriod, VolumeReportsOptions selectedTrafficReport);
     }
 }

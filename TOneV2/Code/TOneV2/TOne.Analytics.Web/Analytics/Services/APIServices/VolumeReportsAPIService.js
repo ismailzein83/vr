@@ -4,7 +4,7 @@
         GetVolumeReportData: GetVolumeReportData
     });
 
-    function GetVolumeReportData(fromDate, toDate, selectedCustomers, selectedSuppliers, selectedZones, attempts, selectedTimePeriod) {
+    function GetVolumeReportData(fromDate, toDate, selectedCustomers, selectedSuppliers, selectedZones, attempts, selectedTimePeriod, selectedTrafficReport) {
         return BaseAPIService.get("/api/Volume/GetVolumeReportData", {
             fromDate: fromDate,
             toDate: toDate,
@@ -12,7 +12,8 @@
             selectedSuppliers: selectedSuppliers,
             selectedZones: selectedZones,
             attempts: attempts,
-            selectedTimePeriod:selectedTimePeriod
+            selectedTimePeriod: selectedTimePeriod,
+            selectedTrafficReport: selectedTrafficReport
         });
     }
 });

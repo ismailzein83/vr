@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.Analytics.Entities
 {
-    public class VolumeTraffic
+    public class VolumeTrafficResult
     {
-       // public List<decimal> {get; set;}
-        public int Attempts { get; set; }
-        public decimal Duration { get; set; }
+        public List<decimal> Values { get; set; }
     }
 }

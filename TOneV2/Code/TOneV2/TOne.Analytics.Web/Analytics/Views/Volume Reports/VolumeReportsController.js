@@ -7,7 +7,7 @@ function VolumeReportsController($scope, VolumeReportsAPIService, VolumeReportsT
 
 
     function defineScope() {
-        $scope.fromDate = '2013/07/01';
+        $scope.fromDate = '2012/07/01';
         $scope.toDate = '2015/07/10';
         $scope.timePeriods = [];
         $scope.trafficTypeReports = [];
@@ -86,17 +86,17 @@ function VolumeReportsController($scope, VolumeReportsAPIService, VolumeReportsT
     function getVolumeReportsData() {
          $scope.isLoading = true;
         var filter = buildFilter();
-        console.log(filter.CustomerIds);
-        console.log(filter.SupplierIds);
-        console.log(filter.ZoneIds);
-        return VolumeReportsAPIService.GetVolumeReportData($scope.fromDate, $scope.toDate, filter.CustomerIds, filter.SupplierIds, filter.ZoneIds, $scope.attempts, $scope.selectedTimePeriod.description).then(function (response) {
+       // console.log(filter.CustomerIds);
+      //  console.log(filter.SupplierIds);
+        //  console.log(filter.ZoneIds);
+      
+        return VolumeReportsAPIService.GetVolumeReportData($scope.fromDate, $scope.toDate, filter.CustomerIds, filter.SupplierIds, filter.ZoneIds, $scope.attempts, $scope.selectedTimePeriod.description, $scope.selectedTrafficReport.value).then(function (response) {
+            $scope.chartData.length = 0;
             angular.forEach(response, function (item) {
                 var attempts = item.Attempts;
-                var Duration = item.Duration;
-                $scope.chartData.push(item);
-                console.log($scope.chartData);
-              });
-            console.log(response);
+                var duration = item.Duration;
+                $scope.chartData.push(item);       
+              });      
             updateChart( $scope.chartData);
 
         }).finally(function () {
@@ -106,53 +106,29 @@ function VolumeReportsController($scope, VolumeReportsAPIService, VolumeReportsT
 
 
     function updateChart(chartData) {
-
-        //if ($scope.chartSaleCostProfitAPI == undefined)
-        //    return;
-
-        //if ($scope.chartProfitAPI == undefined)
-        //    return;
-        var fromDate = $scope.fromDate;
-        var toDate = $scope.toDate;
-        if (fromDate == undefined || toDate == undefined)
-            return;
-
-      //  $scope.chartData.length = 0;
-        $scope.isGettingData = true;
-       // var selectedTimeDimension = $scope.timeDimensionTypesOption.lastselectedvalue;
-       
-        var data = chartData;
         var chartDefinition = {
-                    type: "column",
-                    //    title: "Cost/Sale/Profit",
-                    yAxisTitle: "Value"
+            type: "column",
+            title: "Traffic volume"
         };
-        var xAxisDefinition = { titlePath: "xValue" };
-         //       var xAxisDefinition = { titlePath: "dateTimeValue", groupNamePath: "dateTimeGroupValue" };
-                //var seriesDefinitions = [{
-                //    title: "PROFIT",
-                //    valuePath: "Values[2]",
-                //    type: "spline"
-                //}
-        //];
+        var xAxisDefinition = {
+            titlePath: "Values"
+        };
         var seriesDefinitions = [];
-        for (var i = 0; i < data.length; i++) {
-            var dataItem = data[i];
-            seriesDefinitions.push({
-                title: dataItem.Name,
-                valuePath: "Values[" + i + "]",
-                type: "column"
-            });
-
-            for (var j = 1; j < data.length + 1; j++) {
-                chartData.Values[i] = dataItem.Values[j - 1];
-            }
+        var seriesDefinitions = [{
+            title: "Attempts",
+            valuePath: "Values[0]",
+            type: "column"
+        }, {
+            title: "Durations",
+            valuePath: "Values[1]",
+            type: "column"
         }
+        ];
 
-        
-                chartAPI.renderChart(chartData, chartDefinition, seriesDefinitions, xAxisDefinition);
-            
-                $scope.isGettingData = false;
+        console.log(seriesDefinitions);
+        chartAPI.renderChart(chartData, chartDefinition, seriesDefinitions, xAxisDefinition);
+     
+
             
     }
    

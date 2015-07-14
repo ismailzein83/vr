@@ -89,4 +89,11 @@ namespace TOne.Analytics.Entities
         Decrease = -1,
         New = 2
     }
+
+    public enum VolumeReportsOptions { 
+    
+    TrafficVolumes= 0,
+    CompareInOutTraffic=1,
+    DestinationTrafficVolumes=2
+    }
 }

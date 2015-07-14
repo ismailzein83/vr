@@ -15,9 +15,9 @@ namespace TOne.Analytics.Business
             _datamanager = AnalyticsDataManagerFactory.GetDataManager<IVolumeReportsDataManager>();
         }
 
-        public List<VolumeTraffic> GetVolumeReportData(DateTime fromDate, DateTime toDate, string customerID, string supplierID, string ZoneID, int attempts, string selectedTimePeriod)
+        public List<VolumeTrafficResult> GetVolumeReportData(DateTime fromDate, DateTime toDate, string customerID, string supplierID, string ZoneID, int attempts, string selectedTimePeriod,VolumeReportsOptions selectedTrafficReport)
         {
-            return _datamanager.GetVolumeReportData(fromDate, toDate, customerID, supplierID, ZoneID, attempts, selectedTimePeriod);
+            return _datamanager.GetVolumeReportData(fromDate, toDate, customerID, supplierID, ZoneID, attempts, selectedTimePeriod, selectedTrafficReport);
 
         }
     }

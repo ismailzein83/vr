@@ -21,9 +21,9 @@ namespace TOne.Analytics.Web.Controllers
         }
           
         [HttpGet]
-        public List<VolumeTraffic> GetVolumeReportData(DateTime fromDate, DateTime toDate, string selectedCustomers, string selectedSuppliers, string selectedZones, int attempts, string selectedTimePeriod)
+        public List<VolumeTrafficResult> GetVolumeReportData(DateTime fromDate, DateTime toDate, string selectedCustomers, string selectedSuppliers, string selectedZones, int attempts, string selectedTimePeriod, VolumeReportsOptions selectedTrafficReport)
         {
-            return __volumeReportsManager.GetVolumeReportData(fromDate, toDate, selectedCustomers, selectedSuppliers, selectedZones, attempts, selectedTimePeriod);
+            return __volumeReportsManager.GetVolumeReportData(fromDate, toDate, selectedCustomers, selectedSuppliers, selectedZones, attempts, selectedTimePeriod, selectedTrafficReport);
         }
     }
 }
