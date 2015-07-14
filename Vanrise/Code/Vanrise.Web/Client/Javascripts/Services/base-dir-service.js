@@ -71,7 +71,7 @@ app.service('BaseDirService', ['ValidationMessagesEnum', function (ValidationMes
         return 'ElmntId_' + replaceAll(guid(), '-', '');
     }
 
-    function getValidationMessageTemplate(requiredValue, requiredArray, invalidFormat, customValidation) {
+    function getValidationMessageTemplate(requiredValue, requiredArray, invalidFormat, customValidation,invalidEmail) {
         var template = '<div  class="disable-animations tooltip-error" ng-style="ctrl.isVisibleTooltip() ? {\'display\':\'block\'} : {\'display\':\'none\'} " ng-messages="ctrl.getErrorObject()">';
         if (requiredValue)
             template += '<div ng-message="requiredvalue">{{ ctrl.ValidationMessagesEnum.required }}</div>';
@@ -79,6 +79,8 @@ app.service('BaseDirService', ['ValidationMessagesEnum', function (ValidationMes
             template += '<div ng-message="requiredarray">{{ ctrl.ValidationMessagesEnum.required }}</div>';
         if (invalidFormat)
             template += '<div ng-message="invalidformat">{{ ctrl.ValidationMessagesEnum.invalidFormat }}</div>';
+        if (invalidEmail)
+            template += '<div ng-message="invalidemail">{{ ctrl.ValidationMessagesEnum.invalidEmail }}</div>';
         if (customValidation)
             template += '<div ng-message="customvalidation">{{ ctrl.customMessage }}</div>';
         return template + '</div>';
@@ -94,6 +96,10 @@ app.service('BaseDirService', ['ValidationMessagesEnum', function (ValidationMes
             elementToValidate.attr('vr-validation-array', '');
         if (validationOptions.customValidation)
             elementToValidate.attr('vr-validation-custom', 'ctrl.customvalidate');
+        if (validationOptions.emailValidation)
+            elementToValidate.attr('vr-validation-email', '');
+
+        
 
         elementToTriggerMessage.attr('ng-mouseenter', 'ctrl.showTooltip()');
         elementToTriggerMessage.attr('ng-mouseleave', 'ctrl.hideTooltip()');
