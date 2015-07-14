@@ -18,8 +18,10 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
 
         if ($scope.orgChartId != undefined)
             editMode = true;
-        else
+        else {
             editMode = false;
+            $scope.name = ''; // hides the save button
+        }
     }
 
     function defineScope() {
@@ -46,17 +48,32 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
             $scope.modalContext.closeModal();
         };
 
-        $scope.filterUsers = function (option) {
-            if (option != undefined) {
+        $scope.filterUsers = function () {
+            if ($scope.selectedManager != undefined) {
+                // reset the valid users
                 $scope.validUsers = angular.copy($scope.users);
-                var index = UtilsService.getItemIndexByVal($scope.validUsers, option.UserId, 'UserId');
-                if (index != -1) {
-                    $scope.validUsers.splice(index, 1);
-                }
-                index = UtilsService.getItemIndexByVal($scope.validUsers, $scope.tree.currentNode.Id, 'UserId');
+
+                // remove the selected user from the valid users
+                var index = UtilsService.getItemIndexByVal($scope.validUsers, $scope.tree.currentNode.Id, 'UserId');
+                $scope.validUsers.splice(index, 1);
+
+                // remove the selected manager from the valid users
+                index = UtilsService.getItemIndexByVal($scope.validUsers, $scope.selectedManager.UserId, 'UserId');
                 $scope.validUsers.splice(index, 1);
             }
         }
+
+        //$scope.filterManagers = function () {
+        //    // reset the valid valid managers
+        //    $scope.validManagers = angular.copy($scope.users);
+
+        //    // remove the selected user from the valid managers
+        //    var index = UtilsService.getItemIndexByVal($scope.validManagers, $scope.tree.currentNode.Id, 'UserId');
+        //    $scope.validManagers.splice(index, 1);
+
+        //    // remove the members of the selected users from the valid managers
+
+        //}
 
         $scope.$watch('tree.currentNode', function (newObj, oldObj) {
             if (angular.isObject($scope.tree.currentNode)) {
