@@ -137,9 +137,9 @@
     <Content Include="Client\Images\02.png" />
     <Content Include="Client\Images\doruknet-logo.png" />
     <Content Include="Client\Images\log in.png" />
-    <Content Include="Client\Images\log out.png" />
     <Content Include="Client\Images\login.png" />
     <Content Include="Client\Images\logoonheader.png" />
+    <Content Include="Client\Images\logout.png" />
     <Content Include="Client\Images\member.png" />
     <Content Include="Client\Images\support.png" />
     <Content Include="Client\Javascripts\Constants\ColumnWidthEnum.js" />
