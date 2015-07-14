@@ -27,7 +27,7 @@ namespace TOne.Analytics.Web.Controllers
         {
             if (variationReportOption == VariationReportOptions.InOutBoundMinutes || variationReportOption == VariationReportOptions.InOutBoundAmount)
             {
-                return __billingStatisticsManager.GetInOutVariationReportsData(selectedDate, periodCount, timePeriod, variationReportOption, entityType, entityID, groupingBy);
+                return __billingStatisticsManager.GetInOutVariationReportsData(selectedDate, periodCount, timePeriod, variationReportOption, entityType, entityID, groupingBy,fromRow,toRow);
               
             }
             else
