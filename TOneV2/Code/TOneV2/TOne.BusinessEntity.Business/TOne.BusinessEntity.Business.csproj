@@ -55,6 +55,7 @@
     <Compile Include="CommissionManager.cs" />
     <Compile Include="PriceListManager.cs" />
     <Compile Include="PricingGeneratorManager.cs" />
+    <Compile Include="ProfileManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateManager.cs" />
     <Compile Include="FlaggedServiceManager.cs" />
