@@ -10,7 +10,7 @@ namespace Vanrise.Integration.Adapters.SQLReceiveAdapter
     {
         public override void ImportData(Action<IImportedData> receiveData)
         {
-            using (var connection = new SqlConnection(this.ConnectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
                 var command = new SqlCommand(Query, connection);

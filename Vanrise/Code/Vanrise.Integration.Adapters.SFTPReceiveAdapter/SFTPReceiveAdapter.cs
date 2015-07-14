@@ -42,15 +42,15 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
 
             private void AfterImport(Sftp sftp, SftpItem fileObj, String filePath)
             {
-                if (ActionAfterImport == Actions.Rename)
+                if (ActionAfterImport == (int)Actions.Rename)
                 {
                     sftp.Rename(filePath, filePath.Replace(Extension, ".Imported"));
                 }
-                else if (ActionAfterImport == Actions.Delete)
+                else if (ActionAfterImport == (int)Actions.Delete)
                 {
                     sftp.DeleteFile(filePath);
                 }
-                else if (ActionAfterImport == Actions.Move)
+                else if (ActionAfterImport == (int)Actions.Move)
                 {
                     if (!sftp.DirectoryExists(DirectorytoMoveFile))
                         sftp.CreateDirectory(DirectorytoMoveFile);

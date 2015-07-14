@@ -30,7 +30,7 @@ namespace Vanrise.Integration.Adapters.BaseFTP
 
             public string DirectorytoMoveFile { get; set; }
 
-            public Actions ActionAfterImport { get; set; }
+            public int ActionAfterImport { get; set; }
 
         # endregion 
 

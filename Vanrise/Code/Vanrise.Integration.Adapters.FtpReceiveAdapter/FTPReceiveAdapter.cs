@@ -42,15 +42,15 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
 
         private void AfterImport(Ftp ftp, FtpItem fileObj, String filePath)
         {
-            if (ActionAfterImport == Actions.Rename)
+            if (ActionAfterImport == (int)Actions.Rename)
             {
                 ftp.Rename(filePath, filePath.Replace(Extension, ".Imported"));
             }
-            else if (ActionAfterImport == Actions.Delete)
+            else if (ActionAfterImport == (int)Actions.Delete)
             {
                 ftp.DeleteFile(filePath);
             }
-            else if (ActionAfterImport == Actions.Move)
+            else if (ActionAfterImport == (int)Actions.Move)
             {
                 if (!ftp.DirectoryExists(DirectorytoMoveFile))
                     ftp.CreateDirectory(DirectorytoMoveFile);

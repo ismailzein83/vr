@@ -14,7 +14,8 @@ function FTPReceiveAdapterTemplateController($scope) {
 
 
         $scope.dataSourceAdapter.getData = function () {
-
+            console.log('$scope.selectedAction.value')
+            console.log($scope.selectedAction.value)
             return {
                 $type: "",
                 Extension: $scope.extension,
@@ -23,7 +24,7 @@ function FTPReceiveAdapterTemplateController($scope) {
                 UserName: $scope.userName,
                 Password: $scope.password,
                 DirectorytoMoveFile: $scope.directorytoMoveFile,
-                ActionAfterImport: $scope.actionsAfterImport
+                ActionAfterImport: $scope.selectedAction.value
             };
         };
 
@@ -45,7 +46,7 @@ function FTPReceiveAdapterTemplateController($scope) {
              $scope.userName=UserName;
              $scope.password=Password;
              $scope.directorytoMoveFile=DirectorytoMoveFile;
-             $scope.actionsAfterImport=ActionAfterImport;
+             $scope.selectedAction = ActionAfterImport;
         }
         else {
             $scope.extension = undefined;
@@ -54,7 +55,7 @@ function FTPReceiveAdapterTemplateController($scope) {
             $scope.userName = undefined;
             $scope.password = undefined;
             $scope.directorytoMoveFile = undefined;
-            $scope.actionsAfterImport = undefined;
+            $scope.selectedAction = undefined;
         }
         isFormLoaded = true;
     }
