@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6E5BAC68-BE22-4319-BEB8-0A007EDA6735}</ProjectGuid>
+    <ProjectGuid>{36139FF0-5A20-4A9A-A423-14D0F0F1C09C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Vanrise.Integration.Adapters.SFTPReceiveAdapter</RootNamespace>
-    <AssemblyName>Vanrise.Integration.Adapters.SFTPReceiveAdapter</AssemblyName>
+    <RootNamespace>Vanrise.Integration.Adapters.BaseFTP</RootNamespace>
+    <AssemblyName>Vanrise.Integration.Adapters.BaseFTP</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -34,33 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Rebex.Net.Ftp">
-      <HintPath>..\Resources\DLLs\Rebex.Net.Ftp.dll</HintPath>
-    </Reference>
-    <Reference Include="Rebex.Net.ProxySocket">
-      <HintPath>..\Resources\DLLs\Rebex.Net.ProxySocket.dll</HintPath>
-    </Reference>
-    <Reference Include="Rebex.Net.SecureSocket">
-      <HintPath>..\Resources\DLLs\Rebex.Net.SecureSocket.dll</HintPath>
-    </Reference>
-    <Reference Include="Rebex.Net.Sftp">
-      <HintPath>..\Resources\DLLs\Rebex.Net.Sftp.dll</HintPath>
-    </Reference>
-    <Reference Include="Rebex.Net.Ssh">
-      <HintPath>..\Resources\DLLs\Rebex.Net.Ssh.dll</HintPath>
-    </Reference>
-    <Reference Include="Rebex.Net.SshShell">
-      <HintPath>..\Resources\DLLs\Rebex.Net.SshShell.dll</HintPath>
-    </Reference>
-    <Reference Include="Rebex.Net.Telnet">
-      <HintPath>..\Resources\DLLs\Rebex.Net.Telnet.dll</HintPath>
-    </Reference>
-    <Reference Include="Rebex.Security">
-      <HintPath>..\Resources\DLLs\Rebex.Security.dll</HintPath>
-    </Reference>
-    <Reference Include="Rebex.TerminalEmulation">
-      <HintPath>..\Resources\DLLs\Rebex.TerminalEmulation.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -70,27 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SFTPReceiveAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TPReceiveAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Vanrise.Integration.Adapters.BaseFTP\Vanrise.Integration.Adapters.BaseFTP.csproj">
-      <Project>{36139ff0-5a20-4a9a-a423-14d0f0f1c09c}</Project>
-      <Name>Vanrise.Integration.Adapters.BaseFTP</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Integration.Entities\Vanrise.Integration.Entities.csproj">
       <Project>{bc343c8c-a1ba-4d9e-b4da-c59029594d50}</Project>
       <Name>Vanrise.Integration.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

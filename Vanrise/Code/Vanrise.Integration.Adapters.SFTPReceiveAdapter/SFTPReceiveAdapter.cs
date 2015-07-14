@@ -1,7 +1,7 @@
 ﻿using Rebex.Net;
 using System;
 using System.IO;
-using Vanrise.Integration.Adapters.BaseTP;
+using Vanrise.Integration.Adapters.BaseFTP;
 using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter

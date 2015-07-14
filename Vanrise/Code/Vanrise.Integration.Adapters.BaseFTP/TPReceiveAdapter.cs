@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Integration.Entities;
 
-namespace Vanrise.Integration.Adapters.BaseTP
+namespace Vanrise.Integration.Adapters.BaseFTP
 {
     public abstract class TPReceiveAdapter : BaseReceiveAdapter
     {
@@ -30,7 +30,7 @@ namespace Vanrise.Integration.Adapters.BaseTP
 
             public string DirectorytoMoveFile { get; set; }
 
-            public ctions ActionAfterImport { get; set; }
+            public Actions ActionAfterImport { get; set; }
 
         # endregion 
 
