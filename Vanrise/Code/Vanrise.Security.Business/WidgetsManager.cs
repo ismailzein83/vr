@@ -28,7 +28,7 @@ namespace Vanrise.Security.Business
             int checkSetting = dataManager.CheckWidgetSetting(widget.Setting);
             if (checkSetting == 1)
             {
-                insertOperationOutput.Message = "Widget with same  settings exist !!";
+                insertOperationOutput.Message = "Widget with same settings exist !!";
                 return insertOperationOutput;
             }
 
@@ -59,6 +59,12 @@ namespace Vanrise.Security.Business
             updateOperationOutput.Result = UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
             IWidgetsDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IWidgetsDataManager>();
+            int checkSetting = dataManager.CheckWidgetSetting(widget.Setting);
+            if (checkSetting == 1)
+            {
+                updateOperationOutput.Message = "Widget with same settings exist !!";
+                return updateOperationOutput;
+            }
             bool insertActionSucc = dataManager.UpdateWidget(widget);
 
             if (insertActionSucc)

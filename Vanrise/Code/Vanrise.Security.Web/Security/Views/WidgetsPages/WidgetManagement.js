@@ -44,7 +44,7 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
                 if ($scope.selectedWidgetsType != undefined)
                     widgetType = $scope.selectedWidgetsType.ID;
                 else
-                    widgetType = -1;
+                    widgetType = 0;
                 var widgetName = '';
                 if ($scope.widgetName != undefined)
                     widgetName = $scope.widgetName;

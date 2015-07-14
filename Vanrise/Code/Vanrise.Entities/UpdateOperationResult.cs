@@ -11,7 +11,7 @@ namespace Vanrise.Entities
     public class UpdateOperationOutput<T>
     {
         public UpdateOperationResult Result { get; set; }
-
+        public string Message { get; set; }
         public T UpdatedObject { get; set; }
     }
 }

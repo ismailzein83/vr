@@ -82,13 +82,7 @@ namespace Vanrise.Security.Data.SQL
         {
             if (WidgetName == null)
                 WidgetName = "";
-            if (WidgetType!=-1)
-            {
-                   return GetItemsSP("sec.sp_Widget_GetByNameAndType", WidgetMapper, WidgetName, WidgetType);
-            }
-             
-            else
-                return GetItemsSP("sec.sp_Widget_GetByName", WidgetMapper, WidgetName);
+            return GetItemsSP("sec.sp_Widget_GetFiltered", WidgetMapper, WidgetName, ToDBNullIfDefault(WidgetType));
         }
         public int CheckWidgetSetting(WidgetSetting setting){
              string serialziedSetting = null;
