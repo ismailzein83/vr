@@ -79,8 +79,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Web", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Adapters.FileReceiveAdapter", "Vanrise.Integration.Adapters.FileReceiverAdapter\Vanrise.Integration.Adapters.FileReceiveAdapter.csproj", "{A2BA285E-4F1B-4015-95DA-DBFE41701966}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Adapters.FTPReceiveAdapter", "Vanrise.Integration.Adapters.FtpReceiveAdapter\Vanrise.Integration.Adapters.FTPReceiveAdapter.csproj", "{FB7F11A8-5A64-4C59-B72F-26EC95C07AEB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Adapters.SQLReceiveAdapter", "Vanrise.Integration.Adapters.SQLReceiveAdapter\Vanrise.Integration.Adapters.SQLReceiveAdapter.csproj", "{0BF0203D-561C-471A-87DE-37C89D96E9EB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Adapters.SFTPReceiveAdapter", "Vanrise.Integration.Adapters.SFTPReceiveAdapter\Vanrise.Integration.Adapters.SFTPReceiveAdapter.csproj", "{6E5BAC68-BE22-4319-BEB8-0A007EDA6735}"
@@ -95,7 +93,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Adapter
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 38
+		SccNumberOfProjects = 37
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -223,30 +221,26 @@ Global
 		SccProjectTopLevelParentUniqueName31 = Vanrise.sln
 		SccProjectName31 = Vanrise.Integration.Adapters.FileReceiverAdapter
 		SccLocalPath31 = Vanrise.Integration.Adapters.FileReceiverAdapter
-		SccProjectUniqueName32 = Vanrise.Integration.Adapters.FtpReceiveAdapter\\Vanrise.Integration.Adapters.FTPReceiveAdapter.csproj
+		SccProjectUniqueName32 = Vanrise.Integration.Adapters.SQLReceiveAdapter\\Vanrise.Integration.Adapters.SQLReceiveAdapter.csproj
 		SccProjectTopLevelParentUniqueName32 = Vanrise.sln
-		SccProjectName32 = Vanrise.Integration.Adapters.FtpReceiveAdapter
-		SccLocalPath32 = Vanrise.Integration.Adapters.FtpReceiveAdapter
-		SccProjectUniqueName33 = Vanrise.Integration.Adapters.SQLReceiveAdapter\\Vanrise.Integration.Adapters.SQLReceiveAdapter.csproj
+		SccProjectName32 = Vanrise.Integration.Adapters.SQLReceiveAdapter
+		SccLocalPath32 = Vanrise.Integration.Adapters.SQLReceiveAdapter
+		SccProjectUniqueName33 = Vanrise.Integration.Adapters.SFTPReceiveAdapter\\Vanrise.Integration.Adapters.SFTPReceiveAdapter.csproj
 		SccProjectTopLevelParentUniqueName33 = Vanrise.sln
-		SccProjectName33 = Vanrise.Integration.Adapters.SQLReceiveAdapter
-		SccLocalPath33 = Vanrise.Integration.Adapters.SQLReceiveAdapter
-		SccProjectUniqueName34 = Vanrise.Integration.Adapters.SFTPReceiveAdapter\\Vanrise.Integration.Adapters.SFTPReceiveAdapter.csproj
+		SccProjectName33 = Vanrise.Integration.Adapters.SFTPReceiveAdapter
+		SccLocalPath33 = Vanrise.Integration.Adapters.SFTPReceiveAdapter
+		SccProjectUniqueName34 = Vanrise.Integration.Adapters.MySQLReceiveAdapter\\Vanrise.Integration.Adapters.MySQLReceiveAdapter.csproj
 		SccProjectTopLevelParentUniqueName34 = Vanrise.sln
-		SccProjectName34 = Vanrise.Integration.Adapters.SFTPReceiveAdapter
-		SccLocalPath34 = Vanrise.Integration.Adapters.SFTPReceiveAdapter
-		SccProjectUniqueName35 = Vanrise.Integration.Adapters.MySQLReceiveAdapter\\Vanrise.Integration.Adapters.MySQLReceiveAdapter.csproj
+		SccProjectName34 = Vanrise.Integration.Adapters.MySQLReceiveAdapter
+		SccLocalPath34 = Vanrise.Integration.Adapters.MySQLReceiveAdapter
+		SccProjectUniqueName35 = Vanrise.Integration.Adapters.IBaseDB\\Vanrise.Integration.Adapters.BaseDB.csproj
 		SccProjectTopLevelParentUniqueName35 = Vanrise.sln
-		SccProjectName35 = Vanrise.Integration.Adapters.MySQLReceiveAdapter
-		SccLocalPath35 = Vanrise.Integration.Adapters.MySQLReceiveAdapter
-		SccProjectUniqueName36 = Vanrise.Integration.Adapters.IBaseDB\\Vanrise.Integration.Adapters.BaseDB.csproj
+		SccProjectName35 = Vanrise.Integration.Adapters.IBaseDB
+		SccLocalPath35 = Vanrise.Integration.Adapters.IBaseDB
+		SccProjectUniqueName36 = Vanrise.Integration.Adapters.BaseFTP\\Vanrise.Integration.Adapters.BaseFTP.csproj
 		SccProjectTopLevelParentUniqueName36 = Vanrise.sln
-		SccProjectName36 = Vanrise.Integration.Adapters.IBaseDB
-		SccLocalPath36 = Vanrise.Integration.Adapters.IBaseDB
-		SccProjectUniqueName37 = Vanrise.Integration.Adapters.BaseFTP\\Vanrise.Integration.Adapters.BaseFTP.csproj
-		SccProjectTopLevelParentUniqueName37 = Vanrise.sln
-		SccProjectName37 = Vanrise.Integration.Adapters.BaseFTP
-		SccLocalPath37 = Vanrise.Integration.Adapters.BaseFTP
+		SccProjectName36 = Vanrise.Integration.Adapters.BaseFTP
+		SccLocalPath36 = Vanrise.Integration.Adapters.BaseFTP
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -525,14 +519,6 @@ Global
 		{A2BA285E-4F1B-4015-95DA-DBFE41701966}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A2BA285E-4F1B-4015-95DA-DBFE41701966}.Release|x64.ActiveCfg = Release|Any CPU
 		{A2BA285E-4F1B-4015-95DA-DBFE41701966}.Release|x86.ActiveCfg = Release|Any CPU
-		{FB7F11A8-5A64-4C59-B72F-26EC95C07AEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FB7F11A8-5A64-4C59-B72F-26EC95C07AEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FB7F11A8-5A64-4C59-B72F-26EC95C07AEB}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{FB7F11A8-5A64-4C59-B72F-26EC95C07AEB}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{FB7F11A8-5A64-4C59-B72F-26EC95C07AEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FB7F11A8-5A64-4C59-B72F-26EC95C07AEB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FB7F11A8-5A64-4C59-B72F-26EC95C07AEB}.Release|x64.ActiveCfg = Release|Any CPU
-		{FB7F11A8-5A64-4C59-B72F-26EC95C07AEB}.Release|x86.ActiveCfg = Release|Any CPU
 		{0BF0203D-561C-471A-87DE-37C89D96E9EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0BF0203D-561C-471A-87DE-37C89D96E9EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BF0203D-561C-471A-87DE-37C89D96E9EB}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -609,7 +595,6 @@ Global
 		{BC343C8C-A1BA-4D9E-B4DA-C59029594D50} = {A79B5E8C-36E5-408B-87E2-E7C54FA52810}
 		{070CB7FA-00D4-4BDB-AB37-5F972B5F2F0D} = {A79B5E8C-36E5-408B-87E2-E7C54FA52810}
 		{E799A8A6-EAD5-42B5-9A6D-ED1CE18BAF56} = {A79B5E8C-36E5-408B-87E2-E7C54FA52810}
-		{FB7F11A8-5A64-4C59-B72F-26EC95C07AEB} = {E799A8A6-EAD5-42B5-9A6D-ED1CE18BAF56}
 		{0BF0203D-561C-471A-87DE-37C89D96E9EB} = {E799A8A6-EAD5-42B5-9A6D-ED1CE18BAF56}
 		{6E5BAC68-BE22-4319-BEB8-0A007EDA6735} = {E799A8A6-EAD5-42B5-9A6D-ED1CE18BAF56}
 		{E2203FA3-5489-4C2C-B3D7-EE183E1E73B5} = {E799A8A6-EAD5-42B5-9A6D-ED1CE18BAF56}
