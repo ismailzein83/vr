@@ -133,10 +133,6 @@ function TestPageController($scope, UsersAPIService, UtilsService) {
                 reIndexNode(userIds, $scope.selectedManager.UserId);
             }
         };
-
-        $scope.test = function () {
-            console.log(getChildren());
-        };
     };
 
     function load() {

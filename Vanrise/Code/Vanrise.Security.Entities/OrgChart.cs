@@ -10,6 +10,14 @@ namespace Vanrise.Security.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Hierarchy { get; set; }
+        public List<Member> Hierarchy { get; set; }
     }
+
+    public class Member
+    {
+        public int Id { get; set; }
+        public List<Member> Members { get; set; }
+    }
+
+    
 }

@@ -92,6 +92,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: "Allow Inheritance",
                     class: "glyphicon  glyphicon-play"
                 };
+            case 'ApplyChanges':
+                return {
+                    text: 'Apply Changes',
+                    class: 'glyphicon glyphicon-ok'
+                }
         }
     }
 }]);

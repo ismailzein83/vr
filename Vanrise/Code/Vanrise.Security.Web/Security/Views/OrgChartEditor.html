@@ -1,0 +1,47 @@
+﻿<div vr-modalcontent draggable="" ng-controller="Security_OrgChartEditorController">
+    <vr-modalbody width="'50%'" vr-loader="isGettingData">
+        <vr-form name="orgChartEditorForm">
+            <vr-choices>
+                <vr-choice isselected="definitionSelected">Definition</vr-choice>
+                <vr-choice isselected="hierarchySelected">Hierarchy</vr-choice>
+            </vr-choices>
+
+            <div ng-show="definitionSelected">
+                <vr-row>
+                    <vr-columns colnum="6">
+                        <vr-textbox value="name" label="Name"></vr-textbox>
+                    </vr-columns>
+                </vr-row>
+            </div>
+
+            <div class="row" ng-show="hierarchySelected" style="margin-top:20px;">
+                <div class="col-md-6">
+                    <div data-angular-treeview="true"
+                         data-tree-id="tree"
+                         data-tree-model="members"
+                         data-node-id="Id"
+                         data-node-label="Name"
+                         data-node-children="Members">
+                    </div>
+                </div>
+                <div class="col-md-6" ng-show="tree.currentNode">
+                    <form class="form-inline" style="margin-top: 15px;">
+                        <vr-select label="Manager:" datasource="validManagers" selectedvalues="selectedManager" datatextfield="Name" onselectionchanged="filterUsers" datavaluefield="UserId"></vr-select>
+                        <vr-select ismultipleselection label="Users:" datasource="validUsers" selectedvalues="selectedUsers" datatextfield="Name" datavaluefield="UserId"></vr-select>
+
+                        <vr-button type="ApplyChanges" formname="orgChartEditorForm" data-onclick="applyChange" standalone></vr-button>
+                    </form>
+                </div>
+            </div>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="orgChartEditorForm" data-onclick="saveOrgChart"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>
