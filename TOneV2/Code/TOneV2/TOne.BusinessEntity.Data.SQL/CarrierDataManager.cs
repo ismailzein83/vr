@@ -161,7 +161,8 @@ namespace TOne.BusinessEntity.Data.SQL
                         CustomerPaymentType = (byte)reader["CustomerPaymentType"],
                         SupplierPaymentType = (byte)reader["SupplierPaymentType"],
                         NameSuffix = reader["NameSuffix"] as string,
-                        GroupIds = SplitGroups(reader["CarrierGroups"] as string)
+                        GroupIds = SplitGroups(reader["CarrierGroups"] as string),
+                        CarrierGroupID = GetReaderValue<int?>(reader,"CarrierGroupID")
                     });
             });
             return dic;

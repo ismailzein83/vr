@@ -26,6 +26,10 @@ function BillingReportsController($scope, ReportAPIService, CarrierAPIService, Z
     }
     function defineScope() {
        
+        $scope.optionsZones = function (filterText) {
+            return ZonesService.getSalesZones(filterText);
+        };
+
         $scope.openReport = function () {
             var paramsurl = "";
             paramsurl += "reportId=" + $scope.reporttype.ReportDefinitionId;
@@ -64,32 +68,27 @@ function BillingReportsController($scope, ReportAPIService, CarrierAPIService, Z
             }
         }
     }
+
     function load() {
         loadReportTypes();
         loadCustomers();
         loadSuppliers();
-        loadZones();
     }
 
     function loadReportTypes() {
         ReportAPIService.GetAllReportDefinition().then(function (response) {
             $scope.reportsTypes = response;
-        })
+        });
     }
     function loadCustomers() {
         CarrierAPIService.GetCarriers(1).then(function (response) {
             $scope.optionsCustomers = response;
-        })
+        });
     }
     function loadSuppliers() {
         CarrierAPIService.GetCarriers(2).then(function (response) {
             $scope.optionsSuppliers = response;
-        })
-    }
-    function loadZones() {
-        ZonesService.getSalesZones("%").then(function (response) {
-            $scope.optionsZones = response;
-        })
+        });
     }
 
 };

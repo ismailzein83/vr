@@ -25,7 +25,7 @@ namespace TOne.Analytics.Business
                    Sale_Duration = s.Sum(k => k.SaleDuration),
                    Sale_Rate = s.Sum(k => k.SaleRate * (double)k.SaleDuration) / (double)s.Sum(k => k.SaleDuration), 
                    Supplier = _bemanager.GetCarrirAccountName(s.Key.SupplierID) ,
-                   CostZone = s.Key.CostZone != null ? _bemanager.GetZoneName(s.Key.CostZone) : null,
+                   CostZone = _bemanager.GetZoneName(s.Key.CostZone),
                    Cost_Duration = s.Sum(k => k.CostDuration),
                    Cost_Rate = s.Sum(k => k.CostRate * (double)k.CostDuration) / (double)s.Sum(k => k.CostDuration),
                    Profit = ((double)s.Sum(k => k.SaleDuration) * s.Average(k => k.SaleRate)) != 0 ? (((double)s.Sum(k => k.SaleDuration) * s.Average(k => k.SaleRate)) - ((double)s.Sum(k => k.CostDuration) * s.Average(k => k.CostRate))) : 0,
@@ -41,16 +41,17 @@ namespace TOne.Analytics.Business
                    {
                        Customer = s.Key.Customer,
                        Destination = s.Key.Destination,
-                       SaleDuration = string.Format("{0:#,##0.00}", s.Sum(k => k.Sale_Duration)),
-                       SaleRate = string.Format("{0:0.0000}", (s.Sum(k => k.Sale_Rate * (double) k.Sale_Duration) / (double)s.Sum(k => k.Sale_Duration))),
+                       SaleDuration = FormatNumber(s.Sum(k => k.Sale_Duration)),
+                       SaleRate = FormatNumberDigitRate(s.Sum(k => k.Sale_Rate * (double)k.Sale_Duration) / (double)s.Sum(k => k.Sale_Duration)),
                        Supplier = s.Key.Supplier,
-                       CostDuration = string.Format("{0:#,##0.00}", s.Sum(k => k.Cost_Duration)),
-                       CostRate = string.Format("{0:0.0000}", (s.Sum(k => k.Cost_Rate * (double)k.Cost_Duration) / (double)s.Sum(k => k.Cost_Duration))),
+                       CostDuration = FormatNumber(s.Sum(k => k.Cost_Duration)),
+                       CostRate = FormatNumberDigitRate(s.Sum(k => k.Cost_Rate * (double)k.Cost_Duration) / (double)s.Sum(k => k.Cost_Duration)),
                        Profit = FormatNumber( s.Sum(k => k.Profit)),
-                       ProfitPerc = string.Format("{0:#,##0.00}%", s.Average(k => k.Profit_Perc))
+                       ProfitPerc = FormatNumberPercentage(s.Average(k => k.Profit_Perc))
                    }).OrderBy(s => s.Customer + s.Destination + s.Supplier).ToList();
 
            return resultGrouped ;
+
         }
 
         public List<RoutingAnalysisFormatted> GetRoutingAnalysis(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? top, int? customerAMUId, int? supplierAMUId)
@@ -92,12 +93,12 @@ namespace TOne.Analytics.Business
                 SaleNet = customerSummary.SaleNet,
                 CostDuration = customerSummary.CostDuration,
                 CostNet = customerSummary.CostNet,
-                SaleDurationFormatted = FormatNumber(customerSummary.SaleDuration, 2),
-                SaleNetFormatted = FormatNumber(customerSummary.SaleNet, 2),
-                CostDurationFormatted = FormatNumber(customerSummary.CostDuration, 2),
-                CostNetFormatted = FormatNumber(customerSummary.CostNet, 2),
-                ProfitFormatted = FormatNumber((customerSummary.SaleNet - customerSummary.CostNet), 2),
-                ProfitPercentageFormatted = FormatNumber((customerSummary.SaleNet - customerSummary.CostNet) / customerSummary.SaleNet, 2)
+                SaleDurationFormatted = FormatNumber(customerSummary.SaleDuration),
+                SaleNetFormatted = FormatNumber(customerSummary.SaleNet),
+                CostDurationFormatted = FormatNumber(customerSummary.CostDuration),
+                CostNetFormatted = FormatNumber(customerSummary.CostNet),
+                ProfitFormatted = FormatNumber((customerSummary.SaleNet - customerSummary.CostNet)),
+                ProfitPercentageFormatted = FormatNumber((customerSummary.SaleNet - customerSummary.CostNet) / customerSummary.SaleNet)
             };
         }
 
@@ -106,33 +107,33 @@ namespace TOne.Analytics.Business
             return new RoutingAnalysisFormatted
             {
                 SaleZoneID = obj.SaleZoneID,
-                SaleZone = (obj.SaleZoneID!=null)?_bemanager.GetZoneName(obj.SaleZoneID):null,
+                SaleZone = _bemanager.GetZoneName(obj.SaleZoneID),
                
                 SupplierID = obj.SupplierID,
                 Supplier = (obj.SupplierID != null) ? _bemanager.GetCarrirAccountName(obj.SupplierID) : null,
 
                 SaleNet = obj.SaleNet,
-                SaleNetFormatted = FormatNumber(obj.SaleNet, 2),
+                SaleNetFormatted = FormatNumber(obj.SaleNet),
 
                 CostNet = obj.CostNet,
-                CostNetFormatted = FormatNumber(obj.CostNet, 2),
+                CostNetFormatted = FormatNumber(obj.CostNet),
 
                 Duration = obj.Duration ,
                 DurationFormatted = FormatNumber(obj.Duration),
 
                 ACD = obj.ACD ,
-                ACDFormatted = FormatNumber(obj.ACD,4),
+                ACDFormatted = FormatNumberDigitRate(obj.ACD),
 
 
                 ASR = obj.ASR,
-                ASRFormatted = FormatNumber(obj.ASR, 4),
+                ASRFormatted = FormatNumberDigitRate(obj.ASR),
 
                 Profit = (double)((double)obj.SaleNet - (double)obj.CostNet),
                 ProfitFormatted = FormatNumber((double)obj.SaleNet - (double)obj.CostNet),
                 AVGCost = ((double)obj.Duration == 0 || (double)obj.CostNet == 0) ? 0 : (double)((double)obj.CostNet / (double)obj.Duration),
-                AVGCostFormatted = ((double)obj.Duration == 0 || (double)obj.CostNet == 0) ? "0" : FormatNumber((double)((double)obj.CostNet / (double)obj.Duration), 5),
+                AVGCostFormatted = ((double)obj.Duration == 0 || (double)obj.CostNet == 0) ? "0" : FormatNumberDigitRate((double)((double)obj.CostNet / (double)obj.Duration)),
                 AVGSale = ((double)obj.Duration == 0 || (double)obj.SaleNet == 0) ? 0 : (double)((double)obj.SaleNet / (double)obj.Duration),
-                AVGSaleFormatted = ((double)obj.Duration == 0 || (double)obj.SaleNet == 0) ? "0" : FormatNumber((double)((double)obj.SaleNet / (double)obj.Duration), 5),
+                AVGSaleFormatted = ((double)obj.Duration == 0 || (double)obj.SaleNet == 0) ? "0" : FormatNumberDigitRate((double)((double)obj.SaleNet / (double)obj.Duration)),
             };
         }
         #endregion 

@@ -74,9 +74,9 @@ namespace TOne.Analytics.Business
             return FormatSaleZoneCostSummarySupplier(_datamanager.GetSaleZoneCostSummarySupplier(fromDate, toDate, supplierAMUId, customerAMUId));
         }
 
-        public List<ZoneSummaryFormatted> GetZoneSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier)
+        public List<ZoneSummaryFormatted> GetZoneSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier, out double services)
         {
-            return FormatZoneSummaries(_datamanager.GetZoneSummary(fromDate, toDate, customerId, supplierId, isCost, currencyId, supplierGroup, customerGroup, customerAMUId, supplierAMUId, groupBySupplier));
+            return FormatZoneSummaries(_datamanager.GetZoneSummary(fromDate, toDate, customerId, supplierId, isCost, currencyId, supplierGroup, customerGroup, customerAMUId, supplierAMUId, groupBySupplier, out services));
         }
         public List<ZoneSummaryDetailedFormatted> GetZoneSummaryDetailed(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier, out double services)
         {
@@ -361,13 +361,13 @@ namespace TOne.Analytics.Business
                     SaleDuration = cs.SaleDuration,
                     SaleDurationFormatted = FormatNumber(cs.SaleDuration),
                     SaleNet = cs.SaleNet,
-                    SaleNetFormatted = FormatNumber(cs.SaleNet, 4),
+                    SaleNetFormatted = FormatNumberDigitRate(cs.SaleNet),
                     CostDuration = cs.CostDuration,
                     CostDurationFormatted = FormatNumber(cs.CostDuration),
                     CostNet = cs.CostNet,
-                    CostNetFormatted = FormatNumber(cs.CostNet, 4),
+                    CostNetFormatted = FormatNumberDigitRate(cs.CostNet),
                     ProfitFormatted = FormatNumber(cs.SaleNet - cs.CostNet),
-                    ProfitPercentageFormatted = (cs.SaleNet > 0) ? String.Format("{0:#,##0.00%}", ((cs.SaleNet - cs.CostNet) / cs.SaleNet)) : String.Format("{0:#,##0.00%}", 0),
+                    ProfitPercentageFormatted = (cs.SaleNet > 0) ? FormatNumberPercentage(((cs.SaleNet - cs.CostNet) / cs.SaleNet)) : FormatNumberPercentage(0),
 
                 };
                 if (cs.Carrier != null)
@@ -398,7 +398,7 @@ namespace TOne.Analytics.Business
                 ProfitSummary p = new ProfitSummary()
                 {
                     Profit = (cs.SaleNet != null ? (double)cs.SaleNet : 0 - (cs.CostNet != null ? (double)cs.CostNet : 0)),
-                    FormattedProfit = string.Format("{0:#,##0.00}", (cs.SaleNet != null ? (double)cs.SaleNet : 0) - (cs.CostNet != null ? (double)cs.CostNet : 0)),
+                    FormattedProfit = FormatNumber((cs.SaleNet != null ? (double)cs.SaleNet : 0) - (cs.CostNet != null ? (double)cs.CostNet : 0)),
                     Customer = cs.Customer
                 };
                 profitsummaries.Add(p);
@@ -414,7 +414,7 @@ namespace TOne.Analytics.Business
                 SaleAmountSummary s = new SaleAmountSummary()
                 {
                     SaleAmount = cs.SaleNet != null ? (double)cs.SaleNet : 0,
-                    FormattedSaleAmount = string.Format("{0:#,##0.00}", cs.SaleNet != null ? (double)cs.SaleNet : 0),
+                    FormattedSaleAmount = FormatNumber(cs.SaleNet != null ? (double)cs.SaleNet : 0),
                     Customer = cs.Customer
                 };
                 saleAmountSummary.Add(s);
@@ -502,13 +502,13 @@ namespace TOne.Analytics.Business
                 SaleDurationFormated = zoneProfit.SaleNet == 0 ? "" : (zoneProfit.SaleDuration.HasValue) ? FormatNumber(zoneProfit.SaleDuration) : "0.00",
 
                 SaleNet = zoneProfit.SaleNet,
-                SaleNetFormated = zoneProfit.SaleNet == 0 ? "" : (zoneProfit.SaleNet.HasValue) ? FormatNumber(zoneProfit.SaleNet, 4) : "0.00",
+                SaleNetFormated = zoneProfit.SaleNet == 0 ? "" : (zoneProfit.SaleNet.HasValue) ? FormatNumberDigitRate(zoneProfit.SaleNet) : "0.00",
 
                 CostDuration = zoneProfit.CostDuration,
-                CostDurationFormated = FormatNumber(zoneProfit.CostDuration, 4),
+                CostDurationFormated = FormatNumberDigitRate(zoneProfit.CostDuration),
 
                 CostNet = zoneProfit.CostNet,
-                CostNetFormated = (zoneProfit.CostNet.HasValue) ? FormatNumber(zoneProfit.CostNet, 4) : "0.00",
+                CostNetFormated = (zoneProfit.CostNet.HasValue) ? FormatNumberDigitRate(zoneProfit.CostNet) : "0.00",
 
                 Profit = zoneProfit.SaleNet == 0 ? "" : FormatNumber((!zoneProfit.SaleNet.HasValue) ? 0 : zoneProfit.SaleNet - zoneProfit.CostNet),
                 ProfitSum = (!zoneProfit.SaleNet.HasValue || zoneProfit.SaleNet == 0) ? 0 : zoneProfit.SaleNet - zoneProfit.CostNet,
@@ -526,7 +526,7 @@ namespace TOne.Analytics.Business
                 Calls = zoneSummary.Calls,
 
                 Rate = zoneSummary.Rate,
-                RateFormatted = FormatNumber(zoneSummary.Rate, 4),
+                RateFormatted = FormatNumberDigitRate(zoneSummary.Rate),
 
                 DurationNet = zoneSummary.DurationNet,
                 DurationNetFormatted = FormatNumber(zoneSummary.DurationNet),
@@ -538,7 +538,7 @@ namespace TOne.Analytics.Business
                 DurationInSecondsFormatted = FormatNumber(zoneSummary.DurationInSeconds),
 
                 Net = zoneSummary.Net,
-                NetFormatted = FormatNumber(zoneSummary.Net, 4),
+                NetFormatted = FormatNumberDigitRate(zoneSummary.Net),
 
                 CommissionValue = zoneSummary.CommissionValue,
                 CommissionValueFormatted = FormatNumber(zoneSummary.CommissionValue),
@@ -559,7 +559,7 @@ namespace TOne.Analytics.Business
                 Calls = zoneSummaryDetailed.Calls,
 
                 Rate = zoneSummaryDetailed.Rate,
-                RateFormatted = FormatNumber(zoneSummaryDetailed.Rate, 4),
+                RateFormatted = FormatNumberDigitRate(zoneSummaryDetailed.Rate),
 
                 DurationNet = zoneSummaryDetailed.DurationNet,
                 DurationNetFormatted = FormatNumber(zoneSummaryDetailed.DurationNet),
@@ -568,29 +568,29 @@ namespace TOne.Analytics.Business
                 OffPeakDurationInSecondsFormatted = FormatNumber(zoneSummaryDetailed.OffPeakDurationInSeconds),
 
                 OffPeakRate = zoneSummaryDetailed.OffPeakRate,
-                OffPeakRateFormatted = FormatNumber(zoneSummaryDetailed.OffPeakRate, 4),
+                OffPeakRateFormatted = FormatNumberDigitRate(zoneSummaryDetailed.OffPeakRate),
 
                 OffPeakNet = zoneSummaryDetailed.OffPeakNet,
-                OffPeakNetFormatted = FormatNumber(zoneSummaryDetailed.OffPeakRate, 4),
+                OffPeakNetFormatted = FormatNumberDigitRate(zoneSummaryDetailed.OffPeakRate),
 
                 WeekEndDurationInSeconds = zoneSummaryDetailed.WeekEndDurationInSeconds,
                 WeekEndDurationInSecondsFormatted = FormatNumber(zoneSummaryDetailed.WeekEndDurationInSeconds),
 
                 WeekEndRate = zoneSummaryDetailed.WeekEndRate,
-                WeekEndRateFormatted = FormatNumber(zoneSummaryDetailed.WeekEndRate, 4),
+                WeekEndRateFormatted = FormatNumberDigitRate(zoneSummaryDetailed.WeekEndRate),
 
                 WeekEndNet = zoneSummaryDetailed.WeekEndNet,
-                WeekEndNetFormatted = FormatNumber(zoneSummaryDetailed.WeekEndNet, 4),
+                WeekEndNetFormatted = FormatNumberDigitRate(zoneSummaryDetailed.WeekEndNet),
 
                 DurationInSeconds = zoneSummaryDetailed.DurationInSeconds,
                 DurationInSecondsFormatted = FormatNumber(zoneSummaryDetailed.DurationInSeconds),
 
                 Net = zoneSummaryDetailed.Net,
-                NetFormatted = FormatNumber(zoneSummaryDetailed.Net, 4),
+                NetFormatted = FormatNumberDigitRate(zoneSummaryDetailed.Net),
 
                 TotalDurationFormatted = FormatNumber((zoneSummaryDetailed.DurationInSeconds + zoneSummaryDetailed.OffPeakDurationInSeconds + zoneSummaryDetailed.WeekEndDurationInSeconds)),
 
-                TotalAmountFormatted = FormatNumber(zoneSummaryDetailed.Net + zoneSummaryDetailed.OffPeakNet + zoneSummaryDetailed.WeekEndNet, 4),
+                TotalAmountFormatted = FormatNumberDigitRate(zoneSummaryDetailed.Net + zoneSummaryDetailed.OffPeakNet + zoneSummaryDetailed.WeekEndNet),
 
                 CommissionValue = zoneSummaryDetailed.CommissionValue,
                 CommissionValueFormatted = FormatNumber(zoneSummaryDetailed.CommissionValue),
@@ -616,21 +616,40 @@ namespace TOne.Analytics.Business
                 SaleDurationFormatted = FormatNumber(dailySummary.SaleDuration),
 
                 SaleNet = dailySummary.SaleNet,
-                SaleNetFormatted = FormatNumber(dailySummary.SaleNet, 4),
+                SaleNetFormatted = FormatNumberDigitRate(dailySummary.SaleNet),
 
                 CostNet = dailySummary.CostNet,
-                CostNetFormatted = FormatNumber(dailySummary.CostNet, 4),
+                CostNetFormatted = FormatNumberDigitRate(dailySummary.CostNet),
 
                 ProfitFormatted = FormatNumber(dailySummary.SaleNet - dailySummary.CostNet),
 
 
-                ProfitPercentageFormatted = (dailySummary.SaleNet.HasValue) ? String.Format("{0:#,##0.00%}", (1 - dailySummary.CostNet / dailySummary.SaleNet)) : "-100%",
+                ProfitPercentageFormatted = (dailySummary.SaleNet.HasValue) ? FormatNumberPercentage(1 - dailySummary.CostNet / dailySummary.SaleNet) : "-100%",
             };
         }
 
         private SupplierCostDetails AddGroupName(SupplierCostDetails supplierCostDetails)
         {
-            String customerGroupName = (supplierCostDetails.Customer == null) ? null : _cmanager.GetCarrierAccount(supplierCostDetails.Customer).CarrierGroupName;
+            CarrierAccount ca = (supplierCostDetails.Customer == null) ? null : _cmanager.GetCarrierAccount(supplierCostDetails.Customer) == null ? null : _cmanager.GetCarrierAccount(supplierCostDetails.Customer);
+
+            CarrierGroup cg;
+            String customerGroupName = null;
+            if(ca != null)
+            {
+                if (ca.CarrierGroupID.HasValue)
+                {
+
+                    _cmanager.GetAllCarrierGroups().TryGetValue(ca.CarrierGroupID.Value, out cg);
+                    customerGroupName = cg.CarrierGroupName;
+
+
+                }
+            }
+                
+
+            
+            //String customerGroupName = (supplierCostDetails.Customer == null) ? null : _cmanager.GetAllCarrierGroups() == null ? null : _cmanager.GetCarrierAccount(supplierCostDetails.Customer).CarrierGroupName;
+           // String customerGroupName = (supplierCostDetails.Customer == null) ? null : _cmanager.GetCarrierAccount(supplierCostDetails.Customer) == null ? null : _cmanager.GetCarrierAccount(supplierCostDetails.Customer).CarrierGroupName;
 
             return new SupplierCostDetails
             {
@@ -652,7 +671,7 @@ namespace TOne.Analytics.Business
                 Duration = supplierCostDetails.Duration,
                 DurationFormatted = FormatNumber(supplierCostDetails.Duration),
                 Amount = supplierCostDetails.Amount,
-                AmountFormatted = FormatNumber(supplierCostDetails.Amount, 4),
+                AmountFormatted = FormatNumberDigitRate(supplierCostDetails.Amount),
                 CustomerGroupName = supplierCostDetails.CustomerGroupName
             };
         }
@@ -662,9 +681,9 @@ namespace TOne.Analytics.Business
             return new SaleZoneCostSummaryFormatted
             {
                 AvgCost = saleZoneCostSummary.AvgCost,
-                AvgCostFormatted = FormatNumber(saleZoneCostSummary.AvgCost,5),
+                AvgCostFormatted = FormatNumberDigitRate(saleZoneCostSummary.AvgCost),
                 salezoneID = saleZoneCostSummary.salezoneID,
-                salezoneIDFormatted = (saleZoneCostSummary.salezoneID != null) ? _bemanager.GetZoneName(saleZoneCostSummary.salezoneID) : null,
+                salezoneIDFormatted = _bemanager.GetZoneName(saleZoneCostSummary.salezoneID),
                 AvgDuration = saleZoneCostSummary.AvgDuration,
                 AvgDurationFormatted = FormatNumber(saleZoneCostSummary.AvgDuration)
             };
@@ -678,7 +697,7 @@ namespace TOne.Analytics.Business
                 AvgServiceCostFormatted = FormatNumber(saleZoneCostSummaryService.AvgServiceCost),
 
                 salezoneID = saleZoneCostSummaryService.salezoneID,
-                salezoneIDFormatted = (saleZoneCostSummaryService.salezoneID != null) ? _bemanager.GetZoneName(saleZoneCostSummaryService.salezoneID) : null,
+                salezoneIDFormatted = _bemanager.GetZoneName(saleZoneCostSummaryService.salezoneID),
                 Service = saleZoneCostSummaryService.Service,
 
                 AvgDuration = saleZoneCostSummaryService.AvgDuration,
@@ -698,7 +717,7 @@ namespace TOne.Analytics.Business
                 
                 salezoneID = saleZoneCostSummarySupplier.salezoneID,
 
-                salezoneIDFormatted = (saleZoneCostSummarySupplier.salezoneID != null) ? _bemanager.GetZoneName(saleZoneCostSummarySupplier.salezoneID) : null,
+                salezoneIDFormatted = _bemanager.GetZoneName(saleZoneCostSummarySupplier.salezoneID),
 
                 AvgDuration = saleZoneCostSummarySupplier.AvgDuration,
                 AvgDurationFormatted = FormatNumber(saleZoneCostSummarySupplier.AvgDuration)
@@ -721,11 +740,11 @@ namespace TOne.Analytics.Business
                 Duration = carrierLost.Duration,
                 DurationFormatted = FormatNumber(carrierLost.Duration),
                 CostNet = carrierLost.CostNet,
-                CostNetFormatted = (carrierLost.CostNet == null) ? "0.00" : FormatNumber(carrierLost.CostNet, 4),
+                CostNetFormatted = FormatNumberDigitRate(carrierLost.CostNet),
                 SaleNet = carrierLost.SaleNet,
-                SaleNetFormatted = (carrierLost.SaleNet == null) ? "0.00" : FormatNumber(carrierLost.SaleNet, 4),
+                SaleNetFormatted = FormatNumberDigitRate(carrierLost.SaleNet),
                 Margin = FormatNumber(carrierLost.SaleNet - carrierLost.CostNet),
-                Percentage = (carrierLost.SaleNet != null) ? String.Format("{0:#,##0.0%}", (1 - carrierLost.CostNet / carrierLost.SaleNet)) : "-100%"
+                Percentage = FormatNumberPercentage(1 - carrierLost.CostNet / carrierLost.SaleNet)
 
             };
         }
@@ -771,17 +790,17 @@ namespace TOne.Analytics.Business
                SupplierID = rateLoss.SupplierID,
                Supplier = (rateLoss.SupplierID != null) ? _bemanager.GetCarrirAccountName(rateLoss.SupplierID) : null,
                SaleRate = rateLoss.SaleRate,
-               SaleRateFormatted = FormatNumber(rateLoss.SaleRate, 4),
+               SaleRateFormatted = FormatNumberDigitRate(rateLoss.SaleRate),
                CostRate = rateLoss.CostRate,
-               CostRateFormatted = FormatNumber(rateLoss.CostRate, 4),
+               CostRateFormatted = FormatNumberDigitRate(rateLoss.CostRate),
                CostDuration = rateLoss.CostDuration,
                CostDurationFormatted = FormatNumber(rateLoss.CostDuration),
                SaleDuration = rateLoss.SaleDuration,
                SaleDurationFormatted = FormatNumber(rateLoss.SaleDuration),
                CostNet = rateLoss.CostNet,
-               CostNetFormatted = FormatNumber(rateLoss.CostNet, 4),
+               CostNetFormatted = FormatNumberDigitRate(rateLoss.CostNet),
                SaleNet = rateLoss.SaleNet,
-               SaleNetFormatted = FormatNumber(rateLoss.SaleNet, 4),
+               SaleNetFormatted = FormatNumberDigitRate(rateLoss.SaleNet),
                SaleZoneID = rateLoss.SaleZoneID,
                Loss = rateLoss.CostNet.Value - rateLoss.SaleNet.Value,
                LossFormatted = FormatNumber(rateLoss.CostNet - rateLoss.SaleNet),
@@ -789,12 +808,14 @@ namespace TOne.Analytics.Business
                CarrierGroupsNames = rateLoss.CarrierGroupsNames
            };
         }
-        private string FormatNumber(Decimal? number, int precision)
+        private string FormatNumberDigitRate(Decimal? number)
         {
+            int precision = 4;//Digit Rate 
             return String.Format("{0:#0." + "".PadLeft(precision, '0') + "}", number);
         }
-        private string FormatNumber(Double? number, int precision)
+        private string FormatNumberDigitRate(Double? number)
         {
+            int precision = 4;//Digit Rate 
             return String.Format("{0:#0." + "".PadLeft(precision, '0') + "}", number);
         }
 
@@ -808,6 +829,10 @@ namespace TOne.Analytics.Business
             return String.Format("{0:#,###0}", number);
         }
 
+        private string FormatNumberPercentage(Double? number)
+        {
+            return String.Format("{0:#,##0.00%}", number);
+        }
         private string FormatNumber(Double? number)
         {
             return String.Format("{0:#,###0.00}", number);
@@ -962,7 +987,7 @@ namespace TOne.Analytics.Business
                 Duration = carrierSummaryDaily.Duration,
                 DurationFormatted = FormatNumber(carrierSummaryDaily.Duration),
                 Net = carrierSummaryDaily.Net,
-                NetFormatted = FormatNumber(carrierSummaryDaily.Net, 4)
+                NetFormatted = FormatNumberDigitRate(carrierSummaryDaily.Net)
 
             };
             if (isGroupeByday)
@@ -1002,7 +1027,7 @@ namespace TOne.Analytics.Business
                 CostNet = daily.CostNet,
                 CostNetFormatted = FormatNumber(daily.CostNet),
                 ProfitFormatted = FormatNumber(daily.SaleNet - daily.CostNet),
-                ProfitPercentageFormatted = (daily.SaleNet > 0) ? String.Format("{0:#,##0.00%}", ((daily.SaleNet - daily.CostNet) / daily.SaleNet)) : "0.00%"
+                ProfitPercentageFormatted = (daily.SaleNet > 0) ? FormatNumberPercentage((daily.SaleNet - daily.CostNet) / daily.SaleNet) : "0.00%"
 
             };
         }
@@ -1020,9 +1045,9 @@ namespace TOne.Analytics.Business
                 CostDuration = carrierSummary.CostDuration,
                 CostDurationFormatted = FormatNumber(carrierSummary.CostDuration),
                 CostNet = carrierSummary.CostNet,
-                CostNetFormatted = (carrierSummary.CostNet == 0.00) ? "0.00" : FormatNumber(carrierSummary.CostNet, 4),
+                CostNetFormatted = (carrierSummary.CostNet == 0.00) ? "0.00" : FormatNumberDigitRate(carrierSummary.CostNet),
                 SaleNet = carrierSummary.SaleNet,
-                SaleNetFormatted = (carrierSummary.SaleNet == 0.00) ? "0.00" : FormatNumber(carrierSummary.SaleNet, 4),
+                SaleNetFormatted = (carrierSummary.SaleNet == 0.00) ? "0.00" : FormatNumberDigitRate(carrierSummary.SaleNet),
                 CostCommissionValue = carrierSummary.CostCommissionValue,
                 CostCommissionValueFormatted = FormatNumber(Convert.ToDouble(Math.Abs(carrierSummary.CostCommissionValue.Value))),
                 SaleCommissionValue = carrierSummary.SaleCommissionValue,
@@ -1032,7 +1057,7 @@ namespace TOne.Analytics.Business
                 SaleExtraChargeValue = carrierSummary.SaleExtraChargeValue,
                 SaleExtraChargeValueFormatted = FormatNumber(Convert.ToDouble(Math.Abs(carrierSummary.SaleExtraChargeValue.Value))),
                 Profit = FormatNumber(carrierSummary.SaleNet - carrierSummary.CostNet),
-                AvgMin = (carrierSummary.SaleDuration.Value != 0 && carrierSummary.SaleDuration.Value != 0) ? FormatNumber((decimal)carrierSummary.SaleNet / carrierSummary.SaleDuration - (decimal)carrierSummary.CostNet / carrierSummary.SaleDuration, 4) : "0.00"
+                AvgMin = (carrierSummary.SaleDuration.Value != 0 && carrierSummary.SaleDuration.Value != 0) ? FormatNumberDigitRate((decimal)carrierSummary.SaleNet / carrierSummary.SaleDuration - (decimal)carrierSummary.CostNet / carrierSummary.SaleDuration) : "0.00"
 
 
             };
@@ -1050,7 +1075,7 @@ namespace TOne.Analytics.Business
                 SaleDuration = detailedCarrier.SaleDuration,
                 SaleDurationFormatted = FormatNumber(detailedCarrier.SaleDuration),
                 SaleRate = detailedCarrier.SaleRate,
-                SaleRateFormatted = FormatNumber(detailedCarrier.SaleRate, 4),
+                SaleRateFormatted = FormatNumberDigitRate(detailedCarrier.SaleRate),
                 SaleRateChange = detailedCarrier.SaleRateChange,
                 SaleRateChangeFormatted = ((TOne.Analytics.Entities.Change)detailedCarrier.SaleRateChange).ToString(),
                 SaleRateEffectiveDate = detailedCarrier.SaleRateEffectiveDate,
@@ -1063,7 +1088,7 @@ namespace TOne.Analytics.Business
                 CostDuration = detailedCarrier.CostDuration,
                 CostDurationFormatted = FormatNumber(detailedCarrier.CostDuration),
                 CostRate = detailedCarrier.CostRate,
-                CostRateFormatted = FormatNumber(detailedCarrier.CostRate, 4),
+                CostRateFormatted = FormatNumberDigitRate(detailedCarrier.CostRate),
                 CostRateChange = detailedCarrier.CostRateChange,
                 CostRateChangeFormatted = ((TOne.Analytics.Entities.Change)detailedCarrier.CostRateChange).ToString(),
                 CostRateEffectiveDate = detailedCarrier.CostRateEffectiveDate,
@@ -1071,7 +1096,7 @@ namespace TOne.Analytics.Business
                 CostAmountFormatted = FormatNumber(detailedCarrier.CostAmount),
                 Profit = detailedCarrier.Profit,
                 ProfitFormatted = FormatNumber(detailedCarrier.Profit),
-                ProfitPercentage = (detailedCarrier.SaleAmount > 0) ? String.Format("{0:#,##0.00%}", (1 - detailedCarrier.CostAmount / detailedCarrier.SaleAmount)) : "-100%"
+                ProfitPercentage = (detailedCarrier.SaleAmount > 0) ? FormatNumberPercentage(1 - detailedCarrier.CostAmount / detailedCarrier.SaleAmount) : "-100%"
             };
         }
 

@@ -2042,7 +2042,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!WeekEndNet.Value,Parameters!DigitRate.Value)</Value>
+                              <Value>=FormatNumber(Sum(Fields!WeekEndNet.Value),Parameters!DigitRate.Value)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>

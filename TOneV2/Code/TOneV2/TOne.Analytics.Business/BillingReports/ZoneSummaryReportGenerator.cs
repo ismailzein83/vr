@@ -13,13 +13,14 @@ namespace TOne.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(TOne.Entities.ReportParameters parameters)
         {
             BillingStatisticManager manager = new BillingStatisticManager();
+            double service = 0;
             List<ZoneSummaryFormatted> zoneSummaries = 
-                manager.GetZoneSummary(parameters.FromTime, parameters.ToTime, parameters.CustomerId, parameters.SupplierId, parameters.IsCost, parameters.CurrencyId, parameters.SupplierGroup, parameters.CustomerGroup, parameters.CustomerAMUId, parameters.SupplierAMUId, parameters.GroupBySupplier);
+                manager.GetZoneSummary(parameters.FromTime, parameters.ToTime, parameters.CustomerId, parameters.SupplierId, parameters.IsCost, parameters.CurrencyId, parameters.SupplierGroup, parameters.CustomerGroup, parameters.CustomerAMUId, parameters.SupplierAMUId, parameters.GroupBySupplier, out service);
             
             decimal services = 0;
             if (parameters.IsCost)
                 if(zoneSummaries.Count != 0)
-                    services = zoneSummaries[0].Calls;
+                    services = (decimal)service;
 
             parameters.ServicesForCustomer = services;
             parameters.NormalDuration = zoneSummaries.Where(y => y.RateTypeFormatted == "Normal").Sum(x => Math.Round(x.DurationInSeconds, 2));

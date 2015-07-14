@@ -14,14 +14,14 @@ namespace TOne.Analytics.Business.BillingReports
         {
 
             BillingStatisticManager manager = new BillingStatisticManager();
-            double ddd = 0;
+            double service = 0;
             List<ZoneSummaryDetailedFormatted> zoneSummaryDetailed =
-                manager.GetZoneSummaryDetailed(parameters.FromTime, parameters.ToTime, parameters.CustomerId, parameters.SupplierId, parameters.IsCost, parameters.CurrencyId, parameters.SupplierGroup, parameters.CustomerGroup, parameters.CustomerAMUId, parameters.SupplierAMUId, parameters.GroupBySupplier, out ddd);
+                manager.GetZoneSummaryDetailed(parameters.FromTime, parameters.ToTime, parameters.CustomerId, parameters.SupplierId, parameters.IsCost, parameters.CurrencyId, parameters.SupplierGroup, parameters.CustomerGroup, parameters.CustomerAMUId, parameters.SupplierAMUId, parameters.GroupBySupplier, out service);
             
             decimal services = 0;
             if (parameters.IsCost)
                 if (zoneSummaryDetailed.Count != 0)
-                    services = (decimal)ddd;
+                    services = (decimal)service;
 
             parameters.ServicesForCustomer = services;
 

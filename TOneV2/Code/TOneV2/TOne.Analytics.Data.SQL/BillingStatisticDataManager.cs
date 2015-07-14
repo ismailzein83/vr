@@ -24,9 +24,38 @@ namespace TOne.Analytics.Data.SQL
                 (supplierAMUId == 0) ? (object)DBNull.Value : supplierAMUId,
                 (customerAMUId == 0) ? (object)DBNull.Value : customerAMUId);
         }
-        public List<ZoneSummary> GetZoneSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier)
+        public List<ZoneSummary> GetZoneSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier, out double services)
         {
-            return GetItemsSP("Analytics.SP_BillingRep_GetZoneSummary", (reader) => ZoneSummaryMapper(reader, groupBySupplier),
+            List<ZoneSummary> lstZoneSummary = new List<ZoneSummary>();
+            services = 0;
+            double servicesFees = 0;
+            ExecuteReaderSP("Analytics.SP_BillingRep_GetZoneSummary", (reader) =>
+            {
+                while (reader.Read())
+                {
+                    lstZoneSummary.Add(new ZoneSummary
+                    {
+                        Zone = reader["Zone"] as string,
+                        Calls = GetReaderValue<int>(reader, "Calls"),
+                        Rate = GetReaderValue<double>(reader, "Rate"),
+                        DurationNet = GetReaderValue<decimal>(reader, "DurationNet"),
+                        DurationInSeconds = GetReaderValue<decimal>(reader, "DurationInSeconds"),
+                        RateType = GetReaderValue<byte>(reader, "RateType"),
+                        Net = GetReaderValue<double>(reader, "Net"),
+                        CommissionValue = GetReaderValue<double>(reader, "CommissionValue"),
+                        ExtraChargeValue = GetReaderValue<double>(reader, "ExtraChargeValue"),
+                        SupplierID = (groupBySupplier == true ? reader["SupplierID"] as string : null)
+                    });
+                }
+
+                if (reader.NextResult())
+                {
+                    while (reader.Read())
+                    {
+                        servicesFees = GetReaderValue<double>(reader, "Services");
+                    }
+                }
+            },
                fromDate,
                toDate,
                (customerId == null || customerId == "") ? null : customerId,
@@ -37,17 +66,33 @@ namespace TOne.Analytics.Data.SQL
                (customerGroup == null || customerGroup == "") ? null : customerGroup,
                (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
                (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
-               groupBySupplier
-               );
+               groupBySupplier);
+            services = servicesFees;
+            return lstZoneSummary;
+
+            //return GetItemsSP("Analytics.SP_BillingRep_GetZoneSummary", (reader) => ZoneSummaryMapper(reader, groupBySupplier),
+            //   fromDate,
+            //   toDate,
+            //   (customerId == null || customerId == "") ? null : customerId,
+            //   (supplierId == null || supplierId == "") ? null : supplierId,
+            //   isCost,
+            //   currencyId,
+            //   (supplierGroup == null || supplierGroup == "") ? null : supplierGroup,
+            //   (customerGroup == null || customerGroup == "") ? null : customerGroup,
+            //   (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
+            //   (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
+            //   groupBySupplier
+            //   );
         }
         public List<ZoneSummaryDetailed> GetZoneSummaryDetailed(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier, out double services)
         {
             List<ZoneSummaryDetailed> lstZoneSummaryDetailed = new List<ZoneSummaryDetailed>();
             services = 0;
-            double ser = 0;
+            double servicesFees = 0;
             ExecuteReaderSP("Analytics.SP_BillingRep_GetZoneSummaryDetailed", (reader) =>
             {
                 while (reader.Read())
+                {
                     lstZoneSummaryDetailed.Add(new ZoneSummaryDetailed
                     {
                         Zone = reader["Zone"] as string,
@@ -68,33 +113,29 @@ namespace TOne.Analytics.Data.SQL
                         ExtraChargeValue = GetReaderValue<double>(reader, "ExtraChargeValue"),
                         SupplierID = (groupBySupplier == true ? reader["SupplierID"] as string : null)
                     });
+                }
+
                 if (reader.NextResult())
                 {
                     while (reader.Read())
                     {
-                        ser = GetReaderValue<double>(reader, "Services");
+                        servicesFees = GetReaderValue<double>(reader, "Services");
                     }
                 }
-            //  if (groupBySupplier == true)
-                //{
-                //    instance.SupplierID = reader["SupplierID"] as string;
-                //}
-            });
-            services = ser;
+            },                
+               fromDate,
+               toDate,
+               (customerId == null || customerId == "") ? null : customerId,
+               (supplierId == null || supplierId == "") ? null : supplierId,
+               isCost,
+               currencyId,
+               (supplierGroup == null || supplierGroup == "") ? null : supplierGroup,
+               (customerGroup == null || customerGroup == "") ? null : customerGroup,
+               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
+               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
+               groupBySupplier);
+            services = servicesFees;
             return lstZoneSummaryDetailed;
-            //return GetItemsSP("Analytics.SP_BillingRep_GetZoneSummaryDetailed", (reader) => ZoneSummaryDetailedMapper(reader, groupBySupplier),
-            //   fromDate,
-            //   toDate,
-            //   (customerId == null || customerId == "") ? null : customerId,
-            //   (supplierId == null || supplierId == "") ? null : supplierId,
-            //   isCost,
-            //   currencyId,
-            //   (supplierGroup == null || supplierGroup == "") ? null : supplierGroup,
-            //   (customerGroup == null || customerGroup == "") ? null : customerGroup,
-            //   (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
-            //   (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
-            //   groupBySupplier
-            //   );
         }
         public List<MonthTraffic> GetMonthTraffic(DateTime fromDate, DateTime toDate, string carrierAccountID, bool isSale)
         {
@@ -477,8 +518,6 @@ namespace TOne.Analytics.Data.SQL
                 Profit = String.Format("{0:#0.00}", (zoneProfit.SaleNet - zoneProfit.CostNet)),
 
                 ProfitPercentage = (zoneProfit.SaleNet.HasValue) ? String.Format("{0:#,##0.00%}", (1 - zoneProfit.CostNet / zoneProfit.SaleNet)) : "-100%",
-
-
             };
         }
         private List<ZoneProfitFormatted> MapZoneProfits(List<ZoneProfit> zoneProfits)
