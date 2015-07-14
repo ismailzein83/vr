@@ -19,6 +19,13 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum) {
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };
+        $scope.onValueChanged = function () {
+            var customize = {
+                value: -1,
+                description: "Customize"
+            }
+            $scope.selectedPeriod = customize;
+        }
         $scope.widget = $scope.$parent.widget;
         $scope.widget.SectionTitle = $scope.widget.Name;
         $scope.onElementReady = function (api) {

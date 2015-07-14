@@ -25,6 +25,13 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         $scope.summaryWidgets = [];
         $scope.bodyWidgets = [];
         $scope.viewWidgets = [];
+        $scope.onValueChanged = function () {
+            var customize = {
+                value: -1,
+                description: "Customize"
+            }
+            $scope.selectedPeriod = customize;
+        }
         $scope.periodSelectionChanged = function () {
             var date = getPeriod($scope.selectedPeriod.value);
             $scope.fromDate = date.from;
