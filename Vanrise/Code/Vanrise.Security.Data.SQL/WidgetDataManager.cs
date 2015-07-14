@@ -78,9 +78,9 @@ namespace Vanrise.Security.Data.SQL
             return GetItemSP("sec.sp_Widget_GetById", WidgetMapper, widgetId);
         }
 
-        public List<WidgetDetails> GetFilteredWidgets(string filter)
+        public List<WidgetDetails> GetFilteredWidgets(WidgetFilter filter)
         {
-            return GetItemsSP("sec.sp_Widget_GetFiltered", WidgetMapper, filter);
+            return GetItemsSP("sec.sp_Widget_GetFiltered", WidgetMapper, filter.WidgetName, filter.WidgetType);
         }
         public int CheckWidgetSetting(WidgetSetting setting){
              string serialziedSetting = null;

@@ -6,7 +6,9 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
     load();
 
     function defineScope() {
-        $scope.filterValue="";
+        $scope.widgetsTypes = [];
+        $scope.selectedWidgetsType;
+        $scope.widgetName;
         $scope.widgets = [];
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
@@ -34,10 +36,15 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
         $scope.Add = function () {
             addNewWidget();
         };
-        $scope.searchClicked=function(){
-            if ($scope.filterValue != undefined && $scope.filterValue) {
+        $scope.searchClicked = function () {
+           
+            if ($scope.widgetName != undefined || $scope.selectedWidgetsType) {
+                var filterObject = {
+                    WidgetName: $scope.widgetName,
+                    WidgetType: $scope.selectedWidgetsType.ID
+                }
                 $scope.isGettingData = true;
-                return WidgetAPIService.GetFilteredWidgets($scope.filterValue).then(function (response) {
+                return WidgetAPIService.GetFilteredWidgets(filterObject).then(function (response) {
                     $scope.widgets.length = 0;
                     angular.forEach(response, function (itm) {
                         $scope.widgets.push(itm);
@@ -101,6 +108,7 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
     }
 
     function load() {
+        loadWidgets();
         loadData();
     }
     function loadData() {
@@ -114,6 +122,15 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
             $scope.isGettingData = false;
         }).catch(function (error) {
             VRNotificationService.notifyExceptionWithClose(error, $scope)});
+
+    }
+
+    function loadWidgets() {
+        return WidgetAPIService.GetWidgetsDefinition().then(function (response) {
+            angular.forEach(response, function (itm) {
+                $scope.widgetsTypes.push(itm);
+            });
+        });
 
     }
     

@@ -23,9 +23,7 @@
     }
     function GetFilteredWidgets(filter)
     {
-        return BaseAPIService.get("/api/Widgets/GetFilteredWidgets", {
-            filter: filter
-        });
+        return BaseAPIService.post("/api/Widgets/GetFilteredWidgets", filter);
     }
     function DeleteWidget(widgetId) {
         return BaseAPIService.get("/api/Widgets/DeleteWidget", {

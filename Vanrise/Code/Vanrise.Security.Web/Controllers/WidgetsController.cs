@@ -39,8 +39,8 @@ namespace Vanrise.Security.Web.Controllers
         }
 
 
-         [HttpGet]
-         public List<WidgetDetails> GetFilteredWidgets(string filter)
+         [HttpPost]
+         public List<WidgetDetails> GetFilteredWidgets(WidgetFilter filter)
          {
              WidgetsManager manager = new WidgetsManager();
              return manager.GetFilteredWidgets(filter);

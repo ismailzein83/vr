@@ -65,6 +65,7 @@
     <Compile Include="Widget.cs" />
     <Compile Include="WidgetDefinition.cs" />
     <Compile Include="WidgetDefinitionSetting.cs" />
+    <Compile Include="WidgetFilter.cs" />
     <Compile Include="WidgetSetting.cs" />
   </ItemGroup>
   <ItemGroup>
