@@ -7,6 +7,21 @@ function FTPReceiveAdapterTemplateController($scope) {
 
     function defineScope() {
 
+        console.log(1111111111111111);
+        console.log(1111111111111111);
+        console.log(1111111111111111);
+        console.log(1111111111111111);
+        console.log(1111111111111111);
+        console.log(1111111111111111);
+        console.log(1111111111111111);
+        console.log(1111111111111111);
+
+        $scope.selectedAction = '';
+
+        $scope.actionsAfterImport = [{ value: 0, name: 'Rename' }, { value: 1, name: 'Delete' }, { value: 2, name: 'Move' }];
+
+
+
         $scope.dataSourceAdapter.getData = function () {
 
             return {
