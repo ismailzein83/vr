@@ -54,28 +54,17 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             
         }
         $scope.save = function () {
-           
-                
+
             buildContentsFromScope();
-            buildViewObjFromScope();
-            
-            if ($scope.isEditMode)
-            {
-                if ($scope.summaryWidgets.length == 0 && $scope.bodyWidgets.length==0) {
-                    return VRNotificationService.showError("You Should Add Widgets Before Saving!!");
-
-                }
-                return updateView();
-            }
-               
-            else
-            {
-                if ($scope.summaryContents.length == 0 && $scope.bodyContents.length==0) {
-                    return VRNotificationService.showError("You Should Add Widgets Before Saving!!");
-
-                }
+            buildViewObjFromScope(); console.log($scope.beTree.currentNode);
+            if ($scope.summaryContents.length == 0 && $scope.summaryContents.length == 0)
+                return VRNotificationService.showWarning("You Should Add Widgets Before Saving!!");
+            else if ($scope.beTree.currentNode == undefined)
+                return VRNotificationService.showWarning("You Should Select Menu Location Before Saving!!");
+            if ($scope.isEditMode)  
+                return updateView(); 
+            else  
                 return saveView();
-            }
               
         };
         $scope.close = function () {
@@ -157,7 +146,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
     function updateView() {
        
         return ViewAPIService.UpdateView($scope.View).then(function (response) {
-            if (VRNotificationService.notifyOnItemUpdated("Page", response)) {
+            if (VRNotificationService.notifyOnItemUpdated("View", response)) {
                 if ($scope.onPageUpdated != undefined)
                     $scope.onPageUpdated(response.UpdatedObject);
                 $scope.modalContext.closeModal();
