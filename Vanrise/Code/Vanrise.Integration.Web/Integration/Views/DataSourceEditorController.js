@@ -91,11 +91,14 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
 
     function buildDataSourceObjFromScope() {
 
+        var adapterData = $scope.dataSourceAdapter.getData();
+        adapterData.$type = $scope.selectedAdapterType.Info.FQTN;
+
         var dataSourceData = {
             DataSourceId: (dataSourceId != null) ? dataSourceId : 0,
             Name: $scope.dataSourceName,
             AdapterTypeId: $scope.selectedAdapterType.AdapterTypeId,
-            Settings: { Adapter: $scope.dataSourceAdapter.getData(), MapperCustomCode: $scope.customCode }
+            Settings: { Adapter: adapterData, MapperCustomCode: $scope.customCode }
         };
 
         var taskData = {
@@ -121,6 +124,7 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
             $scope.dataSourceAdapter.loadTemplateData();
 
         $scope.customCode = dataSourceObject.DataSourceData.Settings.MapperCustomCode;
+        $scope.isEnabled = dataSourceObject.TaskData.IsEnabled;
 
         $scope.schedulerTaskTrigger.data = dataSourceObject.TaskData.TaskTrigger;
         if ($scope.schedulerTaskTrigger.loadTemplateData != undefined)
@@ -129,6 +133,7 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
 
     function insertDataSource() {
         var dataSourceObject = buildDataSourceObjFromScope();
+        console.log(dataSourceObject);
         return DataSourceAPIService.AddDataSource(dataSourceObject)
         .then(function (response) {
             if (VRNotificationService.notifyOnItemAdded("Data Source", response)) {

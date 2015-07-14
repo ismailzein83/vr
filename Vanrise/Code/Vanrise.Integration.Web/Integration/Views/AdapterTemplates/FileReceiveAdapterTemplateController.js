@@ -10,7 +10,7 @@ function FileReceiveAdapterTemplateController($scope) {
         $scope.dataSourceAdapter.getData = function () {
 
             return {
-                $type: "Vanrise.Integration.Adapters.FileReceiveAdapter.FileReceiveAdapter, Vanrise.Integration.Adapters.FileReceiveAdapter",
+                $type: "",
                 FolderPath: $scope.folderPath
             };
         };

@@ -18,5 +18,7 @@ namespace Vanrise.Integration.Entities
     public class AdapterTypeInfo
     {
         public string AdapterTemplateURL { get; set; }
+
+        public string FQTN { get; set; }
     }
 }
