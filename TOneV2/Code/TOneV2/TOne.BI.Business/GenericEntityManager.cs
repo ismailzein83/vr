@@ -50,9 +50,10 @@ namespace TOne.BI.Business
         public IEnumerable<EntityRecord> GetTopEntities(string entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, params string[] measureTypesNames)
         {
             List<String> queryFilter = new List<String>();
-            queryFilter.Add("C001");
-            queryFilter.Add("C009");
-            queryFilter.Add("C020");
+            queryFilter = null;
+            //queryFilter.Add("C001");
+            //queryFilter.Add("C009");
+            //queryFilter.Add("C020");
             IBIConfigurationDataManager configurations = BIDataManagerFactory.GetDataManager<IBIConfigurationDataManager>();
             IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
             dataManager.MeasureDefinitions = configurations.GetMeasures();
