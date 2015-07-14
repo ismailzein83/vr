@@ -38,13 +38,18 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
         };
         $scope.searchClicked = function () {
            
-            if ($scope.widgetName != undefined || $scope.selectedWidgetsType) {
-                var filterObject = {
-                    WidgetName: $scope.widgetName,
-                    WidgetType: $scope.selectedWidgetsType.ID
-                }
+            if ($scope.widgetName != undefined || $scope.selectedWidgetsType != undefined) {
+                console.log($scope.widgetName)
+                var widgetType;
+                if ($scope.selectedWidgetsType != undefined)
+                    widgetType = $scope.selectedWidgetsType.ID;
+                else
+                    widgetType = -1;
+                var widgetName = '';
+                if ($scope.widgetName != undefined)
+                    widgetName = $scope.widgetName;
                 $scope.isGettingData = true;
-                return WidgetAPIService.GetFilteredWidgets(filterObject).then(function (response) {
+                return WidgetAPIService.GetFilteredWidgets(widgetName, widgetType).then(function (response) {
                     $scope.widgets.length = 0;
                     angular.forEach(response, function (itm) {
                         $scope.widgets.push(itm);

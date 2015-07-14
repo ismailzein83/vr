@@ -39,11 +39,11 @@ namespace Vanrise.Security.Web.Controllers
         }
 
 
-         [HttpPost]
-         public List<WidgetDetails> GetFilteredWidgets(WidgetFilter filter)
+         [HttpGet]
+         public List<WidgetDetails> GetFilteredWidgets(string WidgetName, int WidgetType)
          {
              WidgetsManager manager = new WidgetsManager();
-             return manager.GetFilteredWidgets(filter);
+             return manager.GetFilteredWidgets(WidgetName, WidgetType);
          }
          [HttpGet]
          public Vanrise.Entities.DeleteOperationOutput<WidgetDetails> DeleteWidget(int widgetId)
