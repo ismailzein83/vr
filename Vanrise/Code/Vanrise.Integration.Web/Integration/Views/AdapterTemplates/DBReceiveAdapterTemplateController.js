@@ -11,7 +11,9 @@ function DBReceiveAdapterTemplateController($scope) {
 
             return {
                 $type: "Vanrise.Integration.Adapters.BaseDB.DBReceiveAdapter, Vanrise.Integration.Adapters.BaseDB",
-                FolderPath: $scope.folderPath
+                ConnectionString: $scope.connectionString,
+                Description: $scope.description,
+                Query: $scope.query
             };
         };
 
@@ -27,10 +29,14 @@ function DBReceiveAdapterTemplateController($scope) {
             return;
         var data = $scope.dataSourceAdapter.data;
         if (data != null) {
-            $scope.folderPath = data.FolderPath;
+            $scope.connectionString=ConnectionString;
+            $scope.description=Description;
+            $scope.query=Query;
         }
         else {
-            $scope.folderPath = undefined;
+            $scope.connectionString = undefined;
+            $scope.description = undefined;
+            $scope.query = undefined;
         }
         isFormLoaded = true;
     }
