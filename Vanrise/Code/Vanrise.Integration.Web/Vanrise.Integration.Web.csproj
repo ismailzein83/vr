@@ -100,7 +100,11 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="Integration\Services\APIServices\DataSourceAPIService.js" />
+    <Content Include="Integration\Views\AdapterTemplates\FTPReceiveAdapterTemplate.html" />
+    <Content Include="Integration\Views\AdapterTemplates\DBReceiveAdapterTemplate.html" />
     <Content Include="Integration\Views\AdapterTemplates\FileReceiveAdapterTemplate.html" />
+    <Content Include="Integration\Views\AdapterTemplates\FTPReceiveAdapterTemplateController.js" />
+    <Content Include="Integration\Views\AdapterTemplates\DBReceiveAdapterTemplateController.js" />
     <Content Include="Integration\Views\AdapterTemplates\FileReceiveAdapterTemplateController.js" />
     <Content Include="Integration\Views\DataSourceEditor.html" />
     <Content Include="Integration\Views\DataSourceEditorController.js" />
