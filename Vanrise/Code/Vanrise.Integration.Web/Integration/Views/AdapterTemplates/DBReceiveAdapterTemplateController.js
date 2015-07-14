@@ -10,7 +10,7 @@ function DBReceiveAdapterTemplateController($scope) {
         $scope.dataSourceAdapter.getData = function () {
 
             return {
-                $type: "Vanrise.Integration.Adapters.BaseDB.DBReceiveAdapter, Vanrise.Integration.Adapters.BaseDB",
+                $type: "",
                 ConnectionString: $scope.connectionString,
                 Description: $scope.description,
                 Query: $scope.query
