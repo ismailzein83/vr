@@ -213,7 +213,7 @@ namespace Vanrise.Queueing
 
         #region IPersistentQueue
 
-        public void Enqueue(object item)
+        public void EnqueueObject(object item)
         {
             T typedItem = item as T;
             if (typedItem == null)

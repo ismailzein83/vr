@@ -8,6 +8,6 @@ namespace Vanrise.Queueing.Entities
 {
     public interface IPersistentQueue
     {
-        void Enqueue(Object item);
+        void EnqueueObject(Object item);
     }
 }
