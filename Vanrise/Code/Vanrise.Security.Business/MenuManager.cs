@@ -33,7 +33,7 @@ namespace Vanrise.Security.Business
                 if(item.ParentId == 0)
                 {
                     MenuItem rootItem = GetModuleMenu(item, modules, views, effectivePermissionsWrapper.EffectivePermissions, effectivePermissionsWrapper.BreakInheritanceEntities);
-                    if(rootItem.Childs.Count > 0)
+                    if(rootItem.Childs != null && rootItem.Childs.Count > 0)
                         retVal.Add(rootItem);
                 }
             } 
