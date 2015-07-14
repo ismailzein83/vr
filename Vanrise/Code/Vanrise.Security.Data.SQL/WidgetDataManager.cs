@@ -84,12 +84,13 @@ namespace Vanrise.Security.Data.SQL
                 widgetName = "";
             return GetItemsSP("sec.sp_Widget_GetFiltered", WidgetMapper, widgetName, ToDBNullIfDefault(widgetType));
         }
-        public int CheckWidgetSetting(WidgetSetting setting){
+        public int CheckWidgetSetting(Widget widget)
+        {
              string serialziedSetting = null;
-             if (setting != null)
-                serialziedSetting = Common.Serializer.Serialize(setting);
+             if (widget.Setting != null)
+                 serialziedSetting = Common.Serializer.Serialize(widget.Setting);
 
-             return (int)ExecuteScalarSP("sec.sp_Widget_CheckSetting", serialziedSetting);
+             return (int)ExecuteScalarSP("sec.sp_Widget_CheckSetting", serialziedSetting, ToDBNullIfDefault(widget.Id));
         }
       
     }

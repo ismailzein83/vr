@@ -66,8 +66,8 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
         var settings = {};
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "New Dynamic Page";
-            modalScope.onPageAdded = function (page) {
-                mainGridAPI.itemAdded(page);
+            modalScope.onPageAdded = function (view) {
+                mainGridAPI.itemAdded(fillNeededData(view));
             };
         };
         VRModalService.showModal('/Client/Modules/Security/Views/DynamicPages/DynamicPageEditor.html', null, settings);
@@ -78,8 +78,8 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
         
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "Edit Dynamic Page: " + dataItem.Name;
-            modalScope.onPageUpdated = function (page) {
-                mainGridAPI.itemUpdated(page);
+            modalScope.onPageUpdated = function (view) {
+                mainGridAPI.itemUpdated(fillNeededData(view));
             };
         };
         VRModalService.showModal('/Client/Modules/Security/Views/DynamicPages/DynamicPageEditor.html', dataItem, settings);
@@ -91,8 +91,10 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
         VRNotificationService.showConfirmation(message).then(function (response) {
             if (response == true) {
                 return ViewAPIService.DeleteView(dataItem.ViewId).then(function (responseObject) {
-                    if (responseObject.Result == DeleteOperationResultEnum.Succeeded.value)
-                        mainGridAPI.itemDeleted(dataItem);
+                    if (responseObject.Result == DeleteOperationResultEnum.Succeeded.value) {
+                        mainGridAPI.itemDeleted(fillNeededData(dataItem));
+                    }
+                       
                     VRNotificationService.notifyOnItemDeleted("View", responseObject);
                     $scope.isGettingData = false;
                 }).catch(function (error) {
@@ -162,8 +164,8 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
         }
         else {
             itm.Audience = {
-                UsersName: 'null',
-                GroupsName: 'null',
+                UsersName: '',
+                GroupsName: '',
             }
         }
         return itm;

@@ -25,7 +25,7 @@ namespace Vanrise.Security.Business
             int widgetId = -1;
             IWidgetsDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IWidgetsDataManager>();
 
-            int checkSetting = dataManager.CheckWidgetSetting(widget.Setting);
+            int checkSetting = dataManager.CheckWidgetSetting(widget);
             if (checkSetting == 1)
             {
                 insertOperationOutput.Message = "Widget with same settings exist !!";
@@ -33,10 +33,6 @@ namespace Vanrise.Security.Business
             }
 
             bool insertActionSucc = dataManager.SaveWidget(widget, out widgetId);
-
-
-           
-          
             if (insertActionSucc)
             {
 
@@ -59,7 +55,12 @@ namespace Vanrise.Security.Business
             updateOperationOutput.Result = UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
             IWidgetsDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IWidgetsDataManager>();
-         
+            int checkSetting = dataManager.CheckWidgetSetting(widget);
+            if (checkSetting == 1)
+            {
+                updateOperationOutput.Message = "Widget with same settings exist !!";
+                return updateOperationOutput;
+            }
             bool updateActionSucc = dataManager.UpdateWidget(widget);
 
             if (updateActionSucc)

@@ -58,6 +58,10 @@ namespace Vanrise.Security.Business
                 View updatedView = dataManager.GetView(view.ViewId);
                 updateOperationOutput.UpdatedObject = updatedView;
             }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
 
             return updateOperationOutput;
         }
