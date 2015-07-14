@@ -13,6 +13,7 @@ namespace TOne.Analytics.Entities
         public string CarrierID { get; set; }
         public string Carrier { get; set; }
         public int? Attempts { get; set; }
+        public string AttemptsFormatted { get; set; }
         public decimal? DurationNet { get; set; }
         public string DurationNetFormatted { get; set; }
         public decimal? Duration { get; set; }

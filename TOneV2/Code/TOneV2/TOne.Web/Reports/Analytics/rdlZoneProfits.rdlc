@@ -179,7 +179,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Supplier Name</Value>
+                              <Value>Supplier</Value>
                               <Style>
                                 <FontWeight>SemiBold</FontWeight>
                                 <Color>DarkRed</Color>
@@ -241,7 +241,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Duration Net</Value>
+                              <Value>Dur Net</Value>
                               <Style>
                                 <FontWeight>SemiBold</FontWeight>
                                 <Color>DarkRed</Color>
@@ -273,7 +273,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Sale Duration</Value>
+                              <Value>Minutes</Value>
                               <Style>
                                 <FontWeight>SemiBold</FontWeight>
                                 <Color>DarkRed</Color>
@@ -305,7 +305,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Cost Net</Value>
+                              <Value>Cost</Value>
                               <Style>
                                 <FontWeight>SemiBold</FontWeight>
                                 <Color>DarkRed</Color>
@@ -337,7 +337,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Sale Net</Value>
+                              <Value>Sale</Value>
                               <Style>
                                 <FontWeight>SemiBold</FontWeight>
                                 <Color>DarkRed</Color>
@@ -677,14 +677,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="CostDurationFormated">
+                    <Textbox Name="CostNetFormated">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!CostDurationFormated.Value</Value>
+                              <Value>=Fields!CostNetFormated.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -695,7 +695,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>CostDurationFormated</rd:DefaultName>
+                      <rd:DefaultName>CostNetFormated</rd:DefaultName>
                       <ZIndex>3</ZIndex>
                       <Style>
                         <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
@@ -1308,7 +1308,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Sum(Fields!Calls.Value)</Value>
+                              <Value>=FormatNumber(Sum(Fields!Calls.Value),2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1458,7 +1458,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!SaleNet.Value - Fields!CostNet.Value),2)</Value>
+                              <Value>=FormatNumber(Sum(Fields!ProfitSum.Value),2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1477,6 +1477,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -1892,11 +1893,18 @@
       </ConnectionProperties>
       <rd:DataSourceID>ccc26b9a-631a-4138-ba99-d439b94f3e7e</rd:DataSourceID>
     </DataSource>
+    <DataSource Name="TOneAnalyticsBusiness">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>6578a246-8f1c-442b-a378-a341484ef21d</rd:DataSourceID>
+    </DataSource>
   </DataSources>
   <DataSets>
     <DataSet Name="ZoneProfit">
       <Query>
-        <DataSourceName>TOneAnalyticsDataSQL2</DataSourceName>
+        <DataSourceName>TOneAnalyticsBusiness</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
@@ -1964,6 +1972,10 @@
           <DataField>Profit</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="ProfitSum">
+          <DataField>ProfitSum</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
         <Field Name="ProfitPercentage">
           <DataField>ProfitPercentage</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -1971,10 +1983,10 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>TOne.Analytics.Business</rd:DataSetName>
-        <rd:TableName>BillingManager</rd:TableName>
+        <rd:TableName>BillingStatisticManager</rd:TableName>
         <rd:ObjectDataSourceSelectMethod>GetZoneProfit</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceSelectMethodSignature>System.Collections.Generic.List`1[TOne.Analytics.Entities.ZoneProfitFormatted] GetZoneProfit(System.DateTime, System.DateTime, System.String)</rd:ObjectDataSourceSelectMethodSignature>
-        <rd:ObjectDataSourceType>TOne.Analytics.Business.BillingManager, TOne.Analytics.Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:ObjectDataSourceSelectMethodSignature>System.Collections.Generic.List`1[TOne.Analytics.Entities.ZoneProfitFormatted] GetZoneProfit(System.DateTime, System.DateTime, Boolean)</rd:ObjectDataSourceSelectMethodSignature>
+        <rd:ObjectDataSourceType>TOne.Analytics.Business.BillingStatisticManager, TOne.Analytics.Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>

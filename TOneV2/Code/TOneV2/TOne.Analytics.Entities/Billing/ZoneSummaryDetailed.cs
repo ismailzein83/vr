@@ -43,6 +43,8 @@ namespace TOne.Analytics.Entities
 
         public double? ExtraChargeValue { get; set; }
 
+        public double? Services { get; set; }
+
 
     }
 }

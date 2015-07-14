@@ -40,21 +40,61 @@ namespace TOne.Analytics.Data.SQL
                groupBySupplier
                );
         }
-        public List<ZoneSummaryDetailed> GetZoneSummaryDetailed(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier)
+        public List<ZoneSummaryDetailed> GetZoneSummaryDetailed(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier, out double services)
         {
-            return GetItemsSP("Analytics.SP_BillingRep_GetZoneSummaryDetailed", (reader) => ZoneSummaryDetailedMapper(reader, groupBySupplier),
-               fromDate,
-               toDate,
-               (customerId == null || customerId == "") ? null : customerId,
-               (supplierId == null || supplierId == "") ? null : supplierId,
-               isCost,
-               currencyId,
-               (supplierGroup == null || supplierGroup == "") ? null : supplierGroup,
-               (customerGroup == null || customerGroup == "") ? null : customerGroup,
-               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
-               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
-               groupBySupplier
-               );
+            List<ZoneSummaryDetailed> lstZoneSummaryDetailed = new List<ZoneSummaryDetailed>();
+            services = 0;
+            double ser = 0;
+            ExecuteReaderSP("Analytics.SP_BillingRep_GetZoneSummaryDetailed", (reader) =>
+            {
+                while (reader.Read())
+                    lstZoneSummaryDetailed.Add(new ZoneSummaryDetailed
+                    {
+                        Zone = reader["Zone"] as string,
+                        ZoneId = GetReaderValue<int>(reader, "ZoneId"),
+                        Calls = GetReaderValue<int>(reader, "Calls"),
+                        DurationNet = GetReaderValue<decimal>(reader, "DurationNet"),
+                        DurationInSeconds = GetReaderValue<decimal>(reader, "DurationInSeconds"),
+                        Rate = GetReaderValue<double>(reader, "Rate"),
+                        Net = GetReaderValue<double>(reader, "Net"),
+                        OffPeakDurationInSeconds = GetReaderValue<decimal>(reader, "OffPeakDurationInSeconds"),
+                        OffPeakRate = GetReaderValue<double>(reader, "OffPeakRate"),
+                        OffPeakNet = GetReaderValue<double>(reader, "OffPeakNet"),
+                        WeekEndDurationInSeconds = GetReaderValue<decimal>(reader, "WeekEndDurationInSeconds"),
+                        WeekEndRate = GetReaderValue<double>(reader, "WeekEndRate"),
+                        WeekEndNet = GetReaderValue<double>(reader, "WeekEndNet"),
+                        Discount = GetReaderValue<double>(reader, "Discount"),
+                        CommissionValue = GetReaderValue<double>(reader, "CommissionValue"),
+                        ExtraChargeValue = GetReaderValue<double>(reader, "ExtraChargeValue"),
+                        SupplierID = (groupBySupplier == true ? reader["SupplierID"] as string : null)
+                    });
+                if (reader.NextResult())
+                {
+                    while (reader.Read())
+                    {
+                        ser = GetReaderValue<double>(reader, "Services");
+                    }
+                }
+            //  if (groupBySupplier == true)
+                //{
+                //    instance.SupplierID = reader["SupplierID"] as string;
+                //}
+            });
+            services = ser;
+            return lstZoneSummaryDetailed;
+            //return GetItemsSP("Analytics.SP_BillingRep_GetZoneSummaryDetailed", (reader) => ZoneSummaryDetailedMapper(reader, groupBySupplier),
+            //   fromDate,
+            //   toDate,
+            //   (customerId == null || customerId == "") ? null : customerId,
+            //   (supplierId == null || supplierId == "") ? null : supplierId,
+            //   isCost,
+            //   currencyId,
+            //   (supplierGroup == null || supplierGroup == "") ? null : supplierGroup,
+            //   (customerGroup == null || customerGroup == "") ? null : customerGroup,
+            //   (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
+            //   (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
+            //   groupBySupplier
+            //   );
         }
         public List<MonthTraffic> GetMonthTraffic(DateTime fromDate, DateTime toDate, string carrierAccountID, bool isSale)
         {

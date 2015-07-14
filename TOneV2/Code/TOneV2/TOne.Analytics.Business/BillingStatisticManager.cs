@@ -78,9 +78,9 @@ namespace TOne.Analytics.Business
         {
             return FormatZoneSummaries(_datamanager.GetZoneSummary(fromDate, toDate, customerId, supplierId, isCost, currencyId, supplierGroup, customerGroup, customerAMUId, supplierAMUId, groupBySupplier));
         }
-        public List<ZoneSummaryDetailedFormatted> GetZoneSummaryDetailed(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier)
+        public List<ZoneSummaryDetailedFormatted> GetZoneSummaryDetailed(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier, out double services)
         {
-            return FormatZoneSummariesDetailed(_datamanager.GetZoneSummaryDetailed(fromDate, toDate, customerId, supplierId, isCost, currencyId, supplierGroup, customerGroup, customerAMUId, supplierAMUId, groupBySupplier));
+            return FormatZoneSummariesDetailed(_datamanager.GetZoneSummaryDetailed(fromDate, toDate, customerId, supplierId, isCost, currencyId, supplierGroup, customerGroup, customerAMUId, supplierAMUId, groupBySupplier, out services));
         }
 
         public List<CarrierLostFormatted> GetCarrierLost(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int margin, int? supplierAMUId, int? customerAMUId)
@@ -497,22 +497,20 @@ namespace TOne.Analytics.Business
                 DurationNetFormated = FormatNumber(zoneProfit.DurationNet),
 
                 SaleDuration = zoneProfit.SaleDuration,
-                SaleDurationFormated = (zoneProfit.SaleDuration.HasValue) ? String.Format("{0:#0.00}", zoneProfit.SaleDuration) : "0.00",
+                SaleDurationFormated = zoneProfit.SaleNet == 0 ? "" : (zoneProfit.SaleDuration.HasValue) ? FormatNumber(zoneProfit.SaleDuration) : "0.00",
 
                 SaleNet = zoneProfit.SaleNet,
-                SaleNetFormated = (zoneProfit.SaleNet.HasValue) ? String.Format("{0:#0.00}", zoneProfit.SaleNet) : "0.00",
+                SaleNetFormated = zoneProfit.SaleNet == 0 ? "" : (zoneProfit.SaleNet.HasValue) ? FormatNumber(zoneProfit.SaleNet, 4) : "0.00",
 
                 CostDuration = zoneProfit.CostDuration,
-                CostDurationFormated = String.Format("{0:#0.0000}", zoneProfit.CostDuration),
+                CostDurationFormated = FormatNumber(zoneProfit.CostDuration, 4),
 
                 CostNet = zoneProfit.CostNet,
-                CostNetFormated = (zoneProfit.CostNet.HasValue) ? String.Format("{0:#0.0000}", zoneProfit.CostNet) : "0.00",
+                CostNetFormated = (zoneProfit.CostNet.HasValue) ? FormatNumber(zoneProfit.CostNet, 4) : "0.00",
 
-                Profit = String.Format("{0:#0.00}", (zoneProfit.SaleNet - zoneProfit.CostNet)),
-
-                ProfitPercentage = (zoneProfit.SaleNet.HasValue) ? String.Format("{0:#,##0.00%}", (1 - zoneProfit.CostNet / zoneProfit.SaleNet)) : "-100%",
-
-
+                Profit = zoneProfit.SaleNet == 0 ? "" : FormatNumber((!zoneProfit.SaleNet.HasValue) ? 0 : zoneProfit.SaleNet - zoneProfit.CostNet),
+                ProfitSum = (!zoneProfit.SaleNet.HasValue || zoneProfit.SaleNet == 0) ? 0 : zoneProfit.SaleNet - zoneProfit.CostNet,
+                ProfitPercentage = zoneProfit.SaleNet == 0 ? "" : (zoneProfit.SaleNet.HasValue) ? FormatNumber(((1 - zoneProfit.CostNet / zoneProfit.SaleNet)) * 100) : "-100%",
             };
         }
 
@@ -526,7 +524,7 @@ namespace TOne.Analytics.Business
                 Calls = zoneSummary.Calls,
 
                 Rate = zoneSummary.Rate,
-                RateFormatted = FormatNumber(zoneSummary.Rate, 5),
+                RateFormatted = FormatNumber(zoneSummary.Rate, 4),
 
                 DurationNet = zoneSummary.DurationNet,
                 DurationNetFormatted = FormatNumber(zoneSummary.DurationNet),
@@ -538,7 +536,7 @@ namespace TOne.Analytics.Business
                 DurationInSecondsFormatted = FormatNumber(zoneSummary.DurationInSeconds),
 
                 Net = zoneSummary.Net,
-                NetFormatted = FormatNumber(zoneSummary.Net, 5),
+                NetFormatted = FormatNumber(zoneSummary.Net, 4),
 
                 CommissionValue = zoneSummary.CommissionValue,
                 CommissionValueFormatted = FormatNumber(zoneSummary.CommissionValue),
@@ -559,44 +557,44 @@ namespace TOne.Analytics.Business
                 Calls = zoneSummaryDetailed.Calls,
 
                 Rate = zoneSummaryDetailed.Rate,
-                RateFormatted = FormatNumber(zoneSummaryDetailed.Rate, 5),
+                RateFormatted = FormatNumber(zoneSummaryDetailed.Rate, 4),
 
                 DurationNet = zoneSummaryDetailed.DurationNet,
                 DurationNetFormatted = FormatNumber(zoneSummaryDetailed.DurationNet),
 
                 OffPeakDurationInSeconds = zoneSummaryDetailed.OffPeakDurationInSeconds,
-                OffPeakDurationInSecondsFormatted = FormatNumber(zoneSummaryDetailed.OffPeakDurationInSeconds, 2),
+                OffPeakDurationInSecondsFormatted = FormatNumber(zoneSummaryDetailed.OffPeakDurationInSeconds),
 
                 OffPeakRate = zoneSummaryDetailed.OffPeakRate,
-                OffPeakRateFormatted = FormatNumber(zoneSummaryDetailed.OffPeakRate, 5),
+                OffPeakRateFormatted = FormatNumber(zoneSummaryDetailed.OffPeakRate, 4),
 
                 OffPeakNet = zoneSummaryDetailed.OffPeakNet,
-                OffPeakNetFormatted = FormatNumber(zoneSummaryDetailed.OffPeakRate, 2),
+                OffPeakNetFormatted = FormatNumber(zoneSummaryDetailed.OffPeakRate, 4),
 
                 WeekEndDurationInSeconds = zoneSummaryDetailed.WeekEndDurationInSeconds,
-                WeekEndDurationInSecondsFormatted = FormatNumber(zoneSummaryDetailed.WeekEndDurationInSeconds, 2),
+                WeekEndDurationInSecondsFormatted = FormatNumber(zoneSummaryDetailed.WeekEndDurationInSeconds),
 
                 WeekEndRate = zoneSummaryDetailed.WeekEndRate,
-                WeekEndRateFormatted = FormatNumber(zoneSummaryDetailed.WeekEndRate, 2),
+                WeekEndRateFormatted = FormatNumber(zoneSummaryDetailed.WeekEndRate, 4),
 
                 WeekEndNet = zoneSummaryDetailed.WeekEndNet,
-                WeekEndNetFormatted = FormatNumber(zoneSummaryDetailed.WeekEndNet, 2),
+                WeekEndNetFormatted = FormatNumber(zoneSummaryDetailed.WeekEndNet, 4),
 
                 DurationInSeconds = zoneSummaryDetailed.DurationInSeconds,
                 DurationInSecondsFormatted = FormatNumber(zoneSummaryDetailed.DurationInSeconds),
 
                 Net = zoneSummaryDetailed.Net,
-                NetFormatted = FormatNumber(zoneSummaryDetailed.Net, 5),
+                NetFormatted = FormatNumber(zoneSummaryDetailed.Net, 4),
 
-                TotalDurationFormatted = FormatNumber((zoneSummaryDetailed.DurationInSeconds + zoneSummaryDetailed.OffPeakDurationInSeconds + zoneSummaryDetailed.WeekEndDurationInSeconds), 2),
+                TotalDurationFormatted = FormatNumber((zoneSummaryDetailed.DurationInSeconds + zoneSummaryDetailed.OffPeakDurationInSeconds + zoneSummaryDetailed.WeekEndDurationInSeconds)),
 
-                TotalAmountFormatted = FormatNumber(zoneSummaryDetailed.Net + zoneSummaryDetailed.OffPeakNet + zoneSummaryDetailed.WeekEndNet, 2),
+                TotalAmountFormatted = FormatNumber(zoneSummaryDetailed.Net + zoneSummaryDetailed.OffPeakNet + zoneSummaryDetailed.WeekEndNet, 4),
 
                 CommissionValue = zoneSummaryDetailed.CommissionValue,
-                CommissionValueFormatted = FormatNumber(zoneSummaryDetailed.CommissionValue, 2),
+                CommissionValueFormatted = FormatNumber(zoneSummaryDetailed.CommissionValue),
 
                 ExtraChargeValue = zoneSummaryDetailed.ExtraChargeValue,
-                ExtraChargeValueFormatted = FormatNumber(zoneSummaryDetailed.ExtraChargeValue),
+                ExtraChargeValueFormatted = FormatNumber(zoneSummaryDetailed.ExtraChargeValue)
             };
         }
 
@@ -605,7 +603,9 @@ namespace TOne.Analytics.Business
             return new DailySummaryFormatted
             {
                 Day = dailySummary.Day,
+                
                 Calls = dailySummary.Calls,
+                CallsFormatted = FormatNumber(dailySummary.Calls),
 
                 DurationNet = dailySummary.DurationNet,
                 DurationNetFormatted = FormatNumber(dailySummary.DurationNet),
@@ -617,7 +617,7 @@ namespace TOne.Analytics.Business
                 SaleNetFormatted = FormatNumber(dailySummary.SaleNet, 4),
 
                 CostNet = dailySummary.CostNet,
-                CostNetFormatted = FormatNumber(dailySummary.CostNet),
+                CostNetFormatted = FormatNumber(dailySummary.CostNet, 4),
 
                 ProfitFormatted = FormatNumber(dailySummary.SaleNet - dailySummary.CostNet),
 
@@ -719,11 +719,11 @@ namespace TOne.Analytics.Business
                 Duration = carrierLost.Duration,
                 DurationFormatted = FormatNumber(carrierLost.Duration),
                 CostNet = carrierLost.CostNet,
-                CostNetFormatted = (carrierLost.CostNet == null) ? "0.00" : FormatNumber(carrierLost.CostNet, 5),
+                CostNetFormatted = (carrierLost.CostNet == null) ? "0.00" : FormatNumber(carrierLost.CostNet, 4),
                 SaleNet = carrierLost.SaleNet,
-                SaleNetFormatted = (carrierLost.SaleNet == null) ? "0.00" : FormatNumber(carrierLost.SaleNet, 5),
+                SaleNetFormatted = (carrierLost.SaleNet == null) ? "0.00" : FormatNumber(carrierLost.SaleNet, 4),
                 Margin = FormatNumber(carrierLost.SaleNet - carrierLost.CostNet),
-                Percentage = (carrierLost.SaleNet != null) ? String.Format("{0:#,##0.00%}", (1 - carrierLost.CostNet / carrierLost.SaleNet)) : "-100%"
+                Percentage = (carrierLost.SaleNet != null) ? String.Format("{0:#,##0.0%}", (1 - carrierLost.CostNet / carrierLost.SaleNet)) : "-100%"
 
             };
         }
@@ -799,6 +799,11 @@ namespace TOne.Analytics.Business
         private string FormatNumber(Decimal? number)
         {
             return String.Format("{0:#,###0.00}", number);
+        }
+
+        private string FormatNumber(int? number)
+        {
+            return String.Format("{0:#,###0}", number);
         }
 
         private string FormatNumber(Double? number)
@@ -949,6 +954,7 @@ namespace TOne.Analytics.Business
                 CarrierID = carrierSummaryDaily.CarrierID,
                 Carrier = _bemanager.GetCarrirAccountName(carrierSummaryDaily.CarrierID),
                 Attempts = carrierSummaryDaily.Attempts,
+                AttemptsFormatted = FormatNumber(carrierSummaryDaily.Attempts),
                 DurationNet = carrierSummaryDaily.DurationNet,
                 DurationNetFormatted = FormatNumber(carrierSummaryDaily.DurationNet),
                 Duration = carrierSummaryDaily.Duration,

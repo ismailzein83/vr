@@ -10,6 +10,7 @@ namespace TOne.Analytics.Entities
     {
         public string Day { get; set; }
         public int Calls { get; set; }
+        public string CallsFormatted { get; set; }
         public decimal? DurationNet { get; set; }
         public string DurationNetFormatted { get; set; }
         public decimal? SaleDuration { get; set; }

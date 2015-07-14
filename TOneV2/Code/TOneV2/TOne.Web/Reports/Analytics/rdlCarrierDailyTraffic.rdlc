@@ -12,9 +12,6 @@
               <Width>1.5in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.75in</Width>
-            </TablixColumn>
-            <TablixColumn>
               <Width>1.875in</Width>
             </TablixColumn>
             <TablixColumn>
@@ -79,38 +76,6 @@
                       </Paragraphs>
                       <rd:DefaultName>textbox1</rd:DefaultName>
                       <ZIndex>22</ZIndex>
-                      <Style>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="textbox18">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>Duration Net</Value>
-                              <Style>
-                                <FontWeight>SemiBold</FontWeight>
-                                <Color>DarkRed</Color>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Right</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>textbox18</rd:DefaultName>
-                      <ZIndex>21</ZIndex>
                       <Style>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -283,14 +248,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="DurationFormatted">
+                    <Textbox Name="AttemptsFormatted">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!DurationFormatted.Value</Value>
+                              <Value>=Fields!AttemptsFormatted.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -301,39 +266,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>DurationFormatted</rd:DefaultName>
-                      <ZIndex>3</ZIndex>
-                      <Style>
-                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Attempts">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=Fields!Attempts.Value</Value>
-                              <Style>
-                                <FontSize>8pt</FontSize>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Right</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Attempts</rd:DefaultName>
+                      <rd:DefaultName>AttemptsFormatted</rd:DefaultName>
                       <ZIndex>2</ZIndex>
                       <Style>
                         <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
@@ -458,38 +391,6 @@
                       </Paragraphs>
                       <rd:DefaultName>textbox8</rd:DefaultName>
                       <ZIndex>10</ZIndex>
-                      <Style>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="textbox20">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>Duration Net</Value>
-                              <Style>
-                                <FontWeight>SemiBold</FontWeight>
-                                <Color>DarkRed</Color>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Right</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>textbox20</rd:DefaultName>
-                      <ZIndex>9</ZIndex>
                       <Style>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -662,38 +563,6 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="textbox21">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!DurationNet.Value),2)</Value>
-                              <Style>
-                                <FontSize>8pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Right</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>textbox21</rd:DefaultName>
-                      <ZIndex>15</ZIndex>
-                      <Style>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
                     <Textbox Name="textbox6">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -701,7 +570,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Sum(Fields!Attempts.Value)</Value>
+                              <Value>=FormatNumber(Sum(Fields!Attempts.Value),2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -799,7 +668,6 @@
             <TablixMember />
             <TablixMember />
             <TablixMember />
-            <TablixMember />
           </TablixMembers>
         </TablixColumnHierarchy>
         <TablixRowHierarchy>
@@ -813,6 +681,12 @@
               <Group Name="table1_Details_Group">
                 <DataElementName>Detail</DataElementName>
               </Group>
+              <SortExpressions>
+                <SortExpression>
+                  <Value>=Fields!Carrier.Value</Value>
+                  <Direction>Descending</Direction>
+                </SortExpression>
+              </SortExpressions>
               <TablixMembers>
                 <TablixMember />
               </TablixMembers>
@@ -833,7 +707,7 @@
         <DataSetName>CarrierSummary</DataSetName>
         <Top>0.125in</Top>
         <Height>1in</Height>
-        <Width>9.4475in</Width>
+        <Width>7.6975in</Width>
         <Style />
       </Tablix>
     </ReportItems>
@@ -1173,6 +1047,10 @@
         <Field Name="Attempts">
           <DataField>Attempts</DataField>
           <rd:TypeName>System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="AttemptsFormatted">
+          <DataField>AttemptsFormatted</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="DurationNet">
           <DataField>DurationNet</DataField>

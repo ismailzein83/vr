@@ -8,8 +8,6 @@ namespace TOne.Analytics.Entities
 {
     public class ZoneProfitFormatted
     {
-
-
         public string CostZone { get; set; }
         public string SaleZone { get; set; }
         public string SupplierID { get; set; }
@@ -25,11 +23,8 @@ namespace TOne.Analytics.Entities
         public string CostNetFormated { get; set; }
         public double? SaleNet { get; set; }
         public string SaleNetFormated { get; set; }
-
         public string Profit { get; set; }
-
+        public double? ProfitSum { get; set; }
         public string ProfitPercentage { get; set; }
-
-
     }
 }

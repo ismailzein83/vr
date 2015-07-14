@@ -386,14 +386,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Calls">
+                    <Textbox Name="CallsFormatted">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Calls.Value</Value>
+                              <Value>=Fields!CallsFormatted.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -404,7 +404,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Calls</rd:DefaultName>
+                      <rd:DefaultName>CallsFormatted</rd:DefaultName>
                       <ZIndex>6</ZIndex>
                       <Style>
                         <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
@@ -1590,6 +1590,10 @@
         <Field Name="Calls">
           <DataField>Calls</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CallsFormatted">
+          <DataField>CallsFormatted</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="DurationNet">
           <DataField>DurationNet</DataField>

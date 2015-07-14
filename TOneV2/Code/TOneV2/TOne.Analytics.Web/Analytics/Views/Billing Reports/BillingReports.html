@@ -58,7 +58,7 @@
                     <vr-label>Commission/Extra</vr-label>
                     <vr-switch value="params.commission"></vr-switch>
                 </vr-columns>
-                <vr-columns colnum="3" ng-if="reporttype.ParameterSettings.RequiresGroupBySupplier">
+                <vr-columns ng-hide="!params.isCost" colnum="3" ng-if="reporttype.ParameterSettings.RequiresGroupBySupplier">
                     <vr-label>By Supplier</vr-label>
                     <vr-switch value="params.bySupplier"></vr-switch>
                 </vr-columns>

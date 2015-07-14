@@ -1241,7 +1241,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Sum(Fields!Calls.Value)</Value>
+                              <Value />
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -1603,7 +1603,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>T Amt</Value>
+                              <Value>Amount</Value>
                               <Style>
                                 <FontSize>12pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1803,7 +1803,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!DurationInSeconds.Value),2)</Value>
+                              <Value>=FormatNumber(Sum(Round(Fields!DurationInSeconds.Value,2)),2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -2639,7 +2639,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!Net.Value)+Sum(Fields!OffPeakNet.Value)+Sum(Fields!WeekEndNet.Value),2)</Value>
+                              <Value>=FormatNumber(Sum(Fields!Net.Value)+Sum(Fields!OffPeakNet.Value)+Sum(Fields!WeekEndNet.Value),4)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2676,7 +2676,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Abs(Fields!ExtraChargeValue.Value)),2)</Value>
+                              <Value>=FormatNumber(Sum(Fields!ExtraChargeValue.Value),2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2713,7 +2713,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Abs(Fields!CommissionValue.Value)),2)</Value>
+                              <Value>=FormatNumber(Sum(Fields!CommissionValue.Value),2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2787,8 +2787,27 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIf(CDbl(Parameters!ServicesForCustomer.Value) = 0 and Parameters!IsCommission.Value = "True",FormatNumber(Sum(Fields!Net.Value)+Sum(Fields!OffPeakNet.Value)+Sum(Fields!WeekEndNet.Value) + Sum(Abs(Fields!ExtraChargeValue.Value))+ Sum(Abs(Fields!CommissionValue.Value)),Parameters!DigitRate.Value) ,
-FormatNumber(Sum(Fields!Net.Value)+Sum(Fields!OffPeakNet.Value)+Sum(Fields!WeekEndNet.Value) + CDbl(Parameters!ServicesForCustomer.Value) ,Parameters!DigitRate.Value))</Value>
+                              <Value>=IIf(
+	Parameters!IsService.Value = "True" , 
+	IIf(
+		Parameters!IsCommission.Value = "True",
+		IIf(
+			Parameters!IsCost.Value = "True",
+			FormatNumber(CDbl(Sum(Fields!Net.Value)+Sum(Fields!OffPeakNet.Value)) + (Sum(Fields!ExtraChargeValue.Value)+ Sum(Fields!CommissionValue.Value)) * (+1) + CDbl(Parameters!ServicesForCustomer.Value) ,Parameters!DigitRate.Value),
+			FormatNumber(CDbl(Sum(Fields!Net.Value)+Sum(Fields!OffPeakNet.Value)) + (Sum(Fields!ExtraChargeValue.Value)+ Sum(Fields!CommissionValue.Value)) * (-1) + CDbl(Parameters!ServicesForCustomer.Value) ,Parameters!DigitRate.Value)
+			),
+		FormatNumber(CDbl(Sum(Fields!Net.Value)+Sum(Fields!OffPeakNet.Value)) + CDbl(Parameters!ServicesForCustomer.Value) ,Parameters!DigitRate.Value)
+		),
+	IIf(
+		Parameters!IsCommission.Value = "True",
+		IIf(
+			Parameters!IsCost.Value = "True",
+			FormatNumber(CDbl(Sum(Fields!Net.Value)+Sum(Fields!OffPeakNet.Value)) + (Sum(Fields!ExtraChargeValue.Value)+ Sum(Fields!CommissionValue.Value)) * (+1),Parameters!DigitRate.Value),
+			FormatNumber(CDbl(Sum(Fields!Net.Value)+Sum(Fields!OffPeakNet.Value)) + (Sum(Fields!ExtraChargeValue.Value)+ Sum(Fields!CommissionValue.Value)) * (-1),Parameters!DigitRate.Value)
+			),
+		FormatNumber(CDbl(Sum(Fields!Net.Value)+Sum(Fields!OffPeakNet.Value)),Parameters!DigitRate.Value)
+		)
+	)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -3653,6 +3672,10 @@ FormatNumber(Sum(Fields!Net.Value)+Sum(Fields!OffPeakNet.Value)+Sum(Fields!WeekE
       <Prompt>DigitRate</Prompt>
     </ReportParameter>
     <ReportParameter Name="GroupeBySupplier">
+      <DataType>Boolean</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="IsCost">
       <DataType>Boolean</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>

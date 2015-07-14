@@ -9,7 +9,10 @@
               <Width>0.03125in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.625in</Width>
+              <Width>2.21874in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>1in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1in</Width>
@@ -134,7 +137,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Calls</Value>
+                              <Value>Dur Net</Value>
                               <Style>
                                 <FontSize>12pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -167,7 +170,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Duration In Minutes</Value>
+                              <Value>Calls</Value>
                               <Style>
                                 <FontSize>12pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -200,7 +203,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Rate</Value>
+                              <Value>Minutes</Value>
                               <Style>
                                 <FontSize>12pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -233,7 +236,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Net</Value>
+                              <Value>Rate</Value>
                               <Style>
                                 <FontSize>12pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -266,7 +269,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Rate Type</Value>
+                              <Value>Amount</Value>
                               <Style>
                                 <FontSize>12pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -299,7 +302,40 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Commission Value</Value>
+                              <Value>R Type</Value>
+                              <Style>
+                                <FontSize>12pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                                <Color>DarkRed</Color>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>textbox4</rd:DefaultName>
+                      <ZIndex>48</ZIndex>
+                      <Style>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="textbox52">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>C Val</Value>
                               <Style>
                                 <FontSize>12pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -416,37 +452,6 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Calls">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=Fields!Calls.Value</Value>
-                              <Style>
-                                <FontSize>8pt</FontSize>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Right</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Calls</rd:DefaultName>
-                      <Style>
-                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
                     <Textbox Name="DurationNetFormatted">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -478,14 +483,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="RateTypeFormatted">
+                    <Textbox Name="Calls1">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!RateTypeFormatted.Value</Value>
+                              <Value>=Fields!Calls.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -496,7 +501,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>RateTypeFormatted</rd:DefaultName>
+                      <rd:DefaultName>Calls1</rd:DefaultName>
                       <Style>
                         <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -509,7 +514,69 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="NetFormatted">
+                    <Textbox Name="DurationInSecondsFormatted">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!DurationInSecondsFormatted.Value</Value>
+                              <Style>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>DurationInSecondsFormatted</rd:DefaultName>
+                      <Style>
+                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="RateFormatted">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!RateFormatted.Value</Value>
+                              <Style>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>RateFormatted</rd:DefaultName>
+                      <Style>
+                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="NetFormatted1">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -527,7 +594,8 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>NetFormatted</rd:DefaultName>
+                      <rd:DefaultName>NetFormatted1</rd:DefaultName>
+                      <ZIndex>1</ZIndex>
                       <Style>
                         <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -540,7 +608,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="RateTypeFormatted1">
+                    <Textbox Name="RateTypeFormatted2">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -558,8 +626,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>RateTypeFormatted1</rd:DefaultName>
-                      <ZIndex>1</ZIndex>
+                      <rd:DefaultName>RateTypeFormatted2</rd:DefaultName>
                       <Style>
                         <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -695,7 +762,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Sum(Fields!Calls.Value)</Value>
+                              <Value />
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -845,6 +912,32 @@
                       </Paragraphs>
                       <rd:DefaultName>textbox26</rd:DefaultName>
                       <ZIndex>8</ZIndex>
+                      <Style>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox54">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value />
+                              <Style />
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox54</rd:DefaultName>
                       <Style>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1123,6 +1216,32 @@
                     </Textbox>
                   </CellContents>
                 </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox55">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value />
+                              <Style />
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox55</rd:DefaultName>
+                      <Style>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
               </TablixCells>
             </TablixRow>
             <TablixRow>
@@ -1389,6 +1508,32 @@
                     </Textbox>
                   </CellContents>
                 </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox56">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value />
+                              <Style />
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox56</rd:DefaultName>
+                      <Style>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
               </TablixCells>
             </TablixRow>
             <TablixRow>
@@ -1570,7 +1715,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Service &amp; Fees</Value>
+                              <Value />
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1693,6 +1838,32 @@
                     </Textbox>
                   </CellContents>
                 </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox57">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value />
+                              <Style />
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox57</rd:DefaultName>
+                      <Style>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
               </TablixCells>
             </TablixRow>
             <TablixRow>
@@ -1801,7 +1972,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Abs(Fields!ExtraChargeValue.Value)),2)</Value>
+                              <Value>=FormatNumber(Sum(Fields!ExtraChargeValue.Value),2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1837,7 +2008,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Abs(Fields!CommissionValue.Value)),2)</Value>
+                              <Value>=FormatNumber(Sum(Fields!CommissionValue.Value),2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1866,14 +2037,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="textbox33">
+                    <Textbox Name="Textbox53">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!ServicesForCustomer.Value</Value>
+                              <Value />
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1885,12 +2056,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>textbox33</rd:DefaultName>
-                      <ZIndex>43</ZIndex>
-                      <Visibility>
-                        <Hidden>=IIF(Parameters!IsService.Value = "false", True, False)</Hidden>
-                      </Visibility>
-                      <DataElementOutput>NoOutput</DataElementOutput>
+                      <rd:DefaultName>Textbox53</rd:DefaultName>
                       <Style>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1909,8 +2075,27 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIf(CDbl(Parameters!ServicesForCustomer.Value) = 0 and Parameters!IsCommission.Value = "True",FormatNumber(CDbl(Parameters!TotalAmount.Value) + Sum(Abs(Fields!ExtraChargeValue.Value))+ Sum(Abs(Fields!CommissionValue.Value)),Parameters!DigitRate.Value) ,
-FormatNumber(CDbl(Parameters!TotalAmount.Value) + CDbl(Parameters!ServicesForCustomer.Value) ,Parameters!DigitRate.Value))</Value>
+                              <Value>=IIf(
+	Parameters!IsService.Value = "True" , 
+	IIf(
+		Parameters!IsCommission.Value = "True",
+		IIf(
+			Parameters!IsCost.Value = "True",
+			FormatNumber(CDbl(Parameters!TotalAmount.Value) + (Sum(Fields!ExtraChargeValue.Value)+ Sum(Fields!CommissionValue.Value)) * (+1) + CDbl(Parameters!ServicesForCustomer.Value) ,Parameters!DigitRate.Value),
+			FormatNumber(CDbl(Parameters!TotalAmount.Value) + (Sum(Fields!ExtraChargeValue.Value)+ Sum(Fields!CommissionValue.Value)) * (-1) + CDbl(Parameters!ServicesForCustomer.Value) ,Parameters!DigitRate.Value)
+			),
+		FormatNumber(CDbl(Parameters!TotalAmount.Value) + CDbl(Parameters!ServicesForCustomer.Value) ,Parameters!DigitRate.Value)
+		),
+	IIf(
+		Parameters!IsCommission.Value = "True",
+		IIf(
+			Parameters!IsCost.Value = "True",
+			FormatNumber(CDbl(Parameters!TotalAmount.Value) + (Sum(Fields!ExtraChargeValue.Value)+ Sum(Fields!CommissionValue.Value)) * (+1),Parameters!DigitRate.Value),
+			FormatNumber(CDbl(Parameters!TotalAmount.Value) + (Sum(Fields!ExtraChargeValue.Value)+ Sum(Fields!CommissionValue.Value)) * (-1),Parameters!DigitRate.Value)
+			),
+		FormatNumber(CDbl(Parameters!TotalAmount.Value),Parameters!DigitRate.Value)
+		)
+	)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1935,6 +2120,7 @@ FormatNumber(CDbl(Parameters!TotalAmount.Value) + CDbl(Parameters!ServicesForCus
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -1996,6 +2182,32 @@ FormatNumber(CDbl(Parameters!TotalAmount.Value) + CDbl(Parameters!ServicesForCus
                     </Textbox>
                   </CellContents>
                 </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox59">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value />
+                              <Style />
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox59</rd:DefaultName>
+                      <Style>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
               </TablixCells>
             </TablixRow>
           </TablixRows>
@@ -2015,6 +2227,11 @@ FormatNumber(CDbl(Parameters!TotalAmount.Value) + CDbl(Parameters!ServicesForCus
             <TablixMember />
             <TablixMember />
             <TablixMember />
+            <TablixMember>
+              <Visibility>
+                <Hidden>=IIf(Parameters!IsCommission.Value = "true" , False ,True)</Hidden>
+              </Visibility>
+            </TablixMember>
           </TablixMembers>
         </TablixColumnHierarchy>
         <TablixRowHierarchy>
@@ -2059,14 +2276,14 @@ FormatNumber(CDbl(Parameters!TotalAmount.Value) + CDbl(Parameters!ServicesForCus
         </TablixRowHierarchy>
         <DataSetName>ZoneSummaries</DataSetName>
         <Height>1.75in</Height>
-        <Width>9.65625in</Width>
+        <Width>10.24999in</Width>
         <Style />
       </Tablix>
     </ReportItems>
     <Height>1.75in</Height>
     <Style />
   </Body>
-  <Width>9.65625in</Width>
+  <Width>10.24999in</Width>
   <Page>
     <PageHeader>
       <Height>2.25in</Height>
@@ -2662,6 +2879,10 @@ FormatNumber(CDbl(Parameters!TotalAmount.Value) + CDbl(Parameters!ServicesForCus
       <Prompt>DigitRate</Prompt>
     </ReportParameter>
     <ReportParameter Name="GroupeBySupplier">
+      <DataType>Boolean</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="IsCost">
       <DataType>Boolean</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
