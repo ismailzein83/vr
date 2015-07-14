@@ -34,5 +34,10 @@ namespace TOne.Analytics.Web.Controllers
                 return __billingStatisticsManager.GetVariationReportsData(selectedDate, periodCount, timePeriod, variationReportOption, fromRow, toRow, entityType, entityID, groupingBy);
             
         }
+
+        public List<VolumeTrafficResult> GetVolumeReportData(DateTime fromDate, DateTime toDate, string selectedCustomers, string selectedSuppliers, string selectedZones, int attempts, string selectedTimePeriod, VolumeReportsOptions selectedTrafficReport)
+        {
+            return __billingStatisticsManager.GetVolumeReportData(fromDate, toDate, selectedCustomers, selectedSuppliers, selectedZones, attempts, selectedTimePeriod, selectedTrafficReport);
+        }
     }
 }

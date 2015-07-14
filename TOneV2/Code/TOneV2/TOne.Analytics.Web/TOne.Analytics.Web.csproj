@@ -119,7 +119,6 @@
     <Compile Include="Controllers\AnalyticsController.cs" />
     <Compile Include="Controllers\BillingStatisticsController.cs" />
     <Compile Include="Controllers\CDRController.cs" />
-    <Compile Include="Controllers\VolumeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -136,15 +135,17 @@
     <Content Include="Analytics\Services\APIServices\AnalyticsAPIService.js" />
     <Content Include="Analytics\Services\APIServices\BillingStatisticsAPIService.js" />
     <Content Include="Analytics\Services\APIServices\CDRAPIService.js" />
-    <Content Include="Analytics\Services\APIServices\VolumeReportsAPIService.js" />
     <Content Include="Analytics\Views\Billing Reports\BillingReports.html" />
     <Content Include="Analytics\Views\Billing Reports\BillingReportsController.js" />
-    <Content Include="Analytics\Views\Billing Statistics\VariationReportsCustomersSuppliers.html" />
-    <Content Include="Analytics\Views\Billing Statistics\VariationReportsCustomersSuppliersController.js" />
-    <Content Include="Analytics\Views\Billing Statistics\VariationReportsDestinationsController.js" />
-    <Content Include="Analytics\Views\Billing Statistics\VariationReportsDestinations.html" />
-    <Content Include="Analytics\Views\Billing Statistics\VariationReports.html" />
-    <Content Include="Analytics\Views\Billing Statistics\VariationReportsController.js" />
+    <Content Include="Analytics\Views\Billing Statistics\Variation Reports\Variation Reports Templates\VariationReportsCustomersSuppliers.html" />
+    <Content Include="Analytics\Views\Billing Statistics\Variation Reports\Variation Reports Templates\VariationReportsCustomersSuppliersController.js" />
+    <Content Include="Analytics\Views\Billing Statistics\Variation Reports\Variation Reports Templates\VariationReportsDestinationsController.js" />
+    <Content Include="Analytics\Views\Billing Statistics\Variation Reports\Variation Reports Templates\VariationReportsDestinations.html" />
+    <Content Include="Analytics\Views\Billing Statistics\Variation Reports\VariationReports.html" />
+    <Content Include="Analytics\Views\Billing Statistics\Variation Reports\VariationReportsController.js" />
+    <Content Include="Analytics\Views\Billing Statistics\Volume Reports\Volume Reports Templates\DestinationTrafficVolumeTemplate.html" />
+    <Content Include="Analytics\Views\Billing Statistics\Volume Reports\Volume Reports Templates\InOutTrafficVolumeTemplate.html" />
+    <Content Include="Analytics\Views\Billing Statistics\Volume Reports\Volume Reports Templates\TrafficVolumeTemplate.html" />
     <Content Include="Analytics\Views\CDR\CDRLog.html" />
     <Content Include="Analytics\Views\CDR\CDRLogController.js" />
     <Content Include="Analytics\Views\CDR\CDRReport.html" />
@@ -152,8 +153,8 @@
     <Content Include="Analytics\Views\Traffic Statistics\TrafficStatisticsGridController.js" />
     <Content Include="Analytics\Views\Traffic Statistics\ZoneMonitor.html" />
     <Content Include="Analytics\Views\Traffic Statistics\ZoneMonitorController.js" />
-    <Content Include="Analytics\Views\Volume Reports\VolumeReports.html" />
-    <Content Include="Analytics\Views\Volume Reports\VolumeReportsController.js" />
+    <Content Include="Analytics\Views\Billing Statistics\Volume Reports\VolumeReports.html" />
+    <Content Include="Analytics\Views\Billing Statistics\Volume Reports\VolumeReportsController.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">

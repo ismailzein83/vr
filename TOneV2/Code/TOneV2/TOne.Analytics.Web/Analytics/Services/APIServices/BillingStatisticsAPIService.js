@@ -3,7 +3,8 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService) {
 
     return ({
 
-        GetVariationReport: GetVariationReport
+        GetVariationReport: GetVariationReport,
+        GetVolumeReportData: GetVolumeReportData
     });
 
     function GetVariationReport(selectedDate, periodCount, timePeriod, variationReportOption, fromRow, toRow,entityType,entityID,groupingBy) {
@@ -23,5 +24,16 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService) {
             );
     }
 
-
+    function GetVolumeReportData(fromDate, toDate, selectedCustomers, selectedSuppliers, selectedZones, attempts, selectedTimePeriod, selectedTrafficReport) {
+        return BaseAPIService.get("/api/Volume/GetVolumeReportData", {
+            fromDate: fromDate,
+            toDate: toDate,
+            selectedCustomers: selectedCustomers,
+            selectedSuppliers: selectedSuppliers,
+            selectedZones: selectedZones,
+            attempts: attempts,
+            selectedTimePeriod: selectedTimePeriod,
+            selectedTrafficReport: selectedTrafficReport
+        });
+    }
 });

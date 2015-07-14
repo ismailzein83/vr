@@ -103,222 +103,6 @@ namespace TOne.Analytics.Business
             return FormatCarrieresSummaryDaily(_datamanager.GetDailyCarrierSummary(fromDate, toDate, customerId, supplierId, isCost, isGroupedByDay, supplierAMUId, customerAMUId), isGroupedByDay);
         }
 
-        public VariationReportResult GetVariationReportsData(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions, int fromRow, int toRow, EntityType entityType, string entityID, GroupingBy groupingBy)
-        {
-            List<TimeRange> timeRanges = new List<TimeRange>();
-            DateTime currentDate = new DateTime();
-            DateTime fromDate = new DateTime();
-            DateTime toDate = new DateTime();
-            currentDate = selectedDate.AddDays(1);
-            int counter = periodCount;
-            while (counter > 0)
-            {
-                switch (timePeriod)
-                {
-                    case TimePeriod.Days:
-                        fromDate = currentDate.AddDays(-1);
-                        toDate = currentDate;
-                        break;
-                    case TimePeriod.Weeks:
-                        fromDate = currentDate.AddDays(-7);
-                        toDate = currentDate;
-                        break;
-                    case TimePeriod.Months:
-                        fromDate = currentDate.AddMonths(-1);
-                        toDate = currentDate;
-                        break;
-                }
-                TimeRange timeRange = new TimeRange { FromDate = fromDate, ToDate = toDate };
-                timeRanges.Add(timeRange);
-                currentDate = fromDate;
-                counter = counter - 1;
-
-            }
-            int totalCount;
-            List<decimal> totalValues,totals;
-            List<DateTime> datetotalValues;
-            decimal totalAverage,totalPercentage,totalPreviousPercentage;
-            List<VariationReports> variationReports = _datamanager.GetVariationReportsData(timeRanges, variationReportOptions, fromRow, toRow,entityType,entityID,groupingBy, out totalCount, out totalValues, out datetotalValues, out totalAverage);
-            var result = GetVariationReportsData(variationReports, timeRanges, selectedDate, periodCount, totalValues, datetotalValues, totalAverage, out totals,out totalPercentage,out totalPreviousPercentage);
-            result.TotalCount = totalCount;
-            result.TotalValues = totals;
-            result.TotalAverage = totalAverage;
-            result.TotalPercentage = totalPercentage;
-            result.TotalPreviousPercentage = totalPreviousPercentage;
-            return result;
-        }
-
-        public VariationReportResult GetVariationReportsData(List<VariationReports> variationReports, List<TimeRange> timeRanges, DateTime selectedDate, int periodCount, List<decimal> totalValues, List<DateTime> datetotalValues, decimal totalAverage, out List<decimal> totals, out decimal totalPercentage, out decimal totalPreviousPercentage)
-        {
-            List<VariationReportsData> variationReportsData = new List<VariationReportsData>();
-            VariationReportsData current = null;
-            foreach (var item in variationReports)
-            {
-                if (current == null || current.ID != item.ID)
-                {
-                    current = new VariationReportsData
-                    {
-                        ID = item.ID,
-                        Name = item.Name,
-                        RowNumber = item.RowNumber,
-                        Values = new List<decimal>()
-                    };
-                    variationReportsData.Add(current);
-
-                }
-            }
-
-            foreach (var rep in variationReportsData)
-            {
-                foreach (var timeRange in timeRanges)
-                {
-                    var value = variationReports.FirstOrDefault(itm => itm.ID == rep.ID && itm.FromDate == timeRange.FromDate && itm.ToDate == timeRange.ToDate);
-                    if (value != null)
-                        rep.Values.Add(value.TotalDuration);
-                    else
-                        rep.Values.Add(0);
-                }
-            }
-
-            foreach (var item in variationReportsData)
-            {
-                decimal average = 0;
-                double CurrentValue = double.Parse(item.Values.First().ToString());
-                double PrevValue = double.Parse(item.Values[1].ToString());
-                foreach (var totalDurations in item.Values)
-                    average += totalDurations;
-                average = average / periodCount;
-                item.PeriodTypeValueAverage = average;
-                item.PeriodTypeValuePercentage = Convert.ToDecimal((CurrentValue - Convert.ToDouble(average)) / (average == 0 ? double.MaxValue : Convert.ToDouble(average))) * 100;
-                item.PreviousPeriodTypeValuePercentage = Convert.ToDecimal((CurrentValue - PrevValue) / (PrevValue == 0 ? double.MaxValue : PrevValue)) * 100;
-
-            }
-
-            totals = new List<decimal>();
-            int i = 0;
-
-            foreach (var timeRange in timeRanges)
-            {
-                if (datetotalValues.Contains(timeRange.FromDate))
-                {
-                    totals.Add(totalValues[i]);
-                    i++;
-                }
-                else
-                    totals.Add(0);
-
-            }
-
-            ////Calcule of Total AVG, Total %, Total Previouss %: 
-             foreach (var item in variationReportsData)
-            {
-                decimal average = 0;
-                double CurrentDayValue = double.Parse(item.Values.First().ToString());
-                double PrevDayValue = double.Parse(item.Values[1].ToString());
-                foreach (var totalDurations in item.Values)
-                    average += totalDurations;
-                average = average / periodCount;
-                item.PeriodTypeValueAverage = average;
-                item.PeriodTypeValuePercentage = Convert.ToDecimal((CurrentDayValue - Convert.ToDouble(average)) / (average == 0 ? double.MaxValue : Convert.ToDouble(average))) * 100;
-                item.PreviousPeriodTypeValuePercentage = Convert.ToDecimal((CurrentDayValue - PrevDayValue) / (PrevDayValue == 0 ? double.MaxValue : PrevDayValue)) * 100;
-
-            }
-             double currentValue = double.Parse(totals.FirstOrDefault().ToString());
-             double prevValue = double.Parse(totals[1].ToString());
-            totalPercentage = Convert.ToDecimal((currentValue - Convert.ToDouble(totalAverage)) / (totalAverage == 0 ? double.MaxValue : Convert.ToDouble(totalAverage))) * 100;
-            totalPreviousPercentage = Convert.ToDecimal((currentValue - prevValue) / (prevValue == 0 ? double.MaxValue : prevValue)) * 100;
-
-            return new VariationReportResult() { VariationReportsData = variationReportsData.OrderBy(itm => itm.RowNumber), TimeRange = timeRanges };
-
-        }
-
-        public VariationReportResult GetInOutVariationReportsData(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions, EntityType entityType, string entityID, GroupingBy groupingBy,int fromRow, int toRow)
-        {
-            List<VariationReportsData> customersList = new List<VariationReportsData>();
-            List<VariationReportsData> onlyCustomersList = new List<VariationReportsData>();
-            List<VariationReportsData> suppliersList = new List<VariationReportsData>();
-            List<VariationReportsData> customersAndSuppliersList = new List<VariationReportsData>();
-            List<TimeRange> timeRanges;
-            VariationReportOptions customersreport;
-            VariationReportOptions suppliersReport;
-
-
-            if (variationReportOptions == VariationReportOptions.InOutBoundMinutes)
-            {
-                 customersreport = VariationReportOptions.InBoundMinutes;
-                 suppliersReport = VariationReportOptions.OutBoundMinutes;
-            }
-            else {
-
-                 customersreport = VariationReportOptions.InBoundAmount;
-                 suppliersReport = VariationReportOptions.OutBoundAmount;
-            }
-            var customersResult = GetVariationReportsData(selectedDate, periodCount, timePeriod, customersreport,0,0, entityType, entityID, groupingBy);
-            timeRanges = customersResult.TimeRange;
-            foreach (var customer in customersResult.VariationReportsData)
-            {
-                customersList.Add(customer);
-
-            }
-            var suppliersResult = GetVariationReportsData(selectedDate, periodCount, timePeriod, suppliersReport, 0,0, entityType, entityID, groupingBy);
-            foreach (var supplier in suppliersResult.VariationReportsData)
-            {
-                suppliersList.Add(supplier);
-
-            }
-
-            foreach (var customer in customersList)
-            {
-                var matchedSupplier = suppliersList.FirstOrDefault(s => s.ID == customer.ID);
-                if (matchedSupplier != null)
-                {
-                    //create 3 item in reslut list : IN, Out ,Total
-                    var name = customer.Name;
-                    customer.Name = string.Format("{0}/IN", name);
-                    customersAndSuppliersList.Add(customer);
-                    matchedSupplier.Name = string.Format("{0}/OUT", name);
-                    customersAndSuppliersList.Add(matchedSupplier);
-
-                    //Total:
-                    var total = new VariationReportsData();
-                    total.Name = string.Format("{0}/TOTAL", name);
-                    total.PeriodTypeValueAverage = customer.PeriodTypeValueAverage - matchedSupplier.PeriodTypeValueAverage;
-                    total.PeriodTypeValuePercentage = customer.PeriodTypeValuePercentage - matchedSupplier.PeriodTypeValuePercentage;
-                    total.PreviousPeriodTypeValuePercentage = matchedSupplier.PreviousPeriodTypeValuePercentage - customer.PreviousPeriodTypeValuePercentage;
-                    List<decimal> totalValues = new List<decimal>();
-                    for (int i = 0; i < customer.Values.Count; i++)
-                        totalValues.Add(customer.Values[i] - matchedSupplier.Values[i]);
-                    total.Values = totalValues;
-                    customersAndSuppliersList.Add(total);
-
-                    //remove out element from out list
-                    suppliersList.Remove(matchedSupplier);
-
-                }
-                else
-                  //add item to in list
-                    onlyCustomersList.Add(customer);
-                
-            }
-            customersAndSuppliersList = customersAndSuppliersList.OrderBy(item => item.Name).ToList();
-
-            //add items in in list
-            //add items remaining in out list
-            foreach (var item in onlyCustomersList)
-                item.Name = string.Format("{0}/IN", item.Name);
-            foreach (var item in suppliersList)
-                item.Name = string.Format("{0}/OUT", item.Name);
-
-            customersAndSuppliersList.AddRange(onlyCustomersList.OrderBy(customer => customer.Name).ToList());
-
-            customersAndSuppliersList.AddRange(suppliersList.OrderBy(supplier => supplier.Name).ToList());
-
-            if(customersAndSuppliersList.Count> toRow && customersAndSuppliersList.Count>fromRow)
-            customersAndSuppliersList = customersAndSuppliersList.GetRange(fromRow,toRow);
-            else customersAndSuppliersList = customersAndSuppliersList.GetRange(0, customersAndSuppliersList.Count() );
-            return new VariationReportResult() { VariationReportsData = customersAndSuppliersList, TimeRange = timeRanges };
-           
-        }
         public List<RateLossFormatted> GetRateLoss(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? zoneId, int? customerAMUId, int? supplierAMUId)
         {
             return FormatRateLosses(_datamanager.GetRateLoss(fromDate, toDate, customerId, supplierId, zoneId, supplierAMUId, customerAMUId));
@@ -482,6 +266,229 @@ namespace TOne.Analytics.Business
 
             return result;
 
+
+        }
+
+        public VariationReportResult GetVariationReportsData(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions, int fromRow, int toRow, EntityType entityType, string entityID, GroupingBy groupingBy)
+        {
+            List<TimeRange> timeRanges = new List<TimeRange>();
+            DateTime currentDate = new DateTime();
+            DateTime fromDate = new DateTime();
+            DateTime toDate = new DateTime();
+            currentDate = selectedDate.AddDays(1);
+            int counter = periodCount;
+            while (counter > 0)
+            {
+                switch (timePeriod)
+                {
+                    case TimePeriod.Days:
+                        fromDate = currentDate.AddDays(-1);
+                        toDate = currentDate;
+                        break;
+                    case TimePeriod.Weeks:
+                        fromDate = currentDate.AddDays(-7);
+                        toDate = currentDate;
+                        break;
+                    case TimePeriod.Months:
+                        fromDate = currentDate.AddMonths(-1);
+                        toDate = currentDate;
+                        break;
+                }
+                TimeRange timeRange = new TimeRange { FromDate = fromDate, ToDate = toDate };
+                timeRanges.Add(timeRange);
+                currentDate = fromDate;
+                counter = counter - 1;
+
+            }
+            int totalCount;
+            List<decimal> totalValues, totals;
+            List<DateTime> datetotalValues;
+            decimal totalAverage, totalPercentage, totalPreviousPercentage;
+            List<VariationReports> variationReports = _datamanager.GetVariationReportsData(timeRanges, variationReportOptions, fromRow, toRow, entityType, entityID, groupingBy, out totalCount, out totalValues, out datetotalValues, out totalAverage);
+            var result = GetVariationReportsData(variationReports, timeRanges, selectedDate, periodCount, totalValues, datetotalValues, totalAverage, out totals, out totalPercentage, out totalPreviousPercentage);
+            result.TotalCount = totalCount;
+            result.TotalValues = totals;
+            result.TotalAverage = totalAverage;
+            result.TotalPercentage = totalPercentage;
+            result.TotalPreviousPercentage = totalPreviousPercentage;
+            return result;
+        }
+
+        public VariationReportResult GetVariationReportsData(List<VariationReports> variationReports, List<TimeRange> timeRanges, DateTime selectedDate, int periodCount, List<decimal> totalValues, List<DateTime> datetotalValues, decimal totalAverage, out List<decimal> totals, out decimal totalPercentage, out decimal totalPreviousPercentage)
+        {
+            List<VariationReportsData> variationReportsData = new List<VariationReportsData>();
+            VariationReportsData current = null;
+            foreach (var item in variationReports)
+            {
+                if (current == null || current.ID != item.ID)
+                {
+                    current = new VariationReportsData
+                    {
+                        ID = item.ID,
+                        Name = item.Name,
+                        RowNumber = item.RowNumber,
+                        Values = new List<decimal>()
+                    };
+                    variationReportsData.Add(current);
+
+                }
+            }
+
+            foreach (var rep in variationReportsData)
+            {
+                foreach (var timeRange in timeRanges)
+                {
+                    var value = variationReports.FirstOrDefault(itm => itm.ID == rep.ID && itm.FromDate == timeRange.FromDate && itm.ToDate == timeRange.ToDate);
+                    if (value != null)
+                        rep.Values.Add(value.TotalDuration);
+                    else
+                        rep.Values.Add(0);
+                }
+            }
+
+            foreach (var item in variationReportsData)
+            {
+                decimal average = 0;
+                double CurrentValue = double.Parse(item.Values.First().ToString());
+                double PrevValue = double.Parse(item.Values[1].ToString());
+                foreach (var totalDurations in item.Values)
+                    average += totalDurations;
+                average = average / periodCount;
+                item.PeriodTypeValueAverage = average;
+                item.PeriodTypeValuePercentage = Convert.ToDecimal((CurrentValue - Convert.ToDouble(average)) / (average == 0 ? double.MaxValue : Convert.ToDouble(average))) * 100;
+                item.PreviousPeriodTypeValuePercentage = Convert.ToDecimal((CurrentValue - PrevValue) / (PrevValue == 0 ? double.MaxValue : PrevValue)) * 100;
+
+            }
+
+            totals = new List<decimal>();
+            int i = 0;
+
+            foreach (var timeRange in timeRanges)
+            {
+                if (datetotalValues.Contains(timeRange.FromDate))
+                {
+                    totals.Add(totalValues[i]);
+                    i++;
+                }
+                else
+                    totals.Add(0);
+
+            }
+
+            ////Calcule of Total AVG, Total %, Total Previouss %: 
+            foreach (var item in variationReportsData)
+            {
+                decimal average = 0;
+                double CurrentDayValue = double.Parse(item.Values.First().ToString());
+                double PrevDayValue = double.Parse(item.Values[1].ToString());
+                foreach (var totalDurations in item.Values)
+                    average += totalDurations;
+                average = average / periodCount;
+                item.PeriodTypeValueAverage = average;
+                item.PeriodTypeValuePercentage = Convert.ToDecimal((CurrentDayValue - Convert.ToDouble(average)) / (average == 0 ? double.MaxValue : Convert.ToDouble(average))) * 100;
+                item.PreviousPeriodTypeValuePercentage = Convert.ToDecimal((CurrentDayValue - PrevDayValue) / (PrevDayValue == 0 ? double.MaxValue : PrevDayValue)) * 100;
+
+            }
+            double currentValue = double.Parse(totals.FirstOrDefault().ToString());
+            double prevValue = double.Parse(totals[1].ToString());
+            totalPercentage = Convert.ToDecimal((currentValue - Convert.ToDouble(totalAverage)) / (totalAverage == 0 ? double.MaxValue : Convert.ToDouble(totalAverage))) * 100;
+            totalPreviousPercentage = Convert.ToDecimal((currentValue - prevValue) / (prevValue == 0 ? double.MaxValue : prevValue)) * 100;
+
+            return new VariationReportResult() { VariationReportsData = variationReportsData.OrderBy(itm => itm.RowNumber), TimeRange = timeRanges };
+
+        }
+
+        public VariationReportResult GetInOutVariationReportsData(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions, EntityType entityType, string entityID, GroupingBy groupingBy, int fromRow, int toRow)
+        {
+            List<VariationReportsData> customersList = new List<VariationReportsData>();
+            List<VariationReportsData> onlyCustomersList = new List<VariationReportsData>();
+            List<VariationReportsData> suppliersList = new List<VariationReportsData>();
+            List<VariationReportsData> customersAndSuppliersList = new List<VariationReportsData>();
+            List<TimeRange> timeRanges;
+            VariationReportOptions customersreport;
+            VariationReportOptions suppliersReport;
+
+
+            if (variationReportOptions == VariationReportOptions.InOutBoundMinutes)
+            {
+                customersreport = VariationReportOptions.InBoundMinutes;
+                suppliersReport = VariationReportOptions.OutBoundMinutes;
+            }
+            else
+            {
+
+                customersreport = VariationReportOptions.InBoundAmount;
+                suppliersReport = VariationReportOptions.OutBoundAmount;
+            }
+            var customersResult = GetVariationReportsData(selectedDate, periodCount, timePeriod, customersreport, 0, 0, entityType, entityID, groupingBy);
+            timeRanges = customersResult.TimeRange;
+            foreach (var customer in customersResult.VariationReportsData)
+            {
+                customersList.Add(customer);
+
+            }
+            var suppliersResult = GetVariationReportsData(selectedDate, periodCount, timePeriod, suppliersReport, 0, 0, entityType, entityID, groupingBy);
+            foreach (var supplier in suppliersResult.VariationReportsData)
+            {
+                suppliersList.Add(supplier);
+
+            }
+
+            foreach (var customer in customersList)
+            {
+                var matchedSupplier = suppliersList.FirstOrDefault(s => s.ID == customer.ID);
+                if (matchedSupplier != null)
+                {
+                    //create 3 item in reslut list : IN, Out ,Total
+                    var name = customer.Name;
+                    customer.Name = string.Format("{0}/IN", name);
+                    customersAndSuppliersList.Add(customer);
+                    matchedSupplier.Name = string.Format("{0}/OUT", name);
+                    customersAndSuppliersList.Add(matchedSupplier);
+
+                    //Total:
+                    var total = new VariationReportsData();
+                    total.Name = string.Format("{0}/TOTAL", name);
+                    total.PeriodTypeValueAverage = customer.PeriodTypeValueAverage - matchedSupplier.PeriodTypeValueAverage;
+                    total.PeriodTypeValuePercentage = customer.PeriodTypeValuePercentage - matchedSupplier.PeriodTypeValuePercentage;
+                    total.PreviousPeriodTypeValuePercentage = matchedSupplier.PreviousPeriodTypeValuePercentage - customer.PreviousPeriodTypeValuePercentage;
+                    List<decimal> totalValues = new List<decimal>();
+                    for (int i = 0; i < customer.Values.Count; i++)
+                        totalValues.Add(customer.Values[i] - matchedSupplier.Values[i]);
+                    total.Values = totalValues;
+                    customersAndSuppliersList.Add(total);
+
+                    //remove out element from out list
+                    suppliersList.Remove(matchedSupplier);
+
+                }
+                else
+                    //add item to in list
+                    onlyCustomersList.Add(customer);
+
+            }
+            customersAndSuppliersList = customersAndSuppliersList.OrderBy(item => item.Name).ToList();
+
+            //add items in in list
+            //add items remaining in out list
+            foreach (var item in onlyCustomersList)
+                item.Name = string.Format("{0}/IN", item.Name);
+            foreach (var item in suppliersList)
+                item.Name = string.Format("{0}/OUT", item.Name);
+
+            customersAndSuppliersList.AddRange(onlyCustomersList.OrderBy(customer => customer.Name).ToList());
+
+            customersAndSuppliersList.AddRange(suppliersList.OrderBy(supplier => supplier.Name).ToList());
+
+            if (customersAndSuppliersList.Count > toRow && customersAndSuppliersList.Count > fromRow)
+                customersAndSuppliersList = customersAndSuppliersList.GetRange(fromRow, toRow);
+            else customersAndSuppliersList = customersAndSuppliersList.GetRange(0, customersAndSuppliersList.Count());
+            return new VariationReportResult() { VariationReportsData = customersAndSuppliersList, TimeRange = timeRanges };
+
+        }
+        public List<VolumeTrafficResult> GetVolumeReportData(DateTime fromDate, DateTime toDate, string customerID, string supplierID, string ZoneID, int attempts, string selectedTimePeriod, VolumeReportsOptions selectedTrafficReport)
+        {
+            return _datamanager.GetVolumeReportData(fromDate, toDate, customerID, supplierID, ZoneID, attempts, selectedTimePeriod, selectedTrafficReport);
 
         }
         #region Private Methods

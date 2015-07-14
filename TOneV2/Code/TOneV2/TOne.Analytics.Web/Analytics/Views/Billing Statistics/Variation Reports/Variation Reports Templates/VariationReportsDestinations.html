@@ -8,7 +8,7 @@
         <vr-datagridcolumn ng-repeat="item in timeRanges" field="'Values[' + $index + ']'" headertext="item" type="'Number'" summaryfield="'TotalValues[' + $index + ']'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'CarrierAccountID/ZoneID'" field="'ID'" ng-show="false"></vr-datagridcolumn>
         <vr-datagridexpandablerow ng-if="showCustomersSuppliersSection">
-             <div ng-include="'/Client/Modules/Analytics/Views/Billing Statistics/VariationReportsCustomersSuppliers.html'"></div>
+            <div ng-include="'/Client/Modules/Analytics/Views/Billing Statistics/Variation Reports/Variation Reports Templates/VariationReportsCustomersSuppliers.html'"></div>
         </vr-datagridexpandablerow>
     </vr-datagrid>
 </div>
