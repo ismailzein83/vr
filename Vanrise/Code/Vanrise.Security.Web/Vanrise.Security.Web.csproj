@@ -118,7 +118,7 @@
     <Content Include="Security\Constants\PermissionFlagEnum.js" />
     <Content Include="Security\Constants\WidgetSectionEnum.js" />
     <Content Include="Security\Services\APIServices\BusinessEntityAPIService.js" />
-    <Content Include="Security\Services\APIServices\OrgChartsAPIService.js" />
+    <Content Include="Security\Services\APIServices\OrgChartAPIService.js" />
     <Content Include="Security\Services\APIServices\SecurityApiService.js" />
     <Content Include="Security\Services\APIServices\MenuAPIService.js" />
     <Content Include="Security\Services\APIServices\PermissionApiService.js" />
@@ -139,6 +139,8 @@
     <Content Include="Security\Views\DynamicPages\DynamicPageManagement.js" />
     <Content Include="Security\Views\Login.html" />
     <Content Include="Security\Views\LoginController.js" />
+    <Content Include="Security\Views\OrgChartEditor.html" />
+    <Content Include="Security\Views\OrgChartEditorController.js" />
     <Content Include="Security\Views\OrgChartManagementController.js" />
     <Content Include="Security\Views\OrgChartManagement.html" />
     <Content Include="Security\Views\PermissionEditor.html" />
@@ -156,6 +158,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\BusinessEntitiesController.cs" />
+    <Compile Include="Controllers\OrgChartController.cs" />
     <Compile Include="Controllers\ViewController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
     <Compile Include="Controllers\MenuController.cs" />

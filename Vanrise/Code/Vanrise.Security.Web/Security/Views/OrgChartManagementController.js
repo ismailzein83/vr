@@ -1,6 +1,6 @@
-﻿UserManagementController.$inject = ['$scope', 'OrgChartsAPIService', 'VRModalService'];
+﻿OrgChartManagementController.$inject = ['$scope', 'OrgChartAPIService', 'VRModalService', 'VRNotificationService'];
 
-function OrgChartManagementController($scope, OrgChartsAPIService, VRModalService) {
+function OrgChartManagementController($scope, OrgChartAPIService, VRModalService, VRNotificationService) {
 
     var mainGridAPI;
 
@@ -29,7 +29,7 @@ function OrgChartManagementController($scope, OrgChartsAPIService, VRModalServic
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = "New Organizational Chart";
+                modalScope.title = 'New Organizational Chart';
                 modalScope.onOrgChartAdded = function (orgChart) {
                     mainGridAPI.itemAdded(orgChart);
                 };
@@ -49,9 +49,9 @@ function OrgChartManagementController($scope, OrgChartsAPIService, VRModalServic
         var pageInfo = mainGridAPI.getPageInfo();
 
         var name = $scope.name != undefined ? $scope.name : '';
-        return OrgChartsAPIService.GetFilteredOrgCharts(pageInfo.fromRow, pageInfo.toRow, name).then(function (response) {
+        return OrgChartAPIService.GetFilteredOrgCharts(pageInfo.fromRow, pageInfo.toRow, name).then(function (response) {
             angular.forEach(response, function (item) {
-                $scope.users.push(item);
+                $scope.orgCharts.push(item);
             });
         });
     }
@@ -59,31 +59,46 @@ function OrgChartManagementController($scope, OrgChartsAPIService, VRModalServic
     function defineMenuActions() {
         $scope.gridMenuActions = [
             {
-                name: "Edit",
+                name: 'Edit',
                 clicked: editOrgChart,
             },
-            //{
-            //    name: "Delete",
-            //    clicked: deleteOrgChart,
-            //}
+            {
+                name: 'Delete',
+                clicked: deleteOrgChart,
+            }
         ];
     }
 
     function editOrgChart(orgChartObject) {
         var modalSettings = {};
-
+        
         var parameters = {
-            orgChartId: orgChartObject.Id
+            orgChartId: orgChartObject.Id,
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Organizational Chart: " + orgChartObject.Name;
+            modalScope.title = 'Edit Organizational Chart: ' + orgChartObject.Name;
             modalScope.onOrgChartUpdated = function (orgChart) {
                 mainGridAPI.itemUpdated(orgChart);
             };
         };
 
         VRModalService.showModal('/Client/Modules/Security/Views/OrgChartEditor.html', parameters, modalSettings);
+    }
+
+    function deleteOrgChart(orgChartObject) {
+        var message = 'Do you want to delete ' + orgChartObject.Name + '?';
+        VRNotificationService.showConfirmation(message).then(function (response) {
+            if (response == true) {
+                return OrgChartAPIService.DeleteOrgChart(orgChartObject.Id).then(function (response) {
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                }).finally(function () {
+                    VRNotificationService.showSuccess(orgChartObject.Name + ' was successfully deleted');
+                    $scope.isGettingData = false;
+                });
+            }
+        });
     }
 }
 
