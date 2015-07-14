@@ -1346,6 +1346,7 @@ input.ui-grid-filter-input[type="text"] {
 .vr-datagrid{
     font-size:12px;    
     width:100%;
+    margin-top:-25px ;/*to fixe menu-grid action position side effects*/
 }
 .vr-datagrid-header{
     background-color:#829EBF;
@@ -1541,4 +1542,11 @@ input.ui-grid-filter-input[type="text"] {
     width:100%;
     height:300px;
 }
- 
+.vr-select-height{
+    height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.vr-select-height:empty{
+       height: 0px;     
+}

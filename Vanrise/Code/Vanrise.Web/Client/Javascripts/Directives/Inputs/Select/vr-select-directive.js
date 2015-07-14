@@ -47,6 +47,7 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
             var controller = this;
             this.ValidationMessagesEnum = ValidationMessagesEnum;
             this.limitcharactercount = $attrs.limitcharactercount;
+            this.limitHeight = ($attrs.limitheight!=undefined)?'limit-height':'';
             this.selectlbl = $attrs.selectlbl;
             this.filtername = '';
             this.showloading = false;

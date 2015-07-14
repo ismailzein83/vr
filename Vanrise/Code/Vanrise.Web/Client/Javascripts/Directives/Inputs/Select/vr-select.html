@@ -1,8 +1,8 @@
-﻿<div class="dropdown-container1"> 
+﻿<div class="dropdown-container1">
     <div class="dropdown-container2">
         <div class="dropdown drop-down-inside-modal">
             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuRule" ng-mouseenter="ctrl.muteaction($event);">
-              <li role="presentation" ng-click="ctrl.onClickLi($event)" ng-if="ctrl.isDropDownOpened()">
+                <li role="presentation" ng-click="ctrl.onClickLi($event)" ng-if="ctrl.isDropDownOpened()">
 
                     <!-- filter  -->
                     <div ng-if="ctrl.isContainerVisible()" style="display: inline-block; width: 220px;">
@@ -29,20 +29,22 @@
                                 <div style="float:right" ng-show="ctrl.findExsite(c) > -1">✔</div>
                             </div>
                         </div>
-
-                        <div ng-if="!ctrl.isMultiple()" ng-repeat="c in ctrl.getdatasource()" class="mark-select " ng-click="ctrl.selectValue($event, c);"
-                             style="display: block; padding: 2px;border: none; white-space: normal;">
-                            <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{::ctrl.getObjectText(c)}}</div>
+                        <div class="vr-select-height" ng-if="!ctrl.isMultiple()">
+                            <div ng-if="!ctrl.isMultiple()" ng-repeat="c in ctrl.getdatasource()" class="mark-select " ng-click="ctrl.selectValue($event, c);"
+                                 style="display: block; padding: 2px;border: none; white-space: normal;">
+                                <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{::ctrl.getObjectText(c)}}</div>
+                            </div>
                         </div>
+
 
                     </div>
                     <!-- filter -->
-
-                    <div ng-if="!ctrl.isContainerVisible()" ng-repeat="c in ctrl.getdatasource()" class="mark-select " ng-click="ctrl.selectValue($event, c);" ng-mouseenter="ctrl.muteaction($event);"
-                         style="display: block;padding:2px; margin:2px; white-space: normal;">
-                        <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{::ctrl.getObjectText(c)}}</div>
+                    <div class="vr-select-height" ng-if="!ctrl.isContainerVisible()">
+                        <div ng-if="!ctrl.isContainerVisible()" ng-repeat="c in ctrl.getdatasource()" class="mark-select " ng-click="ctrl.selectValue($event, c);" ng-mouseenter="ctrl.muteaction($event);"
+                             style="display: block;padding:2px; margin:2px; white-space: normal;">
+                            <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{::ctrl.getObjectText(c)}}</div>
+                        </div>
                     </div>
-
 
                     <!-- Add DIV in case of multiple -->
                     <div ng-if="ctrl.selectedSectionVisible()" style="border-left:1px solid #f0f0f0;display: inline-block; max-width: 220px; height: 260px; overflow: auto; white-space:normal" ng-show="ctrl.selectedSectionVisible()">
