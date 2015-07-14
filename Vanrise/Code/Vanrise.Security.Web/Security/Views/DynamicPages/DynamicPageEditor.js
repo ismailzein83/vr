@@ -49,8 +49,11 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             buildContentsFromScope();
         }
         $scope.onWidgetSelectionChanged = function () {
-            if ($scope.selectedWidget != undefined)
-                $scope.sectionTitle = $scope.selectedWidget.Name;
+            if ($scope.selectedWidget != undefined) {
+                var title = $scope.selectedWidget.Name;
+                $scope.sectionTitle = title;
+            }
+           
             
         }
         $scope.save = function () {
@@ -220,7 +223,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
                 fillEditModeData();
             }
 
-            $scope.isInitializing = false;
+          
             $scope.isGettingData = false;
         }).catch(function (error) {
             VRNotificationService.notifyExceptionWithClose(error, $scope);

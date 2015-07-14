@@ -64,7 +64,7 @@
                             <vr-select label="Widget" datatextfield="Name" datavaluefield="ID"
                                        datasource="widgets" selectedvalues="selectedWidget" onselectionchanged="onWidgetSelectionChanged"></vr-select>
                         </vr-columns>
-                        <vr-columns width="normal" ng-if="selectedWidget">
+                        <vr-columns width="normal" ng-show="selectedWidget">
                             <vr-textbox value="sectionTitle" label="Section Title"></vr-textbox>
                         </vr-columns>
                         <vr-columns width="normal">

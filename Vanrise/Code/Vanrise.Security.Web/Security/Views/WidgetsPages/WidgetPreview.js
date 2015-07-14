@@ -40,7 +40,6 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum) {
             $scope.toDate = date.to;
         }
     }
-
     function getPeriod(periodType) {
        
         switch (periodType.value) {
@@ -150,7 +149,6 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum) {
             $scope.periods.push(PeriodEnum[p]);
         $scope.selectedPeriod = $scope.periods[0];
     }
-    
     function load() {
       
         $scope.isGettingData = false;
