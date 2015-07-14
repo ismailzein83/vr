@@ -173,6 +173,12 @@
     <Reference Include="Vanrise.Integration.Adapters.FTPReceiveAdapter">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.FTPReceiveAdapter.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.MySQLReceiveAdapter">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.MySQLReceiveAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.SQLReceiveAdapter">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.SQLReceiveAdapter.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.Business">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Business.dll</HintPath>
     </Reference>
