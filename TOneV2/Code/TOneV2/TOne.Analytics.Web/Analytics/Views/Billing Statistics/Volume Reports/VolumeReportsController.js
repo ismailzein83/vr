@@ -38,9 +38,9 @@ function VolumeReportsController($scope, BillingStatisticsAPIService, VolumeRepo
     }
     function buildFilter() {
         var filter = {};
-        filter.CustomerIds = getFilterIds($scope.selectedCustomers, "CarrierAccountID");
-        filter.SupplierIds = getFilterIds($scope.selectedSuppliers, "CarrierAccountID");
-        filter.ZoneIds = getFilterIds($scope.selectedZones, "ZoneId");
+        filter.CustomerId = $scope.selectedCustomer.CarrierAccountID;//getFilterIds($scope.selectedCustomer, "CarrierAccountID");
+        filter.SupplierId = $scope.selectedSupplier.CarrierAccountID; //getFilterIds($scope.selectedSupplier, "CarrierAccountID");
+        filter.ZoneId = $scope.selectedZone.ZoneId;//getFilterIds($scope.selectedZone, "ZoneId");  
         return filter;
     }
 
@@ -85,12 +85,12 @@ function VolumeReportsController($scope, BillingStatisticsAPIService, VolumeRepo
     }
     function getVolumeReportsData() {
          $scope.isLoading = true;
-        var filter = buildFilter();
-       // console.log(filter.CustomerIds);
-      //  console.log(filter.SupplierIds);
-        //  console.log(filter.ZoneIds);
-      
-        return VolumeReportsAPIService.GetVolumeReportData($scope.fromDate, $scope.toDate, filter.CustomerIds, filter.SupplierIds, filter.ZoneIds, $scope.attempts, $scope.selectedTimePeriod.description, $scope.selectedTrafficReport.value).then(function (response) {
+         var filter = buildFilter();
+         $scope.showTrafficVolume = $scope.selectedTrafficReport == VolumeReportsOptionsEnum.TrafficVolumes ;
+         $scope.showInOutTaffic = $scope.selectedTrafficReport == VolumeReportsOptionsEnum.CompareInOutTraffic;
+         $scope.destinationTrafficvolume = $scope.selectedTrafficReport == VolumeReportsOptionsEnum.DestinationTrafficVolumes;
+
+         return BillingStatisticsAPIService.GetVolumeReportData($scope.fromDate, $scope.toDate, filter.CustomerId, filter.SupplierId, filter.ZoneId, $scope.attempts, $scope.selectedTimePeriod.description, $scope.selectedTrafficReport.value).then(function (response) {
             $scope.chartData.length = 0;
             angular.forEach(response, function (item) {
                 var attempts = item.Attempts;

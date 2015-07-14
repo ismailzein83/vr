@@ -15,16 +15,16 @@
                     <vr-select label="Time Period" datasource="timePeriods" datatextfield="description" datavaluefield="value" selectedvalues="selectedTimePeriod" ></vr-select>
                 </vr-columns>
                 <vr-columns colnum="2">
-                    <vr-select label="Customers" datasource="customers" datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedCustomers" isrequired ismultipleselection></vr-select>
+                    <vr-select label="Customers" datasource="customers" datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedCustomer" issingleselection></vr-select>
                 </vr-columns>
                 <vr-columns colnum="2">
-                    <vr-select label="Suppliers" datasource="suppliers" datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedSuppliers" isrequired ismultipleselection></vr-select>
+                    <vr-select label="Suppliers" datasource="suppliers" datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedSupplier"  issingleselection></vr-select>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-select label="Zones: " datasource="searchZones" datatextfield="Name" datavaluefield="ZoneId" selectedvalues="selectedZones" entityname="Zones" isrequired ismultipleselection></vr-select>
+                    <vr-select label="Zones" datasource="searchZones" datatextfield="Name" datavaluefield="ZoneId" selectedvalues="selectedZone" entityname="Zones"  issingleselection></vr-select>
                 </vr-columns>
                 <vr-columns colnum="2">
-                    <vr-textbox value="attempts" label="Attempts > " isrequired />
+                    <vr-textbox value="attempts" label="Attempts greater than " isrequired />
                 </vr-columns>
             </vr-row>
         </div>
@@ -35,15 +35,17 @@
                 <vr-button type="Search" formname="formFilter" data-onclick="onSearch"></vr-button>
             </div>
         </vr-actionbar>
-
-        <div vr-loader="isLoading" >
-            <vr-row>
-                <vr-columns colnum="12" simplecol>
-                    <!--<vr-section title={{selectedReportOption.description}}>-->
+        <div ng-if="showTrafficVolume" ng-include=" '/Client/Modules/Analytics/Views/Billing Statistics/Volume Reports/Volume Reports Templates/TrafficVolumeTemplate.html' "></div>
+        <!--<div ng-if="viewScope.show " ng-include="'/Client/Modules/Analytics/Views/Billing Statistics/Volume Reports/Volume Reports Templates/VariationReportsCustomersSuppliers.html'"></div>--> 
+        
+        <div vr-loader="isLoading">
+                <vr-row>
+                    <vr-columns colnum="12" simplecol>
+                   
                         <vr-chart data-on-ready="chartReady"></vr-chart>
-                    <!--</vr-section>-->
-                </vr-columns>
-            </vr-row>
-        </div>
-    </vr-row>
+                       
+                    </vr-columns>
+                </vr-row>
+            </div>
+        </vr-row>
 </vr-panel>

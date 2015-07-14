@@ -25,7 +25,7 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService) {
     }
 
     function GetVolumeReportData(fromDate, toDate, selectedCustomers, selectedSuppliers, selectedZones, attempts, selectedTimePeriod, selectedTrafficReport) {
-        return BaseAPIService.get("/api/Volume/GetVolumeReportData", {
+        return BaseAPIService.get("/api/BillingStatistics/GetVolumeReportData", {
             fromDate: fromDate,
             toDate: toDate,
             selectedCustomers: selectedCustomers,
