@@ -148,16 +148,14 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum) {
         $scope.timeDimensionTypes = [];
         for (var td in TimeDimensionTypeEnum)
             $scope.timeDimensionTypes.push(TimeDimensionTypeEnum[td]);
-
-        $scope.selectedTimeDimensionType = $.grep($scope.timeDimensionTypes, function (t) {
-            return t == TimeDimensionTypeEnum.Daily;
-        })[0];
+        $scope.selectedTimeDimensionType =  TimeDimensionTypeEnum.Daily;
+     
     }
     function definePeriods() {
         $scope.periods = [];
         for (var p in PeriodEnum)
             $scope.periods.push(PeriodEnum[p]);
-        $scope.selectedPeriod = $scope.periods[0];
+        $scope.selectedPeriod = PeriodEnum.CurrentMonth;
     }
     function load() {
       

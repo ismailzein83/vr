@@ -119,7 +119,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         $scope.periods = [];
         for (var p in PeriodEnum)
             $scope.periods.push(PeriodEnum[p]);
-        $scope.selectedPeriod = $scope.periods[0];
+        $scope.selectedPeriod = PeriodEnum.CurrentMonth;
 
 
     }
@@ -129,9 +129,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         for (var td in TimeDimensionTypeEnum)
             $scope.timeDimensionTypes.push(TimeDimensionTypeEnum[td]);
 
-        $scope.selectedTimeDimensionType = $.grep($scope.timeDimensionTypes, function (t) {
-            return t == TimeDimensionTypeEnum.Daily;
-        })[0];
+        $scope.selectedTimeDimensionType = TimeDimensionTypeEnum.Daily;
     }
     function saveView() {
        
