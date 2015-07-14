@@ -59,19 +59,18 @@ namespace Vanrise.Security.Business
             updateOperationOutput.Result = UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
             IWidgetsDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IWidgetsDataManager>();
-            int checkSetting = dataManager.CheckWidgetSetting(widget.Setting);
-            if (checkSetting == 1)
-            {
-                updateOperationOutput.Message = "Widget with same settings exist !!";
-                return updateOperationOutput;
-            }
-            bool insertActionSucc = dataManager.UpdateWidget(widget);
+         
+            bool updateActionSucc = dataManager.UpdateWidget(widget);
 
-            if (insertActionSucc)
+            if (updateActionSucc)
             {
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 WidgetDetails widgetDetail = dataManager.GetWidgetById(widget.Id);
                 updateOperationOutput.UpdatedObject = widgetDetail;
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             }
 
             return updateOperationOutput;
@@ -123,10 +122,10 @@ namespace Vanrise.Security.Business
             return dataManager.GetAllWidgets();
         }
 
-        public List<WidgetDetails> GetFilteredWidgets(string WidgetName, int WidgetType) 
+        public List<WidgetDetails> GetFilteredWidgets(string widgetName, int widgetType) 
         {
             IWidgetsDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IWidgetsDataManager>();
-            return dataManager.GetFilteredWidgets(WidgetName, WidgetType);
+            return dataManager.GetFilteredWidgets(widgetName, widgetType);
         }
       
     }

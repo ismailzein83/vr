@@ -21,11 +21,11 @@
     function GetAllWidgets() {
         return BaseAPIService.get("/api/Widgets/GetAllWidgets");
     }
-    function GetFilteredWidgets(WidgetName, WidgetType)
+    function GetFilteredWidgets(widgetName, widgetType)
     {
         return BaseAPIService.get("/api/Widgets/GetFilteredWidgets",{
-            WidgetName: WidgetName,
-            WidgetType: WidgetType
+            widgetName: widgetName,
+            widgetType: widgetType
             });
     }
     function DeleteWidget(widgetId) {

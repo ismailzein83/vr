@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public enum UpdateOperationResult { Succeeded = 0, Failed = 1 }
+    public enum UpdateOperationResult { Succeeded = 0, Failed = 1 ,SameExists=2}
 
     public class UpdateOperationOutput<T>
     {
