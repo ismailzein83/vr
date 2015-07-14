@@ -8,7 +8,6 @@ namespace Vanrise.Integration.Adapters.MSQLReceiveAdapter
 
     public class MySQLReceiveAdapter :  DBReceiveAdapter
     {
-      
         public override void ImportData(Action<IImportedData> receiveData)
         {
             using (var connection = new MySqlConnection(ConnectionString))
@@ -23,10 +22,5 @@ namespace Vanrise.Integration.Adapters.MSQLReceiveAdapter
 
         }
 
-        public override string ConnectionString { get; set; }
-
-        public override string Description { get; set; }
-
-        public override string Query { get; set; }
     }
 }

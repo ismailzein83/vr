@@ -85,18 +85,5 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
             }
         }
 
-        public override string Extension { get; set; }
-
-        public override string Directory { get; set; }
-
-        public override string ServerIP { get; set; }
-
-        public override string UserName { get; set; }
-
-        public override string Password { get; set; }
-
-        public override string DirectorytoMoveFile { get; set; }
-
-        public override TPReceiveAdapter.Actions ActionAfterImport { get; set; }
     }
 }
