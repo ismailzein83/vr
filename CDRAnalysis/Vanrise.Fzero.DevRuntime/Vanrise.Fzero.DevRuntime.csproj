@@ -158,6 +158,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.BaseDB">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.BaseDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.BaseFTP">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.BaseFTP.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.Adapters.BaseTP">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.BaseTP.dll</HintPath>
     </Reference>

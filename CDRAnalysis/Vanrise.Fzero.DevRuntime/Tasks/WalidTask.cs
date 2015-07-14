@@ -16,7 +16,7 @@ using Vanrise.Integration.Adapters.FTPReceiveAdapter;
 using Vanrise.Integration.Entities;
 using Vanrise.Integration.Data;
 using System.Globalization;
-using Vanrise.Integration.Adapters.BaseTP;
+
 
 
 namespace Vanrise.Fzero.DevRuntime.Tasks
@@ -28,22 +28,24 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             Console.WriteLine("Walid Task started");
 
             var adapter = new FTPReceiveAdapter();
-            adapter.ActionAfterImport = TPReceiveAdapter.Actions.Rename;
-            adapter.Directory = "/var/mysql/5.5/data";
+            adapter.ActionAfterImport = Integration.Adapters.BaseFTP.TPReceiveAdapter.Actions.Rename;
+            adapter.Directory = "/CDRAnalysis/DAT";
             adapter.Extension = ".DAT";
             adapter.Password = "P@ssw0rd";
-            adapter.UserName = "root";
-            adapter.ServerIP = "192.168.110.241";
+            adapter.UserName = "devftpuser";
+            adapter.ServerIP = "192.168.110.185"; 
 
             List<CDR> CDRs = new List<CDR>();
 
-            adapter.ImportData(data => { 
-                
-                StreamReaderImportedData reader = new StreamReaderImportedData();
 
-                while (!reader.StreamReader.EndOfStream)
+            adapter.ImportData( 
+                
+                
+                data => {   
+
+                while (!((StreamReaderImportedData)data).StreamReader.EndOfStream)
                 {
-                    var i = reader.StreamReader.ReadLine();
+                    var i = ((StreamReaderImportedData)data).StreamReader.ReadLine();
 
                     CDR cdr = new CDR();
                     cdr.MSISDN = i.Substring(145, 20).Trim();
