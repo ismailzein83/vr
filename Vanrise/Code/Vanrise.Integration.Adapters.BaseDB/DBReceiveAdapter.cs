@@ -14,6 +14,8 @@ namespace Vanrise.Integration.Adapters.BaseDB
 
             public int LastId { get; set; }
 
+            public string IDColumn { get; set; }
+
 
         # endregion
     }
