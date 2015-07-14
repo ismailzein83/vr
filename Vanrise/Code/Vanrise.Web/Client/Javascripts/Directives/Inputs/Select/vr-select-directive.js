@@ -236,9 +236,9 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                 else {
                     var noCaret = attrs.nocaret != undefined; 
                     var noborder = attrs.noborder != undefined;
-                    var buttonTemplate = '<button class="btn btn-default dropdown-toggle" style="width:100%;' + (noborder ? 'border:none' :  '') + '" type="button" data-toggle="dropdown" '
+                    var buttonTemplate = '<button class="btn btn-default dropdown-toggle" style="width:100%;text-align: left;' + (noborder ? 'border:none' : '') + '" type="button" data-toggle="dropdown" '
                                         + ' aria-expanded="true"  ' + validateButtonClass + '>'
-                                        + '<span style="float: left; margin: 0px; ">{{ctrl.getLabel()}}</span>'
+                                        + '<span style="float: left; margin: 0px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;display: inline-block;width: 100%; ">{{ctrl.getLabel()}}</span>'
                                         + (noCaret == true ? '' : '<span style="position:absolute;top:13px;right:5px" class="caret"></span>')
                                         + '</button>';
                     divDropdown.prepend(buttonTemplate);
