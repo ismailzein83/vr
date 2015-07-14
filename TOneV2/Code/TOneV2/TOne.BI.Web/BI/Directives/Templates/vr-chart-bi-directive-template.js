@@ -1,6 +1,6 @@
-﻿VrChartDirectiveTemplateController.$inject = ['$scope','BITimeDimensionTypeEnum','BIChartDefinitionTypeEnum', 'BIConfigurationAPIService', 'ChartSeriesTypeEnum', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿VrChartDirectiveTemplateController.$inject = ['$scope', 'TimeDimensionTypeEnum', 'BIChartDefinitionTypeEnum', 'BIConfigurationAPIService', 'ChartSeriesTypeEnum', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum,BIChartDefinitionTypeEnum, BIConfigurationAPIService, ChartSeriesTypeEnum, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
+function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, BIChartDefinitionTypeEnum, BIConfigurationAPIService, ChartSeriesTypeEnum, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
     //var mainGridAPI;
     loadParameters();
     defineScope();
@@ -11,17 +11,12 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum,BICha
     function defineScope() {
         $scope.Measures = [];
         $scope.Entities = [];
-        $scope.fromDate = "2015-04-01";
-        $scope.toDate = "2015-04-30";
         $scope.selectedEntityType ;
-        $scope.selectedTopMeasure;
         $scope.definitionTypes = [];
         $scope.selectedDefinitionType;
         $scope.selectedMeasureTypes = [];
+        $scope.selectedMeasureType;
         defineTimeDimensionTypes();
-        $scope.onSelectionChanged = function () {
-            $scope.selectedTopMeasure = $scope.selectedMeasureTypes[0];
-        }
         $scope.subViewConnector.getValue = function () {
             return getSubViewValue();
         }
@@ -32,17 +27,29 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum,BICha
 
     }
     function getSubViewValue() {
-        switch ($scope.selectedOperationType.value) {
-            case "TopEntities": if ($scope.selectedEntityType == undefined || $scope.selectedEntityType == null || $scope.selectedMeasureTypes == undefined || $scope.selectedMeasureTypes.length == 0) return false;
-            case "MeasuresGroupedByTime": if ($scope.selectedMeasureTypes == undefined || $scope.selectedMeasureTypes.length == 0) return false;
-        }
-        var topMeasure = null;
-        if ($scope.selectedTopMeasure != undefined)
-            topMeasure = $scope.selectedTopMeasure.Name;
         var measureTypes = [];
-        for (var i = 0; i < $scope.selectedMeasureTypes.length; i++) {
-            measureTypes.push($scope.selectedMeasureTypes[i].Name);
+       
+        switch ($scope.selectedOperationType.value) {
+            case "TopEntities":
+                if ($scope.selectedEntityType == undefined || $scope.selectedEntityType == null || $scope.selectedMeasureType == undefined)
+                    return false;
+                else {
+                    measureTypes.push($scope.selectedMeasureType.Name);
+                    break;
+                }
+               
+
+            case "MeasuresGroupedByTime":
+                if ($scope.selectedMeasureTypes == undefined || $scope.selectedMeasureTypes.length == 0)
+                    return false;
+                else
+                {
+                 for (var i = 0; i < $scope.selectedMeasureTypes.length; i++) 
+                     measureTypes.push($scope.selectedMeasureTypes[i].Name);
+                 break;
+                    }
         }
+
         var entityType = null;
         if ($scope.selectedEntityType != undefined)
             entityType = $scope.selectedEntityType.Name;
@@ -51,7 +58,7 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum,BICha
             OperationType: $scope.selectedOperationType.value,
             EntityType: entityType,
             MeasureTypes: measureTypes,
-            TopMeasure: topMeasure,
+            TopMeasure: measureTypes[0],
             DefinitionType: $scope.selectedDefinitionType.value,
         };
     }
@@ -65,37 +72,42 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum,BICha
             
             }
         }
-        for (var i = 0; i < settings.MeasureTypes.length; i++) {
-            var measureType=settings.MeasureTypes[i];
-            for (j = 0; j < $scope.Measures.length; j++)
-            {
-               
-                if (measureType == $scope.Measures[j].Name)
-                $scope.selectedMeasureTypes.push($scope.Measures[j]);
-                if ($scope.Measures[j].Name == settings.TopMeasure)
-                $scope.selectedTopMeasure = $scope.Measures[j];
-        }
-             }
+       
         for (var i = 0; i < $scope.operationTypes.length; i++) {
           
                 if($scope.operationTypes[i].value==settings.OperationType)
                     $scope.selectedOperationType=$scope.operationTypes[i];
         }
+        for (var i = 0; i < settings.MeasureTypes.length; i++) {
+            var measureType = settings.MeasureTypes[i];
+            for (j = 0; j < $scope.Measures.length; j++) {
+
+                if (measureType == $scope.Measures[j].Name)
+                {
+                    if ($scope.selectedOperationType.value == "TopEntities")
+                        $scope.selectedMeasureType = $scope.Measures[j];
+                    else
+                        $scope.selectedMeasureTypes.push($scope.Measures[j]);
+                }
+                   
+
+            }
+        }
+       
 
 
     }
     function defineTimeDimensionTypes() {
         $scope.timeDimensionTypes = [];
-        for (var td in BITimeDimensionTypeEnum)
-            $scope.timeDimensionTypes.push(BITimeDimensionTypeEnum[td]);
+        for (var td in TimeDimensionTypeEnum)
+            $scope.timeDimensionTypes.push(TimeDimensionTypeEnum[td]);
 
         $scope.selectedTimeDimensionType = $.grep($scope.timeDimensionTypes, function (t) {
-            return t == BITimeDimensionTypeEnum.Daily;
+            return t == TimeDimensionTypeEnum.Daily;
         })[0];
     }
     function load() {
         defineChartDefinitionTypes();
-        defineNumberOfColumns();
         defineOperationTypes();
         defineChartSeriesTypes();
         $scope.isGettingData = true;
@@ -111,20 +123,6 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum,BICha
 
     }
 
-    function defineNumberOfColumns() {
-        $scope.numberOfColumns = [
-            {
-                value: "6",
-                description: "Half Row"
-            },
-            {
-                value: "12",
-                description: "Full Row"
-            }
-        ];
-
-        $scope.selectedNumberOfColumns = $scope.numberOfColumns[0];
-    }
     function defineOperationTypes() {
         $scope.operationTypes = [{
             value: "TopEntities",

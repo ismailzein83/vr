@@ -169,7 +169,6 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             $scope.selectedTimeDimensionType = UtilsService.getItemByVal($scope.timeDimensionTypes, response.ViewContent.DefaultGrouping, 'value');
         });
     }
-
     function getPeriod(periodType) {
         switch (periodType) {
             case BIPeriodEnum.LastYear.value: return getLastYearInterval();
