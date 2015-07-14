@@ -232,7 +232,7 @@ namespace TOne.Analytics.Business
 
         }
 
-        public VariationReportResult GetInOutVariationReportsData(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions, EntityType entityType, string entityID, GroupingBy groupingBy)
+        public VariationReportResult GetInOutVariationReportsData(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions, EntityType entityType, string entityID, GroupingBy groupingBy,int fromRow, int toRow)
         {
             List<VariationReportsData> customersList = new List<VariationReportsData>();
             List<VariationReportsData> onlyCustomersList = new List<VariationReportsData>();
@@ -313,9 +313,11 @@ namespace TOne.Analytics.Business
 
             customersAndSuppliersList.AddRange(suppliersList.OrderBy(supplier => supplier.Name).ToList());
 
+            if(customersAndSuppliersList.Count> toRow && customersAndSuppliersList.Count>fromRow)
+            customersAndSuppliersList = customersAndSuppliersList.GetRange(fromRow,toRow);
+            else customersAndSuppliersList = customersAndSuppliersList.GetRange(0, customersAndSuppliersList.Count() );
             return new VariationReportResult() { VariationReportsData = customersAndSuppliersList, TimeRange = timeRanges };
-
-
+           
         }
         public List<RateLossFormatted> GetRateLoss(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? zoneId, int? customerAMUId, int? supplierAMUId)
         {
