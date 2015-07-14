@@ -14,11 +14,16 @@ function FileReceiveAdapterTemplateController($scope) {
                 FolderPath: $scope.folderPath
             };
         };
+
+        $scope.dataSourceAdapter.loadTemplateData = function () {
+            loadForm();
+        }
     }
 
+    var isFormLoaded;
     function loadForm() {
 
-        if ($scope.dataSourceAdapter.data == undefined)
+        if ($scope.dataSourceAdapter.data == undefined || isFormLoaded)
             return;
         var data = $scope.dataSourceAdapter.data;
         if (data != null) {
@@ -27,6 +32,7 @@ function FileReceiveAdapterTemplateController($scope) {
         else {
             $scope.folderPath = undefined;
         }
+        isFormLoaded = true;
     }
 
     function load() {

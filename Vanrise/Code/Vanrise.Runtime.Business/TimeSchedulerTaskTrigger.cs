@@ -7,11 +7,11 @@ using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Runtime.Business
 {
+    public enum TimeSchedulerType { Interval = 0, Daily = 1, Weekly = 2};
+
     public class TimeSchedulerTaskTrigger : SchedulerTaskTrigger
     {
-        public List<DayOfWeek> ScheduledDays { get; set; }
-
-        public List<string> ScheduledHours { get; set; }
+        public TimeSchedulerType SelectedType { get; set; }
 
         public override Dictionary<string, object> EvaluateExpressions(SchedulerTask task)
         {
@@ -39,27 +39,7 @@ namespace Vanrise.Runtime.Business
 
         public override DateTime CalculateNextTimeToRun()
         {
-            List<DateTime> listofScheduledDateTimes = new List<DateTime>();
-
-            foreach (DayOfWeek day in ScheduledDays)
-            {
-                foreach (string hour in ScheduledHours)
-                {
-                    string[] timeParts = hour.Split(':');
-
-                    TimeSpan scheduledTime = new TimeSpan(int.Parse(timeParts[0]), int.Parse(timeParts[1]), 0);
-                    TimeSpan spanTillThen = scheduledTime - DateTime.Now.TimeOfDay;
-
-                    int daysTillThen = (int)day - (int)DateTime.Today.DayOfWeek;
-
-                    if ((daysTillThen < 0) || (daysTillThen == 0 && spanTillThen.Ticks < 0))
-                        daysTillThen += 7;
-
-                    listofScheduledDateTimes.Add(DateTime.Now.AddDays(daysTillThen).Add(spanTillThen));
-                }
-            }
-
-            return listofScheduledDateTimes.OrderBy(x => x.Ticks).ToList().FirstOrDefault();
+            return DateTime.MinValue;
         }
     }
 }

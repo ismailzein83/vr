@@ -20,6 +20,11 @@ function ScheduleDailyRepricingProcessTemplateController($scope, UtilsService) {
             };
         };
 
+        $scope.schedulerTaskAction.processInputArguments.loadTemplateData = function()
+        {
+            loadForm();
+        }
+
         $scope.schedulerTaskAction.rawExpressions.getData = function () {
             if ($scope.selectedDateOption.Value == 0)
             {
@@ -43,8 +48,6 @@ function ScheduleDailyRepricingProcessTemplateController($scope, UtilsService) {
             }
             
         }
-
-        loadForm();
     }
 
     function loadForm() {
@@ -68,7 +71,7 @@ function ScheduleDailyRepricingProcessTemplateController($scope, UtilsService) {
     }
 
     function load() {
-
+        loadForm();
     }
 
 }

@@ -98,6 +98,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Runtime\Constants\IntervalTimeTypeEnum.js" />
+    <Content Include="Runtime\Constants\TimeSchedulerTypeEnum.js" />
     <Content Include="Runtime\Services\APIServices\SchedulerTaskAPIService.js" />
     <Content Include="Runtime\Views\ActionTemplates\WFActionTemplate.html" />
     <Content Include="Runtime\Views\ActionTemplates\WFActionTemplateController.js" />
@@ -105,8 +107,14 @@
     <Content Include="Runtime\Views\SchedulerTaskEditorController.js" />
     <Content Include="Runtime\Views\SchedulerTaskManagement.html" />
     <Content Include="Runtime\Views\SchedulerTaskManagementController.js" />
+    <Content Include="Runtime\Views\TriggerTemplates\DailyTimerTriggerTemplate.html" />
+    <Content Include="Runtime\Views\TriggerTemplates\DailyTimerTriggerTemplateController.js" />
+    <Content Include="Runtime\Views\TriggerTemplates\IntervalTimerTriggerTemplate.html" />
+    <Content Include="Runtime\Views\TriggerTemplates\IntervalTimerTriggerTemplateController.js" />
     <Content Include="Runtime\Views\TriggerTemplates\TimerTriggerTemplate.html" />
     <Content Include="Runtime\Views\TriggerTemplates\TimerTriggerTemplateController.js" />
+    <Content Include="Runtime\Views\TriggerTemplates\WeeklyTimerTriggerTemplate.html" />
+    <Content Include="Runtime\Views\TriggerTemplates\WeeklyTimerTriggerTemplateController.js" />
     <Content Include="Runtime\Views\WFScheduleTemplates\ScheduleDailyRepricingProcessTemplate.html" />
     <Content Include="Runtime\Views\WFScheduleTemplates\ScheduleDailyRepricingProcessTemplateController.js" />
   </ItemGroup>

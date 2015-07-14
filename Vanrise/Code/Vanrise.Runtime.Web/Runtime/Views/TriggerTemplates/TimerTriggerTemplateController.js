@@ -1,69 +1,56 @@
-﻿TimeTriggerTemplateController.$inject = ['$scope', 'DaysOfWeekEnum', 'UtilsService'];
+﻿TimeTriggerTemplateController.$inject = ['$scope', 'TimeSchedulerTypeEnum', 'UtilsService'];
 
-function TimeTriggerTemplateController($scope, DaysOfWeekEnum, UtilsService) {
+function TimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, UtilsService) {
 
     defineScope();
     load();
 
     function defineScope() {
 
-        $scope.daysOfWeek = [];
+        $scope.schedulerTypes = [];
+        $scope.selectedType = undefined;
 
-        $scope.selectedDays = [];
-        $scope.selectedHours = [];
-
-        $scope.addHour = function () {
-            $scope.selectedHours.push($scope.time);
-        }
-
-        $scope.removeHour = function (hourToRemove) {
-            $scope.selectedHours.splice($scope.selectedHours.indexOf(hourToRemove), 1);
-        }
+        $scope.schedulerTypeTaskTrigger = {};
 
         $scope.schedulerTaskTrigger.getData = function () {
-            var numbersOfSelectedDays = [];
-            angular.forEach($scope.selectedDays, function (item) {
-                numbersOfSelectedDays.push(item.value);
-            });
-
-            return {
-                $type: "Vanrise.Runtime.Business.TimeSchedulerTaskTrigger, Vanrise.Runtime.Business",
-                ScheduledDays: numbersOfSelectedDays,
-                ScheduledHours: $scope.selectedHours
-            };
+            return $scope.schedulerTypeTaskTrigger.getData();
         };
+
+        $scope.schedulerTaskTrigger.loadTemplateData = function () {
+            loadForm();
+        }
     }
 
+    var isFormLoaded;
     function loadForm() {
-        
-        if ($scope.schedulerTaskTrigger.data == undefined)
+        if ($scope.schedulerTaskTrigger.data == undefined || isFormLoaded)
             return;
+
         var data = $scope.schedulerTaskTrigger.data;
         if (data != null) {
-            angular.forEach(data.ScheduledDays, function (item) {
-                var selectedDay = UtilsService.getItemByVal($scope.daysOfWeek, item, "value");
-                $scope.selectedDays.push(selectedDay);
-            });
-
-            angular.forEach(data.ScheduledHours, function (item) {
-                $scope.selectedHours.push(item);
-            });
+            
+            $scope.selectedType = UtilsService.getItemByVal($scope.schedulerTypes, data.SelectedType, "value");
+            $scope.schedulerTypeTaskTrigger.data = data;
+            if ($scope.schedulerTypeTaskTrigger.loadTemplateData != undefined)
+                $scope.schedulerTypeTaskTrigger.loadTemplateData();
         }
         else {
-            $scope.selectedDays = [];
-            $scope.selectedHours = [];
+            $scope.selectedType = undefined;
         }
+        isFormLoaded = true;
     }
 
     function load() {
-        loadDaysOfWeek();
-
-        loadForm();
+        UtilsService.waitMultipleAsyncOperations([loadSchedulerTypes]).finally(function () {
+            loadForm();
+        }).catch(function (error) {
+            VRNotificationService.notifyExceptionWithClose(error, $scope);
+        });
     }
 
-    function loadDaysOfWeek() {
-        for (var prop in DaysOfWeekEnum) {
-            $scope.daysOfWeek.push(DaysOfWeekEnum[prop]);
+    function loadSchedulerTypes() {
+        for (var prop in TimeSchedulerTypeEnum) {
+            $scope.schedulerTypes.push(TimeSchedulerTypeEnum[prop]);
         }
     }
 }

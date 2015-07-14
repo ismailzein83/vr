@@ -20,6 +20,40 @@ function WFActionTemplateController($scope, BusinessProcessAPIService, UtilsServ
                 ProcessInputArguments: $scope.schedulerTaskAction.processInputArguments.getData()
             };
         };
+
+        $scope.schedulerTaskAction.loadTemplateData = function () {
+            loadForm();
+        }
+    }
+
+    var isFormLoaded;
+    function loadForm() {
+
+        if ($scope.schedulerTaskAction.additionalParameter != undefined)
+        {
+            $scope.selectedBPDefintion = UtilsService.getItemByVal($scope.bpDefinitions, $scope.schedulerTaskAction.additionalParameter.bpDefinitionID, "BPDefinitionID");
+        }
+
+        if ($scope.schedulerTaskAction.data == undefined || isFormLoaded)
+            return;
+
+        var data = $scope.schedulerTaskAction.data;
+        if (data != null) {
+            $scope.selectedBPDefintion = UtilsService.getItemByVal($scope.bpDefinitions, data.BPDefinitionID, "BPDefinitionID");
+
+            $scope.schedulerTaskAction.rawExpressions.data = data.RawExpressions;
+
+            $scope.schedulerTaskAction.processInputArguments.data = data.ProcessInputArguments;
+            if ($scope.schedulerTaskAction.processInputArguments.loadTemplateData != undefined)
+                $scope.schedulerTaskAction.processInputArguments.loadTemplateData();
+        }
+        else {
+            $scope.schedulerTaskAction.processInputArguments.data = undefined;
+            $scope.schedulerTaskAction.rawExpressions.data = undefined;
+            $scope.selectedBPDefintion = undefined;
+        }
+
+        isFormLoaded = true;
     }
 
     function load() {
@@ -31,29 +65,6 @@ function WFActionTemplateController($scope, BusinessProcessAPIService, UtilsServ
         }).catch(function (error) {
             VRNotificationService.notifyExceptionWithClose(error, $scope);
         });
-    }
-
-    function loadForm() {
-
-        if ($scope.schedulerTaskAction.additionalParameter != undefined)
-        {
-            $scope.selectedBPDefintion = UtilsService.getItemByVal($scope.bpDefinitions, $scope.schedulerTaskAction.additionalParameter.bpDefinitionID, "BPDefinitionID");
-        }
-
-        if ($scope.schedulerTaskAction.data == undefined)
-            return;
-
-        var data = $scope.schedulerTaskAction.data;
-        if (data != null) {
-            $scope.selectedBPDefintion = UtilsService.getItemByVal($scope.bpDefinitions, data.BPDefinitionID, "BPDefinitionID");
-            $scope.schedulerTaskAction.processInputArguments.data = data.ProcessInputArguments;
-            $scope.schedulerTaskAction.rawExpressions.data = data.RawExpressions;
-        }
-        else {
-            $scope.schedulerTaskAction.processInputArguments.data = undefined;
-            $scope.schedulerTaskAction.rawExpressions.data = undefined;
-            $scope.selectedBPDefintion = undefined;
-        }
     }
 
     function loadDefinitions()

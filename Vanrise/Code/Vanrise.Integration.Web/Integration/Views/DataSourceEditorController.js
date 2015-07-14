@@ -43,7 +43,7 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
         $scope.dataSourceAdapter = {};
 
         $scope.schedulerTaskTrigger = {};
-
+        $scope.timeTriggerTemplateURL = undefined;
     }
 
     function load() {
@@ -62,8 +62,6 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
         }).finally(function () {
             $scope.isGettingData = false;
         });
-
-
     }
 
     function getDataSource() {
@@ -117,9 +115,16 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
     function fillScopeFromDataSourceObj(dataSourceObject) {
         $scope.selectedAdapterType = UtilsService.getItemByVal($scope.adapterTypes, dataSourceObject.DataSourceData.AdapterTypeId, "AdapterTypeId");
         $scope.dataSourceName = dataSourceObject.DataSourceData.Name;
+
         $scope.dataSourceAdapter.data = dataSourceObject.DataSourceData.Settings.Adapter;
+        if ($scope.dataSourceAdapter.loadTemplateData != undefined)
+            $scope.dataSourceAdapter.loadTemplateData();
+
         $scope.customCode = dataSourceObject.DataSourceData.Settings.MapperCustomCode;
+
         $scope.schedulerTaskTrigger.data = dataSourceObject.TaskData.TaskTrigger;
+        if ($scope.schedulerTaskTrigger.loadTemplateData != undefined)
+            $scope.schedulerTaskTrigger.loadTemplateData();
     }
 
     function insertDataSource() {

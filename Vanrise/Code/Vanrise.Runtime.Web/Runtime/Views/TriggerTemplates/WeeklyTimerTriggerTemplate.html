@@ -1,0 +1,31 @@
+﻿<div ng-controller="Runtime_WeeklyTimeTriggerTemplateController">
+    <vr-section title="Timer Settings">
+        <vr-row>
+            <vr-column width="normal">
+                <vr-select ismultipleselection datasource="daysOfWeek" selectedvalues="selectedDays"
+                           datatextfield="name" datavaluefield="value">
+                </vr-select>
+            </vr-column>
+        </vr-row>
+        <vr-row>
+            <vr-column width="normal">
+                <vr-textbox value="time" label="Enter Time: " />
+
+            </vr-column>
+            <vr-column width="normal">
+                <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+                    <div transclude-to="buttons">
+                        <vr-button type="Add" data-onclick="addHour" />
+                    </div>
+                </vr-actionbar>
+            </vr-column>
+        </vr-row>
+        <vr-row>
+            <vr-column width="normal">
+                <vr-row ng-repeat="hour in selectedHours">
+                    {{hour}} <i class="glyphicon glyphicon-remove hand-cursor" ng-click="removeHour(hour)"></i>
+                </vr-row>
+            </vr-column>
+        </vr-row>
+    </vr-section>
+</div>

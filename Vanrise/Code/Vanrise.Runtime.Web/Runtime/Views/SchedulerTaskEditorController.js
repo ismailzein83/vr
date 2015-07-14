@@ -54,35 +54,28 @@ function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsSer
     function load() {
 
         $scope.isGettingData = true;
-        UtilsService.waitMultipleAsyncOperations([loadTriggers, loadActions]).finally(function () {
+        UtilsService.waitMultipleAsyncOperations([loadTriggers, loadActions]).then(function () {
             if (editMode) {
                 getTask();
             }
-            else
-            {
+            else {
                 $scope.selectedTriggerType = UtilsService.getItemByVal($scope.triggerTypes, 1, "TriggerTypeId");
-                if (actionTypeId != undefined)
-                {
+                if (actionTypeId != undefined) {
                     $scope.selectedActionType = UtilsService.getItemByVal($scope.actionTypes, actionTypeId, "ActionTypeId");
                 }
-                else
-                {
+                else {
                     $scope.selectedActionType = UtilsService.getItemByVal($scope.actionTypes, 1, "ActionTypeId");
                 }
-                
-                if(additionalParameter != undefined)
-                {
+
+                if (additionalParameter != undefined) {
                     $scope.schedulerTaskAction.additionalParameter = additionalParameter;
                 }
             }
 
         }).catch(function (error) {
             VRNotificationService.notifyExceptionWithClose(error, $scope);
-        }).finally(function () {
             $scope.isGettingData = false;
         });
-
-        
     }
 
     function getTask() {
@@ -92,6 +85,8 @@ function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsSer
            })
             .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.isGettingData = false;
             });
     }
 
@@ -130,10 +125,17 @@ function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsSer
     function fillScopeFromTaskObj(taskObject) {
         $scope.name = taskObject.Name;
         $scope.isEnabled = taskObject.IsEnabled;
+
         $scope.selectedTriggerType = UtilsService.getItemByVal($scope.triggerTypes, taskObject.TriggerTypeId, "TriggerTypeId");
         $scope.selectedActionType = UtilsService.getItemByVal($scope.actionTypes, taskObject.ActionTypeId, "ActionTypeId");
+
         $scope.schedulerTaskTrigger.data = taskObject.TaskTrigger;
+        if ($scope.schedulerTaskTrigger.loadTemplateData != undefined)
+            $scope.schedulerTaskTrigger.loadTemplateData();
+
         $scope.schedulerTaskAction.data = taskObject.TaskAction;
+        if ($scope.schedulerTaskAction.loadTemplateData != undefined)
+            $scope.schedulerTaskAction.loadTemplateData();
     }
 
     function insertTask() {

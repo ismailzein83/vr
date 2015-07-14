@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -26,6 +27,8 @@ namespace Vanrise.Integration.Business
         private void ReceiveData(IImportedData data)
         {
             Vanrise.Queueing.PersistentQueueItem queueItem = this.ExecuteCustomCode(data);
+            Vanrise.Queueing.Entities.IPersistentQueue queue = Vanrise.Queueing.PersistentQueueFactory.Default.GetQueue("TestQueue");
+            queue.Enqueue(queueItem);
         }
 
         private void PrepareCustomClass(string customCode)
@@ -41,6 +44,7 @@ namespace Vanrise.Integration.Business
 
             this._classSettings.ClassDefinition = (new StringBuilder()).Append(@"
                 using System;
+                using System.Collections.Generic;
                 using Vanrise.Integration.Entities;
 
                 namespace Vanrise.Integration.Business
@@ -71,6 +75,13 @@ namespace Vanrise.Integration.Business
 
             parameters.ReferencedAssemblies.Add(Assembly.GetCallingAssembly().Location);
             parameters.ReferencedAssemblies.Add(Assembly.GetExecutingAssembly().Location);
+
+            string path = Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
+            foreach (string fileName in Directory.GetFiles(path, "*.dll"))
+            {
+                FileInfo info = new FileInfo(fileName);
+                parameters.ReferencedAssemblies.Add(info.FullName);
+            }
 
             CompilerResults results = provider.CompileAssemblyFromSource(parameters, this._classSettings.ClassDefinition);
 

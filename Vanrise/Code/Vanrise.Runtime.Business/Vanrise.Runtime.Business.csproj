@@ -43,9 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DailyTimeSchedulerTaskTrigger.cs" />
+    <Compile Include="IntervalTimeSchedulerTaskTrigger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SchedulerTaskManager.cs" />
     <Compile Include="TimeSchedulerTaskTrigger.cs" />
+    <Compile Include="WeeklyTimeSchedulerTaskTrigger.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
