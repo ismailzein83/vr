@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FB7F11A8-5A64-4C59-B72F-26EC95C07AEB}</ProjectGuid>
+    <ProjectGuid>{CC95F661-1B6B-4DA1-9802-C4A77C5F0CC9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Vanrise.Integration.Adapters.FTPReceiveAdapter</RootNamespace>
@@ -40,8 +40,7 @@
     <Reference Include="Rebex.Net.ProxySocket">
       <HintPath>..\Resources\DLLs\Rebex.Net.ProxySocket.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Net.SecureSocket, Version=3.0.3854.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Rebex.Net.SecureSocket">
       <HintPath>..\Resources\DLLs\Rebex.Net.SecureSocket.dll</HintPath>
     </Reference>
     <Reference Include="Rebex.Net.Sftp">
@@ -56,8 +55,7 @@
     <Reference Include="Rebex.Net.Telnet">
       <HintPath>..\Resources\DLLs\Rebex.Net.Telnet.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Security, Version=1.5.3854.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Rebex.Security">
       <HintPath>..\Resources\DLLs\Rebex.Security.dll</HintPath>
     </Reference>
     <Reference Include="Rebex.TerminalEmulation">
@@ -72,6 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FTPReceiveAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
