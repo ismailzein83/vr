@@ -10,7 +10,7 @@ namespace Vanrise.Runtime.Business
 
     public class IntervalTimeSchedulerTaskTrigger : TimeSchedulerTaskTrigger
     {
-        public int Interval { get; set; }
+        public double Interval { get; set; }
 
         public IntervalType IntervalType { get; set; }
 
