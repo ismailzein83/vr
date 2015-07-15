@@ -233,6 +233,45 @@
     <Content Include="Client\Javascripts\Services\NotificationService\vr-notification-service.js" />
     <Content Include="Client\Javascripts\Services\utils-service.js" />
     <Content Include="Client\Javascripts\Services\zone-service.js" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\JSTreeView.js" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\demo\basic\HtmlPage1.html" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\demo\basic\index.html" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\demo\basic\Test.js" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\dist\jstree.js" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\dist\themes\default-dark\32px.png" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\dist\themes\default-dark\40px.png" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\dist\themes\default-dark\style.css" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\dist\themes\default-dark\style.min.css" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\dist\themes\default-dark\throbber.gif" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\dist\themes\default\32px.png" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\dist\themes\default\40px.png" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\dist\themes\default\style.css" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\dist\themes\default\style.min.css" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\dist\themes\default\throbber.gif" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\intro.js" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\jstree.checkbox.js" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\jstree.contextmenu.js" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\jstree.dnd.js" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\jstree.js" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\jstree.massload.js" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\jstree.search.js" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\jstree.sort.js" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\jstree.state.js" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\jstree.types.js" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\jstree.unique.js" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\jstree.wholerow.js" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\misc.js" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\outro.js" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\sample.js" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\themes\default-dark\32px.png" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\themes\default-dark\40px.png" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\themes\default-dark\style.css" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\themes\default-dark\throbber.gif" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\themes\default\32px.png" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\themes\default\40px.png" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\themes\default\style.css" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\themes\default\throbber.gif" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\vakata-jstree.js" />
     <Content Include="Client\Libraries\AngularExtensions\treeview\angular.treeview.js" />
     <Content Include="Client\Libraries\AngularExtensions\treeview\css\angular.treeview.css" />
     <Content Include="Client\Libraries\AngularExtensions\treeview\img\file.png" />
@@ -648,6 +687,15 @@
     <Content Include="packages.config">
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\demo\basic\root.json" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\themes\base.less" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\themes\default-dark\style.less" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\themes\default\style.less" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\themes\main.less" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\themes\mixins.less" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\themes\responsive.less" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

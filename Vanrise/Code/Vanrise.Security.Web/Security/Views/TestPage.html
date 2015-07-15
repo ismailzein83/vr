@@ -1,0 +1,37 @@
+﻿
+<div ng-controller="testpage1">
+    <vr-form name="formWidgetPreview">
+        <vr-row>
+            <vr-columns width="normal">
+                <vr-datetimepicker type="date" value="fromDate" label="From" isrequired onvaluechanged="onValueChanged"></vr-datetimepicker>
+            </vr-columns>
+
+            <vr-columns width="normal">
+                <vr-datetimepicker type="date" value="toDate" label="To" isrequired onvaluechanged="onValueChanged"></vr-datetimepicker>
+            </vr-columns>
+
+        </vr-row>
+    </vr-form>
+    <vr-row>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Search" formname="formWidgetPreview" data-onclick="Search"></vr-button>
+            </div>
+        </vr-actionbar>
+    </vr-row>
+         
+    <div id="using_json_2" class="demo">
+        <ul>
+            <li data-jstree='{ "opened" : true }'>
+                Root node
+                <ul>
+                    <li data-jstree='{ "selected" : true }'>Child node 1</li>
+                    <li>Child node 2</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <script>
+    </script>
+    </div>
+

@@ -151,6 +151,8 @@
     <Content Include="Security\Views\RoleEditorController.js" />
     <Content Include="Security\Views\RoleManagement.html" />
     <Content Include="Security\Views\RoleManagementController.js" />
+    <Content Include="Security\Views\TestPage.html" />
+    <Content Include="Security\Views\TestPage.js" />
     <Content Include="Security\Views\UserEditor.html" />
     <Content Include="Security\Views\UserEditorController.js" />
     <Content Include="Security\Views\UserManagement.html" />
