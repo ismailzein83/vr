@@ -1219,8 +1219,11 @@ input.ui-grid-filter-input[type="text"] {
     top: -9px;
     display: inline-block;
 }
-.with-summary{    
-    top: 11px;
+.with-choices{    
+    top: 11px !important;
+}
+.menu-with-choices{    
+    top: 15px !important;
 }
 
 .vr-grid-menu-box:hover{
