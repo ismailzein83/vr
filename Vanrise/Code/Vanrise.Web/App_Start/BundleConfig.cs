@@ -35,6 +35,7 @@ namespace Vanrise.Web
             //    "~/Client/Libraries/Angular", "*.js", true));
 
             bundles.Add(new ScriptBundle("~/bundles/Angular").Include(
+               "~/Client/Libraries/AngularExtensions/BsDateTimePicker/moment-with-locales.js",
                "~/Client/Libraries/Angular/angular.js",
                "~/Client/Libraries/Angular/angular-cookies.js",
                "~/Client/Libraries/Angular/angular-route.js",
@@ -49,6 +50,7 @@ namespace Vanrise.Web
                "~/Client/Libraries/Angular/angular-notify.js",
               "~/Client/Libraries/Angular/ng-sortable.js",
                "~/Client/Libraries/Angular/ivh-treeview.js"
+               
 
               ));
 
