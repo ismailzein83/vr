@@ -76,3 +76,25 @@ WHEN NOT MATCHED BY SOURCE THEN
 DELETE
 ;
 
+MERGE INTO integration.[AdapterType] AS Target 
+USING (VALUES 
+	(1, N'File Receive Adapter', N'{"AdapterTemplateURL": "/Client/Modules/Integration/Views/AdapterTemplates/FileReceiveAdapterTemplate.html", "FQTN": "Vanrise.Integration.Adapters.FileReceiveAdapter.FileReceiveAdapter, Vanrise.Integration.Adapters.FileReceiveAdapter"}'),
+	(2, N'FTP Receive Adapter', N'{"AdapterTemplateURL": "/Client/Modules/Integration/Views/AdapterTemplates/FTPReceiveAdapterTemplate.html","FQTN": "Vanrise.Integration.Adapters.FTPReceiveAdapter.FTPReceiveAdapter, Vanrise.Integration.Adapters.FTPReceiveAdapter"}'),
+	(3, N'SQL Receive Adapter', N'{"AdapterTemplateURL": "/Client/Modules/Integration/Views/AdapterTemplates/DBReceiveAdapterTemplate.html", "FQTN": "Vanrise.Integration.Adapters.SQLReceiveAdapter.SQLReceiveAdapter, Vanrise.Integration.Adapters.SQLReceiveAdapter"}')
+) 
+AS Source ([ID], [Name], [Info])
+ON Target.[ID] = Source.[ID] 
+-- update matched rows 
+WHEN MATCHED THEN 
+UPDATE SET	[ID] = Source.[ID],
+			[Name] = Source.[Name],
+			[Info]  = Source.[Info]
+-- insert new rows 
+WHEN NOT MATCHED BY TARGET THEN 
+INSERT ([ID], [Name], [Info])
+VALUES ([ID], [Name], [Info])
+---- delete rows that are in the target but not the source 
+WHEN NOT MATCHED BY SOURCE THEN 
+DELETE
+;
+

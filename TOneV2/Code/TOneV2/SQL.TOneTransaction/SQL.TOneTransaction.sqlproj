@@ -77,6 +77,9 @@
     <Folder Include="dbo\" />
     <Folder Include="dbo\Functions\" />
     <Folder Include="bp\Functions\" />
+    <Folder Include="integration\" />
+    <Folder Include="integration\Tables\" />
+    <Folder Include="integration\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="runtime\Tables\RunningProcess.sql" />
@@ -140,6 +143,15 @@
     <Build Include="bp\Stored Procedures\sp_BPDefinition_Get.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_GetTasksbyActionType.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_GetReadyAndNewTasks.sql" />
+    <Build Include="integration\Tables\DataSource.sql" />
+    <Build Include="integration\Tables\AdapterType.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSource_GetByTaskId.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSource_Update.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSource_Insert.sql" />
+    <Build Include="integration\Stored Procedures\sp_AdapterType_GetAll.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSource_Get.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSource_GetAll.sql" />
+    <Build Include="Security\integration.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
