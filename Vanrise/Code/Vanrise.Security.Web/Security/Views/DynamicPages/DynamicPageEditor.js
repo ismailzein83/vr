@@ -57,9 +57,10 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             
         }
         $scope.save = function () {
-
+            if (angular.isObject($scope.beTree.currentNode) && $scope.beTree.currentNode.AllowDynamic == 0)
+                return VRNotificationService.showWarning("You Should Select Another Menu Location!!");
             buildContentsFromScope();
-            buildViewObjFromScope(); console.log($scope.beTree.currentNode);
+            buildViewObjFromScope(); 
             if ($scope.summaryContents.length == 0 && $scope.summaryContents.length == 0)
                 return VRNotificationService.showWarning("You Should Add Widgets Before Saving!!");
             else if ($scope.beTree.currentNode == undefined)
@@ -110,8 +111,10 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
 
         };
         $scope.$watch('beTree.currentNode', function (newObj, oldObj) {
-            if ($scope.beTree && angular.isObject($scope.beTree.currentNode)) {
+            if ($scope.beTree && angular.isObject($scope.beTree.currentNode) && $scope.beTree.currentNode.AllowDynamic!=0) {
                 $scope.moduleId = $scope.beTree.currentNode.Id;
+            } else if (angular.isObject($scope.beTree.currentNode) && $scope.beTree.currentNode.AllowDynamic == 0) {
+                VRNotificationService.showWarning("This selection is disabled!!");
             }
         }, false);
     }

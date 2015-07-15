@@ -212,7 +212,8 @@ namespace Vanrise.Security.Business
                 if (item.ParentId == 0)
                 {
                     MenuItem rootItem = GetModuleMenu(item, modules);
-                    retVal.Add(rootItem);
+                    if (rootItem.AllowDynamic != 0 || rootItem.Childs!=null)
+                        retVal.Add(rootItem);
                 }
             }
 
@@ -220,16 +221,18 @@ namespace Vanrise.Security.Business
         }
         private MenuItem GetModuleMenu(Module module, List<Module> modules)
         {
-            MenuItem menu = new MenuItem() { Id=module.ModuleId,Name = module.Name, Location = module.Url, Icon = module.Icon };
-
-            List<Module> subModules = modules.FindAll(x => x.ParentId == module.ModuleId);
+            
+            
+            MenuItem menu = new MenuItem() { Id = module.ModuleId, Name = module.Name, Location = module.Url, Icon = module.Icon, AllowDynamic=module.AllowDynamic };
+            
+            List<Module> subModules = modules.FindAll(x => x.ParentId == module.ModuleId && x.AllowDynamic!=0);
 
             if (subModules.Count > 0)
             {
                 menu.Childs = new List<MenuItem>();
                 foreach (Module item in subModules)
                 {
-                    menu.Childs.Add(GetModuleMenu(item, modules));
+                        menu.Childs.Add(GetModuleMenu(item, modules));
                 }
             }
 

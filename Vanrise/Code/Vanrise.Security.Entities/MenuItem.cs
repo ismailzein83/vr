@@ -19,5 +19,6 @@ namespace Vanrise.Security.Entities
 
         public string Icon { get; set; }
         public ViewType Type { get; set; }
+        public int AllowDynamic { get; set; }
     }
 }

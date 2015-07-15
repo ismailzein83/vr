@@ -19,5 +19,6 @@ namespace Vanrise.Security.Entities
         public int ParentId { get; set; }
 
         public string Icon { get; set; }
+        public int AllowDynamic { get; set; }
     }
 }
