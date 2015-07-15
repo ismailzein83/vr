@@ -19,6 +19,18 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
                 
             //}
 
+
+
+            DirectoryInfo d = new DirectoryInfo(this.FolderPath);//Assuming Test is your Folder
+            FileInfo[] Files = d.GetFiles("*.DAT"); //Getting Text files
+            string str = "";
+            foreach (FileInfo file in Files)
+            {
+                str = str + ", " + file.Name;
+            }
+
+
+
             receiveData(new TextFileImportedData { Content = "Extracted Data" });
         }
     }

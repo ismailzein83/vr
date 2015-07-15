@@ -1,6 +1,6 @@
-﻿FTPReceiveAdapterTemplateController.$inject = ['$scope'];
+﻿FTPReceiveAdapterTemplateController.$inject = ['$scope','UtilsService'];
 
-function FTPReceiveAdapterTemplateController($scope) {
+function FTPReceiveAdapterTemplateController($scope, UtilsService) {
 
     defineScope();
     load();
@@ -37,15 +37,20 @@ function FTPReceiveAdapterTemplateController($scope) {
 
         if ($scope.dataSourceAdapter.data == undefined || isFormLoaded)
             return;
+      
         var data = $scope.dataSourceAdapter.data;
+
+        console.log('UtilsService.getItemByVal(actionsAfterImport, data.ActionAfterImport, "value")')
+        console.log(UtilsService.getItemByVal($scope.actionsAfterImport, data.ActionAfterImport, "value"))
+
         if (data != null) {
-             $scope.extension=Extension;
-             $scope.directory=Directory;
-             $scope.serverIP=ServerIP;
-             $scope.userName=UserName;
-             $scope.password=Password;
-             $scope.directorytoMoveFile=DirectorytoMoveFile;
-             $scope.selectedAction = ActionAfterImport;
+             $scope.extension=data.Extension;
+             $scope.directory = data.Directory;
+             $scope.serverIP = data.ServerIP;
+             $scope.userName = data.UserName;
+             $scope.password = data.Password;
+             $scope.directorytoMoveFile = data.DirectorytoMoveFile;
+             $scope.selectedAction = UtilsService.getItemByVal($scope.actionsAfterImport, data.ActionAfterImport, "value");
         }
         else {
             $scope.extension = undefined;

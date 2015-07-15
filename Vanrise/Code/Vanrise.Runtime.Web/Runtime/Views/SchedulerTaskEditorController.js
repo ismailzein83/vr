@@ -31,6 +31,7 @@ function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsSer
     }
 
     function defineScope() {
+        
         $scope.SaveTask = function () {
             if (editMode) {
                 return updateTask();
@@ -52,13 +53,16 @@ function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsSer
     }
 
     function load() {
-
+        
         $scope.isGettingData = true;
         UtilsService.waitMultipleAsyncOperations([loadTriggers, loadActions]).then(function () {
+            
+
             if (editMode) {
                 getTask();
             }
             else {
+                
                 $scope.selectedTriggerType = UtilsService.getItemByVal($scope.triggerTypes, 1, "TriggerTypeId");
                 if (actionTypeId != undefined) {
                     $scope.selectedActionType = UtilsService.getItemByVal($scope.actionTypes, actionTypeId, "ActionTypeId");
@@ -70,6 +74,10 @@ function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsSer
                 if (additionalParameter != undefined) {
                     $scope.schedulerTaskAction.additionalParameter = additionalParameter;
                 }
+
+
+                $scope.isGettingData = false;
+
             }
 
         }).catch(function (error) {
