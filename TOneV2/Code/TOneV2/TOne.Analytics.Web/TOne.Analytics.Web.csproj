@@ -144,9 +144,9 @@
     <Content Include="Analytics\Views\Billing Statistics\Variation Reports\VariationReports.html" />
     <Content Include="Analytics\Views\Billing Statistics\Variation Reports\VariationReportsController.js" />
     <Content Include="Analytics\Views\Billing Statistics\Volume Reports\Volume Reports Templates\DestinationTrafficVolumeTemplate.html" />
-    <Content Include="Analytics\Views\Billing Statistics\Volume Reports\Volume Reports Templates\DestinationTrafficvolumeTemplate.js" />
+    <Content Include="Analytics\Views\Billing Statistics\Volume Reports\Volume Reports Templates\DestinationTrafficVolumeTemplateController.js" />
     <Content Include="Analytics\Views\Billing Statistics\Volume Reports\Volume Reports Templates\InOutTrafficVolumeTemplate.html" />
-    <Content Include="Analytics\Views\Billing Statistics\Volume Reports\Volume Reports Templates\InOutTrafficVolumeTemplate.js" />
+    <Content Include="Analytics\Views\Billing Statistics\Volume Reports\Volume Reports Templates\InOutTrafficVolumeTemplateController.js" />
     <Content Include="Analytics\Views\Billing Statistics\Volume Reports\Volume Reports Templates\TrafficVolumeTemplate.html" />
     <Content Include="Analytics\Views\Billing Statistics\Volume Reports\Volume Reports Templates\TrafficVolumeTemplateController.js" />
     <Content Include="Analytics\Views\CDR\CDRLog.html" />
