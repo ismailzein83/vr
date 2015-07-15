@@ -16,7 +16,19 @@ namespace Vanrise.Runtime.Business
 
         public override DateTime CalculateNextTimeToRun()
         {
-            return base.CalculateNextTimeToRun();
+            DateTime nextRunTime = DateTime.MinValue;
+
+            switch(IntervalType)
+            {
+                case Business.IntervalType.Hour:
+                    nextRunTime = DateTime.Now.AddHours(Interval);
+                    break;
+                case Business.IntervalType.Minute:
+                    nextRunTime = DateTime.Now.AddMinutes(Interval);
+                    break;
+            }
+
+            return nextRunTime;
         }
     }
 

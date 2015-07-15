@@ -28,7 +28,7 @@ namespace Vanrise.Integration.Business
         {
             Vanrise.Queueing.PersistentQueueItem queueItem = this.ExecuteCustomCode(data);
             Vanrise.Queueing.Entities.IPersistentQueue queue = Vanrise.Queueing.PersistentQueueFactory.Default.GetQueue("TestQueue");
-            queue.Enqueue(queueItem);
+            queue.EnqueueObject(queueItem);
         }
 
         private void PrepareCustomClass(string customCode)
