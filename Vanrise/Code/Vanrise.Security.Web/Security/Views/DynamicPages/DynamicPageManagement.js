@@ -21,12 +21,14 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
         $scope.menuActions = [
            {
                name: "Edit",
+               permissions : "TOne/Administration Module/Dynamic Pages:Edit",
                clicked: function (dataItem) {
                    updatePage(dataItem);
                }
            },
            {
                name: "Delete",
+               permissions: "TOne/Administration Module/Dynamic Pages:Delete",
                clicked: function (dataItem) {
                    deletePage(dataItem);
                }

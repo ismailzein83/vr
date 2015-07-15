@@ -14,12 +14,14 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
             mainGridAPI = api;
         };
         $scope.menuActions = [{
-                name: "Edit",
+            name: "Edit",
+            permissions: "TOne/Administration Module/Dynamic Pages:Edit",
                 clicked: function (dataItem) {
                  updateWidget(dataItem);
                 }
         }, {
             name: "Delete",
+            permissions: "TOne/Administration Module/Dynamic Pages:Delete",
             clicked: function (dataItem) {
                 deleteWidget(dataItem);
             }
