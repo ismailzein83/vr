@@ -7,7 +7,7 @@ CREATE PROCEDURE [integration].[sp_DataSource_Insert]
 	@AdapterTypeId int,
 	@Name varchar(100),
 	@TaskId int,
-	@Settings varchar(1000),
+	@Settings varchar(max),
 	@Id int out
 AS
 BEGIN

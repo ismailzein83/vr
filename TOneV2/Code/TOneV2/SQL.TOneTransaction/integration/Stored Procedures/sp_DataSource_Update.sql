@@ -7,7 +7,7 @@ CREATE PROCEDURE [integration].[sp_DataSource_Update]
 	@ID int,
 	@AdapterTypeId int,
 	@Name varchar(100),
-	@Settings varchar(1000)
+	@Settings varchar(max)
 AS
 BEGIN
 	Update integration.DataSource 
