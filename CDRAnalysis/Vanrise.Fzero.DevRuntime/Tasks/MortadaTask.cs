@@ -17,7 +17,10 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
             SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 5)};
 
+
+
             var runtimeServices = new List<RuntimeService>();
+
             runtimeServices.Add(queueActivationService);
 
             runtimeServices.Add(bpService);
@@ -27,7 +30,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
 
-            //PersistentQueueFactory.Default.CreateQueueIfNotExists<Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch>("TestQueue");
+            PersistentQueueFactory.Default.CreateQueueIfNotExists<Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch>("TestQueue");
             
         }
     }
