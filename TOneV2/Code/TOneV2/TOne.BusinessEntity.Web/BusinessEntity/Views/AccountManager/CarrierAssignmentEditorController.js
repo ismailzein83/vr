@@ -1,6 +1,6 @@
-﻿CarrierAssignmentEditorController.$inject = ['$scope', 'OrgChartAPIService', 'VRModalService', 'VRNavigationService'];
+﻿CarrierAssignmentEditorController.$inject = ['$scope', 'CarrierAPIService', 'VRModalService', 'VRNavigationService'];
 
-function CarrierAssignmentEditorController($scope, OrgChartAPIService, VRModalService, VRNavigationService) {
+function CarrierAssignmentEditorController($scope, CarrierAPIService, VRModalService, VRNavigationService) {
     var gridApi;
     loadParameters();
     defineScope();
@@ -28,13 +28,27 @@ function CarrierAssignmentEditorController($scope, OrgChartAPIService, VRModalSe
         function getData() {
             var pageInfo = gridApi.getPageInfo();
 
-            //return CarriersAPIService.GetRelevantCarriers(pageInfo.fromRow, pageInfo.toRow).then(function (data) {
-            //    angular.forEach(data, function (item) {
-            //        $scope.carriers.push(item);
-            //    });
-            //});
+            return CarrierAPIService.GetForAccountManager(pageInfo.fromRow, pageInfo.toRow).then(function (data) {
+                angular.forEach(data, function (item) {
+                    $scope.carriers.push(item);
+                });
+            });
         }
+        //$scope.onCellClick = function (dataItem) {
+        //    console.log(dataItem);
+        //    console.log('clicked');
+        //}
+        //$scope.onCellClickedAgain = function (dataItem) {
+        //    console.log(dataItem);
+        //    console.log('clicked again');
+        //}
+        //$scope.onSwitchToggle = function () {
+        //    console.log('dirty');
+        //    console.log($scope.carriers);
+        //}
         $scope.assignCarriers = function () {
+            var dirtyCarriers = $scope.carriers.filter(isDirty);
+
             $scope.modalContext.closeModal();
         }
         $scope.closeModal = function () {
@@ -43,9 +57,12 @@ function CarrierAssignmentEditorController($scope, OrgChartAPIService, VRModalSe
     }
 
     function load() {
-        OrgChartAPIService.GetOrgCharts().then(function (data) {
-            $scope.orgCharts = data;
-        });
+    }
+
+    function isDirty(item) {
+        if (item.IsDirty != undefined && item.IsDirty != null && item.isDirty == true)
+            return true;
+        return false;
     }
 }
 

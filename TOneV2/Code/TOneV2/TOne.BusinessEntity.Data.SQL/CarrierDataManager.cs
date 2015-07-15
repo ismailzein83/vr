@@ -16,6 +16,21 @@ namespace TOne.BusinessEntity.Data.SQL
             return GetItemsSP("BEntity.sp_CarrierAccount_GetActiveSuppliersInfo", CarrierAccountInfoMapper);
         }
 
+        public List<AccountManagerCarrier> GetForAccountManager(int from, int to)
+        {
+            return GetItemsSP("BEntity.sp_Carriers_GetForAccountManager", (reader) =>
+            {
+                return new AccountManagerCarrier
+                {
+                    CarrierAccountId = reader["CarrierAccountId"] as string,
+                    Name = reader["Name"] as string,
+                    NameSuffix = reader["NameSuffix"] as string,
+                    IsCustomerAvailable = (bool)reader["IsCustomerAvailable"],
+                    IsSupplierAvailable = (bool)reader["IsSupplierAvailable"]
+                };
+            }, from, to);
+        }
+
         public List<CarrierInfo> GetCarriers(CarrierType carrierType)
         {
             return GetItemsSP("BEntity.sp_Carriers_GetCarriers", (reader) =>

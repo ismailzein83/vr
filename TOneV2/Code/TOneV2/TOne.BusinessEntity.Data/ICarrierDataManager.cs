@@ -12,7 +12,11 @@ namespace TOne.BusinessEntity.Data
         List<CarrierAccountInfo> GetActiveSuppliersInfo();
 
         List<CarrierInfo> GetCarriers(CarrierType carrierType);
+
+        List<AccountManagerCarrier> GetForAccountManager(int from, int to);
+
         List<CarrierAccount> GetCarrierAccounts(string name, string companyName, int from, int to);
+
         CarrierAccount GetCarrierAccount(string carrierAccountId);
 
         int InsertCarrierTest(string CarrierAccountID, string Name);
