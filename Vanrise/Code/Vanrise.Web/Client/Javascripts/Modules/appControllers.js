@@ -10,7 +10,8 @@ var appControllers = angular.module('appControllers', [
     'ui.grid.autoResize',
     'ngMessages',
     'ivh.treeview',
-    'angularTreeview'
+    'angularTreeview',
+    'datetimepicker'
 ]);
 
 
