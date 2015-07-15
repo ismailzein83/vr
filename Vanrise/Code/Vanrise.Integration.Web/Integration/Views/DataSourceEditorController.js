@@ -90,8 +90,13 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
     }
 
     function buildDataSourceObjFromScope() {
-
+        
         var adapterData = $scope.dataSourceAdapter.getData();
+
+        console.log('adapterData');
+        console.log(adapterData);
+
+
         adapterData.$type = $scope.selectedAdapterType.Info.FQTN;
 
         var dataSourceData = {

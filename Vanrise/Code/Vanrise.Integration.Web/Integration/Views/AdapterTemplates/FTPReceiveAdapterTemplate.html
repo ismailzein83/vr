@@ -2,36 +2,36 @@
     <vr-section title="FTP Receive Adapter">
         <vr-row>
 
-            <vr-column width="1/3row">
+            <vr-columns width="1/3row">
                 <vr-textbox value="serverIP" label="Server IPs: " isrequired />
-            </vr-column>
-            <vr-column width="1/3row">
+            </vr-columns>
+            <vr-columns width="1/3row">
                 <vr-textbox value="userName" label="Username: " isrequired />
-            </vr-column>
-            <vr-column width="1/3row">
+            </vr-columns>
+            <vr-columns width="1/3row">
                 <vr-textbox value="password" label="Password: " type="password" isrequired />
-            </vr-column>
+            </vr-columns>
         </vr-row>
         <vr-row>
 
-            <vr-column width="1/3row">
+            <vr-columns width="1/3row">
                 <vr-textbox value="extension" label="Extension: (.dat, .txt, .xml ) " isrequired />
-            </vr-column>
-            <vr-column width="1/3row">
+            </vr-columns>
+            <vr-columns width="1/3row">
                 <vr-textbox value="directory" label="Directory Path: " isrequired />
-            </vr-column>
+            </vr-columns>
 
 
-            <vr-column width="1/3row">
+            <vr-columns width="1/3row">
                 <vr-select datasource="actionsAfterImport" datatextfield="name" datavaluefield="value" label="Action After Import:" selectedvalues="selectedAction" isrequired></vr-select>
-            </vr-column>
+            </vr-columns>
 
         </vr-row>
         <vr-row>
 
-            <vr-column width="1/3row">
+            <vr-columns width="1/3row">
                 <vr-textbox ng-show="selectedAction.value == 2" value="directorytoMoveFile" label="Directory to Move File: " />
-            </vr-column>
+            </vr-columns>
 
         </vr-row>
     </vr-section>

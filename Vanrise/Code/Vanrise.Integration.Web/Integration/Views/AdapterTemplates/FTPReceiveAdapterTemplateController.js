@@ -15,7 +15,6 @@ function FTPReceiveAdapterTemplateController($scope) {
 
         $scope.dataSourceAdapter.getData = function () {
             console.log('$scope.selectedAction.value')
-            console.log($scope.selectedAction.value)
             return {
                 $type: "",
                 Extension: $scope.extension,
