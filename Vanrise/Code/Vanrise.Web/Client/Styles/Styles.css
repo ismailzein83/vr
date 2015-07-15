@@ -429,6 +429,8 @@ Use this for keyframe animations
 .action-bar{
     background-color: #e22337;
     margin-top:10px;
+    z-index: 1;
+    position: relative;
 }
 vr-modalcontent .action-bar{
     margin: 10px -15px 0px !important;
@@ -1213,10 +1215,9 @@ input.ui-grid-filter-input[type="text"] {
 }
 .vr-grid-menu-box{
     position: relative;
-    top: 25px;
     left: -12px;
-    height: 20px;
-    display: inline;
+    top: 25px;
+    display: inline-block;
 }
 .vr-grid-menu-box:hover{
    opacity:0.9;
@@ -1346,7 +1347,7 @@ input.ui-grid-filter-input[type="text"] {
 .vr-datagrid{
     font-size:12px;    
     width:100%;
-    margin-top:-25px ;/*to fixe menu-grid action position side effects*/
+    margin-top:-33px ;/*to fixe menu-grid action position side effects*/
 }
 .vr-datagrid-header{
     background-color:#829EBF;
@@ -1451,6 +1452,7 @@ input.ui-grid-filter-input[type="text"] {
         border-bottom: 1px solid #ddd !important;
         width: 100% ;
         position: relative;
+        z-index: 1;
     }
     .vr-tabs label{
        padding: 1px 7px;
