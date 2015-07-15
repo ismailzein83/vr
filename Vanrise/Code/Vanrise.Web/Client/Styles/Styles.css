@@ -1219,6 +1219,10 @@ input.ui-grid-filter-input[type="text"] {
     top: -9px;
     display: inline-block;
 }
+.with-summary{    
+    top: 11px;
+}
+
 .vr-grid-menu-box:hover{
    opacity:0.9;
 }
