@@ -31,7 +31,7 @@ namespace Vanrise.Security.Data.SQL
                 Url = reader["Url"] as string,
                 ParentId = GetReaderValue<int>(reader, "ParentId"),
                 Icon = reader["Icon"] as string,
-                AllowDynamic = GetReaderValue<int>(reader, "AllowDynamic"),
+                AllowDynamic = GetReaderValue<Boolean>(reader, "AllowDynamic"),
             };
             return module;
         }
