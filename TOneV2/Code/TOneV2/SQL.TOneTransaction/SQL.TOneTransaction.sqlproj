@@ -142,7 +142,8 @@
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_GetReadyAndNewTasks.sql" />
   </ItemGroup>
   <ItemGroup>
-    <PostDeploy Include="Script.PostDeployment.sql" />
+    <PostDeploy Include="TOne.PostDeployment.sql" />
     <None Include="CDRAnalysis.PostDeployment.sql" />
+    <None Include="Common.PostDeployment.sql" />
   </ItemGroup>
 </Project>
