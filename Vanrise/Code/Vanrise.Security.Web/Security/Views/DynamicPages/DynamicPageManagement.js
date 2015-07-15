@@ -50,7 +50,7 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
                 return ViewAPIService.GetFilteredDynamicPages($scope.filterValue).then(function (response) {
                     $scope.dynamicViews.length = 0;
                     angular.forEach(response, function (itm) {
-                        $scope.dynamicViews.push(itm);
+                        $scope.dynamicViews.push(fillNeededData(itm));
                     });
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
