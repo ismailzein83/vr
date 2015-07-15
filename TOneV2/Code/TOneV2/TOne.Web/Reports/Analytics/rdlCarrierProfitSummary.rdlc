@@ -710,7 +710,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -873,14 +872,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Profit">
+                    <Textbox Name="ProfitFormatted">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Profit.Value</Value>
+                              <Value>=Fields!ProfitFormatted.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -891,7 +890,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Profit</rd:DefaultName>
+                      <rd:DefaultName>ProfitFormatted</rd:DefaultName>
                       <ZIndex>1</ZIndex>
                       <Style>
                         <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
@@ -905,14 +904,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="AvgMin">
+                    <Textbox Name="AvgMinFormatted">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!AvgMin.Value</Value>
+                              <Value>=Fields!AvgMinFormatted.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -923,7 +922,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>AvgMin</rd:DefaultName>
+                      <rd:DefaultName>AvgMinFormatted</rd:DefaultName>
                       <Style>
                         <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -1281,7 +1280,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!SaleNet.Value-Fields!CostNet.Value),2)</Value>
+                              <Value>=FormatNumber(Sum(Fields!Profit.Value),2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1313,7 +1312,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Avg(Fields!SaleNet.Value/Fields!SaleDuration.Value - Fields!CostNet.Value/Fields!SaleDuration.Value),2)</Value>
+                              <Value>=FormatNumber(Avg(Fields!AvgMin.Value),4)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2402,7 +2401,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!SaleNet.Value-Fields!CostNet.Value),2)</Value>
+                              <Value>=FormatNumber(Sum(Fields!Profit.Value),2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -4080,10 +4079,18 @@
         </Field>
         <Field Name="Profit">
           <DataField>Profit</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="ProfitFormatted">
+          <DataField>ProfitFormatted</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="AvgMin">
           <DataField>AvgMin</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="AvgMinFormatted">
+          <DataField>AvgMinFormatted</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>

@@ -28,8 +28,10 @@ namespace TOne.Analytics.Entities
         public string CostExtraChargeValueFormatted { get; set; }
         public double? SaleExtraChargeValue { get; set; }
         public string SaleExtraChargeValueFormatted { get; set; }
-        public string Profit { get; set; }
-        public string AvgMin { get; set; }
+        public double? Profit { get; set; }
+        public string ProfitFormatted { get; set; }
+        public decimal? AvgMin { get; set; }
+        public string AvgMinFormatted { get; set; }
 
     }
 }

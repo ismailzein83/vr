@@ -1320,7 +1320,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Sum(Fields!SaleDuration.Value),2)</Value>
+                              <Value>=FormatNumber(Round(Sum(Fields!SaleDuration.Value),2),2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1447,7 +1447,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Sum(Fields!SaleRate.Value),2)</Value>
+                              <Value>=FormatNumber(Round(Sum(Fields!SaleAmount.Value),2),2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1543,7 +1543,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Sum(Fields!CostDuration.Value),2)</Value>
+                              <Value>=FormatNumber(Round(Sum(Fields!CostDuration.Value),2),2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1670,7 +1670,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Sum(Fields!CostAmount.Value),2)</Value>
+                              <Value>=FormatNumber(Round(Sum(Fields!CostAmount.Value),2),2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1704,7 +1704,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Sum(Fields!Profit.Value),2)</Value>
+                              <Value>=FormatNumber(Round(Sum(Fields!Profit.Value),2),2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>

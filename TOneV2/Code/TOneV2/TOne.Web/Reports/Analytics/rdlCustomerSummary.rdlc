@@ -1346,7 +1346,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!SaleNet.Value-Fields!CostNet.Value),2)</Value>
+                              <Value>=FormatNumber(Sum(Fields!Profit.Value),2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2164,7 +2164,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!SaleNet.Value-Fields!CostNet.Value) - CDec(Parameters!ServicesPerCustomer.Value) ,2)</Value>
+                              <Value>=FormatNumber(Sum(Fields!Profit.Value)-(Parameters!ServicesPerCustomer.Value) , 2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -3264,6 +3264,10 @@
           <DataField>CostNetFormatted</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="Profit">
+          <DataField>Profit</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
         <Field Name="ProfitFormatted">
           <DataField>ProfitFormatted</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -3278,7 +3282,7 @@
         </Field>
         <Field Name="Services">
           <DataField>Services</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
+          <rd:TypeName>System.Double</rd:TypeName>
         </Field>
         <Field Name="ServicesFormatted">
           <DataField>ServicesFormatted</DataField>

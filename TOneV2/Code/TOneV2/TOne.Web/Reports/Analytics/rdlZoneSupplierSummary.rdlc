@@ -670,14 +670,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Profit">
+                    <Textbox Name="ProfitFormatted">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Profit.Value</Value>
+                              <Value>=Fields!ProfitFormatted.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -688,7 +688,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Profit</rd:DefaultName>
+                      <rd:DefaultName>ProfitFormatted</rd:DefaultName>
                       <ZIndex>2</ZIndex>
                       <Style>
                         <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
@@ -698,6 +698,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2214,6 +2215,10 @@
         </Field>
         <Field Name="Profit">
           <DataField>Profit</DataField>
+          <rd:TypeName>System.Double</rd:TypeName>
+        </Field>
+        <Field Name="ProfitFormatted">
+          <DataField>ProfitFormatted</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="AVGCost">

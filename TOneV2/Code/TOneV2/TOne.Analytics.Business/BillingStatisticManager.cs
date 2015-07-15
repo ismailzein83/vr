@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Aspose.Cells;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -43,19 +45,69 @@ namespace TOne.Analytics.Business
         public List<SupplierCostDetailsFormatted> GetSupplierCostDetails(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
         {
             List<SupplierCostDetails> lstSuppplierCostDetails = _datamanager.GetSupplierCostDetails(fromDate, toDate, customerAMUId, supplierAMUId);
+            //export to excel
+            ////////////////////////////////
+
+
+            Workbook wbk = new Workbook();
+            Worksheet RateWorkSheet = wbk.Worksheets.Add("Supplier Cost Details");
+            RateWorkSheet.Cells.SetColumnWidth(0, 4);
+            RateWorkSheet.Cells.SetColumnWidth(1, 10);
+            RateWorkSheet.Cells.SetColumnWidth(2, 10);
+            RateWorkSheet.Cells.SetColumnWidth(3, 15);
+            RateWorkSheet.Cells.SetColumnWidth(4, 15);
+            RateWorkSheet.Cells.SetColumnWidth(5, 15);
+
+            int HeaderIndex = 1;
+            int Irow = 1;
+            RateWorkSheet.Cells[Irow, HeaderIndex++].PutValue("Customer");
+            RateWorkSheet.Cells[Irow, HeaderIndex++].PutValue("Group Name");
+            RateWorkSheet.Cells[Irow, HeaderIndex++].PutValue("Carrier");
+            RateWorkSheet.Cells[Irow, HeaderIndex++].PutValue("Amount");
+            RateWorkSheet.Cells[Irow, HeaderIndex++].PutValue("Duration");
+
+            foreach (SupplierCostDetails supplier in lstSuppplierCostDetails)
+            {
+                Irow++;
+                int valueIndex = 1;
+
+                RateWorkSheet.Cells[Irow, valueIndex++].PutValue(supplier.Customer);
+                RateWorkSheet.Cells[Irow, valueIndex++].PutValue(supplier.CustomerGroupName);
+                RateWorkSheet.Cells[Irow, valueIndex++].PutValue(supplier.Carrier);
+                RateWorkSheet.Cells[Irow, valueIndex++].PutValue(supplier.Amount);
+                RateWorkSheet.Cells[Irow, valueIndex++].PutValue(supplier.Duration);
+            }
+            byte[] array;
+            MemoryStream ms = new MemoryStream();
+            ms = wbk.SaveToStream();
+            array = ms.ToArray();
+            int index = RateWorkSheet.ConditionalFormattings.Add();
+
+            FormatConditionCollection fcs = RateWorkSheet.ConditionalFormattings[index];
+
+            int conditionIndex = fcs.AddCondition(FormatConditionType.CellValue, OperatorType.Between, "50", "100");
+
+            FormatCondition fc = fcs[conditionIndex];
+            fc.Style.Font.IsBold = true;
+            //fc.Style.BackgroundColor = Color.Red;
+
+
+            wbk.Save("D:\\book1.xls");
+
+            ////////////////////////////////
             List<SupplierCostDetails> lstSuppplierCostDetailsGrouped = AddGroupNames(lstSuppplierCostDetails);
 
 
             var grouped = lstSuppplierCostDetailsGrouped.GroupBy(c => new { supplier = c.Carrier, subKey = c.CustomerGroupName })
               .Select(r => new SupplierCostDetails
               {
-                  Carrier= r.First().Carrier,
-                   CustomerGroupName = r.Key.subKey,
+                  Carrier = r.First().Carrier,
+                  CustomerGroupName = r.Key.subKey,
                   Duration = r.Sum(rr => (decimal)(string.IsNullOrEmpty(rr.Duration.ToString()) ? 0 : rr.Duration)),
                   Amount = r.Sum(rr => (double)(string.IsNullOrEmpty(rr.Amount.ToString()) ? 0 : rr.Amount))
               });
 
-            
+
             List<SupplierCostDetails> selectedCollection = grouped.ToList();
             List<SupplierCostDetailsFormatted> lstSupplierCostDetailsFormatted = FormatSupplierCostDetails(selectedCollection);
             return lstSupplierCostDetailsFormatted;
@@ -150,9 +202,10 @@ namespace TOne.Analytics.Business
                     CostDurationFormatted = FormatNumber(cs.CostDuration),
                     CostNet = cs.CostNet,
                     CostNetFormatted = FormatNumberDigitRate(cs.CostNet),
-                    ProfitFormatted = FormatNumber(cs.SaleNet - cs.CostNet),
+                    //ProfitFormatted = FormatNumber(cs.SaleNet - cs.CostNet),
+                    Profit = (cs.SaleNet > 0) ? ((cs.SaleNet - cs.CostNet)) : 0,
+                    ProfitFormatted = FormatNumber((cs.SaleNet > 0) ? ((cs.SaleNet - cs.CostNet)) : 0),
                     ProfitPercentageFormatted = (cs.SaleNet > 0) ? FormatNumberPercentage(((cs.SaleNet - cs.CostNet) / cs.SaleNet)) : FormatNumberPercentage(0),
-
                 };
                 if (cs.Carrier != null)
                 {
@@ -175,19 +228,16 @@ namespace TOne.Analytics.Business
 
         public List<ProfitSummary> GetCustomerProfitSummary(List<CustomerSummaryFormatted> summarieslist)
         {
-            List<ProfitSummary> profitsummaries = new List<ProfitSummary>();
-
-            foreach (var cs in summarieslist)
+            List<ProfitSummary> lstProfitSummary = new List<ProfitSummary>();
+            lstProfitSummary = summarieslist.Select(r => new ProfitSummary
             {
-                ProfitSummary p = new ProfitSummary()
-                {
-                    Profit = (cs.SaleNet != null ? (double)cs.SaleNet : 0 - (cs.CostNet != null ? (double)cs.CostNet : 0)),
-                    FormattedProfit = FormatNumber((cs.SaleNet != null ? (double)cs.SaleNet : 0) - (cs.CostNet != null ? (double)cs.CostNet : 0)),
-                    Customer = cs.Customer
-                };
-                profitsummaries.Add(p);
-            }
-            return profitsummaries.OrderByDescending(r => r.Profit).Take(10).ToList();
+                Profit = (r.SaleNet > 0) ? (double)((r.SaleNet - r.CostNet)) : 0,
+                 //(r.SaleNet != null ? (double)r.SaleNet : 0) - (r.CostNet != null ? (double)r.CostNet : 0),
+                FormattedProfit = FormatNumber((r.SaleNet > 0) ? ((r.SaleNet - r.CostNet)) : 0),
+                //string.Format("{0:#,##0.00}", (r.SaleNet != null ? (double)r.SaleNet : 0) - (r.CostNet != null ? (double)r.CostNet : 0)),
+                Customer = r.Customer.ToString()
+            }).OrderByDescending(r => r.Profit).Take(10).ToList();
+            return lstProfitSummary;
         }
         public List<SaleAmountSummary> GetCustomerSaleAmountSummary(List<CustomerSummaryFormatted> summarieslist)
         {
@@ -217,19 +267,17 @@ namespace TOne.Analytics.Business
             List<ExchangeCarrierProfit> ecpList = new List<ExchangeCarrierProfit>();
             foreach (var row in baseList)
             {
-
                 ExchangeCarrierProfit ecp = new ExchangeCarrierProfit()
                 {
                     CarrierAccount = _cmanager.GetCarrierAccount(row.CustomerID),
-                    CustomerProfit = row.CustomerProfit != null ? (double)row.CustomerProfit : 0,
-                    SupplierProfit = row.SupplierProfit != null ? (double)row.SupplierProfit : 0
-
+                    CustomerProfit = (double)row.CustomerProfit,
+                    SupplierProfit = (double)row.SupplierProfit
                 };
                 ecpList.Add(ecp);
             }
 
             List<ExchangeCarrierFormatted> result = new List<ExchangeCarrierFormatted>();
-            
+
             var test = ecpList;
             if (IsExchange == true)
             {
@@ -250,7 +298,7 @@ namespace TOne.Analytics.Business
             else
             {
 
-                result = ecpList.GroupBy(c => c.CarrierAccount).Select(obj => new ExchangeCarrierFormatted
+                result = ecpList.GroupBy(c => new { c.CarrierAccount.ProfileName }).Select(obj => new ExchangeCarrierFormatted
                 {
                     Customer = obj.Key.ProfileName,
                     CustomerProfit = obj.Sum(d => d.CustomerProfit),
@@ -612,7 +660,7 @@ namespace TOne.Analytics.Business
             return new DailySummaryFormatted
             {
                 Day = dailySummary.Day,
-                
+
                 Calls = dailySummary.Calls,
                 CallsFormatted = FormatNumber(dailySummary.Calls),
 
@@ -641,22 +689,14 @@ namespace TOne.Analytics.Business
 
             CarrierGroup cg;
             String customerGroupName = null;
-            if(ca != null)
+            if (ca != null)
             {
                 if (ca.CarrierGroupID.HasValue)
                 {
-
                     _cmanager.GetAllCarrierGroups().TryGetValue(ca.CarrierGroupID.Value, out cg);
                     customerGroupName = cg.CarrierGroupName;
-
-
                 }
             }
-                
-
-            
-            //String customerGroupName = (supplierCostDetails.Customer == null) ? null : _cmanager.GetAllCarrierGroups() == null ? null : _cmanager.GetCarrierAccount(supplierCostDetails.Customer).CarrierGroupName;
-           // String customerGroupName = (supplierCostDetails.Customer == null) ? null : _cmanager.GetCarrierAccount(supplierCostDetails.Customer) == null ? null : _cmanager.GetCarrierAccount(supplierCostDetails.Customer).CarrierGroupName;
 
             return new SupplierCostDetails
             {
@@ -721,7 +761,7 @@ namespace TOne.Analytics.Business
 
                 HighestRate = saleZoneCostSummarySupplier.HighestRate,
                 HighestRateFormatted = FormatNumber(saleZoneCostSummarySupplier.HighestRate),
-                
+
                 salezoneID = saleZoneCostSummarySupplier.salezoneID,
 
                 salezoneIDFormatted = _bemanager.GetZoneName(saleZoneCostSummarySupplier.salezoneID),
@@ -758,13 +798,13 @@ namespace TOne.Analytics.Business
         private List<RateLossFormatted> FormatRateLosses(List<RateLoss> rateLosses)
         {
             List<RateLossFormatted> models = new List<RateLossFormatted>();
-            
-            Dictionary<string,CarrierAccount> carrierAccounts =  _cmanager.GetAllCarrierAccounts();
+
+            Dictionary<string, CarrierAccount> carrierAccounts = _cmanager.GetAllCarrierAccounts();
 
             Dictionary<int, CarrierGroup> carrierGroups = _cmanager.GetAllCarrierGroups();
 
             if (rateLosses != null)
-                for(int j = 0; j < rateLosses.Count(); j++)
+                for (int j = 0; j < rateLosses.Count(); j++)
                 {
                     if (carrierAccounts.ContainsKey(rateLosses[j].CustomerID))
                     {
@@ -772,14 +812,14 @@ namespace TOne.Analytics.Business
 
                         if (carrierAccount.GroupIds != null)
                             //for (int i = 0; i < carrierAccount.GroupIds.Count(); i++)
-                                if (carrierGroups.ContainsKey(carrierAccount.GroupIds[0]))
-                                {
-                                    CarrierGroup carrierGroup = carrierGroups[carrierAccount.GroupIds[0]];
-                                    //if (i == 0)
-                                        rateLosses[j].CarrierGroupsNames = carrierGroup.CarrierGroupName;
-                                    //else
-                                    //    rateLosses[j].CarrierGroupsNames = rateLosses[j].CarrierGroupsNames + ", " + carrierGroup.CarrierGroupName;
-                                }
+                            if (carrierGroups.ContainsKey(carrierAccount.GroupIds[0]))
+                            {
+                                CarrierGroup carrierGroup = carrierGroups[carrierAccount.GroupIds[0]];
+                                //if (i == 0)
+                                rateLosses[j].CarrierGroupsNames = carrierGroup.CarrierGroupName;
+                                //else
+                                //    rateLosses[j].CarrierGroupsNames = rateLosses[j].CarrierGroupsNames + ", " + carrierGroup.CarrierGroupName;
+                            }
                     }
                     models.Add(FormatRateLoss(rateLosses[j]));
                 }
@@ -811,7 +851,7 @@ namespace TOne.Analytics.Business
                SaleZoneID = rateLoss.SaleZoneID,
                Loss = rateLoss.CostNet.Value - rateLoss.SaleNet.Value,
                LossFormatted = FormatNumber(rateLoss.CostNet - rateLoss.SaleNet),
-               LossPerFormatted = FormatNumber(((rateLoss.CostNet - rateLoss.SaleNet) * 100)/rateLoss.CostNet),
+               LossPerFormatted = FormatNumber(((rateLoss.CostNet - rateLoss.SaleNet) * 100) / rateLoss.CostNet),
                CarrierGroupsNames = rateLoss.CarrierGroupsNames
            };
         }
@@ -1063,9 +1103,12 @@ namespace TOne.Analytics.Business
                 CostExtraChargeValueFormatted = FormatNumber(Convert.ToDouble(Math.Abs(carrierSummary.CostExtraChargeValue.Value))),
                 SaleExtraChargeValue = carrierSummary.SaleExtraChargeValue,
                 SaleExtraChargeValueFormatted = FormatNumber(Convert.ToDouble(Math.Abs(carrierSummary.SaleExtraChargeValue.Value))),
-                Profit = FormatNumber(carrierSummary.SaleNet - carrierSummary.CostNet),
-                AvgMin = (carrierSummary.SaleDuration.Value != 0 && carrierSummary.SaleDuration.Value != 0) ? FormatNumberDigitRate((decimal)carrierSummary.SaleNet / carrierSummary.SaleDuration - (decimal)carrierSummary.CostNet / carrierSummary.SaleDuration) : "0.00"
+                Profit = (carrierSummary.SaleNet > 0) ? (double)((carrierSummary.SaleNet - carrierSummary.CostNet)) : 0,
+                ProfitFormatted = FormatNumber((carrierSummary.SaleNet > 0) ? ((carrierSummary.SaleNet - carrierSummary.CostNet)) : 0),
 
+                AvgMin = (carrierSummary.SaleDuration.Value != 0) ? (decimal)(((double)carrierSummary.SaleNet.Value - (double)carrierSummary.CostNet.Value) / (double)carrierSummary.SaleDuration.Value) : 0,
+
+                AvgMinFormatted = (carrierSummary.SaleDuration.Value != 0 && carrierSummary.SaleDuration.Value != 0) ? FormatNumberDigitRate((decimal)carrierSummary.SaleNet / carrierSummary.SaleDuration - (decimal)carrierSummary.CostNet / carrierSummary.SaleDuration) : "0.00"
 
             };
         }

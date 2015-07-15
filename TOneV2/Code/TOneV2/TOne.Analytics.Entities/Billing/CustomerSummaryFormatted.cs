@@ -17,6 +17,7 @@ namespace TOne.Analytics.Entities
         public string CostDurationFormatted { get; set; }
         public double? CostNet { get; set; }
         public string CostNetFormatted { get; set; }
+        public double? Profit { get; set; }
         public string ProfitFormatted { get; set; }
         public string ProfitPercentageFormatted { get; set; }
         public string Customer { get; set; }
