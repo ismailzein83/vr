@@ -237,6 +237,7 @@
     <Content Include="Client\Libraries\AngularExtensions\BsDateTimePicker\bootstrap-datetimepicker.css" />
     <Content Include="Client\Libraries\AngularExtensions\BsDateTimePicker\bootstrap-datetimepicker.js" />
     <Content Include="Client\Libraries\AngularExtensions\BsDateTimePicker\moment-with-locales.js" />
+    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jsTree.directive.js" />
     <Content Include="Client\Libraries\AngularExtensions\JSTreeView\JSTreeView.js" />
     <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\demo\basic\HtmlPage1.html" />
     <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\demo\basic\index.html" />
