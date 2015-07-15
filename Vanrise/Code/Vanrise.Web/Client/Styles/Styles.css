@@ -1488,8 +1488,8 @@ input.ui-grid-filter-input[type="text"] {
     z-index:-10;
 }
 .collapsed-clock{    
-    bottom: 62px;
-    left: -85px;
+    bottom: 75px;
+    left: -70px;
     /* Safari */
     -webkit-transform: rotate(-90deg);
     /* Firefox */

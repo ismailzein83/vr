@@ -37,7 +37,10 @@
                             </li>
                             <li role="presentation">
                                 <a href=" " >Change password</a>
-                            </li>                     
+                            </li>     
+                            <li role="presentation">
+                                <a href="" ng-click="logout()">Logout()</a>
+                            </li>                 
                         </ul>
                     </div>
                 </div>
@@ -113,7 +116,7 @@
                     <span ng-bind="clock  | date:'EEE dd MMM , yyyy'"></span>
 
                     <span style="color: #6a6a6a;font-weight:bold" ng-bind="clock  | date:'hh:mm'"> </span>
-                    <a href="" ng-click="logout()"><img src="Client/Images/logout.png"  /></a> 
+                   
                 </div>
             </div>
 
@@ -146,7 +149,7 @@
                     </ul>
                 </div>
                 <div class="clock collapsed-clock">
-                    <a href="" ng-click="logout()"><img src="Client/Images/logout.png" /></a>
+                  
                     <span ng-bind="clock  | date:'EEE dd MMM , yyyy'"></span>
 
                     <span style="color: #6a6a6a; font-weight: bold" ng-bind="clock  | date:'hh:mm'"> </span>

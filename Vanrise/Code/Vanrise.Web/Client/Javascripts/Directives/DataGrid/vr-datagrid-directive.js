@@ -75,7 +75,7 @@
 
     var headerTemplate = '<div ng-click="colDef.onSort()" class="vr-datagrid-header-cell" >'
    + ' <div col-index="renderIndex">'
-     + '   <div class="vr-datagrid-celltext"  ng-class="colDef.getAlign()" >'
+     + '   <div class="vr-datagrid-celltext"  ng-class="colDef.getAlign()" title="{{colDef.name}}" >'
        + '    <span ng-show="colDef.sortDirection==\'ASC\'">&uarr;</span>'
         + '   <span ng-show="colDef.sortDirection==\'DESC\'">&darr;</span>'
               +'<span ng-if="!colDef.rotateHeader"> {{colDef.name}}</span>'
