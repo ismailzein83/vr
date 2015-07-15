@@ -1,16 +1,17 @@
 ﻿<div ng-controller="Integration_DBReceiveAdapterTemplateController">
     <vr-section title="DB Receive Adapter">
         <vr-row>
-            <vr-column width="normal">
-                <vr-textbox value="connectionString" label="ConnectionString: " />
+            <vr-column width="fullrow">
+                <vr-textbox value="connectionString" label="ConnectionString: " isrequired />
             </vr-column>
 
-            <vr-column width="normal">
+            <vr-column width="fullrow">
+                <vr-textbox value="query" label="Query: " isrequired />
+            </vr-column>
+
+
+            <vr-column width="fullrow">
                 <vr-textbox value="description" label="Description: " />
-            </vr-column>
-
-            <vr-column width="normal">
-                <vr-textbox value="query" label="Query: " />
             </vr-column>
         </vr-row>
     </vr-section>
