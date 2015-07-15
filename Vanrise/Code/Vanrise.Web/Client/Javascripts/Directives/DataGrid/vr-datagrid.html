@@ -2,21 +2,20 @@
     <vr-choices onselectionchanged="ctrl.viewVisibilityChanged()" ng-show="ctrl.updateItems.length > 0">
         <vr-choice isselected="ctrl.isMainItemsShown">Main View</vr-choice>
         <vr-choice>Updated Items ({{ctrl.updateItems.length}})</vr-choice>
-    </vr-choices>
-    <div class="vr-grid-menu-box hand-cursor " id="iddiv" ng-init="showgmenu=false" ng-class="showgmenu==true?'toggle-dd':''" ng-click="showgmenu=!showgmenu">
-        <span class="vr-grid-menu-h-circle hand-cursor" ng-class="ctrl.ngClassLevel"> .</span>
-        <div class="vr-grid-menu-h-dote hand-cursor">.</div>
-    </div>
-    <ul class="vr-grid-menu" ng-show="showgmenu" click-outside="showgmenu=false" outside-if-not="iddiv">
-        <li role="presentation">
-            <a href=" ">Export</a>
-        </li>
-        <li role="presentation">
-            <a href=" ">Add/Remove Column</a>
-        </li>
-    </ul>
+    </vr-choices>  
     <div class="vr-datagrid-header" ng-hide="ctrl.hideheader" ng-style="ctrl.headerStyle" ng-class="ctrl.ngClassLevel">
-
+        <div class="vr-grid-menu-box hand-cursor " id="iddiv" ng-init="showgmenu=false" ng-class="showgmenu==true?'toggle-dd':''" ng-click="showgmenu=!showgmenu">
+            <span class="vr-grid-menu-h-circle hand-cursor" ng-class="ctrl.ngClassLevel"> .</span>
+            <div class="vr-grid-menu-h-dote hand-cursor">.</div>
+        </div>
+        <ul class="vr-grid-menu" ng-show="showgmenu" click-outside="showgmenu=false" outside-if-not="iddiv">
+            <li role="presentation">
+                <a href=" ">Export</a>
+            </li>
+            <li role="presentation">
+                <a href=" ">Add/Remove Column</a>
+            </li>
+        </ul>
         <div style="margin:-2px" ng-style="{'width': ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-show="ctrl.expandableColumnWidth != undefined">
 
         </div>
