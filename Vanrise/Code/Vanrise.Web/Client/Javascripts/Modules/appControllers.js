@@ -11,7 +11,6 @@ var appControllers = angular.module('appControllers', [
     'ngMessages',
     'ivh.treeview',
     'angularTreeview',
-    'jsTree.directive',
     'datetimepicker'
 ]);
 

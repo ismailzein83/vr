@@ -2,7 +2,10 @@
 <div ng-controller="testpage1">
     <vr-form name="formWidgetPreview">
         <vr-row>
-
+            {{selectedTreeNode1}}
+            <vr-treeview datatextfield="text" datavaluefield="id" datachildrenfield="children" on-ready="treeReady" selecteditem="selectedTreeNode1" onvaluechanged="treeValueChanged1"></vr-treeview>
+            {{selectedTreeNode2}}
+            <vr-treeview datatextfield="Name" datavaluefield="id" datachildrenfield="children" on-ready="treeReady2" selecteditem="selectedTreeNode2" onvaluechanged="treeValueChanged2"></vr-treeview>
         </vr-row>
     </vr-form>
     <vr-row>
@@ -57,6 +60,22 @@
 
         </div>
 
+    <input type="button" value="Refresh Tree" ng-click="refreshTree()" />
+    <input type="button" value="Add Node" ng-click="addNode()" />
+    <div id="test2">
+
+        <ul>
+            <li data-jstree='{ "opened" : true }' ng-repeat="value in values">
+                <input type="text" /> {{value.Name}}
+                <ul>
+                    <li data-jstree='{ "opened" : true }' ng-repeat="childValue in value.children">{{childValue.Name}}</li>
+                </ul>
+
+            </li>
+        </ul>
+
+    </div>
+    {{values}}
     
     </div>
 

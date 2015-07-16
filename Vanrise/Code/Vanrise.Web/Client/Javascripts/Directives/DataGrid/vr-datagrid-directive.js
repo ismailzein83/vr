@@ -9,7 +9,8 @@
             onReady: '=',
             maxheight: '@',
             hideheader: '=',
-            noverticallines: '@'
+            noverticallines: '@',
+            idfield: '@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -215,6 +216,26 @@
         }
 
         function itemChanged(item, actionType) {
+            if (item.isDeleted) {//delete the item from the original data source
+                var deletedItemIndex = ctrl.datasource.indexOf(item);
+                if (deletedItemIndex < 0 && ctrl.idfield != undefined)//if item is not found by object, try to find it by id
+                    deletedItemIndex = UtilsService.getItemIndexByVal(ctrl.datasource, item[ctrl.idfield], ctrl.idfield);
+                if (deletedItemIndex >= 0)
+                    ctrl.datasource.splice(deletedItemIndex, 1);
+            }
+
+            if (ctrl.idfield != undefined) {
+                //remove the item if exists in the updatedItems array
+                var itemIndexInUpdatedItems = UtilsService.getItemIndexByVal(ctrl.updateItems, item[ctrl.idfield], ctrl.idfield);
+                if(itemIndexInUpdatedItems >= 0)
+                    ctrl.updateItems.splice(itemIndexInUpdatedItems, 1);
+
+                //update the item in the datasource array if exists
+                var itemIndexInDataSource = UtilsService.getItemIndexByVal(ctrl.datasource, item[ctrl.idfield], ctrl.idfield);
+                if (itemIndexInDataSource >= 0)
+                    ctrl.datasource[itemIndexInDataSource] = item;
+            }            
+            
             item.actionType = actionType;
             ctrl.updateItems.splice(0, 0, item);
         }
@@ -360,10 +381,12 @@
             };
 
             gridApi.itemUpdated = function (item) {
+                item.isUpdated = true;
                 itemChanged(item, "Updated");
             };
 
             gridApi.itemDeleted = function (item) {
+                item.isDeleted = true;
                 itemChanged(item, "Deleted");
             };
 
@@ -529,6 +552,8 @@
 
             ctrl.isActionMenuVisible = function (dataItem) {
                 if (!hasActionMenu)
+                    return false;
+                if (dataItem.isDeleted)
                     return false;
                 var actions = ctrl.getMenuActions(dataItem);
                 return actions != undefined && actions != null && actions.length > 0;

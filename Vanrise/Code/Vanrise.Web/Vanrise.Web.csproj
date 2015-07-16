@@ -217,6 +217,7 @@
     <Content Include="Client\Javascripts\Directives\Old\vr-gridview-standard.html" />
     <Content Include="Client\Javascripts\Directives\Pagination\vr-pagination-directive.js" />
     <Content Include="Client\Javascripts\Directives\Pagination\vr-pagination.html" />
+    <Content Include="Client\Javascripts\Directives\TreeView\vr-treeview-directive.js" />
     <Content Include="Client\Javascripts\Modules\appControllers.js" />
     <Content Include="Client\Javascripts\Modules\appRouting.js" />
     <Content Include="Client\Javascripts\Modules\mainModule.js" />
@@ -238,11 +239,6 @@
     <Content Include="Client\Libraries\AngularExtensions\BsDateTimePicker\bootstrap-datetimepicker.css" />
     <Content Include="Client\Libraries\AngularExtensions\BsDateTimePicker\bootstrap-datetimepicker.js" />
     <Content Include="Client\Libraries\AngularExtensions\BsDateTimePicker\moment-with-locales.js" />
-    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jsTree.directive.js" />
-    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\JSTreeView.js" />
-    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\demo\basic\HtmlPage1.html" />
-    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\demo\basic\index.html" />
-    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\demo\basic\Test.js" />
     <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\dist\jstree.js" />
     <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\dist\themes\default-dark\32px.png" />
     <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\dist\themes\default-dark\40px.png" />
@@ -695,7 +691,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\demo\basic\root.json" />
     <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\themes\base.less" />
     <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\themes\default-dark\style.less" />
     <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\themes\default\style.less" />

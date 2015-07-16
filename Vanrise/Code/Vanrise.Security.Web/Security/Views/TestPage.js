@@ -11,28 +11,51 @@ function testpage1($scope) {
         {
             id: "1",
             Name: "child 1",
-            cheldren: [{
-                id: "1",
-                Name: "child 1",
+            isOpened: true,
+            children: [{
+                id: "2",
+                Name: "child 1"
             }
             ,
             {
-                id: "1",
+                id: "3",
                 Name: "child 1",
+                isSelected: true
             }
             
             ]
         },
         {
-            id: "2",
+            id: "4",
             Name: "child 2",
-            cheldren: []
+            isDisabled: true,
+            children: []
         }];
+        var id = 2;
+        $scope.addNode = function () {
+            $scope.values.push({
+                id: ++id,
+                Name: "child " + id,
+                children: []
+            });
+        };
+        var tree;
+        $scope.refreshTree = function () {
+
+            $('#test2').jstree();
+            
+        };
         $scope.Search = function () {
-         
+
             $scope.data[0].state.selected = true;
             $scope.data[0].state.disabled = true;
-        }
+        };
+        $scope.treeValueChanged1 = function () {
+            console.log($scope.selectedTreeNode1);
+        };
+        $scope.treeValueChanged2 = function () {
+            console.log($scope.selectedTreeNode2);
+        };
         $scope.add = function () {
             var obj = {
                 "text": "Root",
@@ -135,6 +158,13 @@ function testpage1($scope) {
 				    ]
 				}
         ];
+
+        $scope.treeReady = function (api) {
+            api.refreshTree($scope.data);
+        }
+        $scope.treeReady2 = function (api) {
+            api.refreshTree($scope.values);
+        }
         $scope.typesConfig = {
             "default": {
                 "icon": "http://jstree.com/tree.png"

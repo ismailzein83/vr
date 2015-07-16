@@ -1,4 +1,28 @@
-﻿<input type="text" ng-model="testModel" />
+﻿<vr-form name="formFilter">
+    <vr-row ng-init="fieldType = 'password'">
+        <vr-columns width="normal">
+            <vr-textbox type="email" label="Email" value="email"></vr-textbox>{{email}}
+        </vr-columns>
+        <vr-columns width="normal">
+            <vr-textbox type="number" label="Number" value="number"></vr-textbox>{{number}}
+        </vr-columns>
+        <vr-columns width="normal">
+            <vr-textbox type="password" label="Password" value="password"></vr-textbox>{{password}}
+        </vr-columns>
+        <vr-columns width="normal">
+            <vr-switch value="showField"></vr-switch>
+            <vr-textbox type="{{fieldType}}" label="Password" value="field"></vr-textbox>{{field}}
+
+            <vr-directivewrapper directive="vrTextbox " value="field" type="fieldType"></vr-directivewrapper>
+
+        </vr-columns>
+    </vr-row>
+    
+    
+    
+</vr-form>
+
+<input type="text" ng-model="testModel" />
     {{testModel}}
 ff
 <vr-row>
