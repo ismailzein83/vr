@@ -136,9 +136,10 @@
     <Content Include="Client\Images\01.png" />
     <Content Include="Client\Images\02.png" />
     <Content Include="Client\Images\doruknet-logo.png" />
+    <Content Include="Client\Images\Image1.png" />
     <Content Include="Client\Images\log in.png" />
     <Content Include="Client\Images\login.png" />
-    <Content Include="Client\Images\logoonheader.png" />
+    <Content Include="Client\Images\logoonheader_new.png" />
     <Content Include="Client\Images\logout.png" />
     <Content Include="Client\Images\member.png" />
     <Content Include="Client\Images\support.png" />
@@ -716,7 +717,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55089</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
