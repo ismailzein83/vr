@@ -317,7 +317,8 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
 
     }
     function checkAllowDynamic(response){
-        for (var i = 0; i < response.length; i++){
+        for (var i = 0; i < response.length; i++) {
+            response[i].isOpened = true;
             if(response[i].Childs!=undefined)
                 checkAllowDynamic(response[i].Childs);
             if(!response[i].AllowDynamic)

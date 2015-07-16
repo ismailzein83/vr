@@ -5,7 +5,7 @@ app.directive('vrTreeview', [function () {
 
     var directiveDefinitionObject = {
 
-        restrict: 'E',
+        restrict: 'E', 
         scope: {
             onReady: '=',
             datasource:'=',
@@ -13,6 +13,8 @@ app.directive('vrTreeview', [function () {
             datavaluefield: '@',
             datatextfield: '@',
             selecteditem: '=',
+            checkbox: '@',
+            wholerow: '@',
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -47,11 +49,20 @@ app.directive('vrTreeview', [function () {
             api.refreshTree = function () {
                 var treeArray = [];
                 fillTreeFromDataSource(treeArray, ctrl.datasource);
-                treeElement.jstree({
-                    core: {
-                        data: treeArray
-                    }
-                });
+                var treeData={
+                    core: { data: treeArray }
+                }
+                var plugins = [];
+                if (ctrl.checkbox !== undefined)
+                {
+                     plugins.push("checkbox");
+                    
+                }
+                if (ctrl.wholerow !== undefined) {
+                     plugins.push("wholerow")
+                }
+                treeData.plugins=plugins;
+                treeElement.jstree(treeData);
                 treeElement.on('changed.jstree', function (e, data) {
                    ctrl.selecteditem = data.node.original.sourceItem;
                 });
@@ -72,6 +83,7 @@ app.directive('vrTreeview', [function () {
                                 onvaluechangedMethod();
                             }
                         }
+                       
                     });
                 }
             }
