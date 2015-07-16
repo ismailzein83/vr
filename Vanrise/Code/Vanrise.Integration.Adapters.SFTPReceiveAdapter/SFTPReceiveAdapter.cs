@@ -1,12 +1,12 @@
 ﻿using Rebex.Net;
 using System;
 using System.IO;
-using Vanrise.Integration.Adapters.BaseFTP;
+using Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments;
 using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
 {
-    public class SFTPReceiveAdapter : TPReceiveAdapter
+    public class SFTPReceiveAdapter : BaseReceiveAdapter
     {
         #region Private Functions
 
@@ -33,29 +33,29 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
             {
                 sftp.Dispose();
             }
-      
-            private void EstablishConnection(Sftp sftp)
+
+            private void EstablishConnection(Sftp sftp, FTPAdapterArgument ftpAdapterArgument)
             {
-                sftp.Connect(ServerIP);
-                sftp.Login(UserName, Password);
+                sftp.Connect(ftpAdapterArgument.ServerIP);
+                sftp.Login(ftpAdapterArgument.UserName, ftpAdapterArgument.Password);
             }
 
-            private void AfterImport(Sftp sftp, SftpItem fileObj, String filePath)
+            private void AfterImport(Sftp sftp, SftpItem fileObj, String filePath, FTPAdapterArgument ftpAdapterArgument)
             {
-                if (ActionAfterImport == (int)Actions.Rename)
+                if (ftpAdapterArgument.ActionAfterImport == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Rename)
                 {
-                    sftp.Rename(filePath, filePath.Replace(Extension, ".Imported"));
+                    sftp.Rename(filePath, filePath.Replace(ftpAdapterArgument.Extension, ".Imported"));
                 }
-                else if (ActionAfterImport == (int)Actions.Delete)
+                else if (ftpAdapterArgument.ActionAfterImport == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Delete)
                 {
                     sftp.DeleteFile(filePath);
                 }
-                else if (ActionAfterImport == (int)Actions.Move)
+                else if (ftpAdapterArgument.ActionAfterImport == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Move)
                 {
-                    if (!sftp.DirectoryExists(DirectorytoMoveFile))
-                        sftp.CreateDirectory(DirectorytoMoveFile);
+                    if (!sftp.DirectoryExists(ftpAdapterArgument.DirectorytoMoveFile))
+                        sftp.CreateDirectory(ftpAdapterArgument.DirectorytoMoveFile);
 
-                    sftp.Rename(filePath, DirectorytoMoveFile + "/" + fileObj.Name);
+                    sftp.Rename(filePath, ftpAdapterArgument.DirectorytoMoveFile + "/" + fileObj.Name);
                 }
             }
 
@@ -65,22 +65,24 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
             public override void ImportData(BaseAdapterArgument argument, Action<IImportedData> receiveData)
         {
 
+            FTPAdapterArgument ftpAdapterArgument = argument as FTPAdapterArgument;
+
             var sftp = new Rebex.Net.Sftp();
 
-            EstablishConnection(sftp);
+            EstablishConnection(sftp, ftpAdapterArgument);
             if (sftp.GetConnectionState().Connected)
             {
-                sftp.ChangeDirectory(Directory);
+                sftp.ChangeDirectory(ftpAdapterArgument.Directory);
                 SftpItemCollection currentItems = sftp.GetList();
                 if (currentItems.Count > 0)
                 {
                     foreach (var fileObj in currentItems)
                     {
-                        if (!fileObj.IsDirectory && fileObj.Name.ToUpper().Contains(Extension))
+                        if (!fileObj.IsDirectory && fileObj.Name.ToUpper().Contains(ftpAdapterArgument.Extension))
                         {
-                            String filePath = Directory + "/" + fileObj.Name;
+                            String filePath = ftpAdapterArgument.Directory + "/" + fileObj.Name;
                             CreateStreamReader(receiveData, sftp, fileObj, filePath);
-                            AfterImport(sftp, fileObj, filePath);
+                            AfterImport(sftp, fileObj, filePath, ftpAdapterArgument);
                         }
                     }
                 }

@@ -1,12 +1,12 @@
 ﻿using Rebex.Net;
 using System;
 using System.IO;
-using Vanrise.Integration.Adapters.BaseFTP;
+using Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments;
 using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
 {
-    public class FTPReceiveAdapter : TPReceiveAdapter
+    public class FTPReceiveAdapter : BaseReceiveAdapter
     {
         #region Private Functions
 
@@ -34,50 +34,51 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
             ftp.Dispose();
         }
 
-        private void EstablishConnection(Ftp ftp)
+        private void EstablishConnection(Ftp ftp, FTPAdapterArgument ftpAdapterArgument)
         {
-            ftp.Connect(ServerIP);
-            ftp.Login(UserName, Password);
+            ftp.Connect(ftpAdapterArgument.ServerIP);
+            ftp.Login(ftpAdapterArgument.UserName, ftpAdapterArgument.Password);
         }
 
-        private void AfterImport(Ftp ftp, FtpItem fileObj, String filePath)
+        private void AfterImport(Ftp ftp, FtpItem fileObj, String filePath, FTPAdapterArgument ftpAdapterArgument)
         {
-            if (ActionAfterImport == (int)Actions.Rename)
+            if (ftpAdapterArgument.ActionAfterImport == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Rename)
             {
-                ftp.Rename(filePath, filePath.Replace(Extension, ".Imported"));
+                ftp.Rename(filePath, filePath.Replace(ftpAdapterArgument.Extension, ".Imported"));
             }
-            else if (ActionAfterImport == (int)Actions.Delete)
+            else if (ftpAdapterArgument.ActionAfterImport == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Delete)
             {
                 ftp.DeleteFile(filePath);
             }
-            else if (ActionAfterImport == (int)Actions.Move)
+            else if (ftpAdapterArgument.ActionAfterImport == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Move)
             {
-                if (!ftp.DirectoryExists(DirectorytoMoveFile))
-                    ftp.CreateDirectory(DirectorytoMoveFile);
+                if (!ftp.DirectoryExists(ftpAdapterArgument.DirectorytoMoveFile))
+                    ftp.CreateDirectory(ftpAdapterArgument.DirectorytoMoveFile);
 
-                ftp.Rename(filePath, DirectorytoMoveFile + "/" + fileObj.Name);
+                ftp.Rename(filePath, ftpAdapterArgument.DirectorytoMoveFile + "/" + fileObj.Name);
             }
         }
         #endregion
 
         public override void ImportData(BaseAdapterArgument argument, Action<IImportedData> receiveData)
         {
+            FTPAdapterArgument ftpAdapterArgument = argument as FTPAdapterArgument;
             var ftp = new Rebex.Net.Ftp();
 
-            EstablishConnection(ftp);
+            EstablishConnection(ftp, ftpAdapterArgument);
             if (ftp.GetConnectionState().Connected)
             {
-                ftp.ChangeDirectory(Directory);
+                ftp.ChangeDirectory(ftpAdapterArgument.Directory);
                 FtpList currentItems = ftp.GetList();
                 if (currentItems.Count > 0)
                 {
                     foreach (var fileObj in currentItems)
                     {
-                        if (!fileObj.IsDirectory && fileObj.Name.ToUpper().Contains(Extension))
+                        if (!fileObj.IsDirectory && fileObj.Name.ToUpper().Contains(ftpAdapterArgument.Extension))
                         {
-                            String filePath = Directory + "/" + fileObj.Name;
+                            String filePath = ftpAdapterArgument.Directory + "/" + fileObj.Name;
                             CreateStreamReader(receiveData, ftp, fileObj, filePath);
-                            AfterImport(ftp, fileObj, filePath);
+                            AfterImport(ftp, fileObj, filePath, ftpAdapterArgument);
                         }
                     }
                 }
