@@ -1,17 +1,23 @@
-﻿FileReceiveAdapterTemplateController.$inject = ['$scope'];
+﻿FileReceiveAdapterTemplateController.$inject = ['$scope', 'UtilsService'];
 
-function FileReceiveAdapterTemplateController($scope) {
+function FileReceiveAdapterTemplateController($scope, UtilsService) {
 
     defineScope();
     load();
 
     function defineScope() {
 
-        $scope.dataSourceAdapter.getData = function () {
+        $scope.selectedAction = '';
 
+        $scope.actionsAfterImport = [{ value: 0, name: 'Rename' }, { value: 1, name: 'Delete' }, { value: 2, name: 'Move' }];
+
+        $scope.dataSourceAdapter.getData = function () {
             return {
                 $type: "",
-                FolderPath: $scope.folderPath
+                Extension: $scope.extension,
+                Directory: $scope.directory,
+                DirectorytoMoveFile: $scope.directorytoMoveFile,
+                ActionAfterImport: $scope.selectedAction.value
             };
         };
 
@@ -25,12 +31,23 @@ function FileReceiveAdapterTemplateController($scope) {
 
         if ($scope.dataSourceAdapter.data == undefined || isFormLoaded)
             return;
+
         var data = $scope.dataSourceAdapter.data;
+
+        console.log('data')
+        console.log(data)
+
         if (data != null) {
-            $scope.folderPath = data.FolderPath;
+            $scope.extension = data.Extension;
+            $scope.directory = data.Directory;
+            $scope.directorytoMoveFile = data.DirectorytoMoveFile;
+            $scope.selectedAction = UtilsService.getItemByVal($scope.actionsAfterImport, data.ActionAfterImport, "value");
         }
         else {
-            $scope.folderPath = undefined;
+            $scope.extension = undefined;
+            $scope.directory = undefined;
+            $scope.directorytoMoveFile = undefined;
+            $scope.selectedAction = undefined;
         }
         isFormLoaded = true;
     }

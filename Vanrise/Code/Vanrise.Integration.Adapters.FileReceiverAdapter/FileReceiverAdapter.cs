@@ -21,7 +21,7 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
         #region Properties
         public string Extension { get; set; }
 
-        public string FolderPath { get; set; }
+        public string Directory { get; set; }
 
         public string DirectorytoMoveFile { get; set; }
 
@@ -35,7 +35,7 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
         {
             receiveData(new StreamReaderImportedData()
             {
-                StreamReader = new StreamReader(this.FolderPath + "/" + file.Name),
+                StreamReader = new StreamReader(this.Directory + "/" + file.Name),
                 Modified = file.LastWriteTime,
                 Name = file.Name,
                 Size = file.Length
@@ -54,7 +54,7 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
             }
             else if (ActionAfterImport == (int)Actions.Move)
             {
-                if (Directory.Exists(this.FolderPath))
+                if (System.IO.Directory.Exists(this.Directory))
                 {
                     file.MoveTo(Path.Combine(DirectorytoMoveFile, file.Name.Replace(this.Extension, ".Imported")));
                 }
@@ -67,9 +67,9 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
        
         public override void ImportData(Action<IImportedData> receiveData)
         {
-            if (Directory.Exists(this.FolderPath))
+            if (System.IO.Directory.Exists(this.Directory))
             {
-                DirectoryInfo d = new DirectoryInfo(this.FolderPath);//Assuming Test is your Folder
+                DirectoryInfo d = new DirectoryInfo(this.Directory);//Assuming Test is your Folder
                 FileInfo[] Files = d.GetFiles("*.DAT"); //Getting Text files
                 foreach (FileInfo file in Files)
                 {
