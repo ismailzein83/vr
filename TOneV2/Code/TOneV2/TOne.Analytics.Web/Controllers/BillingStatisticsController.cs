@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -18,7 +19,6 @@ namespace TOne.Analytics.Web.Controllers
 
         public BillingStatisticsController()
         {
-
             __billingStatisticsManager = new BillingStatisticManager();
         }
           
@@ -38,6 +38,14 @@ namespace TOne.Analytics.Web.Controllers
         public List<VolumeTrafficResult> GetVolumeReportData(DateTime fromDate, DateTime toDate, string selectedCustomers, string selectedSuppliers, string selectedZones, int attempts, string selectedTimePeriod, VolumeReportsOptions selectedTrafficReport)
         {
             return __billingStatisticsManager.GetVolumeReportData(fromDate, toDate, selectedCustomers, selectedSuppliers, selectedZones, attempts, selectedTimePeriod, selectedTrafficReport);
+        }
+
+        [HttpGet]
+        public HttpResponseMessage Export(string fromDate, string toDate)
+        {
+            DateTime from = DateTime.ParseExact(fromDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            DateTime to = DateTime.ParseExact(toDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            return __billingStatisticsManager.ExportSupplierCostDetails(from, to, 0, 0);
         }
     }
 }

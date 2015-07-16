@@ -1188,7 +1188,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>= FormatNumber(Sum(Fields!SaleNet.Value - Fields!CostNet.Value) / Sum(Fields!SaleNet.Value),2)</Value>
+                              <Value>= FormatNumber((Sum(Fields!Profit.Value) / Sum(Fields!SaleNet.Value)) * 100,2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1626,6 +1626,10 @@
         <Field Name="CostNetFormatted">
           <DataField>CostNetFormatted</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Profit">
+          <DataField>Profit</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
         <Field Name="ProfitFormatted">
           <DataField>ProfitFormatted</DataField>

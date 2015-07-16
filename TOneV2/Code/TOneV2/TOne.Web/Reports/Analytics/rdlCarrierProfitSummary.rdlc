@@ -2459,7 +2459,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Abs(Fields!CostCommissionValue.Value)),2)</Value>
+                              <Value>=FormatNumber(Sum(Fields!CostCommissionValue.Value),2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2494,7 +2494,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Abs(Fields!CostExtraChargeValue.Value)),2)</Value>
+                              <Value>=FormatNumber(Sum(Fields!CostExtraChargeValue.Value),2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2564,7 +2564,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Abs(Fields!SaleExtraChargeValue.Value),2)</Value>
+                              <Value>=FormatNumber(Sum(Abs(Fields!SaleExtraChargeValue.Value)),2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -3556,7 +3556,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIf(Parameters!ShowProfit.Value = "false",FormatNumber(Sum(Fields!SaleNet.Value - Fields!CostNet.Value),2),FormatNumber(Sum(Fields!SaleNet.Value - Fields!CostNet.Value)-Sum(Abs(Fields!SaleCommissionValue.Value)) - Sum(Abs(Fields!CostCommissionValue.Value)) - Sum(Abs(Fields!CostExtraChargeValue.Value)),2))</Value>
+                              <Value>=IIf(Parameters!ShowProfit.Value = "false",FormatNumber(Sum(Fields!SaleNet.Value - Fields!CostNet.Value),2),FormatNumber(Sum(Fields!SaleNet.Value - Fields!CostNet.Value)-Sum((Fields!SaleCommissionValue.Value)) - Sum((Fields!CostCommissionValue.Value)) - Sum((Fields!CostExtraChargeValue.Value)) - Sum((Fields!SaleExtraChargeValue.Value)),2))</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>

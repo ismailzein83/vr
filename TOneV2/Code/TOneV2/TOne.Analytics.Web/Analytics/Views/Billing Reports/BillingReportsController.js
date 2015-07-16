@@ -1,9 +1,23 @@
-﻿BillingReportsController.$inject = ['$scope', 'ReportAPIService', 'CarrierAPIService', 'ZonesService'];
+﻿BillingReportsController.$inject = ['$scope', 'ReportAPIService', 'CarrierAPIService', 'ZonesService', 'BillingStatisticsAPIService', 'MainService'];
 
-function BillingReportsController($scope, ReportAPIService, CarrierAPIService, ZonesService) {
+function BillingReportsController($scope, ReportAPIService, CarrierAPIService, ZonesService, BillingStatisticsAPIService, MainService) {
    
     defineScope();
     load();
+
+    $scope.export = function () {
+        var paramsurl = "?";
+        paramsurl += "fromDate=" + $scope.dateToString($scope.params.fromDate);
+        paramsurl += "&toDate=" + $scope.dateToString($scope.params.toDate);
+
+        window.open(MainService.getBaseURL() + BillingStatisticsAPIService.Export() + paramsurl, "_self");
+       
+
+       
+
+
+    };
+
     $scope.reportsTypes = [];
     $scope.optionsCustomers = [];
     $scope.optionsSuppliers = [];

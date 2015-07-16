@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +14,7 @@ using TOne.Analytics.Data;
 using TOne.Analytics.Entities;
 using TOne.BusinessEntity.Business;
 using TOne.BusinessEntity.Entities;
+using System.Drawing;
 
 namespace TOne.Analytics.Business
 {
@@ -42,26 +46,23 @@ namespace TOne.Analytics.Business
             return FormatDailySummaries(_datamanager.GetDailySummary(fromDate, toDate, customerAMUId, supplierAMUId));
         }
 
-        public List<SupplierCostDetailsFormatted> GetSupplierCostDetails(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        public HttpResponseMessage ExportSupplierCostDetails(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
         {
             List<SupplierCostDetails> lstSuppplierCostDetails = _datamanager.GetSupplierCostDetails(fromDate, toDate, customerAMUId, supplierAMUId);
             //export to excel
             ////////////////////////////////
 
-
             Workbook wbk = new Workbook();
             Worksheet RateWorkSheet = wbk.Worksheets.Add("Supplier Cost Details");
             RateWorkSheet.Cells.SetColumnWidth(0, 4);
-            RateWorkSheet.Cells.SetColumnWidth(1, 10);
-            RateWorkSheet.Cells.SetColumnWidth(2, 10);
+            RateWorkSheet.Cells.SetColumnWidth(1, 15);
+            RateWorkSheet.Cells.SetColumnWidth(2, 15);
             RateWorkSheet.Cells.SetColumnWidth(3, 15);
             RateWorkSheet.Cells.SetColumnWidth(4, 15);
-            RateWorkSheet.Cells.SetColumnWidth(5, 15);
 
             int HeaderIndex = 1;
             int Irow = 1;
             RateWorkSheet.Cells[Irow, HeaderIndex++].PutValue("Customer");
-            RateWorkSheet.Cells[Irow, HeaderIndex++].PutValue("Group Name");
             RateWorkSheet.Cells[Irow, HeaderIndex++].PutValue("Carrier");
             RateWorkSheet.Cells[Irow, HeaderIndex++].PutValue("Amount");
             RateWorkSheet.Cells[Irow, HeaderIndex++].PutValue("Duration");
@@ -72,29 +73,56 @@ namespace TOne.Analytics.Business
                 int valueIndex = 1;
 
                 RateWorkSheet.Cells[Irow, valueIndex++].PutValue(supplier.Customer);
-                RateWorkSheet.Cells[Irow, valueIndex++].PutValue(supplier.CustomerGroupName);
                 RateWorkSheet.Cells[Irow, valueIndex++].PutValue(supplier.Carrier);
                 RateWorkSheet.Cells[Irow, valueIndex++].PutValue(supplier.Amount);
                 RateWorkSheet.Cells[Irow, valueIndex++].PutValue(supplier.Duration);
             }
-            byte[] array;
-            MemoryStream ms = new MemoryStream();
-            ms = wbk.SaveToStream();
-            array = ms.ToArray();
-            int index = RateWorkSheet.ConditionalFormattings.Add();
 
-            FormatConditionCollection fcs = RateWorkSheet.ConditionalFormattings[index];
+            //Styles
+            for(int i =1 ; i<= 4; i++)
+            {
+                Cell cell = RateWorkSheet.Cells.GetCell(1, i);
+                Style style = cell.GetStyle();
+                style.Font.Name = "Times New Roman";
+                style.Font.Color = Color.FromArgb(255, 0, 0); ;
+                style.Font.Size = 14;
+                style.Font.IsBold = true;
+                cell.SetStyle(style);
+            }
 
-            int conditionIndex = fcs.AddCondition(FormatConditionType.CellValue, OperatorType.Between, "50", "100");
+            //Adding a chart to the worksheet
+            int chartIndex = RateWorkSheet.Charts.Add(Aspose.Cells.Charts.ChartType.Pyramid, 5, 0, 15, 5);
 
-            FormatCondition fc = fcs[conditionIndex];
-            fc.Style.Font.IsBold = true;
-            //fc.Style.BackgroundColor = Color.Red;
+            //Accessing the instance of the newly added chart
+            Aspose.Cells.Charts.Chart chart = RateWorkSheet.Charts[chartIndex];
+
+            //Adding SeriesCollection (chart data source) to the chart ranging from "A1" cell to "B3"
+            chart.NSeries.Add("C3:D5", true);
 
 
             wbk.Save("D:\\book1.xls");
 
-            ////////////////////////////////
+            byte[] array;
+            MemoryStream ms = new MemoryStream();
+            ms = wbk.SaveToStream();
+            array = ms.ToArray();
+
+            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+            ms.Position = 0;
+            result.Content = new StreamContent(ms);
+
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = "Data.xls"
+            };
+
+            return result;
+        }
+        public List<SupplierCostDetailsFormatted> GetSupplierCostDetails(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        {
+            List<SupplierCostDetails> lstSuppplierCostDetails = _datamanager.GetSupplierCostDetails(fromDate, toDate, customerAMUId, supplierAMUId);
+
             List<SupplierCostDetails> lstSuppplierCostDetailsGrouped = AddGroupNames(lstSuppplierCostDetails);
 
 
@@ -185,7 +213,7 @@ namespace TOne.Analytics.Business
             Dictionary<string, double> totalServicesPerCustomer = new Dictionary<string, double>();
             foreach (var obj in customerServices)
             {
-                if (obj.AccountId != null && obj.Services != null)
+                if (obj.AccountId != null)
                     totalServicesPerCustomer.Add(obj.AccountId, obj.Services);
 
             }
@@ -202,7 +230,6 @@ namespace TOne.Analytics.Business
                     CostDurationFormatted = FormatNumber(cs.CostDuration),
                     CostNet = cs.CostNet,
                     CostNetFormatted = FormatNumberDigitRate(cs.CostNet),
-                    //ProfitFormatted = FormatNumber(cs.SaleNet - cs.CostNet),
                     Profit = (cs.SaleNet > 0) ? ((cs.SaleNet - cs.CostNet)) : 0,
                     ProfitFormatted = FormatNumber((cs.SaleNet > 0) ? ((cs.SaleNet - cs.CostNet)) : 0),
                     ProfitPercentageFormatted = (cs.SaleNet > 0) ? FormatNumberPercentage(((cs.SaleNet - cs.CostNet) / cs.SaleNet)) : FormatNumberPercentage(0),
@@ -232,9 +259,7 @@ namespace TOne.Analytics.Business
             lstProfitSummary = summarieslist.Select(r => new ProfitSummary
             {
                 Profit = (r.SaleNet > 0) ? (double)((r.SaleNet - r.CostNet)) : 0,
-                 //(r.SaleNet != null ? (double)r.SaleNet : 0) - (r.CostNet != null ? (double)r.CostNet : 0),
                 FormattedProfit = FormatNumber((r.SaleNet > 0) ? ((r.SaleNet - r.CostNet)) : 0),
-                //string.Format("{0:#,##0.00}", (r.SaleNet != null ? (double)r.SaleNet : 0) - (r.CostNet != null ? (double)r.CostNet : 0)),
                 Customer = r.Customer.ToString()
             }).OrderByDescending(r => r.Profit).Take(10).ToList();
             return lstProfitSummary;
@@ -678,8 +703,9 @@ namespace TOne.Analytics.Business
 
                 ProfitFormatted = FormatNumber(dailySummary.SaleNet - dailySummary.CostNet),
 
+                Profit = dailySummary.SaleNet - dailySummary.CostNet,
 
-                ProfitPercentageFormatted = (dailySummary.SaleNet.HasValue) ? FormatNumberPercentage(1 - dailySummary.CostNet / dailySummary.SaleNet) : "-100%",
+                ProfitPercentageFormatted = (dailySummary.SaleNet.HasValue) && (dailySummary.SaleNet != 0) ? FormatNumberPercentage(1 - dailySummary.CostNet / dailySummary.SaleNet) : "",
             };
         }
 
