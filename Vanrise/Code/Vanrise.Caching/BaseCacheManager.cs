@@ -28,6 +28,7 @@ namespace Vanrise.Caching
         public T GetOrCreateObject<T>(string cacheName, ParamType parameter, Func<T> createObject)
         {            
             T obj;
+            CheckCacheDictionaryExpiration(parameter);
             if (!TryGetObjectFromCache(cacheName, parameter, out obj))
             {
                 lock (GetCacheNameLockObject(cacheName, parameter))
@@ -44,7 +45,7 @@ namespace Vanrise.Caching
 
         public virtual void RemoveObjectFromCache(string cacheName, ParamType parameter)
         {
-            ConcurrentDictionary<string, object> objectTypeCaches = GetCacheDictionary(cacheName, parameter);
+            ConcurrentDictionary<string, object> objectTypeCaches = GetCacheDictionary(parameter);
             object dummy;
             objectTypeCaches.TryRemove(cacheName, out dummy);
         }
@@ -53,13 +54,9 @@ namespace Vanrise.Caching
 
         #region Overridable
 
-        internal protected virtual void RefreshCache()
-        {
-        }
-
         protected virtual bool TryGetObjectFromCache<T>(string cacheName, ParamType parameter, out T cachedObject)
         {
-            ConcurrentDictionary<string, object> objectTypeCaches = GetCacheDictionary(cacheName, parameter);
+            ConcurrentDictionary<string, object> objectTypeCaches = GetCacheDictionary(parameter);
 
             object obj;
             bool exists = objectTypeCaches.TryGetValue(cacheName, out obj);
@@ -72,11 +69,11 @@ namespace Vanrise.Caching
 
         protected virtual void AddObjectToCache<T>(string cacheName, ParamType parameter, T obj)
         {
-            ConcurrentDictionary<string, object> objectTypeCaches = GetCacheDictionary(cacheName, parameter);
+            ConcurrentDictionary<string, object> objectTypeCaches = GetCacheDictionary(parameter);
             objectTypeCaches.TryAdd(cacheName, obj);
         }
                 
-        protected virtual ConcurrentDictionary<string, object> GetCacheDictionary(string cacheName, ParamType parameter)
+        protected virtual ConcurrentDictionary<string, object> GetCacheDictionary(ParamType parameter)
         {
             ConcurrentDictionary<string, object> objectTypeCaches;
             if (!_cacheDictionaries.ContainsKey(parameter))
@@ -95,6 +92,58 @@ namespace Vanrise.Caching
             return _cacheNameLocks[key];
         }
 
-        #endregion        
+        protected virtual bool ShouldSetCacheExpired(ParamType parameter)
+        {
+            return false;
+        }
+
+        #endregion       
+ 
+        #region Private Methods
+
+        ConcurrentDictionary<ParamType, CacheDictionaryInfo> _cacheDictionariesInfo = new ConcurrentDictionary<ParamType, CacheDictionaryInfo>();
+
+        private void CheckCacheDictionaryExpiration(ParamType parameter)
+        {
+            CacheDictionaryInfo cacheDictionaryInfo;
+            if (!_cacheDictionariesInfo.TryGetValue(parameter, out cacheDictionaryInfo))
+            {
+                cacheDictionaryInfo = new CacheDictionaryInfo();
+                if (!_cacheDictionariesInfo.TryAdd(parameter, cacheDictionaryInfo))
+                    cacheDictionaryInfo = _cacheDictionariesInfo[parameter];
+            }
+            lock (cacheDictionaryInfo)
+            {
+                if ((DateTime.Now - cacheDictionaryInfo.LastExpirationCheckTime).TotalSeconds <= 2)//dont check expiration if it is checked recently
+                    return;
+                if (ShouldSetCacheExpired(parameter))
+                {
+                    ConcurrentDictionary<string, object> cacheDictionary = GetCacheDictionary(parameter);
+                    if (cacheDictionary != null)
+                        cacheDictionary.Clear();
+                }
+
+                    
+                cacheDictionaryInfo.LastExpirationCheckTime = DateTime.Now;
+            }            
+        }
+
+        private class CacheDictionaryInfo
+        {
+            public DateTime LastExpirationCheckTime { get; set; }
+        }
+
+        #endregion
+    }
+
+    public abstract class BaseCacheManager : BaseCacheManager<Object>
+    {
+        ConcurrentDictionary<string, object> _cacheDictionary = new ConcurrentDictionary<string, object>();
+        protected override ConcurrentDictionary<string, object> GetCacheDictionary(object parameter)
+        {
+            return _cacheDictionary;
+        }
+
+        
     }
 }
