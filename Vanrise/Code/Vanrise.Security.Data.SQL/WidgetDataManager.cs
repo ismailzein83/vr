@@ -11,6 +11,12 @@ namespace Vanrise.Security.Data.SQL
 {
     public class WidgetDataManager : BaseSQLDataManager, IWidgetsDataManager
     {
+        public WidgetDataManager()
+            : base(GetConnectionStringName("SecurityDBConnStringKey", "SecurityDBConnString"))
+        {
+
+        }
+
        public List<WidgetDefinition> GetWidgetsDefinition()
         {
 
