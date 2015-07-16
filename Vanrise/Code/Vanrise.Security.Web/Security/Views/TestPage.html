@@ -2,36 +2,61 @@
 <div ng-controller="testpage1">
     <vr-form name="formWidgetPreview">
         <vr-row>
-            <vr-columns width="normal">
-                <vr-datetimepicker type="date" value="fromDate" label="From" isrequired onvaluechanged="onValueChanged"></vr-datetimepicker>
-            </vr-columns>
-
-            <vr-columns width="normal">
-                <vr-datetimepicker type="date" value="toDate" label="To" isrequired onvaluechanged="onValueChanged"></vr-datetimepicker>
-            </vr-columns>
 
         </vr-row>
     </vr-form>
     <vr-row>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
+                <vr-button type="Add" formname="formWidgetPreview" data-onclick="add"></vr-button>
                 <vr-button type="Search" formname="formWidgetPreview" data-onclick="Search"></vr-button>
+                
             </div>
         </vr-actionbar>
     </vr-row>
          
-    <div id="using_json_2" class="demo">
-        <ul>
-            <li data-jstree='{ "opened" : true }'>
-                Root node
-                <ul>
-                    <li data-jstree='{ "selected" : true }'>Child node 1</li>
-                    <li>Child node 2</li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-    <script>
-    </script>
+  <div>
+      <js-tree tree-data="scope" 
+               tree-model="data" 
+               tree-plugins="types" 
+               tree-types=" typesconfig" 
+               tree-events="ready:readyCB;changed:changedCB;open_node:openNodeCB"></js-tree>
+
+
+
+  </div>
+
+   
+        <div id="test" >
+
+            <ul>
+                <li data-jstree='{ "opened" : true }'>
+                    Root node
+                    <ul>
+                        <li data-jstree='{ "selected" : true }'>Child node 1</li>
+                        <li>Child node 2
+                            <ul>
+                                <li>Child node 3</li>
+                                <li>Child node 4
+                                    <ul>
+                                        <li>Child node 5</li>
+                                        <li>
+                                            Child node 6
+
+                                        </li>
+                                    </ul>
+
+                                </li>
+                            </ul>
+
+                        </li>
+                    </ul>
+                   
+                </li>
+            </ul>
+
+        </div>
+
+    
     </div>
 
