@@ -49,7 +49,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         $scope.menuReady = function (api) {
             treeAPI = api;
             if ($scope.menuList.length > 0)
-                treeAPI.refreshTree($scope.menuList);
+                treeAPI.refreshTree();
         }
         $scope.addedBodyWidgets = [];
         $scope.onSelectionChanged = function () {
@@ -217,7 +217,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         $scope.isGettingData = true;
         UtilsService.waitMultipleAsyncOperations([loadWidgets, loadUsers, loadRoles, loadTree]).finally(function () {
             if (treeAPI!=undefined && !$scope.isEditMode)
-             treeAPI.refreshTree($scope.menuList);
+             treeAPI.refreshTree();
             
             if ($scope.isEditMode) {
                
@@ -285,7 +285,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         }
         $scope.selectedMenuNode = UtilsService.getItemByVal($scope.menuList, $scope.filter.ModuleId, 'Id');
         addIsSelected($scope.menuList, $scope.filter.ModuleId);
-        treeAPI.refreshTree($scope.menuList);
+        treeAPI.refreshTree();
         $scope.selectedPeriod = getPeriod($scope.filter.DefaultPeriod);
         $scope.selectedTimeDimensionType = getTimeDimentionType($scope.filter.DefaultGrouping);
     }
@@ -299,7 +299,6 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
     function loadTree() {
         return MenuAPIService.GetAllMenuItems()
            .then(function (response) {
-               console.log(response);
                checkAllowDynamic(response);
                $scope.menuList = response;
               
@@ -309,7 +308,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         for (var i = 0; i < menuList.length; i++) {
             if (menuList[i].Id == Id) {
                 menuList[i].isSelected = true;
-                console.log(menuList[i]);
+               
                 return;
             }
             if (menuList[i].Childs != undefined)

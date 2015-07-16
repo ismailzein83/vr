@@ -8,6 +8,7 @@ app.directive('vrTreeview', [function () {
         restrict: 'E',
         scope: {
             onReady: '=',
+            datasource:'=',
             datachildrenfield: '@',
             datavaluefield: '@',
             datatextfield: '@',
@@ -43,9 +44,9 @@ app.directive('vrTreeview', [function () {
 
             var api = {};
 
-            api.refreshTree = function (dataSource) {
+            api.refreshTree = function () {
                 var treeArray = [];
-                fillTreeFromDataSource(treeArray, dataSource);
+                fillTreeFromDataSource(treeArray, ctrl.datasource);
                 treeElement.jstree({
                     core: {
                         data: treeArray
