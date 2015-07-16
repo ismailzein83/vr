@@ -14,6 +14,8 @@ namespace Vanrise.Integration.Entities
 
         public int AdapterTypeId { get; set; }
 
+        public AdapterTypeInfo AdapterInfo { get; set; }
+
         public int TaskId { get; set; }
 
         public DataSourceSettings Settings { get; set; }
@@ -21,7 +23,7 @@ namespace Vanrise.Integration.Entities
 
     public class DataSourceSettings
     {
-        public BaseReceiveAdapter Adapter { get; set; }
+        public BaseAdapterArgument AdapterArgument { get; set; }
 
         public string MapperCustomCode { get; set; }
 

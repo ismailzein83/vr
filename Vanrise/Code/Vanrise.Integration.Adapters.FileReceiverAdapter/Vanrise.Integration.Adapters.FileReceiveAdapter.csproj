@@ -47,6 +47,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments\Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments.csproj">
+      <Project>{87cc91d5-ba99-4222-8afc-0a1237364161}</Project>
+      <Name>Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Integration.Entities\Vanrise.Integration.Entities.csproj">
       <Project>{bc343c8c-a1ba-4d9e-b4da-c59029594d50}</Project>
       <Name>Vanrise.Integration.Entities</Name>

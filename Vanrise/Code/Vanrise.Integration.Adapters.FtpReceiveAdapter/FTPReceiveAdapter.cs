@@ -60,7 +60,7 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
         }
         #endregion
 
-        public override void ImportData(Action<IImportedData> receiveData)
+        public override void ImportData(BaseAdapterArgument argument, Action<IImportedData> receiveData)
         {
             var ftp = new Rebex.Net.Ftp();
 

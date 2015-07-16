@@ -61,6 +61,7 @@ namespace Vanrise.Integration.Data.SQL
                 DataSourceId = (int)reader["ID"],
                 Name = reader["Name"] as string,
                 AdapterTypeId = (int)reader["AdapterID"],
+                AdapterInfo = Common.Serializer.Deserialize<Vanrise.Integration.Entities.AdapterTypeInfo>(reader["Info"] as string),
                 TaskId = (int)reader["TaskId"],
                 Settings = Common.Serializer.Deserialize<Vanrise.Integration.Entities.DataSourceSettings>(reader["Settings"] as string),
                

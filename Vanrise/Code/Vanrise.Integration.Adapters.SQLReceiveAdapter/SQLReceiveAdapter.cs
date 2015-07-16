@@ -8,7 +8,7 @@ namespace Vanrise.Integration.Adapters.SQLReceiveAdapter
 
     public class SQLReceiveAdapter :  DBReceiveAdapter
     {
-        public override void ImportData(Action<IImportedData> receiveData)
+        public override void ImportData(BaseAdapterArgument argument, Action<IImportedData> receiveData)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {

@@ -13,7 +13,7 @@ function FileReceiveAdapterTemplateController($scope, UtilsService) {
 
         $scope.dataSourceAdapter.getData = function () {
             return {
-                $type: "",
+                $type: "Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments.FileAdapterArgument, Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments",
                 Extension: $scope.extension,
                 Directory: $scope.directory,
                 DirectorytoMoveFile: $scope.directorytoMoveFile,
@@ -33,9 +33,6 @@ function FileReceiveAdapterTemplateController($scope, UtilsService) {
             return;
 
         var data = $scope.dataSourceAdapter.data;
-
-        console.log('data')
-        console.log(data)
 
         if (data != null) {
             $scope.extension = data.Extension;

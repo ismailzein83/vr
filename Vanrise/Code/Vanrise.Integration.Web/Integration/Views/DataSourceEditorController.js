@@ -90,16 +90,12 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
     }
 
     function buildDataSourceObjFromScope() {
-        
-        var adapterData = $scope.dataSourceAdapter.getData();
-
-        adapterData.$type = $scope.selectedAdapterType.Info.FQTN;
 
         var dataSourceData = {
             DataSourceId: (dataSourceId != null) ? dataSourceId : 0,
             Name: $scope.dataSourceName,
             AdapterTypeId: $scope.selectedAdapterType.AdapterTypeId,
-            Settings: { Adapter: adapterData, MapperCustomCode: $scope.customCode, QueueName: $scope.queueName }
+            Settings: { AdapterArgument: $scope.dataSourceAdapter.getData(), MapperCustomCode: $scope.customCode, QueueName: $scope.queueName }
         };
 
         var taskData = {
@@ -120,7 +116,7 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
         $scope.selectedAdapterType = UtilsService.getItemByVal($scope.adapterTypes, dataSourceObject.DataSourceData.AdapterTypeId, "AdapterTypeId");
         $scope.dataSourceName = dataSourceObject.DataSourceData.Name;
 
-        $scope.dataSourceAdapter.data = dataSourceObject.DataSourceData.Settings.Adapter;
+        $scope.dataSourceAdapter.data = dataSourceObject.DataSourceData.Settings.AdapterArgument;
         if ($scope.dataSourceAdapter.loadTemplateData != undefined)
             $scope.dataSourceAdapter.loadTemplateData();
 
