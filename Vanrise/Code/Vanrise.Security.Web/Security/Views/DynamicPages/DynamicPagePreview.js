@@ -50,10 +50,10 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
                 toDate: $scope.toDate
             }
             if (($scope.bodyWidgets != null && $scope.bodyWidgets != undefined) || ($scope.summaryWidgets != null && $scope.summaryWidgets != undefined)) {
-                refreshData();
+               return refreshData();
             }
             else {
-                loadWidgets();
+                return loadWidgets();
             }    
         };
         fillDateAndPeriod();
@@ -89,17 +89,22 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
     function refreshData() {
         var refreshDataOperations = [];
         angular.forEach($scope.bodyWidgets, function (bodyWidget) {
-            refreshDataOperations.push(bodyWidget.API.retrieveData($scope.filter));
+
+            refreshDataOperations.push(bodyWidget.retrieveData);
         });
         angular.forEach($scope.summaryWidgets, function (summaryWidget) {
-            refreshDataOperations.push(summaryWidget.API.retrieveData($scope.filter));
-        }); 
+            refreshDataOperations.push(summaryWidget.retrieveData);
+       });
+        return UtilsService.waitMultipleAsyncOperations(refreshDataOperations)
+                  .finally(function () {
+                  });
     }
+
     function loadWidgets() {
 
         if (viewId != undefined) {
             $scope.isGettingData = true;
-            UtilsService.waitMultipleAsyncOperations([loadAllWidgets, loadViewByID])
+          return  UtilsService.waitMultipleAsyncOperations([loadAllWidgets, loadViewByID])
                  .finally(function () {
                      
                      loadViewWidgets($scope.allWidgets, $scope.bodyContents, $scope.summaryContents);
@@ -110,7 +115,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             $scope.isGettingData = true;
             $scope.selectedPeriod = $scope.$parent.selectedPeriod;
             $scope.selectedTimeDimensionType = $scope.$parent.selectedTimeDimensionType;
-            UtilsService.waitMultipleAsyncOperations([loadAllWidgets])
+          return  UtilsService.waitMultipleAsyncOperations([loadAllWidgets])
                 .finally(function () {
                     loadViewWidgets($scope.allWidgets, $scope.$parent.bodyContents, $scope.$parent.summaryContents);
                     $scope.isGettingData = false;
@@ -150,6 +155,9 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         bodyWidget.onElementReady = function (api) {
             bodyWidget.API = api;
             bodyWidget.API.retrieveData($scope.filter);
+            bodyWidget.retrieveData = function () {
+                return api.retrieveData($scope.filter);
+            };
         };
         $scope.bodyWidgets.push(bodyWidget);
     }
@@ -157,6 +165,9 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         summaryWidget.onElementReady = function (api) {
             summaryWidget.API = api;
             summaryWidget.API.retrieveData($scope.filter);
+            summaryWidget.retrieveData = function () {
+                return api.retrieveData($scope.filter);
+            };
         };
         $scope.summaryWidgets.push(summaryWidget);
     }

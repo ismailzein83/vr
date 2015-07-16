@@ -123,6 +123,7 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
 
     function loadDynamicViews() {
         $scope.isInitializing = true;
+        $scope.isGettingData = true;
         return ViewAPIService.GetDynamicPages().then(function (response) {
             $scope.dynamicViews.length = 0;
             angular.forEach(response, function (itm) {

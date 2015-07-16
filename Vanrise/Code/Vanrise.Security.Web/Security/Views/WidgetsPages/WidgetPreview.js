@@ -39,7 +39,7 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum) {
                 fromDate: $scope.fromDate,
                 toDate: $scope.toDate
             }
-                refreshWidget();
+               return refreshWidget();
         };
         $scope.periodSelectionChanged = function () {
             var date = getPeriod($scope.selectedPeriod);
@@ -48,7 +48,7 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum) {
         }
     }
     function refreshWidget() {
-        widgetAPI.retrieveData($scope.filter);
+      return  widgetAPI.retrieveData($scope.filter);
     }
     function getPeriod(periodType) {
        
