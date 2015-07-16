@@ -99,7 +99,7 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
             DataSourceId: (dataSourceId != null) ? dataSourceId : 0,
             Name: $scope.dataSourceName,
             AdapterTypeId: $scope.selectedAdapterType.AdapterTypeId,
-            Settings: { Adapter: adapterData, MapperCustomCode: $scope.customCode }
+            Settings: { Adapter: adapterData, MapperCustomCode: $scope.customCode, QueueName: $scope.queueName }
         };
 
         var taskData = {
@@ -126,10 +126,13 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
 
         $scope.customCode = dataSourceObject.DataSourceData.Settings.MapperCustomCode;
         $scope.isEnabled = dataSourceObject.TaskData.IsEnabled;
+        
 
         $scope.schedulerTaskTrigger.data = dataSourceObject.TaskData.TaskTrigger;
         if ($scope.schedulerTaskTrigger.loadTemplateData != undefined)
             $scope.schedulerTaskTrigger.loadTemplateData();
+
+        $scope.queueName = dataSourceObject.DataSourceData.Settings.QueueName;
     }
 
     function insertDataSource() {

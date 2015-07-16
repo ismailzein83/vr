@@ -13,52 +13,50 @@ namespace Vanrise.Integration.Business
 {
     public class DSSchedulerTaskAction : SchedulerTaskAction
     {
-        CustomClassSettings _classSettings;
-
         public override void Execute(SchedulerTask task, Dictionary<string, object> evaluatedExpressions)
         {
             DataSourceManager dataManager = new DataSourceManager();
             Vanrise.Integration.Entities.DataSource dataSource = dataManager.GetDataSourcebyTaskId(task.TaskId);
-            this.PrepareCustomClass(dataSource.Settings.MapperCustomCode);
 
-            dataSource.Settings.Adapter.ImportData(ReceiveData);
+            dataSource.Settings.Adapter.ImportData(data =>
+                {
+                    Vanrise.Queueing.PersistentQueueItem queueItem = this.ExecuteCustomCode(dataSource.Settings.MapperCustomCode, data);
+                    Vanrise.Queueing.Entities.IPersistentQueue queue = Vanrise.Queueing.PersistentQueueFactory.Default.GetQueue(dataSource.Settings.QueueName);
+                    queue.EnqueueObject(queueItem);
+                });
         }
 
-        private void ReceiveData(IImportedData data)
+        private string CreateCustomClass(string customCode, out string className)
         {
-            Vanrise.Queueing.PersistentQueueItem queueItem = this.ExecuteCustomCode(data);
-            Vanrise.Queueing.Entities.IPersistentQueue queue = Vanrise.Queueing.PersistentQueueFactory.Default.GetQueue("TestQueue");
-            queue.EnqueueObject(queueItem);
-        }
-
-        private void PrepareCustomClass(string customCode)
-        {
-            this._classSettings = new CustomClassSettings();
-
-            this._classSettings.ClassName = "CustomMapper_" + Math.Abs(customCode.GetHashCode());
+            className = "CustomMapper_" + Math.Abs(customCode.GetHashCode());
 
 
             string code = (new StringBuilder()).Append(@"public Vanrise.Queueing.PersistentQueueItem MapData(Vanrise.Integration.Entities.IImportedData data)
                                                             {").Append(customCode).Append("}").ToString();
 
-
-            this._classSettings.ClassDefinition = (new StringBuilder()).Append(@"
+            string classDefinition = new StringBuilder().Append(@"
                 using System;
                 using System.Collections.Generic;
                 using Vanrise.Integration.Entities;
 
                 namespace Vanrise.Integration.Business
                 {
-                    public class ").Append(this._classSettings.ClassName).Append(" : ").Append(typeof(IDataMapper).FullName).Append(@"
+                    public class ").Append(className).Append(" : ").Append(typeof(IDataMapper).FullName).Append(@"
                     {                        
                         ").Append(code).Append(@"
                     }
                 }
                 ").ToString();
+
+            return classDefinition;
         }
 
-        private Vanrise.Queueing.PersistentQueueItem ExecuteCustomCode(IImportedData data)
+        private Vanrise.Queueing.PersistentQueueItem ExecuteCustomCode(string customCode, IImportedData data)
         {
+            string className;
+
+            string classDefinition = this.CreateCustomClass(customCode, out className);
+
             Vanrise.Queueing.PersistentQueueItem result = null;
 
             Dictionary<string, string> providerOptions = new Dictionary<string, string>();
@@ -83,23 +81,16 @@ namespace Vanrise.Integration.Business
                 parameters.ReferencedAssemblies.Add(info.FullName);
             }
 
-            CompilerResults results = provider.CompileAssemblyFromSource(parameters, this._classSettings.ClassDefinition);
+            CompilerResults results = provider.CompileAssemblyFromSource(parameters, classDefinition);
 
             if (results.Errors.Count == 0)
             {
-                Type generated = results.CompiledAssembly.GetType("Vanrise.Integration.Business." + this._classSettings.ClassName);
+                Type generated = results.CompiledAssembly.GetType("Vanrise.Integration.Business." + className);
                 IDataMapper mapper = (IDataMapper)generated.GetConstructor(Type.EmptyTypes).Invoke(null);
                 result = mapper.MapData(data);
             }
 
             return result;
         }
-    }
-
-    class CustomClassSettings
-    {
-        public string ClassName { get; set; }
-
-        public string ClassDefinition { get; set; }
     }
 }

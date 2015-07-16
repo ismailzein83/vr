@@ -6,20 +6,21 @@
                 <vr-choice isselected="adapterSettignsSelected">Adapter</vr-choice>
                 <vr-choice isselected="mappperSettignsSelected">Mapper</vr-choice>
                 <vr-choice isselected="schedulerSettignsSelected">Scheduler</vr-choice>
+                <vr-choice isselected="queueSettignsSelected">Queue</vr-choice>
             </vr-choices>
             <div ng-show="definitionSettignsSelected">
                 <vr-row>
-                    <vr-column colmun="6">
+                    <vr-columns colnum="6">
                         <vr-textbox value="dataSourceName" label="Data Source Name" isrequired></vr-textbox>
-                    </vr-column>
+                    </vr-columns>
                 </vr-row>
             </div>
             <div ng-show="adapterSettignsSelected">
                 <vr-row>
-                    <vr-column colmun="6">
+                    <vr-columns colnum="4">
                         <vr-select datatextfield="Name" datavaluefield="AdapterTypeId"
                                    datasource="adapterTypes" selectedvalues="selectedAdapterType"></vr-select>
-                    </vr-column>
+                    </vr-columns>
                 </vr-row>
                 <vr-row>
                     <div ng-include="selectedAdapterType.Info.AdapterTemplateURL"></div>
@@ -34,6 +35,13 @@
                 </vr-row>
                 <vr-row>
                     <div ng-include="'/Client/Modules/Runtime/Views/TriggerTemplates/TimerTriggerTemplate.html'"></div>
+                </vr-row>
+            </div>
+            <div ng-show="queueSettignsSelected">
+                <vr-row>
+                    <vr-columns colnum="6">
+                        <vr-textbox value="queueName" label="Queue Name" isrequired></vr-textbox>
+                    </vr-columns>
                 </vr-row>
             </div>
         </vr-form>

@@ -24,5 +24,7 @@ namespace Vanrise.Integration.Entities
         public BaseReceiveAdapter Adapter { get; set; }
 
         public string MapperCustomCode { get; set; }
+
+        public string QueueName { get; set; }
     }
 }
