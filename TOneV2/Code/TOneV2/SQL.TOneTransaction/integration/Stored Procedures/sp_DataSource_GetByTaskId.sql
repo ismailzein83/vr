@@ -12,11 +12,13 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT [ID]
-      ,[Name]
-      ,[AdapterID]
-      ,[TaskId]
-      ,[Settings]
-       from integration.DataSource 
-       where TaskId = @TaskID
+	SELECT DS.[ID]
+      ,DS.[Name]
+      ,DS.[AdapterID]
+      ,AD.[Info]
+      ,DS.[TaskId]
+      ,DS.[Settings]
+       from integration.DataSource  as DS
+       Join AdapterType as AD on DS.AdapterID = AD.ID
+       where DS.[TaskId] = @TaskID
 END
