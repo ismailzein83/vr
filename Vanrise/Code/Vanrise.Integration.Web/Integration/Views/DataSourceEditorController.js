@@ -93,10 +93,6 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
         
         var adapterData = $scope.dataSourceAdapter.getData();
 
-        console.log('adapterData');
-        console.log(adapterData);
-
-
         adapterData.$type = $scope.selectedAdapterType.Info.FQTN;
 
         var dataSourceData = {
@@ -138,7 +134,6 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
 
     function insertDataSource() {
         var dataSourceObject = buildDataSourceObjFromScope();
-        console.log(dataSourceObject);
         return DataSourceAPIService.AddDataSource(dataSourceObject)
         .then(function (response) {
             if (VRNotificationService.notifyOnItemAdded("Data Source", response)) {

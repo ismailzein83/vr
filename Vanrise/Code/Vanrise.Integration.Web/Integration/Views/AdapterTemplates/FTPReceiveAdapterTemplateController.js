@@ -14,7 +14,6 @@ function FTPReceiveAdapterTemplateController($scope, UtilsService) {
 
 
         $scope.dataSourceAdapter.getData = function () {
-            console.log('$scope.selectedAction.value')
             return {
                 $type: "",
                 Extension: $scope.extension,
@@ -39,9 +38,6 @@ function FTPReceiveAdapterTemplateController($scope, UtilsService) {
             return;
       
         var data = $scope.dataSourceAdapter.data;
-
-        console.log('UtilsService.getItemByVal(actionsAfterImport, data.ActionAfterImport, "value")')
-        console.log(UtilsService.getItemByVal($scope.actionsAfterImport, data.ActionAfterImport, "value"))
 
         if (data != null) {
              $scope.extension=data.Extension;
