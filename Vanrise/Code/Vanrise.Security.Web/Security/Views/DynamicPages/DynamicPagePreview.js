@@ -19,7 +19,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         $scope.toDate;
         $scope.allWidgets = [];
         $scope.viewContent = [];
-
+        $scope.selectedPeriod;
         $scope.summaryContents = [];
         $scope.bodyContents = [];
         $scope.summaryWidgets = [];
@@ -56,16 +56,26 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
                 return loadWidgets();
             }    
         };
-        fillDateAndPeriod();
-        $scope.filter = {
-            timeDimensionType: $scope.selectedTimeDimensionType,
-            fromDate: $scope.fromDate,
-            toDate: $scope.toDate
-        }
-        loadWidgets();
+        $scope.customvalidateFrom = function (fromDate) {
+            return validateDates(fromDate, $scope.toDate);
+        };
+        $scope.customvalidateTo = function (toDate) {
+            return validateDates($scope.fromDate, toDate);
+        };
+        
 
     }
-
+    
+    function validateDates(fromDate, toDate) {
+        if (fromDate == undefined || toDate == undefined)
+            return null;
+        var from = new Date(fromDate);
+        var to = new Date(toDate);
+        if (from.getTime() > to.getTime())
+            return "Start should be before end";
+        else
+            return null;
+    }
     function defineTimeDimensionTypes() {
         $scope.timeDimensionTypes = [];
         for (var td in BITimeDimensionTypeEnum)
@@ -78,6 +88,9 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
 
     function load() {
        
+     
+
+        loadWidgets();
         $scope.isGettingData = false;
 
     }
@@ -85,6 +98,11 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         date = getPeriod($scope.selectedPeriod.value);
         $scope.fromDate = date.from;
         $scope.toDate = date.to;
+        $scope.filter = {
+            timeDimensionType: $scope.selectedTimeDimensionType,
+            fromDate: $scope.fromDate,
+            toDate: $scope.toDate
+        }
     }
     function refreshData() {
         var refreshDataOperations = [];
@@ -106,7 +124,8 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             $scope.isGettingData = true;
           return  UtilsService.waitMultipleAsyncOperations([loadAllWidgets, loadViewByID])
                  .finally(function () {
-                     
+                     fillDateAndPeriod();
+                  
                      loadViewWidgets($scope.allWidgets, $scope.bodyContents, $scope.summaryContents);
                      $scope.isGettingData = false;
                  });
@@ -114,9 +133,11 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         else {
             $scope.isGettingData = true;
             $scope.selectedPeriod = $scope.$parent.selectedPeriod;
+            
             $scope.selectedTimeDimensionType = $scope.$parent.selectedTimeDimensionType;
           return  UtilsService.waitMultipleAsyncOperations([loadAllWidgets])
                 .finally(function () {
+                    fillDateAndPeriod();
                     loadViewWidgets($scope.allWidgets, $scope.$parent.bodyContents, $scope.$parent.summaryContents);
                     $scope.isGettingData = false;
                 });
@@ -184,6 +205,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             $scope.summaryContents = response.ViewContent.SummaryContents;
             $scope.bodyContents = response.ViewContent.BodyContents;
             $scope.selectedPeriod = UtilsService.getItemByVal($scope.periods, response.ViewContent.DefaultPeriod, 'value');
+            console.log($scope.selectedPeriod)
             $scope.selectedTimeDimensionType = UtilsService.getItemByVal($scope.timeDimensionTypes, response.ViewContent.DefaultGrouping, 'value');
         });
     }
@@ -284,7 +306,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         $scope.periods = [];
         for (var p in BIPeriodEnum)
             $scope.periods.push(BIPeriodEnum[p]);
-        $scope.selectedPeriod = $scope.periods[0];
+      //  $scope.selectedPeriod = $scope.periods[0];
     }
 }
 appControllers.controller('Security_DynamicPagePreviewController', DynamicPagePreviewController);
