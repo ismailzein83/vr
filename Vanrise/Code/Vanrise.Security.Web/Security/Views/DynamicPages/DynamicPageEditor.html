@@ -28,13 +28,14 @@
 
                     <vr-columns width="1/3row">
                         <vr-section title="Menu Location">
-                            <div data-tree-id="beTree"
-                                 data-angular-treeview="true"
-                                 data-tree-model="menuList"
-                                 data-node-id="Id"
-                                 data-node-label="Name"
-                                 data-node-children="Childs">
-                            </div>
+
+
+                            <vr-treeview datatextfield="Name"
+                                         datavaluefield="Id"
+                                         datachildrenfield="Childs"
+                                         on-ready="menuReady"
+                                         selecteditem="selectedMenuNode">
+                            </vr-treeview>
                         </vr-section>
                     </vr-columns>
                     <vr-columns width="1/3row">

@@ -4,6 +4,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
     loadParameters();
     defineScope();
     load();
+    var treeAPI;
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
         
@@ -34,6 +35,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         $scope.roles = [];
         $scope.pageName;
         $scope.sectionTitle;
+        $scope.selectedMenuNode;
         $scope.selectedRoles = [];
         $scope.subViewConnector = {};
         $scope.moduleId;
@@ -44,6 +46,11 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         $scope.bodyWidgets = [];
         $scope.selectedColumnWidth;
         $scope.addedSummaryWidgets = [];
+        $scope.menuReady = function (api) {
+            treeAPI = api;
+            if ($scope.menuList.length > 0)
+                treeAPI.refreshTree($scope.menuList);
+        }
         $scope.addedBodyWidgets = [];
         $scope.onSelectionChanged = function () {
             buildContentsFromScope();
@@ -57,14 +64,12 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             
         }
         $scope.save = function () {
-            if (angular.isObject($scope.beTree.currentNode) && $scope.beTree.currentNode.AllowDynamic == 0)
-                return VRNotificationService.showWarning("You Should Select Another Menu Location!!");
             buildContentsFromScope();
             buildViewObjFromScope(); 
             if ($scope.summaryContents.length == 0 && $scope.bodyContents.length == 0)
                 return VRNotificationService.showWarning("You Should Add Widgets Before Saving!!");
-            else if ($scope.beTree.currentNode == undefined)
-                return VRNotificationService.showWarning("You Should Select Menu Location Before Saving!!");
+            if ($scope.selectedMenuNode==undefined)
+                    return VRNotificationService.showWarning("You Should Select Menu Location Before Saving!!");
             if ($scope.isEditMode)  
                 return updateView(); 
             else  
@@ -110,13 +115,6 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             }
 
         };
-        $scope.$watch('beTree.currentNode', function (newObj, oldObj) {
-            if ($scope.beTree && angular.isObject($scope.beTree.currentNode) && $scope.beTree.currentNode.AllowDynamic!=0) {
-                $scope.moduleId = $scope.beTree.currentNode.Id;
-            } else if (angular.isObject($scope.beTree.currentNode) && $scope.beTree.currentNode.AllowDynamic == 0) {
-                VRNotificationService.showWarning("You Should Select Another Menu Location!!");
-            }
-        }, false);
     }
     function definePeriods() {
         $scope.periods = [];
@@ -203,7 +201,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         }
         $scope.View = {
             Name: $scope.pageName,
-            ModuleId: $scope.moduleId,
+            ModuleId: $scope.selectedMenuNode.Id,
             Audience: Audiences,
             ViewContent: ViewContent
         };
@@ -218,6 +216,8 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         defineWidgetSections();
         $scope.isGettingData = true;
         UtilsService.waitMultipleAsyncOperations([loadWidgets, loadUsers, loadRoles, loadTree]).finally(function () {
+            if (treeAPI!=undefined && !$scope.isEditMode)
+             treeAPI.refreshTree($scope.menuList);
             
             if ($scope.isEditMode) {
                
@@ -283,7 +283,9 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             }
 
         }
-        $scope.beTree.currentNode = UtilsService.getItemByVal($scope.menuList, $scope.filter.ModuleId, 'Id');
+        $scope.selectedMenuNode = UtilsService.getItemByVal($scope.menuList, $scope.filter.ModuleId, 'Id');
+        addIsSelected($scope.menuList, $scope.filter.ModuleId);
+        treeAPI.refreshTree($scope.menuList);
         $scope.selectedPeriod = getPeriod($scope.filter.DefaultPeriod);
         $scope.selectedTimeDimensionType = getTimeDimentionType($scope.filter.DefaultGrouping);
     }
@@ -297,9 +299,32 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
     function loadTree() {
         return MenuAPIService.GetAllMenuItems()
            .then(function (response) {
+               console.log(response);
+               checkAllowDynamic(response);
                $scope.menuList = response;
               
            });
+    }
+    function addIsSelected(menuList, Id) {
+        for (var i = 0; i < menuList.length; i++) {
+            if (menuList[i].Id == Id) {
+                menuList[i].isSelected = true;
+                console.log(menuList[i]);
+                return;
+            }
+            if (menuList[i].Childs != undefined)
+                addIsSelected(menuList[i].Childs);
+        }
+
+    }
+    function checkAllowDynamic(response){
+        for (var i = 0; i < response.length; i++){
+            if(response[i].Childs!=undefined)
+                checkAllowDynamic(response[i].Childs);
+            if(!response[i].AllowDynamic)
+                response[i].isDisabled=true;
+        }
+           
     }
 
     function loadWidgets() {

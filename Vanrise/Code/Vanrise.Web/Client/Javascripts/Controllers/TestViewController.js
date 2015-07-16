@@ -97,5 +97,33 @@ var TestViewController = function ($scope, $http, ValuesAPIService) {
         //$scope.testObj.choiceSelectedIndex = 
         // choicesApi.selectChoice();
     };
+
+    $scope.values = [
+       {
+           id: "1",
+           Name: "child 1",
+           isOpened: true,
+           children: [{
+               id: "2",
+               Name: "child 1"
+           }
+           ,
+           {
+               id: "3",
+               Name: "child 1",
+               isSelected: true
+           }
+
+           ]
+       },
+       {
+           id: "4",
+           Name: "child 2",
+           isDisabled: true,
+           children: []
+       }];
+    $scope.treeReady = function (api) {
+        api.refreshTree($scope.values);
+    }
 }
 appControllers.controller('TestViewController', TestViewController);

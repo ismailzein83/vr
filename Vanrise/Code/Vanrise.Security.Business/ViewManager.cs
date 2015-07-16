@@ -32,7 +32,7 @@ namespace Vanrise.Security.Business
                  
                  insertOperationOutput.Result = InsertOperationResult.Succeeded;
                  view.ViewId = viewId;
-                 insertOperationOutput.InsertedObject = view;
+                 insertOperationOutput.InsertedObject = dataManager.GetView(viewId); ;
              }
              else
              {

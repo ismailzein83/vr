@@ -41,7 +41,7 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
             }
         };
         $scope.Add = function () {
-            addPage()
+            addPage();
         };
         $scope.searchClicked = function () {
           
@@ -88,7 +88,7 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
 
     }
     function deletePage(dataItem) {
-      
+
         var message = "Do you want to delete " + dataItem.Name;
         VRNotificationService.showConfirmation(message).then(function (response) {
             if (response == true) {
@@ -139,7 +139,7 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
     function fillNeededData(itm) {
         itm.ViewContent.DefaultPeriodDescription = UtilsService.getItemByVal($scope.periods, itm.ViewContent.DefaultPeriod, 'value').description;
         itm.ViewContent.DefaultGroupingDescription = UtilsService.getItemByVal($scope.timeDimensionTypes, itm.ViewContent.DefaultGrouping, 'value').description;
-        if (itm.Audience!=null) {
+        if (itm.Audience!=null && itm.Audience.Users != undefined) {
             itm.Audience.UsersName = [];
             var usersArray = [];
             var value;
@@ -151,6 +151,9 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
                 
             }
             itm.Audience.UsersName = usersArray.toString();
+        }
+        if (itm.Audience != null &&  itm.Audience.Groups != undefined) {
+      
             itm.Audience.GroupsName = "";
             var groupsArray = [];
             for (var j = 0; j < itm.Audience.Groups.length; j++) {
@@ -163,6 +166,7 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
 
             }
             itm.Audience.GroupsName = groupsArray.toString();
+        
         }
         else {
             itm.Audience = {

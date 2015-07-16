@@ -16,7 +16,10 @@
             <vr-directivewrapper directive="vrTextbox " value="field" type="fieldType"></vr-directivewrapper>
 
         </vr-columns>
-    </vr-row>
+        <vr-columns width="normal">
+            <vr-treeview datatextfield="Name" datavaluefield="id" datachildrenfield="children" on-ready="treeReady" selecteditem="selectedTreeNode" onvaluechanged="treeValueChanged"></vr-treeview>
+        </vr-columns>
+</vr-row>
     
     
     
@@ -158,3 +161,4 @@ testObj.isTab1Selected
 <input type="text" ng-model="testObj.isTab2Selected">
 isTab3Selected
 <input type="text" ng-model="isTab3Selected">
+
