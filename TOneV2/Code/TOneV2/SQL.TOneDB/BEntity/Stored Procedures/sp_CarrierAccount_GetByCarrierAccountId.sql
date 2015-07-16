@@ -20,7 +20,8 @@ SELECT ca.CarrierAccountId,
 	ca.SupplierPaymentType,
 	ca.NameSuffix,
 	ca.CarrierGroupID,
-	cg.CarrierGroupName
+	cg.CarrierGroupName,
+	ca.CarrierGroups
 FROM CarrierAccount ca
 		INNER JOIN CarrierProfile cp on ca.ProfileID = cp.ProfileID
 		LEFT OUTER JOIN

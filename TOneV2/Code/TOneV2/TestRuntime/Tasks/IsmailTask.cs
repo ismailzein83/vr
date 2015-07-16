@@ -5,12 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using TOne.Business;
+using TOne.CDR.Entities;
 using TOne.Entities;
 using TOne.LCR.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Queueing;
+using Vanrise.Queueing.Entities;
 using Vanrise.Runtime;
 
 namespace TestRuntime
@@ -27,6 +29,9 @@ namespace TestRuntime
             ////Console.ReadKey();
             ////return;
             System.Threading.ThreadPool.SetMaxThreads(10000, 10000);
+
+            Vanrise.Queueing.PersistentQueueFactory.Default.CreateQueueIfNotExists<TOne.CDR.Entities.CDRBatch>("testCDRQueue");
+            var queue = Vanrise.Queueing.PersistentQueueFactory.Default.GetQueue("testCDRQueue");
             
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
@@ -39,7 +44,15 @@ namespace TestRuntime
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
 
-            
+            QueueGroupType queueGroupType = new QueueGroupType() { ChildItems = new Dictionary<string, QueueGroupTypeItem>() };
+            var cdrRaw = new QueueGroupTypeItem(typeof(CDRBatch).AssemblyQualifiedName);
+            queueGroupType.ChildItems.Add("CDR Raw", cdrRaw);
+            var cdrRawForBilling = new QueueGroupTypeItem (typeof(CDRBatch).AssemblyQualifiedName );            
+            queueGroupType.ChildItems.Add("CDR Raw for Billing", cdrRawForBilling);
+            var cdrBilling = new QueueGroupTypeItem(typeof(CDRBillingBatch).AssemblyQualifiedName);
+            cdrRawForBilling.ChildItems.Add("CDR Billing", cdrBilling);
+            var cdrMain = new QueueGroupTypeItem(typeof(CDRMainBatch).AssemblyQualifiedName);
+            cdrBilling.ChildItems.Add("CDR Main", cdrMain);
             //Console.ReadKey();
             //host.Stop();
             //Console.ReadKey();

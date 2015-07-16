@@ -17,10 +17,12 @@ SELECT ca.CarrierAccountId,
 	ca.AccountType,
 	ca.CustomerPaymentType,
 	ca.SupplierPaymentType,
-	ca.NameSuffix
+	ca.NameSuffix,
+	ca.CarrierGroups,
+	ca.CarrierGroupID
 FROM
 	CarrierAccount ca
 	INNER JOIN CarrierProfile cp on ca.ProfileID = cp.ProfileID
 			
-where ca.IsDeleted = 'N' AND ca.ActivationStatus = 2
+where ca.IsDeleted = 'N' --AND ca.ActivationStatus = 2
 END

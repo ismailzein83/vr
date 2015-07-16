@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>SQL.TOneConfiguration</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{76d844cc-cba8-4826-ad6c-b7c1e075d838}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>SQL.TOneConfiguration</RootNamespace>
+    <AssemblyName>SQL.TOneConfiguration</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <!-- VS10 without SP1 will not have VisualStudioVersion set, so do that here -->
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <!-- Default to the v10.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="sec\" />
+    <Folder Include="sec\Tables\" />
+    <Folder Include="BI\" />
+    <Folder Include="BI\Tables\" />
+    <Folder Include="sec\Stored Procedures\" />
+    <Folder Include="BI\Stored Procedures\" />
+    <Folder Include="sec\User Defined Types\" />
+    <Folder Include="Security\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="sec\Tables\WidgetDefinition.sql" />
+    <Build Include="sec\Tables\BusinessEntityModule.sql" />
+    <Build Include="sec\Tables\BusinessEntity.sql" />
+    <Build Include="sec\Tables\Role.sql" />
+    <Build Include="sec\Tables\Module.sql" />
+    <Build Include="sec\Tables\UserRole.sql" />
+    <Build Include="sec\Tables\Permission.sql" />
+    <Build Include="sec\Tables\Widget.sql" />
+    <Build Include="sec\Tables\OrgChart.sql" />
+    <Build Include="sec\Tables\View.sql" />
+    <Build Include="sec\Tables\User.sql" />
+    <Build Include="BI\Tables\SchemaConfiguration.sql" />
+    <Build Include="sec\Stored Procedures\sp_WidgetDefinition_Get.sql" />
+    <Build Include="sec\Stored Procedures\sp_View_GetByType.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_GetMembers.sql" />
+    <Build Include="sec\Stored Procedures\sp_Roles_AssignMembers.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_GetAll.sql" />
+    <Build Include="sec\Stored Procedures\sp_BusinessEntityModule_ToggleBreakInheritance.sql" />
+    <Build Include="sec\Stored Procedures\sp_BusinessEntity_ToggleBreakInheritance.sql" />
+    <Build Include="sec\Stored Procedures\sp_Roles_Update.sql" />
+    <Build Include="sec\Stored Procedures\sp_Roles_Insert.sql" />
+    <Build Include="sec\Stored Procedures\sp_Roles_GetAll.sql" />
+    <Build Include="sec\Stored Procedures\sp_Roles_Get.sql" />
+    <Build Include="sec\Stored Procedures\sp_Roles_GetFiltered.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_GetbyId.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_GetFiltered.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_ResetPassword.sql" />
+    <Build Include="sec\Stored Procedures\sp_Roles_GetUserRoles.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_CheckUserName.sql" />
+    <Build Include="sec\Stored Procedures\sp_Permission_Delete.sql" />
+    <Build Include="sec\Stored Procedures\sp_OrgChart_GetAll.sql" />
+    <Build Include="sec\Stored Procedures\sp_Permission_GetAll.sql" />
+    <Build Include="sec\Stored Procedures\sp_Widget_GetFiltered.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_GetbyEmail.sql" />
+    <Build Include="sec\Stored Procedures\sp_OrgChart_Delete.sql" />
+    <Build Include="sec\Stored Procedures\sp_Permission_Update.sql" />
+    <Build Include="sec\Stored Procedures\sp_OrgChart_Update.sql" />
+    <Build Include="sec\Stored Procedures\sp_Widget_Delete.sql" />
+    <Build Include="sec\Stored Procedures\sp_Permission_GetbyHolder.sql" />
+    <Build Include="sec\Stored Procedures\sp_Widget_CheckSetting.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_Insert.sql" />
+    <Build Include="sec\Stored Procedures\sp_OrgChart_GetById.sql" />
+    <Build Include="sec\Stored Procedures\sp_OrgChart_Insert.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_Update.sql" />
+    <Build Include="sec\Stored Procedures\sp_OrgChart_GetFiltered.sql" />
+    <Build Include="sec\Stored Procedures\sp_BusinessEntity_GetAll.sql" />
+    <Build Include="sec\Stored Procedures\sp_BusinessEntityModule_GetAll.sql" />
+    <Build Include="sec\Stored Procedures\sp_View_GetAll.sql" />
+    <Build Include="sec\Stored Procedures\sp_Module_GetAll.sql" />
+    <Build Include="sec\Stored Procedures\sp_View_GetFiltered.sql" />
+    <Build Include="sec\Stored Procedures\sp_View_Delete.sql" />
+    <Build Include="sec\Stored Procedures\sp_View_Update.sql" />
+    <Build Include="sec\Stored Procedures\sp_Widget_GetById.sql" />
+    <Build Include="sec\Stored Procedures\sp_Widget_Update.sql" />
+    <Build Include="sec\Stored Procedures\sp_Widget_GetAll.sql" />
+    <Build Include="sec\Stored Procedures\sp_Widget_Insert.sql" />
+    <Build Include="sec\Stored Procedures\sp_View_GetById.sql" />
+    <Build Include="sec\Stored Procedures\sp_View_Insert.sql" />
+    <Build Include="BI\Stored Procedures\SP_SchemaConfiguration_GetByType.sql" />
+    <Build Include="sec\User Defined Types\IntIDType.sql" />
+    <Build Include="sec\User Defined Types\RoleMembersType.sql" />
+    <Build Include="Security\sec.sql" />
+    <Build Include="Security\BI.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Common.PostDeployment1.sql" />
+    <None Include="TOne.PostDeployment.sql" />
+  </ItemGroup>
+</Project>

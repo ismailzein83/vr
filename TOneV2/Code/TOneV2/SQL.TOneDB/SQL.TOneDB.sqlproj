@@ -85,6 +85,7 @@
     <Folder Include="BI\Stored Procedures\" />
     <Folder Include="Analytics\User Defined Types\" />
     <Folder Include="sec\User Defined Types\" />
+    <Folder Include="Analytics\Functions\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="BEntity\Stored Procedures\sp_Rate_GetCaclulatedZoneRates.sql" />
@@ -254,5 +255,16 @@
     <Build Include="sec\Stored Procedures\sp_View_GetByType.sql" />
     <Build Include="sec\Stored Procedures\sp_View_GetById.sql" />
     <Build Include="sec\Stored Procedures\sp_View_Delete.sql" />
+    <Build Include="sec\Tables\OrgChart.sql" />
+    <Build Include="Analytics\Functions\ParseStringList.sql" />
+    <Build Include="sec\Stored Procedures\sp_Widget_Delete.sql" />
+    <Build Include="sec\Stored Procedures\sp_Widget_CheckSetting.sql" />
+    <Build Include="sec\Stored Procedures\sp_OrgChart_Update.sql" />
+    <Build Include="sec\Stored Procedures\sp_OrgChart_Insert.sql" />
+    <Build Include="sec\Stored Procedures\sp_OrgChart_GetFiltered.sql" />
+    <Build Include="sec\Stored Procedures\sp_OrgChart_GetById.sql" />
+    <Build Include="sec\Stored Procedures\sp_OrgChart_GetAll.sql" />
+    <Build Include="sec\Stored Procedures\sp_OrgChart_Delete.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_CarrierGroup_GetAllCarrierGroup.sql" />
   </ItemGroup>
 </Project>

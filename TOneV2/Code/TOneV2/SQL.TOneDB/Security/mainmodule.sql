@@ -1,5 +1,6 @@
-﻿CREATE SCHEMA [MainModule]
-    AUTHORIZATION [dbo];
+﻿CREATE SCHEMA [mainmodule];
+
+
 
 
 

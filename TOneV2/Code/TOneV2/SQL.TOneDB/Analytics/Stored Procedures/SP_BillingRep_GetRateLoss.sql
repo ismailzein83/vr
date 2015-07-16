@@ -13,6 +13,7 @@ CREATE  PROCEDURE [Analytics].[SP_BillingRep_GetRateLoss](
 )with Recompile
 	AS 
 	
+	DECLARE @Margin FLOAT = 0;
 	
 	DECLARE @ExchangeRates TABLE(
 		Currency VARCHAR(3),
@@ -82,8 +83,8 @@ CREATE  PROCEDURE [Analytics].[SP_BillingRep_GetRateLoss](
 		  AND (@SupplierAmuID IS NULL OR bs.SupplierID IN (SELECT * FROM @SupplierIDs))
 	GROUP BY 
 	    CZ.Name,SZ.Name,bs.SupplierID,bs.CustomerID,sz.ZoneID
-	--HAVING 	
-        --(SUM(bs.cost_nets / ISNULL(ERC.Rate, 1)) - SUM(bs.sale_nets / ISNULL(ERS.Rate, 1))) > @Margin
+	HAVING 	
+        (SUM(bs.cost_nets / ISNULL(ERC.Rate, 1)) - SUM(bs.sale_nets / ISNULL(ERS.Rate, 1))) > @Margin
   
 	  
 	
