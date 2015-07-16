@@ -182,11 +182,6 @@ namespace CallGeneratorTestApp
                     ChannelAllocation c = Form2.LstChanels[i];
                     if ((c.idle == false) && (c.startDate == DateTime.MinValue))
                     {
-                        GeneratedCall GenCall = GeneratedCallRepository.Load(Form2.LstChanels[i].GeneratedCallid);
-                        GenCall.Status = "2";
-                        GenCall.StartCall = DateTime.Now;
-                        GeneratedCallRepository.Save(GenCall);
-
                         Form2.LstChanels[i].startDate = DateTime.Now;
                         Form2.LstChanels[i].startLastCall = DateTime.Now;
                         int ii = Form2.LstChanels[i].sip.ConfigId;

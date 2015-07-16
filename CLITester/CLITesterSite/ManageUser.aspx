@@ -137,6 +137,21 @@
                         </div>
                         <!--/span-->
                     </div>
+                    <div class="row-fluid">
+                        <div class="span6 ">
+                            <div class="control-group">
+                                <label class="control-label" for="lastName">
+                                    Balance per day<span class="required">*</span></label>
+                                <div class="controls">
+                                    <asp:TextBox ID="txtBalance" onkeypress='return isNumber(event)' runat="server" CssClass="m-wrap span12" placeholder="Balance"></asp:TextBox>
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="txtBalance"
+                                          ErrorMessage="Balance Required" Display="Dynamic" Font-Bold="true"
+                                        ForeColor="Red">
+                                    </asp:RequiredFieldValidator>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!--/row-->
                     <div class="form-actions">
                         <asp:Button runat="server" ID="btnSave" CssClass="btn blue" OnClick="btnSave_Click"
@@ -155,6 +170,16 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="ScriptContent" runat="Server">
 <script src="assets/scripts/app.js"></script>
 <script>
+
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+
     jQuery(document).ready(function () {
         App.init();
     });

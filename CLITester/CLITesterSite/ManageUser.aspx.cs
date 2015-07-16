@@ -28,6 +28,9 @@ public partial class ManageUser : BasePage
         if (ViewState["UserId"] != null)
             int.TryParse(ViewState["UserId"].ToString(), out id);
 
+        int balance = 0;
+        int.TryParse(txtBalance.Text, out balance);
+
         User user = new User { Id = id };
 
         if (id > 0)
@@ -43,7 +46,7 @@ public partial class ManageUser : BasePage
         user.Guid = Guid.NewGuid().ToString();
         user.CreationDate = user.Id == 0 ? DateTime.Now : user.CreationDate;
         user.Role = (int)CallGeneratorLibrary.Utilities.Enums.UserRole.User;
-
+        user.Balance = balance;
         if (txtPassword.Text != "")
             user.Password = CommonWebComponents.SecureTextBox.GetHash(txtPassword.Text);
 
@@ -97,6 +100,7 @@ public partial class ManageUser : BasePage
                 txtMobile.Text = user.MobileNumber;
                 txtEmail.Text = user.Email;
                 txtUserName.Text = user.UserName;
+                txtBalance.Text = user.Balance.ToString();
             }
         }
     }

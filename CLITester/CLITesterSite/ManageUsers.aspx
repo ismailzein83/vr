@@ -42,7 +42,9 @@
 											<label><input type="checkbox" checked data-column="1">Username</label>
 											<label><input type="checkbox" checked data-column="2">Email</label>
 											<label><input type="checkbox" checked data-column="3">Creation Date</label>
-                                            <label><input type="checkbox" checked data-column="4">Active</label>
+                                            <label><input type="checkbox" checked data-column="4">Balance</label>
+                                            <label><input type="checkbox" checked data-column="5">Remaining</label>
+                                            <label><input type="checkbox" checked data-column="6">Active</label>
                                             <%--<label><input type="checkbox" checked data-column="5">Roles</label>--%>
 										</div>
 									</div>
@@ -105,6 +107,12 @@
                                         </td>
                                         <td>
                                             <asp:Label ID="Label3" runat="server" Text='<%# Eval("CreationDate") %>'></asp:Label>
+                                        </td>
+                                        <td>
+                                            <asp:Label ID="Label5" runat="server" Text='<%# Eval("Balance") %>'></asp:Label>
+                                        </td>
+                                        <td>
+                                            <asp:Label ID="Label7" runat="server" Text='<%# Eval("RemainingBalance") %>'></asp:Label>
                                         </td>
                                         <td>
                                             <asp:Label ID="Label4" runat="server" Text='<%# Eval("IsActive") %>'></asp:Label>

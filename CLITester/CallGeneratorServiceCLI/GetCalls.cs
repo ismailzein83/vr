@@ -35,7 +35,7 @@ namespace CallGeneratorServiceCLI
                     GeneratedCallRepository.EndExpiredGeneratedCall();
 
                     SipAccount sipAccount = SipAccountRepository.GetTop();
-
+                    
                     //List<User> lstUsers = UserRepository.GetUsers();
                     //foreach (User user in lstUsers)
                     //{
@@ -60,12 +60,13 @@ namespace CallGeneratorServiceCLI
                                 if (existCall == false)
                                 {
                                     // apply configuration, no call exists
-                                    CallGeneratorServiceCLI.NewCallGenCLI.Sip.phone.Config.CallerId = sipAccount.DisplayName;
-                                    CallGeneratorServiceCLI.NewCallGenCLI.Sip.phone.Config.RegDomain = sipAccount.Server;
-                                    CallGeneratorServiceCLI.NewCallGenCLI.Sip.phone.Config.RegUser = sipAccount.DisplayName;
-                                    CallGeneratorServiceCLI.NewCallGenCLI.Sip.phone.Config.RegPass = sipAccount.DisplayName;
-                                    CallGeneratorServiceCLI.NewCallGenCLI.Sip.phone.Config.RegAuthId = sipAccount.DisplayName;
-                                    CallGeneratorServiceCLI.NewCallGenCLI.Sip.phone.ApplyConfig();
+                                    CallGeneratorServiceCLI.NewCallGenCLI.LstSip[0].phone.Config.CallerId = sipAccount.DisplayName;
+                                    CallGeneratorServiceCLI.NewCallGenCLI.LstSip[0].phone.Config.RegDomain = "91.236.236.53";
+                                    CallGeneratorServiceCLI.NewCallGenCLI.LstSip[0].phone.Config.RegUser = sipAccount.DisplayName;
+                                    CallGeneratorServiceCLI.NewCallGenCLI.LstSip[0].phone.Config.RegPass = sipAccount.DisplayName;
+                                    CallGeneratorServiceCLI.NewCallGenCLI.LstSip[0].phone.Config.RegAuthId = sipAccount.DisplayName;
+
+                                    CallGeneratorServiceCLI.NewCallGenCLI.LstSip[0].phone.ApplyConfig();
                                     System.Threading.Thread.Sleep(1000);
                                     finish = true;
                                     WriteToEventLogEx("finish: ");
@@ -74,7 +75,7 @@ namespace CallGeneratorServiceCLI
                             sipAccount.IsChangedCallerId = false;
                             SipAccountRepository.Save(sipAccount);
                         }
-                    //}
+                    //} 
 
                     GeneratedCall generatedCall = GeneratedCallRepository.GetTopGeneratedCall(sipAccount.Id);
                     if (generatedCall != null)
