@@ -49,7 +49,6 @@ function InstanceEditorController($scope, BusinessProcessAPIService, $routeParam
 
 
     function buildInstanceObjFromScope() {
-        console.log('buildInstanceObjFromScope')
         var createProcessInputs = $scope.createProcessInput.getData();
         return createProcessInputs;
     }
