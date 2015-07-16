@@ -21,7 +21,12 @@ namespace Vanrise.Runtime.Business
                 TimeSpan scheduledTime = new TimeSpan(int.Parse(timeParts[0]), int.Parse(timeParts[1]), 0);
                 TimeSpan spanTillThen = scheduledTime - DateTime.Now.TimeOfDay;
 
-                listofScheduledDateTimes.Add(DateTime.Now.Add(spanTillThen));
+                int daysTillThen = 0;
+
+                if (spanTillThen.Ticks < 0)
+                    daysTillThen += 7;
+
+                listofScheduledDateTimes.Add(DateTime.Now.AddDays(daysTillThen).Add(spanTillThen));
             }
 
             return listofScheduledDateTimes.OrderBy(x => x.Ticks).ToList().FirstOrDefault();
