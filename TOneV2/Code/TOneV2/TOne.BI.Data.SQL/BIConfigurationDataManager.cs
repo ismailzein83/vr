@@ -11,6 +11,12 @@ namespace TOne.BI.Data.SQL
 {
     class BIConfigurationDataManager : BaseTOneDataManager, IBIConfigurationDataManager
     {
+        public BIConfigurationDataManager()
+            : base(GetConnectionStringName("BIDBConnStringKey", "BIDBConnString"))
+        {
+
+        }
+
         public List<BIConfiguration<BIConfigurationMeasure>> GetMeasures()
         {
 

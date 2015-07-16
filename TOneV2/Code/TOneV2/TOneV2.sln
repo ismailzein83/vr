@@ -142,9 +142,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Web.Base", "..\..\.
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ToneV2RuntimeSetup", "ToneV2RuntimeSetup\ToneV2RuntimeSetup.vdproj", "{0E49DD39-BD92-4B93-A3B0-D3DC6BB81708}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.TOneConfiguration", "SQL.TOneConfiguration\SQL.TOneConfiguration.sqlproj", "{76D844CC-CBA8-4826-AD6C-B7C1E075D838}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 56
+		SccNumberOfProjects = 57
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -368,6 +370,10 @@ Global
 		SccProjectTopLevelParentUniqueName55 = TOneV2.sln
 		SccProjectName55 = ToneV2RuntimeSetup
 		SccLocalPath55 = ToneV2RuntimeSetup
+		SccProjectUniqueName56 = SQL.TOneConfiguration\\SQL.TOneConfiguration.sqlproj
+		SccProjectTopLevelParentUniqueName56 = TOneV2.sln
+		SccProjectName56 = SQL.TOneConfiguration
+		SccLocalPath56 = SQL.TOneConfiguration
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CD_ROM|Any CPU = CD_ROM|Any CPU
@@ -2434,6 +2440,54 @@ Global
 		{0E49DD39-BD92-4B93-A3B0-D3DC6BB81708}.SingleImage|Mixed Platforms.ActiveCfg = Release
 		{0E49DD39-BD92-4B93-A3B0-D3DC6BB81708}.SingleImage|x64.ActiveCfg = Release
 		{0E49DD39-BD92-4B93-A3B0-D3DC6BB81708}.SingleImage|x86.ActiveCfg = Release
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.CD_ROM|Any CPU.ActiveCfg = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.CD_ROM|Any CPU.Build.0 = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.CD_ROM|Any CPU.Deploy.0 = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.CD_ROM|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.CD_ROM|Mixed Platforms.Build.0 = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.CD_ROM|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.CD_ROM|x64.ActiveCfg = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.CD_ROM|x86.ActiveCfg = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Debug|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.DVD-5|Any CPU.Deploy.0 = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.DVD-5|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.DVD-5|Mixed Platforms.Build.0 = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.DVD-5|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.DVD-5|x64.ActiveCfg = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.DVD-5|x86.ActiveCfg = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Optimized|Any CPU.ActiveCfg = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Optimized|Any CPU.Build.0 = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Optimized|Any CPU.Deploy.0 = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Optimized|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Optimized|Mixed Platforms.Build.0 = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Optimized|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Optimized|x64.ActiveCfg = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Optimized|x86.ActiveCfg = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Release|Mixed Platforms.Deploy.0 = Release|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Release|x64.ActiveCfg = Release|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.Release|x86.ActiveCfg = Release|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.SingleImage|Any CPU.ActiveCfg = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.SingleImage|Any CPU.Build.0 = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.SingleImage|Any CPU.Deploy.0 = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.SingleImage|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.SingleImage|Mixed Platforms.Build.0 = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.SingleImage|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.SingleImage|x64.ActiveCfg = Debug|Any CPU
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838}.SingleImage|x86.ActiveCfg = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2482,6 +2536,7 @@ Global
 		{F6C60928-D1F7-4A6C-9B78-1A86F67CAB06} = {BEBEE4C8-BB5C-4493-91C7-3690C6AEA3B0}
 		{DD37C9F1-5EFC-47DF-A711-A6D5EFB566E1} = {BEBEE4C8-BB5C-4493-91C7-3690C6AEA3B0}
 		{11957CDF-2871-4EDA-A725-86D1B85F1E61} = {BEBEE4C8-BB5C-4493-91C7-3690C6AEA3B0}
+		{76D844CC-CBA8-4826-AD6C-B7C1E075D838} = {BEBEE4C8-BB5C-4493-91C7-3690C6AEA3B0}
 		{C7D60145-89BA-461C-AA71-B37636DD2541} = {8A57B186-D9C0-4296-B608-1E15FE9BAB7B}
 		{A8F33D21-6CCB-49DF-A71C-6653ECA0C45D} = {8A57B186-D9C0-4296-B608-1E15FE9BAB7B}
 		{D23495A3-BF94-4A57-973D-8B3B384FC0A8} = {8A57B186-D9C0-4296-B608-1E15FE9BAB7B}
