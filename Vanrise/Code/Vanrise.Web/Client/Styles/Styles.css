@@ -45,8 +45,8 @@ font-size:12px !important;
 
 .vr-nav-custom .minilogo{
     position: absolute;
-    top: -28px;
-    right: -35px;
+    top: 5px;
+    right:-5px;
 }
 .vr-nav-custom div {
    display:inline-block;
