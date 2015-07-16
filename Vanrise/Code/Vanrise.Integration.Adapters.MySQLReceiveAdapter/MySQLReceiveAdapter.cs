@@ -22,5 +22,22 @@ namespace Vanrise.Integration.Adapters.MSQLReceiveAdapter
 
         }
 
+        public bool IsConnectionAvailable(string connectionString)
+        {
+            try
+            {
+                MySqlConnection connection = new MySqlConnection();
+                connection.ConnectionString = connectionString;
+                connection.Open();
+                connection.Close();
+            }
+            catch (MySqlException)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
     }
 }

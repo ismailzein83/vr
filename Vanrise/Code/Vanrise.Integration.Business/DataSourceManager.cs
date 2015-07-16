@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,10 @@ namespace Vanrise.Integration.Business
 {
     public class DataSourceManager
     {
+
+       
+
+
         public List<Vanrise.Integration.Entities.DataSource> GetDataSources()
         {
             IDataSourceDataManager datamanager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();

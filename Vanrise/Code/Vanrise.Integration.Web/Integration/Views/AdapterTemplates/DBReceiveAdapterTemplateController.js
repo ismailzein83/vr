@@ -1,11 +1,13 @@
-﻿DBReceiveAdapterTemplateController.$inject = ['$scope'];
+﻿DBReceiveAdapterTemplateController.$inject = ['$scope','DataSourceAPIService'];
 
-function DBReceiveAdapterTemplateController($scope) {
+function DBReceiveAdapterTemplateController($scope, DataSourceAPIService) {
 
     defineScope();
     load();
 
     function defineScope() {
+
+     
 
         $scope.dataSourceAdapter.getData = function () {
 
@@ -45,5 +47,7 @@ function DBReceiveAdapterTemplateController($scope) {
 
         loadForm();
     }
+
+
 }
 appControllers.controller('Integration_DBReceiveAdapterTemplateController', DBReceiveAdapterTemplateController);

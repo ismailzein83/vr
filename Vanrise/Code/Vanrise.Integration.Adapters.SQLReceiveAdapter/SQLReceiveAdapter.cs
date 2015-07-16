@@ -22,5 +22,22 @@ namespace Vanrise.Integration.Adapters.SQLReceiveAdapter
 
         }
 
+        public bool IsConnectionAvailable(string connectionString)
+        {
+            try
+            {
+                SqlConnection connection = new SqlConnection();
+                connection.ConnectionString = connectionString;
+                connection.Open();
+                connection.Close();
+            }
+            catch (SqlException)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
     }
 }
