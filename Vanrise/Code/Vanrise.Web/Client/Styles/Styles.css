@@ -1558,3 +1558,6 @@ input.ui-grid-filter-input[type="text"] {
 .vr-select-height:empty{
        height: 0px;     
 }
+.vr-disabled{
+pointer-events: none;
+}

@@ -12230,7 +12230,7 @@
             }
         },
         debug: false,
-        allowInputToggle: false,
+        allowInputToggle: true,
         disabledTimeIntervals: false,
         disabledHours: false,
         enabledHours: false,

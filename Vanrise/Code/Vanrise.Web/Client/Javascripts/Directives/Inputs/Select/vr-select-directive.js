@@ -276,9 +276,7 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
 
                             var self = $(this);
                             var selfHeight = $(this).parent().height();
-                            //var selfWidth = $(this).parent().width();
-                            var selfOffset = $(self).offset();
-                            //var selfOffsetRigth = $(document).width() - selfOffset.left - selfWidth;
+                            var selfOffset = $(self).offset();                           
                             var dropDown = self.parent().find('ul');
                             $(dropDown).css({ position: 'fixed', top: selfOffset.top + selfHeight, left: 'auto' });
                         });
@@ -297,7 +295,10 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                             fixDropdownPosition();
                         });
                     }
-                }, 1000);
+                }, 500);
+                setTimeout(function () {
+                    $('.dropdown-container1').removeClass('vr-disabled');
+                }, 501);
 
 
 //setTimeout(function () {
