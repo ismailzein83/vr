@@ -989,8 +989,8 @@
         },
 
         _longDateFormat: {
-            LTS: 'h:mm:ss A',
-            LT: 'h:mm A',
+            LTS: 'HH:mm:ss',
+            LT: 'HH:mm',
             L: 'MM/DD/YYYY',
             LL: 'MMMM D, YYYY',
             LLL: 'MMMM D, YYYY LT',
@@ -10083,7 +10083,7 @@
                     row.push($('<td>').append($('<a>').attr({'data-action':'today', 'title':'Go to today'}).append($('<span>').addClass(options.icons.today))));
                 }
                 if (!options.sideBySide && hasDate() && hasTime()) {
-                    row.push($('<td>').append($('<a>').attr({'data-action':'togglePicker', 'title':'Select Time'}).append($('<span>').addClass(options.icons.time))));
+                    row.push($('<td>').append($('<a>').attr({'data-action':'togglePicker', 'title':'Select Time'}).append($('<span class="btn-switcher">').addClass(options.icons.time))));
                 }
                 if (options.showClear) {
                     row.push($('<td>').append($('<a>').attr({'data-action':'clear', 'title':'Clear selection'}).append($('<span>').addClass(options.icons.clear))));
@@ -10126,13 +10126,13 @@
                     content.append(toolbar);
                 }
                 if (hasDate()) {
-                    content.append($('<li>').addClass((options.collapse && hasTime() ? 'collapse in' : '')).append(dateView));
+                    content.append($('<li class="date-section">').addClass((options.collapse && hasTime() ? 'collapse in' : '')).append(dateView));
                 }
                 if (options.toolbarPlacement === 'default') {
                     content.append(toolbar);
                 }
                 if (hasTime()) {
-                    content.append($('<li>').addClass((options.collapse && hasDate() ? 'collapse' : '')).append(timeView));
+                    content.append($('<li class="time-section">').addClass((options.collapse && hasDate() ? 'collapse' : '')).append(timeView));
                 }
                 if (options.toolbarPlacement === 'bottom') {
                     content.append(toolbar);

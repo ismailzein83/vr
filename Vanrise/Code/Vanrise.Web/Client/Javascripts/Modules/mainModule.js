@@ -129,7 +129,16 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         }
         else return false;
 
-    }  
+    }
+
+    $rootScope.toggletime = function (e) {
+     //   e.preventDefault();
+     //   e.stopPropagation();
+        $('.datetime-controle').data("DateTimePicker").toggle()
+        $('.date-section').removeClass('in');
+        $('.time-section').addClass('in');
+    }
+
     $scope.clock = ""; // initialise the time variable
     $scope.tickInterval = 1000 //ms
 
@@ -286,15 +295,4 @@ angular.module('mainModule')
 		    locale: 'en'
 	    });
     }
-]).run([
-						'$rootScope',
-						function ($rootScope) {
-						    $rootScope.scoped = {
-						        format: 'HH:mm:ss'
-						    };
-
-						    $rootScope.vm = {
-						        datetime: '05/13/2011 6:30 AM'
-						    }
-						}
-]);
+])
