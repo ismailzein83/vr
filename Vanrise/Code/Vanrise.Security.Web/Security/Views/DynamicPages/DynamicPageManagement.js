@@ -17,6 +17,7 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
         $scope.roles = [];
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
+        
         };
         $scope.menuActions = [
            {
@@ -123,9 +124,10 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
 
     function loadDynamicViews() {
         $scope.isInitializing = true;
+        $scope.dynamicViews.length = 0;
         $scope.isGettingData = true;
         return ViewAPIService.GetDynamicPages().then(function (response) {
-            $scope.dynamicViews.length = 0;
+       
             angular.forEach(response, function (itm) {
                 $scope.dynamicViews.push(fillNeededData(itm));
                 });
