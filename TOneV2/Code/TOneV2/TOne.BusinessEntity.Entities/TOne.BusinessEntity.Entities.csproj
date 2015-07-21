@@ -41,6 +41,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Security.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountManagerCarrier.cs" />
@@ -56,6 +59,7 @@
     <Compile Include="IBusinessEntityInfoManager.cs" />
     <Compile Include="IFlaggedServiceEntity.cs" />
     <Compile Include="IZoneSupplied.cs" />
+    <Compile Include="OrgChartAccountManagerInfo.cs" />
     <Compile Include="PriceList.cs" />
     <Compile Include="SupplierCodes.cs" />
     <Compile Include="Commission.cs" />

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TOne.BusinessEntity.Data;
 using TOne.BusinessEntity.Entities;
 using TOne.Caching;
+using Vanrise.Security.Business;
 
 namespace TOne.BusinessEntity.Business
 {
@@ -27,6 +28,18 @@ namespace TOne.BusinessEntity.Business
         {
             IAccountManagerDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountManagerDataManager>();
             dataManager.AssignCarriers(updatedCarriers);
+        }
+
+        public int? GetLinkedOrgChartId()
+        {
+            OrgChartManager orgChartManager = new OrgChartManager();
+            return orgChartManager.GetLinkedOrgChartId(new OrgChartAccountManagerInfo());
+        }
+
+        public void UpdateLinkedOrgChart(int orgChartId)
+        {
+            OrgChartManager orgChartManager = new OrgChartManager();
+            orgChartManager.UpdateOrgChartLinkedEntity(orgChartId, new OrgChartAccountManagerInfo());
         }
     }
 }
