@@ -1,80 +1,102 @@
-﻿VrDatagridDirectiveTemplateController.$inject = ['$scope','TimeDimensionTypeEnum', 'BIConfigurationAPIService', 'ChartSeriesTypeEnum', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿VrChartDirectiveTemplateController.$inject = ['$scope', 'TimeDimensionTypeEnum', 'ChartDefinitionTypeEnum', 'BIConfigurationAPIService', 'ChartSeriesTypeEnum', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function VrDatagridDirectiveTemplateController($scope, TimeDimensionTypeEnum,BIConfigurationAPIService, ChartSeriesTypeEnum, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
+function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, ChartDefinitionTypeEnum, BIConfigurationAPIService, ChartSeriesTypeEnum, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
+    //var mainGridAPI;
     loadParameters();
     defineScope();
     load();
 
     function loadParameters() {
     }
-
     function defineScope() {
         $scope.Measures = [];
         $scope.Entities = [];
-        $scope.selectedEntityType;
-       
+        $scope.selectedEntityType ;
+        $scope.definitionTypes = [];
+        $scope.selectedDefinitionType;
         $scope.selectedMeasureTypes = [];
-        $scope.selectedTopMeasure;
+        $scope.selectedMeasureType;
         defineTimeDimensionTypes();
-        $scope.onSelectionChanged = function () {
-            $scope.selectedTopMeasure = $scope.selectedMeasureTypes[0];
-        }
         $scope.subViewConnector.getValue = function () {
             return getSubViewValue();
         }
-    }
-
-    function getSubViewValue() {
-
-        switch ($scope.selectedOperationType.value) {
-            case "TopEntities": if ($scope.selectedEntityType == undefined || $scope.selectedEntityType == null || $scope.selectedMeasureTypes == undefined || $scope.selectedMeasureTypes.length == 0) return false;
-            case "MeasuresGroupedByTime": if ($scope.selectedMeasureTypes == undefined ||$scope.selectedMeasureTypes.length == 0) return false;
+        $scope.subViewConnector.setValue = function (value) {
+            $scope.subViewConnector.value = value;
         }
-        
-        var topMeasure = null;
-        if ($scope.selectedTopMeasure != undefined)
-            topMeasure = $scope.selectedTopMeasure.Name;
+
+
+    }
+    function getSubViewValue() {
         var measureTypes = [];
-        for (var i = 0; i < $scope.selectedMeasureTypes.length; i++) {
-            measureTypes.push($scope.selectedMeasureTypes[i].Name);
-        }    
+       
+        switch ($scope.selectedOperationType.value) {
+            case "TopEntities":
+                if ($scope.selectedEntityType == undefined || $scope.selectedEntityType == null || $scope.selectedMeasureType == undefined)
+                    return false;
+                else {
+                    measureTypes.push($scope.selectedMeasureType.Name);
+                    break;
+                }
+               
+
+            case "MeasuresGroupedByTime":
+                if ($scope.selectedMeasureTypes == undefined || $scope.selectedMeasureTypes.length == 0)
+                    return false;
+                else
+                {
+                 for (var i = 0; i < $scope.selectedMeasureTypes.length; i++) 
+                     measureTypes.push($scope.selectedMeasureTypes[i].Name);
+                 break;
+                    }
+        }
+
         var entityType = null;
         if ($scope.selectedEntityType != undefined)
             entityType = $scope.selectedEntityType.Name;
         return {
-            $type: "TOne.BI.Entities.DataGridDirectiveSetting, TOne.BI.Entities",
+            $type: "Vanrise.BI.Entities.ChartDirectiveSetting, Vanrise.BI.Entities",
             OperationType: $scope.selectedOperationType.value,
             EntityType: entityType,
             MeasureTypes: measureTypes,
-            TopMeasure: topMeasure
+            TopMeasure: measureTypes[0],
+            DefinitionType: $scope.selectedDefinitionType.value,
         };
     }
-
     function setSubViewValue(settings) {
-        
-        for (var i = 0; i < $scope.Entities.length; i++) {
-
+        if (settings == undefined)
+            return;
+        for (i = 0; i < $scope.Entities.length; i++) {
+            
             if ($scope.Entities[i].Name == settings.EntityType) {
                 $scope.selectedEntityType = $scope.Entities[i];
-
+            
             }
+        }
+       
+        for (var i = 0; i < $scope.operationTypes.length; i++) {
+          
+                if($scope.operationTypes[i].value==settings.OperationType)
+                    $scope.selectedOperationType=$scope.operationTypes[i];
         }
         for (var i = 0; i < settings.MeasureTypes.length; i++) {
-            var measureType=settings.MeasureTypes[i];
+            var measureType = settings.MeasureTypes[i];
             for (j = 0; j < $scope.Measures.length; j++) {
+
                 if (measureType == $scope.Measures[j].Name)
-                    $scope.selectedMeasureTypes.push($scope.Measures[j]);
-                if ($scope.Measures[j].Name == settings.TopMeasure)
-                    $scope.selectedTopMeasure = $scope.Measures[j];
+                {
+                    if ($scope.selectedOperationType.value == "TopEntities")
+                        $scope.selectedMeasureType = $scope.Measures[j];
+                    else
+                        $scope.selectedMeasureTypes.push($scope.Measures[j]);
+                }
+                   
+
             }
         }
-        for (var i = 0; i < $scope.operationTypes.length; i++) {
+       
 
-            if ($scope.operationTypes[i].value == settings.OperationType)
-                $scope.selectedOperationType = $scope.operationTypes[i];
-        }
+
     }
-
     function defineTimeDimensionTypes() {
         $scope.timeDimensionTypes = [];
         for (var td in TimeDimensionTypeEnum)
@@ -84,9 +106,8 @@ function VrDatagridDirectiveTemplateController($scope, TimeDimensionTypeEnum,BIC
             return t == TimeDimensionTypeEnum.Daily;
         })[0];
     }
-
     function load() {
-        defineNumberOfColumns();
+        defineChartDefinitionTypes();
         defineOperationTypes();
         defineChartSeriesTypes();
         $scope.isGettingData = true;
@@ -100,21 +121,6 @@ function VrDatagridDirectiveTemplateController($scope, TimeDimensionTypeEnum,BIC
             VRNotificationService.notifyExceptionWithClose(error, $scope);
         });
 
-    }
-
-    function defineNumberOfColumns() {
-        $scope.numberOfColumns = [
-            {
-                value: "6",
-                description: "Half Row"
-            },
-            {
-                value: "12",
-                description: "Full Row"
-            }
-        ];
-
-        $scope.selectedNumberOfColumns = $scope.numberOfColumns[0];
     }
 
     function defineOperationTypes() {
@@ -135,15 +141,22 @@ function VrDatagridDirectiveTemplateController($scope, TimeDimensionTypeEnum,BIC
             $scope.chartSeriesTypes.push(ChartSeriesTypeEnum[m]);
         }
     }
+    function defineChartDefinitionTypes() {
+        $scope.definitionTypes = [];
+        for (var m in ChartDefinitionTypeEnum) {
+            $scope.definitionTypes.push(ChartDefinitionTypeEnum[m]);
+        }
+        $scope.selectedDefinitionType = $scope.definitionTypes[0];
+    }
 
     function loadMeasures() {
         return BIConfigurationAPIService.GetMeasures().then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.Measures.push(itm);
+              
             });
         });
     }
-
     function loadEntities() {
         return BIConfigurationAPIService.GetEntities().then(function (response) {
             angular.forEach(response, function (itm) {
@@ -154,4 +167,4 @@ function VrDatagridDirectiveTemplateController($scope, TimeDimensionTypeEnum,BIC
     }
 
 }
-appControllers.controller('BI_VrDatagridDirectiveTemplateController', VrDatagridDirectiveTemplateController);
+appControllers.controller('BI_VrChartDirectiveTemplateController', VrChartDirectiveTemplateController);

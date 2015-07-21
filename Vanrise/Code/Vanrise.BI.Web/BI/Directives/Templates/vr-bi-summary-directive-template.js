@@ -24,7 +24,7 @@ function VrSummaryDirectiveTemplateController($scope, BIConfigurationAPIService,
             measureTypes.push($scope.selectedMeasureTypes[i].Name);
         }
         return {
-            $type: "TOne.BI.Entities.SummaryDirectiveSetting, TOne.BI.Entities",
+            $type: "Vanrise.BI.Entities.SummaryDirectiveSetting, Vanrise.BI.Entities",
             MeasureTypes: measureTypes,
         };
     }

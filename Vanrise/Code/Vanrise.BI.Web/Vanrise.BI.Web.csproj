@@ -119,22 +119,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BI\Constants\BIChartDefinitionTypeEnum.js" />
     <Content Include="BI\Constants\BIEntityTypeEnum.js" />
     <Content Include="BI\Constants\BIMeasureTypeEnum.js" />
-    <Content Include="BI\Directives\bi-visualelement-service1.js" />
+    <Content Include="BI\Directives\bi-visualelement-service.js" />
     <Content Include="BI\Directives\Images\bichartpermission.png" />
     <Content Include="BI\Directives\Images\chartpermission.png" />
     <Content Include="BI\Directives\Images\gridpermission.png" />
-    <Content Include="BI\Directives\Templates\vr-chart-bi-directive-template.html" />
-    <Content Include="BI\Directives\Templates\vr-chart-bi-directive-template.js" />
-    <Content Include="BI\Directives\Templates\vr-datagrid-bi-directive-template.html" />
-    <Content Include="BI\Directives\Templates\vr-datagrid-bi-directive-template.js" />
-    <Content Include="BI\Directives\Templates\vr-summary-bi-directive-template.html" />
-    <Content Include="BI\Directives\Templates\vr-summary-bi-directive-template.js" />
-    <Content Include="BI\Directives\vr-chart-bi-directive.js" />
-    <Content Include="BI\Directives\vr-datagrid-bi-directive.js" />
-    <Content Include="BI\Directives\vr-summary-bi-directive.js" />
+    <Content Include="BI\Directives\Templates\vr-bi-chart-directive-template.html" />
+    <Content Include="BI\Directives\Templates\vr-bi-chart-directive-template.js" />
+    <Content Include="BI\Directives\Templates\vr-bi-datagrid-directive-template.html" />
+    <Content Include="BI\Directives\Templates\vr-bi-datagrid-directive-template.js" />
+    <Content Include="BI\Directives\Templates\vr-bi-summary-directive-template.html" />
+    <Content Include="BI\Directives\Templates\vr-bi-summary-directive-template.js" />
+    <Content Include="BI\Directives\vr-bi-chart-directive.js" />
+    <Content Include="BI\Directives\vr-bi-datagrid-directive.js" />
+    <Content Include="BI\Directives\vr-bi-summary-directive.js" />
     <Content Include="BI\Services\APIServices\BIAPIService.js" />
     <Content Include="BI\Services\APIServices\BIConfigurationAPIService.js" />
     <Content Include="BI\Services\bi-utilities-service.js" />
@@ -142,10 +141,6 @@
     <Content Include="BI\Views\Reports\EntityReportController.js" />
     <Content Include="BI\Views\Reports\EntityReportTemplates\EntityReportResult.html" />
     <Content Include="BI\Views\Reports\EntityReportTemplates\EntityReportResultController.js" />
-    <Content Include="BI\Views\Reports\ZoneDetails.html" />
-    <Content Include="BI\Views\Reports\ZoneDetailsController.js" />
-    <Content Include="BI\Views\Reports\ZoneSummary.html" />
-    <Content Include="BI\Views\Reports\ZoneSummaryController.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\BIConfigurationController.cs" />
