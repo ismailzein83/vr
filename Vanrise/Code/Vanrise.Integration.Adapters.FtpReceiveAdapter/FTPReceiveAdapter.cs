@@ -44,7 +44,7 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
         {
             if (ftpAdapterArgument.ActionAfterImport == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Rename)
             {
-                ftp.Rename(filePath, filePath.Replace(ftpAdapterArgument.Extension, ".Imported"));
+                ftp.Rename(filePath, filePath.ToLower().Replace(ftpAdapterArgument.Extension.ToLower(), ".Imported"));
             }
             else if (ftpAdapterArgument.ActionAfterImport == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Delete)
             {

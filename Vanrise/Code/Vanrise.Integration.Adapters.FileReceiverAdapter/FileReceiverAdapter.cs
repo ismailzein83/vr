@@ -36,7 +36,7 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
         {
             if (fileAdapterArgument.ActionAfterImport == (int)Actions.Rename)
             {
-                file.MoveTo(Path.Combine(file.DirectoryName, file.Name.Replace(fileAdapterArgument.Extension, ".Imported")));
+                file.MoveTo(Path.Combine(file.DirectoryName, file.Name.ToLower().Replace(fileAdapterArgument.Extension.ToLower(), ".Imported")));
             }
             else if (fileAdapterArgument.ActionAfterImport == (int)Actions.Delete)
             {
