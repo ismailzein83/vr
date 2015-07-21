@@ -106,12 +106,15 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
             case DeleteOperationResultEnum.Succeeded.value: showSuccess(itemType + " deleted successfully");
                 return true;
                 break;
+            case DeleteOperationResultEnum.InUse.value:
+                showError("Failed to delete " + itemType + " because it is already in use");
+                break;
             case DeleteOperationResultEnum.Failed.value:
                 if (deleteOperationOutput.Message != null) {
                     showError(deleteOperationOutput.Message); break;
                 }
                 else {
-                    showError("Failed to update " + itemType); break;
+                    showError("Failed to delete " + itemType); break;
                 }
                
         }

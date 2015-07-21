@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public enum DeleteOperationResult { Succeeded = 0, Failed = 1 }
+    public enum DeleteOperationResult { Succeeded = 0, Failed = 1, InUse = 2 }
     public class DeleteOperationOutput<T>
     {
         public DeleteOperationResult Result { get; set; }
