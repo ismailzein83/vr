@@ -1,0 +1,9 @@
+﻿<div ng-controller="ZoneSummaryController" vr-loader="isGettingData">
+    <select ng-options="itm as itm.name for itm in timeDimensionTypes"
+            ng-model="selectedTimeDimensionType" ng-change="updateReport()"></select>
+    <vr-datagrid datasource="data" maxheight="600px">
+        <vr-datagridcolumn headertext="'Time'" field="'dateTimeValue'"></vr-datagridcolumn>
+        <vr-datagridcolumn ng-repeat="measureType in measureTypes" headertext="measureType.description" field="'Values[' + $index + ']'" type="'Number'"></vr-datagridcolumn>
+    </vr-datagrid>
+    <a ng-click="gotoDetails()" style="cursor: pointer; ">More Details</a>
+</div>

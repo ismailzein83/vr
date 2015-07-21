@@ -1,0 +1,35 @@
+﻿<vr-panel ng-controller="BI_EntityReportController">
+    <div class="am-collapse" ng-hide="filterSectionCollapsed">
+        <vr-form name="entityfilterForm">
+            <vr-row removeline>               
+                <vr-columns colnum="2">
+                    <vr-datetimepicker type="date" value="fromDate" label="From" isrequired></vr-datetimepicker>
+                </vr-columns>
+
+                <vr-columns colnum="2">
+                    <vr-datetimepicker type="date" value="toDate" label="To" isrequired></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns colnum="2">
+                    <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Grouped By"
+                               selectedvalues="selectedTimeDimensionType" isrequired hidefilterbox></vr-select>
+                </vr-columns>
+
+            </vr-row>
+            <vr-row></vr-row>
+        </vr-form>
+    </div>
+    <vr-row removeline>
+        <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+            <div transclude-to="buttons">
+                <vr-button type="Search" data-onclick="search" formname="entityfilterForm"></vr-button>
+
+            </div>
+        </vr-actionbar>
+    </vr-row>
+    <vr-row >
+        <vr-columns colnum="12" vr-loader="isGettingData">
+            <div ng-include="'/Client/Modules/BI/Views/Reports/EntityReportTemplates/EntityReportResult.html'"></div>
+        </vr-columns>
+    </vr-row>
+    
+</vr-panel>

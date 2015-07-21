@@ -1,0 +1,14 @@
+﻿<div ng-controller="BI_VrDatagridDirectiveTemplateController" >
+    <vr-columns width="normal">
+        <vr-select datasource="operationTypes" datatextfield="description" datavaluefield="value" label="Data Type" selectedvalues="selectedOperationType" hidefilterbox></vr-select>
+    </vr-columns>
+    <vr-columns width="normal" ng-show=" selectedOperationType.value == 'TopEntities'">
+        <vr-select datasource="Entities" datatextfield="Name" datavaluefield="DisplayName" label="Entity" selectedvalues="selectedEntityType" hidefilterbox isrequired></vr-select>
+    </vr-columns>
+    <vr-columns width="normal">
+        <vr-select datasource="Measures" datatextfield="Name" datavaluefield="DisplayName" label="Measures" selectedvalues="selectedMeasureTypes" ismultipleselection onselectionchanged="onSelectionChanged" hidefilterbox isrequired></vr-select>
+    </vr-columns>
+    <vr-columns width="normal" ng-show=" selectedOperationType.value == 'TopEntities'">
+        <vr-select datasource="selectedMeasureTypes" datatextfield="Name" datavaluefield="DisplayName" label="Top Measure" selectedvalues="selectedTopMeasure" isrequired hidefilterbox></vr-select>
+    </vr-columns>
+</div>

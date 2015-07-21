@@ -1,0 +1,24 @@
+﻿<vr-panel ng-controller="BI_EntityReportResultController" vr-loader="isGettingData">
+    <vr-row>
+        <vr-choices selectedindex="selectedChoiceIndex" onselectionchanged="choiceSelectionChanged()" on-ready="choicesReady">
+            <vr-choice ng-repeat="choice in choicesGroup">{{choice.title}}</vr-choice>
+        </vr-choices>
+    </vr-row>
+    <vr-row ng-show="choicesGroup[selectedChoiceIndex].title=='Report'">
+       
+
+            <vr-datagrid datasource="data" on-ready="gridReady">
+                <vr-datagridcolumn headertext="'Time'" field="'dateTimeValue'"></vr-datagridcolumn>
+                <vr-datagridcolumn ng-repeat="measureType in measureTypes" headertext="measureType.description" field="'Values[' + $index + ']'" type="'Number'"></vr-datagridcolumn>
+                <vr-datagridexpandablerow ng-if="timeDimensionValue < 4">
+                    <div ng-include="'/Client/Modules/BI/Views/Reports/EntityReportTemplates/EntityReportResult.html'"></div>
+                </vr-datagridexpandablerow>
+            </vr-datagrid>
+       
+    </vr-row>
+    <vr-row ng-if="choicesGroup[selectedChoiceIndex].title=='Graph'">
+        <vr-columns colnum="12">
+            <vr-chart data-on-ready="chartEntityReady"></vr-chart>
+        </vr-columns>
+    </vr-row>
+</vr-panel>

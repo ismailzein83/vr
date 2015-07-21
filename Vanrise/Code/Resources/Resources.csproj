@@ -105,6 +105,7 @@
     <Content Include="Databases\TrackingDB\Schema.sql" />
     <Content Include="Databases\TransactionDB\Data.sql" />
     <Content Include="Databases\TransactionDB\Schema.sql" />
+    <Content Include="DLLs\Microsoft.AnalysisServices.AdomdClient.dll" />
     <Content Include="DLLs\Microsoft.Practices.EnterpriseLibrary.Common.dll" />
     <Content Include="DLLs\Microsoft.Practices.EnterpriseLibrary.Data.dll" />
     <Content Include="DLLs\Microsoft.Practices.ServiceLocation.dll" />

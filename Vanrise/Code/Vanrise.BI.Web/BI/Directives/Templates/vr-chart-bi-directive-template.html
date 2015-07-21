@@ -1,0 +1,18 @@
+﻿<div  ng-controller="BI_VrChartDirectiveTemplateController">
+    <vr-columns width="normal">
+        <vr-select datasource="operationTypes" datatextfield="description" datavaluefield="value" label="Data Type" selectedvalues="selectedOperationType" isrequired hidefilterbox></vr-select>
+    </vr-columns>
+    <vr-columns width="normal" ng-show=" selectedOperationType.value == 'TopEntities'">
+        <vr-select datasource="Entities" datatextfield="Name" datavaluefield="DisplayName" label="Entity" selectedvalues="selectedEntityType" isrequired hidefilterbox></vr-select>
+    </vr-columns>
+    <vr-columns width="normal" ng-show=" selectedOperationType.value == 'TopEntities'">
+        <vr-select datasource="Measures" datatextfield="Name" datavaluefield="DisplayName" label="Measures" selectedvalues="selectedMeasureType" hidefilterbox></vr-select>
+    </vr-columns>
+    <vr-columns width="normal" ng-show=" selectedOperationType.value == 'MeasuresGroupedByTime'">
+        <vr-select datasource="Measures" datatextfield="Name" datavaluefield="DisplayName" label="Measures" selectedvalues="selectedMeasureTypes" ismultipleselection hidefilterbox></vr-select>
+    </vr-columns>
+    <vr-columns width="normal" ng-show=" selectedOperationType.value == 'MeasuresGroupedByTime'">
+        <vr-select datasource="definitionTypes" datatextfield="value" datavaluefield="description" label="Chart Type" selectedvalues="selectedDefinitionType" hidefilterbox></vr-select>
+    </vr-columns>
+
+</div>
