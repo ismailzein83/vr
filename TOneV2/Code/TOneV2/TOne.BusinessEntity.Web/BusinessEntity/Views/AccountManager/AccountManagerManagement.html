@@ -10,13 +10,30 @@
         </vr-form>
     </vr-row>
 
-    <vr-row>
-        <div data-angular-treeview="true"
-             data-tree-id="tree"
-             data-tree-model="nodes"
-             data-node-id="nodeId"
-             data-node-label="nodeName"
-             data-node-children="nodeChildren">
+    <div class="row">
+        <div class="col-md-2">
+            <vr-row>
+                <div data-angular-treeview="true"
+                     data-tree-id="tree"
+                     data-tree-model="nodes"
+                     data-node-id="nodeId"
+                     data-node-label="nodeName"
+                     data-node-children="nodeChildren">
+                </div>
+            </vr-row>
         </div>
-    </vr-row>
+
+        <div class="col-md-10">
+            <vr-row>
+                <vr-columns colnum="fullrow" simplecol>
+                    <vr-datagrid datasource="assignedCarriers" on-ready="onGridReady" ng-show="tree.currentNode">
+                        <vr-datagridcolumn headertext="'Carrier Account Id'" field="'CarrierAccountId'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Is Customer'" field="'IsCustomer'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Is Supplier'" field="'IsSupplier'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Relationship'" field="'Relationship'"></vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-columns>
+            </vr-row>
+        </div>
+    </div>
 </vr-panel>

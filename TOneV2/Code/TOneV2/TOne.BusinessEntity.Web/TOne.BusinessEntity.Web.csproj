@@ -126,6 +126,7 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\AccountManagerController.cs" />
     <Compile Include="Controllers\BusinessEntityController.cs" />
     <Compile Include="Controllers\CarrierController.cs" />
     <Compile Include="Controllers\PriceListController.cs" />
@@ -139,6 +140,7 @@
     <Content Include="BusinessEntity\Constant\ActivationStatusEnum.js" />
     <Content Include="BusinessEntity\Constant\PaymentTypeEnum.js" />
     <Content Include="BusinessEntity\Constant\RoutingStatusEnum.js" />
+    <Content Include="BusinessEntity\Services\APIServices\AccountManagerAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\BusinessEntityAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\CarrierAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\PriceListAPIService.js" />

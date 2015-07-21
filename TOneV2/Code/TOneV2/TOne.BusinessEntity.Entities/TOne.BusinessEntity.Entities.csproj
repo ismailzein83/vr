@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountManagerCarrier.cs" />
+    <Compile Include="AssignedAccountManagerCarrier.cs" />
     <Compile Include="CarrierAccount.cs" />
     <Compile Include="CarrierAccountInfo.cs" />
     <Compile Include="CarrierGroup.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="SwitchInfo.cs" />
     <Compile Include="Tariff.cs" />
     <Compile Include="ToDConsideration.cs" />
+    <Compile Include="UpdatedAccountManagerCarrier.cs" />
     <Compile Include="Zone.cs" />
     <Compile Include="ZoneInfo.cs" />
     <Compile Include="ZoneRate.cs" />

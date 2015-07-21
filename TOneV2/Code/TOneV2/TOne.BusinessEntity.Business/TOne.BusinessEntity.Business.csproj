@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountManagerManager.cs" />
     <Compile Include="BusinessEntityInfoManager.cs" />
     <Compile Include="CarrierManager.cs" />
     <Compile Include="CodeManager.cs" />

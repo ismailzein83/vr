@@ -68,6 +68,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationParameterDataManager.cs" />
     <Compile Include="BaseTOneDataManager.cs" />
     <Compile Include="BusinessEntityDataManager.cs" />
     <Compile Include="GenericEntityDataManager.cs" />

@@ -123,6 +123,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationParameterManager.cs" />
     <Compile Include="BulkManager.cs" />
     <Compile Include="BusinessEntityManager.cs" />
     <Compile Include="GenericEntityManager.cs" />

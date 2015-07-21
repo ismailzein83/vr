@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataManagerFactory.cs" />
+    <Compile Include="IApplicationParameterDataManager.cs" />
     <Compile Include="IBusinessEntityDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IReportDefinitionDataManager.cs" />

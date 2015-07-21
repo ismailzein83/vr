@@ -6,19 +6,17 @@
                     
                     <vr-datagrid datasource="carriers" loadmoredata="loadMoreData" on-ready="onGridReady">
                         <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Customer'" field="'IsCustomerAvailable'" isclickable="onCellClick(dataItem)" onclicked="onCellClickedAgain(dataItem)">
-                            <vr-switch value="switch.value" onvaluechanged="onSwitchToggle" ng-show="{{dataItem.IsCustomerAvailable}}"></vr-switch>
+                        <vr-datagridcolumn headertext="'Customer'" field="'IsCustomerAvailable'">
+                            <vr-switch value="dataItem.newCustomerSwitchValue" ng-show="{{dataItem.IsCustomerAvailable}}"></vr-switch>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Supplier'" field="'IsSupplierAvailable'">
-                            <vr-switch value="second.value" ng-show="{{dataItem.IsSupplierAvailable}}"></vr-switch>
+                            <vr-switch value="dataItem.newSupplierSwitchValue" ng-show="{{dataItem.IsSupplierAvailable}}"></vr-switch>
                         </vr-datagridcolumn>
                     </vr-datagrid>
 
                 </vr-columns>
             </vr-row>
         </vr-form>
-
-        <!--<vr-switch value="switch.value" onvaluechanged="onSwitchToggle"></vr-switch>-->
     </vr-modalbody>
     
     <vr-actionbar>

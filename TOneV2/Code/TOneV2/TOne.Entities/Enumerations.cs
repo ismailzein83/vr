@@ -12,4 +12,9 @@ namespace TOne.Entities
         sys_LastRouteSynch,
         sys_LastRouteUpdate
     }
+
+    public enum ApplicationParameterEnum
+    {
+        OrgChartId = 1
+    }
 }

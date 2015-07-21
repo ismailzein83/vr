@@ -1,6 +1,7 @@
-﻿AccountManagerManagementController.$inject = ['$scope', 'UsersAPIService', 'VRModalService', 'UtilsService'];
+﻿AccountManagerManagementController.$inject = ['$scope', 'AccountManagerAPIService', 'UsersAPIService', 'ApplicationParameterAPIService', 'OrgChartAPIService', 'VRModalService', 'UtilsService'];
 
-function AccountManagerManagementController($scope, UsersAPIService, VRModalService, UtilsService) {
+function AccountManagerManagementController($scope, AccountManagerAPIService, UsersAPIService, ApplicationParameterAPIService, OrgChartAPIService, VRModalService, UtilsService) {
+    var gridApi;
     defineScope();
     load();
 
@@ -8,6 +9,7 @@ function AccountManagerManagementController($scope, UsersAPIService, VRModalServ
         $scope.users = [];
         $scope.nodes = [];
         $scope.assignedOrgChart = undefined;
+        $scope.assignedCarriers = [];
 
         $scope.openOrgChartsModal = function () {
             var settings = {};
@@ -43,12 +45,29 @@ function AccountManagerManagementController($scope, UsersAPIService, VRModalServ
 
             VRModalService.showModal('/Client/Modules/BusinessEntity/Views/AccountManager/CarrierAssignmentEditor.html', parameters, settings);
         }
+        $scope.onGridReady = function (api) {
+            gridApi = api;
+        }
+        $scope.$watch('tree.currentNode', function (newObj, oldObj) {
+            if (angular.isObject($scope.tree.currentNode)) {
+                getData();
+            }
+        }, false);
     }
 
     function load() {
         UsersAPIService.GetUsers().then(function (data) {
-            $scope.users = data;
-            mapUsersToNodes();
+            $scope.users = data; // mapMembersToNodes depends on $scope.users
+            //mapUsersToNodes();
+
+            ApplicationParameterAPIService.GetApplicationParameterById(1).then(function (data) {
+                var orgChartId = data.Value;
+
+                OrgChartAPIService.GetOrgChartById(orgChartId).then(function (orgChart) {
+                    console.log(orgChart);
+                    $scope.nodes = mapMembersToNodes(orgChart.Hierarchy);
+                });
+            });
         });
     }
 
@@ -84,6 +103,23 @@ function AccountManagerManagementController($scope, UsersAPIService, VRModalServ
             nodeName: user.Name,
             nodeChildren: []
         };
+    }
+
+    function getData() {
+        $scope.assignedCarriers = [];
+
+        return AccountManagerAPIService.GetAssignedCarriers($scope.tree.currentNode.nodeId).then(function (data) {
+            angular.forEach(data, function (item) {
+                var object = {
+                    CarrierAccountId: item.CarrierAccountId,
+                    IsCustomer: (item.RelationType == 1) ? 'True' : 'False',
+                    IsSupplier: (item.RelationType == 2) ? 'True' : 'False',
+                    Relation: 'Direct'
+                };
+
+                $scope.assignedCarriers.push(object);
+            });
+        });
     }
 }
 

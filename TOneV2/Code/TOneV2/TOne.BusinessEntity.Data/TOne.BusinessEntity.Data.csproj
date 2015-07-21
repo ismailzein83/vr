@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BEDataManagerFactory.cs" />
+    <Compile Include="IAccountManagerDataManager.cs" />
     <Compile Include="ICarrierDataManager.cs" />
     <Compile Include="ICodeDataManager.cs" />
     <Compile Include="ICommissionDataManager.cs" />

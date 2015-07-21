@@ -107,6 +107,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationParameter.cs" />
     <Compile Include="CacheObjectType.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="GenericEntity.cs" />

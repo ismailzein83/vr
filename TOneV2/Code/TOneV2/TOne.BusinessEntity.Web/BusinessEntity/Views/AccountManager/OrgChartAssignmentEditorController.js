@@ -1,6 +1,6 @@
-﻿OrgChartAssignmentEditorController.$inject = ['$scope', 'OrgChartAPIService', 'VRModalService', 'VRNavigationService'];
+﻿OrgChartAssignmentEditorController.$inject = ['$scope', 'OrgChartAPIService', 'ApplicationParameterAPIService', 'VRModalService', 'VRNavigationService'];
 
-function OrgChartAssignmentEditorController($scope, OrgChartAPIService, VRModalService, VRNavigationService) {
+function OrgChartAssignmentEditorController($scope, OrgChartAPIService, ApplicationParameterAPIService, VRModalService, VRNavigationService) {
     loadParameters();
     defineScope();
     load();
@@ -18,6 +18,14 @@ function OrgChartAssignmentEditorController($scope, OrgChartAPIService, VRModalS
         $scope.orgCharts = [];
 
         $scope.assignOrgChart = function () {
+            ApplicationParameterAPIService.UpdateApplicationParameter({
+                Id: 1,
+                Value: $scope.assignedOrgChart.Id
+            }).then(function (data) {
+                console.log(data);
+            }).catch(function (error) {
+                console.log(error);
+            });
             $scope.onOrgChartAssigned($scope.assignedOrgChart);
             $scope.modalContext.closeModal();
         }

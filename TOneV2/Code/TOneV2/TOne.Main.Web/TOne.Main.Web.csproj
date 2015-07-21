@@ -120,12 +120,14 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ApplicationParameterController.cs" />
     <Compile Include="Controllers\ReportDefintionController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Main\Services\APIServices\ApplicationParameterAPIService.js" />
     <Content Include="Main\Services\APIServices\ReportAPIService.js" />
     <Content Include="Main\Services\APIServices\RolesAPIService.js" />
     <Content Include="Main\Services\APIServices\UsersAPIService.js" />

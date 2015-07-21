@@ -1,6 +1,6 @@
-﻿CarrierAssignmentEditorController.$inject = ['$scope', 'CarrierAPIService', 'VRModalService', 'VRNavigationService'];
+﻿CarrierAssignmentEditorController.$inject = ['$scope', 'AccountManagerAPIService', 'VRModalService', 'VRNavigationService', 'UtilsService'];
 
-function CarrierAssignmentEditorController($scope, CarrierAPIService, VRModalService, VRNavigationService) {
+function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRModalService, VRNavigationService, UtilsService) {
     var gridApi;
     loadParameters();
     defineScope();
@@ -26,30 +26,22 @@ function CarrierAssignmentEditorController($scope, CarrierAPIService, VRModalSer
             return getData();
         }
         function getData() {
-            var pageInfo = gridApi.getPageInfo();
-
-            return CarrierAPIService.GetForAccountManager(pageInfo.fromRow, pageInfo.toRow).then(function (data) {
-                angular.forEach(data, function (item) {
-                    $scope.carriers.push(item);
+            UtilsService.waitMultipleAsyncOperations([loadParameters]).finally(function () {
+                // $scope.accountManager.nodeId is set
+                UtilsService.waitMultipleAsyncOperations([getCarriers]).finally(function () {
+                    // $scope.carriers is set
+                    AccountManagerAPIService.GetAssignedCarriers($scope.accountManager.nodeId).then(function (data) {
+                        toggleAssignedCarriers(data);
+                    });
                 });
             });
         }
-        //$scope.onCellClick = function (dataItem) {
-        //    console.log(dataItem);
-        //    console.log('clicked');
-        //}
-        //$scope.onCellClickedAgain = function (dataItem) {
-        //    console.log(dataItem);
-        //    console.log('clicked again');
-        //}
-        //$scope.onSwitchToggle = function () {
-        //    console.log('dirty');
-        //    console.log($scope.carriers);
-        //}
         $scope.assignCarriers = function () {
-            var dirtyCarriers = $scope.carriers.filter(isDirty);
+            var updatedCarriers = mapCarriersForAssignment();
 
-            $scope.modalContext.closeModal();
+            AccountManagerAPIService.AssignCarriers(updatedCarriers).then(function () {
+                $scope.modalContext.closeModal();
+            });
         }
         $scope.closeModal = function () {
             $scope.modalContext.closeModal();
@@ -59,10 +51,78 @@ function CarrierAssignmentEditorController($scope, CarrierAPIService, VRModalSer
     function load() {
     }
 
-    function isDirty(item) {
-        if (item.IsDirty != undefined && item.IsDirty != null && item.isDirty == true)
-            return true;
-        return false;
+    function mapCarriersForAssignment() {
+        var mappedCarriers = [];
+
+        for (var i = 0; i < $scope.carriers.length; i++)
+            mappedCarriers = mappedCarriers.concat(mapCarrierForAssignment($scope.carriers[i]));
+
+        return mappedCarriers;
+    }
+
+    function mapCarrierForAssignment(carrier) {
+        var mappedCarrier = [];
+
+        if (carrier.customerSwitchValue != carrier.newCustomerSwitchValue) {
+            var object = {
+                UserId: carrier.UserId,
+                CarrierAccountId: carrier.CarrierAccountId,
+                RelationType: 1,
+                Status: carrier.newCustomerSwitchValue
+            };
+            mappedCarrier.push(object);
+        }
+
+        if (carrier.supplierSwitchValue != carrier.newSupplierSwitchValue) {
+            var object = {
+                UserId: carrier.UserId,
+                CarrierAccountId: carrier.CarrierAccountId,
+                RelationType: 2,
+                Status: carrier.newSupplierSwitchValue
+            };
+            mappedCarrier.push(object);
+        }
+
+        return mappedCarrier;
+    }
+
+    function getCarriers() {
+        var pageInfo = gridApi.getPageInfo();
+
+        return AccountManagerAPIService.GetCarriers(pageInfo.fromRow, pageInfo.toRow).then(function (data) {
+            angular.forEach(data, function (item) {
+                var object = {
+                    UserId: $scope.accountManager.nodeId,
+                    CarrierAccountId: item.CarrierAccountId,
+                    Name: item.Name,
+                    NameSuffix: item.NameSuffix,
+                    IsCustomerAvailable: item.IsCustomerAvailable,
+                    customerSwitchValue: false,
+                    newCustomerSwitchValue: false,
+                    IsSupplierAvailable: item.IsSupplierAvailable,
+                    supplierSwitchValue: false,
+                    newSupplierSwitchValue: false
+                }
+                $scope.carriers.push(object);
+            });
+        });
+    }
+
+    function toggleAssignedCarriers(assignedCarriers) {
+        for (var i = 0; i < assignedCarriers.length; i++) {
+            var carrier = UtilsService.getItemByVal($scope.carriers, assignedCarriers[i].CarrierAccountId, 'CarrierAccountId');
+
+            if (carrier != null) {
+                if (assignedCarriers[i].RelationType == 1) {
+                    carrier.customerSwitchValue = true;
+                    carrier.newCustomerSwitchValue = true;
+                }
+                else {
+                    carrier.supplierSwitchValue = true;
+                    carrier.newSupplierSwitchValue = true;
+                }
+            }
+        }
     }
 }
 

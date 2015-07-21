@@ -22,11 +22,6 @@ namespace TOne.BusinessEntity.Business
             return _dataManager.GetCarriers(carrierType);
         }
 
-        public List<AccountManagerCarrier> GetForAccountManager(int from, int to)
-        {
-            return _dataManager.GetForAccountManager(from, to);
-        }
-
         public int InsertCarrierTest(string CarrierAccountID, string Name)
         {
             return _dataManager.InsertCarrierTest(CarrierAccountID, Name);
