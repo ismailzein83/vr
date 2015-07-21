@@ -47,6 +47,8 @@ app.directive('vrTreeview', [function () {
             var api = {};
 
             api.refreshTree = function () {
+                treeElement.jstree("destroy");
+                treeElement = $element.find('#divTree');
                 var treeArray = [];
                 fillTreeFromDataSource(treeArray, ctrl.datasource);
                 var treeData={
@@ -59,7 +61,7 @@ app.directive('vrTreeview', [function () {
                     
                 }
                 if (ctrl.wholerow !== undefined) {
-                     plugins.push("wholerow")
+                    plugins.push("wholerow");
                 }
                 treeData.plugins=plugins;
                 treeElement.jstree(treeData);
