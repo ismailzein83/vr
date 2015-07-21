@@ -128,6 +128,21 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BI.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.BI.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BI.Data">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.BI.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BI.Data.SQL">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.BI.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BI.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.BI.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BI.Web">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.BI.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess.Client">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Client.dll</HintPath>
     </Reference>
@@ -327,26 +342,6 @@
     <ProjectReference Include="..\TOne.Analytics.Web\TOne.Analytics.Web.csproj">
       <Project>{9d04963a-abea-49b3-9855-5b64b3b85619}</Project>
       <Name>TOne.Analytics.Web</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TOne.BI.Business\TOne.BI.Business.csproj">
-      <Project>{8ad4159c-2a7f-4755-bc06-c0bff17bd953}</Project>
-      <Name>TOne.BI.Business</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TOne.BI.Data.SQL\TOne.BI.Data.SQL.csproj">
-      <Project>{4b8aaf35-6c33-4245-a26b-a4b0885a5ae2}</Project>
-      <Name>TOne.BI.Data.SQL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TOne.BI.Data\TOne.BI.Data.csproj">
-      <Project>{04248290-1d49-4ae5-a5ca-d4fb9bc82e10}</Project>
-      <Name>TOne.BI.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TOne.BI.Entities\TOne.BI.Entities.csproj">
-      <Project>{91757f60-1a2b-4413-8d27-26b637a03cb4}</Project>
-      <Name>TOne.BI.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TOne.BI.Web\TOne.BI.Web.csproj">
-      <Project>{1fbb316a-3c66-40b9-a40d-b7a93ad2fda2}</Project>
-      <Name>TOne.BI.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.BusinessEntity.Business\TOne.BusinessEntity.Business.csproj">
       <Project>{bdc9694f-88b7-492d-9865-304e774a5776}</Project>

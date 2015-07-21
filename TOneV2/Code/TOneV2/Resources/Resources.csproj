@@ -53,7 +53,6 @@
     <Content Include="DLLs\Iesi.Collections.dll" />
     <Content Include="DLLs\Interop.xlsgen.dll" />
     <Content Include="DLLs\log4net.dll" />
-    <Content Include="DLLs\Microsoft.AnalysisServices.AdomdClient.dll" />
     <Content Include="DLLs\Mono.Security.dll" />
     <Content Include="DLLs\MySql.Data.dll" />
     <Content Include="DLLs\NGenerics.dll" />

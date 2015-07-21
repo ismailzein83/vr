@@ -8,7 +8,7 @@
  - Add the following virtual directories under "Client > Modules" folder:
 	Main			C:\TFS\TOneV2\Code\TOneV2\TOne.Main.Web\Main
 	Analytics		C:\TFS\TOneV2\Code\TOneV2\TOne.Analytics.Web\Analytics
-	BI				C:\TFS\TOneV2\Code\TOneV2\TOne.BI.Web\BI
+	BI				C:\TFS\Vanrise\Code\Vanrise.BI.Web\BI
 	Routing			C:\TFS\TOneV2\Code\TOneV2\TOne.LCR.Web\Routing
 	BusinessEntity	C:\TFS\TOneV2\Code\TOneV2\TOne.BusinessEntity.Web\BusinessEntity
 	Security		C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
