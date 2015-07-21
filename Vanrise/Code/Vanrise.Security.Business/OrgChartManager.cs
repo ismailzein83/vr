@@ -88,5 +88,17 @@ namespace Vanrise.Security.Business
 
             return deleteOperationOutput;
         }
+
+        public int? GetLinkedOrgChartId(OrgChartLinkedEntityInfo entityInfo)
+        {
+            IOrgChartLinkedEntityDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IOrgChartLinkedEntityDataManager>();
+            return dataManager.GetLinkedOrgChartId(entityInfo.GetIdentifier());
+        }
+
+        public void UpdateOrgChartLinkedEntity(int orgChartId, OrgChartLinkedEntityInfo entityInfo)
+        {
+            IOrgChartLinkedEntityDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IOrgChartLinkedEntityDataManager>();
+            dataManager.InsertOrUpdate(orgChartId, entityInfo.GetIdentifier());
+        }
     }
 }
