@@ -14,6 +14,15 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
     {
 
         [HttpGet]
+        public IEnumerable<SubscriberThreshold> GetSubscriberThresholds(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn)
+        {
+            StrategyManager manager = new StrategyManager();
+
+            return manager.GetSubscriberThresholds(fromRow, toRow, fromDate, toDate, msisdn);
+        }
+
+
+        [HttpGet]
         public IEnumerable<CDR> GetNormalCDRs(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn)
         {
             StrategyManager manager = new StrategyManager();

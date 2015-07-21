@@ -22,12 +22,17 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             return GetItemsSP("FraudAnalysis.sp_Strategy_GetStrategy", StrategyMapper, strategyId).FirstOrDefault();
         }
-       
+
         public List<Strategy> GetAllStrategies()
         {
             return GetItemsSP("FraudAnalysis.sp_Strategy_GetAll", StrategyMapper);
         }
 
+
+        public List<SubscriberThreshold> GetSubscriberThresholds(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn)
+        {
+            return GetItemsSP("FraudAnalysis.sp_FraudResult_GetSubscriberThresholds", SubscriberThresholdMapper, fromRow, toRow, fromDate, toDate, msisdn);
+        }
 
         public List<CDR> GetNormalCDRs(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn)
         {
@@ -40,9 +45,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return GetItemsSP("FraudAnalysis.sp_FraudResult_GetNumberProfile", NumberProfileMapper, fromRow, toRow, fromDate, toDate, subscriberNumber);
         }
 
-        
 
-        
+
+
         public List<Strategy> GetFilteredStrategies(int fromRow, int toRow, string name, string description)
         {
             return GetItemsSP("FraudAnalysis.sp_Strategy_GetFilteredStrategies", StrategyMapper, fromRow, toRow, name, description);
@@ -51,8 +56,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         public bool AddStrategy(Strategy strategyObject, out int insertedId)
         {
             object id;
-            int recordesEffected = ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_Insert", out id, 
-                DefaultUserId, 
+            int recordesEffected = ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_Insert", out id,
+                DefaultUserId,
                 !string.IsNullOrEmpty(strategyObject.Name) ? strategyObject.Name : null,
                 !string.IsNullOrEmpty(strategyObject.Description) ? strategyObject.Description : null,
                 DateTime.Now,
@@ -72,7 +77,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 return false;
             }
 
-            
+
         }
 
         public bool UpdateStrategy(Strategy strategyObject)
@@ -80,7 +85,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             int recordesEffected = ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_Update",
                 strategyObject.Id,
-                 DefaultUserId, 
+                 DefaultUserId,
                 !string.IsNullOrEmpty(strategyObject.Name) ? strategyObject.Name : null,
                 !string.IsNullOrEmpty(strategyObject.Description) ? strategyObject.Description : null,
                 DateTime.Now,
@@ -90,8 +95,39 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 return true;
             return false;
         }
-        
+
         #region Private Methods
+
+
+        private SubscriberThreshold SubscriberThresholdMapper(IDataReader reader)
+        {
+            var subscriberThreshold = new SubscriberThreshold();
+
+            subscriberThreshold.DateDay = GetReaderValue<DateTime>(reader, "DateDay");
+            subscriberThreshold.Criteria1 = GetReaderValue<Decimal>(reader, "Criteria1");
+            subscriberThreshold.Criteria2 = GetReaderValue<Decimal>(reader, "Criteria2");
+            subscriberThreshold.Criteria3 = GetReaderValue<Decimal>(reader, "Criteria3");
+            subscriberThreshold.Criteria4 = GetReaderValue<Decimal>(reader, "Criteria4");
+            subscriberThreshold.Criteria5 = GetReaderValue<Decimal>(reader, "Criteria5");
+            subscriberThreshold.Criteria6 = GetReaderValue<Decimal>(reader, "Criteria6");
+            subscriberThreshold.Criteria7 = GetReaderValue<Decimal>(reader, "Criteria7");
+            subscriberThreshold.Criteria8 = GetReaderValue<Decimal>(reader, "Criteria8");
+            subscriberThreshold.Criteria9 = GetReaderValue<Decimal>(reader, "Criteria9");
+            subscriberThreshold.Criteria10 = GetReaderValue<Decimal>(reader, "Criteria10");
+            subscriberThreshold.Criteria11 = GetReaderValue<Decimal>(reader, "Criteria11");
+            subscriberThreshold.Criteria12 = GetReaderValue<Decimal>(reader, "Criteria12");
+            subscriberThreshold.Criteria13 = GetReaderValue<Decimal>(reader, "Criteria13");
+            subscriberThreshold.Criteria14 = GetReaderValue<Decimal>(reader, "Criteria14");
+            subscriberThreshold.Criteria15 = GetReaderValue<Decimal>(reader, "Criteria15");
+            subscriberThreshold.Criteria16 = GetReaderValue<Decimal>(reader, "Criteria16");
+            subscriberThreshold.Criteria17 = GetReaderValue<Decimal>(reader, "Criteria17");
+            subscriberThreshold.Criteria18 = GetReaderValue<Decimal>(reader, "Criteria18");
+            subscriberThreshold.SuspicionLevelName = reader["SuspicionLevelName"] as string; 
+            subscriberThreshold.StrategyName = reader["StrategyName"] as string; 
+
+            return subscriberThreshold;
+        }
+
 
         private CDR CDRMapper(IDataReader reader)
         {
@@ -144,8 +180,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
-        
-
         private Strategy StrategyMapper(IDataReader reader)
         {
             var strategy = Vanrise.Common.Serializer.Deserialize<Strategy>(GetReaderValue<string>(reader, "StrategyContent"));
@@ -186,6 +220,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         #endregion
 
 
-      
+
     }
 }

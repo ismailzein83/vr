@@ -26,6 +26,17 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         }
 
+
+        public IEnumerable<SubscriberThreshold> GetSubscriberThresholds(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn)
+        {
+
+            IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+
+            return manager.GetSubscriberThresholds(fromRow, toRow, fromDate, toDate, msisdn);
+
+        }
+
+
         public IEnumerable<CDR> GetNormalCDRs(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn)
         {
 

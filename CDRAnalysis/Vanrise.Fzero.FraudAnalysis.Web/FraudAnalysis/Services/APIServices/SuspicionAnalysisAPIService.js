@@ -3,11 +3,25 @@
     return ({
         GetFilteredSuspiciousNumbers: GetFilteredSuspiciousNumbers,
         GetNormalCDRs: GetNormalCDRs,
+        GetSubscriberThresholds: GetSubscriberThresholds,
         GetNumberProfiles: GetNumberProfiles
     });
 
     function GetNormalCDRs(fromRow, toRow, fromDate, toDate, msisdn) {
         return BaseAPIService.get("/api/SuspicionAnalysis/GetNormalCDRs",
+            {
+                fromRow: fromRow,
+                toRow: toRow,
+                fromDate: fromDate,
+                toDate: toDate,
+                msisdn: msisdn
+            }
+           );
+    }
+
+
+    function GetSubscriberThresholds(fromRow, toRow, fromDate, toDate, msisdn) {
+        return BaseAPIService.get("/api/SuspicionAnalysis/GetSubscriberThresholds",
             {
                 fromRow: fromRow,
                 toRow: toRow,

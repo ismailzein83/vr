@@ -1,6 +1,7 @@
 ﻿SuspiciousNumberDetailsController.$inject = ['$scope', 'StrategyAPIService', 'SuspicionAnalysisAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
 function SuspiciousNumberDetailsController($scope, StrategyAPIService, SuspicionAnalysisAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+    var subscriberThresholdsGridAPI;
     var normalCDRGridAPI;
     var numberProfileGridAPI;
 
@@ -22,6 +23,28 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
         $scope.toDate = parameters.toDate;
         
     }
+
+    function getSubscriberThresholds() {
+        $scope.subscriberThresholds.length = 0;
+
+        var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
+        var toDate = $scope.toDate != undefined ? $scope.toDate : '';
+
+
+        var pageInfo = subscriberThresholdsGridAPI.getPageInfo();
+
+        $scope.isGettingSubscriberThresholds = true;
+        return SuspicionAnalysisAPIService.GetSubscriberThresholds(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, $scope.subscriberNumber).then(function (response) {
+            angular.forEach(response, function (itm) {
+                $scope.subscriberThresholds.push(itm);
+            });
+        }).finally(function () {
+            $scope.isGettingSubscriberThresholds = false;
+        });
+    }
+
+
+
 
     function getNormalCDRs() {
         $scope.normalCDRs.length = 0;
@@ -66,13 +89,25 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
 
     function defineScope() {
 
+        $scope.subscriberThresholds = [];
         $scope.normalCDRs = [];
         $scope.numberProfiles = [];
         $scope.relatedNumbers = [];
 
 
-        SuspiciousNumberDetailsController.isNormalCDRTabShown = true;
+        SuspiciousNumberDetailsController.isSubscriberThresholdsTabShown = true;
         SuspiciousNumberDetailsController.isNumberProfileTabShown = false;
+        SuspiciousNumberDetailsController.isNormalCDRTabShown = false;
+
+
+        $scope.onSubscriberThresholdsGridReady = function (api) {
+            subscriberThresholdsGridAPI = api;
+        };
+
+        $scope.loadMoreDataSubscriberThresholds = function () {
+            return getSubscriberThresholds();
+        }
+
 
         $scope.onNormalCDRsGridReady = function (api) {
             normalCDRGridAPI = api;
@@ -104,7 +139,9 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
 
         normalCDRGridAPI.clearDataAndContinuePaging();
         numberProfileGridAPI.clearDataAndContinuePaging();
+        subscriberThresholdsGridAPI.clearDataAndContinuePaging();
 
+        getSubscriberThresholds();
         getNormalCDRs();
         getNumberProfiles();
     }
@@ -149,6 +186,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
 
         isNormalCDRTabShown = !isNormalCDRTabShown;
         isNumberProfileTabShown = !isNumberProfileTabShown;
+        isSubscriberThresholdsTabShown = !isSubscriberThresholdsTabShown;
     };
 
 

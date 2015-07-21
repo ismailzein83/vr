@@ -111,7 +111,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             throw new NotImplementedException();
         }
 
-
-       
+        public List<SubscriberThreshold> GetSubscriberThresholds(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
