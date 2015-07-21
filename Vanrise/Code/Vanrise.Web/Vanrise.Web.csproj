@@ -235,6 +235,8 @@
     <Content Include="Client\Javascripts\Services\NotificationService\vr-notification-service.js" />
     <Content Include="Client\Javascripts\Services\utils-service.js" />
     <Content Include="Client\Javascripts\Services\zone-service.js" />
+    <Content Include="Client\Libraries\AngularExtensions\BsDateTimePickereDpendencies\css\bootstrap.css" />
+    <Content Include="Client\Libraries\AngularExtensions\BsDateTimePickereDpendencies\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Client\Libraries\AngularExtensions\BsDateTimePicker\angular-bootstrap-datetimepicker-directive.js" />
     <Content Include="Client\Libraries\AngularExtensions\BsDateTimePicker\bootstrap-datetimepicker.css" />
     <Content Include="Client\Libraries\AngularExtensions\BsDateTimePicker\bootstrap-datetimepicker.js" />
@@ -698,6 +700,13 @@
     <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\themes\mixins.less" />
     <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\themes\responsive.less" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Client\Libraries\AngularExtensions\BsDateTimePickereDpendencies\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Client\Libraries\AngularExtensions\BsDateTimePickereDpendencies\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Client\Libraries\AngularExtensions\BsDateTimePickereDpendencies\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Client\Libraries\AngularExtensions\BsDateTimePickereDpendencies\fonts\glyphicons-halflings-regular.woff2" />
+  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -10,7 +10,8 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
     {
         window.location.href = '/Security/Login';
     }
-
+    
+   
     PermissionAPIService.GetEffectivePermissions().then(function (response) {
         $rootScope.effectivePermissionsWrapper = response;
     }

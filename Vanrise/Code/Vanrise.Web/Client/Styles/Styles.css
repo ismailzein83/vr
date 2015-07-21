@@ -164,7 +164,7 @@ font-size:12px !important;
 textarea.form-control {   
     height: auto ;
 }
-.btn{
+button.btn{
     height: 29px !important;
     padding: 4px 12px !important;
 } 
