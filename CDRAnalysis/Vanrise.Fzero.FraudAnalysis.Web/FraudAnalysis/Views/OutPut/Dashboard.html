@@ -1,6 +1,6 @@
 ﻿<vr-panel ng-controller="FraudAnalysis_DashboardController">
-
-    <vr-form name="formFilter">
+    Not Developed Yet
+    <vr-form name="formFilter" style="display:none">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns colnum="2">
@@ -25,7 +25,7 @@
         </vr-row>
     </vr-form>
 
-    <div vr-loader="isGettingStrategies">
+    <div vr-loader="isGettingStrategies" style="display:none">
         <vr-row>
             <vr-columns colnum="12" simplecol>
                 <vr-datagrid datasource="strategies" menuactions="gridMenuActions" maxheight="400px" loadmoredata="loadMoreData" on-ready="onMainGridReady">
