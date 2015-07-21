@@ -107,10 +107,11 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
     function refreshData() {
         var refreshDataOperations = [];
         angular.forEach($scope.bodyWidgets, function (bodyWidget) {
-
+           if(bodyWidget.API!=undefined)
             refreshDataOperations.push(bodyWidget.retrieveData);
         });
         angular.forEach($scope.summaryWidgets, function (summaryWidget) {
+            if (summaryWidget.API != undefined)
             refreshDataOperations.push(summaryWidget.retrieveData);
         });
       
@@ -185,12 +186,14 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
     }
     function addSummaryWidget(summaryWidget) {
         summaryWidget.onElementReady = function (api) {
+           
             summaryWidget.API = api;
             summaryWidget.API.retrieveData($scope.filter);
             summaryWidget.retrieveData = function () {
                 return api.retrieveData($scope.filter);
             };
         };
+       
         $scope.summaryWidgets.push(summaryWidget);
     }
 
