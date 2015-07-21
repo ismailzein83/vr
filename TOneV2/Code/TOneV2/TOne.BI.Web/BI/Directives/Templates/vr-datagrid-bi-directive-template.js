@@ -1,6 +1,6 @@
-﻿VrDatagridDirectiveTemplateController.$inject = ['$scope','BITimeDimensionTypeEnum', 'BIConfigurationAPIService', 'ChartSeriesTypeEnum', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿VrDatagridDirectiveTemplateController.$inject = ['$scope','TimeDimensionTypeEnum', 'BIConfigurationAPIService', 'ChartSeriesTypeEnum', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function VrDatagridDirectiveTemplateController($scope, BITimeDimensionTypeEnum,BIConfigurationAPIService, ChartSeriesTypeEnum, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
+function VrDatagridDirectiveTemplateController($scope, TimeDimensionTypeEnum,BIConfigurationAPIService, ChartSeriesTypeEnum, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
     loadParameters();
     defineScope();
     load();
@@ -77,11 +77,11 @@ function VrDatagridDirectiveTemplateController($scope, BITimeDimensionTypeEnum,B
 
     function defineTimeDimensionTypes() {
         $scope.timeDimensionTypes = [];
-        for (var td in BITimeDimensionTypeEnum)
-            $scope.timeDimensionTypes.push(BITimeDimensionTypeEnum[td]);
+        for (var td in TimeDimensionTypeEnum)
+            $scope.timeDimensionTypes.push(TimeDimensionTypeEnum[td]);
 
         $scope.selectedTimeDimensionType = $.grep($scope.timeDimensionTypes, function (t) {
-            return t == BITimeDimensionTypeEnum.Daily;
+            return t == TimeDimensionTypeEnum.Daily;
         })[0];
     }
 

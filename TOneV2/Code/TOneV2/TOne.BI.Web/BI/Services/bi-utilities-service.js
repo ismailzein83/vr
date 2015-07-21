@@ -1,7 +1,7 @@
 ﻿
 
 
-app.service('BIUtilitiesService', function (BITimeDimensionTypeEnum, VRModalService, SecurityService) {
+app.service('BIUtilitiesService', function (TimeDimensionTypeEnum, VRModalService, SecurityService) {
 
     return ({
         openEntityReport:openEntityReport,
@@ -46,10 +46,10 @@ app.service('BIUtilitiesService', function (BITimeDimensionTypeEnum, VRModalServ
         angular.forEach(data, function (itm) {
             var dateTimeValue = new Date(itm.Time);
             switch (timeDimensionType) {
-                case BITimeDimensionTypeEnum.Yearly.value:
+                case TimeDimensionTypeEnum.Yearly.value:
                     itm.dateTimeValue = dateTimeValue.getFullYear();
                     break;
-                case BITimeDimensionTypeEnum.Monthly.value:
+                case TimeDimensionTypeEnum.Monthly.value:
                     if (dontFillGroup)
                         itm.dateTimeValue = getMonthNameShort(dateTimeValue) + "-" + getShortYear(dateTimeValue);
                     else {
@@ -58,7 +58,7 @@ app.service('BIUtilitiesService', function (BITimeDimensionTypeEnum, VRModalServ
                     }
                     
                     break;
-                case BITimeDimensionTypeEnum.Weekly.value:
+                case TimeDimensionTypeEnum.Weekly.value:
                     itm.dateTimeValue = "Week " + itm.WeekNumber;
                     var groupName = getMonthNameShort(dateTimeValue) + "-" + getShortYear(dateTimeValue);
                     if (dontFillGroup)
@@ -66,7 +66,7 @@ app.service('BIUtilitiesService', function (BITimeDimensionTypeEnum, VRModalServ
                     else 
                         itm.dateTimeGroupValue = groupName;                                        
                     break;
-                case BITimeDimensionTypeEnum.Daily.value:
+                case TimeDimensionTypeEnum.Daily.value:
                     itm.dateTimeValue = dateTimeValue.getDate();
                     var groupName = getMonthNameShort(dateTimeValue) + "-" + getShortYear(dateTimeValue);
                     if (dontFillGroup)
@@ -75,7 +75,7 @@ app.service('BIUtilitiesService', function (BITimeDimensionTypeEnum, VRModalServ
                         itm.dateTimeGroupValue = groupName;
                     break;
 
-                case BITimeDimensionTypeEnum.Hourly.value:
+                case TimeDimensionTypeEnum.Hourly.value:
                     var hour = dateTimeValue.getHours().toString();
                     var minute = dateTimeValue.getMinutes().toString();
                     itm.dateTimeValue = (hour.length < 2 ? '0' + hour : hour) + ":" + (minute.length < 2 ? '0' + minute : minute);
@@ -93,24 +93,24 @@ app.service('BIUtilitiesService', function (BITimeDimensionTypeEnum, VRModalServ
     function checkIsLongPeriod(timeDimensionType, fromDate, toDate) {
        
         switch (timeDimensionType) {
-            case BITimeDimensionTypeEnum.Yearly.value:
+            case TimeDimensionTypeEnum.Yearly.value:
                 return false;
-            case BITimeDimensionTypeEnum.Monthly.value:
+            case TimeDimensionTypeEnum.Monthly.value:
                 if (toDate.getFullYear() - fromDate.getFullYear() > 4)
                     return true;
                 else
                     return false;
-            case BITimeDimensionTypeEnum.Weekly.value:
+            case TimeDimensionTypeEnum.Weekly.value:
                 if (getDateDifference(fromDate, toDate) > 200)
                     return true
                 else
                     return false;
-            case BITimeDimensionTypeEnum.Daily.value:
+            case TimeDimensionTypeEnum.Daily.value:
                 if (getDateDifference(fromDate, toDate) > 50)
                     return true;
                 else
                     return false;
-            case BITimeDimensionTypeEnum.Hourly.value:
+            case TimeDimensionTypeEnum.Hourly.value:
                 if (getDateDifference(fromDate, toDate) > 2)
                     return true;
                 else
@@ -122,18 +122,18 @@ app.service('BIUtilitiesService', function (BITimeDimensionTypeEnum, VRModalServ
         var dateTimeValue = new Date(timeRecord.Time);
         
         switch (timeDimensionType) {
-            case BITimeDimensionTypeEnum.Yearly.value:
+            case TimeDimensionTypeEnum.Yearly.value:
                 dateTimeValue.setFullYear(dateTimeValue.getFullYear() + 1);
                 dateTimeValue.setDate(dateTimeValue.getDate() - 1);
                 return dateTimeValue;
-            case BITimeDimensionTypeEnum.Monthly.value:
+            case TimeDimensionTypeEnum.Monthly.value:
                 dateTimeValue.setMonth(dateTimeValue.getMonth() + 1);
                 dateTimeValue.setDate(dateTimeValue.getDate() - 1);
                 return dateTimeValue;
-            case BITimeDimensionTypeEnum.Weekly.value:
+            case TimeDimensionTypeEnum.Weekly.value:
                 dateTimeValue.setDate(dateTimeValue.getDate() + 6);
                 return dateTimeValue;
-            case BITimeDimensionTypeEnum.Daily.value:
+            case TimeDimensionTypeEnum.Daily.value:
                 //dateTimeValue.setDate(dateTimeValue.getDate() + 1);
                 return dateTimeValue;
         }

@@ -1,55 +1,55 @@
-﻿
-app.service('BIAPIService', function (BaseAPIService) {
+﻿ app.service('BIAPIService', function (BaseAPIService) {
 
-    return ({
-        
-        GetMeasureTypeList: GetMeasureTypeList,
-        GetMeasureValues: GetMeasureValues,
-        GetEntityMeasuresValues: GetEntityMeasuresValues,
-        GetTopEntities: GetTopEntities
+        return ({
+            GetMeasureValues: GetMeasureValues,
+            GetEntityMeasuresValues: GetEntityMeasuresValues,
+            GetTopEntities: GetTopEntities,
+            GetMeasureValues1: GetMeasureValues1
+    
+        });
+
+
+        function GetMeasureValues(timeDimensionType, fromDate, toDate, measureTypesNames) {
+            return BaseAPIService.get("/api/BI/GetMeasureValues",
+                {
+                    timeDimensionType: timeDimensionType,
+                    fromDate: fromDate,
+                    toDate: toDate,
+                    measureTypesNames: measureTypesNames
+                });
+        }
+
+        function GetEntityMeasuresValues(entityTypeName, entityId, timeDimensionType, fromDate, toDate, measureTypesNames) {
+            return BaseAPIService.get("/api/BI/GetEntityMeasuresValues",
+                {
+                    entityTypeName: entityTypeName,
+                    entityId: entityId,
+                    timeDimensionType: timeDimensionType,
+                    fromDate: fromDate,
+                    toDate: toDate,
+                    measureTypesNames: measureTypesNames
+                });
+        }
+
+        function GetTopEntities(entityTypeName, topByMeasureTypeName, fromDate, toDate, topCount, measureTypesNames) {
+            return BaseAPIService.get("/api/BI/GetTopEntities",
+                {
+                    entityTypeName: entityTypeName,
+                    topByMeasureTypeName: topByMeasureTypeName,
+                    fromDate: fromDate,
+                    toDate: toDate,
+                    topCount: topCount,
+                    measureTypesNames: measureTypesNames
+                });
+        }
+        function GetMeasureValues1(fromDate, toDate, measureTypesNames) {
+            return BaseAPIService.get("/api/BI/GetMeasureValues",
+                {
+                    fromDate: fromDate,
+                    toDate: toDate,
+                    measureTypesNames: measureTypesNames
+                });
+        }
+    
+
     });
-
-
-    function GetMeasureTypeList() {
-        return BaseAPIService.get("/api/BI/GetMeasureTypeList",
-            {
-
-            });
-    }
-
-    function GetMeasureValues(timeDimensionType, fromDate, toDate, measureTypes) {
-        return BaseAPIService.get("/api/BI/GetMeasureValues",
-            {
-                timeDimensionType: timeDimensionType,
-                fromDate: fromDate,
-                toDate: toDate,
-                measureTypes: measureTypes
-            });
-    }
-
-    function GetEntityMeasuresValues(entityType, entityId, timeDimensionType, fromDate, toDate, measureTypes) {
-        return BaseAPIService.get("/api/BI/GetEntityMeasuresValues",
-            {
-                entityType: entityType,
-                entityId: entityId,
-                timeDimensionType: timeDimensionType,
-                fromDate: fromDate,
-                toDate: toDate,
-                measureTypes: measureTypes
-            });
-    }
-
-    function GetTopEntities(entityType, topByMeasureType, fromDate, toDate, topCount, moreMeasures) {
-        return BaseAPIService.get("/api/BI/GetTopEntities",
-            {
-                entityType: entityType,
-                topByMeasureType: topByMeasureType,
-                fromDate: fromDate,
-                toDate: toDate,
-                topCount: topCount,
-                moreMeasures: moreMeasures
-            });
-    }
-
-
-});

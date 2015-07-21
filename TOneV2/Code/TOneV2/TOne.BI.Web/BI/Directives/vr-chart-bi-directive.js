@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualElementService1', 'BIConfigurationAPIService', 'VRModalService', 'UtilsService', 'VRNotificationService', function (BIDataAPIService, BIUtilitiesService, BIVisualElementService1, BIConfigurationAPIService, VRModalService, UtilsService, VRNotificationService) {
+app.directive('vrChartBi', ['BIAPIService', 'BIUtilitiesService', 'BIVisualElementService', 'BIConfigurationAPIService', 'VRModalService', 'UtilsService', 'VRNotificationService', function (BIAPIService, BIUtilitiesService, BIVisualElementService, BIConfigurationAPIService, VRModalService, UtilsService, VRNotificationService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -17,7 +17,7 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
             var ctrl = this;
             var retrieveDataOnLoad = $scope.$parent.$eval($attrs.retrievedataonload);
            
-            var biChart = new BIChart(ctrl, ctrl.settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1,BIConfigurationAPIService, VRModalService, UtilsService, VRNotificationService);
+            var biChart = new BIChart(ctrl, ctrl.settings, retrieveDataOnLoad, BIAPIService, BIVisualElementService, BIConfigurationAPIService, VRModalService, UtilsService, VRNotificationService);
             biChart.initializeController();
 
           
@@ -47,7 +47,7 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
             return '<vr-section title="{{ctrl.title}}"></br><vr-textbox value="ctrl.settings.OperationType" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.settings.EntityType" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.settings.MeasureTypes" vr-disabled="true"></vr-textbox></vr-section>'
           
     }
-    function BIChart(ctrl, settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1, BIConfigurationAPIService, VRModalService, UtilsService, VRNotificationService) {
+    function BIChart(ctrl, settings, retrieveDataOnLoad, BIAPIService, BIVisualElementService, BIConfigurationAPIService, VRModalService, UtilsService, VRNotificationService) {
         var chartAPI;
         var measures = [];
         var entity;
@@ -77,9 +77,9 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
                 ctrl.isAllowed = true;
                 ctrl.onChartReady = function (api) {
                     chartAPI = api;
-                    chartAPI.onDataItemClicked = function (item) {
-                        BIUtilitiesService.openEntityReport(item.EntityType, item.EntityId, item.EntityName);
-                    };
+                    //chartAPI.onDataItemClicked = function (item) {
+                    //    BIUtilitiesService.openEntityReport(item.EntityType, item.EntityId, item.EntityName);
+                    //};
                     //if (retrieveDataOnLoad)
                     //    retrieveData();
                 };
@@ -103,7 +103,7 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
             if (!ctrl.isAllowed)
                 return;
             ctrl.isGettingData = true;
-            return BIVisualElementService1.retrieveWidgetData(ctrl, settings,filter)
+            return BIVisualElementService.retrieveWidgetData(ctrl, settings,filter)
 
                 .then(function (response) {
                            

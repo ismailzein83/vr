@@ -67,6 +67,7 @@ app.directive('vrTreeview', [function () {
                    ctrl.selecteditem = data.node.original.sourceItem;
                 });
             };
+           
             if (ctrl.onReady && typeof (ctrl.onReady) == 'function')
                 ctrl.onReady(api);
         },

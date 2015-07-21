@@ -12,14 +12,6 @@ namespace TOne.BI.Data
     {
         List<BIConfiguration<BIConfigurationMeasure>> MeasureDefinitions { set; }
         List<BIConfiguration<BIConfigurationEntity>> EntityDefinitions { set; }
-
-        IEnumerable<TimeValuesRecord> GetMeasureValues(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params MeasureType[] measureTypes);
-
-        IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(EntityType entityType, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params MeasureType[] measureTypes);
-
-        IEnumerable<GenericEntityRecord> GetTopEntities(EntityType entityType, MeasureType topByMeasureType, DateTime fromDate, DateTime toDate, int topCount, params MeasureType[] moreMeasures);
-
-
         IEnumerable<TimeValuesRecord> GetMeasureValues(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params string[] measureTypeNames);
 
         IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(string entityTypeName, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params string[] measureTypeNames);

@@ -1,6 +1,6 @@
-﻿DynamicPagePreviewController.$inject = ['$scope', 'ViewAPIService', 'WidgetAPIService', 'BITimeDimensionTypeEnum', 'UtilsService', 'VRNotificationService', 'VRNavigationService','WidgetSectionEnum','BIPeriodEnum'];
+﻿DynamicPagePreviewController.$inject = ['$scope', 'ViewAPIService', 'WidgetAPIService', 'TimeDimensionTypeEnum', 'UtilsService', 'VRNotificationService', 'VRNavigationService','WidgetSectionEnum','PeriodEnum'];
 
-function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, BITimeDimensionTypeEnum, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, BIPeriodEnum) {
+function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, TimeDimensionTypeEnum, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, PeriodEnum) {
     var viewId;
     loadParameters();
     defineScope();
@@ -33,9 +33,12 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             $scope.selectedPeriod = customize;
         }
         $scope.periodSelectionChanged = function () {
-            var date = getPeriod($scope.selectedPeriod.value);
-            $scope.fromDate = date.from;
-            $scope.toDate = date.to;
+            if ($scope.selectedPeriod != undefined) {
+                var date = getPeriod($scope.selectedPeriod.value);
+                $scope.fromDate = date.from;
+                $scope.toDate = date.to;
+            }
+           
         }
         defineTimeDimensionTypes();
       
@@ -78,18 +81,15 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
     }
     function defineTimeDimensionTypes() {
         $scope.timeDimensionTypes = [];
-        for (var td in BITimeDimensionTypeEnum)
-            $scope.timeDimensionTypes.push(BITimeDimensionTypeEnum[td]);
+        for (var td in TimeDimensionTypeEnum)
+            $scope.timeDimensionTypes.push(TimeDimensionTypeEnum[td]);
 
         $scope.selectedTimeDimensionType = $.grep($scope.timeDimensionTypes, function (t) {
-            return t == BITimeDimensionTypeEnum.Daily;
+            return t == TimeDimensionTypeEnum.Daily;
         })[0];
     }
 
     function load() {
-       
-     
-
         loadWidgets();
         $scope.isGettingData = false;
 
@@ -112,7 +112,8 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         });
         angular.forEach($scope.summaryWidgets, function (summaryWidget) {
             refreshDataOperations.push(summaryWidget.retrieveData);
-       });
+        });
+      
         return UtilsService.waitMultipleAsyncOperations(refreshDataOperations)
                   .finally(function () {
                   });
@@ -205,20 +206,19 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             $scope.summaryContents = response.ViewContent.SummaryContents;
             $scope.bodyContents = response.ViewContent.BodyContents;
             $scope.selectedPeriod = UtilsService.getItemByVal($scope.periods, response.ViewContent.DefaultPeriod, 'value');
-            console.log($scope.selectedPeriod)
             $scope.selectedTimeDimensionType = UtilsService.getItemByVal($scope.timeDimensionTypes, response.ViewContent.DefaultGrouping, 'value');
         });
     }
     function getPeriod(periodType) {
         switch (periodType) {
-            case BIPeriodEnum.LastYear.value: return getLastYearInterval();
-            case BIPeriodEnum.LastMonth.value: return getLastMonthInterval();
-            case BIPeriodEnum.LastWeek.value: return getLastWeekInterval();
-            case BIPeriodEnum.Yesterday.value: return getYesterdayInterval();
-            case BIPeriodEnum.Today.value: return getTodayInterval();
-            case BIPeriodEnum.CurrentWeek.value: return getCurrentWeekInterval();
-            case BIPeriodEnum.CurrentMonth.value: return getCurrentMonthInterval();
-            case BIPeriodEnum.CurrentYear.value: return getCurrentYearInterval();
+            case PeriodEnum.LastYear.value: return getLastYearInterval();
+            case PeriodEnum.LastMonth.value: return getLastMonthInterval();
+            case PeriodEnum.LastWeek.value: return getLastWeekInterval();
+            case PeriodEnum.Yesterday.value: return getYesterdayInterval();
+            case PeriodEnum.Today.value: return getTodayInterval();
+            case PeriodEnum.CurrentWeek.value: return getCurrentWeekInterval();
+            case PeriodEnum.CurrentMonth.value: return getCurrentMonthInterval();
+            case PeriodEnum.CurrentYear.value: return getCurrentYearInterval();
         }
     }
     function getCurrentYearInterval() {
@@ -304,8 +304,8 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
     }
     function definePeriods() {
         $scope.periods = [];
-        for (var p in BIPeriodEnum)
-            $scope.periods.push(BIPeriodEnum[p]);
+        for (var p in PeriodEnum)
+            $scope.periods.push(PeriodEnum[p]);
       //  $scope.selectedPeriod = $scope.periods[0];
     }
 }

@@ -1,5 +1,5 @@
 ﻿appControllers.controller('BI_ZoneDetailsController',
-    function ZoneDetailsController($scope, VRNavigationService, VRNotificationService, uiGridConstants, BIAPIService, BIUtilitiesService, BITimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum, ZonesService) {
+    function ZoneDetailsController($scope, VRNavigationService, VRNotificationService, uiGridConstants, BIAPIService, BIUtilitiesService, TimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum, ZonesService) {
 
         var zoneId;
         var maxTimeDimension = 0;
@@ -28,14 +28,14 @@
                 datasource: []
             };
 
-            for (prop in BITimeDimensionTypeEnum) {
-                var timeDimensionValue = BITimeDimensionTypeEnum[prop].value;
+            for (prop in TimeDimensionTypeEnum) {
+                var timeDimensionValue = TimeDimensionTypeEnum[prop].value;
                 var obj = {
-                    name: BITimeDimensionTypeEnum[prop].description,
+                    name: TimeDimensionTypeEnum[prop].description,
                     value: timeDimensionValue
                 };
                 $scope.timeDimensionTypesOption.datasource.push(obj);
-                if (obj.value == BITimeDimensionTypeEnum.Daily.value)
+                if (obj.value == TimeDimensionTypeEnum.Daily.value)
                     $scope.timeDimensionTypesOption.lastselectedvalue = obj;
 
                 if (timeDimensionValue > maxTimeDimension)

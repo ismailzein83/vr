@@ -126,8 +126,6 @@
     <Content Include="BI\Constants\BIChartDefinitionTypeEnum.js" />
     <Content Include="BI\Constants\BIEntityTypeEnum.js" />
     <Content Include="BI\Constants\BIMeasureTypeEnum.js" />
-    <Content Include="BI\Constants\BIPeriodEnum.js" />
-    <Content Include="BI\Constants\BITimeDimensionTypeEnum.js" />
     <Content Include="BI\Directives\Images\bichartpermission.png" />
     <Content Include="BI\Directives\Images\chartpermission.png" />
     <Content Include="BI\Directives\Images\gridpermission.png" />
@@ -137,23 +135,12 @@
     <Content Include="BI\Directives\Templates\vr-datagrid-bi-directive-template.js" />
     <Content Include="BI\Directives\Templates\vr-summary-bi-directive-template.html" />
     <Content Include="BI\Directives\Templates\vr-summary-bi-directive-template.js" />
-    <Content Include="BI\Directives\vr-bi-chart-directive.js" />
-    <Content Include="BI\Directives\vr-bi-datagrid-directive.js" />
-    <Content Include="BI\Directives\bi-visualelement-service.js" />
     <Content Include="BI\Directives\bi-visualelement-service1.js" />
     <Content Include="BI\Directives\vr-datagrid-bi-directive.js" />
     <Content Include="BI\Directives\vr-summary-bi-directive.js" />
     <Content Include="BI\Services\APIServices\BIAPIService.js" />
     <Content Include="BI\Services\APIServices\BIConfigurationAPIService.js" />
     <Content Include="BI\Directives\vr-chart-bi-directive.js" />
-    <Content Include="BI\Services\APIServices\BIDataAPIService.js" />
-    <Content Include="BI\Views\Dashboards\DynamicDashboadTemplates\VisualElementEditorController.js" />
-    <Content Include="BI\Views\Dashboards\DynamicDashboadTemplates\VisualElementEditor.html" />
-    <Content Include="BI\Views\Dashboards\DynamicDashboard.html" />
-    <Content Include="BI\Views\Dashboards\DynamicDashboardController.js" />
-    <Content Include="BI\Views\Dashboards\SeniorManagementDashboardController.js" />
-    <Content Include="BI\Views\Dashboards\TopManagementDashboardController.js" />
-    <Content Include="BI\Views\Dashboards\ZoneDashboardController.js" />
     <Content Include="BI\Views\Reports\EntityReport.html" />
     <Content Include="BI\Views\Reports\EntityReportController.js" />
     <Content Include="BI\Views\Reports\EntityReportTemplates\EntityReportResult.html" />
@@ -161,13 +148,8 @@
     <Content Include="BI\Views\Reports\ZoneDetailsController.js" />
     <Content Include="BI\Views\Reports\ZoneSummaryController.js" />
     <Content Include="BI\Services\bi-utilities-service.js" />
-    <Content Include="BI\Views\Dashboards\SeniorManagementDashboard.html" />
-    <Content Include="BI\Views\Dashboards\TopManagementDashboard.html" />
-    <Content Include="BI\Views\Dashboards\ZoneDashboard.html" />
     <Content Include="BI\Views\Reports\ZoneDetails.html" />
     <Content Include="BI\Views\Reports\ZoneSummary.html" />
-    <Content Include="BI\Views\Test.html" />
-    <Content Include="BI\Views\Test.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">

@@ -1,5 +1,5 @@
 ﻿
-app.service('BIVisualElementService1', function (BIDataAPIService) {
+app.service('BIVisualElementService', function (BIAPIService) {
 
     return ({
         retrieveWidgetData: retrieveWidgetData
@@ -11,10 +11,10 @@ app.service('BIVisualElementService1', function (BIDataAPIService) {
         switch (visualElementSettings.OperationType) {
             case "TopEntities":
                 visualElementController.isTopEntities = true;
-                return BIDataAPIService.GetTopEntities(visualElementSettings.EntityType, visualElementSettings.TopMeasure, filter.fromDate, filter.toDate, 10, visualElementSettings.MeasureTypes);
+                return BIAPIService.GetTopEntities(visualElementSettings.EntityType, visualElementSettings.TopMeasure, filter.fromDate, filter.toDate, 10, visualElementSettings.MeasureTypes);
             case "MeasuresGroupedByTime":
                 visualElementController.isDateTimeGroupedData = true;
-                return BIDataAPIService.GetMeasureValues(filter.timeDimensionType.value, filter.fromDate, filter.toDate, visualElementSettings.MeasureTypes);
+                return BIAPIService.GetMeasureValues(filter.timeDimensionType.value, filter.fromDate, filter.toDate, visualElementSettings.MeasureTypes);
                 break;
 
         }

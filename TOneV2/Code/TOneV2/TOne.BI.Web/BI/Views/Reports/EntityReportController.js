@@ -1,6 +1,6 @@
-﻿EntityReportController.$inject = ['$scope', 'UtilsService', 'BITimeDimensionTypeEnum', 'BIEntityTypeEnum', 'BIMeasureTypeEnum', 'BIAPIService', 'BIUtilitiesService', 'VRNavigationService'];
+﻿EntityReportController.$inject = ['$scope', 'UtilsService', 'TimeDimensionTypeEnum', 'BIEntityTypeEnum', 'BIMeasureTypeEnum', 'BIAPIService', 'BIUtilitiesService', 'VRNavigationService'];
 
-function EntityReportController($scope, UtilsService, BITimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum, BIAPIService, BIUtilitiesService, VRNavigationService) {
+function EntityReportController($scope, UtilsService, TimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum, BIAPIService, BIUtilitiesService, VRNavigationService) {
         var resultAPI;
         defineScope();
         load();
@@ -51,11 +51,11 @@ function EntityReportController($scope, UtilsService, BITimeDimensionTypeEnum, B
 
         function defineTimeDimensionTypes() {
             $scope.timeDimensionTypes = [];
-            for (var td in BITimeDimensionTypeEnum)
-                $scope.timeDimensionTypes.push(BITimeDimensionTypeEnum[td]);
+            for (var td in TimeDimensionTypeEnum)
+                $scope.timeDimensionTypes.push(TimeDimensionTypeEnum[td]);
 
             $scope.selectedTimeDimensionType = $.grep($scope.timeDimensionTypes, function (t) {
-                return t == BITimeDimensionTypeEnum.Daily;
+                return t == TimeDimensionTypeEnum.Daily;
             })[0];
         }
         function defineMeasureTypes() {

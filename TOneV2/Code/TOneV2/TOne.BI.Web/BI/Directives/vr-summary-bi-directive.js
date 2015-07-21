@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrSummaryBi', ['UtilsService','BIConfigurationAPIService', 'BIDataAPIService', 'BIUtilitiesService', 'BIVisualElementService1', 'VRModalService', function (UtilsService ,BIConfigurationAPIService,BIDataAPIService, BIUtilitiesService, BIVisualElementService1, VRModalService) {
+app.directive('vrSummaryBi', ['UtilsService', 'BIConfigurationAPIService', 'BIAPIService', 'BIUtilitiesService', 'BIVisualElementService', 'VRModalService', function (UtilsService, BIConfigurationAPIService, BIAPIService, BIUtilitiesService, BIVisualElementService, VRModalService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -14,15 +14,15 @@ app.directive('vrSummaryBi', ['UtilsService','BIConfigurationAPIService', 'BIDat
             var ctrl = this;
             var retrieveDataOnLoad = $scope.$parent.$eval($attrs.retrievedataonload);
             
-            var biSummary = new BISummary(ctrl, ctrl.settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1, BIConfigurationAPIService, UtilsService);
+            var biSummary = new BISummary(ctrl, ctrl.settings, retrieveDataOnLoad, BIAPIService, BIVisualElementService, BIConfigurationAPIService, UtilsService);
             biSummary.initializeController();
 
           
-            $scope.openReportEntityModal = function (item) {
+            //$scope.openReportEntityModal = function (item) {
 
-                BIUtilitiesService.openEntityReport(item.EntityType, item.EntityId, item.EntityName);
+            //    BIUtilitiesService.openEntityReport(item.EntityType, item.EntityId, item.EntityName);
 
-            }
+            //}
 
         },
         controllerAs: 'ctrl',
@@ -49,7 +49,7 @@ app.directive('vrSummaryBi', ['UtilsService','BIConfigurationAPIService', 'BIDat
 
 
     }
-    function BISummary(ctrl, settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1, BIConfigurationAPIService, UtilsService) {
+    function BISummary(ctrl, settings, retrieveDataOnLoad, BIAPIService, BIVisualElementService, BIConfigurationAPIService, UtilsService) {
 
         var summaryAPI;
         var measures = [];
@@ -98,7 +98,7 @@ app.directive('vrSummaryBi', ['UtilsService','BIConfigurationAPIService', 'BIDat
             if (!ctrl.isAllowed)
                 return;
             ctrl.isGettingData = true;
-            return BIDataAPIService.GetMeasureValues1(filter.fromDate, filter.toDate, settings.MeasureTypes)
+            return BIAPIService.GetMeasureValues1(filter.fromDate, filter.toDate, settings.MeasureTypes)
                         .then(function (response) {
                           
                             for (var i = 0; i < response.length; i++) {

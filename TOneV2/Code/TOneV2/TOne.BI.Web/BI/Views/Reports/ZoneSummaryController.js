@@ -1,7 +1,7 @@
 ﻿/// <reference path="../../../../Templates/Grid/HeaderTemplate.html" />
 /// <reference path="../../../../Templates/Grid/HeaderTemplate.html" />
 appControllers.controller('ZoneSummaryController',
-    function ZoneSummaryController($scope, VRNavigationService, BIAPIService, BIUtilitiesService, BITimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum) {
+    function ZoneSummaryController($scope, VRNavigationService, BIAPIService, BIUtilitiesService, TimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum) {
         var measureTypes = [BIMeasureTypeEnum.DurationInMinutes, BIMeasureTypeEnum.Sale, BIMeasureTypeEnum.Cost, BIMeasureTypeEnum.Profit];
         var gridApi;
 
@@ -23,13 +23,13 @@ appControllers.controller('ZoneSummaryController',
             
 
             $scope.timeDimensionTypes = [];
-            for (prop in BITimeDimensionTypeEnum) {
+            for (prop in TimeDimensionTypeEnum) {
                 var obj = {
-                    name: BITimeDimensionTypeEnum[prop].description,
-                    value: BITimeDimensionTypeEnum[prop].value
+                    name: TimeDimensionTypeEnum[prop].description,
+                    value: TimeDimensionTypeEnum[prop].value
                 };
                 $scope.timeDimensionTypes.push(obj);
-                if (obj.value == BITimeDimensionTypeEnum.Daily.value)
+                if (obj.value == TimeDimensionTypeEnum.Daily.value)
                     $scope.selectedTimeDimensionType = obj;
             }
 

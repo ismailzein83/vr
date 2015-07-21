@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrDatagridBi', ['UtilsService','BIDataAPIService', 'BIUtilitiesService', 'BIVisualElementService1', 'VRModalService', 'BIConfigurationAPIService', function (UtilsService ,BIDataAPIService, BIUtilitiesService, BIVisualElementService1, VRModalService, BIConfigurationAPIService) {
+app.directive('vrDatagridBi', ['UtilsService', 'BIAPIService', 'BIUtilitiesService', 'BIVisualElementService', 'VRModalService', 'BIConfigurationAPIService', function (UtilsService, BIAPIService, BIUtilitiesService, BIVisualElementService, VRModalService, BIConfigurationAPIService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -16,14 +16,14 @@ app.directive('vrDatagridBi', ['UtilsService','BIDataAPIService', 'BIUtilitiesSe
             var ctrl = this;
             var retrieveDataOnLoad = $scope.$parent.$eval($attrs.retrievedataonload);
 
-            var biDataGrid = new BIDataGrid(ctrl, ctrl.settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1, BIConfigurationAPIService, UtilsService);
+            var biDataGrid = new BIDataGrid(ctrl, ctrl.settings, retrieveDataOnLoad, BIAPIService, BIVisualElementService, BIConfigurationAPIService, UtilsService);
             biDataGrid.initializeController();
 
-            $scope.openReportEntityModal = function (item) {
+            //$scope.openReportEntityModal = function (item) {
 
-                BIUtilitiesService.openEntityReport(item.EntityType, item.EntityId, item.EntityName);
+            //    BIUtilitiesService.openEntityReport(item.EntityType, item.EntityId, item.EntityName);
 
-            }
+            //}
 
         },
         controllerAs: 'ctrl',
@@ -54,7 +54,7 @@ app.directive('vrDatagridBi', ['UtilsService','BIDataAPIService', 'BIUtilitiesSe
 
 
     }
-    function BIDataGrid(ctrl, settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1, BIConfigurationAPIService, UtilsService) {
+    function BIDataGrid(ctrl, settings, retrieveDataOnLoad, BIAPIService, BIVisualElementService, BIConfigurationAPIService, UtilsService) {
 
         var gridAPI;
         var measures = [];
@@ -96,7 +96,7 @@ app.directive('vrDatagridBi', ['UtilsService','BIDataAPIService', 'BIUtilitiesSe
             if (!ctrl.isAllowed)
                 return;
             ctrl.isGettingData = true;
-            return BIVisualElementService1.retrieveWidgetData(ctrl, settings, filter)
+            return BIVisualElementService.retrieveWidgetData(ctrl, settings, filter)
                         .then(function (response) {
                             if (ctrl.isDateTimeGroupedData)
                                 BIUtilitiesService.fillDateTimeProperties(response, filter.timeDimensionType.value, filter.fromDate, filter.toDate, true);
