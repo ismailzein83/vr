@@ -28,9 +28,9 @@ namespace TOne.Analytics.Business
             return CreateAlertViews(alerts);
         }
 
-        public List<Entities.CarrierRateView> GetRates(string carrierType, DateTime effectiveOn, string carrierID, string codeGroup, int from, int to)
+        public List<Entities.CarrierRateView> GetRates(string carrierType, DateTime effectiveOn, string carrierID, string codeGroup, string code, string zoneName, int from, int to)
         {
-            List<Entities.CarrierRateView> lst = _datamanager.GetRates(carrierType, effectiveOn, carrierID, codeGroup, from, to);
+            List<Entities.CarrierRateView> lst = _datamanager.GetRates(carrierType, effectiveOn, carrierID, codeGroup, code, zoneName, from, to);
             FlaggedServiceManager flaggedServiceManager = new FlaggedServiceManager();
             if (lst != null)
                 flaggedServiceManager.AssignFlaggedServiceInfo(lst);

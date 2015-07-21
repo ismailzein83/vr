@@ -40,9 +40,9 @@ namespace TOne.Web.Online.Controllers
         }
 
         [HttpGet]
-        public List<TOne.Analytics.Entities.CarrierRateView> GetRates(TOne.BusinessEntity.Entities.CarrierType carrierType, DateTime effectiveOn, string carrierID, int from, int to, string codeGroup = null)
+        public List<TOne.Analytics.Entities.CarrierRateView> GetRates(TOne.BusinessEntity.Entities.CarrierType carrierType, DateTime effectiveOn, string carrierID, int from, int to, string code = null, string zoneName = null, string codeGroup = null)
         {
-            return _analyticsManager.GetRates(carrierType.ToString(), effectiveOn, carrierID, codeGroup, from, to);
+            return _analyticsManager.GetRates(carrierType.ToString(), effectiveOn, carrierID, codeGroup, code, zoneName, from, to);
         }
 
         [HttpGet]

@@ -51,7 +51,7 @@ namespace TOne.Analytics.Data.SQL
             }, topCount, showHiddenAlerts, alertLevel, tag, source, userID, from, to);
         }
 
-        public List<Entities.CarrierRateView> GetRates(string carrierType, DateTime effectiveOn, string carrierID, string codeGroup, int from, int to)
+        public List<Entities.CarrierRateView> GetRates(string carrierType, DateTime effectiveOn, string carrierID, string codeGroup, string code, string zoneName, int from, int to)
         {
             return GetItemsSP("Analytics.sp_Rates_GetRates", (reader) =>
                 {
@@ -76,7 +76,7 @@ namespace TOne.Analytics.Data.SQL
                         PricelistBeginEffectiveDate = reader["PricelistBeginEffectiveDate"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(reader["PricelistBeginEffectiveDate"]) : null,
                         UserName = reader["UserName"] as string
                     };
-                }, carrierType, effectiveOn, codeGroup, carrierID, from, to);
+                }, carrierType, effectiveOn, codeGroup, code, zoneName, carrierID, from, to);
         }
 
         public List<Entities.CarrierSummaryView> GetCarrierSummary(string carrierType, DateTime fromDate, DateTime toDate, string customerID, string supplierID, char groupByProfile, int? topCount, int from, int to)
@@ -86,8 +86,8 @@ namespace TOne.Analytics.Data.SQL
                     return new Entities.CarrierSummaryView
                     {
                         ProfileID = groupByProfile == 'Y' && reader["ProfileID"] != DBNull.Value ? (int?)Convert.ToInt32(reader["ProfileID"]) : null,
-                        CarrierID = groupByProfile == 'N' ? (carrierType.ToLower() == "customer" ? reader["CustomerID"] as string : reader["SupplierID"] as string) : null,
-                        CarrierName = groupByProfile == 'N' ? string.Format("{0}{1}", reader["ProfileName"] as string, reader["NameSuffix"] != DBNull.Value && !string.IsNullOrEmpty(reader["NameSuffix"].ToString()) ? " (" + reader["NameSuffix"] as string + ")" : string.Empty) : string.Empty,
+                        CarrierID = (carrierType.ToLower() == "customer" ? reader["CustomerID"] as string : reader["SupplierID"] as string),
+                        CarrierName = string.Format("{0}{1}", reader["ProfileName"] as string, reader["NameSuffix"] != DBNull.Value && !string.IsNullOrEmpty(reader["NameSuffix"].ToString()) ? " (" + reader["NameSuffix"] as string + ")" : string.Empty),
                         ProfileName = groupByProfile == 'Y' ? (reader["ProfileName"] != DBNull.Value ? reader["ProfileName"] as string : "") : string.Empty,
                         SuccessfulAttempts = Convert.ToInt32(reader["SuccessfulAttempts"]),
                         DurationsInMinutes = Convert.ToDecimal(reader["DurationsInMinutes"]),
@@ -154,13 +154,13 @@ namespace TOne.Analytics.Data.SQL
                 {
                     return new Entities.TrafficSummaryView
                     {
-                        Sales = reader["Sales"] != DBNull.Value ? Convert.ToDecimal(reader["Sales"]) : (Decimal)0,
-                        Purchases = reader["Purchases"] != DBNull.Value ? Convert.ToDecimal(reader["Purchases"]) : (Decimal)0,
-                        Profit = reader["Profit"] != DBNull.Value ? Convert.ToDecimal(reader["Profit"]) : (Decimal)0,
-                        DurationInMinutes = reader["DurationsInMinutes"] != DBNull.Value ? Convert.ToDecimal(reader["DurationsInMinutes"]) : (Decimal)0,
-                        NumberOfCalls = reader["Attempts"] != DBNull.Value ? Convert.ToInt32(reader["Attempts"]) : (Int32)0,
-                        AveragePurchases = reader["AveragePurchases"] != DBNull.Value ? Convert.ToDecimal(reader["AveragePurchases"]) : (Decimal)0,
-                        AverageSales = reader["AverageSales"] != DBNull.Value ? Convert.ToDecimal(reader["AverageSales"]) : (Decimal)0
+                        Sales = reader["SaleNet"] != DBNull.Value ? Convert.ToDecimal(reader["SaleNet"]) : (Decimal)0,
+                        Purchases = reader["CostNet"] != DBNull.Value ? Convert.ToDecimal(reader["CostNet"]) : (Decimal)0,
+                        Profit = (reader["SaleNet"] != DBNull.Value ? Convert.ToDecimal(reader["SaleNet"]) : (Decimal)0) - (reader["CostNet"] != DBNull.Value ? Convert.ToDecimal(reader["CostNet"]) : (Decimal)0),
+                        DurationInMinutes = reader["SaleDuration"] != DBNull.Value ? Convert.ToDecimal(reader["SaleDuration"]) : (Decimal)0,
+                        NumberOfCalls = reader["Calls"] != DBNull.Value ? Convert.ToInt32(reader["Calls"]) : (Int32)0,
+                        AveragePurchases = reader["AverageCostNet"] != DBNull.Value ? Convert.ToDecimal(reader["AverageCostNet"]) : (Decimal)0,
+                        AverageSales = reader["AverageSaleNet"] != DBNull.Value ? Convert.ToDecimal(reader["AverageSaleNet"]) : (Decimal)0
                     };
                 }, fromDate, toDate);
         }
