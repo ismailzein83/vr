@@ -41,7 +41,7 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, UtilsS
             if ($scope.isEditMode)
                return updateWidget();
             else
-              return saveWidget();
+              return addWidget();
         };
         $scope.previewSelectionChanged = function () {
             buildWidgetObjFromScope();
@@ -82,8 +82,8 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, UtilsS
 
     }
 
-    function saveWidget() {
-            return WidgetAPIService.SaveWidget($scope.widget).then(function (response) {
+    function addWidget() {
+        return WidgetAPIService.AddWidget($scope.widget).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Widget", response)) {
                     if ($scope.onWidgetAdded != undefined)
                         $scope.onWidgetAdded(response.InsertedObject);

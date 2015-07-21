@@ -34,7 +34,7 @@ namespace Vanrise.Security.Data.SQL
             };
             return instance;
         }
-        public bool SaveWidget(Widget widget, out int insertedId)
+        public bool AddWidget(Widget widget, out int insertedId)
         {
             string serialziedSetting = null;
             if (widget.Setting != null)

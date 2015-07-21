@@ -19,10 +19,10 @@ namespace Vanrise.Security.Web.Controllers
         }
       
         [HttpPost]
-        public Vanrise.Entities.InsertOperationOutput<View> SaveView(View view)
+        public Vanrise.Entities.InsertOperationOutput<View> AddView(View view)
         {
              ViewManager manager = new ViewManager();
-             return manager.SaveView(view);
+             return manager.AddView(view);
           }
         [HttpPost]
         public Vanrise.Entities.UpdateOperationOutput<View> UpdateView(View view)

@@ -20,10 +20,10 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpPost]
-        public Vanrise.Entities.InsertOperationOutput<WidgetDetails> SaveWidget(Widget widget)
+        public Vanrise.Entities.InsertOperationOutput<WidgetDetails> AddWidget(Widget widget)
         {
             WidgetsManager manager = new WidgetsManager();
-            return manager.SaveWidget(widget);
+            return manager.AddWidget(widget);
         }
         [HttpPost]
         public Vanrise.Entities.UpdateOperationOutput<WidgetDetails> UpdateWidget(Widget widget)

@@ -76,7 +76,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             if ($scope.isEditMode)  
                 return updateView(); 
             else  
-                return saveView();
+                return addView();
               
         };
         $scope.close = function () {
@@ -135,9 +135,9 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
 
         $scope.selectedTimeDimensionType = TimeDimensionTypeEnum.Daily;
     }
-    function saveView() {
+    function addView() {
        
-        return ViewAPIService.SaveView($scope.View).then(function (response) {
+        return ViewAPIService.AddView($scope.View).then(function (response) {
             if (VRNotificationService.notifyOnItemAdded("View", response)) {
                 if ($scope.onPageAdded != undefined)
                     $scope.onPageAdded(response.InsertedObject);

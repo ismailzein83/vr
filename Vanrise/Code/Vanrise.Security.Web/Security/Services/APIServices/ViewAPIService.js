@@ -3,7 +3,7 @@
     return ({
         GetDynamicPages: GetDynamicPages,
         UpdateView:UpdateView,
-        SaveView: SaveView,
+        AddView: AddView,
         DeleteView:DeleteView,
         GetView: GetView,
         GetFilteredDynamicPages: GetFilteredDynamicPages
@@ -12,8 +12,8 @@
     function GetDynamicPages() {
         return BaseAPIService.get("/api/View/GetDynamicPages");
     }
-    function SaveView(view) {
-        return BaseAPIService.post("/api/View/SaveView", view);
+    function AddView(view) {
+        return BaseAPIService.post("/api/View/AddView", view);
     }
     function UpdateView(view) {
         return BaseAPIService.post("/api/View/UpdateView", view);

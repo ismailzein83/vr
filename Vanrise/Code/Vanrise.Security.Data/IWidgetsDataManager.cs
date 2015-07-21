@@ -11,7 +11,7 @@ namespace Vanrise.Security.Data
         public interface IWidgetsDataManager : IDataManager
         {
             List<WidgetDefinition> GetWidgetsDefinition();
-            bool SaveWidget(Widget widget, out int insertedId);
+            bool AddWidget(Widget widget, out int insertedId);
             bool UpdateWidget(Widget widget);
             List<WidgetDetails> GetAllWidgets();
             WidgetDetails GetWidgetById(int widgetId);

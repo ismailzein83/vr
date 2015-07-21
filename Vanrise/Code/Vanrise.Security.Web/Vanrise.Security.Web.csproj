@@ -132,11 +132,11 @@
     <Content Include="Security\Views\BusinessEntityManagement.html" />
     <Content Include="Security\Views\BusinessEntityManagementController.js" />
     <Content Include="Security\Views\DynamicPages\DynamicPagePreview.html" />
-    <Content Include="Security\Views\DynamicPages\DynamicPagePreview.js" />
+    <Content Include="Security\Views\DynamicPages\DynamicPagePreviewController.js" />
     <Content Include="Security\Views\DynamicPages\DynamicPageEditor.html" />
-    <Content Include="Security\Views\DynamicPages\DynamicPageEditor.js" />
+    <Content Include="Security\Views\DynamicPages\DynamicPageEditorController.js" />
     <Content Include="Security\Views\DynamicPages\DynamicPageManagement.html" />
-    <Content Include="Security\Views\DynamicPages\DynamicPageManagement.js" />
+    <Content Include="Security\Views\DynamicPages\DynamicPageManagementController.js" />
     <Content Include="Security\Views\Login.html" />
     <Content Include="Security\Views\LoginController.js" />
     <Content Include="Security\Views\OrgChartEditor.html" />
@@ -188,11 +188,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Security\Views\WidgetsPages\WidgetPreview.html" />
-    <Content Include="Security\Views\WidgetsPages\WidgetPreview.js" />
+    <Content Include="Security\Views\WidgetsPages\WidgetPreviewController.js" />
     <Content Include="Security\Views\WidgetsPages\WidgetEditor.html" />
-    <Content Include="Security\Views\WidgetsPages\WidgetEditor.js" />
+    <Content Include="Security\Views\WidgetsPages\WidgetEditorController.js" />
     <Content Include="Security\Views\WidgetsPages\WidgetManagement.html" />
-    <Content Include="Security\Views\WidgetsPages\WidgetManagement.js" />
+    <Content Include="Security\Views\WidgetsPages\WidgetManagementController.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>

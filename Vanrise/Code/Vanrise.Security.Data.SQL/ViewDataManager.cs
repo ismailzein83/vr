@@ -92,7 +92,7 @@ namespace Vanrise.Security.Data.SQL
             return instance;
         }
 
-        public bool SaveView(View view, out int insertedId)
+        public bool AddView(View view, out int insertedId)
         {
             string serialziedContent = null;
             if (view.ViewContent.BodyContents.Count > 0 || view.ViewContent.SummaryContents.Count > 0)
@@ -102,7 +102,7 @@ namespace Vanrise.Security.Data.SQL
                 serialziedAudience = Common.Serializer.Serialize(view.Audience, true);
             object viewId;
             string url = "#/viewwithparams/Security/Views/DynamicPages/DynamicPagePreview";
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Insert", out viewId, view.Name, url, view.ModuleId, null,
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Insert", out viewId, view.Name, view.Name, url, view.ModuleId, null,
                serialziedAudience, serialziedContent, ViewType.Dynamic);
             insertedId  = (recordesEffected > 0) ? (int)viewId : -1;
             return (recordesEffected > 0);

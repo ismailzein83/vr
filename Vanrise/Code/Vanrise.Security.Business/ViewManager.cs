@@ -16,8 +16,8 @@ namespace Vanrise.Security.Business
             IViewDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
             return dataManager.GetDynamicPages();
         }
-  
-        public Vanrise.Entities.InsertOperationOutput<View> SaveView(View view)
+
+        public Vanrise.Entities.InsertOperationOutput<View> AddView(View view)
         {
             InsertOperationOutput<View> insertOperationOutput = new InsertOperationOutput<View>();
 
@@ -25,7 +25,7 @@ namespace Vanrise.Security.Business
             insertOperationOutput.InsertedObject = null;
             int viewId = -1;
             IViewDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
-              bool insertActionSucc = dataManager.SaveView(view, out viewId);
+            bool insertActionSucc = dataManager.AddView(view, out viewId);
 
              if (insertActionSucc)
              {

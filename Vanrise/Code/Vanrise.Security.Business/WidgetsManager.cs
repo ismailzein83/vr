@@ -16,7 +16,7 @@ namespace Vanrise.Security.Business
             IWidgetsDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IWidgetsDataManager>();
             return dataManager.GetWidgetsDefinition();
         }
-        public Vanrise.Entities.InsertOperationOutput<WidgetDetails> SaveWidget(Widget widget)
+        public Vanrise.Entities.InsertOperationOutput<WidgetDetails> AddWidget(Widget widget)
         {
             InsertOperationOutput<WidgetDetails> insertOperationOutput = new InsertOperationOutput<WidgetDetails>();
 
@@ -32,7 +32,7 @@ namespace Vanrise.Security.Business
                 return insertOperationOutput;
             }
 
-            bool insertActionSucc = dataManager.SaveWidget(widget, out widgetId);
+            bool insertActionSucc = dataManager.AddWidget(widget, out widgetId);
             if (insertActionSucc)
             {
 
