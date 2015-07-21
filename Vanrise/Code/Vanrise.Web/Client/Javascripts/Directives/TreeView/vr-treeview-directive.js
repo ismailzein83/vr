@@ -8,7 +8,7 @@ app.directive('vrTreeview', [function () {
         restrict: 'E', 
         scope: {
             onReady: '=',
-            datasource:'=',
+           // datasource:'=',
             datachildrenfield: '@',
             datavaluefield: '@',
             datatextfield: '@',
@@ -46,11 +46,11 @@ app.directive('vrTreeview', [function () {
 
             var api = {};
 
-            api.refreshTree = function () {
+            api.refreshTree = function (datasource) {
                 treeElement.jstree("destroy");
                 treeElement = $element.find('#divTree');
                 var treeArray = [];
-                fillTreeFromDataSource(treeArray, ctrl.datasource);
+                fillTreeFromDataSource(treeArray, datasource);
                 var treeData={
                     core: { data: treeArray }
                 }
@@ -63,8 +63,10 @@ app.directive('vrTreeview', [function () {
                 if (ctrl.wholerow !== undefined) {
                     plugins.push("wholerow");
                 }
-                treeData.plugins=plugins;
-                treeElement.jstree(treeData);
+                treeData.plugins = plugins;
+
+                treeElement.jstree(treeData); 
+
                 treeElement.on('changed.jstree', function (e, data) {
                    ctrl.selecteditem = data.node.original.sourceItem;
                 });

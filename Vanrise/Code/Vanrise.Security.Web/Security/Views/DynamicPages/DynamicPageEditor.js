@@ -48,8 +48,11 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         $scope.addedSummaryWidgets = [];
         $scope.menuReady = function (api) {
             treeAPI = api;
-            if ($scope.menuList.length > 0)
-                treeAPI.refreshTree();
+            if ($scope.menuList.length > 0) {
+                treeAPI.refreshTree($scope.menuList);
+                
+            }
+             
         }
         $scope.addedBodyWidgets = [];
         $scope.onSelectionChanged = function () {
@@ -215,17 +218,17 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         defineColumnWidth();
         defineWidgetSections();
         $scope.isGettingData = true;
-        UtilsService.waitMultipleAsyncOperations([loadWidgets, loadUsers, loadRoles, loadTree]).finally(function () {
-            if (treeAPI!=undefined && !$scope.isEditMode)
-             treeAPI.refreshTree();
-            
+        UtilsService.waitMultipleAsyncOperations([loadWidgets, loadUsers, loadRoles, loadTree]).then(function(){
+            if (treeAPI != undefined && !$scope.isEditMode) {
+                treeAPI.refreshTree($scope.menuList);
+            }
             if ($scope.isEditMode) {
-               
+
                 fillEditModeData();
             }
 
-          
-            $scope.isGettingData = false;
+        }).finally(function () {
+               $scope.isGettingData = false;
         }).catch(function (error) {
             VRNotificationService.notifyExceptionWithClose(error, $scope);
         });
@@ -285,7 +288,9 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         }
         $scope.selectedMenuNode = UtilsService.getItemByVal($scope.menuList, $scope.filter.ModuleId, 'Id');
         addIsSelected($scope.menuList, $scope.filter.ModuleId);
-        treeAPI.refreshTree();
+        
+        if($scope.menuList.length>0)
+            treeAPI.refreshTree($scope.menuList);
         $scope.selectedPeriod = getPeriod($scope.filter.DefaultPeriod);
         $scope.selectedTimeDimensionType = getTimeDimentionType($scope.filter.DefaultGrouping);
     }
