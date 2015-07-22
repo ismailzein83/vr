@@ -65,13 +65,8 @@
     <Folder Include="FraudAnalysis\Tables\" />
     <Folder Include="Security\" />
     <Folder Include="FraudAnalysis\Stored Procedures\" />
-    <Folder Include="sec\" />
-    <Folder Include="sec\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="sec\User Defined Types\IntIDType.sql" />
-    <Build Include="sec\User Defined Types\RoleMembersType.sql" />
-    <Build Include="Security\sec.sql" />
     <Build Include="FraudAnalysis\Tables\Suspicion_Level.sql" />
     <Build Include="FraudAnalysis\Tables\SubscriberThreshold.sql" />
     <Build Include="FraudAnalysis\Tables\NormalCDR.sql" />
