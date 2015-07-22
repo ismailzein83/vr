@@ -105,6 +105,7 @@
     <Content Include="Databases\TrackingDB\Schema.sql" />
     <Content Include="Databases\TransactionDB\Data.sql" />
     <Content Include="Databases\TransactionDB\Schema.sql" />
+    <Content Include="DLLs\Aspose.Cells.dll" />
     <Content Include="DLLs\Microsoft.AnalysisServices.AdomdClient.dll" />
     <Content Include="DLLs\Microsoft.Practices.EnterpriseLibrary.Common.dll" />
     <Content Include="DLLs\Microsoft.Practices.EnterpriseLibrary.Data.dll" />
@@ -147,6 +148,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DLLs\Aspose.Cells.lic" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
