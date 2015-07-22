@@ -1,4 +1,7 @@
-﻿CREATE SCHEMA [FraudAnalysis];
+﻿CREATE SCHEMA [FraudAnalysis]
+    AUTHORIZATION [walid];
+
+
 
 
 

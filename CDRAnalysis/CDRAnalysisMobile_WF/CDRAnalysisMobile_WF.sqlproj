@@ -8,7 +8,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{e61f8d0b-aedb-4fae-8ad5-c3d39ee67206}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -86,56 +86,19 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetAll.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_GetNormalCDR.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetStrategy.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_GetFilteredSuspiciousNumbers.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Update.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Insert.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetFilteredStrategies.sql" />
     <Build Include="Security\FraudAnalysis.sql" />
-    <Build Include="sec\Tables\View.sql" />
-    <Build Include="sec\Tables\WidgetManagement.sql" />
-    <Build Include="sec\Tables\WidgetDefinition.sql" />
-    <Build Include="sec\Tables\BusinessEntityModule.sql" />
-    <Build Include="sec\Tables\BusinessEntity.sql" />
-    <Build Include="sec\Tables\Role.sql" />
-    <Build Include="sec\Tables\UserRole.sql" />
-    <Build Include="sec\Tables\Permission.sql" />
-    <Build Include="sec\Tables\Module.sql" />
-    <Build Include="sec\Tables\User.sql" />
-    <Build Include="sec\Stored Procedures\sp_WidgetManagement_InsertWidget.sql" />
-    <Build Include="sec\Stored Procedures\sp_WidgetManagement_GetAllWidgets.sql" />
-    <Build Include="sec\Stored Procedures\sp_WidgetDefinition_GetWidgets.sql" />
-    <Build Include="sec\Stored Procedures\sp_View_InsertView.sql" />
-    <Build Include="sec\Stored Procedures\sp_View_GetByType.sql" />
-    <Build Include="sec\Stored Procedures\sp_View_GetById.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_Update.sql" />
-    <Build Include="sec\Stored Procedures\sp_BusinessEntity_GetAll.sql" />
-    <Build Include="sec\Stored Procedures\sp_BusinessEntityModule_GetAll.sql" />
-    <Build Include="sec\Stored Procedures\sp_View_GetAll.sql" />
-    <Build Include="sec\Stored Procedures\sp_Module_GetAll.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_GetbyId.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_GetFiltered.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_ResetPassword.sql" />
-    <Build Include="sec\Stored Procedures\sp_Roles_GetUserRoles.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_CheckUserName.sql" />
-    <Build Include="sec\Stored Procedures\sp_Permission_Delete.sql" />
-    <Build Include="sec\Stored Procedures\sp_Permission_GetAll.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_GetbyEmail.sql" />
-    <Build Include="sec\Stored Procedures\sp_Permission_Update.sql" />
-    <Build Include="sec\Stored Procedures\sp_Permission_GetbyHolder.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_Insert.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_GetMembers.sql" />
-    <Build Include="sec\Stored Procedures\sp_Roles_AssignMembers.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_GetAll.sql" />
-    <Build Include="sec\Stored Procedures\sp_BusinessEntityModule_ToggleBreakInheritance.sql" />
-    <Build Include="sec\Stored Procedures\sp_BusinessEntity_ToggleBreakInheritance.sql" />
-    <Build Include="sec\Stored Procedures\sp_Roles_Update.sql" />
-    <Build Include="sec\Stored Procedures\sp_Roles_Insert.sql" />
-    <Build Include="sec\Stored Procedures\sp_Roles_GetAll.sql" />
-    <Build Include="sec\Stored Procedures\sp_Roles_Get.sql" />
-    <Build Include="sec\Stored Procedures\sp_Roles_GetFiltered.sql" />
     <Build Include="sec\User Defined Types\IntIDType.sql" />
     <Build Include="sec\User Defined Types\RoleMembersType.sql" />
     <Build Include="Security\sec.sql" />
+    <Build Include="FraudAnalysis\Tables\SubscriberCase.sql" />
+    <Build Include="FraudAnalysis\Tables\CaseStatus.sql" />
+    <Build Include="Security\walid.sql" />
+    <Build Include="Security\RoleMemberships.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_GetSubscriberThresholds.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempForFilteredSuspiciousNumbers.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
