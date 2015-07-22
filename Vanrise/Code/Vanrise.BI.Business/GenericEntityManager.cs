@@ -75,13 +75,13 @@ namespace Vanrise.BI.Business
                 RateWorkSheet.Cells[Irow, Icol].PutValue(header);
                 RateWorkSheet.Cells.SetColumnWidth(Icol, 20);
             }
-            FillDateTimeProperties(records, timeDimensionType, fromDate, toDate, true);
+            
             foreach (TimeValuesRecord record in records)
             {
                 Irow++;
                 Icol = 1;
 
-                RateWorkSheet.Cells[Irow, Icol].PutValue(record.DateTimeValue);
+                RateWorkSheet.Cells[Irow, Icol].PutValue(GetDateTimeProperties(record, timeDimensionType, fromDate, toDate, true));
                 foreach (Decimal value in  record.Values)
                 {
                     Icol++;
@@ -198,59 +198,55 @@ namespace Vanrise.BI.Business
 
             return result;
         }
-        
-        public string FillDateTimeProperties(IEnumerable<TimeValuesRecord> records, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate,Boolean dontFillGroup) {
+
+        public string GetDateTimeProperties(TimeValuesRecord record, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, Boolean dontFillGroup)
+        {
                 
              if (dontFillGroup == false) {
                  var isLongPeriod = CheckIsLongPeriod(timeDimensionType, fromDate, toDate);
                         if (isLongPeriod == true)
                          dontFillGroup = true;
                      }
-             foreach(TimeValuesRecord record in records){
-                  DateTime dateTimeValue = record.Time;
+
+             DateTime dateTimeValue = record.Time;
                    switch (timeDimensionType) {
                        case TimeDimensionType.Yearly:
                            {
-                               record.DateTimeValue = dateTimeValue.Year.ToString();
-                               break;
+                               return dateTimeValue.Year.ToString();
                            }
                        case TimeDimensionType.Monthly:
                            {
                                if (dontFillGroup)
-                                   record.DateTimeValue = GetMonthNameShort(dateTimeValue) + "-" + GetShortYear(dateTimeValue);
+                                 return (GetMonthNameShort(dateTimeValue) + "-" + GetShortYear(dateTimeValue));
                                break;
                            }
                        case TimeDimensionType.Weekly:
                            {
-                               record.DateTimeValue = "Week " + record.WeekNumber;
                                var groupName = GetMonthNameShort(dateTimeValue) + "-" + GetShortYear(dateTimeValue);
                                if (dontFillGroup)
-                                   record.DateTimeValue = record.DateTimeValue + "-" + groupName;
+                                   return ("Week " + record.WeekNumber + "-" + groupName);
                                break;
                            }
                    
                        case TimeDimensionType.Daily:
                            {
-                               record.DateTimeValue = dateTimeValue.Day.ToString();
                                var groupName = GetMonthNameShort(dateTimeValue) + "-" + GetShortYear(dateTimeValue);
                                if (dontFillGroup)
-                                   record.DateTimeValue = record.DateTimeValue + "-" + groupName;
+                                   return (dateTimeValue.Day.ToString() + "-" + groupName);
                                break;
                            }
                        case TimeDimensionType.Hourly:
                            {
                                string hour = dateTimeValue.Hour.ToString();
                                string minute = dateTimeValue.Minute.ToString();
-                               record.DateTimeValue = (hour.ToCharArray().Length < 2 ? '0' + hour : hour) + ":" + (minute.ToCharArray().Length < 2 ? '0' + minute : minute);
                                var groupName = dateTimeValue.Date + "-" + GetMonthNameShort(dateTimeValue) + "-" + GetShortYear(dateTimeValue);
                                if (dontFillGroup)
-                                   record.DateTimeValue = groupName + " " + record.DateTimeValue;
+                                 return ( groupName + " " + (hour.ToCharArray().Length < 2 ? '0' + hour : hour) + ":" + (minute.ToCharArray().Length < 2 ? '0' + minute : minute));
                                break;
                            }
                   
                         }
-             }
-             return null;
+                   return null;
         
     }
          public Boolean CheckIsLongPeriod(TimeDimensionType timeDimensionType,DateTime fromDate, DateTime toDate) {
