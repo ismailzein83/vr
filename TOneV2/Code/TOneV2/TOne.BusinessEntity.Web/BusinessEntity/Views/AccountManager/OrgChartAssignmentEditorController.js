@@ -21,8 +21,6 @@ function OrgChartAssignmentEditorController($scope, OrgChartAPIService, Applicat
             ApplicationParameterAPIService.UpdateApplicationParameter({
                 Id: 1,
                 Value: $scope.assignedOrgChart.Id
-            }).then(function (data) {
-                console.log(data);
             }).catch(function (error) {
                 console.log(error);
             });

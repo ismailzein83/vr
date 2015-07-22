@@ -25,6 +25,13 @@ namespace TOne.BusinessEntity.Web.Controllers
             return manager.GetAssignedCarriers(parameters);
         }
 
+        [HttpGet]
+        public int? GetLinkedOrgChartId()
+        {
+            AccountManagerManager manager = new AccountManagerManager();
+            return manager.GetLinkedOrgChartId();
+        }
+
         [HttpPost]
         public void AssignCarriers(UpdatedAccountManagerCarrier[] updatedCarriers)
         {

@@ -3,6 +3,7 @@ var serviceObj = function (BaseAPIService) {
     return ({
         GetCarriers: GetCarriers,
         GetAssignedCarriers: GetAssignedCarriers,
+        GetLinkedOrgChartId: GetLinkedOrgChartId,
         AssignCarriers: AssignCarriers
     });
     
@@ -16,6 +17,10 @@ var serviceObj = function (BaseAPIService) {
 
     function GetAssignedCarriers(parameters) {
         return BaseAPIService.post('/api/AccountManager/GetAssignedCarriers', parameters);
+    }
+
+    function GetLinkedOrgChartId() {
+        return BaseAPIService.get('/api/AccountManager/GetLinkedOrgChartId');
     }
 
     function AssignCarriers(updatedCarriers) {

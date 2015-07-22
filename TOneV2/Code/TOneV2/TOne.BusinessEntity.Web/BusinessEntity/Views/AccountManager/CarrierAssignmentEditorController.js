@@ -33,7 +33,6 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
                 UtilsService.waitMultipleAsyncOperations([getCarriers]).finally(function () {
                     // $scope.carriers is set
                     AccountManagerAPIService.GetAssignedCarriers([$scope.orgChart.Id, selectedAccountManagerId]).then(function (data) {
-                        console.log(data);
                         toggleAssignedCarriers(data);
                     });
                 });
@@ -116,7 +115,6 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
             var carrier = UtilsService.getItemByVal($scope.carriers, assignedCarriers[i].CarrierAccountId, 'CarrierAccountId');
 
             if (carrier != null) {
-                console.log(carrier);
                 if (assignedCarriers[i].RelationType == 1) {
                     carrier.customerSwitchValue = true;
                     carrier.newCustomerSwitchValue = true;
