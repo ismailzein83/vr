@@ -5,6 +5,7 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService) {
 
         GetVariationReport: GetVariationReport,
         GetVolumeReportData: GetVolumeReportData,
+        GetTrafficVolumes:GetTrafficVolumes,
         Export: Export
     });
 
@@ -83,6 +84,18 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService) {
             attempts: attempts,
             selectedTimePeriod: selectedTimePeriod,
             selectedTrafficReport: selectedTrafficReport
+        });
+    }
+
+    function GetTrafficVolumes(fromDate, toDate, selectedCustomers, selectedSuppliers, selectedZones, attempts, selectedTimePeriod) {
+        return BaseAPIService.get("/api/BillingStatistics/GetTrafficVolumes", {
+            fromDate: fromDate,
+            toDate: toDate,
+            selectedCustomers: selectedCustomers,
+            selectedSuppliers: selectedSuppliers,
+            selectedZones: selectedZones,
+            attempts: attempts,
+            selectedTimePeriod: selectedTimePeriod
         });
     }
 });

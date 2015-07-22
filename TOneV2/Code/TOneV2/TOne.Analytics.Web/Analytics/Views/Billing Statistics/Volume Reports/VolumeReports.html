@@ -32,11 +32,12 @@
     <vr-row removeline>
         <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
             <div transclude-to="buttons">
-                <vr-button type="Search" formname="formFilter" data-onclick="onSearch"></vr-button>
+                <vr-button type="Search" formname="formFilter" data-onclick="onSearch" vr-Loader="isLoading"></vr-button>
             </div>
         </vr-actionbar>
         <div ng-if="showTrafficVolume" ng-include=" '/Client/Modules/Analytics/Views/Billing Statistics/Volume Reports/Volume Reports Templates/TrafficVolumeTemplate.html' "></div>
-        <!--<div ng-if="viewScope.show " ng-include="'/Client/Modules/Analytics/Views/Billing Statistics/Volume Reports/Volume Reports Templates/VariationReportsCustomersSuppliers.html'"></div>--> 
+        <div ng-if="showInOutTaffic " ng-include="'/Client/Modules/Analytics/Views/Billing Statistics/Volume Reports/Volume Reports Templates/InOutTrafficVolumeTemplate.html'"></div> 
+        <div ng-if="destinationTrafficvolume " ng-include="'/Client/Modules/Analytics/Views/Billing Statistics/Volume Reports/Volume Reports Templates/DestinationTrafficVolumeTemplateController.html'"></div>
         
         <!--<div vr-loader="isLoading">
                 <vr-row>

@@ -8,6 +8,6 @@ namespace TOne.Analytics.Entities
 {
     public class VolumeTrafficResult
     {
-        public List<decimal> Values { get; set; }
+        public List<VolumeTraffic> Values { get; set; }
     }
 }

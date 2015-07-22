@@ -122,7 +122,7 @@ namespace TOne.Analytics.Data.SQL
                         servicesFees = GetReaderValue<double>(reader, "Services");
                     }
                 }
-            },                
+            },
                fromDate,
                toDate,
                (customerId == null || customerId == "") ? null : customerId,
@@ -307,6 +307,41 @@ namespace TOne.Analytics.Data.SQL
                 default: return new List<VolumeTrafficResult>();
 
             }
+        }
+        public List<VolumeTraffic> GetTrafficVolumes(DateTime fromDate, DateTime toDate, string customerId, string supplierId, string zoneId, int attempts, VolumeReportsTimePeriodEnum selectedTimePeriod)
+        {
+            List<VolumeTraffic> resultList = new List<VolumeTraffic>();
+
+            ExecuteReaderSP("rpt_Volumes_DailyTraffic",(reader) =>
+             {
+                 while (reader.Read())
+                     resultList.Add(new VolumeTraffic
+                     {
+                         Attempts = GetReaderValue<int>(reader, "Attempts"),
+                         Duration = GetReaderValue<decimal>(reader, "Duration"),
+                         Date = (selectedTimePeriod == VolumeReportsTimePeriodEnum.None) ? string.Empty :
+                         (selectedTimePeriod == VolumeReportsTimePeriodEnum.Daily) ?
+                         reader["CallDate"] as string :
+                         (selectedTimePeriod == VolumeReportsTimePeriodEnum.Weekly) ?
+                         string.Concat( ((int)reader["CallWeek"]).ToString() ,"/", ((int)reader["CallYear"]).ToString()) :
+                         (selectedTimePeriod == VolumeReportsTimePeriodEnum.Monthly) ?
+                           string.Concat( ((int)reader["CallMonth"]).ToString() ,"/", ((int)reader["CallYear"]).ToString()) :
+                           string.Empty
+
+                     });
+
+             },
+           
+             fromDate,
+             toDate,
+             customerId,
+             supplierId,
+             zoneId,
+             attempts,
+             selectedTimePeriod );
+            return resultList;
+
+
         }
         public List<DailySummary> GetDailySummary(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
         {
@@ -842,7 +877,7 @@ namespace TOne.Analytics.Data.SQL
                     {
                         query.Replace("#additionalStatement#", " , BS.CustomerID");
                         query.Replace("#ValueColumn#", " SUM(BS.Sale_Nets)/ISNULL(ERS.Rate,1) ");
-                       
+
                     }
                     else if (entityType == EntityType.Supplier)
                     {
@@ -951,39 +986,43 @@ namespace TOne.Analytics.Data.SQL
         private List<VolumeTrafficResult> GetTrafficVolumeSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, string ZoneId, int attempts, string selectedTimePeriod)
         {
             //Get Traffic Volume Summary
-            VolumeTraffic result = GetItemSP("rpt_Volumes_DailyTraffic", (reader) => VolumeReportsMapper(reader),
-                   fromDate,
-                   toDate,
-                   (customerId == null || customerId == "") ? null : customerId,
-                   (supplierId == null || supplierId == "") ? null : supplierId,
-                   (ZoneId == null || ZoneId == "") ? (object)DBNull.Value : ZoneId,
-                   attempts,
-                   selectedTimePeriod);
-            List<decimal> values = new List<decimal>();
-            values.Add(result.Attempts);
-            values.Add(result.Duration);
+            //VolumeTraffic result = GetItemSP("rpt_Volumes_DailyTraffic", (reader) => VolumeReportsMapper(reader),
+            //       fromDate,
+            //       toDate,
+            //       (customerId == null || customerId == "") ? null : customerId,
+            //       (supplierId == null || supplierId == "") ? null : supplierId,
+            //       (ZoneId == null || ZoneId == "") ? (object)DBNull.Value : ZoneId,
+            //       attempts,
+            //       selectedTimePeriod);
+            //List<decimal> values = new List<decimal>();
+            //values.Add(result.Attempts);
+            //values.Add(result.Duration);
+
+            //List<VolumeTrafficResult> resultList = new List<VolumeTrafficResult>();
+            //resultList.Add(new VolumeTrafficResult() { Values = values });
+            //return resultList;
 
             List<VolumeTrafficResult> resultList = new List<VolumeTrafficResult>();
-            resultList.Add(new VolumeTrafficResult() { Values = values });
-            return resultList;
-
-
+            return resultList;     
         }
         private List<VolumeTrafficResult> CompareInOutTraffic(DateTime fromDate, DateTime toDate, string customerId, string supplierId, string ZoneId, int attempts, string selectedTimePeriod)
         {
 
-            // Compare in / out traffic for a selected customer 
-            VolumeTraffic result = GetItemSP("rpt_Volumes_CompareInOutTraffic", (reader) => VolumeReportsMapper(reader),
-                   fromDate,
-                   toDate,
-                   (customerId == null || customerId == "") ? null : customerId,
-                   selectedTimePeriod);
-            List<decimal> values = new List<decimal>();
-            values.Add(result.Attempts);
-            values.Add(result.Duration);
+            //// Compare in / out traffic for a selected customer 
+            //VolumeTraffic result = GetItemSP("rpt_Volumes_CompareInOutTraffic", (reader) => VolumeReportsMapper(reader),
+            //       fromDate,
+            //       toDate,
+            //       (customerId == null || customerId == "") ? null : customerId,
+            //       selectedTimePeriod);
+            //List<decimal> values = new List<decimal>();
+            //values.Add(result.Attempts);
+            //values.Add(result.Duration);
 
-            List<VolumeTrafficResult> resultList = new List<VolumeTrafficResult>();
-            resultList.Add(new VolumeTrafficResult() { Values = values });
+            //List<VolumeTrafficResult> resultList = new List<VolumeTrafficResult>();
+            //resultList.Add(new VolumeTrafficResult() { Values = values });
+            //return resultList;
+
+            List<VolumeTrafficResult> resultList = new List<VolumeTrafficResult>();       
             return resultList;
 
 
@@ -994,7 +1033,8 @@ namespace TOne.Analytics.Data.SQL
             VolumeTraffic instance = new VolumeTraffic
             {
                 Attempts = reader["Attempts"] != DBNull.Value ? (int)reader["Attempts"] : 0,
-                Duration = GetReaderValue<decimal>(reader, "Duration")
+                Duration = GetReaderValue<decimal>(reader, "Duration"),
+                Date = reader["CallDate"] !=DBNull.Value ? GetReaderValue<string>(reader, "CallDate") : string.Empty
             };
 
             return instance;

@@ -564,6 +564,12 @@ namespace TOne.Analytics.Business
             return _datamanager.GetVolumeReportData(fromDate, toDate, customerID, supplierID, ZoneID, attempts, selectedTimePeriod, selectedTrafficReport);
 
         }
+
+        public List<VolumeTraffic> GetTrafficVolumes(DateTime fromDate, DateTime toDate, string customerID, string supplierID, string ZoneID, int attempts, VolumeReportsTimePeriodEnum selectedTimePeriod)
+        {
+            return _datamanager.GetTrafficVolumes(fromDate, toDate, customerID, supplierID, ZoneID, attempts, selectedTimePeriod);
+
+        }
         #region Private Methods
         private ZoneProfitFormatted FormatZoneProfit(ZoneProfit zoneProfit)
         {

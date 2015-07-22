@@ -96,4 +96,12 @@ namespace TOne.Analytics.Entities
     CompareInOutTraffic=1,
     DestinationTrafficVolumes=2
     }
+    public enum VolumeReportsTimePeriodEnum
+    {
+
+        None = 0,
+        Daily = 1,
+        Weekly = 2,
+        Monthly = 3
+    }
 }

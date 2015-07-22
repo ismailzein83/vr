@@ -40,6 +40,12 @@ namespace TOne.Analytics.Web.Controllers
             return __billingStatisticsManager.GetVolumeReportData(fromDate, toDate, selectedCustomers, selectedSuppliers, selectedZones, attempts, selectedTimePeriod, selectedTrafficReport);
         }
 
+        public List<VolumeTraffic> GetTrafficVolumes(DateTime fromDate, DateTime toDate, string selectedCustomers, string selectedSuppliers, string selectedZones, int attempts, VolumeReportsTimePeriodEnum selectedTimePeriod)
+        {
+
+            return __billingStatisticsManager.GetTrafficVolumes(fromDate, toDate, selectedCustomers, selectedSuppliers, selectedZones, attempts, selectedTimePeriod);
+        }
+
         [HttpGet]
         public HttpResponseMessage Export(string fromDate, string toDate)
         {
