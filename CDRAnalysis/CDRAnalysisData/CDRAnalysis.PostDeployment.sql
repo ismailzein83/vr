@@ -43,7 +43,7 @@ USING (VALUES
 	(N'3', N'29', N'call Forward'),
 	(N'4', N'30', N'Incoming Sms'),
 	(N'5', N'31', N'Outgoing Sms'),
-	(N'6', N'26', N'Roaming call forward'),
+	(N'6', N'26', N'Roaming call forward')
 ) 
 AS Source ([Code] ,[Description])
 ON Target.[Code] = Source.[Code] 
