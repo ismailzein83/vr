@@ -69,6 +69,8 @@
         $('#datetimepicker3').datetimepicker({
             format: 'DD/MM/YYYY'
         });
+        $('#datetimepicker3').data("DateTimePicker").date(new Date())
+        alert($('#datetimepicker3').data("DateTimePicker").date())
     });
 </script>
 
