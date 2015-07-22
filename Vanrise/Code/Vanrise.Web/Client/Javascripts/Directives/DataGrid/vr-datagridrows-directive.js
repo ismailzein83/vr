@@ -27,13 +27,15 @@ app.directive('vrDatagridrows', [function () {
                     while (scope.viewScope.isGridScope) {
                         scope.viewScope = scope.viewScope.$parent;
                     }
-
+                    var rotateclass = " ";
+                    if (!scope.ctrl.rotateHeader)
+                        rotateclass += "vr-datagrid-header-simple";
                     var parentScope = scope.gridParentScope;
                     while (parentScope.gridParentScope != undefined) {
                         parentScope = parentScope.gridParentScope;
                         drillDownLevel++;
                     }
-                    scope.ctrl.ngClassLevel = "drill-down-level-" + drillDownLevel;
+                    scope.ctrl.ngClassLevel = "drill-down-level-" + drillDownLevel +rotateclass;
                     //console.log('drillDownLevel' + drillDownLevel);
 
                     var lastScrollTop;

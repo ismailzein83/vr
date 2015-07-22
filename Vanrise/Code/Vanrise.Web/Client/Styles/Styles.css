@@ -1365,9 +1365,10 @@ input.ui-grid-filter-input[type="text"] {
     font-size: 10px;
     text-transform:uppercase;
     padding-top:3px;
+}
+.vr-datagrid-header-simple{   
     height:25px;
 }
-
 .vr-datagrid-body{
      background-color:#fff;
      border-bottom : 1px solid #D0D0D0;

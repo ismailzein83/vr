@@ -77,16 +77,25 @@ angular
   ]);
 function toggletime(e) {
     $('.datetime-controle').data("DateTimePicker").toggle();
-    $('.btn-switcher').removeClass("glyphicon-time");
-    $('.btn-switcher').addClass("glyphicon-calendar");
    
+    // to open time div and close date div
     $('.date-section').removeClass('in');
     $('.time-section').addClass('in');
+
+    // switch icon to date
+    $('.btn-switcher').removeClass("glyphicon-time");
+    $('.btn-switcher').addClass("glyphicon-calendar");
 }
 function toggledate(e) {
     $('.datetime-controle').data("DateTimePicker").toggle()
-    $('.date-section').addClass('in');
-    $('.btn-switcher').addClass("glyphicon-time");
+
+    // to open date div and close time div
     $('.time-section').removeClass('in');
+    $('.date-section').addClass('in');
+
+    // switch icon to time
+    $('.btn-switcher').addClass("glyphicon-time");
     $('.btn-switcher').removeClass("glyphicon-calendar");
+   
+    
 }
