@@ -26,6 +26,9 @@
                 <vr-columns colnum="2">
                     <vr-textbox value="attempts" label="Attempts greater than " isrequired />
                 </vr-columns>
+                <vr-columns colnum="2">
+                    <vr-textbox value="topDestinations" label="Top Destination " isrequired />
+                </vr-columns>
             </vr-row>
         </div>
     </vr-form>
@@ -41,7 +44,6 @@
        
             <div ng-show="filter.selectedTrafficTypeReport.value == 0" ng-include=" '/Client/Modules/Analytics/Views/Billing Statistics/Volume Reports/Volume Reports Templates/TrafficVolumeTemplate.html' "></div>
             <div ng-show="filter.selectedTrafficTypeReport.value == 1 " ng-include="'/Client/Modules/Analytics/Views/Billing Statistics/Volume Reports/Volume Reports Templates/InOutTrafficVolumeTemplate.html'"></div>
-            <div ng-show="filter.selectedTrafficTypeReport.value == 2 " ng-include="'/Client/Modules/Analytics/Views/Billing Statistics/Volume Reports/Volume Reports Templates/DestinationTrafficVolumeTemplateController.html'"></div>
-       
+            <div ng-show="filter.selectedTrafficTypeReport.value == 2 " ng-include="'/Client/Modules/Analytics/Views/Billing Statistics/Volume Reports/Volume Reports Templates/DestinationTrafficVolumeTemplate.html'"></div>
     </div>
 </vr-panel>

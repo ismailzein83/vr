@@ -35,10 +35,15 @@ namespace TOne.Analytics.Web.Controllers
             
         }
 
-        public List<VolumeTraffic> GetTrafficVolumes(DateTime fromDate, DateTime toDate, string selectedCustomers, string selectedSuppliers, string selectedZones, int attempts, VolumeReportsTimePeriodEnum selectedTimePeriod)
+        public List<VolumeTraffic> GetTrafficVolumes(DateTime fromDate, DateTime toDate, string customerId, string supplierId, string zoneId, int attempts, VolumeReportsTimePeriod timePeriod)
         {
-            return __billingStatisticsManager.GetTrafficVolumes(fromDate, toDate, selectedCustomers, selectedSuppliers, selectedZones, attempts, selectedTimePeriod);
+            return __billingStatisticsManager.GetTrafficVolumes(fromDate, toDate, customerId, supplierId, zoneId, attempts, timePeriod);
         }
+
+        public List<DestinationVolumeTraffic> GetDestinationTrafficVolumes(DateTime fromDate, DateTime toDate, string customerId, string supplierId, string zoneId, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination)
+        {
+            return __billingStatisticsManager.GetDestinationTrafficVolumes(fromDate, toDate, customerId, supplierId, zoneId, attempts, timePeriod, topDestination);
+        } 
 
         [HttpGet]
         public HttpResponseMessage Export(string fromDate, string toDate)

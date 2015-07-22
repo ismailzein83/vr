@@ -113,7 +113,7 @@
     <Compile Include="Mobile\TrafficSummaryView.cs" />
     <Compile Include="TrafficStatisticSummaryBigResult.cs" />
     <Compile Include="VolumeTraffic.cs" />
-    <Compile Include="VolumeTrafficResult.cs" />
+    <Compile Include="DestinationVolumeTraffic.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.BusinessEntity.Entities\TOne.BusinessEntity.Entities.csproj">

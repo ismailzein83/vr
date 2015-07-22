@@ -4,7 +4,8 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService) {
     return ({
 
         GetVariationReport: GetVariationReport,
-        GetTrafficVolumes:GetTrafficVolumes,
+        GetTrafficVolumes: GetTrafficVolumes,
+        GetDestinationTrafficVolumes : GetDestinationTrafficVolumes,
         Export: Export
     });
 
@@ -73,15 +74,28 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService) {
         //}
     }
     
-    function GetTrafficVolumes(fromDate, toDate, selectedCustomers, selectedSuppliers, selectedZones, attempts, selectedTimePeriod) {
+    function GetTrafficVolumes(fromDate, toDate, selectedCustomer, selectedSupplier, selectedZone, attempts, selectedTimePeriod) {
         return BaseAPIService.get("/api/BillingStatistics/GetTrafficVolumes", {
             fromDate: fromDate,
             toDate: toDate,
-            selectedCustomers: selectedCustomers,
-            selectedSuppliers: selectedSuppliers,
-            selectedZones: selectedZones,
+            customerId: selectedCustomer,
+            supplierId: selectedSupplier,
+            zoneId: selectedZone,
             attempts: attempts,
-            selectedTimePeriod: selectedTimePeriod
+            timePeriod: selectedTimePeriod
+        });
+    }
+
+    function GetDestinationTrafficVolumes(fromDate, toDate, selectedCustomer, selectedSupplier, selectedZone, attempts, selectedTimePeriod,topDestination) {
+        return BaseAPIService.get("/api/BillingStatistics/GetDestinationTrafficVolumes", {
+            fromDate: fromDate,
+            toDate: toDate,
+            customerId: selectedCustomer,
+            supplierId: selectedSupplier,
+            zoneId: selectedZone,
+            attempts: attempts,
+            timePeriod: selectedTimePeriod,
+            topDestination : topDestination
         });
     }
 });

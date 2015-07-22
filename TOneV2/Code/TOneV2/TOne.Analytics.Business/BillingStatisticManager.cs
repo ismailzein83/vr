@@ -559,17 +559,17 @@ namespace TOne.Analytics.Business
             return new VariationReportResult() { VariationReportsData = customersAndSuppliersList, TimeRange = timeRanges };
 
         }
-        public List<VolumeTrafficResult> GetVolumeReportData(DateTime fromDate, DateTime toDate, string customerID, string supplierID, string ZoneID, int attempts, string selectedTimePeriod, VolumeReportsOptions selectedTrafficReport)
+     
+        public List<VolumeTraffic> GetTrafficVolumes(DateTime fromDate, DateTime toDate, string customerID, string supplierID, string zoneID, int attempts, VolumeReportsTimePeriod timePeriod)
         {
-            return _datamanager.GetVolumeReportData(fromDate, toDate, customerID, supplierID, ZoneID, attempts, selectedTimePeriod, selectedTrafficReport);
+            return _datamanager.GetTrafficVolumes(fromDate, toDate, customerID, supplierID, zoneID, attempts, timePeriod);
 
         }
 
-        public List<VolumeTraffic> GetTrafficVolumes(DateTime fromDate, DateTime toDate, string customerID, string supplierID, string ZoneID, int attempts, VolumeReportsTimePeriodEnum selectedTimePeriod)
+        public List<DestinationVolumeTraffic> GetDestinationTrafficVolumes(DateTime fromDate, DateTime toDate, string customerID, string supplierID, string zoneID, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination)
         {
-            return _datamanager.GetTrafficVolumes(fromDate, toDate, customerID, supplierID, ZoneID, attempts, selectedTimePeriod);
-
-        }
+            return _datamanager.GetDestinationTrafficVolumes(fromDate, toDate, customerID, supplierID, zoneID, attempts, timePeriod, topDestination);
+       }
         #region Private Methods
         private ZoneProfitFormatted FormatZoneProfit(ZoneProfit zoneProfit)
         {

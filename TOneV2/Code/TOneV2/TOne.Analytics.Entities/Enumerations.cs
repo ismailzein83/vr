@@ -90,13 +90,8 @@ namespace TOne.Analytics.Entities
         New = 2
     }
 
-    public enum VolumeReportsOptions { 
     
-    TrafficVolumes= 0,
-    CompareInOutTraffic=1,
-    DestinationTrafficVolumes=2
-    }
-    public enum VolumeReportsTimePeriodEnum
+    public enum VolumeReportsTimePeriod
     {
 
         None = 0,

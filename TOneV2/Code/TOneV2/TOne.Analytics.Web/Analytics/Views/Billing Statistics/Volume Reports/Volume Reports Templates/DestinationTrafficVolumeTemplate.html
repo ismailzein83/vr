@@ -1,1 +1,12 @@
-﻿
+﻿<vr-row ng-controller="Analytics_DestinationTrafficVolumeTemplateController">
+    <vr-columns width="fullrow">
+        <vr-section title="Destination Traffic Volumes-Duration">
+            <vr-chart data-on-ready="durationChartReady"></vr-chart>
+        </vr-section>
+
+        <vr-section title="Destination Traffic Volumes-Attempts">
+            <vr-chart data-on-ready="chartReady"></vr-chart>
+        </vr-section>
+    </vr-columns>
+
+</vr-row>

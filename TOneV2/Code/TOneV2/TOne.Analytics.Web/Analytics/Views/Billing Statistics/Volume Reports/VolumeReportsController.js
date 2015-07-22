@@ -37,6 +37,7 @@ function VolumeReportsController($scope, BillingStatisticsAPIService, VolumeRepo
         $scope.filter.supplierId = $scope.selectedSupplier != undefined ? $scope.selectedSupplier.CarrierAccountID : "";
         $scope.filter.zoneId = $scope.selectedZone != undefined ? $scope.selectedZone.ZoneId : 0;
         $scope.filter.attempts = $scope.attempts;
+        $scope.filter.topDestination = $scope.topDestinations;
     }
 
     function loadTimePeriods() {

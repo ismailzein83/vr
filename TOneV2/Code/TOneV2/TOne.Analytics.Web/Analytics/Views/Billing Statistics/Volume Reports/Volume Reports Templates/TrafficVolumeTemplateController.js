@@ -28,7 +28,7 @@ function TrafficVolumeTemplateController($scope, BillingStatisticsAPIService) {
 
         var chartDefinition = {
             type: "column",
-            title: "Traffic volume"
+            title: "Traffic volumes"
         };
         var xAxisDefinition = {
             titlePath: "Date",
@@ -44,7 +44,6 @@ function TrafficVolumeTemplateController($scope, BillingStatisticsAPIService) {
             type: "column"
         }
         ];
-
         chartAPI.renderChart(data, chartDefinition, seriesDefinitions, xAxisDefinition);
 
     }
