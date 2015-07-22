@@ -78,9 +78,6 @@
     <Build Include="FraudAnalysis\Tables\CaseStatus.sql" />
     <Build Include="FraudAnalysis\Tables\NumberProfile.sql" />
     <Build Include="FraudAnalysis\Tables\Strategy.sql" />
-    <Build Include="Security\walid.sql" />
-    <Build Include="Security\development.sql" />
-    <Build Include="Security\RoleMemberships.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempForFilteredSuspiciousNumbers.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_NormalCDR_Load.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_CallClass_GetAll.sql" />
