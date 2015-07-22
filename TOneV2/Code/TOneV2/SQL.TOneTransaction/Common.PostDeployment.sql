@@ -57,8 +57,7 @@ DELETE
 
 MERGE INTO runtime.[SchedulerTaskActionType] AS Target 
 USING (VALUES 
-	(1, N'Workflow', N'{"URL":"/Client/Modules/Runtime/Views/ActionTemplates/WFActionTemplate.html"}'),
-	(2, N'Data Source', N'{"URL":""}')
+	(1, N'Workflow', N'{"URL":"/Client/Modules/Runtime/Views/ActionTemplates/WFActionTemplate.html"}')
 ) 
 AS Source ([ID], [Name], [ActionTypeInfo])
 ON Target.[ID] = Source.[ID] 

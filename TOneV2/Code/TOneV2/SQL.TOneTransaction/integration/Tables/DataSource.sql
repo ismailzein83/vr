@@ -5,8 +5,10 @@
     [TaskId]    INT           NOT NULL,
     [Settings]  VARCHAR (MAX) NOT NULL,
     CONSTRAINT [PK_DataSource] PRIMARY KEY CLUSTERED ([ID] ASC),
-    CONSTRAINT [FK_DataSource_AdapterType] FOREIGN KEY ([AdapterID]) REFERENCES [integration].[AdapterType] ([ID])
+    CONSTRAINT [FK_DataSource_AdapterType] FOREIGN KEY ([AdapterID]) REFERENCES [integration].[AdapterType] ([ID]) ON DELETE CASCADE
 );
+
+
 
 
 
