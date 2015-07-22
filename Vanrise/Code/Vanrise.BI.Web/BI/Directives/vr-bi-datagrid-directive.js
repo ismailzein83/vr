@@ -43,7 +43,7 @@ app.directive('vrBiDatagrid', ['UtilsService', 'BIAPIService', 'BIUtilitiesServi
 
     function getDataGridTemplate(previewmode) {
         if (previewmode != 'true') {
-            return '<vr-section title="{{ctrl.title}}"><div ng-if="ctrl.isAllowed==false" ng-class="\'gridpermission\'"><div  style="padding-top:115px;"><div   class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> You Don\'t Have Permission, Please Contact Your Administrator..!!</div></div></div><div ng-if="ctrl.isAllowed" vr-loader="ctrl.isGettingData"><vr-datagrid  on-export="ctrl.onexport" datasource="ctrl.data" on-ready="ctrl.onGridReady" maxheight="300px">'
+            return '<vr-section title="{{ctrl.title}}"><div ng-if="ctrl.isAllowed==false" ng-class="\'gridpermission\'"><div  style="padding-top:115px;"><div   class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> You Don\'t Have Permission, Please Contact Your Administrator..!!</div></div></div><div ng-if="ctrl.isAllowed" vr-loader="ctrl.isGettingData"><vr-datagrid  onexport="ctrl.onexport" datasource="ctrl.data" on-ready="ctrl.onGridReady" maxheight="300px">'
                                         + '<vr-datagridcolumn  ng-show="ctrl.isTopEntities" headertext="ctrl.entityType.description" field="\'EntityName\'"'// isclickable="\'true\'" \onclicked="openReportEntityModal"
                                     +'  ></vr-datagridcolumn>'
                                         + '<vr-datagridcolumn ng-show="ctrl.isDateTimeGroupedData" headertext="\'Time\'" field="\'dateTimeValue\'"></vr-datagridcolumn>'

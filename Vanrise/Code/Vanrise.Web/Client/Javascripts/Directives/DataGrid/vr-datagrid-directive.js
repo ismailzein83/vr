@@ -11,7 +11,7 @@
             hideheader: '=',
             noverticallines: '@',
             idfield: '@',
-            onExport:'='
+            onexport:'='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -43,8 +43,8 @@
             dataGridObj.defineAPI();
             var isDownloading = false;
             this.onExportClicked = function () {
-               if (this.onExport != undefined && typeof (this.onExport) == 'function') {
-                   var promise = this.onExport();
+                if (this.onexport != undefined && typeof (this.onexport) == 'function') {
+                    var promise = this.onexport();
                
                     if (promise != undefined && promise != null) {
                         isDownloading = true;

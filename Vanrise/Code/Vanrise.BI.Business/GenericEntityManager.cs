@@ -239,7 +239,7 @@ namespace Vanrise.BI.Business
                            {
                                string hour = dateTimeValue.Hour.ToString();
                                string minute = dateTimeValue.Minute.ToString();
-                               var groupName = dateTimeValue.Date + "-" + GetMonthNameShort(dateTimeValue) + "-" + GetShortYear(dateTimeValue);
+                               var groupName = dateTimeValue.Day.ToString() + "-" + GetMonthNameShort(dateTimeValue) + "-" + GetShortYear(dateTimeValue);
                                if (dontFillGroup)
                                  return ( groupName + " " + (hour.ToCharArray().Length < 2 ? '0' + hour : hour) + ":" + (minute.ToCharArray().Length < 2 ? '0' + minute : minute));
                                break;
