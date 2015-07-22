@@ -66,6 +66,7 @@
     <Compile Include="CriteriaManager.cs" />
     <Compile Include="FraudManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CaseManagmentManager.cs" />
     <Compile Include="StrategyManager.cs" />
   </ItemGroup>
   <ItemGroup>

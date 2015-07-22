@@ -182,22 +182,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return fraudResult;
         }
 
-
-        public bool SaveSubscriberCase(Strategy strategyObject)
-        {
-
-            //int recordesEffected = ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_Update",
-            //    strategyObject.Id,
-            //     DefaultUserId,
-            //    !string.IsNullOrEmpty(strategyObject.Name) ? strategyObject.Name : null,
-            //    !string.IsNullOrEmpty(strategyObject.Description) ? strategyObject.Description : null,
-            //    DateTime.Now,
-            //    strategyObject.IsDefault,
-            //    Vanrise.Common.Serializer.Serialize(strategyObject));
-            //if (recordesEffected > 0)
-            //    return true;
-            return false;
-        }
+       
 
     }
 }

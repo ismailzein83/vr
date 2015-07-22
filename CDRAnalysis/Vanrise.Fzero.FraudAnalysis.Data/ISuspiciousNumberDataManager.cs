@@ -10,5 +10,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
         void SaveNumberProfiles(List<NumberProfile> numberProfiles);
 
         IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(string tempTableKey, int fromRow, int toRow, DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList);
+       
     }
 }

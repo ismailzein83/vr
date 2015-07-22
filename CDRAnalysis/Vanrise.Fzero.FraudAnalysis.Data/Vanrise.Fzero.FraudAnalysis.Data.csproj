@@ -55,6 +55,7 @@
     <Compile Include="INumberProfileDataManager.cs" />
     <Compile Include="IStrategyDataManager.cs" />
     <Compile Include="ISuspiciousNumberDataManager.cs" />
+    <Compile Include="ICaseManagementDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
