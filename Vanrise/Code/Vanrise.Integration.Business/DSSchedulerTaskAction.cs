@@ -28,44 +28,50 @@ namespace Vanrise.Integration.Business
                 });
         }
 
-        private string CreateCustomClass(string customCode, out string className)
-        {
-            className = "CustomMapper_" + Math.Abs(customCode.GetHashCode());
-
-
-            string code = (new StringBuilder()).Append(@"public Vanrise.Queueing.PersistentQueueItem MapData(Vanrise.Integration.Entities.IImportedData data)
-                                                            {").Append(customCode).Append("}").ToString();
-
-            string classDefinition = new StringBuilder().Append(@"
-                using System;
-                using System.Collections.Generic;
-                using Vanrise.Integration.Entities;
-
-                namespace Vanrise.Integration.Business
-                {
-                    public class ").Append(className).Append(" : ").Append(typeof(IDataMapper).FullName).Append(@"
-                    {                        
-                        ").Append(code).Append(@"
-                    }
-                }
-                ").ToString();
-
-            return classDefinition;
-        }
-
         private Vanrise.Queueing.PersistentQueueItem ExecuteCustomCode(string customCode, IImportedData data)
         {
-            string className;
-
-            string classDefinition = this.CreateCustomClass(customCode, out className);
-
             Vanrise.Queueing.PersistentQueueItem result = null;
+
+            string className = "CustomMapper_" + Math.Abs(customCode.GetHashCode());
+
+            Assembly generatedAssembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.FullName.StartsWith("Vanrise-Mappers"));
+            Type generatedType = null;
+
+            if (generatedAssembly != null)
+            {
+                generatedType = generatedAssembly.GetType("Vanrise.Integration.Mappers." + className);
+            }
+
+            if (generatedType == null)
+            {
+                Assembly compiledAssembly;
+                if (BuildGeneratedType(customCode, className, out compiledAssembly))
+                {
+                    generatedType = compiledAssembly.GetType("Vanrise.Integration.Mappers." + className);
+                }
+                else
+                {
+                    //TODO: log build errors
+                    return result;
+                }
+            }
+
+            IDataMapper mapper = (IDataMapper)generatedType.GetConstructor(Type.EmptyTypes).Invoke(null);
+            result = mapper.MapData(data);
+            
+            return result;
+        }
+
+        private bool BuildGeneratedType(string customCode, string className, out Assembly compiledAssembly)
+        {
+            string classDefinition = this.BuildCustomClass(customCode, className);
 
             Dictionary<string, string> providerOptions = new Dictionary<string, string>();
             providerOptions["CompilerVersion"] = "v4.0";
             Microsoft.CSharp.CSharpCodeProvider provider = new Microsoft.CSharp.CSharpCodeProvider(providerOptions);
 
             CompilerParameters parameters = new CompilerParameters();
+            parameters.OutputAssembly = "Vanrise-Mappers";
             parameters.GenerateExecutable = false;
             parameters.GenerateInMemory = true;
             parameters.IncludeDebugInformation = true;
@@ -84,15 +90,31 @@ namespace Vanrise.Integration.Business
             }
 
             CompilerResults results = provider.CompileAssemblyFromSource(parameters, classDefinition);
+            compiledAssembly = results.CompiledAssembly;
 
-            if (results.Errors.Count == 0)
-            {
-                Type generated = results.CompiledAssembly.GetType("Vanrise.Integration.Business." + className);
-                IDataMapper mapper = (IDataMapper)generated.GetConstructor(Type.EmptyTypes).Invoke(null);
-                result = mapper.MapData(data);
-            }
+            return (results.Errors.Count == 0);
+        }
 
-            return result;
+        private string BuildCustomClass(string customCode, string className)
+        {
+            string code = (new StringBuilder()).Append(@"public Vanrise.Queueing.PersistentQueueItem MapData(Vanrise.Integration.Entities.IImportedData data)
+                                                            {").Append(customCode).Append("}").ToString();
+
+            string classDefinition = new StringBuilder().Append(@"
+                using System;
+                using System.Collections.Generic;
+                using Vanrise.Integration.Entities;
+
+                namespace Vanrise.Integration.Mappers
+                {
+                    public class ").Append(className).Append(" : ").Append(typeof(IDataMapper).FullName).Append(@"
+                    {                        
+                        ").Append(code).Append(@"
+                    }
+                }
+                ").ToString();
+
+            return classDefinition;
         }
     }
 }
