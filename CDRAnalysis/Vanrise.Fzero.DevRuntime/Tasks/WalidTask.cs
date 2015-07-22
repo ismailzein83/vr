@@ -22,11 +22,11 @@ using Vanrise.Integration.Entities;
 
 namespace Vanrise.Fzero.DevRuntime.Tasks
 {
-    public class WalidTask : ITask
+    public class developmentTask : ITask
     {
         //public void Execute()
         //{
-        //    Console.WriteLine("Walid Task started");
+        //    Console.WriteLine("development Task started");
 
         //    var adapter = new FTPReceiveAdapter();
         //    adapter.ActionAfterImport = (int) Integration.Adapters.BaseFTP.TPReceiveAdapter.Actions.Rename;
@@ -110,10 +110,10 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
 
         public void Execute()
         {
-            //Console.WriteLine("Walid Task started");
+            //Console.WriteLine("development Task started");
 
             //var adapter = new Vanrise.Integration.Adapters.SQLReceiveAdapter.SQLReceiveAdapter();
-            //adapter.ConnectionString = "server=192.168.110.185;user id=walid;password=P@ssw0rd;persistsecurityinfo=True;database=CDRAnalysisMobile_WF";
+            //adapter.ConnectionString = "server=192.168.110.185;user id=development;password=P@ssw0rd;persistsecurityinfo=True;database=CDRAnalysisMobile_WF";
             //adapter.Description = "Description";
             //adapter.Query = "select top 10 * from FraudAnalysis.NormalCDR";
 
