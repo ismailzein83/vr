@@ -77,7 +77,29 @@ var TestViewController = function ($scope, $http, ValuesAPIService) {
         $scope.gridData.push(item);
         gridApi.itemAdded(item);
     }
+    $scope.toggletime = function (e) {
+            var el = angular.element(e.currentTarget);
+            el.parent().data("DateTimePicker").show();
 
+            $('.date-section').removeClass('in');
+            $('.time-section').addClass('in');
+
+            $('.btn-switcher').removeClass("glyphicon-time");
+            $('.btn-switcher').addClass("glyphicon-calendar");
+           
+    }
+
+    $scope.toggledate = function (e) {      
+        var el = angular.element(e.currentTarget);
+        el.parent().data("DateTimePicker").show();
+
+        $('.time-section').removeClass('in');
+        $('.date-section').addClass('in');
+
+        $('.btn-switcher').addClass("glyphicon-time");
+        $('.btn-switcher').removeClass("glyphicon-calendar");
+
+    }
     var gridApi;
     $scope.gridReady = function (api) {
         gridApi = api;

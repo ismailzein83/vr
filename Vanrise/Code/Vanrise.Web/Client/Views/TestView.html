@@ -25,19 +25,53 @@
     
 </vr-form>
 <div class="col-sm-3">
-    <div class="input-group datetime-controle">
+    date-time
+    <div class="input-group date datetime-controle" id="datetimepicker1">
 
-        <input type="text" class="form-control input-sm"
-               datetimepicker>
-        <span class="input-group-addon hand-cursor" onclick="toggledate()">
+        <input type="text" class="form-control input-sm">
+        <span class="input-group-addon " ng-click="toggledate($event) ">
             <i class="glyphicon glyphicon-calendar"></i>
-
         </span>
-        <span class="input-group-addon hand-cursor" onclick="toggletime()">
+        <span class="input-group-addon " ng-click="toggletime($event) ">
             <i class="glyphicon glyphicon-time"></i>
         </span>
     </div>
 </div>
+<div class="col-sm-3">
+    time
+    <div class="input-group date datetime-controle" id="datetimepicker2">
+
+        <input type="text" class="form-control input-sm">        
+        <span class="input-group-addon " >
+            <i class="glyphicon glyphicon-time"></i>
+        </span>
+    </div>
+</div>
+<div class="col-sm-3">
+    date
+    <div class="input-group date datetime-controle" id="datetimepicker3">
+
+        <input type="text" class="form-control input-sm">
+        <span class="input-group-addon " >
+            <i class="glyphicon glyphicon-calendar"></i>
+        </span>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker1').datetimepicker({
+            format: 'L HH:mm',
+            showClose:true
+        });
+        $('#datetimepicker2').datetimepicker({
+            format: 'HH:mm'
+        });
+        $('#datetimepicker3').datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
+    });
+</script>
+
 <input type="text" ng-model="testModel" />
     {{testModel}}
 ff
