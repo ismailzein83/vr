@@ -12,9 +12,9 @@ namespace TOne.BusinessEntity.Data.SQL
 {
     public class AccountManagerCarrierDataManager : BaseTOneDataManager, IAccountManagerCarrierDataManager
     {
-        public List<AccountManagerCarrier> GetCarriers(int from, int to)
+        public List<AccountManagerCarrier> GetCarriers(int userId, int from, int to)
         {
-            return GetItemsSP("BEntity.sp_AccountManager_GetCarriers", AccountManagerCarrier, from, to);
+            return GetItemsSP("BEntity.sp_AccountManager_GetCarriers", AccountManagerCarrier, userId, from, to);
         }
 
         AccountManagerCarrier AccountManagerCarrier(IDataReader reader)

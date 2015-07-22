@@ -2,6 +2,7 @@
 
 function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRModalService, VRNavigationService, UtilsService) {
     var gridApi;
+    var selectedAccountManagerId = undefined;
     loadParameters();
     defineScope();
     load();
@@ -10,7 +11,7 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
         var parameters = VRNavigationService.getParameters($scope);
 
         if (parameters != undefined && parameters != null) {
-            $scope.accountManager = parameters.accountManager;
+            selectedAccountManagerId = parameters.selectedAccountManagerId;
             $scope.orgChart = parameters.orgChart;
         }
     }
@@ -28,15 +29,11 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
         }
         function getData() {
             UtilsService.waitMultipleAsyncOperations([loadParameters]).finally(function () {
-                console.log('parameters are set');
                 // $scope.accountManager.nodeId is set
                 UtilsService.waitMultipleAsyncOperations([getCarriers]).finally(function () {
-                    console.log('carriers are set');
                     // $scope.carriers is set
-                    console.log($scope.orgChart.Id);
-                    console.log($scope.accountManager.nodeId);
-                    AccountManagerAPIService.GetAssignedCarriers([$scope.orgChart.Id, $scope.accountManager.nodeId]).then(function (data) {
-                        console.log('toggling carriers...');
+                    AccountManagerAPIService.GetAssignedCarriers([$scope.orgChart.Id, selectedAccountManagerId]).then(function (data) {
+                        console.log(data);
                         toggleAssignedCarriers(data);
                     });
                 });
@@ -95,10 +92,10 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
     function getCarriers() {
         var pageInfo = gridApi.getPageInfo();
 
-        return AccountManagerAPIService.GetCarriers(pageInfo.fromRow, pageInfo.toRow).then(function (data) {
+        return AccountManagerAPIService.GetCarriers(selectedAccountManagerId, pageInfo.fromRow, pageInfo.toRow).then(function (data) {
             angular.forEach(data, function (item) {
                 var object = {
-                    UserId: $scope.accountManager.nodeId,
+                    UserId: selectedAccountManagerId,
                     CarrierAccountId: item.CarrierAccountId,
                     Name: item.Name,
                     NameSuffix: item.NameSuffix,
@@ -119,6 +116,7 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
             var carrier = UtilsService.getItemByVal($scope.carriers, assignedCarriers[i].CarrierAccountId, 'CarrierAccountId');
 
             if (carrier != null) {
+                console.log(carrier);
                 if (assignedCarriers[i].RelationType == 1) {
                     carrier.customerSwitchValue = true;
                     carrier.newCustomerSwitchValue = true;

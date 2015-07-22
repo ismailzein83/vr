@@ -13,10 +13,10 @@ namespace TOne.BusinessEntity.Business
 {
     public class AccountManagerManager
     {
-        public List<AccountManagerCarrier> GetCarriers(int from, int to)
+        public List<AccountManagerCarrier> GetCarriers(int userId, int from, int to)
         {
             IAccountManagerCarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountManagerCarrierDataManager>();
-            return dataManager.GetCarriers(from, to);
+            return dataManager.GetCarriers(userId, from, to);
         }
 
         public List<AssignedCarrier> GetAssignedCarriers(List<int> parameters)

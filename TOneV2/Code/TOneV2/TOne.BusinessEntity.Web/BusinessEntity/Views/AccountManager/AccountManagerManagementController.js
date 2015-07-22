@@ -41,7 +41,7 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
 
             var parameters = {
                 orgChart: $scope.assignedOrgChart,
-                accountManager: $scope.tree.currentNode
+                selectedAccountManagerId: $scope.tree.currentNode.nodeId
             };
 
             VRModalService.showModal('/Client/Modules/BusinessEntity/Views/AccountManager/CarrierAssignmentEditor.html', parameters, settings);
@@ -65,7 +65,6 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
                 var orgChartId = data.Value;
 
                 OrgChartAPIService.GetOrgChartById(orgChartId).then(function (orgChart) {
-                    console.log(orgChart);
                     $scope.nodes = mapMembersToNodes(orgChart.Hierarchy);
                 });
             });
@@ -112,12 +111,8 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
         //AccountManagerAPIService.GetCarriers(1, 1000).then(function (data) {
 
         //});
-        console.log($scope.assignedOrgChart.Id);
-        console.log($scope.tree.currentNode.nodeId);
         return AccountManagerAPIService.GetAssignedCarriers([$scope.assignedOrgChart.Id, $scope.tree.currentNode.nodeId]).then(function (data) {
             angular.forEach(data, function (item) {
-                console.log(item);
-                console.log('currentNode.nodeId: ' + $scope.tree.currentNode.nodeId);
                 var object = {
                     CarrierAccountId: item.CarrierAccountId,
                     IsCustomer: (item.RelationType == 1) ? 'True' : 'False',
@@ -127,6 +122,8 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
 
                 $scope.assignedCarriers.push(object);
             });
+
+            console.log($scope.assignedCarriers);
         });
     }
 }

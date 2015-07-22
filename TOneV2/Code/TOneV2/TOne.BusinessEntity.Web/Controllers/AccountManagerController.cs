@@ -12,10 +12,10 @@ namespace TOne.BusinessEntity.Web.Controllers
     public class AccountManagerController : ApiController
     {
         [HttpGet]
-        public List<AccountManagerCarrier> GetCarriers(int from, int to)
+        public List<AccountManagerCarrier> GetCarriers(int userId, int from, int to)
         {
             AccountManagerManager manager = new AccountManagerManager();
-            return manager.GetCarriers(from, to);
+            return manager.GetCarriers(userId, from, to);
         }
 
         [HttpPost]

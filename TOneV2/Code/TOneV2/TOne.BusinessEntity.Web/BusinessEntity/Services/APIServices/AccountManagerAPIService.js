@@ -6,8 +6,9 @@ var serviceObj = function (BaseAPIService) {
         AssignCarriers: AssignCarriers
     });
     
-    function GetCarriers(from, to) {
+    function GetCarriers(userId, from, to) {
         return BaseAPIService.get('/api/AccountManager/GetCarriers', {
+            userId: userId,
             from: from,
             to: to
         });
