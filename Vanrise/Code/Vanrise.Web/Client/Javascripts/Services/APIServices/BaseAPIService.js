@@ -33,12 +33,26 @@ app.service('BaseAPIService', function ($http, $q, $rootScope, notify) {
         var urlParameters;
         if (params)
             urlParameters = {
-                params: params
+                params: params,
             };
+        if (options != undefined && options.responseTypeAsBufferArray) 
+            urlParameters.responseType = 'arraybuffer';
         
         $http.get(url, urlParameters)
             .success(function (response, status, headers, config) {
-                deferred.resolve(response);
+               
+                var returnedResponse;
+                if (options != undefined && options.returnAllResponseParameters) {
+                    returnedResponse = {
+                        data: response,
+                        status: status,
+                        headers: headers,
+                        config: config
+                    }
+                }
+                else
+                    returnedResponse = response;
+                deferred.resolve(returnedResponse);
             })
             .error(function (data, status, headers, config) {
                 console.log(data);
