@@ -91,4 +91,7 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_GetSubscriberThresholds.sql" />
     <Build Include="Security\FraudAnalysis.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="CDRAnalysis.PostDeployment.sql" />
+  </ItemGroup>
 </Project>
