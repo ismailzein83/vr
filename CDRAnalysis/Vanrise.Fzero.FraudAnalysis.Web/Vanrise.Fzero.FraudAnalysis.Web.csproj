@@ -121,6 +121,7 @@
     <None Include="Properties\PublishProfiles\New.pubxml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\CaseManagementController.cs" />
     <Compile Include="Controllers\SuspicionAnalysisController.cs" />
     <Compile Include="Controllers\StrategyController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -152,6 +153,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="FraudAnalysis\Services\APIServices\CaseManagementAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\SuspicionAnalysisAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyAPIService.js" />
     <Content Include="FraudAnalysis\Views\OutPut\Dashboard.html" />
