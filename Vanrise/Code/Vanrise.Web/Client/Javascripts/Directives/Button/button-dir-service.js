@@ -99,13 +99,13 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 };
             case 'AssignOrgChart':
                 return {
-                    text: 'Assign Org Chart',
-                    class: 'glyphicon glyphicon-ok-circle'
+                    text: 'Choose an Organization Chart',
+                    class: 'glyphicon glyphicon-list-alt'
                 };
             case 'AssignCarriers':
                 return {
                     text: 'Assign Carriers',
-                    class: 'glyphicon glyphicon-ok-circle'
+                    class: 'glyphicon glyphicon-link'
                 };
         }
     }
