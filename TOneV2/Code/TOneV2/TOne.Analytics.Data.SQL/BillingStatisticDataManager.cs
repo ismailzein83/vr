@@ -310,28 +310,7 @@ namespace TOne.Analytics.Data.SQL
         }
         public List<VolumeTraffic> GetTrafficVolumes(DateTime fromDate, DateTime toDate, string customerId, string supplierId, string zoneId, int attempts, VolumeReportsTimePeriodEnum selectedTimePeriod)
         {
-            List<VolumeTraffic> resultList = new List<VolumeTraffic>();
-
-            ExecuteReaderSP("rpt_Volumes_DailyTraffic",(reader) =>
-             {
-                 while (reader.Read())
-                     resultList.Add(new VolumeTraffic
-                     {
-                         Attempts = GetReaderValue<int>(reader, "Attempts"),
-                         Duration = GetReaderValue<decimal>(reader, "Duration"),
-                         Date = (selectedTimePeriod == VolumeReportsTimePeriodEnum.None) ? string.Empty :
-                         (selectedTimePeriod == VolumeReportsTimePeriodEnum.Daily) ?
-                         reader["CallDate"] as string :
-                         (selectedTimePeriod == VolumeReportsTimePeriodEnum.Weekly) ?
-                         string.Concat( ((int)reader["CallWeek"]).ToString() ,"/", ((int)reader["CallYear"]).ToString()) :
-                         (selectedTimePeriod == VolumeReportsTimePeriodEnum.Monthly) ?
-                           string.Concat( ((int)reader["CallMonth"]).ToString() ,"/", ((int)reader["CallYear"]).ToString()) :
-                           string.Empty
-
-                     });
-
-             },
-           
+            List<VolumeTraffic> resultList = GetItemsSP("rpt_Volumes_DailyTraffic", (reader) => VolumeTrafficMapper(reader, selectedTimePeriod),
              fromDate,
              toDate,
              customerId,
@@ -340,9 +319,25 @@ namespace TOne.Analytics.Data.SQL
              attempts,
              selectedTimePeriod );
             return resultList;
-
-
         }
+
+        VolumeTraffic VolumeTrafficMapper(IDataReader reader, VolumeReportsTimePeriodEnum timePeriod)
+        {
+            VolumeTraffic volumeTraffic = new VolumeTraffic
+                     {
+                         Attempts = GetReaderValue<int>(reader, "Attempts"),
+                         Duration = GetReaderValue<decimal>(reader, "Duration")
+                     };
+            switch (timePeriod)
+            {
+                case VolumeReportsTimePeriodEnum.None: volumeTraffic.Date = ""; break;
+                case VolumeReportsTimePeriodEnum.Daily: volumeTraffic.Date = reader["CallDate"] as string; break;
+                case VolumeReportsTimePeriodEnum.Weekly: volumeTraffic.Date = string.Concat(((int)reader["CallWeek"]).ToString(), "/", ((int)reader["CallYear"]).ToString()); break;
+                case VolumeReportsTimePeriodEnum.Monthly: volumeTraffic.Date = string.Concat(((int)reader["CallMonth"]).ToString(), "/", ((int)reader["CallYear"]).ToString()); break;
+            }
+            return volumeTraffic;
+        }
+
         public List<DailySummary> GetDailySummary(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
         {
             return GetItemsSP("Analytics.SP_BillingRep_GetDailySummary", DailySummaryMapper,

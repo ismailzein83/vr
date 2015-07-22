@@ -1,12 +1,7 @@
-﻿<vr-panel ng-controller="Analytics_TrafficVolumeTemplateController">
-
-    <div vr-loader="isLoading">
-        <vr-row>
-            <vr-columns colnum="12" simplecol>
-                <vr-section title={{selectedTrafficReport.description}}>
-                    <vr-chart data-on-ready="chartReady"></vr-chart>
-                </vr-section>
-            </vr-columns>
-        </vr-row>
-    </div>
-</vr-panel>
+﻿<vr-row ng-controller="Analytics_TrafficVolumeTemplateController">
+    <vr-columns width="fullrow">
+        <vr-section title="Traffic Volumes">
+            <vr-chart data-on-ready="chartReady"></vr-chart>
+        </vr-section>
+    </vr-columns>
+</vr-row>
