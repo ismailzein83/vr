@@ -13,27 +13,22 @@ Post-Deployment Script Template
 
 
 
-MERGE INTO bp.[Module] AS Target 
+MERGE INTO FraudAnalysis.[CallClass] AS Target 
 USING (VALUES 
 	(N'1', N'Administration', N'NULL', N'NULL', N'NULL', N'glyphicon-flash', N'NULL', N'True'),
 	(N'2', N'Fraud Analysis', N'NULL', N'NULL', N'NULL', N'glyphicon-flash', N'NULL', N'True'),
 	(N'3', N'Business Process', N'NULL', N'NULL', N'1', N'NULL', N'NULL', N'True')
 ) 
-AS Source ([Id] ,[Name]  ,[Title]  ,[Url]  ,[ParentId]  ,[Icon]  ,[Rank]  ,[AllowDynamic])
-ON Target.[Name] = Source.[Name] 
+AS Source ([Description]  ,[NetType])
+ON Target.[Description] = Source.[Description] 
 -- update matched rows 
 WHEN MATCHED THEN 
-UPDATE SET	[Title] = Source.[Title],
-			[Url]  = Source.[Url], 
-			[ParentId]  = Source.[ParentId], 
-			[Icon]  = Source.[Icon], 
-			[Rank]  = Source.[Rank], 
-			[AllowDynamic]  = Source.[AllowDynamic] 
+UPDATE SET	[NetType] = Source.[NetType]
 			
 -- insert new rows 
 WHEN NOT MATCHED BY TARGET THEN 
-INSERT ([Name]  ,[Title]  ,[Url]  ,[ParentId]  ,[Icon]  ,[Rank]  ,[AllowDynamic])
-VALUES ([Name]  ,[Title]  ,[Url]  ,[ParentId]  ,[Icon]  ,[Rank]  ,[AllowDynamic])
+INSERT ([Description]  ,[NetType])
+VALUES ([Description]  ,[NetType])
 ---- delete rows that are in the target but not the source 
 WHEN NOT MATCHED BY SOURCE THEN 
 DELETE
@@ -41,42 +36,103 @@ DELETE
 
 
 
-
-MERGE INTO bp.[View] AS Target 
+MERGE INTO FraudAnalysis.[CallType] AS Target 
 USING (VALUES 
-	(N'3',	N'Users',	N'Users',	N'#/view/Security/Views/UserManagement',	N'1',	N'NULL'	,N'NULL',	N'NULL',	N'0'	,N'NULL'),
-	(N'4',	N'Groups',	N'Groups',	N'#/view/Security/Views/RoleManagement',	N'1',	N'NULL',	N'NULL',	N'NULL',	N'0',	N'NULL'),
-	(N'5'	,N'System Entites',	N'System Entites',	N'#/view/Security/Views/BusinessEntityManagement',	N'1',	N'NULL',	N'NULL',	N'NULL',	N'0',	N'NULL'),
-	(N'7',	N'Strategy Management',	N'Strategy Management',	N'#/view/FraudAnalysis/Views/Strategy/StrategyManagement',	N'2'	,N'NULL',	N'NULL'	,N'NULL',	N'0',	N'NULL'),
-	(N'8',	N'Suspicion Analysis',	N'Suspicion Analysis',	N'#/view/FraudAnalysis/Views/SuspiciousAnalysis/SuspicionAnalysis',	N'2',	N'NULL',	N'NULL',	N'NULL',	N'0',	N'NULL'),
-	(N'11',	N'History',	N'Business Process History'	,N'#view/BusinessProcess/Views/BPManagement',	N'3',	N'NULL',	N'NULL',	N'NULL',	N'0'	,N'NULL'),
-	(N'12',	N'Management',	N'Business Process Management',	N'#view/BusinessProcess/Views/BPDefinitionManagement',	N'3',	N'NULL',	N'NULL',	N'NULL',	N'0',	N'NULL'),
-	(N'13',	N'Scheduler Service',	N'Scheduler Service',	N'#/view/Runtime/Views/SchedulerTaskManagement',	N'1',	N'NULL',	N'NULL'	,N'NULL',	N'0',	N'NULL'),
-	(N'17',	N'Data Sources'	,N'Data Sources'	,N'#/view/Integration/Views/DataSourceManagement',	N'1',	N'NULL'	,N'NULL',	N'NULL',	N'0',	N'NULL'),
-	(N'18',	N'Dashboard'	,N'Dashboard',	N'#/view/FraudAnalysis/Views/Output/Dashboard',	N'2',	N'NULL',	N'NULL',	N'NULL',	N'0'	,N'NULL')
+	(N'1', N'1', N'outgoing Voice'),
+	(N'2', N'2', N'Incoming Voice Call'),
+	(N'3', N'29', N'call Forward'),
+	(N'4', N'30', N'Incoming Sms'),
+	(N'5', N'31', N'Outgoing Sms'),
+	(N'6', N'26', N'Roaming call forward'),
 ) 
-AS Source ([Name]  ,[Title]  ,[Url]  ,[Module]  ,[RequiredPermissions]  ,[Audience]  ,[Content]  ,[Type]    ,[Rank])
-ON Target.[Name] = Source.[Name] 
+AS Source ([Code] ,[Description])
+ON Target.[Code] = Source.[Code] 
 -- update matched rows 
 WHEN MATCHED THEN 
-UPDATE SET	[Title] = Source.[Title],
-			[Url] = Source.[Url],
-			[Module]  = Source.[Module],
-			[RequiredPermissions]  = Source.[RequiredPermissions],
-			[Audience]  = Source.[Audience],
-			[Content]  = Source.[Content],
-			[Type]  = Source.[Type],
-			[Rank]  = Source.[Rank]
+UPDATE SET	[Description]  = Source.[Description] 
+			
 -- insert new rows 
 WHEN NOT MATCHED BY TARGET THEN 
-INSERT ([Name]  ,[Title]  ,[Url]  ,[Module]  ,[RequiredPermissions]  ,[Audience]  ,[Content]  ,[Type]    ,[Rank])
-VALUES ([Name]  ,[Title]  ,[Url]  ,[Module]  ,[RequiredPermissions]  ,[Audience]  ,[Content]  ,[Type]    ,[Rank])
+INSERT ([Code] ,[Description])
+VALUES ([Code] ,[Description])
 ---- delete rows that are in the target but not the source 
 WHEN NOT MATCHED BY SOURCE THEN 
 DELETE
 ;
 
 
+MERGE INTO FraudAnalysis.[CaseStatus] AS Target 
+USING (VALUES 
+	(N'1', N'Pending'),
+	(N'2', N'Ignored'),
+	(N'3', N'Confirmed'),
+	(N'4', N'White List')
+) 
+AS Source ([Name])
+ON Target.[Name] = Source.[Name] 
+-- insert new rows 
+WHEN NOT MATCHED BY TARGET THEN 
+INSERT ([Name])
+VALUES ([Name])
+---- delete rows that are in the target but not the source 
+WHEN NOT MATCHED BY SOURCE THEN 
+DELETE
+;
+
+
+MERGE INTO FraudAnalysis.[Period] AS Target 
+USING (VALUES 
+	(N'1', N'Hour'),
+	(N'2', N'Day')
+) 
+AS Source ([Description])
+ON Target.[Description] = Source.[Description] 
+-- insert new rows 
+WHEN NOT MATCHED BY TARGET THEN 
+INSERT ([Description])
+VALUES ([Description])
+---- delete rows that are in the target but not the source 
+WHEN NOT MATCHED BY SOURCE THEN 
+DELETE
+;
+
+
+
+MERGE INTO FraudAnalysis.[SubType] AS Target 
+USING (VALUES 
+	(N'1', N'Prepaid'),
+	(N'2', N'Postpaid')
+) 
+AS Source ([Description])
+ON Target.[Description] = Source.[Description] 
+-- insert new rows 
+WHEN NOT MATCHED BY TARGET THEN 
+INSERT ([Description])
+VALUES ([Description])
+---- delete rows that are in the target but not the source 
+WHEN NOT MATCHED BY SOURCE THEN 
+DELETE
+;
+
+
+
+MERGE INTO FraudAnalysis.[Suspicion_Level] AS Target 
+USING (VALUES 
+	(N'1', N'Clean'),
+	(N'2', N'Suspicious'),
+	(N'3', N'Highly Suspicious'),
+	(N'4', N'Fraud')
+) 
+AS Source ([Name])
+ON Target.[Name] = Source.[Name] 
+-- insert new rows 
+WHEN NOT MATCHED BY TARGET THEN 
+INSERT ([Name])
+VALUES ([Name])
+---- delete rows that are in the target but not the source 
+WHEN NOT MATCHED BY SOURCE THEN 
+DELETE
+;
 
 
 
