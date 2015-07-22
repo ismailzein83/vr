@@ -93,6 +93,10 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
         $scope.normalCDRs = [];
         $scope.numberProfiles = [];
         $scope.relatedNumbers = [];
+        $scope.endDate = new Date();
+
+
+        $scope.statuses = [{ id: 1, name: 'Pending' }, { id: 2, name: 'Ignored' }, { id: 3, name: 'Confirmed' }, { id: 4, name: 'White List' }];
 
 
         SuspiciousNumberDetailsController.isSubscriberThresholdsTabShown = true;
