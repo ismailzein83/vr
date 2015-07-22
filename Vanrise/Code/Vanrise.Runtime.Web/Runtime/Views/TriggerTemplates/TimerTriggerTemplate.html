@@ -1,16 +1,18 @@
 ﻿<div ng-controller="Runtime_TimeTriggerTemplateController">
     <vr-section title="Timer Trigger">
-        <vr-row>
-            <vr-column width="normal">
-                <vr-select datasource="schedulerTypes" selectedvalues="selectedType"
-                           datatextfield="name" datavaluefield="value">
-                </vr-select>
-            </vr-column>
-        </vr-row>
-        <vr-row>
-            <vr-column width="normal">
+        <div>
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-select datasource="schedulerTypes" selectedvalues="selectedType"
+                               datatextfield="name" datavaluefield="value">
+                    </vr-select>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <div>
+            <vr-row>
                 <div ng-include="selectedType.templateURL" />
-            </vr-column>
-        </vr-row>
+            </vr-row>
+        </div>
     </vr-section>
 </div>

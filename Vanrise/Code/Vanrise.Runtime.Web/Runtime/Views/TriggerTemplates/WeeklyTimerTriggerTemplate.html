@@ -1,31 +1,28 @@
 ﻿<div ng-controller="Runtime_WeeklyTimeTriggerTemplateController">
     <vr-section title="Timer Settings">
-        <vr-row>
-            <vr-column width="normal">
-                <vr-select ismultipleselection datasource="daysOfWeek" selectedvalues="selectedDays"
-                           datatextfield="name" datavaluefield="value">
-                </vr-select>
-            </vr-column>
-        </vr-row>
-        <vr-row>
-            <vr-column width="normal">
-                <vr-textbox value="time" label="Enter Time: " />
-
-            </vr-column>
-            <vr-column width="normal">
-                <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-                    <div transclude-to="buttons">
-                        <vr-button type="Add" data-onclick="addHour" />
-                    </div>
-                </vr-actionbar>
-            </vr-column>
-        </vr-row>
-        <vr-row>
-            <vr-column width="normal">
-                <vr-row ng-repeat="hour in selectedHours">
-                    {{hour}} <i class="glyphicon glyphicon-remove hand-cursor" ng-click="removeHour(hour)"></i>
-                </vr-row>
-            </vr-column>
-        </vr-row>
+        <div>
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-select ismultipleselection datasource="daysOfWeek" selectedvalues="selectedDays"
+                               datatextfield="name" datavaluefield="value">
+                    </vr-select>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <div>
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="time" label="Enter Time: " />
+                </vr-columns>
+                <vr-columns width="1/4row">
+                    <vr-button type="Add" data-onclick="addHour" standalone />
+                </vr-columns>
+                <vr-columns width="1/4row">
+                    <vr-row ng-repeat="hour in selectedHours">
+                        {{hour}} <i class="glyphicon glyphicon-remove hand-cursor" ng-click="removeHour(hour)"></i>
+                    </vr-row>
+                </vr-columns>
+            </vr-row>
+        </div>
     </vr-section>
 </div>

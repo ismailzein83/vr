@@ -17,27 +17,34 @@
                 </vr-row>
             </div>
             <div ng-show="triggerSettignsSelected">
-                <vr-row>
-                    <vr-column colmun="6">
-                        <vr-select datatextfield="Name" datavaluefield="TriggerTypeId"
-                                   datasource="triggerTypes" selectedvalues="selectedTriggerType"></vr-select>
-                    </vr-column>
-                </vr-row>
-                <vr-row>
-                    <div ng-include="selectedTriggerType.Info.URL"></div>
-                </vr-row>
-
+                <div>
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-select datatextfield="Name" datavaluefield="TriggerTypeId"
+                                       datasource="triggerTypes" selectedvalues="selectedTriggerType"></vr-select>
+                        </vr-columns>
+                    </vr-row>
+                </div>
+                <div>
+                    <vr-row>
+                        <div ng-include="selectedTriggerType.Info.URL"></div>
+                    </vr-row>
+                </div>
             </div>
             <div ng-show="actionSettingsSelected">
-                <vr-row>
-                    <vr-column colmun="6">
-                        <vr-select datatextfield="Name" datavaluefield="ActionTypeId"
-                                   datasource="actionTypes" selectedvalues="selectedActionType"></vr-select>
-                    </vr-column>
-                </vr-row>
-                <vr-row>
-                    <div ng-include="selectedActionType.Info.URL"></div>
-                </vr-row>
+                <div>
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-select datatextfield="Name" datavaluefield="ActionTypeId"
+                                       datasource="actionTypes" selectedvalues="selectedActionType"></vr-select>
+                        </vr-columns>
+                    </vr-row>
+                </div>
+                <div>
+                    <vr-row>
+                        <div ng-include="selectedActionType.Info.URL"></div>
+                    </vr-row>
+                </div>
             </div>
         </vr-form>
     </vr-modalbody>

@@ -1,15 +1,17 @@
 ﻿<div ng-controller="Runtime_WFActionTemplateController">
     <vr-section title="Worklfow Action">
-        <vr-row>
-            <vr-column width="1/2row">
-                <vr-select datatextfield="Title" datavaluefield="BPDefinitionID"
-                           datasource="bpDefinitions" selectedvalues="selectedBPDefintion"></vr-select>
-            </vr-column>
-        </vr-row>
-        <vr-row>
-            <vr-column width="1/2row">
+        <div>
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-select datatextfield="Title" datavaluefield="BPDefinitionID"
+                               datasource="bpDefinitions" selectedvalues="selectedBPDefintion"></vr-select>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <div>
+            <vr-row>
                 <div ng-include="selectedBPDefintion.Configuration.ScheduleTemplateURL" />
-            </vr-column>
-        </vr-row>
+            </vr-row>
+        </div>
     </vr-section>
 </div>
