@@ -18,5 +18,7 @@ namespace Vanrise.Runtime.Entities
     public class ActionTypeInfo
     {
         public string URL { get; set; }
+
+        public bool SystemType { get; set; }
     }
 }

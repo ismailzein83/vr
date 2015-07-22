@@ -105,6 +105,7 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
             TaskType: 0,
             TriggerTypeId: 1,
             TaskTrigger: $scope.schedulerTaskTrigger.getData(),
+            ActionTypeId: 2,
             TaskAction: { $type: "Vanrise.Integration.Business.DSSchedulerTaskAction, Vanrise.Integration.Business" }
         };
 

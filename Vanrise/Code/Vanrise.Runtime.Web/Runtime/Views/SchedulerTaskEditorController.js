@@ -110,7 +110,10 @@ function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsSer
     function loadActions() {
         return SchedulerTaskAPIService.GetSchedulerTaskActionTypes().then(function (response) {
             angular.forEach(response, function (item) {
-                $scope.actionTypes.push(item);
+                if (!item.Info.SystemType)
+                {
+                    $scope.actionTypes.push(item);
+                }
             });
         });
     }
