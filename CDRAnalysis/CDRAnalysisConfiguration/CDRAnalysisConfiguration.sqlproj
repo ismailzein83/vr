@@ -137,4 +137,7 @@
     <Build Include="Security\sec.sql" />
     <Build Include="Security\BI.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="CDRAnalysis.PostDeployment.sql" />
+  </ItemGroup>
 </Project>
