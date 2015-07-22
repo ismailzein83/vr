@@ -178,6 +178,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             fraudResult.SuspicionLevelName = ((Enums.SuspicionLevel)Enum.ToObject(typeof(Enums.SuspicionLevel), GetReaderValue<int>(reader, "SuspicionLevelId"))).ToString();
             fraudResult.StrategyName = reader["StrategyName"] as string;
             fraudResult.NumberofOccurances = (int)reader["NumberofOccurances"];
+            fraudResult.CaseStatus = reader["CaseStatus"] as string;
             return fraudResult;
         }
 
