@@ -11,5 +11,7 @@ namespace Vanrise.BI.Entities
         public DateTime Time { get; set; }
 
         public int WeekNumber { get; set; }
+
+        public string DateTimeValue { get; set; }
     }
 }

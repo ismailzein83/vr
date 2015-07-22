@@ -50,5 +50,21 @@ namespace Vanrise.BI.Web.Controllers
             return manager.GetMeasureValues(fromDate, toDate, measureTypesNames);
         }
 
+
+         [HttpGet]
+         public HttpResponseMessage ExportMeasureValues(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, [FromUri] string[] measureTypesNames)
+        {
+            GenericEntityManager manager = new GenericEntityManager();
+            IEnumerable<TimeValuesRecord> records= manager.GetMeasureValues(timeDimensionType, fromDate, toDate, measureTypesNames);
+            return manager.ExportMeasureValues(records, "Time", measureTypesNames, timeDimensionType, fromDate, toDate);
+        }
+
+        [HttpGet]
+         public HttpResponseMessage ExportTopEntities(string entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, [FromUri] string[] measureTypesNames)
+        {
+            GenericEntityManager manager = new GenericEntityManager();
+            IEnumerable<EntityRecord> records=manager.GetTopEntities(entityTypeName, topByMeasureTypeName, fromDate, toDate, topCount, measureTypesNames);
+            return manager.ExportTopEntities(records, "EntityName", measureTypesNames);
+        }
     }
 }

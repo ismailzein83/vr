@@ -85,6 +85,7 @@ namespace Vanrise.BI.Data.SQL
             });
             return rslt;
         }
+       
 
         #region Private Methods
 

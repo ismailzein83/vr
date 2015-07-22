@@ -68,7 +68,7 @@ namespace Vanrise.Security.Data.SQL
         public List<View> GetDynamicPages()
         {
 
-            return GetItemsSP("sec.sp_View_GetByType", DynamicPageMapper, ViewType.Dynamic);
+            return GetItemsSP("sec.sp_View_GetFiltered", DynamicPageMapper,null, ViewType.Dynamic);
         }
         public List<View> GetFilteredDynamicViews(string filter)
         {
