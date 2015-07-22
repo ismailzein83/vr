@@ -32,9 +32,12 @@ namespace Vanrise.Integration.Business
         {
             Vanrise.Queueing.PersistentQueueItem result = null;
 
-            string className = "CustomMapper_" + Math.Abs(customCode.GetHashCode());
+            int strHashCode = Math.Abs(customCode.GetHashCode());
 
-            Assembly generatedAssembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.FullName.StartsWith("Vanrise-Mappers"));
+            string assemblyName = "Vanrise_Mappers_" + strHashCode;
+            string className = "CustomMapper_" + strHashCode;
+
+            Assembly generatedAssembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.FullName.StartsWith(assemblyName));
             Type generatedType = null;
 
             if (generatedAssembly != null)
@@ -45,7 +48,7 @@ namespace Vanrise.Integration.Business
             if (generatedType == null)
             {
                 Assembly compiledAssembly;
-                if (BuildGeneratedType(customCode, className, out compiledAssembly))
+                if (BuildGeneratedType(assemblyName, customCode, className, out compiledAssembly))
                 {
                     generatedType = compiledAssembly.GetType("Vanrise.Integration.Mappers." + className);
                 }
@@ -62,7 +65,7 @@ namespace Vanrise.Integration.Business
             return result;
         }
 
-        private bool BuildGeneratedType(string customCode, string className, out Assembly compiledAssembly)
+        private bool BuildGeneratedType(string assemblyName, string customCode, string className, out Assembly compiledAssembly)
         {
             string classDefinition = this.BuildCustomClass(customCode, className);
 
@@ -71,7 +74,7 @@ namespace Vanrise.Integration.Business
             Microsoft.CSharp.CSharpCodeProvider provider = new Microsoft.CSharp.CSharpCodeProvider(providerOptions);
 
             CompilerParameters parameters = new CompilerParameters();
-            parameters.OutputAssembly = "Vanrise-Mappers";
+            parameters.OutputAssembly = assemblyName;
             parameters.GenerateExecutable = false;
             parameters.GenerateInMemory = true;
             parameters.IncludeDebugInformation = true;
