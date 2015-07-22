@@ -10,7 +10,8 @@
             maxheight: '@',
             hideheader: '=',
             noverticallines: '@',
-            idfield: '@'
+            idfield: '@',
+            onExport:'='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -40,6 +41,22 @@
             dataGridObj.calculateDataColumnsSectionWidth();
             dataGridObj.addActionTypeColumn();
             dataGridObj.defineAPI();
+            var isDownloading = false;
+            this.onExportClicked = function () {
+               if (this.onExport != undefined && typeof (this.onExport) == 'function') {
+                   var promise = this.onExport();
+               
+                    if (promise != undefined && promise != null) {
+                        isDownloading = true;
+                        promise.finally(function () {
+                            isDownloading = false;
+                        });
+                    }
+                }
+            };
+            this.showLoader = function () {
+                return isDownloading;
+            };
         },
         controllerAs: 'ctrl',
         bindToController: true,

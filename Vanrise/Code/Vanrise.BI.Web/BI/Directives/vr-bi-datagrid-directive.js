@@ -24,12 +24,7 @@ app.directive('vrBiDatagrid', ['UtilsService', 'BIAPIService', 'BIUtilitiesServi
             //    BIUtilitiesService.openEntityReport(item.EntityType, item.EntityId, item.EntityName);
 
             //}
-            $scope.export = function () {
-                return BIVisualElementService.exportWidgetData(ctrl, ctrl.settings, ctrl.filter).then(function (response) {
-                   
-                    return UtilsService.downloadFile(response.data, response.headers);
-                });
-            }
+       
 
         },
         controllerAs: 'ctrl',
@@ -48,12 +43,12 @@ app.directive('vrBiDatagrid', ['UtilsService', 'BIAPIService', 'BIUtilitiesServi
 
     function getDataGridTemplate(previewmode) {
         if (previewmode != 'true') {
-            return '<vr-section title="{{ctrl.title}}"><div ng-if="ctrl.isAllowed==false" ng-class="\'gridpermission\'"><div  style="padding-top:115px;"><div   class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> You Don\'t Have Permission, Please Contact Your Administrator..!!</div></div></div><div ng-if="ctrl.isAllowed" vr-loader="ctrl.isGettingData"><vr-datagrid datasource="ctrl.data" on-ready="ctrl.onGridReady" maxheight="300px">'
-                                        + '<vr-datagridcolumn ng-show="ctrl.isTopEntities" headertext="ctrl.entityType.description" field="\'EntityName\'"'// isclickable="\'true\'" \onclicked="openReportEntityModal"
+            return '<vr-section title="{{ctrl.title}}"><div ng-if="ctrl.isAllowed==false" ng-class="\'gridpermission\'"><div  style="padding-top:115px;"><div   class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> You Don\'t Have Permission, Please Contact Your Administrator..!!</div></div></div><div ng-if="ctrl.isAllowed" vr-loader="ctrl.isGettingData"><vr-datagrid  on-export="ctrl.onexport" datasource="ctrl.data" on-ready="ctrl.onGridReady" maxheight="300px">'
+                                        + '<vr-datagridcolumn  ng-show="ctrl.isTopEntities" headertext="ctrl.entityType.description" field="\'EntityName\'"'// isclickable="\'true\'" \onclicked="openReportEntityModal"
                                     +'  ></vr-datagridcolumn>'
                                         + '<vr-datagridcolumn ng-show="ctrl.isDateTimeGroupedData" headertext="\'Time\'" field="\'dateTimeValue\'"></vr-datagridcolumn>'
                                         + '<vr-datagridcolumn ng-repeat="measureType in ctrl.measureTypes" headertext="measureType.DisplayName" field="\'Values[\' + $index + \']\'" type="\'Number\'"></vr-datagridcolumn>'
-                                    + '</vr-datagrid></div> <vr-button type="Add" data-onclick="export" standalone></vr-button></vr-section>';
+                                    + '</vr-datagrid></div></vr-section>';
         }
         else
             return '<vr-section title="{{ctrl.title}}"></br><vr-textbox value="ctrl.settings.OperationType" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.entityType.description" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.measureTypes" vr-disabled="true"></vr-textbox></vr-section>';
@@ -74,6 +69,13 @@ app.directive('vrBiDatagrid', ['UtilsService', 'BIAPIService', 'BIUtilitiesServi
                    return;
                }
                ctrl.isAllowed = true;
+               ctrl.onexport = function () {
+                   console.log("in widget");
+                   return BIVisualElementService.exportWidgetData(ctrl, ctrl.settings, ctrl.filter).then(function (response) {
+
+                       return UtilsService.downloadFile(response.data, response.headers);
+                   });
+               }
                ctrl.onGridReady = function (api) {
                    gridAPI = api;
                    //if (retrieveDataOnLoad)
