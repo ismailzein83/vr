@@ -40,6 +40,7 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
             };
 
             var parameters = {
+                orgChart: $scope.assignedOrgChart,
                 accountManager: $scope.tree.currentNode
             };
 
@@ -107,14 +108,21 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
 
     function getData() {
         $scope.assignedCarriers = [];
+        //var memberIds = AccountManagerAPIService.GetMemberIds($scope.assignedOrgChart.Id, $scope.tree.currentNode.nodeId);
+        //AccountManagerAPIService.GetCarriers(1, 1000).then(function (data) {
 
-        return AccountManagerAPIService.GetAssignedCarriers($scope.tree.currentNode.nodeId).then(function (data) {
+        //});
+        console.log($scope.assignedOrgChart.Id);
+        console.log($scope.tree.currentNode.nodeId);
+        return AccountManagerAPIService.GetAssignedCarriers([$scope.assignedOrgChart.Id, $scope.tree.currentNode.nodeId]).then(function (data) {
             angular.forEach(data, function (item) {
+                console.log(item);
+                console.log('currentNode.nodeId: ' + $scope.tree.currentNode.nodeId);
                 var object = {
                     CarrierAccountId: item.CarrierAccountId,
                     IsCustomer: (item.RelationType == 1) ? 'True' : 'False',
                     IsSupplier: (item.RelationType == 2) ? 'True' : 'False',
-                    Relation: 'Direct'
+                    Relationship: (item.UserId == $scope.tree.currentNode.nodeId) ? 'Direct' : 'Indirect'
                 };
 
                 $scope.assignedCarriers.push(object);

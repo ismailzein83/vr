@@ -13,10 +13,8 @@ var serviceObj = function (BaseAPIService) {
         });
     }
 
-    function GetAssignedCarriers(userId) {
-        return BaseAPIService.get('/api/AccountManager/GetAssignedCarriers', {
-            userId: userId
-        });
+    function GetAssignedCarriers(parameters) {
+        return BaseAPIService.post('/api/AccountManager/GetAssignedCarriers', parameters);
     }
 
     function AssignCarriers(updatedCarriers) {

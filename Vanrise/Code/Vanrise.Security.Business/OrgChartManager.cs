@@ -100,5 +100,65 @@ namespace Vanrise.Security.Business
             IOrgChartLinkedEntityDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IOrgChartLinkedEntityDataManager>();
             dataManager.InsertOrUpdate(orgChartId, entityInfo.GetIdentifier());
         }
+
+        public List<int> GetMemberIds(int orgChartId, int managerId)
+        {
+            IOrgChartDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IOrgChartDataManager>();
+            OrgChart orgChart = dataManager.GetOrgChartById(orgChartId);
+
+            Member manager = GetMember(managerId, orgChart.Hierarchy);
+
+            List<int> memberIds = new List<int>();
+            memberIds = GetMemberIdsRecursively(manager);
+            memberIds.Add(manager.Id);
+
+            return memberIds;
+        }
+
+        public Member GetMember(int memberId, List<Member> members) {
+            for (int i = 0; i < members.Count; i++ )
+            {
+                Member target = GetMemberRecursively(memberId, members[i]);
+
+                if (target != null)
+                    return target;
+            }
+
+            return null;
+        }
+
+        public Member GetMemberRecursively(int memberId, Member member)
+        {
+            if (member.Id == memberId)
+                return member;
+
+            if (member.Members.Count > 0)
+            {
+                for (int i = 0; i < member.Members.Count; i++)
+                {
+                    Member result = GetMemberRecursively(memberId, member.Members[i]);
+
+                    if (result != null)
+                        return result;
+                }
+            }
+
+            return null;
+        }
+
+        public List<int> GetMemberIdsRecursively(Member manager)
+        {
+            List<int> ids = new List<int>();
+
+            foreach (Member member in manager.Members)
+            {
+                ids.Add(member.Id);
+
+                if (member.Members.Count > 0)
+                    ids.InsertRange(ids.Count, GetMemberIdsRecursively(member));
+            }
+
+            return ids;
+        }
     }
 }

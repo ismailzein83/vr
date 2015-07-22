@@ -18,11 +18,11 @@ namespace TOne.BusinessEntity.Web.Controllers
             return manager.GetCarriers(from, to);
         }
 
-        [HttpGet]
-        public List<AssignedAccountManagerCarrier> GetAssignedCarriers(int userId)
+        [HttpPost]
+        public List<AssignedCarrier> GetAssignedCarriers(List<int> parameters)
         {
             AccountManagerManager manager = new AccountManagerManager();
-            return manager.GetAssignedCarriers(userId);
+            return manager.GetAssignedCarriers(parameters);
         }
 
         [HttpPost]

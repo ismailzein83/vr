@@ -6,37 +6,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.BusinessEntity.Entities;
-using TOne.Data.SQL;
+using Vanrise.Data.SQL;
 
 namespace TOne.BusinessEntity.Data.SQL
 {
-    class AccountManagerDataManager : BaseTOneDataManager, IAccountManagerDataManager
+    public class AssignedCarrierDataManager : BaseSQLDataManager, IAssignedCarrierDataManager
     {
-        public List<AccountManagerCarrier> GetCarriers(int from, int to)
+        public List<Entities.AssignedCarrier> GetAssignedCarriers(List<int> userIds)
         {
-            return GetItemsSP("BEntity.sp_AccountManager_GetCarriers", (reader) =>
+            DataTable dtMembers = this.BuildUserIdsTable(userIds);
+            return GetItemsSPCmd("BEntity.sp_AccountManager_GetAssignedCarriers", AssigendCarrier, (cmd) =>
             {
-                return new AccountManagerCarrier
-                {
-                    CarrierAccountId = reader["CarrierAccountId"] as string,
-                    Name = reader["Name"] as string,
-                    NameSuffix = reader["NameSuffix"] as string,
-                    IsCustomerAvailable = (bool)reader["IsCustomerAvailable"],
-                    IsSupplierAvailable = (bool)reader["IsSupplierAvailable"]
-                };
-            }, from, to);
-        }
-
-        public List<AssignedAccountManagerCarrier> GetAssignedCarriers(int userId)
-        {
-            return GetItemsSP("BEntity.sp_AccountManager_GetAssignedCarriers", (reader) =>
-            {
-                return new AssignedAccountManagerCarrier
-                {
-                    CarrierAccountId = reader["CarrierAccountId"] as string,
-                    RelationType = (int)reader["RelationType"]
-                };
-            }, userId);
+                var dtPrm = new SqlParameter("@UserIds", SqlDbType.Structured);
+                dtPrm.Value = dtMembers;
+                cmd.Parameters.Add(dtPrm);
+            });
         }
 
         public void AssignCarriers(UpdatedAccountManagerCarrier[] updatedCarriers)
@@ -59,7 +43,7 @@ namespace TOne.BusinessEntity.Data.SQL
             table.Columns.Add("CarrierAccountId", typeof(string));
             table.Columns.Add("RelationType", typeof(int));
             table.Columns.Add("Status", typeof(bool));
-            
+
             table.BeginLoadData();
             foreach (var updatedCarrier in updatedCarriers)
             {
@@ -75,6 +59,34 @@ namespace TOne.BusinessEntity.Data.SQL
             table.EndLoadData();
 
             return table;
+        }
+
+        private DataTable BuildUserIdsTable(List<int> userIds)
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Id", typeof(int));
+            dt.BeginLoadData();
+
+            foreach (var userId in userIds)
+            {
+                DataRow dr = dt.NewRow();
+                dr["Id"] = userId;
+                dt.Rows.Add(dr);
+            }
+
+            dt.EndLoadData();
+            return dt;
+        }
+
+        Entities.AssignedCarrier AssigendCarrier(IDataReader reader)
+        {
+            AssignedCarrier assignedCarrier = new AssignedCarrier
+            {
+                UserId = (int)reader["UserId"],
+                CarrierAccountId = reader["CarrierAccountId"] as string,
+                RelationType = (int)reader["RelationType"]
+            };
+            return assignedCarrier;
         }
     }
 }

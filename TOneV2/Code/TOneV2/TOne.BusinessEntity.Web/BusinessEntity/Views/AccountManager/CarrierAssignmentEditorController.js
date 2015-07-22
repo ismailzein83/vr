@@ -11,11 +11,12 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
 
         if (parameters != undefined && parameters != null) {
             $scope.accountManager = parameters.accountManager;
+            $scope.orgChart = parameters.orgChart;
         }
     }
 
     function defineScope() {
-        $scope.accountManager = {};
+        //$scope.accountManager = {};
         $scope.carriers = [];
 
         $scope.onGridReady = function (api) {
@@ -27,10 +28,15 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
         }
         function getData() {
             UtilsService.waitMultipleAsyncOperations([loadParameters]).finally(function () {
+                console.log('parameters are set');
                 // $scope.accountManager.nodeId is set
                 UtilsService.waitMultipleAsyncOperations([getCarriers]).finally(function () {
+                    console.log('carriers are set');
                     // $scope.carriers is set
-                    AccountManagerAPIService.GetAssignedCarriers($scope.accountManager.nodeId).then(function (data) {
+                    console.log($scope.orgChart.Id);
+                    console.log($scope.accountManager.nodeId);
+                    AccountManagerAPIService.GetAssignedCarriers([$scope.orgChart.Id, $scope.accountManager.nodeId]).then(function (data) {
+                        console.log('toggling carriers...');
                         toggleAssignedCarriers(data);
                     });
                 });

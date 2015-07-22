@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,19 +15,20 @@ namespace TOne.BusinessEntity.Business
     {
         public List<AccountManagerCarrier> GetCarriers(int from, int to)
         {
-            IAccountManagerDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountManagerDataManager>();
+            IAccountManagerCarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountManagerCarrierDataManager>();
             return dataManager.GetCarriers(from, to);
         }
 
-        public List<AssignedAccountManagerCarrier> GetAssignedCarriers(int userId)
+        public List<AssignedCarrier> GetAssignedCarriers(List<int> parameters)
         {
-            IAccountManagerDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountManagerDataManager>();
-            return dataManager.GetAssignedCarriers(userId);
+            IAssignedCarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<IAssignedCarrierDataManager>();
+            List<int> memberIds = GetMemberIds(parameters[0], parameters[1]);
+            return dataManager.GetAssignedCarriers(memberIds);
         }
 
         public void AssignCarriers(UpdatedAccountManagerCarrier[] updatedCarriers)
         {
-            IAccountManagerDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountManagerDataManager>();
+            IAssignedCarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<IAssignedCarrierDataManager>();
             dataManager.AssignCarriers(updatedCarriers);
         }
 
@@ -40,6 +42,12 @@ namespace TOne.BusinessEntity.Business
         {
             OrgChartManager orgChartManager = new OrgChartManager();
             orgChartManager.UpdateOrgChartLinkedEntity(orgChartId, new OrgChartAccountManagerInfo());
+        }
+
+        private List<int> GetMemberIds(int orgChartId, int managerId)
+        {
+            OrgChartManager orgChartManager = new OrgChartManager();
+            return orgChartManager.GetMemberIds(orgChartId, managerId);
         }
     }
 }

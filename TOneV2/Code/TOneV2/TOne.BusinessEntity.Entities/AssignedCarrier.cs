@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace TOne.BusinessEntity.Entities
 {
-    public class AssignedAccountManagerCarrier
+    public class AssignedCarrier
     {
+        public int UserId { get; set; }
         public string CarrierAccountId { get; set; }
         public int RelationType { get; set; }
     }
