@@ -15,9 +15,12 @@ Post-Deployment Script Template
 
 MERGE INTO FraudAnalysis.[CallClass] AS Target 
 USING (VALUES 
-	(N'1', N'Administration', N'NULL', N'NULL', N'NULL', N'glyphicon-flash', N'NULL', N'True'),
-	(N'2', N'Fraud Analysis', N'NULL', N'NULL', N'NULL', N'glyphicon-flash', N'NULL', N'True'),
-	(N'3', N'Business Process', N'NULL', N'NULL', N'1', N'NULL', N'NULL', N'True')
+	(N'ZAINIQ', N'1'),
+	(N'VAS', N'1'),
+	(N'INV', N'1'),
+	(N'INT', N'2'),
+	(N'KOREKTEL', N'0'),
+	(N'ASIACELL', N'0')
 ) 
 AS Source ([Description]  ,[NetType])
 ON Target.[Description] = Source.[Description] 
@@ -38,12 +41,12 @@ DELETE
 
 MERGE INTO FraudAnalysis.[CallType] AS Target 
 USING (VALUES 
-	(N'1', N'1', N'outgoing Voice'),
-	(N'2', N'2', N'Incoming Voice Call'),
-	(N'3', N'29', N'call Forward'),
-	(N'4', N'30', N'Incoming Sms'),
-	(N'5', N'31', N'Outgoing Sms'),
-	(N'6', N'26', N'Roaming call forward')
+	( N'1', N'outgoing Voice'),
+	( N'2', N'Incoming Voice Call'),
+	( N'29', N'call Forward'),
+	( N'30', N'Incoming Sms'),
+	( N'31', N'Outgoing Sms'),
+	( N'26', N'Roaming call forward')
 ) 
 AS Source ([Code] ,[Description])
 ON Target.[Code] = Source.[Code] 
@@ -63,10 +66,10 @@ DELETE
 
 MERGE INTO FraudAnalysis.[CaseStatus] AS Target 
 USING (VALUES 
-	(N'1', N'Pending'),
-	(N'2', N'Ignored'),
-	(N'3', N'Confirmed'),
-	(N'4', N'White List')
+	( N'Pending'),
+	( N'Ignored'),
+	( N'Confirmed'),
+	( N'White List')
 ) 
 AS Source ([Name])
 ON Target.[Name] = Source.[Name] 
@@ -82,8 +85,8 @@ DELETE
 
 MERGE INTO FraudAnalysis.[Period] AS Target 
 USING (VALUES 
-	(N'1', N'Hour'),
-	(N'2', N'Day')
+	( N'Hour'),
+	( N'Day')
 ) 
 AS Source ([Description])
 ON Target.[Description] = Source.[Description] 
@@ -100,8 +103,8 @@ DELETE
 
 MERGE INTO FraudAnalysis.[SubType] AS Target 
 USING (VALUES 
-	(N'1', N'Prepaid'),
-	(N'2', N'Postpaid')
+	( N'Prepaid'),
+	( N'Postpaid')
 ) 
 AS Source ([Description])
 ON Target.[Description] = Source.[Description] 
@@ -118,10 +121,10 @@ DELETE
 
 MERGE INTO FraudAnalysis.[Suspicion_Level] AS Target 
 USING (VALUES 
-	(N'1', N'Clean'),
-	(N'2', N'Suspicious'),
-	(N'3', N'Highly Suspicious'),
-	(N'4', N'Fraud')
+	( N'Clean'),
+	( N'Suspicious'),
+	( N'Highly Suspicious'),
+	( N'Fraud')
 ) 
 AS Source ([Name])
 ON Target.[Name] = Source.[Name] 
