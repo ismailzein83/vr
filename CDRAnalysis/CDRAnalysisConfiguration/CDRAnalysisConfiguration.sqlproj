@@ -83,10 +83,8 @@
     <Build Include="sec\Tables\View.sql" />
     <Build Include="sec\Tables\User.sql" />
     <Build Include="BI\Tables\SchemaConfiguration.sql" />
-    <Build Include="Security\walid.sql" />
     <Build Include="Security\VANRISE_wissam.ajamy.sql" />
     <Build Include="Security\VANRISE_development.sql" />
-    <Build Include="Security\RoleMemberships.sql" />
     <Build Include="sec\Stored Procedures\sp_View_GetFiltered.sql" />
     <Build Include="sec\Stored Procedures\sp_View_Delete.sql" />
     <Build Include="sec\Stored Procedures\sp_View_Update.sql" />
