@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="Carrier_CarrierAccountEditorController">
+﻿<div vr-modalcontent ng-controller="Carrier_CarrierProfileEditorController">
     <vr-modalbody maxheight="'800px'" vr-loader="isGettingData">
 
         <vr-form name="formCarrierAccountEditor">
@@ -23,7 +23,7 @@
             </vr-row>
             <vr-row>
                 <vr-columns colnum="6">
-                    <vr-textbox label="Regestration Number" value="RegestrationNumber"></vr-textbox>
+                    <vr-textbox label="Registration Number" value="RegistrationNumber"></vr-textbox>
                 </vr-columns>
                 <vr-columns colnum="6">
                     <vr-textbox label="Website" value="Website"></vr-textbox>
@@ -31,12 +31,41 @@
             </vr-row>
             <vr-row>
                 <vr-columns colnum="6">
-                    <vr-select datasource="customerPaymentType" datatextfield="description" datavaluefield="value" label="Customer Payment Type"
-                               selectedvalues="selectedCustomerPaymentType"></vr-select>
+                    <vr-textbox label="Telephone" value="Telephone1"></vr-textbox>
                 </vr-columns>
                 <vr-columns colnum="6">
-                    <vr-select datasource="supplierPaymentType" datatextfield="description" datavaluefield="value" label="Supplier Payment Type"
-                               selectedvalues="selectedSupplierPaymentType"></vr-select>
+                    <vr-textbox label="Fax" value="Fax1"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns colnum="6">
+                    <vr-textbox value="Telephone2"></vr-textbox>
+                </vr-columns>
+                <vr-columns colnum="6">
+                    <vr-textbox value="Fax2"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns colnum="6">
+                    <vr-textbox value="Telephone3"></vr-textbox>
+                </vr-columns>
+                <vr-columns colnum="6">
+                    <vr-textbox value="Fax3"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns colnum="6">
+                    <vr-textbox label="Address" value="Address1"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns colnum="6">
+                    <vr-textbox value="Address2"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns colnum="6">
+                    <vr-textbox value="Address3"></vr-textbox>
                 </vr-columns>
             </vr-row>
         </vr-form>

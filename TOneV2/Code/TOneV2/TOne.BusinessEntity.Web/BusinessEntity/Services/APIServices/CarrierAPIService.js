@@ -61,7 +61,7 @@ var serviceObj = function (BaseAPIService) {
             });
     }
     function GetCarrierProfile(profileId) {
-        return BaseAPIService.get("/api/Carrier/GetCarrierProfile",
+        return BaseAPIService.get("/api/Profile/GetCarrierProfile",
             {
                 profileId: profileId
             });

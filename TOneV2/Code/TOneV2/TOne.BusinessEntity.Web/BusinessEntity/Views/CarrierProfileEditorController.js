@@ -45,10 +45,10 @@ function CarrierProfileEditorController($scope, CarrierAPIService, VRModalServic
 
     function fillScopeFromCarrierProfileObj(CarrierAccountObject) {
         $scope.Name = CarrierAccountObject.Name;
-        $scope.Company = CarrierAccountObject.Company;
+        $scope.CompanyName = CarrierAccountObject.CompanyName;
         $scope.Country = CarrierAccountObject.Country;
         $scope.City = CarrierAccountObject.City;
-        $scope.RegestrationNumber = CarrierAccountObject.RegestrationNumber;
+        $scope.RegistrationNumber = CarrierAccountObject.RegistrationNumber;
         $scope.Telephone1 = CarrierAccountObject.Telephone[0];
         $scope.Telephone2 = CarrierAccountObject.Telephone[1];
         $scope.Telephone3 = CarrierAccountObject.Telephone[2];
@@ -78,10 +78,10 @@ function CarrierProfileEditorController($scope, CarrierAPIService, VRModalServic
     function buildCarrierProfileObjFromScope() {
         return {
             Name: $scope.Name,
-            Company: $scope.Company,
+            CompanyName: $scope.CompanyName,
             Country: $scope.Country,
             City: $scope.City,
-            RegestrationNumber: $scope.RegestrationNumber,
+            RegestrationNumber: $scope.RegistrationNumber,
             Telephone1: $scope.Telephone[0],
             Telephone2: $scope.Telephone[1],
             Telephone3: $scope.Telephone[2],
