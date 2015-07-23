@@ -12,10 +12,16 @@ namespace TOne.BusinessEntity.Web.Controllers
     public class ProfileController : ApiController
     {
         [HttpGet]
-        public List<CarrierProfile> GetAllProfiles()
+        public List<CarrierProfile> GetAllProfiles(string name, string companyName, string billingEmail, int from, int to)
         {
             ProfileManager manager = new ProfileManager();
-            return manager.GetAllProfiles();
+            return manager.GetAllProfiles(name, companyName, billingEmail, from, to);
+        }
+        [HttpGet]
+        public CarrierProfile GetCarrierProfile(int profileId)
+        {
+            ProfileManager manager = new ProfileManager();
+            return manager.GetCarrierProfile(profileId);
         }
     }
 }

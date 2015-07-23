@@ -158,6 +158,8 @@
     <Content Include="BusinessEntity\Views\CarrierAccountManagementController.js" />
     <Content Include="BusinessEntity\Views\CarrierPriceList.html" />
     <Content Include="BusinessEntity\Views\CarrierPriceListController.js" />
+    <Content Include="BusinessEntity\Views\CarrierProfileEditor.html" />
+    <Content Include="BusinessEntity\Views\CarrierProfileEditorController.js" />
     <Content Include="BusinessEntity\Views\CarrierProfileManagement.html" />
     <Content Include="BusinessEntity\Views\CarrierProfileManagementController.js" />
     <Content Include="BusinessEntity\Views\Rates.html" />

@@ -9,6 +9,7 @@ namespace TOne.BusinessEntity.Data
 {
     public interface IProfileDataManager : IDataManager
     {
-        List<CarrierProfile> GetAllProfiles();
+        List<CarrierProfile> GetAllProfiles(string name, string companyName, string billingEmail, int from, int to);
+        CarrierProfile GetCarrierProfile(int profileId);
     }
 }

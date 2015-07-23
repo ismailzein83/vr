@@ -11,9 +11,17 @@ namespace TOne.BusinessEntity.Business
     public class ProfileManager
     {
         IProfileDataManager _dataManager;
-        public List<CarrierProfile> GetAllProfiles()
+        public ProfileManager()
         {
-            return _dataManager.GetAllProfiles();
+            _dataManager = BEDataManagerFactory.GetDataManager<IProfileDataManager>();
+        }
+        public List<CarrierProfile> GetAllProfiles(string name, string companyName, string billingEmail, int from, int to)
+        {
+            return _dataManager.GetAllProfiles(name, companyName, billingEmail, from, to);
+        }
+        public CarrierProfile GetCarrierProfile(int profileId)
+        {
+            return _dataManager.GetCarrierProfile(profileId);
         }
     }
 }

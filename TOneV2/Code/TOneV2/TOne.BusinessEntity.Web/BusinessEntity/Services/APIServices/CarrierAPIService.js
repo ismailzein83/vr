@@ -6,7 +6,9 @@ var serviceObj = function (BaseAPIService) {
         insertCarrierTest: insertCarrierTest,
         GetCarrierAccounts: GetCarrierAccounts,
         GetCarrierAccount: GetCarrierAccount,
-        UpdateCarrierAccount: UpdateCarrierAccount
+        UpdateCarrierAccount: UpdateCarrierAccount,
+        GetAllProfiles: GetAllProfiles,
+        GetCarrierProfile: GetCarrierProfile
     });
     function GetCarriers(carrierType) {
         return BaseAPIService.get("/api/Carrier/GetCarriers",
@@ -47,6 +49,22 @@ var serviceObj = function (BaseAPIService) {
 
                 CarrierAccount
             );
+    }
+    function GetAllProfiles(name, companyName, billingEmail, from, to) {
+        return BaseAPIService.get("/api/Profile/GetAllProfiles",
+            {
+                name: name,
+                companyName: companyName,
+                billingEmail: billingEmail,
+                from: from,
+                to: to
+            });
+    }
+    function GetCarrierProfile(profileId) {
+        return BaseAPIService.get("/api/Carrier/GetCarrierProfile",
+            {
+                profileId: profileId
+            });
     }
 }
 serviceObj.$inject = ['BaseAPIService'];
