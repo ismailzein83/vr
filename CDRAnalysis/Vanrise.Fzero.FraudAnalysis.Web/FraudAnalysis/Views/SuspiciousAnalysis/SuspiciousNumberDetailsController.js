@@ -7,6 +7,8 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
     var lastOccurance;
     var strategyName;
     var numberofOccurances;
+    var strategiesList;
+    var suspicionLevelsList;
 
     loadParameters();
     defineScope();
@@ -24,31 +26,11 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
         if (parameters != undefined && parameters != null)
         {
             $scope.subscriberNumber = parameters.subscriberNumber;
-            $scope.suspicionLevelName = parameters.suspicionLevelName;
             $scope.fromDate = parameters.fromDate;
             $scope.toDate = parameters.toDate;
-            console.log("parameters.statusId")
-            console.log(parameters.statusId)
-           
-            if (parameters.statusId == null) {
-                $scope.selectedStatus = UtilsService.getItemByVal($scope.statuses, 4, "id");
-            }
-            else {
-                $scope.selectedStatus = UtilsService.getItemByVal($scope.statuses, parameters.statusId, "id");
-            }
 
-
-            if (parameters.validTill == null) {
-                $scope.endDate = new Date();
-            }
-            else {
-                $scope.validTill = parameters.validTill;
-            }
-            
-            lastOccurance = parameters.lastOccurance;
-            strategyName = parameters.strategyName;
-            numberofOccurances = parameters.numberofOccurances;
-
+            strategiesList = parameters.strategiesList;
+            suspicionLevelsList = parameters.suspicionLevelsList;
         }
             
         
@@ -237,6 +219,36 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
         
         $scope.relatedNumbers = relatedNumbers;
         $scope.selectedRelatedNumber = $scope.subscriberNumber;
+
+
+
+        SuspicionAnalysisAPIService.GetFraudResult($scope.fromDate, $scope.toDate, strategiesList.slice(0, -1), suspicionLevelsList.slice(0, -1), $scope.subscriberNumber).then(function (response) {
+
+            $scope.suspicionLevelName = response.SuspicionLevelName;
+           
+            if (response.statusId == null) {
+                $scope.selectedStatus = UtilsService.getItemByVal($scope.statuses, 4, "id");
+            }
+            else {
+                $scope.selectedStatus = UtilsService.getItemByVal($scope.statuses, response.StatusId, "id");
+            }
+
+
+            if (response.validTill == null) {
+                $scope.endDate = new Date();
+            }
+            else {
+                $scope.validTill = response.ValidTill;
+            }
+            
+            lastOccurance = response.LastOccurance;
+            strategyName = response.StrategyName;
+            numberofOccurances = response.NumberofOccurances;
+        });
+
+
+
+
     }
 
    

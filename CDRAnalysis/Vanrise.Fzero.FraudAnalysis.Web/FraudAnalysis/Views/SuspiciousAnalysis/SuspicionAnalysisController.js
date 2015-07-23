@@ -130,32 +130,24 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
             strategiesList = strategiesList + itm.id + ','
         });
 
-        SuspicionAnalysisAPIService.GetFraudResult(fromDate, toDate, strategiesList.slice(0, -1), suspicionLevelsList.slice(0, -1),fruadResult.SubscriberNumber).then(function (response) {
+        var params = {
+            subscriberNumber: fruadResult.SubscriberNumber,
+            fromDate: $scope.fromDate,
+            toDate: $scope.toDate,
+            strategiesList: strategiesList,
+            suspicionLevelsList: suspicionLevelsList
+        };
 
-            var params = {
-                dateDay: response.DateDay,
-                subscriberNumber: response.SubscriberNumber,
-                suspicionLevelName: response.SuspicionLevelName,
-                fromDate: $scope.fromDate,
-                toDate: $scope.toDate,
-                statusId: response.StatusId,
-                validTill: response.ValidTill,
-                lastOccurance: response.LastOccurance,
-                strategyName: response.StrategyName,
-                numberofOccurances: response.NumberofOccurances
-            };
+        var settings = {};
 
-            var settings = {};
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = "Suspicious Number Details & Related Numbers";
+            modalScope.onSubscriberCaseUpdated = function (subscriberCase) {
 
-            settings.onScopeReady = function (modalScope) {
-                modalScope.title = "Suspicious Number Details & Related Numbers";
-                modalScope.onSubscriberCaseUpdated = function (subscriberCase) {
-
-                    mainGridAPI.itemUpdated(subscriberCase);
-                }
-            };
-            VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/SuspiciousAnalysis/SuspiciousNumberDetails.html", params, settings);
-        });
+                mainGridAPI.itemUpdated(subscriberCase);
+            }
+        };
+        VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/SuspiciousAnalysis/SuspiciousNumberDetails.html", params, settings);
         
     }
 
