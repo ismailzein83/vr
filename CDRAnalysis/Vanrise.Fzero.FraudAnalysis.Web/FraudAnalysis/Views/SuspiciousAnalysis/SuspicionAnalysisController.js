@@ -154,7 +154,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
                     mainGridAPI.itemUpdated(subscriberCase);
                 }
             };
-            VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/SuspiciousAnalysis/test.html", params, settings);
+            VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/SuspiciousAnalysis/SuspiciousNumberDetails.html", params, settings);
         });
         
     }
