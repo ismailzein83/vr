@@ -77,15 +77,19 @@ namespace Vanrise.Security.Business
             DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
 
             deleteOperationOutput.Result = DeleteOperationResult.Failed;
-            
-            IOrgChartDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IOrgChartDataManager>();
-            bool updateActionSucc = dataManager.DeleteOrgChart(orgChartId);
 
-            if (updateActionSucc)
+            // make sure that the org chart isn't linked to an entity
+            if (GetLinkedOrgChartId(new OrgChartLinkedEntityInstance()) == null)
             {
-                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
-            }
+                IOrgChartDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IOrgChartDataManager>();
+                bool updateActionSucc = dataManager.DeleteOrgChart(orgChartId);
 
+                if (updateActionSucc)
+                {
+                    deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+                }
+            }
+            
             return deleteOperationOutput;
         }
 
