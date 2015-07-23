@@ -44,12 +44,12 @@ namespace TOne.Analytics.Web.Controllers
             TrafficStatisticManager manager = new TrafficStatisticManager();
             return manager.GetTrafficStatistics(filterByColumn, columnFilterValue, from, to);
         }
-        [HttpGet]
-        public HttpResponseMessage ExportTrafficStatisticSummary(string tempTableKey)
-        {
-            TrafficStatisticManager manager = new TrafficStatisticManager();
-            return manager.ExportTrafficStatisticSummary(tempTableKey);
-        }
+        //[HttpGet]
+        //public HttpResponseMessage ExportTrafficStatisticSummary(string tempTableKey)
+        //{
+        //    TrafficStatisticManager manager = new TrafficStatisticManager();
+        //    return manager.ExportTrafficStatisticSummary(tempTableKey);
+        //}
 
         #endregion
 
