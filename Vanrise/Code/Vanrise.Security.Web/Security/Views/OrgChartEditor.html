@@ -16,15 +16,23 @@
 
             <div class="row" ng-show="hierarchySelected" style="margin-top:20px;">
                 <div class="col-md-6">
-                    <div data-angular-treeview="true"
+                    <vr-treeview on-ready="treeReady"
+                        datachildrenfield="Members"
+                        datavaluefield="Id"
+                        datatextfield="Name"
+                        selecteditem="currentNode"
+                        onvaluechanged="treeValueChanged">
+                    </vr-treeview>
+
+                    <!--<div data-angular-treeview="true"
                          data-tree-id="tree"
                          data-tree-model="members"
                          data-node-id="Id"
                          data-node-label="Name"
                          data-node-children="Members">
-                    </div>
+                    </div>-->
                 </div>
-                <div class="col-md-6" ng-show="tree.currentNode">
+                <div class="col-md-6" ng-show="currentNode">
                     <form class="form-inline" style="margin-top: 15px;">
                         <vr-select label="Manager" datasource="validManagers" selectedvalues="selectedManager" datatextfield="Name" onselectionchanged="filterUsers" datavaluefield="UserId"></vr-select>
                         <vr-select ismultipleselection label="Users" datasource="validUsers" selectedvalues="selectedUsers" datatextfield="Name" datavaluefield="UserId"></vr-select>

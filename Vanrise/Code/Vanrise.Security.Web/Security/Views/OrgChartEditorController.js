@@ -3,6 +3,7 @@
 function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
 
     var editMode;
+    var treeAPI;
     loadParameters();
     defineScope();
     load();
@@ -35,6 +36,7 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
 
         $scope.applyChange = function () {
             applyFunction();
+            treeAPI.refreshTree($scope.members);
         }
 
         $scope.saveOrgChart = function () {
@@ -54,7 +56,7 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
                 $scope.validUsers = angular.copy($scope.users);
 
                 // remove the selected user from the valid users
-                var index = UtilsService.getItemIndexByVal($scope.validUsers, $scope.tree.currentNode.Id, 'UserId');
+                var index = UtilsService.getItemIndexByVal($scope.validUsers, $scope.currentNode.Id, 'UserId');
                 $scope.validUsers.splice(index, 1);
 
                 // remove the selected manager from the valid users
@@ -68,52 +70,98 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
         //    $scope.validManagers = angular.copy($scope.users);
 
         //    // remove the selected user from the valid managers
-        //    var index = UtilsService.getItemIndexByVal($scope.validManagers, $scope.tree.currentNode.Id, 'UserId');
+        //    var index = UtilsService.getItemIndexByVal($scope.validManagers, $scope.currentNode.Id, 'UserId');
         //    $scope.validManagers.splice(index, 1);
 
         //    // remove the members of the selected users from the valid managers
 
         //}
 
-        $scope.$watch('tree.currentNode', function (newObj, oldObj) {
-            if (angular.isObject($scope.tree.currentNode)) {
-                // select the members of the selected user
-                $scope.selectedUsers.length = 0;
-                for (var i = 0; i < newObj.Members.length; i++) {
-                    var user = UtilsService.getItemByVal($scope.users, newObj.Members[i].Id, 'UserId');
-                    $scope.selectedUsers.push(user);
-                }
+        //$scope.$watch('currentNode', function (newObj, oldObj) {
+        //    if (angular.isObject($scope.currentNode)) {
+        //        // select the members of the selected user
+        //        $scope.selectedUsers.length = 0;
+        //        for (var i = 0; i < newObj.Members.length; i++) {
+        //            var user = UtilsService.getItemByVal($scope.users, newObj.Members[i].Id, 'UserId');
+        //            $scope.selectedUsers.push(user);
+        //        }
 
-                // keep track of the deselected users
-                $scope.defaultSelectedUsers = angular.copy($scope.selectedUsers);
+        //        // keep track of the deselected users
+        //        $scope.defaultSelectedUsers = angular.copy($scope.selectedUsers);
 
-                var managerId = findManager(newObj);
-                var manager = UtilsService.getItemByVal($scope.users, managerId, 'UserId');
-                $scope.selectedManager = manager;
+        //        var managerId = findManager(newObj);
+        //        var manager = UtilsService.getItemByVal($scope.users, managerId, 'UserId');
+        //        $scope.selectedManager = manager;
 
-                // remove the selected user from the managers selection menu
-                $scope.validManagers = angular.copy($scope.users);
-                for (var i = 0; i < $scope.validManagers.length; i++) {
-                    if ($scope.validManagers[i].UserId == newObj.Id) {
-                        $scope.validManagers.splice(i, 1);
+        //        // remove the selected user from the managers selection menu
+        //        $scope.validManagers = angular.copy($scope.users);
+        //        for (var i = 0; i < $scope.validManagers.length; i++) {
+        //            if ($scope.validManagers[i].UserId == newObj.Id) {
+        //                $scope.validManagers.splice(i, 1);
+        //            }
+        //        }
+
+        //        // remove the selected user from the users selection menu
+        //        $scope.validUsers = angular.copy($scope.users);
+        //        for (var i = 0; i < $scope.validUsers.length; i++) {
+        //            if ($scope.validUsers[i].UserId == newObj.Id) { // remove the selected user
+        //                $scope.validUsers.splice(i, 1);
+        //            }
+        //        }
+
+        //        if (managerId != 0) {
+        //            var index = UtilsService.getItemIndexByVal($scope.validUsers, managerId, 'UserId');
+        //            if (index != -1)
+        //                $scope.validUsers.splice(index, 1);
+        //        }
+        //    }
+        //}, false);
+
+        $scope.treeReady = function (api) {
+            treeAPI = api;
+        }
+
+        $scope.treeValueChanged = function () {
+            if (angular.isObject($scope.currentNode) && $scope.currentNode != undefined) {
+                if (angular.isObject($scope.currentNode)) {
+                    // select the members of the selected user
+                    $scope.selectedUsers.length = 0;
+                    for (var i = 0; i < $scope.currentNode.Members.length; i++) {
+                        var user = UtilsService.getItemByVal($scope.users, $scope.currentNode.Members[i].Id, 'UserId');
+                        $scope.selectedUsers.push(user);
                     }
-                }
 
-                // remove the selected user from the users selection menu
-                $scope.validUsers = angular.copy($scope.users);
-                for (var i = 0; i < $scope.validUsers.length; i++) {
-                    if ($scope.validUsers[i].UserId == newObj.Id) { // remove the selected user
-                        $scope.validUsers.splice(i, 1);
+                    // keep track of the deselected users
+                    $scope.defaultSelectedUsers = angular.copy($scope.selectedUsers);
+
+                    var managerId = findManager($scope.currentNode);
+                    var manager = UtilsService.getItemByVal($scope.users, managerId, 'UserId');
+                    $scope.selectedManager = manager;
+
+                    // remove the selected user from the managers selection menu
+                    $scope.validManagers = angular.copy($scope.users);
+                    for (var i = 0; i < $scope.validManagers.length; i++) {
+                        if ($scope.validManagers[i].UserId == $scope.currentNode.Id) {
+                            $scope.validManagers.splice(i, 1);
+                        }
                     }
-                }
 
-                if (managerId != 0) {
-                    var index = UtilsService.getItemIndexByVal($scope.validUsers, managerId, 'UserId');
-                    if (index != -1)
-                        $scope.validUsers.splice(index, 1);
+                    // remove the selected user from the users selection menu
+                    $scope.validUsers = angular.copy($scope.users);
+                    for (var i = 0; i < $scope.validUsers.length; i++) {
+                        if ($scope.validUsers[i].UserId == $scope.currentNode.Id) { // remove the selected user
+                            $scope.validUsers.splice(i, 1);
+                        }
+                    }
+
+                    if (managerId != 0) {
+                        var index = UtilsService.getItemIndexByVal($scope.validUsers, managerId, 'UserId');
+                        if (index != -1)
+                            $scope.validUsers.splice(index, 1);
+                    }
                 }
             }
-        }, false);
+        }
     }
 
     function load() {
@@ -174,6 +222,7 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
     function fillScopeFromOrgChartObj(orgChartObject) {
         $scope.name = orgChartObject.Name;
         $scope.members = mapToClient(orgChartObject.Hierarchy);
+        treeAPI.refreshTree($scope.members);
     }
 
     function insertOrgChart() {
@@ -248,7 +297,7 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
 
     function findManager() {
         for (var i = 0; i < $scope.members.length; i++) {
-            var managerId = findManagerRecursively($scope.members[i], $scope.tree.currentNode);
+            var managerId = findManagerRecursively($scope.members[i], $scope.currentNode);
             if (managerId != 0)
                 return managerId;
         }
@@ -359,11 +408,11 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
             }
 
             var userIds = getUserIds();
-            reIndexNodes(userIds, $scope.tree.currentNode.Id);
+            reIndexNodes(userIds, $scope.currentNode.Id);
         }
 
         if ($scope.selectedManager != undefined) {
-            var userIds = [$scope.tree.currentNode.Id];
+            var userIds = [$scope.currentNode.Id];
             reIndexNodes(userIds, $scope.selectedManager.UserId);
         }
     }
