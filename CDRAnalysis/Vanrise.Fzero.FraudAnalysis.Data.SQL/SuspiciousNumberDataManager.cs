@@ -170,6 +170,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return rslt.Data;
         }
 
+
+        public FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList, string subscriberNumber)
+        {
+            return GetItemsSP("FraudAnalysis.sp_FraudResult_Get", FraudResultMapper, fromDate, toDate, string.Join(",", strategiesList), string.Join(",", suspicionLevelsList), subscriberNumber).FirstOrDefault();
+        }
+
+
         private FraudResult FraudResultMapper(IDataReader reader)
         {
             var fraudResult = new FraudResult();

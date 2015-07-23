@@ -152,6 +152,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return manager.GetFilteredSuspiciousNumbers(tempTableKey,fromRow, toRow, fromDate, toDate, strategiesList, suspicionLevelsList);
         }
 
+
+        public FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList, string subscriberNumber)
+        {
+            ISuspiciousNumberDataManager manager = FraudDataManagerFactory.GetDataManager<ISuspiciousNumberDataManager>();
+
+            return manager.GetFraudResult(fromDate, toDate, strategiesList, suspicionLevelsList, subscriberNumber);
+        }
+
+
         #region Private Classes
 
         private class StrategyLevelWithCriterias

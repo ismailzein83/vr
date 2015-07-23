@@ -114,31 +114,49 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
 
     function detailFraudResult(fruadResult) {
+        var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
+        var toDate = $scope.toDate != undefined ? $scope.toDate : '';
 
-        var params = {
-            dateDay: fruadResult.DateDay,
-            subscriberNumber: fruadResult.SubscriberNumber,
-            suspicionLevelName: fruadResult.SuspicionLevelName,
-            fromDate: $scope.fromDate,
-            toDate: $scope.toDate,
-            statusId: fruadResult.StatusId,
-            validTill: fruadResult.ValidTill,
-            lastOccurance: fruadResult.LastOccurance,
-            strategyName: fruadResult.StrategyName,
-            numberofOccurances: fruadResult.NumberofOccurances
-        };
+        var suspicionLevelsList = '';
+
+        angular.forEach($scope.selectedSuspicionLevels, function (itm) {
+            suspicionLevelsList = suspicionLevelsList + itm.id + ','
+        });
 
 
-        var settings = {};
+        var strategiesList = '';
 
-        settings.onScopeReady = function (modalScope) {
-            modalScope.title = "Suspicious Number Details & Related Numbers";
-            modalScope.onSubscriberCaseUpdated = function (subscriberCase) {
-               
-                mainGridAPI.itemUpdated(subscriberCase);
-            }
-        };
-        VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/SuspiciousAnalysis/SuspiciousNumberDetails.html", params, settings);
+        angular.forEach($scope.selectedStrategies, function (itm) {
+            strategiesList = strategiesList + itm.id + ','
+        });
+
+        SuspicionAnalysisAPIService.GetFraudResult(fromDate, toDate, strategiesList.slice(0, -1), suspicionLevelsList.slice(0, -1),fruadResult.SubscriberNumber).then(function (response) {
+
+            var params = {
+                dateDay: response.DateDay,
+                subscriberNumber: response.SubscriberNumber,
+                suspicionLevelName: response.SuspicionLevelName,
+                fromDate: $scope.fromDate,
+                toDate: $scope.toDate,
+                statusId: response.StatusId,
+                validTill: response.ValidTill,
+                lastOccurance: response.LastOccurance,
+                strategyName: response.StrategyName,
+                numberofOccurances: response.NumberofOccurances
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.title = "Suspicious Number Details & Related Numbers";
+                modalScope.onSubscriberCaseUpdated = function (subscriberCase) {
+
+                    mainGridAPI.itemUpdated(subscriberCase);
+                }
+            };
+            VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/SuspiciousAnalysis/SuspiciousNumberDetails.html", params, settings);
+        });
+        
     }
 
     function guid() {

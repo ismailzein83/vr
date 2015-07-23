@@ -60,6 +60,28 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         }
 
 
+        [HttpGet]
+        public FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, string strategiesList, string suspicionLevelsList, string subscriberNumber)
+        {
+            FraudManager manager = new FraudManager();
+
+            List<int> strategiesIntList = new List<int>();
+            if (strategiesList != null)
+                strategiesIntList = strategiesList.Split(',').Select(h => int.Parse(h)).ToList();
+
+
+
+            List<int> suspicionLevelsIntList = new List<int>();
+            if (suspicionLevelsList != null)
+                suspicionLevelsIntList = suspicionLevelsList.Split(',').Select(h => int.Parse(h)).ToList();
+
+
+
+            return manager.GetFraudResult(fromDate, toDate, strategiesIntList, suspicionLevelsIntList, subscriberNumber);
+        }
+
+        
+
 
     }
 }

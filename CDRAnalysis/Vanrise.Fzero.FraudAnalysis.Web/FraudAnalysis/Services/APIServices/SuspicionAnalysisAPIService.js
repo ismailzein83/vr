@@ -4,7 +4,8 @@
         GetFilteredSuspiciousNumbers: GetFilteredSuspiciousNumbers,
         GetNormalCDRs: GetNormalCDRs,
         GetSubscriberThresholds: GetSubscriberThresholds,
-        GetNumberProfiles: GetNumberProfiles
+        GetNumberProfiles: GetNumberProfiles,
+        GetFraudResult: GetFraudResult
     });
 
     function GetNormalCDRs(fromRow, toRow, fromDate, toDate, msisdn) {
@@ -56,6 +57,19 @@
                 toDate: toDate,
                 strategiesList: strategiesList,
                 suspicionLevelsList: suspicionLevelsList,
+            }
+           );
+    }
+
+
+    function GetFraudResult(fromDate, toDate, strategiesList, suspicionLevelsList, subscriberNumber) {
+        return BaseAPIService.get("/api/SuspicionAnalysis/GetFraudResult",
+            {
+                fromDate: fromDate,
+                toDate: toDate,
+                strategiesList: strategiesList,
+                suspicionLevelsList: suspicionLevelsList,
+                subscriberNumber: subscriberNumber
             }
            );
     }

@@ -164,7 +164,6 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
                        response.UpdatedObject.CaseStatus = $scope.selectedStatus.name;
                        response.UpdatedObject.StatusId = $scope.selectedStatus.id;
                        response.UpdatedObject.ValidTill = $scope.endDate;
-                       console.log(response.UpdatedObject)
                        $scope.onSubscriberCaseUpdated(response.UpdatedObject);
                    }
 

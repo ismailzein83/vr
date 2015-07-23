@@ -29,7 +29,6 @@ appRouting.config(['$routeProvider',
               current++;
           }
           templateURL += '/' + params.pagename + '.html';
-          console.log(templateURL);
           return templateURL;
       }
       $routeProvider.
