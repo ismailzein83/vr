@@ -131,7 +131,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
 
             };
 
-            $scope.getData = function () {
+            $scope.searchClicked = function () {
 
                 $scope.mainGridPagerSettings.currentPage = 1;
                 resultKey = null;
