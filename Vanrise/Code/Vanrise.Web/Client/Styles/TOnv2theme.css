@@ -55,6 +55,8 @@
 "#0074d9"*/
 .selected-node{
     background-color: #f0f0f0 !important;
+    margin-left: -25px;
+    padding-left: 25px;
 }
 .selected-inner-node{
     background-color: #CDCDCD !important;

@@ -99,10 +99,10 @@
                                 </li>
 
                             </ul>
-                            <div ng-if="c.Childs.length > 0" ng-repeat="c in item.Childs" class="dll-menu menu-item-list-ligth ">
+                            <div ng-if="c.Childs.length > 0" ng-repeat="c in item.Childs" class="dll-parent-menu menu-item-list-ligth">
                                 <div class="menulink waves-effect waves-block" ng-class="menusubItemsCurrent.Id == c.Id  ? 'down selected-url ':''" ng-click="setIndexSub(c)">{{::c.Name}}</div>
                                 <ul style="padding-left:15px" class="nav" ng-show="menusubItemsCurrent.Id == c.Id">
-                                    <li ng-repeat="a in c.Childs" class="waves-effect waves-classic " ng-class="a.isSelected?'selected-node':''">
+                                    <li ng-repeat="a in c.Childs" class="waves-effect waves-classic inner-list-item" ng-class="a.isSelected?'selected-node':''">
                                         <a class="menulink" style="color:#333;" ng-class="a.isSelected?'selected-url':''" ng-href="{{::a.Location}}">{{::a.Name}}</a>
                                     </li>
                                 </ul>

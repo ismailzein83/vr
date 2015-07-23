@@ -835,13 +835,46 @@ input.ui-grid-filter-input[type="text"] {
     background-color: #dddddd !important;
     color: #666 !important;
 }
-.panel-heading-vr{
-     border-radius : 0px !important ;
-     padding: 8px 5px !important ;
-}
 .dll-menu:hover {
     background-color: #f0f0f0 !important;
     color: #666 !important;
+}
+.dll-parent-menu {
+    background-color: #dddddd !important;
+    color: #666 !important;
+}
+.dll-parent-menu div:hover {
+    background-color: #f0f0f0 !important;
+    color: #666 !important;
+}
+.dll-parent-menu div:before {
+    content: "";
+    border-color: transparent #111;
+    border-style: solid;
+    border-width: 0.35em 0 0.35em 0.45em;
+    display: inline-block;
+    height: 0;
+    width: 0px;
+    left: -5px;
+    top: -1px;
+    position: relative;
+}
+.dll-parent-menu div.down:before{
+    content: "";
+    border-right: 0.35em solid transparent;
+    border-top: 0.45em solid ;
+    border-bottom: 0px solid transparent;
+    border-left:0.35em solid transparent;
+    display: inline-block;
+    height: 0;
+    width: 0px;
+    left: -5px;
+    top: -1px;
+    position: relative;
+}
+.panel-heading-vr{
+     border-radius : 0px !important ;
+     padding: 8px 5px !important ;
 }
 .active-menu {    
     color: #666 !important;
@@ -859,11 +892,6 @@ input.ui-grid-filter-input[type="text"] {
 .active-menu-parent{
     background-color: #f0f0f0 !important;
     color: #666 !important;
-}
-.dll-menu a:hover {
-    background-color: #f0f0f0 !important;
-    color: #666 !important;
-    border-color: transparent #666;
 }
 .toggel{
      float:right;
@@ -964,11 +992,24 @@ input.ui-grid-filter-input[type="text"] {
 .dropdown-menu-custom-serf li > a:hover {
     background-color:#f0f0f0 !important;
     color: #666 !important;
+  
 }
-
+.inner-list-item{
+    margin-left: -25px;
+    padding-left: 25px;
+}
+.inner-list-item:hover{
+    background-color:#f0f0f0 !important;
+    color: #666 !important;
+}
 .menulink:hover{
     color: #666;
-    text-decoration:none;
+    text-decoration:none;   
+}
+.menulink:hover {
+  text-decoration: none;
+  background-color:initial !important;
+  border-color:initial;
 }
 .menulink:active{
     color:#000 ;
