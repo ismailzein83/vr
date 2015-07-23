@@ -7,7 +7,11 @@ var TestViewController = function ($scope, $http, ValuesAPIService) {
     $scope.html = '<input ng-click="click(1)" value="Click me" type="button">';
     $scope.click = function (arg) {
         alert('Clicked ' + arg);
-    }
+    };
+
+    $scope.logevent = function () {
+        console.log('ng-click');
+    };
     $scope.postMsg = function () {
         $http.post($scope.baseurl + "/api/routing/SaveRouteRule",
       {

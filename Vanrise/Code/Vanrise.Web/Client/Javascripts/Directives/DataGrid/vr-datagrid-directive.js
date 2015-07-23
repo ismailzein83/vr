@@ -41,21 +41,18 @@
             dataGridObj.calculateDataColumnsSectionWidth();
             dataGridObj.addActionTypeColumn();
             dataGridObj.defineAPI();
-            var isDownloading = false;
-            this.onExportClicked = function () {
+            ctrl.isExporting = false;
+            ctrl.onExportClicked = function () {
                 if (this.onexport != undefined && typeof (this.onexport) == 'function') {
                     var promise = this.onexport();
                
                     if (promise != undefined && promise != null) {
-                        isDownloading = true;
+                        ctrl.isExporting = true;
                         promise.finally(function () {
-                            isDownloading = false;
+                            ctrl.isExporting = false;
                         });
                     }
                 }
-            };
-            this.showLoader = function () {
-                return isDownloading;
             };
         },
         controllerAs: 'ctrl',

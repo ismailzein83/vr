@@ -1,6 +1,10 @@
 ﻿<vr-form name="formFilter">
     <vr-row ng-init="fieldType = 'password'">
         <vr-columns width="normal">
+            <div vr-disabled="true">
+                <input ng-click="logevent()" value="log" type="button" />
+            </div>
+            
             <vr-textbox type="email" label="Email" value="email"></vr-textbox>{{email}}
         </vr-columns>
         <vr-columns width="normal">
@@ -70,7 +74,7 @@
             format: 'DD/MM/YYYY'
         });
         $('#datetimepicker3').data("DateTimePicker").date(new Date())
-        alert($('#datetimepicker3').data("DateTimePicker").date())
+        //alert($('#datetimepicker3').data("DateTimePicker").date())
     });
 </script>
 
