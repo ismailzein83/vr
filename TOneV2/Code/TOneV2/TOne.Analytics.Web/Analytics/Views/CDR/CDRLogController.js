@@ -71,7 +71,7 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
             return getData();
         }
 
-        
+   
         $scope.getData = function () {
             $scope.mainGridPagerSettings.currentPage = 1;
             resultKey = null;
@@ -97,6 +97,27 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
 
         $scope.searchZones = function (text) {
             return ZonesService.getSalesZones(text);
+        }
+        $scope.onexport = function () {
+            var pageInfo =$scope.mainGridPagerSettings.getPageInfo();
+            var count = $scope.mainGridPagerSettings.itemsPerPage;
+            var CDRLogSummaryInput = {
+                TempTableKey: resultKey,
+                Filter: $scope.filter.filter,
+                From: $scope.filter.fromDate,
+                To: $scope.filter.toDate,
+                FromRow: pageInfo.fromRow,
+                ToRow: pageInfo.toRow,
+                Size: $scope.filter.nRecords,
+                CDROption: $scope.filter.selectedCDROption,
+                OrderBy: sortColumn.value,
+                IsDescending: sortDescending
+
+            }
+            return CDRAPIService.ExportCDRData(CDRLogSummaryInput).then(function (response) {
+                console.log(response)
+                return UtilsService.downloadFile(response.data, response.headers, response.config);
+            });
         }
     }
     function load() {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 using TOne.Analytics.Business;
@@ -21,7 +22,15 @@ namespace TOne.Analytics.Web.Controllers
             System.Threading.Thread.Sleep(1000);
             return __cdrManager.GetCDRData(input.TempTableKey, input.Filter, input.From, input.To, input.FromRow, input.ToRow, input.Size, input.CDROption, input.OrderBy, input.IsDescending);
         }
+        [HttpPost]
+        public HttpResponseMessage ExportCDRData(GetCDRSummaryInput CDRLogSummaryInput)
+        {
+            System.Threading.Thread.Sleep(1000);
+            CDRBigResult records = __cdrManager.GetCDRData(CDRLogSummaryInput.TempTableKey, CDRLogSummaryInput.Filter, CDRLogSummaryInput.From, CDRLogSummaryInput.To, 0, CDRLogSummaryInput.Size, CDRLogSummaryInput.Size, CDRLogSummaryInput.CDROption, CDRLogSummaryInput.OrderBy, CDRLogSummaryInput.IsDescending);
+            return __cdrManager.ExportCDRData(records);
+        }
     }
+    
     #region Argument Classes
     public class GetCDRSummaryInput
     {

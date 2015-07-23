@@ -71,9 +71,22 @@ app.service('BaseAPIService', function ($http, $q, $rootScope, notify) {
         var data;
         if (dataToSend)
             data = dataToSend
+        if (options != undefined && options.responseTypeAsBufferArray)
+            data.responseType = 'arraybuffer';
         $http.post(url, data)
             .success(function (response, status, headers, config) {
-                deferred.resolve(response);
+                  var returnedResponse;
+                if (options != undefined && options.returnAllResponseParameters) {
+                    returnedResponse = {
+                        data: response,
+                        status: status,
+                        headers: headers,
+                        config: config
+                    }
+                }
+                else
+                    returnedResponse = response;
+                deferred.resolve(returnedResponse);
             })
             .error(function (data, status, headers, config) {
                 console.log(data);

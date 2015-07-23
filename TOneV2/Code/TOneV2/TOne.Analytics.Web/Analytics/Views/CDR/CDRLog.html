@@ -45,7 +45,7 @@
          <div ng-show="showResult" vr-loader="isGettingData">
              <vr-row>
                  <vr-columns width="fullrow" simplecol>
-                     <vr-datagrid datasource="data" pagersettings="mainGridPagerSettings" data-on-ready="onMainGridReady" maxheight="500px" >
+                     <vr-datagrid datasource="data" pagersettings="mainGridPagerSettings" data-on-ready="onMainGridReady" maxheight="500px" onexport="onexport">
                          <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" Type="measure.type" tag="measure" onsortchanged="onMainGridSortChanged"></vr-datagridcolumn>
 
 
