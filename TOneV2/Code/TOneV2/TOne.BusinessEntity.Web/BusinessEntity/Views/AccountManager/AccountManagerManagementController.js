@@ -23,13 +23,11 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
 
             settings.onScopeReady = function (modalScope) {
                 modalScope.title = 'Assign Org Chart';
+
                 modalScope.onOrgChartAssigned = function (orgChartId) {
                     buildNodesFromMembers(orgChartId);
                     assignedOrgChartId = orgChartId;
                     $scope.tree.currentNode = undefined; // deselect the account manager
-                    AccountManagerAPIService.UpdateLinkedOrgChart(orgChartId).then(function () {
-                        console.log('updated');
-                    });
                 }
             };
 

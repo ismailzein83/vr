@@ -103,10 +103,18 @@ namespace Vanrise.Security.Business
             return dataManager.GetLinkedOrgChartId(entityInfo.GetIdentifier());
         }
 
-        public void UpdateOrgChartLinkedEntity(int orgChartId, OrgChartLinkedEntityInfo entityInfo)
+        public Vanrise.Entities.UpdateOperationOutput<object> UpdateOrgChartLinkedEntity(int orgChartId, OrgChartLinkedEntityInfo entityInfo)
         {
             IOrgChartLinkedEntityDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IOrgChartLinkedEntityDataManager>();
-            dataManager.InsertOrUpdate(orgChartId, entityInfo.GetIdentifier());
+            
+            bool updateActionSucc = dataManager.InsertOrUpdate(orgChartId, entityInfo.GetIdentifier());
+            Vanrise.Entities.UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
+
+            updateOperationOutput.Result = updateActionSucc ? Vanrise.Entities.UpdateOperationResult.Succeeded : Vanrise.Entities.UpdateOperationResult.Failed;
+
+            updateOperationOutput.UpdatedObject = null;
+
+            return updateOperationOutput;
         }
 
         public List<int> GetMemberIds(int orgChartId, int managerId)

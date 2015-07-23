@@ -1,6 +1,6 @@
-﻿OrgChartAssignmentEditorController.$inject = ['$scope', 'OrgChartAPIService', 'UtilsService', 'VRModalService', 'VRNavigationService'];
+﻿OrgChartAssignmentEditorController.$inject = ['$scope', 'AccountManagerAPIService', 'OrgChartAPIService', 'UtilsService', 'VRModalService', 'VRNavigationService', 'VRNotificationService'];
 
-function OrgChartAssignmentEditorController($scope, OrgChartAPIService, UtilsService, VRModalService, VRNavigationService) {
+function OrgChartAssignmentEditorController($scope, AccountManagerAPIService, OrgChartAPIService, UtilsService, VRModalService, VRNavigationService, VRNotificationService) {
     loadParameters();
     defineScope();
     load();
@@ -24,9 +24,19 @@ function OrgChartAssignmentEditorController($scope, OrgChartAPIService, UtilsSer
         $scope.orgCharts = [];
 
         $scope.assignOrgChart = function () {
-            $scope.onOrgChartAssigned($scope.assignedOrgChart.Id);
-            $scope.modalContext.closeModal();
+
+            AccountManagerAPIService.UpdateLinkedOrgChart($scope.assignedOrgChart.Id).then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated("Org Chart", response)) {
+                    if ($scope.onOrgChartAssigned != undefined)
+                        $scope.onOrgChartAssigned($scope.assignedOrgChart.Id);
+
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
         }
+
         $scope.closeModal = function () {
             $scope.modalContext.closeModal();
         }

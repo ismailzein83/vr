@@ -27,14 +27,14 @@ namespace TOne.BusinessEntity.Data.SQL
         {
             DataTable table = this.BuildUpdatedCarriersTable(updatedCarriers);
 
-            int recordesEffected = ExecuteNonQuerySPCmd("BEntity.sp_AccountManager_AssignCarriers", (cmd) =>
+            int recordsEffected = ExecuteNonQuerySPCmd("BEntity.sp_AccountManager_AssignCarriers", (cmd) =>
             {
                 var tableParameter = new SqlParameter("@UpdatedCarriers", SqlDbType.Structured);
                 tableParameter.Value = table;
                 cmd.Parameters.Add(tableParameter);
             });
 
-            return recordesEffected > 0;
+            return recordsEffected > 0;
         }
 
         private DataTable BuildUpdatedCarriersTable(UpdatedAccountManagerCarrier[] updatedCarriers)

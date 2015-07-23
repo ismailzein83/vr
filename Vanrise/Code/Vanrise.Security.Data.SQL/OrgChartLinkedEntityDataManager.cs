@@ -32,9 +32,10 @@ namespace Vanrise.Security.Data.SQL
             return orgChartId;
         }
 
-        public void InsertOrUpdate(int orgChartId, string linkedEntityIdentifier)
+        public bool InsertOrUpdate(int orgChartId, string linkedEntityIdentifier)
         {
-            ExecuteNonQuerySP("sec.sp_OrgChartLinkedEntity_Insert", orgChartId, linkedEntityIdentifier);
+            int recordsEffected = ExecuteNonQuerySP("sec.sp_OrgChartLinkedEntity_Insert", orgChartId, linkedEntityIdentifier);
+            return recordsEffected > 0;
         }
     }
 }

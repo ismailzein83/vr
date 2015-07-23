@@ -40,10 +40,10 @@ namespace TOne.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        public void UpdateLinkedOrgChart(int orgChartId)
+        public Vanrise.Entities.UpdateOperationOutput<object> UpdateLinkedOrgChart(int orgChartId)
         {
             AccountManagerManager manager = new AccountManagerManager();
-            manager.UpdateLinkedOrgChart(orgChartId);
+            return manager.UpdateLinkedOrgChart(orgChartId);
         }
 
         [HttpPost]

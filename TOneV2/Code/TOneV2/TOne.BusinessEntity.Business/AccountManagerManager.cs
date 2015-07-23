@@ -54,10 +54,10 @@ namespace TOne.BusinessEntity.Business
             return orgChartManager.GetLinkedOrgChartId(new OrgChartAccountManagerInfo());
         }
 
-        public void UpdateLinkedOrgChart(int orgChartId)
+        public Vanrise.Entities.UpdateOperationOutput<object> UpdateLinkedOrgChart(int orgChartId)
         {
             OrgChartManager orgChartManager = new OrgChartManager();
-            orgChartManager.UpdateOrgChartLinkedEntity(orgChartId, new OrgChartAccountManagerInfo());
+            return orgChartManager.UpdateOrgChartLinkedEntity(orgChartId, new OrgChartAccountManagerInfo());
         }
 
         private List<int> GetMemberIds(int orgChartId, int managerId)

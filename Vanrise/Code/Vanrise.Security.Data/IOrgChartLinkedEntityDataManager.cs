@@ -10,6 +10,6 @@ namespace Vanrise.Security.Data
     {
         int? GetLinkedOrgChartId(string linkedEntityIdentifier);
 
-        void InsertOrUpdate(int orgChartId, string linkedEntityIdentifier);
+        bool InsertOrUpdate(int orgChartId, string linkedEntityIdentifier);
     }
 }
