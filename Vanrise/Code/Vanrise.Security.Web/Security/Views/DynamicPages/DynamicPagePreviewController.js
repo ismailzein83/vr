@@ -33,7 +33,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             $scope.selectedPeriod = customize;
         }
         $scope.periodSelectionChanged = function () {
-            if ($scope.selectedPeriod != undefined) {
+            if ($scope.selectedPeriod != undefined && $scope.selectedPeriod.value != -1) {
                 var date = getPeriod($scope.selectedPeriod.value);
                 $scope.fromDate = date.from;
                 $scope.toDate = date.to;
