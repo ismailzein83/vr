@@ -1,7 +1,7 @@
 ﻿CarrierAssignmentEditorController.$inject = ['$scope', 'AccountManagerAPIService', 'VRModalService', 'VRNavigationService', 'UtilsService'];
 
 function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRModalService, VRNavigationService, UtilsService) {
-    var gridApi;
+    var mainGridAPI;
     var selectedAccountManagerId = undefined;
     loadParameters();
     defineScope();
@@ -12,7 +12,6 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
 
         if (parameters != undefined && parameters != null) {
             selectedAccountManagerId = parameters.selectedAccountManagerId;
-            $scope.orgChart = parameters.orgChart;
         }
     }
 
@@ -20,37 +19,76 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
         //$scope.accountManager = {};
         $scope.carriers = [];
 
-        $scope.onGridReady = function (api) {
-            gridApi = api;
+        $scope.onMainGridReady = function (api) {
+            mainGridAPI = api;
             getData();
         }
         $scope.loadMoreData = function () {
             return getData();
         }
-        function getData() {
-            UtilsService.waitMultipleAsyncOperations([loadParameters]).finally(function () {
-                // $scope.accountManager.nodeId is set
-                UtilsService.waitMultipleAsyncOperations([getCarriers]).finally(function () {
-                    // $scope.carriers is set
-                    AccountManagerAPIService.GetAssignedCarriers([$scope.orgChart.Id, selectedAccountManagerId]).then(function (data) {
-                        toggleAssignedCarriers(data);
-                    });
-                });
-            });
-        }
+        
         $scope.assignCarriers = function () {
             var updatedCarriers = mapCarriersForAssignment();
 
             AccountManagerAPIService.AssignCarriers(updatedCarriers).then(function () {
+                if ($scope.onCarriersAssigned != undefined)
+                    $scope.onCarriersAssigned();
+
                 $scope.modalContext.closeModal();
             });
         }
+
         $scope.closeModal = function () {
             $scope.modalContext.closeModal();
         }
     }
 
     function load() {
+    }
+
+    function getData() {
+        $scope.isGettingData = true;
+
+        return UtilsService.waitMultipleAsyncOperations([getCarriers]).then(function () {
+            getAssignedCarriers();
+            
+        }).catch(function (error) {
+            VRNotificationService.notifyExceptionWithClose(error, $scope);
+            $scope.isGettingData = false;
+        });        
+    }
+
+    function getCarriers() {
+        var pageInfo = mainGridAPI.getPageInfo();
+
+        return AccountManagerAPIService.GetCarriers(selectedAccountManagerId, pageInfo.fromRow, pageInfo.toRow).then(function (data) {
+            angular.forEach(data, function (item) {
+                var object = {
+                    UserId: selectedAccountManagerId,
+                    CarrierAccountId: item.CarrierAccountId,
+                    Name: item.Name,
+                    NameSuffix: item.NameSuffix,
+                    IsCustomerAvailable: item.IsCustomerAvailable,
+                    customerSwitchValue: false,
+                    newCustomerSwitchValue: false,
+                    IsSupplierAvailable: item.IsSupplierAvailable,
+                    supplierSwitchValue: false,
+                    newSupplierSwitchValue: false
+                }
+                $scope.carriers.push(object);
+            });
+        });
+    }
+
+    function getAssignedCarriers()
+    {
+        return AccountManagerAPIService.GetAssignedCarriers(selectedAccountManagerId).then(function (response) {
+            toggleAssignedCarriers(response);
+        }).catch(function (error) {
+            VRNotificationService.notifyExceptionWithClose(error, $scope);
+        }).finally(function () {
+            $scope.isGettingData = false;
+        });
     }
 
     function mapCarriersForAssignment() {
@@ -88,27 +126,7 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
         return mappedCarrier;
     }
 
-    function getCarriers() {
-        var pageInfo = gridApi.getPageInfo();
-
-        return AccountManagerAPIService.GetCarriers(selectedAccountManagerId, pageInfo.fromRow, pageInfo.toRow).then(function (data) {
-            angular.forEach(data, function (item) {
-                var object = {
-                    UserId: selectedAccountManagerId,
-                    CarrierAccountId: item.CarrierAccountId,
-                    Name: item.Name,
-                    NameSuffix: item.NameSuffix,
-                    IsCustomerAvailable: item.IsCustomerAvailable,
-                    customerSwitchValue: false,
-                    newCustomerSwitchValue: false,
-                    IsSupplierAvailable: item.IsSupplierAvailable,
-                    supplierSwitchValue: false,
-                    newSupplierSwitchValue: false
-                }
-                $scope.carriers.push(object);
-            });
-        });
-    }
+    
 
     function toggleAssignedCarriers(assignedCarriers) {
         for (var i = 0; i < assignedCarriers.length; i++) {

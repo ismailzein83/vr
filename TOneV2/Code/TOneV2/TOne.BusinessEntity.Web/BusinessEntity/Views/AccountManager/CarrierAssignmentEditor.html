@@ -4,7 +4,7 @@
             <vr-row>
                 <vr-columns colnum="12">
                     
-                    <vr-datagrid datasource="carriers" loadmoredata="loadMoreData" on-ready="onGridReady">
+                    <vr-datagrid datasource="carriers" loadmoredata="loadMoreData" on-ready="onMainGridReady">
                         <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Customer'" field="'IsCustomerAvailable'">
                             <vr-switch value="dataItem.newCustomerSwitchValue" ng-show="{{dataItem.IsCustomerAvailable}}"></vr-switch>

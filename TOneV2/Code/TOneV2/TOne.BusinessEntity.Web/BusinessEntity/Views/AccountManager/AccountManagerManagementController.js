@@ -1,9 +1,9 @@
-﻿AccountManagerManagementController.$inject = ['$scope', 'AccountManagerAPIService', 'UsersAPIService', 'ApplicationParameterAPIService', 'OrgChartAPIService', 'VRModalService', 'UtilsService'];
+﻿AccountManagerManagementController.$inject = ['$scope', 'AccountManagerAPIService', 'UsersAPIService', 'OrgChartAPIService', 'ApplicationParameterAPIService', 'OrgChartAPIService', 'VRModalService', 'UtilsService'];
 
-function AccountManagerManagementController($scope, AccountManagerAPIService, UsersAPIService, ApplicationParameterAPIService, OrgChartAPIService, VRModalService, UtilsService) {
+function AccountManagerManagementController($scope, AccountManagerAPIService, UsersAPIService, OrgChartAPIService, ApplicationParameterAPIService, OrgChartAPIService, VRModalService, UtilsService) {
     var gridApi;
     var users = [];
-    var assignedOrgChart = undefined;
+    var assignedOrgChartId = undefined;
     defineScope();
     load();
 
@@ -15,18 +15,21 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
             var settings = {};
             var parameters = null;
 
-            if (assignedOrgChart != undefined) {
+            if (assignedOrgChartId != 0) {
                 parameters = {
-                    assignedOrgChart: assignedOrgChart
+                    assignedOrgChartId: assignedOrgChartId
                 };
             }
 
             settings.onScopeReady = function (modalScope) {
                 modalScope.title = 'Assign Org Chart';
-                modalScope.onOrgChartAssigned = function (orgChart) {
-                    $scope.nodes = mapMembersToNodes(orgChart.Hierarchy);
-                    assignedOrgChart = orgChart;
+                modalScope.onOrgChartAssigned = function (orgChartId) {
+                    buildNodesFromMembers(orgChartId);
+                    assignedOrgChartId = orgChartId;
                     $scope.tree.currentNode = undefined; // deselect the account manager
+                    AccountManagerAPIService.UpdateLinkedOrgChart(orgChartId).then(function () {
+                        console.log('updated');
+                    });
                 }
             };
 
@@ -34,14 +37,16 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
         }
         $scope.openCarriersModal = function () {
             var settings = {};
+
+            var parameters = {
+                selectedAccountManagerId: 133
+            };
             
             settings.onScopeReady = function (modalScope) {
                 modalScope.title = 'Assign Carriers';
-            };
-
-            var parameters = {
-                orgChart: assignedOrgChart,
-                selectedAccountManagerId: $scope.tree.currentNode.nodeId
+                modalScope.onCarriersAssigned = function () {
+                    getData();
+                }
             };
 
             VRModalService.showModal('/Client/Modules/BusinessEntity/Views/AccountManager/CarrierAssignmentEditor.html', parameters, settings);
@@ -57,21 +62,26 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
     }
 
     function load() {
-        UsersAPIService.GetUsers().then(function (response) {
+        UsersAPIService.GetUsers().then(function (response) { // make sure that users is set
             users = response; // mapMembersToNodes depends on users
-            //mapUsersToNodes();
 
-            ApplicationParameterAPIService.GetApplicationParameterById(1).then(function (response) {
-                var orgChartId = response.Value;
-
-                OrgChartAPIService.GetOrgChartById(orgChartId).then(function (orgChart) {
-                    $scope.nodes = mapMembersToNodes(orgChart.Hierarchy);
-                });
+            AccountManagerAPIService.GetLinkedOrgChartId().then(function (response) {
+                if (response == undefined || response == null) {
+                    buildNodesFromUsers();
+                }
+                else {
+                    OrgChartAPIService.GetOrgChartById(response).then(function (globalOrgChart) {
+                        $scope.nodes = mapMembersToNodes(globalOrgChart.Hierarchy);
+                        assignedOrgChartId = globalOrgChart.Id;
+                    });
+                }
             });
         });
+    }
 
-        AccountManagerAPIService.GetLinkedOrgChartId().then(function (response) {
-            console.log(response);
+    function buildNodesFromMembers(orgChartId) {
+        OrgChartAPIService.GetOrgChartById(orgChartId).then(function (orgChartObject) {
+            $scope.nodes = mapMembersToNodes(orgChartObject.Hierarchy);
         });
     }
 
@@ -94,7 +104,9 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
         return temp;
     }
 
-    function mapUsersToNodes() {
+    function buildNodesFromUsers() {
+        $scope.nodes = [];
+
         for (var i = 0; i < users.length; i++) {
             var node = mapUserToNode(users[i]);
             $scope.nodes.push(node);
@@ -110,19 +122,34 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
     }
 
     function getData() {
+        //Clear old Data
         $scope.assignedCarriers = [];
 
-        return AccountManagerAPIService.GetAssignedCarriers([assignedOrgChart.Id, $scope.tree.currentNode.nodeId]).then(function (response) {
-            angular.forEach(response, function (item) {
-                var object = {
-                    CarrierAccountId: item.CarrierAccountId,
-                    IsCustomer: (item.RelationType == 1) ? 'True' : 'False',
-                    IsSupplier: (item.RelationType == 2) ? 'True' : 'False',
-                    Relationship: (item.UserId == $scope.tree.currentNode.nodeId) ? 'Direct' : 'Indirect'
-                };
-
-                $scope.assignedCarriers.push(object);
+        if (assignedOrgChartId != undefined)
+        {
+            return AccountManagerAPIService.GetAssignedCarriersWithDesc($scope.tree.currentNode.nodeId, assignedOrgChartId).then(function (response) {
+                fillAssignedCarriers(response);
             });
+        }
+        else
+        {
+            return AccountManagerAPIService.GetAssignedCarriers($scope.tree.currentNode.nodeId).then(function (response) {
+                fillAssignedCarriers(response);
+            });
+        }
+    }
+
+    function fillAssignedCarriers(assignedCarriers)
+    {
+        angular.forEach(assignedCarriers, function (item) {
+            var object = {
+                CarrierAccountId: item.CarrierAccountId,
+                IsCustomer: (item.RelationType == 1) ? 'True' : 'False',
+                IsSupplier: (item.RelationType == 2) ? 'True' : 'False',
+                Access: (item.UserId == $scope.tree.currentNode.nodeId) ? 'Direct' : 'Indirect'
+            };
+
+            $scope.assignedCarriers.push(object);
         });
     }
 }

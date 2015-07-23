@@ -1,16 +1,22 @@
-﻿OrgChartAssignmentEditorController.$inject = ['$scope', 'OrgChartAPIService', 'ApplicationParameterAPIService', 'VRModalService', 'VRNavigationService'];
+﻿OrgChartAssignmentEditorController.$inject = ['$scope', 'OrgChartAPIService', 'UtilsService', 'VRModalService', 'VRNavigationService'];
 
-function OrgChartAssignmentEditorController($scope, OrgChartAPIService, ApplicationParameterAPIService, VRModalService, VRNavigationService) {
+function OrgChartAssignmentEditorController($scope, OrgChartAPIService, UtilsService, VRModalService, VRNavigationService) {
     loadParameters();
     defineScope();
     load();
 
     function loadParameters() {
-        var parameters = VRNavigationService.getParameters($scope);
-        
-        if (parameters != undefined && parameters != null) {
-            $scope.assignedOrgChart = parameters.assignedOrgChart;
-        }
+        // make sure that $scope.orgCharts is set before setting $scope.assignedOrgChart
+        OrgChartAPIService.GetOrgCharts().then(function (response) {
+            $scope.orgCharts = response;
+
+            var parameters = VRNavigationService.getParameters($scope);
+
+            if (parameters != undefined && parameters != null) {
+                // getItemByVal assumes that $scope.orgCharts is set
+                $scope.assignedOrgChart = UtilsService.getItemByVal($scope.orgCharts, parameters.assignedOrgChartId, 'Id');
+            }
+        });
     }
 
     function defineScope() {
@@ -18,13 +24,7 @@ function OrgChartAssignmentEditorController($scope, OrgChartAPIService, Applicat
         $scope.orgCharts = [];
 
         $scope.assignOrgChart = function () {
-            ApplicationParameterAPIService.UpdateApplicationParameter({
-                Id: 1,
-                Value: $scope.assignedOrgChart.Id
-            }).catch(function (error) {
-                console.log(error);
-            });
-            $scope.onOrgChartAssigned($scope.assignedOrgChart);
+            $scope.onOrgChartAssigned($scope.assignedOrgChart.Id);
             $scope.modalContext.closeModal();
         }
         $scope.closeModal = function () {
@@ -33,9 +33,7 @@ function OrgChartAssignmentEditorController($scope, OrgChartAPIService, Applicat
     }
 
     function load() {
-        OrgChartAPIService.GetOrgCharts().then(function (data) {
-            $scope.orgCharts = data;
-        });
+        
     }
 }
 

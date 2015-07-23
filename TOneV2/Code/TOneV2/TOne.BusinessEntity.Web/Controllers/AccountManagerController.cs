@@ -18,11 +18,18 @@ namespace TOne.BusinessEntity.Web.Controllers
             return manager.GetCarriers(userId, from, to);
         }
 
-        [HttpPost]
-        public List<AssignedCarrier> GetAssignedCarriers(List<int> parameters)
+        [HttpGet]
+        public List<AssignedCarrier> GetAssignedCarriers(int managerId)
         {
             AccountManagerManager manager = new AccountManagerManager();
-            return manager.GetAssignedCarriers(parameters);
+            return manager.GetAssignedCarriers(managerId);
+        }
+
+        [HttpGet]
+        public List<AssignedCarrier> GetAssignedCarriersWithDesc(int managerId, int orgChartId)
+        {
+            AccountManagerManager manager = new AccountManagerManager();
+            return manager.GetAssignedCarriersWithDesc(managerId, orgChartId);
         }
 
         [HttpGet]
@@ -30,6 +37,13 @@ namespace TOne.BusinessEntity.Web.Controllers
         {
             AccountManagerManager manager = new AccountManagerManager();
             return manager.GetLinkedOrgChartId();
+        }
+
+        [HttpGet]
+        public void UpdateLinkedOrgChart(int orgChartId)
+        {
+            AccountManagerManager manager = new AccountManagerManager();
+            manager.UpdateLinkedOrgChart(orgChartId);
         }
 
         [HttpPost]
