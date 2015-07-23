@@ -141,7 +141,8 @@
                 },
                 tag: col.tag,
                 getcolor: col.getcolor,
-                rotateHeader: ctrl.rotateHeader
+                rotateHeader: ctrl.rotateHeader,
+                nonHiddable: col.nonHiddable
             };
 
             var columnCellTemplate;
@@ -616,7 +617,8 @@
         function addActionTypeColumn() {
             var col = {
                 headerText: "Action",
-                field: "actionType"
+                field: "actionType",
+                nonHiddable:true
             };
             actionTypeColumn = addColumn(col, ctrl.columnDefs.length);
             ctrl.hideColumn(actionTypeColumn);
