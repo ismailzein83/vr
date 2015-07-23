@@ -566,7 +566,7 @@ namespace TOne.Analytics.Business
 
         }
 
-        public List<DestinationVolumeTraffic> GetDestinationTrafficVolumes(DateTime fromDate, DateTime toDate, string customerID, string supplierID, string zoneID, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination)
+        public List<DestinationVolumeTraffic> GetDestinationTrafficVolumes(DateTime fromDate, DateTime toDate, string customerID, string supplierID, int zoneID, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination)
         {
             return _datamanager.GetDestinationTrafficVolumes(fromDate, toDate, customerID, supplierID, zoneID, attempts, timePeriod, topDestination);
        }

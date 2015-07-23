@@ -38,7 +38,7 @@ function DestinationTrafficVolumeTemplateController($scope, BillingStatisticsAPI
 
         var seriesDefinitions = [{
             title: "Duration",
-            valuePath: "Values",
+            valuePath: "Value",
             type: "areaspline"
         }];
 

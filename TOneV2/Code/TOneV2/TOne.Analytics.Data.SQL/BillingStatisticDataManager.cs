@@ -309,7 +309,7 @@ namespace TOne.Analytics.Data.SQL
             return resultList;
         }
 
-        public List<DestinationVolumeTraffic> GetDestinationTrafficVolumes(DateTime fromDate, DateTime toDate, string customerId, string supplierId, string zoneId, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination) 
+        public List<DestinationVolumeTraffic> GetDestinationTrafficVolumes(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int zoneId, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination) 
         {
             //Get List Of Top Destination Duration 
            return GetDestinationTrafficVolumesQuery(fromDate, toDate, customerId, supplierId, zoneId, attempts, timePeriod, topDestination, true);
@@ -974,11 +974,21 @@ namespace TOne.Analytics.Data.SQL
             return volumeTraffic;
         }
 
-        private List<DestinationVolumeTraffic> GetDestinationTrafficVolumesQuery(DateTime fromDate, DateTime toDate, string customerId, string supplierId, string zoneId, int attempts, VolumeReportsTimePeriod timePeriod, int topDestinations, bool isDuration)
+        private List<DestinationVolumeTraffic> GetDestinationTrafficVolumesQuery(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int zoneId, int attempts, VolumeReportsTimePeriod timePeriod, int topDestinations, bool isDuration)
         {
             string durationField = " SaleDuration / 60.0 ";
             string attemptsField = " NumberOfCalls ";
             string date = fromDate.ToString();
+            //;
+            //SELECT #IDColumn# AS ID, #NameColumn# AS Name, ROW_NUMBER()  OVER ( ORDER BY #ValueColumn# DESC) AS RowNumber
+            //INTO #OrderedEntities
+            //FROM 
+            //Billing_Stats BS
+            //LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
+            //LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate        
+            //#JoinStatement#           
+            //WHERE BS.CallDate >= @BeginTime AND BS.CallDate < @EndTime  #WhereStatement# #BillingStatsFilter# 
+            //GROUP BY #IDColumn#, #NameColumn#,ERC.Rate,ERS.Rate;
             StringBuilder queryBuilder = new StringBuilder(@" Set RowCount @TopDestinations
                             SELECT SZ.Name AS SaleZone,SZ.ZoneID AS SaleZoneID,SUM(CASE WHEN Calldate BETWEEN @FromDate AND @ToDate THEN #ValueColumn# ELSE 0 END) AS [#ValueColumn#]                         
                             From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date #Indexes# ))
@@ -1007,7 +1017,7 @@ namespace TOne.Analytics.Data.SQL
                indexBuilder.Append(",IX_Billing_Stats_Supplier");
            }
 
-           if (zoneId != "0")
+           if (zoneId != 0)
                filterBuilder.Append(" AND SZ.ZoneID= @ZoneId ");
 
             queryBuilder.Replace("#Filters#", filterBuilder.ToString());
@@ -1034,7 +1044,7 @@ namespace TOne.Analytics.Data.SQL
             {
                 SaleZoneName = reader["SaleZone"] as string,
                 SaleZoneID = GetReaderValue<int>(reader, "SaleZoneID"),
-                Values = isDuration ? GetReaderValue<decimal>(reader, durationField) : GetReaderValue<decimal>(reader, attemptsField)
+                Value = isDuration ? GetReaderValue<decimal>(reader, durationField) : GetReaderValue<decimal>(reader, attemptsField)
             };
 
             return destinationVolumeTraffic;

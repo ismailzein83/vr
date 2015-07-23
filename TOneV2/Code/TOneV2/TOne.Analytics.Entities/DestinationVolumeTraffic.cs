@@ -10,6 +10,6 @@ namespace TOne.Analytics.Entities
     {
         public string SaleZoneName { get; set; }
         public int SaleZoneID { get; set; }
-        public decimal Values { get; set; }
+        public decimal Value { get; set; }
     }
 }
