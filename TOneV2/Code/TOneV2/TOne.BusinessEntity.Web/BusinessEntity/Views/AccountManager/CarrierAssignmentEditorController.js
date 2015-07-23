@@ -30,17 +30,19 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
         $scope.assignCarriers = function () {
             var updatedCarriers = mapCarriersForAssignment();
 
-            AccountManagerAPIService.AssignCarriers(updatedCarriers).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Assigned Carriers", response))
-                {
-                    if ($scope.onCarriersAssigned != undefined)
-                        $scope.onCarriersAssigned();
+            if (updatedCarriers.length > 0) {
 
-                    $scope.modalContext.closeModal();
-                }
-            }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            });
+                AccountManagerAPIService.AssignCarriers(updatedCarriers).then(function (response) {
+                    if (VRNotificationService.notifyOnItemUpdated("Assigned Carriers", response)) {
+                        if ($scope.onCarriersAssigned != undefined)
+                            $scope.onCarriersAssigned();
+
+                        $scope.modalContext.closeModal();
+                    }
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                });
+            }
         }
 
         $scope.closeModal = function () {

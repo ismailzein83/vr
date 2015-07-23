@@ -39,7 +39,7 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
             var settings = {};
 
             var parameters = {
-                selectedAccountManagerId: 133
+                selectedAccountManagerId: $scope.tree.currentNode.nodeId
             };
             
             settings.onScopeReady = function (modalScope) {
@@ -141,8 +141,6 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
 
     function fillAssignedCarriers(assignedCarriers)
     {
-        console.log(assignedCarriers);
-
         angular.forEach(assignedCarriers, function (item) {
             var object = {
                 CarrierName: item.CarrierName,
