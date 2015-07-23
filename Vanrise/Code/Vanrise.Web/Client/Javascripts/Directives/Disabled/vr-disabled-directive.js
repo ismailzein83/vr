@@ -6,16 +6,13 @@ app.directive('vrDisabled', ['$compile', function ($compile) {
     var directiveDefinitionObject = {
         restrict: 'A',
         scope: false,
-        compile: function (tElement, tAttrs) {
-            tElement.attr('ng-class', '{\'divDisabled\': ' + tAttrs.vrDisabled + '}');
-            tElement.removeAttr("vr-disabled");
-            return {
-                post: function postLink(scope, iElement, iAttrs, controller) {
-                    $compile(iElement)(scope);
-                }
-            };
+        terminal: true,
+        link: function preLink(scope, iElement, iAttrs) { 
+            iElement.removeAttr("vr-disabled");
+            iElement.attr('ng-class', '{\'divDisabled\': ' + iAttrs.vrDisabled + '}');
+             $compile(iElement)(scope);
         }
-
+ 
     };
     return directiveDefinitionObject;
 

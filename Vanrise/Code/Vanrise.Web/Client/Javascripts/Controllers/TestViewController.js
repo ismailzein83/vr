@@ -11,6 +11,7 @@ var TestViewController = function ($scope, $http, ValuesAPIService) {
 
     $scope.logevent = function () {
         console.log('ng-click');
+        $scope.istrue=true;
     };
     $scope.postMsg = function () {
         $http.post($scope.baseurl + "/api/routing/SaveRouteRule",
