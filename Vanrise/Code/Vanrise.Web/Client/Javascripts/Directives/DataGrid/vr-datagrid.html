@@ -16,7 +16,7 @@
             </li>
             <li role="separator" class="divider"></li>
             <li style="color:#000" role="presentation" ng-repeat="colDef in ctrl.columnDefs">
-                <a ng-click="colDef.isHidden=!colDef.isHidden">
+                <a ng-click="ctrl.switchColumnVisibility(colDef)">
                     <span style="float: right; color: #000;" ng-show="!colDef.isHidden">✔</span>
                     <span style="color:black;text-align:center" aria-hidden="true">{{colDef.name}}</span>
                 </a>

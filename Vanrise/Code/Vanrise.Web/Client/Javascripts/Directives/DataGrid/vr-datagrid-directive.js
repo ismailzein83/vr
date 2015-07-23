@@ -345,6 +345,11 @@
                      
                 }
             };
+
+            ctrl.switchColumnVisibility = function (colDef) {
+                colDef.isHidden = !colDef.isHidden;
+                calculateColumnsWidth();
+            }
         }
         
         function buildRowHtml() {
