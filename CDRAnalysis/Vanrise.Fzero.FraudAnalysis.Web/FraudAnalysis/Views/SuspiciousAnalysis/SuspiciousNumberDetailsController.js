@@ -27,8 +27,24 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
             $scope.suspicionLevelName = parameters.suspicionLevelName;
             $scope.fromDate = parameters.fromDate;
             $scope.toDate = parameters.toDate;
-            $scope.selectedStatus = UtilsService.getItemByVal($scope.statuses, parameters.statusId, "id");
-            $scope.endDate = parameters.validTill;
+            console.log("parameters.statusId")
+            console.log(parameters.statusId)
+           
+            if (parameters.statusId == null) {
+                $scope.selectedStatus = UtilsService.getItemByVal($scope.statuses, 4, "id");
+            }
+            else {
+                $scope.selectedStatus = UtilsService.getItemByVal($scope.statuses, parameters.statusId, "id");
+            }
+
+
+            if (parameters.validTill == null) {
+                $scope.endDate = new Date();
+            }
+            else {
+                $scope.validTill = parameters.validTill;
+            }
+            
             lastOccurance = parameters.lastOccurance;
             strategyName = parameters.strategyName;
             numberofOccurances = parameters.numberofOccurances;
@@ -107,7 +123,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
         $scope.normalCDRs = [];
         $scope.numberProfiles = [];
         $scope.relatedNumbers = [];
-        $scope.endDate = new Date();
+        
 
 
         
@@ -163,7 +179,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
                        response.UpdatedObject.NumberofOccurances = numberofOccurances;
                        response.UpdatedObject.CaseStatus = $scope.selectedStatus.name;
                        response.UpdatedObject.StatusId = $scope.selectedStatus.id;
-                       response.UpdatedObject.ValidTill = $scope.endDate;
+                       response.UpdatedObject.ValidTill = $scope.validTill;
                        $scope.onSubscriberCaseUpdated(response.UpdatedObject);
                    }
 
@@ -184,7 +200,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
         var subscriberCaseObject = {
             SubscriberNumber: $scope.subscriberNumber,
             StatusId: $scope.selectedStatus.id,
-            ValidTill: $scope.endDate
+            ValidTill: $scope.validTill
         };
         return subscriberCaseObject;
     }
