@@ -173,7 +173,9 @@
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\ExecuteStrategyProcessInputController.js" />
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\SuspicionAnalysis.html" />
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\SuspicionAnalysisController.js" />
+    <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\test.html" />
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\SuspiciousNumberDetails.html" />
+    <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\testController.js" />
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\SuspiciousNumberDetailsController.js" />
     <Content Include="FraudAnalysis\Views\Strategy\StrategyManagement.html" />
     <Content Include="FraudAnalysis\Views\Strategy\StrategyManagementController.js" />
