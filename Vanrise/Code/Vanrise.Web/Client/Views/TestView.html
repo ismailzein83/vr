@@ -73,6 +73,17 @@
         $('#datetimepicker3').datetimepicker({
             format: 'DD/MM/YYYY'
         });
+      
+        $('#datetimepicker3').on('dp.show', function (event) {
+            console.log("in show")
+            //console.log(divDatePicker + "dp.show")
+            //var self = $(this);
+            //var selfHeight = $(this).parent().height();
+            //var selfOffset = $(self).offset();
+            //var dropDown = self.parent().find('bootstrap-datetimepicker-widget')[0];
+            //$(dropDown).css({ position: 'fixed', top: selfOffset.top + selfHeight, left: 'auto' });
+        });
+        console.log($('#datetimepicker3'))
         $('#datetimepicker3').data("DateTimePicker").date(new Date())
         //alert($('#datetimepicker3').data("DateTimePicker").date())
     });

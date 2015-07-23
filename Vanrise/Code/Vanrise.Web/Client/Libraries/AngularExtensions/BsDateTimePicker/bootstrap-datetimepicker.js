@@ -10164,8 +10164,9 @@
             },
 
             place = function () {
-                var position = (component || element).position(),
-                    offset = (component || element).offset(),
+                
+                var position = component.position() || element.position(),
+                    offset = component.offset() || element.offset(),
                     vertical = options.widgetPositioning.vertical,
                     horizontal = options.widgetPositioning.horizontal,
                     parent;
@@ -10226,7 +10227,7 @@
                 }
 
                 widget.css({
-                    top: vertical === 'top' ? 'auto' : position.top + element.outerHeight(),
+                    top: vertical === 'top' ? 'auto' : position.top,
                     bottom: vertical === 'top' ? position.top + element.outerHeight() : 'auto',
                     left: horizontal === 'left' ? (parent === element ? 0 : position.left) : 'auto',
                     right: horizontal === 'left' ? 'auto' : parent.outerWidth() - element.outerWidth() - (parent === element ? 0 : position.left)
@@ -10973,6 +10974,7 @@
                 notifyEvent({
                     type: 'dp.show'
                 });
+               
                 return picker;
             },
 

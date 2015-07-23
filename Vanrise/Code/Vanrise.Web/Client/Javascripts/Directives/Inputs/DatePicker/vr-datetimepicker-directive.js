@@ -83,8 +83,19 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                                    $scope.ctrl.value = selectedDate;                                  
                                }
 
-                           });
+                           });                   
+                     if (divDatePicker.closest('.modal-body').length > 0) {
 
+                         divDatePicker
+                          .on('dp.show', function (e) {
+                              var self = $(this);
+                              var selfHeight = $(this).parent().height();
+                              var selfOffset = $(self).offset();
+                              var dropDown = self.parent().find('.bootstrap-datetimepicker-widget')[0];
+                              $(dropDown).css({ position: 'fixed', top: selfOffset.top + selfHeight, left: 'auto' });
+                          });
+                         
+                     }
                      var ctrl = $scope.ctrl;
 
                     $scope.$watch('ctrl.value', function () {
