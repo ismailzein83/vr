@@ -14,7 +14,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
     {
 
         [HttpPost]
-        public Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<SubscriberCase> UpdateStrategy(SubscriberCase subscriberCaseObject)
+        public Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<SubscriberCase> SaveSubscriberCase(SubscriberCase subscriberCaseObject)
         {
             CaseManagmentManager manager = new CaseManagmentManager();
 

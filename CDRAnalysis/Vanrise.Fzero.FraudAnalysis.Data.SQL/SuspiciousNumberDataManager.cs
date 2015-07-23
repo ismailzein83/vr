@@ -179,6 +179,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             fraudResult.StrategyName = reader["StrategyName"] as string;
             fraudResult.NumberofOccurances = (int)reader["NumberofOccurances"];
             fraudResult.CaseStatus = reader["CaseStatus"] as string;
+            fraudResult.StatusId =  GetReaderValue<int?>(reader,"StatusId")  ;
+            fraudResult.ValidTill = GetReaderValue<DateTime?>(reader, "ValidTill");
             return fraudResult;
         }
 

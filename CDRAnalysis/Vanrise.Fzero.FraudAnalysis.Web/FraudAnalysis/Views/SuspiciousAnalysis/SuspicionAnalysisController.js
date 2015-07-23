@@ -114,20 +114,29 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
 
     function detailFraudResult(fruadResult) {
+
+        
+
         var params = {
             dateDay: fruadResult.DateDay,
             subscriberNumber: fruadResult.SubscriberNumber,
             suspicionLevelName: fruadResult.SuspicionLevelName,
             fromDate: $scope.fromDate,
-            toDate: $scope.toDate
+            toDate: $scope.toDate,
+            statusId: fruadResult.StatusId,
+            validTill: fruadResult.ValidTill
         };
 
-        var settings = {
+        console.log('params')
+        console.log(params)
 
-        };
+        var settings = {};
 
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "Suspicious Number Details & Related Numbers";
+            modalScope.onSubscriberCaseUpdated = function (subscriberCase) {
+                mainGridAPI.itemUpdated(subscriberCase);
+            }
         };
         VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/SuspiciousAnalysis/SuspiciousNumberDetails.html", params, settings);
     }

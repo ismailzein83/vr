@@ -12,16 +12,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         public Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<SubscriberCase> SaveSubscriberCase(SubscriberCase subscriberCaseObject)
         {
             ICaseManagementDataManager manager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
-            bool updateActionSucc = manager.SaveSubscriberCase(subscriberCaseObject);
+            manager.SaveSubscriberCase(subscriberCaseObject);
             Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<SubscriberCase> updateOperationOutput = new Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<SubscriberCase>();
 
-            if (updateActionSucc)
-            {
-                updateOperationOutput.Result = Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = subscriberCaseObject;
-            }
-            else
-                updateOperationOutput.Result = Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.Result = Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationResult.Succeeded;
+            updateOperationOutput.UpdatedObject = subscriberCaseObject;
             return updateOperationOutput;
         }
 

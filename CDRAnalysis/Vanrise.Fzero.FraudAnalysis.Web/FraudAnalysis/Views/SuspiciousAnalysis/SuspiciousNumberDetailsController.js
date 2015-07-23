@@ -1,6 +1,6 @@
-﻿SuspiciousNumberDetailsController.$inject = ['$scope', 'StrategyAPIService', 'SuspicionAnalysisAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+﻿SuspiciousNumberDetailsController.$inject = ['$scope', 'StrategyAPIService', 'SuspicionAnalysisAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CaseManagementAPIService'];
 
-function SuspiciousNumberDetailsController($scope, StrategyAPIService, SuspicionAnalysisAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+function SuspiciousNumberDetailsController($scope, StrategyAPIService, SuspicionAnalysisAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CaseManagementAPIService) {
     var subscriberThresholdsGridAPI;
     var normalCDRGridAPI;
     var numberProfileGridAPI;
@@ -12,15 +12,23 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
 
     function loadParameters() {
 
-        var parameters = VRNavigationService.getParameters($scope);
+        $scope.statuses = [{ id: 1, name: 'Pending' }, { id: 2, name: 'Ignored' }, { id: 3, name: 'Confirmed' }, { id: 4, name: 'White List' }];
 
+        var parameters = VRNavigationService.getParameters($scope);
+        console.log('parameters')
+        console.log(parameters)
         $scope.subscriberNumber = undefined;
 
         if (parameters != undefined && parameters != null)
+        {
             $scope.subscriberNumber = parameters.subscriberNumber;
-        $scope.suspicionLevelName = parameters.suspicionLevelName;
-        $scope.fromDate = parameters.fromDate;
-        $scope.toDate = parameters.toDate;
+            $scope.suspicionLevelName = parameters.suspicionLevelName;
+            $scope.fromDate = parameters.fromDate;
+            $scope.toDate = parameters.toDate;
+            $scope.selectedStatus = UtilsService.getItemByVal($scope.statuses, parameters.statusId, "id");
+            $scope.endDate = parameters.validTill;
+        }
+            
         
     }
 
@@ -96,7 +104,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
         $scope.endDate = new Date();
 
 
-        $scope.statuses = [{ id: 1, name: 'Pending' }, { id: 2, name: 'Ignored' }, { id: 3, name: 'Confirmed' }, { id: 4, name: 'White List' }];
+        
 
 
         SuspiciousNumberDetailsController.isSubscriberThresholdsTabShown = true;
@@ -134,6 +142,38 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };
+
+
+        $scope.ApplyChangeStatus = function () {
+            var subscriberCaseObject = BuildSubscriberCaseObjfromScope();
+            CaseManagementAPIService.SaveSubscriberCase(subscriberCaseObject)
+           .then(function (response) {
+               if (VRNotificationService.notifyOnItemUpdated("SubscriberCase", response)) {
+                   if ($scope.onSubscriberCaseUpdated != undefined)
+                       $scope.onSubscriberCaseUpdated(response.UpdatedObject);
+
+                   console.log(response.UpdatedObject)
+
+                   $scope.modalContext.closeModal();
+               }
+           })
+            .catch(
+            function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope)
+            });
+        };
+
+    }
+
+
+    function BuildSubscriberCaseObjfromScope()
+    {
+        var subscriberCaseObject = {
+            SubscriberNumber: $scope.subscriberNumber,
+            StatusId: $scope.selectedStatus.id,
+            ValidTill: $scope.endDate
+        };
+        return subscriberCaseObject;
     }
 
 
@@ -170,20 +210,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
         $scope.selectedRelatedNumber = $scope.subscriberNumber;
     }
 
-    function getStrategy() {
-
-        return StrategyAPIService.GetStrategy($scope.strategyId)
-           .then(function (response) {
-               fillScopeFromStrategyObj(response);
-           })
-            .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            });
-    }
-
-
-
-
+   
 
 
     SuspiciousNumberDetailsController.viewVisibilityChanged = function () {
