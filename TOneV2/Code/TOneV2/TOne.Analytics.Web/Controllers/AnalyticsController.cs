@@ -38,11 +38,17 @@ namespace TOne.Analytics.Web.Controllers
             TrafficStatisticManager manager = new TrafficStatisticManager();
             return manager.GetTrafficStatisticSummary(input.TempTableKey, input.Filter, input.WithSummary, input.GroupKeys, input.From, input.To, input.FromRow, input.ToRow, input.OrderBy, input.IsDescending);
         }
-
+        [HttpGet]
         public IEnumerable<TrafficStatistic> GetTrafficStatistics(TrafficStatisticGroupKeys filterByColumn, string columnFilterValue, DateTime from, DateTime to)
         {
             TrafficStatisticManager manager = new TrafficStatisticManager();
             return manager.GetTrafficStatistics(filterByColumn, columnFilterValue, from, to);
+        }
+        [HttpGet]
+        public HttpResponseMessage ExportTrafficStatisticSummary(string tempTableKey)
+        {
+            TrafficStatisticManager manager = new TrafficStatisticManager();
+            return manager.ExportTrafficStatisticSummary(tempTableKey);
         }
 
         #endregion

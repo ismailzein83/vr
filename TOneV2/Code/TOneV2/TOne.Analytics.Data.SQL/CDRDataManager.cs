@@ -36,6 +36,24 @@ namespace TOne.Analytics.Data.SQL
             return rslt;
             
         }
+
+        public CDRBigResult GetCDRData(string tempTableKey, int nRecords)
+        {
+            TempTableName tempTableName = null;
+            if (tempTableKey != null)
+                tempTableName = GetTempTableName(tempTableKey);
+            CDRBigResult rslt = new CDRBigResult()
+            {
+                ResultKey = tempTableName.Key
+            };
+
+            int totalDataCount;
+            rslt.Data = GetData(tempTableName.TableName, 0, nRecords, BillingCDRMeasures.Attempt, true, out totalDataCount);
+            rslt.TotalCount = totalDataCount;
+
+            return rslt;
+        }
+
         #region Methods
         private void CreateTempTableIfNotExists(string tempTableName, CDRFilter filter, DateTime from, DateTime to, int nRecords, BillingCDROptionMeasures CDROption)
         {

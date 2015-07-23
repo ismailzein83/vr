@@ -202,6 +202,14 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                 });
                 return menuActions;
             };
+
+            $scope.onexport = function () {
+
+                return AnalyticsAPIService.ExportTrafficStatisticSummary($scope.filter.resultKey).then(function (response) {
+                    console.log(response)
+                    return UtilsService.downloadFile(response.data, response.headers, response.config);
+                });
+            }
         }
 
         function load() {

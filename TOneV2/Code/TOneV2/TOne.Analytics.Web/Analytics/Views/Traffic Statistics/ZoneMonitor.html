@@ -59,11 +59,11 @@
         </vr-row>
         <vr-row>
             <vr-columns colnum="12" simplecol>
-                <vr-datagrid data-on-ready="onMainGridReady" datasource="data"
+                <vr-datagrid data-on-ready="onMainGridReady" datasource="data" onexport="onexport"
                              pagersettings="mainGridPagerSettings" menuactions="gridMenuActions">
-                    <vr-datagridcolumn ng-repeat="groupKey in currentSearchCriteria.groupKeys" headertext="groupKey.gridHeader" field="'GroupKeyValues[' + $index + '].Name'"  columnindex="$index" widthfactor="15" enablehiding="'false'" isclickable="'true'" tag="groupKey" onclicked="onGroupKeyClicked"></vr-datagridcolumn>
+                    <vr-datagridcolumn ng-repeat="groupKey in currentSearchCriteria.groupKeys" headertext="groupKey.gridHeader" field="'GroupKeyValues[' + $index + '].Name'" columnindex="$index" widthfactor="15" enablehiding="'false'" isclickable="'true'" tag="groupKey" onclicked="onGroupKeyClicked"></vr-datagridcolumn>
                     <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" summaryfield="measure.propertyName" type="'Number'" tag="measure" onsortchanged="onMainGridSortChanged"></vr-datagridcolumn>
-                    <vr-datagridexpandablerow >
+                    <vr-datagridexpandablerow>
                         <div ng-include="'/Client/Modules/Analytics/Views/Traffic Statistics/TrafficStatisticsGrid.html'"></div>
                     </vr-datagridexpandablerow>
                 </vr-datagrid>

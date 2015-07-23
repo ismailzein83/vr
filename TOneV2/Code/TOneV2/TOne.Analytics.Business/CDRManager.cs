@@ -27,10 +27,11 @@ namespace TOne.Analytics.Business
             return _datamanager.GetCDRData(tempTableKey, filter, fromDate, toDate, fromRow, toRow, nRecords, CDROption, orderBy, isDescending);
         }
 
-        public HttpResponseMessage ExportCDRData(CDRBigResult records)
+        public HttpResponseMessage ExportCDRData(string tempTableKey, int nRecords)
         {
+            CDRBigResult records = _datamanager.GetCDRData(tempTableKey, nRecords);
             Workbook wbk = new Workbook();
-            Worksheet RateWorkSheet = wbk.Worksheets.Add("Top Entity Report");
+            Worksheet RateWorkSheet = wbk.Worksheets.Add("CDR Log");
             int Irow = 1;
             int Icol = 0;
             var headers = Enum.GetNames(typeof(BillingCDRMeasures));
@@ -69,7 +70,7 @@ namespace TOne.Analytics.Business
             ms.Position = 0;
             result.Content = new StreamContent(ms);
 
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.ms-excel");
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/binary");
             result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
             {
                 FileName = "CDRData.xls"

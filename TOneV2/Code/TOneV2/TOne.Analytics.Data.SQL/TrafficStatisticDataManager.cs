@@ -36,6 +36,7 @@ namespace TOne.Analytics.Data.SQL
                 rslt.Summary = GetSummary(tempTableName.TableName);
             return rslt;
         }
+     
 
         public IEnumerable<TrafficStatistic> GetTrafficStatistics(TrafficStatisticGroupKeys filterByColumn, string columnFilterValue, DateTime from, DateTime to)
         {
