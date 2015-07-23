@@ -102,13 +102,13 @@ namespace Vanrise.BI.Business
             }
 
             //Adding a chart to the worksheet
-            int chartIndex = RateWorkSheet.Charts.Add(Aspose.Cells.Charts.ChartType.Pyramid, 5, 0, 15, 5);
+            //int chartIndex = RateWorkSheet.Charts.Add(Aspose.Cells.Charts.ChartType.Pyramid, 5, 0, 15, 5);
 
             // Accessing the instance of the newly added chart
-            Aspose.Cells.Charts.Chart chart = RateWorkSheet.Charts[chartIndex];
+            //Aspose.Cells.Charts.Chart chart = RateWorkSheet.Charts[chartIndex];
 
             // Adding SeriesCollection (chart data source) to the chart ranging from "A1" cell to "B3"
-            chart.NSeries.Add("C3:D5", true);
+            //chart.NSeries.Add("C3:D5", true);
 
 
             wbk.Save("D:\\book1.xls");
@@ -170,13 +170,13 @@ namespace Vanrise.BI.Business
             }
 
             //Adding a chart to the worksheet
-            int chartIndex = RateWorkSheet.Charts.Add(Aspose.Cells.Charts.ChartType.Pyramid, 5, 0, 15, 5);
+            //int chartIndex = RateWorkSheet.Charts.Add(Aspose.Cells.Charts.ChartType.Pyramid, 5, 0, 15, 5);
 
-            // Accessing the instance of the newly added chart
-            Aspose.Cells.Charts.Chart chart = RateWorkSheet.Charts[chartIndex];
+            //// Accessing the instance of the newly added chart
+            //Aspose.Cells.Charts.Chart chart = RateWorkSheet.Charts[chartIndex];
 
-            // Adding SeriesCollection (chart data source) to the chart ranging from "A1" cell to "B3"
-            chart.NSeries.Add("C3:D5", true);
+            //// Adding SeriesCollection (chart data source) to the chart ranging from "A1" cell to "B3"
+            //chart.NSeries.Add("C3:D5", true);
 
 
             wbk.Save("D:\\book1.xls");
