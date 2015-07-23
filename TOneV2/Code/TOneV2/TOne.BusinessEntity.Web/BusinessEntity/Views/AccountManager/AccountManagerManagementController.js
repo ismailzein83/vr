@@ -141,8 +141,11 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
 
     function fillAssignedCarriers(assignedCarriers)
     {
+        console.log(assignedCarriers);
+
         angular.forEach(assignedCarriers, function (item) {
             var object = {
+                CarrierName: item.CarrierName,
                 CarrierAccountId: item.CarrierAccountId,
                 IsCustomer: (item.RelationType == 1) ? 'True' : 'False',
                 IsSupplier: (item.RelationType == 2) ? 'True' : 'False',

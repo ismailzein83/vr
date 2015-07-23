@@ -85,6 +85,7 @@ namespace TOne.BusinessEntity.Data.SQL
             AssignedCarrier assignedCarrier = new AssignedCarrier
             {
                 UserId = (int)reader["UserId"],
+                CarrierName = reader["CarrierName"] as string,
                 CarrierAccountId = reader["CarrierAccountId"] as string,
                 RelationType = (int)reader["RelationType"]
             };
