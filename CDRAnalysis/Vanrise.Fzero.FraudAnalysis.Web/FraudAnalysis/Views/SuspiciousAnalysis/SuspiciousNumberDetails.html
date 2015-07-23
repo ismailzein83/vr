@@ -123,14 +123,22 @@
             </vr-row>
 
             <vr-row>
-                <vr-columns colnum="3">
-                    <vr-select datasource="statuses" datatextfield="name" datavaluefield="id" selectedvalues="selectedStatus" onselectionchanged="selectedStatusChanged" label="Status" isrequired></vr-select>
-                </vr-columns>
+
+                <vr-section title="Update Case: ">
+                    <div style="max-height:285px;overflow-y:auto;overflow-x:hidden">
+                        <vr-columns colnum="2">
+                            <vr-select datasource="statuses" datatextfield="name" datavaluefield="id" selectedvalues="selectedStatus" onselectionchanged="selectedStatusChanged" label="Status" isrequired></vr-select>
+                        </vr-columns>
 
 
-                <vr-columns colnum="3">
-                    <vr-datetimepicker type="date" value="validTill" label="Valid Till" isrequired ng-show="selectedStatus.id==4"></vr-datetimepicker>
-                </vr-columns>
+                        <vr-columns colnum="2">
+                            <vr-datetimepicker type="date" value="validTill" label="Valid Till"></vr-datetimepicker>
+                        </vr-columns>
+                       
+                    </div>
+                </vr-section>
+
+
 
 
 
@@ -140,6 +148,7 @@
 
 
     <div>
+
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
                 <vr-button type="ApplyChanges" formname="formSuspiciousNumberDetails" data-onclick="ApplyChangeStatus" isasynchronous=" true"></vr-button>
