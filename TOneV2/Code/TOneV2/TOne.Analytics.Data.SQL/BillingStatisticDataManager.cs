@@ -979,54 +979,43 @@ namespace TOne.Analytics.Data.SQL
             string durationField = " SaleDuration / 60.0 ";
             string attemptsField = " NumberOfCalls ";
             string date = fromDate.ToString();
-            StringBuilder query = new StringBuilder(@" Set RowCount @TopDestinations
+            StringBuilder queryBuilder = new StringBuilder(@" Set RowCount @TopDestinations
                             SELECT SZ.Name AS SaleZone,SZ.ZoneID AS SaleZoneID,SUM(CASE WHEN Calldate BETWEEN @FromDate AND @ToDate THEN #ValueColumn# ELSE 0 END) AS [#ValueColumn#]                         
-                            From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date #IndexesValue# ))
+                            From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date #Indexes# ))
                                 Join Zone SZ With(Nolock) On SZ.ZoneID=BS.SaleZoneID 
                             WHERE BS.CallDate BETWEEN @FromDate AND @ToDate
                                 AND BS.NumberOfCalls >  @Attempts
-                                #CustomerFilter#
-                                #SupplierFilter#
-                                #ZoneFilter#
+                                #Filters#
                             GROUP BY SZ.Name ,SZ.ZoneID
                             ORDER BY SUM(BS.SaleDuration / 60.0) DESC ");
            if(isDuration)
-                query.Replace("#ValueColumn#", durationField);
-           else query.Replace("#ValueColumn#", attemptsField);
-           if (!string.IsNullOrEmpty(customerId) && !string.IsNullOrEmpty(supplierId))
+                queryBuilder.Replace("#ValueColumn#", durationField);
+           else queryBuilder.Replace("#ValueColumn#", attemptsField);
+
+           StringBuilder filterBuilder = new StringBuilder();
+           StringBuilder indexBuilder = new StringBuilder();
+
+           if (!String.IsNullOrEmpty(customerId))
            {
-               query.Replace("#IndexesValue#", " ,IX_Billing_Stats_Customer,IX_Billing_Stats_Supplier ");
-               query.Replace("#CustomerFilter#", " AND BS.CustomerID=@CustomerId ");
-               query.Replace("#SupplierFilter#", " AND BS.SupplierID=@SupplierId ");
+               filterBuilder.Append(" AND BS.CustomerID=@CustomerId ");
+               indexBuilder.Append(",IX_Billing_Stats_Customer");
            }
-         //  else   query.Replace("#IndexesValue#", !string.IsNullOrEmpty(customerId) ? " ,IX_Billing_Stats_Customer " : !string.IsNullOrEmpty(supplierId) ? " ,IX_Billing_Stats_Supplier " : string.Empty);
-         
-           else if (!string.IsNullOrEmpty(customerId)) {
-               query.Replace("#IndexesValue#", " ,IX_Billing_Stats_Customer ");
-               query.Replace("#CustomerFilter#", " AND BS.CustomerID=@CustomerId ");
-               query.Replace("#SupplierFilter#", " ");
-           
-           }
-           else if (!string.IsNullOrEmpty(supplierId)) {
-               query.Replace("#IndexesValue#", " ,IX_Billing_Stats_Supplier ");
-               query.Replace("#CustomerFilter#", "  ");
-               query.Replace("#SupplierFilter#", " AND BS.SupplierID=@SupplierId ");
-           }
-           else if (string.IsNullOrEmpty(customerId) && string.IsNullOrEmpty(supplierId)) {
 
-               query.Replace("#IndexesValue#", " ");
-               query.Replace("#CustomerFilter#", "  ");
-               query.Replace("#SupplierFilter#", " ");
+           if (!String.IsNullOrEmpty(supplierId))
+           {
+               filterBuilder.Append(" AND BS.SupplierID=@SupplierId  ");
+               indexBuilder.Append(",IX_Billing_Stats_Supplier");
            }
-          
+
            if (zoneId != "0")
-                query.Replace("#ZoneFilter#", " AND SZ.ZoneID= @ZoneId ");
-           else query.Replace("#ZoneFilter#",string.Empty);
-           
+               filterBuilder.Append(" AND SZ.ZoneID= @ZoneId ");
+
+            queryBuilder.Replace("#Filters#", filterBuilder.ToString());
+            queryBuilder.Replace("#Indexes#", indexBuilder.ToString());
 
 
 
-            return GetItemsText(query.ToString(), (reader) => DestinationVolumeTrafficMapper(reader, isDuration, durationField, attemptsField),
+            return GetItemsText(queryBuilder.ToString(), (reader) => DestinationVolumeTrafficMapper(reader, isDuration, durationField, attemptsField),
             (cmd) =>
             {
                 cmd.Parameters.Add(new SqlParameter("@TopDestinations", topDestinations));
