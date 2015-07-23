@@ -26,6 +26,8 @@ function DataSourceManagementController($scope, DataSourceAPIService, VRModalSer
     }
 
     function getData() {
+        $scope.isGettingData = true;
+
         var pageInfo = mainGridAPI.getPageInfo();
 
         var name = $scope.name != undefined ? $scope.name : '';
@@ -33,6 +35,10 @@ function DataSourceManagementController($scope, DataSourceAPIService, VRModalSer
             angular.forEach(response, function (item) {
                 $scope.dataSources.push(item);
             });
+        }).catch(function (error) {
+            VRNotificationService.notifyExceptionWithClose(error, $scope);
+        }).finally(function () {
+            $scope.isGettingData = false;
         });
     }
 

@@ -47,38 +47,51 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
     }
 
     function load() {
-
         $scope.isGettingData = true;
-        UtilsService.waitMultipleAsyncOperations([loadAdapters]).finally(function () {
+        return UtilsService.waitMultipleAsyncOperations([loadAdapters]).then(function () {
             if (editMode) {
-                getDataSource();
+                getDataSourceToEdit();
             }
             else {
                 $scope.selectedAdapterType = UtilsService.getItemByVal($scope.adapterTypes, 1, "AdapterTypeId");
+                $scope.isGettingData = false;
             }
 
         }).catch(function (error) {
-            VRNotificationService.notifyExceptionWithClose(error, $scope);
-        }).finally(function () {
+            VRNotificationService.notifyException(error, $scope);
             $scope.isGettingData = false;
         });
     }
 
+    function getDataSourceToEdit() {
+        return UtilsService.waitMultipleAsyncOperations([getDataSource]).then(function () {
+            getDataSourceTask();
+
+        }).catch(function (error) {
+            VRNotificationService.notifyException(error, $scope);
+            $scope.isGettingData = false;
+        });
+    }
+    
+    var dataSourceObjToEdit;
     function getDataSource() {
         return DataSourceAPIService.GetDataSource(dataSourceId)
            .then(function (dataSourceResponse) {
-               SchedulerTaskAPIService.GetTask(dataSourceResponse.TaskId)
+               dataSourceObjToEdit = dataSourceResponse;
+           });
+    }
+
+    function getDataSourceTask() {
+        return SchedulerTaskAPIService.GetTask(dataSourceObjToEdit.TaskId)
                .then(function (taskResponse) {
-                   var dataSourceObj = { DataSourceData: dataSourceResponse, TaskData: taskResponse }
+                   var dataSourceObj = { DataSourceData: dataSourceObjToEdit, TaskData: taskResponse }
                    fillScopeFromDataSourceObj(dataSourceObj);
                })
                .catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+                   VRNotificationService.notifyException(error, $scope);
+               }).finally(function () {
+                   $scope.isGettingData = false;
                });
-           })
-            .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            });
     }
 
     function loadAdapters() {
