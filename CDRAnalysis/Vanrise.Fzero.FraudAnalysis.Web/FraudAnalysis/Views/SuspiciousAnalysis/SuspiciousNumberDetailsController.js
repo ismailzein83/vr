@@ -4,6 +4,9 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
     var subscriberThresholdsGridAPI;
     var normalCDRGridAPI;
     var numberProfileGridAPI;
+    var lastOccurance;
+    var strategyName;
+    var numberofOccurances;
 
     loadParameters();
     defineScope();
@@ -15,8 +18,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
         $scope.statuses = [{ id: 1, name: 'Pending' }, { id: 2, name: 'Ignored' }, { id: 3, name: 'Confirmed' }, { id: 4, name: 'White List' }];
 
         var parameters = VRNavigationService.getParameters($scope);
-        console.log('parameters')
-        console.log(parameters)
+       
         $scope.subscriberNumber = undefined;
 
         if (parameters != undefined && parameters != null)
@@ -27,6 +29,10 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
             $scope.toDate = parameters.toDate;
             $scope.selectedStatus = UtilsService.getItemByVal($scope.statuses, parameters.statusId, "id");
             $scope.endDate = parameters.validTill;
+            lastOccurance = parameters.lastOccurance;
+            strategyName = parameters.strategyName;
+            numberofOccurances = parameters.numberofOccurances;
+
         }
             
         
@@ -150,9 +156,17 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
            .then(function (response) {
                if (VRNotificationService.notifyOnItemUpdated("SubscriberCase", response)) {
                    if ($scope.onSubscriberCaseUpdated != undefined)
+                   {
+                       response.UpdatedObject.SuspicionLevelName = $scope.suspicionLevelName;
+                       response.UpdatedObject.LastOccurance = lastOccurance;
+                       response.UpdatedObject.StrategyName = strategyName;
+                       response.UpdatedObject.NumberofOccurances = numberofOccurances;
+                       response.UpdatedObject.CaseStatus = $scope.selectedStatus.name;
+                       response.UpdatedObject.StatusId = $scope.selectedStatus.id;
+                       response.UpdatedObject.ValidTill = $scope.endDate;
+                       console.log(response.UpdatedObject)
                        $scope.onSubscriberCaseUpdated(response.UpdatedObject);
-
-                   console.log(response.UpdatedObject)
+                   }
 
                    $scope.modalContext.closeModal();
                }

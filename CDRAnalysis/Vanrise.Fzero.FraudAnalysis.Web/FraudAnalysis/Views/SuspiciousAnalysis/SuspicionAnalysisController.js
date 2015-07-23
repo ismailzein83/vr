@@ -115,8 +115,6 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
     function detailFraudResult(fruadResult) {
 
-        
-
         var params = {
             dateDay: fruadResult.DateDay,
             subscriberNumber: fruadResult.SubscriberNumber,
@@ -124,17 +122,19 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
             fromDate: $scope.fromDate,
             toDate: $scope.toDate,
             statusId: fruadResult.StatusId,
-            validTill: fruadResult.ValidTill
+            validTill: fruadResult.ValidTill,
+            lastOccurance: fruadResult.LastOccurance,
+            strategyName: fruadResult.StrategyName,
+            numberofOccurances: fruadResult.NumberofOccurances
         };
 
-        console.log('params')
-        console.log(params)
 
         var settings = {};
 
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "Suspicious Number Details & Related Numbers";
             modalScope.onSubscriberCaseUpdated = function (subscriberCase) {
+               
                 mainGridAPI.itemUpdated(subscriberCase);
             }
         };
