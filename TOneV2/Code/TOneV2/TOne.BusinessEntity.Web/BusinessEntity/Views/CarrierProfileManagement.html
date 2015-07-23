@@ -2,13 +2,13 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-textbox label="Name" value="name"></vr-textbox>
                 </vr-columns>
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-textbox label="Company Name" value="companyName"></vr-textbox>
                 </vr-columns>
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-textbox label="Billing Email" value="billingEmail"></vr-textbox>
                 </vr-columns>
             </vr-row>
@@ -22,8 +22,8 @@
         </vr-row>
         <div vr-loader="isLoading">
             <vr-row>
-                <vr-columns colnum="12" simplecol>
-                    <vr-datagrid datasource="CarrierProfileDataSource" loadmoredata="loadMoreData" on-ready="gridReady" menuactions="gridMenuActions">
+                <vr-columns width="fullrow">
+                    <vr-datagrid datasource="CarrierProfileDataSource" loadmoredata="loadMoreData" on-ready="gridReady" menuactions="gridMenuActions" idfield="ProfileID">
                         <vr-datagridcolumn headertext="'Name'" field="'Name'">
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Company Name'" field="'CompanyName'">

@@ -1,6 +1,7 @@
 ﻿CarrierProfileEditorController.$inject = ['$scope', 'CarrierAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 function CarrierProfileEditorController($scope, CarrierAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
     var editMode;
+    var dummyId = 0;//this is used to avoid duplicate in ng-repeat
     loadParameters();
     defineScope();
     load();
@@ -23,6 +24,14 @@ function CarrierProfileEditorController($scope, CarrierAPIService, VRModalServic
 
         $scope.close = function () {
             $scope.modalContext.closeModal()
+        };
+
+        $scope.addTelephone = function () {
+            addTelephone("");
+        };
+
+        $scope.addFax = function () {
+            addFax("");
         };
     }
 
@@ -49,16 +58,55 @@ function CarrierProfileEditorController($scope, CarrierAPIService, VRModalServic
         $scope.Country = CarrierAccountObject.Country;
         $scope.City = CarrierAccountObject.City;
         $scope.RegistrationNumber = CarrierAccountObject.RegistrationNumber;
-        $scope.Telephone1 = CarrierAccountObject.Telephone[0];
-        $scope.Telephone2 = CarrierAccountObject.Telephone[1];
-        $scope.Telephone3 = CarrierAccountObject.Telephone[2];
-        $scope.Fax1 = CarrierAccountObject.Fax[0];
-        $scope.Fax2 = CarrierAccountObject.Fax[1];
-        $scope.Fax3 = CarrierAccountObject.Fax[2];
+        $scope.telephones = [];
+        if (CarrierAccountObject.Telephone != undefined) {
+            for (var i = 0; i < CarrierAccountObject.Telephone.length; i++) {
+                var telephoneNumber = CarrierAccountObject.Telephone[i];
+                if (telephoneNumber != "")
+                    addTelephone(telephoneNumber);
+            }
+        }
+
+        $scope.faxes = [];
+        if (CarrierAccountObject.Telephone != undefined) {
+            for (var i = 0; i < CarrierAccountObject.Fax.length; i++) {
+                var faxNumber = CarrierAccountObject.Fax[i];
+                if (faxNumber != "")
+                    addFax(faxNumber);
+            }
+        }
+
         $scope.Address1 = CarrierAccountObject.Address1;
         $scope.Address2 = CarrierAccountObject.Address2;
         $scope.Address3 = CarrierAccountObject.Address3;
         $scope.Website = CarrierAccountObject.Website;
+    }
+
+    
+    function addTelephone(number) {
+        var telephone = {
+            dummyId: dummyId++,
+            number: number,
+            remove: function () {
+                var index = $scope.telephones.indexOf(telephone);
+                if(index >= 0)
+                    $scope.telephones.splice(index, 1);
+            }
+        };
+        $scope.telephones.push(telephone);
+    }
+
+    function addFax(number) {
+        var fax = {
+            dummyId: dummyId++,
+            number: number,
+            remove: function () {
+                var index = $scope.faxes.indexOf(fax);
+                if (index >= 0)
+                    $scope.faxes.splice(index, 1);
+            }
+        };
+        $scope.faxes.push(fax);
     }
 
     function updateCarrierProfile() {
