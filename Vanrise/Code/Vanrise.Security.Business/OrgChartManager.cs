@@ -89,6 +89,10 @@ namespace Vanrise.Security.Business
                     deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
                 }
             }
+            else
+            {
+                deleteOperationOutput.Result = DeleteOperationResult.InUse;
+            }
             
             return deleteOperationOutput;
         }

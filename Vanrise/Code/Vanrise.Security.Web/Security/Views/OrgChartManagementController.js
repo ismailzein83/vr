@@ -90,11 +90,13 @@ function OrgChartManagementController($scope, OrgChartAPIService, VRModalService
         var message = 'Do you want to delete ' + orgChartObject.Name + '?';
         VRNotificationService.showConfirmation(message).then(function (response) {
             if (response == true) {
-                return OrgChartAPIService.DeleteOrgChart(orgChartObject.Id).then(function (response) {
+                return OrgChartAPIService.DeleteOrgChart(orgChartObject.Id).then(function (deletionResponse) {
+                    VRNotificationService.notifyOnItemDeleted("Org Chart", deletionResponse);
+
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
+
                 }).finally(function () {
-                    VRNotificationService.showSuccess(orgChartObject.Name + ' was successfully deleted');
                     $scope.isGettingData = false;
                 });
             }
