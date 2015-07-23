@@ -34,10 +34,18 @@ namespace TOne.BusinessEntity.Business
             return dataManager.GetAssignedCarriers(memberIds);
         }
 
-        public void AssignCarriers(UpdatedAccountManagerCarrier[] updatedCarriers)
+        public Vanrise.Entities.UpdateOperationOutput<object> AssignCarriers(UpdatedAccountManagerCarrier[] updatedCarriers)
         {
             IAssignedCarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<IAssignedCarrierDataManager>();
-            dataManager.AssignCarriers(updatedCarriers);
+            bool updateActionSucc = dataManager.AssignCarriers(updatedCarriers);
+
+            Vanrise.Entities.UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
+
+            updateOperationOutput.Result = updateActionSucc ? Vanrise.Entities.UpdateOperationResult.Succeeded : Vanrise.Entities.UpdateOperationResult.Failed;
+            
+            updateOperationOutput.UpdatedObject = null;
+           
+            return updateOperationOutput;
         }
 
         public int? GetLinkedOrgChartId()

@@ -47,10 +47,10 @@ namespace TOne.BusinessEntity.Web.Controllers
         }
 
         [HttpPost]
-        public void AssignCarriers(UpdatedAccountManagerCarrier[] updatedCarriers)
+        public Vanrise.Entities.UpdateOperationOutput<object> AssignCarriers(UpdatedAccountManagerCarrier[] updatedCarriers)
         {
             AccountManagerManager manager = new AccountManagerManager();
-            manager.AssignCarriers(updatedCarriers);
+            return manager.AssignCarriers(updatedCarriers);
         }
     }
 }

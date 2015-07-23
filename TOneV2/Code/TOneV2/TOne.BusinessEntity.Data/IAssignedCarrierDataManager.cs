@@ -11,6 +11,6 @@ namespace TOne.BusinessEntity.Data
     {
         List<AssignedCarrier> GetAssignedCarriers(List<int> userIds);
 
-        void AssignCarriers(UpdatedAccountManagerCarrier[] updatedCarriers);
+        bool AssignCarriers(UpdatedAccountManagerCarrier[] updatedCarriers);
     }
 }

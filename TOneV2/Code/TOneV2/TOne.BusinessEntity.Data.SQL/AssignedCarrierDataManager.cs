@@ -23,16 +23,18 @@ namespace TOne.BusinessEntity.Data.SQL
             });
         }
 
-        public void AssignCarriers(UpdatedAccountManagerCarrier[] updatedCarriers)
+        public bool AssignCarriers(UpdatedAccountManagerCarrier[] updatedCarriers)
         {
             DataTable table = this.BuildUpdatedCarriersTable(updatedCarriers);
 
-            ExecuteNonQuerySPCmd("BEntity.sp_AccountManager_AssignCarriers", (cmd) =>
+            int recordesEffected = ExecuteNonQuerySPCmd("BEntity.sp_AccountManager_AssignCarriers", (cmd) =>
             {
                 var tableParameter = new SqlParameter("@UpdatedCarriers", SqlDbType.Structured);
                 tableParameter.Value = table;
                 cmd.Parameters.Add(tableParameter);
             });
+
+            return recordesEffected > 0;
         }
 
         private DataTable BuildUpdatedCarriersTable(UpdatedAccountManagerCarrier[] updatedCarriers)
