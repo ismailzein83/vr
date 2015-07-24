@@ -69,22 +69,7 @@ namespace TOne.BusinessEntity.Data.SQL
             return RetrieveData(input, createTempTableAction, CarrierAccountMapper);
         }
 
-        CarrierAccount CarrierAccountMapper(IDataReader reader)
-        {
-            return new CarrierAccount
-            {
-                CarrierAccountId = reader["CarrierAccountId"] as string,
-                ProfileId = (Int16)reader["ProfileId"],
-                ProfileName = reader["ProfileName"] as string,
-                ProfileCompanyName = reader["ProfileCompanyName"] as string,
-                ActivationStatus = (byte)reader["ActivationStatus"],
-                RoutingStatus = (byte)reader["RoutingStatus"],
-                AccountType = (byte)reader["AccountType"],
-                CustomerPaymentType = (byte)reader["CustomerPaymentType"],
-                SupplierPaymentType = (byte)reader["SupplierPaymentType"],
-                NameSuffix = reader["NameSuffix"] as string
-            };
-        }
+       
 
         public CarrierAccount GetCarrierAccount(string carrierAccountId)
         {
@@ -132,6 +117,23 @@ namespace TOne.BusinessEntity.Data.SQL
             return new CarrierAccountInfo
             {
                 CarrierAccountId = reader["CarrierAccountID"] as string
+            };
+        }
+
+        CarrierAccount CarrierAccountMapper(IDataReader reader)
+        {
+            return new CarrierAccount
+            {
+                CarrierAccountId = reader["CarrierAccountId"] as string,
+                ProfileId = (Int16)reader["ProfileId"],
+                ProfileName = reader["ProfileName"] as string,
+                ProfileCompanyName = reader["ProfileCompanyName"] as string,
+                ActivationStatus = (byte)reader["ActivationStatus"],
+                RoutingStatus = (byte)reader["RoutingStatus"],
+                AccountType = (byte)reader["AccountType"],
+                CustomerPaymentType = (byte)reader["CustomerPaymentType"],
+                SupplierPaymentType = (byte)reader["SupplierPaymentType"],
+                NameSuffix = reader["NameSuffix"] as string
             };
         }
 

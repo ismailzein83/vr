@@ -44,15 +44,71 @@ namespace TestRuntime
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
 
-            QueueGroupType queueGroupType = new QueueGroupType() { ChildItems = new Dictionary<string, QueueGroupTypeItem>() };
-            var cdrRaw = new QueueGroupTypeItem(typeof(CDRBatch).AssemblyQualifiedName);
-            queueGroupType.ChildItems.Add("CDR Raw", cdrRaw);
-            var cdrRawForBilling = new QueueGroupTypeItem (typeof(CDRBatch).AssemblyQualifiedName );            
-            queueGroupType.ChildItems.Add("CDR Raw for Billing", cdrRawForBilling);
-            var cdrBilling = new QueueGroupTypeItem(typeof(CDRBillingBatch).AssemblyQualifiedName);
-            cdrRawForBilling.ChildItems.Add("CDR Billing", cdrBilling);
-            var cdrMain = new QueueGroupTypeItem(typeof(CDRMainBatch).AssemblyQualifiedName);
-            cdrBilling.ChildItems.Add("CDR Main", cdrMain);
+            QueueExecutionFlowTree queueFlowTree = new QueueExecutionFlowTree
+            {
+                Activities = new List<BaseExecutionActivity>
+                {
+                    new ParallelExecutionActivity <CDRBatch> {
+                         Activities = new List<BaseExecutionActivity>
+                         {
+                              new QueueStageExecutionActivity<CDRBatch> { StageName = "Store CDR Raws", QueueName="CDRRaw"},
+                              new SequenceExecutionActivity{ 
+                                  Activities = new List<BaseExecutionActivity>                              
+                                  {
+                                      new QueueStageExecutionActivity<CDRBatch>  { StageName = "Process Raw CDRs",  QueueName = "CDRRawForBilling"},
+                                      new ParallelExecutionActivity <CDRBillingBatch>
+                                      {
+                                          Activities = new List<BaseExecutionActivity>
+                                          {
+                                              new SequenceExecutionActivity 
+                                              {
+                                                    Activities = new List<BaseExecutionActivity>
+                                                    {
+                                                        new QueueStageExecutionActivity<CDRBillingBatch>  { StageName = "Process Billing CDRs", QueueName ="CDRBilling"},
+                                                        new SplitExecutionActivity 
+                                                        { 
+                                                            Activities = new List<BaseExecutionActivity>
+                                                            {
+                                                                new QueueStageExecutionActivity<CDRMainBatch>  { StageName = "Store CDR Main",  QueueName = "CDRMain"},
+                                                                new QueueStageExecutionActivity<CDRInvalidBatch>  { StageName = "Store CDR Invalid",  QueueName = "CDRInvalid"}
+                                                            }
+                                                        }
+                                                    }
+                                              },
+                                              new SequenceExecutionActivity
+                                              {
+                                                  Activities = new List<BaseExecutionActivity>
+                                                  {
+                                                      new QueueStageExecutionActivity<CDRBillingBatch> { StageName = "Process Traffic Statistics",QueueName = "CDRBillingForTrafficStats"},
+                                                      new QueueStageExecutionActivity<TrafficStatisticBatch>  { StageName = "Store Traffic Statistics", QueueName = "TrafficStatistics"}
+                                                  }
+                                              },
+                                              new SequenceExecutionActivity
+                                              {
+                                                  Activities = new List<BaseExecutionActivity>
+                                                  {
+                                                      new QueueStageExecutionActivity<CDRBillingBatch> { StageName = "Process Daily Traffic Statistics",  QueueName = "CDRBillingForDailyTrafficStats"},
+                                                      new QueueStageExecutionActivity<TrafficStatisticDailyBatch>  { StageName = "Store Daily Traffic Statistics", QueueName = "TrafficStatisticsDaily"}
+                                                  }
+                                              }
+                                          }
+                                      }
+                                  }
+                              }
+                         }
+                    }
+                }
+            };
+            var tree = Vanrise.Common.Serializer.Serialize(queueFlowTree);
+            ////QueueGroupType queueGroupType = new QueueGroupType() { ChildItems = new Dictionary<string, QueueGroupTypeItem>() };
+            ////var cdrRaw = new QueueGroupTypeItem(typeof(CDRBatch).AssemblyQualifiedName);
+            ////queueGroupType.ChildItems.Add("CDR Raw", cdrRaw);
+            ////var cdrRawForBilling = new QueueGroupTypeItem (typeof(CDRBatch).AssemblyQualifiedName );            
+            ////queueGroupType.ChildItems.Add("CDR Raw for Billing", cdrRawForBilling);
+            ////var cdrBilling = new QueueGroupTypeItem(typeof(CDRBillingBatch).AssemblyQualifiedName);
+            ////cdrRawForBilling.ChildItems.Add("CDR Billing", cdrBilling);
+            ////var cdrMain = new QueueGroupTypeItem(typeof(CDRMainBatch).AssemblyQualifiedName);
+            ////cdrBilling.ChildItems.Add("CDR Main", cdrMain);
             //Console.ReadKey();
             //host.Stop();
             //Console.ReadKey();
