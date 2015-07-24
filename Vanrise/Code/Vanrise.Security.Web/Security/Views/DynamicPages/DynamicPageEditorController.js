@@ -67,12 +67,13 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             
         }
         $scope.save = function () {
+            if ($scope.selectedMenuNode == undefined)
+                return VRNotificationService.showWarning("You Should Select Menu Location Before Saving!!");
             buildContentsFromScope();
             buildViewObjFromScope(); 
             if ($scope.summaryContents.length == 0 && $scope.bodyContents.length == 0)
                 return VRNotificationService.showWarning("You Should Add Widgets Before Saving!!");
-            if ($scope.selectedMenuNode==undefined)
-                    return VRNotificationService.showWarning("You Should Select Menu Location Before Saving!!");
+          
             if ($scope.isEditMode)  
                 return updateView(); 
             else  
