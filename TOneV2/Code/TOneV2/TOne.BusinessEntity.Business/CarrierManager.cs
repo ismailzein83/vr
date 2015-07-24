@@ -40,6 +40,11 @@ namespace TOne.BusinessEntity.Business
                     );
         }
 
+        public Vanrise.Entities.IDataRetrievalResult<CarrierAccount> GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input)
+        {
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, _dataManager.GetFilteredCarrierAccounts(input));
+        }
+
         public Dictionary<int, CarrierGroup> GetAllCarrierGroups()
         {
             TOneCacheManager cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<TOneCacheManager>();

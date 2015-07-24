@@ -15,6 +15,8 @@ namespace TOne.BusinessEntity.Data
 
         List<CarrierAccount> GetCarrierAccounts(string name, string companyName, int from, int to);
 
+        Vanrise.Entities.BigResult<CarrierAccount> GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input);
+
         CarrierAccount GetCarrierAccount(string carrierAccountId);
 
         int InsertCarrierTest(string CarrierAccountID, string Name);

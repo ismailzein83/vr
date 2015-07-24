@@ -8,7 +8,8 @@ var serviceObj = function (BaseAPIService) {
         GetCarrierAccount: GetCarrierAccount,
         UpdateCarrierAccount: UpdateCarrierAccount,
         GetFilteredProfiles: GetFilteredProfiles,
-        GetCarrierProfile: GetCarrierProfile
+        GetCarrierProfile: GetCarrierProfile,
+        GetFilteredCarrierAccounts: GetFilteredCarrierAccounts
     });
     function GetCarriers(carrierType) {
         return BaseAPIService.get("/api/Carrier/GetCarriers",
@@ -29,6 +30,11 @@ var serviceObj = function (BaseAPIService) {
                 Name: Name
             });
     }
+    
+    function GetFilteredCarrierAccounts(input) {
+        return BaseAPIService.post("/api/Carrier/GetFilteredCarrierAccounts", input);
+    }
+
     function GetCarrierAccounts(ProfileName, ProfileCompanyName, from, to) {
         return BaseAPIService.get("/api/Carrier/GetCarrierAccounts",
             {

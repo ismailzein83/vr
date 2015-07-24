@@ -50,6 +50,7 @@
     <Compile Include="AssignedCarrier.cs" />
     <Compile Include="CarrierAccount.cs" />
     <Compile Include="CarrierAccountInfo.cs" />
+    <Compile Include="CarrierAccountQuery.cs" />
     <Compile Include="CarrierGroup.cs" />
     <Compile Include="CarrierInfo.cs" />
     <Compile Include="CarrierProfile.cs" />

@@ -9,7 +9,7 @@ using TOne.BusinessEntity.Entities;
 
 namespace TOne.BusinessEntity.Web.Controllers
 {
-    public class CarrierController : ApiController
+    public class CarrierController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpGet]
         public List<CarrierInfo> GetCarriers(CarrierType carrierType)
@@ -24,6 +24,13 @@ namespace TOne.BusinessEntity.Web.Controllers
         {
             CarrierManager manager = new CarrierManager();
             return manager.InsertCarrierTest(carrierInfo.CarrierAccountID, carrierInfo.Name);
+        }
+
+        [HttpPost]
+        public object GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input)
+        {
+            CarrierManager manager = new CarrierManager();
+            return GetWebResponse(input, manager.GetFilteredCarrierAccounts(input));
         }
 
         [HttpGet]

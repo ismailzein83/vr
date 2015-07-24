@@ -59,6 +59,33 @@ namespace TOne.BusinessEntity.Data.SQL
                     };
                 }, name, companyName, from, to);
         }
+
+        public Vanrise.Entities.BigResult<CarrierAccount> GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input)
+        {
+            Action<string> createTempTableAction = (tempTableName) =>
+                {
+                    ExecuteNonQuerySP("[BEntity].[SP_CarrierAccount_CreateTempForFiltered]", tempTableName, input.Query.Name, input.Query.CompanyName);
+                };
+            return RetrieveData(input, createTempTableAction, CarrierAccountMapper);
+        }
+
+        CarrierAccount CarrierAccountMapper(IDataReader reader)
+        {
+            return new CarrierAccount
+            {
+                CarrierAccountId = reader["CarrierAccountId"] as string,
+                ProfileId = (Int16)reader["ProfileId"],
+                ProfileName = reader["ProfileName"] as string,
+                ProfileCompanyName = reader["ProfileCompanyName"] as string,
+                ActivationStatus = (byte)reader["ActivationStatus"],
+                RoutingStatus = (byte)reader["RoutingStatus"],
+                AccountType = (byte)reader["AccountType"],
+                CustomerPaymentType = (byte)reader["CustomerPaymentType"],
+                SupplierPaymentType = (byte)reader["SupplierPaymentType"],
+                NameSuffix = reader["NameSuffix"] as string
+            };
+        }
+
         public CarrierAccount GetCarrierAccount(string carrierAccountId)
         {
             return GetItemSP("BEntity.sp_CarrierAccount_GetByCarrierAccountId", (reader) =>
@@ -96,7 +123,7 @@ namespace TOne.BusinessEntity.Data.SQL
                 carrierAccount.ProfileId,carrierAccount.ProfileName,carrierAccount.RoutingStatus,carrierAccount.SupplierPaymentType);
             return rowEffected;
         }
-
+         
 
         #region Private Methods
 

@@ -18,10 +18,10 @@
                 </div>
             </vr-actionbar>
         </vr-row>
-        <div vr-loader="isLoading">
+        <div >
             <vr-row>
                 <vr-columns colnum="12" simplecol>
-                    <vr-datagrid datasource="CarrierAccountsDataSource" loadmoredata="loadMoreData" on-ready="gridReady" menuactions="gridMenuActions">
+                    <vr-datagrid datasource="CarrierAccountsDataSource" dataretrievalfunction="dataRetrievalFunction" pagingtype="'PagingOnScroll'" on-ready="gridReady" menuactions="gridMenuActions">
                         <vr-datagridcolumn headertext="'CarrierAccount Id'" field="'CarrierAccountId'">
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'ProfileId'" field="'ProfileId'">

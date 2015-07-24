@@ -8,33 +8,32 @@ function CarrierAccountManagementController($scope, CarrierAPIService, VRModalSe
     }
 
     function defineScope() {
-        $scope.name = '';
-        $scope.companyName = '';
+       
         $scope.CarrierAccountsDataSource = [];
         defineMenuActions();
         $scope.gridReady = function (api) {
             gridApi = api;
-            $scope.isLoading = true;
-            getData().finally(function () {
-                $scope.isLoading = false;
+            return retrieveData();
+        };
+
+        $scope.searchClicked = function () {
+            return retrieveData();
+        };
+
+        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+            return CarrierAPIService.GetFilteredCarrierAccounts(dataRetrievalInput)
+            .then(function (response) {
+                onResponseReady(response);
             });
         };
-        $scope.loadMoreData = function () {
-            return getData();
-        }
-        $scope.searchClicked = function () {
-            gridApi.clearDataAndContinuePaging();
-            return getData();
-        }
     }
-    function getData() {
-        var pageInfo = gridApi.getPageInfo();
-        return CarrierAPIService.GetCarrierAccounts($scope.name, $scope.companyName, pageInfo.fromRow, pageInfo.toRow).then(function (response) {
-            gridApi.addItemsToSource(response);
-            //angular.forEach(response, function (itm) {
-            //    $scope.CarrierAccountsDataSource.push(itm);
-            //});
-        });
+
+    function retrieveData() {
+        var query = {
+            Name: $scope.name,
+            CompanyName: $scope.companyName
+        };
+        return gridApi.retrieveData(query);
     }
 
     function defineMenuActions() {

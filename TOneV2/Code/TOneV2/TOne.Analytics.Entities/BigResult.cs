@@ -14,4 +14,15 @@ namespace TOne.Analytics.Entities
 
         public int TotalCount { get; set; }
     }
+
+    public class TrafficStatisticSummaryQuery
+    {
+        public DateTime From { get; set; }
+
+        public DateTime To { get; set; }
+
+        public TrafficStatisticFilter Filter { get; set; }
+
+        public TrafficStatisticGroupKeys[] GroupKeys { get; set; }
+    }
 }
