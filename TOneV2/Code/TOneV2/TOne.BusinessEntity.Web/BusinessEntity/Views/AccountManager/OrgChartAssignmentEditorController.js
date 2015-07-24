@@ -9,7 +9,6 @@ function OrgChartAssignmentEditorController($scope, AccountManagerAPIService, Or
         // make sure that $scope.orgCharts is set before setting $scope.assignedOrgChart
         OrgChartAPIService.GetOrgCharts().then(function (response) {
             $scope.orgCharts = response;
-
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null) {

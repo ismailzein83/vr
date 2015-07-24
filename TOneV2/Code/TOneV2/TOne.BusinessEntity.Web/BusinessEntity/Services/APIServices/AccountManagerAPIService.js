@@ -3,7 +3,6 @@ var serviceObj = function (BaseAPIService) {
     return ({
         GetCarriers: GetCarriers,
         GetAssignedCarriers: GetAssignedCarriers,
-        GetAssignedCarriersWithDesc: GetAssignedCarriersWithDesc,
         GetLinkedOrgChartId: GetLinkedOrgChartId,
         AssignCarriers: AssignCarriers,
         UpdateLinkedOrgChart: UpdateLinkedOrgChart
@@ -17,19 +16,11 @@ var serviceObj = function (BaseAPIService) {
         });
     }
 
-    function GetAssignedCarriers(managerId) {
+    function GetAssignedCarriers(managerId, withDescendants) {
         return BaseAPIService.get('/api/AccountManager/GetAssignedCarriers', {
-            managerId: managerId
-        }
-        );
-    }
-
-    function GetAssignedCarriersWithDesc(managerId, orgChartId) {
-        return BaseAPIService.get('/api/AccountManager/GetAssignedCarriersWithDesc',
-            {
-                managerId: managerId,
-                orgChartId: orgChartId
-            });
+            managerId: managerId,
+            withDescendants: withDescendants
+        });
     }
 
     function GetLinkedOrgChartId() {

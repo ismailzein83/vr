@@ -26,10 +26,11 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
                 modalScope.title = 'Assign Org Chart';
 
                 modalScope.onOrgChartAssigned = function (orgChartId) {
-                    buildNodesFromMembers(orgChartId);
-                    assignedOrgChartId = orgChartId;
-                    $scope.currentNode = undefined; // deselect the account manager
-                    treeAPI.refreshTree($scope.nodes);
+                    buildNodesFromMembers(orgChartId).then(function () {
+                        assignedOrgChartId = orgChartId;
+                        $scope.currentNode = undefined; // deselect the account manager
+                        treeAPI.refreshTree($scope.nodes);
+                    });
                 }
             };
 
@@ -57,19 +58,16 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
             gridApi = api;
         }
 
-        $scope.$watch('currentNode', function (newObj, oldObj) {
-            if (angular.isObject($scope.currentNode)) {
-                getData();
-            }
-        }, false);
-
         $scope.treeReady = function (api) {
             treeAPI = api;
         }
 
         $scope.treeValueChanged = function () {
-            if (angular.isObject($scope.currentNode) && $scope.currentNode != undefined)
+            if (angular.isObject($scope.currentNode) && $scope.currentNode != undefined) {
+                // clear the grid
+                $scope.assignedCarriers = [];
                 getData();
+            }
         }
     }
 
@@ -94,7 +92,7 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
     }
 
     function buildNodesFromMembers(orgChartId) {
-        OrgChartAPIService.GetOrgChartById(orgChartId).then(function (orgChartObject) {
+       return OrgChartAPIService.GetOrgChartById(orgChartId).then(function (orgChartObject) {
             $scope.nodes = mapMembersToNodes(orgChartObject.Hierarchy);
         });
     }
@@ -136,18 +134,16 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
     }
 
     function getData() {
-        // clear grid data
-        $scope.assignedCarriers = [];
 
         if (assignedOrgChartId != undefined)
         {
-            return AccountManagerAPIService.GetAssignedCarriersWithDesc($scope.currentNode.nodeId, assignedOrgChartId).then(function (response) {
+            return AccountManagerAPIService.GetAssignedCarriers($scope.currentNode.nodeId, true).then(function (response) {
                 fillAssignedCarriers(response);
             });
         }
         else
         {
-            return AccountManagerAPIService.GetAssignedCarriers($scope.currentNode.nodeId).then(function (response) {
+            return AccountManagerAPIService.GetAssignedCarriers($scope.currentNode.nodeId, false).then(function (response) {
                 fillAssignedCarriers(response);
             });
         }

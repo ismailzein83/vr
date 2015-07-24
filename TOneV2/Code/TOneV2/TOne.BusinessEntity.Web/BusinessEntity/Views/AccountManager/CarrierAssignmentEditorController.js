@@ -89,7 +89,7 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
 
     function getAssignedCarriers()
     {
-        return AccountManagerAPIService.GetAssignedCarriers(selectedAccountManagerId).then(function (response) {
+        return AccountManagerAPIService.GetAssignedCarriers(selectedAccountManagerId, false).then(function (response) {
             toggleAssignedCarriers(response);
         }).catch(function (error) {
             VRNotificationService.notifyExceptionWithClose(error, $scope);

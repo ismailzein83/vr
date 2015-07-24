@@ -19,18 +19,22 @@ namespace TOne.BusinessEntity.Business
             return dataManager.GetCarriers(userId, from, to);
         }
 
-        public List<AssignedCarrier> GetAssignedCarriers(int managerId)
+        public List<AssignedCarrier> GetAssignedCarriers(int managerId, bool withDescendants)
         {
             IAssignedCarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<IAssignedCarrierDataManager>();
-
-            return dataManager.GetAssignedCarriers(new List<int>() {managerId});
-        }
-
-        public List<AssignedCarrier> GetAssignedCarriersWithDesc(int managerId, int orgChartId)
-        {
-            IAssignedCarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<IAssignedCarrierDataManager>();
-            List<int> memberIds = GetMemberIds(orgChartId, managerId);
-
+            
+            List<int> memberIds = new List<int>();
+            
+            if (withDescendants)
+            {
+                int? orgChartId = GetLinkedOrgChartId();
+                
+                if (orgChartId != null)
+                    memberIds = GetMemberIds((int)orgChartId, managerId); // GetMemberIds will add managerId to the list
+            }
+            else
+                memberIds.Add(managerId);
+                
             return dataManager.GetAssignedCarriers(memberIds);
         }
 
