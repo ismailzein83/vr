@@ -72,7 +72,18 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                      var dropDown = self.parent().find('.bootstrap-datetimepicker-widget')[0];
                      $(dropDown).css({ position: 'fixed', top: selfOffset.top + selfHeight, left: 'auto' });
                  });
+                var fixDropdownPosition = function () {
+                    divDatePicker.data("DateTimePicker").hide()
 
+                };
+
+                $(".modal-body").unbind("scroll");
+                $(".modal-body").scroll(function () {
+                    fixDropdownPosition();
+                });               
+                $(window).resize(function () {
+                    fixDropdownPosition();
+                });
             }
             var isUserChange = false;
             var selectedDate;
