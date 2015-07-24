@@ -59,9 +59,6 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
         });
     }
 
-
-
-
     function getNormalCDRs() {
         $scope.normalCDRs.length = 0;
 
@@ -80,8 +77,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
             $scope.isGettingNormalCDRs = false;
         });
     }
-
-
+    
     function getNumberProfiles() {
         $scope.numberProfiles.length = 0;
         var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
@@ -99,10 +95,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
             $scope.isGettingNumberProfiles = false;
         });
     }
-
-
-
-
+    
     function defineScope() {
 
         $scope.subscriberThresholds = [];
@@ -174,7 +167,6 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
 
     }
 
-
     function BuildSubscriberCaseObjfromScope()
     {
         var subscriberCaseObject = {
@@ -184,8 +176,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
         };
         return subscriberCaseObject;
     }
-
-
+    
     $scope.selectedRelatedNumbersChanged  = function () {
 
         $scope.subscriberNumber = $scope.selectedRelatedNumber
@@ -199,9 +190,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
         isNumberProfileDataLoaded = false;
         $scope.groupKeySelectionChanged();
     }
-
-
-
+    
     function load() {
 
         var number = parseInt($scope.subscriberNumber);
@@ -225,7 +214,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
 
             $scope.suspicionLevelName = response.SuspicionLevelName;
            
-            if (response.statusId == null) {
+            if (response.StatusId == null) {
                 $scope.selectedStatus = UtilsService.getItemByVal($scope.statuses, 4, "id");
             }
             else {
@@ -233,7 +222,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
             }
 
 
-            if (response.validTill == null) {
+            if (response.ValidTill == null) {
                 $scope.endDate = new Date();
             }
             else {
@@ -249,10 +238,6 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
 
 
     }
-
-
-   
-
 
     $scope.groupKeySelectionChanged = function () {
 
@@ -273,12 +258,6 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
 
         }
     };
-
-
-
-
-
-
-
+    
 }
 appControllers.controller('SuspiciousNumberDetailsController', SuspiciousNumberDetailsController);
