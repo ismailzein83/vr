@@ -565,8 +565,8 @@
             return 25;
         }
 
-        function getPageInfo() {
-            var fromRow = ctrl.datasource.length + 1;
+        function getPageInfo(startFromBeginning) {
+            var fromRow = startFromBeginning ? 1 : ctrl.datasource.length + 1;
             return {
                 fromRow: fromRow,
                 toRow: fromRow + getPageSize() - 1
@@ -682,7 +682,9 @@
             if (!isGridReady)
                 return;
             if (clearBeforeRetrieve) {
-                retrieveDataResultKey = null;              
+                retrieveDataResultKey = null;
+                if (ctrl.showPager)
+                    ctrl.pagerSettings.currentPage = 1;
             }
             
             retrieveDataInput.ResultKey = retrieveDataResultKey;//retrieveDataInput should be of type Vanrise.Entities.RetrieveDataInput<T>
@@ -694,13 +696,15 @@
                 if (ctrl.showPager)
                     pageInfo = ctrl.pagerSettings.getPageInfo();
                 else if (pagingOnScrollEnabled)
-                    pageInfo = getPageInfo();
+                    pageInfo = getPageInfo(clearBeforeRetrieve);
 
                 if (pageInfo != undefined) {
                     retrieveDataInput.FromRow = pageInfo.fromRow;
                     retrieveDataInput.ToRow = pageInfo.toRow;
                 }
             }
+
+            
 
             var onResponseReady = function (response) {
                 if (isExport) {
