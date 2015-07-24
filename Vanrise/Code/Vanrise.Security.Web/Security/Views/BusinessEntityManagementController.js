@@ -2,6 +2,7 @@
 
 function BusinessEntityManagementController($scope, BusinessEntityAPIService, PermissionAPIService, PermissionFlagEnum, HolderTypeEnum, VRModalService) {
 
+    var treeAPI;
     var mainGridAPI;
     var arrMenuAction = [];
 
@@ -30,20 +31,27 @@ function BusinessEntityManagementController($scope, BusinessEntityAPIService, Pe
         $scope.AddNewPermission = addPermission;
         $scope.ToggleInheritance = toggleInheritance;
         $scope.showBreakInheritance = true;
+
+        $scope.treeReady = function (api) {
+            treeAPI = api;
+        }
+
+        $scope.treeValueChanged = function () {
+            if (angular.isObject($scope.currentNode)) {
+                $scope.showBreakInheritance = !$scope.currentNode.BreakInheritance;
+                refreshGrid();
+            }
+        }
     }
 
     function load() {
         $scope.isGettingData = true;
+
         loadTree().finally(function () {
             $scope.isGettingData = false;
+            treeAPI.refreshTree($scope.beList);
+            console.log($scope.beList);
         });
-
-        $scope.$watch('beTree.currentNode', function (newObj, oldObj) {
-            if ($scope.beTree && angular.isObject($scope.beTree.currentNode)) {
-                $scope.showBreakInheritance = !$scope.beTree.currentNode.BreakInheritance;
-                refreshGrid();
-            }
-        }, false);
     }
 
     function loadTree() {
@@ -56,11 +64,11 @@ function BusinessEntityManagementController($scope, BusinessEntityAPIService, Pe
     function getData() {
         var pageInfo = mainGridAPI.getPageInfo();
         
-        return PermissionAPIService.GetPermissionsByEntity($scope.beTree.currentNode.EntType, $scope.beTree.currentNode.EntityId).then(function (response) {
+        return PermissionAPIService.GetPermissionsByEntity($scope.currentNode.EntType, $scope.currentNode.EntityId).then(function (response) {
             angular.forEach(response, function (item) {
                 item.HolderTypeEnum = (item.HolderType == HolderTypeEnum.User.value) ? HolderTypeEnum.User.description : HolderTypeEnum.Role.description;
                 item.PermissionFlagsDescription = buildPermissionFlagDescription(item.PermissionFlags);
-                item.isInherited = !(item.EntityType == $scope.beTree.currentNode.EntType && item.EntityId == $scope.beTree.currentNode.EntityId);
+                item.isInherited = !(item.EntityType == $scope.currentNode.EntType && item.EntityId == $scope.currentNode.EntityId);
                 item.PermissionType = item.isInherited ? 'Inherited (' + item.PermissionPath + ')' : 'Direct';
                 $scope.permissions.push(item);
             });
@@ -119,21 +127,21 @@ function BusinessEntityManagementController($scope, BusinessEntityAPIService, Pe
 
     function addPermission() {
 
-        if ($scope.beTree.currentNode == null)
+        if ($scope.currentNode == null)
             return;
 
         var modalSettings = {
         };
         var parameters = {
-            entityType: $scope.beTree.currentNode.EntType,
-            entityId: $scope.beTree.currentNode.EntityId,
-            permissionOptions: $scope.beTree.currentNode.PermissionOptions,
+            entityType: $scope.currentNode.EntType,
+            entityId: $scope.currentNode.EntityId,
+            permissionOptions: $scope.currentNode.PermissionOptions,
             permissions: $scope.permissions,
             notificationResponseText: "Permissions"
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "New Permissions for Entity '" + $scope.beTree.currentNode.Name + "'";
+            modalScope.title = "New Permissions for Entity '" + $scope.currentNode.Name + "'";
             modalScope.onPermissionsAdded = function () {
                 refreshGrid();
             };
@@ -152,12 +160,12 @@ function BusinessEntityManagementController($scope, BusinessEntityAPIService, Pe
             entityType: permissionObj.EntityType,
             entityId: permissionObj.EntityId,
             permissionFlags: permissionObj.PermissionFlags,
-            permissionOptions: $scope.beTree.currentNode.PermissionOptions,
+            permissionOptions: $scope.currentNode.PermissionOptions,
             notificationResponseText: "Permissions"
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Permissions of Entity '" + $scope.beTree.currentNode.Name + "'";
+            modalScope.title = "Edit Permissions of Entity '" + $scope.currentNode.Name + "'";
             modalScope.onPermissionsUpdated = function () {
                 refreshGrid();
             };
@@ -179,10 +187,10 @@ function BusinessEntityManagementController($scope, BusinessEntityAPIService, Pe
 
     function toggleInheritance()
     {
-        return BusinessEntityAPIService.ToggleBreakInheritance($scope.beTree.currentNode.EntType, $scope.beTree.currentNode.EntityId)
+        return BusinessEntityAPIService.ToggleBreakInheritance($scope.currentNode.EntType, $scope.currentNode.EntityId)
            .then(function (response) {
-               $scope.beTree.currentNode.BreakInheritance = !$scope.beTree.currentNode.BreakInheritance;
-               $scope.showBreakInheritance = !$scope.beTree.currentNode.BreakInheritance;
+               $scope.currentNode.BreakInheritance = !$scope.currentNode.BreakInheritance;
+               $scope.showBreakInheritance = !$scope.currentNode.BreakInheritance;
                refreshGrid();
            });
     }

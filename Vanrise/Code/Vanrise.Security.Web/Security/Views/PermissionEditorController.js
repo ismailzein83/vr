@@ -2,6 +2,7 @@
 
 function PermissionEditorController($scope, PermissionAPIService, BusinessEntityAPIService, VRModalService, VRNotificationService, VRNavigationService) {
 
+    var treeAPI;
     loadParameters();
     defineScope();
     load();
@@ -63,8 +64,8 @@ function PermissionEditorController($scope, PermissionAPIService, BusinessEntity
             var needforAddPermission = true;
             var needforAddPermissionFlag = true;
             angular.forEach($scope.permissions, function (permission) {
-                if (permission.EntityType == $scope.beTree.currentNode.EntType &&
-                    permission.EntityId == $scope.beTree.currentNode.EntityId) {
+                if (permission.EntityType == $scope.currentNode.EntType &&
+                    permission.EntityId == $scope.currentNode.EntityId) {
 
                     //Permission is found and no need to add it to the list of permission that we need to send to the server
                     needforAddPermission = false;
@@ -108,8 +109,8 @@ function PermissionEditorController($scope, PermissionAPIService, BusinessEntity
                 var permissiontoAdd = {
                     HolderType: $scope.holderType,
                     HolderId: $scope.holderId,
-                    EntityType: $scope.beTree.currentNode.EntType,
-                    EntityId: $scope.beTree.currentNode.EntityId
+                    EntityType: $scope.currentNode.EntType,
+                    EntityId: $scope.currentNode.EntityId
                 };
 
                 permissiontoAdd.PermissionFlags = [];
@@ -125,6 +126,37 @@ function PermissionEditorController($scope, PermissionAPIService, BusinessEntity
         };
 
         $scope.permissionFlagOptions = ['None', 'Allow', 'Deny'];
+
+        $scope.treeReady = function (api) {
+            treeAPI = api;
+        }
+
+        $scope.treeValueChanged = function () {
+            if (angular.isObject($scope.currentNode)) {
+                $scope.entityPermissions.length = 0;
+
+                angular.forEach($scope.currentNode.PermissionOptions, function (permissionOption) {
+                    var entityPermission = {
+                        name: permissionOption,
+                        selectedFlagOptionIndex: 0
+                    };
+
+                    angular.forEach($scope.permissions, function (permission) {
+                        if (permission.EntityType == $scope.currentNode.EntType &&
+                            permission.EntityId == $scope.currentNode.EntityId) {
+
+                            angular.forEach(permission.PermissionFlags, function (permissionFlag) {
+                                if (permissionFlag.Name == permissionOption) {
+                                    entityPermission.selectedFlagOptionIndex = permissionFlag.Value;
+                                }
+                            });
+                        }
+                    });
+
+                    $scope.entityPermissions.push(entityPermission);
+                });
+            }
+        }
     }
 
     function load() {
@@ -138,41 +170,13 @@ function PermissionEditorController($scope, PermissionAPIService, BusinessEntity
             loadPermissions().finally(function () {
                 $scope.isGettingData = false;
             })
-            
-        $scope.$watch('beTree.currentNode', function (newObj, oldObj) {
-            if ($scope.beTree && angular.isObject($scope.beTree.currentNode)) {
-                
-                $scope.entityPermissions.length = 0;
-                
-                angular.forEach($scope.beTree.currentNode.PermissionOptions, function (permissionOption) {
-                    var entityPermission = {
-                        name: permissionOption,
-                        selectedFlagOptionIndex : 0
-                    };
-
-                    angular.forEach($scope.permissions, function (permission) {
-                        if (permission.EntityType == $scope.beTree.currentNode.EntType &&
-                            permission.EntityId == $scope.beTree.currentNode.EntityId) {
-                            
-                            angular.forEach(permission.PermissionFlags, function (permissionFlag) {
-                                if(permissionFlag.Name == permissionOption)
-                                {
-                                    entityPermission.selectedFlagOptionIndex = permissionFlag.Value;
-                                }
-                            });
-                        }
-                    });
-
-                    $scope.entityPermissions.push(entityPermission);
-                });
-            }
-        }, false);
     }
 
     function loadTree() {
         return BusinessEntityAPIService.GetEntityNodes()
            .then(function (response) {
                $scope.beList = response;
+               treeAPI.refreshTree($scope.beList);
            })
             .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);

@@ -3,15 +3,14 @@
         <vr-form name="formPermissionEditor">
             <vr-row>
                 <vr-columns colnum="6">
-                    <div data-tree-id="beTree"
-                         data-angular-treeview="true"
-                         data-tree-model="beList"
-                         data-node-id="EntityId"
-                         data-node-label="Name"
-                         data-node-children="Children">
-                    </div>
+                    <vr-treeview on-ready="treeReady"
+                        datachildrenfield="Children"
+                        datatextfield="Name"
+                        selecteditem="currentNode"
+                        onvaluechanged="treeValueChanged">
+                    </vr-treeview>
                 </vr-columns>
-                <vr-columns colnum="6" ng-show="beTree.currentNode != undefined">
+                <vr-columns colnum="6" ng-show="currentNode != undefined">
                     <vr-section title="Assigned Permissions">
                         <vr-row ng-repeat="permission in entityPermissions">
                             <vr-columns colnum="6">
