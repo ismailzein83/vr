@@ -215,7 +215,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
             $scope.suspicionLevelName = response.SuspicionLevelName;
            
             if (response.StatusId == null) {
-                $scope.selectedStatus = UtilsService.getItemByVal($scope.statuses, 4, "id");
+                $scope.selectedStatus = UtilsService.getItemByVal($scope.statuses, 1, "id");
             }
             else {
                 $scope.selectedStatus = UtilsService.getItemByVal($scope.statuses, response.StatusId, "id");

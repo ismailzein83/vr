@@ -1,6 +1,6 @@
-﻿SuspicionAnalysisController.$inject = ['$scope', 'StrategyAPIService', 'SuspicionAnalysisAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿SuspicionAnalysisController.$inject = ['$scope', 'StrategyAPIService', 'SuspicionAnalysisAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService','UtilsService'];
 
-function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalysisAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
+function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalysisAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
 
     var mainGridAPI;
     var arrMenuAction = [];
@@ -12,6 +12,9 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
 
     function defineScope() {
+
+        $scope.statuses = [{ id: 1, name: 'Pending' }, { id: 2, name: 'Ignored' }, { id: 3, name: 'Confirmed' }, { id: 4, name: 'White List' }];
+        $scope.selectedStatus = UtilsService.getItemByVal($scope.statuses, 1, "id");
 
         var Now = new Date();
         Now.setDate(Now.getDate() + 1);
