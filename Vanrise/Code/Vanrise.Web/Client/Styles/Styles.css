@@ -193,6 +193,11 @@ padding: 5px 2px;
 .dropdown-menu {
    font-size:12px;
 }
+.menu-to-top{
+    top: -215px;
+    left: -65px;
+}
+
 .form-control {
    font-size:12px;
 }
@@ -1617,4 +1622,13 @@ input.ui-grid-filter-input[type="text"] {
 }
 .vr-disabled{
 pointer-events: none;
+}
+.vr-small-addon{
+    padding:6px 2px;
+}
+.border-radius{
+    border-radius:4px !important;
+}
+.fix-border-radius{
+    border-radius:4px 0px 0px 4px;
 }
