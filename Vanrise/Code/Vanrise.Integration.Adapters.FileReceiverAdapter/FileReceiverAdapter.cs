@@ -55,21 +55,19 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
        
         public override void ImportData(BaseAdapterArgument argument, Action<IImportedData> receiveData)
         {
-            //FileAdapterArgument fileAdapterArgument = argument as FileAdapterArgument;
+            FileAdapterArgument fileAdapterArgument = argument as FileAdapterArgument;
 
-            //if (System.IO.Directory.Exists(fileAdapterArgument.Directory))
-            //{
-            //    DirectoryInfo d = new DirectoryInfo(fileAdapterArgument.Directory);//Assuming Test is your Folder
-            //    FileInfo[] Files = d.GetFiles("*.DAT"); //Getting Text files
-            //    foreach (FileInfo file in Files)
-            //    {
-            //        CreateStreamReader(fileAdapterArgument, receiveData, file);
-            //        AfterImport(fileAdapterArgument, file);
+            if (System.IO.Directory.Exists(fileAdapterArgument.Directory))
+            {
+                DirectoryInfo d = new DirectoryInfo(fileAdapterArgument.Directory);//Assuming Test is your Folder
+                FileInfo[] Files = d.GetFiles("*.DAT"); //Getting Text files
+                foreach (FileInfo file in Files)
+                {
+                    CreateStreamReader(fileAdapterArgument, receiveData, file);
+                    AfterImport(fileAdapterArgument, file);
 
-            //    }
-            //}
-
-            receiveData(new StreamReaderImportedData());
+                }
+            }
         }
     }
 }
