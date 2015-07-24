@@ -70,12 +70,17 @@ namespace Vanrise.Queueing
             return queueInstance != null && queueInstance.Status == QueueInstanceStatus.ReadyToUse;
         }
 
-        public void CreateQueue<T>(string queueName, string queueTitle, IEnumerable<string> sourceQueueNames, QueueSettings queueSettings = null) where T : PersistentQueueItem
+        public void CreateQueue(string queueItemFQTN, string queueName, string queueTitle, IEnumerable<string> sourceQueueNames, QueueSettings queueSettings = null)
         {
             IQueueDataManager dataManagerQueue = QDataManagerFactory.GetDataManager<IQueueDataManager>();
-            IQueueItemDataManager dataManagerQueueItem = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();
-            string itemFQTN = typeof(T).AssemblyQualifiedName;
-            T emptyInstance = Activator.CreateInstance<T>();
+            IQueueItemDataManager dataManagerQueueItem = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();    
+            Type queueItemType = Type.GetType(queueItemFQTN);
+            if(queueItemType == null)
+                throw new Exception(String.Format("type '{0}' is not available", queueItemFQTN));
+            
+            PersistentQueueItem emptyInstance = Activator.CreateInstance(queueItemType) as PersistentQueueItem;
+            if (emptyInstance == null)
+                throw new Exception(String.Format("{0} is not of type PersistentQueueItem", queueItemFQTN));
             List<int> sourceQueueIds = new List<int>();
             if (sourceQueueNames != null)
             {
@@ -89,22 +94,22 @@ namespace Vanrise.Queueing
                         throw new Exception(String.Format("Source Queue '{0}' is not ready to use", sourceQueueName));
 
                     Type sourceQueueItemType = Type.GetType(sourceQueue.ItemFQTN);
-                    if (typeof(T) != sourceQueueItemType)
-                        throw new Exception(String.Format("Source Queue '{0}' is of item type {1}. Expected Item Type {2}", sourceQueueName, sourceQueueItemType, typeof(T)));
+                    if (queueItemType != sourceQueueItemType)
+                        throw new Exception(String.Format("Source Queue '{0}' is of item type {1}. Expected Item Type {2}", sourceQueueName, sourceQueueItemType, queueItemFQTN));
 
                     if (!sourceQueueIds.Contains(sourceQueue.QueueInstanceId))
                         sourceQueueIds.Add(sourceQueue.QueueInstanceId);
                 }
             }
-            int itemTypeId = dataManagerQueue.InsertOrUpdateQueueItemType(itemFQTN, emptyInstance.ItemTypeTitle, emptyInstance.DefaultQueueSettings);
+            int itemTypeId = dataManagerQueue.InsertOrUpdateQueueItemType(queueItemFQTN, emptyInstance.ItemTypeTitle, emptyInstance.DefaultQueueSettings);
             Action createQueueAction = () =>
-                {
-                    int queueId = dataManagerQueue.InsertQueueInstance(queueName, queueTitle, QueueInstanceStatus.New, itemTypeId, queueSettings);
-                    dataManagerQueue.InsertSubscription(sourceQueueIds, queueId);
-                    dataManagerQueueItem.CreateQueue(queueId);
-                    dataManagerQueueItem.InsertQueueItemIDGen(queueId);
-                    dataManagerQueue.UpdateQueueInstanceStatus(queueName, QueueInstanceStatus.ReadyToUse);
-                };
+            {
+                int queueId = dataManagerQueue.InsertQueueInstance(queueName, queueTitle, QueueInstanceStatus.New, itemTypeId, queueSettings);
+                dataManagerQueue.InsertSubscription(sourceQueueIds, queueId);
+                dataManagerQueueItem.CreateQueue(queueId);
+                dataManagerQueueItem.InsertQueueItemIDGen(queueId);
+                dataManagerQueue.UpdateQueueInstanceStatus(queueName, QueueInstanceStatus.ReadyToUse);
+            };
             //this logic is implemented to rename any previous failed Create Queue action to allow recreation. this is done instead of using Transaction against two databases
             try
             {
@@ -113,12 +118,17 @@ namespace Vanrise.Queueing
             catch
             {
                 string inactiveQueueName = String.Format("{0}_Inactive_{1}", queueName, Guid.NewGuid());
-                if (dataManagerQueue.UpdateQueueName(queueName, QueueInstanceStatus.New, inactiveQueueName) 
+                if (dataManagerQueue.UpdateQueueName(queueName, QueueInstanceStatus.New, inactiveQueueName)
                     || dataManagerQueue.UpdateQueueName(queueName, QueueInstanceStatus.Deleted, inactiveQueueName))
                     createQueueAction();
                 else
                     throw;
             }
+        }
+
+        public void CreateQueue<T>(string queueName, string queueTitle, IEnumerable<string> sourceQueueNames, QueueSettings queueSettings = null) where T : PersistentQueueItem
+        {
+            CreateQueue(typeof(T).AssemblyQualifiedName, queueName, queueTitle, sourceQueueNames, queueSettings);
         }
 
         public void CreateQueue<T>(string queueName, string queueTitle, QueueSettings queueSettings = null) where T : PersistentQueueItem
@@ -131,13 +141,13 @@ namespace Vanrise.Queueing
             CreateQueue<T>(queueName, queueName, null, queueSettings);
         }
 
-        public void CreateQueueIfNotExists<T>(string queueName, string queueTitle = null, IEnumerable<string> sourceQueueNames = null, QueueSettings queueSettings = null) where T : PersistentQueueItem
-        {            
+        public void CreateQueueIfNotExists(string queueItemFQTN, string queueName, string queueTitle = null, IEnumerable<string> sourceQueueNames = null, QueueSettings queueSettings = null)
+        {
             if (!QueueExists(queueName))
             {
                 try
                 {
-                    CreateQueue<T>(queueName, queueTitle ?? queueName, sourceQueueNames, queueSettings);
+                    CreateQueue(queueItemFQTN, queueName, queueTitle ?? queueName, sourceQueueNames, queueSettings);
                 }
                 catch
                 {
@@ -145,6 +155,11 @@ namespace Vanrise.Queueing
                         throw;
                 }
             }
+        }
+
+        public void CreateQueueIfNotExists<T>(string queueName, string queueTitle = null, IEnumerable<string> sourceQueueNames = null, QueueSettings queueSettings = null) where T : PersistentQueueItem
+        {      
+            CreateQueueIfNotExists(typeof(T).AssemblyQualifiedName, queueName, queueTitle, sourceQueueNames, queueSettings);
         }
     }
 }

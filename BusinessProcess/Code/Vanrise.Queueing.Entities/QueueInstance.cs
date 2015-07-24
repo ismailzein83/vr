@@ -24,5 +24,7 @@ namespace Vanrise.Queueing.Entities
         public QueueSettings Settings { get; set; }
 
         public DateTime CreateTime { get; set; }
+
+        public int? ExecutionFlowId { get; set; }
     }
 }

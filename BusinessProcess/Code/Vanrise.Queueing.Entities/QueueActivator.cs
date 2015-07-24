@@ -10,7 +10,7 @@ namespace Vanrise.Queueing.Entities
     {
         public abstract void Run(QueueInstance queueInstance);
 
-        public virtual void Run(QueueInstance queueInstance, IPersistentQueue queue, Dictionary<string, IPersistentQueue> nextQueues)
+        public virtual void Run(QueueInstance queueInstance, IPersistentQueue queue, QueuesByStages queuesByStages)
         {
 
         }
