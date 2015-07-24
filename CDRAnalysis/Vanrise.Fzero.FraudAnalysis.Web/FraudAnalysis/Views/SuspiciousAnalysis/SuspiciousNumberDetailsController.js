@@ -110,24 +110,12 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
         $scope.numberProfiles = [];
         $scope.relatedNumbers = [];
         
-
-
-        
-
-
         SuspiciousNumberDetailsController.isSubscriberThresholdsTabShown = true;
         SuspiciousNumberDetailsController.isNumberProfileTabShown = false;
         SuspiciousNumberDetailsController.isNormalCDRTabShown = false;
 
-
-       
-
-
-
         $scope.onSubscriberThresholdsGridReady = function (api) {
             subscriberThresholdsGridAPI = api;
-            getSubscriberThresholds();
-            isSubscriberThresholdsDataLoaded = true;
         };
 
         $scope.loadMoreDataSubscriberThresholds = function () {
