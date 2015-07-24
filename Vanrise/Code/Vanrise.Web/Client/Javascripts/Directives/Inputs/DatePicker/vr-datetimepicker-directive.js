@@ -49,13 +49,13 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
             var isDateTime;
             switch ($attrs.type) {
                 case "date": format = 'DD/MM/YYYY';
-                    isDate = true;
+                    $scope.ctrl.isDate = true;
                     break;
                 case "time": format = 'HH:mm';
-                    isTime = true;
+                    $scope.ctrl.isTime = true;
                     break;
                 default: format = 'DD/MM/YYYY HH:mm';
-                    isDateTime = true;
+                    $scope.ctrl.isDateTime = true;
                     break;
             }
             divDatePicker.datetimepicker({
@@ -120,8 +120,30 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                 }
 
             });
-            BaseDirService.addScopeValidationMethods(ctrl, elementName, this);
+            $scope.ctrl.toggleDate = function (e) {
+              
+                e.preventDefault();
+                e.stopPropagation();
+               
+                $('.date-section').addClass('in');
+                $('.time-section').removeClass('in');
 
+                // switch icon to time
+                $('.btn-switcher').addClass("glyphicon-time");
+                $('.btn-switcher').removeClass("glyphicon-calendar");
+            }
+            $scope.ctrl.toggleTime = function (e) {
+             
+                e.preventDefault();
+                e.stopPropagation();
+                $('.time-section').addClass('in');
+                $('.date-section').removeClass('in');
+
+                // switch icon to date
+                $('.btn-switcher').removeClass("glyphicon-time");
+                $('.btn-switcher').addClass("glyphicon-calendar");
+            }
+            BaseDirService.addScopeValidationMethods(ctrl, elementName, this);
             
         },
         compile: function (element, attrs) {
@@ -230,17 +252,22 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
             var labelTemplate = '';
             if (attrs.label != undefined)
                 labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
-
+            var icontemplate = "";
+            if (attrs.type == 'date' || attrs.type == 'dateTime')
+                icontemplate += ' <span class="input-group-addon " ng-click="ctrl.toggleDate($event)" ><i class="glyphicon glyphicon-calendar"></i></span>';
+            if (attrs.type == 'time' || attrs.type == 'dateTime')
+                icontemplate += ' <span class="input-group-addon " ng-click="ctrl.toggleTime($event)" > <i class="glyphicon glyphicon-time"></i></span>';
             var dateTemplate =
-                 '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
+                 '<div  >'
                   + '<div id="mainInput" ng-model="ctrl.value">'
-                 + '<div  class="input-group date datetime-controle" id="divDatePicker"  >'
-                                + '<input class="form-control" data-autoclose="1" placeholder="Date" type="text">'
+                 + '<div  class="input-group date datetime-controle" style="width:100%" id="divDatePicker"  >'
+                                + '<input class="form-control" style="height:30px" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
+                                + icontemplate
                             + '</div>'
                       + '</div>'
                     + '</div>';
-
-            var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true);
+           
+            var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true,undefined,true);
 
             //if(attrs.type == 'date')
                 return startTemplate + labelTemplate + dateTemplate + validationTemplate + endTemplate;

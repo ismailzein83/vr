@@ -680,6 +680,9 @@ input.ui-grid-filter-input[type="text"] {
   -o-transition: all 3s ease;
   transition: all 3s ease;
 }
+.fix-top{
+    top:22px;
+}
 .tooltip-error:after, .tooltip-error:before {
 	right: 100%;
 	top: 33%;

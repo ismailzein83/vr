@@ -13,7 +13,6 @@ app.service('BaseDirService', ['ValidationMessagesEnum', function (ValidationMes
         prepareDirectiveHTMLForValidation: prepareDirectiveHTMLForValidation,
         getLastItem: getLastItem,
     });
-
     function getLastItem(arr)
     {
         if (arr == undefined) return null;
@@ -71,8 +70,13 @@ app.service('BaseDirService', ['ValidationMessagesEnum', function (ValidationMes
         return 'ElmntId_' + replaceAll(guid(), '-', '');
     }
 
-    function getValidationMessageTemplate(requiredValue, requiredArray, invalidFormat, customValidation,invalidEmail) {
-        var template = '<div  class="disable-animations tooltip-error" ng-style="ctrl.isVisibleTooltip() ? {\'display\':\'block\'} : {\'display\':\'none\'} " ng-messages="ctrl.getErrorObject()">';
+    function getValidationMessageTemplate(requiredValue, requiredArray, invalidFormat, customValidation, invalidEmail,isNotSelect) {
+        var template = '';
+        if (isNotSelect)
+            template = '<div  class="disable-animations tooltip-error fix-top" ng-style="ctrl.isVisibleTooltip() ? {\'display\':\'block\'} : {\'display\':\'none\'} " ng-messages="ctrl.getErrorObject()">';
+        else
+            template = '<div  class="disable-animations tooltip-error" ng-style="ctrl.isVisibleTooltip() ? {\'display\':\'block\'} : {\'display\':\'none\'} " ng-messages="ctrl.getErrorObject()">';
+
         if (requiredValue)
             template += '<div ng-message="requiredvalue">{{ ctrl.ValidationMessagesEnum.required }}</div>';
         if (requiredArray)
@@ -89,7 +93,6 @@ app.service('BaseDirService', ['ValidationMessagesEnum', function (ValidationMes
     function prepareDirectiveHTMLForValidation(validationOptions, elementToValidate, elementToStyleInvalid, elementToTriggerMessage) {
         var elementName = generateHTMLElementName();
         elementToValidate.attr('name', elementName);
-
         if (validationOptions.requiredValue)
             elementToValidate.attr('vr-validation-value', '');
         if (validationOptions.requiredArray)

@@ -79,7 +79,7 @@ app.directive('vrTextbox', ['ValidationMessagesEnum', 'BaseDirService', function
                                 + '<input id="mainInput" ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" size="10" class="form-control" data-autoclose="1" type="' + type + '" >'
                             + '</div>';
 
-            var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true,true);
+            var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true,true,true);
 
             return startTemplate + labelTemplate + textboxTemplate + validationTemplate + endTemplate;
         }
