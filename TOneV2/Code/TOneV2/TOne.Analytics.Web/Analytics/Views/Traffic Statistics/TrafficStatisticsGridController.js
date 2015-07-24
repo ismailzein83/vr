@@ -1,8 +1,8 @@
 ﻿'use strict'
 /// <reference path="ZoneMonitorSettings.html" />
 /// <reference path="ZoneMonitor.html" />
-TrafficStatisticsGridController.$inject = ['$scope', 'AnalyticsAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficStatisticsMeasureEnum', 'VRModalService'];
-function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum, VRModalService) {
+TrafficStatisticsGridController.$inject = ['$scope', 'AnalyticsAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficStatisticsMeasureEnum', 'VRModalService','UtilsService'];
+function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum, VRModalService, UtilsService) {
     var measures = [];
     var filter = {};
     var sortColumn;
@@ -48,7 +48,35 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
                 return getData();
             }
         };
-       
+        $scope.onexport = function () {
+
+            var measures = [];
+            for (var i = 0; i < $scope.measures.length; i++) {
+                measures.push($scope.measures[i].propertyName);
+            }
+            buildFilter($scope);
+            buildFilterFromViewScope();
+            //  console.log(filter);
+            var toRow = 100;
+            var getTrafficStatisticSummaryInput = {
+                TempTableKey: null,
+                Filter: filter,
+                WithSummary: false,
+                GroupKeys: [$scope.selectedGroupKey.value],
+                From: $scope.viewScope.fromDate,
+                To: $scope.viewScope.toDate,
+                FromRow: 0,
+                ToRow: toRow,
+                OrderBy: sortColumn.value,
+                IsDescending: sortDescending,
+                Headers: measures
+
+            };
+            return AnalyticsAPIService.ExportTrafficStatisticSummary(getTrafficStatisticSummaryInput).then(function (response) {
+                console.log(response)
+                return UtilsService.downloadFile(response.data, response.headers, response.config);
+            });
+        }
      
     }
     function LoadParentGroupKeys(scope) {

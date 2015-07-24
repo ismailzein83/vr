@@ -34,10 +34,8 @@ app.service('AnalyticsAPIService', function (BaseAPIService) {
     function GetTrafficStatisticSummary(getTrafficStatisticSummaryInput) {
         return BaseAPIService.post("/api/Analytics/GetTrafficStatisticSummary", getTrafficStatisticSummaryInput);
     }
-    function ExportTrafficStatisticSummary(tempTableKey) {
-        return BaseAPIService.get("/api/Analytics/ExportTrafficStatisticSummary", 
-            {tempTableKey:tempTableKey
-    }, {
+    function ExportTrafficStatisticSummary(trafficStatisticSummaryInput) {
+        return BaseAPIService.post("/api/Analytics/ExportTrafficStatisticSummary", trafficStatisticSummaryInput, {
         returnAllResponseParameters: true,
         responseTypeAsBufferArray: true
     });

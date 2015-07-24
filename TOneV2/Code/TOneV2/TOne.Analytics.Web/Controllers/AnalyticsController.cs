@@ -44,12 +44,16 @@ namespace TOne.Analytics.Web.Controllers
             TrafficStatisticManager manager = new TrafficStatisticManager();
             return manager.GetTrafficStatistics(filterByColumn, columnFilterValue, from, to);
         }
-        //[HttpGet]
-        //public HttpResponseMessage ExportTrafficStatisticSummary(string tempTableKey)
-        //{
-        //    TrafficStatisticManager manager = new TrafficStatisticManager();
-        //    return manager.ExportTrafficStatisticSummary(tempTableKey);
-        //}
+        [HttpPost]
+        public HttpResponseMessage ExportTrafficStatisticSummary(GetTrafficStatisticSummaryInput input)
+        {
+            TrafficStatisticManager manager = new TrafficStatisticManager();
+            TrafficStatisticSummaryBigResult records = manager.GetTrafficStatisticSummary(input.TempTableKey, input.Filter, input.WithSummary, input.GroupKeys, input.From, input.To, input.FromRow, input.ToRow, input.OrderBy, input.IsDescending);
+            var groupKeys = Enum.GetNames(typeof(TrafficStatisticGroupKeys));
+
+
+            return manager.ExportTrafficStatisticSummary(records, input.Headers,input.GroupKeys);
+        }
 
         #endregion
 
@@ -71,6 +75,7 @@ namespace TOne.Analytics.Web.Controllers
         public int ToRow { get; set; }
         public TrafficStatisticMeasures OrderBy { get; set; }
         public bool IsDescending { get; set; }
+        public List<string> Headers { get; set; }
     }
     #endregion
 }

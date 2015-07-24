@@ -205,7 +205,28 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
 
             $scope.onexport = function () {
 
-                return AnalyticsAPIService.ExportTrafficStatisticSummary($scope.filter.resultKey).then(function (response) {
+                var count = $scope.mainGridPagerSettings.itemsPerPage;
+
+                var pageInfo = $scope.mainGridPagerSettings.getPageInfo();
+                var measures = [];
+                for (var i = 0; i < $scope.measures.length; i++) {
+                    measures.push($scope.measures[i].propertyName);
+                }
+                var getTrafficStatisticSummaryInput = {
+                    TempTableKey: $scope.filter.resultKey,
+                    Filter: $scope.filter.filter,
+                    WithSummary: false,
+                    GroupKeys: $scope.filter.groupKeys,
+                    From: $scope.filter.fromDate,
+                    To: $scope.filter.toDate,
+                    FromRow: pageInfo.fromRow,
+                    ToRow: pageInfo.toRow,
+                    OrderBy: sortColumn.value,
+                    IsDescending: $scope.filter.sortDescending,
+                    Headers: measures
+                    
+                };
+                return AnalyticsAPIService.ExportTrafficStatisticSummary(getTrafficStatisticSummaryInput).then(function (response) {
                     console.log(response)
                     return UtilsService.downloadFile(response.data, response.headers, response.config);
                 });
