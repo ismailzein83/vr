@@ -61,6 +61,7 @@ namespace Vanrise.BI.Business
         public HttpResponseMessage ExportMeasureValues(IEnumerable<TimeValuesRecord> records, string entity, string[] measureTypesNames, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate)
         {
             Workbook wbk = new Workbook();
+            wbk.Worksheets.Clear();
             Worksheet RateWorkSheet = wbk.Worksheets.Add("Time Variation Report");
         
         
@@ -110,9 +111,6 @@ namespace Vanrise.BI.Business
             // Adding SeriesCollection (chart data source) to the chart ranging from "A1" cell to "B3"
             //chart.NSeries.Add("C3:D5", true);
 
-
-            wbk.Save("D:\\book1.xls");
-
             byte[] array;
             MemoryStream ms = new MemoryStream();
             ms = wbk.SaveToStream();
@@ -125,7 +123,7 @@ namespace Vanrise.BI.Business
             result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
             result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
             {
-                FileName = "Data.xls"
+                FileName = "TimeVariatioReport-" + DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString() + ".xls"
             };
 
             return result;
@@ -133,6 +131,7 @@ namespace Vanrise.BI.Business
         public HttpResponseMessage ExportTopEntities(IEnumerable<EntityRecord> records, string entity, string[] measureTypesNames)
         {
             Workbook wbk = new Workbook();
+            wbk.Worksheets.Clear();
             Worksheet RateWorkSheet = wbk.Worksheets.Add("Top Entity Report");
             int Irow = 1;
             int Icol = 1;
@@ -179,7 +178,7 @@ namespace Vanrise.BI.Business
             //chart.NSeries.Add("C3:D5", true);
 
 
-            wbk.Save("D:\\book1.xls");
+           
 
             byte[] array;
             MemoryStream ms = new MemoryStream();
@@ -193,7 +192,7 @@ namespace Vanrise.BI.Business
             result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
             result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
             {
-                FileName = "Data.xls"
+                FileName = "TopEntityReport-" + DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString() + ".xls"
             };
 
             return result;

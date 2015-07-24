@@ -27,11 +27,17 @@ namespace TOne.Analytics.Business
             return _datamanager.GetCDRData(tempTableKey, filter, fromDate, toDate, fromRow, toRow, nRecords, CDROption, orderBy, isDescending);
         }
 
-        public HttpResponseMessage ExportCDRData(string tempTableKey, int nRecords)
+        public HttpResponseMessage ExportCDRData( CDRBigResult records)
         {
-            CDRBigResult records = _datamanager.GetCDRData(tempTableKey, nRecords);
+            //Aspose.Cells.License license = new Aspose.Cells.License();
+            //license.SetLicense("Aspose.Cells.lic");
+            
+            //CDRBigResult records = _datamanager.GetCDRData(tempTableKey, nRecords);
             Workbook wbk = new Workbook();
+            wbk.Worksheets.Clear();
             Worksheet RateWorkSheet = wbk.Worksheets.Add("CDR Log");
+
+            wbk.Worksheets.ActiveSheetIndex = 1;
             int Irow = 1;
             int Icol = 0;
             var headers = Enum.GetNames(typeof(BillingCDRMeasures));
@@ -59,7 +65,7 @@ namespace TOne.Analytics.Business
                 style.Font.IsBold = true;
                 cell.SetStyle(style);
             }
-            wbk.Save("D:\\CDRData.xls");
+           // wbk.Save("D:\\CDRData.xls");
 
             byte[] array;
             MemoryStream ms = new MemoryStream();
@@ -70,10 +76,11 @@ namespace TOne.Analytics.Business
             ms.Position = 0;
             result.Content = new StreamContent(ms);
 
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/binary");
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+           
             result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
             {
-                FileName = "CDRData.xls"
+                FileName = "CDRData-" + DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-"+DateTime.Now.Day.ToString() + ".xls"
             };
 
             return result;

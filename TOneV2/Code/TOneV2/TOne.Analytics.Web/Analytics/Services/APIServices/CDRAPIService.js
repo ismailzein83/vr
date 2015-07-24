@@ -12,14 +12,13 @@ app.service('CDRAPIService', function (BaseAPIService) {
     function GetCDRData(getCDRLogSummaryInput) {
         return BaseAPIService.post("/api/CDR/GetCDRData", getCDRLogSummaryInput);
     }
-    function ExportCDRData(tempTableKey, nRecords) {
-        return BaseAPIService.get("/api/CDR/ExportCDRData", {
-            tempTableKey: tempTableKey,
-            nRecords: nRecords
-        }, {
+    function ExportCDRData(CDRLogSummaryInput) {
+        return BaseAPIService.post("/api/CDR/ExportCDRData", CDRLogSummaryInput, {
             returnAllResponseParameters: true,
             responseTypeAsBufferArray: true
         });
+      
     }
+    
 
 });

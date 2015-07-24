@@ -71,9 +71,21 @@ app.service('BaseAPIService', function ($http, $q, $rootScope, notify) {
         var data;
         if (dataToSend)
             data = dataToSend
+        var responseType = '';
+        var ContentType = 'application/json;charset=utf-8';
         if (options != undefined && options.responseTypeAsBufferArray)
-            data.responseType = 'arraybuffer';
-        $http.post(url, data)
+            responseType = 'arraybuffer';
+
+        var req = {
+            method: 'POST',
+            url: url,
+            responseType:responseType,
+            headers: {
+                'Content-Type': ContentType
+            },
+            data: data
+        }
+        $http(req)
             .success(function (response, status, headers, config) {
                   var returnedResponse;
                 if (options != undefined && options.returnAllResponseParameters) {

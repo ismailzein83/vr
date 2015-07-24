@@ -22,11 +22,12 @@ namespace TOne.Analytics.Web.Controllers
             System.Threading.Thread.Sleep(1000);
             return __cdrManager.GetCDRData(input.TempTableKey, input.Filter, input.From, input.To, input.FromRow, input.ToRow, input.Size, input.CDROption, input.OrderBy, input.IsDescending);
         }
-        [HttpGet]
-        public HttpResponseMessage ExportCDRData(string tempTableKey, int nRecords)
+        [HttpPost]
+        public HttpResponseMessage ExportCDRData(GetCDRSummaryInput input)
         {
             System.Threading.Thread.Sleep(1000);
-            return __cdrManager.ExportCDRData(tempTableKey, nRecords);
+            CDRBigResult records = __cdrManager.GetCDRData(input.TempTableKey, input.Filter, input.From, input.To, 0, input.Size, input.Size, input.CDROption, input.OrderBy, input.IsDescending);
+            return __cdrManager.ExportCDRData(records);
         }
     }
     
