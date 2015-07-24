@@ -1,2 +1,5 @@
-﻿CREATE SCHEMA [sec];
+﻿CREATE SCHEMA [sec]
+    AUTHORIZATION [dbo];
+
+
 

@@ -21,5 +21,5 @@ SELECT	v.Id,
 	FROM	sec.[View] v 
 	INNER JOIN	sec.[Module] m 
 	ON		v.Module=m.Id 
-	WHERE	v.[Type]=@Type and v.Name Like '%'+@Filter+'%'
+	WHERE	v.[Type]=@Type and (v.Name Like '%'+@Filter+'%' or @Filter IS NULL)
 END

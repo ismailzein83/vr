@@ -84,7 +84,6 @@
     <Build Include="sec\Tables\User.sql" />
     <Build Include="BI\Tables\SchemaConfiguration.sql" />
     <Build Include="sec\Stored Procedures\sp_WidgetDefinition_Get.sql" />
-    <Build Include="sec\Stored Procedures\sp_View_GetByType.sql" />
     <Build Include="sec\Stored Procedures\sp_User_GetMembers.sql" />
     <Build Include="sec\Stored Procedures\sp_Roles_AssignMembers.sql" />
     <Build Include="sec\Stored Procedures\sp_User_GetAll.sql" />
@@ -134,6 +133,9 @@
     <Build Include="sec\User Defined Types\RoleMembersType.sql" />
     <Build Include="Security\sec.sql" />
     <Build Include="Security\BI.sql" />
+    <Build Include="sec\Tables\OrgChartLinkedEntity.sql" />
+    <Build Include="sec\Stored Procedures\sp_OrgChartLinkedEntity_Insert.sql" />
+    <Build Include="sec\Stored Procedures\sp_OrgChartLinkedEntity_GetLinkedOrgChartId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment1.sql" />
