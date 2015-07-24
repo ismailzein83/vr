@@ -7,7 +7,6 @@ app.directive('vrValidationEmail', function () {
         link: function (scope, elm, attrs, ctrlModel) {
 
             var validate = function (viewValue) {
-                console.log(viewValue + "viewValue");
                 if (viewValue != null && viewValue != "" && viewValue != undefined) {
                     var isEmail_re = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
                     var valid = String(viewValue).search(isEmail_re) != -1;
