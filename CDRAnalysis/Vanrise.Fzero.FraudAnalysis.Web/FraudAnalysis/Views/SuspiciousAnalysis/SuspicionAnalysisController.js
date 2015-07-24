@@ -14,7 +14,8 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
     function defineScope() {
 
         $scope.statuses = [{ id: 1, name: 'Pending' }, { id: 2, name: 'Ignored' }, { id: 3, name: 'Confirmed' }, { id: 4, name: 'White List' }];
-        $scope.selectedStatus = UtilsService.getItemByVal($scope.statuses, 1, "id");
+        $scope.selectedStatus=[];
+        $scope.selectedStatus.push(UtilsService.getItemByVal($scope.statuses, 1, "id"));
 
         var Now = new Date();
         Now.setDate(Now.getDate() + 1);
@@ -183,11 +184,18 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
         });
 
 
+        var caseStatusesList = '';
+
+        angular.forEach($scope.selectedStatus, function (itm) {
+            caseStatusesList = caseStatusesList + itm.id + ','
+        });
+
+       
 
         var pageInfo = mainGridAPI.getPageInfo();
 
 
-        return SuspicionAnalysisAPIService.GetFilteredSuspiciousNumbers($scope.Guid, pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, strategiesList.slice(0, -1), suspicionLevelsList.slice(0, -1)).then(function (response) {
+        return SuspicionAnalysisAPIService.GetFilteredSuspiciousNumbers($scope.Guid, pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, strategiesList.slice(0, -1), suspicionLevelsList.slice(0, -1), caseStatusesList.slice(0, -1)).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.fraudResults.push(itm);
             });

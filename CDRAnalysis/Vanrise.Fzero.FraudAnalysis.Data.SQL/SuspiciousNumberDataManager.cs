@@ -147,7 +147,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
-        public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(string tempTableKey, int fromRow, int toRow, DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList)
+        public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(string tempTableKey, int fromRow, int toRow, DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList, List<int> caseStatusesList)
         {
 
             TempTableName tempTableName = null;
@@ -163,7 +163,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             };
 
 
-            ExecuteNonQuerySP("[FraudAnalysis].[sp_FraudResult_CreateTempForFilteredSuspiciousNumbers]", tempTableName.TableName, fromDate, toDate, string.Join(",", strategiesList), string.Join(",",suspicionLevelsList));
+            ExecuteNonQuerySP("[FraudAnalysis].[sp_FraudResult_CreateTempForFilteredSuspiciousNumbers]", tempTableName.TableName, fromDate, toDate, string.Join(",", strategiesList), string.Join(",", suspicionLevelsList), string.Join(",", caseStatusesList));
             int totalDataCount;
             rslt.Data = GetDataFromTempTable<FraudResult>(tempTableName.TableName, fromRow, toRow, "SubscriberNumber", false, FraudResultMapper, out totalDataCount);
             rslt.TotalCount = totalDataCount;

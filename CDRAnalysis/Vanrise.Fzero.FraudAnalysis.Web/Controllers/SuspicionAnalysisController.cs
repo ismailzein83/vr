@@ -40,7 +40,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
 
         [HttpGet]
-        public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(string tempTableKey, int fromRow, int toRow, DateTime fromDate, DateTime toDate, string strategiesList, string suspicionLevelsList)
+        public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(string tempTableKey, int fromRow, int toRow, DateTime fromDate, DateTime toDate, string strategiesList, string suspicionLevelsList, string caseStatusesList)
         {
             FraudManager manager = new FraudManager();
 
@@ -55,8 +55,13 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
                 suspicionLevelsIntList = suspicionLevelsList.Split(',').Select(h => int.Parse(h)).ToList();
 
 
+            List<int> caseStatusesIntList = new List<int>();
+            if (caseStatusesList != null)
+                caseStatusesIntList = caseStatusesList.Split(',').Select(h => int.Parse(h)).ToList();
 
-            return manager.GetFilteredSuspiciousNumbers( tempTableKey, fromRow, toRow, fromDate, toDate, strategiesIntList, suspicionLevelsIntList);
+
+
+            return manager.GetFilteredSuspiciousNumbers(tempTableKey, fromRow, toRow, fromDate, toDate, strategiesIntList, suspicionLevelsIntList, caseStatusesIntList);
         }
 
 
