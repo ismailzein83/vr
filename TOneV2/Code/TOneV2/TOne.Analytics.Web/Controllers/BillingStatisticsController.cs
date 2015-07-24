@@ -32,7 +32,6 @@ namespace TOne.Analytics.Web.Controllers
             }
             else
                 return __billingStatisticsManager.GetVariationReportsData(selectedDate, periodCount, timePeriod, variationReportOption, fromRow, toRow, entityType, entityID, groupingBy);
-            
         }
 
         public List<VolumeTraffic> GetTrafficVolumes(DateTime fromDate, DateTime toDate, string customerId, string supplierId, string zoneId, int attempts, VolumeReportsTimePeriod timePeriod)
@@ -46,11 +45,14 @@ namespace TOne.Analytics.Web.Controllers
         } 
 
         [HttpGet]
-        public HttpResponseMessage Export(string fromDate, string toDate)
+        public HttpResponseMessage Export(string fromDate, string toDate, string customerId, string topDestination)
         {
             DateTime from = DateTime.ParseExact(fromDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             DateTime to = DateTime.ParseExact(toDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-            return __billingStatisticsManager.ExportSupplierCostDetails(from, to, 0, 0);
+            int topDest = 0;
+            int.TryParse(topDestination, out topDest);
+
+            return __billingStatisticsManager.ExportSupplierCostDetails(from, to, customerId, topDest);
         }
     }
 }

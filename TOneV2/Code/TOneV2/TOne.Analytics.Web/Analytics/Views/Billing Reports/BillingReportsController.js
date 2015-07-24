@@ -11,13 +11,14 @@ function BillingReportsController($scope, ReportAPIService, CarrierAPIService, Z
         //paramsurl += "&toDate=" + $scope.dateToString($scope.params.toDate);
 
         //window.open(MainService.getBaseURL() + BillingStatisticsAPIService.Export() + paramsurl, "_self");
-       
+        console.log($scope.params.top);
 
-        return BaseAPIService.get("/api/BillingStatistics/Export",
-            {
-                fromDate: "01/01/2014",
-                toDate: "01/07/2015"
-            },
+        return BaseAPIService.get("/api/BillingStatistics/Export",{
+            fromDate: $scope.dateToString($scope.params.fromDate),
+            toDate: $scope.dateToString($scope.params.toDate),
+            customerId: $scope.params.customer.CarrierAccountID,
+            topDestination: $scope.params.top
+        },
             {
                 returnAllResponseParameters: true,
                 responseTypeAsBufferArray: true
@@ -168,7 +169,10 @@ function BillingReportsController($scope, ReportAPIService, CarrierAPIService, Z
             paramsurl += "&customer=" + (($scope.params.customer == null) ? "" : $scope.params.customer.CarrierAccountID);
             paramsurl += "&supplier=" + (($scope.params.supplier == null) ? "" : $scope.params.supplier.CarrierAccountID);
 
-            window.open("/Reports/Analytics/BillingReports.aspx?" + paramsurl, "_blank", "width=1000, height=600,scrollbars=1");
+            if ($scope.reporttype.ReportDefinitionId != 22)
+                window.open("/Reports/Analytics/BillingReports.aspx?" + paramsurl, "_blank", "width=1000, height=600,scrollbars=1");
+            else
+                $scope.export();
         }
         $scope.resetReportParams = function () {
 

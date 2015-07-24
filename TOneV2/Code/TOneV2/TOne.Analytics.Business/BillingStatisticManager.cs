@@ -46,59 +46,154 @@ namespace TOne.Analytics.Business
             return FormatDailySummaries(_datamanager.GetDailySummary(fromDate, toDate, customerAMUId, supplierAMUId));
         }
 
-        public HttpResponseMessage ExportSupplierCostDetails(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        public HttpResponseMessage ExportSupplierCostDetails(DateTime fromDate, DateTime toDate, string customerId, int topDestination)
         {
-            List<SupplierCostDetails> lstSuppplierCostDetails = _datamanager.GetSupplierCostDetails(fromDate, toDate, customerAMUId, supplierAMUId);
+            //List<SupplierCostDetails> lstSuppplierCostDetails = _datamanager.GetSupplierCostDetails(fromDate, toDate, customerAMUId, supplierAMUId);
+            List<CarrierProfileReport> lstSuppplierCostDetails = GetCarrierProfileMTDAndMTA(fromDate, toDate, customerId, true);
+            List<CarrierProfileReport> lstSuppplierCostDetails2 = GetCarrierProfileMTDAndMTA(fromDate, toDate, customerId, false);
+
+            List<CarrierProfileReport> lstSuppplierCostDetails3 = GetCarrierProfile(fromDate, toDate, customerId, topDestination,true, false);
+            int DaysInTillDays = DateTime.DaysInMonth(toDate.Year, toDate.Month);
+
+            TimeSpan span = toDate.Subtract(fromDate);
+
+            int NumberOfMonths = (int)(span.TotalDays / 30);
+
+       
             //export to excel
             ////////////////////////////////
 
             Workbook wbk = new Workbook();
-            Worksheet RateWorkSheet = wbk.Worksheets.Add("Supplier Cost Details");
+            Worksheet RateWorkSheet = wbk.Worksheets.Add("Monthly Traffic as Customer");
+            Worksheet RateWorkSheet2 = wbk.Worksheets.Add("Monthly Traffic as Supplier");
+            Worksheet RateWorkSheet3 = wbk.Worksheets.Add("Traff Top Dest. Durat");
             RateWorkSheet.Cells.SetColumnWidth(0, 4);
             RateWorkSheet.Cells.SetColumnWidth(1, 15);
             RateWorkSheet.Cells.SetColumnWidth(2, 15);
             RateWorkSheet.Cells.SetColumnWidth(3, 15);
-            RateWorkSheet.Cells.SetColumnWidth(4, 15);
+
+            RateWorkSheet2.Cells.SetColumnWidth(0, 4);
+            RateWorkSheet2.Cells.SetColumnWidth(1, 15);
+            RateWorkSheet2.Cells.SetColumnWidth(2, 15);
+            RateWorkSheet2.Cells.SetColumnWidth(3, 15);
+
+            RateWorkSheet3.Cells.SetColumnWidth(0, 4);
+            for (int i = 0; i < NumberOfMonths + 1; i++)
+            {
+                RateWorkSheet3.Cells.SetColumnWidth(i + 1, 20);
+            }
+
 
             int HeaderIndex = 1;
             int Irow = 1;
-            RateWorkSheet.Cells[Irow, HeaderIndex++].PutValue("Customer");
-            RateWorkSheet.Cells[Irow, HeaderIndex++].PutValue("Carrier");
+            RateWorkSheet.Cells[Irow, HeaderIndex++].PutValue("MonthYear");
             RateWorkSheet.Cells[Irow, HeaderIndex++].PutValue("Amount");
             RateWorkSheet.Cells[Irow, HeaderIndex++].PutValue("Duration");
 
-            foreach (SupplierCostDetails supplier in lstSuppplierCostDetails)
+            foreach (CarrierProfileReport supplier in lstSuppplierCostDetails)
             {
                 Irow++;
                 int valueIndex = 1;
 
-                RateWorkSheet.Cells[Irow, valueIndex++].PutValue(supplier.Customer);
-                RateWorkSheet.Cells[Irow, valueIndex++].PutValue(supplier.Carrier);
+                RateWorkSheet.Cells[Irow, valueIndex++].PutValue(supplier.MonthYear);
                 RateWorkSheet.Cells[Irow, valueIndex++].PutValue(supplier.Amount);
-                RateWorkSheet.Cells[Irow, valueIndex++].PutValue(supplier.Duration);
+                RateWorkSheet.Cells[Irow, valueIndex++].PutValue(supplier.Durations);
             }
 
+            HeaderIndex = 1;
+            Irow = 1;
+            RateWorkSheet2.Cells[Irow, HeaderIndex++].PutValue("MonthYear");
+            RateWorkSheet2.Cells[Irow, HeaderIndex++].PutValue("Amount");
+            RateWorkSheet2.Cells[Irow, HeaderIndex++].PutValue("Duration");
+
+            foreach (CarrierProfileReport supplier in lstSuppplierCostDetails2)
+            {
+                Irow++;
+                int valueIndex = 1;
+
+                RateWorkSheet2.Cells[Irow, valueIndex++].PutValue(supplier.MonthYear);
+                RateWorkSheet2.Cells[Irow, valueIndex++].PutValue(supplier.Amount);
+                RateWorkSheet2.Cells[Irow, valueIndex++].PutValue(supplier.Durations);
+            }
+
+
+
+            //////////////////////////
+            HeaderIndex = 1;
+            Irow = 1;
+            RateWorkSheet3.Cells[Irow, HeaderIndex++].PutValue("Name");
+            DateTime d = fromDate;
+            for (int i = 0; i < NumberOfMonths; i++)
+            {
+                string s = d.ToString("MMMM - yyyy");
+                d = d.AddMonths(1);
+                RateWorkSheet3.Cells[Irow, HeaderIndex++].PutValue(s);
+            }
+            List<string> lstZones = lstSuppplierCostDetails3.Select(x => x.Zone).Distinct().ToList<string>();
+
+            for (int ii = 0; ii < lstZones.Count(); ii++)
+            {
+                Irow++;
+                HeaderIndex = 1;
+                int valueIndex = 1;
+                RateWorkSheet3.Cells[Irow, valueIndex++].PutValue(lstZones[ii]);
+                DateTime d2 = fromDate;
+                for (int i = 0; i < NumberOfMonths; i++)
+                {
+                    bool f = false;
+                    for (int j = 0; j < lstSuppplierCostDetails3.Count; j++)
+                    {
+                        if (lstSuppplierCostDetails3[j].Month == d2.Month && lstSuppplierCostDetails3[j].Year == d2.Year && lstZones[ii] == lstSuppplierCostDetails3[j].Zone)
+                        {
+                            RateWorkSheet3.Cells[Irow, valueIndex++].PutValue(lstSuppplierCostDetails3[j].Durations);
+                            f = true;
+                        }
+                    }
+                    if(f== false)
+                        RateWorkSheet3.Cells[Irow, valueIndex++].PutValue("0");
+                    d2 = d2.AddMonths(1);
+                }
+            }
+
+
+            //////////////////////////////////
+
             //Styles
-            for(int i =1 ; i<= 4; i++)
+            for (int i = 1; i <= 3; i++)
             {
                 Cell cell = RateWorkSheet.Cells.GetCell(1, i);
+                Cell cell2 = RateWorkSheet2.Cells.GetCell(1, i);
+                
                 Style style = cell.GetStyle();
                 style.Font.Name = "Times New Roman";
                 style.Font.Color = Color.FromArgb(255, 0, 0); ;
                 style.Font.Size = 14;
                 style.Font.IsBold = true;
                 cell.SetStyle(style);
+                cell2.SetStyle(style);
+            }
+            for (int i = 1; i <= NumberOfMonths +1; i++)
+            {
+                Cell cell3 = RateWorkSheet3.Cells.GetCell(1, i);
+                Style style = cell3.GetStyle();
+                style.Font.Name = "Times New Roman";
+                style.Font.Color = Color.FromArgb(255, 0, 0); ;
+                style.Font.Size = 14;
+                style.Font.IsBold = true;
+                cell3.SetStyle(style);
             }
 
             //Adding a chart to the worksheet
-            int chartIndex = RateWorkSheet.Charts.Add(Aspose.Cells.Charts.ChartType.Pyramid, 5, 0, 15, 5);
+            int chartIndex = RateWorkSheet.Charts.Add(Aspose.Cells.Charts.ChartType.ColumnStacked, 6, 5, 30, 20);
+            int chartIndex2 = RateWorkSheet2.Charts.Add(Aspose.Cells.Charts.ChartType.ColumnStacked, 6, 5, 30, 20);
 
             //Accessing the instance of the newly added chart
             Aspose.Cells.Charts.Chart chart = RateWorkSheet.Charts[chartIndex];
+            Aspose.Cells.Charts.Chart chart2 = RateWorkSheet2.Charts[chartIndex2];
 
             //Adding SeriesCollection (chart data source) to the chart ranging from "A1" cell to "B3"
-            chart.NSeries.Add("C3:D5", true);
-
+            chart.NSeries.Add("C3:D7", true);
+            chart2.NSeries.Add("C3:D7", true);
 
             wbk.Save("D:\\book1.xls");
 
@@ -124,7 +219,6 @@ namespace TOne.Analytics.Business
             List<SupplierCostDetails> lstSuppplierCostDetails = _datamanager.GetSupplierCostDetails(fromDate, toDate, customerAMUId, supplierAMUId);
 
             List<SupplierCostDetails> lstSuppplierCostDetailsGrouped = AddGroupNames(lstSuppplierCostDetails);
-
 
             var grouped = lstSuppplierCostDetailsGrouped.GroupBy(c => new { supplier = c.Carrier, subKey = c.CustomerGroupName })
               .Select(r => new SupplierCostDetails
@@ -169,13 +263,17 @@ namespace TOne.Analytics.Business
         }
         public List<MonthTraffic> GetMonthTraffic(DateTime fromDate, DateTime toDate, string carrierAccountID, bool isSale)
         {
-
             return _datamanager.GetMonthTraffic(fromDate, toDate, carrierAccountID, isSale);
         }
 
-        public List<CarrierProfileReport> GetCarrierProfile(DateTime fromDate, DateTime toDate, string carrierAccountID, int TopDestinations, bool isSale, bool IsAmount)
+        public List<CarrierProfileReport> GetCarrierProfileMTDAndMTA(DateTime fromDate, DateTime toDate, string carrierAccountID, bool isSale)
         {
-            return _datamanager.GetCarrierProfile(fromDate, toDate, carrierAccountID, TopDestinations, isSale, IsAmount);
+            return _datamanager.GetCarrierProfileMTDAndMTA(fromDate, toDate, carrierAccountID, isSale);
+        }
+
+        public List<CarrierProfileReport> GetCarrierProfile(DateTime fromDate, DateTime toDate, string carrierAccountID, int topDestination, bool isSale, bool isAmount)
+        {
+            return _datamanager.GetCarrierProfile(fromDate, toDate, carrierAccountID, topDestination, isSale, isAmount);
         }
 
         public List<CarrierSummaryDailyFormatted> GetDailyCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, bool isGroupedByDay, int? customerAMUId, int? supplierAMUId)
@@ -204,7 +302,6 @@ namespace TOne.Analytics.Business
 
         public List<CustomerSummaryFormatted> GetCustomerSummary(DateTime fromDate, DateTime toDate, string customerId, int? customerAMUId, int? supplierAMUId)
         {
-
             List<CustomerSummary> customerSummaries = _datamanager.GetCustomerSummary(fromDate, toDate, customerId, customerAMUId, supplierAMUId);
 
             List<CustomerServices> customerServices = _datamanager.GetCustomerServices(fromDate, toDate);
@@ -318,11 +415,9 @@ namespace TOne.Analytics.Business
                     Total = FormatNumber(c.CustomerProfit + c.SupplierProfit)
 
                 }).OrderByDescending(r => r.CustomerProfit + r.SupplierProfit).ToList();
-
             }
             else
             {
-
                 result = ecpList.GroupBy(c => new { c.CarrierAccount.ProfileName }).Select(obj => new ExchangeCarrierFormatted
                 {
                     Customer = obj.Key.ProfileName,
@@ -333,13 +428,8 @@ namespace TOne.Analytics.Business
                     Total = FormatNumber(obj.Sum(d => d.CustomerProfit) + obj.Sum(d => d.SupplierProfit))
 
                 }).OrderByDescending(r => r.CustomerProfit + r.SupplierProfit).ToList();
-
-
             }
-
             return result;
-
-
         }
 
         public VariationReportResult GetVariationReportsData(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions, int fromRow, int toRow, EntityType entityType, string entityID, GroupingBy groupingBy)

@@ -11,6 +11,7 @@ namespace TOne.Analytics.Entities
     
         public string Zone { get; set; }
         public int Month { get; set; }
+        public int Year { get; set; }
         public string MonthYear { get; set; }
 
         public decimal? Durations { get; set; }

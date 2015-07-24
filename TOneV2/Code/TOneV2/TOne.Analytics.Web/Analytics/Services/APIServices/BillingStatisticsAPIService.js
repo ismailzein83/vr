@@ -27,51 +27,7 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService) {
     }
 
     function Export() {
-
-
-        console.log("asdsad");
-
-
-
-        //Response.Clear();
-        //Response.Buffer = true;
-        //Response.Charset = "";
-        //Response.Cache.SetCacheability(HttpCacheability.NoCache);
-        //Response.ContentType = "application/vnd.ms-excel";
-        //Response.AppendHeader("Content-Disposition", "attachment; filename=" + fileName); //File Name
-        //Response.WriteFile(filePath) //Save excel file path on server
-        //Response.Flush();
-        //Response.End();
-
-
-        //$.ajax({
-        //    dataType: "json",
-        //    type: "POST",
-        //    url: "/api/BillingStatistics/Export",
-        //    success: function(response) {
-        //        if (response && response.Uri && response.Uri.length) {
-        //            window.location.href = response.Uri;
-        //        }
-        //    }
-        //});
-
-
-
         return "/api/BillingStatistics/Export";
-        //        data: data;
-
-        //$('#hidden-excel-form').bind("submit", successCallback)
-        //$('#hidden-excel-form').submit()
-
-
-
-        //if( $('#hidden-excel-form').length < 1){
-
-            //$('<form>').attr(method= 'POST', id= 'hidden-excel-form', action= '/api/BillingStatistics/Export').appendTo('body');
-
-            //$('#hidden-excel-form').bind("submit", successCallback)
-            //$('#hidden-excel-form').submit()
-        //}
     }
     
     function GetTrafficVolumes(fromDate, toDate, selectedCustomer, selectedSupplier, selectedZone, attempts, selectedTimePeriod) {
