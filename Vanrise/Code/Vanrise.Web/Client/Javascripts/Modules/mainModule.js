@@ -4,19 +4,19 @@
 var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
 .controller('mainCtrl', function mainCtrl($scope, $rootScope, MenuAPIService, PermissionAPIService, notify, $animate, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService) {
     
-    var cookieUserToken = $cookies['TOne_LoginTokenCookie'];
-
-    if (cookieUserToken == undefined)
-    {
-        window.location.href = '/Security/Login';
-    }
+    var cookieUserToken = $cookies.get('TOne_LoginTokenCookie');
     
+    if (cookieUserToken === undefined) {
+        window.location.href = '/Security/Login';
+        return;
+    }
+
     $('#dt1').datetimepicker();
     PermissionAPIService.GetEffectivePermissions().then(function (response) {
         $rootScope.effectivePermissionsWrapper = response;
     }
     );
-
+    
     var userInfo = JSON.parse(cookieUserToken);
     $scope.userDisplayName = userInfo.UserDisplayName;
 

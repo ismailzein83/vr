@@ -1,0 +1,20 @@
+{
+  "name": "Vanrise.Web",
+  "version": "0.0.0",
+  "description": "Vanrise Web",
+  "license": "MIT",
+  "dependencies": {
+    "angular": "1.4.3",
+    "angular-animate": "~1.4.3",
+    "angular-cookies": "~1.4.3",
+    "angular-messages": "~1.4.3",
+    "angular-notify": "~2.5.0",
+    "angular-route": "~1.4.3",
+    "angular-sanitize": "~1.4.3",
+    "angular-strap": "~2.3.1",
+    "angular-ivh-treeview": "~0.10.0",
+    "angular-ui-grid": "~3.0.1",
+    "angular-ui-switch": "~0.1.0",
+    "Sortable": "~1.2.1"
+  }
+}

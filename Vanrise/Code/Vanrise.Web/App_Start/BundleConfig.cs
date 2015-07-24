@@ -37,22 +37,74 @@ namespace Vanrise.Web
 
             bundles.Add(new ScriptBundle("~/bundles/Angular").Include(
                "~/Client/Libraries/AngularExtensions/BsDateTimePicker/moment-with-locales.js",
-               "~/Client/Libraries/Angular/angular.js",
-               "~/Client/Libraries/Angular/angular-cookies.js",
-               "~/Client/Libraries/Angular/angular-route.js",
-               "~/Client/Libraries/Angular/angular-messages.js",
-               "~/Client/Libraries/Angular/angular-animate.js",
-               "~/Client/Libraries/Angular/ui-grid.js",
-               "~/Client/Libraries/Angular/angular-sanitize.js",
-                "~/Client/Libraries/Angular/angular-strap.js",
-               "~/Client/Libraries/Angular/angular-strap.tpl.js",
-              "~/Client/Libraries/Angular/sortable.js",
-               "~/Client/Libraries/Angular/angular-ui-switch.js",
-               "~/Client/Libraries/Angular/angular-notify.js",
-              "~/Client/Libraries/Angular/ng-sortable.js",
-               "~/Client/Libraries/Angular/ivh-treeview.js"
+               
+               "~/Client/Libraries/Bower/angular/angular.js",
+               "~/Client/Libraries/Bower/angular-cookies/angular-cookies.js",
+               "~/Client/Libraries/Bower/angular-route/angular-route.js",
+               "~/Client/Libraries/Bower/angular-messages/angular-messages.js",
+               "~/Client/Libraries/Bower/angular-animate/angular-animate.js",
+               "~/Client/Libraries/Bower/angular-ui-grid/ui-grid.js",
+               "~/Client/Libraries/Bower/angular-sanitize/angular-sanitize.js",
+               "~/Client/Libraries/Bower/angular-strap/dist/angular-strap.js",
+               "~/Client/Libraries/Bower/angular-strap/dist/angular-strap.tpl.js",
+               "~/Client/Libraries/Bower/angular-ui-switch/angular-ui-switch.js",
+               "~/Client/Libraries/Bower/angular-notify/dist/angular-notify.js",
+               "~/Client/Libraries/Bower/angular-ivh-treeview/dist/ivh-treeview.js",
+
+               "~/Client/Libraries/Bower/Sortable/Sortable.js",
+               "~/Client/Libraries/Bower/Sortable/ng-sortable.js"
+
+               //"~/Client/Libraries/Bower/angular/angular.min.js",
+               //"~/Client/Libraries/Bower/angular/angular.min.js.map",
+               
+               //"~/Client/Libraries/Bower/angular-cookies/angular-cookies.min.js",
+               //"~/Client/Libraries/Bower/angular-cookies/angular-cookies.min.js.map",
+
+               //"~/Client/Libraries/Bower/angular-route/angular-route.min.js",
+               //"~/Client/Libraries/Bower/angular-route/angular-route.min.js.map",
+
+               //"~/Client/Libraries/Bower/angular-messages/angular-messages.min.js",
+               //"~/Client/Libraries/Bower/angular-messages/angular-messages.min.js.map",
+
+               //"~/Client/Libraries/Bower/angular-animate/angular-animate.min.js",
+               //"~/Client/Libraries/Bower/angular-animate/angular-animate.min.js.map",
+
+               //"~/Client/Libraries/Bower/angular-ui-grid/ui-grid.min.js",
+
+               //"~/Client/Libraries/Bower/angular-sanitize/angular-sanitize.min.js",
+               //"~/Client/Libraries/Bower/angular-sanitize/angular-sanitize.min.js.map",
+
+               //"~/Client/Libraries/Bower/angular-strap/dist/angular-strap.min.js",
+               //"~/Client/Libraries/Bower/angular-strap/dist/angular-strap.min.js.map",
+               //"~/Client/Libraries/Bower/angular-strap/dist/angular-strap.tpl.min.js",
+
+               //"~/Client/Libraries/Bower/ng-sortable/dist/ng-sortable.min.js",
+               //"~/Client/Libraries/Bower/ng-sortable/dist/ng-sortable.min.js.map",
+
+               //"~/Client/Libraries/Bower/angular-ui-switch/angular-ui-switch.min.js",
+
+               //"~/Client/Libraries/Bower/angular-notify/dist/angular-notify.min.js",
+
+               //"~/Client/Libraries/Bower/angular-ivh-treeview/dist/ivh-treeview.min.js"
+
                
 
+
+              // "~/Client/Libraries/Angular/angular.js",
+              // "~/Client/Libraries/Angular/angular-cookies.js",
+              // "~/Client/Libraries/Angular/angular-route.js",
+              // "~/Client/Libraries/Angular/angular-messages.js",
+              // "~/Client/Libraries/Angular/angular-animate.js",
+              // "~/Client/Libraries/Angular/ui-grid.js",
+              // "~/Client/Libraries/Angular/angular-sanitize.js",
+              //  "~/Client/Libraries/Angular/angular-strap.js",
+              // "~/Client/Libraries/Angular/angular-strap.tpl.js",
+              
+              // "~/Client/Libraries/Angular/angular-ui-switch.js",
+              // "~/Client/Libraries/Angular/angular-notify.js",
+              //"~/Client/Libraries/Angular/ng-sortable.js",
+              // "~/Client/Libraries/Angular/ivh-treeview.js"
+              
               ));
 
             bundles.Add(new ScriptBundle("~/bundles/AngularExtensions").IncludeDirectory(
