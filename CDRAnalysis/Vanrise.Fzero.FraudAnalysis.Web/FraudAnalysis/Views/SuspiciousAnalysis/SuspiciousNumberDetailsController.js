@@ -9,6 +9,10 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
     var numberofOccurances;
     var strategiesList;
     var suspicionLevelsList;
+    var isSubscriberThresholdsDataLoaded = false;
+    var isNormalCDRDataLoaded = false;
+    var isNumberProfileDataLoaded = false;
+
 
     loadParameters();
     defineScope();
@@ -116,8 +120,14 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
         SuspiciousNumberDetailsController.isNormalCDRTabShown = false;
 
 
+       
+
+
+
         $scope.onSubscriberThresholdsGridReady = function (api) {
             subscriberThresholdsGridAPI = api;
+            getSubscriberThresholds();
+            isSubscriberThresholdsDataLoaded = true;
         };
 
         $scope.loadMoreDataSubscriberThresholds = function () {
@@ -196,9 +206,10 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
         numberProfileGridAPI.clearDataAndContinuePaging();
         subscriberThresholdsGridAPI.clearDataAndContinuePaging();
 
-        getSubscriberThresholds();
-        getNormalCDRs();
-        getNumberProfiles();
+        isSubscriberThresholdsDataLoaded = false;
+        isNormalCDRDataLoaded = false;
+        isNumberProfileDataLoaded = false;
+        $scope.groupKeySelectionChanged();
     }
 
 
@@ -251,14 +262,28 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
 
     }
 
+
    
 
 
-    SuspiciousNumberDetailsController.viewVisibilityChanged = function () {
+    $scope.groupKeySelectionChanged = function () {
 
-        isNormalCDRTabShown = !isNormalCDRTabShown;
-        isNumberProfileTabShown = !isNumberProfileTabShown;
-        isSubscriberThresholdsTabShown = !isSubscriberThresholdsTabShown;
+        if ($scope.selectedGroupKeyIndex != undefined) {
+
+            if ($scope.selectedGroupKeyIndex == 0 && !isSubscriberThresholdsDataLoaded) {
+                getSubscriberThresholds();
+                isSubscriberThresholdsDataLoaded = true;
+            }
+            else if ($scope.selectedGroupKeyIndex == 1 && !isNormalCDRDataLoaded) {
+                getNormalCDRs();
+                isNormalCDRDataLoaded = true;
+            }
+            else if ($scope.selectedGroupKeyIndex == 2 && !isNumberProfileDataLoaded) {
+                getNumberProfiles();
+                isNumberProfileDataLoaded = true;
+            }
+
+        }
     };
 
 

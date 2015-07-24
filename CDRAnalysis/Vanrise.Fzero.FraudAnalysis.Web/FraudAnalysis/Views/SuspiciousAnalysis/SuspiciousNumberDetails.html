@@ -33,17 +33,16 @@
             <vr-row>
 
                 <vr-columns colnum="12">
-
-                    <vr-choices onselectionchanged="ctrl.viewVisibilityChanged">
-                        <vr-choice isselected="ctrl.isSubscriberThresholdsTabShown">Subscriber Thresholds</vr-choice>
-                        <vr-choice isselected="ctrl.isNormalCDRTabShown">CDR</vr-choice>
-                        <vr-choice isselected="ctrl.isNumberProfileTabShown">Number Profile</vr-choice>
+                    <vr-choices selectedindex="selectedGroupKeyIndex" onselectionchanged="groupKeySelectionChanged();">
+                        <vr-choice isselected="isSubscriberThresholdsTabShown">Subscriber Thresholds</vr-choice>
+                        <vr-choice isselected="isNormalCDRTabShown">CDR</vr-choice>
+                        <vr-choice isselected="isNumberProfileTabShown">Number Profile</vr-choice>
                     </vr-choices>
 
                     <div>
                         <vr-row>
                             <vr-columns colnum="12">
-                                <div ng-show="ctrl.isSubscriberThresholdsTabShown" vr-loader="isGettingSubscriberThresholds">
+                                <div ng-show="isSubscriberThresholdsTabShown" vr-loader="isGettingSubscriberThresholds">
                                     <vr-datagrid datasource="subscriberThresholds" maxheight="400px" loadmoredata="loadMoreDataSubscriberThresholds" on-ready="onSubscriberThresholdsGridReady">
                                         <vr-datagridcolumn headertext="'Date'" field="'DateDay'" type="'Datetime'" widthfactor="17"></vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Filt. 1'" field="'Criteria1'"></vr-datagridcolumn>
@@ -69,7 +68,7 @@
                                     </vr-datagrid>
 
                                 </div>
-                                <div ng-show="ctrl.isNormalCDRTabShown" vr-loader="isGettingNormalCDRs">
+                                <div ng-show="isNormalCDRTabShown" vr-loader="isGettingNormalCDRs">
                                     <vr-datagrid datasource="normalCDRs" maxheight="400px" loadmoredata="loadMoreDataNormalCDRs" on-ready="onNormalCDRsGridReady">
                                         <vr-datagridcolumn headertext="'IMSI'" field="'IMSI'" widthfactor="13">  </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Connect'" field="'ConnectDateTime'" type="'Datetime'" widthfactor="17"></vr-datagridcolumn>
@@ -86,7 +85,7 @@
                                     </vr-datagrid>
 
                                 </div>
-                                <div ng-show="ctrl.isNumberProfileTabShown" vr-loader="isGettingNumberProfiles">
+                                <div ng-show="isNumberProfileTabShown" vr-loader="isGettingNumberProfiles">
                                     <vr-datagrid datasource="numberProfiles" maxheight="400px" rotate="true" loadmoredata="loadMoreDataNumberProfiles" on-ready="onNumberProfilesGridReady">
                                         <vr-datagridcolumn headertext="'From Date'" field="'FromDate'" type="'Datetime'" widthfactor="25"></vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'To Date'" field="'ToDate'" type="'Datetime'" widthfactor="25"></vr-datagridcolumn>
@@ -134,7 +133,7 @@
                         <vr-columns colnum="2">
                             <vr-datetimepicker type="date" value="validTill" label="Valid Till" isrequired ng-show="selectedStatus.id==4"></vr-datetimepicker>
                         </vr-columns>
-                       
+
                     </div>
                 </vr-section>
 
