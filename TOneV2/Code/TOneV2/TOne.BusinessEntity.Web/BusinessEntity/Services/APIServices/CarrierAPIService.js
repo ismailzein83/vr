@@ -7,7 +7,7 @@ var serviceObj = function (BaseAPIService) {
         GetCarrierAccounts: GetCarrierAccounts,
         GetCarrierAccount: GetCarrierAccount,
         UpdateCarrierAccount: UpdateCarrierAccount,
-        GetAllProfiles: GetAllProfiles,
+        GetFilteredProfiles: GetFilteredProfiles,
         GetCarrierProfile: GetCarrierProfile
     });
     function GetCarriers(carrierType) {
@@ -50,9 +50,10 @@ var serviceObj = function (BaseAPIService) {
                 CarrierAccount
             );
     }
-    function GetAllProfiles(name, companyName, billingEmail, from, to) {
-        return BaseAPIService.get("/api/Profile/GetAllProfiles",
+    function GetFilteredProfiles(resultKey, name, companyName, billingEmail, from, to) {
+        return BaseAPIService.get("/api/Profile/GetFilteredProfiles",
             {
+                resultKey: resultKey,
                 name: name,
                 companyName: companyName,
                 billingEmail: billingEmail,

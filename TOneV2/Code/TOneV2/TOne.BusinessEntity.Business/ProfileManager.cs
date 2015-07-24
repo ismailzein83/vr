@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.BusinessEntity.Data;
 using TOne.BusinessEntity.Entities;
+using Vanrise.Entities;
 
 namespace TOne.BusinessEntity.Business
 {
@@ -15,9 +16,9 @@ namespace TOne.BusinessEntity.Business
         {
             _dataManager = BEDataManagerFactory.GetDataManager<IProfileDataManager>();
         }
-        public List<CarrierProfile> GetAllProfiles(string name, string companyName, string billingEmail, int from, int to)
+        public BigResult<CarrierProfile> GetFilteredProfiles(string resultKey, string name, string companyName, string billingEmail, int from, int to)
         {
-            return _dataManager.GetAllProfiles(name, companyName, billingEmail, from, to);
+            return _dataManager.GetFilteredProfiles(resultKey, name, companyName, billingEmail, from, to);
         }
         public CarrierProfile GetCarrierProfile(int profileId)
         {

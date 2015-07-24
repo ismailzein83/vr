@@ -1,6 +1,7 @@
 ﻿CarrierProfileManagementController.$inject = ['$scope', 'CarrierAPIService', 'VRModalService'];
 function CarrierProfileManagementController($scope, CarrierAPIService, VRModalService) {
     var gridApi;
+    var resultKey = "";
     defineScope();
     load();
 
@@ -25,14 +26,16 @@ function CarrierProfileManagementController($scope, CarrierAPIService, VRModalSe
         }
         $scope.searchClicked = function () {
             gridApi.clearDataAndContinuePaging();
+            resultKey = "";
             return getData();
         }
     }
 
     function getData() {
         var pageInfo = gridApi.getPageInfo();
-        return CarrierAPIService.GetAllProfiles($scope.name, $scope.companyName, $scope.billingEmail, pageInfo.fromRow, pageInfo.toRow).then(function (response) {
-            gridApi.addItemsToSource(response);
+        return CarrierAPIService.GetFilteredProfiles(resultKey, $scope.name, $scope.companyName, $scope.billingEmail, pageInfo.fromRow, pageInfo.toRow).then(function (response) {
+            gridApi.addItemsToSource(response.Data);
+            resultKey = response.ResultKey;
         });
     }
 

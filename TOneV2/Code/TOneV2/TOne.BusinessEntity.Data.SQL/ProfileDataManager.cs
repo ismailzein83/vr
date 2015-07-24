@@ -12,15 +12,10 @@ namespace TOne.BusinessEntity.Data.SQL
 {
     public class ProfileDataManager : BaseTOneDataManager, IProfileDataManager
     {
-        public List<CarrierProfile> GetAllProfiles(string name, string companyName, string billingEmail, int from, int to)
-        {
-            return GetItemsSP("BEntity.SP_Carriers_GetAllProfiles", CarrierProfilesMapper, name, companyName, billingEmail, from, to);
-        }
-
-        public BigResult<CarrierProfile> GetAllProfiles(string resultKey, string name, string companyName, string billingEmail, int from, int to)
+        public BigResult<CarrierProfile> GetFilteredProfiles(string resultKey, string name, string companyName, string billingEmail, int from, int to)
         {
             TempTableName tempTableName = null;
-            if (resultKey != null)
+            if (!string.IsNullOrEmpty(resultKey))
                 tempTableName = GetTempTableName(resultKey);
             else
                 tempTableName = GenerateTempTableName();
@@ -34,20 +29,9 @@ namespace TOne.BusinessEntity.Data.SQL
 
             ExecuteNonQuerySP("[BEntity].[SP_CarrierProfile_CreateTempForFiltered]", tempTableName.TableName, name, companyName, billingEmail);
             int totalDataCount;
-            rslt.Data = GetDataFromTempTable<CarrierProfile>(tempTableName.TableName, from, to, "Name", false, CarrierProfilesMapper, out totalDataCount);
+            rslt.Data = GetDataFromTempTable<CarrierProfile>(tempTableName.TableName, from, to, "Name", false, CarrierProfileMapper, out totalDataCount);
             rslt.TotalCount = totalDataCount;
             return rslt;
-        }
-        private CarrierProfile CarrierProfilesMapper(IDataReader reader)
-        {
-            return new CarrierProfile
-            {
-                ProfileID = (Int16)reader["ProfileId"],
-                Name = reader["Name"] as string,
-                CompanyName = reader["CompanyName"] as string,
-                BillingEmail = reader["BillingEmail"] as string,
-                AccountsCount = (Int32)reader["Accounts"]
-            };
         }
 
         public CarrierProfile GetCarrierProfile(int profileId)
@@ -61,6 +45,7 @@ namespace TOne.BusinessEntity.Data.SQL
                 ProfileID = (Int16)reader["ProfileId"],
                 Name = reader["Name"] as string,
                 CompanyName = reader["CompanyName"] as string,
+                BillingEmail = reader["BillingEmail"] as string,
                 Country = reader["Country"] as string,
                 City = reader["City"] as string,
                 RegistrationNumber = reader["RegistrationNumber"] as string,
@@ -69,7 +54,8 @@ namespace TOne.BusinessEntity.Data.SQL
                 Address1 = reader["Address1"] as string,
                 Address2 = reader["Address2"] as string,
                 Address3 = reader["Address3"] as string,
-                Website = reader["Website"] as string
+                Website = reader["Website"] as string,
+                AccountsCount = GetReaderValue<int>(reader, "AccountsCount")//GetReaderValue(reader["AccountsCount"])
             };
         }
         protected string[] SplitString(string s)
