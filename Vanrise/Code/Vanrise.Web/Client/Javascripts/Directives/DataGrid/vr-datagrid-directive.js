@@ -1,4 +1,4 @@
-﻿app.directive('vrDatagrid', ['UtilsService', 'SecurityService', '$compile', function (UtilsService, SecurityService, $compile) {
+﻿app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalResultTypeEnum', '$compile', function (UtilsService, SecurityService, DataRetrievalResultTypeEnum, $compile) {
 
     'use strict';
 
@@ -20,6 +20,14 @@
             if ($attrs.loadmoredata != undefined)
                 loadMoreDataFunction = $scope.$parent.$eval($attrs.loadmoredata);
            
+            var retrieveDataFunction
+            if ($attrs.dataretrievalfunction != undefined)
+                retrieveDataFunction = $scope.$parent.$eval($attrs.dataretrievalfunction);
+
+            var pagingType;
+            if ($attrs.pagingtype != undefined)
+                pagingType = $scope.$parent.$eval($attrs.pagingtype);
+
             ctrl.clientSideFilterFunction;
             ctrl.rotateHeader = true;
 
@@ -35,25 +43,17 @@
             var actionsAttribute = hasActionMenu ? $scope.$parent.$eval($attrs.menuactions) : undefined;
             var dataGridObj = new DataGrid(ctrl, $scope);
             dataGridObj.initializeController();
-            dataGridObj.definePagingOnScroll($scope, loadMoreDataFunction);
+            if (retrieveDataFunction != undefined)
+                dataGridObj.defineRetrieveData(retrieveDataFunction, pagingType);
+
+            if (loadMoreDataFunction != undefined)
+                dataGridObj.definePagingOnScroll($scope, loadMoreDataFunction);
             dataGridObj.defineExpandableRow();
             dataGridObj.defineMenuColumn(hasActionMenu, actionsAttribute);
             dataGridObj.calculateDataColumnsSectionWidth();
             dataGridObj.addActionTypeColumn();
             dataGridObj.defineAPI();
-            ctrl.isExporting = false;
-            ctrl.onExportClicked = function () {
-                if (this.onexport != undefined && typeof (this.onexport) == 'function') {
-                    var promise = this.onexport();
-               
-                    if (promise != undefined && promise != null) {
-                        ctrl.isExporting = true;
-                        promise.finally(function () {
-                            ctrl.isExporting = false;
-                        });
-                    }
-                }
-            };
+            
         },
         controllerAs: 'ctrl',
         bindToController: true,
@@ -111,6 +111,11 @@
         var actionTypeColumn;
         var stopPagingOnScroll;
         var pagingOnScrollEnabled;
+        var retrieveDataFunction;
+        var retrieveDataInput;
+        var retrieveDataResultKey;
+        var isGridReady;
+       
 
         function addColumn(col, columnIndex) {
             var colDef = {
@@ -351,6 +356,24 @@
                 colDef.isHidden = !colDef.isHidden;
                 calculateColumnsWidth();
             }
+
+            ctrl.isExporting = false;
+            ctrl.onExportClicked = function () {
+                var promise;
+                if (this.onexport != undefined && typeof (this.onexport) == 'function') {
+                    promise = this.onexport();
+                }
+                else {
+                    promise = retrieveData(false, true);
+                }
+
+                if (promise != undefined && promise != null) {
+                    ctrl.isExporting = true;
+                    promise.finally(function () {
+                        ctrl.isExporting = false;
+                    });
+                }
+            };
         }
         
         function buildRowHtml() {
@@ -483,9 +506,21 @@
                 ctrl.summaryDataItem = undefined;
                 buildSummaryRowHtml();
             };
+            
+            gridApi.retrieveData = function (query) {
+                //retrieveDataInput should be of type Vanrise.Entities.RetrieveDataInput<T>
+                retrieveDataInput = {
+                    Query: query,
+                    SortByColumnName: ctrl.columnDefs[0].field
+                };
+                return retrieveData(true);
+            };
 
-            if (ctrl.onReady != null)
-                ctrl.onReady(gridApi);
+            setTimeout(function () {
+                isGridReady = true;
+                if (ctrl.onReady != null)
+                    ctrl.onReady(gridApi);
+            }, 1000);            
         }
 
         function setMaxHeight(maxHeight) {
@@ -624,6 +659,80 @@
             ctrl.hideColumn(actionTypeColumn);
         }
 
+        function defineRetrieveData(retrieveDataFunc, pagingType) {
+            retrieveDataFunction = retrieveDataFunc;
+
+            switch(pagingType)
+            {
+                case "Pager":
+                    ctrl.showPager = true;
+                    ctrl.pagerSettings = {
+                        currentPage: 1,
+                        totalDataCount: 0,
+                        pageChanged: retrieveData
+                    }
+                    break;
+                case "PagingOnScroll":
+                    definePagingOnScroll(scope, retrieveData);
+                    break;
+            }
+        }
+
+        function retrieveData(clearBeforeRetrieve, isExport) {
+            if (!isGridReady)
+                return;
+            if (clearBeforeRetrieve) {
+                retrieveDataResultKey = null;              
+            }
+            
+            retrieveDataInput.ResultKey = retrieveDataResultKey;//retrieveDataInput should be of type Vanrise.Entities.RetrieveDataInput<T>
+            if (isExport)
+                retrieveDataInput.DataRetrievalResultType = DataRetrievalResultTypeEnum.Excel.value;
+            else{
+                retrieveDataInput.DataRetrievalResultType = DataRetrievalResultTypeEnum.Normal.value;
+                var pageInfo;
+                if (ctrl.showPager)
+                    pageInfo = ctrl.pagerSettings.getPageInfo();
+                else if (pagingOnScrollEnabled)
+                    pageInfo = getPageInfo();
+
+                if (pageInfo != undefined) {
+                    retrieveDataInput.FromRow = pageInfo.fromRow;
+                    retrieveDataInput.ToRow = pageInfo.toRow;
+                }
+            }
+
+            var onResponseReady = function (response) {
+                if (isExport) {
+                    UtilsService.downloadFile(response.data, response.headers);
+                }
+                else {
+                    if (clearBeforeRetrieve) {
+                        gridApi.resetSorting();
+                        gridApi.clearDataAndContinuePaging();
+                    }
+                    else if (ctrl.showPager)
+                        ctrl.datasource.length = 0;
+
+                    gridApi.addItemsToSource(response.Data);//response should be of type Vanrise.Entities.BigResult<T>
+                    retrieveDataResultKey = response.ResultKey;
+                    if (ctrl.pagerSettings != undefined && ctrl.pagerSettings != null)
+                        ctrl.pagerSettings.totalDataCount = response.TotalCount;
+                }
+            };
+              
+           
+            var promise = retrieveDataFunction(retrieveDataInput, onResponseReady);//this function should return a promise in case it is getting data
+            
+            if (promise != undefined && promise != null) {
+                ctrl.isLoadingMoreData = true;
+                promise.finally(function () {
+                    ctrl.isLoadingMoreData = false;
+                });
+            }
+            return promise;            
+        }
+
         this.initializeController = initializeController;
         this.defineAPI = defineAPI;
         this.definePagingOnScroll = definePagingOnScroll;
@@ -631,6 +740,7 @@
         this.defineMenuColumn = defineMenuColumn;
         this.calculateDataColumnsSectionWidth = calculateDataColumnsSectionWidth;
         this.addActionTypeColumn = addActionTypeColumn;
+        this.defineRetrieveData = defineRetrieveData;
     }
 
 

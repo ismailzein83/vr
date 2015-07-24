@@ -45,8 +45,11 @@
   <ItemGroup>
     <Compile Include="BigResult.cs" />
     <Compile Include="DeleteOperationOutput.cs" />
+    <Compile Include="ExcelResult.cs" />
     <Compile Include="InsertOperationOutput.cs" />
+    <Compile Include="IDataRetrievalResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DataRetrievalInput.cs" />
     <Compile Include="TempTableName.cs" />
     <Compile Include="UpdateOperationResult.cs" />
   </ItemGroup>

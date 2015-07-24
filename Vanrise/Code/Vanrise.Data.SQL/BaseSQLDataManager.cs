@@ -478,6 +478,45 @@ namespace Vanrise.Data.SQL
                     cmd.Parameters.Add(new SqlParameter("@ToRow", toRow));
                 });
         }
+
+        protected IEnumerable<T> GetAllDataFromTempTable<T>(string tempTableName, string orderByColumnName, bool isDescending, Func<IDataReader, T> objectBuilder)
+        {
+            string query = String.Format(@"SELECT * FROM {0} ORDER BY {1} {2}", tempTableName, orderByColumnName, isDescending ? "DESC" : "ASC");
+            
+            return GetItemsText(query,
+                objectBuilder,
+                (cmd) =>
+                {
+                });
+        }
+
+        protected BigResult<T> RetrieveData<T>(DataRetrievalInput input, Action<string> createTempTableIfNotExists, Func<IDataReader, T> objectBuilder, BigResult<T> rslt = null)
+        {
+            TempTableName tempTableName = null;
+            if (!String.IsNullOrWhiteSpace(input.ResultKey))
+                tempTableName = GetTempTableName(input.ResultKey);
+            else
+                tempTableName = GenerateTempTableName();
+
+            if (rslt == null)
+                rslt = new BigResult<T>();
+            rslt.ResultKey = tempTableName.Key;
+            
+            createTempTableIfNotExists(tempTableName.TableName);
+            switch (input.DataRetrievalResultType)
+            {
+                case DataRetrievalResultType.Excel:
+                    rslt.Data = GetAllDataFromTempTable(tempTableName.TableName, input.SortByColumnName, input.IsSortDescending, objectBuilder);
+                    rslt.TotalCount = rslt.Data.Count();
+                    break;
+                case DataRetrievalResultType.Normal:
+                    int totalDataCount;
+                    rslt.Data = GetDataFromTempTable(tempTableName.TableName, input.FromRow.Value, input.ToRow.Value, input.SortByColumnName, input.IsSortDescending, objectBuilder, out totalDataCount);
+                    rslt.TotalCount = totalDataCount;
+                    break;
+            }
+            return rslt;
+        }
         
         #endregion
     }

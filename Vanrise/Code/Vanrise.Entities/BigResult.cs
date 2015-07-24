@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public class BigResult<T>
+    public class BigResult<T> : IDataRetrievalResult<T>
     {
         public string ResultKey { get; set; }
 

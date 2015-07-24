@@ -20,7 +20,7 @@ app.config(['$httpProvider', function ($httpProvider) {
     });
 }]);
 
-app.service('BaseAPIService', function ($http, $q, $rootScope, notify) {
+app.service('BaseAPIService', function ($http, $q, $rootScope, notify, DataRetrievalResultTypeEnum) {
 
     return ({
         get: get,
@@ -73,13 +73,14 @@ app.service('BaseAPIService', function ($http, $q, $rootScope, notify) {
             data = dataToSend
         var responseType = '';
         var ContentType = 'application/json;charset=utf-8';
-        if (options != undefined && options.responseTypeAsBufferArray)
+        var isExport = dataToSend != undefined && dataToSend.DataRetrievalResultType != undefined && dataToSend.DataRetrievalResultType == DataRetrievalResultTypeEnum.Excel.value;
+        if (isExport || (options != undefined && options.responseTypeAsBufferArray))
             responseType = 'arraybuffer';
 
         var req = {
             method: 'POST',
             url: url,
-            responseType:responseType,
+            responseType: responseType,
             headers: {
                 'Content-Type': ContentType
             },
@@ -87,8 +88,8 @@ app.service('BaseAPIService', function ($http, $q, $rootScope, notify) {
         }
         $http(req)
             .success(function (response, status, headers, config) {
-                  var returnedResponse;
-                if (options != undefined && options.returnAllResponseParameters) {
+                var returnedResponse;
+                if (isExport || (options != undefined && options.returnAllResponseParameters)) {
                     returnedResponse = {
                         data: response,
                         status: status,
