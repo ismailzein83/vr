@@ -11,7 +11,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
     #region Arguments Classes
 
-    public class GetStoreSuspiciousNumbersforStoringInput
+    public class GetStoreSuspiciousNumbersforCasesInput
     {
         public BaseQueue<SuspiciousNumberBatch> InputQueue { get; set; }
 
@@ -23,22 +23,17 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
     #endregion
 
-    public class StoreSuspiciousNumbers : DependentAsyncActivity<GetStoreSuspiciousNumbersforStoringInput>
+    public class UpdateSusbcriberCases : DependentAsyncActivity<GetStoreSuspiciousNumbersforCasesInput>
     {
         #region Arguments
 
         [RequiredArgument]
         public InArgument<BaseQueue<SuspiciousNumberBatch>> InputQueue { get; set; }
-        public InArgument<BaseQueue<NumberProfileBatch>> InputQueue2 { get; set; }
-
-
-        [RequiredArgument]
-        public InArgument<List<Strategy>> Strategies { get; set; }
 
         #endregion
 
 
-        protected override void DoWork(GetStoreSuspiciousNumbersforStoringInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        protected override void DoWork(GetStoreSuspiciousNumbersforCasesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Started Storing Suspicious Numbers to Database");
             ISuspiciousNumberDataManager dataManager = FraudDataManagerFactory.GetDataManager<ISuspiciousNumberDataManager>();
@@ -46,33 +41,24 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItemSuspiciousNumbers = false;
-                bool hasNumberProfiles = false;
                 do
                 {
                     hasItemSuspiciousNumbers = inputArgument.InputQueue.TryDequeue(
                         (x) =>
                         {
-                            dataManager.SaveSuspiciousNumbers(x.suspiciousNumbers);
+                            dataManager.UpdateSusbcriberCases(x.suspiciousNumbers);
                         });
-
-                    hasNumberProfiles = inputArgument.InputQueue2.TryDequeue(
-                       (y) =>
-                       {
-                           dataManager.SaveNumberProfiles(y.numberProfiles);
-                       });
                 }
-                while (!ShouldStop(handle) && hasItemSuspiciousNumbers && hasNumberProfiles);
+                while (!ShouldStop(handle) && hasItemSuspiciousNumbers);
             });
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Finished Storing Suspicious Numbers to Database");
         }
 
-        protected override GetStoreSuspiciousNumbersforStoringInput GetInputArgument2(AsyncCodeActivityContext context)
+        protected override GetStoreSuspiciousNumbersforCasesInput GetInputArgument2(AsyncCodeActivityContext context)
         {
-            return new GetStoreSuspiciousNumbersforStoringInput
+            return new GetStoreSuspiciousNumbersforCasesInput
             {
-                InputQueue = this.InputQueue.Get(context),
-                InputQueue2 = this.InputQueue2.Get(context),
-                Strategies = this.Strategies.Get(context)
+                InputQueue = this.InputQueue.Get(context)
             };
         }
     }

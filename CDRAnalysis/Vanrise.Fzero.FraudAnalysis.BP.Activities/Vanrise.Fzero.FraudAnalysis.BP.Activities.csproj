@@ -79,6 +79,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UpdateSusbcriberCases.cs" />
     <Compile Include="StoreSuspiciousNumbers.cs" />
   </ItemGroup>
   <ItemGroup>
