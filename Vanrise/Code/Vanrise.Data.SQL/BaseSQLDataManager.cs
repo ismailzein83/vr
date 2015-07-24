@@ -490,7 +490,7 @@ namespace Vanrise.Data.SQL
                 });
         }
 
-        protected BigResult<T> RetrieveData<T>(DataRetrievalInput input, Action<string> createTempTableIfNotExists, Func<IDataReader, T> objectBuilder, BigResult<T> rslt = null)
+        protected BigResult<T> RetrieveData<T>(DataRetrievalInput input, Action<string> createTempTableIfNotExists, Func<IDataReader, T> objectBuilder, Dictionary<string,string> fieldsToColumnsMapper = null, BigResult<T> rslt = null)
         {
             TempTableName tempTableName = null;
             if (!String.IsNullOrWhiteSpace(input.ResultKey))
@@ -503,15 +503,18 @@ namespace Vanrise.Data.SQL
             rslt.ResultKey = tempTableName.Key;
             
             createTempTableIfNotExists(tempTableName.TableName);
+            string sortByColumnName = input.SortByColumnName;
+            if (fieldsToColumnsMapper != null && fieldsToColumnsMapper.ContainsKey(sortByColumnName))
+                sortByColumnName = fieldsToColumnsMapper[sortByColumnName];
             switch (input.DataRetrievalResultType)
             {
                 case DataRetrievalResultType.Excel:
-                    rslt.Data = GetAllDataFromTempTable(tempTableName.TableName, input.SortByColumnName, input.IsSortDescending, objectBuilder);
+                    rslt.Data = GetAllDataFromTempTable(tempTableName.TableName, sortByColumnName, input.IsSortDescending, objectBuilder);
                     rslt.TotalCount = rslt.Data.Count();
                     break;
                 case DataRetrievalResultType.Normal:
                     int totalDataCount;
-                    rslt.Data = GetDataFromTempTable(tempTableName.TableName, input.FromRow.Value, input.ToRow.Value, input.SortByColumnName, input.IsSortDescending, objectBuilder, out totalDataCount);
+                    rslt.Data = GetDataFromTempTable(tempTableName.TableName, input.FromRow.Value, input.ToRow.Value, sortByColumnName, input.IsSortDescending, objectBuilder, out totalDataCount);
                     rslt.TotalCount = totalDataCount;
                     break;
             }
