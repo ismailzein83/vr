@@ -10,39 +10,27 @@
         </vr-form>
     </vr-row>
 
-    <div class="row">
-        <div class="col-md-2">
-            <vr-row>
-                <vr-treeview on-ready="treeReady"
-                    datachildrenfield="nodeChildren"
-                    datavaluefield="nodeId"
-                    datatextfield="nodeName"
-                    selecteditem="currentNode"
-                    onvaluechanged="treeValueChanged">
-                </vr-treeview>
+    <vr-row>
+        <vr-columns colnum="3">
+            <vr-treeview on-ready="treeReady"
+                datachildrenfield="nodeChildren"
+                datavaluefield="nodeId"
+                datatextfield="nodeName"
+                selecteditem="currentNode"
+                onvaluechanged="treeValueChanged">
+            </vr-treeview>
+        </vr-columns>
 
-                <!--<div data-angular-treeview="true"
-                     data-tree-id="tree"
-                     data-tree-model="nodes"
-                     data-node-id="nodeId"
-                     data-node-label="nodeName"
-                     data-node-children="nodeChildren">
-                </div>-->
-            </vr-row>
-        </div>
-
-        <div class="col-md-10">
-            <vr-row>
-                <vr-columns colnum="fullrow" simplecol>
-                    <vr-datagrid datasource="assignedCarriers" on-ready="onGridReady" ng-show="currentNode">
-                        <vr-datagridcolumn headertext="'Carrier Name'" field="'CarrierName'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Carrier Account Id'" field="'CarrierAccountId'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Is Customer'" field="'IsCustomer'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Is Supplier'" field="'IsSupplier'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Access'" field="'Access'"></vr-datagridcolumn>
-                    </vr-datagrid>
-                </vr-columns>
-            </vr-row>
-        </div>
-    </div>
+        <vr-columns colnum="9">
+            <vr-columns colnum="fullrow" simplecol>
+                <vr-datagrid datasource="assignedCarriers" on-ready="onGridReady" vr-loader="isGettingData" ng-show="currentNode">
+                    <vr-datagridcolumn headertext="'Carrier Name'" field="'CarrierName'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Carrier Account Id'" field="'CarrierAccountId'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Is Customer'" field="'IsCustomer'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Is Supplier'" field="'IsSupplier'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Access'" field="'Access'"></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-columns>
+    </vr-row>
 </vr-panel>

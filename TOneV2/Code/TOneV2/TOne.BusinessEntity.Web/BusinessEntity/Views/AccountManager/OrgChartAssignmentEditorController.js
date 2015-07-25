@@ -1,25 +1,21 @@
 ﻿OrgChartAssignmentEditorController.$inject = ['$scope', 'AccountManagerAPIService', 'OrgChartAPIService', 'UtilsService', 'VRModalService', 'VRNavigationService', 'VRNotificationService'];
 
 function OrgChartAssignmentEditorController($scope, AccountManagerAPIService, OrgChartAPIService, UtilsService, VRModalService, VRNavigationService, VRNotificationService) {
+
+    var passedOrgChartId = undefined;
+
     loadParameters();
     defineScope();
     load();
 
     function loadParameters() {
-        // make sure that $scope.orgCharts is set before setting $scope.assignedOrgChart
-        OrgChartAPIService.GetOrgCharts().then(function (response) {
-            $scope.orgCharts = response;
-            var parameters = VRNavigationService.getParameters($scope);
+        var parameters = VRNavigationService.getParameters($scope);
 
-            if (parameters != undefined && parameters != null) {
-                // getItemByVal assumes that $scope.orgCharts is set
-                $scope.assignedOrgChart = UtilsService.getItemByVal($scope.orgCharts, parameters.assignedOrgChartId, 'Id');
-            }
-        });
+        if (parameters != undefined && parameters != null)
+            passedOrgChartId = parameters.assignedOrgChartId;
     }
 
     function defineScope() {
-        $scope.orgChartName = '';
         $scope.orgCharts = [];
 
         $scope.assignOrgChart = function () {
@@ -42,7 +38,22 @@ function OrgChartAssignmentEditorController($scope, AccountManagerAPIService, Or
     }
 
     function load() {
-        
+        $scope.isGettingData = true;
+
+        getOrgCharts().finally(function () {
+            $scope.isGettingData = false;
+            $scope.assignedOrgChart = UtilsService.getItemByVal($scope.orgCharts, passedOrgChartId, 'Id');
+        });
+    }
+
+    function getOrgCharts() {
+        return OrgChartAPIService.GetOrgCharts()
+            .then(function (response) {
+                $scope.orgCharts = response;
+            })
+            .catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            });
     }
 }
 

@@ -23,6 +23,7 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
             mainGridAPI = api;
             getData();
         }
+
         $scope.loadMoreData = function () {
             return getData();
         }
