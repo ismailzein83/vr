@@ -24,5 +24,11 @@ namespace TOne.BusinessEntity.Web.Controllers
             ProfileManager manager = new ProfileManager();
             return manager.GetCarrierProfile(profileId);
         }
+        [HttpPost]
+        public int UpdateCarrierProfile(CarrierProfile carrierProfile)
+        {
+            ProfileManager manager = new ProfileManager();
+            return manager.UpdateCarrierProfile(carrierProfile);
+        }
     }
 }

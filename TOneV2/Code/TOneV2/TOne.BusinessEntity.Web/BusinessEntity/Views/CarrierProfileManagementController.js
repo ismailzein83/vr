@@ -1,5 +1,5 @@
-﻿CarrierProfileManagementController.$inject = ['$scope', 'CarrierAPIService', 'VRModalService'];
-function CarrierProfileManagementController($scope, CarrierAPIService, VRModalService) {
+﻿CarrierProfileManagementController.$inject = ['$scope', 'CarrierProfileAPIService', 'VRModalService'];
+function CarrierProfileManagementController($scope, CarrierProfileAPIService, VRModalService) {
     var gridApi;
     var resultKey = "";
     defineScope();
@@ -33,7 +33,7 @@ function CarrierProfileManagementController($scope, CarrierAPIService, VRModalSe
 
     function getData() {
         var pageInfo = gridApi.getPageInfo();
-        return CarrierAPIService.GetFilteredProfiles(resultKey, $scope.name, $scope.companyName, $scope.billingEmail, pageInfo.fromRow, pageInfo.toRow).then(function (response) {
+        return CarrierProfileAPIService.GetFilteredProfiles(resultKey, $scope.name, $scope.companyName, $scope.billingEmail, pageInfo.fromRow, pageInfo.toRow).then(function (response) {
             gridApi.addItemsToSource(response.Data);
             resultKey = response.ResultKey;
         });
@@ -53,7 +53,7 @@ function CarrierProfileManagementController($scope, CarrierAPIService, VRModalSe
             profileID: carrierProfileObj.ProfileID
         };
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "CarrierProfile Info(" + carrierProfileObj.ProfileName + ")";
+            modalScope.title = "CarrierProfile Info(" + carrierProfileObj.Name + ")";
             modalScope.onCarrierProfileUpdated = function (CarrierProfileUpdated) {
                 gridApi.itemUpdated(CarrierProfileUpdated);
 

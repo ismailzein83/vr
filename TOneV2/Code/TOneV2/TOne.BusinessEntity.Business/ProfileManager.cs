@@ -24,5 +24,9 @@ namespace TOne.BusinessEntity.Business
         {
             return _dataManager.GetCarrierProfile(profileId);
         }
+        public int UpdateCarrierProfile(CarrierProfile carrierProfile)
+        {
+            return _dataManager.UpdateCarrierProfile(carrierProfile);
+        }
     }
 }

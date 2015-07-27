@@ -1,5 +1,5 @@
-﻿CarrierProfileEditorController.$inject = ['$scope', 'CarrierAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
-function CarrierProfileEditorController($scope, CarrierAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+﻿CarrierProfileEditorController.$inject = ['$scope', 'CarrierProfileAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+function CarrierProfileEditorController($scope, CarrierProfileAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
     var editMode;
     var dummyId = 0;//this is used to avoid duplicate in ng-repeat
     loadParameters();
@@ -43,7 +43,7 @@ function CarrierProfileEditorController($scope, CarrierAPIService, VRModalServic
     }
 
     function getCarrierProfile() {
-        return CarrierAPIService.GetCarrierProfile($scope.ProfileId)
+        return CarrierProfileAPIService.GetCarrierProfile($scope.ProfileId)
            .then(function (response) {
                fillScopeFromCarrierProfileObj(response);
            })
@@ -82,14 +82,14 @@ function CarrierProfileEditorController($scope, CarrierAPIService, VRModalServic
         $scope.Website = CarrierAccountObject.Website;
     }
 
-    
+
     function addTelephone(number) {
         var telephone = {
             dummyId: dummyId++,
             number: number,
             remove: function () {
                 var index = $scope.telephones.indexOf(telephone);
-                if(index >= 0)
+                if (index >= 0)
                     $scope.telephones.splice(index, 1);
             }
         };
@@ -111,7 +111,7 @@ function CarrierProfileEditorController($scope, CarrierAPIService, VRModalServic
 
     function updateCarrierProfile() {
         var carrierProfileObject = buildCarrierProfileObjFromScope();
-        CarrierAPIService.UpdateCarrierProfile(buildCarrierProfileObjFromScope())
+        CarrierProfileAPIService.UpdateCarrierProfile(buildCarrierProfileObjFromScope())
         .then(function (response) {
             if (VRNotificationService.notifyOnItemUpdated("CarrierProfile", response)) {
                 if ($scope.onCarrierProfileUpdated != undefined)
@@ -124,18 +124,23 @@ function CarrierProfileEditorController($scope, CarrierAPIService, VRModalServic
     }
 
     function buildCarrierProfileObjFromScope() {
+        var telTab = [];
+        var faxTab = [];
+        angular.forEach($scope.telephones, function (itm) {
+            telTab.push(itm.number);
+        });
+        angular.forEach($scope.faxes, function (itm) {
+            faxTab.push(itm.number);
+        });
         return {
+            ProfileId: $scope.ProfileId,
             Name: $scope.Name,
             CompanyName: $scope.CompanyName,
             Country: $scope.Country,
             City: $scope.City,
             RegestrationNumber: $scope.RegistrationNumber,
-            Telephone1: $scope.Telephone[0],
-            Telephone2: $scope.Telephone[1],
-            Telephone3: $scope.Telephone[2],
-            Fax1: $scope.Fax[0],
-            Fax2: $scope.Fax[1],
-            Fax3: $scope.Fax[2],
+            Telephone: telTab,//$scope.telephones,
+            Fax: faxTab,//$scope.faxes,
             Address1: $scope.Address1,
             Address2: $scope.Address2,
             Address3: $scope.Address3,

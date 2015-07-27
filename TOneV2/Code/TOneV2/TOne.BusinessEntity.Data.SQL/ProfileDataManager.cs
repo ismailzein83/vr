@@ -58,6 +58,17 @@ namespace TOne.BusinessEntity.Data.SQL
                 AccountsCount = GetReaderValue<int>(reader, "AccountsCount")//GetReaderValue(reader["AccountsCount"])
             };
         }
+
+        public int UpdateCarrierProfile(CarrierProfile carrierProfile)
+        {
+            string telephone = string.Join("\r\n", carrierProfile.Telephone);
+            string fax = string.Join("\r\n", carrierProfile.Fax);
+            int rowEffected = ExecuteNonQuerySP("BEntity.sp_CarrierProfile_Update ",
+                carrierProfile.ProfileID, carrierProfile.Name, carrierProfile.CompanyName,
+                carrierProfile.Country, carrierProfile.City, carrierProfile.RegistrationNumber,
+               telephone, fax, carrierProfile.Address1, carrierProfile.Address2, carrierProfile.Address3, carrierProfile.Website);
+            return rowEffected;
+        }
         protected string[] SplitString(string s)
         {
             if (s == null)

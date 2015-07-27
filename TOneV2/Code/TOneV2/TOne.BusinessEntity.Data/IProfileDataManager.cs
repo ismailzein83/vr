@@ -12,5 +12,6 @@ namespace TOne.BusinessEntity.Data
     {
         BigResult<CarrierProfile> GetFilteredProfiles(string resultKey, string name, string companyName, string billingEmail, int from, int to);
         CarrierProfile GetCarrierProfile(int profileId);
+        int UpdateCarrierProfile(CarrierProfile carrierProfile);
     }
 }
