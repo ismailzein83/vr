@@ -1415,6 +1415,7 @@ input.ui-grid-filter-input[type="text"] {
 .vr-datagrid{
     font-size:12px;    
     width:100%;
+    border-bottom: 1px solid #DDD;
    /*to fixe menu-grid action position side effects*/
 }
 .vr-datagrid-header{

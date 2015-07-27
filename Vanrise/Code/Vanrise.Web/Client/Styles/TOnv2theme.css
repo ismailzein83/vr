@@ -55,8 +55,6 @@
 "#0074d9"*/
 .selected-node{
     background-color: #f0f0f0 !important;
-    margin-left: -25px;
-    padding-left: 25px;
 }
 .selected-inner-node{
     background-color: #CDCDCD !important;
@@ -215,6 +213,7 @@
   background: -moz-linear-gradient(bottom,#BCBCBC,rgba(255,0,0,1)); /*Fx 3.6-15*/
   background: linear-gradient(to bottom, #BCBCBC, rgba(255,0,0,1)); /*Standard*/
 }
+
 /*20407d
 c0213f
 f27043
