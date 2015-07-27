@@ -1152,20 +1152,31 @@ input.ui-grid-filter-input[type="text"] {
 }
 
 .panel-vr > .panel-heading {
-    background-color: #272264;
-    border-style: solid;
-    text-transform:uppercase ;
-    border-color: #272264;
-    font-weight:bold ;
-    font-size:12px;
-    border-radius:0px ;
-    padding: 2px 15px ;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+    background-color: #fff;
+    margin-bottom: -2px;
+    top: -1px;
+    text-shadow: 2px 2px 0px #C5C5C5;
+    width: 200px;
+    position: relative;
+    border-radius: 4px 4px 0px 0px;
+    color: #333 !important;
+    text-shadow: 2px 2px 0px #C5C5C5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 4px 6px;
+    border: 1px solid #ddd;
+    background: transparent linear-gradient(to top, #fff, #ddd) repeat scroll 0% 0%;
+    border-bottom: transparent;
 }
 
 .panel-vr > .panel-body {   
-    border-style: solid;
-    border-color: #f2f2f2;
-    border: 0px 2px 2px 2px;
+    border:1px solid #ddd;
+     border-radius: 0px 0px 4px 4px;
+    
 }
 .breadcrumb-vr{
     padding: 4px 0px;
