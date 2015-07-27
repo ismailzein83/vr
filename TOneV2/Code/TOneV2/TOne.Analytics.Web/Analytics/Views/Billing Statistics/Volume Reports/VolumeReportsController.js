@@ -7,6 +7,8 @@ function VolumeReportsController($scope, BillingStatisticsAPIService, VolumeRepo
     function defineScope() {
         $scope.fromDate = '2012/07/01';
         $scope.toDate = '2015/07/10';
+        $scope.attempts = 10;
+        $scope.topDestinations = 5;
         $scope.timePeriods = [];
         $scope.customers = [];
         $scope.suppliers = [];

@@ -97,6 +97,7 @@
     <Compile Include="CDRFilter.cs" />
     <Compile Include="CDRBigResult.cs" />
     <Compile Include="Billing\CustomerServices.cs" />
+    <Compile Include="DestinationVolumeTrafficResult.cs" />
     <Compile Include="InOutVolumeTraffic.cs" />
     <Compile Include="KeyColumn.cs" />
     <Compile Include="Mobile\AlertView.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Mobile\TopCustomersView.cs" />
     <Compile Include="Mobile\TopNDestinationView.cs" />
+    <Compile Include="TimeValuesRecord.cs" />
     <Compile Include="TrafficStatistic.cs" />
     <Compile Include="TrafficStatisticFilter.cs" />
     <Compile Include="TrafficStatisticGroupSummary.cs" />
@@ -114,6 +116,7 @@
     <Compile Include="TrafficStatisticSummaryBigResult.cs" />
     <Compile Include="VolumeTraffic.cs" />
     <Compile Include="DestinationVolumeTraffic.cs" />
+    <Compile Include="ZoneInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.BusinessEntity.Entities\TOne.BusinessEntity.Entities.csproj">
