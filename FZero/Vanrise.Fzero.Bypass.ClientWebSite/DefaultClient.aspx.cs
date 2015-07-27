@@ -17,7 +17,7 @@ public partial class DefaultClient : MobileOperatorPage
     {
         get
         {
-            return (CurrentUser.User.GMT-SysParameter.Global_GMT);
+            return (ConfigurationManager.AppSettings["GMT"].ToLower().ToInt() - SysParameter.Global_GMT);
         }
     }
 
