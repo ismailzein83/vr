@@ -5,6 +5,7 @@ using Vanrise.BusinessProcess;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Queueing;
+using System.Linq;
 
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
@@ -53,6 +54,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                         (x) =>
                         {
                             dataManager.SaveSuspiciousNumbers(x.suspiciousNumbers);
+                            dataManager.UpdateSusbcriberCases(x.suspiciousNumbers.Select(n=>n.Number).ToList());
                         });
 
                     hasNumberProfiles = inputArgument.InputQueue2.TryDequeue(

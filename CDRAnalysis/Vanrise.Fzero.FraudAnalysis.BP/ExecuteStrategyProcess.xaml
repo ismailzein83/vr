@@ -171,44 +171,31 @@
           </InArgument>
         </vffba1:StoreSuspiciousNumbers.Strategies>
       </vffba1:StoreSuspiciousNumbers>
-      <vffba1:UpdateSusbcriberCases Status="{x:Null}" sap2010:WorkflowViewState.IdRef="UpdateSusbcriberCases_1">
-        <vffba1:UpdateSusbcriberCases.InputQueue>
-          <InArgument x:TypeArguments="vq:BaseQueue(vffe:SuspiciousNumberBatch)">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:SuspiciousNumberBatch)">suspiciousNumberQueue</mca:CSharpValue>
-          </InArgument>
-        </vffba1:UpdateSusbcriberCases.InputQueue>
-        <vffba1:UpdateSusbcriberCases.PreviousActivityStatus>
-          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">GetSuspiciousNumberStatus</mca:CSharpValue>
-          </InArgument>
-        </vffba1:UpdateSusbcriberCases.PreviousActivityStatus>
-      </vffba1:UpdateSusbcriberCases>
     </Parallel>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2">
       <InArgument x:TypeArguments="x:String">
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("End Executing Strategies Count: {0}", Input.StrategyIds.Count)</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbB87A8EBDgIBAT8FQxEDAaIBRAVPGgMBmwFQBboBEAIBBrsBBb8BEQIBAkEJQZUBAwGjAUwLTGMDAZ8BRwtHagMBnAFYB3cjAgFqeAeXASQCATmYAQetAScCARiuAQe5ASYCAQe9AQm9AZQBAgEDbw1vZAMBkwFbDVtbAwGLAWoNankDAYMBYA1gggECAXtlDWVYAgFzdA10WQIBa5QBDZQBZAIBYooBDYoBcQIBWnsNe3oCAVKFAQ2FAYUBAgFKjwENjwF6AgFCgAENgAGIAQIBOqoBDaoBZAIBMaUBDaUBcgIBKZsBDZsBgAECASGgAQ2gAX0CARm2AQ22AXICARCxAQ2xAYABAgEI</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbBw7A7UBDgIBAT8FQxEDAZEBRAVPGgMBigFQBa4BEAIBBq8BBbMBEQIBAkEJQZUBAwGSAUwLTGMDAY4BRwtHagMBiwFYB3cjAgFZeAeXASQCASiYAQetAScCAQexAQmxAZQBAgEDbw1vZAMBggFbDVtbAgF6ag1qeQIBcmANYIIBAgFqZQ1lWAIBYnQNdFkCAVqUAQ2UAWQCAVGKAQ2KAXECAUl7DXt6AgFBhQENhQGFAQIBOY8BDY8BegIBMYABDYABiAECASmqAQ2qAWQCASClAQ2lAXICARibAQ2bAYABAgEQoAENoAF9AgEI</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="1034,62" />
-      <sap2010:ViewStateData Id="GetStrategy_3" sap:VirtualizedContainerService.HintSize="1034,22" />
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="794,62" />
+      <sap2010:ViewStateData Id="GetStrategy_3" sap:VirtualizedContainerService.HintSize="794,22" />
       <sap2010:ViewStateData Id="LoadNumberProfiles_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetSuspiciousNumber_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="StoreSuspiciousNumbers_2" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="UpdateSusbcriberCases_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1034,86" />
-      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="1034,62" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1056,476">
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794,86" />
+      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="794,62" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816,476">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess_1" sap:VirtualizedContainerService.HintSize="1096,556" />
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess_1" sap:VirtualizedContainerService.HintSize="856,556" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

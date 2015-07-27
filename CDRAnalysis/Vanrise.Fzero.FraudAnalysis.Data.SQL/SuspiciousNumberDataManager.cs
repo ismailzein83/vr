@@ -194,7 +194,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
 
 
-        public void UpdateSusbcriberCases(List<SuspiciousNumber> suspiciousNumbers)
+        public void UpdateSusbcriberCases(List<string> suspiciousNumbers)
         {
             ExecuteNonQuerySP("[FraudAnalysis].[sp_FraudResult_UpdateSubscriberCases]",  string.Join(",", suspiciousNumbers.Select(x=>string.Format("'{0}'",x))) );
         }

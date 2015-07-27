@@ -38,7 +38,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             throw new NotImplementedException();
         }
 
-        public void UpdateSusbcriberCases(List<SuspiciousNumber> suspiciousNumbers)
+        public void UpdateSusbcriberCases(List<string> suspiciousNumbers)
         {
             throw new NotImplementedException();
         }
