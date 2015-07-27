@@ -1175,7 +1175,7 @@ input.ui-grid-filter-input[type="text"] {
 
 .panel-vr > .panel-body {   
     border:1px solid #ddd;
-     border-radius: 0px 0px 4px 4px;
+     border-radius: 0px 4px 4px 4px;
     
 }
 .breadcrumb-vr{
