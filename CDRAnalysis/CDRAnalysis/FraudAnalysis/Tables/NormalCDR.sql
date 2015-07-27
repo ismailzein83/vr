@@ -24,3 +24,17 @@
     [Service_VAS_Name]   VARCHAR (50)    NULL
 );
 
+
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_NormalCDR_MSISDN]
+    ON [FraudAnalysis].[NormalCDR]([MSISDN] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_NormalCDR_ConnectDateTime]
+    ON [FraudAnalysis].[NormalCDR]([ConnectDateTime] ASC);
+

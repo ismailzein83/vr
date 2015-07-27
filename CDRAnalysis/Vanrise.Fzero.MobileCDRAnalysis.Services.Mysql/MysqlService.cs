@@ -33,7 +33,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
 
         private void ErrorLog(string message)
         {
-            string cs = "CDRAnalysisMobile_WF";
+            string cs = "CDRAnalysisMobile_TestData";
             EventLog elog = new EventLog();
             if (!EventLog.SourceExists(cs))
             {
@@ -132,7 +132,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
 
         private void ErrorLog(string message)
         {
-            string cs = "CDRAnalysisMobile_WF";
+            string cs = "CDRAnalysisMobile_TestData";
             EventLog elog = new EventLog();
             if (!EventLog.SourceExists(cs))
             {

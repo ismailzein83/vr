@@ -18,7 +18,7 @@ SET NOCOUNT ON
 	 
 	 if (@@rowcount=0)
 	 Begin
-		INSERT INTO [CDRAnalysisMobile_WF].[FraudAnalysis].[SubscriberCase]
+		INSERT INTO [FraudAnalysis].[SubscriberCase]
            ([SubscriberNumber]
            ,[StatusID]
            ,[ValidTill])
