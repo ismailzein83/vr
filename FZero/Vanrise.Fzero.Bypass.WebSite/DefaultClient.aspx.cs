@@ -108,7 +108,7 @@ public partial class DefaultClient : BasePage
         switch (rtsMain.SelectedIndex)
         {
             case 2:
-                List<Vanrise.Fzero.Bypass.prGetTimeActiveonNetwork_Result> lstView_TimeActiveonNetwork = Vanrise.Fzero.Bypass.prGetTimeActiveonNetwork_Result.prGetTimeActiveonNetwork((ddlClients.SelectedValue.ToInt() == 0 ? 1 : ddlClients.SelectedValue.ToInt()), CurrentUser.MobileOperatorID, fromDateTime, toDateTime);
+                List<Vanrise.Fzero.Bypass.prGetTimeActiveonNetwork_Result> lstView_TimeActiveonNetwork = Vanrise.Fzero.Bypass.prGetTimeActiveonNetwork_Result.prGetTimeActiveonNetwork((ddlClients.SelectedValue.ToInt() == 0 ? 1 : ddlClients.SelectedValue.ToInt()), 0, fromDateTime, toDateTime);
                 rcActiveTime.DataSource = lstView_TimeActiveonNetwork;
                 rcActiveTime.DataBind();
 
@@ -343,9 +343,9 @@ public partial class DefaultClient : BasePage
     {
         if (rtsMain.SelectedIndex == 3)
         {
-            int MobileOperator = CurrentUser.MobileOperatorID;
-            gvOnnetFraudGeneratedCalls.VirtualItemCount = Vanrise.Fzero.Bypass.GeneratedCall.GetFraudCases_LoadonDemand_Count((ddlClients.SelectedValue.ToInt() == 0 ? 1 : ddlClients.SelectedValue.ToInt()), MobileOperator, fromDateTime, toDateTime, 1, true, 0, gvOnnetFraudGeneratedCalls.CurrentPageIndex + 1, gvOnnetFraudGeneratedCalls.PageSize);
-            gvOnnetFraudGeneratedCalls.DataSource = Vanrise.Fzero.Bypass.GeneratedCall.GetFraudCases_LoadonDemand((ddlClients.SelectedValue.ToInt() == 0 ? 1 : ddlClients.SelectedValue.ToInt()), MobileOperator, fromDateTime, toDateTime, 1, true, 0, gvOnnetFraudGeneratedCalls.CurrentPageIndex + 1, gvOnnetFraudGeneratedCalls.PageSize);
+            
+            gvOnnetFraudGeneratedCalls.VirtualItemCount = Vanrise.Fzero.Bypass.GeneratedCall.GetFraudCases_LoadonDemand_Count((ddlClients.SelectedValue.ToInt() == 0 ? 1 : ddlClients.SelectedValue.ToInt()), 0, fromDateTime, toDateTime, 1, true, 0, gvOnnetFraudGeneratedCalls.CurrentPageIndex + 1, gvOnnetFraudGeneratedCalls.PageSize);
+            gvOnnetFraudGeneratedCalls.DataSource = Vanrise.Fzero.Bypass.GeneratedCall.GetFraudCases_LoadonDemand((ddlClients.SelectedValue.ToInt() == 0 ? 1 : ddlClients.SelectedValue.ToInt()), 0, fromDateTime, toDateTime, 1, true, 0, gvOnnetFraudGeneratedCalls.CurrentPageIndex + 1, gvOnnetFraudGeneratedCalls.PageSize);
         }
     }
 
@@ -353,9 +353,9 @@ public partial class DefaultClient : BasePage
     {
         if (rtsMain.SelectedIndex == 4)
         {
-            int MobileOperator = CurrentUser.MobileOperatorID;
-            gvOfnetFraudGeneratedCalls.VirtualItemCount = Vanrise.Fzero.Bypass.GeneratedCall.GetFraudCases_LoadonDemand_Count((ddlClients.SelectedValue.ToInt() == 0 ? 1 : ddlClients.SelectedValue.ToInt()), MobileOperator, fromDateTime, toDateTime, 2, true, 0, gvOfnetFraudGeneratedCalls.CurrentPageIndex + 1, gvOfnetFraudGeneratedCalls.PageSize);
-            gvOfnetFraudGeneratedCalls.DataSource = Vanrise.Fzero.Bypass.GeneratedCall.GetFraudCases_LoadonDemand((ddlClients.SelectedValue.ToInt() == 0 ? 1 : ddlClients.SelectedValue.ToInt()), MobileOperator, fromDateTime, toDateTime, 2, true, 0, gvOfnetFraudGeneratedCalls.CurrentPageIndex + 1, gvOfnetFraudGeneratedCalls.PageSize);
+            
+            gvOfnetFraudGeneratedCalls.VirtualItemCount = Vanrise.Fzero.Bypass.GeneratedCall.GetFraudCases_LoadonDemand_Count((ddlClients.SelectedValue.ToInt() == 0 ? 1 : ddlClients.SelectedValue.ToInt()), 0, fromDateTime, toDateTime, 2, true, 0, gvOfnetFraudGeneratedCalls.CurrentPageIndex + 1, gvOfnetFraudGeneratedCalls.PageSize);
+            gvOfnetFraudGeneratedCalls.DataSource = Vanrise.Fzero.Bypass.GeneratedCall.GetFraudCases_LoadonDemand((ddlClients.SelectedValue.ToInt() == 0 ? 1 : ddlClients.SelectedValue.ToInt()), 0, fromDateTime, toDateTime, 2, true, 0, gvOfnetFraudGeneratedCalls.CurrentPageIndex + 1, gvOfnetFraudGeneratedCalls.PageSize);
         }
     }
 

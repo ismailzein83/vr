@@ -112,7 +112,7 @@ public partial class DefaultClient : MobileOperatorPage
         switch (rtsMain.SelectedIndex)
         {
             case 2:
-                List<prGetTimeActiveonNetwork_Result> lstView_TimeActiveonNetwork = Vanrise.Fzero.Bypass.prGetTimeActiveonNetwork_Result.prGetTimeActiveonNetwork(ConfigurationManager.AppSettings["ClientID"].ToInt(), CurrentUser.MobileOperatorID, fromDateTime, toDateTime);
+                List<prGetTimeActiveonNetwork_Result> lstView_TimeActiveonNetwork = Vanrise.Fzero.Bypass.prGetTimeActiveonNetwork_Result.prGetTimeActiveonNetwork(ConfigurationManager.AppSettings["ClientID"].ToInt(), 0, fromDateTime, toDateTime);
                 rcActiveTime.DataSource = lstView_TimeActiveonNetwork;
                 rcActiveTime.DataBind();
 
@@ -160,7 +160,7 @@ public partial class DefaultClient : MobileOperatorPage
 
     protected void gvCases_NeedDataSource(object source, Telerik.Web.UI.GridNeedDataSourceEventArgs e)
     {
-        Dashboard.GetDashboard(ConfigurationManager.AppSettings["ClientID"].ToInt(), CurrentUser.MobileOperatorID, fromDateTime, toDateTime, false);
+        Dashboard.GetDashboard(ConfigurationManager.AppSettings["ClientID"].ToInt(), 0, fromDateTime, toDateTime, false);
         gvCases.DataSource = Dashboard.listprSummary_Result;
     }
 
@@ -237,7 +237,7 @@ public partial class DefaultClient : MobileOperatorPage
     {
         if (rtsMain.SelectedIndex == 6)
         {
-            gvGeneratedCalls.DataSource = Vanrise.Fzero.Bypass.GeneratedCall.GetReportedCalls(string.Empty, string.Empty, string.Empty, fromDateTime, toDateTime, string.Empty, CurrentUser.MobileOperatorID, 0, 0, 0, ConfigurationManager.AppSettings["ClientID"].ToInt(), DifferenceinGMT);
+            gvGeneratedCalls.DataSource = Vanrise.Fzero.Bypass.GeneratedCall.GetReportedCalls(string.Empty, string.Empty, string.Empty, fromDateTime, toDateTime, string.Empty, 0, 0, 0, 0, ConfigurationManager.AppSettings["ClientID"].ToInt(), DifferenceinGMT);
         }
     }
 
@@ -384,9 +384,8 @@ public partial class DefaultClient : MobileOperatorPage
     {
         if (rtsMain.SelectedIndex == 3)
         {
-            int MobileOperator = CurrentUser.MobileOperatorID;
-            gvOnnetFraudGeneratedCalls.VirtualItemCount = Vanrise.Fzero.Bypass.GeneratedCall.GetFraudCases_LoadonDemand_Count(ConfigurationManager.AppSettings["ClientID"].ToInt(), MobileOperator, fromDateTime, toDateTime, 1, false, DifferenceinGMT, gvOnnetFraudGeneratedCalls.CurrentPageIndex + 1, gvOnnetFraudGeneratedCalls.PageSize);
-            gvOnnetFraudGeneratedCalls.DataSource = Vanrise.Fzero.Bypass.GeneratedCall.GetFraudCases_LoadonDemand(ConfigurationManager.AppSettings["ClientID"].ToInt(), MobileOperator, fromDateTime, toDateTime, 1, false, DifferenceinGMT,gvOnnetFraudGeneratedCalls.CurrentPageIndex+1,gvOnnetFraudGeneratedCalls.PageSize);
+            gvOnnetFraudGeneratedCalls.VirtualItemCount = Vanrise.Fzero.Bypass.GeneratedCall.GetFraudCases_LoadonDemand_Count(ConfigurationManager.AppSettings["ClientID"].ToInt(), 0, fromDateTime, toDateTime, 1, false, DifferenceinGMT, gvOnnetFraudGeneratedCalls.CurrentPageIndex + 1, gvOnnetFraudGeneratedCalls.PageSize);
+            gvOnnetFraudGeneratedCalls.DataSource = Vanrise.Fzero.Bypass.GeneratedCall.GetFraudCases_LoadonDemand(ConfigurationManager.AppSettings["ClientID"].ToInt(), 0, fromDateTime, toDateTime, 1, false, DifferenceinGMT,gvOnnetFraudGeneratedCalls.CurrentPageIndex+1,gvOnnetFraudGeneratedCalls.PageSize);
         }
     }
 
@@ -394,9 +393,8 @@ public partial class DefaultClient : MobileOperatorPage
     {
         if (rtsMain.SelectedIndex == 4)
         {
-            int MobileOperator = CurrentUser.MobileOperatorID;
-            gvOfnetFraudGeneratedCalls.VirtualItemCount = Vanrise.Fzero.Bypass.GeneratedCall.GetFraudCases_LoadonDemand_Count(ConfigurationManager.AppSettings["ClientID"].ToInt(), MobileOperator, fromDateTime, toDateTime, 2, false, DifferenceinGMT, gvOfnetFraudGeneratedCalls.CurrentPageIndex + 1, gvOfnetFraudGeneratedCalls.PageSize);
-            gvOfnetFraudGeneratedCalls.DataSource = Vanrise.Fzero.Bypass.GeneratedCall.GetFraudCases_LoadonDemand(ConfigurationManager.AppSettings["ClientID"].ToInt(), MobileOperator, fromDateTime, toDateTime, 2, false, DifferenceinGMT, gvOfnetFraudGeneratedCalls.CurrentPageIndex + 1, gvOfnetFraudGeneratedCalls.PageSize);
+            gvOfnetFraudGeneratedCalls.VirtualItemCount = Vanrise.Fzero.Bypass.GeneratedCall.GetFraudCases_LoadonDemand_Count(ConfigurationManager.AppSettings["ClientID"].ToInt(), 0, fromDateTime, toDateTime, 2, false, DifferenceinGMT, gvOfnetFraudGeneratedCalls.CurrentPageIndex + 1, gvOfnetFraudGeneratedCalls.PageSize);
+            gvOfnetFraudGeneratedCalls.DataSource = Vanrise.Fzero.Bypass.GeneratedCall.GetFraudCases_LoadonDemand(ConfigurationManager.AppSettings["ClientID"].ToInt(), 0, fromDateTime, toDateTime, 2, false, DifferenceinGMT, gvOfnetFraudGeneratedCalls.CurrentPageIndex + 1, gvOfnetFraudGeneratedCalls.PageSize);
         }
     }
 
@@ -438,9 +436,8 @@ public partial class DefaultClient : MobileOperatorPage
 
         if (rtsMain.SelectedIndex == 5)
         {
-            int MobileOperator = CurrentUser.MobileOperatorID;
-            gvAllGeneratedCalls.VirtualItemCount = Vanrise.Fzero.Bypass.GeneratedCall.GetAllCases_LoadonDemand_Count(ConfigurationManager.AppSettings["ClientID"].ToInt(), MobileOperator, fromDateTime, toDateTime, false, DifferenceinGMT, gvAllGeneratedCalls.CurrentPageIndex + 1, gvAllGeneratedCalls.PageSize);
-            gvAllGeneratedCalls.DataSource = Vanrise.Fzero.Bypass.GeneratedCall.GetAllCases_LoadonDemand(ConfigurationManager.AppSettings["ClientID"].ToInt(), MobileOperator, fromDateTime, toDateTime, false, DifferenceinGMT, gvAllGeneratedCalls.CurrentPageIndex + 1, gvAllGeneratedCalls.PageSize);
+            gvAllGeneratedCalls.VirtualItemCount = Vanrise.Fzero.Bypass.GeneratedCall.GetAllCases_LoadonDemand_Count(ConfigurationManager.AppSettings["ClientID"].ToInt(), 0, fromDateTime, toDateTime, false, DifferenceinGMT, gvAllGeneratedCalls.CurrentPageIndex + 1, gvAllGeneratedCalls.PageSize);
+            gvAllGeneratedCalls.DataSource = Vanrise.Fzero.Bypass.GeneratedCall.GetAllCases_LoadonDemand(ConfigurationManager.AppSettings["ClientID"].ToInt(), 0, fromDateTime, toDateTime, false, DifferenceinGMT, gvAllGeneratedCalls.CurrentPageIndex + 1, gvAllGeneratedCalls.PageSize);
         }
     }
 
