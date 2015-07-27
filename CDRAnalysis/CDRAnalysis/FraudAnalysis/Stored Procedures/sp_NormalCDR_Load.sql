@@ -9,7 +9,15 @@ CREATE PROCEDURE [FraudAnalysis].[sp_NormalCDR_Load]
 )
 AS
 BEGIN
-SELECT  [Id] ,[MSISDN] ,[IMSI] ,[ConnectDateTime] ,[Destination] ,[DurationInSeconds] ,[DisconnectDateTime] ,[Call_Class]  ,[IsOnNet] ,[Call_Type] ,[Sub_Type] ,[IMEI]
-                                                ,[BTS_Id]  ,[Cell_Id]  ,[SwitchRecordId]  ,[Up_Volume]  ,[Down_Volume] ,[Cell_Latitude]  ,[Cell_Longitude]  ,[In_Trunk]  ,[Out_Trunk]  ,[Service_Type]  ,[Service_VAS_Name] FROM NormalCDR
-                                                 with(nolock)    where (connectDateTime between @From and @To)  order by MSISDN, connectdatetime
+
+	SELECT  cdrs.[Id] ,cdrs.[MSISDN] ,cdrs.[IMSI] ,cdrs.[ConnectDateTime] ,cdrs.[Destination] ,
+			cdrs.[DurationInSeconds] ,cdrs.[DisconnectDateTime] ,cdrs.[Call_Class]  ,cdrs.[IsOnNet] ,
+			cdrs.[Call_Type] ,cdrs.[Sub_Type] ,cdrs.[IMEI]
+			,cdrs.[BTS_Id]  ,cdrs.[Cell_Id]  ,cdrs.[SwitchRecordId]  ,cdrs.[Up_Volume]  ,cdrs.[Down_Volume] ,
+			cdrs.[Cell_Latitude]  ,cdrs.[Cell_Longitude]  ,cdrs.[In_Trunk]  ,cdrs.[Out_Trunk]  ,cdrs.[Service_Type]  ,cdrs.[Service_VAS_Name] 
+	                                                
+	FROM NormalCDR cdrs with(nolock)
+	LEFT JOIN [FraudAnalysis].SubscriberCase WhiteNbs ON WhiteNbs.SubscriberNumber = cdrs.MSISDN AND StatusId=4 and ValidTill >= getdate()
+	WHERE cdrs.connectDateTime between @From and @To and WhiteNbs.SubscriberNumber IS NULL
+	ORDER BY cdrs.MSISDN, cdrs.connectdatetime
 END

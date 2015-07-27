@@ -90,6 +90,9 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetFilteredStrategies.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_GetSubscriberThresholds.sql" />
     <Build Include="Security\FraudAnalysis.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_SubscriberCase_Save.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_UpdateSubscriberCases.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_Get.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="CDRAnalysis.PostDeployment.sql" />
