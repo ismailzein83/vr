@@ -40,7 +40,7 @@ namespace Vanrise.Security.Entities
     public enum HolderType
     {
         USER,
-        ROLE
+        GROUP
     }
 
 }

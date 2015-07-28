@@ -105,8 +105,8 @@ namespace Vanrise.Security.Business
 
         public EffectivePermissionsWrapper GetEffectivePermissions(int userId)
         {
-            GroupManager roleManager = new GroupManager();
-            List<int> groups = roleManager.GetUserGroups(userId);
+            GroupManager groupManager = new GroupManager();
+            List<int> groups = groupManager.GetUserGroups(userId);
 
             //TODO: consider these are read from the cache
             PermissionManager permissionManager = new PermissionManager();
@@ -124,9 +124,9 @@ namespace Vanrise.Security.Business
 
             foreach (int groupId in groups)
             {
-                List<Permission> rolePermissions = permissionsRecords.FindAll(x => x.HolderType == HolderType.ROLE && x.HolderId == groupId.ToString());
-                if (rolePermissions.Count > 0)
-                    listOfAllPermissions.Add(this.ConvertPermissionsToPathDictionary(rolePermissions, businessEntityHierarchy));
+                List<Permission> groupPermissions = permissionsRecords.FindAll(x => x.HolderType == HolderType.GROUP && x.HolderId == groupId.ToString());
+                if (groupPermissions.Count > 0)
+                    listOfAllPermissions.Add(this.ConvertPermissionsToPathDictionary(groupPermissions, businessEntityHierarchy));
             }
 
             Dictionary<string, List<string>> allowPermissions = new Dictionary<string, List<string>>();

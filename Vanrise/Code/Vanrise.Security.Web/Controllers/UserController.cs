@@ -31,10 +31,10 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpGet]
-        public List<User> GetMembers(int roleId)
+        public List<User> GetMembers(int groupId)
         {
             UserManager manager = new UserManager();
-            return manager.GetMembers(roleId);
+            return manager.GetMembers(groupId);
         }
 
         [HttpGet]

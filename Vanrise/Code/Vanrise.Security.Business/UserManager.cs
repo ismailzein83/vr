@@ -23,10 +23,10 @@ namespace Vanrise.Security.Business
             return datamanager.GetUsers();
         }
 
-        public List<User> GetMembers(int roleId)
+        public List<User> GetMembers(int groupId)
         {
             IUserDataManager datamanager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-            return datamanager.GetMembers(roleId);
+            return datamanager.GetMembers(groupId);
         }
 
         public User GetUserbyId(int userId)

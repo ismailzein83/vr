@@ -34,10 +34,10 @@
            );
     }
 
-    function GetMembers(roleId) {
+    function GetMembers(groupId) {
         return BaseAPIService.get("/api/Users/GetMembers", 
              {
-                 roleId: roleId
+                 groupId: groupId
              });
     }
 

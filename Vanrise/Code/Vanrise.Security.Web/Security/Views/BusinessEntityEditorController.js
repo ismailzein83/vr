@@ -1,6 +1,6 @@
-﻿BusinessEntityEditorController.$inject = ['$scope', 'PermissionAPIService', 'UtilsService', 'RoleAPIService', 'UsersAPIService', 'HolderTypeEnum', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿BusinessEntityEditorController.$inject = ['$scope', 'PermissionAPIService', 'UtilsService', 'GroupAPIService', 'UsersAPIService', 'HolderTypeEnum', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function BusinessEntityEditorController($scope, PermissionAPIService, UtilsService, RoleAPIService, UsersAPIService, HolderTypeEnum, VRModalService, VRNotificationService, VRNavigationService) {
+function BusinessEntityEditorController($scope, PermissionAPIService, UtilsService, GroupAPIService, UsersAPIService, HolderTypeEnum, VRModalService, VRNotificationService, VRNavigationService) {
 
     var permissionFlags;
     var permissions;
@@ -90,7 +90,7 @@ function BusinessEntityEditorController($scope, PermissionAPIService, UtilsServi
             datasource: []
         };
 
-        $scope.optionsRoles = {
+        $scope.optionsGroups = {
             selectedvalues: [],
             datasource: []
         };
@@ -139,17 +139,17 @@ function BusinessEntityEditorController($scope, PermissionAPIService, UtilsServi
                 $scope.optionsUsers.datasource = response;
             });
 
-            RoleAPIService.GetRoles().then(function (response) {
-                //Remove existing roles
+            GroupAPIService.GetGroups().then(function (response) {
+                //Remove existing groups
                 angular.forEach(permissions, function (perm) {
                     if (perm.EntityType == $scope.entityType && perm.EntityId == $scope.entityId
-                        && perm.HolderType == HolderTypeEnum.Role.value) {
-                        var index = UtilsService.getItemIndexByVal(response, perm.HolderId, "RoleId");
+                        && perm.HolderType == HolderTypeEnum.Group.value) {
+                        var index = UtilsService.getItemIndexByVal(response, perm.HolderId, "GroupId");
                         response.splice(index, 1);
                     }
                 });
 
-                $scope.optionsRoles.datasource = response;
+                $scope.optionsGroups.datasource = response;
 
             });
         }
@@ -201,11 +201,11 @@ function BusinessEntityEditorController($scope, PermissionAPIService, UtilsServi
 
         });
 
-        //Loop again on all selected roles
-        angular.forEach($scope.optionsRoles.selectedvalues, function (role) {
+        //Loop again on all selected groups
+        angular.forEach($scope.optionsGroups.selectedvalues, function (group) {
             var permissiontoAdd = {
-                HolderType: HolderTypeEnum.Role.value,
-                HolderId: role.RoleId,
+                HolderType: HolderTypeEnum.Group.value,
+                HolderId: group.GroupId,
                 EntityType: $scope.entityType,
                 EntityId: $scope.entityId,
                 PermissionFlags: permissionFlags

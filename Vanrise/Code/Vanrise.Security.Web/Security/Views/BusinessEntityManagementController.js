@@ -66,7 +66,7 @@ function BusinessEntityManagementController($scope, BusinessEntityAPIService, Pe
         
         return PermissionAPIService.GetPermissionsByEntity($scope.currentNode.EntType, $scope.currentNode.EntityId).then(function (response) {
             angular.forEach(response, function (item) {
-                item.HolderTypeEnum = (item.HolderType == HolderTypeEnum.User.value) ? HolderTypeEnum.User.description : HolderTypeEnum.Role.description;
+                item.HolderTypeEnum = (item.HolderType == HolderTypeEnum.User.value) ? HolderTypeEnum.User.description : HolderTypeEnum.Group.description;
                 item.PermissionFlagsDescription = buildPermissionFlagDescription(item.PermissionFlags);
                 item.isInherited = !(item.EntityType == $scope.currentNode.EntType && item.EntityId == $scope.currentNode.EntityId);
                 item.PermissionType = item.isInherited ? 'Inherited (' + item.PermissionPath + ')' : 'Direct';

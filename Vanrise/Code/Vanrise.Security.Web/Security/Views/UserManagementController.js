@@ -107,7 +107,7 @@ function UserManagementController($scope, UsersAPIService, VRModalService) {
 
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Reset Password for User: " + userObj.Name;
-            modalScope.onRoleUpdated = function (user) {
+            modalScope.onGroupUpdated = function (user) {
                 mainGridAPI.itemUpdated(user);
             };
         };
