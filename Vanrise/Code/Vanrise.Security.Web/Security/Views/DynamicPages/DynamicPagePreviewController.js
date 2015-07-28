@@ -132,9 +132,13 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         }
         else {
             $scope.isGettingData = true;
-            $scope.selectedPeriod = $scope.$parent.selectedPeriod;
-            
-            $scope.selectedTimeDimensionType = $scope.$parent.selectedTimeDimensionType;
+            if ($scope.$parent.showSearch) {
+                $scope.selectedPeriod = $scope.$parent.selectedViewPeriod;
+                $scope.selectedTimeDimensionType = $scope.$parent.selectedViewTimeDimensionType;
+                fillDateAndPeriod();
+                $scope.showSearch = true;
+            }
+
           return  UtilsService.waitMultipleAsyncOperations([loadAllWidgets])
                 .finally(function () {
                     loadViewWidgets($scope.allWidgets, $scope.$parent.bodyContents, $scope.$parent.summaryContents);
