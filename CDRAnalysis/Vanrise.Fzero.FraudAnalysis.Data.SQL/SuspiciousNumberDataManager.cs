@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using Vanrise.Data.SQL;
 using Vanrise.Entities;
@@ -196,7 +197,21 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public void UpdateSusbcriberCases(List<string> suspiciousNumbers)
         {
-            ExecuteNonQuerySP("[FraudAnalysis].[sp_FraudResult_UpdateSubscriberCases]",  string.Join(",", suspiciousNumbers.Select(x=>string.Format("'{0}'",x))) );
+            DataTable dataTable = new DataTable("[FraudAnalysis].[SubscriberCaseType]");
+            //we create column names as per the type in DB 
+            dataTable.Columns.Add("SubscriberNumber", typeof(string));
+            foreach(var i in suspiciousNumbers)
+            {
+                dataTable.Rows.Add(i);
+            }
+
+            SqlParameter parameter = new SqlParameter();
+            parameter.ParameterName = "@SubscriberCase";
+            parameter.SqlDbType = System.Data.SqlDbType.Structured;
+            parameter.Value = dataTable;
+            parameter.TypeName = "[FraudAnalysis].[SubscriberCaseType]";
+
+            ExecuteNonQuerySP("[FraudAnalysis].[sp_FraudResult_UpdateSubscriberCases]",  parameter);
         }
     }
 }
