@@ -10,21 +10,35 @@ namespace Vanrise.Security.Business
 {
     public class MenuManager
     {
-        public List<MenuItem> GetMenuItems(SecurityToken secToken)
+        public List<MenuItem> GetMenuItems()
         {
-            RoleManager roleManager = new RoleManager();
-            List<int> groups = roleManager.GetUserRoles(secToken.UserId);
+            IModuleDataManager moduleDataManager = SecurityDataManagerFactory.GetDataManager<IModuleDataManager>();
+            List<Module> modules = moduleDataManager.GetModules();
+            List<MenuItem> retVal = new List<MenuItem>();
 
-            PermissionManager permmissionManager = new PermissionManager();
-            EffectivePermissionsWrapper effectivePermissionsWrapper = permmissionManager.GetEffectivePermissions(secToken, groups);
+            foreach (Module item in modules)
+            {
+                if (item.ParentId == 0)
+                {
+                    MenuItem rootItem = GetModuleMenu(item, modules);
+                    if (rootItem.AllowDynamic || rootItem.Childs != null)
+                        retVal.Add(rootItem);
+                }
+            }
 
+            return retVal;
+        }
+
+        public List<MenuItem> GetMenuItems(int userId)
+        {
             IModuleDataManager moduleDataManager = SecurityDataManagerFactory.GetDataManager<IModuleDataManager>();
             List<Module> modules = moduleDataManager.GetModules();
 
-
+            RoleManager roleManager = new RoleManager();
+            List<int> groups = roleManager.GetUserRoles(userId);
+            
             List<View> views = GetViews();
-
-            views = this.FilterViewsPerAudience(views, secToken, groups);
+            views = this.FilterViewsPerAudience(views, userId, groups);
 
             List<MenuItem> retVal = new List<MenuItem>();
 
@@ -32,7 +46,7 @@ namespace Vanrise.Security.Business
             {
                 if(item.ParentId == 0)
                 {
-                    MenuItem rootItem = GetModuleMenu(item, modules, views, effectivePermissionsWrapper.EffectivePermissions, effectivePermissionsWrapper.BreakInheritanceEntities);
+                    MenuItem rootItem = GetModuleMenu(item, modules, views);
                     if(rootItem.Childs != null && rootItem.Childs.Count > 0)
                         retVal.Add(rootItem);
                 }
@@ -40,6 +54,7 @@ namespace Vanrise.Security.Business
 
             return retVal;
         }
+
         private List<View> GetViews()
         {
             IViewDataManager viewDataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
@@ -53,8 +68,7 @@ namespace Vanrise.Security.Business
 
         } 
 
-
-        private MenuItem GetModuleMenu(Module module, List<Module> modules, List<View> views, Dictionary<string, Dictionary<string, Flag>> effectivePermissions, HashSet<string> breakInheritanceEntities)
+        private MenuItem GetModuleMenu(Module module, List<Module> modules, List<View> views)
         {
             MenuItem menu = new MenuItem() { Id = module.ModuleId, Name = module.Name, Title = module.Title, Location = module.Url, Icon = module.Icon };
 
@@ -67,7 +81,7 @@ namespace Vanrise.Security.Business
                 menu.Childs = new List<MenuItem>();
                 foreach (View viewItem in childViews)
                 {
-                    if(viewItem.RequiredPermissions == null || isAllowed(viewItem.RequiredPermissions, effectivePermissions, breakInheritanceEntities))
+                    if(viewItem.RequiredPermissions == null || SecurityContext.Current.IsAllowed(viewItem.RequiredPermissions))
                     {
                         MenuItem viewMenu = new MenuItem() { Id = viewItem.ViewId, Name = viewItem.Name, Title = viewItem.Title, Location = viewItem.Url, Type = viewItem.Type };
                         menu.Childs.Add(viewMenu);
@@ -81,89 +95,14 @@ namespace Vanrise.Security.Business
                     menu.Childs = new List<MenuItem>();
                 foreach (Module item in subModules)
                 {
-                    menu.Childs.Add(GetModuleMenu(item, modules, views, effectivePermissions, breakInheritanceEntities));
+                    menu.Childs.Add(GetModuleMenu(item, modules, views));
                 }
             }
 
             return menu;
         }
 
-        private bool isAllowed(Dictionary<string, List<string>> requiredPermissions, Dictionary<string, Dictionary<string, Flag>> effectivePermissions, HashSet<string> breakInheritanceEntities)
-        {
-            //Assume that the view is allowed, and start looping until you find an exception that prevents the user from seeing this view
-            bool result = true;
-
-            foreach (KeyValuePair<string, List<string>> kvp in requiredPermissions)
-            {
-                result = CheckPermissions(kvp.Key, kvp.Value, effectivePermissions, breakInheritanceEntities, new HashSet<string>());
-                if (!result)
-                    break;
-            }
-
-            return result;
-        }
-
-        private bool CheckPermissions(string requiredPath, List<string> requiredFlags, Dictionary<string, Dictionary<string, Flag>> effectivePermissions,
-            HashSet<string> breakInheritanceEntities, HashSet<string> allowedFlags)
-        {
-            bool result = true;
-
-            Dictionary<string, Flag> effectivePermissionFlags;
-            if (effectivePermissions.TryGetValue(requiredPath, out effectivePermissionFlags))
-            {
-                Flag fullControlFlag;
-                if (effectivePermissionFlags.TryGetValue("Full Control", out fullControlFlag))
-                {
-                    if (fullControlFlag == Flag.DENY)
-                        return false;
-                    else
-                    {
-                        foreach(var flag in requiredFlags)
-                            allowedFlags.Add(flag);
-                    }
-                }
-                else
-                {
-                    foreach (string requiredFlag in requiredFlags)
-                    {
-                        Flag effectivePermissionFlag;
-                        if (effectivePermissionFlags.TryGetValue(requiredFlag, out effectivePermissionFlag))
-                        {
-                            if (effectivePermissionFlag == Flag.DENY)
-                            {
-                                return false;
-                            }
-                            else
-                            {
-                                allowedFlags.Add(requiredFlag);
-                            }
-                        }
-                    }
-                }
-            }
-
-            //The required path might be in one level up, then check it on that level recursively
-            int index = requiredPath.LastIndexOf('/');
-            if (index > 0 && !breakInheritanceEntities.Contains(requiredPath))
-            {
-                //Keep looping recursively until you finish trimming the whole string requiredPath
-                string oneLevelUp = requiredPath.Remove(index);
-                result = CheckPermissions(oneLevelUp, requiredFlags, effectivePermissions, breakInheritanceEntities, allowedFlags);
-            }
-            else
-            {
-                //Validation logic
-                foreach (string item in requiredFlags)
-                {
-                    if (!allowedFlags.Contains(item))
-                        return false;
-                }
-            }
-
-            return result;
-        }
-
-        private List<View> FilterViewsPerAudience(List<View> views, SecurityToken secToken, List<int> subscribedGroups)
+        private List<View> FilterViewsPerAudience(List<View> views, int userId, List<int> subscribedGroups)
         {
             List<View> filteredResults = new List<View>();
             
@@ -172,7 +111,7 @@ namespace Vanrise.Security.Business
                 if(item.Audience != null)
                 {
                     //Check if the user is an audience then add the view; otherwise the view will not be in the filtered results
-                   if((item.Audience.Users != null && item.Audience.Users.Find(x => x == secToken.UserId) != 0) || isAudienceInSubscribedGroups(item, subscribedGroups))
+                   if((item.Audience.Users != null && item.Audience.Users.Find(x => x == userId) != 0) || isAudienceInSubscribedGroups(item, subscribedGroups))
                        filteredResults.Add(item);
                 }
                 else
@@ -200,25 +139,7 @@ namespace Vanrise.Security.Business
 
             return false;
         }
-        public List<MenuItem> GetMenuItems()
-        {
-
-            IModuleDataManager moduleDataManager = SecurityDataManagerFactory.GetDataManager<IModuleDataManager>();
-            List<Module> modules = moduleDataManager.GetModules();
-            List<MenuItem> retVal = new List<MenuItem>();
-          
-            foreach (Module item in modules)
-            {
-                if (item.ParentId == 0)
-                {
-                    MenuItem rootItem = GetModuleMenu(item, modules);
-                    if (rootItem.AllowDynamic  || rootItem.Childs!=null)
-                        retVal.Add(rootItem);
-                }
-            }
-
-            return retVal;
-        }
+        
         private MenuItem GetModuleMenu(Module module, List<Module> modules)
         {
             

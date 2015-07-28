@@ -103,16 +103,11 @@ namespace Vanrise.Security.Business
             return updateOperationOutput;
         }
 
-        public EffectivePermissionsWrapper GetEffectivePermissions(SecurityToken secToken)
+        public EffectivePermissionsWrapper GetEffectivePermissions(int userId)
         {
             RoleManager roleManager = new RoleManager();
-            List<int> groups = roleManager.GetUserRoles(secToken.UserId);
+            List<int> groups = roleManager.GetUserRoles(userId);
 
-            return this.GetEffectivePermissions(secToken, groups);
-        }
-
-        public EffectivePermissionsWrapper GetEffectivePermissions(SecurityToken secToken, List<int> subscribedGroupIds)
-        {
             //TODO: consider these are read from the cache
             PermissionManager permissionManager = new PermissionManager();
             List<Permission> permissionsRecords = permissionManager.GetPermissions();
@@ -123,11 +118,11 @@ namespace Vanrise.Security.Business
 
             List<Dictionary<string, Dictionary<string, Flag>>> listOfAllPermissions = new List<Dictionary<string, Dictionary<string, Flag>>>();
 
-            List<Permission> userPermissions = permissionsRecords.FindAll(x => x.HolderType == HolderType.USER && x.HolderId == secToken.UserId.ToString());
+            List<Permission> userPermissions = permissionsRecords.FindAll(x => x.HolderType == HolderType.USER && x.HolderId == userId.ToString());
             listOfAllPermissions.Add(this.ConvertPermissionsToPathDictionary(userPermissions, businessEntityHierarchy));
 
 
-            foreach (int groupId in subscribedGroupIds)
+            foreach (int groupId in groups)
             {
                 List<Permission> rolePermissions = permissionsRecords.FindAll(x => x.HolderType == HolderType.ROLE && x.HolderId == groupId.ToString());
                 if (rolePermissions.Count > 0)
@@ -166,7 +161,7 @@ namespace Vanrise.Security.Business
                                 allowPermissionsValues.Add(item);
                         }
                     }
-                    else if(allowValues.Count > 0)
+                    else if (allowValues.Count > 0)
                     {
                         allowPermissions.Add(permkvp.Key, allowValues);
                     }
@@ -180,13 +175,13 @@ namespace Vanrise.Security.Business
                                 denyPermissionsValues.Add(item);
                         }
                     }
-                    else if(denyValues.Count > 0)
+                    else if (denyValues.Count > 0)
                     {
                         denyPermissions.Add(permkvp.Key, denyValues);
                     }
                 }
             }
-            
+
 
             //Filter the allowPermissions based on the denyPermissions list
             foreach (KeyValuePair<string, List<string>> allowPerm in allowPermissions)
@@ -249,15 +244,15 @@ namespace Vanrise.Security.Business
 
             foreach (BusinessEntityNode node in businessEntityHierarchy)
             {
-                if(node.BreakInheritance)
+                if (node.BreakInheritance)
                     resultWrapper.BreakInheritanceEntities.Add(node.GetRelativePath());
 
                 IEnumerable<BusinessEntityNode> results = node.Descendants().Where(x => x.BreakInheritance == true);
-                if(results != null)
+                if (results != null)
                 {
                     foreach (BusinessEntityNode subNode in results)
                     {
-                        if(subNode.BreakInheritance)
+                        if (subNode.BreakInheritance)
                             resultWrapper.BreakInheritanceEntities.Add(subNode.GetRelativePath());
                     }
                 }

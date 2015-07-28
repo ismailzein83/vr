@@ -13,9 +13,8 @@ namespace Vanrise.Security.Web.Controllers
         [HttpGet]
         public IEnumerable<MenuItem> GetMenuItems()
         {
-            //TODO: handle the exception Key Not found in case the auth-toekn was null
             MenuManager manager = new MenuManager();
-            return manager.GetMenuItems(SecurityContext.GetSecurityToken());
+            return manager.GetMenuItems(SecurityContext.Current.GetLoggedInUserId());
         }
         
         [HttpGet]

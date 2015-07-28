@@ -10,10 +10,51 @@ namespace Vanrise.Security.Business
 {
     public class SecurityContext
     {
+        #region Constants
+
         public const string SECURITY_TOKEN_NAME = "Auth-Token";
 
-        public static SecurityToken GetSecurityToken()
+        #endregion
+
+        #region Signleton
+
+        private static SecurityContext _current;
+
+        static SecurityContext()
         {
+            _current = new SecurityContext();
+        }
+
+        public static SecurityContext Current
+        {
+            get
+            {
+                return _current;
+            }
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public int GetLoggedInUserId()
+        {
+            return this.GetSecurityToken().UserId;
+        }
+
+        public bool IsAllowed(Dictionary<string, List<string>> requiredPermissions)
+        {
+            SecurityManager manager = new SecurityManager();
+            return manager.IsAllowed(requiredPermissions, this.GetSecurityToken().UserId);
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private SecurityToken GetSecurityToken()
+        {
+            //TODO: handle the exception Key Not found in case the auth-toekn was null
             string token = HttpContext.Current.Request.Headers[SecurityContext.SECURITY_TOKEN_NAME];
 
             if (token == null)
@@ -21,5 +62,8 @@ namespace Vanrise.Security.Business
 
             return Common.Serializer.Deserialize<SecurityToken>(Common.TempEncryptionHelper.Decrypt(token));
         }
+
+        #endregion
+
     }
 }
