@@ -14,6 +14,7 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
     var currentSortedColDef;
     var sortColumn;
     var resultKey;
+    var isFilterScreenReady;
     defineScope();
     loadParameters();
     load();
@@ -64,6 +65,8 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
         };
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
+            if (getDataAfterLoading)
+                $scope.getData();
         }
         $scope.onMainGridSortChanged = function (colDef, sortDirection) {
             sortColumn = colDef.tag;
@@ -73,6 +76,10 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
 
 
         $scope.getData = function () {
+            if (mainGridAPI == undefined)
+                return;
+            if (!isFilterScreenReady)
+                return;
             $scope.mainGridPagerSettings.currentPage = 1;
             resultKey = null;
             mainGridAPI.resetSorting();
@@ -125,6 +132,7 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
         $scope.isInitializing = true;
         UtilsService.waitMultipleAsyncOperations([loadSwitches, loadCustomers, loadSuppliers, loadZonesFromReceivedIds])
             .then(function () {
+                isFilterScreenReady = true;
                 if (getDataAfterLoading)
                     $scope.getData();
             })
@@ -195,6 +203,10 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
     }
     function getData() {
         if (sortColumn == undefined)
+            return;
+        if (mainGridAPI == undefined)
+            return;
+        if (!isFilterScreenReady)
             return;
         var pageInfo = $scope.mainGridPagerSettings.getPageInfo();
         var count = $scope.mainGridPagerSettings.itemsPerPage;
