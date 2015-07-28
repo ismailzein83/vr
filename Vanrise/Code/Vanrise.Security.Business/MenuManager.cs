@@ -34,8 +34,8 @@ namespace Vanrise.Security.Business
             IModuleDataManager moduleDataManager = SecurityDataManagerFactory.GetDataManager<IModuleDataManager>();
             List<Module> modules = moduleDataManager.GetModules();
 
-            RoleManager roleManager = new RoleManager();
-            List<int> groups = roleManager.GetUserRoles(userId);
+            GroupManager roleManager = new GroupManager();
+            List<int> groups = roleManager.GetUserGroups(userId);
             
             List<View> views = GetViews();
             views = this.FilterViewsPerAudience(views, userId, groups);

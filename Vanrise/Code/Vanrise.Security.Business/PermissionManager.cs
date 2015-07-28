@@ -105,8 +105,8 @@ namespace Vanrise.Security.Business
 
         public EffectivePermissionsWrapper GetEffectivePermissions(int userId)
         {
-            RoleManager roleManager = new RoleManager();
-            List<int> groups = roleManager.GetUserRoles(userId);
+            GroupManager roleManager = new GroupManager();
+            List<int> groups = roleManager.GetUserGroups(userId);
 
             //TODO: consider these are read from the cache
             PermissionManager permissionManager = new PermissionManager();

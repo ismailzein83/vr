@@ -1,5 +1,6 @@
-﻿RoleEditorController.$inject = ['$scope', 'RoleAPIService', 'UsersAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
-function RoleEditorController($scope, RoleAPIService, UsersAPIService, VRModalService, VRNotificationService, VRNavigationService) {
+﻿GroupEditorController.$inject = ['$scope', 'GroupAPIService', 'UsersAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+
+function GroupEditorController($scope, GroupAPIService, UsersAPIService, VRModalService, VRNotificationService, VRNavigationService) {
 
     var editMode;
     loadParameters();
@@ -8,23 +9,23 @@ function RoleEditorController($scope, RoleAPIService, UsersAPIService, VRModalSe
 
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
-        $scope.roleId = undefined;
+        $scope.groupId = undefined;
         if (parameters != undefined && parameters != null)
-            $scope.roleId = parameters.roleId;
+            $scope.groupId = parameters.groupId;
 
-        if ($scope.roleId != undefined)
+        if ($scope.groupId != undefined)
             editMode = true;
         else
             editMode = false;
     }
 
     function defineScope() {
-        $scope.SaveRole = function () {
+        $scope.saveGroup = function () {
             if (editMode) {
-                return updateRole();
+                return updateGroup();
             }
             else {
-                return insertRole();
+                return insertGroup();
             }
         };
 
@@ -46,56 +47,55 @@ function RoleEditorController($scope, RoleAPIService, UsersAPIService, VRModalSe
 
         if (editMode) {
             $scope.isGettingData = true;
-            getRole().finally(function () {
+            getGroup().finally(function () {
                 $scope.isGettingData = false;
             })
         }
     }
 
-    function getRole() {
-        return RoleAPIService.GetRole($scope.roleId)
+    function getGroup() {
+        return GroupAPIService.GetGroup($scope.groupId)
            .then(function (response) {
-               fillScopeFromRoleObj(response);
+               fillScopeFromGroupObj(response);
            })
             .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
     }
 
-
-
-    function buildRoleObjFromScope() {
+    function buildGroupObjFromScope() {
         var selectedUserIds = [];
         angular.forEach($scope.optionsUsers.selectedvalues, function (user) {
             selectedUserIds.push(user.UserId);
         });
-        var roleObject = {
-            roleId: ($scope.roleId != null) ? $scope.roleId : 0,
+        var groupObj = {
+            roleId: ($scope.groupId != null) ? $scope.groupId : 0,
             name: $scope.name,
             description: $scope.description,
             members: selectedUserIds
         };
-        return roleObject;
+        return groupObj;
     }
 
-    function fillScopeFromRoleObj(roleObject) {
-        $scope.name = roleObject.Name;
-        $scope.description = roleObject.Description;
+    function fillScopeFromGroupObj(groupObj) {
+        $scope.name = groupObj.Name;
+        $scope.description = groupObj.Description;
         
-        UsersAPIService.GetMembers($scope.roleId).then(function (response) {
+        UsersAPIService.GetMembers($scope.groupId).then(function (response) {
             console.log(response);
             $scope.optionsUsers.selectedvalues = response;
         });
     }
 
-    function insertRole() {
+    function insertGroup() {
         $scope.issaving = true;
-        var roleObject = buildRoleObjFromScope();
-        return RoleAPIService.AddRole(roleObject)
+        var groupObj = buildGroupObjFromScope();
+
+        return GroupAPIService.AddGroup(groupObj)
         .then(function (response) {
-            if (VRNotificationService.notifyOnItemAdded("Role", response)) {
-                if ($scope.onRoleAdded != undefined)
-                    $scope.onRoleAdded(response.InsertedObject);
+            if (VRNotificationService.notifyOnItemAdded("Group", response)) {
+                if ($scope.onGroupAdded != undefined)
+                    $scope.onGroupAdded(response.InsertedObject);
                 $scope.modalContext.closeModal();
             }
         }).catch(function (error) {
@@ -104,13 +104,14 @@ function RoleEditorController($scope, RoleAPIService, UsersAPIService, VRModalSe
 
     }
 
-    function updateRole() {
-        var roleObject = buildRoleObjFromScope();
-        RoleAPIService.UpdateRole(roleObject)
+    function updateGroup() {
+        var groupObj = buildGroupObjFromScope();
+
+        GroupAPIService.UpdateGroup(groupObj)
         .then(function (response) {
-            if (VRNotificationService.notifyOnItemUpdated("Role", response)) {
-                if ($scope.onRoleUpdated != undefined)
-                    $scope.onRoleUpdated(response.UpdatedObject);
+            if (VRNotificationService.notifyOnItemUpdated("Group", response)) {
+                if ($scope.onGroupUpdated != undefined)
+                    $scope.onGroupUpdated(response.UpdatedObject);
                 $scope.modalContext.closeModal();
             }
         }).catch(function (error) {
@@ -118,4 +119,5 @@ function RoleEditorController($scope, RoleAPIService, UsersAPIService, VRModalSe
         });
     }
 }
-appControllers.controller('Security_RoleEditorController', RoleEditorController);
+
+appControllers.controller('Security_GroupEditorController', GroupEditorController);

@@ -50,7 +50,7 @@
     <Compile Include="IOrgChartDataManager.cs" />
     <Compile Include="IOrgChartLinkedEntityDataManager.cs" />
     <Compile Include="IPermissionDataManager.cs" />
-    <Compile Include="IRoleDataManager.cs" />
+    <Compile Include="IGroupDataManager.cs" />
     <Compile Include="IUserDataManager.cs" />
     <Compile Include="IViewDataManager.cs" />
     <Compile Include="IWidgetsDataManager.cs" />

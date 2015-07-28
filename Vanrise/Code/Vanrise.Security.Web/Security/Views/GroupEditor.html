@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="Security_RoleEditorController">
+﻿<div vr-modalcontent ng-controller="Security_GroupEditorController">
     <vr-modalbody width="'50%'" vr-loader="isGettingData">
         <vr-form name="formRoleEditor">
             <vr-row>
@@ -19,7 +19,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formRoleEditor" data-onclick="SaveRole"></vr-button>
+                <vr-button type="Save" formname="formRoleEditor" data-onclick="saveGroup"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>

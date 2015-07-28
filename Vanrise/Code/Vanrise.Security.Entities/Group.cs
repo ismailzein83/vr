@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Security.Entities
 {
-    public class Role
+    public class Group
     {
-        public int RoleId { get; set; }
+        public int GroupId { get; set; }
 
         public string Name { get; set; }
 
