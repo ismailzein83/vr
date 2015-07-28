@@ -1,7 +1,7 @@
-﻿BillingReportsController.$inject = ['$scope', 'ReportAPIService', 'CarrierAPIService', 'ZonesService', 'BillingStatisticsAPIService', 'MainService', 'BaseAPIService'];
+﻿BillingReportsController.$inject = ['$scope', 'ReportAPIService', 'CarrierAccountAPIService', 'ZonesService', 'BillingStatisticsAPIService', 'MainService', 'BaseAPIService'];
 
-function BillingReportsController($scope, ReportAPIService, CarrierAPIService, ZonesService, BillingStatisticsAPIService, MainService, BaseAPIService) {
-   
+function BillingReportsController($scope, ReportAPIService, CarrierAccountAPIService, ZonesService, BillingStatisticsAPIService, MainService, BaseAPIService) {
+
     defineScope();
     load();
 
@@ -13,7 +13,7 @@ function BillingReportsController($scope, ReportAPIService, CarrierAPIService, Z
         //window.open(MainService.getBaseURL() + BillingStatisticsAPIService.Export() + paramsurl, "_self");
         console.log($scope.params.top);
 
-        return BaseAPIService.get("/api/BillingStatistics/Export",{
+        return BaseAPIService.get("/api/BillingStatistics/Export", {
             fromDate: $scope.dateToString($scope.params.fromDate),
             toDate: $scope.dateToString($scope.params.toDate),
             customerId: $scope.params.customer.CarrierAccountID,
@@ -38,7 +38,7 @@ function BillingReportsController($scope, ReportAPIService, CarrierAPIService, Z
                 //var matcher = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/i;
 
                 //var results = headers['content-disposition'].match(matcher);
-                var filename ="myfile44.xls";
+                var filename = "myfile44.xls";
 
                 // Determine the content type from the header or default to "application/octet-stream"
                 var contentType = headers['content-type'] || octetStreamMime;
@@ -121,7 +121,7 @@ function BillingReportsController($scope, ReportAPIService, CarrierAPIService, Z
                     window.open(httpPath, '_blank', '');
                 }
             });
-       
+
 
 
     };
@@ -137,17 +137,17 @@ function BillingReportsController($scope, ReportAPIService, CarrierAPIService, Z
         groupByCustomer: false,
         customer: null,
         supplier: null,
-        zone:null,
+        zone: null,
         isCost: false,
         service: false,
         commission: false,
         bySupplier: false,
         margin: 10,
         isExchange: false,
-        top:10
+        top: 10
     }
     function defineScope() {
-       
+
         $scope.optionsZones = function (filterText) {
             return ZonesService.getSalesZones(filterText);
         };
@@ -206,12 +206,12 @@ function BillingReportsController($scope, ReportAPIService, CarrierAPIService, Z
         });
     }
     function loadCustomers() {
-        CarrierAPIService.GetCarriers(1).then(function (response) {
+        CarrierAccountAPIService.GetCarriers(1).then(function (response) {
             $scope.optionsCustomers = response;
         });
     }
     function loadSuppliers() {
-        CarrierAPIService.GetCarriers(2).then(function (response) {
+        CarrierAccountAPIService.GetCarriers(2).then(function (response) {
             $scope.optionsSuppliers = response;
         });
     }
