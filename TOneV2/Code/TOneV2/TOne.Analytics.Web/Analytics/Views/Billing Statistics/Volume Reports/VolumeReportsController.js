@@ -1,5 +1,5 @@
-﻿VolumeReportsController.$inject = ['$scope', 'BillingStatisticsAPIService', 'VolumeReportsTimePeriodEnum', 'CarrierTypeEnum', 'CarrierAPIService', 'ZonesService'];
-function VolumeReportsController($scope, BillingStatisticsAPIService, VolumeReportsTimePeriodEnum, CarrierTypeEnum, CarrierAPIService, ZonesService) {
+﻿VolumeReportsController.$inject = ['$scope', 'BillingStatisticsAPIService', 'VolumeReportsTimePeriodEnum', 'CarrierTypeEnum', 'CarrierAccountAPIService', 'ZonesService'];
+function VolumeReportsController($scope, BillingStatisticsAPIService, VolumeReportsTimePeriodEnum, CarrierTypeEnum, CarrierAccountAPIService, ZonesService) {
 
     defineScope();
     load();
@@ -63,7 +63,7 @@ function VolumeReportsController($scope, BillingStatisticsAPIService, VolumeRepo
     }
 
     function loadCustomers() {
-        return CarrierAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
+        return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.customers.push(itm);
             });
@@ -71,7 +71,7 @@ function VolumeReportsController($scope, BillingStatisticsAPIService, VolumeRepo
     }
 
     function loadSuppliers() {
-        return CarrierAPIService.GetCarriers(CarrierTypeEnum.Supplier.value).then(function (response) {
+        return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Supplier.value).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.suppliers.push(itm);
             });
