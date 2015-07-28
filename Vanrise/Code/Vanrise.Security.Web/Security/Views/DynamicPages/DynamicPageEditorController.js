@@ -54,9 +54,9 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
                 treeAPI.refreshTree($scope.menuList);
             } 
         }
-        $scope.showSearch=false;
+        $scope.nonSearchable=false;
         $scope.nonSearchableSelectionChanged = function () {
-            $scope.showSearch = true;
+            $scope.nonSearchable = true;
 
         }
         $scope.addedBodyWidgets = [];
@@ -104,7 +104,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
                 NumberOfColumns: $scope.selectedColumnWidth.value,
                 SectionTitle:$scope.sectionTitle
             }
-            if (!$scope.showSearch) {
+            if ($scope.nonSearchable) {
                 viewWidget.DefaultPeriod = $scope.selectedWidgetPeriod.value
                 viewWidget.DefaultGrouping = $scope.selectedWidgetTimeDimensionType.value
             }
@@ -131,7 +131,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         };
     }
     function checkWidgetValidator() {
-        if (!$scope.showSearch) {
+        if ($scope.nonSearchable) {
             for (var i = 0; i < $scope.addedBodyWidgets.length; i++) {
                 var widget = $scope.addedBodyWidgets[i];
                 if (widget.DefaultGrouping == undefined || widget.DefaultPeriod == undefined) {
@@ -242,7 +242,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
             SummaryContents: $scope.summaryContents,
             BodyContents: $scope.bodyContents,
         }
-        if ($scope.showSearch) {
+        if (!$scope.nonSearchable) {
             ViewContent.DefaultPeriod = $scope.selectedViewPeriod.value;
             ViewContent.DefaultGrouping = $scope.selectedViewTimeDimensionType.value;
         }
@@ -338,7 +338,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         if($scope.menuList.length>0)
             treeAPI.refreshTree($scope.menuList);
         if ($scope.filter.DefaultPeriod != undefined && $scope.filter.DefaultGrouping != undefined) {
-            $scope.showSearch = true;
+            $scope.nonSearchable = false;
             $scope.selectedViewPeriod = getPeriod($scope.filter.DefaultPeriod);
             $scope.selectedViewTimeDimensionType = getTimeDimentionType($scope.filter.DefaultGrouping);
         }

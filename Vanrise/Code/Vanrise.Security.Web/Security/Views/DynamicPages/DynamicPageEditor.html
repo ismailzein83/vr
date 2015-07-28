@@ -14,14 +14,14 @@
                                 <vr-textbox value="pageName" label="Page Name" isrequired></vr-textbox>
                             </vr-row>
                             <vr-row>
-                                <vr-switch value="showSearch" onvaluechanged="nonSearchableValueChanged()" "></vr-switch>
+                                <vr-switch value="nonSearchable" label="Non Searchable" onvaluechanged="nonSearchableValueChanged()" "></vr-switch>
                             </vr-row>
-                            <vr-row ng-show="showSearch">
+                            <vr-row ng-show="!nonSearchable">
                                 <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Default Period"
                                            selectedvalues="selectedViewPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
 
                             </vr-row>
-                            <vr-row ng-show="showSearch">
+                            <vr-row ng-show="!nonSearchable">
                                 <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Default Grouping"
                                            selectedvalues="selectedViewTimeDimensionType" isrequired hidefilterbox></vr-select>
 
@@ -76,11 +76,11 @@
                         <vr-columns width="normal">
                             <vr-select datasource="columnWidth" datatextfield="description" datavaluefield="value" label="Row Space" selectedvalues="selectedColumnWidth" isrequired hidefilterbox></vr-select>
                         </vr-columns>
-                        <vr-columns width="normal" ng-show="!showSearch">
+                        <vr-columns width="normal" ng-show="nonSearchable">
                             <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Default Period"
                                        selectedvalues="selectedWidgetPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
                         </vr-columns>
-                        <vr-columns width="normal" ng-show="!showSearch">
+                        <vr-columns width="normal" ng-show="nonSearchable">
                             <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Default Grouping"
                                        selectedvalues="selectedWidgetTimeDimensionType" isrequired hidefilterbox></vr-select>
                         </vr-columns>

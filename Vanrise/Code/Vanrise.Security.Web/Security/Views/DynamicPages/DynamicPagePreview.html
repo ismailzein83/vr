@@ -1,5 +1,5 @@
 ﻿<vr-panel ng-controller="Security_DynamicPagePreviewController">
-    <vr-form name="formDynamicPagePreview" ng-show="showSearch">
+    <vr-form name="formDynamicPagePreview" ng-show="!nonSearchable">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns width="normal">
@@ -20,7 +20,7 @@
 
             </vr-row>
         </div>
-        <vr-row removeline >
+        <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formDynamicPagePreview" data-onclick="Search"></vr-button>

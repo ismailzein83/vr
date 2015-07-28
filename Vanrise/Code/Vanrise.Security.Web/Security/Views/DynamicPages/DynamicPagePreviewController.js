@@ -16,7 +16,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         definePeriods();
         var date;
         $scope.fromDate;
-        $scope.showSearch = false;
+        $scope.nonSearchable = true;
         $scope.toDate;
         $scope.allWidgets = [];
         $scope.viewContent = [];
@@ -132,11 +132,11 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         }
         else {
             $scope.isGettingData = true;
-            if ($scope.$parent.showSearch) {
+            if (!$scope.$parent.nonSearchable) {
                 $scope.selectedPeriod = $scope.$parent.selectedViewPeriod;
                 $scope.selectedTimeDimensionType = $scope.$parent.selectedViewTimeDimensionType;
                 fillDateAndPeriod();
-                $scope.showSearch = true;
+                $scope.nonSearchable = false;
             }
 
           return  UtilsService.waitMultipleAsyncOperations([loadAllWidgets])
@@ -156,7 +156,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             {
                 value.NumberOfColumns = bodyContent.NumberOfColumns;
                 value.SectionTitle = bodyContent.SectionTitle;
-                if (!$scope.showSearch) {
+                if ($scope.nonSearchable) {
                     value.DefaultPeriod = bodyContent.DefaultPeriod;
                     value.DefaultGrouping = bodyContent.DefaultGrouping;
                 }
@@ -171,7 +171,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             if (value != null) {
                 value.NumberOfColumns = summaryContent.NumberOfColumns;
                 value.SectionTitle = summaryContent.SectionTitle;
-                if (!$scope.showSearch) {
+                if ($scope.nonSearchable) {
                     value.DefaultPeriod = summaryContent.DefaultPeriod;
                     value.DefaultGrouping = summaryContent.DefaultGrouping;
                 }
@@ -187,7 +187,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         bodyWidget.onElementReady = function (api) {
             bodyWidget.API = api;
             var filter = {};
-            if ($scope.showSearch)
+            if (!$scope.nonSearchable)
                bodyWidget.API.retrieveData( $scope.filter);
             else {
                 var widgetDate = getPeriod(bodyWidget.DefaultPeriod);
@@ -201,7 +201,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             }
            
             bodyWidget.retrieveData = function () {
-                if ($scope.showSearch)
+                if (!$scope.nonSearchable)
                     return api.retrieveData($scope.filter);
                 else
                    return api.retrieveData(filter);
@@ -214,8 +214,8 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
            
             summaryWidget.API = api;
             var filter = {};
-            if ($scope.showSearch)
-                filter = $scope.filter;
+            if (!$scope.nonSearchable)
+                summaryWidget.API.retrieveData( $scope.filter);
             else {
                 var widgetDate = getPeriod(summaryWidget.DefaultPeriod);
                 var timeDimention = UtilsService.getItemByVal($scope.timeDimensionTypes, summaryWidget.DefaultGrouping, 'value');
@@ -224,10 +224,15 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
                     fromDate: widgetDate.from,
                     toDate: widgetDate.to
                 }
+                summaryWidget.API.retrieveData(filter);
             }
-            summaryWidget.API.retrieveData(filter);
+          
             summaryWidget.retrieveData = function () {
+                if (!$scope.nonSearchable)
+                    return api.retrieveData($scope.filter);
+                else
                     return api.retrieveData(filter);
+
             };
         };
        
@@ -248,7 +253,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             if (response.ViewContent.DefaultPeriod != undefined || response.ViewContent.DefaultGrouping != undefined) {
                 $scope.selectedPeriod = UtilsService.getItemByVal($scope.periods, response.ViewContent.DefaultPeriod, 'value');
                 $scope.selectedTimeDimensionType = UtilsService.getItemByVal($scope.timeDimensionTypes, response.ViewContent.DefaultGrouping, 'value');
-                $scope.showSearch = true;
+                $scope.nonSearchable = false;
                 fillDateAndPeriod();
             }
  
