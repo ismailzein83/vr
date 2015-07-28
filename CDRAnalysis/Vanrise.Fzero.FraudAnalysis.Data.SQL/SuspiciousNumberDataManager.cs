@@ -205,13 +205,19 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 dataTable.Rows.Add(i);
             }
 
-            SqlParameter parameter = new SqlParameter();
-            parameter.ParameterName = "@SubscriberCase";
-            parameter.SqlDbType = System.Data.SqlDbType.Structured;
-            parameter.Value = dataTable;
-            parameter.TypeName = "[FraudAnalysis].[SubscriberCaseType]";
 
-            ExecuteNonQuerySP("[FraudAnalysis].[sp_FraudResult_UpdateSubscriberCases]",  parameter);
+
+            ExecuteNonQuerySPCmd("[FraudAnalysis].[sp_FraudResult_UpdateSubscriberCases]",
+                  (cmd) =>
+                  {
+
+                      SqlParameter parameter = new SqlParameter();
+                      parameter.ParameterName = "@SubscriberCase";
+                      parameter.SqlDbType = System.Data.SqlDbType.Structured;
+                      parameter.Value = dataTable;
+                      parameter.TypeName = "[FraudAnalysis].[SubscriberCaseType]";
+                      cmd.Parameters.Add(parameter);
+                  });
         }
     }
 }
