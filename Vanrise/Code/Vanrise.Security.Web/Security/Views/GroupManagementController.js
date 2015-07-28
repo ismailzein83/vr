@@ -1,7 +1,6 @@
-﻿RoleManagementController.$inject = ['$scope', 'RoleAPIService', 'VRModalService'];
+﻿GroupManagementController.$inject = ['$scope', 'GroupAPIService', 'VRModalService'];
 
-
-function RoleManagementController($scope, RoleAPIService, VRModalService) {
+function GroupManagementController($scope, GroupAPIService, VRModalService) {
     var mainGridAPI;
     var arrMenuAction = [];
 
@@ -10,7 +9,7 @@ function RoleManagementController($scope, RoleAPIService, VRModalService) {
 
     function defineScope() {
         $scope.gridMenuActions = [];
-        $scope.roles = [];
+        $scope.groups = [];
 
         defineMenuActions();
 
@@ -28,7 +27,7 @@ function RoleManagementController($scope, RoleAPIService, VRModalService) {
             return getData();
         };
 
-        $scope.AddNewRole = addRole;
+        $scope.addNewGroup = addGroup;
     }
 
     function load() {
@@ -39,9 +38,9 @@ function RoleManagementController($scope, RoleAPIService, VRModalService) {
         var pageInfo = mainGridAPI.getPageInfo();
 
         var name = $scope.name != undefined ? $scope.name : '';
-        return RoleAPIService.GetFilteredRoles(pageInfo.fromRow, pageInfo.toRow, name).then(function (response) {
+        return GroupAPIService.GetFilteredGroups(pageInfo.fromRow, pageInfo.toRow, name).then(function (response) {
             angular.forEach(response, function (itm) {
-                $scope.roles.push(itm);
+                $scope.groups.push(itm);
             });
         });
     }
@@ -50,7 +49,7 @@ function RoleManagementController($scope, RoleAPIService, VRModalService) {
     {
         $scope.gridMenuActions = [{
             name: "Edit",
-            clicked: editRole,
+            clicked: editGroup,
             permissions: "TOne/Administration Module/Groups:Edit"
         },
         {
@@ -61,48 +60,51 @@ function RoleManagementController($scope, RoleAPIService, VRModalService) {
         ];
     }
 
-    function addRole() {
+    function addGroup() {
         var settings = {};
 
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = "Add Role";
-            modalScope.onRoleAdded = function (role) {
-                mainGridAPI.itemAdded(role);
+            modalScope.title = "Add Group";
+            modalScope.onGroupAdded = function (group) {
+                mainGridAPI.itemAdded(group);
             };
         };
-        VRModalService.showModal('/Client/Modules/Security/Views/RoleEditor.html', null, settings);
+
+        VRModalService.showModal('/Client/Modules/Security/Views/GroupEditor.html', null, settings);
     }
 
-    function editRole(roleObj)
+    function editGroup(groupObj)
     {
-        var modalSettings = {
-        };
+        var modalSettings = {};
+
         var parameters = {
-            roleId: roleObj.RoleId
+            groupId: groupObj.RoleId
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Role: " + roleObj.Name;
-            modalScope.onRoleUpdated = function (role) {
-                mainGridAPI.itemUpdated(role);
+            modalScope.title = "Edit Group: " + groupObj.Name;
+            modalScope.onGroupUpdated = function (group) {
+                mainGridAPI.itemUpdated(group);
             };
         };
-        VRModalService.showModal('/Client/Modules/Security/Views/RoleEditor.html', parameters, modalSettings);
+
+        VRModalService.showModal('/Client/Modules/Security/Views/GroupEditor.html', parameters, modalSettings);
     }
 
-    function assignPermissions(roleObj) {
+    function assignPermissions(groupObj) {
         var modalSettings = {
         };
         var parameters = {
             holderType: 1,
-            holderId: roleObj.RoleId,
+            holderId: groupObj.RoleId,
             notificationResponseText: "Role Permissions"
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Assign Permissions to Role: " + roleObj.Name;
+            modalScope.title = "Assign Permissions to Group: " + groupObj.Name;
         };
         VRModalService.showModal('/Client/Modules/Security/Views/PermissionEditor.html', parameters, modalSettings);
     }
 }
-appControllers.controller('Security_RoleManagementController', RoleManagementController);
+
+appControllers.controller('Security_GroupManagementController', GroupManagementController);

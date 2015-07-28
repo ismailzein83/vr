@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="Security_RoleManagementController">
+﻿<vr-panel ng-controller="Security_GroupManagementController">
 
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
@@ -12,7 +12,7 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked" isasynchronous=" true"></vr-button>
-                    <vr-button type="Add" permissions="TOne/Administration Module/Groups:Add" data-onclick="AddNewRole"></vr-button>
+                    <vr-button type="Add" permissions="TOne/Administration Module/Groups:Add" data-onclick="addNewGroup"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
@@ -21,7 +21,7 @@
     <div>
         <vr-row>
             <vr-columns colnum="12" simplecol>
-                <vr-datagrid datasource="roles" menuactions="gridMenuActions" loadmoredata="loadMoreData" on-ready="onMainGridReady" idfield="RoleId">
+                <vr-datagrid datasource="groups" menuactions="gridMenuActions" loadmoredata="loadMoreData" on-ready="onMainGridReady" idfield="RoleId">
                     <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Description'" field="'Description'"></vr-datagridcolumn>
                 </vr-datagrid>

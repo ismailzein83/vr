@@ -122,7 +122,7 @@
     <Content Include="Security\Services\APIServices\SecurityApiService.js" />
     <Content Include="Security\Services\APIServices\MenuAPIService.js" />
     <Content Include="Security\Services\APIServices\PermissionApiService.js" />
-    <Content Include="Security\Services\APIServices\RoleAPIService.js" />
+    <Content Include="Security\Services\APIServices\GroupAPIService.js" />
     <Content Include="Security\Services\APIServices\UsersAPIService.js" />
     <Content Include="Security\Services\APIServices\ViewAPIService.js" />
     <Content Include="Security\Services\APIServices\WidgetAPIService.js" />
@@ -149,10 +149,10 @@
     <Content Include="Security\Views\PermissionEditorController.js" />
     <Content Include="Security\Views\ResetPasswordEditor.html" />
     <Content Include="Security\Views\ResetPasswordEditorController.js" />
-    <Content Include="Security\Views\RoleEditor.html" />
-    <Content Include="Security\Views\RoleEditorController.js" />
-    <Content Include="Security\Views\RoleManagement.html" />
-    <Content Include="Security\Views\RoleManagementController.js" />
+    <Content Include="Security\Views\GroupEditor.html" />
+    <Content Include="Security\Views\GroupEditorController.js" />
+    <Content Include="Security\Views\GroupManagement.html" />
+    <Content Include="Security\Views\GroupManagementController.js" />
     <Content Include="Security\Views\UserEditor.html" />
     <Content Include="Security\Views\UserEditorController.js" />
     <Content Include="Security\Views\UserManagement.html" />
@@ -165,7 +165,7 @@
     <Compile Include="Controllers\SecurityController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\PermissionController.cs" />
-    <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\WidgetsController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
