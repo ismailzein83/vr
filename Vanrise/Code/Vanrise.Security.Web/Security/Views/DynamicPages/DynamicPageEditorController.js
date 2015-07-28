@@ -7,7 +7,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
     var treeAPI;
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
-        
+        console.log(parameters);
         if (parameters != null) {
             $scope.filter = {
                 Name: parameters.Name,
@@ -26,7 +26,6 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
     }
 
     function defineScope() {
-
         $scope.widgets = [];
         $scope.selectedWidget;
         $scope.users = [];
@@ -50,14 +49,12 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             treeAPI = api;
             if ($scope.menuList.length > 0) {
                 treeAPI.refreshTree($scope.menuList);
-                
-            }
-             
+            } 
         }
         $scope.showSearch=false;
         $scope.nonSearchableSelectionChanged = function () {
             $scope.showSearch = true;
-            console.log(nonSearchableSelectedIndex);
+
         }
         $scope.addedBodyWidgets = [];
         $scope.onSelectionChanged = function () {
@@ -68,8 +65,6 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
                 var title = $scope.selectedWidget.Name;
                 $scope.sectionTitle = title;
             }
-           
-            
         }
         $scope.save = function () {
             if ($scope.selectedMenuNode == undefined)
@@ -201,12 +196,14 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             Users: selectedUsersIDs,
             Groups: selectedRolesIDs
         };
-        
+       
         var ViewContent = {
             SummaryContents: $scope.summaryContents,
             BodyContents: $scope.bodyContents,
-            DefaultPeriod: $scope.selectedPeriod.value,
-            DefaultGrouping: $scope.selectedTimeDimensionType.value
+        }
+        if ($scope.showSearch) {
+            ViewContent.DefaultPeriod= $scope.selectedPeriod.value;
+            ViewContent.DefaultGrouping=$scope.selectedTimeDimensionType.value;
         }
         $scope.View = {
             Name: $scope.pageName,
@@ -297,8 +294,12 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         
         if($scope.menuList.length>0)
             treeAPI.refreshTree($scope.menuList);
-        $scope.selectedPeriod = getPeriod($scope.filter.DefaultPeriod);
-        $scope.selectedTimeDimensionType = getTimeDimentionType($scope.filter.DefaultGrouping);
+        if ($scope.filter.DefaultPeriod != undefined && $scope.filter.DefaultGrouping != undefined) {
+            $scope.showSearch = true;
+            $scope.selectedPeriod = getPeriod($scope.filter.DefaultPeriod);
+            $scope.selectedTimeDimensionType = getTimeDimentionType($scope.filter.DefaultGrouping);
+        }
+
     }
     function getTimeDimentionType(defaultGrouping) {
         return UtilsService.getItemByVal($scope.timeDimensionTypes, defaultGrouping, 'value');

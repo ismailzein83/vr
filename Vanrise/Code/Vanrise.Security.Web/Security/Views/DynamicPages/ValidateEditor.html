@@ -1,0 +1,18 @@
+﻿<div vr-modalcontent ng-controller="Security_ValidateEditorController" width="'50%'">
+    <vr-modalbody vr-loader="isGettingData" maxheight="'700px'">
+        <vr-form name="formValidateEditor">
+            <vr-datagrid datasource="dynamicViews" dataretrievalfunction="dataRetrievalFunction" menuactions="menuActions" on-ready="onMainGridReady" pagingtype="'Pager'" idfield="ViewId">
+                <vr-datagridcolumn headertext="'Audiences'" field="''"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Deny Measures'" field="''"></vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+               <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
+

@@ -137,6 +137,8 @@
     <Content Include="Security\Views\DynamicPages\DynamicPageEditorController.js" />
     <Content Include="Security\Views\DynamicPages\DynamicPageManagement.html" />
     <Content Include="Security\Views\DynamicPages\DynamicPageManagementController.js" />
+    <Content Include="Security\Views\DynamicPages\ValidateEditor.html" />
+    <Content Include="Security\Views\DynamicPages\ValidateEditorController.js" />
     <Content Include="Security\Views\Login.html" />
     <Content Include="Security\Views\LoginController.js" />
     <Content Include="Security\Views\OrgChartEditor.html" />

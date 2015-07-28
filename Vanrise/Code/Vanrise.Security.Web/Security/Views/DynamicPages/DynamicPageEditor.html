@@ -76,13 +76,22 @@
                         <vr-columns width="normal">
                             <vr-select datasource="columnWidth" datatextfield="description" datavaluefield="value" label="Row Space" selectedvalues="selectedColumnWidth" isrequired hidefilterbox></vr-select>
                         </vr-columns>
-                      
+                        <vr-columns width="normal" ng-show="!showSearch">
+                            <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Default Period"
+                                       selectedvalues="selectedPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
+                        </vr-columns>
+                        <vr-columns width="normal" ng-show="!showSearch">
+                            <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Default Grouping"
+                                       selectedvalues="selectedTimeDimensionType" isrequired hidefilterbox></vr-select>
+                        </vr-columns>
                         <vr-columns width="small" vr-disabled="selectedWidget==undefined">
                             <vr-label></vr-label>
                             <vr-button type="Add" formname="formDesigningSelectionModel" data-onclick="addViewContent" standalone></vr-button>
                         </vr-columns>
                        
                     </vr-row>
+    
+
                     <vr-row>
                         <div ng-include="selectedWidget.Setting.DirectiveTemplateURL"></div>
                     </vr-row>

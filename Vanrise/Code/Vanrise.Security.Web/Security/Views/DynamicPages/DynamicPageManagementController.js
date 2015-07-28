@@ -47,7 +47,14 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
                clicked: function (dataItem) {
                    deletePage(dataItem);
                }
-           }];
+           },
+         {
+             name: "Validate",
+             permissions: "TOne/Administration Module/Dynamic Pages:Validate",
+             clicked: function (dataItem) {
+                 validate(dataItem);
+             }
+         }];
         $scope.mainGridPagerSettings = {
             currentPage: 1,
             totalDataCount: 0,
@@ -74,7 +81,15 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
         }
 
     }
+    function validate(dataItem) {
+        var settings = {};
 
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = "Validate Dynamic Page: " + dataItem.Name;
+        };
+        VRModalService.showModal('/Client/Modules/Security/Views/DynamicPages/ValidateEditor.html', dataItem, settings);
+
+    }
     function addPage() {
         var settings = {};
         settings.onScopeReady = function (modalScope) {
