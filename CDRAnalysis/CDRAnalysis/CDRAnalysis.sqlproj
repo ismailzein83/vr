@@ -65,6 +65,7 @@
     <Folder Include="FraudAnalysis\Tables\" />
     <Folder Include="Security\" />
     <Folder Include="FraudAnalysis\Stored Procedures\" />
+    <Folder Include="FraudAnalysis\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="FraudAnalysis\Tables\Suspicion_Level.sql" />
@@ -93,6 +94,7 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_SubscriberCase_Save.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_UpdateSubscriberCases.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_Get.sql" />
+    <Build Include="FraudAnalysis\User Defined Types\SubscriberCaseType.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="CDRAnalysis.PostDeployment.sql" />
