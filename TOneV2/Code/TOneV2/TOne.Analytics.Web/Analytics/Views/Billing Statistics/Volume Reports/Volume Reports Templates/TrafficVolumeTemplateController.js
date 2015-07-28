@@ -44,6 +44,8 @@ function TrafficVolumeTemplateController($scope, BillingStatisticsAPIService) {
             type: "column"
         }
         ];
+        console.log(seriesDefinitions);
+        console.log(xAxisDefinition);
         chartAPI.renderChart(data, chartDefinition, seriesDefinitions, xAxisDefinition);
 
     }
