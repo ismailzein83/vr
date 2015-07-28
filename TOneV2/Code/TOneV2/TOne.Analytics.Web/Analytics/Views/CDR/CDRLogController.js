@@ -1,6 +1,6 @@
-﻿CDRLogController.$inject = ['$scope', 'CDRAPIService', 'UtilsService', 'uiGridConstants', 'VRNavigationService', '$q', 'BusinessEntityAPIService_temp', 'CarrierAPIService', 'BillingCDRMeasureEnum', 'TrafficStatisticsMeasureEnum', 'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'ZonesService', 'BillingCDROptionMeasureEnum'];
+﻿CDRLogController.$inject = ['$scope', 'CDRAPIService', 'UtilsService', 'uiGridConstants', 'VRNavigationService', '$q', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService', 'BillingCDRMeasureEnum', 'TrafficStatisticsMeasureEnum', 'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'ZonesService', 'BillingCDROptionMeasureEnum'];
 
-function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, VRNavigationService, $q, BusinessEntityAPIService, CarrierAPIService, BillingCDRMeasureEnum, TrafficStatisticsMeasureEnum, CarrierTypeEnum, VRModalService, VRNotificationService, ZonesService, BillingCDROptionMeasureEnum) {
+function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, VRNavigationService, $q, BusinessEntityAPIService, CarrierAccountAPIService, BillingCDRMeasureEnum, TrafficStatisticsMeasureEnum, CarrierTypeEnum, VRModalService, VRNotificationService, ZonesService, BillingCDROptionMeasureEnum) {
 
     var receivedCustomerIds;
     var receivedSupplierIds;
@@ -26,9 +26,9 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
             receivedZoneIds = parameters.zoneIds;
             receivedSupplierIds = parameters.supplierIds;
             receivedSwitchIds = parameters.switchIds;
-            getDataAfterLoading = true;   
+            getDataAfterLoading = true;
         }
-            
+
 
         if ($scope.fromDate != undefined)
             editMode = true;
@@ -71,13 +71,13 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
             return getData();
         }
 
-   
+
         $scope.getData = function () {
             $scope.mainGridPagerSettings.currentPage = 1;
             resultKey = null;
             mainGridAPI.resetSorting();
             resetSorting();
-            var  filter= buildFilter();
+            var filter = buildFilter();
             $scope.filter = {
                 filter: filter,
                 fromDate: $scope.fromDate,
@@ -129,17 +129,17 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
                     $scope.getData();
             })
             .finally(function () {
-            $scope.isInitializing = false;
-        }).catch(function (error) {
-            VRNotificationService.notifyExceptionWithClose(error, $scope);
-        });
+                $scope.isInitializing = false;
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            });
     }
     function buildFilter() {
         var filter = {};
         filter.SwitchIds = getFilterIds($scope.selectedSwitches, "SwitchId");
         filter.CustomerIds = getFilterIds($scope.selectedCustomers, "CarrierAccountID");
         filter.SupplierIds = getFilterIds($scope.selectedSuppliers, "CarrierAccountID");
-        filter.ZoneIds = getFilterIds($scope.selectedZones, "ZoneId"); 
+        filter.ZoneIds = getFilterIds($scope.selectedZones, "ZoneId");
         return filter;
     }
     function resetSorting() {
@@ -165,19 +165,19 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
         });
     }
     function loadCustomers() {
-        return CarrierAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
+        return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.customers.push(itm);
-                if (receivedCustomerIds != undefined && receivedCustomerIds.indexOf(itm.CarrierAccountID)>-1)
+                if (receivedCustomerIds != undefined && receivedCustomerIds.indexOf(itm.CarrierAccountID) > -1)
                     $scope.selectedCustomers.push(itm);
             });
         });
     }
     function loadSuppliers() {
-        return CarrierAPIService.GetCarriers(CarrierTypeEnum.Supplier.value).then(function (response) {
+        return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Supplier.value).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.suppliers.push(itm);
-                if(receivedSupplierIds !=undefined && receivedSupplierIds.indexOf(itm.CarrierAccountID)>-1)
+                if (receivedSupplierIds != undefined && receivedSupplierIds.indexOf(itm.CarrierAccountID) > -1)
                     $scope.selectedSuppliers.push(itm);
             });
         });
@@ -209,11 +209,11 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
             CDROption: $scope.filter.selectedCDROption,
             OrderBy: sortColumn.value,
             IsDescending: sortDescending
-            
+
         }
         $scope.showResult = true;
         $scope.isGettingData = true;
-        
+
         return CDRAPIService.GetCDRData(getCDRLogSummaryInput).then(function (response) {
             if (currentSortedColDef != undefined)
                 currentSortedColDef.currentSorting = sortDescending ? 'DESC' : 'ASC';
