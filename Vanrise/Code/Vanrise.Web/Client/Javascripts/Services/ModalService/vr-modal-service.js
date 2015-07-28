@@ -34,7 +34,7 @@ app.service('VRModalService', function ($modal, $rootScope, VRNavigationService,
                 settings.onScopeReady(modalScope);
         }
 
-        var modalInstance = $modal({ scope: modalScope, template: modalUrl, show: true, animation: "am-fade-and-scale" });
+        var modalInstance = $modal({ scope: modalScope, templateUrl: modalUrl, show: true, animation: "am-fade-and-scale" });
         return deferred.promise;
     }
 });
