@@ -89,16 +89,17 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
     function load() {
         $scope.isLoadingTree = true;
 
-        UtilsService.waitMultipleAsyncOperations([getUsers, getLinkedOrgChartId]).then(function () {
+        UtilsService.waitMultipleAsyncOperations([getUsers, getLinkedOrgChartId])
+        .then(function () {
             if (assignedOrgChartId != undefined) {
                 buildTreeFromOrgHierarchy();
             }
             else {
                 buildTreeFromUsers();
             }
-
-        }).catch(function (error) {
-            VRNotificationService.notifyException(error, $scope);
+        })
+        .catch(function (error) {
+            VRNotificationService.notifyExceptionWithClose(error, $scope);
             $scope.isLoadingTree = false;
         });
     }
@@ -126,7 +127,8 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
             })
             .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
-            }).finally(function () {
+            })
+            .finally(function () {
                 $scope.isLoadingTree = false;
             });
     }
