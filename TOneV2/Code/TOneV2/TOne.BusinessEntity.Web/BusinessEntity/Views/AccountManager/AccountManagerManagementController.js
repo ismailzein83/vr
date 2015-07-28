@@ -87,22 +87,19 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
     }
 
     function load() {
+        $scope.isLoadingTree = true;
 
-        getUsers().finally(function () {
+        UtilsService.waitMultipleAsyncOperations([getUsers, getLinkedOrgChartId]).then(function () {
+            if (assignedOrgChartId != undefined) {
+                buildTreeFromOrgHierarchy();
+            }
+            else {
+                buildTreeFromUsers();
+            }
 
-            getLinkedOrgChartId().finally(function () {
-
-                if (assignedOrgChartId == undefined || assignedOrgChartId == null) {
-                    buildNodesFromUsers();
-                    treeAPI.refreshTree($scope.nodes);
-                }
-                else {
-                    getMembers().finally(function () {
-                        buildNodesFromMembers(); // requires users to be set
-                        treeAPI.refreshTree($scope.nodes);
-                    });
-                }
-            });
+        }).catch(function (error) {
+            VRNotificationService.notifyException(error, $scope);
+            $scope.isLoadingTree = false;
         });
     }
 
@@ -110,9 +107,6 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
         return UsersAPIService.GetUsers()
             .then(function (response) {
                 users = response;
-            })
-            .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
     }
 
@@ -120,29 +114,33 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
         return AccountManagerAPIService.GetLinkedOrgChartId()
             .then(function (response) {
                 assignedOrgChartId = response;
-            })
-            .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
     }
 
-    function getMembers() {
+    function buildTreeFromOrgHierarchy() {
         return OrgChartAPIService.GetOrgChartById(assignedOrgChartId)
             .then(function (orgChartObject) {
                 members = orgChartObject.Hierarchy;
+                $scope.nodes = mapMembersToNodes(members);
+                treeAPI.refreshTree($scope.nodes);
             })
             .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.isLoadingTree = false;
             });
     }
 
-    function buildNodesFromUsers() {
+    function buildTreeFromUsers() {
         $scope.nodes = [];
 
         for (var i = 0; i < users.length; i++) {
             var node = mapUserToNode(users[i]);
             $scope.nodes.push(node);
         }
+
+        treeAPI.refreshTree($scope.nodes);
+        $scope.isLoadingTree = false;
     }
 
     function mapUserToNode(user) {
@@ -152,10 +150,6 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
             nodeChildren: [],
             isOpened: true
         };
-    }
-
-    function buildNodesFromMembers() {
-        $scope.nodes = mapMembersToNodes(members);
     }
 
     function mapMembersToNodes(members) {

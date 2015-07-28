@@ -11,15 +11,17 @@
     </vr-row>
 
     <vr-row>
-        <vr-columns colnum="3">
-            <vr-treeview on-ready="treeReady"
-                datachildrenfield="nodeChildren"
-                datavaluefield="nodeId"
-                datatextfield="nodeName"
-                selecteditem="currentNode"
-                onvaluechanged="treeValueChanged">
-            </vr-treeview>
-        </vr-columns>
+        <div vr-loader="isLoadingTree">
+            <vr-columns colnum="3">
+                <vr-treeview on-ready="treeReady"
+                             datachildrenfield="nodeChildren"
+                             datavaluefield="nodeId"
+                             datatextfield="nodeName"
+                             selecteditem="currentNode"
+                             onvaluechanged="treeValueChanged">
+                </vr-treeview>
+            </vr-columns>
+        </div>
 
         <vr-columns colnum="9">
             <vr-columns colnum="fullrow" simplecol>
