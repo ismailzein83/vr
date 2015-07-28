@@ -56,7 +56,6 @@ namespace Vanrise.Security.Web.Controllers
             };
             return manager.UpdateGroup(groupObj, groupObj.Members);
         }
-
     }
 
     public class GroupEditorInput : Group

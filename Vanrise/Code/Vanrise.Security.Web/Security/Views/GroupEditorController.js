@@ -10,6 +10,7 @@ function GroupEditorController($scope, GroupAPIService, UsersAPIService, VRModal
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
         $scope.groupId = undefined;
+
         if (parameters != undefined && parameters != null)
             $scope.groupId = parameters.groupId;
 
@@ -68,12 +69,14 @@ function GroupEditorController($scope, GroupAPIService, UsersAPIService, VRModal
         angular.forEach($scope.optionsUsers.selectedvalues, function (user) {
             selectedUserIds.push(user.UserId);
         });
+
         var groupObj = {
-            roleId: ($scope.groupId != null) ? $scope.groupId : 0,
+            groupId: ($scope.groupId != null) ? $scope.groupId : 0,
             name: $scope.name,
             description: $scope.description,
             members: selectedUserIds
         };
+
         return groupObj;
     }
 
@@ -82,7 +85,6 @@ function GroupEditorController($scope, GroupAPIService, UsersAPIService, VRModal
         $scope.description = groupObj.Description;
         
         UsersAPIService.GetMembers($scope.groupId).then(function (response) {
-            console.log(response);
             $scope.optionsUsers.selectedvalues = response;
         });
     }

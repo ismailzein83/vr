@@ -78,7 +78,7 @@ function GroupManagementController($scope, GroupAPIService, VRModalService) {
         var modalSettings = {};
 
         var parameters = {
-            groupId: groupObj.RoleId
+            groupId: groupObj.GroupId
         };
 
         modalSettings.onScopeReady = function (modalScope) {
@@ -92,17 +92,18 @@ function GroupManagementController($scope, GroupAPIService, VRModalService) {
     }
 
     function assignPermissions(groupObj) {
-        var modalSettings = {
-        };
+        var modalSettings = {};
+
         var parameters = {
             holderType: 1,
-            holderId: groupObj.RoleId,
-            notificationResponseText: "Role Permissions"
+            holderId: groupObj.GroupId,
+            notificationResponseText: "Group Permissions"
         };
 
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Assign Permissions to Group: " + groupObj.Name;
         };
+
         VRModalService.showModal('/Client/Modules/Security/Views/PermissionEditor.html', parameters, modalSettings);
     }
 }

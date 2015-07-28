@@ -176,6 +176,11 @@ function PermissionEditorController($scope, PermissionAPIService, BusinessEntity
         return BusinessEntityAPIService.GetEntityNodes()
            .then(function (response) {
                $scope.beList = response;
+
+               angular.forEach($scope.beList, function (item) {
+                   item.isOpened = true;
+               });
+
                treeAPI.refreshTree($scope.beList);
            })
             .catch(function (error) {
