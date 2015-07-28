@@ -4,25 +4,28 @@
             <vr-row>
                 <vr-columns colnum="6">
                     <vr-treeview on-ready="treeReady"
-                        datachildrenfield="Children"
-                        datatextfield="Name"
-                        selecteditem="currentNode"
-                        onvaluechanged="treeValueChanged">
+                                 datachildrenfield="Children"
+                                 datatextfield="Name"
+                                 selecteditem="currentNode"
+                                 onvaluechanged="treeValueChanged"
+                                 vr-loader="isLoadingTree">
                     </vr-treeview>
                 </vr-columns>
                 <vr-columns colnum="6" ng-show="currentNode != undefined">
-                    <vr-section title="Assigned Permissions">
-                        <vr-row ng-repeat="permission in entityPermissions">
-                            <vr-columns colnum="6">
-                                {{permission.name}}
-                            </vr-columns>
-                            <vr-columns colnum="6">
-                                <vr-choices onselectionchanged="permissionsSelected(permission)" selectedindex="permission.selectedFlagOptionIndex">
-                                    <vr-choice ng-repeat="permissionFlagOption in permissionFlagOptions">{{permissionFlagOption}}</vr-choice>
-                                </vr-choices>
-                            </vr-columns>
-                        </vr-row>
-                    </vr-section>
+                    <div vr-loader="isLoadingPermissions">
+                        <vr-section title="Assigned Permissions">
+                            <vr-row ng-repeat="permission in entityPermissions">
+                                <vr-columns colnum="6">
+                                    {{permission.name}}
+                                </vr-columns>
+                                <vr-columns colnum="6">
+                                    <vr-choices onselectionchanged="permissionsSelected(permission)" selectedindex="permission.selectedFlagOptionIndex">
+                                        <vr-choice ng-repeat="permissionFlagOption in permissionFlagOptions">{{permissionFlagOption}}</vr-choice>
+                                    </vr-choices>
+                                </vr-columns>
+                            </vr-row>
+                        </vr-section>
+                    </div>
                 </vr-columns>
             </vr-row>
         </vr-form>

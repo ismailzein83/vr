@@ -1,6 +1,6 @@
-﻿PermissionEditorController.$inject = ['$scope', 'PermissionAPIService', 'BusinessEntitiesAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿PermissionEditorController.$inject = ['$scope', 'PermissionAPIService', 'BusinessEntitiesAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function PermissionEditorController($scope, PermissionAPIService, BusinessEntityAPIService, VRModalService, VRNotificationService, VRNavigationService) {
+function PermissionEditorController($scope, PermissionAPIService, BusinessEntityAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
 
     var treeAPI;
     loadParameters();
@@ -133,6 +133,8 @@ function PermissionEditorController($scope, PermissionAPIService, BusinessEntity
 
         $scope.treeValueChanged = function () {
             if (angular.isObject($scope.currentNode)) {
+                $scope.isLoadingPermissions = true;
+
                 $scope.entityPermissions.length = 0;
 
                 angular.forEach($scope.currentNode.PermissionOptions, function (permissionOption) {
@@ -155,47 +157,43 @@ function PermissionEditorController($scope, PermissionAPIService, BusinessEntity
 
                     $scope.entityPermissions.push(entityPermission);
                 });
+
+                $scope.isLoadingPermissions = false;
             }
         }
     }
 
     function load() {
+        $scope.isLoadingTree = true;
         $scope.isGettingData = true;
-            loadTree().finally(function () {
-                $scope.isGettingData = false;
-            })
-        
-            $scope.isGettingData = true;
 
-            loadPermissions().finally(function () {
-                $scope.isGettingData = false;
+        UtilsService.waitMultipleAsyncOperations([loadTree, loadPermissions])
+            .catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
             })
+            .finally(function () {
+                $scope.isLoadingTree = false;
+                $scope.isGettingData = false;
+            });
     }
 
     function loadTree() {
         return BusinessEntityAPIService.GetEntityNodes()
-           .then(function (response) {
-               $scope.beList = response;
-
-               angular.forEach($scope.beList, function (item) {
-                   item.isOpened = true;
-               });
-
-               treeAPI.refreshTree($scope.beList);
-           })
-            .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            .then(function (response) {
+                $scope.beList = response;
+                angular.forEach($scope.beList, function (item) {
+                    item.isOpened = true;
+                });
+                treeAPI.refreshTree($scope.beList);
             });
     }
 
     function loadPermissions() {
         return PermissionAPIService.GetPermissionsByHolder($scope.holderType, $scope.holderId)
-           .then(function (response) {
-               $scope.permissions = response;
-           })
-            .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            .then(function (response) {
+                $scope.permissions = response;
             });
     }
 }
+
 appControllers.controller('Security_PermissionEditorController', PermissionEditorController);

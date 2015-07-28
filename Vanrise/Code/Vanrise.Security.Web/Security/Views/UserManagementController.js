@@ -38,11 +38,15 @@ function UserManagementController($scope, UsersAPIService, VRModalService) {
     }
 
     function getData() {
+        $scope.isGettingData = true;
+
         var pageInfo = mainGridAPI.getPageInfo();
 
         var name = $scope.name != undefined ? $scope.name : '';
         var email = $scope.email != undefined ? $scope.email : '';
         return UsersAPIService.GetFilteredUsers(pageInfo.fromRow, pageInfo.toRow, name, email).then(function (response) {
+            $scope.isGettingData = false;
+
             angular.forEach(response, function (itm) {
                 $scope.users.push(itm);
             });
@@ -107,10 +111,16 @@ function UserManagementController($scope, UsersAPIService, VRModalService) {
 
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Reset Password for User: " + userObj.Name;
-            modalScope.onGroupUpdated = function (user) {
+            modalScope.onPasswordReset = function (user) {
+                console.log('management');
+                console.log(user);
                 mainGridAPI.itemUpdated(user);
-            };
+            }
+            //modalScope.onGroupUpdated = function (user) {
+            //    mainGridAPI.itemUpdated(user);
+            //};
         };
+
         VRModalService.showModal('/Client/Modules/Security/Views/ResetPasswordEditor.html', parameters, modalSettings);
     }
 
@@ -129,4 +139,5 @@ function UserManagementController($scope, UsersAPIService, VRModalService) {
         VRModalService.showModal('/Client/Modules/Security/Views/PermissionEditor.html', parameters, modalSettings);
     }
 }
+
 appControllers.controller('Security_UserManagementController', UserManagementController);

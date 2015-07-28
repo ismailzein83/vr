@@ -40,15 +40,17 @@ function OrgChartAssignmentEditorController($scope, AccountManagerAPIService, Or
     function load() {
         $scope.isGettingData = true;
 
-        OrgChartAPIService.GetOrgCharts().then(function (response) {
-            $scope.orgCharts = response;
-            $scope.assignedOrgChart = UtilsService.getItemByVal($scope.orgCharts, passedOrgChartId, 'Id');
-
-        }).catch(function (error) {
-            VRNotificationService.notifyExceptionWithClose(error, $scope);
-        }).finally(function () {
-            $scope.isGettingData = false;
-        });
+        return OrgChartAPIService.GetOrgCharts()
+            .then(function (response) {
+                $scope.orgCharts = response;
+                $scope.assignedOrgChart = UtilsService.getItemByVal($scope.orgCharts, passedOrgChartId, 'Id');
+            })
+            .catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            })
+            .finally(function () {
+                $scope.isGettingData = false;
+            });
     }
 }
 
