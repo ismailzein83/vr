@@ -1,5 +1,5 @@
 ﻿appControllers.controller('RoutingRules_RouteOverrideTemplateController',
-    function RouteOverrideController($scope, $http, CarrierAPIService, RoutingRulesTemplatesEnum, UtilsService, CarrierTypeEnum) {
+    function RouteOverrideController($scope, $http, CarrierAccountAPIService, RoutingRulesTemplatesEnum, UtilsService, CarrierTypeEnum) {
 
         defineScope();
         load();
@@ -39,7 +39,7 @@
         }
 
         function load() {
-            CarrierAPIService.GetCarriers(CarrierTypeEnum.Supplier.value).then(function (response) {
+            CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Supplier.value).then(function (response) {
                 $scope.suppliers = response;
                 if ($scope.subViewActionDataConnector.data != undefined) {
                     loadForm();

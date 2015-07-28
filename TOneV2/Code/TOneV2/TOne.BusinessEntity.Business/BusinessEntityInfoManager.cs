@@ -21,7 +21,7 @@ namespace TOne.BusinessEntity.Business
             string carrierAccountName;
             if (!carrierAccountNames.TryGetValue(carrierAccountId, out carrierAccountName))
             {
-                ICarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierDataManager>();
+                ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
                 carrierAccountName = dataManager.GetCarrierAccountName(carrierAccountId);
                 carrierAccountNames.TryAdd(carrierAccountId, carrierAccountName);
             }

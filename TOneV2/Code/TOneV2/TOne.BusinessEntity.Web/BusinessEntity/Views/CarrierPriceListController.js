@@ -1,5 +1,5 @@
-﻿CarrierPriceListController.$inject = ['$scope', 'CarrierAPIService', 'CarrierTypeEnum','PriceListAPIService'];
-function CarrierPriceListController($scope, CarrierAPIService, CarrierTypeEnum, PriceListAPIService) {
+﻿CarrierPriceListController.$inject = ['$scope', 'CarrierAccountAPIService', 'CarrierTypeEnum','PriceListAPIService'];
+function CarrierPriceListController($scope, CarrierAccountAPIService, CarrierTypeEnum, PriceListAPIService) {
     defineScope();
     load();
 
@@ -16,7 +16,7 @@ function CarrierPriceListController($scope, CarrierAPIService, CarrierTypeEnum, 
         });
     }
     function loadSuppliers() {
-        return CarrierAPIService.GetCarriers(CarrierTypeEnum.Supplier.value).then(function (response) {
+        return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Supplier.value).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.suppliers.push(itm);
             });

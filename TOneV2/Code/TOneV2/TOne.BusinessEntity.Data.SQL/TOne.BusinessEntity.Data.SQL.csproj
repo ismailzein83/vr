@@ -55,11 +55,11 @@
   <ItemGroup>
     <Compile Include="AccountManagerCarrierDataManager.cs" />
     <Compile Include="AssignedCarrierDataManager.cs" />
-    <Compile Include="CarrierDataManager.cs" />
+    <Compile Include="CarrierAccountDataManager.cs" />
     <Compile Include="CodeDataManager.cs" />
     <Compile Include="CommissionDataManager.cs" />
     <Compile Include="PriceListDataManager.cs" />
-    <Compile Include="ProfileDataManager.cs" />
+    <Compile Include="CarrierProfileDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateDataManager.cs" />
     <Compile Include="FlaggedServiceDataManager.cs" />

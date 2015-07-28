@@ -128,9 +128,9 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountManagerController.cs" />
     <Compile Include="Controllers\BusinessEntityController.cs" />
-    <Compile Include="Controllers\CarrierController.cs" />
+    <Compile Include="Controllers\CarrierAccountController.cs" />
     <Compile Include="Controllers\PriceListController.cs" />
-    <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\CarrierProfileController.cs" />
     <Compile Include="Controllers\RateController.cs" />
     <Compile Include="Controllers\SwitchController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -142,7 +142,7 @@
     <Content Include="BusinessEntity\Constant\RoutingStatusEnum.js" />
     <Content Include="BusinessEntity\Services\APIServices\AccountManagerAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\BusinessEntityAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\CarrierAPIService.js" />
+    <Content Include="BusinessEntity\Services\APIServices\CarrierAccountAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\CarrierProfileAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\PriceListAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\ProfileAPIService.js" />

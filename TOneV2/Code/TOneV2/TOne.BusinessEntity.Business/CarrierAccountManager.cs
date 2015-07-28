@@ -9,12 +9,12 @@ using TOne.Caching;
 
 namespace TOne.BusinessEntity.Business
 {
-    public class CarrierManager
+    public class CarrierAccountManager
     {
-        ICarrierDataManager _dataManager;
-        public CarrierManager()
+        ICarrierAccountDataManager _dataManager;
+        public CarrierAccountManager()
         {
-            _dataManager = BEDataManagerFactory.GetDataManager<ICarrierDataManager>();
+            _dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
         }
 
         public List<CarrierInfo> GetCarriers(CarrierType carrierType)

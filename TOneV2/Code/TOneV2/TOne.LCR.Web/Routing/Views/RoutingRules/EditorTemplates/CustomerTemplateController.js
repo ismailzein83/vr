@@ -1,5 +1,5 @@
 ﻿
-var CustomerController = function ($scope, $http, CarrierAPIService, UtilsService, CarrierTypeEnum) {
+var CustomerController = function ($scope, $http, CarrierAccountAPIService, UtilsService, CarrierTypeEnum) {
 
     defineScopeObjects();
     defineScopeMethods();
@@ -80,7 +80,7 @@ var CustomerController = function ($scope, $http, CarrierAPIService, UtilsServic
             }, 150);
         });
 
-        CarrierAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
+        CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
             $scope.customers = response;
             loadForm();
         })
@@ -105,6 +105,6 @@ var CustomerController = function ($scope, $http, CarrierAPIService, UtilsServic
     }
 
 }
-CustomerController.$inject = ['$scope', '$http', 'CarrierAPIService', 'UtilsService', 'CarrierTypeEnum'];
+CustomerController.$inject = ['$scope', '$http', 'CarrierAccountAPIService', 'UtilsService', 'CarrierTypeEnum'];
 appControllers.controller('RoutingRules_CustomerTemplateController', CustomerController)
 

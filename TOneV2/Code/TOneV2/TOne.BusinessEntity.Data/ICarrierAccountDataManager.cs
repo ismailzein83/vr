@@ -7,7 +7,7 @@ using TOne.BusinessEntity.Entities;
 
 namespace TOne.BusinessEntity.Data
 {
-    public interface ICarrierDataManager : IDataManager
+    public interface ICarrierAccountDataManager : IDataManager
     {
         List<CarrierAccountInfo> GetActiveSuppliersInfo();
 

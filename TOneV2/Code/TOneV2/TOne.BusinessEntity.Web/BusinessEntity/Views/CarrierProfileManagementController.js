@@ -9,34 +9,30 @@ function CarrierProfileManagementController($scope, CarrierProfileAPIService, VR
     }
 
     function defineScope() {
-        $scope.name = '';
-        $scope.companyName = '';
-        $scope.billingEmail = '';
         $scope.CarrierProfileDataSource = [];
         defineMenuActions();
         $scope.gridReady = function (api) {
             gridApi = api;
-            $scope.isLoading = true;
-            getData().finally(function () {
-                $scope.isLoading = false;
-            });
+            return retrieveData();
         };
-        $scope.loadMoreData = function () {
-            return getData();
-        }
         $scope.searchClicked = function () {
-            gridApi.clearDataAndContinuePaging();
-            resultKey = "";
-            return getData();
+            return retrieveData();
         }
+        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+            return CarrierProfileAPIService.GetFilteredCarrierProfiles(dataRetrievalInput)
+            .then(function (response) {
+                onResponseReady(response);
+            });
+        }
+        $scope.AddNewCarrierProfile = addCarrierProfile;
     }
-
-    function getData() {
-        var pageInfo = gridApi.getPageInfo();
-        return CarrierProfileAPIService.GetFilteredProfiles(resultKey, $scope.name, $scope.companyName, $scope.billingEmail, pageInfo.fromRow, pageInfo.toRow).then(function (response) {
-            gridApi.addItemsToSource(response.Data);
-            resultKey = response.ResultKey;
-        });
+    function retrieveData() {
+        var query = {
+            Name: $scope.name,
+            CompanyName: $scope.companyName,
+            BillingEmail: $scope.billingEmail
+        };
+        return gridApi.retrieveData(query);
     }
 
     function defineMenuActions() {
@@ -53,13 +49,25 @@ function CarrierProfileManagementController($scope, CarrierProfileAPIService, VR
             profileID: carrierProfileObj.ProfileID
         };
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "CarrierProfile Info(" + carrierProfileObj.Name + ")";
+            modalScope.title = "Carrier Profile Info(" + carrierProfileObj.Name + ")";
             modalScope.onCarrierProfileUpdated = function (CarrierProfileUpdated) {
                 gridApi.itemUpdated(CarrierProfileUpdated);
 
             };
         };
         VRModalService.showModal('/Client/Modules/BusinessEntity/Views/CarrierProfileEditor.html', parameters, modalSettings);
+    }
+
+    function addCarrierProfile() {
+        var modalSettings = {};
+
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.title = "Add Carrier Profile";
+            modalScope.onCarrierProfileAdded = function (CarrierProfileUpdated) {
+                mainGridAPI.itemAdded(CarrierProfileUpdated);
+            };
+        };
+        VRModalService.showModal('/Client/Modules/BusinessEntity/Views/CarrierProfileEditor.html', null, modalSettings);
     }
 }
 appControllers.controller('Carrier_CarrierProfileManagementController', CarrierProfileManagementController);

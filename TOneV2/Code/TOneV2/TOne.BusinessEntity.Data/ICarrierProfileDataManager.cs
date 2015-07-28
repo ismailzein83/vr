@@ -8,10 +8,10 @@ using Vanrise.Entities;
 
 namespace TOne.BusinessEntity.Data
 {
-    public interface IProfileDataManager : IDataManager
+    public interface ICarrierProfileDataManager : IDataManager
     {
-        BigResult<CarrierProfile> GetFilteredProfiles(string resultKey, string name, string companyName, string billingEmail, int from, int to);
+        BigResult<CarrierProfile> GetFilteredCarrierProfiles(Vanrise.Entities.DataRetrievalInput<CarrierProfileQuery> input);
         CarrierProfile GetCarrierProfile(int profileId);
-        int UpdateCarrierProfile(CarrierProfile carrierProfile);
+        bool UpdateCarrierProfile(CarrierProfile carrierProfile);
     }
 }

@@ -14,7 +14,7 @@ namespace TOne.BusinessEntity.Data.SQL
     {
         public Dictionary<string, Dictionary<string, Code>> GetCodes(char firstDigit, DateTime effectiveOn, bool isFuture, List<Entities.CarrierAccountInfo> activeSuppliers, out List<string> distinctCodes)
         {
-            DataTable dtSuppliersCodeInfo = CarrierDataManager.BuildCarrierAccountInfoTable(activeSuppliers);
+            DataTable dtSuppliersCodeInfo = CarrierAccountDataManager.BuildCarrierAccountInfoTable(activeSuppliers);
             Dictionary<string, Dictionary<string, Code>> allSuppliersCodes = new Dictionary<string, Dictionary<string, Code>>();
             List<string> distinctCodes_Internal = new List<string>();
             distinctCodes = distinctCodes_Internal;
@@ -73,7 +73,7 @@ namespace TOne.BusinessEntity.Data.SQL
         }
         public SuppliersCodes GetCodesByCodePrefixGroup(string codePrefix, DateTime effectiveOn, bool isFuture, List<Entities.CarrierAccountInfo> activeSuppliers, out List<string> distinctCodes, out HashSet<Int32> supplierZoneIds, out HashSet<Int32> saleZoneIds)
         {
-            DataTable dtSuppliersCodeInfo = CarrierDataManager.BuildCarrierAccountInfoTable(activeSuppliers);
+            DataTable dtSuppliersCodeInfo = CarrierAccountDataManager.BuildCarrierAccountInfoTable(activeSuppliers);
             //Dictionary<string, Dictionary<string, Code>> allSuppliersCodes = new Dictionary<string, Dictionary<string, Code>>();
             SuppliersCodes allSuppliersCodes = new SuppliersCodes();
             allSuppliersCodes.Codes = new Dictionary<string, SupplierCodes>();

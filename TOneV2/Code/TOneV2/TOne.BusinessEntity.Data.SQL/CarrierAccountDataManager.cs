@@ -9,7 +9,7 @@ using TOne.Data.SQL;
 
 namespace TOne.BusinessEntity.Data.SQL
 {
-    public class CarrierDataManager : BaseTOneDataManager, ICarrierDataManager
+    public class CarrierAccountDataManager : BaseTOneDataManager, ICarrierAccountDataManager
     {
         public List<CarrierAccountInfo> GetActiveSuppliersInfo()
         {
@@ -171,7 +171,7 @@ namespace TOne.BusinessEntity.Data.SQL
             return lstcarrierGroups;
         }
 
-        Dictionary<string, CarrierAccount> ICarrierDataManager.GetAllCarrierAccounts()
+        Dictionary<string, CarrierAccount> ICarrierAccountDataManager.GetAllCarrierAccounts()
         {
             Dictionary<string, CarrierAccount> dic = new Dictionary<string, CarrierAccount>();
 
@@ -197,7 +197,7 @@ namespace TOne.BusinessEntity.Data.SQL
             return dic;
         }
 
-        Dictionary<int, CarrierGroup> ICarrierDataManager.GetAllCarrierGroups()
+        Dictionary<int, CarrierGroup> ICarrierAccountDataManager.GetAllCarrierGroups()
         {
             Dictionary<int, CarrierGroup> dic = new Dictionary<int, CarrierGroup>();
 

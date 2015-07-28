@@ -1,5 +1,5 @@
-﻿CarrierAccountManagementController.$inject = ['$scope', 'CarrierAPIService', 'VRModalService'];
-function CarrierAccountManagementController($scope, CarrierAPIService, VRModalService) {
+﻿CarrierAccountManagementController.$inject = ['$scope', 'CarrierAccountAPIService', 'VRModalService'];
+function CarrierAccountManagementController($scope, CarrierAccountAPIService, VRModalService) {
     var gridApi;
     defineScope();
     load();
@@ -8,7 +8,7 @@ function CarrierAccountManagementController($scope, CarrierAPIService, VRModalSe
     }
 
     function defineScope() {
-       
+
         $scope.CarrierAccountsDataSource = [];
         defineMenuActions();
         $scope.gridReady = function (api) {
@@ -21,7 +21,7 @@ function CarrierAccountManagementController($scope, CarrierAPIService, VRModalSe
         };
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            return CarrierAPIService.GetFilteredCarrierAccounts(dataRetrievalInput)
+            return CarrierAccountAPIService.GetFilteredCarrierAccounts(dataRetrievalInput)
             .then(function (response) {
                 onResponseReady(response);
             });

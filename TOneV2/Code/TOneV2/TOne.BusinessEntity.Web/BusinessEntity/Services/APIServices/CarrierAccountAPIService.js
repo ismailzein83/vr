@@ -7,12 +7,10 @@ var serviceObj = function (BaseAPIService) {
         GetCarrierAccounts: GetCarrierAccounts,
         GetCarrierAccount: GetCarrierAccount,
         UpdateCarrierAccount: UpdateCarrierAccount,
-        GetFilteredProfiles: GetFilteredProfiles,
-        GetCarrierProfile: GetCarrierProfile,
         GetFilteredCarrierAccounts: GetFilteredCarrierAccounts
     });
     function GetCarriers(carrierType) {
-        return BaseAPIService.get("/api/Carrier/GetCarriers",
+        return BaseAPIService.get("/api/CarrierAccount/GetCarriers",
             {
                 carrierType: carrierType
             });
@@ -24,19 +22,19 @@ var serviceObj = function (BaseAPIService) {
     //    });
     //}
     function insertCarrierTest(CarrierAccountID, Name) {
-        return BaseAPIService.post("/api/Carrier/insertCarrierTest",
+        return BaseAPIService.post("/api/CarrierAccount/insertCarrierTest",
             {
                 CarrierAccountID: CarrierAccountID,
                 Name: Name
             });
     }
-    
+
     function GetFilteredCarrierAccounts(input) {
-        return BaseAPIService.post("/api/Carrier/GetFilteredCarrierAccounts", input);
+        return BaseAPIService.post("/api/CarrierAccount/GetFilteredCarrierAccounts", input);
     }
 
     function GetCarrierAccounts(ProfileName, ProfileCompanyName, from, to) {
-        return BaseAPIService.get("/api/Carrier/GetCarrierAccounts",
+        return BaseAPIService.get("/api/CarrierAccount/GetCarrierAccounts",
             {
                 ProfileName: ProfileName,
                 ProfileCompanyName: ProfileCompanyName,
@@ -45,34 +43,17 @@ var serviceObj = function (BaseAPIService) {
             });
     }
     function GetCarrierAccount(carrierAccountId) {
-        return BaseAPIService.get("/api/Carrier/GetCarrierAccount",
+        return BaseAPIService.get("/api/CarrierAccount/GetCarrierAccount",
             {
                 carrierAccountId: carrierAccountId
             });
     }
     function UpdateCarrierAccount(CarrierAccount) {
-        return BaseAPIService.post("/api/Carrier/UpdateCarrierAccount",
+        return BaseAPIService.post("/api/CarrierAccount/UpdateCarrierAccount",
 
                 CarrierAccount
             );
     }
-    function GetFilteredProfiles(resultKey, name, companyName, billingEmail, from, to) {
-        return BaseAPIService.get("/api/Profile/GetFilteredProfiles",
-            {
-                resultKey: resultKey,
-                name: name,
-                companyName: companyName,
-                billingEmail: billingEmail,
-                from: from,
-                to: to
-            });
-    }
-    function GetCarrierProfile(profileId) {
-        return BaseAPIService.get("/api/Profile/GetCarrierProfile",
-            {
-                profileId: profileId
-            });
-    }
 }
 serviceObj.$inject = ['BaseAPIService'];
-appControllers.service('CarrierAPIService', serviceObj);
+appControllers.service('CarrierAccountAPIService', serviceObj);

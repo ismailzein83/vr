@@ -61,12 +61,12 @@
   <ItemGroup>
     <Compile Include="AccountManagerManager.cs" />
     <Compile Include="BusinessEntityInfoManager.cs" />
-    <Compile Include="CarrierManager.cs" />
+    <Compile Include="CarrierAccountManager.cs" />
     <Compile Include="CodeManager.cs" />
     <Compile Include="CommissionManager.cs" />
     <Compile Include="PriceListManager.cs" />
     <Compile Include="PricingGeneratorManager.cs" />
-    <Compile Include="ProfileManager.cs" />
+    <Compile Include="CarrierProfileManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateManager.cs" />
     <Compile Include="FlaggedServiceManager.cs" />

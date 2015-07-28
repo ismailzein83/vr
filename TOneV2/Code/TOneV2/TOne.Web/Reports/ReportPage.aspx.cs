@@ -35,7 +35,7 @@ namespace TOne.Web.Reports
                 }
 
 
-                CarrierManager manager = new CarrierManager();
+                CarrierAccountManager manager = new CarrierAccountManager();
 
                 TrafficStatisticManager manager2 = new TrafficStatisticManager();
 

@@ -1,6 +1,6 @@
-﻿RoutingManagementController.$inject = ['$scope', 'RoutingAPIService', 'CarrierAPIService', 'CarrierTypeEnum', 'BusinessEntityAPIService_temp', 'RouteDetailFilterOrderEnum', 'RoutingRulesEnum', 'VRModalService', 'RoutingRulesTemplatesEnum', 'UtilsService', 'RoutingRulesAPIService', 'VRNotificationService'];
+﻿RoutingManagementController.$inject = ['$scope', 'RoutingAPIService', 'CarrierAccountAPIService', 'CarrierTypeEnum', 'BusinessEntityAPIService_temp', 'RouteDetailFilterOrderEnum', 'RoutingRulesEnum', 'VRModalService', 'RoutingRulesTemplatesEnum', 'UtilsService', 'RoutingRulesAPIService', 'VRNotificationService'];
 
-function RoutingManagementController($scope, RoutingAPIService, CarrierAPIService, CarrierTypeEnum, BusinessEntityAPIService, RouteDetailFilterOrderEnum, RoutingRulesEnum, VRModalService, RoutingRulesTemplatesEnum, UtilsService, RoutingRulesAPIService, VRNotificationService) {
+function RoutingManagementController($scope, RoutingAPIService, CarrierAccountAPIService, CarrierTypeEnum, BusinessEntityAPIService, RouteDetailFilterOrderEnum, RoutingRulesEnum, VRModalService, RoutingRulesTemplatesEnum, UtilsService, RoutingRulesAPIService, VRNotificationService) {
     var mainGridAPI;
     var sortColumn;
     var sortDescending = true;
@@ -109,7 +109,7 @@ function RoutingManagementController($scope, RoutingAPIService, CarrierAPIServic
     }
 
     function loadCustomers() {
-        return CarrierAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
+        return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.customers.push(itm);
             });

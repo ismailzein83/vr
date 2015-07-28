@@ -14,7 +14,7 @@ namespace TOne.BusinessEntity.Data.SQL
     {
         public void LoadZonesInfo(DateTime effectiveTime, bool isFuture, List<Entities.CarrierAccountInfo> activeSuppliers, int batchSize, Action<List<Entities.ZoneInfo>> onBatchAvailable)
         {
-            DataTable dtActiveSuppliers = CarrierDataManager.BuildCarrierAccountInfoTable(activeSuppliers);
+            DataTable dtActiveSuppliers = CarrierAccountDataManager.BuildCarrierAccountInfoTable(activeSuppliers);
             List<ZoneInfo> zones = new List<ZoneInfo>();
             ExecuteReaderSPCmd("[BEntity].[sp_Zone_GetZoneInfoForActiveSuppliers]",
                 (reader) =>

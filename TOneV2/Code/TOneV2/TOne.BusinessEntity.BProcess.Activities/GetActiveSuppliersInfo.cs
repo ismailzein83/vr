@@ -16,7 +16,7 @@ namespace TOne.BusinessEntity.BProcess.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            ICarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierDataManager>();
+            ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
             var activeSuppliers = dataManager.GetActiveSuppliersInfo();
             this.ActiveSuppliers.Set(context, activeSuppliers);
         }

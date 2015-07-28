@@ -1,29 +1,21 @@
 ﻿'use strict'
 var serviceObj = function (BaseAPIService) {
     return ({
-        GetFilteredProfiles: GetFilteredProfiles,
+        GetFilteredCarrierProfiles: GetFilteredCarrierProfiles,
         GetCarrierProfile: GetCarrierProfile,
         UpdateCarrierProfile: UpdateCarrierProfile
     });
-    function GetFilteredProfiles(resultKey, name, companyName, billingEmail, from, to) {
-        return BaseAPIService.get("/api/Profile/GetFilteredProfiles",
-            {
-                resultKey: resultKey,
-                name: name,
-                companyName: companyName,
-                billingEmail: billingEmail,
-                from: from,
-                to: to
-            });
+    function GetFilteredCarrierProfiles(input) {
+        return BaseAPIService.post("/api/CarrierProfile/GetFilteredCarrierProfiles", input);
     }
     function GetCarrierProfile(profileId) {
-        return BaseAPIService.get("/api/Profile/GetCarrierProfile",
+        return BaseAPIService.get("/api/CarrierProfile/GetCarrierProfile",
             {
                 profileId: profileId
             });
     }
     function UpdateCarrierProfile(CarrierProfile) {
-        return BaseAPIService.post("/api/Profile/UpdateCarrierProfile", CarrierProfile);
+        return BaseAPIService.post("/api/CarrierProfile/UpdateCarrierProfile", CarrierProfile);
     }
 }
 serviceObj.$inject = ['BaseAPIService'];

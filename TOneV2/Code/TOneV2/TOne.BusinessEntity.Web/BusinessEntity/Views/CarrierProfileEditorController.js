@@ -12,8 +12,11 @@ function CarrierProfileEditorController($scope, CarrierProfileAPIService, VRModa
         $scope.ProfileId = undefined;
         if (parameters != undefined && parameters != null)
             $scope.ProfileId = parameters.profileID;
-        console.log(parameters);
-        editMode = true;
+
+        if ($scope.ProfileId != undefined)
+            editMode = true;
+        else
+            editMode = false;
     }
 
     function defineScope() {
@@ -36,10 +39,12 @@ function CarrierProfileEditorController($scope, CarrierProfileAPIService, VRModa
     }
 
     function load() {
-        $scope.isGettingData = true;
-        getCarrierProfile().finally(function () {
-            $scope.isGettingData = false;
-        })
+        if (editMode) {
+            $scope.isGettingData = true;
+            getCarrierProfile().finally(function () {
+                $scope.isGettingData = false;
+            })
+        }
     }
 
     function getCarrierProfile() {

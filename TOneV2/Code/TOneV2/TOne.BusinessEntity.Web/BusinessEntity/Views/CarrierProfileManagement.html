@@ -17,13 +17,14 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                    <vr-button type="Add" data-onclick="AddNewCarrierProfile"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
         <div vr-loader="isLoading">
             <vr-row>
                 <vr-columns width="fullrow">
-                    <vr-datagrid datasource="CarrierProfileDataSource" loadmoredata="loadMoreData" on-ready="gridReady" menuactions="gridMenuActions" idfield="ProfileID">
+                    <vr-datagrid datasource="CarrierProfileDataSource" dataretrievalfunction="dataRetrievalFunction" pagingtype="'PagingOnScroll'" on-ready="gridReady" menuactions="gridMenuActions" idfield="ProfileID">
                         <vr-datagridcolumn headertext="'Name'" field="'Name'">
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Company Name'" field="'CompanyName'">

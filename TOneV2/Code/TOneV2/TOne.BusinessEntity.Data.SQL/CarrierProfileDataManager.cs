@@ -10,28 +10,16 @@ using Vanrise.Entities;
 
 namespace TOne.BusinessEntity.Data.SQL
 {
-    public class ProfileDataManager : BaseTOneDataManager, IProfileDataManager
+    public class CarrierProfileDataManager : BaseTOneDataManager, ICarrierProfileDataManager
     {
-        public BigResult<CarrierProfile> GetFilteredProfiles(string resultKey, string name, string companyName, string billingEmail, int from, int to)
+        public BigResult<CarrierProfile> GetFilteredCarrierProfiles(Vanrise.Entities.DataRetrievalInput<CarrierProfileQuery> input)
         {
-            TempTableName tempTableName = null;
-            if (!string.IsNullOrEmpty(resultKey))
-                tempTableName = GetTempTableName(resultKey);
-            else
-                tempTableName = GenerateTempTableName();
+            Action<string> createTempTableAction = (tempTableName) =>
+                {
 
-
-            BigResult<CarrierProfile> rslt = new BigResult<CarrierProfile>()
-            {
-                ResultKey = tempTableName.Key
-            };
-
-
-            ExecuteNonQuerySP("[BEntity].[SP_CarrierProfile_CreateTempForFiltered]", tempTableName.TableName, name, companyName, billingEmail);
-            int totalDataCount;
-            rslt.Data = GetDataFromTempTable<CarrierProfile>(tempTableName.TableName, from, to, "Name", false, CarrierProfileMapper, out totalDataCount);
-            rslt.TotalCount = totalDataCount;
-            return rslt;
+                    ExecuteNonQuerySP("[BEntity].[SP_CarrierProfile_CreateTempForFiltered]", tempTableName, input.Query.Name, input.Query.CompanyName, input.Query.BillingEmail);
+                };
+            return RetrieveData(input, createTempTableAction, CarrierProfileMapper);
         }
 
         public CarrierProfile GetCarrierProfile(int profileId)
@@ -59,7 +47,7 @@ namespace TOne.BusinessEntity.Data.SQL
             };
         }
 
-        public int UpdateCarrierProfile(CarrierProfile carrierProfile)
+        public bool UpdateCarrierProfile(CarrierProfile carrierProfile)
         {
             string telephone = string.Join("\r\n", carrierProfile.Telephone);
             string fax = string.Join("\r\n", carrierProfile.Fax);
@@ -67,7 +55,9 @@ namespace TOne.BusinessEntity.Data.SQL
                 carrierProfile.ProfileID, carrierProfile.Name, carrierProfile.CompanyName,
                 carrierProfile.Country, carrierProfile.City, carrierProfile.RegistrationNumber,
                telephone, fax, carrierProfile.Address1, carrierProfile.Address2, carrierProfile.Address3, carrierProfile.Website);
-            return rowEffected;
+            if (rowEffected > 0)
+                return true;
+            return false;
         }
         protected string[] SplitString(string s)
         {

@@ -1,6 +1,6 @@
-﻿CarrierAccountEditorController.$inject = ['$scope', 'CarrierAPIService', 'RoutingStatusEnum', 'AccountTypeEnum', 'ActivationStatusEnum', 'PaymentTypeEnum', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+﻿CarrierAccountEditorController.$inject = ['$scope', 'CarrierAccountAPIService', 'RoutingStatusEnum', 'AccountTypeEnum', 'ActivationStatusEnum', 'PaymentTypeEnum', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
-function CarrierAccountEditorController($scope, CarrierAPIService, RoutingStatusEnum, AccountTypeEnum, ActivationStatusEnum, PaymentTypeEnum, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+function CarrierAccountEditorController($scope, CarrierAccountAPIService, RoutingStatusEnum, AccountTypeEnum, ActivationStatusEnum, PaymentTypeEnum, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
     var editMode;
     loadParameters();
     defineScope();
@@ -66,7 +66,7 @@ function CarrierAccountEditorController($scope, CarrierAPIService, RoutingStatus
             $scope.supplierPaymentType.push(PaymentTypeEnum[td]);
     }
     function getCarrierAccount() {
-        return CarrierAPIService.GetCarrierAccount($scope.CarrierAccountId)
+        return CarrierAccountAPIService.GetCarrierAccount($scope.CarrierAccountId)
            .then(function (response) {
                fillScopeFromCarrierAccountObj(response);
            })
@@ -76,7 +76,7 @@ function CarrierAccountEditorController($scope, CarrierAPIService, RoutingStatus
     }
     function updateCarrierAccount() {
         var carrierAccountObject = buildCarrierAccountObjFromScope();
-        CarrierAPIService.UpdateCarrierAccount(buildCarrierAccountObjFromScope())
+        CarrierAccountAPIService.UpdateCarrierAccount(buildCarrierAccountObjFromScope())
         .then(function (response) {
             if (VRNotificationService.notifyOnItemUpdated("CarrierAccount", response)) {
                 if ($scope.onCarrierAccountUpdated != undefined)
