@@ -65,15 +65,26 @@ namespace Vanrise.Security.Data.SQL
         }
 
 
-        public List<View> GetDynamicPages()
+        public Vanrise.Entities.BigResult<View> GetDynamicPages()
         {
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("sec.sp_View_GetFiltered", tempTableName, null, ViewType.Dynamic);
+            };
+            return RetrieveData(null, createTempTableAction, DynamicPageMapper);
 
-            return GetItemsSP("sec.sp_View_GetFiltered", DynamicPageMapper,null, ViewType.Dynamic);
+            
         }
-        public List<View> GetFilteredDynamicViews(string filter)
+        public Vanrise.Entities.BigResult<View> GetFilteredDynamicViews(Vanrise.Entities.DataRetrievalInput<string> filter)
         {
+            Dictionary<string,string> mapper=new Dictionary<string,string>();
+            mapper.Add("Name", "PageName");
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("sec.sp_View_GetFiltered", tempTableName, filter.Query, ViewType.Dynamic);
+            };
+            return RetrieveData(filter, createTempTableAction, DynamicPageMapper, mapper);
 
-            return GetItemsSP("sec.sp_View_GetFiltered", DynamicPageMapper, filter,ViewType.Dynamic);
         }
         private View DynamicPageMapper(IDataReader reader)
         {

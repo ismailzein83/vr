@@ -21,12 +21,9 @@
     function GetAllWidgets() {
         return BaseAPIService.get("/api/Widgets/GetAllWidgets");
     }
-    function GetFilteredWidgets(widgetName, widgetType)
+    function GetFilteredWidgets(filter)
     {
-        return BaseAPIService.get("/api/Widgets/GetFilteredWidgets",{
-            widgetName: widgetName,
-            widgetType: widgetType
-            });
+        return BaseAPIService.post("/api/Widgets/GetFilteredWidgets", filter);
     }
     function DeleteWidget(widgetId) {
         return BaseAPIService.get("/api/Widgets/DeleteWidget", {

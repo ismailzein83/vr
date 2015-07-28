@@ -12,6 +12,14 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
         $scope.widgets = [];
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
+            if(api!=undefined)
+            retrieveData();
+        };
+        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+            return WidgetAPIService.GetFilteredWidgets(dataRetrievalInput)
+            .then(function (response) {
+                onResponseReady(response);
+            });
         };
         $scope.menuActions = [{
             name: "Edit",
@@ -39,34 +47,23 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
             addNewWidget();
         };
         $scope.searchClicked = function () {
-           
-            if ($scope.widgetName != undefined || $scope.selectedWidgetsType != undefined) {
-                console.log($scope.widgetName)
-                var widgetType;
-                if ($scope.selectedWidgetsType != undefined)
-                    widgetType = $scope.selectedWidgetsType.ID;
-                else
-                    widgetType = 0;
-                var widgetName = '';
-                if ($scope.widgetName != undefined)
-                    widgetName = $scope.widgetName;
-                $scope.isGettingData = true;
-                return WidgetAPIService.GetFilteredWidgets(widgetName, widgetType).then(function (response) {
-                    $scope.widgets.length = 0;
-                    angular.forEach(response, function (itm) {
-                        $scope.widgets.push(itm);
-                    });
-                }).finally(function () {
-                    $scope.isGettingData = false;
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope)
-                });
-
-            }
-            else
-                loadData();
-
+                retrieveData();
         }
+
+    }
+    function retrieveData() {
+        var widgetType;
+        if ($scope.selectedWidgetsType != undefined)
+            widgetType = $scope.selectedWidgetsType.ID;
+        else
+            widgetType = 0;
+        var query = {
+            WidgetName: $scope.widgetName,
+            WidgetType: widgetType
+        }
+        
+        return mainGridAPI.retrieveData(query);
+
 
     }
     function deleteWidget(dataItem) {
@@ -116,21 +113,8 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
 
     function load() {
         loadWidgets();
-        loadData();
     }
-    function loadData() {
-        $scope.isGettingData = true;
-        return WidgetAPIService.GetAllWidgets().then(function (response) {
-            $scope.widgets.length = 0;
-            angular.forEach(response, function (itm) {
-                $scope.widgets.push(itm);
-            });
-        }).finally(function () {
-            $scope.isGettingData = false;
-        }).catch(function (error) {
-            VRNotificationService.notifyExceptionWithClose(error, $scope)});
 
-    }
 
     function loadWidgets() {
         return WidgetAPIService.GetWidgetsDefinition().then(function (response) {

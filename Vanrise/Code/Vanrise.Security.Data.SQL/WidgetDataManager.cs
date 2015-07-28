@@ -84,11 +84,15 @@ namespace Vanrise.Security.Data.SQL
             return GetItemSP("sec.sp_Widget_GetById", WidgetMapper, widgetId);
         }
 
-        public List<WidgetDetails> GetFilteredWidgets(string widgetName, int widgetType)
+        public Vanrise.Entities.BigResult<WidgetDetails> GetFilteredWidgets(Vanrise.Entities.DataRetrievalInput<WidgetFilter> filter)
         {
-            if (widgetName == null)
-                widgetName = "";
-            return GetItemsSP("sec.sp_Widget_GetFiltered", WidgetMapper, widgetName, ToDBNullIfDefault(widgetType));
+            Dictionary<string, string> mapper = new Dictionary<string, string>();
+            mapper.Add("Name", "WidgetName");
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("sec.sp_Widget_GetFiltered", tempTableName, filter.Query.WidgetName, ToDBNullIfDefault(filter.Query.WidgetType));
+            };
+            return RetrieveData(filter, createTempTableAction, WidgetMapper, mapper);
         }
         public int CheckWidgetSetting(Widget widget)
         {

@@ -1,6 +1,6 @@
 ﻿'use strict'
-DynamicPageManagementController.$inject = ['$scope', 'ViewAPIService', 'VRModalService', 'VRNotificationService','DeleteOperationResultEnum','PeriodEnum','UtilsService','TimeDimensionTypeEnum','UsersAPIService','RoleAPIService'];
-function DynamicPageManagementController($scope, ViewAPIService, VRModalService, VRNotificationService, DeleteOperationResultEnum, PeriodEnum, UtilsService, TimeDimensionTypeEnum, UsersAPIService, RoleAPIService) {
+DynamicPageManagementController.$inject = ['$scope', 'ViewAPIService', 'VRModalService', 'VRNotificationService','DeleteOperationResultEnum','PeriodEnum','UtilsService','TimeDimensionTypeEnum','UsersAPIService','RoleAPIService', 'DataRetrievalResultTypeEnum'];
+function DynamicPageManagementController($scope, ViewAPIService, VRModalService, VRNotificationService, DeleteOperationResultEnum, PeriodEnum, UtilsService, TimeDimensionTypeEnum, UsersAPIService, RoleAPIService, DataRetrievalResultTypeEnum) {
     var mainGridAPI;
     defineScope();
     load();
@@ -12,13 +12,27 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
         $scope.defaultPeriod;
         $scope.defaultGrouping;
         $scope.groups;
-
         $scope.users=[];
         $scope.roles = [];
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
-        
+            if ($scope.users.length != 0 && $scope.roles.length != 0)
+               retrieveData();
         };
+        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+            return ViewAPIService.GetFilteredDynamicPages(dataRetrievalInput)
+            .then(function (response) {
+                if (dataRetrievalInput.DataRetrievalResultType == DataRetrievalResultTypeEnum.Normal.value) {
+                    var data = [];
+                    angular.forEach(response.Data, function (itm) {
+                        data.push(fillNeededData(itm));
+                    });
+                    response.Data = data;                    
+                }
+                onResponseReady(response);
+            });
+        };
+
         $scope.menuActions = [
            {
                name: "Edit",
@@ -45,24 +59,20 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
             addPage();
         };
         $scope.searchClicked = function () {
-          
-            if ($scope.filterValue != undefined && $scope.filterValue) {
-                $scope.isGettingData = true;
-                return ViewAPIService.GetFilteredDynamicPages($scope.filterValue).then(function (response) {
-                    $scope.dynamicViews.length = 0;
-                    angular.forEach(response, function (itm) {
-                        $scope.dynamicViews.push(fillNeededData(itm));
-                    });
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                }).finally(function () {
-                    $scope.isGettingData = false;
-                });
-            }
-            else
-                loadDynamicViews();
-                
+            $scope.searchClicked = function () {
+                return retrieveData();
+            };
+
         }
+    }
+    function retrieveData() {
+
+        if ($scope.filterValue != undefined && $scope.filterValue) {
+            return mainGridAPI.retrieveData($scope.filterValue);
+        } else {
+            return mainGridAPI.retrieveData($scope.filterValue);
+        }
+
     }
 
     function addPage() {
@@ -113,32 +123,14 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
 
     function load() {
         UtilsService.waitMultipleAsyncOperations([loadUsers, loadRoles]).then(function () {
-            loadDynamicViews();
-        })
-                .finally(function () {
-                   
+            if(mainGridAPI!=undefined)
+                return retrieveData();
+        }).finally(function () {
                     $scope.isGettingData = false;
                 });
      
     }
 
-    function loadDynamicViews() {
-        $scope.isInitializing = true;
-        $scope.dynamicViews.length = 0;
-        $scope.isGettingData = true;
-        return ViewAPIService.GetDynamicPages().then(function (response) {
-       
-            angular.forEach(response, function (itm) {
-                $scope.dynamicViews.push(fillNeededData(itm));
-                });
-        }).catch(function (error) {
-            VRNotificationService.notifyExceptionWithClose(error, $scope);
-        }).finally(function () {
-            $scope.isGettingData = false;
-        });
- 
-    }
-   
     function fillNeededData(itm) {
         itm.ViewContent.DefaultPeriodDescription = UtilsService.getItemByVal($scope.periods, itm.ViewContent.DefaultPeriod, 'value').description;
         itm.ViewContent.DefaultGroupingDescription = UtilsService.getItemByVal($scope.timeDimensionTypes, itm.ViewContent.DefaultGrouping, 'value').description;

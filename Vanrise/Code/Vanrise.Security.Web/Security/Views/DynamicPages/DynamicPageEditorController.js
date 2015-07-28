@@ -54,6 +54,11 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             }
              
         }
+        $scope.showSearch=false;
+        $scope.nonSearchableSelectionChanged = function () {
+            $scope.showSearch = true;
+            console.log(nonSearchableSelectedIndex);
+        }
         $scope.addedBodyWidgets = [];
         $scope.onSelectionChanged = function () {
             buildContentsFromScope();

@@ -68,6 +68,10 @@
       <Project>{107dc891-2169-409f-9617-6d52723d05ce}</Project>
       <Name>Vanrise.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Security.Data\Vanrise.Security.Data.csproj">
       <Project>{354e87d0-0442-4e11-8ba4-3d42f00b5853}</Project>
       <Name>Vanrise.Security.Data</Name>

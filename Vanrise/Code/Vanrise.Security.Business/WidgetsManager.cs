@@ -85,8 +85,8 @@ namespace Vanrise.Security.Business
             deleteOperationOutput.Result = DeleteOperationResult.Failed;
             IViewDataManager viewdataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
 
-            List<View> dynamicViews=viewdataManager.GetDynamicPages();
-            foreach (View dynamicView in dynamicViews)
+            Vanrise.Entities.BigResult<View> dynamicViews = viewdataManager.GetDynamicPages();
+            foreach (View dynamicView in dynamicViews.Data)
             {
                 foreach (ViewContentItem bodyContent in dynamicView.ViewContent.BodyContents)
                 {
@@ -123,10 +123,10 @@ namespace Vanrise.Security.Business
             return dataManager.GetAllWidgets();
         }
 
-        public List<WidgetDetails> GetFilteredWidgets(string widgetName, int widgetType) 
+        public Vanrise.Entities.IDataRetrievalResult<WidgetDetails> GetFilteredWidgets(Vanrise.Entities.DataRetrievalInput<WidgetFilter> filter) 
         {
             IWidgetsDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IWidgetsDataManager>();
-            return dataManager.GetFilteredWidgets(widgetName, widgetType);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(filter, dataManager.GetFilteredWidgets(filter));
         }
       
     }

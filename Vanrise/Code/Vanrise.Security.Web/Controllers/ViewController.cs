@@ -12,10 +12,10 @@ namespace Vanrise.Security.Web.Controllers
     public class ViewController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpGet]
-        public List<View> GetDynamicPages()
+         public object GetDynamicPages()
         {
             ViewManager manager = new ViewManager();
-            return manager.GetDynamicPages();
+            return GetWebResponse(null,manager.GetDynamicPages());
         }
       
         [HttpPost]
@@ -42,11 +42,11 @@ namespace Vanrise.Security.Web.Controllers
             ViewManager manager = new ViewManager();
             return manager.DeleteView(viewId);
         }
-           [HttpGet]
-        public List<View> GetFilteredDynamicViews(string filter)
+           [HttpPost]
+        public object GetFilteredDynamicViews(Vanrise.Entities.DataRetrievalInput<string> filter)
         {
             ViewManager manager = new ViewManager();
-            return manager.GetFilteredDynamicViews(filter);
+            return GetWebResponse(filter, manager.GetFilteredDynamicViews(filter));
         }
     }
 }

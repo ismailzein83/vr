@@ -25,7 +25,7 @@
 
         <vr-row>
             <vr-columns colnum="12">
-                <vr-datagrid datasource="widgets" menuactions="menuActions" on-ready="onMainGridReady" idfield="WidgetId">
+                <vr-datagrid datasource="widgets" dataretrievalfunction="dataRetrievalFunction" menuactions="menuActions" on-ready="onMainGridReady" pagingtype="'Pager'" idfield="WidgetId">
                     <vr-datagridcolumn headertext="'Widget Name'" field="'Name'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Widget Type'" field="'WidgetDefinitionName'"></vr-datagridcolumn>
                 </vr-datagrid>

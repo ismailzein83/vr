@@ -11,10 +11,10 @@ namespace Vanrise.Security.Business
 {
     public class ViewManager
     {
-        public List<View> GetDynamicPages()
+        public Vanrise.Entities.IDataRetrievalResult<View> GetDynamicPages()
         {
             IViewDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
-            return dataManager.GetDynamicPages();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(null,dataManager.GetDynamicPages());
         }
 
         public Vanrise.Entities.InsertOperationOutput<View> AddView(View view)
@@ -85,10 +85,10 @@ namespace Vanrise.Security.Business
 
             return deleteOperationOutput;
         }
-        public List<View> GetFilteredDynamicViews(string filter)
+        public Vanrise.Entities.IDataRetrievalResult<View> GetFilteredDynamicViews(Vanrise.Entities.DataRetrievalInput<string> filter)
         {
             IViewDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
-            return dataManager.GetFilteredDynamicViews(filter);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(filter, dataManager.GetFilteredDynamicViews(filter));
         }
   
     }

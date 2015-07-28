@@ -1,7 +1,6 @@
 ﻿app.service('ViewAPIService', function (BaseAPIService) {
 
     return ({
-        GetDynamicPages: GetDynamicPages,
         UpdateView:UpdateView,
         AddView: AddView,
         DeleteView:DeleteView,
@@ -9,9 +8,6 @@
         GetFilteredDynamicPages: GetFilteredDynamicPages
     });
 
-    function GetDynamicPages() {
-        return BaseAPIService.get("/api/View/GetDynamicPages");
-    }
     function AddView(view) {
         return BaseAPIService.post("/api/View/AddView", view);
     }
@@ -31,9 +27,6 @@
        
     }
     function GetFilteredDynamicPages(filter) {
-        return BaseAPIService.get("/api/View/GetFilteredDynamicViews",
-                   {
-                       filter: filter
-                   });
+        return BaseAPIService.post("/api/View/GetFilteredDynamicViews", filter);
     }
 });

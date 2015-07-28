@@ -14,11 +14,14 @@
                                 <vr-textbox value="pageName" label="Page Name" isrequired></vr-textbox>
                             </vr-row>
                             <vr-row>
+                                <vr-switch value="showSearch" onvaluechanged="nonSearchableValueChanged()" "></vr-switch>
+                            </vr-row>
+                            <vr-row ng-show="showSearch">
                                 <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Default Period"
                                            selectedvalues="selectedPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
 
                             </vr-row>
-                            <vr-row>
+                            <vr-row ng-show="showSearch">
                                 <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Default Grouping"
                                            selectedvalues="selectedTimeDimensionType" isrequired hidefilterbox></vr-select>
 
