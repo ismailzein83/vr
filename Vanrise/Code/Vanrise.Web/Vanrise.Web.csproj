@@ -683,6 +683,13 @@
     <Content Include="Client\Libraries\Charts\ZingChart\zingchart.min.js" />
     <Content Include="Client\Libraries\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Client\Libraries\Helpers\DateFormat.js" />
+    <Content Include="Client\Libraries\AngularExtensions\jQueryFileUpload\css\jquery.fileupload-ui.css" />
+    <Content Include="Client\Libraries\AngularExtensions\jQueryFileUpload\css\jquery.fileupload.css" />
+    <Content Include="Client\Libraries\AngularExtensions\jQueryFileUpload\img\loading.gif" />
+    <Content Include="Client\Libraries\AngularExtensions\jQueryFileUpload\img\progressbar.gif" />
+    <Content Include="Client\Libraries\AngularExtensions\jQueryFileUpload\js\jquery.fileupload.js" />
+    <Content Include="Client\Libraries\AngularExtensions\jQueryFileUpload\js\jquery.iframe-transport.js" />
+    <Content Include="Client\Libraries\AngularExtensions\jQueryFileUpload\js\jquery.ui.widget.js" />
     <Content Include="Client\Libraries\JQuery\jquery-2.1.3.min.js" />
     <Content Include="Client\Libraries\JQuery\jquery-ui.js" />
     <Content Include="Client\Libraries\Semantic -old2\semantic.min.css" />

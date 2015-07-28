@@ -93,7 +93,27 @@ var TestViewController = function ($scope, $http, ValuesAPIService) {
             $('.btn-switcher').addClass("glyphicon-calendar");
            
     }
+    var pathArray = location.href.split('/');
+    var base = pathArray[0] + '//' + pathArray[2];
+    $('#fileUpload').fileupload({
+        url: base + '/api/FileManager/UploadFile',
+        formData: function (form) { return []; },
+        replaceFileInput: false,
+        datatype: 'json',
+        add: function (e, data) {            
+          //  data.submit();
 
+        },
+        change: function (e, data) {
+        },
+        drop: function (e, data) {
+        },
+        done: function (e, data) {
+        },
+        fail: function (e, data) {
+            //alert("Oups, une erreur  est survenue.");
+        }
+    });
     $scope.toggledate = function (e) {      
         var el = angular.element(e.currentTarget);
         el.parent().data("DateTimePicker").show();
