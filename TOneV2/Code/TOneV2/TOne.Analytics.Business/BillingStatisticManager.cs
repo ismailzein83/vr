@@ -22,13 +22,13 @@ namespace TOne.Analytics.Business
     {
         private readonly IBillingStatisticDataManager _datamanager;
         private readonly BusinessEntityInfoManager _bemanager;
-        private readonly CarrierManager _cmanager;
+        private readonly CarrierAccountManager _cmanager;
 
         public BillingStatisticManager()
         {
             _datamanager = AnalyticsDataManagerFactory.GetDataManager<IBillingStatisticDataManager>();
             _bemanager = new BusinessEntityInfoManager();
-            _cmanager = new CarrierManager();
+            _cmanager = new CarrierAccountManager();
         }
         public List<ZoneProfitFormatted> GetZoneProfit(DateTime fromDate, DateTime toDate, bool groupByCustomer)
         {
