@@ -1,5 +1,5 @@
 ﻿<vr-panel ng-controller="Security_DynamicPagePreviewController">
-    <vr-form name="formDynamicPagePreview">
+    <vr-form name="formDynamicPagePreview" ng-show="showSearch">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns width="normal">
@@ -17,24 +17,24 @@
                     <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Grouped By"
                                selectedvalues="selectedTimeDimensionType" isrequired hidefilterbox></vr-select>
                 </vr-columns>
-              
+
             </vr-row>
-           </div>
-        <vr-row removeline>
+        </div>
+        <vr-row removeline >
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formDynamicPagePreview" data-onclick="Search" ></vr-button>
+                    <vr-button type="Search" formname="formDynamicPagePreview" data-onclick="Search"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
-</vr-form> 
+    </vr-form> 
 
     <div vr-loader="isGettingData">
             <vr-row ng-if="summaryWidgets.length>0">
                     <div class="list-group">
                         <vr-columns ng-repeat="summaryWidget in summaryWidgets" colnum="{{summaryWidget.NumberOfColumns}}">
                             <vr-directivewrapper directive="summaryWidget.Setting.Directive" title="summaryWidget.SectionTitle" on-ready="summaryWidget.onElementReady" settings="summaryWidget.Setting.Settings"
-                                                 retrievedataonload="true" filter="filter"></vr-directivewrapper>
+                                                 retrievedataonload="true" ></vr-directivewrapper>
                         </vr-columns>
                     </div>
             </vr-row>
@@ -42,7 +42,7 @@
                 <div class="list-group " >
                     <vr-columns ng-repeat="bodyWidget in bodyWidgets" colnum="{{bodyWidget.NumberOfColumns}}">
                         <vr-directivewrapper directive="bodyWidget.Setting.Directive" title="bodyWidget.SectionTitle" on-ready="bodyWidget.onElementReady" settings="bodyWidget.Setting.Settings"
-                                             retrievedataonload="true" filter="filter"></vr-directivewrapper>
+                                           filter="filter"  retrievedataonload="true" ></vr-directivewrapper>
                     </vr-columns>
                 </div>
             </vr-row>

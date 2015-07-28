@@ -1,6 +1,6 @@
 ﻿'use strict'
-DynamicPageManagementController.$inject = ['$scope', 'ViewAPIService', 'VRModalService', 'VRNotificationService','DeleteOperationResultEnum','PeriodEnum','UtilsService','TimeDimensionTypeEnum','UsersAPIService','RoleAPIService', 'DataRetrievalResultTypeEnum'];
-function DynamicPageManagementController($scope, ViewAPIService, VRModalService, VRNotificationService, DeleteOperationResultEnum, PeriodEnum, UtilsService, TimeDimensionTypeEnum, UsersAPIService, RoleAPIService, DataRetrievalResultTypeEnum) {
+DynamicPageManagementController.$inject = ['$scope', 'ViewAPIService', 'VRModalService', 'VRNotificationService', 'DeleteOperationResultEnum', 'PeriodEnum', 'UtilsService', 'TimeDimensionTypeEnum', 'UsersAPIService', 'GroupAPIService', 'DataRetrievalResultTypeEnum'];
+function DynamicPageManagementController($scope, ViewAPIService, VRModalService, VRNotificationService, DeleteOperationResultEnum, PeriodEnum, UtilsService, TimeDimensionTypeEnum, UsersAPIService, GroupAPIService, DataRetrievalResultTypeEnum) {
     var mainGridAPI;
     defineScope();
     load();
@@ -11,12 +11,11 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
         $scope.dynamicViews = [];
         $scope.defaultPeriod;
         $scope.defaultGrouping;
-        $scope.groups;
+        $scope.groups=[];
         $scope.users=[];
-        $scope.roles = [];
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
-            if ($scope.users.length != 0 && $scope.roles.length != 0)
+            if ($scope.users.length != 0 && $scope.groups.length != 0)
                retrieveData();
         };
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
@@ -137,7 +136,7 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
     }
 
     function load() {
-        UtilsService.waitMultipleAsyncOperations([loadUsers, loadRoles]).then(function () {
+        UtilsService.waitMultipleAsyncOperations([loadUsers, loadGroups]).then(function () {
             if(mainGridAPI!=undefined)
                 return retrieveData();
         }).finally(function () {
@@ -147,7 +146,9 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
     }
 
     function fillNeededData(itm) {
-        itm.ViewContent.DefaultPeriodDescription = UtilsService.getItemByVal($scope.periods, itm.ViewContent.DefaultPeriod, 'value').description;
+        if (itm.ViewContent.DefaultPeriod!=null)
+            itm.ViewContent.DefaultPeriodDescription = UtilsService.getItemByVal($scope.periods, itm.ViewContent.DefaultPeriod, 'value').description;
+        if (itm.ViewContent.DefaultGrouping != null)
         itm.ViewContent.DefaultGroupingDescription = UtilsService.getItemByVal($scope.timeDimensionTypes, itm.ViewContent.DefaultGrouping, 'value').description;
         if (itm.Audience!=null && itm.Audience.Users != undefined) {
             itm.Audience.UsersName = [];
@@ -169,7 +170,7 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
             for (var j = 0; j < itm.Audience.Groups.length; j++) {
                 if (itm.Audience.GroupsName != "")
                     itm.Audience.GroupsName += ",";
-                value = UtilsService.getItemByVal($scope.roles, itm.Audience.Groups[j], 'RoleId');
+                value = UtilsService.getItemByVal($scope.groups, itm.Audience.Groups[j], 'RoleId');
                 if (value != null)
                     groupsArray.push(value.Name);
                 
@@ -207,10 +208,10 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
 
     }
 
-    function loadRoles() {
-        RoleAPIService.GetRoles().then(function (response) {
+    function loadGroups() {
+        GroupAPIService.GetGroups().then(function (response) {
             angular.forEach(response, function (role) {
-                $scope.roles.push(role);
+                $scope.groups.push(role);
             }
 )
         });

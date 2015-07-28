@@ -16,6 +16,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         definePeriods();
         var date;
         $scope.fromDate;
+        $scope.showSearch = false;
         $scope.toDate;
         $scope.allWidgets = [];
         $scope.viewContent = [];
@@ -52,6 +53,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
                 fromDate: $scope.fromDate,
                 toDate: $scope.toDate
             }
+            console.log($scope.filter);
             if (($scope.bodyWidgets != null && $scope.bodyWidgets != undefined) || ($scope.summaryWidgets != null && $scope.summaryWidgets != undefined)) {
                return refreshData();
             }
@@ -84,9 +86,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         for (var td in TimeDimensionTypeEnum)
             $scope.timeDimensionTypes.push(TimeDimensionTypeEnum[td]);
 
-        $scope.selectedTimeDimensionType = $.grep($scope.timeDimensionTypes, function (t) {
-            return t == TimeDimensionTypeEnum.Daily;
-        })[0];
+        $scope.selectedTimeDimensionType= TimeDimensionTypeEnum.Daily;
     }
 
     function load() {
@@ -126,8 +126,6 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             $scope.isGettingData = true;
           return  UtilsService.waitMultipleAsyncOperations([loadAllWidgets, loadViewByID])
                  .finally(function () {
-                     fillDateAndPeriod();
-                  
                      loadViewWidgets($scope.allWidgets, $scope.bodyContents, $scope.summaryContents);
                      $scope.isGettingData = false;
                  });
@@ -139,7 +137,6 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             $scope.selectedTimeDimensionType = $scope.$parent.selectedTimeDimensionType;
           return  UtilsService.waitMultipleAsyncOperations([loadAllWidgets])
                 .finally(function () {
-                    fillDateAndPeriod();
                     loadViewWidgets($scope.allWidgets, $scope.$parent.bodyContents, $scope.$parent.summaryContents);
                     $scope.isGettingData = false;
                 });
@@ -155,6 +152,10 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             {
                 value.NumberOfColumns = bodyContent.NumberOfColumns;
                 value.SectionTitle = bodyContent.SectionTitle;
+                if (!$scope.showSearch) {
+                    value.DefaultPeriod = bodyContent.DefaultPeriod;
+                    value.DefaultGrouping = bodyContent.DefaultGrouping;
+                }
                 addBodyWidget(value);
             }
             
@@ -166,9 +167,13 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             if (value != null) {
                 value.NumberOfColumns = summaryContent.NumberOfColumns;
                 value.SectionTitle = summaryContent.SectionTitle;
+                if (!$scope.showSearch) {
+                    value.DefaultPeriod = summaryContent.DefaultPeriod;
+                    value.DefaultGrouping = summaryContent.DefaultGrouping;
+                }
+                
                 addSummaryWidget(value);
             }
-
 
      }
     
@@ -177,9 +182,25 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
     function addBodyWidget(bodyWidget) {
         bodyWidget.onElementReady = function (api) {
             bodyWidget.API = api;
-            bodyWidget.API.retrieveData($scope.filter);
+            var filter = {};
+            if ($scope.showSearch)
+               bodyWidget.API.retrieveData( $scope.filter);
+            else {
+                var widgetDate = getPeriod(bodyWidget.DefaultPeriod);
+                var timeDimention = UtilsService.getItemByVal($scope.timeDimensionTypes, bodyWidget.DefaultGrouping, 'value');
+                filter = {
+                    timeDimensionType: timeDimention,
+                    fromDate: widgetDate.from,
+                    toDate: widgetDate.to
+                }
+                bodyWidget.API.retrieveData(filter);
+            }
+           
             bodyWidget.retrieveData = function () {
-                return api.retrieveData($scope.filter);
+                if ($scope.showSearch)
+                    return api.retrieveData($scope.filter);
+                else
+                   return api.retrieveData(filter);
             };
         };
         $scope.bodyWidgets.push(bodyWidget);
@@ -188,9 +209,21 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         summaryWidget.onElementReady = function (api) {
            
             summaryWidget.API = api;
-            summaryWidget.API.retrieveData($scope.filter);
+            var filter = {};
+            if ($scope.showSearch)
+                filter = $scope.filter;
+            else {
+                var widgetDate = getPeriod(summaryWidget.DefaultPeriod);
+                var timeDimention = UtilsService.getItemByVal($scope.timeDimensionTypes, summaryWidget.DefaultGrouping, 'value');
+                filter = {
+                    timeDimensionType: timeDimention,
+                    fromDate: widgetDate.from,
+                    toDate: widgetDate.to
+                }
+            }
+            summaryWidget.API.retrieveData(filter);
             summaryWidget.retrieveData = function () {
-                return api.retrieveData($scope.filter);
+                    return api.retrieveData(filter);
             };
         };
        
@@ -208,8 +241,13 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         return ViewAPIService.GetView(viewId).then(function (response) {
             $scope.summaryContents = response.ViewContent.SummaryContents;
             $scope.bodyContents = response.ViewContent.BodyContents;
-            $scope.selectedPeriod = UtilsService.getItemByVal($scope.periods, response.ViewContent.DefaultPeriod, 'value');
-            $scope.selectedTimeDimensionType = UtilsService.getItemByVal($scope.timeDimensionTypes, response.ViewContent.DefaultGrouping, 'value');
+            if (response.ViewContent.DefaultPeriod != undefined || response.ViewContent.DefaultGrouping != undefined) {
+                $scope.selectedPeriod = UtilsService.getItemByVal($scope.periods, response.ViewContent.DefaultPeriod, 'value');
+                $scope.selectedTimeDimensionType = UtilsService.getItemByVal($scope.timeDimensionTypes, response.ViewContent.DefaultGrouping, 'value');
+                $scope.showSearch = true;
+                fillDateAndPeriod();
+            }
+ 
         });
     }
     function getPeriod(periodType) {

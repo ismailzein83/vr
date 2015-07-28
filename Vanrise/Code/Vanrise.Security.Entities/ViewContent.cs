@@ -10,7 +10,7 @@ namespace Vanrise.Security.Entities
     {
         public List<ViewContentItem> SummaryContents { get; set; }
         public List<ViewContentItem> BodyContents { get; set; }
-        public int DefaultGrouping { get; set; }
-        public int DefaultPeriod { get; set; }
+        public int? DefaultGrouping { get; set; }
+        public int? DefaultPeriod { get; set; }
     }
 }

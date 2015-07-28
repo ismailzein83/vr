@@ -11,6 +11,8 @@ namespace Vanrise.Security.Entities
         public int WidgetId { get; set; }
         public string NumberOfColumns { get; set; }
         public string SectionTitle { get; set; }
+        public int? DefaultGrouping { get; set; }
+        public int? DefaultPeriod { get; set; }
 
     }
 }

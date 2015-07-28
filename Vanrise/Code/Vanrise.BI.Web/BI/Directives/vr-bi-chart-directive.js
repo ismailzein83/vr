@@ -106,7 +106,6 @@ app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEleme
             return BIVisualElementService.retrieveWidgetData(ctrl, settings,filter)
 
                 .then(function (response) {
-                           
                     if (ctrl.isDateTimeGroupedData) {
                                 BIUtilitiesService.fillDateTimeProperties(response, filter.timeDimensionType.value, filter.fromDate, filter.toDate, false);
                                 refreshChart(response);

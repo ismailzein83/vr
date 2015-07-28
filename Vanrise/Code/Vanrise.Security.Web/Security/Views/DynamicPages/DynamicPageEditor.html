@@ -18,12 +18,12 @@
                             </vr-row>
                             <vr-row ng-show="showSearch">
                                 <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Default Period"
-                                           selectedvalues="selectedPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
+                                           selectedvalues="selectedViewPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
 
                             </vr-row>
                             <vr-row ng-show="showSearch">
                                 <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Default Grouping"
-                                           selectedvalues="selectedTimeDimensionType" isrequired hidefilterbox></vr-select>
+                                           selectedvalues="selectedViewTimeDimensionType" isrequired hidefilterbox></vr-select>
 
                             </vr-row>
                         </vr-section>
@@ -51,8 +51,8 @@
                                 </vr-select>
                             </vr-row>
                             <vr-row width="fullrow">
-                                <vr-select ismultipleselection label="Groups" datasource="roles" selectedvalues="selectedRoles" datatextfield="Name" datavaluefield="RoleId"
-                                           entityname="Roles">
+                                <vr-select ismultipleselection label="Groups" datasource="groups" selectedvalues="selectedGroups" datatextfield="Name" datavaluefield="GroupId"
+                                           entityname="Groups">
                                 </vr-select>
                             </vr-row>
                         </vr-section>
@@ -78,11 +78,11 @@
                         </vr-columns>
                         <vr-columns width="normal" ng-show="!showSearch">
                             <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Default Period"
-                                       selectedvalues="selectedPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
+                                       selectedvalues="selectedWidgetPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
                         </vr-columns>
                         <vr-columns width="normal" ng-show="!showSearch">
                             <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Default Grouping"
-                                       selectedvalues="selectedTimeDimensionType" isrequired hidefilterbox></vr-select>
+                                       selectedvalues="selectedWidgetTimeDimensionType" isrequired hidefilterbox></vr-select>
                         </vr-columns>
                         <vr-columns width="small" vr-disabled="selectedWidget==undefined">
                             <vr-label></vr-label>
