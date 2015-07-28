@@ -30,40 +30,13 @@ namespace Vanrise.Security.Data.SQL
                 Name = reader["Name"] as string,
                 Url = reader["Url"] as string,
                 ModuleId = (int) reader["Module"],
-                RequiredPermissions = this.ParseRequiredPermissionsString(GetReaderValue<string>(reader, "RequiredPermissions")),
+                RequiredPermissions = GetReaderValue<string>(reader, "RequiredPermissions"),
                 Audience = ((reader["Audience"] as string) != null) ? Common.Serializer.Deserialize<AudienceWrapper>(reader["Audience"] as string) : null,
                 Type=(ViewType) reader["Type"]
 
             }; 
             return view;
         }
-
-        private Dictionary<string, List<string>> ParseRequiredPermissionsString(string value)
-        {
-            Dictionary<string, List<string>> requiredPermissions = null;
-
-            if(value != null)
-            {
-                requiredPermissions = new Dictionary<string, List<string>>();
-
-                string[] arrayOfPermissions = value.Split('|');
-
-                foreach (string permission in arrayOfPermissions)
-                {
-                    string[] keyValuesArray = permission.Split(':');
-                    List<string> flags = new List<string>();
-                    foreach (string flag in keyValuesArray[1].Split(','))
-                    {
-                        flags.Add(flag.Trim());
-                    }
-
-                    requiredPermissions.Add(keyValuesArray[0].Trim(), flags);
-                }
-            }
-
-            return requiredPermissions;
-        }
-
 
         public Vanrise.Entities.BigResult<View> GetDynamicPages()
         {
@@ -154,7 +127,7 @@ namespace Vanrise.Security.Data.SQL
                 Url = reader["Url"] as string,
                 ModuleId = (int) reader["Module"],
                 ModuleName = reader["ModuleName"] as string,
-                RequiredPermissions = this.ParseRequiredPermissionsString(GetReaderValue<string>(reader, "RequiredPermissions")),
+                RequiredPermissions = GetReaderValue<string>(reader, "RequiredPermissions"),
                 Audience = ((reader["Audience"] as string) != null) ? Common.Serializer.Deserialize<AudienceWrapper>(reader["Audience"] as string) : null,
                 ViewContent = Common.Serializer.Deserialize<ViewContent>(reader["Content"] as string),
                 Type=(ViewType) reader["Type"],

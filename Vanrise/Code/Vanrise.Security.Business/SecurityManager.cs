@@ -36,7 +36,7 @@ namespace Vanrise.Security.Business
             return result;
         }
 
-        public bool IsAllowed(Dictionary<string, List<string>> requiredPermissions, int userId)
+        public bool IsAllowed(string requiredPermissions, int userId)
         {
             //Assume that the view is allowed, and start looping until you find an exception that prevents the user from seeing this view
             bool result = true;
@@ -44,7 +44,9 @@ namespace Vanrise.Security.Business
             PermissionManager manager = new PermissionManager();
             EffectivePermissionsWrapper effectivePermissionsWrapper = manager.GetEffectivePermissions(userId);
 
-            foreach (KeyValuePair<string, List<string>> kvp in requiredPermissions)
+            Dictionary<string, List<string>> reqPermissionsDic = this.ParseRequiredPermissionsString(requiredPermissions);
+
+            foreach (KeyValuePair<string, List<string>> kvp in reqPermissionsDic)
             {
                 result = CheckPermissions(kvp.Key, kvp.Value, effectivePermissionsWrapper.EffectivePermissions, effectivePermissionsWrapper.BreakInheritanceEntities, new HashSet<string>());
                 if (!result)
@@ -115,6 +117,33 @@ namespace Vanrise.Security.Business
             }
 
             return result;
+        }
+
+
+        private Dictionary<string, List<string>> ParseRequiredPermissionsString(string value)
+        {
+            Dictionary<string, List<string>> requiredPermissions = null;
+
+            if (value != null)
+            {
+                requiredPermissions = new Dictionary<string, List<string>>();
+
+                string[] arrayOfPermissions = value.Split('|');
+
+                foreach (string permission in arrayOfPermissions)
+                {
+                    string[] keyValuesArray = permission.Split(':');
+                    List<string> flags = new List<string>();
+                    foreach (string flag in keyValuesArray[1].Split(','))
+                    {
+                        flags.Add(flag.Trim());
+                    }
+
+                    requiredPermissions.Add(keyValuesArray[0].Trim(), flags);
+                }
+            }
+
+            return requiredPermissions;
         }
 
         #endregion

@@ -42,7 +42,7 @@ namespace Vanrise.Security.Business
             return this.GetSecurityToken().UserId;
         }
 
-        public bool IsAllowed(Dictionary<string, List<string>> requiredPermissions)
+        public bool IsAllowed(string requiredPermissions)
         {
             SecurityManager manager = new SecurityManager();
             return manager.IsAllowed(requiredPermissions, this.GetSecurityToken().UserId);
