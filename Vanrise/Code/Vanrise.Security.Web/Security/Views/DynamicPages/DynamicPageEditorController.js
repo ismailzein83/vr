@@ -146,7 +146,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         var settings = {};
 
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = "Validate Dynamic Page: " + $scope.filter.Name;
+            modalScope.title = "Validate Dynamic Page: " + $scope.pageName;
         };
             
         var selectedUsersIDs = [];
