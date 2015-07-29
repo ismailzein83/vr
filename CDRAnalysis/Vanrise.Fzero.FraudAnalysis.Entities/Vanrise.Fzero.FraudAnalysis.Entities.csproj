@@ -51,14 +51,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Queueing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
+    <Reference Include="Vanrise.Queueing.Entities">
+      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Entities.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AggregateDefinition.cs" />
     <Compile Include="AverageAggregate.cs" />
+    <Compile Include="CDRBatch.cs" />
     <Compile Include="SubscriberThreshold.cs" />
     <Compile Include="Period.cs" />
     <Compile Include="Condition.cs" />

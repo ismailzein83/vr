@@ -50,7 +50,7 @@ namespace Vanrise.Fzero.CDRImport.Business
             string[] sourceQueueNames = null;
             if (sourceQueueNameTemplate != null)
                 sourceQueueNames = new string[] { String.Format("{0}_{1}", sourceQueueNameTemplate, dataSourceKey) };
-            PersistentQueueFactory.Default.CreateQueueIfNotExists<T>(queueName, queueTitle, sourceQueueNames, queueSettings);
+            PersistentQueueFactory.Default.CreateQueueIfNotExists<T>(0, queueName, queueTitle, sourceQueueNames, queueSettings);
         }
 
         static List<string> s_CreatedSwitchesQueues = new List<string>();

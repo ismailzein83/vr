@@ -8,14 +8,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
     {
 
         public Decimal GetCriteriaValue(CriteriaDefinition criteria, NumberProfile numberProfile)
-        {
-            Dictionary<int, CriteriaDefinition> dictionary = new Dictionary<int, CriteriaDefinition>();
-            dictionary = GetCriteriaDefinitions();
-            return  dictionary[criteria.FilterId].Expression(numberProfile);
+        {            
+            return s_criteriaDefinitions[criteria.FilterId].Expression(numberProfile);
         }
 
+        static Dictionary<int, CriteriaDefinition> s_criteriaDefinitions = BuildAndGetCriteriaDefinitions();
         
-        public Dictionary<int, CriteriaDefinition> GetCriteriaDefinitions()
+        static Dictionary<int, CriteriaDefinition> BuildAndGetCriteriaDefinitions()
         {
             Dictionary<int, CriteriaDefinition> dictionary = new Dictionary<int, CriteriaDefinition>();
 
@@ -40,13 +39,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return dictionary; 
         }
 
+        public Dictionary<int, CriteriaDefinition> GetCriteriaDefinitions()
+        {
+            return s_criteriaDefinitions;
+        }
         
         // Funcs
 
         static decimal CalculateRatioCountIncominglowdurationCallsVsCountIncomingCalls(NumberProfile numberProfile)
         {
-            if (numberProfile.AggregateValues["CountInCalls"] != 0)
-                return (numberProfile.AggregateValues["CountInLowDurationCalls"] / numberProfile.AggregateValues["CountInCalls"]);
+            Decimal countInCalls = numberProfile.AggregateValues["CountInCalls"];
+            if (countInCalls != 0)
+                return (numberProfile.AggregateValues["CountInLowDurationCalls"] / countInCalls);
             else
                 return 0;
         }
@@ -54,8 +58,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         static decimal CalculateRatioIncomingCallsvsOutgoingCalls(NumberProfile numberProfile)
         {
-            if (numberProfile.AggregateValues["CountOutCalls"] != 0)
-                return (numberProfile.AggregateValues["CountInCalls"] / numberProfile.AggregateValues["CountOutCalls"]);
+            Decimal countOutCalls = numberProfile.AggregateValues["CountOutCalls"];
+            if (countOutCalls != 0)
+                return (numberProfile.AggregateValues["CountInCalls"] / countOutCalls);
             else
                 return 0;
         }
@@ -87,16 +92,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         static decimal CalculateRatioAverageIncomingDurationvsAverageOutgoingDuration(NumberProfile numberProfile)
         {
-            if (numberProfile.AggregateValues["CallOutDurAvg"] != 0)
-                return (numberProfile.AggregateValues["CallInDurAvg"] / numberProfile.AggregateValues["CallOutDurAvg"]);
+            decimal callOutDurAvg = numberProfile.AggregateValues["CallOutDurAvg"];
+            if (callOutDurAvg != 0)
+                return (numberProfile.AggregateValues["CallInDurAvg"] / callOutDurAvg);
             else
                 return 0;
         }
 
         static decimal CalculateRatioOffNetOriginatedCallsvsOnNetOriginatedCalls(NumberProfile numberProfile)
         {
-            if (numberProfile.AggregateValues["CountOutOnNets"] != 0)
-                return (numberProfile.AggregateValues["CountOutOffNets"] / numberProfile.AggregateValues["CountOutOnNets"]);
+            decimal countOutOnNets = numberProfile.AggregateValues["CountOutOnNets"];
+            if (countOutOnNets != 0)
+                return (numberProfile.AggregateValues["CountOutOffNets"] / countOutOnNets);
             else
                 return 0;
         }
@@ -126,16 +133,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         static decimal CalculateRatioofDistinctDestinationvsTotalNumberofCalls(NumberProfile numberProfile)
         {
-            if (numberProfile.AggregateValues["CountOutCalls"] != 0)
-                return (numberProfile.AggregateValues["DiffOutputNumb"] / numberProfile.AggregateValues["CountOutCalls"]);
+            decimal countOutCalls = numberProfile.AggregateValues["CountOutCalls"];
+            if (countOutCalls != 0)
+                return (numberProfile.AggregateValues["DiffOutputNumb"] / countOutCalls);
             else
                 return 0;
         }
 
         static decimal CalculateRatioInternationalOriginatedvsOutgoingCalls(NumberProfile numberProfile)
         {
-            if (numberProfile.AggregateValues["CountOutCalls"] != 0)
-                return (numberProfile.AggregateValues["CountOutInters"] / numberProfile.AggregateValues["CountOutCalls"]);
+            decimal countOutCalls = numberProfile.AggregateValues["CountOutCalls"];
+            if (countOutCalls != 0)
+                return (numberProfile.AggregateValues["CountOutInters"] / countOutCalls);
             else
                 return 0;
         }

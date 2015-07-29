@@ -19,13 +19,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             ExecuteReaderSP("FraudAnalysis.sp_NormalCDR_Load", (reader) =>
                 {
 
-                    CDR normalCDR = new CDR();
+                    
                     int count = 0;
                     int currentIndex = 0;
 
                     while (reader.Read())
                     {
-                        normalCDR.CallType = (Enums.CallType)Enum.ToObject(typeof(Enums.CallType), GetReaderValue<int>(reader, "Call_Type"));
+                        CDR normalCDR = new CDR();
+                        normalCDR.CallType = Enums.CallType.OutgoingVoiceCall;// (Enums.CallType)Enum.ToObject(typeof(Enums.CallType), GetReaderValue<int>(reader, "Call_Type"));
                         normalCDR.BTSId = GetReaderValue<int?>(reader, "BTS_Id");
                         normalCDR.ConnectDateTime = GetReaderValue<DateTime?>(reader, "ConnectDateTime");
                         normalCDR.Id = (int)reader["Id"];

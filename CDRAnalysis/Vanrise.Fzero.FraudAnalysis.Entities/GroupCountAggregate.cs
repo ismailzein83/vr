@@ -8,45 +8,69 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     public class GroupCountAggregate : IAggregate
     {
 
-        Func<CDR, bool> _condition;
-        Dictionary<int, int> _HoursvsCalls = new Dictionary<int, int>();
-        int _MinimumCountofCallsinActiveHour;
+        Func<CDR, Strategy, bool> _condition;
+
+        Dictionary<Strategy, GroupCountAggregateStrategyInfo> _strategiesInfo;
+        List<Strategy> _strategies;
 
 
-        public GroupCountAggregate(Func<CDR, bool> condition, Strategy strategy)
+        public GroupCountAggregate(Func<CDR, Strategy, bool> condition, List<Strategy> strategies)
         {
             this._condition = condition;
-            this._MinimumCountofCallsinActiveHour = strategy.MinimumCountofCallsinActiveHour;
+            _strategiesInfo = new Dictionary<Strategy, GroupCountAggregateStrategyInfo>();
+            _strategies = strategies;
+            foreach (var strategy in _strategies)
+                _strategiesInfo.Add(strategy, new GroupCountAggregateStrategyInfo());
         }
 
         public void Reset()
         {
-            _HoursvsCalls.Clear();
+            foreach (var strategyCountEntry in _strategiesInfo)
+            {
+                strategyCountEntry.Value.HoursvsCalls.Clear();
+            }
         }
 
         public void EvaluateCDR(CDR cdr)
         {
-            if (this._condition == null || this._condition(cdr))
+            foreach (var strategyCountEntry in _strategiesInfo)
             {
+                if (this._condition == null || this._condition(cdr, strategyCountEntry.Key))
+                {
                     int value;
-                    _HoursvsCalls.TryGetValue(cdr.ConnectDateTime.Value.Hour, out value);
 
-                    if ( value==0)
+                    if (!strategyCountEntry.Value.HoursvsCalls.TryGetValue(cdr.ConnectDateTime.Value.Hour, out value))
                     {
-                        _HoursvsCalls.Add(cdr.ConnectDateTime.Value.Hour, 1);
+                        strategyCountEntry.Value.HoursvsCalls.Add(cdr.ConnectDateTime.Value.Hour, 1);
                     }
                     else
                     {
-                        _HoursvsCalls[cdr.ConnectDateTime.Value.Hour] = ++value;
+                        strategyCountEntry.Value.HoursvsCalls[cdr.ConnectDateTime.Value.Hour] = value + 1;
                     }
+                }
             }
         }
 
-        public decimal GetResult()
+        public decimal GetResult(Strategy strategy)
         {
-            return _HoursvsCalls.Where(x => x.Value >= _MinimumCountofCallsinActiveHour).Count();
+            decimal count = 0;
+            foreach(var value in _strategiesInfo[strategy].HoursvsCalls.Values)
+            {
+                if (value >= strategy.MinimumCountofCallsinActiveHour)
+                    count++;
+            }
+            return count;
         }
 
+        private class GroupCountAggregateStrategyInfo
+        {
+            public GroupCountAggregateStrategyInfo()
+            {
+                this.HoursvsCalls = new Dictionary<int, int>();
+            }
+
+            public Dictionary<int, int> HoursvsCalls { get; set; }
+        }
 
     }
     

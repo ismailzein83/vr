@@ -5,6 +5,7 @@ using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Queueing;
 using System.Linq;
+using System;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
@@ -56,13 +57,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Started Collecting Suspicious Numbers ");
 
-            List<FraudManager> managers= new List<FraudManager>();
+            Dictionary<int, FraudManager> fraudManagers = new Dictionary<int, FraudManager>();
 
                 foreach (var strategy in inputArgument.Strategies)
                 {
-                   managers.Add( new FraudManager(strategy));
+                   fraudManagers.Add(strategy.Id, new FraudManager(strategy));
                 }
-
+                int numberProfilesProcessed = 0;
                 DoWhilePreviousRunning(previousActivityStatus, handle, () =>
                 {
                     bool hasItem = false;
@@ -75,16 +76,15 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                 List<NumberProfile> numbers = new List<NumberProfile>();
                                 List<SuspiciousNumber> sNumbers = new List<SuspiciousNumber>();
 
-                                foreach (NumberProfile number in item.numberProfiles)
+                                foreach (NumberProfile number in item.NumberProfiles)
                                 {
                                     SuspiciousNumber sNumber = new SuspiciousNumber();
-                                    foreach (FraudManager manager in managers)
-                                        if(manager.StrategyId==number.StrategyId)
-                                            if (manager.IsNumberSuspicious(number, out sNumber, number.StrategyId))
-                                            {
-                                                sNumbers.Add(sNumber);
-                                                numbers.Add(number);
-                                            }
+
+                                    if (fraudManagers[number.StrategyId].IsNumberSuspicious(number, out sNumber, number.StrategyId))
+                                    {
+                                        sNumbers.Add(sNumber);
+                                        numbers.Add(number);
+                                    }
 
                                     //numbers.Add(number);
                                 }
@@ -101,10 +101,11 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                                     inputArgument.OutputQueue2.Enqueue(new NumberProfileBatch()
                                     {
-                                        numberProfiles = numbers
+                                        NumberProfiles = numbers
                                     });
                                 }
-
+                                numberProfilesProcessed += item.NumberProfiles.Count;
+                                Console.WriteLine("{0} Number Profiles Processed", numberProfilesProcessed);
 
                             });
                     }

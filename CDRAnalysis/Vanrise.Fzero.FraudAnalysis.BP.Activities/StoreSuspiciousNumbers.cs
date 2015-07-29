@@ -54,13 +54,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                         (x) =>
                         {
                             dataManager.SaveSuspiciousNumbers(x.suspiciousNumbers);
-                            dataManager.UpdateSusbcriberCases(x.suspiciousNumbers.Select(n=>n.Number).ToList());
+                            //dataManager.UpdateSusbcriberCases(x.suspiciousNumbers.Select(n=>n.Number).ToList());
                         });
 
                     hasNumberProfiles = inputArgument.InputQueue2.TryDequeue(
                        (y) =>
                        {
-                           dataManager.SaveNumberProfiles(y.numberProfiles);
+                           dataManager.SaveNumberProfiles(y.NumberProfiles);
                        });
                 }
                 while (!ShouldStop(handle) && hasItemSuspiciousNumbers && hasNumberProfiles);

@@ -228,6 +228,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ITask.cs" />
+    <Compile Include="Tasks\IsmailTask.cs" />
     <Compile Include="Tasks\MortadaTask.cs" />
     <Compile Include="Tasks\WalidTask.cs" />
     <Compile Include="WF.cs">
@@ -246,7 +247,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="WF.resx">

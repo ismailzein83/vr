@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vanrise.Queueing;
+using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {

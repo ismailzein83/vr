@@ -21,7 +21,23 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public int MinimumCountofCallsinActiveHour { get; set; }
 
-        public List<Hour> PeakHours { get; set; }
+        List<Hour> _peakHours;
+        public List<Hour> PeakHours
+        {
+            get
+            {
+                return _peakHours;
+            }
+            set
+            {
+                _peakHours = value;
+                this.PeakHoursIds = new HashSet<int>();
+                foreach (var hour in value)
+                    this.PeakHoursIds.Add(hour.Id);
+            }
+        }
+
+        public HashSet<int> PeakHoursIds { get; set; }
 
         public List<StrategyLevel> StrategyLevels { get; set; }
 

@@ -14,6 +14,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
     public class LoadNumberProfilesInput
     {
+        public BaseQueue<CDRBatch> InputQueue { get; set; }
+
         public BaseQueue<NumberProfileBatch> OutputQueue { get; set; }
 
         public DateTime FromDate { get; set; }
@@ -33,10 +35,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
     #endregion
 
-    public class LoadNumberProfiles : BaseAsyncActivity<LoadNumberProfilesInput>
+    public class LoadNumberProfiles : DependentAsyncActivity<LoadNumberProfilesInput>
     {
 
         #region Arguments
+
+        [RequiredArgument]
+        public InOutArgument<BaseQueue<CDRBatch>> InputQueue { get; set; }
 
         [RequiredArgument]
         public  InOutArgument<BaseQueue<NumberProfileBatch>> OutputQueue { get; set; }
@@ -67,83 +72,110 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             base.OnBeforeExecute(context, handle);
         }
 
-        protected override void DoWork(LoadNumberProfilesInput inputArgument, AsyncActivityHandle handle)
+        protected override void DoWork(LoadNumberProfilesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             IStrategyDataManager strategyManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
             INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
             int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"]);
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Started Loading CDRs from Database to Memory");
 
-            foreach (var strategy in inputArgument.Strategies)
+            var aggregateDefinitions = new AggregateManager(inputArgument.Strategies).GetAggregateDefinitions(strategyManager.GetAllCallClasses());
+            string currentSubscriberNumber = null;
+
+            //foreach (var strategy in inputArgument.Strategies)
+            //{
+            List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
+            int cdrsCount = 0;
+            int numberProfilesCount = 0;
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
-                List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
-                List<AggregateDefinition> aggregateDefinitions = new AggregateManager(strategy).GetAggregateDefinitions(strategyManager.GetAllCallClasses());
-
-                NumberProfile currentNumberProfile = null;
-
-                dataManager.LoadCDR(inputArgument.FromDate, inputArgument.ToDate, batchSize, (cdr) =>
+                bool hasItem = false;
+                do
                 {
-                    if (currentNumberProfile == null || currentNumberProfile.SubscriberNumber != cdr.MSISDN)
-                    {
-                        if (currentNumberProfile != null)
-                        {
-                            FinishNumberProfileProcessing(currentNumberProfile, ref numberProfileBatch, inputArgument, handle, batchSize, aggregateDefinitions);
-                        }
-                        currentNumberProfile = new NumberProfile()
-                        {
-                            SubscriberNumber = cdr.MSISDN,
-                            FromDate = inputArgument.FromDate,
-                            ToDate = inputArgument.ToDate,
-                            PeriodId = inputArgument.PeriodId,
-                            IsOnNet = 1,
-                            StrategyId=strategy.Id
-                        };
-                        foreach (var aggregateDef in aggregateDefinitions)
-                        {
-                            aggregateDef.Aggregation.Reset();
-                            aggregateDef.Aggregation.EvaluateCDR(cdr);
-                        }
-                    }
-                    else
-                    {
-                        foreach (var aggregateDef in aggregateDefinitions)
-                        {
-                            aggregateDef.Aggregation.EvaluateCDR(cdr);
-                        }
-                    }
 
-                });
+                    hasItem = inputArgument.InputQueue.TryDequeue(
+                        (cdrBatch) =>
+                        {
+                            var serializedCDRs = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(cdrBatch.CDRBatchFilePath));
+                            System.IO.File.Delete(cdrBatch.CDRBatchFilePath);
+                            var cdrs = Vanrise.Common.ProtoBufSerializer.Deserialize<List<CDR>>(serializedCDRs);
+                            foreach (var cdr in cdrs)
+                            {
+                                if (currentSubscriberNumber != cdr.MSISDN)
+                                {
+                                    if (currentSubscriberNumber != null)
+                                    {
+                                        FinishNumberProfileProcessing(currentSubscriberNumber, ref numberProfileBatch, ref numberProfilesCount, inputArgument, handle, batchSize, aggregateDefinitions);
+                                    }
+                                    currentSubscriberNumber = cdr.MSISDN;
+                                    foreach (var aggregateDef in aggregateDefinitions)
+                                    {
+                                        aggregateDef.Aggregation.Reset();
+                                        aggregateDef.Aggregation.EvaluateCDR(cdr);
+                                    }
+                                }
+                                else
+                                {
+                                    foreach (var aggregateDef in aggregateDefinitions)
+                                    {
+                                        aggregateDef.Aggregation.EvaluateCDR(cdr);
+                                    }
+                                }
+                            }
+                            cdrsCount += cdrs.Count;
+                            Console.WriteLine("{0} CDRs profiled", cdrsCount);
 
-                if (currentNumberProfile != null)
-                    FinishNumberProfileProcessing(currentNumberProfile, ref numberProfileBatch, inputArgument, handle, 0, aggregateDefinitions);
+                        });
+                }
+                while (!ShouldStop(handle) && hasItem);
+            });
+            if (currentSubscriberNumber != null)
+                FinishNumberProfileProcessing(currentSubscriberNumber, ref numberProfileBatch, ref numberProfilesCount, inputArgument, handle, 0, aggregateDefinitions);
 
-                handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Finished Loading CDRs from Database to Memory");
-            }
+            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Finished Loading CDRs from Database to Memory");
+            //}
 
         }
 
-        private void FinishNumberProfileProcessing(NumberProfile currentNumberProfile, ref List<NumberProfile> numberProfileBatch, LoadNumberProfilesInput inputArgument, AsyncActivityHandle handle, int batchSize, List<AggregateDefinition> AggregateDefinitions)
+        private void FinishNumberProfileProcessing(string subscriberNumber, ref List<NumberProfile> numberProfileBatch, ref int numberProfilesCount, LoadNumberProfilesInput inputArgument, AsyncActivityHandle handle, int batchSize, List<AggregateDefinition> AggregateDefinitions)
         {
-            foreach (var aggregateDef in AggregateDefinitions)
+            foreach(var strategy in inputArgument.Strategies)
             {
-                currentNumberProfile.AggregateValues.Add(aggregateDef.Name, aggregateDef.Aggregation.GetResult());
+                NumberProfile numberProfile = new NumberProfile()
+                {
+                    SubscriberNumber = subscriberNumber,
+                    FromDate = inputArgument.FromDate,
+                    ToDate = inputArgument.ToDate,
+                    PeriodId = inputArgument.PeriodId,
+                    IsOnNet = 1,
+                    StrategyId = strategy.Id
+                };
+                foreach (var aggregateDef in AggregateDefinitions)
+                {
+                    numberProfile.AggregateValues.Add(aggregateDef.Name, aggregateDef.Aggregation.GetResult(strategy));
+                }
+                numberProfileBatch.Add(numberProfile);
             }
-            numberProfileBatch.Add(currentNumberProfile);
+            
+            
             //Console.WriteLine(numberProfileBatch.Count);
             if (numberProfileBatch.Count >= batchSize)
             {
+                numberProfilesCount += numberProfileBatch.Count;
+                Console.WriteLine("{0} Number Profiles Sent", numberProfilesCount);
                 inputArgument.OutputQueue.Enqueue(new NumberProfileBatch()
                 {
-                    numberProfiles = numberProfileBatch
+                    NumberProfiles = numberProfileBatch
                 });
                 numberProfileBatch = new List<NumberProfile>();
             }
         }
 
-        protected override LoadNumberProfilesInput GetInputArgument(System.Activities.AsyncCodeActivityContext context)
+        protected override LoadNumberProfilesInput GetInputArgument2(System.Activities.AsyncCodeActivityContext context)
         {
             return new LoadNumberProfilesInput
             {
+                InputQueue = this.InputQueue.Get(context),
                 OutputQueue = this.OutputQueue.Get(context),
                 FromDate = this.FromDate.Get(context),
                 ToDate = this.ToDate.Get(context),
@@ -152,5 +184,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             };
         }
 
+        private class StrategyNumberProfile
+        {
+            public Strategy Strategy { get; set; }
+
+            public NumberProfile CurrentNumberProfile { get; set; }
+
+            public List<AggregateDefinition> AggregateDefinitions { get; set; }
+        }
     }
 }

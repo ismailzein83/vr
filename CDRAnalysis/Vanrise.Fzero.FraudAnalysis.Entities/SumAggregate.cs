@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
@@ -6,62 +7,65 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     public class SumAggregate:IAggregate
     {
 
-        Func<CDR, bool> _condition;
-        MethodInfo _propertyGetMethod;
         Func<CDR, Decimal> _cdrExpressionToSum;
+        Func<CDR, Strategy, Decimal> cdrExpressionToSumWithStrategy;
         decimal _sum;
-
+        Dictionary<Strategy, SumAggregateStrategyInfo> _strategiesInfo;
+        List<Strategy> _strategies;
        
 
-        public SumAggregate(Func<CDR, Decimal> cdrExpressionToSum, Func<CDR, bool> condition)
+        public SumAggregate(Func<CDR, Decimal> cdrExpressionToSum)
         {
             _cdrExpressionToSum = cdrExpressionToSum;
-            _condition = condition;
+        }
+
+        public SumAggregate(Func<CDR, Strategy, Decimal> cdrExpressionToSum, List<Strategy> strategies)
+        {
+            this.cdrExpressionToSumWithStrategy = cdrExpressionToSum;
+            _strategiesInfo = new Dictionary<Strategy, SumAggregateStrategyInfo>();
+            _strategies = strategies;
+            foreach (var strategy in _strategies)
+                _strategiesInfo.Add(strategy, new SumAggregateStrategyInfo ());
         }
 
         public void Reset()
         {
-            _sum = 0;
+            if (_strategiesInfo != null)
+            {
+                foreach (var strategyCountEntry in _strategiesInfo)
+                {
+                    strategyCountEntry.Value.Sum = 0;
+                }
+            }
+            else
+                _sum = 0;
         }
 
         public void EvaluateCDR(CDR cdr)
         {
-            if (_condition == null || _condition(cdr))
+            if (_strategiesInfo != null)
             {
-                if(_cdrExpressionToSum != null)
-                    _sum += _cdrExpressionToSum(cdr);
-                else
-                    _sum += (Decimal)_propertyGetMethod.Invoke(cdr, null);
+                foreach (var strategySumEntry in _strategiesInfo)
+                {
+                    strategySumEntry.Value.Sum = strategySumEntry.Value.Sum + cdrExpressionToSumWithStrategy(cdr, strategySumEntry.Key);
+                }
             }
+            else
+                _sum += _cdrExpressionToSum(cdr);
         }
-
-        public decimal GetResult()
+        
+        public decimal GetResult(Strategy strategy)
         {
-            return _sum;
+            if (_strategiesInfo != null)
+                return _strategiesInfo[strategy].Sum;
+            else
+                return _sum;
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        private class SumAggregateStrategyInfo
+        {
+            public decimal Sum { get; set; }
+        }
     }
 
     

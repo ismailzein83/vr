@@ -52,6 +52,7 @@
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.Business</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP</AssemblyReference>
     </sco:Collection>
@@ -84,13 +85,42 @@
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadNumberProfilesStatus" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="GetSuspiciousNumberStatus" />
         <Variable x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)" Name="outnumberProfileQueue" />
+        <Variable x:TypeArguments="vq:BaseQueue(vffe:CDRBatch)" Name="cdrQueue" />
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadCDRsStatus" />
       </Parallel.Variables>
+      <vffba1:LoadCDRs sap2010:WorkflowViewState.IdRef="LoadCDRs_1">
+        <vffba1:LoadCDRs.FromDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
+          </InArgument>
+        </vffba1:LoadCDRs.FromDate>
+        <vffba1:LoadCDRs.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:CDRBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:CDRBatch)">cdrQueue</mca:CSharpReference>
+          </InOutArgument>
+        </vffba1:LoadCDRs.OutputQueue>
+        <vffba1:LoadCDRs.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadCDRsStatus</mca:CSharpReference>
+          </OutArgument>
+        </vffba1:LoadCDRs.Status>
+        <vffba1:LoadCDRs.ToDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
+          </InArgument>
+        </vffba1:LoadCDRs.ToDate>
+      </vffba1:LoadCDRs>
       <vffba1:LoadNumberProfiles sap2010:WorkflowViewState.IdRef="LoadNumberProfiles_1">
         <vffba1:LoadNumberProfiles.FromDate>
           <InArgument x:TypeArguments="s:DateTime">
             <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
           </InArgument>
         </vffba1:LoadNumberProfiles.FromDate>
+        <vffba1:LoadNumberProfiles.InputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:CDRBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:CDRBatch)">cdrQueue</mca:CSharpReference>
+          </InOutArgument>
+        </vffba1:LoadNumberProfiles.InputQueue>
         <vffba1:LoadNumberProfiles.OutputQueue>
           <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">numberProfileQueue</mca:CSharpReference>
@@ -101,6 +131,11 @@
             <mca:CSharpValue x:TypeArguments="x:Int32">Input.PeriodId</mca:CSharpValue>
           </InArgument>
         </vffba1:LoadNumberProfiles.PeriodId>
+        <vffba1:LoadNumberProfiles.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadCDRsStatus</mca:CSharpValue>
+          </InArgument>
+        </vffba1:LoadNumberProfiles.PreviousActivityStatus>
         <vffba1:LoadNumberProfiles.Status>
           <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadNumberProfilesStatus</mca:CSharpReference>
@@ -177,25 +212,26 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("End Executing Strategies Count: {0}", Input.StrategyIds.Count)</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbBw7A7UBDgIBAT8FQxEDAZEBRAVPGgMBigFQBa4BEAIBBq8BBbMBEQIBAkEJQZUBAwGSAUwLTGMDAY4BRwtHagMBiwFYB3cjAgFZeAeXASQCASiYAQetAScCAQexAQmxAZQBAgEDbw1vZAMBggFbDVtbAgF6ag1qeQIBcmANYIIBAgFqZQ1lWAIBYnQNdFkCAVqUAQ2UAWQCAVGKAQ2KAXECAUl7DXt6AgFBhQENhQGFAQIBOY8BDY8BegIBMYABDYABiAECASmqAQ2qAWQCASClAQ2lAXICARibAQ2bAYABAgEQoAENoAF9AgEI</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbCM8A9gBDgIBAUAFRBEDAe4BRQVQGgMB5wFRBdEBEAIBBtIBBdYBEQIBAkIJQpUBAwHvAU0LTWMDAesBSAtIagMB6AFbB3AZAwG+AXEHmgEjAgFtmwEHugEkAgEwuwEH0AEnAgEH1AEJ1AGUAQIBA14NXlsDAd0BaA1obwMB0wFjDWNpAwHJAW0NbVkDAb8BkgENkgFkAwG0AYgBDYgBZwMBqgF5DXlpAwGgAXQNdFsDAZYBjQENjQF5AwGMAX4NfoIBAwGCAYMBDYMBWAIBeJcBDZcBWQIBbrcBDbcBZAIBY60BDa0BcQIBWZ4BDZ4BegIBT6gBDagBhQECAUWyAQ2yAXoCATujAQ2jAYgBAgExzQENzQFkAgEmyAENyAFyAgEcvgENvgGAAQIBEsMBDcMBfQIBCA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="794,62" />
-      <sap2010:ViewStateData Id="GetStrategy_3" sap:VirtualizedContainerService.HintSize="794,22" />
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="1034,62" />
+      <sap2010:ViewStateData Id="GetStrategy_3" sap:VirtualizedContainerService.HintSize="1034,22" />
+      <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="LoadNumberProfiles_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetSuspiciousNumber_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="StoreSuspiciousNumbers_2" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794,86" />
-      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="794,62" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816,476">
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1034,86" />
+      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="1034,62" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1056,476">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess_1" sap:VirtualizedContainerService.HintSize="856,556" />
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess_1" sap:VirtualizedContainerService.HintSize="1096,556" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
