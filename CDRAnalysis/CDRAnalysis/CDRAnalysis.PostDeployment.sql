@@ -72,8 +72,8 @@ USING (VALUES
 	( N'4',N'Closed: White List'),
 	( N'5',N'Cancelled')
 ) 
-AS Source ([Id])
-ON Target.[Id] = Source.[Id] 
+AS Source ([Id], [Name])
+ON Target.[Name] = Source.[Name] 
 -- insert new rows 
 WHEN NOT MATCHED BY TARGET THEN 
 INSERT ([Id], [Name])
