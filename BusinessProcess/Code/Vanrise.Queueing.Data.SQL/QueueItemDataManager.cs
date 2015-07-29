@@ -109,22 +109,17 @@ namespace Vanrise.Queueing.Data.SQL
             ExecuteNonQueryText(String.Format(query_CreateQueueTable, queueId), null);
         }
 
-        public void InsertQueueItemIDGen(int queueId)
+        public long GenerateItemID()
         {
-            ExecuteNonQuerySP("queue.sp_QueueItemIDGen_Insert", queueId);
+            return (long)ExecuteScalarSP("queue.sp_QueueItemIDGen_GenerateID");
         }
 
-        public long GenerateItemID(int queueId)
+        public void EnqueueItem(int queueId, long itemId, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus)
         {
-            return (long)ExecuteScalarSP("queue.sp_QueueItemIDGen_GenerateID", queueId);
+            ExecuteEnqueueItemQuery(String.Format(s_query_EnqueueItemAndHeaderTemplate, queueId, itemId, "null"), item, executionFlowTriggerItemId, description, queueItemStatus);
         }
 
-        public void EnqueueItem(int queueId, long itemId, byte[] item, string description, QueueItemStatus queueItemStatus)
-        {
-            ExecuteEnqueueItemQuery(String.Format(s_query_EnqueueItemAndHeaderTemplate, queueId, itemId, "null", "null"), item, description, queueItemStatus);
-        }
-
-        public void EnqueueItem(Dictionary<int, long> targetQueuesItemsIds, int sourceQueueId, long sourceItemId, byte[] item, string description, QueueItemStatus queueItemStatus)
+        public void EnqueueItem(Dictionary<int, long> targetQueuesItemsIds, int sourceQueueId, long sourceItemId, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus)
         {
             
             StringBuilder queryItemBuilder = new StringBuilder();
@@ -139,7 +134,6 @@ namespace Vanrise.Queueing.Data.SQL
                 queryItemHeaderBuilder.AppendLine(String.Format(query_EnqueueItemHeaderTemplate, 
                     queueId, 
                     itemId, 
-                    sourceQueueId != queueId ? sourceQueueId.ToString() : "null", 
                     sourceQueueId != queueId ? sourceItemId.ToString() : "null"));
             }
 
@@ -150,10 +144,10 @@ namespace Vanrise.Queueing.Data.SQL
                                             queryInsertQueueActivationBuilder,
                                             queryItemHeaderBuilder);
 
-            ExecuteEnqueueItemQuery(query, item, description, queueItemStatus);
+            ExecuteEnqueueItemQuery(query, item, executionFlowTriggerItemId, description, queueItemStatus);
         }
 
-        void ExecuteEnqueueItemQuery(string query, byte[] item, string description, QueueItemStatus queueItemStatus)
+        void ExecuteEnqueueItemQuery(string query, byte[] item, long executionFlowTriggerItemID, string description, QueueItemStatus queueItemStatus)
         {
             query = String.Format(@" BEGIN TRANSACTION 
                                      {0}
@@ -163,6 +157,7 @@ namespace Vanrise.Queueing.Data.SQL
             ExecuteNonQueryText(query,
                (cmd) =>
                {
+                   cmd.Parameters.Add(new SqlParameter("@ExecutionFlowTriggerItemID", executionFlowTriggerItemID));
                    cmd.Parameters.Add(new SqlParameter("@Content", item));
                    cmd.Parameters.Add(new SqlParameter("@Description", description));
                    cmd.Parameters.Add(new SqlParameter("@Status", (int)queueItemStatus));
@@ -184,6 +179,7 @@ namespace Vanrise.Queueing.Data.SQL
                         return new QueueItem
                         {
                             ItemId = (long)reader["ID"],
+                            ExecutionFlowTriggerItemId = (long)reader["ExecutionFlowTriggerItemID"],
                             Content = (byte[])reader["Content"]
                         };
 
@@ -214,27 +210,6 @@ namespace Vanrise.Queueing.Data.SQL
         {
             return GetItemsSP("queue.sp_QueueItemHeader_GetFiltered", QueueItemHeaderMapper, queueIds == null ? null : string.Join(",", queueIds.Select(n => ((int)n).ToString()).ToArray())
                 , statuses == null ? null : string.Join(",", statuses.Select(n => ((int)n).ToString()).ToArray()),dateFrom,dateTo);
-        }
-
-        public void Insert(long itemId, int queueId, string description, QueueItemStatus queueItemStatus)
-        {
-            ExecuteNonQuerySP("queue.sp_QueueItemHeader_Insert", itemId, queueId, description, (int)queueItemStatus);
-        }
-
-        public void Insert(Dictionary<int, long> targetQueuesItemsIds, string description, QueueItemStatus queueItemStatus)
-        {
-            string queryTemplate = "Exec queue.sp_QueueItemHeader_Insert {0}, {1}, @Description, @Status";
-            StringBuilder queryBuilder = new StringBuilder();
-            foreach (var targetQueueItemId in targetQueuesItemsIds)
-            {
-                queryBuilder.AppendLine(String.Format(queryTemplate, targetQueueItemId.Value, targetQueueItemId.Key));
-            }
-            ExecuteNonQueryText(queryBuilder.ToString(),
-               (cmd) =>
-               {
-                   cmd.Parameters.Add(new SqlParameter("@Description", description));
-                   cmd.Parameters.Add(new SqlParameter("@Status", (int)queueItemStatus));
-               });
         }
 
         public void UpdateHeaderStatus(long itemId, QueueItemStatus queueItemStatus)
@@ -268,7 +243,6 @@ namespace Vanrise.Queueing.Data.SQL
             {
                 ItemId = (long)reader["ItemID"],
                 QueueId = (int)reader["QueueID"],
-                SourceQueueId = GetReaderValue<int>(reader, "SourceQueueID"),
                 SourceItemId = GetReaderValue<long>(reader, "SourceItemID"),
                 Description = reader["Description"] as string,
                 Status = (QueueItemStatus)reader["Status"],
@@ -286,6 +260,7 @@ namespace Vanrise.Queueing.Data.SQL
         const string query_CreateQueueTable = @"CREATE TABLE [queue].[QueueItem_{0}](
 									                                                [ID] [bigint] NOT NULL,
 									                                                [Content] [varbinary](max) NOT NULL,
+                                                                                    [ExecutionFlowTriggerItemID] [bigint] NOT NULL,
 									                                                [LockedByProcessID] [int] NULL,
 									                                                 CONSTRAINT [PK_QueueItem_{0}] PRIMARY KEY CLUSTERED 
 									                                                (
@@ -301,16 +276,16 @@ namespace Vanrise.Queueing.Data.SQL
                                                        SET @IsEmptyInitialy_{0} = 0
 
                                                      INSERT INTO queue.QueueItem_{0}
-                                                           ([ID], [Content])
+                                                           ([ID], [Content], [ExecutionFlowTriggerItemID])
                                                      VALUES
-                                                           ({1}, @Content)
+                                                           ({1}, @Content, @ExecutionFlowTriggerItemID)
                                                          ";
 
         const string query_EnqueueItemHeaderTemplate = @" INSERT INTO [queue].[QueueItemHeader]
                                                                    ([QueueID]
                                                                    ,[ItemID]
-		                                                           ,[SourceQueueID]
-                                                                   ,[SourceItemID]
+                                                                   ,ExecutionFlowTriggerItemID
+		                                                           ,[SourceItemID]
                                                                    ,[Description]
                                                                    ,[Status]
                                                                    ,CreatedTime
@@ -318,8 +293,8 @@ namespace Vanrise.Queueing.Data.SQL
                                                              VALUES
                                                                    ({0}
                                                                    ,{1}
+                                                                   ,@ExecutionFlowTriggerItemID
                                                                    ,{2}
-                                                                   ,{3}
                                                                    ,@Description
                                                                    ,@Status
                                                                    ,GETDATE()
@@ -334,7 +309,7 @@ namespace Vanrise.Queueing.Data.SQL
 
         const string query_Dequeue = @" 
                                         BEGIN TRAN
-                                        DECLARE @ID bigint, @Content varbinary(max)
+                                        DECLARE @ID bigint, @Content varbinary(max), @ExecutionFlowTriggerItemID bigint
 
                                         IF @SingleQueueReader = 1
                                         BEGIN
@@ -347,13 +322,13 @@ namespace Vanrise.Queueing.Data.SQL
 
                                             --if NO item locked by another reader, select the first item in the queue table
                                             IF @LockedItemID IS NULL
-                                                SELECT TOP (1) @ID = [ID] , @Content = [Content] 
+                                                SELECT TOP (1) @ID = [ID] , @Content = [Content], @ExecutionFlowTriggerItemID = ExecutionFlowTriggerItemID 
                                                 FROM queue.QueueItem_{0}
                                                 ORDER BY ID
                                         END
                                         ELSE
                                         BEGIN
-                                            SELECT TOP (1) @ID = [ID] , @Content = [Content] 
+                                            SELECT TOP (1) @ID = [ID] , @Content = [Content], @ExecutionFlowTriggerItemID = [ExecutionFlowTriggerItemID]
                                             FROM queue.QueueItem_{0} WITH (updlock, readpast) 
                                             WHERE LockedByProcessID IS NULL OR @RunningProcessesIDs NOT LIKE '%,' + CONVERT(VARCHAR, LockedByProcessID) + ',%'
                                             ORDER BY ID
@@ -363,7 +338,7 @@ namespace Vanrise.Queueing.Data.SQL
 	                                        UPDATE queue.QueueItem_{0} SET LockedByProcessID = @ProcessID WHERE ID = @ID
                                         COMMIT; 
 
-                                        SELECT @ID ID, @Content Content WHERE @ID IS NOT NULL";
+                                        SELECT @ID ID, @Content Content, @ExecutionFlowTriggerItemID ExecutionFlowTriggerItemID WHERE @ID IS NOT NULL";
 
         const string query_DeleteFromQueue = "DELETE queue.QueueItem_{0} WHERE ID = @ID";     
 

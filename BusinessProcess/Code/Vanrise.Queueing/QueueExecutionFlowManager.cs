@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Queueing.Data;
 using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Queueing
@@ -11,7 +12,8 @@ namespace Vanrise.Queueing
     {
         public QueuesByStages GetQueuesByStages(int executionFlowId)
         {
-            QueueExecutionFlow executionFlow = new QueueExecutionFlow();
+            IQueueExecutionFlowDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDataManager>();
+            QueueExecutionFlow executionFlow = dataManager.GetExecutionFlow(executionFlowId);
             List<QueueStageInfo> queueStages = executionFlow.Tree.GetQueueStageInfos();
             if (queueStages == null || queueStages.Count == 0)
                 throw new Exception("QueueExecutionFlow doesnt return any QueueStageInfo");
@@ -30,7 +32,7 @@ namespace Vanrise.Queueing
                         sourceQueueNames.Add(GetQueueName(executionFlow, sourceStage));
                     }
                 }
-                PersistentQueueFactory.Default.CreateQueueIfNotExists(stage.QueueTypeFQTN, queueName, queueTitle, sourceQueueNames, stage.QueueSettings);
+                PersistentQueueFactory.Default.CreateQueueIfNotExists(executionFlowId, stage.QueueTypeFQTN, queueName, queueTitle, sourceQueueNames, stage.QueueSettings);
                 if (queuesByStages.ContainsKey(stage.StageName))
                     throw new Exception(String.Format("Duplicate Stage Names: {0}", stage.StageName));
                 queuesByStages.Add(stage.StageName, PersistentQueueFactory.Default.GetQueue(queueName));

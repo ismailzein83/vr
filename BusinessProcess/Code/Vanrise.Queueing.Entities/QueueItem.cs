@@ -9,6 +9,8 @@ namespace Vanrise.Queueing.Entities
     public class QueueItem
     {
         public long ItemId { get; set; }
+
+        public long ExecutionFlowTriggerItemId { get; set; }
         
         public byte[] Content { get; set; }
     }

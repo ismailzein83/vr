@@ -12,8 +12,6 @@ namespace Vanrise.Queueing.Web.Models
 
         public int QueueId { get; set; }
 
-        public int SourceQueueId { get; set; }
-
         public long SourceItemId { get; set; }
 
         public string Description { get; set; }

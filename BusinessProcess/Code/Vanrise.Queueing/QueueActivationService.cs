@@ -17,39 +17,6 @@ namespace Vanrise.Queueing
         {
             IQueueItemDataManager dataManagerQueueItem = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();
             Dictionary<int, long> queueIdsWithNewItems = dataManagerQueueItem.GetQueueIDsHavingNewItems(_lastRetrievedQueueActivationId);
-            if(queueIdsWithNewItems != null && queueIdsWithNewItems.Count > 0)
-            {
-                IQueueDataManager dataManagerQueue = QDataManagerFactory.GetDataManager<IQueueDataManager>();
-                List<QueueInstance> updatedQueues = dataManagerQueue.GetQueueInstances(queueIdsWithNewItems.Keys);
-                foreach(var queueInstance in updatedQueues)
-                {
-                    if (queueInstance.Settings != null && queueInstance.Settings.QueueActivator != null)
-                    {
-                        Task task = new Task(() =>
-                        {
-                            try
-                            {
-                                using (var queueActivator = queueInstance.Settings.QueueActivator)
-                                {
-                                    queueActivator.Run(queueInstance);
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                LoggerFactory.GetExceptionLogger().WriteException(ex);
-                            }
-                        });
-                        task.Start();
-                    }
-                }
-                _lastRetrievedQueueActivationId = queueIdsWithNewItems.Values.Max();
-            }
-        }
-
-        protected void Execute2()
-        {
-            IQueueItemDataManager dataManagerQueueItem = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();
-            Dictionary<int, long> queueIdsWithNewItems = dataManagerQueueItem.GetQueueIDsHavingNewItems(_lastRetrievedQueueActivationId);
             if (queueIdsWithNewItems != null && queueIdsWithNewItems.Count > 0)
             {
                 IQueueDataManager dataManagerQueue = QDataManagerFactory.GetDataManager<IQueueDataManager>();
@@ -65,13 +32,27 @@ namespace Vanrise.Queueing
                                 using (var queueActivator = queueInstance.Settings.QueueActivator)
                                 {
                                     var queue = PersistentQueueFactory.Default.GetQueue(queueInstance.Name);
-                                    if(queueInstance.ExecutionFlowId != null)
+                                    if (queueInstance.ExecutionFlowId != null)
                                     {
                                         QueueExecutionFlowManager executionFlowManager = new QueueExecutionFlowManager();
                                         var queuesByStages = executionFlowManager.GetQueuesByStages(queueInstance.ExecutionFlowId.Value);
-                                        queueActivator.Run(queueInstance, queue, queuesByStages);
+                                        while (queue.TryDequeueObject((itemToProcess) =>
+                                        {
+                                            ItemsToEnqueue outputItems = new ItemsToEnqueue();
+                                            queueActivator.ProcessItem(itemToProcess, outputItems);
+                                            if (outputItems.Count > 0)
+                                            {
+                                                foreach (var outputItem in outputItems)
+                                                {
+                                                    outputItem.Item.ExecutionFlowTriggerItemId = itemToProcess.ExecutionFlowTriggerItemId;
+                                                    queuesByStages[outputItem.StageName].Queue.EnqueueObject(outputItem.Item);
+                                                }
+                                            }
+                                        }))
+                                        {
+
+                                        }
                                     }
-                                    queueActivator.Run(queueInstance);
                                 }
                             }
                             catch (Exception ex)
@@ -84,6 +65,6 @@ namespace Vanrise.Queueing
                 }
                 _lastRetrievedQueueActivationId = queueIdsWithNewItems.Values.Max();
             }
-        }
+        } 
     }
 }

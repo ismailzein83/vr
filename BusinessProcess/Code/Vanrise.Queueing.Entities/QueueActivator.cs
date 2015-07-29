@@ -8,12 +8,7 @@ namespace Vanrise.Queueing.Entities
 {
     public abstract class QueueActivator : IDisposable
     {
-        public abstract void Run(QueueInstance queueInstance);
-
-        public virtual void Run(QueueInstance queueInstance, IPersistentQueue queue, QueuesByStages queuesByStages)
-        {
-
-        }
+        public abstract void ProcessItem(PersistentQueueItem item, ItemsToEnqueue outputItems);
 
         public void Dispose()
         {

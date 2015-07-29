@@ -13,7 +13,9 @@ namespace Vanrise.Queueing.Data
 
         int InsertOrUpdateQueueItemType(string itemFQTN, string title, QueueSettings defaultQueueSettings );
 
-        int InsertQueueInstance(string queueName, string title, QueueInstanceStatus status, int itemTypeId, QueueSettings settings);
+        int InsertQueueInstance(int executionFlowId, string queueName, string title, QueueInstanceStatus status, int itemTypeId, QueueSettings settings);
+
+        bool UpdateQueueSettings(string queueName, QueueSettings settings);
 
         void UpdateQueueInstanceStatus(string queueName, QueueInstanceStatus status);
 

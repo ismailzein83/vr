@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseQueue.cs" />
+    <Compile Include="IExecutionFlowDataManager.cs" />
     <Compile Include="PersistentQueueFactory.cs" />
     <Compile Include="PersistentQueueItem.cs" />
     <Compile Include="MemoryQueue.cs" />

@@ -8,6 +8,8 @@ namespace Vanrise.Queueing.Entities
 {
     public interface IPersistentQueue
     {
-        void EnqueueObject(Object item);
+        long EnqueueObject(PersistentQueueItem item);
+
+        bool TryDequeueObject(Action<PersistentQueueItem> processItem);
     }
 }

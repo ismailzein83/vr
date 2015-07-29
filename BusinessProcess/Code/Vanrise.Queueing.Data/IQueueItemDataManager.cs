@@ -11,13 +11,11 @@ namespace Vanrise.Queueing.Data
     {
         void CreateQueue(int queueId);
 
-        void InsertQueueItemIDGen(int queueId);
+        long GenerateItemID();
 
-        long GenerateItemID(int queueId);
+        void EnqueueItem(int queueId, long itemId, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus);
 
-        void EnqueueItem(int queueId, long itemId, byte[] item, string description, QueueItemStatus queueItemStatus);
-
-        void EnqueueItem(Dictionary<int, long> targetQueuesItemsIds, int sourceQueueId, long sourceItemId, byte[] item, string description, QueueItemStatus queueItemStatus);
+        void EnqueueItem(Dictionary<int, long> targetQueuesItemsIds, int sourceQueueId, long sourceItemId, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus);
 
         QueueItem DequeueItem(int queueId, int currentProcessId, IEnumerable<int> runningProcessesIds, bool singleQueueReader);
 

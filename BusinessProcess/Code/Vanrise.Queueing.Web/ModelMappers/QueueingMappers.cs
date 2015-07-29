@@ -28,7 +28,6 @@ namespace Vanrise.Queueing.Web.ModelMappers
             {
                 ItemId = header.ItemId,
                 QueueId = header.QueueId,
-                SourceQueueId = header.SourceQueueId,
                 SourceItemId = header.SourceItemId,
                 Description = header.Description,
                 Status = header.Status,

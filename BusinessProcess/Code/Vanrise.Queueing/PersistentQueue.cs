@@ -46,15 +46,21 @@ namespace Vanrise.Queueing
        
         public override void Enqueue(T item)
         {
+            EnqueuePrivate(item);
+        }
+
+        long EnqueuePrivate(T item)
+        {
             UpdateSubscribedQueueIdsIfNeeded();
             string itemDescription = item.GenerateDescription();
             byte[] serialized = item.Serialize();
             byte[] compressed = Vanrise.Common.Compressor.Compress(serialized);
 
-            long itemId = _dataManagerQueueItem.GenerateItemID(_queueId);
+            long itemId = _dataManagerQueueItem.GenerateItemID();
+            long executionFlowTriggerItemId = item.ExecutionFlowTriggerItemId > 0 ? item.ExecutionFlowTriggerItemId : itemId;//if first item in the flow, assign the item id to the ExecutionFlowTriggerItemId
             if (_subscribedQueueIds == null || _subscribedQueueIds.Count == 0)
             {
-                _dataManagerQueueItem.EnqueueItem(_queueId, itemId, compressed, itemDescription, QueueItemStatus.New);
+                _dataManagerQueueItem.EnqueueItem(_queueId, itemId, executionFlowTriggerItemId, compressed, itemDescription, QueueItemStatus.New);
             }
             else
             {
@@ -63,10 +69,11 @@ namespace Vanrise.Queueing
                 if (_subscribedQueueIds != null)
                 {
                     foreach (int queueId in _subscribedQueueIds)
-                        targetQueuesItemsIds.Add(queueId, _dataManagerQueueItem.GenerateItemID(queueId));
+                        targetQueuesItemsIds.Add(queueId, _dataManagerQueueItem.GenerateItemID());
                 }
-                _dataManagerQueueItem.EnqueueItem(targetQueuesItemsIds, _queueId, itemId, compressed, itemDescription, QueueItemStatus.New);
+                _dataManagerQueueItem.EnqueueItem(targetQueuesItemsIds, _queueId, itemId, executionFlowTriggerItemId, compressed, itemDescription, QueueItemStatus.New);
             }
+            return itemId;
         }
 
         public override bool TryDequeue(Action<T> processItem)
@@ -148,6 +155,7 @@ namespace Vanrise.Queueing
                 _dataManagerQueueItem.UpdateHeaderStatus(queueItem.ItemId, QueueItemStatus.Processing);
                 byte[] decompressed = Vanrise.Common.Compressor.Decompress(queueItem.Content);
                 T deserialized = _emptyObject.Deserialize<T>(decompressed);
+                deserialized.ExecutionFlowTriggerItemId = queueItem.ExecutionFlowTriggerItemId;
                 try
                 {
                     onItemReady(deserialized);
@@ -213,14 +221,22 @@ namespace Vanrise.Queueing
 
         #region IPersistentQueue
 
-        public void EnqueueObject(object item)
+        public long EnqueueObject(PersistentQueueItem item)
         {
             T typedItem = item as T;
             if (typedItem == null)
                 throw new Exception(String.Format("item is not of type '{0}'", typeof(T)));
-            this.Enqueue(typedItem);
+            return this.EnqueuePrivate(typedItem);
+        }
+
+
+        public bool TryDequeueObject(Action<PersistentQueueItem> processItem)
+        {
+            return this.TryDequeue(processItem);
         }
 
         #endregion
+
+
     }
 }

@@ -13,6 +13,8 @@ namespace Vanrise.Queueing.Entities
         public string Name { get; set; }
 
         public QueueExecutionFlowTree Tree { get; set; }
+
+        public int DefinitionId { get; set; }
     }
 
     public class QueueExecutionFlowTree : CompositeExecutionActivity
@@ -58,7 +60,7 @@ namespace Vanrise.Queueing.Entities
                   { 
                        QueueTypeFQTN = typeof(T).AssemblyQualifiedName,
                        StageName = this.StageName,
-                       QueueName = this.StageName,
+                       QueueName = this.QueueName,
                        QueueTitle = !String.IsNullOrEmpty(this.QueueTitle) ? this.QueueTitle : this.QueueName,
                        QueueSettings = this.QueueSettings
                   }
