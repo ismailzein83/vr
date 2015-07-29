@@ -25,13 +25,17 @@
         <div>
             <vr-row>
                 <vr-columns colnum="12" simplecol>
-                    <vr-datagrid datasource="users" menuactions="gridMenuActions" loadmoredata="loadMoreData" on-ready="onMainGridReady" idfield="UserId" vr-loader="isGettingData">
-                        <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Email'" field="'Email'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Status'">{{dataItem.Status == "0"? 'Not Active': 'Active' }}</vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'LastLogin'">{{dataItem.LastLogin | date:'yyyy-MM-dd' }}</vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Description'" field="'Description'"></vr-datagridcolumn>
-                    </vr-datagrid>
+
+                    <vr-section title="Users">
+                        <vr-datagrid datasource="users" menuactions="gridMenuActions" loadmoredata="loadMoreData" on-ready="onMainGridReady" idfield="UserId" vr-loader="isGettingData">
+                            <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Email'" field="'Email'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Status'">{{dataItem.Status == "0"? 'Not Active': 'Active' }}</vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'LastLogin'">{{dataItem.LastLogin | date:'yyyy-MM-dd' }}</vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Description'" field="'Description'"></vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-section>
+                    
                 </vr-columns>
             </vr-row>
         </div>
