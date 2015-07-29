@@ -354,12 +354,12 @@ namespace TOne.Analytics.Data.SQL
             isSale ? "BS.SaleZoneID" : "BS.CostZoneID");
 
             return GetItemsText(query, (reader) => CarrierProfileMTDAndMTAMapper(reader), null);
-
         }
         public List<CarrierProfileReport> GetCarrierProfile(DateTime fromDate, DateTime toDate, string customerId, int topDestination, bool isSale, bool isAmount)
         {
             string DurationField = "BS.SaleDuration / 60.0";
-            string AmountField = isSale ? "BS.Sale_Nets / dbo.GetExchangeRate(BS.Sale_Currency, BS.CallDate) " : "BS.Cost_Nets / dbo.GetExchangeRate(BS.Sale_Currency, BS.CallDate) ";
+            //string AmountField = isSale ? "BS.Sale_Nets / dbo.GetExchangeRate(BS.Sale_Currency, BS.CallDate) " : "BS.Cost_Nets / dbo.GetExchangeRate(BS.Sale_Currency, BS.CallDate) ";
+            string AmountField = isSale ? "CAST( BS.Sale_Nets / CAST(dbo.GetExchangeRate(BS.Sale_Currency, BS.CallDate) as decimal(13,4))  as decimal(13,4))  " : "CAST( BS.Cost_Nets / CAST(dbo.GetExchangeRate(BS.Sale_Currency, BS.CallDate) as decimal(13,4))  as decimal(13,4)) ";
             string th = isAmount ? AmountField : DurationField;
             string carrier = isSale ? "Customer" : "Supplier";
             string strId = isSale ? "BS.CustomerID" : "BS.SupplierID";

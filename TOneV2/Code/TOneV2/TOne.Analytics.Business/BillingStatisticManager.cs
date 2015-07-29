@@ -45,157 +45,58 @@ namespace TOne.Analytics.Business
         {
             return FormatDailySummaries(_datamanager.GetDailySummary(fromDate, toDate, customerAMUId, supplierAMUId));
         }
+        private string GetExcelColumnName(int columnNumber)
+        {
+            int dividend = columnNumber;
+            string columnName = String.Empty;
+            int modulo;
+
+            while (dividend > 0)
+            {
+                modulo = (dividend - 1) % 26;
+                columnName = Convert.ToChar(65 + modulo).ToString() + columnName;
+                dividend = (int)((dividend - modulo) / 26);
+            }
+
+            return columnName;
+        }
 
         public HttpResponseMessage ExportSupplierCostDetails(DateTime fromDate, DateTime toDate, string customerId, int topDestination)
         {
-            //List<SupplierCostDetails> lstSuppplierCostDetails = _datamanager.GetSupplierCostDetails(fromDate, toDate, customerAMUId, supplierAMUId);
-            List<CarrierProfileReport> lstSuppplierCostDetails = GetCarrierProfileMTDAndMTA(fromDate, toDate, customerId, true);
-            List<CarrierProfileReport> lstSuppplierCostDetails2 = GetCarrierProfileMTDAndMTA(fromDate, toDate, customerId, false);
+            // Monthly Traffic Carrier As Customer (Amount,Durations) , Top N Destinations (Amount,Durations)  (3 datatables)
+            List<CarrierProfileReport> lstCarrierProfileMTDMTASale = GetCarrierProfileMTDAndMTA(fromDate, toDate, customerId, true);
+            List<CarrierProfileReport> lstCarrierProfileSaleAmount = GetCarrierProfile(fromDate, toDate, customerId, topDestination, true, true);
+            List<CarrierProfileReport> lstCarrierProfileSale = GetCarrierProfile(fromDate, toDate, customerId, topDestination, true, false);
 
-            List<CarrierProfileReport> lstSuppplierCostDetails3 = GetCarrierProfile(fromDate, toDate, customerId, topDestination,true, false);
-            int DaysInTillDays = DateTime.DaysInMonth(toDate.Year, toDate.Month);
+            // Monthly Traffic Carrier As Supplier (Amount,Durations) , Top N Destinations (Amount,Durations) (3 datatables)
+            List<CarrierProfileReport> lstCarrierProfileMTDMTA = GetCarrierProfileMTDAndMTA(fromDate, toDate, customerId, false);
+            List<CarrierProfileReport> lstCarrierProfileAmount = GetCarrierProfile(fromDate, toDate, customerId, topDestination, false, true);
+            List<CarrierProfileReport> lstCarrierProfile = GetCarrierProfile(fromDate, toDate, customerId, topDestination, false, false);
 
-            TimeSpan span = toDate.Subtract(fromDate);
-
-            int NumberOfMonths = (int)(span.TotalDays / 30);
-
-       
             //export to excel
             ////////////////////////////////
-
             Workbook wbk = new Workbook();
-            Worksheet RateWorkSheet = wbk.Worksheets.Add("Monthly Traffic as Customer");
-            Worksheet RateWorkSheet2 = wbk.Worksheets.Add("Monthly Traffic as Supplier");
-            Worksheet RateWorkSheet3 = wbk.Worksheets.Add("Traff Top Dest. Durat");
-            RateWorkSheet.Cells.SetColumnWidth(0, 4);
-            RateWorkSheet.Cells.SetColumnWidth(1, 15);
-            RateWorkSheet.Cells.SetColumnWidth(2, 15);
-            RateWorkSheet.Cells.SetColumnWidth(3, 15);
+            wbk.Worksheets.RemoveAt("Sheet1");
+            Aspose.Cells.License license = new Aspose.Cells.License();
+            license.SetLicense("Aspose.Cells.lic");
 
-            RateWorkSheet2.Cells.SetColumnWidth(0, 4);
-            RateWorkSheet2.Cells.SetColumnWidth(1, 15);
-            RateWorkSheet2.Cells.SetColumnWidth(2, 15);
-            RateWorkSheet2.Cells.SetColumnWidth(3, 15);
+            Style style = wbk.Styles[wbk.Styles.Add()];
+            style.Font.Name = "Times New Roman";
+            style.Font.Color = Color.FromArgb(255, 0, 0); ;
+            style.Font.Size = 14;
+            style.Font.IsBold = true;
 
-            RateWorkSheet3.Cells.SetColumnWidth(0, 4);
-            for (int i = 0; i < NumberOfMonths + 1; i++)
-            {
-                RateWorkSheet3.Cells.SetColumnWidth(i + 1, 20);
-            }
+            string chartTitle = "Monthly Traffic " + _bemanager.GetCarrirAccountName(customerId) + " As Customer";
+            CreateWorkSheetMTDMTA(wbk, "Monthly Traffic as Customer", lstCarrierProfileMTDMTASale, fromDate, toDate, topDestination, chartTitle, style);
+            CreateWorkSheet(wbk, "Traf Top Dest Dur Cus", lstCarrierProfileSaleAmount, fromDate, toDate, topDestination, "Traffic Top Destination Duration Customer", style);
+            CreateWorkSheet(wbk, "Traf Top Dest Amt Cus", lstCarrierProfileSale, fromDate, toDate, topDestination, "Traffic Top Destination Amount Customer", style);
 
-
-            int HeaderIndex = 1;
-            int Irow = 1;
-            RateWorkSheet.Cells[Irow, HeaderIndex++].PutValue("MonthYear");
-            RateWorkSheet.Cells[Irow, HeaderIndex++].PutValue("Amount");
-            RateWorkSheet.Cells[Irow, HeaderIndex++].PutValue("Duration");
-
-            foreach (CarrierProfileReport supplier in lstSuppplierCostDetails)
-            {
-                Irow++;
-                int valueIndex = 1;
-
-                RateWorkSheet.Cells[Irow, valueIndex++].PutValue(supplier.MonthYear);
-                RateWorkSheet.Cells[Irow, valueIndex++].PutValue(supplier.Amount);
-                RateWorkSheet.Cells[Irow, valueIndex++].PutValue(supplier.Durations);
-            }
-
-            HeaderIndex = 1;
-            Irow = 1;
-            RateWorkSheet2.Cells[Irow, HeaderIndex++].PutValue("MonthYear");
-            RateWorkSheet2.Cells[Irow, HeaderIndex++].PutValue("Amount");
-            RateWorkSheet2.Cells[Irow, HeaderIndex++].PutValue("Duration");
-
-            foreach (CarrierProfileReport supplier in lstSuppplierCostDetails2)
-            {
-                Irow++;
-                int valueIndex = 1;
-
-                RateWorkSheet2.Cells[Irow, valueIndex++].PutValue(supplier.MonthYear);
-                RateWorkSheet2.Cells[Irow, valueIndex++].PutValue(supplier.Amount);
-                RateWorkSheet2.Cells[Irow, valueIndex++].PutValue(supplier.Durations);
-            }
-
-
-
-            //////////////////////////
-            HeaderIndex = 1;
-            Irow = 1;
-            RateWorkSheet3.Cells[Irow, HeaderIndex++].PutValue("Name");
-            DateTime d = fromDate;
-            for (int i = 0; i < NumberOfMonths; i++)
-            {
-                string s = d.ToString("MMMM - yyyy");
-                d = d.AddMonths(1);
-                RateWorkSheet3.Cells[Irow, HeaderIndex++].PutValue(s);
-            }
-            List<string> lstZones = lstSuppplierCostDetails3.Select(x => x.Zone).Distinct().ToList<string>();
-
-            for (int ii = 0; ii < lstZones.Count(); ii++)
-            {
-                Irow++;
-                HeaderIndex = 1;
-                int valueIndex = 1;
-                RateWorkSheet3.Cells[Irow, valueIndex++].PutValue(lstZones[ii]);
-                DateTime d2 = fromDate;
-                for (int i = 0; i < NumberOfMonths; i++)
-                {
-                    bool f = false;
-                    for (int j = 0; j < lstSuppplierCostDetails3.Count; j++)
-                    {
-                        if (lstSuppplierCostDetails3[j].Month == d2.Month && lstSuppplierCostDetails3[j].Year == d2.Year && lstZones[ii] == lstSuppplierCostDetails3[j].Zone)
-                        {
-                            RateWorkSheet3.Cells[Irow, valueIndex++].PutValue(lstSuppplierCostDetails3[j].Durations);
-                            f = true;
-                        }
-                    }
-                    if(f== false)
-                        RateWorkSheet3.Cells[Irow, valueIndex++].PutValue("0");
-                    d2 = d2.AddMonths(1);
-                }
-            }
-
-
-            //////////////////////////////////
-
-            //Styles
-            for (int i = 1; i <= 3; i++)
-            {
-                Cell cell = RateWorkSheet.Cells.GetCell(1, i);
-                Cell cell2 = RateWorkSheet2.Cells.GetCell(1, i);
-                
-                Style style = cell.GetStyle();
-                style.Font.Name = "Times New Roman";
-                style.Font.Color = Color.FromArgb(255, 0, 0); ;
-                style.Font.Size = 14;
-                style.Font.IsBold = true;
-                cell.SetStyle(style);
-                cell2.SetStyle(style);
-            }
-            for (int i = 1; i <= NumberOfMonths +1; i++)
-            {
-                Cell cell3 = RateWorkSheet3.Cells.GetCell(1, i);
-                Style style = cell3.GetStyle();
-                style.Font.Name = "Times New Roman";
-                style.Font.Color = Color.FromArgb(255, 0, 0); ;
-                style.Font.Size = 14;
-                style.Font.IsBold = true;
-                cell3.SetStyle(style);
-            }
-
-            //Adding a chart to the worksheet
-            int chartIndex = RateWorkSheet.Charts.Add(Aspose.Cells.Charts.ChartType.ColumnStacked, 6, 5, 30, 20);
-            int chartIndex2 = RateWorkSheet2.Charts.Add(Aspose.Cells.Charts.ChartType.ColumnStacked, 6, 5, 30, 20);
-
-            //Accessing the instance of the newly added chart
-            Aspose.Cells.Charts.Chart chart = RateWorkSheet.Charts[chartIndex];
-            Aspose.Cells.Charts.Chart chart2 = RateWorkSheet2.Charts[chartIndex2];
-
-            //Adding SeriesCollection (chart data source) to the chart ranging from "A1" cell to "B3"
-            chart.NSeries.Add("C3:D7", true);
-            chart2.NSeries.Add("C3:D7", true);
-
-            wbk.Save("D:\\book1.xls");
+            chartTitle = "Monthly Traffic " + _bemanager.GetCarrirAccountName(customerId) + " As Supplier";
+            CreateWorkSheetMTDMTA(wbk, "Monthly Traffic as Supplier", lstCarrierProfileMTDMTA, fromDate, toDate, topDestination, chartTitle, style);
+            CreateWorkSheet(wbk, "Traf Top Dest Dur Sup", lstCarrierProfileAmount, fromDate, toDate, topDestination, "Traffic Top Destination Duration Supplier", style);
+            CreateWorkSheet(wbk, "Traf Top Dest Amt Sup", lstCarrierProfile, fromDate, toDate, topDestination, "Traffic Top Destination Amount Supplier", style);            
+        
+            //wbk.Save("D:\\book1.xls");
 
             byte[] array;
             MemoryStream ms = new MemoryStream();
@@ -213,6 +114,130 @@ namespace TOne.Analytics.Business
             };
 
             return result;
+        }
+        private void CreateWorkSheetMTDMTA(Workbook workbook, string workSheetName, List<CarrierProfileReport> lstCarrierProfileReport, DateTime fromDate, DateTime toDate, int topDestination, string chartTitle, Style style)
+        {
+            Worksheet worksheet = workbook.Worksheets.Add(workSheetName);
+            int lstCarrierProfileCount = lstCarrierProfileReport.Count();
+
+            if (lstCarrierProfileCount > 0)
+            {
+                string colName =  GetExcelColumnName(2 + lstCarrierProfileCount);
+
+                worksheet.Cells.SetColumnWidth(0, 4);
+                
+                int HeaderIndex = 2;
+                worksheet.Cells[2, 1].PutValue("Duration");
+                worksheet.Cells[3, 1].PutValue("Amount");
+                for (int i = 0; i < lstCarrierProfileCount; i++)
+                {
+                    worksheet.Cells[1, HeaderIndex].PutValue(lstCarrierProfileReport[i].MonthYear);
+                    worksheet.Cells[2, HeaderIndex].PutValue(lstCarrierProfileReport[i].Amount);
+                    worksheet.Cells[3, HeaderIndex++].PutValue(lstCarrierProfileReport[i].Durations);
+                    worksheet.Cells.SetColumnWidth(i + 1, 20);
+                }
+                worksheet.Cells.SetColumnWidth(lstCarrierProfileCount + 1, 20);
+
+                worksheet.Cells.CreateRange("C2", colName + "2").SetStyle(style);
+
+                //Adding a chart to the worksheet
+                int chartIndex = worksheet.Charts.Add(Aspose.Cells.Charts.ChartType.ColumnStacked, 5, 1, 30, lstCarrierProfileCount + 2);
+
+                //Accessing the instance of the newly added chart
+                Aspose.Cells.Charts.Chart chart = worksheet.Charts[chartIndex];
+
+                chart.NSeries.Add("C3:" + colName + "4", false);
+                chart.NSeries.CategoryData = "C2:" + colName + "2";
+                chart.NSeries[0].Name = "Amount";
+                chart.NSeries[1].Name = "Duration";
+                chart.ValueAxis.TickLabelPosition = Aspose.Cells.Charts.TickLabelPositionType.Low;
+                chart.Legend.Position = Aspose.Cells.Charts.LegendPositionType.Left;
+                chart.Legend.Width = 600;
+                chart.Legend.Height = 600;
+                chart.Title.Font.IsBold = true;
+                chart.Title.Text = chartTitle;
+            }
+        }
+        
+        private void CreateWorkSheet(Workbook workbook, string workSheetName, List<CarrierProfileReport> lstCarrierProfileReport, DateTime fromDate, DateTime toDate, int topDestination, string chartTitle, Style style)
+        {
+            Worksheet worksheet = workbook.Worksheets.Add(workSheetName);
+            int lstCarrierProfileCount = lstCarrierProfileReport.Count();
+
+            if (lstCarrierProfileCount > 0)
+            {
+                int DaysInTillDays = DateTime.DaysInMonth(toDate.Year, toDate.Month);
+                TimeSpan span = toDate.Subtract(fromDate);
+                int NumberOfMonths = (int)(span.TotalDays / 30);
+
+                int HeaderIndex = 2;
+                int Irow = 1;
+
+                string colName =  GetExcelColumnName(2 + NumberOfMonths);
+
+                worksheet.Cells.SetColumnWidth(0, 4);
+                List<string> lstZones = lstCarrierProfileReport.Select(x => x.Zone).Distinct().ToList<string>();
+                int maxZoneLenght = 0;
+                for (int i = 0; i < lstZones.Count(); i++)
+                {
+                    if (lstZones[i].Length > maxZoneLenght)
+                        maxZoneLenght = lstZones[i].Length;
+                }
+
+                DateTime d = fromDate;
+
+                for (int i = 0; i < NumberOfMonths; i++)
+                {
+                    worksheet.Cells.SetColumnWidth(i + 1, maxZoneLenght + 6);
+                    string s = d.ToString("MMMM - yyyy");
+                    d = d.AddMonths(1);
+                    worksheet.Cells[Irow, HeaderIndex++].PutValue(s);
+                }
+                worksheet.Cells.SetColumnWidth(NumberOfMonths, maxZoneLenght + 6);
+                worksheet.Cells.SetColumnWidth(NumberOfMonths + 1, maxZoneLenght + 6);
+
+                for (int k = 0; k < lstZones.Count(); k++)
+                {
+                    Irow++;
+                    HeaderIndex = 1;
+                    int valueIndex = 1;
+
+                    worksheet.Cells[Irow, valueIndex++].PutValue(lstZones[k]);
+                    DateTime fDate = fromDate;
+                    for (int i = 0; i < NumberOfMonths; i++)
+                    {
+                        bool f = false;
+                        for (int j = 0; j < lstCarrierProfileCount; j++)
+                        {
+                            if (lstCarrierProfileReport[j].Month == fDate.Month && lstCarrierProfileReport[j].Year == fDate.Year && lstZones[k] == lstCarrierProfileReport[j].Zone)
+                            {
+                                worksheet.Cells[Irow, valueIndex++].PutValue(lstCarrierProfileReport[j].Durations);
+                                f = true;
+                            }
+                        }
+                        if (f == false)
+                            worksheet.Cells[Irow, valueIndex++].PutValue("0");
+                        fDate = fDate.AddMonths(1);
+                    }
+                }
+
+                worksheet.Cells.CreateRange("C2", colName + "2").SetStyle(style);
+
+                int chartIndex = worksheet.Charts.Add(Aspose.Cells.Charts.ChartType.Column, topDestination + 3, 1, 30, NumberOfMonths + 2);
+                Aspose.Cells.Charts.Chart chart = worksheet.Charts[chartIndex];
+
+
+                chart.NSeries.Add("C3:" + colName + (topDestination + 2).ToString(), false);
+                chart.NSeries.CategoryData = "C2:" + colName + "2";
+                for (int i = 0; i < lstZones.Count(); i++)
+                {
+                    chart.NSeries[i].Name = lstZones[i];
+                }
+                chart.ValueAxis.TickLabelPosition = Aspose.Cells.Charts.TickLabelPositionType.Low;
+                chart.Legend.Position = Aspose.Cells.Charts.LegendPositionType.Left;
+                chart.Title.Font.IsBold = true;
+                chart.Title.Text = chartTitle;
+            }
         }
         public List<SupplierCostDetailsFormatted> GetSupplierCostDetails(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
         {

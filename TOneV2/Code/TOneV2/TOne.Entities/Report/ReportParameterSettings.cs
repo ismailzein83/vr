@@ -43,5 +43,7 @@ namespace TOne.Entities
         public bool RequiresIsExchange { get; set; }
 
         public bool RequiresTop { get; set; }
+
+        public bool CustomerIdNotOptional { get; set; }
     }
 }

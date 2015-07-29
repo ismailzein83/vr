@@ -38,7 +38,7 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
                 //var matcher = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/i;
 
                 //var results = headers['content-disposition'].match(matcher);
-                var filename = "myfile44.xls";
+                var filename = "CarrierProfileReport.xls";
 
                 // Determine the content type from the header or default to "application/octet-stream"
                 var contentType = headers['content-type'] || octetStreamMime;
