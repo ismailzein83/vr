@@ -9,7 +9,7 @@ namespace TOne.BusinessEntity.Data
 {
     public interface IAssignedCarrierDataManager : IDataManager
     {
-        List<AssignedCarrier> GetAssignedCarriers(List<int> userIds);
+        List<AssignedCarrier> GetAssignedCarriers(List<int> userIds, CarrierTypeFilter carrierType);
 
         bool AssignCarriers(UpdatedAccountManagerCarrier[] updatedCarriers);
     }

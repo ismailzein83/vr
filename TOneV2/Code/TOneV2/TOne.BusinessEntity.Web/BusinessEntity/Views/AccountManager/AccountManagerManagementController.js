@@ -178,7 +178,7 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
 
         if (assignedOrgChartId != undefined)
         {
-            return AccountManagerAPIService.GetAssignedCarriers($scope.currentNode.nodeId, true)
+            return AccountManagerAPIService.GetAssignedCarriers($scope.currentNode.nodeId, true, 0)
                 .then(function (response) {
                     fillAssignedCarriers(response);
                 })
@@ -188,7 +188,7 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
         }
         else
         {
-            return AccountManagerAPIService.GetAssignedCarriers($scope.currentNode.nodeId, false)
+            return AccountManagerAPIService.GetAssignedCarriers($scope.currentNode.nodeId, false, 0)
                 .then(function (response) {
                     fillAssignedCarriers(response);
                 })

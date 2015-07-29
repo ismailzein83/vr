@@ -16,10 +16,11 @@ var serviceObj = function (BaseAPIService) {
         });
     }
 
-    function GetAssignedCarriers(managerId, withDescendants) {
+    function GetAssignedCarriers(managerId, withDescendants, carrierType) {
         return BaseAPIService.get('/api/AccountManager/GetAssignedCarriers', {
             managerId: managerId,
-            withDescendants: withDescendants
+            withDescendants: withDescendants,
+            carrierType: carrierType
         });
     }
 

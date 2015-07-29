@@ -19,7 +19,7 @@ namespace TOne.BusinessEntity.Business
             return dataManager.GetCarriers(userId, from, to);
         }
 
-        public List<AssignedCarrier> GetAssignedCarriers(int managerId, bool withDescendants)
+        public List<AssignedCarrier> GetAssignedCarriers(int managerId, bool withDescendants, CarrierTypeFilter carrierType)
         {
             IAssignedCarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<IAssignedCarrierDataManager>();
             
@@ -34,8 +34,8 @@ namespace TOne.BusinessEntity.Business
             }
             else
                 memberIds.Add(managerId);
-                
-            return dataManager.GetAssignedCarriers(memberIds);
+            
+            return dataManager.GetAssignedCarriers(memberIds, carrierType);
         }
 
         public Vanrise.Entities.UpdateOperationOutput<object> AssignCarriers(UpdatedAccountManagerCarrier[] updatedCarriers)

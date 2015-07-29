@@ -19,10 +19,10 @@ namespace TOne.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        public List<AssignedCarrier> GetAssignedCarriers(int managerId, bool withDescendants)
+        public List<AssignedCarrier> GetAssignedCarriers(int managerId, bool withDescendants, CarrierTypeFilter carrierType)
         {
             AccountManagerManager manager = new AccountManagerManager();
-            return manager.GetAssignedCarriers(managerId, withDescendants);
+            return manager.GetAssignedCarriers(managerId, withDescendants, carrierType);
         }
 
         [HttpGet]

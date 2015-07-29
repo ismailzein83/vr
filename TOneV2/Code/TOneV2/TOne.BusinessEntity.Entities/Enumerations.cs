@@ -29,4 +29,10 @@ namespace TOne.BusinessEntity.Entities
         Holiday = 4
     }
 
+    public enum CarrierTypeFilter : short
+    {
+        All = 0,
+        OnlyCustomers = 1,
+        OnlySuppliers = 2
+    }
 }
