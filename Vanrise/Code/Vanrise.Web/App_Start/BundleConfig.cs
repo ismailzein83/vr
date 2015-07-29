@@ -71,6 +71,13 @@ namespace Vanrise.Web
             //Style
             bundles.Add(new StyleBundle("~/Content/Styles").IncludeDirectory(
                "~/Client/Styles", "*.css", true));
+            
+            //Style bootstrap
+            bundles.Add(new StyleBundle("~/Content/bootstrap").IncludeDirectory(
+               "~/Client/Libraries/Bootstrap", "*.css", true).IncludeDirectory(
+               "~/Client/Libraries/Bootstrap", "*.png", true));
+
+
 
             //HichChart
             bundles.Add(new ScriptBundle("~/bundles/highchart").Include(
