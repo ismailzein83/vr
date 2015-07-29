@@ -9,7 +9,7 @@ namespace Vanrise.Security.Data
 {
     public interface IGroupDataManager : IDataManager
     {
-        List<Group> GetFilteredGroups(int fromRow, int toRow, string name);
+        Vanrise.Entities.BigResult<Group> GetFilteredGroups(Vanrise.Entities.DataRetrievalInput<GroupQuery> input);
 
         Group GetGroup(int roleId);
 

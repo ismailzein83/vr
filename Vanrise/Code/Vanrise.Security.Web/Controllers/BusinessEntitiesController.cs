@@ -14,7 +14,6 @@ namespace Vanrise.Security.Web.Controllers
         [HttpGet]
         public IEnumerable<BusinessEntityNode> GetEntityNodes()
         {
-            
             BusinessEntityManager manager = new BusinessEntityManager();
             return manager.GetEntityNodes();
         }

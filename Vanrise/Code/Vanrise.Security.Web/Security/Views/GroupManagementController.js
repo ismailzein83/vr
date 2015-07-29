@@ -1,30 +1,36 @@
-﻿GroupManagementController.$inject = ['$scope', 'GroupAPIService', 'VRModalService'];
+﻿GroupManagementController.$inject = ['$scope', 'GroupAPIService', 'VRModalService', 'VRNotificationService'];
 
-function GroupManagementController($scope, GroupAPIService, VRModalService) {
-    var mainGridAPI;
+function GroupManagementController($scope, GroupAPIService, VRModalService, VRNotificationService) {
+
+    var gridApi;
     var arrMenuAction = [];
 
     defineScope();
     load();
 
     function defineScope() {
-        $scope.gridMenuActions = [];
         $scope.groups = [];
+        $scope.gridMenuActions = [];
 
         defineMenuActions();
 
-        $scope.onMainGridReady = function (api) {
-            mainGridAPI = api;
-            getData();
-        };
-
-        $scope.loadMoreData = function () {
-            return getData();
+        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+            return GroupAPIService.GetFilteredGroups(dataRetrievalInput)
+            .then(function (response) {
+                onResponseReady(response);
+            })
+            .catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            });
         }
 
+        $scope.gridReady = function (api) {
+            gridApi = api;
+            return retrieveData();
+        };
+
         $scope.searchClicked = function () {
-            mainGridAPI.clearDataAndContinuePaging();
-            return getData();
+            return retrieveData();
         };
 
         $scope.addNewGroup = addGroup;
@@ -33,16 +39,12 @@ function GroupManagementController($scope, GroupAPIService, VRModalService) {
     function load() {
     }
 
-    function getData()
-    {
-        var pageInfo = mainGridAPI.getPageInfo();
+    function retrieveData() {
+        var query = {
+            Name: $scope.name
+        };
 
-        var name = $scope.name != undefined ? $scope.name : '';
-        return GroupAPIService.GetFilteredGroups(pageInfo.fromRow, pageInfo.toRow, name).then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.groups.push(itm);
-            });
-        });
+        return gridApi.retrieveData(query);
     }
 
     function defineMenuActions()
@@ -66,7 +68,7 @@ function GroupManagementController($scope, GroupAPIService, VRModalService) {
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "Add Group";
             modalScope.onGroupAdded = function (group) {
-                mainGridAPI.itemAdded(group);
+                gridApi.itemAdded(group);
             };
         };
 
@@ -84,7 +86,7 @@ function GroupManagementController($scope, GroupAPIService, VRModalService) {
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Edit Group: " + groupObj.Name;
             modalScope.onGroupUpdated = function (group) {
-                mainGridAPI.itemUpdated(group);
+                gridApi.itemUpdated(group);
             };
         };
 

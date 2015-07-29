@@ -8,12 +8,8 @@
         UpdateGroup: UpdateGroup
     });
 
-    function GetFilteredGroups(fromRow, toRow, name) {
-        return BaseAPIService.get("/api/Group/GetFilteredGroups", {
-            fromRow: fromRow,
-            toRow: toRow,
-            name: name
-        });
+    function GetFilteredGroups(input) {
+        return BaseAPIService.post("/api/Group/GetFilteredGroups", input);
     }
 
     function GetGroup(groupId) {

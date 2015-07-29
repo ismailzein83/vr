@@ -1,12 +1,11 @@
 ﻿<vr-panel ng-controller="Security_GroupManagementController">
-
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns colnum="2">
                     <vr-textbox value="name" label="Name"></vr-textbox>
                 </vr-columns>
-            </vr-row>            
+            </vr-row>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
@@ -21,7 +20,14 @@
     <div>
         <vr-row>
             <vr-columns colnum="12" simplecol>
-                <vr-datagrid datasource="groups" menuactions="gridMenuActions" loadmoredata="loadMoreData" on-ready="onMainGridReady" idfield="RoleId">
+
+                <vr-datagrid datasource="groups"
+                             dataretrievalfunction="dataRetrievalFunction"
+                             pagingtype="'PagingOnScroll'"
+                             on-ready="gridReady"
+                             menuactions="gridMenuActions"
+                             idfield="GroupId">
+
                     <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Description'" field="'Description'"></vr-datagridcolumn>
                 </vr-datagrid>

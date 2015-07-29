@@ -18,9 +18,14 @@ namespace Vanrise.Security.Data.SQL
 
         }
 
-        public List<Entities.Group> GetFilteredGroups(int fromRow, int toRow, string name)
+        public Vanrise.Entities.BigResult<Group> GetFilteredGroups(Vanrise.Entities.DataRetrievalInput<GroupQuery> input)
         {
-            return GetItemsSP("sec.sp_Group_GetFiltered", GroupMapper, fromRow, toRow, name);
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("[sec].[SP_Group_CreateTempForFiltered]", tempTableName, input.Query.Name);
+            };
+
+            return RetrieveData(input, createTempTableAction, GroupMapper);
         }
 
         public Entities.Group GetGroup(int groupId)

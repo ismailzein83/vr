@@ -23,16 +23,18 @@
             </vr-columns>
         </div>
 
-        <vr-columns colnum="9">
-            <vr-columns colnum="fullrow" simplecol>
-                <vr-datagrid datasource="assignedCarriers" on-ready="onGridReady" vr-loader="isGettingData" ng-show="currentNode">
-                    <vr-datagridcolumn headertext="'Carrier Name'" field="'CarrierName'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Carrier Account Id'" field="'CarrierAccountId'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Is Customer'" field="'IsCustomer'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Is Supplier'" field="'IsSupplier'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Access'" field="'Access'"></vr-datagridcolumn>
-                </vr-datagrid>
+        <div vr-loader="isGettingData">
+            <vr-columns colnum="9">
+                <vr-columns colnum="fullrow" simplecol>
+                    <vr-datagrid datasource="assignedCarriers" on-ready="onGridReady" ng-show="currentNode">
+                        <vr-datagridcolumn headertext="'Carrier Name'" field="'CarrierName'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Carrier Account Id'" field="'CarrierAccountId'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Is Customer'" field="'IsCustomer'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Is Supplier'" field="'IsSupplier'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Access'" field="'Access'"></vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-columns>
             </vr-columns>
-        </vr-columns>
+        </div>
     </vr-row>
 </vr-panel>

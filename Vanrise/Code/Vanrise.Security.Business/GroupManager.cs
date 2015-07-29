@@ -11,10 +11,10 @@ namespace Vanrise.Security.Business
 {
     public class GroupManager
     {
-        public List<Group> GetFilteredGroups(int fromRow, int toRow, string name)
+        public Vanrise.Entities.IDataRetrievalResult<Group> GetFilteredGroups(Vanrise.Entities.DataRetrievalInput<GroupQuery> input)
         {
             IGroupDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IGroupDataManager>();
-            return dataManager.GetFilteredGroups(fromRow, toRow, name);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredGroups(input));
         }
 
         public Group GetGroup(int groupId)

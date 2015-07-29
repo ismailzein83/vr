@@ -41,27 +41,32 @@ function GroupEditorController($scope, GroupAPIService, UsersAPIService, VRModal
     }
 
     function load() {
+        $scope.isGettingData = true;
+
         UsersAPIService.GetUsers().then(function (response) {
             $scope.optionsUsers.datasource = response;
 
-        });
-
-        if (editMode) {
-            $scope.isGettingData = true;
-            getGroup().finally(function () {
+            if (editMode)
+                getGroup();
+            else
                 $scope.isGettingData = false;
-            })
-        }
+
+        }).catch(function (error) {
+            $scope.isGettingData = false;
+            VRNotificationService.notifyExceptionWithClose(error, $scope);
+        });
     }
 
     function getGroup() {
-        return GroupAPIService.GetGroup($scope.groupId)
-           .then(function (response) {
-               fillScopeFromGroupObj(response);
-           })
-            .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
+        return GroupAPIService.GetGroup($scope.groupId).then(function (response) {
+
+            fillScopeFromGroupObj(response).finally(function () {
+                $scope.isGettingData = false;
             });
+        }).catch(function (error) {
+            $scope.isGettingData = false;
+            VRNotificationService.notifyExceptionWithClose(error, $scope);
+        });
     }
 
     function buildGroupObjFromScope() {
@@ -84,9 +89,13 @@ function GroupEditorController($scope, GroupAPIService, UsersAPIService, VRModal
         $scope.name = groupObj.Name;
         $scope.description = groupObj.Description;
         
-        UsersAPIService.GetMembers($scope.groupId).then(function (response) {
-            $scope.optionsUsers.selectedvalues = response;
-        });
+        return UsersAPIService.GetMembers($scope.groupId)
+            .then(function (response) {
+                $scope.optionsUsers.selectedvalues = response;
+            })
+            .catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            });
     }
 
     function insertGroup() {

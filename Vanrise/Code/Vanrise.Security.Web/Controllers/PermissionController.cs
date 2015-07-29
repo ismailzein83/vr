@@ -14,7 +14,6 @@ namespace Vanrise.Security.Web.Controllers
         [HttpGet]
         public IEnumerable<Permission> GetPermissionsByHolder(HolderType holderType, string holderId)
         {
-            throw new Exception();
             PermissionManager manager = new PermissionManager();
             return manager.GetPermissionsByHolder(holderType, holderId);
         }

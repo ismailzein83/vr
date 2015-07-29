@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Http;
 using Vanrise.Security.Business;
@@ -10,11 +11,11 @@ namespace Vanrise.Security.Web.Controllers
 {
     public class GroupController : Vanrise.Web.Base.BaseAPIController
     {
-        [HttpGet]
-        public IEnumerable<Group> GetFilteredGroups(int fromRow, int toRow, string name)
+        [HttpPost]
+        public object GetFilteredGroups(Vanrise.Entities.DataRetrievalInput<GroupQuery> input)
         {
             GroupManager manager = new GroupManager();
-            return manager.GetFilteredGroups(fromRow, toRow, name);
+            return GetWebResponse(input, manager.GetFilteredGroups(input));
         }
 
         [HttpGet]
