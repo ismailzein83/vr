@@ -48,7 +48,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         private CasesSummary CasesSummaryMapper(IDataReader reader)
         {
             var casesSummary = new CasesSummary();
-            casesSummary.CountCase = (int) reader["CountCase"];
+            casesSummary.CountCases = (int)reader["CountCases"];
             casesSummary.StatusName = reader["StatusName"] as string;
             return casesSummary;
         }
@@ -57,7 +57,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         private StrategyCases StrategyCasesMapper(IDataReader reader)
         {
             var strategyCases = new StrategyCases();
-            strategyCases.CountCase = (int)reader["CountCase"];
+            strategyCases.CountCases = (int)reader["CountCases"];
             strategyCases.StrategyName = reader["StrategyName"] as string;
             return strategyCases;
         }
@@ -65,7 +65,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         private BTSCases BTSCasesMapper(IDataReader reader)
         {
             var bTSCases = new BTSCases();
-            bTSCases.CountCase = (int)reader["CountCase"];
+            bTSCases.CountCases = (int)reader["CountCases"];
             bTSCases.BTS_Id = reader["BTS_Id"] as string;
             return bTSCases;
         }
@@ -73,7 +73,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         private CellCases CellCasesMapper(IDataReader reader)
         {
             var cellCases = new CellCases();
-            cellCases.CountCase = (int)reader["CountCase"];
+            cellCases.CountCases = (int)reader["CountCases"];
             cellCases.Cell_Id = reader["Cell_Id"] as string;
             return cellCases;
         }

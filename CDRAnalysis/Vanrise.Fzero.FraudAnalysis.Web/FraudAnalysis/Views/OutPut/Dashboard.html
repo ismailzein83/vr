@@ -1,13 +1,12 @@
 ﻿<vr-panel ng-controller="FraudAnalysis_DashboardController">
-    Not Developed Yet
-    <vr-form name="formFilter" style="display:none">
+    <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns colnum="2">
-                    <vr-textbox value="name" label="Name"></vr-textbox>
+                    <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired customvalidate="customvalidateFrom"></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns colnum="2">
-                    <vr-textbox value="description" label="Description"></vr-textbox>
+                    <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired customvalidate="customvalidateTo"></vr-datetimepicker>
                 </vr-columns>
             </vr-row>
             <vr-row></vr-row>
@@ -23,18 +22,51 @@
                 </div>
             </vr-actionbar>
         </vr-row>
-    </vr-form>
 
-    <div vr-loader="isGettingStrategies" style="display:none">
         <vr-row>
-            <vr-columns colnum="12" simplecol>
-                <vr-datagrid datasource="strategies" menuactions="gridMenuActions" maxheight="400px" loadmoredata="loadMoreData" on-ready="onMainGridReady">
-                    <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Is Default'" field="'IsDefaultText'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Description'" field="'Description'"></vr-datagridcolumn>
-                </vr-datagrid>
+            <vr-columns colnum="3">
+                <vr-section title="Cases Summary">
+                    <div vr-loader="isGettingCasesSummary">
+                        <vr-row>
+                            <vr-columns colnum="12" simplecol>
+                                <vr-datagrid datasource="casesSummary" maxheight="200px" loadmoredata="loadMoreData_CasesSummary" on-ready="onMainGridReady_CasesSummary">
+                                    <vr-datagridcolumn headertext="'Status'" field="'StatusName'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Count Cases'" field="'CountCases'"></vr-datagridcolumn>
+                                </vr-datagrid>
+                            </vr-columns>
+                        </vr-row>
+                    </div>
+                </vr-section>
+            </vr-columns>
+
+            <vr-columns colnum="3">
+                <vr-section title="">
+                    <div style="max-height:285px;overflow-y:auto;overflow-x:hidden">
+                    </div>
+                </vr-section>
+            </vr-columns>
+
+            <vr-columns colnum="3">
+                <vr-section title="">
+                    <div style="max-height:285px;overflow-y:auto;overflow-x:hidden">
+                    </div>
+                </vr-section>
+            </vr-columns>
+
+            <vr-columns colnum="3">
+                <vr-section title="">
+                    <div style="max-height:285px;overflow-y:auto;overflow-x:hidden">
+                    </div>
+                </vr-section>
             </vr-columns>
         </vr-row>
-    </div>
+
+    </vr-form>
+
+    
+
+    
+
+
 
 </vr-panel>

@@ -1,9 +1,8 @@
-﻿DashboardController.$inject = ['$scope', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿DashboardController.$inject = ['$scope', 'DashboardAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function DashboardController($scope, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
+function DashboardController($scope, DashboardAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
 
-    var mainGridAPI;
-    var arrMenuAction = [];
+    var mainGridAPI_CasesSummary;
 
     defineScope();
     load();
@@ -13,90 +12,77 @@ function DashboardController($scope, StrategyAPIService, $routeParams, notify, V
 
     function defineScope() {
 
-        $scope.gridMenuActions = [];
 
-        $scope.strategies = [];
+        var Now = new Date();
+        Now.setDate(Now.getDate() + 1);
 
-        $scope.onMainGridReady = function (api) {
-            mainGridAPI = api;
-            getData();
+        var Yesterday = new Date();
+        Yesterday.setDate(Yesterday.getDate() - 1);
+
+        $scope.fromDate = Yesterday;
+        $scope.toDate = Now;
+
+
+        $scope.customvalidateFrom = function (fromDate) {
+            return validateDates(fromDate, $scope.toDate);
+        };
+        $scope.customvalidateTo = function (toDate) {
+            return validateDates($scope.fromDate, toDate);
+        };
+        function validateDates(fromDate, toDate) {
+            if (fromDate == undefined || toDate == undefined)
+                return null;
+            var from = new Date(fromDate);
+            var to = new Date(toDate);
+            if (from.getTime() > to.getTime())
+                return "Start should be before end";
+            else
+                return null;
+        }
+
+
+
+
+
+
+        $scope.casesSummary = [];
+
+        $scope.onMainGridReady_CasesSummary = function (api) {
+            mainGridAPI_CasesSummary = api;
+            getData_CasesSummary();
         };
 
-        $scope.loadMoreData = function () {
-            return getData();
+        $scope.loadMoreData_CasesSummary = function () {
+            return getData_CasesSummary();
         }
 
         $scope.searchClicked = function () {
-            mainGridAPI.clearDataAndContinuePaging();
-            return getData();
+            mainGridAPI_CasesSummary.clearDataAndContinuePaging();
+            return getData_CasesSummary();
         };
 
-
-        $scope.addNewStrategy = addNewStrategy;
-
-        defineMenuActions();
     }
 
     function load() {
 
     }
 
-    function defineMenuActions() {
-        $scope.gridMenuActions = [{
-            name: "Edit",
-            clicked: editStrategy
-        }];
-    }
+    
 
-    function getData() {
+    function getData_CasesSummary() {
 
-        $scope.isGettingStrategies = true;
+        $scope.isGettingCasesSummary = true;
 
-        var name = $scope.name != undefined ? $scope.name : '';
-        var description = $scope.description != undefined ? $scope.description : '';
-        var pageInfo = mainGridAPI.getPageInfo();
+        var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
+        var toDate = $scope.toDate != undefined ? $scope.toDate : '';
 
-        return StrategyAPIService.GetFilteredStrategies(pageInfo.fromRow, pageInfo.toRow, name, description).then(function (response) {
+        return DashboardAPIService.GetCasesSummary(fromDate, toDate).then(function (response) {
             angular.forEach(response, function (itm) {
-
-                itm.IsDefaultText = itm.IsDefault ? "Default" : "Not Default";
-                $scope.strategies.push(itm);
+                $scope.casesSummary.push(itm);
             });
         }).finally(function () {
-            $scope.isGettingStrategies = false;
+            $scope.isGettingCasesSummary = false;
         });
-    }
-
-    function addNewStrategy() {
-        var settings = {};
-
-        settings.onScopeReady = function (modalScope) {
-            modalScope.title = "New Strategy";
-            modalScope.onStrategyAdded = function (strategy) {
-                strategy.IsDefaultText = strategy.IsDefault ? "Default" : "Not Default";
-                mainGridAPI.itemAdded(strategy);
-            };
-        };
-        VRModalService.showModal('/Client/Modules/FraudAnalysis/Views/Strategy/StrategyEditor.html', null, settings);
-    }
-
-    function editStrategy(strategy) {
-        var params = {
-            strategyId: strategy.Id
-        };
-
-        var settings = {
-
-        };
-
-        settings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Strategy";
-            modalScope.onStrategyUpdated = function (strategy) {
-                strategy.IsDefaultText = strategy.IsDefault ? "Default" : "Not Default";
-                mainGridAPI.itemUpdated(strategy);
-            };
-        };
-        VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/Strategy/StrategyEditor.html", params, settings);
     }
 }
 appControllers.controller('FraudAnalysis_DashboardController', DashboardController);

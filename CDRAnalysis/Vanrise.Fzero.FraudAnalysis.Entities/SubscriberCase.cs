@@ -22,7 +22,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     {
         public string StatusName { get; set; }
 
-        public int CountCase { get; set; }
+        public int CountCases { get; set; }
 
     }
 
@@ -30,7 +30,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     {
         public string StrategyName { get; set; }
 
-        public int CountCase { get; set; }
+        public int CountCases { get; set; }
 
     }
 
@@ -38,7 +38,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     {
         public string BTS_Id { get; set; }
 
-        public int CountCase { get; set; }
+        public int CountCases { get; set; }
 
     }
 
@@ -47,7 +47,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     {
         public string Cell_Id { get; set; }
 
-        public int CountCase { get; set; }
+        public int CountCases { get; set; }
 
     }
 
