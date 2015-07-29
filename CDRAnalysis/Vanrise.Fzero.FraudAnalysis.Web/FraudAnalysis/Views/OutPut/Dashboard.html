@@ -40,22 +40,46 @@
             </vr-columns>
 
             <vr-columns colnum="3">
-                <vr-section title="">
-                    <div style="max-height:285px;overflow-y:auto;overflow-x:hidden">
+                <vr-section title="Strategy Cases">
+                    <div vr-loader="isGettingBTSCases">
+                        <vr-row>
+                            <vr-columns colnum="12" simplecol>
+                                <vr-datagrid datasource="strategyCases" maxheight="200px" loadmoredata="loadMoreData_StrategyCases" on-ready="onMainGridReady_StrategyCases">
+                                    <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Count Cases'" field="'CountCases'"></vr-datagridcolumn>
+                                </vr-datagrid>
+                            </vr-columns>
+                        </vr-row>
                     </div>
                 </vr-section>
             </vr-columns>
 
             <vr-columns colnum="3">
-                <vr-section title="">
-                    <div style="max-height:285px;overflow-y:auto;overflow-x:hidden">
+                <vr-section title="Top 10 BTS">
+                    <div vr-loader="isGettingBTSCases">
+                        <vr-row>
+                            <vr-columns colnum="12" simplecol>
+                                <vr-datagrid datasource="bTSCases" maxheight="200px" loadmoredata="loadMoreData_BTSCases" on-ready="onMainGridReady_BTSCases">
+                                    <vr-datagridcolumn headertext="'BTS Id'" field="'BTS_Id'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Count Cases'" field="'CountCases'"></vr-datagridcolumn>
+                                </vr-datagrid>
+                            </vr-columns>
+                        </vr-row>
                     </div>
                 </vr-section>
             </vr-columns>
 
             <vr-columns colnum="3">
-                <vr-section title="">
-                    <div style="max-height:285px;overflow-y:auto;overflow-x:hidden">
+                <vr-section title="Top 10 Cell">
+                    <div vr-loader="isGettingCellCases">
+                        <vr-row>
+                            <vr-columns colnum="12" simplecol>
+                                <vr-datagrid datasource="cellCases" maxheight="200px" loadmoredata="loadMoreData_CellCases" on-ready="onMainGridReady_CellCases">
+                                    <vr-datagridcolumn headertext="'Cell Id'" field="'Cell_Id'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Count Cases'" field="'CountCases'"></vr-datagridcolumn>
+                                </vr-datagrid>
+                            </vr-columns>
+                        </vr-row>
                     </div>
                 </vr-section>
             </vr-columns>
