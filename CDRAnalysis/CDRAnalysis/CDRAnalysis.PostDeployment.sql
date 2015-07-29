@@ -66,17 +66,18 @@ DELETE
 
 MERGE INTO FraudAnalysis.[CaseStatus] AS Target 
 USING (VALUES 
-	( N'Pending'),
-	( N'Ignored'),
-	( N'Confirmed'),
-	( N'White List')
+	( N'1',N'Opened'),
+	( N'2',N'Pending'),
+	( N'3',N'Closed: Fraud'),
+	( N'4',N'Closed: White List'),
+	( N'5',N'Cancelled')
 ) 
-AS Source ([Name])
-ON Target.[Name] = Source.[Name] 
+AS Source ([Id])
+ON Target.[Id] = Source.[Id] 
 -- insert new rows 
 WHEN NOT MATCHED BY TARGET THEN 
-INSERT ([Name])
-VALUES ([Name])
+INSERT ([Id], [Name])
+VALUES ([Id], [Name])
 ---- delete rows that are in the target but not the source 
 WHEN NOT MATCHED BY SOURCE THEN 
 DELETE
