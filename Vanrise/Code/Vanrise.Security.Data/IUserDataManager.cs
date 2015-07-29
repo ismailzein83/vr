@@ -9,7 +9,7 @@ namespace Vanrise.Security.Data
 {
     public interface IUserDataManager : IDataManager
     {
-        List<User> GetFilteredUsers(int fromRow, int toRow, string name, string email);
+        Vanrise.Entities.BigResult<User> GetFilteredUsers(Vanrise.Entities.DataRetrievalInput<UserQuery> input);
 
         List<User> GetUsers();
 

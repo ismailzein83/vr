@@ -11,15 +11,8 @@
         GetMembers: GetMembers
     });
 
-    function GetFilteredUsers(fromRow, toRow, name, email) {
-        return BaseAPIService.get("/api/Users/GetFilteredUsers",
-            {
-                fromRow: fromRow,
-                toRow: toRow,
-                name: name,
-                email: email
-            }
-           );
+    function GetFilteredUsers(input) {
+        return BaseAPIService.post("/api/Users/GetFilteredUsers", input);
     }
 
     function GetUsers() {

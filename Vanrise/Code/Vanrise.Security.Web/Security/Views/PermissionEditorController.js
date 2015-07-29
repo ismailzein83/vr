@@ -164,7 +164,6 @@ function PermissionEditorController($scope, PermissionAPIService, BusinessEntity
     }
 
     function load() {
-        $scope.isLoadingTree = true;
         $scope.isGettingData = true;
 
         UtilsService.waitMultipleAsyncOperations([loadTree, loadPermissions])
@@ -172,7 +171,6 @@ function PermissionEditorController($scope, PermissionAPIService, BusinessEntity
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             })
             .finally(function () {
-                $scope.isLoadingTree = false;
                 $scope.isGettingData = false;
             });
     }

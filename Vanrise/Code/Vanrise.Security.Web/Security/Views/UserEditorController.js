@@ -1,4 +1,5 @@
 ﻿UserEditorController.$inject = ['$scope', 'UsersAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+
 function UserEditorController($scope, UsersAPIService, VRModalService, VRNotificationService, VRNavigationService) {
 
     var editMode;
@@ -8,7 +9,9 @@ function UserEditorController($scope, UsersAPIService, VRModalService, VRNotific
 
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
+
         $scope.userId = undefined;
+
         if (parameters != undefined && parameters != null)
             $scope.userId = parameters.userId;
 
@@ -36,6 +39,7 @@ function UserEditorController($scope, UsersAPIService, VRModalService, VRNotific
     function load() {
         if (editMode) {
             $scope.isGettingData = true;
+
             getUser().finally(function () {
                 $scope.isGettingData = false;
             })
@@ -44,15 +48,13 @@ function UserEditorController($scope, UsersAPIService, VRModalService, VRNotific
 
     function getUser() {
         return UsersAPIService.GetUserbyId($scope.userId)
-           .then(function (response) {
-               fillScopeFromUserObj(response);
-           })
+            .then(function (response) {
+                fillScopeFromUserObj(response);
+            })
             .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
     }
-
-
 
     function buildUserObjFromScope() {
         var userObject = {
@@ -122,4 +124,5 @@ function UserEditorController($scope, UsersAPIService, VRModalService, VRNotific
     //        return "Invalid";
     //}
 }
+
 appControllers.controller('Security_UserEditorController', UserEditorController);

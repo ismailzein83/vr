@@ -11,10 +11,10 @@ namespace Vanrise.Security.Business
 {
     public class UserManager
     {
-        public List<Vanrise.Security.Entities.User> GetFilteredUsers(int fromRow, int toRow, string name, string email)
+        public Vanrise.Entities.IDataRetrievalResult<User> GetFilteredUsers(Vanrise.Entities.DataRetrievalInput<UserQuery> input)
         {
-            IUserDataManager datamanager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-            return datamanager.GetFilteredUsers(fromRow, toRow, name, email);
+            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredUsers(input));
         }
 
         public List<User> GetUsers()
@@ -83,10 +83,23 @@ namespace Vanrise.Security.Business
             return updateOperationOutput;
         }
 
-        public bool ResetPassword(int userId, string password)
+        public Vanrise.Entities.UpdateOperationOutput<User> ResetPassword(int userId, string password)
         {
-            IUserDataManager datamanager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-            return datamanager.ResetPassword(userId, password);
+            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            bool updateActionSucc = dataManager.ResetPassword(userId, password);
+
+            UpdateOperationOutput<User> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<User>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = GetUserbyId(userId);
+            }
+
+            return updateOperationOutput;
         }
 
         //public string EncodePassword(string password)

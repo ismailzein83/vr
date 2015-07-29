@@ -1,8 +1,8 @@
-﻿UserManagementController.$inject = ['$scope', 'UsersAPIService', 'VRModalService'];
+﻿UserManagementController.$inject = ['$scope', 'UsersAPIService', 'VRModalService', 'VRNotificationService'];
 
-function UserManagementController($scope, UsersAPIService, VRModalService) {
+function UserManagementController($scope, UsersAPIService, VRModalService, VRNotificationService) {
 
-    var mainGridAPI;
+    var gridApi;
     var arrMenuAction = [];
 
     defineScope();
@@ -10,24 +10,28 @@ function UserManagementController($scope, UsersAPIService, VRModalService) {
 
     function defineScope() {
 
-        $scope.gridMenuActions = [];
-
         $scope.users = [];
-
+        $scope.gridMenuActions = [];
+        
         defineMenuActions();
 
-        $scope.onMainGridReady = function (api) {
-            mainGridAPI = api;
-            getData();
+        $scope.gridReady = function (api) {
+            gridApi = api;
+            return retrieveData();
         };
 
-        $scope.loadMoreData = function () {
-            return getData();
-        }
+        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+            return UsersAPIService.GetFilteredUsers(dataRetrievalInput)
+                .then(function (response) {
+                    onResponseReady(response);
+                })
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                });
+        };
 
         $scope.searchClicked = function () {
-            mainGridAPI.clearDataAndContinuePaging();
-            return getData();
+            return retrieveData();
         };
 
         $scope.AddNewUser = AddUser;
@@ -37,20 +41,13 @@ function UserManagementController($scope, UsersAPIService, VRModalService) {
         
     }
 
-    function getData() {
-        $scope.isGettingData = true;
+    function retrieveData() {
+        var query = {
+            Name: $scope.name,
+            Email: $scope.email
+        };
 
-        var pageInfo = mainGridAPI.getPageInfo();
-
-        var name = $scope.name != undefined ? $scope.name : '';
-        var email = $scope.email != undefined ? $scope.email : '';
-        return UsersAPIService.GetFilteredUsers(pageInfo.fromRow, pageInfo.toRow, name, email).then(function (response) {
-            $scope.isGettingData = false;
-
-            angular.forEach(response, function (itm) {
-                $scope.users.push(itm);
-            });
-        });
+        return gridApi.retrieveData(query);
     }
 
     function defineMenuActions() {
@@ -79,7 +76,7 @@ function UserManagementController($scope, UsersAPIService, VRModalService) {
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "New User";
             modalScope.onUserAdded = function (user) {
-                mainGridAPI.itemAdded(user);
+                gridApi.itemAdded(user);
             };
         };
         VRModalService.showModal('/Client/Modules/Security/Views/UserEditor.html', null, settings);
@@ -96,7 +93,7 @@ function UserManagementController($scope, UsersAPIService, VRModalService) {
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Edit User: " + userObj.Name;
             modalScope.onUserUpdated = function (user) {
-                mainGridAPI.itemUpdated(user);
+                gridApi.itemUpdated(user);
             };
         };
         VRModalService.showModal('/Client/Modules/Security/Views/UserEditor.html', parameters, modalSettings);
@@ -112,13 +109,8 @@ function UserManagementController($scope, UsersAPIService, VRModalService) {
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Reset Password for User: " + userObj.Name;
             modalScope.onPasswordReset = function (user) {
-                console.log('management');
-                console.log(user);
-                mainGridAPI.itemUpdated(user);
-            }
-            //modalScope.onGroupUpdated = function (user) {
-            //    mainGridAPI.itemUpdated(user);
-            //};
+                gridApi.itemUpdated(user);
+            };
         };
 
         VRModalService.showModal('/Client/Modules/Security/Views/ResetPasswordEditor.html', parameters, modalSettings);

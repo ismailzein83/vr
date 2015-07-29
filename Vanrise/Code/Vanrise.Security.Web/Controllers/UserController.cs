@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Http;
 using Vanrise.Security.Business;
@@ -14,13 +15,13 @@ namespace Vanrise.Security.Web.Controllers
         public string Password { get; set; }
     }
 
-    public class UsersController : ApiController
+    public class UsersController : Vanrise.Web.Base.BaseAPIController
     {
-        [HttpGet]
-        public IEnumerable<User> GetFilteredUsers(int fromRow, int toRow, string name, string email)
+        [HttpPost]
+        public object GetFilteredUsers(Vanrise.Entities.DataRetrievalInput<UserQuery> input)
         {
             UserManager manager = new UserManager();
-            return manager.GetFilteredUsers(fromRow, toRow, name, email);
+            return GetWebResponse(input, manager.GetFilteredUsers(input));
         }
 
         [HttpGet]
@@ -66,7 +67,7 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpPost]
-        public bool ResetPassword(ResetPasswordInput user)
+        public Vanrise.Entities.UpdateOperationOutput<User> ResetPassword(ResetPasswordInput user)
         {
             UserManager manager = new UserManager();
             return manager.ResetPassword(user.UserId, user.Password);

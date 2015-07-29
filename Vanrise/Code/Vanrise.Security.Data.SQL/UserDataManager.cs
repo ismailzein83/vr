@@ -17,9 +17,14 @@ namespace Vanrise.Security.Data.SQL
 
         }
 
-        public List<Entities.User> GetFilteredUsers(int fromRow, int toRow, string name, string email)
+        public Vanrise.Entities.BigResult<User> GetFilteredUsers(Vanrise.Entities.DataRetrievalInput<UserQuery> input)
         {
-            return GetItemsSP("sec.sp_User_GetFiltered", UserMapper, fromRow, toRow, name, email);
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("[sec].[SP_User_CreateTempForFiltered]", tempTableName, input.Query.Name, input.Query.Email);
+            };
+
+            return RetrieveData(input, createTempTableAction, UserMapper);
         }
 
         public List<User> GetUsers()

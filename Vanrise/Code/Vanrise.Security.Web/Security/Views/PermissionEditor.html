@@ -7,13 +7,12 @@
                                  datachildrenfield="Children"
                                  datatextfield="Name"
                                  selecteditem="currentNode"
-                                 onvaluechanged="treeValueChanged"
-                                 vr-loader="isLoadingTree">
+                                 onvaluechanged="treeValueChanged">
                     </vr-treeview>
                 </vr-columns>
                 <vr-columns colnum="6" ng-show="currentNode != undefined">
-                    <div vr-loader="isLoadingPermissions">
-                        <vr-section title="Assigned Permissions">
+                    <div>
+                        <vr-section title="Assigned Permissions" vr-loader="isLoadingPermissions">
                             <vr-row ng-repeat="permission in entityPermissions">
                                 <vr-columns colnum="6">
                                     {{permission.name}}
