@@ -15,4 +15,41 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public DateTime? ValidTill { get; set; }
 
     }
+
+
+
+    public class CasesSummary
+    {
+        public string StatusName { get; set; }
+
+        public int CountCase { get; set; }
+
+    }
+
+    public class StrategyCases
+    {
+        public string StrategyName { get; set; }
+
+        public int CountCase { get; set; }
+
+    }
+
+    public class BTSCases
+    {
+        public string BTS_Id { get; set; }
+
+        public int CountCase { get; set; }
+
+    }
+
+
+    public class CellCases
+    {
+        public string Cell_Id { get; set; }
+
+        public int CountCase { get; set; }
+
+    }
+
+
 }
