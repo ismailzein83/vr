@@ -15,6 +15,9 @@
     "angular-ivh-treeview": "~0.10.0",
     "angular-ui-grid": "~3.0.1",
     "angular-ui-switch": "~0.1.0",
-    "Sortable": "~1.2.1"
+    "Sortable": "~1.2.1",
+    "jquery": "~2.1.4",
+    "waves": "0.6.5",
+    "bootstrap": "3.3.2"
   }
 }

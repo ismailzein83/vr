@@ -38,7 +38,6 @@
             }
             else
                 ctrl.rotateHeader = $attrs.rotate;
-            console.log(ctrl.rotateHeader);
             var hasActionMenu = $attrs.menuactions != undefined;
             var actionsAttribute = hasActionMenu ? $scope.$parent.$eval($attrs.menuactions) : undefined;
             var dataGridObj = new DataGrid(ctrl, $scope);

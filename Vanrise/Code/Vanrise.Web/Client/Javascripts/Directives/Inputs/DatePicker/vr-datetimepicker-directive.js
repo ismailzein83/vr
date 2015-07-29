@@ -34,7 +34,6 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
         },
         controller: function ($scope, $element, $attrs) {
             var divDatePicker = $element.find('#divDatePicker');
-            console.log($scope)
             var inputElement = $element.find('#mainInput');
             var validationOptions = {};
             if ($attrs.isrequired !== undefined)
