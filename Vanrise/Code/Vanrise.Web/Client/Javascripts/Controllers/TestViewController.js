@@ -1,6 +1,6 @@
 ﻿'use strict'
 
-var TestViewController = function ($scope, $http, ValuesAPIService) {
+var TestViewController = function ($scope, $http, ValuesAPIService, $timeout) {
     
 
     $scope.testModel = 'initial from default';
@@ -95,14 +95,24 @@ var TestViewController = function ($scope, $http, ValuesAPIService) {
     }
     var pathArray = location.href.split('/');
     var base = pathArray[0] + '//' + pathArray[2];
+    $scope.filesAdded = [];
+    $scope.doneupload = false;
     $('#fileUpload').fileupload({
         url: base + '/api/FileManager/UploadFile',
         formData: function (form) { return []; },
         replaceFileInput: false,
         datatype: 'json',
-        add: function (e, data) {            
-          //  data.submit();
-
+        add: function (e, data) {
+            angular.forEach(data.files, function (file) {
+                $scope.filesAdded.push(file);
+            });
+            data.submit();
+        },
+        progress: function (e, data) {
+            $scope.$apply(function () {
+                $scope.num = data.loaded / data.total * 100;
+                $scope.num2 = data.loaded / data.total * 100 ;
+            });
         },
         change: function (e, data) {
         },
@@ -174,3 +184,5 @@ var TestViewController = function ($scope, $http, ValuesAPIService) {
     }
 }
 appControllers.controller('TestViewController', TestViewController);
+
+

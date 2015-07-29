@@ -6,8 +6,8 @@
     <div class="vr-datagrid-header" ng-hide="ctrl.hideheader" ng-style="ctrl.headerStyle" ng-class="ctrl.ngClassLevel">
         
         <div class="vr-grid-menu-box hand-cursor out-div" ng-class="ctrl.updateItems.length > 0?'with-choices':''" ng-init="showgmenu=false" ng-class="showgmenu==true?'toggle-dd':''" ng-click="showgmenu=!showgmenu">
-            <span class="vr-grid-menu-h-circle hand-cursor" ng-class="ctrl.ngClassLevel"> .</span>
-            <div class="vr-grid-menu-h-dote hand-cursor">.</div>
+            <span class="vr-grid-menu-h-circle hand-cursor" ng-class="ctrl.ngClassLevel"></span>
+            <span class="glyphicon glyphicon-wrench vr-grid-menu-h-dote hand-cursor"></span>
         </div>
         <ul class="vr-grid-menu out-div" ng-class="ctrl.updateItems.length > 0?'menu-with-choices':''" ng-show="showgmenu" click-outside="showgmenu=false" outside-if-not="out-div">
             <li role="presentation" vr-disabled="ctrl.isExporting">
@@ -35,7 +35,7 @@
 
     <div id="gridBodyContainer" ng-style="ctrl.gridStyle" ng-show="ctrl.isMainItemsShown">
         <div id="gridBody">
-            <div class="vr-datagrid-body" style="white-space: nowrap; background-color: Transparent; font-weight: bolder; border-right: 1px solid #D0D0D0; border-left: 1px solid #D0D0D0; " ng-if="ctrl.summaryRowHtml != undefined">
+            <div class="vr-datagrid-body" style="white-space: nowrap; background-color: Transparent; font-weight: bolder;" ng-if="ctrl.summaryRowHtml != undefined">
                 <div style="margin:-2px" ng-style="{'width': ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-show="ctrl.expandableColumnWidth != undefined">
                 </div>
                 <div ng-style="{'display':'inline-block', 'width': ctrl.dataColumnsSectionWidth}">

@@ -408,6 +408,7 @@
                 + '</div>';
                 }
             }
+         
         }
         
         function defineAPI() {           
@@ -491,7 +492,6 @@
                         scope.$apply(function () {
                            
                         });
-
                     }, 10);
                 }
             }
@@ -519,7 +519,8 @@
                 isGridReady = true;
                 if (ctrl.onReady != null)
                     ctrl.onReady(gridApi);
-            }, 1000);            
+            }, 1000);
+            
         }
 
         function setMaxHeight(maxHeight) {
@@ -553,6 +554,16 @@
                             if (ctrl.datasource.length - initialLength < getPageSize())
                                 stopPagingOnScroll = true;
                             ctrl.isLoadingMoreData = false;
+                            var div = document.getElementById('gridBodyContainer'); // need real DOM Node, not jQuery wrapper
+                            var hasnotVerticalScrollbar = div.scrollHeight > div.clientHeight;
+                            if (hasnotVerticalScrollbar)
+                                ctrl.headerStyle = {
+                                    "padding-right": getScrollbarWidth()+"px"
+                                }
+                            else ctrl.headerStyle = {
+                                "padding-right": "0px"
+                            }
+                            console.log(hasnotVerticalScrollbar);
                         });
                     }
                 });
@@ -562,6 +573,30 @@
 
         function getPageSize() {
             return 25;
+        }
+        function getScrollbarWidth() {
+            var outer = document.createElement("div");
+            outer.style.visibility = "hidden";
+            outer.style.width = "100px";
+            outer.style.msOverflowStyle = "scrollbar"; // needed for WinJS apps
+
+            document.body.appendChild(outer);
+
+            var widthNoScroll = outer.offsetWidth;
+            // force scrollbars
+            outer.style.overflow = "scroll";
+
+            // add innerdiv
+            var inner = document.createElement("div");
+            inner.style.width = "100%";
+            outer.appendChild(inner);
+
+            var widthWithScroll = inner.offsetWidth;
+
+            // remove divs
+            outer.parentNode.removeChild(outer);
+
+            return widthNoScroll - widthWithScroll;
         }
 
         function getPageInfo(startFromBeginning) {
@@ -721,6 +756,7 @@
                     retrieveDataResultKey = response.ResultKey;
                     if (ctrl.pagerSettings != undefined && ctrl.pagerSettings != null)
                         ctrl.pagerSettings.totalDataCount = response.TotalCount;
+
                 }
             };
               
@@ -731,6 +767,16 @@
                 ctrl.isLoadingMoreData = true;
                 promise.finally(function () {
                     ctrl.isLoadingMoreData = false;
+                    var div = document.getElementById('gridBodyContainer'); // need real DOM Node, not jQuery wrapper
+                    var hasnotVerticalScrollbar = div.scrollHeight > div.clientHeight;
+                    if (hasnotVerticalScrollbar)
+                        ctrl.headerStyle = {
+                            "padding-right": "0px"
+                        }
+                    else ctrl.headerStyle = {
+                        "padding-right": getScrollbarWidth() + "px"
+                    }
+                    // console.log(ctrl.headerStyle)
                 });
             }
             return promise;            

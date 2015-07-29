@@ -70,9 +70,9 @@ app.service('BaseDirService', ['ValidationMessagesEnum', function (ValidationMes
         return 'ElmntId_' + replaceAll(guid(), '-', '');
     }
 
-    function getValidationMessageTemplate(requiredValue, requiredArray, invalidFormat, customValidation, invalidEmail,isNotSelect) {
+    function getValidationMessageTemplate(requiredValue, requiredArray, invalidFormat, customValidation, invalidEmail,isNotSelect, withlabel) {
         var template = '';
-        if (isNotSelect)
+        if (isNotSelect && withlabel)
             template = '<div  class="disable-animations tooltip-error fix-top" ng-style="ctrl.isVisibleTooltip() ? {\'display\':\'block\'} : {\'display\':\'none\'} " ng-messages="ctrl.getErrorObject()">';
         else
             template = '<div  class="disable-animations tooltip-error" ng-style="ctrl.isVisibleTooltip() ? {\'display\':\'block\'} : {\'display\':\'none\'} " ng-messages="ctrl.getErrorObject()">';

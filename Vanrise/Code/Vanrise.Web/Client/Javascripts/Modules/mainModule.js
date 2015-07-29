@@ -265,21 +265,6 @@ app.controller('loginCtrl', function loginCtrl($scope) {
 });
 
 angular.module('mainModule')
-.config(function ($timepickerProvider) {
-    angular.extend($timepickerProvider.defaults, {
-        timeFormat: 'HH:mm:ss',
-        length: 7,
-        minuteStep: 1,
-        animation: ""
-    });
-})
-.config(function ($datepickerProvider) {
-    angular.extend($datepickerProvider.defaults, {
-        dateFormat: 'dd/MM/yyyy',
-        startWeek: 1,
-        animation: ""
-    });
-})
 .config(function ($popoverProvider) {
     angular.extend($popoverProvider.defaults, {
         animation: 'am-flip-x',

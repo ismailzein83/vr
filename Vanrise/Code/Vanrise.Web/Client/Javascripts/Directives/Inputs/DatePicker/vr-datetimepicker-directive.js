@@ -269,18 +269,17 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                 icontemplate += ' <span ng-show="showtd"  class="input-group-addon vr-small-addon " ng-click="ctrl.toggleTime($event)" > <i class="glyphicon glyphicon-time"></i></span>';
             var dateTemplate =
                  '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false"  >'
-                  + '<div id="mainInput" ng-model="ctrl.value" style="border-radius: 4px;">'
+                  + '<div id="mainInput" ng-model="ctrl.value" class="form-control " style="border-radius: 4px;height: auto;padding: 0px;">'
                  + '<div  class="input-group date datetime-controle" style="width:100%" id="divDatePicker"  >'
-                                + '<input class="form-control" style="height:30px;" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
+                                + '<input class="form-control vr-date-input" style="height:30px;" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
                                 + icontemplate
                             + '</div>'
                       + '</div>'
                     + '</div>';
            
-            var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true,undefined,true);
+            var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true,true, attrs.label != undefined);
 
-            //if(attrs.type == 'date')
-                return startTemplate + labelTemplate + dateTemplate + validationTemplate + endTemplate;
+            return startTemplate + labelTemplate + dateTemplate + validationTemplate + endTemplate;
         }
 
     };
