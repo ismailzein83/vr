@@ -3,23 +3,23 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [sec].[sp_Roles_AssignMembers] 
-	@RoleId int,
+CREATE PROCEDURE [sec].[sp_Group_AssignMembers] 
+	@GroupId int,
 	@UserIds sec.[IntIDType] READONLY
 AS
 BEGIN	
 
     --Insert new members
-	Insert into sec.UserRole
-	([UserId], [RoleId])
-	SELECT ID, @RoleId 
+	Insert into sec.UserGroup
+	([UserId], [GroupId])
+	SELECT ID, @GroupId 
 	FROM @UserIds
-	WHERE ID NOT IN (SELECT UserID FROM sec.UserRole WHERE RoleID = @RoleId)
+	WHERE ID NOT IN (SELECT UserId FROM sec.UserGroup WHERE GroupId = @GroupId)
 	
 	--delete removed members
-	DELETE sec.UserRole
-	WHERE RoleID = @RoleId 
+	DELETE sec.UserGroup
+	WHERE GroupId = @GroupId
 			AND 
-			UserID NOT IN (SELECT ID FROM @UserIds)
+			UserId NOT IN (SELECT ID FROM @UserIds)
 	
 END

@@ -5,21 +5,31 @@
 -- =============================================
 CREATE PROCEDURE [sec].[sp_View_GetFiltered]
 	-- Add the parameters for the stored procedure here
-@Filter nvarchar(255) ,
-@Type INT
+	@TempTableName varchar(200),
+	@Filter nvarchar(255) =  NULL ,
+	@Type INT
 
 
 AS
-BEGIN
-SELECT	v.Id,
-			v.Name PageName,
-			v.Module ModuleId,
-			v.Url,v.Audience,
-			v.Content,
-			v.[Type],
-			m.Name ModuleName 
-	FROM	sec.[View] v 
-	INNER JOIN	sec.[Module] m 
-	ON		v.Module=m.Id 
-	WHERE	v.[Type]=@Type and (v.Name Like '%'+@Filter+'%' or @Filter IS NULL)
-END
+	BEGIN
+		SET NOCOUNT ON;
+		IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
+			BEGIN
+				SELECT	v.Id,
+						v.Name PageName,
+						v.Module ModuleId,
+						v.Url,v.Audience,
+						v.Content,
+						v.[Type],
+						m.Name ModuleName 
+				INTO #RESULT
+				FROM	sec.[View] v
+	 
+				INNER JOIN	sec.[Module] m 
+				ON		v.Module=m.Id 
+				WHERE	v.[Type]=@Type and (v.Name Like '%'+@Filter+'%' or @Filter IS NULL)
+				DECLARE @sql VARCHAR(1000)
+				SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #Result';
+				EXEC(@sql)
+			END
+	END

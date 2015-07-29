@@ -74,9 +74,7 @@
     <Build Include="sec\Tables\WidgetDefinition.sql" />
     <Build Include="sec\Tables\BusinessEntityModule.sql" />
     <Build Include="sec\Tables\BusinessEntity.sql" />
-    <Build Include="sec\Tables\Role.sql" />
     <Build Include="sec\Tables\Module.sql" />
-    <Build Include="sec\Tables\UserRole.sql" />
     <Build Include="sec\Tables\Permission.sql" />
     <Build Include="sec\Tables\Widget.sql" />
     <Build Include="sec\Tables\OrgChart.sql" />
@@ -85,19 +83,11 @@
     <Build Include="BI\Tables\SchemaConfiguration.sql" />
     <Build Include="sec\Stored Procedures\sp_WidgetDefinition_Get.sql" />
     <Build Include="sec\Stored Procedures\sp_User_GetMembers.sql" />
-    <Build Include="sec\Stored Procedures\sp_Roles_AssignMembers.sql" />
     <Build Include="sec\Stored Procedures\sp_User_GetAll.sql" />
     <Build Include="sec\Stored Procedures\sp_BusinessEntityModule_ToggleBreakInheritance.sql" />
     <Build Include="sec\Stored Procedures\sp_BusinessEntity_ToggleBreakInheritance.sql" />
-    <Build Include="sec\Stored Procedures\sp_Roles_Update.sql" />
-    <Build Include="sec\Stored Procedures\sp_Roles_Insert.sql" />
-    <Build Include="sec\Stored Procedures\sp_Roles_GetAll.sql" />
-    <Build Include="sec\Stored Procedures\sp_Roles_Get.sql" />
-    <Build Include="sec\Stored Procedures\sp_Roles_GetFiltered.sql" />
     <Build Include="sec\Stored Procedures\sp_User_GetbyId.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_GetFiltered.sql" />
     <Build Include="sec\Stored Procedures\sp_User_ResetPassword.sql" />
-    <Build Include="sec\Stored Procedures\sp_Roles_GetUserRoles.sql" />
     <Build Include="sec\Stored Procedures\sp_User_CheckUserName.sql" />
     <Build Include="sec\Stored Procedures\sp_Permission_Delete.sql" />
     <Build Include="sec\Stored Procedures\sp_OrgChart_GetAll.sql" />
@@ -136,6 +126,17 @@
     <Build Include="sec\Tables\OrgChartLinkedEntity.sql" />
     <Build Include="sec\Stored Procedures\sp_OrgChartLinkedEntity_Insert.sql" />
     <Build Include="sec\Stored Procedures\sp_OrgChartLinkedEntity_GetLinkedOrgChartId.sql" />
+    <Build Include="sec\Tables\UserGroup_2.sql" />
+    <Build Include="sec\Tables\Group_2.sql" />
+    <Build Include="sec\Stored Procedures\SP_User_CreateTempForFiltered_2.sql" />
+    <Build Include="sec\Stored Procedures\sp_Group_Update_2.sql" />
+    <Build Include="sec\Stored Procedures\sp_Group_Insert_2.sql" />
+    <Build Include="sec\Stored Procedures\sp_Group_GetUserGroups_2.sql" />
+    <Build Include="sec\Stored Procedures\sp_Group_GetAll_2.sql" />
+    <Build Include="sec\Stored Procedures\sp_Group_Get_2.sql" />
+    <Build Include="sec\Stored Procedures\SP_Group_CreateTempForFiltered_2.sql" />
+    <Build Include="sec\Stored Procedures\sp_Group_AssignMembers_2.sql" />
+    <Build Include="Security\BEntity_2.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment1.sql" />

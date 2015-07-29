@@ -1,4 +1,4 @@
-﻿CREATE TABLE [sec].[Role] (
+﻿CREATE TABLE [sec].[Group] (
     [ID]          INT            IDENTITY (1, 1) NOT NULL,
     [Name]        NVARCHAR (255) NOT NULL,
     [Description] NTEXT          NULL,
