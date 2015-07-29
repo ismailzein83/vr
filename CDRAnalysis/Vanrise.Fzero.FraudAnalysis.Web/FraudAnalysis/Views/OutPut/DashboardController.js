@@ -59,9 +59,7 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
             getData_CasesSummary();
         };
 
-        $scope.loadMoreData_CasesSummary = function () {
-            return getData_CasesSummary();
-        }
+       
 
         $scope.onMainGridReady_StrategyCases = function (api) {
             mainGridAPI_StrategyCases = api;
@@ -69,27 +67,21 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
         };
 
 
-        $scope.loadMoreData_StrategyCases = function () {
-            return getData_StrategyCases();
-        }
+       
 
         $scope.onMainGridReady_BTSCases = function (api) {
             mainGridAPI_BTSCases = api;
             getData_BTSCases();
         };
 
-        $scope.loadMoreData_BTSCases = function () {
-            return getData_BTSCases();
-        }
+       
 
         $scope.onMainGridReady_CellCases = function (api) {
             mainGridAPI_CellCases = api;
             getData_CellCases();
         };
 
-        $scope.loadMoreData_CellCases = function () {
-            return getData_CellCases();
-        }
+       
 
         $scope.searchClicked = function () {
             mainGridAPI_CasesSummary.clearDataAndContinuePaging();
