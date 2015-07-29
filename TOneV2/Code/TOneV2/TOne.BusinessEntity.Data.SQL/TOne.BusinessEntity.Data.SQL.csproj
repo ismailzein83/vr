@@ -58,6 +58,7 @@
     <Compile Include="CarrierAccountDataManager.cs" />
     <Compile Include="CodeDataManager.cs" />
     <Compile Include="CommissionDataManager.cs" />
+    <Compile Include="LookUpDataManager.cs" />
     <Compile Include="PriceListDataManager.cs" />
     <Compile Include="CarrierProfileDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

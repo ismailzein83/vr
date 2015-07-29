@@ -13,5 +13,6 @@ namespace TOne.BusinessEntity.Data
         BigResult<CarrierProfile> GetFilteredCarrierProfiles(Vanrise.Entities.DataRetrievalInput<CarrierProfileQuery> input);
         CarrierProfile GetCarrierProfile(int profileId);
         bool UpdateCarrierProfile(CarrierProfile carrierProfile);
+        bool AddCarrierProfile(CarrierProfile carrierProfile, out int insertedId);
     }
 }

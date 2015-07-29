@@ -64,6 +64,7 @@
     <Compile Include="CarrierAccountManager.cs" />
     <Compile Include="CodeManager.cs" />
     <Compile Include="CommissionManager.cs" />
+    <Compile Include="LookUpManager.cs" />
     <Compile Include="PriceListManager.cs" />
     <Compile Include="PricingGeneratorManager.cs" />
     <Compile Include="CarrierProfileManager.cs" />

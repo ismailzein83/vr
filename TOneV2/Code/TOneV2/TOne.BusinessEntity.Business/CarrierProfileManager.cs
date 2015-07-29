@@ -38,5 +38,27 @@ namespace TOne.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             return updateOperationOutput;
         }
+        public Vanrise.Entities.InsertOperationOutput<CarrierProfile> AddCarrierProfile(CarrierProfile carrierProfile)
+        {
+            InsertOperationOutput<CarrierProfile> insertOperationOutput = new InsertOperationOutput<CarrierProfile>();
+
+            insertOperationOutput.Result = InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+            int carrierProfileId = -1;
+            bool insertActionSucc = _dataManager.AddCarrierProfile(carrierProfile, out carrierProfileId);
+
+            if (insertActionSucc)
+            {
+                insertOperationOutput.Result = InsertOperationResult.Succeeded;
+                carrierProfile.ProfileID = carrierProfileId;
+                insertOperationOutput.InsertedObject = carrierProfile;
+            }
+            else
+            {
+                insertOperationOutput.Result = InsertOperationResult.SameExists;
+            }
+
+            return insertOperationOutput;
+        }
     }
 }

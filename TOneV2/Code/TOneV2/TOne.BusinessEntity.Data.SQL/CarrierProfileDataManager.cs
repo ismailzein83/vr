@@ -43,6 +43,19 @@ namespace TOne.BusinessEntity.Data.SQL
                 Address2 = reader["Address2"] as string,
                 Address3 = reader["Address3"] as string,
                 Website = reader["Website"] as string,
+                BillingContact = reader["BillingContact"] as string,
+                BillingDisputeEmail = reader["BillingDisputeEmail"] as string,
+                PricingContact = reader["PricingContact"] as string,
+                PricingEmail = reader["PricingEmail"] as string,
+                AccountManagerEmail = reader["AccountManagerEmail"] as string,
+                AccountManagerContact = reader["AccountManagerContact"] as string,
+                SupportContact = reader["SupportContact"] as string,
+                SupportEmail = reader["SupportEmail"] as string,
+                TechnicalContact = reader["TechnicalContact"] as string,
+                TechnicalEmail = reader["TechnicalEmail"] as string,
+                CommercialContact = reader["CommercialContact"] as string,
+                CommercialEmail = reader["CommercialEmail"] as string,
+                SMSPhoneNumber = reader["SMSPhoneNumber"] as string,
                 AccountsCount = GetReaderValue<int>(reader, "AccountsCount")//GetReaderValue(reader["AccountsCount"])
             };
         }
@@ -54,7 +67,10 @@ namespace TOne.BusinessEntity.Data.SQL
             int rowEffected = ExecuteNonQuerySP("BEntity.sp_CarrierProfile_Update ",
                 carrierProfile.ProfileID, carrierProfile.Name, carrierProfile.CompanyName,
                 carrierProfile.Country, carrierProfile.City, carrierProfile.RegistrationNumber,
-               telephone, fax, carrierProfile.Address1, carrierProfile.Address2, carrierProfile.Address3, carrierProfile.Website);
+               telephone, fax, carrierProfile.Address1, carrierProfile.Address2, carrierProfile.Address3, carrierProfile.Website, carrierProfile.BillingEmail, carrierProfile.BillingContact,
+                carrierProfile.BillingDisputeEmail, carrierProfile.PricingContact, carrierProfile.PricingEmail, carrierProfile.AccountManagerEmail, carrierProfile.AccountManagerContact,
+                carrierProfile.SupportContact, carrierProfile.SupportEmail, carrierProfile.TechnicalContact, carrierProfile.TechnicalEmail, carrierProfile.CommercialContact, carrierProfile.CommercialEmail,
+                carrierProfile.SMSPhoneNumber);
             if (rowEffected > 0)
                 return true;
             return false;
@@ -73,6 +89,23 @@ namespace TOne.BusinessEntity.Data.SQL
                     result[i] = split[i];
                 return result;
             }
+        }
+
+        public bool AddCarrierProfile(Entities.CarrierProfile carrierProfile, out int insertedId)
+        {
+            string telephone = string.Join("\r\n", carrierProfile.Telephone);
+            string fax = string.Join("\r\n", carrierProfile.Fax);
+            object profileID;
+
+            int recordesEffected = ExecuteNonQuerySP("BEntity.sp_CarrierProfile_Insert", out profileID, carrierProfile.Name, carrierProfile.CompanyName,
+                carrierProfile.Country, carrierProfile.City, carrierProfile.RegistrationNumber,
+               telephone, fax, carrierProfile.Address1, carrierProfile.Address2, carrierProfile.Address3, carrierProfile.Website, carrierProfile.BillingEmail, carrierProfile.BillingContact,
+                carrierProfile.BillingDisputeEmail, carrierProfile.PricingContact, carrierProfile.PricingEmail, carrierProfile.AccountManagerEmail, carrierProfile.AccountManagerContact,
+                carrierProfile.SupportContact, carrierProfile.SupportEmail, carrierProfile.TechnicalContact, carrierProfile.TechnicalEmail, carrierProfile.CommercialContact, carrierProfile.CommercialEmail,
+                carrierProfile.SMSPhoneNumber);
+
+            insertedId = (recordesEffected > 0) ? (Int16)profileID : -1;
+            return (recordesEffected > 0);
         }
     }
 }

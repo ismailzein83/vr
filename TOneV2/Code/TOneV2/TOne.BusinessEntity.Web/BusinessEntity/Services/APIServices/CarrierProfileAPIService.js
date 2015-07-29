@@ -3,7 +3,8 @@ var serviceObj = function (BaseAPIService) {
     return ({
         GetFilteredCarrierProfiles: GetFilteredCarrierProfiles,
         GetCarrierProfile: GetCarrierProfile,
-        UpdateCarrierProfile: UpdateCarrierProfile
+        UpdateCarrierProfile: UpdateCarrierProfile,
+        AddCarrierProfile: AddCarrierProfile
     });
     function GetFilteredCarrierProfiles(input) {
         return BaseAPIService.post("/api/CarrierProfile/GetFilteredCarrierProfiles", input);
@@ -16,6 +17,9 @@ var serviceObj = function (BaseAPIService) {
     }
     function UpdateCarrierProfile(CarrierProfile) {
         return BaseAPIService.post("/api/CarrierProfile/UpdateCarrierProfile", CarrierProfile);
+    }
+    function AddCarrierProfile(CarrierProfile) {
+        return BaseAPIService.post("/api/CarrierProfile/AddCarrierProfile", CarrierProfile);
     }
 }
 serviceObj.$inject = ['BaseAPIService'];

@@ -1,5 +1,5 @@
-﻿CarrierProfileEditorController.$inject = ['$scope', 'CarrierProfileAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
-function CarrierProfileEditorController($scope, CarrierProfileAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+﻿CarrierProfileEditorController.$inject = ['$scope', 'CarrierProfileAPIService', 'LookUpAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+function CarrierProfileEditorController($scope, CarrierProfileAPIService, LookUpAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
     var editMode;
     var dummyId = 0;//this is used to avoid duplicate in ng-repeat
     loadParameters();
@@ -21,8 +21,17 @@ function CarrierProfileEditorController($scope, CarrierProfileAPIService, VRModa
 
     function defineScope() {
 
+        $scope.telephones = [];
+
+        $scope.faxes = [];
+
         $scope.saveCarrierProfile = function () {
-            return updateCarrierProfile();
+            if (editMode) {
+                return updateCarrierProfile();
+            }
+            else {
+                return insertCarrierProfile();
+            }
         };
 
         $scope.close = function () {
@@ -36,9 +45,27 @@ function CarrierProfileEditorController($scope, CarrierProfileAPIService, VRModa
         $scope.addFax = function () {
             addFax("");
         };
+
+        $scope.optionsCountries = {
+            selectedvalues: '',
+            datasource: []
+        };
+
+        $scope.optionsCities = {
+            selectedvalues: '',
+            datasource: []
+        };
     }
 
     function load() {
+        LookUpAPIService.GetCountries().then(function (response) {
+            $scope.optionsCountries.datasource = response;
+        });
+
+        LookUpAPIService.GetCities().then(function (response) {
+            $scope.optionsCities.datasource = response;
+        });
+
         if (editMode) {
             $scope.isGettingData = true;
             getCarrierProfile().finally(function () {
@@ -57,34 +84,49 @@ function CarrierProfileEditorController($scope, CarrierProfileAPIService, VRModa
             });
     }
 
-    function fillScopeFromCarrierProfileObj(CarrierAccountObject) {
-        $scope.Name = CarrierAccountObject.Name;
-        $scope.CompanyName = CarrierAccountObject.CompanyName;
-        $scope.Country = CarrierAccountObject.Country;
-        $scope.City = CarrierAccountObject.City;
-        $scope.RegistrationNumber = CarrierAccountObject.RegistrationNumber;
-        $scope.telephones = [];
-        if (CarrierAccountObject.Telephone != undefined) {
-            for (var i = 0; i < CarrierAccountObject.Telephone.length; i++) {
-                var telephoneNumber = CarrierAccountObject.Telephone[i];
+    function fillScopeFromCarrierProfileObj(CarrierProfileObject) {
+        $scope.Name = CarrierProfileObject.Name;
+        $scope.CompanyName = CarrierProfileObject.CompanyName;
+        $scope.Country = CarrierProfileObject.Country;
+        $scope.optionsCountries.selectedvalues = $scope.optionsCountries.datasource[UtilsService.getItemIndexByVal($scope.optionsCountries.datasource, CarrierProfileObject.Country, 'Description')];
+        $scope.optionsCities.selectedvalues = $scope.optionsCities.datasource[UtilsService.getItemIndexByVal($scope.optionsCities.datasource, CarrierProfileObject.City, 'Description')];
+        $scope.City = CarrierProfileObject.City;
+        $scope.RegistrationNumber = CarrierProfileObject.RegistrationNumber;
+
+        if (CarrierProfileObject.Telephone != undefined) {
+            for (var i = 0; i < CarrierProfileObject.Telephone.length; i++) {
+                var telephoneNumber = CarrierProfileObject.Telephone[i];
                 if (telephoneNumber != "")
                     addTelephone(telephoneNumber);
             }
         }
 
-        $scope.faxes = [];
-        if (CarrierAccountObject.Telephone != undefined) {
-            for (var i = 0; i < CarrierAccountObject.Fax.length; i++) {
-                var faxNumber = CarrierAccountObject.Fax[i];
+        if (CarrierProfileObject.Telephone != undefined) {
+            for (var i = 0; i < CarrierProfileObject.Fax.length; i++) {
+                var faxNumber = CarrierProfileObject.Fax[i];
                 if (faxNumber != "")
                     addFax(faxNumber);
             }
         }
 
-        $scope.Address1 = CarrierAccountObject.Address1;
-        $scope.Address2 = CarrierAccountObject.Address2;
-        $scope.Address3 = CarrierAccountObject.Address3;
-        $scope.Website = CarrierAccountObject.Website;
+        $scope.Address1 = CarrierProfileObject.Address1;
+        $scope.Address2 = CarrierProfileObject.Address2;
+        $scope.Address3 = CarrierProfileObject.Address3;
+        $scope.Website = CarrierProfileObject.Website;
+        $scope.BillingContact = CarrierProfileObject.BillingContact;
+        $scope.BillingEmail = CarrierProfileObject.BillingEmail;
+        $scope.DisputeEmail = CarrierProfileObject.DisputeEmail;
+        $scope.PricingContact = CarrierProfileObject.PricingContact;
+        $scope.PricingEmail = CarrierProfileObject.PricingEmail;
+        $scope.AccountManagerContact = CarrierProfileObject.AccountManagerContact;
+        $scope.AccountManagerEmail = CarrierProfileObject.AccountManagerEmail;
+        $scope.SupportContact = CarrierProfileObject.SupportContact;
+        $scope.SupportEmail = CarrierProfileObject.SupportEmail;
+        $scope.TechnicalContact = CarrierProfileObject.TechnicalContact;
+        $scope.TechnicalEmail = CarrierProfileObject.TechnicalEmail;
+        $scope.CommercialContact = CarrierProfileObject.CommercialContact;
+        $scope.CommercialEmail = CarrierProfileObject.CommercialEmail;
+        $scope.SMSPhoneNumber = CarrierProfileObject.SMSPhoneNumber;
     }
 
 
@@ -128,9 +170,29 @@ function CarrierProfileEditorController($scope, CarrierProfileAPIService, VRModa
         });
     }
 
+    function insertCarrierProfile() {
+        $scope.issaving = true;
+        var carrierProfileObject = buildCarrierProfileObjFromScope();
+
+        return CarrierProfileAPIService.AddCarrierProfile(carrierProfileObject)
+        .then(function (response) {
+            if (VRNotificationService.notifyOnItemAdded("Carrier Profile", response)) {
+                if ($scope.onCarrierProfileAdded != undefined)
+                    $scope.onCarrierProfileAdded(response.InsertedObject);
+                $scope.modalContext.closeModal();
+            }
+        }).catch(function (error) {
+            VRNotificationService.notifyException(error, $scope);
+        });
+    }
+
     function buildCarrierProfileObjFromScope() {
         var telTab = [];
         var faxTab = [];
+        //var selectedProfileId;
+        //angular.forEach($scope.optionsUsers.selectedvalues, function (user) {
+        //    selectedUserIds.push(user.UserId);
+        //});
         angular.forEach($scope.telephones, function (itm) {
             telTab.push(itm.number);
         });
@@ -141,15 +203,29 @@ function CarrierProfileEditorController($scope, CarrierProfileAPIService, VRModa
             ProfileId: $scope.ProfileId,
             Name: $scope.Name,
             CompanyName: $scope.CompanyName,
-            Country: $scope.Country,
-            City: $scope.City,
-            RegestrationNumber: $scope.RegistrationNumber,
+            Country: $scope.optionsCountries.selectedvalues.Description,
+            City: $scope.optionsCities.selectedvalues.Description,
+            RegistrationNumber: $scope.RegistrationNumber,
             Telephone: telTab,//$scope.telephones,
             Fax: faxTab,//$scope.faxes,
             Address1: $scope.Address1,
             Address2: $scope.Address2,
             Address3: $scope.Address3,
-            Website: $scope.Website
+            Website: $scope.Website,
+            BillingContact: $scope.BillingContact,
+            BillingEmail: $scope.BillingEmail,
+            BillingDisputeEmail: $scope.BillingDisputeEmail,
+            PricingContact: $scope.PricingContact,
+            PricingEmail: $scope.PricingEmail,
+            AccountManagerContact: $scope.AccountManagerContact,
+            AccountManagerEmail: $scope.AccountManagerEmail,
+            SupportContact: $scope.SupportContact,
+            SupportEmail: $scope.SupportEmail,
+            TechnicalContact: $scope.TechnicalContact,
+            TechnicalEmail: $scope.TechnicalEmail,
+            CommercialContact: $scope.CommercialContact,
+            CommercialEmail: $scope.CommercialEmail,
+            SMSPhoneNumber: $scope.SMSPhoneNumber
         };
 
     }

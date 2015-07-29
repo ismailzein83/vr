@@ -21,6 +21,19 @@ namespace TOne.BusinessEntity.Entities
         public string Address2 { get; set; }
         public string Address3 { get; set; }
         public string Website { get; set; }
+        public string BillingContact { get; set; }
+        public string BillingDisputeEmail { get; set; }
+        public string PricingContact { get; set; }
+        public string PricingEmail { get; set; }
+        public string AccountManagerEmail { get; set; }
+        public string AccountManagerContact { get; set; }
+        public string SupportContact { get; set; }
+        public string SupportEmail { get; set; }
+        public string TechnicalContact { get; set; }
+        public string TechnicalEmail { get; set; }
+        public string CommercialContact { get; set; }
+        public string CommercialEmail { get; set; }
+        public string SMSPhoneNumber { get; set; }
         public int AccountsCount { get; set; }
     }
 }

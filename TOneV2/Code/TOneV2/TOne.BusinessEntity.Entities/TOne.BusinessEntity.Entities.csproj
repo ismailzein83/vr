@@ -55,12 +55,15 @@
     <Compile Include="CarrierInfo.cs" />
     <Compile Include="CarrierProfile.cs" />
     <Compile Include="CarrierProfileQuery.cs" />
+    <Compile Include="City.cs" />
     <Compile Include="Code.cs" />
     <Compile Include="CodeGroupInfo.cs" />
+    <Compile Include="Country.cs" />
     <Compile Include="FlaggedService.cs" />
     <Compile Include="IBusinessEntityInfoManager.cs" />
     <Compile Include="IFlaggedServiceEntity.cs" />
     <Compile Include="IZoneSupplied.cs" />
+    <Compile Include="LookUpItem.cs" />
     <Compile Include="OrgChartAccountManagerInfo.cs" />
     <Compile Include="PriceList.cs" />
     <Compile Include="SupplierCodes.cs" />

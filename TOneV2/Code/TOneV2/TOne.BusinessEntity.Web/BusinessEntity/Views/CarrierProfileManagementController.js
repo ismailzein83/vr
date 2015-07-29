@@ -64,7 +64,7 @@ function CarrierProfileManagementController($scope, CarrierProfileAPIService, VR
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Add Carrier Profile";
             modalScope.onCarrierProfileAdded = function (CarrierProfileUpdated) {
-                mainGridAPI.itemAdded(CarrierProfileUpdated);
+                gridApi.itemAdded(CarrierProfileUpdated);
             };
         };
         VRModalService.showModal('/Client/Modules/BusinessEntity/Views/CarrierProfileEditor.html', null, modalSettings);

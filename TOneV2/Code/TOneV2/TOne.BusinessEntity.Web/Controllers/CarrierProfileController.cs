@@ -30,5 +30,11 @@ namespace TOne.BusinessEntity.Web.Controllers
             CarrierProfileManager manager = new CarrierProfileManager();
             return manager.UpdateCarrierProfile(carrierProfile);
         }
+        [HttpPost]
+        public Vanrise.Entities.InsertOperationOutput<CarrierProfile> AddCarrierProfile(CarrierProfile carrierProfile)
+        {
+            CarrierProfileManager manager = new CarrierProfileManager();
+            return manager.AddCarrierProfile(carrierProfile);
+        }
     }
 }
