@@ -6,7 +6,8 @@
             GetTopEntities: GetTopEntities,
             GetMeasureValues1: GetMeasureValues1,
             ExportMeasureValues: ExportMeasureValues,
-            ExportTopEntities: ExportTopEntities
+            ExportTopEntities: ExportTopEntities,
+            GetUserMeasuresValidator: GetUserMeasuresValidator
         });
 
 
@@ -78,5 +79,9 @@
                     responseTypeAsBufferArray: true
                 });
         }
+        function GetUserMeasuresValidator(userMeasuresValidatorInput) {
+            return BaseAPIService.post("/api/BI/GetUserMeasuresValidator", userMeasuresValidatorInput);
+        }
+        
 
     });

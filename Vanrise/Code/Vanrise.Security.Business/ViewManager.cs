@@ -90,6 +90,7 @@ namespace Vanrise.Security.Business
             IViewDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(filter, dataManager.GetFilteredDynamicViews(filter));
         }
-  
+
+      
     }
 }                               

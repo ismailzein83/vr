@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace Vanrise.BI.Entities
 {
-    public class SummaryDirectiveSetting
+    public class SummaryDirectiveSetting:BIWidgetSetting
     {
         public List<string> MeasureTypes { get; set; }
+
+
+        public override List<string> GetMeasures()
+        {
+            return MeasureTypes;
+        }
     }
 }

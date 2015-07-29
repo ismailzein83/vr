@@ -112,6 +112,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Assign Carriers',
                     class: 'glyphicon glyphicon-link'
                 };
+            case 'Validate':
+                return {
+                    text: 'Validate',
+                    class: 'glyphicon glyphicon-ok-circle'
+                };
         }
     }
 }]);

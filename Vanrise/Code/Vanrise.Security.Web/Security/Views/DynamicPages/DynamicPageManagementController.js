@@ -86,7 +86,7 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "Validate Dynamic Page: " + dataItem.Name;
         };
-        VRModalService.showModal('/Client/Modules/Security/Views/DynamicPages/ValidateEditor.html', dataItem, settings);
+        VRModalService.showModal('/Client/Modules/BI/Views/DynamicPageValidator.html', dataItem, settings);
 
     }
     function addPage() {

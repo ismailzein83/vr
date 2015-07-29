@@ -106,6 +106,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Web.Base">
       <HintPath>..\Output\Vanrise.Web.Base.dll</HintPath>
     </Reference>
@@ -137,6 +141,8 @@
     <Content Include="BI\Services\APIServices\BIAPIService.js" />
     <Content Include="BI\Services\APIServices\BIConfigurationAPIService.js" />
     <Content Include="BI\Services\bi-utilities-service.js" />
+    <Content Include="BI\Views\DynamicPageValidator.html" />
+    <Content Include="BI\Views\DynamicPageValidatorController.js" />
     <Content Include="BI\Views\Reports\EntityReport.html" />
     <Content Include="BI\Views\Reports\EntityReportController.js" />
     <Content Include="BI\Views\Reports\EntityReportTemplates\EntityReportResult.html" />
@@ -158,6 +164,10 @@
     <ProjectReference Include="..\Vanrise.BI.Entities\Vanrise.BI.Entities.csproj">
       <Project>{e7326271-88cd-46c2-97b4-5c7eb58637aa}</Project>
       <Name>Vanrise.BI.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

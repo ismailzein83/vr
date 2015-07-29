@@ -66,5 +66,12 @@ namespace Vanrise.BI.Web.Controllers
             IEnumerable<EntityRecord> records=manager.GetTopEntities(entityTypeName, topByMeasureTypeName, fromDate, toDate, topCount, measureTypesNames);
             return manager.ExportTopEntities(records, "EntityName", measureTypesNames);
         }
+
+        [HttpPost]
+        public object GetUserMeasuresValidator(Vanrise.Entities.DataRetrievalInput<UserMeasuresValidatorInput> userMeasuresValidatorInput)
+        {
+            GenericEntityManager manager = new GenericEntityManager();
+            return GetWebResponse(userMeasuresValidatorInput,manager.GetUserMeasuresValidator(userMeasuresValidatorInput));
+        }
     }
 }

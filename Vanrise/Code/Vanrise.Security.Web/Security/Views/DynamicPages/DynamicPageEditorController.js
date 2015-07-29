@@ -1,6 +1,6 @@
-﻿DynamicPageEditorController.$inject = ['$scope', 'MenuAPIService', 'WidgetAPIService', 'GroupAPIService', 'UsersAPIService', 'ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WidgetSectionEnum', 'PeriodEnum', 'TimeDimensionTypeEnum', 'ColumnWidthEnum'];
+﻿DynamicPageEditorController.$inject = ['$scope', 'MenuAPIService', 'WidgetAPIService', 'GroupAPIService', 'UsersAPIService', 'ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WidgetSectionEnum', 'PeriodEnum', 'TimeDimensionTypeEnum', 'ColumnWidthEnum','VRModalService'];
 
-function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, GroupAPIService, UsersAPIService, ViewAPIService, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, PeriodEnum, TimeDimensionTypeEnum, ColumnWidthEnum) {
+function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, GroupAPIService, UsersAPIService, ViewAPIService, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, PeriodEnum, TimeDimensionTypeEnum, ColumnWidthEnum, VRModalService) {
     loadParameters();
     defineScope();
     load();
@@ -46,6 +46,10 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         $scope.addedwidgets = [];
         $scope.summaryWidgets = [];
         $scope.bodyWidgets = [];
+        $scope.validate = function () {
+            validate();
+        }
+
         $scope.selectedColumnWidth;
         $scope.addedSummaryWidgets = [];
         $scope.menuReady = function (api) {
@@ -65,8 +69,16 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         }
         $scope.onWidgetSelectionChanged = function () {
             if ($scope.selectedWidget != undefined) {
-                var title = $scope.selectedWidget.Name;
-                $scope.sectionTitle = title;
+                {
+                    var defaultPeriod;
+                    if (!$scope.nonSearchable)
+                        defaultPeriod = $scope.selectedViewPeriod.description;
+                    else
+                        defaultPeriod = $scope.selectedWidgetPeriod.description;
+                    var title = defaultPeriod+"-"+$scope.selectedWidget.Name;
+                    $scope.sectionTitle = title;
+                }
+               
             }
         }
         $scope.save = function () {
@@ -129,6 +141,35 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
             }
 
         };
+    }
+    function validate() {
+        var settings = {};
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = "Validate Dynamic Page: " + $scope.filter.Name;
+        };
+            
+        var selectedUsersIDs = [];
+        for (var i = 0; i < $scope.selectedUsers.length; i++)
+            selectedUsersIDs.push($scope.selectedUsers[i].UserId);
+        var selectedGroupsIDs = [];
+        for (var i = 0; i < $scope.selectedGroups.length; i++)
+            selectedGroupsIDs.push($scope.selectedGroups[i].GroupId);
+        var Audiences = {
+            Users: selectedUsersIDs,
+            Groups: selectedGroupsIDs
+        };
+        buildContentsFromScope();
+        var ViewContent = {
+            BodyContents: $scope.bodyContents,
+            SummaryContents: $scope.summaryContents
+        }
+        var parameter = {
+            Audience: Audiences,
+            ViewContent: ViewContent
+        }
+        VRModalService.showModal('/Client/Modules/BI/Views/DynamicPageValidator.html', parameter, settings);
+
     }
     function checkWidgetValidator() {
         if ($scope.nonSearchable) {

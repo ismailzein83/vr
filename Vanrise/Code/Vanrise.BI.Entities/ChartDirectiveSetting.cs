@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.BI.Entities
 {
-   public class ChartDirectiveSetting
+   public class ChartDirectiveSetting:BIWidgetSetting
     {
         public string OperationType { get; set; }
         public string EntityType { get; set; }
@@ -14,5 +14,9 @@ namespace Vanrise.BI.Entities
         public string TopMeasure { get; set; }
         public string DefinitionType { get; set; }
         public string Title { get; set; }
+        public override List<string> GetMeasures()
+        {
+            return MeasureTypes;
+        }
     }
 }

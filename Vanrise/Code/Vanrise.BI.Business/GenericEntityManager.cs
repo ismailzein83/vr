@@ -7,10 +7,14 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BI.Data;
 using Vanrise.BI.Entities;
+using Vanrise.Entities;
+using Vanrise.Security.Business;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.BI.Business
 {
@@ -294,5 +298,77 @@ namespace Vanrise.BI.Business
                 int monthIndex = date.Month;
                return shortMonthNames[monthIndex-1];
             }
+
+
+           public Vanrise.Entities.IDataRetrievalResult<UserMeasuresValidator> GetUserMeasuresValidator(Vanrise.Entities.DataRetrievalInput<UserMeasuresValidatorInput> userMeasuresValidatorInput)
+        {
+             // Dictionary<int,List<string>> userMeasuresValidator=new   Dictionary<int,List<string>>();
+            
+              List<UserMeasuresValidator> userMeasuresValidator = new List<UserMeasuresValidator>();
+              List<string> distinctMeasures = new List<string>();
+              WidgetsManager widgetsManager = new WidgetsManager();
+              List<WidgetDetails> widgets = widgetsManager.GetAllWidgets();
+              foreach(WidgetDetails widget in widgets)
+              {
+                 foreach (int widgetId in userMeasuresValidatorInput.Query.Widgets)
+                   {
+                       if (widget.Id == widgetId)
+                       {
+                           List<string> measures = ((BIWidgetSetting)widget.Setting.Settings).GetMeasures();
+                           foreach (string measure in measures)
+                           {
+                               if (!distinctMeasures.Contains(measure))
+                                   distinctMeasures.Add(measure);
+                           }
+                       }
+                   }
+               }
+               BIConfigurationManager manager=new BIConfigurationManager();
+              List<BIConfiguration<BIConfigurationMeasure>> allMeasures= manager.GetMeasures();
+
+              List<BIConfiguration<BIConfigurationMeasure>> filteredMeasures = new List<BIConfiguration<BIConfigurationMeasure>>();
+              for (int i = 0; i < allMeasures.Count; i++)
+              {
+                  if (distinctMeasures.Contains(allMeasures[i].Name))
+                  {
+                      filteredMeasures.Add(allMeasures[i]);
+                  }
+              }
+              List<int> distinctUsers = new List<int>();
+              for (int i = 0; i < userMeasuresValidatorInput.Query.UserIds.Count; i++)
+              {
+                  if (!distinctUsers.Contains(userMeasuresValidatorInput.Query.UserIds[i]))
+                      distinctUsers.Add(userMeasuresValidatorInput.Query.UserIds[i]);
+              }
+              List<User> users = new List<User>();
+              UserManager userManager = new UserManager();
+              for (int i = 0; i < userMeasuresValidatorInput.Query.GroupIds.Count; i++)
+              {
+                  users = userManager.GetMembers(userMeasuresValidatorInput.Query.GroupIds[i]);
+                  foreach (User user in users)
+                  {
+                      if (!distinctUsers.Contains(user.UserId))
+                          distinctUsers.Add(user.UserId);
+
+                  }
+              }
+             
+               
+              Vanrise.Security.Business.SecurityManager securityManager = new Vanrise.Security.Business.SecurityManager();
+              foreach (int user in distinctUsers)
+              {
+                  List<string> userDeniedMeasures = new List<string>();
+                  foreach (BIConfiguration<BIConfigurationMeasure> measure in filteredMeasures)
+                  {
+                      if (measure.Configuration.RequiredPermissions != null && !securityManager.IsAllowed(measure.Configuration.RequiredPermissions, user))
+                          userDeniedMeasures.Add(measure.Name);
+                  }
+                  userMeasuresValidator.Add(new UserMeasuresValidator{UserId=user,MeasuresDenied=userDeniedMeasures});
+              }
+              BigResult<UserMeasuresValidator> returnedData = new BigResult<UserMeasuresValidator>();
+              returnedData.Data = userMeasuresValidator;
+              return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(userMeasuresValidatorInput, returnedData);
+             
+        }
     }
 }
