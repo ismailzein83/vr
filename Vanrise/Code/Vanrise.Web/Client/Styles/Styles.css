@@ -1158,7 +1158,9 @@ input.ui-grid-filter-input[type="text"] {
  height:inherit;
  width:auto;
 }
-
+.panel-vr{
+    margin-top:10px;
+}
 .panel-vr > .panel-heading {
     text-transform: uppercase;
     font-weight: bold;
