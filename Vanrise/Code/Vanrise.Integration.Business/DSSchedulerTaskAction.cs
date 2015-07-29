@@ -22,15 +22,15 @@ namespace Vanrise.Integration.Business
 
             adapter.ImportData(dataSource.Settings.AdapterArgument, data =>
                 {
-                    Vanrise.Queueing.PersistentQueueItem queueItem = this.ExecuteCustomCode(dataSource.Settings.MapperCustomCode, data);
+                    Vanrise.Queueing.Entities.PersistentQueueItem queueItem = this.ExecuteCustomCode(dataSource.Settings.MapperCustomCode, data);
                     Vanrise.Queueing.Entities.IPersistentQueue queue = Vanrise.Queueing.PersistentQueueFactory.Default.GetQueue(dataSource.Settings.QueueName);
                     queue.EnqueueObject(queueItem);
                 });
         }
 
-        private Vanrise.Queueing.PersistentQueueItem ExecuteCustomCode(string customCode, IImportedData data)
+        private Vanrise.Queueing.Entities.PersistentQueueItem ExecuteCustomCode(string customCode, IImportedData data)
         {
-            Vanrise.Queueing.PersistentQueueItem result = null;
+            Vanrise.Queueing.Entities.PersistentQueueItem result = null;
 
             int strHashCode = Math.Abs(customCode.GetHashCode());
 
@@ -80,7 +80,7 @@ namespace Vanrise.Integration.Business
             parameters.IncludeDebugInformation = true;
             parameters.ReferencedAssemblies.Add("System.dll");
             parameters.ReferencedAssemblies.Add(typeof(IDataMapper).Assembly.Location);
-            parameters.ReferencedAssemblies.Add(typeof(Vanrise.Queueing.PersistentQueueItem).Assembly.Location);
+            parameters.ReferencedAssemblies.Add(typeof(Vanrise.Queueing.Entities.PersistentQueueItem).Assembly.Location);
 
             parameters.ReferencedAssemblies.Add(Assembly.GetCallingAssembly().Location);
             parameters.ReferencedAssemblies.Add(Assembly.GetExecutingAssembly().Location);

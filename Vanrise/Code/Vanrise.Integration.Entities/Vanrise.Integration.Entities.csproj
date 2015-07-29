@@ -41,8 +41,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.Queueing">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
+    <Reference Include="Vanrise.Queueing.Entities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Entities.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
