@@ -36,7 +36,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
     public class BTSCases
     {
-        public string BTS_Id { get; set; }
+        public int? BTS_Id { get; set; }
 
         public int CountCases { get; set; }
 

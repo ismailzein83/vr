@@ -66,7 +66,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             var bTSCases = new BTSCases();
             bTSCases.CountCases = (int)reader["CountCases"];
-            bTSCases.BTS_Id = reader["BTS_Id"] as string;
+            bTSCases.BTS_Id =  GetReaderValue<int?>(reader,"BTS_Id");
             return bTSCases;
         }
 
