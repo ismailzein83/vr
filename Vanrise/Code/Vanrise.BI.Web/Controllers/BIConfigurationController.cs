@@ -24,7 +24,7 @@ namespace Vanrise.BI.Web.Controllers
             return mapper.MeasuresMapper(managerData); ;
         }
         [HttpGet]
-        public List<BIEntityModel> GetEntities()
+        public List<BIEntityModel<BIConfigurationEntity>> GetEntities()
         {
             BIConfigurationManager manager = new BIConfigurationManager();
             List<BIConfiguration<BIConfigurationEntity>> managerData = new List<BIConfiguration<BIConfigurationEntity>>();

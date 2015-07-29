@@ -11,9 +11,10 @@ namespace Vanrise.BI.Web.Models
         public string DisplayName { get; set; }
         public string RequiredPermissions { get; set; }
     }
-    public class BIEntityModel
+    public class BIEntityModel<T>
     {
         public string Name { get; set; }
         public string DisplayName { get; set; }
+        public T Configuration { get; set; }
     }
 }

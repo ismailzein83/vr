@@ -25,16 +25,16 @@ namespace Vanrise.BI.Web.ModelMappers
 
             return rslt;
         }
-        public List<BIEntityModel> EntitiesMapper(List<BIConfiguration<BIConfigurationEntity>> managerData)
+        public List<BIEntityModel<BIConfigurationEntity>> EntitiesMapper(List<BIConfiguration<BIConfigurationEntity>> managerData)
         {
-            List<BIEntityModel> rslt = new List<BIEntityModel>();
+            List<BIEntityModel<BIConfigurationEntity>> rslt = new List<BIEntityModel<BIConfigurationEntity>>();
             foreach (BIConfiguration<BIConfigurationEntity> val in managerData)
             {
-                rslt.Add(new BIEntityModel
+                rslt.Add(new BIEntityModel<BIConfigurationEntity>
                 {
                     Name = val.Name,
                     DisplayName = val.DisplayName,
-
+                    Configuration = val.Configuration
                 });
             }
 

@@ -48,8 +48,20 @@ namespace Vanrise.BI.Business
             //queryFilter.Add("C020");
             IBIConfigurationDataManager configurations = BIDataManagerFactory.GetDataManager<IBIConfigurationDataManager>();
             IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
+            List<BIConfiguration<BIConfigurationEntity>> entities = configurations.GetEntities();
+          
+            foreach (BIConfiguration<BIConfigurationEntity> entity in entities)
+            {
+                if (entityTypeName==entity.Name && entity.Configuration.BehaviorFQTN != null)
+                {
+                    var myObject = (IDimensionBehavior)Activator.CreateInstance(Type.GetType(entity.Configuration.BehaviorFQTN));
+                    queryFilter=  myObject.GetFilteredValues();
+                }
+                
+            }
+           
             dataManager.MeasureDefinitions = configurations.GetMeasures();
-            dataManager.EntityDefinitions = configurations.GetEntities();
+            dataManager.EntityDefinitions = entities;
             return dataManager.GetTopEntities(entityTypeName, topByMeasureTypeName, fromDate, toDate, topCount, queryFilter, measureTypesNames);
         }
 

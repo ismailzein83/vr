@@ -55,6 +55,7 @@
     <Compile Include="Enums.cs" />
     <Compile Include="GenericEntity.cs" />
     <Compile Include="GenericEntityRecord.cs" />
+    <Compile Include="IDimensionBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SummaryDirectiveSetting.cs" />
     <Compile Include="TimeValuesRecord.cs" />
