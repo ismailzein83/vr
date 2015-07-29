@@ -22,7 +22,7 @@ namespace Vanrise.Security.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("[sec].[SP_Group_CreateTempForFiltered]", tempTableName, input.Query.Name);
+                ExecuteNonQuerySP("[sec].[sp_Group_CreateTempForFiltered]", tempTableName, input.Query.Name);
             };
 
             return RetrieveData(input, createTempTableAction, GroupMapper);
