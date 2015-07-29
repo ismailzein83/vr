@@ -4,7 +4,6 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [queue].[sp_QueueItemIDGen_GenerateID]
-	@QueueID int
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -16,7 +15,6 @@ BEGIN
 	UPDATE queue.QueueItemIDGen
 	SET @NewItemID = CurrentItemID + 1,
 		CurrentItemID = CurrentItemID + 1
-	WHERE QueueID = @QueueID	
 		
 	SELECT @NewItemID
 END

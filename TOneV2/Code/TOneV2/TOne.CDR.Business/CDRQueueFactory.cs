@@ -74,17 +74,17 @@ namespace TOne.CDR.Business
                 if (s_CreatedSwitchesQueues.Contains(switchId))
                     return;
 
-                CreateSwitchQueueIfNotExists<CDRBatch>(switchId, QueueName.CDRRaw, null, new QueueSettings { SingleConcurrentReader = true, QueueActivator = new Vanrise.Queueing.Extensions.CreateProcessQueueActivator { ProcessInputArguments = new StoreCDRsInDBProcessInput { SwitchID = switchId } } });
-                CreateSwitchQueueIfNotExists<CDRBatch>(switchId, QueueName.CDRRawForBilling, QueueName.CDRRaw, new QueueSettings { SingleConcurrentReader = true, QueueActivator = new Vanrise.Queueing.Extensions.CreateProcessQueueActivator { ProcessInputArguments = new RawCDRsProcessInput { SwitchID = switchId } } });
+                CreateSwitchQueueIfNotExists<CDRBatch>(switchId, QueueName.CDRRaw, null, new QueueSettings { SingleConcurrentReader = true});
+                CreateSwitchQueueIfNotExists<CDRBatch>(switchId, QueueName.CDRRawForBilling, QueueName.CDRRaw, new QueueSettings { SingleConcurrentReader = true });
 
-                CreateSwitchQueueIfNotExists<CDRBillingBatch>(switchId, QueueName.CDRBilling, null, new QueueSettings { SingleConcurrentReader = true, QueueActivator = new Vanrise.Queueing.Extensions.CreateProcessQueueActivator { ProcessInputArguments = new BillingCDRsProcessInput { SwitchID = switchId } } });
-                CreateSwitchQueueIfNotExists<CDRBillingBatch>(switchId, QueueName.CDRBillingForStats, QueueName.CDRBilling , new QueueSettings { SingleConcurrentReader = true, QueueActivator = new Vanrise.Queueing.Extensions.CreateProcessQueueActivator { ProcessInputArguments = new GenerateStatisticsProcessInput { SwitchID = switchId } } });
-                CreateSwitchQueueIfNotExists<CDRBillingBatch>(switchId, QueueName.CDRBillingForStatsDaily, QueueName.CDRBilling, new QueueSettings { SingleConcurrentReader = true, QueueActivator = new Vanrise.Queueing.Extensions.CreateProcessQueueActivator { ProcessInputArguments = new GenerateDailyStatisticsProcessInput { SwitchID = switchId } } });
+                CreateSwitchQueueIfNotExists<CDRBillingBatch>(switchId, QueueName.CDRBilling, null, new QueueSettings { SingleConcurrentReader = true  });
+                CreateSwitchQueueIfNotExists<CDRBillingBatch>(switchId, QueueName.CDRBillingForStats, QueueName.CDRBilling , new QueueSettings { SingleConcurrentReader = true });
+                CreateSwitchQueueIfNotExists<CDRBillingBatch>(switchId, QueueName.CDRBillingForStatsDaily, QueueName.CDRBilling, new QueueSettings { SingleConcurrentReader = true });
 
-                CreateSwitchQueueIfNotExists<CDRMainBatch>(switchId, QueueName.CDRMain, null, new QueueSettings { SingleConcurrentReader = true, QueueActivator = new Vanrise.Queueing.Extensions.CreateProcessQueueActivator { ProcessInputArguments = new StoreMainCDRsInDBProcessInput { SwitchID = switchId } } });
-                CreateSwitchQueueIfNotExists<CDRInvalidBatch>(switchId, QueueName.CDRInvalid, null, new QueueSettings { SingleConcurrentReader = true, QueueActivator = new Vanrise.Queueing.Extensions.CreateProcessQueueActivator { ProcessInputArguments = new StoreInvalidCDRsInDBProcessInput { SwitchID = switchId } } });
-                CreateSwitchQueueIfNotExists<TrafficStatisticBatch>(switchId, QueueName.TrafficStats, null, new QueueSettings { SingleConcurrentReader = true, QueueActivator = new Vanrise.Queueing.Extensions.CreateProcessQueueActivator { ProcessInputArguments = new SaveStatisticsToDBProcessInput { SwitchID = switchId } } });
-                CreateSwitchQueueIfNotExists<TrafficStatisticDailyBatch>(switchId, QueueName.TrafficStatsDaily, null, new QueueSettings { SingleConcurrentReader = true, QueueActivator = new Vanrise.Queueing.Extensions.CreateProcessQueueActivator { ProcessInputArguments = new SaveDailyStatisticsToDBProcessInput { SwitchID = switchId } } });
+                CreateSwitchQueueIfNotExists<CDRMainBatch>(switchId, QueueName.CDRMain, null, new QueueSettings { SingleConcurrentReader = true });
+                CreateSwitchQueueIfNotExists<CDRInvalidBatch>(switchId, QueueName.CDRInvalid, null, new QueueSettings { SingleConcurrentReader = true});
+                CreateSwitchQueueIfNotExists<TrafficStatisticBatch>(switchId, QueueName.TrafficStats, null, new QueueSettings { SingleConcurrentReader = true});
+                CreateSwitchQueueIfNotExists<TrafficStatisticDailyBatch>(switchId, QueueName.TrafficStatsDaily, null, new QueueSettings { SingleConcurrentReader = true });
                 
                 s_CreatedSwitchesQueues.Add(switchId);
             }
@@ -98,7 +98,7 @@ namespace TOne.CDR.Business
             string[] sourceQueueNames = null;
             if (sourceQueueNameTemplate != null)
                 sourceQueueNames = new string[] { String.Format("{0}_{1}", sourceQueueNameTemplate, switchId) };
-            PersistentQueueFactory.Default.CreateQueueIfNotExists<T>(queueName, queueTitle, sourceQueueNames, queueSettings);
+            PersistentQueueFactory.Default.CreateQueueIfNotExists<T>(0, queueName, queueTitle, sourceQueueNames, queueSettings);
         }
 
         static List<int> s_CreatedSwitchesQueues = new List<int>();

@@ -10,7 +10,6 @@ AS
 BEGIN
 	SELECT [ItemID]
       ,[QueueID]
-      ,[SourceQueueID]
       ,[SourceItemID]
       ,[Description]
       ,[Status]

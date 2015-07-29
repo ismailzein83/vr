@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Vanrise.Queueing;
+using Vanrise.Queueing.Entities;
 
 namespace TOne.CDR.Entities
 {

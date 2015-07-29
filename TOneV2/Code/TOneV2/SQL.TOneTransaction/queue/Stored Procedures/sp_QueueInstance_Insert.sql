@@ -4,6 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [queue].[sp_QueueInstance_Insert] 
+	@ExecutionFlowID int,
 	@Name varchar(255),
 	@Title nvarchar(255),
 	@Status int,
@@ -14,12 +15,14 @@ AS
 BEGIN
 	
 	INSERT INTO [queue].[QueueInstance]
-		   ([Name]
+		   (ExecutionFlowID
+		   ,[Name]
 		   ,[Title]
 		   ,[Status]
 		   ,[ItemTypeID]
 		   ,[Settings])           
-	VALUES (@Name
+	VALUES (@ExecutionFlowID
+		  ,@Name
 		  ,@Title
 		  ,@Status
 		  ,@ItemTypeID

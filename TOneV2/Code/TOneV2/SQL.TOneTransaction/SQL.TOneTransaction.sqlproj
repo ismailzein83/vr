@@ -152,6 +152,10 @@
     <Build Include="integration\Stored Procedures\sp_DataSource_Get.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSource_GetAll.sql" />
     <Build Include="Security\integration.sql" />
+    <Build Include="queue\Tables\ExecutionFlowDefinition.sql" />
+    <Build Include="queue\Tables\ExecutionFlow.sql" />
+    <Build Include="queue\Stored Procedures\sp_QueueInstance_UpdateSettings.sql" />
+    <Build Include="queue\Stored Procedures\sp_ExecutionFlow_GetByID.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />

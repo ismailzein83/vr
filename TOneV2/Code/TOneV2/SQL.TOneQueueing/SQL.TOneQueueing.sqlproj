@@ -109,13 +109,21 @@
   <ItemGroup>
     <Build Include="queue\Tables\QueueItemHeader.sql" />
     <Build Include="queue\Tables\QueueItemIDGen.sql" />
-    <Build Include="queue\Stored Procedures\sp_QueueItemHeader_GetByID.sql" />
+    <Build Include="queue\Stored Procedures\sp_QueueItemHeader_GetByID.sql">
+      <AnsiNulls>Off</AnsiNulls>
+      <QuotedIdentifier>Off</QuotedIdentifier>
+    </Build>
     <Build Include="queue\Stored Procedures\sp_QueueItemHeader_Update.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueItemHeader_UpdateStatus.sql" />
-    <Build Include="queue\Stored Procedures\sp_QueueItemIDGen_GenerateID.sql" />
-    <Build Include="queue\Stored Procedures\sp_QueueItemIDGen_Insert.sql" />
+    <Build Include="queue\Stored Procedures\sp_QueueItemIDGen_GenerateID.sql">
+      <AnsiNulls>Off</AnsiNulls>
+      <QuotedIdentifier>Off</QuotedIdentifier>
+    </Build>
     <Build Include="Security\queue.sql" />
     <Build Include="queue\Tables\QueueActivation.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueActivation_GetUpdatedQueueIds.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Script.PostDeployment.sql" />
   </ItemGroup>
 </Project>

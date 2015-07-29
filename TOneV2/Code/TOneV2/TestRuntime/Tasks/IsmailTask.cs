@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using TOne.Business;
 using TOne.CDR.Entities;
+using TOne.CDR.QueueActivators;
 using TOne.Entities;
 using TOne.LCR.Entities;
 using Vanrise.BusinessProcess;
@@ -30,8 +31,8 @@ namespace TestRuntime
             ////return;
             System.Threading.ThreadPool.SetMaxThreads(10000, 10000);
 
-            Vanrise.Queueing.PersistentQueueFactory.Default.CreateQueueIfNotExists<TOne.CDR.Entities.CDRBatch>("testCDRQueue");
-            var queue = Vanrise.Queueing.PersistentQueueFactory.Default.GetQueue("testCDRQueue");
+            //Vanrise.Queueing.PersistentQueueFactory.Default.CreateQueueIfNotExists<TOne.CDR.Entities.CDRBatch>(0, "testCDRQueue");
+            //var queue = Vanrise.Queueing.PersistentQueueFactory.Default.GetQueue("testCDRQueue");
             
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
@@ -44,6 +45,8 @@ namespace TestRuntime
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
 
+            var storeCDRRawsStage = new  QueueStageExecutionActivity<CDRBatch> { StageName = "Store CDR Raws", QueueName="CDRRaw", QueueSettings = new QueueSettings{ QueueActivator = new StoreCDRRawsActivator()}};
+            var processRawCDRsStage = new QueueStageExecutionActivity<CDRBatch> { StageName = "Process Raw CDRs", QueueName = "CDRRawForBilling", QueueSettings = new QueueSettings { QueueActivator = new ProcessRawCDRsActivator() } };
             QueueExecutionFlowTree queueFlowTree = new QueueExecutionFlowTree
             {
                 Activities = new List<BaseExecutionActivity>
@@ -51,11 +54,11 @@ namespace TestRuntime
                     new ParallelExecutionActivity <CDRBatch> {
                          Activities = new List<BaseExecutionActivity>
                          {
-                              new QueueStageExecutionActivity<CDRBatch> { StageName = "Store CDR Raws", QueueName="CDRRaw"},
+                              storeCDRRawsStage,
                               new SequenceExecutionActivity{ 
                                   Activities = new List<BaseExecutionActivity>                              
                                   {
-                                      new QueueStageExecutionActivity<CDRBatch>  { StageName = "Process Raw CDRs",  QueueName = "CDRRawForBilling"},
+                                      processRawCDRsStage,
                                       new ParallelExecutionActivity <CDRBillingBatch>
                                       {
                                           Activities = new List<BaseExecutionActivity>
@@ -100,6 +103,25 @@ namespace TestRuntime
                 }
             };
             var tree = Vanrise.Common.Serializer.Serialize(queueFlowTree);
+
+
+
+            QueueExecutionFlowManager executionFlowManager = new QueueExecutionFlowManager();
+            var queuesByStages = executionFlowManager.GetQueuesByStages(4);
+            TOne.CDR.Entities.CDRBatch cdrBatch = new CDRBatch();
+            cdrBatch.CDRs = new List<TABS.CDR> { 
+             new TABS.CDR {  AttemptDateTime = DateTime.Now, CDPN = "343565436", CGPN = "5465436547", ConnectDateTime = DateTime.Now, Duration = new TimeSpan(0,2,4), IN_CARRIER="Trer", OUT_CARRIER = "6546"
+             }
+            };
+            cdrBatch.SwitchId = 8;
+            while (true)
+            {
+                Console.ReadKey();
+                queuesByStages["Store CDR Raws"].Queue.EnqueueObject(cdrBatch);
+            }
+            
+            
+
             ////QueueGroupType queueGroupType = new QueueGroupType() { ChildItems = new Dictionary<string, QueueGroupTypeItem>() };
             ////var cdrRaw = new QueueGroupTypeItem(typeof(CDRBatch).AssemblyQualifiedName);
             ////queueGroupType.ChildItems.Add("CDR Raw", cdrRaw);
@@ -127,27 +149,27 @@ namespace TestRuntime
             //////    });
             //////t.Start();
 
-            BPClient bpClient = new BPClient();
-            //bpClient.CreateNewProcess(new CreateProcessInput
-            //{
-            //    ProcessName = "RoutingProcess",
-            //    InputArguments = new TOne.LCRProcess.Arguments.RoutingProcessInput
-            //    {
-            //        DivideProcessIntoSubProcesses = true,
-            //        EffectiveTime = DateTime.Now,
-            //        IsFuture = false,
-            //        IsLcrOnly = false
-            //    }
-            //});
+            ////BPClient bpClient = new BPClient();
+            //////bpClient.CreateNewProcess(new CreateProcessInput
+            //////{
+            //////    ProcessName = "RoutingProcess",
+            //////    InputArguments = new TOne.LCRProcess.Arguments.RoutingProcessInput
+            //////    {
+            //////        DivideProcessIntoSubProcesses = true,
+            //////        EffectiveTime = DateTime.Now,
+            //////        IsFuture = false,
+            //////        IsLcrOnly = false
+            //////    }
+            //////});
 
-            bpClient.CreateNewProcess(new CreateProcessInput
-            {
-                InputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput
-                {
-                    RepricingDay = DateTime.Parse("2013-03-29")//,
-                   // DivideProcessIntoSubProcesses = true
-                }
-            });
+            ////bpClient.CreateNewProcess(new CreateProcessInput
+            ////{
+            ////    InputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput
+            ////    {
+            ////        RepricingDay = DateTime.Parse("2013-03-29")//,
+            ////       // DivideProcessIntoSubProcesses = true
+            ////    }
+            ////});
 
             //bpClient.CreateNewProcess(new CreateProcessInput
             //{
