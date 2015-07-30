@@ -3,9 +3,9 @@
 function DashboardController($scope, DashboardAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
 
     var mainGridAPI_CasesSummary;
-    var mainGridAPI_StrategyCases;
     var mainGridAPI_BTSCases;
     var mainGridAPI_CellCases;
+    var chartSelectedMeasureAPI;
 
     defineScope();
     load();
@@ -61,12 +61,6 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
 
        
 
-        $scope.onMainGridReady_StrategyCases = function (api) {
-            mainGridAPI_StrategyCases = api;
-            getData_StrategyCases();
-        };
-
-
        
 
         $scope.onMainGridReady_BTSCases = function (api) {
@@ -81,11 +75,14 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
             getData_CellCases();
         };
 
+        $scope.chartSelectedMeasureReady = function (api) {
+            chartSelectedMeasureAPI = api;
+            getData_StrategyCases();
+        };
        
 
         $scope.searchClicked = function () {
             mainGridAPI_CasesSummary.clearDataAndContinuePaging();
-            mainGridAPI_StrategyCases.clearDataAndContinuePaging();
             mainGridAPI_BTSCases.clearDataAndContinuePaging();
             mainGridAPI_CellCases.clearDataAndContinuePaging();
 
@@ -96,6 +93,10 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
 
             //return true;
         };
+
+
+       
+
 
     }
 
@@ -122,7 +123,10 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
     }
 
     function getData_StrategyCases() {
+        if (!chartSelectedMeasureAPI)
+            return;
 
+        $scope.showResult = true;
         $scope.isGettingStrategyCases = true;
 
         var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
@@ -132,13 +136,29 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
             angular.forEach(response, function (itm) {
                 $scope.strategyCases.push(itm);
             });
+
+            var chartDefinition = {
+                type: "pie",
+                title: "Strategy Cases",
+                yAxisTitle: "CountCases"
+            };
+
+            var seriesDefinitions = [{
+                title: "Fraud Cases",
+                titlePath: "StrategyName",
+                valuePath: "CountCases"
+            }];
+            chartSelectedMeasureAPI.renderSingleDimensionChart($scope.strategyCases, chartDefinition, seriesDefinitions);
+
         }).finally(function () {
             $scope.isGettingStrategyCases = false;
         });
     }
 
-    function getData_BTSCases() {
+   
 
+
+    function getData_BTSCases() {
         $scope.isGettingBTSCases = true;
 
         var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
@@ -152,6 +172,7 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
             $scope.isGettingBTSCases = false;
         });
     }
+
 
     function getData_CellCases() {
 
