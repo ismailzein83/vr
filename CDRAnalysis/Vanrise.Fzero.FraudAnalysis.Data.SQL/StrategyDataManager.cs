@@ -76,25 +76,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return false;
         }
 
-        public List<CallClass> GetAllCallClasses()
-        {
-            return GetItemsSP("FraudAnalysis.sp_CallClass_GetAll", CallClassMapper);
-        }
-
-        public List<Period> GetPeriods()
-        {
-
-            var enumerationType = typeof(Enums.Period);
-            List<Period> periods = new List<Period>();
-
-            foreach (int value in Enum.GetValues(enumerationType))
-            {
-                var name = Enum.GetName(enumerationType, value);
-                periods.Add(new Period() { Id = value, Name = name });
-            }
-
-            return periods;
-        }
 
         #region Private Methods
 
@@ -103,15 +84,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             var strategy = Vanrise.Common.Serializer.Deserialize<Strategy>(GetReaderValue<string>(reader, "StrategyContent"));
             strategy.Id = (int)reader["Id"];
             return strategy;
-        }
-
-        private CallClass CallClassMapper(IDataReader reader)
-        {
-            var callClass = new CallClass();
-            callClass.Id = (int)reader["Id"];
-            callClass.Description = reader["Description"] as string;
-            callClass.NetType = (Enums.NetType)Enum.ToObject(typeof(Enums.NetType), GetReaderValue<int>(reader, "NetType"));
-            return callClass;
         }
 
         #endregion

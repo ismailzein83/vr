@@ -73,6 +73,7 @@
     <Compile Include="DashboardManager.cs" />
     <Compile Include="NumberProfileManager.cs" />
     <Compile Include="NormalCDRManager.cs" />
+    <Compile Include="PredefinedManager.cs" />
     <Compile Include="StrategyManager.cs" />
   </ItemGroup>
   <ItemGroup>

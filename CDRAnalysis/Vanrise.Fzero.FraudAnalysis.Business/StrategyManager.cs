@@ -9,13 +9,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
     public class StrategyManager
     {
 
-        public List<Period> GetPeriods()
-        {
-            IStrategyDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
-
-            return dataManager.GetPeriods();
-        }
-
 
         public Strategy GetStrategy(int StrategyId)
         {
