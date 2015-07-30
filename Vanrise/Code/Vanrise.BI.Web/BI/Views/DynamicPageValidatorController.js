@@ -33,7 +33,7 @@ function ValidateEditorController($scope, MenuAPIService, WidgetAPIService, User
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return BIAPIService.GetUserMeasuresValidator(dataRetrievalInput)
             .then(function (response) {
-                console.log(response);
+
                 if (dataRetrievalInput.DataRetrievalResultType == DataRetrievalResultTypeEnum.Normal.value) {
                     var data = [];
                     angular.forEach(response.Data, function (itm) {
@@ -42,8 +42,7 @@ function ValidateEditorController($scope, MenuAPIService, WidgetAPIService, User
                     response.Data = data;
                     
                 }
-                console.log(response);
-               // $scope.dataSrouce = response.Data;
+
                 onResponseReady(response);
             });
         };
