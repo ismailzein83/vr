@@ -14,6 +14,8 @@ namespace Vanrise.Queueing.Entities
 
         public int QueueId { get; set; }
 
+        public long ExecutionFlowTriggerItemId { get; set; }
+
         public long SourceItemId { get; set; }
 
         public string Description { get; set; }

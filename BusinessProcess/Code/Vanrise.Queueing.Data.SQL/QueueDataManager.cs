@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Data.SQL;
 using Vanrise.Queueing.Entities;
@@ -19,29 +16,6 @@ namespace Vanrise.Queueing.Data.SQL
             : base(GetConnectionStringName("QueueDBConnStringKey", "QueueDBConnString"))
         {
         }
-
-        //public void CreateQueue(string queueName, string title, string itemFQTN, QueueSettings settings, IEnumerable<int> sourceQueueIds)
-        //{
-        //    DataTable dtSourceQueueIds = new DataTable();
-        //    dtSourceQueueIds.Columns.Add("ID", typeof(int));
-        //    dtSourceQueueIds.BeginLoadData();
-        //    if(sourceQueueIds != null)
-        //    {
-        //        foreach (var sourceQueueId in sourceQueueIds)
-        //            dtSourceQueueIds.Rows.Add(sourceQueueId);
-        //    }
-        //    dtSourceQueueIds.EndLoadData();
-        //    ExecuteNonQuerySPCmd("queue.sp_Queue_Create", (cmd) =>
-        //        {
-        //            cmd.Parameters.Add(new SqlParameter("@Name", queueName));
-        //            cmd.Parameters.Add(new SqlParameter("@Title", title));
-        //            cmd.Parameters.Add(new SqlParameter("@ItemFQTN", itemFQTN));
-        //            cmd.Parameters.Add(new SqlParameter("@Settings", Serializer.Serialize(settings)));
-        //            SqlParameter prmSourceQueueIds = new SqlParameter("@SourceQueueIDs", SqlDbType.Structured);
-        //            prmSourceQueueIds.Value = dtSourceQueueIds;
-        //            cmd.Parameters.Add(prmSourceQueueIds);
-        //        });
-        //}
 
         public int InsertOrUpdateQueueItemType(string itemFQTN, string title, QueueSettings defaultQueueSettings )
         {
@@ -85,7 +59,7 @@ namespace Vanrise.Queueing.Data.SQL
 
         public QueueInstance GetQueueInstance(string queueName)
         {
-            return GetItemSP("queue.sp_QueueInstance_GetByName", QueueInstanceReader, queueName);
+            return GetItemSP("queue.sp_QueueInstance_GetByName", QueueInstanceMapper, queueName);
         }
 
         public List<QueueInstance> GetQueueInstances(IEnumerable<int> queueIds)
@@ -96,10 +70,9 @@ namespace Vanrise.Queueing.Data.SQL
             foreach (var id in queueIds)
                 dtIds.Rows.Add(id);
             dtIds.EndLoadData();
-            return GetItemsSPCmd("queue.sp_QueueInstance_GetByIDs", QueueInstanceReader, (cmd) =>
+            return GetItemsSPCmd("queue.sp_QueueInstance_GetByIDs", QueueInstanceMapper, cmd =>
                 {
-                    var prmIds = new SqlParameter("@IDs", SqlDbType.Structured);
-                    prmIds.Value = dtIds;
+                    var prmIds = new SqlParameter("@IDs", SqlDbType.Structured) {Value = dtIds};
                     cmd.Parameters.Add(prmIds);
                 });
         }
@@ -131,31 +104,19 @@ namespace Vanrise.Queueing.Data.SQL
 
         #region Private Methods
 
-        private QueueInstance QueueInstanceReader(IDataReader reader)
-        {
-            return new QueueInstance
-            {
-                QueueInstanceId = (int)reader["ID"],
-                Name = reader["Name"] as string,
-                ExecutionFlowId = GetReaderValue<int?>(reader, "ExecutionFlowID"),
-                Title = reader["Title"] as string,
-                Status = (QueueInstanceStatus)reader["Status"],
-                ItemTypeId = (int)reader["ItemTypeID"],
-                ItemFQTN = reader["ItemFQTN"] as string,
-                Settings = Serializer.Deserialize<QueueSettings>(reader["Settings"] as string),
-                CreateTime = GetReaderValue<DateTime>(reader, "CreatedTime")
-            };
-        }
-
+        
         private QueueInstance QueueInstanceMapper(IDataReader reader)
         {
             return new QueueInstance
             {
                 QueueInstanceId = (int)reader["ID"],
                 Name = reader["Name"] as string,
+                ExecutionFlowId = GetReaderValue<int?>(reader, "ExecutionFlowID"),
+                StageName = reader["StageName"] as string,
                 Title = reader["Title"] as string,
                 Status = (QueueInstanceStatus)reader["Status"],
                 ItemTypeId = (int)reader["ItemTypeID"],
+                ItemFQTN = reader["ItemFQTN"] as string,
                 Settings = Serializer.Deserialize<QueueSettings>(reader["Settings"] as string),
                 CreateTime = GetReaderValue<DateTime>(reader, "CreatedTime")
             };
@@ -186,7 +147,7 @@ namespace Vanrise.Queueing.Data.SQL
 
         public List<QueueInstance> GetQueueInstancesByTypes(IEnumerable<int> queueItemTypes)
         {
-            return GetItemsSP("queue.sp_QueueInstance_GetByTypes", QueueInstanceMapper, queueItemTypes == null ? null : string.Join(",", queueItemTypes.Select(n => ((int)n).ToString()).ToArray()));
+            return GetItemsSP("queue.sp_QueueInstance_GetByTypes", QueueInstanceMapper, queueItemTypes == null ? null : string.Join(",", queueItemTypes.Select(n => n.ToString()).ToArray()));
         }
     }
 }

@@ -243,6 +243,7 @@ namespace Vanrise.Queueing.Data.SQL
             {
                 ItemId = (long)reader["ItemID"],
                 QueueId = (int)reader["QueueID"],
+                ExecutionFlowTriggerItemId = GetReaderValue<long>(reader, "ExecutionFlowTriggerItemID"),
                 SourceItemId = GetReaderValue<long>(reader, "SourceItemID"),
                 Description = reader["Description"] as string,
                 Status = (QueueItemStatus)reader["Status"],
