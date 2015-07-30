@@ -12,36 +12,38 @@ namespace TOne.CDR.Business
     {
         public BillingCDRBase GetBillingCDRBase(Billing_CDR_Base cdrBase)
         {
-            BillingCDRBase cdr = new BillingCDRBase();
+            BillingCDRBase cdr = new BillingCDRBase
+            {
+                Alert = cdrBase.Alert,
+                Attempt = cdrBase.Attempt,
+                CDPN = cdrBase.CDPN,
+                CDPNOut = cdrBase.CDPNOut,
+                CGPN = cdrBase.CGPN,
+                Connect = cdrBase.Connect,
+                CustomerID = cdrBase.CustomerID,
+                Disconnect = cdrBase.Disconnect,
+                DurationInSeconds = cdrBase.DurationInSeconds,
+                Extra_Fields = cdrBase.Extra_Fields,
+                ID = cdrBase.ID,
+                IsRerouted = cdrBase.IsRerouted,
+                OriginatingZoneID = cdrBase.OriginatingZone == null ? -1 : cdrBase.OriginatingZone.ZoneID,
+                OurCode = cdrBase.OurCode,
+                OurZoneID = cdrBase.OurZone == null ? -1 : cdrBase.OurZone.ZoneID,
+                Port_IN = cdrBase.Port_IN,
+                Port_OUT = cdrBase.Port_OUT,
+                ReleaseCode = cdrBase.ReleaseCode,
+                ReleaseSource = cdrBase.ReleaseSource,
+                SIP = cdrBase.SIP,
+                SubscriberID = cdrBase.SubscriberID,
+                SupplierCode = cdrBase.SupplierCode,
+                SupplierID = cdrBase.SupplierID,
+                SupplierZoneID = cdrBase.SupplierZone == null ? -1 : cdrBase.SupplierZone.ZoneID,
+                SwitchCdrID = cdrBase.SwitchCdrID,
+                SwitchID = cdrBase.Switch == null ? -1 : cdrBase.Switch.SwitchID,
+                Tag = cdrBase.Tag,
+                IsValid = cdrBase.IsValid
+            };
 
-            cdr.Alert = cdrBase.Alert;
-            cdr.Attempt = cdrBase.Attempt;
-            cdr.CDPN = cdrBase.CDPN;
-            cdr.CDPNOut = cdrBase.CDPNOut;
-            cdr.CGPN = cdrBase.CGPN;
-            cdr.Connect = cdrBase.Connect;
-            cdr.CustomerID = cdrBase.CustomerID;
-            cdr.Disconnect = cdrBase.Disconnect;
-            cdr.DurationInSeconds = cdrBase.DurationInSeconds;
-            cdr.Extra_Fields = cdrBase.Extra_Fields;
-            cdr.ID = cdrBase.ID;
-            cdr.IsRerouted = cdrBase.IsRerouted;
-            cdr.OriginatingZoneID = cdrBase.OriginatingZone == null ? -1 : cdrBase.OriginatingZone.ZoneID;
-            cdr.OurCode = cdrBase.OurCode;
-            cdr.OurZoneID = cdrBase.OurZone == null ? -1 : cdrBase.OurZone.ZoneID;
-            cdr.Port_IN = cdrBase.Port_IN;
-            cdr.Port_OUT = cdrBase.Port_OUT;
-            cdr.ReleaseCode = cdrBase.ReleaseCode;
-            cdr.ReleaseSource = cdrBase.ReleaseSource;
-            cdr.SIP = cdrBase.SIP;
-            cdr.SubscriberID = cdrBase.SubscriberID;
-            cdr.SupplierCode = cdrBase.SupplierCode;
-            cdr.SupplierID = cdrBase.SupplierID;
-            cdr.SupplierZoneID = cdrBase.SupplierZone == null ? -1 : cdrBase.SupplierZone.ZoneID;
-            cdr.SwitchCdrID = cdrBase.SwitchCdrID;
-            cdr.SwitchID = cdrBase.Switch == null ? -1 : cdrBase.Switch.SwitchID;
-            cdr.Tag = cdrBase.Tag;
-            cdr.IsValid = cdrBase.IsValid;
 
             return cdr;
         }

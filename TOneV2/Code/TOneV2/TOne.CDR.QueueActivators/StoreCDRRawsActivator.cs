@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TOne.CDR.Data;
+﻿using TOne.CDR.Data;
 using TOne.CDR.Entities;
 using Vanrise.Queueing.Entities;
 
@@ -15,8 +10,10 @@ namespace TOne.CDR.QueueActivators
         {
             ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
             CDRBatch cdrBatch = item as CDRBatch;
-            Object preparedMainCDRs = dataManager.PrepareCDRsForDBApply(cdrBatch.CDRs, cdrBatch.SwitchId);
-            dataManager.ApplyCDRsToDB(preparedMainCDRs);
+            if (cdrBatch != null)
+            {
+                dataManager.ApplyCDRsToDB(dataManager.PrepareCDRsForDBApply(cdrBatch.CDRs, cdrBatch.SwitchId));
+            }
         }
         public override void OnDisposed()
         {

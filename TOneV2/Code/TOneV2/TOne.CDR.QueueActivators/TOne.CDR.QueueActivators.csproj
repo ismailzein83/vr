@@ -58,11 +58,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GenerateDailyTrafficStatisticsActivator.cs" />
+    <Compile Include="GenerateTrafficStatisticsActivator.cs" />
+    <Compile Include="ProcessBillingCDRsActivator.cs" />
     <Compile Include="ProcessRawCDRsActivator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoreCDRRawsActivator.cs" />
+    <Compile Include="StoreDailyStatisticsActivator.cs" />
+    <Compile Include="StoreInvalidCDRsActivator.cs" />
+    <Compile Include="StoreMainCDRsActivator.cs" />
+    <Compile Include="StoreStatisticsActivator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.BusinessEntity.Entities\TOne.BusinessEntity.Entities.csproj">
+      <Project>{70ce755d-00ae-4e12-8f07-e4df91346293}</Project>
+      <Name>TOne.BusinessEntity.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.Business\TOne.Business.csproj">
       <Project>{cab55227-6fda-4012-8a59-168ad30f96d2}</Project>
       <Name>TOne.Business</Name>

@@ -21,6 +21,7 @@ namespace TOne.CDR.QueueActivators
             ProtCodeMap codeMap = new ProtCodeMap(cacheManager);
             CDRGenerator cdrGenerator = new CDRGenerator();
             CDRBatch cdrBatch = item as CDRBatch;
+
             TOne.CDR.Entities.CDRBillingBatch cdrBillingGenerated = new TOne.CDR.Entities.CDRBillingBatch();
             cdrBillingGenerated.CDRs = new List<BillingCDRBase>();
             TABS.Switch cdrSwitch;
@@ -31,16 +32,8 @@ namespace TOne.CDR.QueueActivators
             foreach (TABS.CDR cdr in cdrBatch.CDRs)
             {
                 cdr.Switch = cdrSwitch;
-                Billing_CDR_Base billingCDR = null;
-
-                if (cdr.DurationInSeconds > 0)
-                {
-                    billingCDR = new Billing_CDR_Main();
-                }
-                else
-                    billingCDR = new Billing_CDR_Invalid();
-                billingCDR.Attempt = cdr.AttemptDateTime;
-                cdrBillingGenerated.CDRs.Add(cdrGenerator.GetBillingCDRBase(billingCDR));
+                Billing_CDR_Base cdrBase = cdrGenerator.GenerateBillingCdr(codeMap, cdr);
+                cdrBillingGenerated.CDRs.Add(cdrGenerator.GetBillingCDRBase(cdrBase));
             }
             outputItems.Add("Process Billing CDRs", cdrBillingGenerated);
             Vanrise.Caching.CacheManagerFactory.RemoveCacheManager(cacheManagerId);
