@@ -125,7 +125,7 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
     function getData_StrategyCases() {
         if (!chartSelectedMeasureAPI)
             return;
-
+        $scope.strategyCases.length = 0;
         $scope.showResult = true;
         $scope.isGettingStrategyCases = true;
 
