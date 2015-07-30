@@ -442,6 +442,17 @@ Use this for keyframe animations
    
     border-radius: 0px !important;
 }
+.modal-dialog .dropdown-menu{
+    position:fixed !important;
+    left:auto !important;
+    top:auto !important;
+}
+.modal-dialog .bootstrap-datetimepicker-widget{
+    position:fixed !important;
+    left:auto !important;
+    top:auto !important;
+    margin-top:35px;
+}
 .leavecolor{
     background-color: transparent !important;
 }
