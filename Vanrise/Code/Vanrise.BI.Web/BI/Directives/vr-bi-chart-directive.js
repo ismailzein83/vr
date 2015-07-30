@@ -119,7 +119,6 @@ app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEleme
         }
 
         function refreshPIEChart(response) {
-
             var chartDefinition = {
                 type: "pie",
                 title: directiveSettings.EntityType.DisplayName,

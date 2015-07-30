@@ -56,6 +56,8 @@ namespace Vanrise.BI.Business
                 {
                     var myObject = (IDimensionBehavior)Activator.CreateInstance(Type.GetType(entity.Configuration.BehaviorFQTN));
                     queryFilter=  myObject.GetFilteredValues();
+                    if (queryFilter.Count == 0)
+                        return new List<EntityRecord>();
                 }
                 
             }

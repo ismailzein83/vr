@@ -49,7 +49,7 @@ namespace Vanrise.BI.Data.SQL
 
             if (!measureTypesNames.Contains(topByMeasureTypeName))
             {
-                if (expressionsPart == null)
+                if (expressionsPart == null) 
                     expressionsPart = topMeasureColExp;
                 else
                     expressionsPart = string.Format(@"{0} 
@@ -110,7 +110,7 @@ namespace Vanrise.BI.Data.SQL
                     queryBuilder = new StringBuilder();
                 else
                     queryBuilder.Append(" or ");
-                queryBuilder.AppendFormat("FilterValue.currentmember =   {0}.&[{1}] ", entityIdColumn, value);
+                queryBuilder.AppendFormat("FilterValue.currentmember.member_caption =   {0}.&[{1}].member_caption ", entityIdColumn, value);
             }
             return queryBuilder.ToString();
         }
