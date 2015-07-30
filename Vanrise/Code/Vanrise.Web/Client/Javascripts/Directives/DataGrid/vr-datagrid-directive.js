@@ -456,7 +456,7 @@
                 addBatchItemsToBeginSource(itemsToAdd);
             };
 
-            function addBatchItemsToBeginSource(items) {
+            function addBatchItemsToBeginSource(items) {            
                 var numberOfItems = pagingOnScrollEnabled ? getPageSize() : 10;//if paging on scroll is enabled, take the page size
                 for (var i = 0; i < numberOfItems; i++) {
                     if (items.length > 0) {
@@ -514,7 +514,6 @@
                 };
                 return retrieveData(true);
             };
-
             setTimeout(function () {
                 isGridReady = true;
                 if (ctrl.onReady != null)
@@ -555,15 +554,14 @@
                                 stopPagingOnScroll = true;
                             ctrl.isLoadingMoreData = false;
                             var div = document.getElementById('gridBodyContainer'); // need real DOM Node, not jQuery wrapper
-                            var hasnotVerticalScrollbar = div.scrollHeight > div.clientHeight;
-                            if (hasnotVerticalScrollbar)
+                            var hasVerticalScrollbar = div.scrollHeight > div.clientHeight;
+                            if (hasVerticalScrollbar)
                                 ctrl.headerStyle = {
                                     "padding-right": getScrollbarWidth()+"px"
                                 }
                             else ctrl.headerStyle = {
                                 "padding-right": "0px"
                             }
-                            console.log(hasnotVerticalScrollbar);
                         });
                     }
                 });
@@ -766,17 +764,21 @@
             if (promise != undefined && promise != null) {
                 ctrl.isLoadingMoreData = true;
                 promise.finally(function () {
-                    ctrl.isLoadingMoreData = false;
-                    var div = document.getElementById('gridBodyContainer'); // need real DOM Node, not jQuery wrapper
-                    var hasnotVerticalScrollbar = div.scrollHeight > div.clientHeight;
-                    if (hasnotVerticalScrollbar)
-                        ctrl.headerStyle = {
+                    ctrl.isLoadingMoreData = false;                    
+                    setTimeout(function () {
+                        var div = document.getElementById('gridBodyContainer'); // need real DOM Node, not jQuery wrapper
+                        var hasVerticalScrollbar = div.scrollHeight > div.clientHeight;
+                        if (hasVerticalScrollbar)
+                            ctrl.headerStyle = {
+                                "padding-right": getScrollbarWidth() + "px"
+                               
+                            }
+                        else ctrl.headerStyle = {
                             "padding-right": "0px"
+
                         }
-                    else ctrl.headerStyle = {
-                        "padding-right": getScrollbarWidth() + "px"
-                    }
-                    // console.log(ctrl.headerStyle)
+                    },500)
+                 
                 });
             }
             return promise;            

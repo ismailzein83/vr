@@ -2,7 +2,7 @@
 app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessagesEnum', 'UtilsService', function (SelectService, BaseDirService, ValidationMessagesEnum, UtilsService) {
     var openedDropDownIds = [], rootScope;
     var vrSelectSharedObject = {
-        onOpenDropDown: function (idAttribute) {            
+        onOpenDropDown: function (idAttribute) {
             rootScope.$apply(function () {
 			  openedDropDownIds.push(idAttribute);
 			});
@@ -136,7 +136,40 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                 controller.selectedvalues.push(controller.getdatasource()[0]);
                 return controller.getObjectText(controller.getdatasource()[0]);
             };
+            $('div[name=' + $attrs.id + ']').on('show.bs.dropdown', function (e) {
+                vrSelectSharedObject.onOpenDropDown($attrs.id);
+                $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+            });
 
+            $('div[name=' + $attrs.id + ']').attr('name', $attrs.id).on('hide.bs.dropdown', function (e) {
+                vrSelectSharedObject.onCloseDropDown($attrs.id);
+                $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+            });
+            if ($('div[name=' + $attrs.id + ']').closest('.modal-body').length > 0) {
+
+                $('div[name=' + $attrs.id + ']').on('click', '.dropdown-toggle', function (event) {
+
+                    var self = $(this);
+                    var selfHeight = $(this).parent().height();
+                    var selfOffset = $(self).offset();
+                    var dropDown = self.parent().find('ul');
+                    $(dropDown).css({ position: 'fixed', top: 'auto', left: 'auto' });
+                });
+
+                var fixDropdownPosition = function () {
+                    $('.drop-down-inside-modal').find('.dropdown-menu').hide();
+                    $('.drop-down-inside-modal').removeClass("open");
+
+                };
+
+                $(".modal-body").unbind("scroll");
+                $(".modal-body").scroll(function () {
+                    fixDropdownPosition();
+                });
+                $(window).resize(function () {
+                    fixDropdownPosition();
+                });
+            }
             this.getLabel = function () {
                 
                 if (! controller.isMultiple()) {
@@ -271,14 +304,14 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                 }, 100);
                 setTimeout(function() {
                     if ($('div[name=' + attrs.id + ']').closest('.modal-body').length > 0) {
-
+                     
                         $('div[name=' + attrs.id + ']').on('click', '.dropdown-toggle', function(event) {
 
                             var self = $(this);
                             var selfHeight = $(this).parent().height();
                             var selfOffset = $(self).offset();                           
                             var dropDown = self.parent().find('ul');
-                            $(dropDown).css({ position: 'fixed', top: selfOffset.top + selfHeight, left: 'auto' });
+                            $(dropDown).css({ position: 'fixed', top: 'auto' , left: 'auto' });
                         });
 
                         var fixDropdownPosition = function() {
@@ -296,39 +329,6 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                         });
                     }
                 }, 500);
-                setTimeout(function () {
-                    $('.dropdown-container1').removeClass('vr-disabled');
-                }, 501);
-
-
-//setTimeout(function () {
-                //    if (divDropdown.closest('.modal-body').length > 0) {
-
-                //        divDropdown.on('click', '.dropdown-toggle', function (event) {
-
-                //            var self = $(this);
-                //            var selfHeight = $(this).parent().height();
-                //            var selfWidth = $(this).parent().width();
-                //            var selfOffset = $(self).offset();
-                //            var selfOffsetRigth = $(document).width() - selfOffset.left - selfWidth;
-                //            ulDropdown.css({ position: 'fixed', top: selfOffset.top + selfHeight, left: 'auto' });
-                //        });
-
-                //        var fixDropdownPosition = function () {
-                //            ulDropdown.hide();
-                //            divDropdown.removeClass("open");
-                //        };
-
-                //        $(".modal-body").unbind("scroll");
-                //        $(".modal-body").scroll(function () {
-                //            fixDropdownPosition();
-                //        });
-                //        $(window).resize(function () {
-                //            fixDropdownPosition();
-                //        });
-                //    }
-                //}, 1000)
-
             }
 
             onLoad();
