@@ -89,7 +89,6 @@
     <Compile Include="Models\QueueItemHeaderModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="Queueing\Constants\QueueItemStatusEnum.js" />
     <Content Include="Queueing\Services\QueueingAPIService.js" />

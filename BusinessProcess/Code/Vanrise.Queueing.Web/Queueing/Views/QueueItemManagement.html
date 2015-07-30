@@ -1,0 +1,49 @@
+﻿<vr-panel ng-controller="Queueing_QueueItemManagementController">
+
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-select label="Queue Item Types" ismultipleselection hideselectedvaluessection="true" datatextfield="Title" datavaluefield="Id"
+                               onselectionchanged="onchangeQueueItemTypes" datasource="::queueItemTypes" selectedvalues="selectedQueueItemTypes" entityname="Types"></vr-select>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-select label="Queue Instance" ismultipleselection hideselectedvaluessection="true" datatextfield="Title" datavaluefield="QueueInstanceId"
+                               datasource="queueInstances" selectedvalues="selectedQueueInstances" entityname="Instances"></vr-select>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-select label="Status" ismultipleselection hideselectedvaluessection="true" datatextfield="Description" datavaluefield="Value"
+                               datasource="::queueItemStatus" selectedvalues="selectedQueueItemStatus" entityname="Status"></vr-select>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-datetimepicker type="date" value="fromDate" label="From:"></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-datetimepicker type="date" value="toDate" label="To:"></vr-datetimepicker>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="onSearchClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+
+
+        <div>
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-datagrid datasource="::datasource" loadmoredata="loadMoreData" on-ready="onGridReady">
+                        <vr-datagridcolumn headertext="'Description'" field="'Description'" widthfactor="75"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Created Time'" field="'CreatedTime'" type="'Datetime'" widthfactor="10"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Last Updated Time'" field="'LastUpdatedTime'" type="'Datetime'" widthfactor="10"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" widthfactor="5" getcolor="getStatusColor"></vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-columns>
+            </vr-row>
+        </div>
+
+    </vr-form>
+</vr-panel>
