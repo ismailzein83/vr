@@ -12,9 +12,17 @@ namespace Vanrise.Integration.Entities
         public string FileName { get; set; }
         public string Content { get; set; }
 
+        public long Size { get; set; }
+
         public string Description
         {
             get { return FileName; }
+        }
+
+
+        public long? BatchSize
+        {
+            get { return this.Size; }
         }
     }
 }

@@ -29,5 +29,11 @@ namespace Vanrise.Integration.Entities
         {
             get { return null; }
         }
+
+
+        public long? BatchSize
+        {
+            get { return Size; }
+        }
     }
 }

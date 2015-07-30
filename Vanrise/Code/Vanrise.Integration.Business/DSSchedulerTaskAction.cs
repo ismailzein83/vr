@@ -19,7 +19,7 @@ namespace Vanrise.Integration.Business
             Vanrise.Integration.Entities.DataSource dataSource = dataManager.GetDataSourcebyTaskId(task.TaskId);
 
             BaseReceiveAdapter adapter = (BaseReceiveAdapter)Activator.CreateInstance(Type.GetType(dataSource.AdapterInfo.FQTN));
-
+            adapter.SetLogger(new DataSourceLogger());
             adapter.ImportData(dataSource.Settings.AdapterArgument, data =>
                 {
                     Vanrise.Queueing.Entities.PersistentQueueItem queueItem = this.ExecuteCustomCode(dataSource.Settings.MapperCustomCode, data);
