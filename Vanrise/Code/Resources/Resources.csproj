@@ -131,6 +131,8 @@
     <Content Include="DLLs\Rebex.Security.dll" />
     <Content Include="DLLs\Rebex.TerminalEmulation.dll" />
     <Content Include="DLLs\Rebex.TerminalEmulation.xml" />
+    <Content Include="LKUPtable_GenerateMergeScript\Readme.txt" />
+    <Content Include="LKUPtable_GenerateMergeScript\Script.txt" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
