@@ -43,7 +43,7 @@ function ValidateEditorController($scope, MenuAPIService, WidgetAPIService, User
                     
                 }
                 console.log(response);
-                $scope.dataSrouce = response.Data;
+               // $scope.dataSrouce = response.Data;
                 onResponseReady(response);
             });
         };
