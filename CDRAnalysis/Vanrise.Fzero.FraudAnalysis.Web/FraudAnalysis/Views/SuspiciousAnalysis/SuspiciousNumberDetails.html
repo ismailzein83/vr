@@ -43,13 +43,13 @@
                         <vr-row>
                             <vr-columns colnum="12">
                                 <div ng-show="isSubscriberThresholdsTabShown" vr-loader="isGettingSubscriberThresholds">
-                                    <vr-datagrid datasource="subscriberThresholds" maxheight="400px" loadmoredata="loadMoreDataSubscriberThresholds"  on-ready="onSubscriberThresholdsGridReady">
+                                    <vr-datagrid datasource="subscriberThresholds" maxheight="400px" loadmoredata="loadMoreDataSubscriberThresholds" on-ready="onSubscriberThresholdsGridReady">
                                         <vr-datagridcolumn headertext="'Date'" field="'DateDay'" type="'Datetime'" widthfactor="25"></vr-datagridcolumn>
 
                                         <vr-datagridcolumn ng-repeat="filter in filterDefinitions" widthfactor="20" columnindex="$index + 1" headertext="'Filt. ' + filter.filterId" tag="filter">
                                             <div ng-init="filterIndex = viewScope.filterDefinitions.indexOf(colDef.tag)" style="width:100%">
                                                 {{dataItem.CriteriaValues[filterIndex]}}
-                                                
+
                                             </div>
                                         </vr-datagridcolumn>
 
@@ -80,28 +80,12 @@
                                     <vr-datagrid datasource="numberProfiles" maxheight="400px" rotate="true" loadmoredata="loadMoreDataNumberProfiles" on-ready="onNumberProfilesGridReady">
                                         <vr-datagridcolumn headertext="'From Date'" field="'FromDate'" type="'Datetime'" widthfactor="25"></vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'To Date'" field="'ToDate'" type="'Datetime'" widthfactor="25"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountOutCalls'" field="'CountOutCalls'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'DiffOutputNumb'" field="'DiffOutputNumb'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountOutInter'" field="'CountOutInter'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountInInter'" field="'CountInInter'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CallOutDurAvg'" field="'CallOutDurAvg'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountOutFail'" field="'CountOutFail'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountInFail'" field="'CountInFail'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'TotalOutVolume'" field="'TotalOutVolume'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'TotalInVolume'" field="'TotalInVolume'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'DiffInputNumbers'" field="'DiffInputNumbers'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountOutSMS'" field="'CountOutSMS'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'TotalIMEI'" field="'TotalIMEI'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'TotalBTS'" field="'TotalBTS'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'TotalDataVolume'" field="'TotalDataVolume'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountInCalls'" field="'CountInCalls'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CallInDurAvg'" field="'CallInDurAvg'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountOutOnNet'" field="'CountOutOnNet'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountInOnNet'" field="'CountInOnNet'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountOutOffNet'" field="'CountOutOffNet'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountInOffNet'" field="'CountInOffNet'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountConsecutiveCalls'" field="'CountConsecutiveCalls'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Count In Low Duration Calls'" field="'CountInLowDurationCalls'">  </vr-datagridcolumn>
+
+                                        <!--<vr-datagridcolumn ng-repeat="agg in filterDefinitions" widthfactor="20" columnindex="$index + 1" headertext="'Filt. ' + filter.filterId" tag="filter">
+                                            <div ng-init="filterIndex = viewScope.filterDefinitions.indexOf(colDef.tag)" style="width:100%">
+                                                {{dataItem.CriteriaValues[filterIndex]}}
+                                            </div>
+                                        </vr-datagridcolumn>-->
 
                                     </vr-datagrid>
                                 </div>
@@ -125,10 +109,8 @@
                         </div>
                     </vr-section>
                 </vr-columns>
-</vr-row>
+            </vr-row>
 
-
-            {{subscriberThresholds}}
 
         </vr-form>
     </vr-modalbody>
