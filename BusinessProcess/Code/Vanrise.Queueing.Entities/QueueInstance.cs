@@ -13,6 +13,10 @@ namespace Vanrise.Queueing.Entities
 
         public string Name { get; set; }
 
+        public int? ExecutionFlowId { get; set; }
+
+        public string StageName { get; set; }
+
         public string Title { get; set; }
 
         public QueueInstanceStatus Status { get; set; }
@@ -24,7 +28,5 @@ namespace Vanrise.Queueing.Entities
         public QueueSettings Settings { get; set; }
 
         public DateTime CreateTime { get; set; }
-
-        public int? ExecutionFlowId { get; set; }
     }
 }

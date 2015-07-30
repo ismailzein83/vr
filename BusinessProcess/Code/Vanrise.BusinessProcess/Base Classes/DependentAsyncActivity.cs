@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using Vanrise.Data;
+using Vanrise.Queueing;
 
 namespace Vanrise.BusinessProcess
 {
@@ -38,6 +40,47 @@ namespace Vanrise.BusinessProcess
         protected abstract T GetInputArgument2(AsyncCodeActivityContext context);
 
         protected abstract Q DoWorkWithResult(T inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle);
+
+        protected void PrepareDataForDBApply<R, S>(AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle, IBulkApplyDataManager<R> dataManager, BaseQueue<S> inputQueue, BaseQueue<Object> outputQueue, Func<S, IEnumerable<R>> GetItems)
+        {
+            int batchSize = 100000;//ConfigParameterManager.Current.GetRouteBCPBatchSize();
+
+            System.Threading.Tasks.Parallel.For(0, 3, (i) =>
+           {
+               object dbApplyStream = null;
+               int addedItemsToStream = 0;
+               DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+               {
+                   bool hasItems = false;
+                   do
+                   {
+                       hasItems = inputQueue.TryDequeue(
+                       (inputBatch) =>
+                       {
+                           if (dbApplyStream == null)
+                               dbApplyStream = dataManager.InitialiazeStreamForDBApply();
+                           foreach (var item in GetItems(inputBatch))
+                           {
+                               dataManager.WriteRecordToStream(item, dbApplyStream);
+                               addedItemsToStream++;
+                           }
+                           if (addedItemsToStream >= batchSize)
+                           {
+                               Object preparedItemsForDBApply = dataManager.FinishDBApplyStream(dbApplyStream);
+                               outputQueue.Enqueue(preparedItemsForDBApply);
+                               dbApplyStream = null;
+                               addedItemsToStream = 0;
+                           }
+                       });
+                   } while (!ShouldStop(handle) && hasItems);
+               });
+               if (addedItemsToStream > 0)
+               {
+                   Object preparedItemsForDBApply = dataManager.FinishDBApplyStream(dbApplyStream);
+                   outputQueue.Enqueue(preparedItemsForDBApply);
+               }
+           });
+        }
     }
 
     public abstract class DependentAsyncActivity<T> : DependentAsyncActivity<T, Object>

@@ -23,13 +23,19 @@ namespace Vanrise.Queueing
                 List<QueueInstance> updatedQueues = dataManagerQueue.GetQueueInstances(queueIdsWithNewItems.Keys);
                 foreach (var queueInstance in updatedQueues)
                 {
-                    if (queueInstance.Settings != null && queueInstance.Settings.QueueActivator != null)
+                    if (queueInstance.Settings != null && !String.IsNullOrEmpty(queueInstance.Settings.QueueActivatorFQTN))
                     {
                         Task task = new Task(() =>
                         {
                             try
                             {
-                                using (var queueActivator = queueInstance.Settings.QueueActivator)
+                                Type queueActivatorType = Type.GetType(queueInstance.Settings.QueueActivatorFQTN);
+                                if (queueActivatorType == null)
+                                    throw new Exception(String.Format("Could not load QueueActivator type '{0}'", queueInstance.Settings.QueueActivatorFQTN));
+                                QueueActivator queueActivator = Activator.CreateInstance(queueActivatorType) as QueueActivator;
+                                if(queueActivator == null)
+                                    throw new Exception(String.Format("'{0}' is not of type Vanrise.Queueing.Entities.QueueActivator", queueInstance.Settings.QueueActivatorFQTN));
+                                using (queueActivator)
                                 {
                                     var queue = PersistentQueueFactory.Default.GetQueue(queueInstance.Name);
                                     if (queueInstance.ExecutionFlowId != null)

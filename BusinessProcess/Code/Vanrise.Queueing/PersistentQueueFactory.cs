@@ -70,7 +70,7 @@ namespace Vanrise.Queueing
             return queueInstance != null && queueInstance.Status == QueueInstanceStatus.ReadyToUse;
         }
 
-        public void CreateQueue(int executionFlowId, string queueItemFQTN, string queueName, string queueTitle, IEnumerable<string> sourceQueueNames, QueueSettings queueSettings = null)
+        public void CreateQueue(int executionFlowId, string stageName, string queueItemFQTN, string queueName, string queueTitle, IEnumerable<string> sourceQueueNames, QueueSettings queueSettings = null)
         {
             IQueueDataManager dataManagerQueue = QDataManagerFactory.GetDataManager<IQueueDataManager>();
             IQueueItemDataManager dataManagerQueueItem = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();    
@@ -104,7 +104,7 @@ namespace Vanrise.Queueing
             int itemTypeId = dataManagerQueue.InsertOrUpdateQueueItemType(queueItemFQTN, emptyInstance.ItemTypeTitle, emptyInstance.DefaultQueueSettings);
             Action createQueueAction = () =>
             {
-                int queueId = dataManagerQueue.InsertQueueInstance(executionFlowId, queueName, queueTitle, QueueInstanceStatus.New, itemTypeId, queueSettings);
+                int queueId = dataManagerQueue.InsertQueueInstance(executionFlowId, stageName, queueName, queueTitle, QueueInstanceStatus.New, itemTypeId, queueSettings);
                 dataManagerQueue.InsertSubscription(sourceQueueIds, queueId);
                 dataManagerQueueItem.CreateQueue(queueId);
                 dataManagerQueue.UpdateQueueInstanceStatus(queueName, QueueInstanceStatus.ReadyToUse);
@@ -125,28 +125,29 @@ namespace Vanrise.Queueing
             }
         }
 
-        public void CreateQueue<T>(int executionFlowId, string queueName, string queueTitle, IEnumerable<string> sourceQueueNames, QueueSettings queueSettings = null) where T : PersistentQueueItem
-        {
-            CreateQueue(executionFlowId, typeof(T).AssemblyQualifiedName, queueName, queueTitle, sourceQueueNames, queueSettings);
-        }
+        //public void CreateQueue<T>(int executionFlowId, string queueName, string queueTitle, IEnumerable<string> sourceQueueNames, QueueSettings queueSettings = null) where T : PersistentQueueItem
+        //{
+        //    CreateQueue(executionFlowId, typeof(T).AssemblyQualifiedName, queueName, queueTitle, sourceQueueNames, queueSettings);
+        //}
 
-        public void CreateQueue<T>(int executionFlowId, string queueName, string queueTitle, QueueSettings queueSettings = null) where T : PersistentQueueItem
-        {
-            CreateQueue<T>(executionFlowId, queueName, queueTitle, null, queueSettings);
-        }
+        //public void CreateQueue<T>(int executionFlowId, string queueName, string queueTitle, QueueSettings queueSettings = null) where T : PersistentQueueItem
+        //{
+        //    CreateQueue<T>(executionFlowId, queueName, queueTitle, null, queueSettings);
+        //}
 
-        public void CreateQueue<T>(int executionFlowId, string queueName, QueueSettings queueSettings = null) where T : PersistentQueueItem
-        {
-            CreateQueue<T>(executionFlowId, queueName, queueName, null, queueSettings);
-        }
+        //public void CreateQueue<T>(int executionFlowId, string queueName, QueueSettings queueSettings = null) where T : PersistentQueueItem
+        //{
+        //    CreateQueue<T>(executionFlowId, queueName, queueName, null, queueSettings);
+        //}
 
-        public void CreateQueueIfNotExists(int executionFlowId, string queueItemFQTN, string queueName, string queueTitle = null, IEnumerable<string> sourceQueueNames = null, QueueSettings queueSettings = null)
+        public void CreateQueueIfNotExists(int executionFlowId, string stageName, string queueItemFQTN, string queueName, string queueTitle = null, IEnumerable<string> sourceQueueNames = null, QueueSettings queueSettings = null)
         {
+            queueTitle = queueTitle ?? queueName;
             if (!QueueExists(queueName))
             {
                 try
                 {
-                    CreateQueue(executionFlowId, queueItemFQTN, queueName, queueTitle ?? queueName, sourceQueueNames, queueSettings);
+                    CreateQueue(executionFlowId, stageName, queueItemFQTN, queueName, queueTitle, sourceQueueNames, queueSettings);
                 }
                 catch
                 {
@@ -157,13 +158,13 @@ namespace Vanrise.Queueing
             else
             {
                 IQueueDataManager dataManagerQueue = QDataManagerFactory.GetDataManager<IQueueDataManager>();
-                dataManagerQueue.UpdateQueueSettings(queueName, queueSettings);
+                dataManagerQueue.UpdateQueueInstance(queueName, stageName, queueTitle, queueSettings);
             }
         }
 
-        public void CreateQueueIfNotExists<T>(int executionFlowId, string queueName, string queueTitle = null, IEnumerable<string> sourceQueueNames = null, QueueSettings queueSettings = null) where T : PersistentQueueItem
-        {      
-            CreateQueueIfNotExists(executionFlowId, typeof(T).AssemblyQualifiedName, queueName, queueTitle, sourceQueueNames, queueSettings);
-        }
+        //public void CreateQueueIfNotExists<T>(int executionFlowId, string queueName, string queueTitle = null, IEnumerable<string> sourceQueueNames = null, QueueSettings queueSettings = null) where T : PersistentQueueItem
+        //{      
+        //    CreateQueueIfNotExists(executionFlowId, typeof(T).AssemblyQualifiedName, queueName, queueTitle, sourceQueueNames, queueSettings);
+        //}
     }
 }

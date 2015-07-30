@@ -20,28 +20,28 @@ namespace Vanrise.Queueing.Data.SQL
         {
         }
 
-        public void CreateQueue(string queueName, string title, string itemFQTN, QueueSettings settings, IEnumerable<int> sourceQueueIds)
-        {
-            DataTable dtSourceQueueIds = new DataTable();
-            dtSourceQueueIds.Columns.Add("ID", typeof(int));
-            dtSourceQueueIds.BeginLoadData();
-            if(sourceQueueIds != null)
-            {
-                foreach (var sourceQueueId in sourceQueueIds)
-                    dtSourceQueueIds.Rows.Add(sourceQueueId);
-            }
-            dtSourceQueueIds.EndLoadData();
-            ExecuteNonQuerySPCmd("queue.sp_Queue_Create", (cmd) =>
-                {
-                    cmd.Parameters.Add(new SqlParameter("@Name", queueName));
-                    cmd.Parameters.Add(new SqlParameter("@Title", title));
-                    cmd.Parameters.Add(new SqlParameter("@ItemFQTN", itemFQTN));
-                    cmd.Parameters.Add(new SqlParameter("@Settings", Serializer.Serialize(settings)));
-                    SqlParameter prmSourceQueueIds = new SqlParameter("@SourceQueueIDs", SqlDbType.Structured);
-                    prmSourceQueueIds.Value = dtSourceQueueIds;
-                    cmd.Parameters.Add(prmSourceQueueIds);
-                });
-        }
+        //public void CreateQueue(string queueName, string title, string itemFQTN, QueueSettings settings, IEnumerable<int> sourceQueueIds)
+        //{
+        //    DataTable dtSourceQueueIds = new DataTable();
+        //    dtSourceQueueIds.Columns.Add("ID", typeof(int));
+        //    dtSourceQueueIds.BeginLoadData();
+        //    if(sourceQueueIds != null)
+        //    {
+        //        foreach (var sourceQueueId in sourceQueueIds)
+        //            dtSourceQueueIds.Rows.Add(sourceQueueId);
+        //    }
+        //    dtSourceQueueIds.EndLoadData();
+        //    ExecuteNonQuerySPCmd("queue.sp_Queue_Create", (cmd) =>
+        //        {
+        //            cmd.Parameters.Add(new SqlParameter("@Name", queueName));
+        //            cmd.Parameters.Add(new SqlParameter("@Title", title));
+        //            cmd.Parameters.Add(new SqlParameter("@ItemFQTN", itemFQTN));
+        //            cmd.Parameters.Add(new SqlParameter("@Settings", Serializer.Serialize(settings)));
+        //            SqlParameter prmSourceQueueIds = new SqlParameter("@SourceQueueIDs", SqlDbType.Structured);
+        //            prmSourceQueueIds.Value = dtSourceQueueIds;
+        //            cmd.Parameters.Add(prmSourceQueueIds);
+        //        });
+        //}
 
         public int InsertOrUpdateQueueItemType(string itemFQTN, string title, QueueSettings defaultQueueSettings )
         {
@@ -50,16 +50,16 @@ namespace Vanrise.Queueing.Data.SQL
             return (int)id;
         }
 
-        public int InsertQueueInstance(int executionFlowId, string queueName, string title, QueueInstanceStatus status, int itemTypeId, QueueSettings settings)
+        public int InsertQueueInstance(int executionFlowId, string stageName, string queueName, string title, QueueInstanceStatus status, int itemTypeId, QueueSettings settings)
         {
             object id;
-            ExecuteNonQuerySP("queue.sp_QueueInstance_Insert", out id, executionFlowId, queueName, title, (int)status, itemTypeId, settings != null ? (object)Serializer.Serialize(settings) : DBNull.Value);
+            ExecuteNonQuerySP("queue.sp_QueueInstance_Insert", out id, executionFlowId, stageName, queueName, title, (int)status, itemTypeId, settings != null ? (object)Serializer.Serialize(settings) : DBNull.Value);
             return (int)id;
         }
 
-        public bool UpdateQueueSettings(string queueName, QueueSettings settings)
+        public bool UpdateQueueInstance(string queueName, string stageName, string title, QueueSettings settings)
         {
-            return ExecuteNonQuerySP("queue.sp_QueueInstance_UpdateSettings", queueName, settings != null ? (object)Serializer.Serialize(settings) : DBNull.Value) > 0;
+            return ExecuteNonQuerySP("queue.sp_QueueInstance_Update", queueName, stageName, title, settings != null ? (object)Serializer.Serialize(settings) : DBNull.Value) > 0;
         }
 
         public void UpdateQueueInstanceStatus(string queueName, QueueInstanceStatus status)

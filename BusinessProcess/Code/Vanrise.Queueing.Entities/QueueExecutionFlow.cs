@@ -42,7 +42,7 @@ namespace Vanrise.Queueing.Entities
         public List<QueueStageInfo> SourceQueueStages { get; set; }
     }
 
-    public class QueueStageExecutionActivity<T> : BaseExecutionActivity
+    public class QueueStageExecutionActivity : BaseExecutionActivity
     {
         public string StageName { get; set; }
 
@@ -52,13 +52,15 @@ namespace Vanrise.Queueing.Entities
 
         public QueueSettings QueueSettings { get; set; }
 
+        public string QueueTypeFQTN { get; set; }
+
         public override List<QueueStageInfo> GetQueueStageInfos()
         {
             return new List<QueueStageInfo>
             {
                   new QueueStageInfo 
                   { 
-                       QueueTypeFQTN = typeof(T).AssemblyQualifiedName,
+                       QueueTypeFQTN = this.QueueTypeFQTN,
                        StageName = this.StageName,
                        QueueName = this.QueueName,
                        QueueTitle = !String.IsNullOrEmpty(this.QueueTitle) ? this.QueueTitle : this.QueueName,
@@ -73,23 +75,29 @@ namespace Vanrise.Queueing.Entities
         
     }
 
-    public class ParallelExecutionActivity<T> : CompositeExecutionActivity
+    public class ParallelExecutionActivity : CompositeExecutionActivity
     {
         public override List<QueueStageInfo> GetQueueStageInfos()
         {
             //override the parent GetQueueStageInfos to assign the source queue name in order to implement parallel enqueueing
             List<QueueStageInfo> stageInfos = new List<QueueStageInfo>();
-            QueueStageInfo firstStage = null;
+            QueueStageInfo firstBranchStage = null;
             foreach (var child in this.Activities)
             {
                 List<QueueStageInfo> childStageInfos = child.GetQueueStageInfos();
                 if (childStageInfos == null || childStageInfos.Count == 0)
                     throw new Exception("CompositeExecutionActivity doesnt have any child Queue");
 
-                if (firstStage == null)
-                    firstStage = childStageInfos[0];
+                if (firstBranchStage == null)
+                    firstBranchStage = childStageInfos[0];
                 else
-                    childStageInfos[0].SourceQueueStages = new List<QueueStageInfo> { firstStage };
+                {
+                    var childFirstStage = childStageInfos[0];
+                    if (String.Compare(childFirstStage.QueueTypeFQTN, firstBranchStage.QueueTypeFQTN) != 0)
+                        throw new Exception(String.Format("First stages in ParallelExecutionActivity should have same QueueTypeFQTN. '{0}' and '{1}' do NOT match", childFirstStage.QueueTypeFQTN, firstBranchStage.QueueTypeFQTN));
+                    childFirstStage.SourceQueueStages = new List<QueueStageInfo> { firstBranchStage };
+                }
+                    
                 stageInfos.AddRange(childStageInfos);
             }
             return stageInfos;

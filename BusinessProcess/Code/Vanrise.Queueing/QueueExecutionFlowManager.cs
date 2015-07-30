@@ -32,7 +32,7 @@ namespace Vanrise.Queueing
                         sourceQueueNames.Add(GetQueueName(executionFlow, sourceStage));
                     }
                 }
-                PersistentQueueFactory.Default.CreateQueueIfNotExists(executionFlowId, stage.QueueTypeFQTN, queueName, queueTitle, sourceQueueNames, stage.QueueSettings);
+                PersistentQueueFactory.Default.CreateQueueIfNotExists(executionFlowId, stage.StageName, stage.QueueTypeFQTN, queueName, queueTitle, sourceQueueNames, stage.QueueSettings);
                 if (queuesByStages.ContainsKey(stage.StageName))
                     throw new Exception(String.Format("Duplicate Stage Names: {0}", stage.StageName));
                 queuesByStages.Add(stage.StageName, PersistentQueueFactory.Default.GetQueue(queueName));
@@ -47,7 +47,7 @@ namespace Vanrise.Queueing
 
         private string GetQueueTitle(QueueExecutionFlow executionFlow, QueueStageInfo queueStage)
         {
-            return String.Format("{0} - {1}", executionFlow.Name, queueStage.QueueTitle);
+            return String.Format("{1} ({0})", executionFlow.Name, queueStage.QueueTitle);
         }
     }
 }
