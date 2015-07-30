@@ -76,16 +76,16 @@ app.directive('vrBiDatagrid', ['UtilsService', 'BIAPIService', 'BIUtilitiesServi
                        return UtilsService.downloadFile(response.data, response.headers);
                    });
                }
-               ctrl.onGridReady = function (api) {
-                   gridAPI = api;
-                   //if (retrieveDataOnLoad)
-                   //    retrieveData();
-               }
                ctrl.entityType = entity;
                ctrl.measureTypes = measures;
 
                ctrl.data = [];
-               defineAPI();
+               ctrl.onGridReady = function (api) {
+                   gridAPI = api;
+                   defineAPI();
+               }
+              
+            
 
            })
            .finally(function () {
