@@ -136,15 +136,19 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                 controller.selectedvalues.push(controller.getdatasource()[0]);
                 return controller.getObjectText(controller.getdatasource()[0]);
             };
-            $('div[name=' + $attrs.id + ']').on('show.bs.dropdown', function (e) {
-                vrSelectSharedObject.onOpenDropDown($attrs.id);
-                $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
-            });
+          
 
-            $('div[name=' + $attrs.id + ']').attr('name', $attrs.id).on('hide.bs.dropdown', function (e) {
-                vrSelectSharedObject.onCloseDropDown($attrs.id);
-                $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
-            });
+            setTimeout(function () {
+                $('div[name=' + $attrs.id + ']').on('show.bs.dropdown', function (e) {
+                    vrSelectSharedObject.onOpenDropDown($attrs.id);
+                    $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+                });
+
+                $('div[name=' + $attrs.id + ']').attr('name', $attrs.id).on('hide.bs.dropdown', function (e) {
+                    vrSelectSharedObject.onCloseDropDown($attrs.id);
+                    $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+                });
+            }, 100);
             if ($('div[name=' + $attrs.id + ']').closest('.modal-body').length > 0) {
 
                 $('div[name=' + $attrs.id + ']').on('click', '.dropdown-toggle', function (event) {
@@ -291,44 +295,44 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                     ulDropdown.addClass('menu-to-top');
                 }
 
-                setTimeout(function() {
-                    $('div[name=' + attrs.id + ']').on('show.bs.dropdown', function(e) {
-                        vrSelectSharedObject.onOpenDropDown(attrs.id);
-                        $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
-                    });
+                //setTimeout(function() {
+                //    $('div[name=' + attrs.id + ']').on('show.bs.dropdown', function(e) {
+                //        vrSelectSharedObject.onOpenDropDown(attrs.id);
+                //        $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+                //    });
 
-                    $('div[name=' + attrs.id + ']').attr('name', attrs.id).on('hide.bs.dropdown', function(e) {
-                        vrSelectSharedObject.onCloseDropDown(attrs.id);
-                        $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
-                    });
-                }, 100);
-                setTimeout(function() {
-                    if ($('div[name=' + attrs.id + ']').closest('.modal-body').length > 0) {
+                //    $('div[name=' + attrs.id + ']').attr('name', attrs.id).on('hide.bs.dropdown', function(e) {
+                //        vrSelectSharedObject.onCloseDropDown(attrs.id);
+                //        $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+                //    });
+                //}, 100);
+                //setTimeout(function() {
+                //    if ($('div[name=' + attrs.id + ']').closest('.modal-body').length > 0) {
                      
-                        $('div[name=' + attrs.id + ']').on('click', '.dropdown-toggle', function(event) {
+                //        $('div[name=' + attrs.id + ']').on('click', '.dropdown-toggle', function(event) {
 
-                            var self = $(this);
-                            var selfHeight = $(this).parent().height();
-                            var selfOffset = $(self).offset();                           
-                            var dropDown = self.parent().find('ul');
-                            $(dropDown).css({ position: 'fixed', top: 'auto' , left: 'auto' });
-                        });
+                //            var self = $(this);
+                //            var selfHeight = $(this).parent().height();
+                //            var selfOffset = $(self).offset();                           
+                //            var dropDown = self.parent().find('ul');
+                //            $(dropDown).css({ position: 'fixed', top: 'auto' , left: 'auto' });
+                //        });
 
-                        var fixDropdownPosition = function() {
-                            $('.drop-down-inside-modal').find('.dropdown-menu').hide();
-                            $('.drop-down-inside-modal').removeClass("open");
+                //        var fixDropdownPosition = function() {
+                //            $('.drop-down-inside-modal').find('.dropdown-menu').hide();
+                //            $('.drop-down-inside-modal').removeClass("open");
 
-                        };
+                //        };
 
-                        $(".modal-body").unbind("scroll");
-                        $(".modal-body").scroll(function() {
-                            fixDropdownPosition();
-                        });
-                        $(window).resize(function() {
-                            fixDropdownPosition();
-                        });
-                    }
-                }, 500);
+                //        $(".modal-body").unbind("scroll");
+                //        $(".modal-body").scroll(function() {
+                //            fixDropdownPosition();
+                //        });
+                //        $(window).resize(function() {
+                //            fixDropdownPosition();
+                //        });
+                //    }
+                //}, 500);
             }
 
             onLoad();
