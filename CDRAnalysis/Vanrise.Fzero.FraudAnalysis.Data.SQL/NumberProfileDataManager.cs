@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using Vanrise.Data.SQL;
 using Vanrise.Fzero.FraudAnalysis.Entities;
@@ -70,5 +71,73 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                );
         }
 
+
+
+        public void ApplyNumberProfilesToDB(object preparedNumberProfiles)
+        {
+            InsertBulkToTable(preparedNumberProfiles as BaseBulkInsertInfo);
+        }
+
+        public object FinishDBApplyStream(object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.Close();
+            return new StreamBulkInsertInfo
+            {
+                TableName = "[FraudAnalysis].[NumberProfile]",
+                Stream = streamForBulkInsert,
+                TabLock = false,
+                KeepIdentity = false,
+                FieldSeparator = ','
+            };
+        }
+
+        public object InitialiazeStreamForDBApply()
+        {
+            return base.InitializeStreamForBulkInsert();
+        }
+
+        public void WriteRecordToStream(NumberProfile record, object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.WriteRecord("0,{0},{1},{2},{3},{4},{5},{6},0,0,0,{7},0,0,{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28}",
+                                    record.SubscriberNumber,
+                                    record.FromDate,
+                                    record.ToDate,
+                                    GetDictionaryValue(record.AggregateValues, "CountOutCalls"),
+                                    GetDictionaryValue(record.AggregateValues, "DiffOutputNumb"),
+                                    GetDictionaryValue(record.AggregateValues, "CountOutInters"),
+                                    GetDictionaryValue(record.AggregateValues, "CountInInters"),
+                                    GetDictionaryValue(record.AggregateValues, "CallOutDurAvg"),
+                                    GetDictionaryValue(record.AggregateValues, "CountOutFails"),
+                                    GetDictionaryValue(record.AggregateValues, "CountInFails"),
+                                    GetDictionaryValue(record.AggregateValues, "TotalOutVolume"),
+                                    GetDictionaryValue(record.AggregateValues, "TotalInVolume"),
+                                    GetDictionaryValue(record.AggregateValues, "DiffInputNumbers"),
+                                    GetDictionaryValue(record.AggregateValues, "CountOutSMSs"),
+                                    GetDictionaryValue(record.AggregateValues, "TotalIMEI"),
+                                    GetDictionaryValue(record.AggregateValues, "TotalBTS"),
+                                    record.IsOnNet,
+                                    GetDictionaryValue(record.AggregateValues, "TotalDataVolume"),
+                                    record.PeriodId,
+                                    GetDictionaryValue(record.AggregateValues, "CountInCalls"),
+                                    GetDictionaryValue(record.AggregateValues, "CallInDurAvg"),
+                                    GetDictionaryValue(record.AggregateValues, "CountOutOnNets"),
+                                    GetDictionaryValue(record.AggregateValues, "CountInOnNets"),
+                                    GetDictionaryValue(record.AggregateValues, "CountOutOffNets"),
+                                    GetDictionaryValue(record.AggregateValues, "CountInOffNets"),
+                                    GetDictionaryValue(record.AggregateValues, "CountFailConsecutiveCalls"),
+                                    GetDictionaryValue(record.AggregateValues, "CountConsecutiveCalls"),
+                                    GetDictionaryValue(record.AggregateValues, "CountInLowDurationCalls"),
+                                    record.StrategyId);
+        }
+
+        public object GetDictionaryValue<T>(Dictionary<T, Decimal> dictionary, T key)
+        {
+            Decimal value;
+            if (!dictionary.TryGetValue(key, out value))
+                return "";
+            return Math.Round(value, 5);
+        }
     }
 }

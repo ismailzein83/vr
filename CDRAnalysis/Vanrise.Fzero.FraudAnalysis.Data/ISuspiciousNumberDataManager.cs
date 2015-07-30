@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vanrise.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data
 {
-    public interface ISuspiciousNumberDataManager : IDataManager 
+    public interface ISuspiciousNumberDataManager : IDataManager, IBulkApplyDataManager<SuspiciousNumber>
     {
         void UpdateSusbcriberCases(List<string> suspiciousNumbers);
         void SaveSuspiciousNumbers(List<SuspiciousNumber> suspiciousNumbers);
@@ -13,5 +14,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
         IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(string tempTableKey, int fromRow, int toRow, DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList, List<int> caseStatusesList);
 
         FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList, string subscriberNumber);
+
+
+
+        void ApplySuspiciousNumbersToDB(object preparedSuspiciousNumbers);
     }
 }

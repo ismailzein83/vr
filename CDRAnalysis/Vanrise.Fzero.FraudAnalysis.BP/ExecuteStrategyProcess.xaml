@@ -48,11 +48,11 @@
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.Business</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.Queueing.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP</AssemblyReference>
     </sco:Collection>
@@ -84,9 +84,13 @@
         <Variable x:TypeArguments="vq:BaseQueue(vffe:SuspiciousNumberBatch)" Name="suspiciousNumberQueue" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadNumberProfilesStatus" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="GetSuspiciousNumberStatus" />
-        <Variable x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)" Name="outnumberProfileQueue" />
+        <Variable x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)" Name="numberProfileToStoreQueue" />
         <Variable x:TypeArguments="vq:BaseQueue(vffe:CDRBatch)" Name="cdrQueue" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadCDRsStatus" />
+        <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="preparedSuspiciousNumbersQueue" />
+        <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="preparedNumberProfilesQueue" />
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareSuspiciousNumbersStatus" />
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareNumberProfilesStatus" />
       </Parallel.Variables>
       <vffba1:LoadCDRs sap2010:WorkflowViewState.IdRef="LoadCDRs_1">
         <vffba1:LoadCDRs.FromDate>
@@ -165,7 +169,7 @@
         </vffba1:GetSuspiciousNumber.OutputQueue>
         <vffba1:GetSuspiciousNumber.OutputQueue2>
           <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">outnumberProfileQueue</mca:CSharpReference>
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">numberProfileToStoreQueue</mca:CSharpReference>
           </InOutArgument>
         </vffba1:GetSuspiciousNumber.OutputQueue2>
         <vffba1:GetSuspiciousNumber.PreviousActivityStatus>
@@ -184,54 +188,103 @@
           </InArgument>
         </vffba1:GetSuspiciousNumber.Strategies>
       </vffba1:GetSuspiciousNumber>
-      <vffba1:StoreSuspiciousNumbers Status="{x:Null}" sap2010:WorkflowViewState.IdRef="StoreSuspiciousNumbers_2">
-        <vffba1:StoreSuspiciousNumbers.InputQueue>
+      <vffba1:PrepareSuspiciousNumbersForDBApply sap2010:WorkflowViewState.IdRef="PrepareSuspiciousNumbersForDBApply_1">
+        <vffba1:PrepareSuspiciousNumbersForDBApply.InputQueue>
           <InArgument x:TypeArguments="vq:BaseQueue(vffe:SuspiciousNumberBatch)">
             <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:SuspiciousNumberBatch)">suspiciousNumberQueue</mca:CSharpValue>
           </InArgument>
-        </vffba1:StoreSuspiciousNumbers.InputQueue>
-        <vffba1:StoreSuspiciousNumbers.InputQueue2>
-          <InArgument x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">outnumberProfileQueue</mca:CSharpValue>
-          </InArgument>
-        </vffba1:StoreSuspiciousNumbers.InputQueue2>
-        <vffba1:StoreSuspiciousNumbers.PreviousActivityStatus>
+        </vffba1:PrepareSuspiciousNumbersForDBApply.InputQueue>
+        <vffba1:PrepareSuspiciousNumbersForDBApply.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">preparedSuspiciousNumbersQueue</mca:CSharpReference>
+          </InOutArgument>
+        </vffba1:PrepareSuspiciousNumbersForDBApply.OutputQueue>
+        <vffba1:PrepareSuspiciousNumbersForDBApply.PreviousActivityStatus>
           <InArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">GetSuspiciousNumberStatus</mca:CSharpValue>
           </InArgument>
-        </vffba1:StoreSuspiciousNumbers.PreviousActivityStatus>
-        <vffba1:StoreSuspiciousNumbers.Strategies>
-          <InArgument x:TypeArguments="scg:List(vffe:Strategy)">
-            <mca:CSharpValue x:TypeArguments="scg:List(vffe:Strategy)">strategies</mca:CSharpValue>
+        </vffba1:PrepareSuspiciousNumbersForDBApply.PreviousActivityStatus>
+        <vffba1:PrepareSuspiciousNumbersForDBApply.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareSuspiciousNumbersStatus</mca:CSharpReference>
+          </OutArgument>
+        </vffba1:PrepareSuspiciousNumbersForDBApply.Status>
+      </vffba1:PrepareSuspiciousNumbersForDBApply>
+      <vffba1:PrepareNumberProfilesForDBApply sap2010:WorkflowViewState.IdRef="PrepareNumberProfilesForDBApply_1">
+        <vffba1:PrepareNumberProfilesForDBApply.InputQueue>
+          <InArgument x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">numberProfileToStoreQueue</mca:CSharpValue>
           </InArgument>
-        </vffba1:StoreSuspiciousNumbers.Strategies>
-      </vffba1:StoreSuspiciousNumbers>
+        </vffba1:PrepareNumberProfilesForDBApply.InputQueue>
+        <vffba1:PrepareNumberProfilesForDBApply.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">preparedNumberProfilesQueue</mca:CSharpReference>
+          </InOutArgument>
+        </vffba1:PrepareNumberProfilesForDBApply.OutputQueue>
+        <vffba1:PrepareNumberProfilesForDBApply.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">GetSuspiciousNumberStatus</mca:CSharpValue>
+          </InArgument>
+        </vffba1:PrepareNumberProfilesForDBApply.PreviousActivityStatus>
+        <vffba1:PrepareNumberProfilesForDBApply.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareNumberProfilesStatus</mca:CSharpReference>
+          </OutArgument>
+        </vffba1:PrepareNumberProfilesForDBApply.Status>
+      </vffba1:PrepareNumberProfilesForDBApply>
+      <vffba1:ApplySuspiciousNumbersToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplySuspiciousNumbersToDB_1">
+        <vffba1:ApplySuspiciousNumbersToDB.InputQueue>
+          <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">preparedSuspiciousNumbersQueue</mca:CSharpValue>
+          </InArgument>
+        </vffba1:ApplySuspiciousNumbersToDB.InputQueue>
+        <vffba1:ApplySuspiciousNumbersToDB.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareSuspiciousNumbersStatus</mca:CSharpValue>
+          </InArgument>
+        </vffba1:ApplySuspiciousNumbersToDB.PreviousActivityStatus>
+      </vffba1:ApplySuspiciousNumbersToDB>
+      <vffba1:ApplyNumberProfilesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyNumberProfilesToDB_1">
+        <vffba1:ApplyNumberProfilesToDB.InputQueue>
+          <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">preparedNumberProfilesQueue</mca:CSharpValue>
+          </InArgument>
+        </vffba1:ApplyNumberProfilesToDB.InputQueue>
+        <vffba1:ApplyNumberProfilesToDB.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareNumberProfilesStatus</mca:CSharpValue>
+          </InArgument>
+        </vffba1:ApplyNumberProfilesToDB.PreviousActivityStatus>
+      </vffba1:ApplyNumberProfilesToDB>
     </Parallel>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2">
       <InArgument x:TypeArguments="x:String">
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("End Executing Strategies Count: {0}", Input.StrategyIds.Count)</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbCM8A9gBDgIBAUAFRBEDAe4BRQVQGgMB5wFRBdEBEAIBBtIBBdYBEQIBAkIJQpUBAwHvAU0LTWMDAesBSAtIagMB6AFbB3AZAwG+AXEHmgEjAgFtmwEHugEkAgEwuwEH0AEnAgEH1AEJ1AGUAQIBA14NXlsDAd0BaA1obwMB0wFjDWNpAwHJAW0NbVkDAb8BkgENkgFkAwG0AYgBDYgBZwMBqgF5DXlpAwGgAXQNdFsDAZYBjQENjQF5AwGMAX4NfoIBAwGCAYMBDYMBWAIBeJcBDZcBWQIBbrcBDbcBZAIBY60BDa0BcQIBWZ4BDZ4BegIBT6gBDagBhQECAUWyAQ2yAXoCATujAQ2jAYgBAgExzQENzQFkAgEmyAENyAFyAgEcvgENvgGAAQIBEsMBDcMBfQIBCA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbC48A4oCDgIBAUAFRBEDAbkDRQVQGgMBsgNRBYMCEAIBBoQCBYgCEQIBAkIJQpUBAwG6A00LTWMDAbYDSAtIagMBswNfB3QZAwH5AnUHngEjAwGIAp8BB74BJAMBswG/AQfUATMCAXrVAQfqATACAUHrAQf2ASsCAST3AQeCAigCAQeGAgmGApQBAgEDYg1iWwMBpANsDWxvAwGWA2cNZ24DAYgDcQ1xWQMB+gKWAQ2WAWQDAesCjAENjAFnAwHdAn0NfW4DAc8CeA14WwMBwQKRAQ2RAXkDAbMCggENggGCAQMBpQKHAQ2HAVgDAZcCmwENmwFZAwGJArsBDbsBZAMB+gGxAQ2xAXEDAewBogENogF6AwHeAawBDawBiQEDAdABtgENtgF6AwHCAacBDacBiAEDAbQBzAENzAFyAwGlAcIBDcIBgAEDAZcB0QEN0QF/AwGJAccBDccBfwIBe+IBDeIBcgIBbNgBDdgBgQECAV7nAQ3nAXwCAVDdAQ3dAXwCAULzAQ3zAXcCATPuAQ3uAXcCASX/AQ3/AXQCARb6AQ36AXQCAQg=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="1034,62" />
-      <sap2010:ViewStateData Id="GetStrategy_3" sap:VirtualizedContainerService.HintSize="1034,22" />
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="1754,62" />
+      <sap2010:ViewStateData Id="GetStrategy_3" sap:VirtualizedContainerService.HintSize="1754,22" />
       <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="LoadNumberProfiles_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetSuspiciousNumber_2" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="StoreSuspiciousNumbers_2" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1034,86" />
-      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="1034,62" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1056,476">
+      <sap2010:ViewStateData Id="PrepareSuspiciousNumbersForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareNumberProfilesForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplySuspiciousNumbersToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyNumberProfilesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1754,86" />
+      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="1754,62" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1776,476">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess_1" sap:VirtualizedContainerService.HintSize="1096,556" />
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess_1" sap:VirtualizedContainerService.HintSize="1816,556" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -61,7 +61,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.MobileCDRAnal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql", "Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql\Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql.csproj", "{0A69317A-3793-454B-BE3B-C864AA76EF6D}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Vanrise.Fzero.MobileCDRAnalysis.Website", "http://localhost:45816", "{F193F037-F0D5-4DC8-BD50-0DB112005C95}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Vanrise.Fzero.MobileCDRAnalysis.Website(1)", "http://localhost:45816", "{F193F037-F0D5-4DC8-BD50-0DB112005C95}"
 	ProjectSection(WebsiteProperties) = preProject
 		SccProjectName = "SAK"
 		SccAuxPath = "SAK"
@@ -260,8 +260,8 @@ Global
 		{5995A72F-0E1A-4C75-948D-6E0E2C717E49}.Debug|Any CPU.Build.0 = Debug|x64
 		{5995A72F-0E1A-4C75-948D-6E0E2C717E49}.Debug|x64.ActiveCfg = Debug|x64
 		{5995A72F-0E1A-4C75-948D-6E0E2C717E49}.Debug|x64.Build.0 = Debug|x64
-		{5995A72F-0E1A-4C75-948D-6E0E2C717E49}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5995A72F-0E1A-4C75-948D-6E0E2C717E49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5995A72F-0E1A-4C75-948D-6E0E2C717E49}.Release|Any CPU.ActiveCfg = Release|x64
+		{5995A72F-0E1A-4C75-948D-6E0E2C717E49}.Release|Any CPU.Build.0 = Release|x64
 		{5995A72F-0E1A-4C75-948D-6E0E2C717E49}.Release|x64.ActiveCfg = Release|x64
 		{5995A72F-0E1A-4C75-948D-6E0E2C717E49}.Release|x64.Build.0 = Release|x64
 		{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
