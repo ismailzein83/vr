@@ -48,12 +48,14 @@ namespace Vanrise.Web
 
             #endregion
 
-            #region Bootstrap
-
-            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                "~/Client/Libraries/Bower/bootstrap/dist/js/bootstrap.min.js"));
+            
 
             #endregion
+
+            #region Bootstrap
+
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap").IncludeDirectory(
+                "~/Client/Libraries/Bootstrap", "*.js", true));
 
             #endregion
 

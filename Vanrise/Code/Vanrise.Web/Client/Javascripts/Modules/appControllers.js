@@ -1,5 +1,6 @@
 ﻿
 var appControllers = angular.module('appControllers', [
+    'ui.bootstrap',
     'ngAnimate',
     'ng-sortable',
     'ngSanitize',
