@@ -42,7 +42,7 @@ namespace Vanrise.BI.Business
         public IEnumerable<EntityRecord> GetTopEntities(string entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, params string[] measureTypesNames)
         {
             List<String> queryFilter = new List<String>();
-            queryFilter = null;
+           
             //queryFilter.Add("C001");
             //queryFilter.Add("C009");
             //queryFilter.Add("C020");
@@ -56,12 +56,12 @@ namespace Vanrise.BI.Business
                 {
                     var myObject = (IDimensionBehavior)Activator.CreateInstance(Type.GetType(entity.Configuration.BehaviorFQTN));
                     queryFilter=  myObject.GetFilteredValues();
-                    if (queryFilter.Count == 0)
-                        return new List<EntityRecord>();
+                    
                 }
                 
             }
-           
+            if (queryFilter.Count == 0)
+                queryFilter = null;
             dataManager.MeasureDefinitions = configurations.GetMeasures();
             dataManager.EntityDefinitions = entities;
             return dataManager.GetTopEntities(entityTypeName, topByMeasureTypeName, fromDate, toDate, topCount, queryFilter, measureTypesNames);
