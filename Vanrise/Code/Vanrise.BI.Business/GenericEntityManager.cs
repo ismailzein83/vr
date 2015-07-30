@@ -349,7 +349,7 @@ namespace Vanrise.BI.Business
                   }
               }
               List<int> distinctUsers = new List<int>();
-              if (userMeasuresValidatorInput.Query.UserIds.Count != 0 || userMeasuresValidatorInput.Query.GroupIds.Count!=0)
+              if ((userMeasuresValidatorInput.Query.UserIds!=null && userMeasuresValidatorInput.Query.UserIds.Count != 0) || (userMeasuresValidatorInput.Query.GroupIds!=null && userMeasuresValidatorInput.Query.GroupIds.Count != 0))
               {
                   for (int i = 0; i < userMeasuresValidatorInput.Query.UserIds.Count; i++)
                   {
