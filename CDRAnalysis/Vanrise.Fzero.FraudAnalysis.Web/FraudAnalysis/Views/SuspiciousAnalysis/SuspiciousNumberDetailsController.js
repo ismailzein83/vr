@@ -1,6 +1,6 @@
-﻿SuspiciousNumberDetailsController.$inject = ['$scope', 'StrategyAPIService', 'SuspicionAnalysisAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CaseManagementAPIService'];
+﻿SuspiciousNumberDetailsController.$inject = ['$scope', 'StrategyAPIService', 'NormalCDRAPIService' , 'SuspicionAnalysisAPIService', 'NumberProfileAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CaseManagementAPIService'];
 
-function SuspiciousNumberDetailsController($scope, StrategyAPIService, SuspicionAnalysisAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CaseManagementAPIService) {
+function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDRAPIService, SuspicionAnalysisAPIService, NumberProfileAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CaseManagementAPIService) {
     var subscriberThresholdsGridAPI;
     var normalCDRGridAPI;
     var numberProfileGridAPI;
@@ -69,7 +69,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
         var pageInfo = normalCDRGridAPI.getPageInfo();
 
         $scope.isGettingNormalCDRs = true;
-        return SuspicionAnalysisAPIService.GetNormalCDRs(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, $scope.subscriberNumber).then(function (response) {
+        return NormalCDRAPIService.GetNormalCDRs(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, $scope.subscriberNumber).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.normalCDRs.push(itm);
             });
@@ -87,7 +87,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
         var pageInfo = numberProfileGridAPI.getPageInfo();
 
         $scope.isGettingNumberProfiles = true;
-        return SuspicionAnalysisAPIService.GetNumberProfiles(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, $scope.subscriberNumber).then(function (response) {
+        return NumberProfileAPIService.GetNumberProfiles(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, $scope.subscriberNumber).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.numberProfiles.push(itm);
             });

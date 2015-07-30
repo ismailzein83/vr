@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Vanrise.Data.MySQL;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
@@ -13,10 +14,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         }
 
         
-        public void LoadCDR(DateTime from, DateTime to, int? batchSize, Action<CDR> onBatchReady)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         public void ApplyNumberProfilesToDB(object preparedNumberProfiles)
         {
@@ -34,6 +32,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         }
 
         public void WriteRecordToStream(NumberProfile record, object dbApplyStream)
+        {
+            throw new NotImplementedException();
+        }
+        public List<NumberProfile> GetNumberProfiles(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string subscriberNumber)
         {
             throw new NotImplementedException();
         }

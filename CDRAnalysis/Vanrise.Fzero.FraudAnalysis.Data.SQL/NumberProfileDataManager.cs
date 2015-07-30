@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data;
 using Vanrise.Data.SQL;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
@@ -13,62 +13,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             : base("CDRDBConnectionString")
         {
 
-        }
-
-        public void LoadCDR(DateTime from, DateTime to, int? batchSize, Action<CDR> onBatchReady)
-        {
-            ExecuteReaderSP("FraudAnalysis.sp_NormalCDR_Load", (reader) =>
-                {
-
-                    
-                    int count = 0;
-                    int currentIndex = 0;
-
-                    while (reader.Read())
-                    {
-                        CDR normalCDR = new CDR();
-                        normalCDR.CallType = Enums.CallType.OutgoingVoiceCall;// (Enums.CallType)Enum.ToObject(typeof(Enums.CallType), GetReaderValue<int>(reader, "Call_Type"));
-                        normalCDR.BTSId = GetReaderValue<int?>(reader, "BTS_Id");
-                        normalCDR.ConnectDateTime = GetReaderValue<DateTime?>(reader, "ConnectDateTime");
-                        normalCDR.Id = (int)reader["Id"];
-                        normalCDR.IMSI = reader["IMSI"] as string;
-                        normalCDR.DurationInSeconds = GetReaderValue<Decimal?>(reader, "DurationInSeconds");
-                        normalCDR.DisconnectDateTime = GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
-                        normalCDR.CallClass = reader["Call_Class"] as string;
-                        normalCDR.IsOnNet = GetReaderValue<Byte?>(reader, "IsOnNet");
-                        normalCDR.SubType = reader["Sub_Type"] as string;
-                        normalCDR.IMEI = reader["IMEI"] as string;
-                        normalCDR.CellId = reader["Cell_Id"] as string;
-                        normalCDR.SwitchRecordId = GetReaderValue<int?>(reader, "SwitchRecordId");
-                        normalCDR.UpVolume = GetReaderValue<Decimal?>(reader, "Up_Volume");
-                        normalCDR.DownVolume = GetReaderValue<Decimal?>(reader, "Down_Volume");
-                        normalCDR.CellLatitude = GetReaderValue<Decimal?>(reader, "Cell_Latitude");
-                        normalCDR.CellLongitude = GetReaderValue<Decimal?>(reader, "Cell_Longitude");
-                        normalCDR.InTrunk = reader["In_Trunk"] as string;
-                        normalCDR.OutTrunk = reader["Out_Trunk"] as string;
-                        normalCDR.ServiceType = GetReaderValue<int>(reader, "Service_Type");
-                        normalCDR.ServiceVASName = reader["Service_VAS_Name"] as string;
-                        normalCDR.Destination = reader["Destination"] as string;
-                        normalCDR.MSISDN = reader["MSISDN"] as string;
-
-
-                       
-
-                        currentIndex++;
-                        if (currentIndex == 100000)
-                        {
-                            count += currentIndex;
-                            currentIndex = 0;
-                            Console.WriteLine("{0} rows read ", count);
-                        }
-
-                        onBatchReady(normalCDR);
-                    }
-
-                   
-
-                },from,to
-               );
         }
 
         public void ApplyNumberProfilesToDB(object preparedNumberProfiles)
@@ -107,5 +51,25 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                                     Vanrise.Common.Serializer.Serialize(record.AggregateValues, true));
         }
 
+        public List<NumberProfile> GetNumberProfiles(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string subscriberNumber)
+        {
+            return GetItemsSP("FraudAnalysis.sp_FraudResult_GetNumberProfile", NumberProfileMapper, fromRow, toRow, fromDate, toDate, subscriberNumber);
+        }
+
+
+        #region Private Methods
+        private NumberProfile NumberProfileMapper(IDataReader reader)
+        {
+            var numberProfile = new NumberProfile();
+            numberProfile.FromDate = (DateTime)reader["FromDate"];
+            numberProfile.ToDate = (DateTime)reader["ToDate"];
+            numberProfile.StrategyId = (int)reader["StrategyId"];
+            numberProfile.PeriodId = (int)reader["PeriodId"];
+            numberProfile.SubscriberNumber = reader["SubscriberNumber"] as string;
+            numberProfile.AggregateValues = Vanrise.Common.Serializer.Deserialize<Dictionary<string, decimal>>(GetReaderValue<string>(reader, "AggregateValues"));
+
+            return numberProfile;
+        }
+        #endregion
     }
 }

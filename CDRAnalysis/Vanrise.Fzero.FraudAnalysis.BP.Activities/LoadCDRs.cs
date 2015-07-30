@@ -56,7 +56,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         protected override void DoWork(LoadCDRsInput inputArgument, AsyncActivityHandle handle)
         {
             List<CDR> cdrs = new List<CDR>();
-            INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
+            INormalCDRDataManager dataManager = FraudDataManagerFactory.GetDataManager<INormalCDRDataManager>();
             dataManager.LoadCDR(inputArgument.FromDate, inputArgument.ToDate, 0, (cdr) =>
                 {
                     cdrs.Add(cdr);

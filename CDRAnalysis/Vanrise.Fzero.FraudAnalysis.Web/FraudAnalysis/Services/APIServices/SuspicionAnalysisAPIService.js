@@ -2,23 +2,9 @@
 
     return ({
         GetFilteredSuspiciousNumbers: GetFilteredSuspiciousNumbers,
-        GetNormalCDRs: GetNormalCDRs,
         GetSubscriberThresholds: GetSubscriberThresholds,
-        GetNumberProfiles: GetNumberProfiles,
         GetFraudResult: GetFraudResult
     });
-
-    function GetNormalCDRs(fromRow, toRow, fromDate, toDate, msisdn) {
-        return BaseAPIService.get("/api/SuspicionAnalysis/GetNormalCDRs",
-            {
-                fromRow: fromRow,
-                toRow: toRow,
-                fromDate: fromDate,
-                toDate: toDate,
-                msisdn: msisdn
-            }
-           );
-    }
 
 
     function GetSubscriberThresholds(fromRow, toRow, fromDate, toDate, msisdn) {
@@ -35,17 +21,6 @@
 
 
 
-    function GetNumberProfiles(fromRow, toRow, fromDate, toDate, subscriberNumber) {
-        return BaseAPIService.get("/api/SuspicionAnalysis/GetNumberProfiles",
-        {
-            fromRow: fromRow,
-            toRow: toRow,
-            fromDate: fromDate,
-            toDate: toDate,
-            subscriberNumber: subscriberNumber
-        }
-       );
-    }
 
     function GetFilteredSuspiciousNumbers(tempTableKey, fromRow, toRow, fromDate, toDate, strategiesList, suspicionLevelsList, caseStatusesList) {
         return BaseAPIService.get("/api/SuspicionAnalysis/GetFilteredSuspiciousNumbers",

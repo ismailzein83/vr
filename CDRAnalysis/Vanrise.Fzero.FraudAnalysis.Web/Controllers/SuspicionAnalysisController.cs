@@ -20,22 +20,9 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         }
 
 
-        [HttpGet]
-        public IEnumerable<CDR> GetNormalCDRs(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn)
-        {
-            StrategyManager manager = new StrategyManager();
+      
 
-            return manager.GetNormalCDRs(fromRow, toRow, fromDate, toDate, msisdn);
-        }
-
-        [HttpGet]
-        public IEnumerable<NumberProfile> GetNumberProfiles(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string subscriberNumber)
-        {
-            StrategyManager manager = new StrategyManager();
-
-            return manager.GetNumberProfiles(fromRow, toRow, fromDate, toDate, subscriberNumber);
-        }
-
+       
 
         [HttpGet]
         public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(string tempTableKey, int fromRow, int toRow, DateTime fromDate, DateTime toDate, string strategiesList, string suspicionLevelsList, string caseStatusesList)

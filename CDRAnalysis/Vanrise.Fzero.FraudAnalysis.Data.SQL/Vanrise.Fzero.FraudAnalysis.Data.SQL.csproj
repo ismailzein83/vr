@@ -61,6 +61,7 @@
     <Compile Include="NumberProfileDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DashboardManager.cs" />
+    <Compile Include="NormalCDRDataManager.cs" />
     <Compile Include="StrategyDataManager.cs" />
     <Compile Include="CaseManagementDataManager.cs" />
     <Compile Include="SuspiciousNumberDataManager.cs" />

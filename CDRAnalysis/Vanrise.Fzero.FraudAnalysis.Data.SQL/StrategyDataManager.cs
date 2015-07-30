@@ -34,18 +34,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return GetItemsSP("FraudAnalysis.sp_FraudResult_GetSubscriberThresholds", SubscriberThresholdMapper, fromRow, toRow, fromDate, toDate, msisdn);
         }
 
-        public List<CDR> GetNormalCDRs(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn)
-        {
-            return GetItemsSP("FraudAnalysis.sp_FraudResult_GetNormalCDR", CDRMapper, fromRow, toRow, fromDate, toDate, msisdn);
-        }
-
-
-        public List<NumberProfile> GetNumberProfiles(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string subscriberNumber)
-        {
-            return GetItemsSP("FraudAnalysis.sp_FraudResult_GetNumberProfile", NumberProfileMapper, fromRow, toRow, fromDate, toDate, subscriberNumber);
-        }
-
-
         public List<Strategy> GetFilteredStrategies(int fromRow, int toRow, string name, string description)
         {
             return GetItemsSP("FraudAnalysis.sp_Strategy_GetFilteredStrategies", StrategyMapper, fromRow, toRow, name, description);
@@ -96,69 +84,17 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         #region Private Methods
 
-
         private SubscriberThreshold SubscriberThresholdMapper(IDataReader reader)
         {
             var subscriberThreshold = new SubscriberThreshold();
 
             subscriberThreshold.DateDay = GetReaderValue<DateTime>(reader, "DateDay");
-            subscriberThreshold.Criteria1 = GetReaderValue<Decimal>(reader, "Criteria1");
-            subscriberThreshold.Criteria2 = GetReaderValue<Decimal>(reader, "Criteria2");
-            subscriberThreshold.Criteria3 = GetReaderValue<Decimal>(reader, "Criteria3");
-            subscriberThreshold.Criteria4 = GetReaderValue<Decimal>(reader, "Criteria4");
-            subscriberThreshold.Criteria5 = GetReaderValue<Decimal>(reader, "Criteria5");
-            subscriberThreshold.Criteria6 = GetReaderValue<Decimal>(reader, "Criteria6");
-            subscriberThreshold.Criteria7 = GetReaderValue<Decimal>(reader, "Criteria7");
-            subscriberThreshold.Criteria8 = GetReaderValue<Decimal>(reader, "Criteria8");
-            subscriberThreshold.Criteria9 = GetReaderValue<Decimal>(reader, "Criteria9");
-            subscriberThreshold.Criteria10 = GetReaderValue<Decimal>(reader, "Criteria10");
-            subscriberThreshold.Criteria11 = GetReaderValue<Decimal>(reader, "Criteria11");
-            subscriberThreshold.Criteria12 = GetReaderValue<Decimal>(reader, "Criteria12");
-            subscriberThreshold.Criteria13 = GetReaderValue<Decimal>(reader, "Criteria13");
-            subscriberThreshold.Criteria14 = GetReaderValue<Decimal>(reader, "Criteria14");
-            subscriberThreshold.Criteria15 = GetReaderValue<Decimal>(reader, "Criteria15");
-            subscriberThreshold.Criteria16 = GetReaderValue<Decimal>(reader, "Criteria16");
-            subscriberThreshold.Criteria17 = GetReaderValue<Decimal>(reader, "Criteria17");
-            subscriberThreshold.Criteria18 = GetReaderValue<Decimal>(reader, "Criteria18");
             subscriberThreshold.SuspicionLevelName = reader["SuspicionLevelName"] as string; 
-            subscriberThreshold.StrategyName = reader["StrategyName"] as string; 
+            subscriberThreshold.StrategyName = reader["StrategyName"] as string;
+            subscriberThreshold.CriteriaValues = Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(GetReaderValue<string>(reader, "CriteriaValues"));
 
             return subscriberThreshold;
         }
-
-
-        private CDR CDRMapper(IDataReader reader)
-        {
-            var normalCDR = new CDR();
-            normalCDR.CallType = (Enums.CallType)Enum.ToObject(typeof(Enums.CallType), GetReaderValue<int>(reader, "Call_Type"));
-            normalCDR.ConnectDateTime = GetReaderValue<DateTime?>(reader, "ConnectDateTime");
-            normalCDR.IMSI = reader["IMSI"] as string;
-            normalCDR.DurationInSeconds = GetReaderValue<Decimal?>(reader, "DurationInSeconds");
-            normalCDR.CallClass = reader["Call_Class"] as string;
-            normalCDR.SubType = reader["Sub_Type"] as string;
-            normalCDR.IMEI = reader["IMEI"] as string;
-            normalCDR.CellId = reader["Cell_Id"] as string;
-            normalCDR.UpVolume = GetReaderValue<Decimal?>(reader, "Up_Volume");
-            normalCDR.DownVolume = GetReaderValue<Decimal?>(reader, "Down_Volume");
-            normalCDR.ServiceType = GetReaderValue<int>(reader, "Service_Type");
-            normalCDR.ServiceVASName = reader["Service_VAS_Name"] as string;
-            normalCDR.Destination = reader["Destination"] as string;
-            return normalCDR;
-        }
-
-        private NumberProfile NumberProfileMapper(IDataReader reader)
-        {
-            var numberProfile = new NumberProfile();
-            numberProfile.FromDate = (DateTime)reader["FromDate"];
-            numberProfile.ToDate = (DateTime)reader["ToDate"];
-            numberProfile.StrategyId = (int)reader["StrategyId"];
-            numberProfile.PeriodId = (int)reader["PeriodId"];
-            numberProfile.SubscriberNumber = reader["SubscriberNumber"] as string;
-            numberProfile.AggregateValues = Vanrise.Common.Serializer.Deserialize<Dictionary<string,decimal>>(GetReaderValue<string>(reader, "AggregateValues"));
-          
-            return numberProfile;
-        }
-
 
         private Strategy StrategyMapper(IDataReader reader)
         {

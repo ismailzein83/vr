@@ -71,6 +71,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CaseManagmentManager.cs" />
     <Compile Include="DashboardManager.cs" />
+    <Compile Include="NumberProfileManager.cs" />
+    <Compile Include="NormalCDRManager.cs" />
     <Compile Include="StrategyManager.cs" />
   </ItemGroup>
   <ItemGroup>

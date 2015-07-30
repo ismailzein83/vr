@@ -11,10 +11,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         }
 
         public Dictionary<String, Decimal> AggregateValues { get; set; }
+
         public String SubscriberNumber { get; set; }
+
         public DateTime? FromDate { get; set; }
+
         public DateTime? ToDate { get; set; }
+
         public int? IsOnNet { get; set; }
+
         public int PeriodId { get; set; }
 
         public int StrategyId { get; set; } 

@@ -57,32 +57,32 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AggregateDefinition.cs" />
-    <Compile Include="AverageAggregate.cs" />
-    <Compile Include="CDRBatch.cs" />
+    <Compile Include="Aggregates\AverageAggregate.cs" />
+    <Compile Include="Batches\CDRBatch.cs" />
     <Compile Include="SubscriberThreshold.cs" />
-    <Compile Include="Period.cs" />
-    <Compile Include="Condition.cs" />
-    <Compile Include="ConsecutiveAggregate.cs" />
-    <Compile Include="CallClass.cs" />
-    <Compile Include="GroupCountAggregate.cs" />
+    <Compile Include="Predefined\Period.cs" />
+    <Compile Include="Aggregates\Condition.cs" />
+    <Compile Include="Aggregates\ConsecutiveAggregate.cs" />
+    <Compile Include="Predefined\CallClass.cs" />
+    <Compile Include="Aggregates\GroupCountAggregate.cs" />
     <Compile Include="OperationResults\InsertOperationOutput.cs" />
     <Compile Include="OperationResults\UpdateOperationOutput.cs" />
     <Compile Include="FraudResult.cs" />
-    <Compile Include="SumAggregate.cs" />
-    <Compile Include="DistinctCountAggregate.cs" />
+    <Compile Include="Aggregates\SumAggregate.cs" />
+    <Compile Include="Aggregates\DistinctCountAggregate.cs" />
     <Compile Include="CriteriaDefinition.cs" />
-    <Compile Include="Enums.cs" />
-    <Compile Include="IAggregate.cs" />
-    <Compile Include="NumberCriteriaBatch.cs" />
+    <Compile Include="Predefined\Enums.cs" />
+    <Compile Include="Aggregates\IAggregate.cs" />
+    <Compile Include="Batches\NumberCriteriaBatch.cs" />
     <Compile Include="CDR.cs" />
-    <Compile Include="NumberProfileBatch.cs" />
+    <Compile Include="Batches\NumberProfileBatch.cs" />
     <Compile Include="NumberProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CountAggregate.cs" />
+    <Compile Include="Aggregates\CountAggregate.cs" />
     <Compile Include="Strategy.cs" />
     <Compile Include="SubscriberCase.cs" />
     <Compile Include="SuspiciousNumber.cs" />
-    <Compile Include="SuspiciousNumberBatch.cs" />
+    <Compile Include="Batches\SuspiciousNumberBatch.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
