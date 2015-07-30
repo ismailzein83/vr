@@ -349,16 +349,31 @@ namespace Vanrise.BI.Business
                   }
               }
               List<int> distinctUsers = new List<int>();
-              for (int i = 0; i < userMeasuresValidatorInput.Query.UserIds.Count; i++)
+              if (userMeasuresValidatorInput.Query.UserIds.Count != 0 || userMeasuresValidatorInput.Query.GroupIds.Count!=0)
               {
-                  if (!distinctUsers.Contains(userMeasuresValidatorInput.Query.UserIds[i]))
-                      distinctUsers.Add(userMeasuresValidatorInput.Query.UserIds[i]);
+                  for (int i = 0; i < userMeasuresValidatorInput.Query.UserIds.Count; i++)
+                  {
+                      if (!distinctUsers.Contains(userMeasuresValidatorInput.Query.UserIds[i]))
+                          distinctUsers.Add(userMeasuresValidatorInput.Query.UserIds[i]);
+                  }
+                  List<User> users = new List<User>();
+                  UserManager userManager = new UserManager();
+                  for (int i = 0; i < userMeasuresValidatorInput.Query.GroupIds.Count; i++)
+                  {
+                      users = userManager.GetMembers(userMeasuresValidatorInput.Query.GroupIds[i]);
+                      foreach (User user in users)
+                      {
+                          if (!distinctUsers.Contains(user.UserId))
+                              distinctUsers.Add(user.UserId);
+
+                      }
+                  }
               }
-              List<User> users = new List<User>();
-              UserManager userManager = new UserManager();
-              for (int i = 0; i < userMeasuresValidatorInput.Query.GroupIds.Count; i++)
+              else
               {
-                  users = userManager.GetMembers(userMeasuresValidatorInput.Query.GroupIds[i]);
+                  List<User> users = new List<User>();
+                  UserManager userManager = new UserManager();
+                  users=userManager.GetUsers();
                   foreach (User user in users)
                   {
                       if (!distinctUsers.Contains(user.UserId))
@@ -366,6 +381,7 @@ namespace Vanrise.BI.Business
 
                   }
               }
+              
              
                
               Vanrise.Security.Business.SecurityManager securityManager = new Vanrise.Security.Business.SecurityManager();
