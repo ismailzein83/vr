@@ -39,65 +39,10 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
             
         
     }
-
-    function getSubscriberThresholds() {
-        $scope.subscriberThresholds.length = 0;
-
-        var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
-        var toDate = $scope.toDate != undefined ? $scope.toDate : '';
-
-
-        var pageInfo = subscriberThresholdsGridAPI.getPageInfo();
-
-        $scope.isGettingSubscriberThresholds = true;
-        return SuspicionAnalysisAPIService.GetSubscriberThresholds(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, $scope.subscriberNumber).then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.subscriberThresholds.push(itm);
-            });
-        }).finally(function () {
-            $scope.isGettingSubscriberThresholds = false;
-        });
-    }
-
-    function getNormalCDRs() {
-        $scope.normalCDRs.length = 0;
-
-        var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
-        var toDate = $scope.toDate != undefined ? $scope.toDate : '';
-
-
-        var pageInfo = normalCDRGridAPI.getPageInfo();
-
-        $scope.isGettingNormalCDRs = true;
-        return NormalCDRAPIService.GetNormalCDRs(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, $scope.subscriberNumber).then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.normalCDRs.push(itm);
-            });
-        }).finally(function () {
-            $scope.isGettingNormalCDRs = false;
-        });
-    }
-    
-    function getNumberProfiles() {
-        $scope.numberProfiles.length = 0;
-        var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
-        var toDate = $scope.toDate != undefined ? $scope.toDate : '';
-
-
-        var pageInfo = numberProfileGridAPI.getPageInfo();
-
-        $scope.isGettingNumberProfiles = true;
-        return NumberProfileAPIService.GetNumberProfiles(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, $scope.subscriberNumber).then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.numberProfiles.push(itm);
-            });
-        }).finally(function () {
-            $scope.isGettingNumberProfiles = false;
-        });
-    }
     
     function defineScope() {
 
+        $scope.filterDefinitions = [];
         $scope.subscriberThresholds = [];
         $scope.normalCDRs = [];
         $scope.numberProfiles = [];
@@ -114,7 +59,6 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         $scope.loadMoreDataSubscriberThresholds = function () {
             return getSubscriberThresholds();
         }
-
 
         $scope.onNormalCDRsGridReady = function (api) {
             normalCDRGridAPI = api;
@@ -133,11 +77,9 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
             return getNumberProfiles();
         }
 
-
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };
-
 
         $scope.ApplyChangeStatus = function () {
             var subscriberCaseObject = BuildSubscriberCaseObjfromScope();
@@ -165,32 +107,21 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
             });
         };
 
+        $scope.selectedRelatedNumbersChanged = function () {
+
+            $scope.subscriberNumber = $scope.selectedRelatedNumber
+            normalCDRGridAPI.clearDataAndContinuePaging();
+            numberProfileGridAPI.clearDataAndContinuePaging();
+            subscriberThresholdsGridAPI.clearDataAndContinuePaging();
+
+            isSubscriberThresholdsDataLoaded = false;
+            isNormalCDRDataLoaded = false;
+            isNumberProfileDataLoaded = false;
+            $scope.groupKeySelectionChanged();
+        }
+
     }
 
-    function BuildSubscriberCaseObjfromScope()
-    {
-        var subscriberCaseObject = {
-            SubscriberNumber: $scope.subscriberNumber,
-            StatusId: $scope.selectedStatus.id,
-            ValidTill: $scope.validTill
-        };
-        return subscriberCaseObject;
-    }
-    
-    $scope.selectedRelatedNumbersChanged  = function () {
-
-        $scope.subscriberNumber = $scope.selectedRelatedNumber
-
-        normalCDRGridAPI.clearDataAndContinuePaging();
-        numberProfileGridAPI.clearDataAndContinuePaging();
-        subscriberThresholdsGridAPI.clearDataAndContinuePaging();
-
-        isSubscriberThresholdsDataLoaded = false;
-        isNormalCDRDataLoaded = false;
-        isNumberProfileDataLoaded = false;
-        $scope.groupKeySelectionChanged();
-    }
-    
     function load() {
 
         var number = parseInt($scope.subscriberNumber);
@@ -204,39 +135,126 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
             relatedNumbers.push(number + i);
         }
 
-        
+
         $scope.relatedNumbers = relatedNumbers;
         $scope.selectedRelatedNumber = $scope.subscriberNumber;
 
 
-
-        SuspicionAnalysisAPIService.GetFraudResult($scope.fromDate, $scope.toDate, strategiesList.slice(0, -1), suspicionLevelsList.slice(0, -1), $scope.subscriberNumber).then(function (response) {
-
-            $scope.suspicionLevelName = response.SuspicionLevelName;
-           
-            if (response.StatusId == null) {
-                $scope.selectedStatus = UtilsService.getItemByVal($scope.statuses, 1, "id");
-            }
-            else {
-                $scope.selectedStatus = UtilsService.getItemByVal($scope.statuses, response.StatusId, "id");
-            }
+        $scope.isGettingData = true;
+        UtilsService.waitMultipleAsyncOperations([loadFilters])
+        .then(function () {
 
 
-            if (response.ValidTill == null) {
-                $scope.endDate = new Date();
-            }
-            else {
-                $scope.validTill = response.ValidTill;
-            }
-            
-            lastOccurance = response.LastOccurance;
-            strategyName = response.StrategyName;
-            numberofOccurances = response.NumberofOccurances;
+            SuspicionAnalysisAPIService.GetFraudResult($scope.fromDate, $scope.toDate, strategiesList.slice(0, -1), suspicionLevelsList.slice(0, -1), $scope.subscriberNumber).then(function (response) {
+
+                $scope.suspicionLevelName = response.SuspicionLevelName;
+
+                if (response.StatusId == null) {
+                    $scope.selectedStatus = UtilsService.getItemByVal($scope.statuses, 1, "id");
+                }
+                else {
+                    $scope.selectedStatus = UtilsService.getItemByVal($scope.statuses, response.StatusId, "id");
+                }
+
+
+                if (response.ValidTill == null) {
+                    $scope.endDate = new Date();
+                }
+                else {
+                    $scope.validTill = response.ValidTill;
+                }
+
+                lastOccurance = response.LastOccurance;
+                strategyName = response.StrategyName;
+                numberofOccurances = response.NumberofOccurances;
+            });
+
+            $scope.isGettingData = false;
+
+        })
+        .catch(function (error) {
+            $scope.isGettingData = false;
+            VRNotificationService.notifyExceptionWithClose(error, $scope);
         });
 
 
 
 
+
+
+
+
+    }
+
+    function loadFilters() {
+        return StrategyAPIService.GetFilters().then(function (response) {
+            angular.forEach(response, function (itm) {
+                $scope.filterDefinitions.push({ filterId: itm.FilterId, description: itm.Description });
+            });
+        });
+    }
+
+    function BuildSubscriberCaseObjfromScope()
+    {
+        var subscriberCaseObject = {
+            SubscriberNumber: $scope.subscriberNumber,
+            StatusId: $scope.selectedStatus.id,
+            ValidTill: $scope.validTill
+        };
+        return subscriberCaseObject;
+    }
+    
+    function getSubscriberThresholds() {
+        $scope.subscriberThresholds.length = 0;
+
+        var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
+        var toDate = $scope.toDate != undefined ? $scope.toDate : '';
+
+
+        var pageInfo = subscriberThresholdsGridAPI.getPageInfo();
+
+        $scope.isGettingSubscriberThresholds = true;
+        return SuspicionAnalysisAPIService.GetSubscriberThresholds(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, $scope.subscriberNumber).then(function (response) {
+            angular.forEach(response, function (itm) {
+                $scope.subscriberThresholds.push(itm);
+            });
+        }).finally(function () {
+            $scope.isGettingSubscriberThresholds = false;
+        });
+    }
+
+    function getNormalCDRs() {
+        $scope.normalCDRs.length = 0;
+
+        var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
+        var toDate = $scope.toDate != undefined ? $scope.toDate : '';
+        var pageInfo = normalCDRGridAPI.getPageInfo();
+        $scope.isGettingNormalCDRs = true;
+        return NormalCDRAPIService.GetNormalCDRs(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, $scope.subscriberNumber).then(function (response) {
+            angular.forEach(response, function (itm) {
+                $scope.normalCDRs.push(itm);
+            });
+        }).finally(function () {
+            $scope.isGettingNormalCDRs = false;
+        });
+    }
+
+    function getNumberProfiles() {
+        $scope.numberProfiles.length = 0;
+        var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
+        var toDate = $scope.toDate != undefined ? $scope.toDate : '';
+
+
+        var pageInfo = numberProfileGridAPI.getPageInfo();
+
+        $scope.isGettingNumberProfiles = true;
+        return NumberProfileAPIService.GetNumberProfiles(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, $scope.subscriberNumber).then(function (response) {
+            angular.forEach(response, function (itm) {
+                $scope.numberProfiles.push(itm);
+            });
+        }).finally(function () {
+            $scope.isGettingNumberProfiles = false;
+        });
     }
 
     $scope.groupKeySelectionChanged = function () {

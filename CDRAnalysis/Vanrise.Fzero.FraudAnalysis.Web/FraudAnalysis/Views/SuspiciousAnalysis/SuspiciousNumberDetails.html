@@ -43,28 +43,19 @@
                         <vr-row>
                             <vr-columns colnum="12">
                                 <div ng-show="isSubscriberThresholdsTabShown" vr-loader="isGettingSubscriberThresholds">
-                                    <vr-datagrid datasource="subscriberThresholds" maxheight="400px" loadmoredata="loadMoreDataSubscriberThresholds" on-ready="onSubscriberThresholdsGridReady">
-                                        <vr-datagridcolumn headertext="'Date'" field="'DateDay'" type="'Datetime'" widthfactor="17"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Filt. 1'" field="'Criteria1'"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Filt. 2'" field="'Criteria2'"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Filt. 3'" field="'Criteria3'"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Filt. 4'" field="'Criteria4'"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Filt. 5'" field="'Criteria5'"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Filt. 6'" field="'Criteria6'"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Filt. 7'" field="'Criteria7'"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Filt. 8'" field="'Criteria8'"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Filt. 9'" field="'Criteria9'"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Filt. 10'" field="'Criteria10'"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Filt. 11'" field="'Criteria11'"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Filt. 12'" field="'Criteria12'"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Filt. 13'" field="'Criteria13'"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Filt. 14'" field="'Criteria14'"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Filt. 15'" field="'Criteria15'"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Filt. 16'" field="'Criteria16'"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Filt. 17'" field="'Criteria17'"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Filt. 18'" field="'Criteria18'"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelName'"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'"></vr-datagridcolumn>
+                                    <vr-datagrid datasource="subscriberThresholds" maxheight="400px" loadmoredata="loadMoreDataSubscriberThresholds"  on-ready="onSubscriberThresholdsGridReady">
+                                        <vr-datagridcolumn headertext="'Date'" field="'DateDay'" type="'Datetime'" widthfactor="25"></vr-datagridcolumn>
+
+                                        <vr-datagridcolumn ng-repeat="filter in filterDefinitions" widthfactor="20" columnindex="$index + 1" headertext="'Filt. ' + filter.filterId" tag="filter">
+                                            <div ng-init="filterIndex = viewScope.filterDefinitions.indexOf(colDef.tag)" style="width:100%">
+                                                {{dataItem.CriteriaValues[filterIndex]}}
+                                                
+                                            </div>
+                                        </vr-datagridcolumn>
+
+
+                                        <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelName'" widthfactor="25"></vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" widthfactor="20"></vr-datagridcolumn>
                                     </vr-datagrid>
 
                                 </div>
@@ -137,7 +128,7 @@
 </vr-row>
 
 
-            {{numberProfiles}}
+            {{subscriberThresholds}}
 
         </vr-form>
     </vr-modalbody>
