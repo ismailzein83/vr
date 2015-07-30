@@ -1,8 +1,4 @@
-﻿using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System;
 using Vanrise.Data.MySQL;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 

@@ -46,8 +46,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
-
-
         public List<Strategy> GetFilteredStrategies(int fromRow, int toRow, string name, string description)
         {
             return GetItemsSP("FraudAnalysis.sp_Strategy_GetFilteredStrategies", StrategyMapper, fromRow, toRow, name, description);
@@ -153,29 +151,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             var numberProfile = new NumberProfile();
             numberProfile.FromDate = (DateTime)reader["FromDate"];
             numberProfile.ToDate = (DateTime)reader["ToDate"];
-            numberProfile.CountOutCalls = GetReaderValue<decimal?>(reader, "Count_Out_Calls");
-            numberProfile.DiffOutputNumb = GetReaderValue<decimal?>(reader, "Diff_Output_Numb");
-            numberProfile.CountOutInter = GetReaderValue<decimal?>(reader, "Count_Out_Inter");
-            numberProfile.CountInInter = GetReaderValue<decimal?>(reader, "Count_In_Inter");
-            numberProfile.CallOutDurAvg = GetReaderValue<decimal?>(reader, "Call_Out_Dur_Avg");
-            numberProfile.CountOutFail = GetReaderValue<decimal?>(reader, "Count_Out_Fail");
-            numberProfile.CountInFail = GetReaderValue<decimal?>(reader, "Count_In_Fail");
-            numberProfile.TotalOutVolume = GetReaderValue<decimal?>(reader, "Total_Out_Volume");
-            numberProfile.TotalInVolume = GetReaderValue<decimal?>(reader, "Total_In_Volume");
-            numberProfile.DiffInputNumbers = GetReaderValue<decimal?>(reader, "Diff_Input_Numbers");
-            numberProfile.CountOutSMS = GetReaderValue<decimal?>(reader, "Count_Out_SMS");
-            numberProfile.TotalIMEI = GetReaderValue<decimal?>(reader, "Total_IMEI");
-            numberProfile.TotalBTS = GetReaderValue<decimal?>(reader, "Total_BTS");
-            numberProfile.TotalDataVolume = GetReaderValue<decimal?>(reader, "Total_Data_Volume");
-            numberProfile.CountInCalls = GetReaderValue<decimal?>(reader, "Count_In_Calls");
-            numberProfile.CallInDurAvg = GetReaderValue<decimal?>(reader, "Call_In_Dur_Avg");
-            numberProfile.CountOutOnNet = GetReaderValue<decimal?>(reader, "Count_Out_OnNet");
-            numberProfile.CountInOnNet = GetReaderValue<decimal?>(reader, "Count_In_OnNet");
-            numberProfile.CountOutOffNet = GetReaderValue<decimal?>(reader, "Count_Out_OffNet");
-            numberProfile.CountInOffNet = GetReaderValue<decimal?>(reader, "Count_In_OffNet");
-            numberProfile.CountFailConsecutiveCalls = GetReaderValue<decimal?>(reader, "CountFailConsecutiveCalls");
-            numberProfile.CountConsecutiveCalls = GetReaderValue<decimal?>(reader, "CountConsecutiveCalls");
-            numberProfile.CountInLowDurationCalls = GetReaderValue<decimal?>(reader, "CountInLowDurationCalls");
+            numberProfile.StrategyId = (int)reader["StrategyId"];
+            numberProfile.PeriodId = (int)reader["PeriodId"];
+            numberProfile.SubscriberNumber = reader["SubscriberNumber"] as string;
+            numberProfile.AggregateValues = Vanrise.Common.Serializer.Deserialize<Dictionary<string,decimal>>(GetReaderValue<string>(reader, "AggregateValues"));
+          
             return numberProfile;
         }
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Vanrise.Data.MySQL;
 using Vanrise.Fzero.FraudAnalysis.Entities;
-using Vanrise.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
 {
@@ -13,6 +12,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         {
 
         }
+
 
 
 

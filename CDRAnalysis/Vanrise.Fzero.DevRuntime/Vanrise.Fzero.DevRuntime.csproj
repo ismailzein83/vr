@@ -164,9 +164,6 @@
     <Reference Include="Vanrise.Integration.Adapters.BaseFTP">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.BaseFTP.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Integration.Adapters.BaseTP">
-      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.BaseTP.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.Integration.Adapters.FileReceiveAdapter">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.FileReceiveAdapter.dll</HintPath>
     </Reference>
@@ -209,6 +206,9 @@
     </Reference>
     <Reference Include="Vanrise.Queueing.Extensions">
       <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Web">
+      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Web.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Runtime">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>

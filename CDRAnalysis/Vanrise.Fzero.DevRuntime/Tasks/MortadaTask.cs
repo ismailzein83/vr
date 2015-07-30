@@ -30,7 +30,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
 
-            PersistentQueueFactory.Default.CreateQueueIfNotExists<Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch>(0, "TestQueue");
+            //PersistentQueueFactory.Default.CreateQueueIfNotExists<Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch>(0, "TestQueue");
             
         }
     }

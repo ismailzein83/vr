@@ -17,54 +17,54 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
-        public void SaveSuspiciousNumbers(List<SuspiciousNumber> suspiciousNumbers)
-        {
+        //public void SaveSuspiciousNumbers(List<SuspiciousNumber> suspiciousNumbers)
+        //{
 
-            StreamForBulkInsert stream = InitializeStreamForBulkInsert();
+        //    StreamForBulkInsert stream = InitializeStreamForBulkInsert();
 
-            foreach (SuspiciousNumber suspiciousNumber in suspiciousNumbers)
-            {               
+        //    foreach (SuspiciousNumber suspiciousNumber in suspiciousNumbers)
+        //    {               
 
-                string record=  string.Format("0,{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21}",                             
-                                 suspiciousNumber.DateDay.Value,
-                                 suspiciousNumber.Number,
-                                 GetDictionaryValue(suspiciousNumber.CriteriaValues, 0),
-                                 GetDictionaryValue(suspiciousNumber.CriteriaValues, 1),
-                                 GetDictionaryValue(suspiciousNumber.CriteriaValues, 2),
-                                 GetDictionaryValue(suspiciousNumber.CriteriaValues, 3),
-                                 GetDictionaryValue(suspiciousNumber.CriteriaValues, 4),
-                                 GetDictionaryValue(suspiciousNumber.CriteriaValues, 5), 
-                                 GetDictionaryValue(suspiciousNumber.CriteriaValues, 6),
-                                 GetDictionaryValue(suspiciousNumber.CriteriaValues, 7),
-                                 GetDictionaryValue(suspiciousNumber.CriteriaValues, 8),
-                                 GetDictionaryValue(suspiciousNumber.CriteriaValues, 9), 
-                                 GetDictionaryValue(suspiciousNumber.CriteriaValues, 10), 
-                                 GetDictionaryValue(suspiciousNumber.CriteriaValues, 11),
-                                 GetDictionaryValue(suspiciousNumber.CriteriaValues, 12),
-                                 GetDictionaryValue(suspiciousNumber.CriteriaValues, 13),
-                                 GetDictionaryValue(suspiciousNumber.CriteriaValues, 14),
-                                 GetDictionaryValue(suspiciousNumber.CriteriaValues, 15),
-                                 GetDictionaryValue(suspiciousNumber.CriteriaValues, 16),
-                                 GetDictionaryValue(suspiciousNumber.CriteriaValues, 17), 
-                                 suspiciousNumber.SuspectionLevel,
-                                 suspiciousNumber.StrategyId);
+        //        string record=  string.Format("0,{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21}",                             
+        //                         suspiciousNumber.DateDay.Value,
+        //                         suspiciousNumber.Number,
+        //                         GetDictionaryValue(suspiciousNumber.CriteriaValues, 0),
+        //                         GetDictionaryValue(suspiciousNumber.CriteriaValues, 1),
+        //                         GetDictionaryValue(suspiciousNumber.CriteriaValues, 2),
+        //                         GetDictionaryValue(suspiciousNumber.CriteriaValues, 3),
+        //                         GetDictionaryValue(suspiciousNumber.CriteriaValues, 4),
+        //                         GetDictionaryValue(suspiciousNumber.CriteriaValues, 5), 
+        //                         GetDictionaryValue(suspiciousNumber.CriteriaValues, 6),
+        //                         GetDictionaryValue(suspiciousNumber.CriteriaValues, 7),
+        //                         GetDictionaryValue(suspiciousNumber.CriteriaValues, 8),
+        //                         GetDictionaryValue(suspiciousNumber.CriteriaValues, 9), 
+        //                         GetDictionaryValue(suspiciousNumber.CriteriaValues, 10), 
+        //                         GetDictionaryValue(suspiciousNumber.CriteriaValues, 11),
+        //                         GetDictionaryValue(suspiciousNumber.CriteriaValues, 12),
+        //                         GetDictionaryValue(suspiciousNumber.CriteriaValues, 13),
+        //                         GetDictionaryValue(suspiciousNumber.CriteriaValues, 14),
+        //                         GetDictionaryValue(suspiciousNumber.CriteriaValues, 15),
+        //                         GetDictionaryValue(suspiciousNumber.CriteriaValues, 16),
+        //                         GetDictionaryValue(suspiciousNumber.CriteriaValues, 17), 
+        //                         suspiciousNumber.SuspectionLevel,
+        //                         suspiciousNumber.StrategyId);
 
-                stream.WriteRecord(record);
+        //        stream.WriteRecord(record);
 
-            }
+        //    }
 
-            stream.Close();
+        //    stream.Close();
 
-            InsertBulkToTable(
-                new StreamBulkInsertInfo
-                {
-                    TableName = "[FraudAnalysis].[SubscriberThreshold]",
-                    Stream = stream,
-                    TabLock = false,
-                    KeepIdentity = false,
-                    FieldSeparator = ','
-                });
-        }
+        //    InsertBulkToTable(
+        //        new StreamBulkInsertInfo
+        //        {
+        //            TableName = "[FraudAnalysis].[SubscriberThreshold]",
+        //            Stream = stream,
+        //            TabLock = false,
+        //            KeepIdentity = false,
+        //            FieldSeparator = ','
+        //        });
+        //}
 
         public object GetDictionaryValue<T>(Dictionary<T, Decimal> dictionary, T key)
         {
@@ -74,63 +74,63 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return Math.Round(value, 5);
         }
 
-        public void SaveNumberProfiles(List<NumberProfile> numberProfiles)
-        {
+        //public void SaveNumberProfiles(List<NumberProfile> numberProfiles)
+        //{
 
-            StreamForBulkInsert stream = InitializeStreamForBulkInsert();
+        //    StreamForBulkInsert stream = InitializeStreamForBulkInsert();
 
-            foreach (NumberProfile numberProfile in numberProfiles)
-            {
+        //    foreach (NumberProfile numberProfile in numberProfiles)
+        //    {
 
-                stream.WriteRecord("0,{0},{1},{2},{3},{4},{5},{6},0,0,0,{7},0,0,{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28}",
-                                    numberProfile.SubscriberNumber,
-                                    numberProfile.FromDate,
-                                    numberProfile.ToDate,
-                                    GetDictionaryValue(numberProfile.AggregateValues, "CountOutCalls"),
-                                    GetDictionaryValue(numberProfile.AggregateValues, "DiffOutputNumb"),
-                                    GetDictionaryValue(numberProfile.AggregateValues, "CountOutInters"),
-                                    GetDictionaryValue(numberProfile.AggregateValues, "CountInInters"),                                   
-                                    GetDictionaryValue(numberProfile.AggregateValues, "CallOutDurAvg"),                                    
-                                    GetDictionaryValue(numberProfile.AggregateValues, "CountOutFails"),
-                                    GetDictionaryValue(numberProfile.AggregateValues, "CountInFails"),
-                                    GetDictionaryValue(numberProfile.AggregateValues, "TotalOutVolume"),
-                                    GetDictionaryValue(numberProfile.AggregateValues, "TotalInVolume"),
-                                    GetDictionaryValue(numberProfile.AggregateValues, "DiffInputNumbers"),
-                                    GetDictionaryValue(numberProfile.AggregateValues, "CountOutSMSs"),
-                                    GetDictionaryValue(numberProfile.AggregateValues, "TotalIMEI"),
-                                    GetDictionaryValue(numberProfile.AggregateValues, "TotalBTS"),
-                                    numberProfile.IsOnNet,
-                                    GetDictionaryValue(numberProfile.AggregateValues, "TotalDataVolume"),
-                                    numberProfile.PeriodId,
-                                    GetDictionaryValue(numberProfile.AggregateValues, "CountInCalls"),
-                                    GetDictionaryValue(numberProfile.AggregateValues, "CallInDurAvg"),
-                                    GetDictionaryValue(numberProfile.AggregateValues, "CountOutOnNets"),
-                                    GetDictionaryValue(numberProfile.AggregateValues, "CountInOnNets"),
-                                    GetDictionaryValue(numberProfile.AggregateValues, "CountOutOffNets"),
-                                    GetDictionaryValue(numberProfile.AggregateValues, "CountInOffNets"),
-                                    GetDictionaryValue(numberProfile.AggregateValues, "CountFailConsecutiveCalls"),
-                                    GetDictionaryValue(numberProfile.AggregateValues, "CountConsecutiveCalls"),
-                                    GetDictionaryValue(numberProfile.AggregateValues, "CountInLowDurationCalls"),
-                                    numberProfile.StrategyId
-               );
-
-
+        //        stream.WriteRecord("0,{0},{1},{2},{3},{4},{5},{6},0,0,0,{7},0,0,{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28}",
+        //                            numberProfile.SubscriberNumber,
+        //                            numberProfile.FromDate,
+        //                            numberProfile.ToDate,
+        //                            GetDictionaryValue(numberProfile.AggregateValues, "CountOutCalls"),
+        //                            GetDictionaryValue(numberProfile.AggregateValues, "DiffOutputNumb"),
+        //                            GetDictionaryValue(numberProfile.AggregateValues, "CountOutInters"),
+        //                            GetDictionaryValue(numberProfile.AggregateValues, "CountInInters"),                                   
+        //                            GetDictionaryValue(numberProfile.AggregateValues, "CallOutDurAvg"),                                    
+        //                            GetDictionaryValue(numberProfile.AggregateValues, "CountOutFails"),
+        //                            GetDictionaryValue(numberProfile.AggregateValues, "CountInFails"),
+        //                            GetDictionaryValue(numberProfile.AggregateValues, "TotalOutVolume"),
+        //                            GetDictionaryValue(numberProfile.AggregateValues, "TotalInVolume"),
+        //                            GetDictionaryValue(numberProfile.AggregateValues, "DiffInputNumbers"),
+        //                            GetDictionaryValue(numberProfile.AggregateValues, "CountOutSMSs"),
+        //                            GetDictionaryValue(numberProfile.AggregateValues, "TotalIMEI"),
+        //                            GetDictionaryValue(numberProfile.AggregateValues, "TotalBTS"),
+        //                            numberProfile.IsOnNet,
+        //                            GetDictionaryValue(numberProfile.AggregateValues, "TotalDataVolume"),
+        //                            numberProfile.PeriodId,
+        //                            GetDictionaryValue(numberProfile.AggregateValues, "CountInCalls"),
+        //                            GetDictionaryValue(numberProfile.AggregateValues, "CallInDurAvg"),
+        //                            GetDictionaryValue(numberProfile.AggregateValues, "CountOutOnNets"),
+        //                            GetDictionaryValue(numberProfile.AggregateValues, "CountInOnNets"),
+        //                            GetDictionaryValue(numberProfile.AggregateValues, "CountOutOffNets"),
+        //                            GetDictionaryValue(numberProfile.AggregateValues, "CountInOffNets"),
+        //                            GetDictionaryValue(numberProfile.AggregateValues, "CountFailConsecutiveCalls"),
+        //                            GetDictionaryValue(numberProfile.AggregateValues, "CountConsecutiveCalls"),
+        //                            GetDictionaryValue(numberProfile.AggregateValues, "CountInLowDurationCalls"),
+        //                            numberProfile.StrategyId
+        //       );
 
 
-            }
 
-            stream.Close();
 
-            InsertBulkToTable(
-                new StreamBulkInsertInfo
-                {
-                    TableName = "[FraudAnalysis].[NumberProfile]",
-                    Stream = stream,
-                    TabLock = false,
-                    KeepIdentity = false,
-                    FieldSeparator = ','
-                });
-        }
+        //    }
+
+        //    stream.Close();
+
+        //    InsertBulkToTable(
+        //        new StreamBulkInsertInfo
+        //        {
+        //            TableName = "[FraudAnalysis].[NumberProfile]",
+        //            Stream = stream,
+        //            TabLock = false,
+        //            KeepIdentity = false,
+        //            FieldSeparator = ','
+        //        });
+        //}
 
 
         public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(string tempTableKey, int fromRow, int toRow, DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList, List<int> caseStatusesList)
@@ -215,7 +215,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 Stream = streamForBulkInsert,
                 TabLock = false,
                 KeepIdentity = false,
-                FieldSeparator = ','
+                FieldSeparator = '^'
             };
         }
 
@@ -227,29 +227,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         public void WriteRecordToStream(SuspiciousNumber record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("0,{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21}",
+            streamForBulkInsert.WriteRecord("0^{0}^{1}^{2}^{3}^{4}",
                                  record.DateDay.Value,
                                  record.Number,
-                                 GetDictionaryValue(record.CriteriaValues, 0),
-                                 GetDictionaryValue(record.CriteriaValues, 1),
-                                 GetDictionaryValue(record.CriteriaValues, 2),
-                                 GetDictionaryValue(record.CriteriaValues, 3),
-                                 GetDictionaryValue(record.CriteriaValues, 4),
-                                 GetDictionaryValue(record.CriteriaValues, 5),
-                                 GetDictionaryValue(record.CriteriaValues, 6),
-                                 GetDictionaryValue(record.CriteriaValues, 7),
-                                 GetDictionaryValue(record.CriteriaValues, 8),
-                                 GetDictionaryValue(record.CriteriaValues, 9),
-                                 GetDictionaryValue(record.CriteriaValues, 10),
-                                 GetDictionaryValue(record.CriteriaValues, 11),
-                                 GetDictionaryValue(record.CriteriaValues, 12),
-                                 GetDictionaryValue(record.CriteriaValues, 13),
-                                 GetDictionaryValue(record.CriteriaValues, 14),
-                                 GetDictionaryValue(record.CriteriaValues, 15),
-                                 GetDictionaryValue(record.CriteriaValues, 16),
-                                 GetDictionaryValue(record.CriteriaValues, 17),
                                  record.SuspectionLevel,
-                                 record.StrategyId);
+                                 record.StrategyId,
+                                 Vanrise.Common.Serializer.Serialize(record.CriteriaValues, true));
         }
 
 

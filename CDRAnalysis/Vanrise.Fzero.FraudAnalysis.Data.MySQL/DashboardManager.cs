@@ -14,11 +14,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
+
+
         public System.Collections.Generic.List<CasesSummary> GetCasesSummary(DateTime fromDate, DateTime toDate)
         {
             throw new NotImplementedException();
         }
-
 
         public System.Collections.Generic.List<StrategyCases> GetStrategyCases(DateTime fromDate, DateTime toDate)
         {
