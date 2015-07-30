@@ -28,12 +28,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return GetItemsSP("FraudAnalysis.sp_Strategy_GetAll", StrategyMapper);
         }
 
-
-        public List<SubscriberThreshold> GetSubscriberThresholds(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn)
-        {
-            return GetItemsSP("FraudAnalysis.sp_FraudResult_GetSubscriberThresholds", SubscriberThresholdMapper, fromRow, toRow, fromDate, toDate, msisdn);
-        }
-
         public List<Strategy> GetFilteredStrategies(int fromRow, int toRow, string name, string description)
         {
             return GetItemsSP("FraudAnalysis.sp_Strategy_GetFilteredStrategies", StrategyMapper, fromRow, toRow, name, description);
@@ -82,36 +76,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return false;
         }
 
-        #region Private Methods
-
-        private SubscriberThreshold SubscriberThresholdMapper(IDataReader reader)
-        {
-            var subscriberThreshold = new SubscriberThreshold();
-
-            subscriberThreshold.DateDay = GetReaderValue<DateTime>(reader, "DateDay");
-            subscriberThreshold.SuspicionLevelName = reader["SuspicionLevelName"] as string; 
-            subscriberThreshold.StrategyName = reader["StrategyName"] as string;
-            subscriberThreshold.CriteriaValues = Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(GetReaderValue<string>(reader, "CriteriaValues"));
-
-            return subscriberThreshold;
-        }
-
-        private Strategy StrategyMapper(IDataReader reader)
-        {
-            var strategy = Vanrise.Common.Serializer.Deserialize<Strategy>(GetReaderValue<string>(reader, "StrategyContent"));
-            strategy.Id = (int)reader["Id"];
-            return strategy;
-        }
-
-        private CallClass CallClassMapper(IDataReader reader)
-        {
-            var callClass = new CallClass();
-            callClass.Id = (int)reader["Id"];
-            callClass.Description = reader["Description"] as string;
-            callClass.NetType = (Enums.NetType)Enum.ToObject(typeof(Enums.NetType), GetReaderValue<int>(reader, "NetType"));
-            return callClass;
-        }
-
         public List<CallClass> GetAllCallClasses()
         {
             return GetItemsSP("FraudAnalysis.sp_CallClass_GetAll", CallClassMapper);
@@ -132,6 +96,23 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return periods;
         }
 
+        #region Private Methods
+
+        private Strategy StrategyMapper(IDataReader reader)
+        {
+            var strategy = Vanrise.Common.Serializer.Deserialize<Strategy>(GetReaderValue<string>(reader, "StrategyContent"));
+            strategy.Id = (int)reader["Id"];
+            return strategy;
+        }
+
+        private CallClass CallClassMapper(IDataReader reader)
+        {
+            var callClass = new CallClass();
+            callClass.Id = (int)reader["Id"];
+            callClass.Description = reader["Description"] as string;
+            callClass.NetType = (Enums.NetType)Enum.ToObject(typeof(Enums.NetType), GetReaderValue<int>(reader, "NetType"));
+            return callClass;
+        }
 
         #endregion
 

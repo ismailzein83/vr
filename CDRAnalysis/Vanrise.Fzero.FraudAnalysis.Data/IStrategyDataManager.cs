@@ -22,7 +22,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         List<Period> GetPeriods();
 
-        List<SubscriberThreshold> GetSubscriberThresholds(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn);
+        
 
         
     }

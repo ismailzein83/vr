@@ -30,7 +30,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         public IEnumerable<SubscriberThreshold> GetSubscriberThresholds(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn)
         {
 
-            IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+            ISuspiciousNumberDataManager manager = FraudDataManagerFactory.GetDataManager<ISuspiciousNumberDataManager>();
 
             return manager.GetSubscriberThresholds(fromRow, toRow, fromDate, toDate, msisdn);
 

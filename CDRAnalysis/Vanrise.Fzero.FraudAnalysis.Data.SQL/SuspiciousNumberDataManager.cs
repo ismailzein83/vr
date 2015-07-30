@@ -106,6 +106,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             InsertBulkToTable(preparedSuspiciousNumbers as BaseBulkInsertInfo);
         }
 
+        public List<SubscriberThreshold> GetSubscriberThresholds(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn)
+        {
+            return GetItemsSP("FraudAnalysis.sp_FraudResult_GetSubscriberThresholds", SubscriberThresholdMapper, fromRow, toRow, fromDate, toDate, msisdn);
+        }
+
 
         #region Private Methods
 
@@ -121,6 +126,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             fraudResult.StatusId = GetReaderValue<int?>(reader, "StatusId");
             fraudResult.ValidTill = GetReaderValue<DateTime?>(reader, "ValidTill");
             return fraudResult;
+        }
+
+        private SubscriberThreshold SubscriberThresholdMapper(IDataReader reader)
+        {
+            var subscriberThreshold = new SubscriberThreshold();
+
+            subscriberThreshold.DateDay = GetReaderValue<DateTime>(reader, "DateDay");
+            subscriberThreshold.SuspicionLevelName = reader["SuspicionLevelName"] as string;
+            subscriberThreshold.StrategyName = reader["StrategyName"] as string;
+            subscriberThreshold.CriteriaValues = Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(GetReaderValue<string>(reader, "CriteriaValues"));
+
+            return subscriberThreshold;
         }
 
         #endregion
