@@ -140,7 +140,7 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
             var chartDefinition = {
                 type: "pie",
                 title: "Strategy Cases",
-                yAxisTitle: "CountCases"
+                yAxisTitle: "StrategyName"
             };
 
             var seriesDefinitions = [{
