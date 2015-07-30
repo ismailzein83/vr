@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Threading;
 using System.Web.Http;
 using TOne.BusinessEntity.Business;
 using TOne.BusinessEntity.Entities;
@@ -36,7 +35,6 @@ namespace TOne.BusinessEntity.Web.Controllers
         [HttpGet]
         public int? GetLinkedOrgChartId()
         {
-            Thread.Sleep(3000);
             AccountManagerManager manager = new AccountManagerManager();
             return manager.GetLinkedOrgChartId();
         }
