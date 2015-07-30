@@ -26,5 +26,15 @@ namespace TOne.CDR.Entities
         {
             return String.Format("Batch of {0} CDRs", CDRs.Count);
         }
+
+        public int GetRecordCount()
+        {
+            return this.CDRs != null ? this.CDRs.Count : 0;
+        }
+
+        public DateTime GetLastRecordTime()
+        {
+            return this.CDRs != null ? this.CDRs.Max(itm => itm.AttemptDateTime) : default(DateTime);
+        }
     }
 }
