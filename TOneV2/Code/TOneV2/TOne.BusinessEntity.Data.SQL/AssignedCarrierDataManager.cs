@@ -114,6 +114,7 @@ namespace TOne.BusinessEntity.Data.SQL
                 CarrierAccountId = reader["CarrierAccountId"] as string,
                 RelationType = (int)reader["RelationType"]
             };
+
             return assignedCarrier;
         }
     }

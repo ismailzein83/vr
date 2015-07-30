@@ -25,16 +25,17 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
 
             if (updatedCarriers.length > 0) {
 
-                AccountManagerAPIService.AssignCarriers(updatedCarriers).then(function (response) {
-                    if (VRNotificationService.notifyOnItemUpdated("Assigned Carriers", response)) {
-                        if ($scope.onCarriersAssigned != undefined)
-                            $scope.onCarriersAssigned();
+                AccountManagerAPIService.AssignCarriers(updatedCarriers)
+                    .then(function (response) {
+                        if (VRNotificationService.notifyOnItemUpdated("Assigned Carriers", response)) {
+                            if ($scope.onCarriersAssigned != undefined)
+                                $scope.onCarriersAssigned();
 
-                        $scope.modalContext.closeModal();
-                    }
-                }).catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                });
+                            $scope.modalContext.closeModal();
+                        }
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    });
             }
         }
 
@@ -107,11 +108,6 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
         return mappedCarriers;
     }
 
-    function getAssignedCarriers()
-    {
-        return 
-    }
-
     function mapCarriersForAssignment() {
         var mappedCarriers = [];
 
@@ -148,6 +144,7 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
     }
 
     function toggleAssignedCarriers(carriers, assignedCarriers) {
+
         for (var i = 0; i < assignedCarriers.length; i++) {
             var carrier = UtilsService.getItemByVal(carriers, assignedCarriers[i].CarrierAccountId, 'CarrierAccountId');
 
@@ -156,7 +153,7 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
                     carrier.customerSwitchValue = true;
                     carrier.newCustomerSwitchValue = true;
                 }
-                else {
+                else if (assignedCarriers[i].RelationType == 2) {
                     carrier.supplierSwitchValue = true;
                     carrier.newSupplierSwitchValue = true;
                 }
