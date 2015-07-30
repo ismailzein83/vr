@@ -13,29 +13,23 @@ namespace TOne.BusinessEntity.Business
 {
     public class AccountManagerManager
     {
-        public List<AccountManagerCarrier> GetCarriers(int userId, int from, int to)
+        public Vanrise.Entities.IDataRetrievalResult<AccountManagerCarrier> GetCarriers(Vanrise.Entities.DataRetrievalInput<AccountManagerCarrierQuery> input)
         {
             IAccountManagerCarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountManagerCarrierDataManager>();
-            return dataManager.GetCarriers(userId, from, to);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetCarriers(input));
         }
 
         public List<AssignedCarrier> GetAssignedCarriers(int managerId, bool withDescendants, CarrierTypeFilter carrierType)
         {
             IAssignedCarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<IAssignedCarrierDataManager>();
-            
-            List<int> memberIds = new List<int>();
-            
-            if (withDescendants)
-            {
-                int? orgChartId = GetLinkedOrgChartId();
-                
-                if (orgChartId != null)
-                    memberIds = GetMemberIds((int)orgChartId, managerId); // GetMemberIds will add managerId to the list
-            }
-            else
-                memberIds.Add(managerId);
-            
-            return dataManager.GetAssignedCarriers(memberIds, carrierType);
+            return dataManager.GetAssignedCarriers(this.GetMemberIds(managerId, withDescendants), carrierType);
+        }
+
+        public Vanrise.Entities.IDataRetrievalResult<AssignedCarrier> GetAssignedCarriersFromTempTable(Vanrise.Entities.DataRetrievalInput<AssignedCarrierQuery> input)
+        {
+            IAssignedCarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<IAssignedCarrierDataManager>();
+            List<int> userIds = this.GetMemberIds(input.Query.ManagerId, input.Query.WithDescendants);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetAssignedCarriersFromTempTable(input, userIds));
         }
 
         public Vanrise.Entities.UpdateOperationOutput<object> AssignCarriers(UpdatedAccountManagerCarrier[] updatedCarriers)
@@ -68,6 +62,23 @@ namespace TOne.BusinessEntity.Business
         {
             OrgChartManager orgChartManager = new OrgChartManager();
             return orgChartManager.GetMemberIds(orgChartId, managerId);
+        }
+
+        private List<int> GetMemberIds(int managerId, bool withDescendants)
+        {
+            List<int> memberIds = new List<int>();
+
+            if (withDescendants)
+            {
+                int? orgChartId = GetLinkedOrgChartId();
+
+                if (orgChartId != null)
+                    memberIds = GetMemberIds((int)orgChartId, managerId); // GetMemberIds will add managerId to the list
+            }
+            else
+                memberIds.Add(managerId);
+
+            return memberIds;
         }
     }
 }

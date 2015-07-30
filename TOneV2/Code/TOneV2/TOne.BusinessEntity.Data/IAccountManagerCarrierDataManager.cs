@@ -10,6 +10,6 @@ namespace TOne.BusinessEntity.Data
 {
     public interface IAccountManagerCarrierDataManager : IDataManager
     {
-        List<AccountManagerCarrier> GetCarriers(int userId, int from, int to);
+        Vanrise.Entities.BigResult<AccountManagerCarrier> GetCarriers(Vanrise.Entities.DataRetrievalInput<AccountManagerCarrierQuery> input);
     }
 }

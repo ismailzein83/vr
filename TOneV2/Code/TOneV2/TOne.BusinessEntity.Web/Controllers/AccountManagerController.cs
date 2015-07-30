@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Web.Http;
 using TOne.BusinessEntity.Business;
 using TOne.BusinessEntity.Entities;
 
 namespace TOne.BusinessEntity.Web.Controllers
 {
-    public class AccountManagerController : ApiController
+    public class AccountManagerController : Vanrise.Web.Base.BaseAPIController
     {
-        [HttpGet]
-        public List<AccountManagerCarrier> GetCarriers(int userId, int from, int to)
+        [HttpPost]
+        public object GetCarriers(Vanrise.Entities.DataRetrievalInput<AccountManagerCarrierQuery> input)
         {
             AccountManagerManager manager = new AccountManagerManager();
-            return manager.GetCarriers(userId, from, to);
+            return GetWebResponse(input, manager.GetCarriers(input));
         }
 
         [HttpGet]
@@ -25,9 +26,17 @@ namespace TOne.BusinessEntity.Web.Controllers
             return manager.GetAssignedCarriers(managerId, withDescendants, carrierType);
         }
 
+        [HttpPost]
+        public object GetAssignedCarriersFromTempTable(Vanrise.Entities.DataRetrievalInput<AssignedCarrierQuery> input)
+        {
+            AccountManagerManager manager = new AccountManagerManager();
+            return GetWebResponse(input, manager.GetAssignedCarriersFromTempTable(input));
+        }
+
         [HttpGet]
         public int? GetLinkedOrgChartId()
         {
+            Thread.Sleep(3000);
             AccountManagerManager manager = new AccountManagerManager();
             return manager.GetLinkedOrgChartId();
         }

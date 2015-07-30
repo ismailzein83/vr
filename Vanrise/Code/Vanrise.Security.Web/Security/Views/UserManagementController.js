@@ -109,7 +109,8 @@ function UserManagementController($scope, UsersAPIService, VRModalService, VRNot
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Reset Password for User: " + userObj.Name;
             modalScope.onPasswordReset = function (user) {
-                gridApi.itemUpdated(user);
+                // user is null
+                //gridApi.itemUpdated(user);
             };
         };
 

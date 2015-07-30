@@ -83,12 +83,12 @@ namespace Vanrise.Security.Business
             return updateOperationOutput;
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<User> ResetPassword(int userId, string password)
+        public Vanrise.Entities.UpdateOperationOutput<object> ResetPassword(int userId, string password)
         {
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
             bool updateActionSucc = dataManager.ResetPassword(userId, password);
 
-            UpdateOperationOutput<User> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<User>();
+            UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
@@ -96,7 +96,6 @@ namespace Vanrise.Security.Business
             if (updateActionSucc)
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = GetUserbyId(userId);
             }
 
             return updateOperationOutput;

@@ -33,7 +33,7 @@ function ResetPasswordEditorController($scope, UsersAPIService, VRNavigationServ
                         .then(function (response) {
                             if (VRNotificationService.notifyOnItemUpdated("User's password was", response)) {
                                 if ($scope.onPasswordReset != undefined)
-                                    $scope.onPasswordReset(response.UpdatedObject);
+                                    $scope.onPasswordReset(response);
 
                                 $scope.modalContext.closeModal();
                             }

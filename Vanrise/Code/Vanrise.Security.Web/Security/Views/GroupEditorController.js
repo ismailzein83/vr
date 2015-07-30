@@ -1,8 +1,10 @@
-﻿GroupEditorController.$inject = ['$scope', 'GroupAPIService', 'UsersAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿GroupEditorController.$inject = ['$scope', 'GroupAPIService', 'UsersAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
-function GroupEditorController($scope, GroupAPIService, UsersAPIService, VRModalService, VRNotificationService, VRNavigationService) {
+function GroupEditorController($scope, GroupAPIService, UsersAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
 
     var editMode;
+    var group;
+    var members;
     loadParameters();
     defineScope();
     load();
@@ -46,8 +48,17 @@ function GroupEditorController($scope, GroupAPIService, UsersAPIService, VRModal
         UsersAPIService.GetUsers().then(function (response) {
             $scope.optionsUsers.datasource = response;
 
-            if (editMode)
-                getGroup();
+            if (editMode) {
+                UtilsService.waitMultipelAsyncOperations([getGroup, getMembers], function () {
+                    fillScopeFromGroupAndMembersObjs();
+                })
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+                .finally(function () {
+                    $scope.isGettingData = false;
+                });
+            }
             else
                 $scope.isGettingData = false;
 
@@ -58,15 +69,17 @@ function GroupEditorController($scope, GroupAPIService, UsersAPIService, VRModal
     }
 
     function getGroup() {
-        return GroupAPIService.GetGroup($scope.groupId).then(function (response) {
-
-            fillScopeFromGroupObj(response).finally(function () {
-                $scope.isGettingData = false;
+        return GroupAPIService.GetGroup($scope.groupId)
+            .then(function (response) {
+                group = response;
             });
-        }).catch(function (error) {
-            $scope.isGettingData = false;
-            VRNotificationService.notifyExceptionWithClose(error, $scope);
-        });
+    }
+
+    function getMembers() {
+        return UsersAPIService.GetMembers($scope.groupId)
+            .then(function (response) {
+                members = response;
+            });
     }
 
     function buildGroupObjFromScope() {
@@ -85,17 +98,10 @@ function GroupEditorController($scope, GroupAPIService, UsersAPIService, VRModal
         return groupObj;
     }
 
-    function fillScopeFromGroupObj(groupObj) {
-        $scope.name = groupObj.Name;
-        $scope.description = groupObj.Description;
-        
-        return UsersAPIService.GetMembers($scope.groupId)
-            .then(function (response) {
-                $scope.optionsUsers.selectedvalues = response;
-            })
-            .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            });
+    function fillScopeFromGroupAndMembersObjs() {
+        $scope.name = group.Name;
+        $scope.description = group.Description;
+        $scope.optionsUsers.selectedvalues = members;
     }
 
     function insertGroup() {

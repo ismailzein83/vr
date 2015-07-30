@@ -66,7 +66,7 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpPost]
-        public Vanrise.Entities.UpdateOperationOutput<User> ResetPassword(ResetPasswordInput user)
+        public Vanrise.Entities.UpdateOperationOutput<object> ResetPassword(ResetPasswordInput user)
         {
             UserManager manager = new UserManager();
             return manager.ResetPassword(user.UserId, user.Password);

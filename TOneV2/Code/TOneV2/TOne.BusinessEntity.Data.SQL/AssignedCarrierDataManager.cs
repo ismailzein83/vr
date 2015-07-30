@@ -27,6 +27,27 @@ namespace TOne.BusinessEntity.Data.SQL
             });
         }
 
+        public Vanrise.Entities.BigResult<AssignedCarrier> GetAssignedCarriersFromTempTable(Vanrise.Entities.DataRetrievalInput<AssignedCarrierQuery> input, List<int> userIds)
+        {
+            DataTable dtMembers = this.BuildUserIdsTable(userIds);
+            
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySPCmd("[BEntity].[sp_AccountManager_CreateTempForAssignedCarriers]", (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@TempTableName", tempTableName));
+
+                    var dtParameter = new SqlParameter("@UserIds", SqlDbType.Structured);
+                    dtParameter.Value = dtMembers;
+                    cmd.Parameters.Add(dtParameter);
+
+                    cmd.Parameters.Add(new SqlParameter("@CarrierType", input.Query.CarrierType));
+                });
+            };
+
+            return RetrieveData(input, createTempTableAction, AssigendCarrier);
+        }
+
         public bool AssignCarriers(UpdatedAccountManagerCarrier[] updatedCarriers)
         {
             DataTable table = this.BuildUpdatedCarriersTable(updatedCarriers);

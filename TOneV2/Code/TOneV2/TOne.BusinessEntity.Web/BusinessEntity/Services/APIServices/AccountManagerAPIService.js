@@ -3,25 +3,28 @@ var serviceObj = function (BaseAPIService) {
     return ({
         GetCarriers: GetCarriers,
         GetAssignedCarriers: GetAssignedCarriers,
+        GetAssignedCarriersFromTempTable: GetAssignedCarriersFromTempTable,
         GetLinkedOrgChartId: GetLinkedOrgChartId,
         AssignCarriers: AssignCarriers,
         UpdateLinkedOrgChart: UpdateLinkedOrgChart
     });
     
-    function GetCarriers(userId, from, to) {
-        return BaseAPIService.get('/api/AccountManager/GetCarriers', {
-            userId: userId,
-            from: from,
-            to: to
-        });
+    function GetCarriers(input) {
+        return BaseAPIService.post('/api/AccountManager/GetCarriers', input);
     }
 
+    // called from the CarrierAssignmentEditor page
     function GetAssignedCarriers(managerId, withDescendants, carrierType) {
         return BaseAPIService.get('/api/AccountManager/GetAssignedCarriers', {
             managerId: managerId,
             withDescendants: withDescendants,
             carrierType: carrierType
         });
+    }
+
+    // called from the AccountManagerManagement page
+    function GetAssignedCarriersFromTempTable(input) {
+        return BaseAPIService.post('/api/AccountManager/GetAssignedCarriersFromTempTable', input);
     }
 
     function GetLinkedOrgChartId() {

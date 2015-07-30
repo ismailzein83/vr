@@ -10,8 +10,8 @@
         </vr-form>
     </vr-row>
 
-    <vr-row>
-        <div vr-loader="isLoadingTree">
+    <vr-row vr-loader="isLoading">
+        <div>
             <vr-columns colnum="3">
                 <vr-treeview on-ready="treeReady"
                              datachildrenfield="nodeChildren"
@@ -23,10 +23,15 @@
             </vr-columns>
         </div>
 
-        <div vr-loader="isGettingData">
+        <div>
             <vr-columns colnum="9">
                 <vr-columns colnum="fullrow" simplecol>
-                    <vr-datagrid datasource="assignedCarriers" on-ready="onGridReady" ng-show="currentNode">
+                    <vr-datagrid datasource="assignedCarriers"
+                                 dataretrievalfunction="dataRetrievalFunction"
+                                 pagingtype="'PagingOnScroll'"
+                                 on-ready="gridReady"
+                                 ng-show="currentNode">
+
                         <vr-datagridcolumn headertext="'Carrier Name'" field="'CarrierName'"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Carrier Account Id'" field="'CarrierAccountId'"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Is Customer'" field="'IsCustomer'"></vr-datagridcolumn>

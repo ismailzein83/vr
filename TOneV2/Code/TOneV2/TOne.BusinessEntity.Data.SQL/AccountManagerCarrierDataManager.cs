@@ -12,9 +12,14 @@ namespace TOne.BusinessEntity.Data.SQL
 {
     public class AccountManagerCarrierDataManager : BaseTOneDataManager, IAccountManagerCarrierDataManager
     {
-        public List<AccountManagerCarrier> GetCarriers(int userId, int from, int to)
+        public Vanrise.Entities.BigResult<AccountManagerCarrier> GetCarriers(Vanrise.Entities.DataRetrievalInput<AccountManagerCarrierQuery> input)
         {
-            return GetItemsSP("BEntity.sp_AccountManager_GetCarriers", AccountManagerCarrier, userId, from, to);
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("[BEntity].[sp_AccountManager_CreateTempForAccountManagerCarriers]", tempTableName, input.Query.UserId);
+            };
+
+            return RetrieveData(input, createTempTableAction, AccountManagerCarrier);
         }
 
         AccountManagerCarrier AccountManagerCarrier(IDataReader reader)

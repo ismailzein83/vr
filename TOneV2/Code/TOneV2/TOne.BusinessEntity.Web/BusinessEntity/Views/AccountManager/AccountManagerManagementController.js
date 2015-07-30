@@ -31,10 +31,9 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
                 modalScope.onOrgChartAssigned = function (orgChartId) {
                     assignedOrgChartId = orgChartId;
 
-                    getMembers().finally(function () {
-                        buildNodesFromMembers();
-                        treeAPI.refreshTree($scope.nodes);
-                    });
+                    buildTreeFromOrgHierarchy();
+                    $scope.currentNode = undefined;
+                    return retrieveData();
                 }
             };
 
@@ -51,21 +50,28 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
             settings.onScopeReady = function (modalScope) {
                 modalScope.title = 'Assign Carriers';
                 modalScope.onCarriersAssigned = function () {
-                    // clear the grid
-                    $scope.assignedCarriers = [];
-
-                    $scope.isGettingData = true;
-                    getData().finally(function () {
-                        $scope.isGettingData = false;
-                    });
+                    return retrieveData();
                 }
             };
 
             VRModalService.showModal('/Client/Modules/BusinessEntity/Views/AccountManager/CarrierAssignmentEditor.html', parameters, settings);
         }
 
-        $scope.onGridReady = function (api) {
+        $scope.gridReady = function (api) {
             gridApi = api;
+            return retrieveData();
+        }
+
+        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+            
+            return AccountManagerAPIService.GetAssignedCarriersFromTempTable(dataRetrievalInput)
+                .then(function (response) {
+                    response.Data = fillAssignedCarriers(response.Data);
+                    onResponseReady(response);
+                })
+                .catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                });
         }
 
         $scope.treeReady = function (api) {
@@ -73,21 +79,14 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
         }
 
         $scope.treeValueChanged = function () {
-            $scope.isGettingData = true;
-
             if (angular.isObject($scope.currentNode) && $scope.currentNode != undefined) {
-                // clear the grid
-                $scope.assignedCarriers = [];
-
-                getData().finally(function () {
-                    $scope.isGettingData = false;
-                });
+                return retrieveData();
             }
         }
     }
 
     function load() {
-        $scope.isLoadingTree = true;
+        $scope.isLoading = true;
 
         UtilsService.waitMultipleAsyncOperations([getUsers, getLinkedOrgChartId])
         .then(function () {
@@ -99,9 +98,21 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
             }
         })
         .catch(function (error) {
+            $scope.isLoading = false;
             VRNotificationService.notifyExceptionWithClose(error, $scope);
-            $scope.isLoadingTree = false;
         });
+    }
+
+    function retrieveData() {
+        if ($scope.currentNode != undefined) {
+            var query = {
+                ManagerId: $scope.currentNode.nodeId,
+                WithDescendants: (assignedOrgChartId != undefined),
+                CarrierType: 0
+            };
+
+            return gridApi.retrieveData(query);
+        }
     }
 
     function getUsers() {
@@ -129,7 +140,7 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             })
             .finally(function () {
-                $scope.isLoadingTree = false;
+                $scope.isLoading = false;
             });
     }
 
@@ -142,7 +153,7 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
         }
 
         treeAPI.refreshTree($scope.nodes);
-        $scope.isLoadingTree = false;
+        $scope.isLoading = false;
     }
 
     function mapUserToNode(user) {
@@ -174,33 +185,11 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
         return temp;
     }
 
-    function getData() {
-
-        if (assignedOrgChartId != undefined)
-        {
-            return AccountManagerAPIService.GetAssignedCarriers($scope.currentNode.nodeId, true, 0)
-                .then(function (response) {
-                    fillAssignedCarriers(response);
-                })
-                .catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                });
-        }
-        else
-        {
-            return AccountManagerAPIService.GetAssignedCarriers($scope.currentNode.nodeId, false, 0)
-                .then(function (response) {
-                    fillAssignedCarriers(response);
-                })
-                .catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                });
-        }
-    }
-
     function fillAssignedCarriers(assignedCarriers)
     {
+        var data = [];
         angular.forEach(assignedCarriers, function (item) {
+            
             var gridObject = {
                 CarrierName: item.CarrierName,
                 CarrierAccountId: item.CarrierAccountId,
@@ -209,8 +198,10 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
                 Access: (item.UserId == $scope.currentNode.nodeId) ? 'Direct' : 'Indirect'
             };
 
-            $scope.assignedCarriers.push(gridObject);
+            data.push(gridObject);
         });
+
+        return data;
     }
 }
 
