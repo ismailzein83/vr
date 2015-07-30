@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Http;
 using Vanrise.Queueing.Entities;
 using Vanrise.Queueing.Web.ModelMappers;
@@ -49,7 +48,7 @@ namespace Vanrise.Queueing.Web.Controllers
         public IEnumerable<QueueItemHeaderModel> GetHeaders(GetHeadersInput param)
         {
             param.FromRow = param.FromRow - 1;
-            IEnumerable<QueueItemHeaderModel> rows = QueueingMappers.MapQueueItemHeaders(_queueingManager.GetHeaders(param.QueueIds, param.Statuses, param.DateFrom.HasValue ? param.DateFrom.Value : DateTime.Now.AddHours(-1), param.DateTo.HasValue ? param.DateTo.Value : DateTime.Now));
+            IEnumerable<QueueItemHeaderModel> rows = QueueingMappers.MapQueueItemHeaders(_queueingManager.GetHeaders(param.QueueIds, param.Statuses, param.DateFrom ?? DateTime.Now.AddHours(-1), param.DateTo ?? DateTime.Now));
             return rows.Skip(param.FromRow).Take(param.ToRow - param.FromRow);
         }
     }
