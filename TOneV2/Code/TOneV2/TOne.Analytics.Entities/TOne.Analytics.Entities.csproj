@@ -97,6 +97,7 @@
     <Compile Include="CDRFilter.cs" />
     <Compile Include="CDRBigResult.cs" />
     <Compile Include="Billing\CustomerServices.cs" />
+    <Compile Include="CDRSummaryInput.cs" />
     <Compile Include="DestinationVolumeTrafficResult.cs" />
     <Compile Include="DestnationVolumeTrafficItem.cs" />
     <Compile Include="InOutVolumeTraffic.cs" />

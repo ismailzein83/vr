@@ -15,47 +15,44 @@ namespace TOne.Analytics.Data.SQL
 {
     class CDRDataManager : BaseTOneDataManager, ICDRDataManager
     {
-        public CDRBigResult GetCDRData(string tempTableKey, CDRFilter filter, DateTime fromDate, DateTime toDate, int fromRow, int toRow, int nRecords, BillingCDROptionMeasures CDROption, BillingCDRMeasures orderBy, bool isDescending)
-        {   
-            TempTableName tempTableName = null;
-            if (tempTableKey != null)
-                tempTableName = GetTempTableName(tempTableKey);
-            else
-                tempTableName = GenerateTempTableName();
-            CDRBigResult rslt = new CDRBigResult()
-            {
-                ResultKey = tempTableName.Key
-            };
-
-            CreateTempTableIfNotExists(tempTableName.TableName, filter, fromDate, toDate, nRecords, CDROption);
-
-            int totalDataCount;
-            rslt.Data = GetData(tempTableName.TableName, fromRow, toRow,orderBy,isDescending, out totalDataCount);
-            rslt.TotalCount = totalDataCount;
-           
-            return rslt;
-            
-        }
-
-        public CDRBigResult GetCDRData(string tempTableKey, int nRecords)
+        public Vanrise.Entities.BigResult<BillingCDR> GetCDRData(Vanrise.Entities.DataRetrievalInput<CDRSummaryInput> input)
         {
-            TempTableName tempTableName = null;
-            if (tempTableKey != null)
-                tempTableName = GetTempTableName(tempTableKey);
-            CDRBigResult rslt = new CDRBigResult()
+            Dictionary<string, string> mapper = new Dictionary<string, string>();
+            mapper.Add("SwitchName", "SwitchID");
+            Action<string> createTempTableAction = (tempTableName) =>
             {
-                ResultKey = tempTableName.Key
+                ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.Filter, input.Query.CDROption), (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.From));
+                    cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.To));
+                    cmd.Parameters.Add(new SqlParameter("@nRecords", input.Query.Size));
+                });
             };
 
-            int totalDataCount;
-            rslt.Data = GetData(tempTableName.TableName, 0, nRecords, BillingCDRMeasures.Attempt, true, out totalDataCount);
-            rslt.TotalCount = totalDataCount;
-
-            return rslt;
+            Vanrise.Entities.BigResult<BillingCDR> cdrData=RetrieveData(input, createTempTableAction, CDRDataMapper, mapper);
+             FillCDRList(cdrData);
+             return cdrData;
         }
+
+        //public CDRBigResult GetCDRData(string tempTableKey, int nRecords)
+        //{
+        //    TempTableName tempTableName = null;
+        //    if (tempTableKey != null)
+        //        tempTableName = GetTempTableName(tempTableKey);
+        //    CDRBigResult rslt = new CDRBigResult()
+        //    {
+        //        ResultKey = tempTableName.Key
+        //    };
+
+        //    int totalDataCount;
+        //    rslt.Data = GetData(tempTableName.TableName, 0, nRecords, BillingCDRMeasures.Attempt, true, out totalDataCount);
+        //    rslt.TotalCount = totalDataCount;
+
+        //    return rslt;
+        //}
 
         #region Methods
-        private void CreateTempTableIfNotExists(string tempTableName, CDRFilter filter, DateTime from, DateTime to, int nRecords, BillingCDROptionMeasures CDROption)
+        private string CreateTempTableIfNotExists(string tempTableName, CDRFilter filter, BillingCDROptionMeasures CDROption)
         {
             string queryData = "";
             switch(CDROption)
@@ -70,42 +67,24 @@ namespace TOne.Analytics.Data.SQL
                             IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
 	                            BEGIN
 
-                             WITH 
-		                        AllResult AS
-		                        (
-			                        SELECT Top (@nRecords) newtable.* FROM (#Query#)as newtable  where (Attempt between @FromDate AND @ToDate) #FILTER#
-		                        )
-		                        SELECT * INTO #TEMPTABLE# FROM AllResult
-                            END");
+			                        SELECT Top (@nRecords) newtable.* INTO #RESULTs FROM (#Query#)as newtable  where (Attempt between @FromDate AND @ToDate) #FILTER#
+
+		                        SELECT * INTO #TEMPTABLE# FROM #RESULTs
+
+                            END
+                                ");
             queryBuilder.Replace("#TEMPTABLE#", tempTableName);
             queryBuilder.Replace("#Query#", queryData);
             AddFilterToQuery(filter, whereBuilder);
             queryBuilder.Replace("#FILTER#", whereBuilder.ToString());
-            ExecuteNonQueryText(queryBuilder.ToString(), (cmd) =>
-            {
-                cmd.Parameters.Add(new SqlParameter("@FromDate", from));
-                cmd.Parameters.Add(new SqlParameter("@ToDate", to));
-                cmd.Parameters.Add(new SqlParameter("@nRecords", nRecords));
-            });
+            return queryBuilder.ToString();
+       
         }
-        private IEnumerable<BillingCDR> GetData(string tempTableName, int fromRow, int toRow, BillingCDRMeasures orderBy, bool isDescending, out int totalCount)
-        {
-            string orderByColumnName=GetColumnName(orderBy);
-            IEnumerable<BillingCDR> cdrData = base.GetDataFromTempTable<BillingCDR>(tempTableName, fromRow, toRow, orderByColumnName, isDescending,
-                (reader) =>
-                {
-                    var obj = new BillingCDR();
-                    FillCDRDataFromReader(obj, reader);
-                    return obj;
-                },
-                out totalCount);
-            FillCDRList(cdrData);
-            return cdrData;
-        }
-        private void FillCDRList(IEnumerable<BillingCDR> cdrData)
+
+        private void FillCDRList(Vanrise.Entities.BigResult<BillingCDR> cdrData)
         {
             BusinessEntityInfoManager manager = new BusinessEntityInfoManager();
-            foreach(BillingCDR data in cdrData)
+            foreach(BillingCDR data in cdrData.Data)
             {
                 if (data.OurZoneID!=0)
                 data.OurZoneName = manager.GetZoneName(data.OurZoneID);

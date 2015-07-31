@@ -22,7 +22,7 @@
                     </vr-columns>
                     <vr-columns width="normal">
                         <vr-textbox value="nRecords" label="Limit Results to"></vr-textbox>
-                    </vr-columns>
+                    </vr-columns> 
                     <vr-columns width="normal">
                         <vr-datetimepicker type="date" label="From" value="fromDate" isrequired></vr-datetimepicker>
                     </vr-columns>
@@ -42,11 +42,11 @@
                 </div>
             </vr-actionbar>
         </vr-row>
-         <div ng-show="showResult" vr-loader="isGettingData">
+         <div vr-loader="isGettingData">
              <vr-row>
                  <vr-columns width="fullrow" simplecol>
-                     <vr-datagrid datasource="data" pagersettings="mainGridPagerSettings" data-on-ready="onMainGridReady" maxheight="500px" onexport="onexport">
-                         <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" Type="measure.type" tag="measure" onsortchanged="onMainGridSortChanged"></vr-datagridcolumn>
+                     <vr-datagrid datasource="data" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'" on-ready="onMainGridReady">
+                         <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" type="measure.type"></vr-datagridcolumn>
 
 
                      </vr-datagrid>

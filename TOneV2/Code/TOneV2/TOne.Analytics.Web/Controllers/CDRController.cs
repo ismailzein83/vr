@@ -17,36 +17,20 @@ namespace TOne.Analytics.Web.Controllers
             __cdrManager = new CDRManager();
         }
         [HttpPost]
-        public CDRBigResult GetCDRData(GetCDRSummaryInput input)
+        public object GetCDRData(Vanrise.Entities.DataRetrievalInput<CDRSummaryInput> input)
         {
             System.Threading.Thread.Sleep(1000);
-            return __cdrManager.GetCDRData(input.TempTableKey, input.Filter, input.From, input.To, input.FromRow, input.ToRow, input.Size, input.CDROption, input.OrderBy, input.IsDescending);
+             return GetWebResponse(input,__cdrManager.GetCDRData(input));
+          
         }
-        [HttpPost]
-        public HttpResponseMessage ExportCDRData(GetCDRSummaryInput input)
-        {
-            System.Threading.Thread.Sleep(1000);
-            CDRBigResult records = __cdrManager.GetCDRData(input.TempTableKey, input.Filter, input.From, input.To, 0, input.Size, input.Size, input.CDROption, input.OrderBy, input.IsDescending);
-            return __cdrManager.ExportCDRData(records);
-        }
+        //[HttpPost]
+        //public HttpResponseMessage ExportCDRData(CDRSummaryInput input)
+        //{
+        //    System.Threading.Thread.Sleep(1000);
+        //    CDRBigResult records = __cdrManager.GetCDRData(input.TempTableKey, input.Filter, input.From, input.To, 0, input.Size, input.Size, input.CDROption, input.OrderBy, input.IsDescending);
+        //    return __cdrManager.ExportCDRData(records);
+        //}
     }
     
-    #region Argument Classes
-    public class GetCDRSummaryInput
-    {
-       public string TempTableKey { get; set; }
 
-       public int FromRow { get; set; }
-       public int ToRow { get; set; }
-       public BillingCDRMeasures OrderBy { get; set; }
-       public bool IsDescending { get; set; }
-        
-        public CDRFilter Filter { get; set; }
-
-        public DateTime From { get; set; }
-        public DateTime To { get; set; }
-        public int Size { get; set; }
-        public BillingCDROptionMeasures CDROption { get; set; }
-    }
-    #endregion
 }

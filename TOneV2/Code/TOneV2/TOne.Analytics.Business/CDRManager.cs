@@ -21,10 +21,10 @@ namespace TOne.Analytics.Business
         {
             _datamanager = AnalyticsDataManagerFactory.GetDataManager<ICDRDataManager>();
         }
-        public CDRBigResult GetCDRData(string tempTableKey, CDRFilter filter, DateTime fromDate, DateTime toDate, int fromRow, int toRow, int nRecords, BillingCDROptionMeasures CDROption, BillingCDRMeasures orderBy, bool isDescending)
+        public Vanrise.Entities.IDataRetrievalResult<BillingCDR> GetCDRData(Vanrise.Entities.DataRetrievalInput<CDRSummaryInput> input)
         {
 
-            return _datamanager.GetCDRData(tempTableKey, filter, fromDate, toDate, fromRow, toRow, nRecords, CDROption, orderBy, isDescending);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, _datamanager.GetCDRData(input)); 
         }
 
         public HttpResponseMessage ExportCDRData( CDRBigResult records)
