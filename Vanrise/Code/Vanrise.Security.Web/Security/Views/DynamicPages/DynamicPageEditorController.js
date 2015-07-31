@@ -81,6 +81,9 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
                
             }
         }
+        $scope.validateWidgetError = function (addedWidget) {
+            return validateWidgetError(addedWidget);
+        }
         $scope.save = function () {
             if (!checkWidgetValidator()) {
                 return; 
@@ -171,6 +174,16 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         VRModalService.showModal('/Client/Modules/BI/Views/DynamicPageValidator.html', parameter, settings);
 
     }
+    function validateWidgetError(addedWidget) {
+        if ($scope.nonSearchable) {
+            if (addedWidget.DefaultGrouping == undefined || addedWidget.DefaultPeriod == undefined) {
+                  
+                return "ng-valid ng-valid-requiredvalue required-inpute";
+                }
+
+            }
+    }
+
     function checkWidgetValidator() {
         if ($scope.nonSearchable) {
             for (var i = 0; i < $scope.addedBodyWidgets.length; i++) {
@@ -194,6 +207,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         }
         return true;
     }
+
     function definePeriods() {
         $scope.periods = [];
         for (var p in PeriodEnum)
