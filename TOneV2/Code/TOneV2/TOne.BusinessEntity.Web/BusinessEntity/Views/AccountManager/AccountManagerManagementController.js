@@ -66,7 +66,9 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
             
             return AccountManagerAPIService.GetAssignedCarriersFromTempTable(dataRetrievalInput)
                 .then(function (response) {
+
                     response.Data = getMappedAssignedCarriers(response.Data);
+                    
                     onResponseReady(response);
                 })
                 .catch(function (error) {
@@ -192,28 +194,15 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
         var mappedCarriers = [];
 
         angular.forEach(mergedCarriers, function (item) {
-            
-            var gridObject;
 
-            if (item.RelationType != 0) {
-                gridObject = {
-                    CarrierAccountId: item.CarrierAccountId,
-                    CarrierName: item.CarrierName,
-                    IsCustomer: (item.RelationType == 1) ? 'True' : 'False',
-                    IsSupplier: (item.RelationType == 2) ? 'True' : 'False',
-                    Access: (item.UserId == $scope.currentNode.nodeId) ? 'Direct' : 'Indirect'
-                };
-            }
-            else { // item.RelationType = 0
-                gridObject = {
-                    CarrierAccountId: item.CarrierAccountId,
-                    CarrierName: item.CarrierName,
-                    IsCustomer: 'True',
-                    IsSupplier: 'True',
-                    Access: (item.UserId == $scope.currentNode.nodeId) ? 'Direct' : 'Indirect'
-                };
-            }
-            
+            var gridObject = {
+                CarrierAccountId: item.CarrierAccountId,
+                CarrierName: item.CarrierName,
+                IsCustomer: (item.RelationType != 2) ? 'True' : 'False',
+                IsSupplier: (item.RelationType != 1) ? 'True' : 'False',
+                Access: (item.UserId == $scope.currentNode.nodeId) ? 'Direct' : 'Indirect'
+            };
+
             mappedCarriers.push(gridObject);
         });
         

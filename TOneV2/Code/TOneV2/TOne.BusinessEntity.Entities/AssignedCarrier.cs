@@ -14,6 +14,8 @@ namespace TOne.BusinessEntity.Entities
 
         public string CarrierName { get; set; }
 
+        public string NameSuffix { get; set; }
+
         public int RelationType { get; set; }
     }
 }

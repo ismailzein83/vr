@@ -110,12 +110,23 @@ namespace TOne.BusinessEntity.Data.SQL
             AssignedCarrier assignedCarrier = new AssignedCarrier
             {
                 UserId = (int)reader["UserId"],
-                CarrierName = reader["CarrierName"] as string,
+                CarrierName = GetCarrierName(reader["CarrierName"] as string, reader["NameSuffix"] as string),
+                NameSuffix = reader["NameSuffix"] as string,
                 CarrierAccountId = reader["CarrierAccountId"] as string,
                 RelationType = (int)reader["RelationType"]
             };
 
             return assignedCarrier;
+        }
+
+        private string GetCarrierName(string carrierName, string nameSuffix)
+        {
+            string name = carrierName;
+
+            if (nameSuffix != null)
+                name += " (" + nameSuffix + ")";
+
+            return name;
         }
     }
 }
