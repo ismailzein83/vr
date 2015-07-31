@@ -1,14 +1,14 @@
 ﻿'use strict';
 
 app.directive('vrValidationDatetime', function () {
-        return {
+    return {
         restrict: 'A',
         require: 'ngModel',
         link: function (scope, elm, attrs, ctrlModel) {
 
             var validate = function (viewValue) {
-                if (viewValue == "invalid")                
-                        ctrlModel.$setValidity('invalidformat', false);
+                if (viewValue == "invalid")
+                    ctrlModel.$setValidity('invalidformat', false);
                 else {
                     ctrlModel.$setValidity('invalidformat', true);
                 }
@@ -24,7 +24,7 @@ app.directive('vrValidationDatetime', function () {
 
 
 app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', function (ValidationMessagesEnum, BaseDirService) {
-    
+
     var directiveDefinitionObject = {
         restrict: 'E',
         require: '^form',
@@ -40,7 +40,7 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                 validationOptions.requiredValue = true;
             if ($attrs.customvalidate !== undefined)
                 validationOptions.customValidation = true;
-           var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, $element.find('#rootDiv'));
+            var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, $element.find('#rootDiv'));
 
             var format;
             var isDate;
@@ -61,29 +61,28 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                 format: format,
                 showClose: true
             });
-            if (divDatePicker.closest('.modal-body').length > 0) {
+            setTimeout(function () {
+                if (divDatePicker.parents('.modal-body').length > 0) {
+                    divDatePicker
+                     .on('dp.show', function (e) {
+                         var self = $(this);
+                         var selfHeight = $(this).height();
+                         var selfOffset = $(self).offset();
+                         var dropDown = self.parent().find('.bootstrap-datetimepicker-widget')[0];
+                         $(dropDown).css({ position: 'fixed', top: selfOffset.top - $(this).parent().parent().parent().position().top - $(window).scrollTop() + selfHeight, left: 'auto' });
 
-                divDatePicker
-                 .on('dp.show', function (e) {
-                     var self = $(this);
-                     var selfHeight = $(this).parent().height();
-                     var selfOffset = $(self).offset();
-                     var dropDown = self.parent().find('.bootstrap-datetimepicker-widget')[0];
-                     $(dropDown).css({ position: 'fixed', top: 'auto', left: 'auto',marginTop:'35px' });
-                 });
-                var fixDropdownPosition = function () {
-                    divDatePicker.data("DateTimePicker").hide()
+                     });
+                    var fixDropdownPosition = function () {
+                        divDatePicker.data("DateTimePicker").hide()
 
-                };
+                    };
+                    $(divDatePicker.parents('div')).scroll(function () {
+                        fixDropdownPosition();
+                    })
+                }
 
-                $(".modal-body").unbind("scroll");
-                $(".modal-body").scroll(function () {
-                    fixDropdownPosition();
-                });               
-                $(window).resize(function () {
-                    fixDropdownPosition();
-                });
-            }
+            }, 1)
+
             var isUserChange = false;
             var selectedDate;
             divDatePicker
@@ -105,10 +104,6 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
             });
             var ctrl = $scope.ctrl;
             $scope.$watch('ctrl.value', function () {
-                if (ctrl.value==null) {
-                    console.log("is null in control");
-                }
-
                 if (ctrl.value == undefined)
                     return;
 
@@ -131,10 +126,10 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
 
             });
             $scope.ctrl.toggleDate = function (e) {
-              
+
                 e.preventDefault();
                 e.stopPropagation();
-               
+
                 $('.date-section').addClass('in');
                 $('.time-section').removeClass('in');
 
@@ -143,7 +138,7 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                 $('.btn-switcher').removeClass("glyphicon-calendar");
             }
             $scope.ctrl.toggleTime = function (e) {
-             
+
                 e.preventDefault();
                 e.stopPropagation();
                 $('.time-section').addClass('in');
@@ -154,7 +149,7 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                 $('.btn-switcher').addClass("glyphicon-calendar");
             }
             BaseDirService.addScopeValidationMethods(ctrl, elementName, this);
-            
+
         },
         compile: function (element, attrs) {
             //var divDatePickerId = BaseDirService.generateHTMLElementName();
@@ -188,8 +183,8 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                 validationOptions.customValidation = true;
 
             var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, element.find('#rootDiv'));
-             return {
-                 pre: function ($scope, iElem, iAttrs, formCtrl) {
+            return {
+                pre: function ($scope, iElem, iAttrs, formCtrl) {
 
                     // var isUserChange = false;
                     // var selectedDate;
@@ -221,14 +216,14 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                     //          var dropDown = self.parent().find('.bootstrap-datetimepicker-widget')[0];
                     //          $(dropDown).css({ position: 'fixed', top: selfOffset.top + selfHeight, left: 'auto' });
                     //      });
-                         
+
                     // }
                     var ctrl = $scope.ctrl;
 
                     //$scope.$watch('ctrl.value', function () {
                     //    if (ctrl.value == undefined)
                     //        return;
-                        
+
                     //    var date = ctrl.value instanceof Date ? ctrl.value : (new Date(ctrl.value));
                     //    if (selectedDate == undefined || selectedDate.toString() != date.toString()) {                            
                     //        divDatePicker.data("DateTimePicker").date(date);
@@ -237,7 +232,7 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                     //        if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
                     //            return;
                     //        isUserChange = false;//reset the flag
-                           
+
                     //        if (iAttrs.onvaluechanged != undefined) {
                     //            var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onvaluechanged);
                     //            if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
@@ -245,11 +240,11 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                     //            }
                     //        }
                     //    }
-                        
+
                     //});
 
                     BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
-                    
+
                 }
             }
         },
@@ -276,8 +271,8 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                             + '</div>'
                       + '</div>'
                     + '</div>';
-           
-            var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true,true, attrs.label != undefined);
+
+            var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined);
 
             return startTemplate + labelTemplate + dateTemplate + validationTemplate + endTemplate;
         }

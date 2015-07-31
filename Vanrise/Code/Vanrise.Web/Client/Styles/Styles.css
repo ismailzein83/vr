@@ -442,17 +442,6 @@ Use this for keyframe animations
    
     border-radius: 0px !important;
 }
-.modal-dialog .dropdown-menu{
-    position:fixed !important;
-    left:auto !important;
-    top:auto !important;
-}
-.modal-dialog .bootstrap-datetimepicker-widget{
-    position:fixed !important;
-    left:auto !important;
-    top:auto !important;
-    margin-top:35px;
-}
 .leavecolor{
     background-color: transparent !important;
 }
@@ -1304,7 +1293,7 @@ input.ui-grid-filter-input[type="text"] {
 }
 .vr-grid-menu-box{
     position: absolute;
-    left: -18px;
+    left: -14px;
     top: -9px;
     display: inline-block;
 }
@@ -1323,7 +1312,7 @@ input.ui-grid-filter-input[type="text"] {
 }
 .vr-grid-menu-h-circle{
     height: 28px;
-    width: 17px;
+    width: 13px;
     position: relative;
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
@@ -1336,9 +1325,9 @@ input.ui-grid-filter-input[type="text"] {
     color: #333;
     position: relative;
     display: inline;
-    left: 4px;
+    left: 1px;
     font-size: 10px;
-    top: -13px;
+    top: -12px;
 }
 .vr-grid-menu{
     top: 0px;
