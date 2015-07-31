@@ -126,7 +126,26 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
             });
         };
 
+        $scope.groupKeySelectionChanged = function () {
 
+            if ($scope.selectedGroupKeyIndex != undefined) {
+
+
+                if ($scope.selectedGroupKeyIndex == 0 && !isSubscriberThresholdsDataLoaded) {
+                    getSubscriberThresholds();
+                    isSubscriberThresholdsDataLoaded = true;
+                }
+                else if ($scope.selectedGroupKeyIndex == 1 && !isNormalCDRDataLoaded) {
+                    getNormalCDRs();
+                    isNormalCDRDataLoaded = true;
+                }
+                else if ($scope.selectedGroupKeyIndex == 2 && !isNumberProfileDataLoaded) {
+                    getNumberProfiles();
+                    isNumberProfileDataLoaded = true;
+                }
+
+            }
+        };
 
         $scope.selectedRelatedNumbersChanged = function () {
             if (pageLoaded)
@@ -199,12 +218,6 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
             $scope.isGettingData = false;
             VRNotificationService.notifyExceptionWithClose(error, $scope);
         });
-
-
-
-
-
-
 
 
     }
@@ -280,36 +293,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         });
     }
 
-    $scope.groupKeySelectionChanged = function () {
-
-        console.log('$scope.selectedGroupKeyIndex')
-        console.log($scope.selectedGroupKeyIndex)
-        console.log('isSubscriberThresholdsDataLoaded')
-        console.log(isSubscriberThresholdsDataLoaded)
-        console.log('isNormalCDRDataLoaded')
-        console.log(isNormalCDRDataLoaded)
-        console.log('isNumberProfileDataLoaded')
-        console.log(isNumberProfileDataLoaded)
-
-
-        if ($scope.selectedGroupKeyIndex != undefined) {
-           
-
-            if ($scope.selectedGroupKeyIndex == 0 && !isSubscriberThresholdsDataLoaded) {
-                getSubscriberThresholds();
-                isSubscriberThresholdsDataLoaded = true;
-            }
-            else if ($scope.selectedGroupKeyIndex == 1 && !isNormalCDRDataLoaded) {
-                getNormalCDRs();
-                isNormalCDRDataLoaded = true;
-            }
-            else if ($scope.selectedGroupKeyIndex == 2 && !isNumberProfileDataLoaded) {
-                getNumberProfiles();
-                isNumberProfileDataLoaded = true;
-            }
-
-        }
-    };
+    
     
 }
 appControllers.controller('SuspiciousNumberDetailsController', SuspiciousNumberDetailsController);
