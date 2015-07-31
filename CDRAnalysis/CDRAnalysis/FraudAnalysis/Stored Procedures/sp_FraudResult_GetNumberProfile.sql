@@ -15,22 +15,16 @@ CREATE PROCEDURE [FraudAnalysis].[sp_FraudResult_GetNumberProfile]
 	BEGIN
 		SET NOCOUNT ON
 		
-		;WITH NumberProfile_CTE (FromDate, ToDate, Count_Out_Calls, Diff_Output_Numb, Count_Out_Inter, Count_In_Inter, Call_Out_Dur_Avg, Count_Out_Fail, Count_In_Fail, 
-                      Total_Out_Volume, Total_In_Volume, Diff_Input_Numbers, Count_Out_SMS, Total_IMEI, Total_BTS, Total_Data_Volume, Count_In_Calls, Call_In_Dur_Avg, 
-                      Count_Out_OnNet, Count_In_OnNet, Count_Out_OffNet, Count_In_OffNet, CountFailConsecutiveCalls, CountConsecutiveCalls, CountInLowDurationCalls,RowNumber) AS 
+		;WITH NumberProfile_CTE (FromDate, ToDate,StrategyId, PeriodId,  SubscriberNumber, AggregateValues,RowNumber) AS 
 			(
 				
-				SELECT     FromDate, ToDate, Count_Out_Calls, Diff_Output_Numb, Count_Out_Inter, Count_In_Inter, Call_Out_Dur_Avg, Count_Out_Fail, Count_In_Fail, 
-                      Total_Out_Volume, Total_In_Volume, Diff_Input_Numbers, Count_Out_SMS, Total_IMEI, Total_BTS, Total_Data_Volume, Count_In_Calls, Call_In_Dur_Avg, 
-                      Count_Out_OnNet, Count_In_OnNet, Count_Out_OffNet, Count_In_OffNet, CountFailConsecutiveCalls, CountConsecutiveCalls, CountInLowDurationCalls
+				SELECT     FromDate, ToDate,StrategyId, PeriodId, SubscriberNumber, AggregateValues
                       , ROW_NUMBER() OVER ( ORDER BY  FromDate ASC) AS RowNumber 
 				FROM         FraudAnalysis.NumberProfile
 				where SubscriberNumber=@SubscriberNumber and  FromDate >=   @FromDate and ToDate<=@ToDate
 			)
 			
-		SELECT FromDate, ToDate, Count_Out_Calls, Diff_Output_Numb, Count_Out_Inter, Count_In_Inter, Call_Out_Dur_Avg, Count_Out_Fail, Count_In_Fail, 
-                      Total_Out_Volume, Total_In_Volume, Diff_Input_Numbers, Count_Out_SMS, Total_IMEI, Total_BTS, Total_Data_Volume, Count_In_Calls, Call_In_Dur_Avg, 
-                      Count_Out_OnNet, Count_In_OnNet, Count_Out_OffNet, Count_In_OffNet, CountFailConsecutiveCalls, CountConsecutiveCalls, CountInLowDurationCalls,RowNumber
+		SELECT FromDate, ToDate,StrategyId, PeriodId,SubscriberNumber, AggregateValues,RowNumber
 		FROM NumberProfile_CTE WHERE RowNumber between @FromRow AND @ToRow  
 
 		SET NOCOUNT OFF

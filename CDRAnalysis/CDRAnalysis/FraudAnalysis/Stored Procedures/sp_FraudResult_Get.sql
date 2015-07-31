@@ -34,7 +34,7 @@ CREATE PROCEDURE [FraudAnalysis].[sp_FraudResult_Get]
 			end
 			
 		
-		SELECT ISNULL(cs.Name, 'Pending')  CaseStatus,  ISNULL(sc.StatusId, 1) StatusId, sc.ValidTill ValidTill  , COUNT(st.Id) as NumberofOccurances,  MAX(st.DateDay) as LastOccurance,   #Strategy.Name as StrategyName, st.SubscriberNumber as SubscriberNumber , max(#SuspectionLevel.Id) as SuspicionLevelId 
+		SELECT ISNULL(cs.Name, 'Opened')  CaseStatus,  ISNULL(sc.StatusId, 1) StatusId, sc.ValidTill ValidTill  , COUNT(st.Id) as NumberofOccurances,  MAX(st.DateDay) as LastOccurance,   #Strategy.Name as StrategyName, st.SubscriberNumber as SubscriberNumber , max(#SuspectionLevel.Id) as SuspicionLevelId 
 				from [FraudAnalysis].[SubscriberThreshold] st
 				inner join #SuspectionLevel ON st.SuspicionLevelId=#SuspectionLevel.Id 
 				inner join #Strategy ON #Strategy.Id=st.StrategyId 

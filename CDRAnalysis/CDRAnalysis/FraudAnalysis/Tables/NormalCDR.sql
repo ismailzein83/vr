@@ -1,4 +1,4 @@
-﻿CREATE TABLE [FraudAnalysis].[NormalCDR] (
+CREATE TABLE [FraudAnalysis].[NormalCDR] (
     [Id]                 INT             IDENTITY (1, 1) NOT NULL,
     [MSISDN]             VARCHAR (30)    NULL,
     [IMSI]               VARCHAR (20)    NULL,
@@ -31,13 +31,15 @@
 
 
 
+
+
 GO
-CREATE CLUSTERED INDEX [IX_NormalCDR_MSISDN]
+
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_NormalCDR_Clustered]
     ON [FraudAnalysis].[NormalCDR]([MSISDN] ASC, [ConnectDateTime] ASC);
-
-
-
-
-GO
-
 

@@ -66,6 +66,8 @@
     <Folder Include="Security\" />
     <Folder Include="FraudAnalysis\Stored Procedures\" />
     <Folder Include="FraudAnalysis\User Defined Types\" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="FraudAnalysis\Tables\Suspicion_Level.sql" />
@@ -95,6 +97,11 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_UpdateSubscriberCases.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_Get.sql" />
     <Build Include="FraudAnalysis\User Defined Types\SubscriberCaseType.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_GetTopTenCell.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_GetTopTenBTS.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_GetFraudCasesPerStrategy.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_GetCasesSummary.sql" />
+    <Build Include="dbo\Tables\SIMBOX_CDRS2.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="CDRAnalysis.PostDeployment.sql" />
