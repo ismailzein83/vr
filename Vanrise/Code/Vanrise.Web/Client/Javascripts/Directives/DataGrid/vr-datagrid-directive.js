@@ -720,9 +720,12 @@
             }
             
             retrieveDataInput.ResultKey = retrieveDataResultKey;//retrieveDataInput should be of type Vanrise.Entities.RetrieveDataInput<T>
-            if (isExport)
+            if (isExport) {
                 retrieveDataInput.DataRetrievalResultType = DataRetrievalResultTypeEnum.Excel.value;
-            else{
+                retrieveDataInput.FromRow = null;
+                retrieveDataInput.ToRow = null;
+            }
+            else {
                 retrieveDataInput.DataRetrievalResultType = DataRetrievalResultTypeEnum.Normal.value;
                 var pageInfo;
                 if (ctrl.showPager)

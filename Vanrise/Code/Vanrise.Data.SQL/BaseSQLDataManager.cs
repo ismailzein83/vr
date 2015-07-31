@@ -506,17 +506,16 @@ namespace Vanrise.Data.SQL
             string sortByColumnName = input.SortByColumnName;
             if (fieldsToColumnsMapper != null && fieldsToColumnsMapper.ContainsKey(sortByColumnName))
                 sortByColumnName = fieldsToColumnsMapper[sortByColumnName];
-            switch (input.DataRetrievalResultType)
+            if (input.FromRow.HasValue && input.ToRow.HasValue)
             {
-                case DataRetrievalResultType.Excel:
-                    rslt.Data = GetAllDataFromTempTable(tempTableName.TableName, sortByColumnName, input.IsSortDescending, objectBuilder);
-                    rslt.TotalCount = rslt.Data.Count();
-                    break;
-                case DataRetrievalResultType.Normal:
-                    int totalDataCount;
-                    rslt.Data = GetDataFromTempTable(tempTableName.TableName, input.FromRow.Value, input.ToRow.Value, sortByColumnName, input.IsSortDescending, objectBuilder, out totalDataCount);
-                    rslt.TotalCount = totalDataCount;
-                    break;
+                int totalDataCount;
+                rslt.Data = GetDataFromTempTable(tempTableName.TableName, input.FromRow.Value, input.ToRow.Value, sortByColumnName, input.IsSortDescending, objectBuilder, out totalDataCount);
+                rslt.TotalCount = totalDataCount;                
+            }
+            else
+            {
+                rslt.Data = GetAllDataFromTempTable(tempTableName.TableName, sortByColumnName, input.IsSortDescending, objectBuilder);
+                rslt.TotalCount = rslt.Data.Count();
             }
             return rslt;
         }
