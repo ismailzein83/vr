@@ -1551,6 +1551,9 @@ input.ui-grid-filter-input[type="text"] {
        padding: 1px 7px;
        display:inherit !important;
     }
+    .vr-datagrid .vr-tabs label{
+       padding: 0px 7px;
+    }
     .vr-tabs .clicked-btn {
         border-width: 1px;
         border-style: solid;      
