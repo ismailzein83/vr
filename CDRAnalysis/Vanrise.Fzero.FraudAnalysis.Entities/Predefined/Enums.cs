@@ -21,6 +21,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public enum CallType
         {
+            NotDefined = 0,
             OutgoingVoiceCall = 1,
             IncomingVoiceCall = 2,
             CallForward = 29,

@@ -28,14 +28,18 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             host.Start();
 
             BPClient bpClient = new BPClient();
+            int strategyId = int.Parse(Console.ReadLine());
+            Console.WriteLine("Strategy: {0}", strategyId);
+            Console.WriteLine("Press any key to start...");
+            Console.ReadKey();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
                 {
-                    FromDate = DateTime.Parse("2014-01-01"),
-                    ToDate = DateTime.Parse("2015-01-01"),
-                    StrategyIds = new List<int> { 22, 23, 26 },// 27, 28, 29 },//3, 13, 14, 15, 16 },//hourly
-                    //StrategyIds = new List<int> { 2 , 4, 5 , 6, 7, 8, 9, 10, 11, 12 },//daily
+                    FromDate = DateTime.Parse("2014-02-01"),
+                    ToDate = DateTime.Parse("2014-04-01"),
+                    StrategyIds = new List<int> { strategyId},//22, 23, 26 },//, 27, 28, 29 },//3, 13, 14, 15, 16 },//hourly
+                    //StrategyIds = new List<int> { 2, 4, 5, 6, 7, 8, 9, 10, 11, 12 },//daily
                     PeriodId = 1
                 }
             });

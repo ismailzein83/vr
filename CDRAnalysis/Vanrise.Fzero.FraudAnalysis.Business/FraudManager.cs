@@ -72,11 +72,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             suspiciousNumber = null;
 
             Dictionary<int, Decimal> criteriaValues = new Dictionary<int, decimal>();
-            bool isSuspicious = false;
+            
 
             foreach (StrategyLevelWithCriterias strategyLevelWithCriterias in _levelsByPriority)
             {
-                isSuspicious = false;
+                bool isLevelMatch = false;
                 Dictionary<int, decimal> criteriaValuesThresholds = new Dictionary<int, decimal>();
 
                 foreach (LevelCriteriaInfo levelCriteriaThresholdPercentage in strategyLevelWithCriterias.LevelCriteriasThresholdPercentage)
@@ -94,15 +94,17 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
                     if(levelCriteriaThresholdPercentage.PeriodId == profile.PeriodId)
                     {
-                        isSuspicious = 
+                        isLevelMatch = 
                             (levelCriteriaThresholdPercentage.CriteriaDefinitions.CompareOperator == CriteriaCompareOperator.GreaterThanorEqual && criteriaValuesThreshold >= levelCriteriaThresholdPercentage.Percentage)
                             ||
                             (levelCriteriaThresholdPercentage.CriteriaDefinitions.CompareOperator == CriteriaCompareOperator.LessThanorEqual &&criteriaValuesThreshold <= levelCriteriaThresholdPercentage.Percentage);
+                        if (!isLevelMatch)
+                            break;
                     }
                 }
 
 
-                if (isSuspicious)
+                if (isLevelMatch)
                 {
                     suspiciousNumber = new SuspiciousNumber();
                     suspiciousNumber.Number = profile.SubscriberNumber;
@@ -110,10 +112,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     suspiciousNumber.CriteriaValues = criteriaValuesThresholds;
                     suspiciousNumber.DateDay = profile.FromDate;
                     suspiciousNumber.StrategyId = profile.StrategyId;
-                    return isSuspicious;
+                    return true;
                 }
             }
-            return isSuspicious;
+            return false;
         }
 
         public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(string tempTableKey, int fromRow, int toRow, DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList, List<int> caseStatusesList)
