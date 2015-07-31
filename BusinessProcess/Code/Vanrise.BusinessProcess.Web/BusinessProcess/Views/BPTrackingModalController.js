@@ -4,7 +4,7 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
 
     "use strict";
 
-    var mainGridAPI, interval, nonClosedStatuses, lockGetData = false;
+    var mainGridApi, interval, nonClosedStatuses, lockGetData = false;
 
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
@@ -14,13 +14,20 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
         }
     }
 
+    function startGetData() {
+        if (angular.isDefined(interval)) return;
+        interval =  $interval(function callAtInterval() {
+            getData();
+        }, 5000);
+    }
+
     function getData() {
 
         if (!lockGetData)
         {
             lockGetData = true;
 
-            var pageInfo = mainGridAPI.getPageInfo();
+            var pageInfo = mainGridApi.getPageInfo();
 
             return BusinessProcessAPIService.GetTrackingsByInstanceId(
                 $scope.BPInstanceID,
@@ -30,7 +37,7 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
             .then(function (response) {
 
                 $scope.lastTrackingId = UtilsService.getPropMaxValueFromArray(response.Tracking, "TrackingId");
-                mainGridAPI.addItemsToBegin(response.Tracking);
+                mainGridApi.addItemsToBegin(response.Tracking);
                 var isNonClosed = false;
 
                 for (var i = 0, len = nonClosedStatuses.length; i < len; i++) {
@@ -48,6 +55,7 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
                 lockGetData = false;
             });
         }
+        return undefined;
     }
 
     function loadSummary() {
@@ -80,13 +88,37 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
         });
     }
 
-    function load() {
-        defineScope();
-        loadParameters();
-        defineGrid();
-        loadFilters();
-        loadSummary();
-        loadNonClosedStatuses();
+    function stopGetData() {
+        if (angular.isDefined(interval)) {
+            $interval.cancel(interval);
+            interval = undefined;
+        }
+    }
+
+    function defineScope() {
+        $scope.lastTrackingId = 0;
+        $scope.message = '';
+        $scope.trackingSeverity = [];
+        $scope.selectedTrackingSeverity = [];
+        $scope.close = function () {
+            stopGetData();
+            $scope.modalContext.closeModal();
+        };
+
+        $scope.$on('$destroy', function () {
+            stopGetData();
+        });
+
+        $scope.getSeverityColor = function (dataItem, colDef) {
+
+            if (dataItem.Severity === BPTrackingSeverityEnum.Information.value) return LabelColorsEnum.Info.Color;
+            if (dataItem.Severity === BPTrackingSeverityEnum.Warning.value) return LabelColorsEnum.Warning.Color;
+            if (dataItem.Severity === BPTrackingSeverityEnum.Error.value) return LabelColorsEnum.Error.Color;
+            if (dataItem.Severity === BPTrackingSeverityEnum.Verbose.value) return LabelColorsEnum.Primary.Color;
+
+            return LabelColorsEnum.Info.Color;
+        };
+
     }
 
     function defineGrid() {
@@ -97,7 +129,7 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
         };
 
         $scope.onGridReady = function (api) {
-            mainGridAPI = api;
+            mainGridApi = api;
             $scope.isGettingData = true;
             getData().finally(function () {
                 $scope.isGettingData = false;
@@ -130,30 +162,13 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
 
     }
 
-    function defineScope() {
-        $scope.lastTrackingId = 0;
-        $scope.message = '';
-        $scope.trackingSeverity = [];
-        $scope.selectedTrackingSeverity = [];
-        $scope.close = function () {
-            stopGetData();
-            $scope.modalContext.closeModal();
-        };
-
-        $scope.$on('$destroy', function () {
-            stopGetData();
-        });
-
-        $scope.getSeverityColor = function (dataItem, colDef) {
-
-            if (dataItem.Severity === BPTrackingSeverityEnum.Information.value) return LabelColorsEnum.Info.Color;
-            if (dataItem.Severity === BPTrackingSeverityEnum.Warning.value) return LabelColorsEnum.Warning.Color;
-            if (dataItem.Severity === BPTrackingSeverityEnum.Error.value) return LabelColorsEnum.Error.Color;
-            if (dataItem.Severity === BPTrackingSeverityEnum.Verbose.value) return LabelColorsEnum.Primary.Color;
-
-            return LabelColorsEnum.Info.Color;
-        };
-
+    function load() {
+        defineScope();
+        loadParameters();
+        defineGrid();
+        loadFilters();
+        loadSummary();
+        loadNonClosedStatuses();
     }
 
     function isNullOrEmpty(value) {
@@ -161,21 +176,7 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
         return true;
     }
 
-    function startGetData() {
-        if (angular.isDefined(interval)) return;
-        interval =  $interval(function callAtInterval() {
-            getData();
-        }, 5000);
-    }
-
-    function stopGetData() {
-        if (angular.isDefined(interval)) {
-            $interval.cancel(interval);
-            interval = undefined;
-        }
-    }
-
     load();
     
 }
-appControllers.controller('BusinessProcess_BPTrackingModalController', BPTrackingModalController);
+appControllers.controller("BusinessProcess_BPTrackingModalController", BPTrackingModalController);

@@ -24,25 +24,16 @@ function BusinessProcessAPIService(BaseAPIService) {
         );
     }
 
-
     function GetWorkflowTasksByDefinitionIds() {
         return BaseAPIService.get("/api/BusinessProcess/GetWorkflowTasksByDefinitionIds");
     }
-
 
     function CreateNewProcess(createProcessInput) {
         return BaseAPIService.post("/api/BusinessProcess/CreateNewProcess", createProcessInput);
     }
 
-    function GetFilteredBProcess(DefinitionsId, InstanceStatus, FromRow, ToRow, DateFrom, DateTo) {
-        return BaseAPIService.post("/api/BusinessProcess/GetFilteredBProcess", {
-            DefinitionsId: DefinitionsId,
-            InstanceStatus: InstanceStatus,
-            FromRow: FromRow,
-            ToRow: ToRow,
-            DateFrom: DateFrom,
-            DateTo: DateTo
-        });
+    function GetFilteredBProcess(input) {
+        return BaseAPIService.post("/api/BusinessProcess/GetFilteredBProcess", input);
     }
 
     function GetFilteredDefinitions(title) {

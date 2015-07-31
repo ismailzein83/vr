@@ -19,7 +19,7 @@ namespace Vanrise.BusinessProcess.Data
 
         int UpdateDefinitionObjectState(int definitionId, string objectKey, object objectValue);
 
-        List<BPInstance> GetInstancesByCriteria(List<int> definitionID, List<BPInstanceStatus> instanceStatus, DateTime dateFrom, DateTime dateTo);
+        Vanrise.Entities.BigResult<BPInstance> GetInstancesByCriteria(Vanrise.Entities.DataRetrievalInput<BPInstanceQuery> input);
 
         List<BPInstance> GetOpenedInstances();
 

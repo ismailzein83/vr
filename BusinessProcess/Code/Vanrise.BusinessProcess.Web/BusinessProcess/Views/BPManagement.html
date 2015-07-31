@@ -34,7 +34,7 @@
         <div>
             <vr-row>
                 <vr-columns width="fullrow">
-                    <vr-datagrid datasource="::datasource" loadmoredata="loadMoreData" on-ready="onGridReady">
+                    <vr-datagrid datasource="::datasource" pagingtype="'PagingOnScroll'" dataretrievalfunction="dataRetrievalFunction" on-ready="onGridReady">
                         <vr-datagridcolumn headertext="'Title'" field="'Title'" widthfactor="20" isclickable="'true'" onclicked="onTitleClicked"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Last Message'" field="'LastMessage'" widthfactor="60"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Retry'" field="'RetryCount'" widthfactor="5"></vr-datagridcolumn>

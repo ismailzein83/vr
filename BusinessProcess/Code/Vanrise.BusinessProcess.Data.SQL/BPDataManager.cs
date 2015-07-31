@@ -77,11 +77,14 @@ namespace Vanrise.BusinessProcess.Data.SQL
         }
 
 
-        public List<BPInstance> GetInstancesByCriteria(List<int> definitionID, List<BPInstanceStatus> instanceStatus, DateTime dateFrom, DateTime dateTo)
+        public Vanrise.Entities.BigResult<BPInstance> GetInstancesByCriteria(Vanrise.Entities.DataRetrievalInput<BPInstanceQuery> input)
         {
+            return RetrieveData(input, (tempTableName) =>
+            {
+                ExecuteNonQuerySP("bp.sp_BPInstance_CreateTempForFiltered", tempTableName, input.Query.DefinitionsId == null ? null : string.Join(",", input.Query.DefinitionsId.Select(n => n.ToString()).ToArray()),
+                    input.Query.InstanceStatus == null ? null : string.Join(",", input.Query.InstanceStatus.Select(n => ((int)n).ToString()).ToArray()), input.Query.DateFrom, input.Query.DateTo);
 
-            return GetItemsSP("bp.sp_BPInstance_GetByCriterias", BPInstanceMapper, definitionID == null ? null : string.Join(",", definitionID.Select(n => n.ToString()).ToArray()),
-                instanceStatus == null ? null : string.Join(",", instanceStatus.Select(n => ((int)n).ToString()).ToArray()), dateFrom, dateTo);
+            }, BPInstanceMapper);
         }
        
         public BPInstance GetInstance(long instanceId)

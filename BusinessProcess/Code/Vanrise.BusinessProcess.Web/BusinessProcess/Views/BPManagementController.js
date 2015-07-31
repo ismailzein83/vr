@@ -4,48 +4,54 @@ function BPManagementController($scope, UtilsService, BusinessProcessAPIService,
 
     "use strict";
 
-    var mainGridAPI;
+    var mainGridApi;
 
-    function showBPTrackingModal(bpInstanceObj) {
+    function retrieveData() {
 
-        VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPTrackingModal.html', {
-            BPInstanceID: bpInstanceObj.ProcessInstanceID
-        }, {
-            onScopeReady: function (modalScope) {
-                modalScope.title = "Tracking";
-            }
+        return mainGridApi.retrieveData({
+            DefinitionsId: UtilsService.getPropValuesFromArray($scope.selectedDefinition, "BPDefinitionID"),
+            InstanceStatus: UtilsService.getPropValuesFromArray($scope.selectedInstanceStatus, "Value"),
+            DateFrom: $scope.fromDate,
+            DateTo: $scope.toDate
         });
     }
 
-    function getData() {
-
-        var pageInfo = mainGridAPI.getPageInfo();
-        return BusinessProcessAPIService.GetFilteredBProcess(UtilsService.getPropValuesFromArray($scope.selectedDefinition, "BPDefinitionID"),
-            UtilsService.getPropValuesFromArray($scope.selectedInstanceStatus, "Value"),
-            pageInfo.fromRow,
-            pageInfo.toRow,
-            $scope.fromDate,
-            $scope.toDate).then(function (response) {
-                mainGridAPI.addItemsToSource(response);
-            });
-    }
-
     function defineGrid() {
+
         $scope.datasource = [];
-        $scope.loadMoreData = function () {
-            return getData();
-        };
+
         $scope.onGridReady = function (api) {
-            mainGridAPI = api;
+            mainGridApi = api;
+            return retrieveData();
         };
+
+        $scope.onTitleClicked = function (dataItem) {
+
+            VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPTrackingModal.html', {
+                BPInstanceID: dataItem.ProcessInstanceID
+            }, {
+                onScopeReady: function (modalScope) {
+                    modalScope.title = "Tracking";
+                }
+            });
+
+        };
+
+        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+            return BusinessProcessAPIService.GetFilteredBProcess(dataRetrievalInput)
+            .then(function (response) {
+                onResponseReady(response);
+            });
+        };
+
     }
 
     function getCurrentDate(days) {
         var d = new Date();
-        var curr_date = d.getDate() + days;
-        var curr_month = d.getMonth();
-        var curr_year = d.getFullYear();
-        return new Date(curr_year, curr_month, curr_date);
+        var currDate = d.getDate() + days;
+        var currMonth = d.getMonth();
+        var currYear = d.getFullYear();
+        return new Date(currYear, currMonth, currDate);
     }
 
     function defineScope() {
@@ -55,12 +61,9 @@ function BPManagementController($scope, UtilsService, BusinessProcessAPIService,
         $scope.selectedDefinition = [];
         $scope.instanceStatus = [];
         $scope.selectedInstanceStatus = [];
+
         $scope.searchClicked = function () {
-            mainGridAPI.clearDataAndContinuePaging();
-            return getData();
-        };
-        $scope.onTitleClicked = function (dataItem) {
-            showBPTrackingModal(dataItem);
+            return retrieveData();
         };
 
         $scope.getStatusColor = function (dataItem, colDef) {

@@ -52,6 +52,7 @@
     <Compile Include="BPDefinition.cs" />
     <Compile Include="BPEvent.cs" />
     <Compile Include="BPInstance.cs" />
+    <Compile Include="BPInstanceQuery.cs" />
     <Compile Include="BPInstanceStatus.cs" />
     <Compile Include="BPTrackingMessage.cs" />
     <Compile Include="CreateProcessInput.cs" />

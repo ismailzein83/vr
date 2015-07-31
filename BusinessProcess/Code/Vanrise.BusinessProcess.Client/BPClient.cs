@@ -97,10 +97,10 @@ namespace Vanrise.BusinessProcess.Client
             return dataManager.GetInstancesByCriteria(definitionID, dateFrom, dateTo);
         }
 
-        public List<BPInstance> GetFilteredInstances(List<int> definitionID, List<BPInstanceStatus> instanceStatus, DateTime dateFrom, DateTime dateTo)
+        public Vanrise.Entities.IDataRetrievalResult<BPInstance> GetFilteredInstances(Vanrise.Entities.DataRetrievalInput<BPInstanceQuery> input)
         {
             IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
-            return dataManager.GetInstancesByCriteria(definitionID, instanceStatus, dateFrom, dateTo);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetInstancesByCriteria(input));
         }
 
         public BPInstance GetInstance(long instanceId)

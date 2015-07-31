@@ -124,13 +124,10 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
 
         [HttpPost]
-        public IEnumerable<BPInstanceModel> GetFilteredBProcess(GetFilteredBProcessInput param)
+        public Object GetFilteredBProcess(Vanrise.Entities.DataRetrievalInput<BPInstanceQuery> input)
         {
-            param.FromRow = param.FromRow - 1;
             BPClient manager = new BPClient();
-            IEnumerable<BPInstanceModel> rows = BPMappers. MapTMapInstances(manager.GetFilteredInstances(param.DefinitionsId,param.InstanceStatus, param.DateFrom.HasValue ? param.DateFrom.Value : DateTime.Now.AddHours(-1), param.DateTo.HasValue ? param.DateTo.Value : DateTime.Now));
-            rows = rows.Skip(param.FromRow ).Take(param.ToRow - param.FromRow);
-            return rows;
+            return GetWebResponse(input, manager.GetFilteredInstances(input));
         }
 
 
@@ -164,18 +161,6 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
     #region Argument Classes
     
-    public class GetFilteredBProcessInput
-    {
-        public int FromRow { get; set; }
-        public int ToRow { get; set; }
-        public List<int> DefinitionsId { get; set; }
-
-        public List<BPInstanceStatus> InstanceStatus { get; set; }
-
-        public DateTime? DateFrom { get; set; }
-
-        public DateTime? DateTo { get; set; }
-    }
 
     public class GetTrackingsByInstanceIdInput
     {
