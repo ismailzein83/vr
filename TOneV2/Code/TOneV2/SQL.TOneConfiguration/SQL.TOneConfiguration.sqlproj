@@ -139,7 +139,7 @@
     <Build Include="Security\BEntity_2.sql" />
   </ItemGroup>
   <ItemGroup>
-    <PostDeploy Include="Common.PostDeployment1.sql" />
+    <PostDeploy Include="Common.PostDeployment.sql" />
     <None Include="TOne.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
