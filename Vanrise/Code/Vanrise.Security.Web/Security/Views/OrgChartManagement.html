@@ -3,7 +3,7 @@
 
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
-                <vr-columns colnum="normal">
+                <vr-columns colnum="2">
                     <vr-textbox value="name" label="Name"></vr-textbox>
                 </vr-columns>
             </vr-row>
@@ -12,7 +12,7 @@
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Search" formname="filterForm" data-onclick="filterOrgCharts" isasynchronous="true"></vr-button>
+                    <vr-button type="Search" formname="filterForm" data-onclick="searchClicked" isasynchronous="true"></vr-button>
                     <vr-button type="Add" data-onclick="addOrgChart"></vr-button>
                 </div>
             </vr-actionbar>
@@ -21,9 +21,17 @@
         <div>
             <vr-row>
                 <vr-columns colnum="fullrow" simplecol>
-                    <vr-datagrid datasource="orgCharts" menuactions="gridMenuActions" loadmoredata="loadMoreData" on-ready="onMainGridReady">
+
+                    <vr-datagrid datasource="orgCharts"
+                                 dataretrievalfunction="dataRetrievalFunction"
+                                 pagingtype="'PagingOnScroll'"
+                                 on-ready="gridReady"
+                                 menuactions="gridMenuActions"
+                                 idfield="Id">
+
                         <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
                     </vr-datagrid>
+
                 </vr-columns>
             </vr-row>
         </div>

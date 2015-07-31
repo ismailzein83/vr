@@ -2,7 +2,7 @@
 
 function OrgChartManagementController($scope, OrgChartAPIService, VRModalService, VRNotificationService) {
 
-    var mainGridAPI;
+    var gridApi;
 
     defineScope();
     load();
@@ -11,18 +11,24 @@ function OrgChartManagementController($scope, OrgChartAPIService, VRModalService
         $scope.orgCharts = [];
         $scope.gridMenuActions = [];
 
-        $scope.onMainGridReady = function (api) {
-            mainGridAPI = api;
-            getData();
-        };
+        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
 
-        $scope.loadMoreData = function () {
-            return getData();
+            return OrgChartAPIService.GetFilteredOrgCharts(dataRetrievalInput)
+                .then(function (response) {
+                    onResponseReady(response);
+                })
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                });
         }
 
-        $scope.filterOrgCharts = function () {
-            mainGridAPI.clearDataAndContinuePaging();
-            return getData();
+        $scope.gridReady = function (api) {
+            gridApi = api;
+            return retrieveData();
+        };
+
+        $scope.searchClicked = function () {
+            return retrieveData();
         };
 
         $scope.addOrgChart = function () {
@@ -31,7 +37,7 @@ function OrgChartManagementController($scope, OrgChartAPIService, VRModalService
             settings.onScopeReady = function (modalScope) {
                 modalScope.title = 'New Organizational Chart';
                 modalScope.onOrgChartAdded = function (orgChart) {
-                    mainGridAPI.itemAdded(orgChart);
+                    gridApi.itemAdded(orgChart);
                 };
             };
 
@@ -45,15 +51,12 @@ function OrgChartManagementController($scope, OrgChartAPIService, VRModalService
 
     }
 
-    function getData() {
-        var pageInfo = mainGridAPI.getPageInfo();
+    function retrieveData() {
+        var query = {
+            Name: $scope.name
+        };
 
-        var name = $scope.name != undefined ? $scope.name : '';
-        return OrgChartAPIService.GetFilteredOrgCharts(pageInfo.fromRow, pageInfo.toRow, name).then(function (response) {
-            angular.forEach(response, function (item) {
-                $scope.orgCharts.push(item);
-            });
-        });
+        return gridApi.retrieveData(query);
     }
 
     function defineMenuActions() {
@@ -79,7 +82,7 @@ function OrgChartManagementController($scope, OrgChartAPIService, VRModalService
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = 'Edit Organizational Chart: ' + orgChartObject.Name;
             modalScope.onOrgChartUpdated = function (orgChart) {
-                mainGridAPI.itemUpdated(orgChart);
+                gridApi.itemUpdated(orgChart);
             };
         };
 
@@ -88,19 +91,20 @@ function OrgChartManagementController($scope, OrgChartAPIService, VRModalService
 
     function deleteOrgChart(orgChartObject) {
         var message = 'Do you want to delete ' + orgChartObject.Name + '?';
-        VRNotificationService.showConfirmation(message).then(function (response) {
-            if (response == true) {
-                return OrgChartAPIService.DeleteOrgChart(orgChartObject.Id).then(function (deletionResponse) {
-                    VRNotificationService.notifyOnItemDeleted("Org Chart", deletionResponse);
 
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+        VRNotificationService.showConfirmation(message)
+            .then(function (response) {
+                if (response == true) {
 
-                }).finally(function () {
-                    $scope.isGettingData = false;
-                });
-            }
-        });
+                    return OrgChartAPIService.DeleteOrgChart(orgChartObject.Id)
+                        .then(function (deletionResponse) {
+                            VRNotificationService.notifyOnItemDeleted("Org Chart", deletionResponse);
+                        })
+                        .catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                }
+            });
     }
 }
 

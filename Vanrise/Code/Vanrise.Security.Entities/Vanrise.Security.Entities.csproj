@@ -57,6 +57,7 @@
     <Compile Include="OrgChart.cs" />
     <Compile Include="OrgChartLinkedEntityInfo.cs" />
     <Compile Include="OrgChartLinkedEntityInstance.cs" />
+    <Compile Include="OrgChartQuery.cs" />
     <Compile Include="Permission.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomPasswordHelper.cs" />

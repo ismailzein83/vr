@@ -22,9 +22,14 @@ namespace Vanrise.Security.Data.SQL
             return GetItemsSP("sec.sp_OrgChart_GetAll", OrgChartMapper);
         }
 
-        public List<OrgChart> GetFilteredOrgCharts(int fromRow, int toRow, string name)
+        public Vanrise.Entities.BigResult<OrgChart> GetFilteredOrgCharts(Vanrise.Entities.DataRetrievalInput<OrgChartQuery> input)
         {
-            return GetItemsSP("sec.sp_OrgChart_GetFiltered", OrgChartMapper, fromRow, toRow, name);
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("[sec].[sp_OrgChart_CreateTempForFiltered]", tempTableName, input.Query.Name);
+            };
+
+            return RetrieveData(input, createTempTableAction, OrgChartMapper);
         }
 
         public OrgChart GetOrgChartById(int orgChartId)

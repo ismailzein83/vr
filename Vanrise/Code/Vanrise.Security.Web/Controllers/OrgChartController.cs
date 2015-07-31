@@ -17,11 +17,11 @@ namespace Vanrise.Security.Web.Controllers
             return manager.GetOrgCharts();
         }
 
-        [HttpGet]
-        public IEnumerable<OrgChart> GetFilteredOrgCharts(int fromRow, int toRow, string name)
+        [HttpPost]
+        public object GetFilteredOrgCharts(Vanrise.Entities.DataRetrievalInput<OrgChartQuery> input)
         {
             OrgChartManager manager = new OrgChartManager();
-            return manager.GetFilteredOrgCharts(fromRow, toRow, name);
+            return GetWebResponse(input, manager.GetFilteredOrgCharts(input));
         }
         
         [HttpGet]

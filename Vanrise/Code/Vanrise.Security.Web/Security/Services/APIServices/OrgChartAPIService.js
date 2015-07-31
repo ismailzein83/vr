@@ -12,15 +12,8 @@
         return BaseAPIService.get('/api/OrgChart/GetOrgCharts');
     }
 
-    function GetFilteredOrgCharts(fromRow, toRow, name) {
-        return BaseAPIService.get(
-            "/api/OrgChart/GetFilteredOrgCharts",
-            {
-                fromRow: fromRow,
-                toRow: toRow,
-                name: name
-            }
-        );
+    function GetFilteredOrgCharts(input) {
+        return BaseAPIService.post("/api/OrgChart/GetFilteredOrgCharts", input);
     }
 
     function GetOrgChartById(orgChartId) {

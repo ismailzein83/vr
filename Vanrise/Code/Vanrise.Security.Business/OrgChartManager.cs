@@ -17,10 +17,10 @@ namespace Vanrise.Security.Business
             return dataManager.GetOrgCharts();
         }
 
-        public List<OrgChart> GetFilteredOrgCharts(int fromRow, int toRow, string name)
+        public Vanrise.Entities.IDataRetrievalResult<OrgChart> GetFilteredOrgCharts(Vanrise.Entities.DataRetrievalInput<OrgChartQuery> input)
         {
             IOrgChartDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IOrgChartDataManager>();
-            return dataManager.GetFilteredOrgCharts(fromRow, toRow, name);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredOrgCharts(input));
         }
 
         public OrgChart GetOrgChartById(int orgChartId)
