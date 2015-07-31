@@ -192,23 +192,30 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
             })
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            })
+            .finally(function () {
+                $scope.issaving = false;
             });
     }
 
     function updateOrgChart() {
+        $scope.issaving = true;
         var orgChartObject = buildOrgChartObjFromScope();
 
         OrgChartAPIService.UpdateOrgChart(orgChartObject)
-        .then(function (response) {
-            if (VRNotificationService.notifyOnItemUpdated("OrgChart", response)) {
-                if ($scope.onOrgChartUpdated != undefined)
-                    $scope.onOrgChartUpdated(response.UpdatedObject);
-                $scope.modalContext.closeModal();
-            }
-        })
-        .catch(function (error) {
-            VRNotificationService.notifyException(error, $scope);
-        });
+            .then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated("OrgChart", response)) {
+                    if ($scope.onOrgChartUpdated != undefined)
+                        $scope.onOrgChartUpdated(response.UpdatedObject);
+                    $scope.modalContext.closeModal();
+                }
+            })
+            .catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            })
+            .finally(function () {
+                $scope.issaving = false;
+            });
     }
 
     function mapToServer(array) {

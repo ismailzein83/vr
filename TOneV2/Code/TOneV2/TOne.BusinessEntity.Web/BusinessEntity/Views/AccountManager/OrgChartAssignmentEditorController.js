@@ -19,17 +19,23 @@ function OrgChartAssignmentEditorController($scope, AccountManagerAPIService, Or
         $scope.orgCharts = [];
 
         $scope.assignOrgChart = function () {
+            $scope.issaving = true;
 
-            AccountManagerAPIService.UpdateLinkedOrgChart($scope.assignedOrgChart.Id).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Org Chart", response)) {
-                    if ($scope.onOrgChartAssigned != undefined)
-                        $scope.onOrgChartAssigned($scope.assignedOrgChart.Id);
+            AccountManagerAPIService.UpdateLinkedOrgChart($scope.assignedOrgChart.Id)
+                .then(function (response) {
+                    if (VRNotificationService.notifyOnItemUpdated("Org Chart", response)) {
+                        if ($scope.onOrgChartAssigned != undefined)
+                            $scope.onOrgChartAssigned($scope.assignedOrgChart.Id);
 
-                    $scope.modalContext.closeModal();
-                }
-            }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            });
+                        $scope.modalContext.closeModal();
+                    }
+                })
+                .catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                })
+                .finally(function () {
+                    $scope.issaving = false;
+                });
         }
 
         $scope.closeModal = function () {

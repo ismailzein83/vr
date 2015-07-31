@@ -21,6 +21,8 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
         $scope.carriers = [];
         
         $scope.assignCarriers = function () {
+            $scope.issaving = true;
+
             var updatedCarriers = mapCarriersForAssignment();
 
             if (updatedCarriers.length > 0) {
@@ -33,8 +35,12 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
 
                             $scope.modalContext.closeModal();
                         }
-                    }).catch(function (error) {
+                    })
+                    .catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
+                    })
+                    .finally(function () {
+                        $scope.issaving = false;
                     });
             }
         }
