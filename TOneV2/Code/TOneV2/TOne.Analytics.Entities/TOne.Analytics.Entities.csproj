@@ -98,6 +98,7 @@
     <Compile Include="CDRBigResult.cs" />
     <Compile Include="Billing\CustomerServices.cs" />
     <Compile Include="DestinationVolumeTrafficResult.cs" />
+    <Compile Include="DestnationVolumeTrafficItem.cs" />
     <Compile Include="InOutVolumeTraffic.cs" />
     <Compile Include="KeyColumn.cs" />
     <Compile Include="Mobile\AlertView.cs" />
