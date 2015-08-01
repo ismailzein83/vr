@@ -44,7 +44,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         public InOutArgument<BaseQueue<CDRBatch>> InputQueue { get; set; }
 
         [RequiredArgument]
-        public  InOutArgument<BaseQueue<NumberProfileBatch>> OutputQueue { get; set; }
+        public InOutArgument<BaseQueue<NumberProfileBatch>> OutputQueue { get; set; }
 
         [RequiredArgument]
         public InArgument<DateTime> FromDate { get; set; }
@@ -74,13 +74,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(LoadNumberProfilesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            
+            IPredefinedDataManager predefinedDataManager = FraudDataManagerFactory.GetDataManager<IPredefinedDataManager>();
             IStrategyDataManager strategyManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
             INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
             int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"]);
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Started Loading CDRs from Database to Memory");
 
-            var aggregateDefinitions = new AggregateManager(inputArgument.Strategies).GetAggregateDefinitions();
+            var aggregateDefinitions = new AggregateManager(inputArgument.Strategies).GetAggregateDefinitions(predefinedDataManager.GetCallClasses());
             string currentSubscriberNumber = null;
 
             //foreach (var strategy in inputArgument.Strategies)
@@ -140,7 +140,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         private void FinishNumberProfileProcessing(string subscriberNumber, ref List<NumberProfile> numberProfileBatch, ref int numberProfilesCount, LoadNumberProfilesInput inputArgument, AsyncActivityHandle handle, int batchSize, List<AggregateDefinition> AggregateDefinitions)
         {
-            foreach(var strategy in inputArgument.Strategies)
+            foreach (var strategy in inputArgument.Strategies)
             {
                 NumberProfile numberProfile = new NumberProfile()
                 {
@@ -157,8 +157,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 }
                 numberProfileBatch.Add(numberProfile);
             }
-            
-            
+
+
             //Console.WriteLine(numberProfileBatch.Count);
             if (numberProfileBatch.Count >= batchSize)
             {
