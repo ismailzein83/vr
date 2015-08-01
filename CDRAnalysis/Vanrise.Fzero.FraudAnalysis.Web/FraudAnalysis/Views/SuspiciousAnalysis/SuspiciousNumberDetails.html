@@ -82,9 +82,9 @@
                                         <vr-datagridcolumn headertext="'From Date'" field="'FromDate'" type="'Datetime'" widthfactor="20"></vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'To Date'" field="'ToDate'" type="'Datetime'" widthfactor="20"></vr-datagridcolumn>
 
-                                        <vr-datagridcolumn ng-repeat="agg in aggregateDefinitions" columnindex="$index + 1" headertext="agg.name" tag="agg">
-                                            <div ng-init="aggIndex = viewScope.aggregateDefinitions.indexOf(colDef.tag)" style="width:100%">
-                                                {{dataItem.AggregateValues[aggIndex]}}
+                                        <vr-datagridcolumn ng-repeat="agg in aggregateDefinitions" columnindex="$index + 1" headertext="agg.name" tag="agg.name">
+                                            <div ng-init="aggname = colDef.tag" style="width:100%">
+                                                {{dataItem.AggregateValues[aggname]}}
                                             </div>
                                         </vr-datagridcolumn>
 
@@ -115,7 +115,6 @@
             </vr-row>
 
             {{numberProfiles}}
-            {{subscriberThresholds}}
 
         </vr-form>
     </vr-modalbody>
