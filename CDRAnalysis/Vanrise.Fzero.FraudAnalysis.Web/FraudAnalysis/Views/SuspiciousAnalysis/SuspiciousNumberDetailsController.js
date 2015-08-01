@@ -184,11 +184,11 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
 
 
         $scope.isGettingData = true;
-        UtilsService.waitMultipleAsyncOperations([loadAggregates], [loadFilters])
+        UtilsService.waitMultipleAsyncOperations( [loadFilters , loadAggregates])
         .then(function () {
 
 
-            SuspicionAnalysisAPIService.GetFraudResult($scope.fromDate, $scope.toDate, strategiesList.slice(0, -1), suspicionLevelsList.slice(0, -1), $scope.subscriberNumber).then(function (response) {
+            return SuspicionAnalysisAPIService.GetFraudResult($scope.fromDate, $scope.toDate, strategiesList.slice(0, -1), suspicionLevelsList.slice(0, -1), $scope.subscriberNumber).then(function (response) {
 
                 $scope.suspicionLevelName = response.SuspicionLevelName;
 
@@ -210,9 +210,10 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
                 lastOccurance = response.LastOccurance;
                 strategyName = response.StrategyName;
                 numberofOccurances = response.NumberofOccurances;
+            }).finally(function () {
+                $scope.isGettingData = false;
             });
 
-            $scope.isGettingData = false;
 
         })
         .catch(function (error) {
@@ -225,9 +226,10 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
 
     function loadFilters() {
         console.log('loadFilters')
+        var index = 0;
         return StrategyAPIService.GetFilters().then(function (response) {
             angular.forEach(response, function (itm) {
-                $scope.filterDefinitions.push({ filterId: itm.FilterId, description: itm.Description });
+                $scope.filterDefinitions.push({ filterId: ++index, description: itm.Description });
             });
         });
     }

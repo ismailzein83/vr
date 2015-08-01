@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Vanrise.Fzero.FraudAnalysis.Entities;
+using System.Linq;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {
@@ -42,6 +43,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         public Dictionary<int, CriteriaDefinition> GetCriteriaDefinitions()
         {
             return s_criteriaDefinitions;
+        }
+
+        public Dictionary<int, string> GetCriteriaNames()
+        {
+            Dictionary<int, String> names= new Dictionary<int,string>();
+            foreach(var i in s_criteriaDefinitions)
+                names.Add(i.Value.FilterId,i.Value.Description);
+
+            return names;
         }
         
         // Funcs
