@@ -63,7 +63,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
 
         [HttpGet]
-        public List<AggregateDefinition> GetAggregates()
+        public List<string> GetAggregates()
         {
             AggregateManager manager = new AggregateManager();
             return manager.GetAggregateNames();

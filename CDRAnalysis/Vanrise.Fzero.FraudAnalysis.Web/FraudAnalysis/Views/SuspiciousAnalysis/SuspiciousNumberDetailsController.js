@@ -237,7 +237,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         console.log('loadAggregates')
         return StrategyAPIService.GetAggregates().then(function (response) {
             angular.forEach(response, function (itm) {
-                $scope.aggregateDefinitions.push({ aggregateId: itm.AggregateId, name: itm.Name });
+                $scope.aggregateDefinitions.push({ name: itm });
             });
         });
     }
