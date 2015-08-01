@@ -74,13 +74,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(LoadNumberProfilesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            IPredefinedDataManager predefinedDataManager = FraudDataManagerFactory.GetDataManager<IPredefinedDataManager>();
+            
             IStrategyDataManager strategyManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
             INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
             int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"]);
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Started Loading CDRs from Database to Memory");
 
-            var aggregateDefinitions = new AggregateManager(inputArgument.Strategies).GetAggregateDefinitions(predefinedDataManager.GetAllCallClasses());
+            var aggregateDefinitions = new AggregateManager(inputArgument.Strategies).GetAggregateDefinitions();
             string currentSubscriberNumber = null;
 
             //foreach (var strategy in inputArgument.Strategies)

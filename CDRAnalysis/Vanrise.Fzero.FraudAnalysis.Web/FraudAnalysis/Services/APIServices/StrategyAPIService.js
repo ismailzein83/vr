@@ -7,6 +7,7 @@
         UpdateStrategy: UpdateStrategy,
         GetStrategy: GetStrategy,
         GetFilters: GetFilters,
+        GetAggregates: GetAggregates,
         GetPeriods: GetPeriods
     });
 
@@ -52,6 +53,10 @@
 
     function GetFilters() {
         return BaseAPIService.get("/api/Strategy/GetFilters");
+    }
+
+    function GetAggregates() {
+        return BaseAPIService.get("/api/Strategy/GetAggregates");
     }
 
     function GetPeriods() {

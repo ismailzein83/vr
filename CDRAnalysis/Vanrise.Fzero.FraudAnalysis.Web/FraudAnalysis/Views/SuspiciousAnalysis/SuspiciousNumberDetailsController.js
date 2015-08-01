@@ -47,6 +47,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
     function defineScope() {
 
         $scope.filterDefinitions = [];
+        $scope.aggregateDefinitions = [];
         $scope.subscriberThresholds = [];
         $scope.normalCDRs = [];
         $scope.numberProfiles = [];
@@ -183,7 +184,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
 
 
         $scope.isGettingData = true;
-        UtilsService.waitMultipleAsyncOperations([loadFilters])
+        UtilsService.waitMultipleAsyncOperations([loadAggregates], [loadFilters])
         .then(function () {
 
 
@@ -223,9 +224,20 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
     }
 
     function loadFilters() {
+        console.log('loadFilters')
         return StrategyAPIService.GetFilters().then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.filterDefinitions.push({ filterId: itm.FilterId, description: itm.Description });
+            });
+        });
+    }
+
+
+    function loadAggregates() {
+        console.log('loadAggregates')
+        return StrategyAPIService.GetAggregates().then(function (response) {
+            angular.forEach(response, function (itm) {
+                $scope.aggregateDefinitions.push({ aggregateId: itm.AggregateId, name: itm.Name });
             });
         });
     }

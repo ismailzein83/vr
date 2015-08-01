@@ -44,18 +44,18 @@
                             <vr-columns colnum="12">
                                 <div ng-show="isSubscriberThresholdsTabShown" vr-loader="isGettingSubscriberThresholds">
                                     <vr-datagrid datasource="subscriberThresholds" maxheight="400px" loadmoredata="loadMoreDataSubscriberThresholds" on-ready="onSubscriberThresholdsGridReady">
+                                        <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" widthfactor="20"></vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelName'" widthfactor="25"></vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Date'" field="'DateDay'" type="'Datetime'" widthfactor="25"></vr-datagridcolumn>
-
                                         <vr-datagridcolumn ng-repeat="filter in filterDefinitions" widthfactor="20" columnindex="$index + 1" headertext="'Filt. ' + filter.filterId" tag="filter">
                                             <div ng-init="filterIndex = viewScope.filterDefinitions.indexOf(colDef.tag)" style="width:100%">
-                                                {{dataItem.CriteriaValues[filterIndex]}}
+                                                {{dataItem.CriteriaValues[filterIndex+1]}}
 
                                             </div>
                                         </vr-datagridcolumn>
 
 
-                                        <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelName'" widthfactor="25"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" widthfactor="20"></vr-datagridcolumn>
+                                        
                                     </vr-datagrid>
 
                                 </div>
@@ -78,14 +78,17 @@
                                 </div>
                                 <div ng-show="isNumberProfileTabShown" vr-loader="isGettingNumberProfiles">
                                     <vr-datagrid datasource="numberProfiles" maxheight="400px" rotate="true" loadmoredata="loadMoreDataNumberProfiles" on-ready="onNumberProfilesGridReady">
-                                        <vr-datagridcolumn headertext="'From Date'" field="'FromDate'" type="'Datetime'" widthfactor="25"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'To Date'" field="'ToDate'" type="'Datetime'" widthfactor="25"></vr-datagridcolumn>
+                                       
+                                        <vr-datagridcolumn headertext="'From Date'" field="'FromDate'" type="'Datetime'" widthfactor="20"></vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'To Date'" field="'ToDate'" type="'Datetime'" widthfactor="20"></vr-datagridcolumn>
 
-                                        <!--<vr-datagridcolumn ng-repeat="agg in filterDefinitions" widthfactor="20" columnindex="$index + 1" headertext="'Filt. ' + filter.filterId" tag="filter">
-                                            <div ng-init="filterIndex = viewScope.filterDefinitions.indexOf(colDef.tag)" style="width:100%">
-                                                {{dataItem.CriteriaValues[filterIndex]}}
+                                        <vr-datagridcolumn ng-repeat="agg in aggregateDefinitions" columnindex="$index + 1" headertext="agg.name" tag="agg">
+                                            <div ng-init="aggIndex = viewScope.aggregateDefinitions.indexOf(colDef.tag)" style="width:100%">
+                                                {{dataItem.AggregateValues[aggIndex]}}
                                             </div>
-                                        </vr-datagridcolumn>-->
+                                        </vr-datagridcolumn>
+
+                                        
 
                                     </vr-datagrid>
                                 </div>
@@ -111,6 +114,8 @@
                 </vr-columns>
             </vr-row>
 
+            {{numberProfiles}}
+            {{subscriberThresholds}}
 
         </vr-form>
     </vr-modalbody>

@@ -12,8 +12,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         {
 
         }
-       
-        public List<CallClass> GetAllCallClasses()
+
+        public List<CallClass> GetCallClasses()
         {
             throw new NotImplementedException();
         }

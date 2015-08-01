@@ -16,5 +16,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return dataManager.GetPeriods();
         }
 
+        public List<CallClass> GetClasses()
+        {
+            IPredefinedDataManager dataManager = FraudDataManagerFactory.GetDataManager<IPredefinedDataManager>();
+
+            return dataManager.GetCallClasses();
+        }
+
     }
 }

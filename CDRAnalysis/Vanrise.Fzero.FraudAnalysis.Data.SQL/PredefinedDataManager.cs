@@ -10,15 +10,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
     public class PredefinedDataManager : BaseSQLDataManager, IPredefinedDataManager
     {
 
-        int DefaultUserId = 1;
-
         public PredefinedDataManager()
             : base("CDRDBConnectionString")
         {
 
         }
 
-        public List<CallClass> GetAllCallClasses()
+        public List<CallClass> GetCallClasses()
         {
             return GetItemsSP("FraudAnalysis.sp_CallClass_GetAll", CallClassMapper);
         }
