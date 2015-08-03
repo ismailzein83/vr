@@ -6,7 +6,7 @@
                 <vr-choice isselected="adapterSettignsSelected">Adapter</vr-choice>
                 <vr-choice isselected="mappperSettignsSelected">Mapper</vr-choice>
                 <vr-choice isselected="schedulerSettignsSelected">Scheduler</vr-choice>
-                <vr-choice isselected="queueSettignsSelected">Queue</vr-choice>
+                <vr-choice isselected="executionFlowSettignsSelected">Execution Flow</vr-choice>
             </vr-choices>
             <div ng-show="definitionSettignsSelected">
                 <vr-row>
@@ -37,10 +37,10 @@
                     <div ng-include="'/Client/Modules/Runtime/Views/TriggerTemplates/TimerTriggerTemplate.html'"></div>
                 </vr-row>
             </div>
-            <div ng-show="queueSettignsSelected">
+            <div ng-show="executionFlowSettignsSelected">
                 <vr-row>
                     <vr-columns colnum="6">
-                        <vr-textbox value="queueName" label="Queue Name" isrequired></vr-textbox>
+                        <vr-select datasource="executionFlows" datatextfield="Name" datavaluefield="ExecutionFlowId" label="Execution Flow" selectedvalues="selectedExecutionFlow" isrequired></vr-select>
                     </vr-columns>
                 </vr-row>
             </div>

@@ -35,5 +35,14 @@ namespace Vanrise.Integration.Entities
         {
             get { return Size; }
         }
+
+
+        public void OnDisposed()
+        {
+            if(this.StreamReader != null)
+            {
+                this.StreamReader.Close();
+            }
+        }
     }
 }

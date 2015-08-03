@@ -6,14 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Integration.Data;
+using Vanrise.Queueing;
 
 namespace Vanrise.Integration.Business
 {
     public class DataSourceManager
     {
-
-       
-
 
         public List<Vanrise.Integration.Entities.DataSource> GetDataSources()
         {
@@ -120,6 +118,12 @@ namespace Vanrise.Integration.Business
             }
             
             return updateOperationOutput;
+        }
+
+        public List<Vanrise.Queueing.Entities.QueueExecutionFlow> GetExecutionFlows()
+        {
+            QueueExecutionFlowManager manager = new QueueExecutionFlowManager();
+            return manager.GetExecutionFlows();
         }
     }
 }

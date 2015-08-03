@@ -8,8 +8,6 @@ namespace Vanrise.Integration.Entities
 {    
     public interface IDataMapper
     {
-        Vanrise.Queueing.Entities.PersistentQueueItem MapData(IImportedData data);
-
         MappingOutput MapData(IImportedData data, MappedBatchItemsToEnqueue mappedBatches);
     }
 

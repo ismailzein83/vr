@@ -23,13 +23,15 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
 
         private void CreateStreamReader(FileAdapterArgument fileAdapterArgument, Action<IImportedData> receiveData, FileInfo file)
         {
-            receiveData(new StreamReaderImportedData()
+            StreamReaderImportedData reader = new StreamReaderImportedData()
             {
                 StreamReader = new StreamReader(fileAdapterArgument.Directory + "/" + file.Name),
                 Modified = file.LastWriteTime,
                 Name = file.Name,
                 Size = file.Length
-            });
+            };
+            
+            receiveData(reader);
         }
 
         private void AfterImport(FileAdapterArgument fileAdapterArgument, FileInfo file)
@@ -60,7 +62,7 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
             if (System.IO.Directory.Exists(fileAdapterArgument.Directory))
             {
                 DirectoryInfo d = new DirectoryInfo(fileAdapterArgument.Directory);//Assuming Test is your Folder
-                FileInfo[] Files = d.GetFiles("*.DAT"); //Getting Text files
+                FileInfo[] Files = d.GetFiles("*" + fileAdapterArgument.Extension); //Getting Text files
                 foreach (FileInfo file in Files)
                 {
                     CreateStreamReader(fileAdapterArgument, receiveData, file);

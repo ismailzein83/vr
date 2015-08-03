@@ -24,5 +24,10 @@ namespace Vanrise.Integration.Entities
         {
             get { return this.Size; }
         }
+
+        public void OnDisposed()
+        {
+            
+        }
     }
 }

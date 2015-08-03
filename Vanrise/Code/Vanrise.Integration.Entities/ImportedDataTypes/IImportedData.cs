@@ -11,5 +11,7 @@ namespace Vanrise.Integration.Entities
         string Description { get; }
 
         long? BatchSize { get; }
+
+        void OnDisposed();
     }
 }

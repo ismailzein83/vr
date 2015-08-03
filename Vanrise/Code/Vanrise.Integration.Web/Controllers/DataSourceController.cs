@@ -34,6 +34,13 @@ namespace Vanrise.Integration.Web.Controllers
             return manager.GetDataSourceAdapterTypes();
         }
 
+        [HttpGet]
+        public List<Vanrise.Queueing.Entities.QueueExecutionFlow> GetExecutionFlows()
+        {
+            DataSourceManager manager = new DataSourceManager();
+            return manager.GetExecutionFlows();
+        }
+
 
         [HttpPost]
         public Vanrise.Entities.InsertOperationOutput<Vanrise.Integration.Entities.DataSource> AddDataSource(DataSourceWrapper dataSourceWrapper)

@@ -21,5 +21,12 @@ namespace Vanrise.Integration.Entities
         {
             get { return null ; }
         }
+
+
+        public void OnDisposed()
+        {
+            if (this.Reader != null && !Reader.IsClosed)
+                Reader.Close();
+        }
     }
 }

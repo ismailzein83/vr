@@ -27,6 +27,6 @@ namespace Vanrise.Integration.Entities
 
         public string MapperCustomCode { get; set; }
 
-        public string QueueName { get; set; }
+        public int ExecutionFlowId { get; set; }
     }
 }

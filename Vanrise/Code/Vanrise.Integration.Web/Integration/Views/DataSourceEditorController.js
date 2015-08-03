@@ -40,6 +40,7 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
         };
 
         $scope.adapterTypes = [];
+        $scope.executionFlows = [];
         $scope.dataSourceAdapter = {};
 
         $scope.schedulerTaskTrigger = {};
@@ -48,7 +49,7 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
 
     function load() {
         $scope.isGettingData = true;
-        return UtilsService.waitMultipleAsyncOperations([loadAdapters]).then(function () {
+        return UtilsService.waitMultipleAsyncOperations([loadAdapters, loadExecutionFlows]).then(function () {
             if (editMode) {
                 getDataSourceToEdit();
             }
@@ -102,13 +103,21 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
         });
     }
 
+    function loadExecutionFlows() {
+        return DataSourceAPIService.GetExecutionFlows().then(function (response) {
+            angular.forEach(response, function (item) {
+                $scope.executionFlows.push(item);
+            });
+        });
+    }
+
     function buildDataSourceObjFromScope() {
 
         var dataSourceData = {
             DataSourceId: (dataSourceId != null) ? dataSourceId : 0,
             Name: $scope.dataSourceName,
             AdapterTypeId: $scope.selectedAdapterType.AdapterTypeId,
-            Settings: { AdapterArgument: $scope.dataSourceAdapter.getData(), MapperCustomCode: $scope.customCode, QueueName: $scope.queueName }
+            Settings: { AdapterArgument: $scope.dataSourceAdapter.getData(), MapperCustomCode: $scope.customCode, ExecutionFlowId: $scope.selectedExecutionFlow.ExecutionFlowId }
         };
 
         var taskData = {
@@ -141,7 +150,7 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
         if ($scope.schedulerTaskTrigger.loadTemplateData != undefined)
             $scope.schedulerTaskTrigger.loadTemplateData();
 
-        $scope.queueName = dataSourceObject.DataSourceData.Settings.QueueName;
+        $scope.selectedExecutionFlow = UtilsService.getItemByVal($scope.executionFlows, dataSourceObject.DataSourceData.Settings.ExecutionFlowId, "ExecutionFlowId");
     }
 
     function insertDataSource() {
