@@ -10,6 +10,12 @@ namespace Vanrise.Queueing
 {
     public class QueueExecutionFlowManager
     {
+        public List<QueueExecutionFlow> GetExecutionFlows()
+        {
+            IQueueExecutionFlowDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDataManager>();
+            return dataManager.GetExecutionFlows();
+        }
+
         public QueuesByStages GetQueuesByStages(int executionFlowId)
         {
             IQueueExecutionFlowDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDataManager>();

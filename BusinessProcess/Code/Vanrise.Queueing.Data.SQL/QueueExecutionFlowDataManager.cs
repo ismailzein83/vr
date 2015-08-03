@@ -22,6 +22,11 @@ namespace Vanrise.Queueing.Data.SQL
             return GetItemSP("queue.sp_ExecutionFlow_GetByID", ExecutionFlowMapper, executionFlowId);
         }
 
+        public List<QueueExecutionFlow> GetExecutionFlows()
+        {
+            return GetItemsSP("queue.sp_ExecutionFlow_GetAll", ExecutionFlowMapper);
+        }
+
         #region Private Methods
 
         private QueueExecutionFlow ExecutionFlowMapper(IDataReader reader)
