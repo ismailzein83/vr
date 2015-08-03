@@ -87,16 +87,13 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
         };
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            
-            return SuspicionAnalysisAPIService.GetFilteredSuspiciousNumbers(dataRetrievalInput).then(function (response) {
-                angular.forEach(response.Data, function (itm) {
-                    $scope.fraudResults.push(itm);
-                });
-            }).finally(function () {
-               
-                $scope.isGettingFraudResults = false;
+            return SuspicionAnalysisAPIService.GetFilteredSuspiciousNumbers(dataRetrievalInput)
+            .then(function (response) {
+                onResponseReady(response);
             });
         }
+
+
 
         defineMenuActions();
     }
@@ -144,8 +141,6 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
             CaseStatusesList: removeLastComma(caseStatusesList)
         };
 
-        console.log('query')
-        console.log(query)
       
         return mainGridAPI.retrieveData(query);
     }
