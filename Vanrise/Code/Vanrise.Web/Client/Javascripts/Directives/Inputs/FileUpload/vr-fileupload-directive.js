@@ -11,6 +11,7 @@ app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', funct
             customvalidate: '&'
         },
         controller: function ($scope, $element, $attrs) {
+            var ctrl = this;
             var inputElement = $element.find('#mainInput');
             var validationOptions = {};
             if ($attrs.isrequired !== undefined)
@@ -19,22 +20,30 @@ app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', funct
                 validationOptions.customValidation = true;
             var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, $element.find('#rootDiv'));
             var filecontrol = $element.find('#fileUpload');
+
             var pathArray = location.href.split('/');
             var base = pathArray[0] + '//' + pathArray[2];
             $scope.num = 0;
             filecontrol.fileupload({
-                url: base + '/api/FileManager/UploadFile',
+                url: base + '/api/FileManager/UploadFile2',
                 formData: function (form) { return []; },
                 replaceFileInput: false,
                 datatype: 'json',
                 add: function (e, data) {
-                    $scope.ctrl.value = data.files[data.files.length - 1];
-                    console.log($scope.ctrl.value);
+                    
+                    var file = data.files[data.files.length - 1];
+                    ctrl.file = {
+                        name: file.name,
+                        type: file.type,
+                        size: file.size,
+                        lastModifiedDate: file.lastModifiedDate
+                    }
+                    
                     data.submit();
                 },
                 progress: function (e, data) {
                     $scope.$apply(function () {
-                        $scope.ctrl.num = data.loaded / data.total * 100;
+                        ctrl.num = data.loaded / data.total * 100;
                     });
                 },
                 change: function (e, data) {
@@ -42,13 +51,16 @@ app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', funct
                 drop: function (e, data) {
                 },
                 done: function (e, data) {
+                    
+                    ctrl.value = {
+                        fileId: data.result.fileId
+                    }
+
                 },
                 fail: function (e, data) {
                     //alert("Oups, une erreur  est survenue.");
                 }
             });
-
-            var ctrl = $scope.ctrl;
             $scope.$watch('ctrl.value', function () {
 
             });
@@ -56,6 +68,7 @@ app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', funct
             BaseDirService.addScopeValidationMethods(ctrl, elementName, this);
 
         },
+        controllerAs: 'ctrl',
         compile: function (element, attrs) {
 
             var inputElement = element.find('#mainInput');
@@ -94,12 +107,12 @@ app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', funct
                                 +'<i class="glyphicon glyphicon-plus " style="top:-1px"></i>'
                                 + '<input type="file" id="fileUpload">'
                             + '</span>'
-                            + '<div ng-if=" ctrl.value !=null " class="vr-file">'
-                               + ' <a class="vr-file-name">{{ctrl.value.name}}</a>'
+                            + '<div ng-if=" ctrl.file !=null " class="vr-file">'
+                               + ' <a class="vr-file-name">{{ctrl.file.name}}</a>'
                                + ' <div ng-show=" ctrl.num < 100" class="progress-bar progress-bar-success  progress-bar-striped active vr-file-process" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{width: ctrl.num + \'%\'}"></div>'
                                + ' <div ng-show=" ctrl.num == 100 " class="vr-file-process" style="font-size: 10px;top: 20px;"><span>Complete</span></div>'
                             + '</div>'
-                            + '<span ng-show="ctrl.value !=null" class="glyphicon glyphicon-remove hand-cursor vr-file-remove" aria-hidden="true" ng-click="ctrl.value = null"></span>'
+                            + '<span ng-show="ctrl.file !=null" class="glyphicon glyphicon-remove hand-cursor vr-file-remove" aria-hidden="true" ng-click="ctrl.value = null;ctrl.file = null"></span>'
                       + '</div>'
                     + '</div>';
 
