@@ -53,7 +53,6 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
                 fromDate: $scope.fromDate,
                 toDate: $scope.toDate
             }
-            console.log($scope.filter);
             if (($scope.bodyWidgets != null && $scope.bodyWidgets != undefined) || ($scope.summaryWidgets != null && $scope.summaryWidgets != undefined)) {
                return refreshData();
             }
