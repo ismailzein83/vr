@@ -123,7 +123,7 @@ namespace TOne.BusinessEntity.Data.SQL
         {
             string name = carrierName;
 
-            if (nameSuffix != null)
+            if (nameSuffix != "")
                 name += " (" + nameSuffix + ")";
 
             return name;

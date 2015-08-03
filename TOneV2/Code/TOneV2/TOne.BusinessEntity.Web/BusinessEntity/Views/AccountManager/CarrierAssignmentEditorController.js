@@ -114,6 +114,10 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
         return mappedCarriers;
     }
 
+    function getCarrierName(carrierName, nameSuffix) {
+        var name = carriername;
+    }
+
     function mapCarriersForAssignment() {
         var mappedCarriers = [];
 

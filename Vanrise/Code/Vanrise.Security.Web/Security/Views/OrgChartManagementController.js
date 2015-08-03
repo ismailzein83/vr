@@ -99,6 +99,7 @@ function OrgChartManagementController($scope, OrgChartAPIService, VRModalService
                     return OrgChartAPIService.DeleteOrgChart(orgChartObject.Id)
                         .then(function (deletionResponse) {
                             VRNotificationService.notifyOnItemDeleted("Org Chart", deletionResponse);
+                            return retrieveData();
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);

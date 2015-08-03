@@ -78,8 +78,9 @@ namespace Vanrise.Security.Business
 
             deleteOperationOutput.Result = DeleteOperationResult.Failed;
 
+            int? linkdOrgChartId = GetLinkedOrgChartId(new OrgChartLinkedEntityInstance());
             // make sure that the org chart isn't linked to an entity
-            if (GetLinkedOrgChartId(new OrgChartLinkedEntityInstance()) == null)
+            if (linkdOrgChartId == null || linkdOrgChartId != orgChartId)
             {
                 IOrgChartDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IOrgChartDataManager>();
                 bool updateActionSucc = dataManager.DeleteOrgChart(orgChartId);
