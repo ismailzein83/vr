@@ -37,12 +37,49 @@ namespace TOne.Web.Controllers{
 
                     return new HttpResponseMessage()
                     {
-                        Content = new StringContent("File uploaded.")
+                        Content = new StringContent("File uploaded: " + guid)
                     };
                 }
             );
             return task;
         }
 
+        [HttpPost]
+        public Task<FileUploadResult> UploadFile2()
+        {
+            HttpRequestMessage request = this.Request;
+            if (!request.Content.IsMimeMultipartContent())
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UnsupportedMediaType));
+            }
+
+            string root = HttpContext.Current.Server.MapPath("~/Upload");
+            if (!Directory.Exists(root))
+                Directory.CreateDirectory(root);
+            var provider = new MultipartFormDataStreamProvider(root);
+
+            var task = request.Content.ReadAsMultipartAsync(provider).
+                ContinueWith<FileUploadResult>(o =>
+                {
+                    FileInfo finfo = new FileInfo(provider.FileData.First().LocalFileName);
+
+                    string guid = Guid.NewGuid().ToString();
+
+                    File.Move(finfo.FullName, Path.Combine(root, guid + "_" + provider.FileData.First().Headers.ContentDisposition.FileName.Replace("\"", "")));
+
+                    return new FileUploadResult()
+                    {
+                        FileId = 22
+                    };
+                }
+            );
+            return task;
+        }
+
+    }
+
+    public class FileUploadResult
+    {
+        public long FileId { get; set; }
     }
 }
