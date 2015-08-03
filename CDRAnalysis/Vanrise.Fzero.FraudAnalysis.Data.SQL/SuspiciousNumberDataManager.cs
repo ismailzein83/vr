@@ -18,27 +18,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
-        public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(string tempTableKey, int fromRow, int toRow, DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList, List<int> caseStatusesList)
+        public BigResult<FraudResult> GetFilteredSuspiciousNumbers(Vanrise.Entities.DataRetrievalInput<FraudResultQuery> input)
         {
-
-            TempTableName tempTableName = null;
-            if (tempTableKey != null)
-                tempTableName = GetTempTableName(tempTableKey);
-            else
-                tempTableName = GenerateTempTableName();
-
-
-            BigResult<FraudResult> rslt = new BigResult<FraudResult>()
+            Action<string> createTempTableAction = (tempTableName) =>
             {
-                ResultKey = tempTableName.Key
+                ExecuteNonQuerySP("[FraudAnalysis].[sp_FraudResult_CreateTempForFilteredSuspiciousNumbers]", tempTableName, input.Query.FromDate, input.Query.ToDate, input.Query.StrategiesList, input.Query.SuspicionLevelsList, input.Query.CaseStatusesList);
             };
-
-
-            ExecuteNonQuerySP("[FraudAnalysis].[sp_FraudResult_CreateTempForFilteredSuspiciousNumbers]", tempTableName.TableName, fromDate, toDate, string.Join(",", strategiesList), string.Join(",", suspicionLevelsList), string.Join(",", caseStatusesList));
-            int totalDataCount;
-            rslt.Data = GetDataFromTempTable<FraudResult>(tempTableName.TableName, fromRow, toRow, "SubscriberNumber", false, FraudResultMapper, out totalDataCount);
-            rslt.TotalCount = totalDataCount;
-            return rslt.Data;
+            return RetrieveData(input, createTempTableAction, FraudResultMapper);
         }
 
         public FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList, string subscriberNumber)
@@ -142,5 +128,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         #endregion
 
+      
+
+        
     }
 }

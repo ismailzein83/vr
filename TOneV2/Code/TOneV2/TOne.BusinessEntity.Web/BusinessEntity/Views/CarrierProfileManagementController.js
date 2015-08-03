@@ -32,7 +32,8 @@ function CarrierProfileManagementController($scope, CarrierProfileAPIService, VR
             CompanyName: $scope.companyName,
             BillingEmail: $scope.billingEmail
         };
-        return gridApi.retrieveData(query);
+        var result = gridApi.retrieveData(query);
+        return result;
     }
 
     function defineMenuActions() {

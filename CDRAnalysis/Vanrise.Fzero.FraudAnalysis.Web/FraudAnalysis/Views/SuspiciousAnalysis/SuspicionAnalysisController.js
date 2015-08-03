@@ -60,21 +60,15 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
         $scope.fraudResults = [];
 
+
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
-            $scope.Guid = "t_FraudResult" + guid();
-            getData();
+            return retrieveData();
         };
-
-        $scope.loadMoreData = function () {
-            return getData();
+        $scope.searchClicked = function () {
+            return retrieveData();
         }
 
-        $scope.searchClicked = function () {
-            mainGridAPI.clearDataAndContinuePaging();
-            $scope.Guid = "t_FraudResult" + guid();
-            return getData();
-        };
 
         $scope.resetClicked = function () {
 
@@ -92,7 +86,68 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
             mainGridAPI.clearDataAndContinuePaging();
         };
 
+        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+            
+            return SuspicionAnalysisAPIService.GetFilteredSuspiciousNumbers(dataRetrievalInput).then(function (response) {
+                angular.forEach(response.Data, function (itm) {
+                    $scope.fraudResults.push(itm);
+                });
+            }).finally(function () {
+               
+                $scope.isGettingFraudResults = false;
+            });
+        }
+
         defineMenuActions();
+    }
+
+
+    function removeLastComma(strng) {
+        var n = strng.lastIndexOf(",");
+        var a = strng.substring(0, n)
+        return a;
+    }
+
+
+    function retrieveData() {
+
+        var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
+        var toDate = $scope.toDate != undefined ? $scope.toDate : '';
+
+        var suspicionLevelsList = '';
+
+        angular.forEach($scope.selectedSuspicionLevels, function (itm) {
+            suspicionLevelsList = suspicionLevelsList + itm.id + ','
+        });
+
+
+        var strategiesList = '';
+
+        angular.forEach($scope.selectedStrategies, function (itm) {
+            strategiesList = strategiesList + itm.id + ','
+        });
+
+
+        var caseStatusesList = '';
+
+        angular.forEach($scope.selectedStatus, function (itm) {
+            caseStatusesList = caseStatusesList + itm.id + ','
+        });
+
+
+
+        var query = {
+            FromDate: fromDate,
+            ToDate: toDate,
+            SuspicionLevelsList: removeLastComma(suspicionLevelsList),
+            StrategiesList: removeLastComma(strategiesList),
+            CaseStatusesList: removeLastComma(caseStatusesList)
+        };
+
+        console.log('query')
+        console.log(query)
+      
+        return mainGridAPI.retrieveData(query);
     }
 
     function load() {
@@ -153,55 +208,6 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
         };
         VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/SuspiciousAnalysis/SuspiciousNumberDetails.html", params, settings);
         
-    }
-
-    function guid() {
-        function _p8(s) {
-            var p = (Math.random().toString(16) + "000000000").substr(2, 8);
-            return s ? "_" + p.substr(0, 4) + "_" + p.substr(4, 4) : p;
-        }
-        return _p8() + _p8(true) + _p8(true) + _p8();
-    }
-
-    function getData() {
-
-        $scope.isGettingFraudResults = true;
-
-        var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
-        var toDate = $scope.toDate != undefined ? $scope.toDate : '';
-
-        var suspicionLevelsList = '';
-
-        angular.forEach($scope.selectedSuspicionLevels, function (itm) {
-            suspicionLevelsList = suspicionLevelsList + itm.id + ','
-        });
-
-
-        var strategiesList = '';
-
-        angular.forEach($scope.selectedStrategies, function (itm) {
-            strategiesList = strategiesList + itm.id + ','
-        });
-
-
-        var caseStatusesList = '';
-
-        angular.forEach($scope.selectedStatus, function (itm) {
-            caseStatusesList = caseStatusesList + itm.id + ','
-        });
-
-       
-
-        var pageInfo = mainGridAPI.getPageInfo();
-
-
-        return SuspicionAnalysisAPIService.GetFilteredSuspiciousNumbers($scope.Guid, pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, strategiesList.slice(0, -1), suspicionLevelsList.slice(0, -1), caseStatusesList.slice(0, -1)).then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.fraudResults.push(itm);
-            });
-        }).finally(function () {
-            $scope.isGettingFraudResults = false;
-        });
     }
 
 

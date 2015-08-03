@@ -14,12 +14,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         }
 
 
+
+
         public void UpdateSusbcriberCases(List<string> suspiciousNumbers)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(string tempTableKey, int fromRow, int toRow, DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList, List<int> caseStatusesList)
+        public Vanrise.Entities.BigResult<FraudResult> GetFilteredSuspiciousNumbers(Vanrise.Entities.DataRetrievalInput<FraudResultQuery> input)
         {
             throw new NotImplementedException();
         }
@@ -30,6 +32,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         }
 
         public void ApplySuspiciousNumbersToDB(object preparedSuspiciousNumbers)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<SubscriberThreshold> GetSubscriberThresholds(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn)
         {
             throw new NotImplementedException();
         }
@@ -45,11 +52,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         }
 
         public void WriteRecordToStream(SuspiciousNumber record, object dbApplyStream)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<SubscriberThreshold> GetSubscriberThresholds(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn)
         {
             throw new NotImplementedException();
         }

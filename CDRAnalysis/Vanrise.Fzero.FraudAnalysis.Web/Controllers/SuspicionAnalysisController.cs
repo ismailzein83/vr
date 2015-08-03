@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web.Http;
+using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Web.Base;
@@ -20,34 +22,15 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         }
 
 
-      
 
-       
-
-        [HttpGet]
-        public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(string tempTableKey, int fromRow, int toRow, DateTime fromDate, DateTime toDate, string strategiesList, string suspicionLevelsList, string caseStatusesList)
+        [HttpPost]
+        public object GetFilteredSuspiciousNumbers(Vanrise.Entities.DataRetrievalInput<FraudResultQuery> input)
         {
             FraudManager manager = new FraudManager();
-
-            List<int> strategiesIntList = new List<int>();
-            if (strategiesList!=null)
-                strategiesIntList =strategiesList.Split(',').Select(h => int.Parse(h)).ToList();
-
-
-
-            List<int> suspicionLevelsIntList = new List<int>();
-            if (suspicionLevelsList != null)
-                suspicionLevelsIntList = suspicionLevelsList.Split(',').Select(h => int.Parse(h)).ToList();
-
-
-            List<int> caseStatusesIntList = new List<int>();
-            if (caseStatusesList != null)
-                caseStatusesIntList = caseStatusesList.Split(',').Select(h => int.Parse(h)).ToList();
-
-
-
-            return manager.GetFilteredSuspiciousNumbers(tempTableKey, fromRow, toRow, fromDate, toDate, strategiesIntList, suspicionLevelsIntList, caseStatusesIntList);
+            return GetWebResponse(input, manager.GetFilteredSuspiciousNumbers(input));
         }
+
+
 
 
         [HttpGet]

@@ -22,19 +22,8 @@
 
 
 
-    function GetFilteredSuspiciousNumbers(tempTableKey, fromRow, toRow, fromDate, toDate, strategiesList, suspicionLevelsList, caseStatusesList) {
-        return BaseAPIService.get("/api/SuspicionAnalysis/GetFilteredSuspiciousNumbers",
-            {
-                tempTableKey: tempTableKey,
-                fromRow: fromRow,
-                toRow: toRow,
-                fromDate: fromDate,
-                toDate: toDate,
-                strategiesList: strategiesList,
-                suspicionLevelsList: suspicionLevelsList,
-                caseStatusesList: caseStatusesList
-            }
-           );
+    function GetFilteredSuspiciousNumbers(input) {
+        return BaseAPIService.post("/api/SuspicionAnalysis/GetFilteredSuspiciousNumbers", input);
     }
 
 
@@ -51,7 +40,7 @@
     }
 
 
-   
+
 
 
 

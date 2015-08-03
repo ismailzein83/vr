@@ -38,15 +38,16 @@
     <div vr-loader="isGettingFraudResults">
         <vr-row>
             <vr-columns colnum="12" simplecol>
-                <vr-datagrid datasource="fraudResults" menuactions="gridMenuActions" maxheight="400px" loadmoredata="loadMoreData" on-ready="onMainGridReady" idfield="SubscriberNumber">
-                    <vr-datagridcolumn headertext="'Last Occurance'" field="'LastOccurance'" type="'Datetime'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Subscriber Number'" field="'SubscriberNumber'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelName'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Occurances'" field="'NumberofOccurances'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Status'" field="'CaseStatus'"></vr-datagridcolumn>
-                </vr-datagrid>
-            </vr-columns>
+
+                <vr-datagrid datasource="fraudResults" dataretrievalfunction="dataRetrievalFunction" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady" menuactions="gridMenuActions" idfield="SubscriberNumber">
+                        <vr-datagridcolumn headertext="'Last Occurance'" field="'LastOccurance'" type="'Datetime'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Subscriber Number'" field="'SubscriberNumber'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelName'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Occurances'" field="'NumberofOccurances'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Status'" field="'CaseStatus'"></vr-datagridcolumn>
+                    </vr-datagrid>
+</vr-columns>
         </vr-row>
     </div>
 </vr-panel>
