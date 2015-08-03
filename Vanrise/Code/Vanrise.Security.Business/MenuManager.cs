@@ -50,11 +50,23 @@ namespace Vanrise.Security.Business
                     if(rootItem.Childs != null && rootItem.Childs.Count > 0)
                         retVal.Add(rootItem);
                 }
-            } 
-
-            return retVal;
+            }
+            List<MenuItem> test = SortedMenuItems(retVal);
+            return test;
         }
+        public List<MenuItem> SortedMenuItems(List<MenuItem> menuItems)
+        {
+           
+            if (menuItems==null || menuItems.Count == 0)
+                return menuItems;
+            menuItems = menuItems.OrderBy(m => m.Rank).ToList();
+             foreach (MenuItem menuItem in menuItems)
+                 if (menuItem.Childs != null && menuItem.Childs.Count!=0)
+                   menuItem.Childs = SortedMenuItems(menuItem.Childs);
+             return menuItems;
 
+           
+        }
         private List<View> GetViews()
         {
             IViewDataManager viewDataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();

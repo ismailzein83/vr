@@ -93,21 +93,21 @@
                     </div>
                     <div id="collapse-{{$index}}" class="panel-collapse collapse " ng-class="menuItemsCurrent.Id == item.Id ? 'in':'' ">
                         <div class="panel-body">
-                            <ul class="nav">
-                                <li ng-if="c.Childs == null " class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-class="c.isSelected?'selected-node':''" ng-repeat="c in item.Childs">
-                                    <a class="menulink " ng-class="c.isSelected?'selected-url':''" ng-href=" {{::c.Location}}">{{::c.Name}} </a>
-                                </li>
-
-                            </ul>
-                            <div ng-if="c.Childs.length > 0" ng-repeat="c in item.Childs" class="dll-parent-menu menu-item-list-ligth">
-                                <div class="menulink waves-effect waves-block" ng-class="menusubItemsCurrent.Id == c.Id  ? 'down selected-url ':''" ng-click="setIndexSub(c)">{{::c.Name}}</div>
-                                <ul style="padding-left:15px" class="nav" ng-show="menusubItemsCurrent.Id == c.Id">
-                                    <li ng-repeat="a in c.Childs" class="waves-effect waves-classic inner-list-item" ng-class="a.isSelected?'selected-node':''">
-                                        <a class="menulink" style="color:#333;" ng-class="a.isSelected?'selected-url':''" ng-href="{{::a.Location}}">{{::a.Name}}</a>
+                            <div ng-repeat="c in item.Childs">
+                                <ul class="nav">
+                                    <li ng-if="c.Childs == null " class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-class="c.isSelected?'selected-node':''">
+                                        <a class="menulink " ng-class="c.isSelected?'selected-url':''" ng-href=" {{::c.Location}}">{{::c.Name}} </a>
                                     </li>
                                 </ul>
+                                <div ng-if="c.Childs.length > 0" class="dll-parent-menu menu-item-list-ligth">
+                                    <div class="menulink waves-effect waves-block" ng-class="menusubItemsCurrent.Id == c.Id  ? 'down selected-url ':''" ng-click="setIndexSub(c)">{{::c.Name}}</div>
+                                    <ul style="padding-left:15px" class="nav" ng-show="menusubItemsCurrent.Id == c.Id">
+                                        <li ng-repeat="a in c.Childs" class="waves-effect waves-classic inner-list-item" ng-class="a.isSelected?'selected-node':''">
+                                            <a class="menulink" style="color:#333;" ng-class="a.isSelected?'selected-url':''" ng-href="{{::a.Location}}">{{::a.Name}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
-
 
                         </div>
                     </div>
