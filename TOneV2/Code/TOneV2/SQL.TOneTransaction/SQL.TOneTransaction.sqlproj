@@ -159,6 +159,7 @@
     <Build Include="queue\Stored Procedures\sp_QueueItemTypes_GetAll.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueInstance_GetByTypes.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_CreateTempForFiltered.sql" />
+    <Build Include="queue\Stored Procedures\sp_ExecutionFlow_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
