@@ -1,3 +1,2 @@
-﻿CREATE SCHEMA [BEntity]
-    AUTHORIZATION [development];
+﻿CREATE SCHEMA [BEntity];
 

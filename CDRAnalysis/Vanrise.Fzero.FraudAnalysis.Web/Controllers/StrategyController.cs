@@ -19,13 +19,15 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
             return manager.GetAllStrategies();
         }
 
-        [HttpGet]
-        public IEnumerable<Strategy> GetFilteredStrategies(int fromRow, int toRow,string name, string description)
+
+        [HttpPost]
+        public object GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyResultQuery> input)
         {
             StrategyManager manager = new StrategyManager();
-
-            return manager.GetFilteredStrategies(fromRow, toRow, name, description);
+            return GetWebResponse(input, manager.GetFilteredStrategies(input));
         }
+
+
 
         [HttpGet]
         public Strategy GetStrategy(int StrategyId)

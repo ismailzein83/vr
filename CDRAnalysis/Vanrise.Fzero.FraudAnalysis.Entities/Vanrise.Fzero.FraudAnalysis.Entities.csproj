@@ -59,6 +59,7 @@
     <Compile Include="AggregateDefinition.cs" />
     <Compile Include="Aggregates\AverageAggregate.cs" />
     <Compile Include="Batches\CDRBatch.cs" />
+    <Compile Include="ResultQuery\StrategyResultQuery.cs" />
     <Compile Include="SubscriberThreshold.cs" />
     <Compile Include="Predefined\Period.cs" />
     <Compile Include="Aggregates\Condition.cs" />
@@ -83,7 +84,7 @@
     <Compile Include="SubscriberCase.cs" />
     <Compile Include="SuspiciousNumber.cs" />
     <Compile Include="Batches\SuspiciousNumberBatch.cs" />
-    <Compile Include="FraudResultQuery.cs" />
+    <Compile Include="ResultQuery\FraudResultQuery.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

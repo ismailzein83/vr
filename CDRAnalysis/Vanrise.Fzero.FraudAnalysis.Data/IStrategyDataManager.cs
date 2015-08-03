@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data
@@ -10,7 +11,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         List<Strategy> GetAllStrategies();
 
-        List<Strategy> GetFilteredStrategies(int fromRow, int toRow, string name, string description);
+        BigResult<Strategy> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyResultQuery> input);
 
         bool AddStrategy(Strategy strategy, out int insertedId);
 

@@ -12,14 +12,8 @@
     });
 
 
-    function GetFilteredStrategies(fromRow, toRow, name, description) {
-        return BaseAPIService.get("/api/Strategy/GetFilteredStrategies",
-            {
-                fromRow: fromRow,
-                toRow: toRow,
-                name: name,
-                description: description
-            }
+    function GetFilteredStrategies(input) {
+        return BaseAPIService.post("/api/Strategy/GetFilteredStrategies", input
            );
     }
 

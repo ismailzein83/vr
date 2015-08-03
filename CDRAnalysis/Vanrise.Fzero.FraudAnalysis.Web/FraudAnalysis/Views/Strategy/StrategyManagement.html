@@ -28,7 +28,8 @@
     <div vr-loader="isGettingStrategies">
         <vr-row>
             <vr-columns colnum="12" simplecol>
-                <vr-datagrid datasource="strategies" menuactions="gridMenuActions" maxheight="400px" loadmoredata="loadMoreData" on-ready="onMainGridReady" idfield="Id">
+
+                <vr-datagrid datasource="strategies" dataretrievalfunction="dataRetrievalFunction" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady" menuactions="gridMenuActions" idfield="Id">
                     <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Is Default'" field="'IsDefaultText'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Description'" field="'Description'"></vr-datagridcolumn>
@@ -36,5 +37,5 @@
             </vr-columns>
         </vr-row>
     </div>
-    
+
 </vr-panel>

@@ -17,22 +17,27 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
 
         $scope.strategies = [];
 
-        $scope.onMainGridReady = function (api) {
-            mainGridAPI = api;
-            getData();
-        };
-
         $scope.loadMoreData = function () {
             return getData();
         }
 
-        $scope.searchClicked = function () {
-            mainGridAPI.clearDataAndContinuePaging();
-            return getData();
+        $scope.onMainGridReady = function (api) {
+            mainGridAPI = api;
+            return retrieveData();
         };
+        $scope.searchClicked = function () {
+            return retrieveData();
+        }
 
 
         $scope.addNewStrategy = addNewStrategy;
+
+        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+            return StrategyAPIService.GetFilteredStrategies(dataRetrievalInput)
+            .then(function (response) {
+                onResponseReady(response);
+            });
+        }
 
         defineMenuActions();
     }
@@ -48,24 +53,19 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
         }];
     }
 
-    function getData() {
-
-        $scope.isGettingStrategies = true;
+    function retrieveData() {
 
         var name = $scope.name != undefined ? $scope.name : '';
         var description = $scope.description != undefined ? $scope.description : '';
-        var pageInfo = mainGridAPI.getPageInfo();
 
-        return StrategyAPIService.GetFilteredStrategies(pageInfo.fromRow, pageInfo.toRow, name, description).then(function (response) {
-            angular.forEach(response, function (itm) {
+        var query = {
+            Name: name,
+            Description: description
+        };
 
-                itm.IsDefaultText = itm.IsDefault ? "Default" : "Not Default";
-                $scope.strategies.push(itm);
-            });
-        }).finally(function () {
-            $scope.isGettingStrategies = false;
-        });
+        return mainGridAPI.retrieveData(query);
     }
+
 
     function addNewStrategy() {
         var settings = {};

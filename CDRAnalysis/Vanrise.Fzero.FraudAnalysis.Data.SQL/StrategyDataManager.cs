@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Vanrise.Data.SQL;
+using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
@@ -28,10 +29,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return GetItemsSP("FraudAnalysis.sp_Strategy_GetAll", StrategyMapper);
         }
 
-        public List<Strategy> GetFilteredStrategies(int fromRow, int toRow, string name, string description)
+        public BigResult<Strategy> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyResultQuery> input)
         {
-            return GetItemsSP("FraudAnalysis.sp_Strategy_GetFilteredStrategies", StrategyMapper, fromRow, toRow, name, description);
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_CreateTempForFilteredStrategies", tempTableName, input.Query.Name, input.Query.Description);
+            };
+            return RetrieveData(input, createTempTableAction, StrategyMapper);
         }
+
 
         public bool AddStrategy(Strategy strategyObject, out int insertedId)
         {

@@ -26,10 +26,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             throw new NotImplementedException();
         }
 
-        public List<Strategy> GetFilteredStrategies(int fromRow, int toRow, string name, string description)
-        {
-            throw new NotImplementedException();
-        }
 
         public bool AddStrategy(Strategy strategy, out int insertedId)
         {
@@ -50,8 +46,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         {
             throw new NotImplementedException();
         }
-       
 
-       
+
+
+
+
+        public Vanrise.Entities.BigResult<Strategy> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyResultQuery> input)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
