@@ -42,7 +42,7 @@
                     <div vr-loader="isGettingCasesSummary">
                         <vr-row>
                             <vr-columns colnum="12" simplecol>
-                                <vr-datagrid datasource="casesSummary" maxheight="200px"  on-ready="onMainGridReady_CasesSummary">
+                                <vr-datagrid datasource="casesSummary" dataretrievalfunction="dataRetrievalFunction_CaseSummary" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady_CasesSummary">
                                     <vr-datagridcolumn headertext="'Status'" field="'StatusName'"></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'Count Cases'" field="'CountCases'"></vr-datagridcolumn>
                                 </vr-datagrid>
@@ -52,14 +52,14 @@
                 </vr-section>
             </vr-columns>
 
-            
+
 
             <vr-columns colnum="3">
                 <vr-section title="Top 10 BTS">
-                    <div vr-loader="isGettingBTSCases" >
+                    <div vr-loader="isGettingBTSCases">
                         <vr-row>
                             <vr-columns colnum="12" simplecol>
-                                <vr-datagrid datasource="bTSCases" maxheight="200px" on-ready="onMainGridReady_BTSCases">
+                                <vr-datagrid datasource="bTSCases" dataretrievalfunction="dataRetrievalFunction_BTSCases" maxheight="200px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady_BTSCases">
                                     <vr-datagridcolumn headertext="'BTS Id'" field="'BTS_Id'"></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'Count Cases'" field="'CountCases'"></vr-datagridcolumn>
                                 </vr-datagrid>
@@ -74,7 +74,7 @@
                     <div vr-loader="isGettingCellCases">
                         <vr-row>
                             <vr-columns colnum="12" simplecol>
-                                <vr-datagrid datasource="cellCases" maxheight="200px"  on-ready="onMainGridReady_CellCases">
+                                <vr-datagrid datasource="cellCases" dataretrievalfunction="dataRetrievalFunction_CellCases" maxheight="200px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady_CellCases" >
                                     <vr-datagridcolumn headertext="'Cell Id'" field="'Cell_Id'"></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'Count Cases'" field="'CountCases'"></vr-datagridcolumn>
                                 </vr-datagrid>
@@ -88,9 +88,9 @@
 
     </vr-form>
 
-    
 
-    
+
+
 
 
 

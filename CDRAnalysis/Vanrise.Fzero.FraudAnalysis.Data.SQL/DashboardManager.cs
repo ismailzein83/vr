@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Vanrise.Data.SQL;
+using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
@@ -15,12 +16,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
 
         }
-
-        public List<CasesSummary> GetCasesSummary(DateTime fromDate, DateTime toDate)
-        {
-            return GetItemsSP("FraudAnalysis.sp_Dashboard_GetCasesSummary", CasesSummaryMapper, fromDate, toDate);
-        }
-
+               
 
         public List<StrategyCases> GetStrategyCases(DateTime fromDate, DateTime toDate)
         {
@@ -28,15 +24,38 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
-        public List<BTSCases> GetBTSCases(DateTime fromDate, DateTime toDate)
+        public BigResult<CasesSummary> GetCasesSummary(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
         {
-            return GetItemsSP("FraudAnalysis.sp_Dashboard_GetTopTenBTS", BTSCasesMapper, fromDate, toDate);
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("FraudAnalysis.sp_Dashboard_CreateTempForCasesSummary", tempTableName, input.Query.FromDate, input.Query.ToDate);
+            };
+            return RetrieveData(input, createTempTableAction, CasesSummaryMapper);
+            //return GetItemsSP("FraudAnalysis.sp_Dashboard_GetCasesSummary", CasesSummaryMapper, fromDate, toDate);
+        }
+
+               
+
+
+        public BigResult<BTSCases> GetBTSCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
+        {
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("FraudAnalysis.sp_Dashboard_CreateTempForTopTenBTS", tempTableName, input.Query.FromDate, input.Query.ToDate);
+            };
+            return RetrieveData(input, createTempTableAction, BTSCasesMapper);
+            //return GetItemsSP("FraudAnalysis.sp_Dashboard_GetTopTenBTS", BTSCasesMapper, fromDate, toDate);
         }
 
 
-        public List<CellCases> GetCellCases(DateTime fromDate, DateTime toDate)
+        public BigResult<CellCases> GetCellCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
         {
-            return GetItemsSP("FraudAnalysis.sp_Dashboard_GetTopTenCell", CellCasesMapper, fromDate, toDate);
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("FraudAnalysis.sp_Dashboard_CreateTempForTopTenCell", tempTableName, input.Query.FromDate, input.Query.ToDate);
+            };
+            return RetrieveData(input, createTempTableAction, CellCasesMapper);
+            //return GetItemsSP("FraudAnalysis.sp_Dashboard_GetTopTenCell", CellCasesMapper, fromDate, toDate);
         }
 
 

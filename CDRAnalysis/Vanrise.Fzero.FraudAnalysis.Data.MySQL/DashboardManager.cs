@@ -13,25 +13,22 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
-
-
-
-        public System.Collections.Generic.List<CasesSummary> GetCasesSummary(DateTime fromDate, DateTime toDate)
-        {
-            throw new NotImplementedException();
-        }
-
         public System.Collections.Generic.List<StrategyCases> GetStrategyCases(DateTime fromDate, DateTime toDate)
         {
             throw new NotImplementedException();
         }
 
-        public System.Collections.Generic.List<BTSCases> GetBTSCases(DateTime fromDate, DateTime toDate)
+        public Vanrise.Entities.BigResult<CasesSummary> GetCasesSummary(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
         {
             throw new NotImplementedException();
         }
 
-        public System.Collections.Generic.List<CellCases> GetCellCases(DateTime fromDate, DateTime toDate)
+        public Vanrise.Entities.BigResult<BTSCases> GetBTSCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Vanrise.Entities.BigResult<CellCases> GetCellCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
         {
             throw new NotImplementedException();
         }

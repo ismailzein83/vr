@@ -8,12 +8,9 @@
     });
 
 
-    function GetCasesSummary(fromDate, toDate) {
-        return BaseAPIService.get("/api/Dashboard/GetCasesSummary",
-            {
-                fromDate: fromDate,
-                toDate: toDate
-            }
+    function GetCasesSummary(input) {
+        return BaseAPIService.post("/api/Dashboard/GetCasesSummary",
+            input
            );
     }
 
@@ -26,21 +23,15 @@
            );
     }
 
-    function GetBTSCases(fromDate, toDate) {
-        return BaseAPIService.get("/api/Dashboard/GetBTSCases",
-            {
-                fromDate: fromDate,
-                toDate: toDate
-            }
+    function GetBTSCases(input) {
+        return BaseAPIService.post("/api/Dashboard/GetBTSCases",
+            input
            );
     }
 
-    function GetCellCases(fromDate, toDate) {
-        return BaseAPIService.get("/api/Dashboard/GetCellCases",
-            {
-                fromDate: fromDate,
-                toDate: toDate
-            }
+    function GetCellCases(input) {
+        return BaseAPIService.post("/api/Dashboard/GetCellCases",
+            input
            );
     }
 

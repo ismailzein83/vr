@@ -54,48 +54,59 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
         $scope.cellCases = [];
 
 
+
+
         $scope.onMainGridReady_CasesSummary = function (api) {
             mainGridAPI_CasesSummary = api;
-            getData_CasesSummary();
+            return retrieveData_CasesSummary();
         };
-
-       
-
-       
 
         $scope.onMainGridReady_BTSCases = function (api) {
             mainGridAPI_BTSCases = api;
-            getData_BTSCases();
+            return retrieveData_getData_BTSCases();
         };
 
-       
+
 
         $scope.onMainGridReady_CellCases = function (api) {
             mainGridAPI_CellCases = api;
-            getData_CellCases();
+            return retrieveData_CellCases();
         };
 
         $scope.chartSelectedMeasureReady = function (api) {
             chartSelectedMeasureAPI = api;
             getData_StrategyCases();
         };
-       
+
 
         $scope.searchClicked = function () {
-            mainGridAPI_CasesSummary.clearDataAndContinuePaging();
-            mainGridAPI_BTSCases.clearDataAndContinuePaging();
-            mainGridAPI_CellCases.clearDataAndContinuePaging();
-
-            getData_CasesSummary();
-            getData_StrategyCases();
-            getData_BTSCases();
-            getData_CellCases();
-
-            //return true;
+            var results = (retrieveData_CasesSummary() && getData_StrategyCases() && retrieveData_CellCases());
+            return results;
         };
 
+        $scope.dataRetrievalFunction_CaseSummary = function (dataRetrievalInput, onResponseReady) {
+            return DashboardAPIService.GetCasesSummary(dataRetrievalInput)
+            .then(function (response) {
+                onResponseReady(response);
+            });
+        }
 
-       
+
+        $scope.dataRetrievalFunction_BTSCases = function (dataRetrievalInput, onResponseReady) {
+            return DashboardAPIService.GetBTSCases(dataRetrievalInput)
+            .then(function (response) {
+                onResponseReady(response);
+            });
+        }
+
+
+        $scope.dataRetrievalFunction_CellCases = function (dataRetrievalInput, onResponseReady) {
+            return DashboardAPIService.GetCellCases(dataRetrievalInput)
+            .then(function (response) {
+                onResponseReady(response);
+            });
+        }
+
 
 
     }
@@ -104,23 +115,35 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
 
     }
 
-    
 
-    function getData_CasesSummary() {
-
-        $scope.isGettingCasesSummary = true;
-
+    function BuildSearchQuery()
+    {
         var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
         var toDate = $scope.toDate != undefined ? $scope.toDate : '';
 
-        return DashboardAPIService.GetCasesSummary(fromDate, toDate).then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.casesSummary.push(itm);
-            });
-        }).finally(function () {
-            $scope.isGettingCasesSummary = false;
-        });
+        var query = {
+            FromDate: fromDate,
+            ToDate: toDate
+        };
+
+        return query;
     }
+
+    function retrieveData_CasesSummary() {
+        return mainGridAPI_CasesSummary.retrieveData(BuildSearchQuery());
+    }
+
+
+    function retrieveData_BTSCases() {
+        return mainGridAPI_BTSCases.retrieveData(BuildSearchQuery());
+    }
+
+    function retrieveData_CellCases() {
+        return mainGridAPI_CellCases.retrieveData(BuildSearchQuery());
+    }
+
+
+
 
     function getData_StrategyCases() {
         if (!chartSelectedMeasureAPI)
@@ -155,39 +178,5 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
         });
     }
 
-   
-
-
-    function getData_BTSCases() {
-        $scope.isGettingBTSCases = true;
-
-        var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
-        var toDate = $scope.toDate != undefined ? $scope.toDate : '';
-
-        return DashboardAPIService.GetBTSCases(fromDate, toDate).then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.bTSCases.push(itm);
-            });
-        }).finally(function () {
-            $scope.isGettingBTSCases = false;
-        });
-    }
-
-
-    function getData_CellCases() {
-
-        $scope.isGettingCellCases = true;
-
-        var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
-        var toDate = $scope.toDate != undefined ? $scope.toDate : '';
-
-        return DashboardAPIService.GetCellCases(fromDate, toDate).then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.cellCases.push(itm);
-            });
-        }).finally(function () {
-            $scope.isGettingCellCases = false;
-        });
-    }
 }
 appControllers.controller('FraudAnalysis_DashboardController', DashboardController);

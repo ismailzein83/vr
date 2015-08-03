@@ -9,12 +9,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
     public class DashboardManager
     {
 
-        public IEnumerable<CasesSummary> GetCasesSummary(DateTime fromDate, DateTime toDate)
-        {
-            IDashboardManager manager = FraudDataManagerFactory.GetDataManager<IDashboardManager>();
-            return manager.GetCasesSummary(fromDate, toDate);
-        }
-
 
         public IEnumerable<StrategyCases> GetStrategyCases(DateTime fromDate, DateTime toDate)
         {
@@ -23,17 +17,23 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         }
 
 
-        public IEnumerable<BTSCases> GetBTSCases(DateTime fromDate, DateTime toDate)
+        public Vanrise.Entities.IDataRetrievalResult<CasesSummary> GetCasesSummary(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
         {
             IDashboardManager manager = FraudDataManagerFactory.GetDataManager<IDashboardManager>();
-            return manager.GetBTSCases(fromDate, toDate);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, manager.GetCasesSummary(input));
+        }
+
+        public Vanrise.Entities.IDataRetrievalResult<BTSCases> GetBTSCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
+        {
+            IDashboardManager manager = FraudDataManagerFactory.GetDataManager<IDashboardManager>();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, manager.GetBTSCases(input));
         }
 
 
-        public IEnumerable<CellCases> GetCellCases(DateTime fromDate, DateTime toDate)
+        public Vanrise.Entities.IDataRetrievalResult<CellCases> GetCellCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
         {
             IDashboardManager manager = FraudDataManagerFactory.GetDataManager<IDashboardManager>();
-            return manager.GetCellCases(fromDate, toDate);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, manager.GetCellCases(input));
         }
 
 

@@ -12,33 +12,32 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
     {
 
         [HttpGet]
-        public IEnumerable<CasesSummary> GetCasesSummary(DateTime fromDate, DateTime toDate)
-        {
-            DashboardManager manager = new DashboardManager();
-            return manager.GetCasesSummary(fromDate, toDate);
-        }
-
-        [HttpGet]
         public IEnumerable<StrategyCases> GetStrategyCases(DateTime fromDate, DateTime toDate)
         {
             DashboardManager manager = new DashboardManager();
             return manager.GetStrategyCases(fromDate, toDate);
         }
 
-        [HttpGet]
-        public IEnumerable<BTSCases> GetBTSCases(DateTime fromDate, DateTime toDate)
+        [HttpPost]
+        public object GetCasesSummary(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
         {
             DashboardManager manager = new DashboardManager();
-            return manager.GetBTSCases(fromDate, toDate);
+            return GetWebResponse(input, manager.GetCasesSummary(input));
         }
 
-        [HttpGet]
-        public IEnumerable<CellCases> GetCellCases(DateTime fromDate, DateTime toDate)
+        [HttpPost]
+        public object GetBTSCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
         {
             DashboardManager manager = new DashboardManager();
-            return manager.GetCellCases(fromDate, toDate);
+            return GetWebResponse(input, manager.GetBTSCases(input));
         }
 
+        [HttpPost]
+        public object GetCellCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
+        {
+            DashboardManager manager = new DashboardManager();
+            return GetWebResponse(input, manager.GetCellCases(input));
+        }
 
 
     }
