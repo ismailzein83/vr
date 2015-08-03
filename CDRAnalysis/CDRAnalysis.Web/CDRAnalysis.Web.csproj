@@ -191,6 +191,13 @@
     <Reference Include="Vanrise.Logging.SQL">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Queueing.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Data.SQL">
+      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Data.SQL.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Runtime.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Runtime.Business.dll</HintPath>
