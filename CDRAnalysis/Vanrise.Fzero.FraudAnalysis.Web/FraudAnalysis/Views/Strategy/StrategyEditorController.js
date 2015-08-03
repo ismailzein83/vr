@@ -336,9 +336,10 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
     function loadFilters() {
+        var index = 0;
         return StrategyAPIService.GetFilters().then(function (response) {
             angular.forEach(response, function (itm) {
-                $scope.filterDefinitions.push({ filterId: itm.FilterId, description: itm.Description });
+                $scope.filterDefinitions.push({ filterId: ++index, description: itm });
             });
         });
     }
