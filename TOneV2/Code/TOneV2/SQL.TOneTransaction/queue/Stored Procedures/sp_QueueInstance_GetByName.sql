@@ -8,6 +8,7 @@ BEGIN
 		
 	SELECT q.[ID]
       ,q.[Name]
+      ,q.StageName
       ,q.ExecutionFlowID
       ,q.[Title]
       ,q.Status
