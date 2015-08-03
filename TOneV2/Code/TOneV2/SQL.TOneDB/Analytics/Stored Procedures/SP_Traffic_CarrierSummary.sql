@@ -218,7 +218,9 @@ Billing AS
 	, Final AS
 	(	
 	SELECT
+		 R.SupplierID AS SupplierID,
 		 P.ProfileID AS ProfileID,
+		 C.NameSuffix,
 		 P.Name AS ProfileName,
 		 SUM(R.Attempts) AS Attempts,
 		 Sum(R.SuccessfulAttempts) as SuccessfulAttempts,
@@ -237,7 +239,7 @@ Billing AS
 	FROM
 		Results R LEFT JOIN CarrierAccount C ON R.SupplierID = C.CarrierAccountID
 		LEFT JOIN CarrierProfile P ON C.ProfileID = P.ProfileID
-	GROUP BY P.ProfileID, P.Name
+	GROUP BY P.ProfileID, P.Name, R.SupplierID, C.NameSuffix
 	
 	), FinalResult AS (
 	
@@ -406,7 +408,9 @@ Billing AS
 , Final AS
 (
 	SELECT
+		 R.CustomerID AS CustomerID,
 		 P.ProfileID AS ProfileID,
+		 C.NameSuffix,
 		 P.Name AS ProfileName,
 		 SUM(R.Attempts) AS Attempts,
 		 Sum(R.SuccessfulAttempts) as SuccessfulAttempts,
@@ -425,7 +429,7 @@ Billing AS
 	FROM
 		Results R LEFT JOIN CarrierAccount C ON R.CustomerID = C.CarrierAccountID
 		LEFT JOIN CarrierProfile P ON C.ProfileID = P.ProfileID
-	GROUP BY P.ProfileID, P.Name
+	GROUP BY P.ProfileID, P.Name, R.CustomerID, C.NameSuffix
 	
 	), FinalResult AS (
 		SELECT *, ROW_NUMBER() OVER (ORDER BY DurationsInMinutes DESC) AS rownIndex

@@ -1,0 +1,26 @@
+﻿CREATE TABLE [dbo].[PurchaseRateTable] (
+    [Id]                 INT             NOT NULL,
+    [PriceListId]        INT             NULL,
+    [ZoneId]             INT             NULL,
+    [NormalRate]         NUMERIC (23, 5) NULL,
+    [DiscountRate]       NUMERIC (23, 5) NULL,
+    [WeekEndRate]        NUMERIC (23, 5) NULL,
+    [CurrencyId]         INT             NULL,
+    [Commission]         NUMERIC (18, 2) NULL,
+    [FractionUnit]       INT             NULL,
+    [BeginEffectiveDate] DATETIME        NULL,
+    [EndEffectiveDate]   DATETIME        NULL,
+    [ClosingId]          INT             NULL,
+    [FirstPeriod]        INT             NULL,
+    [RepeatFirstPeriod]  TINYINT         NULL,
+    [DateStamp]          DATETIME        NULL,
+    [Blocked]            TINYINT         NULL,
+    [OutCarrierId]       INT             NULL,
+    [PendingChanges]     TINYINT         NULL,
+    [UpdateId]           INT             NULL,
+    [oldid]              INT             NULL,
+    [Status]             TINYINT         NULL,
+    [OldStatus]          TINYINT         NULL,
+    [Processed]          TINYINT         NULL
+);
+

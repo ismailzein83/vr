@@ -4,6 +4,8 @@ CREATE PROCEDURE [Analytics].[sp_Rates_GetRates]
 	@CarrierType VARCHAR(10),
 	@EffectiveOn DATETIME,
 	@CodeGroup NVARCHAR(MAX) =NULL,
+	@Code VARCHAR(20) = NULL,
+	@Zone NVARCHAR(255) = NULL,
 	@Carrier VARCHAR(10),
 	@From INT = 1,
 	@To INT = 10
@@ -58,7 +60,10 @@ BEGIN
                      (c.EndEffectiveDate IS NULL OR c.EndEffectiveDate >@EffectiveON)
    
                SELECT r.*,ROW_NUMBER() OVER ( ORDER BY ZoneNAme ) AS RowNumber INTO #result2  FROM #result1 r WHERE 1=1    
-                AND (@CodeGroup IS NULL OR CodeGroup IN (SELECT ParsedString FROM dbo.ParseStringList(@CodeGroup))) AND  RN=1  
+                AND (@CodeGroup IS NULL OR CodeGroup IN (SELECT ParsedString FROM dbo.ParseStringList(@CodeGroup))) 
+                AND (@Code IS NULL OR Code LIKE ''+@Code+'%')
+                AND (@Zone IS NULL OR ZoneName LIKE '%'+@Zone+'%')
+                AND  RN=1  
                --SELECT COUNT(1) FROM #result2 WHERE 1=1   
                SELECT * from #result2 WHERE RowNumber between @FROM and @TO ORDER BY RowNumber
 	
@@ -113,7 +118,10 @@ BEGIN
                      (c.EndEffectiveDate IS NULL OR c.EndEffectiveDate >@EffectiveON)
    
                SELECT r.*,ROW_NUMBER() OVER ( ORDER BY ZoneNAme ) AS RowNumber INTO #result21  FROM #result11 r WHERE 1=1    
-                 AND (@CodeGroup IS NULL OR CodeGroup IN (SELECT ParsedString FROM dbo.ParseStringList(@CodeGroup)))  AND  RN=1  
+                 AND (@CodeGroup IS NULL OR CodeGroup IN (SELECT ParsedString FROM dbo.ParseStringList(@CodeGroup)))  
+                 AND (@Code IS NULL OR Code LIKE ''+@Code+'%')
+                 AND (@Zone IS NULL OR ZoneName LIKE '%'+@Zone+'%')
+                 AND  RN=1  
                --SELECT COUNT(1) FROM #result21 WHERE 1=1   
                
                SELECT	t.*

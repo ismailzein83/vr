@@ -62,8 +62,17 @@ BEGIN
 					CONVERT(DECIMAL(10,2),SUM(DurationsInSeconds) / 60.0) as DurationsInMinutes,
 					CASE WHEN ''' + ISNULL(@SupplierID,'') + ' '' = '''' then (case when Sum(NumberOfCalls) > 0 then CONVERT(DECIMAL(10,2),Sum(SuccessfulAttempts)*100.0 / Sum(NumberOfCalls)) ELSE 0 end ) else (case when Sum(S.Attempts) > 0 then CONVERT(DECIMAL(10,2),Sum(SuccessfulAttempts)*100.0 / Sum(S.Attempts)) ELSE 0 end ) end as ASR,
 					Sum(SuccessfulAttempts)as SuccessfulAttempt,
-					case when Sum(SuccessfulAttempts) > 0 then CONVERT(DECIMAL(10,2),Sum(DurationsInSeconds/60.)/Sum(SuccessfulAttempts)) else 0 end as ACD,
-					CASE WHEN ''' + ISNULL(@SupplierID,'') + ' '' = '''' then ( case when Sum(NumberOfCalls) > 0 then CONVERT(DECIMAL(10,2),Sum(deliveredAttempts) * 100.0 / SUM(NumberOfCalls)) ELSE 0 end ) else ( case when Sum(S.Attempts) > 0 then CONVERT(DECIMAL(10,2),Sum(deliveredAttempts) * 100.0 / SUM(S.Attempts)) else 0 end ) end as DeliveredASR,
+					case when Sum(SuccessfulAttempts) > 0 then CONVERT(DECIMAL(10,2),Sum(DurationsInSeconds/60.)/Sum(SuccessfulAttempts)) else 0 end as ACD,'+
+					
+					
+					
+				--	CASE WHEN ''' + ISNULL(@SupplierID,'') + ' '' = '''' then ( case when Sum(NumberOfCalls) > 0 then CONVERT(DECIMAL(10,2),Sum(deliveredAttempts) * 100.0 / SUM(NumberOfCalls)) ELSE 0 end ) else ( case when Sum(S.Attempts) > 0 then CONVERT(DECIMAL(10,2),Sum(deliveredAttempts) * 100.0 / SUM(S.NumberOfCalls)) else 0 end ) end as DeliveredASR,
+					
+					
+					+'CASE WHEN 
+                        (Sum(Attempts)) > 0 then CONVERT(DECIMAL(10,2),Sum(deliveredAttempts)*100.00 / sum(Attempts))
+                             when (Sum(NumberOfCalls)-isnull(sum(ReleaseSourceS),0)) > 0  then CONVERT(DECIMAL(10,2),Sum(DeliveredNumberOfCalls)*100.0 /  (Sum(NumberOfCalls)-isnull(sum(ReleaseSourceS),0)))
+                        ELSE 0  END as DeliveredASR,
 				    CONVERT(DECIMAL(10,2),Avg(PDDinSeconds)) as AveragePDD
 				    INTO #RESULT 
 					FROM TrafficStats S WITH(NOLOCK,INDEX(IX_TrafficStats_DateTimeFirst))
@@ -78,8 +87,8 @@ BEGIN
 					WHERE 
 						(
 							FirstCDRAttempt BETWEEN '''+@FromDateStr+''' AND '''+@ToDateStr+'''
-						)
-						and(('''+@SwitchID+ '''=''''  AND CustomerID IS NOT NULL AND CA.RepresentsASwitch=''' + 'N' + ''' )   OR S.SwitchID ='''+@SwitchID +''')'
+						)'
+					--  AND CA.RepresentsASwitch=''' + 'N' + '''   '
 	
 	IF @CodeGroup IS NOT NULL
 	BEGIN
@@ -128,11 +137,11 @@ BEGIN
 		set @sql =@sql + ','''' as CodeGroupName '
 	IF @OrderTarget = 'Quantity'
 		BEGIN	
-			set @sql =  @sql + ' into ' + @tempTableName + ' from #RESULT R order by DurationsInMinutes desc'
+			set @sql =  @sql + ' into ' + @tempTableName + ' from #RESULT R order by attempts ' + @sortOrder + ' , DurationsInMinutes desc'
 		END
 	ELSE
 		BEGIN
-			set @sql =  @sql + ' into ' + @tempTableName + ' from #RESULT R order by ASR desc'
+			set @sql =  @sql + ' into ' + @tempTableName + ' from #RESULT R WHERE  ATTEMPTS>1000 order by  DeliveredASR  ' + @sortOrder +',ACD DESC '
 		END
 	END 
 	
@@ -144,6 +153,6 @@ BEGIN
 	if(@TopRecord IS NULL)
 		set @Sql = @Sql + ' select * from final WHERE rowNumber  between '+CAST( @From AS varchar) +' AND '+CAST( @To as varchar)	
 	ELSE
-		set @Sql = @Sql + ' select top ' + CAST( @TopRecord as varchar) + '* from final WHERE rowNumber  between '+CAST( @From AS varchar) +' AND '+CAST( @To as varchar) + 'Order by DurationsInMinutes ' + @sortOrder
+		set @Sql = @Sql + ' select top ' + CAST( @TopRecord as varchar) + '* from final WHERE rowNumber  between '+CAST( @From AS varchar) +' AND '+CAST( @To as varchar)-- + 'Order by Attempts ' + @sortOrder
 	PRINT @Sql		 
 	execute sp_executesql @Sql

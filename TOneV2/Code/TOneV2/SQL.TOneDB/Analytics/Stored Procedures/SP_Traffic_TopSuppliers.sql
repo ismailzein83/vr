@@ -27,11 +27,12 @@ SET @ToDateTime=DATEADD(dd,1,@todatetime)
 			Sum(TS.NumberOfCalls) as Attempts,
 			Sum(TS.DurationsInSeconds/60.) as DurationsInMinutes     
 		FROM TrafficStats TS WITH(NOLOCK)
-		JOIN CarrierAccount AS CA WITH (NOLOCK) ON TS.CustomerID = CA.CarrierAccountID
+		JOIN CarrierAccount AS CA WITH (NOLOCK) ON TS.supplierid = CA.CarrierAccountID
 		JOIN CarrierProfile AS CP ON CA.ProfileID = CP.ProfileID
      WHERE 
 				SupplierID IS NOT NULL AND
 				FirstCDRAttempt BETWEEN @FromDateTime AND @ToDateTime
+				AND CA.RepresentsASwitch = 'N' 
 			Group By SupplierID, CA.NameSuffix, CP.Name
 			ORDER BY Sum(DurationsInSeconds/60.) DESC
 			

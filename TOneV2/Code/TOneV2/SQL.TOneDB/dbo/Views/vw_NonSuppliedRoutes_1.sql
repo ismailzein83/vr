@@ -1,0 +1,3 @@
+﻿CREATE VIEW [dbo].[vw_NonSuppliedRoutes]
+AS
+	SELECT TOP 100 PERCENT * FROM Route R WHERE NOT EXISTS(SELECT * FROM RouteOption O WHERE O.RouteID=R.RouteID) ORDER BY R.CustomerID

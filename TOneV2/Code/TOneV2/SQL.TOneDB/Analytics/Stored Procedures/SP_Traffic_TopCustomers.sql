@@ -38,6 +38,7 @@ SET @ToDateTime=DATEADD(dd,1,@ToDateTime)
      WHERE 
 				CustomerID IS NOT NULL AND
 				FirstCDRAttempt BETWEEN @FromDateTime AND @ToDateTime
+				AND CA.RepresentsASwitch = 'N'
 			Group By CustomerID, CA.NameSuffix, CP.Name
 			ORDER BY Sum(DurationsInSeconds/60.) DESC
 			

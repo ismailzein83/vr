@@ -32,10 +32,10 @@ BEGIN
 					  ,(Row_Number() OVER (ORDER BY [Created] DESC)) AS RowNumber
 			 FROM Alert A WITH(NOLOCK,index = IX_Alert_Date) 
 			 WHERE 1=1
-			 AND (@ShowHiddenAlerts IS NULL OR A.IsVisible= 'Y')
+			 AND ( A.IsVisible = case when @ShowHiddenAlerts= 'Y' then 'N' else 'Y' end)
 			 AND (@AlertLevel IS NULL OR A.[Level] = @AlertLevel)
 			 AND (@TAG IS NULL OR A.Tag = @TAG)
-			 AND (A.[Source] LIKE CASE WHEN(@Source IS NULL) THEN ':%' ELSE '%' + @Source + '%' END)
+			 AND (A.[Source] LIKE CASE WHEN(@Source IS NULL) THEN '%:%' ELSE '%' + @Source + '%' END)
 			 AND (@UserID IS NULL OR A.[Source] IN (SELECT ID FROM Criteria))
 		)
 					
@@ -63,7 +63,7 @@ BEGIN
 					  ,(Row_Number() OVER (ORDER BY [Created] DESC)) AS RowNumber
 			 FROM Alert A WITH(NOLOCK,index = IX_Alert_Date) 
 			 WHERE 1=1
-			 AND (@ShowHiddenAlerts IS NULL OR A.IsVisible= 'Y')
+			 AND ( A.IsVisible = case when @ShowHiddenAlerts= 'Y' then 'N' else 'Y' end)
 			 AND (@AlertLevel IS NULL OR A.[Level] = @AlertLevel)
 			 AND (@TAG IS NULL OR A.Tag = @TAG)
 			 AND (A.[Source] LIKE CASE WHEN(@Source IS NULL) THEN '%' ELSE '%' + @Source + '%' END)
