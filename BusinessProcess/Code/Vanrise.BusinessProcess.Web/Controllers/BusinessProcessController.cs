@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Web;
 using System.Web.Http;
-using System.Web.Http.Controllers;
 using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.BusinessProcess.Extensions;
@@ -16,13 +13,13 @@ using Vanrise.Runtime.Entities;
 namespace Vanrise.BusinessProcess.Web.Controllers
 {
     [Vanrise.Web.Base.JSONWithType]
-    public partial  class BusinessProcessController : Vanrise.Web.Base.BaseAPIController
+    public class BusinessProcessController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpGet]
-        public BPDefinition GetDefinition(int ID)
+        public BPDefinition GetDefinition(int id)
         {
             BPClient manager = new BPClient();
-            return manager.GetDefinition(ID);
+            return manager.GetDefinition(id);
         }
 
         [HttpPost]
