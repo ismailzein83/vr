@@ -105,6 +105,7 @@
     <Folder Include="queue\Tables\" />
     <Folder Include="queue\Stored Procedures\" />
     <Folder Include="Security\" />
+    <Folder Include="queue\Functions\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="queue\Tables\QueueItemHeader.sql" />
@@ -122,6 +123,11 @@
     <Build Include="Security\queue.sql" />
     <Build Include="queue\Tables\QueueActivation.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueActivation_GetUpdatedQueueIds.sql" />
+    <Build Include="queue\Functions\ParseStringList.sql">
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
+    </Build>
+    <Build Include="queue\Stored Procedures\sp_QueueItemHeader_GetFiltered.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
