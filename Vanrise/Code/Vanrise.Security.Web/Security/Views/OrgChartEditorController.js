@@ -51,64 +51,15 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
             $scope.modalContext.closeModal();
         };
 
-        $scope.filterUsers = function () {
-            if ($scope.selectedManager != undefined) {
-                // reset the valid users
-                $scope.validUsers = angular.copy(users);
-
-                // remove the selected user from the valid users
-                var index = UtilsService.getItemIndexByVal($scope.validUsers, $scope.currentNode.Id, 'UserId');
-                $scope.validUsers.splice(index, 1);
-
-                // remove the selected manager from the valid users
-                index = UtilsService.getItemIndexByVal($scope.validUsers, $scope.selectedManager.UserId, 'UserId');
-                $scope.validUsers.splice(index, 1);
-            }
-        }
-
         $scope.treeReady = function (api) {
             treeAPI = api;
         }
 
         $scope.treeValueChanged = function () {
             if (angular.isObject($scope.currentNode) && $scope.currentNode != undefined) {
-                if (angular.isObject($scope.currentNode)) {
-                    // select the members of the selected user
-                    $scope.selectedUsers.length = 0;
-                    for (var i = 0; i < $scope.currentNode.Members.length; i++) {
-                        var user = UtilsService.getItemByVal(users, $scope.currentNode.Members[i].Id, 'UserId');
-                        $scope.selectedUsers.push(user);
-                    }
 
-                    // keep track of the deselected users
-                    defaultSelectedUsers = angular.copy($scope.selectedUsers);
-
-                    var managerId = findManager($scope.currentNode);
-                    var manager = UtilsService.getItemByVal(users, managerId, 'UserId');
-                    $scope.selectedManager = manager;
-
-                    // remove the selected user from the managers selection menu
-                    $scope.validManagers = angular.copy(users);
-                    for (var i = 0; i < $scope.validManagers.length; i++) {
-                        if ($scope.validManagers[i].UserId == $scope.currentNode.Id) {
-                            $scope.validManagers.splice(i, 1);
-                        }
-                    }
-
-                    // remove the selected user from the users selection menu
-                    $scope.validUsers = angular.copy(users);
-                    for (var i = 0; i < $scope.validUsers.length; i++) {
-                        if ($scope.validUsers[i].UserId == $scope.currentNode.Id) { // remove the selected user
-                            $scope.validUsers.splice(i, 1);
-                        }
-                    }
-
-                    if (managerId != 0) {
-                        var index = UtilsService.getItemIndexByVal($scope.validUsers, managerId, 'UserId');
-                        if (index != -1)
-                            $scope.validUsers.splice(index, 1);
-                    }
-                }
+                setValidManagers();
+                setValidUsers();
             }
         }
     }
@@ -125,7 +76,7 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
                 if (editMode)
                     getOrgChart(); // uses users at some point
                 else {
-                    setMembers();
+                    mapUsersToMembers();
                     $scope.isGettingData = false;
                 }
             })
@@ -133,6 +84,53 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.isGettingData = false;
             });
+    }
+
+    function setValidManagers() {
+
+        // filter the valid managers
+        $scope.validManagers = angular.copy(users); // reset the valid managers
+        $scope.selectedManager = undefined; // reset the selected manager
+
+        // remove the selected user and his/her members from the list of valid managers
+        var memberIds = getMemberIds($scope.currentNode);
+        memberIds = memberIds.concat($scope.currentNode.Id);
+
+        for (var i = 0; i < memberIds.length; i++) {
+            var memberIndex = UtilsService.getItemIndexByVal($scope.validManagers, memberIds[i], 'UserId');
+            $scope.validManagers.splice(memberIndex, 1);
+        }
+
+        // select the manager of the selected user
+        var managerId = findManager($scope.currentNode);
+
+        if (managerId != 0) {
+            var manager = UtilsService.getItemByVal(users, managerId, 'UserId');
+            $scope.selectedManager = manager;
+        }
+    }
+
+    function setValidUsers() {
+        // filter the valid users
+        $scope.validUsers = angular.copy(users); // reset the valid users
+
+        // remove the invalid users from the list of invalid users
+        var managerIds = getManagerIds(); // managerIds includes the id of the selected user
+
+        for (var i = 0; i < managerIds.length; i++) {
+            var managerIndex = UtilsService.getItemIndexByVal($scope.validUsers, managerIds[i], 'UserId');
+            $scope.validUsers.splice(managerIndex, 1);
+        }
+
+        // select the members of the selected user
+        $scope.selectedUsers.length = 0;
+        for (var i = 0; i < $scope.currentNode.Members.length; i++) {
+            var user = UtilsService.getItemByVal(users, $scope.currentNode.Members[i].Id, 'UserId');
+            $scope.selectedUsers.push(user);
+        }
+
+        // keep track of the deselected users
+        defaultSelectedUsers = angular.copy($scope.selectedUsers);
     }
 
     function getOrgChart() {
@@ -149,7 +147,7 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
             });
     }
 
-    function setMembers() {
+    function mapUsersToMembers() {
         // set members
         for (var i = 0; i < users.length; i++) {
             var member = {
@@ -175,7 +173,25 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
     function fillScopeFromOrgChartObj(orgChartObject) {
         $scope.name = orgChartObject.Name;
         members = mapToClient(orgChartObject.Hierarchy);
+        addMissingMembers(); // in case the app's user has added new users to the database that weren't included in the org chart's hierarchy
         treeAPI.refreshTree(members);
+    }
+
+    function addMissingMembers() {
+        var missingMembers = [];
+
+        for (var i = 0; i < users.length; i++) {
+            var member = findNode(users[i].UserId);
+
+            if (member == undefined || member == null)
+                missingMembers.push({
+                    Id: users[i].UserId,
+                    Name: users[i].Name,
+                    Members: []
+                });
+        }
+
+        members = members.concat(missingMembers);
     }
 
     function insertOrgChart() {
@@ -257,23 +273,25 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
     }
 
     function findManager() {
+        if (UtilsService.getItemIndexByVal(members, $scope.currentNode.Id, 'Id') != -1)
+            return 0;
+
         for (var i = 0; i < members.length; i++) {
-            var managerId = findManagerRecursively(members[i], $scope.currentNode);
+            var managerId = findManagerRecursively(members[i]);
             if (managerId != 0)
                 return managerId;
         }
-        return 0;
     }
 
-    function findManagerRecursively(item, childMember) {
-        if (item.Members.length == 0)
+    function findManagerRecursively(node) {
+        if (node.Members.length == 0)
             return 0;
         
-        if (UtilsService.contains(item.Members, childMember))
-            return item.Id;
+        if (UtilsService.getItemIndexByVal(node.Members, $scope.currentNode.Id, 'Id') != -1)
+            return node.Id;
 
-        for (var i = 0; i < item.Members.length; i++) {
-            var managerId = findManagerRecursively(item.Members[i], childMember);
+        for (var i = 0; i < node.Members.length; i++) {
+            var managerId = findManagerRecursively(node.Members[i]);
             if (managerId != 0)
                 return managerId;
         }
@@ -376,6 +394,56 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
             var userIds = [$scope.currentNode.Id];
             reIndexNodes(userIds, $scope.selectedManager.UserId);
         }
+    }
+
+    function getMemberIds(manager) {
+        var ids = [];
+        
+        for (var i = 0; i < manager.Members.length; i++) {
+            var currentMember = manager.Members[i];
+
+            ids.push(currentMember.Id);
+
+            if (currentMember.Members.length > 0)
+                ids = ids.concat(getMemberIds(currentMember));
+        }
+
+        return ids;
+    }
+
+    function getManagerIds() { // including the id of the selected user
+
+        if (UtilsService.getItemIndexByVal(members, $scope.currentNode.Id, 'Id') != -1)
+            return [$scope.currentNode.Id]; // the selected user is a root user
+
+        var ids = [];
+
+        for (var i = 0; i < members.length; i++) {
+            ids = getManagerIdsRecursively(members[i]);
+
+            if (!UtilsService.contains(ids, -1)) // $scope.currentNode was found
+                break;
+        }
+
+        return ids;
+    }
+
+    function getManagerIdsRecursively(node) {
+        if (node.Members.length == 0)
+            return [-1];
+
+        if (UtilsService.getItemIndexByVal(node.Members, $scope.currentNode.Id, 'Id') != -1)
+            return [node.Id, $scope.currentNode.Id];
+
+        for (var i = 0; i < node.Members.length; i++) {
+            var ids = [node.Id];
+            ids = ids.concat(getManagerIdsRecursively(node.Members[i]));
+
+            if (!UtilsService.contains(ids, -1)) // $scope.currentNode was found
+                break;
+        }
+
+        return ids;
     }
 }
 

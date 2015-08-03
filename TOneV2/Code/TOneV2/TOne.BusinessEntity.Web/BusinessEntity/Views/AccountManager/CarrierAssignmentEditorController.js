@@ -98,7 +98,7 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
             var object = {
                 UserId: selectedAccountManagerId,
                 CarrierAccountId: carrier.CarrierAccountId,
-                Name: carrier.Name,
+                Name: getCarrierName(carrier.Name, carrier.NameSuffix),
                 NameSuffix: carrier.NameSuffix,
                 IsCustomerAvailable: carrier.IsCustomerAvailable,
                 customerSwitchValue: false,
@@ -115,7 +115,12 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
     }
 
     function getCarrierName(carrierName, nameSuffix) {
-        var name = carriername;
+        var name = carrierName;
+
+        if (nameSuffix != '')
+            name += ' (' + nameSuffix + ')';
+
+        return name;
     }
 
     function mapCarriersForAssignment() {

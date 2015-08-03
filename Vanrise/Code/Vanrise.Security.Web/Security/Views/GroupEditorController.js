@@ -12,7 +12,7 @@ function GroupEditorController($scope, GroupAPIService, UsersAPIService, VRModal
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
         $scope.groupId = undefined;
-
+        
         if (parameters != undefined && parameters != null)
             $scope.groupId = parameters.groupId;
 
@@ -47,20 +47,22 @@ function GroupEditorController($scope, GroupAPIService, UsersAPIService, VRModal
 
         UsersAPIService.GetUsers().then(function (response) {
             $scope.optionsUsers.datasource = response;
-
+            
             if (editMode) {
-                UtilsService.waitMultipelAsyncOperations([getGroup, getMembers], function () {
-                    fillScopeFromGroupAndMembersObjs();
-                })
-                .catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                })
-                .finally(function () {
-                    $scope.isGettingData = false;
-                });
+                UtilsService.waitMultipleAsyncOperations([getGroup, getMembers])
+                    .then(function () {
+                        fillScopeFromGroupAndMembersObjs();
+                    })
+                    .catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    })
+                    .finally(function () {
+                        $scope.isGettingData = false;
+                    });
             }
-            else
+            else {
                 $scope.isGettingData = false;
+            }
 
         }).catch(function (error) {
             $scope.isGettingData = false;
