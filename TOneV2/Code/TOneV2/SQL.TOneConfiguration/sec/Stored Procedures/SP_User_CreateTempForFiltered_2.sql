@@ -1,8 +1,8 @@
-﻿CREATE PROCEDURE [sec].[SP_User_CreateTempForFiltered]
+﻿CREATE PROCEDURE [sec].[sp_User_CreateTempForFiltered]
 (
-	@TempTableName VARCHAR(200),
-	@Name NVARCHAR(255),
-	@Email NVARCHAR(255)
+	@TempTableName VARCHAR(200) = NULL,
+	@Name NVARCHAR(255) = NULL,
+	@Email NVARCHAR(255) = NULL
 )
 AS
 BEGIN

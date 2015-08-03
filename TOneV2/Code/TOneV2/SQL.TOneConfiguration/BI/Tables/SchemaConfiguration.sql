@@ -4,8 +4,11 @@
     [DisplayName]   NVARCHAR (50)   NULL,
     [Type]          INT             NOT NULL,
     [Configuration] NVARCHAR (1000) NOT NULL,
+    [Rank]          INT             NULL,
     CONSTRAINT [PK_MeasureDefinition] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

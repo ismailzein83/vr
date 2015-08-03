@@ -7,5 +7,5 @@ BEGIN
 			sc.Name,sc.[Type],
 			sc.Configuration 
 	FROM	BI.SchemaConfiguration sc 
-	WHERE sc.[Type]=@Type;
+	WHERE sc.[Type]=@Type ORDER BY sc.[Rank]
 END

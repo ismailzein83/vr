@@ -18,6 +18,7 @@ BEGIN
       ,[Url]
       ,[ParentId]
       ,[Icon]
-      ,[AllowDynamic] from sec.Module
+      ,[AllowDynamic]
+      ,[Rank] from sec.Module
       ORDER BY [Rank]
 END

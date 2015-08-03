@@ -21,6 +21,7 @@ BEGIN
       ,[RequiredPermissions]
       ,[Audience]
       ,[Type]
+      ,[Rank]
       FROM [sec].[View]
       ORDER BY [Module],[Rank]
 END

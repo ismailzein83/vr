@@ -104,7 +104,6 @@
     <Build Include="sec\Stored Procedures\sp_OrgChart_GetById.sql" />
     <Build Include="sec\Stored Procedures\sp_OrgChart_Insert.sql" />
     <Build Include="sec\Stored Procedures\sp_User_Update.sql" />
-    <Build Include="sec\Stored Procedures\sp_OrgChart_GetFiltered.sql" />
     <Build Include="sec\Stored Procedures\sp_BusinessEntity_GetAll.sql" />
     <Build Include="sec\Stored Procedures\sp_BusinessEntityModule_GetAll.sql" />
     <Build Include="sec\Stored Procedures\sp_View_GetAll.sql" />
@@ -137,6 +136,8 @@
     <Build Include="sec\Stored Procedures\SP_Group_CreateTempForFiltered_2.sql" />
     <Build Include="sec\Stored Procedures\sp_Group_AssignMembers_2.sql" />
     <Build Include="Security\BEntity_2.sql" />
+    <Build Include="sec\Stored Procedures\sp_View_UpdateRank.sql" />
+    <Build Include="sec\Stored Procedures\sp_OrgChart_CreateTempForFiltered.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
