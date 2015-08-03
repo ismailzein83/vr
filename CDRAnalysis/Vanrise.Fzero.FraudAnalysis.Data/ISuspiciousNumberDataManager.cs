@@ -16,6 +16,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         void ApplySuspiciousNumbersToDB(object preparedSuspiciousNumbers);
 
-        List<SubscriberThreshold> GetSubscriberThresholds(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn);
+        BigResult<SubscriberThreshold> GetSubscriberThresholds(Vanrise.Entities.DataRetrievalInput<SubscriberThresholdResultQuery> input);
     }
 }

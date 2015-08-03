@@ -1,4 +1,4 @@
-﻿SuspiciousNumberDetailsController.$inject = ['$scope', 'StrategyAPIService', 'NormalCDRAPIService' , 'SuspicionAnalysisAPIService', 'NumberProfileAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CaseManagementAPIService'];
+﻿SuspiciousNumberDetailsController.$inject = ['$scope', 'StrategyAPIService', 'NormalCDRAPIService', 'SuspicionAnalysisAPIService', 'NumberProfileAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CaseManagementAPIService'];
 
 function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDRAPIService, SuspicionAnalysisAPIService, NumberProfileAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CaseManagementAPIService) {
     var subscriberThresholdsGridAPI;
@@ -24,11 +24,10 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         $scope.statuses = [{ id: 1, name: 'Pending' }, { id: 2, name: 'Ignored' }, { id: 3, name: 'Confirmed' }, { id: 4, name: 'White List' }];
 
         var parameters = VRNavigationService.getParameters($scope);
-       
+
         $scope.subscriberNumber = undefined;
 
-        if (parameters != undefined && parameters != null)
-        {
+        if (parameters != undefined && parameters != null) {
             $scope.subscriberNumber = parameters.subscriberNumber;
             $scope.fromDate = parameters.fromDate;
             $scope.toDate = parameters.toDate;
@@ -36,13 +35,10 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
             strategiesList = parameters.strategiesList;
             suspicionLevelsList = parameters.suspicionLevelsList;
         }
-        
-        
-        
-    }
-    
 
-   
+
+
+    }
 
     function defineScope() {
 
@@ -52,22 +48,15 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         $scope.normalCDRs = [];
         $scope.numberProfiles = [];
         $scope.relatedNumbers = [];
-        
+
         SuspiciousNumberDetailsController.isSubscriberThresholdsTabShown = true;
         SuspiciousNumberDetailsController.isNumberProfileTabShown = false;
         SuspiciousNumberDetailsController.isNormalCDRTabShown = false;
 
-        $scope.onSubscriberThresholdsGridReady = function (api) {
-            subscriberThresholdsGridAPI = api;
-            if (SuspiciousNumberDetailsController.isSubscriberThresholdsTabShown) {
-                getSubscriberThresholds();
-            }
-        };
-
         $scope.onNormalCDRsGridReady = function (api) {
             normalCDRGridAPI = api;
             if (SuspiciousNumberDetailsController.isNormalCDRTabShown) {
-                getNormalCDRs();
+                return retrieveData_NormalCDRs();
 
             }
         };
@@ -75,27 +64,23 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         $scope.onNumberProfilesGridReady = function (api) {
             numberProfileGridAPI = api;
             if (SuspiciousNumberDetailsController.isNumberProfileTabShown) {
-                getNumberProfiles();
+                return retrieveData_NumberProfiles();
 
             }
         };
 
-        $scope.loadMoreDataSubscriberThresholds = function () {
-            return getSubscriberThresholds();
-        }
-
-        
-
-        $scope.loadMoreDataNormalCDRs = function () {
-            return getNormalCDRs();
-        }
+        $scope.onNumberProfilesGridReady = function (api) {
+            numberProfileGridAPI = api;
+            if (SuspiciousNumberDetailsController.isNumberProfileTabShown)
+                return retrieveData_SubscriberThresholds();
+        };
 
 
-       
-
-        $scope.loadMoreDataNumberProfiles = function () {
-            return getNumberProfiles();
-        }
+        $scope.onSubscriberThresholdsGridReady = function (api) {
+            subscriberThresholdsGridAPI = api;
+            if (SuspiciousNumberDetailsController.isSubscriberThresholdsTabShown)
+                return retrieveData_SubscriberThresholds();
+        };
 
         $scope.close = function () {
             $scope.modalContext.closeModal()
@@ -106,8 +91,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
             CaseManagementAPIService.SaveSubscriberCase(subscriberCaseObject)
            .then(function (response) {
                if (VRNotificationService.notifyOnItemUpdated("SubscriberCase", response)) {
-                   if ($scope.onSubscriberCaseUpdated != undefined)
-                   {
+                   if ($scope.onSubscriberCaseUpdated != undefined) {
                        response.UpdatedObject.SuspicionLevelName = $scope.suspicionLevelName;
                        response.UpdatedObject.LastOccurance = lastOccurance;
                        response.UpdatedObject.StrategyName = strategyName;
@@ -133,35 +117,58 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
 
 
                 if ($scope.selectedGroupKeyIndex == 0 && !isSubscriberThresholdsDataLoaded) {
-                    getSubscriberThresholds();
                     isSubscriberThresholdsDataLoaded = true;
+                    return retrieveData_SubscriberThresholds();
+                    
                 }
                 else if ($scope.selectedGroupKeyIndex == 1 && !isNormalCDRDataLoaded) {
-                    getNormalCDRs();
                     isNormalCDRDataLoaded = true;
+                    return retrieveData_NormalCDRs();
                 }
                 else if ($scope.selectedGroupKeyIndex == 2 && !isNumberProfileDataLoaded) {
-                    getNumberProfiles();
                     isNumberProfileDataLoaded = true;
+                    return retrieveData_NumberProfiles();
                 }
 
             }
         };
 
         $scope.selectedRelatedNumbersChanged = function () {
-            if (pageLoaded)
-            {
+            if (pageLoaded) {
                 $scope.subscriberNumber = $scope.selectedRelatedNumber
-                isSubscriberThresholdsDataLoaded=false;
-                isNormalCDRDataLoaded=false;
+                isSubscriberThresholdsDataLoaded = false;
+                isNormalCDRDataLoaded = false;
                 isNumberProfileDataLoaded = false;
                 $scope.groupKeySelectionChanged();
             }
-            else
-            {
+            else {
                 pageLoaded = true;
             }
         }
+
+        $scope.dataRetrievalFunction_NormalCDRs = function (dataRetrievalInput, onResponseReady) {
+            return NormalCDRAPIService.GetNormalCDRs(dataRetrievalInput)
+            .then(function (response) {
+                onResponseReady(response);
+            });
+        }
+
+
+        $scope.dataRetrievalFunction_NumberProfiles = function (dataRetrievalInput, onResponseReady) {
+            return NumberProfileAPIService.GetNumberProfiles(dataRetrievalInput)
+            .then(function (response) {
+                onResponseReady(response);
+            });
+        }
+
+
+        $scope.dataRetrievalFunction_SubscriberThresholds = function (dataRetrievalInput, onResponseReady) {
+            return SuspicionAnalysisAPIService.GetSubscriberThresholds(dataRetrievalInput)
+            .then(function (response) {
+                onResponseReady(response);
+            });
+        }
+
 
     }
 
@@ -184,7 +191,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
 
 
         $scope.isGettingData = true;
-        UtilsService.waitMultipleAsyncOperations( [loadFilters , loadAggregates])
+        UtilsService.waitMultipleAsyncOperations([loadFilters, loadAggregates])
         .then(function () {
 
 
@@ -225,7 +232,6 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
     }
 
     function loadFilters() {
-        console.log('loadFilters')
         var index = 0;
         return StrategyAPIService.GetFilters().then(function (response) {
             angular.forEach(response, function (itm) {
@@ -234,9 +240,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         });
     }
 
-
     function loadAggregates() {
-        console.log('loadAggregates')
         return StrategyAPIService.GetAggregates().then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.aggregateDefinitions.push({ name: itm });
@@ -244,8 +248,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         });
     }
 
-    function BuildSubscriberCaseObjfromScope()
-    {
+    function BuildSubscriberCaseObjfromScope() {
         var subscriberCaseObject = {
             SubscriberNumber: $scope.subscriberNumber,
             StatusId: $scope.selectedStatus.id,
@@ -253,61 +256,51 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         };
         return subscriberCaseObject;
     }
-    
-    function getSubscriberThresholds() {
+
+    function retrieveData_SubscriberThresholds() {
         $scope.subscriberThresholds.length = 0;
 
         var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
         var toDate = $scope.toDate != undefined ? $scope.toDate : '';
 
+        var query = {
+            FromDate: fromDate,
+            ToDate: toDate,
+            SubscriberNumber: $scope.subscriberNumber
+        };
 
-        var pageInfo = subscriberThresholdsGridAPI.getPageInfo();
 
-        $scope.isGettingSubscriberThresholds = true;
-        return SuspicionAnalysisAPIService.GetSubscriberThresholds(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, $scope.subscriberNumber).then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.subscriberThresholds.push(itm);
-            });
-        }).finally(function () {
-            $scope.isGettingSubscriberThresholds = false;
-        });
+        return subscriberThresholdsGridAPI.retrieveData(query);
     }
 
-    function getNormalCDRs() {
-        $scope.normalCDRs.length = 0;
+    function retrieveData_NormalCDRs() {
 
         var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
         var toDate = $scope.toDate != undefined ? $scope.toDate : '';
-        var pageInfo = normalCDRGridAPI.getPageInfo();
-        $scope.isGettingNormalCDRs = true;
-        return NormalCDRAPIService.GetNormalCDRs(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, $scope.subscriberNumber).then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.normalCDRs.push(itm);
-            });
-        }).finally(function () {
-            $scope.isGettingNormalCDRs = false;
-        });
+
+        var query = {
+            FromDate: fromDate,
+            ToDate: toDate,
+            MSISDN: $scope.subscriberNumber
+        };
+
+
+        return normalCDRGridAPI.retrieveData(query);
     }
 
-    function getNumberProfiles() {
-        $scope.numberProfiles.length = 0;
+    function retrieveData_NumberProfiles() {
+
         var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
         var toDate = $scope.toDate != undefined ? $scope.toDate : '';
 
+        var query = {
+            FromDate: fromDate,
+            ToDate: toDate,
+            SubscriberNumber: $scope.subscriberNumber
+        };
 
-        var pageInfo = numberProfileGridAPI.getPageInfo();
-
-        $scope.isGettingNumberProfiles = true;
-        return NumberProfileAPIService.GetNumberProfiles(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, $scope.subscriberNumber).then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.numberProfiles.push(itm);
-            });
-        }).finally(function () {
-            $scope.isGettingNumberProfiles = false;
-        });
+        return numberProfileGridAPI.retrieveData(query);
     }
 
-    
-    
 }
 appControllers.controller('SuspiciousNumberDetailsController', SuspiciousNumberDetailsController);

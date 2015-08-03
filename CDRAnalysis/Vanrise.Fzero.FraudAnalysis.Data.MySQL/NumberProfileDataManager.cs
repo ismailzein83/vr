@@ -13,10 +13,17 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
 
         }
 
-        
-       
+
+
+
+
 
         public void ApplyNumberProfilesToDB(object preparedNumberProfiles)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Vanrise.Entities.BigResult<NumberProfile> GetNumberProfiles(Vanrise.Entities.DataRetrievalInput<NumberProfileResultQuery> input)
         {
             throw new NotImplementedException();
         }
@@ -32,10 +39,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         }
 
         public void WriteRecordToStream(NumberProfile record, object dbApplyStream)
-        {
-            throw new NotImplementedException();
-        }
-        public List<NumberProfile> GetNumberProfiles(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string subscriberNumber)
         {
             throw new NotImplementedException();
         }

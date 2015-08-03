@@ -13,12 +13,11 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
     public class SuspicionAnalysisController : BaseAPIController
     {
 
-        [HttpGet]
-        public IEnumerable<SubscriberThreshold> GetSubscriberThresholds(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn)
+        [HttpPost]
+        public object GetSubscriberThresholds(Vanrise.Entities.DataRetrievalInput<SubscriberThresholdResultQuery> input)
         {
             StrategyManager manager = new StrategyManager();
-
-            return manager.GetSubscriberThresholds(fromRow, toRow, fromDate, toDate, msisdn);
+            return GetWebResponse(input, manager.GetSubscriberThresholds(input));
         }
 
 

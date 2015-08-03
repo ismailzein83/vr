@@ -92,10 +92,16 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             InsertBulkToTable(preparedSuspiciousNumbers as BaseBulkInsertInfo);
         }
 
-        public List<SubscriberThreshold> GetSubscriberThresholds(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn)
+
+        public BigResult<SubscriberThreshold> GetSubscriberThresholds(Vanrise.Entities.DataRetrievalInput<SubscriberThresholdResultQuery> input)
         {
-            return GetItemsSP("FraudAnalysis.sp_FraudResult_GetSubscriberThresholds", SubscriberThresholdMapper, fromRow, toRow, fromDate, toDate, msisdn);
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("FraudAnalysis.sp_FraudResult_CreateTempForFilteredSubscriberThresholds", tempTableName, input.Query.FromDate, input.Query.ToDate, input.Query.SubscriberNumber);
+            };
+            return RetrieveData(input, createTempTableAction, SubscriberThresholdMapper);
         }
+
 
 
         #region Private Methods

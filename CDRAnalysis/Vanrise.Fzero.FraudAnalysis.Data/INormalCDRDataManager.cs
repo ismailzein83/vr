@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data
@@ -7,6 +8,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
     public interface INormalCDRDataManager : IDataManager 
     {
         void LoadCDR(DateTime from, DateTime to, int? batchSize, Action<CDR> onBatchReady);
-        List<CDR> GetNormalCDRs(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn);
+        BigResult<CDR> GetNormalCDRs(Vanrise.Entities.DataRetrievalInput<NormalCDRResultQuery> input);
     }
 }

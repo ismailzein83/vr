@@ -9,12 +9,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Web.Controllers
 {
     public class NumberProfileController : BaseAPIController
     {
-        [HttpGet]
-        public IEnumerable<NumberProfile> GetNumberProfiles(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string subscriberNumber)
+
+        [HttpPost]
+        public object GetNumberProfiles(Vanrise.Entities.DataRetrievalInput<NumberProfileResultQuery> input)
         {
             NumberProfileManager manager = new NumberProfileManager();
 
-            return manager.GetNumberProfiles(fromRow, toRow, fromDate, toDate, subscriberNumber);
+            return GetWebResponse(input, manager.GetNumberProfiles(input));
         }
     }
 }

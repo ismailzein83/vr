@@ -8,13 +8,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class NormalCDRManager
     {
-        public IEnumerable<CDR> GetNormalCDRs(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn)
+        public Vanrise.Entities.IDataRetrievalResult<CDR> GetNormalCDRs(Vanrise.Entities.DataRetrievalInput<NormalCDRResultQuery> input)
         {
-
             INormalCDRDataManager manager = FraudDataManagerFactory.GetDataManager<INormalCDRDataManager>();
 
-            return manager.GetNormalCDRs(fromRow, toRow, fromDate, toDate, msisdn);
-
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, manager.GetNormalCDRs(input));
         }
 
     }

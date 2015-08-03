@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using Vanrise.Data.SQL;
+using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
 
@@ -51,10 +52,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                                     Vanrise.Common.Serializer.Serialize(record.AggregateValues, true));
         }
 
-        public List<NumberProfile> GetNumberProfiles(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string subscriberNumber)
+        public BigResult<NumberProfile> GetNumberProfiles(Vanrise.Entities.DataRetrievalInput<NumberProfileResultQuery> input)
         {
-            return GetItemsSP("FraudAnalysis.sp_FraudResult_GetNumberProfile", NumberProfileMapper, fromRow, toRow, fromDate, toDate, subscriberNumber);
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("FraudAnalysis.sp_FraudResult_CreateTempForFilteredNumberProfiles", tempTableName, input.Query.FromDate, input.Query.ToDate, input.Query.SubscriberNumber);
+            };
+            return RetrieveData(input, createTempTableAction, NumberProfileMapper);
         }
+
 
 
         #region Private Methods

@@ -8,13 +8,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class NumberProfileManager
     {
-        public IEnumerable<NumberProfile> GetNumberProfiles(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string subscriberNumber)
+        public Vanrise.Entities.IDataRetrievalResult<NumberProfile> GetNumberProfiles(Vanrise.Entities.DataRetrievalInput<NumberProfileResultQuery> input)
         {
-
             INumberProfileDataManager manager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
 
-            return manager.GetNumberProfiles(fromRow, toRow, fromDate, toDate, subscriberNumber);
-
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, manager.GetNumberProfiles(input));
         }
+
     }
 }

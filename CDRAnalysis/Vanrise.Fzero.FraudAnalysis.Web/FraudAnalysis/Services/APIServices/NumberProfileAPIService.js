@@ -5,16 +5,8 @@
     });
 
 
-    function GetNumberProfiles(fromRow, toRow, fromDate, toDate, subscriberNumber) {
-        return BaseAPIService.get("/api/NumberProfile/GetNumberProfiles",
-        {
-            fromRow: fromRow,
-            toRow: toRow,
-            fromDate: fromDate,
-            toDate: toDate,
-            subscriberNumber: subscriberNumber
-        }
-       );
+    function GetNumberProfiles(input) {
+        return BaseAPIService.post("/api/NumberProfile/GetNumberProfiles", input  );
     }
 
 

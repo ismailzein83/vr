@@ -60,6 +60,9 @@
     <Compile Include="Aggregates\AverageAggregate.cs" />
     <Compile Include="Batches\CDRBatch.cs" />
     <Compile Include="ResultQuery\DashboardResultQuery.cs" />
+    <Compile Include="ResultQuery\SubscriberThresholdResultQuery.cs" />
+    <Compile Include="ResultQuery\NumberProfileResultQuery.cs" />
+    <Compile Include="ResultQuery\NormalCDRResultQuery.cs" />
     <Compile Include="ResultQuery\StrategyResultQuery.cs" />
     <Compile Include="SubscriberThreshold.cs" />
     <Compile Include="Predefined\Period.cs" />

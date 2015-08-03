@@ -43,7 +43,8 @@
                         <vr-row>
                             <vr-columns colnum="12">
                                 <div ng-show="isSubscriberThresholdsTabShown" vr-loader="isGettingSubscriberThresholds">
-                                    <vr-datagrid datasource="subscriberThresholds" maxheight="400px" loadmoredata="loadMoreDataSubscriberThresholds" on-ready="onSubscriberThresholdsGridReady">
+
+                                    <vr-datagrid datasource="subscriberThresholds" dataretrievalfunction="dataRetrievalFunction_SubscriberThresholds" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onSubscriberThresholdsGridReady">
                                         <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" widthfactor="20"></vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelName'" widthfactor="25"></vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Date'" field="'DateDay'" type="'Datetime'" widthfactor="25"></vr-datagridcolumn>
@@ -55,12 +56,12 @@
                                         </vr-datagridcolumn>
 
 
-                                        
+
                                     </vr-datagrid>
 
                                 </div>
                                 <div ng-show="isNormalCDRTabShown" vr-loader="isGettingNormalCDRs">
-                                    <vr-datagrid datasource="normalCDRs" maxheight="400px" loadmoredata="loadMoreDataNormalCDRs" on-ready="onNormalCDRsGridReady">
+                                    <vr-datagrid datasource="normalCDRs" dataretrievalfunction="dataRetrievalFunction_NormalCDRs" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onNormalCDRsGridReady">
                                         <vr-datagridcolumn headertext="'IMSI'" field="'IMSI'" widthfactor="13">  </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Connect'" field="'ConnectDateTime'" type="'Datetime'" widthfactor="17"></vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Duration'" field="'DurationInSeconds'" widthfactor="5">  </vr-datagridcolumn>
@@ -77,8 +78,8 @@
 
                                 </div>
                                 <div ng-show="isNumberProfileTabShown" vr-loader="isGettingNumberProfiles">
-                                    <vr-datagrid datasource="numberProfiles" maxheight="400px" rotate="true" loadmoredata="loadMoreDataNumberProfiles" on-ready="onNumberProfilesGridReady">
-                                       
+                                    <vr-datagrid datasource="numberProfiles" dataretrievalfunction="dataRetrievalFunction_NumberProfiles" maxheight="400px" rotate="true" pagingtype="'PagingOnScroll'" on-ready="onNumberProfilesGridReady" >
+
                                         <vr-datagridcolumn headertext="'From Date'" field="'FromDate'" type="'Datetime'" widthfactor="20"></vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'To Date'" field="'ToDate'" type="'Datetime'" widthfactor="20"></vr-datagridcolumn>
 
@@ -88,7 +89,7 @@
                                             </div>
                                         </vr-datagridcolumn>
 
-                                        
+
 
                                     </vr-datagrid>
                                 </div>

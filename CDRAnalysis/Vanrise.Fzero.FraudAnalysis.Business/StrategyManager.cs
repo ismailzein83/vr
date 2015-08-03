@@ -20,13 +20,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         }
 
 
-        public IEnumerable<SubscriberThreshold> GetSubscriberThresholds(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn)
+        public Vanrise.Entities.IDataRetrievalResult<SubscriberThreshold> GetSubscriberThresholds(Vanrise.Entities.DataRetrievalInput<SubscriberThresholdResultQuery> input)
         {
-
             ISuspiciousNumberDataManager manager = FraudDataManagerFactory.GetDataManager<ISuspiciousNumberDataManager>();
 
-            return manager.GetSubscriberThresholds(fromRow, toRow, fromDate, toDate, msisdn);
-
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, manager.GetSubscriberThresholds(input));
         }
 
 

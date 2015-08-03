@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Vanrise.Data.SQL;
+using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
@@ -70,9 +71,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                );
         }
 
-        public List<CDR> GetNormalCDRs(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn)
+
+        public BigResult<CDR> GetNormalCDRs(Vanrise.Entities.DataRetrievalInput<NormalCDRResultQuery> input)
         {
-            return GetItemsSP("FraudAnalysis.sp_FraudResult_GetNormalCDR", NormalCDRMapper, fromRow, toRow, fromDate, toDate, msisdn);
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("FraudAnalysis.sp_FraudResult_CreateTempForFilteredNormalCDRs", tempTableName, input.Query.FromDate, input.Query.ToDate, input.Query.MSISDN);
+            };
+            return RetrieveData(input, createTempTableAction, NormalCDRMapper);
         }
 
 

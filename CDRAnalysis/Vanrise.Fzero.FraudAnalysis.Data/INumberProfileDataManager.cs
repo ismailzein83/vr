@@ -2,6 +2,7 @@
 using Vanrise.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using System.Collections.Generic;
+using Vanrise.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data
 {
@@ -9,6 +10,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
     {
         void ApplyNumberProfilesToDB(object preparedNumberProfiles);
 
-        List<NumberProfile> GetNumberProfiles(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string subscriberNumber);
+        BigResult<NumberProfile> GetNumberProfiles(Vanrise.Entities.DataRetrievalInput<NumberProfileResultQuery> input);
     }
 }

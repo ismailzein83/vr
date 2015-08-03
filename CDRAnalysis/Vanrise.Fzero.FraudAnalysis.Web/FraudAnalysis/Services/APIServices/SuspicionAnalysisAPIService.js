@@ -7,16 +7,8 @@
     });
 
 
-    function GetSubscriberThresholds(fromRow, toRow, fromDate, toDate, msisdn) {
-        return BaseAPIService.get("/api/SuspicionAnalysis/GetSubscriberThresholds",
-            {
-                fromRow: fromRow,
-                toRow: toRow,
-                fromDate: fromDate,
-                toDate: toDate,
-                msisdn: msisdn
-            }
-           );
+    function GetSubscriberThresholds(input) {
+        return BaseAPIService.post("/api/SuspicionAnalysis/GetSubscriberThresholds", input);
     }
 
 

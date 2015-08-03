@@ -13,16 +13,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
 
         }
 
+
+
+
+
         public void LoadCDR(DateTime from, DateTime to, int? batchSize, Action<CDR> onBatchReady)
         {
             throw new NotImplementedException();
         }
 
-        public List<CDR> GetNormalCDRs(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn)
+        public Vanrise.Entities.BigResult<CDR> GetNormalCDRs(Vanrise.Entities.DataRetrievalInput<NormalCDRResultQuery> input)
         {
             throw new NotImplementedException();
         }
-
-       
     }
 }
