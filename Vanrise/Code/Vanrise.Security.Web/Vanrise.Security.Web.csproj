@@ -145,6 +145,10 @@
     <Content Include="Security\Views\OrgChartManagement.html" />
     <Content Include="Security\Views\PermissionEditor.html" />
     <Content Include="Security\Views\PermissionEditorController.js" />
+    <Content Include="Security\Views\RankingPages\RankingPageEditor.html" />
+    <Content Include="Security\Views\RankingPages\RankingPageEditorController.js" />
+    <Content Include="Security\Views\RankingPages\RankingPageManagement.html" />
+    <Content Include="Security\Views\RankingPages\RankingPageManagementController.js" />
     <Content Include="Security\Views\ResetPasswordEditor.html" />
     <Content Include="Security\Views\ResetPasswordEditorController.js" />
     <Content Include="Security\Views\GroupEditor.html" />

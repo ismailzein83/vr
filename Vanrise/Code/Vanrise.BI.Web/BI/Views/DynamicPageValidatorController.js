@@ -33,13 +33,10 @@ function ValidateEditorController($scope, MenuAPIService, WidgetAPIService, User
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return BIAPIService.GetUserMeasuresValidator(dataRetrievalInput)
             .then(function (response) {
-
                 if (dataRetrievalInput.DataRetrievalResultType == DataRetrievalResultTypeEnum.Normal.value) {
-                    var data = [];
                     angular.forEach(response.Data, function (itm) {
-                        data.push(fillNeededData(itm));
+                       fillNeededData(itm);
                     });
-                    response.Data = data;
                     
                 }
 
@@ -52,8 +49,10 @@ function ValidateEditorController($scope, MenuAPIService, WidgetAPIService, User
         for (var i = 0; i < $scope.users.length; i++) {
             if ($scope.users[i].UserId == itm.UserId)
                 itm.Name = $scope.users[i].Name;
+            if (itm.MeasuresDenied.length == 0) {
+                itm.MeasuresDenied.push("All Allowed");
+            }
         }
-        return itm;
     }
     function retrieveData() {
         var query = {
@@ -82,8 +81,9 @@ function ValidateEditorController($scope, MenuAPIService, WidgetAPIService, User
     }
     function loadUsers() {
         UsersAPIService.GetUsers().then(function (response) {
-            angular.forEach(response, function (users) {
-                $scope.users.push(users);
+            angular.forEach(response, function (user) {
+
+                $scope.users.push(user);
             })
         });
 

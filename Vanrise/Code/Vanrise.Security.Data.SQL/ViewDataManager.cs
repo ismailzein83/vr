@@ -32,7 +32,8 @@ namespace Vanrise.Security.Data.SQL
                 ModuleId = (int) reader["Module"],
                 RequiredPermissions = GetReaderValue<string>(reader, "RequiredPermissions"),
                 Audience = ((reader["Audience"] as string) != null) ? Common.Serializer.Deserialize<AudienceWrapper>(reader["Audience"] as string) : null,
-                Type=(ViewType) reader["Type"]
+                Type=(ViewType) reader["Type"],
+                Rank = GetReaderValue<int>(reader, "Rank"),
 
             }; 
             return view;

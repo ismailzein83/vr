@@ -20,5 +20,6 @@ namespace Vanrise.Security.Entities
 
         public string Icon { get; set; }
         public bool AllowDynamic { get; set; }
+        public int Rank { get; set; }
     }
 }

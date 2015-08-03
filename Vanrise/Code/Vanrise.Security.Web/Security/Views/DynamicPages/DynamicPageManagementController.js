@@ -22,11 +22,9 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
             return ViewAPIService.GetFilteredDynamicPages(dataRetrievalInput)
             .then(function (response) {
                 if (dataRetrievalInput.DataRetrievalResultType == DataRetrievalResultTypeEnum.Normal.value) {
-                    var data = [];
                     angular.forEach(response.Data, function (itm) {
-                        data.push(fillNeededData(itm));
-                    });
-                    response.Data = data;                    
+                        fillNeededData(itm);
+                    });                   
                 }
                 onResponseReady(response);
             });
@@ -185,7 +183,6 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
                 GroupsName: '',
             }
         }
-        return itm;
     }
     function definePeriods() {
         $scope.periods = [];

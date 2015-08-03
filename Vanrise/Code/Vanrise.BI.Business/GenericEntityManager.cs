@@ -363,7 +363,7 @@ namespace Vanrise.BI.Business
                       users = userManager.GetMembers(userMeasuresValidatorInput.Query.GroupIds[i]);
                       foreach (User user in users)
                       {
-                          if (!distinctUsers.Contains(user.UserId))
+                          if (!distinctUsers.Contains(user.UserId) && user.Status != UserStatus.Inactive)
                               distinctUsers.Add(user.UserId);
 
                       }
@@ -376,7 +376,7 @@ namespace Vanrise.BI.Business
                   users=userManager.GetUsers();
                   foreach (User user in users)
                   {
-                      if (!distinctUsers.Contains(user.UserId))
+                      if (!distinctUsers.Contains(user.UserId) && user.Status != UserStatus.Inactive)
                           distinctUsers.Add(user.UserId);
 
                   }

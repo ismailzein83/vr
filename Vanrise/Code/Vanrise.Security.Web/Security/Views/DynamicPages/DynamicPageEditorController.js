@@ -397,6 +397,9 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
             $scope.selectedViewPeriod = getPeriod($scope.filter.DefaultPeriod);
             $scope.selectedViewTimeDimensionType = getTimeDimentionType($scope.filter.DefaultGrouping);
         }
+        else {
+            $scope.nonSearchable = true;
+        }
 
     }
     function getTimeDimentionType(defaultGrouping) {

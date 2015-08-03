@@ -70,7 +70,7 @@ namespace Vanrise.Security.Business
 
         private MenuItem GetModuleMenu(Module module, List<Module> modules, List<View> views)
         {
-            MenuItem menu = new MenuItem() { Id = module.ModuleId, Name = module.Name, Title = module.Title, Location = module.Url, Icon = module.Icon };
+            MenuItem menu = new MenuItem() { Id = module.ModuleId, Name = module.Name, Title = module.Title, Location = module.Url, Icon = module.Icon, Rank = module.Rank };
 
             List<Module> subModules = modules.FindAll(x => x.ParentId == module.ModuleId);
 
@@ -83,7 +83,7 @@ namespace Vanrise.Security.Business
                 {
                     if(viewItem.RequiredPermissions == null || SecurityContext.Current.IsAllowed(viewItem.RequiredPermissions))
                     {
-                        MenuItem viewMenu = new MenuItem() { Id = viewItem.ViewId, Name = viewItem.Name, Title = viewItem.Title, Location = viewItem.Url, Type = viewItem.Type };
+                        MenuItem viewMenu = new MenuItem() { Id = viewItem.ViewId, Name = viewItem.Name, Title = viewItem.Title, Location = viewItem.Url, Type = viewItem.Type, Rank = viewItem .Rank};
                         menu.Childs.Add(viewMenu);
                     }
                 }
