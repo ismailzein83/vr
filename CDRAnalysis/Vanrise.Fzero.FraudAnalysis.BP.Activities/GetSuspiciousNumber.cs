@@ -100,7 +100,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                     });
 
                                 numberProfilesProcessed += item.NumberProfiles.Count;
-                                Console.WriteLine("{0} Number Profiles Processed", numberProfilesProcessed);
+                                handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Verbose, "{0} Number Profiles Processed", numberProfilesProcessed);
 
                             });
                     }

@@ -124,7 +124,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                 }
                             }
                             cdrsCount += cdrs.Count;
-                            Console.WriteLine("{0} CDRs profiled", cdrsCount);
+                            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Verbose, "{0} CDRs profiled", cdrsCount);
 
                         });
                 }
@@ -163,7 +163,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             if (numberProfileBatch.Count >= batchSize)
             {
                 numberProfilesCount += numberProfileBatch.Count;
-                Console.WriteLine("{0} Number Profiles Sent", numberProfilesCount);
+                handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Verbose, "{0} Number Profiles Sent", numberProfilesCount);
                 inputArgument.OutputQueue.Enqueue(new NumberProfileBatch()
                 {
                     NumberProfiles = numberProfileBatch

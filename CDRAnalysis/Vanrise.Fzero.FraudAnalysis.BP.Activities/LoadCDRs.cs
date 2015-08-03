@@ -63,6 +63,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     if (cdrs.Count >= 100000)
                     {                        
                         inputArgument.OutputQueue.Enqueue(BuildCDRBatch(cdrs));
+                        handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Verbose, "{0} CDRs loaded", cdrs.Count);
                         cdrs = new List<CDR>();
                     }
                 });
