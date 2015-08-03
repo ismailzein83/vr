@@ -2,10 +2,9 @@
 
     "use strict";
 
-    businessProcessService.$inject = ['LabelColorsEnum', 'BPInstanceStatusEnum'];
-    appControllers.service('BusinessProcessService', businessProcessService);
-
-    function businessProcessService(LabelColorsEnum, BPInstanceStatusEnum) {
+    businessProcessService.$inject = ['LabelColorsEnum', 'BPInstanceStatusEnum', 'BPTrackingSeverityEnum'];
+    
+    function businessProcessService(LabelColorsEnum, BPInstanceStatusEnum, BPTrackingSeverityEnum) {
 
         function getStatusColor(status) {
 
@@ -33,11 +32,34 @@
             return '';
         }
 
+        function getSeverityDescription(severity) {
+            if (severity) {
+
+                if (severity === BPTrackingSeverityEnum.Information.value) return BPTrackingSeverityEnum.Information.description;
+                if (severity === BPTrackingSeverityEnum.Warning.value) return BPTrackingSeverityEnum.Warning.description;
+                if (severity === BPTrackingSeverityEnum.Error.value) return BPTrackingSeverityEnum.Error.description;
+                if (severity === BPTrackingSeverityEnum.Verbose.value) return BPTrackingSeverityEnum.Verbose.description;
+            }
+            return '';
+        }
+
+        function getSeverityColor(severity) {
+
+            if (severity === BPTrackingSeverityEnum.Information.value) return LabelColorsEnum.Info.Color;
+            if (severity === BPTrackingSeverityEnum.Warning.value) return LabelColorsEnum.Warning.Color;
+            if (severity === BPTrackingSeverityEnum.Error.value) return LabelColorsEnum.Error.Color;
+            if (severity === BPTrackingSeverityEnum.Verbose.value) return LabelColorsEnum.Primary.Color;
+
+            return LabelColorsEnum.Info.Color;
+        };
+
         return ({
             getStatusColor: getStatusColor,
-            getStatusDescription: getStatusDescription
+            getStatusDescription: getStatusDescription,
+            getSeverityColor: getSeverityColor,
+            getSeverityDescription: getSeverityDescription
         });
     }
-
+    appControllers.service('BusinessProcessService', businessProcessService);
 
 })(appControllers);

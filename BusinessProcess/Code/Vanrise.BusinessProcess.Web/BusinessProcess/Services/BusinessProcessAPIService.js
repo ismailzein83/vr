@@ -50,13 +50,8 @@ function BusinessProcessAPIService(BaseAPIService) {
             });
     }
 
-    function GetTrackingsByInstanceId(processInstanceID, fromRow, toRow, lastTrackingId) {
-        return BaseAPIService.post("/api/BusinessProcess/GetTrackingsByInstanceId", {
-            ProcessInstanceID: processInstanceID,
-            FromRow: fromRow,
-            ToRow: toRow,
-            LastTrackingId: lastTrackingId
-        });
+    function GetTrackingsByInstanceId(input) {
+        return BaseAPIService.post("/api/BusinessProcess/GetTrackingsByInstanceId",input);
     }
 
     function GetTrackingSeverity() {

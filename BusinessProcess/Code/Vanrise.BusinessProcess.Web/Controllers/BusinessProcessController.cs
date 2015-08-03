@@ -129,16 +129,10 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
 
         [HttpPost]
-        public GetTrackingsByInstanceIdOutput GetTrackingsByInstanceId(GetTrackingsByInstanceIdInput param)
+        public Object GetFilteredTrackings(Vanrise.Entities.DataRetrievalInput<TrackingQuery> input)
         {
-            param.FromRow = param.FromRow - 1;
             BPClient manager = new BPClient();
-            IEnumerable<BPTrackingMessageModel> rows = BPMappers.MapTrackingMessages(manager.GetTrackingsByInstanceId(param.ProcessInstanceID,param.LastTrackingId));
-            rows = rows.Skip(param.FromRow).Take(param.ToRow - param.FromRow);
-            return new GetTrackingsByInstanceIdOutput(){
-                Tracking = rows,
-                InstanceStatus = manager.GetInstance(param.ProcessInstanceID).Status
-            };
+            return GetWebResponse(input,manager.GetTrackingsByInstanceId(input));
         }
 
         [HttpGet]
@@ -158,15 +152,6 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
     #region Argument Classes
     
-
-    public class GetTrackingsByInstanceIdInput
-    {
-        public long ProcessInstanceID { get; set; }
-        public int FromRow { get; set; }
-        public int ToRow { get; set; }
-        public long LastTrackingId { get; set; }
-
-    }
 
     public class GetTrackingsByInstanceIdOutput
     {

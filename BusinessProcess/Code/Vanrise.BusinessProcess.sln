@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.BusinessProcess.Data", "Vanrise.BusinessProcess.Data\Vanrise.BusinessProcess.Data.csproj", "{E7B7BE23-5ABB-4327-B716-127A19E7B6E6}"
 EndProject
@@ -20,8 +20,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL Database Projects", "SQL Database Projects", "{519AC3E3-8FFA-4AF6-90E9-123BB54837F5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data Access Layer", "Data Access Layer", "{AA9582C1-FDE5-49F8-B2DB-3A461D31F7FD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.BusinessProcess.OldWeb", "Vanrise.BusinessProcess.OldWeb\Vanrise.BusinessProcess.OldWeb.csproj", "{601CDC2A-F409-446B-9E51-71FBCA868E6F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.BusinessProcess.WFActivities.Test", "Vanrise.Business.WFActivities.Test\Vanrise.BusinessProcess.WFActivities.Test.csproj", "{5FCBDC4A-D94E-4883-A41D-C2579D21602D}"
 EndProject
@@ -55,7 +53,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Queueing.Web", "Van
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 21
+		SccNumberOfProjects = 20
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -123,22 +121,18 @@ Global
 		SccProjectTopLevelParentUniqueName16 = Vanrise.BusinessProcess.sln
 		SccProjectName16 = Vanrise.BusinessProcess.Client
 		SccLocalPath16 = Vanrise.BusinessProcess.Client
-		SccProjectUniqueName17 = Vanrise.BusinessProcess.OldWeb\\Vanrise.BusinessProcess.OldWeb.csproj
+		SccProjectUniqueName17 = Vanrise.BusinessProcess.Web\\Vanrise.BusinessProcess.Web.csproj
 		SccProjectTopLevelParentUniqueName17 = Vanrise.BusinessProcess.sln
-		SccProjectName17 = Vanrise.BusinessProcess.OldWeb
-		SccLocalPath17 = Vanrise.BusinessProcess.OldWeb
-		SccProjectUniqueName18 = Vanrise.BusinessProcess.Web\\Vanrise.BusinessProcess.Web.csproj
+		SccProjectName17 = Vanrise.BusinessProcess.Web
+		SccLocalPath17 = Vanrise.BusinessProcess.Web
+		SccProjectUniqueName18 = Vanrise.BusinessProcess.Extensions\\Vanrise.BusinessProcess.Extensions.csproj
 		SccProjectTopLevelParentUniqueName18 = Vanrise.BusinessProcess.sln
-		SccProjectName18 = Vanrise.BusinessProcess.Web
-		SccLocalPath18 = Vanrise.BusinessProcess.Web
-		SccProjectUniqueName19 = Vanrise.BusinessProcess.Extensions\\Vanrise.BusinessProcess.Extensions.csproj
+		SccProjectName18 = Vanrise.BusinessProcess.Extensions
+		SccLocalPath18 = Vanrise.BusinessProcess.Extensions
+		SccProjectUniqueName19 = Vanrise.Queueing.Web\\Vanrise.Queueing.Web.csproj
 		SccProjectTopLevelParentUniqueName19 = Vanrise.BusinessProcess.sln
-		SccProjectName19 = Vanrise.BusinessProcess.Extensions
-		SccLocalPath19 = Vanrise.BusinessProcess.Extensions
-		SccProjectUniqueName20 = Vanrise.Queueing.Web\\Vanrise.Queueing.Web.csproj
-		SccProjectTopLevelParentUniqueName20 = Vanrise.BusinessProcess.sln
-		SccProjectName20 = Vanrise.Queueing.Web
-		SccLocalPath20 = Vanrise.Queueing.Web
+		SccProjectName19 = Vanrise.Queueing.Web
+		SccLocalPath19 = Vanrise.Queueing.Web
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -177,10 +171,6 @@ Global
 		{D34EC1AA-9B14-4000-A6E4-0A4CD23EE87A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D34EC1AA-9B14-4000-A6E4-0A4CD23EE87A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D34EC1AA-9B14-4000-A6E4-0A4CD23EE87A}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{601CDC2A-F409-446B-9E51-71FBCA868E6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{601CDC2A-F409-446B-9E51-71FBCA868E6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{601CDC2A-F409-446B-9E51-71FBCA868E6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{601CDC2A-F409-446B-9E51-71FBCA868E6F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5FCBDC4A-D94E-4883-A41D-C2579D21602D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5FCBDC4A-D94E-4883-A41D-C2579D21602D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FCBDC4A-D94E-4883-A41D-C2579D21602D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -238,28 +228,27 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{AA9582C1-FDE5-49F8-B2DB-3A461D31F7FD} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
+		{E7B7BE23-5ABB-4327-B716-127A19E7B6E6} = {AA9582C1-FDE5-49F8-B2DB-3A461D31F7FD}
+		{3F8405F6-45C3-4EEF-9E59-A8B206DE0AA2} = {AA9582C1-FDE5-49F8-B2DB-3A461D31F7FD}
 		{EB3CF5AA-EC32-4723-81E5-C4A0C0525D05} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
 		{A5EE3349-B642-4CC7-B575-7C338821D63D} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
 		{5C28C004-F7BE-4F09-832F-CE8594B3231F} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
-		{519AC3E3-8FFA-4AF6-90E9-123BB54837F5} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
-		{601CDC2A-F409-446B-9E51-71FBCA868E6F} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
-		{5FCBDC4A-D94E-4883-A41D-C2579D21602D} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
-		{F5064A23-6E52-43DA-AFFA-71425942EBF8} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
-		{0056C00D-0FDB-45D3-955B-ADD9DDABD543} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
-		{0C2DD4B6-E3BE-48D6-93CF-4D135C60004E} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
-		{3F8405F6-45C3-4EEF-9E59-A8B206DE0AA2} = {AA9582C1-FDE5-49F8-B2DB-3A461D31F7FD}
-		{E7B7BE23-5ABB-4327-B716-127A19E7B6E6} = {AA9582C1-FDE5-49F8-B2DB-3A461D31F7FD}
-		{D34EC1AA-9B14-4000-A6E4-0A4CD23EE87A} = {519AC3E3-8FFA-4AF6-90E9-123BB54837F5}
 		{6386587A-5272-42B3-A156-7FAA8116F3A8} = {519AC3E3-8FFA-4AF6-90E9-123BB54837F5}
+		{D34EC1AA-9B14-4000-A6E4-0A4CD23EE87A} = {519AC3E3-8FFA-4AF6-90E9-123BB54837F5}
+		{519AC3E3-8FFA-4AF6-90E9-123BB54837F5} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
+		{AA9582C1-FDE5-49F8-B2DB-3A461D31F7FD} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
+		{5FCBDC4A-D94E-4883-A41D-C2579D21602D} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
 		{28EB3790-0E19-43AB-8ECB-6137EB0E588A} = {AA77692E-2A11-4668-8E05-3A50564EC28E}
 		{7A7BE8A2-3C37-42D6-A2E0-B2422661427F} = {AA77692E-2A11-4668-8E05-3A50564EC28E}
 		{A511DCE7-1FA4-46DC-B04E-01C4CCDD7F1C} = {AA77692E-2A11-4668-8E05-3A50564EC28E}
 		{8C98C28A-3F14-4876-B7DD-DC95313A3BA4} = {AA77692E-2A11-4668-8E05-3A50564EC28E}
+		{151DCD8D-1050-493B-BC05-A34F8CA12D60} = {34325F95-5BD5-4908-AF96-0BB001CAA55F}
+		{B8BD1FB9-E6B0-42CC-A032-544C9FB088C3} = {34325F95-5BD5-4908-AF96-0BB001CAA55F}
 		{34325F95-5BD5-4908-AF96-0BB001CAA55F} = {AA77692E-2A11-4668-8E05-3A50564EC28E}
 		{5BFF8DF2-75AF-4358-AF5E-66AF97B76177} = {AA77692E-2A11-4668-8E05-3A50564EC28E}
+		{F5064A23-6E52-43DA-AFFA-71425942EBF8} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
+		{0056C00D-0FDB-45D3-955B-ADD9DDABD543} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
+		{0C2DD4B6-E3BE-48D6-93CF-4D135C60004E} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
 		{120DB552-8E1C-4391-AFE8-FCE94639AEA3} = {AA77692E-2A11-4668-8E05-3A50564EC28E}
-		{B8BD1FB9-E6B0-42CC-A032-544C9FB088C3} = {34325F95-5BD5-4908-AF96-0BB001CAA55F}
-		{151DCD8D-1050-493B-BC05-A34F8CA12D60} = {34325F95-5BD5-4908-AF96-0BB001CAA55F}
 	EndGlobalSection
 EndGlobal

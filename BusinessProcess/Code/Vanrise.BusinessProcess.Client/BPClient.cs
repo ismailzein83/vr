@@ -109,10 +109,12 @@ namespace Vanrise.BusinessProcess.Client
             return dataManager.GetInstance(instanceId);
         }
 
-        public List<BPTrackingMessage> GetTrackingsByInstanceId(long processInstanceID, long lastTrackingId)
+        public Vanrise.Entities.IDataRetrievalResult<BPTrackingMessage> GetTrackingsByInstanceId(Vanrise.Entities.DataRetrievalInput<TrackingQuery> input)
         {
             IBPTrackingDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
-            return dataManager.GetTrackingsByInstanceId(processInstanceID,  lastTrackingId);
+            TrackingResult result = dataManager.GetTrackingsByInstanceId(input);
+            result.InstanceStatus = GetInstance(input.Query.ProcessInstanceId).Status;
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, result);
         }
 
 

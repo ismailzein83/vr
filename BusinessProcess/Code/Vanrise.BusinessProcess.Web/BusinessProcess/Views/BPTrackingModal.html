@@ -22,7 +22,7 @@
             </vr-row>
             <vr-row>
                 <vr-columns width="fullrow">
-                    <vr-datagrid datasource="::datasource" loadmoredata="loadMoreData" on-ready="onGridReady" clientsidefilter="filterGrid">
+                    <vr-datagrid datasource="::datasource" pagingtype="'PagingOnScroll'" dataretrievalfunction="dataRetrievalFunction" on-ready="onGridReady">
                         <vr-datagridcolumn headertext="'Message'" field="'Message'" widthfactor="50"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Severity'" field="'SeverityDescription'" getcolor="getSeverityColor" widthfactor="20"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Event Time'" field="'EventTime'" widthfactor="30" type="'Datetime'"></vr-datagridcolumn>

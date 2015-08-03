@@ -5,6 +5,7 @@ using System.Text;
 using Vanrise.Data.SQL;
 using System.Configuration;
 using System.Data;
+using System.Runtime.Remoting.Messaging;
 using Vanrise.BusinessProcess.Entities;
 
 namespace Vanrise.BusinessProcess.Data.SQL
@@ -64,12 +65,23 @@ namespace Vanrise.BusinessProcess.Data.SQL
             WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
         }
 
-        public List<BPTrackingMessage> GetTrackingsByInstanceId(long processInstanceID, long lastTrackingId)
+        public TrackingResult GetTrackingsByInstanceId(Vanrise.Entities.DataRetrievalInput<TrackingQuery> input)
         {
 
-            return GetItemsSP("bp.sp_BPTrackings_GetByInstanceId", BPTrackingMapper, processInstanceID, lastTrackingId);
+            return RetrieveData(input, (tempTableName) =>
+            {
+                ExecuteNonQuerySP("bp.sp_BPTrackings_CreateTempForFiltered", tempTableName, input.Query.LastTrackingId, input.Query.ProcessInstanceId);
 
+            }, BPTrackingMapper, null, new TrackingResult()) as TrackingResult;
+
+            //return GetItemsSP("bp.sp_BPTrackings_GetByInstanceId", BPTrackingMapper, processInstanceID, lastTrackingId);
+            //protected BigResult<T> RetrieveData<T>(Dictionary<string, string> fieldsToColumnsMapper = null, BigResult<T> rslt = null);
         }
+
+        //public Vanrise.Entities.BigResult<BPInstance> GetInstancesByCriteria(Vanrise.Entities.DataRetrievalInput<BPInstanceQuery> input)
+        //{
+        //    
+        //}
        
 
         #endregion

@@ -1,10 +1,12 @@
-﻿BPTrackingModalController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'BusinessProcessAPIService', 'BPInstanceStatusEnum', '$interval', 'LabelColorsEnum', 'BPTrackingSeverityEnum'];
-
-function BPTrackingModalController($scope, UtilsService, VRNotificationService, VRNavigationService, BusinessProcessAPIService, BPInstanceStatusEnum, $interval, LabelColorsEnum, BPTrackingSeverityEnum) {
+﻿(function (appControllers) {
 
     "use strict";
 
-    var mainGridApi, interval, nonClosedStatuses, lockGetData = false;
+    bpTrackingModalController.$inject = ['$scope', 'UtilsService', 'VRNavigationService', 'BusinessProcessAPIService', 'BusinessProcessService', 'DataRetrievalResultTypeEnum'];
+
+    function bpTrackingModalController($scope, UtilsService, VRNavigationService, BusinessProcessAPIService, BusinessProcessService, DataRetrievalResultTypeEnum) {
+
+    var mainGridApi, nonClosedStatuses;
 
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
@@ -12,50 +14,6 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
         if (parameters !== undefined && parameters !== null) {
             $scope.BPInstanceID = parameters.BPInstanceID;
         }
-    }
-
-    function startGetData() {
-        if (angular.isDefined(interval)) return;
-        interval =  $interval(function callAtInterval() {
-            getData();
-        }, 5000);
-    }
-
-    function getData() {
-
-        if (!lockGetData)
-        {
-            lockGetData = true;
-
-            var pageInfo = mainGridApi.getPageInfo();
-
-            return BusinessProcessAPIService.GetTrackingsByInstanceId(
-                $scope.BPInstanceID,
-                pageInfo.fromRow,
-                pageInfo.toRow,
-                $scope.lastTrackingId)
-            .then(function (response) {
-
-                $scope.lastTrackingId = UtilsService.getPropMaxValueFromArray(response.Tracking, "TrackingId");
-                mainGridApi.addItemsToBegin(response.Tracking);
-                var isNonClosed = false;
-
-                for (var i = 0, len = nonClosedStatuses.length; i < len; i++) {
-
-                    if (response.InstanceStatus === nonClosedStatuses[i]) {
-                        isNonClosed = true;
-                        break;
-                    }
-                }
-                if (isNonClosed) startGetData();
-                
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            }).finally(function () {
-                lockGetData = false;
-            });
-        }
-        return undefined;
     }
 
     function loadSummary() {
@@ -88,76 +46,51 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
         });
     }
 
-    function stopGetData() {
-        if (angular.isDefined(interval)) {
-            $interval.cancel(interval);
-            interval = undefined;
-        }
-    }
-
     function defineScope() {
         $scope.lastTrackingId = 0;
         $scope.message = '';
         $scope.trackingSeverity = [];
         $scope.selectedTrackingSeverity = [];
         $scope.close = function () {
-            stopGetData();
             $scope.modalContext.closeModal();
         };
 
-        $scope.$on('$destroy', function () {
-            stopGetData();
-        });
-
         $scope.getSeverityColor = function (dataItem, colDef) {
-
-            if (dataItem.Severity === BPTrackingSeverityEnum.Information.value) return LabelColorsEnum.Info.Color;
-            if (dataItem.Severity === BPTrackingSeverityEnum.Warning.value) return LabelColorsEnum.Warning.Color;
-            if (dataItem.Severity === BPTrackingSeverityEnum.Error.value) return LabelColorsEnum.Error.Color;
-            if (dataItem.Severity === BPTrackingSeverityEnum.Verbose.value) return LabelColorsEnum.Primary.Color;
-
-            return LabelColorsEnum.Info.Color;
+            return BusinessProcessService.getSeverityColor(dataItem.Severity);
         };
 
     }
 
+    function retrieveData() {
+
+        return mainGridApi.retrieveData({
+            ProcessInstanceID: $scope.BPInstanceID,
+            LastTrackingId: $scope.lastTrackingId
+        });
+    }
+
     function defineGrid() {
+
         $scope.datasource = [];
-        $scope.gridMenuActions = [];
-        $scope.loadMoreData = function () {
-            return getData();
-        };
 
         $scope.onGridReady = function (api) {
             mainGridApi = api;
-            $scope.isGettingData = true;
-            getData().finally(function () {
-                $scope.isGettingData = false;
-                lockGetData = false;
-            });
+            return retrieveData();
         };
 
-        $scope.filterGrid = function (item) {
-            var isMatch = false;
-            var severity = UtilsService.getPropValuesFromArray($scope.selectedTrackingSeverity, "Value");
+        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+            return BusinessProcessAPIService.GetTrackingsByInstanceId(dataRetrievalInput)
+            .then(function (response) {
 
-            if (isNullOrEmpty($scope.message) && isNullOrEmpty(severity)) return true;
+                $scope.lastTrackingId = UtilsService.getPropMaxValueFromArray(response.Data.Tracking, "TrackingId");
 
-            if (item['Message'].toUpperCase().indexOf($scope.message.toUpperCase()) > -1)
-                isMatch = true;
-
-            if (isNullOrEmpty(severity)) return isMatch;
-
-            var severityMatch = false;
-            for (var i = 0, len = severity.length; i < len; i++) {
-                if (String(item['Severity']).toUpperCase().indexOf(severity[i].toUpperCase()) > -1) {
-                    severityMatch = true;
-                    break;
+                if (dataRetrievalInput.DataRetrievalResultType === DataRetrievalResultTypeEnum.Normal.value) {
+                    for (var i = 0, len = response.Data.length; i < len; i++) {
+                        response.Data[i].SeverityDescription = BusinessProcessService.getSeverityDescription(response.Data[i].Severity);
+                    }
                 }
-            }
-
-            if (severityMatch && isMatch) return true;
-            return false;
+                onResponseReady(response);
+            });
         };
 
     }
@@ -170,13 +103,11 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
         loadSummary();
         loadNonClosedStatuses();
     }
-
-    function isNullOrEmpty(value) {
-        if (value) return false;
-        return true;
-    }
-
+   
     load();
     
 }
-appControllers.controller("BusinessProcess_BPTrackingModalController", BPTrackingModalController);
+
+    appControllers.controller("BusinessProcess_BPTrackingModalController", bpTrackingModalController);
+
+})(appControllers);
