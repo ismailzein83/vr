@@ -88,7 +88,36 @@ namespace Vanrise.Security.Business
         public Vanrise.Entities.IDataRetrievalResult<View> GetFilteredDynamicViews(Vanrise.Entities.DataRetrievalInput<string> filter)
         {
             IViewDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
+            Vanrise.Entities.BigResult<View> views = dataManager.GetFilteredDynamicViews(filter);
+
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(filter, dataManager.GetFilteredDynamicViews(filter));
+        }
+        public Vanrise.Entities.UpdateOperationOutput<List<MenuItem>> UpdateViewsRank(List<MenuItem> updatedMenuItem)
+        {
+            UpdateOperationOutput<List<MenuItem>> updateOperationOutput = new UpdateOperationOutput<List<MenuItem>>();
+
+            updateOperationOutput.Result = UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            IViewDataManager viewDataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
+            IModuleDataManager moduleDataManager = SecurityDataManagerFactory.GetDataManager<IModuleDataManager>();
+            bool  updateActionSucc=false;
+            for (int i = 0; i < updatedMenuItem.Count; i++)
+            {
+                if (updatedMenuItem[i].Childs == null || updatedMenuItem[i].Childs.Count == 0)
+                    updateActionSucc = viewDataManager.UpdateViewRank(updatedMenuItem[i].Id, (i + 1 * 10));
+                else
+                    updateActionSucc = moduleDataManager.UpdateModuleRank(updatedMenuItem[i].Id, (i + 1 * 10));
+            }
+            MenuManager menuManager = new MenuManager();
+            if (updateActionSucc)
+            {
+
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                List<MenuItem> updatedView = menuManager.GetMenuItems(SecurityContext.Current.GetLoggedInUserId());
+                updateOperationOutput.UpdatedObject = updatedView;
+            }
+            return updateOperationOutput;
         }
 
       

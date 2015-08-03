@@ -16,5 +16,6 @@ namespace Vanrise.Security.Data
         bool DeleteView(int viewId);
         View GetView(int viewId);
         Vanrise.Entities.BigResult<View> GetFilteredDynamicViews(Vanrise.Entities.DataRetrievalInput<string> filter);
+        bool UpdateViewRank(int viewId,int rank);
     }
 }

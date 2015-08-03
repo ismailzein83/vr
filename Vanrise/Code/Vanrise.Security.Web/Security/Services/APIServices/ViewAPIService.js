@@ -5,7 +5,8 @@
         AddView: AddView,
         DeleteView:DeleteView,
         GetView: GetView,
-        GetFilteredDynamicPages: GetFilteredDynamicPages
+        GetFilteredDynamicPages: GetFilteredDynamicPages,
+        UpdateViewsRank :UpdateViewsRank 
     });
 
     function AddView(view) {
@@ -28,5 +29,8 @@
     }
     function GetFilteredDynamicPages(filter) {
         return BaseAPIService.post("/api/View/GetFilteredDynamicViews", filter);
+    }
+    function UpdateViewsRank(updatedIds) {
+        return BaseAPIService.post("/api/View/UpdateViewsRank", updatedIds);
     }
 });

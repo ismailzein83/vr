@@ -1,0 +1,33 @@
+﻿<vr-panel ng-controller="Security_RankingPageManagementController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-textbox value="filterValue" label="Page Name"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked" isasynchronous=" true"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+    </vr-form>
+    <div vr-loader="isGettingData">
+        <vr-row>
+            <vr-columns colnum="12">
+                <vr-treeview datatextfield="Name"
+                             datachildrenfield="Childs"
+                             on-ready="menuReady"
+                             selecteditem="selectedMenuNode"
+                             onvaluechanged="onSelectedMenuNodechanged"
+                             wholerow>
+                </vr-treeview>
+            </vr-columns>
+        </vr-row>
+    </div>
+
+</vr-panel>
+

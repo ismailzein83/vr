@@ -139,6 +139,12 @@ namespace Vanrise.Security.Data.SQL
 
             return instance;
         }
+        public bool UpdateViewRank(int viewId, int rank)
+        {
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_View_UpdateRank", viewId, rank);
+            return (recordesEffected > 0);
+        }
+       
 
 
     }

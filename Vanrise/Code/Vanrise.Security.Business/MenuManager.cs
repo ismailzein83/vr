@@ -51,8 +51,8 @@ namespace Vanrise.Security.Business
                         retVal.Add(rootItem);
                 }
             }
-            List<MenuItem> test = SortedMenuItems(retVal);
-            return test;
+
+            return  SortedMenuItems(retVal);;
         }
         public List<MenuItem> SortedMenuItems(List<MenuItem> menuItems)
         {

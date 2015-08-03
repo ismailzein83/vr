@@ -9,5 +9,6 @@ namespace Vanrise.Security.Data
     public interface IModuleDataManager : IDataManager
     {
         List<Vanrise.Security.Entities.Module> GetModules();
+        bool UpdateModuleRank(int moduleId, int rank);
     }
 }

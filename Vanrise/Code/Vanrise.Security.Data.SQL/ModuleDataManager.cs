@@ -36,5 +36,10 @@ namespace Vanrise.Security.Data.SQL
             };
             return module;
         }
+        public bool UpdateModuleRank(int moduleId, int rank)
+        {
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_UpdateRank", moduleId, rank);
+            return (recordesEffected > 0);
+        }
     }
 }

@@ -48,5 +48,11 @@ namespace Vanrise.Security.Web.Controllers
             ViewManager manager = new ViewManager();
             return GetWebResponse(filter, manager.GetFilteredDynamicViews(filter));
         }
+           [HttpPost]
+           public Vanrise.Entities.UpdateOperationOutput<List<MenuItem>> UpdateViewsRank(List<MenuItem> updatedMenuItem)
+           {
+               ViewManager manager = new ViewManager();
+               return manager.UpdateViewsRank(updatedMenuItem);
+           }
     }
 }
