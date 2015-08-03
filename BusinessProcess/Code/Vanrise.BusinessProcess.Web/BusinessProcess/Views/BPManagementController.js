@@ -1,6 +1,6 @@
-﻿BPManagementController.$inject = ['$scope', 'UtilsService', 'BusinessProcessAPIService', 'VRModalService', 'LabelColorsEnum','BPInstanceStatusEnum'];
+﻿BPManagementController.$inject = ['$scope', 'UtilsService', 'BusinessProcessAPIService', 'VRModalService',  'DataRetrievalResultTypeEnum', 'BusinessProcessService'];
 
-function BPManagementController($scope, UtilsService, BusinessProcessAPIService, VRModalService, LabelColorsEnum,BPInstanceStatusEnum) {
+function BPManagementController($scope, UtilsService, BusinessProcessAPIService, VRModalService,DataRetrievalResultTypeEnum, BusinessProcessService) {
 
     "use strict";
 
@@ -40,6 +40,11 @@ function BPManagementController($scope, UtilsService, BusinessProcessAPIService,
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return BusinessProcessAPIService.GetFilteredBProcess(dataRetrievalInput)
             .then(function (response) {
+                if (dataRetrievalInput.DataRetrievalResultType === DataRetrievalResultTypeEnum.Normal.value) {
+                    for (var i = 0, len = response.Data.length; i < len; i++) {
+                        response.Data[i].StatusDescription = BusinessProcessService.getStatusDescription(response.Data[i].Status);
+                    }
+                }
                 onResponseReady(response);
             });
         };
@@ -67,16 +72,7 @@ function BPManagementController($scope, UtilsService, BusinessProcessAPIService,
         };
 
         $scope.getStatusColor = function (dataItem, colDef) {
-
-            if (dataItem.Status === BPInstanceStatusEnum.New.value) return LabelColorsEnum.Primary.Color;
-            if (dataItem.Status === BPInstanceStatusEnum.Running.value) return LabelColorsEnum.Info.Color;
-            if (dataItem.Status === BPInstanceStatusEnum.ProcessFailed.value) return LabelColorsEnum.Error.Color;
-            if (dataItem.Status === BPInstanceStatusEnum.Completed.value) return LabelColorsEnum.Success.Color;
-            if (dataItem.Status === BPInstanceStatusEnum.Aborted.value) return LabelColorsEnum.Warning.Color;
-            if (dataItem.Status === BPInstanceStatusEnum.Suspended.value) return LabelColorsEnum.Warning.Color;
-            if (dataItem.Status === BPInstanceStatusEnum.Terminated.value) return LabelColorsEnum.Error.Color;
-
-            return LabelColorsEnum.Info.Color;
+            return BusinessProcessService.getStatusColor(dataItem.Status);
         };
 
     }
