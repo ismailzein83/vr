@@ -20,7 +20,7 @@ BEGIN
       ,perm.[EntityId]
       ,perm.[PermissionFlags]
     from sec.Permission perm
-	LEFT JOIN sec.[Role] r on r.ID = perm.HolderId
+	LEFT JOIN sec.[Group] r on r.ID = perm.HolderId
 	LEFT JOIN sec.[User] u on u.ID = perm.HolderId 
 	where perm.HolderType = @HolderType
 	and perm.HolderId = @HolderId

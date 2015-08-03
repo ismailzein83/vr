@@ -8,7 +8,7 @@
 	@Id int out
 AS
 BEGIN
-IF NOT EXISTS(select 1 from sec.[User] where Email = @Email)
+IF NOT EXISTS(select null from sec.[User] where Email = @Email)
 	BEGIN
 		Insert into sec.[User] ([Name],[Password],[Email], [Status], [Description])
 		values(@Name, @Password, @Email, @Status, @Description)

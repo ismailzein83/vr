@@ -1,10 +1,10 @@
-﻿
--- =============================================
+﻿-- =============================================
 -- Author:		<Author,,Name>
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [sec].[sp_Module_GetAll]
+CREATE PROCEDURE [sec].[sp_OrgChartLinkedEntity_GetLinkedOrgChartId]
+	@LinkedEntityIdentifier varchar(850)
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -12,13 +12,6 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT  [Id]
-      ,[Name]
-      ,[Title]
-      ,[Url]
-      ,[ParentId]
-      ,[Icon]
-      ,[AllowDynamic]
-      ,[Rank] from sec.Module
-      ORDER BY [Rank]
+	SELECT [OrgChartID]
+       from sec.OrgChartLinkedEntity where LinkedEntityIdentifier = @LinkedEntityIdentifier
 END

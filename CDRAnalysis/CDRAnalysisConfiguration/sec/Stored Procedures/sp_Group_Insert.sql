@@ -3,15 +3,15 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [sec].[sp_Roles_Insert] 
+CREATE PROCEDURE [sec].[sp_Group_Insert] 
 	@Name Nvarchar(255),
 	@Description ntext,
 	@Id int out
 AS
 BEGIN
-IF NOT EXISTS(select 1 from sec.[Role] where Name = @Name)
+IF NOT EXISTS(select 1 from sec.[Group] where Name = @Name)
 	BEGIN
-		Insert into [sec].[Role] ([Name], [Description])
+		Insert into [sec].[Group] ([Name], [Description])
 		values(@Name, @Description)
 		
 		SET @Id = @@IDENTITY

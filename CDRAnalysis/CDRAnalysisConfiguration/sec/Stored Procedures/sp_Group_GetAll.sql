@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [sec].[sp_Roles_GetAll]
+CREATE PROCEDURE [sec].[sp_Group_GetAll]
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -13,5 +13,5 @@ BEGIN
     -- Insert statements for procedure here
 	SELECT [ID]
       ,[Name]
-      ,[Description] from sec.[Role]
+      ,[Description] from sec.[Group]
 END

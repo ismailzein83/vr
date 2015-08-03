@@ -3,8 +3,8 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [sec].[sp_Roles_Get]
-	@RoleId int
+CREATE PROCEDURE [sec].[sp_Group_GetUserGroups]
+	@UserId int
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -12,5 +12,5 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT ID, Name, [Description] from sec.[Role] where ID = @RoleId
+	SELECT UserId from sec.UserGroup where UserId = @UserId
 END

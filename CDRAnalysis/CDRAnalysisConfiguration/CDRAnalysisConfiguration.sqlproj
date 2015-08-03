@@ -69,14 +69,14 @@
     <Folder Include="sec\Stored Procedures\" />
     <Folder Include="BI\Stored Procedures\" />
     <Folder Include="sec\User Defined Types\" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
     <Build Include="sec\Tables\BusinessEntityModule.sql" />
     <Build Include="sec\Tables\BusinessEntity.sql" />
-    <Build Include="sec\Tables\Role.sql" />
     <Build Include="sec\Tables\Module.sql" />
-    <Build Include="sec\Tables\UserRole.sql" />
     <Build Include="sec\Tables\Permission.sql" />
     <Build Include="sec\Tables\Widget.sql" />
     <Build Include="sec\Tables\OrgChart.sql" />
@@ -100,12 +100,10 @@
     <Build Include="sec\Stored Procedures\sp_OrgChart_GetById.sql" />
     <Build Include="sec\Stored Procedures\sp_OrgChart_Insert.sql" />
     <Build Include="sec\Stored Procedures\sp_User_Update.sql" />
-    <Build Include="sec\Stored Procedures\sp_OrgChart_GetFiltered.sql" />
     <Build Include="sec\Stored Procedures\sp_BusinessEntity_GetAll.sql" />
     <Build Include="sec\Stored Procedures\sp_BusinessEntityModule_GetAll.sql" />
     <Build Include="sec\Stored Procedures\sp_View_GetAll.sql" />
     <Build Include="sec\Stored Procedures\sp_Module_GetAll.sql" />
-    <Build Include="sec\Stored Procedures\sp_Roles_GetUserRoles.sql" />
     <Build Include="sec\Stored Procedures\sp_User_CheckUserName.sql" />
     <Build Include="sec\Stored Procedures\sp_Permission_Delete.sql" />
     <Build Include="sec\Stored Procedures\sp_OrgChart_GetAll.sql" />
@@ -119,23 +117,31 @@
     <Build Include="sec\Stored Procedures\sp_User_GetAll.sql" />
     <Build Include="sec\Stored Procedures\sp_BusinessEntityModule_ToggleBreakInheritance.sql" />
     <Build Include="sec\Stored Procedures\sp_BusinessEntity_ToggleBreakInheritance.sql" />
-    <Build Include="sec\Stored Procedures\sp_Roles_Update.sql" />
-    <Build Include="sec\Stored Procedures\sp_Roles_Insert.sql" />
-    <Build Include="sec\Stored Procedures\sp_Roles_GetAll.sql" />
-    <Build Include="sec\Stored Procedures\sp_Roles_Get.sql" />
-    <Build Include="sec\Stored Procedures\sp_Roles_GetFiltered.sql" />
     <Build Include="sec\Stored Procedures\sp_User_GetbyId.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_GetFiltered.sql" />
     <Build Include="sec\Stored Procedures\sp_User_ResetPassword.sql" />
     <Build Include="sec\Stored Procedures\sp_WidgetDefinition_Get.sql" />
-    <Build Include="sec\Stored Procedures\sp_View_GetByType.sql" />
     <Build Include="sec\Stored Procedures\sp_User_GetMembers.sql" />
-    <Build Include="sec\Stored Procedures\sp_Roles_AssignMembers.sql" />
     <Build Include="BI\Stored Procedures\SP_SchemaConfiguration_GetByType.sql" />
     <Build Include="sec\User Defined Types\IntIDType.sql" />
     <Build Include="sec\User Defined Types\RoleMembersType.sql" />
     <Build Include="Security\sec.sql" />
     <Build Include="Security\BI.sql" />
+    <Build Include="sec\Tables\UserGroup.sql" />
+    <Build Include="sec\Tables\OrgChartLinkedEntity.sql" />
+    <Build Include="sec\Tables\Group.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_CreateTempForFiltered.sql" />
+    <Build Include="sec\Stored Procedures\sp_OrgChartLinkedEntity_Insert.sql" />
+    <Build Include="sec\Stored Procedures\sp_OrgChartLinkedEntity_GetLinkedOrgChartId.sql" />
+    <Build Include="sec\Stored Procedures\sp_OrgChart_CreateTempForFiltered.sql" />
+    <Build Include="sec\Stored Procedures\sp_Group_Update.sql" />
+    <Build Include="sec\Stored Procedures\sp_Group_Insert.sql" />
+    <Build Include="sec\Stored Procedures\sp_Group_GetUserGroups.sql" />
+    <Build Include="sec\Stored Procedures\sp_Group_GetAll.sql" />
+    <Build Include="sec\Stored Procedures\sp_Group_Get.sql" />
+    <Build Include="sec\Stored Procedures\sp_Group_CreateTempForFiltered.sql" />
+    <Build Include="sec\Stored Procedures\sp_Group_AssignMembers.sql" />
+    <Build Include="dbo\Stored Procedures\LKUPtable_GenerateMergeScript.sql" />
+    <Build Include="Security\BEntity.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="CDRAnalysis.PostDeployment.sql" />
