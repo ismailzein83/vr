@@ -25,32 +25,23 @@
         </vr-columns>
 </vr-row>
     <div class="row fileupload-buttonbar">
-        <div class="col-lg-7">
-            <!-- The fileinput-button span is used to style the file input field as button -->
-            <span class="btn btn-success fileinput-button vr-file-btn">
-                <i class="glyphicon glyphicon-plus "></i>
-                <span>Add file...</span>
-                <input type="file" id="fileUpload">
-            </span>            
-           
-            <div ng-if="filesAdded.length > 0" class="vr-file">
-                <a>{{filesAdded[filesAdded.length -1 ].name}}</a>
-                <span class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="filesAdded.length = 0 "></span>
-                <div ng-show="num2 < 90" class="progress-bar progress-bar-success  progress-bar-striped active vr-file-process" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{width: num2 + '%'}"></div>
-                <div ng-show="num == 100 " class="vr-file-process" style="font-size: 10px;top: 20px;"><span>Complete</span></div>
-
-            </div>    
-            {{num}}      
-                <!--<button type="button" class="btn btn-primary start" >
-            <i class="glyphicon glyphicon-upload"></i>
-            <span>Start upload</span>
-        </button>
-        <button type="button" class="btn btn-warning cancel" >
-            <i class="glyphicon glyphicon-ban-circle"></i>
-            <span>Cancel upload</span>
-        </button>
-         The global file processing state
-        <span class="fileupload-process"></span>-->
+        <div class="col-lg-4">
+            <!--<div class="vr-file-ulpoad">
+                <span class="btn btn-success fileinput-button vr-file-btn">
+                    <i class="glyphicon glyphicon-plus "></i>
+                    <span>Add file...</span>
+                    <input type="file" id="fileUpload">
+                </span>
+                <div ng-if="filesAdded.length > 0" class="vr-file">
+                    <a class="vr-file-name">{{filesAdded[filesAdded.length -1 ].name}}</a>
+                    <div ng-show="num2 < 90" class="progress-bar progress-bar-success  progress-bar-striped active vr-file-process" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{width: num2 + '%'}"></div>
+                    <div ng-show="num == 100 " class="vr-file-process" style="font-size: 10px;top: 20px;"><span>Complete</span></div>
+                </div> 
+                <span ng-show="filesAdded.length > 0" class="glyphicon glyphicon-remove hand-cursor vr-file-remove" aria-hidden="true" ng-click="filesAdded.length = 0 "></span>  
+            </div>-->  
+            <vr-fileupload value="doc" isrequired> </vr-fileupload>
+          
+            <!--{{num}}-->         
         </div>
         <!-- The global progress state -->
         <div class="col-lg-5 fade" data-ng-class="{in: active()}">

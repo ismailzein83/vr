@@ -190,6 +190,7 @@
     <Content Include="Client\Javascripts\Directives\Inputs\Choices\vr-choice-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Choices\vr-choices-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\DatePicker\vr-datetimepicker-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\FileUpload\vr-fileupload-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Form\vr-form-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Label\vr-label-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Select\dropdown-dir-service.js" />
@@ -1278,6 +1279,7 @@
     <Content Include="Client\Libraries\Bower\bootstrap\package.json" />
     <Content Include="Client\Libraries\Bower\bootstrap\README.md" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

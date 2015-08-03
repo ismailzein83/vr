@@ -666,7 +666,7 @@ input.ui-grid-filter-input[type="text"] {
 }
 
 .required-inpute{  
-    border-color: #D44A47;
+    border-color: #D44A47 !important;
     outline: 0px none;
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 2px rgba(195, 127, 122, 0.85);
 
@@ -1572,6 +1572,58 @@ input.ui-grid-filter-input[type="text"] {
 
 /**************END VR-TABS*********/
 
+
+
+/**************START VR-Upload*********/
+    .vr-file-ulpoad{
+        border: 1px solid #CCC;
+        width: 100%;
+        height: 30px;
+        border-radius: 4px;
+    }
+    .vr-file{   
+        display:inline-block;
+        position:relative;
+        top: -10px;
+        width:calc(100% - 65px );
+        margin-left: 5px;
+        
+    }
+    .vr-file-btn{
+        padding: 5px 12px;
+        height:100%;
+        margin: 0px;
+        width:40px;
+    }
+    .vr-file-remove{
+        top: 0px;
+        right: -2px;
+        width: 15px;
+    }
+    .vr-file-process{
+        display: block;
+        position: absolute;
+        left: 0px;
+        height: 5px;
+        font-size: 12px;
+        top: 25px;
+        width:100% !important;  
+    }
+    .vr-file-name{
+        display: inline-block;
+        font-size: 12px;  
+        width:100% !important;   
+        overflow: hidden;
+        word-wrap: break-word;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        position: relative;
+        top: 7px;
+     }
+     
+/**************END VR-Upload*********/
+
 .clockspace{
     display:inline-block;
     width:5px;
@@ -1660,23 +1712,6 @@ pointer-events: none;
 }
 .fix-border-radius{
     border-radius:4px 0px 0px 4px;
-}
-.vr-file{
-   
-    display:inline-block;
-    position:relative;
-    top: -10px;
-}
-.vr-file-btn{
-    padding: 5px 12px;
-    height:29px;
-}
-.vr-file-process{
-    display: block;
-   position: absolute;
-    left: 0px;
-    top: 17px;
-    height: 5px;
 }
 .vr-date-input{
     border-color: transparent;

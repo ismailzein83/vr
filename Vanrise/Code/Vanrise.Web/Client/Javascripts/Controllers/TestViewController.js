@@ -96,7 +96,6 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout) {
     var pathArray = location.href.split('/');
     var base = pathArray[0] + '//' + pathArray[2];
     $scope.filesAdded = [];
-    $scope.doneupload = false;
     $('#fileUpload').fileupload({
         url: base + '/api/FileManager/UploadFile',
         formData: function (form) { return []; },
