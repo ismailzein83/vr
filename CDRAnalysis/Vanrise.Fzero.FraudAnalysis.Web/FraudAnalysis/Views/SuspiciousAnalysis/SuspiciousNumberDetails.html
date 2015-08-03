@@ -42,7 +42,7 @@
                     <div>
                         <vr-row>
                             <vr-columns colnum="12">
-                                <div ng-show="isSubscriberThresholdsTabShown" vr-loader="isGettingSubscriberThresholds">
+                                <div ng-show="isSubscriberThresholdsTabShown" >
 
                                     <vr-datagrid datasource="subscriberThresholds" dataretrievalfunction="dataRetrievalFunction_SubscriberThresholds" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onSubscriberThresholdsGridReady">
                                         <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" widthfactor="20"></vr-datagridcolumn>
@@ -60,7 +60,7 @@
                                     </vr-datagrid>
 
                                 </div>
-                                <div ng-show="isNormalCDRTabShown" vr-loader="isGettingNormalCDRs">
+                                <div ng-show="isNormalCDRTabShown" >
                                     <vr-datagrid datasource="normalCDRs" dataretrievalfunction="dataRetrievalFunction_NormalCDRs" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onNormalCDRsGridReady">
                                         <vr-datagridcolumn headertext="'IMSI'" field="'IMSI'" widthfactor="13">  </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Connect'" field="'ConnectDateTime'" type="'Datetime'" widthfactor="17"></vr-datagridcolumn>
@@ -77,7 +77,7 @@
                                     </vr-datagrid>
 
                                 </div>
-                                <div ng-show="isNumberProfileTabShown" vr-loader="isGettingNumberProfiles">
+                                <div ng-show="isNumberProfileTabShown" >
                                     <vr-datagrid datasource="numberProfiles" dataretrievalfunction="dataRetrievalFunction_NumberProfiles" maxheight="400px" rotate="true" pagingtype="'PagingOnScroll'" on-ready="onNumberProfilesGridReady" >
 
                                         <vr-datagridcolumn headertext="'From Date'" field="'FromDate'" type="'Datetime'" widthfactor="20"></vr-datagridcolumn>
