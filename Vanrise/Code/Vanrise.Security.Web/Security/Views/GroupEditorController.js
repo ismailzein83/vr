@@ -111,31 +111,33 @@ function GroupEditorController($scope, GroupAPIService, UsersAPIService, VRModal
         var groupObj = buildGroupObjFromScope();
 
         return GroupAPIService.AddGroup(groupObj)
-        .then(function (response) {
-            if (VRNotificationService.notifyOnItemAdded("Group", response)) {
-                if ($scope.onGroupAdded != undefined)
-                    $scope.onGroupAdded(response.InsertedObject);
-                $scope.modalContext.closeModal();
-            }
-        }).catch(function (error) {
-            VRNotificationService.notifyException(error, $scope);
-        });
-
+            .then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded("Group", response)) {
+                    if ($scope.onGroupAdded != undefined)
+                        $scope.onGroupAdded(response.InsertedObject);
+                    $scope.modalContext.closeModal();
+                }
+            })
+            .catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
     }
 
     function updateGroup() {
+        $scope.issaving = true;
         var groupObj = buildGroupObjFromScope();
 
         GroupAPIService.UpdateGroup(groupObj)
-        .then(function (response) {
-            if (VRNotificationService.notifyOnItemUpdated("Group", response)) {
-                if ($scope.onGroupUpdated != undefined)
-                    $scope.onGroupUpdated(response.UpdatedObject);
-                $scope.modalContext.closeModal();
-            }
-        }).catch(function (error) {
-            VRNotificationService.notifyException(error, $scope);
-        });
+            .then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated("Group", response)) {
+                    if ($scope.onGroupUpdated != undefined)
+                        $scope.onGroupUpdated(response.UpdatedObject);
+                    $scope.modalContext.closeModal();
+                }
+            })
+            .catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
     }
 }
 

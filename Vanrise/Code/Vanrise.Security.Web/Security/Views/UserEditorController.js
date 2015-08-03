@@ -91,6 +91,7 @@ function UserEditorController($scope, UsersAPIService, VRModalService, VRNotific
     }
 
     function updateUser() {
+        $scope.issaving = true;
         var userObject = buildUserObjFromScope();
         UsersAPIService.UpdateUser(userObject)
         .then(function (response) {

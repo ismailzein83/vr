@@ -9,44 +9,44 @@
             <div ng-show="definitionSelected">
                 <vr-row>
                     <vr-columns colnum="6">
-                        <vr-textbox value="name" label="Name"></vr-textbox>
+                        <vr-textbox value="name" label="Name" isrequired></vr-textbox>
                     </vr-columns>
                 </vr-row>
             </div>
 
-            <div class="row" ng-show="hierarchySelected" style="margin-top:20px;">
-                <div class="col-md-6">
-                    <vr-treeview on-ready="treeReady"
-                        datachildrenfield="Members"
-                        datavaluefield="Id"
-                        datatextfield="Name"
-                        selecteditem="currentNode"
-                        onvaluechanged="treeValueChanged">
-                    </vr-treeview>
+            <div ng-show="hierarchySelected" style="margin-top:20px;">
 
-                    <!--<div data-angular-treeview="true"
-                         data-tree-id="tree"
-                         data-tree-model="members"
-                         data-node-id="Id"
-                         data-node-label="Name"
-                         data-node-children="Members">
-                    </div>-->
-                </div>
-                <div class="col-md-6" ng-show="currentNode">
-                    <form class="form-inline" style="margin-top: 15px;">
-                        <vr-select label="Manager" datasource="validManagers" selectedvalues="selectedManager" datatextfield="Name" datavaluefield="UserId"></vr-select>
-                        <vr-select ismultipleselection label="Users" datasource="validUsers" selectedvalues="selectedUsers" datatextfield="Name" datavaluefield="UserId"></vr-select>
+                <vr-row>
+                    <vr-columns colnum="6">
+                        <vr-treeview on-ready="treeReady"
+                                        datachildrenfield="Members"
+                                        datavaluefield="Id"
+                                        datatextfield="Name"
+                                        selecteditem="currentNode"
+                                        onvaluechanged="treeValueChanged">
+                        </vr-treeview>
+                    </vr-columns>
 
-                        <vr-button type="ApplyChanges" formname="orgChartEditorForm" data-onclick="applyChange" standalone></vr-button>
-                    </form>
-                </div>
+                    <vr-columns colnum="6" ng-show="currentNode">
+                        <vr-row>
+                            <vr-select label="Manager" datasource="validManagers" selectedvalues="selectedManager" datatextfield="Name" datavaluefield="UserId"></vr-select>
+                        </vr-row>
+                        <vr-row>
+                            <vr-select ismultipleselection label="Users" datasource="validUsers" selectedvalues="selectedUsers" datatextfield="Name" datavaluefield="UserId"></vr-select>
+                        </vr-row>
+                        <vr-row>
+                            <vr-button type="ApplyChanges" formname="orgChartEditorForm" data-onclick="applyChanges" standalone></vr-button>
+                        </vr-row>
+                    </vr-columns>
+                </vr-row>
+
             </div>
         </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="orgChartEditorForm" ng-hide="name == ''" data-onclick="saveOrgChart"></vr-button>
+                <vr-button type="Save" formname="orgChartEditorForm" data-onclick="saveOrgChart"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>
