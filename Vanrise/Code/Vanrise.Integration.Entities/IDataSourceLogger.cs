@@ -9,6 +9,18 @@ namespace Vanrise.Integration.Entities
 {
     public interface IDataSourceLogger
     {
-        void LogEntry(LogEntryType logEntryType, string message);
+        int DataSourceId { set; }
+
+        void LogEntry(LogEntryType logEntryType, string messageFormat, params object[] args);
+
+        void LogEntry(LogEntryType logEntryType, int queteItemId, string messageFormat, params object[] args);
+
+        void WriteVerbose(string messageFormat, params object[] args);
+
+        void WriteInformation(string messageFormat, params object[] args);
+
+        void WriteWarning(string messageFormat, params object[] args);
+
+        void WriteError(string messageFormat, params object[] args);
     }
 }

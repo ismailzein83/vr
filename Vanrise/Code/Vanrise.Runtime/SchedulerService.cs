@@ -16,7 +16,7 @@ namespace Vanrise.Runtime
 
             foreach (Entities.SchedulerTask item in tasks)
             {
-                if (item.IsEnabled && item.Status != Entities.SchedulerTaskStatus.Started)
+                if (item.IsEnabled && item.Status != Entities.SchedulerTaskStatus.InProgress)
                 {
                     if(item.NextRunTime == null)
                     {
@@ -26,12 +26,19 @@ namespace Vanrise.Runtime
                     {
                         Dictionary<string, object> evaluatedExpressions = item.TaskTrigger.EvaluateExpressions(item);
 
-                        item.Status = Entities.SchedulerTaskStatus.Started;
+                        item.Status = Entities.SchedulerTaskStatus.InProgress;
                         dataManager.UpdateTask(item);
+                        
+                        try
+                        {
+                            item.TaskAction.Execute(item, evaluatedExpressions);
+                        }
+                        catch
+                        {
+                            item.Status = Entities.SchedulerTaskStatus.Failed;
+                        }
 
-                        item.TaskAction.Execute(item, evaluatedExpressions);
-
-                        item.Status = Entities.SchedulerTaskStatus.NotStarted;
+                        item.Status = Entities.SchedulerTaskStatus.Completed;
                         item.NextRunTime = item.TaskTrigger.CalculateNextTimeToRun();
                         item.LastRunTime = DateTime.Now;
                     }

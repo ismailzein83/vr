@@ -23,6 +23,7 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
 
         private void CreateStreamReader(FileAdapterArgument fileAdapterArgument, Action<IImportedData> receiveData, FileInfo file)
         {
+            base.LogVerbose("Creating stream reader for file with name {0}", file.Name);
             StreamReaderImportedData reader = new StreamReaderImportedData()
             {
                 StreamReader = new StreamReader(fileAdapterArgument.Directory + "/" + file.Name),
@@ -38,14 +39,17 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
         {
             if (fileAdapterArgument.ActionAfterImport == (int)Actions.Rename)
             {
+                base.LogVerbose("Renaming file {0} after import", file.Name);
                 file.MoveTo(Path.Combine(file.DirectoryName, file.Name.ToLower().Replace(fileAdapterArgument.Extension.ToLower(), ".Imported")));
             }
             else if (fileAdapterArgument.ActionAfterImport == (int)Actions.Delete)
             {
+                base.LogVerbose("Deleting file {0} after import", file.Name);
                 file.Delete();
             }
             else if (fileAdapterArgument.ActionAfterImport == (int)Actions.Move)
             {
+                base.LogVerbose("Moving file {0} after import", file.Name);
                 if (System.IO.Directory.Exists(fileAdapterArgument.Directory))
                 {
                     file.MoveTo(Path.Combine(fileAdapterArgument.DirectorytoMoveFile, file.Name.Replace(fileAdapterArgument.Extension, ".Imported")));
@@ -59,10 +63,14 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
         {
             FileAdapterArgument fileAdapterArgument = argument as FileAdapterArgument;
 
+            base.LogVerbose("Checking the following directory {0}", fileAdapterArgument.Directory);
+
             if (System.IO.Directory.Exists(fileAdapterArgument.Directory))
             {
                 DirectoryInfo d = new DirectoryInfo(fileAdapterArgument.Directory);//Assuming Test is your Folder
+                base.LogVerbose("Getting all files with extenstion {0}", fileAdapterArgument.Extension);
                 FileInfo[] Files = d.GetFiles("*" + fileAdapterArgument.Extension); //Getting Text files
+                base.LogInformation("{0} files are ready to be imported", Files.Length);
                 foreach (FileInfo file in Files)
                 {
                     CreateStreamReader(fileAdapterArgument, receiveData, file);

@@ -13,32 +13,63 @@ namespace Vanrise.Integration.Business
 {
     public class DSSchedulerTaskAction : SchedulerTaskAction
     {
+        DataSourceLogger _logger = new DataSourceLogger();
+
         public override void Execute(SchedulerTask task, Dictionary<string, object> evaluatedExpressions)
         {
             DataSourceManager dataManager = new DataSourceManager();
             Vanrise.Integration.Entities.DataSource dataSource = dataManager.GetDataSourcebyTaskId(task.TaskId);
 
+            _logger.DataSourceId = dataSource.DataSourceId;
+            _logger.WriteInformation("Loaded successfully the data source with name '{0}'", dataSource.Name);
+
+            _logger.WriteVerbose("Preparing queues and stages");
+            
             Vanrise.Queueing.QueueExecutionFlowManager executionFlowManager = new Vanrise.Queueing.QueueExecutionFlowManager();
             var queuesByStages = executionFlowManager.GetQueuesByStages(dataSource.Settings.ExecutionFlowId);
 
+            if(queuesByStages == null || queuesByStages.Count == 0)
+                _logger.WriteWarning("No stages ready for use");
+            else
+                _logger.WriteInformation("{0} stages are ready for use", queuesByStages.Count);
+
+            _logger.WriteVerbose("Preparing adapters to start the import process");
+
             BaseReceiveAdapter adapter = (BaseReceiveAdapter)Activator.CreateInstance(Type.GetType(dataSource.AdapterInfo.FQTN));
-            adapter.SetLogger(new DataSourceLogger());
+            adapter.SetLogger(_logger);
             adapter.ImportData(dataSource.Settings.AdapterArgument, data =>
                 {
+                    _logger.WriteVerbose("Import Process is done, preparing for mapping data with description {0}", data.Description);
+
+                    _logger.WriteVerbose("Executing the custom code written for the mapper");
                     MappedBatchItemsToEnqueue outputItems = new MappedBatchItemsToEnqueue();
-                    MappingOutput outputResult = this.ExecuteCustomCode(dataSource.Settings.MapperCustomCode, data, outputItems);
+                    MappingOutput outputResult = this.ExecuteCustomCode(dataSource.DataSourceId, dataSource.Settings.MapperCustomCode, data, outputItems);
                     if (outputItems.Count > 0)
                     {
                         foreach (var outputItem in outputItems)
                         {
-                            queuesByStages[outputItem.StageName].Queue.EnqueueObject(outputItem.Item);
+                            try
+                            {
+                                _logger.WriteInformation("Enqueuing item '{0}' to stage '{1}'", outputItem.Item.GenerateDescription(), outputItem.StageName);
+                                queuesByStages[outputItem.StageName].Queue.EnqueueObject(outputItem.Item);
+                                _logger.WriteInformation("Enqueued the item successfully");
+                            }
+                            catch(Exception ex)
+                            {
+                                _logger.WriteError("An error occured while enqueuing item in stage {0}. Exception details {1}", outputItem.StageName, ex.Message);
+                                throw;
+                            }
                         }
+                    }
+                    else
+                    {
+                        _logger.WriteWarning("No mapped items to qneueue, the written custom code should specify at least one output item to enqueue items to");
                     }
                     data.OnDisposed();
                 });
         }
 
-        private MappingOutput ExecuteCustomCode(string customCode, IImportedData data, MappedBatchItemsToEnqueue outputItems)
+        private MappingOutput ExecuteCustomCode(int dataSourceId, string customCode, IImportedData data, MappedBatchItemsToEnqueue outputItems)
         {
             MappingOutput outputResult = null;
 
@@ -64,14 +95,25 @@ namespace Vanrise.Integration.Business
                 }
                 else
                 {
-                    //TODO: log build errors
+                    _logger.WriteError("Errors while building the code for the custom class. Please make sure to build the custom code bound with this data source");
                     return outputResult;
                 }
             }
 
-            IDataMapper mapper = (IDataMapper)generatedType.GetConstructor(Type.EmptyTypes).Invoke(null);
-            outputResult = mapper.MapData(data, outputItems);
+            _logger.WriteInformation("Custom class is ready for use");
 
+            try
+            {
+                DataMapper mapper = (DataMapper)generatedType.GetConstructor(Type.EmptyTypes).Invoke(null);
+                mapper.SetLogger(_logger);
+                outputResult = mapper.MapData(data, outputItems);
+                _logger.WriteInformation("Mapped data successfully with output result {0}", outputResult.Result);
+            }
+            catch(Exception ex)
+            {
+                _logger.WriteError("An error occured while mapping data. Error details: {0}", ex.Message);
+            }
+            
             return outputResult;
         }
 
@@ -89,7 +131,7 @@ namespace Vanrise.Integration.Business
             parameters.GenerateInMemory = true;
             parameters.IncludeDebugInformation = true;
             parameters.ReferencedAssemblies.Add("System.dll");
-            parameters.ReferencedAssemblies.Add(typeof(IDataMapper).Assembly.Location);
+            parameters.ReferencedAssemblies.Add(typeof(DataMapper).Assembly.Location);
             parameters.ReferencedAssemblies.Add(typeof(Vanrise.Queueing.Entities.PersistentQueueItem).Assembly.Location);
 
             parameters.ReferencedAssemblies.Add(Assembly.GetCallingAssembly().Location);
@@ -110,7 +152,7 @@ namespace Vanrise.Integration.Business
 
         private string BuildCustomClass(string customCode, string className)
         {
-            string code = (new StringBuilder()).Append(@"public Vanrise.Integration.Entities.MappingOutput MapData(Vanrise.Integration.Entities.IImportedData data, Vanrise.Integration.Entities.MappedBatchItemsToEnqueue mappedBatches)
+            string code = (new StringBuilder()).Append(@"public override Vanrise.Integration.Entities.MappingOutput MapData(Vanrise.Integration.Entities.IImportedData data, Vanrise.Integration.Entities.MappedBatchItemsToEnqueue mappedBatches)
                                                             {").Append(customCode).Append("}").ToString();
 
             string classDefinition = new StringBuilder().Append(@"
@@ -121,7 +163,7 @@ namespace Vanrise.Integration.Business
 
                 namespace Vanrise.Integration.Mappers
                 {
-                    public class ").Append(className).Append(" : ").Append(typeof(IDataMapper).FullName).Append(@"
+                    public class ").Append(className).Append(" : ").Append(typeof(DataMapper).FullName).Append(@"
                     {                        
                         ").Append(code).Append(@"
                     }

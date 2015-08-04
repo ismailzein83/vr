@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="DataSourceAdapterTypeDataManager.cs" />
     <Compile Include="DataSourceDataManager.cs" />
+    <Compile Include="DataSourceLogDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

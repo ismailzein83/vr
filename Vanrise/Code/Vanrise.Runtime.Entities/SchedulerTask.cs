@@ -14,11 +14,14 @@ namespace Vanrise.Runtime.Entities
         [Description("Not Started")]
         NotStarted = 0,
 
-        [Description("Started")]
-        Started = 1,
+        [Description("InProgress")]
+        InProgress = 1,
 
-        [Description("Stopped")]
-        Stopped = 2
+        [Description("Completed")]
+        Completed = 2,
+
+        [Description("Failed")]
+        Failed = 2
     }
 
     public enum SchedulerTaskType

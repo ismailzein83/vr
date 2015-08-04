@@ -19,30 +19,30 @@ namespace Vanrise.Integration.Entities
             _logger = logger;
         }
 
-        protected void LogError(string error)
+        protected void LogError(string messageFormat, params object[] args)
         {
-            LogEntry(LogEntryType.Error, error);
+            LogEntry(LogEntryType.Error, messageFormat, args);
         }
 
-        protected void LogWarning(string warning)
+        protected void LogWarning(string messageFormat, params object[] args)
         {
-            LogEntry(LogEntryType.Warning, warning);
+            LogEntry(LogEntryType.Warning, messageFormat, args);
         }
 
-        protected void LogInformation(string message)
+        protected void LogInformation(string messageFormat, params object[] args)
         {
-            LogEntry(LogEntryType.Information, message);
+            LogEntry(LogEntryType.Information, messageFormat, args);
         }
 
-        protected void LogVerbose(string message)
+        protected void LogVerbose(string messageFormat, params object[] args)
         {
-            LogEntry(LogEntryType.Verbose, message);
+            LogEntry(LogEntryType.Verbose, messageFormat, args);
         }
 
-        void LogEntry(LogEntryType logEntryType, string message)
+        private void LogEntry(LogEntryType logEntryType, string messageForamt, params object[] args)
         {
             if (_logger != null)
-                _logger.LogEntry(logEntryType, message);
+                _logger.LogEntry(logEntryType, messageForamt, args);
         }
     }
 }
