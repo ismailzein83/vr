@@ -110,7 +110,7 @@ namespace TOne.BusinessEntity.Data.SQL
                 UserId = (int)reader["UserId"],
                 CarrierName = GetCarrierName(reader["CarrierName"] as string, reader["NameSuffix"] as string),
                 CarrierAccountId = reader["CarrierAccountId"] as string,
-                RelationType = (int)reader["RelationType"]
+                RelationType = (CarrierRelationType)reader["RelationType"]
             };
 
             return assignedCarrier;

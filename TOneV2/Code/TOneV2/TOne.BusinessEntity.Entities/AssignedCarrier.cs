@@ -14,6 +14,12 @@ namespace TOne.BusinessEntity.Entities
 
         public string CarrierName { get; set; }
 
-        public int RelationType { get; set; }
+        public CarrierRelationType RelationType { get; set; }
+    }
+
+    public enum CarrierRelationType
+    {
+        isCustomer = 1,
+        isSupplier = 2
     }
 }
