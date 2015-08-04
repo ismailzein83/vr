@@ -158,7 +158,7 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                         var selfHeight = $(this).parent().height();
                         var selfOffset = $(self).offset();
                         var dropDown = self.parent().find('ul');
-                        $(dropDown).css({ position: 'fixed', top: selfOffset.top - $(this).parent().parent().parent().position().top - $(window).scrollTop() + selfHeight, left: 'auto' });
+                        $(dropDown).css({ position: 'fixed', top: selfOffset.top  - $(window).scrollTop() + selfHeight, left: 'auto' });
                     });
                     var fixDropdownPosition = function () {
                         $('.drop-down-inside-modal').find('.dropdown-menu').hide();

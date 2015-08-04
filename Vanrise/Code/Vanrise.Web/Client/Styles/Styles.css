@@ -1723,3 +1723,6 @@ pointer-events: none;
     outline: 0px none;
     box-shadow: none;
 }
+.vr-small-addon {
+    border: 1px solid #CCC !important;
+}
