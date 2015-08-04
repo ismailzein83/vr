@@ -34,6 +34,9 @@ function ValidateEditorController($scope, MenuAPIService, WidgetAPIService, User
             return BIAPIService.GetUserMeasuresValidator(dataRetrievalInput)
             .then(function (response) {
                 if (dataRetrievalInput.DataRetrievalResultType == DataRetrievalResultTypeEnum.Normal.value) {
+                    if (response.Data.length == 0) {
+                        $scope.showMessage = "All the active audiences of the page have the rights to see all added widgets."
+                    }
                     angular.forEach(response.Data, function (itm) {
                        fillNeededData(itm);
                     });

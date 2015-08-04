@@ -21,6 +21,7 @@ function RankingPageManagementController($scope, ViewAPIService, VRModalService,
             }
         }
         $scope.onSelectedMenuNodechanged = function () {
+            console.log($scope.menu);
             var settings = {};
             if ($scope.selectedMenuNode != undefined)
             {
@@ -44,40 +45,7 @@ function RankingPageManagementController($scope, ViewAPIService, VRModalService,
     }
 
 
-    function updatePage(dataItem) {
-        var settings = {};
 
-        settings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Dynamic Page: " + dataItem.Name;
-            modalScope.onPageUpdated = function (view) {
-                mainGridAPI.itemUpdated(fillNeededData(view));
-            };
-        };
-        VRModalService.showModal('/Client/Modules/Security/Views/DynamicPages/DynamicPageEditor.html', dataItem, settings);
-
-    }
-    function deletePage(dataItem) {
-
-        var message = "Do you want to delete " + dataItem.Name;
-        VRNotificationService.showConfirmation(message).then(function (response) {
-            if (response == true) {
-                return ViewAPIService.DeleteView(dataItem.ViewId).then(function (responseObject) {
-                    if (responseObject.Result == DeleteOperationResultEnum.Succeeded.value) {
-                        mainGridAPI.itemDeleted(fillNeededData(dataItem));
-                    }
-
-                    VRNotificationService.notifyOnItemDeleted("View", responseObject);
-                    $scope.isGettingData = false;
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                }).finally(function () {
-                });
-            }
-
-        });
-
-
-    }
 
     function load() {
         loadViews();

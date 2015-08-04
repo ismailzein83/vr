@@ -1,23 +1,24 @@
 ﻿<div vr-modalcontent ng-controller="Security_RankPageEditorController" width="'30%'">
     <vr-modalbody vr-loader="isGettingData" maxheight="'700px'">
         <vr-form name="formDynamicPagesEditor">
-                <div>
+            <div>
 
-                    <vr-row>
-                     <!--     <div class="list-group dragbelzone" ng-sortable="itemsSortable">-->   
-                             <div style=" overflow-x: auto; width: 300px; ">
-                            <ul class="list-group dragbelzone" ng-sortable="itemsSortable" ng-show="menu.Childs.length > 0">
-                                <li ng-repeat="child in menu.Childs" class="list-group-item list-custom" style="margin: 1px; font-size: 12px">
-                                    <i class="glyphicon glyphicon-th-list handeldrag"></i>
-                                    <div style="display:inline-block;max-width:200px;">{{child.Name}}</div>
-                                </li>
-                            </ul>
-                            <!--    </div>-->   
-                        </div>
-                    </vr-row>
+           <vr-row>
+                     <div style=" overflow-x: auto; width: 300px; ">
+                    <ul class="list-group dragbelzone" ng-sortable="itemsSortable" ng-show="menu.Childs.length > 0">
+                        <li ng-repeat="child in menu.Childs" class="list-group-item list-custom" style="margin: 1px; font-size: 12px">
+                            <i class="glyphicon glyphicon-th-list handeldrag"></i>
+                            <div style="display:inline-block;max-width:200px;">{{child.Name}}</div>
+                        </li>
+                    </ul>
+
                 </div>
 
-           </vr-form>
+
+            </vr-row>
+        </div>
+       
+        </vr-form>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
@@ -26,4 +27,5 @@
             </div>
         </vr-actionbar>
     </div>
+        </vr-modalbody>
 </div>

@@ -92,7 +92,8 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "New Dynamic Page";
             modalScope.onPageAdded = function (view) {
-                mainGridAPI.itemAdded(fillNeededData(view));
+                fillNeededData(view)
+                mainGridAPI.itemAdded(view);
             };
         };
         VRModalService.showModal('/Client/Modules/Security/Views/DynamicPages/DynamicPageEditor.html', null, settings);
@@ -104,7 +105,8 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "Edit Dynamic Page: " + dataItem.Name;
             modalScope.onPageUpdated = function (view) {
-                mainGridAPI.itemUpdated(fillNeededData(view));
+                fillNeededData(view)
+                mainGridAPI.itemUpdated(view);
             };
         };
         VRModalService.showModal('/Client/Modules/Security/Views/DynamicPages/DynamicPageEditor.html', dataItem, settings);
@@ -117,7 +119,8 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
             if (response == true) {
                 return ViewAPIService.DeleteView(dataItem.ViewId).then(function (responseObject) {
                     if (responseObject.Result == DeleteOperationResultEnum.Succeeded.value) {
-                        mainGridAPI.itemDeleted(fillNeededData(dataItem));
+                        fillNeededData(dataItem)
+                        mainGridAPI.itemDeleted(dataItem);
                     }
                        
                     VRNotificationService.notifyOnItemDeleted("View", responseObject);

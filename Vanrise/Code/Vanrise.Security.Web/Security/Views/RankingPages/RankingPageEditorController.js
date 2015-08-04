@@ -2,6 +2,7 @@
 
 function RankPageEditorController($scope, MenuAPIService, WidgetAPIService, GroupAPIService, UsersAPIService, ViewAPIService, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, PeriodEnum, TimeDimensionTypeEnum, ColumnWidthEnum, VRModalService) {
     loadParameters();
+    var treeAPI;
     defineScope();
     load();
     function loadParameters() {
@@ -9,11 +10,22 @@ function RankPageEditorController($scope, MenuAPIService, WidgetAPIService, Grou
         if (parameters != null) {
             $scope.menu = {
                 Name: parameters.Name,
-                Childs: parameters.Childs
+                Childs: parameters.Childs,
+                isOpened: true
+
             }
         }
     }
     function defineScope() {
+        $scope.selectedMenuNode;
+        $scope.menuReady = function (api) {
+            treeAPI = api;
+            if ($scope.menu.Childs.length > 0) {
+                var menu = [];
+                menu.push($scope.menu);
+                treeAPI.refreshTree(menu);
+            }
+        }
         $scope.save = function () {
             return ViewAPIService.UpdateViewsRank($scope.menu.Childs).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("MenuItems", response)) {
@@ -31,7 +43,12 @@ function RankPageEditorController($scope, MenuAPIService, WidgetAPIService, Grou
     
     } 
     function load() {
-      
+        if (treeAPI != undefined) {
+            var menu = [];
+            menu.push($scope.menu);
+            treeAPI.refreshTree(menu);
+        }
+           
     }
     function loadTree() {
         return MenuAPIService.GetAllMenuItems()

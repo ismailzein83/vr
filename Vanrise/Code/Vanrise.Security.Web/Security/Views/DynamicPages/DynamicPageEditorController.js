@@ -67,6 +67,20 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         $scope.onSelectionChanged = function () {
             buildContentsFromScope();
         }
+        $scope.periodSelectionChanged = function () {
+            if ($scope.selectedWidget != undefined) {
+                {
+                    var defaultPeriod;
+                    if (!$scope.nonSearchable)
+                        defaultPeriod = $scope.selectedViewPeriod.description;
+                    else
+                        defaultPeriod = $scope.selectedWidgetPeriod.description;
+                    var title = defaultPeriod + "-" + $scope.selectedWidget.Name;
+                    $scope.sectionTitle = title;
+                }
+
+            }
+        }
         $scope.onWidgetSelectionChanged = function () {
             if ($scope.selectedWidget != undefined) {
                 {
@@ -241,6 +255,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
        
         return ViewAPIService.UpdateView($scope.View).then(function (response) {
             if (VRNotificationService.notifyOnItemUpdated("View", response)) {
+
                 if ($scope.onPageUpdated != undefined)
                     $scope.onPageUpdated(response.UpdatedObject);
                 $scope.modalContext.closeModal();

@@ -15,6 +15,9 @@ app.directive('vrTreeview', [function () {
             selecteditem: '=',
             checkbox: '@',
             wholerow: '@',
+            draggable: '@',
+            state: '@',
+            movesettings: '@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -45,14 +48,16 @@ app.directive('vrTreeview', [function () {
            
 
             var api = {};
-
+         
             api.refreshTree = function (datasource) {
+                
                 treeElement.jstree("destroy");
                 treeElement = $element.find('#divTree');
                 var treeArray = [];
                 fillTreeFromDataSource(treeArray, datasource);
                 var treeData={
-                    core: { data: treeArray }
+                    core: { data: treeArray },
+                    "state": { "key": "state_demo" },
                 }
                 var plugins = [];
                 if (ctrl.checkbox !== undefined)
@@ -60,14 +65,44 @@ app.directive('vrTreeview', [function () {
                      plugins.push("checkbox");
                     
                 }
+                if (ctrl.draggable != undefined) {
+                    plugins.push("dnd");
+                    treeData.core.check_callback = function (operation, node, parent, position, more) {
+                        
+                        if (ctrl.movesettings != undefined) {
+                          
+                            if (ctrl.movesettings == 'samelevel') {
+                                
+                                if (operation === "copy_node" || operation === "move_node") {
+                                    if (parent.id != node.parent) {
+                                        return false;
+                                    } else
+                                        return true;
+                                }
+                            }
+                            else if (ctrl.movesettings == 'alllevels')
+                                return true;
+                        }
+
+                        
+                    };
+                   
+                }
+                if (ctrl.state != undefined) {
+                    plugins.push("state");
+                    
+                }
                 if (ctrl.wholerow !== undefined) {
                     plugins.push("wholerow");
                 }
                 treeData.plugins = plugins;
+                treeElement.jstree(treeData);
+                treeElement.bind("move_node.jstree", function (e, data) {
 
-                treeElement.jstree(treeData); 
+                });
 
                 treeElement.on('changed.jstree', function (e, data) {
+                 //   console.log(e);
                    ctrl.selecteditem = data.node.original.sourceItem;
                 });
             };
