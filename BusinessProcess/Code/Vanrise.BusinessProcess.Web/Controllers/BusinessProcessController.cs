@@ -132,7 +132,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         public Object GetFilteredTrackings(Vanrise.Entities.DataRetrievalInput<TrackingQuery> input)
         {
             BPClient manager = new BPClient();
-            return GetWebResponse(input,manager.GetTrackingsByInstanceId(input));
+            return GetWebResponse(input, manager.GetFilteredTrackings(input));
         }
 
         [HttpGet]

@@ -12,7 +12,7 @@ namespace Vanrise.BusinessProcess.Entities
         public long ProcessInstanceId { get; set; }
         public long? ParentProcessId { get; set; }
         public BPTrackingSeverity Severity { get; set; }
-        public string Message { get; set; }
+        public string TrackingMessage { get; set; }
         public DateTime EventTime { get; set; }
     }
 }

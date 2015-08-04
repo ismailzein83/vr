@@ -86,6 +86,7 @@
     <Build Include="logging\Stored Procedures\sp_LogAttribute_GetAll.sql" />
     <Build Include="Security\logging.sql" />
     <Build Include="bp\Functions\ParseStringList.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPTrackings_CreateTempForFiltered.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

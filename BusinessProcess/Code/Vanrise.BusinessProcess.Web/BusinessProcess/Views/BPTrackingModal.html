@@ -1,5 +1,5 @@
-﻿<div vr-modalcontent ng-controller="BusinessProcess_BPTrackingModalController">
-    <vr-modalbody width="'100%'" vr-loader="isGettingData">
+﻿<vr-modalcontent ng-controller="BusinessProcess_BPTrackingModalController">
+    <vr-modalbody vr-loader="isGettingData">
         <vr-form name="formBPTrackingModal">
 
             <vr-row removeline>
@@ -9,23 +9,32 @@
                 </vr-columns>
             </vr-row>
 
+
+            <div ng-hide="filterSectionCollapsed">
+                <vr-row removeline>
+                    <vr-columns width="1/2row">
+                        <vr-textbox label="Message:" value="message"></vr-textbox>
+                    </vr-columns>
+                    <vr-columns width="1/2row">
+                        <vr-select label="Severity" ismultipleselection hideselectedvaluessection="true" datatextfield="Description" datavaluefield="Value"
+                                   datasource="::trackingSeverity" selectedvalues="selectedTrackingSeverity"></vr-select>
+                    </vr-columns>
+                </vr-row>
+            </div>
+
             <vr-row removeline>
-                <vr-columns width="1/2row">
-                    <vr-textbox label="Message:" value="message"></vr-textbox>
-                </vr-columns>
-                <vr-columns width="1/2row">
-                    <vr-select label="Severity" ismultipleselection hideselectedvaluessection="true" datatextfield="Description" datavaluefield="Value"
-                               datasource="::trackingSeverity" selectedvalues="selectedTrackingSeverity"></vr-select>
-                </vr-columns>
-            </vr-row>
-            <vr-row>
+                <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                    <div transclude-to="buttons">
+                        <vr-button type="Search" formname="formBPTrackingModal" data-onclick="searchClicked"></vr-button>
+                    </div>
+                </vr-actionbar>
             </vr-row>
             <vr-row>
                 <vr-columns width="fullrow">
                     <vr-datagrid datasource="::datasource" pagingtype="'PagingOnScroll'" dataretrievalfunction="dataRetrievalFunction" on-ready="onGridReady">
-                        <vr-datagridcolumn headertext="'Message'" field="'Message'" widthfactor="50"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Severity'" field="'SeverityDescription'" getcolor="getSeverityColor" widthfactor="20"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Event Time'" field="'EventTime'" widthfactor="30" type="'Datetime'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Message'" field="'TrackingMessage'" widthfactor="80"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Severity'" field="'SeverityDescription'" getcolor="getSeverityColor" widthfactor="10"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Event Time'" field="'EventTime'" widthfactor="10" type="'Datetime'"></vr-datagridcolumn>
                     </vr-datagrid>
                 </vr-columns>
             </vr-row>
@@ -39,4 +48,4 @@
         </vr-actionbar>
 
     </div>
-</div>
+</vr-modalcontent>

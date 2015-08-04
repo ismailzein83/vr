@@ -86,7 +86,7 @@ namespace Vanrise.BusinessProcess
                 {
                     ProcessInstanceId = processInstanceId,
                     ParentProcessId = runningInstance.BPInstance.ParentProcessID,
-                    Message = String.Format("Event '{0}' triggerred", bookmarkName),
+                    TrackingMessage = String.Format("Event '{0}' triggerred", bookmarkName),
                     Severity = BPTrackingSeverity.Verbose,
                     EventTime = DateTime.Now
                 });
@@ -228,7 +228,7 @@ namespace Vanrise.BusinessProcess
             {
                 ProcessInstanceId = bpInstance.ProcessInstanceID,
                 ParentProcessId = bpInstance.ParentProcessID,
-                Message = String.Format("Status changed to '{0}'. {1}", bpInstance.Status, statusChangedTrackingSeverity == BPTrackingSeverity.Error || statusChangedTrackingSeverity == BPTrackingSeverity.Warning ? bpInstance.LastMessage : null),
+                TrackingMessage = String.Format("Status changed to '{0}'. {1}", bpInstance.Status, statusChangedTrackingSeverity == BPTrackingSeverity.Error || statusChangedTrackingSeverity == BPTrackingSeverity.Warning ? bpInstance.LastMessage : null),
                 Severity = statusChangedTrackingSeverity,
                 EventTime = DateTime.Now
             });

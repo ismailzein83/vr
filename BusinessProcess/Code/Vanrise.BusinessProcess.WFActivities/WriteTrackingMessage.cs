@@ -25,7 +25,7 @@ namespace Vanrise.BusinessProcess.WFActivities
             {
                 ProcessInstanceId = sharedData.InstanceInfo.ProcessInstanceID,
                 ParentProcessId = sharedData.InstanceInfo.ParentProcessID,
-                Message = this.Message.Get(context),
+                TrackingMessage = this.Message.Get(context),
                 Severity = severity,
                 EventTime = DateTime.Now
             });

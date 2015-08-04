@@ -22,7 +22,7 @@ namespace Vanrise.BusinessProcess
             BPSharedInstanceData instanceData = context.GetSharedInstanceData();
             BPTrackingMessage trackingMessage = new BPTrackingMessage
             {
-                Message = String.Format(messageFormat, args),
+                TrackingMessage = String.Format(messageFormat, args),
                 EventTime = DateTime.Now,
                 ProcessInstanceId = instanceData.InstanceInfo.ProcessInstanceID,
                 ParentProcessId = instanceData.InstanceInfo.ParentProcessID,

@@ -34,7 +34,7 @@ namespace Vanrise.BusinessProcess.Client
             {
                 ProcessInstanceId = processInstanceId,
                 ParentProcessId = createProcessInput.ParentProcessID,
-                Message = String.Format("Process Created: {0}", processTitle),
+                TrackingMessage = String.Format("Process Created: {0}", processTitle),
                 Severity = BPTrackingSeverity.Information,
                 EventTime = DateTime.Now
             });
@@ -109,12 +109,10 @@ namespace Vanrise.BusinessProcess.Client
             return dataManager.GetInstance(instanceId);
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<BPTrackingMessage> GetTrackingsByInstanceId(Vanrise.Entities.DataRetrievalInput<TrackingQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<BPTrackingMessage> GetFilteredTrackings(Vanrise.Entities.DataRetrievalInput<TrackingQuery> input)
         {
             IBPTrackingDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
-            TrackingResult result = dataManager.GetTrackingsByInstanceId(input);
-            result.InstanceStatus = GetInstance(input.Query.ProcessInstanceId).Status;
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, result);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredTrackings(input));
         }
 
 

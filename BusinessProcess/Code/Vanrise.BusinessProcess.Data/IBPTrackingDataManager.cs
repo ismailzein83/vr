@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Entities;
+
 namespace Vanrise.BusinessProcess.Data
 {
     public interface IBPTrackingDataManager : IDataManager
@@ -9,6 +11,6 @@ namespace Vanrise.BusinessProcess.Data
 
         void WriteTrackingMessagesToDB(List<BPTrackingMessage> lstTrackingMsgs);
 
-        TrackingResult GetTrackingsByInstanceId(Vanrise.Entities.DataRetrievalInput<TrackingQuery> input);
+        BigResult<BPTrackingMessage> GetFilteredTrackings(Vanrise.Entities.DataRetrievalInput<TrackingQuery> input);
     }
 }

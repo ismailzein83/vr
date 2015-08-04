@@ -19,7 +19,7 @@ namespace Vanrise.BusinessProcess.Web.ModelMappers
                 ParentProcessId = msg.ParentProcessId,
                 Severity = msg.Severity,
                 SeverityDescription = msg.Severity.ToString(),
-                Message = msg.Message,
+                Message = msg.TrackingMessage,
                 EventTime = msg.EventTime
             };
         }

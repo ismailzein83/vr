@@ -1,88 +1,94 @@
-﻿BusinessProcessAPIService.$inject = ['BaseAPIService'];
-
-function BusinessProcessAPIService(BaseAPIService) {
+﻿(function(appControllers) {
 
     "use strict";
 
-    function GetOpenedInstances() {
-        return BaseAPIService.get("/api/BusinessProcess/GetOpenedInstances");
-    }
+    businessProcessApiService.$inject = ['BaseAPIService'];
 
-    function GetDefinitions() {
-        return BaseAPIService.get("/api/BusinessProcess/GetDefinitions");
-    }
+    appControllers.service('BusinessProcessAPIService', businessProcessApiService);
 
-    function GetStatusList() {
-        return BaseAPIService.get("/api/BusinessProcess/GetStatusList");
-    }
+    function businessProcessApiService(BaseAPIService) {
 
-    function GetWorkflowTasksByDefinitionId(bpDefinitionId) {
-        return BaseAPIService.get("/api/BusinessProcess/GetWorkflowTasksByDefinitionId",
-            {
-                bpDefinitionId: bpDefinitionId
-            }
-        );
-    }
+        function GetOpenedInstances() {
+            return BaseAPIService.get("/api/BusinessProcess/GetOpenedInstances");
+        }
 
-    function GetWorkflowTasksByDefinitionIds() {
-        return BaseAPIService.get("/api/BusinessProcess/GetWorkflowTasksByDefinitionIds");
-    }
+        function GetDefinitions() {
+            return BaseAPIService.get("/api/BusinessProcess/GetDefinitions");
+        }
 
-    function CreateNewProcess(createProcessInput) {
-        return BaseAPIService.post("/api/BusinessProcess/CreateNewProcess", createProcessInput);
-    }
+        function GetStatusList() {
+            return BaseAPIService.get("/api/BusinessProcess/GetStatusList");
+        }
 
-    function GetFilteredBProcess(input) {
-        return BaseAPIService.post("/api/BusinessProcess/GetFilteredBProcess", input);
-    }
+        function GetWorkflowTasksByDefinitionId(bpDefinitionId) {
+            return BaseAPIService.get("/api/BusinessProcess/GetWorkflowTasksByDefinitionId",
+                {
+                    bpDefinitionId: bpDefinitionId
+                }
+            );
+        }
 
-    function GetFilteredDefinitions(title) {
-        return BaseAPIService.get("/api/BusinessProcess/GetFilteredDefinitions",
-            {
-                title: title
-            });
-    }
+        function GetWorkflowTasksByDefinitionIds() {
+            return BaseAPIService.get("/api/BusinessProcess/GetWorkflowTasksByDefinitionIds");
+        }
 
-    function GetDefinition(id) {
-        return BaseAPIService.get("/api/BusinessProcess/GetDefinition",
-            {
+        function CreateNewProcess(createProcessInput) {
+            return BaseAPIService.post("/api/BusinessProcess/CreateNewProcess", createProcessInput);
+        }
+
+        function GetFilteredBProcess(input) {
+            return BaseAPIService.post("/api/BusinessProcess/GetFilteredBProcess", input);
+        }
+
+        function GetFilteredDefinitions(title) {
+            return BaseAPIService.get("/api/BusinessProcess/GetFilteredDefinitions",
+                {
+                    title: title
+                });
+        }
+
+        function GetDefinition(id) {
+            return BaseAPIService.get("/api/BusinessProcess/GetDefinition",
+                {
+                    id: id
+                });
+        }
+
+        function GetFilteredTrackings(input) {
+            return BaseAPIService.post("/api/BusinessProcess/GetFilteredTrackings", input);
+        }
+
+        function GetTrackingSeverity() {
+            return BaseAPIService.get("/api/BusinessProcess/GetTrackingSeverity");
+        }
+
+        function GetBPInstance(id) {
+            return BaseAPIService.get("/api/BusinessProcess/GetBPInstance", {
                 id: id
             });
-    }
+        }
 
-    function GetTrackingsByInstanceId(input) {
-        return BaseAPIService.post("/api/BusinessProcess/GetTrackingsByInstanceId",input);
-    }
+        function GetNonClosedStatuses() {
+            return BaseAPIService.get("/api/BusinessProcess/GetNonClosedStatuses");
+        }
 
-    function GetTrackingSeverity() {
-        return BaseAPIService.get("/api/BusinessProcess/GetTrackingSeverity");
-    }
-
-    function GetBPInstance(id) {
-        return BaseAPIService.get("/api/BusinessProcess/GetBPInstance", {
-            id: id
+        return ({
+            GetDefinitions: GetDefinitions,
+            GetFilteredDefinitions: GetFilteredDefinitions,
+            GetStatusList: GetStatusList,
+            GetWorkflowTasksByDefinitionId: GetWorkflowTasksByDefinitionId,
+            GetWorkflowTasksByDefinitionIds: GetWorkflowTasksByDefinitionIds,
+            GetFilteredBProcess: GetFilteredBProcess,
+            GetFilteredTrackings: GetFilteredTrackings,
+            GetTrackingSeverity: GetTrackingSeverity,
+            GetOpenedInstances: GetOpenedInstances,
+            CreateNewProcess: CreateNewProcess,
+            GetBPInstance: GetBPInstance,
+            GetDefinition: GetDefinition,
+            GetNonClosedStatuses: GetNonClosedStatuses
         });
+
     }
+    
+})(appControllers);
 
-    function GetNonClosedStatuses() {
-        return BaseAPIService.get("/api/BusinessProcess/GetNonClosedStatuses");
-    }
-
-    return ({
-        GetDefinitions: GetDefinitions,
-        GetFilteredDefinitions: GetFilteredDefinitions,
-        GetStatusList: GetStatusList,
-        GetWorkflowTasksByDefinitionId: GetWorkflowTasksByDefinitionId,
-        GetWorkflowTasksByDefinitionIds: GetWorkflowTasksByDefinitionIds,
-        GetFilteredBProcess: GetFilteredBProcess,
-        GetTrackingsByInstanceId: GetTrackingsByInstanceId,
-        GetTrackingSeverity: GetTrackingSeverity,
-        GetOpenedInstances: GetOpenedInstances,
-        CreateNewProcess: CreateNewProcess,
-        GetBPInstance: GetBPInstance,
-        GetDefinition: GetDefinition,
-        GetNonClosedStatuses: GetNonClosedStatuses
-    });
-
-}
-appControllers.service('BusinessProcessAPIService', BusinessProcessAPIService);
