@@ -37,4 +37,8 @@ namespace Vanrise.BI.Entities
         Entity=0,
         Measure=1
     }
+    public enum MeasureConfigurationType{
+        Financial =0,
+        Technical =1
+    }
 }
