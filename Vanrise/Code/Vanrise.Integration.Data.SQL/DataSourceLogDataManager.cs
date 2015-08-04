@@ -15,9 +15,9 @@ namespace Vanrise.Integration.Data.SQL
 
         }
 
-        public void WriteEntry(Common.LogEntryType entryType, string message, int dataSourceId, int? queueItemId, DateTime logTimeSpan)
+        public void WriteEntry(Common.LogEntryType entryType, string message, int dataSourceId, int? importedBatchId, DateTime logTimeSpan)
         {
-            ExecuteNonQuerySP("integration.sp_DataSourceLog_Insert", dataSourceId, entryType, message, queueItemId, logTimeSpan);
+            ExecuteNonQuerySP("integration.sp_DataSourceLog_Insert", dataSourceId, entryType, message, importedBatchId, logTimeSpan);
         }
     }
 }
