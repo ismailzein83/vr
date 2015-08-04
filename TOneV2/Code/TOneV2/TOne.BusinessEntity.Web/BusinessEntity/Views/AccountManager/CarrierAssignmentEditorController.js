@@ -72,7 +72,11 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
             return AccountManagerAPIService.GetCarriers(dataRetrievalInput)
                 .then(function (response) {
                     carriers = getMappedCarriers(response.Data);
+                    
                     toggleAssignedCarriers(carriers);
+                    console.log('assigned carriers');
+                    console.log(assignedCarriers);
+
                     response.Data = carriers;
                     onResponseReady(response);
                 })

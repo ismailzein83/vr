@@ -119,9 +119,6 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
         return UsersAPIService.GetUsers()
             .then(function (response) {
                 users = response;
-            })
-            .catch(function (error) {
-                console.log('users');
             });
     }
 
@@ -129,9 +126,6 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
         return AccountManagerAPIService.GetLinkedOrgChartId()
             .then(function (response) {
                 assignedOrgChartId = response;
-            })
-            .catch(function (error) {
-                console.log('chart');
             });
     }
 
@@ -238,7 +232,7 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
         var mappedCarriers = [];
 
         angular.forEach(assignedCarriers, function (item) {
-
+            console.log(item);
             var gridObject = {
                 CarrierAccountId: item.CarrierAccountId,
                 CarrierName: item.CarrierName,
