@@ -9,8 +9,7 @@ namespace TOne.BusinessEntity.Entities
     public class AccountManagerCarrier
     {
         public string CarrierAccountId { get; set; }
-        public string Name { get; set; }
-        public string NameSuffix { get; set; }
+        public string CarrierName { get; set; }
         public bool IsCustomerAvailable { get; set; }
         public bool IsSupplierAvailable { get; set; }
     }

@@ -26,7 +26,7 @@ namespace TOne.BusinessEntity.Business
             return dataManager.GetAssignedCarriers(this.GetMemberIds(managerId, withDescendants), carrierType);
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<AssignedCarrier> GetAssignedCarriersFromTempTable(Vanrise.Entities.DataRetrievalInput<AssignedCarrierQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<AssignedCarrierFromTempTable> GetAssignedCarriersFromTempTable(Vanrise.Entities.DataRetrievalInput<AssignedCarrierQuery> input)
         {
             IAssignedCarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<IAssignedCarrierDataManager>();
             List<int> userIds = this.GetMemberIds(input.Query.ManagerId, input.Query.WithDescendants);

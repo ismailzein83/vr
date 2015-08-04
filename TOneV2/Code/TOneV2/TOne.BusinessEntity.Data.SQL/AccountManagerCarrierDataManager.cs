@@ -14,12 +14,15 @@ namespace TOne.BusinessEntity.Data.SQL
     {
         public Vanrise.Entities.BigResult<AccountManagerCarrier> GetCarriers(Vanrise.Entities.DataRetrievalInput<AccountManagerCarrierQuery> input)
         {
+            Dictionary<string, string> columnMapper = new Dictionary<string, string>();
+            columnMapper.Add("CarrierName", "Name");
+
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQuerySP("[BEntity].[sp_AccountManager_CreateTempForAccountManagerCarriers]", tempTableName, input.Query.UserId);
             };
 
-            return RetrieveData(input, createTempTableAction, AccountManagerCarrier);
+            return RetrieveData(input, createTempTableAction, AccountManagerCarrier, columnMapper);
         }
 
         AccountManagerCarrier AccountManagerCarrier(IDataReader reader)
@@ -27,12 +30,22 @@ namespace TOne.BusinessEntity.Data.SQL
             AccountManagerCarrier carrier = new AccountManagerCarrier
             {
                 CarrierAccountId = reader["CarrierAccountId"] as string,
-                Name = reader["Name"] as string,
-                NameSuffix = reader["NameSuffix"] as string,
+                CarrierName = GetCarrierName(reader["Name"] as string, reader["NameSuffix"] as string),
                 IsCustomerAvailable = (bool)reader["IsCustomerAvailable"],
                 IsSupplierAvailable = (bool)reader["IsSupplierAvailable"]
             };
+
             return carrier;
+        }
+
+        private string GetCarrierName(string carrierName, string nameSuffix)
+        {
+            string name = carrierName;
+
+            if (nameSuffix != "")
+                name += " (" + nameSuffix + ")";
+
+            return name;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace TOne.BusinessEntity.Data
     {
         List<AssignedCarrier> GetAssignedCarriers(List<int> userIds, CarrierTypeFilter carrierType);
 
-        Vanrise.Entities.BigResult<AssignedCarrier> GetAssignedCarriersFromTempTable(Vanrise.Entities.DataRetrievalInput<AssignedCarrierQuery> input, List<int> userIds);
+        Vanrise.Entities.BigResult<AssignedCarrierFromTempTable> GetAssignedCarriersFromTempTable(Vanrise.Entities.DataRetrievalInput<AssignedCarrierQuery> input, List<int> userIds);
 
         bool AssignCarriers(UpdatedAccountManagerCarrier[] updatedCarriers);
     }
