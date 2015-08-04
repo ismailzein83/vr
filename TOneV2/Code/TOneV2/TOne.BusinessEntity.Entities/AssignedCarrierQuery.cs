@@ -11,7 +11,5 @@ namespace TOne.BusinessEntity.Entities
         public int ManagerId { get; set; }
 
         public bool WithDescendants { get; set; }
-
-        public CarrierTypeFilter CarrierType { get; set; }
     }
 }
