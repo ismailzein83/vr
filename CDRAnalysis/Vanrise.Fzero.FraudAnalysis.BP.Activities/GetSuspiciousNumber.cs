@@ -83,10 +83,11 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                     if (fraudManagers[number.StrategyId].IsNumberSuspicious(number, out sNumber, number.StrategyId))
                                     {
                                         suspiciousNumbers.Add(sNumber);
-                                        numberProfiles.Add(number);
+                                        //numberProfiles.Add(number);
                                     }
 
-                                    //numbers.Add(number);
+                                    numberProfiles.Add(number);
+                                    //suspiciousNumbers.Add(sNumber);
                                 }
                                 if (suspiciousNumbers.Count > 0)
                                     inputArgument.OutputQueue.Enqueue(new SuspiciousNumberBatch
