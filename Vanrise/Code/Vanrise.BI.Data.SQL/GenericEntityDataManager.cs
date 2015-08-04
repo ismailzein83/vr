@@ -21,17 +21,17 @@ namespace Vanrise.BI.Data.SQL
             set { _entityDefinitions = value; }
         }
 
-        public IEnumerable<TimeValuesRecord> GetMeasureValues(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params string[] measureTypeNames)
+        public IEnumerable<TimeValuesRecord> GetMeasureValues(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, List<String> customerIds, List<String> supplierIds,string customerColumnId, params string[] measureTypeNames)
         {
-            return GetTimeValuesRecord(timeDimensionType, fromDate, toDate, null, measureTypeNames);
+            return GetTimeValuesRecord(timeDimensionType, fromDate, toDate, null, measureTypeNames, customerIds, supplierIds, customerColumnId);
         }
-        public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(string entityTypeName, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params string[] measureTypesNames)
+        public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(string entityTypeName, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, List<String> customerIds, List<String> supplierIds,string customerColumnId, params string[] measureTypesNames)
         {
             string entityIdColumn;
             string entityNameColumn;
             GetEntityColumns(entityTypeName, out entityIdColumn, out entityNameColumn);
             string[] additionalFilters = new string[] { BuildQueryColumnFilter(entityIdColumn, entityId) };
-            return GetTimeValuesRecord(timeDimensionType, fromDate, toDate, additionalFilters, measureTypesNames);
+            return GetTimeValuesRecord(timeDimensionType, fromDate, toDate, additionalFilters, measureTypesNames, customerIds, supplierIds, customerColumnId);
         }
         public IEnumerable<EntityRecord> GetTopEntities(string entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, List<String> queryFilter, params string[] measureTypesNames)
         {
@@ -144,16 +144,12 @@ namespace Vanrise.BI.Data.SQL
 
         }
 
-        private IEnumerable<TimeValuesRecord> GetTimeValuesRecord(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, string[] additionalFilters, string[] measureTypesNames)
+        private IEnumerable<TimeValuesRecord> GetTimeValuesRecord(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, string[] additionalFilters, string[] measureTypesNames, List<String> supplierIds, List<String> customerIds, string customerColumnId)
         {
             List<TimeValuesRecord> rslt = new List<TimeValuesRecord>();
             string[] measureColumns;
             string expressionsPart;
-
-            // GetMeasuresColumns1(measureTypes, _measureDefinitions, out expressionsPart);
-
             GetMeasuresColumns(measureTypesNames, out measureColumns, out expressionsPart);
-
             string columnsPart = BuildQueryColumnsPart(measureColumns);
             string rowsPart = BuildQueryDateRowColumns(timeDimensionType);
             string[] filters = new string[additionalFilters != null ? additionalFilters.Length + 1 : 1];
@@ -166,7 +162,12 @@ namespace Vanrise.BI.Data.SQL
                 }
             }
             string filtersPart = BuildQueryFiltersPart(filters);
-            string query = BuildQuery(columnsPart, rowsPart, filtersPart, expressionsPart);
+
+            string query;
+            if (supplierIds.Count != 0 || customerIds.Count != 0)
+                query = BuildQuery(columnsPart, rowsPart, filtersPart, supplierIds, customerIds, customerColumnId,expressionsPart);
+            else
+                query = BuildQuery(columnsPart, rowsPart, filtersPart, expressionsPart);
 
             ExecuteReaderMDX(query, (reader) =>
             {
@@ -185,6 +186,63 @@ namespace Vanrise.BI.Data.SQL
                 }
             });
             return rslt.OrderBy(itm => itm.Time);
+        }
+        protected string BuildQuery(string columnsPart, string rowsPartValue, string filtersPart, List<String> customerIds, List<String> supplierIds,string customerColumnId, string expressionsPart = null)
+        {
+            StringBuilder customerfilter = new StringBuilder();
+            StringBuilder supplierfilter = new StringBuilder();
+            if (customerIds.Count != 0)
+            {
+                foreach (string customer in customerIds)
+                {
+                    if (customerfilter.Length == 0)
+                    {
+                        customerfilter.Append("* filter(");
+                        customerfilter.Append(customerColumnId);
+                        customerfilter.Append(".children as FilterValue,");
+                        
+                    } 
+                    else
+                    {
+                        customerfilter.Append(" or ");
+                    }
+                    customerfilter.Append("FilterValue.CurrentMember.member_caption=");
+                    customerfilter.Append(customerColumnId);
+                    customerfilter.Append(".&[");
+                    customerfilter.Append(customer);
+                    customerfilter.Append("].MEMBER_CAPTION ");
+                }
+                customerfilter.Append(") ");
+            }
+            if (supplierIds.Count != 0)
+            {
+                foreach (string supplier in supplierIds)
+                {
+                    if (supplierfilter == null)
+                        supplierfilter.Append("* filter([SupplierAccounts].[Carrier Account ID].children as FilterValue,");
+                    else
+                    {
+                        supplierfilter.Append(" or ");
+                    }
+                    supplierfilter.Append("FilterValue.CurrentMember.member_caption=[SupplierAccounts].[Carrier Account ID].&[");
+                    supplierfilter.Append(supplier);
+                    supplierfilter.Append("].MEMBER_CAPTION ");
+                }
+                supplierfilter.Append(")");
+            }
+            string rowsPart = null;
+            if (!String.IsNullOrEmpty(rowsPartValue))
+                rowsPart = string.Format(@",{0} ON ROWS", rowsPartValue);
+            string query = string.Format(@"select {{{0}}} ON COLUMNS                               
+                                    {1} 
+                                    FROM [{2}]
+                                    WHERE {3} {4} {5}", columnsPart, rowsPart, CubeName, filtersPart, customerfilter, supplierfilter);
+
+            if (!String.IsNullOrEmpty(expressionsPart))
+                return String.Format(@"WITH {0}
+                                        {1}", expressionsPart, query);
+            else
+                return query;
         }
         private void GetMeasuresColumns(string[] measureTypesNames, out string[] measureColumns, out string expressionsPart)
         {

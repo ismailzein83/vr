@@ -26,9 +26,34 @@ namespace Vanrise.BI.Business
 
             IBIConfigurationDataManager configurations = BIDataManagerFactory.GetDataManager<IBIConfigurationDataManager>();
             IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
-            dataManager.MeasureDefinitions = configurations.GetMeasures();
-            dataManager.EntityDefinitions = configurations.GetEntities();
-            return dataManager.GetMeasureValues(timeDimensionType, fromDate, toDate, measureTypeNames);
+            List<BIConfiguration<BIConfigurationMeasure>> allMeasures= configurations.GetMeasures();
+            List<BIConfiguration<BIConfigurationEntity>> entities = configurations.GetEntities();
+            dataManager.MeasureDefinitions = allMeasures;
+            dataManager.EntityDefinitions = entities;
+            List<String> customerIds = new List<String>();
+            string customerColumnId=null;
+           foreach (BIConfiguration<BIConfigurationMeasure> measure in allMeasures){
+                foreach (string measureName in measureTypeNames)
+                 {
+                     if (measureName == measure.Name && measure.Configuration.Type == MeasureConfigurationType.Financial)
+                     {
+                         foreach (BIConfiguration<BIConfigurationEntity> entity in entities)
+                         {
+                             if (entity.Name == "Customer")
+                             {
+                                 customerColumnId = entity.Configuration.ColumnID;
+                                 var myObject = (IDimensionBehavior)Activator.CreateInstance(Type.GetType(entity.Configuration.BehaviorFQTN));
+                                 customerIds = myObject.GetFilteredValues();
+                             }
+                            
+                         }
+                     }
+                 }
+           }
+            
+            List<String> supplierIds = new List<String>();
+
+            return dataManager.GetMeasureValues(timeDimensionType, fromDate, toDate, customerIds, supplierIds,customerColumnId, measureTypeNames);
         }
 
         public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(string entityType, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params string[] measureTypes)
@@ -37,15 +62,14 @@ namespace Vanrise.BI.Business
             IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
             dataManager.MeasureDefinitions = configurations.GetMeasures();
             dataManager.EntityDefinitions = configurations.GetEntities();
-            return dataManager.GetEntityMeasuresValues(entityType, entityId, timeDimensionType, fromDate, toDate, measureTypes);
+            List<String> supplierIds=new List<String>();
+            List<String> customerIds=new List<String>();
+            string customerColumnId = null;
+            return dataManager.GetEntityMeasuresValues(entityType, entityId, timeDimensionType, fromDate, toDate, customerIds, supplierIds,customerColumnId, measureTypes);
         }
         public IEnumerable<EntityRecord> GetTopEntities(string entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, params string[] measureTypesNames)
         {
             List<String> queryFilter = new List<String>();
-           
-            //queryFilter.Add("C001");
-            //queryFilter.Add("C009");
-            //queryFilter.Add("C020");
             IBIConfigurationDataManager configurations = BIDataManagerFactory.GetDataManager<IBIConfigurationDataManager>();
             IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
             List<BIConfiguration<BIConfigurationEntity>> entities = configurations.GetEntities();
@@ -393,6 +417,7 @@ namespace Vanrise.BI.Business
                       if (measure.Configuration.RequiredPermissions != null && !securityManager.IsAllowed(measure.Configuration.RequiredPermissions, user))
                           userDeniedMeasures.Add(measure.Name);
                   }
+                  if (userDeniedMeasures.Count>0)
                   userMeasuresValidator.Add(new UserMeasuresValidator{UserId=user,MeasuresDenied=userDeniedMeasures});
               }
               BigResult<UserMeasuresValidator> returnedData = new BigResult<UserMeasuresValidator>();
