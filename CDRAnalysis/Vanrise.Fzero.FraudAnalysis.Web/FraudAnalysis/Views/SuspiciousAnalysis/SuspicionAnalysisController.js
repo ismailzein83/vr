@@ -13,7 +13,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
     function defineScope() {
 
-        $scope.statuses = [{ id: 1, name: 'Pending' }, { id: 2, name: 'Ignored' }, { id: 3, name: 'Confirmed' }, { id: 4, name: 'White List' }];
+        $scope.statuses = [{ id: 2, name: 'Pending' }, { id: 3, name: 'Closed: Fraud' }, { id: 4, name: 'Closed: White List' }, { id: 5, name: 'Cancelled' }, { id: 1, name: 'Opened' }];
         $scope.selectedStatus=[];
         $scope.selectedStatus.push(UtilsService.getItemByVal($scope.statuses, 1, "id"));
 
