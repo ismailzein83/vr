@@ -73,9 +73,9 @@
     <Folder Include="dbo\" />
     <Folder Include="dbo\Functions\" />
     <Folder Include="bp\Functions\" />
-    <Folder Include="integration" />
-    <Folder Include="integration\Stored Procedures" />
-    <Folder Include="integration\Tables" />
+    <Folder Include="integration\" />
+    <Folder Include="integration\Tables\" />
+    <Folder Include="integration\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="bp\Tables\BPTracking.sql" />
@@ -90,9 +90,10 @@
     <Build Include="Security\logging.sql" />
     <Build Include="bp\Functions\ParseStringList.sql" />
     <Build Include="bp\Stored Procedures\sp_BPTrackings_CreateTempForFiltered.sql" />
-    <Build Include="integration\Stored Procedures\sp_DataSourceLog_Insert.sql" />
     <Build Include="integration\Tables\DataSourceImportedBatch.sql" />
     <Build Include="integration\Tables\DataSourceLog.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSourceLog_Insert.sql" />
+    <Build Include="Security\integration.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
