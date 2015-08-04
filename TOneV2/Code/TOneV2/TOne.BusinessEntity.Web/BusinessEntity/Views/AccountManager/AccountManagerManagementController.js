@@ -68,7 +68,6 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
                 .then(function (response) {
 
                     response.Data = getMappedAssignedCarriers(response.Data);
-                    
                     onResponseReady(response);
                 })
                 .catch(function (error) {
@@ -109,8 +108,7 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
         if ($scope.currentNode != undefined) {
             var query = {
                 ManagerId: $scope.currentNode.nodeId,
-                WithDescendants: (assignedOrgChartId != undefined),
-                CarrierType: 0
+                WithDescendants: (assignedOrgChartId != undefined)
             };
 
             return gridApi.retrieveData(query);
@@ -121,6 +119,9 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
         return UsersAPIService.GetUsers()
             .then(function (response) {
                 users = response;
+            })
+            .catch(function (error) {
+                console.log('users');
             });
     }
 
@@ -128,6 +129,9 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
         return AccountManagerAPIService.GetLinkedOrgChartId()
             .then(function (response) {
                 assignedOrgChartId = response;
+            })
+            .catch(function (error) {
+                console.log('chart');
             });
     }
 
@@ -189,17 +193,15 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
 
     function getMappedAssignedCarriers(assignedCarriers)
     {
-        var mergedCarriers = getMergedAssignedCarriers(assignedCarriers);
-
         var mappedCarriers = [];
 
-        angular.forEach(mergedCarriers, function (item) {
+        angular.forEach(assignedCarriers, function (item) {
 
             var gridObject = {
                 CarrierAccountId: item.CarrierAccountId,
                 CarrierName: item.CarrierName,
-                IsCustomer: (item.RelationType != 2) ? 'True' : 'False',
-                IsSupplier: (item.RelationType != 1) ? 'True' : 'False',
+                IsCustomerAssigned: item.IsCustomerAssigned,
+                IsSupplierAssigned: item.IsSupplierAssigned,
                 Access: (item.UserId == $scope.currentNode.nodeId) ? 'Direct' : 'Indirect'
             };
 
@@ -207,36 +209,6 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
         });
         
         return mappedCarriers;
-    }
-
-    function getMergedAssignedCarriers(carriers) {
-        var mergedCarriers = [];
-
-        angular.forEach(carriers, function (item) {
-            if (countAssignedCarrier(mergedCarriers, item) == 0) // i.e. mergedCarriers doesn't contain item
-                mergedCarriers.push(getMergedAssignedCarrier(carriers, item));
-        });
-
-        return mergedCarriers;
-    }
-
-    function countAssignedCarrier(carriers, carrier) {
-        var counter = 0;
-
-        angular.forEach(carriers, function (item) {
-            if (item.UserId == carrier.UserId && item.CarrierAccountId == carrier.CarrierAccountId)
-                counter++;
-        });
-
-        return counter;
-    }
-
-    function getMergedAssignedCarrier(carriers, carrier)
-    {
-        if (countAssignedCarrier(carriers, carrier) == 2)
-            carrier.RelationType = 0; // indicating that this carrier is assigned as a customer and a supplier to this user
-
-        return carrier; // the merged carrier
     }
 }
 

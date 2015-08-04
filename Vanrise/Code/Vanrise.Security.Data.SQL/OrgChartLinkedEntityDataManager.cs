@@ -18,18 +18,7 @@ namespace Vanrise.Security.Data.SQL
 
         public int? GetLinkedOrgChartId(string linkedEntityIdentifier)
         {
-            int? orgChartId = null;
-
-            ExecuteReaderSP("sec.sp_OrgChartLinkedEntity_GetLinkedOrgChartId", (reader) =>
-                {
-                    while (reader.Read())
-                    {
-                        orgChartId = (int)reader["OrgChartID"];
-                    }
-
-                }, linkedEntityIdentifier);
-
-            return orgChartId;
+            return (int)ExecuteScalarSP("sec.sp_OrgChartLinkedEntity_GetLinkedOrgChartId", linkedEntityIdentifier);
         }
 
         public bool InsertOrUpdate(int orgChartId, string linkedEntityIdentifier)

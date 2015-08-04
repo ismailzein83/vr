@@ -69,6 +69,11 @@ namespace Vanrise.Security.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = orgChartObject;
             }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
             return updateOperationOutput;
         }
 

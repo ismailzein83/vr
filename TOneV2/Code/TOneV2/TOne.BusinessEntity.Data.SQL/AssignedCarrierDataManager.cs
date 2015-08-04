@@ -27,7 +27,7 @@ namespace TOne.BusinessEntity.Data.SQL
             });
         }
 
-        public Vanrise.Entities.BigResult<AssignedCarrier> GetAssignedCarriersFromTempTable(Vanrise.Entities.DataRetrievalInput<AssignedCarrierQuery> input, List<int> userIds)
+        public Vanrise.Entities.BigResult<AssignedCarrierFromTempTable> GetAssignedCarriersFromTempTable(Vanrise.Entities.DataRetrievalInput<AssignedCarrierQuery> input, List<int> userIds)
         {
             DataTable dtMembers = this.BuildUserIdsTable(userIds);
             
@@ -40,12 +40,10 @@ namespace TOne.BusinessEntity.Data.SQL
                     var dtParameter = new SqlParameter("@UserIds", SqlDbType.Structured);
                     dtParameter.Value = dtMembers;
                     cmd.Parameters.Add(dtParameter);
-
-                    cmd.Parameters.Add(new SqlParameter("@CarrierType", input.Query.CarrierType));
                 });
             };
 
-            return RetrieveData(input, createTempTableAction, AssigendCarrier);
+            return RetrieveData(input, createTempTableAction, AssignedCarrierFromTempTable);
         }
 
         public bool AssignCarriers(UpdatedAccountManagerCarrier[] updatedCarriers)
@@ -111,9 +109,22 @@ namespace TOne.BusinessEntity.Data.SQL
             {
                 UserId = (int)reader["UserId"],
                 CarrierName = GetCarrierName(reader["CarrierName"] as string, reader["NameSuffix"] as string),
-                NameSuffix = reader["NameSuffix"] as string,
                 CarrierAccountId = reader["CarrierAccountId"] as string,
                 RelationType = (int)reader["RelationType"]
+            };
+
+            return assignedCarrier;
+        }
+
+        Entities.AssignedCarrierFromTempTable AssignedCarrierFromTempTable(IDataReader reader)
+        {
+            AssignedCarrierFromTempTable assignedCarrier = new AssignedCarrierFromTempTable
+            {
+                CarrierAccountId = reader["CarrierAccountId"] as string,
+                CarrierName = GetCarrierName(reader["Name"] as string, reader["NameSuffix"] as string),
+                IsCustomerAssigned = (bool)reader["IsCustomerAssigned"],
+                IsSupplierAssigned = (bool)reader["IsSupplierAssigned"],
+                UserId = (int)reader["UserId"]
             };
 
             return assignedCarrier;

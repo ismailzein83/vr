@@ -29,13 +29,13 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
         }
     }
 
-    function defineScope() {
+    function defineScope(){
         $scope.validManagers = [];
         $scope.selectedManager = undefined;
         $scope.validUsers = [];
         $scope.selectedUsers = [];
 
-        $scope.applyChange = function () {
+        $scope.applyChanges = function () {
             applyFunction();
             treeAPI.refreshTree(members);
         }

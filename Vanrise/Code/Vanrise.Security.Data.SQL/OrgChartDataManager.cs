@@ -56,8 +56,8 @@ namespace Vanrise.Security.Data.SQL
             // serialize orgChartObject.Hierarchy
             string serializedHierarchy = Vanrise.Common.Serializer.Serialize(orgChartObject.Hierarchy, true);
 
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_OrgChart_Update", orgChartObject.Id, orgChartObject.Name, serializedHierarchy);
-            return (recordesEffected > 0);
+            int recordsEffected = ExecuteNonQuerySP("sec.sp_OrgChart_Update", orgChartObject.Id, orgChartObject.Name, serializedHierarchy);
+            return (recordsEffected > 0);
         }
 
         public bool DeleteOrgChart(int orgChartId)
