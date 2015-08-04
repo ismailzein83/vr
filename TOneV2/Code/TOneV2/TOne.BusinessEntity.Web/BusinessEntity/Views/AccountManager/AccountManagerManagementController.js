@@ -139,6 +139,7 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
         return OrgChartAPIService.GetOrgChartById(assignedOrgChartId)
             .then(function (orgChartObject) {
                 members = orgChartObject.Hierarchy;
+                addMissingMembers();
                 $scope.nodes = mapMembersToNodes(members);
                 treeAPI.refreshTree($scope.nodes);
             })
@@ -148,6 +149,47 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
             .finally(function () {
                 $scope.isLoading = false;
             });
+    }
+    
+    function addMissingMembers() {
+        for (var i = 0; i < users.length; i++) {
+            var member = findNode(users[i].UserId);
+
+            if (member == null) { // the user isn't a member
+                var object = {
+                    Id: users[i].UserId,
+                    Name: users[i].Name,
+                    Members: []
+                };
+
+                members.push(object);
+            }
+        }
+    }
+
+    function findNode(id) {
+        for (var i = 0; i < members.length; i++) {
+            var node = getNodeRecursively(id, members[i]);
+            if (node != null)
+                return node;
+        }
+
+        return null;
+    }
+
+    function getNodeRecursively(id, node) {
+        if (node.Id == id)
+            return node;
+
+        if (node.Members != null && node.Members.length > 0) {
+            for (var i = 0; i < node.Members.length; i++) {
+                var result = getNodeRecursively(id, node.Members[i]);
+                if (result != null)
+                    return result;
+            }
+        }
+
+        return null;
     }
 
     function buildTreeFromUsers() {
