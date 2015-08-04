@@ -67,9 +67,8 @@ namespace TOne.Analytics.Data.SQL
                             IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
 	                            BEGIN
 
-			                        SELECT Top (@nRecords) newtable.* INTO #RESULTs FROM (#Query#)as newtable  where (Attempt between @FromDate AND @ToDate) #FILTER#
+			                        SELECT Top (@nRecords) newtable.* INTO #TEMPTABLE# FROM (#Query#)as newtable  where (Attempt between @FromDate AND @ToDate) #FILTER#
 
-		                        SELECT * INTO #TEMPTABLE# FROM #RESULTs
 
                             END
                                 ");
