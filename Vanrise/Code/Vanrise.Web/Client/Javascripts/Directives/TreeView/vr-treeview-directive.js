@@ -59,7 +59,7 @@ app.directive('vrTreeview', [function () {
                         menuList[i].isOpened = true;
                         return menuList[i];
                     }
-                    else if (menuList[i].Childs != undefined) {
+                    else if (menuList[i][mappingChildField] != undefined || menuList[i].Childs!=undefined) {
                         var node=null;
                         if (mappingChildField != undefined)
                             node = setSelectedNode(menuList[i][mappingChildField], nodeId, mappingIdField, mappingChildField);
