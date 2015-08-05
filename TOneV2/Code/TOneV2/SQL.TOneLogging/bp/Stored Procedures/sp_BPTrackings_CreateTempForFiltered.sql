@@ -3,7 +3,8 @@
 	@ProcessInstanceID bigint,
 	@LastTrackingId bigint,
 	@Message varchar(max),
-	@Severities varchar(max)
+	@Severities varchar(max),
+	@TOP int
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -13,7 +14,7 @@ BEGIN
 	IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 	    BEGIN
 		
-			SELECT  [ID]
+			SELECT TOP(@TOP) [ID]
 				  ,[ProcessInstanceID]
 				  ,[ParentProcessID]
 				  ,[TrackingMessage]
