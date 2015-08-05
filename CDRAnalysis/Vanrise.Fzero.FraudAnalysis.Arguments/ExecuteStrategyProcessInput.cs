@@ -20,7 +20,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
         public override string GetTitle()
         {
             IStrategyDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
-            return String.Format("Execute Strategy Process ({0:dd-MMM-yy HH:mm} - {1:dd-MMM-yy HH:mm}), Strategies: {2}", this.FromDate, this.ToDate, String.Join(",", dataManager.GetStrategyNames(StrategyIds)));
+            return String.Format("Execute Strategy Process ({0:dd-MMM-yy HH:mm} to {1:dd-MMM-yy HH:mm}), Strategies: {2}", this.FromDate, this.ToDate, String.Join(",", dataManager.GetStrategyNames(StrategyIds)));
         }
 
         public override void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)
