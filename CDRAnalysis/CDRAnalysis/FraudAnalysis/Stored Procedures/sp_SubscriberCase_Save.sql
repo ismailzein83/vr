@@ -1,6 +1,7 @@
 ﻿
 
 
+
 CREATE PROCEDURE [FraudAnalysis].[sp_SubscriberCase_Save] 
     @SubscriberNumber varchar(50), 
 	@StatusID int,
