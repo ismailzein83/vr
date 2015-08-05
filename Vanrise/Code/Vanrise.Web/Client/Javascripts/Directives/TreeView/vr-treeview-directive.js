@@ -48,19 +48,19 @@ app.directive('vrTreeview', [function () {
            
 
             var api = {};
-            api.setSelectedNode = function (menuList, nodeId) {
-                return setSelectedNode(menuList, nodeId);
+            api.setSelectedNode = function (menuList, nodeId,mappingField) {
+                return setSelectedNode(menuList, nodeId, mappingField);
             };
-            function setSelectedNode(menuList, nodeId) {
+            function setSelectedNode(menuList, nodeId, mappingField) {
                 for (var i = 0; i < menuList.length; i++) {
                    
-                    if (menuList[i].Id == nodeId) {
+                    if (menuList[i][mappingField] == nodeId) {
                         menuList[i].isSelected = true;
                         menuList[i].isOpened = true;
                         return menuList[i];
                     }
-                    if (menuList[i].Childs != undefined) {
-                        var node = setSelectedNode(menuList[i].Childs, nodeId)
+                    else if (menuList[i].Childs != undefined) {
+                        var node = setSelectedNode(menuList[i].Childs, nodeId, mappingField)
                         if (node != null) {
                             menuList[i].isOpened = true;
                             return node;
