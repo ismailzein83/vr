@@ -30,7 +30,6 @@
 
         function loadFilters() {
             $scope.trackingSeverity = UtilsService.getLogEntryType();
-            console.log($scope.trackingSeverity);
         }
 
         function loadNonClosedStatuses() {
