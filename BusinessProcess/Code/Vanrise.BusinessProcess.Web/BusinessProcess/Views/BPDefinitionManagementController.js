@@ -44,7 +44,7 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
         interval = $interval(function callAtInterval() {
             getOpenedInstancesData();
             getScheduledTasksData();
-        }, 5000);
+        }, 10000);
     }
 
     function stopGetData() {
