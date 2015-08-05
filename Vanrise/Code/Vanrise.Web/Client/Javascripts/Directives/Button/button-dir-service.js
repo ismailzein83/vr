@@ -57,6 +57,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: "Add",
                     class: "glyphicon  glyphicon-plus-sign"
                 };
+            case "Edit":
+                return {
+                    text: "Edit",
+                    class: "glyphicon  glyphicon-edit"
+                };
             case "Remove":
                 return {
                     text: "Remove",
