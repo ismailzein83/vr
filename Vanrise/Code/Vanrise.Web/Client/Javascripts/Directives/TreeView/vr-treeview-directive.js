@@ -48,7 +48,26 @@ app.directive('vrTreeview', [function () {
            
 
             var api = {};
-         
+            api.setSelectedNode = function (menuList, nodeId) {
+                return setSelectedNode(menuList, nodeId);
+            };
+            function setSelectedNode(menuList, nodeId) {
+                for (var i = 0; i < menuList.length; i++) {
+                   
+                    if (menuList[i].Id == nodeId) {
+                        menuList[i].isSelected = true;
+                        menuList[i].isOpened = true;
+                        return menuList[i];
+                    }
+                    if (menuList[i].Childs != undefined)
+                        var node=setSelectedNode(menuList[i].Childs, nodeId)
+                    if (node != null) {
+                        menuList[i].isOpened = true;
+                        return node;
+                    }
+                        
+                }
+            }
             api.refreshTree = function (datasource) {
                 
                 treeElement.jstree("destroy");
