@@ -12,6 +12,7 @@ using Vanrise.Caching;
 using Vanrise.Queueing;
 using Vanrise.BusinessProcess;
 using TOne.CDR.Business;
+using Vanrise.Common;
 
 namespace TOne.CDRProcess.Activities
 {
@@ -147,8 +148,8 @@ namespace TOne.CDRProcess.Activities
 
                         }
                         TimeSpan spent = DateTime.Now.Subtract(startPricing);
-                        handle.SharedInstanceData.WriteTrackingMessage(Vanrise.BusinessProcess.Entities.BPTrackingSeverity.Information, "Pricing and billings cdrs({0}-Main:{1},Invalid:{2}) done and takes:{3}", cdrBatch.CDRs.Count, CDRMains.MainCDRs.Count, CDRInvalids.InvalidCDRs.Count, spent);
-                        handle.SharedInstanceData.WriteTrackingMessage(Vanrise.BusinessProcess.Entities.BPTrackingSeverity.Information, "Pricing and billings cdrs({0}) Identifications:{1},Pricing:{2}", cdrBatch.CDRs.Count, totalsecondsforidentifications, totalsecondsforpricing);
+                        handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Pricing and billings cdrs({0}-Main:{1},Invalid:{2}) done and takes:{3}", cdrBatch.CDRs.Count, CDRMains.MainCDRs.Count, CDRInvalids.InvalidCDRs.Count, spent);
+                        handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Pricing and billings cdrs({0}) Identifications:{1},Pricing:{2}", cdrBatch.CDRs.Count, totalsecondsforidentifications, totalsecondsforpricing);
                         inputArgument.OutputBillingQueue.Enqueue(billingCDRs);
                         if (CDRMains.MainCDRs.Count > 0) inputArgument.OutputMainCDRQueue.Enqueue(CDRMains);
                         if (CDRInvalids.InvalidCDRs.Count > 0) inputArgument.OutputInvalidCDRQueue.Enqueue(CDRInvalids);

@@ -9,6 +9,7 @@ using System.Configuration;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Entities;
 using TOne.Business;
+using Vanrise.Common;
 
 namespace TOne.LCRProcess.Activities
 {
@@ -47,7 +48,7 @@ namespace TOne.LCRProcess.Activities
                         }
                         catch (Exception ex)
                         {
-                            context.WriteTrackingMessage(BPTrackingSeverity.Warning, "Exception occurred while deleting the routing database Id '{0}', db Title: '{1}'. Error message: {2}", db.ID, db.Title, ex.Message);
+                            context.WriteTrackingMessage(LogEntryType.Warning, "Exception occurred while deleting the routing database Id '{0}', db Title: '{1}'. Error message: {2}", db.ID, db.Title, ex.Message);
                         }
                     }
                 }

@@ -6,6 +6,7 @@ using System.Activities;
 using System.Threading.Tasks;
 using TOne.CDRProcess.Arguments;
 using Vanrise.BusinessProcess;
+using Vanrise.Common;
 
 namespace TOne.CDRProcess.Activities
 {
@@ -49,7 +50,7 @@ namespace TOne.CDRProcess.Activities
                 action();
             });
             TimeSpan spent = DateTime.Now.Subtract(startClearing);
-            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.BusinessProcess.Entities.BPTrackingSeverity.Information, "Clear TimeRange billings({0:HH:mm}-{1:HH:mm}) done and takes:{2}", from, to, spent);
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Clear TimeRange billings({0:HH:mm}-{1:HH:mm}) done and takes:{2}", from, to, spent);
         }
 
         protected override ClearTimeRangeBillingRecordsInput GetInputArgument(AsyncCodeActivityContext context)
