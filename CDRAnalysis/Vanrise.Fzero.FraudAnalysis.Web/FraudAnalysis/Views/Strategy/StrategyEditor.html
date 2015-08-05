@@ -5,7 +5,12 @@
                 <vr-columns colnum="2">
                     <vr-textbox value="name" label="Name" isrequired></vr-textbox>
                 </vr-columns>
+
                 <vr-columns colnum="2">
+                    <vr-select  label="Period" datasource="periods" datatextfield="Name" datavaluefield="Id"  selectedvalues="selectedPeriod" isrequired ></vr-select>
+                </vr-columns>
+
+                <vr-columns colnum="4">
                     <vr-textbox value="description" label="Description" isrequired></vr-textbox>
                 </vr-columns>
                 <vr-columns colnum="2">

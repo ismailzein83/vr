@@ -7,6 +7,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     {
         public int Id { get; set; }
 
+        public int PeriodId { get; set; }
+
         public string Name { get; set; }
 
         public string Description { get; set; }

@@ -26,9 +26,14 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         $scope.maxLowDurationCall = 8;
         $scope.minCountofCallsinActiveHour = 5;
 
-
+        $scope.selectedPeriod = '';
+        $scope.periods = [];
         $scope.strategyFilters = [];
         $scope.selectedPeakHours = [];
+        $scope.filterDefinitions = [];
+
+        StrategyEditorController.isFilterTabShown = true;
+        StrategyEditorController.isLevelsTabShow = false;
 
         $scope.percentages = [
                          { description: '-75%', value: 0.25 }, { description: '-50%', value: 0.5 }, { description: '-25%', value: 0.75 }, { description: '0%', value: 1.00 }, { description: '25%', value: 1.25 }, { description: '50%', value: 1.50 }, { description: '75%', value: 1.75 }
@@ -126,11 +131,10 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             });
     }
 
-
     function buildStrategyObjFromScope() {
-
         var strategyObject = {
             Id: ($scope.strategyId != null) ? $scope.strategyId : 0,
+            PeriodId: $scope.selectedPeriod.Id,
             Name: $scope.name,
             Description: $scope.description,
             IsDefault: $scope.isDefault,
@@ -141,9 +145,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             StrategyFilters: [],
             StrategyLevels: []
         };
-
-
-
 
         angular.forEach($scope.strategyFilters, function (filter) {
             if (filter.isSelected) {
@@ -163,10 +164,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             }
 
         });
-
-
-
-
 
         angular.forEach($scope.strategyLevels, function (level) {
 
@@ -210,8 +207,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         return strategyObject;
     }
 
-
-
     function loadFiltersForAddMode() {
         angular.forEach($scope.filterDefinitions, function (filterDef) {
             var filterItem = {
@@ -224,6 +219,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
     function fillScopeFromStrategyObj(strategyObject) {
         $scope.name = strategyObject.Name;
+        $scope.selectedPeriod = UtilsService.getItemByVal($scope.periods, strategyObject.PeriodId, "Id");
         $scope.description = strategyObject.Description;
         $scope.isDefault = strategyObject.IsDefault;
         $scope.gapbetweenconsecutivecalls = strategyObject.GapBetweenConsecutiveCalls;
@@ -300,11 +296,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         $scope.issaving = true;
         var strategyObject = buildStrategyObjFromScope();
 
-
-
-
-
-
         return StrategyAPIService.AddStrategy(strategyObject)
           .then(function (response) {
               if (VRNotificationService.notifyOnItemAdded("Strategy", response)) {
@@ -331,10 +322,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         });
     }
 
-
-    $scope.filterDefinitions = [];
-
-
     function loadFilters() {
         var index = 0;
         return StrategyAPIService.GetFilters().then(function (response) {
@@ -344,11 +331,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         });
     }
 
-
-
-    $scope.periods = [];
-    $scope.selectedPeriod = "";
-
     function loadPeriods() {
         return StrategyAPIService.GetPeriods().then(function (response) {
             angular.forEach(response, function (itm) {
@@ -357,24 +339,11 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         });
     }
 
-
-
-
-
-    StrategyEditorController.isFilterTabShown = true;
-    StrategyEditorController.isLevelsTabShow = false;
-
     StrategyEditorController.viewVisibilityChanged = function () {
 
         isFilterTabShown = !isFilterTabShown;
         isLevelsTabShow = !isLevelsTabShow;
     };
-
-
-
-
-
-
 
 }
 appControllers.controller('StrategyEditorController', StrategyEditorController);
