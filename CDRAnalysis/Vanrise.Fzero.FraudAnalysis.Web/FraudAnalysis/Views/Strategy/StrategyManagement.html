@@ -14,11 +14,8 @@
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked" isasynchronous=" true"></vr-button>
-                    <button type="button" class="btn btn-default btncustom  action-bar-btn-icon no-float" aria-label="Left Align" ng-click="addNewStrategy()">
-                        Add
-                        <span style="padding-left:4px" class="glyphicon glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-                    </button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"  ></vr-button>
+                    <vr-button type="Add" formname="formFilter" data-onclick="addNewStrategy"  ></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
