@@ -11,10 +11,10 @@ Post-Deployment Script Template
 */
 MERGE INTO bp.[LKUP_TrackingSeverity] AS Target 
 USING (VALUES 
-	(10, N'Error'),
-	(20, N'Warning'),
-	(30, N'Information'),
-	(40, N'Verbose')
+	(1, N'Error'),
+	(2, N'Warning'),
+	(4, N'Information'),
+	(8, N'Verbose')
 ) 
 AS Source ([ID], [Description])
 ON Target.[ID] = Source.[ID] 
