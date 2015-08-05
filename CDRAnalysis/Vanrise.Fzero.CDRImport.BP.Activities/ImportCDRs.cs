@@ -8,6 +8,7 @@ using Vanrise.BusinessProcess;
 using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Queueing;
 using System.Configuration;
+using Vanrise.Common;
 namespace Vanrise.Fzero.CDRImport.BP.Activities
 {
 
@@ -35,7 +36,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
         protected override void DoWork(ImportCDRsInput inputArgument, AsyncActivityHandle handle)
         {
             string sFTPDir = System.Configuration.ConfigurationManager.AppSettings["SFTP_Dir"].ToString();
-            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Started Importing CDRs to Transit Database");
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started Importing CDRs to Transit Database");
             var sftp = new Rebex.Net.Sftp();
             sftp.Connect(System.Configuration.ConfigurationManager.AppSettings["SERVER"].ToString());
             sftp.Login(System.Configuration.ConfigurationManager.AppSettings["Server_Username"].ToString(), System.Configuration.ConfigurationManager.AppSettings["Server_Pasword"].ToString());
@@ -130,7 +131,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                 }
                 sftp.Disconnect();
             }
-            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Finshed Importing CDRs to Transit Database");
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finshed Importing CDRs to Transit Database");
         }
 
         

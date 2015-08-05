@@ -8,6 +8,7 @@ using Vanrise.Queueing;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using System.Configuration;
+using Vanrise.Common;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
@@ -65,7 +66,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     {
                         totalCount += cdrs.Count;
                         inputArgument.OutputQueue.Enqueue(BuildCDRBatch(cdrs));
-                        handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Verbose, "{0} CDRs loaded", totalCount);
+                        handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} CDRs loaded", totalCount);
                         cdrs = new List<CDR>();
                     }
                 });

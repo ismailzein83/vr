@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
+using Vanrise.Common;
 using Vanrise.Fzero.CDRImport.Data;
 using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Queueing;
@@ -32,7 +33,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
         protected override void DoWork(SaveCDRsToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Started Saving Imported CDRs from Transit Database to Real Database");
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started Saving Imported CDRs from Transit Database to Real Database");
             ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
@@ -48,7 +49,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                 }
                 while (!ShouldStop(handle) && hasItem);
             });
-            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Finshed Saving Imported CDRs from Transit Database to Real Database");
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finshed Saving Imported CDRs from Transit Database to Real Database");
         }
 
         protected override SaveCDRsToDBInput GetInputArgument2(AsyncCodeActivityContext context)

@@ -2,6 +2,7 @@
 using System.Activities;
 using System.Collections.Generic;
 using Vanrise.BusinessProcess;
+using Vanrise.Common;
 using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
@@ -78,7 +79,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             IStrategyDataManager strategyManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
             INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
             int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"]);
-            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Started Loading CDRs from Database to Memory");
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started Loading CDRs from Database to Memory");
 
             var aggregateDefinitions = new AggregateManager(inputArgument.Strategies).GetAggregateDefinitions(predefinedDataManager.GetCallClasses());
             string currentSubscriberNumber = null;
@@ -124,7 +125,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                 }
                             }
                             cdrsCount += cdrs.Count;
-                            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Verbose, "{0} CDRs profiled", cdrsCount);
+                            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} CDRs profiled", cdrsCount);
 
                         });
                 }
@@ -133,7 +134,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             if (currentSubscriberNumber != null)
                 FinishNumberProfileProcessing(currentSubscriberNumber, ref numberProfileBatch, ref numberProfilesCount, inputArgument, handle, 0, aggregateDefinitions);
 
-            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Finished Loading CDRs from Database to Memory");
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs from Database to Memory");
             //}
 
         }
@@ -163,7 +164,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             if (numberProfileBatch.Count >= batchSize)
             {
                 numberProfilesCount += numberProfileBatch.Count;
-                handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Verbose, "{0} Number Profiles Sent", numberProfilesCount);
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} Number Profiles Sent", numberProfilesCount);
                 inputArgument.OutputQueue.Enqueue(new NumberProfileBatch()
                 {
                     NumberProfiles = numberProfileBatch

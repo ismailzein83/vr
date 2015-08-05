@@ -6,6 +6,7 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Queueing;
 using System.Linq;
 using System;
+using Vanrise.Common;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
@@ -55,7 +56,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(GetSuspiciousNumberInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Started Collecting Suspicious Numbers ");
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started Collecting Suspicious Numbers ");
 
             Dictionary<int, FraudManager> fraudManagers = new Dictionary<int, FraudManager>();
 
@@ -101,14 +102,14 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                     });
 
                                 numberProfilesProcessed += item.NumberProfiles.Count;
-                                handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Verbose, "{0} Number Profiles Processed", numberProfilesProcessed);
+                                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} Number Profiles Processed", numberProfilesProcessed);
 
                             });
                     }
                     while (!ShouldStop(handle) && hasItem);
                 });
 
-                handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Finshed Collecting Suspicious Numbers ");
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finshed Collecting Suspicious Numbers ");
         }
 
         protected override GetSuspiciousNumberInput GetInputArgument2(System.Activities.AsyncCodeActivityContext context)
