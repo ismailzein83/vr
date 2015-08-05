@@ -89,6 +89,7 @@ namespace Vanrise.BusinessProcess
 
         public void WriteTrackingMessage(BPTrackingMessage trackingMessage)
         {
+            Console.WriteLine("{0}: {1}", trackingMessage.EventTime, trackingMessage.Message);
             _qPendingTrackingMessages.Enqueue(trackingMessage);
         }
     }
