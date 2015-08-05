@@ -113,29 +113,19 @@
         var retrieveDataFunction;
         var retrieveDataInput;
         var retrieveDataResultKey;
+        var sortColumn;
         var isGridReady;
+        var sortDirection;
        
 
         function addColumn(col, columnIndex) {
+            
             var colDef = {
                 name: col.headerText != undefined ? col.headerText : col.field,
                 headerCellTemplate: headerTemplate,//'/Client/Templates/Grid/HeaderTemplate.html',//template,
                 field: col.field,
                 summaryField: col.summaryField,
                 enableSorting: col.enableSorting != undefined ? col.enableSorting : false,
-                onSort: function () {
-                    if (col.onSortChanged != undefined) {
-                        var sortDirection = colDef.sortDirection != "ASC" ? "ASC" : "DESC";
-                        var promise = col.onSortChanged(colDef, sortDirection);//this function should return a promise in case it is getting data
-                        if (promise != undefined && promise != null)
-                            promise.then(function () {
-                                if (lastSortColumnDef != undefined)
-                                    lastSortColumnDef.sortDirection = undefined;
-                                colDef.sortDirection = sortDirection;
-                                lastSortColumnDef = colDef;
-                            });
-                    }
-                },
                 getAlign: function () {
                     var align = '';
                     if (col.type == "Number") 
@@ -147,6 +137,28 @@
                 getcolor: col.getcolor,
                 rotateHeader: ctrl.rotateHeader,
                 nonHiddable: col.nonHiddable
+            };
+
+            if (col.onSortChanged == undefined) {
+                col.onSortChanged = function (colDef_internal, sortDirection_internal) {
+                    sortColumn = colDef_internal;
+                    sortDirection = sortDirection_internal;
+                    return retrieveData(false, false, true);
+                };
+            }
+
+            colDef.onSort = function () {
+                if (col.onSortChanged != undefined) {
+                    var sortDirection = colDef.sortDirection != "ASC" ? "ASC" : "DESC";
+                    var promise = col.onSortChanged(colDef, sortDirection);//this function should return a promise in case it is getting data
+                    if (promise != undefined && promise != null)
+                        promise.then(function () {
+                            if (lastSortColumnDef != undefined)
+                                lastSortColumnDef.sortDirection = undefined;
+                            colDef.sortDirection = sortDirection;
+                            lastSortColumnDef = colDef;
+                        });
+                }
             };
 
             var columnCellTemplate;
@@ -509,8 +521,7 @@
             gridApi.retrieveData = function (query) {
                 //retrieveDataInput should be of type Vanrise.Entities.RetrieveDataInput<T>
                 retrieveDataInput = {
-                    Query: query,
-                    SortByColumnName: ctrl.columnDefs[0].field
+                    Query: query                    
                 };
                 return retrieveData(true);
             };
@@ -710,14 +721,22 @@
             }
         }
 
-        function retrieveData(clearBeforeRetrieve, isExport) {
+        function retrieveData(clearBeforeRetrieve, isExport, isSorting) {
             if (!isGridReady)
                 return;
             if (clearBeforeRetrieve) {
                 retrieveDataResultKey = null;
+                sortColumn = ctrl.columnDefs[0];
+                sortDirection = "ASC";
+            }
+            if (clearBeforeRetrieve || isSorting) {
                 if (ctrl.showPager)
                     ctrl.pagerSettings.currentPage = 1;
             }
+
+
+            retrieveDataInput.SortByColumnName = sortColumn.field
+            retrieveDataInput.IsSortDescending = (sortDirection == "DESC");
             
             retrieveDataInput.ResultKey = retrieveDataResultKey;//retrieveDataInput should be of type Vanrise.Entities.RetrieveDataInput<T>
             if (isExport) {
@@ -731,7 +750,7 @@
                 if (ctrl.showPager)
                     pageInfo = ctrl.pagerSettings.getPageInfo();
                 else if (pagingOnScrollEnabled)
-                    pageInfo = getPageInfo(clearBeforeRetrieve);
+                    pageInfo = getPageInfo(clearBeforeRetrieve || isSorting);
 
                 if (pageInfo != undefined) {
                     retrieveDataInput.FromRow = pageInfo.fromRow;
@@ -746,12 +765,13 @@
                     UtilsService.downloadFile(response.data, response.headers);
                 }
                 else {
-                    if (clearBeforeRetrieve) {
-                        gridApi.resetSorting();
-                        gridApi.clearDataAndContinuePaging();
-                    }
+                    if (clearBeforeRetrieve) 
+                        gridApi.resetSorting();                    
                     else if (ctrl.showPager)
                         ctrl.datasource.length = 0;
+
+                    if (clearBeforeRetrieve || isSorting)
+                        gridApi.clearDataAndContinuePaging();
 
                     gridApi.addItemsToSource(response.Data);//response should be of type Vanrise.Entities.BigResult<T>
                     retrieveDataResultKey = response.ResultKey;
