@@ -31,6 +31,20 @@ namespace TOne.Analytics.Business
         public List<Entities.CarrierRateView> GetRates(string carrierType, DateTime effectiveOn, string carrierID, string codeGroup, string code, string zoneName, int from, int to)
         {
             List<Entities.CarrierRateView> lst = _datamanager.GetRates(carrierType, effectiveOn, carrierID, codeGroup, code, zoneName, from, to);
+            foreach (Entities.CarrierRateView CR in lst)
+            {
+                switch (CR.ChangeID)
+                {
+                    case -1: CR.Change = "images/down-green.png";
+                        break;
+                    case 1: CR.Change = "images/up-red.png";
+                        break;
+                    case 2: CR.Change = "images/bookmark-256.png";
+                        break;
+                    default: CR.Change = "";
+                        break;
+                }
+            }
             FlaggedServiceManager flaggedServiceManager = new FlaggedServiceManager();
             if (lst != null)
                 flaggedServiceManager.AssignFlaggedServiceInfo(lst);
