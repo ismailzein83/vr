@@ -44,15 +44,6 @@ namespace Vanrise.Integration.Entities
         }
     }
 
-    public class Test : DataMapper
-    {
-
-        public override MappingOutput MapData(IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
     public enum MappingResult
     {
         Valid = 1,

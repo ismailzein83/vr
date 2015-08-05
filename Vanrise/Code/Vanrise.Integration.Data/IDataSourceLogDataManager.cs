@@ -8,6 +8,6 @@ namespace Vanrise.Integration.Data
 {
     public interface IDataSourceLogDataManager : IDataManager
     {
-        void WriteEntry(Vanrise.Common.LogEntryType entryType, string message, int dataSourceId, int? queueItemId, DateTime logTimeSpan);
+        void InsertEntry(Vanrise.Common.LogEntryType entryType, string message, int dataSourceId, long? queueItemId, DateTime logTimeSpan);
     }
 }

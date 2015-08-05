@@ -32,13 +32,13 @@ namespace Vanrise.Runtime
                         try
                         {
                             item.TaskAction.Execute(item, evaluatedExpressions);
+                            item.Status = Entities.SchedulerTaskStatus.Completed;
                         }
                         catch
                         {
                             item.Status = Entities.SchedulerTaskStatus.Failed;
                         }
-
-                        item.Status = Entities.SchedulerTaskStatus.Completed;
+                        
                         item.NextRunTime = item.TaskTrigger.CalculateNextTimeToRun();
                         item.LastRunTime = DateTime.Now;
                     }

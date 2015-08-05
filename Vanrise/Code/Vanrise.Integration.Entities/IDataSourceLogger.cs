@@ -11,9 +11,11 @@ namespace Vanrise.Integration.Entities
     {
         int DataSourceId { set; }
 
+        long LogImportedBatchEntry(ImportedBatchEntry enrty);
+
         void LogEntry(LogEntryType logEntryType, string messageFormat, params object[] args);
 
-        void LogEntry(LogEntryType logEntryType, int queteItemId, string messageFormat, params object[] args);
+        void LogEntry(LogEntryType logEntryType, long importedBatchId, string messageFormat, params object[] args);
 
         void WriteVerbose(string messageFormat, params object[] args);
 

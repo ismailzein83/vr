@@ -18,12 +18,18 @@ namespace Vanrise.Integration.Business
 
         #region Public Methods
 
+        public long LogImportedBatchEntry(Entities.ImportedBatchEntry entry)
+        {
+            IDataSourceImportedBatchDataManager manager = IntegrationDataManagerFactory.GetDataManager<IDataSourceImportedBatchDataManager>();
+            return manager.InsertEntry(this._dataSourceId, entry.BatchDescription, entry.BatchSize, entry.RecordsCount, entry.Result, entry.MapperMessage, entry.QueueItemsIds);
+        }
+
         public void LogEntry(Vanrise.Common.LogEntryType logEntryType, string messageFormat, params object[] args)
         {
             this.PrivateWriteEntry(logEntryType, messageFormat, args);
         }
 
-        public void LogEntry(Common.LogEntryType logEntryType, int importedBatchId, string messageFormat, params object[] args)
+        public void LogEntry(Common.LogEntryType logEntryType, long importedBatchId, string messageFormat, params object[] args)
         {
             this.PrivateWriteEntry(logEntryType, importedBatchId, messageFormat, args);
         }
@@ -57,10 +63,10 @@ namespace Vanrise.Integration.Business
             this.PrivateWriteEntry(entryType, null, messageFormat, args);
         }
 
-        private void PrivateWriteEntry(Vanrise.Common.LogEntryType entryType, int? importedBatchId, string messageFormat, params object[] args)
+        private void PrivateWriteEntry(Vanrise.Common.LogEntryType entryType, long? importedBatchId, string messageFormat, params object[] args)
         {
             IDataSourceLogDataManager manager = IntegrationDataManagerFactory.GetDataManager<IDataSourceLogDataManager>();
-            manager.WriteEntry(entryType, String.Format(messageFormat, args), this._dataSourceId, importedBatchId, DateTime.Now);
+            manager.InsertEntry(entryType, String.Format(messageFormat, args), this._dataSourceId, importedBatchId, DateTime.Now);
         }
 
         #endregion 

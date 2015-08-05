@@ -21,7 +21,7 @@ namespace Vanrise.Runtime.Entities
         Completed = 2,
 
         [Description("Failed")]
-        Failed = 2
+        Failed = 3
     }
 
     public enum SchedulerTaskType

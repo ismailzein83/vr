@@ -52,6 +52,7 @@
     <Compile Include="DataSourceAdapterType.cs" />
     <Compile Include="DataMapper.cs" />
     <Compile Include="IDataSourceLogger.cs" />
+    <Compile Include="ImportedBatchEntry.cs" />
     <Compile Include="ImportedDataTypes\DBReaderImportedData.cs" />
     <Compile Include="ImportedDataTypes\ExcelFileImportedData.cs" />
     <Compile Include="ImportedDataTypes\IImportedData.cs" />

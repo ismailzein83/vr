@@ -21,7 +21,7 @@ namespace Vanrise.Integration.Business
             Vanrise.Integration.Entities.DataSource dataSource = dataManager.GetDataSourcebyTaskId(task.TaskId);
 
             _logger.DataSourceId = dataSource.DataSourceId;
-            _logger.WriteInformation("Loaded successfully the data source with name '{0}'", dataSource.Name);
+            _logger.WriteInformation("Started running data source with name '{0}'", dataSource.Name);
 
             _logger.WriteVerbose("Preparing queues and stages");
             
@@ -39,11 +39,22 @@ namespace Vanrise.Integration.Business
             adapter.SetLogger(_logger);
             adapter.ImportData(dataSource.Settings.AdapterArgument, data =>
                 {
+                    ImportedBatchEntry importedBatchEntry = new ImportedBatchEntry();
+                    importedBatchEntry.BatchSize = data.BatchSize;
+                    importedBatchEntry.BatchDescription = data.Description;
+                    
                     _logger.WriteVerbose("Import Process is done, preparing for mapping data with description {0}", data.Description);
 
                     _logger.WriteVerbose("Executing the custom code written for the mapper");
                     MappedBatchItemsToEnqueue outputItems = new MappedBatchItemsToEnqueue();
                     MappingOutput outputResult = this.ExecuteCustomCode(dataSource.DataSourceId, dataSource.Settings.MapperCustomCode, data, outputItems);
+
+                    importedBatchEntry.Result = outputResult.Result;
+                    importedBatchEntry.MapperMessage = outputResult.Message;
+
+                    List<long> queueItemsIds = new List<long>();
+                    int totalRecordsCount = 0;
+
                     if (outputItems.Count > 0)
                     {
                         foreach (var outputItem in outputItems)
@@ -51,8 +62,12 @@ namespace Vanrise.Integration.Business
                             try
                             {
                                 _logger.WriteInformation("Enqueuing item '{0}' to stage '{1}'", outputItem.Item.GenerateDescription(), outputItem.StageName);
-                                queuesByStages[outputItem.StageName].Queue.EnqueueObject(outputItem.Item);
+
+                                long queueItemId = queuesByStages[outputItem.StageName].Queue.EnqueueObject(outputItem.Item);
                                 _logger.WriteInformation("Enqueued the item successfully");
+
+                                queueItemsIds.Add(queueItemId);
+                                totalRecordsCount += outputItem.Item.GetRecordCount();
                             }
                             catch(Exception ex)
                             {
@@ -66,6 +81,12 @@ namespace Vanrise.Integration.Business
                         _logger.WriteWarning("No mapped items to qneueue, the written custom code should specify at least one output item to enqueue items to");
                     }
                     data.OnDisposed();
+
+                    importedBatchEntry.QueueItemsIds = string.Join(",", queueItemsIds);
+                    importedBatchEntry.RecordsCount = totalRecordsCount;
+
+                    long importedBatchId = _logger.LogImportedBatchEntry(importedBatchEntry);
+                    _logger.LogEntry(Common.LogEntryType.Information, importedBatchId, "Finished running data source task with name '{0}'", dataSource.Name);
                 });
         }
 
@@ -96,6 +117,12 @@ namespace Vanrise.Integration.Business
                 else
                 {
                     _logger.WriteError("Errors while building the code for the custom class. Please make sure to build the custom code bound with this data source");
+                    outputResult = new MappingOutput()
+                    {
+                        Message = "Errors while building the code for the custom class",
+                        Result = MappingResult.Invalid
+                    };
+                    
                     return outputResult;
                 }
             }
