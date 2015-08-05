@@ -7,6 +7,7 @@ using Vanrise.BusinessProcess.Entities;
 using Vanrise.BusinessProcess.Extensions;
 using Vanrise.BusinessProcess.Web.ModelMappers;
 using Vanrise.BusinessProcess.Web.Models;
+using Vanrise.Common;
 using Vanrise.Runtime.Business;
 using Vanrise.Runtime.Entities;
 
@@ -72,12 +73,12 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         public List<EnumModel> GetTrackingSeverity()
         {
             var lst = new List<EnumModel>();
-            foreach (var val in Enum.GetValues(typeof(BPTrackingSeverity)))
+            foreach (var val in Enum.GetValues(typeof(LogEntryType)))
             {
                 EnumModel item = new EnumModel
                 {
                     Value = (int)val,
-                    Description = ((BPTrackingSeverity)val).ToString()
+                    Description = ((LogEntryType)val).ToString()
                 };
                 lst.Add(item);
             }

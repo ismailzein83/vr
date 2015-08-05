@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Activities;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.BusinessProcess.WFActivities
 {
@@ -13,14 +14,14 @@ namespace Vanrise.BusinessProcess.WFActivities
         [RequiredArgument]
         public InArgument<string> Message { get; set; }
 
-        public InArgument<BPTrackingSeverity?> Severity { get; set; }
+        public InArgument<LogEntryType?> Severity { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
             var sharedData = context.GetSharedInstanceData();
 
             Console.WriteLine("{0}: {1}", DateTime.Now, this.Message.Get(context));
-            BPTrackingSeverity severity = this.Severity.Get(context) ?? BPTrackingSeverity.Information;
+            LogEntryType severity = this.Severity.Get(context) ?? LogEntryType.Information;
             BPTrackingChannel.Current.WriteTrackingMessage(new BPTrackingMessage
             {
                 ProcessInstanceId = sharedData.InstanceInfo.ProcessInstanceID,

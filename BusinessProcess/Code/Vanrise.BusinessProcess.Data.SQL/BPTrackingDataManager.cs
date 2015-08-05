@@ -4,6 +4,7 @@ using Vanrise.Data.SQL;
 using System.Data;
 using System.Linq;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common;
 using Vanrise.Entities;
 
 namespace Vanrise.BusinessProcess.Data.SQL
@@ -64,13 +65,10 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
         public BigResult<BPTrackingMessage> GetFilteredTrackings(DataRetrievalInput<TrackingQuery> input)
         {
-
             return RetrieveData(input,tempTableName =>
             {
                 ExecuteNonQuerySP("bp.sp_BPTrackings_CreateTempForFiltered", tempTableName, input.Query.ProcessInstanceId, input.Query.FromTrackingId, input.Query.Message,
-                    input.Query.Severities == null ? null : string.Join(",", input.Query.Severities.Select(n => ((int)n).ToString()).ToArray())
-                    );
-
+                    input.Query.Severities == null ? null : string.Join(",", input.Query.Severities.Select(n => ((int)n).ToString()).ToArray()), (input.ToRow ?? 0) - (input.FromRow ?? 0));
             }, BPTrackingMapper);
         }
 
@@ -86,7 +84,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 ProcessInstanceId = (long)reader["ProcessInstanceID"],
                 ParentProcessId = GetReaderValue<long?>(reader, "ParentProcessId"),
                 TrackingMessage = reader["TrackingMessage"] as string,
-                Severity = (BPTrackingSeverity)((int)reader["Severity"]),
+                Severity = (LogEntryType)((int)reader["Severity"]),
                 EventTime = (DateTime)reader["EventTime"]
             };
 

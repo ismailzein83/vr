@@ -2,24 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Vanrise.Common;
 
 namespace Vanrise.BusinessProcess.Entities
 {
     public enum BPInstanceStatus
     {
-        [BPInstanceStatus(TrackingSeverity = BPTrackingSeverity.Information, IsClosed=false)]
+        [BPInstanceStatus(TrackingSeverity = LogEntryType.Information, IsClosed = false)]
         New = 0,
-        [BPInstanceStatus(TrackingSeverity = BPTrackingSeverity.Information, IsClosed = false)]
+        [BPInstanceStatus(TrackingSeverity = LogEntryType.Information, IsClosed = false)]
         Running = 10,
-        [BPInstanceStatus(TrackingSeverity = BPTrackingSeverity.Error, IsClosed = false)]
+        [BPInstanceStatus(TrackingSeverity = LogEntryType.Error, IsClosed = false)]
         ProcessFailed = 20,
-        [BPInstanceStatus(TrackingSeverity = BPTrackingSeverity.Information, IsClosed = true)]
+        [BPInstanceStatus(TrackingSeverity = LogEntryType.Information, IsClosed = true)]
         Completed = 50,
-        [BPInstanceStatus(TrackingSeverity = BPTrackingSeverity.Error, IsClosed = true)]
+        [BPInstanceStatus(TrackingSeverity = LogEntryType.Error, IsClosed = true)]
         Aborted = 60,
-        [BPInstanceStatus(TrackingSeverity = BPTrackingSeverity.Error, IsClosed = true)]
+        [BPInstanceStatus(TrackingSeverity = LogEntryType.Error, IsClosed = true)]
         Suspended = 70,
-        [BPInstanceStatus(TrackingSeverity = BPTrackingSeverity.Error, IsClosed = true)]
+        [BPInstanceStatus(TrackingSeverity = LogEntryType.Error, IsClosed = true)]
         Terminated = 80
     }
 
@@ -37,7 +38,7 @@ namespace Vanrise.BusinessProcess.Entities
             }
         }
 
-        public BPTrackingSeverity TrackingSeverity { get; set; }
+        public LogEntryType TrackingSeverity { get; set; }
 
         public bool IsClosed { get; set; }
 

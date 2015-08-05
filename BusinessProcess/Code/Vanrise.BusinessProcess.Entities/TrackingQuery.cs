@@ -1,5 +1,7 @@
 ﻿
 using System.Collections.Generic;
+using Vanrise.Common;
+
 namespace Vanrise.BusinessProcess.Entities
 {
     public class TrackingQuery
@@ -9,6 +11,6 @@ namespace Vanrise.BusinessProcess.Entities
 
         public string Message { get; set; }
 
-        public List<BPTrackingSeverity> Severities { get; set; }
+        public List<LogEntryType> Severities { get; set; }
     }
 }

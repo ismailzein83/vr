@@ -5,6 +5,7 @@ using System.Text;
 using System.Activities.Persistence;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Caching;
+using Vanrise.Common;
 
 namespace Vanrise.BusinessProcess
 {
@@ -38,7 +39,7 @@ namespace Vanrise.BusinessProcess
             cacheManagerIds.Clear();
         }
 
-        public void WriteTrackingMessage(BPTrackingSeverity severity, string messageFormat, params object[] args)
+        public void WriteTrackingMessage(LogEntryType severity, string messageFormat, params object[] args)
         {
             BPTrackingMessage trackingMessage = new BPTrackingMessage
             {

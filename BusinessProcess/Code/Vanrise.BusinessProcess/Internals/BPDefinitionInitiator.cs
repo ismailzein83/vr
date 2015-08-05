@@ -10,6 +10,7 @@ using System.Configuration;
 using System.Activities.DurableInstancing;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.BusinessProcess.Data;
+using Vanrise.Common;
 using Vanrise.Runtime;
 
 namespace Vanrise.BusinessProcess
@@ -87,7 +88,7 @@ namespace Vanrise.BusinessProcess
                     ProcessInstanceId = processInstanceId,
                     ParentProcessId = runningInstance.BPInstance.ParentProcessID,
                     TrackingMessage = String.Format("Event '{0}' triggerred", bookmarkName),
-                    Severity = BPTrackingSeverity.Verbose,
+                    Severity = LogEntryType.Verbose,
                     EventTime = DateTime.Now
                 });
                 return true;
@@ -223,12 +224,12 @@ namespace Vanrise.BusinessProcess
         void UpdateProcessStatus(BPInstance bpInstance)
         {
             _dataManager.UpdateInstanceStatus(bpInstance.ProcessInstanceID, bpInstance.Status, bpInstance.LastMessage, bpInstance.RetryCount);
-            BPTrackingSeverity statusChangedTrackingSeverity = BPInstanceStatusAttribute.GetAttribute(bpInstance.Status).TrackingSeverity;
+            LogEntryType statusChangedTrackingSeverity = BPInstanceStatusAttribute.GetAttribute(bpInstance.Status).TrackingSeverity;
             BPTrackingChannel.Current.WriteTrackingMessage(new BPTrackingMessage
             {
                 ProcessInstanceId = bpInstance.ProcessInstanceID,
                 ParentProcessId = bpInstance.ParentProcessID,
-                TrackingMessage = String.Format("Status changed to '{0}'. {1}", bpInstance.Status, statusChangedTrackingSeverity == BPTrackingSeverity.Error || statusChangedTrackingSeverity == BPTrackingSeverity.Warning ? bpInstance.LastMessage : null),
+                TrackingMessage = String.Format("Status changed to '{0}'. {1}", bpInstance.Status, statusChangedTrackingSeverity == LogEntryType.Error || statusChangedTrackingSeverity == LogEntryType.Warning ? bpInstance.LastMessage : null),
                 Severity = statusChangedTrackingSeverity,
                 EventTime = DateTime.Now
             });

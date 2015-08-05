@@ -2,9 +2,9 @@
 
     "use strict";
 
-    bpTrackingModalController.$inject = ['$scope', 'UtilsService', 'VRNavigationService', 'BusinessProcessAPIService', 'BusinessProcessService', 'DataRetrievalResultTypeEnum'];
+    bpTrackingModalController.$inject = ['$scope', 'UtilsService', 'VRNavigationService', 'BusinessProcessAPIService', 'DataRetrievalResultTypeEnum'];
 
-    function bpTrackingModalController($scope, UtilsService, VRNavigationService, BusinessProcessAPIService, BusinessProcessService, DataRetrievalResultTypeEnum) {
+    function bpTrackingModalController($scope, UtilsService, VRNavigationService, BusinessProcessAPIService, DataRetrievalResultTypeEnum) {
 
         var mainGridApi, nonClosedStatuses;
 
@@ -66,7 +66,7 @@
             };
 
             $scope.getSeverityColor = function (dataItem, colDef) {
-                return BusinessProcessService.getSeverityColor(dataItem.Severity);
+                return UtilsService.getLogEntryTypeColor(dataItem.Severity);
             };
 
             $scope.searchClicked = function () {
@@ -92,7 +92,7 @@
 
                     if (dataRetrievalInput.DataRetrievalResultType === DataRetrievalResultTypeEnum.Normal.value) {
                         for (var i = 0, len = response.Data.length; i < len; i++) {
-                            response.Data[i].SeverityDescription = BusinessProcessService.getSeverityDescription(response.Data[i].Severity);
+                            response.Data[i].SeverityDescription = UtilsService.getLogEntryTypeDescription(response.Data[i].Severity);
                         }
                     }
                     onResponseReady(response);

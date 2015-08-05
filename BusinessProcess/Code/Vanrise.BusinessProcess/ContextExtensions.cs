@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.BusinessProcess
 {
@@ -17,7 +18,7 @@ namespace Vanrise.BusinessProcess
             return sharedData;
         }
 
-        public static void WriteTrackingMessage(this ActivityContext context, BPTrackingSeverity severity, string messageFormat, params object[] args)
+        public static void WriteTrackingMessage(this ActivityContext context, LogEntryType severity, string messageFormat, params object[] args)
         {
             BPSharedInstanceData instanceData = context.GetSharedInstanceData();
             BPTrackingMessage trackingMessage = new BPTrackingMessage

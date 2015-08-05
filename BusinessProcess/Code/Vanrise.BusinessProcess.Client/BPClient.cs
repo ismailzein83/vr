@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.BusinessProcess.Client
 {
@@ -35,7 +36,7 @@ namespace Vanrise.BusinessProcess.Client
                 ProcessInstanceId = processInstanceId,
                 ParentProcessId = createProcessInput.ParentProcessID,
                 TrackingMessage = String.Format("Process Created: {0}", processTitle),
-                Severity = BPTrackingSeverity.Information,
+                Severity = LogEntryType.Information,
                 EventTime = DateTime.Now
             });
             CreateProcessOutput output = new CreateProcessOutput
