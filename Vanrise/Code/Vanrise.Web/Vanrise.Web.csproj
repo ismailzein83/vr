@@ -158,6 +158,7 @@
     <Content Include="Client\Javascripts\Constants\DeleteOperationResultEnum.js" />
     <Content Include="Client\Javascripts\Constants\InsertOperationResultEnum.js" />
     <Content Include="Client\Javascripts\Constants\LabelColorsEnum.js" />
+    <Content Include="Client\Javascripts\Constants\LogEntryTypeEnum.js" />
     <Content Include="Client\Javascripts\Constants\MenuItemTypeEnum.js" />
     <Content Include="Client\Javascripts\Constants\PeriodEnum.js" />
     <Content Include="Client\Javascripts\Constants\TimeDimensionTypeEnum.js" />
