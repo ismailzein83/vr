@@ -29,12 +29,8 @@
         }
 
         function loadFilters() {
-
-            BusinessProcessAPIService.GetTrackingSeverity().then(function (response) {
-                for (var i = 0 ; i < response.length ; i++) {
-                    $scope.trackingSeverity.push(response[i]);
-                }
-            });
+            $scope.trackingSeverity = UtilsService.getLogEntryType();
+            console.log($scope.trackingSeverity);
         }
 
         function loadNonClosedStatuses() {
@@ -52,7 +48,7 @@
                 ProcessInstanceId: $scope.BPInstanceID,
                 FromTrackingId: $scope.lastTrackingId,
                 Message: $scope.message,
-                Severities: UtilsService.getPropValuesFromArray($scope.selectedTrackingSeverity, "Value")
+                Severities: UtilsService.getPropValuesFromArray($scope.selectedTrackingSeverity, "value")
             });
         }
 

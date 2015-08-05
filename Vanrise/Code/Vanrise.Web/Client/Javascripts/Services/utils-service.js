@@ -12,8 +12,18 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', functi
         getPropMaxValueFromArray: getPropMaxValueFromArray,
         downloadFile: downloadFile,
         getLogEntryTypeDescription: getLogEntryTypeDescription,
-        getLogEntryTypeColor: getLogEntryTypeColor
+        getLogEntryTypeColor: getLogEntryTypeColor,
+        getLogEntryType: getLogEntryType
     });
+
+    function getLogEntryType() {
+        var array = [];
+        array.push(LogEntryTypeEnum.Information);
+        array.push(LogEntryTypeEnum.Warning);
+        array.push(LogEntryTypeEnum.Error);
+        array.push(LogEntryTypeEnum.Verbose);
+        return array;
+    }
 
     function getLogEntryTypeDescription(logEntryType) {
         if (logEntryType) {
