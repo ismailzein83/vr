@@ -84,14 +84,11 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempForFilteredSuspiciousNumbers.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_NormalCDR_Load.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_CallClass_GetAll.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_GetNumberProfile.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetAll.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_GetNormalCDR.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetStrategy.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Update.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Insert.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetFilteredStrategies.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_GetSubscriberThresholds.sql" />
     <Build Include="Security\FraudAnalysis.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_SubscriberCase_Save.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_UpdateSubscriberCases.sql" />
