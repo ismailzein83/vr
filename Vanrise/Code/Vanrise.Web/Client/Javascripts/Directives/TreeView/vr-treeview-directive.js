@@ -59,12 +59,14 @@ app.directive('vrTreeview', [function () {
                         menuList[i].isOpened = true;
                         return menuList[i];
                     }
-                    if (menuList[i].Childs != undefined)
-                        var node=setSelectedNode(menuList[i].Childs, nodeId)
-                    if (node != null) {
-                        menuList[i].isOpened = true;
-                        return node;
+                    if (menuList[i].Childs != undefined) {
+                        var node = setSelectedNode(menuList[i].Childs, nodeId)
+                        if (node != null) {
+                            menuList[i].isOpened = true;
+                            return node;
+                        }
                     }
+                      
                         
                 }
             }
