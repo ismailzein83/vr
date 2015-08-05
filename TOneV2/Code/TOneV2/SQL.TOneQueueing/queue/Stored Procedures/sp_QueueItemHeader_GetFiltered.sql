@@ -21,7 +21,7 @@ SELECT [ItemID]
       ,[ErrorMessage]
       ,[CreatedTime]
       ,[LastUpdatedTime]
-  FROM [TOneQueueDB].[queue].[QueueItemHeader]
+  FROM [queue].[QueueItemHeader]
   WHERE (@QueueIDs is NULL or QueueID in (SELECT ParsedString FROM [queue].ParseStringList(@QueueIDs) ) ) and 
 		(@Statuses is NULL or Status in (SELECT ParsedString FROM ParseStringList(@Statuses) ) ) and CreatedTime BETWEEN  @DateFrom and @DateTo
            
