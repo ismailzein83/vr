@@ -83,6 +83,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
+        public List<String> GetStrategyNames(List<int> strategyIds)
+        {
+            return GetItemsSP("FraudAnalysis.sp_Strategy_GetStrategyNames", StrategyNameMapper, string.Join(",", strategyIds));
+        }
+
+
         #region Private Methods
 
         private Strategy StrategyMapper(IDataReader reader)
@@ -92,9 +98,16 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return strategy;
         }
 
+        private String StrategyNameMapper(IDataReader reader)
+        {
+            return reader["Name"] as string;
+        }
+
         #endregion
 
 
 
+
+       
     }
 }

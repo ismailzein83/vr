@@ -7,6 +7,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 {
     public interface IStrategyDataManager : IDataManager 
     {
+        List<String> GetStrategyNames(List<int> strategyIds);
+
         Strategy GetStrategy(int strategyId);
 
         List<Strategy> GetAllStrategies();

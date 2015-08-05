@@ -50,6 +50,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Data\Vanrise.Fzero.FraudAnalysis.Data.csproj">
+      <Project>{521364bc-ae3d-4eca-8392-44a6c1961939}</Project>
+      <Name>Vanrise.Fzero.FraudAnalysis.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Entities\Vanrise.Fzero.FraudAnalysis.Entities.csproj">
       <Project>{516b5fb8-205f-44c7-9ce9-949ad88ec87b}</Project>
       <Name>Vanrise.Fzero.FraudAnalysis.Entities</Name>
