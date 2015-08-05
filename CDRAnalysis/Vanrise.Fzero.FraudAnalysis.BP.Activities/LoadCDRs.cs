@@ -56,14 +56,16 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         protected override void DoWork(LoadCDRsInput inputArgument, AsyncActivityHandle handle)
         {
             List<CDR> cdrs = new List<CDR>();
+            int totalCount = 0;
             INormalCDRDataManager dataManager = FraudDataManagerFactory.GetDataManager<INormalCDRDataManager>();
             dataManager.LoadCDR(inputArgument.FromDate, inputArgument.ToDate, 0, (cdr) =>
                 {
                     cdrs.Add(cdr);
                     if (cdrs.Count >= 100000)
-                    {                        
+                    {
+                        totalCount += cdrs.Count;
                         inputArgument.OutputQueue.Enqueue(BuildCDRBatch(cdrs));
-                        handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Verbose, "{0} CDRs loaded", cdrs.Count);
+                        handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Verbose, "{0} CDRs loaded", totalCount);
                         cdrs = new List<CDR>();
                     }
                 });

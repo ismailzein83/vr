@@ -59,7 +59,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     {
                         count += currentIndex;
                         currentIndex = 0;
-                        Console.WriteLine("{0} rows read ", count);
+                        
                     }
 
                     onBatchReady(normalCDR);
