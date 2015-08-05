@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.service('UtilsService', ['$q', function ($q) {
+app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', function ($q, LogEntryTypeEnum, LabelColorsEnum) {
 
     return ({
         replaceAll: replaceAll,
@@ -10,8 +10,31 @@ app.service('UtilsService', ['$q', function ($q) {
         contains: contains,
         getPropValuesFromArray: getPropValuesFromArray,
         getPropMaxValueFromArray: getPropMaxValueFromArray,
-        downloadFile: downloadFile
+        downloadFile: downloadFile,
+        getLogEntryTypeDescription: getLogEntryTypeDescription,
+        getLogEntryTypeColor: getLogEntryTypeColor
     });
+
+    function getLogEntryTypeDescription(logEntryType) {
+        if (logEntryType) {
+
+            if (logEntryType === LogEntryTypeEnum.Information.value) return LogEntryTypeEnum.Information.description;
+            if (logEntryType === LogEntryTypeEnum.Warning.value) return LogEntryTypeEnum.Warning.description;
+            if (logEntryType === LogEntryTypeEnum.Error.value) return LogEntryTypeEnum.Error.description;
+            if (logEntryType === LogEntryTypeEnum.Verbose.value) return LogEntryTypeEnum.Verbose.description;
+        }
+        return '';
+    }
+
+    function getLogEntryTypeColor(logEntryType) {
+
+        if (logEntryType === LogEntryTypeEnum.Information.value) return LabelColorsEnum.Info.Color;
+        if (logEntryType === LogEntryTypeEnum.Warning.value) return LabelColorsEnum.Warning.Color;
+        if (logEntryType === LogEntryTypeEnum.Error.value) return LabelColorsEnum.Error.Color;
+        if (logEntryType === LogEntryTypeEnum.Verbose.value) return LabelColorsEnum.Primary.Color;
+
+        return LabelColorsEnum.Info.Color;
+    };
 
     function replaceAll(string, find, replace) {
         return string.replace(new RegExp(escapeRegExp(find), 'g'), replace);
