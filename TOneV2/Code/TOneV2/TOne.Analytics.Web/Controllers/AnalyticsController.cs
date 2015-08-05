@@ -32,11 +32,11 @@ namespace TOne.Analytics.Web.Controllers
         #region Traffic Statistic
 
         [HttpPost]
-        public TrafficStatisticSummaryBigResult GetTrafficStatisticSummary(GetTrafficStatisticSummaryInput input)
+        public object GetTrafficStatisticSummary(Vanrise.Entities.DataRetrievalInput<TrafficStatisticSummaryInput> input)
         {
             System.Threading.Thread.Sleep(1000);
             TrafficStatisticManager manager = new TrafficStatisticManager();
-            return manager.GetTrafficStatisticSummary(input.TempTableKey, input.Filter, input.WithSummary, input.GroupKeys, input.From, input.To, input.FromRow, input.ToRow, input.OrderBy, input.IsDescending);
+            return GetWebResponse(input,manager.GetTrafficStatisticSummary(input));
         }
         [HttpGet]
         public IEnumerable<TrafficStatistic> GetTrafficStatistics(TrafficStatisticGroupKeys filterByColumn, string columnFilterValue, DateTime from, DateTime to)
@@ -44,16 +44,7 @@ namespace TOne.Analytics.Web.Controllers
             TrafficStatisticManager manager = new TrafficStatisticManager();
             return manager.GetTrafficStatistics(filterByColumn, columnFilterValue, from, to);
         }
-        [HttpPost]
-        public HttpResponseMessage ExportTrafficStatisticSummary(GetTrafficStatisticSummaryInput input)
-        {
-            TrafficStatisticManager manager = new TrafficStatisticManager();
-            TrafficStatisticSummaryBigResult records = manager.GetTrafficStatisticSummary(input.TempTableKey, input.Filter, input.WithSummary, input.GroupKeys, input.From, input.To, input.FromRow, input.ToRow, input.OrderBy, input.IsDescending);
-            var groupKeys = Enum.GetNames(typeof(TrafficStatisticGroupKeys));
-
-
-            return manager.ExportTrafficStatisticSummary(records, input.Headers,input.GroupKeys);
-        }
+ 
 
         #endregion
 

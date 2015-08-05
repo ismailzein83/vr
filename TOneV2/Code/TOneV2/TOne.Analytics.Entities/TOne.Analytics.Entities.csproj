@@ -41,6 +41,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Billing\BillingStatistic.cs" />
@@ -116,6 +119,7 @@
     <Compile Include="TrafficStatisticGroupSummary.cs" />
     <Compile Include="Mobile\TrafficSummaryView.cs" />
     <Compile Include="TrafficStatisticSummaryBigResult.cs" />
+    <Compile Include="TrafficStatisticSummaryInput.cs" />
     <Compile Include="VolumeTraffic.cs" />
     <Compile Include="DestinationVolumeTraffic.cs" />
     <Compile Include="ZoneInfo.cs" />

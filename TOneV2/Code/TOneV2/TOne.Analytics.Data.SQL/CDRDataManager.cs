@@ -34,22 +34,6 @@ namespace TOne.Analytics.Data.SQL
              return cdrData;
         }
 
-        //public CDRBigResult GetCDRData(string tempTableKey, int nRecords)
-        //{
-        //    TempTableName tempTableName = null;
-        //    if (tempTableKey != null)
-        //        tempTableName = GetTempTableName(tempTableKey);
-        //    CDRBigResult rslt = new CDRBigResult()
-        //    {
-        //        ResultKey = tempTableName.Key
-        //    };
-
-        //    int totalDataCount;
-        //    rslt.Data = GetData(tempTableName.TableName, 0, nRecords, BillingCDRMeasures.Attempt, true, out totalDataCount);
-        //    rslt.TotalCount = totalDataCount;
-
-        //    return rslt;
-        //}
 
         #region Methods
         private string CreateTempTableIfNotExists(string tempTableName, CDRFilter filter, BillingCDROptionMeasures CDROption)
@@ -100,27 +84,7 @@ namespace TOne.Analytics.Data.SQL
             }
         }
 
-        private string GetColumnName(BillingCDRMeasures column)
-        {
-            switch (column)
-            {
-                case BillingCDRMeasures.Attempt: return "Attempt";
-                case BillingCDRMeasures.CDPN: return "CDPN";
-                case BillingCDRMeasures.CDPNOut: return "CDPNOut";
-                case BillingCDRMeasures.CGPN: return "CGPN";
-                case BillingCDRMeasures.CustomerInfo: return "CustomerInfo";
-                case BillingCDRMeasures.DurationInSeconds: return "DurationInSeconds";
-                case BillingCDRMeasures.OriginatingZoneName: return "OriginatingZoneName";
-                case BillingCDRMeasures.OurZoneName: return "OurZoneName";
-                case BillingCDRMeasures.PDD: return "PDD";
-                case BillingCDRMeasures.ReleaseCode: return "ReleaseCode";
-                case BillingCDRMeasures.ReleaseSource : return "ReleaseSource";
-                case BillingCDRMeasures.SupplierName: return "SupplierName";
-                case BillingCDRMeasures.SupplierZoneName: return "SupplierZoneName";
-                case BillingCDRMeasures.SwitchName: return "SwitchName";
-                default: return column.ToString();
-            }
-        }
+
         private string GetSingleQuery(string tableName,string alias){
             StringBuilder whereBuilder = new StringBuilder();
             return String.Format(@"

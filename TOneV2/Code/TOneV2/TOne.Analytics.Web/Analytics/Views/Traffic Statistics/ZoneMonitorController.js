@@ -8,23 +8,14 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
     var chartSelectedEntityAPI;
     var mainGridAPI;
     var overallSelectedMeasure;
-    var resultKey;
-    var sortColumn;
-    var sortDescending = true;
-    var currentSortedColDef;
     var measures = [];
     var currentData;
     var groupKeys = [];
-    loadParameters();
     defineScope();
     load();
 
-    function loadParameters() {
-
-    }
-
     function defineScope() {
-
+        $scope.data = [];
         $scope.currentSearchCriteria = {
             groupKeys: []
         };
@@ -64,26 +55,26 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
         $scope.selectedSuppliers = [];
 
         $scope.gridAllMeasuresScope = {};
-        $scope.showResult = false;
         $scope.measures = measures;
-        $scope.data = [];
-
-        $scope.mainGridPagerSettings = {
-            currentPage: 1,
-            totalDataCount: 0,
-            pageChanged: function () {
-                return getData();
-            }
-        };
-        $scope.filter = {
-            resultKey: resultKey,
-            filter: {},
-            groupKeys: [],
-            fromDate: $scope.fromDate,
-            toDate: $scope.toDate,
-            sortDescending: sortDescending
-        };
         defineMenuActions();
+        $scope.onMainGridReady = function (api) {
+            mainGridAPI = api;
+        }
+        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+            return AnalyticsAPIService.GetTrafficStatisticSummary(dataRetrievalInput).then(function (response) {
+                currentData = [];
+                angular.forEach(response.Data, function (itm) {
+                    currentData.push(itm);
+                });
+                if (response.Summary) {
+                    $scope.trafficStatisticSummary = response.Summary;
+                }
+                mainGridAPI.setSummary(response.Summary);
+                renderOverallChart();
+                onResponseReady(response);
+            })
+        };
+
         $scope.chartSelectedMeasureReady = function (api) {
             chartSelectedMeasureAPI = api;
             //chartSelectedMeasureAPI.onDataItemClicked = function (selectedEntity) {
@@ -132,32 +123,14 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
         };
 
         $scope.searchClicked = function () {
+            
 
-            $scope.mainGridPagerSettings.currentPage = 1;
-            resultKey = null;
-            mainGridAPI.resetSorting();
-            resetSorting();
-            var filter = buildFilter();
-
-            var groupKeys = [];
-
+            $scope.currentSearchCriteria.groupKeys.length = 0;
             angular.forEach($scope.selectedGroupKeys, function (group) {
-                groupKeys.push(group.value);
+                $scope.currentSearchCriteria.groupKeys.push(group);
             });
-            $scope.filter = {
-                resultKey: resultKey,
-                filter: filter,
-                groupKeys: groupKeys,
-                fromDate: $scope.fromDate,
-                toDate: $scope.toDate,
-                sortDescending: sortDescending
-            };
-            return getData(true);
+            return retrieveData(true);
         };
-
-        $scope.onMainGridReady = function (api) {
-            mainGridAPI = api;
-        }
 
         $scope.onGroupKeyClicked = function (dataItem, colDef) {
             var group = colDef.tag;
@@ -171,12 +144,6 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
             $scope.selectedEntityName = entityName;
             getAndShowEntityStatistics(groupKey);
         };
-
-        $scope.onMainGridSortChanged = function (colDef, sortDirection) {
-            sortColumn = colDef.tag;
-            sortDescending = (sortDirection == "DESC");
-            return getData();
-        }
 
         $scope.isOverallItemClickable = function (dataItem) {
             return (dataItem.measure.isSum == true);
@@ -203,36 +170,36 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
             return menuActions;
         };
 
-        $scope.onexport = function () {
-
-            var count = $scope.mainGridPagerSettings.itemsPerPage;
-
-            var pageInfo = $scope.mainGridPagerSettings.getPageInfo();
-            var measures = [];
-            for (var i = 0; i < $scope.measures.length; i++) {
-                measures.push($scope.measures[i].propertyName);
-            }
-            var getTrafficStatisticSummaryInput = {
-                TempTableKey: $scope.filter.resultKey,
-                Filter: $scope.filter.filter,
-                WithSummary: false,
-                GroupKeys: $scope.filter.groupKeys,
-                From: $scope.filter.fromDate,
-                To: $scope.filter.toDate,
-                FromRow: pageInfo.fromRow,
-                ToRow: pageInfo.toRow,
-                OrderBy: sortColumn.value,
-                IsDescending: $scope.filter.sortDescending,
-                Headers: measures
-
-            };
-            return AnalyticsAPIService.ExportTrafficStatisticSummary(getTrafficStatisticSummaryInput).then(function (response) {
-                console.log(response)
-                return UtilsService.downloadFile(response.data, response.headers, response.config);
-            });
-        }
     }
 
+    function retrieveData(withSummary) {
+        if (!chartSelectedMeasureAPI)
+            return;
+        
+        if (chartSelectedEntityAPI)
+            chartSelectedEntityAPI.hideChart();
+        var filter = buildFilter();
+        var groupKeys = [];
+
+        angular.forEach($scope.selectedGroupKeys, function (group) {
+            groupKeys.push(group.value);
+        });
+        $scope.filter = {
+            filter: filter,
+            groupKeys: groupKeys,
+            fromDate: $scope.fromDate,
+            toDate: $scope.toDate,
+        };
+
+            var query = {
+                Filter: filter,
+                WithSummary: withSummary,
+                GroupKeys: groupKeys,
+                From: $scope.fromDate,
+                To: $scope.toDate,
+            };
+            return mainGridAPI.retrieveData(query);
+        }
     function load() {
         loadMeasures();
         overallSelectedMeasure = TrafficStatisticsMeasureEnum.Attempts;
@@ -241,6 +208,9 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
         $scope.isInitializing = true;
         UtilsService.waitMultipleAsyncOperations([loadSwitches, loadCodeGroups, loadCustomers, loadSuppliers]).finally(function () {
             $scope.isInitializing = false;
+            if (mainGridAPI != undefined) {
+                retrieveData(true);
+            }
         }).catch(function (error) {
             VRNotificationService.notifyExceptionWithClose(error, $scope);
         });
@@ -344,82 +314,10 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
         }];
     }
 
-    function resetSorting() {
-        sortColumn = TrafficStatisticsMeasureEnum.Attempts;
-        sortDescending = true;
-    }
-
     function loadMeasures() {
         for (var prop in TrafficStatisticsMeasureEnum) {
             measures.push(TrafficStatisticsMeasureEnum[prop]);
         }
-    }
-
-    function getData(withSummary) {
-        if (!chartSelectedMeasureAPI)
-            return;
-        if (sortColumn == undefined)
-            return;
-        if (withSummary == undefined)
-            withSummary = false;
-
-
-        if (chartSelectedEntityAPI)
-            chartSelectedEntityAPI.hideChart();
-
-        var count = $scope.mainGridPagerSettings.itemsPerPage;
-
-        var pageInfo = $scope.mainGridPagerSettings.getPageInfo();
-
-        var getTrafficStatisticSummaryInput = {
-            TempTableKey: $scope.filter.resultKey,
-            Filter: $scope.filter.filter,
-            WithSummary: withSummary,
-            GroupKeys: $scope.filter.groupKeys,
-            From: $scope.filter.fromDate,
-            To: $scope.filter.toDate,
-            FromRow: pageInfo.fromRow,
-            ToRow: pageInfo.toRow,
-            OrderBy: sortColumn.value,
-            IsDescending: $scope.filter.sortDescending
-        };
-        var isSucceeded;
-        $scope.showResult = true;
-        $scope.isGettingData = true;
-        $scope.data.length = 0;
-        $scope.currentSearchCriteria.groupKeys.length = 0;
-        angular.forEach($scope.selectedGroupKeys, function (group) {
-            $scope.currentSearchCriteria.groupKeys.push(group);
-        });
-
-        return AnalyticsAPIService.GetTrafficStatisticSummary(getTrafficStatisticSummaryInput).then(function (response) {
-
-
-
-            currentData = [];
-            angular.forEach(response.Data, function (itm) {
-                currentData.push(itm);
-            });
-            if (currentSortedColDef != undefined)
-                currentSortedColDef.currentSorting = sortDescending ? 'DESC' : 'ASC';
-
-            resultKey = response.ResultKey;
-            $scope.mainGridPagerSettings.totalDataCount = response.TotalCount;
-            if (withSummary) {
-                $scope.trafficStatisticSummary = response.Summary;
-            }
-            //angular.forEach(response.Data, function (itm) {
-            //    $scope.data.push(itm);
-            //});
-            mainGridAPI.addItemsToSource(response.Data);
-            response.Summary.summaryCaption = "OVERALL";
-            mainGridAPI.setSummary(response.Summary);
-            renderOverallChart();
-            isSucceeded = true;
-        })
-            .finally(function () {
-                $scope.isGettingData = false;
-            });
     }
 
     function renderOverallChart() {

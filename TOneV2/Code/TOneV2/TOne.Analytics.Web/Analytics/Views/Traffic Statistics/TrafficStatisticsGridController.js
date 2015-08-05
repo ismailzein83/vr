@@ -5,15 +5,11 @@ TrafficStatisticsGridController.$inject = ['$scope', 'AnalyticsAPIService', 'Tra
 function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum, VRModalService, UtilsService) {
     var measures = [];
     var filter = {};
-    var sortColumn;
-    var sortDescending = true;
-    var currentData;
-    var currentSortedColDef;
-    defineScopeObjects();
-    load();
-    defineScopeMethods();
     var selectedGroupKeys = [];
-    function defineScopeObjects() { 
+    defineScope();
+    load();
+    function defineScope() {
+        
         $scope.parentGroupKeys = [];
         $scope.measures = measures;
         $scope.currentSearchCriteria = {
@@ -40,44 +36,58 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             VRModalService.showModal('/Client/Modules/Analytics/Views/CDR/CDRLog.html', parameters, modalSettings);
         }
         }];
+        $scope.onEntityClicked = function (dataItem) {
+            var parentGroupKeys = $scope.viewScope.groupKeys;
 
-        $scope.mainGridPagerSettings = {
-            currentPage: 1,
-            totalDataCount: 0,
-            pageChanged: function () {
-                return getData();
+            var selectedGroupKeyInParent = $.grep(parentGroupKeys, function (parentGrpKey) {
+                return parentGrpKey.value == $scope.selectedGroupKey.value;
+            })[0];
+            $scope.viewScope.selectEntity(selectedGroupKeyInParent, dataItem.GroupKeyValues[0].Id, dataItem.GroupKeyValues[0].Name)
+        };
+
+        $scope.groupKeySelectionChanged = function () {
+
+            if ($scope.selectedGroupKeyIndex != undefined) {
+                $scope.selectedGroupKey = $scope.groupKeys[$scope.selectedGroupKeyIndex];
+                if (!$scope.selectedGroupKey.isDataLoaded && $scope.selectedGroupKey.gridAPI != undefined) {
+                    // $scope.parentGroupKeys = [];
+                    retrieveData($scope.selectedGroupKey, false);
+                }
+
+
             }
         };
-        $scope.onexport = function () {
 
-            var measures = [];
-            for (var i = 0; i < $scope.measures.length; i++) {
-                measures.push($scope.measures[i].propertyName);
-            }
-            buildFilter($scope);
-            buildFilterFromViewScope();
-            //  console.log(filter);
-            var toRow = 100;
-            var getTrafficStatisticSummaryInput = {
-                TempTableKey: null,
-                Filter: filter,
-                WithSummary: false,
-                GroupKeys: [$scope.selectedGroupKey.value],
-                From: $scope.viewScope.fromDate,
-                To: $scope.viewScope.toDate,
-                FromRow: 0,
-                ToRow: toRow,
-                OrderBy: sortColumn.value,
-                IsDescending: sortDescending,
-                Headers: measures
+        $scope.checkExpandablerow = function (groupKey) {
+            if ($scope.groupKeys.length == 2 && groupKey.value == TrafficStatisticGroupKeysEnum.OurZone.value && ($scope.groupKeys[0].value == TrafficStatisticGroupKeysEnum.CodeGroup.value || $scope.groupKeys[1].value == TrafficStatisticGroupKeysEnum.CodeGroup.value))//only if zone and codegroup remains in groupkeys
+                return false;
+            else if ($scope.groupKeys.length > 1)
+                return true;
+            else if ($scope.selectedGroupKey.value == TrafficStatisticGroupKeysEnum.SupplierId.value)
+                return true;
+            else
+                return false;
+        };
 
-            };
-            return AnalyticsAPIService.ExportTrafficStatisticSummary(getTrafficStatisticSummaryInput).then(function (response) {
-                console.log(response)
-                return UtilsService.downloadFile(response.data, response.headers, response.config);
-            });
-        }
-     
+    }
+    function load() {
+        loadMeasures();
+        loadGroupKeys();
+        $scope.selectedGroupKey = $scope.groupKeys[0];
+    }
+    function retrieveData(groupKey, withSummary) {
+        buildFilter($scope);
+        buildFilterFromViewScope();
+
+        var query = {
+            Filter: filter,
+            WithSummary: withSummary,
+            GroupKeys: [$scope.selectedGroupKey.value],
+            From: $scope.viewScope.fromDate,
+            To: $scope.viewScope.toDate,
+
+        };
+        return groupKey.gridAPI.retrieveData(query);
     }
     function LoadParentGroupKeys(scope) {
         if (scope == $scope.viewScope) {
@@ -161,55 +171,6 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
 
         updateParametersFromGroupKeys(parameters, scope.gridParentScope, scope.dataItem);
     }   
-    function defineScopeMethods() {
-
-        $scope.onEntityClicked = function (dataItem) {
-            var parentGroupKeys = $scope.viewScope.groupKeys;
-
-            var selectedGroupKeyInParent = $.grep(parentGroupKeys, function (parentGrpKey) {
-                return parentGrpKey.value == $scope.selectedGroupKey.value;
-            })[0];
-            $scope.viewScope.selectEntity(selectedGroupKeyInParent, dataItem.GroupKeyValues[0].Id, dataItem.GroupKeyValues[0].Name)
-        };
-
-        $scope.groupKeySelectionChanged = function () {
-           
-            if ($scope.selectedGroupKeyIndex != undefined) {
-                $scope.selectedGroupKey = $scope.groupKeys[$scope.selectedGroupKeyIndex];
-                if (!$scope.selectedGroupKey.isDataLoaded) {
-                   // $scope.parentGroupKeys = [];
-                    getData();
-                }
-              
-                    
-            }
-        };
-
-        $scope.checkExpandablerow = function (groupKey) {
-            if ($scope.groupKeys.length == 2 && groupKey.value == TrafficStatisticGroupKeysEnum.OurZone.value && ($scope.groupKeys[0].value == TrafficStatisticGroupKeysEnum.CodeGroup.value || $scope.groupKeys[1].value == TrafficStatisticGroupKeysEnum.CodeGroup.value))//only if zone and codegroup remains in groupkeys
-                return false;
-        else if ($scope.groupKeys.length > 1)
-                return true;
-            else if ($scope.selectedGroupKey.value == TrafficStatisticGroupKeysEnum.SupplierId.value)
-                return true;
-            else
-                return false;
-        };
-
-        $scope.onMainGridSortChanged = function (colDef, sortDirection) {
-            sortColumn = colDef.tag;
-            sortDescending = (sortDirection == "DESC");
-            return getData();
-        }
-    }
-    function load() {
-        loadMeasures();
-        loadGroupKeys();
-        resetSorting();
-       $scope.selectedGroupKey = $scope.groupKeys[0];
-        if ($scope.selectedGroupKey != undefined)
-            getData(); 
-    }
     function loadMeasures() {
         for (var prop in TrafficStatisticsMeasureEnum) {
             measures.push(TrafficStatisticsMeasureEnum[prop]);
@@ -217,14 +178,15 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
     }
     function loadGroupKeys() {
         for (var prop in TrafficStatisticGroupKeysEnum) {
-          
-            addGroupKeyIfNotExistsInParent({
+            var groupKey = {
                 title: TrafficStatisticGroupKeysEnum[prop].title,
                 value: TrafficStatisticGroupKeysEnum[prop].value,
                 data: [],
                 isDataLoaded: false,
                 gridHeader: TrafficStatisticGroupKeysEnum[prop].gridHeader
-            }); 
+            };
+            
+            addGroupKeyIfNotExistsInParent(groupKey); 
         }
         if ($scope.groupKeys.length > 0)
             $scope.selectedGroupKey = $scope.groupKeys[0];
@@ -238,54 +200,19 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         var parentGroupKeys = $scope.viewScope.currentSearchCriteria.groupKeys;
         if ($.grep(parentGroupKeys, function (parentGrpKey) {
             return parentGrpKey.value == groupKey.value;
-        }).length == 0)
+        }).length == 0) {
+            groupKey.onGridReady = function (api) {
+                groupKey.gridAPI = api;
+                if ($scope.selectedGroupKey == groupKey)
+                    retrieveData(groupKey, false);
+            };
+            groupKey.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                return AnalyticsAPIService.GetTrafficStatisticSummary(dataRetrievalInput).then(function (response) {                    
+                    onResponseReady(response);
+                })
+            };
             $scope.groupKeys.push(groupKey);
-    }
-    function getData() {
-        //if ($scope.notSelectedGroupKeys.length == 0)
-        //    return;
-        if (sortColumn == undefined)
-            return;
-        var withSummary = false;
-        var fromRow = 1;
-        var toRow = 100;
-       
-        buildFilter($scope);
-        buildFilterFromViewScope();
-      //  console.log(filter);
-        var getTrafficStatisticSummaryInput = {
-            TempTableKey: null,
-            Filter: filter,
-            WithSummary: withSummary,
-            GroupKeys: [$scope.selectedGroupKey.value],
-            From: $scope.viewScope.fromDate,
-            To: $scope.viewScope.toDate,
-            FromRow: fromRow,
-            ToRow: toRow,
-            OrderBy: sortColumn.value,
-            IsDescending: sortDescending
-        };
-       
-        var isSucceeded;
-        $scope.isGettingData = true;
-        $scope.currentSearchCriteria.groupKeys.length = 0;
-        angular.forEach($scope.selectedGroupKey, function (group) {
-            $scope.currentSearchCriteria.groupKeys.push(group);
-        });
-        return AnalyticsAPIService.GetTrafficStatisticSummary(getTrafficStatisticSummaryInput).then(function (response) {
-           // console.log(response);
-            $scope.selectedGroupKey.data = [];
-            angular.forEach(response.Data, function (itm) {
-                $scope.selectedGroupKey.data.push(itm);
-              //  currentData.push(itm);
-            });
-            if (currentSortedColDef != undefined)
-                currentSortedColDef.currentSorting = sortDescending ? 'DESC' : 'ASC';
-            $scope.selectedGroupKey.isDataLoaded = true;
-        })
-            .finally(function () {
-                $scope.isGettingData = false;
-            });
+        }
     }
     function buildFilterFromViewScope() {
         if ($scope.viewScope.filter.filter.CustomerIds != null);
@@ -323,7 +250,6 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             }
        
     }
-
     function buildFilter(scope) {
        
         if (scope == $scope.viewScope)
@@ -369,10 +295,6 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         buildFilter(scope.gridParentScope);
        
         
-    }
-    function resetSorting() {
-        sortColumn = TrafficStatisticsMeasureEnum.Attempts;
-        sortDescending = true;
     }
 };
 

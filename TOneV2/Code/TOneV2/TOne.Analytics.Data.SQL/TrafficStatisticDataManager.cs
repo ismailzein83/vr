@@ -17,24 +17,50 @@ namespace TOne.Analytics.Data.SQL
 {
     public class TrafficStatisticDataManager : BaseTOneDataManager, ITrafficStatisticDataManager
     {
-        public TrafficStatisticSummaryBigResult GetTrafficStatisticSummary(string tempTableKey, TrafficStatisticFilter filter, bool withSummary, TrafficStatisticGroupKeys[] groupKeys, DateTime from, DateTime to, int fromRow, int toRow, TrafficStatisticMeasures orderBy, bool isDescending)
+        public TrafficStatisticSummaryBigResult GetTrafficStatisticSummary(Vanrise.Entities.DataRetrievalInput<TrafficStatisticSummaryInput> input)
         {
-            TempTableName tempTableName = null;
-            if (tempTableKey != null)
-                tempTableName = GetTempTableName(tempTableKey);
-            else
-                tempTableName = GenerateTempTableName();
-            TrafficStatisticSummaryBigResult rslt = new TrafficStatisticSummaryBigResult()
+            Dictionary<string, string> mapper = new Dictionary<string, string>();
+            string columnId;
+            GetColumnNames(input.Query.GroupKeys[0], out columnId);
+            mapper.Add("GroupKeyValues[0].Name", columnId);
+            string tempTable=null;
+            Action<string> createTempTableAction = (tempTableName) =>
             {
-                ResultKey = tempTableName.Key
+                tempTable = tempTableName;
+                ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.Filter, input.Query.GroupKeys), (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.From));
+                    cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.To));
+                });
             };
-            CreateTempTableIfNotExists(tempTableName.TableName, filter, groupKeys, from, to);
-            int totalDataCount;
-            rslt.Data = GetData(tempTableName.TableName, groupKeys, fromRow, toRow, orderBy, isDescending, out totalDataCount);
-            rslt.TotalCount = totalDataCount;
-            if (withSummary)
-                rslt.Summary = GetSummary(tempTableName.TableName);
-            return rslt;
+            TrafficStatisticSummaryBigResult rslt = RetrieveData(input, createTempTableAction, (reader) =>
+            {
+                var obj = new TrafficStatisticGroupSummary
+                {
+                    GroupKeyValues = new KeyColumn[input.Query.GroupKeys.Count()]
+                };
+                FillTrafficStatisticFromReader(obj, reader);
+
+                for (int i = 0; i < input.Query.GroupKeys.Count(); i++)
+                {
+                    string idColumn;
+                    GetColumnNames(input.Query.GroupKeys[i], out idColumn);
+                    object id = reader[idColumn];
+                    obj.GroupKeyValues[i] = new KeyColumn
+                    {
+                        Id = id != DBNull.Value ? id.ToString() : null,
+                    };
+                }
+
+                return obj;
+            }, mapper, new TrafficStatisticSummaryBigResult()) as TrafficStatisticSummaryBigResult;
+
+            FillBEProperties(rslt, input.Query.GroupKeys);
+               if (input.Query.WithSummary)
+                   rslt.Summary = GetSummary(tempTable);
+
+               return rslt;
+
         }
      
 
@@ -70,15 +96,13 @@ namespace TOne.Analytics.Data.SQL
 
         #region Private Methods
 
-        private void CreateTempTableIfNotExists(string tempTableName, TrafficStatisticFilter filter, IEnumerable<TrafficStatisticGroupKeys> groupKeys, DateTime from, DateTime to)
+        private string CreateTempTableIfNotExists(string tempTableName, TrafficStatisticFilter filter, IEnumerable<TrafficStatisticGroupKeys> groupKeys)
         {
             StringBuilder whereBuilder = new StringBuilder();
             StringBuilder queryBuilder = new StringBuilder(@"
                             IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
 	                            BEGIN
-                            WITH
-		                        AllResult AS
-		                        (
+
 			                        SELECT
                                             #SELECTPART#
                                            Min(FirstCDRAttempt) AS FirstCDRAttempt
@@ -97,15 +121,13 @@ namespace TOne.Analytics.Data.SQL
 				                           ,CONVERT(DECIMAL(10,2),Avg(ts.PGAD)) as PGAD
                                            ,CONVERT(DECIMAL(10,2),Avg(ts.PDDinSeconds)) as AveragePDD
 
-
+                                        INTO #TEMPTABLE#
 			                        FROM TrafficStats ts WITH(NOLOCK ,INDEX(IX_TrafficStats_DateTimeFirst))
                                  
 			                        WHERE
 			                        FirstCDRAttempt BETWEEN @FromDate AND @ToDate
                                     #FILTER#
 			                        GROUP BY #GROUPBYPART#
-		                        )
-		                        SELECT * INTO #TEMPTABLE# FROM AllResult
                             END");
             StringBuilder groupKeysSelectPart = new StringBuilder();
             StringBuilder groupKeysGroupByPart = new StringBuilder();
@@ -125,11 +147,7 @@ namespace TOne.Analytics.Data.SQL
             queryBuilder.Replace("#FILTER#", whereBuilder.ToString());
             queryBuilder.Replace("#SELECTPART#", groupKeysSelectPart.ToString());
             queryBuilder.Replace("#GROUPBYPART#", groupKeysGroupByPart.ToString());
-            ExecuteNonQueryText(queryBuilder.ToString(), (cmd) =>
-                {
-                    cmd.Parameters.Add(new SqlParameter("@FromDate", from));
-                    cmd.Parameters.Add(new SqlParameter("@ToDate", to));
-                });
+            return queryBuilder.ToString();
         }
 
         private void AddFilterToQuery(TrafficStatisticFilter filter, StringBuilder whereBuilder)
@@ -160,39 +178,12 @@ namespace TOne.Analytics.Data.SQL
                     whereBuilder.AppendFormat("AND {0} IN ({1})", column, String.Join(", ", values));
             }
         }
-        private IEnumerable<TrafficStatisticGroupSummary> GetData(string tempTableName, TrafficStatisticGroupKeys[] groupKeys, int fromRow, int toRow, TrafficStatisticMeasures orderBy, bool isDescending, out int totalCount)
-        {
-            string orderByColumnName = GetColumnName(orderBy);
-            IEnumerable<TrafficStatisticGroupSummary> trafficStatisticrData = base.GetDataFromTempTable<TrafficStatisticGroupSummary>(tempTableName, fromRow, toRow, orderByColumnName, isDescending,
-               (reader) =>
-               {
-                   var obj = new TrafficStatisticGroupSummary
-                   {
-                       GroupKeyValues = new KeyColumn[groupKeys.Count()]
-                   };
-                   FillTrafficStatisticFromReader(obj, reader);
-
-                   for (int i = 0; i < groupKeys.Count(); i++)
-                   {
-                       string idColumn;
-                       GetColumnNames(groupKeys[i], out idColumn);
-                       object id = reader[idColumn];
-                       obj.GroupKeyValues[i] = new KeyColumn
-                       {
-                           Id = id != DBNull.Value ? id.ToString() : null,
-                       };
-                   }
-
-                   return obj;
-               },
-                out totalCount);
-            FillBEProperties(trafficStatisticrData, groupKeys);
-            return trafficStatisticrData;
-        }
-        private void FillBEProperties(IEnumerable<TrafficStatisticGroupSummary> TrafficStatisticData, TrafficStatisticGroupKeys[] groupKeys)
+       
+        private void FillBEProperties(TrafficStatisticSummaryBigResult  TrafficStatisticData, TrafficStatisticGroupKeys[] groupKeys)
         {
             BusinessEntityInfoManager manager = new BusinessEntityInfoManager();
-            foreach (TrafficStatisticGroupSummary data in TrafficStatisticData)
+            
+            foreach (TrafficStatisticGroupSummary data in TrafficStatisticData.Data)
             {
 
                 for (int i = 0; i < groupKeys.Length;i++ )

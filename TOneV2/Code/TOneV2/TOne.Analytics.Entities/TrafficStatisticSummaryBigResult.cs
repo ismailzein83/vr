@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.Analytics.Entities
 {
-    public class TrafficStatisticSummaryBigResult : BigResult<TrafficStatisticGroupSummary>
+    public class TrafficStatisticSummaryBigResult : Vanrise.Entities.BigResult<TrafficStatisticGroupSummary>
     {
         public TrafficStatistic Summary { get; set; }
     }

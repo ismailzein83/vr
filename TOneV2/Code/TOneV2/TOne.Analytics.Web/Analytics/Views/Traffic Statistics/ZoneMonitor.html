@@ -44,7 +44,7 @@
             </vr-actionbar>
         </vr-row>
     </vr-form>
-    <div ng-show="showResult" vr-loader="isGettingData">
+    <div vr-loader="isGettingData">
         <vr-row>
             <vr-columns colnum="6" simplecol>
                 <vr-section title="Overall">
@@ -59,10 +59,10 @@
         </vr-row>
         <vr-row>
             <vr-columns colnum="12" simplecol>
-                <vr-datagrid data-on-ready="onMainGridReady" datasource="data" onexport="onexport"
-                             pagersettings="mainGridPagerSettings" menuactions="gridMenuActions">
+                <vr-datagrid on-ready="onMainGridReady" datasource="data"
+                             menuactions="gridMenuActions" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'">
                     <vr-datagridcolumn ng-repeat="groupKey in currentSearchCriteria.groupKeys" headertext="groupKey.gridHeader" field="'GroupKeyValues[' + $index + '].Name'" columnindex="$index" widthfactor="15" enablehiding="'false'" isclickable="'true'" tag="groupKey" onclicked="onGroupKeyClicked"></vr-datagridcolumn>
-                    <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" summaryfield="measure.propertyName" type="'Number'" tag="measure" onsortchanged="onMainGridSortChanged"></vr-datagridcolumn>
+                    <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" summaryfield="measure.propertyName" type="'Number'" tag="measure" ></vr-datagridcolumn>
                     <vr-datagridexpandablerow>
                         <div ng-include="'/Client/Modules/Analytics/Views/Traffic Statistics/TrafficStatisticsGrid.html'"></div>
                     </vr-datagridexpandablerow>
