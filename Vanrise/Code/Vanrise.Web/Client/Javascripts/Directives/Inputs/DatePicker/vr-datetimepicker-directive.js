@@ -91,7 +91,9 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                     $scope.ctrl.value = null;
                     return;
                 }
-                selectedDate = new Date(e.date);
+              //  console.log(e.date.toLocaleString())
+               
+                selectedDate = e.date.toLocaleString();
                 var modelValue = $scope.ctrl.value;
                 if (modelValue != undefined && !(modelValue instanceof Date))
                     modelValue = new Date(modelValue);
