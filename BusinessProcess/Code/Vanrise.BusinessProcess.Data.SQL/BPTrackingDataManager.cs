@@ -65,11 +65,17 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
         public BigResult<BPTrackingMessage> GetFilteredTrackings(DataRetrievalInput<TrackingQuery> input)
         {
-            return RetrieveData(input,tempTableName =>
+            int? top = input.DataRetrievalResultType == DataRetrievalResultType.Normal ? (int?) (input.ToRow ?? 0) - (input.FromRow ?? 0) : null;
+
+            return new BigResult<BPTrackingMessage>()
             {
-                ExecuteNonQuerySP("bp.sp_BPTrackings_CreateTempForFiltered", tempTableName, input.Query.ProcessInstanceId, input.Query.FromTrackingId, input.Query.Message,
-                    input.Query.Severities == null ? null : string.Join(",", input.Query.Severities.Select(n => ((int)n).ToString()).ToArray()), (input.ToRow ?? 0) - (input.FromRow ?? 0));
-            }, BPTrackingMapper);
+                Data = GetItemsSP("bp.sp_BPTrackings_GetByInstanceId", BPTrackingMapper, input.Query.ProcessInstanceId, input.Query.FromTrackingId,
+                input.Query.Message,
+                input.Query.Severities == null
+                    ? null
+                    : string.Join(",", input.Query.Severities.Select(n => ((int)n).ToString()).ToArray()),
+                top)
+            };
         }
 
         #endregion
