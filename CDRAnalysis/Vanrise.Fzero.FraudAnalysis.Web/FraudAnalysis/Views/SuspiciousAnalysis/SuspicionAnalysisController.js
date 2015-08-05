@@ -18,7 +18,6 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
         $scope.selectedStatus.push(UtilsService.getItemByVal($scope.statuses, 1, "id"));
 
         var Now = new Date();
-        Now.setDate(Now.getDate() + 1);
 
         var Yesterday = new Date();
         Yesterday.setDate(Yesterday.getDate() - 1);
@@ -26,23 +25,6 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
         $scope.fromDate = Yesterday;
         $scope.toDate = Now;
 
-
-        $scope.customvalidateFrom = function (fromDate) {
-            return validateDates(fromDate, $scope.toDate);
-        };
-        $scope.customvalidateTo = function (toDate) {
-            return validateDates($scope.fromDate, toDate);
-        };
-        function validateDates(fromDate, toDate) {
-            if (fromDate == undefined || toDate == undefined)
-                return null;
-            var from = new Date(fromDate);
-            var to = new Date(toDate);
-            if (from.getTime() > to.getTime())
-                return "Start should be before end";
-            else
-                return null;
-        }
 
         $scope.suspicionLevels = [
                         { id: 2, name: 'Suspicious' }, { id: 3, name: 'Highly Suspicious' }, { id: 4, name: 'Fraud' }
@@ -70,22 +52,6 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
         }
 
 
-        $scope.resetClicked = function () {
-
-            var Now = new Date();
-            Now.setDate(Now.getDate() + 1);
-
-            var Yesterday = new Date();
-            Yesterday.setDate(Yesterday.getDate() - 1);
-
-
-            $scope.fromDate = Yesterday;
-            $scope.toDate = Now;
-            $scope.selectedStrategies = [];
-            $scope.selectedSuspicionLevels = [];
-            mainGridAPI.clearDataAndContinuePaging();
-        };
-
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return SuspicionAnalysisAPIService.GetFilteredSuspiciousNumbers(dataRetrievalInput)
             .then(function (response) {
@@ -107,9 +73,6 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
 
     function retrieveData() {
-
-        var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
-        var toDate = $scope.toDate != undefined ? $scope.toDate : '';
 
         var suspicionLevelsList = '';
 
@@ -134,8 +97,8 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
 
         var query = {
-            FromDate: fromDate,
-            ToDate: toDate,
+            FromDate: $scope.fromDate,
+            ToDate: $scope.toDate,
             SuspicionLevelsList: removeLastComma(suspicionLevelsList),
             StrategiesList: removeLastComma(strategiesList),
             CaseStatusesList: removeLastComma(caseStatusesList)
@@ -168,9 +131,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
 
     function detailFraudResult(fruadResult) {
-        var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
-        var toDate = $scope.toDate != undefined ? $scope.toDate : '';
-
+        
         var suspicionLevelsList = '';
 
         angular.forEach($scope.selectedSuspicionLevels, function (itm) {

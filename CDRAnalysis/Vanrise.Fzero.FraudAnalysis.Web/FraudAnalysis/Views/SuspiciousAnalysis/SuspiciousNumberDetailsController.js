@@ -260,12 +260,9 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
     function retrieveData_SubscriberThresholds() {
         $scope.subscriberThresholds.length = 0;
 
-        var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
-        var toDate = $scope.toDate != undefined ? $scope.toDate : '';
-
         var query = {
-            FromDate: fromDate,
-            ToDate: toDate,
+            FromDate: $scope.fromDate,
+            ToDate: $scope.toDate,
             SubscriberNumber: $scope.subscriberNumber
         };
 
@@ -275,12 +272,9 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
 
     function retrieveData_NormalCDRs() {
 
-        var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
-        var toDate = $scope.toDate != undefined ? $scope.toDate : '';
-
         var query = {
-            FromDate: fromDate,
-            ToDate: toDate,
+            FromDate: $scope.fromDate,
+            ToDate: $scope.toDate,
             MSISDN: $scope.subscriberNumber
         };
 
@@ -290,12 +284,9 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
 
     function retrieveData_NumberProfiles() {
 
-        var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
-        var toDate = $scope.toDate != undefined ? $scope.toDate : '';
-
         var query = {
-            FromDate: fromDate,
-            ToDate: toDate,
+            FromDate: $scope.fromDate,
+            ToDate: $scope.toDate,
             SubscriberNumber: $scope.subscriberNumber
         };
 

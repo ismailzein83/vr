@@ -13,7 +13,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 
         public override string GetTitle()
         {
-            return String.Format("Execute Strategy Process ({0:dd-MMM-yy HH:mm} - {1:dd-MMM-yy HH:mm}", this.FromDate, this.ToDate);
+            return String.Format("Execute Strategy Process ({0:dd-MMM-yy HH:mm} - {1:dd-MMM-yy HH:mm})", this.FromDate, this.ToDate);
         }
 
         public override void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)

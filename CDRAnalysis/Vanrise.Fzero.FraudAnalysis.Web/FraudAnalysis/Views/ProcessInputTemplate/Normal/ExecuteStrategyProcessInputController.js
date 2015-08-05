@@ -1,26 +1,8 @@
 ﻿var ExecuteStrategyProcessInputController = function ($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
     defineScope();
-    //load();
-    //loadForm();
+  
     function defineScope() {
-
-        $scope.customvalidateFrom = function (fromDate) {
-            return validateDates(fromDate, $scope.toDate);
-        };
-        $scope.customvalidateTo = function (toDate) {
-            return validateDates($scope.fromDate, toDate);
-        };
-        function validateDates(fromDate, toDate) {
-            if (fromDate == undefined || toDate == undefined)
-                return null;
-            var from = new Date(fromDate);
-            var to = new Date(toDate);
-            if (from.getTime() > to.getTime())
-                return "Start should be before end";
-            else
-                return null;
-        }
-
+              
         $scope.createProcessInputObjects = [];
 
         $scope.strategies = [];
