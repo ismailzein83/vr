@@ -41,11 +41,13 @@
             });
          
             var runningDate = new Date($scope.fromDate);
+            //runningDate = new Date(runningDate.setHours(runningDate.getHours() + 3));
+
 
             $scope.createProcessInputObjects.length = 0;
             if ($scope.selectedPeriod.Id == 1)//Hourly
             {
-                var runningDate = new Date($scope.fromDate);
+                runningDate = new Date($scope.fromDate);
                 while (runningDate < $scope.toDate)
                 {
                     $scope.createProcessInputObjects.push({
@@ -63,7 +65,7 @@
             }
             else if ($scope.selectedPeriod.Id == 2) //Daily
             {
-                var runningDate = new Date($scope.fromDate);
+                runningDate = new Date($scope.fromDate);
                 while (runningDate < $scope.toDate) {
                     $scope.createProcessInputObjects.push({
                         InputArguments: {
