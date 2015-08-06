@@ -26,9 +26,12 @@
             <vr-columns colnum="12" simplecol>
 
                 <vr-datagrid datasource="strategies" dataretrievalfunction="dataRetrievalFunction" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady" menuactions="gridMenuActions" idfield="Id">
-                    <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Strategy Name'" field="'Name'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Type'" field="'StrategyType'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Is Default'" field="'IsDefaultText'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Description'" field="'Description'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Created By'" field="'CreatedBy'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Creation Date'" field="'CreationDate'" type="'Datetime'"></vr-datagridcolumn>
+                    
                 </vr-datagrid>
             </vr-columns>
         </vr-row>

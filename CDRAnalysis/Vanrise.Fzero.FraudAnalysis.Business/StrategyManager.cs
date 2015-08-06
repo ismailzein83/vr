@@ -50,7 +50,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         public Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<Strategy> UpdateStrategy(Strategy strategyObject)
         {
             IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
-            bool updateActionSucc = manager.UpdateStrategy(strategyObject);
+            bool updateActionSucc = manager.UpdateStrategy(strategyObject, Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId());
             Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<Strategy> updateOperationOutput = new Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<Strategy>();
 
             if (updateActionSucc)
@@ -71,7 +71,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             int strategyId = -1;
 
             IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
-            bool insertActionSucc = manager.AddStrategy(strategyObject, out strategyId);
+            bool insertActionSucc = manager.AddStrategy(strategyObject, out strategyId, Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId());
 
             if (insertActionSucc)
             {

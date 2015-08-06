@@ -11,8 +11,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
     public class StrategyDataManager : BaseSQLDataManager, IStrategyDataManager
     {
 
-        int DefaultUserId = 1;
-
         public StrategyDataManager()
             : base("CDRDBConnectionString")
         {
@@ -39,11 +37,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
-        public bool AddStrategy(Strategy strategyObject, out int insertedId)
+        public bool AddStrategy(Strategy strategyObject, out int insertedId, int userId)
         {
             object id;
             int recordesEffected = ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_Insert", out id,
-                DefaultUserId,
+                userId,
                 !string.IsNullOrEmpty(strategyObject.Name) ? strategyObject.Name : null,
                 !string.IsNullOrEmpty(strategyObject.Description) ? strategyObject.Description : null,
                 DateTime.Now,
@@ -67,12 +65,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
-        public bool UpdateStrategy(Strategy strategyObject)
+        public bool UpdateStrategy(Strategy strategyObject, int userId)
         {
 
             int recordesEffected = ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_Update",
                 strategyObject.Id,
-                 DefaultUserId,
+                 userId,
                 !string.IsNullOrEmpty(strategyObject.Name) ? strategyObject.Name : null,
                 !string.IsNullOrEmpty(strategyObject.Description) ? strategyObject.Description : null,
                 DateTime.Now,
@@ -97,6 +95,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             var strategy = Vanrise.Common.Serializer.Deserialize<Strategy>(GetReaderValue<string>(reader, "StrategyContent"));
             strategy.Id = (int)reader["Id"];
+            strategy.StrategyType = ((Enums.Period)Enum.ToObject(typeof(Enums.Period), strategy.PeriodId)).ToString();
             return strategy;
         }
 

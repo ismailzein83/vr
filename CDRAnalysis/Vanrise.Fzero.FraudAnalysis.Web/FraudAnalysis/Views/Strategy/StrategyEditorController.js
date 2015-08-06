@@ -143,7 +143,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             MinimumCountofCallsinActiveHour: $scope.minCountofCallsinActiveHour,
             PeakHours: $scope.selectedPeakHours,
             StrategyFilters: [],
-            StrategyLevels: []
+            StrategyLevels: [],
+            CreationDate: new Date()
         };
 
         angular.forEach($scope.strategyFilters, function (filter) {

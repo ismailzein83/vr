@@ -9,6 +9,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public int PeriodId { get; set; }
 
+        public string StrategyType { get; set; }
+
         public string Name { get; set; }
 
         public string Description { get; set; }
@@ -22,6 +24,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public int MaxLowDurationCall { get; set; }
 
         public int MinimumCountofCallsinActiveHour { get; set; }
+
+        public DateTime CreationDate { get; set; }
 
         List<Hour> _peakHours;
         public List<Hour> PeakHours

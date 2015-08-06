@@ -33,8 +33,9 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return StrategyAPIService.GetFilteredStrategies(dataRetrievalInput)
             .then(function (response) {
-               
                 angular.forEach(response.Data, function (itm) {
+                    console.log('itm')
+                    console.log(itm)
                     itm.IsDefaultText = itm.IsDefault ? "Default" : "Not Default"
                 });
 
