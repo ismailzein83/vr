@@ -1,7 +1,7 @@
 ﻿app.service('StrategyAPIService', function (BaseAPIService) {
 
     return ({
-        GetAllStrategies: GetAllStrategies,
+        GetStrategies: GetStrategies,
         GetFilteredStrategies: GetFilteredStrategies,
         AddStrategy: AddStrategy,
         UpdateStrategy: UpdateStrategy,
@@ -17,8 +17,8 @@
            );
     }
 
-    function GetAllStrategies(periodId) {
-        return BaseAPIService.get("/api/Strategy/GetAllStrategies",
+    function GetStrategies(periodId) {
+        return BaseAPIService.get("/api/Strategy/GetStrategies",
             {
                 PeriodId: periodId
             });

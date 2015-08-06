@@ -21,7 +21,7 @@ namespace Vanrise.Fzero.DevRuntime
         private void MainForm_Load(object sender, EventArgs e)
         {
             IStrategyDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
-            ddlStrategy.DataSource = dataManager.GetAllStrategies(0);
+            ddlStrategy.DataSource = dataManager.GetStrategies(0);
             ddlStrategy.ValueMember = "Id";
             ddlStrategy.DisplayMember = "Name";
         }

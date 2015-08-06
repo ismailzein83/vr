@@ -12,11 +12,11 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
         [HttpGet]
 
-        public IEnumerable<Strategy> GetAllStrategies(int PeriodId)
+        public IEnumerable<Strategy> GetStrategies(int PeriodId)
         {
             StrategyManager manager = new StrategyManager();
 
-            return manager.GetAllStrategies(PeriodId);
+            return manager.GetStrategies(PeriodId);
         }
 
 
