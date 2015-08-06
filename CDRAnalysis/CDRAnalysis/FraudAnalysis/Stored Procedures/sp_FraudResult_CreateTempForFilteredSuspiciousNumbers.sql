@@ -9,9 +9,9 @@ CREATE PROCEDURE [FraudAnalysis].[sp_FraudResult_CreateTempForFilteredSuspicious
 	@TempTableName varchar(200),	
 	@FromDate datetime,
 	@ToDate datetime,
-	@StrategiesList varchar(10) = '',
-	@SuspiciousLevelsList varchar(10) = '',
-	@CaseStatusesList varchar(10) = ''
+	@StrategiesList varchar(100) = '',
+	@SuspiciousLevelsList varchar(100) = '',
+	@CaseStatusesList varchar(100) = ''
 )
 	AS
 	BEGIN

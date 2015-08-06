@@ -63,17 +63,18 @@
     <Folder Include="Properties" />
     <Folder Include="FraudAnalysis\" />
     <Folder Include="FraudAnalysis\Tables\" />
-    <Folder Include="Security\" />
     <Folder Include="FraudAnalysis\Stored Procedures\" />
     <Folder Include="FraudAnalysis\User Defined Types\" />
+    <Folder Include="Security\" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="CDRAnalysis.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="FraudAnalysis\Tables\Suspicion_Level.sql" />
-    <Build Include="FraudAnalysis\Tables\CaseStatus.sql" />
+    <Build Include="FraudAnalysis\Tables\Strategy.sql" />
     <Build Include="FraudAnalysis\Tables\NumberProfile.sql" />
+    <Build Include="FraudAnalysis\Tables\CaseStatus.sql" />
     <Build Include="FraudAnalysis\Tables\SubscriberThreshold.sql" />
     <Build Include="FraudAnalysis\Tables\NormalCDR.sql" />
     <Build Include="FraudAnalysis\Tables\SubscriberCase.sql" />
@@ -81,7 +82,6 @@
     <Build Include="FraudAnalysis\Tables\Period.sql" />
     <Build Include="FraudAnalysis\Tables\CallType.sql" />
     <Build Include="FraudAnalysis\Tables\CallClass.sql" />
-    <Build Include="FraudAnalysis\Tables\Strategy.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempForFilteredNormalCDRs.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempForFilteredNumberProfiles.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempForFilteredSubscriberThresholds.sql" />
@@ -114,6 +114,7 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_CreateTempForFilteredStrategies.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_GetFraudCasesPerStrategy.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_SubscriberCase_Save.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetStrategies.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetStrategy.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Update.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Insert.sql" />
