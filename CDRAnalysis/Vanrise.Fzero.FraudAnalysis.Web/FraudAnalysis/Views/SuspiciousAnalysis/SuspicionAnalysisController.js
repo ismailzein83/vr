@@ -114,7 +114,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
 
     function loadStrategies() {
-        return StrategyAPIService.GetAllStrategies().then(function (response) {
+        return StrategyAPIService.GetAllStrategies(0).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.strategies.push({ id: itm.Id, name: itm.Name });
             });
