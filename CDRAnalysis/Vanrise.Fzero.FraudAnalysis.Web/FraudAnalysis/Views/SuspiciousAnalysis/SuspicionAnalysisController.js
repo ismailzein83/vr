@@ -3,7 +3,6 @@
 function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalysisAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
 
     var mainGridAPI;
-    var arrMenuAction = [];
 
     defineScope();
     load();

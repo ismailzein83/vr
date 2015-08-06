@@ -9,8 +9,6 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
     load();
 
 
-
-
     function defineScope() {
 
         $scope.gridMenuActions = [];
@@ -70,7 +68,6 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
 
         return mainGridAPI.retrieveData(query);
     }
-
 
     function addNewStrategy() {
         var settings = {};
