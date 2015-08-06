@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.Data.SQL;
 using Vanrise.Integration.Entities;
 
@@ -55,7 +56,7 @@ namespace Vanrise.Integration.Data.SQL
             {
                 ID = (int)reader["ID"],
                 DataSourceId = (int)reader["DataSourceId"],
-                Severity = (LogEntryTypeEnum)reader["Severity"],
+                Severity = (LogEntryType)reader["Severity"],
                 Message = GetReaderValue<string>(reader, "Message"),
                 LogEntryTime = (DateTime)reader["LogEntryTime"]
             };
@@ -63,7 +64,7 @@ namespace Vanrise.Integration.Data.SQL
             return dataSourceLog;
         }
 
-        private DataTable BuildSeveritiesTable(List<LogEntryTypeEnum> severities)
+        private DataTable BuildSeveritiesTable(List<LogEntryType> severities)
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("Severity", typeof(int));
