@@ -303,6 +303,8 @@
     <Content Include="images\alert\update.png" />
     <Content Include="images\alert\warning.png" />
     <Content Include="images\loader-mask.gif" />
+    <Content Include="images\login.png" />
+    <Content Include="images\logoonheader.png" />
     <Content Include="images\menu-normal.png" />
     <Content Include="popoverTemp.html" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
