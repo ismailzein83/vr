@@ -83,9 +83,9 @@
                 return BusinessProcessAPIService.GetFilteredTrackings(dataRetrievalInput)
                 .then(function (response) {
 
-                    $scope.lastTrackingId = UtilsService.getPropMaxValueFromArray(response.Data, "Id");
-
                     if (dataRetrievalInput.DataRetrievalResultType === DataRetrievalResultTypeEnum.Normal.value) {
+                        $scope.lastTrackingId = UtilsService.getPropMaxValueFromArray(response.Data, "Id");
+
                         for (var i = 0, len = response.Data.length; i < len; i++) {
                             response.Data[i].SeverityDescription = UtilsService.getLogEntryTypeDescription(response.Data[i].Severity);
                         }
