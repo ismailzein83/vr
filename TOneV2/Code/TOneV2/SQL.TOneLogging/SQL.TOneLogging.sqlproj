@@ -76,6 +76,7 @@
     <Folder Include="integration\" />
     <Folder Include="integration\Tables\" />
     <Folder Include="integration\Stored Procedures\" />
+    <Folder Include="integration\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="bp\Tables\BPTracking.sql" />
@@ -95,6 +96,8 @@
     <Build Include="integration\Stored Procedures\sp_DataSourceLog_Insert.sql" />
     <Build Include="Security\integration.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSourceImportedBatch_Insert.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSourceLog_CreateTempForFiltered.sql" />
+    <Build Include="integration\User Defined Types\SeverityType.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
