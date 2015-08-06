@@ -10,7 +10,7 @@ namespace Vanrise.Security.Data
     public interface IViewDataManager : IDataManager
     {
         List<View> GetViews();
-        Vanrise.Entities.BigResult<View> GetDynamicPages();
+        List<View> GetDynamicPages();
         bool AddView(View view, out int insertedId);
         bool UpdateView(View view);
         bool DeleteView(int viewId);

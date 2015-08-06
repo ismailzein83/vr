@@ -11,11 +11,11 @@ namespace Vanrise.Security.Business
 {
     public class ViewManager
     {
-        public Vanrise.Entities.IDataRetrievalResult<View> GetDynamicPages()
-        {
-            IViewDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(null,dataManager.GetDynamicPages());
-        }
+        //public Vanrise.Entities.IDataRetrievalResult<View> GetDynamicPages()
+        //{
+        //    IViewDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
+        //    return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(null,dataManager.GetDynamicPages());
+        //}
 
         public Vanrise.Entities.InsertOperationOutput<View> AddView(View view)
         {

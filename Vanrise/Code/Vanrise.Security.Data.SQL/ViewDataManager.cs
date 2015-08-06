@@ -39,18 +39,14 @@ namespace Vanrise.Security.Data.SQL
             return view;
         }
 
-        public Vanrise.Entities.BigResult<View> GetDynamicPages()
+        public List<View> GetDynamicPages()
         {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                ExecuteNonQuerySP("sec.sp_View_GetFiltered", tempTableName, null, ViewType.Dynamic);
-            };
-            return RetrieveData(null, createTempTableAction, DynamicPageMapper);
-
+            return GetItemsSP("sec.sp_View_GetFiltered", DynamicPageMapper,null, null, ViewType.Dynamic);
             
         }
         public Vanrise.Entities.BigResult<View> GetFilteredDynamicViews(Vanrise.Entities.DataRetrievalInput<string> filter)
         {
+
             Dictionary<string,string> mapper=new Dictionary<string,string>();
             mapper.Add("Name", "PageName");
             Action<string> createTempTableAction = (tempTableName) =>

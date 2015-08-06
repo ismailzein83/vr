@@ -85,8 +85,8 @@ namespace Vanrise.Security.Business
             deleteOperationOutput.Result = DeleteOperationResult.Failed;
             IViewDataManager viewdataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
 
-            Vanrise.Entities.BigResult<View> dynamicViews = viewdataManager.GetDynamicPages();
-            foreach (View dynamicView in dynamicViews.Data)
+            List<View>  dynamicViews = viewdataManager.GetDynamicPages();
+            foreach (View dynamicView in dynamicViews)
             {
                 foreach (ViewContentItem bodyContent in dynamicView.ViewContent.BodyContents)
                 {

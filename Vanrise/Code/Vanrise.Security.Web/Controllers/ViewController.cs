@@ -11,12 +11,12 @@ namespace Vanrise.Security.Web.Controllers
      [JSONWithTypeAttribute]
     public class ViewController : Vanrise.Web.Base.BaseAPIController
     {
-        [HttpGet]
-         public object GetDynamicPages()
-        {
-            ViewManager manager = new ViewManager();
-            return GetWebResponse(null,manager.GetDynamicPages());
-        }
+        //[HttpGet]
+        // public object GetDynamicPages()
+        //{
+        //    ViewManager manager = new ViewManager();
+        //    return GetWebResponse(null,manager.GetDynamicPages());
+        //}
       
         [HttpPost]
         public Vanrise.Entities.InsertOperationOutput<View> AddView(View view)
