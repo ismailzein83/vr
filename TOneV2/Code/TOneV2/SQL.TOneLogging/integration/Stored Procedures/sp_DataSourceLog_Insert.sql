@@ -3,11 +3,11 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE integration.sp_DataSourceLog_Insert 
+CREATE PROCEDURE [integration].[sp_DataSourceLog_Insert] 
 	@DataSourceId int,
 	@Severity int,
 	@Message varchar(1000),
-	@ImportedBatchId int,
+	@ImportedBatchId bigint,
 	@LogEntryTime dateTime
 AS
 BEGIN

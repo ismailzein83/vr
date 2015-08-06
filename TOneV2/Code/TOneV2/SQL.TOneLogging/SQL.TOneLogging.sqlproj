@@ -94,6 +94,7 @@
     <Build Include="integration\Tables\DataSourceLog.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSourceLog_Insert.sql" />
     <Build Include="Security\integration.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSourceImportedBatch_Insert.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
