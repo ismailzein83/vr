@@ -12,7 +12,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
         public string SuspicionLevelsList { get; set; }
-
         public string StrategiesList { get; set; }
         public string CaseStatusesList { get; set; }
 
