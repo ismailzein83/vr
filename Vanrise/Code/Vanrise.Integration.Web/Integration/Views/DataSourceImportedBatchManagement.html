@@ -1,0 +1,52 @@
+﻿<vr-panel ng-controller="Integration_DataSourceImportedBatchManagementController">
+
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingForm">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-select ismultipleselection label="Data Source" datatextfield="Name" datavaluefield="ID" datasource="dataSources" selectedvalues="selectedDataSources"></vr-select>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-select ismultipleselection label="Mapping Result" datatextfield="description" datavaluefield="value" datasource="mappingResults" selectedvalues="selectedMappingResults"></vr-select>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-datetimepicker label="From" type="dateTime" value="selectedFromDateTime"></vr-datetimepicker>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-datetimepicker label="To" type="dateTime" value="selectedToDateTime"></vr-datetimepicker>
+                </vr-columns>
+            </vr-row>
+        </div>
+    </vr-form>
+
+    <vr-row removeline>
+        <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+            <div transclude-to="buttons">
+                <vr-button type="Search" formname="formFilter" data-onclick="searchClicked" isasynchronous="true"></vr-button>
+            </div>
+        </vr-actionbar>
+    </vr-row>
+
+    <div>
+        <vr-row>
+            <vr-columns width="fullrow" simplecol>
+
+                <!--<vr-datagrid datasource="logs"
+                             dataretrievalfunction="dataRetrievalFunction"
+                             pagingtype="'PagingOnScroll'"
+                             on-ready="gridReady">
+
+                    <vr-datagridcolumn headertext="'Data Source Name'" field="'DataSourceName'" widthfactor="15"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Severity'" field="'SeverityDescription'" widthfactor="10" getcolor="getSeverityColor"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Message'" field="'Message'" widthfactor="60"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Log Entry Time'" field="'LogEntryTime'" widthfactor="15"></vr-datagridcolumn>
+                </vr-datagrid>-->
+
+            </vr-columns>
+        </vr-row>
+    </div>
+
+</vr-panel>
