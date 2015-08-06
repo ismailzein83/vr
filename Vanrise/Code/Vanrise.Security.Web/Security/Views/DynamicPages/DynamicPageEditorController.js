@@ -402,11 +402,15 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
             }
 
         }
-        $scope.selectedMenuNode = UtilsService.getItemByVal($scope.menuList, $scope.filter.ModuleId, 'Id');
-        addIsSelected($scope.menuList, $scope.filter.ModuleId);
+        //$scope.selectedMenuNode = UtilsService.getItemByVal($scope.menuList, $scope.filter.ModuleId, 'Id');
+       // addIsSelected($scope.menuList, $scope.filter.ModuleId);
         
-        if($scope.menuList.length>0)
+        if ($scope.menuList.length > 0) {
+            $scope.selectedMenuNode = treeAPI.setSelectedNode($scope.menuList, $scope.filter.ModuleId, "Id","Childs");
+            console.log($scope.selectedMenuNode);
             treeAPI.refreshTree($scope.menuList);
+        }
+            
         if ($scope.filter.DefaultPeriod != undefined && $scope.filter.DefaultGrouping != undefined) {
             $scope.nonSearchable = false;
             $scope.selectedViewPeriod = getPeriod($scope.filter.DefaultPeriod);
@@ -435,12 +439,12 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
     function addIsSelected(menuList, Id) {
         for (var i = 0; i < menuList.length; i++) {
             if (menuList[i].Id == Id) {
+                $scope.selectedMenuNode = menuList[i];
                 menuList[i].isSelected = true;
-               
                 return;
             }
             if (menuList[i].Childs != undefined)
-                addIsSelected(menuList[i].Childs);
+                addIsSelected(menuList[i].Childs,Id);
         }
 
     }
