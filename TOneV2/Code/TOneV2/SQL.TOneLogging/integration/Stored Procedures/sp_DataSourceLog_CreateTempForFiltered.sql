@@ -18,20 +18,18 @@ BEGIN
 	
 	IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 	    BEGIN
-			SELECT dsl.[ID],
-			dsl.[DataSourceId],
-			ds.[Name],
-			dsl.[Severity],
-			dsl.[Message],
-			dsl.[LogEntryTime]
+			SELECT [ID],
+			[DataSourceId],
+			[Severity],
+			[Message],
+			[LogEntryTime]
 			INTO #RESULT
-			FROM [FZeroLog].[integration].[DataSourceLog] dsl
-			INNER JOIN [FZeroTransaction].[integration].[DataSource] ds ON dsl.DataSourceId = ds.ID
+			FROM [integration].[DataSourceLog]
 			WHERE 
-				(@DataSourceId IS NULL OR dsl.DataSourceId = @DataSourceId) AND
-				(dsl.Severity IN (SELECT Severity FROM @Severities)) AND
-				(@From IS NULL OR dsl.LogEntryTime >= @From) AND
-				(@To IS NULL OR dsl.LogEntryTime <= @To)
+				(@DataSourceId IS NULL OR DataSourceId = @DataSourceId) AND
+				(Severity IN (SELECT Severity FROM @Severities)) AND
+				(@From IS NULL OR LogEntryTime >= @From) AND
+				(@To IS NULL OR LogEntryTime <= @To)
 			
 			DECLARE @sql VARCHAR(1000)
 			SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';

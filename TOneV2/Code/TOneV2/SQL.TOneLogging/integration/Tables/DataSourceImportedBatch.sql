@@ -7,9 +7,11 @@
     [MappingResult]    INT             NULL,
     [MapperMessage]    NVARCHAR (1000) NULL,
     [QueueItemId]      NVARCHAR (50)   NOT NULL,
-    [LogEntryTime]     DATETIME        NULL,
+    [LogEntryTime]     DATETIME        NOT NULL,
     CONSTRAINT [PK_DataSourceImportedBatch] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
