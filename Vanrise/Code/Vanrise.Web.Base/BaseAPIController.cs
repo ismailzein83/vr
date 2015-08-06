@@ -20,7 +20,7 @@ namespace Vanrise.Web.Base
             return result;
         }
 
-        private object GetExcelResponse<T>(ExcelResult<T> excelResult)
+        protected object GetExcelResponse(ExcelResult excelResult)
         {
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
             excelResult.ExcelFileStream.Position = 0;

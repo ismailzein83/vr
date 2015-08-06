@@ -7,7 +7,12 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public class ExcelResult<T> : IDataRetrievalResult<T>
+    public class ExcelResult
+    {
+        public MemoryStream ExcelFileStream { get; set; }
+    }
+
+    public class ExcelResult<T> : ExcelResult, IDataRetrievalResult<T>
     {
         public MemoryStream ExcelFileStream { get; set; }
     }
