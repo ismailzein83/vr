@@ -537,75 +537,6 @@ label{
     width:150px !important;
     display:inline-block !important;
 }
- notification 
-.success, .warning, .attention, .information {
-	padding: 10px 30px;
-	margin-left: 10px;
-	margin-right: 10px;
-	margin-bottom: 20px;
-	color: #555555;
-	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-	position: fixed;
-	top: 60px;
-	right: 20px;
-	max-width: 300px;
-	z-index: 999999;
-	border: 1px solid #D0D0D0;
-	-border-radius:0.4em;
-	-webkit-border-radius:0.4em;
-    text-align:left;
-}
-.success {
-	background: #edfff4 url('../images/alert/success.png') 10px center no-repeat;
-}
-.warning {
-	background: #ffe8e8 url('../images/alert/warning.png') 10px center no-repeat;
-}
-.warningCustom {
-	padding: 15px 40px;
-	color: #555555;
-	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-	top: 300px;
-	right: 300px;
-	position:absolute;  
-	top:50%;  
-	left:50%;  
-	margin:-100px 0 0 -100px;  
-	max-width: 300px;
-	z-index: 999999;
-	border: 1px solid #D0D0D0;
-	-border-radius:0.4em;
-	-webkit-border-radius:0.4em;
-	background: #ffe8e8 url('../images/alert/warning.png') 10px center no-repeat;
-}
-.successCustom {
-	padding: 15px 40px;
-	color: #555555;
-	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-	position:absolute;  
-	top:50%;  
-	left:50%;  
-	margin:-100px 0 0 -100px;  
-	max-width: 300px;
-	z-index: 999999;
-	border: 1px solid #D0D0D0;
-	-border-radius:0.4em;
-	-webkit-border-radius:0.4em;
-	background: #edfff4 url('../images/alert/success.png') 10px center no-repeat;
-}
-.attention {
-	background: #FFFFFF url('../images/alert/attention.png') 10px center no-repeat;
-}
-.success .close, .warning .close, .attention .close, .information .close {
-	float: right;
-	position: absolute;
-	top: 7px;
-	right: 7px;
-	padding-top: 4px;
-	padding-right: 4px;
-	cursor: pointer;
-}
-
  /*ui-grid override*/
 .ui-grid {
     border:none;
@@ -800,13 +731,6 @@ input.ui-grid-filter-input[type="text"] {
   color: #428bca;
   border-bottom: 3px solid #428bca !important;
   padding-bottom: 4px;
-}
-.toggle-menu {
-  display: block;
-  width: 28px;
-  height: 28px;
-  background: url("../../images/menu-normal.png") no-repeat;
-  background-size: 100% 100%;
 }
 .btn-vertical {
     width: 28px;
