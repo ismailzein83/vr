@@ -1,6 +1,6 @@
-﻿BPDefinitionManagementController.$inject = ['$scope', 'BusinessProcessAPIService', 'VRModalService', '$interval', 'VRNotificationService'];
+﻿BPDefinitionManagementController.$inject = ['$scope', 'BusinessProcessAPIService', 'VRModalService', '$interval', 'VRNotificationService', 'UtilsService'];
 
-function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRModalService, $interval, VRNotificationService) {
+function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRModalService, $interval, VRNotificationService, UtilsService) {
 
     "use strict";
     var interval, mainGridAPI;
@@ -72,10 +72,6 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
 
     function getOpenedInstancesData() {
 
-        angular.forEach($scope.filteredDefinitions, function (def) {
-                def.openedInstances = [];
-        });
-
         BusinessProcessAPIService.GetOpenedInstances().then(function (response) {
             angular.forEach(response, function (inst) {
                 angular.forEach($scope.filteredDefinitions, function (def) {
@@ -87,8 +83,14 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
                         if (angular.isUndefined(def.runningInstances)) {
                             def.runningInstances = 0;
                         }
-                        def.runningInstances = parseInt(def.runningInstances)+1;
-                        def.openedInstances.push(inst);
+                        def.runningInstances = parseInt(def.runningInstances) + 1;
+                        var processInstanceIndex = UtilsService.getItemIndexByVal(def.openedInstances, inst.ProcessInstanceID, "ProcessInstanceID");
+                        if (processInstanceIndex >= 0) {
+                            
+                            def.openedInstances[processInstanceIndex] = inst;
+                        }
+                        else
+                            def.openedInstances.push(inst);
                     }
                 });
             });
