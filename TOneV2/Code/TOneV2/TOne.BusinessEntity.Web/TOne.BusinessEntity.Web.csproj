@@ -129,6 +129,7 @@
     <Compile Include="Controllers\AccountManagerController.cs" />
     <Compile Include="Controllers\BusinessEntityController.cs" />
     <Compile Include="Controllers\CarrierAccountController.cs" />
+    <Compile Include="Controllers\CarrierGroupController.cs" />
     <Compile Include="Controllers\LookUpController.cs" />
     <Compile Include="Controllers\PriceListController.cs" />
     <Compile Include="Controllers\CarrierProfileController.cs" />
@@ -144,6 +145,7 @@
     <Content Include="BusinessEntity\Services\APIServices\AccountManagerAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\BusinessEntityAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\CarrierAccountAPIService.js" />
+    <Content Include="BusinessEntity\Services\APIServices\CarrierGroupAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\CarrierProfileAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\LookUpAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\PriceListAPIService.js" />
@@ -159,6 +161,10 @@
     <Content Include="BusinessEntity\Views\CarrierAccountEditorController.js" />
     <Content Include="BusinessEntity\Views\CarrierAccountManagement.html" />
     <Content Include="BusinessEntity\Views\CarrierAccountManagementController.js" />
+    <Content Include="BusinessEntity\Views\CarrierGroupEditor.html" />
+    <Content Include="BusinessEntity\Views\CarrierGroupEditorController.js" />
+    <Content Include="BusinessEntity\Views\CarrierGroupManagement.html" />
+    <Content Include="BusinessEntity\Views\CarrierGroupManagementController.js" />
     <Content Include="BusinessEntity\Views\CarrierPriceList.html" />
     <Content Include="BusinessEntity\Views\CarrierPriceListController.js" />
     <Content Include="BusinessEntity\Views\CarrierProfileEditor.html" />

@@ -160,7 +160,7 @@ function CarrierProfileEditorController($scope, CarrierProfileAPIService, LookUp
         var carrierProfileObject = buildCarrierProfileObjFromScope();
         CarrierProfileAPIService.UpdateCarrierProfile(buildCarrierProfileObjFromScope())
         .then(function (response) {
-            if (VRNotificationService.notifyOnItemUpdated("CarrierProfile", response)) {
+            if (VRNotificationService.notifyOnItemUpdated("Carrier Profile", response)) {
                 if ($scope.onCarrierProfileUpdated != undefined)
                     $scope.onCarrierProfileUpdated(response.UpdatedObject);
                 $scope.modalContext.closeModal();

@@ -5,7 +5,13 @@ var serviceObj = function (BaseAPIService) {
         GetCodeGroups: GetCodeGroups,
         GetSwitches: GetSwitches,
         GetSalesZones: GetSalesZones,
+        GetEntityNodes: GetEntityNodes
     });
+
+
+    function GetEntityNodes() {
+        return BaseAPIService.get("/api/BusinessEntity/GetEntityNodes");
+    }
 
     function GetCodeGroups() {
         return BaseAPIService.get("/api/BusinessEntity/GetCodeGroups",

@@ -108,7 +108,13 @@ namespace TOne.BusinessEntity.Data.SQL
                 carrierAccount.ProfileId,carrierAccount.ProfileName,carrierAccount.RoutingStatus,carrierAccount.SupplierPaymentType);
             return rowEffected;
         }
-         
+
+        public int UpdateCarrierAccountGroup(CarrierAccount carrierAccount)
+        {
+            int rowEffected = ExecuteNonQuerySP("BEntity.sp_CarrierAccount_UpdateGroups",
+                carrierAccount.CarrierAccountId, carrierAccount.CarrierGroupID, carrierAccount.CarrierGroups);
+            return rowEffected;
+        }
 
         #region Private Methods
 
@@ -165,8 +171,11 @@ namespace TOne.BusinessEntity.Data.SQL
 
             foreach (string CarrierGroupID in CarrierGroups.ToString().Split(seperator))
             {
-                carrierGroupId = int.Parse(CarrierGroupID);
-                lstcarrierGroups.Add(carrierGroupId);
+                if (CarrierGroupID != "")
+                {
+                    carrierGroupId = int.Parse(CarrierGroupID);
+                    lstcarrierGroups.Add(carrierGroupId);
+                }
             }
             return lstcarrierGroups;
         }

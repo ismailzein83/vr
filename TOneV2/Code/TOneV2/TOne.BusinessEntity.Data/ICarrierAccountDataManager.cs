@@ -27,5 +27,6 @@ namespace TOne.BusinessEntity.Data
         Dictionary<string, CarrierAccount> GetAllCarrierAccounts();
 
         Dictionary<int, CarrierGroup> GetAllCarrierGroups();
+        int UpdateCarrierAccountGroup(CarrierAccount carrierAccount);
     }
 }

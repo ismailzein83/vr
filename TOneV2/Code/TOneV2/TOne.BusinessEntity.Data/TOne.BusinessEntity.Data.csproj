@@ -53,6 +53,7 @@
     <Compile Include="IAccountManagerCarrierDataManager.cs" />
     <Compile Include="IAssignedCarrierDataManager.cs" />
     <Compile Include="ICarrierAccountDataManager.cs" />
+    <Compile Include="ICarrierGroupDataManager.cs" />
     <Compile Include="ICodeDataManager.cs" />
     <Compile Include="ICommissionDataManager.cs" />
     <Compile Include="IDataManager.cs" />

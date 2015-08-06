@@ -12,6 +12,13 @@ namespace TOne.BusinessEntity.Web.Controllers
     public class BusinessEntityController : ApiController
     {
         [HttpGet]
+        public IEnumerable<CarrierGroupNode> GetEntityNodes()
+        {
+            CarrierGroupManager manager = new CarrierGroupManager();
+            return manager.GetEntityNodes();
+        }
+
+        [HttpGet]
         public List<ZoneInfo> GetSalesZones(string nameFilter)
         {
             //System.Threading.Thread.Sleep(2000);

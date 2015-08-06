@@ -1,0 +1,37 @@
+﻿<vr-panel ng-controller="Carrier_CarrierGroupManagementController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns colnum="2">
+                    <vr-textbox label="Group Name" value="name"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Add" data-onclick="addNewGroup"></vr-button>
+                    <vr-button type="Edit" data-onclick="editGroup"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <div>
+            <vr-row>
+                <vr-columns colnum="4">
+                    <vr-treeview on-ready="treeReady"
+                                 datachildrenfield="Children"
+                                 datatextfield="Name"
+                                 selecteditem="currentNode"
+                                 onvaluechanged="treeValueChanged">
+                    </vr-treeview>
+                </vr-columns>
+                <vr-columns colnum="6" ng-show="currentNode != undefined">
+                    <vr-datagrid datasource="carrierAccounts" menuactions="gridMenuActions" loadmoredata="loadMoreData" on-ready="onMainGridReady">
+                        <vr-datagridcolumn headertext="'Profile Name'" field="'ProfileName'" widthfactor="5"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Suffix'" field="'NameSuffix'" widthfactor="5"></vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-columns>
+            </vr-row>
+        </div>
+    </vr-form>
+</vr-panel>
