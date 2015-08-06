@@ -9,7 +9,12 @@ BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
-
+	
+	DECLARE @SeveritiesTable TABLE (Severity int)
+	Insert @SeveritiesTable 
+	SELECT  ParsedString FROM bp.ParseStringList(@Severities)
+	
+	
 	IF @TOP is null
 	BEGIN
 	
@@ -17,13 +22,14 @@ BEGIN
 				  ,[ProcessInstanceID]
 				  ,[ParentProcessID]
 				  ,[TrackingMessage]
-				  ,[Severity]
+				  ,bpt.[Severity]
 				  ,[EventTime]
-		FROM [bp].[BPTracking] as bpt WITH(NOLOCK)
-		WHERE bpt.ProcessInstanceID = @ProcessInstanceID AND bpt.ID > @LastTrackingId 
+		FROM [bp].[BPTracking] as bpt WITH(NOLOCK) 
+		LEFT JOIN @SeveritiesTable as sv on (sv.Severity = bpt.Severity )  
+		where ( sv.Severity is not null OR (@Severities is null or @Severities = '') )
+			AND bpt.ProcessInstanceID = @ProcessInstanceID 
 			AND (@Message is NULL or  bpt.TrackingMessage LIKE '%' + @Message +'%' ) 
-			AND (@Severities is NULL or Severity in (SELECT ParsedString FROM ParseStringList(@Severities) ) )
-			ORDER BY ID DESC
+		ORDER BY ID DESC
 	
 	END
 	ELSE
@@ -33,16 +39,14 @@ BEGIN
 				  ,[ProcessInstanceID]
 				  ,[ParentProcessID]
 				  ,[TrackingMessage]
-				  ,[Severity]
+				  ,bpt.[Severity]
 				  ,[EventTime]
-		FROM [bp].[BPTracking] as bpt WITH(NOLOCK)
-		WHERE bpt.ProcessInstanceID = @ProcessInstanceID AND bpt.ID > @LastTrackingId 
+		FROM [bp].[BPTracking] as bpt WITH(NOLOCK) 
+		LEFT JOIN @SeveritiesTable as sv on (sv.Severity = bpt.Severity )  
+		where ( sv.Severity is not null OR (@Severities is null or @Severities = '') )
+			AND bpt.ProcessInstanceID = @ProcessInstanceID 
 			AND (@Message is NULL or  bpt.TrackingMessage LIKE '%' + @Message +'%' ) 
-			AND (@Severities is NULL or Severity in (SELECT ParsedString FROM ParseStringList(@Severities) ) )
-			ORDER BY ID DESC
-	
+			AND bpt.ID > @LastTrackingId 
+		ORDER BY ID DESC
 	END
-	
-
-    
 END

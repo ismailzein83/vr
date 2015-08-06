@@ -58,6 +58,14 @@
             return BaseAPIService.post("/api/BusinessProcess/GetFilteredTrackings", input);
         }
 
+        function GetTrackingsFrom(processInstanceId,fromTrackingId) {
+            return BaseAPIService.post("/api/BusinessProcess/GetTrackingsFrom", {
+                ProcessInstanceId: processInstanceId,
+                FromTrackingId: fromTrackingId
+                
+            });
+        }
+
         function GetTrackingSeverity() {
             return BaseAPIService.get("/api/BusinessProcess/GetTrackingSeverity");
         }
@@ -85,7 +93,8 @@
             CreateNewProcess: CreateNewProcess,
             GetBPInstance: GetBPInstance,
             GetDefinition: GetDefinition,
-            GetNonClosedStatuses: GetNonClosedStatuses
+            GetNonClosedStatuses: GetNonClosedStatuses,
+            GetTrackingsFrom: GetTrackingsFrom
         });
 
     }

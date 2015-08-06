@@ -12,5 +12,7 @@ namespace Vanrise.BusinessProcess.Data
         void WriteTrackingMessagesToDB(List<BPTrackingMessage> lstTrackingMsgs);
 
         BigResult<BPTrackingMessage> GetFilteredTrackings(Vanrise.Entities.DataRetrievalInput<TrackingQuery> input);
+
+        List<BPTrackingMessage> GetTrackingsFrom(TrackingQuery input);
     }
 }

@@ -136,6 +136,13 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredTrackings(input));
         }
 
+        [HttpPost]
+        public Object GetTrackingsFrom(TrackingQuery input)
+        {
+            BPClient manager = new BPClient();
+            return manager.GetTrackingsFrom(input);
+        }
+
         [HttpGet]
         public BPInstanceModel GetBPInstance(int id)
         {

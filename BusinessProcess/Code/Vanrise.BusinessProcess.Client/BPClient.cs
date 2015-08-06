@@ -116,6 +116,12 @@ namespace Vanrise.BusinessProcess.Client
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredTrackings(input));
         }
 
+        public List<BPTrackingMessage> GetTrackingsFrom(TrackingQuery input)
+        {
+            IBPTrackingDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
+            return dataManager.GetTrackingsFrom(input);
+        }
+
 
         #endregion
 

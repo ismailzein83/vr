@@ -2,9 +2,9 @@
 
     "use strict";
 
-    businessProcessService.$inject = ['LabelColorsEnum', 'BPInstanceStatusEnum'];
+    businessProcessService.$inject = ['LabelColorsEnum', 'BPInstanceStatusEnum', 'VRModalService', 'UtilsService'];
     
-    function businessProcessService(LabelColorsEnum, BPInstanceStatusEnum) {
+    function businessProcessService(LabelColorsEnum, BPInstanceStatusEnum, VRModalService, UtilsService) {
 
         function getStatusColor(status) {
 
@@ -21,20 +21,29 @@
 
         function getStatusDescription(status) {
             if (status) {
-                if (status === BPInstanceStatusEnum.New.value) return BPInstanceStatusEnum.New.description;
-                if (status === BPInstanceStatusEnum.Running.value) return BPInstanceStatusEnum.Running.description;
-                if (status === BPInstanceStatusEnum.ProcessFailed.value) return BPInstanceStatusEnum.ProcessFailed.description;
-                if (status === BPInstanceStatusEnum.Completed.value) return BPInstanceStatusEnum.Completed.description;
-                if (status === BPInstanceStatusEnum.Aborted.value) return BPInstanceStatusEnum.Aborted.description;
-                if (status === BPInstanceStatusEnum.Suspended.value) return BPInstanceStatusEnum.Suspended.description;
-                if (status === BPInstanceStatusEnum.Terminated.value) return BPInstanceStatusEnum.Terminated.description;
+                var statusEnum = UtilsService.getEnum(BPInstanceStatusEnum, 'value', status);
+
+                if (statusEnum) return statusEnum.description;
             }
-            return '';
+            return undefined;
+        }
+
+        function openProcessTracking(processInstanceId) {
+            
+            VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPTrackingModal.html', {
+                BPInstanceID: processInstanceId
+            }, {
+                onScopeReady: function (modalScope) {
+                    modalScope.title = "Tracking";
+                }
+            });
+
         }
 
         return ({
             getStatusColor: getStatusColor,
-            getStatusDescription: getStatusDescription
+            getStatusDescription: getStatusDescription,
+            openProcessTracking: openProcessTracking
         });
     }
     appControllers.service('BusinessProcessService', businessProcessService);

@@ -2,9 +2,9 @@
 
     "use strict";
     
-    bpManagementController.$inject = ['$scope', 'UtilsService', 'BusinessProcessAPIService', 'VRModalService', 'DataRetrievalResultTypeEnum', 'BusinessProcessService'];
+    bpHistoryController.$inject = ['$scope', 'UtilsService', 'BusinessProcessAPIService', 'DataRetrievalResultTypeEnum', 'BusinessProcessService'];
 
-    function bpManagementController($scope, UtilsService, BusinessProcessAPIService, VRModalService, DataRetrievalResultTypeEnum, BusinessProcessService) {
+    function bpHistoryController($scope, UtilsService, BusinessProcessAPIService, DataRetrievalResultTypeEnum, BusinessProcessService) {
 
         var mainGridApi;
 
@@ -28,17 +28,7 @@
             };
 
             $scope.onTitleClicked = function (dataItem) {
-
-                VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPTrackingModal.html', {
-                    BPInstanceID: dataItem.ProcessInstanceID
-                }, {
-                    useModalTemplate: true,
-                    width: "80%",
-                    onScopeReady: function (modalScope) {
-                        modalScope.title = "Tracking";
-                    }
-                });
-
+                BusinessProcessService.openProcessTracking(dataItem.ProcessInstanceID);
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
@@ -106,7 +96,7 @@
         defineGrid();
     }
 
-    appControllers.controller('BusinessProcess_BPManagementController', bpManagementController);
+    appControllers.controller('BusinessProcess_BPHistoryController', bpHistoryController);
 
 })(appControllers);
 

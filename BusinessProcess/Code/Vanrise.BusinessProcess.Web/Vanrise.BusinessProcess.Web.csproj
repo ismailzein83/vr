@@ -158,8 +158,8 @@
     <Content Include="BusinessProcess\Services\BusinessProcessService.js" />
     <Content Include="BusinessProcess\Views\BPDefinitionManagement.html" />
     <Content Include="BusinessProcess\Views\BPDefinitionManagementController.js" />
-    <Content Include="BusinessProcess\Views\BPManagement.html" />
-    <Content Include="BusinessProcess\Views\BPManagementController.js" />
+    <Content Include="BusinessProcess\Views\BPHistory.html" />
+    <Content Include="BusinessProcess\Views\BPHistoryController.js" />
     <Content Include="BusinessProcess\Views\BPTrackingModal.html" />
     <Content Include="BusinessProcess\Views\BPTrackingModalController.js" />
     <Content Include="BusinessProcess\Views\InstanceEditor.html" />

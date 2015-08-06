@@ -90,7 +90,6 @@
     <Build Include="logging\Stored Procedures\sp_LogAttribute_GetAll.sql" />
     <Build Include="Security\logging.sql" />
     <Build Include="bp\Functions\ParseStringList.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPTrackings_CreateTempForFiltered.sql" />
     <Build Include="integration\Tables\DataSourceImportedBatch.sql" />
     <Build Include="integration\Tables\DataSourceLog.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSourceLog_Insert.sql" />
@@ -98,6 +97,7 @@
     <Build Include="integration\Stored Procedures\sp_DataSourceImportedBatch_Insert.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSourceLog_CreateTempForFiltered.sql" />
     <Build Include="integration\User Defined Types\SeverityType.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPTrackings_GetFromInstanceId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

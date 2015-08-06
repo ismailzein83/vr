@@ -13,27 +13,44 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', functi
         downloadFile: downloadFile,
         getLogEntryTypeDescription: getLogEntryTypeDescription,
         getLogEntryTypeColor: getLogEntryTypeColor,
-        getLogEntryType: getLogEntryType
+        getLogEntryType: getLogEntryType,
+        getEnum:getEnum
     });
 
-    function getLogEntryType() {
+    function getEnum(enumObj,propertyFilter, valueFilter) {
+        for (var item in enumObj) {
+            if (enumObj.hasOwnProperty(item)) {
+
+                var enumItem = enumObj[item];
+
+                if (enumItem[propertyFilter] === valueFilter)
+                    return enumItem;
+            }
+        }
+        return undefined;
+    }
+
+    function getArrayEnum(enumObj) {
         var array = [];
-        array.push(LogEntryTypeEnum.Information);
-        array.push(LogEntryTypeEnum.Warning);
-        array.push(LogEntryTypeEnum.Error);
-        array.push(LogEntryTypeEnum.Verbose);
+
+        for (var item in enumObj) {
+            if (enumObj.hasOwnProperty(item)) {
+                array.push(enumObj[item]);
+            }
+        }
         return array;
+    }
+
+    function getLogEntryType() {
+        return getArrayEnum(LogEntryTypeEnum);
     }
 
     function getLogEntryTypeDescription(logEntryType) {
         if (logEntryType) {
-
-            if (logEntryType === LogEntryTypeEnum.Information.value) return LogEntryTypeEnum.Information.description;
-            if (logEntryType === LogEntryTypeEnum.Warning.value) return LogEntryTypeEnum.Warning.description;
-            if (logEntryType === LogEntryTypeEnum.Error.value) return LogEntryTypeEnum.Error.description;
-            if (logEntryType === LogEntryTypeEnum.Verbose.value) return LogEntryTypeEnum.Verbose.description;
+            var enumObj = getEnum(LogEntryTypeEnum, 'value', logEntryType);
+            if (enumObj) return enumObj.description;
         }
-        return '';
+        return undefined;
     }
 
     function getLogEntryTypeColor(logEntryType) {
@@ -127,15 +144,17 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', functi
 
     function getPropMaxValueFromArray(array, propName) {
         var max = undefined;
+        
         if (array.length > 0) {
 
-            angular.forEach(array, function (val) {
-                if (val === undefined)
-                    max = val[propName];
-                if (val[propName] > max)
-                    max = val[propName];
-            });
+            for (var i = 0, len = array.length; i < len; i++) {
+                if (max === undefined)
+                    max = array[i][propName];
+                if (array[i][propName] > max)
+                    max = array[i][propName];
+            }
         }
+        
         return max;
     }
 

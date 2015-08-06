@@ -65,7 +65,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
         public BigResult<BPTrackingMessage> GetFilteredTrackings(DataRetrievalInput<TrackingQuery> input)
         {
-            int? top = input.DataRetrievalResultType == DataRetrievalResultType.Normal ? (int?) (input.ToRow ?? 0) - (input.FromRow ?? 0) : null;
+            int? top = input.DataRetrievalResultType == DataRetrievalResultType.Normal ? (int?) (input.ToRow ?? 0) - (input.FromRow ?? 0) + 1 : null;
 
             return new BigResult<BPTrackingMessage>()
             {
@@ -76,6 +76,11 @@ namespace Vanrise.BusinessProcess.Data.SQL
                     : string.Join(",", input.Query.Severities.Select(n => ((int)n).ToString()).ToArray()),
                 top)
             };
+        }
+
+        public List<BPTrackingMessage> GetTrackingsFrom(TrackingQuery input)
+        {
+            return GetItemsSP("bp.sp_BPTrackings_GetFromInstanceId", BPTrackingMapper, input.ProcessInstanceId, input.FromTrackingId);
         }
 
         #endregion
