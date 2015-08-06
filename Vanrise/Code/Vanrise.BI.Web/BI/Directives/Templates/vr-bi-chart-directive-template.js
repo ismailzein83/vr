@@ -51,7 +51,7 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
         }
 
         var entityType = null;
-        if ($scope.selectedEntityType != undefined)
+        if ($scope.selectedEntityType != undefined && $scope.selectedOperationType.value != "MeasuresGroupedByTime")
             entityType = $scope.selectedEntityType.Name;
         return {
             $type: "Vanrise.BI.Entities.ChartDirectiveSetting, Vanrise.BI.Entities",

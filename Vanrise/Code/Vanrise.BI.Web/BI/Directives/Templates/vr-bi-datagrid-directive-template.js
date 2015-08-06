@@ -39,7 +39,7 @@ function VrDatagridDirectiveTemplateController($scope, TimeDimensionTypeEnum,BIC
             measureTypes.push($scope.selectedMeasureTypes[i].Name);
         }    
         var entityType = null;
-        if ($scope.selectedEntityType != undefined)
+        if ($scope.selectedEntityType != undefined && $scope.selectedOperationType.value != "MeasuresGroupedByTime")
             entityType = $scope.selectedEntityType.Name;
         return {
             $type: "Vanrise.BI.Entities.DataGridDirectiveSetting, Vanrise.BI.Entities",
