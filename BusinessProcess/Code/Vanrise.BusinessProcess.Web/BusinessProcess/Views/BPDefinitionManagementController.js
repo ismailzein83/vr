@@ -2,10 +2,53 @@
 
 function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRModalService, $interval, VRNotificationService, UtilsService) {
 
-    "use strict";
-    var interval, mainGridAPI;
+    var interval;
+    var mainGridAPI;
+
+    defineScope();
+    load();
+    startGetData();
+
+    function defineScope() {
+
+        $scope.filteredDefinitions = [];
+        $scope.gridMenuActions = [];
+
+        $scope.searchClicked = function () {
+            mainGridAPI.clearDataAndContinuePaging();
+            return getMainData();
+        };
 
 
+        $scope.processInstanceClicked = function (dataItem) {
+            showBPTrackingModal(dataItem.ProcessInstanceID);
+        }
+
+
+        $scope.schedulerTaskClicked = function (dataItem) {
+            showEditTaskModal(dataItem);
+        }
+
+        $scope.onGridReady = function (api) {
+            mainGridAPI = api;
+            return getMainData();
+        };
+
+        $scope.$on('$destroy', function () {
+            stopGetData();
+        });
+
+        defineMenuActions();
+    }
+
+    function load() {
+    }
+
+    function defineMenuActions() {
+        $scope.gridMenuActions = [
+             { name: "Start New Instance", clicked: showStartNewInstance }, { name: "Schedule a Task", clicked: showAddTaskModal }
+        ];
+    }
 
     function showStartNewInstance(BPDefinitionObj) {
         VRModalService.showModal('/Client/Modules/BusinessProcess/Views/InstanceEditor.html', {
@@ -26,7 +69,6 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
             }
         });
     }
-
 
     function showBPTrackingModal(processInstanceId) {
 
@@ -122,44 +164,6 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
 
     }
 
-
-    function defineGrid() {
-        $scope.filteredDefinitions = [];
-        $scope.gridMenuActions = [];
-       
-        $scope.onGridReady = function (api) {
-            mainGridAPI = api;
-            return getMainData();
-        };
-        $scope.gridMenuActions = [
-            { name: "Start New Instance", clicked: showStartNewInstance }, { name: "Schedule a Task", clicked: showAddTaskModal }
-        ];
-
-        $scope.$on('$destroy', function () {
-            stopGetData();
-        });
-
-    }
-
-    $scope.searchClicked = function () {
-        mainGridAPI.clearDataAndContinuePaging();
-        return getMainData();
-    };
-
-
-    $scope.processInstanceClicked = function (dataItem) {
-        showBPTrackingModal(dataItem.ProcessInstanceID);
-    }
-
-
-    $scope.schedulerTaskClicked = function (dataItem) {
-        showEditTaskModal(dataItem);
-    }
-
-
-
-    
-
     function showAddTaskModal(BPDefinitionObj) {
         var settings = {
         };
@@ -192,15 +196,6 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
         VRModalService.showModal('/Client/Modules/Runtime/Views/SchedulerTaskEditor.html', parameters, settings);
     }
 
-
-
-
-
-
-
-
-    defineGrid();
-    startGetData();
 };
 
 appControllers.controller('BusinessProcess_BPDefinitionManagementController', BPDefinitionManagementController);
