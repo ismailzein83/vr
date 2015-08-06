@@ -75,8 +75,8 @@
             var data = $scope.schedulerTaskAction.processInputArguments.data;
 
             if (data != null) {
-
-
+                console.log('data')
+                console.log(data)
 
 
                 angular.forEach(data.StrategyIds, function (strategyId) {
