@@ -99,12 +99,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\DataSourceController.cs" />
+    <Compile Include="Controllers\DataSourceImportedBatchController.cs" />
     <Compile Include="Controllers\DataSourceLogController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="Integration\Constants\Integration_MappingResultTypeEnum.js" />
     <Content Include="Integration\Services\APIServices\DataSourceAPIService.js" />
+    <Content Include="Integration\Services\APIServices\DataSourceImportedBatchAPIService.js" />
     <Content Include="Integration\Services\APIServices\DataSourceLogAPIService.js" />
     <Content Include="Integration\Views\AdapterTemplates\FTPReceiveAdapterTemplate.html" />
     <Content Include="Integration\Views\AdapterTemplates\DBReceiveAdapterTemplate.html" />

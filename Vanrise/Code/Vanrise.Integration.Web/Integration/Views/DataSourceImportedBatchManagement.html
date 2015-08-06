@@ -4,11 +4,15 @@
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingForm">
             <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-select ismultipleselection label="Data Source" datatextfield="Name" datavaluefield="ID" datasource="dataSources" selectedvalues="selectedDataSources"></vr-select>
+                    <vr-select label="Data Source" datatextfield="Name" datavaluefield="ID" datasource="dataSources" selectedvalues="selectedDataSource" isrequired></vr-select>
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-select ismultipleselection label="Mapping Result" datatextfield="description" datavaluefield="value" datasource="mappingResults" selectedvalues="selectedMappingResults"></vr-select>
+                    <vr-select label="Mapping Result" datatextfield="description" datavaluefield="value" datasource="mappingResults" selectedvalues="selectedMappingResult"></vr-select>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-select label="Batch Name" datatextfield="BatchName" datavaluefield="ID" datasource="batchNames" selectedvalues="selectedBatchName"></vr-select>
                 </vr-columns>
 
                 <vr-columns width="normal">
@@ -34,16 +38,19 @@
         <vr-row>
             <vr-columns width="fullrow" simplecol>
 
-                <!--<vr-datagrid datasource="logs"
+                <vr-datagrid datasource="importedBatches"
                              dataretrievalfunction="dataRetrievalFunction"
                              pagingtype="'PagingOnScroll'"
                              on-ready="gridReady">
 
-                    <vr-datagridcolumn headertext="'Data Source Name'" field="'DataSourceName'" widthfactor="15"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Severity'" field="'SeverityDescription'" widthfactor="10" getcolor="getSeverityColor"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Message'" field="'Message'" widthfactor="60"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Log Entry Time'" field="'LogEntryTime'" widthfactor="15"></vr-datagridcolumn>
-                </vr-datagrid>-->
+                    <vr-datagridcolumn headertext="'ID'" field="'ID'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Batch Name'" field="'BatchName'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Batch Size'" field="'BatchSize'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Records Count'" field="'RecordsCount'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Mapping Result'" field="'MappingResult'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Mapper Message'" field="'MapperMessage'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Log Entry Time'" field="'LogEntryTime'"></vr-datagridcolumn>
+                </vr-datagrid>
 
             </vr-columns>
         </vr-row>

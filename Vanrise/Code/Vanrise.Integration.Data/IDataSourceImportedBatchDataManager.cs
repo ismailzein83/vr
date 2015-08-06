@@ -10,5 +10,9 @@ namespace Vanrise.Integration.Data
     public interface IDataSourceImportedBatchDataManager : IDataManager
     {
         long InsertEntry(int dataSourceId, string batchDescription, decimal? batchSize, int recordCounts, MappingResult result, string mapperMessage, string queueItemsIds, DateTime logEntryTime);
+
+        Vanrise.Entities.BigResult<DataSourceImportedBatch> GetFilteredDataSourceImportedBatches(Vanrise.Entities.DataRetrievalInput<DataSourceImportedBatchQuery> input);
+
+        List<Vanrise.Integration.Entities.DataSourceImportedBatchName> GetBatchNames();
     }
 }

@@ -81,11 +81,18 @@ function DataSourceLogManagementController($scope, DataSourceLogsAPIService, Dat
     }
 
     function getMappedSelectedSeverities() {
-        var selectedSeverities = ($scope.selectedSeverities.length > 0) ? $scope.selectedSeverities : UtilsService.getLogEntryType();
+
+        if ($scope.selectedSeverities.length == 0) {
+            var logEntryType = UtilsService.getLogEntryType();
+            logEntryType.splice(3, 1); // remove Verbose
+
+            $scope.selectedSeverities = logEntryType; // select Error, Warning and Information only
+        }
+
         var mappedSelectedSeverities = [];
 
-        for (var i = 0; i < selectedSeverities.length; i++) {
-            mappedSelectedSeverities.push(selectedSeverities[i].value);
+        for (var i = 0; i < $scope.selectedSeverities.length; i++) {
+            mappedSelectedSeverities.push($scope.selectedSeverities[i].value);
         }
 
         return mappedSelectedSeverities;
