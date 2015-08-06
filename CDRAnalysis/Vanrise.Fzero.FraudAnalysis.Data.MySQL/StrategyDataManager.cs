@@ -18,11 +18,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             throw new NotImplementedException();
         }
 
-        public List<Strategy> GetAllStrategies()
-        {
-            throw new NotImplementedException();
-        }
-
         public Vanrise.Entities.BigResult<Strategy> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyResultQuery> input)
         {
             throw new NotImplementedException();
@@ -39,6 +34,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         }
 
         public List<String> GetStrategyNames(List<int> strategyIds)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public List<Strategy> GetAllStrategies(int? PeriodId)
         {
             throw new NotImplementedException();
         }

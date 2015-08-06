@@ -2,14 +2,21 @@
     <vr-form name="formCreateProcessInput">
         <vr-row removeline>
             <vr-columns colnum="3">
+                <vr-select datasource="periods" datatextfield="Name" datavaluefield="Id" label="Period" selectedvalues="selectedPeriod" isrequired onselectionchanged="selectedPeriodChanged"></vr-select>
+            </vr-columns>
+
+            <vr-columns colnum="3">
                 <vr-select datasource="strategies" datatextfield="name" datavaluefield="id" label="Strategy" ismultipleselection selectedvalues="selectedStrategies" isrequired>  </vr-select>
             </vr-columns>
+
             <vr-columns colnum="3">
                 <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired ></vr-datetimepicker>
             </vr-columns>
+
             <vr-columns colnum="3">
                 <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired  ></vr-datetimepicker>
             </vr-columns>
+
         </vr-row>
        
     </vr-form>

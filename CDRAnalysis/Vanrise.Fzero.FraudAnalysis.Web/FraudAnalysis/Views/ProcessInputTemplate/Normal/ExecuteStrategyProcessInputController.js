@@ -1,4 +1,6 @@
 ﻿var ExecuteStrategyProcessInputController = function ($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
+    var pageLoaded = false;
+
     defineScope();
 
     function defineScope() {
@@ -6,30 +8,23 @@
         $scope.createProcessInputObjects = [];
 
         $scope.strategies = [];
-        loadStrategies();
         $scope.selectedStrategies = [];
+        $scope.selectedStrategyIds = [];
 
-        $scope.selectedStrategyIdsDaily = [];
-        $scope.selectedStrategyIdsHourly = [];
+        $scope.periods = [];
+        loadPeriods();
+        $scope.selectedPeriod = "";
+        
 
 
         $scope.createProcessInput.getData = function () {
 
             angular.forEach($scope.selectedStrategies, function (itm) {
-
-                if (itm.periodId == 1)//Hourly
-                {
-                    $scope.selectedStrategyIdsHourly.push(itm.id);
-                }
-                else if (itm.periodId == 2)//Daily
-                {
-                    $scope.selectedStrategyIdsDaily.push(itm.id);
-                }
+                $scope.selectedStrategyIds.push(itm.id);
             });
 
 
             var StartingDate = new Date($scope.fromDate);
-            //runningDate = new Date(runningDate.setHours(runningDate.getHours() + 3));
 
             console.log(StartingDate.toString())
 
@@ -38,14 +33,14 @@
 
 
 
-            if ($scope.selectedStrategyIdsHourly.length > 0)//Hourly
+            if ($scope.selectedPeriod.Id == 1)//Hourly
             {
                 var runningDate = StartingDate;
                 while (runningDate < $scope.toDate) {
                     $scope.createProcessInputObjects.push({
                         InputArguments: {
                             $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
-                            StrategyIds: $scope.selectedStrategyIdsHourly,
+                            StrategyIds: $scope.selectedStrategyIds,
                             FromDate: new Date(runningDate.setHours(runningDate.getHours(), 0, 0, 0)),
                             ToDate: new Date(runningDate.setHours(runningDate.getHours(), 59, 59, 999))
                         }
@@ -55,14 +50,14 @@
 
             }
 
-            if ($scope.selectedStrategyIdsDaily.length > 0) //Daily
+            else if ($scope.selectedPeriod.Id == 2) //Daily
             {
                 var runningDate = StartingDate;
                 while (runningDate < $scope.toDate) {
                     $scope.createProcessInputObjects.push({
                         InputArguments: {
                             $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
-                            StrategyIds: $scope.selectedStrategyIdsDaily,
+                            StrategyIds: $scope.selectedStrategyIds,
                             FromDate: new Date(runningDate.setHours(0, 0, 0, 0)),
                             ToDate: new Date(runningDate.setHours(23, 59, 59, 999))
                         }
@@ -83,11 +78,33 @@
     }
 
 
-    function loadStrategies() {
-        return StrategyAPIService.GetAllStrategies().then(function (response) {
+
+    function loadPeriods() {
+        return StrategyAPIService.GetPeriods().then(function (response) {
             angular.forEach(response, function (itm) {
-                console.log(itm);
-                $scope.strategies.push({ id: itm.Id, name: itm.Name, periodId:itm.PeriodId });
+                $scope.periods.push(itm);
+            });
+        });
+    }
+
+
+
+    $scope.selectedPeriodChanged = function () {
+        if (pageLoaded) {
+            loadStrategies($scope.selectedPeriod.Id);
+        }
+        else {
+            pageLoaded = true;
+        }
+    }
+
+
+    function loadStrategies(periodId) {
+        $scope.strategies.length = 0;
+        $scope.selectedStrategies.length = 0;
+        return StrategyAPIService.GetAllStrategies(periodId).then(function (response) {
+            angular.forEach(response, function (itm) {
+                $scope.strategies.push({ id: itm.Id, name: itm.Name, periodId: itm.PeriodId });
             });
         });
     }

@@ -24,9 +24,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return GetItemsSP("FraudAnalysis.sp_Strategy_GetStrategy", StrategyMapper, strategyId).FirstOrDefault();
         }
 
-        public List<Strategy> GetAllStrategies()
+        public List<Strategy> GetAllStrategies(int? PeriodId)
         {
-            return GetItemsSP("FraudAnalysis.sp_Strategy_GetAll", StrategyMapper);
+            return GetItemsSP("FraudAnalysis.sp_Strategy_GetAll", StrategyMapper, PeriodId);
         }
 
         public BigResult<Strategy> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyResultQuery> input)
@@ -48,6 +48,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 !string.IsNullOrEmpty(strategyObject.Description) ? strategyObject.Description : null,
                 DateTime.Now,
                 strategyObject.IsDefault,
+                strategyObject.PeriodId,
                 Vanrise.Common.Serializer.Serialize(strategyObject)
 
             );
@@ -76,6 +77,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 !string.IsNullOrEmpty(strategyObject.Description) ? strategyObject.Description : null,
                 DateTime.Now,
                 strategyObject.IsDefault,
+                strategyObject.PeriodId,
                 Vanrise.Common.Serializer.Serialize(strategyObject));
             if (recordesEffected > 0)
                 return true;

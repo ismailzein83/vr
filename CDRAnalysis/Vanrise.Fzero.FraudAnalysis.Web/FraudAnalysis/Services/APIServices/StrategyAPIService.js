@@ -17,8 +17,11 @@
            );
     }
 
-    function GetAllStrategies() {
-        return BaseAPIService.get("/api/Strategy/GetAllStrategies");
+    function GetAllStrategies(periodId) {
+        return BaseAPIService.get("/api/Strategy/GetAllStrategies",
+            {
+                PeriodId: periodId
+            });
     }
 
 
