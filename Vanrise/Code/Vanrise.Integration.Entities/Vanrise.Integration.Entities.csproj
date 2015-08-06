@@ -51,6 +51,9 @@
     <Compile Include="DataSource.cs" />
     <Compile Include="DataSourceAdapterType.cs" />
     <Compile Include="DataMapper.cs" />
+    <Compile Include="DataSourceLog.cs" />
+    <Compile Include="DataSourceLogQuery.cs" />
+    <Compile Include="Enumerations.cs" />
     <Compile Include="IDataSourceLogger.cs" />
     <Compile Include="ImportedBatchEntry.cs" />
     <Compile Include="ImportedDataTypes\DBReaderImportedData.cs" />

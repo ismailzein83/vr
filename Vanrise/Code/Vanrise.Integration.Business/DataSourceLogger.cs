@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Integration.Data;
+using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.Business
 {
@@ -52,6 +53,12 @@ namespace Vanrise.Integration.Business
         public void WriteError(string messageFormat, params object[] args)
         {
             this.PrivateWriteEntry(Vanrise.Common.LogEntryType.Error, messageFormat, args);
+        }
+
+        public Vanrise.Entities.IDataRetrievalResult<DataSourceLog> GetFilteredDataSourceLogs(Vanrise.Entities.DataRetrievalInput<DataSourceLogQuery> input)
+        {
+            IDataSourceLogDataManager dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceLogDataManager>();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredDataSourceLogs(input));
         }
 
         #endregion

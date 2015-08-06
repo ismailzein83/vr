@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Data.SQL;
+using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.Data.SQL
 {
@@ -18,6 +21,64 @@ namespace Vanrise.Integration.Data.SQL
         public void InsertEntry(Common.LogEntryType entryType, string message, int dataSourceId, long? importedBatchId, DateTime logTimeSpan)
         {
             ExecuteNonQuerySP("integration.sp_DataSourceLog_Insert", dataSourceId, entryType, message, importedBatchId, logTimeSpan);
+        }
+
+        public Vanrise.Entities.BigResult<DataSourceLog> GetFilteredDataSourceLogs(Vanrise.Entities.DataRetrievalInput<DataSourceLogQuery> input)
+        {
+            Dictionary<string, string> columnMapper = new Dictionary<string, string>();
+            columnMapper.Add("DataSourceName", "Name");
+
+            DataTable dtSeverities = BuildSeveritiesTable(input.Query.Severities);
+
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySPCmd("[integration].[sp_DataSourceLog_CreateTempForFiltered]", (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@TempTableName", tempTableName));
+                    cmd.Parameters.Add(new SqlParameter("@DataSourceId", input.Query.DataSourceId));
+
+                    var dtParameter = new SqlParameter("@Severities", SqlDbType.Structured);
+                    dtParameter.Value = dtSeverities;
+                    cmd.Parameters.Add(dtParameter);
+                    
+                    cmd.Parameters.Add(new SqlParameter("@From", input.Query.From));
+                    cmd.Parameters.Add(new SqlParameter("@To", input.Query.To));
+                });
+            };
+
+            return RetrieveData(input, createTempTableAction, DataSourceLogMapper, columnMapper);
+        }
+
+        Vanrise.Integration.Entities.DataSourceLog DataSourceLogMapper(IDataReader reader)
+        {
+            Vanrise.Integration.Entities.DataSourceLog dataSourceLog = new Vanrise.Integration.Entities.DataSourceLog
+            {
+                LogId = (int)reader["ID"],
+                DataSourceId = (int)reader["DataSourceId"],
+                DataSourceName = reader["Name"] as string,
+                Severity = (int)reader["Severity"],
+                Message = reader["Message"] as string,
+                LogEntryTime = (DateTime)reader["LogEntryTime"]
+            };
+
+            return dataSourceLog;
+        }
+
+        private DataTable BuildSeveritiesTable(List<LogEntryTypeEnum> severities)
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Severity", typeof(int));
+            dt.BeginLoadData();
+
+            foreach (var severity in severities)
+            {
+                DataRow dr = dt.NewRow();
+                dr["Severity"] = severity;
+                dt.Rows.Add(dr);
+            }
+
+            dt.EndLoadData();
+            return dt;
         }
     }
 }
