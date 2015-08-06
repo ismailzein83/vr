@@ -33,6 +33,8 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
         VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPTrackingModal.html', {
             BPInstanceID: processInstanceId
         }, {
+            useModalTemplate: true,
+            width: "80%",
             onScopeReady: function (modalScope) {
                 modalScope.title = "Tracking";
             }
