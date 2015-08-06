@@ -11,11 +11,6 @@
         $scope.selectedStrategies = [];
         $scope.selectedStrategyIds = [];
 
-
-        $scope.periods = [];
-        $scope.selectedPeriod = "";
-
-
         $scope.schedulerTaskAction.rawExpressions.getData = function () {
                 return { "ScheduleTime": "ScheduleTime" };
         };
@@ -30,19 +25,11 @@
             return {
                 $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
                 StrategyIds: $scope.selectedStrategyIds,
-                PeriodId: $scope.selectedPeriod.Id
             };
         };
 
     }
 
-    function loadPeriods() {
-        return StrategyAPIService.GetPeriods().then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.periods.push(itm);
-            });
-        });
-    }
 
 
     function loadStrategies() {
@@ -58,15 +45,13 @@
 
     function load() {
         $scope.isGettingData = true;
-        UtilsService.waitMultipleAsyncOperations([loadStrategies, loadPeriods])
+        UtilsService.waitMultipleAsyncOperations([loadStrategies])
         .then(function () {
                 if ($scope.schedulerTaskAction.processInputArguments.data == undefined)
                     return;
                 var data = $scope.schedulerTaskAction.processInputArguments.data;
 
                 if (data != null) {
-                    $scope.selectedPeriod = $scope.periods[UtilsService.getItemIndexByVal($scope.periods, data.PeriodId, "Id")]
-
                     angular.forEach(data.StrategyIds, function (strategyId) {
                         $scope.selectedStrategies.push($scope.strategies[UtilsService.getItemIndexByVal($scope.strategies, strategyId, "id")]);
                     });

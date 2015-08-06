@@ -156,8 +156,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
                 };
 
-                if (filter.period != undefined)
-                    filterItem.PeriodId = filter.period.Id;
 
 
                 strategyObject.StrategyFilters.push(filterItem);
@@ -219,12 +217,12 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
     function fillScopeFromStrategyObj(strategyObject) {
         $scope.name = strategyObject.Name;
-        $scope.selectedPeriod = UtilsService.getItemByVal($scope.periods, strategyObject.PeriodId, "Id");
         $scope.description = strategyObject.Description;
         $scope.isDefault = strategyObject.IsDefault;
         $scope.gapbetweenconsecutivecalls = strategyObject.GapBetweenConsecutiveCalls;
         $scope.maxLowDurationCall = strategyObject.MaxLowDurationCall;
         $scope.minCountofCallsinActiveHour = strategyObject.MinimumCountofCallsinActiveHour;
+        $scope.selectedPeriod = UtilsService.getItemByVal($scope.periods, strategyObject.PeriodId, "Id");
 
         angular.forEach(strategyObject.PeakHours, function (peakHour) {
 
@@ -249,9 +247,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             if (existingItem != undefined && existingItem != null) {
                 filterItem.isSelected = true;
                 filterItem.threshold = existingItem.Threshold;
-
-                if (existingItem.PeriodId != undefined)
-                    filterItem.period = UtilsService.getItemByVal($scope.periods, existingItem.PeriodId, "Id");
+              
             }
             $scope.strategyFilters.push(filterItem);
 

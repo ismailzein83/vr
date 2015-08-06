@@ -43,11 +43,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         public void WriteRecordToStream(NumberProfile record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("0^{0}^{1}^{2}^{3}^{4}^{5}",
+            streamForBulkInsert.WriteRecord("0^{0}^{1}^{2}^{3}^{4}",
                                     record.SubscriberNumber,
                                     record.FromDate,
                                     record.ToDate,
-                                    record.PeriodId,
                                     record.StrategyId,
                                     Vanrise.Common.Serializer.Serialize(record.AggregateValues, true));
         }
@@ -70,7 +69,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             numberProfile.FromDate = (DateTime)reader["FromDate"];
             numberProfile.ToDate = (DateTime)reader["ToDate"];
             numberProfile.StrategyId = (int)reader["StrategyId"];
-            numberProfile.PeriodId = (int)reader["PeriodId"];
             numberProfile.SubscriberNumber = reader["SubscriberNumber"] as string;
             numberProfile.AggregateValues = Vanrise.Common.Serializer.Deserialize<Dictionary<string, decimal>>(GetReaderValue<string>(reader, "AggregateValues"));
 

@@ -130,11 +130,6 @@
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">numberProfileQueue</mca:CSharpReference>
           </InOutArgument>
         </vffba1:LoadNumberProfiles.OutputQueue>
-        <vffba1:LoadNumberProfiles.PeriodId>
-          <InArgument x:TypeArguments="x:Int32">
-            <mca:CSharpValue x:TypeArguments="x:Int32">Input.PeriodId</mca:CSharpValue>
-          </InArgument>
-        </vffba1:LoadNumberProfiles.PeriodId>
         <vffba1:LoadNumberProfiles.PreviousActivityStatus>
           <InArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadCDRsStatus</mca:CSharpValue>

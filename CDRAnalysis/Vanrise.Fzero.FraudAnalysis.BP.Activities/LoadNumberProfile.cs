@@ -27,9 +27,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
 
         [RequiredArgument]
-        public int PeriodId { get; set; }
-
-        [RequiredArgument]
         public List<Strategy> Strategies { get; set; }
 
     }
@@ -54,9 +51,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         [RequiredArgument]
         public InArgument<DateTime> ToDate { get; set; }
 
-
-        [RequiredArgument]
-        public InArgument<int> PeriodId { get; set; }
 
         [RequiredArgument]
         public InArgument<List<Strategy>> Strategies { get; set; }
@@ -148,8 +142,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     SubscriberNumber = subscriberNumber,
                     FromDate = inputArgument.FromDate,
                     ToDate = inputArgument.ToDate,
-                    PeriodId = inputArgument.PeriodId,
-                    IsOnNet = 1,
                     StrategyId = strategy.Id
                 };
                 foreach (var aggregateDef in AggregateDefinitions)
@@ -181,7 +173,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 OutputQueue = this.OutputQueue.Get(context),
                 FromDate = this.FromDate.Get(context),
                 ToDate = this.ToDate.Get(context),
-                PeriodId = this.PeriodId.Get(context),
                 Strategies = this.Strategies.Get(context)
             };
         }

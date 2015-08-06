@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
+using System.Linq;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 {
@@ -13,9 +14,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 
         public DateTime ToDate { get; set; }
 
-        public int PeriodId { get; set; }
-
-        public List<string> Strategies { get; set; }
 
         public override string GetTitle()
         {
@@ -25,6 +23,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 
         public override void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)
         {
+            IStrategyDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+            int PeriodId = dataManager.GetStrategy(StrategyIds.First()).PeriodId;
+
             if (evaluatedExpressions.ContainsKey("ScheduleTime"))
             {
                 if (PeriodId == (int)Enums.Period.Hour)

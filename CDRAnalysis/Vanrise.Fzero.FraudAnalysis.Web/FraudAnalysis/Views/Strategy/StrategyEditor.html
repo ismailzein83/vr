@@ -40,7 +40,6 @@
                                         <vr-datagridcolumn headertext="'Filter #'" field="'filterId'" widthfactor="3">                   </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Description'" field="'description'" widthfactor="20">                   </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Threshold'"    >  <vr-textbox value="dataItem.threshold"  type="number"   isrequired ng-if="dataItem.isSelected" min="0" max="99"></vr-textbox>            </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Period'">  <vr-select datasource="viewScope.periods" datatextfield="Name" datavaluefield="Id" ng-init="dataItem.period = (dataItem.period == undefined ? viewScope.periods[0] : dataItem.period)" selectedvalues="dataItem.period" isrequired ng-show="dataItem.isSelected"></vr-select>       </vr-datagridcolumn>
                                     </vr-datagrid>
 
                                 </div>
