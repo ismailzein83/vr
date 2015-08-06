@@ -10,8 +10,6 @@ namespace Vanrise.Integration.Entities
     public abstract class MappedBatchItem : PersistentQueueItem
     {
         public abstract int GetRecordCount();
-
-        public abstract DateTime GetLastRecordTime();
     }
 
     public class MappedBatchItemToEnqueue

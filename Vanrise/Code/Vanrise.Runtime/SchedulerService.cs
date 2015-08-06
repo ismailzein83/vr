@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.Runtime.Data;
 
 namespace Vanrise.Runtime
@@ -34,9 +35,10 @@ namespace Vanrise.Runtime
                             item.TaskAction.Execute(item, evaluatedExpressions);
                             item.Status = Entities.SchedulerTaskStatus.Completed;
                         }
-                        catch
+                        catch(Exception ex)
                         {
                             item.Status = Entities.SchedulerTaskStatus.Failed;
+                            LoggerFactory.GetExceptionLogger().WriteException(ex);
                         }
                         
                         item.NextRunTime = item.TaskTrigger.CalculateNextTimeToRun();

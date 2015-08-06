@@ -10,7 +10,7 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
     {
         #region Private Functions
 
-        private static void CreateStreamReader(Action<IImportedData> receiveData, Ftp ftp, FtpItem fileObj, String filePath)
+        private static void CreateStreamReader(Func<IImportedData, bool> receiveData, Ftp ftp, FtpItem fileObj, String filePath)
         {
             var stream = new MemoryStream();
             ftp.GetFile(filePath, stream);
@@ -60,7 +60,7 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
         }
         #endregion
 
-        public override void ImportData(BaseAdapterArgument argument, Action<IImportedData> receiveData)
+        public override void ImportData(BaseAdapterArgument argument, Func<IImportedData, bool> receiveData)
         {
             FTPAdapterArgument ftpAdapterArgument = argument as FTPAdapterArgument;
             var ftp = new Rebex.Net.Ftp();

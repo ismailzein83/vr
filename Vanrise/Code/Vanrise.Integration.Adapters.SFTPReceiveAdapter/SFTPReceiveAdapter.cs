@@ -10,7 +10,7 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
     {
         #region Private Functions
 
-            private static void CreateStreamReader(Action<IImportedData> receiveData, Sftp sftp, SftpItem fileObj, String filePath)
+        private static void CreateStreamReader(Func<IImportedData, bool> receiveData, Sftp sftp, SftpItem fileObj, String filePath)
             {
                 var stream = new MemoryStream();
                 sftp.GetFile(filePath, stream);
@@ -62,7 +62,7 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
        
         #endregion
 
-            public override void ImportData(BaseAdapterArgument argument, Action<IImportedData> receiveData)
+            public override void ImportData(BaseAdapterArgument argument, Func<IImportedData, bool> receiveData)
         {
 
             FTPAdapterArgument ftpAdapterArgument = argument as FTPAdapterArgument;

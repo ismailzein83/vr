@@ -9,6 +9,6 @@ namespace Vanrise.Integration.Data
 {
     public interface IDataSourceImportedBatchDataManager : IDataManager
     {
-        long InsertEntry(int dataSourceId, string batchDescription, decimal? batchSize, int recordCounts, MappingResult result, string mapperMessage, string queueItemsIds);
+        long InsertEntry(int dataSourceId, string batchDescription, decimal? batchSize, int recordCounts, MappingResult result, string mapperMessage, string queueItemsIds, DateTime logEntryTime);
     }
 }

@@ -21,7 +21,7 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
 
         #region Private Functions
 
-        private void CreateStreamReader(FileAdapterArgument fileAdapterArgument, Action<IImportedData> receiveData, FileInfo file)
+        private bool CreateStreamReader(FileAdapterArgument fileAdapterArgument, Func<IImportedData, bool> receiveData, FileInfo file)
         {
             base.LogVerbose("Creating stream reader for file with name {0}", file.Name);
             StreamReaderImportedData reader = new StreamReaderImportedData()
@@ -32,7 +32,7 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
                 Size = file.Length
             };
             
-            receiveData(reader);
+            return receiveData(reader);
         }
 
         private void AfterImport(FileAdapterArgument fileAdapterArgument, FileInfo file)
@@ -58,8 +58,8 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
         }
 
         #endregion
-       
-        public override void ImportData(BaseAdapterArgument argument, Action<IImportedData> receiveData)
+
+        public override void ImportData(BaseAdapterArgument argument, Func<IImportedData, bool> receiveData)
         {
             FileAdapterArgument fileAdapterArgument = argument as FileAdapterArgument;
 
@@ -73,9 +73,8 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
                 base.LogInformation("{0} files are ready to be imported", Files.Length);
                 foreach (FileInfo file in Files)
                 {
-                    CreateStreamReader(fileAdapterArgument, receiveData, file);
-                    AfterImport(fileAdapterArgument, file);
-
+                    if(CreateStreamReader(fileAdapterArgument, receiveData, file))
+                        AfterImport(fileAdapterArgument, file);
                 }
             }
         }

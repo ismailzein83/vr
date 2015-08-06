@@ -22,7 +22,7 @@ namespace Vanrise.Integration.Business
         public long LogImportedBatchEntry(Entities.ImportedBatchEntry entry)
         {
             IDataSourceImportedBatchDataManager manager = IntegrationDataManagerFactory.GetDataManager<IDataSourceImportedBatchDataManager>();
-            return manager.InsertEntry(this._dataSourceId, entry.BatchDescription, entry.BatchSize, entry.RecordsCount, entry.Result, entry.MapperMessage, entry.QueueItemsIds);
+            return manager.InsertEntry(this._dataSourceId, entry.BatchDescription, entry.BatchSize, entry.RecordsCount, entry.Result, entry.MapperMessage, entry.QueueItemsIds, DateTime.Now);
         }
 
         public void LogEntry(Vanrise.Common.LogEntryType logEntryType, string messageFormat, params object[] args)

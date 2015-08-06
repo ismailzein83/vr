@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Integration.Entities;
+using Vanrise.Queueing.Entities;
 using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Integration.Business
@@ -24,14 +25,29 @@ namespace Vanrise.Integration.Business
             _logger.WriteInformation("Started running data source with name '{0}'", dataSource.Name);
 
             _logger.WriteVerbose("Preparing queues and stages");
-            
-            Vanrise.Queueing.QueueExecutionFlowManager executionFlowManager = new Vanrise.Queueing.QueueExecutionFlowManager();
-            var queuesByStages = executionFlowManager.GetQueuesByStages(dataSource.Settings.ExecutionFlowId);
 
-            if(queuesByStages == null || queuesByStages.Count == 0)
-                _logger.WriteWarning("No stages ready for use");
-            else
-                _logger.WriteInformation("{0} stages are ready for use", queuesByStages.Count);
+            QueuesByStages queuesByStages = null;
+
+            try
+            {
+                Vanrise.Queueing.QueueExecutionFlowManager executionFlowManager = new Vanrise.Queueing.QueueExecutionFlowManager();
+                queuesByStages = executionFlowManager.GetQueuesByStages(dataSource.Settings.ExecutionFlowId);
+
+                if (queuesByStages == null || queuesByStages.Count == 0)
+                {
+                    _logger.WriteError("No stages ready for use");
+                    return;
+                }
+                else
+                {
+                    _logger.WriteInformation("{0} stage(s) are ready for use", queuesByStages.Count); 
+                }
+            }
+            catch(Exception ex)
+            {
+                _logger.WriteError("An error occurred while preparing stages. Exception Details {0}", ex.Message);
+                throw;
+            }
 
             _logger.WriteVerbose("Preparing adapters to start the import process");
 
@@ -87,6 +103,8 @@ namespace Vanrise.Integration.Business
 
                     long importedBatchId = _logger.LogImportedBatchEntry(importedBatchEntry);
                     _logger.LogEntry(Common.LogEntryType.Information, importedBatchId, "Finished running data source task with name '{0}'", dataSource.Name);
+
+                    return (outputResult.Result == MappingResult.Valid);
                 });
         }
 
@@ -116,7 +134,7 @@ namespace Vanrise.Integration.Business
                 }
                 else
                 {
-                    _logger.WriteError("Errors while building the code for the custom class. Please make sure to build the custom code bound with this data source");
+                    
                     outputResult = new MappingOutput()
                     {
                         Message = "Errors while building the code for the custom class",
@@ -172,9 +190,33 @@ namespace Vanrise.Integration.Business
             }
 
             CompilerResults results = provider.CompileAssemblyFromSource(parameters, classDefinition);
-            compiledAssembly = results.CompiledAssembly;
 
-            return (results.Errors.Count == 0);
+            bool compilationResult = (results.Errors.Count == 0);
+
+            if(compilationResult)
+            {
+                compiledAssembly = results.CompiledAssembly;
+            }
+            else
+            {
+                _logger.WriteError("Errors while building the code for the custom class. Please make sure to build the custom code bound with this data source.");
+                for (int i = 0; i < results.Errors.Count; i++)
+                {
+                    CompilerError error = results.Errors[i];
+                    if (error.IsWarning)
+                        _logger.WriteWarning("Warning {0}: {1}", i, error.ErrorText);
+                    else
+                        _logger.WriteError("Error {0}: {1}", i, error.ErrorText);
+                }
+                
+                foreach (CompilerError error in results.Errors)
+                {
+                    
+                }
+                compiledAssembly = null;
+            }
+
+            return compilationResult;
         }
 
         private string BuildCustomClass(string customCode, string className)
