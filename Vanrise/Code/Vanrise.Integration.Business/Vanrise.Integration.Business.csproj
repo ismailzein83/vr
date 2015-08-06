@@ -50,7 +50,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataSourceImportedBatchManager.cs" />
     <Compile Include="DataSourceLogger.cs" />
+    <Compile Include="DataSourceLogManager.cs" />
     <Compile Include="DataSourceManager.cs" />
     <Compile Include="DSSchedulerTaskAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -5,6 +5,6 @@
     });
 
     function GetFilteredDataSourceLogs(input) {
-        return BaseAPIService.post('/api/DataSourceLogs/GetFilteredDataSourceLogs', input);
+        return BaseAPIService.post('/api/DataSourceLog/GetFilteredDataSourceLogs', input);
     }
 });

@@ -21,8 +21,8 @@ namespace Vanrise.Integration.Business
 
         public long LogImportedBatchEntry(Entities.ImportedBatchEntry entry)
         {
-            IDataSourceImportedBatchDataManager manager = IntegrationDataManagerFactory.GetDataManager<IDataSourceImportedBatchDataManager>();
-            return manager.InsertEntry(this._dataSourceId, entry.BatchDescription, entry.BatchSize, entry.RecordsCount, entry.Result, entry.MapperMessage, entry.QueueItemsIds, DateTime.Now);
+            DataSourceImportedBatchManager manager = new DataSourceImportedBatchManager();
+            return manager.WriteEntry(entry, this._dataSourceId, DateTime.Now);
         }
 
         public void LogEntry(Vanrise.Common.LogEntryType logEntryType, string messageFormat, params object[] args)
@@ -55,12 +55,6 @@ namespace Vanrise.Integration.Business
             this.PrivateWriteEntry(Vanrise.Common.LogEntryType.Error, messageFormat, args);
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<DataSourceLog> GetFilteredDataSourceLogs(Vanrise.Entities.DataRetrievalInput<DataSourceLogQuery> input)
-        {
-            IDataSourceLogDataManager dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceLogDataManager>();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredDataSourceLogs(input));
-        }
-
         #endregion
 
         #region Private Methods
@@ -72,8 +66,8 @@ namespace Vanrise.Integration.Business
 
         private void PrivateWriteEntry(Vanrise.Common.LogEntryType entryType, long? importedBatchId, string messageFormat, params object[] args)
         {
-            IDataSourceLogDataManager manager = IntegrationDataManagerFactory.GetDataManager<IDataSourceLogDataManager>();
-            manager.InsertEntry(entryType, String.Format(messageFormat, args), this._dataSourceId, importedBatchId, DateTime.Now);
+            DataSourceLogManager manager = new DataSourceLogManager();
+            manager.WriteEntry(entryType, this._dataSourceId, importedBatchId, String.Format(messageFormat, args), DateTime.Now);
         }
 
         #endregion 

@@ -9,12 +9,12 @@ using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.Web.Controllers
 {
-    public class DataSourceLogsController : Vanrise.Web.Base.BaseAPIController
+    public class DataSourceLogController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpPost]
         public object GetFilteredDataSourceLogs(Vanrise.Entities.DataRetrievalInput<DataSourceLogQuery> input)
         {
-            DataSourceLogger manager = new DataSourceLogger();
+            DataSourceLogManager manager = new DataSourceLogManager();
 
             // to be removed
             if (input.Query.From != null)
