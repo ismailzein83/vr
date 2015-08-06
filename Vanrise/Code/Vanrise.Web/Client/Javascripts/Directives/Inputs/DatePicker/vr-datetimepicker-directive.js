@@ -69,7 +69,7 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                          var selfHeight = $(this).height();
                          var selfOffset = $(self).offset();
                          var dropDown = self.parent().find('.bootstrap-datetimepicker-widget')[0];
-                         $(dropDown).css({ position: 'fixed', top: selfOffset.top  - $(window).scrollTop() + selfHeight, left: 'auto' });
+                         $(dropDown).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: 'auto' });
 
                      });
                     var fixDropdownPosition = function () {
@@ -96,14 +96,25 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                 var modelValue = $scope.ctrl.value;
                 if (modelValue != undefined && !(modelValue instanceof Date))
                     modelValue = new Date(modelValue);
-
                 if (modelValue == undefined || modelValue.toString() != selectedDate.toString()) {
                     isUserChange = true;
                     $scope.ctrl.value = selectedDate;
                 }
 
             });
+
+
             var ctrl = $scope.ctrl;
+            ctrl.updateModelOnKeyUp = function (e) {
+                var $this = angular.element(e.currentTarget);
+                console.log(moment($this.val(), format, true).isValid());
+                if (moment($this.val(), format, true).isValid()) {
+                    setTimeout(function () {
+                        divDatePicker.data("DateTimePicker").date($this.val());
+                    }, 1)
+                }
+
+            }
             $scope.$watch('ctrl.value', function () {
                 if (ctrl.value == undefined)
                     return;
@@ -267,7 +278,7 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                  '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false"  >'
                   + '<div id="mainInput" ng-model="ctrl.value" class="form-control " style="border-radius: 4px;height: auto;padding: 0px;">'
                  + '<div  class="input-group date datetime-controle" style="width:100%" id="divDatePicker"  >'
-                                + '<input class="form-control vr-date-input" style="height:30px;" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
+                                + '<input class="form-control vr-date-input" style="height:30px;" ng-keyup="ctrl.updateModelOnKeyUp($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
                                 + icontemplate
                             + '</div>'
                       + '</div>'
