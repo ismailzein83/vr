@@ -39,7 +39,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         }
 
 
-        public List<Strategy> GetAllStrategies(int? PeriodId)
+        public List<Strategy> GetAllStrategies(int PeriodId)
         {
             throw new NotImplementedException();
         }

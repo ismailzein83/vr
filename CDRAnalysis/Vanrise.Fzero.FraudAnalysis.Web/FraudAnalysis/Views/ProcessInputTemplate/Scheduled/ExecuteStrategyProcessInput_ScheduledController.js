@@ -7,9 +7,12 @@
 
         $scope.processInputArguments = [];
 
+        
         $scope.strategies = [];
         $scope.selectedStrategies = [];
         $scope.selectedStrategyIds = [];
+
+        
 
         $scope.periods = [];
         $scope.selectedPeriod = "";
@@ -54,11 +57,14 @@
 
 
     function loadStrategies(periodId) {
+       
         $scope.strategies.length = 0;
         $scope.selectedStrategies.length = 0;
         return StrategyAPIService.GetAllStrategies(periodId).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.strategies.push({ id: itm.Id, name: itm.Name, periodId: itm.PeriodId });
+                console.log('itm')
+                console.log(itm)
             });
         });
     }
@@ -75,9 +81,25 @@
             var data = $scope.schedulerTaskAction.processInputArguments.data;
 
             if (data != null) {
-                console.log('data')
-                console.log(data)
+                loadStrategies(0);
 
+                console.log('data');
+                console.log(data);
+
+                console.log('data.StrategyIds[0]');
+                console.log(data.StrategyIds[0]);
+
+
+                console.log('$scope.strategies');
+                console.log($scope.strategies);
+
+                console.log('UtilsService.getItemIndexByVal($scope.strategies, data.StrategyIds[0], "id")');
+                console.log(UtilsService.getItemIndexByVal($scope.strategies, data.StrategyIds[0], "id"));
+
+
+                $scope.selectedPeriod =  UtilsService.getItemByVal($scope.periods, $scope.strategies[UtilsService.getItemIndexByVal($scope.strategies, data.StrategyIds[0], "id")].periodId, "Id");
+
+                loadStrategies($scope.selectedPeriod.periodId);
 
                 angular.forEach(data.StrategyIds, function (strategyId) {
                     $scope.selectedStrategies.push($scope.strategies[UtilsService.getItemIndexByVal($scope.strategies, strategyId, "id")]);

@@ -29,7 +29,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
 
-        public IEnumerable<Strategy> GetAllStrategies(int? PeriodId)
+        public IEnumerable<Strategy> GetAllStrategies(int PeriodId)
         {
 
             IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
