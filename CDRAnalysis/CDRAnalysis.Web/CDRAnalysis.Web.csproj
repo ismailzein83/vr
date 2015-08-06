@@ -246,7 +246,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Controllers\" />
-    <Folder Include="images\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -260,6 +259,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="images\login.png" />
+    <Content Include="images\logoonheader.png" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
