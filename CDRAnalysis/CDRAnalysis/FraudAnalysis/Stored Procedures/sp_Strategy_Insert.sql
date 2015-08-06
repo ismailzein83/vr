@@ -1,12 +1,13 @@
 ﻿
 
 
-CREATE PROCEDURE [FraudAnalysis].[sp_Strategy_Insert] 
+CREATE PROCEDURE [FraudAnalysis].[sp_Strategy_Insert]
 	@UserId int,
 	@Name varchar(20),
 	@Description varchar(255),
 	@CreationDate DateTime,
 	@IsDefault bit,
+	@PeriodId int,
 	@StrategyContent Nvarchar(max),
 	@Id int out
 	
@@ -14,8 +15,8 @@ AS
 BEGIN
 	IF NOT Exists (SELECT null FROM FraudAnalysis.[Strategy] WHERE Name = @Name)
 	BEGIN
-		Insert into FraudAnalysis.[Strategy] ([Description]  ,[UserId]  ,[CreationDate], [Name]  ,[IsDefault]  ,[StrategyContent])
-		values(@Description  ,@UserId  ,@CreationDate, @Name  ,@IsDefault  ,@StrategyContent)
+		Insert into FraudAnalysis.[Strategy] ([Description]  ,[UserId]  ,[CreationDate], [Name]  ,[IsDefault]  ,[StrategyContent], [PeriodId])
+		values(@Description  ,@UserId  ,@CreationDate, @Name  ,@IsDefault  ,@StrategyContent, @PeriodId)
 	
 		SET @Id = @@IDENTITY
 	END
