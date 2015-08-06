@@ -26,7 +26,7 @@ namespace Vanrise.Integration.Data.SQL
         public Vanrise.Entities.BigResult<DataSourceLog> GetFilteredDataSourceLogs(Vanrise.Entities.DataRetrievalInput<DataSourceLogQuery> input)
         {
             Dictionary<string, string> columnMapper = new Dictionary<string, string>();
-            columnMapper.Add("DataSourceName", "Name");
+            columnMapper.Add("SeverityDescription", "Severity");
 
             DataTable dtSeverities = BuildSeveritiesTable(input.Query.Severities);
 
@@ -53,11 +53,10 @@ namespace Vanrise.Integration.Data.SQL
         {
             Vanrise.Integration.Entities.DataSourceLog dataSourceLog = new Vanrise.Integration.Entities.DataSourceLog
             {
-                LogId = (int)reader["ID"],
+                ID = (int)reader["ID"],
                 DataSourceId = (int)reader["DataSourceId"],
-                DataSourceName = reader["Name"] as string,
-                Severity = (int)reader["Severity"],
-                Message = reader["Message"] as string,
+                Severity = (LogEntryTypeEnum)reader["Severity"],
+                Message = GetReaderValue<string>(reader, "Message"),
                 LogEntryTime = (DateTime)reader["LogEntryTime"]
             };
 

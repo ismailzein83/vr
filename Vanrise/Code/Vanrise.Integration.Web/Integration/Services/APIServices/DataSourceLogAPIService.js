@@ -1,4 +1,4 @@
-﻿app.service('DataSourceLogsAPIService', function (BaseAPIService) {
+﻿app.service('DataSourceLogAPIService', function (BaseAPIService) {
 
     return ({
         GetFilteredDataSourceLogs: GetFilteredDataSourceLogs

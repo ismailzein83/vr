@@ -8,10 +8,10 @@ namespace Vanrise.Integration.Entities
 {
     public class DataSourceLog
     {
-        public int LogId { get; set; }
+        public int ID { get; set; }
         public int DataSourceId { get; set; }
         public string DataSourceName { get; set; }
-        public int Severity { get; set; }
+        public LogEntryTypeEnum Severity { get; set; }
         public string Message { get; set; }
         public DateTime LogEntryTime { get; set; }
     }

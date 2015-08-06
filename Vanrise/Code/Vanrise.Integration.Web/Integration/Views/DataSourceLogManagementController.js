@@ -1,6 +1,6 @@
-﻿DataSourceLogsManagementController.$inject = ['$scope', 'DataSourceLogsAPIService', 'DataSourceAPIService', 'UtilsService', 'VRNotificationService'];
+﻿DataSourceLogManagementController.$inject = ['$scope', 'DataSourceLogAPIService', 'DataSourceAPIService', 'UtilsService', 'VRNotificationService'];
 
-function DataSourceLogsManagementController($scope, DataSourceLogsAPIService, DataSourceAPIService, UtilsService, VRNotificationService) {
+function DataSourceLogManagementController($scope, DataSourceLogsAPIService, DataSourceAPIService, UtilsService, VRNotificationService) {
 
     var gridApi;
 
@@ -92,4 +92,4 @@ function DataSourceLogsManagementController($scope, DataSourceLogsAPIService, Da
     }
 }
 
-appControllers.controller('Integration_DataSourceLogsManagementController', DataSourceLogsManagementController);
+appControllers.controller('Integration_DataSourceLogManagementController', DataSourceLogManagementController);
