@@ -107,7 +107,6 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
             var ctrl = $scope.ctrl;
             ctrl.updateModelOnKeyUp = function (e) {
                 var $this = angular.element(e.currentTarget);
-                console.log(moment($this.val(), format, true).isValid());
                 if (moment($this.val(), format, true).isValid()) {
                     setTimeout(function () {
                         divDatePicker.data("DateTimePicker").date($this.val());
@@ -163,30 +162,7 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
             BaseDirService.addScopeValidationMethods(ctrl, elementName, this);
 
         },
-        compile: function (element, attrs) {
-            //var divDatePickerId = BaseDirService.generateHTMLElementName();
-            //element.attr('id', divDatePickerId);
-            //var divDatePicker = element.find('#divDatePicker');//$('#' + divDatePickerId);//
-            //console.log(element.find('#divDatePicker'))
-            //var format;
-            //var isDate;
-            //var isTime;
-            //var isDateTime;
-            //switch (attrs.type) {
-            //    case "date": format = 'DD/MM/YYYY';
-            //        isDate = true;
-            //        break;
-            //    case "time": format = 'HH:mm';
-            //        isTime = true;
-            //        break;
-            //    default: format = 'DD/MM/YYYY HH:mm';
-            //        isDateTime = true;
-            //        break;
-            //}
-            //divDatePicker.datetimepicker({
-            //    format: format,
-            //    showClose: true
-            //});
+        compile: function (element, attrs) {            
             var inputElement = element.find('#mainInput');
             var validationOptions = {};
             if (attrs.isrequired !== undefined)
@@ -197,66 +173,8 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
             var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, element.find('#rootDiv'));
             return {
                 pre: function ($scope, iElem, iAttrs, formCtrl) {
-
-                    // var isUserChange = false;
-                    // var selectedDate;
-                    // //divDatePicker.datetimepicker({
-                    // //    format: 'DD/MM/YYYY',
-                    // //    showClose: true
-                    // //});
-                    //// $scope.frmctrl = formCtrl
-                    // divDatePicker
-                    //       .on('dp.change', function (e) {                              
-                    //          selectedDate = new Date(e.date);
-                    //           var modelValue = $scope.ctrl.value;
-                    //           if (modelValue != undefined && !(modelValue instanceof Date))
-                    //               modelValue = new Date(modelValue);
-
-                    //           if (modelValue == undefined || modelValue.toString() != selectedDate.toString()) {
-                    //               isUserChange = true;
-                    //               $scope.ctrl.value = selectedDate;                                  
-                    //           }
-
-                    //       });                   
-                    // if (divDatePicker.closest('.modal-body').length > 0) {
-
-                    //     divDatePicker
-                    //      .on('dp.show', function (e) {
-                    //          var self = $(this);
-                    //          var selfHeight = $(this).parent().height();
-                    //          var selfOffset = $(self).offset();
-                    //          var dropDown = self.parent().find('.bootstrap-datetimepicker-widget')[0];
-                    //          $(dropDown).css({ position: 'fixed', top: selfOffset.top + selfHeight, left: 'auto' });
-                    //      });
-
-                    // }
-                    var ctrl = $scope.ctrl;
-
-                    //$scope.$watch('ctrl.value', function () {
-                    //    if (ctrl.value == undefined)
-                    //        return;
-
-                    //    var date = ctrl.value instanceof Date ? ctrl.value : (new Date(ctrl.value));
-                    //    if (selectedDate == undefined || selectedDate.toString() != date.toString()) {                            
-                    //        divDatePicker.data("DateTimePicker").date(date);
-                    //    }
-                    //    else {
-                    //        if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
-                    //            return;
-                    //        isUserChange = false;//reset the flag
-
-                    //        if (iAttrs.onvaluechanged != undefined) {
-                    //            var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onvaluechanged);
-                    //            if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
-                    //                onvaluechangedMethod();
-                    //            }
-                    //        }
-                    //    }
-
-                    //});
-
+                    var ctrl = $scope.ctrl;                   
                     BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
-
                 }
             }
         },
