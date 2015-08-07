@@ -683,8 +683,131 @@ namespace TOne.Analytics.Business
 
         public DestinationVolumeTrafficResult GetDestinationTrafficVolumes(DateTime fromDate, DateTime toDate, string customerID, string supplierID, int zoneID, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination)
         {
-            return _datamanager.GetDestinationTrafficVolumes(fromDate, toDate, customerID, supplierID, zoneID, attempts, timePeriod, topDestination);
+            List<TimeRange> timeRanges = new List<TimeRange>();
+            DateTime currentDate = new DateTime();
+            DateTime startDate = new DateTime();
+            DateTime endDate = new DateTime();
+            currentDate = fromDate;
+            DateTime counter = fromDate;
+            while (counter <= toDate)
+            {
+                switch (timePeriod)
+                {
+                    case VolumeReportsTimePeriod.None:
+                         startDate = fromDate;
+                         endDate = fromDate;
+                         counter = toDate;
+                        break;
+                    case VolumeReportsTimePeriod.Daily:
+                        startDate = currentDate;
+                        endDate = currentDate.AddDays(1);
+                        counter = counter.AddDays(1);
+                        break;
+                    case VolumeReportsTimePeriod.Weekly:
+                        startDate = currentDate;
+                        endDate = currentDate.AddDays(7);
+                        counter = counter.AddDays(7);
+                        break;
+                    case VolumeReportsTimePeriod.Monthly:
+                        startDate = currentDate;
+                        endDate = currentDate.AddMonths(1);
+                        counter = counter.AddMonths(7);
+                        break;
+
+                }
+                TimeRange timeRange = new TimeRange { FromDate = startDate, ToDate = endDate };
+                timeRanges.Add(timeRange);
+                currentDate = endDate;
+            }
+            return _datamanager.GetDestinationTrafficVolumes(fromDate, toDate, customerID, supplierID, zoneID, attempts, timePeriod, topDestination, timeRanges);
        }
+
+        private DestinationVolumeTrafficResult GetDestinationTrafficVolumesResult(List<DestinationVolumeTrafficResult> DestinationTrafficVolumeData, DateTime fromDate, DateTime toDate, string customerID, string supplierID, int zoneID, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination)
+        {
+
+            DestinationVolumeTrafficResult DestinationTrafficVolumeResult = new DestinationVolumeTrafficResult();
+            DestinationVolumeTrafficResult current = null;
+           // foreach (var item in DestinationTrafficVolumeData)
+         //   {
+                //if (current == null || current.ValuesPerDate.Time != item.ValuesPerDate.Time)
+                //{
+                //    for (int i = 0; i < item.TopZones.Count(); i++) { }
+                //    current = new DestnationVolumeTrafficItem();
+                //    // {
+                    //Name = item.TopZones[i],
+                    //RowNumber = item.RowNumber,
+                    //Values = new List<decimal>()
+                    // };
+                    //    variationReportsData.Add(current);
+             //   }
+//           }
+            return DestinationTrafficVolumeResult;
+        }
+
+        //    foreach (var rep in variationReportsData)
+        //    {
+        //        foreach (var timeRange in timeRanges)
+        //        {
+        //            var value = variationReports.FirstOrDefault(itm => itm.ID == rep.ID && itm.FromDate == timeRange.FromDate && itm.ToDate == timeRange.ToDate);
+        //            if (value != null)
+        //                rep.Values.Add(value.TotalDuration);
+        //            else
+        //                rep.Values.Add(0);
+        //        }
+        //    }
+
+        //    foreach (var item in variationReportsData)
+        //    {
+        //        decimal average = 0;
+        //        double CurrentValue = double.Parse(item.Values.First().ToString());
+        //        double PrevValue = double.Parse(item.Values[1].ToString());
+        //        foreach (var totalDurations in item.Values)
+        //            average += totalDurations;
+        //        average = average / periodCount;
+        //        item.PeriodTypeValueAverage = average;
+        //        item.PeriodTypeValuePercentage = Convert.ToDecimal((CurrentValue - Convert.ToDouble(average)) / (average == 0 ? double.MaxValue : Convert.ToDouble(average))) * 100;
+        //        item.PreviousPeriodTypeValuePercentage = Convert.ToDecimal((CurrentValue - PrevValue) / (PrevValue == 0 ? double.MaxValue : PrevValue)) * 100;
+
+        //    }
+
+        //    totals = new List<decimal>();
+        //    int i = 0;
+
+        //    foreach (var timeRange in timeRanges)
+        //    {
+        //        if (datetotalValues.Contains(timeRange.FromDate))
+        //        {
+        //            totals.Add(totalValues[i]);
+        //            i++;
+        //        }
+        //        else
+        //            totals.Add(0);
+
+        //    }
+
+        //    ////Calcule of Total AVG, Total %, Total Previouss %: 
+        //    foreach (var item in variationReportsData)
+        //    {
+        //        decimal average = 0;
+        //        double CurrentDayValue = double.Parse(item.Values.First().ToString());
+        //        double PrevDayValue = double.Parse(item.Values[1].ToString());
+        //        foreach (var totalDurations in item.Values)
+        //            average += totalDurations;
+        //        average = average / periodCount;
+        //        item.PeriodTypeValueAverage = average;
+        //        item.PeriodTypeValuePercentage = Convert.ToDecimal((CurrentDayValue - Convert.ToDouble(average)) / (average == 0 ? double.MaxValue : Convert.ToDouble(average))) * 100;
+        //        item.PreviousPeriodTypeValuePercentage = Convert.ToDecimal((CurrentDayValue - PrevDayValue) / (PrevDayValue == 0 ? double.MaxValue : PrevDayValue)) * 100;
+
+        //    }
+        //    double currentValue = double.Parse(totals.FirstOrDefault().ToString());
+        //    double prevValue = double.Parse(totals[1].ToString());
+        //    totalPercentage = Convert.ToDecimal((currentValue - Convert.ToDouble(totalAverage)) / (totalAverage == 0 ? double.MaxValue : Convert.ToDouble(totalAverage))) * 100;
+        //    totalPreviousPercentage = Convert.ToDecimal((currentValue - prevValue) / (prevValue == 0 ? double.MaxValue : prevValue)) * 100;
+
+        //    return new VariationReportResult() { VariationReportsData = variationReportsData.OrderBy(itm => itm.RowNumber), TimeRange = timeRanges };
+        
+        
+        //}
         #region Private Methods
         private ZoneProfitFormatted FormatZoneProfit(ZoneProfit zoneProfit)
         {
