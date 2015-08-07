@@ -126,6 +126,7 @@
             };
 
             $scope.searchClicked = function () {
+                $scope.lastTrackingId = 0;
                 stopGetData();
                 return retrieveData();
             };
