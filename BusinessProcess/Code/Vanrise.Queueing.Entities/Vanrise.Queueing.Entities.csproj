@@ -47,7 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IPersistentQueue.cs" />
-    <Compile Include="ItemStatus.cs" />
+    <Compile Include="ItemExecutionFlowInfo.cs" />
     <Compile Include="ItemToEnqueue.cs" />
     <Compile Include="PersistentQueueItem.cs" />
     <Compile Include="QueueActivator.cs" />
