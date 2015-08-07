@@ -25,7 +25,7 @@ namespace Vanrise.Web
                 s_isLicensed = null;
             if (!s_isLicensed.HasValue)
             {
-                s_isLicensed = Vanrise.Components.Security.LicenceManagerControl.CheckLicence("TOne License", out licenseKey);
+                s_isLicensed = Vanrise.Components.Security.LicenceManagerControl.CheckLicence("Vanrise License", out licenseKey);
                 if (s_isLicensed.Value) s_licensedActivatationDate = DateTime.Now;
             }
             if (!s_isLicensed.Value)
