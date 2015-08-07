@@ -62,7 +62,6 @@
                             break;
                         }
                     }
-                    console.log(isNonClosed);
                     if ( ! isNonClosed) stopGetData();
                     
                     for (var i = 0, len = trackingResponse.length; i < len; i++) {
@@ -148,7 +147,6 @@
                 return BusinessProcessAPIService.GetFilteredTrackings(dataRetrievalInput).then(function (response) {
 
                     $scope.lastTrackingId = UtilsService.getPropMaxValueFromArray(response.Data, "Id");
-                    console.log($scope.lastTrackingId);
                     if ($scope.lastTrackingId != undefined && startTimer) {
                         startTimer = false;
                         startGetData();
