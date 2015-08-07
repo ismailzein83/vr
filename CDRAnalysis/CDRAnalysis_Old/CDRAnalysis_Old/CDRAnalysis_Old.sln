@@ -3,12 +3,70 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.MobileCDRAnalysis", "..\Vanrise.Fzero.MobileCDRAnalysis\Vanrise.Fzero.MobileCDRAnalysis.csproj", "{C42EA41E-45F6-49FA-BCEC-D13F8CC03E27}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql", "..\Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql\Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql.csproj", "{0A69317A-3793-454B-BE3B-C864AA76EF6D}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Vanrise.Fzero.MobileCDRAnalysis.Website(1)", "http://localhost:49944", "{53146CB8-18E1-4000-84B0-B4C563DEA7CA}"
+	ProjectSection(WebsiteProperties) = preProject
+		SccProjectName = "SAK"
+		SccAuxPath = "SAK"
+		SccLocalPath = "SAK"
+		SccProvider = "SAK"
+		UseIISExpress = "true"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_49944"
+		Debug.AspNetCompiler.PhysicalPath = "..\Vanrise.Fzero.MobileCDRAnalysis.Website\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_49944\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_49944"
+		Release.AspNetCompiler.PhysicalPath = "..\Vanrise.Fzero.MobileCDRAnalysis.Website\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_49944\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		SlnRelativePath = "..\Vanrise.Fzero.MobileCDRAnalysis.Website\"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 1
+		SccNumberOfProjects = 4
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
+		SccProjectUniqueName1 = ..\\Vanrise.Fzero.MobileCDRAnalysis\\Vanrise.Fzero.MobileCDRAnalysis.csproj
+		SccProjectName1 = ../Vanrise.Fzero.MobileCDRAnalysis
+		SccLocalPath1 = ..\\Vanrise.Fzero.MobileCDRAnalysis
+		SccProjectUniqueName2 = ..\\Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql\\Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql.csproj
+		SccProjectName2 = ../Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
+		SccLocalPath2 = ..\\Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
+		SccWebProject3 = true
+		SccProjectUniqueName3 = http://localhost:49944
+		SccProjectName3 = ../Vanrise.Fzero.MobileCDRAnalysis.Website
+		SccLocalPath3 = ..\\Vanrise.Fzero.MobileCDRAnalysis.Website
+		SccProjectEnlistmentChoice3 = 2
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C42EA41E-45F6-49FA-BCEC-D13F8CC03E27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C42EA41E-45F6-49FA-BCEC-D13F8CC03E27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C42EA41E-45F6-49FA-BCEC-D13F8CC03E27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C42EA41E-45F6-49FA-BCEC-D13F8CC03E27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A69317A-3793-454B-BE3B-C864AA76EF6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A69317A-3793-454B-BE3B-C864AA76EF6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A69317A-3793-454B-BE3B-C864AA76EF6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A69317A-3793-454B-BE3B-C864AA76EF6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53146CB8-18E1-4000-84B0-B4C563DEA7CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53146CB8-18E1-4000-84B0-B4C563DEA7CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53146CB8-18E1-4000-84B0-B4C563DEA7CA}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{53146CB8-18E1-4000-84B0-B4C563DEA7CA}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

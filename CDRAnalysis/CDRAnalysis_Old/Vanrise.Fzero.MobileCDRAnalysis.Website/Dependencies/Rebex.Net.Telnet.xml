@@ -1,0 +1,227 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Rebex.Net.Telnet</name>
+    </assembly>
+    <members>
+        <member name="T:Rebex.Net.Messages">
+            <summary>
+            Provides methods for constructing exception messages.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.RebexAsyncResult">
+            <summary>
+            Universal class for asynchronous method invocation.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.Telnet">
+            <summary>
+            Provides methods for communication with Telnet servers.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Telnet.DefaultPort">
+            <summary>
+            Default Telnet port (23).
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.Telnet.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.Telnet"/> class.
+            </summary>
+            <param name="serverName">The server address - either a hostname or a dotted string IP address.</param>
+        </member>
+        <member name="M:Rebex.Net.Telnet.#ctor(System.String,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.Telnet"/> class.
+            </summary>
+            <param name="serverName">The server address - either a hostname or a dotted string IP address.</param>
+            <param name="serverPort">The server port (eg. 23).</param>
+        </member>
+        <member name="M:Rebex.Net.Telnet.SetSocketFactory(Rebex.Net.ISocketFactory)">
+            <summary>
+            Sets the socket factory to be used to create communication sockets.
+            </summary>
+            <param name="factory">Socket factory.</param>
+        </member>
+        <member name="M:Rebex.Net.Telnet.StartShell">
+            <summary>
+            Starts a remote shell.
+            </summary>
+            <returns>Shell object.</returns>
+        </member>
+        <member name="M:Rebex.Net.Telnet.StartVirtualTerminal">
+            <summary>
+            Starts a virtual terminal session.
+            </summary>
+            <returns>Virtual terminal object.</returns>
+        </member>
+        <member name="M:Rebex.Net.Telnet.StartVirtualTerminal(Rebex.TerminalEmulation.TerminalOptions,System.Int32,System.Int32)">
+            <summary>
+            Starts a virtual terminal session.
+            </summary>
+            <param name="options">Initial terminal options.</param>
+            <param name="columns">Horizontal size in character columns.</param>
+            <param name="rows">Vertical size in character rows.</param>
+            <returns>Virtual terminal object.</returns>
+        </member>
+        <member name="M:Rebex.Net.Telnet.Rebex#TerminalEmulation#IShellChannelFactory#CreateShellChannel(Rebex.TerminalEmulation.TerminalOptions,System.Int32,System.Int32)">
+            <summary>
+            Creates a new shell channel using the specified options.
+            </summary>
+            <param name="options">Terminal options.</param>
+            <param name="columns">Horizontal size in character columns.</param>
+            <param name="rows">Vertical size in character rows.</param>
+            <returns>A shell channel.</returns>
+        </member>
+        <member name="P:Rebex.Net.Telnet.HostName">
+            <summary>
+            Gets the host-name of the remote server.
+            </summary>
+            <value>Remote server host-name.</value>
+        </member>
+        <member name="P:Rebex.Net.Telnet.Port">
+            <summary>
+            Gets the port of the remote server.
+            </summary>
+            <value>Remote server port.</value>
+        </member>
+        <member name="P:Rebex.Net.Telnet.LogWriter">
+            <summary>
+            Gets or sets the logger used by this object.
+            </summary>
+            <value>Logger.</value>
+        </member>
+        <member name="P:Rebex.Net.Telnet.Proxy">
+            <summary>
+            Gets or sets the network proxy to use to access a remote server.
+            </summary>
+            <value>The <see cref="P:Rebex.Net.Telnet.Proxy"/> to use to access a remote server.</value>
+        </member>
+        <member name="P:Rebex.Net.Telnet.Timeout">
+            <summary>
+            Gets or sets the length of time before the operation times out (specify -1 or 0 to indicate that the request does not time out).
+            </summary>
+            <value>
+            The length of time, in milliseconds, until the operation times out,
+            or the value -1 or 0 to indicate that the request does not time out.
+            Default is 60000 (60 seconds).
+            </value>
+            <remarks>
+            <p>
+            The internal timeout counter is reset every time data is sent
+            or received from to server. This also means that data transfers only
+            time out after x miliseconds of inactivity, not after x miliseconds
+            from the start of the transfer.
+            </p>
+            <p>
+            Minimal value is 1000. Setting this to a value lower than 1000 will set it to 1000.
+            </p>
+            </remarks>
+        </member>
+        <member name="T:Rebex.Net.TelnetException">
+            <summary>
+            The exception that is thrown when an Telnet error occurs.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.TelnetException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.TelnetException"/> class.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.TelnetException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.TelnetException"/> class with the specified error message.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+        </member>
+        <member name="M:Rebex.Net.TelnetException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.TelnetException"/> class with the specified error message
+            and a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+            <param name="inner">The exception that is the cause of the current exception.</param>
+        </member>
+        <member name="M:Rebex.Net.TelnetShellChannel.InterpretAsCommand(System.Byte[],System.Int32@,System.Int32,System.Byte[],System.Int32@,System.Int32@)">
+            <summary>
+            Interprets one telnet command.
+            </summary>
+            <param name="buffer">Buffer where the data to consume are stored.</param>
+            <param name="idx">Position where to start interpreting.</param>
+            <param name="bufferEnd">End of the region to interpret.</param>
+            <param name="target">Buffer where to store decoded data.</param>
+            <param name="offset">Position where to append decoded data.</param>
+            <param name="count">Number of data in terget buffer. It is increased if any data appended.</param>
+            <remarks>
+            It expects that idx is pointing at the beggining or middle of the telnet command 
+            according to _processingTelnetCommand value.
+            </remarks>
+        </member>
+        <member name="T:Rebex.TerminalEmulation.TelnetTerminalControl">
+            <summary>
+            Telnet terminal emulator control.
+            </summary>
+        </member>
+        <member name="M:Rebex.TerminalEmulation.TelnetTerminalControl.OnConnected(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:Rebex.TerminalEmulation.TelnetTerminalControl.Connected"/> event.
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:Rebex.TerminalEmulation.TelnetTerminalControl.OnDisconnected(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:Rebex.TerminalEmulation.TerminalControl.Disconnected"/> event.
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:Rebex.TerminalEmulation.TelnetTerminalControl.#ctor">
+            <summary>
+            Creates a new instance of Telnet terminal control.
+            </summary>
+        </member>
+        <member name="M:Rebex.TerminalEmulation.TelnetTerminalControl.Connect">
+            <summary>
+            Connects to the Telnet server specified by <see cref="P:Rebex.TerminalEmulation.TelnetTerminalControl.ServerName"/> and <see cref="P:Rebex.TerminalEmulation.TelnetTerminalControl.ServerPort"/> properties.
+            </summary>
+        </member>
+        <member name="M:Rebex.TerminalEmulation.TelnetTerminalControl.Disconnect">
+            <summary>
+            Disconnects from the Telnet server.
+            </summary>
+        </member>
+        <member name="P:Rebex.TerminalEmulation.TelnetTerminalControl.ServerName">
+            <summary>
+            Gets or sets the server address - either a hostname or a dotted string IP address.
+            </summary>
+            <value>Server address.</value>
+        </member>
+        <member name="P:Rebex.TerminalEmulation.TelnetTerminalControl.ServerPort">
+            <summary>
+            Gets or sets the server port. Default value is 23.
+            </summary>
+            <value>Server port.</value>
+        </member>
+        <member name="P:Rebex.TerminalEmulation.TelnetTerminalControl.Proxy">
+            <summary>
+            Gets or sets the network proxy to use to access a remote server.
+            </summary>
+            <value>The <see cref="P:Rebex.TerminalEmulation.TelnetTerminalControl.Proxy"/> to use to access a remote server.</value>
+        </member>
+        <member name="P:Rebex.TerminalEmulation.TelnetTerminalControl.Text">
+            <summary>
+            Gets or sets the text associated with this control.  
+            </summary>
+        </member>
+        <member name="P:Rebex.TerminalEmulation.TelnetTerminalControl.LogWriter">
+            <summary>
+            Gets or sets the logger used by this object.
+            </summary>
+            <value>Logger.</value>
+        </member>
+        <member name="E:Rebex.TerminalEmulation.TelnetTerminalControl.Connected">
+            <summary>
+            Occurs when connected to the server.
+            </summary>
+        </member>
+    </members>
+</doc>
