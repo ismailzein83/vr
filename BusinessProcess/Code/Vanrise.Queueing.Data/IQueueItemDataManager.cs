@@ -30,5 +30,9 @@ namespace Vanrise.Queueing.Data
         Dictionary<int, long> GetQueueIDsHavingNewItems(long afterQueueActivationId);
 
         List<QueueItemHeader> GetHeaders(IEnumerable<int> queueIds, IEnumerable<QueueItemStatus> statuses, DateTime dateFrom, DateTime dateTo);
+
+        List<ItemExecutionStatus> GetItemsExecutionStatus(List<long> itemIds);
+
+        List<QueueItemHeader> GetQueueItemsHeader(List<long> itemIds);
     }
 }

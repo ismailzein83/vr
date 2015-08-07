@@ -235,6 +235,62 @@ namespace Vanrise.Queueing.Data.SQL
             return updatedQueues;
         }
 
+        public List<ItemExecutionStatus> GetItemsExecutionStatus(List<long> itemIds)
+        {
+            List<ItemExecutionStatus> result = new List<ItemExecutionStatus>();
+
+            ExecuteReaderSPCmd("queue.sp_QueueItemHeader_GetItemsExecutionStatus", (reader) =>
+                {
+                    while (reader.Read())
+                    {
+                        ItemExecutionStatus item = new ItemExecutionStatus()
+                        {
+                            ItemId = (long)reader["ItemID"],
+                            ExecutionFlowTriggerItemId = GetReaderValue<long>(reader, "ExecutionFlowTriggerItemID"),
+                            Status = (QueueItemStatus)reader["Status"]
+                        };
+                        result.Add(item);
+                    }
+                }, (cmd) =>
+                {
+                    var dtParameter = new SqlParameter("@ItemIds", SqlDbType.Structured);
+                    dtParameter.Value = BuildItemIdsTable(itemIds);
+                    cmd.Parameters.Add(dtParameter);
+                });
+
+            return result;
+        }
+
+        public List<QueueItemHeader> GetQueueItemsHeader(List<long> itemIds)
+        {
+            List<QueueItemHeader> result = new List<QueueItemHeader>();
+
+            ExecuteReaderSPCmd("queue.sp_QueueItemHeader_GetItemStatuses", (reader) =>
+            {
+                while (reader.Read())
+                {
+                    QueueItemHeader item = new QueueItemHeader
+                    {
+                        ItemId = (long)reader["ItemID"],
+                        Description = reader["Description"] as string,
+                        Status = (QueueItemStatus)reader["Status"],
+                        RetryCount = GetReaderValue<int>(reader, "RetryCount"),
+                        ErrorMessage = reader["ErrorMessage"] as string,
+                        CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+                        LastUpdatedTime = GetReaderValue<DateTime>(reader, "LastUpdatedTime")
+                    };
+                    result.Add(item);
+                }
+            }, (cmd) =>
+            {
+                var dtParameter = new SqlParameter("@ItemIds", SqlDbType.Structured);
+                dtParameter.Value = BuildItemIdsTable(itemIds);
+                cmd.Parameters.Add(dtParameter);
+            });
+
+            return result;
+        }
+
         #region Private Methods
 
         private QueueItemHeader QueueItemHeaderMapper(IDataReader reader)
@@ -252,6 +308,22 @@ namespace Vanrise.Queueing.Data.SQL
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
                 LastUpdatedTime = GetReaderValue<DateTime>(reader, "LastUpdatedTime")
             };
+        }
+        private DataTable BuildItemIdsTable(List<long> itemIds)
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("ItemId", typeof(int));
+            dt.BeginLoadData();
+
+            foreach (var itemId in itemIds)
+            {
+                DataRow dr = dt.NewRow();
+                dr["ItemId"] = itemId;
+                dt.Rows.Add(dr);
+            }
+
+            dt.EndLoadData();
+            return dt;
         }
 
         #endregion
