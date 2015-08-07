@@ -1,7 +1,7 @@
-﻿ZoneMonitorController.$inject = ['$scope', 'UtilsService', 'AnalyticsAPIService', 'uiGridConstants', '$q', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficStatisticsMeasureEnum',
+﻿ZoneMonitorController.$inject = ['$scope', 'UtilsService', 'AnalyticsAPIService', 'uiGridConstants', '$q', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficStatisticsMeasureEnum','LabelColorsEnum',
         'CarrierTypeEnum', 'VRModalService', 'VRNotificationService'];
 
-function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, CarrierAccountAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum,
+function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, CarrierAccountAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum,LabelColorsEnum,
         CarrierTypeEnum, VRModalService, VRNotificationService) {
 
     var chartSelectedMeasureAPI;
@@ -15,6 +15,9 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
     load();
 
     function defineScope() {
+        $scope.asr=50.0;
+        $scope.acd=20.0;
+        $scope.attampts=2;
         $scope.data = [];
         $scope.currentSearchCriteria = {
             groupKeys: []
@@ -40,7 +43,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
         defineGroupKeys();
         $scope.groupKeys = groupKeys;
         $scope.selectedGroupKeys = [];
-        $scope.selectedGroupKeys.push($scope.groupKeys[0]);
+        $scope.selectedGroupKeys.push(TrafficStatisticGroupKeysEnum.OurZone);
 
         $scope.switches = [];
         $scope.selectedSwitches = [];
@@ -53,7 +56,10 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
 
         $scope.suppliers = [];
         $scope.selectedSuppliers = [];
-
+        $scope.getColor = function (dataItem, coldef) {
+            if (coldef.tag.value == TrafficStatisticsMeasureEnum.ACD.value)
+                return getACDColor(dataItem.ACD, dataItem.Attempts);
+        }
         $scope.gridAllMeasuresScope = {};
         $scope.measures = measures;
         defineMenuActions();
@@ -86,36 +92,30 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
             //    getAndShowEntityStatistics();
             //};
         };
-        $scope.customvalidateSelectGroup = function (selectedGroupKeys) {
+        $scope.customvalidateSelectGroup = function () {
 
-
+            //var zoneRule = 0;
+            //var portRule = 0;
+            //var codeGroupRule = 0;
+            ////var zoneRule = 0;
+            ////var zoneRule = 0;
             //for (var i = 0; i < $scope.selectedGroupKeys.length; i++) {
-            //    if ($scope.selectedGroupKeys[i].value == 4) {
-            //        //TrafficStatisticGroupKeysEnum[8].isShownInGroupKey = false;
-            //        groupKeys = [];
-            //        for (var prop in TrafficStatisticGroupKeysEnum) {
-            //            if (TrafficStatisticGroupKeysEnum[prop].isShownInGroupKey && TrafficStatisticGroupKeysEnum[prop].value != 8)
-            //                groupKeys.push(TrafficStatisticGroupKeysEnum[prop]);
-            //        }
-            //    }
-            //    else if ($scope.selectedGroupKeys[i].value == 8) {
-            //        groupKeys = [];
-            //        for (var prop in TrafficStatisticGroupKeysEnum) {
-            //            if (TrafficStatisticGroupKeysEnum[prop].isShownInGroupKey && TrafficStatisticGroupKeysEnum[prop].value!=4)
-            //                groupKeys.push(TrafficStatisticGroupKeysEnum[prop]);
-            //        }
-
-            //    }
+            //    switch ($scope.selectedGroupKeys[i].value) {
+            //        case TrafficStatisticGroupKeysEnum.CodeGroup.value: if (zoneRule>0) zoneRule++; codeGroupRule++; break;
+            //        case TrafficStatisticGroupKeysEnum.OurZone.value: zoneRule++; break;
+            //        case TrafficStatisticGroupKeysEnum.CodeSales.value: if (zoneRule > 0) zoneRule++; codeGroupRule++; break;
+            //        case TrafficStatisticGroupKeysEnum.CodeBuy.value: if (zoneRule > 0) zoneRule++; codeGroupRule++; break;
+            //        case TrafficStatisticGroupKeysEnum.PortIn.value: portRule++; break;
+            //        case TrafficStatisticGroupKeysEnum.PortOut.value: portRule++; break;
+            //        case TrafficStatisticGroupKeysEnum.GateWayIn.value: portRule++; break;
+            //        case TrafficStatisticGroupKeysEnum.GateWayOut.value: portRule++; break;
+            //    }       
             //}
+            //if (zoneRule > 1)
+            //    return "Connot match Zone Rules";
 
-            var count = 0;
-            for (var i = 0; i < $scope.selectedGroupKeys.length; i++) {
-                if ($scope.selectedGroupKeys[i].value == 4 || $scope.selectedGroupKeys[i].value == 8)
-                    count++;
-            }
-            if (count > 1)
-                return "You should choose either Zone Or Code Group";
-            else return null;
+                  
+            //return null;
         };
         $scope.chartSelectedEntityReady = function (api) {
             chartSelectedEntityAPI = api;
@@ -222,6 +222,21 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                 groupKeys.push(TrafficStatisticGroupKeysEnum[prop]);
         }
     }
+
+
+    function getACDColor(acdValue, attemptsValue) {
+        if (attemptsValue>$scope.attampts && acdValue<$scope.acd)
+            return LabelColorsEnum.Warning.Color;
+        //if (status === BPInstanceStatusEnum.Running.value) return LabelColorsEnum.Info.Color;
+        //if (status === BPInstanceStatusEnum.ProcessFailed.value) return LabelColorsEnum.Error.Color;
+        //if (status === BPInstanceStatusEnum.Completed.value) return LabelColorsEnum.Success.Color;
+        //if (status === BPInstanceStatusEnum.Aborted.value) return LabelColorsEnum.Warning.Color;
+        //if (status === BPInstanceStatusEnum.Suspended.value) return LabelColorsEnum.Warning.Color;
+        //if (status === BPInstanceStatusEnum.Terminated.value) return LabelColorsEnum.Error.Color;
+
+       // return LabelColorsEnum.Info.Color;
+    };
+
     function loadCDRParameters(parameters, dataItem) {
         for (var i = 0; i < $scope.currentSearchCriteria.groupKeys.length; i++) {
             var groupKey = $scope.currentSearchCriteria.groupKeys[i];

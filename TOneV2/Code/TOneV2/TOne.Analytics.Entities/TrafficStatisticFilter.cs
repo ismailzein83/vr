@@ -11,8 +11,10 @@ namespace TOne.Analytics.Entities
         public List<int> SwitchIds { get; set; }
         public List<string> PortIn { get; set; }
         public List<string> PortOut { get; set; }
+        public List<string> GateWayIn { get; set; }
+        public List<string> GateWayOut { get; set; }
         public List<string> CustomerIds { get; set; }
-
+        
         public List<string> SupplierIds { get; set; }
         public List<int> SupplierZoneId { get; set; }
 

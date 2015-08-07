@@ -24,31 +24,36 @@ namespace TOne.Analytics.Entities
 
     public enum TrafficStatisticGroupKeys
     {
-        Switch = 0,
-        PortIn = 1,
-        PortOut = 2,
-        CustomerId = 3,
-        OurZone = 4,
-        OriginatingZoneId = 5,
-        SupplierId = 6,
-        SupplierZoneId = 7,
-        CodeGroup = 8
+        OurZone=0,
+        SupplierZoneId=1,
+        CustomerId=2,
+        SupplierId=3,
+        CodeGroup=4,
+        Switch=5,
+        GateWayIn=6,
+        GateWayOut=7,
+        PortIn=8,
+        PortOut=9,
     }
 
     public enum TrafficStatisticMeasures
     {
         FirstCDRAttempt = 0,
-        LastCDRAttempt = 1,
         Attempts = 2,
-        DeliveredAttempts = 3,
-        SuccessfulAttempts = 4,
+        SuccessfulAttempts = 3,
+        FailedAttempts = 4,
         DurationsInMinutes = 5,
-        MaxDurationInMinutes = 6,
-        PDDInSeconds = 7,
-        UtilizationInSeconds = 8,
-        NumberOfCalls = 9,
-        DeliveredNumberOfCalls = 10,
-        PGAD = 11//,
+        CeiledDuration=6,
+        ACD=7,
+         PDDInSeconds = 8,
+         PGAD = 9,
+        MaxDurationInMinutes = 10,
+       
+        LastCDRAttempt = 11,
+        NumberOfCalls = 12,
+        DeliveredNumberOfCalls = 13,
+        UtilizationInSeconds=14
+       //,
         //CeiledDuration = 12,
         //ReleaseSourceAParty = 13
     }

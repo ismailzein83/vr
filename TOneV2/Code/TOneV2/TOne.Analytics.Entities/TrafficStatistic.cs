@@ -15,12 +15,15 @@ namespace TOne.Analytics.Entities
         public int Attempts { get; set; }
 
         public int DeliveredAttempts { get; set; }
-
+        public int FailedAttempts { get; set; }
+        
         public int SuccessfulAttempts { get; set; }
 
         public Decimal DurationsInMinutes { get; set; }
-
+        public Decimal ACD { get; set; }
+        
         public Decimal MaxDurationInMinutes { get; set; }
+        public long CeiledDuration { get; set; }
 
         public Decimal PDDInSeconds { get; set; }
 

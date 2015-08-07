@@ -3,35 +3,46 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
             <vr-row removeline>
-                <vr-columns colnum="2">
-                    <vr-select label="Group By" datasource="groupKeys"
-                               datatextfield="description" datavaluefield="value" selectedvalues="selectedGroupKeys" customvalidate="customvalidateSelectGroup" ismultipleselection isrequired></vr-select>
+                <vr-columns colnum="10">
+                    <vr-columns colnum="2">
+                        <vr-select label="Group By" datasource="groupKeys"
+                                   datatextfield="description" datavaluefield="value" selectedvalues="selectedGroupKeys" customvalidate="customvalidateSelectGroup" ismultipleselection isrequired></vr-select>
+                    </vr-columns>
+                    <vr-columns colnum="2">
+                        <vr-select label="Switches" datasource="switches"
+                                   datatextfield="Name" datavaluefield="SwitchId" selectedvalues="selectedSwitches" ismultipleselection></vr-select>
+                    </vr-columns>
+                    <vr-columns colnum="2">
+                        <vr-select label="Code Groups" datasource="codeGroups"
+                                   datatextfield="Name" datavaluefield="Code" selectedvalues="selectedCodeGroups" ismultipleselection></vr-select>
+                    </vr-columns>
+                    <vr-columns colnum="2">
+                        <vr-select label="Customers" datasource="customers"
+                                   datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedCustomers" ismultipleselection></vr-select>
+                    </vr-columns>
+                    <vr-columns colnum="2">
+                        <vr-select label="Suppliers" datasource="suppliers"
+                                   datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedSuppliers" ismultipleselection></vr-select>
+                    </vr-columns>
+                    <vr-columns colnum="2">
+                        <vr-datetimepicker type="date" value="fromDate" label="From" isrequired></vr-datetimepicker>
+                    </vr-columns>
+                    <vr-columns colnum="2">
+                        <vr-datetimepicker type="date" value="toDate" label="To" isrequired customvalidate="customvalidateTestTo"></vr-datetimepicker>
+                    </vr-columns>
                 </vr-columns>
+
+                
                 <vr-columns colnum="2">
-                    <vr-select label="Switches" datasource="switches"
-                               datatextfield="Name" datavaluefield="SwitchId" selectedvalues="selectedSwitches" ismultipleselection></vr-select>
-                </vr-columns>
-                <vr-columns colnum="2">
-                    <vr-select label="Code Groups" datasource="codeGroups"
-                               datatextfield="Name" datavaluefield="Code" selectedvalues="selectedCodeGroups" ismultipleselection></vr-select>
-                </vr-columns>
-                <vr-columns colnum="2">
-                    <vr-select label="Customers" datasource="customers"
-                               datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedCustomers" ismultipleselection></vr-select>
-                </vr-columns>
-                <vr-columns colnum="2">
-                    <vr-select label="Suppliers" datasource="suppliers"
-                               datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedSuppliers" ismultipleselection></vr-select>
+                    <vr-section title="Advanced Search">
+                        <vr-textbox value="asr" label="ASR"></vr-textbox>
+                        <vr-textbox value="acd" label="ACD"></vr-textbox>
+                        <vr-textbox value="attampts" label="Attampts"></vr-textbox>
+                    </vr-section>
+                    
                 </vr-columns>
             </vr-row>
-            <vr-row removeline>
-                <vr-columns colnum="2">
-                    <vr-datetimepicker type="date" value="fromDate" label="From" isrequired></vr-datetimepicker>
-                </vr-columns>
-                <vr-columns colnum="2">
-                    <vr-datetimepicker type="date" value="toDate" label="To" isrequired customvalidate="customvalidateTestTo"></vr-datetimepicker>
-                </vr-columns>
-            </vr-row>
+          
         </div>
 
         <vr-row removeline>
@@ -62,7 +73,7 @@
                 <vr-datagrid on-ready="onMainGridReady" datasource="data"
                              menuactions="gridMenuActions" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'">
                     <vr-datagridcolumn ng-repeat="groupKey in currentSearchCriteria.groupKeys" headertext="groupKey.gridHeader" field="'GroupKeyValues[' + $index + '].Name'" columnindex="$index" widthfactor="15" enablehiding="'false'" isclickable="'true'" tag="groupKey" onclicked="onGroupKeyClicked"></vr-datagridcolumn>
-                    <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" summaryfield="measure.propertyName" type="'Number'" tag="measure" ></vr-datagridcolumn>
+                    <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" summaryfield="measure.propertyName" type="measure.type" tag="measure" getcolor="getColor"></vr-datagridcolumn>
                     <vr-datagridexpandablerow>
                         <div ng-include="'/Client/Modules/Analytics/Views/Traffic Statistics/TrafficStatisticsGrid.html'"></div>
                     </vr-datagridexpandablerow>

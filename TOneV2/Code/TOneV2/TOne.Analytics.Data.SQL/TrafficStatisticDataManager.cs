@@ -44,11 +44,21 @@ namespace TOne.Analytics.Data.SQL
                 for (int i = 0; i < input.Query.GroupKeys.Count(); i++)
                 {
                     string idColumn;
+
+                    string nameColumn=null;
+                    if (input.Query.GroupKeys[i] == TrafficStatisticGroupKeys.CodeGroup)
+                        nameColumn = CodeGroupNameColumnName;
+                    else if(input.Query.GroupKeys[i] == TrafficStatisticGroupKeys.GateWayIn)
+                        nameColumn = GateWayIDColumnName;
+                    else if (input.Query.GroupKeys[i] == TrafficStatisticGroupKeys.GateWayOut)
+                        nameColumn = GateWayIDColumnName;
+
                     GetColumnNames(input.Query.GroupKeys[i], out idColumn);
                     object id = reader[idColumn];
                     obj.GroupKeyValues[i] = new KeyColumn
                     {
                         Id = id != DBNull.Value ? id.ToString() : null,
+                        Name = nameColumn!=null?reader[nameColumn] as string:null
                     };
                 }
 
@@ -101,71 +111,114 @@ namespace TOne.Analytics.Data.SQL
             StringBuilder whereBuilder = new StringBuilder();
             StringBuilder queryBuilder = new StringBuilder(@"
                             IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
-	                            BEGIN
-
+	                            BEGIN with
+                                OurZones AS (SELECT ZoneID, Name, CodeGroup FROM Zone z WITH (NOLOCK) WHERE SupplierID = 'SYS'),
+SwitchConnectivity AS
+            (
+                SELECT csc.CarrierAccountID AS  CarrierAccount
+                      ,csc.SwitchID AS SwitchID
+                      ,csc.Details AS Details
+                      ,csc.BeginEffectiveDate AS BeginEffectiveDate
+                      ,csc.EndEffectiveDate AS EndEffectiveDate
+                      ,csc.[Name] AS GateWayName
+                 FROM   CarrierSwitchConnectivity csc WITH(NOLOCK)--, INDEX(IX_CSC_CarrierAccount))
+                WHERE (csc.EndEffectiveDate IS null)
+                       
+           
+            ),
+                                     AllResult AS(
 			                        SELECT
                                             #SELECTPART#
                                            Min(FirstCDRAttempt) AS FirstCDRAttempt
 				                           , Sum(ts.Attempts) AS Attempts
+                                            , Sum(ts.SuccessfulAttempts) AS SuccessfulAttempts
+				                           , Sum(ts.Attempts-ts.SuccessfulAttempts) AS FailedAttempts
 				                           , Sum(ts.DeliveredAttempts) AS DeliveredAttempts
-				                           
 				                           , Sum(ts.DurationsInSeconds) AS DurationsInSeconds
 				                           , AVG(ts.PDDInSeconds) AS PDDInSeconds
 				                           , AVG(ts.UtilizationInSeconds) AS UtilizationInSeconds
 				                           , Sum(ts.NumberOfCalls) AS NumberOfCalls
 				                           , SUM(ts.DeliveredNumberOfCalls) AS DeliveredNumberOfCalls
-
-                                           , Sum(ts.SuccessfulAttempts) AS SuccessfulAttempts
+                                           , Sum(ts.CeiledDuration) AS CeiledDuration
+                                           , case when Sum(ts.SuccessfulAttempts) > 0 then CONVERT(DECIMAL(10,2),Sum(ts.DurationsInSeconds)/(60.0*Sum(ts.SuccessfulAttempts))) ELSE 0 end as ACD
+                                           
                                            , DATEADD(ms,-datepart(ms,Max(LastCDRAttempt)),Max(LastCDRAttempt)) as LastCDRAttempt
+
                                            ,CONVERT(DECIMAL(10,2),Max (ts.MaxDurationInSeconds)/60.0) as MaxDurationInSeconds
 				                           ,CONVERT(DECIMAL(10,2),Avg(ts.PGAD)) as PGAD
                                            ,CONVERT(DECIMAL(10,2),Avg(ts.PDDinSeconds)) as AveragePDD
 
-                                        INTO #TEMPTABLE#
+                                       
 			                        FROM TrafficStats ts WITH(NOLOCK ,INDEX(IX_TrafficStats_DateTimeFirst))
-                                 
+                                  #JOINPART#
 			                        WHERE
 			                        FirstCDRAttempt BETWEEN @FromDate AND @ToDate
                                     #FILTER#
-			                        GROUP BY #GROUPBYPART#
+			                        GROUP BY #GROUPBYPART#)
+                            SELECT * INTO #TEMPTABLE# FROM AllResult
                             END");
             StringBuilder groupKeysSelectPart = new StringBuilder();
             StringBuilder groupKeysGroupByPart = new StringBuilder();
+            HashSet<string> joinStatement=new HashSet<string> ();
+            //  string joinStatement = null;
+              AddFilterToQuery(filter, whereBuilder, joinStatement);
             foreach(var groupKey in groupKeys)
             {
                 string columnName;
-                GetColumnNames(groupKey, out columnName);
-               
+                string groupByStatement;
+                GetColumnStatements(groupKey, out columnName, joinStatement, out groupByStatement);
+                if (groupByStatement == null)
+                {
+                    groupByStatement = columnName;
+                }
                groupKeysSelectPart.Append(columnName);
                groupKeysSelectPart.Append(",");
                if (groupKeysGroupByPart.Length > 0)
                     groupKeysGroupByPart.Append(",");
-               groupKeysGroupByPart.Append(columnName);
+                   groupKeysGroupByPart.Append(groupByStatement);
             }
+          
             queryBuilder.Replace("#TEMPTABLE#", tempTableName);
-            AddFilterToQuery(filter, whereBuilder);
+
+            if (joinStatement.Count>0)
+            queryBuilder.Replace("#JOINPART#",string.Join(" ",joinStatement));
+            else
+                queryBuilder.Replace("#JOINPART#", null);
             queryBuilder.Replace("#FILTER#", whereBuilder.ToString());
             queryBuilder.Replace("#SELECTPART#", groupKeysSelectPart.ToString());
             queryBuilder.Replace("#GROUPBYPART#", groupKeysGroupByPart.ToString());
             return queryBuilder.ToString();
         }
 
-        private void AddFilterToQuery(TrafficStatisticFilter filter, StringBuilder whereBuilder)
+        private void AddFilterToQuery(TrafficStatisticFilter filter, StringBuilder whereBuilder, HashSet<string> joinStatement)
         {
             AddFilter(whereBuilder, filter.SwitchIds, "ts.SwitchId");
             AddFilter(whereBuilder, filter.CustomerIds, "ts.CustomerID");
             AddFilter(whereBuilder, filter.SupplierIds, "ts.SupplierID");
-            ZoneManager zoneManager = new ZoneManager();
-            if (filter.CodeGroups != null)
+            if (filter.CodeGroups != null && filter.CodeGroups.Count > 0)
             {
-                List<int> zoneIds = zoneManager.GetCodeGroupZones(filter.CodeGroups);
-                AddFilter(whereBuilder, zoneIds, "ts.OurZoneID");
+                joinStatement.Add(OurZonesJoinQuery);
+                AddFilter(whereBuilder, filter.CodeGroups, "z.CodeGroup");
+
             }
-        
+
             AddFilter(whereBuilder, filter.PortIn, "ts.Port_IN");
             AddFilter(whereBuilder, filter.PortOut, "ts.Port_OUT");
             AddFilter(whereBuilder, filter.ZoneIds, "ts.OurZoneID");
             AddFilter(whereBuilder, filter.SupplierZoneId, "ts.SupplierZoneID");
+            if (filter.GateWayIn != null && filter.GateWayIn.Count > 0)
+            {
+                joinStatement.Add( GateWayInJoinQuery);
+                AddFilter(whereBuilder, filter.GateWayIn, "cscIn.GateWayName");
+
+            }
+            if (filter.GateWayOut != null && filter.GateWayOut.Count > 0)
+            {
+                joinStatement.Add(GateWayOutJoinQuery);
+                AddFilter(whereBuilder, filter.GateWayOut, "cscOut.GateWayName");
+
+            }
+           
         }
 
         void AddFilter<T>(StringBuilder whereBuilder, IEnumerable<T> values, string column)
@@ -203,10 +256,6 @@ namespace TOne.Analytics.Data.SQL
                         case TrafficStatisticGroupKeys.Switch:
                             data.GroupKeyValues[i].Name = manager.GetSwitchName(Convert.ToInt32(Id));break;
                         case TrafficStatisticGroupKeys.CodeGroup:
-                            ZoneManager zoneManager = new ZoneManager();
-                            string codeGroupName = zoneManager.GetZone((Convert.ToInt32(Id))).CodeGroupName;
-                            if (codeGroupName!=null)
-                                data.GroupKeyValues[i].Name = codeGroupName;
                             break;
                         case TrafficStatisticGroupKeys.SupplierZoneId:
                             data.GroupKeyValues[i].Name = manager.GetZoneName(Convert.ToInt32(Id));break;
@@ -214,6 +263,8 @@ namespace TOne.Analytics.Data.SQL
                            data.GroupKeyValues[i].Name=Id;break;
                         case TrafficStatisticGroupKeys.PortOut:
                            data.GroupKeyValues[i].Name =Id;break;
+                        case TrafficStatisticGroupKeys.GateWayIn:
+                            data.GroupKeyValues[i].Name =Id;break;
                         default: break;
                     }
 
@@ -228,13 +279,17 @@ namespace TOne.Analytics.Data.SQL
 				                           , Max(ts.LastCDRAttempt) AS LastCDRAttempt
 				                           , Sum(ts.Attempts) AS Attempts
 				                           , Sum(ts.DeliveredAttempts) AS DeliveredAttempts
-				                           , Sum(ts.SuccessfulAttempts) AS SuccessfulAttempts
+                                            , Sum(ts.SuccessfulAttempts) AS SuccessfulAttempts
+				                            , Sum(ts.Attempts-ts.SuccessfulAttempts) AS FailedAttempts
 				                           , Sum(ts.DurationsInSeconds) AS DurationsInSeconds
+, Sum(ts.CeiledDuration) AS CeiledDuration
+ , case when Sum(ts.SuccessfulAttempts) > 0 then CONVERT(DECIMAL(10,2),Sum(ts.DurationsInSeconds)/(60.0*Sum(ts.SuccessfulAttempts))) ELSE 0 end as ACD
 				                           , Max(ts.MaxDurationInSeconds) AS MaxDurationInSeconds
 				                           , AVG(ts.PDDInSeconds) AS PDDInSeconds
 				                           , AVG(ts.UtilizationInSeconds) AS UtilizationInSeconds
 				                           , Sum(ts.NumberOfCalls) AS NumberOfCalls
 				                           , SUM(ts.DeliveredNumberOfCalls) AS DeliveredNumberOfCalls
+, DATEADD(ms,-datepart(ms,Max(LastCDRAttempt)),Max(LastCDRAttempt)) as LastCDRAttempt
 				                           , AVG(ts.PGAD) AS PGAD FROM {0} ts", tempTableName);
             return GetItemText(query, TrafficStatisticMapper, null);
         }
@@ -265,6 +320,10 @@ namespace TOne.Analytics.Data.SQL
                     return String.Format("{0} = '{1}'", CodeGroupIDColumnName, columnFilterValue);
                 case TrafficStatisticGroupKeys.SupplierZoneId:
                     return String.Format("{0} = '{1}'", SupplierZoneIDColumnName, columnFilterValue);
+                case TrafficStatisticGroupKeys.GateWayIn:
+                    return String.Format("{0} = '{1}'", GateWayIDColumnName, columnFilterValue);
+                case TrafficStatisticGroupKeys.GateWayOut:
+                    return String.Format("{0} = '{1}'", GateWayIDColumnName, columnFilterValue);
                 default: return null;
             }
         }
@@ -274,10 +333,13 @@ namespace TOne.Analytics.Data.SQL
             trafficStatistics.FirstCDRAttempt = GetReaderValue<DateTime>(reader, "FirstCDRAttempt");
             trafficStatistics.LastCDRAttempt = GetReaderValue<DateTime>(reader, "LastCDRAttempt");
             trafficStatistics.Attempts = GetReaderValue<int>(reader, "Attempts");
+            trafficStatistics.FailedAttempts = GetReaderValue<int>(reader, "FailedAttempts");
             trafficStatistics.DeliveredAttempts = GetReaderValue<int>(reader, "DeliveredAttempts");
             trafficStatistics.SuccessfulAttempts = GetReaderValue<int>(reader, "SuccessfulAttempts");
             trafficStatistics.DurationsInMinutes = GetReaderValue<Decimal>(reader, "DurationsInSeconds") / 60;
             trafficStatistics.MaxDurationInMinutes = GetReaderValue<Decimal>(reader, "MaxDurationInSeconds") / 60;
+            trafficStatistics.CeiledDuration = GetReaderValue<long>(reader, "CeiledDuration");
+            trafficStatistics.ACD = GetReaderValue<Decimal>(reader, "ACD");
             trafficStatistics.PDDInSeconds = GetReaderValue<Decimal>(reader, "PDDInSeconds");
             trafficStatistics.UtilizationInSeconds = GetReaderValue<Decimal>(reader, "UtilizationInSeconds");
             trafficStatistics.NumberOfCalls = GetReaderValue<int>(reader, "NumberOfCalls");
@@ -292,7 +354,7 @@ namespace TOne.Analytics.Data.SQL
               case TrafficStatisticMeasures.FirstCDRAttempt:return "FirstCDRAttempt";
               case TrafficStatisticMeasures.LastCDRAttempt: return "LastCDRAttempt";
               case TrafficStatisticMeasures.Attempts: return "Attempts";
-              case TrafficStatisticMeasures.DeliveredAttempts: return "DeliveredAttempts";
+              case TrafficStatisticMeasures.FailedAttempts: return "FailedAttempts";
               case TrafficStatisticMeasures.SuccessfulAttempts: return "SuccessfulAttempts";
               case TrafficStatisticMeasures.DurationsInMinutes: return "DurationsInSeconds";
               case TrafficStatisticMeasures.MaxDurationInMinutes: return "MaxDurationsInSeconds";
@@ -334,55 +396,73 @@ namespace TOne.Analytics.Data.SQL
                 case TrafficStatisticGroupKeys.SupplierZoneId:
                     idColumn = SupplierZoneIDColumnName;
                     break;
+                case TrafficStatisticGroupKeys.GateWayIn:
+                    idColumn = GateWayIDColumnName;
+                    break;
+                case TrafficStatisticGroupKeys.GateWayOut:
+                    idColumn = GateWayIDColumnName;
+                    break;
                 default:
                     idColumn = null;
                     break;
             }
         }
 
-        //private void GetColumnStatements(TrafficStatisticGroupKeys column, out string selectStatement, out string groupByStatement)
-        //{
-        //    switch (column)
-        //    {
-        //        case TrafficStatisticGroupKeys.OurZone:
-        //            selectStatement = String.Format(" ts.OurZoneID as {0},  ", OurZoneIDColumnName);
-        //            groupByStatement = "ts.OurZoneID";
-        //            break;
-        //        case TrafficStatisticGroupKeys.CustomerId:
-        //             selectStatement = String.Format(" ts.CustomerID as {0}, ", CustomerIDColumnName);
-        //            groupByStatement = "ts.CustomerID";
-        //            break;
+        private void GetColumnStatements(TrafficStatisticGroupKeys groupKey, out string columnName, HashSet<string> joinStatement, out string groupByStatement)
+        {
+            GetColumnNames(groupKey, out columnName);
+            switch (groupKey)
+            {
+                case TrafficStatisticGroupKeys.OurZone:
+                    joinStatement = null;
+                    groupByStatement = null; 
+                    break;
+                case TrafficStatisticGroupKeys.CustomerId:
+                    joinStatement = null;
+                    groupByStatement = null; 
+                    break;
 
-        //        case TrafficStatisticGroupKeys.SupplierId:
-        //            selectStatement = String.Format(" ts.SupplierID as {0}, ", SupplierIDColumnName);
-        //            groupByStatement = "ts.SupplierID";
-        //            break;
-        //        case TrafficStatisticGroupKeys.Switch:
-        //            selectStatement = String.Format(" ts.SwitchId as {0}, ", SwitchIdColumnName);
-        //            groupByStatement = "ts.SwitchId";
-        //            break;
-        //        case TrafficStatisticGroupKeys.CodeGroup:
-        //            selectStatement = String.Format("ts.OurZoneID as {0}, ", CodeGroupIDColumnName);
-        //            groupByStatement = "ts.OurZoneID";
-        //            break;
-        //        case TrafficStatisticGroupKeys.PortIn:
-        //            selectStatement = String.Format(" ts.Port_IN as {0}, ", Port_INColumnName);
-        //            groupByStatement = "ts.Port_IN";
-        //            break;
-        //        case TrafficStatisticGroupKeys.PortOut:
-        //            selectStatement = String.Format(" ts.Port_OUT as {0}, ", Port_OutColumnName);
-        //            groupByStatement = "ts.Port_OUT";
-        //            break;
-        //        case TrafficStatisticGroupKeys.SupplierZoneId:
-        //            selectStatement = String.Format(" ts.SupplierZoneID as {0}, ", SupplierZoneIDColumnName);
-        //            groupByStatement = "ts.SupplierZoneID";
-        //            break;
-        //        default:
-        //            selectStatement = null;
-        //            groupByStatement = null;
-        //            break;
-        //    }
-        //}
+                case TrafficStatisticGroupKeys.SupplierId:
+                    joinStatement = null;
+                    groupByStatement = null; 
+                    break;
+                case TrafficStatisticGroupKeys.Switch:
+                    joinStatement = null;
+                    groupByStatement = null; 
+                    break;
+                  case TrafficStatisticGroupKeys.CodeGroup:
+                    columnName = String.Format("z.CodeGroup as {0}, c.Name {1}", CodeGroupIDColumnName, CodeGroupNameColumnName);
+                    joinStatement.Add(String.Format("{0} LEFT JOIN CodeGroup c ON z.CodeGroup=c.Code", OurZonesJoinQuery));
+                    groupByStatement = "z.CodeGroup, c.Name";
+                    break;
+                  case TrafficStatisticGroupKeys.PortIn:
+                    joinStatement = null;
+                    groupByStatement = null; 
+                    break;
+                  case TrafficStatisticGroupKeys.PortOut:
+                    joinStatement = null;
+                    groupByStatement = null; 
+                    break;
+                  case TrafficStatisticGroupKeys.SupplierZoneId:
+                    joinStatement = null;
+                    groupByStatement = null; 
+                    break;
+                  case TrafficStatisticGroupKeys.GateWayIn:
+                    joinStatement.Add(GateWayInJoinQuery);
+                    columnName = String.Format("cscIn.GateWayName as {0}", GateWayIDColumnName);
+                    groupByStatement = "cscIn.GateWayName";
+                    break;
+                  case TrafficStatisticGroupKeys.GateWayOut:
+                    joinStatement.Add(GateWayOutJoinQuery);
+                    columnName = String.Format("cscOut.GateWayName as {0}", GateWayIDColumnName);
+                    groupByStatement = "cscOut.GateWayName";
+                    break;
+                  default:
+                    columnName = null;
+                    groupByStatement = null;
+                    break;
+            }
+        }
 
         #endregion
         const string SwitchIdColumnName = "SwitchId";
@@ -392,6 +472,11 @@ namespace TOne.Analytics.Data.SQL
         const string Port_INColumnName = "Port_IN";
         const string Port_OutColumnName = "Port_OUT";
         const string CodeGroupIDColumnName = "CodeGroupID";
+        const string CodeGroupNameColumnName = "CodeGroupName";
         const string SupplierZoneIDColumnName = "SupplierZoneID";
+        const string GateWayIDColumnName = "GateWayName";
+        const string OurZonesJoinQuery = " LEFT JOIN OurZones z ON ts.OurZoneID = z.ZoneID";
+        const string GateWayInJoinQuery = "Left JOIN SwitchConnectivity cscIn  ON (','+cscIn.Details+',' LIKE '%,'+ts.Port_IN +',%' ) AND(TS.SwitchID = cscIn.SwitchID) AND ts.CustomerID =cscIn.CarrierAccount ";
+        const string GateWayOutJoinQuery = "Left JOIN SwitchConnectivity cscOut ON  (','+cscOut.Details+',' LIKE '%,'+ts.Port_OUT +',%') AND (TS.SwitchID = cscOut.SwitchID)  AND ts.SupplierID  =cscOut.CarrierAccount  ";
     }
 }

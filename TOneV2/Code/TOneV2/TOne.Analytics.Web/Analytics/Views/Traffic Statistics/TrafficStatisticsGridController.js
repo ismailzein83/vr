@@ -1,8 +1,8 @@
 ﻿'use strict'
 /// <reference path="ZoneMonitorSettings.html" />
 /// <reference path="ZoneMonitor.html" />
-TrafficStatisticsGridController.$inject = ['$scope', 'AnalyticsAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficStatisticsMeasureEnum', 'VRModalService','UtilsService'];
-function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum, VRModalService, UtilsService) {
+TrafficStatisticsGridController.$inject = ['$scope', 'AnalyticsAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficStatisticsMeasureEnum', 'VRModalService','UtilsService','LabelColorsEnum'];
+function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum, VRModalService, UtilsService, LabelColorsEnum) {
     var measures = [];
     var filter = {};
     var selectedGroupKeys = [];
@@ -68,6 +68,10 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             else
                 return false;
         };
+        $scope.getColor = function (dataItem, coldef) {
+            if (coldef.tag.value == TrafficStatisticsMeasureEnum.ACD.value)
+                return getACDColor(dataItem.ACD, dataItem.Attempts);
+        }
 
     }
     function load() {
@@ -124,6 +128,18 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         }
   
     }
+    function getACDColor(acdValue, attemptsValue) {
+        if (attemptsValue > $scope.viewScope.attampts && acdValue < $scope.viewScope.acd)
+            return LabelColorsEnum.Warning.Color;
+        //if (status === BPInstanceStatusEnum.Running.value) return LabelColorsEnum.Info.Color;
+        //if (status === BPInstanceStatusEnum.ProcessFailed.value) return LabelColorsEnum.Error.Color;
+        //if (status === BPInstanceStatusEnum.Completed.value) return LabelColorsEnum.Success.Color;
+        //if (status === BPInstanceStatusEnum.Aborted.value) return LabelColorsEnum.Warning.Color;
+        //if (status === BPInstanceStatusEnum.Suspended.value) return LabelColorsEnum.Warning.Color;
+        //if (status === BPInstanceStatusEnum.Terminated.value) return LabelColorsEnum.Error.Color;
+
+        // return LabelColorsEnum.Info.Color;
+    };
     function removeCodeGroupFromGroupKeys() {
         for (var i = 0; i < $scope.groupKeys.length; i++) {
             if ($scope.groupKeys[i].value == TrafficStatisticGroupKeysEnum.CodeGroup.value) {
@@ -195,6 +211,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         applySupplierZoneIdRule();
         applyCodeGroupRule();
         eliminateGroupKeysNotInParent();
+     
     }
     function addGroupKeyIfNotExistsInParent(groupKey) {
         var parentGroupKeys = $scope.viewScope.currentSearchCriteria.groupKeys;
@@ -242,6 +259,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
                 filter.CodeGroups = [];
             fillArray(filter.CodeGroups, $scope.viewScope.filter.filter.CodeGroups);
         }
+   
        
     }
     function fillArray(array, data) {
@@ -262,6 +280,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
 
         for (var i = 0; i < parentGroupKeys.length; i++) {
             var groupKey = parentGroupKeys[i];
+           
             switch (groupKey.value)
             {
                 case TrafficStatisticGroupKeysEnum.OurZone.value:
@@ -287,6 +306,12 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
                     break;
                 case TrafficStatisticGroupKeysEnum.SupplierZoneId.value:
                     filter.SupplierZoneId = [scope.dataItem.GroupKeyValues[i].Id];
+                    break;
+                case TrafficStatisticGroupKeysEnum.GateWayIn.value: console.log(scope.dataItem);
+                    filter.GateWayIn = [scope.dataItem.GroupKeyValues[i].Id];
+                    break;
+                case TrafficStatisticGroupKeysEnum.GateWayOut.value: 
+                    filter.GateWayOut = [scope.dataItem.GroupKeyValues[i].Id];
                     break;
             }
         }
