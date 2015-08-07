@@ -26,15 +26,12 @@ namespace Vanrise.Integration.Data.SQL
 
         public Vanrise.Entities.BigResult<DataSourceImportedBatch> GetFilteredDataSourceImportedBatches(Vanrise.Entities.DataRetrievalInput<DataSourceImportedBatchQuery> input)
         {
-            Dictionary<string, string> columnMapper = new Dictionary<string, string>();
-            columnMapper.Add("ID", "ID");
-
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQuerySP("[integration].[sp_DataSourceImportedBatch_CreateTempForFiltered]", tempTableName, input.Query.DataSourceId, input.Query.BatchName, input.Query.MappingResult, input.Query.From, input.Query.To);
             };
 
-            return RetrieveData(input, createTempTableAction, DataSourceImportedBatchMapper, columnMapper);
+            return RetrieveData(input, createTempTableAction, DataSourceImportedBatchMapper);
         }
 
         public List<Entities.DataSourceImportedBatchName> GetBatchNames()

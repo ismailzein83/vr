@@ -20,7 +20,25 @@ function DataSourceImportedBatchManagementController($scope, DataSourceImportedB
 
         $scope.gridReady = function (api) {
             gridApi = api;
-            return retrieveData();
+
+            // get all of the data sources to filter by the first data source
+            $scope.isLoadingForm = true;
+
+            DataSourceAPIService.GetDataSources()
+                .then(function (response) {
+                    $scope.dataSources = response;
+
+                    if (response.length > 0) // select the first data source
+                        $scope.selectedDataSource = $scope.dataSources[0];
+
+                    return retrieveData();
+                })
+                .catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                })
+                .finally(function () {
+                    $scope.isLoadingForm = false;
+                });
         }
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
@@ -42,7 +60,7 @@ function DataSourceImportedBatchManagementController($scope, DataSourceImportedB
     function load() {
         $scope.isLoadingForm = true;
 
-        UtilsService.waitMultipleAsyncOperations([loadDataSources, loadBatchNames, loadMappingResults])
+        UtilsService.waitMultipleAsyncOperations([loadBatchNames, loadMappingResults])
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             })
@@ -61,13 +79,6 @@ function DataSourceImportedBatchManagementController($scope, DataSourceImportedB
         };
 
         return gridApi.retrieveData(query);
-    }
-
-    function loadDataSources() {
-        return DataSourceAPIService.GetDataSources()
-            .then(function (response) {
-                $scope.dataSources = response;
-            });
     }
 
     function loadBatchNames() {

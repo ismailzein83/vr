@@ -19,7 +19,25 @@ function DataSourceLogManagementController($scope, DataSourceLogsAPIService, Dat
 
         $scope.gridReady = function (api) {
             gridApi = api;
-            return retrieveData();
+
+            // load all of the data sources to filter the grid by the first data source
+            $scope.isLoadingForm = true;
+
+            DataSourceAPIService.GetDataSources()
+                .then(function (response) {
+                    $scope.dataSources = response;
+
+                    if (response.length > 0) // select the first data source
+                        $scope.selectedDataSource = $scope.dataSources[0];
+
+                    return retrieveData();
+                })
+                .catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                })
+                .finally(function () {
+                    $scope.isLoadingForm = false;
+                });
         }
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
@@ -47,9 +65,10 @@ function DataSourceLogManagementController($scope, DataSourceLogsAPIService, Dat
     }
 
     function load() {
+        // the data sources are loaded independently when the grid is ready
         $scope.isLoadingForm = true;
 
-        UtilsService.waitMultipleAsyncOperations([loadDataSources, loadSeverities])
+        UtilsService.waitMultipleAsyncOperations([loadSeverities])
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             })
@@ -67,13 +86,6 @@ function DataSourceLogManagementController($scope, DataSourceLogsAPIService, Dat
         };
 
         return gridApi.retrieveData(query);
-    }
-
-    function loadDataSources() {
-        return DataSourceAPIService.GetDataSources()
-            .then(function (response) {
-                $scope.dataSources = response;
-            });
     }
 
     function loadSeverities() {
