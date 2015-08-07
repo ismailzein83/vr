@@ -61,7 +61,6 @@ namespace TOne.Analytics.Data.SQL
                         Name = nameColumn!=null?reader[nameColumn] as string:null
                     };
                 }
-
                 return obj;
             }, mapper, new TrafficStatisticSummaryBigResult()) as TrafficStatisticSummaryBigResult;
 
@@ -280,6 +279,10 @@ SwitchConnectivity AS
                            data.GroupKeyValues[i].Name=Id;break;
                         case TrafficStatisticGroupKeys.PortOut:
                            data.GroupKeyValues[i].Name =Id;break;
+                        case TrafficStatisticGroupKeys.GateWayOut:
+                            data.GroupKeyValues[i].Name = Id; break;
+                        case TrafficStatisticGroupKeys.GateWayIn:
+                            data.GroupKeyValues[i].Name = Id; break;
                         case TrafficStatisticGroupKeys.CodeBuy:
                             data.GroupKeyValues[i].Name =Id;break;
                         case TrafficStatisticGroupKeys.CodeSales:

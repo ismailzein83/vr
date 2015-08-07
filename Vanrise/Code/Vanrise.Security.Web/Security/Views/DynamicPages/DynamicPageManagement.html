@@ -19,7 +19,7 @@
     <div vr-loader="isGettingData">
         <vr-row>
             <vr-columns colnum="12">
-                <vr-datagrid datasource="dynamicViews" dataretrievalfunction="dataRetrievalFunction"  menuactions="menuActions" on-ready="onMainGridReady" pagingtype="'Pager'" idfield="ViewId">
+                <vr-datagrid datasource="dynamicViews" dataretrievalfunction="dataRetrievalFunction" menuactions="menuActions" on-ready="onMainGridReady" pagingtype="'PagingOnScroll'" idfield="ViewId">
                     <vr-datagridcolumn headertext="'Page Name'" field="'Name'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Menu Location'" field="'ModuleName'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Audiences/Users'" field="'Audience.UsersName'"></vr-datagridcolumn>
