@@ -13,6 +13,9 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout) {
         console.log('ng-click');
         $scope.istrue=true;
     };
+    $scope.doc =  {
+        fileId : 1
+    };
     $scope.postMsg = function () {
         $http.post($scope.baseurl + "/api/routing/SaveRouteRule",
       {

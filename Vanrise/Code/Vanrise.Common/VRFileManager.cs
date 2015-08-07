@@ -10,24 +10,34 @@ namespace Vanrise.Common
 {
     public class VRFileManager
     {
-        public void AddFile(VRFile file)
+        private readonly IVRFileDataManager _datamanager;
+
+        public VRFileManager()
         {
-            IVRFileDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRFileDataManager>();
+            _datamanager =  CommonDataManagerFactory.GetDataManager<IVRFileDataManager>();
+        }
+        public long AddFile(VRFile file)
+        {
+            return _datamanager.AddFile(file);
         }
 
         public bool SetFileUsed(long fileId)
         {
-            return true;
+            return _datamanager.UpdateFileUsed(fileId , true);
         }
 
+        public bool SetFileUnUsed(long fileId)
+        {
+            return _datamanager.UpdateFileUsed(fileId, false);
+        }
         public VRFile GetFile(long fileId)
         {
-            return null;
+            return _datamanager.GetFile(fileId);
         }
 
         public VRFileInfo GetFileInfo(long fileId)
         {
-            return null;
+            return  _datamanager.GetFileInfo(fileId);
         }
     }
 }

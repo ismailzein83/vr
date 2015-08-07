@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using Vanrise.Common;
 using Vanrise.Entities;
@@ -12,38 +15,129 @@ namespace Vanrise.Web.Controllers
 {
     public class VRFileController : Vanrise.Web.Base.BaseAPIController
     {
+        
         [HttpPost]
-        public Task<FileUploadResult> UploadFile()
+        public FileUploadResult UploadFile()
         {
-            HttpRequestMessage request = this.Request;
-            if (!request.Content.IsMimeMultipartContent())
+
+            HttpResponseMessage result = null;
+
+            var httpRequest = HttpContext.Current.Request;
+
+            if (httpRequest.Files.Count > 0 )
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UnsupportedMediaType));
+
+                HttpPostedFile postedFile = httpRequest.Files[0];               
+                VRFile file = new VRFile()
+                {
+                    Content = ReadToEnd(postedFile.InputStream) ,
+                    Name = postedFile.FileName ,
+                    Extension = postedFile.ContentType.Split('/')[1] ,
+                    CreatedTime = DateTime.Now 
+
+                };
+                VRFileManager manager = new VRFileManager();
+                long id = manager.AddFile(file);
+
+                
+                result = Request.CreateResponse(HttpStatusCode.Created );
+                return new FileUploadResult
+                {
+                    FileId = id
+                };
+
             }
-            VRFileManager fileManager = new VRFileManager();
-            //string root = HttpContext.Current.Server.MapPath("~/Upload");
-            //if (!Directory.Exists(root))
-            //    Directory.CreateDirectory(root);
-            //var provider = new MultipartFormDataStreamProvider(root);
 
-            //var task = request.Content..ReadAsMultipartAsync(provider).
-            //    ContinueWith<FileUploadResult>(o =>
-            //    {
-            //        //FileInfo finfo = new FileInfo(provider.FileData.First().LocalFileName);
+            else
+            {
 
-            //        //string guid = Guid.NewGuid().ToString();
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
 
-            //        //File.Move(finfo.FullName, Path.Combine(root, guid + "_" + provider.FileData.First().Headers.ContentDisposition.FileName.Replace("\"", "")));
 
-            //        return new FileUploadResult()
-            //        {
-            //            FileId = 22
-            //        };
-            //    }
-            //);
-            return null;
+            }
+        }
+        [HttpGet]
+        public HttpResponseMessage DownloadFile(long fileId) {
+
+            VRFileManager manager = new VRFileManager();
+            VRFile file = manager.GetFile(fileId);
+            byte[] bytes = file.Content;
+              
+            MemoryStream memStreamRate = new System.IO.MemoryStream();
+            memStreamRate.Write(bytes, 0, bytes.Length);
+            memStreamRate.Seek(0, System.IO.SeekOrigin.Begin);
+
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+            memStreamRate.Position = 0;
+            response.Content = new StreamContent(memStreamRate);
+
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = String.Format(file.Name) 
+            };
+            return response;
+
+        }
+
+        [HttpGet]
+        public VRFileInfo GetFileInfo(long fileId)
+        {
+
+            VRFileManager manager = new VRFileManager();
+            return manager.GetFileInfo(fileId);
+
+        }
+        private static byte[] ReadToEnd(System.IO.Stream stream)
+        {
+            long originalPosition = 0;
+
+            if (stream.CanSeek)
+            {
+                originalPosition = stream.Position;
+                stream.Position = 0;
+            }
+
+            try
+            {
+                byte[] readBuffer = new byte[4096];
+
+                int totalBytesRead = 0;
+                int bytesRead;
+
+                while ((bytesRead = stream.Read(readBuffer, totalBytesRead, readBuffer.Length - totalBytesRead)) > 0)
+                {
+                    totalBytesRead += bytesRead;
+
+                    if (totalBytesRead == readBuffer.Length)
+                    {
+                        int nextByte = stream.ReadByte();
+                        if (nextByte != -1)
+                        {
+                            byte[] temp = new byte[readBuffer.Length * 2];
+                            Buffer.BlockCopy(readBuffer, 0, temp, 0, readBuffer.Length);
+                            Buffer.SetByte(temp, totalBytesRead, (byte)nextByte);
+                            readBuffer = temp;
+                            totalBytesRead++;
+                        }
+                    }
+                }
+
+                byte[] buffer = readBuffer;
+                if (readBuffer.Length != totalBytesRead)
+                {
+                    buffer = new byte[totalBytesRead];
+                    Buffer.BlockCopy(readBuffer, 0, buffer, 0, totalBytesRead);
+                }
+                return buffer;
+            }
+            finally
+            {
+                if (stream.CanSeek)
+                {
+                    stream.Position = originalPosition;
+                }
+            }
         }
     }
-
-    
 }

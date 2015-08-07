@@ -1502,16 +1502,20 @@ input.ui-grid-filter-input[type="text"] {
     .vr-file-ulpoad{
         border: 1px solid #CCC;
         width: 100%;
-        height: 30px;
         border-radius: 4px;
     }
     .vr-file{   
         display:inline-block;
         position:relative;
-        top: -10px;
-        width:calc(100% - 65px );
-        margin-left: 5px;
-        
+        top: -8px;
+        width:calc(100% - 55px );
+        left: 2px;
+    }
+     .vr-file:empty{   
+        display:inline-block;
+        position:relative;
+        top: -5px;
+        width:calc(100% - 40px );
     }
     .vr-file-btn{
         padding: 5px 12px;
@@ -1520,7 +1524,7 @@ input.ui-grid-filter-input[type="text"] {
         width:40px;
     }
     .vr-file-remove{
-        top: 0px;
+        top: 2px;
         right: -2px;
         width: 15px;
     }
@@ -1627,6 +1631,10 @@ input.ui-grid-filter-input[type="text"] {
 }
 .vr-disabled{
 pointer-events: none;
+}
+.vr-disabled-div{
+pointer-events: none;
+opacity:0.9 ;
 }
 .vr-small-addon{
     padding:6px 2px;

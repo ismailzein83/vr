@@ -15,6 +15,7 @@ namespace Vanrise.Entities
         public string Extension { get; set; }
 
         public DateTime CreatedTime { get; set; }
+        public bool IsUsed { get; set; }
     }
 
     public class VRFile : VRFileInfo

@@ -4,9 +4,9 @@
             <div vr-disabled="istrue">
                 <input ng-click="logevent()" value="log" type="button" />
             </div>
-            
-            <vr-textbox type="email" label="Email" value="email"></vr-textbox>{{email}}
-        </vr-columns>
+
+            <vr-textbox type="email" label="Email" value="email" ></vr-textbox>{{email}}
+        </vr-columns>       
         <vr-columns width="normal">
             <vr-textbox type="number" label="Number" value="number"></vr-textbox>{{number}}
         </vr-columns>
@@ -23,7 +23,14 @@
         <vr-columns width="normal">
             <vr-treeview datatextfield="Name" datavaluefield="id" datachildrenfield="children" on-ready="treeReady" selecteditem="selectedTreeNode" onvaluechanged="treeValueChanged"></vr-treeview>
         </vr-columns>
-</vr-row>
+    </vr-row>
+    <vr-row ng-init="fieldType = 'password'">
+        
+        <vr-columns width="normal">
+            <vr-fileupload value="doc" on-ready="vrFileReady" isrequired> </vr-fileuploadlabel>
+</vr-columns>
+        
+    </vr-row>
     <div class="row fileupload-buttonbar">
         <div class="col-lg-4">
             <!--<div class="vr-file-ulpoad">
@@ -36,46 +43,43 @@
                     <a class="vr-file-name">{{filesAdded[filesAdded.length -1 ].name}}</a>
                     <div ng-show="num2 < 90" class="progress-bar progress-bar-success  progress-bar-striped active vr-file-process" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{width: num2 + '%'}"></div>
                     <div ng-show="num == 100 " class="vr-file-process" style="font-size: 10px;top: 20px;"><span>Complete</span></div>
-                </div> 
-                <span ng-show="filesAdded.length > 0" class="glyphicon glyphicon-remove hand-cursor vr-file-remove" aria-hidden="true" ng-click="filesAdded.length = 0 "></span>  
-            </div>-->  
-            <vr-fileupload value="doc" > </vr-fileupload>{{doc}}
-            <vr-fileupload value="doc" isrequired> </vr-fileupload>{{doc}}
-          
-            <!--{{num}}-->         
+                </div>
+                <span ng-show="filesAdded.length > 0" class="glyphicon glyphicon-remove hand-cursor vr-file-remove" aria-hidden="true" ng-click="filesAdded.length = 0 "></span>
+            </div>-->
+
+            <!--{{num}}-->
         </div>
         <!-- The global progress state -->
         <div class="col-lg-5 fade" data-ng-class="{in: active()}">
             <!-- The global progress bar -->
-            <div class="progress progress-striped active" ><div class="progress-bar progress-bar-success" ></div></div>
+            <div class="progress progress-striped active"><div class="progress-bar progress-bar-success"></div></div>
             <!-- The extended global progress state -->
             <div class="progress-extended">&nbsp;</div>
         </div>
-        
-    </div>   
-    <span ng-repeat="f in filesAdded"> {{f.name}}</span>
-        <!--<span ng-model="filesAdded"></span>-->
-</vr-form>
-<div class="col-sm-3">
-    date-time
-    <div class="input-group date datetime-controle" id="datetimepicker1">
 
-        <input type="text" class="form-control input-sm">
-        <span class="input-group-addon " ng-click="toggledate($event) ">
-            <i class="glyphicon glyphicon-calendar"></i>
-        </span>
-        <span class="input-group-addon " ng-click="toggletime($event) ">
-            <i class="glyphicon glyphicon-time"></i>
-        </span>
     </div>
-</div>
+    <span ng-repeat="f in filesAdded"> {{f.name}}</span>
+    <!--<span ng-model="filesAdded"></span>-->
+    <vr-row>
+        <vr-columns width="normal" >
+            <vr-datetimepicker  label="From" value="fromDate" isrequired></vr-datetimepicker>
+        </vr-columns>
+        {{fromDate}}
+
+        <vr-columns width="normal">
+            <vr-datetimepicker type="date" label="From" value="test" isrequired></vr-datetimepicker>
+        </vr-columns>
+        test {{test}}
+    </vr-row>
+
+</vr-form>
 
 <div class="col-sm-3">
     time
     <div class="input-group date datetime-controle" id="datetimepicker2">
 
-        <input type="text" class="form-control input-sm">        
-        <span class="input-group-addon " >
+        <input type="text" class="form-control input-sm">
+        <span class="input-group-addon ">
             <i class="glyphicon glyphicon-time"></i>
         </span>
     </div>
@@ -85,7 +89,7 @@
     <div class="input-group date datetime-controle" id="datetimepicker3">
 
         <input type="text" class="form-control input-sm">
-        <span class="input-group-addon " >
+        <span class="input-group-addon ">
             <i class="glyphicon glyphicon-calendar"></i>
         </span>
     </div>
@@ -94,7 +98,7 @@
     $(function () {
         $('#datetimepicker1').datetimepicker({
             format: 'L HH:mm',
-            showClose:true
+            showClose: true
         });
         $('#datetimepicker2').datetimepicker({
             format: 'HH:mm'
@@ -102,7 +106,7 @@
         $('#datetimepicker3').datetimepicker({
             format: 'DD/MM/YYYY'
         });
-      
+
         $('#datetimepicker3').on('dp.show', function (event) {
             console.log("in show")
             //console.log(divDatePicker + "dp.show")
@@ -137,7 +141,7 @@ ff
 
 </vr-datagridcell>
 <input type="button" ng-click="addItem()" value="Add Item" />
-<vr-datagrid datasource="gridData" maxheight="400px" loadmoredata="loadMoreData"   on-ready="gridReady">
+<vr-datagrid datasource="gridData" maxheight="400px" loadmoredata="loadMoreData" on-ready="gridReady">
     <vr-datagridcolumn headertext="'Column '" field="'col3'">
     </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Column '">
