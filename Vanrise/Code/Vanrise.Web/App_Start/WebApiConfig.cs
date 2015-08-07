@@ -11,7 +11,7 @@ namespace Vanrise.Web
     {
         public static void Register(HttpConfiguration config)
         {
-            //config.Filters.Add(new LicenseCheckFilter());
+            config.Filters.Add(new LicenseCheckFilter());
             // Web API configuration and services
 
             // Web API routes
