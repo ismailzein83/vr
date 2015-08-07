@@ -106,6 +106,7 @@
     <Folder Include="queue\Stored Procedures\" />
     <Folder Include="Security\" />
     <Folder Include="queue\Functions\" />
+    <Folder Include="queue\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="queue\Tables\QueueItemHeader.sql" />
@@ -128,6 +129,15 @@
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
     <Build Include="queue\Stored Procedures\sp_QueueItemHeader_GetFiltered.sql" />
+    <Build Include="queue\Stored Procedures\sp_QueueItemHeader_GetItemsExecutionStatus.sql">
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
+    </Build>
+    <Build Include="queue\Stored Procedures\sp_QueueItemHeader_GetByQueueItemIDs.sql">
+      <AnsiNulls>Off</AnsiNulls>
+      <QuotedIdentifier>Off</QuotedIdentifier>
+    </Build>
+    <Build Include="queue\User Defined Types\ItemIds.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

@@ -10,14 +10,14 @@ CREATE PROCEDURE [integration].[sp_DataSourceImportedBatch_Insert]
 	@RecordsCount int,
 	@MappingResult int,
 	@MapperMessage nvarchar(1000),
-	@QueueItemId nvarchar(50),
+	@QueueItemIds nvarchar(50),
 	@LogEntryTime dateTime
 AS
 BEGIN
 DECLARE @NewItemID BIGINT
 
-	Insert into integration.DataSourceImportedBatch(DataSourceId, BatchDescription, [BatchSize], RecordsCount, MappingResult, MapperMessage, QueueItemId, LogEntryTime)
-    values (@DataSourceId, @BatchDescription, @BatchSize, @RecordsCount, @MappingResult, @MapperMessage, @QueueItemId, @LogEntryTime)
+	Insert into integration.DataSourceImportedBatch(DataSourceId, BatchDescription, [BatchSize], RecordsCount, MappingResult, MapperMessage, QueueItemIds, LogEntryTime)
+    values (@DataSourceId, @BatchDescription, @BatchSize, @RecordsCount, @MappingResult, @MapperMessage, @QueueItemIds, @LogEntryTime)
     
     SET @NewItemID = @@IDENTITY
     select @NewItemID
