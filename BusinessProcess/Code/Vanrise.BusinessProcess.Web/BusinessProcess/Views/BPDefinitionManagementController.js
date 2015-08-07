@@ -1,6 +1,6 @@
-﻿BPDefinitionManagementController.$inject = ['$scope', 'BusinessProcessAPIService', 'VRModalService', '$interval', 'VRNotificationService', 'UtilsService'];
+﻿BPDefinitionManagementController.$inject = ['$scope', 'BusinessProcessAPIService', 'VRModalService', '$interval', 'VRNotificationService', 'UtilsService', 'BusinessProcessService'];
 
-function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRModalService, $interval, VRNotificationService, UtilsService) {
+function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRModalService, $interval, VRNotificationService, UtilsService, BusinessProcessService) {
 
     var interval;
     var mainGridAPI;
@@ -72,15 +72,8 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
 
     function showBPTrackingModal(processInstanceId) {
 
-        VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPTrackingModal.html', {
-            BPInstanceID: processInstanceId
-        }, {
-            useModalTemplate: true,
-            width: "80%",
-            onScopeReady: function (modalScope) {
-                modalScope.title = "Tracking";
-            }
-        });
+        BusinessProcessService.openProcessTracking(processInstanceId);
+
     }
 
     function startGetData() {
