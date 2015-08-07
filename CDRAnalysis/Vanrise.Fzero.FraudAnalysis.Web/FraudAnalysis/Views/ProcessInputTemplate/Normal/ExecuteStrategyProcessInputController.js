@@ -14,7 +14,7 @@
         $scope.periods = [];
         loadPeriods();
         $scope.selectedPeriod = "";
-        
+
 
 
         $scope.createProcessInput.getData = function () {
@@ -24,47 +24,48 @@
             });
 
 
-            var StartingDate = new Date($scope.fromDate);
+            var runningDate = new Date($scope.fromDate);
+            runningDate = new Date(runningDate.setHours(runningDate.getHours() + 2));
 
-            console.log(StartingDate.toString())
 
             $scope.createProcessInputObjects.length = 0;
 
 
-
-
             if ($scope.selectedPeriod.Id == 1)//Hourly
             {
-                var runningDate = StartingDate;
                 while (runningDate < $scope.toDate) {
+                    var fromDate = new Date(runningDate);
+                    var toDate = new Date(runningDate.setHours(runningDate.getHours() + 1));
+
                     $scope.createProcessInputObjects.push({
                         InputArguments: {
                             $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
                             StrategyIds: $scope.selectedStrategyIds,
-                            FromDate: new Date(runningDate.setHours(runningDate.getHours(), 0, 0, 0)),
-                            ToDate: new Date(runningDate.setHours(runningDate.getHours(), 59, 59, 999))
+                            FromDate: new Date(fromDate),
+                            ToDate: new Date(toDate)
                         }
                     });
-                    runningDate = new Date(runningDate.setHours(runningDate.getHours() + 1));
+                    runningDate = new Date(toDate);
                 }
 
             }
 
             else if ($scope.selectedPeriod.Id == 2) //Daily
             {
-                var runningDate = StartingDate;
                 while (runningDate < $scope.toDate) {
+                    var fromDate = new Date(runningDate);
+                    var toDate = new Date(runningDate.setHours(runningDate.getHours() + 24));
+
                     $scope.createProcessInputObjects.push({
                         InputArguments: {
                             $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
                             StrategyIds: $scope.selectedStrategyIds,
-                            FromDate: new Date(runningDate.setHours(0, 0, 0, 0)),
-                            ToDate: new Date(runningDate.setHours(23, 59, 59, 999))
+                            FromDate: new Date(fromDate),
+                            ToDate: new Date(toDate)
                         }
                     });
 
-                    runningDate.setHours(0, 0, 0, 0)
-                    runningDate = new Date(runningDate.setDate(runningDate.getDate() + 1));
+                    runningDate = new Date(toDate);
                 }
 
 
