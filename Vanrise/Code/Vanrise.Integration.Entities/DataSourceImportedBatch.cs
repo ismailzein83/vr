@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Integration.Entities
 {
@@ -14,6 +15,8 @@ namespace Vanrise.Integration.Entities
         public int RecordsCount { get; set; }
         public MappingResultType MappingResult { get; set; }
         public string MapperMessage { get; set; }
+        public string QueueItemIds { get; set; }
         public DateTime LogEntryTime { get; set; }
+        public QueueItemStatus ExecutionStatus { get; set; }
     }
 }

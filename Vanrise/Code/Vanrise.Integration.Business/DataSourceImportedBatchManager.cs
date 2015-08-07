@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Integration.Data;
 using Vanrise.Integration.Entities;
+using Vanrise.Queueing;
+using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Integration.Business
 {
@@ -19,7 +21,48 @@ namespace Vanrise.Integration.Business
         public Vanrise.Entities.IDataRetrievalResult<DataSourceImportedBatch> GetFilteredDataSourceImportedBatches(Vanrise.Entities.DataRetrievalInput<DataSourceImportedBatchQuery> input)
         {
             IDataSourceImportedBatchDataManager dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceImportedBatchDataManager>();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredDataSourceImportedBatches(input));
+            Vanrise.Entities.BigResult<DataSourceImportedBatch> bigResult = dataManager.GetFilteredDataSourceImportedBatches(input);
+
+            List<long> queueItemIds = new List<long>();
+            foreach (DataSourceImportedBatch batch in bigResult.Data)
+            {
+                if(batch.QueueItemIds.Contains(','))
+                {
+                    string [] qIds = batch.QueueItemIds.Split(',');
+                    foreach (string qId in qIds)
+                    {
+                        queueItemIds.Add(long.Parse(qId));
+                    }
+                }
+                else
+                {
+                    queueItemIds.Add(long.Parse(batch.QueueItemIds)); 
+                }
+            }
+
+            QueueingManager qManager = new QueueingManager();
+            Dictionary<long, ItemExecutionStatus> dicItemExecutionStatus = qManager.GetItemsExecutionStatus(queueItemIds);
+
+            foreach (DataSourceImportedBatch batch in bigResult.Data)
+            {
+                if (batch.QueueItemIds.Contains(','))
+                {
+                    string[] qIds = batch.QueueItemIds.Split(',');
+                    foreach (string qId in qIds)
+                    {
+                        long singleQueueItemId = long.Parse(qId);
+                        List<ItemExecutionStatus> list = new List<ItemExecutionStatus>();
+                        list.Add(dicItemExecutionStatus[singleQueueItemId]);
+                        batch.ExecutionStatus = qManager.GetExecutionStatus(list);
+                    }
+                }
+                else
+                {
+                    batch.ExecutionStatus = dicItemExecutionStatus[long.Parse(batch.QueueItemIds)].Status;
+                }
+            }
+            
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, bigResult);
         }
 
         public List<Vanrise.Integration.Entities.DataSourceImportedBatchName> GetBatchNames()

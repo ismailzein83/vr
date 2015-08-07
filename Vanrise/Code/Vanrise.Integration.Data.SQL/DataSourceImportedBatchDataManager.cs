@@ -49,6 +49,7 @@ namespace Vanrise.Integration.Data.SQL
                 RecordsCount = (int)reader["RecordsCount"],
                 MappingResult = (MappingResultType)reader["MappingResult"],
                 MapperMessage = reader["MapperMessage"] as string,
+                QueueItemIds = reader["QueueItemIds"] as string,
                 LogEntryTime = (DateTime)reader["LogEntryTime"]
             };
 
