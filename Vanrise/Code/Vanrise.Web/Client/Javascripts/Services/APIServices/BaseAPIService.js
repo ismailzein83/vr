@@ -55,6 +55,9 @@ app.service('BaseAPIService', function ($http, $q, $rootScope, notify, DataRetri
                 deferred.resolve(returnedResponse);
             })
             .error(function (data, status, headers, config) {
+                console.log('');
+                console.log('Error Occured: ' + data.ExceptionMessage);
+                console.log('');
                 console.log(data);
                 notify.closeAll();
                 notify({ message: 'Error Occured while getting data!', classes: "alert alert-danger" });
@@ -102,6 +105,9 @@ app.service('BaseAPIService', function ($http, $q, $rootScope, notify, DataRetri
                 deferred.resolve(returnedResponse);
             })
             .error(function (data, status, headers, config) {
+                console.log('');
+                console.log('Error Occured: ' + data.ExceptionMessage);
+                console.log('');
                 console.log(data);
                 notify.closeAll();
                 notify({ message: 'Error Occured while posting data!', classes: "alert alert-danger" });

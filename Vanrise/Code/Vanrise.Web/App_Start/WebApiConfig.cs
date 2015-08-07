@@ -25,6 +25,7 @@ namespace Vanrise.Web
             );
 
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
+
         }
     }
 
@@ -32,7 +33,7 @@ namespace Vanrise.Web
     {
         public override void OnAuthorization(System.Web.Http.Controllers.HttpActionContext actionContext)
         {
-
+            //throw new Exception("License Key is expired. key is: ");
             base.OnAuthorization(actionContext);
         }
     }
