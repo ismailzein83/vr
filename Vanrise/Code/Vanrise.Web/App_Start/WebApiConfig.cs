@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -10,7 +11,7 @@ namespace Vanrise.Web
     {
         public static void Register(HttpConfiguration config)
         {
-            config.Filters.Add(new MyAuthorizationFilter());
+            config.Filters.Add(new LicenseCheckFilter());
             // Web API configuration and services
 
             // Web API routes
@@ -25,16 +26,30 @@ namespace Vanrise.Web
             );
 
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
-
+            //config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new MyDateConverter());
         }
     }
 
-    public class MyAuthorizationFilter : System.Web.Http.Filters.AuthorizationFilterAttribute
+    public class MyDateConverter : DateTimeConverterBase
     {
-        public override void OnAuthorization(System.Web.Http.Controllers.HttpActionContext actionContext)
+        public override object ReadJson(Newtonsoft.Json.JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
         {
-            //throw new Exception("License Key is expired. key is: ");
-            base.OnAuthorization(actionContext);
+            return DateTime.Parse(reader.Value as string);
+        }
+
+        public override void WriteJson(Newtonsoft.Json.JsonWriter writer, object value, Newtonsoft.Json.JsonSerializer serializer)
+        {
+            writer.WriteValue(value.ToString());
         }
     }
+
+
+    //public class MyAuthorizationFilter : System.Web.Http.Filters.AuthorizationFilterAttribute
+    //{
+    //    public override void OnAuthorization(System.Web.Http.Controllers.HttpActionContext actionContext)
+    //    {
+    //        //throw new Exception("License Key is expired. key is: ");
+    //        base.OnAuthorization(actionContext);
+    //    }
+    //}
 }
