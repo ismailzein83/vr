@@ -16,10 +16,10 @@ namespace TOne.Analytics.Business
 {
     public class TrafficStatisticManager
     {
-        public TrafficStatisticSummaryBigResult GetTrafficStatisticSummary(Vanrise.Entities.DataRetrievalInput<TrafficStatisticSummaryInput> input)
+        public Vanrise.Entities.IDataRetrievalResult<TrafficStatisticGroupSummary> GetTrafficStatisticSummary(Vanrise.Entities.DataRetrievalInput<TrafficStatisticSummaryInput> input)
         {
             ITrafficStatisticDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<ITrafficStatisticDataManager>();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetTrafficStatisticSummary(input)) as TrafficStatisticSummaryBigResult;
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetTrafficStatisticSummary(input));
         }
 
         public IEnumerable<TrafficStatistic> GetTrafficStatistics(TrafficStatisticGroupKeys filterByColumn, string columnFilterValue, DateTime from, DateTime to)

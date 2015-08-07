@@ -1,8 +1,8 @@
 ﻿ZoneMonitorController.$inject = ['$scope', 'UtilsService', 'AnalyticsAPIService', 'uiGridConstants', '$q', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficStatisticsMeasureEnum','LabelColorsEnum',
-        'CarrierTypeEnum', 'VRModalService', 'VRNotificationService'];
+        'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'DataRetrievalResultTypeEnum'];
 
 function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, CarrierAccountAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum,LabelColorsEnum,
-        CarrierTypeEnum, VRModalService, VRNotificationService) {
+        CarrierTypeEnum, VRModalService, VRNotificationService, DataRetrievalResultTypeEnum) {
 
     var chartSelectedMeasureAPI;
     var chartSelectedEntityAPI;
@@ -68,15 +68,17 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
         }
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return AnalyticsAPIService.GetTrafficStatisticSummary(dataRetrievalInput).then(function (response) {
-                currentData = [];
-                angular.forEach(response.Data, function (itm) {
-                    currentData.push(itm);
-                });
-                if (response.Summary) {
-                    $scope.trafficStatisticSummary = response.Summary;
+                if (dataRetrievalInput.DataRetrievalResultType == DataRetrievalResultTypeEnum.Normal.value) {
+                    currentData = [];
+                    angular.forEach(response.Data, function (itm) {
+                        currentData.push(itm);
+                    });
+                    if (response.Summary) {
+                        $scope.trafficStatisticSummary = response.Summary;
+                    }
+                    mainGridAPI.setSummary(response.Summary);
+                    renderOverallChart();
                 }
-                mainGridAPI.setSummary(response.Summary);
-                renderOverallChart();
                 onResponseReady(response);
             })
         };
