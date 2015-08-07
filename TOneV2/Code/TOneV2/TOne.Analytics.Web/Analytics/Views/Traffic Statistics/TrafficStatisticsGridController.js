@@ -224,7 +224,8 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
                     retrieveData(groupKey, false);
             };
             groupKey.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return AnalyticsAPIService.GetTrafficStatisticSummary(dataRetrievalInput).then(function (response) {                    
+                return AnalyticsAPIService.GetTrafficStatisticSummary(dataRetrievalInput).then(function (response) {
+                    $scope.selectedGroupKey.isDataLoaded = true;
                     onResponseReady(response);
                 })
             };
@@ -312,6 +313,12 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
                     break;
                 case TrafficStatisticGroupKeysEnum.GateWayOut.value: 
                     filter.GateWayOut = [scope.dataItem.GroupKeyValues[i].Id];
+                    break;
+                case TrafficStatisticGroupKeysEnum.CodeBuy.value:
+                    filter.CodeBuy = [scope.dataItem.GroupKeyValues[i].Id];
+                    break;
+                case TrafficStatisticGroupKeysEnum.CodeSales.value:
+                    filter.CodeSales = [scope.dataItem.GroupKeyValues[i].Id];
                     break;
             }
         }

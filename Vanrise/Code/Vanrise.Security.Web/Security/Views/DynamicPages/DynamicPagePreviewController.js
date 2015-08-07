@@ -355,7 +355,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         $scope.periods = [];
         for (var p in PeriodEnum)
             $scope.periods.push(PeriodEnum[p]);
-      //  $scope.selectedPeriod = $scope.periods[0];
+      // $scope.selectedPeriod = $scope.periods[0];
     }
 }
 appControllers.controller('Security_DynamicPagePreviewController', DynamicPagePreviewController);

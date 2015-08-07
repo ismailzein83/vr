@@ -1,8 +1,8 @@
 ﻿ZoneMonitorController.$inject = ['$scope', 'UtilsService', 'AnalyticsAPIService', 'uiGridConstants', '$q', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficStatisticsMeasureEnum','LabelColorsEnum',
-        'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'DataRetrievalResultTypeEnum'];
+        'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'DataRetrievalResultTypeEnum','PeriodEnum'];
 
 function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, CarrierAccountAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum,LabelColorsEnum,
-        CarrierTypeEnum, VRModalService, VRNotificationService, DataRetrievalResultTypeEnum) {
+        CarrierTypeEnum, VRModalService, VRNotificationService, DataRetrievalResultTypeEnum, PeriodEnum) {
 
     var chartSelectedMeasureAPI;
     var chartSelectedEntityAPI;
@@ -10,14 +10,38 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
     var overallSelectedMeasure;
     var measures = [];
     var currentData;
+    var selectedPeriod;
     var groupKeys = [];
     defineScope();
     load();
 
     function defineScope() {
+
+        definePeriods();
         $scope.asr=50.0;
         $scope.acd=20.0;
-        $scope.attampts=2;
+        $scope.attampts = 2;
+    //    $scope.selectedPeriod;
+        $scope.onValueChanged = function () {
+            console.log($scope.selectedPeriod);
+            if ($scope.selectedPeriod != selectedPeriod) {
+                    var customize = {
+                value: -1,
+                description: "Customize"
+                    }
+                    selectedPeriod = $scope.selectedPeriod;
+                $scope.selectedPeriod = customize;
+            }
+           
+        }
+        $scope.periodSelectionChanged = function () {
+            if ($scope.selectedPeriod != undefined && $scope.selectedPeriod.value != -1) {
+                var date = getPeriod($scope.selectedPeriod.value);
+                $scope.fromDate = date.from;
+                $scope.toDate = date.to;
+            }
+
+        }
         $scope.data = [];
         $scope.currentSearchCriteria = {
             groupKeys: []
@@ -205,8 +229,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
     function load() {
         loadMeasures();
         overallSelectedMeasure = TrafficStatisticsMeasureEnum.Attempts;
-        $scope.fromDate = '2012-04-27';
-        $scope.toDate = '2014-04-29';
+      
         $scope.isInitializing = true;
         UtilsService.waitMultipleAsyncOperations([loadSwitches, loadCodeGroups, loadCustomers, loadSuppliers]).finally(function () {
             $scope.isInitializing = false;
@@ -469,6 +492,105 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                 $scope.suppliers.push(itm);
             });
         });
+    }
+    function getPeriod(periodType) {
+        switch (periodType) {
+            case PeriodEnum.LastYear.value: return getLastYearInterval();
+            case PeriodEnum.LastMonth.value: return getLastMonthInterval();
+            case PeriodEnum.LastWeek.value: return getLastWeekInterval();
+            case PeriodEnum.Yesterday.value: return getYesterdayInterval();
+            case PeriodEnum.Today.value: return getTodayInterval();
+            case PeriodEnum.CurrentWeek.value: return getCurrentWeekInterval();
+            case PeriodEnum.CurrentMonth.value: return getCurrentMonthInterval();
+            case PeriodEnum.CurrentYear.value: return getCurrentYearInterval();
+        }
+    }
+    function getCurrentYearInterval() {
+        var date = new Date();
+        var interval = {
+            from: new Date(date.getFullYear(), 0, 1),
+            to: new Date(),
+        }
+        return interval;
+    }
+    function getCurrentWeekInterval() {
+        var thisWeek = new Date(new Date().getTime() - 60 * 60 * 24 * 1000)
+        var day = thisWeek.getDay();
+        var LastMonday;
+        if (day === 0) {
+            LastMonday = new Date();
+        }
+        else {
+            var diffToMonday = thisWeek.getDate() - day + (day === 0 ? -6 : 1);
+            var LastMonday = new Date(thisWeek.setDate(diffToMonday));
+        }
+
+
+        var interval = {
+            from: LastMonday,
+            to: new Date(),
+        }
+        return interval;
+    }
+    function getLastWeekInterval() {
+        var beforeOneWeek = new Date(new Date().getTime() - 60 * 60 * 24 * 7 * 1000)
+        var day = beforeOneWeek.getDay();
+
+        var diffToMonday = beforeOneWeek.getDate() - day + (day === 0 ? -6 : 1);
+        var beforeLastMonday = new Date(beforeOneWeek.setDate(diffToMonday));
+        var lastSunday = new Date(beforeOneWeek.setDate(diffToMonday + 6));
+        var interval = {
+            from: beforeLastMonday,
+            to: lastSunday,
+        }
+        return interval;
+    }
+    function getCurrentMonthInterval() {
+        var date = new Date();
+        var interval = {
+            from: new Date(date.getFullYear(), date.getMonth(), 1),
+            to: new Date(),
+        }
+        return interval;
+    }
+    function getTodayInterval() {
+        var date = new Date();
+        var interval = {
+            from: date,
+            to: date
+        }
+        return interval;
+    }
+    function getYesterdayInterval() {
+        var date = new Date();
+        date.setDate(date.getDate() - 1);
+        var interval = {
+            from: date,
+            to: date,
+        }
+        return interval;
+    }
+    function getLastMonthInterval() {
+        var date = new Date();
+        var interval = {
+            from: new Date(date.getFullYear(), date.getMonth() - 1, 1),
+            to: new Date(date.getFullYear(), date.getMonth(), 0),
+        }
+        return interval;
+    }
+    function getLastYearInterval() {
+        var date = new Date();
+        var interval = {
+            from: new Date(date.getFullYear() - 1, 0, 1),
+            to: new Date(date.getFullYear() - 1, 11, 31)
+        }
+        return interval;
+    }
+    function definePeriods() {
+        $scope.periods = [];
+        for (var p in PeriodEnum)
+            $scope.periods.push(PeriodEnum[p]);
+          $scope.selectedPeriod = $scope.periods[0];
     }
 
 };

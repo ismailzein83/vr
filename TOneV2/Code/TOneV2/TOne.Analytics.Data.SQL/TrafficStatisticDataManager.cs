@@ -49,9 +49,9 @@ namespace TOne.Analytics.Data.SQL
                     if (input.Query.GroupKeys[i] == TrafficStatisticGroupKeys.CodeGroup)
                         nameColumn = CodeGroupNameColumnName;
                     else if(input.Query.GroupKeys[i] == TrafficStatisticGroupKeys.GateWayIn)
-                        nameColumn = GateWayIDColumnName;
+                        nameColumn = GateWayInIDColumnName;
                     else if (input.Query.GroupKeys[i] == TrafficStatisticGroupKeys.GateWayOut)
-                        nameColumn = GateWayIDColumnName;
+                        nameColumn = GateWayOutIDColumnName;
 
                     GetColumnNames(input.Query.GroupKeys[i], out idColumn);
                     object id = reader[idColumn];
@@ -76,11 +76,14 @@ namespace TOne.Analytics.Data.SQL
 
         public IEnumerable<TrafficStatistic> GetTrafficStatistics(TrafficStatisticGroupKeys filterByColumn, string columnFilterValue, DateTime from, DateTime to)
         {
-            string query =String.Format( @"                            
+            string query =String.Format(@"                            
 			                SELECT
 					                ts.OurZoneID
 					                ,ts.FirstCDRAttempt
 				                    , ts.LastCDRAttempt
+, ts.Attempts-ts.SuccessfulAttempts AS FailedAttempts
+ , ts.CeiledDuration AS CeiledDuration
+ , case when ts.SuccessfulAttempts > 0 then CONVERT(DECIMAL(10,2),ts.DurationsInSeconds/(60.0*ts.SuccessfulAttempts)) ELSE 0 end as ACD
 				                    , ts.Attempts
 				                    , ts.DeliveredAttempts
 				                    , ts.SuccessfulAttempts
@@ -109,6 +112,7 @@ namespace TOne.Analytics.Data.SQL
         private string CreateTempTableIfNotExists(string tempTableName, TrafficStatisticFilter filter, IEnumerable<TrafficStatisticGroupKeys> groupKeys)
         {
             StringBuilder whereBuilder = new StringBuilder();
+            string tableName = GetTableName(groupKeys, filter);
             StringBuilder queryBuilder = new StringBuilder(@"
                             IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
 	                            BEGIN with
@@ -149,7 +153,7 @@ SwitchConnectivity AS
                                            ,CONVERT(DECIMAL(10,2),Avg(ts.PDDinSeconds)) as AveragePDD
 
                                        
-			                        FROM TrafficStats ts WITH(NOLOCK ,INDEX(IX_TrafficStats_DateTimeFirst))
+			                        FROM #TABLENAME# 
                                   #JOINPART#
 			                        WHERE
 			                        FirstCDRAttempt BETWEEN @FromDate AND @ToDate
@@ -179,7 +183,8 @@ SwitchConnectivity AS
             }
           
             queryBuilder.Replace("#TEMPTABLE#", tempTableName);
-
+            queryBuilder.Replace("#TABLENAME#", tableName);
+            
             if (joinStatement.Count>0)
             queryBuilder.Replace("#JOINPART#",string.Join(" ",joinStatement));
             else
@@ -189,7 +194,17 @@ SwitchConnectivity AS
             queryBuilder.Replace("#GROUPBYPART#", groupKeysGroupByPart.ToString());
             return queryBuilder.ToString();
         }
-
+        private string GetTableName(IEnumerable<TrafficStatisticGroupKeys> groupKeys, TrafficStatisticFilter filter)
+        {
+            foreach (var groupKey in groupKeys)
+            {
+                if (groupKey == TrafficStatisticGroupKeys.CodeBuy || groupKey == TrafficStatisticGroupKeys.CodeSales)
+                    return "TrafficStatsByCode ts WITH(NOLOCK ,INDEX(IX_TrafficStatsByCode_DateTimeFirst))";
+            }
+            if (filter.CodeSales != null && filter.CodeSales.Count > 0 || filter.CodeSales != null && filter.CodeSales.Count > 0)
+                return "TrafficStatsByCode ts WITH(NOLOCK ,INDEX(IX_TrafficStatsByCode_DateTimeFirst))";
+            return "TrafficStats ts WITH(NOLOCK ,INDEX(IX_TrafficStats_DateTimeFirst)) ";
+        }
         private void AddFilterToQuery(TrafficStatisticFilter filter, StringBuilder whereBuilder, HashSet<string> joinStatement)
         {
             AddFilter(whereBuilder, filter.SwitchIds, "ts.SwitchId");
@@ -218,6 +233,8 @@ SwitchConnectivity AS
                 AddFilter(whereBuilder, filter.GateWayOut, "cscOut.GateWayName");
 
             }
+            AddFilter(whereBuilder, filter.CodeBuy, "ts.SupplierCode");
+            AddFilter(whereBuilder, filter.CodeSales, "ts.OurCode");
            
         }
 
@@ -263,8 +280,10 @@ SwitchConnectivity AS
                            data.GroupKeyValues[i].Name=Id;break;
                         case TrafficStatisticGroupKeys.PortOut:
                            data.GroupKeyValues[i].Name =Id;break;
-                        case TrafficStatisticGroupKeys.GateWayIn:
+                        case TrafficStatisticGroupKeys.CodeBuy:
                             data.GroupKeyValues[i].Name =Id;break;
+                        case TrafficStatisticGroupKeys.CodeSales:
+                            data.GroupKeyValues[i].Name = Id; break;
                         default: break;
                     }
 
@@ -321,9 +340,13 @@ SwitchConnectivity AS
                 case TrafficStatisticGroupKeys.SupplierZoneId:
                     return String.Format("{0} = '{1}'", SupplierZoneIDColumnName, columnFilterValue);
                 case TrafficStatisticGroupKeys.GateWayIn:
-                    return String.Format("{0} = '{1}'", GateWayIDColumnName, columnFilterValue);
+                    return String.Format("{0} = '{1}'", GateWayInIDColumnName, columnFilterValue);
                 case TrafficStatisticGroupKeys.GateWayOut:
-                    return String.Format("{0} = '{1}'", GateWayIDColumnName, columnFilterValue);
+                    return String.Format("{0} = '{1}'", GateWayOutIDColumnName, columnFilterValue);
+                case TrafficStatisticGroupKeys.CodeSales:
+                    return String.Format("{0} = '{1}'", CodeSalesIDColumnName, columnFilterValue);
+                case TrafficStatisticGroupKeys.CodeBuy:
+                    return String.Format("{0} = '{1}'", CodeBuyIDColumnName, columnFilterValue);
                 default: return null;
             }
         }
@@ -397,10 +420,16 @@ SwitchConnectivity AS
                     idColumn = SupplierZoneIDColumnName;
                     break;
                 case TrafficStatisticGroupKeys.GateWayIn:
-                    idColumn = GateWayIDColumnName;
+                    idColumn = GateWayInIDColumnName;
                     break;
                 case TrafficStatisticGroupKeys.GateWayOut:
-                    idColumn = GateWayIDColumnName;
+                    idColumn = GateWayOutIDColumnName;
+                    break;
+                case TrafficStatisticGroupKeys.CodeSales:
+                    idColumn = CodeSalesIDColumnName;
+                    break;
+                case TrafficStatisticGroupKeys.CodeBuy:
+                    idColumn = CodeBuyIDColumnName;
                     break;
                 default:
                     idColumn = null;
@@ -449,13 +478,21 @@ SwitchConnectivity AS
                     break;
                   case TrafficStatisticGroupKeys.GateWayIn:
                     joinStatement.Add(GateWayInJoinQuery);
-                    columnName = String.Format("cscIn.GateWayName as {0}", GateWayIDColumnName);
+                    columnName = String.Format("cscIn.GateWayName as {0}", GateWayInIDColumnName);
                     groupByStatement = "cscIn.GateWayName";
                     break;
                   case TrafficStatisticGroupKeys.GateWayOut:
                     joinStatement.Add(GateWayOutJoinQuery);
-                    columnName = String.Format("cscOut.GateWayName as {0}", GateWayIDColumnName);
+                    columnName = String.Format("cscOut.GateWayName as {0}", GateWayOutIDColumnName);
                     groupByStatement = "cscOut.GateWayName";
+                    break;
+                  case TrafficStatisticGroupKeys.CodeBuy:
+                    joinStatement = null;
+                    groupByStatement = null;
+                    break;
+                  case TrafficStatisticGroupKeys.CodeSales:
+                    joinStatement = null;
+                    groupByStatement = null;
                     break;
                   default:
                     columnName = null;
@@ -474,7 +511,12 @@ SwitchConnectivity AS
         const string CodeGroupIDColumnName = "CodeGroupID";
         const string CodeGroupNameColumnName = "CodeGroupName";
         const string SupplierZoneIDColumnName = "SupplierZoneID";
-        const string GateWayIDColumnName = "GateWayName";
+        const string GateWayInIDColumnName = "GateWayInName";
+        const string GateWayOutIDColumnName = "GateWayOutName";
+
+        const string CodeBuyIDColumnName = "SupplierCode";
+        const string CodeSalesIDColumnName = "OurCode";
+
         const string OurZonesJoinQuery = " LEFT JOIN OurZones z ON ts.OurZoneID = z.ZoneID";
         const string GateWayInJoinQuery = "Left JOIN SwitchConnectivity cscIn  ON (','+cscIn.Details+',' LIKE '%,'+ts.Port_IN +',%' ) AND(TS.SwitchID = cscIn.SwitchID) AND ts.CustomerID =cscIn.CarrierAccount ";
         const string GateWayOutJoinQuery = "Left JOIN SwitchConnectivity cscOut ON  (','+cscOut.Details+',' LIKE '%,'+ts.Port_OUT +',%') AND (TS.SwitchID = cscOut.SwitchID)  AND ts.SupplierID  =cscOut.CarrierAccount  ";

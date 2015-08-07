@@ -14,7 +14,8 @@ namespace TOne.Analytics.Entities
         public List<string> GateWayIn { get; set; }
         public List<string> GateWayOut { get; set; }
         public List<string> CustomerIds { get; set; }
-        
+        public List<string> CodeSales { get; set; }
+        public List<string> CodeBuy { get; set; }
         public List<string> SupplierIds { get; set; }
         public List<int> SupplierZoneId { get; set; }
 

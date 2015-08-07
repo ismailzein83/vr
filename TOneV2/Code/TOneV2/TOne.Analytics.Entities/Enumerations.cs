@@ -34,6 +34,8 @@ namespace TOne.Analytics.Entities
         GateWayOut=7,
         PortIn=8,
         PortOut=9,
+        CodeSales = 10,
+        CodeBuy = 11
     }
 
     public enum TrafficStatisticMeasures
