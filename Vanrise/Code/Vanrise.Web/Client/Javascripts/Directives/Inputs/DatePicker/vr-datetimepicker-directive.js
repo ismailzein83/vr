@@ -92,7 +92,9 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                     return;
                 }
                 var dt = e.date;
-                selectedDate = new Date(dt);
+                selectedDate = convertUTCDateToLocalDate(new Date(dt));
+                selectedDate.setSeconds(0);
+                selectedDate.setMilliseconds(0);
                 var modelValue = $scope.ctrl.value;
                 if (modelValue != undefined && !(modelValue instanceof Date))
                     modelValue = new Date(modelValue);
@@ -102,6 +104,17 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                 }
 
             });
+
+            function convertUTCDateToLocalDate(date) {
+                var newDate = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
+
+                //var offset = date.getTimezoneOffset() / 60;
+                //var hours = date.getHours();
+
+                //newDate.setHours(hours - offset);
+
+                return newDate;
+            }
 
 
             var ctrl = $scope.ctrl;
