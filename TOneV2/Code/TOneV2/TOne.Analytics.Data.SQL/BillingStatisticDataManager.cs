@@ -988,16 +988,7 @@ namespace TOne.Analytics.Data.SQL
 //            string durationField = " SaleDuration / 60.0 ";
 //            string attemptsField = " NumberOfCalls ";
 //            string date = fromDate.ToString();
-//            //;
-//            //SELECT #IDColumn# AS ID, #NameColumn# AS Name, ROW_NUMBER()  OVER ( ORDER BY #ValueColumn# DESC) AS RowNumber
-//            //INTO #OrderedEntities
-//            //FROM 
-//            //Billing_Stats BS
-//            //LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
-//            //LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate        
-//            //#JoinStatement#           
-//            //WHERE BS.CallDate >= @BeginTime AND BS.CallDate < @EndTime  #WhereStatement# #BillingStatsFilter# 
-//            //GROUP BY #IDColumn#, #NameColumn#,ERC.Rate,ERS.Rate;
+
 //            StringBuilder queryBuilder = new StringBuilder(@" Set RowCount @TopDestinations
 //                            SELECT SZ.Name AS SaleZone,SZ.ZoneID AS SaleZoneID,SUM(CASE WHEN Calldate BETWEEN @FromDate AND @ToDate THEN #ValueColumn# ELSE 0 END) AS [#ValueColumn#]                         
 //                            From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date #Indexes# ))
@@ -1007,27 +998,27 @@ namespace TOne.Analytics.Data.SQL
 //                                #Filters#
 //                            GROUP BY SZ.Name ,SZ.ZoneID
 //                            ORDER BY SUM(BS.SaleDuration / 60.0) DESC ");
-//           if(isDuration)
+//            if (isDuration)
 //                queryBuilder.Replace("#ValueColumn#", durationField);
-//           else queryBuilder.Replace("#ValueColumn#", attemptsField);
+//            else queryBuilder.Replace("#ValueColumn#", attemptsField);
 
-//           StringBuilder filterBuilder = new StringBuilder();
-//           StringBuilder indexBuilder = new StringBuilder();
+//            StringBuilder filterBuilder = new StringBuilder();
+//            StringBuilder indexBuilder = new StringBuilder();
 
-//           if (!String.IsNullOrEmpty(customerId))
-//           {
-//               filterBuilder.Append(" AND BS.CustomerID=@CustomerId ");
-//               indexBuilder.Append(",IX_Billing_Stats_Customer");
-//           }
+//            if (!String.IsNullOrEmpty(customerId))
+//            {
+//                filterBuilder.Append(" AND BS.CustomerID=@CustomerId ");
+//                indexBuilder.Append(",IX_Billing_Stats_Customer");
+//            }
 
-//           if (!String.IsNullOrEmpty(supplierId))
-//           {
-//               filterBuilder.Append(" AND BS.SupplierID=@SupplierId  ");
-//               indexBuilder.Append(",IX_Billing_Stats_Supplier");
-//           }
+//            if (!String.IsNullOrEmpty(supplierId))
+//            {
+//                filterBuilder.Append(" AND BS.SupplierID=@SupplierId  ");
+//                indexBuilder.Append(",IX_Billing_Stats_Supplier");
+//            }
 
-//           if (zoneId != 0)
-//               filterBuilder.Append(" AND SZ.ZoneID= @ZoneId ");
+//            if (zoneId != 0)
+//                filterBuilder.Append(" AND SZ.ZoneID= @ZoneId ");
 
 //            queryBuilder.Replace("#Filters#", filterBuilder.ToString());
 //            queryBuilder.Replace("#Indexes#", indexBuilder.ToString());
@@ -1042,12 +1033,13 @@ namespace TOne.Analytics.Data.SQL
 //                cmd.Parameters.Add(new SqlParameter("@ToDate", toDate));
 //                cmd.Parameters.Add(new SqlParameter("@Attempts", attempts));
 //                cmd.Parameters.Add(new SqlParameter("@ZoneId", zoneId));
-//                if(!string.IsNullOrEmpty(supplierId)) cmd.Parameters.Add(new SqlParameter("@SupplierId", supplierId));
+//                if (!string.IsNullOrEmpty(supplierId)) cmd.Parameters.Add(new SqlParameter("@SupplierId", supplierId));
 //                if (!string.IsNullOrEmpty(customerId)) cmd.Parameters.Add(new SqlParameter("@CustomerId", customerId));
 //            });
 //        }
 
-//        private DestinationVolumeTraffic DestinationVolumeTrafficMapper(IDataReader reader,bool isDuration,string durationField,string attemptsField ) {
+//        private DestinationVolumeTraffic DestinationVolumeTrafficMapper(IDataReader reader, bool isDuration, string durationField, string attemptsField)
+//        {
 
 //            DestinationVolumeTraffic destinationVolumeTraffic = new DestinationVolumeTraffic
 //            {
@@ -1085,7 +1077,7 @@ namespace TOne.Analytics.Data.SQL
 
         #endregion
 
-        private string GetDestinationTrafficVolumesQuery(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int zoneId, int attempts, VolumeReportsTimePeriod timePeriod, int topDestinations, bool isDuration)
+        private string GetDestinationTrafficVolumesQuery(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int zoneId, int attempts, VolumeReportsTimePeriod timePeriod, int topDestinations, bool isDuration, List<TimeRange> timeRange)
         {
 
             string durationField = " SaleDuration / 60.0 ";
@@ -1093,8 +1085,8 @@ namespace TOne.Analytics.Data.SQL
             string date = fromDate.ToString();
 
             StringBuilder queryBuilder = new StringBuilder(@" 
-                SET ROWCount @TopDestinations
-                SELECT BS.SaleZoneID AS SaleZoneID,SZ.Name AS SaleZoneName,ROW_NUMBER()  OVER ( ORDER BY SUM(#ValueColumn#) DESC) AS RowNumber
+             
+                SELECT TOP  (@TopDestinations) BS.SaleZoneID AS SaleZoneID,SZ.Name AS SaleZoneName,ROW_NUMBER()  OVER ( ORDER BY SUM(#ValueColumn#) DESC) AS RowNumber
                 INTO #OrderedZones                        
                 From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date #Indexes# )) Join Zone SZ With(Nolock) On SZ.ZoneID=BS.SaleZoneID 
                 WHERE BS.CallDate BETWEEN  @FromDate AND @ToDate
@@ -1104,16 +1096,17 @@ namespace TOne.Analytics.Data.SQL
 
                 SELECT * FROM #OrderedZones
 
-                SET ROWCount @TopDestinations
+ 
                 SELECT   
-	                SaleZoneName ,
-	                SUM(#ValueColumn#) as SaleDurationValue
+                    Z.SaleZoneName as ZoneName,
+	                SUM(#ValueColumn#) as Value
                     #SelectBuilder#
-                FROM Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date #Indexes# )) Join  #OrderedZones Z on Z.SaleZoneID = BS.SaleZoneID
-                WHERE  BS.CallDate BETWEEN @FromDate AND @ToDate
+               From @timeRange tr
+                 LEFT JOIN Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date #Indexes# )) ON BS.CallDate >= tr.FromDate AND BS.CallDate < tr.ToDate
+                  Join  #OrderedZones Z on Z.SaleZoneID = BS.SaleZoneID
                 AND BS.NumberOfCalls >  @Attempts
                 Group By SaleZoneName #GroupByBuilder#
-                Order by SaleDurationValue desc ");
+                Order by #OrderBuilder# Value desc ");
 
             if (isDuration)
                 queryBuilder.Replace("#ValueColumn#", durationField);
@@ -1123,6 +1116,7 @@ namespace TOne.Analytics.Data.SQL
             StringBuilder indexBuilder = new StringBuilder();
             StringBuilder selectBuilder = new StringBuilder();
             StringBuilder groupBuilder = new StringBuilder();
+            StringBuilder orderBuilder = new StringBuilder();
 
             if (!String.IsNullOrEmpty(customerId))
             {
@@ -1146,36 +1140,45 @@ namespace TOne.Analytics.Data.SQL
             {
                 case VolumeReportsTimePeriod.Daily:
                     selectBuilder.Append(" ,CAST(BS.CallDate AS varchar(12)) AS CallDate ");
+            //        selectBuilder.Append(" ,tr.FromDate,tr.ToDate ");
                     groupBuilder.Append(" ,BS.calldate  ");
+                    orderBuilder.Append(" BS.CallDate , ");
                     break;
 
                 case VolumeReportsTimePeriod.Weekly:
                     selectBuilder.Append(@" ,datepart(week,BS.CallDate) AS CallWeek
 					                     ,datepart(year,bs.CallDate) AS CallYear ");
+                //    selectBuilder.Append(" ,tr.FromDate,tr.ToDate ");
                     groupBuilder.Append(" ,DATEPART(week,BS.calldate),DATEPART(year,BS.calldate)  ");
+                    orderBuilder.Append(" BS.CallDate , ");
                     break;
 
                 case VolumeReportsTimePeriod.Monthly:
                     selectBuilder.Append(@" ,datepart(month,BS.CallDate) AS CallMonth
 						                  ,datepart(year,bs.CallDate) AS CallYear ");
+                 //   selectBuilder.Append(" ,tr.FromDate,tr.ToDate ");
                     groupBuilder.Append(" ,DATEPART(month,BS.calldate),DATEPART(year,BS.calldate)  ");
+                    orderBuilder.Append(" BS.CallDate , ");
                     break;
 
-            }
+            }        
             queryBuilder.Replace("#SelectBuilder#", selectBuilder.ToString());
             queryBuilder.Replace("#GroupByBuilder#", groupBuilder.ToString());
+            queryBuilder.Replace("#OrderBuilder#", orderBuilder.ToString());
 
 
             return queryBuilder.ToString();
         }
 
-        public DestinationVolumeTrafficResult GetDestinationTrafficVolumes(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int zoneId, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination)
+        public DestinationVolumeTrafficResult GetDestinationTrafficVolumes(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int zoneId, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination, List<TimeRange> timeRange)
         {
-            string query = GetDestinationTrafficVolumesQuery(fromDate, toDate, customerId, supplierId, zoneId, attempts, timePeriod, topDestination, true);
+            string query = GetDestinationTrafficVolumesQuery(fromDate, toDate, customerId, supplierId, zoneId, attempts, timePeriod, topDestination, true,timeRange);
 
             List<ZoneInfo> topDestinationZones = new List<ZoneInfo>();
             List<TimeValuesRecord> valuesPerDate = new List<TimeValuesRecord>();
             TimeValuesRecord topValues = new TimeValuesRecord { Time = new List<string>(), Values = new List<decimal>() };
+            DataTable timeRangeDataTable = new DataTable();
+            timeRangeDataTable = ToDataTable(timeRange);
 
             if (!string.IsNullOrEmpty(query))
                 ExecuteReaderText(query,
@@ -1198,6 +1201,10 @@ namespace TOne.Analytics.Data.SQL
                    cmd.Parameters.Add(new SqlParameter("@ToDate", toDate));
                    cmd.Parameters.Add(new SqlParameter("@Attempts", attempts));
                    cmd.Parameters.Add(new SqlParameter("@ZoneId", zoneId));
+                   var dtPrm = new SqlParameter("@timeRange", SqlDbType.Structured);
+                   dtPrm.TypeName = "Analytics.TimeRangeType";
+                   dtPrm.Value = timeRangeDataTable;
+                   cmd.Parameters.Add(dtPrm);
                    if (!string.IsNullOrEmpty(supplierId)) cmd.Parameters.Add(new SqlParameter("@SupplierId", supplierId));
                    if (!string.IsNullOrEmpty(customerId)) cmd.Parameters.Add(new SqlParameter("@CustomerId", customerId));
                });
@@ -1237,7 +1244,7 @@ namespace TOne.Analytics.Data.SQL
         {
 
              
-            topValues.Values.Add( GetReaderValue<decimal>(reader, "SaleDurationValue"));
+            topValues.Values.Add( GetReaderValue<decimal>(reader, "Value"));
              
             //topValues.Values =  new List<decimal>();
             //topValues.Values.Add(GetReaderValue<decimal>(reader, "SaleDurationValue"));
@@ -1246,8 +1253,8 @@ namespace TOne.Analytics.Data.SQL
             switch (timePeriod)
             {
                 case VolumeReportsTimePeriod.None: topValues.Time.Add(""); break;
-                case VolumeReportsTimePeriod.Daily: topValues.Time .Add(reader["CallDate"] as string); break;
-                case VolumeReportsTimePeriod.Weekly: topValues.Time.Add(string.Concat(((int)reader["CallWeek"]).ToString(), "/", ((int)reader["CallYear"]).ToString())); break;
+                case VolumeReportsTimePeriod.Daily: topValues.Time.Add(reader["CallDate"] as string); break;
+                case VolumeReportsTimePeriod.Weekly:  topValues.Time.Add(string.Concat(((int)reader["CallWeek"]).ToString(), "/", ((int)reader["CallYear"]).ToString())); break;
                 case VolumeReportsTimePeriod.Monthly: topValues.Time.Add(string.Concat(((int)reader["CallMonth"]).ToString(), "/", ((int)reader["CallYear"]).ToString())); break;
             }
 
