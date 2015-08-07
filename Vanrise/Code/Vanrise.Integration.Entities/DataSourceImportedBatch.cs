@@ -17,6 +17,6 @@ namespace Vanrise.Integration.Entities
         public string MapperMessage { get; set; }
         public string QueueItemIds { get; set; }
         public DateTime LogEntryTime { get; set; }
-        public QueueItemStatus ExecutionStatus { get; set; }
+        public ItemExecutionFlowStatus ExecutionStatus { get; set; }
     }
 }

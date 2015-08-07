@@ -41,7 +41,7 @@ namespace Vanrise.Integration.Business
             }
 
             QueueingManager qManager = new QueueingManager();
-            Dictionary<long, ItemExecutionStatus> dicItemExecutionStatus = qManager.GetItemsExecutionStatus(queueItemIds);
+            Dictionary<long, ItemExecutionFlowInfo> dicItemExecutionStatus = qManager.GetItemsExecutionFlowStatus(queueItemIds);
 
             foreach (DataSourceImportedBatch batch in bigResult.Data)
             {
@@ -51,9 +51,9 @@ namespace Vanrise.Integration.Business
                     foreach (string qId in qIds)
                     {
                         long singleQueueItemId = long.Parse(qId);
-                        List<ItemExecutionStatus> list = new List<ItemExecutionStatus>();
+                        List<ItemExecutionFlowInfo> list = new List<ItemExecutionFlowInfo>();
                         list.Add(dicItemExecutionStatus[singleQueueItemId]);
-                        batch.ExecutionStatus = qManager.GetExecutionStatus(list);
+                        batch.ExecutionStatus = qManager.GetExecutionFlowStatus(list);
                     }
                 }
                 else
