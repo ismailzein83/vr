@@ -15,6 +15,7 @@ using TOne.Analytics.Entities;
 using TOne.BusinessEntity.Business;
 using TOne.BusinessEntity.Entities;
 using System.Drawing;
+using Vanrise.Entities;
 
 namespace TOne.Analytics.Business
 {
@@ -61,7 +62,7 @@ namespace TOne.Analytics.Business
             return columnName;
         }
 
-        public HttpResponseMessage ExportSupplierCostDetails(DateTime fromDate, DateTime toDate, string customerId, int topDestination)
+        public ExcelResult ExportCarrierProfile(DateTime fromDate, DateTime toDate, string customerId, int topDestination)
         {
             // Monthly Traffic Carrier As Customer (Amount,Durations) , Top N Destinations (Amount,Durations)  (3 datatables)
             List<CarrierProfileReport> lstCarrierProfileMTDMTASale = GetCarrierProfileMTDAndMTA(fromDate, toDate, customerId, true);
@@ -94,26 +95,13 @@ namespace TOne.Analytics.Business
             chartTitle = "Monthly Traffic " + _bemanager.GetCarrirAccountName(customerId) + " As Supplier";
             CreateWorkSheetMTDMTA(wbk, "Monthly Traffic as Supplier", lstCarrierProfileMTDMTA, fromDate, toDate, topDestination, chartTitle, style);
             CreateWorkSheet(wbk, "Traf Top Dest Dur Sup", lstCarrierProfileAmount, fromDate, toDate, topDestination, "Traffic Top Destination Duration Supplier", style);
-            CreateWorkSheet(wbk, "Traf Top Dest Amt Sup", lstCarrierProfile, fromDate, toDate, topDestination, "Traffic Top Destination Amount Supplier", style);            
-        
-            //wbk.Save("D:\\book1.xls");
+            CreateWorkSheet(wbk, "Traf Top Dest Amt Sup", lstCarrierProfile, fromDate, toDate, topDestination, "Traffic Top Destination Amount Supplier", style);
 
-            byte[] array;
-            MemoryStream ms = new MemoryStream();
-            ms = wbk.SaveToStream();
-            array = ms.ToArray();
-
-            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
-            ms.Position = 0;
-            result.Content = new StreamContent(ms);
-
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            ExcelResult excelResult = new ExcelResult
             {
-                FileName = "Data.xls"
+                ExcelFileStream = wbk.SaveToStream()
             };
-
-            return result;
+            return excelResult;
         }
         private void CreateWorkSheetMTDMTA(Workbook workbook, string workSheetName, List<CarrierProfileReport> lstCarrierProfileReport, DateTime fromDate, DateTime toDate, int topDestination, string chartTitle, Style style)
         {
@@ -223,7 +211,7 @@ namespace TOne.Analytics.Business
 
                 worksheet.Cells.CreateRange("C2", colName + "2").SetStyle(style);
 
-                int chartIndex = worksheet.Charts.Add(Aspose.Cells.Charts.ChartType.Column, topDestination + 3, 1, 30, NumberOfMonths + 2);
+                int chartIndex = worksheet.Charts.Add(Aspose.Cells.Charts.ChartType.Column, topDestination + 3, 1, (int)(topDestination * 2.5), NumberOfMonths + 2);
                 Aspose.Cells.Charts.Chart chart = worksheet.Charts[chartIndex];
 
 

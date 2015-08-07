@@ -8,6 +8,7 @@ using System.Text;
 using System.Web.Http;
 using TOne.Analytics.Business;
 using TOne.Analytics.Entities;
+using Vanrise.Entities;
 
 
 namespace TOne.Analytics.Web.Controllers
@@ -21,14 +22,14 @@ namespace TOne.Analytics.Web.Controllers
         {
             __billingStatisticsManager = new BillingStatisticManager();
         }
-          
+
         [HttpGet]
-        public VariationReportResult GetVariationReport(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOption, int fromRow, int toRow, EntityType entityType, string entityID,GroupingBy groupingBy)
+        public VariationReportResult GetVariationReport(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOption, int fromRow, int toRow, EntityType entityType, string entityID, GroupingBy groupingBy)
         {
             if (variationReportOption == VariationReportOptions.InOutBoundMinutes || variationReportOption == VariationReportOptions.InOutBoundAmount)
             {
-                return __billingStatisticsManager.GetInOutVariationReportsData(selectedDate, periodCount, timePeriod, variationReportOption, entityType, entityID, groupingBy,fromRow,toRow);
-              
+                return __billingStatisticsManager.GetInOutVariationReportsData(selectedDate, periodCount, timePeriod, variationReportOption, entityType, entityID, groupingBy, fromRow, toRow);
+
             }
             else
                 return __billingStatisticsManager.GetVariationReportsData(selectedDate, periodCount, timePeriod, variationReportOption, fromRow, toRow, entityType, entityID, groupingBy);
@@ -44,15 +45,18 @@ namespace TOne.Analytics.Web.Controllers
             return __billingStatisticsManager.GetDestinationTrafficVolumes(fromDate, toDate, customerId, supplierId, zoneId, attempts, timePeriod, topDestination);
         }
 
-        [HttpGet]
-        public HttpResponseMessage Export(string fromDate, string toDate, string customerId, string topDestination)
+        [HttpPost]
+        public object ExportCarrierProfile(ExportCarrierProfileInput input)
         {
-            DateTime from = DateTime.ParseExact(fromDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-            DateTime to = DateTime.ParseExact(toDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-            int topDest = 0;
-            int.TryParse(topDestination, out topDest);
-
-            return __billingStatisticsManager.ExportSupplierCostDetails(from, to, customerId, topDest);
+            return GetExcelResponse(__billingStatisticsManager.ExportCarrierProfile(input.FromDate, input.ToDate, input.CustomerId, input.TopDestination));
         }
+    }
+
+    public class ExportCarrierProfileInput
+    {
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public int TopDestination { get; set; }
+        public string CustomerId { get; set; }
     }
 }

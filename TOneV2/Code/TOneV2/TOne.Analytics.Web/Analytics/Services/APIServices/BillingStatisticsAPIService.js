@@ -1,15 +1,14 @@
 ﻿
-app.service('BillingStatisticsAPIService', function (BaseAPIService) {
-
+app.service('BillingStatisticsAPIService', function (BaseAPIService, DataRetrievalResultTypeEnum) {
     return ({
 
         GetVariationReport: GetVariationReport,
         GetTrafficVolumes: GetTrafficVolumes,
-        GetDestinationTrafficVolumes : GetDestinationTrafficVolumes,
-        Export: Export
+        GetDestinationTrafficVolumes: GetDestinationTrafficVolumes,
+        ExportCarrierProfile: ExportCarrierProfile
     });
 
-    function GetVariationReport(selectedDate, periodCount, timePeriod, variationReportOption, fromRow, toRow,entityType,entityID,groupingBy) {
+    function GetVariationReport(selectedDate, periodCount, timePeriod, variationReportOption, fromRow, toRow, entityType, entityID, groupingBy) {
         return BaseAPIService.get("/api/BillingStatistics/GetVariationReport",
             {
                 selectedDate: selectedDate,
@@ -26,10 +25,6 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService) {
             );
     }
 
-    function Export() {
-        return "/api/BillingStatistics/Export";
-    }
-    
     function GetTrafficVolumes(fromDate, toDate, selectedCustomer, selectedSupplier, selectedZone, attempts, selectedTimePeriod) {
         return BaseAPIService.get("/api/BillingStatistics/GetTrafficVolumes", {
             fromDate: fromDate,
@@ -42,7 +37,7 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService) {
         });
     }
 
-    function GetDestinationTrafficVolumes(fromDate, toDate, selectedCustomer, selectedSupplier, selectedZone, attempts, selectedTimePeriod,topDestination) {
+    function GetDestinationTrafficVolumes(fromDate, toDate, selectedCustomer, selectedSupplier, selectedZone, attempts, selectedTimePeriod, topDestination) {
         return BaseAPIService.get("/api/BillingStatistics/GetDestinationTrafficVolumes", {
             fromDate: fromDate,
             toDate: toDate,
@@ -51,7 +46,21 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService) {
             zoneId: selectedZone,
             attempts: attempts,
             timePeriod: selectedTimePeriod,
-            topDestination : topDestination
+            topDestination: topDestination
         });
+    }
+
+    function ExportCarrierProfile(fromDate, toDate, topDestination, customerId) {
+        return BaseAPIService.post("/api/BillingStatistics/ExportCarrierProfile",
+            {
+                FromDate: fromDate,
+                ToDate: toDate,
+                TopDestination: topDestination,
+                CustomerId: customerId
+            },
+            {
+                responseTypeAsBufferArray: true,
+                returnAllResponseParameters: true
+            });
     }
 });

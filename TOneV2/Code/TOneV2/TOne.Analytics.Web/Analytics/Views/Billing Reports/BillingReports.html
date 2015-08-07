@@ -11,16 +11,12 @@
                 <vr-columns colnum="3" ng-show="reporttype.ParameterSettings.RequiresCustomerId">
                     <vr-label>Customer</vr-label>
 
-                    <vr-select limitheight="true" hideselectedvaluessection="true" datasource="optionsCustomers"
-                               selectedvalues="params.customer" datatextfield="Name" datavaluefield="CarrierAccountID"
-                               entityname="Customers"></vr-select>
-
-                    <!--<vr-select ng-if="reporttype.ParameterSettings.CustomerIdNotOptional != true" limitheight="true" hideselectedvaluessection="true" datasource="optionsCustomers"
+                    <vr-select ng-if="reporttype.ParameterSettings.CustomerIdNotOptional != true" limitheight="true" hideselectedvaluessection="true" datasource="optionsCustomers"
                                selectedvalues="params.customer" datatextfield="Name" datavaluefield="CarrierAccountID"
                                entityname="Customers"></vr-select>
                     <vr-select ng-if="reporttype.ParameterSettings.CustomerIdNotOptional == true" isrequired limitheight="true" hideselectedvaluessection="true" datasource="optionsCustomers"
                                selectedvalues="params.customer" datatextfield="Name" datavaluefield="CarrierAccountID"
-                               entityname="Customers"></vr-select>-->
+                               entityname="Customers"></vr-select>
 
                 </vr-columns>
                 <vr-columns colnum="3" ng-show="reporttype.ParameterSettings.RequiresSupplierId">

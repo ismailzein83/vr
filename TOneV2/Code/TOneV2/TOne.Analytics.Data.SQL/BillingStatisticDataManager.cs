@@ -335,60 +335,64 @@ namespace TOne.Analytics.Data.SQL
         }
         public List<CarrierProfileReport> GetCarrierProfileMTDAndMTA(DateTime fromDate, DateTime toDate, string customerId, bool isSale)
         {
-            int DaysInTillDays = DateTime.DaysInMonth(toDate.Year, toDate.Month);
-
             string query = String.Format(@"SELECT 
                     Convert(varchar(7), BS.CallDate,121) AS [Month],
                     IsNull(SUM(BS.SaleDuration) / 60.0,0) AS Durations,
                     IsNull(SUM({0}),0) AS Amount
                 From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date,IX_Billing_Stats_{1})), Zone z (NOLOCK) 
-                WHERE BS.CallDate BETWEEN '{2}' AND '{3}' AND {4} = '{5}' AND z.ZoneID = {6}
+                WHERE BS.CallDate BETWEEN @FromDate AND @ToDate  AND {2} = @CustomerId AND z.ZoneID = {3}
                 GROUP BY Convert(varchar(7), BS.CallDate,121)
                 ORDER BY Convert(varchar(7), BS.CallDate,121) DESC",
             isSale ? "BS.Sale_Nets / dbo.GetExchangeRate(BS.Sale_Currency, BS.CallDate) " : "BS.Cost_Nets / dbo.GetExchangeRate(BS.Sale_Currency, BS.CallDate) ",
             isSale ? "Customer" : "Supplier",
-            fromDate.Date.ToString("yyyy-MM-dd"),
-            toDate.Date.ToString("yyyy-MM-") + DaysInTillDays.ToString(),
             isSale ? "BS.CustomerID" : "BS.SupplierID",
-            customerId,
             isSale ? "BS.SaleZoneID" : "BS.CostZoneID");
 
-            return GetItemsText(query, (reader) => CarrierProfileMTDAndMTAMapper(reader), null);
+            return GetItemsText(query, CarrierProfileMTDAndMTAMapper,
+            (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@FromDate", new DateTime(fromDate.Year, fromDate.Month, fromDate.Day)));
+                cmd.Parameters.Add(new SqlParameter("@ToDate", new DateTime(toDate.Year, toDate.Month, DateTime.DaysInMonth(toDate.Year, toDate.Month))));
+                cmd.Parameters.Add(new SqlParameter("@CustomerId", customerId));
+            });
         }
         public List<CarrierProfileReport> GetCarrierProfile(DateTime fromDate, DateTime toDate, string customerId, int topDestination, bool isSale, bool isAmount)
         {
             string DurationField = "BS.SaleDuration / 60.0";
-            //string AmountField = isSale ? "BS.Sale_Nets / dbo.GetExchangeRate(BS.Sale_Currency, BS.CallDate) " : "BS.Cost_Nets / dbo.GetExchangeRate(BS.Sale_Currency, BS.CallDate) ";
             string AmountField = isSale ? "CAST( BS.Sale_Nets / CAST(dbo.GetExchangeRate(BS.Sale_Currency, BS.CallDate) as decimal(13,4))  as decimal(13,4))  " : "CAST( BS.Cost_Nets / CAST(dbo.GetExchangeRate(BS.Sale_Currency, BS.CallDate) as decimal(13,4))  as decimal(13,4)) ";
-            string th = isAmount ? AmountField : DurationField;
+            string amountDuration = isAmount ? AmountField : DurationField;
             string carrier = isSale ? "Customer" : "Supplier";
-            string strId = isSale ? "BS.CustomerID" : "BS.SupplierID";
-            string strSaleZone = isSale ? "BS.SaleZoneID" : "BS.CostZoneID";
-            string query = String.Format(@"WITH OrderedZones AS (SELECT TOP {0} z.ZoneID, z.Name 
-                From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date,IX_Billing_Stats_{5})),
+            string carrierId = isSale ? "BS.CustomerID" : "BS.SupplierID";
+            string saleZone = isSale ? "BS.SaleZoneID" : "BS.CostZoneID";
+            string query = String.Format(@";WITH OrderedZones AS (SELECT TOP (@TopDestination) z.ZoneID, z.Name 
+                From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date,IX_Billing_Stats_{1})),
                 Zone z (NOLOCK) WHERE bs.CallDate 
-                BETWEEN '{1}' AND '{2}' AND {6} = '{3}' AND z.ZoneID = {7} 
+                BETWEEN @FromDate AND @ToDate AND {2} = @CustomerId AND z.ZoneID = {3} 
                 GROUP BY z.ZoneID, z.Name 
-                ORDER BY SUM({4}) DESC ) 
+                ORDER BY SUM({0}) DESC ) 
                 
                 SELECT z.Name,Year(bs.CallDate) AS YearDuration, 
                 MONTH(BS.CallDate) AS MonthDuration, 
-                SUM({4})/60 AS SaleDuration 
-                From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date,IX_Billing_Stats_{5})), OrderedZones z 
-                WHERE bs.CallDate BETWEEN '{1}' AND '{2}' AND {6} = '{3}' AND z.ZoneID = {7} 
+                SUM({0})/60 AS SaleDuration 
+                From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date,IX_Billing_Stats_{1})), OrderedZones z 
+                WHERE bs.CallDate BETWEEN @FromDate AND @ToDate AND {2} = @CustomerId AND z.ZoneID = {3} 
                 GROUP BY z.Name , Year(bs.CallDate), MONTH(BS.CallDate)",
-                topDestination,
-                fromDate.Date.ToString("yyyy-MM-dd"),
-                toDate.Date.ToString("yyyy-MM-dd"),
-                customerId,
-                th,
+                amountDuration,
                 carrier,
-                strId,
-                strSaleZone
+                carrierId,
+                saleZone
                 );
 
-            return GetItemsText(query, (reader) => CarrierProfileMapper(reader), null);
+            return GetItemsText(query, CarrierProfileMapper,
+            (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@TopDestination", topDestination));
+                cmd.Parameters.Add(new SqlParameter("@FromDate", new DateTime(fromDate.Year, fromDate.Month, fromDate.Day)));
+                cmd.Parameters.Add(new SqlParameter("@ToDate", new DateTime(toDate.Year, toDate.Month, toDate.Day)));
+                cmd.Parameters.Add(new SqlParameter("@CustomerId", customerId));
+            });
         }
+
         #region PrivatMethods
         private ZoneProfit ZoneProfitMapper(IDataReader reader, bool groupByCustomer)
         {
