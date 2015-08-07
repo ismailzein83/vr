@@ -131,6 +131,7 @@
     <Content Include="DLLs\Rebex.Security.dll" />
     <Content Include="DLLs\Rebex.TerminalEmulation.dll" />
     <Content Include="DLLs\Rebex.TerminalEmulation.xml" />
+    <Content Include="DLLs\Vanrise.Components.Security.dll" />
     <Content Include="LKUPtable_GenerateMergeScript\Readme.txt" />
     <Content Include="LKUPtable_GenerateMergeScript\Script.txt" />
   </ItemGroup>
