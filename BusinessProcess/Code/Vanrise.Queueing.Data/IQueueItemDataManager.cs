@@ -31,7 +31,7 @@ namespace Vanrise.Queueing.Data
 
         List<QueueItemHeader> GetHeaders(IEnumerable<int> queueIds, IEnumerable<QueueItemStatus> statuses, DateTime dateFrom, DateTime dateTo);
 
-        List<ItemExecutionStatus> GetItemsExecutionStatus(List<long> itemIds);
+        List<ItemExecutionFlowInfo> GetItemExecutionFlowInfo(List<long> itemIds);
 
         List<QueueItemHeader> GetQueueItemsHeader(List<long> itemIds);
     }

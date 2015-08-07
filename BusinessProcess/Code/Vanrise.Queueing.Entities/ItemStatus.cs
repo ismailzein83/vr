@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Queueing.Entities
 {
-    public class ItemExecutionStatus
+    public enum ItemExecutionFlowStatus { New = 0, Processing = 10, Failed = 20, Processed = 30 }
+
+    public class ItemExecutionFlowInfo
     {
         public long ItemId { get; set; }
 
         public long ExecutionFlowTriggerItemId { get; set; }
 
-        public QueueItemStatus Status { get; set; }
+        public ItemExecutionFlowStatus Status { get; set; }
     }
 }

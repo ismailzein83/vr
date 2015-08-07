@@ -34,47 +34,47 @@ namespace Vanrise.Queueing
             return _itemDataManager.GetHeaders(queueIds, statuses, dateFrom, dateTo);
         }
 
-        public Dictionary<long, ItemExecutionStatus> GetItemsExecutionStatus(List<long> itemIds)
+        public Dictionary<long, ItemExecutionFlowInfo> GetItemsExecutionFlowStatus(List<long> itemIds)
         {
-            List<ItemExecutionStatus> originalList = _itemDataManager.GetItemsExecutionStatus(itemIds);
+            List<ItemExecutionFlowInfo> originalList = _itemDataManager.GetItemExecutionFlowInfo(itemIds);
 
             var subLists = originalList.GroupBy(p => p.ItemId)
                         .Select(g => g.ToList());
 
-            Dictionary<long, ItemExecutionStatus> itemsExectionStatusDic = new Dictionary<long, ItemExecutionStatus>();
+            Dictionary<long, ItemExecutionFlowInfo> itemsExectionStatusDic = new Dictionary<long, ItemExecutionFlowInfo>();
 
-            foreach (List<ItemExecutionStatus> list in subLists)
+            foreach (List<ItemExecutionFlowInfo> list in subLists)
             {
-                ItemExecutionStatus resultItem =
-                        new ItemExecutionStatus() { ItemId = list[0].ItemId, ExecutionFlowTriggerItemId = list[0].ExecutionFlowTriggerItemId };
+                ItemExecutionFlowInfo resultItem =
+                        new ItemExecutionFlowInfo() { ItemId = list[0].ItemId, ExecutionFlowTriggerItemId = list[0].ExecutionFlowTriggerItemId };
 
-                resultItem.Status = this.GetExecutionStatus(list);
+                resultItem.Status = this.GetExecutionFlowStatus(list);
                 itemsExectionStatusDic.Add(list[0].ItemId, resultItem);
             }
 
             return itemsExectionStatusDic;
         }
 
-        public QueueItemStatus GetExecutionStatus(List<ItemExecutionStatus> list)
+        public ItemExecutionFlowStatus GetExecutionFlowStatus(List<ItemExecutionFlowInfo> list)
         {
-            QueueItemStatus result = QueueItemStatus.New;
+            ItemExecutionFlowStatus result = ItemExecutionFlowStatus.New;
 
             int statusNewCount = 0;
             int statusProcessedCount = 0;
             int statusItemFailedCount = 0;
             int statusItemProcessingCount = 0;
 
-            foreach (ItemExecutionStatus item in list)
+            foreach (ItemExecutionFlowInfo item in list)
             {
                 switch (item.Status)
                 {
-                    case QueueItemStatus.New:
+                    case ItemExecutionFlowStatus.New:
                         statusNewCount++;
                         break;
-                    case QueueItemStatus.Processing:
+                    case ItemExecutionFlowStatus.Processing:
                         statusItemProcessingCount++;
                         break;
-                    case QueueItemStatus.Failed:
+                    case ItemExecutionFlowStatus.Failed:
                         statusItemFailedCount++;
                         break;
                     default:
@@ -84,13 +84,13 @@ namespace Vanrise.Queueing
             }
 
             if (statusNewCount == list.Count)
-                result = QueueItemStatus.New;
+                result = ItemExecutionFlowStatus.New;
             else if (statusProcessedCount == list.Count)
-                result = QueueItemStatus.Processed;
+                result = ItemExecutionFlowStatus.Processed;
             else if (statusItemFailedCount > 0)
-                result = QueueItemStatus.Failed;
+                result = ItemExecutionFlowStatus.Failed;
             else if (statusItemProcessingCount > 0)
-                result = QueueItemStatus.Processing;
+                result = ItemExecutionFlowStatus.Processing;
 
 
             return result;
@@ -101,7 +101,7 @@ namespace Vanrise.Queueing
             return _itemDataManager.GetQueueItemsHeader(itemIds);
         }
 
-        private QueueItemStatus GetSubStatus(List<ItemExecutionStatus> subList)
+        private QueueItemStatus GetSubStatus(List<ItemExecutionFlowInfo> subList)
         {
             return QueueItemStatus.Processed;
         }

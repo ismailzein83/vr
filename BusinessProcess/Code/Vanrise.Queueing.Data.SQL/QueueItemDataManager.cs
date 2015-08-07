@@ -235,19 +235,19 @@ namespace Vanrise.Queueing.Data.SQL
             return updatedQueues;
         }
 
-        public List<ItemExecutionStatus> GetItemsExecutionStatus(List<long> itemIds)
+        public List<ItemExecutionFlowInfo> GetItemExecutionFlowInfo(List<long> itemIds)
         {
-            List<ItemExecutionStatus> result = new List<ItemExecutionStatus>();
+            List<ItemExecutionFlowInfo> result = new List<ItemExecutionFlowInfo>();
 
             ExecuteReaderSPCmd("queue.sp_QueueItemHeader_GetItemsExecutionStatus", (reader) =>
                 {
                     while (reader.Read())
                     {
-                        ItemExecutionStatus item = new ItemExecutionStatus()
+                        ItemExecutionFlowInfo item = new ItemExecutionFlowInfo()
                         {
                             ItemId = (long)reader["ItemID"],
                             ExecutionFlowTriggerItemId = GetReaderValue<long>(reader, "ExecutionFlowTriggerItemID"),
-                            Status = (QueueItemStatus)reader["Status"]
+                            Status = (ItemExecutionFlowStatus)reader["Status"]
                         };
                         result.Add(item);
                     }
