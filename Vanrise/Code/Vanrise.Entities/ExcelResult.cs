@@ -14,6 +14,5 @@ namespace Vanrise.Entities
 
     public class ExcelResult<T> : ExcelResult, IDataRetrievalResult<T>
     {
-        public MemoryStream ExcelFileStream { get; set; }
     }
 }

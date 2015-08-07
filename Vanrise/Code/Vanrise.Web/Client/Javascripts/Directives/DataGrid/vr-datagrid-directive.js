@@ -724,6 +724,7 @@
         function retrieveData(clearBeforeRetrieve, isExport, isSorting) {
             if (!isGridReady)
                 return;
+            
             if (clearBeforeRetrieve) {
                 retrieveDataResultKey = null;
                 sortColumn = ctrl.columnDefs[0];
@@ -734,7 +735,8 @@
                     ctrl.pagerSettings.currentPage = 1;
             }
 
-
+            if (sortColumn == undefined)
+                return;
             retrieveDataInput.SortByColumnName = sortColumn.field
             retrieveDataInput.IsSortDescending = (sortDirection == "DESC");
             
