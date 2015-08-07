@@ -154,10 +154,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', functi
     }
 
     function getLogEntryTypeDescription(logEntryType) {
-        if (logEntryType) {
-            var enumObj = getEnum(LogEntryTypeEnum, 'value', logEntryType);
-            if (enumObj) return enumObj.description;
-        }
+        var enumObj = getEnum(LogEntryTypeEnum, 'value', logEntryType);
+        if (enumObj) return enumObj.description;
         return undefined;
     }
 
