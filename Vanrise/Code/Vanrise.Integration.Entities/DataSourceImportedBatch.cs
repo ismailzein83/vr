@@ -13,7 +13,7 @@ namespace Vanrise.Integration.Entities
         public string BatchName { get; set; }
         public decimal BatchSize { get; set; }
         public int RecordsCount { get; set; }
-        public MappingResultType MappingResult { get; set; }
+        public MappingResult MappingResult { get; set; }
         public string MapperMessage { get; set; }
         public string QueueItemIds { get; set; }
         public DateTime LogEntryTime { get; set; }

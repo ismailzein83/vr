@@ -105,7 +105,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Integration\Constants\Integration_MappingResultTypeEnum.js" />
+    <Content Include="Integration\Constants\ExecutionStatusColorEnum.js" />
+    <Content Include="Integration\Constants\MappingResultEnum.js" />
+    <Content Include="Integration\Constants\ExecutionStatusEnum.js" />
     <Content Include="Integration\Services\APIServices\DataSourceAPIService.js" />
     <Content Include="Integration\Services\APIServices\DataSourceImportedBatchAPIService.js" />
     <Content Include="Integration\Services\APIServices\DataSourceLogAPIService.js" />
@@ -123,6 +125,8 @@
     <Content Include="Integration\Views\DataSourceLogManagementController.js" />
     <Content Include="Integration\Views\DataSourceManagement.html" />
     <Content Include="Integration\Views\DataSourceManagementController.js" />
+    <Content Include="Integration\Views\QueueItemHeaderGrid.html" />
+    <Content Include="Integration\Views\QueueItemHeaderGridController.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">

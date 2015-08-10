@@ -3,6 +3,7 @@
 function DataSourceLogManagementController($scope, DataSourceLogsAPIService, DataSourceAPIService, UtilsService, VRNotificationService) {
 
     var gridApi;
+    var filtersAreNotReady = true;
 
     defineScope();
     load();
@@ -19,25 +20,7 @@ function DataSourceLogManagementController($scope, DataSourceLogsAPIService, Dat
 
         $scope.gridReady = function (api) {
             gridApi = api;
-
-            // load all of the data sources to filter the grid by the first data source
-            $scope.isLoadingForm = true;
-
-            DataSourceAPIService.GetDataSources()
-                .then(function (response) {
-                    $scope.dataSources = response;
-
-                    if (response.length > 0) // select the first data source
-                        $scope.selectedDataSource = $scope.dataSources[0];
-
-                    return retrieveData();
-                })
-                .catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                })
-                .finally(function () {
-                    $scope.isLoadingForm = false;
-                });
+            return retrieveData();
         }
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
@@ -65,12 +48,22 @@ function DataSourceLogManagementController($scope, DataSourceLogsAPIService, Dat
     }
 
     function load() {
-        // the data sources are loaded independently when the grid is ready
         $scope.isLoadingForm = true;
 
-        UtilsService.waitMultipleAsyncOperations([loadSeverities])
+        loadSeverities();
+
+        DataSourceAPIService.GetDataSources()
+            .then(function (response) {
+                $scope.dataSources = response;
+                
+                if (response.length > 0) // select the first data source
+                    $scope.selectedDataSource = $scope.dataSources[0];
+
+                filtersAreNotReady = false;
+                return retrieveData();
+            })
             .catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
+                VRNotificationService.notifyExceptionWithException(error, $scope);
             })
             .finally(function () {
                 $scope.isLoadingForm = false;
@@ -78,6 +71,9 @@ function DataSourceLogManagementController($scope, DataSourceLogsAPIService, Dat
     }
 
     function retrieveData() {
+        if (gridApi == undefined) return;
+        if (filtersAreNotReady) return;
+
         var query = {
             DataSourceId: ($scope.selectedDataSource != undefined) ? $scope.selectedDataSource.Id : null,
             Severities: getMappedSelectedSeverities(),

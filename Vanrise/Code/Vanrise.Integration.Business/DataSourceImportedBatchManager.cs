@@ -65,10 +65,14 @@ namespace Vanrise.Integration.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, bigResult);
         }
 
-        public List<Vanrise.Integration.Entities.DataSourceImportedBatchName> GetBatchNames()
+        public Vanrise.Entities.IDataRetrievalResult<QueueItemHeader> GetQueueItemHeaders(Vanrise.Entities.DataRetrievalInput<QueueItemHeaderQuery> input)
         {
-            IDataSourceImportedBatchDataManager dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceImportedBatchDataManager>();
-            return dataManager.GetBatchNames();
+            Vanrise.Entities.BigResult<QueueItemHeader> bigResult = new Vanrise.Entities.BigResult<QueueItemHeader>();
+
+            QueueingManager manager = new QueueingManager();
+            bigResult.Data = manager.GetQueueItemsHeader(input.Query.ItemIds);
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, bigResult);
         }
     }
 }

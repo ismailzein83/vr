@@ -12,7 +12,7 @@
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-select label="Batch Name" datatextfield="BatchName" datavaluefield="ID" datasource="batchNames" selectedvalues="selectedBatchName"></vr-select>
+                    <vr-textbox label="Batch Name" value="batchName"></vr-textbox>
                 </vr-columns>
 
                 <vr-columns width="normal">
@@ -47,9 +47,14 @@
                     <vr-datagridcolumn headertext="'Batch Name'" field="'BatchName'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Batch Size'" field="'BatchSize'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Records Count'" field="'RecordsCount'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Mapping Result'" field="'MappingResult'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Mapping Result'" field="'MappingResultDescription'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Mapper Message'" field="'MapperMessage'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Log Entry Time'" field="'LogEntryTime'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Execution Status'" field="'ExecutionStatusDescription'" getcolor="getStatusColor"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Log Entry Time'" field="'LogEntryTime'" type="'Datetime'"></vr-datagridcolumn>
+
+                    <vr-datagridexpandablerow>
+                        <div ng-include="'/Client/Modules/Integration/Views/QueueItemHeaderGrid.html'"></div>
+                    </vr-datagridexpandablerow>
                 </vr-datagrid>
 
             </vr-columns>

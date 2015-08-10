@@ -28,15 +28,10 @@ namespace Vanrise.Integration.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("[integration].[sp_DataSourceImportedBatch_CreateTempForFiltered]", tempTableName, input.Query.DataSourceId, input.Query.BatchName, input.Query.MappingResult, input.Query.From, input.Query.To);
+                ExecuteNonQuerySP("integration.sp_DataSourceImportedBatch_CreateTempForFiltered", tempTableName, input.Query.DataSourceId, input.Query.BatchName, input.Query.MappingResult, input.Query.From, input.Query.To);
             };
 
             return RetrieveData(input, createTempTableAction, DataSourceImportedBatchMapper);
-        }
-
-        public List<Entities.DataSourceImportedBatchName> GetBatchNames()
-        {
-            return GetItemsSP("integration.sp_DataSourceImportedBatch_GetBatchNames", BatchNameMapper);
         }
 
         Vanrise.Integration.Entities.DataSourceImportedBatch DataSourceImportedBatchMapper(IDataReader reader)
@@ -47,23 +42,13 @@ namespace Vanrise.Integration.Data.SQL
                 BatchName = reader["BatchDescription"] as string,
                 BatchSize = GetReaderValue<decimal>(reader, "BatchSize"),
                 RecordsCount = (int)reader["RecordsCount"],
-                MappingResult = (MappingResultType)reader["MappingResult"],
+                MappingResult = (MappingResult)reader["MappingResult"],
                 MapperMessage = reader["MapperMessage"] as string,
                 QueueItemIds = reader["QueueItemIds"] as string,
                 LogEntryTime = (DateTime)reader["LogEntryTime"]
             };
 
             return dataSourceImportedBatch;
-        }
-
-        Vanrise.Integration.Entities.DataSourceImportedBatchName BatchNameMapper(IDataReader reader)
-        {
-            Vanrise.Integration.Entities.DataSourceImportedBatchName batchName = new Vanrise.Integration.Entities.DataSourceImportedBatchName
-            {
-                BatchName = reader["BatchDescription"] as string
-            };
-
-            return batchName;
         }
     }
 }

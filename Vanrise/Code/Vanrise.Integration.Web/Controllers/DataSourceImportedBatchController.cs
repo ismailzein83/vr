@@ -6,6 +6,7 @@ using System.Web.Http;
 using Vanrise.Integration.Business;
 using Vanrise.Web.Base;
 using Vanrise.Integration.Entities;
+using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Integration.Web.Controllers
 {
@@ -18,12 +19,11 @@ namespace Vanrise.Integration.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredDataSourceImportedBatches(input));
         }
 
-        [HttpGet]
-        public List<Vanrise.Integration.Entities.DataSourceImportedBatchName> GetBatchNames()
+        [HttpPost]
+        public object GetQueueItemHeaders(Vanrise.Entities.DataRetrievalInput<QueueItemHeaderQuery> input)
         {
             DataSourceImportedBatchManager manager = new DataSourceImportedBatchManager();
-            List<DataSourceImportedBatchName> response = manager.GetBatchNames();
-            return response;
+            return GetWebResponse(input, manager.GetQueueItemHeaders(input));
         }
     }
 }

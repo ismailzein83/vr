@@ -1,0 +1,22 @@
+﻿<div ng-controller="Integration_QueueItemHeaderGridController">
+
+    <vr-datagrid datasource="queueItemHeaders"
+                 dataretrievalfunction="dataRetrievalFunction"
+                 pagingtype="'PagingOnScroll'"
+                 on-ready="gridReady"
+                 issubgrid>
+
+        <vr-datagridcolumn headertext="'Created Time'" field="'CreatedTime'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Description'" field="'Description'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Error Message'" field="'ErrorMessage'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Execution Flow Trigger Item Id'" field="'ExecutionFlowTriggerItemId'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Item Id'" field="'ItemId'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Last Updated Time'" field="'LastUpdatedTime'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Queue Id'" field="'QueueId'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Retry Count'" field="'RetryCount'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Source Item Id'" field="'SourceItemId'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Status'" field="'ExecutionStatusDescription'" getcolor="getStatusColor"></vr-datagridcolumn>
+
+    </vr-datagrid>
+
+</div>

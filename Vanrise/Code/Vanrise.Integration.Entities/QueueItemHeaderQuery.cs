@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Integration.Entities
 {
-    public class DataSourceImportedBatchName
+    public class QueueItemHeaderQuery
     {
-        public string BatchName { get; set; }
+        public List<long> ItemIds { get; set; }
     }
 }

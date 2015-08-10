@@ -2,14 +2,14 @@
 
     return ({
         GetFilteredDataSourceImportedBatches: GetFilteredDataSourceImportedBatches,
-        GetBatchNames: GetBatchNames
+        GetQueueItemHeaders: GetQueueItemHeaders
     });
 
     function GetFilteredDataSourceImportedBatches(input) {
         return BaseAPIService.post('/api/DataSourceImportedBatch/GetFilteredDataSourceImportedBatches', input);
     }
 
-    function GetBatchNames() {
-        return BaseAPIService.get('/api/DataSourceImportedBatch/GetBatchNames');
+    function GetQueueItemHeaders(input) {
+        return BaseAPIService.post('/api/DataSourceImportedBatch/GetQueueItemHeaders', input);
     }
 });
