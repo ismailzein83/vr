@@ -237,9 +237,7 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
                 CarrierAccountID: item.CarrierAccountID,
                 CarrierName: item.CarrierName,
                 IsCustomerAssigned: (item.IsCustomerIndirect) ? (item.IsCustomerAssigned + ' (Indirect)') : item.IsCustomerAssigned,
-                IsSupplierAssigned: (item.IsSupplierIndirect) ? (item.IsSupplierAssigned + ' (Indirect)') : item.IsSupplierAssigned,
-                IsCustomerIndirect: item.IsCustomerIndirect,
-                IsSupplierIndirect: item.IsSupplierIndirect
+                IsSupplierAssigned: (item.IsSupplierIndirect) ? (item.IsSupplierAssigned + ' (Indirect)') : item.IsSupplierAssigned
             };
 
             mappedCarriers.push(gridObject);
