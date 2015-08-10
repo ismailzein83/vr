@@ -55,11 +55,12 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         ];
 
 
-        $scope.selectedPeakHours = $scope.hours;
-
+        angular.forEach($scope.hours, function (itm) {
+            if (itm.id >= 12 && itm.id <= 17)
+                $scope.selectedPeakHours.push(itm);
+        });
 
         $scope.strategyLevels = [];
-
 
         $scope.AddSuspicionLevel = function () {
             var strategyLevelItem = {
@@ -226,7 +227,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         $scope.maxLowDurationCall = strategyObject.MaxLowDurationCall;
         $scope.minCountofCallsinActiveHour = strategyObject.MinimumCountofCallsinActiveHour;
         $scope.selectedPeriod = UtilsService.getItemByVal($scope.periods, strategyObject.PeriodId, "Id");
-
+        $scope.selectedPeakHours.length = 0;
         angular.forEach(strategyObject.PeakHours, function (peakHour) {
 
             var peakHourItem = {
@@ -250,7 +251,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             if (existingItem != undefined && existingItem != null) {
                 filterItem.isSelected = true;
                 filterItem.threshold = existingItem.Threshold;
-              
+
             }
             $scope.strategyFilters.push(filterItem);
 
