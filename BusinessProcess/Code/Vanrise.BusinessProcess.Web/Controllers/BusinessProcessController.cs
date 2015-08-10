@@ -137,10 +137,16 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         }
 
         [HttpPost]
-        public Object GetTrackingsFrom(TrackingQuery input)
+        public GetTrackingsFromOutput GetTrackingsFrom(TrackingQuery input)
         {
             BPClient manager = new BPClient();
-            return manager.GetTrackingsFrom(input);
+            
+            return new GetTrackingsFromOutput()
+            {
+                Tracking = manager.GetTrackingsFrom(input),
+                InstanceStatus = manager.GetInstance(input.ProcessInstanceId).Status
+            };
+
         }
 
         [HttpGet]
@@ -159,11 +165,11 @@ namespace Vanrise.BusinessProcess.Web.Controllers
     }
 
     #region Argument Classes
-    
 
-    public class GetTrackingsByInstanceIdOutput
+
+    public class GetTrackingsFromOutput
     {
-        public IEnumerable<BPTrackingMessageModel> Tracking { get; set; }
+        public IEnumerable<BPTrackingMessage> Tracking { get; set; }
 
         public BPInstanceStatus InstanceStatus { get; set; }
         

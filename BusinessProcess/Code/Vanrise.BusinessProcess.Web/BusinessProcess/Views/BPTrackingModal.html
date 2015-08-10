@@ -32,7 +32,7 @@
             <vr-row>
                 <vr-columns width="fullrow">
                     <vr-datagrid datasource="::datasource" pagingtype="'PagingOnScroll'" dataretrievalfunction="dataRetrievalFunction" on-ready="onGridReady">
-                        <vr-datagridcolumn headertext="'Message'" field="'TrackingMessage'" widthfactor="80"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Message'" widthfactor="80">{{ dataItem.TrackingMessage + dataItem.Id }}</vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Severity'" field="'SeverityDescription'" getcolor="getSeverityColor" widthfactor="10"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Event Time'" field="'EventTime'" widthfactor="10" type="'Datetime'"></vr-datagridcolumn>
                     </vr-datagrid>

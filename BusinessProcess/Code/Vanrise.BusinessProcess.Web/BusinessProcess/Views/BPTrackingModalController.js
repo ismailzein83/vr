@@ -6,14 +6,8 @@
 
     function bpTrackingModalController($scope, UtilsService, VRNavigationService, $interval, BusinessProcessAPIService, DataRetrievalResultTypeEnum, VRNotificationService) {
 
-        var mainGridApi, nonClosedStatuses, interval, startTimer = true, lockGetData = false;
-        var trackingResponse ;
-        function getTrackingsFrom() {
-            return BusinessProcessAPIService.GetTrackingsFrom($scope.BPInstanceID, $scope.lastTrackingId).then(function (response) {
-                trackingResponse = response;
-            });
-        }
-
+        var mainGridApi, nonClosedStatuses, interval, startTimer = true, lockGetData = false ,minTrackingId = 0,lastTrackingId = 0;
+        
         function getInstance() {
 
             return BusinessProcessAPIService.GetBPInstance($scope.BPInstanceID).then(function (response) {
@@ -47,27 +41,35 @@
 
                 lockGetData = true;
 
-                UtilsService.waitMultipleAsyncOperations([getTrackingsFrom, getInstance]).then(function () {
-
-                    $scope.lastTrackingId = UtilsService.getPropMaxValueFromArray(trackingResponse, "Id");
-
+                BusinessProcessAPIService.GetTrackingsFrom($scope.BPInstanceID, lastTrackingId).then(function (trackingResponse) {
                     var isNonClosed = false;
-
-                    
 
                     for (var i = 0, len = nonClosedStatuses.length; i < len; i++) {
 
-                        if ($scope.process.InstanceStatus === nonClosedStatuses[i]) {
+                        if (trackingResponse.InstanceStatus === nonClosedStatuses[i]) {
                             isNonClosed = true;
                             break;
                         }
                     }
-                    if ( ! isNonClosed) stopGetData();
-                    
-                    for (var i = 0, len = trackingResponse.length; i < len; i++) {
-                        trackingResponse[i].SeverityDescription = UtilsService.getLogEntryTypeDescription(trackingResponse[i].Severity);
+                    console.log(isNonClosed);
+                    if (!isNonClosed) {
+                        stopGetData();
+                        if (lastTrackingId === 0) return;
                     }
-                    mainGridApi.addItemsToBegin(trackingResponse);
+
+                    
+                    if (lastTrackingId !== 0) {
+                        
+                        for (var i = 0, len = trackingResponse.Tracking.length; i < len; i++) {
+                            trackingResponse.Tracking[i].SeverityDescription = UtilsService.getLogEntryTypeDescription(trackingResponse.Tracking[i].Severity);
+                        }
+                        mainGridApi.addItemsToBegin(trackingResponse.Tracking);
+
+                    }
+                    
+                    if (trackingResponse.Tracking !== undefined && trackingResponse.Tracking.length > 0)
+                        lastTrackingId = UtilsService.getPropMaxValueFromArray(trackingResponse.Tracking, "Id");
+
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 }).finally(function () {
@@ -101,14 +103,13 @@
 
             return mainGridApi.retrieveData({
                 ProcessInstanceId: $scope.BPInstanceID,
-                FromTrackingId: $scope.lastTrackingId,
+                FromTrackingId: 0,
                 Message: $scope.message,
                 Severities: UtilsService.getPropValuesFromArray($scope.selectedTrackingSeverity, "value")
             });
         }
 
         function defineScope() {
-            $scope.lastTrackingId = 0;
             $scope.message = '';
             $scope.trackingSeverity = [];
             $scope.selectedTrackingSeverity = [];
@@ -126,7 +127,6 @@
             };
 
             $scope.searchClicked = function () {
-                $scope.lastTrackingId = 0;
                 stopGetData();
                 return retrieveData();
             };
@@ -144,16 +144,18 @@
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
 
+                dataRetrievalInput.Query.FromTrackingId = minTrackingId;
 
                 return BusinessProcessAPIService.GetFilteredTrackings(dataRetrievalInput).then(function (response) {
 
-                    $scope.lastTrackingId = UtilsService.getPropMaxValueFromArray(response.Data, "Id");
-                    if ($scope.lastTrackingId != undefined && startTimer) {
-                        startTimer = false;
-                        startGetData();
-                    }
-
+                    
                     if (dataRetrievalInput.DataRetrievalResultType === DataRetrievalResultTypeEnum.Normal.value) {
+                        
+                        minTrackingId =  UtilsService.getPropMinValueFromArray(response.Data, "Id");
+                        if (minTrackingId != undefined && startTimer) {
+                            startTimer = false;
+                            startGetData();
+                        }
                         
                         for (var i = 0, len = response.Data.length; i < len; i++) {
                             response.Data[i].SeverityDescription = UtilsService.getLogEntryTypeDescription(response.Data[i].Severity);
@@ -170,6 +172,7 @@
         function load() {
             defineScope();
             loadParameters();
+            getInstance();
             defineGrid();
             loadFilters();
             loadNonClosedStatuses();

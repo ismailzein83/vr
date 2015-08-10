@@ -46,7 +46,7 @@ BEGIN
 		where ( sv.Severity is not null OR (@Severities is null or @Severities = '') )
 			AND bpt.ProcessInstanceID = @ProcessInstanceID 
 			AND (@Message is NULL or  bpt.TrackingMessage LIKE '%' + @Message +'%' ) 
-			AND bpt.ID > @LastTrackingId 
+			AND (bpt.ID < @LastTrackingId or @LastTrackingId = 0)
 		ORDER BY ID DESC
 	END
 END
