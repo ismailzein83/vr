@@ -78,6 +78,7 @@
         }
 
         function loadParameters() {
+            
             var parameters = VRNavigationService.getParameters($scope);
             $scope.BPInstanceID = undefined;
             if (parameters !== undefined && parameters !== null) {
@@ -124,6 +125,10 @@
                 $scope.modalContext.closeModal();
             };
 
+            $scope.modalContext.onModalHide = function () {
+                stopGetData();
+            };
+
             $scope.$on('$destroy', function () {
                 stopGetData();
             });
@@ -137,7 +142,6 @@
                 stopGetData();
                 return retrieveData();
             };
-
         }
 
         function defineGrid() {
