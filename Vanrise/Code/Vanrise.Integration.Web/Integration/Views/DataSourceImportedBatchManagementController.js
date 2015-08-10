@@ -75,7 +75,7 @@ function DataSourceImportedBatchManagementController($scope, DataSourceImportedB
         if (filtersAreNotReady) return;
 
         var query = {
-            DataSourceId: $scope.selectedDataSource.ID,
+            DataSourceId: $scope.selectedDataSource.DataSourceId,
             BatchName: ($scope.batchName != undefined) ? $scope.batchName : null,
             MappingResult: ($scope.selectedMappingResult != undefined) ? $scope.selectedMappingResult.value : Integration_MappingResultEnum.Valid.value,
             From: $scope.selectedFromDateTime,
