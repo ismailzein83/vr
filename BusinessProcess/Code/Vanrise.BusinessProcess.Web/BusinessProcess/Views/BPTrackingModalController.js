@@ -51,7 +51,6 @@
                             break;
                         }
                     }
-                    console.log(isNonClosed);
                     if (!isNonClosed) {
                         stopGetData();
                         if (lastTrackingId === 0) return;
