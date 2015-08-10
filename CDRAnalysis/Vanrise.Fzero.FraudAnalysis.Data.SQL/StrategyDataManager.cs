@@ -29,9 +29,22 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public BigResult<Strategy> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyResultQuery> input)
         {
+            bool? IsDefault = null;
+            if (input.Query.IsDefaultList.Contains("true"))
+                IsDefault = true;
+            else if (input.Query.IsDefaultList.Contains("false"))
+                IsDefault = false;
+
+
+            bool? IsEnabled = null;
+            if (input.Query.IsEnabledList.Contains("true"))
+                IsEnabled = true;
+            else if (input.Query.IsEnabledList.Contains("false"))
+                IsEnabled = false;
+
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_CreateTempForFilteredStrategies", tempTableName, input.Query.Name, input.Query.Description, input.Query.PeriodsList, input.Query.UsersList, input.Query.IsDefault, input.Query.IsEnabled, input.Query.FromDate, input.Query.ToDate);
+                ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_CreateTempForFilteredStrategies", tempTableName, input.Query.Name, input.Query.Description, input.Query.PeriodsList, input.Query.UsersList, IsDefault, IsEnabled, input.Query.FromDate, input.Query.ToDate);
             };
             return RetrieveData(input, createTempTableAction, StrategyMapper);
         }

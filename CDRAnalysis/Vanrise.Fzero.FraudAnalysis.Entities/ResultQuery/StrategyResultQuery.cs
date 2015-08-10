@@ -17,9 +17,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public string UsersList { get; set; }
 
-        public bool? IsDefault { get; set; }
+        public string IsDefaultList { get; set; }
 
-        public bool? IsEnabled { get; set; }
+        public string IsEnabledList { get; set; }
 
         public DateTime? FromDate { get; set; }
 

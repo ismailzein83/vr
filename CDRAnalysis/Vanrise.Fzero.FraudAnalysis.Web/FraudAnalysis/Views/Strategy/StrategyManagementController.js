@@ -27,11 +27,11 @@ function StrategyManagementController($scope, StrategyAPIService,UserAPIService,
             return retrieveData();
         }
 
-        $scope.isDefault = [{ value: null, name: 'All' }, { value: false, name: 'Not Default' }, { value: true, name: 'Default' }];
-        $scope.selectedIsDefault = '';
+        $scope.isDefault = [{ value: false, name: 'Not Default' }, { value: true, name: 'Default' }];
+        $scope.selectedIsDefault = [];
 
-        $scope.isEnabled = [{ value: null, name: 'All' }, { value: false, name: 'Disabled' }, { value: true, name: 'Enabled' }];
-        $scope.selectedIsEnabled = '';
+        $scope.isEnabled = [{ value: false, name: 'Disabled' }, { value: true, name: 'Enabled' }];
+        $scope.selectedIsEnabled = [];
 
         $scope.periods = [];
         loadPeriods();
@@ -96,13 +96,27 @@ function StrategyManagementController($scope, StrategyAPIService,UserAPIService,
         });
 
 
+        var isDefaultsList = '';
+
+        angular.forEach($scope.selectedIsDefault, function (itm) {
+            isDefaultsList = isDefaultsList + itm.value + ','
+        });
+
+        var isEnabledList = '';
+
+        angular.forEach($scope.selectedIsEnabled, function (itm) {
+            isEnabledList = isEnabledList + itm.value + ','
+        });
+
+
+
         var query = {
             Name: name,
             Description: description,
             PeriodsList: removeLastComma(periodsList),
             UsersList: removeLastComma(usersList),
-            IsDefault: $scope.selectedIsDefault.value,
-            IsEnabled: $scope.selectedIsEnabled.value,
+            IsDefaultList: removeLastComma(isDefaultsList),
+            IsEnabledList: removeLastComma(isEnabledList),
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate
         };
