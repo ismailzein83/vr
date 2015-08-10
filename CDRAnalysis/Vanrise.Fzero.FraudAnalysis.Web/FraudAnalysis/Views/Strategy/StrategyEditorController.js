@@ -138,6 +138,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             Name: $scope.name,
             Description: $scope.description,
             IsDefault: $scope.isDefault,
+            IsEnabled: $scope.isEnabled,
             GapBetweenConsecutiveCalls: $scope.gapbetweenconsecutivecalls,
             MaxLowDurationCall: $scope.maxLowDurationCall,
             MinimumCountofCallsinActiveHour: $scope.minCountofCallsinActiveHour,
@@ -220,6 +221,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         $scope.name = strategyObject.Name;
         $scope.description = strategyObject.Description;
         $scope.isDefault = strategyObject.IsDefault;
+        $scope.isEnabled = strategyObject.IsEnabled;
         $scope.gapbetweenconsecutivecalls = strategyObject.GapBetweenConsecutiveCalls;
         $scope.maxLowDurationCall = strategyObject.MaxLowDurationCall;
         $scope.minCountofCallsinActiveHour = strategyObject.MinimumCountofCallsinActiveHour;

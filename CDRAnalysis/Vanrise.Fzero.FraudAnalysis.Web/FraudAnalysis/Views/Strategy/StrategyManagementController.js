@@ -30,6 +30,9 @@ function StrategyManagementController($scope, StrategyAPIService,UserAPIService,
         $scope.isDefault = [{ value: null, name: 'All' }, { value: false, name: 'Not Default' }, { value: true, name: 'Default' }];
         $scope.selectedIsDefault = '';
 
+        $scope.isEnabled = [{ value: null, name: 'All' }, { value: false, name: 'Disabled' }, { value: true, name: 'Enabled' }];
+        $scope.selectedIsEnabled = '';
+
         $scope.periods = [];
         loadPeriods();
         $scope.selectedPeriods = [];
@@ -47,6 +50,7 @@ function StrategyManagementController($scope, StrategyAPIService,UserAPIService,
             .then(function (response) {
                 angular.forEach(response.Data, function (itm) {
                     itm.IsDefaultText = itm.IsDefault ? "Default" : "Not Default"
+                    itm.IsEnabledText = itm.IsEnabled ? "Enabled" : "Disabled"
                 });
 
                 onResponseReady(response);
@@ -97,7 +101,8 @@ function StrategyManagementController($scope, StrategyAPIService,UserAPIService,
             Description: description,
             PeriodsList: removeLastComma(periodsList),
             UsersList: removeLastComma(usersList),
-            IsDefault: $scope.selectedIsDefault.value
+            IsDefault: $scope.selectedIsDefault.value,
+            IsEnabled:$scope.selectedIsEnabled.value
         };
 
         return mainGridAPI.retrieveData(query);
@@ -126,6 +131,7 @@ function StrategyManagementController($scope, StrategyAPIService,UserAPIService,
             modalScope.title = "New Strategy";
             modalScope.onStrategyAdded = function (strategy) {
                 strategy.IsDefaultText = strategy.IsDefault ? "Default" : "Not Default";
+                strategy.IsEnabledText = strategy.IsEnabled ? "Enabled" : "Disabled";
                 strategy.StrategyType = UtilsService.getItemByVal($scope.periods, strategy.PeriodId, "Id").Name;
                 mainGridAPI.itemAdded(strategy);
             };
@@ -146,6 +152,7 @@ function StrategyManagementController($scope, StrategyAPIService,UserAPIService,
             modalScope.title = "Edit Strategy";
             modalScope.onStrategyUpdated = function (strategy) {
                 strategy.IsDefaultText = strategy.IsDefault ? "Default" : "Not Default";
+                strategy.IsEnabledText = strategy.IsEnabled ? "Enabled" : "Disabled";
                 strategy.StrategyType = UtilsService.getItemByVal($scope.periods, strategy.PeriodId, "Id").Name;
                 mainGridAPI.itemUpdated(strategy);
             };

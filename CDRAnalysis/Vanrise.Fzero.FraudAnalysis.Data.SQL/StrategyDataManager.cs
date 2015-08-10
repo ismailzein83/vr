@@ -31,7 +31,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_CreateTempForFilteredStrategies", tempTableName, input.Query.Name, input.Query.Description, input.Query.PeriodsList, input.Query.UsersList, input.Query.IsDefault);
+                ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_CreateTempForFilteredStrategies", tempTableName, input.Query.Name, input.Query.Description, input.Query.PeriodsList, input.Query.UsersList, input.Query.IsDefault, input.Query.IsEnabled);
             };
             return RetrieveData(input, createTempTableAction, StrategyMapper);
         }
@@ -46,6 +46,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 !string.IsNullOrEmpty(strategyObject.Description) ? strategyObject.Description : null,
                 DateTime.Now,
                 strategyObject.IsDefault,
+                strategyObject.IsEnabled,
                 strategyObject.PeriodId,
                 Vanrise.Common.Serializer.Serialize(strategyObject)
 
@@ -75,6 +76,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 !string.IsNullOrEmpty(strategyObject.Description) ? strategyObject.Description : null,
                 DateTime.Now,
                 strategyObject.IsDefault,
+                strategyObject.IsEnabled,
                 strategyObject.PeriodId,
                 Vanrise.Common.Serializer.Serialize(strategyObject));
             if (recordesEffected > 0)

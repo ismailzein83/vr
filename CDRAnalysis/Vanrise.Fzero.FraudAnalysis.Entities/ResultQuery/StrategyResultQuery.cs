@@ -19,5 +19,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public bool? IsDefault { get; set; }
 
+        public bool? IsEnabled { get; set; }
+
     }
 }

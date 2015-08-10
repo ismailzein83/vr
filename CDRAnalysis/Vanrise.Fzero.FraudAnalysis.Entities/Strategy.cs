@@ -17,6 +17,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public bool IsDefault { get; set; }
 
+        public bool IsEnabled { get; set; }
+
         public string StrategyContent { get; set;}
 
         public int GapBetweenConsecutiveCalls { get; set; }
