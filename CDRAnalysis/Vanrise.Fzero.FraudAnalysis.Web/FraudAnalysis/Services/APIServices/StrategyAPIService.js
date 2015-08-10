@@ -17,10 +17,11 @@
            );
     }
 
-    function GetStrategies(periodId) {
+    function GetStrategies(periodId, isEnabled) {
         return BaseAPIService.get("/api/Strategy/GetStrategies",
             {
-                PeriodId: periodId
+                PeriodId: periodId,
+                IsEnabled: isEnabled
             });
     }
 

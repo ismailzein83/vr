@@ -22,9 +22,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return GetItemsSP("FraudAnalysis.sp_Strategy_GetStrategy", StrategyMapper, strategyId).FirstOrDefault();
         }
 
-        public List<Strategy> GetStrategies(int PeriodId)
+        public List<Strategy> GetStrategies(int PeriodId, bool? IsEnabled)
         {
-            return GetItemsSP("FraudAnalysis.sp_Strategy_GetStrategies", StrategyMapper, PeriodId);
+            return GetItemsSP("FraudAnalysis.sp_Strategy_GetStrategies", StrategyMapper, PeriodId, IsEnabled);
         }
 
         public BigResult<Strategy> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyResultQuery> input)

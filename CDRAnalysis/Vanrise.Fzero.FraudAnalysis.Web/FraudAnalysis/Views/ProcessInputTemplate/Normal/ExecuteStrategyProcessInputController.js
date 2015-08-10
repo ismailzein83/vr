@@ -101,9 +101,10 @@
 
 
     function loadStrategies(periodId) {
+        var isEnabled = true;
         $scope.strategies.length = 0;
         $scope.selectedStrategies.length = 0;
-        return StrategyAPIService.GetStrategies(periodId).then(function (response) {
+        return StrategyAPIService.GetStrategies(periodId, isEnabled).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.strategies.push({ id: itm.Id, name: itm.Name, periodId: itm.PeriodId });
             });

@@ -36,21 +36,12 @@
     }
 
 
-    function loadPeriods() {
-        $scope.periods.length = 0;
-        return StrategyAPIService.GetPeriods().then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.periods.push(itm);
-            });
-        });
-    }
-
-
 
     $scope.selectedPeriodChanged = function () {
         if (pageLoaded) {
             $scope.strategies.length = 0;
             $scope.selectedStrategies.length = 0;
+            loadStrategies();
         }
         else {
             pageLoaded = true;
@@ -59,52 +50,69 @@
 
 
     function loadStrategies() {
-        var periodId = $scope.selectedPeriod.Id;
-        if (periodId == undefined)
-            periodId = 0;
+        var isEnabled = true;
 
-        $scope.strategies.length = 0;
-        $scope.selectedStrategies.length = 0;
+        var periodId = 0
+        if ($scope.selectedPeriod != '' && $scope.selectedPeriod != null)
+            periodId = $scope.selectedPeriod.Id;
 
-        return StrategyAPIService.GetStrategies(periodId).then(function (response) {
+        return StrategyAPIService.GetStrategies(periodId, isEnabled).then(function (response) {
+            $scope.strategies.length = 0;
+
             angular.forEach(response, function (itm) {
                 $scope.strategies.push({ id: itm.Id, name: itm.Name, periodId: itm.PeriodId });
+
             });
         });
     }
 
 
-
-
     function load() {
-        $scope.isGettingData = true;
-        UtilsService.waitMultipleAsyncOperations([loadPeriods, loadStrategies])
-        .then(function () {
+
+        $scope.periods.length = 0;
+        $scope.periods = [];
+        StrategyAPIService.GetPeriods().then(function (response) {
+            angular.forEach(response, function (itm) {
+                $scope.periods.push(itm);
+            });
+
             if ($scope.schedulerTaskAction.processInputArguments.data == undefined)
                 return;
+
             var data = $scope.schedulerTaskAction.processInputArguments.data;
 
             if (data != null) {
+                $scope.isGettingData = true;
+                UtilsService.waitMultipleAsyncOperations([loadStrategies])
+                .then(function () {
 
-                $scope.selectedPeriod = UtilsService.getItemByVal($scope.periods, $scope.strategies[UtilsService.getItemIndexByVal($scope.strategies, data.StrategyIds[0], "id")].periodId, "Id");
+                    var strategyIndex = UtilsService.getItemIndexByVal($scope.strategies, data.StrategyIds[0], "id");
 
-                UtilsService.waitMultipleAsyncOperations([loadStrategies]).then(function () {
-                    angular.forEach(data.StrategyIds, function (strategyId) {
-                        $scope.selectedStrategies.push($scope.strategies[UtilsService.getItemIndexByVal($scope.strategies, strategyId, "id")]);
-                    });
-                })
+                    if (strategyIndex > -1) {
+                        var selectedStrategy = $scope.strategies[strategyIndex];
 
+                        $scope.selectedPeriod = UtilsService.getItemByVal($scope.periods, selectedStrategy.periodId, "Id");
+
+                        UtilsService.waitMultipleAsyncOperations([loadStrategies]).then(function () {
+                            angular.forEach(data.StrategyIds, function (strategyId) {
+                                $scope.selectedStrategies.push(UtilsService.getItemByVal($scope.strategies, strategyId, "id"));
+                            });
+                        })
+                    }
+                }
+            )
             }
             $scope.isGettingData = false;
 
-        })
-        .catch(function (error) {
+
+        }).catch(function (error) {
             $scope.isGettingData = false;
             VRNotificationService.notifyExceptionWithClose(error, $scope);
         });
+
+
+
     }
-
-
 
 }
 

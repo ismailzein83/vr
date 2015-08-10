@@ -11,7 +11,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         Strategy GetStrategy(int strategyId);
 
-        List<Strategy> GetStrategies(int PeriodId);
+        List<Strategy> GetStrategies(int PeriodId, bool? IsEnabled);
 
         BigResult<Strategy> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyResultQuery> input);
 
