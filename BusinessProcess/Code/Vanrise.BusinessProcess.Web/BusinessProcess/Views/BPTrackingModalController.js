@@ -2,9 +2,9 @@
 
     "use strict";
 
-    bpTrackingModalController.$inject = ['$scope', 'UtilsService', 'VRNavigationService', '$interval', 'BusinessProcessAPIService', 'DataRetrievalResultTypeEnum', 'VRNotificationService'];
+    bpTrackingModalController.$inject = ['$scope', 'UtilsService', 'VRNavigationService', '$interval', 'BusinessProcessAPIService', 'DataRetrievalResultTypeEnum', 'VRNotificationService','LogEntryTypeEnum'];
 
-    function bpTrackingModalController($scope, UtilsService, VRNavigationService, $interval, BusinessProcessAPIService, DataRetrievalResultTypeEnum, VRNotificationService) {
+    function bpTrackingModalController($scope, UtilsService, VRNavigationService, $interval, BusinessProcessAPIService, DataRetrievalResultTypeEnum, VRNotificationService,LogEntryTypeEnum) {
 
         var mainGridApi, nonClosedStatuses, interval, startTimer = true, lockGetData = false ,minTrackingId = 0,lastTrackingId = 0;
         
@@ -108,10 +108,17 @@
             });
         }
 
+        function setDefaultSelectedTrackingSeverity() {
+
+            $scope.selectedTrackingSeverity = [];
+            $scope.selectedTrackingSeverity.push(LogEntryTypeEnum.Error);
+            $scope.selectedTrackingSeverity.push(LogEntryTypeEnum.Warning);
+            $scope.selectedTrackingSeverity.push(LogEntryTypeEnum.Information);
+        }
+
         function defineScope() {
             $scope.message = '';
             $scope.trackingSeverity = [];
-            $scope.selectedTrackingSeverity = [];
             $scope.close = function () {
                 stopGetData();
                 $scope.modalContext.closeModal();
@@ -175,6 +182,7 @@
             getInstance();
             defineGrid();
             loadFilters();
+            setDefaultSelectedTrackingSeverity();
             loadNonClosedStatuses();
         }
 
