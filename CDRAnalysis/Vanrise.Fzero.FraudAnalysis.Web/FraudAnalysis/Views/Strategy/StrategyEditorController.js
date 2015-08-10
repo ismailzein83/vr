@@ -110,7 +110,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
     function deleteRule(rule) {
         var index = $scope.strategyLevels.indexOf(rule);
-        $scope.strategyLevels.splice(index, 1);     
+        $scope.strategyLevels.splice(index, 1);
     }
 
 
@@ -325,6 +325,58 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
     function UpdateStrategy() {
         var strategyObject = buildStrategyObjFromScope();
+
+        var countStrategyFilters = 0;
+        var countStrategyLevels = 0;
+        var countStrategyLevelCrietiraswithNoPercentage = 0;
+
+
+        angular.forEach(strategyObject.StrategyFilters, function (itm) {
+            countStrategyFilters++;
+        });
+
+        
+        angular.forEach(strategyObject.StrategyLevels, function (level) {
+            angular.forEach(level.StrategyLevelCriterias, function (itm) {
+                console.log('itm.Percentage')
+                console.log(itm.Percentage)
+                if (itm.Percentage != undefined)
+                    countStrategyLevels++;
+            });
+        });
+
+        angular.forEach(strategyObject.StrategyLevels, function (level) {
+            angular.forEach(level.StrategyLevelCriterias, function (itm) {
+                console.log('itm.Percentage')
+                console.log(itm.Percentage)
+                if (itm.Percentage == undefined)
+                    countStrategyLevelCrietiraswithNoPercentage++;
+            });
+        });
+
+        if (countStrategyFilters == 0) {
+            VRNotificationService.showError("At least one filter should be specified in a strategy. ");
+            return;
+
+        }
+
+        if (countStrategyLevels == 0) {
+            VRNotificationService.showError("At least one rule with filter(s) and percentage should be specified in a strategy. ");
+            return;
+
+        }
+
+        if (countStrategyLevelCrietiraswithNoPercentage > 0) {
+            VRNotificationService.showError("Rule filters should specify percentage. ");
+            return;
+
+        }
+
+
+
+
+
+
         StrategyAPIService.UpdateStrategy(strategyObject)
         .then(function (response) {
             if (VRNotificationService.notifyOnItemUpdated("Strategy", response)) {
