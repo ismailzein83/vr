@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.service('VRModalService', function ($modal, $rootScope, VRNavigationService, $q, notify) {
+app.service('VRModalService', function ($modal, $rootScope, VRNavigationService, $q) {
 
     return ({
         showModal: showModal
@@ -11,12 +11,13 @@ app.service('VRModalService', function ($modal, $rootScope, VRNavigationService,
         var modalScope = $rootScope.$new();
         
         var modalUrl = viewUrl;
-        
+        var modalInstance;
         modalScope.modalContext = {};
         modalScope.modalContext.closeModal = function () {
-            modalInstance.hide();
+            if (modalInstance) modalInstance.hide();
             deferred.resolve();
         };
+
         VRNavigationService.setParameters(modalScope, parameters);
 
         if (settings != undefined && settings != null) {
@@ -34,7 +35,11 @@ app.service('VRModalService', function ($modal, $rootScope, VRNavigationService,
                 settings.onScopeReady(modalScope);
         }
 
-        var modalInstance = $modal({ scope: modalScope, templateUrl: modalUrl, show: true, animation: "am-fade-and-scale" });
+        modalScope.$on('modal.hide.before', function () {
+            if (typeof (modalScope.modalContext.onModalHide) == "function") modalScope.modalContext.onModalHide();
+        });
+
+        modalInstance = $modal({ scope: modalScope, templateUrl: modalUrl, show: true, animation: "am-fade-and-scale" });
         return deferred.promise;
     }
 });
