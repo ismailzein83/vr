@@ -10,10 +10,10 @@ namespace TOne.Analytics.Web.Controllers
     public class BlockedAttemptsController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpPost]
-        public object GetCDRData(Vanrise.Entities.DataRetrievalInput<string> input)
+        public object GetBlockedAttempts(Vanrise.Entities.DataRetrievalInput<string> input)
         {
             BlockedAttemptsManager manager = new BlockedAttemptsManager();
-            return GetWebResponse(input, manager.GetCDRData(input));
+            return GetWebResponse(input, manager.GetBlockedAttempts(input));
 
         }
     }

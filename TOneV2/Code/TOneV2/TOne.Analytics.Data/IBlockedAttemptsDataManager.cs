@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.Analytics.Data
 {
-    public class IBlockedAttemptsDataManager: IDataManager
+    public interface IBlockedAttemptsDataManager : IDataManager
     {
-        public Vanrise.Entities.BigResult<string> GetBlockedAttempts(Vanrise.Entities.DataRetrievalInput<string> input);
+        Vanrise.Entities.BigResult<string> GetBlockedAttempts(Vanrise.Entities.DataRetrievalInput<string> input);
     }
 }

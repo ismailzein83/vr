@@ -82,6 +82,7 @@
     <Compile Include="BillingReports\ZoneSummaryReportGenerator.cs" />
     <Compile Include="BillingStatisticManager.cs" />
     <Compile Include="BillingStatisticManagerPartial.cs" />
+    <Compile Include="BlockedAttemptsManager.cs" />
     <Compile Include="CDRManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AnalyticsManager.cs" />

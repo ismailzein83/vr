@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="AnalyticsDataManagerFactory.cs" />
     <Compile Include="IBillingStatisticDataManager.cs" />
+    <Compile Include="IBlockedAttemptsDataManager.cs" />
     <Compile Include="ICDRDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IAnalyticsDataManager.cs" />

@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="BillingStatisticDataManager.cs" />
     <Compile Include="BillingStatisticDataManagerPartial.cs" />
+    <Compile Include="BlockedAttemptsDataManager.cs" />
     <Compile Include="CDRDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AnalyticsDataManager.cs" />

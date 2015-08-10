@@ -7,12 +7,12 @@ using TOne.Analytics.Data;
 
 namespace TOne.Analytics.Business
 {
-    public  class BlockedAttemptsManager
+   public class BlockedAttemptsManager
     {
-        public Vanrise.Entities.IDataRetrievalResult<string> GetCDRData(Vanrise.Entities.DataRetrievalInput<string> input)
+        public Vanrise.Entities.IDataRetrievalResult<string> GetBlockedAttempts(Vanrise.Entities.DataRetrievalInput<string> input)
         {
-            IBlockedAttemptsDataManager datamanager = new IBlockedAttemptsDataManager();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, datamanager.GetBlockedAttempts(input));
+            IBlockedAttemptsDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<IBlockedAttemptsDataManager>();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetBlockedAttempts(input));
         }
     }
 }
