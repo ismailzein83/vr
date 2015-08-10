@@ -23,13 +23,13 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
         };
         $scope.menuActions = [{
             name: "Edit",
-            permissions: "TOne/Administration Module/Dynamic Pages:Edit",
+            permissions: "Root/Administration Module/Dynamic Pages:Edit",
                 clicked: function (dataItem) {
                  updateWidget(dataItem);
                 }
         }, {
             name: "Delete",
-            permissions: "TOne/Administration Module/Dynamic Pages:Delete",
+            permissions: "Root/Administration Module/Dynamic Pages:Delete",
             clicked: function (dataItem) {
                 deleteWidget(dataItem);
             }

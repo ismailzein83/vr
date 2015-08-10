@@ -4,9 +4,9 @@
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true">
                 <div transclude-to="buttons">
-                    <vr-button type="BreakInheritance" formname="formBusinessEntity" ng-show="currentNode != undefined && showBreakInheritance" permissions="TOne/Administration Module/System Entities:Assign Permissions" data-onclick="ToggleInheritance" isasynchronous=" true"></vr-button>
-                    <vr-button type="AllowInheritance" formname="formBusinessEntity" ng-show="currentNode != undefined &&!showBreakInheritance" permissions="TOne/Administration Module/System Entities:Assign Permissions" data-onclick="ToggleInheritance" isasynchronous=" true"></vr-button>
-                    <vr-button type="Add" formname="formBusinessEntity" permissions="TOne/Administration Module/System Entities:Assign Permissions" ng-show="currentNode != undefined" data-onclick="AddNewPermission" isasynchronous=" true"></vr-button>
+                    <vr-button type="BreakInheritance" formname="formBusinessEntity" ng-show="currentNode != undefined && showBreakInheritance" permissions="Root/Administration Module/System Entities:Assign Permissions" data-onclick="ToggleInheritance" isasynchronous=" true"></vr-button>
+                    <vr-button type="AllowInheritance" formname="formBusinessEntity" ng-show="currentNode != undefined &&!showBreakInheritance" permissions="Root/Administration Module/System Entities:Assign Permissions" data-onclick="ToggleInheritance" isasynchronous=" true"></vr-button>
+                    <vr-button type="Add" formname="formBusinessEntity" permissions="Root/Administration Module/System Entities:Assign Permissions" ng-show="currentNode != undefined" data-onclick="AddNewPermission" isasynchronous=" true"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>

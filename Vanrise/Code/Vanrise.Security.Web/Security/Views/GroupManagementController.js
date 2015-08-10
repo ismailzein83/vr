@@ -52,12 +52,12 @@ function GroupManagementController($scope, GroupAPIService, VRModalService, VRNo
         $scope.gridMenuActions = [{
             name: "Edit",
             clicked: editGroup,
-            permissions: "TOne/Administration Module/Groups:Edit"
+            permissions: "Root/Administration Module/Groups:Edit"
         },
         {
             name: "Assign Permissions",
             clicked: assignPermissions,
-            permissions: "TOne/Administration Module/System Entities:Assign Permissions"
+            permissions: "Root/Administration Module/System Entities:Assign Permissions"
         }
         ];
     }

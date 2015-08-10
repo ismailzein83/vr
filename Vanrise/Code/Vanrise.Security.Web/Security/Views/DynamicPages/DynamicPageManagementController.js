@@ -33,21 +33,21 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
         $scope.menuActions = [
            {
                name: "Edit",
-               permissions : "TOne/Administration Module/Dynamic Pages:Edit",
+               permissions : "Root/Administration Module/Dynamic Pages:Edit",
                clicked: function (dataItem) {
                    updatePage(dataItem);
                }
            },
            {
                name: "Delete",
-               permissions: "TOne/Administration Module/Dynamic Pages:Delete",
+               permissions: "Root/Administration Module/Dynamic Pages:Delete",
                clicked: function (dataItem) {
                    deletePage(dataItem);
                }
            },
          {
              name: "Validate",
-             permissions: "TOne/Administration Module/Dynamic Pages:Validate",
+             permissions: "Root/Administration Module/Dynamic Pages:Validate",
              clicked: function (dataItem) {
                  validate(dataItem);
              }

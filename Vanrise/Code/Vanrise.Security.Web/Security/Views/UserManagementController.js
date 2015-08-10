@@ -54,17 +54,17 @@ function UserManagementController($scope, UsersAPIService, VRModalService, VRNot
         $scope.gridMenuActions = [{
             name: "Edit",
             clicked: editUser,
-            permissions: "TOne/Administration Module/Users:Edit"
+            permissions: "Root/Administration Module/Users:Edit"
         },
         {
             name: "Reset Password",
             clicked: resetPassword,
-            permissions: "TOne/Administration Module/Users:Reset Password"
+            permissions: "Root/Administration Module/Users:Reset Password"
         },
         {
             name: "Assign Permissions",
             clicked: assignPermissions,
-            permissions: "TOne/Administration Module/System Entities:Assign Permissions"
+            permissions: "Root/Administration Module/System Entities:Assign Permissions"
         }
         ];
     }

@@ -29,7 +29,7 @@ namespace Vanrise.Security.Data.SQL
 
         public bool UpdatePermission(Permission permission)
         {
-            string serialziedPermissionFlag = Common.Serializer.Serialize(permission.PermissionFlags);
+            string serialziedPermissionFlag = Common.Serializer.Serialize(permission.PermissionFlags, true);
 
             int recordsEffected = ExecuteNonQuerySP("sec.sp_Permission_Update", permission.HolderType,
                 permission.HolderId, permission.EntityType, permission.EntityId, serialziedPermissionFlag);

@@ -46,7 +46,7 @@ namespace Vanrise.Security.Data.SQL
             {
                 while (reader.Read())
                 {
-                    result.Add((int)reader["UserId"]);
+                    result.Add((int)reader["GroupId"]);
                 }
             }, userId);
 

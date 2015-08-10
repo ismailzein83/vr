@@ -108,12 +108,12 @@ function BusinessEntityManagementController($scope, BusinessEntityAPIService, Pe
         var menuActions = [{
             name: "Edit",
             clicked: editPermission,
-            permissions: "TOne/Administration Module/System Entities:Assign Permissions"
+            permissions: "Root/Administration Module/System Entities:Assign Permissions"
         },
         {
             name: "Delete",
             clicked: deletePermission,
-            permissions: "TOne/Administration Module/System Entities:Assign Permissions"
+            permissions: "Root/Administration Module/System Entities:Assign Permissions"
         }
         ];
 
