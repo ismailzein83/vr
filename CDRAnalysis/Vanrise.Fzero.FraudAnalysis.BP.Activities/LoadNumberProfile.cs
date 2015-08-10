@@ -69,68 +69,75 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(LoadNumberProfilesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            IPredefinedDataManager predefinedDataManager = FraudDataManagerFactory.GetDataManager<IPredefinedDataManager>();
-            IStrategyDataManager strategyManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
-            INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
-            int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"]);
-            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started Loading CDRs from Database to Memory");
-
-            var aggregateDefinitions = new AggregateManager(inputArgument.Strategies).GetAggregateDefinitions(predefinedDataManager.GetCallClasses());
-            string currentSubscriberNumber = null;
-
-            //foreach (var strategy in inputArgument.Strategies)
-            //{
-            List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
-            int cdrsCount = 0;
-            int numberProfilesCount = 0;
-            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            if (inputArgument.Strategies.Count > 0)
             {
-                bool hasItem = false;
-                do
+                IPredefinedDataManager predefinedDataManager = FraudDataManagerFactory.GetDataManager<IPredefinedDataManager>();
+                IStrategyDataManager strategyManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+                INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
+                int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"]);
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started Loading CDRs from Database to Memory");
+                var aggregateDefinitions = new AggregateManager(inputArgument.Strategies).GetAggregateDefinitions(predefinedDataManager.GetCallClasses());
+                string currentSubscriberNumber = null;
+
+                //foreach (var strategy in inputArgument.Strategies)
+                //{
+                List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
+                int cdrsCount = 0;
+                int numberProfilesCount = 0;
+                DoWhilePreviousRunning(previousActivityStatus, handle, () =>
                 {
+                    bool hasItem = false;
+                    do
+                    {
 
-                    hasItem = inputArgument.InputQueue.TryDequeue(
-                        (cdrBatch) =>
-                        {
-                            var serializedCDRs = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(cdrBatch.CDRBatchFilePath));
-                            System.IO.File.Delete(cdrBatch.CDRBatchFilePath);
-                            var cdrs = Vanrise.Common.ProtoBufSerializer.Deserialize<List<CDR>>(serializedCDRs);
-                            foreach (var cdr in cdrs)
+                        hasItem = inputArgument.InputQueue.TryDequeue(
+                            (cdrBatch) =>
                             {
-                                if (currentSubscriberNumber != cdr.MSISDN)
+                                var serializedCDRs = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(cdrBatch.CDRBatchFilePath));
+                                System.IO.File.Delete(cdrBatch.CDRBatchFilePath);
+                                var cdrs = Vanrise.Common.ProtoBufSerializer.Deserialize<List<CDR>>(serializedCDRs);
+                                foreach (var cdr in cdrs)
                                 {
-                                    if (currentSubscriberNumber != null)
+                                    if (currentSubscriberNumber != cdr.MSISDN)
                                     {
-                                        FinishNumberProfileProcessing(currentSubscriberNumber, ref numberProfileBatch, ref numberProfilesCount, inputArgument, handle, batchSize, aggregateDefinitions);
+                                        if (currentSubscriberNumber != null)
+                                        {
+                                            FinishNumberProfileProcessing(currentSubscriberNumber, ref numberProfileBatch, ref numberProfilesCount, inputArgument, handle, batchSize, aggregateDefinitions);
+                                        }
+                                        currentSubscriberNumber = cdr.MSISDN;
+                                        foreach (var aggregateDef in aggregateDefinitions)
+                                        {
+                                            aggregateDef.Aggregation.Reset();
+                                            aggregateDef.Aggregation.EvaluateCDR(cdr);
+                                        }
                                     }
-                                    currentSubscriberNumber = cdr.MSISDN;
-                                    foreach (var aggregateDef in aggregateDefinitions)
+                                    else
                                     {
-                                        aggregateDef.Aggregation.Reset();
-                                        aggregateDef.Aggregation.EvaluateCDR(cdr);
+                                        foreach (var aggregateDef in aggregateDefinitions)
+                                        {
+                                            aggregateDef.Aggregation.EvaluateCDR(cdr);
+                                        }
                                     }
                                 }
-                                else
-                                {
-                                    foreach (var aggregateDef in aggregateDefinitions)
-                                    {
-                                        aggregateDef.Aggregation.EvaluateCDR(cdr);
-                                    }
-                                }
-                            }
-                            cdrsCount += cdrs.Count;
-                            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} CDRs profiled", cdrsCount);
+                                cdrsCount += cdrs.Count;
+                                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} CDRs profiled", cdrsCount);
 
-                        });
-                }
-                while (!ShouldStop(handle) && hasItem);
-            });
-            if (currentSubscriberNumber != null)
-                FinishNumberProfileProcessing(currentSubscriberNumber, ref numberProfileBatch, ref numberProfilesCount, inputArgument, handle, 0, aggregateDefinitions);
+                            });
+                    }
+                    while (!ShouldStop(handle) && hasItem);
+                });
+                if (currentSubscriberNumber != null)
+                    FinishNumberProfileProcessing(currentSubscriberNumber, ref numberProfileBatch, ref numberProfilesCount, inputArgument, handle, 0, aggregateDefinitions);
 
-            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs from Database to Memory");
-            //}
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs from Database to Memory");
+                //}
 
+            }
+            else
+            {
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Error, "No Strategies Loaded in this Workflow");
+            }
+           
         }
 
         private void FinishNumberProfileProcessing(string subscriberNumber, ref List<NumberProfile> numberProfileBatch, ref int numberProfilesCount, LoadNumberProfilesInput inputArgument, AsyncActivityHandle handle, int batchSize, List<AggregateDefinition> AggregateDefinitions)

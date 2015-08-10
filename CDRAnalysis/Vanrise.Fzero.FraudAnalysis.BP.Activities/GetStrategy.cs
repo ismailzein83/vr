@@ -1,12 +1,14 @@
-﻿using System.Activities;
+﻿using System;
+using System.Activities;
 using System.Collections.Generic;
+using Vanrise.Common;
 using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
-    
-    public class GetStrategy :  CodeActivity 
+
+    public class GetStrategy : CodeActivity
     {
         #region Arguments
 
@@ -24,7 +26,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             foreach (int strategyId in context.GetValue(StrategyIds))
             {
                 Strategy s = new StrategyManager().GetStrategy(strategyId);
-                strategies.Add(s);
+                if (!s.IsEnabled)
+                    Console.WriteLine("Strategy named: {0} was not loaded because it is disabled", s.Name);
+                else
+                    strategies.Add(s);
             }
 
             context.SetValue(Strategies, strategies);
