@@ -1658,3 +1658,25 @@ opacity:0.9 ;
 .vr-small-addon {
     border: 1px solid #CCC !important;
 }
+.circle-div {
+    width: 75px;
+    height: 80px;
+    -webkit-border-radius: 40px;
+    -moz-border-radius: 40px;
+    border-radius: 40px; 
+    background-color:#f0f0f0;
+    padding-top:4px;
+    display:inline-block;
+    margin:4px;
+}
+.circle-div > div{
+   text-align: center;
+   height: 50%;
+}
+.circle-div .circle-label{
+   font-size:12px
+}
+.circle-div .circle-value{
+   line-height:55px;
+   font-size: 10px !important;
+}
