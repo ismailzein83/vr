@@ -97,6 +97,7 @@
     <Compile Include="Billing\ZoneSummaryDetailed.cs" />
     <Compile Include="Billing\ZoneSummaryDetailedFormatted.cs" />
     <Compile Include="Billing\ZoneSummaryFormatted.cs" />
+    <Compile Include="BlockedAttemptsFilter.cs" />
     <Compile Include="CDRFilter.cs" />
     <Compile Include="CDRBigResult.cs" />
     <Compile Include="Billing\CustomerServices.cs" />

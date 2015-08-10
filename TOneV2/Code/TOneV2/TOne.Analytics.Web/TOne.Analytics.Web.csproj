@@ -126,12 +126,14 @@
   <ItemGroup>
     <Compile Include="Controllers\AnalyticsController.cs" />
     <Compile Include="Controllers\BillingStatisticsController.cs" />
+    <Compile Include="Controllers\BlockedAttemptsController.cs" />
     <Compile Include="Controllers\CDRController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Analytics\Constants\BillingCDRMeasureEnum.js" />
     <Content Include="Analytics\Constants\BillingCDROptionMeasureEnum.js" />
+    <Content Include="Analytics\Constants\BlockedAttemptsMeasureEnum.js" />
     <Content Include="Analytics\Constants\EntityTypeEnum.js" />
     <Content Include="Analytics\Constants\GroupingByEnum.js" />
     <Content Include="Analytics\Constants\TimePeriodEnum.js" />
@@ -141,6 +143,7 @@
     <Content Include="Analytics\Constants\VolumeReportsTimePeriodEnum.js" />
     <Content Include="Analytics\Services\APIServices\AnalyticsAPIService.js" />
     <Content Include="Analytics\Services\APIServices\BillingStatisticsAPIService.js" />
+    <Content Include="Analytics\Services\APIServices\BlockedAttemptsAPIService.js" />
     <Content Include="Analytics\Services\APIServices\CDRAPIService.js" />
     <Content Include="Analytics\Views\Billing Reports\BillingReports.html" />
     <Content Include="Analytics\Views\Billing Reports\BillingReportsController.js" />
@@ -156,6 +159,8 @@
     <Content Include="Analytics\Views\Billing Statistics\Volume Reports\Volume Reports Templates\InOutTrafficVolumeTemplateController.js" />
     <Content Include="Analytics\Views\Billing Statistics\Volume Reports\Volume Reports Templates\TrafficVolumeTemplate.html" />
     <Content Include="Analytics\Views\Billing Statistics\Volume Reports\Volume Reports Templates\TrafficVolumeTemplateController.js" />
+    <Content Include="Analytics\Views\BlockedAttempts.html" />
+    <Content Include="Analytics\Views\BlockedAttemptsController.js" />
     <Content Include="Analytics\Views\CDR\CDRLog.html" />
     <Content Include="Analytics\Views\CDR\CDRLogController.js" />
     <Content Include="Analytics\Views\CDR\CDRReport.html" />
