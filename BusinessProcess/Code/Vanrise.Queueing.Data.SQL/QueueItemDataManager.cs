@@ -265,7 +265,7 @@ namespace Vanrise.Queueing.Data.SQL
         {
             List<QueueItemHeader> result = new List<QueueItemHeader>();
 
-            ExecuteReaderSPCmd("queue.sp_QueueItemHeader_GetItemsExecutionStatus", (reader) =>
+            ExecuteReaderSPCmd("queue.sp_QueueItemHeader_GetByQueueItemIDs", (reader) =>
             {
                 while (reader.Read())
                 {
