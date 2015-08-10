@@ -1,6 +1,8 @@
-﻿'use strict';
+﻿
 
 app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','PeriodEnum', function ($q, LogEntryTypeEnum, LabelColorsEnum, PeriodEnum) {
+
+    "use strict";
 
     var dateFormat = function () {
         var token = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g,
@@ -109,22 +111,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         ]
     };
 
-    return ({
-        replaceAll: replaceAll,
-        waitMultipleAsyncOperations: waitMultipleAsyncOperations,
-        getItemIndexByVal: getItemIndexByVal,
-        getItemByVal: getItemByVal,
-        contains: contains,
-        getPropValuesFromArray: getPropValuesFromArray,
-        getPropMaxValueFromArray: getPropMaxValueFromArray,
-        downloadFile: downloadFile,
-        getLogEntryTypeDescription: getLogEntryTypeDescription,
-        getLogEntryTypeColor: getLogEntryTypeColor,
-        getLogEntryType: getLogEntryType,
-        getEnum: getEnum,
-        dateToServerFormat: dateToServerFormat,
-        getPeriod: getPeriod
-    });
+    
 
     function getEnum(enumObj,propertyFilter, valueFilter) {
         for (var item in enumObj) {
@@ -264,6 +251,24 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         
         return max;
     }
+
+    function getPropMinValueFromArray(array, propName) {
+        var min = undefined;
+
+        if (array.length > 0) {
+
+            for (var i = 0, len = array.length; i < len; i++) {
+                if (min === undefined)
+                    min = array[i][propName];
+                if (array[i][propName] < min)
+                    min = array[i][propName];
+            }
+        }
+
+        return min;
+    }
+
+
 
     function downloadFile(data, headers) {
     
@@ -437,4 +442,23 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         }
         return interval;
     }
+
+    return ({
+        replaceAll: replaceAll,
+        waitMultipleAsyncOperations: waitMultipleAsyncOperations,
+        getItemIndexByVal: getItemIndexByVal,
+        getItemByVal: getItemByVal,
+        contains: contains,
+        getPropValuesFromArray: getPropValuesFromArray,
+        getPropMaxValueFromArray: getPropMaxValueFromArray,
+        downloadFile: downloadFile,
+        getLogEntryTypeDescription: getLogEntryTypeDescription,
+        getLogEntryTypeColor: getLogEntryTypeColor,
+        getLogEntryType: getLogEntryType,
+        getEnum: getEnum,
+        dateToServerFormat: dateToServerFormat,
+        getPeriod: getPeriod,
+        getPropMinValueFromArray: getPropMinValueFromArray
+    });
+
 }]);
