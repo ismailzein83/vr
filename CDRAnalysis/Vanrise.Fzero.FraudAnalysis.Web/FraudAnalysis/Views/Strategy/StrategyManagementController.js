@@ -27,6 +27,9 @@ function StrategyManagementController($scope, StrategyAPIService,UserAPIService,
             return retrieveData();
         }
 
+        $scope.isDefault = [{ value: null, name: 'All' }, { value: false, name: 'Not Default' }, { value: true, name: 'Default' }];
+        $scope.selectedIsDefault = '';
+
         $scope.periods = [];
         loadPeriods();
         $scope.selectedPeriods = [];
@@ -93,7 +96,8 @@ function StrategyManagementController($scope, StrategyAPIService,UserAPIService,
             Name: name,
             Description: description,
             PeriodsList: removeLastComma(periodsList),
-            UsersList: removeLastComma(usersList)
+            UsersList: removeLastComma(usersList),
+            IsDefault: $scope.selectedIsDefault.value
         };
 
         return mainGridAPI.retrieveData(query);

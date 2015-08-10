@@ -17,5 +17,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public string UsersList { get; set; }
 
+        public bool? IsDefault { get; set; }
+
     }
 }
