@@ -10,7 +10,7 @@
                     <vr-textbox value="description" label="Description"></vr-textbox>
                 </vr-columns>
                 <vr-columns colnum="2">
-                    <vr-select datasource="users" datatextfield="Name" datavaluefield="Id" label="Analyst" selectedvalues="selectedUsers" ismultipleselection></vr-select>
+                    <vr-select datasource="users" datatextfield="Name" datavaluefield="UserId" label="Analyst" selectedvalues="selectedUsers" ismultipleselection></vr-select>
                 </vr-columns>
                 <vr-columns colnum="2">
                     <vr-select datasource="periods" datatextfield="Name" datavaluefield="Id" label="Type" selectedvalues="selectedPeriods" ismultipleselection></vr-select>
@@ -41,6 +41,8 @@
                 </div>
             </vr-actionbar>
         </vr-row>
+
+        {{selectedUsers}}
     </vr-form>
 
     <div >

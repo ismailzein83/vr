@@ -92,7 +92,7 @@ function StrategyManagementController($scope, StrategyAPIService,UserAPIService,
         var usersList = '';
 
         angular.forEach($scope.selectedUsers, function (itm) {
-            usersList = usersList + itm.Id + ','
+            usersList = usersList + itm.UserId + ','
         });
 
 
