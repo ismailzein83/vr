@@ -80,6 +80,7 @@ function CarrierGroupManagementController($scope, CarrierGroupAPIService, VRModa
             modalScope.title = "Add Carrier Group";
             modalScope.onTreeAdded = function () {
                 load();
+                $scope.currentNode = undefined;
             };
         };
 
@@ -99,7 +100,7 @@ function CarrierGroupManagementController($scope, CarrierGroupAPIService, VRModa
             modalScope.title = "Edit Carrier Group";
             modalScope.onTreeUpdated = function () {
                 load();
-
+                $scope.currentNode = undefined;
             };
         };
 

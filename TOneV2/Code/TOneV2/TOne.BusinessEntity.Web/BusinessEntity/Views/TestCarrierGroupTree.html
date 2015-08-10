@@ -1,0 +1,29 @@
+﻿<vr-modalcontent ng-controller="BusinessEntity_TestCarrierGroupTreeController">
+    <vr-modalbody width="'50%'" vr-loader="isGettingData">
+        <vr-form name="formRoleEditor">
+            <vr-row>
+                <vr-columns colnum="4">
+                    <vr-treeview on-ready="treeReady"
+                                 datachildrenfield="Children"
+                                 datatextfield="Name"
+                                 selecteditem="currentNode"
+                                 onvaluechanged="treeValueChanged">
+                    </vr-treeview>
+                </vr-columns>
+                <vr-columns colnum="4" ng-show="currentNode != undefined && currentNode.EntityId != 0">
+                    <vr-datagrid datasource="carrierAccounts" loadmoredata="loadMoreData" on-ready="onMainGridReady">
+                        <vr-datagridcolumn headertext="'Carrier Account'" field="'CarrierAccountName'" widthfactor="5"></vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formRoleEditor" data-onclick="saveGroup"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</vr-modalcontent>

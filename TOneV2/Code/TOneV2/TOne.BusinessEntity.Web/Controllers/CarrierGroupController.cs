@@ -19,13 +19,13 @@ namespace TOne.BusinessEntity.Web.Controllers
             return manager.GetCarrierGroupMembers(groupId,false);
         }
 
-        //[HttpGet]
-        //public IEnumerable<CarrierInfo> GetCarriersInfoByGroup(string groupId)
-        //{
-        //    List<CarrierAccount> lst = GetCarriersByGroup(groupId).ToList<CarrierAccount>();
-        //    CarrierGroupManager manager = new CarrierGroupManager();
-        //    return manager.GetCarriersInfoByGroup(lst);
-        //}
+        [HttpGet]
+        public IEnumerable<CarrierInfo> GetCarrierGroupMembers(int groupId)
+        {
+            List<CarrierAccount> lstCarrierAccount = GetCarrierAccountsByGroup(groupId).ToList<CarrierAccount>();
+            CarrierGroupManager manager = new CarrierGroupManager();
+            return manager.GetCarriersInfoByGroup(lstCarrierAccount);
+        }
 
         [HttpGet]
         public IEnumerable<CarrierGroupNode> GetEntityNodes()
@@ -34,12 +34,12 @@ namespace TOne.BusinessEntity.Web.Controllers
             return manager.GetEntityNodes();
         }
 
-        //[HttpGet]
-        //public CarrierGroup GetCarrierGroup(int groupId)
-        //{
-        //    CarrierGroupManager manager = new CarrierGroupManager();
-        //    return manager.GetCarrierGroup(groupId);
-        //}
+        [HttpGet]
+        public CarrierGroup GetCarrierGroup(int groupId)
+        {
+            CarrierGroupManager manager = new CarrierGroupManager();
+            return manager.GetCarrierGroup(groupId);
+        }
 
         [HttpPost]
         public InsertOperationOutput<CarrierGroup> AddGroup(GroupEditorInput groupObj)
@@ -54,19 +54,19 @@ namespace TOne.BusinessEntity.Web.Controllers
             return manager.AddGroup(group, groupObj.Members);
         }
 
-        //[HttpPost]
-        // public UpdateOperationOutput<CarrierGroup> UpdateGroup(GroupEditorInput groupObj)
-        //{
-        //    CarrierGroupManager manager = new CarrierGroupManager();
-        //    CarrierGroup group = new CarrierGroup()
-        //    {
-        //        CarrierGroupID = groupObj.CarrierGroupID,
-        //        CarrierGroupName = groupObj.CarrierGroupName,
-        //        ParentID = groupObj.ParentID
-        //    };
+        [HttpPost]
+        public UpdateOperationOutput<CarrierGroup> UpdateGroup(GroupEditorInput groupObj)
+        {
+            CarrierGroupManager manager = new CarrierGroupManager();
+            CarrierGroup group = new CarrierGroup()
+            {
+                ID = groupObj.ID,
+                Name = groupObj.Name,
+                ParentID = groupObj.ParentID
+            };
 
-        //    return manager.UpdateGroup(group, groupObj.Members);
-        //}
+            return manager.UpdateGroup(group, groupObj.Members);
+        }
         
 
 

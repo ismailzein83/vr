@@ -22,5 +22,7 @@ namespace TOne.BusinessEntity.Entities
         public string CarrierGroupName { get; set; }
         public string CarrierGroups { get; set; }
         public List<int> GroupIds { get; set; }
+
+        public string CarrierAccountName { get; set; }
     }
 }

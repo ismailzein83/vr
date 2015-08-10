@@ -65,7 +65,7 @@ function CarrierGroupEditorController($scope, CarrierGroupAPIService, CarrierAcc
                         
                         if (editMode) {
                             //Load Selected
-                            CarrierGroupAPIService.GetCarriersInfoByGroup($scope.carrierGroupId).then(function (response) {
+                            CarrierGroupAPIService.GetCarrierGroupMembers($scope.carrierGroupId).then(function (response) {
 
                                 angular.forEach(response, function (item) {
                                     $scope.selectedvalues.push(item);
@@ -100,13 +100,10 @@ function CarrierGroupEditorController($scope, CarrierGroupAPIService, CarrierAcc
 
     function loadCarrierGroup() {
         return CarrierGroupAPIService.GetCarrierGroup($scope.carrierGroupId).then(function (response) {
-            console.log(response);
-            console.log($scope.beList);
-            $scope.name = response.CarrierGroupName;
+            $scope.name = response.Name;
             
             if ($scope.beList.length > 0) {
-                $scope.currentNode = treeAPI.setSelectedNode($scope.beList, response.CarrierGroupID);
-                console.log($scope.currentNode);
+                $scope.currentNode = treeAPI.setSelectedNode($scope.beList, response.ID);
                 treeAPI.refreshTree($scope.beList);
             }
                 
@@ -118,7 +115,6 @@ function CarrierGroupEditorController($scope, CarrierGroupAPIService, CarrierAcc
             if (menuList[i].EntityId == Id) {
                 menuList[i].isSelected = true;
                 menuList[i].isOpened = true;
-                console.log(menuList[i]);
                 $scope.currentNode = menuList[i];
                 return true;
             }
@@ -154,13 +150,18 @@ function CarrierGroupEditorController($scope, CarrierGroupAPIService, CarrierAcc
             selectedCarrierIds.push(carrierGroup.CarrierAccountID);
         });
 
+        if ($scope.currentNode === undefined)
+            $scope.currentNode = {
+                EntityId : 0
+            };
+
         if (typeof $scope.currentNode.EntityId === 'undefined')
             $scope.currentNode.EntityId = 0;
 
         var groupObj = {
-            CarrierGroupID: $scope.carrierGroupId,
+            ID: $scope.carrierGroupId,
             ParentID: $scope.currentNode.EntityId,
-            CarrierGroupName: $scope.name,
+            Name: $scope.name,
             Members: selectedCarrierIds
 
         };
@@ -176,6 +177,7 @@ function CarrierGroupEditorController($scope, CarrierGroupAPIService, CarrierAcc
             if (VRNotificationService.notifyOnItemAdded("Carrier Group", response)) {
                 if ($scope.onTreeAdded != undefined)
                     $scope.onTreeAdded();
+
                 $scope.modalContext.closeModal();
             }
 

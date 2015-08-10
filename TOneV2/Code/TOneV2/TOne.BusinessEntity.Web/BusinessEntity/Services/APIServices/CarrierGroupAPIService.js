@@ -3,10 +3,10 @@ var serviceObj = function (BaseAPIService) {
     return ({
         GetEntityNodes: GetEntityNodes,
         AddGroup: AddGroup,
-        //UpdateGroup: UpdateGroup,
-        GetCarrierAccountsByGroup: GetCarrierAccountsByGroup,
-        //GetCarriersInfoByGroup: GetCarriersInfoByGroup,
-        //GetCarrierGroup: GetCarrierGroup
+        UpdateGroup: UpdateGroup,
+        GetCarrierAccountsByGroup: GetCarrierAccountsByGroup,//List of all carrier accounts for the ddl // type CarrierAccount
+        GetCarrierGroupMembers: GetCarrierGroupMembers,//List of selected carrier accounts for the ddl // type CarrierInfo
+        GetCarrierGroup: GetCarrierGroup// Get the name of the carrier group
     });
 
     function GetEntityNodes() {
@@ -18,9 +18,9 @@ var serviceObj = function (BaseAPIService) {
     }
 
 
-    //function UpdateGroup(group) {
-    //    return BaseAPIService.post("/api/CarrierGroup/UpdateGroup", group);
-    //}
+    function UpdateGroup(group) {
+        return BaseAPIService.post("/api/CarrierGroup/UpdateGroup", group);
+    }
 
     function GetCarrierAccountsByGroup(groupId) {
         return BaseAPIService.get("/api/CarrierGroup/GetCarrierAccountsByGroup",
@@ -29,25 +29,19 @@ var serviceObj = function (BaseAPIService) {
             });
     }
 
-    //function GetCarriersInfoByGroup(groupId) {
-    //    return BaseAPIService.get("/api/CarrierGroup/GetCarriersInfoByGroup",
-    //        {
-    //            groupId: groupId
-    //        });
-    //}
+    function GetCarrierGroupMembers(groupId) {
+        return BaseAPIService.get("/api/CarrierGroup/GetCarrierGroupMembers",
+            {
+                groupId: groupId
+            });
+    }
 
-
-
-    //function GetCarrierGroups() {
-    //    return BaseAPIService.get("/api/CarrierGroup/GetCarrierGroups");
-    //}
-
-    //function GetCarrierGroup(groupId) {
-    //    return BaseAPIService.get("/api/CarrierGroup/GetCarrierGroup",
-    //        {
-    //            groupId: groupId
-    //        });
-    //}
+    function GetCarrierGroup(groupId) {
+        return BaseAPIService.get("/api/CarrierGroup/GetCarrierGroup",
+            {
+                groupId: groupId
+            });
+    }
     
 }
 serviceObj.$inject = ['BaseAPIService'];

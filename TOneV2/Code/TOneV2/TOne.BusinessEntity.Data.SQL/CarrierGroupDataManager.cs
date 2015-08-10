@@ -51,25 +51,31 @@ namespace TOne.BusinessEntity.Data.SQL
         {
             object carrierGroupId;
 
-            int carrGroupId = ExecuteNonQuerySP("BEntity.sp_CarrierGroup_Insert", out carrierGroupId, carrierGroup.Name, carrierGroup.ParentID);
+            int recordesEffected = ExecuteNonQuerySP("BEntity.sp_CarrierGroup_Insert", out carrierGroupId, carrierGroup.Name, carrierGroup.ParentID);
 
             foreach (string carrAccountId in CarrierAccountIds)
             {
-                ExecuteNonQuerySP("BEntity.sp_CarrierGroupMember_Insert", carrGroupId, carrAccountId);
+                ExecuteNonQuerySP("BEntity.sp_CarrierGroupMember_Insert", carrierGroupId, carrAccountId);
             }
-            insertedId = (carrGroupId > 0) ? (Int16)carrierGroupId : -1;
-            return (carrGroupId > 0);
+            insertedId = (recordesEffected > 0) ? (Int16)carrierGroupId : -1;
+            return (recordesEffected > 0);
         }
 
-        //public bool UpdateCarrierGroup(Entities.CarrierGroup carrierGroup)
-        //{
-        //    int recordesEffected = ExecuteNonQuerySP("BEntity.sp_CarrierGroup_Update", carrierGroup.CarrierGroupID, carrierGroup.CarrierGroupName, carrierGroup.ParentID,
-        //        carrierGroup.ParentPath);
+        public bool UpdateCarrierGroup(Entities.CarrierGroup carrierGroup, string[] CarrierAccountIds)
+        {
+            //update the Carrier group Information and delete the old carrier groups members
+            int recordesEffected = ExecuteNonQuerySP("BEntity.sp_CarrierGroup_Update", carrierGroup.ID, carrierGroup.Name, carrierGroup.ParentID);
 
-        //    if (recordesEffected > 0)
-        //        return true;
-        //    return false;
-        //}
+            //Insert the new carrier groups members
+            foreach (string carrAccountId in CarrierAccountIds)
+            {
+                ExecuteNonQuerySP("BEntity.sp_CarrierGroupMember_Insert", carrierGroup.ID, carrAccountId);
+            }
+
+            if (recordesEffected > 0)
+                return true;
+            return false;
+        }
 
         Entities.CarrierGroup CarrierGroupMapper(IDataReader reader)
         {

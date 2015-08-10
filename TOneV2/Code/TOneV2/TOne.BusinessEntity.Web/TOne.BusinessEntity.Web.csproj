@@ -135,6 +135,8 @@
     <Compile Include="Controllers\CarrierProfileController.cs" />
     <Compile Include="Controllers\RateController.cs" />
     <Compile Include="Controllers\SwitchController.cs" />
+    <Compile Include="Controllers\TestCarrierGroupTreeController.cs" />
+    <Compile Include="Controllers\TestCodeGroupController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -179,6 +181,10 @@
     <Content Include="BusinessEntity\Views\SwitchManagmentController.js" />
     <Content Include="BusinessEntity\Views\SwitchsController.js" />
     <Content Include="BusinessEntity\Views\Switchs.html" />
+    <Content Include="BusinessEntity\Views\TestCarrierGroupTree.html" />
+    <Content Include="BusinessEntity\Views\TestCarrierGroupTreeController.js" />
+    <Content Include="BusinessEntity\Views\TestCodeGroup.html" />
+    <Content Include="BusinessEntity\Views\TestCodeGroupController.js" />
     <Content Include="BusinessEntity\Views\TestNew.html" />
     <Content Include="BusinessEntity\Views\TestNewController.js" />
   </ItemGroup>

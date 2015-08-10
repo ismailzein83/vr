@@ -12,6 +12,6 @@ namespace TOne.BusinessEntity.Data
         CarrierGroup GetCarrierGroup(int carrierGroupId);
         List<CarrierAccount> GetCarrierGroupMembers(IEnumerable<int> carrierGroupIds);
         bool AddCarrierGroup(Entities.CarrierGroup carrierGroup, string[] CarrierAccountIds, out int insertedId);
-        //bool UpdateCarrierGroup(Entities.CarrierGroup carrierGroup);
+        bool UpdateCarrierGroup(Entities.CarrierGroup carrierGroup, string[] CarrierAccountIds);
     }
 }

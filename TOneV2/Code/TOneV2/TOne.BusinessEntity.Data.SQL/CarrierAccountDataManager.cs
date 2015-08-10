@@ -23,7 +23,7 @@ namespace TOne.BusinessEntity.Data.SQL
                 return new CarrierInfo
                 {
                     CarrierAccountID = reader["CarrierAccountID"] as string,
-                    Name = string.Format("{0}{1}", reader["Name"] as string, reader["NameSuffix"] != DBNull.Value && !string.IsNullOrEmpty(reader["NameSuffix"].ToString()) ? " (" + reader["NameSuffix"] as string + ")" : string.Empty)
+                    Name = GetCarrierAccountName(reader["Name"] as string, reader["NameSuffix"] as string)
                 };
             }, carrierType.ToString());
         }
@@ -137,7 +137,8 @@ namespace TOne.BusinessEntity.Data.SQL
                 AccountType = (byte)reader["AccountType"],
                 CustomerPaymentType = (byte)reader["CustomerPaymentType"],
                 SupplierPaymentType = (byte)reader["SupplierPaymentType"],
-                NameSuffix = reader["NameSuffix"] as string
+                NameSuffix = reader["NameSuffix"] as string,
+                CarrierAccountName = GetCarrierAccountName(reader["ProfileName"] as string, reader["NameSuffix"] as string)
             };
         }
 
