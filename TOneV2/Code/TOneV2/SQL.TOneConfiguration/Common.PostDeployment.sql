@@ -26,14 +26,14 @@ set identity_insert [sec].[BusinessEntityModule] on;
 ;with cte_data([Id],[Name],[ParentId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'TOne',null,0,'{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View","Add","Edit", "Delete", "Full Control"]}'),
-(2,'Routing Module',1,0,'{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View","Add","Edit", "Delete", "Full Control"]}'),
-(3,'Business Intelligence Module',1,0,'{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View","Add","Edit", "Delete", "Full Control"]}'),
-(4,'Sales Module',1,0,'{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View","Add","Edit", "Delete", "Full Control"]}'),
-(5,'Business Entity Module',1,0,'{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View","Add","Edit", "Delete", "Full Control"]}'),
-(6,'Administration Module',1,0,'{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View","Add","Edit", "Delete", "Full Control"]}'),
-(7,'Billing Module',3,0,'{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View","Add","Edit", "Delete", "Full Control"]}'),
-(8,'Trafic Module',3,0,'{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View","Add","Edit", "Delete", "Full Control"]}')
+(1,'Root',null,0,'["View","Add","Edit", "Delete", "Full Control"]'),
+(2,'Routing Module',1,0,'["View","Add","Edit", "Delete", "Full Control"]'),
+(3,'Business Intelligence Module',1,0,'["View","Add","Edit", "Delete", "Full Control"]'),
+(4,'Sales Module',1,0,'["View","Add","Edit", "Delete", "Full Control"]'),
+(5,'Business Entity Module',1,0,'["View","Add","Edit", "Delete", "Full Control"]'),
+(6,'Administration Module',1,0,'["View","Add","Edit", "Delete", "Full Control"]'),
+(7,'Billing Module',3,0,'["View","Add","Edit", "Delete", "Full Control"]'),
+(8,'Trafic Module',3,0,'["View","Add","Edit", "Delete", "Full Control"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[ParentId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntityModule] as t
@@ -56,21 +56,21 @@ set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Routes',2,0,'{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View"]}'),
-(2,'Route Rules',2,0,'{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View","Add Block Route","Edit Block Route", "Add Override Route", "Edit Override Route"]}'),
-(3,'Billing Statistics',7,0,'{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View"]}'),
-(4,'CDRs',7,0,'{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View"]}'),
-(6,'Traffic Statistics',8,0,'{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View"]}'),
-(7,'CDRs',8,0,'{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View"]}'),
-(8,'Rates',4,0,'{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View", "Edit"]}'),
-(9,'LCR',4,0,'{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View"]}'),
-(10,'Carrier',5,0,'{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View", "Edit", "Delete"]}'),
-(11,'Code',5,0,'{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View", "Edit"]}'),
-(12,'Zone',5,0,'{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View", "Edit"]}'),
-(13,'Users',6,0,'{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View", "Add", "Edit", "Reset Password"]}'),
-(14,'Groups',6,0,'{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View", "Add", "Edit", "Delete"]}'),
-(15,'System Entities',6,1,'{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View", "Assign Permissions"]}'),
-(17,'Dynamic Pages',6,1,'{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View", "Add", "Edit", "Delete","Validate"]}')
+(1,'Routes',2,0,'["View"]'),
+(2,'Route Rules',2,0,'["View","Add Block Route","Edit Block Route", "Add Override Route", "Edit Override Route"]'),
+(3,'Billing Statistics',7,0,'["View"]'),
+(4,'CDRs',7,0,'["View"]'),
+(6,'Traffic Statistics',8,0,'["View"]'),
+(7,'CDRs',8,0,'["View"]'),
+(8,'Rates',4,0,'["View", "Edit"]'),
+(9,'LCR',4,0,'["View"]'),
+(10,'Carrier',5,0,'["View", "Edit", "Delete"]'),
+(11,'Code',5,0,'["View", "Edit"]'),
+(12,'Zone',5,0,'["View", "Edit"]'),
+(13,'Users',6,0,'["View", "Add", "Edit", "Reset Password"]'),
+(14,'Groups',6,0,'["View", "Add", "Edit", "Delete"]'),
+(15,'System Entities',6,1,'["View", "Assign Permissions"]'),
+(17,'Dynamic Pages',6,1,'["View", "Add", "Edit", "Delete","Validate"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -92,9 +92,9 @@ set nocount on;
 ;with cte_data([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(0,'1',0,'1','{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.PermissionFlag, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.PermissionFlag, Vanrise.Security.Entities","Name":"Full Control","Value":1}]}'),
-(0,'1',1,'15','{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.PermissionFlag, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.PermissionFlag, Vanrise.Security.Entities","Name":"View","Value":1},{"$type":"Vanrise.Security.Entities.PermissionFlag, Vanrise.Security.Entities","Name":"Assign Permissions","Value":1}]}'),
-(0,'1',1,'17','{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.PermissionFlag, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.PermissionFlag, Vanrise.Security.Entities","Name":"View","Value":1},{"$type":"Vanrise.Security.Entities.PermissionFlag, Vanrise.Security.Entities","Name":"Edit","Value":1},{"$type":"Vanrise.Security.Entities.PermissionFlag, Vanrise.Security.Entities","Name":"Delete","Value":1},{"$type":"Vanrise.Security.Entities.PermissionFlag, Vanrise.Security.Entities","Name":"Add","Value":1},{"$type":"Vanrise.Security.Entities.PermissionFlag, Vanrise.Security.Entities","Name":"Validate","Value":1}]}')
+(0,'1',0,'1','[{"Name":"Full Control","Value":1}]'),
+(0,'1',1,'15','[{"Name":"View","Value":1}, {"Name":"Assign Permissions","Value":1}]'),
+(0,'1',1,'17','[{"Name":"View","Value":1}, {"Name":"Edit","Value":1}, {"Name":"Delete","Value":1}, {"Name":"Add","Value":1}, {"Name":"Validate","Value":1}]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags]))
 merge	[sec].[Permission] as t

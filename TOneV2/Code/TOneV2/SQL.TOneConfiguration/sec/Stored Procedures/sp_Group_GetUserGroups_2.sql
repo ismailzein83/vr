@@ -12,5 +12,5 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT UserId from sec.UserGroup where UserId = @UserId
+	SELECT GroupId from sec.UserGroup where UserId = @UserId
 END
