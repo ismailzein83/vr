@@ -30,22 +30,12 @@ namespace TOne.BusinessEntity.Data.SQL
             AccountManagerCarrier carrier = new AccountManagerCarrier
             {
                 CarrierAccountId = reader["CarrierAccountId"] as string,
-                CarrierName = GetCarrierName(reader["Name"] as string, reader["NameSuffix"] as string),
+                CarrierName = CarrierAccountDataManager.GetCarrierAccountName(reader["Name"] as string, reader["NameSuffix"] as string),
                 IsCustomerAvailable = (bool)reader["IsCustomerAvailable"],
                 IsSupplierAvailable = (bool)reader["IsSupplierAvailable"]
             };
 
             return carrier;
-        }
-
-        private string GetCarrierName(string carrierName, string nameSuffix)
-        {
-            string name = carrierName;
-
-            if (nameSuffix != "")
-                name += " (" + nameSuffix + ")";
-
-            return name;
         }
     }
 }

@@ -13,9 +13,6 @@ namespace TOne.BusinessEntity.Entities
 
         public string Name { get; set; }
 
-        public string Path { get; set; }
-        public string ParentPath { get; set; }
-
         [JsonIgnore]
         public CarrierGroupNode Parent { get; set; }
 

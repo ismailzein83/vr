@@ -69,8 +69,6 @@ namespace TOne.BusinessEntity.Data.SQL
             return RetrieveData(input, createTempTableAction, CarrierAccountMapper);
         }
 
-       
-
         public CarrierAccount GetCarrierAccount(string carrierAccountId)
         {
             return GetItemSP("BEntity.sp_CarrierAccount_GetByCarrierAccountId", (reader) =>
@@ -126,7 +124,7 @@ namespace TOne.BusinessEntity.Data.SQL
             };
         }
 
-        CarrierAccount CarrierAccountMapper(IDataReader reader)
+        internal static CarrierAccount CarrierAccountMapper(IDataReader reader)
         {
             return new CarrierAccount
             {
@@ -141,6 +139,11 @@ namespace TOne.BusinessEntity.Data.SQL
                 SupplierPaymentType = (byte)reader["SupplierPaymentType"],
                 NameSuffix = reader["NameSuffix"] as string
             };
+        }
+
+        internal static string GetCarrierAccountName(string carrierName, string nameSuffix)
+        {
+            return string.Format("{0}{1}", carrierName, string.IsNullOrEmpty(nameSuffix) ? string.Empty : " (" + nameSuffix + ")");
         }
 
         internal static DataTable BuildCarrierAccountInfoTable(List<CarrierAccountInfo> carrierAccountsInfo)
@@ -210,16 +213,14 @@ namespace TOne.BusinessEntity.Data.SQL
         {
             Dictionary<int, CarrierGroup> dic = new Dictionary<int, CarrierGroup>();
 
-            ExecuteReaderSP("BEntity.sp_CarrierGroup_GetAllCarrierGroup", (reader) =>
+            ExecuteReaderSP("BEntity.sp_CarrierGroup_GetAll", (reader) =>
             {
                 while (reader.Read())
-                    dic.Add((int)reader["CarrierGroupID"], new CarrierGroup
+                    dic.Add((int)reader["ID"], new CarrierGroup
                     {
-                        CarrierGroupID = (int)reader["CarrierGroupID"],
-                        CarrierGroupName = reader["CarrierGroupName"] as string,
+                        ID = (int)reader["ID"],
+                        Name = reader["Name"] as string,
                         ParentID =GetReaderValue<int?>(reader,"ParentID"),
-                        ParentPath = reader["ParentPath"] as string,
-                        Path = reader["Path"] as string
                     });
                 
             });

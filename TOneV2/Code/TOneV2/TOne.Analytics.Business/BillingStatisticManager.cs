@@ -952,7 +952,7 @@ namespace TOne.Analytics.Business
                 if (ca.CarrierGroupID.HasValue)
                 {
                     _cmanager.GetAllCarrierGroups().TryGetValue(ca.CarrierGroupID.Value, out cg);
-                    customerGroupName = cg.CarrierGroupName;
+                    customerGroupName = cg.Name;
                 }
             }
 
@@ -1074,7 +1074,7 @@ namespace TOne.Analytics.Business
                             {
                                 CarrierGroup carrierGroup = carrierGroups[carrierAccount.GroupIds[0]];
                                 //if (i == 0)
-                                rateLosses[j].CarrierGroupsNames = carrierGroup.CarrierGroupName;
+                                rateLosses[j].CarrierGroupsNames = carrierGroup.Name;
                                 //else
                                 //    rateLosses[j].CarrierGroupsNames = rateLosses[j].CarrierGroupsNames + ", " + carrierGroup.CarrierGroupName;
                             }

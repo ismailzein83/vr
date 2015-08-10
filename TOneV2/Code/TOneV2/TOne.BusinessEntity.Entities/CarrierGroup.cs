@@ -8,10 +8,8 @@ namespace TOne.BusinessEntity.Entities
 {
     public class CarrierGroup
     {
-        public int CarrierGroupID { get; set; }
-        public string CarrierGroupName { get; set; }
+        public int ID { get; set; }
+        public string Name { get; set; }
         public int? ParentID { get; set; }
-        public string ParentPath { get; set; }
-        public string Path { get; set; }
     }
 }

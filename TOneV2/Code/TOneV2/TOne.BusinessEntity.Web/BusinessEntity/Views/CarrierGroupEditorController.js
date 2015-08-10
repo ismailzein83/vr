@@ -98,15 +98,6 @@ function CarrierGroupEditorController($scope, CarrierGroupAPIService, CarrierAcc
            });
     }
 
-    function getData() {
-        return CarrierGroupAPIService.GetCarriersByGroup($scope.currentNode.EntityId).then(function (response) {
-            angular.forEach(response, function (item) {
-                $scope.carrierAccounts.push(item);
-            });
-        });
-    }
-
-
     function loadCarrierGroup() {
         return CarrierGroupAPIService.GetCarrierGroup($scope.carrierGroupId).then(function (response) {
             console.log(response);

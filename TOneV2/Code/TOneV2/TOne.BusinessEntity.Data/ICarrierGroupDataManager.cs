@@ -9,10 +9,9 @@ namespace TOne.BusinessEntity.Data
 {
     public interface ICarrierGroupDataManager : IDataManager
     {
-        List<CarrierGroup> GetEntities();
-        List<CarrierAccount> GetCarriersByGroup(string groupId);
-        bool AddCarrierGroup(Entities.CarrierGroup carrierGroup, out int insertedId);
-        bool UpdateCarrierGroup(Entities.CarrierGroup carrierGroup);
         CarrierGroup GetCarrierGroup(int carrierGroupId);
+        List<CarrierAccount> GetCarrierGroupMembers(IEnumerable<int> carrierGroupIds);
+        bool AddCarrierGroup(Entities.CarrierGroup carrierGroup, string[] CarrierAccountIds, out int insertedId);
+        //bool UpdateCarrierGroup(Entities.CarrierGroup carrierGroup);
     }
 }

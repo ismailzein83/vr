@@ -15,16 +15,12 @@ function CarrierGroupManagementController($scope, CarrierGroupAPIService, VRModa
 
         $scope.carrierAccounts = [];
 
-        defineMenuActions();
-
-
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
-            //getData();
         };
 
         $scope.loadMoreData = function () {
-            return getData();
+            return getCarrierAccounts();
         }
 
 
@@ -63,8 +59,8 @@ function CarrierGroupManagementController($scope, CarrierGroupAPIService, VRModa
            });
     }
 
-    function getData() {
-        return CarrierGroupAPIService.GetCarriersByGroup($scope.currentNode.EntityId).then(function (response) {
+    function getCarrierAccounts() {
+        return CarrierGroupAPIService.GetCarrierAccountsByGroup($scope.currentNode.EntityId).then(function (response) {
             angular.forEach(response, function (item) {
                 $scope.carrierAccounts.push(item);
             });
@@ -73,11 +69,7 @@ function CarrierGroupManagementController($scope, CarrierGroupAPIService, VRModa
 
     function refreshGrid() {
         mainGridAPI.clearDataAndContinuePaging();
-        getData();
-    }
-
-    function defineMenuActions() {
-
+        getCarrierAccounts();
     }
 
     function addGroup() {
