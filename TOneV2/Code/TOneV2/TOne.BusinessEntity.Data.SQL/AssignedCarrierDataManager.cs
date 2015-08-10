@@ -33,9 +33,11 @@ namespace TOne.BusinessEntity.Data.SQL
             
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySPCmd("[BEntity].[sp_AccountManager_CreateTempForAssignedCarriers]", (cmd) =>
+                ExecuteNonQuerySPCmd("BEntity.sp_AccountManager_CreateTempForAssignedCarriers", (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@TempTableName", tempTableName));
+
+                    cmd.Parameters.Add(new SqlParameter("@ManagerId", input.Query.ManagerId));
 
                     var dtParameter = new SqlParameter("@UserIds", SqlDbType.Structured);
                     dtParameter.Value = dtMembers;
@@ -108,7 +110,7 @@ namespace TOne.BusinessEntity.Data.SQL
             AssignedCarrier assignedCarrier = new AssignedCarrier
             {
                 UserId = (int)reader["UserId"],
-                CarrierName = GetCarrierName(reader["CarrierName"] as string, reader["NameSuffix"] as string),
+                CarrierName = CarrierAccountDataManager.GetCarrierAccountName(reader["CarrierName"] as string, reader["NameSuffix"] as string),
                 CarrierAccountId = reader["CarrierAccountId"] as string,
                 RelationType = (CarrierRelationType)reader["RelationType"]
             };
@@ -120,24 +122,15 @@ namespace TOne.BusinessEntity.Data.SQL
         {
             AssignedCarrierFromTempTable assignedCarrier = new AssignedCarrierFromTempTable
             {
-                CarrierAccountId = reader["CarrierAccountId"] as string,
-                CarrierName = GetCarrierName(reader["Name"] as string, reader["NameSuffix"] as string),
+                CarrierAccountID = reader["CarrierAccountID"] as string,
+                CarrierName = CarrierAccountDataManager.GetCarrierAccountName(reader["Name"] as string, reader["NameSuffix"] as string),
                 IsCustomerAssigned = (bool)reader["IsCustomerAssigned"],
                 IsSupplierAssigned = (bool)reader["IsSupplierAssigned"],
-                UserId = (int)reader["UserId"]
+                IsCustomerIndirect = (bool)reader["IsCustomerIndirect"],
+                IsSupplierIndirect = (bool)reader["IsSupplierIndirect"]
             };
 
             return assignedCarrier;
-        }
-
-        private string GetCarrierName(string carrierName, string nameSuffix)
-        {
-            string name = carrierName;
-
-            if (nameSuffix != "")
-                name += " (" + nameSuffix + ")";
-
-            return name;
         }
     }
 }

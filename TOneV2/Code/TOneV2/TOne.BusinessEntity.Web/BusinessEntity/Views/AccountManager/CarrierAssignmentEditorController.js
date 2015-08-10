@@ -74,8 +74,6 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
                     carriers = getMappedCarriers(response.Data);
                     
                     toggleAssignedCarriers(carriers);
-                    console.log('assigned carriers');
-                    console.log(assignedCarriers);
 
                     response.Data = carriers;
                     onResponseReady(response);

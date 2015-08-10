@@ -232,13 +232,14 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
         var mappedCarriers = [];
 
         angular.forEach(assignedCarriers, function (item) {
-            console.log(item);
+
             var gridObject = {
-                CarrierAccountId: item.CarrierAccountId,
+                CarrierAccountID: item.CarrierAccountID,
                 CarrierName: item.CarrierName,
-                IsCustomerAssigned: item.IsCustomerAssigned,
-                IsSupplierAssigned: item.IsSupplierAssigned,
-                Access: (item.UserId == $scope.currentNode.nodeId) ? 'Direct' : 'Indirect'
+                IsCustomerAssigned: (item.IsCustomerIndirect) ? (item.IsCustomerAssigned + ' (Indirect)') : item.IsCustomerAssigned,
+                IsSupplierAssigned: (item.IsSupplierIndirect) ? (item.IsSupplierAssigned + ' (Indirect)') : item.IsSupplierAssigned,
+                IsCustomerIndirect: item.IsCustomerIndirect,
+                IsSupplierIndirect: item.IsSupplierIndirect
             };
 
             mappedCarriers.push(gridObject);
