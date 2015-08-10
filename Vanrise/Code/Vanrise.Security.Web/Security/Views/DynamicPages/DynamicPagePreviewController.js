@@ -26,16 +26,22 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         $scope.summaryWidgets = [];
         $scope.bodyWidgets = [];
         $scope.viewWidgets = [];
-        $scope.onValueChanged = function () {
-            var customize = {
-                value: -1,
-                description: "Customize"
-            }
-            $scope.selectedPeriod = customize;
+        var customize = {
+            value: -1,
+            description: "Customize"
+        }
+        $scope.onBlurChanged = function () {
+            var from = formatMMDDYYYY($scope.fromDate);
+            var oldFrom = formatMMDDYYYY(date.from);
+            var to = formatMMDDYYYY($scope.toDate);
+            var oldTo = formatMMDDYYYY(date.to);
+            if (from != oldFrom || to != oldTo)
+                $scope.selectedPeriod = customize;
+
         }
         $scope.periodSelectionChanged = function () {
             if ($scope.selectedPeriod != undefined && $scope.selectedPeriod.value != -1) {
-                var date = getPeriod($scope.selectedPeriod.value);
+                date = UtilsService.getPeriod($scope.selectedPeriod.value);
                 $scope.fromDate = date.from;
                 $scope.toDate = date.to;
             }
@@ -94,7 +100,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
 
     }
     function fillDateAndPeriod(){
-        date = getPeriod($scope.selectedPeriod.value);
+        date = UtilsService.getPeriod($scope.selectedPeriod.value);
         $scope.fromDate = date.from;
         $scope.toDate = date.to;
         $scope.filter = {
@@ -189,7 +195,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             if (!$scope.nonSearchable)
                bodyWidget.API.retrieveData( $scope.filter);
             else {
-                var widgetDate = getPeriod(bodyWidget.DefaultPeriod);
+                var widgetDate = UtilsService.getPeriod(bodyWidget.DefaultPeriod);
                 var timeDimention = UtilsService.getItemByVal($scope.timeDimensionTypes, bodyWidget.DefaultGrouping, 'value');
                 filter = {
                     timeDimensionType: timeDimention,
@@ -216,7 +222,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             if (!$scope.nonSearchable)
                 summaryWidget.API.retrieveData( $scope.filter);
             else {
-                var widgetDate = getPeriod(summaryWidget.DefaultPeriod);
+                var widgetDate = UtilsService.getPeriod(summaryWidget.DefaultPeriod);
                 var timeDimention = UtilsService.getItemByVal($scope.timeDimensionTypes, summaryWidget.DefaultGrouping, 'value');
                 filter = {
                     timeDimensionType: timeDimention,
@@ -258,99 +264,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
  
         });
     }
-    function getPeriod(periodType) {
-        switch (periodType) {
-            case PeriodEnum.LastYear.value: return getLastYearInterval();
-            case PeriodEnum.LastMonth.value: return getLastMonthInterval();
-            case PeriodEnum.LastWeek.value: return getLastWeekInterval();
-            case PeriodEnum.Yesterday.value: return getYesterdayInterval();
-            case PeriodEnum.Today.value: return getTodayInterval();
-            case PeriodEnum.CurrentWeek.value: return getCurrentWeekInterval();
-            case PeriodEnum.CurrentMonth.value: return getCurrentMonthInterval();
-            case PeriodEnum.CurrentYear.value: return getCurrentYearInterval();
-        }
-    }
-    function getCurrentYearInterval() {
-        var date = new Date();
-        var interval = {
-            from: new Date(date.getFullYear(), 0, 1),
-            to: new Date(),
-        }
-        return interval;
-    }
-    function getCurrentWeekInterval() {
-        var thisWeek = new Date(new Date().getTime() - 60 * 60 * 24 * 1000)
-        var day = thisWeek.getDay();
-        var LastMonday;
-        if (day === 0) {
-            LastMonday = new Date();
-        }
-        else {
-            var diffToMonday = thisWeek.getDate() - day + (day === 0 ? -6 : 1);
-            var LastMonday = new Date(thisWeek.setDate(diffToMonday));
-        }
-
-
-        var interval = {
-            from: LastMonday,
-            to: new Date(),
-        }
-        return interval;
-    }
-    function getLastWeekInterval() {
-        var beforeOneWeek = new Date(new Date().getTime() - 60 * 60 * 24 * 7 * 1000)
-        var day = beforeOneWeek.getDay();
-
-        var diffToMonday = beforeOneWeek.getDate() - day + (day === 0 ? -6 : 1);
-        var beforeLastMonday = new Date(beforeOneWeek.setDate(diffToMonday));
-        var lastSunday = new Date(beforeOneWeek.setDate(diffToMonday + 6));
-        var interval = {
-            from: beforeLastMonday,
-            to: lastSunday,
-        }
-        return interval;
-    }
-    function getCurrentMonthInterval() {
-        var date = new Date();
-        var interval = {
-            from: new Date(date.getFullYear(), date.getMonth(), 1),
-            to: new Date(),
-        }
-        return interval;
-    }
-    function getTodayInterval() {
-        var date = new Date();
-        var interval = {
-            from: date,
-            to: date
-        }
-        return interval;
-    }
-    function getYesterdayInterval() {
-        var date = new Date();
-        date.setDate(date.getDate() - 1);
-        var interval = {
-            from: date,
-            to: date,
-        }
-        return interval;
-    }
-    function getLastMonthInterval() {
-        var date = new Date();
-        var interval = {
-            from: new Date(date.getFullYear(), date.getMonth() - 1, 1),
-            to: new Date(date.getFullYear(), date.getMonth(), 0),
-        }
-        return interval;
-    }
-    function getLastYearInterval() {
-        var date = new Date();
-        var interval = {
-            from: new Date(date.getFullYear() - 1, 0, 1),
-            to: new Date(date.getFullYear() - 1, 11, 31)
-        }
-        return interval;
-    }
+    
     function definePeriods() {
         $scope.periods = [];
         for (var p in PeriodEnum)
