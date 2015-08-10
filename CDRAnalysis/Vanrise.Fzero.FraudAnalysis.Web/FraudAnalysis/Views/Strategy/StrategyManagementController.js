@@ -1,6 +1,6 @@
-﻿StrategyManagementController.$inject = ['$scope', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+﻿StrategyManagementController.$inject = ['$scope', 'StrategyAPIService','UserAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
-function StrategyManagementController($scope, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+function StrategyManagementController($scope, StrategyAPIService,UserAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
 
     var mainGridAPI;
     var arrMenuAction = [];
@@ -30,6 +30,12 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
         $scope.periods = [];
         loadPeriods();
         $scope.selectedPeriods = [];
+
+
+        $scope.users = [];
+        loadUsers();
+        $scope.selectedUsers = [];
+
 
         $scope.addNewStrategy = addNewStrategy;
 
@@ -75,16 +81,30 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
             periodsList = periodsList + itm.Id + ','
         });
 
-        console.log('periodsList')
-        console.log(periodsList)
+
+        var usersList = '';
+
+        angular.forEach($scope.selectedUsers, function (itm) {
+            usersList = usersList + itm.Id + ','
+        });
+
 
         var query = {
             Name: name,
             Description: description,
-            PeriodsList: removeLastComma(periodsList)
+            PeriodsList: removeLastComma(periodsList),
+            UsersList: removeLastComma(usersList)
         };
 
         return mainGridAPI.retrieveData(query);
+    }
+
+    function loadUsers() {
+        return UserAPIService.GetUsers().then(function (response) {
+            angular.forEach(response, function (itm) {
+                $scope.users.push(itm);
+            });
+        });
     }
 
     function loadPeriods() {

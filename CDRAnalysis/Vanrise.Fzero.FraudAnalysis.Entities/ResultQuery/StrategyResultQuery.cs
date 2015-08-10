@@ -15,5 +15,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public string PeriodsList { get; set; }
 
+        public string UsersList { get; set; }
+
     }
 }
