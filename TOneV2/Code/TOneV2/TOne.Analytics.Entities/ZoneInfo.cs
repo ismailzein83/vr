@@ -8,7 +8,13 @@ namespace TOne.Analytics.Entities
 {
     public class ZoneInfo
     {
-        public string ZoneName { get; set; }
         public int ZoneID { get; set; }
+        public string ZoneName { get; set; }
+        public List<decimal> Values { get; set; }
+
+        public List<string> Time { get; set; }
+        
+
+
     }
 }

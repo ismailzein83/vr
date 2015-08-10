@@ -8,7 +8,9 @@ namespace TOne.Analytics.Entities
 {
     public class TimeValuesRecord
     {
-        public List<string> Time { get; set; }
-        public List<decimal> Values { get; set; }
+        public string ZoneName { get; set; }
+        public string Time { get; set; }
+        public decimal Values { get; set; }
+        
     }
 }

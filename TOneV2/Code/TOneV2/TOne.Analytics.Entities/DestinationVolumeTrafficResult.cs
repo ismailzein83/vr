@@ -10,6 +10,6 @@ namespace TOne.Analytics.Entities
     {
          public List<ZoneInfo> TopZones { get; set; }
 
-         public TimeValuesRecord ValuesPerDate { get; set; }
+         public List<TimeValuesRecord> ValuesPerDate { get; set; }
     }
 }

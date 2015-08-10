@@ -40,7 +40,7 @@ namespace TOne.Analytics.Web.Controllers
             return __billingStatisticsManager.GetTrafficVolumes(fromDate, toDate, customerId, supplierId, zoneId, attempts, timePeriod);
         }
 
-        public DestinationVolumeTrafficResult GetDestinationTrafficVolumes(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int zoneId, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination)
+        public List<TOne.Analytics.Entities.ZoneInfo> GetDestinationTrafficVolumes(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int zoneId, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination)
         {
             return __billingStatisticsManager.GetDestinationTrafficVolumes(fromDate, toDate, customerId, supplierId, zoneId, attempts, timePeriod, topDestination);
         }
