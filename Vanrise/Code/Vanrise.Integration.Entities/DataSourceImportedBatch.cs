@@ -10,7 +10,7 @@ namespace Vanrise.Integration.Entities
     public class DataSourceImportedBatch
     {
         public long ID { get; set; }
-        public string BatchName { get; set; }
+        public string BatchDescription { get; set; }
         public decimal BatchSize { get; set; }
         public int RecordsCount { get; set; }
         public MappingResult MappingResult { get; set; }

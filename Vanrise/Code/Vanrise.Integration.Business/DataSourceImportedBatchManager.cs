@@ -65,12 +65,12 @@ namespace Vanrise.Integration.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, bigResult);
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<QueueItemHeader> GetQueueItemHeaders(Vanrise.Entities.DataRetrievalInput<QueueItemHeaderQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<QueueItemHeader> GetQueueItemHeaders(Vanrise.Entities.DataRetrievalInput<List<long>> input)
         {
             Vanrise.Entities.BigResult<QueueItemHeader> bigResult = new Vanrise.Entities.BigResult<QueueItemHeader>();
 
             QueueingManager manager = new QueueingManager();
-            bigResult.Data = manager.GetQueueItemsHeader(input.Query.ItemIds);
+            bigResult.Data = manager.GetQueueItemsHeader(input.Query);
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, bigResult);
         }

@@ -20,7 +20,7 @@ namespace Vanrise.Integration.Web.Controllers
         }
 
         [HttpPost]
-        public object GetQueueItemHeaders(Vanrise.Entities.DataRetrievalInput<QueueItemHeaderQuery> input)
+        public object GetQueueItemHeaders(Vanrise.Entities.DataRetrievalInput<List<long>> input)
         {
             DataSourceImportedBatchManager manager = new DataSourceImportedBatchManager();
             return GetWebResponse(input, manager.GetQueueItemHeaders(input));

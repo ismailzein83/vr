@@ -12,7 +12,7 @@ function DataSourceImportedBatchManagementController($scope, DataSourceImportedB
         $scope.dataSources = [];
         $scope.selectedDataSource = [];
         $scope.mappingResults = [];
-        $scope.selectedMappingResult = undefined;
+        $scope.selectedMappingResults = [];
         $scope.batchName = undefined;
         $scope.selectedFromDateTime = undefined;
         $scope.selectedToDateTime = undefined;
@@ -71,13 +71,12 @@ function DataSourceImportedBatchManagementController($scope, DataSourceImportedB
     }
 
     function retrieveData() {
-        if (gridApi == undefined) return;
-        if (filtersAreNotReady) return;
+        if (gridApi == undefined || filtersAreNotReady) return;
 
         var query = {
             DataSourceId: $scope.selectedDataSource.DataSourceId,
             BatchName: ($scope.batchName != undefined) ? $scope.batchName : null,
-            MappingResult: ($scope.selectedMappingResult != undefined) ? $scope.selectedMappingResult.value : Integration_MappingResultEnum.Valid.value,
+            MappingResults: getMappedMappingResults(),
             From: $scope.selectedFromDateTime,
             To: $scope.selectedToDateTime
         };
@@ -89,6 +88,22 @@ function DataSourceImportedBatchManagementController($scope, DataSourceImportedB
         for (var prop in Integration_MappingResultEnum) {
             $scope.mappingResults.push(Integration_MappingResultEnum[prop]);
         }
+    }
+
+    function getMappedMappingResults() {
+
+        if ($scope.selectedMappingResults.length == 0) {
+            // select all
+            $scope.selectedMappingResults = getArrayEnum(Integration_MappingResultEnum);
+        }
+
+        var mappedMappingResults = [];
+
+        for (var i = 0; i < $scope.selectedMappingResults.length; i++) {
+            mappedMappingResults.push($scope.selectedMappingResults[i].value);
+        }
+
+        return mappedMappingResults;
     }
 
     function getMappingResultDescription(mappingResultValue) {
@@ -115,6 +130,18 @@ function DataSourceImportedBatchManagementController($scope, DataSourceImportedB
         if (executionStatusValue === Integration_ExecutionStatusEnum.Processed.value) return Integration_ExecutionStatusColorEnum.Processed.color;
         
         return Integration_ExecutionStatusColorEnum.New.color;
+    }
+
+    function getArrayEnum(enumObj) {
+        var array = [];
+
+        for (var item in enumObj) {
+            if (enumObj.hasOwnProperty(item)) {
+                array.push(enumObj[item]);
+            }
+        }
+
+        return array;
     }
 }
 

@@ -20,7 +20,6 @@ function QueueItemHeaderGridController($scope, DataSourceImportedBatchAPIService
 
             return DataSourceImportedBatchAPIService.GetQueueItemHeaders(dataRetrievalInput)
                 .then(function (response) {
-                    console.log(response);
 
                     angular.forEach(response.Data, function (item) {
                         item.ExecutionStatusDescription = getExecutionStatusDescription(item.Status);
@@ -43,11 +42,9 @@ function QueueItemHeaderGridController($scope, DataSourceImportedBatchAPIService
     };
 
     function retrieveData() {
-        var query = {
-            itemIds: $scope.dataItem.QueueItemIds.split(',').map(Number)
-        };
-        
-        return gridApi.retrieveData(query);
+
+        var itemIds = $scope.dataItem.QueueItemIds.split(',').map(Number)
+        return gridApi.retrieveData(itemIds);
     }
 
     function getExecutionStatusDescription(executionStatusValue) {

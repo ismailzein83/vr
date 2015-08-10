@@ -63,7 +63,7 @@ function DataSourceLogManagementController($scope, DataSourceLogsAPIService, Dat
                 return retrieveData();
             })
             .catch(function (error) {
-                VRNotificationService.notifyExceptionWithException(error, $scope);
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
             })
             .finally(function () {
                 $scope.isLoadingForm = false;
@@ -71,8 +71,7 @@ function DataSourceLogManagementController($scope, DataSourceLogsAPIService, Dat
     }
 
     function retrieveData() {
-        if (gridApi == undefined) return;
-        if (filtersAreNotReady) return;
+        if (gridApi == undefined || filtersAreNotReady) return;
 
         var query = {
             DataSourceId: ($scope.selectedDataSource != undefined) ? $scope.selectedDataSource.Id : null,

@@ -26,9 +26,23 @@ namespace Vanrise.Integration.Data.SQL
 
         public Vanrise.Entities.BigResult<DataSourceImportedBatch> GetFilteredDataSourceImportedBatches(Vanrise.Entities.DataRetrievalInput<DataSourceImportedBatchQuery> input)
         {
+            DataTable dtMappingResults = BuildMappingResultsTable(input.Query.MappingResults);
+
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("integration.sp_DataSourceImportedBatch_CreateTempForFiltered", tempTableName, input.Query.DataSourceId, input.Query.BatchName, input.Query.MappingResult, input.Query.From, input.Query.To);
+                ExecuteNonQuerySPCmd("integration.sp_DataSourceImportedBatch_CreateTempForFiltered", (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@TempTableName", tempTableName));
+                    cmd.Parameters.Add(new SqlParameter("@DataSourceId", input.Query.DataSourceId));
+                    cmd.Parameters.Add(new SqlParameter("@BatchName", input.Query.BatchName));
+
+                    var dtParameter = new SqlParameter("@MappingResults", SqlDbType.Structured);
+                    dtParameter.Value = dtMappingResults;
+                    cmd.Parameters.Add(dtParameter);
+
+                    cmd.Parameters.Add(new SqlParameter("@From", input.Query.From));
+                    cmd.Parameters.Add(new SqlParameter("@To", input.Query.To));
+                });
             };
 
             return RetrieveData(input, createTempTableAction, DataSourceImportedBatchMapper);
@@ -39,7 +53,7 @@ namespace Vanrise.Integration.Data.SQL
             Vanrise.Integration.Entities.DataSourceImportedBatch dataSourceImportedBatch = new Vanrise.Integration.Entities.DataSourceImportedBatch
             {
                 ID = (long)reader["ID"],
-                BatchName = reader["BatchDescription"] as string,
+                BatchDescription = reader["BatchDescription"] as string,
                 BatchSize = GetReaderValue<decimal>(reader, "BatchSize"),
                 RecordsCount = (int)reader["RecordsCount"],
                 MappingResult = (MappingResult)reader["MappingResult"],
@@ -49,6 +63,23 @@ namespace Vanrise.Integration.Data.SQL
             };
 
             return dataSourceImportedBatch;
+        }
+
+        private DataTable BuildMappingResultsTable(List<MappingResult> mappingResults)
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("MappingResult", typeof(int));
+            dt.BeginLoadData();
+
+            foreach (var mappingResult in mappingResults)
+            {
+                DataRow dr = dt.NewRow();
+                dr["MappingResult"] = mappingResult;
+                dt.Rows.Add(dr);
+            }
+
+            dt.EndLoadData();
+            return dt;
         }
     }
 }

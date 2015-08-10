@@ -8,7 +8,7 @@
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-select label="Mapping Result" datatextfield="description" datavaluefield="value" datasource="mappingResults" selectedvalues="selectedMappingResult"></vr-select>
+                    <vr-select ismultipleselection label="Mapping Results" datatextfield="description" datavaluefield="value" datasource="mappingResults" selectedvalues="selectedMappingResults"></vr-select>
                 </vr-columns>
 
                 <vr-columns width="normal">
@@ -44,7 +44,7 @@
                              on-ready="gridReady">
 
                     <vr-datagridcolumn headertext="'ID'" field="'ID'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Batch Name'" field="'BatchName'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Batch Description'" field="'BatchDescription'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Batch Size'" field="'BatchSize'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Records Count'" field="'RecordsCount'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Mapping Result'" field="'MappingResultDescription'"></vr-datagridcolumn>
