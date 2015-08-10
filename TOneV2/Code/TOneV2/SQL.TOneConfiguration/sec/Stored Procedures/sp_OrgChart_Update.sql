@@ -4,8 +4,11 @@
 	@Hierarchy VARCHAR(1000)
 AS
 BEGIN
-	UPDATE [sec].[OrgChart]
-	SET Name = @Name,
-		Hierarchy = @Hierarchy
-	WHERE Id = @Id
+IF NOT EXISTS(SELECT 1 FROM sec.[OrgChart] WHERE Name = @Name AND Hierarchy = @Hierarchy)
+	BEGIN
+		UPDATE [sec].[OrgChart]
+		SET Name = @Name,
+			Hierarchy = @Hierarchy
+		WHERE Id = @Id
+	END
 END

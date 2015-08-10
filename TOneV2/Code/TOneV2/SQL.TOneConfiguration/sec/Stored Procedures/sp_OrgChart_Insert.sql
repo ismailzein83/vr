@@ -4,8 +4,11 @@
 	@Id INT OUTPUT
 AS
 BEGIN
-	INSERT INTO sec.[OrgChart] ([Name],[Hierarchy])
-	VALUES (@Name, @Hierarchy)
-	
-	SET @Id = @@IDENTITY
+IF NOT EXISTS(SELECT 1 FROM sec.[OrgChart] WHERE Name = @Name)
+	BEGIN
+		INSERT INTO sec.[OrgChart] ([Name],[Hierarchy])
+		VALUES (@Name, @Hierarchy)
+		
+		SET @Id = @@IDENTITY
+	END
 END

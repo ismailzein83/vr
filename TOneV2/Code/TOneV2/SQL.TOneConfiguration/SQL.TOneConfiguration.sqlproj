@@ -69,6 +69,9 @@
     <Folder Include="BI\Stored Procedures\" />
     <Folder Include="sec\User Defined Types\" />
     <Folder Include="Security\" />
+    <Folder Include="common\" />
+    <Folder Include="common\Tables\" />
+    <Folder Include="common\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -138,6 +141,13 @@
     <Build Include="Security\BEntity_2.sql" />
     <Build Include="sec\Stored Procedures\sp_View_UpdateRank.sql" />
     <Build Include="sec\Stored Procedures\sp_OrgChart_CreateTempForFiltered.sql" />
+    <Build Include="common\Tables\File.sql" />
+    <Build Include="sec\Stored Procedures\sp_Module_UpdateRank.sql" />
+    <Build Include="common\Stored Procedures\sp_File_SetUsed.sql" />
+    <Build Include="common\Stored Procedures\sp_File_GetFileById.sql" />
+    <Build Include="common\Stored Procedures\sp_File_GetInfoById.sql" />
+    <Build Include="common\Stored Procedures\sp_File_Insert.sql" />
+    <Build Include="Security\common.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
