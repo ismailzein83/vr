@@ -31,7 +31,7 @@ BEGIN
 			FROM [integration].[DataSourceImportedBatch]
 			WHERE 
 				(@DataSourceId IS NULL OR DataSourceId = @DataSourceId) AND
-				(@BatchName IS NULL OR BatchDescription = @BatchName) AND
+				(@BatchName IS NULL OR BatchDescription LIKE '%' + @BatchName + '%') AND
 				(@MappingResult IS NULL OR MappingResult = @MappingResult) AND
 				(@From IS NULL OR LogEntryTime >= @From) AND
 				(@To IS NULL OR LogEntryTime <= @To)
