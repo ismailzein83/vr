@@ -21,5 +21,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public bool? IsEnabled { get; set; }
 
+        public DateTime? FromDate { get; set; }
+
+        public DateTime? ToDate { get; set; }
+
     }
 }

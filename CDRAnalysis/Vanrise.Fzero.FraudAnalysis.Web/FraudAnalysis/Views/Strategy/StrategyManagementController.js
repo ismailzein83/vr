@@ -102,7 +102,9 @@ function StrategyManagementController($scope, StrategyAPIService,UserAPIService,
             PeriodsList: removeLastComma(periodsList),
             UsersList: removeLastComma(usersList),
             IsDefault: $scope.selectedIsDefault.value,
-            IsEnabled:$scope.selectedIsEnabled.value
+            IsEnabled: $scope.selectedIsEnabled.value,
+            FromDate: $scope.fromDate,
+            ToDate: $scope.toDate
         };
 
         return mainGridAPI.retrieveData(query);
