@@ -91,6 +91,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
+        public void DeleteStrategyResults(string StrategiesList, DateTime FromDate, DateTime ToDate)
+        {
+            ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_DeleteStrategyResults", StrategiesList, FromDate, ToDate);
+        }
+
+
         #region Private Methods
 
         private Strategy StrategyMapper(IDataReader reader)
@@ -111,6 +117,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
 
 
-       
+
+
+
+        
     }
 }

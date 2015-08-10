@@ -18,6 +18,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
         bool AddStrategy(Strategy strategyObject, out int insertedId, int userId);
 
         bool UpdateStrategy(Strategy strategy, int userId);
+
+        void DeleteStrategyResults(string StrategiesList, DateTime FromDate, DateTime ToDate);
         
     }
 }

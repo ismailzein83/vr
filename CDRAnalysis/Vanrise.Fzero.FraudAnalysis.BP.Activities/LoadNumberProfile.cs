@@ -19,6 +19,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         public BaseQueue<NumberProfileBatch> OutputQueue { get; set; }
 
+        [RequiredArgument]
         public DateTime FromDate { get; set; }
 
 
