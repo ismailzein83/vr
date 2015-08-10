@@ -126,6 +126,7 @@
             };
 
             $scope.searchClicked = function () {
+                minTrackingId = 0;
                 stopGetData();
                 return retrieveData();
             };
