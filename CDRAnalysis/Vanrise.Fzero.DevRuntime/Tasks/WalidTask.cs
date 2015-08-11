@@ -21,7 +21,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
 
             var runtimeServices = new List<RuntimeService>();
 
-            //runtimeServices.Add(queueActivationService);
+            runtimeServices.Add(queueActivationService);
 
             runtimeServices.Add(bpService);
 

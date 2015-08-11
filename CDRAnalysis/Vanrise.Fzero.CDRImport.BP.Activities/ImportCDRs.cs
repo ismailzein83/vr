@@ -58,7 +58,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                             var stream = new MemoryStream();
                             sftp.GetFile(filePath, stream);
                             byte[] data = stream.ToArray();
-                            List<CDR> CDRs = new List<CDR>();
+                            List<CDR> cdrList = new List<CDR>();
                             using (var ms = stream)
                             {
                                 ms.Position = 0;
@@ -116,13 +116,13 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                                         cdr.DownVolume = downVolume;
 
 
-                                    CDRs.Add(cdr);
+                                    cdrList.Add(cdr);
                                 }
                             }
 
                             inputArgument.OutputQueue.Enqueue(new ImportedCDRBatch()
                             {
-                                cdrs = CDRs
+                                CDRs = cdrList
                             });
                             sftp.Rename(filePath, newFilePath);
 

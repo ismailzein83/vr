@@ -44,7 +44,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                     hasItem = inputArgument.InputQueue.TryDequeue(
                         (item) =>
                         {
-                            dataManager.SaveCDRsToDB(item.cdrs);
+                            dataManager.SaveCDRsToDB(item.CDRs);
                         });
                 }
                 while (!ShouldStop(handle) && hasItem);
