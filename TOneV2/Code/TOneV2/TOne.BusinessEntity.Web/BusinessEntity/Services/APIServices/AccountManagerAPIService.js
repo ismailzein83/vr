@@ -9,8 +9,10 @@ var serviceObj = function (BaseAPIService) {
         UpdateLinkedOrgChart: UpdateLinkedOrgChart
     });
     
-    function GetCarriers(input) {
-        return BaseAPIService.post('/api/AccountManager/GetCarriers', input);
+    function GetCarriers(userId) {
+        return BaseAPIService.get('/api/AccountManager/GetCarriers', {
+            userId: userId
+        });
     }
 
     // called from the CarrierAssignmentEditor page

@@ -130,9 +130,14 @@ namespace Vanrise.Security.Business
 
             Member manager = GetMember(managerId, orgChart.Hierarchy);
 
+            // manager would be null if he/she were added after the org chart's hierarchy was created
+            // one way to get around this problem is to update all org charts to include the new users in the hierarchy
             List<int> memberIds = new List<int>();
-            memberIds = GetMemberIdsRecursively(manager);
-            memberIds.Add(manager.Id);
+
+            if (manager != null)
+                memberIds = GetMemberIdsRecursively(manager);
+
+            memberIds.Add(managerId);
 
             return memberIds;
         }

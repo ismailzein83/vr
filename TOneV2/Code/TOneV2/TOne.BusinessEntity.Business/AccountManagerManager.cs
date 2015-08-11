@@ -13,10 +13,10 @@ namespace TOne.BusinessEntity.Business
 {
     public class AccountManagerManager
     {
-        public Vanrise.Entities.IDataRetrievalResult<AccountManagerCarrier> GetCarriers(Vanrise.Entities.DataRetrievalInput<AccountManagerCarrierQuery> input)
+        public List<AccountManagerCarrier> GetCarriers(int userId)
         {
             IAccountManagerCarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountManagerCarrierDataManager>();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetCarriers(input));
+            return dataManager.GetCarriers(userId);
         }
 
         public List<AssignedCarrier> GetAssignedCarriers(int managerId, bool withDescendants, CarrierTypeFilter carrierType)

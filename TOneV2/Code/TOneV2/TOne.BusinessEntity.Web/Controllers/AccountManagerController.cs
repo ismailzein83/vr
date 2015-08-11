@@ -11,11 +11,11 @@ namespace TOne.BusinessEntity.Web.Controllers
 {
     public class AccountManagerController : Vanrise.Web.Base.BaseAPIController
     {
-        [HttpPost]
-        public object GetCarriers(Vanrise.Entities.DataRetrievalInput<AccountManagerCarrierQuery> input)
+        [HttpGet]
+        public List<AccountManagerCarrier> GetCarriers(int userId)
         {
             AccountManagerManager manager = new AccountManagerManager();
-            return GetWebResponse(input, manager.GetCarriers(input));
+            return manager.GetCarriers(userId);
         }
 
         [HttpGet]
