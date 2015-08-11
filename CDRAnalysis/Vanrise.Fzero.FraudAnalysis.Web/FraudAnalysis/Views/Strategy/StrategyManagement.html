@@ -16,11 +16,11 @@
                     <vr-select datasource="periods" datatextfield="Name" datavaluefield="Id" label="Type" selectedvalues="selectedPeriods" ismultipleselection></vr-select>
                 </vr-columns>
                 <vr-columns colnum="2">
-                    <vr-select datasource="isDefault" datatextfield="name" datavaluefield="value" label="Default / Not Default" selectedvalues="selectedIsDefault" ismultipleselection></vr-select>
+                    <vr-select datasource="isDefault" datatextfield="name" datavaluefield="value" label="Kind" selectedvalues="selectedIsDefault" ismultipleselection></vr-select>
                 </vr-columns>
 
                 <vr-columns colnum="2">
-                    <vr-select datasource="isEnabled" datatextfield="name" datavaluefield="value" label="Enabled / Disabled" selectedvalues="selectedIsEnabled" ismultipleselection ></vr-select>
+                    <vr-select datasource="isEnabled" datatextfield="name" datavaluefield="value" label="Status" selectedvalues="selectedIsEnabled" ismultipleselection     ></vr-select>
                 </vr-columns>
                
                 <vr-columns colnum="2">
@@ -37,7 +37,7 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"  ></vr-button>
-                    <vr-button type="Add" formname="formFilter" data-onclick="addNewStrategy"  ></vr-button>
+                    <vr-button type="Add" formname="formFilter" data-onclick="addNewStrategy" permissions="Root/Strategy Module:Add"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
@@ -52,8 +52,8 @@
                 <vr-datagrid datasource="strategies" dataretrievalfunction="dataRetrievalFunction" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady" menuactions="gridMenuActions" idfield="Id">
                     <vr-datagridcolumn headertext="'Strategy Name'" field="'Name'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Type'" field="'StrategyType'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Default / Not Default'" field="'IsDefaultText'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Enabled / Disabled'" field="'IsEnabledText'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Kind'" field="'IsDefaultText'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Status'" field="'IsEnabledText'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Created By'" field="'CreatedBy'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Creation Date'" field="'CreationDate'" type="'Datetime'"></vr-datagridcolumn>
                     

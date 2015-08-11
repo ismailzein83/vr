@@ -67,7 +67,8 @@ function StrategyManagementController($scope, StrategyAPIService,UserAPIService,
     function defineMenuActions() {
         $scope.gridMenuActions = [{
             name: "Edit",
-            clicked: editStrategy
+            clicked: editStrategy,
+            permissions: "Root/Strategy Module:Edit"
         }];
     }
 
