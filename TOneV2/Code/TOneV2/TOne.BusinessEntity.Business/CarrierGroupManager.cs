@@ -28,23 +28,21 @@ namespace TOne.BusinessEntity.Business
 
             List<int> retVal = new List<int>();
             retVal.Add(groupId);
-            List<CarrierGroup> childEntities = entities.FindAll(x => x.ParentID.Value == groupId);
-            CarrierGroupNode node = new CarrierGroupNode();
+            CarrierGroup parent = entities.FindAll(x => x.ID == groupId).FirstOrDefault();
+            
+            retVal.AddRange(GetChildrenMembers(parent, entities));
 
-            if (childEntities.Count > 0)
+            return retVal;
+        }
+        private List<int> GetChildrenMembers(CarrierGroup parent, List<CarrierGroup> entities)
+        {
+            List<int> retVal = new List<int>();
+            List<CarrierGroup> ent =  entities.FindAll(x => (x.ParentID.HasValue) && (x.ParentID.Value == parent.ID));
+            foreach(CarrierGroup cg in ent)
             {
-                if (node.Children == null)
-                    node.Children = new List<CarrierGroupNode>();
-
-                foreach (CarrierGroup item in childEntities)
-                {
-                    node.Children.Add(GetCarrierGroupNode(item, entities, node));
-                }
+                retVal.Add(cg.ID);
+                retVal.AddRange(GetChildrenMembers(cg, entities));
             }
-
-            retVal.Add(node.EntityId);
-
-
             return retVal;
         }
 
@@ -99,19 +97,24 @@ namespace TOne.BusinessEntity.Business
             return node;
         }
 
-        public List<CarrierAccount> GetCarrierGroupMembers(int groupId, bool withDescendants)
+        private List<int> GetCarrierGroupIds(int groupId, bool withDescendants)
         {
-            List<CarrierAccount> lstCarrierAccounts = new List<CarrierAccount>();
-            
             List<int> lstCarrierGroupIds = new List<int>();
             if (withDescendants)
                 lstCarrierGroupIds = GetCarrierGroupIds(groupId);
             else
                 lstCarrierGroupIds.Add(groupId);
-            
-            lstCarrierAccounts = _dataManager.GetCarrierGroupMembers(lstCarrierGroupIds);
+            return lstCarrierGroupIds;
+        }
 
-            return lstCarrierAccounts;
+        public List<CarrierAccount> GetCarrierGroupMembers(int groupId, bool withDescendants)
+        {
+            return _dataManager.GetCarrierGroupMembers(GetCarrierGroupIds(groupId, withDescendants));
+        }
+
+        public Vanrise.Entities.IDataRetrievalResult<CarrierAccount> GetCarrierGroupMembers(Vanrise.Entities.DataRetrievalInput<CarrierGroupQuery> input)
+        {
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, _dataManager.GetCarrierGroupMembers(input, GetCarrierGroupIds(input.Query.GroupId, input.Query.WithDescendants)));
         }
 
         public TOne.Entities.InsertOperationOutput<CarrierGroup> AddGroup(CarrierGroup groupObj, string[] CarrierAccountIds)
@@ -164,8 +167,9 @@ namespace TOne.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-        public List<CarrierInfo> GetCarriersInfoByGroup(List<CarrierAccount> lstCarrierAccount)
+        public List<CarrierInfo> GetCarriersInfoByGroup(int groupId, bool withDescendants)
         {
+            List<CarrierAccount>  lstCarrierAccount = GetCarrierGroupMembers(groupId, withDescendants);
             List<CarrierInfo> lstCarrierInfo = new List<CarrierInfo>();
             foreach (CarrierAccount ca in lstCarrierAccount)
             {

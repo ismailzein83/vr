@@ -135,8 +135,6 @@
     <Compile Include="Controllers\CarrierProfileController.cs" />
     <Compile Include="Controllers\RateController.cs" />
     <Compile Include="Controllers\SwitchController.cs" />
-    <Compile Include="Controllers\TestCarrierGroupTreeController.cs" />
-    <Compile Include="Controllers\TestCodeGroupController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

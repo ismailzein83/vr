@@ -6,6 +6,7 @@ var serviceObj = function (BaseAPIService) {
         UpdateGroup: UpdateGroup,
         GetCarrierAccountsByGroup: GetCarrierAccountsByGroup,//List of all carrier accounts for the ddl // type CarrierAccount
         GetCarrierGroupMembers: GetCarrierGroupMembers,//List of selected carrier accounts for the ddl // type CarrierInfo
+        GetCarrierGroupMembersDesc: GetCarrierGroupMembersDesc,//List of selected carrier accounts for the directive with all descendants // type CarrierInfo
         GetCarrierGroup: GetCarrierGroup// Get the name of the carrier group
     });
 
@@ -22,17 +23,23 @@ var serviceObj = function (BaseAPIService) {
         return BaseAPIService.post("/api/CarrierGroup/UpdateGroup", group);
     }
 
-    function GetCarrierAccountsByGroup(groupId) {
-        return BaseAPIService.get("/api/CarrierGroup/GetCarrierAccountsByGroup",
-            {
-                groupId: groupId
-            });
+    function GetCarrierAccountsByGroup(input) {
+        return BaseAPIService.post("/api/CarrierGroup/GetCarrierAccountsByGroup",input);
     }
 
     function GetCarrierGroupMembers(groupId) {
         return BaseAPIService.get("/api/CarrierGroup/GetCarrierGroupMembers",
             {
-                groupId: groupId
+                groupId: groupId,
+                withDescendants: false
+            });
+    }
+
+    function GetCarrierGroupMembersDesc(groupId) {
+        return BaseAPIService.get("/api/CarrierGroup/GetCarrierGroupMembers",
+            {
+                groupId: groupId,
+                withDescendants:true
             });
     }
 

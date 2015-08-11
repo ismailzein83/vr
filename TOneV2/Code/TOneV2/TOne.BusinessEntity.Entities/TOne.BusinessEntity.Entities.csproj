@@ -60,6 +60,7 @@
     <Compile Include="CarrierAccountQuery.cs" />
     <Compile Include="CarrierGroup.cs" />
     <Compile Include="CarrierGroupNode.cs" />
+    <Compile Include="CarrierGroupQuery.cs" />
     <Compile Include="CarrierInfo.cs" />
     <Compile Include="CarrierProfile.cs" />
     <Compile Include="CarrierProfileQuery.cs" />

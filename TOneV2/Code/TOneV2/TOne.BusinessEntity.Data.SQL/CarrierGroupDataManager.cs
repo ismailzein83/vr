@@ -32,6 +32,28 @@ namespace TOne.BusinessEntity.Data.SQL
                   });
         }
 
+        public Vanrise.Entities.BigResult<CarrierAccount> GetCarrierGroupMembers(Vanrise.Entities.DataRetrievalInput<CarrierGroupQuery> input, IEnumerable<int> carrierGroupIds)
+        {
+            DataTable dtCarrierGroupMembers = BuildCarrierAccountInfoTable(carrierGroupIds);
+
+            return RetrieveData(input, (tempTableName) =>
+            {
+                //tempTableName, lstCarrierGroupIds
+                ExecuteNonQuerySPCmd("BEntity.sp_CarrierGroupMember_CreateTempForCarrierGroupIds", (cmd) =>
+                {
+                    var dtPrm = new SqlParameter("@CarrierGroupIds", SqlDbType.Structured);
+                    dtPrm.Value = dtCarrierGroupMembers;
+                    cmd.Parameters.Add(dtPrm);
+
+                    var tempTableNamePrm = new SqlParameter("@TempTableName", SqlDbType.VarChar);
+                    tempTableNamePrm.Value = tempTableName;
+                    cmd.Parameters.Add(tempTableNamePrm);
+
+                });
+
+            }, CarrierAccountDataManager.CarrierAccountMapper);
+        }
+
         internal static DataTable BuildCarrierAccountInfoTable(IEnumerable<int> carrierGroupIds)
         {
             DataTable dtCarrierAccountInfo = new DataTable();

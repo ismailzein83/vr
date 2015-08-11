@@ -1,111 +1,123 @@
-﻿CarrierGroupManagementController.$inject = ['$scope', 'CarrierGroupAPIService', 'VRModalService'];
-function CarrierGroupManagementController($scope, CarrierGroupAPIService, VRModalService) {
+﻿(function (appControllers) {
 
-    var treeAPI;
-    var mainGridAPI;
+    "use strict";
 
-    defineScope();
-    load();
+    CarrierGroupManagementController.$inject = ['$scope', 'CarrierGroupAPIService', 'VRModalService'];
+    function CarrierGroupManagementController($scope, CarrierGroupAPIService, VRModalService) {
 
-    function defineScope() {
+        var treeAPI;
+        var mainGridApi;
 
-        $scope.beList = [];
+        var beListReady = false;
+        function retrieveData() {
+            if (mainGridApi)
+                return mainGridApi.retrieveData({
+                    GroupId: $scope.currentNode.EntityId,
+                    WithDescendants: false
+                });
+        }
 
-        $scope.gridMenuActions = [];
+        function defineGrid() {
 
-        $scope.carrierAccounts = [];
+            $scope.datasource = [];
 
-        $scope.onMainGridReady = function (api) {
-            mainGridAPI = api;
-        };
+            $scope.onGridReady = function (api) {
+                mainGridApi = api;
+                return retrieveData();
+            };
 
-        $scope.loadMoreData = function () {
-            return getCarrierAccounts();
+            $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                return CarrierGroupAPIService.GetCarrierAccountsByGroup(dataRetrievalInput)
+                .then(function (response) {
+
+                    onResponseReady(response);
+                });
+            };
         }
 
 
-        $scope.treeReady = function (api) {
-            treeAPI = api;
-        }
+        function defineScope() {
 
-        $scope.treeValueChanged = function () {
-            if (angular.isObject($scope.currentNode)) {
-                refreshGrid();
+            $scope.beList = [];
+
+            $scope.currentNode = {
+                EntityId: 0
+            };
+
+            $scope.treeReady = function (api) {
+                treeAPI = api;
             }
+
+            $scope.treeValueChanged = function () {
+                if (angular.isObject($scope.currentNode)) {
+                    return retrieveData();
+                }
+            }
+
+            $scope.CarrierAccountsDataSource = [];
+
+            $scope.addNewGroup = addGroup;
+            $scope.editGroup = editGroup;
         }
-           
 
-        $scope.CarrierAccountsDataSource = [];
+        function load() {
 
-        $scope.addNewGroup = addGroup;
-        $scope.editGroup = editGroup;
-    }
+            $scope.isGettingData = true;
 
-    function load() {
-       
-        $scope.isGettingData = true;
-
-        loadTree().finally(function () {
-            $scope.isGettingData = false;
-            treeAPI.refreshTree($scope.beList);
-        });
-    }
-
-    function loadTree() {
-
-        return CarrierGroupAPIService.GetEntityNodes()
-           .then(function (response) {
-               $scope.beList = response;
-           });
-    }
-
-    function getCarrierAccounts() {
-        return CarrierGroupAPIService.GetCarrierAccountsByGroup($scope.currentNode.EntityId).then(function (response) {
-            angular.forEach(response, function (item) {
-                $scope.carrierAccounts.push(item);
+            loadTree().finally(function () {
+                $scope.isGettingData = false;
+                treeAPI.refreshTree($scope.beList);
             });
-        });
-    }
+        }
 
-    function refreshGrid() {
-        mainGridAPI.clearDataAndContinuePaging();
-        getCarrierAccounts();
-    }
+        function loadTree() {
 
-    function addGroup() {
-        var settings = {
-            useModalTemplate: true,
-        };
-        settings.onScopeReady = function (modalScope) {
-            modalScope.title = "Add Carrier Group";
-            modalScope.onTreeAdded = function () {
-                load();
-                $scope.currentNode = undefined;
+            return CarrierGroupAPIService.GetEntityNodes()
+               .then(function (response) {
+                   $scope.beList = response;
+                   beListReady = true;
+               });
+        }
+
+        defineScope();
+        load();
+        defineGrid();
+
+        function addGroup() {
+            var settings = {
+                useModalTemplate: true,
             };
-        };
-
-        VRModalService.showModal('/Client/Modules/BusinessEntity/Views/CarrierGroupEditor.html', null, settings);
-    }
-
-    function editGroup() {
-        var settings = {
-            useModalTemplate: true,
-        };
-
-        var parameters = {
-            carrierGroupId: $scope.currentNode.EntityId
-        };
-
-        settings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Carrier Group";
-            modalScope.onTreeUpdated = function () {
-                load();
-                $scope.currentNode = undefined;
+            settings.onScopeReady = function (modalScope) {
+                modalScope.title = "Add Carrier Group";
+                modalScope.onTreeAdded = function () {
+                    load();
+                    $scope.currentNode = undefined;
+                };
             };
-        };
 
-        VRModalService.showModal('/Client/Modules/BusinessEntity/Views/CarrierGroupEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/BusinessEntity/Views/CarrierGroupEditor.html', null, settings);
+        }
+
+        function editGroup() {
+            var settings = {
+                useModalTemplate: true,
+            };
+
+            var parameters = {
+                carrierGroupId: $scope.currentNode.EntityId
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.title = "Edit Carrier Group";
+                modalScope.onTreeUpdated = function () {
+                    load();
+                    $scope.currentNode = undefined;
+                };
+            };
+
+            VRModalService.showModal('/Client/Modules/BusinessEntity/Views/CarrierGroupEditor.html', parameters, settings);
+        }
     }
-}
+    appControllers.controller('Carrier_CarrierGroupManagementController', CarrierGroupManagementController);
 
-appControllers.controller('Carrier_CarrierGroupManagementController', CarrierGroupManagementController);
+})(appControllers);

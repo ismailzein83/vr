@@ -22,11 +22,12 @@
                                  datachildrenfield="Children"
                                  datatextfield="Name"
                                  selecteditem="currentNode"
-                                 onvaluechanged="treeValueChanged">
+                                 onvaluechanged="treeValueChanged" wholerow>
                     </vr-treeview>
                 </vr-columns>
                 <vr-columns colnum="2" ng-show="currentNode != undefined && currentNode.EntityId != 0">
-                    <vr-datagrid datasource="carrierAccounts" menuactions="gridMenuActions" loadmoredata="loadMoreData" on-ready="onMainGridReady">
+                    <vr-datagrid datasource="::datasource" pagingtype="'PagingOnScroll'" dataretrievalfunction="dataRetrievalFunction" on-ready="onGridReady">
+                        <vr-datagridcolumn headertext="'Carrier Account ID'" field="'CarrierAccountId'" widthfactor="5"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Carrier Account'" field="'CarrierAccountName'" widthfactor="5"></vr-datagridcolumn>
                     </vr-datagrid>
                 </vr-columns>

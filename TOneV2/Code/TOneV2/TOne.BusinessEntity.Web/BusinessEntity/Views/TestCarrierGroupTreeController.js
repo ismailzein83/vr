@@ -1,29 +1,43 @@
-﻿TestCarrierGroupTreeController.$inject = ['$scope', 'CarrierGroupAPIService', 'CarrierAccountAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'CarrierTypeEnum', 'UtilsService'];
+﻿TestCarrierGroupTreeController.$inject = ['$scope', 'CarrierGroupAPIService'];
 
-function TestCarrierGroupTreeController($scope, CarrierGroupAPIService, CarrierAccountAPIService, VRModalService, VRNotificationService, VRNavigationService, CarrierTypeEnum, UtilsService) {
+function TestCarrierGroupTreeController($scope, CarrierGroupAPIService) {
 
     var treeAPI;
     var mainGridAPI;
 
-    defineScope();
-    load();
+    function retrieveData() {
+
+        return mainGridApi.retrieveData({
+            GroupId: $scope.currentNode.EntityId,
+            WithDescendants: true
+        });
+    }
+
+    function defineGrid() {
+
+        $scope.datasource = [];
+
+        $scope.onGridReady = function (api) {
+            mainGridApi = api;
+            return retrieveData();
+        };
+
+        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+            return CarrierGroupAPIService.GetCarrierAccountsByGroup(dataRetrievalInput)
+            .then(function (response) {
+
+                onResponseReady(response);
+            });
+        };
+    }
 
     function defineScope() {
 
         $scope.beList = [];
 
-        $scope.gridMenuActions = [];
-
-        $scope.carrierAccounts = [];
-
-        $scope.onMainGridReady = function (api) {
+        $scope.onGridReady = function (api) {
             mainGridAPI = api;
         };
-
-        $scope.loadMoreData = function () {
-            return getCarrierAccounts();
-        }
-
 
         $scope.treeReady = function (api) {
             treeAPI = api;
@@ -31,21 +45,20 @@ function TestCarrierGroupTreeController($scope, CarrierGroupAPIService, CarrierA
 
         $scope.treeValueChanged = function () {
             if (angular.isObject($scope.currentNode)) {               
-                refreshGrid();
+                return retrieveData();
             }
         }
+
         $scope.saveGroup = function () {
             if (angular.isObject($scope.currentNode)) {
                 $scope.onTreeSelected($scope.currentNode);
             }
             $scope.modalContext.closeModal()
         }
+
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };
-
-        $scope.CarrierAccountsDataSource = [];
-
     }
 
     function load() {
@@ -66,18 +79,22 @@ function TestCarrierGroupTreeController($scope, CarrierGroupAPIService, CarrierA
            });
     }
 
-    function getCarrierAccounts() {
-        return CarrierGroupAPIService.GetCarrierAccountsByGroup($scope.currentNode.EntityId).then(function (response) {
-            angular.forEach(response, function (item) {
-                $scope.carrierAccounts.push(item);
-            });
-        });
-    }
+    defineScope();
+    load();
+    defineGrid();
 
-    function refreshGrid() {
-        mainGridAPI.clearDataAndContinuePaging();
-        getCarrierAccounts();
-    }
+    //function getCarrierAccounts() {
+    //    return CarrierGroupAPIService.GetCarrierAccountsByGroup($scope.currentNode.EntityId, true).then(function (response) {
+    //        angular.forEach(response, function (item) {
+    //            $scope.carrierAccounts.push(item);
+    //        });
+    //    });
+    //}
+
+    //function refreshGrid() {
+    //    mainGridAPI.clearDataAndContinuePaging();
+    //    getCarrierAccounts();
+    //}
 }
 
 appControllers.controller('BusinessEntity_TestCarrierGroupTreeController', TestCarrierGroupTreeController);

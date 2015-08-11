@@ -2,7 +2,7 @@
     <vr-modalbody width="'50%'" vr-loader="isGettingData">
         <vr-form name="formRoleEditor">
             <vr-row>
-                <vr-columns colnum="4">
+                <vr-columns colnum="8">
                     <vr-treeview on-ready="treeReady"
                                  datachildrenfield="Children"
                                  datatextfield="Name"
@@ -11,9 +11,11 @@
                     </vr-treeview>
                 </vr-columns>
                 <vr-columns colnum="4" ng-show="currentNode != undefined && currentNode.EntityId != 0">
-                    <vr-datagrid datasource="carrierAccounts" loadmoredata="loadMoreData" on-ready="onMainGridReady">
-                        <vr-datagridcolumn headertext="'Carrier Account'" field="'CarrierAccountName'" widthfactor="5"></vr-datagridcolumn>
-                    </vr-datagrid>
+                    <div style="margin-left:10px">
+                        <vr-datagrid datasource="::datasource" pagingtype="'PagingOnScroll'" dataretrievalfunction="dataRetrievalFunction" on-ready="onGridReady">
+                            <vr-datagridcolumn headertext="'Carrier Account'" field="'CarrierAccountName'" widthfactor="5"></vr-datagridcolumn>
+                        </vr-datagrid>
+</div>
                 </vr-columns>
             </vr-row>
         </vr-form>

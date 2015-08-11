@@ -1,47 +1,63 @@
-﻿TestCodeGroupController.$inject = ['$scope', 'CarrierGroupAPIService', 'CarrierAccountAPIService', 'CarrierTypeEnum', 'VRModalService'];
-function TestCodeGroupController($scope, CarrierGroupAPIService,CarrierAccountAPIService,CarrierTypeEnum, VRModalService) {
+﻿(function (appControllers) {
 
+    "use strict";
+    
+    testCodeGroupController.$inject = ['$scope', 'CarrierGroupAPIService', 'CarrierAccountAPIService', 'CarrierTypeEnum', 'VRModalService', 'VRNotificationService'];
+    function testCodeGroupController($scope, CarrierGroupAPIService, CarrierAccountAPIService, CarrierTypeEnum, VRModalService, VRNotificationService) {
 
-    defineScope();
-    load();
+        defineScope();
+        load();
 
-    function defineScope() {
+        function defineScope() {
 
-        $scope.selectedvalues = [];
+            $scope.selectedvalues = [];
 
-        $scope.datasource = [];
+            $scope.datasource = [];
 
-        $scope.openTreePopup = function () {
-            var settings = {
-                useModalTemplate: true,
-            };
-            settings.onScopeReady = function (modalScope) {
-                modalScope.title = "Carrier Group";
-                modalScope.onTreeSelected = function (selectedtNode) {
-                    load();
-                    $scope.currentNode = undefined;
-                    $scope.selectedtNode = selectedtNode;
-                    console.log($scope.selectedtNode);
+            $scope.openTreePopup = function () {
+                var settings = {
+                    useModalTemplate: true,
                 };
-            };
+                settings.onScopeReady = function (modalScope) {
+                    modalScope.title = "Carrier Group";
+                    modalScope.onTreeSelected = function (selectedtNode) {
+                        $scope.currentNode = undefined;
+                        $scope.selectedtNode = selectedtNode;
 
-            VRModalService.showModal('/Client/Modules/BusinessEntity/Views/TestCarrierGroupTree.html', null, settings);
-            
+                        console.log($scope.selectedtNode.EntityId);
+
+                        //Load Selected
+                        CarrierGroupAPIService.GetCarrierGroupMembersDesc($scope.selectedtNode.EntityId).then(function (response) {
+                            $scope.selectedvalues = [];
+                            angular.forEach(response, function (item) {
+                                $scope.selectedvalues.push(item);
+                            });
+                        }).catch(function (error) {
+                            $scope.isGettingData = false;
+                            VRNotificationService.notifyExceptionWithClose(error, $scope);
+                        });
+
+                    };
+                };
+
+                VRModalService.showModal('/Client/Modules/BusinessEntity/Views/TestCarrierGroupTree.html', null, settings);
+            }
+        }
+
+        function load() {
+            loadCarriers();
+        }
+
+        function loadCarriers() {
+            return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.SaleZone.value).then(function (response) {
+                angular.forEach(response, function (itm) {
+                    $scope.datasource.push(itm);
+                });
+            });
         }
     }
 
-    function load() {
+    appControllers.controller('Carrier_TestCodeGroupController', testCodeGroupController);
 
-        loadCarriers();
-    }
 
-    function loadCarriers() {
-        return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.SaleZone.value).then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.datasource.push(itm);
-            });
-        });
-    }
-}
-
-appControllers.controller('Carrier_TestCodeGroupController', TestCodeGroupController);
+})(appControllers);
