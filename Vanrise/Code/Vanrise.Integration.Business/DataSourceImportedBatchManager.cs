@@ -12,7 +12,7 @@ namespace Vanrise.Integration.Business
 {
     public class DataSourceImportedBatchManager
     {
-        public long WriteEntry(Entities.ImportedBatchEntry entry, int dataSourceId, DateTime logEntryTime)
+        public long WriteEntry(Entities.ImportedBatchEntry entry, int dataSourceId, string logEntryTime)
         {
             IDataSourceImportedBatchDataManager manager = IntegrationDataManagerFactory.GetDataManager<IDataSourceImportedBatchDataManager>();
             return manager.InsertEntry(dataSourceId, entry.BatchDescription, entry.BatchSize, entry.RecordsCount, entry.Result, entry.MapperMessage, entry.QueueItemsIds, logEntryTime);
@@ -23,7 +23,9 @@ namespace Vanrise.Integration.Business
             IDataSourceImportedBatchDataManager dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceImportedBatchDataManager>();
             Vanrise.Entities.BigResult<DataSourceImportedBatch> bigResult = dataManager.GetFilteredDataSourceImportedBatches(input);
 
-            List<long> queueItemIds = new List<long>();
+            //Technically no need to use Hashset because ids in seperate rows will not repeat. 
+            //Just in case it did, the use of hashset is to avoid this problem.
+            HashSet<long> queueItemIds = new HashSet<long>();
             foreach (DataSourceImportedBatch batch in bigResult.Data)
             {
                 if(batch.QueueItemIds.Contains(','))
@@ -41,20 +43,22 @@ namespace Vanrise.Integration.Business
             }
 
             QueueingManager qManager = new QueueingManager();
-            Dictionary<long, ItemExecutionFlowInfo> dicItemExecutionStatus = qManager.GetItemsExecutionFlowStatus(queueItemIds);
+            Dictionary<long, ItemExecutionFlowInfo> dicItemExecutionStatus = qManager.GetItemsExecutionFlowStatus(queueItemIds.ToList());
 
             foreach (DataSourceImportedBatch batch in bigResult.Data)
             {
                 if (batch.QueueItemIds.Contains(','))
                 {
                     string[] qIds = batch.QueueItemIds.Split(',');
+                    List<ItemExecutionFlowInfo> list = new List<ItemExecutionFlowInfo>();
+                    
                     foreach (string qId in qIds)
                     {
                         long singleQueueItemId = long.Parse(qId);
-                        List<ItemExecutionFlowInfo> list = new List<ItemExecutionFlowInfo>();
                         list.Add(dicItemExecutionStatus[singleQueueItemId]);
-                        batch.ExecutionStatus = qManager.GetExecutionFlowStatus(list);
                     }
+                    
+                    batch.ExecutionStatus = qManager.GetExecutionFlowStatus(list);
                 }
                 else
                 {

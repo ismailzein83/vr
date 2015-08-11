@@ -16,7 +16,7 @@ namespace Vanrise.Integration.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredDataSourceLogs(input));
         }
 
-        public void WriteEntry(Vanrise.Common.LogEntryType entryType, int dataSourceId, long? importedBatchId, string message, DateTime logEntryTime)
+        public void WriteEntry(Vanrise.Common.LogEntryType entryType, int dataSourceId, long? importedBatchId, string message, string logEntryTime)
         {
             IDataSourceLogDataManager manager = IntegrationDataManagerFactory.GetDataManager<IDataSourceLogDataManager>();
             manager.InsertEntry(entryType, message, dataSourceId, importedBatchId, logEntryTime);

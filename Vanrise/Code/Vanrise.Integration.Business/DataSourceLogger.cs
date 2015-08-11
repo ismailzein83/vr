@@ -22,7 +22,7 @@ namespace Vanrise.Integration.Business
         public long LogImportedBatchEntry(Entities.ImportedBatchEntry entry)
         {
             DataSourceImportedBatchManager manager = new DataSourceImportedBatchManager();
-            return manager.WriteEntry(entry, this._dataSourceId, DateTime.Now);
+            return manager.WriteEntry(entry, this._dataSourceId, DateTime.Now.ToString("dd-MM-yyyy HH:mm"));
         }
 
         public void LogEntry(Vanrise.Common.LogEntryType logEntryType, string messageFormat, params object[] args)
@@ -67,7 +67,7 @@ namespace Vanrise.Integration.Business
         private void PrivateWriteEntry(Vanrise.Common.LogEntryType entryType, long? importedBatchId, string messageFormat, params object[] args)
         {
             DataSourceLogManager manager = new DataSourceLogManager();
-            manager.WriteEntry(entryType, this._dataSourceId, importedBatchId, String.Format(messageFormat, args), DateTime.Now);
+            manager.WriteEntry(entryType, this._dataSourceId, importedBatchId, String.Format(messageFormat, args), DateTime.Now.ToString("dd-MM-yyyy HH:mm"));
         }
 
         #endregion 
