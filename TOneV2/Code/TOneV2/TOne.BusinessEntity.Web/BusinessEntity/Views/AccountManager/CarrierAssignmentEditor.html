@@ -2,23 +2,46 @@
     <vr-modalbody width="'50%'" vr-loader="isGettingData">
         <vr-form name="formAssignCarriers">
             <vr-row>
-                <vr-columns colnum="12">
-                    
-                    <vr-datagrid datasource="carriers"
-                                 dataretrievalfunction="dataRetrievalFunction"
-                                 pagingtype="'PagingOnScroll'"
-                                 on-ready="gridReady">
+                <vr-colums width="normal">
+                    <vr-select label="Carriers"
+                               ismultipleselection
+                               datasource="carriers"
+                               selectedvalues="selectedCarriers"
+                               datatextfield="CarrierName"
+                               datavaluefield="CarrierAccountId">
 
-                        <vr-datagridcolumn headertext="'Name'" field="'CarrierName'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Customer'" field="'IsCustomerAvailable'">
-                            <vr-switch value="dataItem.newCustomerSwitchValue" ng-show="{{dataItem.IsCustomerAvailable}}"></vr-switch>
-                        </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Supplier'" field="'IsSupplierAvailable'">
-                            <vr-switch value="dataItem.newSupplierSwitchValue" ng-show="{{dataItem.IsSupplierAvailable}}"></vr-switch>
-                        </vr-datagridcolumn>
-                    </vr-datagrid>
+                    </vr-select>
+                </vr-colums>
+            </vr-row>
 
-                </vr-columns>
+            <vr-row>
+                <ul class="list-group" ng-show="selectedCarriers.length > 0">
+                    <li class="list-group-item list-custom" style="margin:1px;border:0px;font-size:12px;font-weight:bold;">
+                        <div style="float:left;margin-left:25px;">Name</div>
+                        <div style="float:right;margin-right:100px;">
+                            <div style="display:inline-block;margin-right:100px;">Is Customer</div>
+                            <div style="display:inline-block;">Is Supplier</div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div style="height:300px;overflow-x:auto;min-width:300px;">
+                    <ul class="list-group dragbelzone" ng-sortable="itemsSortable" ng-show="selectedCarriers.length > 0">
+                        <li ng-repeat="item in selectedCarriers" class="list-group-item list-custom" style="margin:1px;font-size:12px">
+                            <i class="glyphicon glyphicon-th-list handeldrag"></i>
+                            <div style="display:inline-block;max-width:200px;">{{item.CarrierName}}</div>
+                            <i class="glyphicon glyphicon-remove hand-cursor" style="float:right;padding:5px;cursor:default" ng-click="denyCarrier($event,item)"></i>
+                            <div style="float:right;margin-right:60px;">
+                                <div style="width: 100px; float: left; margin-right: 60px; text-align: center;">
+                                    <switch ng-model="item.newCustomerSwitchValue" ng-show="item.IsCustomerAvailable" class="green"></switch>
+                                </div>
+                                <div style="width:100px;float:left;text-align:center;">
+                                    <switch ng-model="item.newSupplierSwitchValue" ng-show="item.IsSupplierAvailable" class="green"></switch>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </vr-row>
         </vr-form>
     </vr-modalbody>
