@@ -125,5 +125,11 @@ namespace Vanrise.Integration.Business
             QueueExecutionFlowManager manager = new QueueExecutionFlowManager();
             return manager.GetExecutionFlows();
         }
+
+        public List<Vanrise.Integration.Entities.ExecutionFlowDefinition> GetExecutionFlowDefinitions()
+        {
+            List<Vanrise.Integration.Entities.ExecutionFlowDefinition> temp = new List<Entities.ExecutionFlowDefinition>();
+            return temp;
+        }
     }
 }

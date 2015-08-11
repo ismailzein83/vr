@@ -39,6 +39,12 @@ namespace Vanrise.Integration.Web.Controllers
             return manager.GetExecutionFlows();
         }
 
+        [HttpGet]
+        public List<Vanrise.Integration.Entities.ExecutionFlowDefinition> GetExecutionFlowDefinitions()
+        {
+            DataSourceManager manager = new DataSourceManager();
+            return manager.GetExecutionFlowDefinitions();
+        }
 
         [HttpPost]
         public Vanrise.Entities.InsertOperationOutput<Vanrise.Integration.Entities.DataSource> AddDataSource(DataSourceWrapper dataSourceWrapper)

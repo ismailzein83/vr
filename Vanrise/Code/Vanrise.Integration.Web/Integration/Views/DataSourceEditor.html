@@ -42,6 +42,9 @@
                     <vr-columns colnum="6">
                         <vr-select datasource="executionFlows" datatextfield="Name" datavaluefield="ExecutionFlowId" label="Execution Flow" selectedvalues="selectedExecutionFlow" isrequired></vr-select>
                     </vr-columns>
+                    <vr-columns colnum="6">
+                        <vr-button type="Add" formname="formDataSourceEditor" data-onclick="addExecutionFlow" standalone></vr-button>
+                    </vr-columns>
                 </vr-row>
             </div>
         </vr-form>

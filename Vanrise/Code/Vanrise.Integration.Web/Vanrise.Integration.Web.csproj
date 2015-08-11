@@ -119,6 +119,8 @@
     <Content Include="Integration\Views\AdapterTemplates\FileReceiveAdapterTemplateController.js" />
     <Content Include="Integration\Views\DataSourceEditor.html" />
     <Content Include="Integration\Views\DataSourceEditorController.js" />
+    <Content Include="Integration\Views\DataSourceExecutionFlowEditor.html" />
+    <Content Include="Integration\Views\DataSourceExecutionFlowEditorController.js" />
     <Content Include="Integration\Views\DataSourceImportedBatchManagement.html" />
     <Content Include="Integration\Views\DataSourceImportedBatchManagementController.js" />
     <Content Include="Integration\Views\DataSourceLogManagement.html" />

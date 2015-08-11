@@ -39,6 +39,30 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
             $scope.modalContext.closeModal()
         };
 
+        $scope.addExecutionFlow = function () {
+
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.title = "Add an Execution Flow";
+
+                modalScope.onExecutionFlowAdded = function () {
+                    // update the execution flows
+                    $scope.isGettingData = true;
+
+                    loadExecutionFlows()
+                        .catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        })
+                        .finally(function () {
+                            $scope.isGettingData = false;
+                        });
+                };
+            };
+
+            VRModalService.showModal('/Client/Modules/Integration/Views/DataSourceExecutionFlowEditor.html', null, modalSettings);
+        }
+
         $scope.adapterTypes = [];
         $scope.executionFlows = [];
         $scope.dataSourceAdapter = {};
