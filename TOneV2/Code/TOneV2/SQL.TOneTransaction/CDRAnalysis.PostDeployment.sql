@@ -32,3 +32,90 @@ VALUES ([Name], [Title], [FQTN], [Config])
 WHEN NOT MATCHED BY SOURCE THEN 
 DELETE
 ;
+
+
+--Custom Code:
+--Mapper:
+
+--Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch batch = new Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch();
+--            batch.CDRs = new List<Vanrise.Fzero.CDRImport.Entities.CDR>();
+--            System.IO.StreamReader sr = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data)).StreamReader;
+--            while (!sr.EndOfStream)
+--            {
+--                var i = sr.ReadLine();
+
+--                Vanrise.Fzero.CDRImport.Entities.CDR cdr = new Vanrise.Fzero.CDRImport.Entities.CDR();
+--                cdr.MSISDN = i.Substring(145, 20).Trim();
+--                cdr.IMSI = i.Substring(125, 20).Trim();
+--                cdr.Destination = i.Substring(198, 20).Trim();
+--                cdr.CallClass = i.Substring(434, 10).Trim();
+--                cdr.SubType = i.Substring(165, 10).Trim();
+--                cdr.IMEI = i.Substring(105, 20).Trim();
+--                cdr.CellId = i.Substring(252, 22).Trim();
+--                cdr.InTrunk = i.Substring(414, 20).Trim();
+--                cdr.OutTrunk = i.Substring(394, 20).Trim();
+
+
+--                DateTime ConnectDateTime;
+--                if (DateTime.TryParseExact(i.Substring(221, 14).Trim(), "yyyyMddHHmmss", System.Globalization.CultureInfo.InvariantCulture,
+--                                           System.Globalization.DateTimeStyles.None, out ConnectDateTime))
+--                    cdr.ConnectDateTime = ConnectDateTime;
+
+
+
+--                int callType = 0;
+--                if (int.TryParse(i.Substring(102, 3).Trim(), out callType))
+--                    cdr.CallType = callType;
+
+--                decimal cellLatitude;
+--                if (decimal.TryParse(i.Substring(609, 9).Trim(), out cellLatitude))
+--                    cdr.CellLatitude = cellLatitude;
+
+
+--                decimal durationInSeconds;
+--                if (decimal.TryParse(i.Substring(235, 5).Trim(), out durationInSeconds))
+--                    cdr.DurationInSeconds = durationInSeconds;
+
+
+--                decimal upVolume;
+--                if (decimal.TryParse(i.Substring(588, 10).Trim(), out upVolume))
+--                    cdr.UpVolume = upVolume;
+
+
+--                decimal cellLongitude;
+--                if (decimal.TryParse(i.Substring(618, 9).Trim(), out cellLongitude))
+--                    cdr.CellLongitude = cellLongitude;
+
+
+--                decimal downVolume;
+--                if (decimal.TryParse(i.Substring(598, 10).Trim(), out downVolume))
+--                    cdr.DownVolume = downVolume;
+
+
+--                batch.CDRs.Add(cdr);
+--            }
+--            mappedBatches.Add("CDR Import", batch);
+
+--            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
+--            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
+
+--            return result;
+
+
+
+
+--Custom Code:
+--Activator:
+
+--QueueExecutionFlowTree queueFlowTree = new QueueExecutionFlowTree
+--           {
+--               Activities = new List<BaseExecutionActivity>
+--               {                    
+--                   new QueueStageExecutionActivity { StageName = "CDR Import",  QueueName = "CDRQueue", QueueTypeFQTN = typeof(ImportedCDRBatch).AssemblyQualifiedName,
+--                       QueueSettings = new QueueSettings { QueueActivatorFQTN = typeof(CDRImportActivator).AssemblyQualifiedName} }
+--               }
+--           };
+
+
+
+
