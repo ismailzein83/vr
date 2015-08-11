@@ -8,7 +8,7 @@ CREATE PROCEDURE [integration].[sp_DataSourceImportedBatch_CreateTempForFiltered
 	@TempTableName VARCHAR(200),
 	@DataSourceId INT = NULL,
 	@BatchName NVARCHAR(1000) = NULL,
-	@MappingResult INT,
+	@MappingResults [integration].[MappingResultType] READONLY,
 	@From DATETIME = NULL,
 	@To DATETIME = NULL
 )
@@ -32,7 +32,7 @@ BEGIN
 			WHERE 
 				(@DataSourceId IS NULL OR DataSourceId = @DataSourceId) AND
 				(@BatchName IS NULL OR BatchDescription LIKE '%' + @BatchName + '%') AND
-				(@MappingResult IS NULL OR MappingResult = @MappingResult) AND
+				MappingResult IN (SELECT MappingResult FROM @MappingResults) AND
 				(@From IS NULL OR LogEntryTime >= @From) AND
 				(@To IS NULL OR LogEntryTime <= @To)
 			
