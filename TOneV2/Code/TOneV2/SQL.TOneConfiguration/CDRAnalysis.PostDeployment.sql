@@ -51,7 +51,7 @@ USING (VALUES
 	(	N'Scheduler Service',	N'Scheduler Service'	,N'#/view/Runtime/Views/SchedulerTaskManagement',	N'3',	N'Root/Business Process Module/Management:View',	NULL,	NULL,	N'0'	,NULL),
 	(	N'Management',	N'Business Process Management',	N'#view/BusinessProcess/Views/BPDefinitionManagement',	N'3',	N'Root/Business Process Module/Management:View',	NULL,	NULL,	N'0',	NULL),
 	(	N'Dashboard',	N'Dashboard',	N'#/view/FraudAnalysis/Views/Output/Dashboard',	N'2',	N'Root/Dashboard Module:View',	NULL	,NULL,	N'0',	3),
-	(	N'Strategy Management'	,N'Strategy Management'	,N'#/view/FraudAnalysis/Views/Strategy/StrategyManagement',	N'2',	N'Root/Strategy Module:View'	,NULL,	NULL,	N'0',	1),
+	(	N'Detection Strategies'	,N'Detection Strategies'	,N'#/view/FraudAnalysis/Views/Strategy/StrategyManagement',	N'2',	N'Root/Strategy Module:View'	,NULL,	NULL,	N'0',	1),
 	(	N'Datasource Management'	,N'Management',	N'#/view/Integration/Views/DataSourceManagement',	N'4',	N'Root/Integration Module:View',	NULL,	NULL,	N'0'	, NULL),
 	(	N'Logs'	,N'Logs',	N'#/view/Integration/Views/DataSourceLogManagement',	N'4',	N'Root/Integration Module:View',	NULL,	NULL,	N'0'	, NULL),
 	(	N'Imported Batches'	,N'Imported Batches',	N'#/view/Integration/Views/DataSourceImportedBatchManagement',	N'4',	N'Root/Integration Module:View',	NULL,	NULL,	N'0'	, NULL)
