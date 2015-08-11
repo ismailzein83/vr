@@ -7,5 +7,7 @@ namespace Vanrise.Queueing.Data
         Vanrise.Queueing.Entities.QueueExecutionFlow GetExecutionFlow(int executionFlowId);
 
         List<Vanrise.Queueing.Entities.QueueExecutionFlow> GetExecutionFlows();
+
+        bool AddExecutionFlow(Vanrise.Queueing.Entities.QueueExecutionFlow executionFlow, out int insertedId);
     }
 }

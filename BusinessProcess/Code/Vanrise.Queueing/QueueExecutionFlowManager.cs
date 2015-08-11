@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 using Vanrise.Queueing.Data;
 using Vanrise.Queueing.Entities;
 
@@ -44,6 +45,31 @@ namespace Vanrise.Queueing
                 queuesByStages.Add(stage.StageName, PersistentQueueFactory.Default.GetQueue(queueName));
             }
             return queuesByStages;
+        }
+
+        public Vanrise.Entities.InsertOperationOutput<QueueExecutionFlow> AddExecutionFlow(QueueExecutionFlow executionFlowObj)
+        {
+            InsertOperationOutput<QueueExecutionFlow> insertOperationOutput = new InsertOperationOutput<QueueExecutionFlow>();
+
+            insertOperationOutput.Result = InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+            int executionFlowId = -1;
+
+            IQueueExecutionFlowDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDataManager>();
+            bool insertActionSucc = dataManager.AddExecutionFlow(executionFlowObj, out executionFlowId);
+
+            if (insertActionSucc)
+            {
+                insertOperationOutput.Result = InsertOperationResult.Succeeded;
+                executionFlowObj.ExecutionFlowId = executionFlowId;
+                insertOperationOutput.InsertedObject = executionFlowObj;
+            }
+            else
+            {
+                insertOperationOutput.Result = InsertOperationResult.SameExists;
+            }
+
+            return insertOperationOutput;
         }
 
         private string GetQueueName(QueueExecutionFlow executionFlow, QueueStageInfo queueStage)

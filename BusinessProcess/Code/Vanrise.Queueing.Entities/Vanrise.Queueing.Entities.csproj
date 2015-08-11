@@ -53,6 +53,7 @@
     <Compile Include="QueueActivator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueExecutionFlow.cs" />
+    <Compile Include="QueueExecutionFlowDefinition.cs" />
     <Compile Include="QueueInstance.cs" />
     <Compile Include="QueueItem.cs" />
     <Compile Include="QueueItemHeader.cs" />

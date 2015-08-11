@@ -27,6 +27,16 @@ namespace Vanrise.Queueing.Data.SQL
             return GetItemsSP("queue.sp_ExecutionFlow_GetAll", ExecutionFlowMapper);
         }
 
+        public bool AddExecutionFlow(QueueExecutionFlow executionFlow, out int insertedId)
+        {
+            object executionFlowID;
+
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_ExecutionFlow_Insert", out executionFlowID, executionFlow.Name, executionFlow.DefinitionId);
+
+            insertedId = (recordesEffected > 0) ? (int)executionFlowID : -1;
+            return (recordesEffected > 0);
+        }
+
         #region Private Methods
 
         private QueueExecutionFlow ExecutionFlowMapper(IDataReader reader)
