@@ -102,13 +102,9 @@ namespace Vanrise.Security.Business
             IViewDataManager viewDataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
             IModuleDataManager moduleDataManager = SecurityDataManagerFactory.GetDataManager<IModuleDataManager>();
             bool  updateActionSucc=false;
-            for (int i = 0; i < updatedMenuItem.Count; i++)
-            {
-                if (updatedMenuItem[i].Childs == null || updatedMenuItem[i].Childs.Count == 0)
-                    updateActionSucc = viewDataManager.UpdateViewRank(updatedMenuItem[i].Id, (i + 1 * 10));
-                else
-                    updateActionSucc = moduleDataManager.UpdateModuleRank(updatedMenuItem[i].Id, (i + 1 * 10));
-            }
+        
+             updateActionSucc = updateMenuChilds(updatedMenuItem, viewDataManager, moduleDataManager);
+   
             MenuManager menuManager = new MenuManager();
             if (updateActionSucc)
             {
@@ -119,7 +115,21 @@ namespace Vanrise.Security.Business
             }
             return updateOperationOutput;
         }
-
+        public bool updateMenuChilds(List<MenuItem> updatedChildsMenuItem, IViewDataManager viewDataManager, IModuleDataManager moduleDataManager)
+        {
+            for (int i = 0; i < updatedChildsMenuItem.Count; i++)
+            {
+                if (updatedChildsMenuItem[i].Childs == null || updatedChildsMenuItem[i].Childs.Count == 0)
+                    viewDataManager.UpdateViewRank(updatedChildsMenuItem[i].Id, (i + 1 * 10));
+                else
+                {
+                    moduleDataManager.UpdateModuleRank(updatedChildsMenuItem[i].Id, (i + 1 * 10));
+                    updateMenuChilds(updatedChildsMenuItem[i].Childs, viewDataManager, moduleDataManager);
+                }
+                   
+            }
+            return true;
+        }
       
     }
 }                               

@@ -20,28 +20,42 @@ function RankingPageManagementController($scope, ViewAPIService, VRModalService,
                 treeAPI.refreshTree($scope.menu);
             }
         }
-        $scope.onSelectedMenuNodechanged = function () {
-            console.log($scope.menu);
-            var settings = {};
-            if ($scope.selectedMenuNode != undefined)
-            {
-                settings.onScopeReady = function (modalScope) {
-                    modalScope.title = "Ranking Page Editor: " + $scope.selectedMenuNode.Name;
-                    modalScope.onPageUpdated = function (menuItem) {
-                        var menu =[];
-                        menu.push({
-                            Name: "Root",
-                            Childs: menuItem,
-                            isOpened: true
-                        });
-                        treeAPI.refreshTree(menu);
-                    };
-                };
-                VRModalService.showModal('/Client/Modules/Security/Views/RankingPages/RankingPageEditor.html', $scope.selectedMenuNode, settings);
-            }
+        $scope.addClicked = function () {
+            if (treeAPI.getTree()!=undefined)
+            console.log(treeAPI.getTree());
+        }
+        //$scope.onSelectedMenuNodechanged = function () {
+        //    var settings = {};
+        //    if ($scope.selectedMenuNode != undefined)
+        //    {
+        //        settings.onScopeReady = function (modalScope) {
+        //            modalScope.title = "Ranking Page Editor: " + $scope.selectedMenuNode.Name;
+        //            modalScope.onPageUpdated = function (menuItem) {
+        //                var menu =[];
+        //                menu.push({
+        //                    Name: "Root",
+        //                    Childs: menuItem,
+        //                    isOpened: true
+        //                });
+        //                treeAPI.refreshTree(menu);
+        //            };
+        //        };
+        //        VRModalService.showModal('/Client/Modules/Security/Views/Pages/RankingPageEditor.html', $scope.selectedMenuNode, settings);
+        //    }
 
            
-        }
+        //}
+        $scope.save = function () {
+            var menu = treeAPI.getTree();
+            console.log(menu[0].Childs);
+            return ViewAPIService.UpdateViewsRank(menu[0].Childs).then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated("MenuItems", response)) {
+                    if ($scope.onPageUpdated != undefined)
+                        $scope.onPageUpdated(response.UpdatedObject);
+                }
+            })
+
+        };
     }
 
 
@@ -60,7 +74,6 @@ function RankingPageManagementController($scope, ViewAPIService, VRModalService,
 
                 $scope.menuItems.push(item);
             })
-            console.log($scope.menuItems);
             var menu = {
                 Name: "Root",
                 Childs: $scope.menuItems,
