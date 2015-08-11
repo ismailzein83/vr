@@ -77,15 +77,17 @@ app.directive('vrTreeview', [function () {
                 var treeArray = [];
                 fillTreeFromDataSource(treeArray, datasource);
                 var treeData={
-                    core: { data: treeArray },
+                    core: { data: treeArray},
                     "state": { "key": "state_demo" },
+                   
                 }
                 var plugins = [];
                 if (ctrl.checkbox !== undefined)
                 {
                      plugins.push("checkbox");
-                    
+                  
                 }
+                plugins.push("json_data");
                 if (ctrl.draggable != undefined) {
                     plugins.push("dnd");
                     treeData.core.check_callback = function (operation, node, parent, position, more) {
@@ -117,16 +119,35 @@ app.directive('vrTreeview', [function () {
                     plugins.push("wholerow");
                 }
                 treeData.plugins = plugins;
+                treeData.check_callback = true;
                 treeElement.jstree(treeData);
                 treeElement.bind("move_node.jstree", function (e, data) {
-
+                    var jsonTree = treeElement.jstree(true).get_json('#', {});
+                    var returnedTree=[];
+                    getFullTreeData(returnedTree, jsonTree, treeElement);
+                    api.getTree = function () {
+                        return returnedTree;
+                    }
                 });
 
                 treeElement.on('changed.jstree', function (e, data) {
-                 //   console.log(e);
                    ctrl.selecteditem = data.node.original.sourceItem;
                 });
             };
+            function getFullTreeData(treeArray, jsonTree, treeElement) {
+               
+                for (var i = 0; i < jsonTree.length; i++) {
+                    var sourceItem = jsonTree[i]; 
+                    var treeItem = treeElement.jstree(true).get_node(sourceItem.id).original.sourceItem;
+                    treeItem[ctrl.datachildrenfield] = [];
+                    
+                    if (treeItem[ctrl.datachildrenfield] != undefined)
+                        getFullTreeData(treeItem[ctrl.datachildrenfield], sourceItem.children, treeElement);
+                    treeArray.push(treeItem);
+                    
+                }
+
+            }
            
             if (ctrl.onReady && typeof (ctrl.onReady) == 'function')
                 ctrl.onReady(api);
@@ -144,8 +165,9 @@ app.directive('vrTreeview', [function () {
                                 onvaluechangedMethod();
                             }
                         }
-                       
                     });
+
+
                 }
             }
         },
