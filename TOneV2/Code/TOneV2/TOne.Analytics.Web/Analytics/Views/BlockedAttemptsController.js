@@ -1,8 +1,6 @@
-﻿BlockedAttemptsController.$inject = ['$scope', 'UtilsService', 'AnalyticsAPIService', 'uiGridConstants', '$q', 'BusinessEntityAPIService_temp', 'BlockedAttemptsAPIService',
-        'VRNotificationService', 'DataRetrievalResultTypeEnum', 'PeriodEnum','UtilsService','BlockedAttemptsMeasureEnum','CarrierAccountAPIService','CarrierTypeEnum','ZonesService'];
+﻿BlockedAttemptsController.$inject = ['$scope', 'UtilsService', '$q', 'BlockedAttemptsAPIService', 'VRNotificationService', 'DataRetrievalResultTypeEnum', 'PeriodEnum', 'BlockedAttemptsMeasureEnum', 'CarrierAccountAPIService', 'CarrierTypeEnum', 'ZonesService', 'BusinessEntityAPIService_temp'];
 
-function BlockedAttemptsController($scope, UtilsService, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, BlockedAttemptsAPIService,
-        VRNotificationService, DataRetrievalResultTypeEnum, PeriodEnum, UtilsService, BlockedAttemptsMeasureEnum, CarrierAccountAPIService, CarrierTypeEnum, ZonesService) {
+function BlockedAttemptsController($scope, UtilsService, $q, BlockedAttemptsAPIService, VRNotificationService, DataRetrievalResultTypeEnum, PeriodEnum, BlockedAttemptsMeasureEnum, CarrierAccountAPIService, CarrierTypeEnum, ZonesService, BusinessEntityAPIService) {
 
     var mainGridAPI;
     var measures = [];
@@ -39,10 +37,8 @@ function BlockedAttemptsController($scope, UtilsService, AnalyticsAPIService, ui
         $scope.selectedSwitches = [];
         $scope.customers = [];
         $scope.selectedCustomers = [];
-        $scope.getColor = function (dataItem, coldef) {
-            if (coldef.tag.value == TrafficStatisticsMeasureEnum.ACD.value)
-                return getACDColor(dataItem.ACD, dataItem.Attempts);
-        }
+        $scope.showResult = false;
+        $scope.groupByNumber = false;
         $scope.measures = measures;
         defineMenuActions();
         $scope.onMainGridReady = function (api) {
@@ -51,6 +47,7 @@ function BlockedAttemptsController($scope, UtilsService, AnalyticsAPIService, ui
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return BlockedAttemptsAPIService.GetBlockedAttempts(dataRetrievalInput).then(function (response) {
                 onResponseReady(response);
+                $scope.showResult = true;
             })
         };
 
@@ -64,12 +61,17 @@ function BlockedAttemptsController($scope, UtilsService, AnalyticsAPIService, ui
     }
 
     function retrieveData() {
-
-
+        var groupByNumber;
+        if ($scope.groupByNumber)
+            groupByNumber = 'Y'
+        else
+            groupByNumber = 'N'
+        var filter=buildFilter();
         var query = {
             Filter: filter,
             From: $scope.fromDate,
             To: $scope.toDate,
+            GroupByNumber: groupByNumber
         };
         return mainGridAPI.retrieveData(query);
     }
@@ -85,19 +87,6 @@ function BlockedAttemptsController($scope, UtilsService, AnalyticsAPIService, ui
             VRNotificationService.notifyExceptionWithClose(error, $scope);
         });
     }
-
-    function getACDColor(acdValue, attemptsValue) {
-        if (attemptsValue > $scope.attampts && acdValue < $scope.acd)
-            return LabelColorsEnum.Warning.Color;
-        //if (status === BPInstanceStatusEnum.Running.value) return LabelColorsEnum.Info.Color;
-        //if (status === BPInstanceStatusEnum.ProcessFailed.value) return LabelColorsEnum.Error.Color;
-        //if (status === BPInstanceStatusEnum.Completed.value) return LabelColorsEnum.Success.Color;
-        //if (status === BPInstanceStatusEnum.Aborted.value) return LabelColorsEnum.Warning.Color;
-        //if (status === BPInstanceStatusEnum.Suspended.value) return LabelColorsEnum.Warning.Color;
-        //if (status === BPInstanceStatusEnum.Terminated.value) return LabelColorsEnum.Error.Color;
-
-        // return LabelColorsEnum.Info.Color;
-    };
 
     function defineMenuActions() {
         $scope.gridMenuActions = [{
@@ -181,8 +170,6 @@ function BlockedAttemptsController($scope, UtilsService, AnalyticsAPIService, ui
             });
         });
     }
-
-
 
     function definePeriods() {
         $scope.periods = [];

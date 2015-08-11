@@ -1,9 +1,9 @@
 ﻿app.constant('BlockedAttemptsMeasureEnum', {
-    Customer: { value: 2, propertyName: "Customer", description: "Customer", isSum: true, type: "Text" },
-    Zone: { value: 3, propertyName: "Zone", description: "Zone", isSum: true, type: "Text" },
-    BlockAttempt: { value: 4, propertyName: "Block Attempt", description: "Block Attempt", isSum: true, type: "Text" },
-    RelCode: { value: 5, propertyName: "RelCode", description: "Rel. Code", isSum: true, type: "Text" },
+    CustomerID: { value: 2, propertyName: "CustomerID", description: "Customer", isSum: true, type: "Text" },
+    OurZoneID: { value: 3, propertyName: "OurZoneID", description: "Zone", isSum: true, type: "Text" },
+    BlockAttempt: { value: 4, propertyName: "BlockAttempt", description: "Block Attempt", isSum: true, type: "Text" },
+    ReleaseCode: { value: 5, propertyName: "ReleaseCode", description: "Rel. Code", isSum: true, type: "Text" },
     ReleaseSource: { value: 6, propertyName: "ReleaseSource", description: "ReleaseSource", isSum: true, type: "Text" },
-    FirstCall: { value: 7, propertyName: "First Call", description: "First Call", isSum: true, type: "DateTime" },
-    LastCall: { value: 8, propertyName: "Last Call", description: "Last Call", isSum: true, type: "DateTime" },
+    FirstCall: { value: 7, propertyName: "FirstCall", description: "First Call", isSum: true, type: "DateTime" },
+    LastCall: { value: 8, propertyName: "LastCall", description: "Last Call", isSum: true, type: "DateTime" },
 });

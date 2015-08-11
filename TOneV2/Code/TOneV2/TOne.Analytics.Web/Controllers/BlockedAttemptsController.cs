@@ -4,13 +4,14 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using TOne.Analytics.Business;
+using TOne.Analytics.Entities;
 
 namespace TOne.Analytics.Web.Controllers
 {
     public class BlockedAttemptsController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpPost]
-        public object GetBlockedAttempts(Vanrise.Entities.DataRetrievalInput<string> input)
+        public object GetBlockedAttempts(Vanrise.Entities.DataRetrievalInput<BlockedAttemptsInput> input)
         {
             BlockedAttemptsManager manager = new BlockedAttemptsManager();
             return GetWebResponse(input, manager.GetBlockedAttempts(input));

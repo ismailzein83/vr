@@ -27,6 +27,9 @@
                     <vr-columns colnum="2">
                         <vr-datetimepicker type="date" value="toDate" label="To" isrequired></vr-datetimepicker>
                     </vr-columns>
+                    <vr-columns colnum="2">
+                        <vr-switch value="groupByNumber" label="Grouping by number" isrequired></vr-switch>
+                    </vr-columns>
                 </vr-columns>
             </vr-row>
 
@@ -42,12 +45,12 @@
             </vr-actionbar>
         </vr-row>
     </vr-form>
-    <div vr-loader="isGettingData">
+    <div vr-loader="isGettingData" ng-show="showResult">
         <vr-row>
             <vr-columns colnum="12" simplecol>
                 <vr-datagrid on-ready="onMainGridReady" datasource="data"
                              menuactions="gridMenuActions" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'">
-                    <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" summaryfield="measure.propertyName" type="measure.type" tag="measure" getcolor="getColor"></vr-datagridcolumn>
+                    <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" summaryfield="measure.propertyName" type="measure.type" tag="measure"></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
         </vr-row>

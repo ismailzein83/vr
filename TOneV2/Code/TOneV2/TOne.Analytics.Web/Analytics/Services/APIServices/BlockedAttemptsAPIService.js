@@ -6,8 +6,8 @@ app.service('BlockedAttemptsAPIService', function (BaseAPIService) {
       
     });
 
-    function GetBlockedAttempts(getTrafficStatisticSummaryInput) {
-        return BaseAPIService.post("/api/BlockedAttempts/GetBlockedAttempts", getTrafficStatisticSummaryInput);
+    function GetBlockedAttempts(blockedAttemptsInput) {
+        return BaseAPIService.post("/api/BlockedAttempts/GetBlockedAttempts", blockedAttemptsInput);
     }
 
   

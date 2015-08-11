@@ -18,7 +18,8 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
     function defineScope() {
 
         definePeriods();
-        $scope.asr=50.0;
+        $scope.asr = 50.0;
+        $scope.showResult = false;
         $scope.acd=20.0;
         $scope.attampts = 2;
     //    $scope.selectedPeriod;
@@ -104,6 +105,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                     renderOverallChart();
                 }
                 onResponseReady(response);
+                $scope.showResult = true;
             })
         };
 
