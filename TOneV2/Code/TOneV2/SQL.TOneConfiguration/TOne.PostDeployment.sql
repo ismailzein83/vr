@@ -108,7 +108,7 @@ as (select * from (values
 (2,'Rate Plan','Rate Plan','#/view/Routing/Views/Management/RatePlanning',1,null,null,null,0,3),
 (3,'Routing Manager','Routing Manager','#/view/Routing/Views/RoutingManagement/RoutingManagement',1,null,null,null,0,1),
 (8,'Entity Report','Entity Report','#/view/BI/Views/Reports/EntityReport',6,null,null,null,0,5),
-(9,'Zone Monitor','Zone Monitor','#/view/Analytics/Views/Traffic Statistics/ZoneMonitor',4,null,null,null,0,1),
+(9,'Traffic Monitor','Traffic Monitor','#/view/Analytics/Views/Traffic Statistics/ZoneMonitor',4,null,null,null,0,1),
 (10,'Variation','Variation','#/view/Analytics/Views/Billing Statistics/Variation Reports/VariationReports',12,null,null,null,0,1),
 (11,'Billing','Billing','#/view/Analytics/Views/Billing Reports/BillingReports',12,null,null,null,0,2),
 (12,'CDR Log','CDR Log','#/view/Analytics/Views/CDR/CDRLog',4,null,null,null,0,2),
@@ -148,7 +148,8 @@ as (select * from (values
 (207,'Default','Default','#/Default',16,null,null,null,0,8),
 (208,'Default','Default','#/Default',17,null,null,null,0,8),
 (224,'First Dynamic Page','First Dynamic Page','#/viewwithparams/Security/Views/DynamicPages/DynamicPagePreview',2,null,null,'{"SummaryContents":[{"WidgetId":95,"NumberOfColumns":"2","SectionTitle":"Widget_test","DefaultGrouping":3,"DefaultPeriod":6}],"BodyContents":[{"WidgetId":120,"NumberOfColumns":"12","SectionTitle":"Test Widget","DefaultGrouping":3,"DefaultPeriod":0},{"WidgetId":103,"NumberOfColumns":"12","SectionTitle":"Top Sale","DefaultGrouping":3,"DefaultPeriod":0},{"WidgetId":96,"NumberOfColumns":"6","SectionTitle":"Current Month-Top Supplier"}],"DefaultGrouping":3,"DefaultPeriod":6}',1,null),
-(225,'Carrier Group','Carrier Group','#/view/BusinessEntity/Views/CarrierGroupManagement',3,null,null,null,0,3)
+(225,'Carrier Group','Carrier Group','#/view/BusinessEntity/Views/CarrierGroupManagement',3,null,null,null,0,3),
+(226,'Ranking Pages','Ranking Pages','#/view/Security/Views/Pages/RankingPages',5,'Root/Administration Module:View',null,null,0,9)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank]))
 merge	[sec].[View] as t
