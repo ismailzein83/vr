@@ -170,6 +170,8 @@
     <Content Include="Analytics\Views\CDR\CDRReport.html" />
     <Content Include="Analytics\Views\RepeatedNumbers.html" />
     <Content Include="Analytics\Views\RepeatedNumbersController.js" />
+    <Content Include="Analytics\Views\Traffic Statistics\ReleaseCodeStatistics.html" />
+    <Content Include="Analytics\Views\Traffic Statistics\ReleaseCodeStatisticsController.js" />
     <Content Include="Analytics\Views\Traffic Statistics\TrafficStatisticsGrid.html" />
     <Content Include="Analytics\Views\Traffic Statistics\TrafficStatisticsGridController.js" />
     <Content Include="Analytics\Views\Traffic Statistics\ZoneMonitor.html" />
