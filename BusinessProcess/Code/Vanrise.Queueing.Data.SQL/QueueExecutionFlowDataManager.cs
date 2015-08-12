@@ -31,7 +31,7 @@ namespace Vanrise.Queueing.Data.SQL
         {
             object executionFlowID;
 
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_ExecutionFlow_Insert", out executionFlowID, executionFlow.Name, executionFlow.DefinitionId);
+            int recordesEffected = ExecuteNonQuerySP("queue.sp_ExecutionFlow_Insert", out executionFlowID, executionFlow.Name, executionFlow.DefinitionId);
 
             insertedId = (recordesEffected > 0) ? (int)executionFlowID : -1;
             return (recordesEffected > 0);
