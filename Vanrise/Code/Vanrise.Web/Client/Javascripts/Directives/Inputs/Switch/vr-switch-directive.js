@@ -24,7 +24,9 @@ app.directive('vrSwitch', ['SecurityService', function (SecurityService) {
                     }
                 }
             });
-
+            scope.withLable = false;
+            if (attrs.label != undefined)
+                scope.withLable = true;
             scope.notifyUserChange = function () {
                 isUserChange = true;
             };
@@ -37,7 +39,7 @@ app.directive('vrSwitch', ['SecurityService', function (SecurityService) {
                 var label = attrs.label;
                 if (label == undefined)
                     label = '';
-                return '<vr-label>' + label + '</vr-label><div><switch ng-model="value" ng-change="notifyUserChange()" class="green"></switch></div>';
+                return '<vr-label ng-if="withLable">' + label + '</vr-label><div><switch ng-model="value" ng-change="notifyUserChange()" class="green"></switch></div>';
             }
             else
                 return "";
