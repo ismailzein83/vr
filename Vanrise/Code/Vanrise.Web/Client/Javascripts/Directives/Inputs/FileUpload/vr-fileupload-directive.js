@@ -119,7 +119,6 @@ app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService','BaseA
                 }
             }
         },
-        controllerAs: 'ctrl',
         bindToController: true,
         template: function (element, attrs) {
             var startTemplate = '<div id="rootDiv" style="position: relative;">';
