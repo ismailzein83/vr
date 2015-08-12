@@ -4,53 +4,60 @@
 
     serviceObj.$inject = ['BaseAPIService', 'CarrierTypeEnum'];
 
-    function serviceObj(BaseAPIService, CarrierTypeEnum) {
+    function serviceObj(baseApiService, carrierTypeEnum) {
         
         function getCarriers(carrierType) {
-            return BaseAPIService.get("/api/CarrierAccount/GetCarriers",
+            return baseApiService.get("/api/CarrierAccount/GetCarriers",
                 {
                     carrierType: carrierType
                 });
         }
 
         function getCustomers() {
-            return BaseAPIService.get("/api/CarrierAccount/GetCarriers",
+            return baseApiService.get("/api/CarrierAccount/GetCarriers",
                 {
-                    carrierType: CarrierTypeEnum.Customer.value
+                    carrierType: carrierTypeEnum.Customer.value
+                });
+        }
+
+        function getSuppliers() {
+            return baseApiService.get("/api/CarrierAccount/GetCarriers",
+                {
+                    carrierType: carrierTypeEnum.Supplier.value
                 });
         }
     
-        function insertCarrierTest(CarrierAccountID, Name) {
-            return BaseAPIService.post("/api/CarrierAccount/insertCarrierTest",
+        function insertCarrierTest(carrierAccountId, name) {
+            return baseApiService.post("/api/CarrierAccount/insertCarrierTest",
                 {
-                    CarrierAccountID: CarrierAccountID,
-                    Name: Name
+                    CarrierAccountID: carrierAccountId,
+                    Name: name
                 });
         }
 
         function getFilteredCarrierAccounts(input) {
-            return BaseAPIService.post("/api/CarrierAccount/GetFilteredCarrierAccounts", input);
+            return baseApiService.post("/api/CarrierAccount/GetFilteredCarrierAccounts", input);
         }
 
-        function getCarrierAccounts(ProfileName, ProfileCompanyName, from, to) {
-            return BaseAPIService.get("/api/CarrierAccount/GetCarrierAccounts",
+        function getCarrierAccounts(profileName, profileCompanyName, from, to) {
+            return baseApiService.get("/api/CarrierAccount/GetCarrierAccounts",
                 {
-                    ProfileName: ProfileName,
-                    ProfileCompanyName: ProfileCompanyName,
+                    ProfileName: profileName,
+                    ProfileCompanyName: profileCompanyName,
                     from: from,
                     to: to
                 });
         }
 
         function getCarrierAccount(carrierAccountId) {
-            return BaseAPIService.get("/api/CarrierAccount/GetCarrierAccount",
+            return baseApiService.get("/api/CarrierAccount/GetCarrierAccount",
                 {
                     carrierAccountId: carrierAccountId
                 });
         }
 
-        function updateCarrierAccount(CarrierAccount) {
-            return BaseAPIService.post("/api/CarrierAccount/UpdateCarrierAccount",CarrierAccount);
+        function updateCarrierAccount(carrierAccount) {
+            return baseApiService.post("/api/CarrierAccount/UpdateCarrierAccount",carrierAccount);
         }
 
         return ({
@@ -60,7 +67,8 @@
             GetCarrierAccounts: getCarrierAccounts,
             GetCarrierAccount: getCarrierAccount,
             UpdateCarrierAccount: updateCarrierAccount,
-            GetFilteredCarrierAccounts: getFilteredCarrierAccounts
+            GetFilteredCarrierAccounts: getFilteredCarrierAccounts,
+            GetSuppliers: getSuppliers
         });
     }
 
