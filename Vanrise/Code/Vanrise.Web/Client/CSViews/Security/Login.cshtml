@@ -9,6 +9,7 @@
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/bootstrap")
     @Styles.Render("~/Content/AngularExtensions")
+    @Styles.Render("~/Content/CodeMirrorStyle")
     @*@Styles.Render("~/Content/Semantic")*@
     @Styles.Render("~/Content/Styles")
 
@@ -32,7 +33,9 @@
 </body>
 @Scripts.Render("~/bundles/helpers")
 @Scripts.Render("~/bundles/JQuery")
+@Scripts.Render("~/bundles/codemirror")
 @Scripts.Render("~/bundles/Angular")
+@Scripts.Render("~/bundles/CodemirrorDirective")
 @Scripts.Render("~/bundles/AngularExtensions")
 
 @Scripts.Render("~/bundles/bootstrap")

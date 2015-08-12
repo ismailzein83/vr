@@ -41,14 +41,33 @@ namespace Vanrise.Web
 
             #endregion
 
+            #region codemirror Script
+
+            bundles.Add(new ScriptBundle("~/bundles/codemirror").Include(
+               "~/Client/Libraries/Bower/codemirror/lib/codemirror.js",
+               "~/Client/Libraries/Bower/codemirror/mode/clike/clike.js"
+               ));
+
+            bundles.Add(new ScriptBundle("~/bundles/CodemirrorDirective").Include(
+               "~/Client/Libraries/Bower/angular-ui-codemirror/ui-codemirror.js"
+               ));
+
+            #endregion
+
+            #region codemirror Style
+
+            bundles.Add(new StyleBundle("~/Content/CodeMirrorStyle").Include(
+               "~/Client/Libraries/Bower/codemirror/lib/codemirror.css"
+               ));
+
+            #endregion
+
             #region Waves
 
             bundles.Add(new ScriptBundle("~/bundles/waves").Include(
                "~/Client/Libraries/Bower/waves/dist/waves.min.js"));
 
             #endregion
-
-            
 
             #endregion
 
@@ -59,6 +78,7 @@ namespace Vanrise.Web
 
             #endregion
 
+            
             //AngularExtensions
             bundles.Add(new ScriptBundle("~/bundles/AngularExtensions").IncludeDirectory(
               "~/Client/Libraries/AngularExtensions", "*.js", true));
