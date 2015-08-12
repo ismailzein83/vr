@@ -25,6 +25,7 @@ font-size:12px !important;
     margin-left: 25px;
     font-weight: bold;
     color: #5d5d5d;
+    margin-top:5px;
 }
 .vr-user-label{
     font-weight: bold;
@@ -136,7 +137,13 @@ font-size:12px !important;
     padding: 0px 8px;
 }
 .inner-sub{
-    height: 44px;
+    height: 39px;
+    position: relative;
+    padding: 5px;
+    border-bottom: 2px solid #F0F0F0;
+}
+.inner-sub{
+    height: 39px;
     position: relative;
     padding: 5px;
     border-bottom: 2px solid #F0F0F0;
