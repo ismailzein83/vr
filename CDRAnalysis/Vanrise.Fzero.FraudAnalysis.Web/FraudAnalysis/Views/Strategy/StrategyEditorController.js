@@ -87,10 +87,10 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         $scope.SaveStrategy = function () {
             if (editMode) {
 
-                return UpdateStrategy();
+                return updateStrategy();
             }
             else {
-                return AddStrategy();
+                return addStrategy();
             }
         };
 
@@ -309,25 +309,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
     }
 
-    function AddStrategy() {
-        $scope.issaving = true;
-        var strategyObject = buildStrategyObjFromScope();
-
-        return StrategyAPIService.AddStrategy(strategyObject)
-          .then(function (response) {
-              if (VRNotificationService.notifyOnItemAdded("Strategy", response)) {
-                  if ($scope.onStrategyAdded != undefined)
-                      $scope.onStrategyAdded(response.InsertedObject);
-                  $scope.modalContext.closeModal();
-              }
-          }).catch(function (error) {
-              VRNotificationService.notifyException(error, $scope);
-          });
-    }
-
-    function UpdateStrategy() {
-        var strategyObject = buildStrategyObjFromScope();
-
+    function isValid(strategyObject) {
         var countStrategyFilters = 0;
         var countStrategyLevels = 0;
         var countStrategyLevelCrietiraswithNoPercentage = 0;
@@ -337,7 +319,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             countStrategyFilters++;
         });
 
-        
+
         angular.forEach(strategyObject.StrategyLevels, function (level) {
             angular.forEach(level.StrategyLevelCriterias, function (itm) {
                 if (itm.Percentage != undefined)
@@ -352,46 +334,72 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             });
         });
 
+
         if (countStrategyFilters == 0) {
             VRNotificationService.showError("At least one filter should be specified in a strategy. ");
-            return;
+            return false;
 
         }
 
         if (countStrategyLevels == 0) {
             VRNotificationService.showError("At least one rule with filter(s) and percentage should be specified in a strategy. ");
-            return;
+            return false;
 
         }
 
         if (countStrategyLevelCrietiraswithNoPercentage > 0) {
             VRNotificationService.showError("Rule filters should specify percentage. ");
-            return;
+            return false;
 
+        }
+        return true;
+    }
+
+    function addStrategy() {
+        $scope.issaving = true;
+        var strategyObject = buildStrategyObjFromScope();
+
+        if (isValid(strategyObject)) {
+            return StrategyAPIService.AddStrategy(strategyObject)
+          .then(function (response) {
+              if (VRNotificationService.notifyOnItemAdded("Strategy", response)) {
+                  if ($scope.onStrategyAdded != undefined)
+                      $scope.onStrategyAdded(response.InsertedObject);
+                  $scope.modalContext.closeModal();
+              }
+          }).catch(function (error) {
+              VRNotificationService.notifyException(error, $scope);
+          });
+        }
+
+        
+    }
+
+    function updateStrategy() {
+        var strategyObject = buildStrategyObjFromScope();
+
+        if (isValid(strategyObject)) {
+            return StrategyAPIService.UpdateStrategy(strategyObject)
+                              .then(function (response) {
+                                  if (VRNotificationService.notifyOnItemUpdated("Strategy", response)) {
+                                      if ($scope.onStrategyUpdated != undefined)
+                                          $scope.onStrategyUpdated(response.UpdatedObject);
+                                      $scope.modalContext.closeModal();
+                                  }
+                              }).catch(function (error) {
+                                  VRNotificationService.notifyException(error, $scope);
+                              });
         }
 
 
 
-
-
-
-        StrategyAPIService.UpdateStrategy(strategyObject)
-        .then(function (response) {
-            if (VRNotificationService.notifyOnItemUpdated("Strategy", response)) {
-                if ($scope.onStrategyUpdated != undefined)
-                    $scope.onStrategyUpdated(response.UpdatedObject);
-                $scope.modalContext.closeModal();
-            }
-        }).catch(function (error) {
-            VRNotificationService.notifyException(error, $scope);
-        });
     }
 
     function loadFilters() {
         var index = 0;
         return StrategyAPIService.GetFilters().then(function (response) {
             angular.forEach(response, function (itm) {
-                $scope.filterDefinitions.push({ filterId: itm.FilterId, description: itm.Description, label:itm.Label });
+                $scope.filterDefinitions.push({ filterId: itm.FilterId, description: itm.Description, label: itm.Label });
             });
         });
     }
