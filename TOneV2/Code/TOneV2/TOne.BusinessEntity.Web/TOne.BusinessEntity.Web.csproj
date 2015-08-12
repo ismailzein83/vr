@@ -146,6 +146,7 @@
     <Content Include="BusinessEntity\Services\APIServices\BusinessEntityAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\CarrierAccountAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\CarrierGroupAPIService.js" />
+    <Content Include="BusinessEntity\Services\APIServices\CarrierMaskAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\CarrierProfileAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\LookUpAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\PriceListAPIService.js" />
@@ -165,6 +166,8 @@
     <Content Include="BusinessEntity\Views\CarrierGroupEditorController.js" />
     <Content Include="BusinessEntity\Views\CarrierGroupManagement.html" />
     <Content Include="BusinessEntity\Views\CarrierGroupManagementController.js" />
+    <Content Include="BusinessEntity\Views\CarrierMaskManagement.html" />
+    <Content Include="BusinessEntity\Views\CarrierMaskManagementController.js" />
     <Content Include="BusinessEntity\Views\CarrierPriceList.html" />
     <Content Include="BusinessEntity\Views\CarrierPriceListController.js" />
     <Content Include="BusinessEntity\Views\CarrierProfileEditor.html" />

@@ -8,7 +8,7 @@
         var treeAPI;
         var mainGridApi;
 
-        var beListReady = false;
+        var CarrierGroupNodesReady = false;
         function retrieveData() {
             if (mainGridApi)
                 return mainGridApi.retrieveData({
@@ -38,7 +38,7 @@
 
         function defineScope() {
 
-            $scope.beList = [];
+            $scope.CarrierGroupNodes = [];
 
             $scope.currentNode = {
                 EntityId: 0
@@ -66,7 +66,7 @@
 
             loadTree().finally(function () {
                 $scope.isGettingData = false;
-                treeAPI.refreshTree($scope.beList);
+                treeAPI.refreshTree($scope.CarrierGroupNodes);
             });
         }
 
@@ -74,8 +74,8 @@
 
             return CarrierGroupAPIService.GetEntityNodes()
                .then(function (response) {
-                   $scope.beList = response;
-                   beListReady = true;
+                   $scope.CarrierGroupNodes = response;
+                   CarrierGroupNodesReady = true;
                });
         }
 
