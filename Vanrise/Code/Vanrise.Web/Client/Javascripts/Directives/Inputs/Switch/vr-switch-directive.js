@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrSwitch', [function () {
+app.directive('vrSwitch', ['SecurityService', function (SecurityService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -33,10 +33,15 @@ app.directive('vrSwitch', [function () {
         //controllerAs: 'ctrl',
         //bindToController: true,
         template: function (element, attrs) {
-            var label = attrs.label;
-            if (label == undefined)
-                label = '';
-            return '<vr-label>' + label + '</vr-label><div><switch ng-model="value" ng-change="notifyUserChange()" class="green"></switch></div>';
+            if (attrs.permissions === undefined || SecurityService.isAllowed(attrs.permissions)) {
+                var label = attrs.label;
+                if (label == undefined)
+                    label = '';
+                return '<vr-label>' + label + '</vr-label><div><switch ng-model="value" ng-change="notifyUserChange()" class="green"></switch></div>';
+            }
+            else
+                return "";
+            
         }
 
     };
