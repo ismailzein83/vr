@@ -67,10 +67,14 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             }    
         };
         $scope.customvalidateFrom = function (fromDate) {
-            return UtilsService.validateDates(fromDate, $scope.toDate);
+            var from = UtilsService.getShortDate(fromDate);
+            var to = UtilsService.getShortDate($scope.toDate);
+            return UtilsService.validateDates(from, to);
         };
         $scope.customvalidateTo = function (toDate) {
-            return UtilsService.validateDates($scope.fromDate, toDate);
+            var from = UtilsService.getShortDate($scope.fromDate);
+            var to = UtilsService.getShortDate(toDate);
+            return UtilsService.validateDates(from, to);
         };
         
 
