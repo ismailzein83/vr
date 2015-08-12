@@ -351,96 +351,15 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
 
     function getPeriod(periodType) {
         switch (periodType) {
-            case PeriodEnum.LastYear.value: return getLastYearInterval();
-            case PeriodEnum.LastMonth.value: return getLastMonthInterval();
-            case PeriodEnum.LastWeek.value: return getLastWeekInterval();
-            case PeriodEnum.Yesterday.value: return getYesterdayInterval();
-            case PeriodEnum.Today.value: return getTodayInterval();
-            case PeriodEnum.CurrentWeek.value: return getCurrentWeekInterval();
-            case PeriodEnum.CurrentMonth.value: return getCurrentMonthInterval();
-            case PeriodEnum.CurrentYear.value: return getCurrentYearInterval();
+            case PeriodEnum.LastYear.value: return PeriodEnum.LastYear.getInterval();
+            case PeriodEnum.LastMonth.value: return PeriodEnum.LastMonth.getInterval();
+            case PeriodEnum.LastWeek.value: return PeriodEnum.LastWeek.getInterval();
+            case PeriodEnum.Yesterday.value: return PeriodEnum.Yesterday.getInterval();
+            case PeriodEnum.Today.value: return PeriodEnum.Today.getInterval();
+            case PeriodEnum.CurrentWeek.value: return PeriodEnum.CurrentWeek.getInterval();
+            case PeriodEnum.CurrentMonth.value: return PeriodEnum.CurrentMonth.getInterval();
+            case PeriodEnum.CurrentYear.value: return PeriodEnum.CurrentYear.getInterval();
         }
-    }
-    function getCurrentYearInterval() {
-        var date = new Date();
-        var interval = {
-            from: new Date(date.getFullYear(), 0, 1),
-            to: new Date(),
-        }
-        return interval;
-    }
-    function getCurrentWeekInterval() {
-        var thisWeek = new Date(new Date().getTime() - 60 * 60 * 24 * 1000)
-        var day = thisWeek.getDay();
-        var LastMonday;
-        if (day === 0) {
-            LastMonday = new Date();
-        }
-        else {
-            var diffToMonday = thisWeek.getDate() - day + (day === 0 ? -6 : 1);
-            var LastMonday = new Date(thisWeek.setDate(diffToMonday));
-        }
-
-
-        var interval = {
-            from: LastMonday,
-            to: new Date(),
-        }
-        return interval;
-    }
-    function getLastWeekInterval() {
-        var beforeOneWeek = new Date(new Date().getTime() - 60 * 60 * 24 * 7 * 1000)
-        var day = beforeOneWeek.getDay();
-
-        var diffToMonday = beforeOneWeek.getDate() - day + (day === 0 ? -6 : 1);
-        var beforeLastMonday = new Date(beforeOneWeek.setDate(diffToMonday));
-        var lastSunday = new Date(beforeOneWeek.setDate(diffToMonday + 6));
-        var interval = {
-            from: beforeLastMonday,
-            to: lastSunday,
-        }
-        return interval;
-    }
-    function getCurrentMonthInterval() {
-        var date = new Date();
-        var interval = {
-            from: new Date(date.getFullYear(), date.getMonth(), 1),
-            to: new Date(),
-        }
-        return interval;
-    }
-    function getTodayInterval() {
-        var date = new Date();
-        var interval = {
-            from: date,
-            to: date
-        }
-        return interval;
-    }
-    function getYesterdayInterval() {
-        var date = new Date();
-        date.setDate(date.getDate() - 1);
-        var interval = {
-            from: date,
-            to: date,
-        }
-        return interval;
-    }
-    function getLastMonthInterval() {
-        var date = new Date();
-        var interval = {
-            from: new Date(date.getFullYear(), date.getMonth() - 1, 1),
-            to: new Date(date.getFullYear(), date.getMonth(), 0),
-        }
-        return interval;
-    }
-    function getLastYearInterval() {
-        var date = new Date();
-        var interval = {
-            from: new Date(date.getFullYear() - 1, 0, 1),
-            to: new Date(date.getFullYear() - 1, 11, 31)
-        }
-        return interval;
     }
     function getShortDate (date) {
         var dateString = '';
@@ -460,6 +379,16 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         }
         return dateString;
     }
+    function validateDates(fromDate, toDate) {
+        if (fromDate == undefined || toDate == undefined)
+            return null;
+        var from = new Date(fromDate);
+        var to = new Date(toDate);
+        if (from.getTime() > to.getTime())
+            return "Start should be before end";
+        else
+            return null;
+    }
 
     return ({
         replaceAll: replaceAll,
@@ -478,7 +407,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         getPeriod: getPeriod,
         getPropMinValueFromArray: getPropMinValueFromArray,
         getShortDate: getShortDate,
-        getArrayEnum: getArrayEnum
+        getArrayEnum: getArrayEnum,
+        validateDates: validateDates
     });
 
 }]);

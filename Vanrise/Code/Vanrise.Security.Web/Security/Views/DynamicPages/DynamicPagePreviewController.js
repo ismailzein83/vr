@@ -13,13 +13,13 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
     }
 
     function defineScope() {
-        definePeriods();
         var date;
         $scope.fromDate;
         $scope.nonSearchable = true;
         $scope.toDate;
         $scope.allWidgets = [];
         $scope.viewContent = [];
+        $scope.periods = UtilsService.getArrayEnum(PeriodEnum);
         $scope.selectedPeriod;
         $scope.summaryContents = [];
         $scope.bodyContents = [];
@@ -41,7 +41,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         }
         $scope.periodSelectionChanged = function () {
             if ($scope.selectedPeriod != undefined && $scope.selectedPeriod.value != -1) {
-                date = UtilsService.getPeriod($scope.selectedPeriod.value);
+                date = $scope.selectedPeriod.getInterval();
                 $scope.fromDate = date.from;
                 $scope.toDate = date.to;
             }
@@ -67,25 +67,15 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             }    
         };
         $scope.customvalidateFrom = function (fromDate) {
-            return validateDates(fromDate, $scope.toDate);
+            return UtilsService.validateDates(fromDate, $scope.toDate);
         };
         $scope.customvalidateTo = function (toDate) {
-            return validateDates($scope.fromDate, toDate);
+            return UtilsService.validateDates($scope.fromDate, toDate);
         };
         
 
     }
     
-    function validateDates(fromDate, toDate) {
-        if (fromDate == undefined || toDate == undefined)
-            return null;
-        var from = new Date(fromDate);
-        var to = new Date(toDate);
-        if (from.getTime() > to.getTime())
-            return "Start should be before end";
-        else
-            return null;
-    }
     function defineTimeDimensionTypes() {
         $scope.timeDimensionTypes = [];
         for (var td in TimeDimensionTypeEnum)
@@ -100,7 +90,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
 
     }
     function fillDateAndPeriod(){
-        date = UtilsService.getPeriod($scope.selectedPeriod.value);
+        date = $scope.selectedPeriod.getInterval();
         $scope.fromDate = date.from;
         $scope.toDate = date.to;
         $scope.filter = {
@@ -250,7 +240,6 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         });
 
     }
-
     function loadViewByID() {
         return ViewAPIService.GetView(viewId).then(function (response) {
             $scope.summaryContents = response.ViewContent.SummaryContents;
@@ -265,11 +254,6 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         });
     }
     
-    function definePeriods() {
-        $scope.periods = [];
-        for (var p in PeriodEnum)
-            $scope.periods.push(PeriodEnum[p]);
-      // $scope.selectedPeriod = $scope.periods[0];
-    }
+
 }
 appControllers.controller('Security_DynamicPagePreviewController', DynamicPagePreviewController);

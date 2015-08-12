@@ -34,6 +34,9 @@ namespace TOne.Analytics.Entities
         public int DeliveredNumberOfCalls { get; set; }
 
         public Decimal PGAD { get; set; }
+        public Decimal ABR { get; set; }
+        public Decimal ASR { get; set; }
+        public Decimal NER { get; set; }
 
         //public long CeiledDuration { get; set; }
 

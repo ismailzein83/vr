@@ -20,10 +20,6 @@ function RankingPageManagementController($scope, ViewAPIService, VRModalService,
                 treeAPI.refreshTree($scope.menu);
             }
         }
-        $scope.addClicked = function () {
-            if (treeAPI.getTree()!=undefined)
-            console.log(treeAPI.getTree());
-        }
         //$scope.onSelectedMenuNodechanged = function () {
         //    var settings = {};
         //    if ($scope.selectedMenuNode != undefined)
@@ -46,14 +42,18 @@ function RankingPageManagementController($scope, ViewAPIService, VRModalService,
            
         //}
         $scope.save = function () {
-            var menu = treeAPI.getTree();
-            console.log(menu[0].Childs);
-            return ViewAPIService.UpdateViewsRank(menu[0].Childs).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("MenuItems", response)) {
-                    if ($scope.onPageUpdated != undefined)
-                        $scope.onPageUpdated(response.UpdatedObject);
-                }
-            })
+            if (treeAPI.getTree!= undefined) {
+                var menu = treeAPI.getTree();
+                console.log(menu);
+                console.log(menu[0].Childs);
+                return ViewAPIService.UpdateViewsRank(menu[0].Childs).then(function (response) {
+                    if (VRNotificationService.notifyOnItemUpdated("MenuItems", response)) {
+                        if ($scope.onPageUpdated != undefined)
+                            $scope.onPageUpdated(response.UpdatedObject);
+                    }
+                })
+            }
+            
 
         };
     }

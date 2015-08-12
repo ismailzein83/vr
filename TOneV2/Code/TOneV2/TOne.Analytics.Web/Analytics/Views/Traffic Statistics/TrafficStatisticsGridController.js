@@ -1,6 +1,4 @@
 ﻿'use strict'
-/// <reference path="ZoneMonitorSettings.html" />
-/// <reference path="ZoneMonitor.html" />
 TrafficStatisticsGridController.$inject = ['$scope', 'AnalyticsAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficStatisticsMeasureEnum', 'VRModalService','UtilsService','LabelColorsEnum'];
 function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum, VRModalService, UtilsService, LabelColorsEnum) {
     var measures = [];
@@ -71,6 +69,8 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         $scope.getColor = function (dataItem, coldef) {
             if (coldef.tag.value == TrafficStatisticsMeasureEnum.ACD.value)
                 return getACDColor(dataItem.ACD, dataItem.Attempts);
+            else if (coldef.tag.value == TrafficStatisticsMeasureEnum.ASR.value)
+                return getASRColor(dataItem.ASR, dataItem.Attempts);
         }
 
     }
@@ -121,16 +121,47 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             }
         }
     }
-    function applyCodeGroupRule() {
+    function applyZoneRule() {
         for (var i = 0; i < $scope.parentGroupKeys.length; i++) {
             if ($scope.parentGroupKeys[i].value == TrafficStatisticGroupKeysEnum.OurZone.value)
+            {
                 removeCodeGroupFromGroupKeys();
+                removeCodeBuyFromGroupKeys();
+                removeCodeSalesFromGroupKeys();
+            }
+               
         }
   
     }
+    function applyPortRule() {
+        for (var i = 0; i < $scope.parentGroupKeys.length; i++) {
+            if ($scope.parentGroupKeys[i].value == TrafficStatisticGroupKeysEnum.PortIn.value || $scope.parentGroupKeys[i].value == TrafficStatisticGroupKeysEnum.PortOut.value) {
+                removeGateWayOutFromGroupKeys();
+                removeGateWayInFromGroupKeys();
+            }
+
+        }
+
+    }
+    function applyCodeBuyRule() {
+        for (var i = 0; i < $scope.parentGroupKeys.length; i++) {
+            if ($scope.parentGroupKeys[i].value == TrafficStatisticGroupKeysEnum.CodeGroup.value)
+                return;
+        }
+        removeCodeBuyFromGroupKeys();
+
+    }
+    function applyCodeSalesRule() {
+        for (var i = 0; i < $scope.parentGroupKeys.length; i++) {
+            if ($scope.parentGroupKeys[i].value == TrafficStatisticGroupKeysEnum.CodeGroup.value)
+                return;
+        }
+        removeCodeSalesFromGroupKeys();
+
+    }
     function getACDColor(acdValue, attemptsValue) {
         if (attemptsValue > $scope.viewScope.attampts && acdValue < $scope.viewScope.acd)
-            return LabelColorsEnum.Warning.Color;
+            return LabelColorsEnum.WarningLevel1.Color;
         //if (status === BPInstanceStatusEnum.Running.value) return LabelColorsEnum.Info.Color;
         //if (status === BPInstanceStatusEnum.ProcessFailed.value) return LabelColorsEnum.Error.Color;
         //if (status === BPInstanceStatusEnum.Completed.value) return LabelColorsEnum.Success.Color;
@@ -140,9 +171,41 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
 
         // return LabelColorsEnum.Info.Color;
     };
+    function getASRColor(asrValue, attemptsValue) {
+        if (attemptsValue > $scope.viewScope.attampts && asrValue < $scope.viewScope.asr)
+            return LabelColorsEnum.WarningLevel2.Color;
+    };
+    function removeGateWayOutFromGroupKeys() {
+        for (var i = 0; i < $scope.groupKeys.length; i++) {
+            if ($scope.groupKeys[i].value == TrafficStatisticGroupKeysEnum.GateWayOut.value) {
+                $scope.groupKeys.splice(i, 1);
+            }
+        }
+    }
+    function removeGateWayInFromGroupKeys() {
+        for (var i = 0; i < $scope.groupKeys.length; i++) {
+            if ($scope.groupKeys[i].value == TrafficStatisticGroupKeysEnum.GateWayIn.value ) {
+                $scope.groupKeys.splice(i, 1);
+            }
+        }
+    }
     function removeCodeGroupFromGroupKeys() {
         for (var i = 0; i < $scope.groupKeys.length; i++) {
             if ($scope.groupKeys[i].value == TrafficStatisticGroupKeysEnum.CodeGroup.value) {
+                $scope.groupKeys.splice(i, 1);
+            }
+        }
+    }
+    function removeCodeSalesFromGroupKeys() {
+        for (var i = 0; i < $scope.groupKeys.length; i++) {
+            if ($scope.groupKeys[i].value == TrafficStatisticGroupKeysEnum.CodeSales.value) {
+                $scope.groupKeys.splice(i, 1);
+            }
+        }
+    }
+    function removeCodeBuyFromGroupKeys() {
+        for (var i = 0; i < $scope.groupKeys.length; i++) {
+            if ($scope.groupKeys[i].value == TrafficStatisticGroupKeysEnum.CodeBuy.value) {
                 $scope.groupKeys.splice(i, 1);
             }
         }
@@ -209,7 +272,10 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
 
         LoadParentGroupKeys($scope.gridParentScope);
         applySupplierZoneIdRule();
-        applyCodeGroupRule();
+        applyZoneRule();
+        applyPortRule();
+        applyCodeSalesRule();
+        applyCodeBuyRule();
         eliminateGroupKeysNotInParent();
      
     }

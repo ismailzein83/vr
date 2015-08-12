@@ -63,10 +63,14 @@ namespace TOne.Analytics.Data.SQL
                 }
                 return obj;
             }, mapper, new TrafficStatisticSummaryBigResult()) as TrafficStatisticSummaryBigResult;
-
+         
             FillBEProperties(rslt, input.Query.GroupKeys);
-               if (input.Query.WithSummary)
-                   rslt.Summary = GetSummary(tempTable);
+            if (input.Query.WithSummary)
+            {
+             //   string neededSelectStatment = GetNeededStatment(input.Query.Filter, input.Query.GroupKeys);
+                rslt.Summary = GetSummary(tempTable);
+            }
+                 
 
                return rslt;
 
@@ -80,9 +84,9 @@ namespace TOne.Analytics.Data.SQL
 					                ts.OurZoneID
 					                ,ts.FirstCDRAttempt
 				                    , ts.LastCDRAttempt
-, ts.Attempts-ts.SuccessfulAttempts AS FailedAttempts
- , ts.CeiledDuration AS CeiledDuration
- , case when ts.SuccessfulAttempts > 0 then CONVERT(DECIMAL(10,2),ts.DurationsInSeconds/(60.0*ts.SuccessfulAttempts)) ELSE 0 end as ACD
+                                    , ts.Attempts-ts.SuccessfulAttempts AS FailedAttempts
+                                    , ts.CeiledDuration AS CeiledDuration
+                                    , case when ts.SuccessfulAttempts > 0 then CONVERT(DECIMAL(10,2),ts.DurationsInSeconds/(60.0*ts.SuccessfulAttempts)) ELSE 0 end as ACD
 				                    , ts.Attempts
 				                    , ts.DeliveredAttempts
 				                    , ts.SuccessfulAttempts
@@ -116,23 +120,25 @@ namespace TOne.Analytics.Data.SQL
                             IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
 	                            BEGIN with
                                 OurZones AS (SELECT ZoneID, Name, CodeGroup FROM Zone z WITH (NOLOCK) WHERE SupplierID = 'SYS'),
-SwitchConnectivity AS
-            (
-                SELECT csc.CarrierAccountID AS  CarrierAccount
-                      ,csc.SwitchID AS SwitchID
-                      ,csc.Details AS Details
-                      ,csc.BeginEffectiveDate AS BeginEffectiveDate
-                      ,csc.EndEffectiveDate AS EndEffectiveDate
-                      ,csc.[Name] AS GateWayName
-                 FROM   CarrierSwitchConnectivity csc WITH(NOLOCK)--, INDEX(IX_CSC_CarrierAccount))
-                WHERE (csc.EndEffectiveDate IS null)
-                       
+                                SwitchConnectivity AS
+                                     (
+                                       SELECT csc.CarrierAccountID AS  CarrierAccount
+                                        ,csc.SwitchID AS SwitchID
+                                         ,csc.Details AS Details
+                                         ,csc.BeginEffectiveDate AS BeginEffectiveDate
+                                          ,csc.EndEffectiveDate AS EndEffectiveDate
+                                     ,csc.[Name] AS GateWayName
+                                     FROM   CarrierSwitchConnectivity csc WITH(NOLOCK)--, INDEX(IX_CSC_CarrierAccount))
+                                     WHERE (csc.EndEffectiveDate IS null)
+                             
            
-            ),
+                                     ),
                                      AllResult AS(
 			                        SELECT
                                             #SELECTPART#
+                                          
                                            Min(FirstCDRAttempt) AS FirstCDRAttempt
+                                            ,#ABRSELECTPART#
 				                           , Sum(ts.Attempts) AS Attempts
                                             , Sum(ts.SuccessfulAttempts) AS SuccessfulAttempts
 				                           , Sum(ts.Attempts-ts.SuccessfulAttempts) AS FailedAttempts
@@ -189,6 +195,8 @@ SwitchConnectivity AS
             else
                 queryBuilder.Replace("#JOINPART#", null);
             queryBuilder.Replace("#FILTER#", whereBuilder.ToString());
+            string neededSelectStatment = GetNeededStatment(filter, groupKeys);
+            queryBuilder.Replace("#ABRSELECTPART#", neededSelectStatment);
             queryBuilder.Replace("#SELECTPART#", groupKeysSelectPart.ToString());
             queryBuilder.Replace("#GROUPBYPART#", groupKeysGroupByPart.ToString());
             return queryBuilder.ToString();
@@ -299,21 +307,26 @@ SwitchConnectivity AS
             String query = String.Format(@"SELECT
 					                        Min(FirstCDRAttempt) AS FirstCDRAttempt
 				                           , Max(ts.LastCDRAttempt) AS LastCDRAttempt
+                                            ,SUM(ts.ASR) AS ASR
+                                            ,SUM(ts.ABR) AS ABR
+                                            ,SUM(ts.NER) AS NER
 				                           , Sum(ts.Attempts) AS Attempts
 				                           , Sum(ts.DeliveredAttempts) AS DeliveredAttempts
                                             , Sum(ts.SuccessfulAttempts) AS SuccessfulAttempts
 				                            , Sum(ts.Attempts-ts.SuccessfulAttempts) AS FailedAttempts
 				                           , Sum(ts.DurationsInSeconds) AS DurationsInSeconds
-, Sum(ts.CeiledDuration) AS CeiledDuration
- , case when Sum(ts.SuccessfulAttempts) > 0 then CONVERT(DECIMAL(10,2),Sum(ts.DurationsInSeconds)/(60.0*Sum(ts.SuccessfulAttempts))) ELSE 0 end as ACD
+                                            , Sum(ts.CeiledDuration) AS CeiledDuration
+                                    , SUM(ts.ACD) ACD
 				                           , Max(ts.MaxDurationInSeconds) AS MaxDurationInSeconds
 				                           , AVG(ts.PDDInSeconds) AS PDDInSeconds
 				                           , AVG(ts.UtilizationInSeconds) AS UtilizationInSeconds
 				                           , Sum(ts.NumberOfCalls) AS NumberOfCalls
 				                           , SUM(ts.DeliveredNumberOfCalls) AS DeliveredNumberOfCalls
-, DATEADD(ms,-datepart(ms,Max(LastCDRAttempt)),Max(LastCDRAttempt)) as LastCDRAttempt
+                                        , Max(ts.LastCDRAttempt) as LastCDRAttempt
 				                           , AVG(ts.PGAD) AS PGAD FROM {0} ts", tempTableName);
             return GetItemText(query, TrafficStatisticMapper, null);
+
+
         }
 
         TrafficStatistic TrafficStatisticMapper(IDataReader reader)
@@ -371,6 +384,9 @@ SwitchConnectivity AS
             trafficStatistics.NumberOfCalls = GetReaderValue<int>(reader, "NumberOfCalls");
             trafficStatistics.DeliveredNumberOfCalls = GetReaderValue<int>(reader, "DeliveredNumberOfCalls");
             trafficStatistics.PGAD = GetReaderValue<Decimal>(reader, "PGAD");
+            trafficStatistics.ABR = GetReaderValue<Decimal>(reader, "ABR");
+            trafficStatistics.ASR = GetReaderValue<Decimal>(reader, "ASR");
+            trafficStatistics.NER = GetReaderValue<Decimal>(reader, "NER");
         }
 
         private string GetColumnName(TrafficStatisticMeasures column)
@@ -502,6 +518,26 @@ SwitchConnectivity AS
                     groupByStatement = null;
                     break;
             }
+        }
+        public string GetNeededStatment(TrafficStatisticFilter filter, IEnumerable<TrafficStatisticGroupKeys>  groupKeys)
+        {
+            StringBuilder neededSelectStatement = new StringBuilder();
+            foreach (TrafficStatisticGroupKeys groupKey in groupKeys)
+            {
+                if (groupKey == TrafficStatisticGroupKeys.SupplierId || groupKey == TrafficStatisticGroupKeys.PortOut || groupKey == TrafficStatisticGroupKeys.GateWayOut || filter.SupplierIds.Count != 0)
+                {
+                    neededSelectStatement.Append(" Case WHEN SUM(ts.Attempts)>0 THEN CONVERT(DECIMAL(10,2),SUM(ts.SuccessfulAttempts)*100.0/Sum(ts.Attempts)) ELSE 0 END AS ABR ");
+                    neededSelectStatement.Append(", Case WHEN (Sum(ts.Attempts)-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))>0 THEN CONVERT(DECIMAL(10,2),SUM(ts.SuccessfulAttempts)*100.0/(Sum(ts.Attempts)-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))) ELSE 0 END AS ASR ");
+                    neededSelectStatement.Append(" ,Case WHEN (Sum(ts.Attempts)-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))>0 THEN CONVERT(DECIMAL(10,2),SUM(ts.DeliveredNumberOfCalls)*100.0/(Sum(ts.Attempts)-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))) ELSE 0 END AS NER ");
+                    return neededSelectStatement.ToString();
+                }
+               
+            }
+
+             neededSelectStatement.Append(" Case WHEN SUM(ts.NumberOfCalls)>0 THEN CONVERT(DECIMAL(10,2),SUM(ts.SuccessfulAttempts)*100.0/Sum(ts.NumberOfCalls)) ELSE 0 END AS ABR ");
+             neededSelectStatement.Append(" ,Case WHEN (Sum(ts.NumberOfCalls)-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))>0 THEN CONVERT(DECIMAL(10,2),SUM(ts.SuccessfulAttempts)*100.0/(Sum(ts.NumberOfCalls)-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))) ELSE 0 END AS ASR ");
+             neededSelectStatement.Append(" ,Case WHEN (Sum(ts.NumberOfCalls)-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))>0 THEN CONVERT(DECIMAL(10,2),SUM(ts.DeliveredNumberOfCalls)*100.0/(Sum(ts.NumberOfCalls)-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))) ELSE 0 END AS NER ");
+             return neededSelectStatement.ToString();
         }
 
         #endregion

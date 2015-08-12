@@ -47,6 +47,7 @@ function RepeatedNumbersController($scope, UtilsService, $q, RepeatedNumbersAPIS
         }
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return RepeatedNumbersAPIService.GetRepeatedNumbersData(dataRetrievalInput).then(function (response) {
+                console.log(response);
                 onResponseReady(response);
                 $scope.showResult = true;
             })

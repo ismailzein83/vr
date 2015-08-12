@@ -6,16 +6,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.Analytics.Entities;
+using TOne.BusinessEntity.Business;
 using TOne.Data.SQL;
 
 namespace TOne.Analytics.Data.SQL
 {
     public class RepeatedNumbersDataManager : BaseTOneDataManager, IRepeatedNumbersDataManager
     {
+        bool isSwitch = false;
         public Vanrise.Entities.BigResult<RepeatedNumbers> GetRepeatedNumbersData(Vanrise.Entities.DataRetrievalInput<RepeatedNumbersInput> input)
         {
             Dictionary<string, string> mapper = new Dictionary<string, string>();
-            mapper.Add("Customer", "CustomerID");
+            mapper.Add("CustomerInfo", "CustomerID");
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.SwitchIds), (cmd) =>
@@ -29,7 +31,9 @@ namespace TOne.Analytics.Data.SQL
                 });
             };
 
-            return RetrieveData(input, createTempTableAction, BlockedAttemptsMapper, mapper);
+           Vanrise.Entities.BigResult < RepeatedNumbers > repeatedNumbersData=  RetrieveData(input, createTempTableAction, BlockedAttemptsMapper, mapper);
+             FillRepeatedNumbersList( repeatedNumbersData);
+             return repeatedNumbersData;
         }
         RepeatedNumbers BlockedAttemptsMapper(IDataReader reader)
         {
@@ -44,7 +48,8 @@ namespace TOne.Analytics.Data.SQL
             repeatedNumbers.SupplierID = reader["SupplierID"] as string != null ? reader["SupplierID"] as string : "N/A";
             repeatedNumbers.PhoneNumber = reader["PhoneNumber"] as string != null ? reader["PhoneNumber"] as string : "N/A";
             repeatedNumbers.Attempts = GetReaderValue<int>(reader, "Attempts");
-         //   repeatedNumbers.SwitchID = GetReaderValue<Byte>(reader, "SwitchID");
+            if(isSwitch)
+            repeatedNumbers.SwitchID = GetReaderValue<Byte>(reader, "SwitchID");
             repeatedNumbers.DurationsInMinutes =GetReaderValue<Decimal>(reader, "DurationsInMinutes");
 
         }
@@ -55,11 +60,13 @@ namespace TOne.Analytics.Data.SQL
             StringBuilder queryBuilder = new StringBuilder(@"
                             IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
 	                            BEGIN 
-                                SELECT N.OurZoneID, N.PhoneNumber, N.CustomerID, N.SupplierID, Sum(N.Attempt) Attempts, Sum(N.DurationsInMinutes) DurationsInMinutes
+                                SELECT #SELECTPART#  N.OurZoneID, N.PhoneNumber, N.CustomerID, N.SupplierID, Sum(N.Attempt) Attempts, Sum(N.DurationsInMinutes) DurationsInMinutes
                                     INTO #TEMPTABLE#
                                     FROM
                                 ( 
 	                                SELECT  
+
+                                    #SELECTPART#
 		                            BM.OurZoneID AS OurZoneID,
 		                            BM.CustomerID,
 		                            BM.SupplierID,
@@ -75,13 +82,14 @@ namespace TOne.Analytics.Data.SQL
 			                        Attempt BETWEEN @FromDate AND @ToDate
 		                            AND @Type IN ('ALL', 'SUCCESSFUL')
 		                             #FILTER#
-	                                GROUP BY BM.OurZoneID, BM.CustomerID, BM.SupplierID,
+	                                GROUP BY BM.OurZoneID, BM.CustomerID, BM.SupplierID #GROUPBYPART#,
 	                                CASE @PhoneNumberType
 		                            WHEN 'CDPN' THEN BM.CDPN 
 		                            WHEN 'CGPN' THEN BM.CGPN 
 	                                END
 	                                UNION ALL
 	                                SELECT  
+                                    #SELECTPART#
 		                            BI.OurZoneID AS OurZoneID,
 		                            BI.CustomerID,
 		                            BI.SupplierID,
@@ -98,14 +106,14 @@ namespace TOne.Analytics.Data.SQL
                                    
 		                            AND @Type IN ('ALL', 'FAILED')
                                     #FILTER1# 
-	                                GROUP BY BI.OurZoneID,  BI.CustomerID, BI.SupplierID,
+	                                GROUP BY BI.OurZoneID,  BI.CustomerID, BI.SupplierID #GROUPBYPART#,
 	                                CASE @PhoneNumberType
 		                             WHEN 'CDPN' THEN BI.CDPN 
 		                            WHEN 'CGPN' THEN BI.CGPN 
 	                                END
 	
                                     ) N
-                                    GROUP BY N.OurZoneID, N.PhoneNumber, N.CustomerID, N.SupplierID
+                                    GROUP BY N.OurZoneID, N.PhoneNumber, N.CustomerID, N.SupplierID #GROUPBYPART# 
                                     HAVING Sum(N.Attempt) >= @Number 
                                     ORDER BY Sum(N.Attempt) DESC 
                              
@@ -115,6 +123,20 @@ namespace TOne.Analytics.Data.SQL
             queryBuilder.Replace("#TEMPTABLE#", tempTableName);
             queryBuilder.Replace("#FILTER#", whereBuilder.ToString());
             queryBuilder.Replace("#FILTER1#", whereBuilder1.ToString());
+            if (switchIds.Count > 0){
+                isSwitch = true;
+                queryBuilder.Replace("#SELECTPART#", "SwitchID,");
+                queryBuilder.Replace("#GROUPBYPART#", ",SwitchID");
+            }
+
+            else
+            {
+                isSwitch = false;
+                queryBuilder.Replace("#SELECTPART#", "");
+                queryBuilder.Replace("#GROUPBYPART#", "");
+            }
+               
+
             return queryBuilder.ToString();
         }
 
@@ -137,6 +159,27 @@ namespace TOne.Analytics.Data.SQL
             }
             else
                 whereBuilder.AppendFormat("AND (CustomerID IS NOT NULL AND BI.CustomerID NOT IN (SELECT grasc.CID FROM [dbo].GetRepresentedAsSwitchCarriers() grasc)) ");
+        }
+        private void FillRepeatedNumbersList(Vanrise.Entities.BigResult<RepeatedNumbers> repeatedNumbersData)
+        {
+            BusinessEntityInfoManager manager = new BusinessEntityInfoManager();
+            foreach (RepeatedNumbers data in repeatedNumbersData.Data)
+            {
+                if (data.OurZoneID != 0)
+                    data.OurZoneName = manager.GetZoneName(data.OurZoneID);
+                else
+                    data.OurZoneName = "N/A";
+                if (data.CustomerID != null || data.CustomerID.Length != 0)
+                    data.CustomerInfo = manager.GetCarrirAccountName(data.CustomerID);
+                else
+                    data.CustomerInfo = "N/A";
+                if (data.SupplierID != null || data.SupplierID.Length!=0)
+                    data.SupplierName = manager.GetCarrirAccountName(data.SupplierID);
+                else
+                    data.SupplierName = "N/A";
+   
+                data.SwitchName = manager.GetSwitchName(data.SwitchID)!=null?manager.GetSwitchName(data.SwitchID):"N/A";
+            }
         }
     }
 }

@@ -6,8 +6,9 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, Util
     load();
     var date;
     function defineScope() {
-        definePeriods();
-        date = UtilsService.getPeriod($scope.selectedPeriod.value);
+       
+        $scope.selectedPeriod = PeriodEnum.CurrentMonth;
+        date = $scope.selectedPeriod.getInterval();
         $scope.fromDate = date.from;
         $scope.toDate = date.to;
         
@@ -17,6 +18,7 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, Util
             fromDate: $scope.fromDate,
             toDate: $scope.toDate
         }
+        $scope.periods = UtilsService.getArrayEnum(PeriodEnum);
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };
@@ -54,7 +56,7 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, Util
 
             if ($scope.selectedPeriod.value != -1) {
 
-                date = UtilsService.getPeriod($scope.selectedPeriod.value);
+                date = $scope.selectedPeriod.getInterval();
                 console.log(date);
                 $scope.fromDate = date.from;
                 $scope.toDate = date.to;
@@ -62,21 +64,11 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, Util
      
         }
         $scope.customvalidateFrom = function (fromDate) {
-            return validateDates(fromDate, $scope.toDate);
+            return UtilsService.validateDates(fromDate, $scope.toDate);
         };
         $scope.customvalidateTo = function (toDate) {
-            return validateDates($scope.fromDate, toDate);
+            return UtilsService.validateDates($scope.fromDate, toDate);
         };
-    }
-    function validateDates(fromDate, toDate) {
-        if (fromDate == undefined || toDate == undefined)
-            return null;
-        var from = new Date(fromDate);
-        var to = new Date(toDate);
-        if (from.getTime() > to.getTime())
-            return "Start should be before end";
-        else
-            return null;
     }
     function refreshWidget() {
       return  widgetAPI.retrieveData($scope.filter);
@@ -88,12 +80,6 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, Util
             $scope.timeDimensionTypes.push(TimeDimensionTypeEnum[td]);
         $scope.selectedTimeDimensionType =  TimeDimensionTypeEnum.Daily;
      
-    }
-    function definePeriods() {
-        $scope.periods = [];
-        for (var p in PeriodEnum)
-            $scope.periods.push(PeriodEnum[p]);
-        $scope.selectedPeriod = PeriodEnum.CurrentMonth;
     }
     function load() {
       

@@ -46,15 +46,18 @@ namespace TOne.Analytics.Entities
         FailedAttempts = 4,
         DurationsInMinutes = 5,
         CeiledDuration=6,
-        ACD=7,
-         PDDInSeconds = 8,
-         PGAD = 9,
-        MaxDurationInMinutes = 10,
+        ASR = 7,
+        ABR=8,
+        ACD=9,
+        NER = 10,
+         PDDInSeconds = 11,
+         PGAD = 12,
+        MaxDurationInMinutes = 13,
        
-        LastCDRAttempt = 11,
-        NumberOfCalls = 12,
-        DeliveredNumberOfCalls = 13,
-        UtilizationInSeconds=14
+        LastCDRAttempt = 14,
+        NumberOfCalls = 15,
+        DeliveredNumberOfCalls = 16,
+        UtilizationInSeconds=17
        //,
         //CeiledDuration = 12,
         //ReleaseSourceAParty = 13

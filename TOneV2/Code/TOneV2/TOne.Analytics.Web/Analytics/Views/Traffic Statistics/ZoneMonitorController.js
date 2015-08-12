@@ -1,8 +1,8 @@
 ﻿ZoneMonitorController.$inject = ['$scope', 'UtilsService', 'AnalyticsAPIService', 'uiGridConstants', '$q', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficStatisticsMeasureEnum','LabelColorsEnum',
-        'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'DataRetrievalResultTypeEnum','PeriodEnum'];
+        'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'DataRetrievalResultTypeEnum', 'PeriodEnum', 'AnalyticsService'];
 
 function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, CarrierAccountAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum,LabelColorsEnum,
-        CarrierTypeEnum, VRModalService, VRNotificationService, DataRetrievalResultTypeEnum, PeriodEnum) {
+        CarrierTypeEnum, VRModalService, VRNotificationService, DataRetrievalResultTypeEnum, PeriodEnum, analyticsService) {
 
     var chartSelectedMeasureAPI;
     var chartSelectedEntityAPI;
@@ -11,18 +11,40 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
     var measures = [];
     var currentData;
     var selectedPeriod;
-    var groupKeys = [];
+    var groupKeys = analyticsService.getTrafficStatisticGroupKeys();
     defineScope();
     load();
 
     function defineScope() {
-
-        definePeriods();
         $scope.asr = 50.0;
         $scope.showResult = false;
         $scope.acd=20.0;
         $scope.attampts = 2;
-    //    $scope.selectedPeriod;
+        $scope.groupKeys = groupKeys;
+        $scope.selectedGroupKeys = analyticsService.getDefaultTrafficStatisticGroupKeys();
+
+        $scope.switches = [];
+        $scope.selectedSwitches = [];
+
+        $scope.codeGroups = [];
+        $scope.selectedCodeGroups = [];
+
+        $scope.customers = [];
+        $scope.selectedCustomers = [];
+
+        $scope.suppliers = [];
+        $scope.selectedSuppliers = [];
+        $scope.data = [];
+        $scope.periods = analyticsService.getPeriods();
+        $scope.selectedPeriod = $scope.periods[0];
+
+        $scope.gridAllMeasuresScope = {};
+        $scope.measures = measures;
+        defineMenuActions();
+        $scope.currentSearchCriteria = {
+            groupKeys: []
+        };
+
         $scope.onValueChanged = function () {
             console.log($scope.selectedPeriod);
             if ($scope.selectedPeriod != selectedPeriod) {
@@ -37,57 +59,27 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
         }
         $scope.periodSelectionChanged = function () {
             if ($scope.selectedPeriod != undefined && $scope.selectedPeriod.value != -1) {
-                var date = getPeriod($scope.selectedPeriod.value);
+                var date = $scope.selectedPeriod.getInterval();
                 $scope.fromDate = date.from;
                 $scope.toDate = date.to;
             }
 
         }
-        $scope.data = [];
-        $scope.currentSearchCriteria = {
-            groupKeys: []
-        };
+        
         $scope.customvalidateTestFrom = function (fromDate) {
-            return validateDates(fromDate, $scope.toDate);
+            return UtilsService.validateDates(fromDate, $scope.toDate);
         };
         $scope.customvalidateTestTo = function (toDate) {
-            return validateDates($scope.fromDate, toDate);
+            return UtilsService.validateDates($scope.fromDate, toDate);
         };
-        function validateDates(fromDate, toDate) {
-            if (fromDate == undefined || toDate == undefined)
-                return null;
-            var from = new Date(fromDate);
-            var to = new Date(toDate);
-            if (from.getTime() > to.getTime())
-                return "Start should be before end";
-            else
-                return null;
-        }
-        $scope.testModel = 'ZoneMonitorController';
 
-        defineGroupKeys();
-        $scope.groupKeys = groupKeys;
-        $scope.selectedGroupKeys = [];
-        $scope.selectedGroupKeys.push(TrafficStatisticGroupKeysEnum.OurZone);
-
-        $scope.switches = [];
-        $scope.selectedSwitches = [];
-
-        $scope.codeGroups = [];
-        $scope.selectedCodeGroups = [];
-
-        $scope.customers = [];
-        $scope.selectedCustomers = [];
-
-        $scope.suppliers = [];
-        $scope.selectedSuppliers = [];
         $scope.getColor = function (dataItem, coldef) {
             if (coldef.tag.value == TrafficStatisticsMeasureEnum.ACD.value)
                 return getACDColor(dataItem.ACD, dataItem.Attempts);
+            else if (coldef.tag.value == TrafficStatisticsMeasureEnum.ASR.value)
+                return getASRColor(dataItem.ASR, dataItem.Attempts);
         }
-        $scope.gridAllMeasuresScope = {};
-        $scope.measures = measures;
-        defineMenuActions();
+        
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
         }
@@ -111,14 +103,6 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
 
         $scope.chartSelectedMeasureReady = function (api) {
             chartSelectedMeasureAPI = api;
-            //chartSelectedMeasureAPI.onDataItemClicked = function (selectedEntity) {
-            //    if (selectedEntity.zoneId == undefined)
-            //        return;
-            //    $scope.selectedEntityId = selectedEntity.zoneId;
-            //    $scope.selectedEntityName = selectedEntity.zoneName;
-            //    //console.log($scope.selectedEntityName);
-            //    getAndShowEntityStatistics();
-            //};
         };
         $scope.customvalidateSelectGroup = function () {
 
@@ -151,8 +135,6 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
         };
 
         $scope.searchClicked = function () {
-            
-
             $scope.currentSearchCriteria.groupKeys.length = 0;
             angular.forEach($scope.selectedGroupKeys, function (group) {
                 $scope.currentSearchCriteria.groupKeys.push(group);
@@ -181,6 +163,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
             overallSelectedMeasure = dataItem.measure;
             renderOverallChart();
         };
+       
 
         $scope.getChartMenuActions = function (dataItem) {
             var menuActions = [];
@@ -231,7 +214,6 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
     function load() {
         loadMeasures();
         overallSelectedMeasure = TrafficStatisticsMeasureEnum.Attempts;
-      
         $scope.isInitializing = true;
         UtilsService.waitMultipleAsyncOperations([loadSwitches, loadCodeGroups, loadCustomers, loadSuppliers]).finally(function () {
             $scope.isInitializing = false;
@@ -243,25 +225,13 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
         });
     }
 
-    function defineGroupKeys() {
-        for (var prop in TrafficStatisticGroupKeysEnum) {
-            if (TrafficStatisticGroupKeysEnum[prop].isShownInGroupKey)
-                groupKeys.push(TrafficStatisticGroupKeysEnum[prop]);
-        }
-    }
-
-
     function getACDColor(acdValue, attemptsValue) {
         if (attemptsValue>$scope.attampts && acdValue<$scope.acd)
-            return LabelColorsEnum.Warning.Color;
-        //if (status === BPInstanceStatusEnum.Running.value) return LabelColorsEnum.Info.Color;
-        //if (status === BPInstanceStatusEnum.ProcessFailed.value) return LabelColorsEnum.Error.Color;
-        //if (status === BPInstanceStatusEnum.Completed.value) return LabelColorsEnum.Success.Color;
-        //if (status === BPInstanceStatusEnum.Aborted.value) return LabelColorsEnum.Warning.Color;
-        //if (status === BPInstanceStatusEnum.Suspended.value) return LabelColorsEnum.Warning.Color;
-        //if (status === BPInstanceStatusEnum.Terminated.value) return LabelColorsEnum.Error.Color;
-
-       // return LabelColorsEnum.Info.Color;
+            return LabelColorsEnum.WarningLevel1.Color; 
+    };
+    function getASRColor(asrValue, attemptsValue) {
+        if (attemptsValue > $scope.attampts && asrValue < $scope.asr)
+            return LabelColorsEnum.WarningLevel2.Color;
     };
 
     function loadCDRParameters(parameters, dataItem) {
@@ -270,27 +240,21 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
             switch (groupKey.value) {
                 case TrafficStatisticGroupKeysEnum.OurZone.value:
                     parameters.zoneIds = [dataItem.GroupKeyValues[i].Id];
-                    // console.log(parameters.zoneIds);
                     break;
                 case TrafficStatisticGroupKeysEnum.CustomerId.value:
                     parameters.customerIds = [dataItem.GroupKeyValues[i].Id];
-                    // console.log(parameters.customerIds);
                     break;
                 case TrafficStatisticGroupKeysEnum.SupplierId.value:
                     parameters.supplierIds = [dataItem.GroupKeyValues[i].Id];
-                    //  console.log(parameters.supplierIds);
                     break;
                 case TrafficStatisticGroupKeysEnum.Switch.value:
                     parameters.switchIds = [dataItem.GroupKeyValues[i].Id];
-                    //  console.log(parameters.switchIds);
                     break;
                 case TrafficStatisticGroupKeysEnum.PortIn.value:
                     parameters.PortIn = [dataItem.GroupKeyValues[i].Id];
-                    //  console.log(parameters.PortIn);
                     break;
                 case TrafficStatisticGroupKeysEnum.PortOut.value:
                     parameters.PortOut = [dataItem.GroupKeyValues[i].Id];
-                    //  console.log(parameters.PortOut);
                     break;
             }
         }
@@ -495,105 +459,8 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
             });
         });
     }
-    function getPeriod(periodType) {
-        switch (periodType) {
-            case PeriodEnum.LastYear.value: return getLastYearInterval();
-            case PeriodEnum.LastMonth.value: return getLastMonthInterval();
-            case PeriodEnum.LastWeek.value: return getLastWeekInterval();
-            case PeriodEnum.Yesterday.value: return getYesterdayInterval();
-            case PeriodEnum.Today.value: return getTodayInterval();
-            case PeriodEnum.CurrentWeek.value: return getCurrentWeekInterval();
-            case PeriodEnum.CurrentMonth.value: return getCurrentMonthInterval();
-            case PeriodEnum.CurrentYear.value: return getCurrentYearInterval();
-        }
-    }
-    function getCurrentYearInterval() {
-        var date = new Date();
-        var interval = {
-            from: new Date(date.getFullYear(), 0, 1),
-            to: new Date(),
-        }
-        return interval;
-    }
-    function getCurrentWeekInterval() {
-        var thisWeek = new Date(new Date().getTime() - 60 * 60 * 24 * 1000)
-        var day = thisWeek.getDay();
-        var LastMonday;
-        if (day === 0) {
-            LastMonday = new Date();
-        }
-        else {
-            var diffToMonday = thisWeek.getDate() - day + (day === 0 ? -6 : 1);
-            var LastMonday = new Date(thisWeek.setDate(diffToMonday));
-        }
 
 
-        var interval = {
-            from: LastMonday,
-            to: new Date(),
-        }
-        return interval;
-    }
-    function getLastWeekInterval() {
-        var beforeOneWeek = new Date(new Date().getTime() - 60 * 60 * 24 * 7 * 1000)
-        var day = beforeOneWeek.getDay();
-
-        var diffToMonday = beforeOneWeek.getDate() - day + (day === 0 ? -6 : 1);
-        var beforeLastMonday = new Date(beforeOneWeek.setDate(diffToMonday));
-        var lastSunday = new Date(beforeOneWeek.setDate(diffToMonday + 6));
-        var interval = {
-            from: beforeLastMonday,
-            to: lastSunday,
-        }
-        return interval;
-    }
-    function getCurrentMonthInterval() {
-        var date = new Date();
-        var interval = {
-            from: new Date(date.getFullYear(), date.getMonth(), 1),
-            to: new Date(),
-        }
-        return interval;
-    }
-    function getTodayInterval() {
-        var date = new Date();
-        var interval = {
-            from: date,
-            to: date
-        }
-        return interval;
-    }
-    function getYesterdayInterval() {
-        var date = new Date();
-        date.setDate(date.getDate() - 1);
-        var interval = {
-            from: date,
-            to: date,
-        }
-        return interval;
-    }
-    function getLastMonthInterval() {
-        var date = new Date();
-        var interval = {
-            from: new Date(date.getFullYear(), date.getMonth() - 1, 1),
-            to: new Date(date.getFullYear(), date.getMonth(), 0),
-        }
-        return interval;
-    }
-    function getLastYearInterval() {
-        var date = new Date();
-        var interval = {
-            from: new Date(date.getFullYear() - 1, 0, 1),
-            to: new Date(date.getFullYear() - 1, 11, 31)
-        }
-        return interval;
-    }
-    function definePeriods() {
-        $scope.periods = [];
-        for (var p in PeriodEnum)
-            $scope.periods.push(PeriodEnum[p]);
-          $scope.selectedPeriod = $scope.periods[0];
-    }
 
 };
 
