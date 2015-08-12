@@ -80,10 +80,10 @@
                 <div ng-repeat="item in menuItems" class="panel panel-default menu-item-list">
                     <div ng-class="item.isSelected? 'bold-item bgcolor-grad-{{item.keyclass}}':'bgcolor-{{item.keyclass}}'" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{$index}}" aria-expanded="true"  ng-click="setIndex(item,$event)">
                         <span ng-if="item.Childs.length > 0">
-                            <span class="glyphicon " style="top: -4px; margin-right: 15px;"><img ng-src="{{item.Icon}}" /></span>
+                            <span class="glyphicon " style="top: -4px; "><img ng-src="{{item.Icon}}" /></span>
                             <span style="position: relative; top: 0px;">{{::item.Name}}</span>
                             <span class=" hand-cursor  toggel">
-                                <span ng-if="item.Childs.length>0" class="glyphicon glyphicon" ng-class=" menuItemsCurrent.Id == item.Id ? 'glyphicon-minus':'glyphicon-plus'" style="font-size: 10px; top: 10px;"></span>
+                                <span ng-if="item.Childs.length>0" class="glyphicon glyphicon" ng-class=" menuItemsCurrent.Id == item.Id ? 'glyphicon-minus':'glyphicon-plus'" style="font-size: 10px; top: 2px;"></span>
                             </span>
                         </span>
 
@@ -124,14 +124,14 @@
 
             <div id="collapsedmenu" style="background-color:#ddd;height:100%;width:40px;position:fixed;z-index:10" ng-show="toogled==false">
                 <div class="dropdown dropdown-custom-serf leftdiv">
-                    <div class="dropdown-toggle hand-cursor glyphicon glyphicon glyphicon-chevron-right dropdown-item" style="height: 43px; top: 10px;" ng-click="toggledpanel()">
+                    <div class="dropdown-toggle hand-cursor glyphicon glyphicon glyphicon-chevron-right dropdown-item" style="height: 43px; top: 8px;" ng-click="toggledpanel()">
 
                     </div>
                 </div>
 
                 <div ng-repeat="item in menuItems" class="dropdown dropdown-custom-serf leftdiv " ng-class="item.isSelected? 'bgcolor-grad-{{item.keyclass}}':'bgcolor-{{item.keyclass}}'" ng-mouseenter="showMenu($event)" ng-mouseleave="hideMenu($event)">
-                    <div class="dropdown-toggle hand-cursor glyphicon dll-menu-theme dropdown-item" ng-class="item.Icon" id="dropdownMenuCu-{{$index}}" aria-expanded="true" data-toggle="dropdown">
-
+                    <div class="dropdown-toggle hand-cursor glyphicon dll-menu-theme dropdown-item" id="dropdownMenuCu-{{$index}}" style="top: 5px;" aria-expanded="true" data-toggle="dropdown">
+                        <img ng-src="{{item.Icon}}" />
                     </div>
                     <ul class="dropdown-menu dropdown-menu-custom-serf" role="menu" aria-labelledby="dropdownMenuCu-{{$index}}">
                         <li role="presentation">
