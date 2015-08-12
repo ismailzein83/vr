@@ -22,7 +22,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
     function defineScope() {
 
-        $scope.gapbetweenconsecutivecalls = 10;
+        $scope.gapBetweenConsecutiveCalls = 10;
+        $scope.gapBetweenFailedConsecutiveCalls = 10;
         $scope.maxLowDurationCall = 8;
         $scope.minCountofCallsinActiveHour = 5;
 
@@ -155,7 +156,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             Description: $scope.description,
             IsDefault: $scope.isDefault,
             IsEnabled: $scope.isEnabled,
-            GapBetweenConsecutiveCalls: $scope.gapbetweenconsecutivecalls,
+            GapBetweenConsecutiveCalls: $scope.gapBetweenConsecutiveCalls,
+            GapBetweenFailedConsecutiveCalls: $scope.gapBetweenFailedConsecutiveCalls,
             MaxLowDurationCall: $scope.maxLowDurationCall,
             MinimumCountofCallsinActiveHour: $scope.minCountofCallsinActiveHour,
             PeakHours: $scope.selectedPeakHours,
@@ -239,7 +241,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         $scope.description = strategyObject.Description;
         $scope.isDefault = strategyObject.IsDefault;
         $scope.isEnabled = strategyObject.IsEnabled;
-        $scope.gapbetweenconsecutivecalls = strategyObject.GapBetweenConsecutiveCalls;
+        $scope.gapBetweenConsecutiveCalls = strategyObject.GapBetweenConsecutiveCalls;
+        $scope.gapBetweenFailedConsecutiveCalls = strategyObject.GapBetweenFailedConsecutiveCalls;
         $scope.maxLowDurationCall = strategyObject.MaxLowDurationCall;
         $scope.minCountofCallsinActiveHour = strategyObject.MinimumCountofCallsinActiveHour;
         $scope.selectedPeriod = UtilsService.getItemByVal($scope.periods, strategyObject.PeriodId, "Id");

@@ -23,6 +23,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public int GapBetweenConsecutiveCalls { get; set; }
 
+        public int GapBetweenFailedConsecutiveCalls { get; set; }
+
         public int MaxLowDurationCall { get; set; }
 
         public int MinimumCountofCallsinActiveHour { get; set; }

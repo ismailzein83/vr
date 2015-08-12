@@ -59,12 +59,22 @@
                                                 <vr-select datasource="hours" datatextfield="name" datavaluefield="id" label="Peak Hours" selectedvalues="selectedPeakHours" ismultipleselection isrequired></vr-select>
                                             </vr-columns>
                                         </vr-row>
-                                        <vr-row ng-show="strategyFilters[15].isSelected  || strategyFilters[16].isSelected ">
+
+                                        <vr-row ng-show="strategyFilters[15].isSelected">
 
                                             <vr-columns colnum="11">
-                                                <vr-textbox value="gapbetweenconsecutivecalls" type="number" label="Gap Between Consecutive Calls" isrequired></vr-textbox>
+                                                <vr-textbox value="gapBetweenConsecutiveCalls" type="number" label="Gap Between Consecutive Calls" isrequired></vr-textbox>
                                             </vr-columns>
                                         </vr-row>
+
+                                        <vr-row ng-show="strategyFilters[16].isSelected ">
+
+                                            <vr-columns colnum="11">
+                                                <vr-textbox value="gapBetweenFailedConsecutiveCalls" type="number" label="Gap Between Failed Consecutive Calls" isrequired></vr-textbox>
+                                            </vr-columns>
+                                        </vr-row>
+
+
                                         <vr-row ng-show="strategyFilters[17].isSelected">
 
 
