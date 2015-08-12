@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using Vanrise.Integration.Business;
+using Vanrise.Queueing.Entities;
 using Vanrise.Web.Base;
 
 namespace Vanrise.Integration.Web.Controllers
@@ -39,8 +40,15 @@ namespace Vanrise.Integration.Web.Controllers
             return manager.GetExecutionFlows();
         }
 
+        [HttpPost]
+        public Vanrise.Entities.InsertOperationOutput<QueueExecutionFlow> AddExecutionFlow(QueueExecutionFlow execFlowObject)
+        {
+            DataSourceManager manager = new DataSourceManager();
+            return manager.AddExecutionFlow(execFlowObject);
+        }
+
         [HttpGet]
-        public List<Vanrise.Integration.Entities.ExecutionFlowDefinition> GetExecutionFlowDefinitions()
+        public List<QueueExecutionFlowDefinition> GetExecutionFlowDefinitions()
         {
             DataSourceManager manager = new DataSourceManager();
             return manager.GetExecutionFlowDefinitions();

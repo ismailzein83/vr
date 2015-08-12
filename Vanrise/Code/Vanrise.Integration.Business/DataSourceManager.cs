@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Integration.Data;
 using Vanrise.Queueing;
+using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Integration.Business
 {
@@ -126,10 +127,16 @@ namespace Vanrise.Integration.Business
             return manager.GetExecutionFlows();
         }
 
-        public List<Vanrise.Integration.Entities.ExecutionFlowDefinition> GetExecutionFlowDefinitions()
+        public Vanrise.Entities.InsertOperationOutput<QueueExecutionFlow> AddExecutionFlow(QueueExecutionFlow execFlowObject)
         {
-            List<Vanrise.Integration.Entities.ExecutionFlowDefinition> temp = new List<Entities.ExecutionFlowDefinition>();
-            return temp;
+            QueueExecutionFlowManager manager = new QueueExecutionFlowManager();
+            return manager.AddExecutionFlow(execFlowObject);
+        }
+
+        public List<QueueExecutionFlowDefinition> GetExecutionFlowDefinitions()
+        {
+            QueueExecutionFlowDefinitionManager manager = new QueueExecutionFlowDefinitionManager();
+            return manager.GetAll();
         }
     }
 }

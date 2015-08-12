@@ -5,6 +5,8 @@
         GetDataSource: GetDataSource,
         GetDataSourceAdapterTypes: GetDataSourceAdapterTypes,
         GetExecutionFlows: GetExecutionFlows,
+        AddExecutionFlow: AddExecutionFlow,
+        GetExecutionFlowDefinitions: GetExecutionFlowDefinitions,
         AddDataSource: AddDataSource,
         UpdateDataSource: UpdateDataSource
     });
@@ -27,6 +29,14 @@
 
     function GetExecutionFlows() {
         return BaseAPIService.get("/api/DataSource/GetExecutionFlows");
+    }
+
+    function AddExecutionFlow(execFlowObject) {
+        return BaseAPIService.post("/api/DataSource/AddExecutionFlow", execFlowObject);
+    }
+
+    function GetExecutionFlowDefinitions() {
+        return BaseAPIService.get("/api/DataSource/GetExecutionFlowDefinitions");
     }
 
     function AddDataSource(dataSource) {

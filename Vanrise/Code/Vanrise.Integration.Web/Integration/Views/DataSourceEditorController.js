@@ -50,6 +50,9 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
                     // update the execution flows
                     $scope.isGettingData = true;
 
+                    // clear the selection menu
+                    $scope.executionFlows = [];
+
                     loadExecutionFlows()
                         .catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);
