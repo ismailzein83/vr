@@ -143,22 +143,34 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             });
 
 
+
             AggregateDefinitions.Add(new AggregateDefinition()
             {
-                Aggregation = new SumAggregate(
-               (cdr) =>
-               {
-                   return (cdr.CallType == Enums.CallType.OutgoingVoiceCall && cdr.DurationInSeconds.HasValue) ? cdr.DurationInSeconds.Value / 60 : 0;
-               }
+                Aggregation = new AverageAggregate(
+                    (cdr) =>
+                    {
+                        return (cdr.CallType == Enums.CallType.OutgoingVoiceCall && cdr.DurationInSeconds.HasValue && cdr.DurationInSeconds > 0);
+                    }
+                     ,
+
+                   (cdr) =>
+                   {
+                       return cdr.DurationInSeconds.Value / 60;
+                   }
             )
             });
 
             AggregateDefinitions.Add(new AggregateDefinition()
             {
-                Aggregation = new SumAggregate(
+                Aggregation = new AverageAggregate(
+                   (cdr) =>
+                   {
+                       return (cdr.CallType == Enums.CallType.IncomingVoiceCall && cdr.DurationInSeconds.HasValue && cdr.DurationInSeconds > 0);
+                   }
+                    ,
                (cdr) =>
                {
-                   return (cdr.CallType == Enums.CallType.IncomingVoiceCall && cdr.DurationInSeconds.HasValue) ? cdr.DurationInSeconds.Value / 60 : 0;
+                   return cdr.DurationInSeconds.Value / 60;
                }
             )
             });
@@ -344,7 +356,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
 
-            for(int i=0; i<_AggregateNames.Count; i++)
+            for (int i = 0; i < _AggregateNames.Count; i++)
             {
                 AggregateDefinitions[i].Name = _AggregateNames[i];
             }
@@ -353,7 +365,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return AggregateDefinitions;
         }
 
-       
+
 
         public List<string> GetAggregateNames()
         {
