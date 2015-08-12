@@ -78,13 +78,13 @@ app.service('BaseDirService', ['ValidationMessagesEnum', function (ValidationMes
             template = '<div  class="disable-animations tooltip-error" ng-style="ctrl.isVisibleTooltip() ? {\'display\':\'block\'} : {\'display\':\'none\'} " ng-messages="ctrl.getErrorObject()">';
 
         if (requiredValue)
-            template += '<div ng-message="requiredvalue">{{ ctrl.ValidationMessagesEnum.required }}</div>';
+            template += '<div ng-message="requiredvalue">'+ ValidationMessagesEnum.required +'</div>';
         if (requiredArray)
-            template += '<div ng-message="requiredarray">{{ ctrl.ValidationMessagesEnum.required }}</div>';
+            template += '<div ng-message="requiredarray">' + ValidationMessagesEnum.required + '</div>';
         if (invalidFormat)
-            template += '<div ng-message="invalidformat">{{ ctrl.ValidationMessagesEnum.invalidFormat }}</div>';
+            template += '<div ng-message="invalidformat">' + ValidationMessagesEnum.invalidFormat + '</div>';
         if (invalidEmail)
-            template += '<div ng-message="invalidemail">{{ ctrl.ValidationMessagesEnum.invalidEmail }}</div>';
+            template += '<div ng-message="invalidemail">' + ValidationMessagesEnum.invalidEmail + '</div>';
         if (customValidation)
             template += '<div ng-message="customvalidation">{{ ctrl.customMessage }}</div>';
         return template + '</div>';
