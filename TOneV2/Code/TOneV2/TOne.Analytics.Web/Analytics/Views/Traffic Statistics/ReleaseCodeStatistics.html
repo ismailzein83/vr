@@ -26,7 +26,7 @@
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Period"
-                               selectedvalues="selectedPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
+                               selectedvalues="selectedPeriod" isrequired hidefilterbox onselectionchanged="onPeriodSelectionChanged"></vr-select>
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-datetimepicker type="date" value="fromDate" label="From" isrequired></vr-datetimepicker>
@@ -38,15 +38,29 @@
             </vr-row>
         </div>
 
-        <!--<vr-row removeline>
+        <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
 
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
-                    <vr-button type="Reset" ng-show="false"></vr-button>
                 </div>
             </vr-actionbar>
-        </vr-row>-->
+        </vr-row>
     </vr-form>
+
+    <div vr-loader="isGettingData" ng-show="showResult">
+        <vr-row>
+            <vr-columns width="fullrow">
+                <!--<vr-datagrid on-ready="onMainGridReady" datasource="data"
+                             menuactions="gridMenuActions" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'">
+                    <vr-datagridcolumn ng-repeat="groupKey in currentSearchCriteria.groupKeys" headertext="groupKey.gridHeader" field="'GroupKeyValues[' + $index + '].Name'" columnindex="$index" widthfactor="15" enablehiding="'false'" isclickable="'true'" tag="groupKey" onclicked="onGroupKeyClicked"></vr-datagridcolumn>
+                    <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" summaryfield="measure.propertyName" type="measure.type" tag="measure" getcolor="getColor"></vr-datagridcolumn>
+                    <vr-datagridexpandablerow>
+                        <div ng-include="'/Client/Modules/Analytics/Views/Traffic Statistics/TrafficStatisticsGrid.html'"></div>
+                    </vr-datagridexpandablerow>
+                </vr-datagrid>-->
+            </vr-columns>
+        </vr-row>
+    </div>
 
 </vr-panel>
