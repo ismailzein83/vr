@@ -155,7 +155,6 @@ app.directive('vrTreeview', [function () {
         controllerAs: 'ctrl',
         bindToController: true,
         compile: function (element, attrs) {
-            console.log(element);
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
                     $scope.$watch('ctrl.selecteditem', function () {
