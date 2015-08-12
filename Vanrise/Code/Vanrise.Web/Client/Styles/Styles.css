@@ -267,6 +267,20 @@ inp
 .mark-select .hand-cursor{
     font-size:12px !important;
 } 
+.label-warning-1 {
+  background-color: #FFD400 ;
+}
+.label-warning-1[href]:hover,
+.label-warning-1[href]:focus {
+  background-color: #ec971f;
+}
+.label-warning-2 {
+  background-color: #FFAA00;
+}
+.label-warning-2[href]:hover,
+.label-warning-2[href]:focus {
+  background-color: #ec971f;
+}
 /* end bootstrap overide */  
 .disable-animations.ng-animate{
     -webkit-transition: none !important;
@@ -1669,14 +1683,34 @@ opacity:0.9 ;
     display:inline-block;
     margin:4px;
 }
+.circle-div .vr-control-label {
+ color:#fff !important;
+}
 .circle-div > div{
    text-align: center;
    height: 50%;
 }
 .circle-div .circle-label{
-   font-size:12px
+    font-size:9px;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    width: 75px;
+    padding-top: 5px;
 }
 .circle-div .circle-value{
    line-height:55px;
-   font-size: 10px !important;
+   font-size: 16px !important;
+}
+.circle-bg-0{
+   background-color:#20407D !important;
+}
+.circle-bg-1{
+   background-color:#E22337 !important;
+}
+.circle-bg-2{
+   background-color:#E08821 !important;
+}
+.circle-bg-3{
+   background-color:#25B679 !important;
 }
