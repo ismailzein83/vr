@@ -124,7 +124,7 @@ function uiCodemirrorDirective($timeout, uiCodemirrorConfig) {
 
 
     // Keep the ngModel in sync with changes from CodeMirror
-    codemirror.on('change', function(instance) {
+    codemirror.on('change', function (instance) {
       var newValue = instance.getValue();
       if (newValue !== ngModel.$viewValue) {
         scope.$evalAsync(function() {

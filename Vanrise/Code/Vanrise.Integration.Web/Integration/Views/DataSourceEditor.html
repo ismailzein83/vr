@@ -27,7 +27,8 @@
                 </vr-row>
             </div>
             <div ng-show="mappperSettignsSelected">
-                <textarea style="margin-top:12px;" ng-model="customCode" rows="12" cols="40" />
+                <vr-code-editor value="customCode"></vr-code-editor>
+                <!--<textarea style="margin-top:12px;" ng-model="customCode" rows="12" cols="40" />-->
             </div>
             <div ng-show="schedulerSettignsSelected">
                 <vr-row>
