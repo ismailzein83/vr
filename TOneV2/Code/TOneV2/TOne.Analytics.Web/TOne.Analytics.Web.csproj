@@ -145,6 +145,7 @@
     <Content Include="Analytics\Constants\VariationReportOptionsEnum.js" />
     <Content Include="Analytics\Constants\VolumeReportsTimePeriodEnum.js" />
     <Content Include="Analytics\Services\APIServices\AnalyticsAPIService.js" />
+    <Content Include="Analytics\Services\APIServices\AnalyticsService.js" />
     <Content Include="Analytics\Services\APIServices\BillingStatisticsAPIService.js" />
     <Content Include="Analytics\Services\APIServices\BlockedAttemptsAPIService.js" />
     <Content Include="Analytics\Services\APIServices\CDRAPIService.js" />

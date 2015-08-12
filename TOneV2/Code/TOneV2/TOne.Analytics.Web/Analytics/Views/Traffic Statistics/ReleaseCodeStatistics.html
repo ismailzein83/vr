@@ -1,8 +1,52 @@
 ﻿<vr-panel ng-controller="Analytics_ReleaseCodeStatisticsController">
 
     <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
+            <vr-row removeline>
 
-        
+                <vr-columns width="normal">
+                    <vr-select label="Group By" datasource="groupKeys"
+                               datatextfield="description" datavaluefield="value" selectedvalues="selectedGroupKeys" ismultipleselection></vr-select>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-select label="Switches" datasource="switches"
+                               datatextfield="Name" datavaluefield="SwitchId" selectedvalues="selectedSwitches" ismultipleselection></vr-select>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-select label="Code Groups" datasource="codeGroups"
+                               datatextfield="Name" datavaluefield="Code" selectedvalues="selectedCodeGroups" ismultipleselection></vr-select>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-select label="Customers" datasource="customers"
+                               datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedCustomers" ismultipleselection></vr-select>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-select label="Suppliers" datasource="suppliers"
+                               datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedSuppliers" ismultipleselection></vr-select>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Period"
+                               selectedvalues="selectedPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-datetimepicker type="date" value="fromDate" label="From" isrequired></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-datetimepicker type="date" value="toDate" label="To" isrequired customvalidate="customvalidateDate"></vr-datetimepicker>
+                </vr-columns>
+
+            </vr-row>
+        </div>
+
+        <!--<vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                    <vr-button type="Reset" ng-show="false"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>-->
     </vr-form>
 
 </vr-panel>

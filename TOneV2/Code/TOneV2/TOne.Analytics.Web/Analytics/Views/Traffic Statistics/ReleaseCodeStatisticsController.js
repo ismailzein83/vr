@@ -2,30 +2,86 @@
 
     "use strict";
 	
-    releaseCodeStatisticsController.$inject = ['$scope'];
+    releaseCodeStatisticsController.$inject = ['$scope', 'AnalyticsService', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService'];
 
-    function releaseCodeStatisticsController($scope) {
+    function releaseCodeStatisticsController($scope, analyticsService, businessEntityApiService, carrierAccountApiService) {
         
 		function defineScope(){
-			$scope.onSearchClicked = function () {
-                mainGridApi.clearDataAndContinuePaging();
-                return getGridData();
-            };
+			
 		}
 		
 		function defineGrid() {
-            $scope.gridDataSource = [];
-            $scope.loadMoreData = function () {
-                return getGridData();
-            };
-            $scope.onGridReady = function (api) {
-                mainGridApi = api;
-            };
+            
         }
 		
-		function defineFilters() {
-			console.log("Define filters");
+		function loadSwitches() {
+		    return businessEntityApiService.GetSwitches().then(function (response) {
+		        $scope.switches = response;
+		    });
 		}
+
+		function loadCodeGroups() {
+		    return businessEntityApiService.GetCodeGroups().then(function (response) {
+		        $scope.codeGroups = response;
+		    });
+		}
+
+		function loadCustomers() {
+		    return carrierAccountApiService.getCustomers().then(function (response) {
+		        $scope.customers = response;
+		    });
+		}
+
+		function loadSuppliers() {
+		    return carrierAccountApiService.getSuppliers().then(function (response) {
+		        $scope.suppliers = response;
+		    });
+		}
+
+		function defineFilters() {
+
+		    $scope.fromDate = '';
+		    $scope.toDate = '';
+
+
+		    $scope.groupKeys = analyticsService.getTrafficStatisticGroupKeys();
+		    $scope.selectedGroupKeys = analyticsService.getDefaultTrafficStatisticGroupKeys();
+
+		    $scope.switches = [];
+		    $scope.selectedSwitches = [];
+
+		    $scope.codeGroups = [];
+		    $scope.selectedCodeGroups = [];
+
+		    $scope.customers = [];
+		    $scope.selectedCustomers = [];
+
+		    $scope.suppliers = [];
+		    $scope.selectedSuppliers = [];
+
+		    $scope.periods = analyticsService.getPeriods();
+		    $scope.selectedPeriod = $scope.periods[0];
+
+		    $scope.periodSelectionChanged = function () {
+		        if ($scope.selectedPeriod != undefined && $scope.selectedPeriod.value !== -1) {
+		            var date = $scope.selectedPeriod.getInterval();
+		            $scope.fromDate = date.from;
+		            $scope.toDate = date.to;
+		        }
+
+		    }
+
+		    $scope.customvalidateDate = function (toDate) {
+		        return analyticsService.validateDates($scope.fromDate, toDate);
+		    };
+
+		    loadSwitches();
+		    loadCodeGroups();
+		    loadCustomers();
+		    loadSuppliers();
+		}
+
+		
 		
 		defineScope();
 		defineGrid();
