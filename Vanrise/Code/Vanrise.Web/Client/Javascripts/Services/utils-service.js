@@ -442,6 +442,24 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         }
         return interval;
     }
+    function getShortDate (date) {
+        var dateString = '';
+        if (date) {
+
+            var day = "" + (parseInt(date.getDate()));
+            if (day.length == 1)
+                dateString += "0" + day;
+            else
+                dateString += day;
+            var month = "" + (parseInt(date.getMonth()) + 1);
+            if (month.length == 1)
+                dateString += "/0" + month;
+            else
+                dateString += "/" + month;
+            dateString += "/" + date.getFullYear();
+        }
+        return dateString;
+    }
 
     return ({
         replaceAll: replaceAll,
@@ -458,7 +476,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         getEnum: getEnum,
         dateToServerFormat: dateToServerFormat,
         getPeriod: getPeriod,
-        getPropMinValueFromArray: getPropMinValueFromArray
+        getPropMinValueFromArray: getPropMinValueFromArray,
+        getShortDate: getShortDate
     });
 
 }]);

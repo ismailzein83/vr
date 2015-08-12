@@ -1,6 +1,6 @@
-﻿RepeatedNumbersController.$inject = ['$scope', 'UtilsService', '$q', 'RepeatedNumbersAPIService', 'VRNotificationService', 'DataRetrievalResultTypeEnum', 'PeriodEnum', 'RepeatedNumbersMeasureEnum', 'CarrierAccountAPIService', 'CarrierTypeEnum', 'ZonesService', 'BusinessEntityAPIService_temp', 'CallsOptionEnum'];
+﻿RepeatedNumbersController.$inject = ['$scope', 'UtilsService', '$q', 'RepeatedNumbersAPIService', 'VRNotificationService', 'DataRetrievalResultTypeEnum', 'PeriodEnum', 'RepeatedNumbersMeasureEnum', 'CarrierAccountAPIService', 'CarrierTypeEnum', 'ZonesService', 'BusinessEntityAPIService_temp', 'CallsOptionEnum','VRModalService'];
 
-function RepeatedNumbersController($scope, UtilsService, $q, RepeatedNumbersAPIService, VRNotificationService, DataRetrievalResultTypeEnum, PeriodEnum, RepeatedNumbersMeasureEnum, CarrierAccountAPIService, CarrierTypeEnum, ZonesService, BusinessEntityAPIService, CallsOptionEnum) {
+function RepeatedNumbersController($scope, UtilsService, $q, RepeatedNumbersAPIService, VRNotificationService, DataRetrievalResultTypeEnum, PeriodEnum, RepeatedNumbersMeasureEnum, CarrierAccountAPIService, CarrierTypeEnum, ZonesService, BusinessEntityAPIService, CallsOptionEnum, VRModalService) {
 
     var mainGridAPI;
     var measures = [];
@@ -13,21 +13,24 @@ function RepeatedNumbersController($scope, UtilsService, $q, RepeatedNumbersAPIS
         definePeriods();
         defineCallsOption();
         $scope.selectedCallsOption;
-        $scope.onValueChanged = function () {
-            console.log($scope.selectedPeriod);
-            if ($scope.selectedPeriod != selectedPeriod) {
-                var customize = {
-                    value: -1,
-                    description: "Customize"
-                }
-                selectedPeriod = $scope.selectedPeriod;
+        var date;
+        var customize = {
+            value: -1,
+            description: "Customize"
+        }
+        $scope.onBlurChanged = function () {
+
+            var from = UtilsService.getShortDate($scope.fromDate);
+            var oldFrom = UtilsService.getShortDate(date.from);
+            var to = UtilsService.getShortDate($scope.toDate);
+            var oldTo = UtilsService.getShortDate(date.to);
+            if (from != oldFrom || to != oldTo)
                 $scope.selectedPeriod = customize;
-            }
 
         }
         $scope.periodSelectionChanged = function () {
             if ($scope.selectedPeriod != undefined && $scope.selectedPeriod.value != -1) {
-                var date = UtilsService.getPeriod($scope.selectedPeriod.value);
+                 date = UtilsService.getPeriod($scope.selectedPeriod.value);
                 $scope.fromDate = date.from;
                 $scope.toDate = date.to;
             }
@@ -87,14 +90,12 @@ function RepeatedNumbersController($scope, UtilsService, $q, RepeatedNumbersAPIS
                     //maxHeight: "800px"
                 };
                 var parameters = {
-                    fromDate: $scope.filter.fromDate,
-                    toDate: $scope.filter.toDate
-
-                    ///[dataItem.GroupKeyValues[0].Id]
+                    fromDate: $scope.fromDate,
+                    toDate: $scope.toDate,
+                    customerIds: dataItem.CustomerID != null || dataItem.CustomerID != undefined ? [dataItem.CustomerID] : null,
+                    zoneIds: dataItem.OurZoneID != null || dataItem.OurZoneID != undefined ? [dataItem.OurZoneID] : null,
+                    supplierIds: dataItem.SupplierID != null || dataItem.SupplierID != undefined?[dataItem.SupplierID]:null
                 };
-                loadCDRParameters(parameters, dataItem);
-
-
 
                 VRModalService.showModal('/Client/Modules/Analytics/Views/CDR/CDRLog.html', parameters, modalSettings);
             }

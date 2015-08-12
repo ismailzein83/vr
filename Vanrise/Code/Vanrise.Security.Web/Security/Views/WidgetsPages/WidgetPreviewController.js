@@ -25,10 +25,10 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, Util
             description: "Customize"
         }
         $scope.onBlurChanged = function () {
-            var from = formatMMDDYYYY($scope.fromDate);
-            var oldFrom = formatMMDDYYYY(date.from);
-            var to = formatMMDDYYYY($scope.toDate);
-            var oldTo = formatMMDDYYYY(date.to);
+            var from = UtilsService.getShortDate($scope.fromDate);
+            var oldFrom = UtilsService.getShortDate(date.from);
+            var to = UtilsService.getShortDate($scope.toDate);
+            var oldTo = UtilsService.getShortDate(date.to);
             if (from != oldFrom || to != oldTo)
                 $scope.selectedPeriod = customize;
 
@@ -81,11 +81,7 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, Util
     function refreshWidget() {
       return  widgetAPI.retrieveData($scope.filter);
     }
-  function formatMMDDYYYY(date) {
-      return (date.getMonth() + 1) +
-        "/" + date.getDate() +
-        "/" + date.getFullYear();
-    }
+
     function defineTimeDimensionTypes() {
         $scope.timeDimensionTypes = [];
         for (var td in TimeDimensionTypeEnum)

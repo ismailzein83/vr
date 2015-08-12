@@ -31,10 +31,10 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             description: "Customize"
         }
         $scope.onBlurChanged = function () {
-            var from = formatMMDDYYYY($scope.fromDate);
-            var oldFrom = formatMMDDYYYY(date.from);
-            var to = formatMMDDYYYY($scope.toDate);
-            var oldTo = formatMMDDYYYY(date.to);
+            var from = UtilsService.getShortDate($scope.fromDate);
+            var oldFrom = UtilsService.getShortDate(date.from);
+            var to = UtilsService.getShortDate($scope.toDate);
+            var oldTo = UtilsService.getShortDate(date.to);
             if (from != oldFrom || to != oldTo)
                 $scope.selectedPeriod = customize;
 
