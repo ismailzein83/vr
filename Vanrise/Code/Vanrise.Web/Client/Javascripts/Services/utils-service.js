@@ -477,7 +477,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         dateToServerFormat: dateToServerFormat,
         getPeriod: getPeriod,
         getPropMinValueFromArray: getPropMinValueFromArray,
-        getShortDate: getShortDate
+        getShortDate: getShortDate,
+        getArrayEnum: getArrayEnum
     });
 
 }]);
