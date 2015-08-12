@@ -12,6 +12,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public string Description { get; set; }
 
+        public string Label { get; set; }
+
         public Func<NumberProfile, Decimal> Expression;
     }
 }

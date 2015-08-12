@@ -35,16 +35,13 @@
                     <div ng-show="ctrl.isFilterTabShown">
                         <vr-row>
 
-
-
                             <vr-columns colnum="9">
                                 <div>
-
                                     <vr-datagrid datasource="strategyFilters" maxheight="400px">
                                         <vr-datagridcolumn headertext="' '" widthfactor="3">       <vr-switch value="dataItem.isSelected"></vr-switch>            </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Filter #'" field="'filterId'" widthfactor="3">                   </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Description'" field="'description'" widthfactor="20">                   </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Threshold'"    >  <vr-textbox value="dataItem.threshold"  type="number"   isrequired ng-if="dataItem.isSelected" min="0" max="99"></vr-textbox>            </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Threshold'"    > <vr-label>{{dataItem.label}}</vr-label>   <vr-textbox value="dataItem.threshold"  type="number" isrequired ng-if="dataItem.isSelected" min="0" max="99"></vr-textbox>       </vr-datagridcolumn>
                                     </vr-datagrid>
 
                                 </div>

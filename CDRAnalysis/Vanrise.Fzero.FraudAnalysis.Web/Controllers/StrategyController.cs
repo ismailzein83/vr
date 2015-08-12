@@ -56,7 +56,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
 
         [HttpGet]
-        public Dictionary<int, string> GetFilters()
+        public List<CriteriaName> GetFilters()
         {
             CriteriaManager manager = new CriteriaManager();
 

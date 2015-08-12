@@ -72,7 +72,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
                 var levelCriteriaItem = {
                     filterId: filter.filterId,
-                    percentage: $scope.percentages[3]
+                    percentage: $scope.percentages[3],
                 };
                 strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem);
 
@@ -227,7 +227,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         angular.forEach($scope.filterDefinitions, function (filterDef) {
             var filterItem = {
                 filterId: filterDef.filterId,
-                description: filterDef.description
+                description: filterDef.description,
+                label: filterDef.label
             };
             $scope.strategyFilters.push(filterItem);
         });
@@ -258,7 +259,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
             var filterItem = {
                 filterId: filterDef.filterId,
-                description: filterDef.description
+                description: filterDef.description,
+                label: filterDef.label
             };
 
 
@@ -338,8 +340,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         
         angular.forEach(strategyObject.StrategyLevels, function (level) {
             angular.forEach(level.StrategyLevelCriterias, function (itm) {
-                console.log('itm.Percentage')
-                console.log(itm.Percentage)
                 if (itm.Percentage != undefined)
                     countStrategyLevels++;
             });
@@ -347,8 +347,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
         angular.forEach(strategyObject.StrategyLevels, function (level) {
             angular.forEach(level.StrategyLevelCriterias, function (itm) {
-                console.log('itm.Percentage')
-                console.log(itm.Percentage)
                 if (itm.Percentage == undefined)
                     countStrategyLevelCrietiraswithNoPercentage++;
             });
@@ -393,7 +391,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         var index = 0;
         return StrategyAPIService.GetFilters().then(function (response) {
             angular.forEach(response, function (itm) {
-                $scope.filterDefinitions.push({ filterId: ++index, description: itm });
+                $scope.filterDefinitions.push({ filterId: itm.FilterId, description: itm.Description, label:itm.Label });
             });
         });
     }

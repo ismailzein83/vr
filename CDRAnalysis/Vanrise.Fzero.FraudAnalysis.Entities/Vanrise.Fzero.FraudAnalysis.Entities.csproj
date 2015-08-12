@@ -59,6 +59,7 @@
     <Compile Include="AggregateDefinition.cs" />
     <Compile Include="Aggregates\AverageAggregate.cs" />
     <Compile Include="Batches\CDRBatch.cs" />
+    <Compile Include="CriteriaName.cs" />
     <Compile Include="ResultQuery\DashboardResultQuery.cs" />
     <Compile Include="ResultQuery\SubscriberThresholdResultQuery.cs" />
     <Compile Include="ResultQuery\NumberProfileResultQuery.cs" />
