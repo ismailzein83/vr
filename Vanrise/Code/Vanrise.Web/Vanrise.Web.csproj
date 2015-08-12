@@ -209,11 +209,7 @@
     <Content Include="Client\Javascripts\Directives\Inputs\Select\vr-select-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Select\vr-select.html" />
     <Content Include="Client\Javascripts\Directives\Inputs\Switch\vr-switch-directive.js" />
-    <Content Include="Client\Javascripts\Directives\Inputs\Textbox\textbox-dir-service.js" />
-    <Content Include="Client\Javascripts\Directives\Inputs\Textbox\vr-textbox-button.html" />
     <Content Include="Client\Javascripts\Directives\Inputs\Textbox\vr-textbox-directive.js" />
-    <Content Include="Client\Javascripts\Directives\Inputs\Textbox\vr-textbox-icon.html" />
-    <Content Include="Client\Javascripts\Directives\Inputs\Textbox\vr-textbox-standard.html" />
     <Content Include="Client\Javascripts\Directives\Inputs\Validation\validation-dir-service.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Validation\vr-validation.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Validation\vrValidationEmail.js" />
