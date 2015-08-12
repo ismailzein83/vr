@@ -1,5 +1,5 @@
-﻿<div vr-modalcontent draggable="" ng-controller="Security_OrgChartEditorController">
-    <vr-modalbody width="'50%'" vr-loader="isGettingData">
+﻿<div vr-modalcontent draggable="" ng-controller="Security_OrgChartEditorController" width="'60%'">
+    <vr-modalbody vr-loader="isGettingData">
         <vr-form name="orgChartEditorForm">
             <vr-choices>
                 <vr-choice isselected="definitionSelected">Definition</vr-choice>
@@ -14,29 +14,24 @@
                 </vr-row>
             </div>
 
-            <div ng-show="hierarchySelected" style="margin-top:20px;">
+            <div ng-show="hierarchySelected">
 
                 <vr-row>
-                    <vr-columns colnum="6">
-                        <vr-treeview on-ready="treeReady"
-                                        datachildrenfield="Members"
-                                        datavaluefield="Id"
-                                        datatextfield="Name"
-                                        selecteditem="currentNode"
-                                        onvaluechanged="treeValueChanged">
-                        </vr-treeview>
-                    </vr-columns>
-
-                    <vr-columns colnum="6" ng-show="currentNode">
-                        <vr-row>
-                            <vr-select label="Manager" datasource="validManagers" selectedvalues="selectedManager" datatextfield="Name" datavaluefield="UserId"></vr-select>
-                        </vr-row>
-                        <vr-row>
-                            <vr-select ismultipleselection label="Users" datasource="validUsers" selectedvalues="selectedUsers" datatextfield="Name" datavaluefield="UserId"></vr-select>
-                        </vr-row>
-                        <vr-row>
-                            <vr-button type="ApplyChanges" formname="orgChartEditorForm" data-onclick="applyChanges" standalone></vr-button>
-                        </vr-row>
+                    <vr-columns width="fullrow">
+                        <vr-section title="Org Chart Hierarchy">
+                            <div style="z-index: inherit">
+                                <vr-treeview on-ready="treeReady"
+                                             datachildrenfield="Members"
+                                             datavaluefield="Id"
+                                             datatextfield="Name"
+                                             selecteditem="currentNode"
+                                             draggabletree
+                                             movesettings="alllevels"
+                                             wholerow>
+                                </vr-treeview>
+                            </div>
+                           
+                        </vr-section>
                     </vr-columns>
                 </vr-row>
 
