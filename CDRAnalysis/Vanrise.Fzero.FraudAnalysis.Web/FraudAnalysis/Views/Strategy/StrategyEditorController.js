@@ -36,8 +36,10 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         StrategyEditorController.isFilterTabShown = true;
         StrategyEditorController.isLevelsTabShow = false;
 
-        $scope.percentages = [
-                         { description: '-75%', value: 0.25 }, { description: '-50%', value: 0.5 }, { description: '-25%', value: 0.75 }, { description: '0%', value: 1.00 }, { description: '25%', value: 1.25 }, { description: '50%', value: 1.50 }, { description: '75%', value: 1.75 }
+        $scope.percentages = [{ description: '75%', value: 1.75 }, { description: '50%', value: 1.50 }, { description: '25%', value: 1.25 }, { description: '0%', value: 1.00 }, { description: '-25%', value: 0.75 }, { description: '-50%', value: 0.5 }, { description: '-75%', value: 0.25 }
+                        
+                         
+                         
 
         ];
 
@@ -163,7 +165,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             PeakHours: $scope.selectedPeakHours,
             StrategyFilters: [],
             StrategyLevels: [],
-            CreationDate: new Date()
+            LastUpdatedOn: new Date()
         };
 
         angular.forEach($scope.strategyFilters, function (filter) {

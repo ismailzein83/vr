@@ -13,6 +13,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public string Name { get; set; }
 
+        public string Analyst { get; set; }
+
+        public int UserId { get; set; }
+
         public string Description { get; set; }
 
         public bool IsDefault { get; set; }
@@ -29,7 +33,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public int MinimumCountofCallsinActiveHour { get; set; }
 
-        public DateTime CreationDate { get; set; }
+        public DateTime LastUpdatedOn { get; set; }
 
         List<Hour> _peakHours;
         public List<Hour> PeakHours

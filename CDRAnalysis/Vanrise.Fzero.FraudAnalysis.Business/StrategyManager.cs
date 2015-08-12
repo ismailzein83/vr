@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Entities;
+using System.Linq;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {
@@ -39,11 +40,19 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         }
 
 
-        public Vanrise.Entities.IDataRetrievalResult<Strategy> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyResultQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<Strategy> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyResultQuery> input, IEnumerable<User> users)
         {
             IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, manager.GetFilteredStrategies(input));
+            BigResult<Strategy> strategies = manager.GetFilteredStrategies(input);
+
+            foreach ( var strategy in strategies.Data)
+            {
+                strategy.Analyst = users.Where(x => x.UserId == strategy.UserId).First().Name;
+            }
+
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, strategies);
         }
 
 

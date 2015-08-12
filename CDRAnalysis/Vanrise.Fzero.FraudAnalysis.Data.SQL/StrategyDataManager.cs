@@ -116,6 +116,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             var strategy = Vanrise.Common.Serializer.Deserialize<Strategy>(GetReaderValue<string>(reader, "StrategyContent"));
             strategy.Id = (int)reader["Id"];
+            strategy.UserId = (int)reader["UserId"];
             strategy.StrategyType = ((Enums.Period)Enum.ToObject(typeof(Enums.Period), strategy.PeriodId)).ToString();
             return strategy;
         }

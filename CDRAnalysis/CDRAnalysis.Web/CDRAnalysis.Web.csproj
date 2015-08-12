@@ -259,6 +259,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="images\iconheader.ico" />
     <Content Include="images\login.png" />
     <Content Include="images\logoonheader.png" />
     <Content Include="Web.config">
