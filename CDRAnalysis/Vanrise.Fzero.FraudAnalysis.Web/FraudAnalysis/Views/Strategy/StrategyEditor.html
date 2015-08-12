@@ -13,13 +13,16 @@
                 <vr-columns colnum="4">
                     <vr-textbox value="description" label="Description" isrequired></vr-textbox>
                 </vr-columns>
-                <vr-columns colnum="2">
-                    <vr-switch value="isDefault" label="Is Default"></vr-switch>
-                </vr-columns>
 
                 <vr-columns colnum="2">
                     <vr-switch value="isEnabled" label="Is Enabled"></vr-switch>
                 </vr-columns>
+
+                <vr-columns colnum="2">
+                    <vr-switch value="isDefault" label="Is Default" permissions="Root/Strategy Module:Add Default"></vr-switch>
+                </vr-columns>
+
+               
 
             </vr-row>
 
