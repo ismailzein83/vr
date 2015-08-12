@@ -24,13 +24,13 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
         $scope.itemsSortable = { handle: '.handeldrag', animation: 150 };
         
         $scope.assignCarriers = function () {
-            $scope.issaving = true;
-
+            denyDeselectedCarriers();
             var updatedCarriers = mapCarriersForAssignment();
 
             if (updatedCarriers.length > 0) {
+                $scope.issaving = true;
 
-                AccountManagerAPIService.AssignCarriers(updatedCarriers)
+                return AccountManagerAPIService.AssignCarriers(updatedCarriers)
                     .then(function (response) {
                         if (VRNotificationService.notifyOnItemUpdated("Assigned Carriers", response)) {
                             if ($scope.onCarriersAssigned != undefined)
@@ -171,6 +171,21 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, VRM
         }
 
         return mappedCarrier;
+    }
+
+    function denyDeselectedCarriers() {
+
+        for (var i = 0; i < assignedCarriers.length; i++) {
+            var index = UtilsService.getItemIndexByVal($scope.selectedCarriers, assignedCarriers[i].CarrierAccountId, 'CarrierAccountId');
+            
+            if (index == -1) { // the assigned carrier has been deselected
+                var carrier = UtilsService.getItemByVal($scope.carriers, assignedCarriers[i].CarrierAccountId, 'CarrierAccountId');
+
+                // deny the carrier
+                carrier.newCustomerSwitchValue = false;
+                carrier.newSupplierSwitchValue = false;
+            }
+        }
     }
 }
 
