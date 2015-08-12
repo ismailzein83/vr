@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function releaseCodeStatisticsController($scope, analyticsService, businessEntityApiService, carrierAccountApiService) {
+    function releaseCodeStatisticsController($scope, analyticsService, businessEntityApiService, carrierAccountApiService,utilsService) {
         
         function defineScope() {
 
@@ -83,7 +83,7 @@
             }
 
             $scope.customvalidateDate = function (toDate) {
-                return analyticsService.validateDates($scope.fromDate, toDate);
+                return utilsService.validateDates($scope.fromDate, toDate);
             };
 
             loadSwitches();
@@ -99,7 +99,7 @@
         defineFilters();
     }
 
-    releaseCodeStatisticsController.$inject = ['$scope', 'AnalyticsService', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService'];
+    releaseCodeStatisticsController.$inject = ['$scope', 'AnalyticsService', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService', 'UtilsService'];
     appControllers.controller('Analytics_ReleaseCodeStatisticsController', releaseCodeStatisticsController);
 
 })(appControllers);
