@@ -28,19 +28,29 @@ function IntervalTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, In
 
     var isFormLoaded;
     function loadForm() {
+        if ($scope.schedulerTypeTaskTrigger.data != undefined && !isFormLoaded)
+        {
+            isFormLoaded = true;
 
-        if ($scope.schedulerTypeTaskTrigger.data == undefined || isFormLoaded)
-            return;
-        var data = $scope.schedulerTypeTaskTrigger.data;
-        if (data != null) {
-            $scope.interval = data.Interval; 
-            $scope.selectedIntervalType = UtilsService.getItemByVal($scope.intervalTypes, data.IntervalType, "value");
+            var data = $scope.schedulerTypeTaskTrigger.data;
+            if (data != null) {
+                $scope.interval = data.Interval;
+                $scope.selectedIntervalType = UtilsService.getItemByVal($scope.intervalTypes, data.IntervalType, "value");
+            }
+            else
+                setFormToDefault();
+            
         }
         else {
-            $scope.interval = "1";
-            $scope.selectedIntervalType = undefined;
+            setFormToDefault();
         }
-        isFormLoaded = true;
+        
+    }
+
+    function setFormToDefault()
+    {
+        $scope.interval = "30";
+        $scope.selectedIntervalType = UtilsService.getItemByVal($scope.intervalTypes, IntervalTimeTypeEnum.Minute.value, "value");
     }
 
     function load() {
