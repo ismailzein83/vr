@@ -62,13 +62,13 @@
 
         return ({
             GetCarriers: getCarriers,
-            GetCustomers: getCustomers,
             insertCarrierTest: insertCarrierTest,
             GetCarrierAccounts: getCarrierAccounts,
             GetCarrierAccount: getCarrierAccount,
             UpdateCarrierAccount: updateCarrierAccount,
             GetFilteredCarrierAccounts: getFilteredCarrierAccounts,
-            GetSuppliers: getSuppliers
+            getSuppliers: getSuppliers,
+            getCustomers: getCustomers
         });
     }
 
