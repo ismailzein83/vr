@@ -2,8 +2,14 @@
     <vr-modalbody vr-loader="isGettingData" maxheight="'700px'">
         <vr-form name="formDynamicPagesEditor">
             <div>
-
-           <vr-row>
+                <vr-treeview datatextfield="Name"
+                             datachildrenfield="Childs"
+                             on-ready="menuReady"
+                             selecteditem="selectedMenuNode"
+                             movesettings="samelevel"
+                             draggabletree>
+                </vr-treeview>
+           <!--<vr-row>
                      <div style=" overflow-x: auto; width: 300px; ">
                     <ul class="list-group dragbelzone" ng-sortable="itemsSortable" ng-show="menu.Childs.length > 0">
                         <li ng-repeat="child in menu.Childs" class="list-group-item list-custom" style="margin: 1px; font-size: 12px">
@@ -15,7 +21,7 @@
                 </div>
 
 
-            </vr-row>
+            </vr-row>-->
         </div>
        
         </vr-form>

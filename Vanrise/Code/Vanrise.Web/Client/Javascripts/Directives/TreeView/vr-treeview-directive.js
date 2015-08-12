@@ -15,7 +15,7 @@ app.directive('vrTreeview', [function () {
             selecteditem: '=',
             checkbox: '@',
             wholerow: '@',
-            draggable: '@',
+            draggabletree: '@',
             state: '@',
             movesettings: '@'
         },
@@ -88,7 +88,7 @@ app.directive('vrTreeview', [function () {
                   
                 }
                 plugins.push("json_data");
-                if (ctrl.draggable != undefined) {
+                if (ctrl.draggabletree != undefined) {
                     plugins.push("dnd");
                     treeData.core.check_callback = function (operation, node, parent, position, more) {
                         
@@ -121,6 +121,7 @@ app.directive('vrTreeview', [function () {
                 treeData.plugins = plugins;
                 treeData.check_callback = true;
                 treeElement.jstree(treeData);
+                console.log(treeElement);
                 treeElement.bind("move_node.jstree", function (e, data) {
                     var jsonTree = treeElement.jstree(true).get_json('#', {});
                     var returnedTree=[];
@@ -155,7 +156,7 @@ app.directive('vrTreeview', [function () {
         controllerAs: 'ctrl',
         bindToController: true,
         compile: function (element, attrs) {
-
+            console.log(element);
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
                     $scope.$watch('ctrl.selecteditem', function () {
