@@ -121,7 +121,6 @@ app.directive('vrTreeview', [function () {
                 treeData.plugins = plugins;
                 treeData.check_callback = true;
                 treeElement.jstree(treeData);
-                console.log(treeElement);
                 treeElement.bind("move_node.jstree", function (e, data) {
                     var jsonTree = treeElement.jstree(true).get_json('#', {});
                     var returnedTree=[];
