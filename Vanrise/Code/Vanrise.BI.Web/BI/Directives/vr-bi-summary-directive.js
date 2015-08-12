@@ -49,7 +49,7 @@ app.directive('vrBiSummary', ['UtilsService', 'BIConfigurationAPIService', 'BIAP
                     + '</div>'
                     + '<div ng-if="ctrl.isAllowed" vr-loader="ctrl.isGettingData">'
                         + '<div width="normal">'
-                            + '<div class="circle-div" ng-repeat="value in ctrl.dataSource" >'
+                            + '<div class="circle-div" ng-repeat="value in ctrl.dataSource" ng-class="\'circle-bg-\'+ $index % 4" >'
                                 + '<div class="circle-value" >'
                                   + '<vr-label isValue="{{value.value}}">{{value.value}}</vr-label>'
                                 + '</div>'
@@ -65,7 +65,7 @@ app.directive('vrBiSummary', ['UtilsService', 'BIConfigurationAPIService', 'BIAP
         }
         else
             //  return '<vr-section title="{{ctrl.title}}"><div><table class="table  table-striped" ><tr ng-repeat="value in ctrl.measureTypes" ><td><vr-label isValue="{{value}}">{{value.DisplayName}}</vr-label></td></tr></table></vr-section>';
-            return '<vr-section title="{{ctrl.title}}"><div><div class="circle-div" ng-repeat="value in ctrl.measureTypes" ><div class="circle-value" > </vr-label></div><div  class="circle-label" >{{value.DisplayName}}</div></vr-section>';
+            return '<vr-section title="{{ctrl.title}}"><div><div class="circle-div" ng-repeat="value in ctrl.measureTypes" ng-class="\'circle-bg-\'+ $index % 4"  ><div class="circle-value" ></div><div  class="circle-label" ><vr-label isValue="{{value}}">{{value.DisplayName}}</vr-label</div></vr-section>';
 
 
 
