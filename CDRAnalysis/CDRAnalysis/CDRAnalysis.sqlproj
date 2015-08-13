@@ -63,9 +63,11 @@
     <Folder Include="Properties" />
     <Folder Include="FraudAnalysis\" />
     <Folder Include="FraudAnalysis\Tables\" />
-    <Folder Include="Security\" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Functions\" />
     <Folder Include="FraudAnalysis\Stored Procedures\" />
     <Folder Include="FraudAnalysis\User Defined Types\" />
+    <Folder Include="Security\" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="CDRAnalysis.PostDeployment.sql" />
@@ -90,8 +92,9 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_CreateTempForCasesSummary.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_CreateTempForFilteredStrategies.sql" />
     <Build Include="Security\FraudAnalysis.sql" />
-    <Build Include="FraudAnalysis\Tables\Suspicion_Level.sql" />
+    <Build Include="dbo\Functions\CSVToTable.sql" />
     <Build Include="FraudAnalysis\Tables\Strategy.sql" />
+    <Build Include="FraudAnalysis\Tables\Suspicion_Level.sql" />
     <Build Include="FraudAnalysis\Tables\NumberProfile.sql" />
     <Build Include="FraudAnalysis\Tables\CaseStatus.sql" />
     <Build Include="FraudAnalysis\Tables\SubscriberThreshold.sql" />
@@ -119,6 +122,7 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Update.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Insert.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_Get.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_DeleteStrategyResults.sql" />
     <Build Include="FraudAnalysis\User Defined Types\SubscriberCaseType.sql" />
     <Build Include="Security\FraudAnalysis.sql" />
   </ItemGroup>

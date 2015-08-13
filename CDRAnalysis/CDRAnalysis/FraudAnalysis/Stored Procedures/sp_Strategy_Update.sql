@@ -5,8 +5,9 @@ CREATE PROCEDURE [FraudAnalysis].[sp_Strategy_Update]
 	@UserId int,
 	@Name varchar(20),
 	@Description varchar(255),
-	@CreationDate DateTime,
+	@LastUpdatedOn DateTime,
 	@IsDefault bit,
+	@IsEnabled bit,
 	@PeriodId int,
 	@StrategyContent Nvarchar(max)
 AS
@@ -14,9 +15,10 @@ BEGIN
 	UPDATE FraudAnalysis.[Strategy]
     SET Description = @Description
       ,UserId = @UserId
-      ,CreationDate = @CreationDate
+      ,LastUpdatedOn = @LastUpdatedOn
       ,Name = @Name
       ,IsDefault = @IsDefault
+      ,IsEnabled = @IsEnabled
       ,StrategyContent = @StrategyContent
       ,PeriodId=@PeriodId
 	 WHERE Id = @Id

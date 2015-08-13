@@ -4,7 +4,12 @@ CREATE PROCEDURE [FraudAnalysis].[sp_Strategy_CreateTempForFilteredStrategies]
 	@TempTableName varchar(200),	
 	@Name Nvarchar(255),
 	@Description Nvarchar(255), 
-	@PeriodsList Nvarchar(255)
+	@PeriodsList Nvarchar(255),
+	@UsersList Nvarchar(255),
+	@IsDefault bit,
+	@IsEnabled bit,
+	@FromDate datetime,
+	@ToDate datetime
 )
 	AS
 	BEGIN
@@ -12,25 +17,22 @@ CREATE PROCEDURE [FraudAnalysis].[sp_Strategy_CreateTempForFilteredStrategies]
 		
 		IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 	    BEGIN
-	    
-	    CREATE TABLE #Period(Id int, Description varchar(20))
-	    
-			IF(@PeriodsList = '')
-				begin
-					EXEC('INSERT INTO #Period SELECT Id,Description FROM [FraudAnalysis].Period ')
-				end
-			else
-				begin
-					EXEC('INSERT INTO #Period SELECT Id,Description FROM [FraudAnalysis].Period p WHERE p.Id IN ('+@PeriodsList+')')
-				end
-	    
 	    		
-			SELECT FraudAnalysis.[Strategy].[Id],FraudAnalysis.[Strategy].[Name], FraudAnalysis.[Strategy].[StrategyContent] , FraudAnalysis.[Strategy].[PeriodId]
+			SELECT s.[Id],s.[Name], s.[StrategyContent] , s.[PeriodId], s.[UserId]
 			into #Result
-			FROM FraudAnalysis.[Strategy]
-			inner join #Period  on #Period.Id=FraudAnalysis.[Strategy].PeriodId
-			WHERE (@Name IS NULL OR FraudAnalysis.[Strategy].Name  LIKE '%' + @Name + '%' )
-			AND (@Description IS NULL OR FraudAnalysis.[Strategy].Description  LIKE '%' + @Description + '%' )
+			FROM FraudAnalysis.[Strategy] s
+			WHERE (@Name IS NULL OR s.Name  LIKE '%' + @Name + '%' )
+			AND (@Description IS NULL OR s.Description  LIKE '%' + @Description + '%' )
+			and (@IsDefault is null or s.IsDefault=@IsDefault)
+			and (@IsEnabled is null or s.IsEnabled=@IsEnabled)
+			and 
+			(( @FromDate is null and @ToDate is null )
+			or ( @FromDate is not null and @ToDate is null and  s.LastUpdatedOn >= @FromDate)
+			or ( @FromDate is null and @ToDate is not null and  s.LastUpdatedOn <= @ToDate)
+			or ( @FromDate is not null and @ToDate is not null and  s.LastUpdatedOn between @FromDate and @ToDate))
+			
+			and (@PeriodsList ='' or  s.PeriodId in (SELECT * FROM dbo.CSVToTable(@PeriodsList)))
+			and (@UsersList ='' or  s.UserId in (SELECT * FROM dbo.CSVToTable(@UsersList)))
 						
 			declare @sql varchar(1000)
 			set @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #Result';

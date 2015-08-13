@@ -2,18 +2,12 @@
 
 CREATE PROCEDURE [FraudAnalysis].[sp_Strategy_GetStrategies] 
 (
-	@PeriodId int
+	@PeriodId int,
+	@IsEnabled bit
 )
 AS
 BEGIN
-SELECT [Id]
-      ,[Description]
-      ,[UserId]
-      ,[CreationDate]
-      ,[Name]
-      ,[IsDefault]
-      ,[PeriodId]
-      ,[StrategyContent]
-  FROM FraudAnalysis.Strategy
-  Where (@PeriodId =0 or PeriodId = @PeriodId)
+SELECT s.[Id],s.[Name], s.[StrategyContent] , s.[PeriodId], s.[UserId]
+  FROM FraudAnalysis.Strategy s
+  Where (@PeriodId =0 or PeriodId = @PeriodId) and (@IsEnabled is null or IsEnabled=@IsEnabled)
 END
