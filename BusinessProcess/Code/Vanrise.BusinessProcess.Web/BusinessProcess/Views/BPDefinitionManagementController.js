@@ -114,8 +114,6 @@ function BPDefinitionManagementController($scope, BusinessProcessService, Busine
 
     function getRecentInstancesData() {
 
-
-
         angular.forEach($scope.filteredDefinitions, function (def) { def.openedInstances = []; });
 
         BusinessProcessAPIService.GetRecentInstances(statusUpdatedAfter).then(function (response) {
@@ -124,7 +122,7 @@ function BPDefinitionManagementController($scope, BusinessProcessService, Busine
 
                 if (statusUpdatedAfter == '' && UtilsService.getEnum(BPInstanceStatusEnum, 'value', inst.Status).isOpened)
                     statusUpdatedAfter = inst.StatusUpdatedTime;
-                
+
 
                 angular.forEach($scope.filteredDefinitions, function (def) {
                     if (def.BPDefinitionID == inst.DefinitionID) {
@@ -138,13 +136,6 @@ function BPDefinitionManagementController($scope, BusinessProcessService, Busine
                         }
 
 
-
-                        //if (angular.isUndefined(def.runningInstances)) {
-                        //    def.runningInstances = 0;
-                        //}
-
-
-
                         if (UtilsService.getEnum(BPInstanceStatusEnum, 'value', inst.Status).isOpened) {
                             var openedProcessInstanceIndex = UtilsService.getItemIndexByVal(def.openedInstances, inst.ProcessInstanceID, "ProcessInstanceID");
 
@@ -154,8 +145,6 @@ function BPDefinitionManagementController($scope, BusinessProcessService, Busine
                                 def.openedInstances.push(inst);
                         }
 
-                        def.runningInstances = def.openedInstances.length;
-                        console.log(def.runningInstances)
 
                         var processInstanceIndex = UtilsService.getItemIndexByVal(def.recentInstances, inst.ProcessInstanceID, "ProcessInstanceID");
 
@@ -163,9 +152,6 @@ function BPDefinitionManagementController($scope, BusinessProcessService, Busine
                             def.recentInstances[processInstanceIndex] = inst;
                         else
                             def.recentInstances.push(inst);
-
-
-
 
 
                     }

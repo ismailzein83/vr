@@ -22,7 +22,7 @@
                 <vr-columns width="fullrow">
                     <vr-datagrid datasource="filteredDefinitions" on-ready="onGridReady" menuactions="gridMenuActions">
                         <vr-datagridcolumn headertext="'Process'" field="'Title'" ></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Opened Instances'"  >{{dataItem.runningInstances}}</vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Opened Instances'"  >{{dataItem.openedInstances.length}}</vr-datagridcolumn>
                         <vr-datagridexpandablerow>
 
                             <vr-choices>
