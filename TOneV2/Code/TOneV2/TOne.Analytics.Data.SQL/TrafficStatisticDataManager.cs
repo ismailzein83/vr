@@ -69,8 +69,8 @@ namespace TOne.Analytics.Data.SQL
                     object id = reader[idColumn];
                     obj.GroupKeyValues[i] = new KeyColumn
                     {
-                        Id = id != DBNull.Value ? id.ToString() : null,
-                        Name = nameColumn!=null?reader[nameColumn] as string:null
+                        Id = id != DBNull.Value ? id.ToString() : "N/A",
+                        Name = nameColumn != null && reader[nameColumn] as string != null ? reader[nameColumn] as string : "N/A"
                     };
                 }
                 return obj;
@@ -91,29 +91,40 @@ namespace TOne.Analytics.Data.SQL
 
         public IEnumerable<TrafficStatistic> GetTrafficStatistics(TrafficStatisticGroupKeys filterByColumn, string columnFilterValue, DateTime from, DateTime to)
         {
+              //SELECT
+              //                      ts.OurZoneID
+              //                      ,ts.FirstCDRAttempt
+              //                      , ts.LastCDRAttempt
+              //                      , ts.Attempts-ts.SuccessfulAttempts AS FailedAttempts
+              //                      , ts.CeiledDuration AS CeiledDuration
+              //                      , case when ts.SuccessfulAttempts > 0 then CONVERT(DECIMAL(10,2),ts.DurationsInSeconds/(60.0*ts.SuccessfulAttempts)) ELSE 0 end as ACD
+              //                      , sum(ts.Attempts)
+              //                      , ts.DeliveredAttempts
+              //                      , ts.SuccessfulAttempts
+              //                      , ts.DurationsInSeconds
+              //                      , ts.MaxDurationInSeconds
+              //                      , ts.PDDInSeconds
+              //                      , ts.UtilizationInSeconds
+              //                      , ts.NumberOfCalls
+              //                      , ts.DeliveredNumberOfCalls
+              //                      , ts.PGAD
+
+              //              FROM TrafficStats ts WITH(NOLOCK ,INDEX(IX_TrafficStats_DateTimeFirst))
+              //              WHERE {0} AND  ts.FirstCDRAttempt BETWEEN @FromDate AND @ToDate
+            string columnName;
+            HashSet<string> joinStatement=new HashSet<string> ();
+            string groupByStatement;
+            GetColumnStatements(filterByColumn, out columnName, joinStatement, out groupByStatement);
             string query =String.Format(@"                            
 			                SELECT
-					                ts.OurZoneID
-					                ,ts.FirstCDRAttempt
-				                    , ts.LastCDRAttempt
-                                    , ts.Attempts-ts.SuccessfulAttempts AS FailedAttempts
-                                    , ts.CeiledDuration AS CeiledDuration
-                                    , case when ts.SuccessfulAttempts > 0 then CONVERT(DECIMAL(10,2),ts.DurationsInSeconds/(60.0*ts.SuccessfulAttempts)) ELSE 0 end as ACD
-				                    , ts.Attempts
-				                    , ts.DeliveredAttempts
-				                    , ts.SuccessfulAttempts
-				                    , ts.DurationsInSeconds
-				                    , ts.MaxDurationInSeconds
-				                    , ts.PDDInSeconds
-				                    , ts.UtilizationInSeconds
-				                    , ts.NumberOfCalls
-				                    , ts.DeliveredNumberOfCalls
-				                    , ts.PGAD
+					                {0}    
+				                    , ts.Attempts as Attempts
+				                    , ts.DurationsInSeconds AS DurationsInSeconds
 
-			                FROM TrafficStats ts WITH(NOLOCK ,INDEX(IX_TrafficStats_DateTimeFirst))
-			                WHERE {0} AND  ts.FirstCDRAttempt BETWEEN @FromDate AND @ToDate
-			                ORDER BY ts.FirstCDRAttempt ", GetColumnFilter(filterByColumn, columnFilterValue));
-            return GetItemsText(query, TrafficStatisticMapper,
+			                FROM TrafficStats ts WITH(NOLOCK ,INDEX(IX_TrafficStats_DateTimeFirst)) {1}
+			                WHERE {2} AND  ts.FirstCDRAttempt BETWEEN @FromDate AND @ToDate 
+			                ORDER BY Attempts ", columnName,joinStatement.ToString(), GetColumnFilter(filterByColumn, columnFilterValue));
+            return GetItemsText(query, TrafficStatisticChartMapper,
                 (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@FromDate", from));
@@ -123,6 +134,19 @@ namespace TOne.Analytics.Data.SQL
    
 
         #region Private Methods
+        TrafficStatistic TrafficStatisticChartMapper( IDataReader reader)
+        {
+
+            TrafficStatistic trafficStatistics = new TrafficStatistic
+            {
+
+                Attempts = GetReaderValue<int>(reader, "Attempts"),
+
+                DurationsInMinutes = GetReaderValue<Decimal>(reader, "DurationsInSeconds") / 60
+            };
+            return trafficStatistics;
+            
+        }
 
         private string CreateTempTableIfNotExists(string tempTableName, TrafficStatisticFilter filter, IEnumerable<TrafficStatisticGroupKeys> groupKeys)
         {
@@ -282,110 +306,26 @@ namespace TOne.Analytics.Data.SQL
                     switch (groupKey)
                     {
                         case TrafficStatisticGroupKeys.OurZone:
-                              if (Id != null)
-                                  data.GroupKeyValues[i].Name = manager.GetZoneName(Convert.ToInt32(Id));
-                            else
-                            {
-                                data.GroupKeyValues[i].Id = "N/A";
-                                data.GroupKeyValues[i].Name = "N/A";
-                            }
-                               
+                            if (Id != "N/A")
+                                  data.GroupKeyValues[i].Name = manager.GetZoneName(Convert.ToInt32(Id));                       
                              break;
                           
                         case TrafficStatisticGroupKeys.CustomerId:
-                          if (Id != null)
+                             if (Id != "N/A")
                                data.GroupKeyValues[i].Name = manager.GetCarrirAccountName(Id);
-                            else
-                            {
-                                data.GroupKeyValues[i].Id = "N/A";
-                                data.GroupKeyValues[i].Name = "N/A";
-                            }
                           break;   
 
                         case TrafficStatisticGroupKeys.SupplierId:
-                                if (Id != null)
+                          if (Id != "N/A")
                                     data.GroupKeyValues[i].Name = manager.GetCarrirAccountName(Id);
-                            else
-                            {
-                                data.GroupKeyValues[i].Id = "N/A";
-                                data.GroupKeyValues[i].Name = "N/A";
-                            }
                           break; 
                         case TrafficStatisticGroupKeys.Switch:
-                                if (Id != null)
+                          if (Id != "N/A")
                                     data.GroupKeyValues[i].Name = manager.GetSwitchName(Convert.ToInt32(Id));
-                            else
-                            {
-                                data.GroupKeyValues[i].Id = "N/A";
-                                data.GroupKeyValues[i].Name = "N/A";
-                            }
-                          break; 
-                        case TrafficStatisticGroupKeys.CodeGroup:
-                                if (Id == null)
-                            {
-                                data.GroupKeyValues[i].Id = "N/A";
-                                data.GroupKeyValues[i].Name = "N/A";
-                            }
                           break; 
                         case TrafficStatisticGroupKeys.SupplierZoneId:
-                            data.GroupKeyValues[i].Name = manager.GetZoneName(Convert.ToInt32(Id));break;
-                        case TrafficStatisticGroupKeys.PortIn:
-                             if (Id != null)
-                                data.GroupKeyValues[i].Name = Id;
-                            else
-                            {
-                                data.GroupKeyValues[i].Id = "N/A";
-                                data.GroupKeyValues[i].Name = "N/A";
-                            }
-                               
-                             break;
-                        case TrafficStatisticGroupKeys.PortOut:
-                              if (Id != null)
-                                data.GroupKeyValues[i].Name = Id;
-                            else
-                            {
-                                data.GroupKeyValues[i].Id = "N/A";
-                                data.GroupKeyValues[i].Name = "N/A";
-                            }
-                               
-                             break;
-                        case TrafficStatisticGroupKeys.GateWayOut:
-                            if (Id != null)
-                                data.GroupKeyValues[i].Name = Id;
-                            else
-                            {
-                                data.GroupKeyValues[i].Id = "N/A";
-                                data.GroupKeyValues[i].Name = "N/A";
-                            }
-                               
-                             break;
-                        case TrafficStatisticGroupKeys.GateWayIn:
-                           if (Id!=null)
-                            data.GroupKeyValues[i].Name = Id;
-                            else
-                           {
-                               data.GroupKeyValues[i].Id = "N/A";
-                               data.GroupKeyValues[i].Name = "N/A";
-                           }
-                             break;
-                        case TrafficStatisticGroupKeys.CodeBuy:
-                             if (Id != null)
-                                 data.GroupKeyValues[i].Name = Id;
-                             else
-                             {
-                                 data.GroupKeyValues[i].Id = "N/A";
-                                 data.GroupKeyValues[i].Name = "N/A";
-                             }
-                             break;
-                        case TrafficStatisticGroupKeys.CodeSales:
-                             if (Id != null)
-                                 data.GroupKeyValues[i].Name = Id;
-                             else
-                             {
-                                 data.GroupKeyValues[i].Id = "N/A";
-                                 data.GroupKeyValues[i].Name = "N/A";
-                             }
-                             break;
+                          if (Id != "N/A")
+                            data.GroupKeyValues[i].Name = manager.GetZoneName(Convert.ToInt32(Id));break;                            
                         default: break;
                     }
 

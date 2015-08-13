@@ -402,6 +402,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
         $scope.isGettingEntityStatistics = true;
         AnalyticsAPIService.GetTrafficStatistics(groupKey.value, $scope.selectedEntityId, $scope.fromDate, $scope.toDate)
         .then(function (response) {
+            console.log(response);
             var chartData = response;
 
             var chartDefinition = {
@@ -409,7 +410,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                 title: $scope.selectedEntityName
             };
             var xAxisDefinition = {
-                titlePath: "FirstCDRAttempt",
+                titlePath: "Attempts",
                 isDateTime: true
             };
             var seriesDefinitions = [];

@@ -64,11 +64,8 @@ function RepeatedNumbersController($scope, UtilsService, $q, RepeatedNumbersAPIS
 
     function retrieveData() {
             for (var i = 0; i < $scope.measures.length; i++) {
-                if($scope.measures[i].value==RepeatedNumbersMeasureEnum.SwitchName.value && $scope.selectedSwitches.length != 0)
-                    $scope.measures[i].isShown=true;
-                else if($scope.measures[i].value==RepeatedNumbersMeasureEnum.SwitchName.value && $scope.selectedSwitches.length == 0)
-                $scope.measures[i].isShown=false;
-
+                if($scope.measures[i].value==RepeatedNumbersMeasureEnum.SwitchName.value)
+                    $scope.measures[i].isShown=$scope.selectedSwitches.length != 0;
             }
 
         var filter = buildFilter();
