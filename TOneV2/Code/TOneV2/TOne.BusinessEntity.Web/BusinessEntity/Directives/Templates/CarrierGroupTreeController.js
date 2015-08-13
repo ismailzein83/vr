@@ -1,6 +1,6 @@
-﻿TestCarrierGroupTreeController.$inject = ['$scope', 'CarrierGroupAPIService'];
+﻿CarrierGroupTreeController.$inject = ['$scope', 'CarrierGroupAPIService'];
 
-function TestCarrierGroupTreeController($scope, CarrierGroupAPIService) {
+function CarrierGroupTreeController($scope, CarrierGroupAPIService) {
 
     var treeAPI;
     var mainGridAPI;
@@ -82,19 +82,6 @@ function TestCarrierGroupTreeController($scope, CarrierGroupAPIService) {
     defineScope();
     load();
     defineGrid();
-
-    //function getCarrierAccounts() {
-    //    return CarrierGroupAPIService.GetCarrierAccountsByGroup($scope.currentNode.EntityId, true).then(function (response) {
-    //        angular.forEach(response, function (item) {
-    //            $scope.carrierAccounts.push(item);
-    //        });
-    //    });
-    //}
-
-    //function refreshGrid() {
-    //    mainGridAPI.clearDataAndContinuePaging();
-    //    getCarrierAccounts();
-    //}
 }
 
-appControllers.controller('BusinessEntity_TestCarrierGroupTreeController', TestCarrierGroupTreeController);
+appControllers.controller('BusinessEntity_CarrierGroupTreeController', CarrierGroupTreeController);
