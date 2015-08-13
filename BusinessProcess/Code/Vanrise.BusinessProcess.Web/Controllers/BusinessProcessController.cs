@@ -32,10 +32,10 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
 
         [HttpGet]
-        public IEnumerable<BPInstanceModel> GetOpenedInstances()
+        public IEnumerable<BPInstanceModel> GetRecentInstances(DateTime? StatusUpdatedAfter)
         {
             BPClient manager = new BPClient();
-            return BPMappers.MapTMapInstances(manager.GetOpenedInstances());
+            return BPMappers.MapTMapInstances(manager.GetRecentInstances(StatusUpdatedAfter));
         }
 
         [HttpGet]

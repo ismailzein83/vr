@@ -22,7 +22,7 @@
                 <vr-columns width="fullrow">
                     <vr-datagrid datasource="filteredDefinitions" on-ready="onGridReady" menuactions="gridMenuActions">
                         <vr-datagridcolumn headertext="'Process'" field="'Title'" ></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Running Instances'" field="'runningInstances'" ></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Opened Instances'"  >{{dataItem.runningInstances}}</vr-datagridcolumn>
                         <vr-datagridexpandablerow>
 
                             <vr-choices>
@@ -31,15 +31,17 @@
                             </vr-choices>
 
                             <div ng-show="dataItem.isRunningTabShown">
-                                <vr-datagrid datasource="dataItem.openedInstances">
+                                <vr-datagrid datasource="dataItem.recentInstances">
                                     <vr-datagridcolumn headertext="'Title'" field="'Title'" isclickable="true" onclicked="viewScope.processInstanceClicked"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Execution Status'" field="'StatusDescription'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" widthfactor="5" getcolor="viewScope.getStatusColor"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Created On'" field="'CreatedTime'" type="'Datetime'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Last Status Update Time'" field="'StatusUpdatedTime'" type="'Datetime'"></vr-datagridcolumn>
                                 </vr-datagrid>
                             </div>
                             <div ng-show="dataItem.isScheduledTabShow">
                                 <vr-datagrid datasource="dataItem.scheduledTasks"    >
                                     <vr-datagridcolumn headertext="'Name'" field="'Name'" isclickable="true" onclicked="viewScope.schedulerTaskClicked"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" widthfactor="5" getcolor="viewScope.getStatusColor"></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'Last Run Time'" field="'LastRunTime'"></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'Next Run Time'" field="'NextRunTime'"></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'Is Enabled'" field="'IsEnabledDescription'">     </vr-datagridcolumn>

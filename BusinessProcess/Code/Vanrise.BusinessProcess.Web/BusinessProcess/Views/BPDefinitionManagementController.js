@@ -1,9 +1,10 @@
-﻿BPDefinitionManagementController.$inject = ['$scope', 'BusinessProcessAPIService', 'VRModalService', '$interval', 'VRNotificationService', 'UtilsService', 'BusinessProcessService'];
+﻿BPDefinitionManagementController.$inject = ['$scope', 'BusinessProcessService', 'BusinessProcessAPIService', 'BPInstanceStatusEnum', 'VRModalService', '$interval', 'VRNotificationService', 'UtilsService', 'BusinessProcessService'];
 
-function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRModalService, $interval, VRNotificationService, UtilsService, BusinessProcessService) {
+function BPDefinitionManagementController($scope, BusinessProcessService, BusinessProcessAPIService, BPInstanceStatusEnum, VRModalService, $interval, VRNotificationService, UtilsService, BusinessProcessService) {
 
     var interval;
     var mainGridAPI;
+    var statusUpdatedAfter = '';
 
     defineScope();
     load();
@@ -38,6 +39,10 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
             stopGetData();
         });
 
+        $scope.getStatusColor = function (dataItem, colDef) {
+            return BusinessProcessService.getStatusColor(dataItem.Status);
+        };
+
         defineMenuActions();
     }
 
@@ -58,13 +63,13 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
             onScopeReady: function (modalScope) {
                 modalScope.title = "Start New Instance";
                 modalScope.onProcessInputCreated = function (processInstanceId) {
-                    getOpenedInstancesData();
+                    getRecentInstancesData();
                     showBPTrackingModal(processInstanceId);
                 };
 
                 modalScope.onProcessInputsCreated = function () {
                     VRNotificationService.showSuccess("Bussiness Instances created succesfully;  Open nested grid to see the created instances");
-                    getOpenedInstancesData();
+                    getRecentInstancesData();
                 };
             }
         });
@@ -79,7 +84,7 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
     function startGetData() {
         if (angular.isDefined(interval)) return;
         interval = $interval(function callAtInterval() {
-            getOpenedInstancesData();
+            getRecentInstancesData();
             getScheduledTasksData();
         }, 10000);
     }
@@ -97,37 +102,72 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
         var title = $scope.title != undefined ? $scope.title : '';
 
         BusinessProcessAPIService.GetFilteredDefinitions(title).then(function (response) {
-            angular.forEach(response, function (def) {            
+            angular.forEach(response, function (def) {
                 $scope.filteredDefinitions.push(def);
             });
-          
-            getOpenedInstancesData();
+
+            getRecentInstancesData();
             getScheduledTasksData();
         });
-        
+
     }
 
-    function getOpenedInstancesData() {
+    function getRecentInstancesData() {
 
-        BusinessProcessAPIService.GetOpenedInstances().then(function (response) {
+
+
+        angular.forEach($scope.filteredDefinitions, function (def) { def.openedInstances = []; });
+
+        BusinessProcessAPIService.GetRecentInstances(statusUpdatedAfter).then(function (response) {
+
             angular.forEach(response, function (inst) {
+
+                if (statusUpdatedAfter == '' && UtilsService.getEnum(BPInstanceStatusEnum, 'value', inst.Status).isOpened)
+                    statusUpdatedAfter = inst.StatusUpdatedTime;
+                
+
                 angular.forEach($scope.filteredDefinitions, function (def) {
                     if (def.BPDefinitionID == inst.DefinitionID) {
+
+                        if (angular.isUndefined(def.recentInstances)) {
+                            def.recentInstances = [];
+                        }
+
                         if (angular.isUndefined(def.openedInstances)) {
                             def.openedInstances = [];
                         }
 
-                        if (angular.isUndefined(def.runningInstances)) {
-                            def.runningInstances = 0;
+
+
+                        //if (angular.isUndefined(def.runningInstances)) {
+                        //    def.runningInstances = 0;
+                        //}
+
+
+
+                        if (UtilsService.getEnum(BPInstanceStatusEnum, 'value', inst.Status).isOpened) {
+                            var openedProcessInstanceIndex = UtilsService.getItemIndexByVal(def.openedInstances, inst.ProcessInstanceID, "ProcessInstanceID");
+
+                            if (openedProcessInstanceIndex >= 0)
+                                def.openedInstances[openedProcessInstanceIndex] = inst;
+                            else
+                                def.openedInstances.push(inst);
                         }
-                        def.runningInstances = parseInt(def.runningInstances) + 1;
-                        var processInstanceIndex = UtilsService.getItemIndexByVal(def.openedInstances, inst.ProcessInstanceID, "ProcessInstanceID");
-                        if (processInstanceIndex >= 0) {
-                            
-                            def.openedInstances[processInstanceIndex] = inst;
-                        }
+
+                        def.runningInstances = def.openedInstances.length;
+                        console.log(def.runningInstances)
+
+                        var processInstanceIndex = UtilsService.getItemIndexByVal(def.recentInstances, inst.ProcessInstanceID, "ProcessInstanceID");
+
+                        if (processInstanceIndex >= 0)
+                            def.recentInstances[processInstanceIndex] = inst;
                         else
-                            def.openedInstances.push(inst);
+                            def.recentInstances.push(inst);
+
+
+
+
+
                     }
                 });
             });
@@ -140,7 +180,7 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
         angular.forEach($scope.filteredDefinitions, function (def) {
             def.scheduledTasks = [];
         });
-        
+
         BusinessProcessAPIService.GetWorkflowTasksByDefinitionIds().then(function (response) {
             angular.forEach(response, function (task) {
                 angular.forEach($scope.filteredDefinitions, function (def) {

@@ -21,7 +21,7 @@ namespace Vanrise.BusinessProcess.Data
 
         Vanrise.Entities.BigResult<BPInstance> GetInstancesByCriteria(Vanrise.Entities.DataRetrievalInput<BPInstanceQuery> input);
 
-        List<BPInstance> GetOpenedInstances();
+        List<BPInstance> GetRecentInstances(DateTime? StatusUpdatedAfter);
 
         List<BPInstance> GetInstancesByCriteria(int definitionID, DateTime dateFrom, DateTime dateTo);
         

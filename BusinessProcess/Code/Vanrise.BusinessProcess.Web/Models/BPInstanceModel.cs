@@ -19,5 +19,7 @@ namespace Vanrise.BusinessProcess.Web.Models
         public object InputArgument { get; set; }
         public string LastMessage { get; set; }
         public DateTime CreatedTime { get; set; }
+        public DateTime? StatusUpdatedTime { get; set; }
+        
     }
 }

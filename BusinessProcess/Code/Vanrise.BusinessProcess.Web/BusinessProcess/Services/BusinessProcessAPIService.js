@@ -8,8 +8,11 @@
 
     function businessProcessApiService(BaseAPIService) {
 
-        function GetOpenedInstances() {
-            return BaseAPIService.get("/api/BusinessProcess/GetOpenedInstances");
+        function GetRecentInstances(statusUpdatedAfter) {
+            return BaseAPIService.get("/api/BusinessProcess/GetRecentInstances",
+                {
+                    StatusUpdatedAfter: statusUpdatedAfter
+                });
         }
 
         function GetDefinitions() {
@@ -89,7 +92,7 @@
             GetFilteredBProcess: GetFilteredBProcess,
             GetFilteredTrackings: GetFilteredTrackings,
             GetTrackingSeverity: GetTrackingSeverity,
-            GetOpenedInstances: GetOpenedInstances,
+            GetRecentInstances: GetRecentInstances,
             CreateNewProcess: CreateNewProcess,
             GetBPInstance: GetBPInstance,
             GetDefinition: GetDefinition,

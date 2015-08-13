@@ -50,7 +50,8 @@ namespace Vanrise.BusinessProcess.Web.ModelMappers
                 InputArgument = ins.InputArgument,
                 LastMessage = ins.LastMessage,
                 CreatedTime = ins.CreatedTime,
-                StatusDescription = ins.Status.ToString()
+                StatusDescription = ins.Status.ToString(),
+                StatusUpdatedTime = ins.StatusUpdatedTime
 
             };
         }

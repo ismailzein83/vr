@@ -61,19 +61,9 @@ namespace Vanrise.BusinessProcess.Data.SQL
         }
 
 
-        public List<BPInstance> GetOpenedInstances()
+        public List<BPInstance> GetRecentInstances(DateTime? StatusUpdatedAfter)
         {
-            List<int> instanceStatus = new List<int>();
-            foreach (BPInstanceStatus bpInstanceStatus in Enum.GetValues(typeof(BPInstanceStatus)))
-            {
-                if (!BPInstanceStatusAttribute.GetAttribute(bpInstanceStatus).IsClosed)
-                {
-                    instanceStatus.Add(((int)bpInstanceStatus));
-                }
-                    
-            }
-
-            return GetItemsSP("bp.sp_BPInstance_GetOpened", BPInstanceMapper, instanceStatus == null ? null : string.Join(",", instanceStatus.Select(n => n.ToString()).ToArray()));
+            return GetItemsSP("bp.sp_BPInstance_GetRecent", BPInstanceMapper, StatusUpdatedAfter);
         }
 
 
@@ -231,7 +221,8 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 Status = (BPInstanceStatus)reader["ExecutionStatus"],
                 RetryCount = GetReaderValue<int>(reader, "RetryCount"),
                 LastMessage = reader["LastMessage"] as string,
-                CreatedTime =  (DateTime)reader["CreatedTime"]
+                CreatedTime =  (DateTime)reader["CreatedTime"],
+                StatusUpdatedTime = GetReaderValue<DateTime?>(reader, "StatusUpdatedTime")
             };
             if (withInputArguments)
             {

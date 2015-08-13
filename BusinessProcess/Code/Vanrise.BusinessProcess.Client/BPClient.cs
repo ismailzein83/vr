@@ -69,10 +69,10 @@ namespace Vanrise.BusinessProcess.Client
 
         #region BP Transaction Methods
 
-        public List<BPInstance> GetOpenedInstances()
+        public List<BPInstance> GetRecentInstances(DateTime? StatusUpdatedAfter)
         {
             IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
-            return dataManager.GetOpenedInstances();
+            return dataManager.GetRecentInstances(StatusUpdatedAfter);
         }
         public List<BPDefinition> GetFilteredDefinitions(string title)
         {
