@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace TOne.Analytics.Entities
 {
     public enum AlertLevel : byte
@@ -36,6 +31,18 @@ namespace TOne.Analytics.Entities
         PortOut=9,
         CodeSales = 10,
         CodeBuy = 11
+    }
+
+    public enum ReleaseCodeMeasure
+    {
+        RelCode = 0,
+        ReleaseSource = 1,
+        FailedAttempts = 2,
+        Attempts = 3,
+        Percentage = 4,
+        DurationInMinutes = 5,
+        FirstCall = 6,
+        LastCall = 7
     }
 
     public enum TrafficStatisticMeasures
