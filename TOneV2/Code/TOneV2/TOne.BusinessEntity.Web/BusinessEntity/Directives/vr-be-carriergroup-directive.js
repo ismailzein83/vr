@@ -80,7 +80,6 @@ app.directive('vrBeCarriergroup', ['VRModalService', 'UtilsService', 'VRNotifica
                + ' <span class="glyphicon glyphicon-th hand-cursor"  aria-hidden="true" ng-click="openTreePopup()"></span></div>';
     }
     function BeCarrierGroup(ctrl, VRModalService, UtilsService, VRNotificationService, CarrierAccountAPIService, CarrierGroupAPIService, CarrierTypeEnum,datasource) {
-        console.log(ctrl.type);
         var type;
         if (ctrl.type == "Customer")
             type = CarrierTypeEnum.Customer.value;
