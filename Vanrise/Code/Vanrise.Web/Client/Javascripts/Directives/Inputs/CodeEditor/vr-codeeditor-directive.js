@@ -33,7 +33,7 @@
             controllerAs: 'ctrl',
             bindToController: true,
             template: function (element, attrs) {
-                return '<textarea ui-codemirror="ctrl.editorOptions" ng-model="ctrl.value"></textarea>';
+                return '<textarea ui-codemirror="ctrl.editorOptions" ng-model="ctrl.value"></textarea>'
             }
 
         };

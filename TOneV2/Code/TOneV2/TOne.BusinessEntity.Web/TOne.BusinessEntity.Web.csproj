@@ -216,6 +216,7 @@
   <ItemGroup>
     <Content Include="BusinessEntity\Views\TestPage.html" />
     <Content Include="BusinessEntity\Views\TestPageController.js" />
+    <Content Include="BusinessEntity\Views\TestPageEditor.html" />
     <Content Include="packages.config" />
     <Content Include="web.config" />
   </ItemGroup>

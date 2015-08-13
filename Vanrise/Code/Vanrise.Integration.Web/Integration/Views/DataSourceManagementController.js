@@ -60,7 +60,7 @@ function DataSourceManagementController($scope, DataSourceAPIService, VRModalSer
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "Add Data Source";
             modalScope.onDataSourceAdded = function (dataSource) {
-                mainGridAPI.itemAdded(dataSource);
+                gridApi.itemAdded(dataSource);
             };
         };
         VRModalService.showModal('/Client/Modules/Integration/Views/DataSourceEditor.html', null, settings);
@@ -77,7 +77,7 @@ function DataSourceManagementController($scope, DataSourceAPIService, VRModalSer
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Edit Data Source";
             modalScope.onDataSourceUpdated = function (dataSource) {
-                mainGridAPI.itemUpdated(dataSource);
+                gridApi.itemUpdated(dataSource);
             };
         };
         VRModalService.showModal('/Client/Modules/Integration/Views/DataSourceEditor.html', parameters, modalSettings);
@@ -93,8 +93,7 @@ function DataSourceManagementController($scope, DataSourceAPIService, VRModalSer
                     return DataSourceAPIService.DeleteDataSource(dataSourceObj.DataSourceId)
                         .then(function (deletionResponse) {
                             VRNotificationService.notifyOnItemDeleted("Data Source", deletionResponse);
-                            $scope.dataSources = []; // clear the grid
-                            return getData(); // refresh the grid
+                            return retrieveData(); // refresh the grid
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);

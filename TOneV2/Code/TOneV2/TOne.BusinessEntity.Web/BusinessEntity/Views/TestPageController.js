@@ -1,6 +1,6 @@
-﻿TestPageController.$inject = ['$scope', 'UsersAPIService', 'UtilsService'];
+﻿TestPageController.$inject = ['$scope', 'UsersAPIService', 'UtilsService', 'VRModalService'];
 
-function TestPageController($scope, UsersAPIService, UtilsService) {
+function TestPageController($scope, UsersAPIService, UtilsService, VRModalService) {
   
     defineScope();
     load();
@@ -133,6 +133,22 @@ function TestPageController($scope, UsersAPIService, UtilsService) {
                 reIndexNode(userIds, $scope.selectedManager.UserId);
             }
         };
+
+        $scope.test = function () {
+            var settings = {
+                useModalTemplate: true,
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.title = "Testing VR-Code-Editor";
+
+                modalScope.onModalClosed = function () {
+
+                };
+            };
+
+            VRModalService.showModal('/Client/Modules/BusinessEntity/Views/TestPageEditor.html', null, settings);
+        }
     };
 
     function load() {
@@ -167,6 +183,12 @@ function TestPageController($scope, UsersAPIService, UtilsService) {
                 console.log($scope.selectedUsers);
             }
         }, false);
+
+        loadCode();
+    }
+
+    function loadCode() {
+        $scope.customCode = '<script>document.write("Hello world!");</script>';
     }
 }
 
