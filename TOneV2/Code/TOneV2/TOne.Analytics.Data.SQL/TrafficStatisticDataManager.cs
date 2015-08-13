@@ -23,6 +23,18 @@ namespace TOne.Analytics.Data.SQL
             string columnId;
             GetColumnNames(input.Query.GroupKeys[0], out columnId);
             mapper.Add("GroupKeyValues[0].Name", columnId);
+            mapper.Add("Zone", "OurZoneID");
+            mapper.Add("Customer", "CustomerID");
+            mapper.Add("Supplier", "SupplierID");
+            mapper.Add("Code Group", "CodeGroupID");
+            mapper.Add("Switch", "SwitchID");
+            mapper.Add("GateWay In", "GateWayInName");
+            mapper.Add("GateWay Out", "GateWayOutName");
+            mapper.Add("Port In", "Port_IN");
+            mapper.Add("Port Out", "Port_OUT");
+            mapper.Add("Code Sales", "OurCode");
+            mapper.Add("Code Buy", "SupplierCode");
+
             string tempTable=null;
             Action<string> createTempTableAction = (tempTableName) =>
             {
@@ -126,7 +138,7 @@ namespace TOne.Analytics.Data.SQL
                                         ,csc.SwitchID AS SwitchID
                                          ,csc.Details AS Details
                                          ,csc.BeginEffectiveDate AS BeginEffectiveDate
-                                          ,csc.EndEffectiveDate AS EndEffectiveDate
+                                           ,csc.EndEffectiveDate AS EndEffectiveDate
                                      ,csc.[Name] AS GateWayName
                                      FROM   CarrierSwitchConnectivity csc WITH(NOLOCK)--, INDEX(IX_CSC_CarrierAccount))
                                      WHERE (csc.EndEffectiveDate IS null)
@@ -214,7 +226,7 @@ namespace TOne.Analytics.Data.SQL
         }
         private void AddFilterToQuery(TrafficStatisticFilter filter, StringBuilder whereBuilder, HashSet<string> joinStatement)
         {
-            AddFilter(whereBuilder, filter.SwitchIds, "ts.SwitchId");
+            AddFilter(whereBuilder, filter.SwitchIds, "ts.SwitchID");
             AddFilter(whereBuilder, filter.CustomerIds, "ts.CustomerID");
             AddFilter(whereBuilder, filter.SupplierIds, "ts.SupplierID");
             if (filter.CodeGroups != null && filter.CodeGroups.Count > 0)
@@ -270,31 +282,110 @@ namespace TOne.Analytics.Data.SQL
                     switch (groupKey)
                     {
                         case TrafficStatisticGroupKeys.OurZone:
-                            data.GroupKeyValues[i].Name = manager.GetZoneName(Convert.ToInt32(Id));break;
+                              if (Id != null)
+                                  data.GroupKeyValues[i].Name = manager.GetZoneName(Convert.ToInt32(Id));
+                            else
+                            {
+                                data.GroupKeyValues[i].Id = "N/A";
+                                data.GroupKeyValues[i].Name = "N/A";
+                            }
+                               
+                             break;
+                          
                         case TrafficStatisticGroupKeys.CustomerId:
-                            if(Id!=null)
-                              data.GroupKeyValues[i].Name = manager.GetCarrirAccountName(Id);break;
+                          if (Id != null)
+                               data.GroupKeyValues[i].Name = manager.GetCarrirAccountName(Id);
+                            else
+                            {
+                                data.GroupKeyValues[i].Id = "N/A";
+                                data.GroupKeyValues[i].Name = "N/A";
+                            }
+                          break;   
+
                         case TrafficStatisticGroupKeys.SupplierId:
-                            if (Id != null)
-                            data.GroupKeyValues[i].Name = manager.GetCarrirAccountName(Id);break;
+                                if (Id != null)
+                                    data.GroupKeyValues[i].Name = manager.GetCarrirAccountName(Id);
+                            else
+                            {
+                                data.GroupKeyValues[i].Id = "N/A";
+                                data.GroupKeyValues[i].Name = "N/A";
+                            }
+                          break; 
                         case TrafficStatisticGroupKeys.Switch:
-                            data.GroupKeyValues[i].Name = manager.GetSwitchName(Convert.ToInt32(Id));break;
+                                if (Id != null)
+                                    data.GroupKeyValues[i].Name = manager.GetSwitchName(Convert.ToInt32(Id));
+                            else
+                            {
+                                data.GroupKeyValues[i].Id = "N/A";
+                                data.GroupKeyValues[i].Name = "N/A";
+                            }
+                          break; 
                         case TrafficStatisticGroupKeys.CodeGroup:
-                            break;
+                                if (Id == null)
+                            {
+                                data.GroupKeyValues[i].Id = "N/A";
+                                data.GroupKeyValues[i].Name = "N/A";
+                            }
+                          break; 
                         case TrafficStatisticGroupKeys.SupplierZoneId:
                             data.GroupKeyValues[i].Name = manager.GetZoneName(Convert.ToInt32(Id));break;
                         case TrafficStatisticGroupKeys.PortIn:
-                           data.GroupKeyValues[i].Name=Id;break;
+                             if (Id != null)
+                                data.GroupKeyValues[i].Name = Id;
+                            else
+                            {
+                                data.GroupKeyValues[i].Id = "N/A";
+                                data.GroupKeyValues[i].Name = "N/A";
+                            }
+                               
+                             break;
                         case TrafficStatisticGroupKeys.PortOut:
-                           data.GroupKeyValues[i].Name =Id;break;
+                              if (Id != null)
+                                data.GroupKeyValues[i].Name = Id;
+                            else
+                            {
+                                data.GroupKeyValues[i].Id = "N/A";
+                                data.GroupKeyValues[i].Name = "N/A";
+                            }
+                               
+                             break;
                         case TrafficStatisticGroupKeys.GateWayOut:
-                            data.GroupKeyValues[i].Name = Id; break;
+                            if (Id != null)
+                                data.GroupKeyValues[i].Name = Id;
+                            else
+                            {
+                                data.GroupKeyValues[i].Id = "N/A";
+                                data.GroupKeyValues[i].Name = "N/A";
+                            }
+                               
+                             break;
                         case TrafficStatisticGroupKeys.GateWayIn:
-                            data.GroupKeyValues[i].Name = Id; break;
+                           if (Id!=null)
+                            data.GroupKeyValues[i].Name = Id;
+                            else
+                           {
+                               data.GroupKeyValues[i].Id = "N/A";
+                               data.GroupKeyValues[i].Name = "N/A";
+                           }
+                             break;
                         case TrafficStatisticGroupKeys.CodeBuy:
-                            data.GroupKeyValues[i].Name =Id;break;
+                             if (Id != null)
+                                 data.GroupKeyValues[i].Name = Id;
+                             else
+                             {
+                                 data.GroupKeyValues[i].Id = "N/A";
+                                 data.GroupKeyValues[i].Name = "N/A";
+                             }
+                             break;
                         case TrafficStatisticGroupKeys.CodeSales:
-                            data.GroupKeyValues[i].Name = Id; break;
+                             if (Id != null)
+                                 data.GroupKeyValues[i].Name = Id;
+                             else
+                             {
+                                 data.GroupKeyValues[i].Id = "N/A";
+                                 data.GroupKeyValues[i].Name = "N/A";
+                             }
+                             break;
                         default: break;
                     }
 
@@ -475,8 +566,9 @@ namespace TOne.Analytics.Data.SQL
                     groupByStatement = null; 
                     break;
                 case TrafficStatisticGroupKeys.Switch:
+                    columnName = String.Format("ts.SwitchID as {0}", SwitchIdColumnName);
+                    groupByStatement = "ts.SwitchID";
                     joinStatement = null;
-                    groupByStatement = null; 
                     break;
                   case TrafficStatisticGroupKeys.CodeGroup:
                     columnName = String.Format("z.CodeGroup as {0}, c.Name {1}", CodeGroupIDColumnName, CodeGroupNameColumnName);
@@ -541,7 +633,7 @@ namespace TOne.Analytics.Data.SQL
         }
 
         #endregion
-        const string SwitchIdColumnName = "SwitchId";
+        const string SwitchIdColumnName = "SwitchID";
         const string OurZoneIDColumnName = "OurZoneID";
         const string CustomerIDColumnName = "CustomerID";
         const string SupplierIDColumnName = "SupplierID";
@@ -557,7 +649,7 @@ namespace TOne.Analytics.Data.SQL
         const string CodeSalesIDColumnName = "OurCode";
 
         const string OurZonesJoinQuery = " LEFT JOIN OurZones z ON ts.OurZoneID = z.ZoneID";
-        const string GateWayInJoinQuery = "Left JOIN SwitchConnectivity cscIn  ON (','+cscIn.Details+',' LIKE '%,'+ts.Port_IN +',%' ) AND(TS.SwitchID = cscIn.SwitchID) AND ts.CustomerID =cscIn.CarrierAccount ";
-        const string GateWayOutJoinQuery = "Left JOIN SwitchConnectivity cscOut ON  (','+cscOut.Details+',' LIKE '%,'+ts.Port_OUT +',%') AND (TS.SwitchID = cscOut.SwitchID)  AND ts.SupplierID  =cscOut.CarrierAccount  ";
+        const string GateWayInJoinQuery = "Left JOIN SwitchConnectivity cscIn  ON (','+cscIn.Details+',' LIKE '%,'+ts.Port_IN +',%' ) AND(ts.SwitchID = cscIn.SwitchID) AND ts.CustomerID =cscIn.CarrierAccount ";
+        const string GateWayOutJoinQuery = "Left JOIN SwitchConnectivity cscOut ON  (','+cscOut.Details+',' LIKE '%,'+ts.Port_OUT +',%') AND (ts.SwitchID = cscOut.SwitchID)  AND ts.SupplierID  =cscOut.CarrierAccount  ";
     }
 }

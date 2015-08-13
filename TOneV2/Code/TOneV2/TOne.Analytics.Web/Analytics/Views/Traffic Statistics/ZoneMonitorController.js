@@ -19,7 +19,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
         $scope.asr = 50.0;
         $scope.showResult = false;
         $scope.acd=20.0;
-        $scope.attampts = 2;
+        $scope.attempts = 2;
         $scope.groupKeys = groupKeys;
         $scope.selectedGroupKeys = analyticsService.getDefaultTrafficStatisticGroupKeys();
 
@@ -139,12 +139,14 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
             angular.forEach($scope.selectedGroupKeys, function (group) {
                 $scope.currentSearchCriteria.groupKeys.push(group);
             });
+            if (mainGridAPI!=undefined)
             return retrieveData(true);
         };
 
         $scope.onGroupKeyClicked = function (dataItem, colDef) {
             var group = colDef.tag;
             var groupIndex = $scope.currentSearchCriteria.groupKeys.indexOf(group);
+            if (dataItem.GroupKeyValues[groupIndex].Id != "N/A" || dataItem.GroupKeyValues[groupIndex].Id !=null)
             $scope.selectEntity(group, dataItem.GroupKeyValues[groupIndex].Id, dataItem.GroupKeyValues[groupIndex].Name);
         };
 
@@ -186,7 +188,6 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
     function retrieveData(withSummary) {
         if (!chartSelectedMeasureAPI)
             return;
-        
         if (chartSelectedEntityAPI)
             chartSelectedEntityAPI.hideChart();
         var filter = buildFilter();
@@ -226,11 +227,11 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
     }
 
     function getACDColor(acdValue, attemptsValue) {
-        if (attemptsValue>$scope.attampts && acdValue<$scope.acd)
+        if (attemptsValue>$scope.attempts && acdValue<$scope.acd)
             return LabelColorsEnum.WarningLevel1.Color; 
     };
     function getASRColor(asrValue, attemptsValue) {
-        if (attemptsValue > $scope.attampts && asrValue < $scope.asr)
+        if (attemptsValue > $scope.attempts && asrValue < $scope.asr)
             return LabelColorsEnum.WarningLevel2.Color;
     };
 
