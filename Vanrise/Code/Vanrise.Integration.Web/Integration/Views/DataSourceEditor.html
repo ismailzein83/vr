@@ -26,8 +26,8 @@
                     <div ng-include="selectedAdapterType.Info.AdapterTemplateURL"></div>
                 </vr-row>
             </div>
-            <div ng-if="mappperSettignsSelected">
-                <vr-code-editor value="customCode"></vr-code-editor>
+            <div ng-show="mappperSettignsSelected">
+                <textarea ng-model="customCode" rows="15" cols="64" style="margin-top: 15px;"></textarea>
             </div>
             <div ng-show="schedulerSettignsSelected">
                 <vr-row>
