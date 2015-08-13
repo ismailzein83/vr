@@ -17,10 +17,14 @@ namespace Vanrise.Runtime.Data
 
         List<Entities.SchedulerTask> GetAllTasks();
 
-        List<Entities.SchedulerTask> GetReadyAndNewTasks();
+        List<Entities.SchedulerTask> GetDueTasks();
 
         bool AddTask(Entities.SchedulerTask taskObject, out int insertedId);
 
         bool UpdateTask(Entities.SchedulerTask taskObject);
+
+        bool TryLockTask(int taskId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds, IEnumerable<Entities.SchedulerTaskStatus> acceptableTaskStatuses);
+
+        void UnlockTask(int taskId);
     }
 }

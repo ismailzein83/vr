@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,9 +38,9 @@ namespace Vanrise.Runtime.Data.SQL
             return GetItemsSP("runtime.sp_SchedulerTask_GetAll", TaskMapper);
         }
 
-        public List<Entities.SchedulerTask> GetReadyAndNewTasks()
+        public List<Entities.SchedulerTask> GetDueTasks()
         {
-            return GetItemsSP("runtime.sp_SchedulerTask_GetReadyAndNewTasks", TaskMapper);
+            return GetItemsSP("runtime.sp_SchedulerTask_GetDueTasks", TaskMapper);
         }
 
         public bool AddTask(Entities.SchedulerTask taskObject, out int insertedId)
@@ -61,6 +62,28 @@ namespace Vanrise.Runtime.Data.SQL
             return (recordesEffected > 0);
         }
 
+        public bool TryLockTask(int taskId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds, IEnumerable<Entities.SchedulerTaskStatus> acceptableTaskStatuses)
+        {
+            int rslt = ExecuteNonQuerySPCmd("runtime.sp_SchedulerTask_TryLockAndUpdateScheduleTask",
+                (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@TaskId", taskId));
+                    cmd.Parameters.Add(new SqlParameter("@CurrentRuntimeProcessID", currentRuntimeProcessId));
+                    var dtPrm = new SqlParameter("@RunningProcessIDs", SqlDbType.Structured);
+                    dtPrm.Value = BuildIDDataTable(runningRuntimeProcessesIds);
+                    cmd.Parameters.Add(dtPrm);
+                    dtPrm = new SqlParameter("@TaskStatuses", SqlDbType.Structured);
+                    dtPrm.Value = BuildIDDataTable(acceptableTaskStatuses.Select(itm => (int)itm));
+                    cmd.Parameters.Add(dtPrm);
+                });
+            return rslt > 0;
+        }
+
+        public void UnlockTask(int taskId)
+        {
+            ExecuteNonQuerySP("runtime.sp_SchedulerTask_UnlockTask", taskId);
+        }
+
         SchedulerTask TaskMapper(IDataReader reader)
         {
             SchedulerTask task = new SchedulerTask
@@ -77,6 +100,22 @@ namespace Vanrise.Runtime.Data.SQL
                 TaskAction = Common.Serializer.Deserialize<SchedulerTaskAction>(reader["TaskAction"] as string)
             };
             return task;
+        }
+
+        DataTable BuildIDDataTable<T>(IEnumerable<T> ids)
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("ID", typeof(T));
+            dt.BeginLoadData();
+            if (ids != null)
+            {
+                foreach (var id in ids)
+                {
+                    dt.Rows.Add(id);
+                }
+            }
+            dt.EndLoadData();
+            return dt;
         }
 
     }

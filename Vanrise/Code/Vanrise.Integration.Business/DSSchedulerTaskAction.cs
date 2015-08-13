@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Vanrise.Integration.Entities;
 using Vanrise.Queueing.Entities;
@@ -114,7 +115,7 @@ namespace Vanrise.Integration.Business
 
             int strHashCode = Math.Abs(customCode.GetHashCode());
 
-            string assemblyName = "Vanrise_Mappers_" + strHashCode;
+            string assemblyName = string.Format("Vanrise_Mappers_{0}_{1}", dataSourceId, strHashCode);
             string className = "CustomMapper_" + strHashCode;
 
             Assembly generatedAssembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.FullName.StartsWith(assemblyName));
@@ -209,10 +210,6 @@ namespace Vanrise.Integration.Business
                         _logger.WriteError("Error {0}: {1}", i, error.ErrorText);
                 }
                 
-                foreach (CompilerError error in results.Errors)
-                {
-                    
-                }
                 compiledAssembly = null;
             }
 

@@ -38,7 +38,8 @@ namespace Vanrise.Integration.Business
                 }
                 else
                 {
-                    queueItemIds.Add(long.Parse(batch.QueueItemIds)); 
+                    if(!string.IsNullOrEmpty(batch.QueueItemIds))
+                        queueItemIds.Add(long.Parse(batch.QueueItemIds)); 
                 }
             }
 
@@ -62,7 +63,10 @@ namespace Vanrise.Integration.Business
                 }
                 else
                 {
-                    batch.ExecutionStatus = dicItemExecutionStatus[long.Parse(batch.QueueItemIds)].Status;
+                    if (string.IsNullOrEmpty(batch.QueueItemIds))
+                        batch.ExecutionStatus = ItemExecutionFlowStatus.Failed;
+                    else
+                        batch.ExecutionStatus = dicItemExecutionStatus[long.Parse(batch.QueueItemIds)].Status;
                 }
             }
             
