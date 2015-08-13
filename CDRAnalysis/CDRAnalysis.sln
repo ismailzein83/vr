@@ -59,13 +59,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.FraudAnalysis
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{161A5C58-A6E9-44C5-B0FC-1012582BFDDB}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CDRAnalysisConfiguration", "CDRAnalysisConfiguration\CDRAnalysisConfiguration.sqlproj", "{662963ED-42FF-4ABF-81FA-D0FC03757540}"
-EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CDRAnalysis", "CDRAnalysis\CDRAnalysis.sqlproj", "{56B47F3B-A88D-4C9D-9706-87C7BAA05FB5}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 25
+		SccNumberOfProjects = 24
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -157,14 +155,10 @@ Global
 		SccProjectTopLevelParentUniqueName22 = CDRAnalysis.sln
 		SccProjectName22 = Dependencies
 		SccLocalPath22 = Dependencies
-		SccProjectUniqueName23 = CDRAnalysisConfiguration\\CDRAnalysisConfiguration.sqlproj
+		SccProjectUniqueName23 = CDRAnalysis\\CDRAnalysis.sqlproj
 		SccProjectTopLevelParentUniqueName23 = CDRAnalysis.sln
-		SccProjectName23 = CDRAnalysisConfiguration
-		SccLocalPath23 = CDRAnalysisConfiguration
-		SccProjectUniqueName24 = CDRAnalysis\\CDRAnalysis.sqlproj
-		SccProjectTopLevelParentUniqueName24 = CDRAnalysis.sln
-		SccProjectName24 = CDRAnalysis
-		SccLocalPath24 = CDRAnalysis
+		SccProjectName23 = CDRAnalysis
+		SccLocalPath23 = CDRAnalysis
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -307,14 +301,6 @@ Global
 		{459A8A67-4CBC-4C83-A94F-53ADA1178FA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{459A8A67-4CBC-4C83-A94F-53ADA1178FA4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{459A8A67-4CBC-4C83-A94F-53ADA1178FA4}.Release|x64.ActiveCfg = Release|Any CPU
-		{662963ED-42FF-4ABF-81FA-D0FC03757540}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{662963ED-42FF-4ABF-81FA-D0FC03757540}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{662963ED-42FF-4ABF-81FA-D0FC03757540}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{662963ED-42FF-4ABF-81FA-D0FC03757540}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{662963ED-42FF-4ABF-81FA-D0FC03757540}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{662963ED-42FF-4ABF-81FA-D0FC03757540}.Release|Any CPU.Build.0 = Release|Any CPU
-		{662963ED-42FF-4ABF-81FA-D0FC03757540}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{662963ED-42FF-4ABF-81FA-D0FC03757540}.Release|x64.ActiveCfg = Release|Any CPU
 		{56B47F3B-A88D-4C9D-9706-87C7BAA05FB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{56B47F3B-A88D-4C9D-9706-87C7BAA05FB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56B47F3B-A88D-4C9D-9706-87C7BAA05FB5}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
@@ -350,7 +336,6 @@ Global
 		{C527C7B2-A481-4D1D-B25A-4A540E812153} = {3CAFC6CA-8D5A-4FAE-9661-2B90354B0D07}
 		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0} = {3CAFC6CA-8D5A-4FAE-9661-2B90354B0D07}
 		{9BC5681C-2FD8-4A88-858C-F4DA9CCA7C15} = {3CAFC6CA-8D5A-4FAE-9661-2B90354B0D07}
-		{662963ED-42FF-4ABF-81FA-D0FC03757540} = {161A5C58-A6E9-44C5-B0FC-1012582BFDDB}
 		{56B47F3B-A88D-4C9D-9706-87C7BAA05FB5} = {161A5C58-A6E9-44C5-B0FC-1012582BFDDB}
 	EndGlobalSection
 EndGlobal

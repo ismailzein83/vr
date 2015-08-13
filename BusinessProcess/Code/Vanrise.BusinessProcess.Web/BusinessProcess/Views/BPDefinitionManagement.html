@@ -21,12 +21,12 @@
             <vr-row>
                 <vr-columns width="fullrow">
                     <vr-datagrid datasource="filteredDefinitions" on-ready="onGridReady" menuactions="gridMenuActions">
-                        <vr-datagridcolumn headertext="'Process'" field="'Title'" widthfactor="20"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Running Instances'" field="'runningInstances'" widthfactor="20"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Process'" field="'Title'" ></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Running Instances'" field="'runningInstances'" ></vr-datagridcolumn>
                         <vr-datagridexpandablerow>
 
                             <vr-choices>
-                                <vr-choice isselected="dataItem.isRunningTabShown">Running Instances</vr-choice>
+                                <vr-choice isselected="dataItem.isRunningTabShown">Recent Instances</vr-choice>
                                 <vr-choice isselected="dataItem.isScheduledTabShow">Scheduled Instances</vr-choice>
                             </vr-choices>
 
