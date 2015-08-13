@@ -505,7 +505,7 @@
                         });
                     }, 10);
                 }
-                // to handle rigth padding in old data loading methode in bi
+                // to rigth padding in old data loading methode in bi
                 if (ctrl.datasource.length <= 11)
                     ctrl.headerStyle = {
                         "padding-right": "0px"
