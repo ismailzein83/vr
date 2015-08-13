@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent draggable="" ng-controller="Security_OrgChartEditorController" width="'60%'">
+﻿<div vr-modalcontent draggable="" ng-controller="Security_OrgChartEditorController" width="'40%'">
     <vr-modalbody vr-loader="isGettingData">
         <vr-form name="orgChartEditorForm">
             <vr-choices>
@@ -18,20 +18,15 @@
 
                 <vr-row>
                     <vr-columns width="fullrow">
-                        <vr-section title="Org Chart Hierarchy">
-                            <div style="z-index: inherit">
-                                <vr-treeview on-ready="treeReady"
-                                             datachildrenfield="Members"
-                                             datavaluefield="Id"
-                                             datatextfield="Name"
-                                             selecteditem="currentNode"
-                                             draggabletree
-                                             movesettings="alllevels"
-                                             wholerow>
-                                </vr-treeview>
-                            </div>
-                           
-                        </vr-section>
+                        <vr-treeview on-ready="treeReady"
+                                     datachildrenfield="Members"
+                                     datavaluefield="Id"
+                                     datatextfield="Name"
+                                     selecteditem="currentNode"
+                                     draggabletree
+                                     movesettings="alllevels"
+                                     wholerow>
+                        </vr-treeview>
                     </vr-columns>
                 </vr-row>
 

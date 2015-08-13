@@ -11,8 +11,6 @@ function DataSourceExecutionFlowEditorController($scope, DataSourceAPIService, V
         $scope.executionFlowName = undefined;
 
         $scope.saveExecutionFlow = function () {
-            $scope.issaving = true;
-
             var execFlowObject = buildExecFlowObjFromScope();
 
             return DataSourceAPIService.AddExecutionFlow(execFlowObject)
@@ -27,9 +25,6 @@ function DataSourceExecutionFlowEditorController($scope, DataSourceAPIService, V
                 })
                 .catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
-                })
-                .finally(function () {
-                    $scope.issaving = false;
                 });
         }
 

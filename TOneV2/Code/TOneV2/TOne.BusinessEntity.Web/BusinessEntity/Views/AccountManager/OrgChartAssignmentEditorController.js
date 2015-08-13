@@ -19,7 +19,6 @@ function OrgChartAssignmentEditorController($scope, AccountManagerAPIService, Or
         $scope.orgCharts = [];
 
         $scope.assignOrgChart = function () {
-            $scope.issaving = true;
 
             AccountManagerAPIService.UpdateLinkedOrgChart($scope.assignedOrgChart.Id)
                 .then(function (response) {
@@ -32,9 +31,6 @@ function OrgChartAssignmentEditorController($scope, AccountManagerAPIService, Or
                 })
                 .catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
-                })
-                .finally(function () {
-                    $scope.issaving = false;
                 });
         }
 

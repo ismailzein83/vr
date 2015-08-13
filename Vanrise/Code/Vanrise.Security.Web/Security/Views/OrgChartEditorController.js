@@ -22,10 +22,7 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
             orgChartId = parameters.orgChartId;
         }
 
-        if (orgChartId != undefined)
-            editMode = true;
-        else
-            editMode = false;
+        editMode = (orgChartId != undefined);
     }
 
     function defineScope(){
@@ -165,7 +162,6 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
     }
 
     function insertOrgChart() {
-        $scope.issaving = true;
         var orgChartObject = buildOrgChartObjFromScope();
 
         return OrgChartAPIService.AddOrgChart(orgChartObject)
@@ -179,14 +175,10 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
             })
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
-            })
-            .finally(function () {
-                $scope.issaving = false;
             });
     }
 
     function updateOrgChart() {
-        $scope.issaving = true;
         var orgChartObject = buildOrgChartObjFromScope();
 
         return OrgChartAPIService.UpdateOrgChart(orgChartObject)
@@ -200,9 +192,6 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
             })
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
-            })
-            .finally(function () {
-                $scope.issaving = false;
             });
     }
 

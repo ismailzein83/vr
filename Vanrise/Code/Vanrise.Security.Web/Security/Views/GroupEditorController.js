@@ -16,10 +16,7 @@ function GroupEditorController($scope, GroupAPIService, UsersAPIService, VRModal
         if (parameters != undefined && parameters != null)
             $scope.groupId = parameters.groupId;
 
-        if ($scope.groupId != undefined)
-            editMode = true;
-        else
-            editMode = false;
+        editMode = ($scope.groupId != undefined);
     }
 
     function defineScope() {
@@ -107,7 +104,6 @@ function GroupEditorController($scope, GroupAPIService, UsersAPIService, VRModal
     }
 
     function insertGroup() {
-        $scope.issaving = true;
         var groupObj = buildGroupObjFromScope();
 
         return GroupAPIService.AddGroup(groupObj)
@@ -124,7 +120,6 @@ function GroupEditorController($scope, GroupAPIService, UsersAPIService, VRModal
     }
 
     function updateGroup() {
-        $scope.issaving = true;
         var groupObj = buildGroupObjFromScope();
 
         GroupAPIService.UpdateGroup(groupObj)

@@ -15,10 +15,7 @@ function UserEditorController($scope, UsersAPIService, VRModalService, VRNotific
         if (parameters != undefined && parameters != null)
             $scope.userId = parameters.userId;
 
-        if ($scope.userId != undefined)
-            editMode = true;
-        else
-            editMode = false;
+        editMode = ($scope.userId != undefined);
     }
 
     function defineScope() {
@@ -75,7 +72,6 @@ function UserEditorController($scope, UsersAPIService, VRModalService, VRNotific
     }
 
     function insertUser() {
-        $scope.issaving = true;
         var userObject = buildUserObjFromScope();
         return UsersAPIService.AddUser(userObject)
         .then(function (response) {
@@ -91,7 +87,6 @@ function UserEditorController($scope, UsersAPIService, VRModalService, VRNotific
     }
 
     function updateUser() {
-        $scope.issaving = true;
         var userObject = buildUserObjFromScope();
         UsersAPIService.UpdateUser(userObject)
         .then(function (response) {

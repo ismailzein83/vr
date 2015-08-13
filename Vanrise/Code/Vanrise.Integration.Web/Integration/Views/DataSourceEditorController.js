@@ -19,10 +19,7 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
             taskId = parameters.taskId;
         }
 
-        if (dataSourceId != undefined)
-            editMode = true;
-        else
-            editMode = false;
+        editMode = (dataSourceId != undefined);
     }
 
     function defineScope() {
