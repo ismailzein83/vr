@@ -9,14 +9,8 @@
         UpdateTask: UpdateTask
     });
 
-    function GetFilteredTasks(fromRow, toRow, name) {
-        return BaseAPIService.get("/api/SchedulerTask/GetFilteredTasks",
-            {
-                fromRow: fromRow,
-                toRow: toRow,
-                name: name
-            }
-           );
+    function GetFilteredTasks(input) {
+        return BaseAPIService.post("/api/SchedulerTask/GetFilteredTasks", input);
     }
 
     function GetTask(taskId) {

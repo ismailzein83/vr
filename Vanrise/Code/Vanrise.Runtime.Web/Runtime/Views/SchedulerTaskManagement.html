@@ -21,7 +21,13 @@
     <div>
         <vr-row>
             <vr-columns colnum="12" simplecol>
-                <vr-datagrid datasource="schedulerTasks" menuactions="gridMenuActions" loadmoredata="loadMoreData" on-ready="onMainGridReady">
+                <vr-datagrid datasource="schedulerTasks"
+                             dataretrievalfunction="dataRetrievalFunction"
+                             pagingtype="'PagingOnScroll'"
+                             on-ready="gridReady"
+                             menuactions="gridMenuActions"
+                             idfield="">
+
                     <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Is Enabled'" field="'IsEnabled'"></vr-datagridcolumn>
                 </vr-datagrid>

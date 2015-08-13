@@ -18,9 +18,14 @@ namespace Vanrise.Runtime.Data.SQL
 
         }
 
-        public List<Entities.SchedulerTask> GetFilteredTasks(int fromRow, int toRow, string name)
+        public Vanrise.Entities.BigResult<Vanrise.Runtime.Entities.SchedulerTask> GetFilteredTasks(Vanrise.Entities.DataRetrievalInput<string> input)
         {
-            return GetItemsSP("runtime.sp_SchedulerTask_GetFiltered", TaskMapper, fromRow, toRow, name);
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("runtime.sp_SchedulerTask_CreateTempForFiltered", tempTableName, input.Query);
+            };
+
+            return RetrieveData(input, createTempTableAction, TaskMapper);
         }
 
         public Entities.SchedulerTask GetTask(int taskId)

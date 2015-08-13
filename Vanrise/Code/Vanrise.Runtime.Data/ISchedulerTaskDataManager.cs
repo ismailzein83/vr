@@ -9,7 +9,7 @@ namespace Vanrise.Runtime.Data
 {
     public interface ISchedulerTaskDataManager : IDataManager
     {
-        List<Entities.SchedulerTask> GetFilteredTasks(int fromRow, int toRow, string name);
+        Vanrise.Entities.BigResult<Vanrise.Runtime.Entities.SchedulerTask> GetFilteredTasks(Vanrise.Entities.DataRetrievalInput<string> input);
 
         Entities.SchedulerTask GetTask(int taskId);
 

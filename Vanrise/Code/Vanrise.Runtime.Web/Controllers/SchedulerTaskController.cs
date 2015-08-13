@@ -12,11 +12,11 @@ namespace Vanrise.Runtime.Web.Controllers
     [JSONWithTypeAttribute]
     public class SchedulerTaskController : Vanrise.Web.Base.BaseAPIController
     {
-        [HttpGet]
-        public List<SchedulerTask> GetFilteredTasks(int fromRow, int toRow, string name)
+        [HttpPost]
+        public object GetFilteredTasks(Vanrise.Entities.DataRetrievalInput<string> input)
         {
             SchedulerTaskManager manager = new SchedulerTaskManager();
-            return manager.GetFilteredTasks(fromRow, toRow, name);
+            return GetWebResponse(input, manager.GetFilteredTasks(input));
         }
 
         [HttpGet]

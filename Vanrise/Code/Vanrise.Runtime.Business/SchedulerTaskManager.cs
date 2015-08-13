@@ -11,10 +11,10 @@ namespace Vanrise.Runtime.Business
 {
     public class SchedulerTaskManager
     {
-        public List<Vanrise.Runtime.Entities.SchedulerTask> GetFilteredTasks(int fromRow, int toRow, string name)
+        public Vanrise.Entities.IDataRetrievalResult<Vanrise.Runtime.Entities.SchedulerTask> GetFilteredTasks(Vanrise.Entities.DataRetrievalInput<string> input)
         {
-            ISchedulerTaskDataManager datamanager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
-            return datamanager.GetFilteredTasks(fromRow, toRow, name);
+            ISchedulerTaskDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredTasks(input));
         }
 
         public Vanrise.Runtime.Entities.SchedulerTask GetTask(int taskId)
