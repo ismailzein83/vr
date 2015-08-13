@@ -400,7 +400,7 @@
                 + '</div>'
 
             + '</div>';
-            }
+            }        
             buildSummaryRowHtml();
         }
 
@@ -420,7 +420,6 @@
                 + '</div>';
                 }
             }
-         
         }
         
         function defineAPI() {           
@@ -505,6 +504,15 @@
                            
                         });
                     }, 10);
+                }
+                // to handle rigth padding in old data loading methode in bi
+                if (ctrl.datasource.length <= 11)
+                    ctrl.headerStyle = {
+                        "padding-right": "0px"
+                    }
+                else
+                ctrl.headerStyle = {
+                    "padding-right": getScrollbarWidth() + "px"
                 }
             }
 
