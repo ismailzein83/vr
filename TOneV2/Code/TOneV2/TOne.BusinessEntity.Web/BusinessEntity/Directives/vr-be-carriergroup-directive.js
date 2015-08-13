@@ -73,11 +73,11 @@ app.directive('vrBeCarriergroup', ['VRModalService', 'UtilsService', 'VRNotifica
             label = attrs.label;
         else
             label = "Carriers";
-        return '<vr-columns width="normal">'
+        return '<div style="display:inline-block;width: calc(100% - 18px);">'
                    + '<vr-label >' + label + '</vr-label>'
                + ' <vr-select  ismultipleselection  datasource="datasource" selectedvalues="selectedCarrierValues" onselectionchanged="onselectionvalueschanged" datatextfield="Name" datavaluefield="CarrierAccountID"'
-               + 'entityname="' + label + '"></vr-select></vr-columns><vr-columns  width="normal">'
-               + ' <span class="glyphicon glyphicon-th hand-cursor" style="top:30px" aria-hidden="true" ng-click="openTreePopup()"></span></vr-columns>';
+               + 'entityname="' + label + '"></vr-select></div>'
+               + ' <span class="glyphicon glyphicon-th hand-cursor"  aria-hidden="true" ng-click="openTreePopup()"></span></div>';
     }
     function BeCarrierGroup(ctrl, VRModalService, UtilsService, VRNotificationService, CarrierAccountAPIService, CarrierGroupAPIService, CarrierTypeEnum,datasource) {
         console.log(ctrl.type);
