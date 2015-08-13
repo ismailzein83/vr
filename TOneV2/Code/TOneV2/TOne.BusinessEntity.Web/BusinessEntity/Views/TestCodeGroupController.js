@@ -9,7 +9,10 @@
         load();
 
         function defineScope() {
-
+            $scope.selectedvaluesneeded=[];
+            $scope.selectionchanged = function () {
+                console.log($scope.selectedvaluesneeded);
+            }
             $scope.selectedvalues = [];
 
             $scope.datasource = [];

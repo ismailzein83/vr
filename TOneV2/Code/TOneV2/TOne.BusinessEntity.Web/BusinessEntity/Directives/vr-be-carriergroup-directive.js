@@ -5,12 +5,13 @@ app.directive('vrBeCarriergroup', ['VRModalService', 'UtilsService', 'VRNotifica
         restrict: 'E',
         scope: {
             type: "=",
-            label:"@"
+            label: "@",
+            selectedvalues:"="
 
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            $scope.selectedvalues = [];
+            $scope.selectedCarrierValues = [];
             $scope.datasource = [];
             var beCarrierGroup = new BeCarrierGroup(ctrl, VRModalService, UtilsService, VRNotificationService, CarrierAccountAPIService, CarrierGroupAPIService, CarrierTypeEnum, $scope.datasource);
             beCarrierGroup.initializeController();
@@ -24,10 +25,11 @@ app.directive('vrBeCarriergroup', ['VRModalService', 'UtilsService', 'VRNotifica
                         $scope.currentNode = undefined;
                         $scope.selectedtNode = selectedtNode;
                         CarrierGroupAPIService.GetCarrierGroupMembersDesc($scope.selectedtNode.EntityId).then(function (response) {
-                            $scope.selectedvalues = [];
+                         
                             angular.forEach(response, function (item) {
-                                $scope.selectedvalues.push(item);
+                                $scope.selectedCarrierValues.push(item);
                             });
+                            ctrl.selectedvalues = $scope.selectedCarrierValues;
                         }).catch(function (error) {
                             $scope.isGettingData = false;
                             VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -38,6 +40,10 @@ app.directive('vrBeCarriergroup', ['VRModalService', 'UtilsService', 'VRNotifica
 
                 VRModalService.showModal('/Client/Modules/BusinessEntity/Directives/Templates/CarrierGroupTree.html', null, settings);
             }
+            $scope.onselectionvalueschanged = function () {
+                ctrl.selectedvalues=$scope.selectedCarrierValues;
+               
+            }
 
         },
         controllerAs: 'ctrl',
@@ -45,7 +51,14 @@ app.directive('vrBeCarriergroup', ['VRModalService', 'UtilsService', 'VRNotifica
         compile: function (element, attrs) {
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
-
+                    $scope.$watch('ctrl.selectedvalues.length', function () {
+                        if (iAttrs.onselectionchanged != undefined) {
+                            var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onselectionchanged);
+                            if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
+                                onvaluechangedMethod();
+                            }
+                        }
+                    });
                 }
             }
         },
@@ -62,7 +75,7 @@ app.directive('vrBeCarriergroup', ['VRModalService', 'UtilsService', 'VRNotifica
             label = "Carriers";
         return '<vr-columns width="normal">'
                    + '<vr-label >' + label + '</vr-label>'
-               + ' <vr-select  ismultipleselection isrequired datasource="datasource" selectedvalues="selectedvalues" datatextfield="Name" datavaluefield="CarrierAccountID"'
+               + ' <vr-select  ismultipleselection isrequired datasource="datasource" selectedvalues="selectedCarrierValues" onselectionchanged="onselectionvalueschanged" datatextfield="Name" datavaluefield="CarrierAccountID"'
                + 'entityname="' + label + '"></vr-select></vr-columns><vr-columns colnum="2">'
                + ' <span class="glyphicon glyphicon-th hand-cursor" style="top:30px" aria-hidden="true" ng-click="openTreePopup()"></span></vr-columns>';
     }
