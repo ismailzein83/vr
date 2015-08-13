@@ -63,7 +63,14 @@ function RepeatedNumbersController($scope, UtilsService, $q, RepeatedNumbersAPIS
     }
 
     function retrieveData() {
-      
+            for (var i = 0; i < $scope.measures.length; i++) {
+                if($scope.measures[i].value==RepeatedNumbersMeasureEnum.SwitchName.value && $scope.selectedSwitches.length != 0)
+                    $scope.measures[i].isShown=true;
+                else if($scope.measures[i].value==RepeatedNumbersMeasureEnum.SwitchName.value && $scope.selectedSwitches.length == 0)
+                $scope.measures[i].isShown=false;
+
+            }
+
         var filter = buildFilter();
         var query = {
             SwitchIds: filter.SwitchIds,
@@ -125,6 +132,7 @@ function RepeatedNumbersController($scope, UtilsService, $q, RepeatedNumbersAPIS
         for (var prop in RepeatedNumbersMeasureEnum) {
             measures.push(RepeatedNumbersMeasureEnum[prop]);
         }
+
     }
 
     function buildFilter() {
