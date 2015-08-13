@@ -107,7 +107,7 @@
         var actionMenuWidth;
         var expandableColumnWidth = 0;
         var expandableRowTemplate;
-        var actionTypeColumn;
+        //var actionTypeColumn;
         var stopPagingOnScroll;
         var pagingOnScrollEnabled;
         var retrieveDataFunction;
@@ -288,14 +288,14 @@
 
             ctrl.headerStyle = {};
             ctrl.isMainItemsShown = true;
-            ctrl.viewVisibilityChanged = function () {
-                if (!ctrl.isMainItemsShown) {
-                    ctrl.showColumn(actionTypeColumn);
-                }
-                else {
-                    ctrl.hideColumn(actionTypeColumn);
-                }
-            };
+            //ctrl.viewVisibilityChanged = function () {
+            //    if (!ctrl.isMainItemsShown) {
+            //        ctrl.showColumn(actionTypeColumn);
+            //    }
+            //    else {
+            //        ctrl.hideColumn(actionTypeColumn);
+            //    }
+            //};
 
 
             ctrl.addColumn = addColumn;
@@ -566,6 +566,7 @@
                             ctrl.isLoadingMoreData = false;
                             var div = document.getElementById('gridBodyContainer'); // need real DOM Node, not jQuery wrapper
                             var hasVerticalScrollbar = div.scrollHeight > div.clientHeight;
+                            console.log(hasVerticalScrollbar);
                             if (hasVerticalScrollbar)
                                 ctrl.headerStyle = {
                                     "padding-right": getScrollbarWidth()+"px"
@@ -692,15 +693,15 @@
             };
         }
 
-        function addActionTypeColumn() {
-            var col = {
-                headerText: "Action",
-                field: "actionType",
-                nonHiddable:true
-            };
-            actionTypeColumn = addColumn(col, ctrl.columnDefs.length);
-            ctrl.hideColumn(actionTypeColumn);
-        }
+        //function addActionTypeColumn() {
+        //    var col = {
+        //        headerText: "Action",
+        //        field: "actionType",
+        //        nonHiddable:true
+        //    };
+        //    actionTypeColumn = addColumn(col, ctrl.columnDefs.length);
+        //    //ctrl.hideColumn(actionTypeColumn);
+        //}
 
         function defineRetrieveData(retrieveDataFunc, pagingType) {
             retrieveDataFunction = retrieveDataFunc;
@@ -793,6 +794,7 @@
                     setTimeout(function () {
                         var div = document.getElementById('gridBodyContainer'); // need real DOM Node, not jQuery wrapper
                         var hasVerticalScrollbar = div.scrollHeight > div.clientHeight;
+                        console.log(hasVerticalScrollbar)
                         if (hasVerticalScrollbar)
                             ctrl.headerStyle = {
                                 "padding-right": getScrollbarWidth() + "px"

@@ -1,5 +1,5 @@
 ﻿<div class="vr-datagrid" vr-loader="ctrl.isLoadingMoreData" >
-    <vr-choices onselectionchanged="ctrl.viewVisibilityChanged()" ng-show="ctrl.updateItems.length > 0">
+    <vr-choices  ng-show="ctrl.updateItems.length > 0">
         <vr-choice isselected="ctrl.isMainItemsShown">Main View</vr-choice>
         <vr-choice>Updated Items ({{ctrl.updateItems.length}})</vr-choice>
     </vr-choices>  
