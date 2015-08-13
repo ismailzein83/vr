@@ -51,6 +51,7 @@ function StrategyManagementController($scope, StrategyAPIService,UserAPIService,
                 angular.forEach(response.Data, function (itm) {
                     itm.IsDefaultText = itm.IsDefault ? "Default" : "Not Default"
                     itm.IsEnabledText = itm.IsEnabled ? "Enabled" : "Disabled"
+                    itm.StrategyType = UtilsService.getItemByVal($scope.periods, itm.PeriodId, "Id").Name;
                 });
 
                 onResponseReady(response);
