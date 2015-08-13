@@ -167,6 +167,8 @@
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_TryLockAndUpdateScheduleTask.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_GetDueTasks.sql" />
     <Build Include="runtime\User Defined Types\IDIntType.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSource_Delete.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSource_CreateTempForFiltered.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
