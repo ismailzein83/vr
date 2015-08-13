@@ -18,9 +18,10 @@ CREATE PROCEDURE [FraudAnalysis].[sp_Strategy_CreateTempForFilteredStrategies]
 		IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 	    BEGIN
 	    		
-			SELECT s.[Id],s.[Name], s.[StrategyContent] , s.[PeriodId], s.[UserId]
+			SELECT s.[Id],s.[Name], s.[StrategyContent] , s.[UserId], s.[PeriodId], p.Description as StrategyType
 			into #Result
 			FROM FraudAnalysis.[Strategy] s
+			inner join FraudAnalysis.Period p on p.Id=s.PeriodId
 			WHERE (@Name IS NULL OR s.Name  LIKE '%' + @Name + '%' )
 			AND (@Description IS NULL OR s.Description  LIKE '%' + @Description + '%' )
 			and (@IsDefault is null or s.IsDefault=@IsDefault)
