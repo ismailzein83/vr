@@ -66,6 +66,7 @@
     <Compile Include="BusinessEntityInfoManager.cs" />
     <Compile Include="CarrierAccountManager.cs" />
     <Compile Include="CarrierGroupManager.cs" />
+    <Compile Include="CarrierMaskManager.cs" />
     <Compile Include="CodeManager.cs" />
     <Compile Include="CommissionManager.cs" />
     <Compile Include="CustomerBehavior.cs" />

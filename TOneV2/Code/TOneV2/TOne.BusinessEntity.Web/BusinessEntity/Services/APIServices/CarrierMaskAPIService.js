@@ -4,8 +4,8 @@ var serviceObj = function (BaseAPIService) {
         GetCarrierMasks: GetCarrierMasks
     });
 
-    function GetCarrierMasks() {
-        return BaseAPIService.get("/api/CarrierMask/GetCarrierMasks");
+    function GetCarrierMasks(input) {
+        return BaseAPIService.get("/api/CarrierMask/GetCarrierMasks", input);
     }
 }
 serviceObj.$inject = ['BaseAPIService'];

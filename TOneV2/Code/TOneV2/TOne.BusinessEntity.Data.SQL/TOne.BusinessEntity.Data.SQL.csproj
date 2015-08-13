@@ -57,6 +57,7 @@
     <Compile Include="AssignedCarrierDataManager.cs" />
     <Compile Include="CarrierAccountDataManager.cs" />
     <Compile Include="CarrierGroupDataManager.cs" />
+    <Compile Include="CarrierMaskDataManager.cs" />
     <Compile Include="CodeDataManager.cs" />
     <Compile Include="CommissionDataManager.cs" />
     <Compile Include="LookUpDataManager.cs" />

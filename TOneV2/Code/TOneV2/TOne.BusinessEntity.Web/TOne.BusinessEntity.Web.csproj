@@ -130,6 +130,7 @@
     <Compile Include="Controllers\BusinessEntityController.cs" />
     <Compile Include="Controllers\CarrierAccountController.cs" />
     <Compile Include="Controllers\CarrierGroupController.cs" />
+    <Compile Include="Controllers\CarrierMaksController.cs" />
     <Compile Include="Controllers\LookUpController.cs" />
     <Compile Include="Controllers\PriceListController.cs" />
     <Compile Include="Controllers\CarrierProfileController.cs" />
@@ -142,6 +143,7 @@
     <Content Include="BusinessEntity\Constant\ActivationStatusEnum.js" />
     <Content Include="BusinessEntity\Constant\PaymentTypeEnum.js" />
     <Content Include="BusinessEntity\Constant\RoutingStatusEnum.js" />
+    <Content Include="BusinessEntity\Directives\vr-be-carriergroup-directive.js" />
     <Content Include="BusinessEntity\Services\APIServices\AccountManagerAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\BusinessEntityAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\CarrierAccountAPIService.js" />
