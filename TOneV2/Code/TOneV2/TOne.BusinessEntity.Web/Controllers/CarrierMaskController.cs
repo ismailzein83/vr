@@ -10,10 +10,10 @@ using Vanrise.Entities;
 
 namespace TOne.BusinessEntity.Web.Controllers
 {
-    public class CarrierMaksController : Vanrise.Web.Base.BaseAPIController
+    public class CarrierMaskController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpPost]
-        public Object GetCarrierMask(Vanrise.Entities.DataRetrievalInput<CarrierMaskQuery> input)
+        public Object GetCarrierMasks(Vanrise.Entities.DataRetrievalInput<CarrierMaskQuery> input)
         {
             CarrierMaskManager manager = new CarrierMaskManager();
             return GetWebResponse(input, manager.GetCarrierMasks(input));

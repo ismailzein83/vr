@@ -17,7 +17,7 @@ namespace TOne.BusinessEntity.Data.SQL
             return RetrieveData(input, (tempTableName) =>
             {
                 ExecuteNonQuerySP("BEntity.sp_CarrierMask_CreateTempForFiltered", tempTableName, input.Query.Name);
-
+                
             }, CarrierMaskMapper);
         }
 

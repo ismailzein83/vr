@@ -131,7 +131,7 @@
     <Compile Include="Controllers\BusinessEntityController.cs" />
     <Compile Include="Controllers\CarrierAccountController.cs" />
     <Compile Include="Controllers\CarrierGroupController.cs" />
-    <Compile Include="Controllers\CarrierMaksController.cs" />
+    <Compile Include="Controllers\CarrierMaskController.cs" />
     <Compile Include="Controllers\LookUpController.cs" />
     <Compile Include="Controllers\PriceListController.cs" />
     <Compile Include="Controllers\CarrierProfileController.cs" />
@@ -173,6 +173,8 @@
     <Content Include="BusinessEntity\Views\CarrierGroupEditorController.js" />
     <Content Include="BusinessEntity\Views\CarrierGroupManagement.html" />
     <Content Include="BusinessEntity\Views\CarrierGroupManagementController.js" />
+    <Content Include="BusinessEntity\Views\CarrierMaskEditor.html" />
+    <Content Include="BusinessEntity\Views\CarrierMaskEditorController.js" />
     <Content Include="BusinessEntity\Views\CarrierMaskManagement.html" />
     <Content Include="BusinessEntity\Views\CarrierMaskManagementController.js" />
     <Content Include="BusinessEntity\Views\CarrierPriceList.html" />

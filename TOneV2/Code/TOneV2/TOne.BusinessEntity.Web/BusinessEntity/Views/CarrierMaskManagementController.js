@@ -31,7 +31,6 @@
             };
         }
 
-
         function defineScope() {
 
             $scope.CarrierAccountsDataSource = [];
@@ -43,10 +42,6 @@
 
             $scope.isGettingData = true;
         }
-
-        defineScope();
-        load();
-        defineGrid();
 
         function addGroup() {
             var settings = {
@@ -62,6 +57,10 @@
 
             VRModalService.showModal('/Client/Modules/BusinessEntity/Views/CarrierMaskEditor.html', null, settings);
         }
+
+        defineScope();
+        load();
+        defineGrid();
     }
     appControllers.controller('Carrier_CarrierMaskManagementController', CarrierMaskManagementController);
 
