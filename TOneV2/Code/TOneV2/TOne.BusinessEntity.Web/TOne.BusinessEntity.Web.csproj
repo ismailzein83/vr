@@ -123,6 +123,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="BusinessEntity\Directives\Templates\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
@@ -143,6 +144,10 @@
     <Content Include="BusinessEntity\Constant\ActivationStatusEnum.js" />
     <Content Include="BusinessEntity\Constant\PaymentTypeEnum.js" />
     <Content Include="BusinessEntity\Constant\RoutingStatusEnum.js" />
+    <Content Include="BusinessEntity\Directives\CarrierGroupTree.html" />
+    <Content Include="BusinessEntity\Directives\CarrierGroupTreeController.js" />
+    <Content Include="BusinessEntity\Directives\CodeGroup.html" />
+    <Content Include="BusinessEntity\Directives\CodeGroupController.js" />
     <Content Include="BusinessEntity\Directives\vr-be-carriergroup-directive.js" />
     <Content Include="BusinessEntity\Services\APIServices\AccountManagerAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\BusinessEntityAPIService.js" />
@@ -237,7 +242,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>7380</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

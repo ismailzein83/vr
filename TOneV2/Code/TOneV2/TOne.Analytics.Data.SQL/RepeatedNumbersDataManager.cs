@@ -18,6 +18,7 @@ namespace TOne.Analytics.Data.SQL
         {
             Dictionary<string, string> mapper = new Dictionary<string, string>();
             mapper.Add("CustomerInfo", "CustomerID");
+            mapper.Add("SwitchName", "SwitchID");
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.SwitchIds), (cmd) =>

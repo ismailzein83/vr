@@ -19,6 +19,11 @@
                         <vr-select datasource="callsOption" datatextfield="description" datavaluefield="value" label="Calls Option"
                                    selectedvalues="selectedCallsOption" isrequired hidefilterbox></vr-select>
                     </vr-columns>
+                </vr-columns>
+
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns colnum="10">
                     <vr-columns colnum="2">
                         <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Period"
                                    selectedvalues="selectedPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
@@ -32,6 +37,7 @@
                     </vr-columns>
 
                 </vr-columns>
+
             </vr-row>
 
         </div>
