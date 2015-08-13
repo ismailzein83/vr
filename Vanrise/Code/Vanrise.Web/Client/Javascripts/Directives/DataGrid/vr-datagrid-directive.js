@@ -50,7 +50,7 @@
             dataGridObj.defineExpandableRow();
             dataGridObj.defineMenuColumn(hasActionMenu, actionsAttribute);
             dataGridObj.calculateDataColumnsSectionWidth();
-            dataGridObj.addActionTypeColumn();
+            //dataGridObj.addActionTypeColumn();
             dataGridObj.defineAPI();
             
         },
@@ -815,7 +815,7 @@
         this.defineExpandableRow = defineExpandableRow;
         this.defineMenuColumn = defineMenuColumn;
         this.calculateDataColumnsSectionWidth = calculateDataColumnsSectionWidth;
-        this.addActionTypeColumn = addActionTypeColumn;
+        //this.addActionTypeColumn = addActionTypeColumn;
         this.defineRetrieveData = defineRetrieveData;
     }
 
