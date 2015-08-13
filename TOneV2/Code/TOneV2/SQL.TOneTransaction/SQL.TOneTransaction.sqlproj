@@ -80,6 +80,7 @@
     <Folder Include="integration\" />
     <Folder Include="integration\Tables\" />
     <Folder Include="integration\Stored Procedures\" />
+    <Folder Include="runtime\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="runtime\Tables\RunningProcess.sql" />
@@ -142,7 +143,6 @@
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_Insert.sql" />
     <Build Include="bp\Stored Procedures\sp_BPDefinition_Get.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_GetTasksbyActionType.sql" />
-    <Build Include="runtime\Stored Procedures\sp_SchedulerTask_GetReadyAndNewTasks.sql" />
     <Build Include="integration\Tables\DataSource.sql" />
     <Build Include="integration\Tables\AdapterType.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSource_GetByTaskId.sql" />
@@ -163,6 +163,10 @@
     <Build Include="bp\Stored Procedures\sp_BPInstance_GetRecent.sql" />
     <Build Include="queue\Stored Procedures\sp_ExecutionFlowDefinition_GetAll_1.sql" />
     <Build Include="queue\Stored Procedures\sp_ExecutionFlow_Insert.sql" />
+    <Build Include="runtime\Stored Procedures\sp_SchedulerTask_UnlockTask.sql" />
+    <Build Include="runtime\Stored Procedures\sp_SchedulerTask_TryLockAndUpdateScheduleTask.sql" />
+    <Build Include="runtime\Stored Procedures\sp_SchedulerTask_GetDueTasks.sql" />
+    <Build Include="runtime\User Defined Types\IDIntType.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />

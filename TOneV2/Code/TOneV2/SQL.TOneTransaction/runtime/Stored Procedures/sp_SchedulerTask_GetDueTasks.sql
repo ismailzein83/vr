@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [runtime].[sp_SchedulerTask_GetReadyAndNewTasks]
+CREATE PROCEDURE [runtime].[sp_SchedulerTask_GetDueTasks]
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from

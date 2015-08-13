@@ -10,6 +10,7 @@ AS
 BEGIN
 	SELECT [ItemID]
       ,[QueueID]
+      ,ExecutionFlowTriggerItemID
       ,[SourceItemID]
       ,[Description]
       ,[Status]
