@@ -1,9 +1,7 @@
-﻿DataSourceManagementController.$inject = ['$scope', 'DataSourceAPIService', 'VRModalService'];
+﻿DataSourceManagementController.$inject = ['$scope', 'DataSourceAPIService', 'VRModalService', 'VRNotificationService'];
 
-
-function DataSourceManagementController($scope, DataSourceAPIService, VRModalService) {
-    var mainGridAPI;
-    var arrMenuAction = [];
+function DataSourceManagementController($scope, DataSourceAPIService, VRModalService, VRNotificationService) {
+    var gridApi;
 
     defineScope();
     load();
@@ -14,10 +12,21 @@ function DataSourceManagementController($scope, DataSourceAPIService, VRModalSer
 
         defineMenuActions();
 
-        $scope.onMainGridReady = function (api) {
-            mainGridAPI = api;
-            getData();
+        $scope.gridReady = function (api) {
+            gridApi = api;
+            return retrieveData();
         };
+
+        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+
+            return DataSourceAPIService.GetFilteredDataSources(dataRetrievalInput)
+                .then(function (response) {
+                    onResponseReady(response);
+                })
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                });
+        }
 
         $scope.AddNewDataSource = addNewDataSource;
     }
@@ -25,32 +34,23 @@ function DataSourceManagementController($scope, DataSourceAPIService, VRModalSer
     function load() {
     }
 
-    function getData() {
-        $scope.isGettingData = true;
+    function retrieveData() {
+        var query = {
+        };
 
-        var pageInfo = mainGridAPI.getPageInfo();
-
-        var name = $scope.name != undefined ? $scope.name : '';
-        return DataSourceAPIService.GetDataSources().then(function (response) {
-            angular.forEach(response, function (item) {
-                $scope.dataSources.push(item);
-            });
-        }).catch(function (error) {
-            VRNotificationService.notifyExceptionWithClose(error, $scope);
-        }).finally(function () {
-            $scope.isGettingData = false;
-        });
+        return gridApi.retrieveData(query);
     }
 
     function defineMenuActions() {
-        $scope.gridMenuActions = [{
-            name: "Edit",
-            clicked: editDataSource
-        },
-        {
-            name: "Delete",
-            clicked: deleteDataSource
-        }
+        $scope.gridMenuActions = [
+            {
+                name: "Edit",
+                clicked: editDataSource
+            },
+            {
+                name: "Delete",
+                clicked: deleteDataSource
+            }
         ];
     }
 
@@ -84,7 +84,24 @@ function DataSourceManagementController($scope, DataSourceAPIService, VRModalSer
     }
 
     function deleteDataSource(dataSourceObj) {
-        //TODO: implement Delete functionality
+        var message = 'Do you want to delete ' + dataSourceObj.Name + '?';
+
+        VRNotificationService.showConfirmation(message)
+            .then(function (response) {
+                if (response == true) {
+
+                    return DataSourceAPIService.DeleteDataSource(dataSourceObj.DataSourceId)
+                        .then(function (deletionResponse) {
+                            VRNotificationService.notifyOnItemDeleted("Data Source", deletionResponse);
+                            $scope.dataSources = []; // clear the grid
+                            return getData(); // refresh the grid
+                        })
+                        .catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                }
+            });
     }
 }
+
 appControllers.controller('Integration_DataSourceManagementController', DataSourceManagementController);

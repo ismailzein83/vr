@@ -10,6 +10,8 @@ namespace Vanrise.Integration.Data
     {
         List<Vanrise.Integration.Entities.DataSource> GetDataSources();
 
+        Vanrise.Entities.BigResult<Vanrise.Integration.Entities.DataSource> GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<object> input);
+
         Vanrise.Integration.Entities.DataSource GetDataSource(int dataSourceId);
 
         Vanrise.Integration.Entities.DataSource GetDataSourcebyTaskId(int taskId);
@@ -17,6 +19,8 @@ namespace Vanrise.Integration.Data
         bool AddDataSource(Vanrise.Integration.Entities.DataSource dataSourceObject, out int insertedId);
 
         bool UpdateDataSource(Vanrise.Integration.Entities.DataSource dataSourceObject);
+
+        bool DeleteDataSource(int dataSourceId);
 
         bool UpdateTaskId(int dataSourceId, int taskId);
     }

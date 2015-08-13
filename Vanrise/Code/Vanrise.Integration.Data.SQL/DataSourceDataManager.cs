@@ -21,6 +21,19 @@ namespace Vanrise.Integration.Data.SQL
             return GetItemsSP("integration.sp_DataSource_GetAll", DataSourceMapper);
         }
 
+        public Vanrise.Entities.BigResult<Vanrise.Integration.Entities.DataSource> GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<object> input)
+        {
+            Dictionary<string, string> columnMapper = new Dictionary<string, string>();
+            columnMapper.Add("DataSourceId", "ID");
+
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("integration.sp_DataSource_CreateTempForFiltered", tempTableName);
+            };
+
+            return RetrieveData(input, createTempTableAction, DataSourceMapper, columnMapper);
+        }
+
         public Entities.DataSource GetDataSource(int dataSourceId)
         {
             return GetItemSP("integration.sp_DataSource_Get", DataSourceMapper, dataSourceId);
@@ -48,6 +61,12 @@ namespace Vanrise.Integration.Data.SQL
             return (recordesEffected > 0);
         }
 
+        public bool DeleteDataSource(int dataSourceId)
+        {
+            int recordsEffected = ExecuteNonQuerySP("integration.sp_DataSource_Delete", dataSourceId);
+            return (recordsEffected > 0);
+        }
+
         public bool UpdateTaskId(int dataSourceId, int taskId)
         {
             int recordesEffected = ExecuteNonQuerySP("integration.sp_DataSource_UpdateTaskId", dataSourceId, taskId);
@@ -63,9 +82,9 @@ namespace Vanrise.Integration.Data.SQL
                 AdapterTypeId = (int)reader["AdapterID"],
                 AdapterInfo = Common.Serializer.Deserialize<Vanrise.Integration.Entities.AdapterTypeInfo>(reader["Info"] as string),
                 TaskId = (int)reader["TaskId"],
-                Settings = Common.Serializer.Deserialize<Vanrise.Integration.Entities.DataSourceSettings>(reader["Settings"] as string),
-               
+                Settings = Common.Serializer.Deserialize<Vanrise.Integration.Entities.DataSourceSettings>(reader["Settings"] as string)
             };
+
             return dataSource;
         }
     }

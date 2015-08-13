@@ -13,10 +13,18 @@
     <div vr-loader="isGettingData">
         <vr-row>
             <vr-columns colnum="12" simplecol>
-                <vr-datagrid datasource="dataSources" menuactions="gridMenuActions" on-ready="onMainGridReady">
+
+                <vr-datagrid datasource="dataSources"
+                             dataretrievalfunction="dataRetrievalFunction"
+                             pagingtype="'PagingOnScroll'"
+                             on-ready="gridReady"
+                             menuactions="gridMenuActions"
+                             idfield="DataSourceId">
+
                     <vr-datagridcolumn headertext="'Data Source Id'" field="'DataSourceId'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Data Source Name'" field="'Name'"></vr-datagridcolumn>
                 </vr-datagrid>
+
             </vr-columns>
         </vr-row>
     </div>

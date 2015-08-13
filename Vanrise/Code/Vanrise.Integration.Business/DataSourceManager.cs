@@ -13,11 +13,16 @@ namespace Vanrise.Integration.Business
 {
     public class DataSourceManager
     {
-
         public List<Vanrise.Integration.Entities.DataSource> GetDataSources()
         {
             IDataSourceDataManager datamanager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
             return datamanager.GetDataSources();
+        }
+
+        public Vanrise.Entities.IDataRetrievalResult<Vanrise.Integration.Entities.DataSource> GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<object> input)
+        {
+            IDataSourceDataManager dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredDataSources(input));
         }
 
         public Vanrise.Integration.Entities.DataSource GetDataSource(int dataSourceId)
@@ -94,6 +99,22 @@ namespace Vanrise.Integration.Business
             }
             
             return updateOperationOutput;
+        }
+
+        public Vanrise.Entities.DeleteOperationOutput<object> DeleteDataSource(int dataSourceId)
+        {
+            DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
+            deleteOperationOutput.Result = DeleteOperationResult.Failed;
+
+            IDataSourceDataManager dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
+            bool deleted = dataManager.DeleteDataSource(dataSourceId);
+
+            if (deleted)
+            {
+                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+            }
+
+            return deleteOperationOutput;
         }
 
         public Vanrise.Entities.UpdateOperationOutput<object> AddDataSourceTask(int dataSourceId, Vanrise.Runtime.Entities.SchedulerTask task)

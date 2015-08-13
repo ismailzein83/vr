@@ -2,18 +2,23 @@
 
     return ({
         GetDataSources: GetDataSources,
+        GetFilteredDataSources: GetFilteredDataSources,
         GetDataSource: GetDataSource,
         GetDataSourceAdapterTypes: GetDataSourceAdapterTypes,
         GetExecutionFlows: GetExecutionFlows,
         AddExecutionFlow: AddExecutionFlow,
         GetExecutionFlowDefinitions: GetExecutionFlowDefinitions,
         AddDataSource: AddDataSource,
+        DeleteDataSource: DeleteDataSource,
         UpdateDataSource: UpdateDataSource
     });
 
-
     function GetDataSources() {
         return BaseAPIService.get("/api/DataSource/GetDataSources");
+    }
+
+    function GetFilteredDataSources(input) {
+        return BaseAPIService.post("/api/DataSource/GetFilteredDataSources", input);
     }
 
     function GetDataSource(dataSourceId) {
@@ -41,6 +46,12 @@
 
     function AddDataSource(dataSource) {
         return BaseAPIService.post("/api/DataSource/AddDataSource", dataSource);
+    }
+
+    function DeleteDataSource(dataSourceId) {
+        return BaseAPIService.get("/api/DataSource/DeleteDataSource", {
+            dataSourceId: dataSourceId
+        });
     }
 
     function UpdateDataSource(dataSource) {

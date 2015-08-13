@@ -19,6 +19,13 @@ namespace Vanrise.Integration.Web.Controllers
             return manager.GetDataSources();
         }
 
+        [HttpPost]
+        public object GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<object> input)
+        {
+            DataSourceManager manager = new DataSourceManager();
+            return GetWebResponse(input, manager.GetFilteredDataSources(input));
+        }
+
         [HttpGet]
         public Vanrise.Integration.Entities.DataSource GetDataSource(int dataSourceId)
         {
@@ -68,6 +75,12 @@ namespace Vanrise.Integration.Web.Controllers
             return manager.UpdateDataSource(dataSourceWrapper.DataSourceData, dataSourceWrapper.TaskData);
         }
 
+        [HttpGet]
+        public Vanrise.Entities.DeleteOperationOutput<object> DeleteDataSource(int dataSourceId)
+        {
+            DataSourceManager manager = new DataSourceManager();
+            return manager.DeleteDataSource(dataSourceId);
+        }
     }
 
     public class DataSourceWrapper
