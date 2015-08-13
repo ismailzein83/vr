@@ -120,7 +120,7 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
         return BusinessEntityAPIService.GetSwitches().then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.switches.push(itm);
-                if (receivedSwitchIds != undefined && receivedSwitchIds.indexOf(itm.SwitchId.toString()) > -1)
+                if (receivedSwitchIds != undefined && (receivedSwitchIds.indexOf(itm.SwitchId.toString()) > -1 || receivedSwitchIds.indexOf(itm.SwitchId) > -1))
                     $scope.selectedSwitches.push(itm);
             });
         });

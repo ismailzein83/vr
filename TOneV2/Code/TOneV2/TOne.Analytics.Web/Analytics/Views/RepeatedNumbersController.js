@@ -97,12 +97,14 @@ function RepeatedNumbersController($scope, UtilsService, $q, RepeatedNumbersAPIS
                     width: "80%"//,
                     //maxHeight: "800px"
                 };
+                console.log(dataItem);
                 var parameters = {
                     fromDate: $scope.fromDate,
                     toDate: $scope.toDate,
                     customerIds: dataItem.CustomerID != null || dataItem.CustomerID != undefined ? [dataItem.CustomerID] : null,
                     zoneIds: dataItem.OurZoneID != null || dataItem.OurZoneID != undefined ? [dataItem.OurZoneID] : null,
-                    supplierIds: dataItem.SupplierID != null || dataItem.SupplierID != undefined?[dataItem.SupplierID]:null
+                    supplierIds: dataItem.SupplierID != null || dataItem.SupplierID != undefined ? [dataItem.SupplierID] : null,
+                    switchIds: [dataItem.SwitchID],
                 };
 
                 VRModalService.showModal('/Client/Modules/Analytics/Views/CDR/CDRLog.html', parameters, modalSettings);
