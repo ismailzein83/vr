@@ -801,7 +801,6 @@
                     setTimeout(function () {
                         var div = document.getElementById('gridBodyContainer'); // need real DOM Node, not jQuery wrapper
                         var hasVerticalScrollbar = div.scrollHeight > div.clientHeight;
-                        console.log(hasVerticalScrollbar)
                         if (hasVerticalScrollbar)
                             ctrl.headerStyle = {
                                 "padding-right": getScrollbarWidth() + "px"
