@@ -185,9 +185,11 @@
     <Content Include="Client\Javascripts\Directives\Chart\vr-chart-directive.js" />
     <Content Include="Client\Javascripts\Directives\Chart\vr-chart-settings.html" />
     <Content Include="Client\Javascripts\Directives\Chart\vr-chart.html" />
+    <Content Include="Client\Javascripts\Directives\Containers\vr-image-directive.js" />
     <Content Include="Client\Javascripts\Directives\Containers\vr-columns-directive.js" />
     <Content Include="Client\Javascripts\Directives\Containers\vr-panel-directive.js" />
     <Content Include="Client\Javascripts\Directives\Containers\vr-row-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Containers\vr-fieldset-directive.js" />
     <Content Include="Client\Javascripts\Directives\Containers\vr-section-directive.js" />
     <Content Include="Client\Javascripts\Directives\DataGrid\vr-datagrid-directive.js" />
     <Content Include="Client\Javascripts\Directives\DataGrid\vr-datagrid.html" />
