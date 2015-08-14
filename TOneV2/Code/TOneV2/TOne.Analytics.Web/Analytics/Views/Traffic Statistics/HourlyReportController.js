@@ -200,7 +200,7 @@ function HourlyReportController($scope, UtilsService, AnalyticsAPIService, uiGri
 
     function getACDColor(acdValue, attemptsValue) {
         if (attemptsValue > $scope.attempts && acdValue < $scope.acd)
-            return LabelColorsEnum.WarningLevel1.Color;
+            return LabelColorsEnum.WarningLevel1.Color; 
     };
     function getASRColor(asrValue, attemptsValue) {
         if (attemptsValue > $scope.attempts && asrValue < $scope.asr)
