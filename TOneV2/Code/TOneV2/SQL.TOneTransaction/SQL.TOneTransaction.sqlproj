@@ -136,7 +136,6 @@
     <Build Include="runtime\Tables\SchedulerTaskActionType.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTaskTriggerType_GetAll.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTaskActionType_GetAll.sql" />
-    <Build Include="runtime\Stored Procedures\sp_SchedulerTask_GetFiltered.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_GetAll.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_Get.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_Update.sql" />
@@ -169,6 +168,8 @@
     <Build Include="runtime\User Defined Types\IDIntType.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSource_Delete.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSource_CreateTempForFiltered.sql" />
+    <Build Include="runtime\Stored Procedures\sp_SchedulerTask_Delete.sql" />
+    <Build Include="runtime\Stored Procedures\sp_SchedulerTask_CreateTempForFiltered.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
