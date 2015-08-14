@@ -14,17 +14,17 @@ using TOne.Analytics.Entities;
 
 namespace TOne.Analytics.Business
 {
-    public class TrafficStatisticManager
+    public class TrafficMonitorManager
     {
         public Vanrise.Entities.IDataRetrievalResult<TrafficStatisticGroupSummary> GetTrafficStatisticSummary(Vanrise.Entities.DataRetrievalInput<TrafficStatisticSummaryInput> input)
         {
-            ITrafficStatisticDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<ITrafficStatisticDataManager>();
+            ITrafficMonitorDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<ITrafficMonitorDataManager>();
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetTrafficStatisticSummary(input));
         }
 
         public IEnumerable<TrafficStatistic> GetTrafficStatistics(TrafficStatisticGroupKeys filterByColumn, string columnFilterValue, DateTime from, DateTime to)
         {
-            ITrafficStatisticDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<ITrafficStatisticDataManager>();
+            ITrafficMonitorDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<ITrafficMonitorDataManager>();
             return dataManager.GetTrafficStatistics(filterByColumn, columnFilterValue, from, to);
         }
     }

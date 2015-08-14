@@ -6,11 +6,10 @@ app.service('AnalyticsAPIService', function (BaseAPIService) {
         GetTrafficStatisticMeasureList: GetTrafficStatisticMeasureList,
         GetTrafficStatisticSummary: GetTrafficStatisticSummary,
         GetTrafficStatistics: GetTrafficStatistics,
-        ExportTrafficStatisticSummary: ExportTrafficStatisticSummary
     });
 
     function GetTopNDestinations(fromDate, toDate, from, to, topCount, showSupplier, groupByCodeGroup, codeGroup) {
-        return BaseAPIService.get("/api/Analytics/GetTopNDestinations",
+        return BaseAPIService.get("/api/TrafficMonitor/GetTopNDestinations",
             {
                 fromDate: fromDate,
                 toDate: toDate,
@@ -25,24 +24,18 @@ app.service('AnalyticsAPIService', function (BaseAPIService) {
     }
 
     function GetTrafficStatisticMeasureList() {
-        return BaseAPIService.get("/api/Analytics/GetTrafficStatisticMeasureList",
+        return BaseAPIService.get("/api/TrafficMonitor/GetTrafficStatisticMeasureList",
             {
             }
            );
     }
 
     function GetTrafficStatisticSummary(getTrafficStatisticSummaryInput) {
-        return BaseAPIService.post("/api/Analytics/GetTrafficStatisticSummary", getTrafficStatisticSummaryInput);
-    }
-    function ExportTrafficStatisticSummary(trafficStatisticSummaryInput) {
-        return BaseAPIService.post("/api/Analytics/ExportTrafficStatisticSummary", trafficStatisticSummaryInput, {
-        returnAllResponseParameters: true,
-        responseTypeAsBufferArray: true
-    });
+        return BaseAPIService.post("/api/TrafficMonitor/GetTrafficStatisticSummary", getTrafficStatisticSummaryInput);
     }
 
     function GetTrafficStatistics(filterByColumn, columnFilterValue, from, to) {
-        return BaseAPIService.get("/api/Analytics/GetTrafficStatistics",
+        return BaseAPIService.get("/api/TrafficMonitor/GetTrafficStatistics",
            {
                filterByColumn: filterByColumn,
                columnFilterValue: columnFilterValue,

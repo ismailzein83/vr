@@ -57,7 +57,7 @@
     <Compile Include="IDataManager.cs" />
     <Compile Include="IAnalyticsDataManager.cs" />
     <Compile Include="IRepeatedNumbersDataManager.cs" />
-    <Compile Include="ITrafficStatisticDataManager.cs" />
+    <Compile Include="ITrafficMonitorDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

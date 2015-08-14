@@ -22,29 +22,23 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
         $scope.attempts = 2;
         $scope.groupKeys = groupKeys;
         $scope.selectedGroupKeys = analyticsService.getDefaultTrafficStatisticGroupKeys();
-
         $scope.switches = [];
         $scope.selectedSwitches = [];
-
         $scope.codeGroups = [];
         $scope.selectedCodeGroups = [];
-
         $scope.customers = [];
         $scope.selectedCustomers = [];
-
         $scope.suppliers = [];
         $scope.selectedSuppliers = [];
         $scope.data = [];
         $scope.periods = analyticsService.getPeriods();
         $scope.selectedPeriod = $scope.periods[0];
-
         $scope.gridAllMeasuresScope = {};
         $scope.measures = measures;
         defineMenuActions();
         $scope.currentSearchCriteria = {
             groupKeys: []
         };
-
         $scope.onValueChanged = function () {
             console.log($scope.selectedPeriod);
             if ($scope.selectedPeriod != selectedPeriod) {
@@ -54,8 +48,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                     }
                     selectedPeriod = $scope.selectedPeriod;
                 $scope.selectedPeriod = customize;
-            }
-           
+            }       
         }
         $scope.periodSelectionChanged = function () {
             if ($scope.selectedPeriod != undefined && $scope.selectedPeriod.value != -1) {
@@ -65,21 +58,18 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
             }
 
         }
-        
         $scope.customvalidateTestFrom = function (fromDate) {
             return UtilsService.validateDates(fromDate, $scope.toDate);
         };
         $scope.customvalidateTestTo = function (toDate) {
             return UtilsService.validateDates($scope.fromDate, toDate);
         };
-
         $scope.getColor = function (dataItem, coldef) {
             if (coldef.tag.value == TrafficStatisticsMeasureEnum.ACD.value)
                 return getACDColor(dataItem.ACD, dataItem.Attempts);
             else if (coldef.tag.value == TrafficStatisticsMeasureEnum.ASR.value)
                 return getASRColor(dataItem.ASR, dataItem.Attempts);
-        }
-        
+        }      
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
         }
@@ -100,7 +90,6 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                 $scope.showResult = true;
             })
         };
-
         $scope.chartSelectedMeasureReady = function (api) {
             chartSelectedMeasureAPI = api;
         };
@@ -133,7 +122,6 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
             chartSelectedEntityAPI = api;
 
         };
-
         $scope.searchClicked = function () {
             $scope.currentSearchCriteria.groupKeys.length = 0;
             angular.forEach($scope.selectedGroupKeys, function (group) {
@@ -142,31 +130,25 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
             if (mainGridAPI!=undefined)
             return retrieveData(true);
         };
-
         $scope.onGroupKeyClicked = function (dataItem, colDef) {
             var group = colDef.tag;
             var groupIndex = $scope.currentSearchCriteria.groupKeys.indexOf(group);
             if (dataItem.GroupKeyValues[groupIndex].Id != "N/A" || dataItem.GroupKeyValues[groupIndex].Id !=null)
             $scope.selectEntity(group, dataItem.GroupKeyValues[groupIndex].Id, dataItem.GroupKeyValues[groupIndex].Name);
         };
-
         $scope.selectEntity = function (groupKey, entityId, entityName) {
             $scope.selectedEntityType = groupKey.description;
             $scope.selectedEntityId = entityId;
             $scope.selectedEntityName = entityName;
             getAndShowEntityStatistics(groupKey);
         };
-
         $scope.isOverallItemClickable = function (dataItem) {
             return (dataItem.measure.isSum == true);
         };
-
         $scope.onOverallItemClicked = function (dataItem) {
             overallSelectedMeasure = dataItem.measure;
             renderOverallChart();
-        };
-       
-
+        };       
         $scope.getChartMenuActions = function (dataItem) {
             var menuActions = [];
             angular.forEach($scope.currentSearchCriteria.groupKeys, function (groupKey) {
@@ -235,52 +217,19 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
             return LabelColorsEnum.WarningLevel2.Color;
     };
 
-    function loadCDRParameters(parameters, dataItem) {
-        for (var i = 0; i < $scope.currentSearchCriteria.groupKeys.length; i++) {
-            var groupKey = $scope.currentSearchCriteria.groupKeys[i];
-            switch (groupKey.value) {
-                case TrafficStatisticGroupKeysEnum.OurZone.value:
-                    parameters.zoneIds = [dataItem.GroupKeyValues[i].Id];
-                    break;
-                case TrafficStatisticGroupKeysEnum.CustomerId.value:
-                    parameters.customerIds = [dataItem.GroupKeyValues[i].Id];
-                    break;
-                case TrafficStatisticGroupKeysEnum.SupplierId.value:
-                    parameters.supplierIds = [dataItem.GroupKeyValues[i].Id];
-                    break;
-                case TrafficStatisticGroupKeysEnum.Switch.value:
-                    parameters.switchIds = [dataItem.GroupKeyValues[i].Id];
-                    break;
-                case TrafficStatisticGroupKeysEnum.PortIn.value:
-                    parameters.PortIn = [dataItem.GroupKeyValues[i].Id];
-                    break;
-                case TrafficStatisticGroupKeysEnum.PortOut.value:
-                    parameters.PortOut = [dataItem.GroupKeyValues[i].Id];
-                    break;
-            }
-        }
-
-    }
     function defineMenuActions() {
         $scope.gridMenuActions = [{
             name: "CDRs",
             clicked: function (dataItem) {
                 var modalSettings = {
                     useModalTemplate: true,
-                    width: "80%"//,
-                    //maxHeight: "800px"
+                    width: "80%",
                 };
                 var parameters = {
                     fromDate: $scope.filter.fromDate,
                     toDate: $scope.filter.toDate
-
-                    ///[dataItem.GroupKeyValues[0].Id]
                 };
-                loadCDRParameters(parameters, dataItem);
-
-
-
-                VRModalService.showModal('/Client/Modules/Analytics/Views/CDR/CDRLog.html', parameters, modalSettings);
+                analyticsService.showCdrLogModal(parameters, dataItem.GroupKeyValues, $scope.currentSearchCriteria.groupKeys);
             }
         },
         {

@@ -15,7 +15,7 @@ using Vanrise.Entities;
 
 namespace TOne.Analytics.Data.SQL
 {
-    public class TrafficStatisticDataManager : BaseTOneDataManager, ITrafficStatisticDataManager
+    public class TrafficMonitorDataManager : BaseTOneDataManager, ITrafficMonitorDataManager
     {
         public TrafficStatisticSummaryBigResult GetTrafficStatisticSummary(Vanrise.Entities.DataRetrievalInput<TrafficStatisticSummaryInput> input)
         {
@@ -78,12 +78,7 @@ namespace TOne.Analytics.Data.SQL
          
             FillBEProperties(rslt, input.Query.GroupKeys);
             if (input.Query.WithSummary)
-            {
-             //   string neededSelectStatment = GetNeededStatment(input.Query.Filter, input.Query.GroupKeys);
                 rslt.Summary = GetSummary(tempTable);
-            }
-                 
-
                return rslt;
 
         }
@@ -91,31 +86,13 @@ namespace TOne.Analytics.Data.SQL
 
         public IEnumerable<TrafficStatistic> GetTrafficStatistics(TrafficStatisticGroupKeys filterByColumn, string columnFilterValue, DateTime from, DateTime to)
         {
-              //SELECT
-              //                      ts.OurZoneID
-              //                      ,ts.FirstCDRAttempt
-              //                      , ts.LastCDRAttempt
-              //                      , ts.Attempts-ts.SuccessfulAttempts AS FailedAttempts
-              //                      , ts.CeiledDuration AS CeiledDuration
-              //                      , case when ts.SuccessfulAttempts > 0 then CONVERT(DECIMAL(10,2),ts.DurationsInSeconds/(60.0*ts.SuccessfulAttempts)) ELSE 0 end as ACD
-              //                      , sum(ts.Attempts)
-              //                      , ts.DeliveredAttempts
-              //                      , ts.SuccessfulAttempts
-              //                      , ts.DurationsInSeconds
-              //                      , ts.MaxDurationInSeconds
-              //                      , ts.PDDInSeconds
-              //                      , ts.UtilizationInSeconds
-              //                      , ts.NumberOfCalls
-              //                      , ts.DeliveredNumberOfCalls
-              //                      , ts.PGAD
-
-              //              FROM TrafficStats ts WITH(NOLOCK ,INDEX(IX_TrafficStats_DateTimeFirst))
-              //              WHERE {0} AND  ts.FirstCDRAttempt BETWEEN @FromDate AND @ToDate
             string columnName;
             HashSet<string> joinStatement=new HashSet<string> ();
             string groupByStatement;
             GetColumnStatements(filterByColumn, out columnName, joinStatement, out groupByStatement);
-            string query =String.Format(@"                            
+            string query = String.Format(@"BEGIN with 
+                             OurZones AS (SELECT ZoneID, Name, CodeGroup  FROM Zone z WITH (NOLOCK) WHERE SupplierID = 'SYS'),
+                              AllResult AS(  
 			                SELECT
 					                {0}    
 				                    , ts.Attempts as Attempts
@@ -123,7 +100,8 @@ namespace TOne.Analytics.Data.SQL
 
 			                FROM TrafficStats ts WITH(NOLOCK ,INDEX(IX_TrafficStats_DateTimeFirst)) {1}
 			                WHERE {2} AND  ts.FirstCDRAttempt BETWEEN @FromDate AND @ToDate 
-			                ORDER BY Attempts ", columnName,joinStatement.ToString(), GetColumnFilter(filterByColumn, columnFilterValue));
+			                 )
+                           SELECT * FROM AllResult ORDER BY Attempts END  ", columnName, joinStatement.Count != 0 ? string.Join(" ", joinStatement) : null, GetColumnFilter(filterByColumn, columnFilterValue));
             return GetItemsText(query, TrafficStatisticChartMapper,
                 (cmd) =>
                 {
@@ -139,9 +117,7 @@ namespace TOne.Analytics.Data.SQL
 
             TrafficStatistic trafficStatistics = new TrafficStatistic
             {
-
                 Attempts = GetReaderValue<int>(reader, "Attempts"),
-
                 DurationsInMinutes = GetReaderValue<Decimal>(reader, "DurationsInSeconds") / 60
             };
             return trafficStatistics;
@@ -579,7 +555,7 @@ namespace TOne.Analytics.Data.SQL
         const string SupplierIDColumnName = "SupplierID";
         const string Port_INColumnName = "Port_IN";
         const string Port_OutColumnName = "Port_OUT";
-        const string CodeGroupIDColumnName = "CodeGroupID";
+        const string CodeGroupIDColumnName = "CodeGroup";
         const string CodeGroupNameColumnName = "CodeGroupName";
         const string SupplierZoneIDColumnName = "SupplierZoneID";
         const string GateWayInIDColumnName = "GateWayInName";
@@ -587,8 +563,8 @@ namespace TOne.Analytics.Data.SQL
 
         const string CodeBuyIDColumnName = "SupplierCode";
         const string CodeSalesIDColumnName = "OurCode";
-
-        const string OurZonesJoinQuery = " LEFT JOIN OurZones z ON ts.OurZoneID = z.ZoneID";
+        
+        const string OurZonesJoinQuery = " LEFT JOIN  OurZones z ON ts.OurZoneID = z.ZoneID";
         const string GateWayInJoinQuery = "Left JOIN SwitchConnectivity cscIn  ON (','+cscIn.Details+',' LIKE '%,'+ts.Port_IN +',%' ) AND(ts.SwitchID = cscIn.SwitchID) AND ts.CustomerID =cscIn.CarrierAccount ";
         const string GateWayOutJoinQuery = "Left JOIN SwitchConnectivity cscOut ON  (','+cscOut.Details+',' LIKE '%,'+ts.Port_OUT +',%') AND (ts.SwitchID = cscOut.SwitchID)  AND ts.SupplierID  =cscOut.CarrierAccount  ";
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TOne.Analytics.Entities;
 namespace TOne.Analytics.Data
 {
-    public interface ITrafficStatisticDataManager : IDataManager
+    public interface ITrafficMonitorDataManager : IDataManager
     {
         TrafficStatisticSummaryBigResult GetTrafficStatisticSummary(Vanrise.Entities.DataRetrievalInput<TrafficStatisticSummaryInput> input);
         

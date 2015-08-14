@@ -37,7 +37,7 @@ namespace TOne.Web.Reports
 
                 CarrierAccountManager manager = new CarrierAccountManager();
 
-                TrafficStatisticManager manager2 = new TrafficStatisticManager();
+                TrafficMonitorManager manager2 = new TrafficMonitorManager();
 
                 IEnumerable<TrafficStatistic> arr = manager2.GetTrafficStatistics(TrafficStatisticGroupKeys.OurZone, "804", DateTime.Parse("2012-04-27"), DateTime.Parse("2014-06-29"));
                    

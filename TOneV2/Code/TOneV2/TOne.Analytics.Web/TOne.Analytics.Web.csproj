@@ -124,7 +124,7 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\AnalyticsController.cs" />
+    <Compile Include="Controllers\TrafficMonitorController.cs" />
     <Compile Include="Controllers\BillingStatisticsController.cs" />
     <Compile Include="Controllers\BlockedAttemptsController.cs" />
     <Compile Include="Controllers\CDRController.cs" />

@@ -9,10 +9,10 @@ using TOne.Analytics.Entities;
 
 namespace TOne.Analytics.Web.Controllers
 {
-    public class AnalyticsController : Vanrise.Web.Base.BaseAPIController
+    public class TrafficMonitorController : Vanrise.Web.Base.BaseAPIController
     {
         private readonly AnalyticsManager _analyticsManager;
-        public AnalyticsController()
+        public TrafficMonitorController()
         {
             _analyticsManager = new AnalyticsManager();
         }
@@ -35,13 +35,13 @@ namespace TOne.Analytics.Web.Controllers
         public object GetTrafficStatisticSummary(Vanrise.Entities.DataRetrievalInput<TrafficStatisticSummaryInput> input)
         {
             System.Threading.Thread.Sleep(1000);
-            TrafficStatisticManager manager = new TrafficStatisticManager();
+            TrafficMonitorManager manager = new TrafficMonitorManager();
             return GetWebResponse(input,manager.GetTrafficStatisticSummary(input));
         }
         [HttpGet]
         public IEnumerable<TrafficStatistic> GetTrafficStatistics(TrafficStatisticGroupKeys filterByColumn, string columnFilterValue, DateTime from, DateTime to)
         {
-            TrafficStatisticManager manager = new TrafficStatisticManager();
+            TrafficMonitorManager manager = new TrafficMonitorManager();
             return manager.GetTrafficStatistics(filterByColumn, columnFilterValue, from, to);
         }
  
