@@ -32,12 +32,10 @@
                                  on-ready="gridReady"
                                  ng-show="currentNode">
 
-                        <!-- for some reason, the first column appears last in the grid -->
-                        <!-- this is a bug in the vr-datagrid directive, and this is just a temporary solution -->
-                        <vr-datagridcolumn headertext="'Is Supplier'" field="'IsSupplierAssigned'"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Carrier Account ID'" field="'CarrierAccountID'"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Carrier Name'" field="'CarrierName'"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Is Customer'" field="'IsCustomerAssigned'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Is Supplier'" field="'IsSupplierAssigned'"></vr-datagridcolumn>
                     </vr-datagrid>
                 </vr-columns>
             </vr-columns>
