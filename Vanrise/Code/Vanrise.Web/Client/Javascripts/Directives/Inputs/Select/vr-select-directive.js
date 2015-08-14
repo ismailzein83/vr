@@ -51,7 +51,7 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
             this.selectlbl = $attrs.selectlbl;
             this.filtername = '';
             this.showloading = false;
-            this.data = {};
+            this.data = [];
 
             this.isDropDownOpened = function () {
                 return vrSelectSharedObject.isDropDownOpened($attrs.id);
