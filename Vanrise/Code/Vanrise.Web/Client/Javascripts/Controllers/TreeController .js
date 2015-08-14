@@ -18,7 +18,7 @@ var TreeController = function ($scope, $rootScope) {
         },
         {
             label: "NOC", location: '', icon: 'glyphicon-flash', children: [
-               { label: "Zone Monitor", location: '#/NOC/ZoneMonitor' }
+               { label: "Traffic Monitor", location: '#/NOC/TrafficMonitor' }
             ]
         },
         {

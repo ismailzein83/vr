@@ -176,8 +176,8 @@
     <Content Include="Analytics\Views\Traffic Statistics\ReleaseCodeStatisticsController.js" />
     <Content Include="Analytics\Views\Traffic Statistics\TrafficStatisticsGrid.html" />
     <Content Include="Analytics\Views\Traffic Statistics\TrafficStatisticsGridController.js" />
-    <Content Include="Analytics\Views\Traffic Statistics\ZoneMonitor.html" />
-    <Content Include="Analytics\Views\Traffic Statistics\ZoneMonitorController.js" />
+    <Content Include="Analytics\Views\Traffic Statistics\TrafficMonitor.html" />
+    <Content Include="Analytics\Views\Traffic Statistics\TrafficMonitorController.js" />
     <Content Include="Analytics\Views\Billing Statistics\Volume Reports\VolumeReports.html" />
     <Content Include="Analytics\Views\Billing Statistics\Volume Reports\VolumeReportsController.js" />
   </ItemGroup>

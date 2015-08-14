@@ -1,7 +1,7 @@
-﻿ZoneMonitorController.$inject = ['$scope', 'UtilsService', 'AnalyticsAPIService', 'uiGridConstants', '$q', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficStatisticsMeasureEnum','LabelColorsEnum',
+﻿TrafficMonitorController.$inject = ['$scope', 'UtilsService', 'AnalyticsAPIService', 'uiGridConstants', '$q', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficStatisticsMeasureEnum', 'LabelColorsEnum',
         'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'DataRetrievalResultTypeEnum', 'PeriodEnum', 'AnalyticsService'];
 
-function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, CarrierAccountAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum,LabelColorsEnum,
+function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, CarrierAccountAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum, LabelColorsEnum,
         CarrierTypeEnum, VRModalService, VRNotificationService, DataRetrievalResultTypeEnum, PeriodEnum, analyticsService) {
 
     var chartSelectedMeasureAPI;
@@ -415,4 +415,4 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
 
 };
 
-appControllers.controller('Analytics_ZoneMonitorController', ZoneMonitorController);
+appControllers.controller('Analytics_TrafficMonitorController', TrafficMonitorController);
