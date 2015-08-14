@@ -23,14 +23,14 @@ app.directive('vrPreviewImage', [ function () {
         bindToController: true,
         template: function (element, attrs) {
             
-            var startTemplate = '<div style="padding:2px;border:1px solid #ccc;">';
+            var startTemplate = '<div style="padding:2px;border:1px solid #ccc;" ng-style="ctrl.Style">';
             var endTemplate = '</div>';
 
             var labelTemplate = '';
             if (attrs.label != undefined)
                 labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
-            var imageTemplate = ' <img ng-if="ctrl.value!= null && ctrl.value!= 0 "  ng-src="api/VRFile/PreviewImage?fileId={{ctrl.value}}" ng-style="ctrl.Style"/>'
-                                + '<img ng-if="ctrl.value == null  ctrl.value!= 0 " ng-src="/Client/Images/no_image.jpg"  ng-style="ctrl.Style" >';
+            var imageTemplate = ' <img ng-if="ctrl.value!= null && ctrl.value!= 0 "  ng-src="api/VRFile/PreviewImage?fileId={{ctrl.value}}" style="width:100%;height:100%"/>'
+                                + '<img ng-if="ctrl.value == null  ctrl.value!= 0 " ng-src="/Client/Images/no_image.jpg"   style="width:100%;height:100%">';
                  
 
 
