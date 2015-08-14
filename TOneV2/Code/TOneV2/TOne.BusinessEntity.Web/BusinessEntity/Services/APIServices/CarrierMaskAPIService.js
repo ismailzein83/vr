@@ -1,11 +1,26 @@
 ﻿'use strict'
 var serviceObj = function (BaseAPIService) {
     return ({
-        GetCarrierMasks: GetCarrierMasks
+        GetFilteredCarrierMasks: GetFilteredCarrierMasks,
+        GetCarrierMask: GetCarrierMask,
+        UpdateCarrierMask: UpdateCarrierMask,
+        AddCarrierMask: AddCarrierMask
     });
 
-    function GetCarrierMasks(input) {
-        return BaseAPIService.post("/api/CarrierMask/GetCarrierMasks", input);
+    function GetFilteredCarrierMasks(input) {
+        return BaseAPIService.post("/api/CarrierMask/GetFilteredCarrierMasks", input);
+    }
+    function GetCarrierMask(carrierMaskId) {
+        return BaseAPIService.get("/api/CarrierMask/GetCarrierMask",
+            {
+                carrierMaskId: carrierMaskId
+            });
+    }
+    function UpdateCarrierMask(carrierMask) {
+        return BaseAPIService.post("/api/CarrierMask/UpdateCarrierMask", carrierMask);
+    }
+    function AddCarrierMask(carrierMask) {
+        return BaseAPIService.post("/api/CarrierMask/AddCarrierMask", carrierMask);
     }
 }
 serviceObj.$inject = ['BaseAPIService'];

@@ -13,10 +13,31 @@ namespace TOne.BusinessEntity.Web.Controllers
     public class CarrierMaskController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpPost]
-        public Object GetCarrierMasks(Vanrise.Entities.DataRetrievalInput<CarrierMaskQuery> input)
+        public Object GetFilteredCarrierMasks(Vanrise.Entities.DataRetrievalInput<CarrierMaskQuery> input)
         {
             CarrierMaskManager manager = new CarrierMaskManager();
-            return GetWebResponse(input, manager.GetCarrierMasks(input));
+            return GetWebResponse(input, manager.GetFilteredCarrierMasks(input));
+        }
+
+        [HttpGet]
+        public CarrierMask GetCarrierMask(int carrierMaskId)
+        {
+            CarrierMaskManager manager = new CarrierMaskManager();
+            return manager.GetCarrierMask(carrierMaskId);
+        }
+
+        [HttpPost]
+        public TOne.Entities.UpdateOperationOutput<CarrierMask> UpdateCarrierMask(CarrierMask carrierMask)
+        {
+            CarrierMaskManager manager = new CarrierMaskManager();
+            return manager.UpdateCarrierMask(carrierMask);
+        }
+
+        [HttpPost]
+        public Vanrise.Entities.InsertOperationOutput<CarrierMask> AddCarrierMask(CarrierMask carrierMask)
+        {
+            CarrierMaskManager manager = new CarrierMaskManager();
+            return manager.AddCarrierMask(carrierMask);
         }
     }
 }

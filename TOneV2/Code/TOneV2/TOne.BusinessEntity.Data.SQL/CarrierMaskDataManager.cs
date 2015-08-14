@@ -21,6 +21,40 @@ namespace TOne.BusinessEntity.Data.SQL
             }, CarrierMaskMapper);
         }
 
+        public CarrierMask GetCarrierMask(int carrierMaskId)
+        {
+            return GetItemSP("BEntity.sp_CarrierMask_GetByMaskId", CarrierMaskMapper, carrierMaskId);
+        }
+
+        public bool UpdateCarrierMask(CarrierMask carrierMask)
+        {
+            int rowEffected = ExecuteNonQuerySP("BEntity.sp_CarrierMask_Update",
+                carrierMask.ID, carrierMask.Name, carrierMask.CompanyName,
+                carrierMask.CountryId, carrierMask.RegistrationNumber, carrierMask.VatID, carrierMask.Telephone1, carrierMask.Telephone2, carrierMask.Telephone3,
+                carrierMask.Fax1, carrierMask.Fax2, carrierMask.Fax3, carrierMask.Address1, carrierMask.Address2, carrierMask.Address3, carrierMask.CompanyLogo,
+                carrierMask.IsBankReferences, carrierMask.BillingContact, carrierMask.BillingEmail,
+                carrierMask.PricingContact, carrierMask.PricingEmail, carrierMask.AccountManagerEmail,
+                carrierMask.SupportContact, carrierMask.SupportEmail, carrierMask.CurrencyId, carrierMask.PriceList, carrierMask.MaskInvoiceformat, carrierMask.MaskOverAllCounter, carrierMask.YearlyMaskOverAllCounter);
+            if (rowEffected > 0)
+                return true;
+            return false;
+        }
+
+        public bool AddCarrierMask(Entities.CarrierMask carrierMask, out int insertedId)
+        {
+            object maskID;
+
+            int recordesEffected = ExecuteNonQuerySP("BEntity.sp_CarrierMask_Insert", out maskID, carrierMask.Name, carrierMask.CompanyName,
+                carrierMask.CountryId, carrierMask.RegistrationNumber, carrierMask.VatID, carrierMask.Telephone1, carrierMask.Telephone2, carrierMask.Telephone3,
+                carrierMask.Fax1, carrierMask.Fax2, carrierMask.Fax3, carrierMask.Address1, carrierMask.Address2, carrierMask.Address3, carrierMask.CompanyLogo,
+                carrierMask.IsBankReferences, carrierMask.BillingContact, carrierMask.BillingEmail,
+                carrierMask.PricingContact, carrierMask.PricingEmail, carrierMask.AccountManagerEmail,
+                carrierMask.SupportContact, carrierMask.SupportEmail, carrierMask.CurrencyId, carrierMask.PriceList, carrierMask.MaskInvoiceformat, carrierMask.MaskOverAllCounter, carrierMask.YearlyMaskOverAllCounter);
+
+            insertedId = (recordesEffected > 0) ? (Int16)maskID : -1;
+            return (recordesEffected > 0);
+        }
+
         private CarrierMask CarrierMaskMapper(IDataReader reader)
         {
             Entities.CarrierMask module = new Entities.CarrierMask
@@ -40,7 +74,7 @@ namespace TOne.BusinessEntity.Data.SQL
                 Address1 = reader["Address1"] as string,
                 Address2 = reader["Address2"] as string,
                 Address3 = reader["Address3"] as string,
-                CompanyLogo = reader["CompanyLogo"] as string,
+                CompanyLogo = GetReaderValue<long>(reader, "CompanyLogo"),
                 IsBankReferences = GetReaderValue<bool>(reader, "IsBankReferences"),
                 BillingContact = reader["BillingContact"] as string,
                 BillingEmail = reader["BillingEmail"] as string,
@@ -50,8 +84,8 @@ namespace TOne.BusinessEntity.Data.SQL
                 SupportContact = reader["SupportContact"] as string,
                 SupportEmail = reader["SupportEmail"] as string,
                 CurrencyId = GetReaderValue<int>(reader, "CurrencyId"),
-                PriceList = GetReaderValue<int>(reader, "PriceList"),
-                MaskInvoiceformat = GetReaderValue<int>(reader, "MaskInvoiceformat"),
+                PriceList = reader["PriceList"] as string,
+                MaskInvoiceformat = reader["MaskInvoiceformat"] as string,
                 MaskOverAllCounter = GetReaderValue<int>(reader, "MaskOverAllCounter"),
                 YearlyMaskOverAllCounter = GetReaderValue<int>(reader, "YearlyMaskOverAllCounter")
             };

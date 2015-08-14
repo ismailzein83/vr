@@ -23,7 +23,7 @@ namespace TOne.BusinessEntity.Entities
         public string Address1 { get; set; }
         public string Address2 { get; set; }
         public string Address3 { get; set; }
-        public string CompanyLogo { get; set; }
+        public long CompanyLogo { get; set; }
         public bool IsBankReferences { get; set; }
         public string BillingContact { get; set; }
         public string BillingEmail { get; set; }
@@ -33,8 +33,8 @@ namespace TOne.BusinessEntity.Entities
         public string SupportContact { get; set; }
         public string SupportEmail { get; set; }
         public int CurrencyId { get; set; }
-        public int PriceList { get; set; }
-        public int MaskInvoiceformat { get; set; }
+        public string PriceList { get; set; }
+        public string MaskInvoiceformat { get; set; }
         public int MaskOverAllCounter { get; set; }
         public int YearlyMaskOverAllCounter { get; set; }
 

@@ -10,14 +10,14 @@
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Add" data-onclick="addNewGroup"></vr-button>
+                    <vr-button type="Add" data-onclick="AddNewCarrierMask"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
         <div>
             <vr-row>
                 <vr-columns colnum="12">
-                    <vr-datagrid datasource="::datasource" pagingtype="'PagingOnScroll'" dataretrievalfunction="dataRetrievalFunction" on-ready="onGridReady">
+                    <vr-datagrid datasource="::datasource" pagingtype="'PagingOnScroll'" dataretrievalfunction="dataRetrievalFunction" on-ready="onGridReady" menuactions="gridMenuActions">
                         <vr-datagridcolumn headertext="'Name'" field="'Name'" widthfactor="5"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Company Name'" field="'CompanyName'" widthfactor="5"></vr-datagridcolumn>
                     </vr-datagrid>
