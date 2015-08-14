@@ -171,6 +171,8 @@
     <Content Include="Analytics\Views\CDR\CDRLog.html" />
     <Content Include="Analytics\Views\CDR\CDRLogController.js" />
     <Content Include="Analytics\Views\CDR\CDRReport.html" />
+    <Content Include="Analytics\Views\DailyReport.html" />
+    <Content Include="Analytics\Views\DailyReportController.js" />
     <Content Include="Analytics\Views\RepeatedNumbers.html" />
     <Content Include="Analytics\Views\RepeatedNumbersController.js" />
     <Content Include="Analytics\Views\Traffic Statistics\HourlyReport.html" />
