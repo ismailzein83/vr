@@ -186,7 +186,7 @@
                 colDef.widthFactor = col.widthFactor;
 
             if (columnIndex == undefined)
-                ctrl.columnDefs.splice(ctrl.columnDefs.length - 1, 0, colDef);//to insert before the actionType column
+                ctrl.columnDefs.splice(ctrl.columnDefs.length , 0, colDef);//to insert before the actionType column
             else
                 ctrl.columnDefs.splice(columnIndex, 0, colDef);
             calculateColumnsWidth();
@@ -574,7 +574,6 @@
                             ctrl.isLoadingMoreData = false;
                             var div = document.getElementById('gridBodyContainer'); // need real DOM Node, not jQuery wrapper
                             var hasVerticalScrollbar = div.scrollHeight > div.clientHeight;
-                            console.log(hasVerticalScrollbar);
                             if (hasVerticalScrollbar)
                                 ctrl.headerStyle = {
                                     "padding-right": getScrollbarWidth()+"px"
