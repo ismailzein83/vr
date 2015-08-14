@@ -1,4 +1,4 @@
-﻿CREATE TABLE [FraudAnalysis].[SubscriberThreshold] (
+CREATE TABLE [FraudAnalysis].[SubscriberThreshold] (
     [Id]               INT            IDENTITY (1, 1) NOT NULL,
     [DateDay]          DATETIME       NULL,
     [SubscriberNumber] VARCHAR (50)   NULL,
@@ -9,7 +9,9 @@
 );
 
 
+
+
 GO
-CREATE CLUSTERED INDEX [IX_SubscriberThresholds]
-    ON [FraudAnalysis].[SubscriberThreshold]([DateDay] ASC, [StrategyId] ASC);
+CREATE CLUSTERED INDEX [IX_SubscriberThreshold_StrategyId]
+    ON [FraudAnalysis].[SubscriberThreshold]([StrategyId] ASC);
 

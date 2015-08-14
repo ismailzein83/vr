@@ -66,7 +66,7 @@ DELETE
 
 MERGE INTO FraudAnalysis.[CaseStatus] AS Target 
 USING (VALUES 
-	( N'1',N'Opened'),
+	( N'1',N'Open'),
 	( N'2',N'Pending'),
 	( N'3',N'Closed: Fraud'),
 	( N'4',N'Closed: White List'),
@@ -86,8 +86,8 @@ DELETE
 
 MERGE INTO FraudAnalysis.[Period] AS Target 
 USING (VALUES 
-	( N'Hour'),
-	( N'Day')
+	( N'Hourly'),
+	( N'Daily')
 ) 
 AS Source ([Description])
 ON Target.[Description] = Source.[Description] 

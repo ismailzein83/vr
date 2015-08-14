@@ -1,4 +1,4 @@
-﻿CREATE TABLE [FraudAnalysis].[NumberProfile] (
+CREATE TABLE [FraudAnalysis].[NumberProfile] (
     [Id]               INT            IDENTITY (1, 1) NOT NULL,
     [SubscriberNumber] VARCHAR (30)   NULL,
     [FromDate]         DATETIME       NULL,
@@ -8,7 +8,9 @@
 );
 
 
+
+
 GO
-CREATE CLUSTERED INDEX [IX_NumberProfile]
-    ON [FraudAnalysis].[NumberProfile]([FromDate] ASC, [ToDate] ASC, [StrategyId] ASC);
+CREATE CLUSTERED INDEX [IX_NumberProfile_StrategyId]
+    ON [FraudAnalysis].[NumberProfile]([StrategyId] ASC);
 

@@ -21,7 +21,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
 
     function loadParameters() {
 
-        $scope.statuses = [{ id: 1, name: 'Pending' }, { id: 2, name: 'Ignored' }, { id: 3, name: 'Confirmed' }, { id: 4, name: 'White List' }];
+        $scope.statuses = [{ id: 2, name: 'Pending' }, { id: 3, name: 'Closed: Fraud' }, { id: 4, name: 'Closed: White List' }, { id: 5, name: 'Cancelled' }, { id: 1, name: 'Open' }];
 
         var parameters = VRNavigationService.getParameters($scope);
 
