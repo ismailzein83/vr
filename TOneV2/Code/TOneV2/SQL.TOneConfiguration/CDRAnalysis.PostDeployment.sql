@@ -85,7 +85,7 @@ set identity_insert [sec].[BusinessEntityModule] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1,'Root',null,0,'["View","Full Control"]'),
-(2,'Strategy Module',1,0,'["View","Add","Edit", "Full Control"]'),
+(2,'Strategy Module',1,0,'["View","Add","Edit", "Add System built in", "Full Control"]'),
 (3,'Suspicion Analysis Module',1,0,'["View"]'),
 (4,'Reporting Module',1,0,'["View"]'),
 (5,'Dashboard Module',1,0,'["View"]'),
