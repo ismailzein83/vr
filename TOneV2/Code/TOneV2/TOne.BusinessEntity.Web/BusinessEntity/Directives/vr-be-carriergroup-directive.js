@@ -71,8 +71,15 @@ app.directive('vrBeCarriergroup', ['VRModalService', 'UtilsService', 'VRNotifica
         var label;
         if (attrs.label != undefined)
             label = attrs.label;
-        else
-            label = "Carriers";
+        else {
+            if (attrs.type == "'Customer'")
+                label = "Customers";
+            else if (attrs.type == "'Supplier'")
+                label = "Suppliers";
+            else if (attrs.type == "'Exchange'")
+                label = "Carriers";
+        }
+           
         return '<div style="display:inline-block;width: calc(100% - 18px);">'
                    + '<vr-label >' + label + '</vr-label>'
                + ' <vr-select  ismultipleselection  datasource="datasource" selectedvalues="selectedCarrierValues" onselectionchanged="onselectionvalueschanged" datatextfield="Name" datavaluefield="CarrierAccountID"'
