@@ -1,6 +1,6 @@
-﻿CDRLogController.$inject = ['$scope', 'CDRAPIService', 'UtilsService', 'uiGridConstants', 'VRNavigationService', '$q', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService', 'BillingCDRMeasureEnum', 'TrafficStatisticsMeasureEnum', 'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'ZonesService', 'BillingCDROptionMeasureEnum'];
+﻿CDRLogController.$inject = ['$scope', 'CDRAPIService', 'UtilsService', 'uiGridConstants', 'VRNavigationService', '$q', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService', 'BillingCDRMeasureEnum', 'TrafficMonitorMeasureEnum', 'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'ZonesService', 'BillingCDROptionMeasureEnum'];
 
-function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, VRNavigationService, $q, BusinessEntityAPIService, CarrierAccountAPIService, BillingCDRMeasureEnum, TrafficStatisticsMeasureEnum, CarrierTypeEnum, VRModalService, VRNotificationService, ZonesService, BillingCDROptionMeasureEnum) {
+function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, VRNavigationService, $q, BusinessEntityAPIService, CarrierAccountAPIService, BillingCDRMeasureEnum, TrafficMonitorMeasureEnum, CarrierTypeEnum, VRModalService, VRNotificationService, ZonesService, BillingCDROptionMeasureEnum) {
 
     var receivedCustomerIds;
     var receivedSupplierIds;

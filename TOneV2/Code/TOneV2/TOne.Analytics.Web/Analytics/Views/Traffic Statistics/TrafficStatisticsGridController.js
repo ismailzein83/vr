@@ -1,6 +1,6 @@
 ﻿'use strict'
-TrafficStatisticsGridController.$inject = ['$scope', 'AnalyticsAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficStatisticsMeasureEnum', 'VRModalService','UtilsService','LabelColorsEnum'];
-function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum, VRModalService, UtilsService, LabelColorsEnum) {
+TrafficStatisticsGridController.$inject = ['$scope', 'AnalyticsAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficMonitorMeasureEnum', 'VRModalService', 'UtilsService', 'LabelColorsEnum'];
+function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficStatisticGroupKeysEnum, TrafficMonitorMeasureEnum, VRModalService, UtilsService, LabelColorsEnum) {
     var measures = [];
     var filter = {};
     var selectedGroupKeys = [];
@@ -67,9 +67,9 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
                 return false;
         };
         $scope.getColor = function (dataItem, coldef) {
-            if (coldef.tag.value == TrafficStatisticsMeasureEnum.ACD.value)
+            if (coldef.tag.value == TrafficMonitorMeasureEnum.ACD.value)
                 return getACDColor(dataItem.ACD, dataItem.Attempts);
-            else if (coldef.tag.value == TrafficStatisticsMeasureEnum.ASR.value)
+            else if (coldef.tag.value == TrafficMonitorMeasureEnum.ASR.value)
                 return getASRColor(dataItem.ASR, dataItem.Attempts);
         }
 
@@ -251,9 +251,9 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         updateParametersFromGroupKeys(parameters, scope.gridParentScope, scope.dataItem);
     }   
     function loadMeasures() {
-        for (var prop in TrafficStatisticsMeasureEnum) {
-            measures.push(TrafficStatisticsMeasureEnum[prop]);
-        }
+        for (var prop in TrafficMonitorMeasureEnum) {
+            measures.push(TrafficMonitorMeasureEnum[prop]);
+        } 
     }
     function loadGroupKeys() {
         for (var prop in TrafficStatisticGroupKeysEnum) {

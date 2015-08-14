@@ -1,8 +1,8 @@
-﻿TrafficMonitorController.$inject = ['$scope', 'UtilsService', 'AnalyticsAPIService', 'uiGridConstants', '$q', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficMonitorMeasureEnum', 'LabelColorsEnum',
-        'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'DataRetrievalResultTypeEnum', 'PeriodEnum', 'AnalyticsService'];
+﻿HourlyReportController.$inject = ['$scope', 'UtilsService', 'AnalyticsAPIService', 'uiGridConstants', '$q', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService', 'TrafficStatisticGroupKeysEnum', 'HourlyReportMeasureEnum', 'LabelColorsEnum',
+        'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'DataRetrievalResultTypeEnum', 'PeriodEnum', 'AnalyticsService','ZonesService'];
 
-function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, CarrierAccountAPIService, TrafficStatisticGroupKeysEnum, TrafficMonitorMeasureEnum, LabelColorsEnum,
-        CarrierTypeEnum, VRModalService, VRNotificationService, DataRetrievalResultTypeEnum, PeriodEnum, analyticsService) {
+function HourlyReportController($scope, UtilsService, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, CarrierAccountAPIService, TrafficStatisticGroupKeysEnum, HourlyReportMeasureEnum, LabelColorsEnum,
+        CarrierTypeEnum, VRModalService, VRNotificationService, DataRetrievalResultTypeEnum, PeriodEnum, analyticsService, ZonesService) {
 
     var chartSelectedMeasureAPI;
     var chartSelectedEntityAPI;
@@ -16,10 +16,6 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
     load();
 
     function defineScope() {
-        $scope.asr = 50.0;
-        $scope.showResult = false;
-        $scope.acd=20.0;
-        $scope.attempts = 2;
         $scope.groupKeys = groupKeys;
         $scope.selectedGroupKeys = analyticsService.getDefaultTrafficStatisticGroupKeys();
         $scope.switches = [];
@@ -30,26 +26,19 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
         $scope.selectedCustomers = [];
         $scope.suppliers = [];
         $scope.selectedSuppliers = [];
+        $scope.zones = [];
+        $scope.selectedZones = [];
         $scope.data = [];
+        $scope.searchZones = function (text) {
+            return ZonesService.getSalesZones(text);
+        }
+        $scope.onSelectionChanged = function () {
+
+            return $scope.selectedConnectionIndex!=0;
+        }
+        $scope.selectedConnectionIndex;
         $scope.periods = analyticsService.getPeriods();
         $scope.selectedPeriod = $scope.periods[0];
-        $scope.gridAllMeasuresScope = {};
-        $scope.measures = measures;
-        defineMenuActions();
-        $scope.currentSearchCriteria = {
-            groupKeys: []
-        };
-        $scope.onValueChanged = function () {
-            console.log($scope.selectedPeriod);
-            if ($scope.selectedPeriod != selectedPeriod) {
-                    var customize = {
-                value: -1,
-                description: "Customize"
-                    }
-                    selectedPeriod = $scope.selectedPeriod;
-                $scope.selectedPeriod = customize;
-            }       
-        }
         $scope.periodSelectionChanged = function () {
             if ($scope.selectedPeriod != undefined && $scope.selectedPeriod.value != -1) {
                 var date = $scope.selectedPeriod.getInterval();
@@ -64,12 +53,36 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
         $scope.customvalidateTestTo = function (toDate) {
             return UtilsService.validateDates($scope.fromDate, toDate);
         };
+
+
+
+
+        $scope.showResult = false;       
+        $scope.gridAllMeasuresScope = {};
+        $scope.measures = measures;
+        defineMenuActions();
+        $scope.currentSearchCriteria = {
+            groupKeys: []
+        };
+        $scope.onValueChanged = function () {
+            console.log($scope.selectedPeriod);
+            if ($scope.selectedPeriod != selectedPeriod) {
+                var customize = {
+                    value: -1,
+                    description: "Customize"
+                }
+                selectedPeriod = $scope.selectedPeriod;
+                $scope.selectedPeriod = customize;
+            }
+        }
+        
+       
         $scope.getColor = function (dataItem, coldef) {
-            if (coldef.tag.value == TrafficMonitorMeasureEnum.ACD.value)
+            if (coldef.tag.value == HourlyReportMeasureEnum.ACD.value)
                 return getACDColor(dataItem.ACD, dataItem.Attempts);
-            else if (coldef.tag.value == TrafficMonitorMeasureEnum.ASR.value)
+            else if (coldef.tag.value == HourlyReportMeasureEnum.ASR.value)
                 return getASRColor(dataItem.ASR, dataItem.Attempts);
-        }      
+        }
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
         }
@@ -94,29 +107,6 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
             chartSelectedMeasureAPI = api;
         };
         $scope.customvalidateSelectGroup = function () {
-
-            //var zoneRule = 0;
-            //var portRule = 0;
-            //var codeGroupRule = 0;
-            ////var zoneRule = 0;
-            ////var zoneRule = 0;
-            //for (var i = 0; i < $scope.selectedGroupKeys.length; i++) {
-            //    switch ($scope.selectedGroupKeys[i].value) {
-            //        case TrafficStatisticGroupKeysEnum.CodeGroup.value: if (zoneRule>0) zoneRule++; codeGroupRule++; break;
-            //        case TrafficStatisticGroupKeysEnum.OurZone.value: zoneRule++; break;
-            //        case TrafficStatisticGroupKeysEnum.CodeSales.value: if (zoneRule > 0) zoneRule++; codeGroupRule++; break;
-            //        case TrafficStatisticGroupKeysEnum.CodeBuy.value: if (zoneRule > 0) zoneRule++; codeGroupRule++; break;
-            //        case TrafficStatisticGroupKeysEnum.PortIn.value: portRule++; break;
-            //        case TrafficStatisticGroupKeysEnum.PortOut.value: portRule++; break;
-            //        case TrafficStatisticGroupKeysEnum.GateWayIn.value: portRule++; break;
-            //        case TrafficStatisticGroupKeysEnum.GateWayOut.value: portRule++; break;
-            //    }       
-            //}
-            //if (zoneRule > 1)
-            //    return "Connot match Zone Rules";
-
-                  
-            //return null;
         };
         $scope.chartSelectedEntityReady = function (api) {
             chartSelectedEntityAPI = api;
@@ -127,14 +117,14 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
             angular.forEach($scope.selectedGroupKeys, function (group) {
                 $scope.currentSearchCriteria.groupKeys.push(group);
             });
-            if (mainGridAPI!=undefined)
-            return retrieveData(true);
+            if (mainGridAPI != undefined)
+                return retrieveData(true);
         };
         $scope.onGroupKeyClicked = function (dataItem, colDef) {
             var group = colDef.tag;
             var groupIndex = $scope.currentSearchCriteria.groupKeys.indexOf(group);
-            if (dataItem.GroupKeyValues[groupIndex].Id != "N/A" || dataItem.GroupKeyValues[groupIndex].Id !=null)
-            $scope.selectEntity(group, dataItem.GroupKeyValues[groupIndex].Id, dataItem.GroupKeyValues[groupIndex].Name);
+            if (dataItem.GroupKeyValues[groupIndex].Id != "N/A" || dataItem.GroupKeyValues[groupIndex].Id != null)
+                $scope.selectEntity(group, dataItem.GroupKeyValues[groupIndex].Id, dataItem.GroupKeyValues[groupIndex].Name);
         };
         $scope.selectEntity = function (groupKey, entityId, entityName) {
             $scope.selectedEntityType = groupKey.description;
@@ -148,7 +138,7 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
         $scope.onOverallItemClicked = function (dataItem) {
             overallSelectedMeasure = dataItem.measure;
             renderOverallChart();
-        };       
+        };
         $scope.getChartMenuActions = function (dataItem) {
             var menuActions = [];
             angular.forEach($scope.currentSearchCriteria.groupKeys, function (groupKey) {
@@ -185,18 +175,18 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
             toDate: $scope.toDate,
         };
 
-            var query = {
-                Filter: filter,
-                WithSummary: withSummary,
-                GroupKeys: groupKeys,
-                From: $scope.fromDate,
-                To: $scope.toDate,
-            };
-            return mainGridAPI.retrieveData(query);
-        }
+        var query = {
+            Filter: filter,
+            WithSummary: withSummary,
+            GroupKeys: groupKeys,
+            From: $scope.fromDate,
+            To: $scope.toDate,
+        };
+        return mainGridAPI.retrieveData(query);
+    }
     function load() {
         loadMeasures();
-        overallSelectedMeasure = TrafficMonitorMeasureEnum.Attempts;
+        overallSelectedMeasure = HourlyReportMeasureEnum.Attempts;
         $scope.isInitializing = true;
         UtilsService.waitMultipleAsyncOperations([loadSwitches, loadCodeGroups, loadCustomers, loadSuppliers]).finally(function () {
             $scope.isInitializing = false;
@@ -209,8 +199,8 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
     }
 
     function getACDColor(acdValue, attemptsValue) {
-        if (attemptsValue>$scope.attempts && acdValue<$scope.acd)
-            return LabelColorsEnum.WarningLevel1.Color; 
+        if (attemptsValue > $scope.attempts && acdValue < $scope.acd)
+            return LabelColorsEnum.WarningLevel1.Color;
     };
     function getASRColor(asrValue, attemptsValue) {
         if (attemptsValue > $scope.attempts && asrValue < $scope.asr)
@@ -271,8 +261,8 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
     }
 
     function loadMeasures() {
-        for (var prop in TrafficMonitorMeasureEnum) {
-            measures.push(TrafficMonitorMeasureEnum[prop]);
+        for (var prop in HourlyReportMeasureEnum) {
+            measures.push(HourlyReportMeasureEnum[prop]);
         }
     }
 
@@ -338,7 +328,6 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
     }
 
 
-
     function getAndShowEntityStatistics(groupKey) {
         $scope.isGettingEntityStatistics = true;
         AnalyticsAPIService.GetTrafficStatistics(groupKey.value, $scope.selectedEntityId, $scope.fromDate, $scope.toDate)
@@ -359,7 +348,7 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
                 seriesDefinitions.push({
                     title: measure.description,
                     valuePath: measure.propertyName,
-                    selected: (measure == TrafficMonitorMeasureEnum.Attempts || measure == TrafficMonitorMeasureEnum.DurationsInMinutes)
+                    selected: (measure == HourlyReportMeasureEnum.Attempts || measure == HourlyReportMeasureEnum.DurationsInMinutes)
                 });
             });
 
@@ -407,4 +396,4 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
 
 };
 
-appControllers.controller('Analytics_TrafficMonitorController', TrafficMonitorController);
+appControllers.controller('Analytics_HourlyReportController', HourlyReportController);

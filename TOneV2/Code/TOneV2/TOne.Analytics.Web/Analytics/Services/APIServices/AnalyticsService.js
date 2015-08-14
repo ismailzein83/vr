@@ -61,6 +61,15 @@
                 width: "80%"
             });
         }
+        function getFilterIds(values, idProp) {
+            var filterIds = [];
+            if (values.length > 0) {
+                angular.forEach(values, function (val) {
+                    filterIds.push(val[idProp]);
+                });
+            }
+            return filterIds;
+        }
 
         function getReleaseCodeMeasureEnum() {
             return utilsService.getArrayEnum(releaseCodeMeasureEnum);
@@ -71,7 +80,8 @@
             getDefaultTrafficStatisticGroupKeys: getDefaultTrafficStatisticGroupKeys,
             getPeriods: getPeriods,
             showCdrLogModal: showCdrLogModal,
-            getReleaseCodeMeasureEnum: getReleaseCodeMeasureEnum
+            getReleaseCodeMeasureEnum: getReleaseCodeMeasureEnum,
+            getFilterIds: getFilterIds
         });
 
 

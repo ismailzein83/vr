@@ -1,4 +1,4 @@
-﻿app.constant('TrafficStatisticsMeasureEnum', {
+﻿app.constant('TrafficMonitorMeasureEnum', {
     Attempts: { value: 2, propertyName: "Attempts", description: "Attempts", isSum: true ,type:"Number"},
     SuccessfulAttempts: { value: 3, propertyName: "SuccessfulAttempts", description: "Successful", isSum: true, type: "Number" },
     FailedAttempts: { value: 4, propertyName: "FailedAttempts", description: "Failed", isSum: true, type: "Number" },
