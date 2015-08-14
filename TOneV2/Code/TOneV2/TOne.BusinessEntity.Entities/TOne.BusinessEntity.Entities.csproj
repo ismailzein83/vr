@@ -70,6 +70,7 @@
     <Compile Include="Code.cs" />
     <Compile Include="CodeGroupInfo.cs" />
     <Compile Include="Country.cs" />
+    <Compile Include="Currency.cs" />
     <Compile Include="FlaggedService.cs" />
     <Compile Include="IBusinessEntityInfoManager.cs" />
     <Compile Include="IFlaggedServiceEntity.cs" />

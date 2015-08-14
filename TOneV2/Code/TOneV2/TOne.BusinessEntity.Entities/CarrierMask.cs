@@ -32,7 +32,7 @@ namespace TOne.BusinessEntity.Entities
         public string AccountManagerEmail { get; set; }
         public string SupportContact { get; set; }
         public string SupportEmail { get; set; }
-        public int CurrencyId { get; set; }
+        public string CurrencyId { get; set; }
         public string PriceList { get; set; }
         public string MaskInvoiceformat { get; set; }
         public int MaskOverAllCounter { get; set; }

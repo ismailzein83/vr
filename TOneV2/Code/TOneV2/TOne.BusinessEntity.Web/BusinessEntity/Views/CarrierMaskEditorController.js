@@ -1,5 +1,5 @@
-﻿CarrierMaskEditorController.$inject = ['$scope', 'CarrierMaskAPIService', 'LookUpAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
-function CarrierMaskEditorController($scope, CarrierMaskAPIService, LookUpAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+﻿CarrierMaskEditorController.$inject = ['$scope', 'CarrierMaskAPIService', 'LookUpAPIService', 'CurrencyAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+function CarrierMaskEditorController($scope, CarrierMaskAPIService, LookUpAPIService, CurrencyAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
     var editMode;
     loadParameters();
     defineScope();
@@ -37,19 +37,58 @@ function CarrierMaskEditorController($scope, CarrierMaskAPIService, LookUpAPISer
             selectedvalues: '',
             datasource: []
         };
+
+        $scope.optionsCurrencies = {
+            selectedvalues: '',
+            datasource: []
+        };
     }
 
-    function load() {
-        LookUpAPIService.GetCountries().then(function (response) {
+    function loadCountries() {
+        return LookUpAPIService.GetCountries().then(function (response) {
             $scope.optionsCountries.datasource = response;
         });
+    }
 
-        if (editMode) {
-            $scope.isGettingData = true;
-            getCarrierMask().finally(function () {
-                $scope.isGettingData = false;
+    function loadCurrencies(){
+        return CurrencyAPIService.GetCurrencies().then(function (response) {
+            $scope.optionsCurrencies.datasource = response;
+        });
+
+    }
+    function load() {
+
+
+
+
+
+
+        UtilsService.waitMultipleAsyncOperations([loadCountries, loadCurrencies])
+            .then(function () {
+
+                console.log($scope.optionsCurrencies.datasource);
+
+
+                if (editMode) {
+                    $scope.isGettingData = true;
+                    getCarrierMask().finally(function () {
+                        $scope.isGettingData = false;
+                    })
+                }
+
             })
-        }
+            .catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            })
+            .finally(function () {
+                $scope.isGettingData = false;
+            });
+
+
+
+
+
+
     }
 
     function getCarrierMask() {
@@ -66,8 +105,12 @@ function CarrierMaskEditorController($scope, CarrierMaskAPIService, LookUpAPISer
         $scope.Name = CarrierMaskObject.Name;
         $scope.CompanyName = CarrierMaskObject.CompanyName;
         $scope.Country = CarrierMaskObject.Country;
+
+
+
         $scope.optionsCountries.selectedvalues = $scope.optionsCountries.datasource[UtilsService.getItemIndexByVal($scope.optionsCountries.datasource, CarrierMaskObject.Country, 'ID')];
-        $scope.City = CarrierMaskObject.City;
+        $scope.optionsCurrencies.selectedvalues = $scope.optionsCurrencies.datasource[UtilsService.getItemIndexByVal($scope.optionsCurrencies.datasource, CarrierMaskObject.CurrencyId, 'CurrencyID')];
+
         $scope.RegistrationNumber = CarrierMaskObject.RegistrationNumber;
         $scope.VatID = CarrierMaskObject.VatID;
         $scope.IsBankReferences = CarrierMaskObject.IsBankReferences;
@@ -137,7 +180,10 @@ function CarrierMaskEditorController($scope, CarrierMaskAPIService, LookUpAPISer
             ID: $scope.MaskId,
             Name: $scope.Name,
             CompanyName: $scope.CompanyName,
-            Country: $scope.optionsCountries.selectedvalues.ID,
+
+            CountryId: $scope.optionsCountries.selectedvalues.LookUpID,
+            CurrencyId: $scope.optionsCurrencies.selectedvalues.CurrencyID,
+
             RegistrationNumber: $scope.RegistrationNumber,
             VatID: $scope.VatID,
             IsBankReferences: $scope.IsBankReferences,

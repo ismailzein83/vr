@@ -77,7 +77,7 @@
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.title = "Add Carrier Mask";
                 modalScope.onCarrierMaskAdded = function (CarrierMaskAdded) {
-                    gridApi.itemAdded(CarrierMaskAdded);
+                    mainGridApi.itemAdded(CarrierMaskAdded);
                 };
             };
             VRModalService.showModal('/Client/Modules/BusinessEntity/Views/CarrierMaskEditor.html', null, modalSettings);

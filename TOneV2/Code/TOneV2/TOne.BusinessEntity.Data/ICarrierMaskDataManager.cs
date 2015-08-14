@@ -15,5 +15,6 @@ namespace TOne.BusinessEntity.Data
 
         bool UpdateCarrierMask(CarrierMask carrierMask);
         bool AddCarrierMask(CarrierMask carrierMask, out int insertedId);
+        //bool DeleteCarrierMask(CarrierMask carrierMask);
     }
 }

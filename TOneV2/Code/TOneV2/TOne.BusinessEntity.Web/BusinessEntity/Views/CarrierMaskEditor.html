@@ -21,14 +21,25 @@
                         </vr-select>
                     </vr-columns>
                     <vr-columns width="normal">
+                        <vr-label>Currency</vr-label>
+                        <vr-select datasource="optionsCurrencies.datasource"  selectedvalues="optionsCurrencies.selectedvalues" datatextfield="CurrencyFullName" datavaluefield="CurrencyId"
+                                   entityname="Currencies">
+                        </vr-select>
+                    </vr-columns>
+                    <vr-columns width="normal">
                         <vr-textbox label="Registration Number" value="RegistrationNumber"></vr-textbox>
                     </vr-columns>
                     <vr-columns width="normal">
-                        <vr-textbox label="Vat ID." value="VatID"></vr-textbox>
+                        <vr-row removeline>
+                            <vr-columns width="1/2row">
+                                <vr-textbox label="Vat ID." value="VatID"></vr-textbox>
+                            </vr-columns>
+                            <vr-columns width="1/2row">
+                                <vr-switch label="Bank Ref." value="IsBankReferences"></vr-switch>
+                            </vr-columns>
+                        </vr-row>
                     </vr-columns>
-                    <vr-columns width="normal">
-                        <vr-switch label="Bank References" value="IsBankReferences"></vr-switch>
-                    </vr-columns>
+                   
                 </vr-row>
                 <vr-row>
                     <vr-columns width="1/2row">
@@ -187,7 +198,12 @@
                         <vr-section title="Company Logo">
                             <vr-row>
                                 <vr-columns width="fullrow">
-                                    <vr-fileupload value="CompanyLogo"> </vr-fileupload>
+                                    <vr-fileupload extension="images" value="CompanyLogo"> </vr-fileupload>
+                                </vr-columns>
+                            </vr-row>
+                            <vr-row>
+                                <vr-columns width="fullrow">
+                                    <vr-preview-image height="80px" width="80px" value="CompanyLogo.fileId"> </vr-preview-image>
                                 </vr-columns>
                             </vr-row>
                         </vr-section>

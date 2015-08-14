@@ -28,6 +28,20 @@ namespace TOne.BusinessEntity.Business
             return _dataManager.GetCarrierMask(carrierMaskId);
         }
 
+        //public TOne.Entities.UpdateOperationOutput<CarrierMask> DeleteCarrierMask(CarrierMask carrierMask)
+        //{
+        //    bool updateActionSucc = _dataManager.DeleteCarrierMask(carrierMask);
+        //    TOne.Entities.UpdateOperationOutput<CarrierMask> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<CarrierMask>();
+
+        //    if (updateActionSucc)
+        //    {
+        //        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+        //        updateOperationOutput.UpdatedObject = carrierMask;
+        //    }
+        //    else
+        //        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+        //    return updateOperationOutput;
+        //}
         public TOne.Entities.UpdateOperationOutput<CarrierMask> UpdateCarrierMask(CarrierMask carrierMask)
         {
             bool updateActionSucc = _dataManager.UpdateCarrierMask(carrierMask);

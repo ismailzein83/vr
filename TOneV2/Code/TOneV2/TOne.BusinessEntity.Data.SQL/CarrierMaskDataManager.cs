@@ -40,6 +40,15 @@ namespace TOne.BusinessEntity.Data.SQL
             return false;
         }
 
+
+        //public bool DeleteCarrierMask(CarrierMask carrierMask)
+        //{
+        //    int rowEffected = ExecuteNonQuerySP("BEntity.sp_CarrierMask_DeleteByMaskId", carrierMask.ID);
+        //    if (rowEffected > 0)
+        //        return true;
+        //    return false;
+        //}
+
         public bool AddCarrierMask(Entities.CarrierMask carrierMask, out int insertedId)
         {
             object maskID;
@@ -83,7 +92,7 @@ namespace TOne.BusinessEntity.Data.SQL
                 AccountManagerEmail = reader["AccountManagerEmail"] as string,
                 SupportContact = reader["SupportContact"] as string,
                 SupportEmail = reader["SupportEmail"] as string,
-                CurrencyId = GetReaderValue<int>(reader, "CurrencyId"),
+                CurrencyId = reader["CurrencyId"] as string,
                 PriceList = reader["PriceList"] as string,
                 MaskInvoiceformat = reader["MaskInvoiceformat"] as string,
                 MaskOverAllCounter = GetReaderValue<int>(reader, "MaskOverAllCounter"),

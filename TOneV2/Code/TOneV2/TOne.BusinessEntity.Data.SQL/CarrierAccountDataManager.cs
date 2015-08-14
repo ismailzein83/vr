@@ -103,7 +103,7 @@ namespace TOne.BusinessEntity.Data.SQL
             int rowEffected = ExecuteNonQuerySP("BEntity.sp_CarrierAccount_Update ",
                 carrierAccount.AccountType,carrierAccount.ActivationStatus,carrierAccount.CarrierAccountId,
                 carrierAccount.CustomerPaymentType,carrierAccount.NameSuffix,carrierAccount.ProfileCompanyName,
-                carrierAccount.ProfileId,carrierAccount.ProfileName,carrierAccount.RoutingStatus,carrierAccount.SupplierPaymentType);
+                carrierAccount.ProfileId,carrierAccount.ProfileName,carrierAccount.RoutingStatus,carrierAccount.SupplierPaymentType, carrierAccount.CarrierMaskId);
             return rowEffected;
         }
 

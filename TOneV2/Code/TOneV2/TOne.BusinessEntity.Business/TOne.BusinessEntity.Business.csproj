@@ -69,6 +69,7 @@
     <Compile Include="CarrierMaskManager.cs" />
     <Compile Include="CodeManager.cs" />
     <Compile Include="CommissionManager.cs" />
+    <Compile Include="CurrencyManager.cs" />
     <Compile Include="CustomerBehavior.cs" />
     <Compile Include="LookUpManager.cs" />
     <Compile Include="PriceListManager.cs" />

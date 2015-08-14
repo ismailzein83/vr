@@ -24,5 +24,7 @@ namespace TOne.BusinessEntity.Entities
         public List<int> GroupIds { get; set; }
 
         public string CarrierAccountName { get; set; }
+
+        public int CarrierMaskId { get; set; }
     }
 }

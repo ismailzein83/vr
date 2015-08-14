@@ -57,6 +57,7 @@
     <Compile Include="ICarrierMaskDataManager.cs" />
     <Compile Include="ICodeDataManager.cs" />
     <Compile Include="ICommissionDataManager.cs" />
+    <Compile Include="ICurrencyDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="ILookUpDataManager.cs" />
     <Compile Include="IPriceListDataManager.cs" />
