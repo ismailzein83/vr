@@ -281,6 +281,7 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
         var measure = overallSelectedMeasure;
         var othersValue = $scope.trafficStatisticSummary[measure.propertyName];
         var index = 1;
+        console.log(currentData);
         angular.forEach(currentData, function (itm) {
             if (index > 15)
                 return;
@@ -288,7 +289,7 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
             var dataItem = {
                 groupKeyValues: itm.GroupKeyValues,
                 entityName: '',
-                value: itm[measure.propertyName]
+                value: itm.Data[measure.propertyName]
             };
 
             for (var i = 0; i < $scope.currentSearchCriteria.groupKeys.length; i++) {
@@ -297,7 +298,7 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
                 dataItem.entityName += itm.GroupKeyValues[i].Name;
             };
             chartData.push(dataItem);
-            othersValue -= itm[measure.propertyName];
+            othersValue -= itm.Data[measure.propertyName];
         });
         chartData.sort(function (a, b) {
             if (a.value > b.value) {

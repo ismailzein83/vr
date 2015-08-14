@@ -8,5 +8,6 @@ namespace TOne.Analytics.Data
 {
     public interface IHourlyReportDataManager : IDataManager
     {
+        Vanrise.Entities.BigResult<string> GetHourlyReportData(Vanrise.Entities.DataRetrievalInput<string> input);
     }
 }

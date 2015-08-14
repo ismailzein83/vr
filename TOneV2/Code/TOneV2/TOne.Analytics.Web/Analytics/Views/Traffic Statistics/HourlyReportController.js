@@ -1,8 +1,8 @@
-﻿HourlyReportController.$inject = ['$scope', 'UtilsService', 'AnalyticsAPIService', 'uiGridConstants', '$q', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService', 'TrafficStatisticGroupKeysEnum', 'HourlyReportMeasureEnum', 'LabelColorsEnum',
-        'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'DataRetrievalResultTypeEnum', 'PeriodEnum', 'AnalyticsService','ZonesService'];
+﻿HourlyReportController.$inject = ['$scope', 'UtilsService', 'HourlyReportAPIService', 'uiGridConstants', '$q', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService', 'TrafficStatisticGroupKeysEnum', 'HourlyReportMeasureEnum', 'LabelColorsEnum',
+        'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'DataRetrievalResultTypeEnum', 'PeriodEnum', 'AnalyticsService','ZonesService','ChartTypeEnum'];
 
-function HourlyReportController($scope, UtilsService, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, CarrierAccountAPIService, TrafficStatisticGroupKeysEnum, HourlyReportMeasureEnum, LabelColorsEnum,
-        CarrierTypeEnum, VRModalService, VRNotificationService, DataRetrievalResultTypeEnum, PeriodEnum, analyticsService, ZonesService) {
+function HourlyReportController($scope, UtilsService, HourlyReportAPIService, uiGridConstants, $q, BusinessEntityAPIService, CarrierAccountAPIService, TrafficStatisticGroupKeysEnum, HourlyReportMeasureEnum, LabelColorsEnum,
+        CarrierTypeEnum, VRModalService, VRNotificationService, DataRetrievalResultTypeEnum, PeriodEnum, analyticsService, ZonesService,ChartTypeEnum) {
 
     var chartSelectedMeasureAPI;
     var chartSelectedEntityAPI;
@@ -18,6 +18,8 @@ function HourlyReportController($scope, UtilsService, AnalyticsAPIService, uiGri
     function defineScope() {
         $scope.groupKeys = groupKeys;
         $scope.selectedGroupKeys = analyticsService.getDefaultTrafficStatisticGroupKeys();
+        $scope.chartType = UtilsService.getArrayEnum(ChartTypeEnum);
+        $scope.selectedChartType = ChartTypeEnum.Bar;
         $scope.switches = [];
         $scope.selectedSwitches = [];
         $scope.codeGroups = [];
@@ -87,7 +89,7 @@ function HourlyReportController($scope, UtilsService, AnalyticsAPIService, uiGri
             mainGridAPI = api;
         }
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            return AnalyticsAPIService.GetTrafficStatisticSummary(dataRetrievalInput).then(function (response) {
+            return HourlyReportAPIService.GetHourlyReportData(dataRetrievalInput).then(function (response) {
                 if (dataRetrievalInput.DataRetrievalResultType == DataRetrievalResultTypeEnum.Normal.value) {
                     currentData = [];
                     angular.forEach(response.Data, function (itm) {

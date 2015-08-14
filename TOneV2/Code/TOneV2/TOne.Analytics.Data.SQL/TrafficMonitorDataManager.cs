@@ -17,11 +17,13 @@ namespace TOne.Analytics.Data.SQL
 {
     public class TrafficMonitorDataManager : BaseTOneDataManager, ITrafficMonitorDataManager
     {
-        public TrafficStatisticSummaryBigResult GetTrafficStatisticSummary(Vanrise.Entities.DataRetrievalInput<TrafficStatisticSummaryInput> input)
+        public TrafficStatisticSummaryBigResult<TrafficStatistic> GetTrafficStatisticSummary(Vanrise.Entities.DataRetrievalInput<TrafficStatisticSummaryInput> input)
         {
             Dictionary<string, string> mapper = new Dictionary<string, string>();
             string columnId;
             GetColumnNames(input.Query.GroupKeys[0], out columnId);
+
+            mapper.Add("Data.Attempts", "Attempts");
             mapper.Add("GroupKeyValues[0].Name", columnId);
             mapper.Add("Zone", "OurZoneID");
             mapper.Add("Customer", "CustomerID");
@@ -45,14 +47,15 @@ namespace TOne.Analytics.Data.SQL
                     cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.To));
                 });
             };
-            TrafficStatisticSummaryBigResult rslt = RetrieveData(input, createTempTableAction, (reader) =>
+            TrafficStatisticSummaryBigResult<TrafficStatistic> rslt = RetrieveData(input, createTempTableAction, (reader) =>
             {
-                var obj = new TrafficStatisticGroupSummary
+                var obj = new TrafficStatisticGroupSummary<TrafficStatistic>
                 {
-                    GroupKeyValues = new KeyColumn[input.Query.GroupKeys.Count()]
+                    GroupKeyValues = new KeyColumn[input.Query.GroupKeys.Count()], 
+                    Data= FillTrafficStatisticFromReader(reader)
                 };
-                FillTrafficStatisticFromReader(obj, reader);
 
+               
                 for (int i = 0; i < input.Query.GroupKeys.Count(); i++)
                 {
                     string idColumn;
@@ -74,7 +77,7 @@ namespace TOne.Analytics.Data.SQL
                     };
                 }
                 return obj;
-            }, mapper, new TrafficStatisticSummaryBigResult()) as TrafficStatisticSummaryBigResult;
+            }, mapper, new TrafficStatisticSummaryBigResult<TrafficStatistic>()) as TrafficStatisticSummaryBigResult<TrafficStatistic>;
          
             FillBEProperties(rslt, input.Query.GroupKeys);
             if (input.Query.WithSummary)
@@ -267,12 +270,12 @@ namespace TOne.Analytics.Data.SQL
                     whereBuilder.AppendFormat("AND {0} IN ({1})", column, String.Join(", ", values));
             }
         }
-       
-        private void FillBEProperties(TrafficStatisticSummaryBigResult  TrafficStatisticData, TrafficStatisticGroupKeys[] groupKeys)
+
+        private void FillBEProperties(TrafficStatisticSummaryBigResult<TrafficStatistic> TrafficStatisticData, TrafficStatisticGroupKeys[] groupKeys)
         {
             BusinessEntityInfoManager manager = new BusinessEntityInfoManager();
-            
-            foreach (TrafficStatisticGroupSummary data in TrafficStatisticData.Data)
+
+            foreach (TrafficStatisticGroupSummary<TrafficStatistic> data in TrafficStatisticData.Data)
             {
 
                 for (int i = 0; i < groupKeys.Length;i++ )
@@ -338,9 +341,7 @@ namespace TOne.Analytics.Data.SQL
 
         TrafficStatistic TrafficStatisticMapper(IDataReader reader)
         {
-            TrafficStatistic obj = new TrafficStatistic();
-            FillTrafficStatisticFromReader(obj, reader);
-            return obj;
+            return FillTrafficStatisticFromReader(reader); ;
         }
         private string GetColumnFilter(TrafficStatisticGroupKeys column, string columnFilterValue)
         {
@@ -374,8 +375,9 @@ namespace TOne.Analytics.Data.SQL
             }
         }
 
-        void FillTrafficStatisticFromReader(TrafficStatistic trafficStatistics, IDataReader reader)
+        TrafficStatistic FillTrafficStatisticFromReader(IDataReader reader)
         {
+            TrafficStatistic trafficStatistics = new TrafficStatistic();
             trafficStatistics.FirstCDRAttempt = GetReaderValue<DateTime>(reader, "FirstCDRAttempt");
             trafficStatistics.LastCDRAttempt = GetReaderValue<DateTime>(reader, "LastCDRAttempt");
             trafficStatistics.Attempts = GetReaderValue<int>(reader, "Attempts");
@@ -394,6 +396,7 @@ namespace TOne.Analytics.Data.SQL
             trafficStatistics.ABR = GetReaderValue<Decimal>(reader, "ABR");
             trafficStatistics.ASR = GetReaderValue<Decimal>(reader, "ASR");
             trafficStatistics.NER = GetReaderValue<Decimal>(reader, "NER");
+            return trafficStatistics;
         }
 
         private string GetColumnName(TrafficStatisticMeasures column)

@@ -2,13 +2,13 @@
 app.service('HourlyReportAPIService', function (BaseAPIService) {
 
     return ({
-        GetRepeatedNumbersData: GetRepeatedNumbersData,
+        GetHourlyReportData: GetHourlyReportData,
 
     });
 
 
-    function GetRepeatedNumbersData(repeatedNumbersDataInput) {
-        return BaseAPIService.post("/api/RepeatedNumbers/GetRepeatedNumbersData", repeatedNumbersDataInput);
+    function GetHourlyReportData(hourlyReportDataInput) {
+        return BaseAPIService.post("/api/HourlyReport/GetHourlyReportData", hourlyReportDataInput);
     }
 
 
