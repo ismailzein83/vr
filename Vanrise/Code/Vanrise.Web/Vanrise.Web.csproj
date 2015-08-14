@@ -148,6 +148,7 @@
     <Content Include="Client\Images\01.png" />
     <Content Include="Client\Images\02.png" />
     <Content Include="Client\Images\doruknet-logo.png" />
+    <Content Include="Client\Images\no_image.jpg" />
     <Content Include="Client\Images\loader-mask.gif" />
     <Content Include="Client\Images\log in.png" />
     <Content Include="Client\Images\logout.png" />
@@ -185,7 +186,7 @@
     <Content Include="Client\Javascripts\Directives\Chart\vr-chart-directive.js" />
     <Content Include="Client\Javascripts\Directives\Chart\vr-chart-settings.html" />
     <Content Include="Client\Javascripts\Directives\Chart\vr-chart.html" />
-    <Content Include="Client\Javascripts\Directives\Containers\vr-image-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Containers\vr-preview-image-directive.js" />
     <Content Include="Client\Javascripts\Directives\Containers\vr-columns-directive.js" />
     <Content Include="Client\Javascripts\Directives\Containers\vr-panel-directive.js" />
     <Content Include="Client\Javascripts\Directives\Containers\vr-row-directive.js" />

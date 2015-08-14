@@ -27,12 +27,13 @@ namespace Vanrise.Web.Controllers
             if (httpRequest.Files.Count > 0 )
             {
 
-                HttpPostedFile postedFile = httpRequest.Files[0];               
+                HttpPostedFile postedFile = httpRequest.Files[0];
+                string[] nameastab = postedFile.FileName.Split('.');
                 VRFile file = new VRFile()
                 {
                     Content = ReadToEnd(postedFile.InputStream) ,
                     Name = postedFile.FileName ,
-                    Extension = postedFile.ContentType.Split('/')[1] ,
+                    Extension = nameastab[nameastab.Length -1],
                     CreatedTime = DateTime.Now 
 
                 };
@@ -76,6 +77,37 @@ namespace Vanrise.Web.Controllers
             {
                 FileName = String.Format(file.Name) 
             };
+            return response;
+
+        }
+
+        [HttpGet]
+        public HttpResponseMessage PreviewImage(long fileId)
+        {
+
+            VRFileManager manager = new VRFileManager();
+            VRFile file = manager.GetFile(fileId);
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+           
+            if (file.Extension == "jpg" || file.Extension == "png" || file.Extension == "jpeg" || file.Extension == "bmp" || file.Extension == "gif")
+            {
+                byte[] bytes = file.Content;
+                MemoryStream memStreamRate = new System.IO.MemoryStream();
+                memStreamRate.Write(bytes, 0, bytes.Length);
+                memStreamRate.Seek(0, System.IO.SeekOrigin.Begin);
+
+
+                memStreamRate.Position = 0;
+                response.Content = new StreamContent(memStreamRate);
+
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue("image/" + file.Extension);
+               
+            }
+            else
+            {
+                response = new HttpResponseMessage(HttpStatusCode.NotFound);
+            }
+          
             return response;
 
         }
