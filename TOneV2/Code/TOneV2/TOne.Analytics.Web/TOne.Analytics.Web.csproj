@@ -152,6 +152,7 @@
     <Content Include="Analytics\Services\APIServices\BillingStatisticsAPIService.js" />
     <Content Include="Analytics\Services\APIServices\BlockedAttemptsAPIService.js" />
     <Content Include="Analytics\Services\APIServices\CDRAPIService.js" />
+    <Content Include="Analytics\Services\APIServices\HourlyReportAPIService.js" />
     <Content Include="Analytics\Services\APIServices\RepeatedNumbersAPIService.js" />
     <Content Include="Analytics\Views\Billing Reports\BillingReports.html" />
     <Content Include="Analytics\Views\Billing Reports\BillingReportsController.js" />
