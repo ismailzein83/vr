@@ -54,5 +54,11 @@ namespace Vanrise.Runtime.Web.Controllers
             return manager.UpdateTask(taskObject);
         }
 
+        [HttpGet]
+        public Vanrise.Entities.DeleteOperationOutput<object> DeleteTask(int taskId)
+        {
+            SchedulerTaskManager manager = new SchedulerTaskManager();
+            return manager.DeleteTask(taskId);
+        }
     }
 }

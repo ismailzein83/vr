@@ -42,11 +42,9 @@ function SchedulerTaskManagementController($scope, SchedulerTaskAPIService, VRMo
     }
 
     function retrieveData() {
-        var query = {
-            Name: ($scope.name != undefined) ? $scope.name : null
-        };
+        var name = ($scope.name != undefined && $scope.name != '') ? $scope.name : null;
 
-        return gridApi.retrieveData(query);
+        return gridApi.retrieveData(name);
     }
 
     function defineMenuActions() {
@@ -69,7 +67,6 @@ function SchedulerTaskManagementController($scope, SchedulerTaskAPIService, VRMo
             modalScope.title = "Add Task";
             modalScope.onTaskAdded = function (task) {
                 gridApi.itemAdded(task);
-                return retrieveData();
             };
         };
         VRModalService.showModal('/Client/Modules/Runtime/Views/SchedulerTaskEditor.html', null, settings);
@@ -86,14 +83,29 @@ function SchedulerTaskManagementController($scope, SchedulerTaskAPIService, VRMo
             modalScope.title = "Edit Task: " + taskObj.Name;
             modalScope.onTaskUpdated = function (task) {
                 gridApi.itemUpdated(task);
-                return retrieveData();
             };
         };
         VRModalService.showModal('/Client/Modules/Runtime/Views/SchedulerTaskEditor.html', parameters, modalSettings);
     }
 
     function deleteTask(taskObj) {
-        //TODO: implement Delete functionality
+        var message = 'Do you want to delete ' + taskObj.Name + '?';
+
+        VRNotificationService.showConfirmation(message)
+            .then(function (response) {
+                if (response == true) {
+
+                    return SchedulerTaskAPIService.DeleteTask(taskObj.TaskId)
+                        .then(function (deletionResponse) {
+                            VRNotificationService.notifyOnItemDeleted("Scheduler Task", deletionResponse);
+                            // to be removed
+                            return retrieveData();
+                        })
+                        .catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                }
+            });
     }
 }
 

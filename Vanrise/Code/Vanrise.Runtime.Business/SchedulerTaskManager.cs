@@ -80,5 +80,20 @@ namespace Vanrise.Runtime.Business
             return updateOperationOutput;
         }
 
+        public Vanrise.Entities.DeleteOperationOutput<object> DeleteTask(int taskId)
+        {
+            DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
+            deleteOperationOutput.Result = DeleteOperationResult.Failed;
+
+            ISchedulerTaskDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
+            bool deleted = dataManager.DeleteTask(taskId);
+
+            if (deleted)
+            {
+                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+            }
+
+            return deleteOperationOutput;
+        }
     }
 }

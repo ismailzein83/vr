@@ -6,7 +6,8 @@
         GetSchedulerTaskTriggerTypes: GetSchedulerTaskTriggerTypes,
         GetSchedulerTaskActionTypes: GetSchedulerTaskActionTypes,
         AddTask: AddTask,
-        UpdateTask: UpdateTask
+        UpdateTask: UpdateTask,
+        DeleteTask: DeleteTask
     });
 
     function GetFilteredTasks(input) {
@@ -37,4 +38,9 @@
         return BaseAPIService.post("/api/SchedulerTask/UpdateTask", task);
     }
 
+    function DeleteTask(taskId) {
+        return BaseAPIService.get("/api/SchedulerTask/DeleteTask", {
+            taskId: taskId
+        });
+    }
 });

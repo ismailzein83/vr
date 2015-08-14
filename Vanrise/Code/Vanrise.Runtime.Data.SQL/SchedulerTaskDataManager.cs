@@ -67,6 +67,12 @@ namespace Vanrise.Runtime.Data.SQL
             return (recordesEffected > 0);
         }
 
+        public bool DeleteTask(int taskId)
+        {
+            int recordsEffected = ExecuteNonQuerySP("runtime.sp_SchedulerTask_Delete", taskId);
+            return (recordsEffected > 0);
+        }
+
         public bool TryLockTask(int taskId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds, IEnumerable<Entities.SchedulerTaskStatus> acceptableTaskStatuses)
         {
             int rslt = ExecuteNonQuerySPCmd("runtime.sp_SchedulerTask_TryLockAndUpdateScheduleTask",
