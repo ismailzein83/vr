@@ -120,7 +120,6 @@
     <Compile Include="RepeatedNumbersInput.cs" />
     <Compile Include="TimeValuesRecord.cs" />
     <Compile Include="TrafficStatistic.cs" />
-    <Compile Include="TrafficStatisticBase.cs" />
     <Compile Include="TrafficStatisticFilter.cs" />
     <Compile Include="TrafficStatisticGroupSummary.cs" />
     <Compile Include="Mobile\TrafficSummaryView.cs" />
