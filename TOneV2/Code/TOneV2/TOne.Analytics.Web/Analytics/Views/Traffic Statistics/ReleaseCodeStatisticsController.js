@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function releaseCodeStatisticsController($scope, analyticsService, businessEntityApiService, carrierAccountApiService, utilsService) {
+    function releaseCodeStatisticsController($scope, analyticsService, businessEntityApiService, carrierAccountApiService, utilsService, analyticsApiService) {
 
         var mainGridApi , selectedFilter;
 
@@ -72,12 +72,12 @@
             $scope.measures = analyticsService.getReleaseCodeMeasureEnum();
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return AnalyticsAPIService.GetTrafficStatisticSummary(dataRetrievalInput).then(function (response) {
-                    onResponseReady(response);
-                    $scope.showResult = true;
-                });
+                //return analyticsApiService.getReleaseCodeStatistics(dataRetrievalInput).then(function (response) {
+                //    onResponseReady(response);
+                //    $scope.showResult = true;
+                //});
 
-                $scope.showResult = true;
+                //$scope.showResult = true;
             };
             
         }
@@ -109,17 +109,6 @@
             });
         }
 
-        function loadCustomers() {
-            return carrierAccountApiService.getCustomers().then(function (response) {
-                $scope.customers = response;
-            });
-        }
-
-        function loadSuppliers() {
-            return carrierAccountApiService.getSuppliers().then(function (response) {
-                $scope.suppliers = response;
-            });
-        }
         
         function defineFilters() {
 
@@ -134,11 +123,9 @@
 
             $scope.codeGroups = [];
             $scope.selectedCodeGroups = [];
-
-            $scope.customers = [];
+            
             $scope.selectedCustomers = [];
 
-            $scope.suppliers = [];
             $scope.selectedSuppliers = [];
 
             $scope.periods = analyticsService.getPeriods();
@@ -158,8 +145,6 @@
 
             loadSwitches();
             loadCodeGroups();
-            loadCustomers();
-            loadSuppliers();
         }
 
         defineScope();
@@ -168,7 +153,7 @@
         defineMenuActions();
     }
 
-    releaseCodeStatisticsController.$inject = ['$scope', 'AnalyticsService', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService', 'UtilsService'];
+    releaseCodeStatisticsController.$inject = ['$scope', 'AnalyticsService', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService', 'UtilsService', 'AnalyticsAPIService'];
     appControllers.controller('Analytics_ReleaseCodeStatisticsController', releaseCodeStatisticsController);
 
 })(appControllers);
