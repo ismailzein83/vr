@@ -23,10 +23,17 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemSP("bp.sp_BPDefinition_Get", BPDefinitionMapper, ID);
         }
 
-        public List<BPDefinition> GetFilteredDefinitions(string title)
+
+        public Vanrise.Entities.BigResult<BPDefinition> GetFilteredDefinitions(Vanrise.Entities.DataRetrievalInput<BPDefinitionQuery> input)
         {
-            return GetItemsSP("bp.sp_BPDefinition_GetFiltered", BPDefinitionMapper, title);
+            return RetrieveData(input, (tempTableName) =>
+            {
+                ExecuteNonQuerySP("bp.sp_BPDefinition_CreateTempForFiltered", tempTableName, input.Query.Title);
+
+            }, BPDefinitionMapper);
         }
+
+
 
         public List<BPDefinition> GetDefinitions()
         {

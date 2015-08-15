@@ -74,10 +74,11 @@ namespace Vanrise.BusinessProcess.Client
             IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
             return dataManager.GetRecentInstances(StatusUpdatedAfter);
         }
-        public List<BPDefinition> GetFilteredDefinitions(string title)
+
+        public Vanrise.Entities.IDataRetrievalResult<BPDefinition> GetFilteredDefinitions(Vanrise.Entities.DataRetrievalInput<BPDefinitionQuery> input)
         {
             IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
-            return dataManager.GetFilteredDefinitions(title);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredDefinitions(input));
         }
 
         public BPDefinition GetDefinition(int ID)

@@ -1,9 +1,11 @@
-﻿BPDefinitionManagementController.$inject = ['$scope', 'BusinessProcessService', 'BusinessProcessAPIService', 'BPInstanceStatusEnum', 'VRModalService', '$interval', 'VRNotificationService', 'UtilsService', 'BusinessProcessService'];
+﻿"use strict";
 
-function BPDefinitionManagementController($scope, BusinessProcessService, BusinessProcessAPIService, BPInstanceStatusEnum, VRModalService, $interval, VRNotificationService, UtilsService, BusinessProcessService) {
+BPDefinitionManagementController.$inject = ['$scope', 'BusinessProcessService', 'BusinessProcessAPIService', 'BPInstanceStatusEnum', 'VRModalService', '$interval', 'VRNotificationService', 'UtilsService'];
 
+function BPDefinitionManagementController($scope, BusinessProcessService, BusinessProcessAPIService, BPInstanceStatusEnum, VRModalService, $interval, VRNotificationService, UtilsService) {
+    
     var interval;
-    var mainGridAPI;
+    var mainGridApi;
     var statusUpdatedAfter = '';
 
     defineScope();
@@ -16,23 +18,29 @@ function BPDefinitionManagementController($scope, BusinessProcessService, Busine
         $scope.gridMenuActions = [];
 
         $scope.searchClicked = function () {
-            mainGridAPI.clearDataAndContinuePaging();
-            return getMainData();
+            return retrieveData();
         };
-
 
         $scope.processInstanceClicked = function (dataItem) {
             showBPTrackingModal(dataItem.ProcessInstanceID);
         }
-
 
         $scope.schedulerTaskClicked = function (dataItem) {
             showEditTaskModal(dataItem);
         }
 
         $scope.onGridReady = function (api) {
-            mainGridAPI = api;
-            return getMainData();
+            mainGridApi = api;
+            return retrieveData();
+        };
+
+        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+            return BusinessProcessAPIService.GetFilteredDefinitions(dataRetrievalInput)
+            .then(function (response) {
+                onResponseReady(response);
+                getRecentInstancesData();
+                getScheduledTasksData();
+            });
         };
 
         $scope.$on('$destroy', function () {
@@ -94,22 +102,6 @@ function BPDefinitionManagementController($scope, BusinessProcessService, Busine
             $interval.cancel(interval);
             interval = undefined;
         }
-    }
-
-    function getMainData() {
-        var pageInfo = mainGridAPI.getPageInfo();
-
-        var title = $scope.title != undefined ? $scope.title : '';
-
-        BusinessProcessAPIService.GetFilteredDefinitions(title).then(function (response) {
-            angular.forEach(response, function (def) {
-                $scope.filteredDefinitions.push(def);
-            });
-
-            getRecentInstancesData();
-            getScheduledTasksData();
-        });
-
     }
 
     function getRecentInstancesData() {
@@ -214,6 +206,14 @@ function BPDefinitionManagementController($scope, BusinessProcessService, Busine
         };
         VRModalService.showModal('/Client/Modules/Runtime/Views/SchedulerTaskEditor.html', parameters, settings);
     }
+
+    function retrieveData() {
+
+        return mainGridApi.retrieveData({
+            Title: $scope.title
+        });
+    }
+
 
 };
 

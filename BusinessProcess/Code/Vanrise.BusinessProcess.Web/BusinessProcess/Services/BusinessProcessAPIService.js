@@ -43,11 +43,8 @@
             return BaseAPIService.post("/api/BusinessProcess/GetFilteredBProcess", input);
         }
 
-        function GetFilteredDefinitions(title) {
-            return BaseAPIService.get("/api/BusinessProcess/GetFilteredDefinitions",
-                {
-                    title: title
-                });
+        function GetFilteredDefinitions(input) {
+            return BaseAPIService.post("/api/BusinessProcess/GetFilteredDefinitions", input);
         }
 
         function GetDefinition(id) {

@@ -38,12 +38,15 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             return BPMappers.MapTMapInstances(manager.GetRecentInstances(StatusUpdatedAfter));
         }
 
-        [HttpGet]
-        public List<BPDefinition> GetFilteredDefinitions(string title)
+
+        [HttpPost]
+        public Object GetFilteredDefinitions(Vanrise.Entities.DataRetrievalInput<BPDefinitionQuery> input)
         {
             BPClient manager = new BPClient();
-            return manager.GetFilteredDefinitions(title);
+            return GetWebResponse(input, manager.GetFilteredDefinitions(input));
         }
+
+
 
         [HttpGet]
         public List<BPDefinition> GetDefinitions()
