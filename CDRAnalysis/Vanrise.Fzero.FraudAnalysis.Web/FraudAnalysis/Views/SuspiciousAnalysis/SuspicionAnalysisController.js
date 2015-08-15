@@ -1,18 +1,19 @@
-﻿SuspicionAnalysisController.$inject = ['$scope', 'StrategyAPIService', 'SuspicionAnalysisAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService','UtilsService'];
+﻿SuspicionAnalysisController.$inject = ['$scope', 'StrategyAPIService', 'SuspicionAnalysisAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CaseStatusEnum', 'SuspicionLevelsEnum'];
 
-function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalysisAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalysisAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CaseStatusEnum, SuspicionLevelsEnum) {
 
     var mainGridAPI;
 
     defineScope();
     load();
 
-
-
-
     function defineScope() {
+        $scope.statuses = [];
+        angular.forEach(CaseStatusEnum, function (status) {
+            $scope.statuses.push({ id: status.id, name: status.name })
+        });
 
-        $scope.statuses = [{ id: 2, name: 'Pending' }, { id: 3, name: 'Closed: Fraud' }, { id: 4, name: 'Closed: White List' }, { id: 5, name: 'Cancelled' }, { id: 1, name: 'Open' }];
+
         $scope.selectedStatus=[];
         $scope.selectedStatus.push(UtilsService.getItemByVal($scope.statuses, 1, "id"));
 
@@ -24,11 +25,12 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
         $scope.fromDate = Yesterday;
         $scope.toDate = Now;
 
+        $scope.suspicionLevels = [];
+        angular.forEach(SuspicionLevelsEnum, function (level) {
+            $scope.suspicionLevels.push({ id: level.id, name: level.name })
+        });
 
-        $scope.suspicionLevels = [
-                        { id: 2, name: 'Suspicious' }, { id: 3, name: 'Highly Suspicious' }, { id: 4, name: 'Fraud' }
-
-        ];
+      
 
         $scope.strategies = [];
 

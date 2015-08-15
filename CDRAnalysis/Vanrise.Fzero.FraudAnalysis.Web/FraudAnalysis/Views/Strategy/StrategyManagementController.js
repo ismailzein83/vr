@@ -1,6 +1,6 @@
-﻿StrategyManagementController.$inject = ['$scope', 'StrategyAPIService','UserAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+﻿StrategyManagementController.$inject = ['$scope', 'StrategyAPIService', 'UserAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'KindEnum', 'StatusEnum'];
 
-function StrategyManagementController($scope, StrategyAPIService,UserAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+function StrategyManagementController($scope, StrategyAPIService, UserAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, KindEnum, StatusEnum) {
 
     var mainGridAPI;
     var arrMenuAction = [];
@@ -27,10 +27,23 @@ function StrategyManagementController($scope, StrategyAPIService,UserAPIService,
             return retrieveData();
         }
 
-        $scope.isDefault = [{ value: false, name: 'Not Default' }, { value: true, name: 'Default' }];
+
+        console.log(KindEnum)
+
+        $scope.isDefault = [];
+        angular.forEach(KindEnum, function (kind) {
+            $scope.isDefault.push({ value: kind.value, name: kind.name })
+        });
+
         $scope.selectedIsDefault = [];
 
-        $scope.isEnabled = [{ value: false, name: 'Disabled' }, { value: true, name: 'Enabled' }];
+
+        $scope.isEnabled = [];
+        angular.forEach(StatusEnum, function (itm) {
+            $scope.isEnabled.push({ value: itm.value, name: itm.name })
+        });
+
+
         $scope.selectedIsEnabled = [];
 
         $scope.periods = [];
@@ -49,8 +62,8 @@ function StrategyManagementController($scope, StrategyAPIService,UserAPIService,
             return StrategyAPIService.GetFilteredStrategies(dataRetrievalInput)
             .then(function (response) {
                 angular.forEach(response.Data, function (itm) {
-                    itm.IsDefaultText = itm.IsDefault ? "Default" : "Not Default"
-                    itm.IsEnabledText = itm.IsEnabled ? "Enabled" : "Disabled"
+                    itm.IsDefaultText = itm.IsDefault ? KindEnum.SystemBuiltIn.name : KindEnum.UserDefined.name;
+                    itm.IsEnabledText = itm.IsEnabled ? StatusEnum.Enabled.name : StatusEnum.Disabled.name;
                     itm.StrategyType = UtilsService.getItemByVal($scope.periods, itm.PeriodId, "Id").Name;
                 });
 
@@ -148,8 +161,8 @@ function StrategyManagementController($scope, StrategyAPIService,UserAPIService,
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "New Strategy";
             modalScope.onStrategyAdded = function (strategy) {
-                strategy.IsDefaultText = strategy.IsDefault ? "Default" : "Not Default";
-                strategy.IsEnabledText = strategy.IsEnabled ? "Enabled" : "Disabled";
+                strategy.IsDefaultText = strategy.IsDefault ? KindEnum.SystemBuiltIn.name : KindEnum.UserDefined.name;
+                strategy.IsEnabledText = strategy.IsEnabled ? StatusEnum.Enabled.name : StatusEnum.Disabled.name;
                 strategy.StrategyType = UtilsService.getItemByVal($scope.periods, strategy.PeriodId, "Id").Name;
                 mainGridAPI.itemAdded(strategy);
             };
@@ -169,8 +182,8 @@ function StrategyManagementController($scope, StrategyAPIService,UserAPIService,
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "Edit Strategy";
             modalScope.onStrategyUpdated = function (strategy) {
-                strategy.IsDefaultText = strategy.IsDefault ? "Default" : "Not Default";
-                strategy.IsEnabledText = strategy.IsEnabled ? "Enabled" : "Disabled";
+                strategy.IsDefaultText = strategy.IsDefault ? KindEnum.SystemBuiltIn.name : KindEnum.UserDefined.name;
+                strategy.IsEnabledText = strategy.IsEnabled ? StatusEnum.Enabled.name : StatusEnum.Disabled.name;
                 strategy.StrategyType = UtilsService.getItemByVal($scope.periods, strategy.PeriodId, "Id").Name;
                 mainGridAPI.itemUpdated(strategy);
             };

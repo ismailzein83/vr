@@ -25,8 +25,6 @@
 
 
             var runningDate = new Date($scope.fromDate);
-            //runningDate = new Date(runningDate.setHours(runningDate.getHours() + 2));
-            console.log($scope.fromDate);
 
             $scope.createProcessInputObjects.length = 0;
 

@@ -1,6 +1,6 @@
-﻿SuspiciousNumberDetailsController.$inject = ['$scope', 'StrategyAPIService', 'NormalCDRAPIService', 'SuspicionAnalysisAPIService', 'NumberProfileAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CaseManagementAPIService'];
+﻿SuspiciousNumberDetailsController.$inject = ['$scope', 'StrategyAPIService', 'NormalCDRAPIService', 'SuspicionAnalysisAPIService', 'NumberProfileAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CaseManagementAPIService', 'CaseStatusEnum'];
 
-function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDRAPIService, SuspicionAnalysisAPIService, NumberProfileAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CaseManagementAPIService) {
+function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDRAPIService, SuspicionAnalysisAPIService, NumberProfileAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CaseManagementAPIService, CaseStatusEnum) {
     var subscriberThresholdsGridAPI;
     var normalCDRGridAPI;
     var numberProfileGridAPI;
@@ -21,7 +21,10 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
 
     function loadParameters() {
 
-        $scope.statuses = [{ id: 2, name: 'Pending' }, { id: 3, name: 'Closed: Fraud' }, { id: 4, name: 'Closed: White List' }, { id: 5, name: 'Cancelled' }, { id: 1, name: 'Open' }];
+        $scope.statuses = [];
+        angular.forEach(CaseStatusEnum, function (status) {
+            $scope.statuses.push({ id: status.id, name: status.name })
+        });
 
         var parameters = VRNavigationService.getParameters($scope);
 

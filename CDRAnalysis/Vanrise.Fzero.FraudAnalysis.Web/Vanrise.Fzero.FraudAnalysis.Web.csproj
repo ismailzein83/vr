@@ -165,6 +165,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="FraudAnalysis\Constants\Enums.js" />
     <Content Include="FraudAnalysis\Services\APIServices\CaseManagementAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\DashboardAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\NumberProfileAPIService.js" />

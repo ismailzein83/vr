@@ -1,6 +1,6 @@
-﻿StrategyEditorController.$inject = ['$scope', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+﻿StrategyEditorController.$inject = ['$scope', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'PercentageEnum' ,'SuspicionLevelsEnum', 'HourEnum'];
 
-function StrategyEditorController($scope, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+function StrategyEditorController($scope, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, PercentageEnum, SuspicionLevelsEnum, HourEnum) {
 
     var editMode;
     loadParameters();
@@ -36,26 +36,25 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         StrategyEditorController.isFilterTabShown = true;
         StrategyEditorController.isLevelsTabShow = false;
 
-        $scope.percentages = [{ description: '75%', value: 1.75 }, { description: '50%', value: 1.50 }, { description: '25%', value: 1.25 }, { description: '0%', value: 1.00 }, { description: '-25%', value: 0.75 }, { description: '-50%', value: 0.5 }, { description: '-75%', value: 0.25 }
-                        
-                         
-                         
-
-        ];
-
-        $scope.suspicionLevels = [
-                         { id: 2, name: 'Suspicious' }, { id: 3, name: 'Highly Suspicious' }, { id: 4, name: 'Fraud' }
-
-        ];
 
 
-        $scope.hours = [
-                         { id: 0, name: '12:00 AM' }, { id: 1, name: '01:00 AM' }, { id: 2, name: '02:00 AM' }, { id: 3, name: '03:00 AM' }, { id: 4, name: '04:00 AM' }, { id: 5, name: '05:00 AM' },
-                         { id: 6, name: '06:00 AM' }, { id: 7, name: '07:00 AM' }, { id: 8, name: '08:00 AM' }, { id: 9, name: '09:00 AM' }, { id: 10, name: '10:00 AM' }, { id: 11, name: '11:00 AM' },
-                         { id: 12, name: '12:00 PM' }, { id: 13, name: '01:00 PM' }, { id: 14, name: '02:00 PM' }, { id: 15, name: '03:00 PM' }, { id: 16, name: '04:00 PM' }, { id: 17, name: '05:00 PM' },
-                         { id: 18, name: '06:00 PM' }, { id: 19, name: '07:00 PM' }, { id: 20, name: '08:00 PM' }, { id: 21, name: '09:00 PM' }, { id: 22, name: '10:00 PM' }, { id: 23, name: '11:00 PM' }
+        $scope.percentages = [];
+        angular.forEach(PercentageEnum, function (itm) {
+            $scope.percentages.push({ value: itm.value, description: itm.description })
+        });
 
-        ];
+
+
+        $scope.suspicionLevels = [];
+        angular.forEach(SuspicionLevelsEnum, function (itm) {
+            $scope.suspicionLevels.push({ value: itm.value, name: itm.name })
+        });
+
+
+        $scope.hours = [];
+        angular.forEach(HourEnum, function (itm) {
+            $scope.hours.push({ id: itm.id, name: itm.name })
+        });
 
 
         angular.forEach($scope.hours, function (itm) {
