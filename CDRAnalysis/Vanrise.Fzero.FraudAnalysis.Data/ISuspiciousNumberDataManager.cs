@@ -14,6 +14,5 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         void ApplySuspiciousNumbersToDB(object preparedSuspiciousNumbers);
 
-        BigResult<AccountThreshold> GetAccountThresholds(Vanrise.Entities.DataRetrievalInput<AccountThresholdResultQuery> input);
     }
 }

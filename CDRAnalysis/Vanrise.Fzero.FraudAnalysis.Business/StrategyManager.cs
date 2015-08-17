@@ -20,16 +20,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         }
 
-
-        public Vanrise.Entities.IDataRetrievalResult<AccountThreshold> GetAccountThresholds(Vanrise.Entities.DataRetrievalInput<AccountThresholdResultQuery> input)
-        {
-            ISuspiciousNumberDataManager manager = FraudDataManagerFactory.GetDataManager<ISuspiciousNumberDataManager>();
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, manager.GetAccountThresholds(input));
-        }
-
-
-
         public IEnumerable<Strategy> GetStrategies(int PeriodId, bool? IsEnabled)
         {
 

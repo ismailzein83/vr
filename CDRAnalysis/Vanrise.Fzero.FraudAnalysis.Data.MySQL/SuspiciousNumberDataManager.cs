@@ -28,11 +28,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             throw new NotImplementedException();
         }
 
-        public Vanrise.Entities.BigResult<AccountThreshold> GetAccountThresholds(Vanrise.Entities.DataRetrievalInput<AccountThresholdResultQuery> input)
-        {
-            throw new NotImplementedException();
-        }
-
         public object FinishDBApplyStream(object dbApplyStream)
         {
             throw new NotImplementedException();

@@ -15,11 +15,11 @@ CREATE PROCEDURE [FraudAnalysis].[sp_FraudResult_Get]
 		
 		IF(@SuspiciousLevelsList = '')
 			begin
-				EXEC('INSERT INTO #SuspectionLevel SELECT Id,Name FROM [FraudAnalysis].Suspicion_Level')
+				EXEC('INSERT INTO #SuspectionLevel SELECT Id,Name FROM [FraudAnalysis].SuspicionLevel')
 			end
 		else
 			begin
-				EXEC('INSERT INTO #SuspectionLevel SELECT Id,Name FROM [FraudAnalysis].Suspicion_Level s WHERE s.Id IN ('+@SuspiciousLevelsList+')')
+				EXEC('INSERT INTO #SuspectionLevel SELECT Id,Name FROM [FraudAnalysis].SuspicionLevel s WHERE s.Id IN ('+@SuspiciousLevelsList+')')
 			end
 			
 			

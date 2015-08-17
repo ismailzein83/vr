@@ -34,7 +34,6 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
             $scope.accountNumber = parameters.accountNumber;
             $scope.fromDate = parameters.fromDate;
             $scope.toDate = parameters.toDate;
-
             strategiesList = parameters.strategiesList;
             suspicionLevelsList = parameters.suspicionLevelsList;
         }
@@ -52,7 +51,6 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         $scope.numberProfiles = [];
         $scope.relatedNumbers = [];
 
-        SuspiciousNumberDetailsController.isAccountThresholdsTabShown = true;
         SuspiciousNumberDetailsController.isNumberProfileTabShown = false;
         SuspiciousNumberDetailsController.isNormalCDRTabShown = false;
 
@@ -72,18 +70,6 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
             }
         };
 
-        $scope.onNumberProfilesGridReady = function (api) {
-            numberProfileGridAPI = api;
-            if (SuspiciousNumberDetailsController.isNumberProfileTabShown)
-                return retrieveData_AccountThresholds();
-        };
-
-
-        $scope.onAccountThresholdsGridReady = function (api) {
-            accountThresholdsGridAPI = api;
-            if (SuspiciousNumberDetailsController.isAccountThresholdsTabShown)
-                return retrieveData_AccountThresholds();
-        };
 
         $scope.close = function () {
             $scope.modalContext.closeModal()
@@ -118,17 +104,11 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
 
             if ($scope.selectedGroupKeyIndex != undefined) {
 
-
-                if ($scope.selectedGroupKeyIndex == 0 && !isAccountThresholdsDataLoaded) {
-                    isAccountThresholdsDataLoaded = true;
-                    return retrieveData_AccountThresholds();
-                    
-                }
-                else if ($scope.selectedGroupKeyIndex == 1 && !isNormalCDRDataLoaded) {
+                if ($scope.selectedGroupKeyIndex == 0 && !isNormalCDRDataLoaded) {
                     isNormalCDRDataLoaded = true;
                     return retrieveData_NormalCDRs();
                 }
-                else if ($scope.selectedGroupKeyIndex == 2 && !isNumberProfileDataLoaded) {
+                else if ($scope.selectedGroupKeyIndex == 1 && !isNumberProfileDataLoaded) {
                     isNumberProfileDataLoaded = true;
                     return retrieveData_NumberProfiles();
                 }
@@ -139,7 +119,6 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         $scope.selectedRelatedNumbersChanged = function () {
             if (pageLoaded) {
                 $scope.accountNumber = $scope.selectedRelatedNumber
-                isAccountThresholdsDataLoaded = false;
                 isNormalCDRDataLoaded = false;
                 isNumberProfileDataLoaded = false;
                 $scope.groupKeySelectionChanged();
@@ -165,12 +144,6 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         }
 
 
-        $scope.dataRetrievalFunction_AccountThresholds = function (dataRetrievalInput, onResponseReady) {
-            return SuspicionAnalysisAPIService.GetAccountThresholds(dataRetrievalInput)
-            .then(function (response) {
-                onResponseReady(response);
-            });
-        }
 
 
     }

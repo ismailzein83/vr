@@ -2,16 +2,8 @@
 
     return ({
         GetFilteredSuspiciousNumbers: GetFilteredSuspiciousNumbers,
-        GetAccountThresholds: GetAccountThresholds,
         GetFraudResult: GetFraudResult
     });
-
-
-    function GetAccountThresholds(input) {
-        return BaseAPIService.post("/api/SuspicionAnalysis/GetAccountThresholds", input);
-    }
-
-
 
 
     function GetFilteredSuspiciousNumbers(input) {

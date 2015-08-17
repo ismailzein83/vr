@@ -13,14 +13,6 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
     public class SuspicionAnalysisController : BaseAPIController
     {
 
-        [HttpPost]
-        public object GetAccountThresholds(Vanrise.Entities.DataRetrievalInput<AccountThresholdResultQuery> input)
-        {
-            StrategyManager manager = new StrategyManager();
-            return GetWebResponse(input, manager.GetAccountThresholds(input));
-        }
-
-
 
         [HttpPost]
         public object GetFilteredSuspiciousNumbers(Vanrise.Entities.DataRetrievalInput<FraudResultQuery> input)

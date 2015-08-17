@@ -69,15 +69,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
-        public BigResult<AccountThreshold> GetAccountThresholds(Vanrise.Entities.DataRetrievalInput<AccountThresholdResultQuery> input)
-        {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                ExecuteNonQuerySP("FraudAnalysis.sp_FraudResult_CreateTempForFilteredAccountThresholds", tempTableName, input.Query.FromDate, input.Query.ToDate, input.Query.AccountNumber);
-            };
-            return RetrieveData(input, createTempTableAction, AccountThresholdMapper);
-        }
-
 
 
         #region Private Methods
