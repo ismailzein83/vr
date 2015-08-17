@@ -18,7 +18,7 @@ CREATE PROCEDURE [FraudAnalysis].[sp_FraudResult_CreateTempForFilteredAccountThr
 			CREATE TABLE #SuspicionLevel(Id int, Name varchar(20))
 			CREATE TABLE #Strategy(Id int, Name varchar(20))
 			
-			EXEC('INSERT INTO #SuspicionLevel SELECT Id,Name FROM [FraudAnalysis].Suspicion_Level')
+			EXEC('INSERT INTO #SuspicionLevel SELECT Id,Name FROM [FraudAnalysis].SuspicionLevel')
 			EXEC('INSERT INTO #Strategy SELECT Id,Name FROM [FraudAnalysis].Strategy ')
 			
 			

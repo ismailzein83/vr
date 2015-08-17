@@ -74,7 +74,6 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="FraudAnalysis\Tables\Strategy.sql" />
-    <Build Include="FraudAnalysis\Tables\Suspicion_Level.sql" />
     <Build Include="FraudAnalysis\Tables\NumberProfile.sql" />
     <Build Include="FraudAnalysis\Tables\CaseStatus.sql" />
     <Build Include="FraudAnalysis\Tables\NormalCDR.sql" />

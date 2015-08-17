@@ -5,8 +5,14 @@
     [SuspicionLevelId] INT            NULL,
     [StrategyId]       INT            NULL,
     [CriteriaValues]   NVARCHAR (MAX) NULL,
-    CONSTRAINT [FK_SubscriberThreshold_Suspicion_Level] FOREIGN KEY ([SuspicionLevelId]) REFERENCES [FraudAnalysis].[Suspicion_Level] ([Id])
+    CONSTRAINT [FK_SubscriberThreshold_Suspicion_Level] FOREIGN KEY ([SuspicionLevelId]) REFERENCES [FraudAnalysis].[SuspicionLevel] ([Id])
 );
+
+
+
+
+
+
 
 
 GO
