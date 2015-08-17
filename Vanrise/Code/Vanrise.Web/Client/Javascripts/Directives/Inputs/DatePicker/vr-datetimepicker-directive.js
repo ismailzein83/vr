@@ -235,7 +235,7 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                  '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false"  >'
                   + '<div id="mainInput" ng-model="ctrl.value" class="form-control " ng-style="ctrl.getInputeStyle()" style="border-radius: 4px;height: auto;padding: 0px;">'
                         + '<div  class="input-group date datetime-controle"  id="divDatePicker"  >'
-                                + '<input class="form-control vr-date-input" ng-style="ctrl.getInputeStyle()" style="height:30px;"  ng-keyup="ctrl.updateModelOnKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
+                                + '<input class="form-control vr-date-input" ng-style="ctrl.getInputeStyle()" style="height:27px;"  ng-keyup="ctrl.updateModelOnKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
                                 + icontemplate
                             + '</div>'
                       + '</div>'
