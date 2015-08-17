@@ -124,6 +124,7 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\DailyReportController.cs" />
     <Compile Include="Controllers\HourlyReportController.cs" />
     <Compile Include="Controllers\TrafficMonitorController.cs" />
     <Compile Include="Controllers\BillingStatisticsController.cs" />
@@ -137,6 +138,7 @@
     <Content Include="Analytics\Constants\BillingCDROptionMeasureEnum.js" />
     <Content Include="Analytics\Constants\BlockedAttemptsMeasureEnum.js" />
     <Content Include="Analytics\Constants\CallsOptionEnum.js" />
+    <Content Include="Analytics\Constants\DailyReportMeasureEnum.js" />
     <Content Include="Analytics\Constants\EntityTypeEnum.js" />
     <Content Include="Analytics\Constants\GroupingByEnum.js" />
     <Content Include="Analytics\Constants\HourlyReportMeasureEnum.js" />
@@ -153,6 +155,7 @@
     <Content Include="Analytics\Services\APIServices\BlockedAttemptsAPIService.js" />
     <Content Include="Analytics\Services\APIServices\CDRAPIService.js" />
     <Content Include="Analytics\Constants\ChartTypeEnum.js" />
+    <Content Include="Analytics\Services\APIServices\DailyReportAPIService.js" />
     <Content Include="Analytics\Services\APIServices\HourlyReportAPIService.js" />
     <Content Include="Analytics\Services\APIServices\RepeatedNumbersAPIService.js" />
     <Content Include="Analytics\Views\Billing Reports\BillingReports.html" />

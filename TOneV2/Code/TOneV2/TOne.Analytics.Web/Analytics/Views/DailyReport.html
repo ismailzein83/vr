@@ -1,0 +1,62 @@
+﻿<vr-panel ng-controller="Analytics_DailyReportController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-select label="Customers"
+                               ismultipleselection
+                               datasource="customers"
+                               selectedvalues="selectedCustomers"
+                               datatextfield="Name"
+                               datavaluefield="CarrierAccountID">
+                    </vr-select>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-select label="Suppliers"
+                               ismultipleselection
+                               datasource="suppliers"
+                               selectedvalues="selectedSuppliers"
+                               datatextfield="Name"
+                               datavaluefield="CarrierAccountID">
+                    </vr-select>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-select label="Zones"
+                               ismultipleselection
+                               datasource="searchZones"
+                               selectedvalues="selectedZones"
+                               datatextfield="Name"
+                               datavaluefield="ZoneId"
+                               entityname="Zones">
+                    </vr-select>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-datetimepicker type="date" label="Target Date" value="targetDate" isrequired></vr-datetimepicker>
+                </vr-columns>
+            </vr-row>
+        </div>
+
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked" isasynchronous="true"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+    </vr-form>
+
+    <div>
+        <vr-row>
+            <vr-columns width="fullrow" simplecol>
+                <vr-datagrid datasource="calls"
+                             dataretrievalfunction="dataRetrievalFunction"
+                             pagingtype="'PagingOnScroll'"
+                             on-ready="gridReady"
+                             idfield="Id">
+
+                    <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" type="measure.type"></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </div>
+</vr-panel>
