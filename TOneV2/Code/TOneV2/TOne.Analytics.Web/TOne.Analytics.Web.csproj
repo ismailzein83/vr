@@ -124,6 +124,7 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\CarrierSummaryStatsController.cs" />
     <Compile Include="Controllers\DailyReportController.cs" />
     <Compile Include="Controllers\HourlyReportController.cs" />
     <Compile Include="Controllers\TrafficMonitorController.cs" />
@@ -153,6 +154,7 @@
     <Content Include="Analytics\Services\APIServices\AnalyticsService.js" />
     <Content Include="Analytics\Services\APIServices\BillingStatisticsAPIService.js" />
     <Content Include="Analytics\Services\APIServices\BlockedAttemptsAPIService.js" />
+    <Content Include="Analytics\Services\APIServices\CarrierSummaryStatsAPIService.js" />
     <Content Include="Analytics\Services\APIServices\CDRAPIService.js" />
     <Content Include="Analytics\Constants\ChartTypeEnum.js" />
     <Content Include="Analytics\Services\APIServices\DailyReportAPIService.js" />
@@ -174,6 +176,8 @@
     <Content Include="Analytics\Views\Billing Statistics\Volume Reports\Volume Reports Templates\TrafficVolumeTemplateController.js" />
     <Content Include="Analytics\Views\BlockedAttempts.html" />
     <Content Include="Analytics\Views\BlockedAttemptsController.js" />
+    <Content Include="Analytics\Views\CarrierSummary.html" />
+    <Content Include="Analytics\Views\CarrierSummaryController.js" />
     <Content Include="Analytics\Views\CDR\CDRLog.html" />
     <Content Include="Analytics\Views\CDR\CDRLogController.js" />
     <Content Include="Analytics\Views\CDR\CDRReport.html" />
@@ -220,7 +224,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>6103</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
