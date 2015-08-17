@@ -16,6 +16,8 @@ function VolumeReportsController($scope, BillingStatisticsAPIService, VolumeRepo
         $scope.searchZones = function (text) {
             return ZonesService.getSalesZones(text);
         };
+        $scope.params = {};
+        $scope.params.chartsOption = false;
         loadCustomers();
         loadSuppliers();
         loadTimePeriods();
@@ -35,11 +37,14 @@ function VolumeReportsController($scope, BillingStatisticsAPIService, VolumeRepo
         $scope.filter.toDate = $scope.toDate;
         $scope.filter.selectedTrafficTypeReport = $scope.selectedTrafficTypeReport;
         $scope.filter.timePeriod = $scope.selectedTimePeriod.value;
-        $scope.filter.customerId = $scope.selectedCustomer != undefined ? $scope.selectedCustomer.CarrierAccountID : "";
+        $scope.filter.customerId = $scope.params.selectedCustomer != undefined ? $scope.params.selectedCustomer.CarrierAccountID : "";//$scope.selectedCustomer != undefined ? $scope.selectedCustomer.CarrierAccountID : "";
+        $scope.filter.requiredCustomerId = $scope.params.requiredCustomer != undefined ? $scope.params.requiredCustomer.CarrierAccountID : "";//$scope.requiredCustomer != undefined ? $scope.requiredCustomer.CarrierAccountID : "";
         $scope.filter.supplierId = $scope.selectedSupplier != undefined ? $scope.selectedSupplier.CarrierAccountID : "";
         $scope.filter.zoneId = $scope.selectedZone != undefined ? $scope.selectedZone.ZoneId : 0;
         $scope.filter.attempts = $scope.attempts;
         $scope.filter.topDestination = $scope.topDestinations;
+        $scope.filter.showChartsInPie = $scope.params.chartsOption;
+        console.log($scope.filter);
     }
 
     function loadTimePeriods() {

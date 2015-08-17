@@ -40,16 +40,24 @@ namespace TOne.Analytics.Web.Controllers
             return __billingStatisticsManager.GetTrafficVolumes(fromDate, toDate, customerId, supplierId, zoneId, attempts, timePeriod);
         }
 
-        public List<TOne.Analytics.Entities.ZoneInfo> GetDestinationTrafficVolumes(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int zoneId, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination)
+        public List<TOne.Analytics.Entities.ZoneInfo> GetDestinationTrafficVolumes(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int zoneId, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination, bool isDuration)
         {
-            return __billingStatisticsManager.GetDestinationTrafficVolumes(fromDate, toDate, customerId, supplierId, zoneId, attempts, timePeriod, topDestination);
+            return __billingStatisticsManager.GetDestinationTrafficVolumes(fromDate, toDate, customerId, supplierId, zoneId, attempts, timePeriod, topDestination,isDuration);
         }
+
+         [HttpGet]
+        public List<InOutVolumeTraffic> CompareInOutTraffic(DateTime fromDate, DateTime toDate, string customerId, VolumeReportsTimePeriod timePeriod, bool showChartsInPie)
+        {
+            return __billingStatisticsManager.CompareInOutTraffic(fromDate, toDate, customerId, timePeriod, showChartsInPie);
+
+        } 
 
         [HttpPost]
         public object ExportCarrierProfile(ExportCarrierProfileInput input)
         {
             return GetExcelResponse(__billingStatisticsManager.ExportCarrierProfile(input.FromDate, input.ToDate, input.CustomerId, input.TopDestination));
         }
+
     }
 
     public class ExportCarrierProfileInput

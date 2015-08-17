@@ -35,8 +35,9 @@ namespace TOne.Analytics.Data
 
         List<VariationReports> GetVariationReportsData(List<TimeRange> timeRange, VariationReportOptions variationReportOptions, int fromRow, int toRow, EntityType entityType, string entityID, GroupingBy groupingBy, out int totalCount, out  List<decimal> totalValues, out List<DateTime> datetotalValues, out decimal TotalAverage);
         List<VolumeTraffic> GetTrafficVolumes(DateTime fromDate, DateTime toDate, string customerID, string supplierID, string zoneID, int attempts, VolumeReportsTimePeriod timePeriod);
-        DestinationVolumeTrafficResult GetDestinationTrafficVolumes(DateTime fromDate, DateTime toDate, string customerID, string supplierID, int zoneID, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination, List<TimeRange> timeRange);
+        DestinationVolumeTrafficResult GetDestinationTrafficVolumes(DateTime fromDate, DateTime toDate, string customerID, string supplierID, int zoneID, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination, List<TimeRange> timeRange, bool isDuration);
 
+        List<InOutVolumeTraffic> CompareInOutTraffic(DateTime fromDate, DateTime toDate, string customerId, VolumeReportsTimePeriod timePeriod);
         
     }
 }

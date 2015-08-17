@@ -670,7 +670,7 @@ namespace TOne.Analytics.Business
 
         }
 
-        public List<TOne.Analytics.Entities.ZoneInfo> GetDestinationTrafficVolumes(DateTime fromDate, DateTime toDate, string customerID, string supplierID, int zoneID, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination)
+        public List<TOne.Analytics.Entities.ZoneInfo> GetDestinationTrafficVolumes(DateTime fromDate, DateTime toDate, string customerID, string supplierID, int zoneID, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination,bool isDuration)
         {
             List<TimeRange> timeRanges = new List<TimeRange>();
             DateTime currentDate = new DateTime();
@@ -684,8 +684,8 @@ namespace TOne.Analytics.Business
                 {
                     case VolumeReportsTimePeriod.None:
                          startDate = fromDate;
-                         endDate = fromDate;
-                         counter = toDate;
+                         endDate = toDate;
+                         counter = toDate.AddDays(1);
                         break;
                     case VolumeReportsTimePeriod.Daily:
                         startDate = currentDate;
@@ -708,120 +708,35 @@ namespace TOne.Analytics.Business
                 timeRanges.Add(timeRange);
                 currentDate = endDate;
             }
-            DestinationVolumeTrafficResult destinationTrafficResult =  _datamanager.GetDestinationTrafficVolumes(fromDate, toDate, customerID, supplierID, zoneID, attempts, timePeriod, topDestination, timeRanges);
+            DestinationVolumeTrafficResult destinationTrafficResult =  _datamanager.GetDestinationTrafficVolumes(fromDate, toDate, customerID, supplierID, zoneID, attempts, timePeriod, topDestination, timeRanges,isDuration);
             return GetDestinationTrafficVolumesResult(destinationTrafficResult, fromDate, toDate, customerID, supplierID, zoneID, attempts, timePeriod, topDestination,timeRanges);
         }
 
-        private List<TOne.Analytics.Entities.ZoneInfo> GetDestinationTrafficVolumesResult(DestinationVolumeTrafficResult DestinationTrafficVolumeData, DateTime fromDate, DateTime toDate, string customerID, string supplierID, int zoneID, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination,List<TimeRange> timeRanges)
+
+        public List<InOutVolumeTraffic> CompareInOutTraffic(DateTime fromDate, DateTime toDate, string customerId, VolumeReportsTimePeriod timePeriod, bool showChartsInPie)
         {
-
-            List<TOne.Analytics.Entities.ZoneInfo> DestinationTrafficVolumeResult = new List<TOne.Analytics.Entities.ZoneInfo>();
-            TOne.Analytics.Entities.ZoneInfo current = null;
-            foreach (var zoneInfo in DestinationTrafficVolumeData.TopZones)
-            {
-                if (current == null || current.ZoneName != zoneInfo.ZoneName)    
-                {
-              
-                    current = new TOne.Analytics.Entities.ZoneInfo
-                     {
-                          ZoneID = zoneInfo.ZoneID,
-                          ZoneName = zoneInfo.ZoneName,
-                          Values = new List<decimal>(),
-                          Time = new List<string>() 
-                        };
-                    //foreach (var value in DestinationTrafficVolumeData.ValuesPerDate)
-                    //{
-                    //    if (value.ZoneName == current.ZoneName)
-                    //    current.Values.Add(value.Values);
-                    //}
-
-                    DestinationTrafficVolumeResult.Add(current);
-                }
-            }
-            string timeCondition = string.Empty;
-           
-            var currentCulture = CultureInfo.CurrentCulture;
-
-
-            foreach (var res in DestinationTrafficVolumeResult)
-            {
-                foreach (var timeRange in timeRanges)
-                {
-                    switch (timePeriod)
-                    {
-                        case VolumeReportsTimePeriod.None: timeCondition = string.Empty; break;
-                        case VolumeReportsTimePeriod.Daily: timeCondition = timeRange.FromDate.Date.ToString(); break;
-                        case VolumeReportsTimePeriod.Weekly: timeCondition = string.Concat(currentCulture.Calendar.GetWeekOfYear(timeRange.FromDate.Date,currentCulture.DateTimeFormat.CalendarWeekRule,currentCulture.DateTimeFormat.FirstDayOfWeek), "/", timeRange.FromDate.Year.ToString()); break;
-                        case VolumeReportsTimePeriod.Monthly: timeCondition = string.Concat(timeRange.FromDate.Month.ToString(), "/", timeRange.FromDate.Year.ToString() ); break;
-                    }
-                    var value = DestinationTrafficVolumeData.ValuesPerDate.FirstOrDefault(itm => itm.ZoneName == res.ZoneName && itm.Time == timeCondition );
-                   //var time = DestinationTrafficVolumeData.ValuesPerDate.SelectMany(itm=> itm.Time).Distinct();
-                    //var time = ValuesPerDate.ForEach(v => v.Time);
-                    res.Time.Add(timeCondition.ToString());
-                    if (value != null)
-                        res.Values.Add(value.Values);
-                    else
-                        res.Values.Add(0);     
-                }
-            }
-
-            return DestinationTrafficVolumeResult;
+            //if (!showChartsInPie)
+            // List<InOutVolumeTraffic> inOutTrafficVolumes =
+            return _datamanager.CompareInOutTraffic(fromDate, toDate, customerId, timePeriod);
+           //  return GetCompareInOutTrafficResult(timePeriod, inOutTrafficVolumes);
+            //else
+            //    return _datamanager.CompareInOutTrafficInPie(fromDate, toDate, customerId, timePeriod);
         }
+        //private List<InOutVolumeTraffic> GetCompareInOutTrafficResult( VolumeReportsTimePeriod timePeriod, List<InOutVolumeTraffic> inOutTrafficVolumes) {
 
-            
-
-        //    foreach (var item in variationReportsData)
+        //    foreach (var res in inOutTrafficVolumes)
         //    {
-        //        decimal average = 0;
-        //        double CurrentValue = double.Parse(item.Values.First().ToString());
-        //        double PrevValue = double.Parse(item.Values[1].ToString());
-        //        foreach (var totalDurations in item.Values)
-        //            average += totalDurations;
-        //        average = average / periodCount;
-        //        item.PeriodTypeValueAverage = average;
-        //        item.PeriodTypeValuePercentage = Convert.ToDecimal((CurrentValue - Convert.ToDouble(average)) / (average == 0 ? double.MaxValue : Convert.ToDouble(average))) * 100;
-        //        item.PreviousPeriodTypeValuePercentage = Convert.ToDecimal((CurrentValue - PrevValue) / (PrevValue == 0 ? double.MaxValue : PrevValue)) * 100;
 
-        //    }
-
-        //    totals = new List<decimal>();
-        //    int i = 0;
-
-        //    foreach (var timeRange in timeRanges)
-        //    {
-        //        if (datetotalValues.Contains(timeRange.FromDate))
+        //        switch (timePeriod)
         //        {
-        //            totals.Add(totalValues[i]);
-        //            i++;
+        //            case VolumeReportsTimePeriod.None: res.Date = string.Empty; break;
+        //            case VolumeReportsTimePeriod.Daily: res.Date = res.Date.ToString("MMM dd yyyy "); break;
+        //            case VolumeReportsTimePeriod.Weekly: res.Date = string.Concat(currentCulture.Calendar.GetWeekOfYear(timeRange.FromDate.Date, currentCulture.DateTimeFormat.CalendarWeekRule, currentCulture.DateTimeFormat.FirstDayOfWeek), "/", timeRange.FromDate.Year.ToString()); break;
+        //            case VolumeReportsTimePeriod.Monthly: res.Date = string.Concat(timeRange.FromDate.Month.ToString(), "/", timeRange.FromDate.Year.ToString()); break;
         //        }
-        //        else
-        //            totals.Add(0);
-
         //    }
-
-        //    ////Calcule of Total AVG, Total %, Total Previouss %: 
-        //    foreach (var item in variationReportsData)
-        //    {
-        //        decimal average = 0;
-        //        double CurrentDayValue = double.Parse(item.Values.First().ToString());
-        //        double PrevDayValue = double.Parse(item.Values[1].ToString());
-        //        foreach (var totalDurations in item.Values)
-        //            average += totalDurations;
-        //        average = average / periodCount;
-        //        item.PeriodTypeValueAverage = average;
-        //        item.PeriodTypeValuePercentage = Convert.ToDecimal((CurrentDayValue - Convert.ToDouble(average)) / (average == 0 ? double.MaxValue : Convert.ToDouble(average))) * 100;
-        //        item.PreviousPeriodTypeValuePercentage = Convert.ToDecimal((CurrentDayValue - PrevDayValue) / (PrevDayValue == 0 ? double.MaxValue : PrevDayValue)) * 100;
-
-        //    }
-        //    double currentValue = double.Parse(totals.FirstOrDefault().ToString());
-        //    double prevValue = double.Parse(totals[1].ToString());
-        //    totalPercentage = Convert.ToDecimal((currentValue - Convert.ToDouble(totalAverage)) / (totalAverage == 0 ? double.MaxValue : Convert.ToDouble(totalAverage))) * 100;
-        //    totalPreviousPercentage = Convert.ToDecimal((currentValue - prevValue) / (prevValue == 0 ? double.MaxValue : prevValue)) * 100;
-
-        //    return new VariationReportResult() { VariationReportsData = variationReportsData.OrderBy(itm => itm.RowNumber), TimeRange = timeRanges };
-        
-        
         //}
+
         #region Private Methods
         private ZoneProfitFormatted FormatZoneProfit(ZoneProfit zoneProfit)
         {
@@ -992,7 +907,6 @@ namespace TOne.Analytics.Business
             };
         }
 
-
         private SupplierCostDetailsFormatted FormatSupplierCostDetails(SupplierCostDetails supplierCostDetails)
         {
             return new SupplierCostDetailsFormatted
@@ -1035,7 +949,6 @@ namespace TOne.Analytics.Business
                 AvgDurationFormatted = FormatNumber(saleZoneCostSummaryService.AvgDuration)
             };
         }
-
 
         private SaleZoneCostSummarySupplierFormatted FormatSaleZoneCostSummarySupplier(SaleZoneCostSummarySupplier saleZoneCostSummarySupplier)
         {
@@ -1432,6 +1345,54 @@ namespace TOne.Analytics.Business
                 ProfitFormatted = FormatNumber(detailedCarrier.Profit),
                 ProfitPercentage = (detailedCarrier.SaleAmount > 0) ? FormatNumberPercentage(1 - detailedCarrier.CostAmount / detailedCarrier.SaleAmount) : "-100%"
             };
+        }
+
+        private List<TOne.Analytics.Entities.ZoneInfo>  GetDestinationTrafficVolumesResult(DestinationVolumeTrafficResult DestinationTrafficVolumeData, DateTime fromDate, DateTime toDate, string customerID, string supplierID, int zoneID, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination, List<TimeRange> timeRanges)
+        {
+
+            List<TOne.Analytics.Entities.ZoneInfo> DestinationTrafficVolumeResult = new List<TOne.Analytics.Entities.ZoneInfo>();
+            TOne.Analytics.Entities.ZoneInfo current = null;
+            foreach (var zoneInfo in DestinationTrafficVolumeData.TopZones)
+            {
+                if (current == null || current.ZoneName != zoneInfo.ZoneName)
+                {
+
+                    current = new TOne.Analytics.Entities.ZoneInfo
+                    {
+                        ZoneID = zoneInfo.ZoneID,
+                        ZoneName = zoneInfo.ZoneName,
+                        Values = new List<decimal>(),
+                        Time = new List<string>()
+                    };
+                    DestinationTrafficVolumeResult.Add(current);
+                }
+            }
+            string timeCondition = string.Empty;
+
+            var currentCulture = CultureInfo.CurrentCulture;
+
+
+            foreach (var res in DestinationTrafficVolumeResult)
+            {
+                foreach (var timeRange in timeRanges)
+                {
+                    switch (timePeriod)
+                    {
+                        case VolumeReportsTimePeriod.None: timeCondition = string.Empty; break;
+                        case VolumeReportsTimePeriod.Daily: timeCondition = timeRange.FromDate.Date.ToString("MMM dd yyyy "); break;
+                        case VolumeReportsTimePeriod.Weekly: timeCondition = string.Concat(currentCulture.Calendar.GetWeekOfYear(timeRange.FromDate.Date, currentCulture.DateTimeFormat.CalendarWeekRule, currentCulture.DateTimeFormat.FirstDayOfWeek), "/", timeRange.FromDate.Year.ToString()); break;
+                        case VolumeReportsTimePeriod.Monthly: timeCondition = string.Concat(timeRange.FromDate.Month.ToString(), "/", timeRange.FromDate.Year.ToString()); break;
+                    }
+                    var value = DestinationTrafficVolumeData.ValuesPerDate.FirstOrDefault(itm => itm.ZoneName == res.ZoneName && itm.Time == timeCondition);
+                    res.Time.Add(timeCondition.ToString());
+                    if (value != null)
+                        res.Values.Add(value.Values);
+                    else
+                        res.Values.Add(0);
+                }
+            }
+
+            return DestinationTrafficVolumeResult;
         }
 
         #endregion

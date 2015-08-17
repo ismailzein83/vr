@@ -169,7 +169,6 @@ namespace TOne.Analytics.Data.SQL
             });
 
         }
-      
         public List<CarrierLost> GetCarrierLost(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int margin, int? supplierAMUId, int? customerAMUId)
         {
             return GetItemsSP("Analytics.SP_BillingRep_GetCarrierLostReport", CarrierLostMapper,
@@ -196,81 +195,6 @@ namespace TOne.Analytics.Data.SQL
                  (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
              );
         }
-        public List<VariationReports> GetVariationReportsData(List<TimeRange> timeRange, VariationReportOptions variationReportOptions, int fromRow, int toRow, EntityType entityType, string entityID, GroupingBy groupingBy, out int totalCount, out  List<decimal> totalValues, out List<DateTime> datetotalValues, out decimal TotalAverage)
-        {
-            List<VariationReports> variationReportList = new List<VariationReports>();
-            DataTable timeRangeDataTable = new DataTable();
-            timeRangeDataTable = ToDataTable(timeRange);
-            DateTime beginTime = (from d in timeRange select d.FromDate).Min();
-            DateTime endTime = (from d in timeRange select d.ToDate).Max();
-            string selectedReportQuery = GetVariationReportQuery(timeRange, variationReportOptions, entityType, groupingBy);
-            int totalCount_Internal = 0;
-            List<decimal> totalValues_Internal = new List<decimal>();
-            List<DateTime> datetotalValues_Internal = new List<DateTime>();
-            decimal TotalAverage_Internal = 0;
-            if (!string.IsNullOrEmpty(selectedReportQuery))
-                ExecuteReaderText(selectedReportQuery,
-                (reader) =>
-                {
-                    while (reader.Read())
-                        variationReportList.Add(VariationReportsMapper(reader));
-                    reader.NextResult();
-                    reader.Read();
-                    totalCount_Internal = reader["TotalCount"] != DBNull.Value ? (int)reader["TotalCount"] : 0;
-                    reader.NextResult();
-                    while (reader.Read())
-                    {
-                        totalValues_Internal.Add(reader["TotalValues"] != DBNull.Value ? Convert.ToDecimal(reader["TotalValues"]) : 0);
-                        datetotalValues_Internal.Add(GetReaderValue<DateTime>(reader, "FromDate"));
-                    }
-                    reader.NextResult();
-                    reader.Read();
-                    TotalAverage_Internal = reader["TotalAverage"] != DBNull.Value ? Convert.ToDecimal(reader["TotalAverage"]) : 0;
-
-                },
-                (cmd) =>
-                {
-                    var dtPrm = new SqlParameter("@timeRange", SqlDbType.Structured);
-                    dtPrm.TypeName = "Analytics.TimeRangeType";
-                    dtPrm.Value = timeRangeDataTable;
-                    cmd.Parameters.Add(dtPrm);
-                    cmd.Parameters.Add(new SqlParameter("@BeginTime", beginTime));
-                    cmd.Parameters.Add(new SqlParameter("@EndTime", endTime));
-                    cmd.Parameters.Add(new SqlParameter("@FromRow", fromRow));
-                    cmd.Parameters.Add(new SqlParameter("@ToRow", toRow));
-                    if (entityID != null)
-                        cmd.Parameters.Add(new SqlParameter("@EntityID", entityID));
-                    else cmd.Parameters.Add(new SqlParameter("@EntityID", string.Empty));
-                });
-            totalCount = totalCount_Internal;
-            totalValues = totalValues_Internal;
-            datetotalValues = datetotalValues_Internal;
-            TotalAverage = TotalAverage_Internal;
-            return variationReportList;
-
-
-        }
-        public List<VolumeTraffic> GetTrafficVolumes(DateTime fromDate, DateTime toDate, string customerId, string supplierId, string zoneId, int attempts, VolumeReportsTimePeriod timePeriod)
-        {
-            List<VolumeTraffic> resultList = GetItemsSP("Analytics.SP_BillingStats_GetTrafficVolumes", (reader) => VolumeTrafficMapper(reader, timePeriod),
-             fromDate,
-             toDate,
-             customerId,
-             supplierId,
-             zoneId,
-             attempts,
-             timePeriod );
-            return resultList;
-        }
-
-        //public List<DestinationVolumeTraffic> GetDestinationTrafficVolumes(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int zoneId, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination) 
-        //{
-        //    //Get List Of Top Destination Duration 
-        //   return GetDestinationTrafficVolumesQuery(fromDate, toDate, customerId, supplierId, zoneId, attempts, timePeriod, topDestination, true);
-           
-        //    ////Get List Of Top Destination Attempts 
-        //    //GetDestinationTrafficVolumesQuery(fromDate, toDate, customerId, supplierId, zoneId, attempts, timePeriod, topDestination, 0);
-        //}
         public List<DailySummary> GetDailySummary(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
         {
             return GetItemsSP("Analytics.SP_BillingRep_GetDailySummary", DailySummaryMapper,
@@ -391,6 +315,121 @@ namespace TOne.Analytics.Data.SQL
                 cmd.Parameters.Add(new SqlParameter("@ToDate", new DateTime(toDate.Year, toDate.Month, toDate.Day)));
                 cmd.Parameters.Add(new SqlParameter("@CustomerId", customerId));
             });
+        }
+        public List<VariationReports> GetVariationReportsData(List<TimeRange> timeRange, VariationReportOptions variationReportOptions, int fromRow, int toRow, EntityType entityType, string entityID, GroupingBy groupingBy, out int totalCount, out  List<decimal> totalValues, out List<DateTime> datetotalValues, out decimal TotalAverage)
+        {
+            List<VariationReports> variationReportList = new List<VariationReports>();
+            DataTable timeRangeDataTable = new DataTable();
+            timeRangeDataTable = ToDataTable(timeRange);
+            DateTime beginTime = (from d in timeRange select d.FromDate).Min();
+            DateTime endTime = (from d in timeRange select d.ToDate).Max();
+            string selectedReportQuery = GetVariationReportQuery(timeRange, variationReportOptions, entityType, groupingBy);
+            int totalCount_Internal = 0;
+            List<decimal> totalValues_Internal = new List<decimal>();
+            List<DateTime> datetotalValues_Internal = new List<DateTime>();
+            decimal TotalAverage_Internal = 0;
+            if (!string.IsNullOrEmpty(selectedReportQuery))
+                ExecuteReaderText(selectedReportQuery,
+                (reader) =>
+                {
+                    while (reader.Read())
+                        variationReportList.Add(VariationReportsMapper(reader));
+                    reader.NextResult();
+                    reader.Read();
+                    totalCount_Internal = reader["TotalCount"] != DBNull.Value ? (int)reader["TotalCount"] : 0;
+                    reader.NextResult();
+                    while (reader.Read())
+                    {
+                        totalValues_Internal.Add(reader["TotalValues"] != DBNull.Value ? Convert.ToDecimal(reader["TotalValues"]) : 0);
+                        datetotalValues_Internal.Add(GetReaderValue<DateTime>(reader, "FromDate"));
+                    }
+                    reader.NextResult();
+                    reader.Read();
+                    TotalAverage_Internal = reader["TotalAverage"] != DBNull.Value ? Convert.ToDecimal(reader["TotalAverage"]) : 0;
+
+                },
+                (cmd) =>
+                {
+                    var dtPrm = new SqlParameter("@timeRange", SqlDbType.Structured);
+                    dtPrm.TypeName = "Analytics.TimeRangeType";
+                    dtPrm.Value = timeRangeDataTable;
+                    cmd.Parameters.Add(dtPrm);
+                    cmd.Parameters.Add(new SqlParameter("@BeginTime", beginTime));
+                    cmd.Parameters.Add(new SqlParameter("@EndTime", endTime));
+                    cmd.Parameters.Add(new SqlParameter("@FromRow", fromRow));
+                    cmd.Parameters.Add(new SqlParameter("@ToRow", toRow));
+                    if (entityID != null)
+                        cmd.Parameters.Add(new SqlParameter("@EntityID", entityID));
+                    else cmd.Parameters.Add(new SqlParameter("@EntityID", string.Empty));
+                });
+            totalCount = totalCount_Internal;
+            totalValues = totalValues_Internal;
+            datetotalValues = datetotalValues_Internal;
+            TotalAverage = TotalAverage_Internal;
+            return variationReportList;
+
+
+        }
+        public List<VolumeTraffic> GetTrafficVolumes(DateTime fromDate, DateTime toDate, string customerId, string supplierId, string zoneId, int attempts, VolumeReportsTimePeriod timePeriod)
+        {
+            List<VolumeTraffic> resultList = GetItemsSP("Analytics.SP_BillingStats_GetTrafficVolumes", (reader) => VolumeTrafficMapper(reader, timePeriod),
+             fromDate,
+             toDate,
+             customerId,
+             supplierId,
+             zoneId,
+             attempts,
+             timePeriod);
+            return resultList;
+        }
+        public DestinationVolumeTrafficResult GetDestinationTrafficVolumes(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int zoneId, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination, List<TimeRange> timeRange, bool isDuration)
+        {
+            string query = GetDestinationTrafficVolumesQuery(fromDate, toDate, customerId, supplierId, zoneId, attempts, timePeriod, topDestination, isDuration, timeRange);
+
+            List<ZoneInfo> topDestinationZones = new List<ZoneInfo>();
+            List<TimeValuesRecord> valuesPerDate = new List<TimeValuesRecord>();
+            DataTable timeRangeDataTable = new DataTable();
+            timeRangeDataTable = ToDataTable(timeRange);
+
+            if (!string.IsNullOrEmpty(query))
+                ExecuteReaderText(query,
+                (reader) =>
+                {
+                    while (reader.Read())
+                        topDestinationZones.Add(TopZonesMapper(reader));
+                    reader.NextResult();
+                    while (reader.Read())
+                    {
+                        valuesPerDate.Add(TopValuesPerDateMapper(reader, timePeriod, isDuration));
+                    }
+
+                },
+               (cmd) =>
+               {
+                   cmd.Parameters.Add(new SqlParameter("@TopDestinations", topDestination));
+                   cmd.Parameters.Add(new SqlParameter("@FromDate", fromDate));
+                   cmd.Parameters.Add(new SqlParameter("@ToDate", toDate));
+                   cmd.Parameters.Add(new SqlParameter("@Attempts", attempts));
+                   cmd.Parameters.Add(new SqlParameter("@ZoneId", zoneId));
+                   var dtPrm = new SqlParameter("@timeRange", SqlDbType.Structured);
+                   dtPrm.TypeName = "Analytics.TimeRangeType";
+                   dtPrm.Value = timeRangeDataTable;
+                   cmd.Parameters.Add(dtPrm);
+                   if (!string.IsNullOrEmpty(supplierId)) cmd.Parameters.Add(new SqlParameter("@SupplierId", supplierId));
+                   if (!string.IsNullOrEmpty(customerId)) cmd.Parameters.Add(new SqlParameter("@CustomerId", customerId));
+               });
+
+            return new DestinationVolumeTrafficResult() { TopZones = topDestinationZones, ValuesPerDate = valuesPerDate };
+        }
+        public List<InOutVolumeTraffic> CompareInOutTraffic(DateTime fromDate, DateTime toDate, string customerId, VolumeReportsTimePeriod timePeriod)
+        {
+            List<InOutVolumeTraffic> resultList = GetItemsSP("rpt_Volumes_CompareInOutTraffic", (reader) => InOutVolumeTrafficMapper(reader, timePeriod),
+                fromDate,
+                toDate,
+                customerId,
+                timePeriod);
+
+            return resultList;
         }
 
         #region PrivatMethods
@@ -562,24 +601,6 @@ namespace TOne.Analytics.Data.SQL
                     models.Add(MapZoneProfit(z));
                 }
             return models;
-        }
-        private VariationReports VariationReportsMapper(IDataReader reader)
-        {
-
-            VariationReports instance = new VariationReports
-            {
-                Name = reader["Name"] as string,
-                PeriodTypeValueAverage = GetReaderValue<decimal>(reader, "AVG"),
-                PeriodTypeValuePercentage = GetReaderValue<decimal>(reader, "%"),
-                FromDate = GetReaderValue<DateTime>(reader, "FromDate"),
-                ToDate = GetReaderValue<DateTime>(reader, "ToDate"),
-                TotalDuration = reader["Total"] != DBNull.Value ? Convert.ToDecimal(reader["Total"]) : 0,
-                PreviousPeriodTypeValuePercentage = GetReaderValue<decimal>(reader, "Prev %"),
-                ID = reader["ID"] != DBNull.Value ? reader["ID"].ToString() : string.Empty,
-                RowNumber = reader["RowNumber"] != DBNull.Value ? (long)reader["RowNumber"] : 0
-            };
-
-            return instance;
         }
         private CarrierSummaryDaily CarrierSummaryDailyMapper(IDataReader reader)
         {
@@ -970,6 +991,24 @@ namespace TOne.Analytics.Data.SQL
                 query.Replace("#SecondBillingStatsFilter#", "");
             return query.ToString();
         }
+        private VariationReports VariationReportsMapper(IDataReader reader)
+        {
+
+            VariationReports instance = new VariationReports
+            {
+                Name = reader["Name"] as string,
+                PeriodTypeValueAverage = GetReaderValue<decimal>(reader, "AVG"),
+                PeriodTypeValuePercentage = GetReaderValue<decimal>(reader, "%"),
+                FromDate = GetReaderValue<DateTime>(reader, "FromDate"),
+                ToDate = GetReaderValue<DateTime>(reader, "ToDate"),
+                TotalDuration = reader["Total"] != DBNull.Value ? Convert.ToDecimal(reader["Total"]) : 0,
+                PreviousPeriodTypeValuePercentage = GetReaderValue<decimal>(reader, "Prev %"),
+                ID = reader["ID"] != DBNull.Value ? reader["ID"].ToString() : string.Empty,
+                RowNumber = reader["RowNumber"] != DBNull.Value ? (long)reader["RowNumber"] : 0
+            };
+
+            return instance;
+        }
         private VolumeTraffic VolumeTrafficMapper(IDataReader reader, VolumeReportsTimePeriod timePeriod)
         {
             VolumeTraffic volumeTraffic = new VolumeTraffic
@@ -986,101 +1025,6 @@ namespace TOne.Analytics.Data.SQL
             }
             return volumeTraffic;
         }
-
-//        private List<DestinationVolumeTraffic> GetDestinationTrafficVolumesQuery(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int zoneId, int attempts, VolumeReportsTimePeriod timePeriod, int topDestinations, bool isDuration)
-//        {
-//            string durationField = " SaleDuration / 60.0 ";
-//            string attemptsField = " NumberOfCalls ";
-//            string date = fromDate.ToString();
-
-//            StringBuilder queryBuilder = new StringBuilder(@" Set RowCount @TopDestinations
-//                            SELECT SZ.Name AS SaleZone,SZ.ZoneID AS SaleZoneID,SUM(CASE WHEN Calldate BETWEEN @FromDate AND @ToDate THEN #ValueColumn# ELSE 0 END) AS [#ValueColumn#]                         
-//                            From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date #Indexes# ))
-//                                Join Zone SZ With(Nolock) On SZ.ZoneID=BS.SaleZoneID 
-//                            WHERE BS.CallDate BETWEEN @FromDate AND @ToDate
-//                                AND BS.NumberOfCalls >  @Attempts
-//                                #Filters#
-//                            GROUP BY SZ.Name ,SZ.ZoneID
-//                            ORDER BY SUM(BS.SaleDuration / 60.0) DESC ");
-//            if (isDuration)
-//                queryBuilder.Replace("#ValueColumn#", durationField);
-//            else queryBuilder.Replace("#ValueColumn#", attemptsField);
-
-//            StringBuilder filterBuilder = new StringBuilder();
-//            StringBuilder indexBuilder = new StringBuilder();
-
-//            if (!String.IsNullOrEmpty(customerId))
-//            {
-//                filterBuilder.Append(" AND BS.CustomerID=@CustomerId ");
-//                indexBuilder.Append(",IX_Billing_Stats_Customer");
-//            }
-
-//            if (!String.IsNullOrEmpty(supplierId))
-//            {
-//                filterBuilder.Append(" AND BS.SupplierID=@SupplierId  ");
-//                indexBuilder.Append(",IX_Billing_Stats_Supplier");
-//            }
-
-//            if (zoneId != 0)
-//                filterBuilder.Append(" AND SZ.ZoneID= @ZoneId ");
-
-//            queryBuilder.Replace("#Filters#", filterBuilder.ToString());
-//            queryBuilder.Replace("#Indexes#", indexBuilder.ToString());
-
-
-
-//            return GetItemsText(queryBuilder.ToString(), (reader) => DestinationVolumeTrafficMapper(reader, isDuration, durationField, attemptsField),
-//            (cmd) =>
-//            {
-//                cmd.Parameters.Add(new SqlParameter("@TopDestinations", topDestinations));
-//                cmd.Parameters.Add(new SqlParameter("@FromDate", fromDate));
-//                cmd.Parameters.Add(new SqlParameter("@ToDate", toDate));
-//                cmd.Parameters.Add(new SqlParameter("@Attempts", attempts));
-//                cmd.Parameters.Add(new SqlParameter("@ZoneId", zoneId));
-//                if (!string.IsNullOrEmpty(supplierId)) cmd.Parameters.Add(new SqlParameter("@SupplierId", supplierId));
-//                if (!string.IsNullOrEmpty(customerId)) cmd.Parameters.Add(new SqlParameter("@CustomerId", customerId));
-//            });
-//        }
-
-//        private DestinationVolumeTraffic DestinationVolumeTrafficMapper(IDataReader reader, bool isDuration, string durationField, string attemptsField)
-//        {
-
-//            DestinationVolumeTraffic destinationVolumeTraffic = new DestinationVolumeTraffic
-//            {
-//                SaleZoneName = reader["SaleZone"] as string,
-//                SaleZoneID = GetReaderValue<int>(reader, "SaleZoneID"),
-//                Value = isDuration ? GetReaderValue<decimal>(reader, durationField) : GetReaderValue<decimal>(reader, attemptsField)
-//            };
-
-//            return destinationVolumeTraffic;
-//        }
-        private static DataTable ToDataTable<T>(List<T> items)
-        {
-            DataTable dataTable = new DataTable(typeof(T).Name);
-
-            //Get all the properties
-            PropertyInfo[] Props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            foreach (PropertyInfo prop in Props)
-            {
-                //Setting column names as Property names
-                dataTable.Columns.Add(prop.Name);
-            }
-            foreach (T item in items)
-            {
-                var values = new object[Props.Length];
-                for (int i = 0; i < Props.Length; i++)
-                {
-                    //inserting property values to datatable rows
-                    values[i] = Props[i].GetValue(item, null);
-                }
-                dataTable.Rows.Add(values);
-            }
-            //put a breakpoint here and check datatable
-            return dataTable;
-        }
-
-        #endregion
-
         private string GetDestinationTrafficVolumesQuery(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int zoneId, int attempts, VolumeReportsTimePeriod timePeriod, int topDestinations, bool isDuration, List<TimeRange> timeRange)
         {
 
@@ -1090,7 +1034,7 @@ namespace TOne.Analytics.Data.SQL
 
             StringBuilder queryBuilder = new StringBuilder(@" 
              
-                SELECT TOP  (@TopDestinations) BS.SaleZoneID AS SaleZoneID,SZ.Name AS SaleZoneName,ROW_NUMBER()  OVER ( ORDER BY SUM(#ValueColumn#) DESC) AS RowNumber
+                SELECT TOP  (@TopDestinations) BS.SaleZoneID AS SaleZoneID,SZ.Name AS SaleZoneName,ROW_NUMBER()  OVER ( ORDER BY SUM( SaleDuration / 60.0 ) DESC) AS RowNumber
                 INTO #OrderedZones                        
                 From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date #Indexes# )) Join Zone SZ With(Nolock) On SZ.ZoneID=BS.SaleZoneID 
                 WHERE BS.CallDate BETWEEN  @FromDate AND @ToDate
@@ -1144,7 +1088,6 @@ namespace TOne.Analytics.Data.SQL
             {
                 case VolumeReportsTimePeriod.Daily:
                     selectBuilder.Append(" ,CAST(BS.CallDate AS varchar(12)) AS CallDate ");
-            //        selectBuilder.Append(" ,tr.FromDate,tr.ToDate ");
                     groupBuilder.Append(" ,BS.calldate  ");
                     orderBuilder.Append(" BS.CallDate , ");
                     break;
@@ -1152,7 +1095,6 @@ namespace TOne.Analytics.Data.SQL
                 case VolumeReportsTimePeriod.Weekly:
                     selectBuilder.Append(@" ,datepart(week,BS.CallDate) AS CallWeek
 					                     ,datepart(year,bs.CallDate) AS CallYear ");
-                //    selectBuilder.Append(" ,tr.FromDate,tr.ToDate ");
                     groupBuilder.Append(" ,DATEPART(week,BS.calldate),DATEPART(year,BS.calldate)  ");
                     orderBuilder.Append(" DATEPART(week,BS.calldate),DATEPART(year,BS.calldate), ");
                     break;
@@ -1160,12 +1102,11 @@ namespace TOne.Analytics.Data.SQL
                 case VolumeReportsTimePeriod.Monthly:
                     selectBuilder.Append(@" ,datepart(month,BS.CallDate) AS CallMonth
 						                  ,datepart(year,bs.CallDate) AS CallYear ");
-                 //   selectBuilder.Append(" ,tr.FromDate,tr.ToDate ");
                     groupBuilder.Append(" ,DATEPART(month,BS.calldate),DATEPART(year,BS.calldate)  ");
                     orderBuilder.Append(" DATEPART(month,BS.calldate),DATEPART(year,BS.calldate), ");
                     break;
 
-            }        
+            }
             queryBuilder.Replace("#SelectBuilder#", selectBuilder.ToString());
             queryBuilder.Replace("#GroupByBuilder#", groupBuilder.ToString());
             queryBuilder.Replace("#OrderBuilder#", orderBuilder.ToString());
@@ -1173,52 +1114,6 @@ namespace TOne.Analytics.Data.SQL
 
             return queryBuilder.ToString();
         }
-
-        public DestinationVolumeTrafficResult GetDestinationTrafficVolumes(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int zoneId, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination, List<TimeRange> timeRange)
-        {
-            string query = GetDestinationTrafficVolumesQuery(fromDate, toDate, customerId, supplierId, zoneId, attempts, timePeriod, topDestination, true,timeRange);
-
-            List<ZoneInfo> topDestinationZones = new List<ZoneInfo>();
-            List<TimeValuesRecord> valuesPerDate = new List<TimeValuesRecord>();
-           // TimeValuesRecord topValues = new TimeValuesRecord { Time = new List<string>(), Values = new List<decimal>() };
-            DataTable timeRangeDataTable = new DataTable();
-            timeRangeDataTable = ToDataTable(timeRange);
-
-            if (!string.IsNullOrEmpty(query))
-                ExecuteReaderText(query,
-                (reader) =>
-                {
-                    while (reader.Read())
-                        topDestinationZones.Add(TopZonesMapper(reader));
-                    reader.NextResult();
-         //           reader.Read();                  
-                    while (reader.Read())
-                    {
-                        valuesPerDate.Add(TopValuesPerDateMapper(reader, timePeriod));
-                     //   topValues = new TimeValuesRecord { Time = new List<string>(), Values = new List<decimal>() };
-                    }
-
-                },
-               (cmd) =>
-               {
-                   cmd.Parameters.Add(new SqlParameter("@TopDestinations", topDestination));
-                   cmd.Parameters.Add(new SqlParameter("@FromDate", fromDate));
-                   cmd.Parameters.Add(new SqlParameter("@ToDate", toDate));
-                   cmd.Parameters.Add(new SqlParameter("@Attempts", attempts));
-                   cmd.Parameters.Add(new SqlParameter("@ZoneId", zoneId));
-                   var dtPrm = new SqlParameter("@timeRange", SqlDbType.Structured);
-                   dtPrm.TypeName = "Analytics.TimeRangeType";
-                   dtPrm.Value = timeRangeDataTable;
-                   cmd.Parameters.Add(dtPrm);
-                   if (!string.IsNullOrEmpty(supplierId)) cmd.Parameters.Add(new SqlParameter("@SupplierId", supplierId));
-                   if (!string.IsNullOrEmpty(customerId)) cmd.Parameters.Add(new SqlParameter("@CustomerId", customerId));
-               });
-
-            return new DestinationVolumeTrafficResult() { TopZones = topDestinationZones, ValuesPerDate = valuesPerDate };
-
-
-        }
-
         private DestinationVolumeTraffic DestinationVolumeTrafficMapper(IDataReader reader, bool isDuration, string durationField, string attemptsField)
         {
 
@@ -1231,7 +1126,6 @@ namespace TOne.Analytics.Data.SQL
 
             return destinationVolumeTraffic;
         }
-
         private ZoneInfo TopZonesMapper(IDataReader reader)
         {
 
@@ -1244,32 +1138,77 @@ namespace TOne.Analytics.Data.SQL
 
             return topZone;
         }
-
-        private TimeValuesRecord TopValuesPerDateMapper(IDataReader reader, VolumeReportsTimePeriod timePeriod)
+        private TimeValuesRecord TopValuesPerDateMapper(IDataReader reader, VolumeReportsTimePeriod timePeriod, bool isDuration)
         {
             TimeValuesRecord topValues = new TimeValuesRecord
-            { 
-                ZoneName = reader["ZoneName"] as string,   
-                Values = GetReaderValue<decimal>(reader,"Value")
+            {
+                ZoneName = reader["ZoneName"] as string,
+                Values = isDuration ? GetReaderValue<decimal>(reader, "Value") : GetReaderValue<int>(reader, "Value")
             };
-             
-            //topValues.Values.Add( GetReaderValue<decimal>(reader, "Value"));
-             
-            ////topValues.Values =  new List<decimal>();
-            ////topValues.Values.Add(GetReaderValue<decimal>(reader, "SaleDurationValue"));
-
 
             switch (timePeriod)
             {
                 case VolumeReportsTimePeriod.None: topValues.Time = string.Empty; break;
-                case VolumeReportsTimePeriod.Daily: topValues.Time= reader["CallDate"] as string ; break;
-                case VolumeReportsTimePeriod.Weekly: topValues.Time= string.Concat(((int)reader["CallWeek"]).ToString(), "/", ((int)reader["CallYear"]).ToString()) ; break;
-                case VolumeReportsTimePeriod.Monthly: topValues.Time= string.Concat(((int)reader["CallMonth"]).ToString(), "/", ((int)reader["CallYear"]).ToString()) ; break;
+                case VolumeReportsTimePeriod.Daily: topValues.Time = reader["CallDate"] as string; break;
+                case VolumeReportsTimePeriod.Weekly: topValues.Time = string.Concat(((int)reader["CallWeek"]).ToString(), "/", ((int)reader["CallYear"]).ToString()); break;
+                case VolumeReportsTimePeriod.Monthly: topValues.Time = string.Concat(((int)reader["CallMonth"]).ToString(), "/", ((int)reader["CallYear"]).ToString()); break;
             }
 
 
             return topValues;
         }
+        private InOutVolumeTraffic InOutVolumeTrafficMapper(IDataReader reader, VolumeReportsTimePeriod timePeriod)
+        {
+
+            InOutVolumeTraffic inOutVolumeTraffic = new InOutVolumeTraffic
+            {
+                TrafficDirection = reader["TrafficDirection"] as string,
+                Duration = GetReaderValue<decimal>(reader, "Duration"),
+                Net = GetReaderValue<decimal>(reader, "Net"),
+                PercDuration = reader["PercDuration"] as string,
+                PercNet = reader["PercNet"] as string,
+                TotalDuration = GetReaderValue<decimal>(reader, "TotalDuration"),
+                TotalNet = GetReaderValue<decimal>(reader, "TotalNet")
+
+            };
+            switch (timePeriod)
+            {
+                case VolumeReportsTimePeriod.None: inOutVolumeTraffic.Date = ""; break;
+                case VolumeReportsTimePeriod.Daily: inOutVolumeTraffic.Date = GetReaderValue<DateTime>(reader, "CallDate").Date.ToShortDateString(); break;
+                case VolumeReportsTimePeriod.Weekly: inOutVolumeTraffic.Date = string.Concat(((int)reader["CallWeek"]).ToString(), "/", ((int)reader["CallYear"]).ToString()); break;
+                case VolumeReportsTimePeriod.Monthly: inOutVolumeTraffic.Date = string.Concat(((int)reader["CallMonth"]).ToString(), "/", ((int)reader["CallYear"]).ToString()); break;
+            }
+            return inOutVolumeTraffic;
+
+        }
+        private static DataTable ToDataTable<T>(List<T> items)
+        {
+            DataTable dataTable = new DataTable(typeof(T).Name);
+
+            //Get all the properties
+            PropertyInfo[] Props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (PropertyInfo prop in Props)
+            {
+                //Setting column names as Property names
+                dataTable.Columns.Add(prop.Name);
+            }
+            foreach (T item in items)
+            {
+                var values = new object[Props.Length];
+                for (int i = 0; i < Props.Length; i++)
+                {
+                    //inserting property values to datatable rows
+                    values[i] = Props[i].GetValue(item, null);
+                }
+                dataTable.Rows.Add(values);
+            }
+            //put a breakpoint here and check datatable
+            return dataTable;
+        }
+
+        #endregion
+
+
 
     }
 }

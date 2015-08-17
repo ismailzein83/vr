@@ -5,6 +5,7 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService, DataRetriev
         GetVariationReport: GetVariationReport,
         GetTrafficVolumes: GetTrafficVolumes,
         GetDestinationTrafficVolumes: GetDestinationTrafficVolumes,
+        CompareInOutTraffic: CompareInOutTraffic,
         ExportCarrierProfile: ExportCarrierProfile
     });
 
@@ -37,7 +38,7 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService, DataRetriev
         });
     }
 
-    function GetDestinationTrafficVolumes(fromDate, toDate, selectedCustomer, selectedSupplier, selectedZone, attempts, selectedTimePeriod, topDestination) {
+    function GetDestinationTrafficVolumes(fromDate, toDate, selectedCustomer, selectedSupplier, selectedZone, attempts, selectedTimePeriod, topDestination, isDuration) {
         return BaseAPIService.get("/api/BillingStatistics/GetDestinationTrafficVolumes", {
             fromDate: fromDate,
             toDate: toDate,
@@ -46,7 +47,18 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService, DataRetriev
             zoneId: selectedZone,
             attempts: attempts,
             timePeriod: selectedTimePeriod,
-            topDestination: topDestination
+            topDestination: topDestination,
+            isDuration: isDuration
+        });
+    }
+
+    function CompareInOutTraffic(fromDate, toDate, customerId, timePeriod, showChartsInPie) {
+        return BaseAPIService.get("/api/BillingStatistics/CompareInOutTraffic", {
+            fromDate: fromDate,
+            toDate: toDate,
+            customerId: customerId,
+            timePeriod: timePeriod,
+            showChartsInPie: showChartsInPie
         });
     }
 

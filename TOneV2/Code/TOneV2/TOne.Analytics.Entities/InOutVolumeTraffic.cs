@@ -17,5 +17,6 @@ namespace TOne.Analytics.Entities
         public decimal TotalDuration {get;set;}
 
         public decimal TotalNet { get; set; }
+        public string Date { get; set; }
     }
 }
