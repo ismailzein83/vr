@@ -121,5 +121,6 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_DeleteStrategyResults.sql" />
     <Build Include="FraudAnalysis\User Defined Types\AccountCaseType.sql" />
     <Build Include="Security\FraudAnalysis.sql" />
+    <Build Include="FraudAnalysis\Tables\SuspicionLevel.sql" />
   </ItemGroup>
 </Project>

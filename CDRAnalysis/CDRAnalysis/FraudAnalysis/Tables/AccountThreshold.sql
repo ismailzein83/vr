@@ -15,6 +15,8 @@
 
 
 
+
+
 GO
 CREATE CLUSTERED INDEX [IX_SubscriberThreshold_StrategyId]
     ON [FraudAnalysis].[AccountThreshold]([StrategyId] ASC);
