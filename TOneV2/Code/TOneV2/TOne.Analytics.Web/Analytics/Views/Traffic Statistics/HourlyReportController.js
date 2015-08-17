@@ -77,20 +77,12 @@ function HourlyReportController($scope, UtilsService, HourlyReportAPIService, ui
                 $scope.selectedPeriod = customize;
             }
         }
-        
-       
-        $scope.getColor = function (dataItem, coldef) {
-            if (coldef.tag.value == HourlyReportMeasureEnum.ACD.value)
-                return getACDColor(dataItem.ACD, dataItem.Attempts);
-            else if (coldef.tag.value == HourlyReportMeasureEnum.ASR.value)
-                return getASRColor(dataItem.ASR, dataItem.Attempts);
-        }
+              
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
         }
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return HourlyReportAPIService.GetHourlyReportData(dataRetrievalInput).then(function (response) {
-                console.log(response);
                 if (dataRetrievalInput.DataRetrievalResultType == DataRetrievalResultTypeEnum.Normal.value) {
                     currentData = [];
                     angular.forEach(response.Data, function (itm) {
@@ -100,7 +92,7 @@ function HourlyReportController($scope, UtilsService, HourlyReportAPIService, ui
                         $scope.trafficStatisticSummary = response.Summary;
                     }
                     mainGridAPI.setSummary(response.Summary);
-                  //  renderOverallChart();
+                    renderOverallChart();
                 }
                 onResponseReady(response);
                 $scope.showResult = true;
@@ -201,15 +193,6 @@ function HourlyReportController($scope, UtilsService, HourlyReportAPIService, ui
         });
     }
 
-    function getACDColor(acdValue, attemptsValue) {
-        if (attemptsValue > $scope.attempts && acdValue < $scope.acd)
-            return LabelColorsEnum.WarningLevel1.Color; 
-    };
-    function getASRColor(asrValue, attemptsValue) {
-        if (attemptsValue > $scope.attempts && asrValue < $scope.asr)
-            return LabelColorsEnum.WarningLevel2.Color;
-    };
-
     function defineMenuActions() {
         $scope.gridMenuActions = [{
             name: "CDRs",
@@ -281,7 +264,7 @@ function HourlyReportController($scope, UtilsService, HourlyReportAPIService, ui
             var dataItem = {
                 groupKeyValues: itm.GroupKeyValues,
                 entityName: '',
-                value: itm[measure.propertyName]
+                value: itm.Data[measure.propertyName]
             };
 
             for (var i = 0; i < $scope.currentSearchCriteria.groupKeys.length; i++) {
@@ -290,7 +273,7 @@ function HourlyReportController($scope, UtilsService, HourlyReportAPIService, ui
                 dataItem.entityName += itm.GroupKeyValues[i].Name;
             };
             chartData.push(dataItem);
-            othersValue -= itm[measure.propertyName];
+            othersValue -= itm.Data[measure.propertyName];
         });
         chartData.sort(function (a, b) {
             if (a.value > b.value) {
@@ -320,7 +303,6 @@ function HourlyReportController($scope, UtilsService, HourlyReportAPIService, ui
         //console.log(chartData.length);
         chartSelectedMeasureAPI.renderSingleDimensionChart(chartData, chartDefinition, seriesDefinitions);
     }
-
     function buildFilter() {
         var filter = {};
         filter.SwitchIds = analyticsService.getFilterIds($scope.selectedSwitches, "SwitchId");
@@ -329,6 +311,7 @@ function HourlyReportController($scope, UtilsService, HourlyReportAPIService, ui
         filter.CodeGroups = analyticsService.getFilterIds($scope.selectedCodeGroups, "Code");
         return filter;
     }
+
 
 
     function getAndShowEntityStatistics(groupKey) {
@@ -394,9 +377,6 @@ function HourlyReportController($scope, UtilsService, HourlyReportAPIService, ui
             });
         });
     }
-
-
-
 };
 
 appControllers.controller('Analytics_HourlyReportController', HourlyReportController);

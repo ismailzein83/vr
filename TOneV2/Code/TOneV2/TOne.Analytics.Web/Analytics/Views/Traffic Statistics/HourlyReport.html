@@ -84,7 +84,7 @@
     <div vr-loader="isGettingData" ng-show="showResult">
         <vr-row>
             <vr-columns colnum="6" simplecol>
-                <vr-section title="Overall">
+                <vr-section title="Traffic By Hour - Attempts">
                     <vr-chart data-on-ready="chartSelectedMeasureReady" menuactions="getChartMenuActions"></vr-chart>
                 </vr-section>
             </vr-columns>
@@ -99,9 +99,9 @@
                 <vr-datagrid on-ready="onMainGridReady" datasource="data"
                              menuactions="gridMenuActions" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'">
                     <vr-datagridcolumn ng-repeat="groupKey in currentSearchCriteria.groupKeys" headertext="groupKey.gridHeader" field="'GroupKeyValues[' + $index + '].Name'" columnindex="$index" widthfactor="15" enablehiding="'false'" isclickable="'true'" tag="groupKey" onclicked="onGroupKeyClicked"></vr-datagridcolumn>
-                    <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.fieldName" summaryfield="measure.propertyName" type="measure.type" tag="measure" getcolor="getColor"></vr-datagridcolumn>
+                    <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.fieldName" summaryfield="measure.propertyName" type="measure.type" tag="measure" getcolor="getColor" ></vr-datagridcolumn>
                     <vr-datagridexpandablerow>
-                        <div ng-include="'/Client/Modules/Analytics/Views/Traffic Statistics/TrafficStatisticsGrid.html'"></div>
+                        <div ng-include="'/Client/Modules/Analytics/Views/Traffic Statistics/HourlyReportGrid.html'"></div>
                     </vr-datagridexpandablerow>
                 </vr-datagrid>
             </vr-columns>

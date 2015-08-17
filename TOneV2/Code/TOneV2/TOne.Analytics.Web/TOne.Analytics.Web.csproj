@@ -187,6 +187,8 @@
     <Content Include="Analytics\Views\RepeatedNumbersController.js" />
     <Content Include="Analytics\Views\Traffic Statistics\HourlyReport.html" />
     <Content Include="Analytics\Views\Traffic Statistics\HourlyReportController.js" />
+    <Content Include="Analytics\Views\Traffic Statistics\HourlyReportGrid.html" />
+    <Content Include="Analytics\Views\Traffic Statistics\HourlyReportGridController.js" />
     <Content Include="Analytics\Views\Traffic Statistics\ReleaseCodeStatistics.html" />
     <Content Include="Analytics\Views\Traffic Statistics\ReleaseCodeStatisticsController.js" />
     <Content Include="Analytics\Views\Traffic Statistics\TrafficStatisticsGrid.html" />

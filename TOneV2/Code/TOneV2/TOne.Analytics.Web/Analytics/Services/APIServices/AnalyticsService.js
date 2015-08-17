@@ -75,13 +75,122 @@
             return utilsService.getArrayEnum(releaseCodeMeasureEnum);
         }
 
+        function applyGroupKeysRules(parentGroupKeys, groupKeys) {
+            applyZoneRule(parentGroupKeys, groupKeys);
+            applyPortRule(parentGroupKeys, groupKeys);
+            applyCodeBuyRule(parentGroupKeys, groupKeys);
+            applyCodeSalesRule(parentGroupKeys, groupKeys);
+            applySupplierZoneIdRule(parentGroupKeys, groupKeys);
+            eliminateGroupKeysNotInParent(parentGroupKeys, groupKeys);
+        }
+
+        function applyZoneRule(parentGroupKeys, groupKeys) {
+            for (var i = 0; i < parentGroupKeys.length; i++) {
+                if (parentGroupKeys[i].value == trafficStatisticGroupKeysEnum.OurZone.value) {
+                    removeCodeGroupFromGroupKeys(groupKeys);
+                    removeCodeBuyFromGroupKeys(groupKeys);
+                    removeCodeSalesFromGroupKeys(groupKeys);
+                }
+
+            }
+
+        }
+        function applyPortRule(parentGroupKeys, groupKeys) {
+            for (var i = 0; i < parentGroupKeys.length; i++) {
+                if (parentGroupKeys[i].value == trafficStatisticGroupKeysEnum.PortIn.value || parentGroupKeys[i].value == trafficStatisticGroupKeysEnum.PortOut.value) {
+                    removeGateWayOutFromGroupKeys(groupKeys);
+                    removeGateWayInFromGroupKeys(groupKeys);
+                }
+
+            }
+
+        }
+        function applyCodeBuyRule(parentGroupKeys, groupKeys) {
+            for (var i = 0; i < parentGroupKeys.length; i++) {
+                if (parentGroupKeys[i].value == trafficStatisticGroupKeysEnum.CodeGroup.value)
+                    return;
+            }
+            removeCodeBuyFromGroupKeys(groupKeys);
+
+        }
+        function applyCodeSalesRule(parentGroupKeys, groupKeys) {
+            for (var i = 0; i < parentGroupKeys.length; i++) {
+                if (parentGroupKeys[i].value == trafficStatisticGroupKeysEnum.CodeGroup.value)
+                    return;
+            }
+            removeCodeSalesFromGroupKeys(groupKeys);
+
+        }
+        function applySupplierZoneIdRule(parentGroupKeys, groupKeys) {
+            for (var i = 0; i <parentGroupKeys.length; i++) {
+                if (parentGroupKeys[i].value == trafficStatisticGroupKeysEnum.SupplierId.value)
+                    return;
+            }
+            removeSupplierIdFromGroupKeys(groupKeys);
+
+        }
+
+        function removeGateWayOutFromGroupKeys(groupKeys) {
+            for (var i = 0; i < groupKeys.length; i++) {
+                if (groupKeys[i].value == trafficStatisticGroupKeysEnum.GateWayOut.value) {
+                    groupKeys.splice(i, 1);
+                }
+            }
+        }
+        function removeGateWayInFromGroupKeys(groupKeys) {
+            for (var i = 0; i < groupKeys.length; i++) {
+                if (groupKeys[i].value == trafficStatisticGroupKeysEnum.GateWayIn.value) {
+                    groupKeys.splice(i, 1);
+                }
+            }
+        }
+        function removeCodeGroupFromGroupKeys(groupKeys) {
+            for (var i = 0; i < groupKeys.length; i++) {
+                if (groupKeys[i].value == trafficStatisticGroupKeysEnum.CodeGroup.value) {
+                    groupKeys.splice(i, 1);
+                }
+            }
+        }
+        function removeCodeSalesFromGroupKeys(groupKeys) {
+            for (var i = 0; i <groupKeys.length; i++) {
+                if (groupKeys[i].value == trafficStatisticGroupKeysEnum.CodeSales.value) {
+                    groupKeys.splice(i, 1);
+                }
+            }
+        }
+        function removeCodeBuyFromGroupKeys(groupKeys) {
+            for (var i = 0; i < groupKeys.length; i++) {
+                if (groupKeys[i].value == trafficStatisticGroupKeysEnum.CodeBuy.value) {
+                    groupKeys.splice(i, 1);
+                }
+            }
+        }
+        function removeSupplierIdFromGroupKeys(groupKeys) {
+            for (var i = 0; i < groupKeys.length; i++) {
+                if (groupKeys[i].value == trafficStatisticGroupKeysEnum.SupplierZoneId.value) {
+                   groupKeys.splice(i, 1);
+                }
+            }
+        }
+
+        function eliminateGroupKeysNotInParent(parentGroupKeys, groupKeys) {
+
+            for (var i = 0; i < parentGroupKeys.length; i++) {
+                for (var j = 0; j < groupKeys.length; j++)
+                    if (parentGroupKeys[i].value == groupKeys[j].value)
+                        groupKeys.splice(j, 1);
+            }
+        }
+
         return ({
             getTrafficStatisticGroupKeys: getTrafficStatisticGroupKeys,
             getDefaultTrafficStatisticGroupKeys: getDefaultTrafficStatisticGroupKeys,
             getPeriods: getPeriods,
             showCdrLogModal: showCdrLogModal,
             getReleaseCodeMeasureEnum: getReleaseCodeMeasureEnum,
-            getFilterIds: getFilterIds
+            getFilterIds: getFilterIds,
+            applyGroupKeysRules: applyGroupKeysRules
+
         });
 
 
