@@ -15,7 +15,7 @@ function FTPReceiveAdapterTemplateController($scope, UtilsService) {
 
         $scope.dataSourceAdapter.getData = function () {
             return {
-                $type: "",
+                $type: "Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument, Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments",
                 Extension: $scope.extension,
                 Directory: $scope.directory,
                 ServerIP: $scope.serverIP,

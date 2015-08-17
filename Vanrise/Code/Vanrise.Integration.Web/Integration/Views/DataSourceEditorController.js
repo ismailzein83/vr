@@ -141,6 +141,7 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
             DataSourceId: (dataSourceId != null) ? dataSourceId : 0,
             Name: $scope.dataSourceName,
             AdapterTypeId: $scope.selectedAdapterType.AdapterTypeId,
+            TaskId: (taskId != null) ? taskId : 0,
             Settings: { AdapterArgument: $scope.dataSourceAdapter.getData(), MapperCustomCode: $scope.customCode, ExecutionFlowId: $scope.selectedExecutionFlow.ExecutionFlowId }
         };
 
