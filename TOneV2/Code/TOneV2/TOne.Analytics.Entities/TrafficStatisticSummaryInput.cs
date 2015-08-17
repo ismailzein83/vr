@@ -8,7 +8,7 @@ namespace TOne.Analytics.Entities
 {
     public class TrafficStatisticSummaryInput
     {
-        public TrafficStatisticFilter Filter { get; set; }
+        public GenericFilter Filter { get; set; }
 
         public bool WithSummary { get; set; }
 

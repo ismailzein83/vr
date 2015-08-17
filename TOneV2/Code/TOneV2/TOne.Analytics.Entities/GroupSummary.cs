@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.Analytics.Entities
 {
-    public class TrafficStatisticGroupSummary<T>
+    public class GroupSummary<T>
     {
         public KeyColumn[] GroupKeyValues { get; set; }
 

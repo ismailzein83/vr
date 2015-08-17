@@ -56,7 +56,7 @@ namespace TOne.Analytics.Web.Controllers
     public class GetTrafficStatisticSummaryInput
     {
         public string TempTableKey { get; set; }
-        public TrafficStatisticFilter Filter { get; set; }
+        public GenericFilter Filter { get; set; }
 
         public bool WithSummary { get; set; }
 

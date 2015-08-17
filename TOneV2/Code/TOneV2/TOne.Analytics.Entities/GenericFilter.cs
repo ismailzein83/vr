@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.Analytics.Entities
 {
-    public class TrafficStatisticFilter
+    public class GenericFilter
     {
         public List<int> SwitchIds { get; set; }
         public List<string> PortIn { get; set; }

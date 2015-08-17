@@ -106,6 +106,8 @@
     <Compile Include="CDRSummaryInput.cs" />
     <Compile Include="DestinationVolumeTrafficResult.cs" />
     <Compile Include="DestnationVolumeTrafficItem.cs" />
+    <Compile Include="HourlyReport.cs" />
+    <Compile Include="HourlyReportInput.cs" />
     <Compile Include="InOutVolumeTraffic.cs" />
     <Compile Include="KeyColumn.cs" />
     <Compile Include="Mobile\AlertView.cs" />
@@ -120,10 +122,10 @@
     <Compile Include="RepeatedNumbersInput.cs" />
     <Compile Include="TimeValuesRecord.cs" />
     <Compile Include="TrafficStatistic.cs" />
-    <Compile Include="TrafficStatisticFilter.cs" />
-    <Compile Include="TrafficStatisticGroupSummary.cs" />
+    <Compile Include="GenericFilter.cs" />
+    <Compile Include="GroupSummary.cs" />
     <Compile Include="Mobile\TrafficSummaryView.cs" />
-    <Compile Include="TrafficStatisticSummaryBigResult.cs" />
+    <Compile Include="GenericSummaryBigResult.cs" />
     <Compile Include="TrafficStatisticSummaryInput.cs" />
     <Compile Include="VolumeTraffic.cs" />
     <Compile Include="DestinationVolumeTraffic.cs" />

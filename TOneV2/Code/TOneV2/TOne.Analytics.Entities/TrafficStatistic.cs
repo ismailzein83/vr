@@ -38,8 +38,5 @@ namespace TOne.Analytics.Entities
         public Decimal ASR { get; set; }
         public Decimal NER { get; set; }
 
-        //public long CeiledDuration { get; set; }
-
-        //public int ReleaseSourceAParty { get; set; }
     }
 }

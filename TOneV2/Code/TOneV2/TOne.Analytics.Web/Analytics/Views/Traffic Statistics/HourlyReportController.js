@@ -90,6 +90,7 @@ function HourlyReportController($scope, UtilsService, HourlyReportAPIService, ui
         }
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return HourlyReportAPIService.GetHourlyReportData(dataRetrievalInput).then(function (response) {
+                console.log(response);
                 if (dataRetrievalInput.DataRetrievalResultType == DataRetrievalResultTypeEnum.Normal.value) {
                     currentData = [];
                     angular.forEach(response.Data, function (itm) {
@@ -99,7 +100,7 @@ function HourlyReportController($scope, UtilsService, HourlyReportAPIService, ui
                         $scope.trafficStatisticSummary = response.Summary;
                     }
                     mainGridAPI.setSummary(response.Summary);
-                    renderOverallChart();
+                  //  renderOverallChart();
                 }
                 onResponseReady(response);
                 $scope.showResult = true;

@@ -21,7 +21,7 @@ namespace TOne.Analytics.Entities
 
         public DateTime To { get; set; }
 
-        public TrafficStatisticFilter Filter { get; set; }
+        public GenericFilter Filter { get; set; }
 
         public TrafficStatisticGroupKeys[] GroupKeys { get; set; }
     }
