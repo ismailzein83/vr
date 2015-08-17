@@ -46,7 +46,7 @@ USING (VALUES
 	(	N'Users',	N'Users',	N'#/view/Security/Views/UserManagement',	N'1',	N'Root/Administration Module/Users:View'	,NULL,	NULL,	N'0'	,NULL),
 	(	N'Groups',	N'Groups',	N'#/view/Security/Views/GroupManagement',	N'1',	N'Root/Administration Module/Groups:View',	NULL,	NULL,	N'0',	NULL),
 	(	N'System Entites',	N'System Entites',	N'#/view/Security/Views/BusinessEntityManagement',	N'1',	N'Root/Administration Module/System Entities:View',	NULL,	NULL,	N'0',	NULL),
-	(	N'Suspicion Analysis',	N'Suspicion Analysis',	N'#/view/FraudAnalysis/Views/SuspiciousAnalysis/SuspicionAnalysist',	N'2'	,N'Root/Suspicion Analysis Module:View',	NULL	,NULL,	N'0',	2),
+	(	N'Suspicious Cases',	N'Suspicious Cases',	N'#/view/FraudAnalysis/Views/SuspiciousAnalysis/SuspicionAnalysist',	N'2'	,N'Root/Suspicion Analysis Module:View',	NULL	,NULL,	N'0',	2),
 	(	N'History',	N'Business Process History',	N'#view/BusinessProcess/Views/BPHistory',	N'3',	N'Root/Business Process Module/History:View',	NULL,	NULL,	N'0',	NULL),
 	(	N'Scheduler Service',	N'Scheduler Service'	,N'#/view/Runtime/Views/SchedulerTaskManagement',	N'3',	N'Root/Business Process Module/Management:View',	NULL,	NULL,	N'0'	,NULL),
 	(	N'Management',	N'Business Process Management',	N'#view/BusinessProcess/Views/BPDefinitionManagement',	N'3',	N'Root/Business Process Module/Management:View',	NULL,	NULL,	N'0',	NULL),
