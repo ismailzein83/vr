@@ -27,7 +27,7 @@ CREATE PROCEDURE [FraudAnalysis].[sp_FraudResult_CreateTempForFilteredSuspicious
 		
 		IF(@SuspiciousLevelsList = '')
 			begin
-				EXEC('INSERT INTO #SuspectionLevel SELECT Id,Name FROM [FraudAnalysis].Suspicion_Level')
+				EXEC('INSERT INTO #SuspectionLevel SELECT Id,Name FROM [FraudAnalysis].SuspicionLevel')
 			end
 		else
 			begin
