@@ -172,8 +172,14 @@
     <Reference Include="Vanrise.Data.SQL">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Integration.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
