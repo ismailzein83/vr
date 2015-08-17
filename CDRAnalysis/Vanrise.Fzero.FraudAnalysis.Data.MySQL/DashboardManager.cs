@@ -28,9 +28,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             throw new NotImplementedException();
         }
 
-        public Vanrise.Entities.BigResult<CellCases> GetCellCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }

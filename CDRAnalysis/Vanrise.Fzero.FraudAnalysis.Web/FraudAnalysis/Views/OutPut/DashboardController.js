@@ -4,7 +4,6 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
 
     var mainGridAPI_CasesSummary;
     var mainGridAPI_BTSCases;
-    var mainGridAPI_CellCases;
     var chartSelectedMeasureAPI;
 
     defineScope();
@@ -26,7 +25,6 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
         $scope.casesSummary = [];
         $scope.strategyCases = [];
         $scope.bTSCases = [];
-        $scope.cellCases = [];
 
 
 
@@ -41,13 +39,6 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
             return retrieveData_getData_BTSCases();
         };
 
-
-
-        $scope.onMainGridReady_CellCases = function (api) {
-            mainGridAPI_CellCases = api;
-            return retrieveData_CellCases();
-        };
-
         $scope.chartSelectedMeasureReady = function (api) {
             chartSelectedMeasureAPI = api;
             getData_StrategyCases();
@@ -55,7 +46,7 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
 
 
         $scope.searchClicked = function () {
-            var results = (retrieveData_CasesSummary() && getData_StrategyCases() && retrieveData_CellCases());
+            var results = (retrieveData_CasesSummary() && getData_StrategyCases());
             return results;
         };
 
@@ -74,13 +65,6 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
             });
         }
 
-
-        $scope.dataRetrievalFunction_CellCases = function (dataRetrievalInput, onResponseReady) {
-            return DashboardAPIService.GetCellCases(dataRetrievalInput)
-            .then(function (response) {
-                onResponseReady(response);
-            });
-        }
 
 
 
@@ -109,12 +93,6 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
     function retrieveData_BTSCases() {
         return mainGridAPI_BTSCases.retrieveData(BuildSearchQuery());
     }
-
-    function retrieveData_CellCases() {
-        return mainGridAPI_CellCases.retrieveData(BuildSearchQuery());
-    }
-
-
 
 
     function getData_StrategyCases() {

@@ -31,7 +31,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 ExecuteNonQuerySP("FraudAnalysis.sp_Dashboard_CreateTempForCasesSummary", tempTableName, input.Query.FromDate, input.Query.ToDate);
             };
             return RetrieveData(input, createTempTableAction, CasesSummaryMapper);
-            //return GetItemsSP("FraudAnalysis.sp_Dashboard_GetCasesSummary", CasesSummaryMapper, fromDate, toDate);
         }
 
                
@@ -44,20 +43,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 ExecuteNonQuerySP("FraudAnalysis.sp_Dashboard_CreateTempForTopTenBTS", tempTableName, input.Query.FromDate, input.Query.ToDate);
             };
             return RetrieveData(input, createTempTableAction, BTSCasesMapper);
-            //return GetItemsSP("FraudAnalysis.sp_Dashboard_GetTopTenBTS", BTSCasesMapper, fromDate, toDate);
         }
-
-
-        public BigResult<CellCases> GetCellCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
-        {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                ExecuteNonQuerySP("FraudAnalysis.sp_Dashboard_CreateTempForTopTenCell", tempTableName, input.Query.FromDate, input.Query.ToDate);
-            };
-            return RetrieveData(input, createTempTableAction, CellCasesMapper);
-            //return GetItemsSP("FraudAnalysis.sp_Dashboard_GetTopTenCell", CellCasesMapper, fromDate, toDate);
-        }
-
 
 
 
@@ -88,16 +74,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             bTSCases.BTS_Id =  GetReaderValue<int?>(reader,"BTS_Id");
             return bTSCases;
         }
-
-        private CellCases CellCasesMapper(IDataReader reader)
-        {
-            var cellCases = new CellCases();
-            cellCases.CountCases = (int)reader["CountCases"];
-            cellCases.Cell_Id = reader["Cell_Id"] as string;
-            return cellCases;
-        }
-
-          
 
 
         #endregion

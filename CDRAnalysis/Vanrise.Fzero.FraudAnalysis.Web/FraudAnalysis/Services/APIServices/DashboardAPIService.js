@@ -3,8 +3,7 @@
     return ({
         GetCasesSummary: GetCasesSummary,
         GetStrategyCases: GetStrategyCases,
-        GetBTSCases: GetBTSCases,
-        GetCellCases: GetCellCases
+        GetBTSCases: GetBTSCases
     });
 
 
@@ -28,17 +27,6 @@
             input
            );
     }
-
-    function GetCellCases(input) {
-        return BaseAPIService.post("/api/Dashboard/GetCellCases",
-            input
-           );
-    }
-
-
-
-
-   
 
 
 

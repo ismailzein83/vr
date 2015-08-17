@@ -30,12 +30,5 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         }
 
 
-        public Vanrise.Entities.IDataRetrievalResult<CellCases> GetCellCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
-        {
-            IDashboardManager manager = FraudDataManagerFactory.GetDataManager<IDashboardManager>();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, manager.GetCellCases(input));
-        }
-
-
     }
 }
