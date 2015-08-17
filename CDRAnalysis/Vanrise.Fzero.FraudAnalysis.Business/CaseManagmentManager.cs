@@ -12,6 +12,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         public Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<AccountCase> SaveAccountCase(AccountCase accountCaseObject)
         {
             ICaseManagementDataManager manager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
+            accountCaseObject.UserId= Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
             manager.SaveAccountCase(accountCaseObject);
             Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<AccountCase> updateOperationOutput = new Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<AccountCase>();
 

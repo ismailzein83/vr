@@ -19,7 +19,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public bool SaveAccountCase(AccountCase accountCaseObject)
         {
-            int recordesEffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_Save",  accountCaseObject.AccountNumber, accountCaseObject.StatusID, accountCaseObject.ValidTill   );
+            int recordesEffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_Insert",  accountCaseObject.AccountNumber, accountCaseObject.StatusID, accountCaseObject.ValidTill , accountCaseObject.UserId  );
             if (recordesEffected > 0)
                 return true;
             return false;
