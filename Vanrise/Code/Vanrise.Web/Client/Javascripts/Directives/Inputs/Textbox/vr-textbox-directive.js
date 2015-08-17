@@ -60,7 +60,16 @@
                         ctrl.notifyUserChange = function () {
                             isUserChange = true;
                         };
-
+                        if (attrs.hint != undefined)
+                            ctrl.hint = attrs.hint;
+                        ctrl.getInputeStyle = function () {
+                            return (attrs.hint != undefined) ? {
+                                    "display": "inline-block",
+                                    "width": "calc(100% - 15px)",
+                                    "margin-right": "1px"
+                                } :{} ;
+                        }
+                       
                         BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
 
                     }
@@ -79,9 +88,11 @@
                 var type = 'text';
                 if (attrs.type != undefined && attrs.type === TextboxTypeEnum.Password.name)
                     type = 'password';
-                var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
-                                    + '<input id="mainInput" ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" size="10" class="form-control" data-autoclose="1" type="' + type + '" >'
-                                + '</div>';
+                    var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
+                            + '<input id="mainInput" ng-style="ctrl.getInputeStyle()" ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" size="10" class="form-control" data-autoclose="1" type="' + type + '" >'
+                            + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7" html="true" placement="bottom"  trigger="hover"  data-type="info" data-title="{{ctrl.hint}}"></span>'
+                        + '</div>';
+                
 
                 var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined);
 

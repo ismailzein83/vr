@@ -1759,3 +1759,32 @@ opacity:0.9 ;
 .circle-bg-3{
    background-color:#25B679 !important;
 }
+.vr-hint{
+    position: absolute;
+    top: 100%;
+    right: 0px;
+    z-index: 100;
+    border: 1px solid rgb(204, 204, 204);
+    background-color: rgb(204, 230, 255);
+    color: rgb(102, 102, 102);
+    bottom: -163px;
+    margin-top: 2px;
+    border-radius: 5px;
+    padding: 5px;
+}
+.tooltip.bottom .tooltip-arrow{
+    border-bottom-color:#575757;
+}
+.tooltip.in {
+    opacity: 1;
+}
+.tooltip-info .tooltip-inner{
+    background-color:#F1F2F7 ;
+    color:#575757;
+    border: 1px solid #575757 ;
+    min-width:200px;
+    font-size:11px;
+}
+.tooltip.bottom {
+    margin-top: 7px;
+}

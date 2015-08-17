@@ -128,6 +128,18 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                 }
 
             }
+
+            if ($attrs.hint != undefined)
+                ctrl.hint = $attrs.hint;
+            ctrl.getInputeStyle = function () {
+                return ($attrs.hint != undefined) ? {
+                    "display": "inline-block",
+                    "width": "calc(100% - 15px)",
+                    "margin-right": "1px"
+                } : {
+                    "width": "100%",
+                };
+            }
             $scope.$watch('ctrl.value', function () {
                 if (ctrl.value == undefined)
                     return;
@@ -152,7 +164,7 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
             });
 
             $scope.ctrl.onBlurDirective = function (e) {
-                if ($attrs.onblurdatetime  != undefined) {
+                if ($attrs.onblurdatetime != undefined) {
                     var onblurdatetimeMethod = $scope.$parent.$eval($attrs.onblurdatetime);
                     if (onblurdatetimeMethod != undefined && onblurdatetimeMethod != null && typeof (onblurdatetimeMethod) == 'function') {
                         onblurdatetimeMethod();
@@ -185,7 +197,7 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
             BaseDirService.addScopeValidationMethods(ctrl, elementName, this);
 
         },
-        compile: function (element, attrs) {            
+        compile: function (element, attrs) {
             var inputElement = element.find('#mainInput');
             var validationOptions = {};
             if (attrs.isrequired !== undefined)
@@ -196,7 +208,7 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
             var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, element.find('#rootDiv'));
             return {
                 pre: function ($scope, iElem, iAttrs, formCtrl) {
-                    var ctrl = $scope.ctrl;                   
+                    var ctrl = $scope.ctrl;
                     BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
                 }
             }
@@ -221,12 +233,14 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
 
             var dateTemplate =
                  '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false"  >'
-                  + '<div id="mainInput" ng-model="ctrl.value" class="form-control " style="border-radius: 4px;height: auto;padding: 0px;">'
-                 + '<div  class="input-group date datetime-controle" style="width:100%" id="divDatePicker"  >'
-                                + '<input class="form-control vr-date-input" style="height:30px;" ng-keyup="ctrl.updateModelOnKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
+                  + '<div id="mainInput" ng-model="ctrl.value" class="form-control " ng-style="ctrl.getInputeStyle()" style="border-radius: 4px;height: auto;padding: 0px;">'
+                        + '<div  class="input-group date datetime-controle"  id="divDatePicker"  >'
+                                + '<input class="form-control vr-date-input" ng-style="ctrl.getInputeStyle()" style="height:30px;"  ng-keyup="ctrl.updateModelOnKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
                                 + icontemplate
                             + '</div>'
                       + '</div>'
+                      + '<span  ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7;top:-10px" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>'
+
                     + '</div>';
 
             var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined);

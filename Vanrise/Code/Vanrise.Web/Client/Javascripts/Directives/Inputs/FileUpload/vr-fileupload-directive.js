@@ -115,6 +115,17 @@ app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', 'VRNo
                 var id =  ctrl.value.fileId ;
                 window.open("/api/VRFile/DownloadFile?fileId="+id,'_self');
             }
+            if ($attrs.hint != undefined)
+                ctrl.hint = $attrs.hint;
+            ctrl.getInputeStyle = function () {
+                return ($attrs.hint != undefined) ? {
+                    "display": "inline-block",
+                    "width": "calc(100% - 15px)",
+                    "margin-right": "1px"
+                } : {
+                    "width": "100%",
+                };
+            }
             
         },
         controllerAs: 'ctrl',
@@ -134,7 +145,7 @@ app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', 'VRNo
 
                     var ctrl = $scope.ctrl;
 
-
+                    
                     BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
 
                 }
@@ -150,7 +161,7 @@ app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', 'VRNo
                 labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
             var fileTemplate =
                  '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false" ng-class="isUploading == true? \'vr-disabled-div\':\'\'" >'
-                     + '<div id="mainInput" ng-model="ctrl.value" class="form-control vr-file-ulpoad" style="border-radius: 4px;padding: 0px;">'                            
+                     + '<div id="mainInput" ng-model="ctrl.value" class="form-control vr-file-ulpoad"  ng-style="ctrl.getInputeStyle()" style="border-radius: 4px;padding: 0px;">'
                             + '<div  class="vr-file">'
                                +'<div ng-if=" ctrl.file !=null ">'
                                + ' <a href="" class="vr-file-name" ng-click="ctrl.downloadFile() ">{{ctrl.file.name}}</a>'
@@ -165,6 +176,8 @@ app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', 'VRNo
                                 + '<input type="file" id="fileUpload">'
                             + '</span>'
                       + '</div>'
+                      + '<span  ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7;" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>'
+
                     + '</div>';
 
 
