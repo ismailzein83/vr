@@ -74,6 +74,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
 
         $scope.ApplyChangeStatus = function () {
             var accountCaseObject = BuildAccountCaseObjfromScope();
+            console.log(accountCaseObject)
             CaseManagementAPIService.SaveAccountCase(accountCaseObject)
            .then(function (response) {
                if (VRNotificationService.notifyOnItemUpdated("AccountCase", response)) {
@@ -222,10 +223,16 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
     }
 
     function BuildAccountCaseObjfromScope() {
+        var validTill = null;
+        if ($scope.selectedStatus.id == 3 || $scope.selectedStatus.id == 4) //Fruad or Whitelist
+        {
+            validTill = $scope.validTill;
+        }
+
         var accountCaseObject = {
             AccountNumber: $scope.accountNumber,
             StatusId: $scope.selectedStatus.id,
-            ValidTill: $scope.validTill
+            ValidTill: validTill
         };
         return accountCaseObject;
     }

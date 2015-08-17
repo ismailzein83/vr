@@ -89,7 +89,7 @@
                                 <vr-select datasource="statuses" datatextfield="name" datavaluefield="id" selectedvalues="selectedStatus" onselectionchanged="selectedStatusChanged" label="Status" isrequired></vr-select>
                             </vr-columns>
                             <vr-columns colnum="2">
-                                <vr-datetimepicker type="date" value="validTill" label="Valid Till" ng-if="selectedStatus.id==4" isrequired></vr-datetimepicker>
+                                <vr-datetimepicker type="date" value="validTill" label="Valid Till" ng-show="selectedStatus.id==4 || selectedStatus.id==5" isrequired></vr-datetimepicker> <!--statuses: fraud =3,white list=4-->
                             </vr-columns>
                         </div>
                     </vr-section>
