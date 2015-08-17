@@ -78,7 +78,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"]);
                 handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started Loading CDRs from Database to Memory");
                 var aggregateDefinitions = new AggregateManager(inputArgument.Strategies).GetAggregateDefinitions(predefinedDataManager.GetCallClasses());
-                string currentSubscriberNumber = null;
+                string currentAccountNumber = null;
 
                 //foreach (var strategy in inputArgument.Strategies)
                 //{
@@ -99,13 +99,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                 var cdrs = Vanrise.Common.ProtoBufSerializer.Deserialize<List<CDR>>(serializedCDRs);
                                 foreach (var cdr in cdrs)
                                 {
-                                    if (currentSubscriberNumber != cdr.MSISDN)
+                                    if (currentAccountNumber != cdr.MSISDN)
                                     {
-                                        if (currentSubscriberNumber != null)
+                                        if (currentAccountNumber != null)
                                         {
-                                            FinishNumberProfileProcessing(currentSubscriberNumber, ref numberProfileBatch, ref numberProfilesCount, inputArgument, handle, batchSize, aggregateDefinitions);
+                                            FinishNumberProfileProcessing(currentAccountNumber, ref numberProfileBatch, ref numberProfilesCount, inputArgument, handle, batchSize, aggregateDefinitions);
                                         }
-                                        currentSubscriberNumber = cdr.MSISDN;
+                                        currentAccountNumber = cdr.MSISDN;
                                         foreach (var aggregateDef in aggregateDefinitions)
                                         {
                                             aggregateDef.Aggregation.Reset();
@@ -127,8 +127,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     }
                     while (!ShouldStop(handle) && hasItem);
                 });
-                if (currentSubscriberNumber != null)
-                    FinishNumberProfileProcessing(currentSubscriberNumber, ref numberProfileBatch, ref numberProfilesCount, inputArgument, handle, 0, aggregateDefinitions);
+                if (currentAccountNumber != null)
+                    FinishNumberProfileProcessing(currentAccountNumber, ref numberProfileBatch, ref numberProfilesCount, inputArgument, handle, 0, aggregateDefinitions);
 
                 handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs from Database to Memory");
                 //}
@@ -141,13 +141,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
            
         }
 
-        private void FinishNumberProfileProcessing(string subscriberNumber, ref List<NumberProfile> numberProfileBatch, ref int numberProfilesCount, LoadNumberProfilesInput inputArgument, AsyncActivityHandle handle, int batchSize, List<AggregateDefinition> AggregateDefinitions)
+        private void FinishNumberProfileProcessing(string accountNumber, ref List<NumberProfile> numberProfileBatch, ref int numberProfilesCount, LoadNumberProfilesInput inputArgument, AsyncActivityHandle handle, int batchSize, List<AggregateDefinition> AggregateDefinitions)
         {
             foreach (var strategy in inputArgument.Strategies)
             {
                 NumberProfile numberProfile = new NumberProfile()
                 {
-                    SubscriberNumber = subscriberNumber,
+                    AccountNumber = accountNumber,
                     FromDate = inputArgument.FromDate,
                     ToDate = inputArgument.ToDate,
                     StrategyId = strategy.Id
@@ -160,7 +160,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             }
 
 
-            //Console.WriteLine(numberProfileBatch.Count);
             if (numberProfileBatch.Count >= batchSize)
             {
                 numberProfilesCount += numberProfileBatch.Count;

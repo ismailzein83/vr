@@ -1,12 +1,12 @@
 ﻿app.service('CaseManagementAPIService', function (BaseAPIService) {
 
     return ({
-        SaveSubscriberCase: SaveSubscriberCase
+        SaveAccountCase: SaveAccountCase
     });
 
-    function SaveSubscriberCase(subscriberCase) {
-        return BaseAPIService.post("/api/CaseManagement/SaveSubscriberCase",
-            subscriberCase
+    function SaveAccountCase(accountCase) {
+        return BaseAPIService.post("/api/CaseManagement/SaveAccountCase",
+            accountCase
            );
     }
 

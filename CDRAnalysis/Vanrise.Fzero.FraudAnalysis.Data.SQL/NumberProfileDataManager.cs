@@ -44,7 +44,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord("0^{0}^{1}^{2}^{3}^{4}",
-                                    record.SubscriberNumber,
+                                    record.AccountNumber,
                                     record.FromDate,
                                     record.ToDate,
                                     record.StrategyId,
@@ -55,7 +55,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_FraudResult_CreateTempForFilteredNumberProfiles", tempTableName, input.Query.FromDate, input.Query.ToDate, input.Query.SubscriberNumber);
+                ExecuteNonQuerySP("FraudAnalysis.sp_FraudResult_CreateTempForFilteredNumberProfiles", tempTableName, input.Query.FromDate, input.Query.ToDate, input.Query.AccountNumber);
             };
             return RetrieveData(input, createTempTableAction, NumberProfileMapper);
         }
@@ -69,7 +69,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             numberProfile.FromDate = (DateTime)reader["FromDate"];
             numberProfile.ToDate = (DateTime)reader["ToDate"];
             numberProfile.StrategyId = (int)reader["StrategyId"];
-            numberProfile.SubscriberNumber = reader["SubscriberNumber"] as string;
+            numberProfile.AccountNumber = reader["AccountNumber"] as string;
             numberProfile.AggregateValues = Vanrise.Common.Serializer.Deserialize<Dictionary<string, decimal>>(GetReaderValue<string>(reader, "AggregateValues"));
 
             return numberProfile;

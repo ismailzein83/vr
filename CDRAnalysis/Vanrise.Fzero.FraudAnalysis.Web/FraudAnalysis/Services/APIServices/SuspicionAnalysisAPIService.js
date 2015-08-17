@@ -2,13 +2,13 @@
 
     return ({
         GetFilteredSuspiciousNumbers: GetFilteredSuspiciousNumbers,
-        GetSubscriberThresholds: GetSubscriberThresholds,
+        GetAccountThresholds: GetAccountThresholds,
         GetFraudResult: GetFraudResult
     });
 
 
-    function GetSubscriberThresholds(input) {
-        return BaseAPIService.post("/api/SuspicionAnalysis/GetSubscriberThresholds", input);
+    function GetAccountThresholds(input) {
+        return BaseAPIService.post("/api/SuspicionAnalysis/GetAccountThresholds", input);
     }
 
 
@@ -19,14 +19,14 @@
     }
 
 
-    function GetFraudResult(fromDate, toDate, strategiesList, suspicionLevelsList, subscriberNumber) {
+    function GetFraudResult(fromDate, toDate, strategiesList, suspicionLevelsList, accountNumber) {
         return BaseAPIService.get("/api/SuspicionAnalysis/GetFraudResult",
             {
                 fromDate: fromDate,
                 toDate: toDate,
                 strategiesList: strategiesList,
                 suspicionLevelsList: suspicionLevelsList,
-                subscriberNumber: subscriberNumber
+                accountNumber: accountNumber
             }
            );
     }

@@ -8,14 +8,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 {
     public interface ISuspiciousNumberDataManager : IDataManager, IBulkApplyDataManager<SuspiciousNumber>
     {
-        void UpdateSusbcriberCases(List<string> suspiciousNumbers);
-
         BigResult<FraudResult> GetFilteredSuspiciousNumbers(Vanrise.Entities.DataRetrievalInput<FraudResultQuery> input);
 
-        FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList, string subscriberNumber);
+        FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList, string accountNumber);
 
         void ApplySuspiciousNumbersToDB(object preparedSuspiciousNumbers);
 
-        BigResult<SubscriberThreshold> GetSubscriberThresholds(Vanrise.Entities.DataRetrievalInput<SubscriberThresholdResultQuery> input);
+        BigResult<AccountThreshold> GetAccountThresholds(Vanrise.Entities.DataRetrievalInput<AccountThresholdResultQuery> input);
     }
 }

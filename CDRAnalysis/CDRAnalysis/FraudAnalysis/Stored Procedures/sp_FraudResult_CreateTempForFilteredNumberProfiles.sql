@@ -5,7 +5,7 @@ CREATE PROCEDURE [FraudAnalysis].[sp_FraudResult_CreateTempForFilteredNumberProf
 	@TempTableName varchar(200),	
 	@FromDate DATETIME,
 	@ToDate DATETIME,
-	@SubscriberNumber varCHAR(100)
+	@AccountNumber varCHAR(100)
 )
 	AS
 	BEGIN
@@ -13,10 +13,10 @@ CREATE PROCEDURE [FraudAnalysis].[sp_FraudResult_CreateTempForFilteredNumberProf
 		
 		IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 	    BEGIN
-			SELECT     FromDate, ToDate,StrategyId, SubscriberNumber, AggregateValues
+			SELECT     FromDate, ToDate,StrategyId, AccountNumber, AggregateValues
             into #Result
 			FROM         FraudAnalysis.NumberProfile
-			where SubscriberNumber=@SubscriberNumber and  FromDate >=   @FromDate and ToDate<=@ToDate
+			where AccountNumber=@AccountNumber and  FromDate >=   @FromDate and ToDate<=@ToDate
 			
 			
 			declare @sql varchar(1000)

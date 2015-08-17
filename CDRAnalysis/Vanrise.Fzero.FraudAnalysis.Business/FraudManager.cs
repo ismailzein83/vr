@@ -102,7 +102,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 if (isLevelMatch)
                 {
                     suspiciousNumber = new SuspiciousNumber();
-                    suspiciousNumber.Number = profile.SubscriberNumber;
+                    suspiciousNumber.Number = profile.AccountNumber;
                     suspiciousNumber.SuspectionLevel = strategyLevelWithCriterias.SuspicionLevelId;
                     suspiciousNumber.CriteriaValues = criteriaValuesThresholds;
                     suspiciousNumber.DateDay = profile.FromDate;
@@ -122,11 +122,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         }
 
 
-        public FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList, string subscriberNumber)
+        public FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList, string accountNumber)
         {
             ISuspiciousNumberDataManager manager = FraudDataManagerFactory.GetDataManager<ISuspiciousNumberDataManager>();
 
-            return manager.GetFraudResult(fromDate, toDate, strategiesList, suspicionLevelsList, subscriberNumber);
+            return manager.GetFraudResult(fromDate, toDate, strategiesList, suspicionLevelsList, accountNumber);
         }
 
 

@@ -1,7 +1,7 @@
 ﻿SuspiciousNumberDetailsController.$inject = ['$scope', 'StrategyAPIService', 'NormalCDRAPIService', 'SuspicionAnalysisAPIService', 'NumberProfileAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CaseManagementAPIService', 'CaseStatusEnum'];
 
 function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDRAPIService, SuspicionAnalysisAPIService, NumberProfileAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CaseManagementAPIService, CaseStatusEnum) {
-    var subscriberThresholdsGridAPI;
+    var accountThresholdsGridAPI;
     var normalCDRGridAPI;
     var numberProfileGridAPI;
     var lastOccurance;
@@ -9,7 +9,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
     var numberofOccurances;
     var strategiesList;
     var suspicionLevelsList;
-    var isSubscriberThresholdsDataLoaded = false;
+    var isAccountThresholdsDataLoaded = false;
     var isNormalCDRDataLoaded = false;
     var isNumberProfileDataLoaded = false;
     var pageLoaded = false;
@@ -28,10 +28,10 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
 
         var parameters = VRNavigationService.getParameters($scope);
 
-        $scope.subscriberNumber = undefined;
+        $scope.accountNumber = undefined;
 
         if (parameters != undefined && parameters != null) {
-            $scope.subscriberNumber = parameters.subscriberNumber;
+            $scope.accountNumber = parameters.accountNumber;
             $scope.fromDate = parameters.fromDate;
             $scope.toDate = parameters.toDate;
 
@@ -47,12 +47,12 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
 
         $scope.filterDefinitions = [];
         $scope.aggregateDefinitions = [];
-        $scope.subscriberThresholds = [];
+        $scope.accountThresholds = [];
         $scope.normalCDRs = [];
         $scope.numberProfiles = [];
         $scope.relatedNumbers = [];
 
-        SuspiciousNumberDetailsController.isSubscriberThresholdsTabShown = true;
+        SuspiciousNumberDetailsController.isAccountThresholdsTabShown = true;
         SuspiciousNumberDetailsController.isNumberProfileTabShown = false;
         SuspiciousNumberDetailsController.isNormalCDRTabShown = false;
 
@@ -75,14 +75,14 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         $scope.onNumberProfilesGridReady = function (api) {
             numberProfileGridAPI = api;
             if (SuspiciousNumberDetailsController.isNumberProfileTabShown)
-                return retrieveData_SubscriberThresholds();
+                return retrieveData_AccountThresholds();
         };
 
 
-        $scope.onSubscriberThresholdsGridReady = function (api) {
-            subscriberThresholdsGridAPI = api;
-            if (SuspiciousNumberDetailsController.isSubscriberThresholdsTabShown)
-                return retrieveData_SubscriberThresholds();
+        $scope.onAccountThresholdsGridReady = function (api) {
+            accountThresholdsGridAPI = api;
+            if (SuspiciousNumberDetailsController.isAccountThresholdsTabShown)
+                return retrieveData_AccountThresholds();
         };
 
         $scope.close = function () {
@@ -90,11 +90,11 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         };
 
         $scope.ApplyChangeStatus = function () {
-            var subscriberCaseObject = BuildSubscriberCaseObjfromScope();
-            CaseManagementAPIService.SaveSubscriberCase(subscriberCaseObject)
+            var accountCaseObject = BuildAccountCaseObjfromScope();
+            CaseManagementAPIService.SaveAccountCase(accountCaseObject)
            .then(function (response) {
-               if (VRNotificationService.notifyOnItemUpdated("SubscriberCase", response)) {
-                   if ($scope.onSubscriberCaseUpdated != undefined) {
+               if (VRNotificationService.notifyOnItemUpdated("AccountCase", response)) {
+                   if ($scope.onAccountCaseUpdated != undefined) {
                        response.UpdatedObject.SuspicionLevelName = $scope.suspicionLevelName;
                        response.UpdatedObject.LastOccurance = lastOccurance;
                        response.UpdatedObject.StrategyName = strategyName;
@@ -102,7 +102,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
                        response.UpdatedObject.CaseStatus = $scope.selectedStatus.name;
                        response.UpdatedObject.StatusId = $scope.selectedStatus.id;
                        response.UpdatedObject.ValidTill = $scope.validTill;
-                       $scope.onSubscriberCaseUpdated(response.UpdatedObject);
+                       $scope.onAccountCaseUpdated(response.UpdatedObject);
                    }
 
                    $scope.modalContext.closeModal();
@@ -119,9 +119,9 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
             if ($scope.selectedGroupKeyIndex != undefined) {
 
 
-                if ($scope.selectedGroupKeyIndex == 0 && !isSubscriberThresholdsDataLoaded) {
-                    isSubscriberThresholdsDataLoaded = true;
-                    return retrieveData_SubscriberThresholds();
+                if ($scope.selectedGroupKeyIndex == 0 && !isAccountThresholdsDataLoaded) {
+                    isAccountThresholdsDataLoaded = true;
+                    return retrieveData_AccountThresholds();
                     
                 }
                 else if ($scope.selectedGroupKeyIndex == 1 && !isNormalCDRDataLoaded) {
@@ -138,8 +138,8 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
 
         $scope.selectedRelatedNumbersChanged = function () {
             if (pageLoaded) {
-                $scope.subscriberNumber = $scope.selectedRelatedNumber
-                isSubscriberThresholdsDataLoaded = false;
+                $scope.accountNumber = $scope.selectedRelatedNumber
+                isAccountThresholdsDataLoaded = false;
                 isNormalCDRDataLoaded = false;
                 isNumberProfileDataLoaded = false;
                 $scope.groupKeySelectionChanged();
@@ -165,8 +165,8 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         }
 
 
-        $scope.dataRetrievalFunction_SubscriberThresholds = function (dataRetrievalInput, onResponseReady) {
-            return SuspicionAnalysisAPIService.GetSubscriberThresholds(dataRetrievalInput)
+        $scope.dataRetrievalFunction_AccountThresholds = function (dataRetrievalInput, onResponseReady) {
+            return SuspicionAnalysisAPIService.GetAccountThresholds(dataRetrievalInput)
             .then(function (response) {
                 onResponseReady(response);
             });
@@ -177,7 +177,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
 
     function load() {
 
-        var number = parseInt($scope.subscriberNumber);
+        var number = parseInt($scope.accountNumber);
 
         var relatedNumbers = [];
         for (var i = 5; i >= 1; i--) {
@@ -190,7 +190,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
 
 
         $scope.relatedNumbers = relatedNumbers;
-        $scope.selectedRelatedNumber = $scope.subscriberNumber;
+        $scope.selectedRelatedNumber = $scope.accountNumber;
 
 
         $scope.isGettingData = true;
@@ -198,7 +198,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         .then(function () {
 
 
-            return SuspicionAnalysisAPIService.GetFraudResult($scope.fromDate, $scope.toDate, strategiesList.slice(0, -1), suspicionLevelsList.slice(0, -1), $scope.subscriberNumber).then(function (response) {
+            return SuspicionAnalysisAPIService.GetFraudResult($scope.fromDate, $scope.toDate, strategiesList.slice(0, -1), suspicionLevelsList.slice(0, -1), $scope.accountNumber).then(function (response) {
 
                 $scope.suspicionLevelName = response.SuspicionLevelName;
 
@@ -251,26 +251,26 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         });
     }
 
-    function BuildSubscriberCaseObjfromScope() {
-        var subscriberCaseObject = {
-            SubscriberNumber: $scope.subscriberNumber,
+    function BuildAccountCaseObjfromScope() {
+        var accountCaseObject = {
+            AccountNumber: $scope.accountNumber,
             StatusId: $scope.selectedStatus.id,
             ValidTill: $scope.validTill
         };
-        return subscriberCaseObject;
+        return accountCaseObject;
     }
 
-    function retrieveData_SubscriberThresholds() {
-        $scope.subscriberThresholds.length = 0;
+    function retrieveData_AccountThresholds() {
+        $scope.accountThresholds.length = 0;
 
         var query = {
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate,
-            SubscriberNumber: $scope.subscriberNumber
+            AccountNumber: $scope.accountNumber
         };
 
 
-        return subscriberThresholdsGridAPI.retrieveData(query);
+        return accountThresholdsGridAPI.retrieveData(query);
     }
 
     function retrieveData_NormalCDRs() {
@@ -278,7 +278,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         var query = {
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate,
-            MSISDN: $scope.subscriberNumber
+            MSISDN: $scope.accountNumber
         };
 
 
@@ -290,7 +290,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         var query = {
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate,
-            SubscriberNumber: $scope.subscriberNumber
+            AccountNumber: $scope.accountNumber
         };
 
         return numberProfileGridAPI.retrieveData(query);

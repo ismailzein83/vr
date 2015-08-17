@@ -2,8 +2,8 @@
 
 
 
-CREATE PROCEDURE [FraudAnalysis].[sp_SubscriberCase_Save] 
-    @SubscriberNumber varchar(50), 
+CREATE PROCEDURE [FraudAnalysis].[sp_AccountCase_Save] 
+    @AccountNumber varchar(50), 
 	@StatusID int,
 	@ValidTill DateTime	
 AS
@@ -11,20 +11,20 @@ BEGIN
 
 SET NOCOUNT ON
 	
-	UPDATE FraudAnalysis.[SubscriberCase]
+	UPDATE FraudAnalysis.[AccountCase]
     SET StatusID = @StatusID ,ValidTill = @ValidTill
-	 WHERE SubscriberNumber = @SubscriberNumber 
+	 WHERE AccountNumber = @AccountNumber 
 	 
 
 	 
 	 if (@@rowcount=0)
 	 Begin
-		INSERT INTO [FraudAnalysis].[SubscriberCase]
-           ([SubscriberNumber]
+		INSERT INTO [FraudAnalysis].[AccountCase]
+           ([AccountNumber]
            ,[StatusID]
            ,[ValidTill])
 		VALUES
-           (@SubscriberNumber
+           (@AccountNumber
            ,@StatusID
            ,@ValidTill)
 	 End

@@ -9,11 +9,11 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
     {
 
         [HttpPost]
-        public Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<SubscriberCase> SaveSubscriberCase(SubscriberCase subscriberCaseObject)
+        public Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<AccountCase> SaveAccountCase(AccountCase accountCaseObject)
         {
             CaseManagmentManager manager = new CaseManagmentManager();
 
-            return manager.SaveSubscriberCase(subscriberCaseObject);
+            return manager.SaveAccountCase(accountCaseObject);
         }
 
 

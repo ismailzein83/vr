@@ -12,7 +12,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public Dictionary<String, Decimal> AggregateValues { get; set; }
 
-        public String SubscriberNumber { get; set; }
+        public String AccountNumber { get; set; }
 
         public DateTime? FromDate { get; set; }
 

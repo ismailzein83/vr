@@ -79,14 +79,12 @@
     <Build Include="FraudAnalysis\Tables\CaseStatus.sql" />
     <Build Include="FraudAnalysis\Tables\SubscriberThreshold.sql" />
     <Build Include="FraudAnalysis\Tables\NormalCDR.sql" />
-    <Build Include="FraudAnalysis\Tables\SubscriberCase.sql" />
     <Build Include="FraudAnalysis\Tables\SubType.sql" />
     <Build Include="FraudAnalysis\Tables\Period.sql" />
     <Build Include="FraudAnalysis\Tables\CallType.sql" />
     <Build Include="FraudAnalysis\Tables\CallClass.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempForFilteredNormalCDRs.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempForFilteredNumberProfiles.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempForFilteredSubscriberThresholds.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_CreateTempForTopTenCell.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_CreateTempForTopTenBTS.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_CreateTempForCasesSummary.sql" />
@@ -116,14 +114,17 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_CreateTempForCasesSummary.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_CreateTempForFilteredStrategies.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_GetFraudCasesPerStrategy.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_SubscriberCase_Save.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetStrategies.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetStrategy.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Update.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Insert.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_Get.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_DeleteStrategyResults.sql" />
-    <Build Include="FraudAnalysis\User Defined Types\SubscriberCaseType.sql" />
     <Build Include="Security\FraudAnalysis.sql" />
+    <Build Include="FraudAnalysis\Tables\AccountCase.sql" />
+    <Build Include="FraudAnalysis\User Defined Types\AccountCaseType.sql" />
+    <Build Include="FraudAnalysis\Tables\AccountThreshold.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempForFilteredAccountThresholds.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_Save.sql" />
   </ItemGroup>
 </Project>

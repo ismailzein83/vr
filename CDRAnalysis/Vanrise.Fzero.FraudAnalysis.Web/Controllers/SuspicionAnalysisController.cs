@@ -14,10 +14,10 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
     {
 
         [HttpPost]
-        public object GetSubscriberThresholds(Vanrise.Entities.DataRetrievalInput<SubscriberThresholdResultQuery> input)
+        public object GetAccountThresholds(Vanrise.Entities.DataRetrievalInput<AccountThresholdResultQuery> input)
         {
             StrategyManager manager = new StrategyManager();
-            return GetWebResponse(input, manager.GetSubscriberThresholds(input));
+            return GetWebResponse(input, manager.GetAccountThresholds(input));
         }
 
 
@@ -33,7 +33,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
 
         [HttpGet]
-        public FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, string strategiesList, string suspicionLevelsList, string subscriberNumber)
+        public FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, string strategiesList, string suspicionLevelsList, string accountNumber)
         {
             FraudManager manager = new FraudManager();
 
@@ -49,7 +49,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
 
 
-            return manager.GetFraudResult(fromDate, toDate, strategiesIntList, suspicionLevelsIntList, subscriberNumber);
+            return manager.GetFraudResult(fromDate, toDate, strategiesIntList, suspicionLevelsIntList, accountNumber);
         }
 
         

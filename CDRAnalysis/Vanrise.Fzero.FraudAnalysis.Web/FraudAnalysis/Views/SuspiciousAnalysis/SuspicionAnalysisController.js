@@ -149,7 +149,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
         });
 
         var params = {
-            subscriberNumber: fruadResult.SubscriberNumber,
+            accountNumber: fruadResult.AccountNumber,
             fromDate: $scope.fromDate,
             toDate: $scope.toDate,
             strategiesList: strategiesList,
@@ -160,9 +160,9 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "Suspicious Number Details & Related Numbers";
-            modalScope.onSubscriberCaseUpdated = function (subscriberCase) {
+            modalScope.onAccountCaseUpdated = function (accountCase) {
 
-                mainGridAPI.itemUpdated(subscriberCase);
+                mainGridAPI.itemUpdated(accountCase);
             }
         };
         VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/SuspiciousAnalysis/SuspiciousNumberDetails.html", params, settings);

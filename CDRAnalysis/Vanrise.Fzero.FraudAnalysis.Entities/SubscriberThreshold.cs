@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class SubscriberThreshold
+    public class AccountThreshold
     {
         public DateTime DateDay { get; set; }
 

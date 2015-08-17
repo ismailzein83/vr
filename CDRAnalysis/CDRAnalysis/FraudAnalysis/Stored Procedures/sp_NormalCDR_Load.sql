@@ -17,7 +17,7 @@ BEGIN
 			cdrs.[Cell_Latitude]  ,cdrs.[Cell_Longitude]  ,cdrs.[In_Trunk]  ,cdrs.[Out_Trunk]  ,cdrs.[Service_Type]  ,cdrs.[Service_VAS_Name] 
 	                                                
 	FROM NormalCDR cdrs with(nolock)
-	LEFT JOIN [FraudAnalysis].SubscriberCase WhiteNbs ON WhiteNbs.SubscriberNumber = cdrs.MSISDN AND StatusId=4 and ValidTill >= getdate()
-	WHERE cdrs.connectDateTime between @From and @To and WhiteNbs.SubscriberNumber IS NULL
+	LEFT JOIN [FraudAnalysis].AccountCase WhiteNbs ON WhiteNbs.AccountNumber = cdrs.MSISDN AND StatusId=4 and ValidTill >= getdate()
+	WHERE cdrs.connectDateTime between @From and @To and WhiteNbs.AccountNumber IS NULL
 	ORDER BY cdrs.MSISDN, cdrs.connectdatetime
 END

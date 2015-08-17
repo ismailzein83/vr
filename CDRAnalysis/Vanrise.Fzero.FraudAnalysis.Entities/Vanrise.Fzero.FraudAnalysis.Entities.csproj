@@ -87,7 +87,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Aggregates\CountAggregate.cs" />
     <Compile Include="Strategy.cs" />
-    <Compile Include="SubscriberCase.cs" />
+    <Compile Include="AccountCase.cs" />
     <Compile Include="SuspiciousNumber.cs" />
     <Compile Include="Batches\SuspiciousNumberBatch.cs" />
     <Compile Include="ResultQuery\FraudResultQuery.cs" />

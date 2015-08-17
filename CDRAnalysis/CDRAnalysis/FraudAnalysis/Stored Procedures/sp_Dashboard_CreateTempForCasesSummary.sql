@@ -13,10 +13,10 @@ CREATE PROCEDURE [FraudAnalysis].[sp_Dashboard_CreateTempForCasesSummary]
 		IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 	    BEGIN
 		
-			select IsNuLL(cs.Name,'Opened') as StatusName, count(st.SubscriberNumber)as CountCases 
+			select IsNuLL(cs.Name,'Open') as StatusName, count(st.AccountNumber)as CountCases 
 			into #Result
-			from FraudAnalysis.SubscriberThreshold st 
-			left join FraudAnalysis.SubscriberCase sc on st.SubscriberNumber = sc.SubscriberNumber 
+			from FraudAnalysis.AccountThreshold st 
+			left join FraudAnalysis.AccountCase sc on st.AccountNumber = sc.AccountNumber 
 			left join FraudAnalysis.CaseStatus cs on cs.Id=sc.StatusId
 			
 			

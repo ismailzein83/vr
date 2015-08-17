@@ -9,14 +9,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
     public class CaseManagmentManager
     {
 
-        public Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<SubscriberCase> SaveSubscriberCase(SubscriberCase subscriberCaseObject)
+        public Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<AccountCase> SaveAccountCase(AccountCase accountCaseObject)
         {
             ICaseManagementDataManager manager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
-            manager.SaveSubscriberCase(subscriberCaseObject);
-            Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<SubscriberCase> updateOperationOutput = new Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<SubscriberCase>();
+            manager.SaveAccountCase(accountCaseObject);
+            Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<AccountCase> updateOperationOutput = new Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<AccountCase>();
 
             updateOperationOutput.Result = Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationResult.Succeeded;
-            updateOperationOutput.UpdatedObject = subscriberCaseObject;
+            updateOperationOutput.UpdatedObject = accountCaseObject;
             return updateOperationOutput;
         }
 

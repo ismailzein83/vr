@@ -7,7 +7,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     {
         public DateTime LastOccurance { get; set; }
 
-        public string SubscriberNumber { get; set; }
+        public string AccountNumber { get; set; }
 
         public Enums.SuspicionLevel SuspicionLevel { get; set; }
 

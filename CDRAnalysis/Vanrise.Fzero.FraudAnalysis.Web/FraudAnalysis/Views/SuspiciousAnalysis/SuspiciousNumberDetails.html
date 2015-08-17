@@ -3,10 +3,10 @@
         <vr-form name="formSuspiciousNumberDetails">
             <vr-row>
                 <vr-columns colnum="2">
-                    <vr-label>Subscriber Number:</vr-label>
+                    <vr-label>Account Number:</vr-label>
                 </vr-columns>
                 <vr-columns colnum="2">
-                    <vr-label isvalue>{{subscriberNumber}}</vr-label>
+                    <vr-label isvalue>{{accountNumber}}</vr-label>
                 </vr-columns>
 
 
@@ -34,7 +34,7 @@
 
                 <vr-columns colnum="12">
                     <vr-choices selectedindex="selectedGroupKeyIndex" onselectionchanged="groupKeySelectionChanged();">
-                        <vr-choice isselected="isSubscriberThresholdsTabShown">Subscriber Thresholds</vr-choice>
+                        <vr-choice isselected="isAccountThresholdsTabShown">Account Thresholds</vr-choice>
                         <vr-choice isselected="isNormalCDRTabShown">CDR</vr-choice>
                         <vr-choice isselected="isNumberProfileTabShown">Number Profile</vr-choice>
                     </vr-choices>
@@ -42,9 +42,9 @@
                     <div>
                         <vr-row>
                             <vr-columns colnum="12">
-                                <div ng-show="isSubscriberThresholdsTabShown" >
+                                <div ng-show="isAccountThresholdsTabShown" >
 
-                                    <vr-datagrid datasource="subscriberThresholds" dataretrievalfunction="dataRetrievalFunction_SubscriberThresholds" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onSubscriberThresholdsGridReady">
+                                    <vr-datagrid datasource="accountThresholds" dataretrievalfunction="dataRetrievalFunction_AccountThresholds" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onAccountThresholdsGridReady">
                                         <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" widthfactor="20"></vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelName'" widthfactor="25"></vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Date'" field="'DateDay'" type="'Datetime'" widthfactor="25"></vr-datagridcolumn>

@@ -5,7 +5,7 @@ CREATE PROCEDURE [FraudAnalysis].[sp_FraudResult_Get]
 	@ToDate datetime,
 	@StrategiesList varchar(10) = '',
 	@SuspiciousLevelsList varchar(10) = '',
-	@SubscriberNumber varchar(50)
+	@AccountNumber varchar(50)
 )
 	AS
 	BEGIN
@@ -34,14 +34,14 @@ CREATE PROCEDURE [FraudAnalysis].[sp_FraudResult_Get]
 			end
 			
 		
-		SELECT ISNULL(cs.Name, 'Opened')  CaseStatus,  ISNULL(sc.StatusId, 1) StatusId, sc.ValidTill ValidTill  , COUNT(st.Id) as NumberofOccurances,  MAX(st.DateDay) as LastOccurance,   #Strategy.Name as StrategyName, st.SubscriberNumber as SubscriberNumber , max(#SuspectionLevel.Id) as SuspicionLevelId 
-				from [FraudAnalysis].[SubscriberThreshold] st
+		SELECT ISNULL(cs.Name, 'Open')  CaseStatus,  ISNULL(sc.StatusId, 1) StatusId, sc.ValidTill ValidTill  , COUNT(st.Id) as NumberofOccurances,  MAX(st.DateDay) as LastOccurance,   #Strategy.Name as StrategyName, st.AccountNumber as AccountNumber , max(#SuspectionLevel.Id) as SuspicionLevelId 
+				from [FraudAnalysis].[AccountThreshold] st
 				inner join #SuspectionLevel ON st.SuspicionLevelId=#SuspectionLevel.Id 
 				inner join #Strategy ON #Strategy.Id=st.StrategyId 
-				left join [FraudAnalysis].[SubscriberCase] sc  ON sc.SubscriberNumber=st.SubscriberNumber 
+				left join [FraudAnalysis].[AccountCase] sc  ON sc.AccountNumber=st.AccountNumber 
 				left join [FraudAnalysis].[CaseStatus] cs ON cs.Id=sc.StatusId
-				WHERE  SuspicionLevelId <> 0 and dateday between @fromDate and @ToDate and st.SubscriberNumber=@SubscriberNumber
-				group by st.SubscriberNumber, #Strategy.Name, cs.Name , sc.StatusId, sc.ValidTill
+				WHERE  SuspicionLevelId <> 0 and dateday between @fromDate and @ToDate and st.AccountNumber=@AccountNumber
+				group by st.AccountNumber, #Strategy.Name, cs.Name , sc.StatusId, sc.ValidTill
 				
 		
 	END

@@ -1,11 +1,11 @@
 ﻿
 
-CREATE PROCEDURE [FraudAnalysis].[sp_FraudResult_CreateTempForFilteredSubscriberThresholds]
+CREATE PROCEDURE [FraudAnalysis].[sp_FraudResult_CreateTempForFilteredAccountThresholds]
 (
 	@TempTableName varchar(200),	
 	@FromDate DATETIME,
 	@ToDate DATETIME,
-	@MSISDN varCHAR(100)
+	@AccountNumber varCHAR(100)
 )
 	AS
 	BEGIN
@@ -23,12 +23,12 @@ CREATE PROCEDURE [FraudAnalysis].[sp_FraudResult_CreateTempForFilteredSubscriber
 			
 			
 			
-			SELECT [DateDay]  ,[SubscriberNumber]  ,CriteriaValues   ,#SuspicionLevel.Name as SuspicionLevelName  ,#Strategy.Name as StrategyName 
+			SELECT [DateDay]  ,[AccountNumber]  ,CriteriaValues   ,#SuspicionLevel.Name as SuspicionLevelName  ,#Strategy.Name as StrategyName 
 			into #Result
-			FROM [FraudAnalysis].[SubscriberThreshold] st
+			FROM [FraudAnalysis].[AccountThreshold] st
 			inner join #SuspicionLevel ON st.SuspicionLevelId=#SuspicionLevel.Id 
 			inner join #Strategy ON #Strategy.Id=st.StrategyId 
-			WHERE  SubscriberNumber=@MSISDN and SuspicionLevelId <> 0 and dateday between @FromDate and @ToDate  
+			WHERE  AccountNumber=@AccountNumber and SuspicionLevelId <> 0 and dateday between @FromDate and @ToDate  
 			
 		
 			

@@ -12,7 +12,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
 
         }
 
-        public bool SaveSubscriberCase(SubscriberCase subscriberCaseObject)
+        public bool SaveAccountCase(AccountCase accountCaseObject)
         {
             throw new NotImplementedException();
         }

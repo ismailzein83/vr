@@ -6,6 +6,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 {
     public interface ICaseManagementDataManager : IDataManager 
     {
-        bool SaveSubscriberCase(SubscriberCase subscriberCaseObject);
+        bool SaveAccountCase(AccountCase accountCaseObject);
     }
 }
