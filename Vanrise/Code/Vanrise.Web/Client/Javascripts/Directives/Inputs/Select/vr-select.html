@@ -1,5 +1,5 @@
 ﻿<div class="dropdown-container1">
-    <div class="dropdown-container2">
+    <div class="dropdown-container2" ng-style="ctrl.getInputeStyle()">
         <div class="dropdown drop-down-inside-modal">
             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuRule" ng-mouseenter="ctrl.muteaction($event);">
                 <li role="presentation" ng-click="ctrl.onClickLi($event)" ng-if="ctrl.isDropDownOpened()">
@@ -39,10 +39,18 @@
 
                     </div>
                     <!-- filter -->
-                    <div class="vr-select-height" ng-if="!ctrl.isContainerVisible()">
-                        <div ng-if="!ctrl.isContainerVisible()" ng-repeat="c in ctrl.getdatasource()" class="mark-select " ng-click="ctrl.selectValue($event, c);" ng-mouseenter="ctrl.muteaction($event);"
-                             style="display: block;padding:2px; margin:2px; white-space: normal;">
-                            <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{::ctrl.getObjectText(c)}}</div>
+                    <div ng-if="!ctrl.isContainerVisible()">
+                        <div ng-if="ctrl.withLocalFiter()" style="padding-bottom: 5px; border-bottom: 1px solid #f0f0f0; ">
+                            <div class="inner-addon right-addon">
+                                <i class="glyphicon glyphicon-remove hand-cursor" ng-if="ctrl.filtername.length > 0" style="top:9px" ng-click="ctrl.clearFilter($event)"></i>
+                                <input type="text" class="form-control input-sm" style="width:100%" ng-model="ctrl.filtername" ng-click="ctrl.muteAction($event)" />
+                            </div>
+                        </div>
+                        <div class="vr-select-height">
+                            <div ng-if="!ctrl.isContainerVisible()" ng-repeat="c in ctrl.getdatasource() | filter:ctrl.filtername" class="mark-select " ng-click="ctrl.selectValue($event, c);" ng-mouseenter="ctrl.muteaction($event);"
+                                 style="display: block;padding:2px; margin:2px; white-space: normal;">
+                                <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{::ctrl.getObjectText(c)}}</div>
+                            </div>
                         </div>
                     </div>
 
@@ -73,6 +81,8 @@
         </div>
 
     </div>
+    <span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>
+
 </div>
 
 

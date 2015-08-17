@@ -68,7 +68,19 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                 if (controller.isRemoteLoad()) return controller.data;
                 return controller.datasource;
             };
+            this.withLocalFiter = function () {
+                return ($attrs.withlocalfilter != undefined);
+            };
 
+            if ($attrs.hint != undefined)
+                this.hint = $attrs.hint;
+            this.getInputeStyle = function () {
+                return ($attrs.hint != undefined) ? {
+                    "display": "inline-block",
+                    "width": "calc(100% - 15px)",
+                    "margin-right": "-3px"
+                } : {};
+            }
             this.setdatasource = function (datasource) {
                 if (controller.isRemoteLoad()) controller.data = datasource;
                 else controller.datasource = datasource;
