@@ -1,7 +1,6 @@
 ﻿SuspiciousNumberDetailsController.$inject = ['$scope', 'StrategyAPIService', 'NormalCDRAPIService', 'SuspicionAnalysisAPIService', 'NumberProfileAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CaseManagementAPIService', 'CaseStatusEnum'];
 
 function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDRAPIService, SuspicionAnalysisAPIService, NumberProfileAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CaseManagementAPIService, CaseStatusEnum) {
-    var accountThresholdsGridAPI;
     var normalCDRGridAPI;
     var numberProfileGridAPI;
     var lastOccurance;
@@ -9,7 +8,6 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
     var numberofOccurances;
     var strategiesList;
     var suspicionLevelsList;
-    var isAccountThresholdsDataLoaded = false;
     var isNormalCDRDataLoaded = false;
     var isNumberProfileDataLoaded = false;
     var pageLoaded = false;
@@ -46,13 +44,12 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
 
         $scope.filterDefinitions = [];
         $scope.aggregateDefinitions = [];
-        $scope.accountThresholds = [];
         $scope.normalCDRs = [];
         $scope.numberProfiles = [];
         $scope.relatedNumbers = [];
 
-        SuspiciousNumberDetailsController.isNumberProfileTabShown = false;
-        SuspiciousNumberDetailsController.isNormalCDRTabShown = false;
+        SuspiciousNumberDetailsController.isNumberProfileTabShown =false ;
+        SuspiciousNumberDetailsController.isNormalCDRTabShown = true;
 
         $scope.onNormalCDRsGridReady = function (api) {
             normalCDRGridAPI = api;
@@ -233,18 +230,6 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         return accountCaseObject;
     }
 
-    function retrieveData_AccountThresholds() {
-        $scope.accountThresholds.length = 0;
-
-        var query = {
-            FromDate: $scope.fromDate,
-            ToDate: $scope.toDate,
-            AccountNumber: $scope.accountNumber
-        };
-
-
-        return accountThresholdsGridAPI.retrieveData(query);
-    }
 
     function retrieveData_NormalCDRs() {
 
