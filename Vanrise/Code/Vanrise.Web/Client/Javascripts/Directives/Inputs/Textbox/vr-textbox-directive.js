@@ -11,6 +11,7 @@
             require: '^form',
             scope: {
                 value: '=',
+                hint:'@',
                 customvalidate: '&'
             },
             controller: function ($scope, $element) {
@@ -60,7 +61,11 @@
                         ctrl.notifyUserChange = function () {
                             isUserChange = true;
                         };
-                        if (attrs.hint != undefined)
+                        ctrl.readOnly = attrs.readonly != undefined;
+                        if (attrs.hint != undefined) {
+                            ctrl.hint = attrs.hint;
+                            console.log(attrs.hint);
+                        }
                             ctrl.hint = attrs.hint;
                         ctrl.getInputeStyle = function () {
                             return (attrs.hint != undefined) ? {
@@ -68,6 +73,21 @@
                                     "width": "calc(100% - 15px)",
                                     "margin-right": "1px"
                                 } :{} ;
+                        }
+
+                        ctrl.adjustTooltipPosition = function (e) {
+                            setTimeout(function () {
+                                var self = angular.element(e.currentTarget);
+                                var selfHeight = $(self).height();
+                                var selfOffset = $(self).offset();
+                                var tooltip = self.parent().find('.tooltip-info')[0];
+                                $(tooltip).css({ display: 'block !important' });
+                                var innerTooltip = self.parent().find('.tooltip-inner')[0];
+                                var innerTooltipArrow = self.parent().find('.tooltip-arrow')[0];
+                                $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight +5, left: selfOffset.left - 30 });
+                                $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight , left: selfOffset.left  });
+
+                            }, 1)
                         }
                        
                         BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
@@ -88,9 +108,12 @@
                 var type = 'text';
                 if (attrs.type != undefined && attrs.type === TextboxTypeEnum.Password.name)
                     type = 'password';
+                    if (attrs.hint != undefined) {
+                        console.log(attrs.hint);
+                    }
                     var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
-                            + '<input id="mainInput" ng-style="ctrl.getInputeStyle()" ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" size="10" class="form-control" data-autoclose="1" type="' + type + '" >'
-                            + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7" html="true" placement="bottom"  trigger="hover"  data-type="info" data-title="{{ctrl.hint}}"></span>'
+                            + '<input  ng-readonly="ctrl.readOnly" id="mainInput" ng-style="ctrl.getInputeStyle()" ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" size="10" class="form-control" data-autoclose="1" type="' + type + '" >'
+                            + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" html="true" style="color:#337AB7"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)" ng data-type="info" data-title="{{ctrl.hint}}"></span>'
                         + '</div>';
                 
 
