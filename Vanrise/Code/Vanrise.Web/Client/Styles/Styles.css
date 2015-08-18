@@ -1774,9 +1774,21 @@ opacity:0.9 ;
 }
 .tooltip.bottom .tooltip-arrow{
     border-bottom-color:#575757;
+    margin-left: 2px;
 }
 .tooltip.in {
     opacity: 1;
+   
+}
+.tooltip-info{
+     display: none;
+}
+/* over ride form-control[readonly] background-color*/
+.form-control[readonly]{
+    background-color: #fff;
+}
+.tooltip{
+    position:fixed;
 }
 .tooltip-info .tooltip-inner{
     background-color:#F1F2F7 ;
@@ -1784,6 +1796,12 @@ opacity:0.9 ;
     border: 1px solid #575757 ;
     min-width:200px;
     font-size:11px;
+    /*position:fixed;*/
+    text-align:left;
+    max-width:100%;
+    min-width:initial;
+    font-size: 11px;
+    overflow-y: auto;
 }
 .tooltip.bottom {
     margin-top: 10px;
