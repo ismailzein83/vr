@@ -39,7 +39,8 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
             customvalidate: '&',
             datasource: '=',
             selectedvalues: '=',
-            onselectionchanged: '='
+            onselectionchanged: '=',
+            hint:'@'
         },
         controller: function ($scope, $element, $attrs) {
             if (rootScope == undefined)
@@ -80,6 +81,19 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                     "width": "calc(100% - 15px)",
                     "margin-right": "-3px"
                 } : {};
+            }
+            this.adjustTooltipPosition = function (e) {
+                setTimeout(function () {
+                    var self = angular.element(e.currentTarget);
+                    var selfHeight = $(self).height();
+                    var selfOffset = $(self).offset();
+                    var tooltip = self.parent().find('.tooltip-info')[0];
+                    $(tooltip).css({ display: 'block !important' });
+                    var innerTooltip = self.parent().find('.tooltip-inner')[0];
+                    var innerTooltipArrow = self.parent().find('.tooltip-arrow')[0];
+                    $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 5, left: selfOffset.left - 30 });
+                    $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: selfOffset.left });
+                }, 1)
             }
             this.setdatasource = function (datasource) {
                 if (controller.isRemoteLoad()) controller.data = datasource;

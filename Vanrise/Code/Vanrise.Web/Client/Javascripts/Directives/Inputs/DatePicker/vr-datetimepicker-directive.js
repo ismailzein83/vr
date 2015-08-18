@@ -30,6 +30,7 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
         require: '^form',
         scope: {
             value: '=',
+            hint:'@',
             customvalidate: '&'
         },
         controller: function ($scope, $element, $attrs) {
@@ -140,6 +141,20 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                     "width": "100%",
                 };
             }
+
+            ctrl.adjustTooltipPosition = function (e) {
+                setTimeout(function () {
+                    var self = angular.element(e.currentTarget);
+                    var selfHeight = $(self).height();
+                    var selfOffset = $(self).offset();
+                    var tooltip = self.parent().find('.tooltip-info')[0];
+                    $(tooltip).css({ display: 'block !important' });
+                    var innerTooltip = self.parent().find('.tooltip-inner')[0];
+                    var innerTooltipArrow = self.parent().find('.tooltip-arrow')[0];
+                    $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 5, left: selfOffset.left - 30 });
+                    $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: selfOffset.left });
+                }, 1)
+            }
             $scope.$watch('ctrl.value', function () {
                 if (ctrl.value == undefined)
                     return;
@@ -239,7 +254,7 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                                 + icontemplate
                             + '</div>'
                       + '</div>'
-                      + '<span  ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7;top:-10px" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>'
+                      + '<span  ng-if="ctrl.hint!=undefined" ng-mouseenter="ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7;top:-10px" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>'
 
                     + '</div>';
 

@@ -9,6 +9,7 @@ app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', 'VRNo
         scope: {
             onReady: '=',
             value: '=',
+            hint:'@',
             customvalidate: '&'
         },
         controller: function ($scope, $element, $attrs,$timeout) {
@@ -126,7 +127,17 @@ app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', 'VRNo
                     "width": "100%",
                 };
             }
-            
+
+            ctrl.adjustTooltipPosition = function (e) {
+                setTimeout(function () {
+                    var self = angular.element(e.currentTarget);
+                    var selfHeight = $(self).height();
+                    var selfOffset = $(self).offset();
+                    console.log(selfOffset);
+                    var innerTooltip = self.parent().find('.tooltip-inner')[0];
+                    $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 17, left: selfOffset.left - 30 });
+                }, 1)
+            }
         },
         controllerAs: 'ctrl',
         compile: function (element, attrs) {
@@ -144,7 +155,19 @@ app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', 'VRNo
 
 
                     var ctrl = $scope.ctrl;
-
+                    ctrl.adjustTooltipPosition = function (e) {
+                        setTimeout(function () {
+                            var self = angular.element(e.currentTarget);
+                            var selfHeight = $(self).height();
+                            var selfOffset = $(self).offset();
+                            var tooltip = self.parent().find('.tooltip-info')[0];
+                            $(tooltip).css({ display: 'block !important' });
+                            var innerTooltip = self.parent().find('.tooltip-inner')[0];
+                            var innerTooltipArrow = self.parent().find('.tooltip-arrow')[0];
+                            $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 5, left: selfOffset.left - 30 });
+                            $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: selfOffset.left });
+                        }, 1)
+                    }
                     
                     BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
 
@@ -176,7 +199,7 @@ app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', 'VRNo
                                 + '<input type="file" id="fileUpload">'
                             + '</span>'
                       + '</div>'
-                      + '<span  ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7;" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>'
+                      + '<span  ng-if="ctrl.hint!=undefined" ng-mouseenter="ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7;" html="true" ng-mouseenter="ctrl.adjustTooltipPosition($event)" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>'
 
                     + '</div>';
 
