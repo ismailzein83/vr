@@ -105,13 +105,11 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetStrategyNames.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempForFilteredNormalCDRs.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempForFilteredNumberProfiles.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempForFilteredAccountThresholds.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_CreateTempForTopTenCell.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_CreateTempForTopTenBTS.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_CreateTempForCasesSummary.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_CreateTempForFilteredStrategies.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_GetFraudCasesPerStrategy.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_Save.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetStrategies.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetStrategy.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Update.sql" />
@@ -121,5 +119,8 @@
     <Build Include="FraudAnalysis\User Defined Types\AccountCaseType.sql" />
     <Build Include="Security\FraudAnalysis.sql" />
     <Build Include="FraudAnalysis\Tables\SuspicionLevel.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_UpdateAccountCases.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempForFilteredAccountCases.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_Insert.sql" />
   </ItemGroup>
 </Project>

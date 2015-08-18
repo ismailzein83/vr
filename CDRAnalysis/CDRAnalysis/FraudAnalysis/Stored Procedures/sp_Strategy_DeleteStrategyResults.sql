@@ -5,10 +5,8 @@ CREATE PROCEDURE [FraudAnalysis].[sp_Strategy_DeleteStrategyResults]
 	@ToDate DateTime
 AS
 BEGIN
-select * from FraudAnalysis.[Strategy]
-    --Delete FraudAnalysis.[NumberProfile] Where Id in ( SELECT Id FROM FraudAnalysis.[NumberProfile] WITH (NOLOCK)  where StrategyId in ( SELECT * FROM dbo.CSVToTable(@StrategiesList)) and FromDate>=@FromDate and ToDate <=@ToDate     )
-    --Delete FraudAnalysis.[AccountThreshold] Where Id in ( SELECT Id FROM FraudAnalysis.[AccountThreshold] WITH (NOLOCK)  where StrategyId in (SELECT * FROM dbo.CSVToTable(@StrategiesList)) and DateDay>=@FromDate and DateDay <=@ToDate     )
 
+    
 		DECLARE @Deleted_Rows_NP INT;
 		SET @Deleted_Rows_NP = 1;
 		WHILE (@Deleted_Rows_NP > 0)

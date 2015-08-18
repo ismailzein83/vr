@@ -1,17 +1,14 @@
 ﻿
 
-
-
-
-
 CREATE PROCEDURE [FraudAnalysis].[sp_FraudResult_CreateTempForFilteredSuspiciousNumbers]
 (
-	@TempTableName varchar(200),	
+	@TempTableName varchar(200),
 	@FromDate datetime,
 	@ToDate datetime,
 	@StrategiesList varchar(100) = '',
 	@SuspiciousLevelsList varchar(100) = '',
-	@CaseStatusesList varchar(100) = ''
+	@CaseStatusesList varchar(100) = '',
+	@AccountNumber 	varchar(50)
 )
 	AS
 	BEGIN
@@ -21,7 +18,7 @@ CREATE PROCEDURE [FraudAnalysis].[sp_FraudResult_CreateTempForFilteredSuspicious
 	    BEGIN
 		
 		CREATE TABLE #SuspectionLevel(Id int, Name varchar(20))
-		CREATE TABLE #Strategy(Id int, Name varchar(20))
+		CREATE TABLE #Strategy(Id int, Name varchar(20), PeriodId int)
 		CREATE TABLE #CaseStatus(Id int, Name varchar(20))
 		
 		
@@ -38,11 +35,11 @@ CREATE PROCEDURE [FraudAnalysis].[sp_FraudResult_CreateTempForFilteredSuspicious
 			
 		IF(@StrategiesList = '')
 			begin
-				EXEC('INSERT INTO #Strategy SELECT Id,Name FROM [FraudAnalysis].Strategy ')
+				EXEC('INSERT INTO #Strategy SELECT Id,Name,PeriodId FROM [FraudAnalysis].Strategy ')
 			end
 		else
 			begin
-				EXEC('INSERT INTO #Strategy SELECT Id,Name FROM [FraudAnalysis].Strategy s WHERE s.Id IN ('+@StrategiesList+')')
+				EXEC('INSERT INTO #Strategy SELECT Id,Name,PeriodId FROM [FraudAnalysis].Strategy s WHERE s.Id IN ('+@StrategiesList+')')
 			end
 			
 			
@@ -55,31 +52,19 @@ CREATE PROCEDURE [FraudAnalysis].[sp_FraudResult_CreateTempForFilteredSuspicious
 				EXEC('INSERT INTO #CaseStatus SELECT Id,Name FROM [FraudAnalysis].CaseStatus cs WHERE cs.Id IN ('+@CaseStatusesList+')')
 			end
 			
-		Select  temp.CaseStatus CaseStatus , temp.StatusId StatusId, temp.ValidTill ValidTill, temp.NumberofOccurances NumberofOccurances, temp.LastOccurance LastOccurance, temp.StrategyName StrategyName, temp.AccountNumber AccountNumber, temp.SuspicionLevelId SuspicionLevelId INTO #Result from
-		
-		
-		(SELECT ISNULL(cs.Name, 'Open')  CaseStatus,  ISNULL(sc.StatusId, 1) StatusId, sc.ValidTill ValidTill  , COUNT(st.Id) as NumberofOccurances,  MAX(st.DateDay) as LastOccurance,   #Strategy.Name as StrategyName, st.AccountNumber as AccountNumber , max(#SuspectionLevel.Id) as SuspicionLevelId 
+		SELECT  cs.Name  CaseStatus,  ac.StatusId, ac.ValidTill ValidTill  , cast(count(st.Id) as varchar(10))+ ( case when  s.PeriodId = 2 then  ' Day(s)' else ' Hour(s)' end )as NumberofOccurances,  MAX(st.DateDay) as LastOccurance,   s.Name as StrategyName, st.AccountNumber as AccountNumber , max(#SuspectionLevel.Id) as SuspicionLevelId 
+				
+				INTO #Result
+				
 				from [FraudAnalysis].[AccountThreshold] st
 				inner join #SuspectionLevel ON st.SuspicionLevelId=#SuspectionLevel.Id 
-				inner join #Strategy ON #Strategy.Id=st.StrategyId 
-				inner join [FraudAnalysis].[AccountCase] sc  ON sc.AccountNumber=st.AccountNumber 
-				inner join #CaseStatus cs ON cs.Id=sc.StatusId
-				WHERE  SuspicionLevelId <> 0 and dateday between @fromDate and @ToDate 
-				group by st.AccountNumber, #Strategy.Name, cs.Name , sc.StatusId, sc.ValidTill
+				inner join #Strategy s ON s.Id=st.StrategyId 
+				inner join [FraudAnalysis].[AccountCase] ac  ON ac.AccountNumber=st.AccountNumber 
+				inner join #CaseStatus cs ON cs.Id=ac.StatusId 
+				WHERE (@AccountNumber is null or st.AccountNumber=@AccountNumber) and dateday between @fromDate and @ToDate and ac.Id =(select MAX(Id) from accountcase ac2 where ac2.accountnumber= st.AccountNumber )
+				group by st.AccountNumber, s.Name, cs.Name , ac.StatusId, ac.ValidTill, s.PeriodId
 				
-		union
-			
-		SELECT 'Open'  CaseStatus,   1 as StatusId, null ValidTill  , COUNT(st.Id) as NumberofOccurances,  MAX(st.DateDay) as LastOccurance,   #Strategy.Name as StrategyName, st.AccountNumber as AccountNumber , max(#SuspectionLevel.Id) as SuspicionLevelId 
-				from [FraudAnalysis].[AccountThreshold] st
-				inner join #SuspectionLevel ON st.SuspicionLevelId=#SuspectionLevel.Id 
-				inner join #Strategy ON #Strategy.Id=st.StrategyId 
-				WHERE  SuspicionLevelId <> 0 and dateday between @fromDate and @ToDate  and  AccountNumber not in (select AccountNumber from AccountCase) and  (@CaseStatusesList = '' or @CaseStatusesList LIKE '%1%'  )
-				group by st.AccountNumber, #Strategy.Name
-				
-				
-				
-				) as temp
-		
+						
 				
 				declare @sql varchar(1000)
 				set @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #Result';

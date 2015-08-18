@@ -1,4 +1,4 @@
-CREATE TABLE [FraudAnalysis].[AccountThreshold] (
+﻿CREATE TABLE [FraudAnalysis].[AccountThreshold] (
     [Id]               INT            IDENTITY (1, 1) NOT NULL,
     [DateDay]          DATETIME       NULL,
     [AccountNumber]    VARCHAR (50)   NULL,
@@ -18,7 +18,14 @@ CREATE TABLE [FraudAnalysis].[AccountThreshold] (
 
 
 
+
+
 GO
 CREATE CLUSTERED INDEX [IX_AccountThreshold_StrategyId]
     ON [FraudAnalysis].[AccountThreshold]([StrategyId] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_AccountThreshold_AccountNumber]
+    ON [FraudAnalysis].[AccountThreshold]([AccountNumber] ASC);
 

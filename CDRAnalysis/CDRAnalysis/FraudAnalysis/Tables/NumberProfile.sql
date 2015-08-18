@@ -8,7 +8,14 @@
 );
 
 
+
+
 GO
 CREATE CLUSTERED INDEX [IX_NumberProfile_StrategyId]
     ON [FraudAnalysis].[NumberProfile]([StrategyId] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_NumberProfile_AccountNumber]
+    ON [FraudAnalysis].[NumberProfile]([AccountNumber] ASC);
 
