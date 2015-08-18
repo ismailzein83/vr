@@ -71,11 +71,11 @@
         }
 
     };
-
+ 
     var cellTemplate = '<div style="text-align: #TEXTALIGN#;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" >'
         + ''
-      + '<a ng-if="$parent.ctrl.isColumnClickable(colDef, dataItem)"  ng-class="::$parent.ctrl.getCellClass(colDef, dataItem)" ng-click="$parent.ctrl.onColumnClicked(colDef, dataItem)" style="cursor:pointer;"> {{::$parent.ctrl.getColumnValue(colDef, dataItem) #CELLFILTER#}}</a>'
-      + '<span ng-if="(!$parent.ctrl.isColumnClickable(colDef, dataItem))" ng-class="::$parent.ctrl.getCellClass(colDef, dataItem)"> {{::$parent.ctrl.getColumnValue(colDef, dataItem) #CELLFILTER#}}</span>'
+      + '<a ng-if="$parent.ctrl.isColumnClickable(colDef, dataItem)"  ng-class="::$parent.ctrl.getCellClass(colDef, dataItem)" ng-click="$parent.ctrl.onColumnClicked(colDef, dataItem)" style="cursor:pointer;"> {{::$parent.ctrl.getColumnValue(colDef, dataItem) #CELLFILTER#}}#PERCENTAGE#</a>'
+      + '<span ng-if="(!$parent.ctrl.isColumnClickable(colDef, dataItem))" ng-class="::$parent.ctrl.getCellClass(colDef, dataItem)"> {{::$parent.ctrl.getColumnValue(colDef, dataItem) #CELLFILTER#}}#PERCENTAGE#</span>'
       + ''
    + '</div>';
 
@@ -119,7 +119,7 @@
        
 
         function addColumn(col, columnIndex) {
-            
+            ctrl.isProgress = col.type == "Progress" ? true : false;
             var colDef = {
                 name: col.headerText != undefined ? col.headerText : col.field,
                 headerCellTemplate: headerTemplate,//'/Client/Templates/Grid/HeaderTemplate.html',//template,
@@ -133,6 +133,7 @@
                         return align;
 
                 },
+                isProgress:ctrl.isProgress,
                 tag: col.tag,
                 getcolor: col.getcolor,
                 rotateHeader: ctrl.rotateHeader,
@@ -198,8 +199,15 @@
             if (col.type == "Number") {
                 template = template.replace("#TEXTALIGN#", "right;padding-right:2px");
                 template = UtilsService.replaceAll(template, "#CELLFILTER#", "| number:2");
+                template = UtilsService.replaceAll(template, "#PERCENTAGE#", "");
+            }
+            else if (col.type == "Progress") {
+                template = template.replace("#TEXTALIGN#", "center;position:absolute;color:#666;");
+                template = UtilsService.replaceAll(template, "#CELLFILTER#", "| number:1");
+                template = UtilsService.replaceAll(template, "#PERCENTAGE#", "%");
             }
             else {
+                template = UtilsService.replaceAll(template, "#PERCENTAGE#", "");
                 template = template.replace("#TEXTALIGN#", "left");
                 if (col.type == "Datetime")
                     template = UtilsService.replaceAll(template, "#CELLFILTER#", "| date:'yyyy-MM-dd HH:mm'");
@@ -207,6 +215,7 @@
                     template = UtilsService.replaceAll(template, "#CELLFILTER#", "| date:'yyyy-MM-dd'");
                 else
                     template = UtilsService.replaceAll(template, "#CELLFILTER#", "");
+
             }
             return template;
         }
@@ -389,13 +398,28 @@
         
         function buildRowHtml() {
             ctrl.rowHtml = '';
+            var progressMain;
+            var progressBarClass;
+            var style;
+            var percent;
             for (var i = 0; i < ctrl.columnDefs.length; i++) {
+                if (ctrl.columnDefs[i].isProgress) {
+                    progressMain = " progress";
+                    progressBarClass=" progress-bar progress-bar-striped active";
+                    style = 'width:{{::$parent.ctrl.getColumnValue($parent.ctrl.columnDefs[' + i + '], dataItem)}}%;';
+                }else
+                {
+                    progressMain = "";
+                    progressBarClass = ""
+                    style = "";
+                }
+              
                 var currentColumn = ctrl.columnDefs[i];
                 var currentColumnHtml = '$parent.ctrl.columnDefs[' + i + ']';
                 ctrl.rowHtml += '<div ng-if="!' + currentColumnHtml + '.isHidden" ng-style="{ \'width\': ' + currentColumnHtml + '.width, \'display\':\'inline-block\'' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}">'
-                + '<div class="vr-datagrid-cell">'
-                + '    <div class="vr-datagrid-celltext">'
-                  + UtilsService.replaceAll(ctrl.columnDefs[i].cellTemplate, "colDef", currentColumnHtml)
+                + '<div class="vr-datagrid-cell ' + progressMain + '" style="margin-bottom:0px">'
+                + '    <div class="vr-datagrid-celltext' + progressBarClass + '" style="' + style + '" >'
+                  + UtilsService.replaceAll(ctrl.columnDefs[i].cellTemplate, "colDef", currentColumnHtml) 
                     + '</div>'
                 + '</div>'
 

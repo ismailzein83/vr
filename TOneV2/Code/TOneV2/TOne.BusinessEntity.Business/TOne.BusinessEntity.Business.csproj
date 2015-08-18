@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="AccountManagerManager.cs" />
     <Compile Include="BusinessEntityInfoManager.cs" />
+    <Compile Include="CarrierAccountConnectionManager.cs" />
     <Compile Include="CarrierAccountManager.cs" />
     <Compile Include="CarrierGroupManager.cs" />
     <Compile Include="CarrierMaskManager.cs" />

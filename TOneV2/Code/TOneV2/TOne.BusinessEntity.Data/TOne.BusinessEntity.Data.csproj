@@ -52,6 +52,7 @@
     <Compile Include="BEDataManagerFactory.cs" />
     <Compile Include="IAccountManagerCarrierDataManager.cs" />
     <Compile Include="IAssignedCarrierDataManager.cs" />
+    <Compile Include="ICarrierAccountConnectionDataManager.cs" />
     <Compile Include="ICarrierAccountDataManager.cs" />
     <Compile Include="ICarrierGroupDataManager.cs" />
     <Compile Include="ICarrierMaskDataManager.cs" />

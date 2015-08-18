@@ -86,8 +86,6 @@ namespace TOne.Analytics.Data.SQL
                return rslt;
 
         }
-     
-
         public IEnumerable<TrafficStatistic> GetTrafficStatistics(TrafficStatisticGroupKeys filterByColumn, string columnFilterValue, DateTime from, DateTime to)
         {
             string columnName;
@@ -114,7 +112,6 @@ namespace TOne.Analytics.Data.SQL
                 });
         }
    
-
         #region Private Methods
         TrafficStatistic TrafficStatisticChartMapper( IDataReader reader)
         {
@@ -127,7 +124,6 @@ namespace TOne.Analytics.Data.SQL
             return trafficStatistics;
             
         }
-
         private string CreateTempTableIfNotExists(string tempTableName, GenericFilter filter, IEnumerable<TrafficStatisticGroupKeys> groupKeys)
         {
             StringBuilder whereBuilder = new StringBuilder();
@@ -216,11 +212,7 @@ namespace TOne.Analytics.Data.SQL
             queryBuilder.Replace("#SELECTPART#", groupKeysSelectPart.ToString());
             queryBuilder.Replace("#GROUPBYPART#", groupKeysGroupByPart.ToString());
             return queryBuilder.ToString();
-        }
-
-
-
-  
+        } 
         private TrafficStatistic GetSummary(string tempTableName)
         {
             String query = String.Format(@"SELECT
@@ -292,14 +284,8 @@ namespace TOne.Analytics.Data.SQL
               case TrafficStatisticMeasures.PGAD: return "PGAD";
                 default: return column.ToString();
             }            
-        }
-       
-
-
+        }  
         #endregion
 
-       
-       
-       
     }
 }

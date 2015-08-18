@@ -10,5 +10,7 @@ namespace TOne.Analytics.Data
     public interface IHourlyReportDataManager : IDataManager
     {
         GenericSummaryBigResult<HourlyReport> GetHourlyReportData(Vanrise.Entities.DataRetrievalInput<HourlyReportInput> input);
+
+        IEnumerable<HourlyReport> GetHourlyReport(TrafficStatisticGroupKeys filterByColumn, string columnFilterValue, DateTime from, DateTime to);
     }
 }

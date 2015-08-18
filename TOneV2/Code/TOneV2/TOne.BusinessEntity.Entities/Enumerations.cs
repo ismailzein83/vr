@@ -35,4 +35,9 @@ namespace TOne.BusinessEntity.Entities
         OnlyCustomers = 1,
         OnlySuppliers = 2
     }
+    public enum ConnectionType 
+    {
+        VoIP=0,
+        TDM=1
+    }
 }

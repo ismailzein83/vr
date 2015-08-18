@@ -128,6 +128,7 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountManagerController.cs" />
     <Compile Include="Controllers\BusinessEntityController.cs" />
+    <Compile Include="Controllers\CarrierAccountConnectionController.cs" />
     <Compile Include="Controllers\CarrierAccountController.cs" />
     <Compile Include="Controllers\CarrierGroupController.cs" />
     <Compile Include="Controllers\CarrierMaskController.cs" />
@@ -150,6 +151,7 @@
     <Content Include="BusinessEntity\Services\APIServices\AccountManagerAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\BusinessEntityAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\CarrierAccountAPIService.js" />
+    <Content Include="BusinessEntity\Services\APIServices\CarrierAccountConnectionAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\CarrierGroupAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\CarrierMaskAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\CarrierProfileAPIService.js" />

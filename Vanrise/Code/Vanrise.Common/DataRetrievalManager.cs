@@ -86,13 +86,13 @@ namespace Vanrise.Common
                 }   
                 rowIndex++;             
             }
-                
 
+            
             MemoryStream memoryStream = new MemoryStream();
             memoryStream = wbk.SaveToStream();
            
-            excelResult.ExcelFileStream = memoryStream;            
-
+            excelResult.ExcelFileStream = memoryStream;
+            wbk.Save("D:\\book1.xlsx", SaveFormat.Xlsx);
             return excelResult;
         }
     }

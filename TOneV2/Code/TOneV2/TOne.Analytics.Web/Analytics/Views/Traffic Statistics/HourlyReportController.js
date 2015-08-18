@@ -1,11 +1,12 @@
 ﻿HourlyReportController.$inject = ['$scope', 'UtilsService', 'HourlyReportAPIService', 'uiGridConstants', '$q', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService', 'TrafficStatisticGroupKeysEnum', 'HourlyReportMeasureEnum', 'LabelColorsEnum',
-        'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'DataRetrievalResultTypeEnum', 'PeriodEnum', 'AnalyticsService','ZonesService','ChartTypeEnum'];
+        'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'DataRetrievalResultTypeEnum', 'PeriodEnum', 'AnalyticsService', 'ZonesService', 'ChartTypeEnum', 'CarrierAccountConnectionAPIService', 'CarrierTypeEnum'];
 
 function HourlyReportController($scope, UtilsService, HourlyReportAPIService, uiGridConstants, $q, BusinessEntityAPIService, CarrierAccountAPIService, TrafficStatisticGroupKeysEnum, HourlyReportMeasureEnum, LabelColorsEnum,
-        CarrierTypeEnum, VRModalService, VRNotificationService, DataRetrievalResultTypeEnum, PeriodEnum, analyticsService, ZonesService,ChartTypeEnum) {
+        CarrierTypeEnum, VRModalService, VRNotificationService, DataRetrievalResultTypeEnum, PeriodEnum, analyticsService, ZonesService, ChartTypeEnum, CarrierAccountConnectionAPIService,CarrierTypeEnum ) {
 
-    var chartSelectedMeasureAPI;
-    var chartSelectedEntityAPI;
+    //var chartSelectedMeasureAPI;
+    var chart1SelectedEntityAPI;
+    var chart2SelectedEntityAPI;
     var mainGridAPI;
     var overallSelectedMeasure;
     var measures = [];
@@ -31,12 +32,30 @@ function HourlyReportController($scope, UtilsService, HourlyReportAPIService, ui
         $scope.zones = [];
         $scope.selectedZones = [];
         $scope.data = [];
+        $scope.connections = [];
+        $scope.selectedConnections = [];
         $scope.searchZones = function (text) {
             return ZonesService.getSalesZones(text);
         }
         $scope.onSelectionChanged = function () {
+           
+            var value;
+            switch ($scope.selectedConnectionIndex) {
+                case 0: $scope.selectedConnections.length = 0; $scope.connections.length = 0; return;
+                case 1: value = CarrierTypeEnum.Customer.value;
+                    break;
+                case 2: value = CarrierTypeEnum.Supplier.value;
+                    break;
+            }
+            return CarrierAccountConnectionAPIService.GetConnectionByCarrierType(value).then(function (response) {
+                $scope.selectedConnections.length = 0;
+                $scope.connections.length = 0;
+                angular.forEach(response, function (itm) {
+                    $scope.connections.push(itm);
+                });
 
-            return $scope.selectedConnectionIndex!=0;
+            });
+          //  return $scope.selectedConnectionIndex!=0;
         }
         $scope.selectedConnectionIndex;
         $scope.periods = analyticsService.getPeriods();
@@ -56,9 +75,6 @@ function HourlyReportController($scope, UtilsService, HourlyReportAPIService, ui
             return UtilsService.validateDates($scope.fromDate, toDate);
         };
 
-
-
-
         $scope.showResult = false;       
         $scope.gridAllMeasuresScope = {};
         $scope.measures = measures;
@@ -67,7 +83,6 @@ function HourlyReportController($scope, UtilsService, HourlyReportAPIService, ui
             groupKeys: []
         };
         $scope.onValueChanged = function () {
-            console.log($scope.selectedPeriod);
             if ($scope.selectedPeriod != selectedPeriod) {
                 var customize = {
                     value: -1,
@@ -92,19 +107,36 @@ function HourlyReportController($scope, UtilsService, HourlyReportAPIService, ui
                         $scope.trafficStatisticSummary = response.Summary;
                     }
                     mainGridAPI.setSummary(response.Summary);
-                    renderOverallChart();
+                   // renderOverallChart();
+                    showEntityStatisticsChart1(response);
+                    if (chart2SelectedEntityAPI != undefined)
+                    showEntityStatisticsChart2(response.Data, HourlyReportMeasureEnum.ASR);
                 }
                 onResponseReady(response);
                 $scope.showResult = true;
             })
         };
-        $scope.chartSelectedMeasureReady = function (api) {
-            chartSelectedMeasureAPI = api;
-        };
+        $scope.asrSelected;
+        $scope.acdSelected;
+        $scope.onChartSelectionChanged = function () {
+            if ($scope.asrSelected)
+                showEntityStatisticsChart2(currentData, HourlyReportMeasureEnum.ASR);
+            else if($scope.acdSelected)
+                showEntityStatisticsChart2(currentData, HourlyReportMeasureEnum.ACD);
+        }
+        //$scope.chartSelectedMeasureReady = function (api) {
+        //    chartSelectedMeasureAPI = api;
+        //};
         $scope.customvalidateSelectGroup = function () {
         };
-        $scope.chartSelectedEntityReady = function (api) {
-            chartSelectedEntityAPI = api;
+        $scope.chart1SelectedEntityReady = function (api) {
+            chart1SelectedEntityAPI = api;
+
+        };
+        $scope.chart2SelectedEntityReady = function (api) {
+            chart2SelectedEntityAPI = api;
+            if( $scope.showResult)
+                showEntityStatisticsChart2(currentData, HourlyReportMeasureEnum.ASR);
 
         };
         $scope.searchClicked = function () {
@@ -153,24 +185,38 @@ function HourlyReportController($scope, UtilsService, HourlyReportAPIService, ui
     }
 
     function retrieveData(withSummary) {
-        if (!chartSelectedMeasureAPI)
-            return;
-        if (chartSelectedEntityAPI)
-            chartSelectedEntityAPI.hideChart();
+        //if (!chartSelectedMeasureAPI)
+        //    return;
+        if (chart1SelectedEntityAPI)
+            chart1SelectedEntityAPI.hideChart();
+        if (chart2SelectedEntityAPI)
+            chart2SelectedEntityAPI.hideChart();
         var filter = buildFilter();
         var groupKeys = [];
 
         angular.forEach($scope.selectedGroupKeys, function (group) {
             groupKeys.push(group.value);
         });
+        var connectionList=[];
+        var carrierType;
+        
+        switch ($scope.selectedConnectionIndex) {
+            case 1: carrierType = CarrierTypeEnum.Customer.value; connectionList = UtilsService.getPropValuesFromArray($scope.selectedConnections, "Value");
+
+                break;
+            case 2: carrierType = CarrierTypeEnum.Supplier.value; connectionList = UtilsService.getPropValuesFromArray($scope.selectedConnections, "Value");
+                break;
+        }
+       
         $scope.filter = {
             filter: filter,
             groupKeys: groupKeys,
             fromDate: $scope.fromDate,
             toDate: $scope.toDate,
         };
-
         var query = {
+            CarrierType: carrierType,
+            ConnectionList: connectionList,
             Filter: filter,
             WithSummary: withSummary,
             GroupKeys: groupKeys,
@@ -192,7 +238,6 @@ function HourlyReportController($scope, UtilsService, HourlyReportAPIService, ui
             VRNotificationService.notifyExceptionWithClose(error, $scope);
         });
     }
-
     function defineMenuActions() {
         $scope.gridMenuActions = [{
             name: "CDRs",
@@ -245,64 +290,65 @@ function HourlyReportController($scope, UtilsService, HourlyReportAPIService, ui
             }
         }];
     }
-
     function loadMeasures() {
         for (var prop in HourlyReportMeasureEnum) {
             measures.push(HourlyReportMeasureEnum[prop]);
         }
     }
 
-    function renderOverallChart() {
-        var chartData = [];
-        var measure = overallSelectedMeasure;
-        var othersValue = $scope.trafficStatisticSummary[measure.propertyName];
-        var index = 1;
-        angular.forEach(currentData, function (itm) {
-            if (index > 15)
-                return;
-            index++;
-            var dataItem = {
-                groupKeyValues: itm.GroupKeyValues,
-                entityName: '',
-                value: itm.Data[measure.propertyName]
-            };
+    //function renderOverallChart() {
+    //    var chartData = [];
+    //    var measure = overallSelectedMeasure;
+    //    var othersValue = $scope.trafficStatisticSummary[measure.propertyName];
+    //    var index = 1;
+    //    angular.forEach(currentData, function (itm) {
+    //        if (index > 15)
+    //            return;
+    //        index++;
+    //        var dataItem = {
+    //            groupKeyValues: itm.GroupKeyValues,
+    //            entityName: '',
+    //            value: itm.Data[measure.propertyName]
+    //        };
 
-            for (var i = 0; i < $scope.currentSearchCriteria.groupKeys.length; i++) {
-                if (dataItem.entityName.length > 0)
-                    dataItem.entityName += ' - ';
-                dataItem.entityName += itm.GroupKeyValues[i].Name;
-            };
-            chartData.push(dataItem);
-            othersValue -= itm.Data[measure.propertyName];
-        });
-        chartData.sort(function (a, b) {
-            if (a.value > b.value) {
-                return 1;
-            }
-            if (a.value < b.value) {
-                return -1;
-            }
-            // a must be equal to b
-            return 0;
-        });
-        chartData.push({
-            entityName: "Others",
-            value: othersValue
-        });
-        var chartDefinition = {
-            type: "pie",
-            title: measure.description,
-            yAxisTitle: "Value"
-        };
+    //        for (var i = 0; i < $scope.currentSearchCriteria.groupKeys.length; i++) {
+    //            if (dataItem.entityName.length > 0)
+    //                dataItem.entityName += ' - ';
+    //            dataItem.entityName += itm.GroupKeyValues[i].Name;
+    //        };
+    //        chartData.push(dataItem);
+    //        othersValue -= itm.Data[measure.propertyName];
+    //    });
+    //    chartData.sort(function (a, b) {
+    //        if (a.value > b.value) {
+    //            return 1;
+    //        }
+    //        if (a.value < b.value) {
+    //            return -1;
+    //        }
+    //        // a must be equal to b
+    //        return 0;
+    //    });
+    //    chartData.push({
+    //        entityName: "Others",
+    //        value: othersValue
+    //    });
+    //    var chartDefinition = {
+    //        type: "pie",
+    //        title: measure.description,
+    //        yAxisTitle: "Value"
+    //    };
 
-        var seriesDefinitions = [{
-            title: measure.description,
-            titlePath: "entityName",
-            valuePath: "value"
-        }];
-        //console.log(chartData.length);
-        chartSelectedMeasureAPI.renderSingleDimensionChart(chartData, chartDefinition, seriesDefinitions);
-    }
+    //    var seriesDefinitions = [{
+    //        title: measure.description,
+    //        titlePath: "entityName",
+    //        valuePath: "value"
+    //    }];
+    //    //console.log(chartData.length);
+    //    chartSelectedMeasureAPI.renderSingleDimensionChart(chartData, chartDefinition, seriesDefinitions);
+    //}
+
+
     function buildFilter() {
         var filter = {};
         filter.SwitchIds = analyticsService.getFilterIds($scope.selectedSwitches, "SwitchId");
@@ -311,40 +357,81 @@ function HourlyReportController($scope, UtilsService, HourlyReportAPIService, ui
         filter.CodeGroups = analyticsService.getFilterIds($scope.selectedCodeGroups, "Code");
         return filter;
     }
-
-
-
-    function getAndShowEntityStatistics(groupKey) {
+    function showEntityStatisticsChart1(response) {
         $scope.isGettingEntityStatistics = true;
-        AnalyticsAPIService.GetTrafficStatistics(groupKey.value, $scope.selectedEntityId, $scope.fromDate, $scope.toDate)
-        .then(function (response) {
-            console.log(response);
-            var chartData = response;
-
-            var chartDefinition = {
-                type: "spline",
-                title: $scope.selectedEntityName
-            };
+    
+            
+            var chartData = [];
+            for (var i = 0; i < response.Data.length; i++) {
+                var values = {
+                    Attempts: response.Data[i].Data.Attempts,
+                    DurationsInMinutes: response.Data[i].Data.DurationsInMinutes
+                }
+                chartData.push(values);
+            }
+       
+            var title = "Traffic By Hour  ";
+            var seriesDefinitions = [];
+            angular.forEach(measures, function (measure) {
+                if (measure == HourlyReportMeasureEnum.Attempts || measure == HourlyReportMeasureEnum.DurationsInMinutes) {
+                    title += " - " + measure.description + " ";
+                    seriesDefinitions.push({
+                        title: measure.description,
+                        valuePath: measure.propertyName,
+                        //selected: (measure == HourlyReportMeasureEnum.Attempts)
+                    });
+                }
+               
+            });
             var xAxisDefinition = {
                 titlePath: "Attempts",
                 isDateTime: true
             };
-            var seriesDefinitions = [];
-            angular.forEach(measures, function (measure) {
+            var chartDefinition = {
+                type: "spline",
+                title: title,
+                yAxisTitle: "Value"
+            };
+            chart1SelectedEntityAPI.renderChart(chartData, chartDefinition, seriesDefinitions, xAxisDefinition);
+            $scope.isGettingEntityStatistics = false;
+
+    }
+    function showEntityStatisticsChart2(response,selectedEntity) {
+        $scope.isGettingEntityStatistics = true;
+        var chartData = [];
+        for (var i = 0; i < response.length; i++) {
+            var obj={
+                key:selectedEntity.propertyName,
+                value:response[i].Data[selectedEntity.propertyName]
+            }
+           
+            chartData.push(obj);
+        }
+        var title="Traffic By Hour  ";
+        var xAxisDefinition = {
+            titlePath: "value",
+            isDateTime: true
+        };
+        var seriesDefinitions = [];
+        angular.forEach(measures, function (measure) {
+            if (measure == HourlyReportMeasureEnum[selectedEntity.propertyName]) {
+                title +=" - "+ measure.description + " ";
                 seriesDefinitions.push({
                     title: measure.description,
-                    valuePath: measure.propertyName,
-                    selected: (measure == HourlyReportMeasureEnum.Attempts || measure == HourlyReportMeasureEnum.DurationsInMinutes)
+                    valuePath: "value",
+                    //selected: (measure == HourlyReportMeasureEnum.Attempts)
                 });
-            });
-
-            chartSelectedEntityAPI.renderChart(chartData, chartDefinition, seriesDefinitions, xAxisDefinition);
-        })
-        .finally(function () {
-            $scope.isGettingEntityStatistics = false;
-        });;
+            }
+              
+        });
+        var chartDefinition = {
+            type: "spline",
+            title: title,
+            yAxisTitle: "Value"
+        };
+        chart2SelectedEntityAPI.renderChart(chartData, chartDefinition, seriesDefinitions, xAxisDefinition);
+        $scope.isGettingEntityStatistics = false;
     }
-
     function loadSwitches() {
         return BusinessEntityAPIService.GetSwitches().then(function (response) {
             angular.forEach(response, function (itm) {

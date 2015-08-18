@@ -25,8 +25,8 @@ namespace TOne.Analytics.Entities
         public int SuccessfulAttempt { get; set; }
 
         public Decimal UtilizationInMinutes { get; set; }
-
-
-
+        public Decimal GrayArea { get; set; }
+        public Decimal GreenArea { get; set; }
+        
     }
 }

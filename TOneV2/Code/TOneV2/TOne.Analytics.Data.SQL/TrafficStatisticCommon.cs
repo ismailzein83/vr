@@ -10,7 +10,7 @@ namespace TOne.Analytics.Data.SQL
 {
    public class TrafficStatisticCommon
     {
-       public string GetTableName(IEnumerable<TrafficStatisticGroupKeys> groupKeys, GenericFilter filter)
+      public string GetTableName(IEnumerable<TrafficStatisticGroupKeys> groupKeys, GenericFilter filter)
        {
            foreach (var groupKey in groupKeys)
            {
@@ -21,8 +21,7 @@ namespace TOne.Analytics.Data.SQL
                return "TrafficStatsByCode ts WITH(NOLOCK ,INDEX(IX_TrafficStatsByCode_DateTimeFirst))";
            return "TrafficStats ts WITH(NOLOCK ,INDEX(IX_TrafficStats_DateTimeFirst)) ";
        }
-
-       public void AddFilterToQuery(GenericFilter filter, StringBuilder whereBuilder, HashSet<string> joinStatement)
+      public void AddFilterToQuery(GenericFilter filter, StringBuilder whereBuilder, HashSet<string> joinStatement)
        {
            AddFilter(whereBuilder, filter.SwitchIds, "ts.SwitchID");
            AddFilter(whereBuilder, filter.CustomerIds, "ts.CustomerID");
@@ -311,22 +310,23 @@ namespace TOne.Analytics.Data.SQL
                   break;
           }
       }
-     public const string SwitchIdColumnName = "SwitchID";
-     public const string OurZoneIDColumnName = "OurZoneID";
-     public const string CustomerIDColumnName = "CustomerID";
-     public const string SupplierIDColumnName = "SupplierID";
-     public const string Port_INColumnName = "Port_IN";
-     public const string Port_OutColumnName = "Port_OUT";
-     public const string CodeGroupNameColumnName = "CodeGroupName";
-     public const string SupplierZoneIDColumnName = "SupplierZoneID";
-     public const string GateWayInIDColumnName = "GateWayInName";
-     public const string GateWayOutIDColumnName = "GateWayOutName";
-     public const string CodeGroupIDColumnName = "CodeGroup";
-     public const string CodeBuyIDColumnName = "SupplierCode";
-     public const string CodeSalesIDColumnName = "OurCode";
-     public const string OurZonesJoinQuery = " LEFT JOIN  OurZones z ON ts.OurZoneID = z.ZoneID";
-     public const string GateWayInJoinQuery = "Left JOIN SwitchConnectivity cscIn  ON (','+cscIn.Details+',' LIKE '%,'+ts.Port_IN +',%' ) AND(ts.SwitchID = cscIn.SwitchID) AND ts.CustomerID =cscIn.CarrierAccount ";
-     public const string GateWayOutJoinQuery = "Left JOIN SwitchConnectivity cscOut ON  (','+cscOut.Details+',' LIKE '%,'+ts.Port_OUT +',%') AND (ts.SwitchID = cscOut.SwitchID)  AND ts.SupplierID  =cscOut.CarrierAccount  ";
-
+      #region Constant
+        public const string SwitchIdColumnName = "SwitchID";
+        public const string OurZoneIDColumnName = "OurZoneID";
+        public const string CustomerIDColumnName = "CustomerID";
+        public const string SupplierIDColumnName = "SupplierID";
+        public const string Port_INColumnName = "Port_IN";
+        public const string Port_OutColumnName = "Port_OUT";
+        public const string CodeGroupNameColumnName = "CodeGroupName";
+        public const string SupplierZoneIDColumnName = "SupplierZoneID";
+        public const string GateWayInIDColumnName = "GateWayInName";
+        public const string GateWayOutIDColumnName = "GateWayOutName";
+        public const string CodeGroupIDColumnName = "CodeGroup";
+        public const string CodeBuyIDColumnName = "SupplierCode";
+        public const string CodeSalesIDColumnName = "OurCode";
+        public const string OurZonesJoinQuery = " LEFT JOIN  OurZones z ON ts.OurZoneID = z.ZoneID";
+        public const string GateWayInJoinQuery = "Left JOIN SwitchConnectivity cscIn  ON (','+cscIn.Details+',' LIKE '%,'+ts.Port_IN +',%' ) AND(ts.SwitchID = cscIn.SwitchID) AND ts.CustomerID =cscIn.CarrierAccount ";
+        public const string GateWayOutJoinQuery = "Left JOIN SwitchConnectivity cscOut ON  (','+cscOut.Details+',' LIKE '%,'+ts.Port_OUT +',%') AND (ts.SwitchID = cscOut.SwitchID)  AND ts.SupplierID  =cscOut.CarrierAccount  ";
+      #endregion
     }
 }

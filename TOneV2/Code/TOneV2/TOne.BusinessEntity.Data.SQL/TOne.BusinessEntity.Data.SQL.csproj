@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="AccountManagerCarrierDataManager.cs" />
     <Compile Include="AssignedCarrierDataManager.cs" />
+    <Compile Include="CarrierAccountConnectionDataManager.cs" />
     <Compile Include="CarrierAccountDataManager.cs" />
     <Compile Include="CarrierGroupDataManager.cs" />
     <Compile Include="CarrierMaskDataManager.cs" />

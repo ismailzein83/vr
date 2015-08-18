@@ -16,5 +16,10 @@ namespace TOne.Analytics.Business
            IHourlyReportDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<IHourlyReportDataManager>();
            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetHourlyReportData(input));
        }
+       public IEnumerable<HourlyReport> GetHourlyReport(TrafficStatisticGroupKeys filterByColumn, string columnFilterValue, DateTime from, DateTime to)
+       {
+           IHourlyReportDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<IHourlyReportDataManager>();
+           return dataManager.GetHourlyReport(filterByColumn, columnFilterValue, from, to);
+       }
     }
 }

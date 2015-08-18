@@ -17,5 +17,11 @@ namespace TOne.Analytics.Web.Controllers
             return GetWebResponse(input, manager.GetHourlyReportData(input));
 
         }
+        [HttpGet]
+        public IEnumerable<HourlyReport> GetHourlyReport(TrafficStatisticGroupKeys filterByColumn, string columnFilterValue, DateTime from, DateTime to)
+        {
+            HourlyReportManager manager = new HourlyReportManager();
+            return manager.GetHourlyReport(filterByColumn, columnFilterValue, from, to);
+        }
     }
 }
