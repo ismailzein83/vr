@@ -14,11 +14,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public DateTime? ValidTill { get; set; }
 
-        public int StrategyId { get; set; }
+        public int? StrategyId { get; set; }
 
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
 
         public DateTime LogDate { get; set; }
+
+        public string StrategyName { get; set; }
+
+        public string StatusName { get; set; }
+
+        public string UserName { get; set; }
+
 
     }
 

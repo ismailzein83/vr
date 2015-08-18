@@ -1,7 +1,8 @@
 ﻿app.service('CaseManagementAPIService', function (BaseAPIService) {
 
     return ({
-        SaveAccountCase: SaveAccountCase
+        SaveAccountCase: SaveAccountCase,
+        GetFilteredAccountCases: GetFilteredAccountCases
     });
 
     function SaveAccountCase(accountCase) {
@@ -9,6 +10,14 @@
             accountCase
            );
     }
+
+    function GetFilteredAccountCases(input) {
+        return BaseAPIService.post("/api/CaseManagement/GetFilteredAccountCases", input);
+    }
+
+
+
+    
 
 
 });

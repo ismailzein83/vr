@@ -2,33 +2,36 @@
     <vr-modalbody vr-loader="isGettingData">
         <vr-form name="formSuspiciousNumberDetails">
             <vr-row>
-                <vr-columns colnum="2">
-                    <vr-label>Account Number:</vr-label>
-                </vr-columns>
-                <vr-columns colnum="2">
-                    <vr-label isvalue>{{accountNumber}}</vr-label>
-                </vr-columns>
-
 
                 <vr-columns colnum="2">
-                    <vr-label>Suspicion Level:</vr-label>
-                </vr-columns>
-                <vr-columns colnum="2">
-                    <vr-label isvalue>{{suspicionLevelName}}</vr-label>
+                    <vr-label>Account Number</vr-label>
+                    <vr-textbox value="accountNumber"   readonly ></vr-textbox>
                 </vr-columns>
 
 
 
                 <vr-columns colnum="2">
-                    <vr-label>Related Numbers:</vr-label>
+                    <vr-label>Suspicion Level</vr-label>
+                    <vr-textbox value="suspicionLevelName" readonly ></vr-textbox>
                 </vr-columns>
                 <vr-columns colnum="2">
-                    <vr-select datasource="relatedNumbers" selectedvalues="selectedRelatedNumber" onselectionchanged="selectedRelatedNumbersChanged"></vr-select>
+                    <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired onvaluechanged="onvaluechanged"></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns colnum="2">
+                    <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired onvaluechanged="onvaluechanged"></vr-datetimepicker>
+                </vr-columns>
+
+
+                <vr-columns colnum="2">
+                    <vr-select label="Related Numbers" datasource="relatedNumbers" selectedvalues="selectedRelatedNumber" onselectionchanged="onvaluechanged"></vr-select>
                 </vr-columns>
 
 
 
             </vr-row>
+
+
+         
 
             <vr-row>
 
@@ -36,12 +39,13 @@
                     <vr-choices selectedindex="selectedGroupKeyIndex" onselectionchanged="groupKeySelectionChanged();">
                         <vr-choice isselected="isNormalCDRTabShown">CDR</vr-choice>
                         <vr-choice isselected="isNumberProfileTabShown">Number Profile</vr-choice>
+                        <vr-choice isselected="isRelatedCaseTabShown">Related Cases</vr-choice>
                     </vr-choices>
 
                     <div>
                         <vr-row>
                             <vr-columns colnum="12">
-                                <div ng-show="isNormalCDRTabShown" >
+                                <div ng-show="isNormalCDRTabShown">
                                     <vr-datagrid datasource="normalCDRs" dataretrievalfunction="dataRetrievalFunction_NormalCDRs" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onNormalCDRsGridReady">
                                         <vr-datagridcolumn headertext="'IMSI'" field="'IMSI'" widthfactor="13">  </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Connect'" field="'ConnectDateTime'" type="'Datetime'" widthfactor="17"></vr-datagridcolumn>
@@ -58,8 +62,8 @@
                                     </vr-datagrid>
 
                                 </div>
-                                <div ng-show="isNumberProfileTabShown" >
-                                    <vr-datagrid datasource="numberProfiles" dataretrievalfunction="dataRetrievalFunction_NumberProfiles" maxheight="400px" rotate="true" pagingtype="'PagingOnScroll'" on-ready="onNumberProfilesGridReady" >
+                                <div ng-show="isNumberProfileTabShown">
+                                    <vr-datagrid datasource="numberProfiles" dataretrievalfunction="dataRetrievalFunction_NumberProfiles" maxheight="400px" rotate="true" pagingtype="'PagingOnScroll'" on-ready="onNumberProfilesGridReady">
 
                                         <vr-datagridcolumn headertext="'From Date'" field="'FromDate'" type="'Datetime'" widthfactor="20"></vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'To Date'" field="'ToDate'" type="'Datetime'" widthfactor="20"></vr-datagridcolumn>
@@ -74,6 +78,20 @@
 
                                     </vr-datagrid>
                                 </div>
+
+
+                                <div ng-show="isRelatedCaseTabShown">
+                                    <vr-datagrid datasource="relatedCases" dataretrievalfunction="dataRetrievalFunction_RelatedCases" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onRelatedCasesGridReady">
+
+                                        <vr-datagridcolumn headertext="'Log Date'" field="'LogDate'" type="'Datetime'" widthfactor="20"></vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Status'" field="'StatusName'" widthfactor="20"></vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" widthfactor="20"></vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Analyst'" field="'UserName'" widthfactor="20"></vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Valid Till'" field="'ValidTill'" type="'Datetime'" widthfactor="20" ></vr-datagridcolumn>
+
+                                    </vr-datagrid>
+                                </div>
+
                             </vr-columns>
                         </vr-row>
                     </div>
@@ -81,15 +99,15 @@
 
             </vr-row>
 
-            <vr-row>
+            <vr-row ng-show="accountNumber==selectedRelatedNumber">
                 <vr-columns width="fullrow">
                     <vr-section title="Update Case: ">
                         <div style="max-height:285px;overflow-y:auto;overflow-x:hidden">
                             <vr-columns colnum="2">
-                                <vr-select datasource="statuses" datatextfield="name" datavaluefield="id" selectedvalues="selectedStatus" onselectionchanged="selectedStatusChanged" label="Status" isrequired></vr-select>
+                                <vr-select datasource="statuses" datatextfield="name" datavaluefield="id" selectedvalues="selectedStatus" label="Status" isrequired></vr-select>
                             </vr-columns>
                             <vr-columns colnum="2">
-                                <vr-datetimepicker type="date" value="validTill" label="Valid Till" ng-show="selectedStatus.id==4 || selectedStatus.id==5" isrequired></vr-datetimepicker> <!--statuses: fraud =3,white list=4-->
+                                <vr-datetimepicker type="date" value="validTill" label="Valid Till" ng-if="selectedStatus.id==4" isrequired></vr-datetimepicker> <!--statuses: fraud =3,white list=4-->
                             </vr-columns>
                         </div>
                     </vr-section>
@@ -104,7 +122,7 @@
 
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="ApplyChanges" formname="formSuspiciousNumberDetails" data-onclick="ApplyChangeStatus"  ></vr-button>
+                <vr-button type="ApplyChanges" formname="formSuspiciousNumberDetails" data-onclick="ApplyChangeStatus" ng-show="accountNumber==selectedRelatedNumber"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>

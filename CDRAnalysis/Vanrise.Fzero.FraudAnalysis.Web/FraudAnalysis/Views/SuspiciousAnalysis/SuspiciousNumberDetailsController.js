@@ -3,6 +3,8 @@
 function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDRAPIService, SuspicionAnalysisAPIService, NumberProfileAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CaseManagementAPIService, CaseStatusEnum) {
     var normalCDRGridAPI;
     var numberProfileGridAPI;
+    var relatedCaseGridAPI;
+
     var lastOccurance;
     var strategyName;
     var numberofOccurances;
@@ -10,6 +12,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
     var suspicionLevelsList;
     var isNormalCDRDataLoaded = false;
     var isNumberProfileDataLoaded = false;
+    var isRelatedCaseDataLoaded = false;
     var pageLoaded = false;
 
     loadParameters();
@@ -20,8 +23,10 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
     function loadParameters() {
 
         $scope.statuses = [];
+        $scope.selectedStatus = '';
         angular.forEach(CaseStatusEnum, function (status) {
-            $scope.statuses.push({ id: status.id, name: status.name })
+            if (status != CaseStatusEnum.Open)
+                $scope.statuses.push({ id: status.id, name: status.name })
         });
 
         var parameters = VRNavigationService.getParameters($scope);
@@ -46,10 +51,13 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         $scope.aggregateDefinitions = [];
         $scope.normalCDRs = [];
         $scope.numberProfiles = [];
+        $scope.relatedCases = [];
         $scope.relatedNumbers = [];
-
-        SuspiciousNumberDetailsController.isNumberProfileTabShown =false ;
+        
         SuspiciousNumberDetailsController.isNormalCDRTabShown = true;
+        SuspiciousNumberDetailsController.isNumberProfileTabShown = false;
+        SuspiciousNumberDetailsController.isRelatedCaseTabShown = false;
+
 
         $scope.onNormalCDRsGridReady = function (api) {
             normalCDRGridAPI = api;
@@ -63,6 +71,15 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
             numberProfileGridAPI = api;
             if (SuspiciousNumberDetailsController.isNumberProfileTabShown) {
                 return retrieveData_NumberProfiles();
+
+            }
+        };
+
+
+        $scope.onRelatedCasesGridReady = function (api) {
+            relatedCaseGridAPI = api;
+            if (SuspiciousNumberDetailsController.isRelatedCaseTabShown) {
+                return retrieveData_RelatedCases();
 
             }
         };
@@ -110,15 +127,19 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
                     isNumberProfileDataLoaded = true;
                     return retrieveData_NumberProfiles();
                 }
+                else if ($scope.selectedGroupKeyIndex == 2 && !isNumberProfileDataLoaded) {
+                    isRelatedCaseDataLoaded = true;
+                    return retrieveData_RelatedCases();
+                }
 
             }
         };
 
-        $scope.selectedRelatedNumbersChanged = function () {
+        $scope.onvaluechanged = function () {
             if (pageLoaded) {
-                $scope.accountNumber = $scope.selectedRelatedNumber
                 isNormalCDRDataLoaded = false;
                 isNumberProfileDataLoaded = false;
+                isRelatedCaseDataLoaded = false;
                 $scope.groupKeySelectionChanged();
             }
             else {
@@ -141,6 +162,13 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
             });
         }
 
+        $scope.dataRetrievalFunction_RelatedCases = function (dataRetrievalInput, onResponseReady) {
+            return CaseManagementAPIService.GetFilteredAccountCases(dataRetrievalInput)
+            .then(function (response) {
+                onResponseReady(response);
+            });
+        }
+
 
 
 
@@ -151,11 +179,11 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         var number = parseInt($scope.accountNumber);
 
         var relatedNumbers = [];
-        for (var i = 5; i >= 1; i--) {
+        for (var i = 10; i >= 1; i--) {
             relatedNumbers.push(number - i);
         }
         relatedNumbers.push(number);
-        for (var i = 1; i <= 5; i++) {
+        for (var i = 1; i <= 10; i++) {
             relatedNumbers.push(number + i);
         }
 
@@ -172,13 +200,6 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
             return SuspicionAnalysisAPIService.GetFraudResult($scope.fromDate, $scope.toDate, strategiesList.slice(0, -1), suspicionLevelsList.slice(0, -1), $scope.accountNumber).then(function (response) {
 
                 $scope.suspicionLevelName = response.SuspicionLevelName;
-
-                if (response.StatusId == null) {
-                    $scope.selectedStatus = UtilsService.getItemByVal($scope.statuses, 1, "id");
-                }
-                else {
-                    $scope.selectedStatus = UtilsService.getItemByVal($scope.statuses, response.StatusId, "id");
-                }
 
 
                 if (response.ValidTill == null) {
@@ -234,16 +255,16 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
             StatusId: $scope.selectedStatus.id,
             ValidTill: validTill
         };
+        console.log(accountCaseObject)
         return accountCaseObject;
     }
-
 
     function retrieveData_NormalCDRs() {
 
         var query = {
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate,
-            MSISDN: $scope.accountNumber
+            MSISDN: $scope.selectedRelatedNumber
         };
 
 
@@ -255,10 +276,19 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         var query = {
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate,
-            AccountNumber: $scope.accountNumber
+            AccountNumber: $scope.selectedRelatedNumber
         };
 
         return numberProfileGridAPI.retrieveData(query);
+    }
+
+    function retrieveData_RelatedCases() {
+
+        var query = {
+            AccountNumber: $scope.selectedRelatedNumber
+        };
+
+        return relatedCaseGridAPI.retrieveData(query);
     }
 
 }

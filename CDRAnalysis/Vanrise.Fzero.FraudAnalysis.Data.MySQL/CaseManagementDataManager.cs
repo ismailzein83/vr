@@ -16,5 +16,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         {
             throw new NotImplementedException();
         }
+
+
+        public Vanrise.Entities.BigResult<AccountCase> GetFilteredAccountCases(Vanrise.Entities.DataRetrievalInput<AccountCaseResultQuery> input)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

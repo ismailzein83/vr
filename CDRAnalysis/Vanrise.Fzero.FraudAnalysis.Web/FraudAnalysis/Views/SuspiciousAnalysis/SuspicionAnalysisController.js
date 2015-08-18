@@ -56,7 +56,6 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return SuspicionAnalysisAPIService.GetFilteredSuspiciousNumbers(dataRetrievalInput)
             .then(function (response) {
-                console.log(response)
                 onResponseReady(response);
             });
         }
@@ -161,7 +160,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
         var settings = {};
 
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = "Suspicious Number Details & Related Numbers";
+            modalScope.title = "Suspicious Number Details";
             modalScope.onAccountCaseUpdated = function (accountCase) {
 
                 mainGridAPI.itemUpdated(accountCase);
