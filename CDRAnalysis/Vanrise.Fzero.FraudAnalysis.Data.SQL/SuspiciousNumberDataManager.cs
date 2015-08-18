@@ -17,6 +17,32 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
+        public void UpdateSusbcriberCases(Dictionary<string, int> cases)
+        {
+            DataTable dataTable = new DataTable("[FraudAnalysis].[AccountCaseType]");
+            //we create column names as per the type in DB 
+            dataTable.Columns.Add("AccountNumber", typeof(string));
+            dataTable.Columns.Add("StrategyId", typeof(int));
+            foreach (var i in cases)
+            {
+                dataTable.Rows.Add(i.Key,i.Value );
+            }
+
+
+
+            ExecuteNonQuerySPCmd("[FraudAnalysis].[sp_FraudResult_UpdateAccountCases]",
+                  (cmd) =>
+                  {
+
+                      SqlParameter parameter = new SqlParameter();
+                      parameter.ParameterName = "@AccountCase";
+                      parameter.SqlDbType = System.Data.SqlDbType.Structured;
+                      parameter.Value = dataTable;
+                      parameter.TypeName = "[FraudAnalysis].[AccountCaseType]";
+                      cmd.Parameters.Add(parameter);
+                  });
+        }
+
 
         public BigResult<FraudResult> GetFilteredSuspiciousNumbers(Vanrise.Entities.DataRetrievalInput<FraudResultQuery> input)
         {

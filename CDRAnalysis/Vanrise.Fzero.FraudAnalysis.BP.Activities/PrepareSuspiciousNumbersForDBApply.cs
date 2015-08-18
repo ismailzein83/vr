@@ -31,6 +31,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         protected override void DoWork(PrepareSuspiciousNumbersForDBApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             ISuspiciousNumberDataManager dataManager = FraudDataManagerFactory.GetDataManager<ISuspiciousNumberDataManager>();
+           
             PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, suspicousNumberBatch => suspicousNumberBatch.SuspiciousNumbers);
         }        
 

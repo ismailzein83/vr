@@ -7,6 +7,7 @@ using Vanrise.Queueing;
 using System.Linq;
 using System;
 using Vanrise.Common;
+using Vanrise.Fzero.FraudAnalysis.Data;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
@@ -59,6 +60,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started Collecting Suspicious Numbers ");
 
             Dictionary<int, FraudManager> fraudManagers = new Dictionary<int, FraudManager>();
+            ISuspiciousNumberDataManager dataManager = FraudDataManagerFactory.GetDataManager<ISuspiciousNumberDataManager>();
 
                 foreach (var strategy in inputArgument.Strategies)
                 {
@@ -88,13 +90,23 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                     }
 
                                     numberProfiles.Add(number);
-                                    //suspiciousNumbers.Add(sNumber);
                                 }
                                 if (suspiciousNumbers.Count > 0)
-                                    inputArgument.OutputQueue.Enqueue(new SuspiciousNumberBatch
+                                {
+                                    Dictionary<string, int> cases = new Dictionary<string, int>();
+                                                foreach (var i in suspiciousNumbers)
+                                                {
+                                                    cases.Add(i.Number, i.StrategyId);
+                                                }
+                                                dataManager.UpdateSusbcriberCases(cases);
+
+                                     inputArgument.OutputQueue.Enqueue(new SuspiciousNumberBatch
                                     {
                                         SuspiciousNumbers = suspiciousNumbers
                                     });
+
+                                }
+                                   
                                 if (numberProfiles.Count > 0)
                                     inputArgument.OutputQueue2.Enqueue(new NumberProfileBatch
                                     {
