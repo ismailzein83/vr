@@ -45,7 +45,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
 
 
 
-        public void UpdateSusbcriberCases(Dictionary<string, int> cases)
+        public void UpdateSusbcriberCases(List<AccountCaseType> cases)
         {
             throw new NotImplementedException();
         }

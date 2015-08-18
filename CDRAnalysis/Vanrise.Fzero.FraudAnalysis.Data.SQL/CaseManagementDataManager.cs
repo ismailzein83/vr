@@ -46,7 +46,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             accountCase.StatusID = (int)reader["StatusId"];
             accountCase.StatusName = reader["StatusName"] as string;
             accountCase.StrategyId =  GetReaderValue<int?>(reader,"StrategyId");
+            accountCase.SuspicionLevelID = GetReaderValue<int?>(reader, "SuspicionLevelID");
             accountCase.StrategyName = reader["StrategyName"] as string;
+            accountCase.SuspicionLevelName = reader["SuspicionLevelName"] as string;
             accountCase.UserId = GetReaderValue<int?>(reader, "UserId");
             accountCase.ValidTill = GetReaderValue<DateTime?>(reader, "ValidTill");
 

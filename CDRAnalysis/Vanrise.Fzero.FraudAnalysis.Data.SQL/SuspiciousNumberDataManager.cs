@@ -17,15 +17,16 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
-        public void UpdateSusbcriberCases(Dictionary<string, int> cases)
+        public void UpdateSusbcriberCases(List<AccountCaseType> cases)
         {
             DataTable dataTable = new DataTable("[FraudAnalysis].[AccountCaseType]");
             //we create column names as per the type in DB 
             dataTable.Columns.Add("AccountNumber", typeof(string));
             dataTable.Columns.Add("StrategyId", typeof(int));
+            dataTable.Columns.Add("SuspicionLevelID", typeof(int));
             foreach (var i in cases)
             {
-                dataTable.Rows.Add(i.Key,i.Value );
+                dataTable.Rows.Add(i.AccountNumber,i.StrategyId, i.SuspicionLevelID     );
             }
 
 

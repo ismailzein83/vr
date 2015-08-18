@@ -93,10 +93,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                 }
                                 if (suspiciousNumbers.Count > 0)
                                 {
-                                    Dictionary<string, int> cases = new Dictionary<string, int>();
+                                    List<AccountCaseType> cases = new List<AccountCaseType>();
                                                 foreach (var i in suspiciousNumbers)
                                                 {
-                                                    cases.Add(i.Number, i.StrategyId);
+                                                    cases.Add(  new AccountCaseType(){AccountNumber= i.Number, StrategyId= i.StrategyId, SuspicionLevelID= i.SuspectionLevel});
                                                 }
                                                 dataManager.UpdateSusbcriberCases(cases);
 
