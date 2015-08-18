@@ -167,11 +167,16 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
             setTimeout(function () {
                 $('div[name=' + $attrs.id + ']').on('show.bs.dropdown', function (e) {
                     vrSelectSharedObject.onOpenDropDown($attrs.id);
+                    setTimeout(function () {
+                        $('#filterInput').focus();
+                    }, 1);
                     $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
                 });
 
                 $('div[name=' + $attrs.id + ']').attr('name', $attrs.id).on('hide.bs.dropdown', function (e) {
+                    $('#filterInput').blur();
                     vrSelectSharedObject.onCloseDropDown($attrs.id);
+                  
                     $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
                 });
             }, 100);

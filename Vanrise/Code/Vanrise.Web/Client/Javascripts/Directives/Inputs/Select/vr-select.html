@@ -11,10 +11,10 @@
                             <div class="inner-addon right-addon">
 
                                 <i ng-if="! ctrl.isRemoteLoad()" class="glyphicon glyphicon-remove hand-cursor" ng-click="ctrl.clearFilter($event)"></i>
-                                <input ng-if="!ctrl.isRemoteLoad()" type="text" class="form-control input-sm" style="width:100%" ng-model="ctrl.filtername" ng-click="ctrl.muteAction($event)" />
+                                <input ng-if="!ctrl.isRemoteLoad()" id="filterInput" type="text" class="form-control input-sm" style="width:100%" ng-model="ctrl.filtername" ng-click="ctrl.muteAction($event)" />
 
                                 <i ng-if="ctrl.isRemoteLoad()" class="glyphicon icon-loader" ng-show="ctrl.showloading"></i>
-                                <input ng-if="ctrl.isRemoteLoad()" class="form-control input-sm" style="width:100%" type="text" placeholder="{{ctrl.limitplaceholder}}" ng-click="ctrl.muteAction($event)" ng-model="ctrl.filtername" ng-change="ctrl.search();">
+                                <input ng-if="ctrl.isRemoteLoad()" id="filterInput" class="form-control input-sm" style="width:100%" type="text" placeholder="{{ctrl.limitplaceholder}}" ng-click="ctrl.muteAction($event)" ng-model="ctrl.filtername" ng-change="ctrl.search();">
 
                             </div>
                         </div>
@@ -43,7 +43,7 @@
                         <div ng-if="ctrl.withLocalFiter()" style="padding-bottom: 5px; border-bottom: 1px solid #f0f0f0; ">
                             <div class="inner-addon right-addon">
                                 <i class="glyphicon glyphicon-remove hand-cursor" ng-if="ctrl.filtername.length > 0" style="top:9px" ng-click="ctrl.clearFilter($event)"></i>
-                                <input type="text" class="form-control input-sm" style="width:100%" ng-model="ctrl.filtername" ng-click="ctrl.muteAction($event)" />
+                                <input id="filterInput" type="text" class="form-control input-sm" style="width:100%" ng-model="ctrl.filtername" ng-click="ctrl.muteAction($event)" />
                             </div>
                         </div>
                         <div class="vr-select-height">
