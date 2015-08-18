@@ -19,7 +19,7 @@ function DailyTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, Utils
 
         $scope.schedulerTypeTaskTrigger.getData = function () {
             return {
-                $type: "Vanrise.Runtime.Business.DailyTimeSchedulerTaskTrigger, Vanrise.Runtime.Business",
+                $type: "Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.DailyTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments",
                 SelectedType: TimeSchedulerTypeEnum.Daily.value,
                 ScheduledHours: $scope.selectedHours
             };

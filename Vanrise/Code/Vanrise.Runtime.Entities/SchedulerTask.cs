@@ -48,12 +48,13 @@ namespace Vanrise.Runtime.Entities
 
         public int TriggerTypeId { get; set; }
 
-        public SchedulerTaskTrigger TaskTrigger { get; set; }
-
         public int ActionTypeId { get; set; }
 
-        public SchedulerTaskAction TaskAction { get; set; }
+        public TriggerTypeInfo TriggerInfo { get; set; }
 
+        public ActionTypeInfo ActionInfo { get; set; }
+
+        public SchedulerTaskSettings TaskSettings { get; set; }
 
 
         public static string GetEnumDescription(Enum value)
@@ -71,6 +72,10 @@ namespace Vanrise.Runtime.Entities
 
     }
 
+    public class SchedulerTaskSettings
+    {
+        public BaseTaskActionArgument TaskActionArgument { get; set; }
 
-
+        public BaseTaskTriggerArgument TaskTriggerArgument { get; set; }
+    }
 }

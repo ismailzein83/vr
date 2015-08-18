@@ -8,8 +8,6 @@ namespace Vanrise.Runtime.Entities
 {
     public abstract class SchedulerTaskAction
     {
-        public Dictionary<string, object> RawExpressions { get; set; }
-
-        public abstract void Execute(SchedulerTask task, Dictionary<string, object> evaluatedExpressions);
+        public abstract void Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument, Dictionary<string, object> evaluatedExpressions);
     }
 }

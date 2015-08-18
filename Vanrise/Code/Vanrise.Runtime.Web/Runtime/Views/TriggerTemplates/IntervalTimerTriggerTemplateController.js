@@ -13,7 +13,7 @@ function IntervalTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, In
 
         $scope.schedulerTypeTaskTrigger.getData = function () {
             return {
-                $type: "Vanrise.Runtime.Business.IntervalTimeSchedulerTaskTrigger, Vanrise.Runtime.Business",
+                $type: "Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.IntervalTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments",
                 SelectedType: TimeSchedulerTypeEnum.Interval.value,
                 Interval: $scope.interval,
                 IntervalType: $scope.selectedIntervalType.value

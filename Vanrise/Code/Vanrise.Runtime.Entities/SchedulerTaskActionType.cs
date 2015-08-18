@@ -20,5 +20,8 @@ namespace Vanrise.Runtime.Entities
         public string URL { get; set; }
 
         public bool SystemType { get; set; }
+
+        public string FQTN { get; set; }
+
     }
 }

@@ -151,9 +151,8 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
             IsEnabled: $scope.isEnabled,
             TaskType: 0,
             TriggerTypeId: 1,
-            TaskTrigger: $scope.schedulerTaskTrigger.getData(),
             ActionTypeId: 2,
-            TaskAction: { $type: "Vanrise.Integration.Business.DSSchedulerTaskAction, Vanrise.Integration.Business" }
+            TaskSettings: { TaskTriggerArgument: $scope.schedulerTaskTrigger.getData() }
         };
 
         return { DataSourceData: dataSourceData, TaskData: taskData };
@@ -171,7 +170,7 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
         $scope.isEnabled = dataSourceObject.TaskData.IsEnabled;
         
 
-        $scope.schedulerTaskTrigger.data = dataSourceObject.TaskData.TaskTrigger;
+        $scope.schedulerTaskTrigger.data = dataSourceObject.TaskData.TaskSettings.TaskTriggerArgument;
         if ($scope.schedulerTaskTrigger.loadTemplateData != undefined)
             $scope.schedulerTaskTrigger.loadTemplateData();
 

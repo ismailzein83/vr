@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Vanrise.Runtime.Entities;
 
-namespace Vanrise.Runtime.Business
+namespace Vanrise.Runtime.Entities
 {
-    
-
-    public class TimeSchedulerTaskTrigger
+    public class BaseTaskTriggerArgument
     {
     }
 }

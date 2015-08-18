@@ -17,7 +17,7 @@ namespace Vanrise.Integration.Business
     {
         DataSourceLogger _logger = new DataSourceLogger();
 
-        public override void Execute(SchedulerTask task, Dictionary<string, object> evaluatedExpressions)
+        public override void Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument, Dictionary<string, object> evaluatedExpressions)
         {
             DataSourceManager dataManager = new DataSourceManager();
             Vanrise.Integration.Entities.DataSource dataSource = dataManager.GetDataSourcebyTaskId(task.TaskId);
@@ -41,10 +41,10 @@ namespace Vanrise.Integration.Business
                 }
                 else
                 {
-                    _logger.WriteInformation("{0} stage(s) are ready for use", queuesByStages.Count); 
+                    _logger.WriteInformation("{0} stage(s) are ready for use", queuesByStages.Count);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.WriteError("An error occurred while preparing stages. Exception Details {0}", ex.Message);
                 throw;
@@ -55,58 +55,58 @@ namespace Vanrise.Integration.Business
             BaseReceiveAdapter adapter = (BaseReceiveAdapter)Activator.CreateInstance(Type.GetType(dataSource.AdapterInfo.FQTN));
             adapter.SetLogger(_logger);
             adapter.ImportData(dataSource.Settings.AdapterArgument, data =>
+            {
+                ImportedBatchEntry importedBatchEntry = new ImportedBatchEntry();
+                importedBatchEntry.BatchSize = data.BatchSize;
+                importedBatchEntry.BatchDescription = data.Description;
+
+                _logger.WriteVerbose("Import Process is done, preparing for mapping data with description {0}", data.Description);
+
+                _logger.WriteVerbose("Executing the custom code written for the mapper");
+                MappedBatchItemsToEnqueue outputItems = new MappedBatchItemsToEnqueue();
+                MappingOutput outputResult = this.ExecuteCustomCode(dataSource.DataSourceId, dataSource.Settings.MapperCustomCode, data, outputItems);
+
+                importedBatchEntry.Result = outputResult.Result;
+                importedBatchEntry.MapperMessage = outputResult.Message;
+
+                List<long> queueItemsIds = new List<long>();
+                int totalRecordsCount = 0;
+
+                if (outputItems.Count > 0)
                 {
-                    ImportedBatchEntry importedBatchEntry = new ImportedBatchEntry();
-                    importedBatchEntry.BatchSize = data.BatchSize;
-                    importedBatchEntry.BatchDescription = data.Description;
-                    
-                    _logger.WriteVerbose("Import Process is done, preparing for mapping data with description {0}", data.Description);
-
-                    _logger.WriteVerbose("Executing the custom code written for the mapper");
-                    MappedBatchItemsToEnqueue outputItems = new MappedBatchItemsToEnqueue();
-                    MappingOutput outputResult = this.ExecuteCustomCode(dataSource.DataSourceId, dataSource.Settings.MapperCustomCode, data, outputItems);
-
-                    importedBatchEntry.Result = outputResult.Result;
-                    importedBatchEntry.MapperMessage = outputResult.Message;
-
-                    List<long> queueItemsIds = new List<long>();
-                    int totalRecordsCount = 0;
-
-                    if (outputItems.Count > 0)
+                    foreach (var outputItem in outputItems)
                     {
-                        foreach (var outputItem in outputItems)
+                        try
                         {
-                            try
-                            {
-                                _logger.WriteInformation("Enqueuing item '{0}' to stage '{1}'", outputItem.Item.GenerateDescription(), outputItem.StageName);
+                            _logger.WriteInformation("Enqueuing item '{0}' to stage '{1}'", outputItem.Item.GenerateDescription(), outputItem.StageName);
 
-                                long queueItemId = queuesByStages[outputItem.StageName].Queue.EnqueueObject(outputItem.Item);
-                                _logger.WriteInformation("Enqueued the item successfully");
+                            long queueItemId = queuesByStages[outputItem.StageName].Queue.EnqueueObject(outputItem.Item);
+                            _logger.WriteInformation("Enqueued the item successfully");
 
-                                queueItemsIds.Add(queueItemId);
-                                totalRecordsCount += outputItem.Item.GetRecordCount();
-                            }
-                            catch(Exception ex)
-                            {
-                                _logger.WriteError("An error occured while enqueuing item in stage {0}. Exception details {1}", outputItem.StageName, ex.Message);
-                                throw;
-                            }
+                            queueItemsIds.Add(queueItemId);
+                            totalRecordsCount += outputItem.Item.GetRecordCount();
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.WriteError("An error occured while enqueuing item in stage {0}. Exception details {1}", outputItem.StageName, ex.Message);
+                            throw;
                         }
                     }
-                    else
-                    {
-                        _logger.WriteWarning("No mapped items to qneueue, the written custom code should specify at least one output item to enqueue items to");
-                    }
-                    data.OnDisposed();
+                }
+                else
+                {
+                    _logger.WriteWarning("No mapped items to qneueue, the written custom code should specify at least one output item to enqueue items to");
+                }
+                data.OnDisposed();
 
-                    importedBatchEntry.QueueItemsIds = string.Join(",", queueItemsIds);
-                    importedBatchEntry.RecordsCount = totalRecordsCount;
+                importedBatchEntry.QueueItemsIds = string.Join(",", queueItemsIds);
+                importedBatchEntry.RecordsCount = totalRecordsCount;
 
-                    long importedBatchId = _logger.LogImportedBatchEntry(importedBatchEntry);
-                    _logger.LogEntry(Common.LogEntryType.Information, importedBatchId, "Finished running data source task with name '{0}'", dataSource.Name);
+                long importedBatchId = _logger.LogImportedBatchEntry(importedBatchEntry);
+                _logger.LogEntry(Common.LogEntryType.Information, importedBatchId, "Finished running data source task with name '{0}'", dataSource.Name);
 
-                    return (outputResult.Result == MappingResult.Valid);
-                });
+                return (outputResult.Result == MappingResult.Valid);
+            });
         }
 
         private MappingOutput ExecuteCustomCode(int dataSourceId, string customCode, IImportedData data, MappedBatchItemsToEnqueue outputItems)

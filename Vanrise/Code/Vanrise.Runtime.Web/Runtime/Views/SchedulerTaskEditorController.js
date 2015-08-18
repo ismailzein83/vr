@@ -119,16 +119,14 @@ function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsSer
     }
 
     function buildTaskObjFromScope() {
-
         var taskObject = {
             TaskId: (taskId != null) ? taskId : 0,
             Name: $scope.name,
             IsEnabled: $scope.isEnabled,
             TaskType: 1,
             TriggerTypeId: $scope.selectedTriggerType.TriggerTypeId,
-            TaskTrigger: $scope.schedulerTaskTrigger.getData(),
             ActionTypeId: $scope.selectedActionType.ActionTypeId,
-            TaskAction: $scope.schedulerTaskAction.getData()
+            TaskSettings: { TaskTriggerArgument: $scope.schedulerTaskTrigger.getData(), TaskActionArgument: $scope.schedulerTaskAction.getData()}
         };
         return taskObject;
     }
@@ -140,11 +138,11 @@ function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsSer
         $scope.selectedTriggerType = UtilsService.getItemByVal($scope.triggerTypes, taskObject.TriggerTypeId, "TriggerTypeId");
         $scope.selectedActionType = UtilsService.getItemByVal($scope.actionTypes, taskObject.ActionTypeId, "ActionTypeId");
 
-        $scope.schedulerTaskTrigger.data = taskObject.TaskTrigger;
+        $scope.schedulerTaskTrigger.data = taskObject.TaskSettings.TaskTriggerArgument;
         if ($scope.schedulerTaskTrigger.loadTemplateData != undefined)
             $scope.schedulerTaskTrigger.loadTemplateData();
 
-        $scope.schedulerTaskAction.data = taskObject.TaskAction;
+        $scope.schedulerTaskAction.data = taskObject.TaskSettings.TaskActionArgument;
         if ($scope.schedulerTaskAction.loadTemplateData != undefined)
             $scope.schedulerTaskAction.loadTemplateData();
     }

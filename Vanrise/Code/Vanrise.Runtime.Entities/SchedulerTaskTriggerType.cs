@@ -18,6 +18,8 @@ namespace Vanrise.Runtime.Entities
     public class TriggerTypeInfo
     {
         public string URL { get; set; }
+
+        public string FQTN { get; set; }
     }
 
 }

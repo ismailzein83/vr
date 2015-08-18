@@ -109,9 +109,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.BI.Web", "Vanrise.B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Common.Data.SQL", "Vanrise.Common.Data.SQL\Vanrise.Common.Data.SQL.csproj", "{B3A5A0CE-6294-44B5-A4D6-521F45B35295}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Runtime.Triggers.TimeTaskTrigger", "Vanrise.Runtime.Triggers.TimeTaskTrigger\Vanrise.Runtime.Triggers.TimeTaskTrigger.csproj", "{D95CAFF3-5FF1-42A7-AD44-3B3546E0B85E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments", "Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments\Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.csproj", "{20D3CD34-A9E8-47AA-AF98-D8140A14BBE8}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 45
+		SccNumberOfProjects = 47
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -291,6 +295,14 @@ Global
 		SccProjectTopLevelParentUniqueName44 = Vanrise.sln
 		SccProjectName44 = Vanrise.Common.Data.SQL
 		SccLocalPath44 = Vanrise.Common.Data.SQL
+		SccProjectUniqueName45 = Vanrise.Runtime.Triggers.TimeTaskTrigger\\Vanrise.Runtime.Triggers.TimeTaskTrigger.csproj
+		SccProjectTopLevelParentUniqueName45 = Vanrise.sln
+		SccProjectName45 = Vanrise.Runtime.Triggers.TimeTaskTrigger
+		SccLocalPath45 = Vanrise.Runtime.Triggers.TimeTaskTrigger
+		SccProjectUniqueName46 = Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments\\Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.csproj
+		SccProjectTopLevelParentUniqueName46 = Vanrise.sln
+		SccProjectName46 = Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments
+		SccLocalPath46 = Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -673,6 +685,22 @@ Global
 		{B3A5A0CE-6294-44B5-A4D6-521F45B35295}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B3A5A0CE-6294-44B5-A4D6-521F45B35295}.Release|x64.ActiveCfg = Release|Any CPU
 		{B3A5A0CE-6294-44B5-A4D6-521F45B35295}.Release|x86.ActiveCfg = Release|Any CPU
+		{D95CAFF3-5FF1-42A7-AD44-3B3546E0B85E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D95CAFF3-5FF1-42A7-AD44-3B3546E0B85E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D95CAFF3-5FF1-42A7-AD44-3B3546E0B85E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D95CAFF3-5FF1-42A7-AD44-3B3546E0B85E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D95CAFF3-5FF1-42A7-AD44-3B3546E0B85E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D95CAFF3-5FF1-42A7-AD44-3B3546E0B85E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D95CAFF3-5FF1-42A7-AD44-3B3546E0B85E}.Release|x64.ActiveCfg = Release|Any CPU
+		{D95CAFF3-5FF1-42A7-AD44-3B3546E0B85E}.Release|x86.ActiveCfg = Release|Any CPU
+		{20D3CD34-A9E8-47AA-AF98-D8140A14BBE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20D3CD34-A9E8-47AA-AF98-D8140A14BBE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20D3CD34-A9E8-47AA-AF98-D8140A14BBE8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{20D3CD34-A9E8-47AA-AF98-D8140A14BBE8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{20D3CD34-A9E8-47AA-AF98-D8140A14BBE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20D3CD34-A9E8-47AA-AF98-D8140A14BBE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20D3CD34-A9E8-47AA-AF98-D8140A14BBE8}.Release|x64.ActiveCfg = Release|Any CPU
+		{20D3CD34-A9E8-47AA-AF98-D8140A14BBE8}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -696,6 +724,8 @@ Global
 		{B90EB082-6281-498C-99BA-63A75F21A66C} = {C314EDE4-0CF4-4E30-BF4D-D08798AB0543}
 		{87EB7A9F-3D55-4C5B-852F-FF12F27F5714} = {C314EDE4-0CF4-4E30-BF4D-D08798AB0543}
 		{7B928BA5-C19B-4D8C-912F-8D2D8A679718} = {C314EDE4-0CF4-4E30-BF4D-D08798AB0543}
+		{D95CAFF3-5FF1-42A7-AD44-3B3546E0B85E} = {C314EDE4-0CF4-4E30-BF4D-D08798AB0543}
+		{20D3CD34-A9E8-47AA-AF98-D8140A14BBE8} = {C314EDE4-0CF4-4E30-BF4D-D08798AB0543}
 		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0} = {20A2407E-D892-41D2-8D77-6612045F9E51}
 		{C527C7B2-A481-4D1D-B25A-4A540E812153} = {20A2407E-D892-41D2-8D77-6612045F9E51}
 		{04DE17C7-70B4-40A1-84DD-26C91CA228AC} = {375D020B-2FA0-4D68-B841-E74E1FD15B16}

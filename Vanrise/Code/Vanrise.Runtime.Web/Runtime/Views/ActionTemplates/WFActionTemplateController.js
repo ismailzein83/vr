@@ -14,7 +14,7 @@ function WFActionTemplateController($scope, BusinessProcessAPIService, UtilsServ
 
         $scope.schedulerTaskAction.getData = function () {
             return {
-                $type: "Vanrise.BusinessProcess.Extensions.WFSchedulerTaskAction, Vanrise.BusinessProcess.Extensions",
+                $type: "Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.WFTaskActionArgument, Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments",
                 RawExpressions: $scope.schedulerTaskAction.rawExpressions.getData(),
                 BPDefinitionID: $scope.selectedBPDefintion.BPDefinitionID,
                 ProcessInputArguments: $scope.schedulerTaskAction.processInputArguments.getData()

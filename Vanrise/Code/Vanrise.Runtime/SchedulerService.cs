@@ -32,21 +32,24 @@ namespace Vanrise.Runtime
                         {
                             try
                             {
+                                SchedulerTaskTrigger taskTrigger = (SchedulerTaskTrigger)Activator.CreateInstance(Type.GetType(item.TriggerInfo.FQTN));
                                 if (item.NextRunTime == null)
                                 {
-                                    item.NextRunTime = item.TaskTrigger.CalculateNextTimeToRun();
+                                    item.NextRunTime = taskTrigger.CalculateNextTimeToRun(item.TaskSettings.TaskTriggerArgument);
                                 }
                                 else
                                 {
-                                    Dictionary<string, object> evaluatedExpressions = item.TaskTrigger.EvaluateExpressions(item);
+                                    Dictionary<string, object> evaluatedExpressions = taskTrigger.EvaluateExpressions(item);
 
                                     item.Status = Entities.SchedulerTaskStatus.InProgress;
                                     dataManager.UpdateTask(item);
 
-                                    item.TaskAction.Execute(item, evaluatedExpressions);
+                                    SchedulerTaskAction taskAction = (SchedulerTaskAction)Activator.CreateInstance(Type.GetType(item.ActionInfo.FQTN));
+
+                                    taskAction.Execute(item, item.TaskSettings.TaskActionArgument, evaluatedExpressions);
                                     item.Status = Entities.SchedulerTaskStatus.Completed;
 
-                                    item.NextRunTime = item.TaskTrigger.CalculateNextTimeToRun();
+                                    item.NextRunTime = taskTrigger.CalculateNextTimeToRun(item.TaskSettings.TaskTriggerArgument);
                                     item.LastRunTime = DateTime.Now;
                                 }
                             }
