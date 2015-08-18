@@ -1,8 +1,0 @@
-﻿CREATE SCHEMA [BI];
-
-
-
-
-
-
-
