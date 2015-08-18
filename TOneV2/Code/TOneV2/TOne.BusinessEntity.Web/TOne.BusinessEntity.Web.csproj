@@ -153,6 +153,7 @@
     <Content Include="BusinessEntity\Services\APIServices\CarrierGroupAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\CarrierMaskAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\CarrierProfileAPIService.js" />
+    <Content Include="BusinessEntity\Services\APIServices\CarrierSummaryAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\CurrencyAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\LookUpAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\PriceListAPIService.js" />

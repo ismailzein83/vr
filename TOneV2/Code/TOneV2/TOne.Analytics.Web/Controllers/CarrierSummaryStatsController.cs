@@ -12,12 +12,12 @@ namespace TOne.Analytics.Web.Controllers
 {
     public class CarrierSummaryStatsController : Vanrise.Web.Base.BaseAPIController
     {
-        //[HttpPost]
-        //public Object GetFilteredCarrierSummaryStats(Vanrise.Entities.DataRetrievalInput<CarrierMaskQuery> input)
-        //{
-        //    CarrierSummaryStatsManager manager = new CarrierSummaryStatsManager();
-        //    return GetWebResponse(input, manager.GetCarrierSummaryStats(input));
-        //}
+        [HttpPost]
+        public Object GetFilteredCarrierSummaryStats(Vanrise.Entities.DataRetrievalInput<CarrierSummaryStatsQuery> input)
+        {
+            CarrierSummaryStatsManager manager = new CarrierSummaryStatsManager();
+            return GetWebResponse(input, manager.GetFilteredCarrierSummaryStats(input));
+        }
 
     }
 }

@@ -100,6 +100,8 @@
     <Compile Include="BlockedAttempts.cs" />
     <Compile Include="BlockedAttemptsFilter.cs" />
     <Compile Include="BlockedAttemptsInput.cs" />
+    <Compile Include="CarrierSummaryStats.cs" />
+    <Compile Include="CarrierSummaryStatsQuery.cs" />
     <Compile Include="CDRFilter.cs" />
     <Compile Include="CDRBigResult.cs" />
     <Compile Include="Billing\CustomerServices.cs" />

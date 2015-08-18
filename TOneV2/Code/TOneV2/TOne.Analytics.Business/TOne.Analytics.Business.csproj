@@ -83,6 +83,7 @@
     <Compile Include="BillingStatisticManager.cs" />
     <Compile Include="BillingStatisticManagerPartial.cs" />
     <Compile Include="BlockedAttemptsManager.cs" />
+    <Compile Include="CarrierSummaryStatsManager.cs" />
     <Compile Include="CDRManager.cs" />
     <Compile Include="DailyReportManager.cs" />
     <Compile Include="HourlyReportManager.cs" />
