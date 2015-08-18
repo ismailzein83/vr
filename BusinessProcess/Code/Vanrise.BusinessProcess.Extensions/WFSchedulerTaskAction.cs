@@ -9,26 +9,26 @@ using Vanrise.Runtime.Entities;
 
 namespace Vanrise.BusinessProcess.Extensions
 {
-    public class WFSchedulerTaskAction : SchedulerTaskAction
+    public class WFSchedulerTaskAction
     {
-        public int BPDefinitionID { get; set; }
+        //public int BPDefinitionID { get; set; }
 
-        public BaseProcessInputArgument ProcessInputArguments { get; set; }
+        //public BaseProcessInputArgument ProcessInputArguments { get; set; }
 
-        public override void Execute(SchedulerTask task, Dictionary<string, object> evaluatedExpressions)
-        {
-            Console.WriteLine("WFSchedulerTaskAction started...");
+        //public override void Execute(SchedulerTask task, Dictionary<string, object> evaluatedExpressions)
+        //{
+        //    Console.WriteLine("WFSchedulerTaskAction started...");
 
-            if(evaluatedExpressions != null)
-                ProcessInputArguments.MapExpressionValues(evaluatedExpressions);
+        //    if(evaluatedExpressions != null)
+        //        ProcessInputArguments.MapExpressionValues(evaluatedExpressions);
 
-            BPClient bpClient = new BPClient();
-            bpClient.CreateNewProcess(new BusinessProcess.Entities.CreateProcessInput
-            {
-                InputArguments = this.ProcessInputArguments
-            });
+        //    BPClient bpClient = new BPClient();
+        //    bpClient.CreateNewProcess(new BusinessProcess.Entities.CreateProcessInput
+        //    {
+        //        InputArguments = this.ProcessInputArguments
+        //    });
 
-            Console.WriteLine("WFSchedulerTaskAction finished...");
-        }
+        //    Console.WriteLine("WFSchedulerTaskAction finished...");
+        //}
     }
 }

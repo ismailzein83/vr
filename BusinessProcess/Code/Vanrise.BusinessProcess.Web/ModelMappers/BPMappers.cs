@@ -78,9 +78,10 @@ namespace Vanrise.BusinessProcess.Web.ModelMappers
                 Status = task.Status,
                 NextRunTime = task.NextRunTime,
                 LastRunTime = task.LastRunTime,
-                TaskTrigger = task.TaskTrigger,
                 ActionTypeId = task.ActionTypeId,
-                TaskAction = task.TaskAction,
+                ActionInfo = task.ActionInfo,
+                TriggerInfo = task.TriggerInfo,
+                TaskSettings = task.TaskSettings, 
                 StatusDescription = SchedulerTask.GetEnumDescription(task.Status)
             };
         }

@@ -29,11 +29,13 @@ namespace Vanrise.BusinessProcess.Web.Models
 
         public int TriggerTypeId { get; set; }
 
-        public SchedulerTaskTrigger TaskTrigger { get; set; }
+        public TriggerTypeInfo TriggerInfo { get; set; }
 
         public int ActionTypeId { get; set; }
 
-        public SchedulerTaskAction TaskAction { get; set; }
+        public ActionTypeInfo ActionInfo { get; set; }
+
+        public SchedulerTaskSettings TaskSettings { get; set; }
 
         public string StatusDescription { get; set; }
     }

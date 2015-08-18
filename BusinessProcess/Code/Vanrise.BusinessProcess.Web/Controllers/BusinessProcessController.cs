@@ -5,6 +5,7 @@ using System.Web.Http;
 using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.BusinessProcess.Extensions;
+using Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments;
 using Vanrise.BusinessProcess.Web.ModelMappers;
 using Vanrise.BusinessProcess.Web.Models;
 using Vanrise.Common;
@@ -98,7 +99,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
             foreach (SchedulerTask task in workflowTasks)
             {
-                if (((WFSchedulerTaskAction)task.TaskAction).BPDefinitionID == bpDefinitionId)
+                if (((WFTaskActionArgument)task.TaskSettings.TaskActionArgument).BPDefinitionID == bpDefinitionId)
                     filteredList.Add(task);
             }
 
