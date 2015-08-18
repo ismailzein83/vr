@@ -48,7 +48,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("[FraudAnalysis].[sp_FraudResult_CreateTempForFilteredSuspiciousNumbers]", tempTableName, input.Query.FromDate, input.Query.ToDate, input.Query.StrategiesList, input.Query.SuspicionLevelsList, input.Query.CaseStatusesList);
+                ExecuteNonQuerySP("[FraudAnalysis].[sp_FraudResult_CreateTempForFilteredSuspiciousNumbers]", tempTableName, input.Query.FromDate, input.Query.ToDate, input.Query.StrategiesList, input.Query.SuspicionLevelsList, input.Query.CaseStatusesList, input.Query.AccountNumber);
             };
             return RetrieveData(input, createTempTableAction, FraudResultMapper);
         }
@@ -106,7 +106,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             fraudResult.AccountNumber = reader["AccountNumber"] as string;
             fraudResult.SuspicionLevelName = ((Enums.SuspicionLevel)Enum.ToObject(typeof(Enums.SuspicionLevel), GetReaderValue<int>(reader, "SuspicionLevelId"))).ToString();
             fraudResult.StrategyName = reader["StrategyName"] as string;
-            fraudResult.NumberofOccurances = (int)reader["NumberofOccurances"];
+            fraudResult.NumberofOccurances = reader["NumberofOccurances"] as string;
             fraudResult.CaseStatus = reader["CaseStatus"] as string;
             fraudResult.StatusId = GetReaderValue<int?>(reader, "StatusId");
             fraudResult.ValidTill = GetReaderValue<DateTime?>(reader, "ValidTill");

@@ -15,7 +15,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public string StrategyName { get; set; }
 
-        public int NumberofOccurances { get; set; }
+        public string NumberofOccurances { get; set; }
 
         public string CaseStatus { get; set; }
 

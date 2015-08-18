@@ -14,6 +14,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public string SuspicionLevelsList { get; set; }
         public string StrategiesList { get; set; }
         public string CaseStatusesList { get; set; }
+        public string AccountNumber { get; set; }
 
     }
 }

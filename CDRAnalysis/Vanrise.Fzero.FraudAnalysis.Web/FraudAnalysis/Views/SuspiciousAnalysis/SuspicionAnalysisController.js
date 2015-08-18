@@ -56,6 +56,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return SuspicionAnalysisAPIService.GetFilteredSuspiciousNumbers(dataRetrievalInput)
             .then(function (response) {
+                console.log(response)
                 onResponseReady(response);
             });
         }
@@ -98,6 +99,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
 
         var query = {
+            AccountNumber : $scope.accountNumber,
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate,
             SuspicionLevelsList: removeLastComma(suspicionLevelsList),
@@ -149,11 +151,11 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
         });
 
         var params = {
-            accountNumber: fruadResult.AccountNumber,
             fromDate: $scope.fromDate,
             toDate: $scope.toDate,
             strategiesList: strategiesList,
-            suspicionLevelsList: suspicionLevelsList
+            suspicionLevelsList: suspicionLevelsList,
+            accountNumber: fruadResult.AccountNumber
         };
 
         var settings = {};
