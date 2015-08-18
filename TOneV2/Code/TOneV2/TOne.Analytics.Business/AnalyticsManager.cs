@@ -50,7 +50,31 @@ namespace TOne.Analytics.Business
                 flaggedServiceManager.AssignFlaggedServiceInfo(lst);
             return lst;
         }
+        public bool UpdateRateServiceFlag(CarrierRateView appParamObj)
+        {
+            IAnalyticsDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<IAnalyticsDataManager>();
+            string[] nameServices = appParamObj.FlaggedServiceSymbol.Split(',');
+            FlaggedServiceManager flaggedServiceManager = new FlaggedServiceManager();
+            int serviceID = 0;
+            foreach (string serviceName in nameServices)
+            {
+                serviceID += flaggedServiceManager.GetServiceFlags().Values.ToList().Where(s => s.Symbol.Equals(serviceName)).FirstOrDefault().FlaggedServiceID;
+            }
+            bool updateActionSucc = dataManager.UpdateRateServiceFlag(appParamObj, serviceID);
 
+            TOne.Entities.UpdateOperationOutput<CarrierRateView> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<CarrierRateView>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = appParamObj;
+            }
+
+            return updateActionSucc;
+        }
         public List<Entities.CarrierSummaryView> GetCarrierSummary(string carrierType, DateTime fromDate, DateTime toDate, string customerID, string supplierID, int? topCount, char groupByProfile, int from, int to)
         {
             toDate = toDate.AddDays(1).AddSeconds(-1);

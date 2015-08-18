@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OldRouteManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BuildContexts\SingleDestinationRoutesBuildContext.cs" />
     <Compile Include="BuildContexts\RouteBuildContext.cs" />

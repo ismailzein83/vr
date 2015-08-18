@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using TOne.Analytics.Business;
+using TOne.Analytics.Entities;
 
 namespace TOne.Web.Online.Controllers
 {
@@ -44,7 +45,11 @@ namespace TOne.Web.Online.Controllers
         {
             return _analyticsManager.GetRates(carrierType.ToString(), effectiveOn, carrierID, codeGroup, code, zoneName, from, to);
         }
-
+        [HttpPost]
+        public bool UpdateRateServiceFlag(CarrierRateView appParamObj)
+        {
+            return _analyticsManager.UpdateRateServiceFlag(appParamObj);
+        }
         [HttpGet]
         public List<TOne.Analytics.Entities.CarrierSummaryView> GetCarrierSummary(TOne.BusinessEntity.Entities.CarrierType carrierType, DateTime fromDate, DateTime toDate, int from, int to, char groupByProfile = 'N', string customerID = null, string supplierID = null, int? topCount = null)
         {

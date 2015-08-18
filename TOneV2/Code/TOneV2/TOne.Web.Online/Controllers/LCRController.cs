@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using TOne.LCR.Business;
 using TOne.LCR.Entities.Routing;
 
 namespace TOne.Web.Online.Controllers
 {
     public class LCRController : ApiController
     {
+        private readonly OldRouteManager _routeManager;
+        public LCRController()
+        {
+            _routeManager = new OldRouteManager();
+        }
         /// <summary>
         /// Get List of Routes 
         /// </summary>
@@ -19,9 +25,9 @@ namespace TOne.Web.Online.Controllers
         /// <param name="lcrCount">Maximum count of Suppliers in LCR.</param>
         /// <returns></returns>
         [HttpGet]
-        public List<RouteInfo> GetRoutes(string customerId, string target, TargetType targetType, int routesCount, int lcrCount)
+        public List<RouteInfo> GetRoutes(bool showBlocks, bool? isBlock, int topValue, int from, int to, string customerId = null, string supplierId = null, string code = null, string zone = null)
         {
-            return new List<RouteInfo>();
+            return _routeManager.GetRoutes(showBlocks, isBlock, topValue, from, to, customerId, supplierId, code, zone);
         }
     }
 }

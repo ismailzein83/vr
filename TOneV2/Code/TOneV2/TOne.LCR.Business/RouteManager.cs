@@ -5,11 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.LCR.Data;
 using TOne.LCR.Entities;
+using TOne.LCR.Entities.Routing;
 
 namespace TOne.LCR.Business
 {
     public class RouteManager
     {
+        private readonly IRoutingDataManager _datamanager;
+        public RouteManager()
+        {
+            _datamanager = LCRDataManagerFactory.GetDataManager<IRoutingDataManager>();
+        }
+        
         public void ConvertRouteOptions(List<RouteSupplierOption> options, out string suppliersOption, out string suppliersOrderOption, out string percentagesOption)
         {
             suppliersOption = null;

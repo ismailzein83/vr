@@ -145,6 +145,10 @@
     <Reference Include="Vanrise.Data.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -287,6 +291,10 @@
     <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">
       <Project>{60da66bd-017d-43a2-82dc-ed7db8751d23}</Project>
       <Name>TOne.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.LCR.Business\TOne.LCR.Business.csproj">
+      <Project>{5e726053-e223-49ce-9bf6-61271153a94d}</Project>
+      <Name>TOne.LCR.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.LCR.Data.SQL\TOne.LCR.Data.SQL.csproj">
       <Project>{acc3f0e9-3a0c-4b90-afe7-d9cdaa858c0b}</Project>

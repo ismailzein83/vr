@@ -86,7 +86,6 @@ namespace TOne.BusinessEntity.Business
                 }
             }
         }
-
         #endregion
     }
 }
