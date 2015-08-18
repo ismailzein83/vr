@@ -234,6 +234,12 @@
     <Reference Include="Vanrise.BusinessProcess.Extensions">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Extensions.WFTaskAction">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.WFTaskAction.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess.WFActivities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
@@ -282,6 +288,12 @@
     </Reference>
     <Reference Include="Vanrise.Runtime.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Triggers.TimeTaskTrigger">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Triggers.TimeTaskTrigger.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.dll</HintPath>
     </Reference>
     <Reference Include="WebHelperLibrary, Version=1.0.5238.26274, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

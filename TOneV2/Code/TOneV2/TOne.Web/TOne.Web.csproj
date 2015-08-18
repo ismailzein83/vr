@@ -155,8 +155,8 @@
     <Reference Include="Vanrise.BusinessProcess.Entities">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Extensions">
-      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.dll</HintPath>
+    <Reference Include="Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.BusinessProcess.Web">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Web.dll</HintPath>
@@ -209,6 +209,9 @@
     </Reference>
     <Reference Include="Vanrise.Runtime.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Runtime.Web">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Web.dll</HintPath>

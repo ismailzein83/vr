@@ -12,22 +12,24 @@ BEGIN
 	
 	IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 	    BEGIN
-			SELECT [Id],
-			[Name],
-			[IsEnabled],
-			[TaskType],
-			[Status],
-			[LastRunTime],
-			[NextRunTime],
-			[TriggerTypeId],
-			[TaskTrigger],
-			[ActionTypeId],
-			[TaskAction]
+			SELECT SC.[ID]
+			  ,SC.[Name]
+			  ,SC.[IsEnabled]
+			  ,SC.[Status]
+			  ,SC.[LastRunTime]
+			  ,SC.[NextRunTime]
+			  ,SC.[TriggerTypeId]
+			  ,SC.[ActionTypeId]
+			  ,TR.[TriggerTypeInfo]
+			  ,AC.[ActionTypeInfo]
+			  ,SC.[TaskSettings]
 			
 			INTO #RESULT
 			
-			FROM [runtime].[ScheduleTask]
-			WHERE (@Name IS NULL OR [Name] LIKE '%' + @Name + '%' ) AND [TaskType] != 0
+			from runtime.ScheduleTask SC
+			JOIN runtime.SchedulerTaskTriggerType TR on SC.TriggerTypeId = TR.ID
+			JOIN runtime.SchedulerTaskActionType AC on SC.ActionTypeId = AC.ID
+			WHERE (@Name IS NULL OR SC.[Name] LIKE '%' + @Name + '%' ) AND SC.[TaskType] != 0
 			
 			DECLARE @sql VARCHAR(1000)
 			SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';

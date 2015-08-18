@@ -12,15 +12,19 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT [ID]
-      ,[Name]
-      ,[IsEnabled]
-      ,[Status]
-      ,[LastRunTime]
-      ,[NextRunTime]
-      ,[TriggerTypeId]
-      ,[TaskTrigger]
-      ,[ActionTypeId]
-      ,[TaskAction]
-      from runtime.ScheduleTask where ID = @TaskId
+	SELECT SC.[ID]
+      ,SC.[Name]
+      ,SC.[IsEnabled]
+      ,SC.[Status]
+      ,SC.[LastRunTime]
+      ,SC.[NextRunTime]
+      ,SC.[TriggerTypeId]
+      ,SC.[ActionTypeId]
+      ,TR.[TriggerTypeInfo]
+      ,AC.[ActionTypeInfo]
+      ,SC.[TaskSettings]
+      from runtime.ScheduleTask SC
+      JOIN runtime.SchedulerTaskTriggerType TR on SC.TriggerTypeId = TR.ID
+      JOIN runtime.SchedulerTaskActionType AC on SC.ActionTypeId = AC.ID
+      where SC.ID = @TaskId
 END

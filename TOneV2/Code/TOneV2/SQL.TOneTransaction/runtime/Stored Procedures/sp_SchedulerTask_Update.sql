@@ -11,9 +11,8 @@ CREATE PROCEDURE [runtime].[sp_SchedulerTask_Update]
 	@LastRunTime datetime,
 	@NextRunTime datetime,
 	@TriggerTypeId int,
-	@TaskTrigger varchar(1000),
 	@ActionTypeId int,
-	@TaskAction varchar(1000)
+	@TaskSettings varchar(MAX)
 AS
 BEGIN
 	UPDATE runtime.ScheduleTask
@@ -23,8 +22,7 @@ BEGIN
 		LastRunTime = @LastRunTime,
 		NextRunTime = @NextRunTime,
 		TriggerTypeId = @TriggerTypeId,
-		TaskTrigger = @TaskTrigger,
 		ActionTypeId = @ActionTypeId,
-		TaskAction = @TaskAction
+		TaskSettings = @TaskSettings
 	WHERE ID = @ID
 END

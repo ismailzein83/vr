@@ -38,7 +38,7 @@ DELETE;
 
 MERGE INTO runtime.[SchedulerTaskTriggerType] AS Target 
 USING (VALUES 
-	(1, N'Timer', N'{"URL":"/Client/Modules/Runtime/Views/TriggerTemplates/TimerTriggerTemplate.html"}')
+	(1, N'Timer', N'{"URL":"/Client/Modules/Runtime/Views/TriggerTemplates/TimerTriggerTemplate.html", "FQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.TimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger"}')
 ) 
 AS Source ([ID], [Name], [TriggerTypeInfo])
 ON Target.[ID] = Source.[ID] 
@@ -58,8 +58,8 @@ DELETE
 
 MERGE INTO runtime.[SchedulerTaskActionType] AS Target 
 USING (VALUES 
-	(1, N'Workflow', N'{"URL":"/Client/Modules/Runtime/Views/ActionTemplates/WFActionTemplate.html", "SystemType":false}'),
-	(2, N'Data Source', N'{"URL":"", "SystemType":true}')
+	(1, N'Workflow', N'{"URL":"/Client/Modules/Runtime/Views/ActionTemplates/WFActionTemplate.html", "SystemType":false, "FQTN":"Vanrise.BusinessProcess.Extensions.WFTaskAction.WFSchedulerTaskAction, Vanrise.BusinessProcess.Extensions.WFTaskAction"}'),
+	(2, N'Data Source', N'{"URL":"", "SystemType":true, "FQTN":"Vanrise.Integration.Business.DSSchedulerTaskAction, Vanrise.Integration.Business"}')
 ) 
 AS Source ([ID], [Name], [ActionTypeInfo])
 ON Target.[ID] = Source.[ID] 
