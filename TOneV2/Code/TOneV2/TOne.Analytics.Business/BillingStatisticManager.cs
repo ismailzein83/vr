@@ -715,7 +715,7 @@ namespace TOne.Analytics.Business
 
         public List<InOutVolumeTraffic> CompareInOutTraffic(DateTime fromDate, DateTime toDate, string customerId, VolumeReportsTimePeriod timePeriod, bool showChartsInPie)
         {
-            //if (!showChartsInPie)
+           // if (!showChartsInPie)
             // List<InOutVolumeTraffic> inOutTrafficVolumes =
             return _datamanager.CompareInOutTraffic(fromDate, toDate, customerId, timePeriod);
            //  return GetCompareInOutTrafficResult(timePeriod, inOutTrafficVolumes);
