@@ -96,7 +96,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                     List<AccountCaseType> cases = new List<AccountCaseType>();
                                                 foreach (var i in suspiciousNumbers)
                                                 {
-                                                    cases.Add(  new AccountCaseType(){AccountNumber= i.Number, StrategyId= i.StrategyId, SuspicionLevelID= i.SuspectionLevel});
+                                                    cases.Add(  new AccountCaseType(){AccountNumber= i.Number, StrategyId= i.StrategyId, SuspicionLevelID= i.SuspicionLevel});
                                                 }
                                                 dataManager.UpdateSusbcriberCases(cases);
 

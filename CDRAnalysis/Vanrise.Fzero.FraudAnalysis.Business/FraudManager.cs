@@ -103,7 +103,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 {
                     suspiciousNumber = new SuspiciousNumber();
                     suspiciousNumber.Number = profile.AccountNumber;
-                    suspiciousNumber.SuspectionLevel = strategyLevelWithCriterias.SuspicionLevelId;
+                    suspiciousNumber.SuspicionLevel = strategyLevelWithCriterias.SuspicionLevelId;
                     suspiciousNumber.CriteriaValues = criteriaValuesThresholds;
                     suspiciousNumber.DateDay = profile.FromDate;
                     suspiciousNumber.StrategyId = profile.StrategyId;

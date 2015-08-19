@@ -85,7 +85,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             streamForBulkInsert.WriteRecord("0^{0}^{1}^{2}^{3}^{4}",
                                  record.DateDay.Value,
                                  record.Number,
-                                 record.SuspectionLevel,
+                                 record.SuspicionLevel,
                                  record.StrategyId,
                                  Vanrise.Common.Serializer.Serialize(record.CriteriaValues, true));
         }

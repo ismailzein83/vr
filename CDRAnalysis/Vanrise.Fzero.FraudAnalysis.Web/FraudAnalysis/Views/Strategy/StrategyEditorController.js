@@ -47,7 +47,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
         $scope.suspicionLevels = [];
         angular.forEach(SuspicionLevelsEnum, function (itm) {
-            $scope.suspicionLevels.push({ value: itm.value, name: itm.name })
+            $scope.suspicionLevels.push({ id: itm.id, name: itm.name })
         });
 
 
@@ -184,8 +184,12 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
         });
 
-        angular.forEach($scope.strategyLevels, function (level) {
 
+        console.log('$scope.strategyLevels')
+        console.log($scope.strategyLevels)
+
+        angular.forEach($scope.strategyLevels, function (level) {
+            
             var strategyLevelItem = {
                 SuspicionLevelId: level.suspicionLevel.id,
                 StrategyLevelCriterias: []
@@ -219,7 +223,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             });
 
             strategyObject.StrategyLevels.push(strategyLevelItem);
-
+            console.log('strategyObject')
+            console.log(strategyObject)
 
         });
 
@@ -409,7 +414,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         var index = 0;
         return StrategyAPIService.GetFilters().then(function (response) {
             angular.forEach(response, function (itm) {
-                console.log(itm)
                 $scope.filterDefinitions.push({ 
                     filterId: itm.FilterId,
                     description: itm.Description,

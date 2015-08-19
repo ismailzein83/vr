@@ -10,7 +10,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     {
         public string Number { get; set; }
 
-        public int SuspectionLevel { get; set; }
+        public int SuspicionLevel { get; set; }
 
         public Dictionary<int,Decimal> CriteriaValues { get; set; }
 
