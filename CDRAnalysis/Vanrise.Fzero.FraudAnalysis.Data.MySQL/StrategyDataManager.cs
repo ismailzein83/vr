@@ -52,7 +52,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         }
 
 
-        public void DeleteStrategyResults(string StrategiesList, DateTime FromDate, DateTime ToDate)
+        public void DeleteStrategyResults(int StrategyId, DateTime FromDate, DateTime ToDate)
         {
             throw new NotImplementedException();
         }

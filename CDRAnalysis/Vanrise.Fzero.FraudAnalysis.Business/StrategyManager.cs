@@ -83,12 +83,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return insertOperationOutput;
         }
 
-        public void DeleteStrategyResults(string StrategiesList, DateTime FromDate, DateTime ToDate)
+        public void DeleteStrategyResults(int StrategyId, DateTime FromDate, DateTime ToDate)
         {
 
             IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
 
-            manager.DeleteStrategyResults(StrategiesList, FromDate, ToDate);
+            manager.DeleteStrategyResults(StrategyId, FromDate, ToDate);
 
         }
 

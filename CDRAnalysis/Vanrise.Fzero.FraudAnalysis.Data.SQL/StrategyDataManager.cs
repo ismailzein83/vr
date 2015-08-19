@@ -106,9 +106,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
-        public void DeleteStrategyResults(string StrategiesList, DateTime FromDate, DateTime ToDate)
+        public void DeleteStrategyResults(int StrategyId, DateTime FromDate, DateTime ToDate)
         {
-            ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_DeleteStrategyResults", StrategiesList, FromDate, ToDate);
+            ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_DeleteStrategyResults", StrategyId, FromDate, ToDate);
         }
 
 

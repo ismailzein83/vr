@@ -39,7 +39,11 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             {
                 Console.WriteLine("Started deleting previous results");
                 StrategyManager manager = new StrategyManager();
-                manager.DeleteStrategyResults(string.Join(",", context.GetValue(StrategyIds)), context.GetValue(FromDate), context.GetValue(ToDate));
+
+                foreach (var strategyId in context.GetValue(StrategyIds))
+                    manager.DeleteStrategyResults(strategyId, context.GetValue(FromDate), context.GetValue(ToDate));
+
+
                 Console.WriteLine("Ended deleting previous results");
             }
           
