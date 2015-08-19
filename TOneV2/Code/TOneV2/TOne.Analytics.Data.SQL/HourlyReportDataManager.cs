@@ -225,6 +225,10 @@ namespace TOne.Analytics.Data.SQL
                 queryBuilder.Replace("#JOINPART#", string.Join(" ", joinStatement));
             else
                 queryBuilder.Replace("#JOINPART#", null);
+            if (filter.SwitchIds.Count == 0)
+            {
+                whereBuilder.Append(" AND CustomerID IS NOT NULL AND CA.RepresentsASwitch='N' ");
+            }
             queryBuilder.Replace("#FILTER#", whereBuilder.ToString());
             string neededSelectStatment = trafficStatisticCommon.GetNeededStatment(filter, groupKeys);
             queryBuilder.Replace("#NeededSelectPart#", neededSelectStatment);

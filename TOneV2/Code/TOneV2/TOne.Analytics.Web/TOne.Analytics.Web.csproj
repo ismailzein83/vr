@@ -127,6 +127,7 @@
     <Compile Include="Controllers\CarrierSummaryStatsController.cs" />
     <Compile Include="Controllers\DailyReportController.cs" />
     <Compile Include="Controllers\HourlyReportController.cs" />
+    <Compile Include="Controllers\RawCDRLogController.cs" />
     <Compile Include="Controllers\TrafficMonitorController.cs" />
     <Compile Include="Controllers\BillingStatisticsController.cs" />
     <Compile Include="Controllers\BlockedAttemptsController.cs" />
@@ -159,6 +160,7 @@
     <Content Include="Analytics\Constants\ChartTypeEnum.js" />
     <Content Include="Analytics\Services\APIServices\DailyReportAPIService.js" />
     <Content Include="Analytics\Services\APIServices\HourlyReportAPIService.js" />
+    <Content Include="Analytics\Services\APIServices\RawCDRLogAPIService.js" />
     <Content Include="Analytics\Services\APIServices\RepeatedNumbersAPIService.js" />
     <Content Include="Analytics\Views\Billing Reports\BillingReports.html" />
     <Content Include="Analytics\Views\Billing Reports\BillingReportsController.js" />
@@ -183,6 +185,8 @@
     <Content Include="Analytics\Views\CDR\CDRReport.html" />
     <Content Include="Analytics\Views\DailyReport.html" />
     <Content Include="Analytics\Views\DailyReportController.js" />
+    <Content Include="Analytics\Views\RawCDRLog.html" />
+    <Content Include="Analytics\Views\RawCDRLogController.js" />
     <Content Include="Analytics\Views\RepeatedNumbers.html" />
     <Content Include="Analytics\Views\RepeatedNumbersController.js" />
     <Content Include="Analytics\Views\Traffic Statistics\HourlyReport.html" />

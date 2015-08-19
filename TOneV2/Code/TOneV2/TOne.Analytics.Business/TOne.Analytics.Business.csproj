@@ -89,6 +89,7 @@
     <Compile Include="HourlyReportManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AnalyticsManager.cs" />
+    <Compile Include="RawCDRLogManager.cs" />
     <Compile Include="RepeatedNumbersManager.cs" />
     <Compile Include="TrafficMonitorManager.cs" />
   </ItemGroup>

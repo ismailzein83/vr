@@ -61,6 +61,7 @@
     <Compile Include="HourlyReportDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AnalyticsDataManager.cs" />
+    <Compile Include="RawCDRLogDataManager.cs" />
     <Compile Include="RepeatedNumbersDataManager.cs" />
     <Compile Include="TrafficMonitorDataManager.cs" />
     <Compile Include="TrafficStatisticCommon.cs" />

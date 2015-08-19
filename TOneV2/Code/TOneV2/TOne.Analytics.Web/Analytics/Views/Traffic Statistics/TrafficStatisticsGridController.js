@@ -1,6 +1,6 @@
 ﻿'use strict'
-TrafficStatisticsGridController.$inject = ['$scope', 'AnalyticsAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficMonitorMeasureEnum', 'VRModalService', 'UtilsService', 'LabelColorsEnum'];
-function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficStatisticGroupKeysEnum, TrafficMonitorMeasureEnum, VRModalService, UtilsService, LabelColorsEnum) {
+TrafficStatisticsGridController.$inject = ['$scope', 'AnalyticsAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficMonitorMeasureEnum', 'VRModalService', 'UtilsService', 'LabelColorsEnum','AnalyticsService'];
+function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficStatisticGroupKeysEnum, TrafficMonitorMeasureEnum, VRModalService, UtilsService, LabelColorsEnum, AnalyticsService) {
     var measures = [];
     var filter = {};
     var selectedGroupKeys = [];
