@@ -33,10 +33,9 @@
                             <i class="glyphicon glyphicon-remove hand-cursor" style="float:right;padding:5px;cursor:default" ng-click="denyCarrier($event,item)"></i>
                             <div style="float:right;margin-right:60px;">
                                 <div style="width: 100px; float: left; margin-right: 60px; text-align: center;">
-                                    <vr-switch ng-model="item.newCustomerSwitchValue" ng-show="item.IsCustomerAvailable" class="green"></vr-switch>{{item.newCustomerSwitchValue}}
-                                </div>
+                                    <vr-switch value="item.newCustomerSwitchValue" ng-show="item.IsCustomerAvailable" class="green"></vr-switch>
                                 <div style="width:100px;float:left;text-align:center;">
-                                    <vr-switch ng-model="item.newSupplierSwitchValue" ng-show="item.IsSupplierAvailable" class="green"></vr-switch>
+                                    <vr-switch value="item.newSupplierSwitchValue" ng-show="item.IsSupplierAvailable" class="green"></vr-switch>
                                 </div>
                             </div>
                         </li>
