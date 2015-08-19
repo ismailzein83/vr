@@ -120,7 +120,7 @@ DELETE
 
 
 
-MERGE INTO FraudAnalysis.[Suspicion_Level] AS Target 
+MERGE INTO FraudAnalysis.[SuspicionLevel] AS Target 
 USING (VALUES 
 	( N'Clean'),
 	( N'Suspicious'),
