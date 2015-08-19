@@ -6,9 +6,15 @@
     [StrategyId]       INT          NULL,
     [UserId]           INT          NULL,
     [LogDate]          DATETIME     CONSTRAINT [DF_AccountCase_LogDate] DEFAULT (getdate()) NOT NULL,
-    [SuspicionLevelID] INT          NULL,
-    CONSTRAINT [PK_AccountCase_1] PRIMARY KEY CLUSTERED ([ID] ASC)
+    [SuspicionLevelID] INT          NULL
 );
 
 
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_AccountCase_AccountNumber]
+    ON [FraudAnalysis].[AccountCase]([AccountNumber] ASC);
 
