@@ -7,7 +7,7 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
 
     $scope.export = function () {
 
-            return BillingStatisticsAPIService.ExportCarrierProfile($scope.dateToString($scope.params.fromDate), $scope.dateToString($scope.params.toDate), $scope.params.top, $scope.params.customer.CarrierAccountID).then(function (response) {
+            return BillingStatisticsAPIService.ExportCarrierProfile($scope.params.fromDate, $scope.params.toDate, $scope.params.top, $scope.params.customer.CarrierAccountID).then(function (response) {
                  UtilsService.downloadFile(response.data, response.headers);
             });
         
