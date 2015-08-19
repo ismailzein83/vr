@@ -11,7 +11,10 @@
             require: '^form',
             scope: {
                 value: '=',
-                hint:'@',
+                hint: '@',
+                minvalue:'@',
+                maxvalue: '@',
+                decimalprecision:'@',
                 customvalidate: '&'
             },
             controller: function ($scope, $element) {
@@ -43,23 +46,23 @@
                                 var arr = String(newValue).split("");
                                 var decimalArray = String(newValue).split(".");
                                 if (arr.length === 0) return;
-                                if (iAttrs.minvalue != undefined && parseFloat(iAttrs.minvalue)  == 0 && arr.indexOf("-") > -1) {
+                                if (iAttrs.minvalue != undefined && parseFloat(ctrl.minvalue) == 0 && arr.indexOf("-") > -1) {
                                     ctrl.value = oldValue;
                                 }
-                                if (iAttrs.decimalprecision != undefined && parseInt(iAttrs.decimalprecision) == 0 && arr.indexOf(".") > -1) {
+                                if (iAttrs.decimalprecision != undefined && parseInt(ctrl.decimalprecision) == 0 && arr.indexOf(".") > -1) {
                                     ctrl.value = oldValue;
                                 }
                                 if (arr.length === 1 && (arr[0] === '-' || arr[0] === '.')) return;
 
                                 if (arr.length === 2 && newValue === '-.') return;
                                 
-                                if (iAttrs.decimalprecision != undefined && decimalArray.length >0 && decimalArray[1]!=undefined  && decimalArray[1].length > parseInt(iAttrs.decimalprecision)) {
+                                if (iAttrs.decimalprecision != undefined && decimalArray.length >0 && decimalArray[1]!=undefined  && decimalArray[1].length > parseInt(ctrl.decimalprecision)) {
                                     ctrl.value = oldValue;
                                 }
-                                if (iAttrs.maxvalue != undefined && newValue > parseFloat(iAttrs.maxvalue)) {
+                                if (iAttrs.maxvalue != undefined && newValue > parseFloat(ctrl.maxvalue)) {
                                     ctrl.value = oldValue
                                 }
-                                if (iAttrs.minvalue != undefined && newValue < parseFloat(iAttrs.minvalue)) {
+                                if (iAttrs.minvalue != undefined && newValue < parseFloat(ctrl.minvalue)) {
                                     ctrl.value = oldValue;
                                 }
                                 if (isNaN(newValue)) {
