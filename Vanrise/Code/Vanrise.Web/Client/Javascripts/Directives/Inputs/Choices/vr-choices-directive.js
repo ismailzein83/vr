@@ -34,7 +34,7 @@ app.directive('vrChoices', [function () {
                 setChoiceSelection(choiceCtrl, false);
                 setDefaultChoiceSeletion();
             }
-
+            ctrl.isradio = $attrs.isradio != undefined;
             function setDefaultChoiceSeletion() {
                 if (choiceCtrls.length == 0 || ctrl.selectedindex > -1)
                     return;
@@ -85,7 +85,8 @@ app.directive('vrChoices', [function () {
         controllerAs: 'ctrl',
         bindToController: true,
         compile: function (element, attrs) {
-            element.html('<div class="btn-group btn-group-custom vr-tabs" role="group" >' + element.html() + '</div>');
+            var radioclass = (attrs.isradio != undefined) ? " radio-btn-groupe" : "";
+            element.html('<div class="btn-group btn-group-custom vr-tabs ' + radioclass + '"   >' + element.html() + '</div>');
 
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {

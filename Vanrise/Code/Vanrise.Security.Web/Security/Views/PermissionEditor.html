@@ -18,7 +18,7 @@
                                     {{permission.name}}
                                 </vr-columns>
                                 <vr-columns colnum="6">
-                                    <vr-choices onselectionchanged="permissionsSelected(permission)" selectedindex="permission.selectedFlagOptionIndex">
+                                    <vr-choices isradio onselectionchanged="permissionsSelected(permission)" selectedindex="permission.selectedFlagOptionIndex">
                                         <vr-choice ng-repeat="permissionFlagOption in permissionFlagOptions">{{permissionFlagOption}}</vr-choice>
                                     </vr-choices>
                                 </vr-columns>

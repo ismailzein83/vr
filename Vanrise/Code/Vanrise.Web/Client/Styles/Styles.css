@@ -1547,6 +1547,22 @@ input.ui-grid-filter-input[type="text"] {
         padding:0px 10px;
     }
 
+    .radio-btn-groupe{
+        border-color:transparent !important;
+
+    }
+    .radio-btn-groupe label{
+          padding: 1px 3px !important;
+          cursor:pointer !important;
+    } 
+    .radio-btn-groupe .clicked-btn{
+       border-bottom-color:  #DDD !important;
+       border-radius: 5px !important;
+       background-color: #6DA279 !important;
+       color: #fff !important;
+       font-weight: normal !important;
+    }
+
 /**************END VR-TABS*********/
 
 
