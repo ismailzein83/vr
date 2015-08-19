@@ -28,6 +28,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             throw new NotImplementedException();
         }
 
-       
+        public Vanrise.Entities.BigResult<DailyVolumeLoose> GetDailyVolumeLooses(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -4,6 +4,8 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
 
     var mainGridAPI_CasesSummary;
     var mainGridAPI_BTSCases;
+    var mainGridAPI_DailyVolumeLooses;
+
     var chartSelectedMeasureAPI;
 
     defineScope();
@@ -25,6 +27,7 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
         $scope.casesSummary = [];
         $scope.strategyCases = [];
         $scope.bTSCases = [];
+        $scope.dailyVolumeLooses = [];
 
 
 
@@ -37,6 +40,11 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
         $scope.onMainGridReady_BTSCases = function (api) {
             mainGridAPI_BTSCases = api;
             return retrieveData_BTSCases();
+        };
+
+        $scope.onMainGridReady_DailyVolumeLooses = function (api) {
+            mainGridAPI_DailyVolumeLooses = api;
+            return retrieveData_DailyVolumeLooses();
         };
 
         $scope.chartSelectedMeasureReady = function (api) {
@@ -62,7 +70,13 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
         $scope.dataRetrievalFunction_BTSCases = function (dataRetrievalInput, onResponseReady) {
             return DashboardAPIService.GetBTSCases(dataRetrievalInput)
             .then(function (response) {
-               
+                onResponseReady(response);
+            });
+        }
+
+        $scope.dataRetrievalFunction_DailyVolumeLooses = function (dataRetrievalInput, onResponseReady) {
+            return DashboardAPIService.GetDailyVolumeLooses(dataRetrievalInput)
+            .then(function (response) {
                 onResponseReady(response);
             });
         }
@@ -96,6 +110,10 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
         return mainGridAPI_BTSCases.retrieveData(BuildSearchQuery());
     }
 
+    function retrieveData_DailyVolumeLooses() {
+        return mainGridAPI_DailyVolumeLooses.retrieveData(BuildSearchQuery());
+    }
+
 
     function getData_StrategyCases() {
         if (!chartSelectedMeasureAPI)
@@ -106,8 +124,6 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
 
 
         return DashboardAPIService.GetStrategyCases($scope.fromDate, $scope.toDate).then(function (response) {
-            console.log('Chart: response')
-            console.log(response)
             angular.forEach(response, function (itm) {
                 $scope.strategyCases.push(itm);
             });

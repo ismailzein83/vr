@@ -46,6 +46,16 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
+        public BigResult<DailyVolumeLoose> GetDailyVolumeLooses(DataRetrievalInput<DashboardResultQuery> input)
+        {
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("FraudAnalysis.sp_Dashboard_CreateTempForDailyVolumeLooses", tempTableName, input.Query.FromDate, input.Query.ToDate);
+            };
+            return RetrieveData(input, createTempTableAction, DailyVolumeLoosesMapper);
+        }
+
+
 
         #region Private Methods
 
@@ -76,9 +86,21 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
+        private DailyVolumeLoose DailyVolumeLoosesMapper(IDataReader reader)
+        {
+            var dailyVolumeLoose = new DailyVolumeLoose();
+            dailyVolumeLoose.DateDay = (DateTime)reader["DateDay"];
+            dailyVolumeLoose.Volume = GetReaderValue<decimal>(reader, "Volume");
+            return dailyVolumeLoose;
+        }
+
+
         #endregion
 
 
 
+
+
+       
     }
 }

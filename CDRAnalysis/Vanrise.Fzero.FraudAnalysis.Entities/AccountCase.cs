@@ -59,12 +59,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
     }
 
-
-    public class CellCases
+    public class DailyVolumeLoose
     {
-        public string Cell_Id { get; set; }
+        public DateTime DateDay { get; set; }
 
-        public int CountCases { get; set; }
+        public decimal Volume { get; set; }
 
     }
 

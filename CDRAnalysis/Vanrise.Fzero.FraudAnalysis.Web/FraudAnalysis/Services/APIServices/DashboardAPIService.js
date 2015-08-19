@@ -3,7 +3,8 @@
     return ({
         GetCasesSummary: GetCasesSummary,
         GetStrategyCases: GetStrategyCases,
-        GetBTSCases: GetBTSCases
+        GetBTSCases: GetBTSCases,
+        GetDailyVolumeLooses: GetDailyVolumeLooses
     });
 
 
@@ -24,6 +25,13 @@
 
     function GetBTSCases(input) {
         return BaseAPIService.post("/api/Dashboard/GetBTSCases",
+            input
+           );
+    }
+
+
+    function GetDailyVolumeLooses(input) {
+        return BaseAPIService.post("/api/Dashboard/GetDailyVolumeLooses",
             input
            );
     }

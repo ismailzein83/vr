@@ -64,6 +64,24 @@
                 </vr-section>
             </vr-columns>
 
+
+            <vr-columns colnum="3">
+                <vr-section title="Daily Volume Looses">
+                    <div>
+                        <vr-row>
+                            <vr-columns colnum="12" simplecol>
+                                <vr-datagrid datasource="dailyVolumeLooses" dataretrievalfunction="dataRetrievalFunction_DailyVolumeLooses" maxheight="200px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady_DailyVolumeLooses">
+                                    <vr-datagridcolumn headertext="'Day'" field="'DateDay'" type="'Datetime'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Volume'" field="'Volume'"></vr-datagridcolumn>
+                                </vr-datagrid>
+                            </vr-columns>
+                        </vr-row>
+                    </div>
+                </vr-section>
+            </vr-columns>
+
+
+
         </vr-row>
 
 

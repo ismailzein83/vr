@@ -32,6 +32,13 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
             return GetWebResponse(input, manager.GetBTSCases(input));
         }
 
+        [HttpPost]
+        public object GetDailyVolumeLooses(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
+        {
+            DashboardManager manager = new DashboardManager();
+            return GetWebResponse(input, manager.GetDailyVolumeLooses(input));
+        }
+
 
 
     }
