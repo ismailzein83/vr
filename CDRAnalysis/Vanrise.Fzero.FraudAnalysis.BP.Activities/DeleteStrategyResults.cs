@@ -34,10 +34,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
+            Console.WriteLine("Check if overiding previous results is allowed");
             if (context.GetValue(OverridePrevious))
             {
+                Console.WriteLine("Started deleting previous results");
                 StrategyManager manager = new StrategyManager();
                 manager.DeleteStrategyResults(string.Join(",", context.GetValue(StrategyIds)), context.GetValue(FromDate), context.GetValue(ToDate));
+                Console.WriteLine("Ended deleting previous results");
             }
           
         }
