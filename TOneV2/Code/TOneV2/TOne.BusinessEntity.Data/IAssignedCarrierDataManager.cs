@@ -9,7 +9,7 @@ namespace TOne.BusinessEntity.Data
 {
     public interface IAssignedCarrierDataManager : IDataManager
     {
-        List<AssignedCarrier> GetAssignedCarriers(List<int> userIds, CarrierTypeFilter carrierType);
+        List<AssignedCarrier> GetAssignedCarriers(List<int> userIds, CarrierType carrierType);
 
         Vanrise.Entities.BigResult<AssignedCarrierFromTempTable> GetAssignedCarriersFromTempTable(Vanrise.Entities.DataRetrievalInput<AssignedCarrierQuery> input, List<int> userIds);
 

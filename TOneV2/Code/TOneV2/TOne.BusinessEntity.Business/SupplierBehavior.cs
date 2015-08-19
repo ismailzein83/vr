@@ -14,7 +14,7 @@ namespace TOne.BusinessEntity.Business
         public List<string> GetFilteredValues()
         {
             AccountManagerManager accountManagerManager = new AccountManagerManager();
-            List<AssignedCarrier> assignedCarriers = accountManagerManager.GetAssignedCarriers(SecurityContext.Current.GetLoggedInUserId(), true, CarrierTypeFilter.OnlySuppliers);
+            List<AssignedCarrier> assignedCarriers = accountManagerManager.GetAssignedCarriers(SecurityContext.Current.GetLoggedInUserId(), true, CarrierType.Supplier);
             List<string> suppliers = new List<string>();
             foreach (AssignedCarrier assignedCarrier in assignedCarriers)
             {

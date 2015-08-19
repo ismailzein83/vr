@@ -12,7 +12,7 @@ namespace TOne.BusinessEntity.Data.SQL
 {
     public class AssignedCarrierDataManager : BaseSQLDataManager, IAssignedCarrierDataManager
     {
-        public List<Entities.AssignedCarrier> GetAssignedCarriers(List<int> userIds, CarrierTypeFilter carrierType)
+        public List<Entities.AssignedCarrier> GetAssignedCarriers(List<int> userIds, CarrierType carrierType)
         {
             DataTable dtMembers = this.BuildUserIdsTable(userIds);
             return GetItemsSPCmd("BEntity.sp_AccountManager_GetAssignedCarriers", AssigendCarrier, (cmd) =>
@@ -112,7 +112,7 @@ namespace TOne.BusinessEntity.Data.SQL
                 UserId = (int)reader["UserId"],
                 CarrierName = CarrierAccountDataManager.GetCarrierAccountName(reader["CarrierName"] as string, reader["NameSuffix"] as string),
                 CarrierAccountId = reader["CarrierAccountId"] as string,
-                RelationType = (CarrierRelationType)reader["RelationType"]
+                RelationType = (CarrierType)reader["RelationType"]
             };
 
             return assignedCarrier;

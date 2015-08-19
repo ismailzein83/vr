@@ -143,6 +143,7 @@
   <ItemGroup>
     <Content Include="BusinessEntity\Constant\AccountTypeEnum.js" />
     <Content Include="BusinessEntity\Constant\ActivationStatusEnum.js" />
+    <Content Include="BusinessEntity\Constant\CarrierTypeEnum.js" />
     <Content Include="BusinessEntity\Constant\PaymentTypeEnum.js" />
     <Content Include="BusinessEntity\Constant\RoutingStatusEnum.js" />
     <Content Include="BusinessEntity\Directives\Templates\CarrierGroupTree.html" />

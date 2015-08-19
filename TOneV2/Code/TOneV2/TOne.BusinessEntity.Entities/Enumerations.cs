@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace TOne.BusinessEntity.Entities
 {
-    public enum CarrierType : short
+    public enum CarrierType
     {
-        Exchange = 0,
-        Customer = 1,
+        Customer = 0,
+        Exchange = 1,
         Supplier = 2
     }
 
@@ -29,12 +29,6 @@ namespace TOne.BusinessEntity.Entities
         Holiday = 4
     }
 
-    public enum CarrierTypeFilter : short
-    {
-        All = 0,
-        OnlyCustomers = 1,
-        OnlySuppliers = 2
-    }
     public enum ConnectionType 
     {
         VoIP=0,

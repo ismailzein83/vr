@@ -19,7 +19,7 @@ namespace TOne.BusinessEntity.Business
             return dataManager.GetCarriers(userId);
         }
 
-        public List<AssignedCarrier> GetAssignedCarriers(int managerId, bool withDescendants, CarrierTypeFilter carrierType)
+        public List<AssignedCarrier> GetAssignedCarriers(int managerId, bool withDescendants, CarrierType carrierType)
         {
             IAssignedCarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<IAssignedCarrierDataManager>();
             
