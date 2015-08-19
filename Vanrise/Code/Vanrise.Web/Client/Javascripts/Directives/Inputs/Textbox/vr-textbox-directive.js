@@ -35,17 +35,27 @@
 
                         var isUserChange;
                         $scope.$watch('ctrl.value', function (newValue, oldValue) {
-                            //if (!isValidElem())
-                            //    return;
-
+                        
                             if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
                                 return;
                             isUserChange = false;//reset the flag
                             if (iAttrs.type === TextboxTypeEnum.Number.name) {
                                 var arr = String(newValue).split("");
+                                var decimalArray = String(newValue).split(".");
                                 if (arr.length === 0) return;
+                                if (iAttrs.minvalue != undefined && parseFloat(iAttrs.minvalue)  == 0 && arr.indexOf("-") > -1) {
+                                    ctrl.value = oldValue;
+                                }
+                                if (iAttrs.decimalprecision != undefined && parseInt(iAttrs.decimalprecision) == 0 && arr.indexOf(".") > -1) {
+                                    ctrl.value = oldValue;
+                                }
                                 if (arr.length === 1 && (arr[0] === '-' || arr[0] === '.')) return;
+
                                 if (arr.length === 2 && newValue === '-.') return;
+                                
+                                if (iAttrs.decimalprecision != undefined && decimalArray.length >0 && decimalArray[1]!=undefined  && decimalArray[1].length > parseInt(iAttrs.decimalprecision)) {
+                                    ctrl.value = oldValue;
+                                }
                                 if (iAttrs.maxvalue != undefined && newValue > parseFloat(iAttrs.maxvalue)) {
                                     ctrl.value = oldValue
                                 }
