@@ -36,7 +36,7 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
 
         $scope.onMainGridReady_BTSCases = function (api) {
             mainGridAPI_BTSCases = api;
-            return retrieveData_getData_BTSCases();
+            return retrieveData_BTSCases();
         };
 
         $scope.chartSelectedMeasureReady = function (api) {
@@ -58,9 +58,11 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
         }
 
 
+
         $scope.dataRetrievalFunction_BTSCases = function (dataRetrievalInput, onResponseReady) {
             return DashboardAPIService.GetBTSCases(dataRetrievalInput)
             .then(function (response) {
+               
                 onResponseReady(response);
             });
         }
@@ -104,6 +106,8 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
 
 
         return DashboardAPIService.GetStrategyCases($scope.fromDate, $scope.toDate).then(function (response) {
+            console.log('Chart: response')
+            console.log(response)
             angular.forEach(response, function (itm) {
                 $scope.strategyCases.push(itm);
             });
