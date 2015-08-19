@@ -20,6 +20,8 @@
 
 
 
+
+
 GO
 CREATE CLUSTERED INDEX [IX_AccountThreshold_StrategyId]
     ON [FraudAnalysis].[AccountThreshold]([StrategyId] ASC);
@@ -28,4 +30,9 @@ CREATE CLUSTERED INDEX [IX_AccountThreshold_StrategyId]
 GO
 CREATE NONCLUSTERED INDEX [IX_AccountThreshold_AccountNumber]
     ON [FraudAnalysis].[AccountThreshold]([AccountNumber] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_AccountThreshold_DateDay]
+    ON [FraudAnalysis].[AccountThreshold]([DateDay] ASC);
 

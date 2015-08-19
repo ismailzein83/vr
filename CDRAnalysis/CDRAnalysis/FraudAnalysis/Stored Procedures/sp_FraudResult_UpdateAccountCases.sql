@@ -12,19 +12,24 @@
           set @CurrentDate=Getdate(); 
             
         INSERT INTO [FraudAnalysis].AccountCase(AccountNumber, StatusId, StrategyId, SuspicionLevelID) 
-            SELECT act.AccountNumber, 1, act.StrategyId, act.SuspicionLevelID FROM [FraudAnalysis].AccountCase ac, @AccountCase act 
-            WHERE ac.AccountNumber=act.AccountNumber and (ac.StrategyId<>act.StrategyId or ac. SuspicionLevelID<>act.SuspicionLevelID) and  ((ac.StatusID=4  and ac.ValidTill <=@CurrentDate) or (ac.StatusId <>4)  ) and ac.Id =(select max(Id) from  FraudAnalysis.AccountCase acTemp where  acTemp.AccountNumber=act.AccountNumber  )  ;    
-		
-		
-		INSERT INTO [FraudAnalysis].AccountCase(AccountNumber, StatusId, StrategyId, SuspicionLevelID)
-		  SELECT act.AccountNumber, 1, act.StrategyId, act.SuspicionLevelID FROM @AccountCase act 
-		
-
+        SELECT	distinct act.AccountNumber, 1, act.StrategyId, act.SuspicionLevelID 
+        FROM	[FraudAnalysis].AccountCase ac with(nolock,index=IX_AccountCase_AccountNumber)
+				, @AccountCase act 
+        WHERE	ac.AccountNumber=act.AccountNumber  
+				and  ((ac.StatusID=4  and ac.ValidTill <=@CurrentDate) or (ac.StatusId <>4 and (ac.StrategyId<>act.StrategyId or ac. SuspicionLevelID<>act.SuspicionLevelID))  ) 
+				and ac.Id =(select max(Id) from  FraudAnalysis.AccountCase acTemp  with(nolock,index=IX_AccountCase_AccountNumber)where  acTemp.AccountNumber=act.AccountNumber  )  ;    
 		
 		
 		--INSERT INTO [FraudAnalysis].AccountCase(AccountNumber, StatusId, StrategyId, SuspicionLevelID)
 		--  SELECT act.AccountNumber, 1, act.StrategyId, act.SuspicionLevelID FROM @AccountCase act 
-		-- left join [FraudAnalysis].AccountCase acTemp ON acTemp.AccountNumber = act.AccountNumber WHERE acTemp.AccountNumber IS NULL
+		
+
+		
+		
+		INSERT INTO [FraudAnalysis].AccountCase(AccountNumber, StatusId, StrategyId, SuspicionLevelID)
+		SELECT	distinct act.AccountNumber, 1, act.StrategyId, act.SuspicionLevelID 
+		FROM	@AccountCase act 
+				left join [FraudAnalysis].AccountCase acTemp with(nolock,index=IX_AccountCase_AccountNumber) ON acTemp.AccountNumber = act.AccountNumber where acTemp.AccountNumber IS NULL
 
 		 
 		

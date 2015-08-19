@@ -54,14 +54,16 @@ CREATE PROCEDURE [FraudAnalysis].[sp_FraudResult_CreateTempForFilteredSuspicious
 			
 		SELECT  cs.Name  CaseStatus,  ac.StatusId, ac.ValidTill ValidTill  , cast(count(st.Id) as varchar(10))+ ( case when  s.PeriodId = 2 then  ' Day(s)' else ' Hour(s)' end )as NumberofOccurances,  MAX(st.DateDay) as LastOccurance,   s.Name as StrategyName, st.AccountNumber as AccountNumber , max(#SuspectionLevel.Id) as SuspicionLevelId 
 				
-				INTO #Result
-				
-				from [FraudAnalysis].[AccountThreshold] st
-				inner join #SuspectionLevel ON st.SuspicionLevelId=#SuspectionLevel.Id 
-				inner join #Strategy s ON s.Id=st.StrategyId 
-				inner join [FraudAnalysis].[AccountCase] ac  ON ac.AccountNumber=st.AccountNumber 
-				inner join #CaseStatus cs ON cs.Id=ac.StatusId 
-				WHERE (@AccountNumber is null or st.AccountNumber=@AccountNumber) and dateday between @fromDate and @ToDate and ac.Id =(select MAX(Id) from accountcase ac2 where ac2.accountnumber= st.AccountNumber )
+				INTO	#Result				
+				from	[FraudAnalysis].[AccountThreshold] st with(nolock, index=IX_AccountThreshold_AccountNumber)
+						inner join #SuspectionLevel ON st.SuspicionLevelId=#SuspectionLevel.Id 
+						inner join #Strategy s ON s.Id=st.StrategyId 
+						inner join [FraudAnalysis].[AccountCase] ac with(nolock, index=IX_AccountCase_AccountNumber) ON st.AccountNumber= ac.AccountNumber
+						inner join #CaseStatus cs ON ac.StatusId = cs.Id
+				WHERE	st.dateday between @fromDate and @ToDate 
+						and (@AccountNumber is null or st.AccountNumber=@AccountNumber)
+						and ac.Id =(select MAX(Id) from accountcase ac2 with(nolock, index=IX_AccountCase_AccountNumber) where ac2.accountnumber= st.AccountNumber ) 
+												
 				group by st.AccountNumber, s.Name, cs.Name , ac.StatusId, ac.ValidTill, s.PeriodId
 				
 						
