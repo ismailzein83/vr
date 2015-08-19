@@ -6,7 +6,9 @@ CREATE PROCEDURE [FraudAnalysis].[sp_AccountCase_Insert]
     @AccountNumber varchar(50), 
 	@StatusID int,
 	@ValidTill DateTime	,
-	@UserId int
+	@UserId int,
+	@StrategyId int, 
+	@SuspicionLevelID int
 	
 AS
 BEGIN
@@ -14,12 +16,16 @@ BEGIN
            ([AccountNumber]
            ,[StatusID]
            ,[ValidTill]
-           ,[UserId])
+           ,[UserId]
+           ,[StrategyId]
+           ,[SuspicionLevelID])
 		VALUES
            (@AccountNumber
            ,@StatusID
            ,@ValidTill
            ,@UserId
+           ,@StrategyId
+           ,@SuspicionLevelID
            )
 	 
 END

@@ -13,15 +13,15 @@ CREATE PROCEDURE [FraudAnalysis].[sp_Dashboard_CreateTempForTopTenBTS]
 		IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 	    BEGIN
 		
-			select top 10 count(distinct sc.AccountNumber) as CountCases, cdr.BTS_id BTS_Id 
+			select top 10 count(distinct ac.AccountNumber) as CountCases, cdr.BTS_id BTS_Id 
 			into #Result
 			from FraudAnalysis.NormalCDR cdr 
-			inner join FraudAnalysis.AccountCase sc on cdr.MSISDN=sc.AccountNumber
+			inner join FraudAnalysis.AccountCase ac on cdr.MSISDN=ac.AccountNumber
 			
 			
-			where cdr.connectdatetime between @FromDate and @ToDate and sc.StatusID = 3
+			where ac.LogDate between @FromDate and @ToDate and ac.StatusID = 3
 			group by BTS_id
-			order by count(distinct sc.AccountNumber) desc
+			order by count(distinct ac.AccountNumber) desc
 		
 			
 			

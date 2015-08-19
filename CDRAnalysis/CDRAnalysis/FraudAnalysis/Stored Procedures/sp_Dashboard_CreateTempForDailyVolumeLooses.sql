@@ -1,6 +1,6 @@
 ﻿
 
-CREATE PROCEDURE [FraudAnalysis].[sp_Dashboard_CreateTempForTopTenCell]
+CREATE PROCEDURE [FraudAnalysis].[sp_Dashboard_CreateTempForDailyVolumeLooses]
 (
 	@TempTableName varchar(200),	
 	@FromDate datetime,
@@ -12,15 +12,14 @@ CREATE PROCEDURE [FraudAnalysis].[sp_Dashboard_CreateTempForTopTenCell]
 		
 		IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 	    BEGIN
-	    
-			select top 10 count(distinct sc.AccountNumber) as CountCases, cdr.cell_id Cell_Id 
+		
+			select sum(cdr.DurationInSeconds) as Volume, CONVERT(date, cdr.ConnectDateTime) as DateDay
 			into #Result
 			from FraudAnalysis.NormalCDR cdr 
-			inner join FraudAnalysis.AccountCase sc on cdr.MSISDN=sc.AccountNumber
-			where cdr.connectdatetime between @FromDate and @ToDate and sc.StatusID = 3
-			group by cell_id
-			order by count(distinct sc.AccountNumber) desc
+			inner join FraudAnalysis.AccountCase ac on cdr.MSISDN=ac.AccountNumber
 			
+			where ac.LogDate between @FromDate and @ToDate and ac.StatusID = 3 and cdr.Call_Type=1
+			group by CONVERT(date, cdr.ConnectDateTime) 
 			
 			declare @sql varchar(1000)
 			set @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #Result';

@@ -83,7 +83,6 @@
     <Build Include="FraudAnalysis\Tables\CallClass.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempForFilteredNormalCDRs.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempForFilteredNumberProfiles.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_CreateTempForTopTenCell.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_CreateTempForTopTenBTS.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_CreateTempForCasesSummary.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_CreateTempForFilteredStrategies.sql" />
@@ -122,5 +121,6 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_UpdateAccountCases.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempForFilteredAccountCases.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_Insert.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_CreateTempForDailyVolumeLooses.sql" />
   </ItemGroup>
 </Project>

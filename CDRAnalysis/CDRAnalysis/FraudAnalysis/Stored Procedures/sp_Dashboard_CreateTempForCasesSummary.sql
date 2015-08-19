@@ -13,15 +13,22 @@ CREATE PROCEDURE [FraudAnalysis].[sp_Dashboard_CreateTempForCasesSummary]
 		IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 	    BEGIN
 		
-			select IsNuLL(cs.Name,'Open') as StatusName, count(st.AccountNumber)as CountCases 
-			into #Result
-			from FraudAnalysis.AccountThreshold st 
-			left join FraudAnalysis.AccountCase sc on st.AccountNumber = sc.AccountNumber 
-			left join FraudAnalysis.CaseStatus cs on cs.Id=sc.StatusId
+		select Temp.StatusName, sum(Temp.CountCases) as CountCases 
+		into #Result
+		from
+		    (select cs.Name StatusName, 0 as CountCases 
+			from  FraudAnalysis.CaseStatus cs 
 			
+			union       	
+		
+		
+			select cs.Name StatusName, count(ac.AccountNumber)as CountCases 
+			from  FraudAnalysis.AccountCase ac right join FraudAnalysis.CaseStatus cs on cs.Id=ac.StatusId
+			where ac.LogDate between @FromDate and @ToDate
+			group by cs.Name,cs.Id) as Temp
 			
-			where st.DateDay between @FromDate and @ToDate
-			group by cs.Name,cs.Id
+			group by Temp.StatusName
+			
 		
 			
 			
