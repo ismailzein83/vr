@@ -40,7 +40,8 @@
                             $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
                             StrategyIds: $scope.selectedStrategyIds,
                             FromDate: new Date(fromDate),
-                            ToDate: new Date(toDate)
+                            ToDate: new Date(toDate),
+                            OverridePrevious: $scope.overridePrevious
                         }
                     });
                     runningDate = new Date(toDate);
@@ -59,7 +60,8 @@
                             $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
                             StrategyIds: $scope.selectedStrategyIds,
                             FromDate: new Date(fromDate),
-                            ToDate: new Date(toDate)
+                            ToDate: new Date(toDate),
+                            OverridePrevious: $scope.overridePrevious
                         }
                     });
 

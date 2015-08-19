@@ -72,6 +72,11 @@
           <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
         </InArgument>
       </vffba1:DeleteStrategyResults.FromDate>
+      <vffba1:DeleteStrategyResults.OverridePrevious>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">Input.OverridePrevious</mca:CSharpValue>
+        </InArgument>
+      </vffba1:DeleteStrategyResults.OverridePrevious>
       <vffba1:DeleteStrategyResults.StrategyIds>
         <InArgument x:TypeArguments="scg:List(x:Int32)">
           <mca:CSharpValue x:TypeArguments="scg:List(x:Int32)">Input.StrategyIds</mca:CSharpValue>
@@ -274,7 +279,7 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("End Executing Strategies Count: {0}", Input.StrategyIds.Count)</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbDE8A5YCDgIBAUAFRBEDAbUDRQVVJAMBqwNWBWEaAwGkA2IFjwIQAgEGkAIFlAIRAgECQglClQEDAbYDTQtNYwMBsgNIC0hZAwGvA1ILUlcDAawDXgteYwMBqANZC1lqAwGlA3AHhQEZAwHrAoYBB6oBIwMBiAKrAQfKASQDAbMBywEH4AEzAgF64QEH9gEwAgFB9wEHggIrAgEkgwIHjgIoAgEHkgIJkgKUAQIBA3MNc1sDAZYDfQ19bwMBiAN4DXhuAwH6AoIBDYIBWQMB7AKiAQ2iAWQDAd0CmAENmAFnAwHPAo4BDY4BbgMBwQKJAQ2JAVsDAbMCnQENnQF5AwGlApMBDZMBggEDAZcCpwENpwFZAwGJAscBDccBZAMB+gG9AQ29AXEDAewBrgENrgF6AwHeAbgBDbgBiQEDAdABwgENwgF6AwHCAbMBDbMBiAEDAbQB2AEN2AFyAwGlAc4BDc4BgAEDAZcB3QEN3QF/AwGJAdMBDdMBfwIBe+4BDe4BcgIBbOQBDeQBgQECAV7zAQ3zAXwCAVDpAQ3pAXwCAUL/AQ3/AXcCATP6AQ36AXcCASWLAg2LAnQCARaGAg2GAnQCAQg=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbDI8A5sCDgIBAUAFRBEDAbgDRQVaJAMBqwNbBWYaAwGkA2cFlAIQAgEGlQIFmQIRAgECQglClQEDAbkDUgtSYwMBtQNNC01gAwGyA0gLSFkDAa8DVwtXVwMBrANjC2NjAwGoA14LXmoDAaUDdQeKARkDAesCiwEHrwEjAwGIArABB88BJAMBswHQAQflATMCAXrmAQf7ATACAUH8AQeHAisCASSIAgeTAigCAQeXAgmXApQBAgEDeA14WwMBlgOCAQ2CAW8DAYgDfQ19bgMB+gKHAQ2HAVkDAewCpwENpwFkAwHdAp0BDZ0BZwMBzwKTAQ2TAW4DAcECjgENjgFbAwGzAqIBDaIBeQMBpQKYAQ2YAYIBAwGXAqwBDawBWQMBiQLMAQ3MAWQDAfoBwgENwgFxAwHsAbMBDbMBegMB3gG9AQ29AYkBAwHQAccBDccBegMBwgG4AQ24AYgBAwG0Ad0BDd0BcgMBpQHTAQ3TAYABAwGXAeIBDeIBfwMBiQHYAQ3YAX8CAXvzAQ3zAXICAWzpAQ3pAYEBAgFe+AEN+AF8AgFQ7gEN7gF8AgFChAINhAJ3AgEz/wEN/wF3AgElkAINkAJ0AgEWiwINiwJ0AgEI</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

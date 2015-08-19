@@ -24,14 +24,22 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         [RequiredArgument]
         public InArgument<List<int>> StrategyIds { get; set; }
 
+
+        [RequiredArgument]
+        public InArgument<bool> OverridePrevious { get; set; }
+
         #endregion
 
 
 
         protected override void Execute(CodeActivityContext context)
         {
-            StrategyManager manager= new StrategyManager();
-            manager.DeleteStrategyResults(string.Join(",", context.GetValue(StrategyIds)), context.GetValue(FromDate), context.GetValue(ToDate));
+            if (context.GetValue(OverridePrevious))
+            {
+                StrategyManager manager = new StrategyManager();
+                manager.DeleteStrategyResults(string.Join(",", context.GetValue(StrategyIds)), context.GetValue(FromDate), context.GetValue(ToDate));
+            }
+          
         }
     }
 }

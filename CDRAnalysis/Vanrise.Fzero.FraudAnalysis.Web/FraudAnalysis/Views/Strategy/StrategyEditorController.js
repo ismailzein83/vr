@@ -231,7 +231,10 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             var filterItem = {
                 filterId: filterDef.filterId,
                 description: filterDef.description,
-                label: filterDef.label
+                label: filterDef.label,
+                minValue: filterDef.minValue,
+                maxValue: filterDef.maxValue,
+                decimalPrecision: filterDef.decimalPrecision
             };
             $scope.strategyFilters.push(filterItem);
         });
@@ -264,7 +267,10 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             var filterItem = {
                 filterId: filterDef.filterId,
                 description: filterDef.description,
-                label: filterDef.label
+                label: filterDef.label,
+                minValue: filterDef.minValue,
+                maxValue: filterDef.maxValue,
+                decimalPrecision: filterDef.decimalPrecision
             };
 
 
@@ -403,7 +409,15 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         var index = 0;
         return StrategyAPIService.GetFilters().then(function (response) {
             angular.forEach(response, function (itm) {
-                $scope.filterDefinitions.push({ filterId: itm.FilterId, description: itm.Description, label: itm.Label });
+                console.log(itm)
+                $scope.filterDefinitions.push({ 
+                    filterId: itm.FilterId,
+                    description: itm.Description,
+                    label: itm.Label, 
+                    minValue: itm.MinValue,
+                    maxValue: itm.MaxValue,
+                    decimalPrecision: itm.DecimalPrecision
+                });
             });
         });
     }

@@ -30,6 +30,7 @@
             return {
                 $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
                 StrategyIds: $scope.selectedStrategyIds,
+                OverridePrevious : false
             };
         };
 
