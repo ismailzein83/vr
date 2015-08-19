@@ -253,7 +253,9 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         var accountCaseObject = {
             AccountNumber: $scope.accountNumber,
             StatusId: $scope.selectedStatus.id,
-            ValidTill: validTill
+            ValidTill: validTill,
+            SuspicionLevelID: $scope.relatedCases[$scope.relatedCases.length - 1].SuspicionLevelID,
+            StrategyId: $scope.relatedCases[$scope.relatedCases.length - 1].StrategyId
         };
         console.log(accountCaseObject)
         return accountCaseObject;
