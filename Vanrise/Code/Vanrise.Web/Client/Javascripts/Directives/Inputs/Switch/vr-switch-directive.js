@@ -23,10 +23,11 @@ app.directive('vrSwitch', ['SecurityService', function (SecurityService) {
                     $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: selfOffset.left });
                 }, 1)
             }
+            if ($scope.value == undefined)
+                $scope.value = false;
         },
         link: function (scope, element, attrs, ctrl) {
-            if (scope.value == undefined)
-                scope.value = false;
+            
             var isUserChange;
             scope.$watch('value', function () {
                 if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
