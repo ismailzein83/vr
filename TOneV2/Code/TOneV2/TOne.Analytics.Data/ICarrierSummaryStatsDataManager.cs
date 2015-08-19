@@ -8,9 +8,6 @@ namespace TOne.Analytics.Data
 {
     public interface ICarrierSummaryStatsDataManager : IDataManager
     {
-        //List<Entities.CarrierSummaryStats> GetCarrierSummaryStats(string carrierType, DateTime fromDate, DateTime toDate, string customerID, string supplierID, char groupByProfile, int? topCount, string currency);
-
-        Vanrise.Entities.BigResult<Entities.CarrierSummaryStats> GetCarrierSummaryStatsByCriteria(Vanrise.Entities.DataRetrievalInput<Entities.CarrierSummaryStatsQuery> input);
-
+        Vanrise.Entities.BigResult<Entities.CarrierSummaryStats> GetCarrierSummaryStats(Vanrise.Entities.DataRetrievalInput<Entities.CarrierSummaryStatsQuery> input);
     }
 }

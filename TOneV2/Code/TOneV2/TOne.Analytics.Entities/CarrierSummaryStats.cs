@@ -8,19 +8,19 @@ namespace TOne.Analytics.Entities
 {
     public class CarrierSummaryStats
     {
-        public string SupplierID { get; set; }
-        public decimal Attempts { get; set; }
-        public decimal? SuccessfulAttempts { get; set; }
-        public decimal? DurationsInMinutes { get; set; }
-        public decimal? ASR { get; set; }
-        public decimal? ACD { get; set; }
-        public decimal? DeliveredASR { get; set; }
-        public decimal? AveragePDD { get; set; }
-        public decimal? NumberOfCalls { get; set; }
-        public decimal? PricedDuration { get; set; }
-        public decimal? Sale_Nets { get; set; }
-        public decimal? Cost_Nets { get; set; }
-        public decimal? Profit { get; set; }
+        public string GroupID { get; set; }
+        public double? Attempts { get; set; }
+        public double? SuccessfulAttempts { get; set; }
+        public double? DurationsInMinutes { get; set; }
+        public double? ASR { get; set; }
+        public double? ACD { get; set; }
+        public double? DeliveredASR { get; set; }
+        public double? AveragePDD { get; set; }
+        public double? NumberOfCalls { get; set; }
+        public double? PricedDuration { get; set; }
+        public double? Sale_Nets { get; set; }
+        public double? Cost_Nets { get; set; }
+        public double? Profit { get; set; }
         public double? Percentage { get; set; }
         public int rownIndex { get; set; }
     }

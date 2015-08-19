@@ -29,7 +29,7 @@ function CarrierMaskEditorController($scope, CarrierMaskAPIService, LookUpAPISer
             }
         };
 
-        //$scope.labelhint = "Dates: {0} = Invoice Issue Date, {1} = Invoice Begin Date, {2} = Invoice Till Date <br> Overall Counters: {3} = Account Invoices Count, {4} = All Invoices Count (+ Startup Counter Value)<br>Yearly Counters: {5} = Account's Yearly Invoice Count, {6} = Yearly Invoices Count (+ Yearly Startup Counter Value";
+        $scope.labelhint = "<b>Dates:</b> {0} = Invoice Issue Date, {1} = Invoice Begin Date, {2} = Invoice Till Date <br> <b>Overall Counters:</b> {3} = Account Invoices Count, {4} = All Invoices Count (+ Startup Counter Value)<br> <b>Yearly Counters:</b> {5} = Account's Yearly Invoice Count, {6} = Yearly Invoices Count (+ Yearly Startup Counter Value)";
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };

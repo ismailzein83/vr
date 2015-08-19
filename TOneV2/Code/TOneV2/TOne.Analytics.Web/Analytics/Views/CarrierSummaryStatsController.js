@@ -8,22 +8,28 @@
         var gridApi;
 
         function retrieveData() {
-            console.log($scope.optionsCurrencies.selectedvalues);
+            
+            $scope.getHeader = $scope.byProfile ? "Profile" : "Carrier";
+
+            if ($scope.selectedvalues == undefined)
+                $scope.selectedvalues = null;
+
+            if ($scope.optionsCurrencies.selectedvalues == undefined)
+                $scope.optionsCurrencies.selectedvalues = null;
 
             return gridApi.retrieveData({
                 CarrierType: $scope.isCustomer,
-                CustomerID: $scope.selectedvalues.CarrierAccountID,
+                CustomerID: $scope.selectedvalues == null ? null :  $scope.selectedvalues.CarrierAccountID,
                 TopRecord: $scope.top,
                 FromDate: $scope.fromDate,
                 ToDate: $scope.toDate,
-                Currency: $scope.optionsCurrencies.selectedvalues.CurrencyID,
+                Currency: $scope.optionsCurrencies.selectedvalues == null ? null : $scope.optionsCurrencies.selectedvalues.CurrencyID,
                 GroupByProfile: $scope.byProfile,
                 ShowInactive: $scope.showInactive
             });
         }
 
         function defineScope() {
-
             $scope.datasource = [];
 
             $scope.optionsCurrencies = {
@@ -31,9 +37,11 @@
                 datasource: []
             };
 
+            
+            $scope.getHeader = "";
             $scope.gridReady = function (api) {
                 gridApi = api;
-                return retrieveData();
+                //return retrieveData();
             };
 
             $scope.searchClicked = function () {

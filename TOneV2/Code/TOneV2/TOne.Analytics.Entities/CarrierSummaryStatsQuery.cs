@@ -15,8 +15,8 @@ namespace TOne.Analytics.Entities
         public string SupplierID { get; set; }
         public int TopRecord { get; set; }
         public string GroupByProfile { get; set; }
-        public int CustomerAmuID { get; set; }
-        public int SupplierAmuID { get; set; }
+        public int? CustomerAmuID { get; set; }
+        public int? SupplierAmuID { get; set; }
         public string Currency { get; set; }
         public string ShowInactive { get; set; }
     }
