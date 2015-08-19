@@ -46,6 +46,12 @@
                                 if (arr.length === 0) return;
                                 if (arr.length === 1 && (arr[0] === '-' || arr[0] === '.')) return;
                                 if (arr.length === 2 && newValue === '-.') return;
+                                if (iAttrs.maxvalue != undefined && newValue > parseFloat(iAttrs.maxvalue)) {
+                                    ctrl.value = oldValue
+                                }
+                                if (iAttrs.minvalue != undefined && newValue < parseFloat(iAttrs.minvalue)) {
+                                    ctrl.value = oldValue;
+                                }
                                 if (isNaN(newValue)) {
                                     ctrl.value = oldValue;
                                 }
