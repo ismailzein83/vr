@@ -6,27 +6,48 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.Analytics.Entities;
+using TOne.BusinessEntity.Business;
 using TOne.Data.SQL;
 
 namespace TOne.Analytics.Data.SQL
 {
     public class BlockedAttemptsDataManager : BaseTOneDataManager, IBlockedAttemptsDataManager
     {
+        private bool groupByNumber;
+        private TrafficStatisticCommon trafficStatisticCommon = new TrafficStatisticCommon();
         public Vanrise.Entities.BigResult<BlockedAttempts> GetBlockedAttempts(Vanrise.Entities.DataRetrievalInput<BlockedAttemptsInput> input)
         {
             Dictionary<string, string> mapper = new Dictionary<string, string>();
-            mapper.Add("Customer", "CustomerID");
+            mapper.Add("CustomerName", "CustomerID");
+            groupByNumber = input.Query.GroupByNumber;
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName,input.Query.Filter), (cmd) =>
+                ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.Filter, input.Query.GroupByNumber), (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@FromDateTime", input.Query.From));
                     cmd.Parameters.Add(new SqlParameter("@ToDateTime", input.Query.To));
-                    cmd.Parameters.Add(new SqlParameter("@GroupByNumber", input.Query.GroupByNumber));
                 });
             };
+            Vanrise.Entities.BigResult<BlockedAttempts> data=RetrieveData(input, createTempTableAction, BlockedAttemptsMapper, mapper);
+            FillProperties(data);
+            return data;
+        }
 
-            return RetrieveData(input, createTempTableAction, BlockedAttemptsMapper, mapper);
+
+        public void FillProperties(Vanrise.Entities.BigResult<BlockedAttempts> Data)
+        {
+            BusinessEntityInfoManager manager = new BusinessEntityInfoManager();
+
+            foreach (BlockedAttempts data in Data.Data)
+            {
+                if(data.CustomerID!=null)
+                  data.CustomerName= manager.GetCarrirAccountName(data.CustomerID);
+                else
+                  data.CustomerName="N/A";
+              data.SwitchName= manager.GetSwitchName(data.SwitchID);
+               data.OurZoneName= manager.GetZoneName(data.OurZoneID);
+       
+            }    
         }
 
         BlockedAttempts BlockedAttemptsMapper(IDataReader reader)
@@ -45,12 +66,18 @@ namespace TOne.Analytics.Data.SQL
             blockedAttempts.CustomerID = reader["CustomerID"] as string;
             blockedAttempts.FirstCall = GetReaderValue<DateTime>(reader, "FirstCall");
             blockedAttempts.LastCall = GetReaderValue<DateTime>(reader, "LastCall");
-            blockedAttempts.PhoneNumber = reader["PhoneNumber"] as string;
-            blockedAttempts.CLI = reader["CLI"] as string;
+            if (groupByNumber)
+            {
+                blockedAttempts.PhoneNumber = reader["PhoneNumber"] as string;
+                blockedAttempts.CLI = reader["CLI"] as string;
+            }
+
         }
-        public string CreateTempTableIfNotExists(string tempTableName, BlockedAttemptsFilter filter)
+        public string CreateTempTableIfNotExists(string tempTableName, BlockedAttemptsFilter filter ,bool groupByNumber)
         {
             StringBuilder whereBuilder = new StringBuilder();
+            StringBuilder groupBuilder = new StringBuilder();
+            StringBuilder selectBuilder = new StringBuilder();
             StringBuilder queryBuilder = new StringBuilder(@"
                             IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
 	                            BEGIN 
@@ -62,9 +89,8 @@ namespace TOne.Analytics.Data.SQL
 		                        BCDRI.ReleaseSource, 
 		                        case when CustomerID IS NULL then 'N/A' ELSE CustomerID END  AS CustomerID,
 		                        DATEADD(ms,-datepart(ms,Min(BCDRI.Attempt)),Min(BCDRI.Attempt)) AS FirstCall,
-		                        DATEADD(ms,-datepart(ms,Max(BCDRI.Attempt)),Max(BCDRI.Attempt)) AS LastCall,
-		                        case WHEN @GroupByNumber = 'Y' then CDPN ELSE '' END AS PhoneNumber,
-		                        case WHEN @GroupByNumber = 'Y' then CGPN ELSE '' END AS CLI    
+		                        DATEADD(ms,-datepart(ms,Max(BCDRI.Attempt)),Max(BCDRI.Attempt)) AS LastCall
+                                #SELECTPART# 
 	                            INTO #TEMPTABLE#
 	                            FROM  Billing_CDR_Invalid  BCDRI  WITH(NOLOCK)
 	                            WHERE
@@ -72,10 +98,20 @@ namespace TOne.Analytics.Data.SQL
 		                        AND DurationInSeconds = 0
 		                        AND SupplierID IS NULL
 		                        #FILTER#
-                               GROUP BY ReleaseCode,SwitchID,ReleaseSource,OurZoneID,CustomerID,case WHEN @GroupByNumber = 'Y' then CDPN ELSE '' END, case WHEN @GroupByNumber = 'Y' then CGPN ELSE '' END
+                               GROUP BY ReleaseCode,SwitchID,ReleaseSource,OurZoneID,CustomerID #GROUPINGPART#
+
                                 ORDER BY Count (*) DESC
                             END");
+
             AddFilterToQuery(filter, whereBuilder);
+            if (groupByNumber)
+            {
+                selectBuilder.Append(",CDPN as PhoneNumber,CGPN as CLI");
+                groupBuilder.Append(",CDPN,CGPN");
+            }
+
+            queryBuilder.Replace("#GROUPINGPART#", groupBuilder.ToString());
+            queryBuilder.Replace("#SELECTPART#", selectBuilder.ToString());
             queryBuilder.Replace("#TEMPTABLE#", tempTableName);
             queryBuilder.Replace("#FILTER#", whereBuilder.ToString());
             return queryBuilder.ToString();

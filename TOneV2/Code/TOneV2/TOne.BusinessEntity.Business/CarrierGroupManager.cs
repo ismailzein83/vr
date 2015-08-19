@@ -7,6 +7,7 @@ using TOne.BusinessEntity.Data;
 using TOne.BusinessEntity.Entities;
 using TOne.Entities;
 using Vanrise.Entities;
+using Vanrise.Security.Business;
 
 namespace TOne.BusinessEntity.Business
 {
@@ -113,7 +114,31 @@ namespace TOne.BusinessEntity.Business
 
         public Vanrise.Entities.IDataRetrievalResult<CarrierAccount> GetCarrierGroupMembers(Vanrise.Entities.DataRetrievalInput<CarrierGroupQuery> input)
         {
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, _dataManager.GetCarrierGroupMembers(input, GetCarrierGroupIds(input.Query.GroupId, input.Query.WithDescendants)));
+            if (input.Query.WithAssignedCarrier && input.Query.CarrierType == CarrierType.Customer)
+            {
+                AccountManagerManager accountManagerManager = new AccountManagerManager();
+                List<AssignedCarrier> assignedCarriers = accountManagerManager.GetAssignedCarriers(SecurityContext.Current.GetLoggedInUserId(), true, CarrierType.Customer);
+                List<string> cutomers = new List<string>();
+                foreach (AssignedCarrier assignedCarrier in assignedCarriers)
+                {
+                    cutomers.Add(assignedCarrier.CarrierAccountId);
+                }
+                return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, _dataManager.GetCarrierGroupMembers(input, GetCarrierGroupIds(input.Query.GroupId, input.Query.WithDescendants), cutomers));
+            }
+            else if (input.Query.WithAssignedCarrier && input.Query.CarrierType == CarrierType.Supplier)
+            {
+                AccountManagerManager accountManagerManager = new AccountManagerManager();
+                List<AssignedCarrier> assignedCarriers = accountManagerManager.GetAssignedCarriers(SecurityContext.Current.GetLoggedInUserId(), true, CarrierType.Supplier);
+                List<string> suppliers = new List<string>();
+                foreach (AssignedCarrier assignedCarrier in assignedCarriers)
+                {
+                    suppliers.Add(assignedCarrier.CarrierAccountId);
+                }
+                return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, _dataManager.GetCarrierGroupMembers(input, GetCarrierGroupIds(input.Query.GroupId, input.Query.WithDescendants), suppliers));
+            }
+
+            else
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, _dataManager.GetCarrierGroupMembers(input, GetCarrierGroupIds(input.Query.GroupId, input.Query.WithDescendants),null));
         }
 
         public TOne.Entities.InsertOperationOutput<CarrierGroup> AddGroup(CarrierGroup groupObj, string[] CarrierAccountIds)

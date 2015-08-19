@@ -1,9 +1,11 @@
 ﻿app.constant('BlockedAttemptsMeasureEnum', {
-    CustomerID: { value: 2, propertyName: "CustomerID", description: "Customer", isSum: true, type: "Text" },
-    OurZoneID: { value: 3, propertyName: "OurZoneID", description: "Zone", isSum: true, type: "Text" },
-    BlockAttempt: { value: 4, propertyName: "BlockAttempt", description: "Block Attempt", isSum: true, type: "Text" },
-    ReleaseCode: { value: 5, propertyName: "ReleaseCode", description: "Rel. Code", isSum: true, type: "Text" },
-    ReleaseSource: { value: 6, propertyName: "ReleaseSource", description: "ReleaseSource", isSum: true, type: "Text" },
-    FirstCall: { value: 7, propertyName: "FirstCall", description: "First Call", isSum: true, type: "DateTime" },
-    LastCall: { value: 8, propertyName: "LastCall", description: "Last Call", isSum: true, type: "DateTime" },
+    CustomerID: { value: 2, propertyName: "CustomerName", description: "Customer", isSum: true, type: "Text",isShown:true },
+    OurZoneID: { value: 3, propertyName: "OurZoneName", description: "Zone", isSum: true, type: "Text", isShown: true },
+    BlockAttempt: { value: 4, propertyName: "BlockAttempt", description: "Block Attempt", isSum: true, type: "Text", isShown: true },
+    CLI: { value: 5, propertyName: "CLI", description: "CLI", isSum: true, type: "Text", isShown: false },
+    PhoneNumber: { value: 6, propertyName: "PhoneNumber", description: "PhoneNumber", isSum: true, type: "Text", isShown: false },
+    ReleaseCode: { value: 7, propertyName: "ReleaseCode", description: "Rel. Code", isSum: true, type: "Text", isShown: true },
+    ReleaseSource: { value: 8, propertyName: "ReleaseSource", description: "ReleaseSource", isSum: true, type: "Text", isShown: true },
+    FirstCall: { value: 9, propertyName: "FirstCall", description: "First Call", isSum: true, type: "DateTime", isShown: true },
+    LastCall: { value: 10, propertyName: "LastCall", description: "Last Call", isSum: true, type: "DateTime", isShown: true },
 });

@@ -1,15 +1,24 @@
-﻿CarrierGroupTreeController.$inject = ['$scope', 'CarrierGroupAPIService'];
+﻿CarrierGroupTreeController.$inject = ['$scope', 'CarrierGroupAPIService','VRNavigationService'];
 
-function CarrierGroupTreeController($scope, CarrierGroupAPIService) {
+function CarrierGroupTreeController($scope, CarrierGroupAPIService, VRNavigationService) {
 
     var treeAPI;
     var mainGridAPI;
-
+    var assignedCarrier;
+    var carrierType;
+    function loadParameters() {
+        var parameters = VRNavigationService.getParameters($scope);
+        console.log(parameters);
+        assignedCarrier = parameters.assignedCarrier;
+        carrierType = parameters.carrierType;
+    }
     function retrieveData() {
 
         return mainGridApi.retrieveData({
             GroupId: $scope.currentNode.EntityId,
-            WithDescendants: true
+            WithAssignedCarrier:assignedCarrier,
+            WithDescendants: true,
+            CarrierType:carrierType
         });
     }
 
@@ -78,7 +87,7 @@ function CarrierGroupTreeController($scope, CarrierGroupAPIService) {
                $scope.beList = response;
            });
     }
-
+    loadParameters();
     defineScope();
     load();
     defineGrid();

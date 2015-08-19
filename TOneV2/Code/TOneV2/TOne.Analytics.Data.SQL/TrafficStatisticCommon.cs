@@ -249,7 +249,7 @@ namespace TOne.Analytics.Data.SQL
           StringBuilder neededSelectStatement = new StringBuilder();
           foreach (TrafficStatisticGroupKeys groupKey in groupKeys)
           {
-              if (groupKey == TrafficStatisticGroupKeys.SupplierId || groupKey == TrafficStatisticGroupKeys.PortOut || groupKey == TrafficStatisticGroupKeys.GateWayOut || filter.SupplierIds.Count != 0)
+              if (groupKey == TrafficStatisticGroupKeys.SupplierId || groupKey == TrafficStatisticGroupKeys.PortOut || groupKey == TrafficStatisticGroupKeys.GateWayOut || (filter.SupplierIds!=null && filter.SupplierIds.Count != 0))
               {
                   neededSelectStatement.Append(" Case WHEN SUM(ts.Attempts)>0 THEN CONVERT(DECIMAL(10,2),SUM(ts.SuccessfulAttempts)*100.0/Sum(ts.Attempts)) ELSE 0 END AS ABR ");
                   neededSelectStatement.Append(", Case WHEN (Sum(ts.Attempts)-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))>0 THEN CONVERT(DECIMAL(10,2),SUM(ts.SuccessfulAttempts)*100.0/(Sum(ts.Attempts)-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))) ELSE 0 END AS ASR ");

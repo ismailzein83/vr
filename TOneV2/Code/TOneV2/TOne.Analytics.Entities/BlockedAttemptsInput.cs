@@ -11,6 +11,6 @@ namespace TOne.Analytics.Entities
         public BlockedAttemptsFilter Filter { get; set; }
         public DateTime From { get; set; }
         public DateTime To { get; set; }
-        public char GroupByNumber { get; set; }
+        public bool GroupByNumber { get; set; }
     }
 }

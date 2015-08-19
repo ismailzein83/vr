@@ -1,6 +1,6 @@
-﻿BlockedAttemptsController.$inject = ['$scope', 'UtilsService', '$q', 'BlockedAttemptsAPIService', 'VRNotificationService', 'DataRetrievalResultTypeEnum', 'PeriodEnum', 'BlockedAttemptsMeasureEnum', 'CarrierAccountAPIService', 'CarrierTypeEnum', 'ZonesService', 'BusinessEntityAPIService_temp'];
+﻿BlockedAttemptsController.$inject = ['$scope', 'UtilsService', '$q', 'BlockedAttemptsAPIService', 'VRNotificationService', 'DataRetrievalResultTypeEnum', 'PeriodEnum', 'BlockedAttemptsMeasureEnum', 'CarrierAccountAPIService', 'CarrierTypeEnum', 'ZonesService', 'BusinessEntityAPIService_temp','AnalyticsService','VRModalService'];
 
-function BlockedAttemptsController($scope, UtilsService, $q, BlockedAttemptsAPIService, VRNotificationService, DataRetrievalResultTypeEnum, PeriodEnum, BlockedAttemptsMeasureEnum, CarrierAccountAPIService, CarrierTypeEnum, ZonesService, BusinessEntityAPIService) {
+function BlockedAttemptsController($scope, UtilsService, $q, BlockedAttemptsAPIService, VRNotificationService, DataRetrievalResultTypeEnum, PeriodEnum, BlockedAttemptsMeasureEnum, CarrierAccountAPIService, CarrierTypeEnum, ZonesService, BusinessEntityAPIService, AnalyticsService, VRModalService) {
 
     var mainGridAPI;
     var measures = [];
@@ -61,31 +61,22 @@ function BlockedAttemptsController($scope, UtilsService, $q, BlockedAttemptsAPIS
     }
 
     function retrieveData() {
-        var groupByNumber;
-        if ($scope.groupByNumber)
-            groupByNumber = 'Y'
-        else
-            groupByNumber = 'N'
+        for (var i = 0; i < $scope.measures.length; i++) {
+            if ($scope.measures[i].value == BlockedAttemptsMeasureEnum.CLI.value || $scope.measures[i].value == BlockedAttemptsMeasureEnum.PhoneNumber.value)
+                $scope.measures[i].isShown = $scope.groupByNumber;
+        }
         var filter=buildFilter();
         var query = {
             Filter: filter,
             From: $scope.fromDate,
             To: $scope.toDate,
-            GroupByNumber: groupByNumber
+            GroupByNumber: $scope.groupByNumber
         };
         return mainGridAPI.retrieveData(query);
     }
     function load() {
         loadMeasures();
-        $scope.isInitializing = true;
-        UtilsService.waitMultipleAsyncOperations([loadSwitches, loadCustomers]).finally(function () {
-            $scope.isInitializing = false;
-            if (mainGridAPI != undefined) {
-                retrieveData();
-            }
-        }).catch(function (error) {
-            VRNotificationService.notifyExceptionWithClose(error, $scope);
-        });
+        loadSwitches();
     }
 
     function defineMenuActions() {
@@ -98,12 +89,16 @@ function BlockedAttemptsController($scope, UtilsService, $q, BlockedAttemptsAPIS
                     //maxHeight: "800px"
                 };
                 var parameters = {
-                    fromDate: $scope.filter.fromDate,
-                    toDate: $scope.filter.toDate
-
+                    fromDate: $scope.fromDate,
+                    toDate: $scope.toDate,
+                    customerIds: dataItem.CustomerID != null || dataItem.CustomerID != undefined ? [dataItem.CustomerID] : null,
+                    zoneIds: dataItem.OurZoneID != null || dataItem.OurZoneID != undefined ? [dataItem.OurZoneID] : null,
+                    supplierIds: dataItem.SupplierID != null || dataItem.SupplierID != undefined ? [dataItem.SupplierID] : null,
+                    switchIds: [dataItem.SwitchID],
                     ///[dataItem.GroupKeyValues[0].Id]
                 };
-                loadCDRParameters(parameters, dataItem);
+
+             
 
 
 
@@ -163,13 +158,7 @@ function BlockedAttemptsController($scope, UtilsService, $q, BlockedAttemptsAPIS
     }
 
 
-    function loadCustomers() {
-        return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.customers.push(itm);
-            });
-        });
-    }
+
 
     function definePeriods() {
         $scope.periods = [];

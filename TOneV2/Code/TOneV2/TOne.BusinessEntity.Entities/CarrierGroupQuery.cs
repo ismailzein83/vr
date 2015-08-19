@@ -10,5 +10,8 @@ namespace TOne.BusinessEntity.Entities
     {
         public int GroupId { get; set; }
         public bool WithDescendants { get; set; }
+        public bool WithAssignedCarrier { get; set; }
+        public CarrierType CarrierType { get; set; }
+        
     }
 }
