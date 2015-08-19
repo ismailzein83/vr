@@ -46,23 +46,28 @@
                                 var arr = String(newValue).split("");
                                 var decimalArray = String(newValue).split(".");
                                 if (arr.length === 0) return;
+                                if (decimalArray.length > 2)
+                                    ctrl.value = oldValue;
+                                if (iAttrs.minvalue != undefined && parseFloat(ctrl.minvalue) > 0 && iAttrs.maxvalue != undefined && parseFloat(ctrl.maxvalue) < 1 && decimalArray[1] != undefined && decimalArray[1].length < parseInt(ctrl.decimalprecision))
+                                return false;
                                 if (iAttrs.minvalue != undefined && parseFloat(ctrl.minvalue) == 0 && arr.indexOf("-") > -1) {
                                     ctrl.value = oldValue;
                                 }
                                 if (iAttrs.decimalprecision != undefined && parseInt(ctrl.decimalprecision) == 0 && arr.indexOf(".") > -1) {
                                     ctrl.value = oldValue;
                                 }
-                                if (arr.length === 1 && (arr[0] === '-' || arr[0] === '.')) return;
+                                if (arr.length === 1 && (arr[0] === '-' || arr[0] === '.')) ctrl.value = newValue;
 
-                                if (arr.length === 2 && newValue === '-.') return;
-                                
+                                if (arr.length === 2 && newValue === '-.') ctrl.value = newValue;
+                              
                                 if (iAttrs.decimalprecision != undefined && decimalArray.length >0 && decimalArray[1]!=undefined  && decimalArray[1].length > parseInt(ctrl.decimalprecision)) {
                                     ctrl.value = oldValue;
                                 }
-                                if (iAttrs.maxvalue != undefined && newValue > parseFloat(ctrl.maxvalue)) {
+                                if (iAttrs.maxvalue != undefined && newValue > parseFloat(ctrl.maxvalue) ) {
                                     ctrl.value = oldValue
                                 }
-                                if (iAttrs.minvalue != undefined && newValue < parseFloat(ctrl.minvalue)) {
+
+                                if (iAttrs.minvalue != undefined && newValue < parseFloat(ctrl.minvalue) ) {
                                     ctrl.value = oldValue;
                                 }
                                 if (isNaN(newValue)) {
