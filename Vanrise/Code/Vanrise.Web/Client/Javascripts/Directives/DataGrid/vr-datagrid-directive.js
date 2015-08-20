@@ -119,7 +119,6 @@
        
 
         function addColumn(col, columnIndex) {
-            ctrl.isProgress = col.type == "Progress" ? true : false;
             var colDef = {
                 name: col.headerText != undefined ? col.headerText : col.field,
                 headerCellTemplate: headerTemplate,//'/Client/Templates/Grid/HeaderTemplate.html',//template,
@@ -133,7 +132,7 @@
                         return align;
 
                 },
-                isProgress:ctrl.isProgress,
+                type:col.type,
                 tag: col.tag,
                 getcolor: col.getcolor,
                 rotateHeader: ctrl.rotateHeader,
@@ -201,7 +200,7 @@
                 template = UtilsService.replaceAll(template, "#CELLFILTER#", "| number:2");
                 template = UtilsService.replaceAll(template, "#PERCENTAGE#", "");
             }
-            else if (col.type == "Progress") {
+            else if (col.type == "Progress" || col.type == "MultiProgress") {
                 template = template.replace("#TEXTALIGN#", "center;position:absolute;color:#666;");
                 template = UtilsService.replaceAll(template, "#CELLFILTER#", "| number:1");
                 template = UtilsService.replaceAll(template, "#PERCENTAGE#", "%");
@@ -402,25 +401,50 @@
             var progressBarClass;
             var style;
             var percent;
+            var value;
+            var secondValue;
+            var secondDiv;
+            var fieldValue;
             for (var i = 0; i < ctrl.columnDefs.length; i++) {
-                if (ctrl.columnDefs[i].isProgress) {
+                var currentColumn = ctrl.columnDefs[i];
+                if (currentColumn.type == "MultiProgress") {
+                    progressMain = " progress";
+                    var values = currentColumn.field.split("|");
+                    value = "{{::dataItem." + values [0]+ "}}";
+                    secondValue = "{{::dataItem." + values[1] + "}}";
+                    progressBarClass = " progress-bar progress-bar-warning active";
+                    style = 'width:' + value + '%;';
+                    secondDiv = '<div class="vr-datagrid-celltext progress-bar progress-bar-success active" style="width:' + secondValue + '%" >'
+                    + '</div>';
+                    fieldValue = function () {
+                        return "";
+                    };
+                }
+                else if (currentColumn.type == "Progress") {
                     progressMain = " progress";
                     progressBarClass=" progress-bar progress-bar-striped active";
-                    style = 'width:{{::$parent.ctrl.getColumnValue($parent.ctrl.columnDefs[' + i + '], dataItem)}}%;';
+                    style = 'width:' + value + '%;';
+                    secondDiv = "";
+                    fieldValue = function () {
+                        return UtilsService.replaceAll(currentColumn.cellTemplate, "colDef", currentColumnHtml);
+                    };
                 }else
                 {
                     progressMain = "";
                     progressBarClass = ""
                     style = "";
+                    secondDiv = ""
+                    fieldValue = function () {
+                        return UtilsService.replaceAll(currentColumn.cellTemplate, "colDef", currentColumnHtml);
+                    };
                 }
-              
-                var currentColumn = ctrl.columnDefs[i];
                 var currentColumnHtml = '$parent.ctrl.columnDefs[' + i + ']';
                 ctrl.rowHtml += '<div ng-if="!' + currentColumnHtml + '.isHidden" ng-style="{ \'width\': ' + currentColumnHtml + '.width, \'display\':\'inline-block\'' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}">'
                 + '<div class="vr-datagrid-cell ' + progressMain + '" style="margin-bottom:0px">'
                 + '    <div class="vr-datagrid-celltext' + progressBarClass + '" style="' + style + '" >'
-                  + UtilsService.replaceAll(ctrl.columnDefs[i].cellTemplate, "colDef", currentColumnHtml) 
+                  + fieldValue()
                     + '</div>'
+               + secondDiv
                 + '</div>'
 
             + '</div>';
