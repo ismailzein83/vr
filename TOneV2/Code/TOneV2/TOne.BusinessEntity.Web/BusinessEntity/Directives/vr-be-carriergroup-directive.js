@@ -7,7 +7,7 @@ app.directive('vrBeCarriergroup', ['VRModalService', 'UtilsService', 'VRNotifica
             type: "=",
             label: "@",
             selectedvalues:"=",
-            assignedcarrier: "@"
+            isassignedcarrier: "@"
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -48,8 +48,8 @@ app.directive('vrBeCarriergroup', ['VRModalService', 'UtilsService', 'VRNotifica
                 else if (ctrl.type == "Exchange")
                     parameters.carrierType = CarrierTypeEnum.SaleZone.value;
 
-                
-                parameters.assignedCarrier = ctrl.assignedcarrier != undefined ? true : false;
+                console.log(ctrl.isassignedcarrier);
+                parameters.assignedCarrier = ctrl.isassignedcarrier != undefined ? true : false;
                 
 
                 VRModalService.showModal('/Client/Modules/BusinessEntity/Directives/Templates/CarrierGroupTree.html', parameters, settings);
@@ -108,14 +108,14 @@ app.directive('vrBeCarriergroup', ['VRModalService', 'UtilsService', 'VRNotifica
             type = CarrierTypeEnum.Supplier.value;
         else if (ctrl.type == "Exchange")
             type = CarrierTypeEnum.SaleZone.value;
-            
+        var isAssignedCarrier = ctrl.isassignedcarrier != undefined ? true : false;
         function initializeController() {
             loadCarriers();
         }
 
         function loadCarriers() {
-
-            return CarrierAccountAPIService.GetCarriers(type).then(function (response) {
+            
+            return CarrierAccountAPIService.GetCarriers(type, isAssignedCarrier).then(function (response) {
                 angular.forEach(response, function (itm) {
                     datasource.push(itm);
                 }); 

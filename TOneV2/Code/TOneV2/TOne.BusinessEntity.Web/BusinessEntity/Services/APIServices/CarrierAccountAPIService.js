@@ -6,10 +6,15 @@
 
     function serviceObj(baseApiService, carrierTypeEnum) {
         
-        function getCarriers(carrierType) {
+        function getCarriers(carrierType, isAssignedCarrier) {
+            if (isAssignedCarrier == undefined) {
+                alert("Your Request function (getCarriers) should have new parameter (assignedCarrier = true or assignedCarrier=false);");
+            }
+               
             return baseApiService.get("/api/CarrierAccount/GetCarriers",
                 {
-                    carrierType: carrierType
+                    carrierType: carrierType,
+                    isAssignedCarrier: isAssignedCarrier
                 });
         }
 

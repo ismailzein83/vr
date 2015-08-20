@@ -11,7 +11,7 @@ namespace TOne.BusinessEntity.Data
     {
         List<CarrierAccountInfo> GetActiveSuppliersInfo();
 
-        List<CarrierInfo> GetCarriers(CarrierType carrierType);
+        List<CarrierInfo> GetCarriers(CarrierType carrierType,List<string> assignedCarriers);
 
         List<CarrierAccount> GetCarrierAccounts(string name, string companyName, int from, int to);
 

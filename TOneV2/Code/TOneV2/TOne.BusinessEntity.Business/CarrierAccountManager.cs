@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TOne.BusinessEntity.Data;
 using TOne.BusinessEntity.Entities;
 using TOne.Caching;
+using Vanrise.Security.Business;
 
 namespace TOne.BusinessEntity.Business
 {
@@ -17,9 +18,32 @@ namespace TOne.BusinessEntity.Business
             _dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
         }
 
-        public List<CarrierInfo> GetCarriers(CarrierType carrierType)
+        public List<CarrierInfo> GetCarriers(CarrierType carrierType, bool isAssignedCarrier)
         {
-            return _dataManager.GetCarriers(carrierType);
+            if (isAssignedCarrier && carrierType == CarrierType.Customer)
+            {
+                  AccountManagerManager accountManagerManager = new AccountManagerManager();
+                  List<AssignedCarrier> assignedCarriers = accountManagerManager.GetAssignedCarriers(SecurityContext.Current.GetLoggedInUserId(), true, CarrierType.Customer);
+                  List<string> cutomers = new List<string>();
+                  foreach (AssignedCarrier assignedCarrier in assignedCarriers)
+                     {
+                       cutomers.Add(assignedCarrier.CarrierAccountId);
+                    }
+                  return _dataManager.GetCarriers(carrierType, cutomers);
+            }
+            else if (isAssignedCarrier && carrierType == CarrierType.Supplier)
+            {
+                 AccountManagerManager accountManagerManager = new AccountManagerManager();
+                 List<AssignedCarrier> assignedCarriers = accountManagerManager.GetAssignedCarriers(SecurityContext.Current.GetLoggedInUserId(), true, CarrierType.Supplier);
+                 List<string> suppliers = new List<string>();
+                 foreach (AssignedCarrier assignedCarrier in assignedCarriers)
+                    {
+                        suppliers.Add(assignedCarrier.CarrierAccountId);
+                    }
+                 return _dataManager.GetCarriers(carrierType, suppliers);
+            }
+            else
+            return _dataManager.GetCarriers(carrierType,null);
         }
 
         public int InsertCarrierTest(string CarrierAccountID, string Name)

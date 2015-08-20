@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,17 +17,78 @@ namespace TOne.BusinessEntity.Data.SQL
             return GetItemsSP("BEntity.sp_CarrierAccount_GetActiveSuppliersInfo", CarrierAccountInfoMapper);
         }
 
-        public List<CarrierInfo> GetCarriers(CarrierType carrierType)
+        public List<CarrierInfo> GetCarriers(CarrierType carrierType, List<string> assignedCarriers)
         {
-            return GetItemsSP("BEntity.sp_Carriers_GetCarriers", (reader) =>
-            {
-                return new CarrierInfo
-                {
-                    CarrierAccountID = reader["CarrierAccountID"] as string,
-                    Name = GetCarrierAccountName(reader["Name"] as string, reader["NameSuffix"] as string)
-                };
-            }, carrierType.ToString());
+            List<CarrierInfo> carriers = new List<CarrierInfo>();
+            ExecuteReaderText(CreateQuery(assignedCarriers, carrierType), (reader) =>
+            { 
+               while (reader.Read())
+               {           
+                  try
+                  {
+                   CarrierInfo carrierInfo = new CarrierInfo
+                    {
+                      CarrierAccountID = reader["CarrierAccountID"] as string,
+                      Name = GetCarrierAccountName(reader["Name"] as string, reader["NameSuffix"] as string)
+                    };
+                    carriers.Add(carrierInfo);
+                  }
+                 catch (Exception ex)
+                 {
+                    throw ex;
+                 }
+               }
+             }, (cmd) =>
+             {
+               cmd.Parameters.Add(new SqlParameter("@CarrierType", carrierType.ToString()));
+             });
+            return carriers;
         }
+
+
+        private string CreateQuery(List<string> assignedCarriers, CarrierType carrierType)
+        {
+            StringBuilder whereBuilder = new StringBuilder();
+            StringBuilder accountType= new StringBuilder();
+            StringBuilder queryBuilder = new StringBuilder(@"                  
+                                                    SELECT ca.CarrierAccountID, cp.Name, ca.NameSuffix  FROM CarrierAccount ca
+                                                    INNER JOIN CarrierProfile cp on ca.ProfileID = cp.ProfileID
+                                                    WHERE ca.IsDeleted = 'N' AND ca.ActivationStatus = 2 #AddAccountTypeValues# #FILTER#
+                                                    ORDER BY Name ASC
+                                                ");
+
+            AddFilter<string>(whereBuilder, assignedCarriers, "ca.CarrierAccountID");
+            AddAccountTypeValues(carrierType, accountType);
+            queryBuilder.Replace("#FILTER#", whereBuilder.ToString());
+            queryBuilder.Replace("#AddAccountTypeValues#", accountType.ToString());
+            return queryBuilder.ToString();
+        }
+        private void AddAccountTypeValues(CarrierType carrierType,StringBuilder accountType)
+        {
+            
+            if(carrierType==CarrierType.Customer)
+                accountType.Append("AND ca.AccountType IN (0,1)");
+            else if(carrierType==CarrierType.Supplier)
+                accountType.Append("AND ca.AccountType IN (2,1)");
+            else
+                accountType.Append(" ");
+
+        }
+
+        public void AddFilter<T>(StringBuilder whereBuilder, IEnumerable<T> values, string column)
+        {
+            if (whereBuilder.Length != 0)
+                whereBuilder.AppendFormat(" AND ");
+            if (values != null && values.Count() > 0)
+            {
+                if (typeof(T) == typeof(string))
+                    whereBuilder.AppendFormat("AND {0} IN ('{1}')", column, String.Join("', '", values));
+                else
+                    whereBuilder.AppendFormat("AND {0} IN ({1})", column, String.Join(", ", values));
+            }
+        }
+
+
 
         public string GetCarrierAccountName(string carrierAccountId)
         {

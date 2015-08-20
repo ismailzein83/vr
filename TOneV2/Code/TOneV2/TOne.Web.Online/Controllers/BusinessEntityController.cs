@@ -18,7 +18,7 @@ namespace TOne.Web.Online.Controllers
         public List<CarrierInfo> GetCarriers(CarrierType carrierType = CarrierType.Exchange)
         {
             CarrierAccountManager manager = new CarrierAccountManager();
-            return manager.GetCarriers(carrierType);
+            return manager.GetCarriers(carrierType,false);
         }
 
         [HttpGet]

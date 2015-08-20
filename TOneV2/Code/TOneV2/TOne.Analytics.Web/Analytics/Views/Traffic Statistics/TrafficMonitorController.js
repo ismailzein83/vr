@@ -198,7 +198,7 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
         loadMeasures();
         overallSelectedMeasure = TrafficMonitorMeasureEnum.Attempts;
         $scope.isInitializing = true;
-        UtilsService.waitMultipleAsyncOperations([loadSwitches, loadCodeGroups, loadCustomers, loadSuppliers]).finally(function () {
+        UtilsService.waitMultipleAsyncOperations([loadSwitches, loadCodeGroups]).finally(function () {
             $scope.isInitializing = false;
             if (mainGridAPI != undefined) {
                 retrieveData(true);
@@ -388,21 +388,7 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
 
     }
 
-    function loadCustomers() {
-        return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.customers.push(itm);
-            });
-        });
-    }
 
-    function loadSuppliers() {
-        return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Supplier.value).then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.suppliers.push(itm);
-            });
-        });
-    }
 
 
 

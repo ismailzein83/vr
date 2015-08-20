@@ -12,11 +12,11 @@ namespace TOne.BusinessEntity.Web.Controllers
     public class CarrierAccountController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpGet]
-        public List<CarrierInfo> GetCarriers(CarrierType carrierType)
+        public List<CarrierInfo> GetCarriers(CarrierType carrierType, bool isAssignedCarrier)
         {
 
             CarrierAccountManager manager = new CarrierAccountManager();
-            return manager.GetCarriers(carrierType);
+            return manager.GetCarriers(carrierType, isAssignedCarrier);
         }
 
 
