@@ -52,7 +52,8 @@ function CarrierGroupTreeController($scope, CarrierGroupAPIService, VRNavigation
         }
 
         $scope.treeValueChanged = function () {
-            if (angular.isObject($scope.currentNode)) {               
+
+            if (angular.isObject($scope.currentNode) && $scope.currentNode.EntityId != $scope.beList[0].EntityId) {
                 return retrieveData();
             }
         }
