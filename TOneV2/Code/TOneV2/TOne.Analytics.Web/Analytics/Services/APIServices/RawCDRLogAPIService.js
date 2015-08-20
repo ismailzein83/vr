@@ -3,22 +3,14 @@ app.service('RawCDRLogAPIService', function (BaseAPIService) {
 
     return ({
 
-        GetCDRData: GetCDRData,
-        ExportCDRData: ExportCDRData
-
+        GetRawCDRData: GetRawCDRData,
     });
 
 
-    function GetCDRData(getCDRLogSummaryInput) {
-        return BaseAPIService.post("/api/CDR/GetCDRData", getCDRLogSummaryInput);
+    function GetRawCDRData(query) {
+        return BaseAPIService.post("/api/RawCDRLog/GetRawCDRData", query);
     }
-    function ExportCDRData(CDRLogSummaryInput) {
-        return BaseAPIService.post("/api/CDR/ExportCDRData", CDRLogSummaryInput, {
-            returnAllResponseParameters: true,
-            responseTypeAsBufferArray: true
-        });
 
-    }
 
 
 });
