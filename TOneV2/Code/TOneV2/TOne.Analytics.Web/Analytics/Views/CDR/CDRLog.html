@@ -6,11 +6,10 @@
                         <vr-select datasource="switches" datatextfield="Name" datavaluefield="SwitchId" selectedvalues="selectedSwitches" label="Switches" ismultipleselection></vr-select>
                     </vr-columns>
                     <vr-columns width="normal">
-                        <vr-select datasource="customers" datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedCustomers" label="Customers" ismultipleselection></vr-select>
+                        <vr-be-carriergroup type="'Customer'" selectedvalues="selectedCustomers"></vr-be-carriergroup>
                     </vr-columns>
                     <vr-columns width="normal">
-                        <vr-select label="Suppliers" datasource="suppliers"
-                                   datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedSuppliers" ismultipleselection></vr-select>
+                        <vr-be-carriergroup type="'Supplier'" selectedvalues="selectedSuppliers"></vr-be-carriergroup>
                     </vr-columns>
                     <vr-columns width="normal">
                         <vr-select ismultipleselection datasource="searchZones" label="Zones" selectedvalues="selectedZones" datatextfield="Name" datavaluefield="ZoneId"
