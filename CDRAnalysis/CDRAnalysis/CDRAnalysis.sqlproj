@@ -104,7 +104,6 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetStrategyNames.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempForFilteredNormalCDRs.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempForFilteredNumberProfiles.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_CreateTempForTopTenCell.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_CreateTempForTopTenBTS.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_CreateTempForCasesSummary.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_CreateTempForFilteredStrategies.sql" />
