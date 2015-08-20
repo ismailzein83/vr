@@ -2,11 +2,11 @@
 
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
-.controller('mainCtrl', function mainCtrl($scope, $rootScope, MenuAPIService, PermissionAPIService, notify, $animate, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService) {
+.controller('mainCtrl', function mainCtrl($scope, $rootScope, MenuAPIService, SecurityService, PermissionAPIService, notify, $animate, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService) {
     
-    var cookieUserToken = $cookies.get('TOne_LoginTokenCookie');
+    var accessCookie = SecurityService.getAccessCookie();
     
-    if (cookieUserToken === undefined) {
+    if (accessCookie === undefined) {
         window.location.href = '/Security/Login';
         return;
     }
@@ -17,7 +17,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
     }
     );
     
-    var userInfo = JSON.parse(cookieUserToken);
+    var userInfo = JSON.parse(accessCookie);
     $scope.userDisplayName = userInfo.UserDisplayName;
 
     Waves.displayEffect();
@@ -35,6 +35,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
     }
     $scope.logout = function () {
         window.location.href = '/Security/Login';
+        SecurityService.deleteAccessCookie();
     }
 
     $scope.showMenu = function (e) {
@@ -61,7 +62,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         var modalSettings = {
         };
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "TOne Support";
+            modalScope.title = "Support";
            
         };
         VRModalService.showModal('/Client/Modules/Common/Views/Support.html', null, modalSettings);

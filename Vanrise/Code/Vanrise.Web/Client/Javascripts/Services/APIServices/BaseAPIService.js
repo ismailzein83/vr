@@ -1,9 +1,9 @@
 ﻿
 app.config(['$httpProvider', function ($httpProvider) {
-    $httpProvider.interceptors.push(function ($q, $cookies) {
+    $httpProvider.interceptors.push(function ($q, $injector) {
         return {
             'request': function (config) {
-                var userInfoCookie = $cookies.get('TOne_LoginTokenCookie');
+                var userInfoCookie = $injector.get('SecurityService').getAccessCookie();
                 if (userInfoCookie != undefined)
                 {
                     var userInfo = JSON.parse(userInfoCookie);

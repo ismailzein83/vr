@@ -1,7 +1,7 @@
-﻿LoginController.$inject = ['$scope', 'SecurityAPIService'];
+﻿LoginController.$inject = ['$scope', 'SecurityAPIService', 'SecurityService'];
 
 
-function LoginController($scope, SecurityAPIService) {
+function LoginController($scope, SecurityAPIService, SecurityService) {
     defineScope();
     load();
 
@@ -24,19 +24,12 @@ function LoginController($scope, SecurityAPIService) {
             .then(function (response) {
                 var userInfo = JSON.stringify(response);
                 console.log(userInfo);
-                setCookie('TOne_LoginTokenCookie', userInfo, '', '', '');
-
+                SecurityService.createAccessCookie(userInfo);
                 window.location.href = '/';
         }
         );       
     }
 
-    function setCookie(name, value, expires, path, domain, secure) {
-        document.cookie = name + "=" + escape(value) +
-        ((expires) ? "; expires=" + expires.toGMTString() : "") +
-        ("; path=/") +       //you having wrong quote here
-        ((domain) ? "; domain=" + domain : "") +
-        ((secure) ? "; secure" : "");
-    }
+   
 }
 appControllers.controller('Security_LoginController', LoginController);

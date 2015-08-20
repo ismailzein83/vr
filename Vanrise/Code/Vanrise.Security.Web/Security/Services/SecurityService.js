@@ -1,9 +1,12 @@
 ﻿'use strict';
 
-app.service('SecurityService', ['$rootScope', 'UtilsService', 'PermissionFlagEnum', function ($rootScope, UtilsService, PermissionFlagEnum) {
+app.service('SecurityService', ['$rootScope', 'UtilsService', 'PermissionFlagEnum', '$cookies', function ($rootScope, UtilsService, PermissionFlagEnum, $cookies) {
 
     return ({
-        isAllowed: isAllowed
+        isAllowed: isAllowed,
+        createAccessCookie: createAccessCookie,
+        getAccessCookie: getAccessCookie,
+        deleteAccessCookie: deleteAccessCookie
     });
 
     function isAllowed(attrValue) {
@@ -97,5 +100,16 @@ app.service('SecurityService', ['$rootScope', 'UtilsService', 'PermissionFlagEnu
         return result;
     }
 
+    function createAccessCookie(userInfo) {
+        var expiresDate = new Date(new Date().getTime() + parseInt(30) * 1000 * 60 * 60 * 24);
+        $cookies.put('Vanrise_AccessCookie-' + location.port, userInfo, { path: '/', domain: location.hostname, expires: expiresDate, secure: false });
+    }
 
+    function getAccessCookie() {
+        return $cookies.get('Vanrise_AccessCookie-' + location.port);
+    }
+
+    function deleteAccessCookie() {
+        $cookies.remove('Vanrise_AccessCookie-' + location.port);
+    }
 }]);
