@@ -74,7 +74,6 @@
     <Build Include="dbo\Tables\Users.sql" />
     <Build Include="dbo\Tables\UserPermissions.sql" />
     <Build Include="dbo\Tables\ToneFeedbacks.sql" />
-    <Build Include="dbo\Tables\to_be_delete_CopyGeneratedCalls.sql" />
     <Build Include="dbo\Tables\SysParameters.sql" />
     <Build Include="dbo\Tables\SwitchProfiles.sql" />
     <Build Include="dbo\Tables\Statuses.sql" />
@@ -161,5 +160,8 @@
     <Build Include="dbo\User Defined Types\ZebraSupplierTable.sql" />
     <Build Include="dbo\User Defined Types\ZebraCurrencyTable.sql" />
     <Build Include="dbo\User Defined Types\BillingStatsType.sql" />
+    <Build Include="dbo\Stored Procedures\prGetReportedCalls_old.sql" />
+    <Build Include="dbo\Stored Procedures\prGetReportedCalls_1.sql" />
+    <Build Include="dbo\Stored Procedures\prGetReportedCalls.sql" />
   </ItemGroup>
 </Project>

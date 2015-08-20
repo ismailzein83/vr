@@ -38,7 +38,7 @@ SELECT     dbo.GeneratedCalls.SourceID, 'Case' + CONVERT(char(20), dbo.Generated
                       dbo.MobileOperatorFeedbacks.Name AS MobileOperatorFeedbackName, dbo.GeneratedCalls.Carrier, dbo.Clients.Name AS ClientName
 FROM         dbo.Sources AS Sources_1 RIGHT OUTER JOIN
                       dbo.Reports RIGHT OUTER JOIN
-                      dbo.GeneratedCalls LEFT OUTER JOIN
+                      dbo.GeneratedCalls WITH (NOLOCK) LEFT OUTER JOIN
                       dbo.MobileOperatorFeedbacks ON dbo.GeneratedCalls.MobileOperatorFeedbackID = dbo.MobileOperatorFeedbacks.ID LEFT OUTER JOIN
                       dbo.Clients INNER JOIN
                       dbo.RecievedCalls ON dbo.Clients.ID = dbo.RecievedCalls.ClientID ON dbo.GeneratedCalls.ID = dbo.RecievedCalls.GeneratedCallID ON 

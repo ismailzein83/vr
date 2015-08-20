@@ -1,15 +1,4 @@
-﻿
-
-
-
-
-
-
-
-
-
-
--- =============================================
+﻿-- =============================================
 -- Author:		<Author,,Name>
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
@@ -33,15 +22,10 @@ DECLARE @Type varchar(50)
 
  DECLARE @getID CURSOR
  SET @getID = CURSOR FOR
-SELECT  [ID]
-      ,[CLI]
-      ,[b_number]
-      ,[AttemptDateTime]
-      ,[DurationInSeconds]
-	  ,[OriginationNetwork]
-	  ,[Carrier]
-	  ,[Type]
-FROM RecievedCalls where  GeneratedCallID is null  and (CLI not like '07%' or CLI not like '09%') and SourceID=1 
+SELECT  [ID],[CLI],[b_number],[AttemptDateTime],[DurationInSeconds],[OriginationNetwork],[Carrier],[Type]
+FROM	RecievedCalls   with(nolock,index=I_GeneratedCallsID)
+where	GeneratedCallID is null
+		and (CLI not like '07%' or CLI not like '09%') and SourceID=1 
 order by ID 
 OPEN @getID
 FETCH NEXT

@@ -1,14 +1,4 @@
 ﻿
-
-
-
-
-
-
-
-
-
-
 -- =============================================
 -- Author:		<Author,,Name>
 -- Create date: <Create Date,,>
@@ -17,9 +7,6 @@
 CREATE PROCEDURE [dbo].[prLevelOneCompare_HaveNoGenerated]
 	@LevelOneComparisonDateTime datetime
 AS
-
-
-
 
 DECLARE @ID INT
 DECLARE @CLI varchar(30)
@@ -30,25 +17,17 @@ DECLARE @OriginationNetwork varchar(50)
 DECLARE @Carrier varchar(50)
 DECLARE @Type varchar(50)
 
- DECLARE @getID CURSOR
- SET @getID = CURSOR FOR
-SELECT  [ID]
-      ,[CLI]
-      ,[b_number]
-      ,[AttemptDateTime]
-      ,[DurationInSeconds]
-      ,[OriginationNetwork]
-	  ,[Carrier]
-	  ,[Type]
-FROM RecievedCalls where  GeneratedCallID is null and AttemptDateTime < dateadd(hh, -1, getdate()) and (      (LEN (CLI)=11 and  CLI like '07%' and  b_number  like'964%')     or (LEN (CLI)=10 and  b_number  like '963%' and    CLI like '09%')         )
+DECLARE @getID CURSOR
+SET @getID = CURSOR FOR
+SELECT  [ID],[CLI],[b_number],[AttemptDateTime],[DurationInSeconds],[OriginationNetwork],[Carrier],[Type]
+FROM	RecievedCalls  with(nolock,index=I_AttemptDateTime)
+where	AttemptDateTime < dateadd(hh, -1, getdate())
+		and  GeneratedCallID is null 
+		and ((LEN (CLI)=11 and  CLI like '07%' and  b_number  like'964%') or (LEN (CLI)=10 and  b_number  like '963%' and    CLI like '09%'))
 order by ID 
-OPEN @getID
-FETCH NEXT
-FROM @getID INTO @ID ,@CLI ,@b_number ,@AttemptDateTime ,@DurationInSeconds, @OriginationNetwork, @Carrier, @Type
+OPEN @getID FETCH NEXT FROM @getID INTO @ID ,@CLI ,@b_number ,@AttemptDateTime ,@DurationInSeconds, @OriginationNetwork, @Carrier, @Type
 WHILE @@FETCH_STATUS = 0
 BEGIN
-
-
  Declare @RecievedB_number varchar(50)
     
     IF  CHARINDEX('964',@b_number) > 0 
