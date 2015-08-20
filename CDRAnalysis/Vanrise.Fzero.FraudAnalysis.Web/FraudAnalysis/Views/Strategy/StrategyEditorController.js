@@ -239,7 +239,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                 label: filterDef.label,
                 minValue: filterDef.minValue,
                 maxValue: filterDef.maxValue,
-                decimalPrecision: filterDef.decimalPrecision
+                decimalPrecision: filterDef.decimalPrecision,
+                excludeHourly: filterDef.excludeHourly
             };
             $scope.strategyFilters.push(filterItem);
         });
@@ -275,7 +276,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                 label: filterDef.label,
                 minValue: filterDef.minValue,
                 maxValue: filterDef.maxValue,
-                decimalPrecision: filterDef.decimalPrecision
+                decimalPrecision: filterDef.decimalPrecision,
+                excludeHourly: filterDef.excludeHourly
             };
 
 
@@ -420,7 +422,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                     label: itm.Label, 
                     minValue: itm.MinValue,
                     maxValue: itm.MaxValue,
-                    decimalPrecision: itm.DecimalPrecision
+                    decimalPrecision: itm.DecimalPrecision,
+                    excludeHourly: itm.ExcludeHourly
                 });
             });
         });
@@ -439,6 +442,25 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         isFilterTabShown = !isFilterTabShown;
         isLevelsTabShow = !isLevelsTabShow;
     };
+
+    $scope.selectedPeriodChanged = function () {
+        angular.forEach($scope.strategyFilters, function (filter) {
+            if (filter.excludeHourly && $scope.selectedPeriod.Id == 1)
+                filter.isSelected = false;
+        });
+    }
+
+
+    $scope.showSwitch = function (filter) {
+        if (filter.excludeHourly && $scope.selectedPeriod.Id == 1) {
+            filter.isSelected = false;
+            return false;
+        }
+        else
+            return true;
+                
+    }
+
 
 }
 appControllers.controller('StrategyEditorController', StrategyEditorController);

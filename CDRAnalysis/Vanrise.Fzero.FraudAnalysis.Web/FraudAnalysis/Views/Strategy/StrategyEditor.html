@@ -7,7 +7,7 @@
                 </vr-columns>
 
                 <vr-columns colnum="2">
-                    <vr-select  label="Type" datasource="periods" datatextfield="Name" datavaluefield="Id"  selectedvalues="selectedPeriod" isrequired ></vr-select>
+                    <vr-select label="Type" datasource="periods" datatextfield="Name" datavaluefield="Id" selectedvalues="selectedPeriod" onselectionchanged="selectedPeriodChanged" isrequired></vr-select>
                 </vr-columns>
 
                 <vr-columns colnum="4">
@@ -39,9 +39,9 @@
                         <vr-row>
 
                             <vr-columns colnum="9">
-                                <div>
+                                <div><!--//ng-show="!{{dataItem.excludeHourly  && viewScope.selectedPeriod.Id ==1}}"-->
                                     <vr-datagrid datasource="strategyFilters" maxheight="400px">
-                                        <vr-datagridcolumn headertext="' '" widthfactor="3">       <vr-switch value="dataItem.isSelected"></vr-switch>            </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="' '" widthfactor="3">     <vr-switch value="dataItem.isSelected" ng-show="viewScope.showSwitch(dataItem)"></vr-switch>            </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Filter #'" field="'filterId'" widthfactor="3">                   </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Description'" field="'description'" widthfactor="20">                   </vr-datagridcolumn>    
                                         <vr-datagridcolumn headertext="'Threshold'"    > <vr-label>{{dataItem.label}}</vr-label>   <vr-textbox value="dataItem.threshold" type="number" isrequired ng-if="dataItem.isSelected" minvalue="{{dataItem.minValue}}" maxvalue="{{dataItem.maxValue}}" decimalprecision="{{dataItem.decimalPrecision}}"></vr-textbox>       </vr-datagridcolumn>

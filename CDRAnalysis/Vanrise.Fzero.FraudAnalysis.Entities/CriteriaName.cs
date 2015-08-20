@@ -16,5 +16,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public int DecimalPrecision { get; set; }
 
+        public bool ExcludeHourly { get; set; }
+
     }
 }
