@@ -1,10 +1,12 @@
-﻿DashboardController.$inject = ['$scope', 'DashboardAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿DashboardController.$inject = ['$scope', 'DashboardAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService','DataSourceImportedBatchAPIService','Integration_MappingResultEnum'];
 
-function DashboardController($scope, DashboardAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
+function DashboardController($scope, DashboardAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, DataSourceImportedBatchAPIService, Integration_MappingResultEnum) {
 
     var mainGridAPI_CasesSummary;
     var mainGridAPI_BTSCases;
     var mainGridAPI_DailyVolumeLooses;
+    var mainGridAPI_ImportedBatches;
+
 
     var chartSelectedMeasureAPI;
 
@@ -28,6 +30,7 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
         $scope.strategyCases = [];
         $scope.bTSCases = [];
         $scope.dailyVolumeLooses = [];
+        $scope.importedBatches = [];
 
 
 
@@ -47,6 +50,12 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
             return retrieveData_DailyVolumeLooses();
         };
 
+        $scope.onMainGridReady_ImportedBatches = function (api) {
+            mainGridAPI_ImportedBatches = api;
+            return retrieveData_ImportedBatches();
+        };
+
+
         $scope.chartSelectedMeasureReady = function (api) {
             chartSelectedMeasureAPI = api;
             getData_StrategyCases();
@@ -54,8 +63,11 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
 
 
         $scope.searchClicked = function () {
-            var results = (retrieveData_CasesSummary() && getData_StrategyCases());
-            return results;
+            retrieveData_CasesSummary();
+            getData_StrategyCases()
+            retrieveData_BTSCases()
+            retrieveData_DailyVolumeLooses()
+            retrieveData_ImportedBatches()
         };
 
         $scope.dataRetrievalFunction_CaseSummary = function (dataRetrievalInput, onResponseReady) {
@@ -82,7 +94,12 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
         }
 
 
-
+        $scope.dataRetrievalFunction_ImportedBatches = function (dataRetrievalInput, onResponseReady) {
+            return DataSourceImportedBatchAPIService.GetFilteredDataSourceImportedBatches(dataRetrievalInput)
+            .then(function (response) {
+                onResponseReady(response);
+            });
+        }
 
     }
 
@@ -114,6 +131,42 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
         return mainGridAPI_DailyVolumeLooses.retrieveData(BuildSearchQuery());
     }
 
+    function retrieveData_ImportedBatches() {
+        var query = {
+            DataSourceId: null,
+            BatchName: null,
+            MappingResults: getMappedMappingResults(),
+            From: $scope.fromDate,
+            To: $scope.toDate
+        };
+
+        return mainGridAPI_ImportedBatches.retrieveData(query);
+    }
+
+    function getMappedMappingResults() {
+
+        $scope.selectedMappingResults = getArrayEnum(Integration_MappingResultEnum);
+
+        var mappedMappingResults = [];
+
+        for (var i = 0; i < $scope.selectedMappingResults.length; i++) {
+            mappedMappingResults.push($scope.selectedMappingResults[i].value);
+        }
+
+        return mappedMappingResults;
+    }
+
+    function getArrayEnum(enumObj) {
+        var array = [];
+
+        for (var item in enumObj) {
+            if (enumObj.hasOwnProperty(item)) {
+                array.push(enumObj[item]);
+            }
+        }
+
+        return array;
+    }
 
     function getData_StrategyCases() {
         if (!chartSelectedMeasureAPI)

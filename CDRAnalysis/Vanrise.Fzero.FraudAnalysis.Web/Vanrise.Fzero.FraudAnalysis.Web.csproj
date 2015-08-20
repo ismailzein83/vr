@@ -108,6 +108,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Integration.Business">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Entities">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Security.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
