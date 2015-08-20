@@ -48,7 +48,6 @@ app.directive('vrBeCarriergroup', ['VRModalService', 'UtilsService', 'VRNotifica
                 else if (ctrl.type == "Exchange")
                     parameters.carrierType = CarrierTypeEnum.SaleZone.value;
 
-                console.log(ctrl.isassignedcarrier);
                 parameters.assignedCarrier = ctrl.isassignedcarrier != undefined ? true : false;
                 
 
