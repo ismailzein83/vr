@@ -30,7 +30,8 @@
                     validationOptions.customValidation = true;
                 if (attrs.type === TextboxTypeEnum.Email.name)
                     validationOptions.emailValidation = true;
-
+                if (attrs.type === TextboxTypeEnum.Number.name)
+                    validationOptions.numberValidation = true;
                 var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, element.find('#rootDiv'));
                 return {
                     pre: function ($scope, iElem, iAttrs, formCtrl) {
@@ -45,34 +46,19 @@
                             if (iAttrs.type === TextboxTypeEnum.Number.name) {
                                 var arr = String(newValue).split("");
                                 var decimalArray = String(newValue).split(".");
+                                var negativeArray = String(newValue).split("-");
                                 if (arr.length === 0) return;
                                 if (decimalArray.length > 2)
                                     ctrl.value = oldValue;
-                                if (iAttrs.minvalue != undefined && parseFloat(ctrl.minvalue) > 0 && iAttrs.maxvalue != undefined && parseFloat(ctrl.maxvalue) < 1 && decimalArray[1] != undefined && decimalArray[1].length < parseInt(ctrl.decimalprecision))
-                                return false;
-                                if (iAttrs.minvalue != undefined && parseFloat(ctrl.minvalue) == 0 && arr.indexOf("-") > -1) {
+                                if (negativeArray.length > 2)
                                     ctrl.value = oldValue;
-                                }
-                                if (iAttrs.decimalprecision != undefined && parseInt(ctrl.decimalprecision) == 0 && arr.indexOf(".") > -1) {
-                                    ctrl.value = oldValue;
-                                }
-                                if (arr.length === 1 && (arr[0] === '-' || arr[0] === '.')) ctrl.value = newValue;
-
-                                if (arr.length === 2 && newValue === '-.') ctrl.value = newValue;
-                              
-                                if (iAttrs.decimalprecision != undefined && decimalArray.length >0 && decimalArray[1]!=undefined  && decimalArray[1].length > parseInt(ctrl.decimalprecision)) {
-                                    ctrl.value = oldValue;
-                                }
-                                if (iAttrs.maxvalue != undefined && newValue > parseFloat(ctrl.maxvalue) ) {
-                                    ctrl.value = oldValue
-                                }
-
-                                if (iAttrs.minvalue != undefined && newValue < parseFloat(ctrl.minvalue) ) {
-                                    ctrl.value = oldValue;
-                                }
+                                if (arr.length === 0) return;
+                                if (arr.length === 1 && (arr[0] == '-' || arr[0] === '.')) return;
+                                if (arr.length === 2 && newValue === '-.') return;
                                 if (isNaN(newValue)) {
                                     ctrl.value = oldValue;
                                 }
+                            
                             }
                             if (iAttrs.onvaluechanged != undefined) {
                                 var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onvaluechanged);
@@ -105,7 +91,7 @@
                                 var selfHeight = $(self).height();
                                 var selfOffset = $(self).offset();
                                 var tooltip = self.parent().find('.tooltip-info')[0];
-                                $(tooltip).css({ display: 'block !important' });
+                                $(tooltip).css({ display: 'block' });
                                 var innerTooltip = self.parent().find('.tooltip-inner')[0];
                                 var innerTooltipArrow = self.parent().find('.tooltip-arrow')[0];
                                 $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight +5, left: selfOffset.left - 30 });
@@ -137,11 +123,11 @@
                     }
                     var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
                             + '<input  ng-readonly="ctrl.readOnly" id="mainInput" ng-style="ctrl.getInputeStyle()" ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" size="10" class="form-control" data-autoclose="1" type="' + type + '" >'
-                            + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" html="true" style="color:#337AB7"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)" ng data-type="info" data-title="{{ctrl.hint}}"></span>'
+                            + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" html="true" style="color:#337AB7"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" title="{{ctrl.hint}}"></span>'
                         + '</div>';
                 
 
-                var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined);
+                    var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined ,true);
 
                 return startTemplate + labelTemplate + textboxTemplate + validationTemplate + endTemplate;
             }

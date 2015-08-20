@@ -215,6 +215,7 @@
     <Content Include="Client\Javascripts\Directives\Inputs\Textbox\vr-textbox-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Validation\validation-dir-service.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Validation\vr-validation.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Validation\vrValidationNumber.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Validation\vrValidationEmail.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Validation\vrValidationArray.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Validation\vrValidationCustom.js" />

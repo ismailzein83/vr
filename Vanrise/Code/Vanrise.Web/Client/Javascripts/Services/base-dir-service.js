@@ -13,8 +13,7 @@ app.service('BaseDirService', ['ValidationMessagesEnum', function (ValidationMes
         prepareDirectiveHTMLForValidation: prepareDirectiveHTMLForValidation,
         getLastItem: getLastItem,
     });
-    function getLastItem(arr)
-    {
+    function getLastItem(arr) {
         if (arr == undefined) return null;
         if (arr.length > 0)
             return arr[arr.length - 1];
@@ -58,7 +57,7 @@ app.service('BaseDirService', ['ValidationMessagesEnum', function (ValidationMes
           s4() + '-' + s4() + s4() + s4();
     }
 
-   
+
     function escapeRegExp(string) {
         return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
     }
@@ -70,7 +69,7 @@ app.service('BaseDirService', ['ValidationMessagesEnum', function (ValidationMes
         return 'ElmntId_' + replaceAll(guid(), '-', '');
     }
 
-    function getValidationMessageTemplate(requiredValue, requiredArray, invalidFormat, customValidation, invalidEmail,isNotSelect, withlabel) {
+    function getValidationMessageTemplate(requiredValue, requiredArray, invalidFormat, customValidation, invalidEmail, isNotSelect, withlabel, invalidNum) {
         var template = '';
         if (isNotSelect && withlabel)
             template = '<div  class="disable-animations tooltip-error fix-top" ng-style="ctrl.isVisibleTooltip() ? {\'display\':\'block\'} : {\'display\':\'none\'} " ng-messages="ctrl.getErrorObject()">';
@@ -78,13 +77,15 @@ app.service('BaseDirService', ['ValidationMessagesEnum', function (ValidationMes
             template = '<div  class="disable-animations tooltip-error" ng-style="ctrl.isVisibleTooltip() ? {\'display\':\'block\'} : {\'display\':\'none\'} " ng-messages="ctrl.getErrorObject()">';
 
         if (requiredValue)
-            template += '<div ng-message="requiredvalue">'+ ValidationMessagesEnum.required +'</div>';
+            template += '<div ng-message="requiredvalue">' + ValidationMessagesEnum.required + '</div>';
         if (requiredArray)
             template += '<div ng-message="requiredarray">' + ValidationMessagesEnum.required + '</div>';
         if (invalidFormat)
             template += '<div ng-message="invalidformat">' + ValidationMessagesEnum.invalidFormat + '</div>';
         if (invalidEmail)
             template += '<div ng-message="invalidemail">' + ValidationMessagesEnum.invalidEmail + '</div>';
+        if (invalidNum)
+            template += '<div ng-message="invalidnumber">' + ValidationMessagesEnum.invalidNumber + '</div>';
         if (customValidation)
             template += '<div ng-message="customvalidation">{{ ctrl.customMessage }}</div>';
         return template + '</div>';
@@ -101,8 +102,8 @@ app.service('BaseDirService', ['ValidationMessagesEnum', function (ValidationMes
             elementToValidate.attr('vr-validation-custom', 'ctrl.customvalidate');
         if (validationOptions.emailValidation)
             elementToValidate.attr('vr-validation-email', '');
-
-        
+        if (validationOptions.numberValidation)
+            elementToValidate.attr('vr-validation-number', '');
 
         elementToTriggerMessage.attr('ng-mouseenter', 'ctrl.showTooltip()');
         elementToTriggerMessage.attr('ng-mouseleave', 'ctrl.hideTooltip()');
@@ -146,6 +147,6 @@ app.service('BaseDirService', ['ValidationMessagesEnum', function (ValidationMes
             return validationClass.invalid;
         }
 
-        
+
     }
 }]);
