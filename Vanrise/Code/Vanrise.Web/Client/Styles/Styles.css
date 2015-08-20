@@ -1822,3 +1822,7 @@ opacity:0.9 ;
 .tooltip.bottom {
     margin-top: 10px;
 }
+
+.progress-bar-gray{
+    background-color:#D0D0D0;
+}

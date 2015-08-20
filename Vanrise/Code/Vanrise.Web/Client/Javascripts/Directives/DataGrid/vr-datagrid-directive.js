@@ -405,6 +405,7 @@
             var secondValue;
             var secondDiv;
             var fieldValue;
+            var title;
             for (var i = 0; i < ctrl.columnDefs.length; i++) {
                 var currentColumn = ctrl.columnDefs[i];
                 if (currentColumn.type == "MultiProgress") {
@@ -412,22 +413,25 @@
                     var values = currentColumn.field.split("|");
                     value = "{{::dataItem." + values [0]+ "}}";
                     secondValue = "{{::dataItem." + values[1] + "}}";
-                    progressBarClass = " progress-bar progress-bar-warning active";
+                    title = 'title="'+value+'"%';
+                    progressBarClass = " progress-bar progress-bar-gray active";
                     style = 'width:' + value + '%;';
-                    secondDiv = '<div class="vr-datagrid-celltext progress-bar progress-bar-success active" style="width:' + secondValue + '%" >'
+                    secondDiv = '<div class="vr-datagrid-celltext progress-bar progress-bar-success active" style="width:' + secondValue + '%" title="' + secondValue + '%">'
                     + '</div>';
                     fieldValue = function () {
                         return "";
                     };
+               
                 }
                 else if (currentColumn.type == "Progress") {
                     progressMain = " progress";
                     progressBarClass=" progress-bar progress-bar-striped active";
-                    style = 'width:' + value + '%;';
+                    style = 'width: {{::dataItem." '+ currentColumn.field+' "}} %;';
                     secondDiv = "";
                     fieldValue = function () {
                         return UtilsService.replaceAll(currentColumn.cellTemplate, "colDef", currentColumnHtml);
                     };
+                    title = 'title={{::dataItem." ' + currentColumn.field + '"}}';
                 }else
                 {
                     progressMain = "";
@@ -437,11 +441,12 @@
                     fieldValue = function () {
                         return UtilsService.replaceAll(currentColumn.cellTemplate, "colDef", currentColumnHtml);
                     };
+                    title = "";
                 }
                 var currentColumnHtml = '$parent.ctrl.columnDefs[' + i + ']';
                 ctrl.rowHtml += '<div ng-if="!' + currentColumnHtml + '.isHidden" ng-style="{ \'width\': ' + currentColumnHtml + '.width, \'display\':\'inline-block\'' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}">'
-                + '<div class="vr-datagrid-cell ' + progressMain + '" style="margin-bottom:0px">'
-                + '    <div class="vr-datagrid-celltext' + progressBarClass + '" style="' + style + '" >'
+                + '<div class="vr-datagrid-cell ' + progressMain + '" style="margin-bottom:0px;padding:0px;">'
+                + '    <div class="vr-datagrid-celltext' + progressBarClass + '" style="' + style + '"' + title+ '>'
                   + fieldValue()
                     + '</div>'
                + secondDiv
