@@ -23,5 +23,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public float MaxValue { get; set; }
 
         public int DecimalPrecision { get; set; }
+
+        public string ToolTip { get; set; }
     }
 }

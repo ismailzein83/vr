@@ -18,5 +18,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public bool ExcludeHourly { get; set; }
 
+        public string ToolTip { get; set; }
+
     }
 }

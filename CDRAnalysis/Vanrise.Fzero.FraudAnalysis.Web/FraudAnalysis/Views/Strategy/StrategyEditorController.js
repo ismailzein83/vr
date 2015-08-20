@@ -240,7 +240,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                 minValue: filterDef.minValue,
                 maxValue: filterDef.maxValue,
                 decimalPrecision: filterDef.decimalPrecision,
-                excludeHourly: filterDef.excludeHourly
+                excludeHourly: filterDef.excludeHourly,
+                toolTip: filterDef.toolTip
             };
             $scope.strategyFilters.push(filterItem);
         });
@@ -277,7 +278,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                 minValue: filterDef.minValue,
                 maxValue: filterDef.maxValue,
                 decimalPrecision: filterDef.decimalPrecision,
-                excludeHourly: filterDef.excludeHourly
+                excludeHourly: filterDef.excludeHourly,
+                toolTip: filterDef.toolTip
             };
 
 
@@ -423,7 +425,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                     minValue: itm.MinValue,
                     maxValue: itm.MaxValue,
                     decimalPrecision: itm.DecimalPrecision,
-                    excludeHourly: itm.ExcludeHourly
+                    excludeHourly: itm.ExcludeHourly,
+                    toolTip: itm.ToolTip
                 });
             });
         });
@@ -443,13 +446,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         isLevelsTabShow = !isLevelsTabShow;
     };
 
-    $scope.selectedPeriodChanged = function () {
-        angular.forEach($scope.strategyFilters, function (filter) {
-            if (filter.excludeHourly && $scope.selectedPeriod.Id == 1)
-                filter.isSelected = false;
-        });
-    }
-
+   
 
     $scope.showSwitch = function (filter) {
         if (filter.excludeHourly && $scope.selectedPeriod.Id == 1) {
