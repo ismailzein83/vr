@@ -1,5 +1,5 @@
-﻿InOutTrafficVolumeTemplateController.$inject = ['$scope', 'BillingStatisticsAPIService', 'UtilsService', 'VRNotificationService'];
-function InOutTrafficVolumeTemplateController($scope, BillingStatisticsAPIService, UtilsService, VRNotificationService) {
+﻿InOutTrafficVolumeTemplateController.$inject = ['$scope', 'BillingStatisticsAPIService', 'UtilsService', 'VRNotificationService', 'UtilsService'];
+function InOutTrafficVolumeTemplateController($scope, BillingStatisticsAPIService, UtilsService, VRNotificationService,UtilsService) {
 
     var durationChartAPI;
     var amountChartAPI;
@@ -44,29 +44,38 @@ function InOutTrafficVolumeTemplateController($scope, BillingStatisticsAPIServic
 
     function getDurations() {
         var filter = $scope.filter;
-        return BillingStatisticsAPIService.CompareInOutTraffic(filter.fromDate, filter.toDate, filter.requiredCustomerId, filter.timePeriod, filter.showChartsInPie)
-             .then(function (response) {
-                 $scope.durationData = response;
-                 if (durationChartAPI != undefined) {
-                     if (!filter.showChartsInPie) {
-                         console.log(filter.showChartsInPie);
-                         updateDurationChart($scope.durationData, filter.timePeriod);
+        if (!filter.showChartsInPie) {
+            return BillingStatisticsAPIService.CompareInOutTraffic(filter.fromDate, filter.toDate, filter.requiredCustomerId, filter.timePeriod, filter.showChartsInPie)
+                .then(function (response) {
+                    $scope.durationData = response;
+                    if (durationChartAPI != undefined) {
+                        if (!filter.showChartsInPie) {
+                            console.log(filter.showChartsInPie);
+                            updateDurationChart($scope.durationData, filter.timePeriod);
 
-                     }
-                     else {
-                         console.log(filter.showChartsInPie);
-                         updateDurationPie($scope.durationData, filter.timePeriod);
-                     }
-                 }
-                 if (amountChartAPI != undefined) {
-                     if (!filter.showChartsInPie) {
-                         console.log(filter.showChartsInPie);
-                         updateAmountChart($scope.durationData, filter.timePeriod);
-                     }
-                     else { console.log(filter.showChartsInPie);  updateAmountPie($scope.durationData, filter.timePeriod); }
-                 }
-                 durationFlag = true;
-             });
+                        }
+                        else {
+                            console.log(filter.showChartsInPie);
+                            updateDurationPie($scope.durationData, filter.timePeriod);
+                        }
+                    }
+                    if (amountChartAPI != undefined) {
+                        if (!filter.showChartsInPie) {
+                            console.log(filter.showChartsInPie);
+                            updateAmountChart($scope.durationData, filter.timePeriod);
+                        }
+                        else { console.log(filter.showChartsInPie); updateAmountPie($scope.durationData, filter.timePeriod); }
+                    }
+                    durationFlag = true;
+                });
+        }
+
+        else {
+            return BillingStatisticsAPIService.ExportInOutTraffic(filter.fromDate, filter.toDate, filter.requiredCustomerId, filter.timePeriod)
+                .then(function (response) {
+                    UtilsService.downloadFile(response.data, response.headers);
+                });
+        }
     }
 
     //function getAmounts() {

@@ -6,7 +6,8 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService, DataRetriev
         GetTrafficVolumes: GetTrafficVolumes,
         GetDestinationTrafficVolumes: GetDestinationTrafficVolumes,
         CompareInOutTraffic: CompareInOutTraffic,
-        ExportCarrierProfile: ExportCarrierProfile
+        ExportCarrierProfile: ExportCarrierProfile,
+        ExportInOutTraffic: ExportInOutTraffic
     });
 
     function GetVariationReport(selectedDate, periodCount, timePeriod, variationReportOption, fromRow, toRow, entityType, entityID, groupingBy) {
@@ -69,6 +70,20 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService, DataRetriev
                 ToDate: toDate,
                 TopDestination: topDestination,
                 CustomerId: customerId
+            },
+            {
+                responseTypeAsBufferArray: true,
+                returnAllResponseParameters: true
+            });
+    }
+
+    function ExportInOutTraffic(fromDate, toDate, customerId,timePeriod) {
+        return BaseAPIService.post("/api/BillingStatistics/ExportInOutTraffic",
+            {
+                FromDate: fromDate,
+                ToDate: toDate,
+                CustomerId: customerId,
+                timePeriod: timePeriod
             },
             {
                 responseTypeAsBufferArray: true,

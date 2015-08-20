@@ -50,7 +50,12 @@ namespace TOne.Analytics.Web.Controllers
         {
             return __billingStatisticsManager.CompareInOutTraffic(fromDate, toDate, customerId, timePeriod, showChartsInPie);
 
-        } 
+        }
+
+         public object ExportInOutTraffic(ExportInOutTraffic input)
+         {
+             return GetExcelResponse(__billingStatisticsManager.ExportInOutTraffic(input.FromDate, input.ToDate, input.CustomerId, input.TimePeriod));
+         }
 
         [HttpPost]
         public object ExportCarrierProfile(ExportCarrierProfileInput input)
@@ -66,5 +71,13 @@ namespace TOne.Analytics.Web.Controllers
         public DateTime ToDate { get; set; }
         public int TopDestination { get; set; }
         public string CustomerId { get; set; }
+    }
+
+    public class ExportInOutTraffic
+    {
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public string CustomerId { get; set; }
+        public VolumeReportsTimePeriod TimePeriod { get; set; }
     }
 }
