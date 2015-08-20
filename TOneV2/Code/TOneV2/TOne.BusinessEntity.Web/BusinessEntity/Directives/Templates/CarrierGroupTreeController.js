@@ -8,7 +8,6 @@ function CarrierGroupTreeController($scope, CarrierGroupAPIService, VRNavigation
     var carrierType;
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
-        console.log(parameters);
         assignedCarrier = parameters.assignedCarrier;
         carrierType = parameters.carrierType;
     }
