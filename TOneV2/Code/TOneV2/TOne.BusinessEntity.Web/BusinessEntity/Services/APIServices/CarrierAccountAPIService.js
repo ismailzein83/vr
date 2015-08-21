@@ -18,17 +18,25 @@
                 });
         }
 
-        function getCustomers() {
+        function getCustomers(isAssignedCarrier) {
+            if (isAssignedCarrier == undefined) {
+                alert("Your Request function (getCarriers) should have new parameter (assignedCarrier = true or assignedCarrier=false);");
+            }
             return baseApiService.get("/api/CarrierAccount/GetCarriers",
                 {
-                    carrierType: carrierTypeEnum.Customer.value
+                    carrierType: carrierTypeEnum.Customer.value,
+                    isAssignedCarrier: isAssignedCarrier
                 });
         }
 
-        function getSuppliers() {
+        function getSuppliers(isAssignedCarrier) {
+            if (isAssignedCarrier == undefined) {
+                alert("Your Request function (getCarriers) should have new parameter (assignedCarrier = true or assignedCarrier=false);");
+            }
             return baseApiService.get("/api/CarrierAccount/GetCarriers",
                 {
-                    carrierType: carrierTypeEnum.Supplier.value
+                    carrierType: carrierTypeEnum.Supplier.value,
+                    isAssignedCarrier: isAssignedCarrier
                 });
         }
     
