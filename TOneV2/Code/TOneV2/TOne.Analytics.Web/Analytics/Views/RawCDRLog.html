@@ -40,6 +40,18 @@
                 <vr-columns width="normal">
                     <vr-datetimepicker type="date" label="To" value="toDate" isrequired></vr-datetimepicker>
                 </vr-columns>
+              
+
+            </vr-row>
+            <vr-row>
+                <vr-columns width="fullrow" >
+                    <div style="display:inline-block;width:calc(100% - 19px)">
+                        <vr-label>Where Condition</vr-label>
+                        <textarea rows="3" class="form-control" ng-model="whereCondtion" style="width:100%;resize:none;display:inline"></textarea>
+                        
+                    </div>
+                    <span class="hand-cursor glyphicon glyphicon-info-sign" aria-hidden="true" style="top:-30px" ng-click="onInfoClick()"></span>
+                </vr-columns>
             </vr-row>
         </div>
     </vr-form>

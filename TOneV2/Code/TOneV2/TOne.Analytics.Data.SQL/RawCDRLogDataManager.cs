@@ -80,6 +80,7 @@ namespace TOne.Analytics.Data.SQL
 
             if (!string.IsNullOrEmpty(query.InCarrier))
                 whereBuilder.Append("AND (IN_CARRIER Like '%" + query.InCarrier + "%')");
+            
             if (!string.IsNullOrEmpty(query.OutCarrier))
                 whereBuilder.Append("AND (OUT_CARRIER Like '%" + query.OutCarrier + "%')");
            // if ( query.Switches.Count!=0)
@@ -89,6 +90,8 @@ namespace TOne.Analytics.Data.SQL
                 whereBuilder.AppendFormat(@" AND CDPN LIKE '{0}'", query.InCDPN);
             else
                 whereBuilder.AppendFormat(@" AND CDPNOut LIKE '{0}'", query.OutCDPN);
+            if (!string.IsNullOrEmpty(query.WhereCondition))
+                whereBuilder.AppendFormat(@"AND {0}", query.WhereCondition);
             if (!string.IsNullOrEmpty(query.CGPN))
                 whereBuilder.AppendFormat(@" AND (CGPN LIKE {0})","'" + query.CGPN + "'");
              whereBuilder.AppendFormat(@" AND ( {0} IS NULL  OR DurationInSeconds >= {0} )

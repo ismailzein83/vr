@@ -145,6 +145,7 @@
     <Content Include="Analytics\Constants\GroupingByEnum.js" />
     <Content Include="Analytics\Constants\HourlyReportMeasureEnum.js" />
     <Content Include="Analytics\Constants\RawCDRLogMeasureEnum.js" />
+    <Content Include="Analytics\Constants\RawCDRLogWhereInfoEnum.js" />
     <Content Include="Analytics\Constants\ReleaseCodeMeasureEnum.js" />
     <Content Include="Analytics\Constants\RepeatedNumbersMeasureEnum.js" />
     <Content Include="Analytics\Constants\TimePeriodEnum.js" />
@@ -188,6 +189,8 @@
     <Content Include="Analytics\Views\DailyReportController.js" />
     <Content Include="Analytics\Views\RawCDRLog.html" />
     <Content Include="Analytics\Views\RawCDRLogController.js" />
+    <Content Include="Analytics\Views\RawCDRLogTemplate\RawCDRLogTemplate.html" />
+    <Content Include="Analytics\Views\RawCDRLogTemplate\RawCDRLogTemplateController.js" />
     <Content Include="Analytics\Views\RepeatedNumbers.html" />
     <Content Include="Analytics\Views\RepeatedNumbersController.js" />
     <Content Include="Analytics\Views\Traffic Statistics\HourlyReport.html" />

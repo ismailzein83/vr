@@ -21,5 +21,7 @@ namespace TOne.Analytics.Entities
        public int NRecords { get; set; }
        public DateTime FromDate { get; set; }
        public DateTime ToDate { get; set; }
+       public string WhereCondition { get; set; }
+
     }
 }

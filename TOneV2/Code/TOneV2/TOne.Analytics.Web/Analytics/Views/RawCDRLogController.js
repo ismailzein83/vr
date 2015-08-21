@@ -1,6 +1,6 @@
-﻿RawCDRLogController.$inject = ['$scope', 'RawCDRLogAPIService', 'UtilsService', '$q', 'BusinessEntityAPIService_temp', 'RawCDRLogMeasureEnum'];
+﻿RawCDRLogController.$inject = ['$scope', 'RawCDRLogAPIService', 'UtilsService', '$q', 'BusinessEntityAPIService_temp', 'RawCDRLogMeasureEnum', 'VRModalService','VRNotificationService'];
 
-function RawCDRLogController($scope, RawCDRLogAPIService, UtilsService, $q, BusinessEntityAPIService, RawCDRLogMeasureEnum) {
+function RawCDRLogController($scope, RawCDRLogAPIService, UtilsService, $q, BusinessEntityAPIService, RawCDRLogMeasureEnum, VRModalService, VRNotificationService) {
     var mainGridAPI;
     var measures = [];
     var CDROption = [];
@@ -20,15 +20,28 @@ function RawCDRLogController($scope, RawCDRLogAPIService, UtilsService, $q, Busi
         $scope.cgpn;
         $scope.minDuration;
         $scope.maxDuration;
+        $scope.whereCondtion;
         $scope.data = [];
         $scope.measures = measures;
+        $scope.onInfoClick = function () {
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.title = "CDR Table Definition ";
+            };
+            VRModalService.showModal('/Client/Modules/Analytics/Views/RawCDRLogTemplate/RawCDRLogTemplate.html', null, settings);
+
+        }
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
         }
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return RawCDRLogAPIService.GetRawCDRData(dataRetrievalInput).then(function (response) {
                 onResponseReady(response);
-            })
+            }).catch(function (error) {
+                console.log(error.ExceptionMessage);
+               // VRNotificationService.notifyException("Sintex Error", "dsad");
+
+            });
         };
 
 
@@ -40,6 +53,7 @@ function RawCDRLogController($scope, RawCDRLogAPIService, UtilsService, $q, Busi
     }
 
     function retrieveData() {
+        console.log($scope.whereCondtion)
         var filter = buildFilter();
         var query = {
             Switches: filter.SwitchIds,
@@ -53,7 +67,8 @@ function RawCDRLogController($scope, RawCDRLogAPIService, UtilsService, $q, Busi
             CGPN: $scope.cgpn,
             MinDuration: $scope.minDuration,
             MaxDuration: $scope.maxDuration,
-            DurationType:$scope.selectedDurationType.description
+            DurationType: $scope.selectedDurationType.description,
+            WhereCondition: $scope.whereCondtion
         }
         return mainGridAPI.retrieveData(query);
     }
