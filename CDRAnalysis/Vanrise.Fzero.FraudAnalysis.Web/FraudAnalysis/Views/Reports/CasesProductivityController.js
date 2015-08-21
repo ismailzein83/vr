@@ -23,6 +23,8 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
 
         $scope.strategies = [];
 
+        $scope.casesProductivity = [];
+
         loadStrategies();
 
         $scope.selectedStrategies = [];
@@ -76,7 +78,7 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
         var strategiesList = '';
 
         angular.forEach($scope.selectedStrategies, function (itm) {
-            strategiesList = strategiesList + itm.Id + ','
+            strategiesList = strategiesList + itm.id + ','
         });
 
 

@@ -20,7 +20,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_CreateTempForFilteredCasesProductivity", tempTableName, input.Query.FromDate, input.Query.ToDate, input.Query.StrategiesList);
+                ExecuteNonQuerySP("FraudAnalysis.sp_Reports_CreateTempForFilteredCasesProductivity", tempTableName, input.Query.FromDate, input.Query.ToDate, input.Query.StrategiesList);
             };
 
 
@@ -33,9 +33,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             CaseProductivity caseProductivity = new CaseProductivity();
             caseProductivity.ClosedCases = (int)reader["ClosedCases"];
-            caseProductivity.ClosedoverGenerated = (float)reader["ClosedoverGenerated"];
-            caseProductivity.FraudCases = (int)reader["FraudCases"];
             caseProductivity.GeneratedCases = (int)reader["GeneratedCases"];
+            caseProductivity.ClosedoverGenerated = caseProductivity.ClosedCases / caseProductivity.GeneratedCases;
+            caseProductivity.FraudCases = (int)reader["FraudCases"];
             caseProductivity.StrategyName = reader["StrategyName"] as string;
             return caseProductivity;
         }
