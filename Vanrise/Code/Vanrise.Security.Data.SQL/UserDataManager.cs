@@ -81,6 +81,11 @@ namespace Vanrise.Security.Data.SQL
             return result;
         }
 
+        public bool CheckUserPassword(int userId, string Password)
+        {
+            bool result = (bool)ExecuteScalarSP("sec.sp_User_CheckUserPassword", userId ,Password);
+            return result;
+        }
         private User UserMapper(IDataReader reader)
         {
             return new Entities.User

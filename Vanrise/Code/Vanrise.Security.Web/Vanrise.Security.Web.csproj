@@ -149,6 +149,8 @@
     <Content Include="Security\Views\Pages\RankingPageEditorController.js" />
     <Content Include="Security\Views\Pages\RankingPageManagement.html" />
     <Content Include="Security\Views\Pages\RankingPageManagementController.js" />
+    <Content Include="Security\Views\ResetPassword.html" />
+    <Content Include="Security\Views\ResetPasswordController.js" />
     <Content Include="Security\Views\ResetPasswordEditor.html" />
     <Content Include="Security\Views\ResetPasswordEditorController.js" />
     <Content Include="Security\Views\GroupEditor.html" />

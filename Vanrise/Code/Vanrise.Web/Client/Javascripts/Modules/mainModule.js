@@ -19,7 +19,8 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
     
     var userInfo = JSON.parse(accessCookie);
     $scope.userDisplayName = userInfo.UserDisplayName;
-
+    
+ 
     Waves.displayEffect();
     var dropdownHidingTimeoutHandlerc;
 
@@ -66,6 +67,18 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
            
         };
         VRModalService.showModal('/Client/Modules/Common/Views/Support.html', null, modalSettings);
+    }
+
+    $scope.openResetPasswordModal = function () {
+
+        var modalSettings = {
+        };
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.title = "Reset Password for User " + $scope.userDisplayName;
+          
+
+        };
+        VRModalService.showModal('/Client/Modules/Security/Views/ResetPassword.html', null, modalSettings);
     }
    
 

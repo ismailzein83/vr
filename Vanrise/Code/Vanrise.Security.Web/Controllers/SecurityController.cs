@@ -17,11 +17,20 @@ namespace Vanrise.Security.Web.Controllers
             return manager.Authenticate(credentialsObject.Email, credentialsObject.Password);
         }
 
+         [HttpGet]
+        public Vanrise.Entities.UpdateOperationOutput<object> ResetPassword(string oldPassword,string newPassword)
+        {
+            int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
+            SecurityManager manager = new SecurityManager();
+            return manager.ResetPassword(loggedInUserId,oldPassword ,newPassword);
+        }
+
         public class CredentialsInput
         {
             public string Email { get; set; }
 
             public string Password { get; set; }
         }
+
     }
 }

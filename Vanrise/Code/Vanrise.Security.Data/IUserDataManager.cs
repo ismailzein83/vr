@@ -26,5 +26,7 @@ namespace Vanrise.Security.Data
         bool ResetPassword(int userId, string password);
 
         bool CheckUserName(string name);
+
+        bool CheckUserPassword(int userId,string Password);
     }
 }
