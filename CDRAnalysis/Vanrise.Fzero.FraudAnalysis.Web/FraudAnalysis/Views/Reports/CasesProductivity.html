@@ -1,0 +1,44 @@
+﻿<vr-panel ng-controller="FraudAnalysis_CasesProductivityController">
+
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns colnum="2">
+                    <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns colnum="2">
+                    <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired></vr-datetimepicker>
+                </vr-columns>
+
+                <vr-columns colnum="2">
+                    <vr-select datasource="strategies" datatextfield="name" datavaluefield="id" label="Strategy" selectedvalues="selectedStrategies" ismultipleselection></vr-select>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+
+
+    </vr-form>
+
+    <div>
+        <vr-row>
+            <vr-columns colnum="12" simplecol>
+
+                <vr-datagrid datasource="casesProductivity" dataretrievalfunction="dataRetrievalFunction" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady" menuactions="gridMenuActions" idfield="Id">
+                    <vr-datagridcolumn headertext="'Strategy Name'" field="'Name'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Generated Cases'" field="'GeneratedCases'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Closed Cases'" field="'ClosedCases'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Fraud Cases'" field="'FraudCases'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Closed / Generated'" field="'ClosedoverGenerated'"></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </div>
+
+</vr-panel>

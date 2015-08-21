@@ -185,9 +185,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         });
 
 
-        console.log('$scope.strategyLevels')
-        console.log($scope.strategyLevels)
-
         angular.forEach($scope.strategyLevels, function (level) {
             
             var strategyLevelItem = {
@@ -223,8 +220,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             });
 
             strategyObject.StrategyLevels.push(strategyLevelItem);
-            console.log('strategyObject')
-            console.log(strategyObject)
+           
 
         });
 

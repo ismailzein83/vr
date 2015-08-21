@@ -28,8 +28,6 @@ function StrategyManagementController($scope, StrategyAPIService, UserAPIService
         }
 
 
-        console.log(KindEnum)
-
         $scope.isDefault = [];
         angular.forEach(KindEnum, function (kind) {
             $scope.isDefault.push({ value: kind.value, name: kind.name })

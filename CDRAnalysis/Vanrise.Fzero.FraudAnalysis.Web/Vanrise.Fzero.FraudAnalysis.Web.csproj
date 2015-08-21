@@ -180,6 +180,7 @@
     <Content Include="FraudAnalysis\Services\APIServices\DashboardAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\NumberProfileAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\NormalCDRAPIService.js" />
+    <Content Include="FraudAnalysis\Services\APIServices\ReportingAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\UserAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\SuspicionAnalysisAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyAPIService.js" />
@@ -195,6 +196,8 @@
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\CDRImportProcessInput.html" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\SaveCDRToDBProcessInputController.js" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\CDRImportProcessInputController.js" />
+    <Content Include="FraudAnalysis\Views\Reports\CasesProductivity.html" />
+    <Content Include="FraudAnalysis\Views\Reports\CasesProductivityController.js" />
     <Content Include="FraudAnalysis\Views\Strategy\StrategyEditor.html" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\ExecuteStrategyProcessInput.html" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\ExecuteStrategyProcessInputController.js" />

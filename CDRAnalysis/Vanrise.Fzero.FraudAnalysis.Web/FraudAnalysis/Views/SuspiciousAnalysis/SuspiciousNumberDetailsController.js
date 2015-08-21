@@ -91,7 +91,6 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
 
         $scope.ApplyChangeStatus = function () {
             var accountCaseObject = BuildAccountCaseObjfromScope();
-            console.log(accountCaseObject)
             CaseManagementAPIService.SaveAccountCase(accountCaseObject)
            .then(function (response) {
                if (VRNotificationService.notifyOnItemUpdated("AccountCase", response)) {
@@ -257,7 +256,6 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
             SuspicionLevelID: $scope.relatedCases[$scope.relatedCases.length - 1].SuspicionLevelID,
             StrategyId: $scope.relatedCases[$scope.relatedCases.length - 1].StrategyId
         };
-        console.log(accountCaseObject)
         return accountCaseObject;
     }
 
