@@ -55,9 +55,10 @@ namespace TOne.BusinessEntity.Data.SQL
             //};
         }
 
-        private ToDConsiderationinfo ToDConsiderationINMapper(IDataReader reader)
+        private TODConsiderationInfo ToDConsiderationInfoMapper(IDataReader reader)
         {
-           
+            TODConsiderationInfo tod = new TODConsiderationInfo();
+            return tod;
          
         }
 
@@ -66,13 +67,13 @@ namespace TOne.BusinessEntity.Data.SQL
             return GetItemsSP("BEntity.sp_ToDConsideration_GetToDConsiderations", ToDConsiderationMapper, ToDBNullIfDefault(zoneId), customerId, when);
         }
 
-        public Vanrise.Entities.BigResult<CarrierMask> GetCarrierMasksByCriteria(Vanrise.Entities.DataRetrievalInput<CarrierMaskQuery> input)
+        public Vanrise.Entities.BigResult<TODConsiderationInfo> GetCarrierMasksByCriteria(Vanrise.Entities.DataRetrievalInput<TODCustomerQuery> input)
         {
             return RetrieveData(input, (tempTableName) =>
             {
-                ExecuteNonQuerySP("BEntity.sp_CarrierMask_CreateTempForFiltered", tempTableName, input.Query.Name);
+                ExecuteNonQuerySP("BEntity.sp_CustomersToDConsideration_CreateTempForFiltered", tempTableName, input.Query.ZoneId, input.Query.CustomerId, input.Query.EffectiveOn);
 
-            }, CarrierMaskMapper);
+            }, ToDConsiderationInfoMapper);
         }
     }
 }
