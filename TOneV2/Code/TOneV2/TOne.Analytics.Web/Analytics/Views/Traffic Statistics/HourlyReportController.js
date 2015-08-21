@@ -1,8 +1,8 @@
-﻿HourlyReportController.$inject = ['$scope', 'UtilsService', 'HourlyReportAPIService', 'uiGridConstants', '$q', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService', 'TrafficStatisticGroupKeysEnum', 'HourlyReportMeasureEnum', 'LabelColorsEnum',
-        'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'DataRetrievalResultTypeEnum', 'PeriodEnum', 'AnalyticsService', 'ZonesService', 'ChartTypeEnum', 'CarrierAccountConnectionAPIService', 'CarrierTypeEnum'];
+﻿HourlyReportController.$inject = ['$scope', 'UtilsService', 'HourlyReportAPIService', '$q', 'BusinessEntityAPIService_temp', 'HourlyReportMeasureEnum',
+        'CarrierTypeEnum', 'VRNotificationService', 'DataRetrievalResultTypeEnum', 'AnalyticsService', 'ZonesService', 'ChartTypeEnum', 'CarrierAccountConnectionAPIService', 'CarrierTypeEnum'];
 
-function HourlyReportController($scope, UtilsService, HourlyReportAPIService, uiGridConstants, $q, BusinessEntityAPIService, CarrierAccountAPIService, TrafficStatisticGroupKeysEnum, HourlyReportMeasureEnum, LabelColorsEnum,
-        CarrierTypeEnum, VRModalService, VRNotificationService, DataRetrievalResultTypeEnum, PeriodEnum, analyticsService, ZonesService, ChartTypeEnum, CarrierAccountConnectionAPIService,CarrierTypeEnum ) {
+function HourlyReportController($scope, UtilsService, HourlyReportAPIService, $q, BusinessEntityAPIService, HourlyReportMeasureEnum,
+        CarrierTypeEnum, VRNotificationService, DataRetrievalResultTypeEnum, analyticsService, ZonesService, ChartTypeEnum, CarrierAccountConnectionAPIService,CarrierTypeEnum ) {
 
     //var chartSelectedMeasureAPI;
     var chart1SelectedEntityAPI;
@@ -229,7 +229,7 @@ function HourlyReportController($scope, UtilsService, HourlyReportAPIService, ui
         loadMeasures();
         overallSelectedMeasure = HourlyReportMeasureEnum.Attempts;
         $scope.isInitializing = true;
-        UtilsService.waitMultipleAsyncOperations([loadSwitches, loadCodeGroups, loadCustomers, loadSuppliers]).finally(function () {
+        UtilsService.waitMultipleAsyncOperations([loadSwitches, loadCodeGroups]).finally(function () {
             $scope.isInitializing = false;
             if (mainGridAPI != undefined) {
                 retrieveData(true);
@@ -449,21 +449,6 @@ function HourlyReportController($scope, UtilsService, HourlyReportAPIService, ui
 
     }
 
-    function loadCustomers() {
-        return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.customers.push(itm);
-            });
-        });
-    }
-
-    function loadSuppliers() {
-        return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Supplier.value).then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.suppliers.push(itm);
-            });
-        });
-    }
 };
 
 appControllers.controller('Analytics_HourlyReportController', HourlyReportController);

@@ -397,62 +397,36 @@
         
         function buildRowHtml() {
             ctrl.rowHtml = '';
-            var progressMain;
-            var progressBarClass;
-            var style;
-            var percent;
             var value;
-            var secondValue;
-            var secondDiv;
-            var fieldValue;
-            var title;
             for (var i = 0; i < ctrl.columnDefs.length; i++) {
                 var currentColumn = ctrl.columnDefs[i];
+                var currentColumnHtml = '$parent.ctrl.columnDefs[' + i + ']';
+                ctrl.rowHtml += '<div ng-if="!' + currentColumnHtml + '.isHidden" ng-style="{ \'width\': ' + currentColumnHtml + '.width, \'display\':\'inline-block\'' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}"">';
                 if (currentColumn.type == "MultiProgress") {
-                    progressMain = " progress";
                     var values = currentColumn.field.split("|");
-                    value = "{{::dataItem." + values [0]+ "}}";
-                    secondValue = "{{::dataItem." + values[1] + "}}";
-                    title = 'title="'+value+'"%';
-                    progressBarClass = " progress-bar progress-bar-gray active";
-                    style = 'width:' + value + '%;';
-                    secondDiv = '<div class="vr-datagrid-celltext progress-bar progress-bar-success active" style="width:' + secondValue + '%" title="' + secondValue + '%">'
-                    + '</div>';
-                    fieldValue = function () {
-                        return "";
-                    };
+                    ctrl.rowHtml += '<vr-progressbar value="';
+                    for (var j = 0; j < values.length; j++) {
+                        ctrl.rowHtml += ('{{::dataItem.' + values[j] + '}}');
+                        if (j < values.length-1)
+                            ctrl.rowHtml += "|";
+
+                    }
+                    ctrl.rowHtml += '"></vr-progressbar></div>';
                
                 }
                 else if (currentColumn.type == "Progress") {
-                    progressMain = " progress";
-                    progressBarClass=" progress-bar progress-bar-striped active";
-                    style = 'width: {{::dataItem." '+ currentColumn.field+' "}} %;';
-                    secondDiv = "";
-                    fieldValue = function () {
-                        return UtilsService.replaceAll(currentColumn.cellTemplate, "colDef", currentColumnHtml);
-                    };
-                    title = 'title={{::dataItem." ' + currentColumn.field + '"}}';
+                    value = "{{::dataItem." + currentColumn.field + "}}";
+                    ctrl.rowHtml += '<vr-progressbar value="' + value +'"></vr-progressbar></div>';
                 }else
                 {
-                    progressMain = "";
-                    progressBarClass = ""
-                    style = "";
-                    secondDiv = ""
-                    fieldValue = function () {
-                        return UtilsService.replaceAll(currentColumn.cellTemplate, "colDef", currentColumnHtml);
-                    };
-                    title = "";
+                    ctrl.rowHtml += '<div class="vr-datagrid-cell">'
+                        + '    <div class="vr-datagrid-celltext ">'
+                        + UtilsService.replaceAll(currentColumn.cellTemplate, "colDef", currentColumnHtml)
+                     +'</div>'
+                     + '</div>'
+                        + '</div>'; 
                 }
-                var currentColumnHtml = '$parent.ctrl.columnDefs[' + i + ']';
-                ctrl.rowHtml += '<div ng-if="!' + currentColumnHtml + '.isHidden" ng-style="{ \'width\': ' + currentColumnHtml + '.width, \'display\':\'inline-block\'' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}">'
-                + '<div class="vr-datagrid-cell ' + progressMain + '" style="margin-bottom:0px;padding:0px;">'
-                + '    <div class="vr-datagrid-celltext' + progressBarClass + '" style="' + style + '"' + title+ '>'
-                  + fieldValue()
-                    + '</div>'
-               + secondDiv
-                + '</div>'
-
-            + '</div>';
+                
             }        
             buildSummaryRowHtml();
         }

@@ -79,11 +79,12 @@ namespace TOne.Analytics.Data.SQL
                                 ");
 
             if (!string.IsNullOrEmpty(query.InCarrier))
-                whereBuilder.Append("AND (IN_CARRIER Like '%" + query.InCarrier + "')%");
+                whereBuilder.Append("AND (IN_CARRIER Like '%" + query.InCarrier + "%')");
             if (!string.IsNullOrEmpty(query.OutCarrier))
-                whereBuilder.Append("AND (OUT_CARRIER Like '%" + query.OutCarrier + "')%");
-            if (query.Switches != null || query.Switches.Count!=0)
-                whereBuilder.AppendFormat("AND C.SwitchID IN ('{0}')", String.Join("', '", query.Switches));
+                whereBuilder.Append("AND (OUT_CARRIER Like '%" + query.OutCarrier + "%')");
+           // if ( query.Switches.Count!=0)
+                AddFilter<string>(whereBuilder, query.Switches, "C.SwitchID");
+               // whereBuilder.AppendFormat("AND C.SwitchID IN ('{0}')", String.Join("', '", query.Switches));
             if (!string.IsNullOrEmpty(query.InCDPN))
                 whereBuilder.AppendFormat(@" AND CDPN LIKE '{0}'", query.InCDPN);
             else
@@ -100,6 +101,17 @@ namespace TOne.Analytics.Data.SQL
             return queryBuilder.ToString();
 
         }
+
+        void AddFilter<T>(StringBuilder whereBuilder, IEnumerable<T> values, string column)
+        {
+            if (values != null && values.Count() > 0)
+            {
+                if (typeof(T) == typeof(string))
+                    whereBuilder.AppendFormat("AND {0} IN ('{1}')", column, String.Join("', '", values));
+                else
+                    whereBuilder.AppendFormat("AND {0} IN ({1})", column, String.Join(", ", values));
+            }
+        }
         private RawCDRLog RawCDRLogDataMapper(IDataReader reader)
         {
 
@@ -109,7 +121,7 @@ namespace TOne.Analytics.Data.SQL
         }
         void FillRawCDRDataFromReader(RawCDRLog rawCDRLog, IDataReader reader)
         {
-            rawCDRLog.CDRID = GetReaderValue<int>(reader, "CDRID");
+            rawCDRLog.CDRID = GetReaderValue<Int64>(reader, "CDRID");
             rawCDRLog.AlertDateTime = GetReaderValue<DateTime>(reader, "AlertDateTime");
             rawCDRLog.AttemptDateTime = GetReaderValue<DateTime>(reader, "AttemptDateTime");
             rawCDRLog.CAUSE_FROM = reader["CAUSE_FROM"] as string;
@@ -123,14 +135,14 @@ namespace TOne.Analytics.Data.SQL
             rawCDRLog.DisconnectDateTime = GetReaderValue<DateTime>(reader, "DisconnectDateTime");
             rawCDRLog.DurationInSeconds = GetReaderValue<Decimal>(reader, "DurationInSeconds");
             rawCDRLog.Extra_Fields = reader["Extra_Fields"] as string;
-            rawCDRLog.IDonSwitch = GetReaderValue<long>(reader, "DurationInSeconds");
+            rawCDRLog.IDonSwitch = GetReaderValue<Int64>(reader, "IDonSwitch");
             rawCDRLog.IN_CARRIER = reader["IN_CARRIER"] as string;
-            rawCDRLog.IN_CIRCUIT = GetReaderValue<int>(reader, "SwitchCdrID");
+            rawCDRLog.IN_CIRCUIT = GetReaderValue<Int64>(reader, "IN_CIRCUIT");
             rawCDRLog.IN_IP = reader["IN_IP"] as string;
             rawCDRLog.IN_TRUNK = reader["IN_TRUNK"] as string;
-            rawCDRLog.IsRerouted = GetReaderValue<char>(reader, "IsRerouted");
+            rawCDRLog.IsRerouted = GetReaderValue<string>(reader, "IsRerouted");
             rawCDRLog.OUT_CARRIER = reader["OUT_CARRIER"] as string;
-            rawCDRLog.OUT_CIRCUIT = GetReaderValue<int>(reader, "OUT_CIRCUIT");
+            rawCDRLog.OUT_CIRCUIT = GetReaderValue<Int16>(reader, "OUT_CIRCUIT");
             rawCDRLog.OUT_IP = reader["OUT_IP"] as string;
             rawCDRLog.OUT_TRUNK = reader["OUT_TRUNK"] as string;
             rawCDRLog.SwitchName = reader["SwitchName"] as string;

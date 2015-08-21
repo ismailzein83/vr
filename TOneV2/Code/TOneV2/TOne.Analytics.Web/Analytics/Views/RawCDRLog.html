@@ -6,19 +6,30 @@
                     <vr-select datasource="switches" datatextfield="Name" datavaluefield="SwitchId" selectedvalues="selectedSwitches" label="Switches" ismultipleselection></vr-select>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-select datasource="customers" datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedCustomers" label="Customers" ismultipleselection></vr-select>
+                    <vr-textbox value="inCarrier" label="In Carrier"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-select label="Suppliers" datasource="suppliers"
-                               datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedSuppliers" ismultipleselection></vr-select>
+                    <vr-textbox value="outCarrier" label="Out Carrier"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal" ng-init="option=1">
+                    <vr-choices selectedindex="selectedConnectionIndex" onselectionchanged="onSelectionChanged()">
+                        <vr-choice isselected="inSelected">CDPN In</vr-choice>
+                        <vr-choice isselected="outSelected">CDPN Out</vr-choice>
+                    </vr-choices>
+                    <vr-textbox ng-show="inSelected" value="inCDPN" ></vr-textbox>
+                    <vr-textbox ng-show="outSelected" value="outCDPN" ></vr-textbox>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-select ismultipleselection datasource="searchZones" label="Zones" selectedvalues="selectedZones" datatextfield="Name" datavaluefield="ZoneId"
-                               entityname="Zones"></vr-select>
+                    <vr-textbox value="cgpn" label="CGPN"></vr-textbox>
                 </vr-columns>
-
                 <vr-columns width="normal">
-                    <vr-select datasource="CDROption" datatextfield="description" datavaluefield="value" selectedvalues="selectedCDROption" label="CDR Option" isrequired></vr-select>
+                    <vr-select datasource="durationType" datatextfield="description" datavaluefield="value" selectedvalues="selectedDurationType" label="Duration In" isrequired></vr-select>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-textbox value="minDuration" label="Min Duration"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-textbox value="maxDuration" label="Max Duration"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-textbox value="nRecords" label="Limit Results to"></vr-textbox>

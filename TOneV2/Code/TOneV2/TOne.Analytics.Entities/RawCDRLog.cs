@@ -8,9 +8,9 @@ namespace TOne.Analytics.Entities
 {
     public class RawCDRLog
     {
-        public int CDRID { get; set; }
+        public Int64 CDRID { get; set; }
         public string SwitchName { get; set; }
-        public long IDonSwitch { get; set; }
+        public Int64 IDonSwitch { get; set; }
         public string Tag { get; set; }
         public DateTime AttemptDateTime { get; set; }
         public DateTime AlertDateTime { get; set; }
@@ -18,11 +18,11 @@ namespace TOne.Analytics.Entities
         public DateTime DisconnectDateTime { get; set; }
         public Decimal DurationInSeconds { get; set; }
         public string IN_TRUNK { get; set; }
-        public long IN_CIRCUIT { get; set; }
+        public Int64 IN_CIRCUIT { get; set; }
         public string IN_CARRIER { get; set; }
         public string IN_IP { get; set; }
         public string OUT_TRUNK { get; set; }
-        public int OUT_CIRCUIT { get; set; }
+        public Int16 OUT_CIRCUIT { get; set; }
         public string OUT_CARRIER { get; set; }
         public string OUT_IP { get; set; }
         public string CGPN { get; set; }
@@ -35,7 +35,7 @@ namespace TOne.Analytics.Entities
         public string CAUSE_TO { get; set; }
         public string Extra_Fields { get; set; }
 
-        public char IsRerouted { get; set; }
+        public string IsRerouted { get; set; }
 
     }
 }
