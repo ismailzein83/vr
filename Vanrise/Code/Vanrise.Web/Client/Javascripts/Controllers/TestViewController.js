@@ -19,6 +19,8 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout) {
     $scope.progress =[];
     $scope.progress.push(10);
     $scope.progress.push(20);
+    $scope.progress.push(30);
+
     $scope.postMsg = function () {
         $http.post($scope.baseurl + "/api/routing/SaveRouteRule",
       {

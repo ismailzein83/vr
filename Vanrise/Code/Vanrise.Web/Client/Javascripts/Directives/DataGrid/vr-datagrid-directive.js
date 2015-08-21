@@ -416,7 +416,7 @@
                 }
                 else if (currentColumn.type == "Progress") {
                     gridvalue = "{{::dataItem." + currentColumn.field + "}}";
-                    ctrl.rowHtml += '<vr-progressbar gridvalue="' + gridvalue + '"></vr-progressbar></div>';
+                    ctrl.rowHtml += '<vr-progressbar gridvalue="' + gridvalue + '" ></vr-progressbar></div>';
                 }else
                 {
                     ctrl.rowHtml += '<div class="vr-datagrid-cell">'
