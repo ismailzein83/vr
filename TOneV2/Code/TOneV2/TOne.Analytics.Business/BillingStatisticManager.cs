@@ -712,15 +712,9 @@ namespace TOne.Analytics.Business
             return GetDestinationTrafficVolumesResult(destinationTrafficResult, fromDate, toDate, customerID, supplierID, zoneID, attempts, timePeriod, topDestination, timeRanges);
         }
 
-
         public List<InOutVolumeTraffic> CompareInOutTraffic(DateTime fromDate, DateTime toDate, string customerId, VolumeReportsTimePeriod timePeriod, bool showChartsInPie)
-        {
-            // if (!showChartsInPie)
-            // List<InOutVolumeTraffic> inOutTrafficVolumes =
+        {           
             return _datamanager.CompareInOutTraffic(fromDate, toDate, customerId, timePeriod);
-            //  return GetCompareInOutTrafficResult(timePeriod, inOutTrafficVolumes);
-            //else
-            //    return _datamanager.CompareInOutTrafficInPie(fromDate, toDate, customerId, timePeriod);
         }
 
         public ExcelResult ExportInOutTraffic(DateTime fromDate, DateTime toDate, string customerId, VolumeReportsTimePeriod timePeriod)
@@ -741,13 +735,14 @@ namespace TOne.Analytics.Business
             style.Font.IsBold = true;
 
 
-
-            string chartTitle = string.Concat( (timePeriod.ToString() != "None" ? timePeriod.ToString() : " ") , " InOut Traffic By Durations(mn) for Customer " , _bemanager.GetCarrirAccountName(customerId) );
+            //InOut Durtions Chart Sheet
+            string chartTitle = string.Concat((timePeriod.ToString() != "None" ? timePeriod.ToString() : " "), " InOut Traffic By Durations(mn) for Customer ", _bemanager.GetCarrirAccountName(customerId));
             CreateWorkSheetInOutTraffic(wbk, " InOut Traffic By Durations(mn)", lstInOutTraffic, fromDate, toDate, chartTitle, style);
-         
-            chartTitle = string.Concat( (timePeriod.ToString() != "None" ? timePeriod.ToString() : " ") , " InOut Traffic By Sale(IN)/Cost(Out) Amounts for Customer " , _bemanager.GetCarrirAccountName(customerId) );
+
+            //InOut Net Amounts Chart Sheet
+            chartTitle = string.Concat((timePeriod.ToString() != "None" ? timePeriod.ToString() : " "), " InOut Traffic By Sale(IN)/Cost(Out) Amounts for Customer ", _bemanager.GetCarrirAccountName(customerId));
             CreateWorkSheetInOutTraffic(wbk, "InOut Traffic By Amounts", lstInOutTraffic, fromDate, toDate, chartTitle, style);
-            
+
             ExcelResult excelResult = new ExcelResult
             {
                 ExcelFileStream = wbk.SaveToStream()
@@ -762,254 +757,7 @@ namespace TOne.Analytics.Business
             public string To { get; set; }
         }
         #endregion
-        private void CreateWorkSheetInOutTraffic(Workbook workbook, string workSheetName, List<InOutVolumeTraffic> lstInOutTraffic, DateTime fromDate, DateTime toDate, string chartTitle, Style style)
-        {
-            Dictionary<int, ChartRange> dicChartRange = new Dictionary<int, ChartRange>();
-            Worksheet worksheet = workbook.Worksheets.Add(workSheetName);
-            int lstInOutTrafficCount = lstInOutTraffic.Count();
 
-            if (lstInOutTrafficCount > 0)
-            {
-                string colName = GetExcelColumnName(2 + lstInOutTrafficCount);
-
-                worksheet.Cells.SetColumnWidth(0, 4);
-
-                int counter = 0;
-                int HeaderIndex = 2;
-                worksheet.Cells[2, 1].PutValue("IN");
-                worksheet.Cells[3, 1].PutValue("OUT");
-                for (int i = 0; i < lstInOutTrafficCount; i++)
-                {
-                    if (i == 0)
-                    {
-                        worksheet.Cells[1, HeaderIndex].PutValue(lstInOutTraffic[i].Date);
-                        //worksheet.Cells[2, HeaderIndex].PutValue(lstInOutTraffic[i].TrafficDirection == "IN" ? workSheetName.Contains("Duration") ? lstInOutTraffic[i].Duration : lstInOutTraffic[i].Net : 0);
-                        //worksheet.Cells[3, HeaderIndex].PutValue(lstInOutTraffic[i + 1].TrafficDirection == "OUT" ? lstInOutTraffic[i + 1].Date == lstInOutTraffic[i].Date ? workSheetName.Contains("Duration") ? lstInOutTraffic[i + 1].Duration : lstInOutTraffic[i + 1].Net : 0 : 0);
-                        if (lstInOutTraffic[i].TrafficDirection == "IN")
-                        {
-                            if (workSheetName.Contains("Duration"))
-                                worksheet.Cells[2, HeaderIndex].PutValue(lstInOutTraffic[i].Duration);
-                            else worksheet.Cells[2, HeaderIndex].PutValue(lstInOutTraffic[i].Net);
-                             worksheet.Cells[3, HeaderIndex].PutValue(lstInOutTraffic[i + 1].TrafficDirection == "OUT" ? lstInOutTraffic[i + 1].Date == lstInOutTraffic[i].Date ? workSheetName.Contains("Duration") ? lstInOutTraffic[i + 1].Duration : lstInOutTraffic[i + 1].Net : 0 : 0);
-                           
-                        }
-                        else
-                        {
-                            if (workSheetName.Contains("Duration"))
-                                worksheet.Cells[3, HeaderIndex].PutValue(lstInOutTraffic[i].Duration);
-                            else worksheet.Cells[3, HeaderIndex].PutValue(lstInOutTraffic[i].Net);
-                            
-                                worksheet.Cells[2, HeaderIndex].PutValue(lstInOutTraffic[i + 1].TrafficDirection == "IN" ? lstInOutTraffic[i + 1].Date == lstInOutTraffic[i].Date ? workSheetName.Contains("Duration") ? lstInOutTraffic[i + 1].Duration : lstInOutTraffic[i + 1].Net : 0 : 0);
-                          
-                        }
-                        
-                        
-                        ChartRange range = new ChartRange
-                        {
-                            From = worksheet.Cells[2, HeaderIndex].Name,
-                            To = worksheet.Cells[3, HeaderIndex + 1].Name
-                        };
-                        dicChartRange[counter] = range;
-                        HeaderIndex++;
-                        counter++;
-
-                    }
-                    else if (lstInOutTraffic[i].Date != lstInOutTraffic[i - 1].Date)
-                    {
-                        worksheet.Cells[1, HeaderIndex].PutValue(lstInOutTraffic[i].Date);
-                        if (lstInOutTraffic[i].TrafficDirection == "IN")
-                        {
-                            if (workSheetName.Contains("Duration"))
-                                worksheet.Cells[2, HeaderIndex].PutValue(lstInOutTraffic[i].Duration);
-                            else worksheet.Cells[2, HeaderIndex].PutValue(lstInOutTraffic[i].Net);
-                            if (i + 1 != lstInOutTrafficCount)
-                                worksheet.Cells[3, HeaderIndex].PutValue(lstInOutTraffic[i + 1].TrafficDirection == "OUT" ? lstInOutTraffic[i + 1].Date == lstInOutTraffic[i].Date ? workSheetName.Contains("Duration") ? lstInOutTraffic[i + 1].Duration : lstInOutTraffic[i + 1].Net : 0 : 0);
-                            else worksheet.Cells[3, HeaderIndex].PutValue(0);
-                        }
-                        else
-                        {
-                            if (workSheetName.Contains("Duration"))
-                                worksheet.Cells[3, HeaderIndex].PutValue(lstInOutTraffic[i].Duration);
-                            else worksheet.Cells[3, HeaderIndex].PutValue(lstInOutTraffic[i].Net);
-                            if (i + 1 != lstInOutTrafficCount)
-                            worksheet.Cells[2, HeaderIndex].PutValue(lstInOutTraffic[i + 1].TrafficDirection == "IN" ? lstInOutTraffic[i + 1].Date == lstInOutTraffic[i].Date ? workSheetName.Contains("Duration") ? lstInOutTraffic[i + 1].Duration : lstInOutTraffic[i + 1].Net : 0 : 0);
-                             else worksheet.Cells[2, HeaderIndex].PutValue(0);
-                        }
-                        ChartRange range = new ChartRange
-                        {
-                            From = worksheet.Cells[2, HeaderIndex].Name,
-                            To = worksheet.Cells[3, HeaderIndex + 1].Name
-                        };
-                        dicChartRange[counter] = range;
-                        HeaderIndex++;
-                        counter++;
-                    }
-
-                    worksheet.Cells.SetColumnWidth(i + 1, 20);
-                }
-                worksheet.Cells.SetColumnWidth(lstInOutTrafficCount + 1, 20);
-
-                worksheet.Cells.CreateRange("C2", colName + "2").SetStyle(style);
-                int upperLeftRow = 5;
-                int upperLeftColumn = 1;
-                int lowerRightRow = 20;
-                int lowerRightColumn = 4;
-
-                for (int i = 0; i < counter; i++)
-                {
-                    //Adding a chart to the worksheet
-                    int chartIndex = worksheet.Charts.Add(Aspose.Cells.Charts.ChartType.Pie, upperLeftRow, upperLeftColumn, lowerRightRow, lowerRightColumn);// upperLeftRow+i, upperLeftColumn + i, lowerRightRow + i,lowerRightColumn);
-                   // upperLeftColumn = upperLeftColumn + 4;
-                   // lowerRightColumn = lowerRightColumn + 4;
-
-                    upperLeftRow = upperLeftRow + 16;
-                    lowerRightRow = lowerRightRow + 16;
-                    
-
-                    //Accessing the instance of the newly added chart
-                    Aspose.Cells.Charts.Chart chart = worksheet.Charts[chartIndex];
-                    string range = string.Format("{0}:{1}", dicChartRange[i].From, dicChartRange[i].To);
-                    chart.NSeries.Add(range, true);
-                    chart.NSeries.CategoryData = "B3:B4";
-                    chart.NSeries[0].Name = "IN";
-                    chart.NSeries[1].Name = "OUT";
-                    chart.NSeries.IsColorVaried = true;
-                    chart.ShowLegend = true;
-                    chart.ShowDataTable = true;
-                    
-                    //Set the DataLabels in the chart
-                    Aspose.Cells.Charts.DataLabels datalabels;
-                    for (int j = 0; j < chart.NSeries.Count; j++)
-                    {
-                       datalabels = chart.NSeries[j].DataLabels;
-                       datalabels.Postion = Aspose.Cells.Charts.LabelPositionType.InsideBase;
-                       datalabels.IsCategoryNameShown = true;
-                       datalabels.IsValueShown = true;
-                       datalabels.IsPercentageShown = true;
-                       datalabels.IsLegendKeyShown = true;
-
-                    }
-                    //Set the Legend.
-                    Aspose.Cells.Charts.Legend legend = chart.Legend;
-                    legend.Position = Aspose.Cells.Charts.LegendPositionType.Left;
-                    legend.Height = 100;
-                    legend.Width = 130;
-                    legend.Y = 1500;
-                    legend.TextFont.IsBold = true;
-                    legend.Border.Color = Color.Blue;
-                    legend.Area.Formatting = Aspose.Cells.Charts.FormattingType.Custom;
-
-                    //Set FillFormat.
-                    Aspose.Cells.Drawing.FillFormat fillformat = legend.Area.FillFormat;
-                    fillformat.Texture = Aspose.Cells.Drawing.TextureType.Bouquet;
-
-                    chart.ValueAxis.TickLabelPosition = Aspose.Cells.Charts.TickLabelPositionType.Low;
-                    chart.Legend.Position = Aspose.Cells.Charts.LegendPositionType.Left;
-                    chart.Legend.Width = 600;
-                    chart.Legend.Height = 600;
-                    chart.Title.Font.IsBold = true;
-                    chart.Title.Text = worksheet.Cells[1, i + 2].StringValue!=string.Empty ? string.Concat(chartTitle, " , " + worksheet.Cells[1, i + 2].StringValue): chartTitle ;
-                }
-            }
-        }
-
-        //private void CreateWorkSheet(Workbook workbook, string workSheetName, List<InOutVolumeTraffic> lstInOutTraffic, DateTime fromDate, DateTime toDate, int topDestination, string chartTitle, Style style)
-        //{
-        //    Worksheet worksheet = workbook.Worksheets.Add(workSheetName);
-        //    int lstCarrierProfileCount = lstInOutTraffic.Count();
-
-        //    if (lstCarrierProfileCount > 0)
-        //    {
-        //        int DaysInTillDays = DateTime.DaysInMonth(toDate.Year, toDate.Month);
-        //        TimeSpan span = toDate.Subtract(fromDate);
-        //        int NumberOfMonths = (int)(span.TotalDays / 30);
-
-        //        int HeaderIndex = 2;
-        //        int Irow = 1;
-
-        //        string colName =  GetExcelColumnName(2 + NumberOfMonths);
-
-        //        worksheet.Cells.SetColumnWidth(0, 4);
-        //        List<string> lstZones = lstInOutTraffic.Select(x => x.TrafficDirection).Distinct().ToList<string>();
-        //        int maxZoneLenght = 0;
-        //        for (int i = 0; i < lstZones.Count(); i++)
-        //        {
-        //            if (lstZones[i].Length > maxZoneLenght)
-        //                maxZoneLenght = lstZones[i].Length;
-        //        }
-
-        //        DateTime d = fromDate;
-
-        //        for (int i = 0; i < NumberOfMonths; i++)
-        //        {
-        //            worksheet.Cells.SetColumnWidth(i + 1, maxZoneLenght + 6);
-        //            string s = d.ToString("MMMM - yyyy");
-        //            d = d.AddMonths(1);
-        //            worksheet.Cells[Irow, HeaderIndex++].PutValue(s);
-        //        }
-        //        worksheet.Cells.SetColumnWidth(NumberOfMonths, maxZoneLenght + 6);
-        //        worksheet.Cells.SetColumnWidth(NumberOfMonths + 1, maxZoneLenght + 6);
-
-        //        for (int k = 0; k < lstZones.Count(); k++)
-        //        {
-        //            Irow++;
-        //            HeaderIndex = 1;
-        //            int valueIndex = 1;
-
-        //            worksheet.Cells[Irow, valueIndex++].PutValue(lstZones[k]);
-        //            DateTime fDate = fromDate;
-        //            for (int i = 0; i < NumberOfMonths; i++)
-        //            {
-        //                bool f = false;
-        //                for (int j = 0; j < lstCarrierProfileCount; j++)
-        //                {
-        //                   // if (lstInOutTraffic[j].Date == fDate.Month && lstInOutTraffic[j].Year == fDate.Year && lstZones[k] == lstInOutTraffic[j].Zone)
-        //                  //  {
-        //                        worksheet.Cells[Irow, valueIndex++].PutValue(lstInOutTraffic[j].Date);
-        //                        f = true;
-        //                  //  }
-        //                }
-        //                if (f == false)
-        //                    worksheet.Cells[Irow, valueIndex++].PutValue("0");
-        //                fDate = fDate.AddMonths(1);
-        //            }
-        //        }
-
-        //        worksheet.Cells.CreateRange("C2", colName + "2").SetStyle(style);
-
-        //        int chartIndex = worksheet.Charts.Add(Aspose.Cells.Charts.ChartType.Column, topDestination + 3, 1, (int)(topDestination * 2.5), NumberOfMonths + 2);
-        //        Aspose.Cells.Charts.Chart chart = worksheet.Charts[chartIndex];
-
-
-        //        chart.NSeries.Add("C3:" + colName + (topDestination + 2).ToString(), false);
-        //        chart.NSeries.CategoryData = "C2:" + colName + "2";
-        //        for (int i = 0; i < lstZones.Count(); i++)
-        //        {
-        //            chart.NSeries[i].Name = lstZones[i];
-        //        }
-        //        chart.ValueAxis.TickLabelPosition = Aspose.Cells.Charts.TickLabelPositionType.Low;
-        //        chart.Legend.Position = Aspose.Cells.Charts.LegendPositionType.Left;
-        //        chart.Title.Font.IsBold = true;
-        //        chart.Title.Text = chartTitle;
-        //    }
-        //}
-
-
-
-        //private List<InOutVolumeTraffic> GetCompareInOutTrafficResult( VolumeReportsTimePeriod timePeriod, List<InOutVolumeTraffic> inOutTrafficVolumes) {
-
-        //    foreach (var res in inOutTrafficVolumes)
-        //    {
-
-        //        switch (timePeriod)
-        //        {
-        //            case VolumeReportsTimePeriod.None: res.Date = string.Empty; break;
-        //            case VolumeReportsTimePeriod.Daily: res.Date = res.Date.ToString("MMM dd yyyy "); break;
-        //            case VolumeReportsTimePeriod.Weekly: res.Date = string.Concat(currentCulture.Calendar.GetWeekOfYear(timeRange.FromDate.Date, currentCulture.DateTimeFormat.CalendarWeekRule, currentCulture.DateTimeFormat.FirstDayOfWeek), "/", timeRange.FromDate.Year.ToString()); break;
-        //            case VolumeReportsTimePeriod.Monthly: res.Date = string.Concat(timeRange.FromDate.Month.ToString(), "/", timeRange.FromDate.Year.ToString()); break;
-        //        }
-        //    }
-        //}
 
         #region Private Methods
         private ZoneProfitFormatted FormatZoneProfit(ZoneProfit zoneProfit)
@@ -1668,6 +1416,156 @@ namespace TOne.Analytics.Business
 
             return DestinationTrafficVolumeResult;
         }
+
+        private void CreateWorkSheetInOutTraffic(Workbook workbook, string workSheetName, List<InOutVolumeTraffic> lstInOutTraffic, DateTime fromDate, DateTime toDate, string chartTitle, Style style)
+        {
+            Dictionary<int, ChartRange> dicChartRange = new Dictionary<int, ChartRange>();
+            Worksheet worksheet = workbook.Worksheets.Add(workSheetName);
+            int lstInOutTrafficCount = lstInOutTraffic.Count();
+
+            if (lstInOutTrafficCount > 0)
+            {
+                string colName = GetExcelColumnName(2 + lstInOutTrafficCount);
+
+                worksheet.Cells.SetColumnWidth(0, 4);
+
+                int counter = 0;
+                int HeaderIndex = 2;
+                worksheet.Cells[2, 1].PutValue("IN");
+                worksheet.Cells[3, 1].PutValue("OUT");
+                for (int i = 0; i < lstInOutTrafficCount; i++)
+                {
+                    if (i == 0)
+                    {
+                        worksheet.Cells[1, HeaderIndex].PutValue(lstInOutTraffic[i].Date);
+                        if (lstInOutTraffic[i].TrafficDirection == "IN")
+                        {
+                            if (workSheetName.Contains("Duration"))
+                                worksheet.Cells[2, HeaderIndex].PutValue(lstInOutTraffic[i].Duration);
+                            else worksheet.Cells[2, HeaderIndex].PutValue(lstInOutTraffic[i].Net);
+                            worksheet.Cells[3, HeaderIndex].PutValue(lstInOutTraffic[i + 1].TrafficDirection == "OUT" ? lstInOutTraffic[i + 1].Date == lstInOutTraffic[i].Date ? workSheetName.Contains("Duration") ? lstInOutTraffic[i + 1].Duration : lstInOutTraffic[i + 1].Net : 0 : 0);
+
+                        }
+                        else
+                        {
+                            if (workSheetName.Contains("Duration"))
+                                worksheet.Cells[3, HeaderIndex].PutValue(lstInOutTraffic[i].Duration);
+                            else worksheet.Cells[3, HeaderIndex].PutValue(lstInOutTraffic[i].Net);
+
+                            worksheet.Cells[2, HeaderIndex].PutValue(lstInOutTraffic[i + 1].TrafficDirection == "IN" ? lstInOutTraffic[i + 1].Date == lstInOutTraffic[i].Date ? workSheetName.Contains("Duration") ? lstInOutTraffic[i + 1].Duration : lstInOutTraffic[i + 1].Net : 0 : 0);
+
+                        }
+
+
+                        ChartRange range = new ChartRange
+                        {
+                            From = worksheet.Cells[2, HeaderIndex].Name,
+                            To = worksheet.Cells[3, HeaderIndex + 1].Name
+                        };
+                        dicChartRange[counter] = range;
+                        HeaderIndex++;
+                        counter++;
+
+                    }
+                    else if (lstInOutTraffic[i].Date != lstInOutTraffic[i - 1].Date)
+                    {
+                        worksheet.Cells[1, HeaderIndex].PutValue(lstInOutTraffic[i].Date);
+                        if (lstInOutTraffic[i].TrafficDirection == "IN")
+                        {
+                            if (workSheetName.Contains("Duration"))
+                                worksheet.Cells[2, HeaderIndex].PutValue(lstInOutTraffic[i].Duration);
+                            else worksheet.Cells[2, HeaderIndex].PutValue(lstInOutTraffic[i].Net);
+                            if (i + 1 != lstInOutTrafficCount)
+                                worksheet.Cells[3, HeaderIndex].PutValue(lstInOutTraffic[i + 1].TrafficDirection == "OUT" ? lstInOutTraffic[i + 1].Date == lstInOutTraffic[i].Date ? workSheetName.Contains("Duration") ? lstInOutTraffic[i + 1].Duration : lstInOutTraffic[i + 1].Net : 0 : 0);
+                            else worksheet.Cells[3, HeaderIndex].PutValue(0);
+                        }
+                        else
+                        {
+                            if (workSheetName.Contains("Duration"))
+                                worksheet.Cells[3, HeaderIndex].PutValue(lstInOutTraffic[i].Duration);
+                            else worksheet.Cells[3, HeaderIndex].PutValue(lstInOutTraffic[i].Net);
+                            if (i + 1 != lstInOutTrafficCount)
+                                worksheet.Cells[2, HeaderIndex].PutValue(lstInOutTraffic[i + 1].TrafficDirection == "IN" ? lstInOutTraffic[i + 1].Date == lstInOutTraffic[i].Date ? workSheetName.Contains("Duration") ? lstInOutTraffic[i + 1].Duration : lstInOutTraffic[i + 1].Net : 0 : 0);
+                            else worksheet.Cells[2, HeaderIndex].PutValue(0);
+                        }
+                        ChartRange range = new ChartRange
+                        {
+                            From = worksheet.Cells[2, HeaderIndex].Name,
+                            To = worksheet.Cells[3, HeaderIndex + 1].Name
+                        };
+                        dicChartRange[counter] = range;
+                        HeaderIndex++;
+                        counter++;
+                    }
+
+                    worksheet.Cells.SetColumnWidth(i + 1, 20);
+                }
+                worksheet.Cells.SetColumnWidth(lstInOutTrafficCount + 1, 20);
+
+                worksheet.Cells.CreateRange("C2", colName + "2").SetStyle(style);
+                int upperLeftRow = 5;
+                int upperLeftColumn = 1;
+                int lowerRightRow = 20;
+                int lowerRightColumn = 4;
+
+                for (int i = 0; i < counter; i++)
+                {
+                    //Adding a chart to the worksheet
+                    int chartIndex = worksheet.Charts.Add(Aspose.Cells.Charts.ChartType.Pie, upperLeftRow, upperLeftColumn, lowerRightRow, lowerRightColumn);// upperLeftRow+i, upperLeftColumn + i, lowerRightRow + i,lowerRightColumn);
+                    // upperLeftColumn = upperLeftColumn + 4;
+                    // lowerRightColumn = lowerRightColumn + 4;
+
+                    upperLeftRow = upperLeftRow + 16;
+                    lowerRightRow = lowerRightRow + 16;
+
+
+                    //Accessing the instance of the newly added chart
+                    Aspose.Cells.Charts.Chart chart = worksheet.Charts[chartIndex];
+                    string range = string.Format("{0}:{1}", dicChartRange[i].From, dicChartRange[i].To);
+                    chart.NSeries.Add(range, true);
+                    chart.NSeries.CategoryData = "B3:B4";
+                    chart.NSeries[0].Name = "IN";
+                    chart.NSeries[1].Name = "OUT";
+                    chart.NSeries.IsColorVaried = true;
+                    chart.ShowLegend = true;
+                    chart.ShowDataTable = true;
+
+                    //Set the DataLabels in the chart
+                    Aspose.Cells.Charts.DataLabels datalabels;
+                    for (int j = 0; j < chart.NSeries.Count; j++)
+                    {
+                        datalabels = chart.NSeries[j].DataLabels;
+                        datalabels.Postion = Aspose.Cells.Charts.LabelPositionType.InsideBase;
+                        datalabels.IsCategoryNameShown = true;
+                        datalabels.IsValueShown = true;
+                        datalabels.IsPercentageShown = true;
+                        datalabels.IsLegendKeyShown = true;
+
+                    }
+                    //Set the Legend.
+                    Aspose.Cells.Charts.Legend legend = chart.Legend;
+                    legend.Position = Aspose.Cells.Charts.LegendPositionType.Left;
+                    legend.Height = 100;
+                    legend.Width = 130;
+                    legend.Y = 1500;
+                    legend.TextFont.IsBold = true;
+                    legend.Border.Color = Color.Blue;
+                    legend.Area.Formatting = Aspose.Cells.Charts.FormattingType.Custom;
+
+                    //Set FillFormat.
+                    Aspose.Cells.Drawing.FillFormat fillformat = legend.Area.FillFormat;
+                    fillformat.Texture = Aspose.Cells.Drawing.TextureType.Bouquet;
+
+                    chart.ValueAxis.TickLabelPosition = Aspose.Cells.Charts.TickLabelPositionType.Low;
+                    chart.Legend.Position = Aspose.Cells.Charts.LegendPositionType.Left;
+                    chart.Legend.Width = 600;
+                    chart.Legend.Height = 600;
+                    chart.Title.Font.IsBold = true;
+                    chart.Title.Text = worksheet.Cells[1, i + 2].StringValue != string.Empty ? string.Concat(chartTitle, " , " + worksheet.Cells[1, i + 2].StringValue) : chartTitle;
+                }
+            }
+        }
+
 
         #endregion
     }

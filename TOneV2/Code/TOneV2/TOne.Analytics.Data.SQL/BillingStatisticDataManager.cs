@@ -423,7 +423,7 @@ namespace TOne.Analytics.Data.SQL
         }
         public List<InOutVolumeTraffic> CompareInOutTraffic(DateTime fromDate, DateTime toDate, string customerId, VolumeReportsTimePeriod timePeriod)
         {
-            List<InOutVolumeTraffic> resultList = GetItemsSP("rpt_Volumes_CompareInOutTraffic", (reader) => InOutVolumeTrafficMapper(reader, timePeriod),
+            List<InOutVolumeTraffic> resultList = GetItemsSP("Analytics.SP_BillingStats_CompareInOutTraffic", (reader) => InOutVolumeTrafficMapper(reader, timePeriod),
                 fromDate,
                 toDate,
                 customerId,
