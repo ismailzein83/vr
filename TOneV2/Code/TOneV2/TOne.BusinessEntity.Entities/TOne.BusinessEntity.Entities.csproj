@@ -59,6 +59,7 @@
     <Compile Include="CarrierAccountInfo.cs" />
     <Compile Include="CarrierAccountQuery.cs" />
     <Compile Include="CarrierConnection.cs" />
+    <Compile Include="TODCustomerQuery.cs" />
     <Compile Include="TODConsiderationInfo.cs" />
     <Compile Include="CarrierGroup.cs" />
     <Compile Include="CarrierGroupNode.cs" />

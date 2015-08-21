@@ -1,21 +1,26 @@
-﻿CustomerTODManagementController.$inject = ['$scope', 'CarrierAccountAPIService', 'VRModalService'];
-function CustomerTODManagementController($scope, CarrierAccountAPIService, VRModalService) {
+﻿CustomerTODManagementController.$inject = ['$scope', 'CarrierAccountAPIService', 'ZonesService', 'BusinessEntityAPIService_temp', 'VRModalService', 'CarrierTypeEnum'];
+function CustomerTODManagementController($scope, CarrierAccountAPIService,ZonesService, BusinessEntityAPIService ,VRModalService, CarrierTypeEnum) {
     var gridApi;
     defineScope();
     load();
 
     function load() {
+        loadCustomers()
     }
 
     function defineScope() {
-
+        $scope.customers = [];
+        $scope.searchZones = [];
+        $scope.selectedZones = [];
         //$scope.CarrierAccountsDataSource = [];
         //defineMenuActions();
         //$scope.gridReady = function (api) {
         //    gridApi = api;
         //    return retrieveData();
         //};
-        $scope.title="Customer TOD"
+        $scope.searchZones = function (text) {
+            return ZonesService.getSalesZones(text);
+        }
         //$scope.searchClicked = function () {
         //    return retrieveData();
         //};
@@ -57,6 +62,14 @@ function CustomerTODManagementController($scope, CarrierAccountAPIService, VRMod
         //    };
         //};
         //VRModalService.showModal('/Client/Modules/BusinessEntity/Views/CarrierAccountEditor.html', parameters, modalSettings);
+    }
+
+    function loadCustomers() {
+        return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Customer.value ,false).then(function (response) {
+            angular.forEach(response, function (itm) {
+                $scope.customers.push(itm);
+            });
+        });
     }
 }
 

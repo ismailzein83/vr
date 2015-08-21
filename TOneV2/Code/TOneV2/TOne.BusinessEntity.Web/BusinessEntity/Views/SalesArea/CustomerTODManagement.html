@@ -1,33 +1,50 @@
 ﻿<vr-panel ng-controller="Customer_CustomerTODManagementController">
     <vr-form name="formFilter">
-        <h1>{{title}}</h1>
-        <!--<div ng-hide="filterSectionCollapsed">
-        </div>
-        <vr-row removeline>
-            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
-                <div transclude-to="buttons">
-                    <vr-button type="Add" data-onclick="addNewGroup"></vr-button>
-                    <vr-button type="Edit" data-onclick="editGroup" ng-show="currentNode != undefined && currentNode.EntityId != 0"></vr-button>
-                </div>
-            </vr-actionbar>
-        </vr-row>
-        <div>
-            <vr-row>
-                <vr-columns colnum="4">
-                    <vr-treeview on-ready="treeReady"
-                                 datachildrenfield="Children"
-                                 datatextfield="Name"
-                                 selecteditem="currentNode"
-                                 onvaluechanged="treeValueChanged" wholerow>
-                    </vr-treeview>
-                </vr-columns>
-                <vr-columns colnum="2" ng-show="currentNode != undefined && currentNode.EntityId != 0">
-                    <vr-datagrid datasource="::datasource" pagingtype="'PagingOnScroll'" dataretrievalfunction="dataRetrievalFunction" on-ready="onGridReady">
-                        <vr-datagridcolumn headertext="'Carrier Account ID'" field="'CarrierAccountId'" widthfactor="5"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Carrier Account'" field="'CarrierAccountName'" widthfactor="5"></vr-datagridcolumn>
-                    </vr-datagrid>
-                </vr-columns>
+        <vr-form name="formFilter">
+            <div ng-hide="filterSectionCollapsed">
+                <vr-row removeline>
+                    <vr-columns width="normal">
+                        <vr-select label="Customer" withlocalfilter datasource="customers" selectedvalues="selectedCustomer" datatextfield="Name" datavaluefield="CarrierAccountID"
+                                   entityname="Customers">
+                        </vr-select>
+                    </vr-columns>
+                    <vr-columns width="normal">
+                        <vr-select ismultipleselection datasource="searchZones" label="Zones" selectedvalues="selectedZones" datatextfield="Name" datavaluefield="ZoneId"
+                                   entityname="Zones"></vr-select>
+                    </vr-columns>
+                    <vr-columns width="normal">
+                        <vr-datetimepicker type="date" value="effectiveOn" label="Effective On" isrequired></vr-datetimepicker>
+                    </vr-columns>
+
+                </vr-row>
+            </div>
+            <vr-row removeline>
+                <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                    <div transclude-to="buttons">
+                        <vr-button type="Search" formname="formFilter" data-onclick="null"></vr-button>
+                        <!--<vr-button type="Add" data-onclick="AddNewCarrierProfile"></vr-button>-->
+                    </div>
+                </vr-actionbar>
             </vr-row>
-        </div>-->
+            <div vr-loader="isLoading">
+                <vr-row>
+                    <vr-columns width="fullrow">
+                        <vr-datagrid datasource="[]" dataretrievalfunction=" " pagingtype="'PagingOnScroll'" on-ready="gridReady" menuactions="[]" idfield="ProfileID">
+                            <vr-datagridcolumn headertext="'Customer'" field="'Name'">
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Zone'" field="'CompanyName'">
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Definition'" field="'BillingEmail'">
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Start Date'" field="'AccountsCount'">
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'End Date'" field="'AccountsCount'">
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Active'" field="'AccountsCount'">
+                            </vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-columns>
+            </div>
+        </vr-form>
     </vr-form>
 </vr-panel>
