@@ -16,6 +16,9 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout) {
     $scope.doc =  {
         fileId : 1
     };
+    $scope.progress =[];
+    $scope.progress.push(10);
+    $scope.progress.push(20);
     $scope.postMsg = function () {
         $http.post($scope.baseurl + "/api/routing/SaveRouteRule",
       {

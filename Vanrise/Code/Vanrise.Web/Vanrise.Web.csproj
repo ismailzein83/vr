@@ -232,6 +232,7 @@
     <Content Include="Client\Javascripts\Directives\Old\vr-gridview-standard.html" />
     <Content Include="Client\Javascripts\Directives\Pagination\vr-pagination-directive.js" />
     <Content Include="Client\Javascripts\Directives\Pagination\vr-pagination.html" />
+    <Content Include="Client\Javascripts\Directives\ProgressBar\vr-progressbar-directive.js" />
     <Content Include="Client\Javascripts\Directives\TreeView\vr-treeview-directive.js" />
     <Content Include="Client\Javascripts\Modules\appControllers.js" />
     <Content Include="Client\Javascripts\Modules\appRouting.js" />

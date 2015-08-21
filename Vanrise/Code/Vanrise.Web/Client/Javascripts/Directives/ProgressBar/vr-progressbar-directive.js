@@ -7,11 +7,15 @@ app.directive('vrProgressbar', [function () {
 
         restrict: 'E',
         scope: {
-            value: '@',
+            value: '=',
+            gridvalue:'@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            ctrl.values = ctrl.value.split("|");
+            if (ctrl.gridvalue!=undefined)
+                ctrl.values = ctrl.gridvalue.split("|");
+            else
+                ctrl.values = ctrl.value;
         },
         controllerAs: 'ctrl',
         bindToController: true,
@@ -29,18 +33,29 @@ app.directive('vrProgressbar', [function () {
     };
 
     function getTemplate(attrs) {
-        var values = attrs.value.split("|");
+        var values;
+        var gridClass = "";
+        var gridCellTextClass = "";
+        if (attrs.gridvalue != undefined){
+            values = attrs.gridvalue.split("|");
+            gridClass = "vr-datagrid-cell";
+            gridCellTextClass = "vr-datagrid-celltext";
+        }
+        else {
+            values = attrs.value;
+        }
+           
         if (values.length == 0) {
-          return   '<div class="vr-datagrid-cell progress" style="margin-bottom:0px;padding:0px;">'
-                     + '<div class="vr-datagrid-celltext progress-bar progress-bar-gray active" style="width:{{ctrl.value}}%" title="{{ctrl.value}}%">'
+            return '<div class="' + gridClass + ' progress" style="margin-bottom:0px;padding:0px;">'
+                     + '<div class="' + gridCellTextClass + ' progress-bar progress-bar-gray active" style="width:{{ctrl.value}}%" title="{{ctrl.value}}%">'
                      +" {{ctrl.value}}%"
                      +'</div>'
                   +'</div>';
         }
         else {
-            var template = '<div class="vr-datagrid-cell progress" style="margin-bottom:0px;padding:0px;">'
+            var template = '<div class="' + gridClass + ' progress" style="margin-bottom:0px;padding:0px;">'
             for (var i = 0; i < values.length; i++) {
-                template += '<div class="vr-datagrid-celltext progress-bar ' + getProgressColor(i) + ' active" style="width:{{ctrl.values[' + i + ']}}%" title="{{ctrl.values[' + i + ']}}%"></div>'
+                template += '<div class="' + gridCellTextClass + ' progress-bar ' + getProgressColor(i) + ' active" style="width:{{ctrl.values[' + i + ']}}%" title="{{ctrl.values[' + i + ']}}%"></div>'
             }
             template += "</div>";
             return template;

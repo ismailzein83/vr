@@ -397,14 +397,14 @@
         
         function buildRowHtml() {
             ctrl.rowHtml = '';
-            var value;
+            var gridvalue;
             for (var i = 0; i < ctrl.columnDefs.length; i++) {
                 var currentColumn = ctrl.columnDefs[i];
                 var currentColumnHtml = '$parent.ctrl.columnDefs[' + i + ']';
                 ctrl.rowHtml += '<div ng-if="!' + currentColumnHtml + '.isHidden" ng-style="{ \'width\': ' + currentColumnHtml + '.width, \'display\':\'inline-block\'' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}"">';
                 if (currentColumn.type == "MultiProgress") {
                     var values = currentColumn.field.split("|");
-                    ctrl.rowHtml += '<vr-progressbar value="';
+                    ctrl.rowHtml += '<vr-progressbar gridvalue="';
                     for (var j = 0; j < values.length; j++) {
                         ctrl.rowHtml += ('{{::dataItem.' + values[j] + '}}');
                         if (j < values.length-1)
@@ -415,8 +415,8 @@
                
                 }
                 else if (currentColumn.type == "Progress") {
-                    value = "{{::dataItem." + currentColumn.field + "}}";
-                    ctrl.rowHtml += '<vr-progressbar value="' + value +'"></vr-progressbar></div>';
+                    gridvalue = "{{::dataItem." + currentColumn.field + "}}";
+                    ctrl.rowHtml += '<vr-progressbar gridvalue="' + gridvalue + '"></vr-progressbar></div>';
                 }else
                 {
                     ctrl.rowHtml += '<div class="vr-datagrid-cell">'
