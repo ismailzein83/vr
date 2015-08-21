@@ -8,7 +8,7 @@ namespace Vanrise.Integration.Adapters.MSQLReceiveAdapter
 
     public class MySQLReceiveAdapter : BaseReceiveAdapter
     {
-        public override void ImportData(BaseAdapterArgument argument, Func<IImportedData, bool> receiveData)
+        public override void ImportData(int dataSourceId, BaseAdapterArgument argument, Func<IImportedData, bool> receiveData)
         {
             DBAdapterArgument dbAdapterArgument = argument as DBAdapterArgument;
 

@@ -15,8 +15,6 @@ namespace Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments
 
         public string Query { get; set; }
 
-        public int LastId { get; set; }
-
-        public string IDColumn { get; set; }
+        public string StartIndex { get; set; }
     }
 }

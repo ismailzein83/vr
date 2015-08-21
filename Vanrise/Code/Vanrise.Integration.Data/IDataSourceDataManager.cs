@@ -23,5 +23,9 @@ namespace Vanrise.Integration.Data
         bool DeleteDataSource(int dataSourceId);
 
         bool UpdateTaskId(int dataSourceId, int taskId);
+
+        Vanrise.Integration.Entities.DataSourceSettings GetDataSourceSettings(int dataSourceId);
+
+        bool UpdateDataSourceSettings(int dataSourceId, Entities.DataSourceSettings settings);
     }
 }

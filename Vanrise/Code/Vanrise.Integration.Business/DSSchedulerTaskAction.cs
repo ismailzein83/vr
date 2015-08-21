@@ -54,7 +54,7 @@ namespace Vanrise.Integration.Business
 
             BaseReceiveAdapter adapter = (BaseReceiveAdapter)Activator.CreateInstance(Type.GetType(dataSource.AdapterInfo.FQTN));
             adapter.SetLogger(_logger);
-            adapter.ImportData(dataSource.Settings.AdapterArgument, data =>
+            adapter.ImportData(dataSource.DataSourceId, dataSource.Settings.AdapterArgument, data =>
             {
                 ImportedBatchEntry importedBatchEntry = new ImportedBatchEntry();
                 importedBatchEntry.BatchSize = data.BatchSize;
@@ -177,6 +177,7 @@ namespace Vanrise.Integration.Business
             parameters.GenerateInMemory = true;
             parameters.IncludeDebugInformation = true;
             parameters.ReferencedAssemblies.Add("System.dll");
+            parameters.ReferencedAssemblies.Add("System.Data.dll");
             parameters.ReferencedAssemblies.Add(typeof(DataMapper).Assembly.Location);
             parameters.ReferencedAssemblies.Add(typeof(Vanrise.Queueing.Entities.PersistentQueueItem).Assembly.Location);
 
@@ -225,6 +226,7 @@ namespace Vanrise.Integration.Business
                 using System;
                 using System.Collections.Generic;
                 using System.IO;
+                using System.Data;
                 using Vanrise.Integration.Entities;
 
                 namespace Vanrise.Integration.Mappers

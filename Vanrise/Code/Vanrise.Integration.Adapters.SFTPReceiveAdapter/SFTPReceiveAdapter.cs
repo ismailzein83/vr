@@ -62,7 +62,7 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
        
         #endregion
 
-            public override void ImportData(BaseAdapterArgument argument, Func<IImportedData, bool> receiveData)
+            public override void ImportData(int dataSourceId, BaseAdapterArgument argument, Func<IImportedData, bool> receiveData)
         {
 
             FTPAdapterArgument ftpAdapterArgument = argument as FTPAdapterArgument;

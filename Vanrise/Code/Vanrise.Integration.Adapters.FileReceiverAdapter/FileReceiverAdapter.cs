@@ -59,7 +59,7 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
 
         #endregion
 
-        public override void ImportData(BaseAdapterArgument argument, Func<IImportedData, bool> receiveData)
+        public override void ImportData(int dataSourceId, BaseAdapterArgument argument, Func<IImportedData, bool> receiveData)
         {
             FileAdapterArgument fileAdapterArgument = argument as FileAdapterArgument;
 

@@ -11,6 +11,8 @@ namespace Vanrise.Integration.Entities
     {
         public IDataReader Reader { get; set; }
 
+        public string StartIndex { get; set; }
+
         public string Description
         {
             get { return null; }

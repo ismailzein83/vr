@@ -73,6 +73,18 @@ namespace Vanrise.Integration.Data.SQL
             return (recordesEffected > 0);
         }
 
+        public Entities.DataSourceSettings GetDataSourceSettings(int dataSourceId)
+        {
+            object result = ExecuteScalarSP("integration.sp_DataSource_GetSettings", dataSourceId);
+            return Common.Serializer.Deserialize<Vanrise.Integration.Entities.DataSourceSettings>(result.ToString());
+        }
+
+        public bool UpdateDataSourceSettings(int dataSourceId, Entities.DataSourceSettings settings)
+        {
+            int recordsEffected = ExecuteNonQuerySP("integration.sp_DataSource_UpdateSettings", dataSourceId, Common.Serializer.Serialize(settings));
+            return recordsEffected > 0;
+        }
+
         Vanrise.Integration.Entities.DataSource DataSourceMapper(IDataReader reader)
         {
             Vanrise.Integration.Entities.DataSource dataSource = new Vanrise.Integration.Entities.DataSource
@@ -87,5 +99,8 @@ namespace Vanrise.Integration.Data.SQL
 
             return dataSource;
         }
+
+
+
     }
 }

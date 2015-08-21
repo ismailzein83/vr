@@ -159,5 +159,17 @@ namespace Vanrise.Integration.Business
             QueueExecutionFlowDefinitionManager manager = new QueueExecutionFlowDefinitionManager();
             return manager.GetAll();
         }
+
+        public Vanrise.Integration.Entities.DataSourceSettings GetDataSourceSettings(int dataSourceId)
+        {
+            IDataSourceDataManager manager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
+            return manager.GetDataSourceSettings(dataSourceId);
+        }
+
+        public bool UpdateDataSourceSettings(int dataSourceId, Vanrise.Integration.Entities.DataSourceSettings settings)
+        {
+            IDataSourceDataManager manager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
+            return manager.UpdateDataSourceSettings(dataSourceId, settings);
+        }
     }
 }

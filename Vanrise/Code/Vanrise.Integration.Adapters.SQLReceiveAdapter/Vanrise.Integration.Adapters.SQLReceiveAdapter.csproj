@@ -51,6 +51,10 @@
       <Project>{cb9c51d9-f3e9-4025-80b7-60207980ac9c}</Project>
       <Name>Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Integration.Business\Vanrise.Integration.Business.csproj">
+      <Project>{1f22483a-d3db-48ee-aea8-8988bdb3b9a1}</Project>
+      <Name>Vanrise.Integration.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Integration.Entities\Vanrise.Integration.Entities.csproj">
       <Project>{bc343c8c-a1ba-4d9e-b4da-c59029594d50}</Project>
       <Name>Vanrise.Integration.Entities</Name>

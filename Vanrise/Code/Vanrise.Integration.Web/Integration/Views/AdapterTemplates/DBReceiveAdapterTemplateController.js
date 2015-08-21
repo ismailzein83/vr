@@ -10,6 +10,8 @@ function DBReceiveAdapterTemplateController($scope, DataSourceAPIService) {
         $scope.connectionString = undefined;
         $scope.description = undefined;
         $scope.query = undefined;
+        $scope.startIndex = undefined;
+
 
         $scope.dataSourceAdapter.getData = function () {
 
@@ -17,7 +19,8 @@ function DBReceiveAdapterTemplateController($scope, DataSourceAPIService) {
                 $type: "Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments.DBAdapterArgument, Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments",
                 ConnectionString: $scope.connectionString,
                 Description: $scope.description,
-                Query: $scope.query
+                Query: $scope.query,
+                StartIndex: $scope.startIndex
             };
         };
 
@@ -36,6 +39,7 @@ function DBReceiveAdapterTemplateController($scope, DataSourceAPIService) {
             $scope.connectionString = data.ConnectionString;
             $scope.description = data.Description;
             $scope.query = data.Query;
+            $scope.startIndex = data.StartIndex;
         }
 
         isFormLoaded = true;

@@ -9,7 +9,7 @@ namespace Vanrise.Integration.Entities
 {
     public abstract class BaseReceiveAdapter
     {
-        public abstract void ImportData(BaseAdapterArgument argument, Func<IImportedData, bool> receiveData);
+        public abstract void ImportData(int dataSourceId, BaseAdapterArgument argument, Func<IImportedData, bool> receiveData);
 
         //public abstract bool IsCredentialsAvailable(string connectionString);
 
