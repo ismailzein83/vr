@@ -13,7 +13,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public int FraudCases { get; set; }
 
-        public float ClosedoverGenerated { get; set; }
+        public decimal ClosedoverGenerated { get; set; }
+
+        public DateTime? DateDay { get; set; }
 
              
     }

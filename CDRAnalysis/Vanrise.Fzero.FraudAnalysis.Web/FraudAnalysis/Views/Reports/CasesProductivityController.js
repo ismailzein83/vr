@@ -85,7 +85,8 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
         var query = {
             StrategiesList: removeLastComma(strategiesList),
             FromDate: $scope.fromDate,
-            ToDate: $scope.toDate
+            ToDate: $scope.toDate,
+            GroupDaily: $scope.groupDaily
         };
 
         return mainGridAPI.retrieveData(query);

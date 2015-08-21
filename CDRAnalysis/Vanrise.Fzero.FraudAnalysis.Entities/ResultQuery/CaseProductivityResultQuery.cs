@@ -15,5 +15,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public DateTime? ToDate { get; set; }
 
+        public bool GroupDaily { get; set; }
+
     }
 }
