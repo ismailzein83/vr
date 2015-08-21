@@ -80,6 +80,7 @@
     <Compile Include="NumberProfileManager.cs" />
     <Compile Include="NormalCDRManager.cs" />
     <Compile Include="PredefinedManager.cs" />
+    <Compile Include="ReportingManager.cs" />
     <Compile Include="StrategyManager.cs" />
   </ItemGroup>
   <ItemGroup>

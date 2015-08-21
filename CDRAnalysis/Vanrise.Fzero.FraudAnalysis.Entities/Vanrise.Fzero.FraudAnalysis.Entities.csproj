@@ -66,6 +66,7 @@
     <Compile Include="ResultQuery\AccountCaseResultQuery.cs" />
     <Compile Include="ResultQuery\NumberProfileResultQuery.cs" />
     <Compile Include="ResultQuery\NormalCDRResultQuery.cs" />
+    <Compile Include="ResultQuery\CaseProductivityResultQuery.cs" />
     <Compile Include="ResultQuery\StrategyResultQuery.cs" />
     <Compile Include="AccountThreshold.cs" />
     <Compile Include="Predefined\Period.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="NumberProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Aggregates\CountAggregate.cs" />
+    <Compile Include="CaseProductivity.cs" />
     <Compile Include="Strategy.cs" />
     <Compile Include="AccountCase.cs" />
     <Compile Include="SuspiciousNumber.cs" />

@@ -6,7 +6,7 @@
 
 
     function GetFilteredCasesProductivity(input) {
-        return BaseAPIService.post("/api/Strategy/GetFilteredCasesProductivity", input
+        return BaseAPIService.post("/api/Reporting/GetFilteredCasesProductivity", input
            );
     }
     

@@ -59,6 +59,7 @@
     <Compile Include="IDashboardManager.cs" />
     <Compile Include="INormalCDRDataManager.cs" />
     <Compile Include="IPredefinedDataManager.cs" />
+    <Compile Include="IReportingDataManager.cs" />
     <Compile Include="IStrategyDataManager.cs" />
     <Compile Include="ISuspiciousNumberDataManager.cs" />
     <Compile Include="ICaseManagementDataManager.cs" />
