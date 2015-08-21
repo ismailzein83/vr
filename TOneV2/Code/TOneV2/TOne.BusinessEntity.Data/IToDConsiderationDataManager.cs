@@ -10,5 +10,6 @@ namespace TOne.BusinessEntity.Data
     public interface IToDConsiderationDataManager : IDataManager
     {
         List<ToDConsideration> GetToDConsideration(string customerId, int zoneId, DateTime when);
+        Vanrise.Entities.BigResult<TODConsiderationInfo> GetCarrierMasksByCriteria(Vanrise.Entities.DataRetrievalInput<TODCustomerQuery> input);
     }
 }
