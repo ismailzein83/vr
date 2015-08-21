@@ -187,6 +187,8 @@
     <Content Include="BusinessEntity\Views\CarrierProfileManagementController.js" />
     <Content Include="BusinessEntity\Views\Rates.html" />
     <Content Include="BusinessEntity\Views\RatesController.js" />
+    <Content Include="BusinessEntity\Views\SalesArea\CustomerTODManagementController.js" />
+    <Content Include="BusinessEntity\Views\SalesArea\CustomerTODManagement.html" />
     <Content Include="BusinessEntity\Views\SwitchEditor.html" />
     <Content Include="BusinessEntity\Views\SwitchEditorController.js" />
     <Content Include="BusinessEntity\Views\SwitchManagment.html" />
