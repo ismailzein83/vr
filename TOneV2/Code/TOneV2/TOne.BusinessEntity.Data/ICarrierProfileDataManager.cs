@@ -14,5 +14,7 @@ namespace TOne.BusinessEntity.Data
         CarrierProfile GetCarrierProfile(int profileId);
         bool UpdateCarrierProfile(CarrierProfile carrierProfile);
         bool AddCarrierProfile(CarrierProfile carrierProfile, out int insertedId);
+
+        List<CarrierProfile> GetAllCarrierProfiles();
     }
 }

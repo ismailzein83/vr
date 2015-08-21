@@ -14,6 +14,7 @@ namespace TOne.Analytics.Business
     {
         private readonly ICarrierSummaryStatsDataManager _datamanager;
         private readonly CarrierAccountManager _cmanager;
+        private readonly CarrierProfileManager _cpmanager;
 
         public CarrierSummaryStatsManager()
         {
@@ -37,9 +38,10 @@ namespace TOne.Analytics.Business
             else
                 input.Query.GroupByProfile = "N";
 
-            List<CarrierSummaryStats> lstCarrierSummaryStats = _datamanager.GetCarrierSummaryStats(input).Data.ToList<CarrierSummaryStats>();
+            Vanrise.Entities.BigResult<Entities.CarrierSummaryStats> lstCarrierSummaryStats = _datamanager.GetCarrierSummaryStats(input);
             List<CarrierAccount> activeCustomers = new List<CarrierAccount>();
             List<CarrierAccount> activeSuppliers = new List<CarrierAccount>();
+            List<CarrierAccount> lstCarriers = _cmanager.GetAllCarrierAccounts().Values.ToList<CarrierAccount>();
             //-----------------------------------------------------------------------------------
             List<CarrierProfile> activeProfile = new List<CarrierProfile>();
             //-----------------------------------------------------------------------------------
@@ -49,43 +51,27 @@ namespace TOne.Analytics.Business
             decimal Sale = 0;
             decimal Profit = 0;
             decimal ProfitPercentage = 0;
+            List<CarrierSummaryStats> lstCarrierSummarySta = lstCarrierSummaryStats.Data.ToList<CarrierSummaryStats>();
+            
 
-            if (input.Query.GroupByProfile == "False")
+            if (input.Query.GroupByProfile == "N")
             {
-                foreach (CarrierSummaryStats row in lstCarrierSummaryStats)
+                foreach (CarrierSummaryStats row in lstCarrierSummarySta)
                 {
-
                     if (input.Query.CarrierType == "Customer")
                         if (row.GroupID != null && row.GroupID.ToString() != "")
                         {
-                            //row["CarrierID"] = row["CustomerID"];
-
-                            //TABS.CarrierAccount account = null;
-                            //if (TABS.CarrierAccount.All.ContainsKey("" + row["CustomerID"]))
-                            //    account = TABS.CarrierAccount.All["" + row["CustomerID"]];
-                            //else
-                            //    account = TABS.ObjectAssembler.Get<TABS.CarrierAccount>("" + row["CustomerID"]);
-
-                            //row["Carrier"] = account.NameAsCustomer;
-
                             CarrierAccount account = _cmanager.GetCarrierAccount(row.GroupID);
                             activeCustomers.Add(account);
+                            row.GroupName = account.ProfileName;
                         }
 
                     if (input.Query.CarrierType == "Supplier")
                         if (row.GroupID != null && row.GroupID.ToString() != "")
                         {
-                            //row["CarrierID"] = row["SupplierID"];
-
-                            //TABS.CarrierAccount account = null;
-                            //if (TABS.CarrierAccount.All.ContainsKey("" + row["SupplierID"]))
-                            //    account = TABS.CarrierAccount.All["" + row["SupplierID"]];
-                            //else
-                            //    account = TABS.ObjectAssembler.Get<TABS.CarrierAccount>("" + row["SupplierID"]);
-
-                            //row["Carrier"] = account.NameAsSupplier;
                             CarrierAccount account = _cmanager.GetCarrierAccount(row.GroupID);
                             activeSuppliers.Add(account);
+                            row.GroupName = account.ProfileName;
                         }
 
                     TotalDurations += (decimal)row.DurationsInMinutes;
@@ -95,51 +81,85 @@ namespace TOne.Analytics.Business
                     Profit += Convert.ToDecimal(row.Profit);
                     decimal costAmmount = Convert.ToDecimal(row.Cost_Nets);
                     decimal saleAmmount = Convert.ToDecimal(row.Sale_Nets);
-                    decimal duration;
 
                     try
                     {
-                        //ProfitPercentage = saleAmmount == 0 ? 0 : ((saleAmmount - costAmmount) / saleAmmount) * 100;
-                        //row.ProfitePercentage = Math.Round(ProfitPercentage, 2);// String.Format("{0:P}", ProfitPercentage);
+                        ProfitPercentage = saleAmmount == 0 ? 0 : ((saleAmmount - costAmmount) / saleAmmount) * 100;
+                        row.ProfitPercentage = Math.Round(ProfitPercentage, 2);
                     }
                     catch { }
                 }
 
-                //if (ChkShowInactive.Checked)
-                //{
-                //    if (CarrierType.SelectedValue == "Customer")
-                //    {
-                //        foreach (var account in TABS.CarrierAccount.Customers.Except(activeCustomers))
-                //        {
-                //            DataRow row = data.NewRow();
-                //            row["CarrierID"] = account.CarrierAccountID;
-                //            row["Carrier"] = account.NameAsCustomer;
-                //            data.Rows.Add(row);
-                //        }
-                //    }
+                if (input.Query.ShowInactive == "True")
+                {
+                    if (input.Query.CarrierType == "Customer")
+                    {
+                        foreach (var account in _cmanager.GetAllCarriers(CarrierType.Customer).Except(activeCustomers))
+                        {
+                            CarrierSummaryStats row = new CarrierSummaryStats();
+                            row.GroupName = account.ProfileName;
+                            lstCarrierSummarySta.Add(row);
+                        }
+                    }
 
-                //    if (CarrierType.SelectedValue == "Supplier")
-                //    {
-                //        foreach (var account in TABS.CarrierAccount.Suppliers.Except(activeSuppliers))
-                //        {
-                //            DataRow row = data.NewRow();
-                //            row["CarrierID"] = account.CarrierAccountID;
-                //            row["Carrier"] = account.NameAsSupplier;
-                //            data.Rows.Add(row);
-                //        }
-                //    }
-
-                //}
-                //rgCarrierSummary.Columns.FindByUniqueName("clmProfile").Visible = false;
-                //rgCarrierSummary.Columns.FindByUniqueName("clmCustomer").Visible = true;
-                //rgCarrierSummary.Columns.FindByUniqueName("clmZoneDetails").Visible = true;
-                //rgCarrierSummary.Columns.FindByUniqueName("clmCarrierDetails").Visible = true;
+                    if (input.Query.CarrierType == "Supplier")
+                    {
+                        foreach (var account in _cmanager.GetAllCarriers(CarrierType.Supplier).Except(activeSuppliers))
+                        {
+                            CarrierSummaryStats row = new CarrierSummaryStats();
+                            row.GroupName = account.ProfileName;
+                            lstCarrierSummarySta.Add(row);
+                        }
+                    }
+                }
             }
 
+            if (input.Query.GroupByProfile == "Y")
+            {
+                List<int> NEwProfiles = new List<int>();
+                foreach (CarrierSummaryStats row in lstCarrierSummarySta)
+                {
+                    if (row.GroupID != null && row.GroupID.ToString() != "")
+                    {
+                        int profileId = 0;
+                        int.TryParse(row.GroupID, out profileId);
+                        CarrierProfile profile = _cpmanager.GetCarrierProfile(profileId);
+                        row.GroupName = profile.Name;
+                        NEwProfiles.Add(profileId);
+                    }
+                    
+                    TotalDurations += (decimal)row.DurationsInMinutes;
+                    Attempts += (int)row.Attempts;
+                    Cost += Convert.ToDecimal(row.Cost_Nets);
+                    Sale += Convert.ToDecimal(row.Sale_Nets);
+                    Profit += Convert.ToDecimal(row.Profit);
+                    decimal costAmmount = Convert.ToDecimal(row.Cost_Nets);
+                    decimal saleAmmount = Convert.ToDecimal(row.Sale_Nets);
+                    
+                    try
+                    {
+                        ProfitPercentage = (saleAmmount - costAmmount) / saleAmmount;
+                        row.ProfitPercentage = Math.Round(ProfitPercentage, 2);
+                    }
+                    catch { }
+                }
 
-
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, _datamanager.GetCarrierSummaryStats(input));
+                if (input.Query.ShowInactive == "True")
+                {
+                    foreach (CarrierAccount account in _cmanager.GetAllCarriers(CarrierType.Customer).Except(activeCustomers))
+                    {
+                        if (!NEwProfiles.Contains(account.ProfileId))
+                        {
+                            CarrierSummaryStats NewRow = new CarrierSummaryStats();
+                            NewRow.GroupName = account.ProfileName;
+                            lstCarrierSummarySta.Add(NewRow);
+                            NEwProfiles.Add(account.ProfileId);
+                        }
+                    }
+                }
+            }
+            lstCarrierSummaryStats.Data = lstCarrierSummarySta;
+           return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input,lstCarrierSummaryStats );
         }
     }
 }

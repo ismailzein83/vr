@@ -46,6 +46,11 @@ namespace TOne.BusinessEntity.Business
             return _dataManager.GetCarriers(carrierType,null);
         }
 
+        public List<CarrierAccount> GetAllCarriers(CarrierType carrierType)
+        {
+            return _dataManager.GetAllCarriers(carrierType);
+        }
+
         public int InsertCarrierTest(string CarrierAccountID, string Name)
         {
             return _dataManager.InsertCarrierTest(CarrierAccountID, Name);

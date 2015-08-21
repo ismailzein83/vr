@@ -45,6 +45,11 @@ namespace TOne.BusinessEntity.Data.SQL
             return carriers;
         }
 
+        public List<CarrierAccount> GetAllCarriers(CarrierType carrierType)
+        {
+            return GetItemsSP("BEntity.sp_CarrierAccount_GetAll", CarrierAccountMapper, (int)carrierType);
+        }
+
 
         private string CreateQuery(List<string> assignedCarriers, CarrierType carrierType)
         {

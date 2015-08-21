@@ -23,5 +23,7 @@ namespace TOne.Analytics.Entities
         public double? Profit { get; set; }
         public double? Percentage { get; set; }
         public int rownIndex { get; set; }
+        public decimal? ProfitPercentage { get; set; }
+        public string GroupName { get; set; }
     }
 }

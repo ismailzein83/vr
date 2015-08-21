@@ -64,7 +64,7 @@
         }
 
         function loadCarriers() {
-            return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.SaleZone.value).then(function (response) {
+            return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.SaleZone.value,false).then(function (response) {
                 angular.forEach(response, function (itm) {
                     $scope.datasource.push(itm);
                 });

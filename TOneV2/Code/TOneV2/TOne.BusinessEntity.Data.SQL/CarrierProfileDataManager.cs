@@ -22,6 +22,11 @@ namespace TOne.BusinessEntity.Data.SQL
             return RetrieveData(input, createTempTableAction, CarrierProfileMapper);
         }
 
+        public List<CarrierProfile> GetAllCarrierProfiles()
+        {
+            return GetItemsSP("BEntity.sp_CarrierProfile_GetAll", CarrierProfileMapper, null);
+        }
+
         public CarrierProfile GetCarrierProfile(int profileId)
         {
             return GetItemSP("BEntity.sp_CarrierProfile_GetByProfileId", CarrierProfileMapper, profileId);

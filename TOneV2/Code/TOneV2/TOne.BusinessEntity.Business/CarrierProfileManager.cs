@@ -60,5 +60,10 @@ namespace TOne.BusinessEntity.Business
 
             return insertOperationOutput;
         }
+
+        public List<CarrierProfile> GetAllCarrierProfiles()
+        {
+            return _dataManager.GetAllCarrierProfiles();
+        }
     }
 }

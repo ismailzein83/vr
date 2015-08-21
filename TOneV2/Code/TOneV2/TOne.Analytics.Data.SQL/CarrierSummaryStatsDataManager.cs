@@ -27,19 +27,19 @@ namespace TOne.Analytics.Data.SQL
             return new CarrierSummaryStats
             {
                 GroupID = reader["GroupID"] as string,
-                Attempts = GetReaderValue<double>(reader, "Attempts"),
-                SuccessfulAttempts = GetReaderValue<double>(reader, "SuccessfulAttempts"),
-                DurationsInMinutes = GetReaderValue<double>(reader, "DurationsInMinutes"),
-                ASR = GetReaderValue<double>(reader, "ASR"),
-                ACD = GetReaderValue<double>(reader, "ACD"),
-                DeliveredASR = GetReaderValue<double>(reader, "DeliveredASR"),
-                AveragePDD = GetReaderValue<double>(reader, "AveragePDD"),
-                NumberOfCalls = GetReaderValue<double>(reader, "NumberOfCalls"),
-                PricedDuration = GetReaderValue<double>(reader, "PricedDuration"),
-                Sale_Nets = GetReaderValue<double>(reader, "Sale_Nets"),
-                Cost_Nets = GetReaderValue<double>(reader, "Cost_Nets"),
-                Profit = GetReaderValue<double>(reader, "Profit"),
-                Percentage = GetReaderValue<double>(reader, "Percentage"),
+                Attempts = Math.Round(GetReaderValue<double>(reader, "Attempts"), 2),
+                SuccessfulAttempts = Math.Round(GetReaderValue<double>(reader, "SuccessfulAttempts") ,2),
+                DurationsInMinutes = Math.Round(GetReaderValue<double>(reader, "DurationsInMinutes"),2),
+                ASR = Math.Round(GetReaderValue<double>(reader, "ASR"), 2),
+                ACD = Math.Round(GetReaderValue<double>(reader, "ACD"), 2),
+                DeliveredASR = Math.Round(GetReaderValue<double>(reader, "DeliveredASR"), 2),
+                AveragePDD = Math.Round(GetReaderValue<double>(reader, "AveragePDD"), 2),
+                NumberOfCalls = Math.Round(GetReaderValue<double>(reader, "NumberOfCalls"), 2),
+                PricedDuration = Math.Round(GetReaderValue<double>(reader, "PricedDuration"), 2),
+                Sale_Nets = Math.Round(GetReaderValue<double>(reader, "Sale_Nets"), 2),
+                Cost_Nets = Math.Round(GetReaderValue<double>(reader, "Cost_Nets"), 2),
+                Profit = Math.Round(GetReaderValue<double>(reader, "Profit"), 2),
+                Percentage = Math.Round(GetReaderValue<double>(reader, "Percentage"), 2),
                 rownIndex = GetReaderValue<int>(reader, "rownIndex")
             };
         }
