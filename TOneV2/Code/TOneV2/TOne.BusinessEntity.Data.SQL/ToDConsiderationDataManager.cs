@@ -67,7 +67,7 @@ namespace TOne.BusinessEntity.Data.SQL
             return GetItemsSP("BEntity.sp_ToDConsideration_GetToDConsiderations", ToDConsiderationMapper, ToDBNullIfDefault(zoneId), customerId, when);
         }
 
-        public Vanrise.Entities.BigResult<TODConsiderationInfo> GetCarrierMasksByCriteria(Vanrise.Entities.DataRetrievalInput<TODCustomerQuery> input)
+        public Vanrise.Entities.BigResult<TODConsiderationInfo> GetToDConsiderationByCriteria(Vanrise.Entities.DataRetrievalInput<TODCustomerQuery> input)
         {
             return RetrieveData(input, (tempTableName) =>
             {

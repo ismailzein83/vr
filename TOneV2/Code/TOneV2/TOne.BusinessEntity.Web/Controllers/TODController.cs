@@ -11,11 +11,12 @@ namespace TOne.BusinessEntity.Web.Controllers
 {
     public class TODController : Vanrise.Web.Base.BaseAPIController
     {
-
+        [HttpPost]
         public object GetCutomerTODFromTempTable(Vanrise.Entities.DataRetrievalInput<TODCustomerQuery> input)
         {
-           // tod manager = new AccountManagerManager();
-            return null ;
+
+            TODManager manager = new TODManager();
+            return manager.GetFilteredCustomerTOD(input);
         }
 
        

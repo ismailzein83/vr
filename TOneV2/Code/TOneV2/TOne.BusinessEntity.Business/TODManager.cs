@@ -19,8 +19,7 @@ namespace TOne.BusinessEntity.Business
 
         public Vanrise.Entities.IDataRetrievalResult<TODConsiderationInfo> GetFilteredCustomerTOD(Vanrise.Entities.DataRetrievalInput<TODCustomerQuery> input)
         {
-            return null;
-                //Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, _dataManager.GetCarrierMasksByCriteria(input));
+            return  Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, _dataManager.GetToDConsiderationByCriteria(input));
         }
         
     }
