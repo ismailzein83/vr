@@ -55,10 +55,24 @@ namespace TOne.BusinessEntity.Data.SQL
             //};
         }
 
+        private ToDConsiderationinfo ToDConsiderationINMapper(IDataReader reader)
+        {
+           
+         
+        }
+
         public List<ToDConsideration> GetToDConsideration(string customerId, int zoneId, DateTime when)
         {
             return GetItemsSP("BEntity.sp_ToDConsideration_GetToDConsiderations", ToDConsiderationMapper, ToDBNullIfDefault(zoneId), customerId, when);
         }
 
+        public Vanrise.Entities.BigResult<CarrierMask> GetCarrierMasksByCriteria(Vanrise.Entities.DataRetrievalInput<CarrierMaskQuery> input)
+        {
+            return RetrieveData(input, (tempTableName) =>
+            {
+                ExecuteNonQuerySP("BEntity.sp_CarrierMask_CreateTempForFiltered", tempTableName, input.Query.Name);
+
+            }, CarrierMaskMapper);
+        }
     }
 }

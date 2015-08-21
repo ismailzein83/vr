@@ -71,6 +71,7 @@
     <Compile Include="SwitchDataManager.cs" />
     <Compile Include="TariffDataManager.cs" />
     <Compile Include="ToDConsiderationDataManager.cs" />
+    <Compile Include="ToDConsiderationinfo.cs" />
     <Compile Include="ZoneDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
