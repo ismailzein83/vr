@@ -170,6 +170,8 @@
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_Delete.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_CreateTempForFiltered.sql" />
     <Build Include="bp\Stored Procedures\sp_BPDefinition_CreateTempForFiltered.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSource_UpdateSettings.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSource_GetSettings.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
