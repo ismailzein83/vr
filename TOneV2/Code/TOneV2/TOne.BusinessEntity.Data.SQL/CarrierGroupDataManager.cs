@@ -20,7 +20,7 @@ namespace TOne.BusinessEntity.Data.SQL
 
         public List<CarrierAccount> GetCarrierGroupMembers(IEnumerable<int> carrierGroupIds)
         {
-            DataTable dtCarrierGroupMembers = BuildCarrierAccountInfoTable(carrierGroupIds);
+            DataTable dtCarrierGroupMembers = BuildCarrierAccountInfoTable<int>(carrierGroupIds, "ID");
 
             return GetItemsSPCmd("[BEntity].[sp_CarrierGroupMember_GetByCarrierGroupIds]",
                   CarrierAccountDataManager.CarrierAccountMapper,
@@ -35,114 +35,51 @@ namespace TOne.BusinessEntity.Data.SQL
 
         public Vanrise.Entities.BigResult<CarrierAccount> GetCarrierGroupMembers(Vanrise.Entities.DataRetrievalInput<CarrierGroupQuery> input, IEnumerable<int> carrierGroupIds,List<string> filter)
         {
-           // DataTable dtCarrierGroupMembers = BuildCarrierAccountInfoTable(carrierGroupIds);
-
-            Action<string> createTempTableAction = (tempTableName) =>
+            DataTable dtCarrierGroupMembers = BuildCarrierAccountInfoTable<int>(carrierGroupIds,"ID");
+            DataTable dtAssignedCarriers=new DataTable();
+            if (filter != null)
+             dtAssignedCarriers= BuildCarrierAccountInfoTable<string>(filter, "CarrierID");
+            return RetrieveData(input, (tempTableName) =>
             {
-                ExecuteNonQueryText(CreateQuery(tempTableName, filter, carrierGroupIds), (cmd) =>
+                //tempTableName, lstCarrierGroupIds
+                ExecuteNonQuerySPCmd("BEntity.sp_CarrierGroupMember_CreateTempForCarrierGroupIds", (cmd) =>
                 {
+                    var dtPrm = new SqlParameter("@CarrierGroupIds", SqlDbType.Structured);
+                    dtPrm.Value = dtCarrierGroupMembers;
+                    cmd.Parameters.Add(dtPrm);
+
+                    var tempTableNamePrm = new SqlParameter("@TempTableName", SqlDbType.VarChar);
+                    tempTableNamePrm.Value = tempTableName;
+                    cmd.Parameters.Add(tempTableNamePrm);
+                    if (filter != null)
+                    {
+                        var assignedCarriers = new SqlParameter("@AssignedCarriers", SqlDbType.Structured);
+                        assignedCarriers.Value = dtAssignedCarriers;
+                        cmd.Parameters.Add(assignedCarriers);
+                    }
+                    
+
                 });
-            };
-            return RetrieveData(input, createTempTableAction, CarrierAccountDataManager.CarrierAccountMapper);
 
-            //return RetrieveData(input, (tempTableName) =>
-            //{
-            //    //tempTableName, lstCarrierGroupIds
-            //    ExecuteNonQuerySPCmd("BEntity.sp_CarrierGroupMember_CreateTempForCarrierGroupIds", (cmd) =>
-            //    {
-            //        var dtPrm = new SqlParameter("@CarrierGroupIds", SqlDbType.Structured);
-            //        dtPrm.Value = dtCarrierGroupMembers;
-            //        cmd.Parameters.Add(dtPrm);
-
-            //        var tempTableNamePrm = new SqlParameter("@TempTableName", SqlDbType.VarChar);
-            //        tempTableNamePrm.Value = tempTableName;
-            //        cmd.Parameters.Add(tempTableNamePrm);
-
-            //    });
-
-            //}, CarrierAccountDataManager.CarrierAccountMapper);
+            }, CarrierAccountDataManager.CarrierAccountMapper);
         }
 
 
-
-        private string CreateQuery(string tempTableName, List<string> filter, IEnumerable<int> carrierGroupIds)
-        {
-            StringBuilder whereBuilder = new StringBuilder();
-            StringBuilder queryBuilder = new StringBuilder(@"
-
-                                           
-                                            IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
-	                                        BEGIN
-			                                WITH CarrierAccountIDs (CarrierAccountID)
-		                                	AS
-			                                (
-			                                	SELECT DISTINCT cgm.CarrierAccountID
-			                                	FROM BEntity.CarrierGroupMember as cgm WHERE #CARRIERWHEREFILTER#
-			                                ) , AllCarrierAccounts AS (
-		    
-				                            SELECT ca.CarrierAccountId,
-					                                cp.ProfileId ,
-						                            cp.Name AS ProfileName,
-						                            cp.CompanyName AS ProfileCompanyName,
-						                            ca.ActivationStatus,
-						                            ca.RoutingStatus,
-						                            ca.AccountType,
-						                            ca.CustomerPaymentType,
-						                            ca.SupplierPaymentType,
-						                            ca.NameSuffix,
-						                            '' as CarrierAccountName
-			                                        FROM CarrierAccount  as ca WITH(NOLOCK) Join CarrierAccountIDs as caIds on ca.CarrierAccountID = caIds.CarrierAccountID
-										            INNER JOIN CarrierProfile cp on ca.ProfileID = cp.ProfileID
-                                                    #WHERESTRING#
-                                                     #FILTER#
-			                                )
-			
-			                                SELECT * INTO #TEMPTABLE#  FROM AllCarrierAccounts
-		                                    END
-                                                ");
-            StringBuilder whereString = new StringBuilder();
-            StringBuilder carrierAccountWhereBuilder = new StringBuilder();
-            HashSet<string> joinStatement = new HashSet<string>();
-            AddFilter<string>(whereBuilder, filter, "ca.CarrierAccountId");
-
-            AddFilter<int>(carrierAccountWhereBuilder, carrierGroupIds, "cgm.CarrierGroupID");
-
-            if (whereBuilder.Length > 0)
-                whereString.Append(" Where ");
-            queryBuilder.Replace("#CARRIERWHEREFILTER#", carrierAccountWhereBuilder.ToString());
-            queryBuilder.Replace("#TEMPTABLE#", tempTableName);
-            queryBuilder.Replace("#WHERESTRING#", whereString.ToString());
-            queryBuilder.Replace("#FILTER#", whereBuilder.ToString());
-            return queryBuilder.ToString();
-        }
-
-        public void AddFilter<T>(StringBuilder whereBuilder, IEnumerable<T> values, string column)
-        {
-            if (whereBuilder.Length!=0)
-                whereBuilder.AppendFormat(" AND " );
-            if (values != null && values.Count() > 0)
-            {
-                if (typeof(T) == typeof(string))
-                    whereBuilder.AppendFormat(" {0} IN ('{1}')", column, String.Join("', '", values));
-                else
-                    whereBuilder.AppendFormat(" {0} IN ({1})", column, String.Join(", ", values));
-            }
-        }
-
-
-
-        internal static DataTable BuildCarrierAccountInfoTable(IEnumerable<int> carrierGroupIds)
+        internal static DataTable BuildCarrierAccountInfoTable<T>(IEnumerable<T> carrierGroupIds,string column)
         {
             DataTable dtCarrierAccountInfo = new DataTable();
-            dtCarrierAccountInfo.Columns.Add("ID", typeof(int));
-            dtCarrierAccountInfo.BeginLoadData();
-            foreach (var z in carrierGroupIds)
-            {
-                DataRow dr = dtCarrierAccountInfo.NewRow();
-                dr["ID"] = z;
-                dtCarrierAccountInfo.Rows.Add(dr);
-            }
-            dtCarrierAccountInfo.EndLoadData();
+           
+                dtCarrierAccountInfo.Columns.Add(column, typeof(T));
+                dtCarrierAccountInfo.BeginLoadData();
+                foreach (var z in carrierGroupIds)
+                {
+                    DataRow dr = dtCarrierAccountInfo.NewRow();
+                    dr[column] = z;
+                    dtCarrierAccountInfo.Rows.Add(dr);
+                }
+                dtCarrierAccountInfo.EndLoadData();
+            
+            
             return dtCarrierAccountInfo;
         }
 
