@@ -23,5 +23,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         {
             throw new NotImplementedException();
         }
+
+
+        public Vanrise.Entities.BigResult<LinesDetected> GetFilteredLinesDetected(Vanrise.Entities.DataRetrievalInput<LinesDetectedResultQuery> input)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

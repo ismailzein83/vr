@@ -61,8 +61,10 @@
     <Compile Include="Aggregates\AverageAggregate.cs" />
     <Compile Include="Aggregates\FailedConsecutiveAggregate.cs" />
     <Compile Include="Batches\CDRBatch.cs" />
+    <Compile Include="LinesDetected.cs" />
     <Compile Include="BlockedLines.cs" />
     <Compile Include="CriteriaName.cs" />
+    <Compile Include="ResultQuery\LinesDetectedResultQuery.cs" />
     <Compile Include="ResultQuery\BlockedLinesResultQuery.cs" />
     <Compile Include="ResultQuery\DashboardResultQuery.cs" />
     <Compile Include="ResultQuery\AccountCaseResultQuery.cs" />

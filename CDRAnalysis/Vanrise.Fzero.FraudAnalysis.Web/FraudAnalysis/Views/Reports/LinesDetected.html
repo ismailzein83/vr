@@ -1,0 +1,40 @@
+﻿<vr-panel ng-controller="FraudAnalysis_LinesDetectedController">
+
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns colnum="2">
+                    <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns colnum="2">
+                    <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired></vr-datetimepicker>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+
+
+    </vr-form>
+
+    <div>
+        <vr-row>
+            <vr-columns colnum="12" simplecol>
+
+                <vr-datagrid datasource="detectedLines" dataretrievalfunction="dataRetrievalFunction" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady" >
+                    <vr-datagridcolumn headertext="'Account Number'" field="'AccountNumber'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Volume'" field="'Volume'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Active Days'" field="'ActiveDays'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Generated Cases'" field="'GeneratedCases'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Reason of Blocking'" field="'ReasonofBlocking'"></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </div>
+
+</vr-panel>

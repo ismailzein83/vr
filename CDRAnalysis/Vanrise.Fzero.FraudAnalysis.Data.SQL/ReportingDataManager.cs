@@ -90,6 +90,38 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, BlockedLinesMapper);
         }
 
+
+        public BigResult<LinesDetected> GetFilteredLinesDetected(DataRetrievalInput<LinesDetectedResultQuery> input)
+        {
+
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+
+                string Query = " IF NOT OBJECT_ID('" + tempTableName + "', N'U') IS NOT NULL"
+                             + " Begin "
+                             + " SELECT ac.AccountNumber, SUM(cdr.DurationInSeconds) AS Volume, COUNT(ac.ID) AS GeneratedCases, 'Fraud' AS ReasonofBlocking, 0 AS ActiveDays "
+                             + " , Count(distinct ac.AccountNumber) as BlockedLinesCount"
+                             + " into " + tempTableName
+                             + " FROM   FraudAnalysis.AccountCase AS ac WITH (nolock, INDEX = IX_AccountCase_AccountNumber) INNER JOIN"
+                             + " FraudAnalysis.NormalCDR AS cdr WITH (nolock, INDEX = IX_NormalCDR_MSISDN) ON ac.AccountNumber = cdr.MSISDN"
+                             + " Where ac.StatusID = 3 and cdr.Call_Type = 1 and cdr.ConnectDateTime BETWEEN @FromDate and  @ToDate"
+                             + " GROUP BY ac.AccountNumber "
+                             + " End";
+
+
+
+                ExecuteNonQueryText(Query, (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromDate));
+                    cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.ToDate));
+                });
+            };
+
+
+            return RetrieveData(input, createTempTableAction, LinesDetectedMapper);
+        }
+
+
         #region Private Methods
 
         private CaseProductivity CaseProductivityMapper(IDataReader reader)
@@ -114,6 +146,17 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             blockedLines.DateDay = GetReaderValue<DateTime?>(reader, "DateDay");
             blockedLines.AccountNumbers = GetReaderValue<string>(reader, "AccountNumbers").Split(',').ToList();
             return blockedLines;
+        }
+
+        private LinesDetected LinesDetectedMapper(IDataReader reader)
+        {
+            LinesDetected linesDetected = new LinesDetected();
+            linesDetected.AccountNumber = reader["AccountNumber"] as string;
+            linesDetected.ReasonofBlocking = reader["ReasonofBlocking"] as string;
+            linesDetected.ActiveDays = (int) reader["ActiveDays"] ;
+            linesDetected.GeneratedCases = (int)reader["GeneratedCases"];
+            linesDetected.Volume = (decimal)reader["Volume"];
+            return linesDetected;
         }
 
         #endregion
