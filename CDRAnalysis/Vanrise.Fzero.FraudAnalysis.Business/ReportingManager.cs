@@ -18,6 +18,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, casesProductivity);
         }
 
+        public Vanrise.Entities.IDataRetrievalResult<BlockedLines> GetFilteredBlockedLines(Vanrise.Entities.DataRetrievalInput<BlockedLinesResultQuery> input)
+        {
+            IReportingDataManager manager = FraudDataManagerFactory.GetDataManager<IReportingDataManager>();
+
+            BigResult<BlockedLines> blockedLines = manager.GetFilteredBlockedLines(input);
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, blockedLines);
+        }
+
 
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using Vanrise.Data.SQL;
 using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
+using System.Linq;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
@@ -54,6 +55,40 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
+        public BigResult<BlockedLines> GetFilteredBlockedLines(DataRetrievalInput<BlockedLinesResultQuery> input)
+        {
+
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+
+                string Query = " IF NOT OBJECT_ID('" + tempTableName + "', N'U') IS NOT NULL"
+                             + " Begin "
+                             + " SELECT s.Name StrategyName"
+                             + " , Count(distinct ac.AccountNumber) as BlockedLinesCount"
+                             + (!input.Query.GroupDaily ? " , null as DateDay" : " , CAST(ac.LogDate AS DATE)    as DateDay")
+
+                             + (!input.Query.GroupDaily ? " , '' as AccountNumbers" : " , STUFF(( SELECT ', ' + [AccountNumber]  FROM [FraudAnalysis].[AccountCase] WHERE StatusId=3 and  (CAST(LogDate AS DATE) =  CAST(ac.LogDate AS DATE) and   ac.StrategyId= StrategyId )   FOR XML PATH(''),TYPE).value('(./text())[1]','VARCHAR(MAX)')  ,1,2,''    ) AS AccountNumbers  ")
+                             + " into " + tempTableName
+                             + " FROM [FraudAnalysis].[AccountCase]	ac with(nolock, index=IX_AccountCase_LogDate) inner join [FraudAnalysis].[Strategy] s"
+                             + " on ac.StrategyId = s.Id"
+                             + " Where ac.LogDate BETWEEN @FromDate and  @ToDate and ac.StatusId=3"
+                             + (input.Query.StrategiesList != "" ? " and ac.StrategyId IN (" + input.Query.StrategiesList + ")" : "")
+                             + " Group by s.Name, ac.StrategyId"
+                             + (!input.Query.GroupDaily ? "" : " , CAST(ac.LogDate AS DATE) ")
+                             + " End";
+
+
+
+                ExecuteNonQueryText(Query, (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromDate));
+                    cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.ToDate));
+                });
+            };
+
+
+            return RetrieveData(input, createTempTableAction, BlockedLinesMapper);
+        }
 
         #region Private Methods
 
@@ -69,8 +104,19 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return caseProductivity;
         }
 
-        #endregion
 
-        
+
+        private BlockedLines BlockedLinesMapper(IDataReader reader)
+        {
+            BlockedLines blockedLines = new BlockedLines();
+            blockedLines.BlockedLinesCount = (int)reader["BlockedLinesCount"];
+            blockedLines.StrategyName = reader["StrategyName"] as string;
+            blockedLines.DateDay = GetReaderValue<DateTime?>(reader, "DateDay");
+            blockedLines.AccountNumbers = GetReaderValue<string>(reader, "AccountNumbers").Split(',').ToList();
+            return blockedLines;
+        }
+
+        #endregion
+       
     }
 }

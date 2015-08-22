@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="FraudAnalysis_CasesProductivityController">
+﻿<vr-panel ng-controller="FraudAnalysis_BlockedLinesController">
 
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
@@ -35,12 +35,9 @@
         <vr-row>
             <vr-columns colnum="12" simplecol>
 
-                <vr-datagrid datasource="casesProductivity" dataretrievalfunction="dataRetrievalFunction" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady"  >
+                <vr-datagrid datasource="blockedLines" dataretrievalfunction="dataRetrievalFunction" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady" menuactions="gridMenuActions">
                     <vr-datagridcolumn headertext="'Strategy Name'" field="'StrategyName'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Generated Cases'" field="'GeneratedCases'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Closed Cases'" field="'ClosedCases'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Fraud Cases'" field="'FraudCases'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Closed / Generated'" field="'ClosedoverGenerated'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Blocked Lines'" field="'BlockedLinesCount'"></vr-datagridcolumn>
                     <vr-datagridcolumn ng-show="groupDaily" headertext="'Date Day'" field="'DateDay'" type="'Datetime'"></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>

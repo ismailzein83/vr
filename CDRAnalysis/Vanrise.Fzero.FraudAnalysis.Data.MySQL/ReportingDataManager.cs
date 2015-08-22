@@ -17,5 +17,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         {
             throw new NotImplementedException();
         }
+
+
+        public Vanrise.Entities.BigResult<BlockedLines> GetFilteredBlockedLines(Vanrise.Entities.DataRetrievalInput<BlockedLinesResultQuery> input)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -197,8 +197,12 @@
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\CDRImportProcessInput.html" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\SaveCDRToDBProcessInputController.js" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\CDRImportProcessInputController.js" />
+    <Content Include="FraudAnalysis\Views\Reports\BlockedLines.html" />
     <Content Include="FraudAnalysis\Views\Reports\CasesProductivity.html" />
+    <Content Include="FraudAnalysis\Views\Reports\BlockedLinesController.js" />
     <Content Include="FraudAnalysis\Views\Reports\CasesProductivityController.js" />
+    <Content Include="FraudAnalysis\Views\Reports\BlockedLinesDetails.html" />
+    <Content Include="FraudAnalysis\Views\Reports\BlockedLinesDetailsController.js" />
     <Content Include="FraudAnalysis\Views\Strategy\StrategyEditor.html" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\ExecuteStrategyProcessInput.html" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\ExecuteStrategyProcessInputController.js" />
