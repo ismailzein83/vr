@@ -99,7 +99,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
                 string Query = " IF NOT OBJECT_ID('" + tempTableName + "', N'U') IS NOT NULL"
                              + " Begin "
-                             + " SELECT ac.AccountNumber, SUM(cdr.DurationInSeconds) AS Volume, COUNT(ac.ID) AS GeneratedCases, 'Fraud' AS ReasonofBlocking, 0 AS ActiveDays "
+                             + " SELECT ac.AccountNumber, SUM(cdr.DurationInSeconds)/60 AS Volume, COUNT(ac.ID) AS GeneratedCases, 'Fraud' AS ReasonofBlocking, 0 AS ActiveDays "
                              + " , Count(distinct ac.AccountNumber) as BlockedLinesCount"
                              + " into " + tempTableName
                              + " FROM   FraudAnalysis.AccountCase AS ac WITH (nolock, INDEX = IX_AccountCase_AccountNumber) INNER JOIN"
