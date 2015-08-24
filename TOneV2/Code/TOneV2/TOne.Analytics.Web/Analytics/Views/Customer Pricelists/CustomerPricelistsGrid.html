@@ -1,0 +1,9 @@
+﻿<div ng-controller="CustomerPricelistsGridController" vr-loader="isGettingData">
+    <div ng-repeat="groupKey in groupKeys">
+        <vr-datagrid datasource="groupKey.data" ng-show="groupKey == selectedGroupKey" menuactions="menuActions" issubgrid dataretrievalfunction="groupKey.dataRetrievalFunction" pagingtype="'Pager'" on-ready="groupKey.onGridReady">
+            <vr-datagridcolumn headertext="groupKey.gridHeader" field="'GroupKeyValues[0].Name'" widthfactor="20" isclickable="'true'" onclicked="onEntityClicked"></vr-datagridcolumn>
+            <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.gridHeader" field="measure.fieldName" tag="measure" type="measure.type" getcolor="getColor" onsortchanged="onMainGridSortChanged"></vr-datagridcolumn>
+
+        </vr-datagrid>
+    </div>
+</div>

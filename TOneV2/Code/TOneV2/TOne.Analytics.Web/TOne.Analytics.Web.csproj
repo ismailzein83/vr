@@ -145,6 +145,7 @@
     <Content Include="Analytics\Constants\EntityTypeEnum.js" />
     <Content Include="Analytics\Constants\GroupingByEnum.js" />
     <Content Include="Analytics\Constants\HourlyReportMeasureEnum.js" />
+    <Content Include="Analytics\Constants\PriceListMeasureEnum.js" />
     <Content Include="Analytics\Constants\RawCDRLogMeasureEnum.js" />
     <Content Include="Analytics\Constants\RawCDRLogWhereInfoEnum.js" />
     <Content Include="Analytics\Constants\ReleaseCodeMeasureEnum.js" />
@@ -188,8 +189,10 @@
     <Content Include="Analytics\Views\CDR\CDRLog.html" />
     <Content Include="Analytics\Views\CDR\CDRLogController.js" />
     <Content Include="Analytics\Views\CDR\CDRReport.html" />
-    <Content Include="Analytics\Views\CustomerPricelists.html" />
-    <Content Include="Analytics\Views\CustomerPricelistsController.js" />
+    <Content Include="Analytics\Views\Customer Pricelists\CustomerPricelists.html" />
+    <Content Include="Analytics\Views\Customer Pricelists\CustomerPricelistsController.js" />
+    <Content Include="Analytics\Views\Customer Pricelists\CustomerPricelistsGrid.html" />
+    <Content Include="Analytics\Views\Customer Pricelists\CustomerPricelistsGridController.js" />
     <Content Include="Analytics\Views\DailyReport.html" />
     <Content Include="Analytics\Views\DailyReportController.js" />
     <Content Include="Analytics\Views\RawCDRLog.html" />
