@@ -18,11 +18,11 @@ namespace Vanrise.Security.Web.Controllers
         }
 
          [HttpGet]
-        public Vanrise.Entities.UpdateOperationOutput<object> ResetPassword(string oldPassword,string newPassword)
+        public Vanrise.Entities.UpdateOperationOutput<object> ChangePassword(string oldPassword, string newPassword)
         {
             int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
             SecurityManager manager = new SecurityManager();
-            return manager.ResetPassword(loggedInUserId,oldPassword ,newPassword);
+            return manager.ChangePassword(loggedInUserId, oldPassword, newPassword);
         }
 
         public class CredentialsInput

@@ -81,9 +81,9 @@ namespace Vanrise.Security.Data.SQL
             return result;
         }
 
-        public bool CheckUserPassword(int userId, string Password)
+        public bool ChangePassword(int userId, string oldPassword,string newPassword)
         {
-            bool result = (bool)ExecuteScalarSP("sec.sp_User_CheckUserPassword", userId ,Password);
+            bool result = (bool)ExecuteScalarSP("sec.sp_User_ChangeMyPassword", userId, oldPassword, newPassword);
             return result;
         }
 

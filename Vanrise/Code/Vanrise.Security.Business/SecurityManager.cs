@@ -56,18 +56,13 @@ namespace Vanrise.Security.Business
             return result;
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<object> ResetPassword(int userId, string oldPassword, string newPassword)
-        {
-           
+        public Vanrise.Entities.UpdateOperationOutput<object> ChangePassword(int userId, string oldPassword, string newPassword)
+        {           
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
             Vanrise.Entities.UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
-             bool resetActionSucc = dataManager.CheckUserPassword(userId, oldPassword);
-             if (resetActionSucc)
-                {
-                    resetActionSucc = dataManager.ResetPassword(userId, newPassword);
-                }
-             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-             updateOperationOutput.UpdatedObject = null;
+            bool resetActionSucc = dataManager.ChangePassword(userId , oldPassword,newPassword); 
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+        //     updateOperationOutput.UpdatedObject = null;
 
              if (resetActionSucc)
              {
