@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 using Vanrise.Security.Data;
 using Vanrise.Security.Entities;
 
@@ -12,28 +13,50 @@ namespace Vanrise.Security.Business
     {
         #region Public Methods
 
-        public AuthenticationToken Authenticate(string email, string password)
+        public AuthenticateOperationOutput<AuthenticationToken> Authenticate(string email, string password)
         {
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
             User user = dataManager.GetUserbyEmail(email);
 
-            AuthenticationToken result = new AuthenticationToken();
-            result.TokenName = SecurityContext.SECURITY_TOKEN_NAME;
-            result.Token = null;
-            result.UserName = user.Email;
-            result.UserDisplayName = user.Name;
+            AuthenticateOperationOutput<AuthenticationToken> authenticationOperationOutput = new AuthenticateOperationOutput<AuthenticationToken>();
+            authenticationOperationOutput.Result = AuthenticateOperationResult.Failed;
+            authenticationOperationOutput.AuthenticationObject = null;
 
-            if (user.Status != UserStatus.Inactive && user.Password == password)
+            if(user != null)
             {
-                SecurityToken userInfo = new SecurityToken
+                AuthenticationToken authToken = new AuthenticationToken();
+                authToken.TokenName = SecurityContext.SECURITY_TOKEN_NAME;
+                authToken.Token = null;
+                authToken.UserName = user.Email;
+                authToken.UserDisplayName = user.Name;
+
+                if (user.Status == UserStatus.Inactive)
                 {
-                    UserId = user.UserId
-                };
-                string encrypted = Common.TempEncryptionHelper.Encrypt(Common.Serializer.Serialize(userInfo));
-                result.Token = encrypted;
+                    authenticationOperationOutput.Result = AuthenticateOperationResult.Inactive;
+                }
+                else if (user.Password != password)
+                {
+                    authenticationOperationOutput.Result = AuthenticateOperationResult.WrongCredentials;
+                }
+                else
+                {
+                    SecurityToken userInfo = new SecurityToken
+                    {
+                        UserId = user.UserId
+                    };
+                    string encrypted = Common.TempEncryptionHelper.Encrypt(Common.Serializer.Serialize(userInfo));
+                    authToken.Token = encrypted;
+                    authenticationOperationOutput.Result = AuthenticateOperationResult.Succeeded;
+                    authenticationOperationOutput.AuthenticationObject = authToken;
+                }
+
+            }
+            else
+            {
+                authenticationOperationOutput.Result = AuthenticateOperationResult.UserNotExists;
             }
 
-            return result;
+            return authenticationOperationOutput;
         }
 
         public bool IsAllowed(string requiredPermissions, int userId)

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.service('VRNotificationService', function (VRModalService, VRNavigationService, InsertOperationResultEnum, UpdateOperationResultEnum, DeleteOperationResultEnum,$q, notify, $location) {
+app.service('VRNotificationService', function (VRModalService, VRNavigationService, InsertOperationResultEnum, UpdateOperationResultEnum, DeleteOperationResultEnum, AuthenticateOperationResultEnum, $q, notify, $location) {
 
     return ({
         showConfirmation: showConfirmation,
@@ -12,7 +12,8 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
         notifyExceptionWithClose: notifyExceptionWithClose,
         notifyOnItemAdded: notifyOnItemAdded,
         notifyOnItemUpdated: notifyOnItemUpdated,
-        notifyOnItemDeleted: notifyOnItemDeleted
+        notifyOnItemDeleted: notifyOnItemDeleted,
+        notifyOnUserAuthenticated: notifyOnUserAuthenticated
     });
 
     function showConfirmation(message) {
@@ -140,6 +141,44 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
                     default: showWarning(itemType + " with the same key already exists"); break;
                 }
                 break;
+        }
+        return false;
+    }
+
+    function notifyOnUserAuthenticated(authenticateOperationOutput) {
+        switch (authenticateOperationOutput.Result) {
+            case AuthenticateOperationResultEnum.Succeeded.value:
+                return true;
+                break;
+            case AuthenticateOperationResultEnum.Inactive.value:
+                if (authenticateOperationOutput.Message != undefined) {
+                    showError(authenticateOperationOutput.Message); break;
+                }
+                else {
+                    showError("Login Failed. Inactive User"); break;
+                }
+            case AuthenticateOperationResultEnum.WrongCredentials.value:
+                if (authenticateOperationOutput.Message != undefined) {
+                    showError(authenticateOperationOutput.Message); break;
+                }
+                else {
+                    showError("Login Failed. Wrong Credentials"); break;
+                }
+            case AuthenticateOperationResultEnum.UserNotExists.value:
+                if (authenticateOperationOutput.Message != undefined) {
+                    showError(authenticateOperationOutput.Message); break;
+                }
+                else {
+                    showError("Login Failed. The user does not exist"); break;
+                }
+            case AuthenticateOperationResultEnum.Failed.value:
+                if (authenticateOperationOutput.Message != undefined) {
+                    showError(authenticateOperationOutput.Message); break;
+                }
+                else {
+                    showError("Login Failed. An error occurred"); break;
+                }
+
         }
         return false;
     }

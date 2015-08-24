@@ -154,6 +154,7 @@
     <Content Include="Client\Images\logout.png" />
     <Content Include="Client\Images\member.png" />
     <Content Include="Client\Images\support.png" />
+    <Content Include="Client\Javascripts\Constants\AuthenticateOperationResultEnum.js" />
     <Content Include="Client\Javascripts\Constants\ChartDefinitionTypeEnum.js" />
     <Content Include="Client\Javascripts\Constants\ColumnWidthEnum.js" />
     <Content Include="Client\Javascripts\Constants\DataRetrievalResultTypeEnum.js" />

@@ -1,7 +1,7 @@
-﻿LoginController.$inject = ['$scope', 'SecurityAPIService', 'SecurityService'];
+﻿LoginController.$inject = ['$scope', 'SecurityAPIService', 'SecurityService', 'VRNotificationService'];
 
 
-function LoginController($scope, SecurityAPIService, SecurityService) {
+function LoginController($scope, SecurityAPIService, SecurityService, VRNotificationService) {
     defineScope();
     load();
 
@@ -22,10 +22,12 @@ function LoginController($scope, SecurityAPIService, SecurityService) {
 
         return SecurityAPIService.Authenticate(credentialsObject)
             .then(function (response) {
-                var userInfo = JSON.stringify(response);
-                console.log(userInfo);
-                SecurityService.createAccessCookie(userInfo);
-                window.location.href = '/';
+                if (VRNotificationService.notifyOnUserAuthenticated(response))
+                {
+                    var userInfo = JSON.stringify(response.AuthenticationObject);
+                    SecurityService.createAccessCookie(userInfo);
+                    window.location.href = '/';
+                }                
         }
         );       
     }
