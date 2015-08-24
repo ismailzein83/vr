@@ -1,0 +1,59 @@
+﻿<vr-panel ng-controller="Analytics_SupplierTariffManagementController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-select label="Supplier"
+                               withlocalfilter
+                               datasource="suppliers"
+                               selectedvalues="selectedSupplier"
+                               datatextfield="Name"
+                               datavaluefield="CarrierAccountID"
+                               entityname="Supplier">
+                    </vr-select>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-select label="Zones"
+                               datasource="zones"
+                               selectedvalues="selectedZones"
+                               datatextfield="Name"
+                               datavaluefield="ZoneID"
+                               ismultipleselection
+                               entityname="Zones">
+                    </vr-select>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-datetimepicker label="Effective On" value="effectiveOn" type="date" isrequired></vr-datetimepicker>
+                </vr-columns>
+            </vr-row>
+        </div>
+
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked" isasynchronous="true"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+    </vr-form>
+
+    <div>
+        <vr-row>
+            <vr-columns width="fullrow" simplecol>
+                <vr-datagrid datasource="tariffs"
+                             dataretrievalfunction="dataRetrievalFunction"
+                             pagingtype="'PagingOnScroll'"
+                             on-ready="gridReady"
+                             idfield=""
+                             ng-show="showGrid">
+
+                    <vr-datagridcolumn ng-repeat="measure in measures"
+                                       headertext="measure.description"
+                                       field="measure.propertyName"
+                                       type="measure.type">
+                    </vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </div>
+</vr-panel>
