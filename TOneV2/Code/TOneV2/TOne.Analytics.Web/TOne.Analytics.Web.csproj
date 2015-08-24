@@ -129,6 +129,7 @@
     <Compile Include="Controllers\DailyReportController.cs" />
     <Compile Include="Controllers\HourlyReportController.cs" />
     <Compile Include="Controllers\RawCDRLogController.cs" />
+    <Compile Include="Controllers\SupplierTariffController.cs" />
     <Compile Include="Controllers\TrafficMonitorController.cs" />
     <Compile Include="Controllers\BillingStatisticsController.cs" />
     <Compile Include="Controllers\BlockedAttemptsController.cs" />
@@ -168,6 +169,7 @@
     <Content Include="Analytics\Services\APIServices\HourlyReportAPIService.js" />
     <Content Include="Analytics\Services\APIServices\RawCDRLogAPIService.js" />
     <Content Include="Analytics\Services\APIServices\RepeatedNumbersAPIService.js" />
+    <Content Include="Analytics\Services\APIServices\SupplierTariffAPIService.js" />
     <Content Include="Analytics\Views\Billing Reports\BillingReports.html" />
     <Content Include="Analytics\Views\Billing Reports\BillingReportsController.js" />
     <Content Include="Analytics\Views\Billing Statistics\Variation Reports\Variation Reports Templates\VariationReportsCustomersSuppliers.html" />
