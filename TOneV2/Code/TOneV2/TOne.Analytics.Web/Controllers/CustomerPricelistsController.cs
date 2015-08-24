@@ -16,5 +16,11 @@ namespace TOne.Analytics.Web.Controllers
             CustomerPricelistsManager manager = new CustomerPricelistsManager();
             return GetWebResponse(input, manager.GetCustomerPriceLists(input));
         }
+        [HttpPost]
+        public object GetCustomerPriceListDetails(Vanrise.Entities.DataRetrievalInput<int> input)
+        {
+            CustomerPricelistsManager manager = new CustomerPricelistsManager();
+            return GetWebResponse(input, manager.GetCustomerPriceListDetails(input));
+        }
     }
 }

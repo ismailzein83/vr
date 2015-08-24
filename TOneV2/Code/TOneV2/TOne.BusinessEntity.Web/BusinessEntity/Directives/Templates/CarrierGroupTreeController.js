@@ -59,7 +59,8 @@ function CarrierGroupTreeController($scope, CarrierGroupAPIService, VRNavigation
         }
 
         $scope.saveGroup = function () {
-            if (angular.isObject($scope.currentNode)) {
+
+            if (angular.isObject($scope.currentNode) && $scope.currentNode.EntityId != $scope.beList[0].EntityId) {
                 $scope.onTreeSelected($scope.currentNode);
             }
             $scope.modalContext.closeModal()

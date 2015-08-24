@@ -1,93 +1,72 @@
 ﻿'use strict'
-CustomerPricelistsGridController.$inject = ['$scope', 'AnalyticsAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficMonitorMeasureEnum', 'VRModalService', 'UtilsService', 'LabelColorsEnum', 'AnalyticsService'];
-function CustomerPricelistsGridController($scope, AnalyticsAPIService, TrafficStatisticGroupKeysEnum, TrafficMonitorMeasureEnum, VRModalService, UtilsService, LabelColorsEnum, AnalyticsService) {
-    var measures = [];
-    var filter = {};
-    var selectedGroupKeys = [];
+CustomerPricelistsGridController.$inject = ['$scope', 'VRModalService', 'UtilsService','PriceListMeasureEnum','CustomerPricelistsAPIService'];
+function CustomerPricelistsGridController($scope, VRModalService, UtilsService, PriceListMeasureEnum, CustomerPricelistsAPIService) {
+    var mainGridAPI;
     defineScope();
     load();
     function defineScope() {
-        $scope.measures = measures;
+        $scope.measures = [];
+        $scope.data = [];
         $scope.menuActions = [{
-            name: "CDRs",
+            name: "Send Email",
             clicked: function (dataItem) {
                 var modalSettings = {
                     useModalTemplate: true,
                     width: "80%",
                     maxHeight: "800px"
                 };
-                var parameters = {
-                    fromDate: $scope.viewScope.fromDate,
-                    toDate: $scope.viewScope.toDate,
-                    customerIds: [],
-                    zoneIds: [],
-                    supplierIds: [],
-                    switchIds: []
+                VRModalService.showModal('/Client/Modules/Analytics/Views/Customer Pricelists/CustomerPricelistsGrid.html', null, modalSettings);
+            }
+        },
+        {
+            name: "Export",
+            clicked: function (dataItem) {
+                var modalSettings = {
+                    useModalTemplate: true,
+                    width: "80%",
+                    maxHeight: "800px"
                 };
-                updateParametersFromGroupKeys(parameters, $scope, dataItem);
-                VRModalService.showModal('/Client/Modules/Analytics/Views/CDR/CDRLog.html', parameters, modalSettings);
+                VRModalService.showModal('/Client/Modules/Analytics/Views/Customer Pricelists/CustomerPricelistsGrid.html', null, modalSettings);
+            }
+        },
+        {
+            name: "Get Change Log",
+            clicked: function (dataItem) {
+                var modalSettings = {
+                    useModalTemplate: true,
+                    width: "80%",
+                    maxHeight: "800px"
+                };
+                VRModalService.showModal('/Client/Modules/Analytics/Views/Customer Pricelists/CustomerPricelistsGrid.html', null, modalSettings);
             }
         }];
-        $scope.onEntityClicked = function (dataItem) {
-            var parentGroupKeys = $scope.viewScope.groupKeys;
-
-            var selectedGroupKeyInParent = $.grep(parentGroupKeys, function (parentGrpKey) {
-                return parentGrpKey.value == $scope.selectedGroupKey.value;
-            })[0];
-            $scope.viewScope.selectEntity(selectedGroupKeyInParent, dataItem.GroupKeyValues[0].Id, dataItem.GroupKeyValues[0].Name)
-        };
-
-       
-
-        $scope.checkExpandablerow = function (groupKey) {
-            if ($scope.groupKeys.length == 2 && groupKey.value == TrafficStatisticGroupKeysEnum.OurZone.value && ($scope.groupKeys[0].value == TrafficStatisticGroupKeysEnum.CodeGroup.value || $scope.groupKeys[1].value == TrafficStatisticGroupKeysEnum.CodeGroup.value))//only if zone and codegroup remains in groupkeys
-                return false;
-            else if ($scope.groupKeys.length > 1)
-                return true;
-            else if ($scope.selectedGroupKey.value == TrafficStatisticGroupKeysEnum.SupplierId.value)
-                return true;
-            else
-                return false;
+        $scope.onMainGridReady = function (api) {
+            mainGridAPI = api;
+            retrieveData();
+        }
+        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+            return CustomerPricelistsAPIService.GetCustomerPriceListDetails(dataRetrievalInput).then(function (response) {
+                onResponseReady(response);
+            })
         };
       
-
     }
     function load() {
         loadMeasures();
-        loadGroupKeys();
-        $scope.selectedGroupKey = $scope.groupKeys[0];
+        retrieveData();
+        
     }
-    function retrieveData(groupKey, withSummary) {
-        buildFilter($scope);
-        buildFilterFromViewScope();
-
-        var query = {
-            Filter: filter,
-            WithSummary: withSummary,
-            GroupKeys: [$scope.selectedGroupKey.value],
-            From: $scope.viewScope.fromDate,
-            To: $scope.viewScope.toDate,
-
-        };
-        return groupKey.gridAPI.retrieveData(query);
+    function retrieveData() {
+        if (mainGridAPI == undefined)
+            return;
+        var query = $scope.dataItem.PriceListID;
+        return mainGridAPI.retrieveData(query);
     }
-
-  
-   
     function loadMeasures() {
-        for (var prop in TrafficMonitorMeasureEnum) {
-            measures.push(TrafficMonitorMeasureEnum[prop]);
+        for (var prop in PriceListMeasureEnum) {
+            $scope.measures.push(PriceListMeasureEnum[prop]);
         }
     }
-   
-    function fillArray(array, data) {
-        for (var i = 0; i < data.length; i++) {
-            array.push(data[i]);
-        }
-
-    }
-  
-
 };
 
 appControllers.controller('CustomerPricelistsGridController', CustomerPricelistsGridController);

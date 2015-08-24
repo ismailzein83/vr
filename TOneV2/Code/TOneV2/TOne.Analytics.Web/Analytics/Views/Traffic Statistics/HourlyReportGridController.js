@@ -34,15 +34,7 @@ function HourlyReportGridController($scope, HourlyReportAPIService, TrafficStati
                 VRModalService.showModal('/Client/Modules/Analytics/Views/CDR/CDRLog.html', parameters, modalSettings);
             }
         }];
-        $scope.onEntityClicked = function (dataItem) {
-            var parentGroupKeys = $scope.viewScope.groupKeys;
-
-            var selectedGroupKeyInParent = $.grep(parentGroupKeys, function (parentGrpKey) {
-                return parentGrpKey.value == $scope.selectedGroupKey.value;
-            })[0];
-            $scope.viewScope.selectEntity(selectedGroupKeyInParent, dataItem.GroupKeyValues[0].Id, dataItem.GroupKeyValues[0].Name)
-        };
-
+       
         $scope.groupKeySelectionChanged = function () {
 
             if ($scope.selectedGroupKeyIndex != undefined) {

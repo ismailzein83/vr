@@ -74,7 +74,6 @@
 
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
-                    <vr-button type="Reset" ng-show="false"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
@@ -118,7 +117,7 @@
             <vr-columns colnum="12" simplecol>
                 <vr-datagrid on-ready="onMainGridReady" datasource="data"
                              menuactions="gridMenuActions" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'">
-                    <vr-datagridcolumn ng-repeat="groupKey in currentSearchCriteria.groupKeys" headertext="groupKey.gridHeader" field="'GroupKeyValues[' + $index + '].Name'" columnindex="$index" widthfactor="15" enablehiding="'false'" isclickable="'true'" tag="groupKey" onclicked="onGroupKeyClicked"></vr-datagridcolumn>
+                    <vr-datagridcolumn ng-repeat="groupKey in currentSearchCriteria.groupKeys" headertext="groupKey.gridHeader" field="'GroupKeyValues[' + $index + '].Name'" columnindex="$index" widthfactor="15" enablehiding="'false'"  tag="groupKey" ></vr-datagridcolumn>
                     <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.fieldName" summaryfield="measure.propertyName" type="measure.type"  tag="measure"></vr-datagridcolumn>
                     <vr-datagridexpandablerow>
                         <div ng-include="'/Client/Modules/Analytics/Views/Traffic Statistics/HourlyReportGrid.html'"></div>

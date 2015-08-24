@@ -26,7 +26,7 @@ app.directive('vrBeCarriergroup', ['VRModalService', 'UtilsService', 'VRNotifica
                         $scope.selectedtNode = selectedtNode;
 
                         CarrierGroupAPIService.GetCarrierGroupMembersDesc($scope.selectedtNode.EntityId).then(function (response) {
-                         
+                            $scope.selectedCarrierValues.length = 0;
                             angular.forEach(response, function (item) {
                                 $scope.selectedCarrierValues.push(item);
                             });

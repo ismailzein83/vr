@@ -252,42 +252,6 @@ function HourlyReportController($scope, UtilsService, HourlyReportAPIService, $q
                 };
                 analyticsService.showCdrLogModal(parameters, dataItem.GroupKeyValues, $scope.currentSearchCriteria.groupKeys);
             }
-        },
-        {
-            name: "Show Confirmation",
-            clicked: function (dataItem) {
-                VRNotificationService.showConfirmation('Are you sure you want to delete?')
-                .then(function (result) {
-                    if (result)
-                        console.log('Confirmed');
-                    else
-                        console.log('not confirmed');
-                });
-            }
-        },
-        {
-            name: "Show Error",
-            clicked: function (dataItem) {
-                VRNotificationService.showError('Error Message');
-            }
-        },
-        {
-            name: "Show Warning",
-            clicked: function (dataItem) {
-                VRNotificationService.showWarning('Warning Message');
-            }
-        },
-        {
-            name: "Show Success",
-            clicked: function (dataItem) {
-                VRNotificationService.showSuccess('Success Message');
-            }
-        },
-        {
-            name: "Show Information",
-            clicked: function (dataItem) {
-                VRNotificationService.showInformation('Information Message');
-            }
         }];
     }
     function loadMeasures() {

@@ -16,5 +16,12 @@ namespace TOne.Analytics.Business
            ICustomerPricelistsDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<ICustomerPricelistsDataManager>();
            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetCustomerPriceLists(input));
        }
+
+       public Vanrise.Entities.IDataRetrievalResult<CustomerPriceListDetail> GetCustomerPriceListDetails(Vanrise.Entities.DataRetrievalInput<int> input)
+       {
+
+           ICustomerPricelistsDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<ICustomerPricelistsDataManager>();
+           return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetCustomerPriceListDetails(input));
+       }
     }
 }

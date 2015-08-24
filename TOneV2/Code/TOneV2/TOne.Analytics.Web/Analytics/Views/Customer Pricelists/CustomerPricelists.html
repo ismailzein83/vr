@@ -16,14 +16,13 @@
 
             <div transclude-to="buttons">
                 <vr-button type="Search" formname="formFilter" data-onclick="getData"></vr-button>
-                <vr-button type="Reset"></vr-button>
             </div>
         </vr-actionbar>
     </vr-row>
     <div ng-show="showResult">
         <vr-row>
             <vr-columns width="fullrow" simplecol>
-                <vr-datagrid datasource="data" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'" on-ready="onMainGridReady" maxheight="500px">
+                <vr-datagrid datasource="data" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'" on-ready="onMainGridReady" >
                     <vr-datagridcolumn headertext="'ID'" field="'PriceListID'" type="Number" widthfactor="2"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Supply Date'" field="'BeginEffectiveDate'" type="'Date'" widthfactor="3"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'User'" field="'Name'" widthfactor="5"></vr-datagridcolumn>

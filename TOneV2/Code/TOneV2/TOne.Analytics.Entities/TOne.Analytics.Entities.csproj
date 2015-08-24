@@ -106,6 +106,7 @@
     <Compile Include="CDRBigResult.cs" />
     <Compile Include="Billing\CustomerServices.cs" />
     <Compile Include="CDRSummaryInput.cs" />
+    <Compile Include="CustomerPriceListDetail.cs" />
     <Compile Include="CustomerPriceLists.cs" />
     <Compile Include="DailyReportCall.cs" />
     <Compile Include="DailyReportQuery.cs" />

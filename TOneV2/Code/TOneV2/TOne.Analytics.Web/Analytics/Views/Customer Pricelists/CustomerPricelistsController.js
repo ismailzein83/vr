@@ -1,6 +1,6 @@
-﻿CustomerPricelistsController.$inject = ['$scope', 'RawCDRLogAPIService', 'UtilsService', '$q', 'BusinessEntityAPIService_temp', 'RawCDRLogMeasureEnum', 'VRModalService', 'VRNotificationService','CarrierAccountAPIService','CarrierTypeEnum','CustomerPricelistsAPIService'];
+﻿CustomerPricelistsController.$inject = ['$scope', 'UtilsService', '$q','CarrierAccountAPIService','CarrierTypeEnum','CustomerPricelistsAPIService'];
 
-function CustomerPricelistsController($scope, RawCDRLogAPIService, UtilsService, $q, BusinessEntityAPIService, RawCDRLogMeasureEnum, VRModalService, VRNotificationService, CarrierAccountAPIService, CarrierTypeEnum, CustomerPricelistsAPIService) {
+function CustomerPricelistsController($scope, UtilsService, $q, CarrierAccountAPIService, CarrierTypeEnum, CustomerPricelistsAPIService) {
     var mainGridAPI;
     defineScope();
     load();
