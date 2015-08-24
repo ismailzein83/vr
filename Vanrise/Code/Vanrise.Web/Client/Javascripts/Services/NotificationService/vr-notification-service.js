@@ -169,7 +169,7 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
                     showError(authenticateOperationOutput.Message); break;
                 }
                 else {
-                    showError("Login Failed. The user does not exist"); break;
+                    showError("Login Failed. User does not exist"); break;
                 }
             case AuthenticateOperationResultEnum.Failed.value:
                 if (authenticateOperationOutput.Message != undefined) {
