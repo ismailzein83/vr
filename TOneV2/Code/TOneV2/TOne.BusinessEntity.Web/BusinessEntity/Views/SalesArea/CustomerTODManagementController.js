@@ -1,68 +1,66 @@
-﻿CustomerTODManagementController.$inject = ['$scope', 'CarrierAccountAPIService', 'ZonesService', 'BusinessEntityAPIService_temp', 'VRModalService', 'CarrierTypeEnum'];
-function CustomerTODManagementController($scope, CarrierAccountAPIService,ZonesService, BusinessEntityAPIService ,VRModalService, CarrierTypeEnum) {
+﻿CustomerTODManagementController.$inject = ['$scope', 'CarrierAccountAPIService', 'ZonesService', 'VRModalService', 'CarrierTypeEnum', 'TODAPIService'];
+function CustomerTODManagementController($scope, CarrierAccountAPIService, ZonesService, VRModalService, CarrierTypeEnum, TODAPIService) {
     var gridApi;
-    defineScope();
-    load();
-
+   
     function load() {
-        loadCustomers()
-    }
+        loadCustomers();
 
+    }
     function defineScope() {
         $scope.customers = [];
         $scope.searchZones = [];
         $scope.selectedZones = [];
-        //$scope.CarrierAccountsDataSource = [];
-        //defineMenuActions();
-        //$scope.gridReady = function (api) {
-        //    gridApi = api;
-        //    return retrieveData();
-        //};
+        $scope.datasource = [];
+        $scope.effectiveOn = new Date();
+        defineMenuActions();
+        $scope.gridReady = function (api) {
+            gridApi = api;
+            return retrieveData();
+        };
         $scope.searchZones = function (text) {
             return ZonesService.getSalesZones(text);
         }
-        //$scope.searchClicked = function () {
-        //    return retrieveData();
-        //};
+        $scope.searchClicked = function () {
+            return retrieveData();
+        };
 
-        //$scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-        //    return CarrierAccountAPIService.GetFilteredCarrierAccounts(dataRetrievalInput)
-        //    .then(function (response) {
-        //        onResponseReady(response);
-        //    });
-        //};
+        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+            return TODAPIService.GetFilteredCustomerTOD(dataRetrievalInput)
+            .then(function (response) {
+                onResponseReady(response);
+            });
+        };
     }
 
     function retrieveData() {
-        //var query = {
-        //    Name: $scope.name,
-        //    CompanyName: $scope.companyName
-        //};
-        //return gridApi.retrieveData(query);
+        var query = {
+           };
+        if ($scope.selectedCustomer != undefined && $scope.selectedCustomer != null)
+            query.CustomerId = $scope.selectedCustomer.CarrierAccountID;
+
+        else
+            query.CustomerId = null;
+        if ($scope.selectedZones.length > 0) {
+            query.ZoneIds = [];
+            angular.forEach($scope.selectedZones, function (z) {
+                query.ZoneIds.push(z.ZoneId);
+            });
+
+        }
+        else
+            query.ZoneIds = [];
+        query.EffectiveOn = $scope.effectiveOn;
+        return gridApi.retrieveData(query);
     }
 
     function defineMenuActions() {
-        //$scope.gridMenuActions = [{
-        //    name: "Edit",
-        //    clicked: editCarrierAccount
-        //}];
+        $scope.gridMenuActions = [{
+            name: "Edit"//,
+            //clicked: editCarrierAccount
+        }];
     }
 
-    function editCarrierAccount(carrierAccountObj) {
-        //var modalSettings = {
-        //};
-        //var parameters = {
-        //    carrierAccountId: carrierAccountObj.CarrierAccountId
-        //};
-        //modalSettings.onScopeReady = function (modalScope) {
-        //    modalScope.title = "CarrierAccount Info(" + carrierAccountObj.ProfileName + ")";
-        //    modalScope.onCarrierAccountUpdated = function (CarrierAccountUpdated) {
-        //        gridApi.itemUpdated(CarrierAccountUpdated);
-
-        //    };
-        //};
-        //VRModalService.showModal('/Client/Modules/BusinessEntity/Views/CarrierAccountEditor.html', parameters, modalSettings);
-    }
+  
 
     function loadCustomers() {
         return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Customer.value ,false).then(function (response) {
@@ -71,6 +69,8 @@ function CustomerTODManagementController($scope, CarrierAccountAPIService,ZonesS
             });
         });
     }
+    defineScope();
+    load();
 }
 
 appControllers.controller('Customer_CustomerTODManagementController', CustomerTODManagementController);

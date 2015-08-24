@@ -9,7 +9,7 @@ namespace TOne.BusinessEntity.Entities
     public class TODCustomerQuery
     {
         public string CustomerId { get; set; }
-        public int ZoneId { get; set; }
+        public List<int> ZoneIds { get; set; }
         public DateTime EffectiveOn { get; set; }
     }
 }

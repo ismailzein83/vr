@@ -9,7 +9,7 @@
                         </vr-select>
                     </vr-columns>
                     <vr-columns width="normal">
-                        <vr-select ismultipleselection datasource="searchZones" label="Zones" selectedvalues="selectedZones" datatextfield="Name" datavaluefield="ZoneId"
+                        <vr-select datasource="searchZones" label="Zones" selectedvalues="selectedZones" ismultipleselection datatextfield="Name" datavaluefield="ZoneId"
                                    entityname="Zones"></vr-select>
                     </vr-columns>
                     <vr-columns width="normal">
@@ -21,7 +21,7 @@
             <vr-row removeline>
                 <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                     <div transclude-to="buttons">
-                        <vr-button type="Search" formname="formFilter" data-onclick="null"></vr-button>
+                        <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
                         <!--<vr-button type="Add" data-onclick="AddNewCarrierProfile"></vr-button>-->
                     </div>
                 </vr-actionbar>
@@ -29,19 +29,19 @@
             <div vr-loader="isLoading">
                 <vr-row>
                     <vr-columns width="fullrow">
-                        <vr-datagrid datasource="[]" dataretrievalfunction=" " pagingtype="'PagingOnScroll'" on-ready="gridReady" menuactions="[]" idfield="ProfileID">
-                            <vr-datagridcolumn headertext="'Customer'" field="'Name'">
+                        <vr-datagrid datasource="::datasource" pagingtype="'PagingOnScroll'" dataretrievalfunction="dataRetrievalFunction" on-ready="gridReady" menuactions="[]" >
+                            <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'">
                             </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Zone'" field="'CompanyName'">
+                            <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'">
                             </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Definition'" field="'BillingEmail'">
+                            <vr-datagridcolumn headertext="'Definition'" field="'DefinitionDisplayS'">
                             </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Start Date'" field="'AccountsCount'">
+                            <vr-datagridcolumn headertext="'Start Date'" field="'BeginEffectiveDate'">
                             </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'End Date'" field="'AccountsCount'">
+                            <vr-datagridcolumn headertext="'End Date'" field="'EndEffectiveDate'">
                             </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Active'" field="'AccountsCount'">
-                            </vr-datagridcolumn>
+                            <!--<vr-datagridcolumn headertext="'Active'" field="'AccountsCount'">
+                            </vr-datagridcolumn>-->
                         </vr-datagrid>
                     </vr-columns>
             </div>

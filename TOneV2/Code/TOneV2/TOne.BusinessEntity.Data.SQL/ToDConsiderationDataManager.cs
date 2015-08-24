@@ -55,11 +55,58 @@ namespace TOne.BusinessEntity.Data.SQL
             //};
         }
 
-        private TODConsiderationInfo ToDConsiderationInfoMapper(IDataReader reader)
+        private TODConsiderationInfo ToDConsiderationInfoMapper(IDataReader reader ,DateTime when)
         {
-            TODConsiderationInfo tod = new TODConsiderationInfo();
-            return tod;
+            TODConsiderationInfo toDConsiderationInfo = new TODConsiderationInfo
+            {
+                ToDConsiderationID = GetReaderValue<long>(reader, "ToDConsiderationID"),
+                ZoneID = GetReaderValue<int>(reader, "ZoneID"),
+                SupplierID = reader["SupplierID"] as string,
+                CustomerID = reader["CustomerID"] as string,
+                BeginTime = reader["BeginTime"] as string,
+                EndTime = reader["EndTime"] as string,
+                WeekDay = reader["WeekDay"] != DBNull.Value ? (DayOfWeek)Enum.Parse(typeof(DayOfWeek), reader["WeekDay"].ToString()) : 0,
+                HolidayDate = GetReaderValue<DateTime>(reader, "HolidayDate"),
+                HolidayName = reader["HolidayName"] as string,
+                RateType = reader["RateType"] != DBNull.Value ? (ToDRateType)Enum.Parse(typeof(ToDRateType), reader["RateType"].ToString()) : ToDRateType.Normal,
+                BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate"),
+                EndEffectiveDate = (reader["EndEffectiveDate"] == DBNull.Value) ? null : (DateTime?)GetReaderValue<DateTime>(reader, "EndEffectiveDate"),
+                UserID = GetReaderValue<int>(reader, "UserID"),
+                ZoneName = reader["ZoneName"] as string,
+                CustomerName = reader["CustomerName"] as string,
+                DefinitionDisplayS = reader["DefinitionDisplayS"] as string,
+            };
+            toDConsiderationInfo.IsActive = WasActive(when, toDConsiderationInfo);
+
+            return toDConsiderationInfo;
          
+        }
+
+        private bool WasActive(DateTime when , TODConsiderationInfo tod )
+        {
+            if (!GetIsEffective(tod.BeginEffectiveDate, tod.EndEffectiveDate, when)) return false;
+
+            string time = when.ToString("HH:mm:ss.fff");
+
+            // Assume effective
+            bool isActive = true;
+
+            // In any 
+            if (tod.BeginTime != null && (time.CompareTo(tod.BeginTime) < 0 || time.CompareTo(tod.EndTime) > 0)) isActive = false;
+            if (tod.WeekDay != null && when.DayOfWeek != tod.WeekDay.Value) isActive = false;
+            if (tod.HolidayDate != null && (tod.HolidayDate.Value.Month != when.Month || tod.HolidayDate.Value.Day != when.Day)) isActive = false;
+
+            return isActive;
+        }
+
+
+
+        private bool GetIsEffective(DateTime? BeginEffectiveDate, DateTime? EndEffectiveDate, DateTime when)
+        {
+            bool isEffective = BeginEffectiveDate.HasValue ? BeginEffectiveDate.Value <= when : true;
+            if (isEffective)
+                isEffective = EndEffectiveDate.HasValue ? EndEffectiveDate.Value >= when : true;
+            return isEffective;
         }
 
         public List<ToDConsideration> GetToDConsideration(string customerId, int zoneId, DateTime when)
@@ -71,9 +118,9 @@ namespace TOne.BusinessEntity.Data.SQL
         {
             return RetrieveData(input, (tempTableName) =>
             {
-                ExecuteNonQuerySP("BEntity.sp_CustomersToDConsideration_CreateTempForFiltered", tempTableName, input.Query.ZoneId, input.Query.CustomerId, input.Query.EffectiveOn);
+                ExecuteNonQuerySP("BEntity.sp_CustomersToDConsideration_CreateTempForFiltered", tempTableName, (input.Query.ZoneIds.Count()>0 && input.Query.ZoneIds!=null )? string.Join(",", input.Query.ZoneIds.Select(x => x.ToString()).ToArray())  : null, input.Query.CustomerId, input.Query.EffectiveOn);
 
-            }, ToDConsiderationInfoMapper);
+            }, (reader) => ToDConsiderationInfoMapper(reader, input.Query.EffectiveOn));
         }
     }
 }
