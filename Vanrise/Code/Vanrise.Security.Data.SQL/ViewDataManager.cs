@@ -22,27 +22,11 @@ namespace Vanrise.Security.Data.SQL
             return GetItemsSP("sec.sp_View_GetAll", ViewMapper);
         }
 
-        Entities.View ViewMapper(IDataReader reader)
-        {
-            Entities.View view = new Entities.View
-            {
-                ViewId = (int)reader["Id"],
-                Name = reader["Name"] as string,
-                Title = reader["Title"] as string,
-                Url = reader["Url"] as string,
-                ModuleId = (int) reader["Module"],
-                RequiredPermissions = GetReaderValue<string>(reader, "RequiredPermissions"),
-                Audience = ((reader["Audience"] as string) != null) ? Common.Serializer.Deserialize<AudienceWrapper>(reader["Audience"] as string) : null,
-                Type=(ViewType) reader["Type"],
-                Rank = GetReaderValue<int>(reader, "Rank"),
-
-            }; 
-            return view;
-        }
+     
 
         public List<View> GetDynamicPages()
         {
-            return GetItemsSP("sec.sp_View_GetFiltered", GetViewMapper, null, null, ViewType.Dynamic);
+            return GetItemsSP("sec.sp_View_GetFiltered", ViewMapper, null, null, ViewType.Dynamic);
             
         }
         public Vanrise.Entities.BigResult<View> GetFilteredDynamicViews(Vanrise.Entities.DataRetrievalInput<string> filter)
@@ -54,7 +38,7 @@ namespace Vanrise.Security.Data.SQL
             {
                 ExecuteNonQuerySP("sec.sp_View_GetFiltered", tempTableName, filter.Query, ViewType.Dynamic);
             };
-            return RetrieveData(filter, createTempTableAction, GetViewMapper, mapper);
+            return RetrieveData(filter, createTempTableAction, ViewMapper, mapper);
 
         }
 
@@ -97,9 +81,9 @@ namespace Vanrise.Security.Data.SQL
 
         public View GetView(int viewId)
         {
-            return GetItemSP("sec.sp_View_GetById ", GetViewMapper, viewId);
+            return GetItemSP("sec.sp_View_GetById ", ViewMapper, viewId);
         }
-        private View GetViewMapper(IDataReader reader)
+        private View ViewMapper(IDataReader reader)
         {
 
             View instance = new View
@@ -112,7 +96,7 @@ namespace Vanrise.Security.Data.SQL
                 ModuleName = reader["ModuleName"] as string,
                 RequiredPermissions = GetReaderValue<string>(reader, "RequiredPermissions"),
                 Audience = ((reader["Audience"] as string) != null) ? Common.Serializer.Deserialize<AudienceWrapper>(reader["Audience"] as string) : null,
-                ViewContent = Common.Serializer.Deserialize<ViewContent>(reader["Content"] as string),
+                ViewContent = ((reader["Content"] as string) != null) ? Common.Serializer.Deserialize<ViewContent>(reader["Content"] as string) : null,
                 Type=(ViewType) reader["Type"],
 
             };
