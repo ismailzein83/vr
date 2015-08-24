@@ -160,6 +160,7 @@
     <Content Include="BusinessEntity\Services\APIServices\CurrencyAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\LookUpAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\PriceListAPIService.js" />
+    <Content Include="BusinessEntity\Services\APIServices\TODAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\ProfileAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\SwitchManagmentAPIService.js" />
     <Content Include="BusinessEntity\Views\AccountManager\AccountManagerManagement.html" />
