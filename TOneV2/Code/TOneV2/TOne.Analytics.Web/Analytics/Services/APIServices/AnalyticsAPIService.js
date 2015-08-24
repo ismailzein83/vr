@@ -1,48 +1,54 @@
-﻿
-app.service('AnalyticsAPIService', function (BaseAPIService) {
+﻿(function(app) {
 
-    return ({
-        GetTopNDestinations: GetTopNDestinations,
-        GetTrafficStatisticMeasureList: GetTrafficStatisticMeasureList,
-        GetTrafficStatisticSummary: GetTrafficStatisticSummary,
-        GetTrafficStatistics: GetTrafficStatistics,
-    });
+    "use strict";
 
-    function GetTopNDestinations(fromDate, toDate, from, to, topCount, showSupplier, groupByCodeGroup, codeGroup) {
-        return BaseAPIService.get("/api/TrafficMonitor/GetTopNDestinations",
-            {
-                fromDate: fromDate,
-                toDate: toDate,
-                from: from,
-                to: 20,
-                topCount: 20,
-                showSupplier: showSupplier,
-                groupByCodeGroup: groupByCodeGroup,
-                codeGroup: codeGroup
-            }
-           );
-    }
+    app.service('AnalyticsAPIService', ['BaseAPIService', function (baseApiService) {
 
-    function GetTrafficStatisticMeasureList() {
-        return BaseAPIService.get("/api/TrafficMonitor/GetTrafficStatisticMeasureList",
-            {
-            }
-           );
-    }
+        return ({
+            GetTopNDestinations: GetTopNDestinations,
+            GetTrafficStatisticMeasureList: GetTrafficStatisticMeasureList,
+            GetTrafficStatisticSummary: GetTrafficStatisticSummary,
+            GetTrafficStatistics: GetTrafficStatistics,
+            getReleaseCodeStatistics: getReleaseCodeStatistics
+        });
 
-    function GetTrafficStatisticSummary(getTrafficStatisticSummaryInput) {
-        return BaseAPIService.post("/api/TrafficMonitor/GetTrafficStatisticSummary", getTrafficStatisticSummaryInput);
-    }
+        function getReleaseCodeStatistics(input) {
+            return baseApiService.post("/api/TrafficMonitor/GetReleaseCodeStatistics", input);
+        }
 
-    function GetTrafficStatistics(filterByColumn, columnFilterValue, from, to) {
-        return BaseAPIService.get("/api/TrafficMonitor/GetTrafficStatistics",
-           {
-               filterByColumn: filterByColumn,
-               columnFilterValue: columnFilterValue,
-               from: from,
-               to: to
-           }
-          );
-    }
+        function GetTopNDestinations(fromDate, toDate, from, to, topCount, showSupplier, groupByCodeGroup, codeGroup) {
+            return baseApiService.get("/api/TrafficMonitor/GetTopNDestinations",
+                {
+                    fromDate: fromDate,
+                    toDate: toDate,
+                    from: from,
+                    to: 20,
+                    topCount: 20,
+                    showSupplier: showSupplier,
+                    groupByCodeGroup: groupByCodeGroup,
+                    codeGroup: codeGroup
+                });
+        }
 
-});
+        function GetTrafficStatisticMeasureList() {
+            return baseApiService.get("/api/TrafficMonitor/GetTrafficStatisticMeasureList",{});
+        }
+
+        function GetTrafficStatisticSummary(getTrafficStatisticSummaryInput) {
+            return baseApiService.post("/api/TrafficMonitor/GetTrafficStatisticSummary", getTrafficStatisticSummaryInput);
+        }
+
+        function GetTrafficStatistics(filterByColumn, columnFilterValue, from, to) {
+            return baseApiService.get("/api/TrafficMonitor/GetTrafficStatistics",
+               {
+                   filterByColumn: filterByColumn,
+                   columnFilterValue: columnFilterValue,
+                   from: from,
+                   to: to
+               });
+        }
+
+    }]);
+
+})(app);
+

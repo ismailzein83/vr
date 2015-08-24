@@ -20,7 +20,7 @@
             var groupKeys = [];
 
             for (var i = 0, len = $scope.selectedGroupKeys.length; i < len; i++) {
-                groupKeys.push($scope.selectedGroupKeys[i]);
+                groupKeys.push($scope.selectedGroupKeys[i].value);
             }
 
             selectedFilter = {
@@ -29,6 +29,8 @@
                 fromDate: $scope.fromDate,
                 toDate: $scope.toDate
             };
+
+            console.log(groupKeys);
 
             return mainGridApi.retrieveData({
                 Filter: filter,
@@ -67,18 +69,16 @@
                 //selectEntity(group, dataItem.GroupKeyValues[groupIndex].Id, dataItem.GroupKeyValues[groupIndex].Name);
             };
 
-            $scope.showResult = true;
+            $scope.showResult = false;
 
             $scope.measures = analyticsService.getReleaseCodeMeasureEnum();
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-
-                //return analyticsApiService.getReleaseCodeStatistics(dataRetrievalInput).then(function (response) {
-                //    onResponseReady(response);
-                //    $scope.showResult = true;
-                //});
-
-                //$scope.showResult = true;
+                console.log(dataRetrievalInput);
+                return analyticsApiService.getReleaseCodeStatistics(dataRetrievalInput).then(function (response) {
+                    onResponseReady(response);
+                    $scope.showResult = true;
+                });
             };
             
         }
