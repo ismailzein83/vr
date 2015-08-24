@@ -8,9 +8,9 @@ namespace TOne.Analytics.Entities
 {
     public class DailyReportQuery
     {
-        public List<int> CarrierIds { get; set; }
-        public List<int> SupplierIds { get; set; }
-        public List<int> ZoneIds { get; set; }
-        public DateTime TargetDate { get; set; }
+        public List<int> selectedZoneIDs { get; set; }
+        public List<string> selectedCustomerIDs { get; set; }
+        public List<string> selectedSupplierIDs { get; set; }
+        public DateTime targetDate { get; set; }
     }
 }

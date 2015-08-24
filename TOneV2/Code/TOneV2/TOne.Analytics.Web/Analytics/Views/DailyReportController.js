@@ -1,6 +1,6 @@
-﻿DailyReportController.$inject = ['$scope', 'CarrierAccountAPIService', 'CarrierTypeEnum', 'ZonesService', 'DailyReportMeasureEnum', 'VRNotificationService', 'UtilsService'];
+﻿DailyReportController.$inject = ['$scope', 'DailyReportAPIService', 'ZonesService', 'DailyReportMeasureEnum', 'VRNotificationService', 'UtilsService'];
 
-function DailyReportController($scope, CarrierAccountAPIService, CarrierTypeEnum, ZonesService, DailyReportMeasureEnum, VRNotificationService, UtilsService) {
+function DailyReportController($scope, DailyReportAPIService, ZonesService, DailyReportMeasureEnum, VRNotificationService, UtilsService) {
 
     var gridApi = undefined;
 
@@ -9,24 +9,30 @@ function DailyReportController($scope, CarrierAccountAPIService, CarrierTypeEnum
 
     function defineScope() {
 
-        $scope.customers = [];
         $scope.selectedCustomers = [];
-        $scope.suppliers = [];
         $scope.selectedSuppliers = [];
         $scope.selectedZones = [];
-        $scope.targetDate = undefined;
-        $scope.measures = [];
+        $scope.targetDate = Date.now();
+        $scope.showGrid = false;
 
         $scope.calls = [];
 
+        $scope.searchZones = function (text) {
+            return ZonesService.getSalesZones(text);
+        }
+
+        $scope.searchClicked = function () {
+            $scope.showGrid = true;
+            return retrieveData();
+        }
+
         $scope.gridReady = function (api) {
             gridApi = api;
-            return retrieveData();
         }
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
 
-            return DailyReportAPIService.GetDailyReportCalls(dataRetrievalInput)
+            return DailyReportAPIService.GetFilteredDailyReportCalls(dataRetrievalInput)
                 .then(function (response) {
                     onResponseReady(response);
                 })
@@ -34,59 +40,45 @@ function DailyReportController($scope, CarrierAccountAPIService, CarrierTypeEnum
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
         }
-
-        $scope.searchZones = function (text) {
-            return ZonesService.getSalesZones(text);
-        }
     }
 
     function load() {
-        $scope.isInitializing = true;
-
-        loadMeasures();
-
-        UtilsService.waitMultipleAsyncOperations([loadCustomers, loadSuppliers])
-            .catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            })
-            .finally(function () {
-                $scope.isInitializing = false;
-            });
     }
 
     function retrieveData() {
         var query = {
-            CarrierIds: getCarrierIds(),
-            SupplierIds: getSupplierIds(),
-            ZoneIds: getZoneIds(),
+            selectedZoneIDs: getSelectedZoneIDs(),
+            selectedCustomerIDs: getCarrierAccountIDs($scope.selectedCustomers),
+            selectedSupplierIDs: getCarrierAccountIDs($scope.selectedSuppliers),
             targetDate: $scope.targetDate
         };
 
         return gridApi.retrieveData(query);
     }
 
-    function loadCustomers() {
-        return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Customer.value)
-            .then(function (response) {
-                angular.forEach(response, function (item) {
-                    $scope.customers.push(item);
-                });
-            });
+    function getSelectedZoneIDs() {
+        if ($scope.selectedZones.length == 0)
+            return [];
+
+        var ids = [];
+
+        for (var i = 0; i < $scope.selectedZones.length; i++)
+            ids.push($scope.selectedZones[i].ZoneId);
+
+        return ids;
     }
 
-    function loadSuppliers() {
-        return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Supplier.value)
-            .then(function (response) {
-                angular.forEach(response, function (item) {
-                    $scope.suppliers.push(item);
-                });
-            });
-    }
+    function getCarrierAccountIDs(carriers) {
+        if (carriers.length == 0)
+            return [];
 
-    function loadMeasures() {
-        for (var property in DailyReportMeasureEnum) {
-            $scope.measures.push(DailyReportMeasureEnum[property]);
+        var ids = [];
+
+        for (var i = 0; i < carriers.length; i++) {
+            ids.push(carriers[i].CarrierAccountID);
         }
+
+        return ids;
     }
 }
 

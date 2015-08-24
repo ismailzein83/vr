@@ -1,10 +1,10 @@
 ﻿app.service('DailyReportAPIService', function (BaseAPIService) {
 
     return ({
-        GetDailyReportCalls: GetDailyReportCalls
+        GetFilteredDailyReportCalls: GetFilteredDailyReportCalls
     });
 
-    function GetDailyReportCalls(input) {
-        return BaseAPIService.get('/api/DailyReport/GetDailyReportCalls', input);
+    function GetFilteredDailyReportCalls(input) {
+        return BaseAPIService.post('/api/DailyReport/GetFilteredDailyReportCalls', input);
     }
 });
