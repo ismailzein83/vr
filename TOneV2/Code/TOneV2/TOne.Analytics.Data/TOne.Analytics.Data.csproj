@@ -55,6 +55,7 @@
     <Compile Include="IBlockedAttemptsDataManager.cs" />
     <Compile Include="ICarrierSummaryStatsDataManager.cs" />
     <Compile Include="ICDRDataManager.cs" />
+    <Compile Include="ICustomerPricelistsDataManager.cs" />
     <Compile Include="IDailyReportDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IAnalyticsDataManager.cs" />

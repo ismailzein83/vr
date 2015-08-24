@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Http;
+using TOne.Analytics.Business;
+
+namespace TOne.Analytics.Web.Controllers
+{
+    public class CustomerPricelistsController : Vanrise.Web.Base.BaseAPIController
+    {
+        
+        [HttpPost]
+        public object GetCustomerPriceLists(Vanrise.Entities.DataRetrievalInput<string> input)
+        {
+            CustomerPricelistsManager manager = new CustomerPricelistsManager();
+            return GetWebResponse(input, manager.GetCustomerPriceLists(input));
+        }
+    }
+}

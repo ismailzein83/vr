@@ -1,0 +1,35 @@
+﻿<vr-panel ng-controller="Analytics_CustomerPricelistsController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-select datasource="switches" datatextfield="Name" datavaluefield="SwitchId" selectedvalues="selectedSwitches" label="Switches" ismultipleselection></vr-select>
+                </vr-columns>
+
+            </vr-row>
+           
+        </div>
+    </vr-form>
+
+    <vr-row>
+        <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+
+            <div transclude-to="buttons">
+                <vr-button type="Search" formname="formFilter" data-onclick="getData"></vr-button>
+                <vr-button type="Reset"></vr-button>
+            </div>
+        </vr-actionbar>
+    </vr-row>
+    <div vr-loader="isGettingData">
+        <vr-row>
+            <vr-columns width="fullrow" simplecol>
+                <vr-datagrid datasource="data" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'" on-ready="onMainGridReady" maxheight="500px">
+                    <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" type="measure.type"></vr-datagridcolumn>
+
+
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </div>
+
+</vr-panel>

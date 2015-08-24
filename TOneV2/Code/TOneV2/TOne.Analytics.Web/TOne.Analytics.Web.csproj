@@ -125,6 +125,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\CarrierSummaryStatsController.cs" />
+    <Compile Include="Controllers\CustomerPricelistsController.cs" />
     <Compile Include="Controllers\DailyReportController.cs" />
     <Compile Include="Controllers\HourlyReportController.cs" />
     <Compile Include="Controllers\RawCDRLogController.cs" />
@@ -160,6 +161,7 @@
     <Content Include="Analytics\Services\APIServices\CarrierSummaryStatsAPIService.js" />
     <Content Include="Analytics\Services\APIServices\CDRAPIService.js" />
     <Content Include="Analytics\Constants\ChartTypeEnum.js" />
+    <Content Include="Analytics\Services\APIServices\CustomerPricelistsAPIService.js" />
     <Content Include="Analytics\Services\APIServices\DailyReportAPIService.js" />
     <Content Include="Analytics\Services\APIServices\HourlyReportAPIService.js" />
     <Content Include="Analytics\Services\APIServices\RawCDRLogAPIService.js" />
@@ -185,6 +187,8 @@
     <Content Include="Analytics\Views\CDR\CDRLog.html" />
     <Content Include="Analytics\Views\CDR\CDRLogController.js" />
     <Content Include="Analytics\Views\CDR\CDRReport.html" />
+    <Content Include="Analytics\Views\CustomerPricelists.html" />
+    <Content Include="Analytics\Views\CustomerPricelistsController.js" />
     <Content Include="Analytics\Views\DailyReport.html" />
     <Content Include="Analytics\Views\DailyReportController.js" />
     <Content Include="Analytics\Views\RawCDRLog.html" />
