@@ -150,6 +150,7 @@
     <Build Include="Security\common.sql" />
     <Build Include="sec\Stored Procedures\sp_User_EditUserProfile.sql" />
     <Build Include="sec\Stored Procedures\sp_User_CheckUserPassword.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_ChangeMyPassword.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

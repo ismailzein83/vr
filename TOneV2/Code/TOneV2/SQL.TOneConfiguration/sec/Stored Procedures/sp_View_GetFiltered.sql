@@ -16,9 +16,11 @@ AS
 		IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 			BEGIN
 				SELECT	v.Id,
-						v.Name PageName,
-						v.Module ModuleId,
-						v.Url,v.Audience,
+						v.Name,
+						v.Module,
+						v.[RequiredPermissions],
+						v.Url,
+						v.Audience,
 						v.Content,
 						v.[Type],
 						m.Name ModuleName 
