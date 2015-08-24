@@ -19,14 +19,14 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="net.tcp://166.62.16.176:8523/FMSImportService/mex" Protocol="mex" SourceId="1" />
+    <MetadataSource Address="net.tcp://198.12.156.25:8523/FMSImportService/mex" Protocol="mex" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="13073b9d-09b5-4ac2-9d70-ca0206b58199" SourceId="1" SourceUrl="net.tcp://166.62.16.176:8523/FMSImportService/mex" />
-    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="cb0fd955-b876-480e-a25c-e08b20425e78" SourceId="1" SourceUrl="net.tcp://166.62.16.176:8523/FMSImportService/mex" />
-    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="abd2475c-5cc2-451a-9f90-5f8ed0af83d1" SourceId="1" SourceUrl="net.tcp://166.62.16.176:8523/FMSImportService/mex" />
-    <MetadataFile FileName="Vanrise.Fzero.Bypass1.xsd" MetadataType="Schema" ID="b9a036e8-c17f-4054-86c1-5e8ead50fd33" SourceId="1" SourceUrl="net.tcp://166.62.16.176:8523/FMSImportService/mex" />
-    <MetadataFile FileName="Vanrise.Fzero.Services.WcfServiceLibrary.xsd" MetadataType="Schema" ID="d557e444-41fa-4833-b339-cdbfff7d1648" SourceId="1" SourceUrl="net.tcp://166.62.16.176:8523/FMSImportService/mex" />
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="13073b9d-09b5-4ac2-9d70-ca0206b58199" SourceId="1" SourceUrl="net.tcp://198.12.156.25:8523/FMSImportService/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="cb0fd955-b876-480e-a25c-e08b20425e78" SourceId="1" SourceUrl="net.tcp://198.12.156.25:8523/FMSImportService/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="abd2475c-5cc2-451a-9f90-5f8ed0af83d1" SourceId="1" SourceUrl="net.tcp://198.12.156.25:8523/FMSImportService/mex" />
+    <MetadataFile FileName="Vanrise.Fzero.Bypass1.xsd" MetadataType="Schema" ID="b9a036e8-c17f-4054-86c1-5e8ead50fd33" SourceId="1" SourceUrl="net.tcp://198.12.156.25:8523/FMSImportService/mex" />
+    <MetadataFile FileName="Vanrise.Fzero.Services.WcfServiceLibrary.xsd" MetadataType="Schema" ID="d557e444-41fa-4833-b339-cdbfff7d1648" SourceId="1" SourceUrl="net.tcp://198.12.156.25:8523/FMSImportService/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
