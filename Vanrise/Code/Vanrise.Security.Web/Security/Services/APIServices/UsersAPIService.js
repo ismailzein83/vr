@@ -8,7 +8,8 @@
         CheckUserName: CheckUserName,
         ResetPassword: ResetPassword,
         GetUsers: GetUsers,
-        GetMembers: GetMembers
+        GetMembers: GetMembers,
+        EditUserProfile: EditUserProfile
     });
 
     function GetFilteredUsers(input) {
@@ -58,6 +59,13 @@
         return BaseAPIService.post("/api/Users/ResetPassword",
             resetPasswordInput
            );
+    }
+
+    function EditUserProfile(name) {
+        return BaseAPIService.get("/api/Users/EditUserProfile",
+             { Name: name
+             }
+            );
     }
 
 });

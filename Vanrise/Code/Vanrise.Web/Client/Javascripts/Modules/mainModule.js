@@ -80,6 +80,17 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         };
         VRModalService.showModal('/Client/Modules/Security/Views/ResetPassword.html', null, modalSettings);
     }
+
+    $scope.openEditProfileModal = function () {
+
+        var modalSettings = {
+        };
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.title = "Edit Profile for User " + $scope.userDisplayName;
+
+        };
+        VRModalService.showModal('/Client/Modules/Security/Views/EditProfile.html', null, modalSettings);
+    }
    
 
 

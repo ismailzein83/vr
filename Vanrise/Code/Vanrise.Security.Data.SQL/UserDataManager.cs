@@ -86,6 +86,10 @@ namespace Vanrise.Security.Data.SQL
             bool result = (bool)ExecuteScalarSP("sec.sp_User_CheckUserPassword", userId ,Password);
             return result;
         }
+
+        public bool EditUserProfile(string name,int userId) {
+            return ExecuteNonQuerySP("sec.sp_User_EditUserProfile", userId,name) >0 ;
+        }
         private User UserMapper(IDataReader reader)
         {
             return new Entities.User

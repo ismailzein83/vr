@@ -111,5 +111,22 @@ namespace Vanrise.Security.Business
             IUserDataManager datamanager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
             return datamanager.CheckUserName(name);
         }
+
+        public Vanrise.Entities.UpdateOperationOutput<User> EditUserProfile(string name,int userId)
+        {
+            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            bool updateActionSucc = dataManager.EditUserProfile(name,userId);
+            UpdateOperationOutput<User> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<User>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = GetUserbyId(userId);
+            }
+            return updateOperationOutput;
+        }
     }
 }
