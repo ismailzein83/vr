@@ -1,15 +1,12 @@
-﻿ResetPasswordController.$inject = ['$scope', 'SecurityAPIService', 'VRNavigationService', 'VRNotificationService'];
+﻿ResetPasswordController.$inject = ['$scope', 'SecurityAPIService', 'VRNotificationService'];
 
-function ResetPasswordController($scope, SecurityAPIService, VRNavigationService, VRNotificationService) {
+function ResetPasswordController($scope, SecurityAPIService, VRNotificationService) {
 
-   // var parameters;
     loadParameters();
     defineScope();
     load();
 
     function loadParameters() {
-        //parameters = VRNavigationService.getParameters($scope);
-        //console.log(parameters);
     }
 
     function defineScope() {
@@ -26,11 +23,6 @@ function ResetPasswordController($scope, SecurityAPIService, VRNavigationService
             }
             else {
                
-                //var credentialsObject = {
-                //    OldPassword: $scope.txtPasswordOld,
-                //    NewPassword: $scope.txtPasswordNew
-                //};
-
                 return SecurityAPIService.ResetPassword($scope.txtPasswordOld,$scope.txtPasswordNew)
                         .then(function (response) {
                             if (VRNotificationService.notifyOnItemUpdated("User's password", response)) {
