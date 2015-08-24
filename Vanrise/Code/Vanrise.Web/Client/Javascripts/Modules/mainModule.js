@@ -175,6 +175,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
 
     var allMenuItems = [];   
     MenuAPIService.GetMenuItems().then(function (response) {
+        console.log(response);
         angular.forEach(response, function (value, key, itm) {
             value.keyclass = key % 16;
             value.isSelected = false;

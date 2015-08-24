@@ -156,7 +156,7 @@ namespace Vanrise.Security.Business
         {
             
             
-            MenuItem menu = new MenuItem() { Id = module.ModuleId, Name = module.Name, Location = module.Url, Icon = module.Icon, AllowDynamic=module.AllowDynamic };
+            MenuItem menu = new MenuItem() { Id = module.ModuleId, Name = module.Name,Title=module.Title, Location = module.Url, Icon = module.Icon, AllowDynamic=module.AllowDynamic };
             
             List<Module> subModules = modules.FindAll(x => x.ParentId == module.ModuleId && x.AllowDynamic);
 
