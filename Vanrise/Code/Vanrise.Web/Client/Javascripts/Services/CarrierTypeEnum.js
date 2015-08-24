@@ -1,6 +1,6 @@
 ﻿
 app.constant('CarrierTypeEnum', {
-    SaleZone: { value: 0, description: "Exchange" },
-    Customer: { value: 1, description: "Customer" },
+    SaleZone: { value: 1, description: "Exchange" },
+    Customer: { value: 0, description: "Customer" },
     Supplier: { value: 2, description: "Supplier" }
 });
