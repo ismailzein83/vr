@@ -126,7 +126,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
                     isNumberProfileDataLoaded = true;
                     return retrieveData_NumberProfiles();
                 }
-                else if ($scope.selectedGroupKeyIndex == 2 && !isNumberProfileDataLoaded) {
+                else if ($scope.selectedGroupKeyIndex == 2 && !isRelatedCaseDataLoaded) {
                     isRelatedCaseDataLoaded = true;
                     return retrieveData_RelatedCases();
                 }
@@ -260,15 +260,18 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
     }
 
     function retrieveData_NormalCDRs() {
+        if (normalCDRGridAPI != undefined)
+        {
+            var query = {
+                FromDate: $scope.fromDate,
+                ToDate: $scope.toDate,
+                MSISDN: $scope.selectedRelatedNumber
+            };
 
-        var query = {
-            FromDate: $scope.fromDate,
-            ToDate: $scope.toDate,
-            MSISDN: $scope.selectedRelatedNumber
-        };
 
-
-        return normalCDRGridAPI.retrieveData(query);
+            return normalCDRGridAPI.retrieveData(query);
+        }
+        
     }
 
     function retrieveData_NumberProfiles() {
