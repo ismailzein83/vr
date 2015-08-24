@@ -167,7 +167,6 @@
     <Content Include="Analytics\Services\APIServices\HourlyReportAPIService.js" />
     <Content Include="Analytics\Services\APIServices\RawCDRLogAPIService.js" />
     <Content Include="Analytics\Services\APIServices\RepeatedNumbersAPIService.js" />
-    <Content Include="Analytics\Services\TariffAPIService.js" />
     <Content Include="Analytics\Views\Billing Reports\BillingReports.html" />
     <Content Include="Analytics\Views\Billing Reports\BillingReportsController.js" />
     <Content Include="Analytics\Views\Billing Statistics\Variation Reports\Variation Reports Templates\VariationReportsCustomersSuppliers.html" />
