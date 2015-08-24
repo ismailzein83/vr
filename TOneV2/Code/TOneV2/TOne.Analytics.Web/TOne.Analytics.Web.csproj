@@ -149,6 +149,7 @@
     <Content Include="Analytics\Constants\RawCDRLogWhereInfoEnum.js" />
     <Content Include="Analytics\Constants\ReleaseCodeMeasureEnum.js" />
     <Content Include="Analytics\Constants\RepeatedNumbersMeasureEnum.js" />
+    <Content Include="Analytics\Constants\SupplierTariffMeasureEnum.js" />
     <Content Include="Analytics\Constants\TimePeriodEnum.js" />
     <Content Include="Analytics\Constants\TrafficStatisticGroupKeysEnum.js" />
     <Content Include="Analytics\Constants\TrafficMonitorMeasureEnum.js" />
@@ -166,6 +167,7 @@
     <Content Include="Analytics\Services\APIServices\HourlyReportAPIService.js" />
     <Content Include="Analytics\Services\APIServices\RawCDRLogAPIService.js" />
     <Content Include="Analytics\Services\APIServices\RepeatedNumbersAPIService.js" />
+    <Content Include="Analytics\Services\TariffAPIService.js" />
     <Content Include="Analytics\Views\Billing Reports\BillingReports.html" />
     <Content Include="Analytics\Views\Billing Reports\BillingReportsController.js" />
     <Content Include="Analytics\Views\Billing Statistics\Variation Reports\Variation Reports Templates\VariationReportsCustomersSuppliers.html" />
@@ -197,6 +199,8 @@
     <Content Include="Analytics\Views\RawCDRLogTemplate\RawCDRLogTemplateController.js" />
     <Content Include="Analytics\Views\RepeatedNumbers.html" />
     <Content Include="Analytics\Views\RepeatedNumbersController.js" />
+    <Content Include="Analytics\Views\SupplierTariffManagement.html" />
+    <Content Include="Analytics\Views\SupplierTariffManagementController.js" />
     <Content Include="Analytics\Views\Traffic Statistics\HourlyReport.html" />
     <Content Include="Analytics\Views\Traffic Statistics\HourlyReportController.js" />
     <Content Include="Analytics\Views\Traffic Statistics\HourlyReportGrid.html" />
