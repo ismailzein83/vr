@@ -14,7 +14,14 @@
 
 
 
+
+
 GO
 CREATE CLUSTERED INDEX [IX_AccountCase_AccountNumber]
     ON [FraudAnalysis].[AccountCase]([AccountNumber] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_AccountCase_LogDate]
+    ON [FraudAnalysis].[AccountCase]([LogDate] ASC);
 
