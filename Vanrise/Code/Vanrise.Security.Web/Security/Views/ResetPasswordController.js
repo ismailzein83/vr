@@ -33,7 +33,7 @@ function ResetPasswordController($scope, SecurityAPIService, VRNavigationService
 
                 return SecurityAPIService.ResetPassword($scope.txtPasswordOld,$scope.txtPasswordNew)
                         .then(function (response) {
-                            if (VRNotificationService.notifyOnItemUpdated("User's password was", response)) {
+                            if (VRNotificationService.notifyOnItemUpdated("User's password", response)) {
                                $scope.modalContext.closeModal();
                             }
                         })
