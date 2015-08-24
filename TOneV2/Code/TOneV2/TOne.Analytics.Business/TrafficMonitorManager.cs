@@ -16,6 +16,12 @@ namespace TOne.Analytics.Business
 {
     public class TrafficMonitorManager
     {
+        public Vanrise.Entities.IDataRetrievalResult<GroupSummary<TrafficStatistic>> GetReleaseCodeStatistics(Vanrise.Entities.DataRetrievalInput<TrafficStatisticSummaryInput> input)
+        {
+            ITrafficMonitorDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<ITrafficMonitorDataManager>();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetTrafficStatisticSummary(input));
+        }
+
         public Vanrise.Entities.IDataRetrievalResult<GroupSummary<TrafficStatistic>> GetTrafficStatisticSummary(Vanrise.Entities.DataRetrievalInput<TrafficStatisticSummaryInput> input)
         {
             ITrafficMonitorDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<ITrafficMonitorDataManager>();

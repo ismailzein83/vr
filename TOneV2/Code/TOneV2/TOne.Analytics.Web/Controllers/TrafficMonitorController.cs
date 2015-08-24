@@ -46,6 +46,16 @@ namespace TOne.Analytics.Web.Controllers
         }
  
 
+        [HttpPost]
+        public object GetReleaseCodeStatistics(Vanrise.Entities.DataRetrievalInput<TrafficStatisticSummaryInput> input)
+        {
+            System.Threading.Thread.Sleep(1000);
+            TrafficMonitorManager manager = new TrafficMonitorManager();
+            return GetWebResponse(input, manager.GetReleaseCodeStatistics(input));
+        }
+
+        
+
 
         #endregion
 

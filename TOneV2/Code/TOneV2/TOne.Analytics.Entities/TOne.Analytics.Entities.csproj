@@ -124,6 +124,7 @@
     <Compile Include="Mobile\TopNDestinationView.cs" />
     <Compile Include="RawCDRInput.cs" />
     <Compile Include="RawCDRLog.cs" />
+    <Compile Include="ReleaseCodeStatistic.cs" />
     <Compile Include="RepeatedNumbers.cs" />
     <Compile Include="RepeatedNumbersInput.cs" />
     <Compile Include="TimeValuesRecord.cs" />

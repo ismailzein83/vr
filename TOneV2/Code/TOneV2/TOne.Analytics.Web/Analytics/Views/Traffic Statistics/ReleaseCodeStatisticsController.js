@@ -72,6 +72,7 @@
             $scope.measures = analyticsService.getReleaseCodeMeasureEnum();
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+
                 //return analyticsApiService.getReleaseCodeStatistics(dataRetrievalInput).then(function (response) {
                 //    onResponseReady(response);
                 //    $scope.showResult = true;
