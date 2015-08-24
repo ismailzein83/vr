@@ -148,6 +148,8 @@
     <Build Include="common\Stored Procedures\sp_File_GetInfoById.sql" />
     <Build Include="common\Stored Procedures\sp_File_Insert.sql" />
     <Build Include="Security\common.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_EditUserProfile.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_CheckUserPassword.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

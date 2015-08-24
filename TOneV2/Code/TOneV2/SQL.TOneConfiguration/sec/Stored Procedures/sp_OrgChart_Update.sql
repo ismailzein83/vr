@@ -4,7 +4,7 @@
 	@Hierarchy VARCHAR(1000)
 AS
 BEGIN
-IF NOT EXISTS(SELECT 1 FROM sec.[OrgChart] WHERE Name = @Name AND Hierarchy = @Hierarchy)
+IF NOT EXISTS(SELECT 1 FROM sec.[OrgChart] WHERE Id != @Id AND Name = @Name)
 	BEGIN
 		UPDATE [sec].[OrgChart]
 		SET Name = @Name,
