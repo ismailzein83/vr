@@ -61,6 +61,7 @@
     <Compile Include="IAnalyticsDataManager.cs" />
     <Compile Include="IHourlyReportDataManager.cs" />
     <Compile Include="IRawCDRLogDataManager.cs" />
+    <Compile Include="IReleaseCodeDataManager.cs" />
     <Compile Include="IRepeatedNumbersDataManager.cs" />
     <Compile Include="ISupplierTariffDataManager.cs" />
     <Compile Include="ITrafficMonitorDataManager.cs" />

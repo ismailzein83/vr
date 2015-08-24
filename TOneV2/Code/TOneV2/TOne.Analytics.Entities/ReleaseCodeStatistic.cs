@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.Analytics.Entities
 {
@@ -12,15 +8,15 @@ namespace TOne.Analytics.Entities
 
         public String ReleaseSource { get; set; }
 
-        public String DurationsInMinutes { get; set; }
+        public Decimal DurationsInMinutes { get; set; }
 
-        public String Attempts { get; set; }
+        public int Attempts { get; set; }
 
-        public String FailedAttempts { get; set; }
+        public int FailedAttempts { get; set; }
 
-        public String FirstAttempt { get; set; }
+        public DateTime FirstAttempt { get; set; }
 
-        public String LastAttempt { get; set; }
+        public DateTime LastAttempt { get; set; }
 
         public String PortOut { get; set; }
 

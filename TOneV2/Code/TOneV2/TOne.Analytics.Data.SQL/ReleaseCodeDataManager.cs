@@ -4,13 +4,12 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using TOne.Analytics.Entities;
 using TOne.Data.SQL;
 
 namespace TOne.Analytics.Data.SQL
 {
-    public class ReleaseCodeDataManager : BaseTOneDataManager
+    public class ReleaseCodeDataManager : BaseTOneDataManager, IReleaseCodeDataManager
     {
         private TrafficStatisticCommon _trafficStatisticCommon = new TrafficStatisticCommon();
 
@@ -128,7 +127,7 @@ namespace TOne.Analytics.Data.SQL
             return queryBuilder.ToString();
         }
 
-        public GenericSummaryBigResult<TrafficStatistic> GetReleaseCodeStatistic(Vanrise.Entities.DataRetrievalInput<TrafficStatisticSummaryInput> input)
+        public GenericSummaryBigResult<ReleaseCodeStatistic> GetReleaseCodeStatistic(Vanrise.Entities.DataRetrievalInput<TrafficStatisticSummaryInput> input)
         {
             Dictionary<string, string> mapper = new Dictionary<string, string>
             {
@@ -163,12 +162,12 @@ namespace TOne.Analytics.Data.SQL
                     cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.To));
                 });
             };
-            GenericSummaryBigResult<TrafficStatistic> rslt = RetrieveData(input, createTempTableAction, (reader) =>
+            GenericSummaryBigResult<ReleaseCodeStatistic> rslt = RetrieveData(input, createTempTableAction, (reader) =>
             {
-                var obj = new GroupSummary<TrafficStatistic>
+                var obj = new GroupSummary<ReleaseCodeStatistic>
                 {
                     GroupKeyValues = new KeyColumn[input.Query.GroupKeys.Count()],
-                    Data = FillTrafficStatisticFromReader(reader)
+                    Data = FillReleaseCodeStatisticFromReader(reader)
                 };
 
 
@@ -193,37 +192,28 @@ namespace TOne.Analytics.Data.SQL
                     };
                 }
                 return obj;
-            }, mapper, new GenericSummaryBigResult<TrafficStatistic>()) as GenericSummaryBigResult<TrafficStatistic>;
+            }, mapper, new GenericSummaryBigResult<ReleaseCodeStatistic>()) as GenericSummaryBigResult<ReleaseCodeStatistic>;
 
-            _trafficStatisticCommon.FillBEProperties<TrafficStatistic>(rslt, input.Query.GroupKeys);
+            _trafficStatisticCommon.FillBEProperties<ReleaseCodeStatistic>(rslt, input.Query.GroupKeys);
             return rslt;
 
         }
 
-        TrafficStatistic FillTrafficStatisticFromReader(IDataReader reader)
+        ReleaseCodeStatistic FillReleaseCodeStatisticFromReader(IDataReader reader)
         {
-            TrafficStatistic trafficStatistics = new TrafficStatistic
+            ReleaseCodeStatistic releaseCodeStatistics = new ReleaseCodeStatistic
             {
-                FirstCDRAttempt = GetReaderValue<DateTime>(reader, "FirstCDRAttempt"),
-                LastCDRAttempt = GetReaderValue<DateTime>(reader, "LastCDRAttempt"),
                 Attempts = GetReaderValue<int>(reader, "Attempts"),
                 FailedAttempts = GetReaderValue<int>(reader, "FailedAttempts"),
-                DeliveredAttempts = GetReaderValue<int>(reader, "DeliveredAttempts"),
-                SuccessfulAttempts = GetReaderValue<int>(reader, "SuccessfulAttempts"),
                 DurationsInMinutes = GetReaderValue<Decimal>(reader, "DurationsInSeconds")/60,
-                MaxDurationInMinutes = GetReaderValue<Decimal>(reader, "MaxDurationInSeconds")/60,
-                CeiledDuration = GetReaderValue<long>(reader, "CeiledDuration"),
-                ACD = GetReaderValue<Decimal>(reader, "ACD"),
-                PDDInSeconds = GetReaderValue<Decimal>(reader, "PDDInSeconds"),
-                UtilizationInSeconds = GetReaderValue<Decimal>(reader, "UtilizationInSeconds"),
-                NumberOfCalls = GetReaderValue<int>(reader, "NumberOfCalls"),
-                DeliveredNumberOfCalls = GetReaderValue<int>(reader, "DeliveredNumberOfCalls"),
-                PGAD = GetReaderValue<Decimal>(reader, "PGAD"),
-                ABR = GetReaderValue<Decimal>(reader, "ABR"),
-                ASR = GetReaderValue<Decimal>(reader, "ASR"),
-                NER = GetReaderValue<Decimal>(reader, "NER")
+                ReleaseCode = reader["ReleaseCode"] as string,
+                FirstAttempt = GetReaderValue<DateTime>(reader, "FirstAttempt"),
+                LastAttempt = GetReaderValue<DateTime>(reader, "LastAttempt"),
+                PortIn = reader["PortIn"] as string,
+                PortOut = reader["PortOut"] as string,
+                ReleaseSource = reader["ReleaseSource"] as string
             };
-            return trafficStatistics;
+            return releaseCodeStatistics;
         }
 
     }
