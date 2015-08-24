@@ -3,13 +3,23 @@
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns colnum="1">
-                    <vr-switch label="Is Customer" value="isCustomer"></vr-switch>
+                    <!--<vr-switch label="Is Customer" value="isCustomer"></vr-switch>-->
+                    <vr-select label="Group By" datasource="optionsGroups.datasource"
+                               datatextfield="name" datavaluefield="value" selectedvalues="optionsGroups.selectedvalues"></vr-select>
                 </vr-columns>
-                <vr-columns colnum="2">
-                    <vr-select label="Carrier" datasource="datasource"  withlocalfilter selectedvalues="selectedvalues" datatextfield="Name" datavaluefield="CarrierAccountID"
+                <vr-columns colnum="2" ng-show="optionsGroups.selectedvalues.value== 1 || optionsGroups.selectedvalues.value== 2">
+                    <vr-select label="Carrier" datasource="datasource" withlocalfilter selectedvalues="selectedvalues" datatextfield="Name" datavaluefield="CarrierAccountID"
                                entityname="Carriers">
                     </vr-select>
                 </vr-columns>
+                
+                <vr-columns colnum="2" ng-show="optionsGroups.selectedvalues.value== 3">
+                    <vr-select label="Zone" datasource="datasourceZones" selectedvalues="selectedvaluesZones" datatextfield="Name" datavaluefield="ZoneId"
+                               entityname="Zones">
+                    </vr-select>
+
+                </vr-columns>
+
                 <vr-columns colnum="1">
                     <vr-textbox type="number" label="Top" value="top"></vr-textbox>
                 </vr-columns>

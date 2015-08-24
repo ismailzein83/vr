@@ -13,6 +13,7 @@ namespace TOne.BusinessEntity.Entities
         public string CodeGroupId { get; set; }
 
         public string CodeGroupName { get; set; }
+        public string SupplierID { get; set; }
 
         public string Name { get; set; }
 

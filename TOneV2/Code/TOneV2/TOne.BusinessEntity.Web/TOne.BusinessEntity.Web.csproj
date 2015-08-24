@@ -139,6 +139,7 @@
     <Compile Include="Controllers\CarrierProfileController.cs" />
     <Compile Include="Controllers\RateController.cs" />
     <Compile Include="Controllers\SwitchController.cs" />
+    <Compile Include="Controllers\ZoneController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +164,7 @@
     <Content Include="BusinessEntity\Services\APIServices\TODAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\ProfileAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\SwitchManagmentAPIService.js" />
+    <Content Include="BusinessEntity\Services\APIServices\ZoneAPIService.js" />
     <Content Include="BusinessEntity\Views\AccountManager\AccountManagerManagement.html" />
     <Content Include="BusinessEntity\Views\AccountManager\AccountManagerManagementController.js" />
     <Content Include="BusinessEntity\Views\AccountManager\CarrierAssignmentEditor.html" />

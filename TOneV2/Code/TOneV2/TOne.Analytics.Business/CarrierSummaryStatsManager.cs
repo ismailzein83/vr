@@ -90,28 +90,28 @@ namespace TOne.Analytics.Business
                     catch { }
                 }
 
-                if (input.Query.ShowInactive == "True")
-                {
-                    if (input.Query.CarrierType == "Customer")
-                    {
-                        foreach (var account in _cmanager.GetAllCarriers(CarrierType.Customer).Except(activeCustomers))
-                        {
-                            CarrierSummaryStats row = new CarrierSummaryStats();
-                            row.GroupName = account.ProfileName;
-                            lstCarrierSummarySta.Add(row);
-                        }
-                    }
+                //if (input.Query.ShowInactive == "True")
+                //{
+                //    if (input.Query.CarrierType == "Customer")
+                //    {
+                //        foreach (var account in _cmanager.GetAllCarriers(CarrierType.Customer).Except(activeCustomers))
+                //        {
+                //            CarrierSummaryStats row = new CarrierSummaryStats();
+                //            row.GroupName = account.ProfileName;
+                //            lstCarrierSummarySta.Add(row);
+                //        }
+                //    }
 
-                    if (input.Query.CarrierType == "Supplier")
-                    {
-                        foreach (var account in _cmanager.GetAllCarriers(CarrierType.Supplier).Except(activeSuppliers))
-                        {
-                            CarrierSummaryStats row = new CarrierSummaryStats();
-                            row.GroupName = account.ProfileName;
-                            lstCarrierSummarySta.Add(row);
-                        }
-                    }
-                }
+                //    if (input.Query.CarrierType == "Supplier")
+                //    {
+                //        foreach (var account in _cmanager.GetAllCarriers(CarrierType.Supplier).Except(activeSuppliers))
+                //        {
+                //            CarrierSummaryStats row = new CarrierSummaryStats();
+                //            row.GroupName = account.ProfileName;
+                //            lstCarrierSummarySta.Add(row);
+                //        }
+                //    }
+                //}
             }
 
             if (input.Query.GroupByProfile == "Y")
@@ -144,19 +144,19 @@ namespace TOne.Analytics.Business
                     catch { }
                 }
 
-                if (input.Query.ShowInactive == "True")
-                {
-                    foreach (CarrierAccount account in _cmanager.GetAllCarriers(CarrierType.Customer).Except(activeCustomers))
-                    {
-                        if (!NEwProfiles.Contains(account.ProfileId))
-                        {
-                            CarrierSummaryStats NewRow = new CarrierSummaryStats();
-                            NewRow.GroupName = account.ProfileName;
-                            lstCarrierSummarySta.Add(NewRow);
-                            NEwProfiles.Add(account.ProfileId);
-                        }
-                    }
-                }
+                //if (input.Query.ShowInactive == "True")
+                //{
+                //    foreach (CarrierAccount account in _cmanager.GetAllCarriers(CarrierType.Customer).Except(activeCustomers))
+                //    {
+                //        if (!NEwProfiles.Contains(account.ProfileId))
+                //        {
+                //            CarrierSummaryStats NewRow = new CarrierSummaryStats();
+                //            NewRow.GroupName = account.ProfileName;
+                //            lstCarrierSummarySta.Add(NewRow);
+                //            NEwProfiles.Add(account.ProfileId);
+                //        }
+                //    }
+                //}
             }
             lstCarrierSummaryStats.Data = lstCarrierSummarySta;
            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input,lstCarrierSummaryStats );

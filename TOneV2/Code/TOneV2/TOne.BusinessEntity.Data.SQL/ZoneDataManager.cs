@@ -51,6 +51,11 @@ namespace TOne.BusinessEntity.Data.SQL
             return GetItemsSP("[BEntity].[sp_Zone_GetFilteredBySupplierId]", ZoneInfoMapper, supplierId, nameFilter);
          
         }
+        public List<ZoneInfo> GetOwnZones(string supplierId, string nameFilter, DateTime whenDate)
+        {
+            return GetItemsSP("[BEntity].[sp_Zone_GetOwnFilteredBySupplierId]", ZoneInfoMapper, supplierId, nameFilter, whenDate);
+
+        }
 
         public string GetZoneName(int zoneId)
         {
@@ -124,6 +129,7 @@ namespace TOne.BusinessEntity.Data.SQL
                 ZoneId = (int)reader["ZoneID"],
                 CodeGroupId = reader["CodeGroupId"] as string,
                 CodeGroupName = reader["CodeGroupName"] as string,
+                SupplierID = reader["SupplierID"] as string,
                 Name = reader["Name"] as string,
                 ServiceFlag = GetReaderValue<short>(reader, "ServicesFlag"),
                 BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate"),

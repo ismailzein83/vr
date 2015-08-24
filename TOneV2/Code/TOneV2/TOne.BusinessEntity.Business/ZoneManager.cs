@@ -34,6 +34,11 @@ namespace TOne.BusinessEntity.Business
             return _dataManager.GetZones(supplierId, nameFilter);
         }
 
+        public List<ZoneInfo> GetOwnZones(string nameFilter)
+        {
+            return _dataManager.GetOwnZones("SYS", nameFilter, DateTime.Now);
+        }
+
         public Dictionary<int, Zone> GetAllZones()
         {
             TOneCacheManager cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<TOneCacheManager>();
@@ -44,7 +49,12 @@ namespace TOne.BusinessEntity.Business
                     return _dataManager.GetAllZones();
                 });
         }
-
+        //public Dictionary<int, Zone> GetOwnZones(DateTime when)
+        //{
+        //    return GetAllZones().Where(pair => (pair.Value.SupplierID == "SYS") && (pair.Value.BeginEffectiveDate <=  DateTime.Now) && (pair.Value.EndEffectiveDate == null || pair.Value.EndEffectiveDate >= when))
+        //                         .ToDictionary(pair => pair.Key,
+        //                                       pair => pair.Value);
+        //}
         public Zone GetZone(int zoneId)
         {
             Zone zone;

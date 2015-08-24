@@ -2,8 +2,8 @@
 
     "use strict";
 
-    CarrierSummaryStatsController.$inject = ['$scope', 'CarrierSummaryStatsAPIService', 'CarrierAccountAPIService', 'CurrencyAPIService', 'CarrierTypeEnum', 'VRModalService'];
-    function CarrierSummaryStatsController($scope, CarrierSummaryStatsAPIService, CarrierAccountAPIService, CurrencyAPIService, CarrierTypeEnum, VRModalService) {
+    CarrierSummaryStatsController.$inject = ['$scope', 'CarrierSummaryStatsAPIService', 'CarrierAccountAPIService', 'BusinessEntityAPIService_temp', 'CurrencyAPIService', 'CarrierTypeEnum', 'VRModalService'];
+    function CarrierSummaryStatsController($scope, CarrierSummaryStatsAPIService, CarrierAccountAPIService, BusinessEntityAPIService, CurrencyAPIService, CarrierTypeEnum, VRModalService) {
 
         var gridApi;
 
@@ -18,7 +18,8 @@
                 $scope.optionsCurrencies.selectedvalues = null;
 
             return gridApi.retrieveData({
-                CarrierType: $scope.isCustomer,
+                //CarrierType: $scope.isCustomer,
+                CarrierType: "True",
                 CustomerID: $scope.selectedvalues == null ? null :  $scope.selectedvalues.CarrierAccountID,
                 TopRecord: $scope.top,
                 FromDate: $scope.fromDate,
@@ -30,14 +31,25 @@
         }
 
         function defineScope() {
+            $scope.top = 2000;
             $scope.datasource = [];
+            $scope.selectedvaluesZones = [];
 
+            var groupKeys = [];
+            groupKeys.push({ name: "Customer", value: 1 });
+            groupKeys.push({ name: "Supplier", value: 2 });
+            groupKeys.push({ name: "Zone", value: 3 });
+            $scope.optionsGroups = {
+                selectedvalues: '',
+                datasource: groupKeys
+            };
+
+          
             $scope.optionsCurrencies = {
                 selectedvalues: '',
                 datasource: []
             };
-
-            
+           
             $scope.getHeader = "";
             $scope.gridReady = function (api) {
                 gridApi = api;
@@ -60,7 +72,6 @@
 
             loadCarriers();
             loadCurrencies();
-
         }
 
         function loadCarriers() {
@@ -78,6 +89,17 @@
 
         }
 
+        $scope.datasourceZones = function (text) {
+            return BusinessEntityAPIService.GetOwnZones(text);
+        }
+
+
+        //function loadZones(text) {
+        //    return BusinessEntityAPIService.GetOwnZones(text).then(function (response) {
+        //        $scope.datasourceZones = response;
+        //    });
+
+        //}
 
         defineScope();
         load();
