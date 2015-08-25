@@ -11,7 +11,8 @@
                 SwitchIds: utilsService.getPropValuesFromArray($scope.selectedSwitches, "SwitchId"),
                 CustomerIds: utilsService.getPropValuesFromArray($scope.selectedCustomers, "CarrierAccountID"),
                 SupplierIds: utilsService.getPropValuesFromArray($scope.selectedSuppliers, "CarrierAccountID"),
-                CodeGroups: utilsService.getPropValuesFromArray($scope.selectedCodeGroups, "Code")
+                CodeGroups: utilsService.getPropValuesFromArray($scope.selectedCodeGroups, "Code"),
+                ZoneIds: utilsService.getPropValuesFromArray($scope.selectedZones, "ZoneId")
             };
         }
 
@@ -29,8 +30,6 @@
                 fromDate: $scope.fromDate,
                 toDate: $scope.toDate
             };
-
-            console.log(groupKeys);
 
             return mainGridApi.retrieveData({
                 Filter: filter,
@@ -56,7 +55,9 @@
         }
 
         function defineGrid() {
-         
+
+            $scope.selectedZones = [];
+
             $scope.gridData = [];
 
             $scope.onMainGridReady = function(api) {

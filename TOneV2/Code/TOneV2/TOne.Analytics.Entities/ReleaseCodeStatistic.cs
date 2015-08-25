@@ -22,13 +22,5 @@ namespace TOne.Analytics.Entities
 
         public String PortIn { get; set; }
 
-
-        //SwitchID,
-        //    ZoneID,  
-        //    [Name],
-        //    SupplierID,
-        //    SupplierName,
-        
-
     }
 }

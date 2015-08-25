@@ -22,9 +22,14 @@
                 <vr-columns width="normal">
                     <vr-be-carriergroup type="'Supplier'" selectedvalues="selectedSuppliers"></vr-be-carriergroup>
                 </vr-columns>
+                
             </vr-row>
 
             <vr-row>
+
+                <vr-columns width="normal">
+                    <vr-be-zones selectedvalues="selectedZones" ismultipleselection></vr-be-zones>
+                </vr-columns>
 
                 <vr-columns width="normal">
                     <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Period"
