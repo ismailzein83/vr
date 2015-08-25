@@ -10,30 +10,12 @@ function SupplierTariffManagementController($scope, CarrierAccountAPIService, Ca
     function defineScope() {
         $scope.suppliers = [];
         $scope.selectedSupplier = undefined;
-        $scope.zones = []; // zones per selected supplier
         $scope.selectedZones = [];
         $scope.effectiveOn = Date.now();
 
         $scope.tariffs = [];
         $scope.measures = [];
         $scope.showGrid = false;
-
-        $scope.supplierChanged = function (selectedSupplier, allSuppliers) {
-            //if (selectedSupplier != undefined) {
-            //    $scope.zones = [];
-            //    $scope.selectedZones = [];
-
-            //    SupplierTariffAPIService.GetZonesBySupplierID(selectedSupplier.CarrierAccountID)
-            //        .then(function (response) {
-            //            angular.forEach(response, function (item) {
-            //                $scope.zones.push(item);
-            //            });
-            //        })
-            //        .catch(function (error) {
-            //            VRNotificationService.notifyException(error, $scope);
-            //        });
-            //}
-        }
 
         $scope.searchClicked = function () {
             $scope.showGrid = true;
@@ -54,6 +36,12 @@ function SupplierTariffManagementController($scope, CarrierAccountAPIService, Ca
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
+        }
+
+        $scope.onSupplierChange = function (supplier) {
+            if (supplier != undefined) {
+                console.log($scope.selectedSupplier.CarrierAccountID);
+            }
         }
     }
 

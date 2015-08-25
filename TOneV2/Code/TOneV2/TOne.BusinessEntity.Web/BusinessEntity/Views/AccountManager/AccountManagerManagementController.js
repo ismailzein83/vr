@@ -66,7 +66,6 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
             
             return AccountManagerAPIService.GetAssignedCarriersFromTempTable(dataRetrievalInput)
                 .then(function (response) {
-
                     response.Data = getMappedAssignedCarriers(response.Data);
                     onResponseReady(response);
                 })

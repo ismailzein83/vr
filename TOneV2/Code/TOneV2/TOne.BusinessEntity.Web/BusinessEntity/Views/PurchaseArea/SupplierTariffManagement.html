@@ -9,19 +9,15 @@
                                selectedvalues="selectedSupplier"
                                datatextfield="Name"
                                datavaluefield="CarrierAccountID"
-                               onselectionchanged="supplierChanged"
+                               onselectionchanged="onSupplierChange"
                                entityname="Supplier">
                     </vr-select>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-select label="Zones"
-                               datasource="zones"
-                               selectedvalues="selectedZones"
-                               datatextfield="Name"
-                               datavaluefield="ZoneId"
-                               ismultipleselection
-                               entityname="Zones">
-                    </vr-select>
+                    <vr-be-zones selectedvalues="selectedZones"
+                                 carrierid="selectedSupplier.CarrierAccountID"
+                                 ismultipleselection>
+                    </vr-be-zones>
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-datetimepicker label="Effective On" value="effectiveOn" type="date" isrequired></vr-datetimepicker>

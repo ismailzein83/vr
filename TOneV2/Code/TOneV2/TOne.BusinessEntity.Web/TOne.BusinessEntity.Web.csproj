@@ -208,6 +208,8 @@
     <Content Include="BusinessEntity\Views\RatesController.js" />
     <Content Include="BusinessEntity\Views\PurchaseArea\SupplierTODManagement.html" />
     <Content Include="BusinessEntity\Views\PurchaseArea\SupplierTODManagementController.js" />
+    <Content Include="BusinessEntity\Views\SalesArea\CustomerTariffManagement.html" />
+    <Content Include="BusinessEntity\Views\SalesArea\CustomerTariffManagementController.js" />
     <Content Include="BusinessEntity\Views\SalesArea\CustomerTODManagementController.js" />
     <Content Include="BusinessEntity\Views\SalesArea\CustomerTODManagement.html" />
     <Content Include="BusinessEntity\Views\Supplier PriceLists\SupplierPriceLists.html" />

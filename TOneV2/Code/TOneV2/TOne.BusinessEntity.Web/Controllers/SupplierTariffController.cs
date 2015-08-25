@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
-using TOne.Analytics.Business;
-using TOne.Analytics.Entities;
 using TOne.BusinessEntity.Business;
+using TOne.BusinessEntity.Entities;
 
-namespace TOne.Analytics.Web.Controllers
+namespace TOne.BusinessEntity.Web.Controllers
 {
     public class SupplierTariffController : Vanrise.Web.Base.BaseAPIController
     {

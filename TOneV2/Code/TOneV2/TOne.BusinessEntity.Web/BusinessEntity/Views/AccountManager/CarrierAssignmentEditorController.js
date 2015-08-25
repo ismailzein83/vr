@@ -1,6 +1,6 @@
-﻿CarrierAssignmentEditorController.$inject = ['$scope', 'AccountManagerAPIService', 'CarrierTypeFilterEnum', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+﻿CarrierAssignmentEditorController.$inject = ['$scope', 'AccountManagerAPIService', 'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
-function CarrierAssignmentEditorController($scope, AccountManagerAPIService, CarrierTypeFilterEnum, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+function CarrierAssignmentEditorController($scope, AccountManagerAPIService, CarrierTypeEnum, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
 
     var selectedAccountManagerId = undefined;
     var assignedCarriers = [];
@@ -24,7 +24,6 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, Car
         $scope.itemsSortable = { handle: '.handeldrag', animation: 150 };
         
         $scope.assignCarriers = function () {
-            console.log($scope.carriers);
 
             denyDeselectedCarriers();
             var updatedCarriers = mapCarriersForAssignment();
@@ -87,9 +86,8 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, Car
 
     function loadAssignedCarriers() {
 
-        return AccountManagerAPIService.GetAssignedCarriers(selectedAccountManagerId, false, CarrierTypeFilterEnum.Exchange.value)
+        return AccountManagerAPIService.GetAssignedCarriers(selectedAccountManagerId, false, CarrierTypeEnum.SaleZone.value)
             .then(function (response) {
-
                 assignedCarriers = response;
             });
     }
@@ -122,11 +120,11 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, Car
 
             var carrier = UtilsService.getItemByVal($scope.carriers, assignedCarriers[i].CarrierAccountId, 'CarrierAccountId'); // will never return null
             
-            if (assignedCarriers[i].RelationType == CarrierTypeFilterEnum.Customer.value) {
+            if (assignedCarriers[i].RelationType == CarrierTypeEnum.Customer.value) {
                 carrier.customerSwitchValue = true;
                 carrier.newCustomerSwitchValue = true;
             }
-            else if (assignedCarriers[i].RelationType == CarrierTypeFilterEnum.Supplier.value) {
+            else if (assignedCarriers[i].RelationType == CarrierTypeEnum.Supplier.value) {
                 carrier.supplierSwitchValue = true;
                 carrier.newSupplierSwitchValue = true;
             }
@@ -150,22 +148,20 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, Car
         var mappedCarrier = [];
 
         if (carrier.customerSwitchValue != carrier.newCustomerSwitchValue) {
-            console.log('1');
             var object = {
                 UserId: carrier.UserId,
                 CarrierAccountId: carrier.CarrierAccountId,
-                RelationType: CarrierTypeFilterEnum.Customer.value,
+                RelationType: CarrierTypeEnum.Customer.value,
                 Status: carrier.newCustomerSwitchValue
             };
             mappedCarrier.push(object);
         }
 
         if (carrier.supplierSwitchValue != carrier.newSupplierSwitchValue) {
-            console.log('2');
             var object = {
                 UserId: carrier.UserId,
                 CarrierAccountId: carrier.CarrierAccountId,
-                RelationType: CarrierTypeFilterEnum.Supplier.value,
+                RelationType: CarrierTypeEnum.Supplier.value,
                 Status: carrier.newSupplierSwitchValue
             };
             mappedCarrier.push(object);
