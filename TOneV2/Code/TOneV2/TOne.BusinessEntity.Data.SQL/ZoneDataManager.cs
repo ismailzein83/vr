@@ -136,5 +136,10 @@ namespace TOne.BusinessEntity.Data.SQL
                 EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate")
             };
         }
+
+        public List<ZoneInfo> GetZonesBySupplierID(string supplierID)
+        {
+            return GetItemsSP("BEntity.sp_Zone_GetBySupplierID", ZoneInfoMapper, supplierID);
+        }
     }
 }

@@ -83,5 +83,10 @@ namespace TOne.BusinessEntity.Business
             }
             return zoneIds;
         }
+
+        public List<ZoneInfo> GetZonesBySupplierID(string supplierID)
+        {
+            return _dataManager.GetZonesBySupplierID(supplierID);
+        }
     }
 }
