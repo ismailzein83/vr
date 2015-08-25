@@ -123,13 +123,13 @@ namespace TOne.Analytics.Data.SQL
 
             if (selectedZoneIDs.Count > 0)
                 whereClause += " AND ZoneID IN (" + GetCommaSeparatedList(selectedZoneIDs) + ")";
-            else if (selectedSupplierID != null)
-            {
-                ZoneManager manager = new ZoneManager();
-                List<TOne.BusinessEntity.Entities.ZoneInfo> supplierZones = manager.GetZonesBySupplierID(selectedSupplierID);
+            //else if (selectedSupplierID != null)
+            //{
+            //    ZoneManager manager = new ZoneManager();
+            //    List<TOne.BusinessEntity.Entities.ZoneInfo> supplierZones = manager.GetZonesBySupplierID(selectedSupplierID);
 
-                whereClause += " AND ZoneID IN (" + GetCommaSeparatedList(GetZoneIDs(supplierZones)) + ")";
-            }
+            //    whereClause += " AND ZoneID IN (" + GetCommaSeparatedList(GetZoneIDs(supplierZones)) + ")";
+            //}
 
             return whereClause;
         }

@@ -17,12 +17,5 @@ namespace TOne.Analytics.Web.Controllers
             SupplierTariffManager manager = new SupplierTariffManager();
             return GetWebResponse(input, manager.GetFilteredSupplierTariffs(input));
         }
-
-        [HttpGet]
-        public List<TOne.BusinessEntity.Entities.ZoneInfo> GetZonesBySupplierID(string supplierID)
-        {
-            ZoneManager manager = new ZoneManager();
-            return manager.GetZonesBySupplierID(supplierID);
-        }
     }
 }

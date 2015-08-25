@@ -19,20 +19,20 @@ function SupplierTariffManagementController($scope, CarrierAccountAPIService, Ca
         $scope.showGrid = false;
 
         $scope.supplierChanged = function (selectedSupplier, allSuppliers) {
-            if (selectedSupplier != undefined) {
-                $scope.zones = [];
-                $scope.selectedZones = [];
+            //if (selectedSupplier != undefined) {
+            //    $scope.zones = [];
+            //    $scope.selectedZones = [];
 
-                SupplierTariffAPIService.GetZonesBySupplierID(selectedSupplier.CarrierAccountID)
-                    .then(function (response) {
-                        angular.forEach(response, function (item) {
-                            $scope.zones.push(item);
-                        });
-                    })
-                    .catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
-                    });
-            }
+            //    SupplierTariffAPIService.GetZonesBySupplierID(selectedSupplier.CarrierAccountID)
+            //        .then(function (response) {
+            //            angular.forEach(response, function (item) {
+            //                $scope.zones.push(item);
+            //            });
+            //        })
+            //        .catch(function (error) {
+            //            VRNotificationService.notifyException(error, $scope);
+            //        });
+            //}
         }
 
         $scope.searchClicked = function () {
