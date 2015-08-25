@@ -49,8 +49,11 @@ namespace Vanrise.Common
             //default Export is Excel
 
             ExcelResult<T> excelResult = new ExcelResult<T>();
+          
 
             Workbook wbk = new Workbook();
+            Aspose.Cells.License license = new Aspose.Cells.License();
+            license.SetLicense("Aspose.Cells.lic");
             wbk.Worksheets.Clear();
             Worksheet RateWorkSheet = wbk.Worksheets.Add("Result");
             int rowIndex = 0;

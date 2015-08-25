@@ -48,7 +48,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Aspose.Cells">
+    <Reference Include="Aspose.Cells, Version=8.2.2.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Resources\DLLs\Aspose.Cells.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
@@ -90,6 +91,10 @@
     <Compile Include="Serializer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Resources\Resources.csproj">
+      <Project>{1e5344d3-558e-445f-8329-fc78455eb715}</Project>
+      <Name>Resources</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
