@@ -28,22 +28,16 @@ function IntervalTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, In
 
     var isFormLoaded;
     function loadForm() {
-        if ($scope.schedulerTypeTaskTrigger.data != undefined && !isFormLoaded)
-        {
-            isFormLoaded = true;
+        if ($scope.schedulerTypeTaskTrigger.data == undefined || isFormLoaded)
+            return;
 
             var data = $scope.schedulerTypeTaskTrigger.data;
             if (data != null) {
                 $scope.interval = data.Interval;
                 $scope.selectedIntervalType = UtilsService.getItemByVal($scope.intervalTypes, data.IntervalType, "value");
             }
-            else
-                setFormToDefault();
-            
-        }
-        else {
-            setFormToDefault();
-        }
+
+            isFormLoaded = true;
         
     }
 
@@ -55,6 +49,7 @@ function IntervalTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, In
 
     function load() {
         UtilsService.waitMultipleAsyncOperations([loadIntervalTypes]).finally(function () {
+            setFormToDefault();
             loadForm();
         }).catch(function (error) {
             VRNotificationService.notifyExceptionWithClose(error, $scope);
