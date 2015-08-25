@@ -63,6 +63,7 @@
     <Compile Include="RandomPasswordHelper.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="User.cs" />
+    <Compile Include="UserProfile.cs" />
     <Compile Include="UserQuery.cs" />
     <Compile Include="View.cs" />
     <Compile Include="ViewContentItem.cs" />

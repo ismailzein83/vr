@@ -11,11 +11,15 @@ function EditProfileController($scope, UsersAPIService, VRNotificationService) {
 
     function defineScope() {
 
-        $scope.txtName = "";
-
         $scope.EditUserProfile = function () {
 
-            return UsersAPIService.EditUserProfile($scope.txtName)
+            var userProfileObject = {
+                UserId: $scope.userObject.UserId,
+                Name: $scope.txtName
+            }
+
+
+            return UsersAPIService.EditUserProfile(userProfileObject)
                         .then(function (response) {
                             if (VRNotificationService.notifyOnItemUpdated("User's Name", response)) {
                                 $scope.modalContext.closeModal();
@@ -23,21 +27,37 @@ function EditProfileController($scope, UsersAPIService, VRNotificationService) {
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);
-                            console.log(error);
-
-                        })
-                        .finally(function () {
-                            $scope.$hide();
                         });
+                      
         }
 
-        $scope.hide = function () {
-            $scope.$hide();
+        $scope.close = function () {
+            $scope.modalContext.closeModal();
         };
 
     }
     
     function load() {
+
+        $scope.isGettingData = true;
+        return UsersAPIService.LoadLoggedInUserProfile()
+          .then(function (response) {
+              fillScopeFromUserObj(response);
+          })
+          .catch(function (error) {
+              VRNotificationService.notifyExceptionWithClose(error, $scope);
+          })
+         .finally(function () {
+             $scope.isGettingData = false;
+         });
+     
+
+    }
+
+    function fillScopeFromUserObj(userObject) {
+        $scope.txtName = userObject.Name;
+        $scope.userObject = userObject;
+     
     }
 
 };

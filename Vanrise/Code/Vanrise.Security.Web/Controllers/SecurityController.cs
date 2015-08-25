@@ -18,12 +18,11 @@ namespace Vanrise.Security.Web.Controllers
             return manager.Authenticate(credentialsObject.Email, credentialsObject.Password);
         }
 
-         [HttpGet]
-        public Vanrise.Entities.UpdateOperationOutput<object> ChangePassword(string oldPassword, string newPassword)
-        {
-            int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
+         [HttpPost]
+        public Vanrise.Entities.UpdateOperationOutput<object> ChangePassword(ChangedPasswordObject changedPasswordObject)
+        {          
             SecurityManager manager = new SecurityManager();
-            return manager.ChangePassword(loggedInUserId, oldPassword, newPassword);
+            return manager.ChangePassword(changedPasswordObject.OldPassword,changedPasswordObject.NewPassword);
         }
 
         public class CredentialsInput
@@ -31,6 +30,13 @@ namespace Vanrise.Security.Web.Controllers
             public string Email { get; set; }
 
             public string Password { get; set; }
+        }
+
+        public class ChangedPasswordObject
+        {
+            public string OldPassword { get; set;}
+
+            public string NewPassword {get; set;}
         }
 
     }

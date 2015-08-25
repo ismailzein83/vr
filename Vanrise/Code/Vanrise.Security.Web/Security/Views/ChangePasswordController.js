@@ -12,19 +12,24 @@ function ChangePasswordController($scope, SecurityAPIService, VRNotificationServ
     function defineScope() {
 
         $scope.ChangePassword = function () {
-           
-            return SecurityAPIService.ChangePassword($scope.txtPasswordOld, $scope.txtPasswordNew)
+
+            var ChangedPasswordObject = {
+                OldPassword: $scope.txtPasswordOld,
+                NewPassword: $scope.txtPasswordNew
+            }
+
+            return SecurityAPIService.ChangePassword(ChangedPasswordObject)
                         .then(function (response) {
                             if (VRNotificationService.notifyOnItemUpdated("User's password", response)) {
-                               $scope.modalContext.closeModal();
+                                $scope.modalContext.closeModal();
                             }
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);
-                        }) 
+                        });
         };
 
-        $scope.hide = function () {
+        $scope.close = function () {
             $scope.modalContext.closeModal();
         };
 

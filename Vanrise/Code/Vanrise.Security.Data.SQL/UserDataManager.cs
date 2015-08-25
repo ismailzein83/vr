@@ -83,8 +83,8 @@ namespace Vanrise.Security.Data.SQL
 
         public bool ChangePassword(int userId, string oldPassword,string newPassword)
         {
-            bool result = (bool)ExecuteScalarSP("sec.sp_User_ChangeMyPassword", userId, oldPassword, newPassword);
-            return result;
+            int recordsAffected = ExecuteNonQuerySP("sec.sp_User_ChangeMyPassword", userId, oldPassword, newPassword);
+            return (recordsAffected>0);
         }
 
         public bool EditUserProfile(string name,int userId) {

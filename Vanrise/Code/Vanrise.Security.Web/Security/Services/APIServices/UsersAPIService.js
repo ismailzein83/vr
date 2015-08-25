@@ -9,7 +9,9 @@
         ResetPassword: ResetPassword,
         GetUsers: GetUsers,
         GetMembers: GetMembers,
-        EditUserProfile: EditUserProfile
+        EditUserProfile: EditUserProfile,
+        LoadLoggedInUserProfile: LoadLoggedInUserProfile
+
     });
 
     function GetFilteredUsers(input) {
@@ -61,11 +63,12 @@
            );
     }
 
-    function EditUserProfile(name) {
-        return BaseAPIService.get("/api/Users/EditUserProfile",
-             { Name: name
-             }
-            );
+    function EditUserProfile(userProfileObject) {
+        return BaseAPIService.post("/api/Users/EditUserProfile", userProfileObject);
+    }
+
+    function LoadLoggedInUserProfile() {
+        return BaseAPIService.get("/api/Users/LoadLoggedInUserProfile");
     }
 
 });

@@ -72,12 +72,18 @@ namespace Vanrise.Security.Web.Controllers
             return manager.ResetPassword(user.UserId, user.Password);
         }
 
-      [HttpGet]
-        public Vanrise.Entities.UpdateOperationOutput<User> EditUserProfile(string name)
+        [HttpGet]
+        public UserProfile LoadLoggedInUserProfile()
+        { 
+         UserManager manager = new UserManager();
+         return manager.LoadLoggedInUserProfile();
+        }
+
+      [HttpPost]
+        public Vanrise.Entities.UpdateOperationOutput<UserProfile> EditUserProfile(UserProfile userProfileObject)
         {
             UserManager manager = new UserManager();
-            int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
-            return manager.EditUserProfile(name, loggedInUserId);
+            return manager.EditUserProfile(userProfileObject);
         
         }
     }

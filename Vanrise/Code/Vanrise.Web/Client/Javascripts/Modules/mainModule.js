@@ -86,7 +86,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         var modalSettings = {
         };
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Profile for User " + $scope.userDisplayName;
+            modalScope.title = "Edit my profile";
 
         };
         VRModalService.showModal('/Client/Modules/Security/Views/EditProfile.html', null, modalSettings);

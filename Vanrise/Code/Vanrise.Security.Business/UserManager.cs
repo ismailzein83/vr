@@ -112,21 +112,27 @@ namespace Vanrise.Security.Business
             return datamanager.CheckUserName(name);
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<User> EditUserProfile(string name,int userId)
+        public Vanrise.Entities.UpdateOperationOutput<UserProfile> EditUserProfile(UserProfile userProfileObject)
         {
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-            bool updateActionSucc = dataManager.EditUserProfile(name,userId);
-            UpdateOperationOutput<User> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<User>();
-
+          //  int userId = SecurityContext.Current.GetLoggedInUserId();
+            bool updateActionSucc = dataManager.EditUserProfile(userProfileObject.Name, userProfileObject.UserId);
+            UpdateOperationOutput<UserProfile> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<UserProfile>();
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
-
             if (updateActionSucc)
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = GetUserbyId(userId);
+                updateOperationOutput.UpdatedObject = userProfileObject;
             }
             return updateOperationOutput;
+        }
+
+        public UserProfile LoadLoggedInUserProfile()
+        {
+            
+            IUserDataManager datamanager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            return new UserProfile {  UserId = SecurityContext.Current.GetLoggedInUserId() , Name =  datamanager.GetUserbyId(SecurityContext.Current.GetLoggedInUserId()).Name } ;
+            
         }
     }
 }

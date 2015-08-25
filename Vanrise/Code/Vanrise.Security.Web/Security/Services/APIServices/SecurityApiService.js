@@ -9,10 +9,7 @@
         return BaseAPIService.post("/api/Security/Authenticate", credentialsObject);
     }
 
-    function ChangePassword(oldPassword, newPassword) {
-        return BaseAPIService.get("/api/Security/ChangePassword", {
-            oldPassword: oldPassword,
-            newPassword: newPassword
-        });
+    function ChangePassword(ChangedPasswordObject) {
+        return BaseAPIService.post("/api/Security/ChangePassword", ChangedPasswordObject);
     }
 });
