@@ -7,11 +7,20 @@
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
-                selectedvalues: "="
+                selectedvalues: "=",
+                carrierid: "="
             },
             controller: function () {
-                
+
+                var ctrl = this;
+
                 function zonesDatasource(text) {
+
+                    console.log(ctrl.carrierid);
+                    if (ctrl.carrierid) {
+                        return zoneApiService.GetZones(text, ctrl.carrierid);
+                    }
+
                     return zoneApiService.GetOwnZones(text);
                 }
 
