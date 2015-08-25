@@ -61,9 +61,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{161A5C58-A6E
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CDRAnalysis", "CDRAnalysis\CDRAnalysis.sqlproj", "{56B47F3B-A88D-4C9D-9706-87C7BAA05FB5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Bussiness", "Vanrise.Fzero.Bussiness\Vanrise.Fzero.Bussiness.csproj", "{5FD89D7B-B235-415E-BF69-BBA516D19D17}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 24
+		SccNumberOfProjects = 25
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -159,6 +161,10 @@ Global
 		SccProjectTopLevelParentUniqueName23 = CDRAnalysis.sln
 		SccProjectName23 = CDRAnalysis
 		SccLocalPath23 = CDRAnalysis
+		SccProjectUniqueName24 = Vanrise.Fzero.Bussiness\\Vanrise.Fzero.Bussiness.csproj
+		SccProjectTopLevelParentUniqueName24 = CDRAnalysis.sln
+		SccProjectName24 = Vanrise.Fzero.Bussiness
+		SccLocalPath24 = Vanrise.Fzero.Bussiness
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -309,6 +315,12 @@ Global
 		{56B47F3B-A88D-4C9D-9706-87C7BAA05FB5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{56B47F3B-A88D-4C9D-9706-87C7BAA05FB5}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{56B47F3B-A88D-4C9D-9706-87C7BAA05FB5}.Release|x64.ActiveCfg = Release|Any CPU
+		{5FD89D7B-B235-415E-BF69-BBA516D19D17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FD89D7B-B235-415E-BF69-BBA516D19D17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FD89D7B-B235-415E-BF69-BBA516D19D17}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5FD89D7B-B235-415E-BF69-BBA516D19D17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FD89D7B-B235-415E-BF69-BBA516D19D17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FD89D7B-B235-415E-BF69-BBA516D19D17}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -324,6 +336,7 @@ Global
 		{57ED5DF8-602D-49AE-86FC-416D446F5CE2} = {7A71D2CF-9B16-4D57-89F1-C5B263DCFB77}
 		{5995A72F-0E1A-4C75-948D-6E0E2C717E49} = {B646C60C-E175-44BC-A0DB-617DE07E99AE}
 		{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983} = {1FFAF5A6-AC9C-4361-9ACD-1BFDDD87A336}
+		{5FD89D7B-B235-415E-BF69-BBA516D19D17} = {1FFAF5A6-AC9C-4361-9ACD-1BFDDD87A336}
 		{521364BC-AE3D-4ECA-8392-44A6C1961939} = {2068D29A-9DB3-4E50-83A3-C360CD6C3AC4}
 		{DD4F4480-110D-4BC4-8EA0-688FC59C9B34} = {2068D29A-9DB3-4E50-83A3-C360CD6C3AC4}
 		{516B5FB8-205F-44C7-9CE9-949AD88EC87B} = {2068D29A-9DB3-4E50-83A3-C360CD6C3AC4}
