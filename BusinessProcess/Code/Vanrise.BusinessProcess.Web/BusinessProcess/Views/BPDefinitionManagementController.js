@@ -183,7 +183,7 @@ function BPDefinitionManagementController($scope, BusinessProcessService, Busine
         };
 
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = "Add Task";
+            modalScope.title = "Schedule Task";
             modalScope.onTaskAdded = function (task) {
                 getScheduledTasksData();
             };
