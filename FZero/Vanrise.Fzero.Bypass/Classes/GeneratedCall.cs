@@ -1916,7 +1916,7 @@ namespace Vanrise.Fzero.Bypass
             {
                 using (Entities context = new Entities())
                 {
-                    ((IObjectContextAdapter)context).ObjectContext.CommandTimeout = 18000;
+                    ((IObjectContextAdapter)context).ObjectContext.CommandTimeout = 0;
                     GeneratedCallsList = context.ViewGeneratedCalls.Where(x => x.ReportedBefore == false)
                                 .Where(u => u.ID > 0
                                   && (u.ClientID == ClientID)
