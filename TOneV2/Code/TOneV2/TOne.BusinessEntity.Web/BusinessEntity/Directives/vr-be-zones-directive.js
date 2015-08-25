@@ -16,7 +16,6 @@
 
                 function zonesDatasource(text) {
 
-                    console.log(ctrl.carrierid);
                     if (ctrl.carrierid) {
                         return zoneApiService.GetZones(text, ctrl.carrierid);
                     }
