@@ -2,12 +2,14 @@
     <div>
         <vr-datagrid datasource="data" menuactions="menuActions" issubgrid dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'" on-ready="onMainGridReady">
           
-            <vr-datagridcolumn headertext="'ID'" field="'PriceListID'" type="Number" widthfactor="2"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Pricelist Date'" >{{gettext()}}</vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Description'" field="'Description'" widthfactor="10"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'User'" field="'Name'" widthfactor="5"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'ZoneID'" field="'ZoneID'" type="Number" widthfactor="5"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" widthfactor="10"></vr-datagridcolumn>
 
-
+            <vr-datagridcolumn headertext="'Rate ID'" field="'RateID'" type="Number" widthfactor="5"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Rate'" field="'Rate'" widthfactor="5" isclickable="true"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Change'">
+                <span ng-class="gridParentScope.getChangeIcon(dataItem)"></span>
+            </vr-datagridcolumn>
         </vr-datagrid>
     </div>
 </div>

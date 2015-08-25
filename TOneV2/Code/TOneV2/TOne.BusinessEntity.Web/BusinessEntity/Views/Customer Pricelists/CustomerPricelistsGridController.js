@@ -1,6 +1,6 @@
 ﻿'use strict'
-CustomerPricelistsGridController.$inject = ['$scope', 'VRModalService', 'UtilsService','CustomerPricelistsAPIService'];
-function CustomerPricelistsGridController($scope, VRModalService, UtilsService, CustomerPricelistsAPIService) {
+CustomerPricelistsGridController.$inject = ['$scope', 'VRModalService', 'UtilsService','CustomerPricelistsAPIService','ChangeEnum'];
+function CustomerPricelistsGridController($scope, VRModalService, UtilsService, CustomerPricelistsAPIService,ChangeEnum) {
     var mainGridAPI;
     defineScope();
     load();
@@ -48,8 +48,12 @@ function CustomerPricelistsGridController($scope, VRModalService, UtilsService, 
                 onResponseReady(response);
             })
         };
-        $scope.gettext = function () {
-            return "test01";
+        $scope.getChangeIcon = function (dataItem) {
+            switch(dataItem.Change){
+                case ChangeEnum.Increase.value:return ChangeEnum.Increase.icon;
+                case ChangeEnum.Decrease.value: return ChangeEnum.Decrease.icon;
+                case ChangeEnum.New.value: return ChangeEnum.New.icon;
+            }
         }
       
     }
