@@ -243,7 +243,7 @@ function HourlyReportGridController($scope, HourlyReportAPIService, TrafficStati
                 case TrafficStatisticGroupKeysEnum.SupplierZoneId.value:
                     filter.SupplierZoneId = [scope.dataItem.GroupKeyValues[i].Id];
                     break;
-                case TrafficStatisticGroupKeysEnum.GateWayIn.value: console.log(scope.dataItem);
+                case TrafficStatisticGroupKeysEnum.GateWayIn.value: 
                     filter.GateWayIn = [scope.dataItem.GroupKeyValues[i].Id];
                     break;
                 case TrafficStatisticGroupKeysEnum.GateWayOut.value:

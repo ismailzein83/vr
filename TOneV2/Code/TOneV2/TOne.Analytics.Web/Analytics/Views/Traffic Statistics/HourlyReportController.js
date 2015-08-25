@@ -260,59 +260,6 @@ function HourlyReportController($scope, UtilsService, HourlyReportAPIService, $q
         }
     }
 
-    //function renderOverallChart() {
-    //    var chartData = [];
-    //    var measure = overallSelectedMeasure;
-    //    var othersValue = $scope.trafficStatisticSummary[measure.propertyName];
-    //    var index = 1;
-    //    angular.forEach(currentData, function (itm) {
-    //        if (index > 15)
-    //            return;
-    //        index++;
-    //        var dataItem = {
-    //            groupKeyValues: itm.GroupKeyValues,
-    //            entityName: '',
-    //            value: itm.Data[measure.propertyName]
-    //        };
-
-    //        for (var i = 0; i < $scope.currentSearchCriteria.groupKeys.length; i++) {
-    //            if (dataItem.entityName.length > 0)
-    //                dataItem.entityName += ' - ';
-    //            dataItem.entityName += itm.GroupKeyValues[i].Name;
-    //        };
-    //        chartData.push(dataItem);
-    //        othersValue -= itm.Data[measure.propertyName];
-    //    });
-    //    chartData.sort(function (a, b) {
-    //        if (a.value > b.value) {
-    //            return 1;
-    //        }
-    //        if (a.value < b.value) {
-    //            return -1;
-    //        }
-    //        // a must be equal to b
-    //        return 0;
-    //    });
-    //    chartData.push({
-    //        entityName: "Others",
-    //        value: othersValue
-    //    });
-    //    var chartDefinition = {
-    //        type: "pie",
-    //        title: measure.description,
-    //        yAxisTitle: "Value"
-    //    };
-
-    //    var seriesDefinitions = [{
-    //        title: measure.description,
-    //        titlePath: "entityName",
-    //        valuePath: "value"
-    //    }];
-    //    //console.log(chartData.length);
-    //    chartSelectedMeasureAPI.renderSingleDimensionChart(chartData, chartDefinition, seriesDefinitions);
-    //}
-
-
     function buildFilter() {
         var filter = {};
         filter.SwitchIds = analyticsService.getFilterIds($scope.selectedSwitches, "SwitchId");

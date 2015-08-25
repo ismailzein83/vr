@@ -32,7 +32,6 @@ app.directive('vrProgressbar', [function ($compile) {
 
     function getTemplate(ctrl) {
         var values;
-        console.log(ctrl);
         var gridClass = "";
         var gridCellTextClass = "";
         if (ctrl.gridvalue != undefined) {
@@ -43,7 +42,7 @@ app.directive('vrProgressbar', [function ($compile) {
         else {
             values = ctrl.value;
         }
-        console.log(Object.prototype.toString.call(values));
+
         if (Object.prototype.toString.call(values) ==='[object Number]') {
             return '<div class="' + gridClass + ' progress" style="margin-bottom:0px;padding:0px;">'
                      + '<div class="' + gridCellTextClass + ' progress-bar progress-bar-gray active" style="width:'+values+'%" title="'+values+'%">'

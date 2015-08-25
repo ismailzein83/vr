@@ -11,7 +11,6 @@ function BlockedAttemptsController($scope, UtilsService, $q, BlockedAttemptsAPIS
     function defineScope() {
         definePeriods();
         $scope.onValueChanged = function () {
-            console.log($scope.selectedPeriod);
             if ($scope.selectedPeriod != selectedPeriod) {
                 var customize = {
                     value: -1,
@@ -103,24 +102,6 @@ function BlockedAttemptsController($scope, UtilsService, $q, BlockedAttemptsAPIS
 
 
                 VRModalService.showModal('/Client/Modules/Analytics/Views/CDR/CDRLog.html', parameters, modalSettings);
-            }
-        },
-        {
-            name: "Show Confirmation",
-            clicked: function (dataItem) {
-                VRNotificationService.showConfirmation('Are you sure you want to delete?')
-                .then(function (result) {
-                    if (result)
-                        console.log('Confirmed');
-                    else
-                        console.log('not confirmed');
-                });
-            }
-        },
-        {
-            name: "Show Error",
-            clicked: function (dataItem) {
-                VRNotificationService.showError('Error Message');
             }
         }];
     }

@@ -40,7 +40,6 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
             groupKeys: []
         };
         $scope.onValueChanged = function () {
-            console.log($scope.selectedPeriod);
             if ($scope.selectedPeriod != selectedPeriod) {
                     var customize = {
                 value: -1,
@@ -231,42 +230,6 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
                 };
                 analyticsService.showCdrLogModal(parameters, dataItem.GroupKeyValues, $scope.currentSearchCriteria.groupKeys);
             }
-        },
-        {
-            name: "Show Confirmation",
-            clicked: function (dataItem) {
-                VRNotificationService.showConfirmation('Are you sure you want to delete?')
-                .then(function (result) {
-                    if (result)
-                        console.log('Confirmed');
-                    else
-                        console.log('not confirmed');
-                });
-            }
-        },
-        {
-            name: "Show Error",
-            clicked: function (dataItem) {
-                VRNotificationService.showError('Error Message');
-            }
-        },
-        {
-            name: "Show Warning",
-            clicked: function (dataItem) {
-                VRNotificationService.showWarning('Warning Message');
-            }
-        },
-        {
-            name: "Show Success",
-            clicked: function (dataItem) {
-                VRNotificationService.showSuccess('Success Message');
-            }
-        },
-        {
-            name: "Show Information",
-            clicked: function (dataItem) {
-                VRNotificationService.showInformation('Information Message');
-            }
         }];
     }
 
@@ -281,7 +244,6 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
         var measure = overallSelectedMeasure;
         var othersValue = $scope.trafficStatisticSummary[measure.propertyName];
         var index = 1;
-        console.log(currentData);
         angular.forEach(currentData, function (itm) {
             if (index > 15)
                 return;
@@ -325,7 +287,6 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
             titlePath: "entityName",
             valuePath: "value"
         }];
-        //console.log(chartData.length);
         chartSelectedMeasureAPI.renderSingleDimensionChart(chartData, chartDefinition, seriesDefinitions);
     }
 
@@ -344,7 +305,6 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
         $scope.isGettingEntityStatistics = true;
         AnalyticsAPIService.GetTrafficStatistics(groupKey.value, $scope.selectedEntityId, $scope.fromDate, $scope.toDate)
         .then(function (response) {
-            console.log(response);
             var chartData = response;
 
             var chartDefinition = {

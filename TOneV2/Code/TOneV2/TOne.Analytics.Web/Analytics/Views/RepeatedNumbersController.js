@@ -47,7 +47,6 @@ function RepeatedNumbersController($scope, UtilsService, $q, RepeatedNumbersAPIS
         }
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return RepeatedNumbersAPIService.GetRepeatedNumbersData(dataRetrievalInput).then(function (response) {
-                console.log(response);
                 onResponseReady(response);
                 $scope.showResult = true;
             })
@@ -94,7 +93,6 @@ function RepeatedNumbersController($scope, UtilsService, $q, RepeatedNumbersAPIS
                     width: "80%"//,
                     //maxHeight: "800px"
                 };
-                console.log(dataItem);
                 var parameters = {
                     fromDate: $scope.fromDate,
                     toDate: $scope.toDate,
@@ -106,25 +104,9 @@ function RepeatedNumbersController($scope, UtilsService, $q, RepeatedNumbersAPIS
 
                 VRModalService.showModal('/Client/Modules/Analytics/Views/CDR/CDRLog.html', parameters, modalSettings);
             }
-        },
-        {
-            name: "Show Confirmation",
-            clicked: function (dataItem) {
-                VRNotificationService.showConfirmation('Are you sure you want to delete?')
-                .then(function (result) {
-                    if (result)
-                        console.log('Confirmed');
-                    else
-                        console.log('not confirmed');
-                });
-            }
-        },
-        {
-            name: "Show Error",
-            clicked: function (dataItem) {
-                VRNotificationService.showError('Error Message');
-            }
-        }];
+        }
+        
+     ];
     }
 
     function loadMeasures() {

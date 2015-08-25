@@ -38,7 +38,6 @@ function RawCDRLogController($scope, RawCDRLogAPIService, UtilsService, $q, Busi
             return RawCDRLogAPIService.GetRawCDRData(dataRetrievalInput).then(function (response) {
                 onResponseReady(response);
             }).catch(function (error) {
-                console.log(error.ExceptionMessage);
                // VRNotificationService.notifyException("Sintex Error", "dsad");
 
             });
@@ -53,7 +52,6 @@ function RawCDRLogController($scope, RawCDRLogAPIService, UtilsService, $q, Busi
     }
 
     function retrieveData() {
-        console.log($scope.whereCondtion)
         var filter = buildFilter();
         var query = {
             Switches: filter.SwitchIds,
