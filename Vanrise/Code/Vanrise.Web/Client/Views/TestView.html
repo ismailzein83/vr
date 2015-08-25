@@ -142,8 +142,10 @@ ff
 
 </vr-datagridcell>
 <input type="button" ng-click="addItem()" value="Add Item" />
-<vr-datagrid datasource="gridData" maxheight="400px" loadmoredata="loadMoreData" on-ready="gridReady">
+<vr-datagrid defaultsortbyfieldname="'col2'" defaultsortdirection="'DESC'" datasource="gridData" maxheight="400px" loadmoredata="loadMoreData" on-ready="gridReady">
     <vr-datagridcolumn headertext="'Column '" field="'col3'">
+    </vr-datagridcolumn>
+    <vr-datagridcolumn field="'col2'">
     </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Column '">
         <input type="text" ng-model="dataItem.col3" />
