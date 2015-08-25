@@ -70,19 +70,19 @@ namespace TOne.BusinessEntity.Data.SQL
                 HolidayName = reader["HolidayName"] as string,
                 RateType = reader["RateType"] != DBNull.Value ? (ToDRateType)Enum.Parse(typeof(ToDRateType), reader["RateType"].ToString()) : ToDRateType.Normal,
                 BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate"),
-                EndEffectiveDate = (reader["EndEffectiveDate"] == DBNull.Value) ? null : (DateTime?)GetReaderValue<DateTime>(reader, "EndEffectiveDate"),
+                EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate"),
                 UserID = GetReaderValue<int>(reader, "UserID"),
                 ZoneName = reader["ZoneName"] as string,
                 CarrierName = reader["CarrierName"] as string,
                 DefinitionDisplayS = reader["DefinitionDisplayS"] as string,
             };
-            toDConsiderationInfo.IsActive = WasActive(when, toDConsiderationInfo);
+            toDConsiderationInfo.IsActive = isActive(when, toDConsiderationInfo);
 
             return toDConsiderationInfo;
          
         }
 
-        private bool WasActive(DateTime when , TODConsiderationInfo tod )
+        private bool isActive(DateTime when , TODConsiderationInfo tod )
         {
             if (!GetIsEffective(tod.BeginEffectiveDate, tod.EndEffectiveDate, when)) return false;
 
@@ -116,9 +116,14 @@ namespace TOne.BusinessEntity.Data.SQL
 
         public Vanrise.Entities.BigResult<TODConsiderationInfo> GetToDConsiderationByCriteria(Vanrise.Entities.DataRetrievalInput<TODCustomerQuery> input)
         {
+
+            
             return RetrieveData(input, (tempTableName) =>
             {
-                ExecuteNonQuerySP("BEntity.sp_CustomersToDConsideration_CreateTempForFiltered", tempTableName, (input.Query.ZoneIds.Count()>0 && input.Query.ZoneIds!=null )? string.Join(",", input.Query.ZoneIds.Select(x => x.ToString()).ToArray())  : null, input.Query.CustomerId , input.Query.EffectiveOn);
+                string zoneIds = null;
+                if (input.Query.ZoneIds.Count() > 0)
+                    zoneIds = string.Join<int>(",", input.Query.ZoneIds);
+                ExecuteNonQuerySP("BEntity.sp_CustomersToDConsideration_CreateTempForFiltered", tempTableName, zoneIds , input.Query.CustomerId, input.Query.EffectiveOn);
 
             }, (reader) => ToDConsiderationInfoMapper(reader, input.Query.EffectiveOn));
         }

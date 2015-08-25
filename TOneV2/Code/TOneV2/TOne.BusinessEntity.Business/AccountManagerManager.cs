@@ -81,5 +81,29 @@ namespace TOne.BusinessEntity.Business
 
             return memberIds;
         }
+
+        public List<string> GetMyAssignedSuppliersAMU()
+        {
+            AccountManagerManager accountManagerManager = new AccountManagerManager();
+            List<AssignedCarrier> assignedCarriers = accountManagerManager.GetAssignedCarriers(SecurityContext.Current.GetLoggedInUserId(), true, CarrierType.Supplier);
+            List<string> suppliers = new List<string>();
+            foreach (AssignedCarrier assignedCarrier in assignedCarriers)
+            {
+                suppliers.Add(assignedCarrier.CarrierAccountId);
+            }
+            return suppliers;
+        }
+
+        public List<string> GetMyAssignedCustomerAMU()
+        {
+            AccountManagerManager accountManagerManager = new AccountManagerManager();
+            List<AssignedCarrier> assignedCarriers = accountManagerManager.GetAssignedCarriers(SecurityContext.Current.GetLoggedInUserId(), true, CarrierType.Customer);
+            List<string> cutomers = new List<string>();
+            foreach (AssignedCarrier assignedCarrier in assignedCarriers)
+            {
+                cutomers.Add(assignedCarrier.CarrierAccountId);
+            }
+            return cutomers;
+        } 
     }
 }

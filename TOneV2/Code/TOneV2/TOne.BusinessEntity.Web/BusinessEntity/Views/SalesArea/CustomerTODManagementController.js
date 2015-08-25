@@ -3,6 +3,7 @@ function CustomerTODManagementController($scope, CarrierAccountAPIService, Zones
     var gridApi;
    
     function load() {
+        $scope.isLoading = true;
         loadCustomers();
 
     }
@@ -67,6 +68,9 @@ function CustomerTODManagementController($scope, CarrierAccountAPIService, Zones
             angular.forEach(response, function (itm) {
                 $scope.customers.push(itm);
             });
+        }).finally(function () {
+            $scope.isLoading = false;
+
         });
     }
     defineScope();

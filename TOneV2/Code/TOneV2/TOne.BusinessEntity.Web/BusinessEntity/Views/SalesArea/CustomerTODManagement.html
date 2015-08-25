@@ -1,6 +1,6 @@
 ﻿<vr-panel ng-controller="Customer_CustomerTODManagementController">
     <vr-form name="formFilter">
-        <vr-form name="formFilter">
+        <vr-form name="formFilter" vr-loader="isLoading">
             <div ng-hide="filterSectionCollapsed">
                 <vr-row removeline>
                     <vr-columns width="normal">
@@ -26,25 +26,26 @@
                     </div>
                 </vr-actionbar>
             </vr-row>
-            <div vr-loader="isLoading">
-                <vr-row>
-                    <vr-columns width="fullrow">
-                        <vr-datagrid datasource="::datasource" pagingtype="'PagingOnScroll'" dataretrievalfunction="dataRetrievalFunction" on-ready="gridReady" menuactions="[]" >
-                            <vr-datagridcolumn headertext="'Customer'" field="'CarrierName'">
-                            </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'">
-                            </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Definition'" field="'DefinitionDisplayS'">
-                            </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Start Date'" field="'BeginEffectiveDate'">
-                            </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'End Date'" field="'EndEffectiveDate'">
-                            </vr-datagridcolumn>
-                            <!--<vr-datagridcolumn headertext="'Active'" field="'AccountsCount'">
-                            </vr-datagridcolumn>-->
-                        </vr-datagrid>
-                    </vr-columns>
-            </div>
         </vr-form>
+        <div>
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-datagrid datasource="::datasource" pagingtype="'PagingOnScroll'" dataretrievalfunction="dataRetrievalFunction" on-ready="gridReady" menuactions="[]">
+                        <vr-datagridcolumn headertext="'Customer'" field="'CarrierName'">
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'">
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Definition'" field="'DefinitionDisplayS'">
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Start Date'" field="'BeginEffectiveDate'">
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'End Date'" field="'EndEffectiveDate'">
+                        </vr-datagridcolumn>
+                        <!--<vr-datagridcolumn headertext="'Active'" field="'AccountsCount'">
+                        </vr-datagridcolumn>-->
+                    </vr-datagrid>
+                </vr-columns>
+        </div>
+
     </vr-form>
 </vr-panel>
