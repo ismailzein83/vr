@@ -26,6 +26,7 @@ namespace Vanrise.Security.Data.SQL
 
         public List<View> GetDynamicPages()
         {
+
             return GetItemsSP("sec.sp_View_GetFiltered", ViewMapper, null, null, ViewType.Dynamic);
             
         }
@@ -33,7 +34,7 @@ namespace Vanrise.Security.Data.SQL
         {
 
             Dictionary<string,string> mapper=new Dictionary<string,string>();
-            mapper.Add("Name", "PageName");
+           
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQuerySP("sec.sp_View_GetFiltered", tempTableName, filter.Query, ViewType.Dynamic);
