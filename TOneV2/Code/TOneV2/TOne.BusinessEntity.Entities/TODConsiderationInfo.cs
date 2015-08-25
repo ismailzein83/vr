@@ -23,7 +23,7 @@ namespace TOne.BusinessEntity.Entities
         public int UserID {get; set; }
         public string ZoneName { get; set; }
         public string CustomerNameSuffix { get; set; }
-        public string CustomerName { get; set; }
+        public string CarrierName { get; set; }
         public string DefinitionDisplayS { get; set; }
         public bool IsActive { get; set; }
 

@@ -73,7 +73,7 @@ namespace TOne.BusinessEntity.Data.SQL
                 EndEffectiveDate = (reader["EndEffectiveDate"] == DBNull.Value) ? null : (DateTime?)GetReaderValue<DateTime>(reader, "EndEffectiveDate"),
                 UserID = GetReaderValue<int>(reader, "UserID"),
                 ZoneName = reader["ZoneName"] as string,
-                CustomerName = reader["CustomerName"] as string,
+                CarrierName = reader["CarrierName"] as string,
                 DefinitionDisplayS = reader["DefinitionDisplayS"] as string,
             };
             toDConsiderationInfo.IsActive = WasActive(when, toDConsiderationInfo);
@@ -118,7 +118,7 @@ namespace TOne.BusinessEntity.Data.SQL
         {
             return RetrieveData(input, (tempTableName) =>
             {
-                ExecuteNonQuerySP("BEntity.sp_CustomersToDConsideration_CreateTempForFiltered", tempTableName, (input.Query.ZoneIds.Count()>0 && input.Query.ZoneIds!=null )? string.Join(",", input.Query.ZoneIds.Select(x => x.ToString()).ToArray())  : null, input.Query.CustomerId, input.Query.EffectiveOn);
+                ExecuteNonQuerySP("BEntity.sp_CustomersToDConsideration_CreateTempForFiltered", tempTableName, (input.Query.ZoneIds.Count()>0 && input.Query.ZoneIds!=null )? string.Join(",", input.Query.ZoneIds.Select(x => x.ToString()).ToArray())  : null, input.Query.CustomerId , input.Query.EffectiveOn);
 
             }, (reader) => ToDConsiderationInfoMapper(reader, input.Query.EffectiveOn));
         }

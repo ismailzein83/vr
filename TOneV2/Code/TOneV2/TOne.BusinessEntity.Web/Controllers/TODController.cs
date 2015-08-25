@@ -16,7 +16,7 @@ namespace TOne.BusinessEntity.Web.Controllers
         {
 
             TODManager manager = new TODManager();
-            return manager.GetFilteredCustomerTOD(input);
+            return GetWebResponse(input, manager.GetFilteredCustomerTOD(input));
         }
 
        
