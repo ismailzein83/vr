@@ -19,5 +19,6 @@ namespace TOne.Analytics.Entities
         public int? SupplierAmuID { get; set; }
         public string Currency { get; set; }
         public string ShowInactive { get; set; }
+        public string ZoneID { get; set; }
     }
 }

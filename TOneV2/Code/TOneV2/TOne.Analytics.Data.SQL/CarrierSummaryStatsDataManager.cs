@@ -17,7 +17,7 @@ namespace TOne.Analytics.Data.SQL
         {
             return RetrieveData(input, (tempTableName) =>
             {
-                ExecuteNonQuerySP("BEntity.sp_CarrierSummaryStats_CreateTempForFiltered", tempTableName, input.Query.CarrierType, input.Query.FromDate, input.Query.ToDate, input.Query.CustomerID, input.Query.SupplierID, input.Query.TopRecord, input.Query.GroupByProfile, input.Query.CustomerAmuID, input.Query.SupplierAmuID, input.Query.Currency);
+                ExecuteNonQuerySP("BEntity.sp_CarrierSummaryStats_CreateTempForFiltered", tempTableName, input.Query.CarrierType, input.Query.FromDate, input.Query.ToDate, input.Query.CustomerID, input.Query.SupplierID, input.Query.ZoneID, input.Query.TopRecord, input.Query.GroupByProfile, input.Query.CustomerAmuID, input.Query.SupplierAmuID, input.Query.Currency);
 
             }, CarrierSummaryStatsMapper);
         }

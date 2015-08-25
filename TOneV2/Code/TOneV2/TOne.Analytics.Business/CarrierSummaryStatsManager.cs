@@ -28,10 +28,12 @@ namespace TOne.Analytics.Business
             input.Query.SupplierAmuID = null;
             input.Query.CustomerAmuID = null;
             
-            if (input.Query.CarrierType == "True")
+            if (input.Query.CarrierType == "1")
                 input.Query.CarrierType = "Customer";
-            else
+            else if (input.Query.CarrierType == "2")
                 input.Query.CarrierType = "Supplier";
+            else
+                input.Query.CarrierType = "Zone";
             
             if (input.Query.GroupByProfile == "True")
                 input.Query.GroupByProfile = "Y";

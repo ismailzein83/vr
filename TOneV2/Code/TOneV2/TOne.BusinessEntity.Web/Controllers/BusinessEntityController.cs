@@ -16,7 +16,7 @@ namespace TOne.BusinessEntity.Web.Controllers
         {
             //System.Threading.Thread.Sleep(2000);
             ZoneManager manager = new ZoneManager();
-            return manager.GetSalesZones(nameFilter);
+            return manager.GetOwnZones(nameFilter);
         }
 
         [HttpGet]

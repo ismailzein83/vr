@@ -1,19 +1,12 @@
-﻿'use strict'
+﻿"use strict";
+
 var serviceObj = function (BaseAPIService) {
     return ({
-        GetSalesZones: GetSalesZones,
         GetOwnZones: GetOwnZones
     });
 
-    function GetSalesZones(nameFilter) {
-        return BaseAPIService.get("/api/BusinessEntity/GetSalesZones",
-            {
-                nameFilter: nameFilter
-            });
-    }
-
     function GetOwnZones(nameFilter) {
-        return BaseAPIService.get("/api/BusinessEntity/GetOwnZones",
+        return BaseAPIService.get("/api/Zone/GetOwnZones",
             {
                 nameFilter: nameFilter
             });

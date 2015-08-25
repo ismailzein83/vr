@@ -21,22 +21,18 @@ namespace TOne.BusinessEntity.Business
         {
             _dataManager.LoadZonesInfo(effectiveTime, isFuture, activeSuppliers, batchSize, onBatchAvailable);
         }
-        public List<ZoneInfo> GetSalesZones(string nameFilter)
-        {
-            return GetZones("SYS", nameFilter);
-        }
         public List<ZoneInfo> GetZoneList(IEnumerable<int> zonesIds)
         {
             return _dataManager.GetZoneList(zonesIds);
         }
         public List<ZoneInfo> GetZones(string supplierId, string nameFilter)
         {
-            return _dataManager.GetZones(supplierId, nameFilter);
+            return _dataManager.GetZones(supplierId, nameFilter,DateTime.Now);
         }
 
         public List<ZoneInfo> GetOwnZones(string nameFilter)
         {
-            return _dataManager.GetOwnZones("SYS", nameFilter, DateTime.Now);
+            return _dataManager.GetZones("SYS", nameFilter, DateTime.Now);
         }
 
         public Dictionary<int, Zone> GetAllZones()
@@ -49,12 +45,7 @@ namespace TOne.BusinessEntity.Business
                     return _dataManager.GetAllZones();
                 });
         }
-        //public Dictionary<int, Zone> GetOwnZones(DateTime when)
-        //{
-        //    return GetAllZones().Where(pair => (pair.Value.SupplierID == "SYS") && (pair.Value.BeginEffectiveDate <=  DateTime.Now) && (pair.Value.EndEffectiveDate == null || pair.Value.EndEffectiveDate >= when))
-        //                         .ToDictionary(pair => pair.Key,
-        //                                       pair => pair.Value);
-        //}
+
         public Zone GetZone(int zoneId)
         {
             Zone zone;
@@ -82,11 +73,6 @@ namespace TOne.BusinessEntity.Business
 
             }
             return zoneIds;
-        }
-
-        public List<ZoneInfo> GetZonesBySupplierID(string supplierID)
-        {
-            return _dataManager.GetZonesBySupplierID(supplierID);
         }
     }
 }

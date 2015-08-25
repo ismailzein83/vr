@@ -51,7 +51,7 @@ namespace TOne.BusinessEntity.Data.SQL
             return GetItemsSP("[BEntity].[sp_Zone_GetFilteredBySupplierId]", ZoneInfoMapper, supplierId, nameFilter);
          
         }
-        public List<ZoneInfo> GetOwnZones(string supplierId, string nameFilter, DateTime whenDate)
+        public List<ZoneInfo> GetZones(string supplierId, string nameFilter, DateTime whenDate)
         {
             return GetItemsSP("[BEntity].[sp_Zone_GetOwnFilteredBySupplierId]", ZoneInfoMapper, supplierId, nameFilter, whenDate);
 

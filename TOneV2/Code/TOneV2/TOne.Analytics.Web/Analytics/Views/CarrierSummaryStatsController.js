@@ -2,14 +2,16 @@
 
     "use strict";
 
-    CarrierSummaryStatsController.$inject = ['$scope', 'CarrierSummaryStatsAPIService', 'CarrierAccountAPIService', 'BusinessEntityAPIService_temp', 'CurrencyAPIService', 'CarrierTypeEnum', 'VRModalService'];
-    function CarrierSummaryStatsController($scope, CarrierSummaryStatsAPIService, CarrierAccountAPIService, BusinessEntityAPIService, CurrencyAPIService, CarrierTypeEnum, VRModalService) {
+    CarrierSummaryStatsController.$inject = ['$scope', 'CarrierSummaryStatsAPIService', 'CarrierAccountAPIService', 'ZoneAPIService', 'CurrencyAPIService', 'CarrierTypeEnum', 'VRModalService'];
+    function CarrierSummaryStatsController($scope, CarrierSummaryStatsAPIService, CarrierAccountAPIService, ZoneAPIService, CurrencyAPIService, CarrierTypeEnum, VRModalService) {
 
         var gridApi;
 
         function retrieveData() {
             
-            $scope.getHeader = $scope.byProfile ? "Profile" : "Carrier";
+            $scope.getHeader = $scope.optionsGroups.selectedvalues.value == 3 ? "Zone" : $scope.byProfile ? "Profile" : "Carrier";
+
+            $scope.optionsGroups.selectedvalues
 
             if ($scope.selectedvalues == undefined)
                 $scope.selectedvalues = null;
@@ -19,8 +21,9 @@
 
             return gridApi.retrieveData({
                 //CarrierType: $scope.isCustomer,
-                CarrierType: "True",
-                CustomerID: $scope.selectedvalues == null ? null :  $scope.selectedvalues.CarrierAccountID,
+                CarrierType: $scope.optionsGroups.selectedvalues.value,
+                CustomerID: $scope.selectedvalues == null ? null : $scope.selectedvalues.CarrierAccountID,
+                ZoneID: $scope.selectedvaluesZones == null ? null : $scope.selectedvaluesZones.ZoneId,
                 TopRecord: $scope.top,
                 FromDate: $scope.fromDate,
                 ToDate: $scope.toDate,
@@ -90,7 +93,7 @@
         }
 
         $scope.datasourceZones = function (text) {
-            return BusinessEntityAPIService.GetOwnZones(text);
+            return ZoneAPIService.GetOwnZones(text);
         }
 
 
