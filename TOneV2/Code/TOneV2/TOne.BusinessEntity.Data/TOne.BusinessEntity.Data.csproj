@@ -67,6 +67,7 @@
     <Compile Include="IRateDataManager.cs" />
     <Compile Include="IFlaggedServiceDataManager.cs" />
     <Compile Include="ISupplierPricelistsDataManager.cs" />
+    <Compile Include="ISupplierTariffDataManager.cs" />
     <Compile Include="ISwitchDataManager.cs" />
     <Compile Include="ITariffDataManager.cs" />
     <Compile Include="IToDConsiderationDataManager.cs" />

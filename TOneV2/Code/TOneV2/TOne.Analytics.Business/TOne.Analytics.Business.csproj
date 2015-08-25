@@ -95,7 +95,6 @@
     <Compile Include="AnalyticsManager.cs" />
     <Compile Include="RawCDRLogManager.cs" />
     <Compile Include="RepeatedNumbersManager.cs" />
-    <Compile Include="SupplierTariffManager.cs" />
     <Compile Include="TrafficMonitorManager.cs" />
   </ItemGroup>
   <ItemGroup>

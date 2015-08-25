@@ -70,6 +70,7 @@
     <Compile Include="CarrierMaskManager.cs" />
     <Compile Include="CustomerPricelistsManager.cs" />
     <Compile Include="SupplierPricelistsManager.cs" />
+    <Compile Include="SupplierTariffManager.cs" />
     <Compile Include="TODManager.cs" />
     <Compile Include="CodeManager.cs" />
     <Compile Include="CommissionManager.cs" />

@@ -127,8 +127,6 @@
     <Compile Include="ReleaseCodeStatistic.cs" />
     <Compile Include="RepeatedNumbers.cs" />
     <Compile Include="RepeatedNumbersInput.cs" />
-    <Compile Include="SupplierTariff.cs" />
-    <Compile Include="SupplierTariffQuery.cs" />
     <Compile Include="TimeValuesRecord.cs" />
     <Compile Include="TrafficStatistic.cs" />
     <Compile Include="GenericFilter.cs" />

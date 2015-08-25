@@ -64,7 +64,6 @@
     <Compile Include="RawCDRLogDataManager.cs" />
     <Compile Include="ReleaseCodeDataManager.cs" />
     <Compile Include="RepeatedNumbersDataManager.cs" />
-    <Compile Include="SupplierTariffDataManager.cs" />
     <Compile Include="TrafficMonitorDataManager.cs" />
     <Compile Include="TrafficStatisticCommon.cs" />
   </ItemGroup>

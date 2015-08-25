@@ -70,6 +70,7 @@
     <Compile Include="RateDataManager.cs" />
     <Compile Include="FlaggedServiceDataManager.cs" />
     <Compile Include="SupplierPricelistsDataManager.cs" />
+    <Compile Include="SupplierTariffDataManager.cs" />
     <Compile Include="SwitchDataManager.cs" />
     <Compile Include="TariffDataManager.cs" />
     <Compile Include="ToDConsiderationDataManager.cs" />

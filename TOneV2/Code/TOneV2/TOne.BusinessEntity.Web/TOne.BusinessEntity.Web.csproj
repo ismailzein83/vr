@@ -128,6 +128,7 @@
   <ItemGroup>
     <Compile Include="Controllers\CustomerPricelistsController.cs" />
     <Compile Include="Controllers\SupplierPricelistsController.cs" />
+    <Compile Include="Controllers\SupplierTariffController.cs" />
     <Compile Include="Controllers\TODController.cs" />
     <Compile Include="Controllers\AccountManagerController.cs" />
     <Compile Include="Controllers\BusinessEntityController.cs" />
@@ -150,6 +151,7 @@
     <Content Include="BusinessEntity\Constant\ChangeEnum.js" />
     <Content Include="BusinessEntity\Constant\PaymentTypeEnum.js" />
     <Content Include="BusinessEntity\Constant\RoutingStatusEnum.js" />
+    <Content Include="BusinessEntity\Constant\SupplierTariffMeasureEnum.js" />
     <Content Include="BusinessEntity\Directives\Templates\CarrierGroupTree.html" />
     <Content Include="BusinessEntity\Directives\Templates\CarrierGroupTreeController.js" />
     <Content Include="BusinessEntity\Directives\vr-be-carriergroup-directive.js" />
@@ -167,6 +169,7 @@
     <Content Include="BusinessEntity\Services\APIServices\LookUpAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\PriceListAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\SupplierPricelistsAPIService.js" />
+    <Content Include="BusinessEntity\Services\APIServices\SupplierTariffAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\TODAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\ProfileAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\SwitchManagmentAPIService.js" />
@@ -199,6 +202,8 @@
     <Content Include="BusinessEntity\Views\Customer Pricelists\CustomerPricelistsController.js" />
     <Content Include="BusinessEntity\Views\Customer Pricelists\CustomerPricelistsGrid.html" />
     <Content Include="BusinessEntity\Views\Customer Pricelists\CustomerPricelistsGridController.js" />
+    <Content Include="BusinessEntity\Views\PurchaseArea\SupplierTariffManagement.html" />
+    <Content Include="BusinessEntity\Views\PurchaseArea\SupplierTariffManagementController.js" />
     <Content Include="BusinessEntity\Views\Rates.html" />
     <Content Include="BusinessEntity\Views\RatesController.js" />
     <Content Include="BusinessEntity\Views\PurchaseArea\SupplierTODManagement.html" />
