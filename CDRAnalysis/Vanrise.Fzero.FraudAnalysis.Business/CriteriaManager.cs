@@ -3,16 +3,12 @@ using System.Collections.Generic;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using System.Linq;
 
+
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class CriteriaManager
     {
-
-        public int OperatorType
-        {
-            get; set; 
-        }
-
+        
         public Decimal GetCriteriaValue(CriteriaDefinition criteria, NumberProfile numberProfile)
         {            
             return s_criteriaDefinitions[criteria.FilterId].Expression(numberProfile);
