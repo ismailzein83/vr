@@ -59,12 +59,14 @@
     <Compile Include="ICodeDataManager.cs" />
     <Compile Include="ICommissionDataManager.cs" />
     <Compile Include="ICurrencyDataManager.cs" />
+    <Compile Include="ICustomerPricelistsDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="ILookUpDataManager.cs" />
     <Compile Include="IPriceListDataManager.cs" />
     <Compile Include="ICarrierProfileDataManager.cs" />
     <Compile Include="IRateDataManager.cs" />
     <Compile Include="IFlaggedServiceDataManager.cs" />
+    <Compile Include="ISupplierPricelistsDataManager.cs" />
     <Compile Include="ISwitchDataManager.cs" />
     <Compile Include="ITariffDataManager.cs" />
     <Compile Include="IToDConsiderationDataManager.cs" />

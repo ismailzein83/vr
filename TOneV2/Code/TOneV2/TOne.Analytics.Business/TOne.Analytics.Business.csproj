@@ -89,7 +89,6 @@
     <Compile Include="BlockedAttemptsManager.cs" />
     <Compile Include="CarrierSummaryStatsManager.cs" />
     <Compile Include="CDRManager.cs" />
-    <Compile Include="CustomerPricelistsManager.cs" />
     <Compile Include="DailyReportManager.cs" />
     <Compile Include="HourlyReportManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

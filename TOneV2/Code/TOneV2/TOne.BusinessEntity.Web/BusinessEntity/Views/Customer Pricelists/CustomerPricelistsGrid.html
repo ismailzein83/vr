@@ -1,0 +1,20 @@
+﻿<div ng-controller="CustomerPricelistsGridController" vr-loader="isGettingData">
+    <div>
+        <vr-datagrid datasource="data" menuactions="menuActions" issubgrid dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'" on-ready="onMainGridReady">
+            <vr-datagridcolumn headertext="'ZoneID'" field="'ZoneID'" type="Number" widthfactor="5"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'"  widthfactor="10"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Rate ID'" field="'RateID'" type="Number"  widthfactor="5"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Rate'" field="'Rate'"  widthfactor="5" isclickable="true"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Change'"   >{{viewScope.gettext()}}
+                <span class="glyphicon glyphicon-arrow-up"></span>
+            </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Services'" field="'ServicesFlag'" type="Number" widthfactor="5"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'OffPeak'" field="'OffPeakRate'" widthfactor="5" ></vr-datagridcolumn>
+          
+            <vr-datagridcolumn headertext="'Weekend'" field="'WeekendRate'"  widthfactor="5"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'BED'" field="'BeginEffectiveDate'" type="Date" widthfactor="8"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'EED'" field="'EndEffectiveDate'" type="Date" widthfactor="8" ></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Notes'" field="'Notes'" widthfactor="20" ></vr-datagridcolumn>
+        </vr-datagrid>
+    </div>
+</div>

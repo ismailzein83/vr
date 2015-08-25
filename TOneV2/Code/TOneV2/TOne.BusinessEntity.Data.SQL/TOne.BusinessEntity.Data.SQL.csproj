@@ -62,12 +62,14 @@
     <Compile Include="CodeDataManager.cs" />
     <Compile Include="CommissionDataManager.cs" />
     <Compile Include="CurrencyDataManager.cs" />
+    <Compile Include="CustomerPricelistsDataManager.cs" />
     <Compile Include="LookUpDataManager.cs" />
     <Compile Include="PriceListDataManager.cs" />
     <Compile Include="CarrierProfileDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateDataManager.cs" />
     <Compile Include="FlaggedServiceDataManager.cs" />
+    <Compile Include="SupplierPricelistsDataManager.cs" />
     <Compile Include="SwitchDataManager.cs" />
     <Compile Include="TariffDataManager.cs" />
     <Compile Include="ToDConsiderationDataManager.cs" />

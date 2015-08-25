@@ -1,0 +1,13 @@
+﻿<div ng-controller="SupplierPricelistsGridController" vr-loader="isGettingData">
+    <div>
+        <vr-datagrid datasource="data" menuactions="menuActions" issubgrid dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'" on-ready="onMainGridReady">
+          
+            <vr-datagridcolumn headertext="'ID'" field="'PriceListID'" type="Number" widthfactor="2"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Pricelist Date'" >{{gettext()}}</vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Description'" field="'Description'" widthfactor="10"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'User'" field="'Name'" widthfactor="5"></vr-datagridcolumn>
+
+
+        </vr-datagrid>
+    </div>
+</div>
