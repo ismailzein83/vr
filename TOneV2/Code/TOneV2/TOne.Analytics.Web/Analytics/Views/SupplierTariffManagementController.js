@@ -1,6 +1,6 @@
-﻿SupplierTariffManagementController.$inject = ['$scope', 'CarrierAccountAPIService', 'CarrierTypeEnum', 'SupplierTariffMeasureEnum', 'SupplierTariffAPIService'];
+﻿SupplierTariffManagementController.$inject = ['$scope', 'CarrierAccountAPIService', 'CarrierTypeEnum', 'SupplierTariffMeasureEnum', 'SupplierTariffAPIService', 'VRNotificationService'];
 
-function SupplierTariffManagementController($scope, CarrierAccountAPIService, CarrierTypeEnum, SupplierTariffMeasureEnum, SupplierTariffAPIService) {
+function SupplierTariffManagementController($scope, CarrierAccountAPIService, CarrierTypeEnum, SupplierTariffMeasureEnum, SupplierTariffAPIService, VRNotificationService) {
 
     var gridApi = undefined;
 
@@ -18,9 +18,26 @@ function SupplierTariffManagementController($scope, CarrierAccountAPIService, Ca
         $scope.measures = [];
         $scope.showGrid = false;
 
+        $scope.supplierChanged = function (selectedSupplier, allSuppliers) {
+            if (selectedSupplier != undefined) {
+                $scope.zones = [];
+                $scope.selectedZones = [];
+
+                SupplierTariffAPIService.GetZonesBySupplierID(selectedSupplier.CarrierAccountID)
+                    .then(function (response) {
+                        angular.forEach(response, function (item) {
+                            $scope.zones.push(item);
+                        });
+                    })
+                    .catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    });
+            }
+        }
+
         $scope.searchClicked = function () {
             $scope.showGrid = true;
-            //return retrieveData();
+            return retrieveData();
         }
 
         $scope.gridReady = function (api) {
@@ -29,7 +46,7 @@ function SupplierTariffManagementController($scope, CarrierAccountAPIService, Ca
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
 
-            return SupplierTariffAPIService.GetFilteredSupplierTarrifs(dataRetrievalInput)
+            return SupplierTariffAPIService.GetFilteredSupplierTariffs(dataRetrievalInput)
                 .then(function (response) {
                     console.log(response);
                     onResponseReady(response);
@@ -62,12 +79,11 @@ function SupplierTariffManagementController($scope, CarrierAccountAPIService, Ca
 
     function retrieveData() {
         var query = {
-            selectedSupplierID: ($scope.selectedSupplier.CarrierAccountID) ? $scope.selectedSupplier.CarrierAccountID : null,
+            selectedSupplierID: ($scope.selectedSupplier != undefined) ? ($scope.selectedSupplier.CarrierAccountID) : null,
             selectedZoneIDs: getSelectedZoneIDs(),
             effectiveOn: $scope.effectiveOn
         };
 
-        console.log(query);
         return gridApi.retrieveData(query);
     }
 
@@ -78,12 +94,12 @@ function SupplierTariffManagementController($scope, CarrierAccountAPIService, Ca
 
     function getSelectedZoneIDs() {
         if ($scope.selectedZones.length == 0)
-            return null;
+            return [];
 
         var ids = [];
 
         for (var i = 0; i < $scope.selectedZones.length; i++)
-            ids.push($scope.selectedZones[i].CarrierAccountID);
+            ids.push($scope.selectedZones[i].ZoneId);
 
         return ids;
     }

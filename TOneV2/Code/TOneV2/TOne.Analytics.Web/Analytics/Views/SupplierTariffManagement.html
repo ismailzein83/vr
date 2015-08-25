@@ -9,6 +9,7 @@
                                selectedvalues="selectedSupplier"
                                datatextfield="Name"
                                datavaluefield="CarrierAccountID"
+                               onselectionchanged="supplierChanged"
                                entityname="Supplier">
                     </vr-select>
                 </vr-columns>
@@ -17,7 +18,7 @@
                                datasource="zones"
                                selectedvalues="selectedZones"
                                datatextfield="Name"
-                               datavaluefield="ZoneID"
+                               datavaluefield="ZoneId"
                                ismultipleselection
                                entityname="Zones">
                     </vr-select>
@@ -44,7 +45,7 @@
                              dataretrievalfunction="dataRetrievalFunction"
                              pagingtype="'PagingOnScroll'"
                              on-ready="gridReady"
-                             idfield=""
+                             idfield="TariffID"
                              ng-show="showGrid">
 
                     <vr-datagridcolumn ng-repeat="measure in measures"

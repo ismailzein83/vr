@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Http;
 using TOne.Analytics.Business;
 using TOne.Analytics.Entities;
+using TOne.BusinessEntity.Business;
 
 namespace TOne.Analytics.Web.Controllers
 {
@@ -15,6 +16,13 @@ namespace TOne.Analytics.Web.Controllers
         {
             SupplierTariffManager manager = new SupplierTariffManager();
             return GetWebResponse(input, manager.GetFilteredSupplierTariffs(input));
+        }
+
+        [HttpGet]
+        public List<TOne.BusinessEntity.Entities.ZoneInfo> GetZonesBySupplierID(string supplierID)
+        {
+            ZoneManager manager = new ZoneManager();
+            return manager.GetZonesBySupplierID(supplierID);
         }
     }
 }
