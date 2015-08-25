@@ -1,7 +1,0 @@
-﻿<div ng-controller="CustomerPricelistsGridController" vr-loader="isGettingData">
-    <div>
-        <vr-datagrid datasource="data" menuactions="menuActions" issubgrid dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'" on-ready="onMainGridReady">
-            <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" tag="measure" type="measure.type" getcolor="getColor"></vr-datagridcolumn>
-        </vr-datagrid>
-    </div>
-</div>
