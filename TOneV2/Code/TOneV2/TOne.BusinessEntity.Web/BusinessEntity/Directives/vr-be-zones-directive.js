@@ -22,8 +22,11 @@
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            template: function () {
-                return '<vr-select ismultipleselection datasource="ctrl.zonesDatasource" label="Zones" selectedvalues="ctrl.selectedvalues" datatextfield="Name" datavaluefield="ZoneId" entityname="Zones"></vr-select>';
+            template: function (element, attrs) {
+                if (attrs.ismultipleselection !== undefined) {
+                    return '<vr-select ismultipleselection datasource="ctrl.zonesDatasource" label="Zones" selectedvalues="ctrl.selectedvalues" datatextfield="Name" datavaluefield="ZoneId" entityname="Zones"></vr-select>';
+                }
+                return '<vr-select datasource="ctrl.zonesDatasource" label="Zones" selectedvalues="ctrl.selectedvalues" datatextfield="Name" datavaluefield="ZoneId" entityname="Zones"></vr-select>';
             }
 
         };
