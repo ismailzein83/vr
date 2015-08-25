@@ -35,5 +35,6 @@ namespace TOne.BusinessEntity.Entities
         public string CommercialEmail { get; set; }
         public string SMSPhoneNumber { get; set; }
         public int AccountsCount { get; set; }
+        public long FileID { get; set; }
     }
 }

@@ -92,7 +92,7 @@ function CarrierProfileEditorController($scope, CarrierProfileAPIService, LookUp
         $scope.optionsCities.selectedvalues = $scope.optionsCities.datasource[UtilsService.getItemIndexByVal($scope.optionsCities.datasource, CarrierProfileObject.City, 'Description')];
         $scope.City = CarrierProfileObject.City;
         $scope.RegistrationNumber = CarrierProfileObject.RegistrationNumber;
-
+        $scope.CompanyLogo = { fileId: CarrierProfileObject.FileID };
         if (CarrierProfileObject.Telephone != undefined) {
             for (var i = 0; i < CarrierProfileObject.Telephone.length; i++) {
                 var telephoneNumber = CarrierProfileObject.Telephone[i];
@@ -225,7 +225,8 @@ function CarrierProfileEditorController($scope, CarrierProfileAPIService, LookUp
             TechnicalEmail: $scope.TechnicalEmail,
             CommercialContact: $scope.CommercialContact,
             CommercialEmail: $scope.CommercialEmail,
-            SMSPhoneNumber: $scope.SMSPhoneNumber
+            SMSPhoneNumber: $scope.SMSPhoneNumber,
+            FileID: $scope.CompanyLogo != null ? $scope.CompanyLogo.fileId : null
         };
 
     }

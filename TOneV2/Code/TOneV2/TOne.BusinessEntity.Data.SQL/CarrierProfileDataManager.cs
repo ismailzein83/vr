@@ -61,7 +61,8 @@ namespace TOne.BusinessEntity.Data.SQL
                 CommercialContact = reader["CommercialContact"] as string,
                 CommercialEmail = reader["CommercialEmail"] as string,
                 SMSPhoneNumber = reader["SMSPhoneNumber"] as string,
-                AccountsCount = GetReaderValue<int>(reader, "AccountsCount")//GetReaderValue(reader["AccountsCount"])
+                AccountsCount = GetReaderValue<int>(reader, "AccountsCount"),//GetReaderValue(reader["AccountsCount"])
+                FileID = GetReaderValue<long>(reader, "FileID")
             };
         }
 
@@ -75,7 +76,7 @@ namespace TOne.BusinessEntity.Data.SQL
                telephone, fax, carrierProfile.Address1, carrierProfile.Address2, carrierProfile.Address3, carrierProfile.Website, carrierProfile.BillingEmail, carrierProfile.BillingContact,
                 carrierProfile.BillingDisputeEmail, carrierProfile.PricingContact, carrierProfile.PricingEmail, carrierProfile.AccountManagerEmail, carrierProfile.AccountManagerContact,
                 carrierProfile.SupportContact, carrierProfile.SupportEmail, carrierProfile.TechnicalContact, carrierProfile.TechnicalEmail, carrierProfile.CommercialContact, carrierProfile.CommercialEmail,
-                carrierProfile.SMSPhoneNumber);
+                carrierProfile.SMSPhoneNumber, carrierProfile.FileID);
             if (rowEffected > 0)
                 return true;
             return false;
@@ -107,7 +108,7 @@ namespace TOne.BusinessEntity.Data.SQL
                telephone, fax, carrierProfile.Address1, carrierProfile.Address2, carrierProfile.Address3, carrierProfile.Website, carrierProfile.BillingEmail, carrierProfile.BillingContact,
                 carrierProfile.BillingDisputeEmail, carrierProfile.PricingContact, carrierProfile.PricingEmail, carrierProfile.AccountManagerEmail, carrierProfile.AccountManagerContact,
                 carrierProfile.SupportContact, carrierProfile.SupportEmail, carrierProfile.TechnicalContact, carrierProfile.TechnicalEmail, carrierProfile.CommercialContact, carrierProfile.CommercialEmail,
-                carrierProfile.SMSPhoneNumber);
+                carrierProfile.SMSPhoneNumber, carrierProfile.FileID);
 
             insertedId = (recordesEffected > 0) ? (Int16)profileID : -1;
             return (recordesEffected > 0);
