@@ -28,6 +28,14 @@
             if ($attrs.pagingtype != undefined)
                 pagingType = $scope.$parent.$eval($attrs.pagingtype);
 
+            var defaultSortByFieldName;
+            if ($attrs.defaultsortbyfieldname != undefined)
+                defaultSortByFieldName = $scope.$parent.$eval($attrs.defaultsortbyfieldname);
+
+            var defaultSortDirection;
+            if ($attrs.defaultsortdirection != undefined)
+                defaultSortDirection = $scope.$parent.$eval($attrs.defaultsortdirection);
+
             ctrl.clientSideFilterFunction;
             ctrl.rotateHeader = true;
 
@@ -43,7 +51,7 @@
             var dataGridObj = new DataGrid(ctrl, $scope);
             dataGridObj.initializeController();
             if (retrieveDataFunction != undefined)
-                dataGridObj.defineRetrieveData(retrieveDataFunction, pagingType);
+                dataGridObj.defineRetrieveData(retrieveDataFunction, pagingType, defaultSortByFieldName, defaultSortDirection);
 
             if (loadMoreDataFunction != undefined)
                 dataGridObj.definePagingOnScroll($scope, loadMoreDataFunction);
@@ -116,6 +124,8 @@
         var sortColumn;
         var isGridReady;
         var sortDirection;
+        var defaultSortByFieldName;
+        var defaultSortDirection;
        
 
         function addColumn(col, columnIndex) {
@@ -737,8 +747,10 @@
         //    //ctrl.hideColumn(actionTypeColumn);
         //}
 
-        function defineRetrieveData(retrieveDataFunc, pagingType) {
+        function defineRetrieveData(retrieveDataFunc, pagingType, defaultSortByFieldName_local, defaultSortDirection_local) {
             retrieveDataFunction = retrieveDataFunc;
+            defaultSortByFieldName = defaultSortByFieldName_local;
+            defaultSortDirection = defaultSortDirection_local;
 
             switch(pagingType)
             {
@@ -755,24 +767,24 @@
                     break;
             }
         }
-
+        
         function retrieveData(clearBeforeRetrieve, isExport, isSorting) {
             if (!isGridReady)
                 return;
             
             if (clearBeforeRetrieve) {
-                retrieveDataResultKey = null;
-                sortColumn = ctrl.columnDefs[0];
-                sortDirection = "ASC";
+                retrieveDataResultKey = null;                
+                sortColumn = defaultSortByFieldName != undefined ? undefined : ctrl.columnDefs[0];
+                sortDirection = defaultSortDirection != undefined ? defaultSortDirection : "ASC";
             }
             if (clearBeforeRetrieve || isSorting) {
                 if (ctrl.showPager)
                     ctrl.pagerSettings.currentPage = 1;
             }
 
-            if (sortColumn == undefined)
+            retrieveDataInput.SortByColumnName = sortColumn != undefined ? sortColumn.field : defaultSortByFieldName;
+            if (retrieveDataInput.SortByColumnName == undefined)
                 return;
-            retrieveDataInput.SortByColumnName = sortColumn.field
             retrieveDataInput.IsSortDescending = (sortDirection == "DESC");
             
             retrieveDataInput.ResultKey = retrieveDataResultKey;//retrieveDataInput should be of type Vanrise.Entities.RetrieveDataInput<T>
