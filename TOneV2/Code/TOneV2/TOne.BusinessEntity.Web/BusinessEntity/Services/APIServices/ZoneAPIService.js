@@ -11,6 +11,14 @@ var serviceObj = function (BaseAPIService) {
                 nameFilter: nameFilter
             });
     }
+
+    function GetZones(nameFilter, supplierId) {
+        return BaseAPIService.get("/api/Zone/GetZones",
+            {
+                nameFilter: nameFilter,
+                supplierId: supplierId
+            });
+    }
 }
 serviceObj.$inject = ['BaseAPIService'];
 appControllers.service('ZoneAPIService', serviceObj);

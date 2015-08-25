@@ -60,6 +60,7 @@
             };
 
             $scope.searchClicked = function () {
+                console.log($scope.selectedvaluesZones);
                 return retrieveData();
             };
 
@@ -92,9 +93,9 @@
 
         }
 
-        $scope.datasourceZones = function (text) {
-            return ZoneAPIService.GetOwnZones(text);
-        }
+        //$scope.datasourceZones = function (text) {
+        //    return ZoneAPIService.GetOwnZones(text);
+        //}
 
 
         //function loadZones(text) {

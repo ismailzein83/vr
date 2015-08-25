@@ -14,10 +14,10 @@
                 </vr-columns>
                 
                 <vr-columns colnum="2" ng-show="optionsGroups.selectedvalues.value== 3">
-                    <vr-select label="Zone" datasource="datasourceZones" selectedvalues="selectedvaluesZones" datatextfield="Name" datavaluefield="ZoneId"
-                               entityname="Zones">
+                    <vr-be-zones selectedvalues="selectedvaluesZones"> </vr-be-zones>
+                    <!--<vr-select label="Zone" datasource="datasourceZones"  datatextfield="Name" datavaluefield="ZoneId"
+                               entityname="Zones">-->
                     </vr-select>
-
                 </vr-columns>
 
                 <vr-columns colnum="1">

@@ -46,11 +46,11 @@ namespace TOne.BusinessEntity.Data.SQL
                 });
         }
         
-        public List<ZoneInfo> GetZones(string supplierId, string nameFilter)
-        {
-            return GetItemsSP("[BEntity].[sp_Zone_GetFilteredBySupplierId]", ZoneInfoMapper, supplierId, nameFilter);
+        //public List<ZoneInfo> GetZones(string supplierId, string nameFilter)
+        //{
+        //    return GetItemsSP("[BEntity].[sp_Zone_GetFilteredBySupplierId]", ZoneInfoMapper, supplierId, nameFilter);
          
-        }
+        //}
         public List<ZoneInfo> GetZones(string supplierId, string nameFilter, DateTime whenDate)
         {
             return GetItemsSP("[BEntity].[sp_Zone_GetOwnFilteredBySupplierId]", ZoneInfoMapper, supplierId, nameFilter, whenDate);
@@ -137,9 +137,9 @@ namespace TOne.BusinessEntity.Data.SQL
             };
         }
 
-        public List<ZoneInfo> GetZonesBySupplierID(string supplierID)
-        {
-            return GetItemsSP("BEntity.sp_Zone_GetBySupplierID", ZoneInfoMapper, supplierID);
-        }
+        //public List<ZoneInfo> GetZonesBySupplierID(string supplierID)
+        //{
+        //    return GetItemsSP("BEntity.sp_Zone_GetBySupplierID", ZoneInfoMapper, supplierID);
+        //}
     }
 }

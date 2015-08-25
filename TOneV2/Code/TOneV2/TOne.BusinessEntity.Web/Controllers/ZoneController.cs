@@ -17,5 +17,12 @@ namespace TOne.BusinessEntity.Web.Controllers
             ZoneManager manager = new ZoneManager();
             return manager.GetOwnZones(nameFilter);
         }
+
+        [HttpGet]
+        public List<ZoneInfo> GetZones(string nameFilter, string supplierId)
+        {
+            ZoneManager manager = new ZoneManager();
+            return manager.GetZones(supplierId, nameFilter);
+        }
     }
 }
