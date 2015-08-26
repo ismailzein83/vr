@@ -227,54 +227,54 @@ f79624
 
 .drill-down-level-0{    
     background: transparent linear-gradient(to top, #00ADEF , #00ADEF ) repeat scroll 0% 0%;
-    color: #333;
+    color: #FFF;
     border-bottom:0px;
 }
 .drill-down-level-1{
     background: transparent linear-gradient(to top, #c0213f, #c0213f) repeat scroll 0% 0%;
-    color: #333;
+    color: #FFF;
     border-bottom:0px;
 }
 .drill-down-level-2{
     background: transparent linear-gradient(to top, #f27043, #f27043) repeat scroll 0% 0%;
-    color: #333;
+    color: #FFF;
     border-bottom:0px;
 }
 .drill-down-level-3{
     background: transparent linear-gradient(to top, #806dbb, #806dbb) repeat scroll 0% 0%;
-    color: #333;
+    color: #FFF;
     border-bottom:0px;
 }
 .drill-down-level-4{
     background: transparent linear-gradient(to top, #4f7ac8, #4f7ac8) repeat scroll 0% 0%;
-    color: #333;
+    color: #FFF;
     border-bottom:0px;
 }
 
 .drill-down-level-5{
     background: transparent linear-gradient(to top, #01a082, #01a082) repeat scroll 0% 0%;
-    color: #333;
+    color: #FFF;
     border-bottom:0px;
 }
 .drill-down-level-6{
     background: transparent linear-gradient(to top, #f79624, #f79624) repeat scroll 0% 0%;
-    color: #333;
+    color: #FFF;
     border-bottom:0px;
 
 }
 .drill-down-level-7{
     background: transparent linear-gradient(to top, #9e1f63, #9e1f63) repeat scroll 0% 0%;
-    color: #333;
+    color: #FFF;
     border-bottom:0px;
 }
 .drill-down-level-8{
     background: transparent linear-gradient(to top, #20407d, #20407d) repeat scroll 0% 0%;
-    color: #333;
+    color: #FFF;
     border-bottom:0px;
 }
 .drill-down-level-9{
     background: transparent linear-gradient(to top, #01a4b5, #01a4b5) repeat scroll 0% 0%;
-    color: #333;
+    color: #FFF;
     border-bottom:0px;
 }
 /* override style.css*/
