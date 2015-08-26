@@ -64,24 +64,24 @@ namespace TOne.BusinessEntity.Data.SQL
             return customerTariff;
         }
 
-        protected IList<TABS.Tariff> GetTariffs(TABS.CarrierAccount supplier, TABS.CarrierAccount customer, TABS.Zone zone, DateTime from)
-        {
-            string hql = string.Format(@"FROM  Tariff t
-                                                     WHERE (t.EndEffectiveDate > :when OR t.EndEffectiveDate IS NULL)
-                                                        AND (t.EndEffectiveDate IS NULL OR t.EndEffectiveDate != t.BeginEffectiveDate)
-                                                        {0}
-                                                        {1}
-                                                        {2}
-                                                     ORDER BY t.BeginEffectiveDate"
-                                                , (zone != null) ? " AND t.Zone = :zone" : ""
-                                                , (customer != null) ? " AND t.Customer = :customer" : ""
-                                                , (supplier != null) ? " AND t.Supplier = :supplier" : "");
-            NHibernate.IQuery query = CurrentSession.CreateQuery(hql).SetParameter("when", from);
-            if (zone != null) query.SetParameter("zone", zone);
-            if (customer != null) query.SetParameter("customer", customer);
-            if (supplier != null) query.SetParameter("supplier", supplier);
-            IList<TABS.Tariff> listTariffs = query.List<TABS.Tariff>();
-            return listTariffs;
-        }
+//        protected IList<TABS.Tariff> GetTariffs(TABS.CarrierAccount supplier, TABS.CarrierAccount customer, TABS.Zone zone, DateTime from)
+//        {
+//            string hql = string.Format(@"FROM  Tariff t
+//                                                     WHERE (t.EndEffectiveDate > :when OR t.EndEffectiveDate IS NULL)
+//                                                        AND (t.EndEffectiveDate IS NULL OR t.EndEffectiveDate != t.BeginEffectiveDate)
+//                                                        {0}
+//                                                        {1}
+//                                                        {2}
+//                                                     ORDER BY t.BeginEffectiveDate"
+//                                                , (zone != null) ? " AND t.Zone = :zone" : ""
+//                                                , (customer != null) ? " AND t.Customer = :customer" : ""
+//                                                , (supplier != null) ? " AND t.Supplier = :supplier" : "");
+//            NHibernate.IQuery query = CurrentSession.CreateQuery(hql).SetParameter("when", from);
+//            if (zone != null) query.SetParameter("zone", zone);
+//            if (customer != null) query.SetParameter("customer", customer);
+//            if (supplier != null) query.SetParameter("supplier", supplier);
+//            IList<TABS.Tariff> listTariffs = query.List<TABS.Tariff>();
+//            return listTariffs;
+//        }
     }
 }
