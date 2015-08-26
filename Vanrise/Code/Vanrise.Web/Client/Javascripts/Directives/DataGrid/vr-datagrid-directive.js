@@ -38,7 +38,7 @@
 
             ctrl.clientSideFilterFunction;
             ctrl.rotateHeader = true;
-
+            ctrl.el = $element;
             if ($attrs.clientsidefilter != undefined)
                 ctrl.clientSideFilterFunction = $scope.$parent.$eval($attrs.clientsidefilter);
             if ($attrs.rotate == undefined) {
@@ -609,7 +609,7 @@
                             if (ctrl.datasource.length - initialLength < getPageSize())
                                 stopPagingOnScroll = true;
                             ctrl.isLoadingMoreData = false;
-                            var div = document.getElementById('gridBodyContainer'); // need real DOM Node, not jQuery wrapper
+                            var div = $(ctrl.el).find("#gridBodyContainer")[0];// need real DOM Node, not jQuery wrapper
                             var hasVerticalScrollbar = div.scrollHeight > div.clientHeight;
                             if (hasVerticalScrollbar)
                                 ctrl.headerStyle = {
@@ -838,8 +838,8 @@
                 promise.finally(function () {
                     ctrl.isLoadingMoreData = false;                    
                     setTimeout(function () {
-                        var div = document.getElementById('gridBodyContainer'); // need real DOM Node, not jQuery wrapper
-                        var hasVerticalScrollbar = div.scrollHeight > div.clientHeight;
+                        var div = $(ctrl.el).find("#gridBodyContainer")[0];// need real DOM Node, not jQuery wrapper
+                        var hasVerticalScrollbar = div.scrollHeight > div.clientHeight;                        
                         if (hasVerticalScrollbar)
                             ctrl.headerStyle = {
                                 "padding-right": getScrollbarWidth() + "px"
