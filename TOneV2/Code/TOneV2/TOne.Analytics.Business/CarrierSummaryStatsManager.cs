@@ -41,7 +41,8 @@ namespace TOne.Analytics.Business
             else
                 input.Query.GroupByProfile = "N";
 
-            Vanrise.Entities.BigResult<Entities.CarrierSummaryStats> lstCarrierSummaryStats = _datamanager.GetCarrierSummaryStats(input);
+            CarrierSummaryBigResult<CarrierSummaryStats> lstCarrierSummaryStats = _datamanager.GetCarrierSummaryStats(input);
+
             List<CarrierAccount> activeCustomers = new List<CarrierAccount>();
             List<CarrierAccount> activeSuppliers = new List<CarrierAccount>();
             List<CarrierAccount> lstCarriers = _cmanager.GetAllCarrierAccounts().Values.ToList<CarrierAccount>();
@@ -53,7 +54,7 @@ namespace TOne.Analytics.Business
             decimal Cost = 0;
             decimal Sale = 0;
             decimal Profit = 0;
-            decimal ProfitPercentage = 0;
+            double ProfitPercentage = 0;
             List<CarrierSummaryStats> lstCarrierSummarySta = lstCarrierSummaryStats.Data.ToList<CarrierSummaryStats>();
 
             if (input.Query.CarrierType != "Zone")
@@ -67,7 +68,7 @@ namespace TOne.Analytics.Business
                             {
                                 CarrierAccount account = _cmanager.GetCarrierAccount(row.GroupID);
                                 activeCustomers.Add(account);
-                                row.GroupName = account.ProfileName;
+                                row.GroupID = account.ProfileName;
                             }
 
                         if (input.Query.CarrierType == "Supplier")
@@ -75,7 +76,7 @@ namespace TOne.Analytics.Business
                             {
                                 CarrierAccount account = _cmanager.GetCarrierAccount(row.GroupID);
                                 activeSuppliers.Add(account);
-                                row.GroupName = account.ProfileName;
+                                row.GroupID = account.ProfileName;
                             }
 
                         TotalDurations += (decimal)row.DurationsInMinutes;
@@ -83,13 +84,13 @@ namespace TOne.Analytics.Business
                         Cost += Convert.ToDecimal(row.Cost_Nets);
                         Sale += Convert.ToDecimal(row.Sale_Nets);
                         Profit += Convert.ToDecimal(row.Profit);
-                        decimal costAmmount = Convert.ToDecimal(row.Cost_Nets);
-                        decimal saleAmmount = Convert.ToDecimal(row.Sale_Nets);
+                        double costAmmount = Convert.ToDouble(row.Cost_Nets);
+                        double saleAmmount = Convert.ToDouble(row.Sale_Nets);
 
                         try
                         {
                             ProfitPercentage = saleAmmount == 0 ? 0 : ((saleAmmount - costAmmount) / saleAmmount) * 100;
-                            row.ProfitPercentage = Math.Round(ProfitPercentage, 2);
+                            row.Percentage = Math.Round(ProfitPercentage, 2);
                         }
                         catch { }
                     }
@@ -128,7 +129,7 @@ namespace TOne.Analytics.Business
                             int profileId = 0;
                             int.TryParse(row.GroupID, out profileId);
                             CarrierProfile profile = _cpmanager.GetCarrierProfile(profileId);
-                            row.GroupName = profile.Name;
+                            row.GroupID = profile.Name;
                             NEwProfiles.Add(profileId);
                         }
 
@@ -137,13 +138,13 @@ namespace TOne.Analytics.Business
                         Cost += Convert.ToDecimal(row.Cost_Nets);
                         Sale += Convert.ToDecimal(row.Sale_Nets);
                         Profit += Convert.ToDecimal(row.Profit);
-                        decimal costAmmount = Convert.ToDecimal(row.Cost_Nets);
-                        decimal saleAmmount = Convert.ToDecimal(row.Sale_Nets);
+                        double costAmmount = Convert.ToDouble(row.Cost_Nets);
+                        double saleAmmount = Convert.ToDouble(row.Sale_Nets);
 
                         try
                         {
                             ProfitPercentage = (saleAmmount - costAmmount) / saleAmmount;
-                            row.ProfitPercentage = Math.Round(ProfitPercentage, 2);
+                            row.Percentage = Math.Round(ProfitPercentage, 2);
                         }
                         catch { }
                     }
@@ -163,6 +164,14 @@ namespace TOne.Analytics.Business
                     //}
                 }
                 lstCarrierSummaryStats.Data = lstCarrierSummarySta;
+                lstCarrierSummaryStats.Summary = new CarrierSummaryStats() { 
+                    DurationsInMinutes = (double)TotalDurations,
+                    Attempts = Attempts,
+                    Cost_Nets = (double)Cost,
+                    Sale_Nets = (double)Sale,
+                    Profit = (double)Profit,
+                    Percentage = Math.Round(ProfitPercentage, 2)
+                };
             }
             else
             {
@@ -173,7 +182,28 @@ namespace TOne.Analytics.Business
                     Cost += Convert.ToDecimal(row.Cost_Nets);
                     Sale += Convert.ToDecimal(row.Sale_Nets);
                     Profit += Convert.ToDecimal(row.Profit);
+
+                    double costAmmount = Convert.ToDouble(row.Cost_Nets);
+                    double saleAmmount = Convert.ToDouble(row.Sale_Nets);
+
+                    try
+                    {
+                        ProfitPercentage = saleAmmount == 0 ? 0 : ((saleAmmount - costAmmount) / saleAmmount) * 100;
+                        row.Percentage = Math.Round(ProfitPercentage, 2);
+                    }
+                    catch { }
                 }
+
+                lstCarrierSummaryStats.Data = lstCarrierSummarySta;
+                lstCarrierSummaryStats.Summary = new CarrierSummaryStats()
+                {
+                    DurationsInMinutes = (double)TotalDurations,
+                    Attempts = Attempts,
+                    Cost_Nets = (double)Cost,
+                    Sale_Nets = (double)Sale,
+                    Profit = (double)Profit,
+                    Percentage = Math.Round(ProfitPercentage, 2)
+                };
             }
 
            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input,lstCarrierSummaryStats );

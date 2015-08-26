@@ -55,19 +55,19 @@
                 <vr-columns colnum="12">
                     <vr-datagrid datasource="::datasource" pagingtype="'PagingOnScroll'" dataretrievalfunction="dataRetrievalFunction" on-ready="gridReady">
                         <vr-datagridcolumn headertext="getHeader" field="'GroupID'" widthfactor="5"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Attempts'" field="'Attempts'" widthfactor="5"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Attempts'" field="'Attempts'" summaryfield="'Attempts'" widthfactor="5"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Successful Attempts'" field="'SuccessfulAttempts'" widthfactor="5"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Duration(Min)'" field="'DurationsInMinutes'" widthfactor="5"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Duration(Min)'" field="'DurationsInMinutes'" summaryfield="'DurationsInMinutes'" widthfactor="5"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'ASR'" field="'ASR'" widthfactor="5"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'ACD'" field="'ACD'" widthfactor="5"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'NER'" field="'DeliveredASR'" widthfactor="5"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'PDD'" field="'AveragePDD'" widthfactor="5"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Priced Calls'" field="'NumberOfCalls'" widthfactor="5"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Priced Duration'" field="'PricedDuration'" widthfactor="5"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Sale Amount'" field="'Sale_Nets'" widthfactor="5"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Cost Amount'" field="'Cost_Nets'" widthfactor="5"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Profit'" field="'Profit'" widthfactor="5"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Profit %'" field="'ProfitPercentage'" widthfactor="5"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Sale Amount'" field="'Sale_Nets'" summaryfield="'Sale_Nets'" widthfactor="5"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Cost Amount'" field="'Cost_Nets'" summaryfield="'Cost_Nets'" widthfactor="5"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Profit'" field="'Profit'" summaryfield="'Profit'" widthfactor="5"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Profit %'" field="'Percentage'" summaryfield="'Percentage'" widthfactor="5"></vr-datagridcolumn>
                     </vr-datagrid>
                 </vr-columns>
             </vr-row>

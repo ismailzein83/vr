@@ -60,13 +60,13 @@
             };
 
             $scope.searchClicked = function () {
-                console.log($scope.selectedvaluesZones);
                 return retrieveData();
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return CarrierSummaryStatsAPIService.GetFilteredCarrierSummaryStats(dataRetrievalInput)
                 .then(function (response) {
+                    gridApi.setSummary(response.Summary);
                     onResponseReady(response);
                 });
             };
