@@ -24,7 +24,7 @@ namespace TOne.BusinessEntity.Data.SQL
             mapper.Add("FirstPeriodRate", "FirstPeriodRate");
             mapper.Add("FractionUnit", "FractionUnit");
             mapper.Add("BED", "BeginEffectiveDate");
-            mapper.Add("EED", "EndEffectiveDate");
+            mapper.Add("EEDDescription", "EndEffectiveDate");
             mapper.Add("IsEffective", "IsEffective");
 
             Action<string> createTempTableAction = (tempTableName) =>
