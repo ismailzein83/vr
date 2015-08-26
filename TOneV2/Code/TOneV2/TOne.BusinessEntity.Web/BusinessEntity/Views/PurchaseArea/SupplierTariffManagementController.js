@@ -19,7 +19,7 @@ function SupplierTariffManagementController($scope, CarrierAccountAPIService, Ca
 
         $scope.searchClicked = function () {
             $scope.showGrid = true;
-            return retrieveData();
+            //return retrieveData();
         }
 
         $scope.gridReady = function (api) {
@@ -36,12 +36,6 @@ function SupplierTariffManagementController($scope, CarrierAccountAPIService, Ca
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
-        }
-
-        $scope.onSupplierChange = function (supplier) {
-            if (supplier != undefined) {
-                console.log($scope.selectedSupplier.CarrierAccountID);
-            }
         }
     }
 
