@@ -25,14 +25,18 @@ namespace TOne.BusinessEntity.Business
         {
             return _dataManager.GetZoneList(zonesIds);
         }
-        public List<ZoneInfo> GetZones(string supplierId, string nameFilter)
+        public List<ZoneInfo> GetSupplierZones(string supplierId, string nameFilter)
         {
-            return _dataManager.GetZones(supplierId, nameFilter,DateTime.Now);
+            return _dataManager.GetSupplierZones(supplierId, nameFilter, DateTime.Now);
+        }
+        public List<ZoneInfo> GetCustomerZones(string customerId, string nameFilter)
+        {
+            return _dataManager.GetCustomerZones(customerId, nameFilter, DateTime.Now);
         }
 
         public List<ZoneInfo> GetOwnZones(string nameFilter)
         {
-            return _dataManager.GetZones("SYS", nameFilter, DateTime.Now);
+            return _dataManager.GetSupplierZones("SYS", nameFilter, DateTime.Now);
         }
 
         public Dictionary<int, Zone> GetAllZones()

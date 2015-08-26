@@ -55,6 +55,7 @@
     <Compile Include="AssignedCarrier.cs" />
     <Compile Include="AssignedCarrierFromTempTable.cs" />
     <Compile Include="AssignedCarrierQuery.cs" />
+    <Compile Include="BasePriceListDetail.cs" />
     <Compile Include="CarrierAccount.cs" />
     <Compile Include="CarrierAccountInfo.cs" />
     <Compile Include="CarrierAccountQuery.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="CustomerTariff.cs" />
     <Compile Include="CustomerTariffQuery.cs" />
     <Compile Include="PriceLists.cs" />
+    <Compile Include="SupplierPriceListDetail.cs" />
     <Compile Include="SupplierTariff.cs" />
     <Compile Include="SupplierTariffQuery.cs" />
     <Compile Include="TODCustomerQuery.cs" />

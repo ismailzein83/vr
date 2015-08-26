@@ -1,8 +1,8 @@
-﻿(function (angular,app) {
+﻿(function (angular, app) {
 
     "use strict";
 
-    app.directive('vrBeZones', ['ZoneAPIService', function (zoneApiService) {
+    app.directive('vrBeCostzones', ['ZoneAPIService', function (zoneApiService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -17,7 +17,7 @@
                 function zonesDatasource(text) {
 
                     if (ctrl.carrierid) {
-                        return zoneApiService.GetCustomerZones(text, ctrl.carrierid);
+                        return zoneApiService.GetSupplierZones(text, ctrl.carrierid);
                     }
 
                     return zoneApiService.GetOwnZones(text);
@@ -38,8 +38,8 @@
             }
 
         };
-        
+
         return directiveDefinitionObject;
     }]);
 
-})(angular,app);
+})(angular, app);

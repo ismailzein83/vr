@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.BusinessEntity.Entities
 {
-    public class CustomerPriceListDetail : BasePriceListDetail
+    public class SupplierPriceListDetail : BasePriceListDetail
     {
-     
-           											
-
     }
 }

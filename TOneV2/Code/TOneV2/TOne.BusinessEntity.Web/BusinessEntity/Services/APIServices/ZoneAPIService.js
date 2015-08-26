@@ -3,7 +3,7 @@
 var serviceObj = function (BaseAPIService) {
     return ({
         GetOwnZones: GetOwnZones,
-        GetZones: GetZones
+        GetSupplierZones: GetSupplierZones
     });
 
     function GetOwnZones(nameFilter) {
@@ -13,12 +13,21 @@ var serviceObj = function (BaseAPIService) {
             });
     }
 
-    function GetZones(nameFilter, supplierId) {
-        return BaseAPIService.get("/api/Zone/GetZones",
+    function GetSupplierZones(nameFilter, supplierId) {
+        return BaseAPIService.get("/api/Zone/GetSupplierZones",
             {
                 nameFilter: nameFilter,
                 supplierId: supplierId
             });
+
+    }
+    function GetCustomerZones(nameFilter, supplierId) {
+        return BaseAPIService.get("/api/Zone/GetCustomerZones",
+            {
+                nameFilter: nameFilter,
+                customerId: customerId
+            });
+
     }
 }
 serviceObj.$inject = ['BaseAPIService'];

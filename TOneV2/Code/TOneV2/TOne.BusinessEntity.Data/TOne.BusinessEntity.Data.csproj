@@ -52,6 +52,7 @@
     <Compile Include="BEDataManagerFactory.cs" />
     <Compile Include="IAccountManagerCarrierDataManager.cs" />
     <Compile Include="IAssignedCarrierDataManager.cs" />
+    <Compile Include="IBasePriceListDataManager.cs" />
     <Compile Include="ICarrierAccountConnectionDataManager.cs" />
     <Compile Include="ICarrierAccountDataManager.cs" />
     <Compile Include="ICarrierGroupDataManager.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="ILookUpDataManager.cs" />
     <Compile Include="IPriceListDataManager.cs" />
     <Compile Include="ICarrierProfileDataManager.cs" />
+    <Compile Include="IRateAnalysisDataManager.cs" />
     <Compile Include="IRateDataManager.cs" />
     <Compile Include="IFlaggedServiceDataManager.cs" />
     <Compile Include="ISupplierPricelistsDataManager.cs" />

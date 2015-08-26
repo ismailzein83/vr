@@ -9,20 +9,13 @@ using TOne.BusinessEntity.Entities;
 
 namespace TOne.BusinessEntity.Business
 {
-   public class CustomerPricelistsManager
+    public class CustomerPricelistsManager : BasePricelistManager<CustomerPriceListDetail>
     {
-       public Vanrise.Entities.IDataRetrievalResult<PriceLists> GetCustomerPriceLists(Vanrise.Entities.DataRetrievalInput<string> input)
+        public Vanrise.Entities.IDataRetrievalResult<PriceLists> GetCustomerPriceLists(Vanrise.Entities.DataRetrievalInput<string> input)
        {
 
            ICustomerPricelistsDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerPricelistsDataManager>();
            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetCustomerPriceLists(input));
-       }
-
-       public Vanrise.Entities.IDataRetrievalResult<CustomerPriceListDetail> GetCustomerPriceListDetails(Vanrise.Entities.DataRetrievalInput<int> input)
-       {
-
-           ICustomerPricelistsDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerPricelistsDataManager>();
-           return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetCustomerPriceListDetails(input));
        }
     }
 }

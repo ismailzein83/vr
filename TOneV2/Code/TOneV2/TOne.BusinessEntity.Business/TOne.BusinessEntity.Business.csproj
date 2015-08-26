@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountManagerManager.cs" />
+    <Compile Include="BasePricelistManager.cs" />
     <Compile Include="BusinessEntityInfoManager.cs" />
     <Compile Include="CarrierAccountConnectionManager.cs" />
     <Compile Include="CarrierAccountManager.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="CarrierMaskManager.cs" />
     <Compile Include="CustomerPricelistsManager.cs" />
     <Compile Include="CustomerTariffManager.cs" />
+    <Compile Include="RateAnalysisManager.cs" />
     <Compile Include="SupplierPricelistsManager.cs" />
     <Compile Include="SupplierTariffManager.cs" />
     <Compile Include="TODManager.cs" />

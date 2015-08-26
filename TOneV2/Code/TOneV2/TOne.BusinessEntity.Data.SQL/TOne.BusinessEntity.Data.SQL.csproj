@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="AccountManagerCarrierDataManager.cs" />
     <Compile Include="AssignedCarrierDataManager.cs" />
+    <Compile Include="BasePriceListDataManager.cs" />
     <Compile Include="CarrierAccountConnectionDataManager.cs" />
     <Compile Include="CarrierAccountDataManager.cs" />
     <Compile Include="CarrierGroupDataManager.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="PriceListDataManager.cs" />
     <Compile Include="CarrierProfileDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RateAnalysisDataManager.cs" />
     <Compile Include="RateDataManager.cs" />
     <Compile Include="FlaggedServiceDataManager.cs" />
     <Compile Include="SupplierPricelistsDataManager.cs" />

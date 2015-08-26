@@ -10,6 +10,6 @@ namespace TOne.BusinessEntity.Data
     public interface ISupplierPricelistsDataManager:IDataManager
     {
         Vanrise.Entities.BigResult<PriceLists> GetSupplierPriceLists(Vanrise.Entities.DataRetrievalInput<string> input);
-        Vanrise.Entities.BigResult<CustomerPriceListDetail> GetSupplierPriceListDetails(Vanrise.Entities.DataRetrievalInput<int> input);
+
     }
 }

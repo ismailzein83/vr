@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.BusinessEntity.Entities
+namespace TOne.BusinessEntity.Business
 {
-    public class CustomerPriceListDetail : BasePriceListDetail
+    class RateAnalysisManager
     {
-     
-           											
-
     }
 }

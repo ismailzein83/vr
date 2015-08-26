@@ -7,5 +7,6 @@ namespace TOne.BusinessEntity.Web.Controllers
 {
     public class RateAnalysisController
     {
+
     }
 }

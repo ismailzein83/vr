@@ -19,10 +19,16 @@ namespace TOne.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        public List<ZoneInfo> GetZones(string nameFilter, string supplierId)
+        public List<ZoneInfo> GetSupplierZones(string nameFilter, string supplierId)
         {
             ZoneManager manager = new ZoneManager();
-            return manager.GetZones(supplierId, nameFilter);
+            return manager.GetSupplierZones(supplierId, nameFilter);
+        }
+        [HttpGet]
+        public List<ZoneInfo> GetCustomerZones(string nameFilter, string customerId)
+        {
+            ZoneManager manager = new ZoneManager();
+            return manager.GetCustomerZones(customerId, nameFilter);
         }
     }
 }

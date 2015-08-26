@@ -11,9 +11,10 @@ namespace TOne.BusinessEntity.Data
     {
         void LoadZonesInfo(DateTime effectiveTime, bool isFuture, List<CarrierAccountInfo> activeSuppliers, int batchSize, Action<List<ZoneInfo>> onBatchAvailable);
         //List<ZoneInfo> GetZones(string supplierId ,string nameFilter);
-        List<ZoneInfo> GetZones(string supplierId, string nameFilter, DateTime whenDate);
+        List<ZoneInfo> GetSupplierZones(string supplierId, string nameFilter, DateTime whenDate);
 
         List<ZoneInfo> GetZoneList(IEnumerable<int> zonesIds);
+        List<ZoneInfo> GetCustomerZones(string customerId, string nameFilter, DateTime whenDate);
         string GetZoneName(int zoneId);
 
         Dictionary<int, Zone> GetAllZones();

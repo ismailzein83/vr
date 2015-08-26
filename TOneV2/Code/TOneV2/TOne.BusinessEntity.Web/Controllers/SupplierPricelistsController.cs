@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using TOne.BusinessEntity.Business;
+using TOne.BusinessEntity.Entities;
 
 namespace TOne.Analytics.Web.Controllers
 {
@@ -18,8 +19,8 @@ namespace TOne.Analytics.Web.Controllers
         [HttpPost]
         public object GetSupplierPriceListDetails(Vanrise.Entities.DataRetrievalInput<int> input)
         {
-            SupplierPricelistsManager manager = new SupplierPricelistsManager();
-            return GetWebResponse(input, manager.GetSupplierPriceListDetails(input));
+            BasePricelistManager<SupplierPriceListDetail> manager = new BasePricelistManager<SupplierPriceListDetail>();
+            return GetWebResponse(input, manager.GetPriceListDetails(input));
         }
     }
 }

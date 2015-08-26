@@ -158,6 +158,7 @@
     <Content Include="BusinessEntity\Directives\Templates\CarrierGroupTree.html" />
     <Content Include="BusinessEntity\Directives\Templates\CarrierGroupTreeController.js" />
     <Content Include="BusinessEntity\Directives\vr-be-carriergroup-directive.js" />
+    <Content Include="BusinessEntity\Directives\vr-be-costzones-directive.js" />
     <Content Include="BusinessEntity\Directives\vr-be-zones-directive.js" />
     <Content Include="BusinessEntity\Services\APIServices\AccountManagerAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\BusinessEntityAPIService.js" />

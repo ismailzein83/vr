@@ -7,8 +7,8 @@ using TOne.BusinessEntity.Entities;
 
 namespace TOne.BusinessEntity.Data
 {
-    public interface ICustomerPricelistsDataManager : IDataManager
+    public interface IBasePriceListDataManager:IDataManager
     {
-        Vanrise.Entities.BigResult<PriceLists> GetCustomerPriceLists(Vanrise.Entities.DataRetrievalInput<string> input);
+        Vanrise.Entities.BigResult<T> GetPriceListDetails<T>(Vanrise.Entities.DataRetrievalInput<int> input) where T : BasePriceListDetail;
     }
 }
