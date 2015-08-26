@@ -13,14 +13,14 @@ namespace TOne.BusinessEntity.Entities
         public string SupplierName { get; set; }
         public int ZoneID { get; set; }
         public string ZoneName { get; set; }
-        public string Currency { get; set; }
+        public string CurrencyID { get; set; }
         public decimal CallFee { get; set; }
         public byte FirstPeriod { get; set; }
         public decimal FirstPeriodRate { get; set; }
         public byte FractionUnit { get; set; }
         public DateTime BED { get; set; }
         public DateTime EED { get; set; }
-        public string EndEffectiveDateDescription { get; set; }
+        public string EEDDescription { get; set; }
         public string IsEffective { get; set; }
     }
 }

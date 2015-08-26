@@ -40,7 +40,51 @@ namespace TOne.BusinessEntity.Data.SQL
 
         private string CreateTempTableIfNotExists(string tempTableName, string selectedCustomerID, List<int> selectedZoneIDs)
         {
-            StringBuilder query = new StringBuilder(@""); ;
+            StringBuilder query = new StringBuilder(@"
+                IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
+                BEGIN
+
+                WITH Carriers AS
+                (
+	                SELECT ca.CarrierAccountID, cp.Name AS CustomerName, ca.NameSuffix, ca.GMTTime, cp.CurrencyID
+	                FROM CarrierAccount ca INNER JOIN CarrierProfile cp ON cp.ProfileID = ca.ProfileID
+	                --WHERE ca.ActivationStatus = 2
+                ),
+
+                Zones AS (SELECT ZoneID, Name AS ZoneName FROM Zone WHERE IsEffective = 'Y')
+
+                SELECT
+	                t.TariffID,
+	                t.ZoneID,
+	                z.ZoneName,
+	                t.CustomerID,
+	                c.CustomerName,
+	                c.NameSuffix,
+	                c.CurrencyID,
+	                t.CallFee,
+	                t.FirstPeriod,
+	                t.FirstPeriodRate,
+	                t.FractionUnit,
+	                t.BeginEffectiveDate,
+	                t.EndEffectiveDate,
+	                t.IsEffective
+
+	            INTO #TEMP_TABLE_NAME#
+
+                FROM Tariff t
+                INNER JOIN Carriers c ON c.CarrierAccountID = t.CustomerID
+                INNER JOIN Zones z ON z.ZoneID = t.ZoneID
+
+                #MAIN_WHERE_CLAUSE#
+
+                ORDER BY t.BeginEffectiveDate
+
+                END
+            ");
+
+            query.Replace("#TEMP_TABLE_NAME#", tempTableName);
+            query.Replace("#MAIN_WHERE_CLAUSE#", GetMainWhereClause(selectedCustomerID, selectedZoneIDs));
+
             return query.ToString();
         }
 
@@ -50,38 +94,51 @@ namespace TOne.BusinessEntity.Data.SQL
             {
                 TariffID = (long)reader["TariffID"],
                 CustomerID = reader["CustomerID"] as string,
+                CustomerName = reader["CustomerName"] as string,
                 ZoneID = GetReaderValue<int>(reader, "ZoneID"),
-                Currency = GetReaderValue<string>(reader, "Currency"),
+                ZoneName = reader["ZoneName"] as string,
+                CurrencyID = GetReaderValue<string>(reader, "CurrencyID"),
                 CallFee = (decimal)reader["CallFee"],
                 FirstPeriod = GetReaderValue<byte>(reader, "FirstPeriod"),
                 FirstPeriodRate = GetReaderValue<decimal>(reader, "FirstPeriodRate"),
                 FractionUnit = GetReaderValue<byte>(reader, "FractionUnit"),
                 BED = GetReaderValue<DateTime>(reader, "BeginEffectiveDate"),
                 EED = GetReaderValue<DateTime>(reader, "EndEffectiveDate"),
+                EEDDescription = GetReaderValue<string>(reader, "EndEffectiveDate"),
                 IsEffective = (string)reader["IsEffective"]
             };
 
             return customerTariff;
         }
 
-//        protected IList<TABS.Tariff> GetTariffs(TABS.CarrierAccount supplier, TABS.CarrierAccount customer, TABS.Zone zone, DateTime from)
-//        {
-//            string hql = string.Format(@"FROM  Tariff t
-//                                                     WHERE (t.EndEffectiveDate > :when OR t.EndEffectiveDate IS NULL)
-//                                                        AND (t.EndEffectiveDate IS NULL OR t.EndEffectiveDate != t.BeginEffectiveDate)
-//                                                        {0}
-//                                                        {1}
-//                                                        {2}
-//                                                     ORDER BY t.BeginEffectiveDate"
-//                                                , (zone != null) ? " AND t.Zone = :zone" : ""
-//                                                , (customer != null) ? " AND t.Customer = :customer" : ""
-//                                                , (supplier != null) ? " AND t.Supplier = :supplier" : "");
-//            NHibernate.IQuery query = CurrentSession.CreateQuery(hql).SetParameter("when", from);
-//            if (zone != null) query.SetParameter("zone", zone);
-//            if (customer != null) query.SetParameter("customer", customer);
-//            if (supplier != null) query.SetParameter("supplier", supplier);
-//            IList<TABS.Tariff> listTariffs = query.List<TABS.Tariff>();
-//            return listTariffs;
-//        }
+        private string GetMainWhereClause(string selectedCustomerID, List<int> selectedZoneIDs)
+        {
+            string whereClause = "WHERE";
+
+            whereClause += " t.SupplierID = 'SYS'";
+
+            if (selectedCustomerID != null)
+                whereClause += " AND t.CustomerID = '" + selectedCustomerID + "'";
+
+            if (selectedZoneIDs != null)
+                whereClause += " AND ZoneID IN (" + GetCommaSeparatedList(selectedZoneIDs) + ")";
+
+            whereClause += " AND t.BeginEffectiveDate <= DATEADD(HH, c.GMTTime, @EffectiveOn)";
+            whereClause += " AND (t.EndEffectiveDate IS NULL OR t.EndEffectiveDate > DATEADD(HH, c.GMTTime, @EffectiveOn))";
+
+            return whereClause;
+        }
+
+        private string GetCommaSeparatedList(List<int> items)
+        {
+            string list = "";
+
+            for (int i = 0; i < items.Count; i++)
+            {
+                list += (i > 0) ? (", " + items[i].ToString()) : items[i].ToString();
+            }
+
+            return list;
+        }
     }
 }

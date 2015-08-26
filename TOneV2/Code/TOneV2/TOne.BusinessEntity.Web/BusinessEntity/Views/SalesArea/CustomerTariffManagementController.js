@@ -19,7 +19,7 @@ function CustomerTariffManagementController($scope, CarrierAccountAPIService, Ca
 
         $scope.searchClicked = function () {
             $scope.showGrid = true;
-            //return retrieveData();
+            return retrieveData();
         }
 
         $scope.gridReady = function (api) {
@@ -36,6 +36,11 @@ function CustomerTariffManagementController($scope, CarrierAccountAPIService, Ca
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
+        }
+
+        $scope.onCustomerChanged = function (customer) {
+            if (customer != undefined)
+                console.log(customer.CarrierAccountID);
         }
     }
 
@@ -77,7 +82,7 @@ function CustomerTariffManagementController($scope, CarrierAccountAPIService, Ca
 
     function getSelectedZoneIDs() {
         if ($scope.selectedZones.length == 0)
-            return [];
+            return null;
 
         var ids = [];
 

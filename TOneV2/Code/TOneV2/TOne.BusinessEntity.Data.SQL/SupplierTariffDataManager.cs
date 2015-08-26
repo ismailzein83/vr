@@ -19,7 +19,7 @@ namespace TOne.BusinessEntity.Data.SQL
 
             mapper.Add("SupplierName", "SupplierID");
             mapper.Add("ZoneName", "ZoneID");
-            mapper.Add("Currency", "Currency");
+            mapper.Add("Currency", "CurrencyID");
             mapper.Add("CallFee", "CallFee");
             mapper.Add("FirstPeriod", "FirstPeriod");
             mapper.Add("FirstPeriodRate", "FirstPeriodRate");
@@ -35,6 +35,7 @@ namespace TOne.BusinessEntity.Data.SQL
                     cmd.Parameters.Add(new SqlParameter("@EffectiveOn", input.Query.effectiveOn));
                 });
             };
+
             return RetrieveData(input, createTempTableAction, SupplierTariffMapper, mapper);
         }
 
@@ -44,22 +45,26 @@ namespace TOne.BusinessEntity.Data.SQL
                 IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
                 BEGIN
                 
-                WITH CurrencyCTE AS
+                WITH Carriers AS
                 (
-	                SELECT ca.CarrierAccountID, cp.CurrencyID AS Currency
+	                SELECT ca.CarrierAccountID, cp.Name AS SupplierName, ca.NameSuffix, ca.GMTTime, cp.CurrencyID
 	                FROM CarrierAccount ca INNER JOIN CarrierProfile cp ON cp.ProfileID = ca.ProfileID
-	                WHERE ca.AccountType IN (1, 2)
-                )
+	                --WHERE ca.ActivationStatus = 2
+                ),
+
+                Zones AS (SELECT ZoneID, Name AS ZoneName FROM Zone WHERE IsEffective = 'Y')
 
                 SELECT
 	                t.TariffID,
-	                t.SupplierID,
 	                t.ZoneID,
-	                cte.Currency,
+	                z.ZoneName,
+	                t.SupplierID,
+	                c.SupplierName,
+	                c.NameSuffix,
+	                c.CurrencyID,
 	                t.CallFee,
 	                t.FirstPeriod,
 	                t.FirstPeriodRate,
-	                t.RepeatFirstPeriod,
 	                t.FractionUnit,
 	                t.BeginEffectiveDate,
 	                t.EndEffectiveDate,
@@ -68,8 +73,8 @@ namespace TOne.BusinessEntity.Data.SQL
                 INTO #TEMP_TABLE_NAME#
 
                 FROM Tariff t
-                INNER JOIN CurrencyCTE cte ON cte.CarrierAccountID = t.SupplierID
-                INNER JOIN CarrierAccount ca ON ca.CarrierAccountID = t.SupplierID
+                INNER JOIN Carriers c ON c.CarrierAccountID = t.SupplierID
+                INNER JOIN Zones z ON z.ZoneID = t.ZoneID
                 
                 #MAIN_WHERE_CLAUSE#
 
@@ -90,15 +95,17 @@ namespace TOne.BusinessEntity.Data.SQL
             {
                 TariffID = (long)reader["TariffID"],
                 SupplierID = reader["SupplierID"] as string,
+                SupplierName = reader["SupplierName"] as string,
                 ZoneID = GetReaderValue<int>(reader, "ZoneID"),
-                Currency = GetReaderValue<string>(reader, "Currency"),
+                ZoneName = reader["ZoneName"] as string,
+                CurrencyID = GetReaderValue<string>(reader, "CurrencyID"),
                 CallFee = (decimal)reader["CallFee"],
                 FirstPeriod = GetReaderValue<byte>(reader, "FirstPeriod"),
                 FirstPeriodRate = GetReaderValue<decimal>(reader, "FirstPeriodRate"),
                 FractionUnit = GetReaderValue<byte>(reader, "FractionUnit"),
                 BED = GetReaderValue<DateTime>(reader, "BeginEffectiveDate"),
                 EED = GetReaderValue<DateTime>(reader, "EndEffectiveDate"),
-                EndEffectiveDateDescription = (GetReaderValue<DateTime>(reader, "EndEffectiveDate") == Convert.ToDateTime(null)) ? "" : Convert.ToString(Convert.ToDateTime(reader["EndEffectiveDate"]).Date.ToString()),
+                EEDDescription = GetReaderValue<string>(reader, "EndEffectiveDate"),
                 IsEffective = (string)reader["IsEffective"]
             };
 
@@ -110,35 +117,17 @@ namespace TOne.BusinessEntity.Data.SQL
             string whereClause = "WHERE";
 
             whereClause += " t.CustomerID = 'SYS'";
-            whereClause += " AND t.BeginEffectiveDate <= DATEADD(HH, ca.GMTTime, @EffectiveOn)";
-            whereClause += " AND (t.EndEffectiveDate IS NULL OR DATEADD(HH, ca.GMTTime, @EffectiveOn) < t.EndEffectiveDate)";
             
             if (selectedSupplierID != null)
                 whereClause += " AND SupplierID = '" + selectedSupplierID + "'";
 
             if (selectedZoneIDs.Count > 0)
-                whereClause += " AND ZoneID IN (" + GetCommaSeparatedList(selectedZoneIDs) + ")";
-            //else if (selectedSupplierID != null)
-            //{
-            //    ZoneManager manager = new ZoneManager();
-            //    List<TOne.BusinessEntity.Entities.ZoneInfo> supplierZones = manager.GetZonesBySupplierID(selectedSupplierID);
+                whereClause += " AND t.ZoneID IN (" + GetCommaSeparatedList(selectedZoneIDs) + ")";
 
-            //    whereClause += " AND ZoneID IN (" + GetCommaSeparatedList(GetZoneIDs(supplierZones)) + ")";
-            //}
+            whereClause += " AND t.BeginEffectiveDate <= DATEADD(HH, c.GMTTime, @EffectiveOn)";
+            whereClause += " AND (t.EndEffectiveDate IS NULL OR t.EndEffectiveDate > DATEADD(HH, c.GMTTime, @EffectiveOn))";
 
             return whereClause;
-        }
-
-        private List<int> GetZoneIDs(List<TOne.BusinessEntity.Entities.ZoneInfo> zones)
-        {
-            List<int> ids = new List<int>();
-
-            foreach (TOne.BusinessEntity.Entities.ZoneInfo zone in zones)
-            {
-                ids.Add(zone.ZoneId);
-            }
-
-            return ids;
         }
 
         private string GetCommaSeparatedList(List<int> items)

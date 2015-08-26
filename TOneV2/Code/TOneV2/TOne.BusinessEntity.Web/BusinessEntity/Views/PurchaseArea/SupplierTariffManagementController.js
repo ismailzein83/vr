@@ -19,7 +19,7 @@ function SupplierTariffManagementController($scope, CarrierAccountAPIService, Ca
 
         $scope.searchClicked = function () {
             $scope.showGrid = true;
-            //return retrieveData();
+            return retrieveData();
         }
 
         $scope.gridReady = function (api) {
@@ -66,6 +66,7 @@ function SupplierTariffManagementController($scope, CarrierAccountAPIService, Ca
             effectiveOn: $scope.effectiveOn
         };
 
+        console.log(query);
         return gridApi.retrieveData(query);
     }
 
