@@ -76,13 +76,13 @@ namespace TOne.BusinessEntity.Data.SQL
                 CarrierName = reader["CarrierName"] as string,
                 DefinitionDisplayS = reader["DefinitionDisplayS"] as string,
             };
-            toDConsiderationInfo.IsActive = isActive(when, toDConsiderationInfo);
+            toDConsiderationInfo.IsActive = IsActive(when, toDConsiderationInfo);
 
             return toDConsiderationInfo;
          
         }
 
-        private bool isActive(DateTime when , TODConsiderationInfo tod )
+        private bool IsActive(DateTime when , TODConsiderationInfo tod )
         {
             if (!GetIsEffective(tod.BeginEffectiveDate, tod.EndEffectiveDate, when)) return false;
 
