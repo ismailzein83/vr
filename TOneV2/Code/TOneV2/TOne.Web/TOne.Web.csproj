@@ -355,6 +355,26 @@
       <Project>{9d04963a-abea-49b3-9855-5b64b3b85619}</Project>
       <Name>TOne.Analytics.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.Billing.Business\TOne.Billing.Business.csproj">
+      <Project>{48801e47-8dcf-4f6d-8620-c5dceea417d2}</Project>
+      <Name>TOne.Billing.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Billing.Data.SQL\TOne.Billing.Data.SQL.csproj">
+      <Project>{07d00ec1-98a9-4cad-8202-ca7711077c04}</Project>
+      <Name>TOne.Billing.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Billing.Data\TOne.Billing.Data.csproj">
+      <Project>{96e3e753-f09f-4bbb-8a2f-a566e0881532}</Project>
+      <Name>TOne.Billing.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Billing.Entities\TOne.Billing.Entities.csproj">
+      <Project>{b67177e5-337e-4e22-88ef-20751d652178}</Project>
+      <Name>TOne.Billing.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Billing.Web\TOne.Billing.Web.csproj">
+      <Project>{5f00fe00-4f2d-413d-8586-06601afbb881}</Project>
+      <Name>TOne.Billing.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.BusinessEntity.Business\TOne.BusinessEntity.Business.csproj">
       <Project>{bdc9694f-88b7-492d-9865-304e774a5776}</Project>
       <Name>TOne.BusinessEntity.Business</Name>
