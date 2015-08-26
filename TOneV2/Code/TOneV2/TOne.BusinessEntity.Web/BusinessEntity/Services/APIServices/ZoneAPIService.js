@@ -3,7 +3,8 @@
 var serviceObj = function (BaseAPIService) {
     return ({
         GetOwnZones: GetOwnZones,
-        GetSupplierZones: GetSupplierZones
+        GetSupplierZones: GetSupplierZones,
+        GetCustomerZones: GetCustomerZones
     });
 
     function GetOwnZones(nameFilter) {
