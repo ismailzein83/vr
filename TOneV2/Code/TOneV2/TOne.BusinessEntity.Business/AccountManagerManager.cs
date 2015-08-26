@@ -84,8 +84,7 @@ namespace TOne.BusinessEntity.Business
 
         public List<string> GetMyAssignedSuppliersAMU()
         {
-            AccountManagerManager accountManagerManager = new AccountManagerManager();
-            List<AssignedCarrier> assignedCarriers = accountManagerManager.GetAssignedCarriers(SecurityContext.Current.GetLoggedInUserId(), true, CarrierType.Supplier);
+            List<AssignedCarrier> assignedCarriers = GetAssignedCarriers(SecurityContext.Current.GetLoggedInUserId(), true, CarrierType.Supplier);
             List<string> suppliers = new List<string>();
             foreach (AssignedCarrier assignedCarrier in assignedCarriers)
             {
@@ -96,8 +95,7 @@ namespace TOne.BusinessEntity.Business
 
         public List<string> GetMyAssignedCustomerAMU()
         {
-            AccountManagerManager accountManagerManager = new AccountManagerManager();
-            List<AssignedCarrier> assignedCarriers = accountManagerManager.GetAssignedCarriers(SecurityContext.Current.GetLoggedInUserId(), true, CarrierType.Customer);
+            List<AssignedCarrier> assignedCarriers = GetAssignedCarriers(SecurityContext.Current.GetLoggedInUserId(), true, CarrierType.Customer);
             List<string> cutomers = new List<string>();
             foreach (AssignedCarrier assignedCarrier in assignedCarriers)
             {
@@ -105,5 +103,26 @@ namespace TOne.BusinessEntity.Business
             }
             return cutomers;
         } 
+
+        public List<string> GetAssignedAccountIds(int managerId, CarrierType carrierType )
+        {
+            List<AssignedCarrier> assignedCarriers = GetAssignedCarriers(managerId, true, carrierType);
+            List<string> accountIds = new List<string>();
+            foreach (AssignedCarrier assignedCarrier in assignedCarriers)
+            {
+                accountIds.Add(assignedCarrier.CarrierAccountId);
+            }
+            return accountIds;
+        }
+
+        public List<string> GetMyAssignedCustomerIds()
+        {
+            return GetAssignedAccountIds(SecurityContext.Current.GetLoggedInUserId(), CarrierType.Customer);
+        }
+
+        public List<string> GetMyAssignedSupplierIds()
+        {
+            return GetAssignedAccountIds(SecurityContext.Current.GetLoggedInUserId(), CarrierType.Supplier);
+        }
     }
 }
