@@ -14,8 +14,9 @@ function DataSourceLogManagementController($scope, DataSourceLogsAPIService, Dat
         $scope.selectedDataSource = undefined;
         $scope.severities = [];
         $scope.selectedSeverities = [];
-        $scope.selectedFromDateTime = undefined;
-        $scope.selectedToDateTime = undefined;
+        fromDate = new Date();
+        $scope.selectedFromDateTime = fromDate.setDate(fromDate.getDate() - 1);
+        $scope.selectedToDateTime = new Date();
         $scope.logs = [];
 
         $scope.gridReady = function (api) {
