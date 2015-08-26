@@ -127,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\CustomerPricelistsController.cs" />
+    <Compile Include="Controllers\RateAnalysisController.cs" />
     <Compile Include="Controllers\SupplierPricelistsController.cs" />
     <Compile Include="Controllers\SupplierTariffController.cs" />
     <Compile Include="Controllers\TODController.cs" />
@@ -168,6 +169,7 @@
     <Content Include="BusinessEntity\Services\APIServices\CustomerPricelistsAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\LookUpAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\PriceListAPIService.js" />
+    <Content Include="BusinessEntity\Services\APIServices\RateAnalysisAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\SupplierPricelistsAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\SupplierTariffAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\TODAPIService.js" />
@@ -198,10 +200,12 @@
     <Content Include="BusinessEntity\Views\CarrierProfileEditorController.js" />
     <Content Include="BusinessEntity\Views\CarrierProfileManagement.html" />
     <Content Include="BusinessEntity\Views\CarrierProfileManagementController.js" />
-    <Content Include="BusinessEntity\Views\Customer Pricelists\CustomerPricelists.html" />
-    <Content Include="BusinessEntity\Views\Customer Pricelists\CustomerPricelistsController.js" />
-    <Content Include="BusinessEntity\Views\Customer Pricelists\CustomerPricelistsGrid.html" />
-    <Content Include="BusinessEntity\Views\Customer Pricelists\CustomerPricelistsGridController.js" />
+    <Content Include="BusinessEntity\Views\Rate Analysis\RateAnalysis.html" />
+    <Content Include="BusinessEntity\Views\Rate Analysis\RateAnalysisController.js" />
+    <Content Include="BusinessEntity\Views\SalesArea\Customer Pricelists\CustomerPricelists.html" />
+    <Content Include="BusinessEntity\Views\SalesArea\Customer Pricelists\CustomerPricelistsController.js" />
+    <Content Include="BusinessEntity\Views\SalesArea\Customer Pricelists\CustomerPricelistsGrid.html" />
+    <Content Include="BusinessEntity\Views\SalesArea\Customer Pricelists\CustomerPricelistsGridController.js" />
     <Content Include="BusinessEntity\Views\PurchaseArea\SupplierTariffManagement.html" />
     <Content Include="BusinessEntity\Views\PurchaseArea\SupplierTariffManagementController.js" />
     <Content Include="BusinessEntity\Views\Rates.html" />
@@ -212,10 +216,10 @@
     <Content Include="BusinessEntity\Views\SalesArea\CustomerTariffManagementController.js" />
     <Content Include="BusinessEntity\Views\SalesArea\CustomerTODManagementController.js" />
     <Content Include="BusinessEntity\Views\SalesArea\CustomerTODManagement.html" />
-    <Content Include="BusinessEntity\Views\Supplier PriceLists\SupplierPriceLists.html" />
-    <Content Include="BusinessEntity\Views\Supplier PriceLists\SupplierPriceListsController.js" />
-    <Content Include="BusinessEntity\Views\Supplier PriceLists\SupplierPriceListsGrid.html" />
-    <Content Include="BusinessEntity\Views\Supplier PriceLists\SupplierPriceListsGridController.js" />
+    <Content Include="BusinessEntity\Views\PurchaseArea\Supplier PriceLists\SupplierPriceLists.html" />
+    <Content Include="BusinessEntity\Views\PurchaseArea\Supplier PriceLists\SupplierPriceListsController.js" />
+    <Content Include="BusinessEntity\Views\PurchaseArea\Supplier PriceLists\SupplierPriceListsGrid.html" />
+    <Content Include="BusinessEntity\Views\PurchaseArea\Supplier PriceLists\SupplierPriceListsGridController.js" />
     <Content Include="BusinessEntity\Views\SwitchEditor.html" />
     <Content Include="BusinessEntity\Views\SwitchEditorController.js" />
     <Content Include="BusinessEntity\Views\SwitchManagment.html" />

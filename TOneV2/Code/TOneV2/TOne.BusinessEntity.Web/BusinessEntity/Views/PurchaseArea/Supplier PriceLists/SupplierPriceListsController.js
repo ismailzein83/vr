@@ -44,4 +44,4 @@ function SupplierPricelistsController($scope, UtilsService, $q, CarrierAccountAP
 
     }
 };
-appControllers.controller('Analytics_SupplierPricelistsController', SupplierPricelistsController);
+appControllers.controller('BE_SupplierPricelistsController', SupplierPricelistsController);

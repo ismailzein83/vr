@@ -45,4 +45,4 @@ function CustomerPricelistsController($scope, UtilsService, $q, CarrierAccountAP
 
     }
 };
-appControllers.controller('Analytics_CustomerPricelistsController', CustomerPricelistsController);
+appControllers.controller('BE_CustomerPricelistsController', CustomerPricelistsController);

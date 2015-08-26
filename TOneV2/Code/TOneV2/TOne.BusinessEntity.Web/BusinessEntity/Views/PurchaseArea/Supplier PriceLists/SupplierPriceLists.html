@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="Analytics_SupplierPricelistsController">
+﻿<vr-panel ng-controller="BE_SupplierPricelistsController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
             <vr-row removeline>
@@ -28,7 +28,7 @@
                     <vr-datagridcolumn headertext="'Description'" field="'Description'" widthfactor="10"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'User'" field="'Name'" widthfactor="5"></vr-datagridcolumn>
                     <vr-datagridexpandablerow>
-                        <div ng-include="'/Client/Modules/BusinessEntity/Views/Supplier Pricelists/SupplierPricelistsGrid.html'"></div>
+                        <div ng-include="'/Client/Modules/BusinessEntity/Views/PurchaseArea/Supplier Pricelists/SupplierPricelistsGrid.html'"></div>
                     </vr-datagridexpandablerow>
                 </vr-datagrid>
             </vr-columns>

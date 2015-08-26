@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="Analytics_CustomerPricelistsController">
+﻿<vr-panel ng-controller="BE_CustomerPricelistsController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
             <vr-row removeline>
@@ -7,7 +7,7 @@
                 </vr-columns>
 
             </vr-row>
-           
+
         </div>
     </vr-form>
 
@@ -22,14 +22,14 @@
     <div ng-show="showResult">
         <vr-row>
             <vr-columns width="fullrow" simplecol>
-                <vr-datagrid datasource="data" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'" on-ready="onMainGridReady" >
+                <vr-datagrid datasource="data" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'" on-ready="onMainGridReady">
                     <vr-datagridcolumn headertext="'ID'" field="'PriceListID'" type="Number" widthfactor="2"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Supply Date'" field="'BeginEffectiveDate'" type="'Date'" widthfactor="3"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'User'" field="'Name'" widthfactor="5"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Description'" field="'Description'" widthfactor="10"></vr-datagridcolumn>
 
-                    <vr-datagridexpandablerow >
-                        <div ng-include="'/Client/Modules/BusinessEntity/Views/Customer Pricelists/CustomerPricelistsGrid.html'"></div>
+                    <vr-datagridexpandablerow>
+                        <div ng-include="'/Client/Modules/BusinessEntity/Views/SalesArea/Customer Pricelists/CustomerPricelistsGrid.html'"></div>
                     </vr-datagridexpandablerow>
                 </vr-datagrid>
             </vr-columns>
