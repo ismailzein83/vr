@@ -1,4 +1,5 @@
 ﻿using System;
+using Vanrise.Fzero.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
@@ -19,6 +20,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public bool ExcludeHourly { get; set; }
 
         public string ToolTip { get; set; }
+
+        public CommonEnums.OperatorType OperatorTypeAllowed { get; set; }
 
     }
 }

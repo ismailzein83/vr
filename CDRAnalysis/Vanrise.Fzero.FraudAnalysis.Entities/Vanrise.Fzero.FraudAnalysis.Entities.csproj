@@ -100,6 +100,12 @@
     <Compile Include="ResultQuery\FraudResultQuery.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Fzero.Entities\Vanrise.Fzero.Entities.csproj">
+      <Project>{417276c2-f440-4445-a688-0838caba5e90}</Project>
+      <Name>Vanrise.Fzero.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

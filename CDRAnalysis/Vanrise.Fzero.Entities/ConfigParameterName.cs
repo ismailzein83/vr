@@ -5,7 +5,7 @@ namespace Vanrise.Fzero.Entities
     public enum ConfigParameterName
     {
         [ConfigParameterName(DefaultValue = "1")]
-        OperatorType = 1
+        OperatorType = CommonEnums.OperatorType.Mobile
     }
 
     public class ConfigParameterNameAttribute : Attribute

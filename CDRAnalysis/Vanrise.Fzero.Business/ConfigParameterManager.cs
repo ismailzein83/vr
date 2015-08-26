@@ -32,9 +32,9 @@ namespace Vanrise.Fzero.Business
 
         #region Public Methods
 
-        public int GetOperatorType()
+        public CommonEnums.OperatorType GetOperatorType()
         {
-            return GetIntValue(ConfigParameterName.OperatorType);
+            return (CommonEnums.OperatorType)Enum.ToObject(typeof(CommonEnums.OperatorType), GetIntValue(ConfigParameterName.OperatorType));
         }
 
         #endregion
