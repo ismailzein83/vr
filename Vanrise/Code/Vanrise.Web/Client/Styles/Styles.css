@@ -1485,7 +1485,7 @@ input.ui-grid-filter-input[type="text"] {
     left:2px;
 }
 .vr-pager-container .dropdown-menu{
-    min-width:50px;
+    min-width:40px;
 }
 .vr-pager-container .menu-to-top{
     top: -255px;

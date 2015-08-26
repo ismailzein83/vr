@@ -25,7 +25,7 @@ function SupplierTODManagementController($scope, CarrierAccountAPIService, Zones
         };
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            return TODAPIService.GetFilteredCustomerTOD(dataRetrievalInput)
+            return TODAPIService.GetFilteredSupplierTOD(dataRetrievalInput)
             .then(function (response) {
                 onResponseReady(response);
             });

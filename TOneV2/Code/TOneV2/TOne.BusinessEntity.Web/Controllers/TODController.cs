@@ -12,13 +12,20 @@ namespace TOne.BusinessEntity.Web.Controllers
     public class TODController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpPost]
-        public object GetCutomerTODFromTempTable(Vanrise.Entities.DataRetrievalInput<TODCustomerQuery> input)
+        public object GetCutomerTODFromTempTable(Vanrise.Entities.DataRetrievalInput<TODQuery> input)
         {
 
             TODManager manager = new TODManager();
             return GetWebResponse(input, manager.GetFilteredCustomerTOD(input));
         }
 
+        [HttpPost]
+        public object GetSupplierTODFromTempTable(Vanrise.Entities.DataRetrievalInput<TODQuery> input)
+        {
+
+            TODManager manager = new TODManager();
+            return GetWebResponse(input, manager.GetFilteredSupplierTOD(input));
+        }
        
     }
 }

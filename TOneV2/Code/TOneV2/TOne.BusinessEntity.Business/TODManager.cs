@@ -17,10 +17,18 @@ namespace TOne.BusinessEntity.Business
             _dataManager = BEDataManagerFactory.GetDataManager<IToDConsiderationDataManager>();
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<TODConsiderationInfo> GetFilteredCustomerTOD(Vanrise.Entities.DataRetrievalInput<TODCustomerQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<TODConsiderationInfo> GetFilteredCustomerTOD(Vanrise.Entities.DataRetrievalInput<TODQuery> input)
         {
-            return  Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, _dataManager.GetToDConsiderationByCriteria(input));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, _dataManager.GetCustomerToDConsiderationByCriteria(input));
         }
-        
+
+
+        public Vanrise.Entities.IDataRetrievalResult<TODConsiderationInfo> GetFilteredSupplierTOD(Vanrise.Entities.DataRetrievalInput<TODQuery> input)
+        {
+             AccountManagerManager am = new AccountManagerManager();
+
+            List<string> suppliersAMUIds = am.GetMyAssignedSupplierIds();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, _dataManager.GetSupplierToDConsiderationByCriteria(input, suppliersAMUIds));
+        }
     }
 }

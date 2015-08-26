@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.BusinessEntity.Entities
 {
-    public class TODCustomerQuery
+    public class TODQuery
     {
         public string CustomerId { get; set; }
         public string SupplierId { get; set; }

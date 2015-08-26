@@ -9,8 +9,7 @@
                         </vr-select>
                     </vr-columns>
                     <vr-columns width="normal">
-                        <vr-select datasource="searchZones" label="Zones" selectedvalues="selectedZones" ismultipleselection datatextfield="Name" datavaluefield="ZoneId"
-                                   entityname="Zones"></vr-select>
+                        <vr-be-costzones selectedvalues="selectedZones" carrierid="selectedSupplier.CarrierAccountID" ismultipleselection></vr-be-costzones>
                     </vr-columns>
                     <vr-columns width="normal">
                         <vr-datetimepicker type="date" value="effectiveOn" label="Effective On" isrequired></vr-datetimepicker>
@@ -40,8 +39,8 @@
                             </vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'End Date'" field="'EndEffectiveDate'">
                             </vr-datagridcolumn>
-                            <!--<vr-datagridcolumn headertext="'Active'" field="'AccountsCount'">
-                            </vr-datagridcolumn>-->
+                            <vr-datagridcolumn headertext="'Active'" field="'IsActive'">
+                            </vr-datagridcolumn>
                         </vr-datagrid>
                     </vr-columns>
             </div>
