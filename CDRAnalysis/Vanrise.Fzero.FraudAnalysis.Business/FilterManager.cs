@@ -8,7 +8,7 @@ using Vanrise.Fzero.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {
-    public class CriteriaManager
+    public class FilterManager
     {
 
         static CommonEnums.OperatorType defaultOperatorType = ConfigParameterManager.Current.GetOperatorType();
@@ -26,7 +26,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             Dictionary<int, CriteriaDefinition> dictionary = new Dictionary<int, CriteriaDefinition>();
 
             dictionary.Add(1, new CriteriaDefinition()  { FilterId = 1,  OperatorTypeAllowed = CommonEnums.OperatorType.Both,   ExcludeHourly = false, MinValue = 0.01F, MaxValue = 0.99F,          DecimalPrecision = 2, ToolTip = "MinValue = 0.01, MaxValue = 0.99, DecimalPrecision = 2",           Label = "Ratio",  Description = "Ratio Incoming Calls vs Outgoing Calls ",                                  CompareOperator = CriteriaCompareOperator.LessThanorEqual, Expression = CalculateRatioIncomingCallsvsOutgoingCalls });
-            dictionary.Add(2, new CriteriaDefinition()  { FilterId = 2,  OperatorTypeAllowed = CommonEnums.OperatorType.PSTN,   ExcludeHourly = false, MinValue = 1,     MaxValue = int.MaxValue,   DecimalPrecision = 0, ToolTip = "MinValue = 1, MaxValue = int.MaxValue, DecimalPrecision = 0",      Label = "Count",  Description = "Count of Distinct Destinations",                                           CompareOperator = CriteriaCompareOperator.GreaterThanorEqual, Expression = CalculateCountofDistinctDestinations });
+            dictionary.Add(2, new CriteriaDefinition()  { FilterId = 2,  OperatorTypeAllowed = CommonEnums.OperatorType.Mobile, ExcludeHourly = false, MinValue = 1, MaxValue = int.MaxValue, DecimalPrecision = 0, ToolTip = "MinValue = 1, MaxValue = int.MaxValue, DecimalPrecision = 0", Label = "Count", Description = "Count of Distinct Destinations", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual, Expression = CalculateCountofDistinctDestinations });
             dictionary.Add(3, new CriteriaDefinition()  { FilterId = 3,  OperatorTypeAllowed = CommonEnums.OperatorType.Mobile, ExcludeHourly = false, MinValue = 1,     MaxValue = int.MaxValue,   DecimalPrecision = 0, ToolTip = "MinValue = 1, MaxValue = int.MaxValue, DecimalPrecision = 0",      Label = "Count",  Description = "Count outgoing calls",                                                     CompareOperator = CriteriaCompareOperator.GreaterThanorEqual, Expression = CalculateCountOutgoingCalls });
             dictionary.Add(4, new CriteriaDefinition()  { FilterId = 4,  OperatorTypeAllowed = CommonEnums.OperatorType.Mobile, ExcludeHourly = false, MinValue = 1,     MaxValue = int.MaxValue,   DecimalPrecision = 0, ToolTip = "MinValue = 1, MaxValue = int.MaxValue, DecimalPrecision = 0",      Label = "Count",  Description = "Count of Total BTS Per MSISDN",                                            CompareOperator = CriteriaCompareOperator.LessThanorEqual, Expression = CalculateCountofTotalBTSPerMSISDN });
             dictionary.Add(5, new CriteriaDefinition()  { FilterId = 5,  OperatorTypeAllowed = CommonEnums.OperatorType.Mobile, ExcludeHourly = false, MinValue = 0.01F, MaxValue = float.MaxValue, DecimalPrecision = 2, ToolTip = "MinValue = 0.01, MaxValue = float.MaxValue, DecimalPrecision = 2", Label = "Volume", Description = "Total Originated Volume",                                                  CompareOperator = CriteriaCompareOperator.GreaterThanorEqual, Expression = CalculateTotalOriginatedVolume });

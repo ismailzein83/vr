@@ -10,7 +10,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
     public class FraudManager
     {
         private List<StrategyLevelWithCriterias> _levelsByPriority;
-        CriteriaManager _criteriaManager = new CriteriaManager();
+        FilterManager _FilterManager = new FilterManager();
         public int StrategyId { get; set; }
 
         public FraudManager(Strategy strategy)
@@ -34,8 +34,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 throw new ArgumentNullException("strategy.StrategyFilters");
 
 
-            var criteriaManager = new CriteriaManager();
-            Dictionary<int, CriteriaDefinition> criteriaDefinitions = criteriaManager.GetCriteriaDefinitions();
+            var FilterManager = new FilterManager();
+            Dictionary<int, CriteriaDefinition> criteriaDefinitions = FilterManager.GetCriteriaDefinitions();
             if (criteriaDefinitions == null)
                 throw new ArgumentNullException("criteriaDefinitions");
 
@@ -82,7 +82,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     Decimal criteriaValue;
                     if (!criteriaValues.TryGetValue(levelCriteriaThresholdPercentage.CriteriaDefinitions.FilterId, out criteriaValue))
                     {
-                        criteriaValue = _criteriaManager.GetCriteriaValue(levelCriteriaThresholdPercentage.CriteriaDefinitions, profile);
+                        criteriaValue = _FilterManager.GetCriteriaValue(levelCriteriaThresholdPercentage.CriteriaDefinitions, profile);
                         criteriaValues.Add(levelCriteriaThresholdPercentage.CriteriaDefinitions.FilterId, criteriaValue);
                     }
 
