@@ -63,6 +63,7 @@
     <Compile Include="CommissionDataManager.cs" />
     <Compile Include="CurrencyDataManager.cs" />
     <Compile Include="CustomerPricelistsDataManager.cs" />
+    <Compile Include="CustomerTariffDataManger.cs" />
     <Compile Include="LookUpDataManager.cs" />
     <Compile Include="PriceListDataManager.cs" />
     <Compile Include="CarrierProfileDataManager.cs" />

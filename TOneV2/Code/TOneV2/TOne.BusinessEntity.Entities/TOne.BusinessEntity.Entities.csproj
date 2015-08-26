@@ -60,6 +60,8 @@
     <Compile Include="CarrierAccountQuery.cs" />
     <Compile Include="CarrierConnection.cs" />
     <Compile Include="CustomerPriceListDetail.cs" />
+    <Compile Include="CustomerTariff.cs" />
+    <Compile Include="CustomerTariffQuery.cs" />
     <Compile Include="PriceLists.cs" />
     <Compile Include="SupplierTariff.cs" />
     <Compile Include="SupplierTariffQuery.cs" />

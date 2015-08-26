@@ -127,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\CustomerPricelistsController.cs" />
+    <Compile Include="Controllers\CustomerTariffController.cs" />
     <Compile Include="Controllers\RateAnalysisController.cs" />
     <Compile Include="Controllers\SupplierPricelistsController.cs" />
     <Compile Include="Controllers\SupplierTariffController.cs" />
@@ -150,6 +151,7 @@
     <Content Include="BusinessEntity\Constant\AccountTypeEnum.js" />
     <Content Include="BusinessEntity\Constant\ActivationStatusEnum.js" />
     <Content Include="BusinessEntity\Constant\ChangeEnum.js" />
+    <Content Include="BusinessEntity\Constant\CustomerTariffMeasureEnum.js" />
     <Content Include="BusinessEntity\Constant\PaymentTypeEnum.js" />
     <Content Include="BusinessEntity\Constant\RoutingStatusEnum.js" />
     <Content Include="BusinessEntity\Constant\SupplierTariffMeasureEnum.js" />
@@ -167,6 +169,7 @@
     <Content Include="BusinessEntity\Services\APIServices\CarrierSummaryAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\CurrencyAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\CustomerPricelistsAPIService.js" />
+    <Content Include="BusinessEntity\Services\APIServices\CustomerTariffAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\LookUpAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\PriceListAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\RateAnalysisAPIService.js" />
