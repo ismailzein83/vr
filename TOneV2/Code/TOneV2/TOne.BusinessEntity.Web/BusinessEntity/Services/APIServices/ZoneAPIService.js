@@ -22,7 +22,7 @@ var serviceObj = function (BaseAPIService) {
             });
 
     }
-    function GetCustomerZones(nameFilter, supplierId) {
+    function GetCustomerZones(nameFilter, customerId) {
         return BaseAPIService.get("/api/Zone/GetCustomerZones",
             {
                 nameFilter: nameFilter,
