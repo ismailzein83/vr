@@ -1,6 +1,6 @@
-﻿SuspiciousNumberDetailsController.$inject = ['$scope', 'StrategyAPIService', 'NormalCDRAPIService', 'SuspicionAnalysisAPIService', 'NumberProfileAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CaseManagementAPIService', 'CaseStatusEnum'];
+﻿SuspiciousNumberDetailsController.$inject = ['$scope', 'StrategyAPIService','OperatorTypeEnum', 'NormalCDRAPIService', 'SuspicionAnalysisAPIService', 'NumberProfileAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CaseManagementAPIService', 'CaseStatusEnum'];
 
-function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDRAPIService, SuspicionAnalysisAPIService, NumberProfileAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CaseManagementAPIService, CaseStatusEnum) {
+function SuspiciousNumberDetailsController($scope, StrategyAPIService, OperatorTypeEnum, NormalCDRAPIService, SuspicionAnalysisAPIService, NumberProfileAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CaseManagementAPIService, CaseStatusEnum) {
     var normalCDRGridAPI;
     var numberProfileGridAPI;
     var relatedCaseGridAPI;
@@ -14,6 +14,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
     var isNumberProfileDataLoaded = false;
     var isRelatedCaseDataLoaded = false;
     var pageLoaded = false;
+    var defaultOperatorType;
 
     loadParameters();
     defineScope();
@@ -53,10 +54,24 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
         $scope.numberProfiles = [];
         $scope.relatedCases = [];
         $scope.relatedNumbers = [];
+        $scope.operatorTypes = [];
         
         SuspiciousNumberDetailsController.isNormalCDRTabShown = true;
         SuspiciousNumberDetailsController.isNumberProfileTabShown = false;
         SuspiciousNumberDetailsController.isRelatedCaseTabShown = false;
+
+
+        angular.forEach(OperatorTypeEnum, function (itm) {
+            $scope.operatorTypes.push({ value: itm.value, name: itm.name })
+        });
+
+
+        SuspicionAnalysisAPIService.GetOperatorType()
+         .then(function (response) {
+             defaultOperatorType = UtilsService.getItemByVal($scope.operatorTypes, response, "value")
+         });
+
+
 
 
         $scope.onNormalCDRsGridReady = function (api) {
@@ -168,7 +183,23 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
             });
         }
 
+       
+        $scope.renderinMobileOnly = function () {
+            console.log('defaultOperatorType.value')
+            console.log(defaultOperatorType.value)
+            console.log('OperatorTypeEnum.Mobile.value')
+            console.log(OperatorTypeEnum.Mobile.value)
+            return defaultOperatorType.value == OperatorTypeEnum.Mobile.value;
+        }
 
+
+        $scope.renderinPSTNOnly = function () {
+            console.log('defaultOperatorType.value')
+            console.log(defaultOperatorType.value)
+            console.log('OperatorTypeEnum.Mobile.value')
+            console.log(OperatorTypeEnum.Mobile.value)
+            return defaultOperatorType.value == OperatorTypeEnum.PSTN.value;
+        }
 
 
     }
@@ -293,6 +324,9 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, NormalCDR
 
         return relatedCaseGridAPI.retrieveData(query);
     }
+
+   
+
 
 }
 appControllers.controller('SuspiciousNumberDetailsController', SuspiciousNumberDetailsController);

@@ -2,9 +2,14 @@
 
     return ({
         GetFilteredSuspiciousNumbers: GetFilteredSuspiciousNumbers,
-        GetFraudResult: GetFraudResult
+        GetFraudResult: GetFraudResult,
+        GetOperatorType: GetOperatorType
     });
 
+
+    function GetOperatorType() {
+        return BaseAPIService.get("/api/SuspicionAnalysis/GetOperatorType");
+    }
 
     function GetFilteredSuspiciousNumbers(input) {
         return BaseAPIService.post("/api/SuspicionAnalysis/GetFilteredSuspiciousNumbers", input);
@@ -22,11 +27,6 @@
             }
            );
     }
-
-
-
-
-
 
 
 });

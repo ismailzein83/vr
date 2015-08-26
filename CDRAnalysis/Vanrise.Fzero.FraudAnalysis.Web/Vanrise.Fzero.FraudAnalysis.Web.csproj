@@ -154,6 +154,14 @@
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.Business\Vanrise.Fzero.Business.csproj">
+      <Project>{a211ae1c-89e5-4b19-b737-7a0af4063f8f}</Project>
+      <Name>Vanrise.Fzero.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.Entities\Vanrise.Fzero.Entities.csproj">
+      <Project>{417276c2-f440-4445-a688-0838caba5e90}</Project>
+      <Name>Vanrise.Fzero.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Business\Vanrise.Fzero.FraudAnalysis.Business.csproj">
       <Project>{c195cfd3-948d-447c-83b4-3365d0515ec9}</Project>
       <Name>Vanrise.Fzero.FraudAnalysis.Business</Name>

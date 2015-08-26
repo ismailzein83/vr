@@ -47,18 +47,18 @@
                             <vr-columns colnum="12">
                                 <div ng-show="isNormalCDRTabShown">
                                     <vr-datagrid datasource="normalCDRs" dataretrievalfunction="dataRetrievalFunction_NormalCDRs" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onNormalCDRsGridReady">
-                                        <vr-datagridcolumn headertext="'IMSI'" field="'IMSI'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'IMSI'" field="'IMSI'" widthfactor="13" ng-if="viewScope.renderinMobileOnly"   >  </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Connect'" field="'ConnectDateTime'" type="'Datetime'" widthfactor="17"></vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Duration'" field="'DurationInSeconds'" widthfactor="5">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Class'" field="'CallClass'" widthfactor="10">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Class'" field="'CallClass'" widthfactor="10" ng-if="viewScope.renderinMobileOnly">  </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Type'" field="'CallType'" widthfactor="10">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'SubType'" field="'SubType'" widthfactor="10">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'IMEI'" field="'IMEI'" widthfactor="13">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Cell Id'" field="'CellId'" widthfactor="10">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Up Volume'" field="'UpVolume'" widthfactor="10">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Down Volume'" field="'DownVolume'" widthfactor="10">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Service Type'" field="'ServiceType'" widthfactor="10">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Service VAS'" field="'ServiceVASName'">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'SubType'" field="'SubType'" widthfactor="10"   >  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'IMEI'" field="'IMEI'" widthfactor="13" ng-if="viewScope.renderinMobileOnly">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Cell Id'" field="'CellId'" widthfactor="10" ng-if="viewScope.renderinMobileOnly">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Up Volume'" field="'UpVolume'" widthfactor="10" ng-if="viewScope.renderinMobileOnly">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Down Volume'" field="'DownVolume'" widthfactor="10" ng-if="viewScope.renderinMobileOnly">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Service Type'" field="'ServiceType'" widthfactor="10" ng-if="viewScope.renderinMobileOnly">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Service VAS'" field="'ServiceVASName'" ng-if="viewScope.renderinMobileOnly">  </vr-datagridcolumn>
                                     </vr-datagrid>
 
                                 </div>

@@ -11,8 +11,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
     public class FilterManager
     {
 
-        static CommonEnums.OperatorType defaultOperatorType = ConfigParameterManager.Current.GetOperatorType();
-
+        public static CommonEnums.OperatorType DefaultOperatorType
+        {
+           get
+	        {
+	            return ConfigParameterManager.Current.GetOperatorType();
+	        }
+        }
 
         public Decimal GetCriteriaValue(CriteriaDefinition criteria, NumberProfile numberProfile)
         {            
@@ -43,7 +48,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             dictionary.Add(16, new CriteriaDefinition() { FilterId = 16, OperatorTypeAllowed = CommonEnums.OperatorType.Mobile, ExcludeHourly = false, MinValue = 1,     MaxValue = int.MaxValue,   DecimalPrecision = 0, ToolTip = "MinValue = 1, MaxValue = int.MaxValue, DecimalPrecision = 0",      Label = "Count",  Description = "Consecutive Calls",                                                        CompareOperator = CriteriaCompareOperator.GreaterThanorEqual, Expression = CalculateConsecutiveCalls });
             dictionary.Add(17, new CriteriaDefinition() { FilterId = 17, OperatorTypeAllowed = CommonEnums.OperatorType.Mobile, ExcludeHourly = false, MinValue = 1,     MaxValue = int.MaxValue,   DecimalPrecision = 0, ToolTip = "MinValue = 1, MaxValue = int.MaxValue, DecimalPrecision = 0",      Label = "Count",  Description = "Fail Consecutive Calls",                                                   CompareOperator = CriteriaCompareOperator.GreaterThanorEqual, Expression = CalculateFailConsecutiveCalls });
             dictionary.Add(18, new CriteriaDefinition() { FilterId = 18, OperatorTypeAllowed = CommonEnums.OperatorType.Mobile, ExcludeHourly = false, MinValue = 0.01F, MaxValue = 1.00F,          DecimalPrecision = 2, ToolTip = "MinValue = 0.01, MaxValue = 1.00, DecimalPrecision = 2",           Label = "Ratio",  Description = "Ratio (Count Incoming “low duration” Calls)  Vs (Count Incoming Calls)",   CompareOperator = CriteriaCompareOperator.GreaterThanorEqual, Expression = CalculateRatioCountIncominglowdurationCallsVsCountIncomingCalls });
-            return dictionary.Where(x => x.Value.OperatorTypeAllowed == defaultOperatorType || x.Value.OperatorTypeAllowed == CommonEnums.OperatorType.Both ).ToDictionary(i => i.Key, i => i.Value); 
+            return dictionary.Where(x => x.Value.OperatorTypeAllowed == DefaultOperatorType || x.Value.OperatorTypeAllowed == CommonEnums.OperatorType.Both).ToDictionary(i => i.Key, i => i.Value); 
         }
 
         public Dictionary<int, CriteriaDefinition> GetCriteriaDefinitions()

@@ -7,6 +7,8 @@ using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Web.Base;
+using Vanrise.Fzero.Business;
+using Vanrise.Fzero.Entities;
 
 namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 {
@@ -42,6 +44,14 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
 
             return manager.GetFraudResult(fromDate, toDate, strategiesIntList, suspicionLevelsIntList, accountNumber);
+        }
+
+
+
+        [HttpGet]
+        public CommonEnums.OperatorType GetOperatorType()
+        {
+            return FilterManager.DefaultOperatorType;
         }
 
         
