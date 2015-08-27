@@ -37,6 +37,7 @@
                 defaultSortDirection = $scope.$parent.$eval($attrs.defaultsortdirection);
 
             ctrl.clientSideFilterFunction;
+            ctrl.hideGridMenu = ($attrs.hidegridmenu != undefined);
             ctrl.rotateHeader = true;
             ctrl.el = $element;
             if ($attrs.clientsidefilter != undefined)
