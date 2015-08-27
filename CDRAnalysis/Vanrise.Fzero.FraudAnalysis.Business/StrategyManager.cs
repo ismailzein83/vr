@@ -30,19 +30,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         }
 
 
-        public Vanrise.Entities.IDataRetrievalResult<Strategy> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyResultQuery> input, IEnumerable<User> users)
+        public Vanrise.Entities.IDataRetrievalResult<Strategy> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyResultQuery> input)
         {
             IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
 
-            BigResult<Strategy> strategies = manager.GetFilteredStrategies(input);
-
-            foreach ( var strategy in strategies.Data)
-            {
-                strategy.Analyst = users.Where(x => x.UserId == strategy.UserId).First().Name;
-            }
-
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, strategies);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, manager.GetFilteredStrategies(input));
         }
 
 
@@ -56,6 +48,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             {
                 updateOperationOutput.Result = Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = strategyObject;
+                strategyObject.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
             }
             else
                 updateOperationOutput.Result = Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationResult.Failed;
@@ -76,6 +69,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             {
                 insertOperationOutput.Result = Vanrise.Fzero.FraudAnalysis.Entities.InsertOperationResult.Succeeded;
                 strategyObject.Id = strategyId;
+                strategyObject.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
                 insertOperationOutput.InsertedObject = strategyObject;
             }
             else
