@@ -14,7 +14,8 @@
                 hint: '@',
                 minvalue:'@',
                 maxvalue: '@',
-                decimalprecision:'@',
+                decimalprecision: '@',
+                maxlength:'@',
                 customvalidate: '&'
             },
             controller: function ($scope, $element) {
@@ -59,6 +60,12 @@
                                     ctrl.value = oldValue;
                                 }
                             
+                            }
+                            if (iAttrs.maxlength != undefined) {
+                                var charArray = String(newValue).split("");
+                                if(charArray.length > ctrl.maxlength)
+                                    ctrl.value = oldValue;
+
                             }
                             if (iAttrs.onvaluechanged != undefined) {
                                 var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onvaluechanged);
