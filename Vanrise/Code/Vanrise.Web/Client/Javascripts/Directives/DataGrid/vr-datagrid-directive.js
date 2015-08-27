@@ -97,7 +97,7 @@
 
     var headerTemplate = '<div ng-click="colDef.onSort()" class="vr-datagrid-header-cell" >'
    + ' <div col-index="renderIndex">'
-     + '   <div class="vr-datagrid-celltext"  ng-class="colDef.getAlign()" title="{{colDef.name}}" >'
+     + '   <div class="vr-datagrid-celltext"  ng-class="colDef.getAlign()" title="{{colDef.description}}" >'
        + '    <span ng-show="colDef.sortDirection==\'ASC\'">&uarr;</span>'
         + '   <span ng-show="colDef.sortDirection==\'DESC\'">&darr;</span>'
               +'<span ng-if="!colDef.rotateHeader"> {{colDef.name}}</span>'
@@ -131,6 +131,7 @@
         function addColumn(col, columnIndex) {
             var colDef = {
                 name: col.headerText != undefined ? col.headerText : col.field,
+                description:(col.headerDescription != undefined)? col.headerDescription :(  col.headerText != undefined ? col.headerText : col.field),
                 headerCellTemplate: headerTemplate,//'/Client/Templates/Grid/HeaderTemplate.html',//template,
                 field: col.field,
                 summaryField: col.summaryField,

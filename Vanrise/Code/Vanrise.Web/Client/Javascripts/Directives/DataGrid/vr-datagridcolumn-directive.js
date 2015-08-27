@@ -7,7 +7,8 @@
             element.html('');
             return {
                 pre: function ($scope, iElem, iAttrs, dataGridCtrl) {
-                    var headerText = iAttrs.headertext != undefined ? $scope.$eval(iAttrs.headertext) : undefined; 
+                    var headerText = iAttrs.headertext != undefined ? $scope.$eval(iAttrs.headertext) : undefined;
+                    var headerDescription = iAttrs.headerdescription != undefined ? $scope.$eval(iAttrs.headerdescription) : undefined;
                     var field = iAttrs.field != undefined ? $scope.$eval(iAttrs.field) : undefined;
                     var summaryField = iAttrs.summaryfield != undefined ? $scope.$eval(iAttrs.summaryfield) : undefined;
                     var widthFactor = iAttrs.widthfactor != undefined ? $scope.$eval(iAttrs.widthfactor) : undefined;
@@ -21,6 +22,7 @@
                     var getcolor = iAttrs.getcolor != undefined ? $scope.$eval(iAttrs.getcolor) : undefined;
                     var col = {
                         headerText: headerText,
+                        headerDescription:headerDescription,
                         field: field,
                         summaryField: summaryField,
                         widthFactor: widthFactor,
