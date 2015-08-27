@@ -1,4 +1,7 @@
-﻿CREATE SCHEMA [mainmodule];
+﻿CREATE SCHEMA [mainmodule]
+    AUTHORIZATION [dbo];
+
+
 
 
 

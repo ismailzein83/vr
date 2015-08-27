@@ -1,2 +1,5 @@
-﻿CREATE SCHEMA [main];
+﻿CREATE SCHEMA [main]
+    AUTHORIZATION [dbo];
+
+
 

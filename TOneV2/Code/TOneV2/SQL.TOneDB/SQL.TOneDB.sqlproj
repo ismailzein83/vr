@@ -89,6 +89,10 @@
     <Folder Include="BEntity\Tables\" />
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
+    <Folder Include="BEntity\Functions\" />
+    <Folder Include="Billing\" />
+    <Folder Include="Billing\Stored Procedures\" />
+    <Folder Include="dbo\Functions\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="BEntity\Stored Procedures\sp_Rate_GetCaclulatedZoneRates.sql" />
@@ -235,5 +239,43 @@
     <Build Include="dbo\Tables\MCT.sql" />
     <Build Include="dbo\Tables\CurrencyExchangeRate.sql" />
     <Build Include="dbo\Tables\Currency.sql" />
+    <Build Include="dbo\Tables\ToDConsideration.sql" />
+    <Build Include="dbo\Tables\CarrierProfile.sql" />
+    <Build Include="BEntity\Functions\ParseStringList.sql" />
+    <Build Include="LCR\Stored Procedures\SP_Route_GetRoutes.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Zone_GetFilteredBySupplier.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Zone_GetFilteredByCustomer.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_SupplierToDConsideration_CreateTempForFiltered.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Rate_CreateTempByFiltered.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_CustomersToDConsideration_CreateTempForFiltered.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Currency_GetAll.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_CarrierSummaryStats_CreateTempForFiltered.sql" />
+    <Build Include="BEntity\Stored Procedures\SP_CarrierProfile_GetAll.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_CarrierMask_Update.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_CarrierMask_Insert.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_CarrierMask_GetByMaskId.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_CarrierMask_DeleteByMaskId.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_CarrierMask_CreateTempForFiltered.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_CarrierGroupMember_Insert.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_CarrierGroupMember_GetByCarrierGroupIds.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_CarrierGroupMember_CreateTempByCarrierGroupIds.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_CarrierGroup_Update.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_CarrierGroup_Insert.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_CarrierGroup_GetById.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_CarrierAccountConnection_GetByCarrierType.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_CarrierAccount_UpdateGroups.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_CarrierAccount_GetAll.sql" />
+    <Build Include="Analytics\Stored Procedures\sp_Rate_GetByPriceListID.sql" />
+    <Build Include="Analytics\Stored Procedures\sp_PriceList_GetBySupplierID.sql" />
+    <Build Include="Analytics\Stored Procedures\sp_PriceList_GetByCustomerID.sql" />
+    <Build Include="Analytics\Stored Procedures\sp_DailyReportCall_CreateTempForFiltered.sql" />
+    <Build Include="Analytics\Stored Procedures\sp_CarrierRateView_Update.sql" />
+    <Build Include="Analytics\Stored Procedures\SP_BillingStats_CompareInOutTraffic.sql" />
+    <Build Include="Billing\Stored Procedures\sp_BillingInvoiceDetails_CreateTempByInvoiceID.sql" />
+    <Build Include="Billing\Stored Procedures\sp_BillingInvoice_CreateTempBySupplierID.sql" />
+    <Build Include="BEntity\User Defined Types\CarrierAccountIDType.sql" />
+    <Build Include="BEntity\User Defined Types\AssignedCarriers.sql" />
+    <Build Include="Security\Billing.sql" />
+    <Build Include="dbo\Functions\IsToDActive.sql" />
   </ItemGroup>
 </Project>
