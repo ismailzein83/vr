@@ -181,6 +181,7 @@ namespace Vanrise.Integration.Business
             parameters.ReferencedAssemblies.Add("System.Data.dll");
             parameters.ReferencedAssemblies.Add(typeof(DataMapper).Assembly.Location);
             parameters.ReferencedAssemblies.Add(typeof(Vanrise.Queueing.Entities.PersistentQueueItem).Assembly.Location);
+            parameters.ReferencedAssemblies.Add(typeof(Vanrise.Integration.Mappers.Utils).Assembly.Location);
 
             parameters.ReferencedAssemblies.Add(Assembly.GetCallingAssembly().Location);
             parameters.ReferencedAssemblies.Add(Assembly.GetExecutingAssembly().Location);
@@ -229,6 +230,7 @@ namespace Vanrise.Integration.Business
                 using System.IO;
                 using System.Data;
                 using Vanrise.Integration.Entities;
+                using Vanrise.Integration.Mappers;
 
                 namespace Vanrise.Integration.Mappers
                 {

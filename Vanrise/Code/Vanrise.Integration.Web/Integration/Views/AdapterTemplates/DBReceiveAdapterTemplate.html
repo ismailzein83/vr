@@ -9,12 +9,8 @@
                 <vr-textarea value="query" label="Query" hint="Ex: Select top 1000 from Table where ID > {LastImportedId}" isrequired />
             </vr-columns>
 
-            <vr-columns width="1/2row">
+            <vr-columns width="fullrow">
                 <vr-textbox readonly value="lastImportedId" label="Last Imported Id" />
-            </vr-columns>
-            
-            <vr-columns width="small">
-                <vr-button type="Reset" data-onclick="resetLastImportedId" standalone></vr-button>
             </vr-columns>
         </vr-row>
     </vr-section>

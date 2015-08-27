@@ -33,7 +33,7 @@ namespace Vanrise.Integration.Adapters.SQLReceiveAdapter
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LogError("An error occurred in SQL Adapter while importing data. Exception Details: {0}", ex.Message);
             }
