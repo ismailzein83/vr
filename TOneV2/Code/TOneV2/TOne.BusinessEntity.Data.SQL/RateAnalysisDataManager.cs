@@ -15,7 +15,7 @@ namespace TOne.BusinessEntity.Data.SQL
        {
            Action<string> createTempTableAction = (tempTableName) =>
            {
-               ExecuteNonQuerySP("[BEntity].[sp_Rate_CreateTempForRateAnalysis]", tempTableName, input.Query.ZoneId, input.Query.EffectedDate, input.Query.CustomerId, input.Query.SupplierId);
+               ExecuteNonQuerySP("[BEntity].[sp_Rate_CreateTempByFiltered]", tempTableName, input.Query.ZoneId, input.Query.EffectedDate, input.Query.CustomerId, input.Query.SupplierId);
            };
 
            return RetrieveData(input, createTempTableAction, RateAnalysisMapper);
@@ -31,6 +31,8 @@ namespace TOne.BusinessEntity.Data.SQL
            rateAnalysis.ServicesFlag = GetReaderValue<Int16>(reader, "ServicesFlag");
            rateAnalysis.BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate");
            rateAnalysis.EndEffectiveDate = GetReaderValue<DateTime>(reader, "EndEffectiveDate");
+           rateAnalysis.Effective = (IsEffective)Enum.Parse(typeof(IsEffective), GetReaderValue<string>(reader, "IsEffective").ToString());
+           rateAnalysis.Currency = GetReaderValue<string>(reader, "CurrencyID");
            rateAnalysis.Notes = reader["Notes"] as string;
            return rateAnalysis;
        }

@@ -4,7 +4,8 @@ var serviceObj = function (BaseAPIService) {
     return ({
         GetOwnZones: GetOwnZones,
         GetSupplierZones: GetSupplierZones,
-        GetCustomerZones: GetCustomerZones
+        GetCustomerZones: GetCustomerZones,
+        GetZoneById: GetZoneById
     });
 
     function GetOwnZones(nameFilter) {
@@ -27,6 +28,13 @@ var serviceObj = function (BaseAPIService) {
             {
                 nameFilter: nameFilter,
                 customerId: customerId
+            });
+
+    }
+    function GetZoneById(zoneId) {
+        return BaseAPIService.get("/api/Zone/GetZoneById",
+            {
+                zoneId: zoneId
             });
 
     }

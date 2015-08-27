@@ -15,7 +15,7 @@ namespace TOne.BusinessEntity.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("[Analytics].[sp_PriceList_GetByCustomerID]", tempTableName, input.Query);
+                ExecuteNonQuerySP("[BEntity].[sp_PriceList_GetByCustomerID]", tempTableName, input.Query);
             };
 
             return RetrieveData(input, createTempTableAction, CustomerPriceListsMapper);

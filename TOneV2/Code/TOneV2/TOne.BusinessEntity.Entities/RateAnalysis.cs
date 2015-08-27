@@ -16,9 +16,9 @@ namespace TOne.BusinessEntity.Entities
         public Change Change { get; set; }
         public Int16 ServicesFlag { get; set; }
         public DateTime BeginEffectiveDate { get; set; }
-
+        public string Currency { get; set; }
         public DateTime EndEffectiveDate { get; set; }
-        public bool Effective { get; set; }
+        public IsEffective Effective { get; set; }
         public string Notes { get; set; }
     }
 }

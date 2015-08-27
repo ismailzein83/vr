@@ -34,4 +34,9 @@ namespace TOne.BusinessEntity.Entities
         VoIP=0,
         TDM=1
     }
+    public enum IsEffective
+    {
+        Y=0,
+        N=1
+    }
 }

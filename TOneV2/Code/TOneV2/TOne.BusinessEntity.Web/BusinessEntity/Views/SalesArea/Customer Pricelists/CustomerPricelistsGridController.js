@@ -39,6 +39,21 @@ function CustomerPricelistsGridController($scope, VRModalService, UtilsService, 
                 VRModalService.showModal('/Client/Modules/Analytics/Views/Customer Pricelists/CustomerPricelistsGrid.html', null, modalSettings);
             }
         }];
+        $scope.onRateClicked = function (dataItem) {
+            var modalSettings = {
+                useModalTemplate: true,
+                width: "80%",
+                maxHeight: "800px"
+            };
+            var parameters = {
+                Rate: dataItem.Rate,
+                ZoneId: dataItem.ZoneID,
+                CustomerId: $scope.gridParentScope.selectedCustomer.CarrierAccountID,
+                EffectiveDate: $scope.dataItem.BeginEffectiveDate
+            };
+
+            VRModalService.showModal('/Client/Modules/BusinessEntity/Views/Rate Analysis/RateAnalysis.html', parameters, modalSettings);
+        }
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
             retrieveData();

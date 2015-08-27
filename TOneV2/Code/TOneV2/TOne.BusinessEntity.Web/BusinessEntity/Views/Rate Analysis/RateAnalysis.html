@@ -19,12 +19,12 @@
                     <vr-be-zones selectedvalues="selectedZone" carrierid="selectedCustomer.CarrierAccountID"></vr-be-zones>
                 </vr-columns>
                 <vr-columns width="normal" ng-show="supplierSelected">
-                    <vr-be-costzones selectedvalues="selectedZone1" carrierid="selectedSupplier.CarrierAccountID"></vr-be-costzones>
+                    <vr-be-costzones selectedvalues="selectedZone" carrierid="selectedSupplier.CarrierAccountID"></vr-be-costzones>
                 </vr-columns>
                     <vr-columns width="normal">
                         <vr-datetimepicker type="date" value="effectiveDate" label="Effective Since" ></vr-datetimepicker>
                     </vr-columns>
-</vr-row>
+            </vr-row>
 
         </div>
     </vr-form>
@@ -39,23 +39,34 @@
     </vr-row>
     <div ng-show="showResult">
         <vr-row>
+             <vr-columns width="fullrow" simplecol>
+
+                 <vr-chart data-on-ready="chartRateAnalysisReady"></vr-chart>
+
+             </vr-columns>
+        </vr-row>
+        <vr-row>
             <vr-columns width="fullrow" simplecol>
                 <vr-datagrid datasource="data" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'" on-ready="onMainGridReady">
 
                     <vr-datagridcolumn headertext="'ID'" field="'RateID'" type="Number" widthfactor="5"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Rate'" field="'Rate'" widthfactor="5" isclickable="true"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Change'">{{viewScope.test}}
+                    <vr-datagridcolumn headertext="'OffPeak'" field="'OffPeakRate'" widthfactor="5"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Weekend'" field="'WeekendRate'" widthfactor="5"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Change'">
                         <span ng-class="viewScope.getChangeIcon(dataItem)"></span>
                     </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Currency'" field="'Currency'" type="Number" widthfactor="5"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Services'" field="'ServicesFlag'" type="Number" widthfactor="5"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'OffPeak'" field="'OffPeakRate'" widthfactor="5"></vr-datagridcolumn>
+                   
 
-                    <vr-datagridcolumn headertext="'Weekend'" field="'WeekendRate'" widthfactor="5"></vr-datagridcolumn>
+                   
                     <vr-datagridcolumn headertext="'BED'" field="'BeginEffectiveDate'" type="Date" widthfactor="8"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'EED'" field="'EndEffectiveDate'" type="Date" widthfactor="8"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Effective'" field="'IsEffective'" type="Date" widthfactor="8"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Notes'" field="'Notes'" widthfactor="20"></vr-datagridcolumn>
 
-                    <vr-datagridexpandablerow>
+                    <vr-datagridexpandablerow ng-if="checkExpandablerow()">
                         <div ng-include="'/Client/Modules/BusinessEntity/Views/Customer Pricelists/CustomerPricelistsGrid.html'"></div>
                     </vr-datagridexpandablerow>
                 </vr-datagrid>

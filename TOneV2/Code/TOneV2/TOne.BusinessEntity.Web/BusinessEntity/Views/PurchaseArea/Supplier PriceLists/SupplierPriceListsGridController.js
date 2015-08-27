@@ -1,6 +1,6 @@
 ﻿'use strict'
-SupplierPricelistsGridController.$inject = ['$scope', 'VRModalService', 'UtilsService', 'SupplierPricelistsAPIService','ChangeEnum'];
-function SupplierPricelistsGridController($scope, VRModalService, UtilsService, SupplierPricelistsAPIService, ChangeEnum) {
+SupplierPricelistsGridController.$inject = ['$scope', 'VRModalService', 'UtilsService', 'SupplierPricelistsAPIService','ChangeEnum','CodeAPIService'];
+function SupplierPricelistsGridController($scope, VRModalService, UtilsService, SupplierPricelistsAPIService, ChangeEnum, CodeAPIService) {
     var mainGridAPI;
     defineScope();
     load();
@@ -51,12 +51,36 @@ function SupplierPricelistsGridController($scope, VRModalService, UtilsService, 
                 onResponseReady(response);
             })
         };
+        $scope.onRateClicked = function (dataItem) {
+            var modalSettings = {
+                useModalTemplate: true,
+                width: "80%",
+                maxHeight: "800px"
+            };
+            
+            var parameters = {
+                Rate: dataItem.Rate,
+                ZoneId: dataItem.ZoneID,
+                  SupplierId: $scope.gridParentScope.selectedSupplier.CarrierAccountID,
+                 EffectiveDate:$scope.dataItem.BeginEffectiveDate
+            };
+
+            VRModalService.showModal('/Client/Modules/BusinessEntity/Views/Rate Analysis/RateAnalysis.html', parameters, modalSettings);
+        }
         $scope.getChangeIcon = function (dataItem) {
             switch (dataItem.Change) {
                 case ChangeEnum.Increase.value: return ChangeEnum.Increase.icon;
                 case ChangeEnum.Decrease.value: return ChangeEnum.Decrease.icon;
                 case ChangeEnum.New.value: return ChangeEnum.New.icon;
             }
+        }
+        $scope.getCodes = function () {
+           
+            
+            //CodeAPIService.GetCodes(dataItem.ZoneID, $scope.dataItem.BeginEffectiveDate).then(function (response) {
+            //    console.log(response);
+            //});
+            //return;
         }
 
     }

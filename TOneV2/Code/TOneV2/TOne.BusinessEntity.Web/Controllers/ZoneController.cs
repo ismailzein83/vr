@@ -30,5 +30,15 @@ namespace TOne.BusinessEntity.Web.Controllers
             ZoneManager manager = new ZoneManager();
             return manager.GetCustomerZones(customerId, nameFilter);
         }
+        [HttpGet]
+        public ZoneInfo GetZoneById(int zoneId)
+        {
+            ZoneManager manager = new ZoneManager();
+            Zone z=manager.GetZone(zoneId);
+            ZoneInfo zoneInfo= new ZoneInfo();
+            zoneInfo.ZoneId=z.ZoneId;
+            zoneInfo.Name=z.Name;
+            return zoneInfo;
+        }
     }
 }

@@ -16,7 +16,7 @@ namespace TOne.Analytics.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("[Analytics].[sp_PriceList_GetBySupplierID]", tempTableName, input.Query);
+                ExecuteNonQuerySP("[BEntity].[sp_PriceList_GetBySupplierID]", tempTableName, input.Query);
             };
 
             return RetrieveData(input, createTempTableAction, SupplierPriceListsMapper);
