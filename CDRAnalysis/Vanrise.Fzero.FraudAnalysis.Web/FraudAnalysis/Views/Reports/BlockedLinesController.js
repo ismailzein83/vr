@@ -1,4 +1,6 @@
-﻿BlockedLinesController.$inject = ['$scope', 'ReportingAPIService', 'StrategyAPIService', 'UserAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'KindEnum', 'StatusEnum'];
+﻿"use strict";
+
+BlockedLinesController.$inject = ['$scope', 'ReportingAPIService', 'StrategyAPIService', 'UserAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'KindEnum', 'StatusEnum'];
 
 function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService, UserAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, KindEnum, StatusEnum) {
 
@@ -32,13 +34,9 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
         $scope.selectedStrategies = [];
         $scope.accountNumbers = [];
 
-        $scope.loadMoreData = function () {
-            return getData();
-        }
 
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
-            return retrieveData();
         };
         $scope.searchClicked = function () {
             return retrieveData();

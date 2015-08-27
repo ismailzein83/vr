@@ -1,4 +1,6 @@
-﻿LinesDetectedController.$inject = ['$scope', 'ReportingAPIService', 'UserAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+﻿"use strict";
+
+LinesDetectedController.$inject = ['$scope', 'ReportingAPIService', 'UserAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
 function LinesDetectedController($scope, ReportingAPIService, UserAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
 
@@ -23,13 +25,9 @@ function LinesDetectedController($scope, ReportingAPIService, UserAPIService, $r
 
         $scope.detectedLines = [];
 
-        $scope.loadMoreData = function () {
-            return getData();
-        }
 
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
-            return retrieveData();
         };
         $scope.searchClicked = function () {
             return retrieveData();

@@ -1,4 +1,6 @@
-﻿SuspicionAnalysisController.$inject = ['$scope', 'StrategyAPIService', 'SuspicionAnalysisAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CaseStatusEnum', 'SuspicionLevelsEnum'];
+﻿"use strict";
+
+SuspicionAnalysisController.$inject = ['$scope', 'StrategyAPIService', 'SuspicionAnalysisAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CaseStatusEnum', 'SuspicionLevelsEnum'];
 
 function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalysisAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CaseStatusEnum, SuspicionLevelsEnum) {
 

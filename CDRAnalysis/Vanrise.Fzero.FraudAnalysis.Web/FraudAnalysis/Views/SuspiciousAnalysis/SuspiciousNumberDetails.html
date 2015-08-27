@@ -37,14 +37,27 @@
 
                 <vr-columns colnum="12">
                     <vr-choices selectedindex="selectedGroupKeyIndex" onselectionchanged="groupKeySelectionChanged();">
+                        <vr-choice isselected="isRelatedCaseTabShown">Related Cases</vr-choice>
                         <vr-choice isselected="isNormalCDRTabShown">CDR</vr-choice>
                         <vr-choice isselected="isNumberProfileTabShown">Number Profile</vr-choice>
-                        <vr-choice isselected="isRelatedCaseTabShown">Related Cases</vr-choice>
+                        
                     </vr-choices>
 
                     <div>
                         <vr-row>
                             <vr-columns colnum="12">
+                                <div ng-show="isRelatedCaseTabShown">
+                                    <vr-datagrid datasource="relatedCases" dataretrievalfunction="dataRetrievalFunction_RelatedCases" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onRelatedCasesGridReady">
+
+                                        <vr-datagridcolumn headertext="'Log Date'" field="'LogDate'" type="'Datetime'" widthfactor="20"></vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Status'" field="'StatusName'" widthfactor="20"></vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" widthfactor="20"></vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelName'" widthfactor="20"></vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Analyst'" field="'UserName'" widthfactor="20"></vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Valid Till'" field="'ValidTill'" type="'Datetime'" widthfactor="20"></vr-datagridcolumn>
+
+                                    </vr-datagrid>
+                                </div>
                                 <div ng-show="isNormalCDRTabShown">
                                     <vr-datagrid datasource="normalCDRs" dataretrievalfunction="dataRetrievalFunction_NormalCDRs" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onNormalCDRsGridReady">
                                         <vr-datagridcolumn headertext="'IMSI'" field="'IMSI'" widthfactor="13" ng-if="renderinMobileOnly()">  </vr-datagridcolumn>
@@ -76,18 +89,7 @@
                                 </div>
 
 
-                                <div ng-show="isRelatedCaseTabShown">
-                                    <vr-datagrid datasource="relatedCases" dataretrievalfunction="dataRetrievalFunction_RelatedCases" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onRelatedCasesGridReady">
-
-                                        <vr-datagridcolumn headertext="'Log Date'" field="'LogDate'" type="'Datetime'" widthfactor="20"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Status'" field="'StatusName'" widthfactor="20"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" widthfactor="20"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelName'" widthfactor="20"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Analyst'" field="'UserName'" widthfactor="20"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Valid Till'" field="'ValidTill'" type="'Datetime'" widthfactor="20" ></vr-datagridcolumn>
-
-                                    </vr-datagrid>
-                                </div>
+                               
 
                             </vr-columns>
                         </vr-row>

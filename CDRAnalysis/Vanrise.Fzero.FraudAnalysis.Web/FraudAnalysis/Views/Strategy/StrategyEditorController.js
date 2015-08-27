@@ -1,4 +1,6 @@
-﻿StrategyEditorController.$inject = ['$scope', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'PercentageEnum' ,'SuspicionLevelsEnum', 'HourEnum'];
+﻿"use strict";
+
+StrategyEditorController.$inject = ['$scope', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'PercentageEnum', 'SuspicionLevelsEnum', 'HourEnum'];
 
 function StrategyEditorController($scope, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, PercentageEnum, SuspicionLevelsEnum, HourEnum) {
 

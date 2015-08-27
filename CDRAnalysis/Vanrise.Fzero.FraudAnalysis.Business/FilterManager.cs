@@ -63,9 +63,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         static decimal CalculateRatioCountIncominglowdurationCallsVsCountIncomingCalls(NumberProfile numberProfile)
         {
-            Decimal countInCalls = numberProfile.AggregateValues["CountInCalls"];
+            Decimal countInCalls = numberProfile.AggregateValues["Count In Calls"];
             if (countInCalls != 0)
-                return (numberProfile.AggregateValues["CountInLowDurationCalls"] / countInCalls);
+                return (numberProfile.AggregateValues["Count In Low Duration Calls"] / countInCalls);
             else
                 return 0;
         }
@@ -73,31 +73,31 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         static decimal CalculateRatioIncomingCallsvsOutgoingCalls(NumberProfile numberProfile)
         {
-            Decimal countOutCalls = numberProfile.AggregateValues["CountOutCalls"];
+            Decimal countOutCalls = numberProfile.AggregateValues["Count Out Calls"];
             if (countOutCalls != 0)
-                return (numberProfile.AggregateValues["CountInCalls"] / countOutCalls);
+                return (numberProfile.AggregateValues["Count In Calls"] / countOutCalls);
             else
                 return 0;
         }
 
         static decimal CalculateCountofDistinctDestinations(NumberProfile numberProfile)
         {
-            return numberProfile.AggregateValues["DiffOutputNumb"];
+            return numberProfile.AggregateValues["Diff Output Numbers"];
         }
 
         static decimal CalculateCountOutgoingCalls(NumberProfile numberProfile)
         {
-            return numberProfile.AggregateValues["CountOutCalls"];
+            return numberProfile.AggregateValues["Count Out Calls"];
         }
 
         static decimal CalculateCountofTotalBTSPerMSISDN(NumberProfile numberProfile)
         {
-            return numberProfile.AggregateValues["TotalBTS"];
+            return numberProfile.AggregateValues["Total BTS"];
         }
 
         static decimal CalculateTotalOriginatedVolume(NumberProfile numberProfile)
         {
-            return numberProfile.AggregateValues["TotalOutVolume"];
+            return numberProfile.AggregateValues["Total Out Volume"];
         }
 
         static decimal CalculateCountofTotalIMEIPerMSISDN(NumberProfile numberProfile)
@@ -107,18 +107,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         static decimal CalculateRatioAverageIncomingDurationvsAverageOutgoingDuration(NumberProfile numberProfile)
         {
-            decimal callOutDurAvg = numberProfile.AggregateValues["CallOutDurAvg"];
+            decimal callOutDurAvg = numberProfile.AggregateValues["Call Out Dur Avg"];
             if (callOutDurAvg != 0)
-                return (numberProfile.AggregateValues["CallInDurAvg"] / callOutDurAvg);
+                return (numberProfile.AggregateValues["Call In Dur Avg"] / callOutDurAvg);
             else
                 return 0;
         }
 
         static decimal CalculateRatioOffNetOriginatedCallsvsOnNetOriginatedCalls(NumberProfile numberProfile)
         {
-            decimal countOutOnNets = numberProfile.AggregateValues["CountOutOnNets"];
+            decimal countOutOnNets = numberProfile.AggregateValues["Count Out OnNets"];
             if (countOutOnNets != 0)
-                return (numberProfile.AggregateValues["CountOutOffNets"] / countOutOnNets);
+                return (numberProfile.AggregateValues["Count Out OffNets"] / countOutOnNets);
             else
                 return 0;
         }
@@ -126,36 +126,36 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         static decimal CalculateCountofDailyActiveHours(NumberProfile numberProfile)
         {
           
-                return numberProfile.AggregateValues["CountActiveHours"];
+                return numberProfile.AggregateValues["Count Active Hours"];
            
         }
 
         static decimal CalculateDistinctDestinationofNightCalls(NumberProfile numberProfile)
         {
             
-                return numberProfile.AggregateValues["DiffOutputNumbNightCalls"]; 
+                return numberProfile.AggregateValues["Diff Output Numbers NightCalls"]; 
             
         }
 
         static decimal CalculateVoiceOnlyServiceUsage(NumberProfile numberProfile)
         {
-            return numberProfile.AggregateValues["CountOutSMSs"];
+            return numberProfile.AggregateValues["Count Out SMSs"];
         }
 
         static decimal CalculateRatioofDistinctDestinationvsTotalNumberofCalls(NumberProfile numberProfile)
         {
-            decimal countOutCalls = numberProfile.AggregateValues["CountOutCalls"];
+            decimal countOutCalls = numberProfile.AggregateValues["Count Out Calls"];
             if (countOutCalls != 0)
-                return (numberProfile.AggregateValues["DiffOutputNumb"] / countOutCalls);
+                return (numberProfile.AggregateValues["Diff Output Numbers"] / countOutCalls);
             else
                 return 0;
         }
 
         static decimal CalculateRatioInternationalOriginatedvsOutgoingCalls(NumberProfile numberProfile)
         {
-            decimal countOutCalls = numberProfile.AggregateValues["CountOutCalls"];
+            decimal countOutCalls = numberProfile.AggregateValues["Count Out Calls"];
             if (countOutCalls != 0)
-                return (numberProfile.AggregateValues["CountOutInters"] / countOutCalls);
+                return (numberProfile.AggregateValues["Count Out Inters"] / countOutCalls);
             else
                 return 0;
         }
@@ -163,23 +163,23 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         static decimal CalculateCountofOutgoingDuringPeakHours(NumberProfile numberProfile)
         {
           
-                return numberProfile.AggregateValues["CountOutCallsPeakHours"]; 
+                return numberProfile.AggregateValues["Count Out Calls Peak Hours"]; 
            
         }
 
         static decimal CalculateDataUsage(NumberProfile numberProfile)
         {
-            return numberProfile.AggregateValues["TotalDataVolume"];
+            return numberProfile.AggregateValues["Total Data Volume"];
         }
 
         static decimal CalculateConsecutiveCalls(NumberProfile numberProfile)
         {
-            return numberProfile.AggregateValues["CountConsecutiveCalls"];
+            return numberProfile.AggregateValues["Count Consecutive Calls"];
         }
 
         static decimal CalculateFailConsecutiveCalls(NumberProfile numberProfile)
         {
-            return numberProfile.AggregateValues["CountFailConsecutiveCalls"];
+            return numberProfile.AggregateValues["Count Fail Consecutive Calls"];
         }
 
         

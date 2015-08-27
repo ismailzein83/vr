@@ -1,4 +1,6 @@
-﻿CasesProductivityController.$inject = ['$scope','ReportingAPIService', 'StrategyAPIService', 'UserAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'KindEnum', 'StatusEnum'];
+﻿"use strict";
+
+CasesProductivityController.$inject = ['$scope', 'ReportingAPIService', 'StrategyAPIService', 'UserAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'KindEnum', 'StatusEnum'];
 
 function CasesProductivityController($scope, ReportingAPIService, StrategyAPIService, UserAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, KindEnum, StatusEnum) {
 
@@ -29,13 +31,9 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
 
         $scope.selectedStrategies = [];
 
-        $scope.loadMoreData = function () {
-            return getData();
-        }
 
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
-            return retrieveData();
         };
         $scope.searchClicked = function () {
             return retrieveData();

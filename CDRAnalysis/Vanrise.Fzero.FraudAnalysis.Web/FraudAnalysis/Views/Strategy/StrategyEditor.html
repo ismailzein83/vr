@@ -42,7 +42,7 @@
                                 <div>
                                     <vr-datagrid datasource="strategyFilters" maxheight="400px">
                                         <vr-datagridcolumn headertext="' '" widthfactor="3">     <vr-switch value="dataItem.isSelected"  ng-show="viewScope.showSwitch(dataItem)"></vr-switch>            </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Filter #'" field="'filterId'" widthfactor="3">                   </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Filter #'" field="'filterId'"  widthfactor="3">                   </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Description'" field="'description'" widthfactor="20">                   </vr-datagridcolumn>    
                                         <vr-datagridcolumn headertext="'Threshold'"    > <vr-label>  {{dataItem.label}}</vr-label>   <vr-textbox value="dataItem.threshold" type="number" isrequired ng-if="dataItem.isSelected" title="{{dataItem.toolTip}}" minvalue="{{dataItem.minValue}}" maxvalue="{{dataItem.maxValue}}" decimalprecision="{{dataItem.decimalPrecision}}"></vr-textbox>       </vr-datagridcolumn>
                                     </vr-datagrid>
@@ -114,7 +114,7 @@
                             </div>
                             <vr-datagrid datasource="strategyLevels"  maxheight="400px">
                                 <vr-datagridcolumn headertext="'Suspicion Level'" widthfactor="20"> <vr-form name="formSuspicionLevel">    <vr-select datasource="viewScope.suspicionLevels" datatextfield="name" datavaluefield="id" ng-init="dataItem.suspicionLevel = (dataItem.suspicionLevel == undefined ? viewScope.suspicionLevels[0] : dataItem.suspicionLevel)" selectedvalues="dataItem.suspicionLevel" isrequired widthfactor="20" columnindex="0"></vr-select>       </vr-datagridcolumn>
-                                <vr-datagridcolumn ng-repeat="filter in strategyFilters" widthfactor="20" ng-show="filter.isSelected" columnindex="$index + 1" headertext="'Filter: ' + filter.filterId" tag="filter">
+                                <vr-datagridcolumn ng-repeat="filter in strategyFilters" widthfactor="20" ng-show="filter.isSelected" columnindex="$index + 1" headertext="'Filter: ' + filter.filterId" headerdescription="filter.description" tag="filter">
                                     <div ng-init="filterIndex = viewScope.strategyFilters.indexOf(colDef.tag)" style="width:100%">
                                         <vr-switch value="dataItem.StrategyLevelCriterias[filterIndex].isSelected" style="width:50%"></vr-switch>
                                         <vr-select style="width:50%" ng-show="dataItem.StrategyLevelCriterias[filterIndex].isSelected" datasource="viewScope.percentages" datatextfield="description" datavaluefield="value" selectedvalues="dataItem.StrategyLevelCriterias[filterIndex].percentage"></vr-select>
@@ -125,10 +125,6 @@
                             </vr-datagrid>
 
                         </div>
-
-
-
-
 
                     </div>
 

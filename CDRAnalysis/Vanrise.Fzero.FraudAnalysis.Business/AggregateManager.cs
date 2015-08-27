@@ -403,7 +403,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 1, 
-                Name = "CountOutCalls", 
+                Name = "Count Out Calls", 
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
@@ -411,7 +411,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 2,
-                Name = "CountInCalls",
+                Name = "Count In Calls",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
@@ -419,7 +419,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 3,
-                Name = "TotalDataVolume",
+                Name = "Total Data Volume",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
@@ -427,7 +427,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 4,
-                Name = "CountOutFails",
+                Name = "Count Out Fails",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
@@ -435,7 +435,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 5,
-                Name = "CountInFails",
+                Name = "Count In Fails",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
@@ -444,7 +444,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 6,
-                Name = "CountOutSMSs",
+                Name = "Count Out SMSs",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
@@ -453,14 +453,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 7,
-                Name = "CountOutOffNets",
+                Name = "Count Out OffNets",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 8,
-                Name = "CountOutOnNets",
+                Name = "Count Out OnNets",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
@@ -468,7 +468,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 9,
-                Name = "CountOutInters",
+                Name = "Count Out Inters",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
@@ -476,7 +476,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 10,
-                Name = "CountInInters",
+                Name = "Count In Inters",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
@@ -485,14 +485,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 11,
-                Name = "CallOutDurAvg",
+                Name = "Call Out Dur Avg",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 12,
-                Name = "CallInDurAvg",
+                Name = "Call In Dur Avg",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
@@ -500,7 +500,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 13,
-                Name = "TotalOutVolume",
+                Name = "Total Out Volume",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
@@ -511,14 +511,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 14,
-                Name = "TotalInVolume",
+                Name = "Total In Volume",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 15,
-                Name = "TotalIMEI8",
+                Name = "Total IMEI",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
@@ -526,7 +526,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 16,
-                Name = "TotalBTS",
+                Name = "Total BTS",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
@@ -534,7 +534,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 17,
-                Name = "DiffOutputNumb",
+                Name = "Diff Output Numbers",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
@@ -542,7 +542,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 18,
-                Name = "DiffInputNumbers",
+                Name = "Diff Input Numbers",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
@@ -550,7 +550,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 19,
-                Name = "CountInOffNets",
+                Name = "Count In OffNets",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
@@ -558,7 +558,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 20,
-                Name = "CountInOnNets",
+                Name = "Count In OnNets",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
@@ -566,7 +566,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 21,
-                Name = "DiffOutputNumbNightCalls",
+                Name = "Diff Output Numbers NightCalls",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
@@ -574,7 +574,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 22,
-                Name = "CountOutCallsPeakHours",
+                Name = "Count Out Calls Peak Hours",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
@@ -582,7 +582,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 23,
-                Name = "CountConsecutiveCalls",
+                Name = "Count Consecutive Calls",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
@@ -592,7 +592,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 24,
-                Name = "CountActiveHours",
+                Name = "Count Active Hours",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
@@ -601,7 +601,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 25,
-                Name = "CountFailConsecutiveCalls",
+                Name = "Count Fail Consecutive Calls",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 
@@ -609,7 +609,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo()
             {
                 Id = 26,
-                Name = "CountInLowDurationCalls",
+                Name = "Count In Low Duration Calls",
                 OperatorTypeAllowed = Fzero.Entities.CommonEnums.OperatorType.Mobile
             });
 

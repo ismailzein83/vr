@@ -1,4 +1,6 @@
-﻿StrategyManagementController.$inject = ['$scope', 'StrategyAPIService', 'UserAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'KindEnum', 'StatusEnum'];
+﻿"use strict";
+
+StrategyManagementController.$inject = ['$scope', 'StrategyAPIService', 'UserAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'KindEnum', 'StatusEnum'];
 
 function StrategyManagementController($scope, StrategyAPIService, UserAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, KindEnum, StatusEnum) {
 
@@ -15,9 +17,6 @@ function StrategyManagementController($scope, StrategyAPIService, UserAPIService
 
         $scope.strategies = [];
 
-        $scope.loadMoreData = function () {
-            return getData();
-        }
 
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;

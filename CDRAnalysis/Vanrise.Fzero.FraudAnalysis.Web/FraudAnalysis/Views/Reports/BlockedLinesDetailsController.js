@@ -1,4 +1,6 @@
-﻿BlockedLinesDetailsController.$inject = ['$scope', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+﻿"use strict";
+
+BlockedLinesDetailsController.$inject = ['$scope', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
 function BlockedLinesDetailsController($scope,  $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
 

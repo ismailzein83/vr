@@ -1,4 +1,6 @@
-﻿DashboardController.$inject = ['$scope', 'DashboardAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService','DataSourceImportedBatchAPIService','Integration_MappingResultEnum'];
+﻿"use strict";
+
+DashboardController.$inject = ['$scope', 'DashboardAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'DataSourceImportedBatchAPIService', 'Integration_MappingResultEnum'];
 
 function DashboardController($scope, DashboardAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, DataSourceImportedBatchAPIService, Integration_MappingResultEnum) {
 

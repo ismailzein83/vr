@@ -1,4 +1,6 @@
-﻿SuspiciousNumberDetailsController.$inject = ['$scope', 'StrategyAPIService','OperatorTypeEnum', 'NormalCDRAPIService', 'SuspicionAnalysisAPIService', 'NumberProfileAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CaseManagementAPIService', 'CaseStatusEnum'];
+﻿"use strict";
+
+SuspiciousNumberDetailsController.$inject = ['$scope', 'StrategyAPIService', 'OperatorTypeEnum', 'NormalCDRAPIService', 'SuspicionAnalysisAPIService', 'NumberProfileAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CaseManagementAPIService', 'CaseStatusEnum'];
 
 function SuspiciousNumberDetailsController($scope, StrategyAPIService, OperatorTypeEnum, NormalCDRAPIService, SuspicionAnalysisAPIService, NumberProfileAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CaseManagementAPIService, CaseStatusEnum) {
     var normalCDRGridAPI;
@@ -55,12 +57,13 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, OperatorT
         $scope.relatedCases = [];
         $scope.relatedNumbers = [];
         $scope.operatorTypes = [];
-        
-        SuspiciousNumberDetailsController.isNormalCDRTabShown = true;
-        SuspiciousNumberDetailsController.isNumberProfileTabShown = false;
-        SuspiciousNumberDetailsController.isRelatedCaseTabShown = false;
 
-       
+        SuspiciousNumberDetailsController.isRelatedCaseTabShown = true;
+        SuspiciousNumberDetailsController.isNormalCDRTabShown = false;
+        SuspiciousNumberDetailsController.isNumberProfileTabShown = false;
+
+
+
 
         angular.forEach(OperatorTypeEnum, function (itm) {
             $scope.operatorTypes.push({ value: itm.value, name: itm.name })
@@ -70,8 +73,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, OperatorT
         SuspicionAnalysisAPIService.GetOperatorType()
          .then(function (response) {
              defaultOperatorType = UtilsService.getItemByVal($scope.operatorTypes, response, "value")
-             console.log('defaultOperatorType')
-             console.log(defaultOperatorType)
+
              $scope.renderinMobileOnly = function () {
                  if (defaultOperatorType.value == OperatorTypeEnum.Mobile.value)
                      return true
@@ -92,7 +94,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, OperatorT
          });
 
 
-        
+
 
 
         $scope.onNormalCDRsGridReady = function (api) {
@@ -154,19 +156,18 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, OperatorT
 
             if ($scope.selectedGroupKeyIndex != undefined) {
 
-                if ($scope.selectedGroupKeyIndex == 0 && !isNormalCDRDataLoaded) {
-                    isNormalCDRDataLoaded = true;
-                    return retrieveData_NormalCDRs();
-                }
-                else if ($scope.selectedGroupKeyIndex == 1 && !isNumberProfileDataLoaded) {
-                    isNumberProfileDataLoaded = true;
-                    return retrieveData_NumberProfiles();
-                }
-                else if ($scope.selectedGroupKeyIndex == 2 && !isRelatedCaseDataLoaded) {
+                if ($scope.selectedGroupKeyIndex == 0 && !isRelatedCaseDataLoaded) {
                     isRelatedCaseDataLoaded = true;
                     return retrieveData_RelatedCases();
                 }
-
+                else if ($scope.selectedGroupKeyIndex == 1 && !isNormalCDRDataLoaded) {
+                    isNormalCDRDataLoaded = true;
+                    return retrieveData_NormalCDRs();
+                }
+                else if ($scope.selectedGroupKeyIndex == 2 && !isNumberProfileDataLoaded) {
+                    isNumberProfileDataLoaded = true;
+                    return retrieveData_NumberProfiles();
+                }
             }
         };
 
@@ -204,8 +205,8 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, OperatorT
             });
         }
 
-       
-        
+
+
 
 
     }
@@ -297,8 +298,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, OperatorT
     }
 
     function retrieveData_NormalCDRs() {
-        if (normalCDRGridAPI != undefined)
-        {
+        if (normalCDRGridAPI != undefined) {
             var query = {
                 FromDate: $scope.fromDate,
                 ToDate: $scope.toDate,
@@ -308,7 +308,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, OperatorT
 
             return normalCDRGridAPI.retrieveData(query);
         }
-        
+
     }
 
     function retrieveData_NumberProfiles() {
@@ -331,7 +331,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, OperatorT
         return relatedCaseGridAPI.retrieveData(query);
     }
 
-   
+
 
 
 }
