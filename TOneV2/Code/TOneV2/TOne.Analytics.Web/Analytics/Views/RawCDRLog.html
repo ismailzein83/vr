@@ -1,10 +1,15 @@
 ﻿<vr-panel ng-controller="Analytics_RawCDRLogController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
-            <vr-choices selectedindex="selectedConnectionIndex" onselectionchanged="onSelectionChanged()">
-                <vr-choice isselected="basicSelected">Basic</vr-choice>
-                <vr-choice isselected="advancedSelected">Advanced</vr-choice>
-            </vr-choices>
+            <vr-columns colnum="fullrow">
+                <div style="padding : 0px 5px">
+                    <vr-choices selectedindex="selectedConnectionIndex" onselectionchanged="onSelectionChanged()">
+                        <vr-choice isselected="basicSelected">Basic</vr-choice>
+                        <vr-choice isselected="advancedSelected">Advanced</vr-choice>
+                    </vr-choices>
+                </div>
+
+            </vr-columns>
             <vr-row removeline ng-show="basicSelected">
                 <vr-columns width="normal">
                     <vr-select datasource="switches" datatextfield="Name" datavaluefield="SwitchId" selectedvalues="selectedSwitches" label="Switches" ismultipleselection></vr-select>
@@ -39,10 +44,10 @@
                     <vr-textbox value="nRecords" label="Limit Results to"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-datetimepicker type="datetime" label="From" value="fromDate" isrequired></vr-datetimepicker>
+                    <vr-datetimepicker type="dateTime" label="From" value="fromDate" isrequired></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-datetimepicker type="datetime" label="To" value="toDate" isrequired></vr-datetimepicker>
+                    <vr-datetimepicker type="dateTime" label="To" value="toDate" isrequired></vr-datetimepicker>
                 </vr-columns>
 
 
