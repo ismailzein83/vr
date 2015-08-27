@@ -97,7 +97,7 @@
                         console.log(attrs.hint);
                     }
                     var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
-                            + '<textarea  ng-readonly="ctrl.readOnly" id="mainInput" ng-style="ctrl.getInputeStyle()" ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()"rows="3" class="form-control" style="width: 100%; resize: none;" >'
+                            + '<textarea  ng-readonly="ctrl.readOnly" id="mainInput" ng-style="ctrl.getInputeStyle()" ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()"rows="3" class="form-control" style="width: 100%; resize: none;" ></textarea>'
                             + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" html="true" style="color:#337AB7"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
                         + '</div>';
                 
