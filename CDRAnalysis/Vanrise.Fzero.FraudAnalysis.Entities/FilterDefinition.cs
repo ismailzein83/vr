@@ -5,7 +5,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
     public enum CriteriaCompareOperator { GreaterThanorEqual, LessThanorEqual }
 
-    public class CriteriaDefinition
+    public class FilterDefinition
     {
         public bool ExcludeHourly { get; set; }
 

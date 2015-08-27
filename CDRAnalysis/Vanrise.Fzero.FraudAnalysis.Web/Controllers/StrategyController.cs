@@ -60,7 +60,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
 
         [HttpGet]
-        public List<CriteriaName> GetFilters()
+        public List<FilterDefinitionInfo> GetFilters()
         {
             FilterManager manager = new FilterManager();
 
@@ -69,10 +69,10 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
 
         [HttpGet]
-        public List<string> GetAggregates()
+        public List<AggregateDefinitionInfo> GetAggregates()
         {
             AggregateManager manager = new AggregateManager();
-            return manager.GetAggregateNames();
+            return manager.GetAggregateDefinitionsInfo();
         }
 
 

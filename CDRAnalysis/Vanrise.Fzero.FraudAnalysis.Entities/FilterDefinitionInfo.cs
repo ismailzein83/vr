@@ -3,7 +3,7 @@ using Vanrise.Fzero.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class CriteriaName
+    public class FilterDefinitionInfo
     {
         public int FilterId { get; set; }
 

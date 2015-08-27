@@ -32,7 +32,7 @@ namespace Vanrise.Fzero.Business
 
         #region Public Methods
 
-        public CommonEnums.OperatorType GetOperatorType()
+        public static CommonEnums.OperatorType GetOperatorType()
         {
             return (CommonEnums.OperatorType)Enum.ToObject(typeof(CommonEnums.OperatorType), GetIntValue(ConfigParameterName.OperatorType));
         }
@@ -44,32 +44,13 @@ namespace Vanrise.Fzero.Business
         delegate bool TryParseDelegate<T>(string value, out T result);
 
 
-        private int GetIntValue(ConfigParameterName prmName)
+        private static int GetIntValue(ConfigParameterName prmName)
         {
             return GetTypedValue<int>(prmName, int.TryParse);
         }
 
-        private bool GetBoolValue(ConfigParameterName prmName)
-        {
-            return GetTypedValue<bool>(prmName, bool.TryParse);
-        }
 
-        private Decimal GetDecimalValue(ConfigParameterName prmName)
-        {
-            return GetTypedValue<Decimal>(prmName, Decimal.TryParse);
-        }
-
-        private DateTime GetDateTimeValue(ConfigParameterName prmName)
-        {
-            return GetTypedValue<DateTime>(prmName, DateTime.TryParse);
-        }
-
-        private TimeSpan GetTimeSpanValue(ConfigParameterName prmName)
-        {
-            return GetTypedValue<TimeSpan>(prmName, TimeSpan.TryParse);
-        }
-
-        private T GetTypedValue<T>(ConfigParameterName prmName, TryParseDelegate<T> tryParse)
+        private static T GetTypedValue<T>(ConfigParameterName prmName, TryParseDelegate<T> tryParse)
         {
             string valAsString = GetParameterValueFromConfig(prmName);
             if (valAsString == null)
@@ -85,7 +66,7 @@ namespace Vanrise.Fzero.Business
             return typedValue;
         }
 
-        string GetParameterValueFromConfig(ConfigParameterName prmName)
+        static string  GetParameterValueFromConfig(ConfigParameterName prmName)
         {
             return ConfigurationManager.AppSettings[prmName.ToString()];
         }

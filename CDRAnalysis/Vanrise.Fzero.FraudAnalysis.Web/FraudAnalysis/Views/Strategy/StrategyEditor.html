@@ -112,8 +112,8 @@
                             <div>
                                 <vr-button type="Add" data-onclick="AddSuspicionLevel" standalone></vr-button>
                             </div>
-                            <vr-datagrid datasource="strategyLevels" menuactions="rulesGridMenuActions" maxheight="400px">
-                                <vr-datagridcolumn headertext="'Suspicion Level'" widthfactor="20">  <vr-select datasource="viewScope.suspicionLevels" datatextfield="name" datavaluefield="id" ng-init="dataItem.suspicionLevel = (dataItem.suspicionLevel == undefined ? viewScope.suspicionLevels[0] : dataItem.suspicionLevel)" selectedvalues="dataItem.suspicionLevel" isrequired widthfactor="20" columnindex="0"></vr-select>       </vr-datagridcolumn>
+                            <vr-datagrid datasource="strategyLevels"  maxheight="400px">
+                                <vr-datagridcolumn headertext="'Suspicion Level'" widthfactor="20"> <vr-form name="formSuspicionLevel">    <vr-select datasource="viewScope.suspicionLevels" datatextfield="name" datavaluefield="id" ng-init="dataItem.suspicionLevel = (dataItem.suspicionLevel == undefined ? viewScope.suspicionLevels[0] : dataItem.suspicionLevel)" selectedvalues="dataItem.suspicionLevel" isrequired widthfactor="20" columnindex="0"></vr-select>       </vr-datagridcolumn>
                                 <vr-datagridcolumn ng-repeat="filter in strategyFilters" widthfactor="20" ng-show="filter.isSelected" columnindex="$index + 1" headertext="'Filter: ' + filter.filterId" tag="filter">
                                     <div ng-init="filterIndex = viewScope.strategyFilters.indexOf(colDef.tag)" style="width:100%">
                                         <vr-switch value="dataItem.StrategyLevelCriterias[filterIndex].isSelected" style="width:50%"></vr-switch>
@@ -121,6 +121,7 @@
                                     </div>
 
                                 </vr-datagridcolumn>
+                                <vr-datagridcolumn  widthfactor="10"><span class="hand-cursor glyphicon glyphicon-remove" ng-click="viewScope.deleteRule(dataItem)"></span> </vr-datagridcolumn>
                             </vr-datagrid>
 
                         </div>

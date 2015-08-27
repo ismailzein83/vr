@@ -100,20 +100,16 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             $scope.modalContext.closeModal()
         };
 
-        defineMenuActions();
+        $scope.deleteRule = function (rule) {
+            var index = $scope.strategyLevels.indexOf(rule);
+            $scope.strategyLevels.splice(index, 1);
+        }
+
     }
 
-    function defineMenuActions() {
-        $scope.rulesGridMenuActions = [{
-            name: "Delete",
-            clicked: deleteRule
-        }];
-    }
+   
 
-    function deleteRule(rule) {
-        var index = $scope.strategyLevels.indexOf(rule);
-        $scope.strategyLevels.splice(index, 1);
-    }
+   
 
 
     function load() {

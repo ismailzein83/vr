@@ -57,13 +57,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountCaseType.cs" />
+    <Compile Include="AggregateDefinitionInfo.cs" />
     <Compile Include="AggregateDefinition.cs" />
     <Compile Include="Aggregates\AverageAggregate.cs" />
     <Compile Include="Aggregates\FailedConsecutiveAggregate.cs" />
     <Compile Include="Batches\CDRBatch.cs" />
     <Compile Include="LinesDetected.cs" />
     <Compile Include="BlockedLines.cs" />
-    <Compile Include="CriteriaName.cs" />
+    <Compile Include="FilterDefinitionInfo.cs" />
     <Compile Include="ResultQuery\LinesDetectedResultQuery.cs" />
     <Compile Include="ResultQuery\BlockedLinesResultQuery.cs" />
     <Compile Include="ResultQuery\DashboardResultQuery.cs" />
@@ -83,7 +84,7 @@
     <Compile Include="FraudResult.cs" />
     <Compile Include="Aggregates\SumAggregate.cs" />
     <Compile Include="Aggregates\DistinctCountAggregate.cs" />
-    <Compile Include="CriteriaDefinition.cs" />
+    <Compile Include="FilterDefinition.cs" />
     <Compile Include="Predefined\Enums.cs" />
     <Compile Include="Aggregates\IAggregate.cs" />
     <Compile Include="Batches\NumberCriteriaBatch.cs" />

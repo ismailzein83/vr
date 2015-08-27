@@ -60,6 +60,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, OperatorT
         SuspiciousNumberDetailsController.isNumberProfileTabShown = false;
         SuspiciousNumberDetailsController.isRelatedCaseTabShown = false;
 
+       
 
         angular.forEach(OperatorTypeEnum, function (itm) {
             $scope.operatorTypes.push({ value: itm.value, name: itm.name })
@@ -69,9 +70,29 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, OperatorT
         SuspicionAnalysisAPIService.GetOperatorType()
          .then(function (response) {
              defaultOperatorType = UtilsService.getItemByVal($scope.operatorTypes, response, "value")
+             console.log('defaultOperatorType')
+             console.log(defaultOperatorType)
+             $scope.renderinMobileOnly = function () {
+                 if (defaultOperatorType.value == OperatorTypeEnum.Mobile.value)
+                     return true
+                 else
+                     return false
+                 return;
+             }
+
+
+             $scope.renderinPSTNOnly = function () {
+                 if (defaultOperatorType.value == OperatorTypeEnum.PSTN.value)
+                     return true
+                 else
+                     return false
+                 return;
+             }
+
          });
 
 
+        
 
 
         $scope.onNormalCDRsGridReady = function (api) {
@@ -184,22 +205,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, OperatorT
         }
 
        
-        $scope.renderinMobileOnly = function () {
-            console.log('defaultOperatorType.value')
-            console.log(defaultOperatorType.value)
-            console.log('OperatorTypeEnum.Mobile.value')
-            console.log(OperatorTypeEnum.Mobile.value)
-            return defaultOperatorType.value == OperatorTypeEnum.Mobile.value;
-        }
-
-
-        $scope.renderinPSTNOnly = function () {
-            console.log('defaultOperatorType.value')
-            console.log(defaultOperatorType.value)
-            console.log('OperatorTypeEnum.Mobile.value')
-            console.log(OperatorTypeEnum.Mobile.value)
-            return defaultOperatorType.value == OperatorTypeEnum.PSTN.value;
-        }
+        
 
 
     }
@@ -268,7 +274,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, OperatorT
     function loadAggregates() {
         return StrategyAPIService.GetAggregates().then(function (response) {
             angular.forEach(response, function (itm) {
-                $scope.aggregateDefinitions.push({ name: itm });
+                $scope.aggregateDefinitions.push({ name: itm.Name });
             });
         });
     }
