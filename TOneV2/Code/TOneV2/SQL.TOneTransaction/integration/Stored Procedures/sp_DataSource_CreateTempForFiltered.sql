@@ -14,6 +14,7 @@ BEGIN
 			SELECT ds.[ID],
 			ds.[Name],
 			ds.[adapterID],
+			ds.[AdapterState],
 			ad.[Info],
 			ds.[TaskId],
 			ds.[Settings]

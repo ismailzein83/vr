@@ -3,12 +3,12 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [integration].[sp_DataSource_UpdateSettings]
+CREATE PROCEDURE [integration].[sp_DataSource_UpdateAdapterState]
 	@DataSourceID int,
-	@Settings varchar(max)
+	@AdapterState varchar(1000)
 AS
 BEGIN
 	Update integration.DataSource 
-	Set	Settings = @Settings
+	Set	AdapterState = @AdapterState
 	Where ID = @DataSourceID
 END
