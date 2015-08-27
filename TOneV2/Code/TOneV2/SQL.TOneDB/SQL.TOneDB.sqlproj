@@ -233,5 +233,7 @@
     <Build Include="dbo\Tables\Billing_Stats.sql" />
     <Build Include="dbo\Tables\AMU_Carrier.sql" />
     <Build Include="dbo\Tables\MCT.sql" />
+    <Build Include="dbo\Tables\CurrencyExchangeRate.sql" />
+    <Build Include="dbo\Tables\Currency.sql" />
   </ItemGroup>
 </Project>
