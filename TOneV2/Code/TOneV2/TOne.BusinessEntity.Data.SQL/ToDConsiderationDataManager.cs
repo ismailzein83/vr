@@ -121,7 +121,7 @@ namespace TOne.BusinessEntity.Data.SQL
             return RetrieveData(input, (tempTableName) =>
             {
                 string zoneIds = null;
-                if (input.Query.ZoneIds.Count() > 0)
+                if (input.Query.ZoneIds != null && input.Query.ZoneIds.Count() > 0)
                     zoneIds = string.Join<int>(",", input.Query.ZoneIds);
                 ExecuteNonQuerySP("BEntity.sp_CustomersToDConsideration_CreateTempForFiltered", tempTableName, zoneIds , input.Query.CustomerId, input.Query.EffectiveOn);
 
