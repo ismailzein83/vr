@@ -330,7 +330,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Aggregation = new ConsecutiveAggregate(
                       (cdr, strategy) =>
                       {
-                          return (cdr.CallType == Enums.CallType.OutgoingVoiceCall);
+                          return (cdr.CallType == Enums.CallType.OutgoingVoiceCall && cdr.DurationInSeconds > 0);
                       }
                       , _strategies
                   )
