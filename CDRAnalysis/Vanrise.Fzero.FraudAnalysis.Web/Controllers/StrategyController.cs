@@ -24,11 +24,9 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         public object GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyResultQuery> input)
         {
 
-            UserController userManager = new UserController();
-
             StrategyManager manager = new StrategyManager();
                                    
-            return GetWebResponse(input, manager.GetFilteredStrategies(input, userManager.GetUsers()));
+            return GetWebResponse(input, manager.GetFilteredStrategies(input));
         }
 
 

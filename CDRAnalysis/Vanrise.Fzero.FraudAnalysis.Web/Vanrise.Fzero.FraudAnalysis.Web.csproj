@@ -144,9 +144,9 @@
     <Compile Include="Controllers\NumberProfileController.cs" />
     <Compile Include="Controllers\NormalCDRController.cs" />
     <Compile Include="Controllers\ReportingController.cs" />
-    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\SuspicionAnalysisController.cs" />
     <Compile Include="Controllers\StrategyController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
