@@ -43,6 +43,7 @@ namespace TOne.BusinessEntity.Business
             }
             return zoneName;
         }
+        
         public string GetSwitchName(int switchId)
         {
             TOneCacheManager cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<TOneCacheManager>();
@@ -58,7 +59,6 @@ namespace TOne.BusinessEntity.Business
             }
             return switchName;
         }
-
 
         public string GetCodeGroupName(int codeGroupId)
         {
