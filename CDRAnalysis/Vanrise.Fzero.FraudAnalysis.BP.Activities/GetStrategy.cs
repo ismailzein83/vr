@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Vanrise.Common;
 using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Entities;
+using Vanrise.BusinessProcess;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
@@ -27,7 +28,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             {
                 Strategy s = new StrategyManager().GetStrategy(strategyId);
                 if (!s.IsEnabled)
-                    Console.WriteLine("Strategy named: {0} was not loaded because it is disabled", s.Name);
+                    ContextExtensions.WriteTrackingMessage(context, LogEntryType.Warning, "Strategy named: {0} was not loaded because it is disabled", s.Name);
                 else
                     strategies.Add(s);
             }

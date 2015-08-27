@@ -70,8 +70,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(LoadNumberProfilesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            if (inputArgument.Strategies.Count > 0)
-            {
                 IPredefinedDataManager predefinedDataManager = FraudDataManagerFactory.GetDataManager<IPredefinedDataManager>();
                 IStrategyDataManager strategyManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
                 INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
@@ -133,11 +131,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs from Database to Memory");
                 //}
 
-            }
-            else
-            {
-                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Error, "No Strategies Loaded in this Workflow");
-            }
            
         }
 
