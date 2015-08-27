@@ -113,6 +113,11 @@
     <Compile Include="DailyReportQuery.cs" />
     <Compile Include="DestinationVolumeTrafficResult.cs" />
     <Compile Include="DestnationVolumeTrafficItem.cs" />
+    <Compile Include="Generic\AnalyticGroupField.cs" />
+    <Compile Include="Generic\AnalyticGroupFieldValue.cs" />
+    <Compile Include="Generic\AnalyticMeasureField.cs" />
+    <Compile Include="Generic\AnalyticQuery.cs" />
+    <Compile Include="Generic\AnalyticRecord.cs" />
     <Compile Include="HourlyReport.cs" />
     <Compile Include="HourlyReportInput.cs" />
     <Compile Include="InOutVolumeTraffic.cs" />

@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TOne.Analytics.Data.SQL
+{
+    public class AnalyticGroupFieldConfig
+    {
+        public string IdColumn { get; set; }
+
+        public string NameColumn { get; set; }
+
+        public List<string> JoinStatements { get; set; }
+    }
+}

@@ -59,6 +59,10 @@
     <Compile Include="CarrierZoneSummaryStatsCommon.cs" />
     <Compile Include="CDRDataManager.cs" />
     <Compile Include="DailyReportDataManager.cs" />
+    <Compile Include="GenericAnalyticDataManager.cs" />
+    <Compile Include="Generic\AnalyticGroupFieldConfig.cs" />
+    <Compile Include="Generic\AnalyticMeasureFieldConfig.cs" />
+    <Compile Include="Generic\GenericAnalyticConfigManager.cs" />
     <Compile Include="HourlyReportDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AnalyticsDataManager.cs" />
