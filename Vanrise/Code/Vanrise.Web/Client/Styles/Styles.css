@@ -1471,7 +1471,7 @@ input.ui-grid-filter-input[type="text"] {
     padding-right:2px !important;
 } 
 .vr-pager-container{
-    border: 1px  #D0D0D0 solid  !important;
+    border-color: transparent;
     border-top: transparent !important;
     /*background-color:#8dc641;*/
 }
@@ -1573,6 +1573,10 @@ input.ui-grid-filter-input[type="text"] {
        background-color: #6DA279 !important;
        color: #fff !important;
        font-weight: normal !important;
+    }
+
+    .vr-choices-filter{
+        margin:0px 5px ;
     }
 
 /**************END VR-TABS*********/

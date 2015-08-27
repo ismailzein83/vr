@@ -4,15 +4,13 @@
         <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
             <vr-row removeline>
                 <vr-columns colnum="fullrow">
-                    <div style="padding : 0px 5px">
-                        <vr-choices selectedindex="selectedFilternIndex">
-                            <vr-choice isselected="basicSelected">Basic</vr-choice>
-                            <vr-choice isselected="advancedSelected">Advanced</vr-choice>
-                        </vr-choices>
-                    </div>
-                    
+                    <vr-choices-filter selectedindex="selectedFilternIndex">
+                        <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
+                        <vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
+                    </vr-choices-filter>
+
                 </vr-columns>
-            </vr-row>              
+            </vr-row>
             <vr-row removeline>
                 <vr-columns colnum="fullrow" ng-show="basicSelected">
                     <vr-row>
@@ -26,7 +24,7 @@
                         </vr-columns>
 
                         <vr-columns width="normal">
-                            <vr-datetimepicker type="dateTime"  value="fromDate" label="From" isrequired customvalidate="customvalidateTestFrom"></vr-datetimepicker>
+                            <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired customvalidate="customvalidateTestFrom"></vr-datetimepicker>
                         </vr-columns>
                         <vr-columns width="normal">
                             <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired customvalidate="customvalidateTestTo"></vr-datetimepicker>
@@ -44,7 +42,7 @@
                                        selectedvalues="selectedPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
                         </vr-columns>
                         <vr-columns width="normal">
-                            <vr-datetimepicker type="dateTime"  value="fromDate" label="From" isrequired customvalidate="customvalidateTestFrom"></vr-datetimepicker>
+                            <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired customvalidate="customvalidateTestFrom"></vr-datetimepicker>
                         </vr-columns>
                         <vr-columns width="normal">
                             <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired customvalidate="customvalidateTestTo"></vr-datetimepicker>

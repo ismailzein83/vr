@@ -202,6 +202,8 @@
     <Content Include="Client\Javascripts\Directives\DataGrid\vr-htmlcompiler-directive.js" />
     <Content Include="Client\Javascripts\Directives\DirectiveWrapper\vr-directivewrapper-directive.js" />
     <Content Include="Client\Javascripts\Directives\Disabled\vr-disabled-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\ChoiceFilter\vr-choice-filter-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\ChoiceFilter\vr-choices-filter-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Choices\vr-choice-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Choices\vr-choices-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\CodeEditor\vr-codeeditor-directive.js" />
