@@ -131,7 +131,8 @@
     <Compile Include="Controllers\RateAnalysisController.cs" />
     <Compile Include="Controllers\SupplierPricelistsController.cs" />
     <Compile Include="Controllers\SupplierTariffController.cs" />
-    <Compile Include="Controllers\TODController.cs" />
+    <Compile Include="Controllers\SupplierTODController.cs" />
+    <Compile Include="Controllers\CustomerTODController.cs" />
     <Compile Include="Controllers\AccountManagerController.cs" />
     <Compile Include="Controllers\BusinessEntityController.cs" />
     <Compile Include="Controllers\CarrierAccountConnectionController.cs" />
@@ -176,7 +177,8 @@
     <Content Include="BusinessEntity\Services\APIServices\RateAnalysisAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\SupplierPricelistsAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\SupplierTariffAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\TODAPIService.js" />
+    <Content Include="BusinessEntity\Services\APIServices\CustomerTODAPIService .js" />
+    <Content Include="BusinessEntity\Services\APIServices\SupplierTODAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\ProfileAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\SwitchManagmentAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\ZoneAPIService.js" />

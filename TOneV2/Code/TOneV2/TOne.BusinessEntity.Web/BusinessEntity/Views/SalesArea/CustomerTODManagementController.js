@@ -1,5 +1,5 @@
-﻿CustomerTODManagementController.$inject = ['$scope', 'CarrierAccountAPIService', 'ZonesService', 'VRModalService', 'CarrierTypeEnum', 'TODAPIService'];
-function CustomerTODManagementController($scope, CarrierAccountAPIService, ZonesService, VRModalService, CarrierTypeEnum, TODAPIService) {
+﻿CustomerTODManagementController.$inject = ['$scope', 'CarrierAccountAPIService', 'ZonesService', 'VRModalService', 'CarrierTypeEnum', 'CustomerTODAPIService'];
+function CustomerTODManagementController($scope, CarrierAccountAPIService, ZonesService, VRModalService, CarrierTypeEnum, CustomerTODAPIService) {
     var gridApi;
    
     function load() {
@@ -26,7 +26,7 @@ function CustomerTODManagementController($scope, CarrierAccountAPIService, Zones
         };
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            return TODAPIService.GetFilteredCustomerTOD(dataRetrievalInput)
+            return CustomerTODAPIService.GetFilteredCustomerTOD(dataRetrievalInput)
             .then(function (response) {
                 onResponseReady(response);
             });

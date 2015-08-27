@@ -9,7 +9,7 @@ using TOne.BusinessEntity.Entities;
 
 namespace TOne.BusinessEntity.Web.Controllers
 {
-    public class TODController : Vanrise.Web.Base.BaseAPIController
+    public class CustomerTODController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpPost]
         public object GetCutomerTODFromTempTable(Vanrise.Entities.DataRetrievalInput<TODQuery> input)
@@ -19,13 +19,5 @@ namespace TOne.BusinessEntity.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredCustomerTOD(input));
         }
 
-        [HttpPost]
-        public object GetSupplierTODFromTempTable(Vanrise.Entities.DataRetrievalInput<TODQuery> input)
-        {
-
-            TODManager manager = new TODManager();
-            return GetWebResponse(input, manager.GetFilteredSupplierTOD(input));
-        }
-       
     }
 }
