@@ -46,7 +46,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
-        public BigResult<BTSHighValueCases> GetBTSHighValueCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
+        public BigResult<BTSHighValueCases> GetTop10BTSHighValue(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
@@ -97,7 +97,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         private BTSHighValueCases BTSHighValueCasesMapper(IDataReader reader)
         {
             var bTSHighValueCases = new BTSHighValueCases();
-            bTSHighValueCases.Volume = (int)reader["Volume"];
+            bTSHighValueCases.Volume = (decimal)reader["Volume"];
             bTSHighValueCases.BTS_Id = GetReaderValue<int?>(reader, "BTS_Id");
             return bTSHighValueCases;
         }

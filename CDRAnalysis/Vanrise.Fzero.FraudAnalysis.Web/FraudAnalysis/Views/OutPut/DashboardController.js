@@ -76,7 +76,7 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
             retrieveData_BTSCases()
             retrieveData_DailyVolumeLooses()
             retrieveData_ImportedBatches()
-            retrieveData_BTSHighValueCases
+            retrieveData_BTSHighValueCases()
         };
 
         $scope.dataRetrievalFunction_CaseSummary = function (dataRetrievalInput, onResponseReady) {
@@ -96,7 +96,7 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
         }
 
         $scope.dataRetrievalFunction_BTSHighValueCases = function (dataRetrievalInput, onResponseReady) {
-            return DashboardAPIService.GetBTSHighValueCases(dataRetrievalInput)
+            return DashboardAPIService.GetTop10BTSHighValue(dataRetrievalInput)
             .then(function (response) {
                 onResponseReady(response);
             })
@@ -144,8 +144,8 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
         return mainGridAPI_BTSCases.retrieveData(BuildSearchQuery());
     }
 
-    function retrieveData_BTSHighValueCase() {
-        return mainGridAPI_BTSHighValueCases(BuildSearchQuery());
+    function retrieveData_BTSHighValueCases() {
+        return mainGridAPI_BTSHighValueCases.retrieveData(BuildSearchQuery());
     }
 
     function retrieveData_DailyVolumeLooses() {

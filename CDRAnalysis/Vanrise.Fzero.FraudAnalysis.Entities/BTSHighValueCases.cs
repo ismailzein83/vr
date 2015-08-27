@@ -6,7 +6,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     {
         public int? BTS_Id { get; set; }
 
-        public int Volume { get; set; }
+        public decimal Volume { get; set; }
 
     }
 

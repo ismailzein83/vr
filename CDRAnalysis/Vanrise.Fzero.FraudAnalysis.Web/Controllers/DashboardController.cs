@@ -33,10 +33,10 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         }
 
         [HttpPost]
-        public object GetBTSHighValueCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
+        public object GetTop10BTSHighValue(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
         {
             DashboardManager manager = new DashboardManager();
-            return GetWebResponse(input, manager.GetBTSHighValueCases(input));
+            return GetWebResponse(input, manager.GetTop10BTSHighValue(input));
         }
 
         [HttpPost]
