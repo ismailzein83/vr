@@ -41,6 +41,7 @@ namespace TOne.Analytics.Data.SQL
 
         private static void FillGroupFieldsConfig()
         {
+            s_AllGroupFieldsConfig = new Dictionary<AnalyticGroupField, AnalyticGroupFieldConfig>();
             s_AllGroupFieldsConfig.Add(AnalyticGroupField.OwnZone,
                 new AnalyticGroupFieldConfig
                 {
@@ -61,6 +62,7 @@ namespace TOne.Analytics.Data.SQL
 
         private static void FillMeasureFieldsConfig()
         {
+            s_AllMeasureFieldsConfig = new Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig>();
             throw new NotImplementedException();
         }
 
