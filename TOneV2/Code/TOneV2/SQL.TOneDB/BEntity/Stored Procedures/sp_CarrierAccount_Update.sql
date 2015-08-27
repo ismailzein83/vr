@@ -14,7 +14,8 @@ CREATE PROCEDURE [BEntity].[sp_CarrierAccount_Update]
 @ProfileId smallint,
 @ProfileName nvarchar(200),
 @RoutingStatus tinyint,
-@SupplierPaymentType tinyint
+@SupplierPaymentType tinyint,
+@CarrierMaskId int
 )
 AS
 BEGIN
@@ -30,7 +31,8 @@ SET AccountType = @AccountType,
 	NameSuffix = @NameSuffix,
 	ProfileID = @ProfileId,
 	RoutingStatus = @RoutingStatus,
-	SupplierPaymentType = @SupplierPaymentType
+	SupplierPaymentType = @SupplierPaymentType,
+	CarrierMaskId = @CarrierMaskId
 WHERE CarrierAccountID = @CarrierAccountId
 
 UPDATE CarrierProfile

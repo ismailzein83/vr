@@ -30,7 +30,8 @@ CREATE PROCEDURE [BEntity].[sp_CarrierProfile_Update]
 @TechnicalEmail nvarchar(256),
 @CommercialContact nvarchar(200),
 @CommercialEmail nvarchar(250),
-@SMSPhoneNumber varchar(50)
+@SMSPhoneNumber varchar(50),
+@FileID BIGINT
 )
 AS
 BEGIN
@@ -59,7 +60,8 @@ BEGIN
 			TechnicalEmail = @TechnicalEmail,
 			CommercialContact = @CommercialContact,
 			CommercialEmail = @CommercialEmail,
-			SMSPhoneNumber = @SMSPhoneNumber
+			SMSPhoneNumber = @SMSPhoneNumber,
+			FileID = @FileID
 	WHERE ProfileID = @ProfileId
 
 END

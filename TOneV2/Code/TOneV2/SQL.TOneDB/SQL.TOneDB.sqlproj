@@ -128,7 +128,6 @@
     <Build Include="LCR\Stored Procedures\sp_RouteRuleDefinition_Insert.sql" />
     <Build Include="LCR\Stored Procedures\sp_RouteRuleDefinition_GetByRouteRuleId.sql" />
     <Build Include="LCR\Stored Procedures\sp_RouteRuleDefinition_GetAll.sql" />
-    <Build Include="BEntity\Stored Procedures\sp_Zone_GetFilteredBySupplierId.sql" />
     <Build Include="BEntity\Stored Procedures\sp_Zone_GetByZonesIds.sql" />
     <Build Include="LCR\User Defined Types\IntIDType.sql" />
     <Build Include="BEntity\User Defined Types\IntIDType.sql" />
@@ -188,7 +187,6 @@
     <Build Include="BEntity\Stored Procedures\sp_Switch_GetName.sql" />
     <Build Include="BEntity\Stored Procedures\sp_PriceList_GetByCarrierAccountID.sql" />
     <Build Include="BEntity\Stored Procedures\sp_CodeGroup_GetName.sql" />
-    <Build Include="BEntity\Stored Procedures\sp_CarrierGroup_GetCarrierGroup.sql" />
     <Build Include="Analytics\Stored Procedures\SP_BillingRep_GetZoneSummaryDetailed.sql" />
     <Build Include="Analytics\Stored Procedures\SP_BillingRep_GetZoneSummary.sql" />
     <Build Include="Analytics\Stored Procedures\SP_BillingRep_GetZoneProfits.sql" />
@@ -208,7 +206,6 @@
     <Build Include="Analytics\Stored Procedures\SP_BillingRep_GetCarrierLostReport.sql" />
     <Build Include="Security\main.sql" />
     <Build Include="Analytics\Functions\ParseStringList.sql" />
-    <Build Include="BEntity\Stored Procedures\sp_CarrierGroup_GetAllCarrierGroup.sql" />
     <Build Include="BEntity\Tables\AccountManager_4.sql" />
     <Build Include="BEntity\Stored Procedures\sp_FlaggedService_GetServiceFlag_4.sql" />
     <Build Include="BEntity\Stored Procedures\sp_Countries_GetAll_4.sql" />
@@ -219,18 +216,22 @@
     <Build Include="BEntity\Stored Procedures\sp_CarrierProfile_Insert_4.sql" />
     <Build Include="BEntity\Stored Procedures\sp_CarrierProfile_GetByProfileId_4.sql" />
     <Build Include="BEntity\Stored Procedures\SP_CarrierProfile_CreateTempForFiltered_4.sql" />
-    <Build Include="BEntity\Stored Procedures\sp_CarrierGroup_GetCarriers_4.sql" />
     <Build Include="BEntity\Stored Procedures\sp_CarrierGroup_GetAll_4.sql" />
     <Build Include="BEntity\Stored Procedures\SP_CarrierAccount_CreateTempForFiltered_4.sql" />
     <Build Include="BEntity\Stored Procedures\sp_AccountManager_GetCarriers_4.sql" />
     <Build Include="BEntity\Stored Procedures\sp_AccountManager_GetAssignedCarriers_4.sql" />
     <Build Include="BEntity\Stored Procedures\sp_AccountManager_CreateTempForAssignedCarriers_4.sql" />
-    <Build Include="BEntity\Stored Procedures\sp_AccountManager_CreateTempForAccountManagerCarriers_4.sql" />
     <Build Include="BEntity\Stored Procedures\sp_AccountManager_AssignCarriers_4.sql" />
     <Build Include="Analytics\Stored Procedures\SP_BillingStats_GetTrafficVolumes_4.sql" />
     <Build Include="BEntity\User Defined Types\UpdatedAccountManagerCarriersType_4.sql" />
     <Build Include="BEntity\User Defined Types\MemberIdType_4.sql" />
     <Build Include="dbo\Tables\CarrierAccount.sql" />
     <Build Include="dbo\Tables\CarrierGroup.sql" />
+    <Build Include="BEntity\Tables\CarrierMask.sql" />
+    <Build Include="BEntity\Tables\CarrierGroupMember.sql" />
+    <Build Include="BEntity\Tables\CarrierGroup.sql" />
+    <Build Include="dbo\Tables\Billing_Stats.sql" />
+    <Build Include="dbo\Tables\AMU_Carrier.sql" />
+    <Build Include="dbo\Tables\MCT.sql" />
   </ItemGroup>
 </Project>

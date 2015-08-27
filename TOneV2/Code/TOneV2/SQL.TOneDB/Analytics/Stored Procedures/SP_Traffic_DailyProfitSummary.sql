@@ -5,7 +5,7 @@
 with Recompile
 	AS 
 
-	SET @todate = dateadd(dd,1,@todate)
+	--SET @todate = dateadd(dd,1,@todate)
 
 	DECLARE @ExchangeRates TABLE(
 		Currency VARCHAR(3),
@@ -28,7 +28,7 @@ with Recompile
 		    FROM Billing_Stats bs  WITH(NOLOCK,INDEX(IX_Billing_Stats_Date))
 		    LEFT JOIN @ExchangeRates ERC ON ERC.Currency = bs.Cost_Currency AND ERC.Date = bs.CallDate			
             LEFT JOIN @ExchangeRates ERS ON ERS.Currency = bs.Sale_Currency AND ERS.Date = bs.CallDate
-            WHERE bs.calldate >=@fromdate AND bs.calldate<@ToDate
+            WHERE bs.calldate =@fromdate --AND bs.calldate<@ToDate
 			GROUP BY 
 			    bs.calldate
 			--ORDER BY CAST(bs.calldate AS varchar(11)) Asc	

@@ -8,7 +8,7 @@ WITH recompile
 AS
 BEGIN
 
-SET @ToDateTime=DATEADD(dd,1,@todatetime)
+--SET @ToDateTime=DATEADD(dd,1,@todatetime)
 	DECLARE @Results TABLE(
 			CarrierAccountID VARCHAR(5),
 			NameSuffix VARCHAR(100),
@@ -24,15 +24,15 @@ SET @ToDateTime=DATEADD(dd,1,@todatetime)
 		SELECT	TS.SupplierID As CarrierAccountID,
 				CA.NameSuffix AS NameSuffix,
 				CP.Name AS ProfileName,
-			Sum(TS.NumberOfCalls) as Attempts,
+			Sum(TS.Attempts) as Attempts,
 			Sum(TS.DurationsInSeconds/60.) as DurationsInMinutes     
 		FROM TrafficStats TS WITH(NOLOCK)
 		JOIN CarrierAccount AS CA WITH (NOLOCK) ON TS.supplierid = CA.CarrierAccountID
-		JOIN CarrierProfile AS CP ON CA.ProfileID = CP.ProfileID
+		JOIN CarrierProfile AS CP ON Cp.ProfileID = CA.ProfileID
      WHERE 
 				SupplierID IS NOT NULL AND
 				FirstCDRAttempt BETWEEN @FromDateTime AND @ToDateTime
-				AND CA.RepresentsASwitch = 'N' 
+			--	AND CA.RepresentsASwitch = 'N' 
 			Group By SupplierID, CA.NameSuffix, CP.Name
 			ORDER BY Sum(DurationsInSeconds/60.) DESC
 			

@@ -58,9 +58,13 @@
     [AutomatedImportSubjectCode] VARCHAR (50)   NULL,
     [IsLCREnabled]               CHAR (1)       CONSTRAINT [DF_CarrierAccount_IsLCREnabled] DEFAULT ('N') NULL,
     [DS_ID_auto]                 INT            IDENTITY (1, 1) NOT NULL,
+    [CarrierMaskId]              INT            NULL,
     CONSTRAINT [PK_CarrierAccount] PRIMARY KEY CLUSTERED ([CarrierAccountID] ASC),
-    CONSTRAINT [FK_CarrierAccount_CarrierGroup] FOREIGN KEY ([CarrierGroupID]) REFERENCES [dbo].[CarrierGroup] ([CarrierGroupID]) ON DELETE SET NULL
+    CONSTRAINT [FK_CarrierAccount_CarrierGroup] FOREIGN KEY ([CarrierGroupID]) REFERENCES [dbo].[CarrierGroup] ([CarrierGroupID]) ON DELETE SET NULL,
+    CONSTRAINT [FK_CarrierAccount_CarrierMask] FOREIGN KEY ([CarrierMaskId]) REFERENCES [BEntity].[CarrierMask] ([ID])
 );
+
+
 
 
 GO

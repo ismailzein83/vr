@@ -31,6 +31,7 @@ CREATE PROCEDURE [BEntity].[sp_CarrierProfile_Insert]
 @CommercialContact nvarchar(200),
 @CommercialEmail nvarchar(250),
 @SMSPhoneNumber varchar(50),
+@FileID BIGINT,
 @ProfileId smallint OUTPUT
 )
 AS
@@ -60,7 +61,8 @@ BEGIN
 			TechnicalEmail,
 			CommercialContact,
 			CommercialEmail,
-			SMSPhoneNumber)
+			SMSPhoneNumber,
+			FileID)
 			VALUES
 			( @Name,
 			  @CompanyName,
@@ -86,7 +88,8 @@ BEGIN
 			  @TechnicalEmail,
 			  @CommercialContact,
 			  @CommercialEmail,
-			  @SMSPhoneNumber
+			  @SMSPhoneNumber,
+			  @FileID
 			)
 set @ProfileId = scope_Identity()
 END

@@ -14,7 +14,7 @@ CREATE PROCEDURE [Analytics].[SP_Traffic_TopCustomers]
 WITH recompile 
 AS
 BEGIN
-SET @ToDateTime=DATEADD(dd,1,@ToDateTime)
+--SET @ToDateTime=DATEADD(dd,1,@ToDateTime)
 	DECLARE @Results TABLE(
 			CarrierAccountID VARCHAR(5),
 			NameSuffix VARCHAR(100),

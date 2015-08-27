@@ -40,7 +40,8 @@ BEGIN
 				cp.CommercialContact,
 				cp.CommercialEmail,
 				cp.SMSPhoneNumber,
-				ca.AccountsCount
+				ca.AccountsCount,
+				cp.FileID
 	FROM CarrierProfile cp
 	LEFT JOIN profileAccountsCount ca on ca.ProfileID = cp.ProfileID
 	WHERE cp.ProfileID = @ProfileID

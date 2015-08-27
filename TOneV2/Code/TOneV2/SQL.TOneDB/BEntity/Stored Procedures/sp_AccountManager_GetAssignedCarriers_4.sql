@@ -14,5 +14,5 @@ BEGIN
 	FROM BEntity.AccountManager am
 	INNER JOIN dbo.CarrierAccount ca ON am.CarrierAccountId = ca.CarrierAccountID
 	INNER JOIN dbo.CarrierProfile cp ON ca.ProfileID = cp.ProfileID
-	WHERE am.UserId IN (SELECT Id FROM @UserIds) AND (@CarrierType = 0 OR am.RelationType = @CarrierType)
+	WHERE am.UserId IN (SELECT Id FROM @UserIds) AND (@CarrierType = 1 OR am.RelationType = @CarrierType)
 END

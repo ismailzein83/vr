@@ -20,12 +20,13 @@ SELECT ca.CarrierAccountId,
 	ca.SupplierPaymentType,
 	ca.NameSuffix,
 	ca.CarrierGroupID,
-	cg.CarrierGroupName,
+	cg.Name as CarrierGroupName,
+	ca.NominalCapacityInE1s,
 	ca.CarrierGroups
 FROM CarrierAccount ca
 		INNER JOIN CarrierProfile cp on ca.ProfileID = cp.ProfileID
 		LEFT OUTER JOIN
-                   CarrierGroup cg ON ca.CarrierGroupID = cg.CarrierGroupID
+                   BEntity.CarrierGroup cg ON ca.CarrierGroupID = cg.ID
                       
 			WHERE 
 				ca.CarrierAccountID = @CarrierAccountId

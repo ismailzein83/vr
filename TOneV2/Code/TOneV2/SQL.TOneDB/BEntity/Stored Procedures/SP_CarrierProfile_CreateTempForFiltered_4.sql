@@ -46,7 +46,8 @@ BEGIN
 				cp.CommercialContact,
 				cp.CommercialEmail,
 				cp.SMSPhoneNumber,
-				ca.AccountsCount
+				ca.AccountsCount,
+				cp.FileID
 			INTO #Result
 			FROM CarrierProfile cp
 			LEFT JOIN profileAccountsCount ca ON cp.ProfileID = ca.ProfileID
