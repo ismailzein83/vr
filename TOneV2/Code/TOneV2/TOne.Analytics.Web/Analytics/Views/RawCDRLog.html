@@ -1,7 +1,11 @@
 ﻿<vr-panel ng-controller="Analytics_RawCDRLogController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
-            <vr-row removeline>
+            <vr-choices selectedindex="selectedConnectionIndex" onselectionchanged="onSelectionChanged()">
+                <vr-choice isselected="basicSelected">Basic</vr-choice>
+                <vr-choice isselected="advancedSelected">Advanced</vr-choice>
+            </vr-choices>
+            <vr-row removeline ng-show="basicSelected">
                 <vr-columns width="normal">
                     <vr-select datasource="switches" datatextfield="Name" datavaluefield="SwitchId" selectedvalues="selectedSwitches" label="Switches" ismultipleselection></vr-select>
                 </vr-columns>
@@ -16,8 +20,8 @@
                         <vr-choice isselected="inSelected">CDPN In</vr-choice>
                         <vr-choice isselected="outSelected">CDPN Out</vr-choice>
                     </vr-choices>
-                    <vr-textbox ng-show="inSelected" value="inCDPN" ></vr-textbox>
-                    <vr-textbox ng-show="outSelected" value="outCDPN" ></vr-textbox>
+                    <vr-textbox ng-show="inSelected" value="inCDPN"></vr-textbox>
+                    <vr-textbox ng-show="outSelected" value="outCDPN"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-textbox value="cgpn" label="CGPN"></vr-textbox>
@@ -40,15 +44,15 @@
                 <vr-columns width="normal">
                     <vr-datetimepicker type="datetime" label="To" value="toDate" isrequired></vr-datetimepicker>
                 </vr-columns>
-              
+
 
             </vr-row>
             <vr-row>
-                <vr-columns width="fullrow" >
+                <vr-columns width="fullrow" ng-show="advancedSelected">
                     <div style="display:inline-block;width:calc(100% - 19px)">
                         <vr-label>Where Condition</vr-label>
                         <textarea rows="3" class="form-control" ng-model="whereCondtion" style="width:100%;resize:none;display:inline"></textarea>
-                        
+
                     </div>
                     <span class="hand-cursor glyphicon glyphicon-info-sign" aria-hidden="true" style="top:-30px" ng-click="onInfoClick()"></span>
                 </vr-columns>
