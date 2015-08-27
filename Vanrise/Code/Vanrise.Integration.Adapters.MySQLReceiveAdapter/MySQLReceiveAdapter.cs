@@ -8,26 +8,35 @@ namespace Vanrise.Integration.Adapters.MSQLReceiveAdapter
 
     public class MySQLReceiveAdapter : BaseReceiveAdapter
     {
-        public override void ImportData(int dataSourceId, BaseAdapterArgument argument, Func<IImportedData, bool> receiveData)
+        public override void ImportData(int dataSourceId, BaseAdapterState adapterState, BaseAdapterArgument argument, Func<IImportedData, bool> receiveData)
         {
             DBAdapterArgument dbAdapterArgument = argument as DBAdapterArgument;
+            DBAdapterState dbAdapterState = adapterState as DBAdapterState;
 
-            dbAdapterArgument.Query = dbAdapterArgument.Query.ToLower().Replace("{startindex}", dbAdapterArgument.StartIndex);
+            DBReaderImportedData data = null;
 
-            using (var connection = new MySqlConnection(dbAdapterArgument.ConnectionString))
+            try
             {
-                connection.Open();
-                var command = new MySqlCommand(dbAdapterArgument.Query, connection);
-                DBReaderImportedData data = new DBReaderImportedData();
-                data.Reader = command.ExecuteReader();
-                data.StartIndex = dbAdapterArgument.StartIndex;
-                //dbAdapterArgument.Description = data.Description;
-                if (receiveData(data))
+
+                dbAdapterArgument.Query = dbAdapterArgument.Query.ToLower().Replace("{lastimportedid}", dbAdapterState.LastImportedId);
+
+                using (var connection = new MySqlConnection(dbAdapterArgument.ConnectionString))
                 {
-                    this.UpdateStartIndex(dataSourceId, data);
+                    connection.Open();
+                    var command = new MySqlCommand(dbAdapterArgument.Query, connection);
+                    data = new DBReaderImportedData();
+                    data.Reader = command.ExecuteReader();
+
+                    if (receiveData(data))
+                    {
+                        this.UpdateLastImportedId(dataSourceId, data, dbAdapterState);
+                    }
                 }
             }
-
+            catch (Exception ex)
+            {
+                LogError("An error occurred in My SQL Adapter while importing data. Exception Details: {0}", ex.Message);
+            }
         }
 
         public bool IsConnectionAvailable(string connectionString)
@@ -47,12 +56,11 @@ namespace Vanrise.Integration.Adapters.MSQLReceiveAdapter
             return true;
         }
 
-        private void UpdateStartIndex(int dataSourceId, DBReaderImportedData data)
+        private void UpdateLastImportedId(int dataSourceId, DBReaderImportedData data, DBAdapterState dbAdapterState)
         {
             Vanrise.Integration.Business.DataSourceManager manager = new Business.DataSourceManager();
-            DataSourceSettings settings = manager.GetDataSourceSettings(dataSourceId);
-            ((DBAdapterArgument)settings.AdapterArgument).StartIndex = data.StartIndex;
-            manager.UpdateDataSourceSettings(dataSourceId, settings);
+            dbAdapterState.LastImportedId = data.LastImportedId;
+            manager.UpdateAdapterState(dataSourceId, dbAdapterState);
         }
 
     }

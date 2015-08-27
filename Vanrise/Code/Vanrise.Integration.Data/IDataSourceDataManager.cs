@@ -24,8 +24,6 @@ namespace Vanrise.Integration.Data
 
         bool UpdateTaskId(int dataSourceId, int taskId);
 
-        Vanrise.Integration.Entities.DataSourceSettings GetDataSourceSettings(int dataSourceId);
-
-        bool UpdateDataSourceSettings(int dataSourceId, Entities.DataSourceSettings settings);
+        bool UpdateAdapterState(int dataSourceId, Entities.BaseAdapterState adapterState);
     }
 }

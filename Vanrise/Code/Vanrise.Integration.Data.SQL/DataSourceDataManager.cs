@@ -48,16 +48,17 @@ namespace Vanrise.Integration.Data.SQL
         {
             object dataSourceId;
 
-            int recordesEffected = ExecuteNonQuerySP("integration.sp_DataSource_Insert", out dataSourceId, dataSourceObject.AdapterTypeId, dataSourceObject.Name, dataSourceObject.TaskId,
-                Common.Serializer.Serialize(dataSourceObject.Settings));
+            int recordesEffected = ExecuteNonQuerySP("integration.sp_DataSource_Insert", out dataSourceId, dataSourceObject.Name, dataSourceObject.AdapterTypeId,
+                Common.Serializer.Serialize(dataSourceObject.AdapterState), dataSourceObject.TaskId, Common.Serializer.Serialize(dataSourceObject.Settings));
+            
             insertedId = (int)dataSourceId;
             return (recordesEffected > 0);
         }
 
         public bool UpdateDataSource(Entities.DataSource dataSourceObject)
         {
-            int recordesEffected = ExecuteNonQuerySP("integration.sp_DataSource_Update", dataSourceObject.DataSourceId, dataSourceObject.AdapterTypeId, dataSourceObject.Name,
-                Common.Serializer.Serialize(dataSourceObject.Settings));
+            int recordesEffected = ExecuteNonQuerySP("integration.sp_DataSource_Update", dataSourceObject.DataSourceId, dataSourceObject.Name, dataSourceObject.AdapterTypeId,
+                Common.Serializer.Serialize(dataSourceObject.AdapterState), Common.Serializer.Serialize(dataSourceObject.Settings));
             return (recordesEffected > 0);
         }
 
@@ -73,15 +74,9 @@ namespace Vanrise.Integration.Data.SQL
             return (recordesEffected > 0);
         }
 
-        public Entities.DataSourceSettings GetDataSourceSettings(int dataSourceId)
+        public bool UpdateAdapterState(int dataSourceId, Entities.BaseAdapterState adapterState)
         {
-            object result = ExecuteScalarSP("integration.sp_DataSource_GetSettings", dataSourceId);
-            return Common.Serializer.Deserialize<Vanrise.Integration.Entities.DataSourceSettings>(result.ToString());
-        }
-
-        public bool UpdateDataSourceSettings(int dataSourceId, Entities.DataSourceSettings settings)
-        {
-            int recordsEffected = ExecuteNonQuerySP("integration.sp_DataSource_UpdateSettings", dataSourceId, Common.Serializer.Serialize(settings));
+            int recordsEffected = ExecuteNonQuerySP("integration.sp_DataSource_UpdateAdapterState", dataSourceId, Common.Serializer.Serialize(adapterState));
             return recordsEffected > 0;
         }
 
@@ -93,6 +88,7 @@ namespace Vanrise.Integration.Data.SQL
                 Name = reader["Name"] as string,
                 AdapterTypeId = (int)reader["AdapterID"],
                 AdapterInfo = Common.Serializer.Deserialize<Vanrise.Integration.Entities.AdapterTypeInfo>(reader["Info"] as string),
+                AdapterState = reader["AdapterState"] != DBNull.Value ? Common.Serializer.Deserialize<Vanrise.Integration.Entities.BaseAdapterState>(reader["AdapterState"] as string): null,
                 TaskId = (int)reader["TaskId"],
                 Settings = Common.Serializer.Deserialize<Vanrise.Integration.Entities.DataSourceSettings>(reader["Settings"] as string)
             };

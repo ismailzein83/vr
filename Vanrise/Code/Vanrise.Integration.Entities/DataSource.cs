@@ -16,6 +16,8 @@ namespace Vanrise.Integration.Entities
 
         public AdapterTypeInfo AdapterInfo { get; set; }
 
+        public BaseAdapterState AdapterState { get; set; }
+
         public int TaskId { get; set; }
 
         public DataSourceSettings Settings { get; set; }

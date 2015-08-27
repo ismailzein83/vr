@@ -8,19 +8,23 @@ function DBReceiveAdapterTemplateController($scope, DataSourceAPIService) {
     function defineScope() {
 
         $scope.connectionString = undefined;
-        $scope.description = undefined;
         $scope.query = undefined;
-        $scope.startIndex = undefined;
+        $scope.lastImportedId = 0;
 
-
-        $scope.dataSourceAdapter.getData = function () {
+        $scope.dataSourceAdapter.argument.getData = function () {
 
             return {
                 $type: "Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments.DBAdapterArgument, Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments",
                 ConnectionString: $scope.connectionString,
-                Description: $scope.description,
-                Query: $scope.query,
-                StartIndex: $scope.startIndex
+                Query: $scope.query
+            };
+        };
+
+        $scope.dataSourceAdapter.adapterState.getData = function () {
+
+            return {
+                $type: "Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments.DBAdapterState, Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments",
+                LastImportedId: $scope.lastImportedId
             };
         };
 
@@ -32,14 +36,18 @@ function DBReceiveAdapterTemplateController($scope, DataSourceAPIService) {
     var isFormLoaded;
     function loadForm() {
 
-        if ($scope.dataSourceAdapter.data == undefined || isFormLoaded)
+        if ($scope.dataSourceAdapter.argument.data == undefined || $scope.dataSourceAdapter.adapterState.data == undefined || isFormLoaded)
             return;
-        var data = $scope.dataSourceAdapter.data;
-        if (data != null) {
-            $scope.connectionString = data.ConnectionString;
-            $scope.description = data.Description;
-            $scope.query = data.Query;
-            $scope.startIndex = data.StartIndex;
+        var argumentData = $scope.dataSourceAdapter.argument.data;
+        if (argumentData != null) {
+            $scope.connectionString = argumentData.ConnectionString;
+            $scope.query = argumentData.Query;
+        }
+
+        var adapterState = $scope.dataSourceAdapter.adapterState.data;
+        if (adapterState != null)
+        {
+            $scope.lastImportedId = adapterState.LastImportedId;
         }
 
         isFormLoaded = true;

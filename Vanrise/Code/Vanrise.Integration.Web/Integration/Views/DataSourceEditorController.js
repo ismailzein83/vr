@@ -66,6 +66,8 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
         $scope.adapterTypes = [];
         $scope.executionFlows = [];
         $scope.dataSourceAdapter = {};
+        $scope.dataSourceAdapter.argument = {};
+        $scope.dataSourceAdapter.adapterState = {};
 
         $scope.schedulerTaskTrigger = {};
         $scope.timeTriggerTemplateURL = undefined;
@@ -91,7 +93,7 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
     function getDataSourceToEdit() {
         return UtilsService.waitMultipleAsyncOperations([getDataSource]).then(function () {
             getDataSourceTask();
-
+            
         }).catch(function (error) {
             VRNotificationService.notifyException(error, $scope);
             $scope.isGettingData = false;
@@ -141,8 +143,9 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
             DataSourceId: (dataSourceId != null) ? dataSourceId : 0,
             Name: $scope.dataSourceName,
             AdapterTypeId: $scope.selectedAdapterType.AdapterTypeId,
+            AdapterState: $scope.dataSourceAdapter.adapterState.getData(),
             TaskId: (taskId != null) ? taskId : 0,
-            Settings: { AdapterArgument: $scope.dataSourceAdapter.getData(), MapperCustomCode: $scope.customCode, ExecutionFlowId: $scope.selectedExecutionFlow.ExecutionFlowId }
+            Settings: { AdapterArgument: $scope.dataSourceAdapter.argument.getData(), MapperCustomCode: $scope.customCode, ExecutionFlowId: $scope.selectedExecutionFlow.ExecutionFlowId }
         };
 
         var taskData = {
@@ -158,23 +161,24 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
         return { DataSourceData: dataSourceData, TaskData: taskData };
     }
 
-    function fillScopeFromDataSourceObj(dataSourceObject) {
-        $scope.selectedAdapterType = UtilsService.getItemByVal($scope.adapterTypes, dataSourceObject.DataSourceData.AdapterTypeId, "AdapterTypeId");
-        $scope.dataSourceName = dataSourceObject.DataSourceData.Name;
+    function fillScopeFromDataSourceObj(dataSourceObj) {
+        $scope.selectedAdapterType = UtilsService.getItemByVal($scope.adapterTypes, dataSourceObj.DataSourceData.AdapterTypeId, "AdapterTypeId");
+        $scope.dataSourceName = dataSourceObj.DataSourceData.Name;
 
-        $scope.dataSourceAdapter.data = dataSourceObject.DataSourceData.Settings.AdapterArgument;
+        $scope.dataSourceAdapter.argument.data = dataSourceObj.DataSourceData.Settings.AdapterArgument;
+        $scope.dataSourceAdapter.adapterState.data = dataSourceObj.DataSourceData.AdapterState;
         if ($scope.dataSourceAdapter.loadTemplateData != undefined)
             $scope.dataSourceAdapter.loadTemplateData();
 
-        $scope.customCode = dataSourceObject.DataSourceData.Settings.MapperCustomCode;
-        $scope.isEnabled = dataSourceObject.TaskData.IsEnabled;
+        $scope.customCode = dataSourceObj.DataSourceData.Settings.MapperCustomCode;
+        $scope.isEnabled = dataSourceObj.TaskData.IsEnabled;
         
 
-        $scope.schedulerTaskTrigger.data = dataSourceObject.TaskData.TaskSettings.TaskTriggerArgument;
+        $scope.schedulerTaskTrigger.data = dataSourceObj.TaskData.TaskSettings.TaskTriggerArgument;
         if ($scope.schedulerTaskTrigger.loadTemplateData != undefined)
             $scope.schedulerTaskTrigger.loadTemplateData();
 
-        $scope.selectedExecutionFlow = UtilsService.getItemByVal($scope.executionFlows, dataSourceObject.DataSourceData.Settings.ExecutionFlowId, "ExecutionFlowId");
+        $scope.selectedExecutionFlow = UtilsService.getItemByVal($scope.executionFlows, dataSourceObj.DataSourceData.Settings.ExecutionFlowId, "ExecutionFlowId");
     }
 
     function insertDataSource() {

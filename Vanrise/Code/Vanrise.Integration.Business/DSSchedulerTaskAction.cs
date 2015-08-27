@@ -54,7 +54,7 @@ namespace Vanrise.Integration.Business
 
             BaseReceiveAdapter adapter = (BaseReceiveAdapter)Activator.CreateInstance(Type.GetType(dataSource.AdapterInfo.FQTN));
             adapter.SetLogger(_logger);
-            adapter.ImportData(dataSource.DataSourceId, dataSource.Settings.AdapterArgument, data =>
+            adapter.ImportData(dataSource.DataSourceId, dataSource.AdapterState, dataSource.Settings.AdapterArgument, data =>
             {
                 ImportedBatchEntry importedBatchEntry = new ImportedBatchEntry();
                 importedBatchEntry.BatchSize = data.BatchSize;
@@ -65,6 +65,8 @@ namespace Vanrise.Integration.Business
                 _logger.WriteVerbose("Executing the custom code written for the mapper");
                 MappedBatchItemsToEnqueue outputItems = new MappedBatchItemsToEnqueue();
                 MappingOutput outputResult = this.ExecuteCustomCode(dataSource.DataSourceId, dataSource.Settings.MapperCustomCode, data, outputItems);
+
+                data.OnDisposed();
 
                 importedBatchEntry.Result = outputResult.Result;
                 importedBatchEntry.MapperMessage = outputResult.Message;
@@ -97,7 +99,6 @@ namespace Vanrise.Integration.Business
                 {
                     _logger.WriteWarning("No mapped items to qneueue, the written custom code should specify at least one output item to enqueue items to");
                 }
-                data.OnDisposed();
 
                 importedBatchEntry.QueueItemsIds = string.Join(",", queueItemsIds);
                 importedBatchEntry.RecordsCount = totalRecordsCount;

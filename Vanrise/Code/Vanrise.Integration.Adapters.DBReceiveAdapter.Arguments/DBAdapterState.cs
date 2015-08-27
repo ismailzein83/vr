@@ -7,10 +7,8 @@ using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments
 {
-    public class DBAdapterArgument : BaseAdapterArgument
+    public class DBAdapterState : BaseAdapterState
     {
-        public string ConnectionString { get; set; }
-
-        public string Query { get; set; }
+        public string LastImportedId { get; set; }
     }
 }

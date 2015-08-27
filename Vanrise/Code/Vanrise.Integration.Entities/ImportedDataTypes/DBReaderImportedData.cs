@@ -11,7 +11,7 @@ namespace Vanrise.Integration.Entities
     {
         public IDataReader Reader { get; set; }
 
-        public string StartIndex { get; set; }
+        public string LastImportedId { get; set; }
 
         public string Description
         {
@@ -28,7 +28,10 @@ namespace Vanrise.Integration.Entities
         public void OnDisposed()
         {
             if (this.Reader != null && !Reader.IsClosed)
+            {
                 Reader.Close();
+                Reader.Dispose();
+            }
         }
     }
 }

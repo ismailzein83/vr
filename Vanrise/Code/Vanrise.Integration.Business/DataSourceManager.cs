@@ -160,16 +160,10 @@ namespace Vanrise.Integration.Business
             return manager.GetAll();
         }
 
-        public Vanrise.Integration.Entities.DataSourceSettings GetDataSourceSettings(int dataSourceId)
+        public bool UpdateAdapterState(int dataSourceId, Vanrise.Integration.Entities.BaseAdapterState adapterState)
         {
             IDataSourceDataManager manager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
-            return manager.GetDataSourceSettings(dataSourceId);
-        }
-
-        public bool UpdateDataSourceSettings(int dataSourceId, Vanrise.Integration.Entities.DataSourceSettings settings)
-        {
-            IDataSourceDataManager manager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
-            return manager.UpdateDataSourceSettings(dataSourceId, settings);
+            return manager.UpdateAdapterState(dataSourceId, adapterState);
         }
     }
 }

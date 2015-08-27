@@ -11,7 +11,7 @@ function FileReceiveAdapterTemplateController($scope, UtilsService) {
 
         $scope.actionsAfterImport = [{ value: 0, name: 'Rename' }, { value: 1, name: 'Delete' }, { value: 2, name: 'Move' }];
 
-        $scope.dataSourceAdapter.getData = function () {
+        $scope.dataSourceAdapter.argument.getData = function () {
             return {
                 $type: "Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments.FileAdapterArgument, Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments",
                 Extension: $scope.extension,
@@ -19,6 +19,10 @@ function FileReceiveAdapterTemplateController($scope, UtilsService) {
                 DirectorytoMoveFile: $scope.directorytoMoveFile,
                 ActionAfterImport: $scope.selectedAction.value
             };
+        };
+
+        $scope.dataSourceAdapter.adapterState.getData = function () {
+            return null;
         };
 
         $scope.dataSourceAdapter.loadTemplateData = function () {
@@ -29,10 +33,10 @@ function FileReceiveAdapterTemplateController($scope, UtilsService) {
     var isFormLoaded;
     function loadForm() {
 
-        if ($scope.dataSourceAdapter.data == undefined || isFormLoaded)
+        if ($scope.dataSourceAdapter.argument.data == undefined || isFormLoaded)
             return;
 
-        var data = $scope.dataSourceAdapter.data;
+        var data = $scope.dataSourceAdapter.argument.data;
 
         if (data != null) {
             $scope.extension = data.Extension;

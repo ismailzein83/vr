@@ -42,6 +42,7 @@ namespace Vanrise.Integration.Entities
             if(this.StreamReader != null)
             {
                 this.StreamReader.Close();
+                this.StreamReader.Dispose();
             }
         }
     }
