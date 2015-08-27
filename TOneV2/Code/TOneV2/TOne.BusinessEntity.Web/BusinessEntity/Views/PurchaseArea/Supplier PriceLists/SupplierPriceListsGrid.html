@@ -11,7 +11,7 @@
                 <span ng-class="gridParentScope.getChangeIcon(dataItem)"></span>
             </vr-datagridcolumn>
             <vr-datagridexpandablerow>
-                <div > Codes: {{gridParentScope.getCodes()}} </div>
+                <div > Codes: <vr-label>{{gridParentScope.getCodes(dataItem)}}{{gridParentScope.codes}}</vr-label> </div>
             </vr-datagridexpandablerow>
         </vr-datagrid>
     </div>

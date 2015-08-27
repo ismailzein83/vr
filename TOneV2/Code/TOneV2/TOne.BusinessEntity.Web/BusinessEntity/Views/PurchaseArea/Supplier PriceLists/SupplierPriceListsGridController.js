@@ -74,13 +74,17 @@ function SupplierPricelistsGridController($scope, VRModalService, UtilsService, 
                 case ChangeEnum.New.value: return ChangeEnum.New.icon;
             }
         }
-        $scope.getCodes = function () {
-           
+        $scope.getCodes = function (dataItem) {
+            if(dataItem.isCodeLoaded==undefined)
+            {
+                dataItem.isCodeLoaded = true;
+                 CodeAPIService.GetCodes(dataItem.ZoneID, $scope.dataItem.BeginEffectiveDate).then(function (response) {
+                     $scope.codes = response;
+                });
+
+            }
             
-            //CodeAPIService.GetCodes(dataItem.ZoneID, $scope.dataItem.BeginEffectiveDate).then(function (response) {
-            //    console.log(response);
-            //});
-            //return;
+           
         }
 
     }
