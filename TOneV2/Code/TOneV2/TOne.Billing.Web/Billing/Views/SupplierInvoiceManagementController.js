@@ -30,7 +30,6 @@ function SupplierInvoiceManagementController($scope, CarrierAccountAPIService, C
 
             return SupplierInvoiceAPIService.GetFilteredSupplierInvoices(dataRetrievalInput)
                 .then(function (response) {
-                    console.log(response);
                     onResponseReady(response);
                 })
                 .catch(function (error) {
@@ -66,7 +65,6 @@ function SupplierInvoiceManagementController($scope, CarrierAccountAPIService, C
             to: $scope.to
         };
 
-        console.log(query);
         return gridApi.retrieveData(query);
     }
 

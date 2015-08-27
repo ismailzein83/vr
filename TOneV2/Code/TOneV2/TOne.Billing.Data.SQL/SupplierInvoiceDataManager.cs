@@ -16,23 +16,8 @@ namespace TOne.Billing.Data.SQL
         {
             Dictionary<string, string> mapper = new Dictionary<string, string>();
 
-            mapper.Add("InvoiceID", "InvoiceID");
             mapper.Add("SupplierName", "SupplierID");
             mapper.Add("UserName", "UserID");
-            mapper.Add("SerialNumber", "SerialNumber");
-            mapper.Add("BeginDate", "BeginDate");
-            mapper.Add("EndDate", "EndDate");
-            mapper.Add("TimeZone", "InvoiceNotes");
-            mapper.Add("IssueDate", "IssueDate");
-            mapper.Add("DueDate", "DueDate");
-            mapper.Add("CreationDate", "CreationDate");
-            mapper.Add("NumberOfCalls", "NumberOfCalls");
-            mapper.Add("Duration", "Duration");
-            mapper.Add("Amount", "Amount");
-            mapper.Add("CurrencyID", "CurrencyID");
-            mapper.Add("IsLocked", "IsLocked");
-            mapper.Add("IsPaid", "IsPaid");
-            mapper.Add("InvoiceNotes", "InvoiceNotes");
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
@@ -44,24 +29,12 @@ namespace TOne.Billing.Data.SQL
 
         public Vanrise.Entities.BigResult<SupplierInvoiceDetail> GetFilteredSupplierInvoiceDetails(Vanrise.Entities.DataRetrievalInput<int> input)
         {
-            Dictionary<string, string> mapper = new Dictionary<string, string>();
-
-            mapper.Add("FromDate", "");
-            mapper.Add("TillDate", "");
-            mapper.Add("Destination", "");
-            mapper.Add("NumberOfCalls", "");
-            mapper.Add("Duration", "Duration");
-            mapper.Add("Rate", "Rate");
-            mapper.Add("RateType", "RateType");
-            mapper.Add("Amount", "Amount");
-            mapper.Add("CurrencyID", "CurrencyID");
-
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQuerySP("Billing.sp_BillingInvoiceDetails_CreateTempByInvoiceID", tempTableName, input.Query);
             };
 
-            return RetrieveData(input, createTempTableAction, SupplierInvoiceDetailMapper, mapper);
+            return RetrieveData(input, createTempTableAction, SupplierInvoiceDetailMapper);
         }
 
         private SupplierInvoice SupplierInvoiceMapper(IDataReader reader)
@@ -70,12 +43,13 @@ namespace TOne.Billing.Data.SQL
             {
                 InvoiceID = (int)reader["InvoiceID"],
                 SupplierID = reader["SupplierID"] as string,
+                SupplierName = reader["SupplierName"] as string,
                 UserID = GetReaderValue<int>(reader, "UserID"),
                 UserName = GetReaderValue<string>(reader, "UserName"),
                 SerialNumber = reader["SerialNumber"] as string,
                 BeginDate = (DateTime)reader["BeginDate"],
                 EndDate = (DateTime)reader["EndDate"],
-                TimeZone = GetReaderValue<string>(reader, "InvoiceNotes"),
+                TimeZone = GetReaderValue<string>(reader, "TimeZone"),
                 IssueDate = (DateTime)reader["IssueDate"],
                 DueDate = (DateTime)reader["DueDate"],
                 CreationDate = (DateTime)reader["CreationDate"],
@@ -95,7 +69,7 @@ namespace TOne.Billing.Data.SQL
         {
             SupplierInvoiceDetail supplierInvoiceDetail = new SupplierInvoiceDetail
             {
-                DetailID = (int)reader["DetailID"],
+                DetailID = (long)reader["DetailID"],
                 FromDate = GetReaderValue<DateTime>(reader, "FromDate"),
                 TillDate = GetReaderValue<DateTime>(reader, "TillDate"),
                 Destination = GetReaderValue<string>(reader, "Destination"),

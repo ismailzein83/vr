@@ -21,7 +21,6 @@ function SupplierInvoiceDetailGridController($scope, SupplierInvoiceDetailGridMe
 
             return SupplierInvoiceAPIService.GetFilteredSupplierInvoiceDetails(dataRetrievalInput)
                 .then(function (response) {
-                    console.log(response);
                     onResponseReady(response);
                 })
                 .catch(function (error) {
@@ -35,9 +34,8 @@ function SupplierInvoiceDetailGridController($scope, SupplierInvoiceDetailGridMe
     }
 
     function retrieveData() {
-        var invoiceID = $scope.dataItem.InvoiceID;
 
-        console.log(invoiceID);
+        var invoiceID = $scope.dataItem.InvoiceID;
         return gridApi.retrieveData(invoiceID);
     }
 

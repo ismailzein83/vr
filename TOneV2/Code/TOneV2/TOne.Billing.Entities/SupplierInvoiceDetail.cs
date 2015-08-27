@@ -8,7 +8,7 @@ namespace TOne.Billing.Entities
 {
     public class SupplierInvoiceDetail
     {
-        public int DetailID { get; set; }
+        public long DetailID { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime TillDate { get; set; }
         public string Destination { get; set; }
