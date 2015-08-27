@@ -53,12 +53,12 @@ namespace TOne.BusinessEntity.Data.SQL
         //}
         public List<ZoneInfo> GetSupplierZones(string supplierId, string nameFilter, DateTime whenDate)
         {
-            return GetItemsSP("[BEntity].[sp_Zone_GetOwnFilteredBySupplierId]", ZoneInfoMapper, supplierId, nameFilter, whenDate);
+            return GetItemsSP("[BEntity].[sp_Zone_GetFilteredBySupplier]", ZoneInfoMapper, supplierId, nameFilter, whenDate);
 
         }
         public List<ZoneInfo> GetCustomerZones(string customerId, string nameFilter, DateTime whenDate)
         {
-            return GetItemsSP("[BEntity].[sp_Zone_GetOwnFilteredByCustomerId]", ZoneInfoMapper, customerId, nameFilter, whenDate);
+            return GetItemsSP("[BEntity].[sp_Zone_GetFilteredByCustomer]", ZoneInfoMapper, customerId, nameFilter, whenDate);
 
         }
 

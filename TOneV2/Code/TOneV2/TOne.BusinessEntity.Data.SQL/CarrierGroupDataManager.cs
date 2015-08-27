@@ -44,7 +44,7 @@ namespace TOne.BusinessEntity.Data.SQL
 
             return RetrieveData(input, (tempTableName) =>
             {
-                ExecuteNonQuerySP("BEntity.sp_CarrierGroupMember_CreateTempForCarrierGroupIds", tempTableName, carrierGroupIDs, assignedCarriers);
+                ExecuteNonQuerySP("BEntity.sp_CarrierGroupMember_CreateTempByCarrierGroupIds", tempTableName, carrierGroupIDs, assignedCarriers);
 
             }, CarrierAccountDataManager.CarrierAccountMapper);
         }

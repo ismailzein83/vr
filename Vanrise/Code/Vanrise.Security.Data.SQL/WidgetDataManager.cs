@@ -90,7 +90,7 @@ namespace Vanrise.Security.Data.SQL
             mapper.Add("Name", "WidgetName");
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("sec.sp_Widget_GetFiltered", tempTableName, filter.Query.WidgetName, ToDBNullIfDefault(filter.Query.WidgetType));
+                ExecuteNonQuerySP("sec.sp_Widget_CreateTempByFiltered", tempTableName, filter.Query.WidgetName, ToDBNullIfDefault(filter.Query.WidgetType));
             };
             return RetrieveData(filter, createTempTableAction, WidgetMapper, mapper);
         }
