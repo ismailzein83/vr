@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.BusinessEntity.Entities;
 
 namespace TOne.BusinessEntity.Data
 {
-    class IRateAnalysisDataManager
+    public interface IRateAnalysisDataManager:IDataManager
     {
+        Vanrise.Entities.BigResult<RateAnalysis> GetRateAnalysis(Vanrise.Entities.DataRetrievalInput<RateAnalysisQuery> input);
     }
 }

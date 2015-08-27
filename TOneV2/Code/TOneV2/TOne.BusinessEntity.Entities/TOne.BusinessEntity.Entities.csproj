@@ -64,6 +64,8 @@
     <Compile Include="CustomerTariff.cs" />
     <Compile Include="CustomerTariffQuery.cs" />
     <Compile Include="PriceLists.cs" />
+    <Compile Include="RateAnalysis.cs" />
+    <Compile Include="RateAnalysisQuery.cs" />
     <Compile Include="SupplierPriceListDetail.cs" />
     <Compile Include="SupplierTariff.cs" />
     <Compile Include="SupplierTariffQuery.cs" />

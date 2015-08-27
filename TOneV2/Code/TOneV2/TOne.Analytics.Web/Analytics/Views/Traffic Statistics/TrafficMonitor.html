@@ -3,60 +3,57 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
             <vr-row removeline>
-                <vr-columns colnum="8">
-                    <vr-fieldset title="Basic Filter">
-                        <vr-row removeline>
-                            <vr-columns width="normal">
-                                <vr-select label="Group By" datasource="groupKeys"
-                                           datatextfield="description" datavaluefield="value" selectedvalues="selectedGroupKeys" customvalidate="customvalidateSelectGroup" ismultipleselection isrequired></vr-select>
-                            </vr-columns>
-                            <vr-columns width="normal">
-                                <vr-select label="Switches" datasource="switches"
-                                           datatextfield="Name" datavaluefield="SwitchId" selectedvalues="selectedSwitches" ismultipleselection></vr-select>
-                            </vr-columns>
-                            <vr-columns width="normal">
-                                <vr-select label="Code Groups" datasource="codeGroups"
-                                           datatextfield="Name" datavaluefield="Code" selectedvalues="selectedCodeGroups" ismultipleselection></vr-select>
-                            </vr-columns>
-                            <vr-columns width="normal">
-                                <vr-be-carriergroup type="'Customer'" selectedvalues="selectedCustomers"></vr-be-carriergroup>
-                            </vr-columns>
-                            <vr-columns width="normal">
-                                <vr-be-carriergroup type="'Supplier'" selectedvalues="selectedSuppliers" isassignedcarrier="ture"></vr-be-carriergroup>
-                            </vr-columns>
-                        </vr-row>
-                        <vr-row removeline>
-                            <vr-columns width="normal">
-                                <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Period"
-                                           selectedvalues="selectedPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
-                            </vr-columns>
+                <vr-choices selectedindex="selectedConnectionIndex" onselectionchanged="onSelectionChanged()">
+                    <vr-choice isselected="basicSelected">Basic Filter</vr-choice>
+                    <vr-choice isselected="advancedSelected">Advanced Filter</vr-choice>
+                </vr-choices>
+                <vr-columns colnum="8" ng-show="basicSelected">
+                    <vr-row removeline>
+                        <vr-columns width="normal">
+                            <vr-select label="Group By" datasource="groupKeys"
+                                       datatextfield="description" datavaluefield="value" selectedvalues="selectedGroupKeys" customvalidate="customvalidateSelectGroup" ismultipleselection isrequired></vr-select>
+                        </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-select label="Switches" datasource="switches"
+                                       datatextfield="Name" datavaluefield="SwitchId" selectedvalues="selectedSwitches" ismultipleselection></vr-select>
+                        </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-select label="Code Groups" datasource="codeGroups"
+                                       datatextfield="Name" datavaluefield="Code" selectedvalues="selectedCodeGroups" ismultipleselection></vr-select>
+                        </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-be-carriergroup type="'Customer'" selectedvalues="selectedCustomers"></vr-be-carriergroup>
+                        </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-be-carriergroup type="'Supplier'" selectedvalues="selectedSuppliers" isassignedcarrier="ture"></vr-be-carriergroup>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row removeline>
+                        <vr-columns width="normal">
+                            <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Period"
+                                       selectedvalues="selectedPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
+                        </vr-columns>
 
-                            <vr-columns width="normal">
-                                <vr-datetimepicker type="date" value="fromDate" label="From" isrequired customvalidate="customvalidateTestFrom"></vr-datetimepicker>
-                            </vr-columns>
-                            <vr-columns width="normal">
-                                <vr-datetimepicker type="date" value="toDate" label="To" isrequired customvalidate="customvalidateTestTo"></vr-datetimepicker>
-                            </vr-columns>
-                        </vr-row>
+                        <vr-columns width="normal">
+                            <vr-datetimepicker type="datetime" value="fromDate" label="From" isrequired customvalidate="customvalidateTestFrom"></vr-datetimepicker>
+                        </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-datetimepicker type="datetime" value="toDate" label="To" isrequired customvalidate="customvalidateTestTo"></vr-datetimepicker>
+                        </vr-columns>
+                    </vr-row>
+                </vr-columns>
+                <vr-columns colnum="4" ng-show="advancedSelected">
+                    <vr-columns width="1/3row">
+                        <vr-textbox value="asr" label="ASR"></vr-textbox>
+                    </vr-columns>
+                    <vr-columns width="1/3row">
+                        <vr-textbox value="acd" label="ACD"></vr-textbox>
+                    </vr-columns>
 
-                    </vr-fieldset>
-</vr-columns>
-                <vr-columns colnum="4">
-                    <vr-fieldset title="Advanced Search">
+                    <vr-columns width="1/3row">
+                        <vr-textbox value="attempts" label="Attempts"></vr-textbox>
+                    </vr-columns>
 
-                            <vr-columns width="1/3row">
-                                <vr-textbox value="asr" label="ASR"></vr-textbox>
-                            </vr-columns>
-                            <vr-columns width="1/3row">
-                                <vr-textbox value="acd" label="ACD"></vr-textbox>
-                            </vr-columns>
-          
-                            <vr-columns width="1/3row">
-                                <vr-textbox value="attempts" label="Attempts"></vr-textbox>
-                            </vr-columns>
-    
-                        
-                    </vr-fieldset>
                 </vr-columns>
             </vr-row>
 
