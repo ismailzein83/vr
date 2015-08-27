@@ -1,6 +1,6 @@
-﻿DBReceiveAdapterTemplateController.$inject = ['$scope','DataSourceAPIService'];
+﻿DBReceiveAdapterTemplateController.$inject = ['$scope', 'DataSourceAPIService', 'VRNotificationService'];
 
-function DBReceiveAdapterTemplateController($scope, DataSourceAPIService) {
+function DBReceiveAdapterTemplateController($scope, DataSourceAPIService, VRNotificationService) {
 
     defineScope();
     load();
@@ -30,6 +30,15 @@ function DBReceiveAdapterTemplateController($scope, DataSourceAPIService) {
 
         $scope.dataSourceAdapter.loadTemplateData = function () {
             loadForm();
+        }
+
+        $scope.resetLastImportedId = function () {
+            var confirmationMessage = "After save, resetting this key will affect the running instances of this data source. \n Are you sure you want to reset the Last Imported Id?";
+            VRNotificationService.showConfirmation(confirmationMessage).then(function (response) {
+                if (response == true) {
+                    $scope.lastImportedId = 0;
+                }
+            });
         }
     }
 
