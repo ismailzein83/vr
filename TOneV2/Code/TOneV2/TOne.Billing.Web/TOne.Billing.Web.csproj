@@ -123,11 +123,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Billing\" />
-    <Folder Include="Controllers\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\SupplierInvoiceController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -143,6 +142,12 @@
       <Project>{b67177e5-337e-4e22-88ef-20751d652178}</Project>
       <Name>TOne.Billing.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Billing\Constants\SupplierInvoiceMeasureEnum.js" />
+    <Content Include="Billing\Services\APIServices\SupplierInvoiceAPIService.js" />
+    <Content Include="Billing\Views\SupplierInvoiceManagement.html" />
+    <Content Include="Billing\Views\SupplierInvoiceManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
