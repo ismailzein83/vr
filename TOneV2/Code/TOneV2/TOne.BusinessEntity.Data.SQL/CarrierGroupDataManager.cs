@@ -35,31 +35,16 @@ namespace TOne.BusinessEntity.Data.SQL
 
         public Vanrise.Entities.BigResult<CarrierAccount> GetCarrierGroupMembers(Vanrise.Entities.DataRetrievalInput<CarrierGroupQuery> input, IEnumerable<int> carrierGroupIds,List<string> filter)
         {
-            DataTable dtCarrierGroupMembers = BuildCarrierAccountInfoTable<int>(carrierGroupIds,"ID");
-            DataTable dtAssignedCarriers=new DataTable();
-            if (filter != null)
-             dtAssignedCarriers= BuildCarrierAccountInfoTable<string>(filter, "CarrierID");
+            string carrierGroupIDs = null;
+            if (carrierGroupIds.Count() > 0)
+                carrierGroupIDs = string.Join<int>(",", carrierGroupIds);
+            string assignedCarriers = null;
+            if (filter!=null && filter.Count() > 0)
+                assignedCarriers = string.Join<string>(",", filter);
+
             return RetrieveData(input, (tempTableName) =>
             {
-                //tempTableName, lstCarrierGroupIds
-                ExecuteNonQuerySPCmd("BEntity.sp_CarrierGroupMember_CreateTempForCarrierGroupIds", (cmd) =>
-                {
-                    var dtPrm = new SqlParameter("@CarrierGroupIds", SqlDbType.Structured);
-                    dtPrm.Value = dtCarrierGroupMembers;
-                    cmd.Parameters.Add(dtPrm);
-
-                    var tempTableNamePrm = new SqlParameter("@TempTableName", SqlDbType.VarChar);
-                    tempTableNamePrm.Value = tempTableName;
-                    cmd.Parameters.Add(tempTableNamePrm);
-                    if (filter != null)
-                    {
-                        var assignedCarriers = new SqlParameter("@AssignedCarriers", SqlDbType.Structured);
-                        assignedCarriers.Value = dtAssignedCarriers;
-                        cmd.Parameters.Add(assignedCarriers);
-                    }
-                    
-
-                });
+                ExecuteNonQuerySP("BEntity.sp_CarrierGroupMember_CreateTempForCarrierGroupIds", tempTableName, carrierGroupIDs, assignedCarriers);
 
             }, CarrierAccountDataManager.CarrierAccountMapper);
         }
