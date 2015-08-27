@@ -4,6 +4,7 @@
         GetCasesSummary: GetCasesSummary,
         GetStrategyCases: GetStrategyCases,
         GetBTSCases: GetBTSCases,
+        GetBTSHighValueCases: GetBTSHighValueCases,
         GetDailyVolumeLooses: GetDailyVolumeLooses
     });
 
@@ -25,6 +26,12 @@
 
     function GetBTSCases(input) {
         return BaseAPIService.post("/api/Dashboard/GetBTSCases",
+            input
+           );
+    }
+
+    function GetBTSHighValueCases(input) {
+        return BaseAPIService.post("/api/Dashboard/GetBTSHighValueCases",
             input
            );
     }

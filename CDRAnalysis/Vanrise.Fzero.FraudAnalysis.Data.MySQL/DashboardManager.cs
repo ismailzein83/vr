@@ -32,5 +32,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             throw new NotImplementedException();
         }
+
+
+        public Vanrise.Entities.BigResult<BTSHighValueCases> GetBTSHighValueCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

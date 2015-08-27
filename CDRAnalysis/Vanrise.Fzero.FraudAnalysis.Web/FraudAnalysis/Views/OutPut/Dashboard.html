@@ -66,6 +66,22 @@
 
 
             <vr-columns colnum="3">
+                <vr-section title="Top 10 High Value BTS">
+                    <div>
+                        <vr-row>
+                            <vr-columns colnum="12" simplecol>
+                                <vr-datagrid datasource="bTSHighValueCases" dataretrievalfunction="dataRetrievalFunction_BTSHighValueCases" maxheight="200px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady_BTSHighValueCases">
+                                    <vr-datagridcolumn headertext="'BTS Id'" field="'BTS_Id'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Volume (minutes)'" field="'Volume'" type="'Number'"></vr-datagridcolumn>
+                                </vr-datagrid>
+                            </vr-columns>
+                        </vr-row>
+                    </div>
+                </vr-section>
+            </vr-columns>
+
+
+            <vr-columns colnum="3">
                 <vr-section title="Daily Volume Looses">
                     <div>
                         <vr-row>

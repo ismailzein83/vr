@@ -29,6 +29,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, manager.GetBTSCases(input));
         }
 
+        public Vanrise.Entities.IDataRetrievalResult<BTSHighValueCases> GetBTSHighValueCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
+        {
+            IDashboardManager manager = FraudDataManagerFactory.GetDataManager<IDashboardManager>();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, manager.GetBTSHighValueCases(input));
+        }
+
+
+        
+
 
         public Vanrise.Entities.IDataRetrievalResult<DailyVolumeLoose> GetDailyVolumeLooses(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
         {

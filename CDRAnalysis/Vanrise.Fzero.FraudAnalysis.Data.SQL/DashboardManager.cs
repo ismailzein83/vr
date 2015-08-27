@@ -46,6 +46,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
+        public BigResult<BTSHighValueCases> GetBTSHighValueCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
+        {
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("FraudAnalysis.sp_Dashboard_CreateTempForTopTenHighValueBTS", tempTableName, input.Query.FromDate, input.Query.ToDate);
+            };
+            return RetrieveData(input, createTempTableAction, BTSHighValueCasesMapper);
+        }
+
         public BigResult<DailyVolumeLoose> GetDailyVolumeLooses(DataRetrievalInput<DashboardResultQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
@@ -85,6 +94,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return bTSCases;
         }
 
+        private BTSHighValueCases BTSHighValueCasesMapper(IDataReader reader)
+        {
+            var bTSHighValueCases = new BTSHighValueCases();
+            bTSHighValueCases.Volume = (int)reader["Volume"];
+            bTSHighValueCases.BTS_Id = GetReaderValue<int?>(reader, "BTS_Id");
+            return bTSHighValueCases;
+        }
+
 
         private DailyVolumeLoose DailyVolumeLoosesMapper(IDataReader reader)
         {
@@ -97,10 +114,5 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         #endregion
 
-
-
-
-
-       
     }
 }

@@ -4,6 +4,7 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
 
     var mainGridAPI_CasesSummary;
     var mainGridAPI_BTSCases;
+    var mainGridAPI_BTSHighValueCases;
     var mainGridAPI_DailyVolumeLooses;
     var mainGridAPI_ImportedBatches;
 
@@ -29,6 +30,7 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
         $scope.casesSummary = [];
         $scope.strategyCases = [];
         $scope.bTSCases = [];
+        $scope.bTSHighValueCases = [];
         $scope.dailyVolumeLooses = [];
         $scope.importedBatches = [];
 
@@ -44,6 +46,12 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
             mainGridAPI_BTSCases = api;
             return retrieveData_BTSCases();
         };
+
+        $scope.onMainGridReady_BTSHighValueCases =function(api)
+        {
+            mainGridAPI_BTSHighValueCases = api;
+            return retrieveData_BTSHighValueCases();
+        }
 
         $scope.onMainGridReady_DailyVolumeLooses = function (api) {
             mainGridAPI_DailyVolumeLooses = api;
@@ -68,6 +76,7 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
             retrieveData_BTSCases()
             retrieveData_DailyVolumeLooses()
             retrieveData_ImportedBatches()
+            retrieveData_BTSHighValueCases
         };
 
         $scope.dataRetrievalFunction_CaseSummary = function (dataRetrievalInput, onResponseReady) {
@@ -85,6 +94,14 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
                 onResponseReady(response);
             });
         }
+
+        $scope.dataRetrievalFunction_BTSHighValueCases = function (dataRetrievalInput, onResponseReady) {
+            return DashboardAPIService.GetBTSHighValueCases(dataRetrievalInput)
+            .then(function (response) {
+                onResponseReady(response);
+            })
+        }
+
 
         $scope.dataRetrievalFunction_DailyVolumeLooses = function (dataRetrievalInput, onResponseReady) {
             return DashboardAPIService.GetDailyVolumeLooses(dataRetrievalInput)
@@ -125,6 +142,10 @@ function DashboardController($scope, DashboardAPIService, $routeParams, notify, 
 
     function retrieveData_BTSCases() {
         return mainGridAPI_BTSCases.retrieveData(BuildSearchQuery());
+    }
+
+    function retrieveData_BTSHighValueCase() {
+        return mainGridAPI_BTSHighValueCases(BuildSearchQuery());
     }
 
     function retrieveData_DailyVolumeLooses() {
