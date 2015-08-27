@@ -5,11 +5,11 @@
     </vr-choices>  
     <div class="vr-datagrid-header" ng-hide="ctrl.hideheader" ng-style="ctrl.headerStyle" ng-class="ctrl.ngClassLevel">
         
-        <div ng-if="!ctrl.hideGridMenu" class="vr-grid-menu-box hand-cursor out-div" ng-class="ctrl.updateItems.length > 0?'with-choices':''" ng-init="showgmenu=false" ng-class="showgmenu==true?'toggle-dd':''" ng-click="showgmenu=!showgmenu">
+        <div ng-show="!ctrl.hideGridMenu" class="vr-grid-menu-box hand-cursor out-div" ng-class="ctrl.updateItems.length > 0?'with-choices':''" ng-init="showgmenu=false" ng-class="showgmenu==true?'toggle-dd':''" ng-click="showgmenu=!showgmenu">
             <span class="vr-grid-menu-h-circle hand-cursor" ng-class="ctrl.ngClassLevel"></span>
             <span class="glyphicon glyphicon-wrench vr-grid-menu-h-dote hand-cursor"></span>
         </div>
-        <ul ng-if="!ctrl.hideGridMenu" class="vr-grid-menu out-div" ng-class="ctrl.updateItems.length > 0?'menu-with-choices':''" ng-show="showgmenu" click-outside="showgmenu=false" outside-if-not="out-div">
+        <ul class="vr-grid-menu out-div" ng-class="ctrl.updateItems.length > 0?'menu-with-choices':''" ng-show="showgmenu==true && ctrl.hideGridMenu == false " click-outside="showgmenu=false" outside-if-not="out-div">
             <li role="presentation" vr-disabled="ctrl.isExporting">
                 <span style="padding-left:4px;color:black;text-align:center" class="hand-cursor" aria-hidden="true" ng-click="ctrl.onExportClicked()">Export</span>
                 <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin-left:3px" ng-show="ctrl.isExporting" />
