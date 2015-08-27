@@ -144,8 +144,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Billing\Constants\SupplierInvoiceDetailGridMeasureEnum.js" />
     <Content Include="Billing\Constants\SupplierInvoiceMeasureEnum.js" />
     <Content Include="Billing\Services\APIServices\SupplierInvoiceAPIService.js" />
+    <Content Include="Billing\Views\SupplierInvoiceDetailGrid.html" />
+    <Content Include="Billing\Views\SupplierInvoiceDetailGridController.js" />
     <Content Include="Billing\Views\SupplierInvoiceManagement.html" />
     <Content Include="Billing\Views\SupplierInvoiceManagementController.js" />
   </ItemGroup>

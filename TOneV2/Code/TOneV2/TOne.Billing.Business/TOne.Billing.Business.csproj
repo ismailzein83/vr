@@ -61,6 +61,14 @@
       <Project>{b67177e5-337e-4e22-88ef-20751d652178}</Project>
       <Name>TOne.Billing.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.BusinessEntity.Business\TOne.BusinessEntity.Business.csproj">
+      <Project>{bdc9694f-88b7-492d-9865-304e774a5776}</Project>
+      <Name>TOne.BusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.BusinessEntity.Entities\TOne.BusinessEntity.Entities.csproj">
+      <Project>{70ce755d-00ae-4e12-8f07-e4df91346293}</Project>
+      <Name>TOne.BusinessEntity.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
