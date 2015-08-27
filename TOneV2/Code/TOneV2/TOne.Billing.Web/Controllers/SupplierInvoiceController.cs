@@ -16,5 +16,12 @@ namespace TOne.Billing.Web.Controllers
             SupplierInvoiceManager manager = new SupplierInvoiceManager();
             return GetWebResponse(input, manager.GetFilteredSupplierInvoices(input));
         }
+
+        [HttpPost]
+        public object GetFilteredSupplierInvoiceDetails(Vanrise.Entities.DataRetrievalInput<int> input)
+        {
+            SupplierInvoiceManager manager = new SupplierInvoiceManager();
+            return GetWebResponse(input, manager.GetFilteredSupplierInvoiceDetails(input));
+        }
     }
 }

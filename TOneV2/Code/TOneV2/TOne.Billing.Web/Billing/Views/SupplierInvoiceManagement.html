@@ -36,7 +36,7 @@
             <vr-columns width="fullrow" simplecol>
                 <vr-datagrid datasource="invoices"
                              dataretrievalfunction="dataRetrievalFunction"
-                             pagingtype="'Pager'"
+                             pagingtype="'PagingOnScroll'"
                              on-ready="gridReady"
                              idfield="InvoiceID"
                              ng-show="showGrid">
@@ -46,6 +46,10 @@
                                        field="measure.propertyName"
                                        type="measure.type">
                     </vr-datagridcolumn>
+
+                    <vr-datagridexpandablerow>
+                        <div ng-include="'/Client/Modules/Billing/Views/SupplierInvoiceDetailGrid.html'"></div>
+                    </vr-datagridexpandablerow>
                 </vr-datagrid>
             </vr-columns>
         </vr-row>

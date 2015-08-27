@@ -1,0 +1,17 @@
+﻿<div ng-controller="Billing_SupplierInvoiceDetailGridController">
+
+    <vr-datagrid datasource="details"
+                 dataretrievalfunction="dataRetrievalFunction"
+                 pagingtype="'PagingOnScroll'"
+                 on-ready="gridReady"
+                 idfield="DetailID"
+                 issubgrid>
+
+        <vr-datagridcolumn ng-repeat="measure in detailMeasures"
+                           headertext="measure.description"
+                           field="measure.propertyName"
+                           type="measure.type">
+        </vr-datagridcolumn>
+    </vr-datagrid>
+
+</div>

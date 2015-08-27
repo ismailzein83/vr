@@ -19,7 +19,7 @@ function SupplierInvoiceManagementController($scope, CarrierAccountAPIService, C
 
         $scope.searchClicked = function () {
             $scope.showGrid = true;
-            //return retrieveData();
+            return retrieveData();
         }
 
         $scope.gridReady = function (api) {
@@ -61,7 +61,7 @@ function SupplierInvoiceManagementController($scope, CarrierAccountAPIService, C
 
     function retrieveData() {
         var query = {
-            selectedSupplierID: ($scope.selectedSupplier != undefined) ? $scope.selectedSupplier : null,
+            selectedSupplierID: ($scope.selectedSupplier != undefined) ? $scope.selectedSupplier.CarrierAccountID : null,
             from: $scope.from,
             to: $scope.to
         };
