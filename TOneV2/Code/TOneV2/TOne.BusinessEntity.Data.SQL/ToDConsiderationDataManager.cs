@@ -55,9 +55,9 @@ namespace TOne.BusinessEntity.Data.SQL
             //};
         }
 
-        private TODConsiderationInfo ToDConsiderationInfoMapper(IDataReader reader ,DateTime when)
+        private BaseTODConsiderationInfo ToDConsiderationInfoMapper(IDataReader reader ,DateTime when)
         {
-            TODConsiderationInfo toDConsiderationInfo = new TODConsiderationInfo
+            BaseTODConsiderationInfo toDConsiderationInfo = new BaseTODConsiderationInfo
             {
                 ToDConsiderationID = GetReaderValue<long>(reader, "ToDConsiderationID"),
                 ZoneID = GetReaderValue<int>(reader, "ZoneID"),
@@ -82,7 +82,7 @@ namespace TOne.BusinessEntity.Data.SQL
          
         }
 
-        private bool IsActive(DateTime when , TODConsiderationInfo tod )
+        private bool IsActive(DateTime when , BaseTODConsiderationInfo tod )
         {
             if (!GetIsEffective(tod.BeginEffectiveDate, tod.EndEffectiveDate, when)) return false;
 
@@ -114,7 +114,7 @@ namespace TOne.BusinessEntity.Data.SQL
             return GetItemsSP("BEntity.sp_ToDConsideration_GetToDConsiderations", ToDConsiderationMapper, ToDBNullIfDefault(zoneId), customerId, when);
         }
 
-        public Vanrise.Entities.BigResult<TODConsiderationInfo> GetCustomerToDConsiderationByCriteria(Vanrise.Entities.DataRetrievalInput<TODQuery> input)
+        public Vanrise.Entities.BigResult<BaseTODConsiderationInfo> GetCustomerToDConsiderationByCriteria(Vanrise.Entities.DataRetrievalInput<TODQuery> input)
         {
 
             
@@ -128,7 +128,7 @@ namespace TOne.BusinessEntity.Data.SQL
             }, (reader) => ToDConsiderationInfoMapper(reader, input.Query.EffectiveOn));
         }
 
-        public Vanrise.Entities.BigResult<TODConsiderationInfo> GetSupplierToDConsiderationByCriteria(Vanrise.Entities.DataRetrievalInput<TODQuery> input , List<string> suppliersAMUids )
+        public Vanrise.Entities.BigResult<BaseTODConsiderationInfo> GetSupplierToDConsiderationByCriteria(Vanrise.Entities.DataRetrievalInput<TODQuery> input , List<string> suppliersAMUids )
         {
 
 

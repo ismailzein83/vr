@@ -17,13 +17,13 @@ namespace TOne.BusinessEntity.Business
             _dataManager = BEDataManagerFactory.GetDataManager<IToDConsiderationDataManager>();
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<TODConsiderationInfo> GetFilteredCustomerTOD(Vanrise.Entities.DataRetrievalInput<TODQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<BaseTODConsiderationInfo> GetFilteredCustomerTOD(Vanrise.Entities.DataRetrievalInput<TODQuery> input)
         {
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, _dataManager.GetCustomerToDConsiderationByCriteria(input));
         }
 
 
-        public Vanrise.Entities.IDataRetrievalResult<TODConsiderationInfo> GetFilteredSupplierTOD(Vanrise.Entities.DataRetrievalInput<TODQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<BaseTODConsiderationInfo> GetFilteredSupplierTOD(Vanrise.Entities.DataRetrievalInput<TODQuery> input)
         {
              AccountManagerManager am = new AccountManagerManager();
 

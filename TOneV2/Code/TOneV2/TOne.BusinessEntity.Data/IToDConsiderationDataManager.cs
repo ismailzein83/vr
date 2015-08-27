@@ -10,8 +10,8 @@ namespace TOne.BusinessEntity.Data
     public interface IToDConsiderationDataManager : IDataManager
     {
         List<ToDConsideration> GetToDConsideration(string customerId, int zoneId, DateTime when);
-        Vanrise.Entities.BigResult<TODConsiderationInfo> GetCustomerToDConsiderationByCriteria(Vanrise.Entities.DataRetrievalInput<TODQuery> input);
+        Vanrise.Entities.BigResult<BaseTODConsiderationInfo> GetCustomerToDConsiderationByCriteria(Vanrise.Entities.DataRetrievalInput<TODQuery> input);
 
-        Vanrise.Entities.BigResult<TODConsiderationInfo> GetSupplierToDConsiderationByCriteria(Vanrise.Entities.DataRetrievalInput<TODQuery> input , List<string> suppliersAMUids);
+        Vanrise.Entities.BigResult<BaseTODConsiderationInfo> GetSupplierToDConsiderationByCriteria(Vanrise.Entities.DataRetrievalInput<TODQuery> input , List<string> suppliersAMUids);
     }
 }

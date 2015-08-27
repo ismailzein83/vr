@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.BusinessEntity.Entities
 {
-    public class TODConsiderationInfo
+    public class BaseTODConsiderationInfo
     {
         public long ToDConsiderationID { get; set; }
         public int ZoneID { get; set; } 
