@@ -39,7 +39,7 @@
                             <vr-columns colnum="12" simplecol>
                                 <vr-datagrid datasource="casesSummary" dataretrievalfunction="dataRetrievalFunction_CaseSummary" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady_CasesSummary">
                                     <vr-datagridcolumn headertext="'Status'" field="'StatusName'"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Count Cases'" field="'CountCases'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Count Cases'" field="'CountCases'" type="'Number'"  ></vr-datagridcolumn>
                                 </vr-datagrid>
                             </vr-columns>
                         </vr-row>
@@ -56,7 +56,7 @@
                             <vr-columns colnum="12" simplecol>
                                 <vr-datagrid datasource="bTSCases" dataretrievalfunction="dataRetrievalFunction_BTSCases" maxheight="200px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady_BTSCases">
                                     <vr-datagridcolumn headertext="'BTS Id'" field="'BTS_Id'"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Count Cases'" field="'CountCases'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Count Cases'" field="'CountCases'" type="'Number'"></vr-datagridcolumn>
                                 </vr-datagrid>
                             </vr-columns>
                         </vr-row>
@@ -72,7 +72,7 @@
                             <vr-columns colnum="12" simplecol>
                                 <vr-datagrid datasource="dailyVolumeLooses" dataretrievalfunction="dataRetrievalFunction_DailyVolumeLooses" maxheight="200px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady_DailyVolumeLooses">
                                     <vr-datagridcolumn headertext="'Day'" field="'DateDay'" type="'Datetime'"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Volume'" field="'Volume'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Volume'" field="'Volume'" type="'Number'"></vr-datagridcolumn>
                                 </vr-datagrid>
                             </vr-columns>
                         </vr-row>
@@ -94,8 +94,8 @@
                                              pagingtype="'PagingOnScroll'"
                                              on-ready="onMainGridReady_ImportedBatches">
 
-                                    <vr-datagridcolumn headertext="'Batch Size'" field="'BatchSize'"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Records Count'" field="'RecordsCount'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Batch Size'" field="'BatchSize'" type="'Number'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Records Count'" field="'RecordsCount'" type="'Number'"></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'Import Date'" field="'LogEntryTime'" type="'Datetime'"></vr-datagridcolumn>
                                 </vr-datagrid>
 
