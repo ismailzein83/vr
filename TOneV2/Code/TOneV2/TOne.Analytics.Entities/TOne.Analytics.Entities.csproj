@@ -103,6 +103,8 @@
     <Compile Include="CarrierSummaryBigResult.cs" />
     <Compile Include="CarrierSummaryStats.cs" />
     <Compile Include="CarrierSummaryStatsQuery.cs" />
+    <Compile Include="CarrierZoneSummaryGenericFilter.cs" />
+    <Compile Include="CarrierZoneSummaryInput.cs" />
     <Compile Include="CDRFilter.cs" />
     <Compile Include="CDRBigResult.cs" />
     <Compile Include="Billing\CustomerServices.cs" />

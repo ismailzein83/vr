@@ -41,7 +41,8 @@ namespace TOne.Analytics.Business
             else
                 input.Query.GroupByProfile = "N";
 
-            CarrierSummaryBigResult<CarrierSummaryStats> lstCarrierSummaryStats = _datamanager.GetCarrierSummaryStats(input);
+            CarrierSummaryBigResult<CarrierSummaryStats> lstCarrierSummaryStats = new CarrierSummaryBigResult<CarrierSummaryStats>();
+            //= _datamanager.GetCarrierSummaryStats(input);
 
             List<CarrierAccount> activeCustomers = new List<CarrierAccount>();
             List<CarrierAccount> activeSuppliers = new List<CarrierAccount>();

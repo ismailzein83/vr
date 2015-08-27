@@ -32,7 +32,12 @@ namespace TOne.Analytics.Entities
         CodeSales = 10,
         CodeBuy = 11
     }
-
+    public enum CarrierZoneSummaryStatsGroupKeys
+    {
+        CustomerId = 0,
+        SupplierId = 1,
+        ZoneId = 2
+    }
     public enum ReleaseCodeMeasure
     {
         RelCode = 0,

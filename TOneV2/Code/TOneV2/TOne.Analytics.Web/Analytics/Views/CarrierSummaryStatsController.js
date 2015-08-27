@@ -2,16 +2,18 @@
 
     "use strict";
 
-    CarrierSummaryStatsController.$inject = ['$scope', 'CarrierSummaryStatsAPIService', 'CarrierAccountAPIService', 'ZoneAPIService', 'CurrencyAPIService', 'CarrierTypeEnum', 'VRModalService'];
-    function CarrierSummaryStatsController($scope, CarrierSummaryStatsAPIService, CarrierAccountAPIService, ZoneAPIService, CurrencyAPIService, CarrierTypeEnum, VRModalService) {
+    CarrierSummaryStatsController.$inject = ['$scope', 'CarrierSummaryStatsAPIService', 'CarrierAccountAPIService', 'CarrierSummaryMeasureEnum', 'ZoneAPIService', 'CurrencyAPIService', 'CarrierTypeEnum', 'VRModalService'];
+    function CarrierSummaryStatsController($scope, CarrierSummaryStatsAPIService, CarrierAccountAPIService, CarrierSummaryMeasureEnum, ZoneAPIService, CurrencyAPIService, CarrierTypeEnum, VRModalService) {
 
         var gridApi;
 
         function retrieveData() {
-            
+
+            $scope.datasource = [];
+
             $scope.getHeader = $scope.optionsGroups.selectedvalues.value == 3 ? "Zone" : $scope.byProfile ? "Profile" : "Carrier";
 
-            $scope.optionsGroups.selectedvalues
+            
 
             if ($scope.selectedvalues == undefined)
                 $scope.selectedvalues = null;
@@ -20,10 +22,10 @@
                 $scope.optionsCurrencies.selectedvalues = null;
 
             return gridApi.retrieveData({
-                //CarrierType: $scope.isCustomer,
                 CarrierType: $scope.optionsGroups.selectedvalues.value,
-                CustomerID: $scope.selectedvalues == null ? null : $scope.selectedvalues.CarrierAccountID,
-                ZoneID: $scope.selectedvaluesZones == null ? null : $scope.selectedvaluesZones.ZoneId,
+                CustomerID: $scope.optionsGroups.selectedvalues.value != 1 ? null : $scope.optionsCarriers.selectedvalues == null ? null : $scope.optionsCarriers.selectedvalues.CarrierAccountID,
+                SupplierID: $scope.optionsGroups.selectedvalues.value != 2 ? null : $scope.optionsCarriers.selectedvalues == null ? null : $scope.optionsCarriers.selectedvalues.CarrierAccountID,
+                ZoneID: $scope.optionsGroups.selectedvalues.value != 3 ? null : $scope.selectedvaluesZones == null ? null : $scope.selectedvaluesZones.ZoneId,
                 TopRecord: $scope.top,
                 FromDate: $scope.fromDate,
                 ToDate: $scope.toDate,
@@ -35,9 +37,8 @@
 
         function defineScope() {
             $scope.top = 2000;
-            $scope.datasource = [];
             $scope.selectedvaluesZones = [];
-
+            $scope.measures = [];
             var groupKeys = [];
             groupKeys.push({ name: "Customer", value: 1 });
             groupKeys.push({ name: "Supplier", value: 2 });
@@ -49,6 +50,11 @@
 
           
             $scope.optionsCurrencies = {
+                selectedvalues: '',
+                datasource: []
+            };
+
+            $scope.optionsCarriers = {
                 selectedvalues: '',
                 datasource: []
             };
@@ -73,7 +79,7 @@
         }
 
         function load() {
-
+            loadMeasures();
             loadCarriers();
             loadCurrencies();
         }
@@ -81,7 +87,7 @@
         function loadCarriers() {
             return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.SaleZone.value,false).then(function (response) {
                 angular.forEach(response, function (itm) {
-                    $scope.datasource.push(itm);
+                    $scope.optionsCarriers.datasource.push(itm);
                 });
             });
         }
@@ -93,20 +99,15 @@
 
         }
 
-        //$scope.datasourceZones = function (text) {
-        //    return ZoneAPIService.GetOwnZones(text);
-        //}
-
-
-        //function loadZones(text) {
-        //    return BusinessEntityAPIService.GetOwnZones(text).then(function (response) {
-        //        $scope.datasourceZones = response;
-        //    });
-
-        //}
+        function loadMeasures() {
+            for (var prop in CarrierSummaryMeasureEnum) {
+                $scope.measures.push(CarrierSummaryMeasureEnum[prop]);
+            }
+        }
 
         defineScope();
         load();
+
     }
     appControllers.controller('Carrier_CarrierSummaryStatsController', CarrierSummaryStatsController);
 
