@@ -18,9 +18,9 @@ namespace TOne.BusinessEntity.Entities
         public byte FirstPeriod { get; set; }
         public decimal FirstPeriodRate { get; set; }
         public byte FractionUnit { get; set; }
-        public DateTime BED { get; set; }
-        public DateTime EED { get; set; }
-        public string EEDDescription { get; set; }
+        public DateTime BeginEffectiveDate { get; set; }
+        public DateTime EndEffectiveDate { get; set; }
+        public string EndEffectiveDateDescription { get; set; }
         public string IsEffective { get; set; }
     }
 }

@@ -30,7 +30,6 @@ function SupplierTariffManagementController($scope, CarrierAccountAPIService, Ca
 
             return SupplierTariffAPIService.GetFilteredSupplierTariffs(dataRetrievalInput)
                 .then(function (response) {
-                    console.log(response);
                     onResponseReady(response);
                 })
                 .catch(function (error) {
@@ -66,7 +65,6 @@ function SupplierTariffManagementController($scope, CarrierAccountAPIService, Ca
             effectiveOn: $scope.effectiveOn
         };
 
-        console.log(query);
         return gridApi.retrieveData(query);
     }
 
@@ -77,7 +75,7 @@ function SupplierTariffManagementController($scope, CarrierAccountAPIService, Ca
 
     function getSelectedZoneIDs() {
         if ($scope.selectedZones.length == 0)
-            return [];
+            return null;
 
         var ids = [];
 
