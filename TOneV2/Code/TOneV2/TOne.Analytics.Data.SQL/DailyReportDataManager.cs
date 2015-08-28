@@ -22,12 +22,6 @@ namespace TOne.Analytics.Data.SQL
             mapper.Add("ZoneName", "ZoneID");
             mapper.Add("CustomerName", "CustomerID");
             mapper.Add("SupplierName", "SupplierID");
-            mapper.Add("Attempts", "Attempts");
-            mapper.Add("SuccessfulAttempts", "SuccessfulAttempts");
-            mapper.Add("DurationInMinutes", "DurationInMinutes");
-            mapper.Add("ASR", "ASR");
-            mapper.Add("ACD", "ACD");
-            mapper.Add("PDD", "PDD");
             mapper.Add("CostRateDescription", "CostRate");
             mapper.Add("SaleRateDescription", "SaleRate");
 
@@ -174,96 +168,87 @@ namespace TOne.Analytics.Data.SQL
 
         private string GetTrafficWhereClause(List<int> selectedZoneIDs)
         {
-            string whereClause = "WHERE";
+            StringBuilder whereClause = new StringBuilder(@"WHERE");
 
-            whereClause += " dbo.DateOf(FirstCDRAttempt) = @TargetDate";
-            whereClause += " AND CustomerID NOT IN (SELECT grASc.CID FROM dbo.GetRepresentedAsSwitchCarriers() grASc)";
+            whereClause.Append(" dbo.DateOf(FirstCDRAttempt) = @TargetDate");
+            whereClause.Append(" AND CustomerID NOT IN (SELECT grASc.CID FROM dbo.GetRepresentedAsSwitchCarriers() grASc)");
 
             if (selectedZoneIDs.Count > 0)
             {
                 string selectedZoneIDsList = GetCommaSeparatedList(selectedZoneIDs);
-                whereClause += " AND OurZoneID IN (" + selectedZoneIDsList + ")";
+                whereClause.Append(" AND OurZoneID IN (" + selectedZoneIDsList + ")");
             }
 
-            whereClause += commonWhereClauseConditions;
+            whereClause.Append(commonWhereClauseConditions);
 
-            return whereClause;
+            return whereClause.ToString();
         }
 
         private string GetBillingWhereClause(List<int> selectedZoneIDs)
         {
-            string whereClause = "WHERE";
+            StringBuilder whereClause = new StringBuilder(@"WHERE");
 
-            whereClause += " dbo.DateOf(CallDate) = @TargetDate";
+            whereClause.Append(" dbo.DateOf(CallDate) = @TargetDate");
 
             if (selectedZoneIDs.Count > 0)
             {
                 string selectedZoneIDsList = GetCommaSeparatedList(selectedZoneIDs);
-                whereClause += " AND SaleZoneID IN (" + selectedZoneIDsList + ")";
+                whereClause.Append(" AND SaleZoneID IN (" + selectedZoneIDsList + ")");
             }
 
-            whereClause += commonWhereClauseConditions;
+            whereClause.Append(commonWhereClauseConditions);
 
-            return whereClause;
+            return whereClause.ToString();
         }
 
         private string GetCommonWhereClauseConditions(List<string> selectedCustomerIDs, List<string> selectedSupplierIDs, List<string> assignedCustomerIDs, List<string> assignedSupplierIDs)
         {
-            string whereClause = null;
+            StringBuilder whereClause = new StringBuilder();
 
             if (selectedCustomerIDs.Count > 0 && selectedSupplierIDs.Count > 0)
             {
-                string selectedCustomerIDsList = GetCommaSeparatedList(selectedCustomerIDs);
-                string selectedSupplierIDsList = GetCommaSeparatedList(selectedSupplierIDs);
-
-                whereClause = " AND ((CustomerID IS NULL OR CustomerID IN (" + selectedCustomerIDsList + ")) OR (SupplierID IS NULL OR SupplierID IN (" + selectedSupplierIDsList + ")))";
+                whereClause.Append(" AND ((CustomerID IS NULL OR CustomerID IN (#SELECTED_CUSTOMER_IDS#)) OR (SupplierID IS NULL OR SupplierID IN (#SELECTED_SUPPLIER_IDS#)))");
             }
             else if (selectedCustomerIDs.Count == 0 && selectedSupplierIDs.Count == 0)
             {
                 if (assignedCustomerIDs.Count > 0 && assignedSupplierIDs.Count > 0)
                 {
-                    string assignedCustomerIDsList = GetCommaSeparatedList(assignedCustomerIDs);
-                    string assignedSupplierIDsList = GetCommaSeparatedList(assignedSupplierIDs);
-
-                    whereClause = " AND ((CustomerID IS NULL OR CustomerID IN (" + assignedCustomerIDsList + ")) OR (SupplierID IS NULL OR SupplierID IN (" + assignedSupplierIDsList + ")))";
+                    whereClause.Append(" AND ((CustomerID IS NULL OR CustomerID IN (#ASSIGNED_CUSTOMER_IDS#)) OR (SupplierID IS NULL OR SupplierID IN (#ASSIGNED_SUPPLIER_IDS#)))");
                 }
                 else if (assignedCustomerIDs.Count > 0)
                 {
-                    string assignedCustomerIDsList = GetCommaSeparatedList(assignedCustomerIDs);
-                    whereClause = " AND (CustomerID IS NULL OR CustomerID IN (" + assignedCustomerIDsList + "))";
+                    whereClause.Append(" AND (CustomerID IS NULL OR CustomerID IN (#ASSIGNED_CUSTOMER_IDS#))");
                 }
                 else if (assignedSupplierIDs.Count > 0)
                 {
-                    string assignedSupplierIDsList = GetCommaSeparatedList(assignedSupplierIDs);
-                    whereClause = " AND (SupplierID IS NULL OR SupplierID IN (" + assignedSupplierIDsList + "))";
+                    whereClause.Append(" AND (SupplierID IS NULL OR SupplierID IN (#ASSIGNED_SUPPLIER_IDS#))");
                 }
             }
             else if (selectedCustomerIDs.Count > 0)
             {
-                string selectedCustomerIDsList = GetCommaSeparatedList(selectedCustomerIDs);
-
                 if (assignedSupplierIDs.Count > 0)
                 {
-                    string assignedSupplierIDsList = GetCommaSeparatedList(assignedSupplierIDs);
-                    whereClause = " AND ((CustomerID IS NULL OR CustomerID IN (" + selectedCustomerIDsList + ")) OR (SupplierID IS NULL OR SupplierID IN (" + assignedSupplierIDsList + ")))";
+                    whereClause.Append(" AND ((CustomerID IS NULL OR CustomerID IN (#SELECTED_CUSTOMER_IDS#)) OR (SupplierID IS NULL OR SupplierID IN (#ASSIGNED_SUPPLIER_IDS#)))");
                 }
                 else
-                    whereClause = " AND (CustomerID IS NULL OR CustomerID IN (" + selectedCustomerIDsList + "))";
+                    whereClause.Append(" AND (CustomerID IS NULL OR CustomerID IN (#SELECTED_CUSTOMER_IDS#))");
             }
             else if (selectedSupplierIDs.Count > 0)
             {
-                string selectedSupplierIDsList = GetCommaSeparatedList(selectedSupplierIDs);
-
                 if (assignedCustomerIDs.Count > 0)
                 {
-                    string assignedCustomerIDsList = GetCommaSeparatedList(assignedCustomerIDs);
-                    whereClause = " AND ((CustomerID IS NULL OR CustomerID IN (" + assignedCustomerIDsList + ")) OR (SupplierID IS NULL OR SupplierID IN (" + selectedSupplierIDsList + ")))";
+                    whereClause.Append(" AND ((CustomerID IS NULL OR CustomerID IN (#ASSIGNED_CUSTOMER_IDS#)) OR (SupplierID IS NULL OR SupplierID IN (#SELECTED_SUPPLIER_IDS#)))");
                 }
                 else
-                    whereClause = " AND (SupplierID IS NULL OR SupplierID IN (" + selectedSupplierIDsList + "))";
+                    whereClause.Append(" AND (SupplierID IS NULL OR SupplierID IN (#SELECTED_SUPPLIER_IDS#))");
             }
 
-            return whereClause;
+            whereClause.Replace("#SELECTED_CUSTOMER_IDS#", GetCommaSeparatedList(selectedCustomerIDs));
+            whereClause.Replace("#SELECTED_SUPPLIER_IDS#", GetCommaSeparatedList(selectedSupplierIDs));
+            whereClause.Replace("#ASSIGNED_CUSTOMER_IDS#", GetCommaSeparatedList(assignedCustomerIDs));
+            whereClause.Replace("#ASSIGNED_SUPPLIER_IDS#", GetCommaSeparatedList(assignedSupplierIDs));
+
+            return whereClause.ToString();
         }
 
         private string GetCommaSeparatedList(List<string> items)
