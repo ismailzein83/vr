@@ -1,6 +1,5 @@
 ﻿'use strict'
 var serviceObj = function (BaseAPIService) {
-    alert("in")
     return ({
         GetFilteredSupplierTOD: GetFilteredSupplierTOD
     });
