@@ -18,26 +18,26 @@ namespace Vanrise.Fzero.DevRuntime
         {
 
             //string conStr = "Data Source=192.168.110.185;Initial Catalog=CDRAnalysisMobile_Research;User ID=development;Password=dev!123;";
-            //string query = "SELECT [MSISDN],[IMSI],[ConnectDateTime],[Destination],[DurationInSeconds],[DisconnectDateTime],[Call_Class],[IsOnNet],[Call_Type],[Sub_Type],[IMEI],[BTS_Id],[Cell_Id],[SwitchRecordId],[Up_Volume],[Down_Volume],[Cell_Latitude],[Cell_Longitude],[In_Trunk],[Out_Trunk],[Service_Type],[Service_VAS_Name],[Id] FROM [CDRAnalysisMobile_Research].[dbo].[NormalCDRAf] where Id > 120585";
+            //string query = "SELECT top 1 [MSISDN],[IMSI],[ConnectDateTime],[Destination],[DurationInSeconds],[DisconnectDateTime],[Call_Class],[IsOnNet],[Call_Type],[Sub_Type],[IMEI],[BTS_Id],[Cell_Id],[SwitchRecordId],[Up_Volume],[Down_Volume],[Cell_Latitude],[Cell_Longitude],[In_Trunk],[Out_Trunk],[Service_Type],[Service_VAS_Name],[Id] FROM [CDRAnalysisMobile_Research].[dbo].[NormalCDRAf] where Id > 120585";
 
             //IDataReader reader = null;
 
             //SqlConnection conn = new SqlConnection(conStr);
-            
+
             //conn.Open();
             //SqlCommand cmd = new SqlCommand(query, conn);
             //reader = cmd.ExecuteReader();
-            
-            
+
+
 
             //Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch batch = new Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch();
             //batch.CDRs = new List<Vanrise.Fzero.CDRImport.Entities.CDR>();
-            
-            //Vanrise.Integration.Entities.DBReaderImportedData ImportedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
-            
+
+           // Vanrise.Integration.Entities.DBReaderImportedData ImportedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
+
             //IDataReader reader = ImportedData.Reader;
             //string index = ImportedData.LastImportedId;
-            
+            //string index = "0";
             //while (reader.Read())
             //{
 
@@ -69,11 +69,11 @@ namespace Vanrise.Fzero.DevRuntime
             //    index = normalCDR.Id.ToString();
 
             //    Console.WriteLine(index);
-                
+
 
             //    batch.CDRs.Add(normalCDR);
             //}
-            
+
             //ImportedData.LastImportedId = index;
 
             //mappedBatches.Add("CDR Import", batch);
@@ -85,11 +85,7 @@ namespace Vanrise.Fzero.DevRuntime
             //return result;          
 
 
-
-
-
-
-
+            
 
 
 
