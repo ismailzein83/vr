@@ -38,7 +38,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     normalCDR.DurationInSeconds = GetReaderValue<Decimal?>(reader, "DurationInSeconds");
                     normalCDR.DisconnectDateTime = GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
                     normalCDR.CallClass = reader["Call_Class"] as string;
-                    normalCDR.IsOnNet = GetReaderValue<Byte?>(reader, "IsOnNet");
+                    normalCDR.IsOnNet = GetReaderValue<short?>(reader, "IsOnNet");
                     normalCDR.SubType = reader["Sub_Type"] as string;
                     normalCDR.IMEI = reader["IMEI"] as string;
                     normalCDR.CellId = reader["Cell_Id"] as string;
@@ -48,7 +48,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     normalCDR.CellLongitude = GetReaderValue<Decimal?>(reader, "Cell_Longitude");
                     normalCDR.InTrunk = reader["In_Trunk"] as string;
                     normalCDR.OutTrunk = reader["Out_Trunk"] as string;
-                    normalCDR.ServiceType = GetReaderValue<int>(reader, "Service_Type");
+                    normalCDR.ServiceType = GetReaderValue<int?>(reader, "Service_Type");
                     normalCDR.ServiceVASName = reader["Service_VAS_Name"] as string;
                     normalCDR.Destination = reader["Destination"] as string;
                     normalCDR.MSISDN = reader["MSISDN"] as string;

@@ -13,7 +13,7 @@ namespace Vanrise.Fzero.CDRImport.Entities
         {
             Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(CDR), "Id", "MSISDN", "IMSI", "ConnectDateTime", "Destination", "DurationInSeconds",
                 "DisconnectDateTime", "CallClass", "IsOnNet", "CallType", "SubType", "IMEI", "BTSId",
-                "CellId", "SwitchRecordId", "UpVolume", "DownVolume", "CellLatitude", "CellLongitude", "InTrunk",
+                "CellId", "UpVolume", "DownVolume", "CellLatitude", "CellLongitude", "InTrunk",
                 "OutTrunk", "ServiceType", "ServiceVASName");
         }
 
