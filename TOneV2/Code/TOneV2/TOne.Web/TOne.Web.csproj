@@ -302,6 +302,7 @@
     <Content Include="images\logoonheader.png" />
     <Content Include="images\iconheader.ico" />
     <Content Include="images\menu-icons\account manager.png" />
+    <Content Include="images\menu-icons\Account.png" />
     <Content Include="images\menu-icons\Administration.png" />
     <Content Include="images\menu-icons\billing.png" />
     <Content Include="images\menu-icons\busines intel.png" />
@@ -312,6 +313,7 @@
     <Content Include="images\menu-icons\plug.png" />
     <Content Include="images\menu-icons\post paid - pre paid.png" />
     <Content Include="images\menu-icons\Purchase Area.png" />
+    <Content Include="images\menu-icons\Routing.png" />
     <Content Include="images\menu-icons\Sale Area.png" />
     <Content Include="popoverTemp.html" />
     <Content Include="Global.asax" />
