@@ -9,10 +9,10 @@ namespace TOne.Analytics.Data.SQL
 {
     internal class GenericAnalyticConfigManager
     {
-        public GenericAnalyticConfigManager()
+        static GenericAnalyticConfigManager()
         {
             FillGroupFieldsConfig();
-            //FillMeasureFieldsConfig();
+            FillMeasureFieldsConfig();
         }
 
         static Dictionary<AnalyticGroupField, AnalyticGroupFieldConfig> s_AllGroupFieldsConfig;
@@ -74,7 +74,17 @@ namespace TOne.Analytics.Data.SQL
         {
             s_AllMeasureFieldsConfig = new Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig>();
 
-            throw new NotImplementedException();
+            s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.Attempts,
+                new AnalyticMeasureFieldConfig
+                {
+                    GetFieldExpression = (query) => "Sum(ts.Attempts)"
+                });
+
+            s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.DurationsInMinutes,
+               new AnalyticMeasureFieldConfig
+               {
+                   GetFieldExpression = (query) => "Sum(ts.DurationsInSeconds) / 60"
+               });
         }
 
     }
