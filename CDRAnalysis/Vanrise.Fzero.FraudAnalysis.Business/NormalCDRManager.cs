@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Entities;
+using Vanrise.Fzero.CDRImport.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {

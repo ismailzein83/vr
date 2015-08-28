@@ -90,10 +90,8 @@
     <Compile Include="Aggregates\SumAggregate.cs" />
     <Compile Include="Aggregates\DistinctCountAggregate.cs" />
     <Compile Include="FilterDefinition.cs" />
-    <Compile Include="Predefined\Enums.cs" />
     <Compile Include="Aggregates\IAggregate.cs" />
     <Compile Include="Batches\NumberCriteriaBatch.cs" />
-    <Compile Include="CDR.cs" />
     <Compile Include="Batches\NumberProfileBatch.cs" />
     <Compile Include="NumberProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -107,6 +105,10 @@
     <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Entities\Vanrise.Fzero.CDRImport.Entities.csproj">
+      <Project>{8ea7f723-709a-480a-9ecf-be40c336a0cb}</Project>
+      <Name>Vanrise.Fzero.CDRImport.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Fzero.Entities\Vanrise.Fzero.Entities.csproj">
       <Project>{417276c2-f440-4445-a688-0838caba5e90}</Project>
       <Name>Vanrise.Fzero.Entities</Name>

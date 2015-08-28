@@ -6,6 +6,8 @@ using System.Linq;
 using Vanrise.Data.SQL;
 using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
+using Vanrise.Fzero.CDRImport.Entities;
+
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
@@ -105,7 +107,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             var fraudResult = new FraudResult();
             fraudResult.LastOccurance = (DateTime)reader["LastOccurance"];
             fraudResult.AccountNumber = reader["AccountNumber"] as string;
-            fraudResult.SuspicionLevelName = ((Enums.SuspicionLevel)Enum.ToObject(typeof(Enums.SuspicionLevel), GetReaderValue<int>(reader, "SuspicionLevelId"))).ToString();
+            fraudResult.SuspicionLevelName = ((SuspicionLevelEnum)Enum.ToObject(typeof(SuspicionLevelEnum), GetReaderValue<int>(reader, "SuspicionLevelId"))).ToString();
             fraudResult.StrategyName = reader["StrategyName"] as string;
             fraudResult.NumberofOccurances = reader["NumberofOccurances"] as string;
             fraudResult.CaseStatus = reader["CaseStatus"] as string;

@@ -5,6 +5,7 @@ using System.Linq;
 using Vanrise.Data.SQL;
 using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
+using Vanrise.Fzero.CDRImport.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
@@ -29,7 +30,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 while (reader.Read())
                 {
                     CDR normalCDR = new CDR();
-                    normalCDR.CallType =  GetReaderValue<Enums.CallType>(reader, "Call_Type");
+                    normalCDR.CallType =  GetReaderValue<CallTypeEnum>(reader, "Call_Type");
                     normalCDR.BTSId = GetReaderValue<int?>(reader, "BTS_Id");
                     normalCDR.ConnectDateTime = GetReaderValue<DateTime?>(reader, "ConnectDateTime");
                     normalCDR.Id = (int)reader["Id"];
@@ -41,7 +42,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     normalCDR.SubType = reader["Sub_Type"] as string;
                     normalCDR.IMEI = reader["IMEI"] as string;
                     normalCDR.CellId = reader["Cell_Id"] as string;
-                    normalCDR.SwitchRecordId = GetReaderValue<int?>(reader, "SwitchRecordId");
                     normalCDR.UpVolume = GetReaderValue<Decimal?>(reader, "Up_Volume");
                     normalCDR.DownVolume = GetReaderValue<Decimal?>(reader, "Down_Volume");
                     normalCDR.CellLatitude = GetReaderValue<Decimal?>(reader, "Cell_Latitude");
@@ -87,7 +87,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         private CDR NormalCDRMapper(IDataReader reader)
         {
             var normalCDR = new CDR();
-            normalCDR.CallType = (Enums.CallType)Enum.ToObject(typeof(Enums.CallType), GetReaderValue<int>(reader, "Call_Type"));
+            normalCDR.CallType = (CallTypeEnum)Enum.ToObject(typeof(CallTypeEnum), GetReaderValue<int>(reader, "Call_Type"));
             normalCDR.ConnectDateTime = GetReaderValue<DateTime?>(reader, "ConnectDateTime");
             normalCDR.IMSI = reader["IMSI"] as string;
             normalCDR.DurationInSeconds = GetReaderValue<Decimal?>(reader, "DurationInSeconds");

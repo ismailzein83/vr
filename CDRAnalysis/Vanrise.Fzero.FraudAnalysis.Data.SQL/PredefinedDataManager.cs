@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using Vanrise.Data.SQL;
 using Vanrise.Fzero.FraudAnalysis.Entities;
+using Vanrise.Fzero.CDRImport.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
@@ -24,7 +25,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         public List<Period> GetPeriods()
         {
 
-            var enumerationType = typeof(Enums.Period);
+            var enumerationType = typeof(PeriodEnum);
             List<Period> periods = new List<Period>();
 
             foreach (int value in Enum.GetValues(enumerationType))
@@ -43,7 +44,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             var callClass = new CallClass();
             callClass.Id = (int)reader["Id"];
             callClass.Description = reader["Description"] as string;
-            callClass.NetType = (Enums.NetType)Enum.ToObject(typeof(Enums.NetType), GetReaderValue<int>(reader, "NetType"));
+            callClass.NetType = (NetTypeEnum)Enum.ToObject(typeof(NetTypeEnum), GetReaderValue<int>(reader, "NetType"));
             return callClass;
         }
 

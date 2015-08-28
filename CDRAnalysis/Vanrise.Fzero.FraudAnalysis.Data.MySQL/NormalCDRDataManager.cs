@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Vanrise.Data.MySQL;
 using Vanrise.Fzero.FraudAnalysis.Entities;
+using Vanrise.Fzero.CDRImport.Entities;
+
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
 {

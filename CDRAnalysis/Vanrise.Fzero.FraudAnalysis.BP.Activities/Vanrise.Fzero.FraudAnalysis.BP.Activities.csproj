@@ -98,6 +98,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Entities\Vanrise.Fzero.CDRImport.Entities.csproj">
+      <Project>{8ea7f723-709a-480a-9ecf-be40c336a0cb}</Project>
+      <Name>Vanrise.Fzero.CDRImport.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Arguments\Vanrise.Fzero.FraudAnalysis.BP.Arguments.csproj">
       <Project>{8de7b4ac-2ea9-4a88-9a44-e73a21e26398}</Project>
       <Name>Vanrise.Fzero.FraudAnalysis.BP.Arguments</Name>

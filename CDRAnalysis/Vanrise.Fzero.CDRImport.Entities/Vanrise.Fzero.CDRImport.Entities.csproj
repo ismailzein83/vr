@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CDR.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="ImportedCDRBatch.cs" />
     <Compile Include="ParsedCDRBatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

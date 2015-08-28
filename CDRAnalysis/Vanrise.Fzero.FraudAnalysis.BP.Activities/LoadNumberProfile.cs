@@ -7,6 +7,7 @@ using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Queueing;
+using Vanrise.Fzero.CDRImport.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {

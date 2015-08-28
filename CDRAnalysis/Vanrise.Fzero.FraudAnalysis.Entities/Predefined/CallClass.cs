@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vanrise.Fzero.CDRImport.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
@@ -7,7 +8,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     {
         public int Id { get; set; }
         public string Description { get; set; }
-        public Enums.NetType NetType { get; set; }
+        public NetTypeEnum NetType { get; set; }
     }
 
     

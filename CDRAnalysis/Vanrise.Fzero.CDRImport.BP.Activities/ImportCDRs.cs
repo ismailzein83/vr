@@ -4,6 +4,9 @@ using System.Activities;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+//Todo: Remove Later
+
+
 using Vanrise.BusinessProcess;
 using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Queueing;
@@ -87,9 +90,9 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
 
 
-                                    int callType = 0;
-                                    if (int.TryParse(i.Substring(102, 3).Trim(), out callType))
-                                        cdr.CallType = callType;
+                                    //int callType = 0;
+                                    //if (int.TryParse(i.Substring(102, 3).Trim(), out callType))
+                                    //    cdr.CallType = callType;
 
                                     decimal cellLatitude;
                                     if (decimal.TryParse(i.Substring(609, 9).Trim(), out cellLatitude))

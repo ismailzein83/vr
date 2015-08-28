@@ -9,6 +9,7 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using System.Configuration;
 using Vanrise.Common;
+using Vanrise.Fzero.CDRImport.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {

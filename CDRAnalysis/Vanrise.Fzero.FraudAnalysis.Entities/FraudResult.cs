@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vanrise.Fzero.CDRImport.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
@@ -9,7 +10,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public string AccountNumber { get; set; }
 
-        public Enums.SuspicionLevel SuspicionLevel { get; set; }
+        public SuspicionLevelEnum SuspicionLevel { get; set; }
 
         public string SuspicionLevelName { get; set; }
 
