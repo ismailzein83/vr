@@ -32,7 +32,11 @@ namespace Vanrise.BI.Web.Controllers
             Mappers mapper = new Mappers();
             return mapper.EntitiesMapper(managerData); ;
         }
-    
-       
+
+        [HttpGet]
+        public string GetSystemCurrency()
+        {
+            return System.Configuration.ConfigurationManager.AppSettings["Currency"];
+        } 
     }
 }

@@ -127,9 +127,6 @@ app.directive('vrBiSummary', ['UtilsService', 'BIConfigurationAPIService', 'BIAP
                                    
                                 }
                             }
-
-                            console.log(ctrl.measureTypes);
-
                         }).finally(function () {
                             ctrl.isGettingData = false;
                         });
@@ -140,8 +137,19 @@ app.directive('vrBiSummary', ['UtilsService', 'BIConfigurationAPIService', 'BIAP
                 
                 for (var i = 0; i < settings.MeasureTypes.length; i++) {
                     var value = UtilsService.getItemByVal(response, settings.MeasureTypes[i], 'Name');
+                    
                     if (value != null)
-                        measures.push(value);
+                    {
+
+                        if (value.Unit === "Currency")
+                            BIConfigurationAPIService.GetSystemCurrency().then(function (response) {
+                                value.Unit = response;
+                                measures.push(value);
+                            });
+                        else
+                            measures.push(value);
+                    }
+                       
                 }
             });
         }
