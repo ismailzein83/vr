@@ -17,6 +17,7 @@ function RawCDRLogController($scope, RawCDRLogAPIService, UtilsService, $q, Busi
         $scope.outCarrier;
         $scope.inCDPN;
         $scope.outCDPN;
+        $scope.showResult = false;
         $scope.cgpn;
         $scope.minDuration;
         $scope.maxDuration;
@@ -37,6 +38,7 @@ function RawCDRLogController($scope, RawCDRLogAPIService, UtilsService, $q, Busi
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return RawCDRLogAPIService.GetRawCDRData(dataRetrievalInput).then(function (response) {
                 onResponseReady(response);
+                $scope.showResult = true;
             }).catch(function (error) {
                // VRNotificationService.notifyException("Sintex Error", "dsad");
 

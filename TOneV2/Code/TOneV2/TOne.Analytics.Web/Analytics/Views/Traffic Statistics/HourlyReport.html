@@ -3,19 +3,19 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
 
-
             <vr-row removeline>
                 <vr-columns colnum="fullrow">
-                    <div style="padding : 0px 5px">
-                        <vr-choices selectedindex="selectedFilternIndex">
-                            <vr-choice isselected="basicSelected">Basic</vr-choice>
-                            <vr-choice isselected="advancedSelected">Advanced</vr-choice>
-                        </vr-choices>
-                    </div>
+                    <vr-choices-filter selectedindex="selectedFilternIndex">
+                        <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
+                        <vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
+                    </vr-choices-filter>
 
                 </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                
                 <vr-columns colnum="fullrow" ng-show="basicSelected">
-                    <vr-row removeline>
+                    <vr-row>
                         <vr-columns width="normal">
                             <vr-select label="Group By" datasource="groupKeys"
                                        datatextfield="description" datavaluefield="value" selectedvalues="selectedGroupKeys" customvalidate="customvalidateSelectGroup" ismultipleselection isrequired></vr-select>
@@ -33,49 +33,51 @@
                     </vr-row>
                 </vr-columns>
                 <vr-columns colnum="fullrow" ng-show="advancedSelected">
-                    <vr-columns width="normal">
-                        <vr-select label="Group By" datasource="groupKeys"
-                                   datatextfield="description" datavaluefield="value" selectedvalues="selectedGroupKeys" customvalidate="customvalidateSelectGroup" ismultipleselection isrequired></vr-select>
-                    </vr-columns>
-                    <vr-columns width="normal">
-                        <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Period"
-                                   selectedvalues="selectedPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
-                    </vr-columns>
+                    <vr-row>
+                        <vr-columns width="normal">
+                            <vr-select label="Group By" datasource="groupKeys"
+                                       datatextfield="description" datavaluefield="value" selectedvalues="selectedGroupKeys" customvalidate="customvalidateSelectGroup" ismultipleselection isrequired></vr-select>
+                        </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Period"
+                                       selectedvalues="selectedPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
+                        </vr-columns>
 
-                    <vr-columns width="normal">
-                        <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired customvalidate="customvalidateTestFrom"></vr-datetimepicker>
-                    </vr-columns>
-                    <vr-columns width="normal">
-                        <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired customvalidate="customvalidateTestTo"></vr-datetimepicker>
-                    </vr-columns>
-                    <vr-columns width="normal">
-                        <vr-select label="Switches" datasource="switches"
-                                   datatextfield="Name" datavaluefield="SwitchId" selectedvalues="selectedSwitches" ismultipleselection></vr-select>
-                    </vr-columns>
-                    <vr-columns width="normal">
-                        <vr-select ismultipleselection datasource="searchZones" label="Zones" selectedvalues="selectedZones" datatextfield="Name" datavaluefield="ZoneId"
-                                   entityname="Zones"></vr-select>
-                    </vr-columns>
-                    <vr-columns width="normal">
-                        <vr-select label="Code Groups" datasource="codeGroups"
-                                   datatextfield="Name" datavaluefield="Code" selectedvalues="selectedCodeGroups" ismultipleselection></vr-select>
-                    </vr-columns>
-                    <vr-columns width="normal">
-                        <vr-be-carriergroup type="'Customer'" selectedvalues="selectedCustomers"></vr-be-carriergroup>
-                    </vr-columns>
-                    <vr-columns width="normal">
-                        <vr-be-carriergroup type="'Supplier'" selectedvalues="selectedSuppliers"></vr-be-carriergroup>
-                    </vr-columns>
-                    <vr-columns width="normal">
-                        <vr-choices selectedindex="selectedConnectionIndex" onselectionchanged="onSelectionChanged()">
-                            <vr-choice isselected="noneSelected">None</vr-choice>
-                            <vr-choice isselected="inSelected">In</vr-choice>
-                            <vr-choice isselected="outSelected">Out</vr-choice>
-                        </vr-choices>
-                        <vr-select label="Connection" datasource="connections"
-                                   datatextfield="DisplayName" datavaluefield="ID" selectedvalues="selectedConnections" ismultipleselection></vr-select>
-                    </vr-columns>
-                </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired customvalidate="customvalidateTestFrom"></vr-datetimepicker>
+                        </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired customvalidate="customvalidateTestTo"></vr-datetimepicker>
+                        </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-select label="Switches" datasource="switches"
+                                       datatextfield="Name" datavaluefield="SwitchId" selectedvalues="selectedSwitches" ismultipleselection></vr-select>
+                        </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-select ismultipleselection datasource="searchZones" label="Zones" selectedvalues="selectedZones" datatextfield="Name" datavaluefield="ZoneId"
+                                       entityname="Zones"></vr-select>
+                        </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-select label="Code Groups" datasource="codeGroups"
+                                       datatextfield="Name" datavaluefield="Code" selectedvalues="selectedCodeGroups" ismultipleselection></vr-select>
+                        </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-be-carriergroup type="'Customer'" selectedvalues="selectedCustomers"></vr-be-carriergroup>
+                        </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-be-carriergroup type="'Supplier'" selectedvalues="selectedSuppliers"></vr-be-carriergroup>
+                        </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-choices selectedindex="selectedConnectionIndex" onselectionchanged="onSelectionChanged()">
+                                <vr-choice isselected="noneSelected">None</vr-choice>
+                                <vr-choice isselected="inSelected">In</vr-choice>
+                                <vr-choice isselected="outSelected">Out</vr-choice>
+                            </vr-choices>
+                            <vr-select label="Connection" datasource="connections"
+                                       datatextfield="DisplayName" datavaluefield="ID" selectedvalues="selectedConnections" ismultipleselection></vr-select>
+                        </vr-columns>
+                        </vr-row>
+</vr-columns>
 
             </vr-row>
 

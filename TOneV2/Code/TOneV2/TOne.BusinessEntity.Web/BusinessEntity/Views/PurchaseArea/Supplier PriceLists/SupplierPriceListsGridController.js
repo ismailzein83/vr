@@ -79,7 +79,7 @@ function SupplierPricelistsGridController($scope, VRModalService, UtilsService, 
             {
                 dataItem.isCodeLoaded = true;
                  CodeAPIService.GetCodes(dataItem.ZoneID, $scope.dataItem.BeginEffectiveDate).then(function (response) {
-                     $scope.codes = response;
+                     dataItem.codes = response;
                 });
 
             }

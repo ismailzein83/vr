@@ -1,6 +1,6 @@
 ﻿'use strict'
-CustomerPricelistsGridController.$inject = ['$scope', 'VRModalService', 'UtilsService','CustomerPricelistsAPIService','ChangeEnum'];
-function CustomerPricelistsGridController($scope, VRModalService, UtilsService, CustomerPricelistsAPIService,ChangeEnum) {
+CustomerPricelistsGridController.$inject = ['$scope', 'VRModalService', 'UtilsService','CustomerPricelistsAPIService','ChangeEnum','CodeAPIService'];
+function CustomerPricelistsGridController($scope, VRModalService, UtilsService, CustomerPricelistsAPIService, ChangeEnum, CodeAPIService) {
     var mainGridAPI;
     defineScope();
     load();
@@ -74,7 +74,7 @@ function CustomerPricelistsGridController($scope, VRModalService, UtilsService, 
             if (dataItem.isCodeLoaded == undefined) {
                 dataItem.isCodeLoaded = true;
                 CodeAPIService.GetCodes(dataItem.ZoneID, $scope.dataItem.BeginEffectiveDate).then(function (response) {
-                    $scope.codes = response;
+                    dataItem.codes = response;
                 });
 
             }

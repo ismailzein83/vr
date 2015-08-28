@@ -37,6 +37,7 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
         $scope.toDate = '2015/06/06';
         $scope.nRecords = '100'
         $scope.isInitializing = false;
+        $scope.showResult = false;
         $scope.switches = [];
         $scope.selectedSwitches = [];
         $scope.data = [];
@@ -58,6 +59,7 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return CDRAPIService.GetCDRData(dataRetrievalInput).then(function (response) {
                 onResponseReady(response);
+                $scope.showResult = true;
             })
         };
 

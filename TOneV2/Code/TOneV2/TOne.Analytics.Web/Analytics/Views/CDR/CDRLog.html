@@ -40,7 +40,7 @@
                 </div>
             </vr-actionbar>
         </vr-row>
-         <div vr-loader="isGettingData">
+         <div ng-show="showResult">
              <vr-row>
                  <vr-columns width="fullrow" simplecol>
                      <vr-datagrid datasource="data" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'" on-ready="onMainGridReady" maxheight="500px">

@@ -15,7 +15,7 @@
             <vr-datagridcolumn headertext="'EED'" field="'EndEffectiveDate'" type="Date" widthfactor="8" ></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Notes'" field="'Notes'" widthfactor="20" ></vr-datagridcolumn>
             <vr-datagridexpandablerow>
-                <div> Codes: <vr-label>{{gridParentScope.getCodes(dataItem)}}{{gridParentScope.codes}}</vr-label> </div>
+                <div> Codes: <vr-label>{{gridParentScope.getCodes(dataItem)}}{{dataItem.codes}}</vr-label> </div>
             </vr-datagridexpandablerow>
         </vr-datagrid>
 </div>
