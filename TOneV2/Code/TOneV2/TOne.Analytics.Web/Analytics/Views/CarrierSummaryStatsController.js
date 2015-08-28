@@ -70,7 +70,7 @@
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return CarrierSummaryStatsAPIService.GetFilteredCarrierSummaryStats(dataRetrievalInput)
+                return CarrierSummaryStatsAPIService.GetFiltered(dataRetrievalInput)
                 .then(function (response) {
                     gridApi.setSummary(response.Summary);
                     onResponseReady(response);

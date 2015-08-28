@@ -43,10 +43,12 @@ namespace TOne.Analytics.Data.SQL
 
 
 
-//        }
+ //       }
 
 //        private string CreateTempTableIfNotExists(string tempTableName, GenericFilter filter, IEnumerable<TrafficStatisticGroupKeys> groupKeys)
 //        {
+
+
 //            StringBuilder whereBuilder = new StringBuilder();
 //            string tableName = trafficStatisticCommon.GetTableName(groupKeys, filter);
 //            StringBuilder queryBuilder = new StringBuilder(@"

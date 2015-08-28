@@ -58,6 +58,7 @@
     <Compile Include="IDailyReportDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IAnalyticsDataManager.cs" />
+    <Compile Include="IGenericAnalyticDataManager.cs" />
     <Compile Include="IHourlyReportDataManager.cs" />
     <Compile Include="IRawCDRLogDataManager.cs" />
     <Compile Include="IReleaseCodeDataManager.cs" />

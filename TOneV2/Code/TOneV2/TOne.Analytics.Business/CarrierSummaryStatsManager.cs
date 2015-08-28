@@ -15,12 +15,18 @@ namespace TOne.Analytics.Business
         private readonly ICarrierSummaryStatsDataManager _datamanager;
         private readonly CarrierAccountManager _cmanager;
         private readonly CarrierProfileManager _cpmanager;
-
+        private readonly IGenericAnalyticDataManager _gdatamanager;
         public CarrierSummaryStatsManager()
         {
+            _gdatamanager = AnalyticsDataManagerFactory.GetDataManager<IGenericAnalyticDataManager>();
             _datamanager = AnalyticsDataManagerFactory.GetDataManager<ICarrierSummaryStatsDataManager>();
             _cmanager = new CarrierAccountManager();
             _cpmanager = new CarrierProfileManager();
+        }
+
+        public Vanrise.Entities.IDataRetrievalResult<AnalyticRecord> GetFiltered(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
+        {
+           return _gdatamanager.GetAnalyticSummary(input); 
         }
 
         public Vanrise.Entities.IDataRetrievalResult<CarrierSummaryStats> GetFilteredCarrierSummaryStats(Vanrise.Entities.DataRetrievalInput<CarrierSummaryStatsQuery> input)

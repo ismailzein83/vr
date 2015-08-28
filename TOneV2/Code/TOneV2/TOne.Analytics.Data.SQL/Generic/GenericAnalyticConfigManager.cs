@@ -9,22 +9,22 @@ namespace TOne.Analytics.Data.SQL
 {
     internal class GenericAnalyticConfigManager
     {
-        static GenericAnalyticConfigManager()
+        public GenericAnalyticConfigManager()
         {
             FillGroupFieldsConfig();
-            FillMeasureFieldsConfig();
+            //FillMeasureFieldsConfig();
         }
 
         static Dictionary<AnalyticGroupField, AnalyticGroupFieldConfig> s_AllGroupFieldsConfig;
         static Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig> s_AllMeasureFieldsConfig;
         public Dictionary<AnalyticGroupField, AnalyticGroupFieldConfig> GetGroupFieldsConfig(IEnumerable<AnalyticGroupField> fields)
         {
-            Dictionary<AnalyticGroupField, AnalyticGroupFieldConfig> result = new Dictionary<AnalyticGroupField,AnalyticGroupFieldConfig>();
-            foreach(var itm in s_AllGroupFieldsConfig)
+            Dictionary<AnalyticGroupField, AnalyticGroupFieldConfig> result = new Dictionary<AnalyticGroupField, AnalyticGroupFieldConfig>();
+            foreach (var itm in s_AllGroupFieldsConfig)
             {
-                if(fields.Contains(itm.Key))
+                if (fields.Contains(itm.Key))
                     result.Add(itm.Key, itm.Value);
-            } 
+            }
             return result;
         }
 
@@ -42,12 +42,13 @@ namespace TOne.Analytics.Data.SQL
         private static void FillGroupFieldsConfig()
         {
             s_AllGroupFieldsConfig = new Dictionary<AnalyticGroupField, AnalyticGroupFieldConfig>();
+
             s_AllGroupFieldsConfig.Add(AnalyticGroupField.OwnZone,
                 new AnalyticGroupFieldConfig
                 {
                     IdColumn = "ts.OurZoneID",
                     NameColumn = "z.Name",
-                    JoinStatements = { "JOIN Zone z WITH (NOLOCK) ON z.ZoneID = ts.OurZoneID" }
+                    JoinStatements = new List<string>() { "JOIN Zone z WITH (NOLOCK) ON z.ZoneID = ts.OurZoneID" }
                 });
 
             s_AllGroupFieldsConfig.Add(AnalyticGroupField.Customer,
@@ -55,14 +56,24 @@ namespace TOne.Analytics.Data.SQL
                 {
                     IdColumn = "ts.CustomerID",
                     NameColumn = "case when cust.NameSuffix != '' THEN  custProf.Name + '(' + cust.NameSuffix + ')' else custProf.Name end",
-                    JoinStatements = { @"JOIN CarrierAccount cust WITH (NOLOCK) ON cust.CarrierAccountID = ts.CustomerID
+                    JoinStatements = new List<string>() { @"JOIN CarrierAccount cust WITH (NOLOCK) ON cust.CarrierAccountID = ts.CustomerID
                                          JOIN CarrierProfile custProf on cust.ProfileID = custProf.ProfileID" }
+                });
+
+            s_AllGroupFieldsConfig.Add(AnalyticGroupField.Supplier,
+                new AnalyticGroupFieldConfig
+                {
+                    IdColumn = "ts.SupplierID",
+                    NameColumn = "case when cust.NameSuffix != '' THEN  custProf.Name + '(' + cust.NameSuffix + ')' else custProf.Name end",
+                    JoinStatements = new List<string>() { @"JOIN CarrierAccount cust WITH (NOLOCK) ON cust.CarrierAccountID = ts.SupplierID
+                                                     JOIN CarrierProfile custProf on cust.ProfileID = custProf.ProfileID" }
                 });
         }
 
         private static void FillMeasureFieldsConfig()
         {
             s_AllMeasureFieldsConfig = new Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig>();
+
             throw new NotImplementedException();
         }
 

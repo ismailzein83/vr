@@ -19,5 +19,12 @@ namespace TOne.Analytics.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredCarrierSummaryStats(input));
         }
 
+        [HttpPost]
+        public Object GetFiltered(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
+        {
+            CarrierSummaryStatsManager manager = new CarrierSummaryStatsManager();
+            return GetWebResponse(input, manager.GetFiltered(input));
+        }
+
     }
 }
