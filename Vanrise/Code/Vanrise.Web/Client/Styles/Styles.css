@@ -1768,21 +1768,22 @@ opacity:0.9 ;
   
 }
 .circle-div .circle-label{
+    
     font-size:9px;
     display: table-cell;
     vertical-align: middle;
     text-align: center;
     width: 85px;
-    padding-top: 5px;
-    height: 50%;
+    padding-top: 14px;
+    height: 40%;
 }
 .circle-div .circle-value{
-   line-height:45px;
+   
    font-size: 15px !important;
-   height: 40%;
+   height: 30%;
 }
 .circle-div .circle-unit{
-   height: 10%;
+   height: 30%;
    font-size: 9px;
 }
 .circle-bg-0{
