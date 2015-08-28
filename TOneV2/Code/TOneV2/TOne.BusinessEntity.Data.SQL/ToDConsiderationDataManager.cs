@@ -55,34 +55,32 @@ namespace TOne.BusinessEntity.Data.SQL
             //};
         }
 
-        private BaseTODConsiderationInfo ToDConsiderationInfoMapper(IDataReader reader ,DateTime when)
+
+        protected T ToDConsiderationInfoMapper<T>(IDataReader reader, DateTime when) where T : BaseTODConsiderationInfo
         {
-            BaseTODConsiderationInfo toDConsiderationInfo = new BaseTODConsiderationInfo
-            {
-                ToDConsiderationID = GetReaderValue<long>(reader, "ToDConsiderationID"),
-                ZoneID = GetReaderValue<int>(reader, "ZoneID"),
-                SupplierID = reader["SupplierID"] as string,
-                CustomerID = reader["CustomerID"] as string,
-                BeginTime = reader["BeginTime"] as string,
-                EndTime = reader["EndTime"] as string,
-                WeekDay = reader["WeekDay"] != DBNull.Value ? (DayOfWeek)Enum.Parse(typeof(DayOfWeek), reader["WeekDay"].ToString()) : 0,
-                HolidayDate = GetReaderValue<DateTime>(reader, "HolidayDate"),
-                HolidayName = reader["HolidayName"] as string,
-                RateType = reader["RateType"] != DBNull.Value ? (ToDRateType)Enum.Parse(typeof(ToDRateType), reader["RateType"].ToString()) : ToDRateType.Normal,
-                BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate"),
-                EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate"),
-                UserID = GetReaderValue<int>(reader, "UserID"),
-                ZoneName = reader["ZoneName"] as string,
-                CarrierName = reader["CarrierName"] as string,
-                DefinitionDisplayS = reader["DefinitionDisplayS"] as string,
-            };
+            T toDConsiderationInfo = Activator.CreateInstance<T>();
+            toDConsiderationInfo.ToDConsiderationID = GetReaderValue<long>(reader, "ToDConsiderationID");
+            toDConsiderationInfo.ZoneID = GetReaderValue<int>(reader, "ZoneID");
+            toDConsiderationInfo.SupplierID = reader["SupplierID"] as string;
+            toDConsiderationInfo.CustomerID = reader["CustomerID"] as string;
+            toDConsiderationInfo.BeginTime = reader["BeginTime"] as string;
+            toDConsiderationInfo.EndTime = reader["EndTime"] as string;
+            toDConsiderationInfo.WeekDay = reader["WeekDay"] != DBNull.Value ? (DayOfWeek)Enum.Parse(typeof(DayOfWeek), reader["WeekDay"].ToString()) : 0;
+            toDConsiderationInfo.HolidayDate = GetReaderValue<DateTime>(reader, "HolidayDate");
+            toDConsiderationInfo.HolidayName = reader["HolidayName"] as string;
+            toDConsiderationInfo.RateType = reader["RateType"] != DBNull.Value ? (ToDRateType)Enum.Parse(typeof(ToDRateType), reader["RateType"].ToString()) : ToDRateType.Normal;
+            toDConsiderationInfo.BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate");
+            toDConsiderationInfo.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate");
+            toDConsiderationInfo.UserID = GetReaderValue<int>(reader, "UserID");
+            toDConsiderationInfo.ZoneName = reader["ZoneName"] as string;
+            toDConsiderationInfo.CarrierName = reader["CarrierName"] as string;
+            toDConsiderationInfo.DefinitionDisplayS = reader["DefinitionDisplayS"] as string;
             toDConsiderationInfo.IsActive = IsActive(when, toDConsiderationInfo);
 
             return toDConsiderationInfo;
-         
         }
 
-        private bool IsActive(DateTime when , BaseTODConsiderationInfo tod )
+        private bool IsActive(DateTime when, BaseTODConsiderationInfo tod)
         {
             if (!GetIsEffective(tod.BeginEffectiveDate, tod.EndEffectiveDate, when)) return false;
 
@@ -113,36 +111,6 @@ namespace TOne.BusinessEntity.Data.SQL
         {
             return GetItemsSP("BEntity.sp_ToDConsideration_GetToDConsiderations", ToDConsiderationMapper, ToDBNullIfDefault(zoneId), customerId, when);
         }
-
-        public Vanrise.Entities.BigResult<BaseTODConsiderationInfo> GetCustomerToDConsiderationByCriteria(Vanrise.Entities.DataRetrievalInput<TODQuery> input)
-        {
-
-            
-            return RetrieveData(input, (tempTableName) =>
-            {
-                string zoneIds = null;
-                if (input.Query.ZoneIds != null && input.Query.ZoneIds.Count() > 0)
-                    zoneIds = string.Join<int>(",", input.Query.ZoneIds);
-                ExecuteNonQuerySP("BEntity.sp_CustomersToDConsideration_CreateTempForFiltered", tempTableName, zoneIds , input.Query.CustomerId, input.Query.EffectiveOn);
-
-            }, (reader) => ToDConsiderationInfoMapper(reader, input.Query.EffectiveOn));
-        }
-
-        public Vanrise.Entities.BigResult<BaseTODConsiderationInfo> GetSupplierToDConsiderationByCriteria(Vanrise.Entities.DataRetrievalInput<TODQuery> input , List<string> suppliersAMUids )
-        {
-
-
-            return RetrieveData(input, (tempTableName) =>
-            {
-                string zoneIds = null;
-                string suppliersIds = null;
-                if (input.Query.ZoneIds.Count() > 0)
-                    zoneIds = string.Join<int>(",", input.Query.ZoneIds);
-                if (suppliersAMUids.Count() > 0)
-                    suppliersIds = string.Join<string>(",", suppliersAMUids);
-                ExecuteNonQuerySP("BEntity.sp_SupplierToDConsideration_CreateTempForFiltered", tempTableName, zoneIds, suppliersIds, input.Query.SupplierId, input.Query.EffectiveOn);
-
-            }, (reader) => ToDConsiderationInfoMapper(reader, input.Query.EffectiveOn));
-        }
+        
     }
 }

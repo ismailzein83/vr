@@ -16,8 +16,8 @@ namespace TOne.BusinessEntity.Web.Controllers
         public object GetSupplierTODFromTempTable(Vanrise.Entities.DataRetrievalInput<TODQuery> input)
         {
 
-            TODManager manager = new TODManager();
-            return GetWebResponse(input, manager.GetFilteredSupplierTOD(input));
+            SupplierTODManager manager = new SupplierTODManager();
+            return GetWebResponse(input, manager.GetSupplierTODFiltered(input));
         }
        
     }

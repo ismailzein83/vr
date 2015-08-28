@@ -74,8 +74,10 @@
     <Compile Include="FlaggedServiceDataManager.cs" />
     <Compile Include="SupplierPricelistsDataManager.cs" />
     <Compile Include="SupplierTariffDataManager.cs" />
+    <Compile Include="CustomerToDDataManager .cs" />
     <Compile Include="SwitchDataManager.cs" />
     <Compile Include="TariffDataManager.cs" />
+    <Compile Include="SupplierToDDataManager.cs" />
     <Compile Include="ToDConsiderationDataManager.cs" />
     <Compile Include="ToDConsiderationinfo.cs" />
     <Compile Include="ZoneDataManager.cs" />

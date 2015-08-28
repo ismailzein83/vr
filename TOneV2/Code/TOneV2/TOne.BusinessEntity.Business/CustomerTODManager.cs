@@ -11,11 +11,11 @@ namespace TOne.BusinessEntity.Business
 {
     public class CustomerTODManager : BaseTODManager<CustomerTODConsiderationInfo>
     {
-        public Vanrise.Entities.IDataRetrievalResult<CustomerTODConsiderationInfo> GetCustomerTODInfos(Vanrise.Entities.DataRetrievalInput<TODQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<CustomerTODConsiderationInfo> GetCustomerTODFiltered(Vanrise.Entities.DataRetrievalInput<TODQuery> input)
         {
 
             ICustomerTODDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerTODDataManager>();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetCustomerTODInfos(input));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetCustomerToDConsiderationByCriteria(input));
         }
     }
 }

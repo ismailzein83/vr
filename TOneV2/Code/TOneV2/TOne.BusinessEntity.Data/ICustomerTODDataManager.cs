@@ -9,7 +9,7 @@ namespace TOne.BusinessEntity.Data
 {
     public interface ICustomerTODDataManager : IDataManager
     {
-        Vanrise.Entities.BigResult<CustomerTODConsiderationInfo> GetCustomerTODInfos(Vanrise.Entities.DataRetrievalInput<TODQuery> input);
+        Vanrise.Entities.BigResult<CustomerTODConsiderationInfo> GetCustomerToDConsiderationByCriteria(Vanrise.Entities.DataRetrievalInput<TODQuery> input);
 
     }
 }

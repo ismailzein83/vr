@@ -77,7 +77,6 @@
     <Compile Include="SupplierTODManager.cs" />
     <Compile Include="SupplierPricelistsManager.cs" />
     <Compile Include="SupplierTariffManager.cs" />
-    <Compile Include="TODManager.cs" />
     <Compile Include="CodeManager.cs" />
     <Compile Include="CommissionManager.cs" />
     <Compile Include="CurrencyManager.cs" />

@@ -15,8 +15,8 @@ namespace TOne.BusinessEntity.Web.Controllers
         public object GetCutomerTODFromTempTable(Vanrise.Entities.DataRetrievalInput<TODQuery> input)
         {
 
-            TODManager manager = new TODManager();
-            return GetWebResponse(input, manager.GetFilteredCustomerTOD(input));
+            CustomerTODManager manager = new CustomerTODManager();
+            return GetWebResponse(input, manager.GetCustomerTODFiltered(input));
         }
 
     }

@@ -9,6 +9,5 @@ namespace TOne.BusinessEntity.Data
 {
     public interface IBaseTODDataManager : IDataManager
     {
-        Vanrise.Entities.BigResult<T> GetTODinfos<T>(Vanrise.Entities.DataRetrievalInput<TODQuery> input) where T : BaseTODConsiderationInfo;
     }
 }

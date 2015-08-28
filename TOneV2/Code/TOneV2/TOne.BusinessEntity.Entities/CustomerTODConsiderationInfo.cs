@@ -8,6 +8,6 @@ namespace TOne.BusinessEntity.Entities
 {
     public class CustomerTODConsiderationInfo : BaseTODConsiderationInfo
     {
-
+        public string CustomerNameSuffix { get; set; }
     }
 }
