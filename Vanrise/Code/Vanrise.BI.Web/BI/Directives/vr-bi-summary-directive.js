@@ -51,7 +51,7 @@ app.directive('vrBiSummary', ['UtilsService', 'BIConfigurationAPIService', 'BIAP
                         + '<div width="normal">'
                             + '<div class="circle-div" ng-repeat="value in ctrl.dataSource" ng-class="\'circle-bg-\'+ $index % 4" >'
                                 + '<div class="circle-value" >'
-                                  + '<vr-label isValue="{{value.value}}">{{value.value}}</vr-label>'
+                                  + '<vr-label isValue="{{value.value}}">{{value.value}}{{value.description.Unit}}</vr-label>'
                                 + '</div>'
                                 + '<div  class="circle-label" >'
                                  + '<vr-label isValue="{{value.description.DisplayName}}">{{value.description.DisplayName}}</vr-label>'
@@ -60,8 +60,6 @@ app.directive('vrBiSummary', ['UtilsService', 'BIConfigurationAPIService', 'BIAP
                         + '</div>'
                     + '</div>'
                 + '</vr-section>'
-
-
         }
         else
             //  return '<vr-section title="{{ctrl.title}}"><div><table class="table  table-striped" ><tr ng-repeat="value in ctrl.measureTypes" ><td><vr-label isValue="{{value}}">{{value.DisplayName}}</vr-label></td></tr></table></vr-section>';
@@ -74,6 +72,7 @@ app.directive('vrBiSummary', ['UtilsService', 'BIConfigurationAPIService', 'BIAP
 
         var summaryAPI;
         var measures = [];
+        var units = [];
         function initializeController() {
             UtilsService.waitMultipleAsyncOperations([loadMeasures])
            .then(function () {
@@ -89,10 +88,6 @@ app.directive('vrBiSummary', ['UtilsService', 'BIConfigurationAPIService', 'BIAP
                }
                ctrl.measureTypes = measures;
 
-
-               //if (retrieveDataOnLoad)
-               //    retrieveData();
-               ctrl.measureTypes = measures;
                ctrl.dataSource = [];
 
                defineAPI();
@@ -121,14 +116,16 @@ app.directive('vrBiSummary', ['UtilsService', 'BIConfigurationAPIService', 'BIAP
             ctrl.isGettingData = true;
             return BIAPIService.GetMeasureValues1(filter.fromDate, filter.toDate, settings.MeasureTypes)
                         .then(function (response) {
-
+                           
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.dataSource[i] = {
                                     value: response[i].toFixed(2),
-                                    description: ctrl.measureTypes[i]
+                                    description: ctrl.measureTypes[i],
+                                   
                                 }
                             }
 
+                            console.log(ctrl.measureTypes);
 
                         }).finally(function () {
                             ctrl.isGettingData = false;
@@ -137,6 +134,7 @@ app.directive('vrBiSummary', ['UtilsService', 'BIConfigurationAPIService', 'BIAP
         function loadMeasures() {
 
             return BIConfigurationAPIService.GetMeasures().then(function (response) {
+                
                 for (var i = 0; i < settings.MeasureTypes.length; i++) {
                     var value = UtilsService.getItemByVal(response, settings.MeasureTypes[i], 'Name');
                     if (value != null)

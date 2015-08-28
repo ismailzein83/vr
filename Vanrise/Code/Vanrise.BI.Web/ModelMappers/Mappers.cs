@@ -18,8 +18,8 @@ namespace Vanrise.BI.Web.ModelMappers
                 {
                     Name = val.Name,
                     DisplayName = val.DisplayName,
-                    RequiredPermissions = val.Configuration.RequiredPermissions
-                    
+                    RequiredPermissions = val.Configuration.RequiredPermissions,
+                    Unit=val.Configuration.Unit
                 });
             }
 

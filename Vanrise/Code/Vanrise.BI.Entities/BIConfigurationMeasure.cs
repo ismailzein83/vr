@@ -12,5 +12,6 @@ namespace Vanrise.BI.Entities
         public string Expression { get; set; }
         public string RequiredPermissions { get; set; }
         public MeasureConfigurationType Type { get; set; }
+        public string Unit { get; set; }
     }
 }
