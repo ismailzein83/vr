@@ -16,6 +16,7 @@ function SupplierInvoiceManagementController($scope, CarrierAccountAPIService, C
         $scope.measures = [];
         $scope.invoices = [];
         $scope.showGrid = false;
+        defineMenuActions();
 
         $scope.searchClicked = function () {
             $scope.showGrid = true;
@@ -72,6 +73,88 @@ function SupplierInvoiceManagementController($scope, CarrierAccountAPIService, C
         for (var property in SupplierInvoiceMeasureEnum) {
             $scope.measures.push(SupplierInvoiceMeasureEnum[property]);
         }
+    }
+
+    function defineMenuActions() {
+        $scope.gridMenuActions = [
+            {
+                name: 'Get Supplier Amount',
+                clicked: getSupplierAmount
+            },
+            {
+                name: 'Toggle Is Locked',
+                clicked: toggleIsLocked
+            },
+            {
+                name: 'Toggle Is Paid',
+                clicked: toggleIsPaid
+            },
+            {
+                name: 'Edit Notes',
+                clicked: editNotes
+            },
+            {
+                name: 'Export As Excel',
+                clicked: exportAsExcel
+            },
+            {
+                name: 'Export As PDF',
+                clicked: exportAsPDF
+            },
+            {
+                name: 'Download Attachment',
+                clicked: downloadAttachment
+            },
+            {
+                name: 'Email',
+                clicked: emailInvoice
+            },
+            {
+                name: 'Compare',
+                clicked: compareInvoice
+            },
+            {
+                name: 'Delete',
+                clicked: deleteInvoice
+            }
+        ];
+    }
+
+    function getSupplierAmount(invoiceObject) { }
+
+    function toggleIsLocked(invoiceObject) { }
+
+    function toggleIsPaid(invoiceObject) { }
+
+    function editNotes(invoiceObject) { }
+
+    function exportAsExcel(invoiceObject) { }
+
+    function exportAsPDF(invoiceObject) { }
+
+    function downloadAttachment(invoiceObject) { }
+
+    function emailInvoice(invoiceObject) { }
+
+    function compareInvoice(invoiceObject) { }
+
+    function deleteInvoice(invoiceObject) {
+        var message = 'Do you want to delete the invoice?';
+
+        VRNotificationService.showConfirmation(message)
+            .then(function (response) {
+                if (response == true) {
+
+                    return SupplierInvoiceAPIService.DeleteInvoice(invoiceObject.InvoiceID)
+                        .then(function (deletionResponse) {
+                            VRNotificationService.notifyOnItemDeleted("Invoice", deletionResponse);
+                            //return retrieveData();
+                        })
+                        .catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                }
+            });
     }
 }
 
