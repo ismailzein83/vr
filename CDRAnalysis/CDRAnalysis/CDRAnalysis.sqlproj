@@ -121,5 +121,7 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempForFilteredAccountCases.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_Insert.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_CreateTempForDailyVolumeLooses.sql" />
+    <Build Include="FraudAnalysis\Tables\AccountStatusHistory.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_CreateTempForTopTenHighValueBTS.sql" />
   </ItemGroup>
 </Project>
