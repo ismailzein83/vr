@@ -78,6 +78,10 @@
       <Project>{cbf1f0c5-fc6d-47cc-8eff-daf5e01dab14}</Project>
       <Name>Vanrise.Integration.Mappers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Runtime.Business\Vanrise.Runtime.Business.csproj">
+      <Project>{7b928ba5-c19b-4d8c-912f-8d2d8a679718}</Project>
+      <Name>Vanrise.Runtime.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Runtime.Data\Vanrise.Runtime.Data.csproj">
       <Project>{2b79fccf-afbe-43f2-9ddc-3a91f5ff2489}</Project>
       <Name>Vanrise.Runtime.Data</Name>

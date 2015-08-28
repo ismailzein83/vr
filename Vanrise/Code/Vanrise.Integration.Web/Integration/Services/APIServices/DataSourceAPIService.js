@@ -48,9 +48,10 @@
         return BaseAPIService.post("/api/DataSource/AddDataSource", dataSource);
     }
 
-    function DeleteDataSource(dataSourceId) {
+    function DeleteDataSource(dataSourceId, taskId) {
         return BaseAPIService.get("/api/DataSource/DeleteDataSource", {
-            dataSourceId: dataSourceId
+            dataSourceId: dataSourceId,
+            taskId: taskId
         });
     }
 

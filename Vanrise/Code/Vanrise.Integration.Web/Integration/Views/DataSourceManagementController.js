@@ -90,7 +90,7 @@ function DataSourceManagementController($scope, DataSourceAPIService, VRModalSer
             .then(function (response) {
                 if (response == true) {
 
-                    return DataSourceAPIService.DeleteDataSource(dataSourceObj.DataSourceId)
+                    return DataSourceAPIService.DeleteDataSource(dataSourceObj.DataSourceId, dataSourceObj.TaskId)
                         .then(function (deletionResponse) {
                             VRNotificationService.notifyOnItemDeleted("Data Source", deletionResponse);
                             return retrieveData(); // refresh the grid

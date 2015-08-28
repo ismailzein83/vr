@@ -101,7 +101,7 @@ namespace Vanrise.Integration.Business
             return updateOperationOutput;
         }
 
-        public Vanrise.Entities.DeleteOperationOutput<object> DeleteDataSource(int dataSourceId)
+        public Vanrise.Entities.DeleteOperationOutput<object> DeleteDataSource(int dataSourceId, int taskId)
         {
             DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
             deleteOperationOutput.Result = DeleteOperationResult.Failed;
@@ -111,7 +111,11 @@ namespace Vanrise.Integration.Business
 
             if (deleted)
             {
-                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+                Vanrise.Runtime.Business.SchedulerTaskManager schedulerTaskManager = new Runtime.Business.SchedulerTaskManager();
+                if ((schedulerTaskManager.DeleteTask(taskId)).Result == DeleteOperationResult.Succeeded)
+                {
+                    deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+                }
             }
 
             return deleteOperationOutput;

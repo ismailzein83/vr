@@ -76,10 +76,10 @@ namespace Vanrise.Integration.Web.Controllers
         }
 
         [HttpGet]
-        public Vanrise.Entities.DeleteOperationOutput<object> DeleteDataSource(int dataSourceId)
+        public Vanrise.Entities.DeleteOperationOutput<object> DeleteDataSource(int dataSourceId, int taskId)
         {
             DataSourceManager manager = new DataSourceManager();
-            return manager.DeleteDataSource(dataSourceId);
+            return manager.DeleteDataSource(dataSourceId, taskId);
         }
     }
 
