@@ -30,7 +30,6 @@ function CustomerTariffManagementController($scope, CarrierAccountAPIService, Ca
 
             return CustomerTariffAPIService.GetFilteredCustomerTariffs(dataRetrievalInput)
                 .then(function (response) {
-                    console.log(response);
                     onResponseReady(response);
                 })
                 .catch(function (error) {
@@ -71,7 +70,6 @@ function CustomerTariffManagementController($scope, CarrierAccountAPIService, Ca
             effectiveOn: $scope.effectiveOn
         };
 
-        console.log(query);
         return gridApi.retrieveData(query);
     }
 
