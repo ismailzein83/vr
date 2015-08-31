@@ -15,7 +15,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public Dictionary<int,Decimal> CriteriaValues { get; set; }
 
         public DateTime? DateDay { get; set; }
-
+        
         public int StrategyId { get; set; }
     }
 }

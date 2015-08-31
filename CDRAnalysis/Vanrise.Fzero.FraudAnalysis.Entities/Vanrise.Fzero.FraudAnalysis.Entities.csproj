@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CasesSummary.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="StrategyCases.cs" />
     <Compile Include="BTSHighValueCases.cs" />
     <Compile Include="BTSCases.cs" />

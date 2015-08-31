@@ -85,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplyNumberProfilesToDB.cs" />
+    <Compile Include="ApplyFraudResultToDB.cs" />
     <Compile Include="ApplySuspiciousNumbersToDB.cs" />
     <Compile Include="DeleteStrategyResults.cs" />
     <Compile Include="GetStrategy.cs" />
@@ -94,6 +95,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PrepareNumberProfilesForDBApply.cs" />
+    <Compile Include="PrepareFraudResultForDBApply.cs" />
     <Compile Include="PrepareSuspiciousNumbersForDBApply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

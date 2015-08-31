@@ -36,8 +36,8 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             {
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
                 {
-                    FromDate = DateTime.Parse("2014-02-01"),
-                    ToDate = DateTime.Parse("2014-04-01"),
+                    FromDate = DateTime.Parse("2014-01-01"),
+                    ToDate = DateTime.Parse("2014-01-02"),
                     StrategyIds = new List<int> { strategyId},//22, 23, 26 },//, 27, 28, 29 },//3, 13, 14, 15, 16 },//hourly
                     //StrategyIds = new List<int> { 2, 4, 5, 6, 7, 8, 9, 10, 11, 12 },//daily
                 }

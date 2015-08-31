@@ -20,6 +20,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         public BaseQueue<SuspiciousNumberBatch> OutputQueue { get; set; }
 
+        public BaseQueue<SuspiciousNumberBatch> OutputQueueForFraudResult { get; set; }
+
         public BaseQueue<NumberProfileBatch> OutputQueue2 { get; set; }
 
         public List<Strategy> Strategies { get; set; }
@@ -37,6 +39,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         public InOutArgument<BaseQueue<SuspiciousNumberBatch>> OutputQueue { get; set; }
 
+        public InOutArgument<BaseQueue<SuspiciousNumberBatch>> OutputQueueForFraudResult { get; set; }
+
         public InOutArgument<BaseQueue<NumberProfileBatch>> OutputQueue2 { get; set; }
 
         [RequiredArgument]
@@ -48,6 +52,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             if (this.OutputQueue.Get(context) == null)
                 this.OutputQueue.Set(context, new MemoryQueue<SuspiciousNumberBatch>());
+
+            if (this.OutputQueueForFraudResult.Get(context) == null)
+                this.OutputQueueForFraudResult.Set(context, new MemoryQueue<SuspiciousNumberBatch>());
 
             if (this.OutputQueue2.Get(context) == null)
                 this.OutputQueue2.Set(context, new MemoryQueue<NumberProfileBatch>());
@@ -104,6 +111,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                     {
                                         SuspiciousNumbers = suspiciousNumbers
                                     });
+                                     inputArgument.OutputQueueForFraudResult.Enqueue(new SuspiciousNumberBatch
+                                     {
+                                         SuspiciousNumbers = suspiciousNumbers
+                                     });
 
                                 }
                                    
@@ -130,6 +141,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             {
                 InputQueue = this.InputQueue.Get(context),
                 OutputQueue = this.OutputQueue.Get(context),
+                OutputQueueForFraudResult = this.OutputQueueForFraudResult.Get(context),
                 OutputQueue2 = this.OutputQueue2.Get(context),
                 Strategies = this.Strategies.Get(context)
             };
