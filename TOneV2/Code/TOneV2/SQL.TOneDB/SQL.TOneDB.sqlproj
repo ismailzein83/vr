@@ -266,8 +266,6 @@
     <Build Include="BEntity\Stored Procedures\sp_CarrierAccount_UpdateGroups.sql" />
     <Build Include="BEntity\Stored Procedures\sp_CarrierAccount_GetAll.sql" />
     <Build Include="Analytics\Stored Procedures\sp_Rate_GetByPriceListID.sql" />
-    <Build Include="Analytics\Stored Procedures\sp_PriceList_GetBySupplierID.sql" />
-    <Build Include="Analytics\Stored Procedures\sp_PriceList_GetByCustomerID.sql" />
     <Build Include="Analytics\Stored Procedures\sp_DailyReportCall_CreateTempForFiltered.sql" />
     <Build Include="Analytics\Stored Procedures\sp_CarrierRateView_Update.sql" />
     <Build Include="Analytics\Stored Procedures\SP_BillingStats_CompareInOutTraffic.sql" />
@@ -277,5 +275,11 @@
     <Build Include="BEntity\User Defined Types\AssignedCarriers.sql" />
     <Build Include="Security\Billing.sql" />
     <Build Include="dbo\Functions\IsToDActive.sql" />
+    <Build Include="Billing\Stored Procedures\sp_BillingInvoice_Delete.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Zone_GetByZoneId.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Tariff_CreateTempBySupplierID.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Tariff_CreateTempByCustomerID.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_PriceList_GetBySupplierID.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_PriceList_GetByCustomerID.sql" />
   </ItemGroup>
 </Project>

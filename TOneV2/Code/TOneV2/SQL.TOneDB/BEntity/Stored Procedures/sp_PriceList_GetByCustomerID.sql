@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [Analytics].[sp_PriceList_GetByCustomerID] 
+create PROCEDURE [BEntity].[sp_PriceList_GetByCustomerID] 
 	-- Add the parameters for the stored procedure here
 	@TempTableName VARCHAR(200),
 	@CustomerID VARCHAR(5)

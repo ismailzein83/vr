@@ -14,14 +14,24 @@ BEGIN
 	
 	IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 	BEGIN
+		WITH CarriersCTE AS
+		(
+			SELECT ca.CarrierAccountID, cp.Name AS SupplierName, ca.NameSuffix AS SupplierNameSuffix
+			FROM CarrierAccount ca INNER JOIN CarrierProfile cp ON cp.ProfileID = ca.ProfileID
+			WHERE ca.AccountType IN (1, 2)
+		)
+		
 		SELECT
 			bi.InvoiceID,
 			bi.SupplierID,
+			cte.SupplierName,
+			cte.SupplierNameSuffix,
 			bi.UserID,
 			u.Name AS UserName,
 			bi.SerialNumber,
 			bi.BeginDate,
 			bi.EndDate,
+			bi.InvoiceNotes AS TimeZone,
 			bi.IssueDate,
 			bi.DueDate,
 			bi.CreationDate,
@@ -35,12 +45,14 @@ BEGIN
 		
 		INTO #RESULT
 		FROM dbo.Billing_Invoice bi
+		INNER JOIN CarriersCTE cte ON cte.CarrierAccountID = bi.SupplierID
 		LEFT JOIN dbo.[User] u ON bi.UserID = u.ID
 		
-		WHERE --CustomerID = 'sys'
+		WHERE
+			--CustomerID = 'SYS'
 			SupplierID = @SelectedSupplierID
-			--and ((bi.BeginDate between @from and @to) or (bi.EndDate between @from and @to))
-			AND (BeginDate >= @from and EndDate <= @to)
+			AND ((bi.BeginDate BETWEEN @from AND @to) OR (bi.EndDate BETWEEN @from AND @to))
+			--AND (BeginDate >= @from and EndDate <= @to) This makes more sense to me, but I'm going with the implementation of the old sp
 		
 		ORDER BY IssueDate DESC
 		

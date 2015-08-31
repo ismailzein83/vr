@@ -14,7 +14,7 @@ BEGIN
 		  ,Z.Name
     FROM Zone Z WITH(NOLOCK)    
     WHERE   
-     Z.SupplierID = @SupplierId and Z.Name like('%'+ @NameFilter+'%')
+     (@SupplierId IS NULL OR Z.SupplierID = @SupplierId ) and Z.Name like('%'+ @NameFilter+'%')
      and z.BeginEffectiveDate <= @WhenDate and (z.EndEffectiveDate is NULL or z.EndEffectiveDate > @WhenDate)
      ORDER BY Z.Name
 END
