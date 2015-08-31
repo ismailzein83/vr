@@ -8,7 +8,7 @@ namespace Vanrise.Integration.Adapters.SQLReceiveAdapter
 
     public class SQLReceiveAdapter : BaseReceiveAdapter
     {
-        public override void ImportData(int dataSourceId, BaseAdapterState adapterState, BaseAdapterArgument argument, Func<IImportedData, bool> receiveData)
+        public override void ImportData(int dataSourceId, BaseAdapterState adapterState, BaseAdapterArgument argument, Action<IImportedData> receiveData)
         {
             DBAdapterArgument dbAdapterArgument = argument as DBAdapterArgument;
             DBAdapterState dbAdapterState = adapterState as DBAdapterState;
@@ -17,20 +17,37 @@ namespace Vanrise.Integration.Adapters.SQLReceiveAdapter
 
             try
             {
-                dbAdapterArgument.Query = dbAdapterArgument.Query.ToLower().Replace("{lastimportedid}", dbAdapterState.LastImportedId);
-
                 using (var connection = new SqlConnection(dbAdapterArgument.ConnectionString))
                 {
                     connection.Open();
-                    var command = new SqlCommand(dbAdapterArgument.Query, connection);
-                    data = new DBReaderImportedData();
-                    data.Reader = command.ExecuteReader();
-                    data.LastImportedId = dbAdapterState.LastImportedId;
-
-                    if (receiveData(data))
+                    bool keepFetchingData = false;
+                    do
                     {
-                        this.UpdateLastImportedId(dataSourceId, data, dbAdapterState);
-                    }
+                        string query = dbAdapterArgument.Query.ToLower().Replace("{lastimportedid}", dbAdapterState.LastImportedId);
+                        var command = new SqlCommand(query, connection);
+
+                        data = new DBReaderImportedData();
+                        data.Reader = command.ExecuteReader();
+
+                        if (keepFetchingData = data.Reader.HasRows)
+                        {
+                            data.LastImportedId = dbAdapterState.LastImportedId;
+
+                            receiveData(data);
+
+                            if (data.LastImportedId == dbAdapterState.LastImportedId)
+                                break;
+
+                            dbAdapterState.LastImportedId = data.LastImportedId;
+                            base.UpdateAdapterState(dataSourceId, dbAdapterState);
+                        }
+                        else
+                        {
+                            LogInformation("No more rows to fetch from Source DB");
+                        }
+
+                    } while (keepFetchingData);
+                    
                 }
             }
             catch (Exception ex)
@@ -55,13 +72,5 @@ namespace Vanrise.Integration.Adapters.SQLReceiveAdapter
 
             return true;
         }
-
-        private void UpdateLastImportedId(int dataSourceId, DBReaderImportedData data, DBAdapterState dbAdapterState)
-        {
-            Vanrise.Integration.Business.DataSourceManager manager = new Business.DataSourceManager();
-            dbAdapterState.LastImportedId = data.LastImportedId;
-            manager.UpdateAdapterState(dataSourceId, dbAdapterState);
-        }
-
     }
 }

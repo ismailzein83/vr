@@ -43,14 +43,14 @@
                              pagingtype="'PagingOnScroll'"
                              on-ready="gridReady">
 
-                    <vr-datagridcolumn headertext="'ID'" field="'ID'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Batch Description'" field="'BatchDescription'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Batch Size'" field="'BatchSize'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Records Count'" field="'RecordsCount'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Mapping Result'" field="'MappingResultDescription'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Mapper Message'" field="'MapperMessage'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Execution Status'" field="'ExecutionStatusDescription'" getcolor="getStatusColor"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Log Entry Time'" field="'LogEntryTime'" type="'Datetime'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'ID'" field="'ID'" widthfactor="3"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Batch Description'" field="'BatchDescription'" widthfactor="8"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Batch Size'" field="'BatchSize'" widthfactor="3"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Records Count'" field="'RecordsCount'" widthfactor="3"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Mapping Result'" field="'MappingResultDescription'" widthfactor="5"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Mapper Message'" field="'MapperMessage'" widthfactor="17"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Execution Status'" field="'ExecutionStatusDescription'" getcolor="getStatusColor" widthfactor="5"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Log Entry Time'" field="'LogEntryTime'" type="'Datetime'" widthfactor="5"></vr-datagridcolumn>
 
                     <vr-datagridexpandablerow>
                         <div ng-include="'/Client/Modules/Integration/Views/QueueItemHeaderGrid.html'"></div>

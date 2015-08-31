@@ -57,6 +57,7 @@
     <Compile Include="DataSourceLog.cs" />
     <Compile Include="DataSourceLogQuery.cs" />
     <Compile Include="IDataSourceLogger.cs" />
+    <Compile Include="IDataSourceManager.cs" />
     <Compile Include="ImportedBatchEntry.cs" />
     <Compile Include="ImportedDataTypes\DBReaderImportedData.cs" />
     <Compile Include="ImportedDataTypes\ExcelFileImportedData.cs" />

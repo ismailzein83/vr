@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace Vanrise.Integration.Entities
 {
     public class DBReaderImportedData : IImportedData
     {
-        public IDataReader Reader { get; set; }
+        public DbDataReader Reader { get; set; }
 
         public string LastImportedId { get; set; }
 

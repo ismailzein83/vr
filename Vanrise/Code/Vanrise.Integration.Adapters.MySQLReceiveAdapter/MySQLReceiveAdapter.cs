@@ -8,7 +8,7 @@ namespace Vanrise.Integration.Adapters.MSQLReceiveAdapter
 
     public class MySQLReceiveAdapter : BaseReceiveAdapter
     {
-        public override void ImportData(int dataSourceId, BaseAdapterState adapterState, BaseAdapterArgument argument, Func<IImportedData, bool> receiveData)
+        public override void ImportData(int dataSourceId, BaseAdapterState adapterState, BaseAdapterArgument argument, Action<IImportedData> receiveData)
         {
             DBAdapterArgument dbAdapterArgument = argument as DBAdapterArgument;
             DBAdapterState dbAdapterState = adapterState as DBAdapterState;
@@ -25,11 +25,14 @@ namespace Vanrise.Integration.Adapters.MSQLReceiveAdapter
                     connection.Open();
                     var command = new MySqlCommand(dbAdapterArgument.Query, connection);
                     data = new DBReaderImportedData();
-                    data.Reader = command.ExecuteReader();
-
-                    if (receiveData(data))
+                    while ((data.Reader = command.ExecuteReader()).HasRows)
                     {
-                        this.UpdateLastImportedId(dataSourceId, data, dbAdapterState);
+                        data.LastImportedId = dbAdapterState.LastImportedId;
+                        
+                        receiveData(data);
+
+                        dbAdapterState.LastImportedId = data.LastImportedId;
+                        base.UpdateAdapterState(dataSourceId, dbAdapterState);
                     }
                 }
             }
@@ -55,13 +58,5 @@ namespace Vanrise.Integration.Adapters.MSQLReceiveAdapter
 
             return true;
         }
-
-        private void UpdateLastImportedId(int dataSourceId, DBReaderImportedData data, DBAdapterState dbAdapterState)
-        {
-            Vanrise.Integration.Business.DataSourceManager manager = new Business.DataSourceManager();
-            dbAdapterState.LastImportedId = data.LastImportedId;
-            manager.UpdateAdapterState(dataSourceId, dbAdapterState);
-        }
-
     }
 }

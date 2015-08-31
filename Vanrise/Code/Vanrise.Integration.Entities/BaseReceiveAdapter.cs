@@ -9,14 +9,26 @@ namespace Vanrise.Integration.Entities
 {
     public abstract class BaseReceiveAdapter
     {
-        public abstract void ImportData(int dataSourceId, BaseAdapterState adapterState, BaseAdapterArgument argument, Func<IImportedData, bool> receiveData);
+        public abstract void ImportData(int dataSourceId, BaseAdapterState adapterState, BaseAdapterArgument argument, Action<IImportedData> receiveData);
 
         //public abstract bool IsCredentialsAvailable(string connectionString);
 
         private IDataSourceLogger _logger;
+        private IDataSourceManager _dataSourceManager;
+
         public void SetLogger(IDataSourceLogger logger)
         {
             _logger = logger;
+        }
+
+        public void SetDataSourceManager(IDataSourceManager manager)
+        {
+            _dataSourceManager = manager;
+        }
+
+        protected bool UpdateAdapterState(int dataSourceId, Vanrise.Integration.Entities.BaseAdapterState adapterState)
+        {
+            return _dataSourceManager.UpdateAdapterState(dataSourceId, adapterState);
         }
 
         protected void LogError(string messageFormat, params object[] args)

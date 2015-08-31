@@ -6,12 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Integration.Data;
+using Vanrise.Integration.Entities;
 using Vanrise.Queueing;
 using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Integration.Business
 {
-    public class DataSourceManager
+    public class DataSourceManager : IDataSourceManager
     {
         public List<Vanrise.Integration.Entities.DataSource> GetDataSources()
         {

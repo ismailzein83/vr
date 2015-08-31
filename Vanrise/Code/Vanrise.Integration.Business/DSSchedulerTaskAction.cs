@@ -23,7 +23,7 @@ namespace Vanrise.Integration.Business
             Vanrise.Integration.Entities.DataSource dataSource = dataManager.GetDataSourcebyTaskId(task.TaskId);
 
             _logger.DataSourceId = dataSource.DataSourceId;
-            _logger.WriteInformation("Started running data source with name '{0}'", dataSource.Name);
+            _logger.WriteInformation("Started running Data Source with name '{0}'", dataSource.Name);
 
             _logger.WriteVerbose("Preparing queues and stages");
 
@@ -54,6 +54,7 @@ namespace Vanrise.Integration.Business
 
             BaseReceiveAdapter adapter = (BaseReceiveAdapter)Activator.CreateInstance(Type.GetType(dataSource.AdapterInfo.FQTN));
             adapter.SetLogger(_logger);
+            adapter.SetDataSourceManager(dataManager);
             adapter.ImportData(dataSource.DataSourceId, dataSource.AdapterState, dataSource.Settings.AdapterArgument, data =>
             {
                 ImportedBatchEntry importedBatchEntry = new ImportedBatchEntry();
@@ -74,7 +75,7 @@ namespace Vanrise.Integration.Business
                 List<long> queueItemsIds = new List<long>();
                 int totalRecordsCount = 0;
 
-                if (outputItems.Count > 0)
+                if (outputItems != null && outputItems.Count > 0)
                 {
                     foreach (var outputItem in outputItems)
                     {
@@ -104,10 +105,10 @@ namespace Vanrise.Integration.Business
                 importedBatchEntry.RecordsCount = totalRecordsCount;
 
                 long importedBatchId = _logger.LogImportedBatchEntry(importedBatchEntry);
-                _logger.LogEntry(Common.LogEntryType.Information, importedBatchId, "Finished running data source task with name '{0}'", dataSource.Name);
-
-                return (outputResult.Result == MappingResult.Valid);
+                _logger.LogEntry(Common.LogEntryType.Information, importedBatchId, "Importing a new batch with Id '{0}'", importedBatchId);
             });
+
+            _logger.WriteInformation("Finished running Data Source with name '{0}' ", dataSource.Name);
         }
 
         private MappingOutput ExecuteCustomCode(int dataSourceId, string customCode, IImportedData data, MappedBatchItemsToEnqueue outputItems)
@@ -204,13 +205,12 @@ namespace Vanrise.Integration.Business
             else
             {
                 _logger.WriteError("Errors while building the code for the custom class. Please make sure to build the custom code bound with this data source.");
-                for (int i = 0; i < results.Errors.Count; i++)
+                foreach (CompilerError error in results.Errors)
                 {
-                    CompilerError error = results.Errors[i];
                     if (error.IsWarning)
-                        _logger.WriteWarning("Warning {0}: {1}", i, error.ErrorText);
+                        _logger.WriteWarning("Warning {0}: {1}. Line Number {2}", error.ErrorNumber, error.ErrorText, error.Line);
                     else
-                        _logger.WriteError("Error {0}: {1}", i, error.ErrorText);
+                        _logger.WriteError("Error {0}: {1}. Line Number {2}", error.ErrorNumber, error.ErrorText, error.Line);
                 }
                 
                 compiledAssembly = null;
