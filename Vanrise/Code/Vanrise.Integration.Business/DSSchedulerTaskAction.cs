@@ -46,7 +46,7 @@ namespace Vanrise.Integration.Business
             }
             catch (Exception ex)
             {
-                _logger.WriteError("An error occurred while preparing stages. Exception Details {0}", ex.Message);
+                _logger.WriteError("An error occurred while preparing stages. Exception Details {0}", ex.ToString());
                 throw;
             }
 
@@ -91,7 +91,7 @@ namespace Vanrise.Integration.Business
                         }
                         catch (Exception ex)
                         {
-                            _logger.WriteError("An error occured while enqueuing item in stage {0}. Exception details {1}", outputItem.StageName, ex.Message);
+                            _logger.WriteError("An error occured while enqueuing item in stage {0}. Exception details {1}", outputItem.StageName, ex.ToString());
                             throw;
                         }
                     }
@@ -159,7 +159,7 @@ namespace Vanrise.Integration.Business
             }
             catch(Exception ex)
             {
-                _logger.WriteError("An error occured while mapping data. Error details: {0}", ex.Message);
+                _logger.WriteError("An error occured while mapping data. Error details: {0}", ex.ToString());
             }
             
             return outputResult;

@@ -82,7 +82,7 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
             }
             catch(Exception ex)
             {
-                LogError("An error occurred in File Adapter while importing data. Exception Details: {0}", ex.Message);
+                LogError("An error occurred in File Adapter while importing data. Exception Details: {0}", ex.ToString());
             }
         }
     }
