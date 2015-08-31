@@ -29,21 +29,24 @@ namespace Vanrise.Integration.Adapters.SQLReceiveAdapter
                         data = new DBReaderImportedData();
                         data.Reader = command.ExecuteReader();
 
+                        data.LastImportedId = dbAdapterState.LastImportedId;
+
                         if (keepFetchingData = data.Reader.HasRows)
                         {
-                            data.LastImportedId = dbAdapterState.LastImportedId;
-
                             receiveData(data);
 
                             if (data.LastImportedId == dbAdapterState.LastImportedId)
+                            {
+                                LogWarning("Fetching data will stop. The 'Last Imported Id' was not updated after mapping. Last Imported Id is {0}", data.LastImportedId);
                                 break;
+                            }
 
                             dbAdapterState.LastImportedId = data.LastImportedId;
                             base.UpdateAdapterState(dataSourceId, dbAdapterState);
                         }
                         else
                         {
-                            LogInformation("No more rows to fetch from Source DB");
+                            LogInformation("No more rows to fetch from Source DB. Last Imported Id is {0}", data.LastImportedId);
                         }
 
                     } while (keepFetchingData);

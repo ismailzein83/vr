@@ -37,18 +37,9 @@ namespace Vanrise.Runtime.Triggers.TimeTaskTrigger
         public override DateTime CalculateNextTimeToRun(BaseTaskTriggerArgument taskTriggerArgument)
         {
             TimeTaskTriggerArgument timeTaskTriggerArgument = (TimeTaskTriggerArgument)taskTriggerArgument;
-            
-            switch(timeTaskTriggerArgument.SelectedType)
-            {
-                case TimeSchedulerType.Daily:
-                    return new DailyTimeSchedulerTaskTrigger().CalculateNextTimeToRun(timeTaskTriggerArgument);
-                case TimeSchedulerType.Interval:
-                    return new IntervalTimeSchedulerTaskTrigger().CalculateNextTimeToRun(timeTaskTriggerArgument);
-                case TimeSchedulerType.Weekly:
-                    return new WeeklyTimeSchedulerTaskTrigger().CalculateNextTimeToRun(timeTaskTriggerArgument);
-            }
+            TimeSchedulerTaskTrigger timerTaskTrigger = (TimeSchedulerTaskTrigger)Activator.CreateInstance(Type.GetType(timeTaskTriggerArgument.TimerTriggerTypeFQTN));
 
-            return DateTime.MinValue;
+            return timerTaskTrigger.CalculateNextTimeToRun(timeTaskTriggerArgument);
         }
     }
 }

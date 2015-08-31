@@ -38,6 +38,7 @@ function DBReceiveAdapterTemplateController($scope, DataSourceAPIService, VRNoti
 
         if ($scope.dataSourceAdapter.argument.data == undefined || $scope.dataSourceAdapter.adapterState.data == undefined || isFormLoaded)
             return;
+
         var argumentData = $scope.dataSourceAdapter.argument.data;
         if (argumentData != null) {
             $scope.connectionString = argumentData.ConnectionString;

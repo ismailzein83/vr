@@ -7,14 +7,14 @@ function IntervalTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, In
 
     function defineScope() {
 
-        $scope.interval = "1";
+        $scope.interval = undefined;
         $scope.intervalTypes = [];
         $scope.selectedIntervalType = undefined;
 
         $scope.schedulerTypeTaskTrigger.getData = function () {
             return {
                 $type: "Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.IntervalTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments",
-                SelectedType: TimeSchedulerTypeEnum.Interval.value,
+                TimerTriggerTypeFQTN: TimeSchedulerTypeEnum.Interval.FQTN,
                 Interval: $scope.interval,
                 IntervalType: $scope.selectedIntervalType.value
             };
@@ -48,12 +48,9 @@ function IntervalTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, In
     }
 
     function load() {
-        UtilsService.waitMultipleAsyncOperations([loadIntervalTypes]).finally(function () {
-            setFormToDefault();
-            loadForm();
-        }).catch(function (error) {
-            VRNotificationService.notifyExceptionWithClose(error, $scope);
-        });
+        loadIntervalTypes();
+        setFormToDefault();
+        loadForm();
     }
 
     function loadIntervalTypes() {

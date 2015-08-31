@@ -8,6 +8,7 @@ function DailyTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, Utils
     function defineScope() {
 
         $scope.selectedHours = [];
+        $scope.selectedDays = [];
 
         $scope.addHour = function () {
             $scope.selectedHours.push($scope.time);
@@ -20,7 +21,7 @@ function DailyTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, Utils
         $scope.schedulerTypeTaskTrigger.getData = function () {
             return {
                 $type: "Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.DailyTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments",
-                SelectedType: TimeSchedulerTypeEnum.Daily.value,
+                TimerTriggerTypeFQTN: TimeSchedulerTypeEnum.Daily.FQTN,
                 ScheduledHours: $scope.selectedHours
             };
         };
@@ -34,9 +35,9 @@ function DailyTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, Utils
     function loadForm() {
         if ($scope.schedulerTypeTaskTrigger.data == undefined || isFormLoaded)
             return;
+
         var data = $scope.schedulerTypeTaskTrigger.data;
         if (data != null) {
-
             angular.forEach(data.ScheduledDays, function (item) {
                 var selectedDay = UtilsService.getItemByVal($scope.daysOfWeek, item, "value");
                 $scope.selectedDays.push(selectedDay);
@@ -46,9 +47,7 @@ function DailyTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, Utils
                 $scope.selectedHours.push(item);
             });
         }
-        else {
-            $scope.selectedHours = [];
-        }
+
         isFormLoaded = true;
     }
 

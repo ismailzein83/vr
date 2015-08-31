@@ -29,7 +29,7 @@ function TimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, UtilsServi
         var data = $scope.schedulerTaskTrigger.data;
         if (data != null) {
             
-            $scope.selectedType = UtilsService.getItemByVal($scope.schedulerTypes, data.SelectedType, "value");
+            $scope.selectedType = UtilsService.getItemByVal($scope.schedulerTypes, data.TimerTriggerTypeFQTN, "FQTN");
             $scope.schedulerTypeTaskTrigger.data = data;
             if ($scope.schedulerTypeTaskTrigger.loadTemplateData != undefined)
                 $scope.schedulerTypeTaskTrigger.loadTemplateData();

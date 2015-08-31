@@ -7,7 +7,13 @@ function FTPReceiveAdapterTemplateController($scope, UtilsService) {
 
     function defineScope() {
 
-        $scope.selectedAction = '';
+        $scope.extension = undefined;
+        $scope.directory = undefined;
+        $scope.serverIP = undefined;
+        $scope.userName = undefined;
+        $scope.password = undefined;
+        $scope.directorytoMoveFile = undefined;
+        $scope.selectedAction = undefined;
 
         $scope.actionsAfterImport = [{ value: 0, name: 'Rename' }, { value: 1, name: 'Delete' }, { value: 2, name: 'Move' }];
 
@@ -51,15 +57,7 @@ function FTPReceiveAdapterTemplateController($scope, UtilsService) {
              $scope.directorytoMoveFile = data.DirectorytoMoveFile;
              $scope.selectedAction = UtilsService.getItemByVal($scope.actionsAfterImport, data.ActionAfterImport, "value");
         }
-        else {
-            $scope.extension = undefined;
-            $scope.directory = undefined;
-            $scope.serverIP = undefined;
-            $scope.userName = undefined;
-            $scope.password = undefined;
-            $scope.directorytoMoveFile = undefined;
-            $scope.selectedAction = undefined;
-        }
+
         isFormLoaded = true;
     }
 

@@ -28,7 +28,7 @@ function WeeklyTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, Days
 
             return {
                 $type: "Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.WeeklyTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments",
-                SelectedType: TimeSchedulerTypeEnum.Weekly.value,
+                TimerTriggerTypeFQTN: TimeSchedulerTypeEnum.Weekly.FQTN,
                 ScheduledDays: numbersOfSelectedDays,
                 ScheduledHours: $scope.selectedHours
             };
@@ -44,6 +44,7 @@ function WeeklyTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, Days
 
         if ($scope.schedulerTypeTaskTrigger.data == undefined || isFormLoaded)
             return;
+
         var data = $scope.schedulerTypeTaskTrigger.data;
         if (data != null) {
 
@@ -56,19 +57,13 @@ function WeeklyTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, Days
                 $scope.selectedHours.push(item);
             });
         }
-        else {
-            $scope.selectedDays = [];
-            $scope.selectedHours = [];
-        }
+
         isFormLoaded = true;
     }
 
     function load() {
-        UtilsService.waitMultipleAsyncOperations([loadDaysOfWeek]).finally(function () {
-            loadForm();
-        }).catch(function (error) {
-            VRNotificationService.notifyExceptionWithClose(error, $scope);
-        });
+        loadDaysOfWeek();
+        loadForm();
     }
 
     function loadDaysOfWeek() {
