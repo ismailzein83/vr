@@ -8,8 +8,8 @@ namespace TOne.BusinessEntity.Entities
 {
     public class CustomerTariffQuery
     {
-        public string selectedCustomerID { get; set; }
-        public List<int> selectedZoneIDs { get; set; }
-        public DateTime effectiveOn { get; set; }
+        public string SelectedCustomerID { get; set; }
+        public List<int> SelectedZoneIDs { get; set; }
+        public DateTime EffectiveOn { get; set; }
     }
 }

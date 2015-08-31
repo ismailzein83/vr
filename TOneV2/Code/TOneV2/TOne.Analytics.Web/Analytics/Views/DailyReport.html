@@ -42,11 +42,9 @@
             <vr-columns width="fullrow" simplecol>
                 <vr-datagrid datasource="calls"
                              dataretrievalfunction="dataRetrievalFunction"
-                             pagingtype="'PagingOnScroll'"
+                             pagingtype="'Pager'"
                              on-ready="gridReady"
                              ng-show="showGrid">
-
-                    <!--<vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" type="measure.type"></vr-datagridcolumn>-->
 
                     <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'" type="'Text'"></vr-datagridcolumn>
@@ -57,8 +55,8 @@
                     <vr-datagridcolumn headertext="'ASR'" field="'ASR'" type="'Number'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'ACD'" field="'ACD'" type="'Number'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'PDD'" field="'PDD'" type="'Number'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Cost Rate'" field="'CostRateDescription'" type="'Number'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Sale Rate'" field="'SaleRateDescription'" type="'Number'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Cost Rate'" field="'CostRateDescription'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Sale Rate'" field="'SaleRateDescription'" type="'Text'"></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
         </vr-row>

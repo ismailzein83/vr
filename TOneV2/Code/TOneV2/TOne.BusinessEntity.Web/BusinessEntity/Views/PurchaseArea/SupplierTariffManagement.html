@@ -9,13 +9,15 @@
                                selectedvalues="selectedSupplier"
                                datatextfield="Name"
                                datavaluefield="CarrierAccountID"
+                               onselectionchanged="onSupplierChanged"
                                entityname="Supplier">
                     </vr-select>
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-be-costzones selectedvalues="selectedZones"
-                                 carrierid="selectedSupplier.CarrierAccountID"
-                                 ismultipleselection>
+                                     carrierid="selectedSupplier.CarrierAccountID"
+                                     ismultipleselection
+                                     ng-show="showZonesMenu">
                     </vr-be-costzones>
                 </vr-columns>
                 <vr-columns width="normal">
@@ -43,11 +45,16 @@
                              idfield="TariffID"
                              ng-show="showGrid">
 
-                    <vr-datagridcolumn ng-repeat="measure in measures"
-                                       headertext="measure.description"
-                                       field="measure.propertyName"
-                                       type="measure.type">
-                    </vr-datagridcolumn>
+                    <vr-datagridcolumn field="'SupplierName'" headertext="'Supplier'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'ZoneName'" headertext="'Zone'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'CurrencyID'" headertext="'Currency'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'CallFee'" headertext="'Call Fee'" type="'Number'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'FirstPeriod'" headertext="'First Period'" type="'Number'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'FirstPeriodRate'" headertext="'First Period Rate'" type="'Number'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'FractionUnit'" headertext="'Fraction Unit'" type="'Number'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'BeginEffectiveDate'" headertext="'BED'" type="'Date'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'EndEffectiveDate'" headertext="'EED'" type="'Date'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'IsEffective'" headertext="'Is Effective'" type="'Text'"></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
         </vr-row>

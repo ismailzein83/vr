@@ -14,20 +14,14 @@ namespace TOne.BusinessEntity.Data.SQL
     {
         public Vanrise.Entities.BigResult<CustomerTariff> GetFilteredCustomerTariffs(Vanrise.Entities.DataRetrievalInput<CustomerTariffQuery> input)
         {
-            Dictionary<string, string> mapper = new Dictionary<string, string>();
-
-            mapper.Add("CustomerName", "CustomerID");
-            mapper.Add("ZoneName", "ZoneID");
-            mapper.Add("EndEffectiveDateDescription", "EndEffectiveDate");
-
             return RetrieveData(input, (tempTableName) =>
             {
                 string zoneIDs = null;
 
-                if (input.Query.selectedZoneIDs != null && input.Query.selectedZoneIDs.Count() > 0)
-                    zoneIDs = string.Join<int>(",", input.Query.selectedZoneIDs);
+                if (input.Query.SelectedZoneIDs != null && input.Query.SelectedZoneIDs.Count() > 0)
+                    zoneIDs = string.Join<int>(",", input.Query.SelectedZoneIDs);
 
-                ExecuteNonQuerySP("BEntity.sp_Tariff_GetFilteredByCustomerID", tempTableName, input.Query.selectedCustomerID, zoneIDs, input.Query.effectiveOn);
+                ExecuteNonQuerySP("BEntity.sp_Tariff_CreateTempByCustomerID", tempTableName, input.Query.SelectedCustomerID, zoneIDs, input.Query.EffectiveOn);
 
             }, (reader) => CustomerTariffMapper(reader));
         }
@@ -38,7 +32,7 @@ namespace TOne.BusinessEntity.Data.SQL
             {
                 TariffID = (long)reader["TariffID"],
                 CustomerID = reader["CustomerID"] as string,
-                CustomerName = reader["CustomerName"] as string,
+                CustomerName = CarrierAccountDataManager.GetCarrierAccountName(reader["CustomerName"] as string, GetReaderValue<string>(reader, "CustomerNameSuffix")),
                 ZoneID = GetReaderValue<int>(reader, "ZoneID"),
                 ZoneName = reader["ZoneName"] as string,
                 CurrencyID = GetReaderValue<string>(reader, "CurrencyID"),
@@ -47,8 +41,7 @@ namespace TOne.BusinessEntity.Data.SQL
                 FirstPeriodRate = GetReaderValue<decimal>(reader, "FirstPeriodRate"),
                 FractionUnit = GetReaderValue<byte>(reader, "FractionUnit"),
                 BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate"),
-                EndEffectiveDate = GetReaderValue<DateTime>(reader, "EndEffectiveDate"),
-                EndEffectiveDateDescription = GetReaderValue<string>(reader, "EndEffectiveDate"),
+                EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate"),
                 IsEffective = (string)reader["IsEffective"]
             };
 

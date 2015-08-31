@@ -42,11 +42,22 @@
                              idfield="InvoiceID"
                              ng-show="showGrid">
 
-                    <vr-datagridcolumn ng-repeat="measure in measures"
-                                       headertext="measure.description"
-                                       field="measure.propertyName"
-                                       type="measure.type">
-                    </vr-datagridcolumn>
+                    <vr-datagridcolumn field="'SupplierName'" headertext="'Supplier'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'UserName'" headertext="'User'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'SerialNumber'" headertext="'Serial Number'" type="'Number'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'BeginDate'" headertext="'Begin Date'" type="'Date'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'EndDate'" headertext="'End Date'" type="'Date'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'TimeZone'" headertext="'Time Zone'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'IssueDate'" headertext="'Issue Date'" type="'Date'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'DueDate'" headertext="'Due Date'" type="'Date'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'CreationDate'" headertext="'Creation Date'" type="'Date'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'NumberOfCalls'" headertext="'Calls'" type="'Number'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'Duration'" headertext="'Duration (Mins)'" type="'Number'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'Amount'" headertext="'Amount'" type="'Number'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'CurrencyID'" headertext="'Currency'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'IsLocked'" headertext="'Is Locked'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'IsPaid'" headertext="'Is Paid'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn field="'InvoiceNotes'" headertext="'Invoice Notes'" type="'Text'"></vr-datagridcolumn>
 
                     <vr-datagridexpandablerow>
                         <div ng-include="'/Client/Modules/Billing/Views/SupplierInvoiceDetailGrid.html'"></div>

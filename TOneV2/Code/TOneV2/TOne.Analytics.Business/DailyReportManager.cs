@@ -23,7 +23,7 @@ namespace TOne.Analytics.Business
             IDailyReportDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<IDailyReportDataManager>();
             Vanrise.Entities.BigResult<DailyReportCall> bigResult = dataManager.GetFilteredDailyReportCalls(input, GetCarrierAccountIDs(assignedCustomers), GetCarrierAccountIDs(assignedSuppliers));
 
-            if (assignedCustomers.Count > 0 || assignedSuppliers.Count > 0)
+            if (assignedCustomers != null || assignedSuppliers != null)
             {
                 // if the user has some assigned carriers, then overwrite the names and rates of the unassigned carriers
                 foreach (DailyReportCall call in bigResult.Data)
@@ -54,10 +54,16 @@ namespace TOne.Analytics.Business
             AccountManagerManager accountManagerManager = new AccountManagerManager();
             assignedCustomers = accountManagerManager.GetAssignedCarriers(SecurityContext.Current.GetLoggedInUserId(), true, CarrierType.Customer);
             assignedSuppliers = accountManagerManager.GetAssignedCarriers(SecurityContext.Current.GetLoggedInUserId(), true, CarrierType.Supplier);
+
+            assignedCustomers = (assignedCustomers.Count == 0) ? null : assignedCustomers;
+            assignedSuppliers = (assignedSuppliers.Count == 0) ? null : assignedSuppliers;
         }
 
         private List<string> GetCarrierAccountIDs(List<AssignedCarrier> carriers)
         {
+            if (carriers == null)
+                return null;
+
             List<string> ids = new List<string>();
 
             foreach (AssignedCarrier carrier in carriers)
@@ -68,7 +74,7 @@ namespace TOne.Analytics.Business
 
         private bool IsCarrierAssigned(List<AssignedCarrier> assignedCarriers, string targetCarrierID)
         {
-            if (assignedCarriers.Count == 0 // the user has the right to view all carriers including this one
+            if (assignedCarriers == null // the user has the right to view all carriers including this one
                 || targetCarrierID == null) // assume that the carrier is assigned
                 return true;
 

@@ -1,6 +1,6 @@
-﻿SupplierTariffManagementController.$inject = ['$scope', 'CarrierAccountAPIService', 'CarrierTypeEnum', 'SupplierTariffMeasureEnum', 'SupplierTariffAPIService', 'VRNotificationService'];
+﻿SupplierTariffManagementController.$inject = ['$scope', 'CarrierAccountAPIService', 'CarrierTypeEnum', 'SupplierTariffAPIService', 'UtilsService', 'VRNotificationService'];
 
-function SupplierTariffManagementController($scope, CarrierAccountAPIService, CarrierTypeEnum, SupplierTariffMeasureEnum, SupplierTariffAPIService, VRNotificationService) {
+function SupplierTariffManagementController($scope, CarrierAccountAPIService, CarrierTypeEnum, SupplierTariffAPIService, UtilsService, VRNotificationService) {
 
     var gridApi = undefined;
 
@@ -11,10 +11,10 @@ function SupplierTariffManagementController($scope, CarrierAccountAPIService, Ca
         $scope.suppliers = [];
         $scope.selectedSupplier = undefined;
         $scope.selectedZones = [];
+        $scope.showZonesMenu = false;
         $scope.effectiveOn = Date.now();
 
         $scope.tariffs = [];
-        $scope.measures = [];
         $scope.showGrid = false;
 
         $scope.searchClicked = function () {
@@ -36,12 +36,14 @@ function SupplierTariffManagementController($scope, CarrierAccountAPIService, Ca
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
         }
+
+        $scope.onSupplierChanged = function (selectedSupplier, allSuppliers) {
+            $scope.showZonesMenu = (selectedSupplier != undefined) ? true : false;
+        }
     }
 
     function load() {
         $scope.isInitializing = true;
-
-        loadMeasures();
 
         // load the suppliers
         CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Supplier.value, false)
@@ -60,29 +62,12 @@ function SupplierTariffManagementController($scope, CarrierAccountAPIService, Ca
 
     function retrieveData() {
         var query = {
-            selectedSupplierID: ($scope.selectedSupplier != undefined) ? ($scope.selectedSupplier.CarrierAccountID) : null,
-            selectedZoneIDs: getSelectedZoneIDs(),
-            effectiveOn: $scope.effectiveOn
+            SelectedSupplierID: ($scope.selectedSupplier != undefined) ? ($scope.selectedSupplier.CarrierAccountID) : null,
+            SelectedZoneIDs: UtilsService.getPropValuesFromArray($scope.selectedZones, 'ZoneId'),
+            EffectiveOn: $scope.effectiveOn
         };
-
+        
         return gridApi.retrieveData(query);
-    }
-
-    function loadMeasures() {
-        for (var property in SupplierTariffMeasureEnum)
-            $scope.measures.push(SupplierTariffMeasureEnum[property]);
-    }
-
-    function getSelectedZoneIDs() {
-        if ($scope.selectedZones.length == 0)
-            return null;
-
-        var ids = [];
-
-        for (var i = 0; i < $scope.selectedZones.length; i++)
-            ids.push($scope.selectedZones[i].ZoneId);
-
-        return ids;
     }
 }
 

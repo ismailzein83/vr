@@ -1,6 +1,6 @@
-﻿DailyReportController.$inject = ['$scope', 'DailyReportAPIService', 'ZonesService', 'DailyReportMeasureEnum', 'VRNotificationService', 'UtilsService'];
+﻿DailyReportController.$inject = ['$scope', 'DailyReportAPIService', 'ZonesService', 'VRNotificationService', 'UtilsService'];
 
-function DailyReportController($scope, DailyReportAPIService, ZonesService, DailyReportMeasureEnum, VRNotificationService, UtilsService) {
+function DailyReportController($scope, DailyReportAPIService, ZonesService, VRNotificationService, UtilsService) {
 
     var gridApi = undefined;
 
@@ -47,38 +47,13 @@ function DailyReportController($scope, DailyReportAPIService, ZonesService, Dail
 
     function retrieveData() {
         var query = {
-            selectedZoneIDs: getSelectedZoneIDs(),
-            selectedCustomerIDs: getCarrierAccountIDs($scope.selectedCustomers),
-            selectedSupplierIDs: getCarrierAccountIDs($scope.selectedSuppliers),
-            targetDate: $scope.targetDate
+            SelectedZoneIDs: UtilsService.getPropValuesFromArray($scope.selectedZones, 'ZoneId'),
+            SelectedCustomerIDs: UtilsService.getPropValuesFromArray($scope.selectedCustomers, 'CarrierAccountID'),
+            SelectedSupplierIDs: UtilsService.getPropValuesFromArray($scope.selectedSuppliers, 'CarrierAccountID'),
+            TargetDate: $scope.targetDate
         };
 
         return gridApi.retrieveData(query);
-    }
-
-    function getSelectedZoneIDs() {
-        if ($scope.selectedZones.length == 0)
-            return [];
-
-        var ids = [];
-
-        for (var i = 0; i < $scope.selectedZones.length; i++)
-            ids.push($scope.selectedZones[i].ZoneId);
-
-        return ids;
-    }
-
-    function getCarrierAccountIDs(carriers) {
-        if (carriers.length == 0)
-            return [];
-
-        var ids = [];
-
-        for (var i = 0; i < carriers.length; i++) {
-            ids.push(carriers[i].CarrierAccountID);
-        }
-
-        return ids;
     }
 }
 

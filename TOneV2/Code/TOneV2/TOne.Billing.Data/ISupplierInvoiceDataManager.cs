@@ -10,6 +10,7 @@ namespace TOne.Billing.Data
     public interface ISupplierInvoiceDataManager : IDataManager
     {
         Vanrise.Entities.BigResult<SupplierInvoice> GetFilteredSupplierInvoices(Vanrise.Entities.DataRetrievalInput<SupplierInvoiceQuery> input);
-        Vanrise.Entities.BigResult<SupplierInvoiceDetail> GetFilteredSupplierInvoiceDetails(Vanrise.Entities.DataRetrievalInput<int> input);
+        Vanrise.Entities.BigResult<SupplierInvoiceDetail> GetFilteredSupplierInvoiceDetails(Vanrise.Entities.DataRetrievalInput<SupplierInvoiceDetailQuery> input);
+        bool DeleteInvoice(int invoiceID);
     }
 }

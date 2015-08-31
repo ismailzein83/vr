@@ -8,8 +8,8 @@ namespace TOne.Billing.Entities
 {
     public class SupplierInvoiceQuery
     {
-        public string selectedSupplierID { get; set; }
-        public DateTime from { get; set; }
-        public DateTime to { get; set; }
+        public string SelectedSupplierID { get; set; }
+        public DateTime From { get; set; }
+        public DateTime To { get; set; }
     }
 }

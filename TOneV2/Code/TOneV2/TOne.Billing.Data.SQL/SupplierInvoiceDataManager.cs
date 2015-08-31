@@ -14,27 +14,28 @@ namespace TOne.Billing.Data.SQL
     {
         public Vanrise.Entities.BigResult<SupplierInvoice> GetFilteredSupplierInvoices(Vanrise.Entities.DataRetrievalInput<SupplierInvoiceQuery> input)
         {
-            Dictionary<string, string> mapper = new Dictionary<string, string>();
-
-            mapper.Add("SupplierName", "SupplierID");
-            mapper.Add("UserName", "UserID");
-
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("Billing.sp_BillingInvoice_CreateTempBySupplierID", tempTableName, input.Query.selectedSupplierID, input.Query.from, input.Query.to);
+                ExecuteNonQuerySP("Billing.sp_BillingInvoice_CreateTempBySupplierID", tempTableName, input.Query.SelectedSupplierID, input.Query.From, input.Query.To);
             };
 
-            return RetrieveData(input, createTempTableAction, SupplierInvoiceMapper, mapper);
+            return RetrieveData(input, createTempTableAction, SupplierInvoiceMapper);
         }
 
-        public Vanrise.Entities.BigResult<SupplierInvoiceDetail> GetFilteredSupplierInvoiceDetails(Vanrise.Entities.DataRetrievalInput<int> input)
+        public Vanrise.Entities.BigResult<SupplierInvoiceDetail> GetFilteredSupplierInvoiceDetails(Vanrise.Entities.DataRetrievalInput<SupplierInvoiceDetailQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("Billing.sp_BillingInvoiceDetails_CreateTempByInvoiceID", tempTableName, input.Query);
+                ExecuteNonQuerySP("Billing.sp_BillingInvoiceDetails_CreateTempByInvoiceID", tempTableName, input.Query.InvoiceID);
             };
 
             return RetrieveData(input, createTempTableAction, SupplierInvoiceDetailMapper);
+        }
+
+        public bool DeleteInvoice(int invoiceID)
+        {
+            int recordsEffected = ExecuteNonQuerySP("Billing.sp_BillingInvoice_Delete", invoiceID);
+            return (recordsEffected > 0);
         }
 
         private SupplierInvoice SupplierInvoiceMapper(IDataReader reader)
@@ -43,7 +44,7 @@ namespace TOne.Billing.Data.SQL
             {
                 InvoiceID = (int)reader["InvoiceID"],
                 SupplierID = reader["SupplierID"] as string,
-                SupplierName = reader["SupplierName"] as string,
+                SupplierName = GetCarrierName(reader["SupplierName"] as string, GetReaderValue<string>(reader, "SupplierNameSuffix")),
                 UserID = GetReaderValue<int>(reader, "UserID"),
                 UserName = GetReaderValue<string>(reader, "UserName"),
                 SerialNumber = reader["SerialNumber"] as string,
@@ -82,6 +83,14 @@ namespace TOne.Billing.Data.SQL
             };
 
             return supplierInvoiceDetail;
+        }
+
+        private string GetCarrierName(string name, string suffix) {
+            
+            if (suffix != null && suffix != "")
+                return name + " (" + suffix + ")";
+            else
+                return name;
         }
     }
 }

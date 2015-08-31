@@ -1,6 +1,6 @@
-﻿SupplierInvoiceDetailGridController.$inject = ['$scope', 'SupplierInvoiceDetailGridMeasureEnum', 'SupplierInvoiceAPIService', 'VRNotificationService'];
+﻿SupplierInvoiceDetailGridController.$inject = ['$scope', 'SupplierInvoiceAPIService', 'VRNotificationService'];
 
-function SupplierInvoiceDetailGridController($scope, SupplierInvoiceDetailGridMeasureEnum, SupplierInvoiceAPIService, VRNotificationService) {
+function SupplierInvoiceDetailGridController($scope, SupplierInvoiceAPIService, VRNotificationService) {
 
     var gridApi = undefined;
 
@@ -9,7 +9,6 @@ function SupplierInvoiceDetailGridController($scope, SupplierInvoiceDetailGridMe
 
     function defineScope() {
 
-        $scope.detailMeasures = [];
         $scope.details = [];
         
         $scope.gridReady = function (api) {
@@ -30,19 +29,14 @@ function SupplierInvoiceDetailGridController($scope, SupplierInvoiceDetailGridMe
     }
 
     function load() {
-        loadMeasures();
     }
 
     function retrieveData() {
-
-        var invoiceID = $scope.dataItem.InvoiceID;
-        return gridApi.retrieveData(invoiceID);
-    }
-
-    function loadMeasures() {
-        for (var property in SupplierInvoiceDetailGridMeasureEnum) {
-            $scope.detailMeasures.push(SupplierInvoiceDetailGridMeasureEnum[property]);
-        }
+        var query = {
+            InvoiceID: $scope.dataItem.InvoiceID
+        };
+        
+        return gridApi.retrieveData(query);
     }
 }
 

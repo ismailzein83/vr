@@ -1,6 +1,6 @@
-﻿SupplierInvoiceManagementController.$inject = ['$scope', 'CarrierAccountAPIService', 'CarrierTypeEnum', 'SupplierInvoiceMeasureEnum', 'SupplierInvoiceAPIService', 'VRNotificationService'];
+﻿SupplierInvoiceManagementController.$inject = ['$scope', 'CarrierAccountAPIService', 'CarrierTypeEnum', 'SupplierInvoiceAPIService', 'VRNotificationService'];
 
-function SupplierInvoiceManagementController($scope, CarrierAccountAPIService, CarrierTypeEnum, SupplierInvoiceMeasureEnum, SupplierInvoiceAPIService, VRNotificationService) {
+function SupplierInvoiceManagementController($scope, CarrierAccountAPIService, CarrierTypeEnum, SupplierInvoiceAPIService, VRNotificationService) {
 
     var gridApi = undefined;
 
@@ -13,7 +13,6 @@ function SupplierInvoiceManagementController($scope, CarrierAccountAPIService, C
         $scope.from = Date.now();
         $scope.to = Date.now();
 
-        $scope.measures = [];
         $scope.invoices = [];
         $scope.showGrid = false;
         defineMenuActions();
@@ -31,6 +30,7 @@ function SupplierInvoiceManagementController($scope, CarrierAccountAPIService, C
 
             return SupplierInvoiceAPIService.GetFilteredSupplierInvoices(dataRetrievalInput)
                 .then(function (response) {
+                    console.log(response);
                     onResponseReady(response);
                 })
                 .catch(function (error) {
@@ -41,8 +41,6 @@ function SupplierInvoiceManagementController($scope, CarrierAccountAPIService, C
 
     function load() {
         $scope.isInitializing = true;
-
-        loadMeasures();
 
         // load the suppliers
         CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Supplier.value, false)
@@ -61,18 +59,13 @@ function SupplierInvoiceManagementController($scope, CarrierAccountAPIService, C
 
     function retrieveData() {
         var query = {
-            selectedSupplierID: ($scope.selectedSupplier != undefined) ? $scope.selectedSupplier.CarrierAccountID : null,
-            from: $scope.from,
-            to: $scope.to
+            SelectedSupplierID: ($scope.selectedSupplier != undefined) ? $scope.selectedSupplier.CarrierAccountID : null,
+            From: $scope.from,
+            To: $scope.to
         };
 
+        console.log(query);
         return gridApi.retrieveData(query);
-    }
-
-    function loadMeasures() {
-        for (var property in SupplierInvoiceMeasureEnum) {
-            $scope.measures.push(SupplierInvoiceMeasureEnum[property]);
-        }
     }
 
     function defineMenuActions() {
@@ -122,7 +115,24 @@ function SupplierInvoiceManagementController($scope, CarrierAccountAPIService, C
 
     function getSupplierAmount(invoiceObject) { }
 
-    function toggleIsLocked(invoiceObject) { }
+    function toggleIsLocked(invoiceObject) {
+        var message = 'Are you sure that you want to lock/unlock the invoice?';
+
+        VRNotificationService.showConfirmation(message)
+            .then(function (response) {
+                if (response == true) {
+
+                    return SupplierInvoiceAPIService.ToggleInvoiceLock(invoiceObject.InvoiceID)
+                        .then(function (deletionResponse) {
+                            VRNotificationService.notifyOnItemDeleted("Invoice", deletionResponse);
+                            return retrieveData();
+                        })
+                        .catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                }
+            });
+    }
 
     function toggleIsPaid(invoiceObject) { }
 
@@ -139,7 +149,7 @@ function SupplierInvoiceManagementController($scope, CarrierAccountAPIService, C
     function compareInvoice(invoiceObject) { }
 
     function deleteInvoice(invoiceObject) {
-        var message = 'Do you want to delete the invoice?';
+        var message = 'Are you sure that you want to delete the invoice?';
 
         VRNotificationService.showConfirmation(message)
             .then(function (response) {
@@ -148,7 +158,7 @@ function SupplierInvoiceManagementController($scope, CarrierAccountAPIService, C
                     return SupplierInvoiceAPIService.DeleteInvoice(invoiceObject.InvoiceID)
                         .then(function (deletionResponse) {
                             VRNotificationService.notifyOnItemDeleted("Invoice", deletionResponse);
-                            //return retrieveData();
+                            return retrieveData();
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);
