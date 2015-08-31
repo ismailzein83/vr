@@ -65,24 +65,25 @@ set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Routing','Routing','Routing',null,'glyphicon-certificate',7,0),
-(2,'Business Intelligence','Business Intelligence','BI',null,'glyphicon-certificate',11,1),
-(3,'Business Entities','Business Entities','Business Entities',null,'glyphicon-cog',2,0),
-(4,'NOC','NOC','NOC',null,'glyphicon-flash',9,1),
-(5,'Administration','Administration','Administration',null,'glyphicon-flash',1,0),
-(6,'Others','Others','Others',null,'glyphicon-pencil',13,0),
-(10,'Business Process','Business Process','Business Process',5,null,null,0),
-(11,'Billing','Billing','Billing',null,'glyphicon-pencil',6,0),
-(12,'Reports','Reports','Reports',11,null,null,1),
-(14,'Plugins','Plugins','Plugins',null,'glyphicon-cog',12,0),
-(15,'Bilateral Agreement','Bilateral Agreement','Bilateral Agreement',14,null,3,0),
-(16,'BQR','BQR','BQR',14,null,2,0),
-(17,'Code Preparation','Code Preparation','Code Preparation',14,null,1,0),
-(18,'Purchase Area','Purchase Area','Purchase Area',null,'glyphicon-flash',3,0),
-(19,'Sale Area','Sale Area','Sale Area',null,'glyphicon-pencil',4,0),
-(20,'Prepaid-Postpaid','Prepaid-Postpaid','Prepaid-Postpaid',null,'glyphicon-pencil',10,0),
-(21,'Management','Management','Management',null,'glyphicon-flash',5,0),
-(22,'Account Manager','Account Manager','Account Manager',null,'glyphicon-pencil',8,0)
+(1,'Routing','Routing','Routing',null,'/images/menu-icons/Routing.png',16,0),
+(2,'Business Intelligence','Business Intelligence','BI',null,'/images/menu-icons/busines intel.png',19,1),
+(3,'Business Entities','Business Entities','Business Entities',null,'/images/menu-icons/Business Entities.png',11,0),
+(4,'NOC','NOC','NOC',null,'/images/menu-icons/NOC.png',18,1),
+(5,'Administration','Administration','Administration',null,'/images/menu-icons/Administration.png',10,0),
+(6,'Others','Others','Others',null,'/images/menu-icons/other.png',22,0),
+(10,'Business Process','Business Process','Business Process',5,null,17,0),
+(11,'Billing','Billing','Billing',null,'/images/menu-icons/billing.png',15,0),
+(12,'Reports','Reports','Reports',11,null,10,1),
+(14,'Plugins','Plugins','Plugins',null,'/images/menu-icons/plug.png',21,0),
+(15,'Bilateral Agreement','Bilateral Agreement','Bilateral Agreement',14,null,10,0),
+(16,'BQR','BQR','BQR',14,null,12,0),
+(17,'Code Preparation','Code Preparation','Code Preparation',14,null,11,0),
+(18,'Purchase Area','Purchase Area','Purchase Area',null,'/images/menu-icons/Purchase Area.png',12,0),
+(19,'Sale Area','Sale Area','Sale Area',null,'/images/menu-icons/Sale Area.png',13,0),
+(20,'Prepaid-Postpaid','Prepaid-Postpaid','Prepaid-Postpaid',null,'/images/menu-icons/post paid - pre paid.png',20,0),
+(21,'Management','Management','Management',null,'/images/menu-icons/Management.png',14,0),
+(22,'Account Manager','Account Manager','Account Manager',null,'/images/menu-icons/Account.png',17,0),
+(23,'Dynamic Management','Dynamic Management','Dynamic Management',5,null,16,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
