@@ -6,19 +6,16 @@
     Cancelled:    { id: 5, name: 'Cancelled' }
 });
 
-
 app.constant('SuspicionLevelsEnum', {
     Suspicious: { id: 2, name: 'Suspicious' },
     HighlySuspicious: { id: 3, name: 'Highly Suspicious' },
     Fraud: { id: 4, name: 'Fraud' }
 });
 
-
 app.constant('KindEnum', {
     UserDefined: { value: false, name: 'User defined' }, 
     SystemBuiltIn: { value: true, name: 'System built in' }
 });
-
 
 app.constant('OperatorTypeEnum', {
     Mobile: { value: 1, name: 'Mobile' },
@@ -26,13 +23,10 @@ app.constant('OperatorTypeEnum', {
     Both: { value: 0, name: 'Both' }
 });
 
-
 app.constant('StatusEnum', {
     Disabled: { value: false, name: 'Disabled' },
     Enabled: { value: true, name: 'Enabled' }
 });
-
-
 
 app.constant('HourEnum', {
     h_0: { id: 0, name: '12:00 AM' }, h_1 : { id: 1, name: '01:00 AM' }, h_2 :{ id: 2, name: '02:00 AM' }, h_3 :{ id: 3, name: '03:00 AM' }, h_4 :{ id: 4, name: '04:00 AM' }, h_5 :{ id: 5, name: '05:00 AM' },
@@ -51,6 +45,21 @@ app.constant('PercentageEnum', {
     SeventyFiveMinus: { description: '-75%', value: 0.25 }
 });
 
+app.constant("FraudAnalysis_CaseStatusEnum", {
+    Open: { value: 0, description: "Open" },
+    Pending: { value: 2, description: "Pending" },
+    ClosedFraud: { value: 3, description: "Closed: Fraud" },
+    ClosedWhiteList: { value: 4, description: "Closed: White List" }
+}); 
 
+app.constant("FraudAnalysis_SuspicionLevelEnum", {
+    Suspicious: { value: 2, description: "Suspicious" },
+    HighlySuspicious: { value: 3, description: "Highly Suspicious" },
+    Fraud: { value: 4, description: "Fraud" }
+});
 
-
+app.constant("FraudAnalysis_SuspicionOccuranceStatusEnum", {
+    Open: { value: 0, description: "Open" },
+    Closed: { value: 10, description: "Closed" },
+    Deleted: { value: 20, description: "Deleted" }
+});
