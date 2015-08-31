@@ -227,6 +227,8 @@
     <Content Include="FraudAnalysis\Views\Strategy\StrategyManagement.html" />
     <Content Include="FraudAnalysis\Views\Strategy\StrategyManagementController.js" />
     <Content Include="FraudAnalysis\Views\Strategy\StrategyEditorController.js" />
+    <Content Include="FraudAnalysis\Views\SuspiciousCaseManagement.html" />
+    <Content Include="FraudAnalysis\Views\SuspiciousCaseManagementController.js" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
