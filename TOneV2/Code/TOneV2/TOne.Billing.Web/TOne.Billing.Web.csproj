@@ -123,6 +123,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Billing\Constants\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
@@ -144,8 +145,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Billing\Constants\SupplierInvoiceDetailGridMeasureEnum.js" />
-    <Content Include="Billing\Constants\SupplierInvoiceMeasureEnum.js" />
     <Content Include="Billing\Services\APIServices\SupplierInvoiceAPIService.js" />
     <Content Include="Billing\Views\SupplierInvoiceDetailGrid.html" />
     <Content Include="Billing\Views\SupplierInvoiceDetailGridController.js" />

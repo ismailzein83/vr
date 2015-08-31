@@ -209,7 +209,7 @@ namespace TOne.BusinessEntity.Data.SQL
                 CarrierAccountName = GetCarrierAccountName(reader["ProfileName"] as string, reader["NameSuffix"] as string)
             };
         }
-
+        
         internal static string GetCarrierAccountName(string carrierName, string nameSuffix)
         {
             return string.Format("{0}{1}", carrierName, string.IsNullOrEmpty(nameSuffix) ? string.Empty : " (" + nameSuffix + ")");
