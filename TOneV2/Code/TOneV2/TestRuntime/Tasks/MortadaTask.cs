@@ -31,14 +31,14 @@ namespace TestRuntime.Tasks
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
 
-            //BPClient bpClient = new BPClient();
-            //bpClient.CreateNewProcess(new CreateProcessInput
-            //{
-            //    InputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput
-            //    {
-            //        RepricingDay = DateTime.Parse("2013-03-29")
-            //    }
-            //});
+            BPClient bpClient = new BPClient();
+            bpClient.CreateNewProcess(new CreateProcessInput
+            {
+                InputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput
+                {
+                    RepricingDay = DateTime.Parse("2013-03-29")
+                }
+            });
 
 
         }

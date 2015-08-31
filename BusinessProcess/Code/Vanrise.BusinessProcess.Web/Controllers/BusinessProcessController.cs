@@ -93,7 +93,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         public List<SchedulerTask> GetWorkflowTasksByDefinitionId(int bpDefinitionId)
         {
             SchedulerTaskManager manager = new SchedulerTaskManager();
-            List<SchedulerTask> workflowTasks = manager.GetTasksbyActionType(1);
+            List<SchedulerTask> workflowTasks = manager.GetTasksbyActionType(WFTaskActionConstants.WFSchedulerTaskActionId);
 
             List<SchedulerTask> filteredList = new List<SchedulerTask>();
 
@@ -111,7 +111,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         public List<SchedulerTaskModel> GetWorkflowTasksByDefinitionIds()
         {
             SchedulerTaskManager manager = new SchedulerTaskManager();
-            List<SchedulerTask> workflowTasks = manager.GetTasksbyActionType(1);
+            List<SchedulerTask> workflowTasks = manager.GetTasksbyActionType(WFTaskActionConstants.WFSchedulerTaskActionId);
 
             List<SchedulerTask> filteredList = new List<SchedulerTask>();
 
