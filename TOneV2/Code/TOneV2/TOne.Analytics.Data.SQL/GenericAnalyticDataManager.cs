@@ -12,9 +12,7 @@ namespace TOne.Analytics.Data.SQL
 {
     public class GenericAnalyticDataManager : BaseTOneDataManager, IGenericAnalyticDataManager
     {
-        //private GenericAnalyticConfigManager _manager =  new GenericAnalyticConfigManager();
-
-        public Vanrise.Entities.BigResult<AnalyticRecord> GetAnalyticSummary(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
+        public Vanrise.Entities.BigResult<AnalyticRecord> GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
         {
             GenericAnalyticConfigManager _manager = new GenericAnalyticConfigManager();
             Dictionary<AnalyticGroupField, AnalyticGroupFieldConfig> groupFieldsConfig = _manager.GetGroupFieldsConfig(input.Query.GroupFields);
@@ -30,7 +28,20 @@ namespace TOne.Analytics.Data.SQL
                 });
             };
 
-            return RetrieveData(input, createTempTableIfNotExistsAction, (reader) => AnalyticRecordMapper(reader, groupFieldsConfig, measureFieldsConfig));
+            Dictionary<string, string> columnsMappings = new Dictionary<string, string>();
+            for (int i = 0; i < input.Query.GroupFields.Length; i++ )
+            {
+                var groupField = input.Query.GroupFields[i];
+                columnsMappings.Add(String.Format("GroupFieldValues[{0}].Name", (int)groupField), String.Format("GroupFieldName_{0}", groupField));
+            }
+
+            for (int i = 0; i < input.Query.MeasureFields.Length; i++)
+            {
+                var measureField = input.Query.MeasureFields[i];
+                columnsMappings.Add(String.Format("MeasureValues[{0}]", (int)measureField), String.Format("Measure_{0}", measureField));
+            }
+
+            return RetrieveData(input, createTempTableIfNotExistsAction, (reader) => AnalyticRecordMapper(reader, groupFieldsConfig, measureFieldsConfig), columnsMappings);
         }
 
         private string BuildAnalyticSummaryQuery(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input, string tempTableName, Dictionary<AnalyticGroupField, AnalyticGroupFieldConfig> groupFieldsConfig, Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig> measureFieldsConfig)
@@ -44,11 +55,10 @@ namespace TOne.Analytics.Data.SQL
 			                                                    WHERE
 			                                                    FirstCDRAttempt BETWEEN @FromDate AND @ToDate
                                                                 #FILTERPART#
-			                                                    GROUP BY #GROUPBYPART#
+			                                                    GROUP BY #GROUPBYPART# ,cust.NameSuffix , custProf.Name
                                                             END ");
             
            
-
             StringBuilder selectPartBuilder = new StringBuilder();
             StringBuilder joinPartBuilder = new StringBuilder();
             StringBuilder filterPartBuilder = new StringBuilder();
@@ -59,14 +69,21 @@ namespace TOne.Analytics.Data.SQL
             {                
                 AnalyticGroupFieldConfig groupFieldConfig = groupFieldsConfig[groupField];
 
-                AddColumnToGroupByPart(groupByPartBuilder, groupFieldConfig.IdColumn);
+                if (groupFieldConfig.GroupByStatements != null)
+                    foreach (var statement in groupFieldConfig.GroupByStatements)
+                    {
+                        AddColumnToGroupByPart(groupByPartBuilder, statement);
+                    }
+
                 if(groupFieldConfig.JoinStatements != null)
                     foreach (var statement in groupFieldConfig.JoinStatements)
                     {
                         AddStatementToJoinPart(joinPartBuilder, statement);
                     }
+                
                 if(!String.IsNullOrEmpty(groupFieldConfig.IdColumn))
                     AddColumnToSelectPart(selectPartBuilder, String.Format("{0} AS GroupFieldId_{1}", groupFieldConfig.IdColumn, groupField));
+                
                 if (!String.IsNullOrEmpty(groupFieldConfig.NameColumn))
                     AddColumnToSelectPart(selectPartBuilder, String.Format("{0} AS GroupFieldName_{1}", groupFieldConfig.NameColumn, groupField));
             }
@@ -92,7 +109,7 @@ namespace TOne.Analytics.Data.SQL
         {
             if(selectPartBuilder.Length > 0)
             {
-                selectPartBuilder.Append(", ");
+                selectPartBuilder.Append(" , ");
             }
             selectPartBuilder.Append(column);
         }
@@ -101,7 +118,7 @@ namespace TOne.Analytics.Data.SQL
         {
             if (groupByPartBuilder.Length > 0)
             {
-                groupByPartBuilder.Append(", ");
+                groupByPartBuilder.Append(" , ");
             }
             groupByPartBuilder.Append(column);
         }
@@ -127,10 +144,10 @@ namespace TOne.Analytics.Data.SQL
             var index = 0;
             foreach (var groupFieldConfig in groupFieldsConfig)
             {
-                object id = reader[String.Format("GroupFieldId_{1}", groupFieldConfig.Key)];
+                object id = reader[String.Format("GroupFieldId_{0}", groupFieldConfig.Key)];
                 if (id != DBNull.Value)
                 {
-                    string nameColumnName = String.Format("GroupFieldName_{1}", groupFieldConfig.Key);
+                    string nameColumnName = String.Format("GroupFieldName_{0}", groupFieldConfig.Key);
                     record.GroupFieldValues[index] = new AnalyticGroupFieldValue
                     {
                         Id = id.ToString(),
@@ -146,7 +163,7 @@ namespace TOne.Analytics.Data.SQL
             foreach (var measureFieldConfig in measureFieldsConfig)
             {
 
-                string columnName = String.Format("Measure_{1}", measureFieldConfig.Key);
+                string columnName = String.Format("Measure_{0}", measureFieldConfig.Key);
                 record.MeasureValues[index] = GetReaderValue<object>(reader, columnName);
 
                 index++;

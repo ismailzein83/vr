@@ -25,6 +25,5 @@ namespace TOne.Analytics.Web.Controllers
             CarrierSummaryStatsManager manager = new CarrierSummaryStatsManager();
             return GetWebResponse(input, manager.GetFiltered(input));
         }
-
     }
 }

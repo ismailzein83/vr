@@ -2,35 +2,32 @@
 
     "use strict";
 
-    CarrierSummaryGridController.$inject = ['$scope', 'AnalyticsAPIService', 'CarrierSummaryGroupKeysEnum', 'CarrierSummaryMeasureEnum', 'VRModalService', 'UtilsService', 'LabelColorsEnum', 'AnalyticsService'];
-    function CarrierSummaryGridController($scope, AnalyticsAPIService, CarrierSummaryGroupKeysEnum, CarrierSummaryMeasureEnum, VRModalService, UtilsService, LabelColorsEnum, AnalyticsService) {
+    CarrierSummaryGridController.$inject = ['$scope', 'CarrierSummaryStatsAPIService', 'CarrierSummaryGroupKeysEnum', 'CarrierSummaryMeasureEnum', 'VRModalService', 'UtilsService', 'AnalyticsService'];
+    function CarrierSummaryGridController($scope, CarrierSummaryStatsAPIService, CarrierSummaryGroupKeysEnum, CarrierSummaryMeasureEnum, VRModalService, UtilsService, AnalyticsService) {
         var filter = {};
+        var measures = [];
+        var measureFields = [];
         var selectedGroupKeys = [];
         defineScope();
         load();
+
         function defineScope() {
 
             $scope.parentGroupKeys = [];
-            $scope.measures = [];
+            $scope.measures = measureFields;
+            $scope.selectedGroupKey;
             $scope.measuresGroupKeys = [];
             $scope.currentSearchCriteria = {
                 groupKeys: []
             };
             $scope.groupKeys = [];
 
-            $scope.onEntityClicked = function (dataItem) {
-                var parentGroupKeys = $scope.viewScope.groupKeys;
-
-                var selectedGroupKeyInParent = $.grep(parentGroupKeys, function (parentGrpKey) {
-                    return parentGrpKey.value == $scope.selectedGroupKey.value;
-                })[0];
-                $scope.viewScope.selectEntity(selectedGroupKeyInParent, dataItem.GroupKeyValues[0].Id, dataItem.GroupKeyValues[0].Name)
-            };
-
             $scope.groupKeySelectionChanged = function () {
 
                 if ($scope.selectedGroupKeyIndex != undefined) {
                     $scope.selectedGroupKey = $scope.groupKeys[$scope.selectedGroupKeyIndex];
+
+                    
                     if (!$scope.selectedGroupKey.isDataLoaded && $scope.selectedGroupKey.gridAPI != undefined) {
                         // $scope.parentGroupKeys = [];
                         retrieveData($scope.selectedGroupKey, false);
@@ -44,66 +41,33 @@
               
             };
         }
-        function load() {
-            LoadParentGroupKeys($scope);//return the Parent group keys
-            loadMeasures(); // load the measures values - grid headers
-            loadMeasuresGroupKeys();
-            eliminateGroupKeysNotInParent($scope.parentGroupKeys, $scope.groupKeys);
 
-            
-
-           $scope.selectedGroupKey = $scope.groupKeys[0];
-        }
         function retrieveData(groupKey, withSummary) {
             buildFilter($scope);
-            buildFilterFromViewScope();
+            //buildFilterFromViewScope();
+
 
             var query = {
-                Filter: filter,
-                WithSummary: withSummary,
-                GroupKeys: [$scope.selectedGroupKey.value],
-                From: $scope.viewScope.fromDate,
-                To: $scope.viewScope.toDate,
-
+                GroupFields: [$scope.selectedGroupKey.value],
+                MeasureFields: measures,
+                FromTime: $scope.viewScope.fromDate,
+                ToTime: $scope.viewScope.toDate,
             };
+
             return groupKey.gridAPI.retrieveData(query);
         }
 
-        function LoadParentGroupKeys(scope) {
-            if (scope == $scope.viewScope) {
-                    $scope.parentGroupKeys.push(scope.optionsGroups.selectedvalues);
-                return;
-            }
-            else {
-                $scope.parentGroupKeys.push(scope.gridParentScope.optionsGroups.selectedvalues);
-                LoadParentGroupKeys(scope.gridParentScope);
-            }
 
+        function loadQueryMeasures() {
+            if (measureFields.length == 0)
+                for (var prop in CarrierSummaryMeasureEnum) {
+                    measureFields.push(CarrierSummaryMeasureEnum[prop]);
+                }
         }
 
 
-        function loadMeasures() {
-            for (var prop in CarrierSummaryMeasureEnum) {
-                $scope.measures.push(CarrierSummaryMeasureEnum[prop]);
-            }
-        }
-
-        function loadMeasuresGroupKeys() {
-            for (var prop in CarrierSummaryGroupKeysEnum) {
-                $scope.groupKeys.push(CarrierSummaryGroupKeysEnum[prop]);
-            }
-        }
-
-        function eliminateGroupKeysNotInParent(parentGroupKeys, groupKeys) {
-
-            for (var i = 0; i < parentGroupKeys.length; i++) {
-                for (var j = 0; j < groupKeys.length; j++)
-                    if (parentGroupKeys[i].value == groupKeys[j].value)
-                        groupKeys.splice(j, 1);
-            }
-        }
-     
         function buildFilterFromViewScope() {
+
             if ($scope.viewScope.filter.filter.CustomerIds != null);
             {
                 if (filter.CustomerIds == undefined)
@@ -154,14 +118,14 @@
                 var groupKey = parentGroupKeys[i];
 
                 switch (groupKey.value) {
-                    case TrafficStatisticGroupKeysEnum.OurZone.value:
-                        filter.ZoneIds = [scope.dataItem.GroupKeyValues[i].Id];
+                    case CarrierSummaryGroupKeysEnum.ZoneId.value:
+                        filter.ZoneIds = [scope.dataItem.GroupFieldValues[i].Id];
                         break;
-                    case TrafficStatisticGroupKeysEnum.CustomerId.value:
-                        filter.CustomerIds = [scope.dataItem.GroupKeyValues[i].Id];
+                    case CarrierSummaryGroupKeysEnum.CustomerId.value:
+                        filter.CustomerIds = [scope.dataItem.GroupFieldValues[i].Id];
                         break;
-                    case TrafficStatisticGroupKeysEnum.SupplierId.value:
-                        filter.SupplierIds = [scope.dataItem.GroupKeyValues[i].Id];
+                    case CarrierSummaryGroupKeysEnum.SupplierId.value:
+                        filter.SupplierIds = [scope.dataItem.GroupFieldValues[i].Id];
                         break;
                 }
             }
@@ -171,6 +135,107 @@
 
 
         }
+
+        function load() {
+            loadGroupKeys();// Load all group keys
+            loadMeasures();
+            loadQueryMeasures();
+            //LoadParentGroupKeys($scope.gridParentScope);//return the Parent group keys        
+
+           //Eliminate Parent group keys from group keys
+            // addFunctionsGroupKey();
+
+           $scope.selectedGroupKey = $scope.groupKeys[0];
+        }
+
+        function loadMeasures() {
+            for (var prop in CarrierSummaryMeasureEnum) {
+                measures.push(CarrierSummaryMeasureEnum[prop].value);
+            }
+        }
+
+        function loadGroupKeys() {
+            for (var prop in CarrierSummaryGroupKeysEnum) {
+                var groupKey = {
+                    name: CarrierSummaryGroupKeysEnum[prop].name,
+                    value: CarrierSummaryGroupKeysEnum[prop].value,
+                    data: [],
+                    isDataLoaded: false,
+                    propertyName: CarrierSummaryGroupKeysEnum[prop].propertyName
+                };
+               
+                addGroupKeyIfNotExistsInParent(groupKey);
+            }
+           
+            if ($scope.groupKeys.length > 0)
+                $scope.selectedGroupKey = $scope.groupKeys[0];
+            LoadParentGroupKeys($scope.gridParentScope);
+            eliminateGroupKeysNotInParent($scope.parentGroupKeys, $scope.groupKeys);
+        }
+
+        function addGroupKeyIfNotExistsInParent(groupKey) {
+            var parentGroupKeys = $scope.viewScope.selectedGroupKeys;
+            for (var i = 0; i < parentGroupKeys.length; i++) {
+                if (parentGroupKeys[i].value == groupKey.value)
+                    return;
+            }
+                groupKey.onGridReady = function (api) {
+                    groupKey.gridAPI = api;
+                    if ($scope.selectedGroupKey == groupKey)
+                        retrieveData(groupKey, false);
+                };
+                groupKey.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                    return CarrierSummaryStatsAPIService.GetFiltered(dataRetrievalInput).then(function (response) {
+                        $scope.selectedGroupKey.isDataLoaded = true;
+                        onResponseReady(response);
+                    })
+                };
+                $scope.groupKeys.push(groupKey);
+  
+            //for (var i = 0; i < $scope.groupKeys.length; i++) {
+            //    $scope.groupKeys[i].onGridReady = function (api) {
+            //        $scope.groupKeys[i].gridAPI = api;
+            //        if ($scope.selectedGroupKey == $scope.groupKeys[i])
+            //            retrieveData($scope.groupKeys[i], false);
+            //    };
+            //    $scope.groupKeys[i].dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+            //        return CarrierSummaryStatsAPIService.GetFiltered(dataRetrievalInput).then(function (response) {
+
+            //            $scope.selectedGroupKey.isDataLoaded = true;
+            //            console.log("TTEEESST");
+            //            onResponseReady(response);
+            //        })
+            //    };
+            //}
+           
+        }
+
+        //function loadGroupKeys() {
+        //    for (var prop in CarrierSummaryGroupKeysEnum) {
+        //        $scope.groupKeys.push(CarrierSummaryGroupKeysEnum[prop]);
+        //    }
+        //}
+
+        function LoadParentGroupKeys(scope) {
+            if (scope == $scope.viewScope) {
+                $scope.parentGroupKeys = scope.selectedGroupKeys;
+                return;
+            }
+            else {
+                $scope.parentGroupKeys.push(scope.gridParentScope.selectedGroupKeys);
+                LoadParentGroupKeys(scope.gridParentScope);
+            }
+        }
+
+        function eliminateGroupKeysNotInParent(parentGroupKeys, groupKeys) {
+
+            for (var i = 0; i < parentGroupKeys.length; i++) {
+                for (var j = 0; j < groupKeys.length; j++)
+                    if (parentGroupKeys[i].value == groupKeys[j].value)
+                        groupKeys.splice(j, 1);
+            }
+        }
+
     }
     appControllers.controller('CarrierSummaryGridController', CarrierSummaryGridController);
 

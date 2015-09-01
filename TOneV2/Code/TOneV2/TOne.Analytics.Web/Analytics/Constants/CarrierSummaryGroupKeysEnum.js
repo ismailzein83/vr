@@ -1,5 +1,5 @@
 ﻿app.constant('CarrierSummaryGroupKeysEnum', {
-    CustomerId: { name: "Customer", value: 1, description: "Customer"},
-    SupplierId: { name: "Supplier", value: 2, description: "Supplier" },
-    ZoneId: { name: "Zone", value: 3, description: "Zone"},
+    CustomerId: { name: "Customer", value: 0, description: "Customer", propertyName: 'GroupFieldName_Customer' },
+    SupplierId: { name: "Supplier", value: 1, description: "Supplier", propertyName: 'GroupFieldName_Supplier' },
+    ZoneId: { name: "Zone", value: 2, description: "Zone", propertyName: 'GroupFieldName_Zone' },
 });

@@ -17,13 +17,14 @@ namespace TOne.Analytics.Data.SQL
 
         static Dictionary<AnalyticGroupField, AnalyticGroupFieldConfig> s_AllGroupFieldsConfig;
         static Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig> s_AllMeasureFieldsConfig;
+
         public Dictionary<AnalyticGroupField, AnalyticGroupFieldConfig> GetGroupFieldsConfig(IEnumerable<AnalyticGroupField> fields)
         {
             Dictionary<AnalyticGroupField, AnalyticGroupFieldConfig> result = new Dictionary<AnalyticGroupField, AnalyticGroupFieldConfig>();
-            foreach (var itm in s_AllGroupFieldsConfig)
+            foreach (AnalyticGroupField itm in fields)
             {
-                if (fields.Contains(itm.Key))
-                    result.Add(itm.Key, itm.Value);
+                var item = s_AllGroupFieldsConfig[itm];
+                result.Add(itm, item);
             }
             return result;
         }
@@ -43,12 +44,13 @@ namespace TOne.Analytics.Data.SQL
         {
             s_AllGroupFieldsConfig = new Dictionary<AnalyticGroupField, AnalyticGroupFieldConfig>();
 
-            s_AllGroupFieldsConfig.Add(AnalyticGroupField.OwnZone,
+            s_AllGroupFieldsConfig.Add(AnalyticGroupField.Zone,
                 new AnalyticGroupFieldConfig
                 {
                     IdColumn = "ts.OurZoneID",
                     NameColumn = "z.Name",
-                    JoinStatements = new List<string>() { "JOIN Zone z WITH (NOLOCK) ON z.ZoneID = ts.OurZoneID" }
+                    JoinStatements = new List<string>() { " JOIN Zone z WITH (NOLOCK) ON z.ZoneID = ts.OurZoneID " },
+                    GroupByStatements = new List<string>() { " ts.OurZoneID, z.Name " }
                 });
 
             s_AllGroupFieldsConfig.Add(AnalyticGroupField.Customer,
@@ -56,17 +58,19 @@ namespace TOne.Analytics.Data.SQL
                 {
                     IdColumn = "ts.CustomerID",
                     NameColumn = "case when cust.NameSuffix != '' THEN  custProf.Name + '(' + cust.NameSuffix + ')' else custProf.Name end",
-                    JoinStatements = new List<string>() { @"JOIN CarrierAccount cust WITH (NOLOCK) ON cust.CarrierAccountID = ts.CustomerID
-                                         JOIN CarrierProfile custProf on cust.ProfileID = custProf.ProfileID" }
+                    JoinStatements = new List<string>() { @" JOIN CarrierAccount cust WITH (NOLOCK) ON cust.CarrierAccountID = ts.CustomerID
+                                         JOIN CarrierProfile custProf on cust.ProfileID = custProf.ProfileID " },
+                    GroupByStatements = new List<string>() { " ts.CustomerID, cust.NameSuffix, custProf.Name " }
                 });
 
             s_AllGroupFieldsConfig.Add(AnalyticGroupField.Supplier,
                 new AnalyticGroupFieldConfig
                 {
                     IdColumn = "ts.SupplierID",
-                    NameColumn = "case when cust.NameSuffix != '' THEN  custProf.Name + '(' + cust.NameSuffix + ')' else custProf.Name end",
-                    JoinStatements = new List<string>() { @"JOIN CarrierAccount cust WITH (NOLOCK) ON cust.CarrierAccountID = ts.SupplierID
-                                                     JOIN CarrierProfile custProf on cust.ProfileID = custProf.ProfileID" }
+                    NameColumn = "case when custSupplier.NameSuffix != '' THEN  custProfSupplier.Name + '(' + custSupplier.NameSuffix + ')' else custProfSupplier.Name end",
+                    JoinStatements = new List<string>() { @" JOIN CarrierAccount custSupplier WITH (NOLOCK) ON custSupplier.CarrierAccountID = ts.SupplierID
+                                                     JOIN CarrierProfile custProfSupplier on custSupplier.ProfileID = custProfSupplier.ProfileID " },
+                    GroupByStatements = new List<string>() { " ts.SupplierID, custSupplier.NameSuffix, custProfSupplier.Name " }
                 });
         }
 
@@ -80,12 +84,17 @@ namespace TOne.Analytics.Data.SQL
                     GetFieldExpression = (query) => "Sum(ts.Attempts)"
                 });
 
+            s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.SuccessfulAttempts,
+                new AnalyticMeasureFieldConfig
+                {
+                    GetFieldExpression = (query) => "Sum(ts.SuccessfulAttempts) / 60"
+                });
+
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.DurationsInMinutes,
                new AnalyticMeasureFieldConfig
                {
                    GetFieldExpression = (query) => "Sum(ts.DurationsInSeconds) / 60"
                });
         }
-
     }
 }

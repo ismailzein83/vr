@@ -9,6 +9,6 @@ namespace TOne.Analytics.Data
 {
     public interface IGenericAnalyticDataManager : IDataManager
     {
-        Vanrise.Entities.BigResult<AnalyticRecord> GetAnalyticSummary(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input);
+        Vanrise.Entities.BigResult<AnalyticRecord> GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input);
     }
 }

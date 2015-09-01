@@ -26,7 +26,7 @@ namespace TOne.Analytics.Business
 
         public Vanrise.Entities.IDataRetrievalResult<AnalyticRecord> GetFiltered(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
         {
-           return _gdatamanager.GetAnalyticSummary(input); 
+            return _gdatamanager.GetAnalyticRecords(input);
         }
 
         public Vanrise.Entities.IDataRetrievalResult<CarrierSummaryStats> GetFilteredCarrierSummaryStats(Vanrise.Entities.DataRetrievalInput<CarrierSummaryStatsQuery> input)

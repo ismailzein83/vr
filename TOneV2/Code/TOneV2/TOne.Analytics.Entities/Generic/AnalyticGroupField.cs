@@ -8,8 +8,8 @@ namespace TOne.Analytics.Entities
 {
     public enum AnalyticGroupField
     {
-        OwnZone = 0,
+        Customer = 0,
         Supplier = 1,
-        Customer = 2
+        Zone = 2
     }
 }

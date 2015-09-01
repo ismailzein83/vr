@@ -13,5 +13,7 @@ namespace TOne.Analytics.Data.SQL
         public string NameColumn { get; set; }
 
         public List<string> JoinStatements { get; set; }
+
+        public List<string> GroupByStatements { get; set; }
     }
 }

@@ -3,22 +3,13 @@
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns colnum="1">
-                    <vr-select label="Group By" datasource="optionsGroups.datasource"
-                               datatextfield="name" datavaluefield="value" selectedvalues="optionsGroups.selectedvalues"></vr-select>
-                </vr-columns>
-                <vr-columns colnum="2" ng-show="optionsGroups.selectedvalues.value== 1 || optionsGroups.selectedvalues.value== 2">
-                    <vr-select label="Carrier" datasource="optionsCarriers.datasource" withlocalfilter selectedvalues="optionsCarriers.selectedvalues" datatextfield="Name" 
-                               datavaluefield="CarrierAccountID" entityname="Carriers">
-                    </vr-select>
-                </vr-columns>
-                
-                <vr-columns colnum="2" ng-show="optionsGroups.selectedvalues.value== 3">
-                    <vr-be-zones selectedvalues="selectedvaluesZones"> </vr-be-zones>
-                    </vr-select>
-                </vr-columns>
+                    <!--<vr-select label="Group By" ismultipleselection datasource="optionsGroups.datasource"
+                               datatextfield="name" datavaluefield="value" selectedvalues="optionsGroups.selectedvalues"></vr-select>-->
 
-                <vr-columns colnum="1">
-                    <vr-textbox type="number" label="Top" value="top"></vr-textbox>
+                    <vr-select label="Group By" datasource="groupKeys"
+                               datatextfield="description" datavaluefield="value" selectedvalues="selectedGroupKeys"  ismultipleselection isrequired></vr-select>
+
+
                 </vr-columns>
                 <vr-columns colnum="2">
                     <vr-datetimepicker type="date" label="From:" value="fromDate" isrequired></vr-datetimepicker>
@@ -27,17 +18,6 @@
                     <vr-datetimepicker type="date" label="To:" value="toDate" isrequired></vr-datetimepicker>
                 </vr-columns>
 
-                <vr-columns colnum="2" ng-show="optionsGroups.selectedvalues.value== 1 || optionsGroups.selectedvalues.value== 2">
-                    <vr-select label="Currency" datasource="optionsCurrencies.datasource" ng-if="optionsGroups.selectedvalues.value== 1 || optionsGroups.selectedvalues.value== 2" isrequired 
-                               withlocalfilter selectedvalues="optionsCurrencies.selectedvalues" datatextfield="CurrencyFullName" datavaluefield="CurrencyId" entityname="Currencies">
-                    </vr-select>
-                </vr-columns>
-                <vr-columns colnum="1" ng-show="optionsGroups.selectedvalues.value== 1 || optionsGroups.selectedvalues.value== 2">
-                    <vr-switch label="Group by profile" value="byProfile"></vr-switch>
-                </vr-columns>
-                <vr-columns colnum="1" ng-show="false">
-                    <vr-switch label="Show inactive" value="showInactive"></vr-switch>
-                </vr-columns>
             </vr-row>
         </div>
         <vr-row removeline>
@@ -50,9 +30,11 @@
         <div>
             <vr-row>
                 <vr-columns colnum="12">
-                    <vr-datagrid datasource="::datasource" pagingtype="'PagingOnScroll'" dataretrievalfunction="dataRetrievalFunction" on-ready="gridReady">
-                        <vr-datagridcolumn headertext="getHeader" field="'GroupID'" widthfactor="5"></vr-datagridcolumn>
-                        <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" summaryfield="measure.propertyName" type="measure.type" tag="measure"></vr-datagridcolumn>
+                    <vr-datagrid datasource="datasource" pagingtype="'Pager'" dataretrievalfunction="dataRetrievalFunction" on-ready="gridReady">
+                        
+                        <vr-datagridcolumn ng-repeat="groupKey in currentSearchCriteria.groupKeys" headertext="groupKey.description" field="'GroupFieldValues[' + $index + '].Name'" columnindex="$index" widthfactor="15"></vr-datagridcolumn>
+                        <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="'MeasureValues[' + $index + ']'" tag="measure"></vr-datagridcolumn>
+
                         <vr-datagridexpandablerow>
                             <div ng-include="'/Client/Modules/Analytics/Views/CarrierSummaryGrid.html'"></div>
                         </vr-datagridexpandablerow>

@@ -2,111 +2,120 @@
 
     "use strict";
 
-    CarrierSummaryStatsController.$inject = ['$scope', 'CarrierSummaryStatsAPIService', 'CarrierAccountAPIService', 'CarrierSummaryMeasureEnum', 'ZoneAPIService', 'CurrencyAPIService', 'CarrierTypeEnum', 'VRModalService'];
-    function CarrierSummaryStatsController($scope, CarrierSummaryStatsAPIService, CarrierAccountAPIService, CarrierSummaryMeasureEnum, ZoneAPIService, CurrencyAPIService, CarrierTypeEnum, VRModalService) {
+    CarrierSummaryStatsController.$inject = ['$scope', 'CarrierSummaryStatsAPIService', 'CarrierAccountAPIService', 'CarrierSummaryMeasureEnum', 'ZoneAPIService', 'CurrencyAPIService', 'CarrierTypeEnum', 'VRModalService', 'AnalyticsService'];
+    function CarrierSummaryStatsController($scope, CarrierSummaryStatsAPIService, CarrierAccountAPIService, CarrierSummaryMeasureEnum, ZoneAPIService, CurrencyAPIService, CarrierTypeEnum, VRModalService, analyticsService) {
 
-        var gridApi;
+        var gridApi, measureFields = [];
 
-        function retrieveData() {
 
-            $scope.datasource = [];
-
-            $scope.getHeader = $scope.optionsGroups.selectedvalues.value == 3 ? "Zone" : $scope.byProfile ? "Profile" : "Carrier";
-
-            
-
-            if ($scope.selectedvalues == undefined)
-                $scope.selectedvalues = null;
-
-            if ($scope.optionsCurrencies.selectedvalues == undefined)
-                $scope.optionsCurrencies.selectedvalues = null;
-
-            return gridApi.retrieveData({
-                CarrierType: $scope.optionsGroups.selectedvalues.value,
-                CustomerID: $scope.optionsGroups.selectedvalues.value != 1 ? null : $scope.optionsCarriers.selectedvalues == null ? null : $scope.optionsCarriers.selectedvalues.CarrierAccountID,
-                SupplierID: $scope.optionsGroups.selectedvalues.value != 2 ? null : $scope.optionsCarriers.selectedvalues == null ? null : $scope.optionsCarriers.selectedvalues.CarrierAccountID,
-                ZoneID: $scope.optionsGroups.selectedvalues.value != 3 ? null : $scope.selectedvaluesZones == null ? null : $scope.selectedvaluesZones.ZoneId,
-                TopRecord: $scope.top,
-                FromDate: $scope.fromDate,
-                ToDate: $scope.toDate,
-                Currency: $scope.optionsCurrencies.selectedvalues == null ? null : $scope.optionsCurrencies.selectedvalues.CurrencyID,
-                GroupByProfile: $scope.byProfile,
-                ShowInactive: $scope.showInactive
-            });
-        }
+        var groupKeys = analyticsService.getCarrierZoneSummaryGroupKeys();
+        var measures = [];
+        var currentData;
+        defineScope();
+        load();
 
         function defineScope() {
-            $scope.top = 2000;
-            $scope.selectedvaluesZones = [];
-            $scope.measures = [];
-            var groupKeys = [];
-            groupKeys.push({ name: "Customer", value: 1 });
-            groupKeys.push({ name: "Supplier", value: 2 });
-            groupKeys.push({ name: "Zone", value: 3 });
-            $scope.optionsGroups = {
-                selectedvalues: '',
-                datasource: groupKeys
+
+            var now = new Date();
+            $scope.fromDate = new Date(2013, 1, 1);
+            $scope.toDate = now;
+
+
+            $scope.groupKeys = groupKeys;
+            $scope.selectedGroupKeys = [];
+            $scope.measures = measures;
+
+            $scope.currentSearchCriteria = {
+                groupKeys: []
             };
 
-          
-            $scope.optionsCurrencies = {
-                selectedvalues: '',
-                datasource: []
-            };
-
-            $scope.optionsCarriers = {
-                selectedvalues: '',
-                datasource: []
-            };
-           
-            $scope.getHeader = "";
             $scope.gridReady = function (api) {
                 gridApi = api;
-                //return retrieveData();
-            };
+            }
 
             $scope.searchClicked = function () {
+                $scope.currentSearchCriteria.groupKeys.length = 0;
+                angular.forEach($scope.selectedGroupKeys, function (group) {
+                    $scope.currentSearchCriteria.groupKeys.push(group);
+                });
+                
                 return retrieveData();
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return CarrierSummaryStatsAPIService.GetFiltered(dataRetrievalInput)
                 .then(function (response) {
-                    gridApi.setSummary(response.Summary);
+
+                    //gridApi.setSummary(response.Summary);
+
+                    var index = 1;
+                    angular.forEach(currentData, function (itm) {
+
+                        if (index > 15)
+                            return;
+                        index++;
+
+                        var dataItem = {
+                            groupKeyValues: itm.GroupFieldValues,
+                            entityName: ''
+                            //value: itm.Data[measure.propertyName]
+                        };
+
+                        for (var i = 0; i < $scope.currentSearchCriteria.groupKeys.length; i++) {
+                            if (dataItem.entityName.length > 0)
+                                dataItem.entityName += ' - ';
+                            dataItem.entityName += itm.GroupFieldValues[i].Name;
+                        };
+                    });
+
+
                     onResponseReady(response);
                 });
             };
+
+
+        }
+
+
+        function retrieveData() {
+
+            $scope.datasource = [];
+
+            var groupKeys = [];
+
+            angular.forEach($scope.selectedGroupKeys, function (group) {
+                groupKeys.push(group.value);
+            });
+
+
+            var query = {
+                GroupFields: groupKeys,
+                MeasureFields: measureFields,
+                FromTime: $scope.fromDate,
+                ToTime: $scope.toDate,
+            };
+            return gridApi.retrieveData(query);
         }
 
         function load() {
             loadMeasures();
-            loadCarriers();
-            loadCurrencies();
+            loadQueryMeasures();
         }
 
-        function loadCarriers() {
-            return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.SaleZone.value,false).then(function (response) {
-                angular.forEach(response, function (itm) {
-                    $scope.optionsCarriers.datasource.push(itm);
-                });
-            });
-        }
 
-        function loadCurrencies() {
-            return CurrencyAPIService.GetCurrencies().then(function (response) {
-                $scope.optionsCurrencies.datasource = response;
-            });
-
+        function loadQueryMeasures() {
+            if (measureFields.length == 0)
+                for (var prop in CarrierSummaryMeasureEnum) {
+                    measureFields.push(CarrierSummaryMeasureEnum[prop].value);
+                }
         }
 
         function loadMeasures() {
             for (var prop in CarrierSummaryMeasureEnum) {
-                $scope.measures.push(CarrierSummaryMeasureEnum[prop]);
+                measures.push(CarrierSummaryMeasureEnum[prop]);
             }
         }
 
-        defineScope();
-        load();
 
     }
     appControllers.controller('Carrier_CarrierSummaryStatsController', CarrierSummaryStatsController);
