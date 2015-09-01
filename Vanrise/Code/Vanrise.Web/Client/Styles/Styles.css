@@ -1779,16 +1779,14 @@ opacity:0.9 ;
 .circle-div .circle-value{
    font-size: 15px !important;
    height: 35%;
-   display: table-cell;
+  
    width: 85px;
-   bottom: -10px;
+  
    position: relative;
 }
 .circle-div .circle-unit{
    height: 15%;
    font-size: 9px;
-   position: relative;
-   top: 5px;
 }
 .circle-bg-0{
    background-color:#20407D !important;

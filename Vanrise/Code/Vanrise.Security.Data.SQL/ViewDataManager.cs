@@ -27,7 +27,7 @@ namespace Vanrise.Security.Data.SQL
         public List<View> GetDynamicPages()
         {
 
-            return GetItemsSP("sec.sp_View_CreateTempByFiltered", ViewMapper, null, null, ViewType.Dynamic);
+            return GetItemsSP("sec.sp_View_GetByType", ViewMapper, ViewType.Dynamic);
             
         }
         public Vanrise.Entities.BigResult<View> GetFilteredDynamicViews(Vanrise.Entities.DataRetrievalInput<string> filter)
