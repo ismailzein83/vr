@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-DashboardController.$inject = ['$scope', 'DashboardAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'DataSourceImportedBatchAPIService', 'Integration_MappingResultEnum'];
+DashboardController.$inject = ['$scope', 'DashboardAPIService' , 'DataSourceImportedBatchAPIService', 'Integration_MappingResultEnum'];
 
-function DashboardController($scope, DashboardAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, DataSourceImportedBatchAPIService, Integration_MappingResultEnum) {
+function DashboardController($scope, DashboardAPIService,  DataSourceImportedBatchAPIService, Integration_MappingResultEnum) {
 
     var mainGridAPI_CasesSummary;
     var mainGridAPI_BTSCases;
