@@ -56,7 +56,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                 {
                     TableName = "[FraudAnalysis].[NormalCDR]",
                     Stream = stream,
-                    TabLock = false,
+                    TabLock = true,
                     KeepIdentity = false,
                     FieldSeparator = ','
                 });

@@ -12,11 +12,8 @@ namespace Vanrise.Fzero.CDRImport.Entities
     {
         static ImportedCDRBatch()
         {
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(ImportedCDRBatch), "CDRs");
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(CDR), "MSISDN", "IMSI", "ConnectDateTime", "Destination", "DurationInSeconds",
-                "DisconnectDateTime","CallClass", "IsOnNet", "CallType", "SubType", "IMEI", "BTSId", "CellId",
-                "UpVolume", "DownVolume", "CellLatitude", "CellLongitude", "InTrunk", "OutTrunk",
-                "ServiceType", "ServiceVASName");
+            CDR dummy = new CDR();
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(ImportedCDRBatch), "CDRs");           
         }
 
         public override string GenerateDescription()
