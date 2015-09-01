@@ -216,6 +216,7 @@
     <Content Include="Client\Javascripts\Directives\Inputs\Select\vr-select.html" />
     <Content Include="Client\Javascripts\Directives\Inputs\Switch\vr-switch-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Textarea\vr-textarea-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Numeric\vr-numeric-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Textbox\vr-textbox-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Validation\validation-dir-service.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Validation\vr-validation.js" />

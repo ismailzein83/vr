@@ -1853,3 +1853,47 @@ opacity:0.9 ;
 .progress-bar-gray{
     background-color:#D0D0D0;
 }
+/* strat of vr-numeric */
+
+    .vr-numeric .input-box{
+        display:inline-block;
+        width:100%;
+    }
+    .vr-numeric .vr-numeric-control{
+        display: inline-block;
+        position: absolute;
+        right:5px;
+        top: 5px;
+    }
+    .with-hint{
+        right:20px !important;
+    }
+    .with-label{
+        top:27px !important;
+    }
+    .vr-numeric .vr-numeric-control .unit{
+        position: absolute;
+        right: 15px;
+        color: #635F5F;
+        font-size: 12px;
+        top: 2px;
+    }
+    .vr-numeric .vr-numeric-control .arrow-box{
+        height: 12px;
+        width: 10px;
+    }
+    .vr-numeric .vr-numeric-control .arrow-box > div{
+        border-width: 5px;
+        display: block;
+        margin: 0px;
+        position: relative;
+    }
+    .vr-numeric .vr-numeric-control .arrow-box .caret-up{  
+        top: -4px; 
+    }
+    .vr-numeric .vr-numeric-control .arrow-box .caret-down{
+       bottom: -4px
+    }
+
+
+/* end of vr-numeric*/
