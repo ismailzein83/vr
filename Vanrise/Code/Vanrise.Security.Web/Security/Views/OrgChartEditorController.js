@@ -97,7 +97,9 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
 
     function fillScopeFromOrgChartObj(orgChartObject) {
         $scope.name = orgChartObject.Name;
+        
         addMappedUnassignedUsersToHierarchy(orgChartObject.Hierarchy);
+        removeDeletedUsersFromHierarchy(orgChartObject.Hierarchy);
 
         members = mapHierarchyToTreeNodes(orgChartObject.Hierarchy);
         treeAPI.refreshTree(members);
@@ -115,6 +117,54 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
                     Members: [],
                     isOpened: true
                 });
+        }
+    }
+
+    function removeDeletedUsersFromHierarchy(mainHierarchy)
+    {
+        //Deleted Users should be removed from the hierarchy
+        //Members under deleted users should be added to hierarchy's root
+        var objectsToAddToRoot = [];
+        var objectsToDelete = [];
+        markObjectsToReindex(mainHierarchy, objectsToAddToRoot, objectsToDelete);
+
+        angular.forEach(objectsToDelete, function (item) {
+            removeMemberById(mainHierarchy, item.Id);
+        });
+
+        angular.forEach(objectsToAddToRoot, function (item) {
+            mainHierarchy.push(item);
+        });
+    }
+
+    function markObjectsToReindex(mainHierarchy, objectsToAddToRoot, objectsToDelete)
+    {
+        for (var i = 0; i < mainHierarchy.length; i++) {
+            var userFound = UtilsService.getItemByVal(users, mainHierarchy[i].Id, 'UserId');
+            if (userFound) {
+                if (mainHierarchy[i].Members.length > 0)
+                    markObjectsToReindex(mainHierarchy[i].Members, objectsToAddToRoot, objectsToDelete);
+            }
+            else {
+                objectsToDelete.push(mainHierarchy[i]);
+                angular.forEach(mainHierarchy[i].Members, function (item) {
+                    objectsToAddToRoot.push(item);
+                });
+            }
+        }
+    }
+
+    function removeMemberById(mainHierarchy, id) {
+        for (var i = 0; i < mainHierarchy.length; i++) {
+            if(mainHierarchy[i].Id == id)
+            {
+                mainHierarchy.splice(i, 1);
+                return;
+            }
+            else if (mainHierarchy[i].Members.length > 0)
+            {
+                removeMemberById(mainHierarchy[i].Members, id);
+            }
         }
     }
 
