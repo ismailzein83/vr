@@ -67,10 +67,10 @@ namespace TOne.Analytics.Data.SQL
                 new AnalyticGroupFieldConfig
                 {
                     IdColumn = "ts.SupplierID",
-                    NameColumn = "case when custSupplier.NameSuffix != '' THEN  custProfSupplier.Name + '(' + custSupplier.NameSuffix + ')' else custProfSupplier.Name end",
-                    JoinStatements = new List<string>() { @" JOIN CarrierAccount custSupplier WITH (NOLOCK) ON custSupplier.CarrierAccountID = ts.SupplierID
-                                                     JOIN CarrierProfile custProfSupplier on custSupplier.ProfileID = custProfSupplier.ProfileID " },
-                    GroupByStatements = new List<string>() { " ts.SupplierID, custSupplier.NameSuffix, custProfSupplier.Name " }
+                    NameColumn = "case when supp.NameSuffix != '' THEN  suppProf.Name + '(' + supp.NameSuffix + ')' else suppProf.Name end",
+                    JoinStatements = new List<string>() { @" JOIN CarrierAccount supp WITH (NOLOCK) ON supp.CarrierAccountID = ts.SupplierID
+                                                     JOIN CarrierProfile suppProf on supp.ProfileID = suppProf.ProfileID " },
+                    GroupByStatements = new List<string>() { " ts.SupplierID, supp.NameSuffix, suppProf.Name " }
                 });
         }
 

@@ -32,13 +32,13 @@ namespace TOne.Analytics.Data.SQL
             for (int i = 0; i < input.Query.GroupFields.Length; i++ )
             {
                 var groupField = input.Query.GroupFields[i];
-                columnsMappings.Add(String.Format("GroupFieldValues[{0}].Name", (int)groupField), String.Format("GroupFieldName_{0}", groupField));
+                columnsMappings.Add(String.Format("GroupFieldValues[{0}].Name", i), String.Format("GroupFieldName_{0}", groupField));
             }
 
             for (int i = 0; i < input.Query.MeasureFields.Length; i++)
             {
                 var measureField = input.Query.MeasureFields[i];
-                columnsMappings.Add(String.Format("MeasureValues[{0}]", (int)measureField), String.Format("Measure_{0}", measureField));
+                columnsMappings.Add(String.Format("MeasureValues[{0}]", i), String.Format("Measure_{0}", measureField));
             }
 
             return RetrieveData(input, createTempTableIfNotExistsAction, (reader) => AnalyticRecordMapper(reader, groupFieldsConfig, measureFieldsConfig), columnsMappings);
@@ -55,7 +55,7 @@ namespace TOne.Analytics.Data.SQL
 			                                                    WHERE
 			                                                    FirstCDRAttempt BETWEEN @FromDate AND @ToDate
                                                                 #FILTERPART#
-			                                                    GROUP BY #GROUPBYPART# ,cust.NameSuffix , custProf.Name
+			                                                    GROUP BY #GROUPBYPART#
                                                             END ");
             
            

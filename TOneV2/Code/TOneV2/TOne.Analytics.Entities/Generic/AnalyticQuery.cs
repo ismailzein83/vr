@@ -15,5 +15,14 @@ namespace TOne.Analytics.Entities
         public AnalyticGroupField[] GroupFields { get; set; }
 
         public AnalyticMeasureField[] MeasureFields { get; set; }
+
+        public List<DimensionFilter> Filters { get; set; }
+    }
+
+    public class DimensionFilter
+    {
+        public AnalyticGroupField Dimension { get; set; }
+
+        public List<Object> FilterValues { get; set; }
     }
 }
