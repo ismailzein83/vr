@@ -38,7 +38,7 @@
                              datasource="logs"
                              dataretrievalfunction="dataRetrievalFunction"
                              pagingtype="'PagingOnScroll'"
-                             on-ready="gridReady">
+                             on-ready="gridReady" normalcell="true">
                     <vr-datagridcolumn headertext="'ID'" field="'ID'" widthfactor="5"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Severity'" field="'SeverityDescription'" widthfactor="10" getcolor="getSeverityColor"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Message'" field="'Message'" widthfactor="70"></vr-datagridcolumn>
