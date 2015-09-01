@@ -73,7 +73,7 @@ namespace Vanrise.Runtime.Data.SQL
             return (recordsEffected > 0);
         }
 
-        public bool TryLockTask(int taskId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds, IEnumerable<Entities.SchedulerTaskStatus> acceptableTaskStatuses)
+        public bool TryLockTask(int taskId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds)
         {
             int rslt = ExecuteNonQuerySPCmd("runtime.sp_SchedulerTask_TryLockAndUpdateScheduleTask",
                 (cmd) =>
@@ -82,9 +82,6 @@ namespace Vanrise.Runtime.Data.SQL
                     cmd.Parameters.Add(new SqlParameter("@CurrentRuntimeProcessID", currentRuntimeProcessId));
                     var dtPrm = new SqlParameter("@RunningProcessIDs", SqlDbType.Structured);
                     dtPrm.Value = BuildIDDataTable(runningRuntimeProcessesIds);
-                    cmd.Parameters.Add(dtPrm);
-                    dtPrm = new SqlParameter("@TaskStatuses", SqlDbType.Structured);
-                    dtPrm.Value = BuildIDDataTable(acceptableTaskStatuses.Select(itm => (int)itm));
                     cmd.Parameters.Add(dtPrm);
                 });
             return rslt > 0;

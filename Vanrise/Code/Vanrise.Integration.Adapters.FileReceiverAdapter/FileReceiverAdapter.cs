@@ -63,11 +63,12 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
         {
             FileAdapterArgument fileAdapterArgument = argument as FileAdapterArgument;
 
-            try
-            {
-                base.LogVerbose("Checking the following directory {0}", fileAdapterArgument.Directory);
 
-                if (System.IO.Directory.Exists(fileAdapterArgument.Directory))
+            base.LogVerbose("Checking the following directory {0}", fileAdapterArgument.Directory);
+
+            if (System.IO.Directory.Exists(fileAdapterArgument.Directory))
+            {
+                try
                 {
                     DirectoryInfo d = new DirectoryInfo(fileAdapterArgument.Directory);//Assuming Test is your Folder
                     base.LogVerbose("Getting all files with extenstion {0}", fileAdapterArgument.Extension);
@@ -79,10 +80,15 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
                         AfterImport(fileAdapterArgument, file);
                     }
                 }
+                catch (Exception ex)
+                {
+                    LogError("An error occurred in File Adapter while importing data. Exception Details: {0}", ex.ToString());
+                }
             }
-            catch(Exception ex)
+            else
             {
-                LogError("An error occurred in File Adapter while importing data. Exception Details: {0}", ex.ToString());
+                LogError("Could not find Directory {0}", fileAdapterArgument.Directory);
+                throw new DirectoryNotFoundException();
             }
         }
     }

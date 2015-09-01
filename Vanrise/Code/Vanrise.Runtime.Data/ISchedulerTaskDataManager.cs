@@ -25,7 +25,7 @@ namespace Vanrise.Runtime.Data
 
         bool DeleteTask(int taskId);
 
-        bool TryLockTask(int taskId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds, IEnumerable<Entities.SchedulerTaskStatus> acceptableTaskStatuses);
+        bool TryLockTask(int taskId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds);
 
         void UnlockTask(int taskId);
     }

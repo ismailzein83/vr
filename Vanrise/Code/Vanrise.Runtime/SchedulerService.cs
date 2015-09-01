@@ -12,8 +12,6 @@ namespace Vanrise.Runtime
 {
     public class SchedulerService : RuntimeService
     {
-        private static IEnumerable<SchedulerTaskStatus> _acceptableTaskStatuses = new SchedulerTaskStatus[] { SchedulerTaskStatus.NotStarted, SchedulerTaskStatus.Failed, SchedulerTaskStatus.Completed };
-
         protected override void Execute()
         {
             ISchedulerTaskDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
@@ -26,13 +24,14 @@ namespace Vanrise.Runtime
 
             foreach (Entities.SchedulerTask item in tasks)
             {
-                if (item.IsEnabled && dataManager.TryLockTask(item.TaskId, currentRuntimeProcessId, runningRuntimeProcessesIds, _acceptableTaskStatuses))
+                if (item.IsEnabled && dataManager.TryLockTask(item.TaskId, currentRuntimeProcessId, runningRuntimeProcessesIds))
                 {
                     Task task = new Task(() =>
                         {
+                            SchedulerTaskTrigger taskTrigger = null;
                             try
                             {
-                                SchedulerTaskTrigger taskTrigger = (SchedulerTaskTrigger)Activator.CreateInstance(Type.GetType(item.TriggerInfo.FQTN));
+                                taskTrigger = (SchedulerTaskTrigger)Activator.CreateInstance(Type.GetType(item.TriggerInfo.FQTN));
                                 if (item.NextRunTime == null)
                                 {
                                     item.NextRunTime = taskTrigger.CalculateNextTimeToRun(item.TaskSettings.TaskTriggerArgument);
@@ -49,8 +48,7 @@ namespace Vanrise.Runtime
                                     taskAction.Execute(item, item.TaskSettings.TaskActionArgument, evaluatedExpressions);
                                     item.Status = Entities.SchedulerTaskStatus.Completed;
 
-                                    item.NextRunTime = taskTrigger.CalculateNextTimeToRun(item.TaskSettings.TaskTriggerArgument);
-                                    item.LastRunTime = DateTime.Now;
+                                    
                                 }
                             }
                             catch(Exception ex)
@@ -60,6 +58,12 @@ namespace Vanrise.Runtime
                             }
                             finally
                             {
+                                if(taskTrigger != null)
+                                {
+                                    item.NextRunTime = taskTrigger.CalculateNextTimeToRun(item.TaskSettings.TaskTriggerArgument);
+                                    item.LastRunTime = DateTime.Now;
+                                }
+                                
                                 dataManager.UpdateTask(item);
                                 dataManager.UnlockTask(item.TaskId);
                             }
