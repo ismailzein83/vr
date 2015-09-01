@@ -71,8 +71,8 @@
                             isUserChange = true;
                         };
                         ctrl.readOnly = attrs.readonly != undefined;
-                        ctrl.upColor = (attrs.upcolor != undefined) ? ctrl.upcolor : '#009900';
-                        ctrl.downColor = (attrs.downcolor != undefined) ? ctrl.downcolor : '#f00';
+                        ctrl.upColor = (attrs.upcolor != undefined) ? ctrl.upcolor : 'green';
+                        ctrl.downColor = (attrs.downcolor != undefined) ? ctrl.downcolor : 'red';
                         ctrl.minValue = (attrs.minvalue != undefined) ? parseInt(ctrl.minvalue) : undefined;
                         ctrl.maxValue = (attrs.maxvalue != undefined) ? parseInt(ctrl.maxvalue) : undefined;
                         ctrl.stepValue = (attrs.stepvalue != undefined) ? parseInt(ctrl.stepvalue) : 1;
