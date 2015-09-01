@@ -2,13 +2,13 @@
 
     "use strict";
 
-    CarrierSummaryStatsController.$inject = ['$scope', 'CarrierSummaryStatsAPIService', 'CarrierAccountAPIService', 'CarrierSummaryMeasureEnum', 'ZoneAPIService', 'CurrencyAPIService', 'CarrierTypeEnum', 'VRModalService', 'AnalyticsService'];
-    function CarrierSummaryStatsController($scope, CarrierSummaryStatsAPIService, CarrierAccountAPIService, CarrierSummaryMeasureEnum, ZoneAPIService, CurrencyAPIService, CarrierTypeEnum, VRModalService, analyticsService) {
+    GenericAnalyticController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticMeasureEnum', 'VRModalService', 'AnalyticsService'];
+    function GenericAnalyticController($scope, GenericAnalyticAPIService, GenericAnalyticMeasureEnum, VRModalService, analyticsService) {
 
         var gridApi, measureFields = [];
 
 
-        var groupKeys = analyticsService.getCarrierZoneSummaryGroupKeys();
+        var groupKeys = analyticsService.getGenericAnalyticGroupKeys();
         var measures = [];
         var currentData;
         defineScope();
@@ -31,7 +31,7 @@
 
             $scope.gridReady = function (api) {
                 gridApi = api;
-            }
+            };
 
             $scope.searchClicked = function () {
                 $scope.currentSearchCriteria.groupKeys.length = 0;
@@ -43,7 +43,7 @@
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return CarrierSummaryStatsAPIService.GetFiltered(dataRetrievalInput)
+                return GenericAnalyticAPIService.GetFiltered(dataRetrievalInput)
                 .then(function (response) {
 
                     //gridApi.setSummary(response.Summary);
@@ -56,7 +56,7 @@
                         index++;
 
                         var dataItem = {
-                            groupKeyValues: itm.GroupFieldValues,
+                            groupKeyValues: itm.DimensionValues,
                             entityName: ''
                             //value: itm.Data[measure.propertyName]
                         };
@@ -64,7 +64,7 @@
                         for (var i = 0; i < $scope.currentSearchCriteria.groupKeys.length; i++) {
                             if (dataItem.entityName.length > 0)
                                 dataItem.entityName += ' - ';
-                            dataItem.entityName += itm.GroupFieldValues[i].Name;
+                            dataItem.entityName += itm.DimensionValues[i].Name;
                         };
                     });
 
@@ -105,19 +105,19 @@
 
         function loadQueryMeasures() {
             if (measureFields.length == 0)
-                for (var prop in CarrierSummaryMeasureEnum) {
-                    measureFields.push(CarrierSummaryMeasureEnum[prop].value);
+                for (var prop in GenericAnalyticMeasureEnum) {
+                    measureFields.push(GenericAnalyticMeasureEnum[prop].value);
                 }
         }
 
         function loadMeasures() {
-            for (var prop in CarrierSummaryMeasureEnum) {
-                measures.push(CarrierSummaryMeasureEnum[prop]);
+            for (var prop in GenericAnalyticMeasureEnum) {
+                measures.push(GenericAnalyticMeasureEnum[prop]);
             }
         }
 
 
     }
-    appControllers.controller('Carrier_CarrierSummaryStatsController', CarrierSummaryStatsController);
+    appControllers.controller('Generic_GenericAnalyticController', GenericAnalyticController);
 
 })(appControllers);

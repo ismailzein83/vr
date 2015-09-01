@@ -12,7 +12,7 @@ namespace TOne.Analytics.Entities
 
         public DateTime ToTime { get; set; }
         
-        public AnalyticGroupField[] GroupFields { get; set; }
+        public AnalyticDimension[] GroupFields { get; set; }
 
         public AnalyticMeasureField[] MeasureFields { get; set; }
 
@@ -21,7 +21,7 @@ namespace TOne.Analytics.Entities
 
     public class DimensionFilter
     {
-        public AnalyticGroupField Dimension { get; set; }
+        public AnalyticDimension Dimension { get; set; }
 
         public List<Object> FilterValues { get; set; }
     }

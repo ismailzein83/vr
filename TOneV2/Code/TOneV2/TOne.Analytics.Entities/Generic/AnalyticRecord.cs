@@ -8,7 +8,7 @@ namespace TOne.Analytics.Entities
 {
     public class AnalyticRecord
     {
-        public AnalyticGroupFieldValue[] GroupFieldValues { get; set; }
+        public AnalyticDimensionValue[] DimensionValues { get; set; }
 
         public Object[] MeasureValues { get; set; }
     }

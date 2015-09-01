@@ -1,15 +1,10 @@
-﻿<vr-panel ng-controller="Carrier_CarrierSummaryStatsController">
+﻿<vr-panel ng-controller="Generic_GenericAnalyticController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns colnum="1">
-                    <!--<vr-select label="Group By" ismultipleselection datasource="optionsGroups.datasource"
-                               datatextfield="name" datavaluefield="value" selectedvalues="optionsGroups.selectedvalues"></vr-select>-->
-
                     <vr-select label="Group By" datasource="groupKeys"
-                               datatextfield="description" datavaluefield="value" selectedvalues="selectedGroupKeys"  ismultipleselection isrequired></vr-select>
-
-
+                               datatextfield="description" datavaluefield="value" selectedvalues="selectedGroupKeys" ismultipleselection isrequired></vr-select>
                 </vr-columns>
                 <vr-columns colnum="2">
                     <vr-datetimepicker type="date" label="From:" value="fromDate" isrequired></vr-datetimepicker>
@@ -17,7 +12,6 @@
                 <vr-columns colnum="2">
                     <vr-datetimepicker type="date" label="To:" value="toDate" isrequired></vr-datetimepicker>
                 </vr-columns>
-
             </vr-row>
         </div>
         <vr-row removeline>
@@ -31,12 +25,12 @@
             <vr-row>
                 <vr-columns colnum="12">
                     <vr-datagrid datasource="datasource" pagingtype="'Pager'" dataretrievalfunction="dataRetrievalFunction" on-ready="gridReady">
-                        
-                        <vr-datagridcolumn ng-repeat="groupKey in currentSearchCriteria.groupKeys" headertext="groupKey.description" field="'GroupFieldValues[' + $index + '].Name'" columnindex="$index" widthfactor="15"></vr-datagridcolumn>
+
+                        <vr-datagridcolumn ng-repeat="groupKey in currentSearchCriteria.groupKeys" headertext="groupKey.description" field="'DimensionValues[' + $index + '].Name'" columnindex="$index" widthfactor="15"></vr-datagridcolumn>
                         <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="'MeasureValues[' + $index + ']'" tag="measure"></vr-datagridcolumn>
 
                         <vr-datagridexpandablerow>
-                            <div ng-include="'/Client/Modules/Analytics/Views/CarrierSummaryGrid.html'"></div>
+                            <div ng-include="'/Client/Modules/Analytics/Views/GenericAnalyticGrid.html'"></div>
                         </vr-datagridexpandablerow>
                     </vr-datagrid>
                 </vr-columns>

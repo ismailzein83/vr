@@ -15,12 +15,12 @@ namespace TOne.Analytics.Data.SQL
         public Vanrise.Entities.BigResult<AnalyticRecord> GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
         {
             GenericAnalyticConfigManager _manager = new GenericAnalyticConfigManager();
-            Dictionary<AnalyticGroupField, AnalyticGroupFieldConfig> groupFieldsConfig = _manager.GetGroupFieldsConfig(input.Query.GroupFields);
+            Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsConfig = _manager.GetGroupFieldsConfig(input.Query.GroupFields);
             Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig> measureFieldsConfig = _manager.GetMeasureFieldsConfig(input.Query.MeasureFields);
 
             Action<string> createTempTableIfNotExistsAction = (tempTableName) =>
             {                
-                string query = BuildAnalyticSummaryQuery(input, tempTableName, groupFieldsConfig, measureFieldsConfig);
+                string query = BuildAnalyticSummaryQuery(input, tempTableName, dimensionsConfig, measureFieldsConfig);
                 ExecuteNonQueryText(query, (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromTime));
@@ -32,7 +32,7 @@ namespace TOne.Analytics.Data.SQL
             for (int i = 0; i < input.Query.GroupFields.Length; i++ )
             {
                 var groupField = input.Query.GroupFields[i];
-                columnsMappings.Add(String.Format("GroupFieldValues[{0}].Name", i), String.Format("GroupFieldName_{0}", groupField));
+                columnsMappings.Add(String.Format("DimensionValues[{0}].Name", i), String.Format("DimensionName_{0}", groupField));
             }
 
             for (int i = 0; i < input.Query.MeasureFields.Length; i++)
@@ -41,10 +41,10 @@ namespace TOne.Analytics.Data.SQL
                 columnsMappings.Add(String.Format("MeasureValues[{0}]", i), String.Format("Measure_{0}", measureField));
             }
 
-            return RetrieveData(input, createTempTableIfNotExistsAction, (reader) => AnalyticRecordMapper(reader, groupFieldsConfig, measureFieldsConfig), columnsMappings);
+            return RetrieveData(input, createTempTableIfNotExistsAction, (reader) => AnalyticRecordMapper(reader, dimensionsConfig, measureFieldsConfig), columnsMappings);
         }
 
-        private string BuildAnalyticSummaryQuery(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input, string tempTableName, Dictionary<AnalyticGroupField, AnalyticGroupFieldConfig> groupFieldsConfig, Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig> measureFieldsConfig)
+        private string BuildAnalyticSummaryQuery(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input, string tempTableName, Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsConfig, Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig> measureFieldsConfig)
         {
             StringBuilder queryBuilder = new StringBuilder(@"IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
 	                                                        BEGIN 
@@ -65,9 +65,9 @@ namespace TOne.Analytics.Data.SQL
             StringBuilder groupByPartBuilder = new StringBuilder();
 
             //adding group fields related parts to the query
-            foreach (AnalyticGroupField groupField in input.Query.GroupFields)
+            foreach (AnalyticDimension groupField in input.Query.GroupFields)
             {                
-                AnalyticGroupFieldConfig groupFieldConfig = groupFieldsConfig[groupField];
+                AnalyticDimensionConfig groupFieldConfig = dimensionsConfig[groupField];
 
                 if (groupFieldConfig.GroupByStatements != null)
                     foreach (var statement in groupFieldConfig.GroupByStatements)
@@ -82,10 +82,10 @@ namespace TOne.Analytics.Data.SQL
                     }
                 
                 if(!String.IsNullOrEmpty(groupFieldConfig.IdColumn))
-                    AddColumnToSelectPart(selectPartBuilder, String.Format("{0} AS GroupFieldId_{1}", groupFieldConfig.IdColumn, groupField));
+                    AddColumnToSelectPart(selectPartBuilder, String.Format("{0} AS DimensionId_{1}", groupFieldConfig.IdColumn, groupField));
                 
                 if (!String.IsNullOrEmpty(groupFieldConfig.NameColumn))
-                    AddColumnToSelectPart(selectPartBuilder, String.Format("{0} AS GroupFieldName_{1}", groupFieldConfig.NameColumn, groupField));
+                    AddColumnToSelectPart(selectPartBuilder, String.Format("{0} AS DimensionName_{1}", groupFieldConfig.NameColumn, groupField));
             }
 
             //adding Measures related parts to the query
@@ -133,22 +133,22 @@ namespace TOne.Analytics.Data.SQL
             filterPartBuilder.Append(filter);
         }
 
-        AnalyticRecord AnalyticRecordMapper(IDataReader reader, Dictionary<AnalyticGroupField, AnalyticGroupFieldConfig> groupFieldsConfig, Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig> measureFieldsConfig)
+        AnalyticRecord AnalyticRecordMapper(IDataReader reader, Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsConfig, Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig> measureFieldsConfig)
         {
             AnalyticRecord record = new AnalyticRecord()
             {
-                GroupFieldValues = new AnalyticGroupFieldValue[groupFieldsConfig.Count],
+                DimensionValues = new AnalyticDimensionValue[dimensionsConfig.Count],
                 MeasureValues = new Object[measureFieldsConfig.Count]
             };
 
             var index = 0;
-            foreach (var groupFieldConfig in groupFieldsConfig)
+            foreach (var groupFieldConfig in dimensionsConfig)
             {
-                object id = reader[String.Format("GroupFieldId_{0}", groupFieldConfig.Key)];
+                object id = reader[String.Format("DimensionId_{0}", groupFieldConfig.Key)];
                 if (id != DBNull.Value)
                 {
-                    string nameColumnName = String.Format("GroupFieldName_{0}", groupFieldConfig.Key);
-                    record.GroupFieldValues[index] = new AnalyticGroupFieldValue
+                    string nameColumnName = String.Format("DimensionName_{0}", groupFieldConfig.Key);
+                    record.DimensionValues[index] = new AnalyticDimensionValue
                     {
                         Id = id.ToString(),
                         Name = reader[nameColumnName] as string

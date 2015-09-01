@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.Analytics.Data.SQL
 {
-    public class AnalyticGroupFieldConfig
+    public class AnalyticDimensionConfig
     {
         public string IdColumn { get; set; }
 

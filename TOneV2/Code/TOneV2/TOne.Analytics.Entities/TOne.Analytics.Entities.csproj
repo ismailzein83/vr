@@ -104,7 +104,6 @@
     <Compile Include="CarrierSummaryStats.cs" />
     <Compile Include="CarrierSummaryStatsQuery.cs" />
     <Compile Include="CarrierZoneSummaryGenericFilter.cs" />
-    <Compile Include="CarrierZoneSummaryInput.cs" />
     <Compile Include="CDRFilter.cs" />
     <Compile Include="CDRBigResult.cs" />
     <Compile Include="Billing\CustomerServices.cs" />
@@ -113,8 +112,8 @@
     <Compile Include="DailyReportQuery.cs" />
     <Compile Include="DestinationVolumeTrafficResult.cs" />
     <Compile Include="DestnationVolumeTrafficItem.cs" />
-    <Compile Include="Generic\AnalyticGroupField.cs" />
-    <Compile Include="Generic\AnalyticGroupFieldValue.cs" />
+    <Compile Include="Generic\AnalyticDimension.cs" />
+    <Compile Include="Generic\AnalyticDimensionValue.cs" />
     <Compile Include="Generic\AnalyticMeasureField.cs" />
     <Compile Include="Generic\AnalyticQuery.cs" />
     <Compile Include="Generic\AnalyticRecord.cs" />

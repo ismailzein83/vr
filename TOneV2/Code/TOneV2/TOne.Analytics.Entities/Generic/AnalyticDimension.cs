@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.Analytics.Entities
 {
-    public enum AnalyticGroupField
+    public enum AnalyticDimension
     {
         Customer = 0,
         Supplier = 1,

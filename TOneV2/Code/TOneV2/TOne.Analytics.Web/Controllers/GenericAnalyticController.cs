@@ -10,19 +10,19 @@ using Vanrise.Entities;
 
 namespace TOne.Analytics.Web.Controllers
 {
-    public class CarrierSummaryStatsController : Vanrise.Web.Base.BaseAPIController
+    public class GenericAnalyticController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpPost]
         public Object GetFilteredCarrierSummaryStats(Vanrise.Entities.DataRetrievalInput<CarrierSummaryStatsQuery> input)
         {
-            CarrierSummaryStatsManager manager = new CarrierSummaryStatsManager();
+            GenericAnalyticManager manager = new GenericAnalyticManager();
             return GetWebResponse(input, manager.GetFilteredCarrierSummaryStats(input));
         }
 
         [HttpPost]
         public Object GetFiltered(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
         {
-            CarrierSummaryStatsManager manager = new CarrierSummaryStatsManager();
+            GenericAnalyticManager manager = new GenericAnalyticManager();
             return GetWebResponse(input, manager.GetFiltered(input));
         }
     }

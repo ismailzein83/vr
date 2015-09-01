@@ -8,7 +8,6 @@ namespace TOne.Analytics.Entities
 {
     public enum AnalyticMeasureField
     {
-        //GroupID = 0,
         Attempts = 0,
         SuccessfulAttempts = 1,
         DurationsInMinutes = 3,

@@ -2,8 +2,8 @@
 
     "use strict";
 
-    CarrierSummaryGridController.$inject = ['$scope', 'CarrierSummaryStatsAPIService', 'CarrierSummaryGroupKeysEnum', 'CarrierSummaryMeasureEnum', 'VRModalService', 'UtilsService', 'AnalyticsService'];
-    function CarrierSummaryGridController($scope, CarrierSummaryStatsAPIService, CarrierSummaryGroupKeysEnum, CarrierSummaryMeasureEnum, VRModalService, UtilsService, AnalyticsService) {
+    GenericAnalyticGridController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticGroupKeysEnum', 'GenericAnalyticMeasureEnum', 'VRModalService', 'UtilsService', 'AnalyticsService'];
+    function GenericAnalyticGridController($scope, GenericAnalyticAPIService, GenericAnalyticGroupKeysEnum, GenericAnalyticMeasureEnum, VRModalService, UtilsService, AnalyticsService) {
         var filter = {};
         var measures = [];
         var measureFields = [];
@@ -60,8 +60,8 @@
 
         function loadQueryMeasures() {
             if (measureFields.length == 0)
-                for (var prop in CarrierSummaryMeasureEnum) {
-                    measureFields.push(CarrierSummaryMeasureEnum[prop]);
+                for (var prop in GenericAnalyticMeasureEnum) {
+                    measureFields.push(GenericAnalyticMeasureEnum[prop]);
                 }
         }
 
@@ -118,14 +118,14 @@
                 var groupKey = parentGroupKeys[i];
 
                 switch (groupKey.value) {
-                    case CarrierSummaryGroupKeysEnum.ZoneId.value:
-                        filter.ZoneIds = [scope.dataItem.GroupFieldValues[i].Id];
+                    case GenericAnalyticGroupKeysEnum.ZoneId.value:
+                        filter.ZoneIds = [scope.dataItem.DimensionValues[i].Id];
                         break;
-                    case CarrierSummaryGroupKeysEnum.CustomerId.value:
-                        filter.CustomerIds = [scope.dataItem.GroupFieldValues[i].Id];
+                    case GenericAnalyticGroupKeysEnum.CustomerId.value:
+                        filter.CustomerIds = [scope.dataItem.DimensionValues[i].Id];
                         break;
-                    case CarrierSummaryGroupKeysEnum.SupplierId.value:
-                        filter.SupplierIds = [scope.dataItem.GroupFieldValues[i].Id];
+                    case GenericAnalyticGroupKeysEnum.SupplierId.value:
+                        filter.SupplierIds = [scope.dataItem.DimensionValues[i].Id];
                         break;
                 }
             }
@@ -149,19 +149,19 @@
         }
 
         function loadMeasures() {
-            for (var prop in CarrierSummaryMeasureEnum) {
-                measures.push(CarrierSummaryMeasureEnum[prop].value);
+            for (var prop in GenericAnalyticMeasureEnum) {
+                measures.push(GenericAnalyticMeasureEnum[prop].value);
             }
         }
 
         function loadGroupKeys() {
-            for (var prop in CarrierSummaryGroupKeysEnum) {
+            for (var prop in GenericAnalyticGroupKeysEnum) {
                 var groupKey = {
-                    name: CarrierSummaryGroupKeysEnum[prop].name,
-                    value: CarrierSummaryGroupKeysEnum[prop].value,
+                    name: GenericAnalyticGroupKeysEnum[prop].name,
+                    value: GenericAnalyticGroupKeysEnum[prop].value,
                     data: [],
                     isDataLoaded: false,
-                    propertyName: CarrierSummaryGroupKeysEnum[prop].propertyName
+                    propertyName: GenericAnalyticGroupKeysEnum[prop].propertyName
                 };
                
                 addGroupKeyIfNotExistsInParent(groupKey);
@@ -185,7 +185,7 @@
                         retrieveData(groupKey, false);
                 };
                 groupKey.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return CarrierSummaryStatsAPIService.GetFiltered(dataRetrievalInput).then(function (response) {
+                    return GenericAnalyticAPIService.GetFiltered(dataRetrievalInput).then(function (response) {
                         $scope.selectedGroupKey.isDataLoaded = true;
                         onResponseReady(response);
                     })
@@ -199,7 +199,7 @@
             //            retrieveData($scope.groupKeys[i], false);
             //    };
             //    $scope.groupKeys[i].dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            //        return CarrierSummaryStatsAPIService.GetFiltered(dataRetrievalInput).then(function (response) {
+            //        return GenericAnalyticAPIService.GetFiltered(dataRetrievalInput).then(function (response) {
 
             //            $scope.selectedGroupKey.isDataLoaded = true;
             //            console.log("TTEEESST");
@@ -211,8 +211,8 @@
         }
 
         //function loadGroupKeys() {
-        //    for (var prop in CarrierSummaryGroupKeysEnum) {
-        //        $scope.groupKeys.push(CarrierSummaryGroupKeysEnum[prop]);
+        //    for (var prop in GenericAnalyticGroupKeysEnum) {
+        //        $scope.groupKeys.push(GenericAnalyticGroupKeysEnum[prop]);
         //    }
         //}
 
@@ -237,6 +237,6 @@
         }
 
     }
-    appControllers.controller('CarrierSummaryGridController', CarrierSummaryGridController);
+    appControllers.controller('GenericAnalyticGridController', GenericAnalyticGridController);
 
 })(appControllers);

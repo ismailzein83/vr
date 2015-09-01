@@ -1,6 +1,9 @@
-﻿app.constant('CarrierSummaryMeasureEnum', {
-    Measure_Attempts: { value: 0, propertyName: "Data.MeasureValues[0]", description: "Attempts", type: "Text", fieldName: "MeasureValues.Measure_Attempts" },
-    Measure_SuccessfulAttempts: { value: 1, propertyName: "Data.MeasureValues[1]", description: "Successful Attempts", type: "Text", fieldName: "MeasureValues.Measure_SuccessfulAttempts" }
+﻿app.constant('GenericAnalyticMeasureEnum', {
+    Measure_Attempts: { value: 0, description: "Attempts", type: "Text"},
+    Measure_SuccessfulAttempts: { value: 1, description: "Successful Attempts", type: "Text"}
+
+    //Measure_Attempts: { value: 0, propertyName: "Data.MeasureValues[0]", description: "Attempts", type: "Text", fieldName: "MeasureValues.Measure_Attempts" },
+//Measure_SuccessfulAttempts: { value: 1, propertyName: "Data.MeasureValues[1]", description: "Successful Attempts", type: "Text", fieldName: "MeasureValues
 
     //GroupFieldName_Customer: { value: 2, propertyName: "GroupFieldName_Customer", description: "GroupFieldName_Customer", type: "Text", fieldName: "Data.GroupFieldName_Customer" }
     //,

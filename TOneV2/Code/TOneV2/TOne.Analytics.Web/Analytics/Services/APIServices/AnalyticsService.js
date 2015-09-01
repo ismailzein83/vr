@@ -2,9 +2,9 @@
 
     "use strict";
 
-    analyticsServiceObj.$inject = ['TrafficStatisticGroupKeysEnum', 'CarrierSummaryGroupKeysEnum', 'PeriodEnum', 'UtilsService', 'VRModalService', 'ReleaseCodeMeasureEnum'];
+    analyticsServiceObj.$inject = ['TrafficStatisticGroupKeysEnum', 'GenericAnalyticGroupKeysEnum', 'PeriodEnum', 'UtilsService', 'VRModalService', 'ReleaseCodeMeasureEnum'];
 
-    function analyticsServiceObj(trafficStatisticGroupKeysEnum, CarrierSummaryGroupKeysEnum, periodEnum, utilsService, vrModalService, releaseCodeMeasureEnum) {
+    function analyticsServiceObj(trafficStatisticGroupKeysEnum, GenericAnalyticGroupKeysEnum, periodEnum, utilsService, vrModalService, releaseCodeMeasureEnum) {
         
         function getTrafficStatisticGroupKeys() {
             var groupKeys = [];
@@ -16,10 +16,10 @@
         }
 
         
-        function getCarrierZoneSummaryGroupKeys() {
+        function getGenericAnalyticGroupKeys() {
             var groupKeys = [];
-            for (var prop in CarrierSummaryGroupKeysEnum) {
-                    groupKeys.push(CarrierSummaryGroupKeysEnum[prop]);
+            for (var prop in GenericAnalyticGroupKeysEnum) {
+                    groupKeys.push(GenericAnalyticGroupKeysEnum[prop]);
             }
             return groupKeys;
         }
@@ -192,7 +192,7 @@
         }
 
         return ({
-            getCarrierZoneSummaryGroupKeys: getCarrierZoneSummaryGroupKeys,
+            getGenericAnalyticGroupKeys: getGenericAnalyticGroupKeys,
             getTrafficStatisticGroupKeys: getTrafficStatisticGroupKeys,
             getDefaultTrafficStatisticGroupKeys: getDefaultTrafficStatisticGroupKeys,
             getPeriods: getPeriods,

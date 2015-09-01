@@ -11,19 +11,19 @@ namespace TOne.Analytics.Data.SQL
     {
         static GenericAnalyticConfigManager()
         {
-            FillGroupFieldsConfig();
+            FillDimensionsConfig();
             FillMeasureFieldsConfig();
         }
 
-        static Dictionary<AnalyticGroupField, AnalyticGroupFieldConfig> s_AllGroupFieldsConfig;
+        static Dictionary<AnalyticDimension, AnalyticDimensionConfig> s_AllDimensionsConfig;
         static Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig> s_AllMeasureFieldsConfig;
 
-        public Dictionary<AnalyticGroupField, AnalyticGroupFieldConfig> GetGroupFieldsConfig(IEnumerable<AnalyticGroupField> fields)
+        public Dictionary<AnalyticDimension, AnalyticDimensionConfig> GetGroupFieldsConfig(IEnumerable<AnalyticDimension> fields)
         {
-            Dictionary<AnalyticGroupField, AnalyticGroupFieldConfig> result = new Dictionary<AnalyticGroupField, AnalyticGroupFieldConfig>();
-            foreach (AnalyticGroupField itm in fields)
+            Dictionary<AnalyticDimension, AnalyticDimensionConfig> result = new Dictionary<AnalyticDimension, AnalyticDimensionConfig>();
+            foreach (AnalyticDimension itm in fields)
             {
-                var item = s_AllGroupFieldsConfig[itm];
+                var item = s_AllDimensionsConfig[itm];
                 result.Add(itm, item);
             }
             return result;
@@ -40,12 +40,12 @@ namespace TOne.Analytics.Data.SQL
             return result;
         }
 
-        private static void FillGroupFieldsConfig()
+        private static void FillDimensionsConfig()
         {
-            s_AllGroupFieldsConfig = new Dictionary<AnalyticGroupField, AnalyticGroupFieldConfig>();
+            s_AllDimensionsConfig = new Dictionary<AnalyticDimension, AnalyticDimensionConfig>();
 
-            s_AllGroupFieldsConfig.Add(AnalyticGroupField.Zone,
-                new AnalyticGroupFieldConfig
+            s_AllDimensionsConfig.Add(AnalyticDimension.Zone,
+                new AnalyticDimensionConfig
                 {
                     IdColumn = "ts.OurZoneID",
                     NameColumn = "z.Name",
@@ -53,8 +53,8 @@ namespace TOne.Analytics.Data.SQL
                     GroupByStatements = new List<string>() { " ts.OurZoneID, z.Name " }
                 });
 
-            s_AllGroupFieldsConfig.Add(AnalyticGroupField.Customer,
-                new AnalyticGroupFieldConfig
+            s_AllDimensionsConfig.Add(AnalyticDimension.Customer,
+                new AnalyticDimensionConfig
                 {
                     IdColumn = "ts.CustomerID",
                     NameColumn = "case when cust.NameSuffix != '' THEN  custProf.Name + '(' + cust.NameSuffix + ')' else custProf.Name end",
@@ -63,8 +63,8 @@ namespace TOne.Analytics.Data.SQL
                     GroupByStatements = new List<string>() { " ts.CustomerID, cust.NameSuffix, custProf.Name " }
                 });
 
-            s_AllGroupFieldsConfig.Add(AnalyticGroupField.Supplier,
-                new AnalyticGroupFieldConfig
+            s_AllDimensionsConfig.Add(AnalyticDimension.Supplier,
+                new AnalyticDimensionConfig
                 {
                     IdColumn = "ts.SupplierID",
                     NameColumn = "case when supp.NameSuffix != '' THEN  suppProf.Name + '(' + supp.NameSuffix + ')' else suppProf.Name end",

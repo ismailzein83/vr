@@ -10,13 +10,13 @@ using TOne.BusinessEntity.Business;
 
 namespace TOne.Analytics.Business
 {
-    public class CarrierSummaryStatsManager
+    public class GenericAnalyticManager
     {
         private readonly ICarrierSummaryStatsDataManager _datamanager;
         private readonly CarrierAccountManager _cmanager;
         private readonly CarrierProfileManager _cpmanager;
         private readonly IGenericAnalyticDataManager _gdatamanager;
-        public CarrierSummaryStatsManager()
+        public GenericAnalyticManager()
         {
             _gdatamanager = AnalyticsDataManagerFactory.GetDataManager<IGenericAnalyticDataManager>();
             _datamanager = AnalyticsDataManagerFactory.GetDataManager<ICarrierSummaryStatsDataManager>();

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.Analytics.Entities
 {
-    public class AnalyticGroupFieldValue
+    public class AnalyticDimensionValue
     {
         public string Id { get; set; }
 
