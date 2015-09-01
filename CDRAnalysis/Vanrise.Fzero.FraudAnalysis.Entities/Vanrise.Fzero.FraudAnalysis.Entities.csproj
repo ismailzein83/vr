@@ -56,6 +56,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountSuspicionDetail.cs" />
+    <Compile Include="AccountSuspicionDetailQuery.cs" />
+    <Compile Include="AccountSuspicionSummary.cs" />
+    <Compile Include="AccountSuspicionSummaryQuery.cs" />
     <Compile Include="CasesSummary.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="StrategyCases.cs" />

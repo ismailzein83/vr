@@ -49,7 +49,7 @@ app.constant("CaseStatusEnum2", {
     Open: { value: 0, description: "Open" },
     Pending: { value: 2, description: "Pending" },
     ClosedFraud: { value: 3, description: "Closed: Fraud" },
-    ClosedWhiteList: { value: 4, description: "Closed: White List" }
+    ClosedWhitelist: { value: 4, description: "Closed: Whitelist" }
 }); 
 
 app.constant("SuspicionLevelEnum2", {

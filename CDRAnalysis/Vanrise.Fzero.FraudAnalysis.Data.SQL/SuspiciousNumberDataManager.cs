@@ -46,7 +46,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                   });
         }
 
-
         public BigResult<FraudResult> GetFilteredSuspiciousNumbers(Vanrise.Entities.DataRetrievalInput<FraudResultQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
@@ -56,11 +55,49 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, FraudResultMapper);
         }
 
+        public BigResult<AccountSuspicionSummary> GetFilteredAccountSuspicionSummaries(Vanrise.Entities.DataRetrievalInput<AccountSuspicionSummaryQuery> input)
+        {
+            Dictionary<string, string> mapper = new Dictionary<string, string>();
+
+            mapper.Add("SuspicionLevelDescription", "SuspicionLevelID");
+            mapper.Add("CaseStatusDescription", "CaseStatusID");
+
+            return RetrieveData(input, (tempTableName) =>
+            {
+                string selectedStrategyIDs = null;
+                string selectedSuspicionLevelIDs = null;
+                string selectedCaseStatusIDs = null;
+
+                if (input.Query.SelectedStrategyIDs != null && input.Query.SelectedStrategyIDs.Count() > 0)
+                    selectedStrategyIDs = string.Join<int>(",", input.Query.SelectedStrategyIDs);
+
+                if (input.Query.SelectedSuspicionLevelIDs != null && input.Query.SelectedSuspicionLevelIDs.Count() > 0)
+                    selectedSuspicionLevelIDs = string.Join(",", input.Query.SelectedSuspicionLevelIDs.Select(n => ((int)n).ToString()).ToArray());
+
+                if (input.Query.SelectedCaseStatusIDs != null && input.Query.SelectedCaseStatusIDs.Count() > 0)
+                    selectedCaseStatusIDs = string.Join(",", input.Query.SelectedCaseStatusIDs.Select(n => ((int)n).ToString()).ToArray());
+
+                ExecuteNonQuerySP("FraudAnalysis.sp_FraudResult_CreateTempByFiltered", tempTableName, input.Query.AccountNumber, input.Query.From, input.Query.To, selectedStrategyIDs, selectedSuspicionLevelIDs, selectedCaseStatusIDs);
+
+            }, (reader) => AccountSuspicionSummaryMapper(reader), mapper);
+        }
+
+        public BigResult<AccountSuspicionDetail> GetFilteredAccountSuspicionDetails(Vanrise.Entities.DataRetrievalInput<AccountSuspicionDetailQuery> input)
+        {
+            Dictionary<string, string> mapper = new Dictionary<string, string>();
+
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("FraudAnalysis.sp_AccountSuspicionHistory_CreateTempByAccountNumber", tempTableName, input.Query.AccountNumber, input.Query.From, input.Query.To);
+            };
+
+            return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, mapper);
+        }
+
         public FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList, string accountNumber)
         {
             return GetItemsSP("FraudAnalysis.sp_FraudResult_Get", FraudResultMapper, fromDate, toDate, string.Join(",", strategiesList), string.Join(",", suspicionLevelsList), accountNumber).FirstOrDefault();
         }
-
 
         public object FinishDBApplyStream(object dbApplyStream)
         {
@@ -97,10 +134,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             InsertBulkToTable(preparedSuspiciousNumbers as BaseBulkInsertInfo);
         }
 
-
-
-
-        #region Private Methods
+        #region Private Members
 
         private FraudResult FraudResultMapper(IDataReader reader)
         {
@@ -128,10 +162,32 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return accountThreshold;
         }
 
+        private AccountSuspicionSummary AccountSuspicionSummaryMapper(IDataReader reader)
+        {
+            var accountSuspicionSummary = new AccountSuspicionSummary();
+
+            accountSuspicionSummary.AccountNumber = reader["AccountNumber"] as string;
+            accountSuspicionSummary.SuspicionLevelID = (SuspicionLevel)reader["SuspicionLevelID"];
+            accountSuspicionSummary.StrategyName = reader["StrategyName"] as string;
+            accountSuspicionSummary.NumberOfOccurances = (int)reader["NumberOfOccurances"];
+            accountSuspicionSummary.CaseStatusID = GetReaderValue<CaseStatus>(reader, "CaseStatusID");
+
+            return accountSuspicionSummary;
+        }
+
+        private AccountSuspicionDetail AccountSuspicionDetailMapper(IDataReader reader)
+        {
+            var detail = new AccountSuspicionDetail();
+
+            detail.DetailID = (int)reader["DetialID"];
+            detail.AnalystID = GetReaderValue<int>(reader, "AnalystID");
+            detail.AnalystName = GetReaderValue<string>(reader, "AnalystName");
+            detail.StatusID = (SuspicionOccuranceStatus)reader["StatusID"];
+            detail.LogDate = GetReaderValue<DateTime>(reader, "LogDate");
+
+            return detail;
+        }
+
         #endregion
-
-      
-
-        
     }
 }

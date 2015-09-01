@@ -14,8 +14,6 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 {
     public class SuspicionAnalysisController : BaseAPIController
     {
-
-
         [HttpPost]
         public object GetFilteredSuspiciousNumbers(Vanrise.Entities.DataRetrievalInput<FraudResultQuery> input)
         {
@@ -23,8 +21,19 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredSuspiciousNumbers(input));
         }
 
+        [HttpPost]
+        public object GetFilteredAccountSuspicionSummaries(Vanrise.Entities.DataRetrievalInput<AccountSuspicionSummaryQuery> input)
+        {
+            FraudManager manager = new FraudManager();
+            return GetWebResponse(input, manager.GetFilteredAccountSuspicionSummaries(input));
+        }
 
-
+        [HttpPost]
+        public object GetFilteredAccountSuspicionDetails(Vanrise.Entities.DataRetrievalInput<AccountSuspicionDetailQuery> input)
+        {
+            FraudManager manager = new FraudManager();
+            return GetWebResponse(input, manager.GetFilteredAccountSuspicionDetails(input));
+        }
 
         [HttpGet]
         public FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, string strategiesList, string suspicionLevelsList, string accountNumber)
@@ -46,16 +55,10 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
             return manager.GetFraudResult(fromDate, toDate, strategiesIntList, suspicionLevelsIntList, accountNumber);
         }
 
-
-
         [HttpGet]
         public CommonEnums.OperatorType GetOperatorType()
         {
             return ConfigParameterManager.GetOperatorType();
         }
-
-        
-
-
     }
 }

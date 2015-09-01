@@ -194,10 +194,11 @@
     <Content Include="FraudAnalysis\Services\APIServices\NumberProfileAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\NormalCDRAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\ReportingAPIService.js" />
-    <Content Include="FraudAnalysis\Services\APIServices\SuspiciousCaseAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\UserAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\SuspicionAnalysisAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyAPIService.js" />
+    <Content Include="FraudAnalysis\Views\SuspicionAnalysis2.html" />
+    <Content Include="FraudAnalysis\Views\SuspicionAnalysis2Controller.js" />
     <Content Include="FraudAnalysis\Views\OutPut\Dashboard.html" />
     <Content Include="FraudAnalysis\Views\OutPut\DashboardController.js" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\ExecuteStrategyProcessInput_Scheduled.html" />
@@ -228,8 +229,8 @@
     <Content Include="FraudAnalysis\Views\Strategy\StrategyManagement.html" />
     <Content Include="FraudAnalysis\Views\Strategy\StrategyManagementController.js" />
     <Content Include="FraudAnalysis\Views\Strategy\StrategyEditorController.js" />
-    <Content Include="FraudAnalysis\Views\SuspiciousCaseManagement.html" />
-    <Content Include="FraudAnalysis\Views\SuspiciousCaseManagementController.js" />
+    <Content Include="FraudAnalysis\Views\SuspiciousNumberDetails2.html" />
+    <Content Include="FraudAnalysis\Views\SuspiciousNumberDetails2Controller.js" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

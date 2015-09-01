@@ -18,6 +18,16 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             throw new NotImplementedException();
         }
 
+        public Vanrise.Entities.BigResult<AccountSuspicionSummary> GetFilteredAccountSuspicionSummaries(Vanrise.Entities.DataRetrievalInput<AccountSuspicionSummaryQuery> input)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Vanrise.Entities.BigResult<AccountSuspicionDetail> GetFilteredAccountSuspicionDetails(Vanrise.Entities.DataRetrievalInput<AccountSuspicionDetailQuery> input)
+        {
+            throw new NotImplementedException();
+        }
+
         public FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList, string accountNumber)
         {
             throw new NotImplementedException();
@@ -42,8 +52,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         {
             throw new NotImplementedException();
         }
-
-
 
         public void UpdateSusbcriberCases(List<AccountCaseType> cases)
         {
