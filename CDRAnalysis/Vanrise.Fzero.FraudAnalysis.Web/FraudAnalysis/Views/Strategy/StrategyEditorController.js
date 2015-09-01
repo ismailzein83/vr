@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-StrategyEditorController.$inject = ['$scope', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'PercentageEnum', 'SuspicionLevelsEnum', 'HourEnum'];
+StrategyEditorController.$inject = ['$scope', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'SuspicionLevelsEnum', 'HourEnum'];
 
-function StrategyEditorController($scope, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, PercentageEnum, SuspicionLevelsEnum, HourEnum) {
+function StrategyEditorController($scope, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, SuspicionLevelsEnum, HourEnum) {
 
     var editMode;
     loadParameters();
@@ -40,12 +40,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
 
-        $scope.percentages = [];
-        angular.forEach(PercentageEnum, function (itm) {
-            $scope.percentages.push({ value: itm.value, description: itm.description })
-        });
-
-
 
         $scope.suspicionLevels = [];
         angular.forEach(SuspicionLevelsEnum, function (itm) {
@@ -76,7 +70,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
                 var levelCriteriaItem = {
                     filterId: filter.filterId,
-                    percentage: $scope.percentages[3],
+                    percentage: 0,
                 };
                 strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem);
 
@@ -109,9 +103,9 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
     }
 
-   
 
-   
+
+
 
 
     function load() {
@@ -184,7 +178,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
         angular.forEach($scope.strategyLevels, function (level) {
-            
+
             var strategyLevelItem = {
                 SuspicionLevelId: level.suspicionLevel.id,
                 StrategyLevelCriterias: []
@@ -205,10 +199,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                         FilterId: $scope.strategyFilters[index].filterId
                     };
 
-                    if (levelCriteria.percentage != undefined) {
-                        levelCriteriaItem.Percentage = levelCriteria.percentage.value;
-                    }
-
+                    levelCriteriaItem.Percentage = ((levelCriteria.percentage +100) /100)   ;
 
                     strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem);
                 }
@@ -218,7 +209,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             });
 
             strategyObject.StrategyLevels.push(strategyLevelItem);
-           
+
 
         });
 
@@ -306,10 +297,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                 var existingItem = UtilsService.getItemByVal(level.StrategyLevelCriterias, filterDef.filterId, "FilterId");
                 if (existingItem != undefined && existingItem != null) {
                     levelCriteriaItem.isSelected = true;
-
-                    if (existingItem.Percentage != undefined)
-                        levelCriteriaItem.percentage = UtilsService.getItemByVal($scope.percentages, existingItem.Percentage, "value");
-
+                    levelCriteriaItem.percentage = ((existingItem.Percentage*100)-100)
                 }
                 strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem);
             });
@@ -325,7 +313,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     function isValid(strategyObject) {
         var countStrategyFilters = 0;
         var countStrategyLevels = 0;
-        var countStrategyLevelCrietiraswithNoPercentage = 0;
 
 
         angular.forEach(strategyObject.StrategyFilters, function (itm) {
@@ -335,17 +322,11 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
         angular.forEach(strategyObject.StrategyLevels, function (level) {
             angular.forEach(level.StrategyLevelCriterias, function (itm) {
-                if (itm.Percentage != undefined)
                     countStrategyLevels++;
             });
         });
 
-        angular.forEach(strategyObject.StrategyLevels, function (level) {
-            angular.forEach(level.StrategyLevelCriterias, function (itm) {
-                if (itm.Percentage == undefined)
-                    countStrategyLevelCrietiraswithNoPercentage++;
-            });
-        });
+        
 
 
         if (countStrategyFilters == 0) {
@@ -355,16 +336,12 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         }
 
         if (countStrategyLevels == 0) {
-            VRNotificationService.showError("At least one rule with filter(s) and percentage should be specified in a strategy. ");
+            VRNotificationService.showError("At least one rule with filter(s) should be specified in a strategy. ");
             return false;
 
         }
 
-        if (countStrategyLevelCrietiraswithNoPercentage > 0) {
-            VRNotificationService.showError("Rule filters should specify percentage. ");
-            return false;
-
-        }
+       
         return true;
     }
 
@@ -385,7 +362,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
           });
         }
 
-        
+
     }
 
     function updateStrategy() {
@@ -412,10 +389,10 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         var index = 0;
         return StrategyAPIService.GetFilters().then(function (response) {
             angular.forEach(response, function (itm) {
-                $scope.filterDefinitions.push({ 
+                $scope.filterDefinitions.push({
                     filterId: itm.FilterId,
                     description: itm.Description,
-                    label: itm.Label, 
+                    label: itm.Label,
                     minValue: itm.MinValue,
                     maxValue: itm.MaxValue,
                     decimalPrecision: itm.DecimalPrecision,
@@ -440,7 +417,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         isLevelsTabShow = !isLevelsTabShow;
     };
 
-   
+
 
     $scope.showSwitch = function (filter) {
         if (filter.excludeHourly && $scope.selectedPeriod.Id == 1) {
@@ -449,7 +426,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         }
         else
             return true;
-                
+
     }
 
 
