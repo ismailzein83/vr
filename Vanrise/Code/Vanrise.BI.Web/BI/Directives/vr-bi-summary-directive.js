@@ -141,13 +141,6 @@ app.directive('vrBiSummary', ['UtilsService', 'BIConfigurationAPIService', 'BIAP
                     
                     if (value != null)
                     {
-
-                        if (value.Unit === "Currency")
-                            BIConfigurationAPIService.GetSystemCurrency().then(function (response) {
-                                value.Unit = response;
-                                measures.push(value);
-                            });
-                        else
                             measures.push(value);
                     }
                        

@@ -15,7 +15,13 @@ namespace Vanrise.BI.Business
         public List<BIConfiguration<BIConfigurationMeasure>> GetMeasures()
         {
             IBIConfigurationDataManager dataManager = BIDataManagerFactory.GetDataManager<IBIConfigurationDataManager>();
-            return dataManager.GetMeasures();
+            List<BIConfiguration<BIConfigurationMeasure>> measures = dataManager.GetMeasures();
+            foreach (BIConfiguration<BIConfigurationMeasure> measure in measures)
+            {
+                if (measure.Configuration.Unit == "Currency")
+                    measure.Configuration.Unit = System.Configuration.ConfigurationManager.AppSettings["Currency"];
+            }
+            return measures;
         }
         public List<BIConfiguration<BIConfigurationEntity>> GetEntities()
         {
