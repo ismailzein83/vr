@@ -45,20 +45,20 @@ app.constant('PercentageEnum', {
     SeventyFiveMinus: { description: '-75%', value: 0.25 }
 });
 
-app.constant("FraudAnalysis_CaseStatusEnum", {
+app.constant("CaseStatusEnum2", {
     Open: { value: 0, description: "Open" },
     Pending: { value: 2, description: "Pending" },
     ClosedFraud: { value: 3, description: "Closed: Fraud" },
     ClosedWhiteList: { value: 4, description: "Closed: White List" }
 }); 
 
-app.constant("FraudAnalysis_SuspicionLevelEnum", {
+app.constant("SuspicionLevelEnum2", {
     Suspicious: { value: 2, description: "Suspicious" },
     HighlySuspicious: { value: 3, description: "Highly Suspicious" },
     Fraud: { value: 4, description: "Fraud" }
 });
 
-app.constant("FraudAnalysis_SuspicionOccuranceStatusEnum", {
+app.constant("SuspicionOccuranceStatusEnum2", {
     Open: { value: 0, description: "Open" },
     Closed: { value: 10, description: "Closed" },
     Deleted: { value: 20, description: "Deleted" }

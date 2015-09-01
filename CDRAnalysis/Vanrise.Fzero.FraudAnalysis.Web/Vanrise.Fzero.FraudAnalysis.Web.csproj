@@ -194,6 +194,7 @@
     <Content Include="FraudAnalysis\Services\APIServices\NumberProfileAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\NormalCDRAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\ReportingAPIService.js" />
+    <Content Include="FraudAnalysis\Services\APIServices\SuspiciousCaseAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\UserAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\SuspicionAnalysisAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyAPIService.js" />
