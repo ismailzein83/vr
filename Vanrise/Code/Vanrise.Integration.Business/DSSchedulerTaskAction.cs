@@ -183,6 +183,7 @@ namespace Vanrise.Integration.Business
             parameters.ReferencedAssemblies.Add(typeof(DataMapper).Assembly.Location);
             parameters.ReferencedAssemblies.Add(typeof(Vanrise.Queueing.Entities.PersistentQueueItem).Assembly.Location);
             parameters.ReferencedAssemblies.Add(typeof(Vanrise.Integration.Mappers.Utils).Assembly.Location);
+            parameters.ReferencedAssemblies.Add(typeof(Vanrise.Common.ProtoBufSerializer).Assembly.Location);
 
             parameters.ReferencedAssemblies.Add(Assembly.GetCallingAssembly().Location);
             parameters.ReferencedAssemblies.Add(Assembly.GetExecutingAssembly().Location);
