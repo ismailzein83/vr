@@ -40,6 +40,9 @@
             ctrl.hideGridMenu = ($attrs.hidegridmenu != undefined);
             ctrl.rotateHeader = true;
             ctrl.el = $element;
+            ctrl.getCellLayoutStyle = function () {
+                return $attrs.normalcell != undefined ? { 'white-space': 'normal' } : { 'white-space': 'nowrap' };
+            }
             if ($attrs.clientsidefilter != undefined)
                 ctrl.clientSideFilterFunction = $scope.$parent.$eval($attrs.clientsidefilter);
             if ($attrs.rotate == undefined) {
@@ -84,7 +87,7 @@
     var cellTemplate = '<div style="text-align: #TEXTALIGN#;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" >'
         + ''
       + '<a ng-if="$parent.ctrl.isColumnClickable(colDef, dataItem)"  ng-class="::$parent.ctrl.getCellClass(colDef, dataItem)" ng-click="$parent.ctrl.onColumnClicked(colDef, dataItem)" style="cursor:pointer;"> {{::$parent.ctrl.getColumnValue(colDef, dataItem) #CELLFILTER#}}#PERCENTAGE#</a>'
-      + '<span ng-if="(!$parent.ctrl.isColumnClickable(colDef, dataItem))" ng-class="::$parent.ctrl.getCellClass(colDef, dataItem)"> {{::$parent.ctrl.getColumnValue(colDef, dataItem) #CELLFILTER#}}#PERCENTAGE#</span>'
+      + '<span ng-if="(!$parent.ctrl.isColumnClickable(colDef, dataItem))" ng-style="::$parent.ctrl.getCellLayoutStyle()" ng-class="::$parent.ctrl.getCellClass(colDef, dataItem)"> {{::$parent.ctrl.getColumnValue(colDef, dataItem) #CELLFILTER#}}#PERCENTAGE#</span>'
       + ''
    + '</div>';
 
