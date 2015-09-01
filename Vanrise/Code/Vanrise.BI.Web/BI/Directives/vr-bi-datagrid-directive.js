@@ -51,7 +51,7 @@ app.directive('vrBiDatagrid', ['UtilsService', 'BIAPIService', 'BIUtilitiesServi
                                     + '</vr-datagrid></div></vr-section>';
         }
         else
-            return '<vr-section title="{{ctrl.title}}"></br><vr-textbox value="ctrl.settings.OperationType" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.entityType.description" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.measureTypes" vr-disabled="true"></vr-textbox></vr-section>';
+            return '<vr-section title="{{ctrl.title}}"></br><vr-textbox value="ctrl.settings.OperationType" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.settings.EntityType" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.settings.MeasureTypes" vr-disabled="true"></vr-textbox></vr-section>';
 
 
 
