@@ -7,7 +7,7 @@ app.directive('vrValidationValue', function () {
         link: function (scope, elm, attrs, ctrlModel) {
 
             var validate = function (viewValue) {
-                if (viewValue == undefined || viewValue == '') ctrlModel.$setValidity('requiredvalue', false);
+            if (viewValue == undefined || viewValue === '') ctrlModel.$setValidity('requiredvalue', false);
                 else ctrlModel.$setValidity('requiredvalue', true);
                 return viewValue;
             }

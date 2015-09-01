@@ -45,9 +45,10 @@
                                 if (arr.length === 0) return;
                                 if (negativeArray.length > 2)
                                     ctrl.value = oldValue;
+                                if (arr.indexOf(".") > -1)
+                                    ctrl.value = oldValue;
                                 if (arr.length === 0) return;
                                 if (arr.length === 1 && (arr[0] == '-')) return;
-
                                 if (ctrl.maxValue != undefined && parseFloat(newValue) > ctrl.maxValue) {
                                     ctrl.value = oldValue;
                                 }
@@ -80,10 +81,11 @@
                             var avrege;
                             if (isNaN(parseFloat(ctrl.value))) {
                                 if (ctrl.minValue == undefined || ctrl.maxValue == undefined)
-                                    avrege = 0;
+                                    avrege = parseInt( 0 );
                                 else
                                     avrege = (ctrl.maxValue + ctrl.minValue) / 2 + (((ctrl.maxValue + ctrl.minValue) / 2 % ctrl.stepValue));
                                 ctrl.value = avrege ;
+                                ctrl.notifyUserChange();
 
                                 return;
                             }
@@ -101,6 +103,7 @@
                                 else
                                     avrege = (ctrl.maxValue + ctrl.minValue) / 2 + (((ctrl.maxValue + ctrl.minValue) / 2 % ctrl.stepValue));
                                 ctrl.value = avrege;
+                                ctrl.notifyUserChange();
 
                                 return;
                             }
@@ -108,7 +111,8 @@
                             if (ctrl.minValue != undefined &&  newvalue < ctrl.minValue)
                                 return;
                             else
-                               ctrl.value = newvalue;
+                                ctrl.value = newvalue;
+
 
                         };
                         if (attrs.hint != undefined) {
@@ -159,7 +163,7 @@
                     labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';               
                 var numericTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
                                             + '<div  class="vr-numeric" ng-style="ctrl.getInputeStyle()">'
-                                                   + '<input class="form-control  border-radius input-box" type="text" class="" id="mainInput" ng-model="ctrl.value" >'
+                                                   + '<input class="form-control  border-radius input-box" type="text" ng-change="ctrl.notifyUserChange()" id="mainInput" ng-model="ctrl.value" >'
                                                     + '<div class="vr-numeric-control" ng-class="ctrl.getNumericControlClass()">'
                                                         + '<span class="unit" ng-bind="ctrl.unitValue"></span>'
                                                         + '<div class="hand-cursor arrow-box" ng-click="ctrl.increment()" ng-style="{\'color\':ctrl.upColor}">'
