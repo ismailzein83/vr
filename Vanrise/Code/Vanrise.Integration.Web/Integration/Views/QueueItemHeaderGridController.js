@@ -1,6 +1,6 @@
-﻿QueueItemHeaderGridController.$inject = ['$scope', 'DataSourceImportedBatchAPIService', 'Integration_ExecutionStatusEnum', 'Integration_ExecutionStatusColorEnum', 'UtilsService', 'VRNotificationService'];
+﻿QueueItemHeaderGridController.$inject = ['$scope', 'DataSourceImportedBatchAPIService', 'DataSourceService', 'VRNotificationService'];
 
-function QueueItemHeaderGridController($scope, DataSourceImportedBatchAPIService, Integration_ExecutionStatusEnum, Integration_ExecutionStatusColorEnum, UtilsService, VRNotificationService) {
+function QueueItemHeaderGridController($scope, DataSourceImportedBatchAPIService, DataSourceService, VRNotificationService) {
 
     var gridApi;
 
@@ -22,7 +22,7 @@ function QueueItemHeaderGridController($scope, DataSourceImportedBatchAPIService
                 .then(function (response) {
 
                     angular.forEach(response.Data, function (item) {
-                        item.ExecutionStatusDescription = getExecutionStatusDescription(item.Status);
+                        item.ExecutionStatusDescription = DataSourceService.getExecutionStatusDescription(item.Status);
                     });
 
                     onResponseReady(response);
@@ -33,7 +33,7 @@ function QueueItemHeaderGridController($scope, DataSourceImportedBatchAPIService
         }
 
         $scope.getStatusColor = function (dataItem, colDef) {
-            return getExecutionStatusColor(dataItem.Status);
+            return DataSourceService.getExecutionStatusColor(dataItem.Status);
         }
     };
 
@@ -45,24 +45,6 @@ function QueueItemHeaderGridController($scope, DataSourceImportedBatchAPIService
 
         var itemIds = $scope.dataItem.QueueItemIds.split(',').map(Number)
         return gridApi.retrieveData(itemIds);
-    }
-
-    function getExecutionStatusDescription(executionStatusValue) {
-
-        var enumObj = UtilsService.getEnum(Integration_ExecutionStatusEnum, 'value', executionStatusValue);
-        if (enumObj) return enumObj.description;
-        
-        return undefined;
-    }
-
-    function getExecutionStatusColor(executionStatusValue) {
-
-        if (executionStatusValue === Integration_ExecutionStatusEnum.New.value) return Integration_ExecutionStatusColorEnum.New.color;
-        if (executionStatusValue === Integration_ExecutionStatusEnum.Processing.value) return Integration_ExecutionStatusColorEnum.Processing.color;
-        if (executionStatusValue === Integration_ExecutionStatusEnum.Failed.value) return Integration_ExecutionStatusColorEnum.Failed.color;
-        if (executionStatusValue === Integration_ExecutionStatusEnum.Processed.value) return Integration_ExecutionStatusColorEnum.Processed.color;
-        
-        return Integration_ExecutionStatusColorEnum.New.color;
     }
 }
 

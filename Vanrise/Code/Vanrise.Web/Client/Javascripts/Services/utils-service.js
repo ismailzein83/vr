@@ -142,19 +142,37 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
     }
 
     function getLogEntryTypeDescription(logEntryType) {
-        var enumObj = getEnum(LogEntryTypeEnum, 'value', logEntryType);
+        return getEnumDescription(LogEntryTypeEnum, logEntryType);
+    }
+
+    function getEnumDescription(dataEnum, value)
+    {
+        var enumObj = getEnum(dataEnum, 'value', value);
         if (enumObj) return enumObj.description;
         return undefined;
     }
 
     function getLogEntryTypeColor(logEntryType) {
 
-        if (logEntryType === LogEntryTypeEnum.Information.value) return LabelColorsEnum.Info.Color;
-        if (logEntryType === LogEntryTypeEnum.Warning.value) return LabelColorsEnum.Warning.Color;
-        if (logEntryType === LogEntryTypeEnum.Error.value) return LabelColorsEnum.Error.Color;
-        if (logEntryType === LogEntryTypeEnum.Verbose.value) return LabelColorsEnum.Primary.Color;
+        var color = undefined;
 
-        return LabelColorsEnum.Info.Color;
+        switch(logEntryType)
+        {
+            case LogEntryTypeEnum.Information.value:
+                color = LabelColorsEnum.Info.color;
+                break;
+            case LogEntryTypeEnum.Warning.value:
+                color = LabelColorsEnum.Warning.color;
+                break;
+            case LogEntryTypeEnum.Error.value:
+                color = LabelColorsEnum.Error.color;
+                break;
+            case LogEntryTypeEnum.Verbose.value:
+                color = LabelColorsEnum.Primary.color;
+                break;
+        }
+
+        return color;
     };
 
     function replaceAll(string, find, replace) {
@@ -408,7 +426,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         getPropMinValueFromArray: getPropMinValueFromArray,
         getShortDate: getShortDate,
         getArrayEnum: getArrayEnum,
-        validateDates: validateDates
+        validateDates: validateDates,
+        getEnumDescription: getEnumDescription
     });
 
 }]);

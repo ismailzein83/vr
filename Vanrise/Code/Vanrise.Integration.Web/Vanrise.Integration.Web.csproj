@@ -105,12 +105,12 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Integration\Constants\ExecutionStatusColorEnum.js" />
     <Content Include="Integration\Constants\MappingResultEnum.js" />
     <Content Include="Integration\Constants\ExecutionStatusEnum.js" />
     <Content Include="Integration\Services\APIServices\DataSourceAPIService.js" />
     <Content Include="Integration\Services\APIServices\DataSourceImportedBatchAPIService.js" />
     <Content Include="Integration\Services\APIServices\DataSourceLogAPIService.js" />
+    <Content Include="Integration\Services\DataSourceService.js" />
     <Content Include="Integration\Views\AdapterTemplates\FTPReceiveAdapterTemplate.html" />
     <Content Include="Integration\Views\AdapterTemplates\DBReceiveAdapterTemplate.html" />
     <Content Include="Integration\Views\AdapterTemplates\FileReceiveAdapterTemplate.html" />
