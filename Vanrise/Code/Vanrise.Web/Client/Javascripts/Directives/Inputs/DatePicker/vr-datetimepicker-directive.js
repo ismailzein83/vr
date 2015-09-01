@@ -102,7 +102,17 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                     modelValue = new Date(modelValue);
                 if (modelValue == undefined || modelValue.toString() != selectedDate.toString()) {
                     isUserChange = true;
-                    $scope.ctrl.value = selectedDate;
+                   
+                    if ($attrs.type == "time") {
+                        $scope.ctrl.value = {
+                            hours: selectedDate.getUTCHours(),
+                            minutes: selectedDate.getUTCMinutes(),
+                            seconds: selectedDate.getUTCSeconds(),
+                            milliseconds: selectedDate.getUTCMilliseconds()
+                        };
+                    }
+                    else
+                        $scope.ctrl.value = selectedDate;
                 }
 
             });
@@ -158,8 +168,22 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
             $scope.$watch('ctrl.value', function () {
                 if (ctrl.value == undefined)
                     return;
-
-                var date = ctrl.value instanceof Date ? ctrl.value : (new Date(ctrl.value));
+                var date;
+                if ($attrs.type == "time") {
+                    if (ctrl.value.hours == undefined)
+                        ctrl.value.hours = 0;
+                    if (ctrl.value.minutes == undefined)
+                        ctrl.value.minutes = 0;
+                    if (ctrl.value.seconds == undefined)
+                        ctrl.value.seconds = 0;
+                    if (ctrl.value.milliseconds == undefined)
+                        ctrl.value.milliseconds = 0;
+                    date = new Date();
+                    date.setHours(ctrl.value.hours, ctrl.value.minutes, ctrl.value.seconds, ctrl.value.milliseconds);
+                }
+                else {
+                    date = ctrl.value instanceof Date ? ctrl.value : (new Date(ctrl.value));
+                }
                 if (selectedDate == undefined || selectedDate.toString() != date.toString()) {
                     divDatePicker.data("DateTimePicker").date(date);
                 }

@@ -2,7 +2,10 @@
 
 var TestViewController = function ($scope, $http, ValuesAPIService, $timeout) {
     
-
+    $scope.timeObj = {
+        hours: 23,
+        minutes: 23
+    };
     $scope.testModel = 'initial from default';
     $scope.html = '<input ng-click="click(1)" value="Click me" type="button">';
     $scope.click = function (arg) {
