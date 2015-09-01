@@ -21,6 +21,7 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return ViewAPIService.GetFilteredDynamicPages(dataRetrievalInput)
             .then(function (response) {
+                
                 if (dataRetrievalInput.DataRetrievalResultType == DataRetrievalResultTypeEnum.Normal.value) {
                     angular.forEach(response.Data, function (itm) {
                         fillNeededData(itm);
@@ -116,6 +117,7 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
 
         var message = "Do you want to delete " + dataItem.Name;
         VRNotificationService.showConfirmation(message).then(function (response) {
+            
             if (response == true) {
                 return ViewAPIService.DeleteView(dataItem.ViewId).then(function (responseObject) {
                     if (responseObject.Result == DeleteOperationResultEnum.Succeeded.value) {
@@ -171,7 +173,7 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
             for (var j = 0; j < itm.Audience.Groups.length; j++) {
                 if (itm.Audience.GroupsName != "")
                     itm.Audience.GroupsName += ",";
-                value = UtilsService.getItemByVal($scope.groups, itm.Audience.Groups[j], 'RoleId');
+                value = UtilsService.getItemByVal($scope.groups, itm.Audience.Groups[j], 'GroupId');
                 if (value != null)
                     groupsArray.push(value.Name);
                 
