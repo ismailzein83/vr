@@ -16,8 +16,8 @@
                 maxvalue: '@',
                 unit: '@',
                 stepvalue: '@',
-                upcolor: '@',
-                downcolor:'@',
+                upsign: '@',
+                downsign: '@',
                 customvalidate: '&'
             },
             controller: function ($scope, $element) {
@@ -70,9 +70,27 @@
                         ctrl.notifyUserChange = function () {
                             isUserChange = true;
                         };
-                        ctrl.readOnly = attrs.readonly != undefined;
-                        ctrl.upColor = (attrs.upcolor != undefined) ? ctrl.upcolor : 'green';
-                        ctrl.downColor = (attrs.downcolor != undefined) ? ctrl.downcolor : 'red';
+                        var defaultcolor = '#666';
+                        ctrl.upColor = defaultcolor;
+                        ctrl.downColor = defaultcolor;
+                        if (attrs.upsign != undefined ) {
+                            if(attrs.upsign == "critical")
+                                ctrl.upColor = '#ff0000';
+                            else if(attrs.upsign == "safe")
+                                ctrl.upColor = '#009900';
+                            else
+                                ctrl.upColor = defaultcolor;
+
+                        }
+                        if (attrs.downsign != undefined) {
+                            if (attrs.downsign == "critical")
+                                ctrl.downColor = '#ff0000';
+                            else if (attrs.downsign == "safe")
+                                ctrl.downColor = '#009900';
+                            else
+                                ctrl.downColor = defaultcolor;
+
+                        }
                         ctrl.minValue = (attrs.minvalue != undefined) ? parseInt(ctrl.minvalue) : undefined;
                         ctrl.maxValue = (attrs.maxvalue != undefined) ? parseInt(ctrl.maxvalue) : undefined;
                         ctrl.stepValue = (attrs.stepvalue != undefined) ? parseInt(ctrl.stepvalue) : 1;
