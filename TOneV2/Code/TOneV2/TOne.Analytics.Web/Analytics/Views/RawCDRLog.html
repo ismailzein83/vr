@@ -11,9 +11,9 @@
                 </vr-columns>
             </vr-row>
             <vr-row removeline>
-                <vr-columns colnum="fullrow" ng-show="basicSelected">
+                <vr-columns colnum="fullrow" ng-if="basicSelected">
                     <vr-row>
-                        
+
                         <vr-columns width="normal">
                             <vr-textbox value="nRecords" label="Limit Results to"></vr-textbox>
                         </vr-columns>
@@ -23,7 +23,7 @@
                         <vr-columns width="normal">
                             <vr-datetimepicker type="dateTime" label="To" value="toDate" isrequired></vr-datetimepicker>
                         </vr-columns>
-                    </vr-row>     
+                    </vr-row>
 
                 </vr-columns>
             </vr-row>

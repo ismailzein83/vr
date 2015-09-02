@@ -12,7 +12,7 @@
                 </vr-columns>
             </vr-row>
             <vr-row removeline>
-                <vr-columns colnum="fullrow" ng-show="basicSelected">
+                <vr-columns colnum="fullrow" ng-if="basicSelected">
                     <vr-row>
                         <vr-columns width="normal">
                             <vr-select label="Group By" datasource="groupKeys"
