@@ -49,6 +49,9 @@ namespace Vanrise.Security.Business
             insertOperationOutput.InsertedObject = null;
             int userId = -1;
 
+            string defPassword = "123456";
+            userObject.Password = HashingUtility.ComputeHash(defPassword, "", HashingUtility.GetVanriseSalt());
+
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
             bool insertActionSucc = dataManager.AddUser(userObject, out userId);
 
@@ -86,7 +89,8 @@ namespace Vanrise.Security.Business
         public Vanrise.Entities.UpdateOperationOutput<object> ResetPassword(int userId, string password)
         {
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-            bool updateActionSucc = dataManager.ResetPassword(userId, password);
+            
+            bool updateActionSucc = dataManager.ResetPassword(userId, HashingUtility.ComputeHash(password, "", HashingUtility.GetVanriseSalt()));
 
             UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
 

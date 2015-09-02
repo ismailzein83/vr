@@ -34,7 +34,7 @@ namespace Vanrise.Security.Business
                 {
                     authenticationOperationOutput.Result = AuthenticateOperationResult.Inactive;
                 }
-                else if (user.Password != password)
+                else if (!HashingUtility.VerifyHash(password, "", user.Password))
                 {
                     authenticationOperationOutput.Result = AuthenticateOperationResult.WrongCredentials;
                 }
@@ -84,7 +84,11 @@ namespace Vanrise.Security.Business
             int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
             Vanrise.Entities.UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
-            bool resetActionSucc = dataManager.ChangePassword(loggedInUserId, oldPassword, newPassword); 
+            
+            string encryptedOldPassword = HashingUtility.ComputeHash(oldPassword, "", HashingUtility.GetVanriseSalt());
+            string encryptedNewPassword = HashingUtility.ComputeHash(newPassword, "", HashingUtility.GetVanriseSalt());
+
+            bool resetActionSucc = dataManager.ChangePassword(loggedInUserId, encryptedOldPassword, encryptedNewPassword); 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
         //     updateOperationOutput.UpdatedObject = null;
 

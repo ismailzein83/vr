@@ -50,13 +50,8 @@ namespace Vanrise.Security.Data.SQL
         public bool AddUser(User userObject, out int insertedId)
         {
             object userID;
-            
-            //string password = RandomPasswordHelper.Generate(8, 10);
-            string password = "1";
-            //TODO: implement an encryption module
-            //string encPassword = manager.EncodePassword(password);
 
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Insert", out userID, userObject.Name, password, userObject.Email, userObject.Status, userObject.Description);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Insert", out userID, userObject.Name, userObject.Password, userObject.Email, userObject.Status, userObject.Description);
             insertedId = (recordesEffected > 0) ? (int)userID : -1;
 
             return (recordesEffected > 0);
