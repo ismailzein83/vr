@@ -75,9 +75,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NumberProfiling.xaml.cs">
-      <DependentUpon>NumberProfiling.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -105,10 +102,6 @@
     </XamlAppDef>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="NumberProfiling.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <XamlAppDef Include="ProfileNumber.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
