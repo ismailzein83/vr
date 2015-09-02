@@ -32,7 +32,7 @@
                             <div style="display:inline-block;max-width:200px;">{{item.CarrierName}}</div>
                             <i class="glyphicon glyphicon-remove hand-cursor" style="float:right;padding:5px;cursor:default" ng-click="denyCarrier($event,item)"></i>
                             <div style="float:right;margin-right:60px;">
-                                <div style="width: 100px; float: left; margin-right: 60px; text-align: center;">
+                                <div style="width: 100px; float: left; margin-right: 60px; text-align: center;" ng-style="item.IsCustomerAvailable == false ? {'float':'none','margin-right':'0px'}:{}" >
                                     <vr-switch value="item.newCustomerSwitchValue" ng-show="item.IsCustomerAvailable" class="green"></vr-switch>
                                 </div>
                                 <div style="width:100px;float:left;text-align:center;">
