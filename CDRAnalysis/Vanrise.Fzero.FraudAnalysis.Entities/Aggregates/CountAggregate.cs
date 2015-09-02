@@ -8,19 +8,19 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     public class CountAggregate:IAggregate
     {
         Func<CDR, bool> _condition;
-        Func<CDR, Strategy, bool> _conditionWithStrategy;
+        Func<CDR, INumberProfileParameters, bool> _conditionWithStrategy;
         int _count;
-        Dictionary<Strategy, CountAggregateStrategyInfo> _strategiesInfo;
-        List<Strategy> _strategies;
+        Dictionary<INumberProfileParameters, CountAggregateStrategyInfo> _strategiesInfo;
+        IEnumerable<INumberProfileParameters> _strategies;
         public CountAggregate(Func<CDR,bool> condition)
         {
             this._condition = condition;
         }
 
-        public CountAggregate(Func<CDR, Strategy, bool> condition, List<Strategy> strategies)
+        public CountAggregate(Func<CDR, INumberProfileParameters, bool> condition, IEnumerable<INumberProfileParameters> strategies)
         {
             this._conditionWithStrategy = condition;
-            _strategiesInfo = new Dictionary<Strategy, CountAggregateStrategyInfo>();
+            _strategiesInfo = new Dictionary<INumberProfileParameters, CountAggregateStrategyInfo>();
             _strategies = strategies;
             foreach (var strategy in _strategies)
                 _strategiesInfo.Add(strategy, new CountAggregateStrategyInfo());
@@ -56,7 +56,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
             }
         }
 
-        public decimal GetResult(Strategy strategy)
+        public decimal GetResult(INumberProfileParameters strategy)
         {
             if (_strategiesInfo != null)
                 return _strategiesInfo[strategy].Count;

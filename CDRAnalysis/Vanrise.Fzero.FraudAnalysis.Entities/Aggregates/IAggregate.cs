@@ -7,6 +7,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         void Reset();
         void EvaluateCDR(CDR normalCDR);
 
-        decimal GetResult(Strategy strategy);
+        decimal GetResult(INumberProfileParameters strategy);
     }
 }

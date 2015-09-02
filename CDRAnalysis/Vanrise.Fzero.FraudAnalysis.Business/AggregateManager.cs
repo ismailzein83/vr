@@ -11,11 +11,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
     public class AggregateManager
     {
 
-        List<Strategy> _strategies;
+        IEnumerable<INumberProfileParameters> _strategies;
         HashSet<int> _nightCallHours = new HashSet<int>() { 0, 1, 2, 3, 4, 5 };
 
 
-        public AggregateManager(List<Strategy> strategies)
+        public AggregateManager(IEnumerable<INumberProfileParameters> strategies)
         {
             _strategies = strategies;
         }

@@ -10,13 +10,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     {
 
         Func<CDR, bool> _condition;
-        Func<CDR, Strategy, bool> _conditionWithStrategy;
+        Func<CDR, INumberProfileParameters, bool> _conditionWithStrategy;
         //MethodInfo _propertyGetMethod;
         Func<CDR, Object> _cdrExpressionToCountDistinct;
         HashSet<Object> _distinctItems = new HashSet<Object>();
 
-        Dictionary<Strategy, DistinctCountAggregateStrategyInfo> _strategiesInfo;
-        List<Strategy> _strategies;
+        Dictionary<INumberProfileParameters, DistinctCountAggregateStrategyInfo> _strategiesInfo;
+        IEnumerable<INumberProfileParameters> _strategies;
        
 
         public DistinctCountAggregate(Func<CDR, Object> cdrExpressionToCountDistinct, Func<CDR, bool> condition)
@@ -25,7 +25,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
             this._condition = condition;
         }
 
-        public DistinctCountAggregate(Func<CDR, Object> cdrExpressionToCountDistinct, Func<CDR, Strategy, bool> condition, List<Strategy> strategies)
+        public DistinctCountAggregate(Func<CDR, Object> cdrExpressionToCountDistinct, Func<CDR, INumberProfileParameters, bool> condition, IEnumerable<INumberProfileParameters> strategies)
         {
             this._cdrExpressionToCountDistinct = cdrExpressionToCountDistinct;
             this._conditionWithStrategy = condition;
@@ -64,7 +64,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
             }
         }
 
-        public decimal GetResult(Strategy strategy)
+        public decimal GetResult(INumberProfileParameters strategy)
         {
             if (_strategiesInfo != null)
                 return _strategiesInfo[strategy].DistinctItems.Count();

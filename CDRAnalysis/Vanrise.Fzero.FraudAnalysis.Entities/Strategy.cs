@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class Strategy
+    public class Strategy : INumberProfileParameters
     {
         public int Id { get; set; }
 

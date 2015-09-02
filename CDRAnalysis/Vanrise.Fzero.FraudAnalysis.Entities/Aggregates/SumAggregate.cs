@@ -9,10 +9,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     {
 
         Func<CDR, Decimal> _cdrExpressionToSum;
-        Func<CDR, Strategy, Decimal> cdrExpressionToSumWithStrategy;
+        Func<CDR, INumberProfileParameters, Decimal> cdrExpressionToSumWithStrategy;
         decimal _sum;
-        Dictionary<Strategy, SumAggregateStrategyInfo> _strategiesInfo;
-        List<Strategy> _strategies;
+        Dictionary<INumberProfileParameters, SumAggregateStrategyInfo> _strategiesInfo;
+        IEnumerable<INumberProfileParameters> _strategies;
        
 
         public SumAggregate(Func<CDR, Decimal> cdrExpressionToSum)
@@ -20,10 +20,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
             _cdrExpressionToSum = cdrExpressionToSum;
         }
 
-        public SumAggregate(Func<CDR, Strategy, Decimal> cdrExpressionToSum, List<Strategy> strategies)
+        public SumAggregate(Func<CDR, INumberProfileParameters, Decimal> cdrExpressionToSum, IEnumerable<INumberProfileParameters> strategies)
         {
             this.cdrExpressionToSumWithStrategy = cdrExpressionToSum;
-            _strategiesInfo = new Dictionary<Strategy, SumAggregateStrategyInfo>();
+            _strategiesInfo = new Dictionary<INumberProfileParameters, SumAggregateStrategyInfo>();
             _strategies = strategies;
             foreach (var strategy in _strategies)
                 _strategiesInfo.Add(strategy, new SumAggregateStrategyInfo ());
@@ -54,8 +54,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
             else
                 _sum += _cdrExpressionToSum(cdr);
         }
-        
-        public decimal GetResult(Strategy strategy)
+
+        public decimal GetResult(INumberProfileParameters strategy)
         {
             if (_strategiesInfo != null)
                 return _strategiesInfo[strategy].Sum;

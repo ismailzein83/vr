@@ -9,16 +9,16 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     public class GroupCountAggregate : IAggregate
     {
 
-        Func<CDR, Strategy, bool> _condition;
+        Func<CDR, INumberProfileParameters, bool> _condition;
 
-        Dictionary<Strategy, GroupCountAggregateStrategyInfo> _strategiesInfo;
-        List<Strategy> _strategies;
+        Dictionary<INumberProfileParameters, GroupCountAggregateStrategyInfo> _strategiesInfo;
+        IEnumerable<INumberProfileParameters> _strategies;
 
 
-        public GroupCountAggregate(Func<CDR, Strategy, bool> condition, List<Strategy> strategies)
+        public GroupCountAggregate(Func<CDR, INumberProfileParameters, bool> condition, IEnumerable<INumberProfileParameters> strategies)
         {
             this._condition = condition;
-            _strategiesInfo = new Dictionary<Strategy, GroupCountAggregateStrategyInfo>();
+            _strategiesInfo = new Dictionary<INumberProfileParameters, GroupCountAggregateStrategyInfo>();
             _strategies = strategies;
             foreach (var strategy in _strategies)
                 _strategiesInfo.Add(strategy, new GroupCountAggregateStrategyInfo());
@@ -52,7 +52,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
             }
         }
 
-        public decimal GetResult(Strategy strategy)
+        public decimal GetResult(INumberProfileParameters strategy)
         {
             decimal count = 0;
             foreach(var value in _strategiesInfo[strategy].HoursvsCalls.Values)

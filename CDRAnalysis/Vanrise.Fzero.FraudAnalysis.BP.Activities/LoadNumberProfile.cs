@@ -19,17 +19,14 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         public BaseQueue<CDRBatch> InputQueue { get; set; }
 
         public BaseQueue<NumberProfileBatch> OutputQueue { get; set; }
-
-        [RequiredArgument]
+        
         public DateTime FromDate { get; set; }
-
-
-        [RequiredArgument]
+        
         public DateTime ToDate { get; set; }
-
-
-        [RequiredArgument]
+        
         public List<Strategy> Strategies { get; set; }
+
+        public NumberProfileParameters Parameters { get; set; }
 
     }
 
@@ -52,10 +49,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         [RequiredArgument]
         public InArgument<DateTime> ToDate { get; set; }
-
-
-        [RequiredArgument]
+                
         public InArgument<List<Strategy>> Strategies { get; set; }
+
+        public InArgument<NumberProfileParameters> Parameters { get; set; }
 
         #endregion
 
@@ -76,7 +73,12 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
                 int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"]);
                 handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started Loading CDRs from Database to Memory");
-                var aggregateDefinitions = new AggregateManager(inputArgument.Strategies).GetAggregateDefinitions(predefinedDataManager.GetCallClasses());
+                var callClasses = predefinedDataManager.GetCallClasses();
+                var aggregateDefinitions = inputArgument.Strategies != null?
+                    new AggregateManager(inputArgument.Strategies as IEnumerable<INumberProfileParameters>).GetAggregateDefinitions(callClasses)
+                    :
+                    new AggregateManager(new List<INumberProfileParameters> { inputArgument.Parameters }).GetAggregateDefinitions(callClasses)
+                    ;
                 string currentAccountNumber = null;
 
                 //foreach (var strategy in inputArgument.Strategies)
@@ -137,18 +139,35 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         private void FinishNumberProfileProcessing(string accountNumber, ref List<NumberProfile> numberProfileBatch, ref int numberProfilesCount, LoadNumberProfilesInput inputArgument, AsyncActivityHandle handle, int batchSize, List<AggregateDefinition> AggregateDefinitions)
         {
-            foreach (var strategy in inputArgument.Strategies)
+            if (inputArgument.Strategies != null)
+            {
+                foreach (var strategy in inputArgument.Strategies)
+                {
+                    NumberProfile numberProfile = new NumberProfile()
+                    {
+                        AccountNumber = accountNumber,
+                        FromDate = inputArgument.FromDate,
+                        ToDate = inputArgument.ToDate,
+                        StrategyId = strategy.Id
+                    };
+                    foreach (var aggregateDef in AggregateDefinitions)
+                    {
+                        numberProfile.AggregateValues.Add(aggregateDef.Name, aggregateDef.Aggregation.GetResult(strategy));
+                    }
+                    numberProfileBatch.Add(numberProfile);
+                }
+            }
+            else
             {
                 NumberProfile numberProfile = new NumberProfile()
                 {
                     AccountNumber = accountNumber,
                     FromDate = inputArgument.FromDate,
-                    ToDate = inputArgument.ToDate,
-                    StrategyId = strategy.Id
+                    ToDate = inputArgument.ToDate
                 };
                 foreach (var aggregateDef in AggregateDefinitions)
                 {
-                    numberProfile.AggregateValues.Add(aggregateDef.Name, aggregateDef.Aggregation.GetResult(strategy));
+                    numberProfile.AggregateValues.Add(aggregateDef.Name, aggregateDef.Aggregation.GetResult(inputArgument.Parameters));
                 }
                 numberProfileBatch.Add(numberProfile);
             }

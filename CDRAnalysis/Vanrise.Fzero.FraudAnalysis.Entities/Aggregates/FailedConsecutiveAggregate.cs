@@ -9,15 +9,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     public class FailedConsecutiveAggregate : IAggregate
     {
 
-        Func<CDR, Strategy, bool> _condition;
-              
-        Dictionary<Strategy, ConsecutiveAggregateStrategyInfo> _strategiesInfo;
-        List<Strategy> _strategies;
+        Func<CDR, INumberProfileParameters, bool> _condition;
 
-        public FailedConsecutiveAggregate(Func<CDR, Strategy, bool> condition, List<Strategy> strategies)
+        Dictionary<INumberProfileParameters, ConsecutiveAggregateStrategyInfo> _strategiesInfo;
+        IEnumerable<INumberProfileParameters> _strategies;
+
+        public FailedConsecutiveAggregate(Func<CDR, INumberProfileParameters, bool> condition, IEnumerable<INumberProfileParameters> strategies)
         {
             this._condition = condition;
-            _strategiesInfo = new Dictionary<Strategy, ConsecutiveAggregateStrategyInfo>();
+            _strategiesInfo = new Dictionary<INumberProfileParameters, ConsecutiveAggregateStrategyInfo>();
             _strategies = strategies;
             foreach (var strategy in _strategies)
                 _strategiesInfo.Add(strategy, new ConsecutiveAggregateStrategyInfo());
@@ -49,7 +49,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
 
 
-        public decimal GetResult(Strategy strategy)
+        public decimal GetResult(INumberProfileParameters strategy)
         {
             return _strategiesInfo[strategy].Count;
         }
