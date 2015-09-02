@@ -119,7 +119,7 @@
                                 <vr-datagridcolumn ng-repeat="filter in strategyFilters" ng-show="filter.isSelected" columnindex="$index + 1" headertext="'Filter: ' + filter.filterId" headerdescription="filter.description" tag="filter">
                                     <span ng-init="filterIndex = viewScope.strategyFilters.indexOf(colDef.tag)" >
                                             <vr-switch value="dataItem.StrategyLevelCriterias[filterIndex].isSelected"></vr-switch>
-                                            <vr-numeric ng-show="dataItem.StrategyLevelCriterias[filterIndex].isSelected" value="dataItem.StrategyLevelCriterias[filterIndex].percentage" minvalue="-75" maxvalue="75" stepvalue="25" downcolor="green" upcolor="red" unit="%" isrequired></vr-numeric>
+                                        <vr-numeric ng-show="dataItem.StrategyLevelCriterias[filterIndex].isSelected" value="dataItem.StrategyLevelCriterias[filterIndex].percentage" minvalue="-75" maxvalue="75" stepvalue="25" upsign="critical" downsign="safe" unit="%" isrequired></vr-numeric>
                                     </span>
 
                                 </vr-datagridcolumn>
