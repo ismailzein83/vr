@@ -1354,7 +1354,7 @@ input.ui-grid-filter-input[type="text"] {
 .clicked-btn{ 
      border-bottom:2px solid;
 }
-.ui-grid-cell{
+.ui-grid-1465{
     overflow:visible !important;
 }
 .gid-cell-menu {
@@ -1462,9 +1462,7 @@ input.ui-grid-filter-input[type="text"] {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.vr-datagrid-celltext div{
-    min-height:17px;
-}
+
 .vr-grid-cell-number{
     text-align: right !important;   
     padding-right:2px !important;
