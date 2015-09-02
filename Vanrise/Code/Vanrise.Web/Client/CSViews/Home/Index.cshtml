@@ -69,7 +69,7 @@
     </div>
     <div id="wrapper" ng-style="toogled==true?{'padding-left':'210px'}:{'padding-left':'25px'}">
         <!-- Sidebar -->
-        <div id="sidebar-wrapper" ng-style="toogled==true?{'width':'225px'}:{'width':'2px'}">
+        <div id="sidebar-wrapper" ng-style="toogled==true?{'width':'225px'}:{'width':'2px'}" ng-mouseout="mouseout()" ng-mouseover="mouseover()">
 
             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" ng-show="toogled==true">
                 <div class="panel panel-default toggle-panel ">
@@ -78,7 +78,7 @@
                     </div>
                 </div>
                 <div ng-repeat="item in menuItems" class="panel panel-default menu-item-list">
-                    <div ng-class="item.isSelected? 'bold-item bgcolor-grad-{{item.keyclass}}':'bgcolor-{{item.keyclass}}'" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{$index}}" aria-expanded="true"  ng-click="setIndex(item,$event)">
+                    <div ng-class="item.isSelected? 'bold-item bgcolor-grad-{{item.keyclass}}':'bgcolor-{{item.keyclass}}'" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{$index}}" aria-expanded="true" ng-click="setIndex(item,$event)">
                         <span ng-if="item.Childs.length > 0">
                             <span class="glyphicon " style="top: -4px; "><img ng-src="{{item.Icon}}" /></span>
                             <span style="position: relative; top: 0px;">{{::item.Name}}</span>
@@ -118,7 +118,7 @@
                     <span ng-bind="clock  | date:'EEE dd MMM , yyyy'"></span>
 
                     <span style="color: #6a6a6a;font-weight:bold" ng-bind="clock  | date:'hh:mm'"> </span>
-                   
+
                 </div>
             </div>
 
@@ -151,7 +151,7 @@
                     </ul>
                 </div>
                 <div class="clock collapsed-clock">
-                  
+
                     <span ng-bind="clock  | date:'EEE dd MMM , yyyy'"></span>
 
                     <span style="color: #6a6a6a; font-weight: bold" ng-bind="clock  | date:'hh:mm'"> </span>

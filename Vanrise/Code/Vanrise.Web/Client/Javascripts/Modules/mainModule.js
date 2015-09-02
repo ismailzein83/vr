@@ -28,12 +28,26 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
     //$animate.enabled(false, $('#sidebar-wrapper'));
     //$animate.enabled(true, $('#collapsedmenu'));
 
-    $scope.toogled = true;
+    $scope.toogled = false;
     $scope.toggledpanel = function () {
+
         $scope.toogled = !$scope.toogled;
 
 
     }
+
+    var timer;
+    $scope.show = false;
+    $scope.mouseover = function () {
+        $timeout.cancel(timer);
+        $scope.toogled = true;
+    };
+    $scope.mouseout = function () {
+       timer = $timeout(function () {
+           $scope.toogled = false;
+       }, 100);
+    };
+
     $scope.logout = function () {
         window.location.href = '/Security/Login';
         SecurityService.deleteAccessCookie();
