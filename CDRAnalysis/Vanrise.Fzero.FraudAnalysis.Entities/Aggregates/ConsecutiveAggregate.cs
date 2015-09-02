@@ -12,14 +12,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         Func<CDR, INumberProfileParameters, bool> _condition;
 
         Dictionary<INumberProfileParameters, ConsecutiveAggregateStrategyInfo> _strategiesInfo;
-        IEnumerable<INumberProfileParameters> _strategies;
+        IEnumerable<INumberProfileParameters> _parameters;
 
-        public ConsecutiveAggregate(Func<CDR, INumberProfileParameters, bool> condition, IEnumerable<INumberProfileParameters> strategies)
+        public ConsecutiveAggregate(Func<CDR, INumberProfileParameters, bool> condition, IEnumerable<INumberProfileParameters> parameters)
         {
             this._condition = condition;
             _strategiesInfo = new Dictionary<INumberProfileParameters, ConsecutiveAggregateStrategyInfo>();
-            _strategies = strategies;
-            foreach (var strategy in _strategies)
+            _parameters = parameters;
+            foreach (var strategy in _parameters)
                 _strategiesInfo.Add(strategy, new ConsecutiveAggregateStrategyInfo());
         }
 

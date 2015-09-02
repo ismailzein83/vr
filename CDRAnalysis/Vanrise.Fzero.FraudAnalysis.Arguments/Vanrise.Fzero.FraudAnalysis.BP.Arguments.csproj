@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NumberProfilingInput.cs" />
     <Compile Include="ExecuteStrategyProcessInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

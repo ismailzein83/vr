@@ -16,7 +16,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         HashSet<Object> _distinctItems = new HashSet<Object>();
 
         Dictionary<INumberProfileParameters, DistinctCountAggregateStrategyInfo> _strategiesInfo;
-        IEnumerable<INumberProfileParameters> _strategies;
+        IEnumerable<INumberProfileParameters> _parameters;
        
 
         public DistinctCountAggregate(Func<CDR, Object> cdrExpressionToCountDistinct, Func<CDR, bool> condition)
@@ -25,12 +25,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
             this._condition = condition;
         }
 
-        public DistinctCountAggregate(Func<CDR, Object> cdrExpressionToCountDistinct, Func<CDR, INumberProfileParameters, bool> condition, IEnumerable<INumberProfileParameters> strategies)
+        public DistinctCountAggregate(Func<CDR, Object> cdrExpressionToCountDistinct, Func<CDR, INumberProfileParameters, bool> condition, IEnumerable<INumberProfileParameters> parameters)
         {
             this._cdrExpressionToCountDistinct = cdrExpressionToCountDistinct;
             this._conditionWithStrategy = condition;
-            _strategies = strategies;
-            foreach (var strategy in _strategies)
+            _parameters = parameters;
+            foreach (var strategy in _parameters)
                 _strategiesInfo.Add(strategy, new DistinctCountAggregateStrategyInfo());
         }
 

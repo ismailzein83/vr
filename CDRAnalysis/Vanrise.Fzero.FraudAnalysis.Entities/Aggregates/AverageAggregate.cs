@@ -35,7 +35,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
           
         }
 
-        public decimal GetResult(INumberProfileParameters strategy)
+        public decimal GetResult(INumberProfileParameters parameters)
         {
             if (this._sum == 0 || this._count == 0)
                 return 0;

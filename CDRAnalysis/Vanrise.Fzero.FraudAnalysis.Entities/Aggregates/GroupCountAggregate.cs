@@ -12,15 +12,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         Func<CDR, INumberProfileParameters, bool> _condition;
 
         Dictionary<INumberProfileParameters, GroupCountAggregateStrategyInfo> _strategiesInfo;
-        IEnumerable<INumberProfileParameters> _strategies;
+        IEnumerable<INumberProfileParameters> _parameters;
 
 
-        public GroupCountAggregate(Func<CDR, INumberProfileParameters, bool> condition, IEnumerable<INumberProfileParameters> strategies)
+        public GroupCountAggregate(Func<CDR, INumberProfileParameters, bool> condition, IEnumerable<INumberProfileParameters> parameters)
         {
             this._condition = condition;
             _strategiesInfo = new Dictionary<INumberProfileParameters, GroupCountAggregateStrategyInfo>();
-            _strategies = strategies;
-            foreach (var strategy in _strategies)
+            _parameters = parameters;
+            foreach (var strategy in _parameters)
                 _strategiesInfo.Add(strategy, new GroupCountAggregateStrategyInfo());
         }
 

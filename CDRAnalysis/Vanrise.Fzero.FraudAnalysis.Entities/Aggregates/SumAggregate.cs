@@ -12,7 +12,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         Func<CDR, INumberProfileParameters, Decimal> cdrExpressionToSumWithStrategy;
         decimal _sum;
         Dictionary<INumberProfileParameters, SumAggregateStrategyInfo> _strategiesInfo;
-        IEnumerable<INumberProfileParameters> _strategies;
+        IEnumerable<INumberProfileParameters> _parameters;
        
 
         public SumAggregate(Func<CDR, Decimal> cdrExpressionToSum)
@@ -20,12 +20,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
             _cdrExpressionToSum = cdrExpressionToSum;
         }
 
-        public SumAggregate(Func<CDR, INumberProfileParameters, Decimal> cdrExpressionToSum, IEnumerable<INumberProfileParameters> strategies)
+        public SumAggregate(Func<CDR, INumberProfileParameters, Decimal> cdrExpressionToSum, IEnumerable<INumberProfileParameters> parameters)
         {
             this.cdrExpressionToSumWithStrategy = cdrExpressionToSum;
             _strategiesInfo = new Dictionary<INumberProfileParameters, SumAggregateStrategyInfo>();
-            _strategies = strategies;
-            foreach (var strategy in _strategies)
+            _parameters = parameters;
+            foreach (var strategy in _parameters)
                 _strategiesInfo.Add(strategy, new SumAggregateStrategyInfo ());
         }
 

@@ -11,13 +11,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
     public class AggregateManager
     {
 
-        IEnumerable<INumberProfileParameters> _strategies;
+        IEnumerable<INumberProfileParameters> _parameters;
         HashSet<int> _nightCallHours = new HashSet<int>() { 0, 1, 2, 3, 4, 5 };
 
 
-        public AggregateManager(IEnumerable<INumberProfileParameters> strategies)
+        public AggregateManager(IEnumerable<INumberProfileParameters> parameters)
         {
-            _strategies = strategies;
+            _parameters = parameters;
         }
 
         public AggregateManager()
@@ -321,7 +321,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Aggregation = new CountAggregate((cdr, strategy) =>
                 {
                     return (cdr.CallType == CallTypeEnum.OutgoingVoiceCall && cdr.ConnectDateTime.HasValue && strategy.PeakHoursIds.Contains(cdr.ConnectDateTime.Value.Hour));
-                }, _strategies)
+                }, _parameters)
             });
 
            
@@ -333,7 +333,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                       {
                           return (cdr.CallType == CallTypeEnum.OutgoingVoiceCall && cdr.DurationInSeconds > 0);
                       }
-                      , _strategies
+                      , _parameters
                   )
             });
 
@@ -348,7 +348,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                       {
                           return (cdr.CallType == CallTypeEnum.OutgoingVoiceCall);
                       }
-                      , _strategies
+                      , _parameters
                   )
             });
 
@@ -362,7 +362,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                       {
                           return (cdr.CallType == CallTypeEnum.OutgoingVoiceCall && cdr.DurationInSeconds == 0);
                       }
-                      , _strategies
+                      , _parameters
                   )
             });
 
@@ -373,7 +373,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Aggregation = new CountAggregate((cdr, strategy) =>
                 {
                     return (cdr.CallType == CallTypeEnum.IncomingVoiceCall && cdr.DurationInSeconds <= strategy.MaxLowDurationCall);
-                }, _strategies)
+                }, _parameters)
             });
 
             foreach (var i in AggregateDefinitions)
