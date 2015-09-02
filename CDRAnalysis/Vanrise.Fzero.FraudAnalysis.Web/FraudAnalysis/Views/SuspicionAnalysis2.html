@@ -1,0 +1,80 @@
+﻿<vr-panel ng-controller="FraudAnalysis_SuspicionAnalysis2Controller">
+
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-textbox label="Account Number" value="accountNumber"></vr-textbox>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-datetimepicker label="From" value="from" type="dateTime" isrequired></vr-datetimepicker>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-datetimepicker label="To" value="to" type="dateTime" isrequired></vr-datetimepicker>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-select label="Strategy"
+                               datasource="strategies"
+                               selectedvalues="selectedStrategies"
+                               datavaluefield="value"
+                               datatextfield="description"
+                               ismultipleselection>
+                    </vr-select>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-select label="Suspicion Level"
+                               datasource="suspicionLevels"
+                               selectedvalues="selectedSuspicionLevels"
+                               datavaluefield="value"
+                               datatextfield="description"
+                               ismultipleselection>
+                    </vr-select>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-select label="Status"
+                               datasource="caseStatuses"
+                               selectedvalues="selectedCaseStatuses"
+                               datavaluefield="value"
+                               datatextfield="description"
+                               ismultipleselection>
+                    </vr-select>
+                </vr-columns>
+            </vr-row>
+        </div>
+
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+    </vr-form>
+
+    <div>
+        <vr-row>
+            <vr-columns width="fullrow" simplecol>
+
+                <vr-datagrid datasource="fraudResults"
+                             on-ready="onGridReady"
+                             dataretrievalfunction="dataRetrievalFunction"
+                             menuactions="gridMenuActions"
+                             pagingtype="'PagingOnScroll'"
+                             idfield="AccountNumber"
+                             maxheight="400px">
+
+                    <vr-datagridcolumn headertext="'Account Number'" field="'AccountNumber'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelDescription'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Occurances'" field="'NumberOfOccurances'" type="'Number'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Status'" field="'CaseStatusDescription'" type="'Text'"></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </div>
+</vr-panel>

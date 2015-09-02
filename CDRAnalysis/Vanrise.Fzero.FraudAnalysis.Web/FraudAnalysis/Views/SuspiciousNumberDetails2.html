@@ -1,0 +1,48 @@
+﻿<div vr-modalcontent ng-controller="FraudAnalysis_SuspiciousNumberDetails2Controller" width="'75%'">
+    <vr-modalbody vr-loader="isGettingData">
+
+        <vr-form name="formSuspiciousNumberDetails">
+            <vr-row>
+                <vr-columns width="normal">
+                    <vr-textbox label="Account Number" value="accountNumber" readonly></vr-textbox>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-textbox label="Suspicion Level" value="suspicionLevelDescription" readonly></vr-textbox>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-datetimepicker label="From" value="from" type="dateTime" readonly></vr-datetimepicker>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-datetimepicker label="To" value="to" type="dateTime" readonly></vr-datetimepicker>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+
+        <vr-row>
+            <vr-columns width="fullrow" simplecol>
+                <vr-datagrid datasource="logs"
+                             on-ready="onGridReady"
+                             dataretrievalfunction="dataRetrievalFunction"
+                             pagingtype="'PagingOnScroll'"
+                             idfield="DetialID">
+
+                    <vr-datagridcolumn headertext="'Log Date'" field="'LogDate'" type="'Datetime'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Status'" field="'StatusID'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Analyst'" field="'AnalystName'" type="'Text'"></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formSuspiciousNumberDetails" data-onclick="updateAccountCase"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
