@@ -124,9 +124,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="bin\Debug\Reports\rptRepeatedToOperator.rdlc" />
-    <EmbeddedResource Include="bin\Debug\Reports\rptRepeatedToSyrianOperator.rdlc" />
-    <EmbeddedResource Include="bin\Debug\Reports\rptRepeatedToZainOperator.rdlc" />
     <EmbeddedResource Include="ProjectInstaller.resx">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -134,6 +131,7 @@
     <EmbeddedResource Include="RepeatedReportService.resx">
       <DependentUpon>RepeatedReportService.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptRepeatedDefaultToOperator.rdlc" />
     <EmbeddedResource Include="Reports\rptRepeatedToOperator.rdlc" />
     <EmbeddedResource Include="Reports\rptRepeatedToSyrianOperator.rdlc" />
     <EmbeddedResource Include="Reports\rptRepeatedToZainOperator.rdlc" />
@@ -164,6 +162,9 @@
       <Project>{1ca1b8a4-c6ac-499d-a763-8276a68c415e}</Project>
       <Name>Vanrise.Fzero.Bypass</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Debug\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

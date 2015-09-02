@@ -196,6 +196,10 @@ namespace Vanrise.Fzero.Services.ClientReport
             {
                 reportPath = Path.Combine(exeFolder, @"Reports\rptToOperator.rdlc");
             }
+            else
+            {
+                reportPath = Path.Combine(exeFolder, @"Reports\rptToOperator.rdlc");
+            }
 
 
 

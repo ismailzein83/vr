@@ -68,7 +68,6 @@ namespace Vanrise.Fzero.Services.DailyReport
                             if (listViewSummary.Count > 0)
                             {
                                 SendReport(listViewSummary, i.User.FullName, i.User.ClientID.Value, string.Empty, i.ID, DifferenceInGMT);
-                                //SendReport(listViewSummary, i.User.FullName, i.User.ClientID.Value, string.Empty, i.ID);
                             }
                         }
                     }
@@ -125,7 +124,6 @@ namespace Vanrise.Fzero.Services.DailyReport
             rptDailyReport.LocalReport.Refresh();
 
             string CCs = EmailCC.GetClientEmailCCs(ClientID);
-            //string CCs = "walid.emailbox@gmail.com";
 
 
             if (ClientID == 3)

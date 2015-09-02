@@ -73,7 +73,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=First(Fields!ReportingDateTime.Value, "dsViewGeneratedCalls")</Value>
+                              <Value>= Now()</Value>
                               <Style>
                                 <Color>DimGray</Color>
                               </Style>
@@ -107,7 +107,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Mobile</Value>
+                              <Value>Expected </Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -119,7 +119,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Operator</Value>
+                              <Value>Resolution</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -152,7 +152,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!MobileOperatorName.Value</Value>
+                              <Value>N/A</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <Color>DimGray</Color>
@@ -239,9 +239,6 @@
         <Left>0.3125in</Left>
         <Height>0.48958in</Height>
         <Width>6.10432in</Width>
-        <Visibility>
-          <Hidden>=Parameters!HideSignature.Value</Hidden>
-        </Visibility>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -257,84 +254,46 @@
         <Height>0.5in</Height>
         <Width>1.76042in</Width>
         <ZIndex>1</ZIndex>
-        <Visibility>
-          <Hidden>=Parameters!HideSignature.Value</Hidden>
-        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
         </Style>
       </Image>
-      <Image Name="ITPC">
-        <Source>Embedded</Source>
-        <Value>ITPC</Value>
-        <Sizing>FitProportional</Sizing>
-        <Top>0.04042in</Top>
-        <Left>5.22917in</Left>
-        <Height>0.59375in</Height>
-        <Width>1.20833in</Width>
-        <ZIndex>2</ZIndex>
-        <Visibility>
-          <Hidden>=Parameters!HideSignature.Value</Hidden>
-        </Visibility>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-        </Style>
-      </Image>
-      <Tablix Name="Tablix6">
+      <Tablix Name="Tablix5">
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.02334in</Width>
+              <Width>1.60504in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.44607in</Width>
-            </TablixColumn>
-            <TablixColumn>
-              <Width>0.82412in</Width>
-            </TablixColumn>
-            <TablixColumn>
-              <Width>1.31088in</Width>
-            </TablixColumn>
-            <TablixColumn>
-              <Width>0.53461in</Width>
-            </TablixColumn>
-            <TablixColumn>
-              <Width>1.0176in</Width>
-            </TablixColumn>
-            <TablixColumn>
-              <Width>0.96839in</Width>
+              <Width>4.52517in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.6875in</Height>
+              <Height>0.23958in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox52">
+                    <Textbox Name="Textbox24">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Called Number</Value>
+                              <Value>Fraud Report Description</Value>
                               <Style>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox52</rd:DefaultName>
+                      <rd:DefaultName>Textbox1</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -350,26 +309,32 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox54">
+                    <Textbox Name="Textbox25">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Type</Value>
+                              <Value>Repeated</Value>
                               <Style>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
+                                <Color>DimGray</Color>
+                              </Style>
+                            </TextRun>
+                            <TextRun>
+                              <Value> Fraud Numbers</Value>
+                              <Style>
+                                <FontSize>9pt</FontSize>
+                                <Color>DimGray</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox54</rd:DefaultName>
+                      <rd:DefaultName>Textbox5</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -383,509 +348,6 @@
                     </Textbox>
                   </CellContents>
                 </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox56">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>CLI</Value>
-                              <Style>
-                                <FontSize>8pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>(To be Blocked ASAP)</Value>
-                              <Style>
-                                <FontSize>8pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox56</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox58">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>Date &amp; Time</Value>
-                              <Style>
-                                <FontSize>8pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox58</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox11">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>Duration In Seconds</Value>
-                              <Style>
-                                <FontSize>8pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox11</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox62">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>Recommended Action</Value>
-                              <Style>
-                                <FontSize>8pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox62</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox66">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>Status</Value>
-                              <Style>
-                                <FontSize>8pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>( Operator's Use)</Value>
-                              <Style>
-                                <FontSize>8pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox66</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-              </TablixCells>
-            </TablixRow>
-            <TablixRow>
-              <Height>0.32292in</Height>
-              <TablixCells>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="b_number">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=Fields!b_number.Value</Value>
-                              <Style>
-                                <FontSize>8pt</FontSize>
-                                <Color>Red</Color>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>b_number</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox55">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>GSM</Value>
-                              <Style>
-                                <FontSize>8pt</FontSize>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox55</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="CLI">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=Fields!CLI.Value</Value>
-                              <Style>
-                                <FontSize>8pt</FontSize>
-                                <Color>Red</Color>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>CLI</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="AttemptDateTime">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=Format(Fields!AttemptDateTime.Value,"dd/MM/yyyy HH:mm:ss")</Value>
-                              <Style>
-                                <FontSize>8pt</FontSize>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>AttemptDateTime</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="DurationInSeconds">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=Fields!DurationInSeconds.Value</Value>
-                              <Style>
-                                <FontSize>8pt</FontSize>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>DurationInSeconds</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="RecommendedActionName">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=Fields!RecommendedActionName.Value</Value>
-                              <Style>
-                                <FontSize>8pt</FontSize>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>RecommendedActionName</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox67">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value />
-                              <Style>
-                                <FontSize>8pt</FontSize>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox67</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-              </TablixCells>
-            </TablixRow>
-            <TablixRow>
-              <Height>0.25in</Height>
-              <TablixCells>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox15">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>Total: </Value>
-                              <Style>
-                                <FontSize>8pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                                <TextDecoration>None</TextDecoration>
-                              </Style>
-                            </TextRun>
-                            <TextRun>
-                              <Value>=Count(Fields!AttemptDateTime.Value)</Value>
-                              <Style>
-                                <FontSize>8pt</FontSize>
-                                <TextDecoration>None</TextDecoration>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Left</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox15</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                    <ColSpan>7</ColSpan>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell />
-                <TablixCell />
-                <TablixCell />
-                <TablixCell />
-                <TablixCell />
-                <TablixCell />
               </TablixCells>
             </TablixRow>
           </TablixRows>
@@ -894,32 +356,19 @@
           <TablixMembers>
             <TablixMember />
             <TablixMember />
-            <TablixMember />
-            <TablixMember />
-            <TablixMember />
-            <TablixMember />
-            <TablixMember />
           </TablixMembers>
         </TablixColumnHierarchy>
         <TablixRowHierarchy>
           <TablixMembers>
-            <TablixMember>
-              <KeepWithGroup>After</KeepWithGroup>
-            </TablixMember>
-            <TablixMember>
-              <Group Name="Details1" />
-            </TablixMember>
-            <TablixMember>
-              <KeepWithGroup>Before</KeepWithGroup>
-            </TablixMember>
+            <TablixMember />
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>dsViewGeneratedCalls</DataSetName>
-        <Top>2.86333in</Top>
-        <Left>0.3125in</Left>
-        <Height>1.26042in</Height>
-        <Width>6.12501in</Width>
-        <ZIndex>3</ZIndex>
+        <Top>2.04688in</Top>
+        <Left>0.30729in</Left>
+        <Height>0.23958in</Height>
+        <Width>6.13021in</Width>
+        <ZIndex>2</ZIndex>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -930,7 +379,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>6.10432in</Width>
+              <Width>6.14063in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -946,7 +395,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Suspected Number/Trunks and Usage Summary</Value>
+                              <Value>Suspected Number/Trunks amd Usage Summary</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -989,11 +438,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>dsViewGeneratedCalls</DataSetName>
-        <Top>2.55208in</Top>
-        <Left>0.3125in</Left>
+        <Top>2.42708in</Top>
+        <Left>0.30729in</Left>
         <Height>0.30208in</Height>
-        <Width>6.10432in</Width>
-        <ZIndex>4</ZIndex>
+        <Width>6.14063in</Width>
+        <ZIndex>3</ZIndex>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -1004,10 +453,10 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.68064in</Width>
+              <Width>1.69358in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>4.42369in</Width>
+              <Width>4.43663in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1093,14 +542,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>dsViewGeneratedCalls</DataSetName>
-        <Top>4.30729in</Top>
-        <Left>0.3125in</Left>
+        <Top>3.80729in</Top>
+        <Left>0.30729in</Left>
         <Height>0.59375in</Height>
-        <Width>6.10433in</Width>
-        <ZIndex>5</ZIndex>
-        <Visibility>
-          <Hidden>=Parameters!HideSignature.Value</Hidden>
-        </Visibility>
+        <Width>6.13021in</Width>
+        <ZIndex>4</ZIndex>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -1169,7 +615,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!ReportedByName.Value</Value>
+                              <Value>="Rashid Ajamy"</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                                 <FontSize>9pt</FontSize>
@@ -1235,7 +681,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!MobileNumber.Value</Value>
+                              <Value>="9613576633"</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                                 <FontSize>9pt</FontSize>
@@ -1277,14 +723,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>dsViewGeneratedCalls</DataSetName>
-        <Top>5.05208in</Top>
+        <Top>4.55208in</Top>
         <Left>0.3125in</Left>
         <Height>0.21875in</Height>
         <Width>6.125in</Width>
-        <ZIndex>6</ZIndex>
-        <Visibility>
-          <Hidden>=Parameters!HideSignature.Value</Hidden>
-        </Visibility>
+        <ZIndex>5</ZIndex>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -1295,7 +738,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.68837in</Width>
+              <Width>1.69358in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1350,14 +793,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>dsViewGeneratedCalls</DataSetName>
-        <Top>5.27083in</Top>
-        <Left>0.3125in</Left>
+        <Top>4.77083in</Top>
+        <Left>0.30729in</Left>
         <Height>0.42188in</Height>
-        <Width>1.68837in</Width>
-        <ZIndex>7</ZIndex>
-        <Visibility>
-          <Hidden>=Parameters!HideSignature.Value</Hidden>
-        </Visibility>
+        <Width>1.69358in</Width>
+        <ZIndex>6</ZIndex>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -1369,14 +809,11 @@
         <Value>signature</Value>
         <MIMEType>image/gif</MIMEType>
         <Sizing>FitProportional</Sizing>
-        <Top>5.27083in</Top>
+        <Top>4.77083in</Top>
         <Left>2.00087in</Left>
         <Height>0.42188in</Height>
         <Width>4.43664in</Width>
-        <ZIndex>8</ZIndex>
-        <Visibility>
-          <Hidden>=Parameters!HideSignature.Value</Hidden>
-        </Visibility>
+        <ZIndex>7</ZIndex>
         <Style>
           <Border>
             <Color>LightGrey</Color>
@@ -1397,10 +834,10 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>2.23755in</Width>
+              <Width>2.2531in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.86677in</Width>
+              <Width>3.88232in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1505,14 +942,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>dsViewGeneratedCalls</DataSetName>
-        <Top>6.03in</Top>
+        <Top>5.53in</Top>
         <Left>0.3125in</Left>
         <Height>0.25in</Height>
-        <Width>6.10432in</Width>
-        <ZIndex>9</ZIndex>
-        <Visibility>
-          <Hidden>=Parameters!HideSignature.Value</Hidden>
-        </Visibility>
+        <Width>6.13542in</Width>
+        <ZIndex>8</ZIndex>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -1523,10 +957,10 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.68064in</Width>
+              <Width>1.69358in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>4.42369in</Width>
+              <Width>4.43663in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1615,14 +1049,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>dsViewGeneratedCalls</DataSetName>
-        <Top>6.38021in</Top>
-        <Left>0.3125in</Left>
+        <Top>5.88021in</Top>
+        <Left>0.30729in</Left>
         <Height>1.13542in</Height>
-        <Width>6.10433in</Width>
-        <ZIndex>10</ZIndex>
-        <Visibility>
-          <Hidden>=Parameters!HideSignature.Value</Hidden>
-        </Visibility>
+        <Width>6.13021in</Width>
+        <ZIndex>9</ZIndex>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -1831,14 +1262,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>dsViewGeneratedCalls</DataSetName>
-        <Top>7.69271in</Top>
+        <Top>7.19271in</Top>
         <Left>0.3125in</Left>
         <Height>0.21875in</Height>
         <Width>4.11609in</Width>
-        <ZIndex>11</ZIndex>
-        <Visibility>
-          <Hidden>=Parameters!HideSignature.Value</Hidden>
-        </Visibility>
+        <ZIndex>10</ZIndex>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -1849,16 +1277,16 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>2.26967in</Width>
+              <Width>2.27097in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.43366in</Width>
+              <Width>1.43496in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.03819in</Width>
+              <Width>1.03949in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.38349in</Width>
+              <Width>1.38479in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -2018,14 +1446,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>dsViewGeneratedCalls</DataSetName>
-        <Top>8.06771in</Top>
-        <Left>0.3125in</Left>
+        <Top>7.56771in</Top>
+        <Left>0.30729in</Left>
         <Height>0.21875in</Height>
-        <Width>6.12501in</Width>
-        <ZIndex>12</ZIndex>
-        <Visibility>
-          <Hidden>=Parameters!HideSignature.Value</Hidden>
-        </Visibility>
+        <Width>6.13021in</Width>
+        <ZIndex>11</ZIndex>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -2036,10 +1461,10 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>2.25542in</Width>
+              <Width>2.26576in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.8489in</Width>
+              <Width>3.85924in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -2144,14 +1569,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>dsViewGeneratedCalls</DataSetName>
-        <Top>8.28906in</Top>
+        <Top>7.78906in</Top>
         <Left>0.3125in</Left>
         <Height>0.42188in</Height>
-        <Width>6.10432in</Width>
-        <ZIndex>13</ZIndex>
-        <Visibility>
-          <Hidden>=Parameters!HideSignature.Value</Hidden>
-        </Visibility>
+        <Width>6.125in</Width>
+        <ZIndex>12</ZIndex>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -2484,10 +1906,7 @@
         <Left>0.3125in</Left>
         <Height>0.21875in</Height>
         <Width>6.10435in</Width>
-        <ZIndex>14</ZIndex>
-        <Visibility>
-          <Hidden>=Parameters!HideSignature.Value</Hidden>
-        </Visibility>
+        <ZIndex>13</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2800,10 +2219,7 @@
         <Left>0.3125in</Left>
         <Height>0.21875in</Height>
         <Width>6.10435in</Width>
-        <ZIndex>15</ZIndex>
-        <Visibility>
-          <Hidden>=Parameters!HideSignature.Value</Hidden>
-        </Visibility>
+        <ZIndex>14</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2822,40 +2238,94 @@
           </RightBorder>
         </Style>
       </Tablix>
-      <Tablix Name="Tablix5">
+      <Textbox Name="MobileOperatorName">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Parameters!MobileOperator.Value</Value>
+                <Style>
+                  <FontSize>16pt</FontSize>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>MobileOperatorName</rd:DefaultName>
+        <Top>0.28in</Top>
+        <Left>2.36856in</Left>
+        <Height>0.35417in</Height>
+        <Width>1.95498in</Width>
+        <ZIndex>15</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Tablix Name="Tablix6">
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.5921in</Width>
+              <Width>1.71457in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>4.51223in</Width>
+              <Width>1.39704in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>1.5463in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>1.44641in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.47916in</Height>
+              <Height>0.38542in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox24">
+                    <Textbox Name="Textbox56">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Fraud Report Description</Value>
+                              <Value>CLI</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>(To be Blocked ASAP)</Value>
+                              <Style>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox1</rd:DefaultName>
+                      <rd:DefaultName>Textbox56</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -2871,24 +2341,255 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox25">
+                    <Textbox Name="Textbox5">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Suspected GSM SIM Box Bypass - Discovered through Call Generation Engine.</Value>
+                              <Value>First Occurrence</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
-                                <Color>DimGray</Color>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox5</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox10">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>Last Occurrence</Value>
+                              <Style>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox10</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox12">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>Status</Value>
+                              <Style>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>(Operator's Use)</Value>
+                              <Style>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox12</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+              </TablixCells>
+            </TablixRow>
+            <TablixRow>
+              <Height>0.32292in</Height>
+              <TablixCells>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="CLI">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!CLI.Value</Value>
+                              <Style>
+                                <FontSize>8pt</FontSize>
+                                <Color>Red</Color>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>CLI</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="FirstAttemptDateTime">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Format(Fields!FirstAttemptDateTime.Value,"dd/MM/yyyy HH:mm:ss")</Value>
+                              <Style>
+                                <FontSize>8pt</FontSize>
+                                <Color>Red</Color>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>FirstAttemptDateTime</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="LastAttemptDateTime">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Format(Fields!LastAttemptDateTime.Value,"dd/MM/yyyy HH:mm:ss")</Value>
+                              <Style>
+                                <FontSize>8pt</FontSize>
+                                <Color>Red</Color>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>LastAttemptDateTime</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox14">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value />
+                              <Style>
+                                <FontSize>8pt</FontSize>
+                                <Color>Red</Color>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox14</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -2910,22 +2611,26 @@
           <TablixMembers>
             <TablixMember />
             <TablixMember />
+            <TablixMember />
+            <TablixMember />
           </TablixMembers>
         </TablixColumnHierarchy>
         <TablixRowHierarchy>
           <TablixMembers>
-            <TablixMember />
+            <TablixMember>
+              <KeepWithGroup>After</KeepWithGroup>
+            </TablixMember>
+            <TablixMember>
+              <Group Name="Details1" />
+            </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>dsViewGeneratedCalls</DataSetName>
-        <Top>1.977in</Top>
-        <Left>0.3125in</Left>
-        <Height>0.47916in</Height>
-        <Width>6.10433in</Width>
+        <Top>2.7986in</Top>
+        <Left>0.30729in</Left>
+        <Height>0.70834in</Height>
+        <Width>6.10432in</Width>
         <ZIndex>16</ZIndex>
-        <Visibility>
-          <Hidden>=Parameters!HideSignature.Value</Hidden>
-        </Visibility>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -2933,7 +2638,7 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>8.71094in</Height>
+    <Height>8.21094in</Height>
     <Style />
   </Body>
   <Width>6.44792in</Width>
@@ -2946,186 +2651,54 @@
   </Page>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
-    <DataSource Name="FMSDataSet">
+    <DataSource Name="DSRepeatedCases">
       <ConnectionProperties>
         <DataProvider>System.Data.DataSet</DataProvider>
         <ConnectString>/* Local Connection */</ConnectString>
       </ConnectionProperties>
-      <rd:DataSourceID>75317b06-c509-4b7f-b78b-9d39eaf02a29</rd:DataSourceID>
+      <rd:DataSourceID>a18b9c7f-a653-426f-851e-40cded6e0798</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="DataSet1">
-      <Query>
-        <DataSourceName>FMSDataSet</DataSourceName>
-        <CommandText>/* Local Query */</CommandText>
-      </Query>
-      <Fields>
-        <Field Name="Id">
-          <DataField>Id</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="Name">
-          <DataField>Name</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-      </Fields>
-      <rd:DataSetInfo>
-        <rd:DataSetName>FMSDataSet</rd:DataSetName>
-        <rd:SchemaPath>C:\Users\Walid\Desktop\FMSSolution\WebSite\App_Code\FMSDataSet.xsd</rd:SchemaPath>
-        <rd:TableName>AppType</rd:TableName>
-        <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
-        <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
-        <rd:TableAdapterName>AppTypeTableAdapter</rd:TableAdapterName>
-      </rd:DataSetInfo>
-    </DataSet>
     <DataSet Name="dsViewGeneratedCalls">
       <Query>
-        <DataSourceName>FMSDataSet</DataSourceName>
+        <DataSourceName>DSRepeatedCases</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="ID">
-          <DataField>ID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="SourceID">
-          <DataField>SourceID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CaseID">
-          <DataField>CaseID</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
         <Field Name="MobileOperatorID">
           <DataField>MobileOperatorID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="StatusID">
-          <DataField>StatusID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="PriorityID">
-          <DataField>PriorityID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="ReportingStatusID">
-          <DataField>ReportingStatusID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="DurationInSeconds">
-          <DataField>DurationInSeconds</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="MobileOperatorFeedbackID">
-          <DataField>MobileOperatorFeedbackID</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="CLI">
           <DataField>CLI</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="OriginationNetwork">
-          <DataField>OriginationNetwork</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
+        <Field Name="LastAttemptDateTime">
+          <DataField>LastAttemptDateTime</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
-        <Field Name="AssignedTo">
-          <DataField>AssignedTo</DataField>
+        <Field Name="FirstAttemptDateTime">
+          <DataField>FirstAttemptDateTime</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="ID">
+          <DataField>ID</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="AssignedBy">
-          <DataField>AssignedBy</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="ReportID">
-          <DataField>ReportID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="AttemptDateTime">
-          <DataField>AttemptDateTime</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="InvestigationDateTime">
-          <DataField>InvestigationDateTime</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="FeedbackDateTime">
-          <DataField>FeedbackDateTime</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="AssignmentDateTime">
-          <DataField>AssignmentDateTime</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="ReportingStatusName">
-          <DataField>ReportingStatusName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="MobileOperatorFeedbackName">
-          <DataField>MobileOperatorFeedbackName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="PriorityName">
-          <DataField>PriorityName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ReportRealID">
-          <DataField>ReportRealID</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="SourceName">
-          <DataField>SourceName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="StatusName">
-          <DataField>StatusName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="AssignedToFullName">
-          <DataField>AssignedToFullName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="a_number">
-          <DataField>a_number</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="b_number">
-          <DataField>b_number</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="MobileOperatorName">
-          <DataField>MobileOperatorName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="RecommendedActionName">
-          <DataField>RecommendedActionName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ReportingDateTime">
-          <DataField>ReportingDateTime</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="ReportedByName">
-          <DataField>ReportedByName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="MobileNumber">
-          <DataField>MobileNumber</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>
-        <rd:DataSetName>FMSDataSet</rd:DataSetName>
-        <rd:SchemaPath>C:\Users\Walid\Desktop\FMSSolution\WebSite\App_Code\FMSDataSet.xsd</rd:SchemaPath>
-        <rd:TableName>ViewGeneratedCalls</rd:TableName>
+        <rd:DataSetName>DSRepeatedCases</rd:DataSetName>
+        <rd:SchemaPath>C:\Users\Walid\Desktop\FMSSolution\WebSite\App_Code\DSRepeatedCases.xsd</rd:SchemaPath>
+        <rd:TableName>vwRepeatedCase</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
-        <rd:TableAdapterName>ViewGeneratedCallsTableAdapter</rd:TableAdapterName>
+        <rd:TableAdapterName>vwRepeatedCaseTableAdapter</rd:TableAdapterName>
       </rd:DataSetInfo>
     </DataSet>
     <DataSet Name="SignatureDataset">
       <Query>
-        <DataSourceName>FMSDataSet</DataSourceName>
+        <DataSourceName>DSRepeatedCases</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
@@ -3135,8 +2708,8 @@
         </Field>
       </Fields>
       <rd:DataSetInfo>
-        <rd:DataSetName>FMSDataSet</rd:DataSetName>
-        <rd:SchemaPath>C:\Users\Walid\Desktop\FMSSolution\WebSite\App_Code\FMSDataSet.xsd</rd:SchemaPath>
+        <rd:DataSetName>DSRepeatedCases</rd:DataSetName>
+        <rd:SchemaPath>C:\Users\Walid\Desktop\FMSSolution\WebSite\App_Code\DSRepeatedCases.xsd</rd:SchemaPath>
         <rd:TableName>Users</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
@@ -3160,8 +2733,10 @@
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="HideSignature">
-      <DataType>Boolean</DataType>
+    <ReportParameter Name="MobileOperator">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>

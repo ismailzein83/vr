@@ -334,6 +334,11 @@ public partial class ToBeReportedCases : BasePage
                     profile_name = "FMS_Profile";
                     rvToOperator.LocalReport.ReportPath = "Reports\\rptToOperator.rdlc";
                 }
+                else
+                {
+                    profile_name = "FMS_Profile";
+                    rvToOperator.LocalReport.ReportPath = "Reports\\rptDefaultToOperator.rdlc";
+                }
 
 
 

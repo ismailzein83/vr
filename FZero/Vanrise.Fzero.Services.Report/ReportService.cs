@@ -120,7 +120,7 @@ namespace Vanrise.Fzero.Services.Report
 
             report.SentDateTime = DateTime.Now;
 
-            if (ClientID == 3)
+            if (ClientID == 3) //ST
             {
                 report.RecommendedAction = "It is highly recommended to immediately block these fraudulent MSISDNs as they are terminating international calls without passing legally through ST IGW.";
                 report.ApplicationUserID = 8;
@@ -195,6 +195,10 @@ namespace Vanrise.Fzero.Services.Report
             else if (ClientID == (int)Enums.Clients.ITPC)//-- ITPC
             {
                 reportPath = Path.Combine(exeFolder, @"Reports\rptToOperator.rdlc");
+            }
+            else
+            {
+                reportPath = Path.Combine(exeFolder, @"Reports\rptDefaultToOperator.rdlc");
             }
 
 

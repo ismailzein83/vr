@@ -186,6 +186,10 @@ namespace Vanrise.Fzero.Services.RepeatedReport
             {
                 reportPath = Path.Combine(exeFolder, @"Reports\rptRepeatedToOperator.rdlc");
             }
+            else
+            {
+                reportPath = Path.Combine(exeFolder, @"Reports\rptRepeatedDefaultToOperator.rdlc");
+            }
 
 
 
@@ -212,7 +216,6 @@ namespace Vanrise.Fzero.Services.RepeatedReport
             rvToOperator.LocalReport.Refresh();
 
             string CCs = EmailCC.GetClientEmailCCs(ClientID);
-            //string CCs = "walid.emailbox@gmail.com;afares@vanrise.com;";
 
             if (ClientID == 3)
             {
