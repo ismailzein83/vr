@@ -98,6 +98,7 @@ namespace Vanrise.Security.Data.SQL
                 RequiredPermissions = GetReaderValue<string>(reader, "RequiredPermissions"),
                 Audience = ((reader["Audience"] as string) != null) ? Common.Serializer.Deserialize<AudienceWrapper>(reader["Audience"] as string) : null,
                 ViewContent = ((reader["Content"] as string) != null) ? Common.Serializer.Deserialize<ViewContent>(reader["Content"] as string) : null,
+                Rank = GetReaderValue<int>(reader, "Rank"),
                 Type=(ViewType) reader["Type"],
 
             };
