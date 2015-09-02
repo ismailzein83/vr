@@ -27,7 +27,7 @@ namespace Vanrise.Security.Data
 
         bool CheckUserName(string name);
 
-        bool ChangePassword(int userId,string oldPassword,string newPassword);
+        bool ChangePassword(int userId, string newPassword);
 
         bool EditUserProfile(string name,int userId);
     }

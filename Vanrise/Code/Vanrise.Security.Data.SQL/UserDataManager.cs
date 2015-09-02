@@ -76,9 +76,9 @@ namespace Vanrise.Security.Data.SQL
             return result;
         }
 
-        public bool ChangePassword(int userId, string oldPassword,string newPassword)
+        public bool ChangePassword(int userId, string newPassword)
         {
-            int recordsAffected = ExecuteNonQuerySP("sec.sp_User_ChangeMyPassword", userId, oldPassword, newPassword);
+            int recordsAffected = ExecuteNonQuerySP("sec.sp_User_ChangeMyPassword", userId, newPassword);
             return (recordsAffected>0);
         }
 

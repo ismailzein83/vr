@@ -83,22 +83,28 @@ namespace Vanrise.Security.Business
         {
             int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            
             Vanrise.Entities.UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
-            
-            string encryptedOldPassword = HashingUtility.ComputeHash(oldPassword, "", HashingUtility.GetVanriseSalt());
-            string encryptedNewPassword = HashingUtility.ComputeHash(newPassword, "", HashingUtility.GetVanriseSalt());
-
-            bool resetActionSucc = dataManager.ChangePassword(loggedInUserId, encryptedOldPassword, encryptedNewPassword); 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-        //     updateOperationOutput.UpdatedObject = null;
+            updateOperationOutput.UpdatedObject = null;
 
-             if (resetActionSucc)
-             {
-                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-             }
+            User currentUser = dataManager.GetUserbyId(loggedInUserId);
 
-             return updateOperationOutput;
-            
+            bool changePasswordActionSucc = false;
+            bool oldPasswordIsCorrect = HashingUtility.VerifyHash(oldPassword, "", currentUser.Password);
+
+            if (oldPasswordIsCorrect)
+            {
+                string encryptedNewPassword = HashingUtility.ComputeHash(newPassword, "", null);
+                changePasswordActionSucc = dataManager.ChangePassword(loggedInUserId, encryptedNewPassword);
+            }
+
+            if (changePasswordActionSucc)
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+            }
+
+            return updateOperationOutput;
         }
 
         #endregion

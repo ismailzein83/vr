@@ -50,7 +50,7 @@ namespace Vanrise.Security.Business
             int userId = -1;
 
             string defPassword = "123456";
-            userObject.Password = HashingUtility.ComputeHash(defPassword, "", HashingUtility.GetVanriseSalt());
+            userObject.Password = HashingUtility.ComputeHash(defPassword, "", null);
 
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
             bool insertActionSucc = dataManager.AddUser(userObject, out userId);
@@ -90,7 +90,7 @@ namespace Vanrise.Security.Business
         {
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
             
-            bool updateActionSucc = dataManager.ResetPassword(userId, HashingUtility.ComputeHash(password, "", HashingUtility.GetVanriseSalt()));
+            bool updateActionSucc = dataManager.ResetPassword(userId, HashingUtility.ComputeHash(password, "", null));
 
             UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
 
