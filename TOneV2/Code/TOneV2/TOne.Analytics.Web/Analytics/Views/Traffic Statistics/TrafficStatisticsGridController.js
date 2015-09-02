@@ -68,9 +68,9 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         };
         $scope.getColor = function (dataItem, coldef) {
             if (coldef.tag.value == TrafficMonitorMeasureEnum.ACD.value)
-                return getACDColor(dataItem.ACD, dataItem.Attempts);
+                return getACDColor(dataItem.Data.ACD, dataItem.Data.Attempts);
             else if (coldef.tag.value == TrafficMonitorMeasureEnum.ASR.value)
-                return getASRColor(dataItem.ASR, dataItem.Attempts);
+                return getASRColor(dataItem.Data.ASR, dataItem.Data.Attempts);
         }
 
     }
@@ -108,7 +108,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
     }
     function getACDColor(acdValue, attemptsValue) {
         if (attemptsValue > $scope.viewScope.attampts && acdValue < $scope.viewScope.acd)
-            return LabelColorsEnum.WarningLevel1.Color;
+            return LabelColorsEnum.WarningLevel1.color;
         //if (status === BPInstanceStatusEnum.Running.value) return LabelColorsEnum.Info.Color;
         //if (status === BPInstanceStatusEnum.ProcessFailed.value) return LabelColorsEnum.Error.Color;
         //if (status === BPInstanceStatusEnum.Completed.value) return LabelColorsEnum.Success.Color;
@@ -120,7 +120,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
     };
     function getASRColor(asrValue, attemptsValue) {
         if (attemptsValue > $scope.viewScope.attampts && asrValue < $scope.viewScope.asr)
-            return LabelColorsEnum.WarningLevel2.Color;
+            return LabelColorsEnum.WarningLevel2.color;
     };
     function updateParametersFromGroupKeys(parameters, scope, dataItem) {
         var groupKeys = [];

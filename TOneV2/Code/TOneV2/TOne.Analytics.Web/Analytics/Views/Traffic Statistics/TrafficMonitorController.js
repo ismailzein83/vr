@@ -64,10 +64,11 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
             return UtilsService.validateDates($scope.fromDate, toDate);
         };
         $scope.getColor = function (dataItem, coldef) {
+            console.log(dataItem);
             if (coldef.tag.value == TrafficMonitorMeasureEnum.ACD.value)
-                return getACDColor(dataItem.ACD, dataItem.Attempts);
+                return getACDColor(dataItem.Data.ACD, dataItem.Data.Attempts);
             else if (coldef.tag.value == TrafficMonitorMeasureEnum.ASR.value)
-                return getASRColor(dataItem.ASR, dataItem.Attempts);
+                return getASRColor(dataItem.Data.ASR, dataItem.Data.Attempts);
         }      
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
@@ -209,11 +210,11 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
 
     function getACDColor(acdValue, attemptsValue) {
         if (attemptsValue>$scope.attempts && acdValue<$scope.acd)
-            return LabelColorsEnum.WarningLevel1.Color; 
+            return LabelColorsEnum.WarningLevel1.color; 
     };
     function getASRColor(asrValue, attemptsValue) {
         if (attemptsValue > $scope.attempts && asrValue < $scope.asr)
-            return LabelColorsEnum.WarningLevel2.Color;
+            return LabelColorsEnum.WarningLevel2.color;
     };
 
     function defineMenuActions() {

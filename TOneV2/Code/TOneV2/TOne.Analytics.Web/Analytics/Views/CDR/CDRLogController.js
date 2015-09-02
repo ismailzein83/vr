@@ -33,8 +33,9 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
     function defineScope() {
         
         $scope.ZoneIds = [];
-        $scope.fromDate = '2015/06/02';
-        $scope.toDate = '2015/06/06';
+        var date=new Date();
+        $scope.fromDate=new Date(date.getFullYear(),date.getMonth(),date.getDate(),00,00,00,00);
+        $scope.toDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 00, 00);
         $scope.nRecords = '100'
         $scope.isInitializing = false;
         $scope.showResult = false;

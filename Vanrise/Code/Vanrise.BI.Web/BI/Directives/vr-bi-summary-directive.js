@@ -54,7 +54,7 @@ app.directive('vrBiSummary', ['UtilsService', 'BIConfigurationAPIService', 'BIAP
                                  + '<vr-label isValue="{{value.description.DisplayName}}">{{value.description.DisplayName}}</vr-label>'
                                 + '</div>'
                                 + '<div class="circle-value" >'
-                                  + '<vr-label isValue="{{value.value}}">{{value.value}}</vr-label>'
+                                  + '<vr-label isValue="{{value.value}}">{{value.value | number:2}}</vr-label>'
                                 + '</div>'
                                 +'<div class="circle-unit" >'
                                   + '<vr-label isValue="{{value.value}}">({{value.description.Unit}})</vr-label>'

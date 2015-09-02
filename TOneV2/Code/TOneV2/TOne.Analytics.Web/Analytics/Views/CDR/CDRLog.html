@@ -14,7 +14,7 @@
                     <vr-columns width="fullrow" ng-if="basicSelected">
                         <vr-row>
                             <vr-columns width="normal">
-                                <vr-textbox value="nRecords" label="Limit Results to"></vr-textbox>
+                                <vr-textbox type="number" value="nRecords" label="Limit Results to" isrequired></vr-textbox>
                             </vr-columns>
                             <vr-columns width="normal">
                                 <vr-datetimepicker type="dateTime" label="From" value="fromDate" isrequired></vr-datetimepicker>
@@ -29,7 +29,7 @@
                     <vr-columns width="fullrow" ng-show="advancedSelected">
                         <vr-row>
                             <vr-columns width="normal">
-                                <vr-textbox value="nRecords" label="Limit Results to"></vr-textbox>
+                                <vr-textbox value="nRecords" type="number" label="Limit Results to" isrequired></vr-textbox>
                             </vr-columns>
                             <vr-columns width="normal">
                                 <vr-datetimepicker type="dateTime" label="From" value="fromDate" isrequired></vr-datetimepicker>
