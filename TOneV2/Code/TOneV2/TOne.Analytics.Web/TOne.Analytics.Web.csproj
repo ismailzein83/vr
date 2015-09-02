@@ -202,6 +202,8 @@
     <Content Include="Analytics\Views\Traffic Statistics\HourlyReportGridController.js" />
     <Content Include="Analytics\Views\Traffic Statistics\ReleaseCodeStatistics.html" />
     <Content Include="Analytics\Views\Traffic Statistics\ReleaseCodeStatisticsController.js" />
+    <Content Include="Analytics\Views\Traffic Statistics\ReleaseCodeStatisticsGrid.html" />
+    <Content Include="Analytics\Views\Traffic Statistics\ReleaseCodeStatisticsGridController.js" />
     <Content Include="Analytics\Views\Traffic Statistics\TrafficStatisticsGrid.html" />
     <Content Include="Analytics\Views\Traffic Statistics\TrafficStatisticsGridController.js" />
     <Content Include="Analytics\Views\Traffic Statistics\TrafficMonitor.html" />
