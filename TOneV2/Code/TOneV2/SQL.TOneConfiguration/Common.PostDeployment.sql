@@ -4,7 +4,7 @@ set identity_insert [sec].[User] on;
 ;with cte_data([ID],[Name],[Password],[Email],[Status])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Administrator','1','admin@vanrise.com',1)
+(1,'Administrator','9se8222byLvgU9Bzln+oPVZAblIhczMtIT8hLVNhMXQ=','admin@vanrise.com',1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Password],[Email],[Status]))
 merge	[sec].[User] as t
