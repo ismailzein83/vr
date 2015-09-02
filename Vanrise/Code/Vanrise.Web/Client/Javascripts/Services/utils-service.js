@@ -137,6 +137,12 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         return array;
     }
 
+    function fillArray(array, data) {
+        for (var i = 0; i < data.length; i++) {
+            array.push(data[i]);
+        }
+    }
+
     function getLogEntryType() {
         return getArrayEnum(LogEntryTypeEnum);
     }
@@ -427,7 +433,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         getShortDate: getShortDate,
         getArrayEnum: getArrayEnum,
         validateDates: validateDates,
-        getEnumDescription: getEnumDescription
+        getEnumDescription: getEnumDescription,
+        fillArray: fillArray
     });
 
 }]);
