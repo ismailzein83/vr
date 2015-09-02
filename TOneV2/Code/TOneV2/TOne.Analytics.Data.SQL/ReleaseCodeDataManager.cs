@@ -121,6 +121,12 @@ namespace TOne.Analytics.Data.SQL
                     case TrafficStatisticGroupKeys.PortIn:
                         result.Add("Port_in");
                         break;
+                    case TrafficStatisticGroupKeys.CodeSales:
+                        result.Add("OurCode");
+                        break;
+                    case TrafficStatisticGroupKeys.CodeBuy:
+                        result.Add("SupplierCode");
+                        break;
                     case TrafficStatisticGroupKeys.CodeGroup:
                         result.Add("CodeGroup");
                         joinStatement.Add("LEFT JOIN Zone as z ON BT.OurZoneID = z.ZoneID");
@@ -134,7 +140,7 @@ namespace TOne.Analytics.Data.SQL
         {
             CustomQuery queryCdrInvalid = new CustomQuery
             {
-                SelectStatement = "SELECT BL.SwitchID,OurZoneID,CustomerID,SupplierID, ReleaseCode, ReleaseSource,DurationInSeconds, Attempt, Port_out, Port_in",
+                SelectStatement = "SELECT BL.SwitchID,OurZoneID,CustomerID,SupplierID, ReleaseCode, ReleaseSource,DurationInSeconds, Attempt, Port_out, Port_in,OurCode,SupplierCode",
                 InsertStatement ="Into #BillingTemp",
                 FromStatement = "FROM Billing_CDR_INVALID as BL WITH(NOLOCK,INDEX(IX_Billing_CDR_InValid_Attempt))",
                 WhereStatement = String.Format("WHERE Attempt  BETWEEN @FromDate AND @ToDate  {0}", GetFilterCondition(filter)),
