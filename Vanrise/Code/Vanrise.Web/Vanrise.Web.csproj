@@ -130,6 +130,7 @@
     <Content Include="Client\CSViews\Security\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\AuthorizationFilter.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\LicenseCheckFilter.cs" />

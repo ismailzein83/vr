@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using Vanrise.Web.App_Start;
 
 namespace Vanrise.Web
 {
@@ -13,6 +14,8 @@ namespace Vanrise.Web
         {
            //config.Filters.Add(new LicenseCheckFilter());
             // Web API configuration and services
+
+            config.Filters.Add(new AuthorizationFilter());
 
             // Web API routes
             config.MapHttpAttributeRoutes();
