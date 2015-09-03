@@ -12,7 +12,9 @@ namespace Vanrise.Web
     {
         public static void Register(HttpConfiguration config)
         {
-           //config.Filters.Add(new LicenseCheckFilter());
+            //Enable/Disable license checker by commenting below line of code
+            config.Filters.Add(new LicenseCheckFilter());
+
             // Web API configuration and services
 
             config.Filters.Add(new AuthorizationFilter());
