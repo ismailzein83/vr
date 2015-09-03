@@ -36,10 +36,6 @@ function CustomerTariffManagementController($scope, CarrierAccountAPIService, Ca
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
         }
-
-        $scope.onCustomerChanged = function (selectedCustomer, allCustomers) {
-            $scope.showZonesMenu = ($scope.selectedCustomer != undefined) ? true : false;
-        }
     }
 
     function load() {

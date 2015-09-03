@@ -9,15 +9,13 @@
                                selectedvalues="selectedCustomer"
                                datatextfield="Name"
                                datavaluefield="CarrierAccountID"
-                               onselectionchanged="onCustomerChanged"
                                entityname="Customer">
                     </vr-select>
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-be-zones selectedvalues="selectedZones"
                                  carrierid="selectedCustomer.CarrierAccountID"
-                                 ismultipleselection
-                                 ng-show="showZonesMenu">
+                                 ismultipleselection>
                     </vr-be-zones>
                 </vr-columns>
                 <vr-columns width="normal">
