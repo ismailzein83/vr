@@ -26,7 +26,6 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpGet]
-        [Authorization(Permissions = "Root/Administration Module/Users:View")]
         public IEnumerable<User> GetUsers()
         {
             UserManager manager = new UserManager();
