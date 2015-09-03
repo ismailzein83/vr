@@ -106,7 +106,10 @@ font-size:12px !important;
    top: 32px;
    right:140px;
 }
-
+.unpined-icon{
+    transform: rotate(-45deg);
+   
+}
 .vr-nav-custom .warning-icon {
    position: absolute;
    top: 32px;

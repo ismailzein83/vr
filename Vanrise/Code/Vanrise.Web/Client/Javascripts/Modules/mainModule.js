@@ -35,14 +35,25 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
 
 
     }
+    $scope.pinned = false;
+    $scope.pinpanel = function () {
 
+        $scope.pinned = !$scope.pinned;
+
+
+    }
+    
     var timer;
     $scope.show = false;
     $scope.mouseover = function () {
+        if ($scope.pinned==true)
+            return
         $timeout.cancel(timer);
         $scope.toogled = true;
     };
     $scope.mouseout = function () {
+        if ($scope.pinned == true)
+            return
        timer = $timeout(function () {
            $scope.toogled = false;
        }, 100);
