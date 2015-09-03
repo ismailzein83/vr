@@ -428,14 +428,20 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                     ctrl.search = function () {
                         ctrl.setdatasource([]);
                         if (!ctrl.isRemoteLoad()) return;
-                        if (ctrl.filtername.length > (iAttrs.limitcharactercount - 1)) {
-                            ctrl.showloading = true;
-                            ctrl.datasource(ctrl.filtername).then(function (items) {
-                                ctrl.setdatasource(items);
-                                ctrl.showloading = false;
-                            }, function (msg) {
-                                console.log(msg);
-                            });
+                        console.log(typeof ctrl.datasource !== 'undefined' && ctrl.datasource)
+                        if (ctrl.filtername.length > (iAttrs.limitcharactercount - 1) && typeof ctrl.datasource !== 'undefined' && ctrl.datasource) {
+                            if (ctrl.datasource(ctrl.filtername).then != undefined) {
+
+                                ctrl.showloading = true;
+                                ctrl.datasource(ctrl.filtername).then(function (items) {
+                                    ctrl.setdatasource(items);
+                                    ctrl.showloading = false;
+                                }, function (msg) {
+                                    console.log(msg);
+                                });
+
+                            }
+                         
                         }
 
                     };

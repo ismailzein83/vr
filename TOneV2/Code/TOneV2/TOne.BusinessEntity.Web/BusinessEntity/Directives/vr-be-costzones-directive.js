@@ -2,7 +2,7 @@
 
     "use strict";
 
-    app.directive('vrBeCostzones', ['ZoneAPIService', function (zoneApiService) {
+    app.directive('vrBeCostzones', ['ZoneAPIService', '$q', function (zoneApiService, $q) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -10,7 +10,7 @@
                 selectedvalues: "=",
                 carrierid: "="
             },
-            controller: function () {
+            controller: function ($q) {
 
                 var ctrl = this;
 
@@ -19,8 +19,9 @@
                     if (ctrl.carrierid) {
                         return zoneApiService.GetSupplierZones(text, ctrl.carrierid);
                     }
-
-                    return zoneApiService.GetOwnZones(text);
+                    else
+                        return;
+                        
                 }
 
                 angular.extend(this, {
