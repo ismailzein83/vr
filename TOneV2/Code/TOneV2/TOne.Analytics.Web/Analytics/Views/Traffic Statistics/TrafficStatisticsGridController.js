@@ -30,6 +30,9 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
                 supplierIds: [],
                 switchIds:[]
             };
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.title = "CDR Log";
+            };
             updateParametersFromGroupKeys(parameters, $scope, dataItem);
             VRModalService.showModal('/Client/Modules/Analytics/Views/CDR/CDRLog.html', parameters, modalSettings);
         }

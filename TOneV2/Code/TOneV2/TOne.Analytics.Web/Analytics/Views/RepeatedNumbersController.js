@@ -101,7 +101,9 @@ function RepeatedNumbersController($scope, UtilsService, $q, RepeatedNumbersAPIS
                     supplierIds: dataItem.SupplierID != null || dataItem.SupplierID != undefined ? [dataItem.SupplierID] : null,
                     switchIds: [dataItem.SwitchID],
                 };
-
+                modalSettings.onScopeReady = function (modalScope) {
+                    modalScope.title = "CDR Log";
+                };
                 VRModalService.showModal('/Client/Modules/Analytics/Views/CDR/CDRLog.html', parameters, modalSettings);
             }
         }

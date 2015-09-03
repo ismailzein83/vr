@@ -45,6 +45,9 @@ function CustomerPricelistsGridController($scope, VRModalService, UtilsService, 
                 width: "80%",
                 maxHeight: "800px"
             };
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.title = "Rate Analysis";
+            };
             var parameters = {
                 Rate: dataItem.Rate,
                 ZoneId: dataItem.ZoneID,

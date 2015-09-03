@@ -97,7 +97,9 @@ function BlockedAttemptsController($scope, UtilsService, $q, BlockedAttemptsAPIS
                     ///[dataItem.GroupKeyValues[0].Id]
                 };
 
-             
+                modalSettings.onScopeReady = function (modalScope) {
+                    modalScope.title = "CDR Log";
+                };
 
 
 

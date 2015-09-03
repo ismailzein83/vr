@@ -6,6 +6,7 @@ function RateAnalysisController($scope, UtilsService, $q, CarrierAccountAPIServi
     var responseData;
     var filter;
     var isExpendable = true;
+    var chartLoaded = false;
     loadParameters();
     defineScope();
     load();
@@ -45,13 +46,14 @@ function RateAnalysisController($scope, UtilsService, $q, CarrierAccountAPIServi
             return RateAnalysisAPIService.GetRateAnalysis(dataRetrievalInput).then(function (response) {
                 fillEffectiveValue(response);
                 responseData = response;
-                if (chartRateAnalysisAPI!=undefined)
+                if (chartRateAnalysisAPI != undefined && !chartLoaded)
                     showRateAnalysisChart(response);
                 onResponseReady(response);
                 $scope.showResult = true;
             })
         };
         $scope.getData = function () {
+            chartLoaded = false;
             return retrieveData();
         };
         $scope.getChangeIcon = function (dataItem) {
@@ -63,7 +65,7 @@ function RateAnalysisController($scope, UtilsService, $q, CarrierAccountAPIServi
         }
         $scope.chartRateAnalysisReady = function (api) {
             chartRateAnalysisAPI = api;
-            if(responseData!=undefined)
+            if (responseData != undefined && !chartLoaded)
                 showRateAnalysisChart(responseData);
             
         };
@@ -78,34 +80,49 @@ function RateAnalysisController($scope, UtilsService, $q, CarrierAccountAPIServi
      
     }
     function showRateAnalysisChart(response) {
+        
         $scope.isGettingEntityStatistics = true;
-
-
-        var chartData = [];
-        for (var i = 0; i < response.Data.length; i++) {
-            var values = {
-                Rate: response.Data[i].Rate,
-            }
-            chartData.push(values);
+        var query = {
+            ZoneId: $scope.selectedZone.ZoneId,
+            EffectedDate:$scope.effectiveDate,
+            CustomerId: $scope.selectedCustomer != undefined ? $scope.selectedCustomer.CarrierAccountID : null,
+            SupplierId: $scope.selectedSupplier!=undefined?$scope.selectedSupplier.CarrierAccountID:null
         }
+        var dataRetrievalInput = {
+            SortByColumnName:"RateID",
+            Query:query,
+            ResultKey:response.ResultKey,
+            FromRow:null,
+            ToRow:null
+        }
+       RateAnalysisAPIService.GetRateAnalysis(dataRetrievalInput).then(function (response) {
+           var chartData = [];
+           for (var i = 0; i < response.Data.length; i++) {
+               var values = {
+                   Rate: response.Data[i].Rate,
+               }
+               chartData.push(values);
+           }
 
-        var title = "Rate";
-        var seriesDefinitions = [{
-            title: "Rate Values",
-            valuePath: "Rate",
+           var title = "Rate";
+           var seriesDefinitions = [{
+               title: "Rate Values",
+               valuePath: "Rate",
 
-        }];
-        var xAxisDefinition = {
-            titlePath: "Rate",
-            isDateTime: true
-        };
-        var chartDefinition = {
-            type: "spline",
-            title: title,
-            yAxisTitle: "Value"
-        };
-        chartRateAnalysisAPI.renderChart(chartData, chartDefinition, seriesDefinitions, xAxisDefinition);
-        $scope.isGettingEntityStatistics = false;
+           }];
+           var xAxisDefinition = {
+               titlePath: "Rate",
+               isDateTime: true
+           };
+           var chartDefinition = {
+               type: "spline",
+               title: title,
+               yAxisTitle: "Value"
+           };
+           chartRateAnalysisAPI.renderChart(chartData, chartDefinition, seriesDefinitions, xAxisDefinition);
+           $scope.isGettingEntityStatistics = false;
+           chartLoaded = true;
+       });
 
     }
     function retrieveData() {
