@@ -2,6 +2,12 @@
     Measure_Attempts: { value: 0, description: "Attempts", type: "Text"},
     Measure_SuccessfulAttempts: { value: 1, description: "Successful Attempts", type: "Text"}
 
+
+
+
+
+
+
     //Measure_Attempts: { value: 0, propertyName: "Data.MeasureValues[0]", description: "Attempts", type: "Text", fieldName: "MeasureValues.Measure_Attempts" },
 //Measure_SuccessfulAttempts: { value: 1, propertyName: "Data.MeasureValues[1]", description: "Successful Attempts", type: "Text", fieldName: "MeasureValues
 

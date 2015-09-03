@@ -13,13 +13,6 @@ namespace TOne.Analytics.Web.Controllers
     public class GenericAnalyticController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpPost]
-        public Object GetFilteredCarrierSummaryStats(Vanrise.Entities.DataRetrievalInput<CarrierSummaryStatsQuery> input)
-        {
-            GenericAnalyticManager manager = new GenericAnalyticManager();
-            return GetWebResponse(input, manager.GetFilteredCarrierSummaryStats(input));
-        }
-
-        [HttpPost]
         public Object GetFiltered(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
         {
             GenericAnalyticManager manager = new GenericAnalyticManager();

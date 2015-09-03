@@ -24,7 +24,8 @@ namespace TOne.Analytics.Data.SQL
             foreach (AnalyticDimension itm in fields)
             {
                 var item = s_AllDimensionsConfig[itm];
-                result.Add(itm, item);
+                if (!result.ContainsKey(itm))
+                    result.Add(itm, item);
             }
             return result;
         }

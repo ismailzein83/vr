@@ -15,12 +15,22 @@ namespace TOne.Analytics.Data.SQL
         public Vanrise.Entities.BigResult<AnalyticRecord> GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
         {
             GenericAnalyticConfigManager _manager = new GenericAnalyticConfigManager();
-            Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsConfig = _manager.GetGroupFieldsConfig(input.Query.GroupFields);
+            Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsConfig = _manager.GetGroupFieldsConfig(input.Query.DimensionFields);
+
+            Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsFilterConfig = new Dictionary<AnalyticDimension,AnalyticDimensionConfig>();
+
+            List<AnalyticDimension> fields = new List<AnalyticDimension>();
+            foreach (DimensionFilter add in input.Query.Filters)
+            {
+                fields.Add(add.Dimension);
+            }
+            dimensionsFilterConfig = _manager.GetGroupFieldsConfig(fields);
+
             Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig> measureFieldsConfig = _manager.GetMeasureFieldsConfig(input.Query.MeasureFields);
 
             Action<string> createTempTableIfNotExistsAction = (tempTableName) =>
-            {                
-                string query = BuildAnalyticSummaryQuery(input, tempTableName, dimensionsConfig, measureFieldsConfig);
+            {
+                string query = BuildAnalyticSummaryQuery(input, tempTableName, dimensionsConfig, measureFieldsConfig, dimensionsFilterConfig);
                 ExecuteNonQueryText(query, (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromTime));
@@ -29,9 +39,9 @@ namespace TOne.Analytics.Data.SQL
             };
 
             Dictionary<string, string> columnsMappings = new Dictionary<string, string>();
-            for (int i = 0; i < input.Query.GroupFields.Length; i++ )
+            for (int i = 0; i < input.Query.DimensionFields.Length; i++ )
             {
-                var groupField = input.Query.GroupFields[i];
+                var groupField = input.Query.DimensionFields[i];
                 columnsMappings.Add(String.Format("DimensionValues[{0}].Name", i), String.Format("DimensionName_{0}", groupField));
             }
 
@@ -44,7 +54,10 @@ namespace TOne.Analytics.Data.SQL
             return RetrieveData(input, createTempTableIfNotExistsAction, (reader) => AnalyticRecordMapper(reader, dimensionsConfig, measureFieldsConfig), columnsMappings);
         }
 
-        private string BuildAnalyticSummaryQuery(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input, string tempTableName, Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsConfig, Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig> measureFieldsConfig)
+        private string BuildAnalyticSummaryQuery(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input, string tempTableName, 
+            Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsConfig, 
+            Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig> measureFieldsConfig,
+            Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsFilterConfig)
         {
             StringBuilder queryBuilder = new StringBuilder(@"IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
 	                                                        BEGIN 
@@ -65,7 +78,7 @@ namespace TOne.Analytics.Data.SQL
             StringBuilder groupByPartBuilder = new StringBuilder();
 
             //adding group fields related parts to the query
-            foreach (AnalyticDimension groupField in input.Query.GroupFields)
+            foreach (AnalyticDimension groupField in input.Query.DimensionFields)
             {                
                 AnalyticDimensionConfig groupFieldConfig = dimensionsConfig[groupField];
 
@@ -96,6 +109,25 @@ namespace TOne.Analytics.Data.SQL
                 AddColumnToSelectPart(selectPartBuilder, String.Format("{0} AS Measure_{1}", measureFieldConfig.GetFieldExpression(input.Query), measureField));
             }
 
+            foreach(DimensionFilter dimensionFilter in input.Query.Filters)
+            {
+                AnalyticDimensionConfig filterFieldConfig = dimensionsFilterConfig[dimensionFilter.Dimension];
+
+
+                if (!String.IsNullOrEmpty(filterFieldConfig.IdColumn))
+                    AddFilterToFilterPart(filterPartBuilder, dimensionFilter.FilterValues, filterFieldConfig.IdColumn);
+                    
+
+                //for (int i = 0; i <= dimensionFilter.FilterValues.Count(); i++ )
+                //    if (!String.IsNullOrEmpty(filterFieldConfig.IdColumn))
+                //    {
+                //        AddFilterToFilterPart(filterPartBuilder, String.Format(" AND {0} = {1}", filterFieldConfig.IdColumn, dimensionFilter.FilterValues[i]));
+
+                //        AddFilter(filterPartBuilder, dimensionFilter.FilterValues, filterFieldConfig.IdColumn);
+
+                //    }
+                        
+            }
             queryBuilder.Replace("#TEMPTABLE#", tempTableName);
             queryBuilder.Replace("#SELECTPART#", selectPartBuilder.ToString());
             queryBuilder.Replace("#JOINPART#", joinPartBuilder.ToString());
@@ -103,6 +135,17 @@ namespace TOne.Analytics.Data.SQL
             queryBuilder.Replace("#GROUPBYPART#", groupByPartBuilder.ToString());
 
             return queryBuilder.ToString();
+        }
+
+        public void AddFilterToFilterPart<T>(StringBuilder filterBuilder, List<T> values, string column)
+        {
+            if (values != null && values.Count() > 0)
+            {
+                if (values[0].GetType() == typeof(string))
+                    filterBuilder.AppendFormat("AND {0} = '{1}'", column, String.Join(", ", values));
+                else
+                    filterBuilder.AppendFormat("AND {0} = {1}", column, String.Join(", ", values));
+            }
         }
 
         void AddColumnToSelectPart(StringBuilder selectPartBuilder, string column)
@@ -128,10 +171,10 @@ namespace TOne.Analytics.Data.SQL
             joinPartBuilder.Append(statement);
         }
 
-        void AddFilterToFilterPart(StringBuilder filterPartBuilder, string filter)
-        {
-            filterPartBuilder.Append(filter);
-        }
+        //void AddFilterToFilterPart(StringBuilder filterPartBuilder, string filter)
+        //{
+        //    filterPartBuilder.Append(filter);
+        //}
 
         AnalyticRecord AnalyticRecordMapper(IDataReader reader, Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsConfig, Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig> measureFieldsConfig)
         {

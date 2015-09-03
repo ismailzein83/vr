@@ -4,10 +4,11 @@
     </vr-choices>
     <div ng-repeat="groupKey in groupKeys">
         <vr-datagrid datasource="groupKey.data" ng-show="groupKey == selectedGroupKey" issubgrid dataretrievalfunction="groupKey.dataRetrievalFunction" pagingtype="'Pager'" on-ready="groupKey.onGridReady">
-            <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" type="measure.type" tag="measure"></vr-datagridcolumn>
-            <!--<vr-datagridexpandablerow ng-if="checkExpandablerow(groupKey)">
+            <vr-datagridcolumn  headertext="groupKey.name" field="'DimensionValues[0].Name'" widthfactor="15"></vr-datagridcolumn>
+            <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="'MeasureValues[' + $index + ']'" tag="measure"></vr-datagridcolumn>
+            <vr-datagridexpandablerow ng-if="checkExpandablerow(groupKey)">
                 <div ng-include="'/Client/Modules/Analytics/Views/GenericAnalyticGrid.html'"></div>
-            </vr-datagridexpandablerow>-->
+            </vr-datagridexpandablerow>
         </vr-datagrid>
     </div>
 </div>

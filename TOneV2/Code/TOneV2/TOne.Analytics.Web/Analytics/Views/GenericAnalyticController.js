@@ -82,6 +82,7 @@
             $scope.datasource = [];
 
             var groupKeys = [];
+            var filters = [];
 
             angular.forEach($scope.selectedGroupKeys, function (group) {
                 groupKeys.push(group.value);
@@ -89,11 +90,13 @@
 
 
             var query = {
-                GroupFields: groupKeys,
+                Filters: filters,
+                DimensionFields: groupKeys,
                 MeasureFields: measureFields,
                 FromTime: $scope.fromDate,
-                ToTime: $scope.toDate,
+                ToTime: $scope.toDate
             };
+            
             return gridApi.retrieveData(query);
         }
 
