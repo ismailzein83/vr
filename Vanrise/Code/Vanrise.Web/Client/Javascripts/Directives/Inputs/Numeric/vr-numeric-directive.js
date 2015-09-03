@@ -74,18 +74,18 @@
                         ctrl.upColor = defaultcolor;
                         ctrl.downColor = defaultcolor;
                         if (attrs.upsign != undefined ) {
-                            if(attrs.upsign == "critical")
+                            if (ctrl.upsign == "critical")
                                 ctrl.upColor = '#ff0000';
-                            else if(attrs.upsign == "safe")
+                            else if (ctrl.upsign == "safe")
                                 ctrl.upColor = '#009900';
                             else
                                 ctrl.upColor = defaultcolor;
 
                         }
                         if (attrs.downsign != undefined) {
-                            if (attrs.downsign == "critical")
+                            if (ctrl.downsign == "critical")
                                 ctrl.downColor = '#ff0000';
-                            else if (attrs.downsign == "safe")
+                            else if (ctrl.downsign == "safe")
                                 ctrl.downColor = '#009900';
                             else
                                 ctrl.downColor = defaultcolor;
