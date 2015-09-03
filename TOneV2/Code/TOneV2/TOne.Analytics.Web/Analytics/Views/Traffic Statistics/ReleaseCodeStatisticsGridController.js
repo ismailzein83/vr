@@ -4,10 +4,10 @@
 
     function releaseCodeStatisticsGridController($scope, analyticsService, analyticsApiService, trafficStatisticGroupKeysEnum) {
 
-        var measures , filter = {};
+        var measures ;
 
         function retrieveData(groupKey, withSummary) {
-            filter = $scope.viewScope.filter;
+            var filter = $scope.viewScope.filter;
             filter.build($scope);
 
             var query = {
