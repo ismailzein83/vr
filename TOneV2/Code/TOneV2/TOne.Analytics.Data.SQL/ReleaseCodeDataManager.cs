@@ -185,16 +185,14 @@ namespace TOne.Analytics.Data.SQL
             CustomQuery queryCteResult = new CustomQuery()
             {
                 SelectStatement = String.Format(@"SELECT 
-                                            Sum(DurationsInMinutes) DurationsInMinutes,
-			                                Sum(Attempts) Attempts,
-			                                Sum(SuccessfulAttempts) SuccessfulAttempts,
-			                                Sum(Attempts) - Sum(SuccessfulAttempts) FailedAttempts,
-			                                Min(FirstAttempt) FirstAttempt,	
-			                                Max(LastAttempt) LastAttempt,
-			                                0 Percentage,
+                                            DurationsInMinutes,
+		                                    Attempts,
+		                                    SuccessfulAttempts,
+		                                    Attempts - SuccessfulAttempts FailedAttempts,
+		                                    FirstAttempt FirstAttempt,	
+		                                    LastAttempt LastAttempt,
                                             ReleaseCode,ReleaseSource , {0}", groupBy.Replace("BT.SupplierID", "SupplierID")),
                 FromStatement = "FROM PrimaryResult pr ",
-                GroupByStatement = "GROUP BY ReleaseCode,ReleaseSource , " + groupBy.Replace("BT.SupplierID", "SupplierID"),
             };
 
             String queryResult = BuildTempTable(tempTableName,(query)=>
@@ -442,7 +440,6 @@ namespace TOne.Analytics.Data.SQL
 
             Dictionary<string, string> mapper = new Dictionary<string, string>
             {
-                {"Data.Attempts", "Attempts"},
                 {"Zone", "OurZoneID"},
                 {"Customer", "CustomerID"},
                 {"Supplier", "SupplierID"},
@@ -456,7 +453,14 @@ namespace TOne.Analytics.Data.SQL
                 {"Code Buy", "SupplierCode"},
                 {"GroupKeyValues[0].Name", columnId},
                 {"GroupKeyValues[3].Name","CodeGroup"},
-                {"Data.ReleaseCode","ReleaseCode"}
+                {"Data.ReleaseCode","ReleaseCode"},
+                {"Data.Percentage","Percentage"},
+                {"Data.Attempts", "Attempts"},
+                {"Data.ReleaseSource","ReleaseSource"},
+                {"Data.FailedAttempts","FailedAttempts"},
+                {"Data.DurationsInMinutes","DurationsInMinutes"},
+                {"Data.FirstAttempt","FirstAttempt"},
+                {"Data.LastAttempt","LastAttempt"}
             };
 
             Action<string> createTempTableAction = (tempTableName) =>
@@ -467,6 +471,9 @@ namespace TOne.Analytics.Data.SQL
                     cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.To));
                 });
             };
+
+            decimal totalAttempts = 0;
+
             GenericSummaryBigResult<ReleaseCodeStatistic> rslt = RetrieveData(input, createTempTableAction, (reader) =>
             {
                 var obj = new GroupSummary<ReleaseCodeStatistic>
@@ -474,7 +481,7 @@ namespace TOne.Analytics.Data.SQL
                     GroupKeyValues = new KeyColumn[input.Query.GroupKeys.Count()],
                     Data = FillReleaseCodeStatisticFromReader(reader)
                 };
-
+                totalAttempts += obj.Data.Attempts;
 
                 for (int i = 0; i < input.Query.GroupKeys.Count(); i++)
                 {
@@ -499,6 +506,15 @@ namespace TOne.Analytics.Data.SQL
                 return obj;
             }, mapper, new GenericSummaryBigResult<ReleaseCodeStatistic>()) as GenericSummaryBigResult<ReleaseCodeStatistic>;
 
+            var list = rslt.Data.ToList();
+
+            for (var i = 0; i < list.Count(); i++)
+            {
+                var x = list[i];
+                list[i].Data.Percentage = (x.Data.Attempts / totalAttempts) * 100;
+            }
+            rslt.Data = list;
+
             _trafficStatisticCommon.FillBEProperties(rslt, input.Query.GroupKeys);
             return rslt;
 
@@ -514,8 +530,6 @@ namespace TOne.Analytics.Data.SQL
                 ReleaseCode = reader["ReleaseCode"] as string,
                 FirstAttempt = GetReaderValue<DateTime>(reader, "FirstAttempt"),
                 LastAttempt = GetReaderValue<DateTime>(reader, "LastAttempt"),
-                //PortIn = reader["PortIn"] as string,
-                //PortOut = reader["PortOut"] as string,
                 ReleaseSource = reader["ReleaseSource"] as string
             };
             return releaseCodeStatistics;

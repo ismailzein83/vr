@@ -22,5 +22,7 @@ namespace TOne.Analytics.Entities
 
         public String PortIn { get; set; }
 
+        public decimal Percentage { get; set; }
+
     }
 }
