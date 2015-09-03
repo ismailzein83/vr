@@ -1,4 +1,4 @@
-﻿var NumberProfilingProcessController = function ($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
+﻿var NumberProfilingProcessController = function ($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, HourEnum) {
     var pageLoaded = false;
 
     defineScope();
@@ -16,6 +16,8 @@
         angular.forEach(HourEnum, function (itm) {
             $scope.hours.push({ id: itm.id, name: itm.name })
         });
+
+        $scope.selectedPeakHours = [];
 
 
         $scope.createProcessInput.getData = function () {
@@ -55,7 +57,7 @@
 
                     $scope.createProcessInputObjects.push({
                         InputArguments: {
-                            $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
+                            $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.NumberProfilingProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
                             FromDate: new Date(fromDate),
                             ToDate: new Date(toDate),
                             PeriodId: $scope.selectedPeriod.Id,
@@ -88,7 +90,7 @@
 
 }
 
-ExecuteStrategyProcessInputController.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+NumberProfilingProcessController.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'HourEnum'];
 appControllers.controller('FraudAnalysis_NumberProfilingProcessController', NumberProfilingProcessController)
 
 

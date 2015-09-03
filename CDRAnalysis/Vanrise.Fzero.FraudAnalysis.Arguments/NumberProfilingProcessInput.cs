@@ -20,8 +20,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 
         public override string GetTitle()
         {
-            IStrategyDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
-            return String.Format("Number profiling ({0:dd-MMM-yy HH:mm} to {1:dd-MMM-yy HH:mm})", this.FromDate, this.ToDate);
+            return String.Format("Number profiling ({0:dd-MMM-yy HH:mm}    to     {1:dd-MMM-yy HH:mm})", this.FromDate, this.ToDate);
         }
 
         public override void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)
