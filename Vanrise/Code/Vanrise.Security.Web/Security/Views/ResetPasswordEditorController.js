@@ -2,64 +2,51 @@
 
 function ResetPasswordEditorController($scope, UsersAPIService, VRNavigationService, VRNotificationService) {
 
-    var parameters;
+    var userId = undefined;
 
     loadParameters();
     defineScope();
     load();
 
     function loadParameters() {
-        parameters = VRNavigationService.getParameters($scope);
+        var parameters = VRNavigationService.getParameters($scope);
+
+        if (parameters != undefined && parameters != null)
+            userId = parameters.userId;
     }
 
     function defineScope() {
 
         $scope.ResetPassword = function () {
 
-            var ResetPasswordInput = {};
-
-            if ($scope.txtPassword != $scope.txtPasswordC) {
-                return "Invalid Password"
+            var ResetPasswordInput = {
+                UserId: userId,
+                Password: $scope.txtPassword
             }
-            else {
-                if (parameters != undefined) {
 
-                    ResetPasswordInput = {
-                        UserId: parameters.userId,
-                        Password: $scope.txtPassword
+            UsersAPIService.ResetPassword(ResetPasswordInput)
+                .then(function (response) {
+                    if (VRNotificationService.notifyOnItemUpdated("User's password is", response)) {
+                        if ($scope.onPasswordReset != undefined)
+                            $scope.onPasswordReset(response);
+
+                        $scope.modalContext.closeModal();
                     }
+                })
+                .catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                });
 
-                    UsersAPIService.ResetPassword(ResetPasswordInput)
-                        .then(function (response) {
-                            if (VRNotificationService.notifyOnItemUpdated("User's password was", response)) {
-                                if ($scope.onPasswordReset != undefined)
-                                    $scope.onPasswordReset(response);
-
-                                $scope.modalContext.closeModal();
-                            }
-                            //if ($scope.onUserUpdated != undefined)
-                            //    $scope.onUserUpdated(ResetPasswordInput);
-                        })
-                        .catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                        })
-                        .finally(function () {
-                            $scope.$hide();
-                            //$scope.grid.itemAdded(ResetPasswordInput);
-                        });
-                }
-
-            }
         };
 
-        $scope.hide = function () {
-            $scope.$hide();
+        $scope.close = function () {
+            $scope.modalContext.closeModal();
         };
 
         $scope.ConfirmPassword = function (text) {
 
             if ($scope.txtPassword != text)
-                return "Invalid Password";
+                return "Your Passwords do not match";
             else
                 return null;
         };
@@ -68,7 +55,6 @@ function ResetPasswordEditorController($scope, UsersAPIService, VRNavigationServ
     function load() {
     }
     
-
 }
 
 appControllers.controller('Security_ResetPasswordEditorController', ResetPasswordEditorController);

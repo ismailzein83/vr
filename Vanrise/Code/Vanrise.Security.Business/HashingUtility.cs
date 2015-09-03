@@ -9,13 +9,6 @@ namespace Vanrise.Security.Business
 {
     public class HashingUtility
     {
-        private const string VANRISE_SALT = "V@nR!s3-!?!-Sa1t";
-
-        public static byte[] GetVanriseSalt()
-        {
-            return System.Text.Encoding.UTF8.GetBytes(VANRISE_SALT);
-        }
-
         /// <summary>
         /// Generates a hash for the given plain text value and returns a
         /// base64-encoded result. Before the hash is computed, a random salt
