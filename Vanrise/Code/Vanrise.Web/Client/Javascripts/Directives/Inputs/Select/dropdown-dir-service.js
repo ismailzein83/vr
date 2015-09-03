@@ -102,9 +102,9 @@ app.service('SelectService', ['BaseDirService', function (BaseDirService) {
             label = values[0] + "," + values[1] + "," + values[2];
         else
             label = length + " " + labelMsg;
-        if (label.length > 21)
-            label = label.substring(0, 20) + "..";
-
+        if(label != undefined)
+            if (label.length > 21)
+                label = label.substring(0, 20) + "..";
         return label;
     }
 
