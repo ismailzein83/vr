@@ -35,7 +35,7 @@ function SupplierTODManagementController($scope, CarrierAccountAPIService, Zones
     function retrieveData() {
         var query = {
            };
-        if ($scope.selectedCustomer != undefined && $scope.selectedCustomer != null)
+        if ($scope.selectedSupplier != undefined && $scope.selectedSupplier != null)
             query.SupplierId = $scope.selectedSupplier.CarrierAccountID;
 
         else

@@ -309,7 +309,7 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                                         + ' aria-expanded="true"  ' + validateButtonClass + '>'
                                         + '<span style="float: left; margin: 0px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;display: inline-block;width: 100%; ">{{ctrl.getLabel()}}</span>'
                                         + (noCaret == true ? '' : '<span style="position:absolute;top:13px;right:5px" class="caret"></span>')
-                                        + '</button>';
+                                        + '</button><span ng-if="!ctrl.isMultiple() && ctrl.selectedvalues != undefined && ctrl.selectedvalues.length != 0  "  class="glyphicon glyphicon-remove hand-cursor" style="position: absolute;right: 15px;top: 10px;font-size: 11px;" aria-hidden="true" ng-click="ctrl.clearAllSelected($event);"></span>';
                     divDropdown.prepend(buttonTemplate);
                 }
 

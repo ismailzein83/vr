@@ -19,24 +19,14 @@ app.directive('vrList', [ 'MultiTranscludeService', function ( MultiTranscludeSe
            
         },
         controllerAs: 'ctrl',
-        bindToController: true,
-        //compile: function (tElement, tAttrs, transclude) {
-        //    var rpt = document.createAttribute('ng-repeat');
-        //    rpt.nodeValue = tAttrs.element;
-        //    tElement[0].children[0].attributes.setNamedItem(rpt);
-        //    return function (scope, element, attr) {
-        //        var rhs = attr.element.split(' in ')[1];
-        //        scope.items = $parse(rhs)(scope);
-        //        console.log(scope.items);
-        //    }        
-        //},
+        bindToController: true,       
         link: function (scope, elem, attr, ctrl, transcludeFn) {
             MultiTranscludeService.transclude(elem, transcludeFn);
         },
         template: function (element, attrs) {
             var template = '';
             template =  '<div transclude-id="header"></div>'
-                      + '<div transclude-id="rowdiv"></div><div transclude-id="rowdiv"></div>';
+                      + '<div ng-sortable="itemsSortable"><div ng-repeat="c in ctrl.getdatasource()"  > {{c}}  </div> </div>';
             return template;
         }
 
