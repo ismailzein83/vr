@@ -16,9 +16,9 @@ namespace TOne.Analytics.Data.SQL
         private String GetFilterCondition(GenericFilter filter)
         {
             StringBuilder whereBuilder = new StringBuilder();
-            _trafficStatisticCommon.AddFilter(whereBuilder, filter.CustomerIds, "CustomerID");
-            _trafficStatisticCommon.AddFilter(whereBuilder, filter.SupplierIds, "SupplierID");
-            _trafficStatisticCommon.AddFilter(whereBuilder, filter.SwitchIds, "SwitchID");
+            _trafficStatisticCommon.AddFilter(whereBuilder, filter.CustomerIds, "BL.CustomerID");
+            _trafficStatisticCommon.AddFilter(whereBuilder, filter.SupplierIds, "BL.SupplierID");
+            _trafficStatisticCommon.AddFilter(whereBuilder, filter.SwitchIds, "BL.SwitchID");
 
             if (filter.SwitchIds == null || filter.SwitchIds.Count == 0)
                 whereBuilder.Append(" AND CustomerID IS NOT NULL AND CustomerID NOT IN (SELECT grasc.CID FROM [dbo].GetRepresentedAsSwitchCarriers() grasc)");
@@ -455,7 +455,8 @@ namespace TOne.Analytics.Data.SQL
                 {"Code Sales", "OurCode"},
                 {"Code Buy", "SupplierCode"},
                 {"GroupKeyValues[0].Name", columnId},
-                {"GroupKeyValues[3].Name","CodeGroup"}
+                {"GroupKeyValues[3].Name","CodeGroup"},
+                {"Data.ReleaseCode","ReleaseCode"}
             };
 
             Action<string> createTempTableAction = (tempTableName) =>

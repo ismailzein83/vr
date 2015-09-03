@@ -2,22 +2,18 @@
 
     "use strict";
 
-    function releaseCodeStatisticsController($scope, analyticsService, businessEntityApiService, carrierAccountApiService, utilsService, analyticsApiService) {
+    function releaseCodeStatisticsController($scope, analyticsService, businessEntityApiService, carrierAccountApiService, utilsService, analyticsApiService, filterFactory) {
 
         var mainGridApi , selectedFilter;
 
-        function buildFilter() {
-            return {
-                SwitchIds: utilsService.getPropValuesFromArray($scope.selectedSwitches, "SwitchId"),
-                CustomerIds: utilsService.getPropValuesFromArray($scope.selectedCustomers, "CarrierAccountID"),
-                SupplierIds: utilsService.getPropValuesFromArray($scope.selectedSuppliers, "CarrierAccountID"),
-                CodeGroups: utilsService.getPropValuesFromArray($scope.selectedCodeGroups, "Code"),
-                ZoneIds: utilsService.getPropValuesFromArray($scope.selectedZones, "ZoneId")
-            };
-        }
-
         function retrieveData() {
-            var filter = buildFilter();
+            $scope.filter = new filterFactory(
+                utilsService.getPropValuesFromArray($scope.selectedCustomers, "CarrierAccountID"),
+                utilsService.getPropValuesFromArray($scope.selectedSuppliers, "CarrierAccountID"),
+                utilsService.getPropValuesFromArray($scope.selectedSwitches, "SwitchId"),
+                utilsService.getPropValuesFromArray($scope.selectedCodeGroups, "Code"),
+                utilsService.getPropValuesFromArray($scope.selectedZones, "ZoneId"));
+
             var groupKeys = [];
 
             for (var i = 0, len = $scope.selectedGroupKeys.length; i < len; i++) {
@@ -25,14 +21,14 @@
             }
 
             selectedFilter = {
-                filter: filter,
+                filter: $scope.filter,
                 groupKeys: groupKeys,
                 fromDate: $scope.fromDate,
                 toDate: $scope.toDate
             };
 
             return mainGridApi.retrieveData({
-                Filter: filter,
+                Filter: $scope.filter,
                 GroupKeys: groupKeys,
                 From: $scope.fromDate,
                 To: $scope.toDate
@@ -64,18 +60,12 @@
                 mainGridApi = api;
             };
 
-            $scope.onGroupKeyClicked = function (dataItem, colDef) {
-                //var group = colDef.tag;
-                //var groupIndex = $scope.currentSearchCriteria.groupKeys.indexOf(group);
-                //selectEntity(group, dataItem.GroupKeyValues[groupIndex].Id, dataItem.GroupKeyValues[groupIndex].Name);
-            };
-
             $scope.showResult = false;
 
             $scope.measures = analyticsService.getReleaseCodeMeasureEnum();
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                console.log(dataRetrievalInput);
+                
                 return analyticsApiService.getReleaseCodeStatistics(dataRetrievalInput).then(function (response) {
                     onResponseReady(response);
                     $scope.showResult = true;
@@ -155,7 +145,7 @@
         defineMenuActions();
     }
 
-    releaseCodeStatisticsController.$inject = ['$scope', 'AnalyticsService', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService', 'UtilsService', 'AnalyticsAPIService'];
+    releaseCodeStatisticsController.$inject = ['$scope', 'AnalyticsService', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService', 'UtilsService', 'AnalyticsAPIService', 'Analytics_FilterFactory'];
     appControllers.controller('Analytics_ReleaseCodeStatisticsController', releaseCodeStatisticsController);
 
 })(appControllers);

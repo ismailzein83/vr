@@ -1,10 +1,81 @@
-﻿(function(appControllers) {
+﻿(function (appControllers) {
 
     "use strict";
 
     analyticsServiceObj.$inject = ['TrafficStatisticGroupKeysEnum', 'GenericAnalyticGroupKeysEnum', 'PeriodEnum', 'UtilsService', 'VRModalService', 'ReleaseCodeMeasureEnum'];
 
-    function analyticsServiceObj(trafficStatisticGroupKeysEnum, GenericAnalyticGroupKeysEnum, periodEnum, utilsService, vrModalService, releaseCodeMeasureEnum) {
+    function analyticsServiceObj(trafficStatisticGroupKeysEnum, genericAnalyticGroupKeysEnum, periodEnum, utilsService, vrModalService, releaseCodeMeasureEnum) {
+        
+        function updateParametersFromGroupKeys(parameters, scope, dataItem, viewScope) {
+            var groupKeys ;
+            if (scope === undefined)
+                return;
+            if (scope === viewScope) {
+                groupKeys = scope.selectedGroupKeys;
+            }
+            else {
+                groupKeys = [scope.selectedGroupKey];
+            }
+
+            for (var i = 0; i < groupKeys.length; i++) {
+                var groupKey = groupKeys[i];
+                switch (groupKey.value) {
+                    case trafficStatisticGroupKeysEnum.OurZone.value:
+                        parameters.zoneIds.push(dataItem.GroupKeyValues[i].Id);
+                        break;
+                    case trafficStatisticGroupKeysEnum.CustomerId.value:
+                        parameters.customerIds.push(dataItem.GroupKeyValues[i].Id);
+                        break;
+                    case trafficStatisticGroupKeysEnum.SupplierId.value:
+                        parameters.supplierIds.push(dataItem.GroupKeyValues[i].Id);
+                        break;
+                    case trafficStatisticGroupKeysEnum.Switch.value:
+                        parameters.switchIds.push(dataItem.GroupKeyValues[i].Id);
+                        break;
+                }
+            }
+
+            updateParametersFromGroupKeys(parameters, scope.gridParentScope, scope.dataItem);
+        }
+
+        function checkExpandableRow(selectedTabGroupKey,groupKeys) {
+            if (groupKeys.length === 2 && selectedGroupKey.value === trafficStatisticGroupKeysEnum.OurZone.value && (groupKeys[0].value ===
+            trafficStatisticGroupKeysEnum.CodeGroup.value || groupKeys.value === trafficStatisticGroupKeysEnum.CodeGroup.value))
+                return false;
+            else if (groupKeys.length > 1)
+                return true;
+            else if (selectedTabGroupKey.value === trafficStatisticGroupKeysEnum.SupplierId.value)
+                return true;
+            else
+                return false;
+        }
+
+        function showCdrLog(parameters) {
+            vrModalService.showModal('/Client/Modules/Analytics/Views/CDR/CDRLog.html', parameters, {
+                useModalTemplate: true,
+                width: "80%",
+                maxHeight: "800px",
+                title: "CDR Log"
+            });
+        }
+
+        function getSubGridMenuAction(scope) {
+            return [{
+                name: "CDRs",
+                clicked: function (dataItem) {
+                    var parameters = {
+                        fromDate:scope.viewScope.fromDate,
+                        toDate: scope.viewScope.toDate,
+                        customerIds: [],
+                        zoneIds: [],
+                        supplierIds: [],
+                        switchIds: []
+                    };
+                    updateParametersFromGroupKeys(parameters, scope, dataItem,scope.viewScope);
+                    showCdrLog(parameters);
+                }
+            }];
+        }
         
         function getTrafficStatisticGroupKeys() {
             var groupKeys = [];
@@ -15,11 +86,10 @@
             return groupKeys;
         }
 
-        
         function getGenericAnalyticGroupKeys() {
             var groupKeys = [];
-            for (var prop in GenericAnalyticGroupKeysEnum) {
-                    groupKeys.push(GenericAnalyticGroupKeysEnum[prop]);
+            for (var prop in genericAnalyticGroupKeysEnum) {
+                    groupKeys.push(genericAnalyticGroupKeysEnum[prop]);
             }
             return groupKeys;
         }
@@ -62,14 +132,10 @@
         }
 
         function showCdrLogModal(parameters, dataItemGroupKeyValues, filterGroupKeys) {
-            
             loadCdrParameters(parameters, dataItemGroupKeyValues, filterGroupKeys);
-
-            vrModalService.showModal('/Client/Modules/Analytics/Views/CDR/CDRLog.html', parameters, {
-                useModalTemplate: true,
-                width: "80%"
-            });
+            showCdrLog(parameters);
         }
+
         function getFilterIds(values, idProp) {
             var filterIds = [];
             if (values.length > 0) {
@@ -199,8 +265,9 @@
             showCdrLogModal: showCdrLogModal,
             getReleaseCodeMeasureEnum: getReleaseCodeMeasureEnum,
             getFilterIds: getFilterIds,
-            applyGroupKeysRules: applyGroupKeysRules
-
+            applyGroupKeysRules: applyGroupKeysRules,
+            getSubGridMenuAction: getSubGridMenuAction,
+            checkExpandableRow: checkExpandableRow
         });
 
 
