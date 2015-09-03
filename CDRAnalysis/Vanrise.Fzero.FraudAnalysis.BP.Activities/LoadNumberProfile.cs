@@ -193,7 +193,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 OutputQueue = this.OutputQueue.Get(context),
                 FromDate = this.FromDate.Get(context),
                 ToDate = this.ToDate.Get(context),
-                Strategies = this.Strategies.Get(context)
+                Strategies = this.Strategies.Get(context),
+                Parameters = this.Parameters.Get(context)
             };
         }
 

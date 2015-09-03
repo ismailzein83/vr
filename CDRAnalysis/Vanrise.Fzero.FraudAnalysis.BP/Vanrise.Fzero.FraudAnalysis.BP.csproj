@@ -102,7 +102,7 @@
     </XamlAppDef>
   </ItemGroup>
   <ItemGroup>
-    <XamlAppDef Include="NumberProfiling.xaml">
+    <XamlAppDef Include="NumberProfilingProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>

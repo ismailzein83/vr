@@ -7,7 +7,7 @@ using Vanrise.Fzero.CDRImport.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 {
-    public class NumberProfilingInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
+    public class NumberProfilingProcessInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
     {
         public NumberProfileParameters Parameters { get; set; }
 

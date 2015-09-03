@@ -17,11 +17,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
             this._condition = condition;
         }
 
-        public CountAggregate(Func<CDR, INumberProfileParameters, bool> condition, IEnumerable<INumberProfileParameters> strategies)
+        public CountAggregate(Func<CDR, INumberProfileParameters, bool> condition, IEnumerable<INumberProfileParameters> parameters)
         {
             this._conditionWithStrategy = condition;
             _strategiesInfo = new Dictionary<INumberProfileParameters, CountAggregateStrategyInfo>();
-            _parameters = strategies;
+            _parameters = parameters;
             foreach (var strategy in _parameters)
                 _strategiesInfo.Add(strategy, new CountAggregateStrategyInfo());
         }

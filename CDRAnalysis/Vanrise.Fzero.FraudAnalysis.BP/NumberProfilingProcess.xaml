@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.Fzero.FraudAnalysis.BP.ProfileNumber"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.Fzero.FraudAnalysis.BP.NumberProfilingProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
@@ -15,7 +15,7 @@
  xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
-    <x:Property Name="Input" Type="InArgument(vffba:NumberProfilingInput)" />
+    <x:Property Name="Input" Type="InArgument(vffba:NumberProfilingProcessInput)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>Vanrise.Fzero.FraudAnalysis.BP.ProfileNumber_1</sap2010:WorkflowViewState.IdRef>
@@ -148,7 +148,7 @@
       <vffba1:PrepareNumberProfilesForDBApply sap2010:WorkflowViewState.IdRef="PrepareNumberProfilesForDBApply_1">
         <vffba1:PrepareNumberProfilesForDBApply.InputQueue>
           <InArgument x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">numberProfileToStoreQueue</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">numberProfileQueue</mca:CSharpValue>
           </InArgument>
         </vffba1:PrepareNumberProfilesForDBApply.InputQueue>
         <vffba1:PrepareNumberProfilesForDBApply.OutputQueue>
@@ -158,7 +158,7 @@
         </vffba1:PrepareNumberProfilesForDBApply.OutputQueue>
         <vffba1:PrepareNumberProfilesForDBApply.PreviousActivityStatus>
           <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">GetSuspiciousNumberStatus</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadNumberProfilesStatus</mca:CSharpValue>
           </InArgument>
         </vffba1:PrepareNumberProfilesForDBApply.PreviousActivityStatus>
         <vffba1:PrepareNumberProfilesForDBApply.Status>
@@ -185,7 +185,7 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("Ended Profiling")</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>d0ZDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXE51bWJlclByb2ZpbGluZy54YW1sG0IDvQEOAgEBQwVHEQMBmgJIBbYBEAIBBbcBBbsBEQIBAkUJRWkDAZsCWQduGQMB2QFvB5MBIwIBaJQBB6kBMAIBJ6oBB7UBKAIBBrkBCbkBZwIBA1wNXFsDAYoCZg1mbwMB+gFhDWFuAwHqAWsNa1kDAdoBgQENgQFvAwHJAYYBDYYBZwMBuQF3DXduAwGpAXINclsDAZkBiwENiwF5AwGJAXwNfIIBAgF5kAENkAFZAgFpoQENoQFyAgFYlwENlwGBAQIBSKYBDaYBfAIBOJwBDZwBfAIBKLIBDbIBdAIBF60BDa0BdAIBBw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXE51bWJlclByb2ZpbGluZ1Byb2Nlc3MueGFtbBtCA70BDgIBAUMFRxEDAZoCSAW2ARACAQW3AQW7ARECAQJFCUVpAwGbAlkHbhkDAdkBbweTASMCAWiUAQepATACASeqAQe1ASgCAQa5AQm5AWcCAQNcDVxbAwGKAmYNZm8DAfoBYQ1hbgMB6gFrDWtZAwHaAYEBDYEBbwMByQGGAQ2GAWcDAbkBdw13bgMBqQFyDXJbAwGZAYsBDYsBeQMBiQF8DXyCAQIBeZABDZABWQIBaaEBDaEBcQIBWJcBDZcBegIBSKYBDaYBfAIBOJwBDZwBfAIBKLIBDbIBdAIBF60BDa0BdAIBBw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
