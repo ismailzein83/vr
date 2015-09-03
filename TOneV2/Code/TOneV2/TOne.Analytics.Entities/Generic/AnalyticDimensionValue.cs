@@ -8,7 +8,7 @@ namespace TOne.Analytics.Entities
 {
     public class AnalyticDimensionValue
     {
-        public string Id { get; set; }
+        public Object Id { get; set; }
 
         public string Name { get; set; }
     }

@@ -187,13 +187,13 @@ namespace TOne.Analytics.Data.SQL
             var index = 0;
             foreach (var groupFieldConfig in dimensionsConfig)
             {
-                object id = reader[String.Format("DimensionId_{0}", groupFieldConfig.Key)];
-                if (id != DBNull.Value)
+                object id = GetReaderValue<object>(reader, String.Format("DimensionId_{0}", groupFieldConfig.Key));
+                if (id != null)
                 {
                     string nameColumnName = String.Format("DimensionName_{0}", groupFieldConfig.Key);
                     record.DimensionValues[index] = new AnalyticDimensionValue
                     {
-                        Id = id.ToString(),
+                        Id = id,
                         Name = reader[nameColumnName] as string
                     };
                 }
