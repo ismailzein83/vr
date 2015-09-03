@@ -214,7 +214,7 @@ namespace TOne.Analytics.Data.SQL
 
             if (selectedCustomerIDs != null && selectedSupplierIDs != null)
             {
-                whereClause.Append(" AND ((CustomerID IS NULL OR CustomerID IN (#SELECTED_CUSTOMER_IDS#)) OR (SupplierID IS NULL OR SupplierID IN (#SELECTED_SUPPLIER_IDS#)))");
+                whereClause.Append(" AND ((CustomerID IN (#SELECTED_CUSTOMER_IDS#)) OR (SupplierID IN (#SELECTED_SUPPLIER_IDS#)))");
             }
             else if (selectedCustomerIDs == null && selectedSupplierIDs == null)
             {
@@ -235,19 +235,19 @@ namespace TOne.Analytics.Data.SQL
             {
                 if (assignedSupplierIDs != null)
                 {
-                    whereClause.Append(" AND ((CustomerID IS NULL OR CustomerID IN (#SELECTED_CUSTOMER_IDS#)) OR (SupplierID IS NULL OR SupplierID IN (#ASSIGNED_SUPPLIER_IDS#)))");
+                    whereClause.Append(" AND ((CustomerID IN (#SELECTED_CUSTOMER_IDS#)) OR (SupplierID IS NULL OR SupplierID IN (#ASSIGNED_SUPPLIER_IDS#)))");
                 }
                 else
-                    whereClause.Append(" AND (CustomerID IS NULL OR CustomerID IN (#SELECTED_CUSTOMER_IDS#))");
+                    whereClause.Append(" AND (CustomerID IN (#SELECTED_CUSTOMER_IDS#))");
             }
             else if (selectedSupplierIDs != null)
             {
                 if (assignedCustomerIDs != null)
                 {
-                    whereClause.Append(" AND ((CustomerID IS NULL OR CustomerID IN (#ASSIGNED_CUSTOMER_IDS#)) OR (SupplierID IS NULL OR SupplierID IN (#SELECTED_SUPPLIER_IDS#)))");
+                    whereClause.Append(" AND ((CustomerID IS NULL OR CustomerID IN (#ASSIGNED_CUSTOMER_IDS#)) OR (SupplierID IN (#SELECTED_SUPPLIER_IDS#)))");
                 }
                 else
-                    whereClause.Append(" AND (SupplierID IS NULL OR SupplierID IN (#SELECTED_SUPPLIER_IDS#))");
+                    whereClause.Append(" AND (SupplierID IN (#SELECTED_SUPPLIER_IDS#))");
             }
 
             whereClause.Replace("#SELECTED_CUSTOMER_IDS#", GetCommaSeparatedList(selectedCustomerIDs));
