@@ -60,7 +60,6 @@
             return groupKey.gridAPI.retrieveData(query);
         }
 
-        //scope.dataItem.GroupKeyValues
         function loadQueryMeasures() {
             if (measureFields.length == 0)
                 for (var prop in GenericAnalyticMeasureEnum) {
@@ -92,18 +91,6 @@
                         }
                     }
                 }
-
-                //switch (groupKey.value) {
-                //    case GenericAnalyticGroupKeysEnum.ZoneId.value:
-                //        filter.ZoneIds = [scope.dataItem.DimensionValues[i].Id];
-                //        break;
-                //    case GenericAnalyticGroupKeysEnum.CustomerId.value:
-                //        filter.CustomerIds = [scope.dataItem.DimensionValues[i].Id];
-                //        break;
-                //    case GenericAnalyticGroupKeysEnum.SupplierId.value:
-                //        filter.SupplierIds = [scope.dataItem.DimensionValues[i].Id];
-                //        break;
-                //}
             }
 
             buildFilter(scope.gridParentScope);
