@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthenticateOperationOutput.cs" />
+    <Compile Include="AuthorizationAttribute.cs" />
     <Compile Include="BigResult.cs" />
     <Compile Include="DeleteOperationOutput.cs" />
     <Compile Include="ExcelResult.cs" />
