@@ -23,5 +23,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public CommonEnums.OperatorType OperatorTypeAllowed { get; set; }
 
+        public string UpSign { get; set; }
+
+        public string DownSign { get; set; }
+
     }
 }

@@ -197,6 +197,8 @@
     <Content Include="FraudAnalysis\Services\APIServices\UserAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\SuspicionAnalysisAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyAPIService.js" />
+    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\NumberProfilingProcessInput.html" />
+    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\NumberProfilingProcessController.js" />
     <Content Include="FraudAnalysis\Views\SuspicionAnalysis2.html" />
     <Content Include="FraudAnalysis\Views\SuspicionAnalysis2Controller.js" />
     <Content Include="FraudAnalysis\Views\OutPut\Dashboard.html" />

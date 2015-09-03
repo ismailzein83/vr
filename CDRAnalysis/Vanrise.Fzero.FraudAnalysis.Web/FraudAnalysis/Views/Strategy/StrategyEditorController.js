@@ -71,6 +71,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                 var levelCriteriaItem = {
                     filterId: filter.filterId,
                     percentage: 0,
+                    upSign: filter.upSign,
+                    downSign: filter.downSign
                 };
                 strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem);
 
@@ -102,11 +104,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         }
 
     }
-
-
-
-
-
 
     function load() {
 
@@ -226,7 +223,9 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                 maxValue: filterDef.maxValue,
                 decimalPrecision: filterDef.decimalPrecision,
                 excludeHourly: filterDef.excludeHourly,
-                toolTip: filterDef.toolTip
+                toolTip: filterDef.toolTip,
+                upSign: filterDef.upSign,
+                downSign: filterDef.downSign
             };
             $scope.strategyFilters.push(filterItem);
         });
@@ -264,7 +263,9 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                 maxValue: filterDef.maxValue,
                 decimalPrecision: filterDef.decimalPrecision,
                 excludeHourly: filterDef.excludeHourly,
-                toolTip: filterDef.toolTip
+                toolTip: filterDef.toolTip,
+                upSign: filterDef.upSign,
+                downSign: filterDef.downSign
             };
 
 
@@ -291,21 +292,23 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             angular.forEach($scope.filterDefinitions, function (filterDef) {
 
                 var levelCriteriaItem = {
-                    filterId: filterDef.FilterId
+                    filterId: filterDef.FilterId,
+                    upSign: filterDef.upSign,
+                    downSign: filterDef.downSign
                 };
 
                 var existingItem = UtilsService.getItemByVal(level.StrategyLevelCriterias, filterDef.filterId, "FilterId");
                 if (existingItem != undefined && existingItem != null) {
                     levelCriteriaItem.isSelected = true;
-                    levelCriteriaItem.percentage = ((existingItem.Percentage*100)-100)
+                    levelCriteriaItem.percentage = ((existingItem.Percentage * 100) - 100);
+                    
                 }
                 strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem);
             });
 
             $scope.strategyLevels.push(strategyLevelItem);
+
         });
-
-
 
 
     }
@@ -397,7 +400,9 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                     maxValue: itm.MaxValue,
                     decimalPrecision: itm.DecimalPrecision,
                     excludeHourly: itm.ExcludeHourly,
-                    toolTip: itm.ToolTip
+                    toolTip: itm.ToolTip,
+                    upSign: itm.UpSign,
+                    downSign: itm.DownSign
                 });
             });
         });
@@ -417,8 +422,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         isLevelsTabShow = !isLevelsTabShow;
     };
 
-
-
     $scope.showSwitch = function (filter) {
         if (filter.excludeHourly && $scope.selectedPeriod.Id == 1) {
             filter.isSelected = false;
@@ -428,7 +431,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             return true;
 
     }
-
 
 }
 appControllers.controller('StrategyEditorController', StrategyEditorController);
