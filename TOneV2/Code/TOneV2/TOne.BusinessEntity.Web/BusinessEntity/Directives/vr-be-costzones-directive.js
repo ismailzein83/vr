@@ -20,7 +20,7 @@
                         return zoneApiService.GetSupplierZones(text, ctrl.carrierid);
                     }
                     else
-                        return;
+                        return null;
                         
                 }
 
