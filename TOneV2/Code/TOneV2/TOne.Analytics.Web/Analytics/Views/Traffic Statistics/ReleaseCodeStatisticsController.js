@@ -101,7 +101,6 @@
             });
         }
 
-        
         function defineFilters() {
 
             $scope.fromDate = '';
