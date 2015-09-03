@@ -20,8 +20,12 @@
                 </div>
             </vr-columns>
             <vr-columns colnum="2" simplecol>
+               
+                <vr-label style="float: right; margin-top: 2px; margin-right: 5px;">
+                    <span style="">Total count ({{ctrl.pagersettings.totalDataCount}})</span>
+                </vr-label>
                 <vr-label style="float:right; margin-top: 2px">
-                    <span style="">Page {{ctrl.pagersettings.currentPage}} of {{ctrl.pagersettings.numberOfPages}}</span>
+                    <span style="">Page {{ctrl.pagersettings.currentPage}} of {{ctrl.pagersettings.numberOfPages}}, </span>
                 </vr-label>
             </vr-columns>
 
