@@ -60,7 +60,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             Dictionary<string, string> mapper = new Dictionary<string, string>();
 
             mapper.Add("SuspicionLevelDescription", "SuspicionLevelID");
-            mapper.Add("CaseStatusDescription", "CaseStatusID");
+            mapper.Add("AccountStatusDescription", "AccountStatusID");
 
             return RetrieveData(input, (tempTableName) =>
             {
@@ -86,9 +86,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             Dictionary<string, string> mapper = new Dictionary<string, string>();
 
+            mapper.Add("SuspicionLevelDescription", "SuspicionLevelID");
+            mapper.Add("AccountStatusDescription", "AccountStatusID");
+
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_AccountSuspicionHistory_CreateTempByAccountNumber", tempTableName, input.Query.AccountNumber, input.Query.From, input.Query.To);
+                ExecuteNonQuerySP("FraudAnalysis.sp_FraudResult_GetByAccountNumber", tempTableName, input.Query.AccountNumber, input.Query.From, input.Query.To);
             };
 
             return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, mapper);
@@ -164,26 +167,27 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         private AccountSuspicionSummary AccountSuspicionSummaryMapper(IDataReader reader)
         {
-            var accountSuspicionSummary = new AccountSuspicionSummary();
+            var summary = new AccountSuspicionSummary();
 
-            accountSuspicionSummary.AccountNumber = reader["AccountNumber"] as string;
-            accountSuspicionSummary.SuspicionLevelID = (SuspicionLevel)reader["SuspicionLevelID"];
-            accountSuspicionSummary.StrategyName = reader["StrategyName"] as string;
-            accountSuspicionSummary.NumberOfOccurances = (int)reader["NumberOfOccurances"];
-            accountSuspicionSummary.CaseStatusID = GetReaderValue<CaseStatus>(reader, "CaseStatusID");
+            summary.AccountNumber = reader["AccountNumber"] as string;
+            summary.SuspicionLevelID = (SuspicionLevel)reader["SuspicionLevelID"];
+            summary.NumberOfOccurances = (int)reader["NumberOfOccurances"];
+            summary.LastOccurance = (DateTime)reader["LastOccurance"];
+            summary.AccountStatusID = GetReaderValue<AccountStatus>(reader, "AccountStatusID");
 
-            return accountSuspicionSummary;
+            return summary;
         }
 
         private AccountSuspicionDetail AccountSuspicionDetailMapper(IDataReader reader)
         {
             var detail = new AccountSuspicionDetail();
 
-            detail.DetailID = (int)reader["DetialID"];
-            detail.AnalystID = GetReaderValue<int>(reader, "AnalystID");
-            detail.AnalystName = GetReaderValue<string>(reader, "AnalystName");
-            detail.StatusID = (SuspicionOccuranceStatus)reader["StatusID"];
-            detail.LogDate = GetReaderValue<DateTime>(reader, "LogDate");
+            detail.DetailID = (long)reader["DetailID"];
+            detail.AccountNumber = reader["AccountNumber"] as string;
+            detail.SuspicionLevelID = (SuspicionLevel)reader["SuspicionLevelID"];
+            detail.StrategyName = reader["StrategyName"] as string;
+            detail.AccountStatusID = GetReaderValue<AccountStatus>(reader, "AccountStatusID");
+            detail.DateDay = (DateTime)reader["DateDay"];
 
             return detail;
         }

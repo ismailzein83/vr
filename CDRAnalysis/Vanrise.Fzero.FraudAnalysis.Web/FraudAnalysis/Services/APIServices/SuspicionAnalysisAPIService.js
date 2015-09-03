@@ -20,6 +20,13 @@
         return BaseAPIService.post("/api/SuspicionAnalysis/GetFilteredAccountSuspicionDetails", input);
     }
 
+    function UpdateAccountCase(accountNumber, caseID) {
+        return BaseAPIService.get("/api/SuspicionAnalysis/UpdateAccountCase", {
+            accountNumber: accountNumber,
+            caseID: caseID
+        });
+    }
+
     function GetFraudResult(fromDate, toDate, strategiesList, suspicionLevelsList, accountNumber) {
         return BaseAPIService.get("/api/SuspicionAnalysis/GetFraudResult", {
             fromDate: fromDate,

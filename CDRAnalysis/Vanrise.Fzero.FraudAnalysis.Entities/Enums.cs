@@ -20,7 +20,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         Deleted = 20
     }
 
-    public enum CaseStatus
+    public enum AccountStatus
     {
         Open = 0,
         Pending = 2,
