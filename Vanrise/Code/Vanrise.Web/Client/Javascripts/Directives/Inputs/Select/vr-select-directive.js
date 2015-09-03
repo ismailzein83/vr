@@ -428,7 +428,6 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                     ctrl.search = function () {
                         ctrl.setdatasource([]);
                         if (!ctrl.isRemoteLoad()) return;
-                        console.log(typeof ctrl.datasource !== 'undefined' && ctrl.datasource)
                         if (ctrl.filtername.length > (iAttrs.limitcharactercount - 1) && typeof ctrl.datasource !== 'undefined' && ctrl.datasource!= null) {
                             if (ctrl.datasource(ctrl.filtername).then != undefined) {
 
