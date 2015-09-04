@@ -18,7 +18,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public DateTime? ToDate { get; set; }
 
-        public int StrategyId { get; set; } 
+        public int StrategyId { get; set; }
+
+        public int StrategyExecutionID { get; set; }
 
 
     }

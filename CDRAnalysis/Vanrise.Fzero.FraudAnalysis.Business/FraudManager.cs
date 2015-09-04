@@ -64,6 +64,57 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             }
         }
 
+        public bool IsNumberSuspicious(NumberProfile numberProfile, out StrategyExecutionDetail strategyExecutionDetail)
+        {
+
+            strategyExecutionDetail = null;
+
+            Dictionary<int, Decimal> criteriaValues = new Dictionary<int, decimal>();
+
+
+            foreach (StrategyLevelWithCriterias strategyLevelWithCriterias in _levelsByPriority)
+            {
+                bool isLevelMatch = false;
+                Dictionary<int, decimal> criteriaValuesThresholds = new Dictionary<int, decimal>();
+
+                foreach (LevelCriteriaInfo levelCriteriaThresholdPercentage in strategyLevelWithCriterias.LevelCriteriasThresholdPercentage)
+                {
+                    Decimal criteriaValue;
+                    if (!criteriaValues.TryGetValue(levelCriteriaThresholdPercentage.CriteriaDefinitions.FilterId, out criteriaValue))
+                    {
+                        criteriaValue = _FilterManager.GetCriteriaValue(levelCriteriaThresholdPercentage.CriteriaDefinitions, profile);
+                        criteriaValues.Add(levelCriteriaThresholdPercentage.CriteriaDefinitions.FilterId, criteriaValue);
+                    }
+
+
+                    decimal criteriaValuesThreshold = criteriaValue / levelCriteriaThresholdPercentage.Threshold;
+                    criteriaValuesThresholds.Add(levelCriteriaThresholdPercentage.CriteriaDefinitions.FilterId, criteriaValuesThreshold);
+
+                    isLevelMatch =
+                        (levelCriteriaThresholdPercentage.CriteriaDefinitions.CompareOperator == CriteriaCompareOperator.GreaterThanorEqual && criteriaValuesThreshold >= levelCriteriaThresholdPercentage.Percentage)
+                        ||
+                        (levelCriteriaThresholdPercentage.CriteriaDefinitions.CompareOperator == CriteriaCompareOperator.LessThanorEqual && criteriaValuesThreshold <= levelCriteriaThresholdPercentage.Percentage);
+                    if (!isLevelMatch)
+                        break;
+                }
+
+
+                if (isLevelMatch)
+                {
+                    strategyExecutionDetail = new StrategyExecutionDetail();
+                    strategyExecutionDetail.AccountNumber = numberProfile.AccountNumber;
+                    strategyExecutionDetail.SuspicionLevelID = strategyLevelWithCriterias.SuspicionLevelId;
+                    strategyExecutionDetail.FilterValues = criteriaValuesThresholds;
+                    strategyExecutionDetail.AggregateValues = numberProfile.AggregateValues;
+                    strategyExecutionDetail.SuspicionOccuranceStatus = SuspicionOccuranceStatus.Open;
+                    strategyExecutionDetail.StrategyExecutionID = numberProfile.StrategyExecutionID;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
         public bool IsNumberSuspicious(NumberProfile profile, out SuspiciousNumber suspiciousNumber, int StrategyId)
         {
 

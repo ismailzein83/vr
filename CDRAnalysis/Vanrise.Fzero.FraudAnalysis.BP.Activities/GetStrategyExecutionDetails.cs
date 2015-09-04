@@ -16,13 +16,11 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
     public class GetStrategyExecutionDetailInput
     {
-        public BaseQueue<NumberProfileBatch> InputQueue { get; set; }
+        public BaseQueue<NumberProfileBatch> InputQueueForNumberProfile { get; set; }
 
-        public BaseQueue<SuspiciousNumberBatch> OutputQueue { get; set; }
+        public BaseQueue<StrategyExecutionDetailBatch> OutputQueueForStrategyExecutionDetail { get; set; }
 
-        public BaseQueue<SuspiciousNumberBatch> OutputQueueForFraudResult { get; set; }
-
-        public BaseQueue<NumberProfileBatch> OutputQueue2 { get; set; }
+        public BaseQueue<NumberProfileBatch> OutputQueueForNumberProfile { get; set; }
 
         public List<Strategy> Strategies { get; set; }
     }
@@ -35,13 +33,11 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         #region Arguments
 
         [RequiredArgument]
-        public InArgument<BaseQueue<NumberProfileBatch>> InputQueue { get; set; }
+        public InArgument<BaseQueue<NumberProfileBatch>> InputQueueForNumberProfile { get; set; }
 
-        public InOutArgument<BaseQueue<SuspiciousNumberBatch>> OutputQueue { get; set; }
+        public InOutArgument<BaseQueue<StrategyExecutionDetailBatch>> OutputQueueForStrategyExecutionDetail { get; set; }
 
-        public InOutArgument<BaseQueue<SuspiciousNumberBatch>> OutputQueueForFraudResult { get; set; }
-
-        public InOutArgument<BaseQueue<NumberProfileBatch>> OutputQueue2 { get; set; }
+        public InOutArgument<BaseQueue<NumberProfileBatch>> OutputQueueForNumberProfile { get; set; }
 
         [RequiredArgument]
         public InArgument<List<Strategy>> Strategies { get; set; }
@@ -50,14 +46,11 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
-            if (this.OutputQueue.Get(context) == null)
-                this.OutputQueue.Set(context, new MemoryQueue<SuspiciousNumberBatch>());
+            if (this.OutputQueueForStrategyExecutionDetail.Get(context) == null)
+                this.OutputQueueForStrategyExecutionDetail.Set(context, new MemoryQueue<StrategyExecutionDetailBatch>());
 
-            if (this.OutputQueueForFraudResult.Get(context) == null)
-                this.OutputQueueForFraudResult.Set(context, new MemoryQueue<SuspiciousNumberBatch>());
-
-            if (this.OutputQueue2.Get(context) == null)
-                this.OutputQueue2.Set(context, new MemoryQueue<NumberProfileBatch>());
+            if (this.OutputQueueForNumberProfile.Get(context) == null)
+                this.OutputQueueForNumberProfile.Set(context, new MemoryQueue<NumberProfileBatch>());
 
             base.OnBeforeExecute(context, handle);
         }
@@ -80,45 +73,33 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     do
                     {
 
-                        hasItem = inputArgument.InputQueue.TryDequeue(
+                        hasItem = inputArgument.InputQueueForNumberProfile.TryDequeue(
                             (item) =>
                             {
                                 List<NumberProfile> numberProfiles = new List<NumberProfile>();
-                                List<SuspiciousNumber> suspiciousNumbers = new List<SuspiciousNumber>();
+                                List<StrategyExecutionDetail> strategyExecutionDetails = new List<StrategyExecutionDetail>();
 
-                                foreach (NumberProfile number in item.NumberProfiles)
+                                foreach (NumberProfile numberProfile in item.NumberProfiles)
                                 {
-                                    SuspiciousNumber sNumber = new SuspiciousNumber();
+                                    StrategyExecutionDetail strategyExecutionDetail = new StrategyExecutionDetail();
 
-                                    if (fraudManagers[number.StrategyId].IsNumberSuspicious(number, out sNumber, number.StrategyId))
+                                    if (fraudManagers[numberProfile.StrategyId].IsNumberSuspicious(numberProfile, out strategyExecutionDetail))
                                     {
-                                        suspiciousNumbers.Add(sNumber);
-                                        numberProfiles.Add(number);
+                                        strategyExecutionDetails.Add(strategyExecutionDetail);
+                                        numberProfiles.Add(numberProfile);
                                     }
 
                                 }
-                                if (suspiciousNumbers.Count > 0)
+                                if (strategyExecutionDetails.Count > 0)
                                 {
-                                    List<AccountCaseType> cases = new List<AccountCaseType>();
-                                                foreach (var i in suspiciousNumbers)
-                                                {
-                                                    cases.Add(  new AccountCaseType(){AccountNumber= i.Number, StrategyId= i.StrategyId, SuspicionLevelID= i.SuspicionLevel});
-                                                }
-                                                dataManager.UpdateSusbcriberCases(cases);
-
-                                     inputArgument.OutputQueue.Enqueue(new SuspiciousNumberBatch
+                                     inputArgument.OutputQueueForStrategyExecutionDetail.Enqueue(new StrategyExecutionDetailBatch
                                     {
-                                        SuspiciousNumbers = suspiciousNumbers
+                                        StrategyExecutionDetails = strategyExecutionDetails
                                     });
-                                     inputArgument.OutputQueueForFraudResult.Enqueue(new SuspiciousNumberBatch
-                                     {
-                                         SuspiciousNumbers = suspiciousNumbers
-                                     });
-
                                 }
                                    
                                 if (numberProfiles.Count > 0)
-                                    inputArgument.OutputQueue2.Enqueue(new NumberProfileBatch
+                                    inputArgument.OutputQueueForNumberProfile.Enqueue(new NumberProfileBatch
                                     {
                                         NumberProfiles = numberProfiles
                                     });
@@ -138,10 +119,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             return new GetStrategyExecutionDetailInput()
             {
-                InputQueue = this.InputQueue.Get(context),
-                OutputQueue = this.OutputQueue.Get(context),
-                OutputQueueForFraudResult = this.OutputQueueForFraudResult.Get(context),
-                OutputQueue2 = this.OutputQueue2.Get(context),
+                InputQueueForNumberProfile = this.InputQueueForNumberProfile.Get(context),
+                OutputQueueForStrategyExecutionDetail = this.OutputQueueForStrategyExecutionDetail.Get(context),
+                OutputQueueForNumberProfile = this.OutputQueueForNumberProfile.Get(context),
                 Strategies = this.Strategies.Get(context)
             };
         }
