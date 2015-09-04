@@ -82,7 +82,7 @@ namespace TOne.Analytics.Data.SQL
                 {
                     IdColumn = "z.CodeGroup",
                     NameColumn = "c.Name",
-                    JoinStatements = new List<string>() { @" LEFT JOIN  OurZones z ON ts.OurZoneID = z.ZoneID LEFT JOIN CodeGroup c ON z.CodeGroup=c.Code" },
+                    JoinStatements = new List<string>() { @" LEFT JOIN  OurZones ourz ON ts.OurZoneID = ourz.ZoneID LEFT JOIN CodeGroup c ON ourz.CodeGroup=c.Code" },
                     GroupByStatements = new List<string>() { " z.CodeGroup ,  c.Name" },
                     CTEStatement = " OurZones AS (SELECT ZoneID, Name, CodeGroup FROM Zone z WITH (NOLOCK) WHERE SupplierID = 'SYS') "
                 });

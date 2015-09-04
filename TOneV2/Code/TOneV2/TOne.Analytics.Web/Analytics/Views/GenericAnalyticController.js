@@ -2,16 +2,10 @@
 
     "use strict";
 
-    GenericAnalyticController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticMeasureEnum', 'VRModalService', 'AnalyticsService'];
-    function GenericAnalyticController($scope, GenericAnalyticAPIService, GenericAnalyticMeasureEnum, VRModalService, analyticsService) {
+    GenericAnalyticController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticMeasureEnum',  'AnalyticsService'];
+    function GenericAnalyticController($scope, GenericAnalyticAPIService, GenericAnalyticMeasureEnum,  analyticsService) {
 
-        var gridApi, measureFields = [];
-
-
-        var groupKeys = analyticsService.getGenericAnalyticGroupKeys();
-        var measures = [];
-        var currentData;
-        defineScope();
+        var gridApi, measureFields;
         load();
 
         function defineScope() {
@@ -20,71 +14,44 @@
             $scope.fromDate = new Date(2013, 1, 1);
             $scope.toDate = now;
 
+            measureFields = analyticsService.getGenericAnalyticMeasureValues();
+            $scope.measures = analyticsService.getGenericAnalyticMeasures();
+            $scope.groupKeys = analyticsService.getGenericAnalyticGroupKeys();
 
-            $scope.groupKeys = groupKeys;
             $scope.selectedGroupKeys = [];
-            $scope.measures = measures;
-
             $scope.currentSearchCriteria = {
                 groupKeys: []
             };
-
             $scope.gridReady = function (api) {
                 gridApi = api;
             };
-
-            $scope.searchClicked = function () {
-                $scope.currentSearchCriteria.groupKeys.length = 0;
-                angular.forEach($scope.selectedGroupKeys, function (group) {
-                    $scope.currentSearchCriteria.groupKeys.push(group);
-                });
-                
+            $scope.searchClicked = function () { 
                 return retrieveData();
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return GenericAnalyticAPIService.GetFiltered(dataRetrievalInput)
                 .then(function (response) {
-
-                    //gridApi.setSummary(response.Summary);
-
-                    var index = 1;
-                    angular.forEach(currentData, function (itm) {
-
-                        if (index > 15)
-                            return;
-                        index++;
-
-                        var dataItem = {
-                            groupKeyValues: itm.DimensionValues,
-                            entityName: ''
-                            //value: itm.Data[measure.propertyName]
-                        };
-
-                        for (var i = 0; i < $scope.currentSearchCriteria.groupKeys.length; i++) {
-                            if (dataItem.entityName.length > 0)
-                                dataItem.entityName += ' - ';
-                            dataItem.entityName += itm.DimensionValues[i].Name;
-                        };
+                    $scope.currentSearchCriteria.groupKeys.length = 0;
+                    $scope.selectedGroupKeys.forEach(function (group) {
+                        $scope.currentSearchCriteria.groupKeys.push(group);
                     });
-
+                    //gridApi.setSummary(response.Summary);
 
                     onResponseReady(response);
                 });
             };
-
-
         }
 
-
         function retrieveData() {
-
+            if (gridApi == undefined)
+                return;
             $scope.datasource = [];
 
             var groupKeys = [];
             var filters = [];
 
-            angular.forEach($scope.selectedGroupKeys, function (group) {
+            $scope.selectedGroupKeys.forEach(function (group) {
                 groupKeys.push(group.value);
             });
 
@@ -96,30 +63,12 @@
                 FromTime: $scope.fromDate,
                 ToTime: $scope.toDate
             };
-            
             return gridApi.retrieveData(query);
         }
 
         function load() {
-            loadMeasures();
-            loadQueryMeasures();
+            defineScope();
         }
-
-
-        function loadQueryMeasures() {
-            if (measureFields.length == 0)
-                for (var prop in GenericAnalyticMeasureEnum) {
-                    measureFields.push(GenericAnalyticMeasureEnum[prop].value);
-                }
-        }
-
-        function loadMeasures() {
-            for (var prop in GenericAnalyticMeasureEnum) {
-                measures.push(GenericAnalyticMeasureEnum[prop]);
-            }
-        }
-
-
     }
     appControllers.controller('Generic_GenericAnalyticController', GenericAnalyticController);
 

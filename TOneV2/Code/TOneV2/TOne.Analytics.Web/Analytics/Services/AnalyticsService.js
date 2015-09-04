@@ -2,9 +2,9 @@
 
     "use strict";
 
-    analyticsServiceObj.$inject = ['TrafficStatisticGroupKeysEnum', 'GenericAnalyticDimensionEnum', 'PeriodEnum', 'UtilsService', 'VRModalService', 'ReleaseCodeMeasureEnum'];
+    analyticsServiceObj.$inject = ['GenericAnalyticMeasureEnum', 'TrafficStatisticGroupKeysEnum', 'GenericAnalyticDimensionEnum', 'PeriodEnum', 'UtilsService', 'VRModalService', 'ReleaseCodeMeasureEnum'];
 
-    function analyticsServiceObj(trafficStatisticGroupKeysEnum, GenericAnalyticDimensionEnum, periodEnum, utilsService, vrModalService, releaseCodeMeasureEnum) {
+    function analyticsServiceObj(GenericAnalyticMeasureEnum,trafficStatisticGroupKeysEnum, GenericAnalyticDimensionEnum, periodEnum, utilsService, vrModalService, releaseCodeMeasureEnum) {
         
         function updateParametersFromGroupKeys(parameters, scope, dataItem, viewScope) {
             var groupKeys ;
@@ -84,6 +84,23 @@
                     groupKeys.push(trafficStatisticGroupKeysEnum[prop]);
             }
             return groupKeys;
+        }
+
+        function getGenericAnalyticMeasures() {
+            var measures = [];
+            for (var prop in GenericAnalyticMeasureEnum) {
+                measures.push(GenericAnalyticMeasureEnum[prop]);
+            }
+            return measures;
+        }
+
+        function getGenericAnalyticMeasureValues() {
+            var measureValues = [];
+            if (measureValues.length == 0)
+                for (var prop in GenericAnalyticMeasureEnum) {
+                    measureValues.push(GenericAnalyticMeasureEnum[prop].value);
+                }
+            return measureValues;
         }
 
         function getGenericAnalyticGroupKeys() {
@@ -258,6 +275,8 @@
         }
 
         return ({
+            getGenericAnalyticMeasureValues:getGenericAnalyticMeasureValues,
+            getGenericAnalyticMeasures:getGenericAnalyticMeasures,
             getGenericAnalyticGroupKeys: getGenericAnalyticGroupKeys,
             getTrafficStatisticGroupKeys: getTrafficStatisticGroupKeys,
             getDefaultTrafficStatisticGroupKeys: getDefaultTrafficStatisticGroupKeys,

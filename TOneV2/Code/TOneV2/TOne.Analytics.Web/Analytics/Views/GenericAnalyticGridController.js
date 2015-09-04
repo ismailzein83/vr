@@ -2,24 +2,20 @@
 
     "use strict";
 
-    GenericAnalyticGridController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticDimensionEnum', 'GenericAnalyticMeasureEnum', 'VRModalService', 'UtilsService', 'AnalyticsService'];
-    function GenericAnalyticGridController($scope, GenericAnalyticAPIService, GenericAnalyticDimensionEnum, GenericAnalyticMeasureEnum, VRModalService, UtilsService, AnalyticsService) {
+    GenericAnalyticGridController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticDimensionEnum'];
+    function GenericAnalyticGridController($scope, GenericAnalyticAPIService, GenericAnalyticDimensionEnum) {
         var filter = [];
-        var measures = [];
         var measureFields = [];
-        var selectedGroupKeys = [];
-        defineScope();
+        var selectedGroupKeys = [] , parentGroupKeys = [];
+        
         load();
 
         function defineScope() {
 
-            $scope.parentGroupKeys = [];
-            $scope.measures = measureFields;
+            measureFields = $scope.viewScope.measureFields;
+            $scope.measures = $scope.viewScope.measures;
+
             $scope.selectedGroupKey;
-            $scope.measuresGroupKeys = [];
-            $scope.currentSearchCriteria = {
-                groupKeys: []
-            };
             $scope.groupKeys = [];
 
             $scope.groupKeySelectionChanged = function () {
@@ -29,10 +25,8 @@
 
                     
                     if (!$scope.selectedGroupKey.isDataLoaded && $scope.selectedGroupKey.gridAPI != undefined) {
-                        // $scope.parentGroupKeys = [];
                         retrieveData($scope.selectedGroupKey, false);
                     }
-
 
                 }
             };
@@ -52,30 +46,22 @@
             var query = {
                 Filters: filter,
                 DimensionFields: [$scope.selectedGroupKey.value],
-                MeasureFields: measures,
+                MeasureFields: measureFields,
                 FromTime: $scope.viewScope.fromDate,
                 ToTime: $scope.viewScope.toDate
             };
-            console.log(filter);
             return groupKey.gridAPI.retrieveData(query);
-        }
-
-        function loadQueryMeasures() {
-            if (measureFields.length == 0)
-                for (var prop in GenericAnalyticMeasureEnum) {
-                    measureFields.push(GenericAnalyticMeasureEnum[prop]);
-                }
         }
 
         function buildFilter(scope) {
 
             if (scope == $scope.viewScope)
                 return;
-
+            var parentGroupKeys;
             if (scope.gridParentScope == $scope.viewScope)
-                var parentGroupKeys = scope.gridParentScope.selectedGroupKeys;
+                parentGroupKeys = scope.gridParentScope.selectedGroupKeys;
             else
-                var parentGroupKeys = [scope.gridParentScope.selectedGroupKey];
+                parentGroupKeys = [scope.gridParentScope.selectedGroupKey];
 
 
 
@@ -98,17 +84,9 @@
         }
 
         function load() {
-            loadGroupKeys();// Load all group keys
-            loadMeasures();
-            loadQueryMeasures();
-
-           $scope.selectedGroupKey = $scope.groupKeys[0];
-        }
-
-        function loadMeasures() {
-            for (var prop in GenericAnalyticMeasureEnum) {
-                measures.push(GenericAnalyticMeasureEnum[prop].value);
-            }
+            defineScope();
+            loadGroupKeys();
+            $scope.selectedGroupKey = $scope.groupKeys[0];
         }
 
         function loadGroupKeys() {
@@ -124,7 +102,7 @@
             }
 
             LoadParentGroupKeys($scope.gridParentScope);
-            eliminateGroupKeysNotInParent($scope.parentGroupKeys, $scope.groupKeys);
+            eliminateGroupKeysNotInParent(parentGroupKeys, $scope.groupKeys);
         }
 
         function addGroupKeyIfNotExistsInParent(groupKey) {
@@ -151,12 +129,12 @@
             if (scope == $scope.viewScope) 
                 {
                     for (var i = 0; i < scope.selectedGroupKeys.length; i++) {
-                        $scope.parentGroupKeys.push(scope.selectedGroupKeys[i]);
+                        parentGroupKeys.push(scope.selectedGroupKeys[i]);
                     }
                     return;
                 }
             else {
-                $scope.parentGroupKeys.push(scope.selectedGroupKey);
+                parentGroupKeys.push(scope.selectedGroupKey);
                 LoadParentGroupKeys(scope.gridParentScope);
             }
         }

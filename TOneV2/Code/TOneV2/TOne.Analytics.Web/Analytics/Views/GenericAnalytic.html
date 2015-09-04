@@ -24,7 +24,7 @@
         <div>
             <vr-row>
                 <vr-columns colnum="12">
-                    <vr-datagrid datasource="datasource" pagingtype="'Pager'" dataretrievalfunction="dataRetrievalFunction" on-ready="gridReady">
+                    <vr-datagrid datasource="::datasource" pagingtype="'Pager'" dataretrievalfunction="dataRetrievalFunction" on-ready="gridReady">
 
                         <vr-datagridcolumn ng-repeat="groupKey in currentSearchCriteria.groupKeys" headertext="groupKey.description" field="'DimensionValues[' + $index + '].Name'" columnindex="$index" widthfactor="15"></vr-datagridcolumn>
                         <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="'MeasureValues[' + $index + ']'" tag="measure"></vr-datagridcolumn>
