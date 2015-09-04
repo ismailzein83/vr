@@ -55,6 +55,10 @@ app.service('BaseAPIService', function ($http, $q, $rootScope, notify, DataRetri
                 deferred.resolve(returnedResponse);
             })
             .error(function (data, status, headers, config) {
+
+                if (status === 401)
+                    window.location.href = '/Security/Login';
+
                 console.log('');
                 console.log('Error Occured: ' + data.ExceptionMessage);
                 console.log('');
@@ -105,6 +109,10 @@ app.service('BaseAPIService', function ($http, $q, $rootScope, notify, DataRetri
                 deferred.resolve(returnedResponse);
             })
             .error(function (data, status, headers, config) {
+
+                if (status === 401)
+                    window.location.href = '/Security/Login';
+
                 console.log('');
                 console.log('Error Occured: ' + data.ExceptionMessage);
                 console.log('');

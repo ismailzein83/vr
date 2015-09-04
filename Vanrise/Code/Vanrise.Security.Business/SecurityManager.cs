@@ -25,11 +25,14 @@ namespace Vanrise.Security.Business
 
             if(user != null)
             {
+                int expirationPeriodInMinutes = 1440;
+
                 AuthenticationToken authToken = new AuthenticationToken();
                 authToken.TokenName = SecurityContext.SECURITY_TOKEN_NAME;
                 authToken.Token = null;
                 authToken.UserName = user.Email;
                 authToken.UserDisplayName = user.Name;
+                authToken.ExpirationIntervalInMinutes = expirationPeriodInMinutes;
 
                 if (user.Status == UserStatus.Inactive)
                 {
@@ -43,7 +46,9 @@ namespace Vanrise.Security.Business
                 {
                     SecurityToken userInfo = new SecurityToken
                     {
-                        UserId = user.UserId
+                        UserId = user.UserId,
+                        IssuedAt = DateTime.Now,
+                        ExpiresAt = DateTime.Now.AddMinutes(expirationPeriodInMinutes)
                     };
                     string encrypted = Common.Cryptography.Encrypt(Common.Serializer.Serialize(userInfo), ConfigurationManager.AppSettings[SecurityContext.SECURITY_ENCRYPTION_SECRETE_KEY]);
                     authToken.Token = encrypted;

@@ -14,11 +14,17 @@ namespace Vanrise.Security.Entities
 
         public string UserDisplayName { get; set; }
 
+        public int ExpirationIntervalInMinutes { get; set; }
+
         public string Token { get; set; }
     }
 
     public class SecurityToken
     {
         public int UserId { get; set; }
+
+        public DateTime IssuedAt { get; set; }
+
+        public DateTime ExpiresAt { get; set; }
     }
 }

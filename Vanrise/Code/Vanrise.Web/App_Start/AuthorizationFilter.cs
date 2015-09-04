@@ -15,7 +15,7 @@ namespace Vanrise.Web.App_Start
 
             if (att != null && !SecurityContext.Current.IsAllowed(att.Permissions))
             {
-                actionContext.Response = new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.Forbidden);
+                actionContext.Response = Utils.CreateResponseMessage(System.Net.HttpStatusCode.Forbidden, "you are not authorized to perform this request");
             }
 
             base.OnAuthorization(actionContext);
