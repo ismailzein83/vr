@@ -26,7 +26,6 @@
             }
         };
 
-
         var directiveDefinitionObject = {
 
             require: '^form',
@@ -49,47 +48,73 @@
             controller: function ($scope, $element, $attrs) {
                 if (rootScope == undefined)
                     rootScope = $scope.$root;
+
                 var controller = this;
-                this.ValidationMessagesEnum = validationMessagesEnum;
-                this.limitcharactercount = $attrs.limitcharactercount;
-                this.limitHeight = ($attrs.limitheight != undefined) ? 'limit-height' : '';
-                this.selectlbl = $attrs.selectlbl;
-                this.filtername = '';
-                this.showloading = false;
-                this.data = [];
 
-                this.isDropDownOpened = function () {
+                //Configuration
+                angular.extend(this, {
+                    ValidationMessagesEnum: validationMessagesEnum,
+                    limitcharactercount : $attrs.limitcharactercount,
+                    limitHeight : (($attrs.limitheight != undefined) ? 'limit-height' : ''),
+                    selectlbl : $attrs.selectlbl,
+                    filtername : '',
+                    showloading : false,
+                    data: [],
+                    hint : (($attrs.hint != undefined) ? $attrs.hint : undefined )
+                });
+                //Configuration
+
+                function isDropDownOpened() {
                     return vrSelectSharedObject.isDropDownOpened($attrs.id);
-                };
-                this.isPagination = function () {
+                }
+
+                function isPagination() {
                     return $attrs.ispagination != undefined;
-                };
-                this.isContainerVisible = function () {
-                    if (controller.isMultiple()) return true;
-                    if (controller.isRemoteLoad()) return true;
-                    if (controller.isEnFilter()) return true;
+                }
+
+                function isMultiple() {
+                    return selectService.isMultiple($attrs);
+                }
+
+                function isRemoteLoad() {
+                    if (typeof (controller.datasource) == 'function') return true;
                     return false;
-                };
+                }
 
-                this.getdatasource = function () {
-                    if (controller.isRemoteLoad()) return controller.data;
+                function isEnFilter() {
+                    var isEnable = false;
+                    if (isMultiple()) isEnable = true;
+                    if (isRemoteLoad()) isEnable = true;
+                    if (controller.hidefilterbox === "" || controller.hidefilterbox) isEnable = false;
+                    return isEnable;
+                }
+
+                function isContainerVisible() {
+                    if (isMultiple()) return true;
+                    if (isRemoteLoad()) return true;
+                    if (isEnFilter()) return true;
+                    return false;
+                }
+
+                function getdatasource() {
+                    if (isRemoteLoad()) return controller.data;
                     return controller.datasource;
-                };
-                this.withLocalFiter = function () {
-                    return ($attrs.withlocalfilter != undefined);
-                };
+                }
 
-                if ($attrs.hint != undefined)
-                    this.hint = $attrs.hint;
-                this.getInputeStyle = function () {
+                function withLocalFiter() {
+                    return ($attrs.withlocalfilter != undefined);
+                }
+
+                function getInputeStyle() {
                     return ($attrs.hint != undefined) ? {
                         "display": "inline-block",
                         "width": "calc(100% - 15px)",
                         "margin-right": "-3px"
                     } : {};
                 }
-                this.adjustTooltipPosition = function (e) {
-                    setTimeout(function() {
+
+                function adjustTooltipPosition(e) {
+                    setTimeout(function () {
                         var self = angular.element(e.currentTarget);
                         var selfHeight = $(self).height();
                         var selfOffset = $(self).offset();
@@ -101,74 +126,119 @@
                         $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: selfOffset.left });
                     }, 1);
                 }
-                this.setdatasource = function (datasource) {
-                    if (controller.isRemoteLoad()) controller.data = datasource;
+
+                function setdatasource(datasource) {
+                    if (isRemoteLoad()) controller.data = datasource;
                     else controller.datasource = datasource;
-                };
+                }
 
-                this.isRemoteLoad = function () {
-                    if (typeof (controller.datasource) == 'function') return true;
-                    return false;
-                };
+                function muteAction(e) {
+                    baseDirService.muteAction(e);
+                }
 
-                this.isEnFilter = function () {
-                    var isEnable = false;
-                    if (controller.isMultiple()) isEnable = true;
-                    if (controller.isRemoteLoad()) isEnable = true;
-                    if (controller.hidefilterbox === "" || controller.hidefilterbox) isEnable = false;
-                    return isEnable;
-                };
+                function onClickLi(e) {
+                    if (isMultiple()) muteAction(e);
+                }
 
-                this.onClickLi = function (e) {
-                    if (controller.isMultiple()) controller.muteAction(e);
-                };
-
-                this.isMultiple = function () {
-                    return selectService.isMultiple($attrs);
-                };
-
-                this.selectedSectionVisible = function () {
+                function selectedSectionVisible() {
                     if (controller.hideselectedvaluessection === "" || controller.hideselectedvaluessection) return false;
                     if (controller.selectedvalues == undefined) return false;
-                    if (controller.selectedvalues.length > 0 && controller.isMultiple()) return true;
+                    if (controller.selectedvalues.length > 0 && isMultiple()) return true;
                     return false;
-                };
+                }
 
-
-                this.getObjectProperty = function (item, property) {
+                function getObjectProperty(item, property) {
                     return baseDirService.getObjectProperty(item, property);
-                };
+                }
 
-                this.getObjectText = function (item) {
-                    if (controller.datatextfield) return controller.getObjectProperty(item, controller.datatextfield);
+                function getObjectText(item) {
+                    if (controller.datatextfield) return getObjectProperty(item, controller.datatextfield);
+                    return item;
+                }
+
+                function getObjectValue(item) {
+                    if (controller.datavaluefield) return getObjectProperty(item, controller.datavaluefield);
                     return item;
                 };
 
-                this.getObjectValue = function (item) {
-                    if (controller.datavaluefield) return controller.getObjectProperty(item, controller.datavaluefield);
-                    return item;
-                };
+                function findExsite(item) {
+                    return utilsService.getItemIndexByVal(controller.selectedvalues, getObjectValue(item), controller.datavaluefield);
+                }
 
-                this.findExsite = function (item) {
-                    return utilsService.getItemIndexByVal(controller.selectedvalues, controller.getObjectValue(item), controller.datavaluefield);
-                };
-
-                this.muteAction = function (e) {
-                    baseDirService.muteAction(e);
-                };
-
-                this.clearFilter = function (e) {
-                    controller.muteAction(e);
+                function clearFilter(e) {
+                    muteAction(e);
                     controller.filtername = '';
-                };
+                }
 
-                this.selectFirstItem = function () {
+                function selectFirstItem() {
                     controller.selectedvalues = [];
                     controller.selectedvalues.length = 0;
-                    controller.selectedvalues.push(controller.getdatasource()[0]);
-                    return controller.getObjectText(controller.getdatasource()[0]);
-                };
+                    controller.selectedvalues.push(getdatasource()[0]);
+                    return controller.getObjectText(getdatasource()[0]);
+                }
 
+                function getLabel() {
+
+                    if (! isMultiple()) {
+
+                        var lastValue;
+                        if (Object.prototype.toString.call(controller.selectedvalues) === '[object Array]')
+                            lastValue = baseDirService.getLastItem(controller.selectedvalues);
+                        else
+                            lastValue = controller.selectedvalues;
+
+                        if (lastValue == null) {
+
+                            if ($attrs.placeholder)
+                                return $attrs.placeholder;
+
+                            return selectFirstItem();
+                        }
+
+                        var x = getObjectText(lastValue);
+                        if (x !== undefined)
+                            return x;
+                    }
+
+                    var selectedVal = [];
+                    for (var i = 0; i < controller.selectedvalues.length; i++) {
+                        selectedVal.push(getObjectText(controller.selectedvalues[i]));
+                        if (i === 2) break;
+                    }
+                    var s = selectService.getSelectText(controller.selectedvalues.length, selectedVal, $attrs.placeholder, $attrs.selectplaceholder);
+                    return s;
+                }
+
+                function getSelectedSectionClass() {
+                    if (!selectedSectionVisible()) return 'single-col-checklist';
+                    return controller.selectedvalues.length === 0 ? 'single-col-checklist' : 'double-col-checklist';
+                }
+
+                //Exports
+                angular.extend(this, {
+                    isDropDownOpened: isDropDownOpened,
+                    isPagination: isPagination,
+                    isContainerVisible: isContainerVisible,
+                    isMultiple: isMultiple,
+                    isRemoteLoad: isRemoteLoad,
+                    isEnFilter: isEnFilter,
+                    getdatasource: getdatasource,
+                    withLocalFiter: withLocalFiter,
+                    getInputeStyle: getInputeStyle,
+                    adjustTooltipPosition: adjustTooltipPosition,
+                    setdatasource: setdatasource,
+                    onClickLi: onClickLi,
+                    muteAction: muteAction,
+                    selectedSectionVisible: selectedSectionVisible,
+                    getObjectText: getObjectText,
+                    getObjectValue: getObjectValue,
+                    findExsite: findExsite,
+                    clearFilter: clearFilter,
+                    selectFirstItem: selectFirstItem,
+                    getLabel: getLabel,
+                    getSelectedSectionClass:getSelectedSectionClass
+                });
+                //Exports
 
                 setTimeout(function () {
                     $('div[name=' + $attrs.id + ']').on('show.bs.dropdown', function () {
@@ -211,44 +281,6 @@
                     }
 
                 }, 1);
-                this.getLabel = function () {
-
-                    if (!controller.isMultiple()) {
-
-                        var lastValue;
-                        if (Object.prototype.toString.call(controller.selectedvalues) === '[object Array]')
-                            lastValue = baseDirService.getLastItem(controller.selectedvalues);
-                        else
-                            lastValue = controller.selectedvalues;
-
-                        if (lastValue == null) {
-
-                            if ($attrs.placeholder)
-                                return $attrs.placeholder;
-
-                            return controller.selectFirstItem();
-                        }
-
-                        var x = controller.getObjectText(lastValue);
-                        if (x !== undefined)
-                            return x;
-                    }
-
-                    var selectedVal = [];
-                    for (var i = 0; i < controller.selectedvalues.length; i++) {
-                        selectedVal.push(controller.getObjectText(controller.selectedvalues[i]));
-                        if (i === 2) break;
-                    }
-                    var s = selectService.getSelectText(controller.selectedvalues.length, selectedVal, $attrs.placeholder, $attrs.selectplaceholder);
-                    return s;
-
-                };
-
-                this.getSelectedSectionClass = function () {
-                    if (!controller.selectedSectionVisible()) return 'single-col-checklist';
-                    return controller.selectedvalues.length === 0 ? 'single-col-checklist' : 'double-col-checklist';
-                };
-
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -327,45 +359,6 @@
                     if (attrs.openup !== undefined) {
                         ulDropdown.addClass('menu-to-top');
                     }
-
-                    //setTimeout(function() {
-                    //    $('div[name=' + attrs.id + ']').on('show.bs.dropdown', function(e) {
-                    //        vrSelectSharedObject.onOpenDropDown(attrs.id);
-                    //        $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
-                    //    });
-
-                    //    $('div[name=' + attrs.id + ']').attr('name', attrs.id).on('hide.bs.dropdown', function(e) {
-                    //        vrSelectSharedObject.onCloseDropDown(attrs.id);
-                    //        $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
-                    //    });
-                    //}, 100);
-                    //setTimeout(function() {
-                    //    if ($('div[name=' + attrs.id + ']').closest('.modal-body').length > 0) {
-
-                    //        $('div[name=' + attrs.id + ']').on('click', '.dropdown-toggle', function(event) {
-
-                    //            var self = $(this);
-                    //            var selfHeight = $(this).parent().height();
-                    //            var selfOffset = $(self).offset();                           
-                    //            var dropDown = self.parent().find('ul');
-                    //            $(dropDown).css({ position: 'fixed', top: 'auto' , left: 'auto' });
-                    //        });
-
-                    //        var fixDropdownPosition = function() {
-                    //            $('.drop-down-inside-modal').find('.dropdown-menu').hide();
-                    //            $('.drop-down-inside-modal').removeClass("open");
-
-                    //        };
-
-                    //        $(".modal-body").unbind("scroll");
-                    //        $(".modal-body").scroll(function() {
-                    //            fixDropdownPosition();
-                    //        });
-                    //        $(window).resize(function() {
-                    //            fixDropdownPosition();
-                    //        });
-                    //    }
-                    //}, 500);
                 }
 
                 onLoad();
@@ -384,13 +377,10 @@
                                 ctrl.selectedvalues = null;
                         };
 
-                        var selectItem = function (e, item) {
+                        function selectItem(e, item) {
 
                             if (!ctrl.isMultiple()) {
-                                ctrl.selectedvalues = item;// [];
-                                //ctrl.selectedvalues.length = 0;
-                                //ctrl.selectedvalues.push(item);
-
+                                ctrl.selectedvalues = item;
                             }
                             else {
                                 ctrl.muteAction(e);
@@ -406,7 +396,7 @@
                                 else
                                     ctrl.selectedvalues.push(item);
                             }
-                        };
+                        }
 
                         ctrl.selectValue = function (e, item) {
                             selectItem(e, item);
