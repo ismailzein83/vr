@@ -1,4 +1,4 @@
-﻿var NumberProfilingProcessController = function ($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, HourEnum) {
+﻿var NumberProfilingProcessInputController = function ($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, HourEnum) {
     var pageLoaded = false;
 
     defineScope();
@@ -22,7 +22,10 @@
 
         $scope.createProcessInput.getData = function () {
 
-
+            $scope.PeakHoursIds = [];
+            angular.forEach($scope.selectedPeakHours, function (itm) {
+                $scope.PeakHoursIds.push(itm.id)
+            });
 
             var runningDate = new Date($scope.fromDate);
 
@@ -35,13 +38,15 @@
                     var fromDate = new Date(runningDate);
                     var toDate = new Date(runningDate.setHours(runningDate.getHours() + 1));
 
+                    
+
                     $scope.createProcessInputObjects.push({
                         InputArguments: {
                             $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.NumberProfilingProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
                             FromDate: new Date(fromDate),
                             ToDate: new Date(toDate),
                             PeriodId:$scope.selectedPeriod.Id,
-                            Parameters:{GapBetweenConsecutiveCalls:$scope.gapBetweenConsecutiveCalls, GapBetweenFailedConsecutiveCalls:$scope.gapBetweenFailedConsecutiveCalls,MaxLowDurationCall:$scope.maxLowDurationCall, MinimumCountofCallsinActiveHour: $scope.minCountofCallsinActiveHour , PeakHoursIds:[1,2,3]  }
+                            Parameters: { GapBetweenConsecutiveCalls: $scope.gapBetweenConsecutiveCalls, GapBetweenFailedConsecutiveCalls: $scope.gapBetweenFailedConsecutiveCalls, MaxLowDurationCall: $scope.maxLowDurationCall, MinimumCountofCallsinActiveHour: $scope.minCountofCallsinActiveHour, PeakHoursIds: $scope.PeakHoursIds }
                         }
                     });
                     runningDate = new Date(toDate);
@@ -61,7 +66,7 @@
                             FromDate: new Date(fromDate),
                             ToDate: new Date(toDate),
                             PeriodId: $scope.selectedPeriod.Id,
-                            Parameters: { GapBetweenConsecutiveCalls: $scope.gapBetweenConsecutiveCalls, GapBetweenFailedConsecutiveCalls: $scope.gapBetweenFailedConsecutiveCalls, MaxLowDurationCall: $scope.maxLowDurationCall, MinimumCountofCallsinActiveHour: $scope.minCountofCallsinActiveHour, PeakHoursIds: [1, 2, 3] }
+                            Parameters: { GapBetweenConsecutiveCalls: $scope.gapBetweenConsecutiveCalls, GapBetweenFailedConsecutiveCalls: $scope.gapBetweenFailedConsecutiveCalls, MaxLowDurationCall: $scope.maxLowDurationCall, MinimumCountofCallsinActiveHour: $scope.minCountofCallsinActiveHour, PeakHoursIds: $scope.PeakHoursIds }
                         }
                     });
 
@@ -90,8 +95,8 @@
 
 }
 
-NumberProfilingProcessController.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'HourEnum'];
-appControllers.controller('FraudAnalysis_NumberProfilingProcessController', NumberProfilingProcessController)
+NumberProfilingProcessInputController.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'HourEnum'];
+appControllers.controller('FraudAnalysis_NumberProfilingProcessInputController', NumberProfilingProcessInputController)
 
 
 
