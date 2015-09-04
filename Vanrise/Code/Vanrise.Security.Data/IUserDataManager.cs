@@ -11,7 +11,7 @@ namespace Vanrise.Security.Data
     {
         Vanrise.Entities.BigResult<User> GetFilteredUsers(Vanrise.Entities.DataRetrievalInput<UserQuery> input);
 
-        List<User> GetUsers();
+        List<UserInfo> GetUsers();
 
         List<User> GetMembers(int roleId);
 

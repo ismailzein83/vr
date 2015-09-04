@@ -17,7 +17,7 @@ namespace Vanrise.Security.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredUsers(input));
         }
 
-        public List<User> GetUsers()
+        public List<UserInfo> GetUsers()
         {
             IUserDataManager datamanager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
             return datamanager.GetUsers();

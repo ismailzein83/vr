@@ -395,10 +395,10 @@ namespace Vanrise.BI.Business
               }
               else
               {
-                  List<User> users = new List<User>();
+                  List<UserInfo> users = new List<UserInfo>();
                   UserManager userManager = new UserManager();
                   users=userManager.GetUsers();
-                  foreach (User user in users)
+                  foreach (UserInfo user in users)
                   {
                       if (!distinctUsers.Contains(user.UserId) && user.Status != UserStatus.Inactive)
                           distinctUsers.Add(user.UserId);

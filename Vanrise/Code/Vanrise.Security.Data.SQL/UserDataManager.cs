@@ -27,9 +27,9 @@ namespace Vanrise.Security.Data.SQL
             return RetrieveData(input, createTempTableAction, UserMapper);
         }
 
-        public List<User> GetUsers()
+        public List<UserInfo> GetUsers()
         {
-            return GetItemsSP("sec.sp_User_GetAll", UserMapper);
+            return GetItemsSP("sec.sp_User_GetAll", UserInfoMapper);
         }
 
         public List<User> GetMembers(int groupId)
@@ -96,6 +96,16 @@ namespace Vanrise.Security.Data.SQL
                 LastLogin = GetReaderValue<DateTime>(reader, "LastLogin"),
                 Status = (Entities.UserStatus) reader["Status"],
                 Description = reader["Description"] as string
+            };
+        }
+
+        private UserInfo UserInfoMapper(IDataReader reader)
+        {
+            return new Entities.UserInfo
+            {
+                UserId = Convert.ToInt32(reader["Id"]),
+                Name = reader["Name"] as string,
+                Status = (Entities.UserStatus)reader["Status"]
             };
         }
     }
