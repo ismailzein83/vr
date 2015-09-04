@@ -18,7 +18,7 @@
                 maxlength:'@',
                 customvalidate: '&'
             },
-            controller: function ($scope, $element) {
+            controller: function () {
 
             },
             compile: function (element, attrs) {
@@ -54,7 +54,7 @@
                                 if (negativeArray.length > 2)
                                     ctrl.value = oldValue;
                                 if (arr.length === 0) return;
-                                if (arr.length === 1 && (arr[0] == '-' || arr[0] === '.')) return;
+                                if (arr.length === 1 && (arr[0] === '-' || arr[0] === '.')) return;
                                 if (arr.length === 2 && newValue === '-.') return;
                                 if (isNaN(newValue)) {
                                     ctrl.value = oldValue;
@@ -93,7 +93,7 @@
                         }
 
                         ctrl.adjustTooltipPosition = function (e) {
-                            setTimeout(function () {
+                            setTimeout(function() {
                                 var self = angular.element(e.currentTarget);
                                 var selfHeight = $(self).height();
                                 var selfOffset = $(self).offset();
@@ -101,10 +101,10 @@
                                 $(tooltip).css({ display: 'block' });
                                 var innerTooltip = self.parent().find('.tooltip-inner')[0];
                                 var innerTooltipArrow = self.parent().find('.tooltip-arrow')[0];
-                                $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight +5, left: selfOffset.left - 30 });
-                                $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight , left: selfOffset.left  });
+                                $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 5, left: selfOffset.left - 30 });
+                                $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: selfOffset.left });
 
-                            }, 1)
+                            }, 1);
                         }
                        
                         BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
