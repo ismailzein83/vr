@@ -162,7 +162,7 @@ function BPDefinitionManagementController($scope, BusinessProcessService, Busine
         BusinessProcessAPIService.GetWorkflowTasksByDefinitionIds().then(function (response) {
             angular.forEach(response, function (task) {
                 angular.forEach($scope.filteredDefinitions, function (def) {
-                    if (def.BPDefinitionID == task.TaskAction.BPDefinitionID) {
+                    if (def.BPDefinitionID == task.TaskSettings.TaskActionArgument.BPDefinitionID) {
                         if (angular.isUndefined(def.scheduledTasks)) {
                             def.scheduledTasks = [];
                         }
