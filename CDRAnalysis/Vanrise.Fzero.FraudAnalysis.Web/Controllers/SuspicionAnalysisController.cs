@@ -35,11 +35,11 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredAccountSuspicionDetails(input));
         }
 
-        [HttpGet]
-        public bool UpdateAccountCase(string accountNumber, CaseStatus caseStatus, DateTime? validTill)
+        [HttpPost]
+        public bool UpdateAccountCase(SpecialInput input)
         {
             FraudManager manager = new FraudManager();
-            return manager.UpdateAccountCase(accountNumber, caseStatus, validTill);
+            return manager.UpdateAccountCase(input.accountNumber, input.caseStatus, input.validTill);
         }
 
         [HttpGet]

@@ -4,6 +4,7 @@
         GetFilteredSuspiciousNumbers: GetFilteredSuspiciousNumbers,
         GetFilteredAccountSuspicionSummaries: GetFilteredAccountSuspicionSummaries,
         GetFilteredAccountSuspicionDetails: GetFilteredAccountSuspicionDetails,
+        UpdateAccountCase: UpdateAccountCase,
         GetFraudResult: GetFraudResult,
         GetOperatorType: GetOperatorType
     });
@@ -20,12 +21,8 @@
         return BaseAPIService.post("/api/SuspicionAnalysis/GetFilteredAccountSuspicionDetails", input);
     }
 
-    function UpdateAccountCase(accountNumber, caseStatus, validTill) {
-        return BaseAPIService.get("/api/SuspicionAnalysis/UpdateAccountCase", {
-            accountNumber: accountNumber,
-            caseStatus: caseStatus,
-            validTill: validTill
-        });
+    function UpdateAccountCase(input) {
+        return BaseAPIService.post("/api/SuspicionAnalysis/UpdateAccountCase", input);
     }
 
     function GetFraudResult(fromDate, toDate, strategiesList, suspicionLevelsList, accountNumber) {
