@@ -60,22 +60,25 @@ namespace TOne.Analytics.Data.SQL
             Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsFilterConfig)
         {
             StringBuilder queryBuilder = new StringBuilder(@"IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
-	                                                        BEGIN 
+	                                                        BEGIN
+                                                                WITH 
+                                                                #CTEPART#
+                                                                AllResult AS( 
 			                                                    SELECT #SELECTPART#
-                                                                INTO #TEMPTABLE#
-			                                                    FROM TrafficStats ts
+			                                                    FROM TrafficStats ts WITH(NOLOCK ,INDEX(IX_TrafficStats_DateTimeFirst))
                                                                 #JOINPART#
 			                                                    WHERE
 			                                                    FirstCDRAttempt BETWEEN @FromDate AND @ToDate
                                                                 #FILTERPART#
-			                                                    GROUP BY #GROUPBYPART#
+			                                                    GROUP BY #GROUPBYPART#)
+                                                                SELECT * INTO #TEMPTABLE# FROM AllResult
                                                             END ");
-            
-           
+
             StringBuilder selectPartBuilder = new StringBuilder();
             StringBuilder joinPartBuilder = new StringBuilder();
             StringBuilder filterPartBuilder = new StringBuilder();
             StringBuilder groupByPartBuilder = new StringBuilder();
+            StringBuilder ctePartBuilder = new StringBuilder();
 
             //adding group fields related parts to the query
             foreach (AnalyticDimension groupField in input.Query.DimensionFields)
@@ -93,6 +96,9 @@ namespace TOne.Analytics.Data.SQL
                     {
                         AddStatementToJoinPart(joinPartBuilder, statement);
                     }
+
+                if (groupFieldConfig.CTEStatement != null)
+                    AddStatementToCTEPart(ctePartBuilder, groupFieldConfig.CTEStatement);
                 
                 if(!String.IsNullOrEmpty(groupFieldConfig.IdColumn))
                     AddColumnToSelectPart(selectPartBuilder, String.Format("{0} AS DimensionId_{1}", groupFieldConfig.IdColumn, groupField));
@@ -133,6 +139,7 @@ namespace TOne.Analytics.Data.SQL
             queryBuilder.Replace("#JOINPART#", joinPartBuilder.ToString());
             queryBuilder.Replace("#FILTERPART#", filterPartBuilder.ToString());
             queryBuilder.Replace("#GROUPBYPART#", groupByPartBuilder.ToString());
+            queryBuilder.Replace("#CTEPART#", ctePartBuilder.ToString());
 
             return queryBuilder.ToString();
         }
@@ -166,15 +173,16 @@ namespace TOne.Analytics.Data.SQL
             groupByPartBuilder.Append(column);
         }
 
+        void AddStatementToCTEPart(StringBuilder ctePartBuilder, string statement)
+        {
+            if (statement.Length != 0)
+                ctePartBuilder.Append(statement + " , ");
+        }
+
         void AddStatementToJoinPart(StringBuilder joinPartBuilder, string statement)
         {
             joinPartBuilder.Append(statement);
         }
-
-        //void AddFilterToFilterPart(StringBuilder filterPartBuilder, string filter)
-        //{
-        //    filterPartBuilder.Append(filter);
-        //}
 
         AnalyticRecord AnalyticRecordMapper(IDataReader reader, Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsConfig, Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig> measureFieldsConfig)
         {

@@ -2,8 +2,8 @@
 
     "use strict";
 
-    GenericAnalyticGridController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticGroupKeysEnum', 'GenericAnalyticMeasureEnum', 'VRModalService', 'UtilsService', 'AnalyticsService'];
-    function GenericAnalyticGridController($scope, GenericAnalyticAPIService, GenericAnalyticGroupKeysEnum, GenericAnalyticMeasureEnum, VRModalService, UtilsService, AnalyticsService) {
+    GenericAnalyticGridController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticDimensionEnum', 'GenericAnalyticMeasureEnum', 'VRModalService', 'UtilsService', 'AnalyticsService'];
+    function GenericAnalyticGridController($scope, GenericAnalyticAPIService, GenericAnalyticDimensionEnum, GenericAnalyticMeasureEnum, VRModalService, UtilsService, AnalyticsService) {
         var filter = [];
         var measures = [];
         var measureFields = [];
@@ -82,9 +82,9 @@
             for (var i = 0; i < parentGroupKeys.length; i++) {
                 var groupKey = parentGroupKeys[i];
 
-                for (var item in GenericAnalyticGroupKeysEnum) {
-                    if (GenericAnalyticGroupKeysEnum.hasOwnProperty(item)) {
-                        if (groupKey.value == GenericAnalyticGroupKeysEnum[item].value) {
+                for (var item in GenericAnalyticDimensionEnum) {
+                    if (GenericAnalyticDimensionEnum.hasOwnProperty(item)) {
+                        if (groupKey.value == GenericAnalyticDimensionEnum[item].value) {
                             var obj = { Dimension: groupKey.value };
                             obj.FilterValues = [scope.dataItem.DimensionValues[i].Id];
                             filter.push(obj);
@@ -112,20 +112,17 @@
         }
 
         function loadGroupKeys() {
-            for (var prop in GenericAnalyticGroupKeysEnum) {
+            for (var prop in GenericAnalyticDimensionEnum) {
                 var groupKey = {
-                    name: GenericAnalyticGroupKeysEnum[prop].name,
-                    value: GenericAnalyticGroupKeysEnum[prop].value,
+                    name: GenericAnalyticDimensionEnum[prop].name,
+                    value: GenericAnalyticDimensionEnum[prop].value,
                     data: [],
-                    isDataLoaded: false,
-                    propertyName: GenericAnalyticGroupKeysEnum[prop].propertyName
+                    isDataLoaded: false
                 };
                
                 addGroupKeyIfNotExistsInParent(groupKey);
             }
-           
-            //if ($scope.groupKeys.length > 0)
-            //    $scope.selectedGroupKey = $scope.groupKeys[0];
+
             LoadParentGroupKeys($scope.gridParentScope);
             eliminateGroupKeysNotInParent($scope.parentGroupKeys, $scope.groupKeys);
         }
@@ -171,9 +168,6 @@
                         groupKeys.splice(j, 1);
             }
         }
-
-
-
 
     }
     appControllers.controller('GenericAnalyticGridController', GenericAnalyticGridController);

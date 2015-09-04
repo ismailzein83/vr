@@ -8,19 +8,24 @@ namespace TOne.Analytics.Entities
 {
     public enum AnalyticMeasureField
     {
-        Attempts = 0,
-        SuccessfulAttempts = 1,
-        DurationsInMinutes = 3,
-        ASR = 4,
-        ACD = 5,
-        DeliveredASR = 6,
-        AveragePDD = 7,
-        NumberOfCalls = 8,
-        PricedDuration = 9,
-        Sale_Nets = 10,
-        Cost_Nets = 11,
-        Profit = 12,
-        Percentage = 13,
-        rownIndex = 14
+        FirstCDRAttempt = 0,
+        ABR = 1,
+        ASR = 2,
+        NER = 3,
+        Attempts = 4,
+        SuccessfulAttempts = 5,
+        FailedAttempts = 6,
+        DeliveredAttempts = 7,
+        DurationsInSeconds = 8,
+        PDDInSeconds = 9,
+        UtilizationInSeconds = 10,
+        NumberOfCalls = 11,
+        DeliveredNumberOfCalls = 12,
+        CeiledDuration = 13,
+        ACD = 14,
+        LastCDRAttempt = 15,
+        MaxDurationInSeconds = 16,
+        PGAD = 17,
+        AveragePDD = 18
     }
 }

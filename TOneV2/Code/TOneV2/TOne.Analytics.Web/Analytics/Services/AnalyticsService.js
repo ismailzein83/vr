@@ -2,9 +2,9 @@
 
     "use strict";
 
-    analyticsServiceObj.$inject = ['TrafficStatisticGroupKeysEnum', 'GenericAnalyticGroupKeysEnum', 'PeriodEnum', 'UtilsService', 'VRModalService', 'ReleaseCodeMeasureEnum'];
+    analyticsServiceObj.$inject = ['TrafficStatisticGroupKeysEnum', 'GenericAnalyticDimensionEnum', 'PeriodEnum', 'UtilsService', 'VRModalService', 'ReleaseCodeMeasureEnum'];
 
-    function analyticsServiceObj(trafficStatisticGroupKeysEnum, genericAnalyticGroupKeysEnum, periodEnum, utilsService, vrModalService, releaseCodeMeasureEnum) {
+    function analyticsServiceObj(trafficStatisticGroupKeysEnum, GenericAnalyticDimensionEnum, periodEnum, utilsService, vrModalService, releaseCodeMeasureEnum) {
         
         function updateParametersFromGroupKeys(parameters, scope, dataItem, viewScope) {
             var groupKeys ;
@@ -88,8 +88,8 @@
 
         function getGenericAnalyticGroupKeys() {
             var groupKeys = [];
-            for (var prop in genericAnalyticGroupKeysEnum) {
-                    groupKeys.push(genericAnalyticGroupKeysEnum[prop]);
+            for (var prop in GenericAnalyticDimensionEnum) {
+                    groupKeys.push(GenericAnalyticDimensionEnum[prop]);
             }
             return groupKeys;
         }
