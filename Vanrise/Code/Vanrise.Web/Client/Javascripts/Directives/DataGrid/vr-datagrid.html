@@ -58,8 +58,8 @@
 <div ng-show="ctrl.showPager && ctrl.pagerSettings.numberOfPages > 1" ng-class="ctrl.ngClassLevel">
     <vr-pagination pagersettings="ctrl.pagerSettings"></vr-pagination>
 </div>
-<div ng-show="!ctrl.showPager" ng-class="ctrl.ngClassLevel">
-   <div class="pull-right" style="font-size: 10px; margin-right: 5px; margin-top: 5px; "> Total count ({{ctrl.pagerSettings.totalDataCount}})</div> 
+<div ng-show="!ctrl.showPager" ng-class="ctrl.ngClassLevel" class="vr-remote-footer">
+    <div class="pull-right" style="font-size: 10px; margin-right: 5px; margin-top: 5px; "> Total count ({{ctrl.pagerSettings.totalDataCount}})</div>
 </div>
 <div id="rowTemplate">
     <div style="white-space:nowrap" ng-style="{'background-color': isRowExpanded ? '#F5F5F5' : 'Transparent', 'font-weight' :isRowExpanded ? 'bolder' : 'normal', 'border-right': '1px solid #D0D0D0', 'border-left': '1px solid #D0D0D0'}">

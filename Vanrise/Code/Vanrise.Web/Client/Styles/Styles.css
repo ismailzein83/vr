@@ -1897,3 +1897,15 @@ opacity:0.9 ;
 
 
 /* end of vr-numeric*/
+.big-data-grid{
+    width:100%;
+    overflow-x:auto;
+    padding-left:15px;
+}
+
+.big-data-grid .vr-datagrid{
+    width:3000px !important;
+}
+.big-data-grid .vr-remote-footer{
+     width:3000px !important;
+}

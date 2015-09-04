@@ -76,16 +76,18 @@
 
                                 </div>
                                 <div ng-show="isNumberProfileTabShown">
-                                    <vr-datagrid datasource="numberProfiles" dataretrievalfunction="dataRetrievalFunction_NumberProfiles" maxheight="400px" rotate="true" pagingtype="'PagingOnScroll'" on-ready="onNumberProfilesGridReady">
+                                    <div class="big-data-grid">
+                                        <vr-datagrid datasource="numberProfiles" dataretrievalfunction="dataRetrievalFunction_NumberProfiles" maxheight="400px"  pagingtype="'PagingOnScroll'" on-ready="onNumberProfilesGridReady">
 
-                                        <vr-datagridcolumn headertext="'From Date'" field="'FromDate'" type="'Datetime'" widthfactor="20"></vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'To Date'" field="'ToDate'" type="'Datetime'" widthfactor="20"></vr-datagridcolumn>
+                                            <vr-datagridcolumn headertext="'From Date'" field="'FromDate'" type="'Datetime'" ></vr-datagridcolumn>
+                                            <vr-datagridcolumn headertext="'To Date'" field="'ToDate'" type="'Datetime'" ></vr-datagridcolumn>
 
-                                        <vr-datagridcolumn ng-repeat="agg in aggregateDefinitions" columnindex="$index + 1" headertext="agg.name" 
-                                                           field="'AggregateValues[&quot;' + agg.name + '&quot;]'" type="'Number'"></vr-datagridcolumn>
+                                            <vr-datagridcolumn ng-repeat="agg in aggregateDefinitions" columnindex="$index + 1" headertext="agg.name"
+                                                               field="'AggregateValues[&quot;' + agg.name + '&quot;]'" type="'Number'"></vr-datagridcolumn>
 
 
-                                    </vr-datagrid>
+                                        </vr-datagrid>
+                                    </div>
                                 </div>
 
 
