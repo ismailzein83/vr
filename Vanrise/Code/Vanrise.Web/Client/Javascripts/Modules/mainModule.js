@@ -56,7 +56,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             return
        timer = $timeout(function () {
            $scope.toogled = false;
-       }, 100);
+       }, 250);
     };
 
     $scope.logout = function () {
