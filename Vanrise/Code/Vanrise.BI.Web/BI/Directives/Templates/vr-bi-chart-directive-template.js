@@ -63,8 +63,14 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
         };
     }
     function setSubViewValue(settings) {
+        console.log(settings);
         if (settings == undefined)
             return;
+        for (var i = 0; i < $scope.definitionTypes.length; i++) {
+            if($scope.definitionTypes[i].value==settings.DefinitionType)
+                $scope.selectedDefinitionType = $scope.definitionTypes[i];
+        }
+       
         for (i = 0; i < $scope.Entities.length; i++) {
             
             if ($scope.Entities[i].Name == settings.EntityType) {
@@ -89,7 +95,7 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
                     else
                         $scope.selectedMeasureTypes.push($scope.Measures[j]);
                 }
-                   
+                
 
             }
         }

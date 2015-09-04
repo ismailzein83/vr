@@ -17,6 +17,7 @@ function VrDatagridDirectiveTemplateController($scope, TimeDimensionTypeEnum,BIC
         $scope.selectedTopMeasure;
         defineTimeDimensionTypes();
         $scope.onSelectionChanged = function () {
+            if ($scope.selectedTopMeasure==undefined)
             $scope.selectedTopMeasure = $scope.selectedMeasureTypes[0];
         }
         $scope.subViewConnector.getValue = function () {

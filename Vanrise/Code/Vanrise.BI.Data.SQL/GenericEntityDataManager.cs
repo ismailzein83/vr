@@ -61,7 +61,7 @@ namespace Vanrise.BI.Data.SQL
             if (queryFilter != null)
                 rowsPart = BuildQueryTopRows(topMeasureColumn, topCount, queryFilter, entityIdColumn, entityNameColumn);
             else
-                rowsPart = BuildQueryTopRowsPart(topMeasureColumn, topCount, entityIdColumn, entityNameColumn);
+                rowsPart = BuildQueryTopRowsParts(topMeasureColumn, topCount, entityNameColumn);
             string filtersPart = GetDateFilter(fromDate, toDate);
             string query = BuildQuery(columnsPart, rowsPart, filtersPart, expressionsPart);
             string entityName = GetEntityName(entityTypeName, out entityName);
@@ -69,9 +69,13 @@ namespace Vanrise.BI.Data.SQL
             {
                 while (reader.Read())
                 {
+                    string EntityId = null;
+                     if (queryFilter != null)
+                         EntityId = reader[GetRowColumnToRead(entityIdColumn)] as string;
                     EntityRecord entityValue = new EntityRecord
                     {
-                        EntityId = reader[GetRowColumnToRead(entityIdColumn)] as string,
+
+                        EntityId = EntityId,
                         EntityName = reader[GetRowColumnToRead(entityNameColumn)] as string,
                         EntityType = entityName,
                         Values = new Decimal[measureColumns.Length]
@@ -88,6 +92,10 @@ namespace Vanrise.BI.Data.SQL
        
 
         #region Private Methods
+        protected string BuildQueryTopRowsParts(string columnBy, int count,  string columnsName)
+        {
+            return String.Format(@"TopCount({0}.CHILDREN, {1}, {2})", columnsName, count, columnBy);
+        }
 
         protected string BuildQueryTopRows(string columnBy, int count, List<String> queryFilter, string entityIdColumn, string entityNameColumn)
         {

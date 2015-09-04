@@ -8,11 +8,11 @@
                         <vr-choice isselected="supplierSelected">Supplier</vr-choice>
                     </vr-choices>
                     <vr-columns width="fullrow" ng-show="customerSelected">
-                        <vr-select datasource="customers" datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedCustomer" label="Customer" entityname="Customer"></vr-select>
+                        <vr-select datasource="customers" datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedCustomer"  entityname="Customer"></vr-select>
                     </vr-columns>
 
                     <vr-columns width="fullrow" ng-show="supplierSelected">
-                        <vr-select datasource="suppliers" datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedSupplier" label="Supplier" entityname="Supplier"></vr-select>
+                        <vr-select datasource="suppliers" datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedSupplier" entityname="Supplier"></vr-select>
                     </vr-columns>
                 </vr-columns>
                 <vr-columns width="normal" ng-show="customerSelected">
@@ -49,21 +49,21 @@
             <vr-columns width="fullrow" simplecol>
                 <vr-datagrid datasource="data" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'" on-ready="onMainGridReady">
 
-                    <vr-datagridcolumn headertext="'ID'" field="'RateID'" type="Number" widthfactor="5"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Rate'" field="'Rate'" widthfactor="5" isclickable="true"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'OffPeak'" field="'OffPeakRate'" widthfactor="5"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Weekend'" field="'WeekendRate'" widthfactor="5"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'ID'" field="'RateID'" type="'Number'" widthfactor="5"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Rate'" field="'Rate'" type="'Number'" widthfactor="5" isclickable="true"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'OffPeak'" field="'OffPeakRate'" type="'Number'" widthfactor="5"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Weekend'" field="'WeekendRate'" type="'Number'" widthfactor="5"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Change'">
                         <span ng-class="viewScope.getChangeIcon(dataItem)"></span>
                     </vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Currency'" field="'Currency'" type="Number" widthfactor="5"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Services'" field="'ServicesFlag'" type="Number" widthfactor="5"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Currency'" field="'Currency'" widthfactor="5"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Services'" field="'ServicesFlag'" type="'Number'" widthfactor="5"></vr-datagridcolumn>
                    
 
                    
-                    <vr-datagridcolumn headertext="'BED'" field="'BeginEffectiveDate'" type="Date" widthfactor="8"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'EED'" field="'EndEffectiveDate'" type="Date" widthfactor="8"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Effective'" field="'IsEffective'" type="Date" widthfactor="8"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'BED'" field="'BeginEffectiveDate'" type="'Date'" widthfactor="8"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'EED'" field="'EndEffectiveDate'" type="'Date'" widthfactor="8"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Effective'" field="'IsEffective'" type="'Date'" widthfactor="8"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Notes'" field="'Notes'" widthfactor="20"></vr-datagridcolumn>
 
                     <vr-datagridexpandablerow ng-if="checkExpandablerow()">
