@@ -131,6 +131,9 @@ namespace TOne.Analytics.Data.SQL
                         result.Add("CodeGroup");
                         joinStatement.Add("LEFT JOIN Zone as z ON BT.OurZoneID = z.ZoneID");
                         break;
+                    case TrafficStatisticGroupKeys.SupplierZoneId:
+                        result.Add("SupplierZoneID");
+                        break;
                 }
             }
             return string.Join(",", result);
@@ -140,7 +143,7 @@ namespace TOne.Analytics.Data.SQL
         {
             CustomQuery queryCdrInvalid = new CustomQuery
             {
-                SelectStatement = "SELECT BL.SwitchID,OurZoneID,CustomerID,SupplierID, ReleaseCode, ReleaseSource,DurationInSeconds, Attempt, Port_out, Port_in,OurCode,SupplierCode",
+                SelectStatement = "SELECT BL.SwitchID,OurZoneID,CustomerID,SupplierID,SupplierZoneID, ReleaseCode, ReleaseSource,DurationInSeconds, Attempt, Port_out, Port_in,OurCode,SupplierCode",
                 InsertStatement ="Into #BillingTemp",
                 FromStatement = "FROM Billing_CDR_INVALID as BL WITH(NOLOCK,INDEX(IX_Billing_CDR_InValid_Attempt))",
                 WhereStatement = String.Format("WHERE Attempt  BETWEEN @FromDate AND @ToDate  {0}", GetFilterCondition(filter)),
