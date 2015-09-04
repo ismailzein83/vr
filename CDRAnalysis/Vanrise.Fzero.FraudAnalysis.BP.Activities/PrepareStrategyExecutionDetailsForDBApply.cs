@@ -30,9 +30,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(PrepareStrategyExecutionDetailsForDBApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            IStrategyDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+            IStrategyExecutionDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
 
-           // PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, strategyExecutionDetailBatch => strategyExecutionDetailBatch.StrategyExecutionDetails);
+            PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, strategyExecutionDetailBatch => strategyExecutionDetailBatch.StrategyExecutionDetails);
         }
 
         protected override PrepareStrategyExecutionDetailsForDBApplyInput GetInputArgument2(AsyncCodeActivityContext context)

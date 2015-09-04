@@ -64,6 +64,7 @@
     <Compile Include="NormalCDRDataManager.cs" />
     <Compile Include="PredefinedDataManager.cs" />
     <Compile Include="ReportingDataManager.cs" />
+    <Compile Include="StrategyExecutionDataManager.cs" />
     <Compile Include="StrategyDataManager.cs" />
     <Compile Include="CaseManagementDataManager.cs" />
     <Compile Include="SuspiciousNumberDataManager.cs" />

@@ -111,33 +111,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_DeleteStrategyResults", StrategyId, FromDate, ToDate);
         }
 
-        public bool ExecuteStrategy(StrategyExecution strategyExecutionObject, out int insertedId)
-        {
-            object id;
-            int recordesEffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecution_Insert", out id,
-                strategyExecutionObject.ProcessID,
-                strategyExecutionObject.StrategyID,
-                strategyExecutionObject.FromDate,
-                strategyExecutionObject.ToDate,
-                strategyExecutionObject.PeriodID,
-                DateTime.Now
-            );
-
-            if (recordesEffected > 0)
-            {
-                insertedId = (int)id;
-                return true;
-            }
-            else
-            {
-                insertedId = 0;
-                return false;
-            }
-
-
-        }
-
-
 
         #region Private Methods
 
@@ -156,12 +129,5 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         #endregion
 
-
-
-
-
-
-
-        
     }
 }
