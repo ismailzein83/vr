@@ -44,19 +44,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthenticateOperationOutput.cs" />
-    <Compile Include="AuthorizationAttribute.cs" />
+    <Compile Include="CustomAttributes\AuthorizationAttribute.cs" />
     <Compile Include="BigResult.cs" />
     <Compile Include="DeleteOperationOutput.cs" />
     <Compile Include="ExcelResult.cs" />
     <Compile Include="File\FileUploadResult.cs" />
     <Compile Include="InsertOperationOutput.cs" />
     <Compile Include="IDataRetrievalResult.cs" />
+    <Compile Include="CustomAttributes\IsAnonymousAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataRetrievalInput.cs" />
     <Compile Include="TempTableName.cs" />
     <Compile Include="UpdateOperationResult.cs" />
     <Compile Include="File\VRFile.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

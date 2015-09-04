@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace Vanrise.Security.Business
         #region Constants
 
         public const string SECURITY_TOKEN_NAME = "Auth-Token";
+        public const string SECURITY_ENCRYPTION_SECRETE_KEY = "EncryptionSecreteKey";
 
         #endregion
 
@@ -56,11 +58,9 @@ namespace Vanrise.Security.Business
         {
             //TODO: handle the exception Key Not found in case the auth-toekn was null
             string token = HttpContext.Current.Request.Headers[SecurityContext.SECURITY_TOKEN_NAME];
-
-            if (token == null)
-                throw new KeyNotFoundException(SecurityContext.SECURITY_TOKEN_NAME + " not found in request header");
-
-            return Common.Serializer.Deserialize<SecurityToken>(Common.TempEncryptionHelper.Decrypt(token));
+            string decryptedKey = Common.Cryptography.Decrypt(token, ConfigurationManager.AppSettings[SecurityContext.SECURITY_ENCRYPTION_SECRETE_KEY]);
+            
+            return Common.Serializer.Deserialize<SecurityToken>(decryptedKey);
         }
 
         #endregion

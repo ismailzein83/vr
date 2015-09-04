@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace Vanrise.Security.Business
     public class SecurityManager
     {
         #region Public Methods
-
+        
         public AuthenticateOperationOutput<AuthenticationToken> Authenticate(string email, string password)
         {
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
@@ -44,7 +45,7 @@ namespace Vanrise.Security.Business
                     {
                         UserId = user.UserId
                     };
-                    string encrypted = Common.TempEncryptionHelper.Encrypt(Common.Serializer.Serialize(userInfo));
+                    string encrypted = Common.Cryptography.Encrypt(Common.Serializer.Serialize(userInfo), ConfigurationManager.AppSettings[SecurityContext.SECURITY_ENCRYPTION_SECRETE_KEY]);
                     authToken.Token = encrypted;
                     authenticationOperationOutput.Result = AuthenticateOperationResult.Succeeded;
                     authenticationOperationOutput.AuthenticationObject = authToken;

@@ -12,6 +12,7 @@ namespace Vanrise.Security.Web.Controllers
     public class SecurityController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpPost]
+        [IsAnonymous]
         public AuthenticateOperationOutput<AuthenticationToken> Authenticate(CredentialsInput credentialsObject)
         {
             SecurityManager manager = new SecurityManager();

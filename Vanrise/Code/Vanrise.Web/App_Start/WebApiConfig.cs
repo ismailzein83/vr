@@ -17,7 +17,9 @@ namespace Vanrise.Web
 
             // Web API configuration and services
 
-            config.Filters.Add(new CustomAuthorizationFilterAttribute());
+            //Web API Filters
+            config.Filters.Add(new AuthenticationFilter());
+            config.Filters.Add(new AuthorizationFilter());
 
             // Web API routes
             config.MapHttpAttributeRoutes();
