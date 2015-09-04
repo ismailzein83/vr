@@ -14,7 +14,7 @@ namespace Vanrise.Security.Business
         #region Constants
 
         public const string SECURITY_TOKEN_NAME = "Auth-Token";
-        public const string SECURITY_ENCRYPTION_SECRETE_KEY = "EncryptionSecreteKey";
+        public const string SECURITY_ENCRYPTION_SECRETE_KEY = "EncryptionSecretKey";
 
         #endregion
 
