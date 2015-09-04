@@ -82,7 +82,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     Decimal criteriaValue;
                     if (!criteriaValues.TryGetValue(levelCriteriaThresholdPercentage.CriteriaDefinitions.FilterId, out criteriaValue))
                     {
-                        criteriaValue = _FilterManager.GetCriteriaValue(levelCriteriaThresholdPercentage.CriteriaDefinitions, profile);
+                        criteriaValue = _FilterManager.GetCriteriaValue(levelCriteriaThresholdPercentage.CriteriaDefinitions, numberProfile);
                         criteriaValues.Add(levelCriteriaThresholdPercentage.CriteriaDefinitions.FilterId, criteriaValue);
                     }
 
