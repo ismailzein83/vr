@@ -36,6 +36,13 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         }
 
         [HttpGet]
+        public bool UpdateAccountCase(string accountNumber, CaseStatus caseStatus, DateTime? validTill)
+        {
+            FraudManager manager = new FraudManager();
+            return manager.UpdateAccountCase(accountNumber, caseStatus, validTill);
+        }
+
+        [HttpGet]
         public FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, string strategiesList, string suspicionLevelsList, string accountNumber)
         {
             FraudManager manager = new FraudManager();

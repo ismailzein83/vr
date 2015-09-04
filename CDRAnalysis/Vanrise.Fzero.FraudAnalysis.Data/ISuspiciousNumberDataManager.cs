@@ -16,6 +16,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         BigResult<AccountSuspicionDetail> GetFilteredAccountSuspicionDetails(Vanrise.Entities.DataRetrievalInput<AccountSuspicionDetailQuery> input);
 
+        bool UpdateAccountCase(string accountNumber, CaseStatus caseStatus, DateTime? validTill);
+
         FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList, string accountNumber);
 
         void ApplySuspiciousNumbersToDB(object preparedSuspiciousNumbers);

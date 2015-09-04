@@ -97,34 +97,35 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, mapper);
         }
 
-        public bool UpdateAccountCase(string AccountNumber, CaseStatus CaseStatus, DateTime? ValidTill)
+        public bool UpdateAccountCase(string accountNumber, CaseStatus caseStatus, DateTime? validTill)
         {
             int userID = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
             
-            // Working with the AccountCase1 table
             IAccountCaseDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountCaseDataManager>();
+            AccountCase1 accountCase = dataManager.GetLastAccountCaseByAccountNumber(accountNumber);
 
-            AccountCase1 accountCase = dataManager.GetLastAccountCaseByAccountNumber(AccountNumber);
             int caseID;
             bool operationSucceeded;
-
+            
             if (accountCase == null || (accountCase.StatusID == CaseStatus.ClosedFraud) || (accountCase.StatusID == CaseStatus.ClosedWhiteList))
-                operationSucceeded = dataManager.InsertAccountCase(out caseID, AccountNumber, userID, ValidTill);
+                operationSucceeded = dataManager.InsertAccountCase(out caseID, accountNumber, userID, validTill);
             else
             {
                 caseID = accountCase.CaseID;
-                operationSucceeded = dataManager.UpdateAccountCaseStatus(accountCase.CaseID, accountCase.StatusID, ValidTill);
+                operationSucceeded = dataManager.UpdateAccountCaseStatus(accountCase.CaseID, accountCase.StatusID, validTill);
             }
 
             if (!operationSucceeded) return false;
 
-            operationSucceeded = dataManager.LogAccountCaseStatusUpdate(caseID, userID, CaseStatus);
+            operationSucceeded = dataManager.InsertAccountCaseHistory(caseID, userID, caseStatus);
 
             if (!operationSucceeded) return false;
 
-            operationSucceeded = dataManager.InsertOrUpdateAccountStatus(AccountNumber, CaseStatus);
+            operationSucceeded = dataManager.InsertOrUpdateAccountStatus(accountNumber, caseStatus);
 
-            return false;
+            if (!operationSucceeded) return false;
+
+            return dataManager.SetStatusToCaseStatus(accountNumber, caseStatus);
         }
 
         public FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList, string accountNumber)

@@ -20,10 +20,11 @@
         return BaseAPIService.post("/api/SuspicionAnalysis/GetFilteredAccountSuspicionDetails", input);
     }
 
-    function UpdateAccountCase(accountNumber, caseID) {
+    function UpdateAccountCase(accountNumber, caseStatus, validTill) {
         return BaseAPIService.get("/api/SuspicionAnalysis/UpdateAccountCase", {
             accountNumber: accountNumber,
-            caseID: caseID
+            caseStatus: caseStatus,
+            validTill: validTill
         });
     }
 

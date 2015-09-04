@@ -28,6 +28,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             throw new NotImplementedException();
         }
 
+        public bool UpdateAccountCase(string accountNumber, CaseStatus caseStatus, DateTime? validTill)
+        {
+            throw new NotImplementedException();
+        }
+
         public FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList, string accountNumber)
         {
             throw new NotImplementedException();

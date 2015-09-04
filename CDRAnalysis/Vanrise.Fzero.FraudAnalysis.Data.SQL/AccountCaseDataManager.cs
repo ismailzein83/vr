@@ -29,19 +29,25 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public bool UpdateAccountCaseStatus(int caseID, CaseStatus statusID, DateTime? validTill)
         {
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase1_Insert", caseID, statusID, validTill);
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase1_Update", caseID, statusID, validTill);
             return (recordsAffected > 0);
         }
 
-        public bool LogAccountCaseStatusUpdate(int caseID, int userID, CaseStatus CaseStatus)
+        public bool InsertAccountCaseHistory(int caseID, int userID, CaseStatus caseStatus)
         {
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCaseHistory_Insert", caseID, userID, CaseStatus);
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCaseHistory_Insert", caseID, userID, caseStatus);
             return (recordsAffected > 0);
         }
 
-        public bool InsertOrUpdateAccountStatus(string AccountNumber, CaseStatus CaseStatus)
+        public bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus)
         {
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCaseHistory_Insert", AccountNumber, CaseStatus);
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_InsertOrUpdate", accountNumber, caseStatus);
+            return (recordsAffected > 0);
+        }
+
+        public bool SetStatusToCaseStatus(string accountNumber, CaseStatus caseStatus)
+        {
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_FraudResult_SetStatusToCaseStatus", accountNumber, caseStatus);
             return (recordsAffected > 0);
         }
 

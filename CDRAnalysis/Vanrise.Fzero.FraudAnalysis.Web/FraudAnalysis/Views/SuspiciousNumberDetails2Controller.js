@@ -54,6 +54,16 @@ function SuspiciousNumberDetails2Controller($scope, SuspicionAnalysisAPIService,
                 });
         }
 
+        $scope.updateAccountCase = function () {
+            return SuspicionAnalysisAPIService.UpdateAccountCase($scope.accountNumber, $scope.selectedCaseStatus, $scope.validTill)
+                .then(function (response) {
+                    $scope.modalContext.closeModal();
+                })
+                .catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                });
+        }
+
         $scope.close = function () {
             $scope.modalContext.closeModal()
         }
