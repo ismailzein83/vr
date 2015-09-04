@@ -70,10 +70,12 @@
     <Compile Include="CarrierAccountManager.cs" />
     <Compile Include="CarrierGroupManager.cs" />
     <Compile Include="CarrierMaskManager.cs" />
+    <Compile Include="CustomerCommissionManager.cs" />
     <Compile Include="CustomerPricelistsManager.cs" />
     <Compile Include="CustomerTariffManager.cs" />
     <Compile Include="RateAnalysisManager.cs" />
     <Compile Include="CustomerTODManager.cs" />
+    <Compile Include="SupplierCommissionManager.cs" />
     <Compile Include="SupplierTODManager.cs" />
     <Compile Include="SupplierPricelistsManager.cs" />
     <Compile Include="SupplierTariffManager.cs" />

@@ -61,6 +61,7 @@
     <Compile Include="ICodeDataManager.cs" />
     <Compile Include="ICommissionDataManager.cs" />
     <Compile Include="ICurrencyDataManager.cs" />
+    <Compile Include="ICustomerCommissionDataManager.cs" />
     <Compile Include="ICustomerPricelistsDataManager.cs" />
     <Compile Include="ICustomerTariffDataManager.cs" />
     <Compile Include="IDataManager.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="IRateAnalysisDataManager.cs" />
     <Compile Include="IRateDataManager.cs" />
     <Compile Include="IFlaggedServiceDataManager.cs" />
+    <Compile Include="ISupplierCommissionDataManager.cs" />
     <Compile Include="ISupplierTODDataManager.cs" />
     <Compile Include="ICustomerTODDataManager.cs" />
     <Compile Include="ISupplierPricelistsDataManager.cs" />
