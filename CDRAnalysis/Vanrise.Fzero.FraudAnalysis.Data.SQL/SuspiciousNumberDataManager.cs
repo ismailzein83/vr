@@ -9,7 +9,6 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Fzero.CDRImport.Entities;
 using System.Security;
 
-
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
     public class SuspiciousNumberDataManager : BaseSQLDataManager, ISuspiciousNumberDataManager
@@ -98,9 +97,21 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, mapper);
         }
 
-        public bool UpdateAccountCase(int UserID, string AccountNumber, CaseStatus CaseStatus, DateTime ValidTill)
+        public bool UpdateAccountCase(string AccountNumber, CaseStatus CaseStatus, DateTime ValidTill)
         {
+            int userID = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+            
+            // Working with the AccountCase1 table
+            IAccountCaseDataManager dataManger = FraudDataManagerFactory.GetDataManager<IAccountCaseDataManager>();
 
+            AccountCase1 accountCase = dataManger.GetLastAccountCaseByAccountNumber(AccountNumber);
+            
+            int caseID = (accountCase == null
+                || (accountCase.StatusID == CaseStatus.ClosedFraud)
+                || (accountCase.StatusID == CaseStatus.ClosedWhiteList)) ?
+
+                InsertAccountCase(AccountNumber, userID, ValidTill) :
+                UpdateAccountCase(AccountNumber, CaseStatus, ValidTill); // should i update the user as well?
 
             return false;
         }

@@ -58,7 +58,7 @@ app.constant("SuspicionLevelEnum", {
     Fraud: { value: 4, description: "Fraud" }
 });
 
-app.constant("SuspicionOccuranceStatusEnum2", {
+app.constant("SuspicionOccuranceStatusEnum", {
     Open: { value: 0, description: "Open" },
     Closed: { value: 10, description: "Closed" },
     Deleted: { value: 20, description: "Deleted" }

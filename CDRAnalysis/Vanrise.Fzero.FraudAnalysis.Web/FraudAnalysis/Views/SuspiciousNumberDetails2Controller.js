@@ -1,6 +1,6 @@
-﻿SuspiciousNumberDetails2Controller.$inject = ["$scope", "SuspicionAnalysisAPIService", "SuspicionLevelEnum", "CaseStatusEnum2", "UtilsService", "VRNavigationService", "VRNotificationService"];
+﻿SuspiciousNumberDetails2Controller.$inject = ["$scope", "SuspicionAnalysisAPIService", "SuspicionLevelEnum", "SuspicionOccuranceStatusEnum", "UtilsService", "VRNavigationService", "VRNotificationService"];
 
-function SuspiciousNumberDetails2Controller($scope, SuspicionAnalysisAPIService, SuspicionLevelEnum, CaseStatusEnum2, UtilsService, VRNavigationService, VRNotificationService) {
+function SuspiciousNumberDetails2Controller($scope, SuspicionAnalysisAPIService, SuspicionLevelEnum, SuspicionOccuranceStatusEnum, UtilsService, VRNavigationService, VRNotificationService) {
 
     var gridAPI = undefined;
 
@@ -43,7 +43,7 @@ function SuspiciousNumberDetails2Controller($scope, SuspicionAnalysisAPIService,
                         var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", item.SuspicionLevelID);
                         item.SuspicionLevelDescription = suspicionLevel.description;
 
-                        var accountStatus = UtilsService.getEnum(CaseStatusEnum2, "value", item.AccountStatusID);
+                        var accountStatus = UtilsService.getEnum(SuspicionOccuranceStatusEnum, "value", item.AccountStatusID);
                         item.AccountStatusDescription = accountStatus.description;
                     });
 
@@ -64,12 +64,12 @@ function SuspiciousNumberDetails2Controller($scope, SuspicionAnalysisAPIService,
         }
 
         $scope.toggleValidTill = function (selectedStatus) {
-            $scope.whiteListSelected = (selectedStatus != undefined && selectedStatus.value == CaseStatusEnum2.ClosedWhitelist.value) ? true : false;
+            $scope.whiteListSelected = (selectedStatus != undefined && selectedStatus.value == SuspicionOccuranceStatusEnum.ClosedWhitelist.value) ? true : false;
         }
     }
 
     function load() {
-        $scope.caseStatuses = UtilsService.getArrayEnum(CaseStatusEnum2);
+        $scope.caseStatuses = UtilsService.getArrayEnum(SuspicionOccuranceStatusEnum);
     }
 
     function retrieveData() {
