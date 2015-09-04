@@ -174,7 +174,7 @@
                     controller.selectedvalues = [];
                     controller.selectedvalues.length = 0;
                     controller.selectedvalues.push(getdatasource()[0]);
-                    return controller.getObjectText(getdatasource()[0]);
+                    return getObjectText(getdatasource()[0]);
                 }
 
                 function getLabel() {
