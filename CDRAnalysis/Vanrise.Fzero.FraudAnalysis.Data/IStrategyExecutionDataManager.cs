@@ -11,6 +11,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
         bool ExecuteStrategy(StrategyExecution strategyExecutionObject, out int insertedId);
 
         void ApplyStrategyExecutionDetailsToDB(object preparedStrategyExecutionDetails);
+
         
     }
 }

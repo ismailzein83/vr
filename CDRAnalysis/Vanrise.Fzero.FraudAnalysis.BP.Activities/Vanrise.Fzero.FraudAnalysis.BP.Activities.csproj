@@ -88,6 +88,7 @@
     <Compile Include="ApplyFraudResultToDB.cs" />
     <Compile Include="ApplyStrategyExecutionDetailsToDB.cs" />
     <Compile Include="ApplySuspiciousNumbersToDB.cs" />
+    <Compile Include="DeleteStrategyExecutionDetails.cs" />
     <Compile Include="DeleteStrategyResults.cs" />
     <Compile Include="GetStrategies.cs" />
     <Compile Include="GetStrategy.cs" />

@@ -81,5 +81,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             InsertBulkToTable(preparedStrategyExecutionDetails as BaseBulkInsertInfo);
         }
+
     }
 }

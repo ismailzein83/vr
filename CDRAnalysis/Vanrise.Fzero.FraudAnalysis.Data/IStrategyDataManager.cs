@@ -1,4 +1,6 @@
-﻿using System;
+﻿//to do: DeleteStrategyResults should be removed
+
+using System;
 using System.Collections.Generic;
 using Vanrise.Data;
 using Vanrise.Entities;
