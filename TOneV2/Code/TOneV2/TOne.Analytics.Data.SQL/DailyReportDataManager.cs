@@ -214,7 +214,7 @@ namespace TOne.Analytics.Data.SQL
 
             if (selectedCustomerIDs != null && selectedSupplierIDs != null)
             {
-                whereClause.Append(" AND ((CustomerID IN (#SELECTED_CUSTOMER_IDS#)) OR (SupplierID IN (#SELECTED_SUPPLIER_IDS#)))");
+                whereClause.Append(" AND ((CustomerID IN (#SELECTED_CUSTOMER_IDS#)) AND (SupplierID IN (#SELECTED_SUPPLIER_IDS#)))");
             }
             else if (selectedCustomerIDs == null && selectedSupplierIDs == null)
             {
