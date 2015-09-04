@@ -27,10 +27,21 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return (recordsAffected > 0);
         }
 
-        public bool UpdateAccountCaseStatus(caseID, acco)
+        public bool UpdateAccountCaseStatus(int caseID, CaseStatus statusID, DateTime? validTill)
         {
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase1_Insert", accountCaseObject.CaseID, accountCaseObject.StatusID, accountCaseObject.ValidTill);
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase1_Insert", caseID, statusID, validTill);
+            return (recordsAffected > 0);
+        }
 
+        public bool LogAccountCaseStatusUpdate(int caseID, int userID, CaseStatus CaseStatus)
+        {
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCaseHistory_Insert", caseID, userID, CaseStatus);
+            return (recordsAffected > 0);
+        }
+
+        public bool InsertOrUpdateAccountStatus(string AccountNumber, CaseStatus CaseStatus)
+        {
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCaseHistory_Insert", AccountNumber, CaseStatus);
             return (recordsAffected > 0);
         }
 

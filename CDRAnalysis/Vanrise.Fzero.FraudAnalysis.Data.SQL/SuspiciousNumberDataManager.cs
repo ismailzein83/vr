@@ -97,21 +97,32 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, mapper);
         }
 
-        public bool UpdateAccountCase(string AccountNumber, CaseStatus CaseStatus, DateTime ValidTill)
+        public bool UpdateAccountCase(string AccountNumber, CaseStatus CaseStatus, DateTime? ValidTill)
         {
             int userID = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
             
             // Working with the AccountCase1 table
-            IAccountCaseDataManager dataManger = FraudDataManagerFactory.GetDataManager<IAccountCaseDataManager>();
+            IAccountCaseDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountCaseDataManager>();
 
-            AccountCase1 accountCase = dataManger.GetLastAccountCaseByAccountNumber(AccountNumber);
-            
-            int caseID = (accountCase == null
-                || (accountCase.StatusID == CaseStatus.ClosedFraud)
-                || (accountCase.StatusID == CaseStatus.ClosedWhiteList)) ?
+            AccountCase1 accountCase = dataManager.GetLastAccountCaseByAccountNumber(AccountNumber);
+            int caseID;
+            bool operationSucceeded;
 
-                InsertAccountCase(AccountNumber, userID, ValidTill) :
-                UpdateAccountCase(AccountNumber, CaseStatus, ValidTill); // should i update the user as well?
+            if (accountCase == null || (accountCase.StatusID == CaseStatus.ClosedFraud) || (accountCase.StatusID == CaseStatus.ClosedWhiteList))
+                operationSucceeded = dataManager.InsertAccountCase(out caseID, AccountNumber, userID, ValidTill);
+            else
+            {
+                caseID = accountCase.CaseID;
+                operationSucceeded = dataManager.UpdateAccountCaseStatus(accountCase.CaseID, accountCase.StatusID, ValidTill);
+            }
+
+            if (!operationSucceeded) return false;
+
+            operationSucceeded = dataManager.LogAccountCaseStatusUpdate(caseID, userID, CaseStatus);
+
+            if (!operationSucceeded) return false;
+
+            operationSucceeded = dataManager.InsertOrUpdateAccountStatus(AccountNumber, CaseStatus);
 
             return false;
         }

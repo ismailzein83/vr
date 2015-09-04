@@ -10,7 +10,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
     public interface IAccountCaseDataManager : IDataManager
     {
         AccountCase1 GetLastAccountCaseByAccountNumber(string accountNumber);
-        bool InsertAccountCase(AccountCase1 accountCase, out int insertedID);
-        bool UpdateAccountCase(AccountCase1 accountCase);
+        bool InsertAccountCase(out int insertedID, string accountNumber, int userID, DateTime? validTill);
+        bool UpdateAccountCaseStatus(int caseID, CaseStatus statusID, DateTime? validTill);
+        bool LogAccountCaseStatusUpdate(int caseID, int userID, CaseStatus CaseStatus);
+        bool InsertOrUpdateAccountStatus(string AccountNumber, CaseStatus CaseStatus);
     }
 }
