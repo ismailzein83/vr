@@ -45,7 +45,7 @@ app.constant('PercentageEnum', {
     SeventyFiveMinus: { description: '-75%', value: 0.25 }
 });
 
-app.constant("AccountStatusEnum", {
+app.constant("CaseStatusEnum2", {
     Open: { value: 0, description: "Open" },
     Pending: { value: 2, description: "Pending" },
     ClosedFraud: { value: 3, description: "Closed: Fraud" },

@@ -7,6 +7,7 @@ using Vanrise.Data.SQL;
 using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Fzero.CDRImport.Entities;
+using System.Security;
 
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
@@ -97,6 +98,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, mapper);
         }
 
+        public bool UpdateAccountCase(int UserID, string AccountNumber, CaseStatus CaseStatus, DateTime ValidTill)
+        {
+
+
+            return false;
+        }
+
         public FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList, string accountNumber)
         {
             return GetItemsSP("FraudAnalysis.sp_FraudResult_Get", FraudResultMapper, fromDate, toDate, string.Join(",", strategiesList), string.Join(",", suspicionLevelsList), accountNumber).FirstOrDefault();
@@ -173,20 +181,20 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             summary.SuspicionLevelID = (SuspicionLevel)reader["SuspicionLevelID"];
             summary.NumberOfOccurances = (int)reader["NumberOfOccurances"];
             summary.LastOccurance = (DateTime)reader["LastOccurance"];
-            summary.AccountStatusID = GetReaderValue<AccountStatus>(reader, "AccountStatusID");
+            summary.AccountStatusID = GetReaderValue<CaseStatus>(reader, "AccountStatusID");
 
             return summary;
         }
 
         private AccountSuspicionDetail AccountSuspicionDetailMapper(IDataReader reader)
         {
-            var detail = new AccountSuspicionDetail();
+            var detail = new AccountSuspicionDetail(); // a detail is a fraud result instance
 
             detail.DetailID = (long)reader["DetailID"];
             detail.AccountNumber = reader["AccountNumber"] as string;
             detail.SuspicionLevelID = (SuspicionLevel)reader["SuspicionLevelID"];
             detail.StrategyName = reader["StrategyName"] as string;
-            detail.AccountStatusID = GetReaderValue<AccountStatus>(reader, "AccountStatusID");
+            detail.AccountStatusID = GetReaderValue<CaseStatus>(reader, "AccountStatusID");
             detail.DateDay = (DateTime)reader["DateDay"];
 
             return detail;

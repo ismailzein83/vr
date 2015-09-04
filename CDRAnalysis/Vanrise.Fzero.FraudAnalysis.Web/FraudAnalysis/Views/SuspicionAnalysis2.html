@@ -60,19 +60,20 @@
         <vr-row>
             <vr-columns width="fullrow" simplecol>
 
-                <vr-datagrid datasource="fraudResults"
+                <vr-datagrid datasource="accountSuspicionSummaries"
                              on-ready="onGridReady"
                              dataretrievalfunction="dataRetrievalFunction"
                              menuactions="gridMenuActions"
                              pagingtype="'PagingOnScroll'"
-                             idfield="AccountNumber"
-                             maxheight="400px">
+                             idfield="AccountNumber">
 
                     <vr-datagridcolumn headertext="'Account Number'" field="'AccountNumber'" type="'Text'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelDescription'" type="'Text'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" type="'Text'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Occurances'" field="'NumberOfOccurances'" type="'Number'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Status'" field="'CaseStatusDescription'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Last Occurance'" field="'LastOccurance'" type="'Datetime'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Status'" field="'AccountStatusDescription'" type="'Text'"></vr-datagridcolumn>
+
+                    <!--<vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" type="'Text'"></vr-datagridcolumn>-->
                 </vr-datagrid>
             </vr-columns>
         </vr-row>

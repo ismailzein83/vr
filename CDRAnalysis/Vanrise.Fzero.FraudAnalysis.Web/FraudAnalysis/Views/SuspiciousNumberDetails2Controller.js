@@ -1,6 +1,6 @@
-﻿SuspiciousNumberDetails2Controller.$inject = ["$scope", "SuspicionAnalysisAPIService", "VRNavigationService"];
+﻿SuspiciousNumberDetails2Controller.$inject = ["$scope", "SuspicionAnalysisAPIService", "SuspicionLevelEnum", "CaseStatusEnum2", "UtilsService", "VRNavigationService", "VRNotificationService"];
 
-function SuspiciousNumberDetails2Controller($scope, SuspicionAnalysisAPIService, VRNavigationService) {
+function SuspiciousNumberDetails2Controller($scope, SuspicionAnalysisAPIService, SuspicionLevelEnum, CaseStatusEnum2, UtilsService, VRNavigationService, VRNotificationService) {
 
     var gridAPI = undefined;
 
@@ -13,7 +13,6 @@ function SuspiciousNumberDetails2Controller($scope, SuspicionAnalysisAPIService,
 
         if (parameters != undefined && parameters != null) {
             $scope.accountNumber = parameters.AccountNumber;
-            $scope.suspicionLevelDescription = parameters.SuspicionLevelDescription;
             $scope.from = parameters.From;
             $scope.to = parameters.To;
         }
@@ -21,7 +20,13 @@ function SuspiciousNumberDetails2Controller($scope, SuspicionAnalysisAPIService,
 
     function defineScope() {
 
+        $scope.from = "01/01/2014 00:00";
+        $scope.to = "01/01/2014 00:00";
+
         $scope.logs = [];
+        $scope.caseStatuses = [];
+        $scope.selectedCaseStatus = undefined;
+        $scope.whiteListSelected = false;
 
         $scope.onGridReady = function (api) {
             gridAPI = api;
@@ -33,6 +38,15 @@ function SuspiciousNumberDetails2Controller($scope, SuspicionAnalysisAPIService,
             return SuspicionAnalysisAPIService.GetFilteredAccountSuspicionDetails(dataRetrievalInput)
                 .then(function (response) {
                     console.log(response);
+
+                    angular.forEach(response.Data, function (item) {
+                        var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", item.SuspicionLevelID);
+                        item.SuspicionLevelDescription = suspicionLevel.description;
+
+                        var accountStatus = UtilsService.getEnum(CaseStatusEnum2, "value", item.AccountStatusID);
+                        item.AccountStatusDescription = accountStatus.description;
+                    });
+
                     onResponseReady(response);
                 })
                 .catch(function (error) {
@@ -43,9 +57,20 @@ function SuspiciousNumberDetails2Controller($scope, SuspicionAnalysisAPIService,
         $scope.close = function () {
             $scope.modalContext.closeModal()
         }
+
+        $scope.filterDetails = function () {
+            if (gridAPI != undefined)
+                return retrieveData();
+        }
+
+        $scope.toggleValidTill = function (selectedStatus) {
+            $scope.whiteListSelected = (selectedStatus != undefined && selectedStatus.value == CaseStatusEnum2.ClosedWhitelist.value) ? true : false;
+        }
     }
 
-    function load() { }
+    function load() {
+        $scope.caseStatuses = UtilsService.getArrayEnum(CaseStatusEnum2);
+    }
 
     function retrieveData() {
         var query = {

@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-SuspicionAnalysis2Controller.$inject = ["$scope", "SuspicionAnalysisAPIService", "StrategyAPIService", "SuspicionLevelEnum2", "CaseStatusEnum2", "UtilsService", "VRNotificationService", "VRModalService", "VRNavigationService"];
+SuspicionAnalysis2Controller.$inject = ["$scope", "SuspicionAnalysisAPIService", "StrategyAPIService", "SuspicionLevelEnum", "CaseStatusEnum2", "UtilsService", "VRNotificationService", "VRModalService", "VRNavigationService"];
 
-function SuspicionAnalysis2Controller($scope, SuspicionAnalysisAPIService, StrategyAPIService, SuspicionLevelEnum2, CaseStatusEnum2, UtilsService, VRNotificationService, VRModalService, VRNavigationService) {
+function SuspicionAnalysis2Controller($scope, SuspicionAnalysisAPIService, StrategyAPIService, SuspicionLevelEnum, CaseStatusEnum2, UtilsService, VRNotificationService, VRModalService, VRNavigationService) {
 
     var gridAPI = undefined;
 
@@ -26,7 +26,7 @@ function SuspicionAnalysis2Controller($scope, SuspicionAnalysisAPIService, Strat
         $scope.caseStatuses = [];
         $scope.selectedCaseStatuses = [];
 
-        $scope.fraudResults = [];
+        $scope.accountSuspicionSummaries = [];
         $scope.gridMenuActions = [];
 
         $scope.onGridReady = function (api) {
@@ -45,11 +45,11 @@ function SuspicionAnalysis2Controller($scope, SuspicionAnalysisAPIService, Strat
                     console.log(response);
 
                     angular.forEach(response.Data, function (item) {
-                        var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum2, "value", item.SuspicionLevelID);
+                        var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", item.SuspicionLevelID);
                         item.SuspicionLevelDescription = suspicionLevel.description;
 
-                        var caseStatus = UtilsService.getEnum(CaseStatusEnum2, "value", item.CaseStatusID);
-                        item.CaseStatusDescription = caseStatus.description;
+                        var accountStatus = UtilsService.getEnum(CaseStatusEnum2, "value", item.AccountStatusID);
+                        item.AccountStatusDescription = accountStatus.description;
                     });
 
                     onResponseReady(response);
@@ -79,7 +79,7 @@ function SuspicionAnalysis2Controller($scope, SuspicionAnalysisAPIService, Strat
     function load() {
         $scope.isInitializing = true;
 
-        $scope.suspicionLevels = UtilsService.getArrayEnum(SuspicionLevelEnum2);
+        $scope.suspicionLevels = UtilsService.getArrayEnum(SuspicionLevelEnum);
         $scope.caseStatuses = UtilsService.getArrayEnum(CaseStatusEnum2);
 
         return StrategyAPIService.GetStrategies(0, "") // get all the enabled and disabled strategies (2nd arg) for all periods (1st arg)
@@ -107,24 +107,22 @@ function SuspicionAnalysis2Controller($scope, SuspicionAnalysisAPIService, Strat
     }
 
     function detailFraudResult(gridObject) {
+        var modalSettings = {};
 
         var parameters = {
             AccountNumber: gridObject.AccountNumber,
-            SuspicionLevelDescription: gridObject.SuspicionLevelDescription,
             From: $scope.from,
             To: $scope.to
         };
 
-        var settings = {};
-
-        settings.onScopeReady = function (modalScope) {
+        modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Suspicious Number Details";
             modalScope.onAccountCaseUpdated = function (accountCase) {
                 gridAPI.itemUpdated(accountCase);
             }
         };
 
-        VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/SuspiciousNumberDetails2.html", parameters, settings);
+        VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/SuspiciousNumberDetails2.html", parameters, modalSettings);
     }
 }
 
