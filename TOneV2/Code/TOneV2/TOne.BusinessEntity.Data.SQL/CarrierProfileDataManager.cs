@@ -61,6 +61,7 @@ namespace TOne.BusinessEntity.Data.SQL
                 CommercialContact = reader["CommercialContact"] as string,
                 CommercialEmail = reader["CommercialEmail"] as string,
                 SMSPhoneNumber = reader["SMSPhoneNumber"] as string,
+                CurrencyID = reader["CurrencyID"] as string,
                 AccountsCount = GetReaderValue<int>(reader, "AccountsCount"),//GetReaderValue(reader["AccountsCount"])
                 FileID = GetReaderValue<long>(reader, "FileID")
             };

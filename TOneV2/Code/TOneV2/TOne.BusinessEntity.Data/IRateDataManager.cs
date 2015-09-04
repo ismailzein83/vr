@@ -12,5 +12,7 @@ namespace TOne.BusinessEntity.Data
         void LoadCalculatedZoneRates(DateTime effectiveTime, bool isFuture, int batchSize, Action<ZoneRateBatch> onBatchAvailable);
         void GetCalculatedZoneRates(DateTime effectiveTime, bool isFuture, IEnumerable<int> zoneIds, out List<ZoneRate> customerZoneRates, out List<ZoneRate> supplierZoneRates);
         List<Rate> GetRate(int zoneId, string customerId, DateTime when);
+
+        List<ExchangeRate> GetExchangeRates(DateTime fromDate, DateTime toDate);
     }
 }

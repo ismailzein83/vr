@@ -177,5 +177,20 @@ namespace TOne.BusinessEntity.Data.SQL
             dtInfoTable.EndLoadData();
             return dtInfoTable;
         }
+        public List<ExchangeRate> GetExchangeRates(DateTime fromDate, DateTime toDate)
+        {
+            return GetItemsSP("BEntity.sp_CurrencyExchangeRate_GetByExchangeDate", ExchangeRateMapper, fromDate, toDate);
+        }
+        private ExchangeRate ExchangeRateMapper(IDataReader reader)
+        {
+            return new ExchangeRate
+            {
+                CurrencyExchangeRateID = GetReaderValue<Int64>(reader, "CurrencyExchangeRateID"),
+                CurrencyID = reader["CurrencyID"] as string,
+                Rate = GetReaderValue<float>(reader, "Rate"),
+                ExchangeDate = GetReaderValue<DateTime>(reader, "ExchangeDate"),
+                
+            };
+        }
     }
 }

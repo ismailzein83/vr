@@ -39,4 +39,10 @@ namespace TOne.BusinessEntity.Entities
         Y=0,
         N=1
     }
+    public enum IsCeiling
+    {
+        Y = 0,
+        N = 1,
+        Null=2
+    }
 }

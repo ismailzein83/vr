@@ -24,7 +24,9 @@ namespace TOne.BusinessEntity.Entities
         public List<int> GroupIds { get; set; }
         public int NominalCapacityInE1s { get; set; }
         public string CarrierAccountName { get; set; }
-
+        public IsCeiling IsCustomerCeiling{ get; set; }
+        public IsCeiling IsSupplierCeiling{ get; set; }
         public int CarrierMaskId { get; set; }
+        public Int16 SupplierGMTTime { get; set; }
     }
 }

@@ -127,9 +127,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\CodeController.cs" />
+    <Compile Include="Controllers\CustomerCommissionController.cs" />
     <Compile Include="Controllers\CustomerPricelistsController.cs" />
     <Compile Include="Controllers\CustomerTariffController.cs" />
     <Compile Include="Controllers\RateAnalysisController.cs" />
+    <Compile Include="Controllers\SupplierCommissionController.cs" />
     <Compile Include="Controllers\SupplierPricelistsController.cs" />
     <Compile Include="Controllers\SupplierTariffController.cs" />
     <Compile Include="Controllers\SupplierTODController.cs" />
@@ -171,11 +173,13 @@
     <Content Include="BusinessEntity\Services\APIServices\CarrierSummaryAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\CodeAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\CurrencyAPIService.js" />
+    <Content Include="BusinessEntity\Services\APIServices\CustomerCommissionAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\CustomerPricelistsAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\CustomerTariffAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\LookUpAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\PriceListAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\RateAnalysisAPIService.js" />
+    <Content Include="BusinessEntity\Services\APIServices\SupplierCommissionAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\SupplierPricelistsAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\SupplierTariffAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\CustomerTODAPIService .js" />
@@ -207,6 +211,8 @@
     <Content Include="BusinessEntity\Views\CarrierProfileEditorController.js" />
     <Content Include="BusinessEntity\Views\CarrierProfileManagement.html" />
     <Content Include="BusinessEntity\Views\CarrierProfileManagementController.js" />
+    <Content Include="BusinessEntity\Views\PurchaseArea\SupplierCommissionManagement.html" />
+    <Content Include="BusinessEntity\Views\PurchaseArea\SupplierCommissionManagementController.js" />
     <Content Include="BusinessEntity\Views\Rate Analysis\RateAnalysis.html" />
     <Content Include="BusinessEntity\Views\Rate Analysis\RateAnalysisController.js" />
     <Content Include="BusinessEntity\Views\SalesArea\Customer Pricelists\CustomerPricelists.html" />
@@ -219,6 +225,8 @@
     <Content Include="BusinessEntity\Views\RatesController.js" />
     <Content Include="BusinessEntity\Views\PurchaseArea\SupplierTODManagement.html" />
     <Content Include="BusinessEntity\Views\PurchaseArea\SupplierTODManagementController.js" />
+    <Content Include="BusinessEntity\Views\SalesArea\CustomerCommissionManagement.html" />
+    <Content Include="BusinessEntity\Views\SalesArea\CustomerCommissionManagementController.js" />
     <Content Include="BusinessEntity\Views\SalesArea\CustomerTariffManagement.html" />
     <Content Include="BusinessEntity\Views\SalesArea\CustomerTariffManagementController.js" />
     <Content Include="BusinessEntity\Views\SalesArea\CustomerTODManagementController.js" />
