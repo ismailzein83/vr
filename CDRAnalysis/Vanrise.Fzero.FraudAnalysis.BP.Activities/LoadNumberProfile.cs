@@ -81,8 +81,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     ;
                 string currentAccountNumber = null;
 
-                //foreach (var strategy in inputArgument.Strategies)
-                //{
                 List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
                 int cdrsCount = 0;
                 int numberProfilesCount = 0;
