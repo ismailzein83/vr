@@ -163,7 +163,9 @@
             }
 
             colDef.onSort = function () {
-                if (col.onSortChanged != undefined) {
+                console.log(col);
+
+                if (col.onSortChanged != undefined && col.disableSorting ==false) {
                     var sortDirection = colDef.sortDirection != "ASC" ? "ASC" : "DESC";
                     var promise = col.onSortChanged(colDef, sortDirection);//this function should return a promise in case it is getting data
                     if (promise != undefined && promise != null)
