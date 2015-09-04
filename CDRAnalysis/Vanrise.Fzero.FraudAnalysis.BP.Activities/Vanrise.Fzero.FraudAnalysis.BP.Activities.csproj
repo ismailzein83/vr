@@ -98,7 +98,6 @@
     <Compile Include="LoadNumberProfile.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PrepareProfilesForDBApply.cs" />
     <Compile Include="PrepareNumberProfilesForDBApply.cs" />
     <Compile Include="PrepareFraudResultForDBApply.cs" />
     <Compile Include="PrepareStrategyExecutionDetailsForDBApply.cs" />
