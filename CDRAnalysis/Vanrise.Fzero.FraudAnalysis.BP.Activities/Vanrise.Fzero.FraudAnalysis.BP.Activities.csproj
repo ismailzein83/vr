@@ -86,6 +86,7 @@
   <ItemGroup>
     <Compile Include="ApplyNumberProfilesToDB.cs" />
     <Compile Include="ApplyFraudResultToDB.cs" />
+    <Compile Include="ApplyStrategyExecutionDetailsToDB.cs" />
     <Compile Include="ApplySuspiciousNumbersToDB.cs" />
     <Compile Include="DeleteStrategyResults.cs" />
     <Compile Include="GetStrategies.cs" />

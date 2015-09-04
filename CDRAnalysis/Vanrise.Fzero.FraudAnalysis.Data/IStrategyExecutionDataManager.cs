@@ -8,8 +8,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 {
     public interface IStrategyExecutionDataManager : IDataManager, IBulkApplyDataManager<StrategyExecutionDetail>
     {
-
         bool ExecuteStrategy(StrategyExecution strategyExecutionObject, out int insertedId);
+
+        void ApplyStrategyExecutionDetailsToDB(object preparedStrategyExecutionDetails);
         
     }
 }

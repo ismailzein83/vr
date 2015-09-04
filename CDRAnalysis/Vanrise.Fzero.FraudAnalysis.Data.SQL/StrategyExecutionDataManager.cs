@@ -46,17 +46,40 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public object FinishDBApplyStream(object dbApplyStream)
         {
-            throw new NotImplementedException();
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.Close();
+            return new StreamBulkInsertInfo
+            {
+                TableName = "[FraudAnalysis].[StrategyExecutionDetail]",
+                Stream = streamForBulkInsert,
+                TabLock = false,
+                KeepIdentity = false,
+                FieldSeparator = '^'
+            };
         }
 
         public object InitialiazeStreamForDBApply()
         {
-            throw new NotImplementedException();
+            return base.InitializeStreamForBulkInsert();
         }
 
         public void WriteRecordToStream(StrategyExecutionDetail record, object dbApplyStream)
         {
-            throw new NotImplementedException();
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.WriteRecord("0^{0}^{1}^{2}^{3}^{4}",
+                                 record.StrategyExecutionID,
+                                 record.AccountNumber,
+                                 record.SuspicionLevelID,
+                                 Vanrise.Common.Serializer.Serialize(record.FilterValues, true),
+                                 Vanrise.Common.Serializer.Serialize(record.AggregateValues, true),
+                                 record.CaseID,
+                                 record.SuspicionOccuranceStatus
+                                 );
+        }
+
+        public void ApplyStrategyExecutionDetailsToDB(object preparedStrategyExecutionDetails)
+        {
+            InsertBulkToTable(preparedStrategyExecutionDetails as BaseBulkInsertInfo);
         }
     }
 }

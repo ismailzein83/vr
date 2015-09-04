@@ -33,5 +33,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         {
             throw new NotImplementedException();
         }
+
+
+        public void ApplyStrategyExecutionDetailsToDB(object preparedStrategyExecutionDetails)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
