@@ -2,9 +2,9 @@
 
     "use strict";
 
-    vrDirectiveObj.$inject = ['BaseDirService'];
+    //vrDirectiveObj.$inject = [];
 
-    function vrDirectiveObj(BaseDirService) {
+    function vrDirectiveObj() {
 
         return {
             restrict: 'E',
@@ -12,13 +12,13 @@
             scope: {
                 value: '='
             },
-            controller: function ($scope, $element) {
+            controller: function () {
 
             },
-            compile: function (element, attrs) {
+            compile: function () {
 
                 return {
-                    pre: function ($scope, iElem, iAttrs, formCtrl) {
+                    pre: function ($scope) {
                         var ctrl = $scope.ctrl;
 
                         ctrl.editorOptions = {
@@ -32,8 +32,8 @@
 
             controllerAs: 'ctrl',
             bindToController: true,
-            template: function (element, attrs) {
-                return '<textarea ui-codemirror="ctrl.editorOptions" ng-model="ctrl.value"></textarea>'
+            template: function () {
+                return '<textarea ui-codemirror="ctrl.editorOptions" ng-model="ctrl.value"></textarea>';
             }
 
         };
