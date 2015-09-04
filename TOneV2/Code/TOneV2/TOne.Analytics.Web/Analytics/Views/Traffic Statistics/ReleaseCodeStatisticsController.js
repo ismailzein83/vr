@@ -7,12 +7,17 @@
         var mainGridApi , selectedFilter;
 
         function retrieveData() {
-            $scope.filter = new filterFactory(
-                utilsService.getPropValuesFromArray($scope.selectedCustomers, "CarrierAccountID"),
-                utilsService.getPropValuesFromArray($scope.selectedSuppliers, "CarrierAccountID"),
-                utilsService.getPropValuesFromArray($scope.selectedSwitches, "SwitchId"),
-                utilsService.getPropValuesFromArray($scope.selectedCodeGroups, "Code"),
-                utilsService.getPropValuesFromArray($scope.selectedZones, "ZoneId"));
+
+            if ($scope.advancedSelected) {
+                $scope.filter = new filterFactory(
+                    utilsService.getPropValuesFromArray($scope.selectedCustomers, "CarrierAccountID"),
+                    utilsService.getPropValuesFromArray($scope.selectedSuppliers, "CarrierAccountID"),
+                    utilsService.getPropValuesFromArray($scope.selectedSwitches, "SwitchId"),
+                    utilsService.getPropValuesFromArray($scope.selectedCodeGroups, "Code"),
+                    utilsService.getPropValuesFromArray($scope.selectedZones, "ZoneId"));
+            } else {
+                $scope.filter = new filterFactory();
+            }
 
             var groupKeys = [];
 
