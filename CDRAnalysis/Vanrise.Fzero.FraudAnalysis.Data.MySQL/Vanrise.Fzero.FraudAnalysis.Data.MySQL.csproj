@@ -58,7 +58,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountCaseDataManager.cs" />
     <Compile Include="DashboardManager.cs" />
     <Compile Include="NumberProfileDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
