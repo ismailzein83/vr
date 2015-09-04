@@ -32,7 +32,7 @@ namespace TOne.Analytics.Data.SQL
             select = "";
             if ((filter.CodeGroups != null && filter.CodeGroups.Count > 0) || (filter.ZoneIds != null && filter.ZoneIds.Count > 0))
             {
-                result = " LEFT JOIN #ZONES z ON OurZoneID = z.ZoneID ";
+                result = " INNER JOIN #ZONES z ON OurZoneID = z.ZoneID ";
             }
 
             foreach (var groupKey in groupKeys)
