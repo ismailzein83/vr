@@ -93,10 +93,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                     if (fraudManagers[number.StrategyId].IsNumberSuspicious(number, out sNumber, number.StrategyId))
                                     {
                                         suspiciousNumbers.Add(sNumber);
-                                        //numberProfiles.Add(number);
+                                        numberProfiles.Add(number);
                                     }
 
-                                    numberProfiles.Add(number);
                                 }
                                 if (suspiciousNumbers.Count > 0)
                                 {

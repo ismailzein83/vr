@@ -56,5 +56,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         {
             throw new NotImplementedException();
         }
+
+
+        public bool ExecuteStrategy(StrategyExecution strategyExecutionObject, out int insertedId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vanrise.Data;
 using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data
 {
-    public interface IStrategyDataManager : IDataManager 
+    public interface IStrategyDataManager : IDataManager//, IBulkApplyDataManager<StrategyExecutionDetail>
     {
         List<String> GetStrategyNames(List<int> strategyIds);
 
@@ -20,6 +21,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
         bool UpdateStrategy(Strategy strategy, int userId);
 
         void DeleteStrategyResults(int StrategyId, DateTime FromDate, DateTime ToDate);
+
+        bool ExecuteStrategy(StrategyExecution strategyExecutionObject, out int insertedId);
         
     }
 }

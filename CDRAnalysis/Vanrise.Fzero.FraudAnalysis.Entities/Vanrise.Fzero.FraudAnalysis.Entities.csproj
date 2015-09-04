@@ -60,6 +60,7 @@
     <Compile Include="AccountSuspicionDetailQuery.cs" />
     <Compile Include="AccountSuspicionSummary.cs" />
     <Compile Include="AccountSuspicionSummaryQuery.cs" />
+    <Compile Include="Batches\StrategyExecutionDetailBatch.cs" />
     <Compile Include="CasesSummary.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="INumberProfileParameters.cs" />
@@ -106,6 +107,8 @@
     <Compile Include="CaseProductivity.cs" />
     <Compile Include="Strategy.cs" />
     <Compile Include="AccountCase.cs" />
+    <Compile Include="StrategyExecution.cs" />
+    <Compile Include="StrategyExecutionDetail.cs" />
     <Compile Include="SuspiciousNumber.cs" />
     <Compile Include="Batches\SuspiciousNumberBatch.cs" />
     <Compile Include="ResultQuery\FraudResultQuery.cs" />

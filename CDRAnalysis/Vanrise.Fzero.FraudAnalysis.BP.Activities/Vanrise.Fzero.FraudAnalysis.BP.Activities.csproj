@@ -88,6 +88,7 @@
     <Compile Include="ApplyFraudResultToDB.cs" />
     <Compile Include="ApplySuspiciousNumbersToDB.cs" />
     <Compile Include="DeleteStrategyResults.cs" />
+    <Compile Include="GetStrategies.cs" />
     <Compile Include="GetStrategy.cs" />
     <Compile Include="GetSuspiciousNumber.cs" />
     <Compile Include="LoadCDRs.cs" />
@@ -96,6 +97,7 @@
     </Compile>
     <Compile Include="PrepareNumberProfilesForDBApply.cs" />
     <Compile Include="PrepareFraudResultForDBApply.cs" />
+    <Compile Include="PrepareStrategyExecutionDetailsForDBApply.cs" />
     <Compile Include="PrepareSuspiciousNumbersForDBApply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

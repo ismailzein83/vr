@@ -77,6 +77,25 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return insertOperationOutput;
         }
 
+
+
+        public Vanrise.Fzero.FraudAnalysis.Entities.InsertOperationOutput<StrategyExecution> ExecuteStrategy(StrategyExecution strategyExecutionObject)
+        {
+            Vanrise.Fzero.FraudAnalysis.Entities.InsertOperationOutput<StrategyExecution> insertOperationOutput = new Vanrise.Fzero.FraudAnalysis.Entities.InsertOperationOutput<StrategyExecution>();
+
+            int strategyExecutionId = -1;
+
+            IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+            manager.ExecuteStrategy(strategyExecutionObject, out strategyExecutionId);
+
+            strategyExecutionObject.ID = strategyExecutionId;
+            insertOperationOutput.InsertedObject = strategyExecutionObject;
+
+            return insertOperationOutput;
+        }
+
+
+
         public void DeleteStrategyResults(int StrategyId, DateTime FromDate, DateTime ToDate)
         {
 

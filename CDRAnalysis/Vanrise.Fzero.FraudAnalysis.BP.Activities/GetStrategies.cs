@@ -9,7 +9,7 @@ using Vanrise.BusinessProcess;
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
 
-    public class GetStrategy : CodeActivity
+    public class GetStrategies : CodeActivity
     {
         #region Arguments
 
