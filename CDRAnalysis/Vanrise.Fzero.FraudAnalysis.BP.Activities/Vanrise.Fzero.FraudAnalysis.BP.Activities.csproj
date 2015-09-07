@@ -85,24 +85,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplyNumberProfilesToDB.cs" />
-    <Compile Include="ApplyFraudResultToDB.cs" />
     <Compile Include="ApplyStrategyExecutionDetailsToDB.cs" />
-    <Compile Include="ApplySuspiciousNumbersToDB.cs" />
     <Compile Include="DeleteStrategyExecutionDetails.cs" />
-    <Compile Include="DeleteStrategyResults.cs" />
     <Compile Include="GetStrategiesExecutionInfo.cs" />
-    <Compile Include="GetStrategy.cs" />
     <Compile Include="GetStrategyExecutionDetails.cs" />
-    <Compile Include="GetSuspiciousNumber.cs" />
     <Compile Include="LoadCDRs.cs" />
     <Compile Include="CreateNumberProfiles.cs" />
     <Compile Include="LoadNumberProfile.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PrepareNumberProfilesForDBApply.cs" />
-    <Compile Include="PrepareFraudResultForDBApply.cs" />
     <Compile Include="PrepareStrategyExecutionDetailsForDBApply.cs" />
-    <Compile Include="PrepareSuspiciousNumbersForDBApply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
