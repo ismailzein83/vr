@@ -19,7 +19,7 @@ CREATE PROCEDURE [FraudAnalysis].[sp_Dashboard_CreateTempForTopTenBTS]
 			inner join FraudAnalysis.AccountCase ac on cdr.MSISDN=ac.AccountNumber
 			
 			
-			where ac.LogDate between @FromDate and @ToDate and ac.StatusID = 3
+			where ac.CreatedTime between @FromDate and @ToDate and ac.Status = 3
 			group by BTS_id
 			order by count(distinct ac.AccountNumber) desc
 		

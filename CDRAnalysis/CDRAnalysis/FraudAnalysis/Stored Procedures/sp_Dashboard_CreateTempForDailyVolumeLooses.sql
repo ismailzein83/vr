@@ -18,7 +18,7 @@ CREATE PROCEDURE [FraudAnalysis].[sp_Dashboard_CreateTempForDailyVolumeLooses]
 			from FraudAnalysis.NormalCDR cdr 
 			inner join FraudAnalysis.AccountCase ac on cdr.MSISDN=ac.AccountNumber
 			
-			where ac.LogDate between @FromDate and @ToDate and ac.StatusID = 3 and cdr.Call_Type=1
+			where ac.CreatedTime between @FromDate and @ToDate and ac.Status = 3 and cdr.Call_Type=1
 			group by CONVERT(date, cdr.ConnectDateTime) 
 			
 			declare @sql varchar(1000)

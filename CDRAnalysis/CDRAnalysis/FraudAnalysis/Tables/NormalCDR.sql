@@ -25,7 +25,14 @@
 );
 
 
+
+
 GO
 CREATE CLUSTERED INDEX [IX_NormalCDR_MSISDN]
     ON [FraudAnalysis].[NormalCDR]([MSISDN] ASC, [ConnectDateTime] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [NormalCDR_IMEI]
+    ON [FraudAnalysis].[NormalCDR]([IMEI] ASC);
 

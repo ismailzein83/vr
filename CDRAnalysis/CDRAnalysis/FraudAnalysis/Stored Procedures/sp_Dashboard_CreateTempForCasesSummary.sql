@@ -23,8 +23,8 @@ CREATE PROCEDURE [FraudAnalysis].[sp_Dashboard_CreateTempForCasesSummary]
 		
 		
 			select cs.Name StatusName, count(ac.AccountNumber)as CountCases 
-			from  FraudAnalysis.AccountCase ac right join FraudAnalysis.CaseStatus cs on cs.Id=ac.StatusId
-			where ac.LogDate between @FromDate and @ToDate
+			from  FraudAnalysis.AccountCase ac right join FraudAnalysis.CaseStatus cs on cs.Id=ac.Status
+			where ac.CreatedTime between @FromDate and @ToDate
 			group by cs.Name,cs.Id) as Temp
 			
 			group by Temp.StatusName

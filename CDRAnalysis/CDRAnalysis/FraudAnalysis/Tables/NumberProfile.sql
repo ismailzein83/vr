@@ -1,11 +1,14 @@
 ﻿CREATE TABLE [FraudAnalysis].[NumberProfile] (
-    [Id]              INT            IDENTITY (1, 1) NOT NULL,
-    [AccountNumber]   VARCHAR (30)   NULL,
-    [FromDate]        DATETIME       NULL,
-    [ToDate]          DATETIME       NULL,
-    [StrategyId]      INT            NULL,
-    [AggregateValues] NVARCHAR (MAX) NULL
+    [ID]                  INT            IDENTITY (1, 1) NOT NULL,
+    [AccountNumber]       VARCHAR (30)   NULL,
+    [FromDate]            DATETIME       NULL,
+    [ToDate]              DATETIME       NULL,
+    [StrategyId]          INT            NULL,
+    [AggregateValues]     NVARCHAR (MAX) NULL,
+    [StrategyExecutionID] INT            NULL
 );
+
+
 
 
 
