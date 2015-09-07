@@ -37,8 +37,11 @@
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
       <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
       <AssemblyReference>System</AssemblyReference>
       <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
       <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
@@ -53,6 +56,7 @@
       <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing.Entities</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.Business</AssemblyReference>
@@ -64,24 +68,35 @@
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="scg:List(vffe:Strategy)" Name="strategies" />
+      <Variable x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)" Name="strategiesExecutionInfo" />
     </Sequence.Variables>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1">
       <InArgument x:TypeArguments="x:String">
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("Start Executing Strategies Count: {0}",Input.StrategyIds.Count)</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <vffba1:GetStrategy sap2010:WorkflowViewState.IdRef="GetStrategy_3">
-      <vffba1:GetStrategy.Strategies>
-        <OutArgument x:TypeArguments="scg:List(vffe:Strategy)">
-          <mca:CSharpReference x:TypeArguments="scg:List(vffe:Strategy)">strategies</mca:CSharpReference>
+    <vffba1:GetStrategiesExecutionInfo sap2010:WorkflowViewState.IdRef="GetStrategiesExecutionInfo_1">
+      <vffba1:GetStrategiesExecutionInfo.FromDate>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
+        </InArgument>
+      </vffba1:GetStrategiesExecutionInfo.FromDate>
+      <vffba1:GetStrategiesExecutionInfo.StrategiesExecutionInfo>
+        <OutArgument x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)">
+          <mca:CSharpReference x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)">strategiesExecutionInfo</mca:CSharpReference>
         </OutArgument>
-      </vffba1:GetStrategy.Strategies>
-      <vffba1:GetStrategy.StrategyIds>
+      </vffba1:GetStrategiesExecutionInfo.StrategiesExecutionInfo>
+      <vffba1:GetStrategiesExecutionInfo.StrategyIds>
         <InArgument x:TypeArguments="scg:List(x:Int32)">
           <mca:CSharpValue x:TypeArguments="scg:List(x:Int32)">Input.StrategyIds</mca:CSharpValue>
         </InArgument>
-      </vffba1:GetStrategy.StrategyIds>
-    </vffba1:GetStrategy>
+      </vffba1:GetStrategiesExecutionInfo.StrategyIds>
+      <vffba1:GetStrategiesExecutionInfo.ToDate>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
+        </InArgument>
+      </vffba1:GetStrategiesExecutionInfo.ToDate>
+    </vffba1:GetStrategiesExecutionInfo>
     <If sap2010:WorkflowViewState.IdRef="If_1">
       <If.Condition>
         <InArgument x:TypeArguments="x:Boolean">
@@ -151,7 +166,7 @@
                 </InArgument>
               </vffba1:LoadCDRs.ToDate>
             </vffba1:LoadCDRs>
-            <vffba1:LoadNumberProfiles sap2010:WorkflowViewState.IdRef="LoadNumberProfiles_1">
+            <vffba1:LoadNumberProfiles Parameters="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadNumberProfiles_1">
               <vffba1:LoadNumberProfiles.FromDate>
                 <InArgument x:TypeArguments="s:DateTime">
                   <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
@@ -345,12 +360,12 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbEFAA90CDgIBAUQFSBEDAZIFSQVUGgMBiwVVBdsCCgIBAkYJRpUBAwGTBVELUWMDAY8FTAtMagMBjAVYC1h/AgEDXAnQAhQCAQvTAgnZAiQCAQZdC3IqAwH+BHMLygIWAgEQywILzwIXAgEM1gIP1gKDAQIBCNMCZNMCgQECAQdqEWppAwGIBWURZWYDAYUFYBFgXwMBggVvEW9dAwH/BIQBDZkBHwMBuQSaAQ2+ASkDAcEDvwEN4wEqAwHJAuQBDfkBOQMBhAL6AQ2PAjYDAb8BkAINpQIzAgF6pgINsQIxAgFXsgINvQIuAgE0vgINyQIrAgERzQIPzQKaAQIBDYcBE4cBYQMB7QSRARORAXUDAdwEjAETjAF0AwHLBJYBE5YBXwMBugS2ARO2AWoDAagErAETrAFtAwGXBKIBE6IBdAMBhgSdAROdAWEDAfUDsQETsQF/AwHkA6cBE6cBiAEDAdMDuwETuwFfAwHCA+ABE+ABagMBsAPWARPWAXcDAZ8DwgETwgGAAQMBjgPMARPMAY8BAwH9AtsBE9sBgAEDAewC0QET0QGcAQMB2wLHARPHAY4BAwHKAvEBE/EBeAMBuALnARPnAYYBAwGnAvYBE/YBhQEDAZYC7AET7AGFAQMBhQKHAhOHAngDAfMB/QET/QGHAQMB4gGMAhOMAoIBAwHRAYICE4ICggEDAcABnQITnQJ4AwGuAZMCE5MClAEDAZ0BogITogJ/AwGMAZgCE5gCfwIBe64CE64CfQIBaakCE6kCfQIBWLoCE7oCegIBRrUCE7UCegIBNcYCE8YCdwIBI8ECE8ECdwIBEg==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbENEA+wCDgIBAUkFTREDAccFTgVjKQMBtgVkBeoCCgIBAksJS5UBAwHIBVsLW2MDAcMFVgtWhAEDAb8FUQtRWQMBuwVgC2BXAwG3BWcLZ38CAQNrCd8CFAIBDeICCegCJAIBB2wLgQEqAwGlBYIBC9kCFgIBE9oCC94CFwIBDuUCD+UCgwECAQniAmTiAoEBAgEIeRF5aQMBsgV0EXRmAwGuBW8Rb18DAaoFfhF+XQMBpgWTAQ2oAR8DAdwEqQENzQEpAwHdA84BDfIBKgMB3gLzAQ2IAjkDAZUCiQINngI2AwHMAZ8CDbQCMwMBgwG1Ag3AAjECAV7BAg3MAi4CATnNAg3YAisCARTcAg/cApoBAgEPlgETlgFhAwGTBaABE6ABdQMBgQWbARObAXQDAe8EpQETpQFfAwHdBMUBE8UBagMBygS7ARO7AW0DAbgEsQETsQF0AwGmBKwBE6wBYQMBlATAARPAAX8DAYIEtgETtgGIAQMB8APKARPKAV8DAd4D7wET7wFqAwHLA+UBE+UBdwMBuQPRARPRAYABAwGnA9sBE9sBjwEDAZUD6gET6gGAAQMBgwPgARPgAZwBAwHxAtYBE9YBjgEDAd8CgAITgAJ4AwHMAvYBE/YBhgEDAboChQIThQKFAQMBqAL7ARP7AYUBAwGWApYCE5YCeAMBgwKMAhOMAocBAwHxAZsCE5sCggEDAd8BkQITkQKCAQMBzQGsAhOsAngDAboBogITogKUAQMBqAGxAhOxAn8DAZYBpwITpwJ/AwGEAb0CE70CfQIBcbgCE7gCfQIBX8kCE8kCegIBTMQCE8QCegIBOtUCE9UCdwIBJ9ACE9ACdwIBFQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="2481,62" />
-      <sap2010:ViewStateData Id="GetStrategy_3" sap:VirtualizedContainerService.HintSize="2481,22" />
+      <sap2010:ViewStateData Id="GetStrategiesExecutionInfo_1" sap:VirtualizedContainerService.HintSize="2481,22" />
       <sap2010:ViewStateData Id="DeleteStrategyResults_1" sap:VirtualizedContainerService.HintSize="2234,22" />
       <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="LoadNumberProfiles_1" sap:VirtualizedContainerService.HintSize="200,40" />

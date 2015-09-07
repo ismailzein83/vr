@@ -22,7 +22,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         public BaseQueue<NumberProfileBatch> OutputQueueForNumberProfile { get; set; }
 
-        public List<Strategy> Strategies { get; set; }
+        public List<StrategyExecutionInfo> StrategiesExecutionInfo { get; set; }
     }
 
     #endregion
@@ -40,7 +40,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         public InOutArgument<BaseQueue<NumberProfileBatch>> OutputQueueForNumberProfile { get; set; }
 
         [RequiredArgument]
-        public InArgument<List<Strategy>> Strategies { get; set; }
+        public InArgument<List<StrategyExecutionInfo>> StrategiesExecutionInfo { get; set; }
 
         #endregion
 
@@ -62,7 +62,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             Dictionary<int, FraudManager> fraudManagers = new Dictionary<int, FraudManager>();
             ISuspiciousNumberDataManager dataManager = FraudDataManagerFactory.GetDataManager<ISuspiciousNumberDataManager>();
 
-                foreach (var strategy in inputArgument.Strategies)
+            List<Strategy> strategies = new List<Strategy>();
+            foreach (var strategiesExecutionInfo in inputArgument.StrategiesExecutionInfo)
+            {
+                strategies.Add(strategiesExecutionInfo.Strategy);
+            }
+
+                foreach (var strategy in strategies)
                 {
                    fraudManagers.Add(strategy.Id, new FraudManager(strategy));
                 }
@@ -122,7 +128,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 InputQueueForNumberProfile = this.InputQueueForNumberProfile.Get(context),
                 OutputQueueForStrategyExecutionDetail = this.OutputQueueForStrategyExecutionDetail.Get(context),
                 OutputQueueForNumberProfile = this.OutputQueueForNumberProfile.Get(context),
-                Strategies = this.Strategies.Get(context)
+                StrategiesExecutionInfo = this.StrategiesExecutionInfo.Get(context)
             };
         }
     }
