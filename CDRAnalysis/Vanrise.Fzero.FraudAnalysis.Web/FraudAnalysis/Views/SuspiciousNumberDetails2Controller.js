@@ -21,7 +21,7 @@ function SuspiciousNumberDetails2Controller($scope, SuspicionAnalysisAPIService,
     function defineScope() {
 
         $scope.from = "01/01/2014 00:00";
-        $scope.to = "01/01/2014 00:00";
+        $scope.to = "02/01/2014 00:00";
 
         $scope.logs = [];
         $scope.caseStatuses = [];

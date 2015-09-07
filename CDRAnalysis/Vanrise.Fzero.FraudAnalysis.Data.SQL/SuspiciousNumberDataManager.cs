@@ -191,8 +191,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             detail.SuspicionLevelID = (SuspicionLevel)reader["SuspicionLevelID"];
             detail.StrategyName = reader["StrategyName"] as string;
             detail.AccountStatusID = GetReaderValue<CaseStatus>(reader, "AccountStatusID");
-            detail.DateDay = (DateTime)reader["DateDay"];
-
+            detail.FromDate = (DateTime)reader["FromDate"];
+            detail.ToDate = (DateTime)reader["ToDate"];
             return detail;
         }
 

@@ -15,7 +15,7 @@ function SuspicionAnalysis2Controller($scope, SuspicionAnalysisAPIService, Strat
         //$scope.from = Date.now();
         //$scope.to = Date.now();
         $scope.from = "01/01/2014 00:00";
-        $scope.to = "01/01/2014 00:00";
+        $scope.to = "02/01/2014 00:00";
 
         $scope.strategies = [];
         $scope.selectedStrategies = [];
