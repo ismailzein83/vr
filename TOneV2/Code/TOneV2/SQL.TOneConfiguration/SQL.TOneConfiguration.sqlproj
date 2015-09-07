@@ -95,7 +95,6 @@
     <Build Include="sec\Stored Procedures\sp_Permission_Delete.sql" />
     <Build Include="sec\Stored Procedures\sp_OrgChart_GetAll.sql" />
     <Build Include="sec\Stored Procedures\sp_Permission_GetAll.sql" />
-    <Build Include="sec\Stored Procedures\sp_Widget_GetFiltered.sql" />
     <Build Include="sec\Stored Procedures\sp_User_GetbyEmail.sql" />
     <Build Include="sec\Stored Procedures\sp_OrgChart_Delete.sql" />
     <Build Include="sec\Stored Procedures\sp_Permission_Update.sql" />
@@ -111,7 +110,6 @@
     <Build Include="sec\Stored Procedures\sp_BusinessEntityModule_GetAll.sql" />
     <Build Include="sec\Stored Procedures\sp_View_GetAll.sql" />
     <Build Include="sec\Stored Procedures\sp_Module_GetAll.sql" />
-    <Build Include="sec\Stored Procedures\sp_View_GetFiltered.sql" />
     <Build Include="sec\Stored Procedures\sp_View_Delete.sql" />
     <Build Include="sec\Stored Procedures\sp_View_Update.sql" />
     <Build Include="sec\Stored Procedures\sp_Widget_GetById.sql" />
@@ -151,6 +149,9 @@
     <Build Include="sec\Stored Procedures\sp_User_EditUserProfile.sql" />
     <Build Include="sec\Stored Procedures\sp_User_CheckUserPassword.sql" />
     <Build Include="sec\Stored Procedures\sp_User_ChangeMyPassword.sql" />
+    <Build Include="sec\Stored Procedures\sp_Widget_CreateTempByFiltered.sql" />
+    <Build Include="sec\Stored Procedures\sp_View_GetByType.sql" />
+    <Build Include="sec\Stored Procedures\sp_View_CreateTempByFiltered.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

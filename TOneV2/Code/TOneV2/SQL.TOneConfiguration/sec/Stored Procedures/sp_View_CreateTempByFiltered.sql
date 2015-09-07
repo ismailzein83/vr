@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [sec].[sp_View_GetFiltered]
+CREATE PROCEDURE [sec].[sp_View_CreateTempByFiltered]
 	-- Add the parameters for the stored procedure here
 	@TempTableName varchar(200),
 	@Filter nvarchar(255) =  NULL ,
@@ -17,12 +17,14 @@ AS
 			BEGIN
 				SELECT	v.Id,
 						v.Name,
+						v.Title,
 						v.Module,
 						v.[RequiredPermissions],
 						v.Url,
 						v.Audience,
 						v.Content,
 						v.[Type],
+						v.[Rank],
 						m.Name ModuleName 
 				INTO #RESULT
 				FROM	sec.[View] v

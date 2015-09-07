@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [sec].[sp_Widget_GetFiltered]
+CREATE PROCEDURE [sec].[sp_Widget_CreateTempByFiltered]
 @TempTableName varchar(200),
 @WidgetName nvarchar(50) =  NULL,
 @WidgetType int
@@ -12,6 +12,7 @@ BEGIN
 		SET NOCOUNT ON;
 		IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 			BEGIN
+			
 				SELECT	w.Id,w.WidgetDefinitionId,
 						w.Name AS WidgetName,
 						w.Title,

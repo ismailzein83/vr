@@ -13,6 +13,7 @@ BEGIN
 			v.[Audience],
 			v.[Content],
 			v.[Type],
+			v.[Rank],
 			m.Name ModuleName  
 	FROM	sec.[View]
 	AS		v 
