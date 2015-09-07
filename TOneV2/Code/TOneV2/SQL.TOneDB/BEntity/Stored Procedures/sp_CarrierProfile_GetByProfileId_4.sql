@@ -41,7 +41,8 @@ BEGIN
 				cp.CommercialEmail,
 				cp.SMSPhoneNumber,
 				ca.AccountsCount,
-				cp.FileID
+				cp.FileID,
+				cp.CurrencyID
 	FROM CarrierProfile cp
 	LEFT JOIN profileAccountsCount ca on ca.ProfileID = cp.ProfileID
 	WHERE cp.ProfileID = @ProfileID

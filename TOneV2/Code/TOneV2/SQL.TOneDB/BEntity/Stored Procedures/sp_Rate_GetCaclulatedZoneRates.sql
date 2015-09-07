@@ -54,10 +54,10 @@ BEGIN
              r.ZoneID, 
              p.SupplierID, 
              p.CustomerID,
-             NormalRate = (r.Rate/ C.LastRate) +
-                          Case When CC.Tax2 is null Then 0 Else CASE WHEN P.SupplierID <> 'SYS' THEN 1 ELSE -1 END * (r.Rate/ C.LastRate) * CC.Tax2 / 100.0 End + 
-                          Case When Co.SupplierID is null Then 0 Else isnull(CASE WHEN P.SupplierID <> 'SYS' THEN 1 ELSE -1 END * (CASE WHEN isnull(Co.Amount,0)  <> 0 THEN Amount / C.LastRate ELSE (r.Rate/ C.LastRate) * Percentage / 100.0  END),0) End  , 
-             r.ServicesFlag
+			(R.Rate/ C.LastRate) +
+			Case When Co.SupplierID is null Then 0 Else isnull(CASE WHEN P.SupplierID <> 'SYS' THEN 1 ELSE -1 END * (CASE WHEN isnull(Co.Amount,0)  <> 0 THEN Amount / C.LastRate ELSE (R.Rate/ C.LastRate) * Percentage / 100.0  END),0) End  
+			NormalRate,
+			r.ServicesFlag
     FROM Rate r WITH (NOLOCK)
     LEFT JOIN @ZoneIds zf on zf.ID = r.ZoneID
     JOIN PriceList p WITH (NOLOCK) ON r.PriceListID = p.PriceListID

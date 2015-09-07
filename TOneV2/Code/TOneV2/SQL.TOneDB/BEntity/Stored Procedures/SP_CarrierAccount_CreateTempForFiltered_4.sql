@@ -21,6 +21,8 @@ BEGIN
 			ca.AccountType,
 			ca.CustomerPaymentType,
 			ca.SupplierPaymentType,
+			ca.IsCustomerCeiling,
+			ca.IsSupplierCeiling,
 			ca.NameSuffix
 			INTO #RESULT
 			FROM CarrierAccount ca

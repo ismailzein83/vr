@@ -6,7 +6,7 @@
 CREATE PROCEDURE [BEntity].[sp_Rate_CreateTempByFiltered]
 	@TempTableName varchar(200),
 	@ZoneId INT,
-	@EffectedDate SMALLDATETIME,
+	@EffectedDate SMALLDATETIME =NULL,
 	@CustomerId VARCHAR(5)= NULL,
 	@SupplierId VARCHAR(5)= NULL
 AS
@@ -36,7 +36,7 @@ BEGIN
             LEFT JOIN ZONE Z ON Z.ZoneID = R.ZoneID
             
             WHERE R.ZoneID = @ZoneId
-				AND @EffectedDate<= R.BeginEffectiveDate
+				AND (@EffectedDate IS NULL OR @EffectedDate<= R.BeginEffectiveDate)
 				AND (P.CustomerID = @CustomerId OR @CustomerId IS NULL)
 				AND (P.SupplierID = @SupplierId OR @SupplierId IS NULL)
             ORDER BY R.BeginEffectiveDate DESC ,r.RateID DESC

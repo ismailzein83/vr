@@ -5,7 +5,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-Create PROCEDURE [BEntity].[sp_CarrierAccount_GetAll]
+CREATE PROCEDURE [BEntity].[sp_CarrierAccount_GetAll]
 	@CarrierType int = NULL
 AS
 
@@ -18,7 +18,9 @@ SELECT ca.CarrierAccountId,
 			ca.AccountType,
 			ca.CustomerPaymentType,
 			ca.SupplierPaymentType,
-			ca.NameSuffix
+			ca.NameSuffix,
+			ca.IsCustomerCeiling,
+			ca.IsSupplierCeiling
 
 			FROM CarrierAccount ca
 			INNER JOIN CarrierProfile cp on ca.ProfileID = cp.ProfileID

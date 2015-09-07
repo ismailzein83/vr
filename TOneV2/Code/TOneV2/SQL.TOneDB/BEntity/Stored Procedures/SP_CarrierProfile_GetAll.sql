@@ -41,7 +41,8 @@ WITH profileAccountsCount AS (SELECT ca.ProfileID, COUNT(*) AccountsCount
 				cp.CommercialEmail,
 				cp.SMSPhoneNumber,
 				ca.AccountsCount,
-				cp.FileID
+				cp.FileID,
+				cp.CurrencyID
 			INTO #Result
 			FROM CarrierProfile cp
 			LEFT JOIN profileAccountsCount ca ON cp.ProfileID = ca.ProfileID

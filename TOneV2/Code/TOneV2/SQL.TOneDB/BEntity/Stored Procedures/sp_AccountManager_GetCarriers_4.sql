@@ -28,7 +28,7 @@ SET NOCOUNT ON
 	
 	FROM CarrierAccount ca
 	INNER JOIN CarrierProfile cp ON ca.ProfileID = cp.ProfileID
-	LEFT JOIN BEntity.AccountManager AMCust ON AMCust.CarrierAccountID = ca.CarrierAccountID AND AMCust.RelationType = 1 AND AMCust.UserId != @UserId
+	LEFT JOIN BEntity.AccountManager AMCust ON AMCust.CarrierAccountID = ca.CarrierAccountID AND AMCust.RelationType = 0 AND AMCust.UserId != @UserId
 	LEFT JOIN BEntity.AccountManager AMSupp ON AMSupp.CarrierAccountID = ca.CarrierAccountID AND AMSupp.RelationType = 2 AND AMSupp.UserId != @UserId
 
 	WHERE ca.IsDeleted = 'N' AND ca.ActivationStatus = 2
