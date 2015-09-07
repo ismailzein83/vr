@@ -50,7 +50,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             streamForBulkInsert.Close();
             return new StreamBulkInsertInfo
             {
-                TableName = "[FraudAnalysis].[StrategyExecutionDetail]",
+                TableName = "[FraudAnalysis].[StrategyExecutionDetails]",
                 Stream = streamForBulkInsert,
                 TabLock = false,
                 KeepIdentity = false,
@@ -66,14 +66,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         public void WriteRecordToStream(StrategyExecutionDetail record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("0^{0}^{1}^{2}^{3}^{4}",
+            streamForBulkInsert.WriteRecord("0^{0}^{1}^{2}^{3}^{4}^{5}^{6}",
                                  record.StrategyExecutionID,
                                  record.AccountNumber,
                                  record.SuspicionLevelID,
                                  Vanrise.Common.Serializer.Serialize(record.FilterValues, true),
                                  Vanrise.Common.Serializer.Serialize(record.AggregateValues, true),
                                  record.CaseID,
-                                 record.SuspicionOccuranceStatus
+                                 (int) record.SuspicionOccuranceStatus
                                  );
         }
 

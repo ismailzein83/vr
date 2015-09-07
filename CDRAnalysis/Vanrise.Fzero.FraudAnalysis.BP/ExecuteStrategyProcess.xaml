@@ -271,7 +271,7 @@
               </vffba1:PrepareStrategyExecutionDetailsForDBApply.PreviousActivityStatus>
               <vffba1:PrepareStrategyExecutionDetailsForDBApply.Status>
                 <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareNumberProfilesStatus</mca:CSharpReference>
+                  <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareStrategyExecutionDetailsStatus</mca:CSharpReference>
                 </OutArgument>
               </vffba1:PrepareStrategyExecutionDetailsForDBApply.Status>
             </vffba1:PrepareStrategyExecutionDetailsForDBApply>
@@ -287,7 +287,7 @@
                 </InArgument>
               </vffba1:ApplyNumberProfilesToDB.PreviousActivityStatus>
             </vffba1:ApplyNumberProfilesToDB>
-            <vffba1:ApplyStrategyExecutionDetailsToDB Status="{x:Null}">
+            <vffba1:ApplyStrategyExecutionDetailsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyStrategyExecutionDetailsToDB_1">
               <vffba1:ApplyStrategyExecutionDetailsToDB.InputQueue>
                 <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
                   <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">preparedStrategyExecutionDetailsQueue</mca:CSharpValue>
@@ -298,7 +298,6 @@
                   <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareStrategyExecutionDetailsStatus</mca:CSharpValue>
                 </InArgument>
               </vffba1:ApplyStrategyExecutionDetailsToDB.PreviousActivityStatus>
-              <sap2010:WorkflowViewState.IdRef>ApplyStrategyExecutionDetailsToDB_1</sap2010:WorkflowViewState.IdRef>
             </vffba1:ApplyStrategyExecutionDetailsToDB>
           </Parallel>
           <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2">
@@ -318,7 +317,7 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbDpEA8ICDgIBAUgFTBEDAcgDTQViKQMBuwNjBcACCgIBAkoJSpUBAwHJA1oLWmMDAcUDVQtVhAEDAcIDUAtQWQMBvwNfC19XAwG8A2YLZpkBAgEDagm1AhQCAQu4Agm+AiQCAQZrC4ABMwMBrgOBAQuvAhYCARCwAgu0AhcCAQy7Ag+7AoMBAgEIuAJkuAKBAQIBB3MRc2YDAbgDeBF4ggEDAbUDbhFuXwMBsgN9EX1dAwGvA48BDaQBHwMB9QKlAQ3JASsDAZICygEN6QEyAwG9AeoBDf8BNgMBhAGAAg2VAkACAUuWAg2hAi4CAS6iAg2uAjgCARGyAg+yApoBAgENkgETkgFhAwGgA5wBE5wBdQMBkgOXAROXAXQDAYQDoQEToQFfAwH2ArcBE7cBbQMB5wKtAROtAXQDAdkCwQETwQGEAQMBywKoAROoAWEDAb0CvAETvAGBAQMBrwKyAROyAYgBAwGhAsYBE8YBXwMBkwLNARPNAYABAwGEAtwBE9wBeQMB9gHmARPmAYQBAwHoAdcBE9cBnAEDAdoB4QET4QGHAQMBzAHSARPSAY8BAwG+AfcBE/cBfwMBrwHtARPtAYcBAwGhAfwBE/wBggEDAZMB8gET8gGCAQMBhQGNAhONAn8CAXaDAhODApQBAgFokgITkgKCAQIBWogCE4gCjAECAUyeAhOeAnoCAT2ZAhOZAnoCAS+qAhOqAoQBAgEgpQITpQKEAQIBEg==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbDpEA8ECDgIBAUgFTBEDAcgDTQViKQMBuwNjBb8CCgIBAkoJSpUBAwHJA1oLWmMDAcUDVQtVhAEDAcIDUAtQWQMBvwNfC19XAwG8A2YLZpkBAgEDagm0AhQCAQu3Agm9AiQCAQZrC4ABMwMBrgOBAQuuAhYCARCvAguzAhcCAQy6Ag+6AoMBAgEItwJktwKBAQIBB3MRc2YDAbgDeBF4ggEDAbUDbhFuXwMBsgN9EX1dAwGvA48BDaQBHwMB9QKlAQ3JASsDAZICygEN6QEyAwG9AeoBDf8BNgMBhAGAAg2VAkACAUuWAg2hAi4CAS6iAg2tAjgCARGxAg+xApoBAgENkgETkgFhAwGgA5wBE5wBdQMBkgOXAROXAXQDAYQDoQEToQFfAwH2ArcBE7cBbQMB5wKtAROtAXQDAdkCwQETwQGEAQMBywKoAROoAWEDAb0CvAETvAGBAQMBrwKyAROyAYgBAwGhAsYBE8YBXwMBkwLNARPNAYABAwGEAtwBE9wBeQMB9gHmARPmAYQBAwHoAdcBE9cBnAEDAdoB4QET4QGHAQMBzAHSARPSAY8BAwG+AfcBE/cBfwMBrwHtARPtAYcBAwGhAfwBE/wBggEDAZMB8gET8gGCAQMBhQGNAhONAn8CAXaDAhODApQBAgFokgITkgKMAQIBWogCE4gCjAECAUyeAhOeAnoCAT2ZAhOZAnoCAS+qAhOqAoQBAgEgpQITpQKEAQIBEg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
