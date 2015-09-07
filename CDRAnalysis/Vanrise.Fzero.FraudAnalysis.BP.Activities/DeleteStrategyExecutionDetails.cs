@@ -22,7 +22,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
 
         [RequiredArgument]
-        public InArgument<List<int>> StrategyIds { get; set; }
+        public InArgument<List<StrategyExecutionInfo>> StrategiesExecutionInfo { get; set; }
 
 
         [RequiredArgument]
@@ -40,7 +40,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 Console.WriteLine("Started deleting previous results");
                 StrategyManager manager = new StrategyManager();
 
-                foreach (var strategyId in context.GetValue(StrategyIds))
+                List<int> StrategyIds = new List<int>();
+                foreach (var strategyExecutionIfo in context.GetValue(StrategiesExecutionInfo))
+                {
+                    StrategyIds.Add(strategyExecutionIfo.Strategy.Id);
+                }
+
+                foreach (var strategyId in StrategyIds)
                     manager.DeleteStrategyResults(strategyId, context.GetValue(FromDate), context.GetValue(ToDate));
 
 

@@ -66,6 +66,7 @@
     <Compile Include="INumberProfileParameters.cs" />
     <Compile Include="NumberProfileParameters.cs" />
     <Compile Include="SpecialInput.cs" />
+    <Compile Include="StrategyExecutionInfo.cs" />
     <Compile Include="StrategyCases.cs" />
     <Compile Include="BTSHighValueCases.cs" />
     <Compile Include="BTSCases.cs" />

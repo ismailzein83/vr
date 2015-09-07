@@ -10,7 +10,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     {
         public int ID { get; set; }
 
-        public int ProcessID { get; set; }
+        public long ProcessID { get; set; }
 
         public int StrategyID { get; set; }
 

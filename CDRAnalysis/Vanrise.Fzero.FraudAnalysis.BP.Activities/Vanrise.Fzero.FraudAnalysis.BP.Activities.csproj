@@ -90,11 +90,12 @@
     <Compile Include="ApplySuspiciousNumbersToDB.cs" />
     <Compile Include="DeleteStrategyExecutionDetails.cs" />
     <Compile Include="DeleteStrategyResults.cs" />
-    <Compile Include="GetStrategies.cs" />
+    <Compile Include="GetStrategiesExecutionInfo.cs" />
     <Compile Include="GetStrategy.cs" />
     <Compile Include="GetStrategyExecutionDetails.cs" />
     <Compile Include="GetSuspiciousNumber.cs" />
     <Compile Include="LoadCDRs.cs" />
+    <Compile Include="CreateNumberProfiles.cs" />
     <Compile Include="LoadNumberProfile.cs">
       <SubType>Code</SubType>
     </Compile>
