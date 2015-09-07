@@ -62,5 +62,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         {
             throw new NotImplementedException();
         }
+
+
+        public AccountSuspicionSummary GetAccountSuspicionSummaryByAccountNumber(string accountNumber, DateTime from, DateTime to)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -36,10 +36,10 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         }
 
         [HttpPost]
-        public bool UpdateAccountCase(AccountCaseUpdate input)
+        public Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> UpdateAccountCase(AccountCaseUpdate input)
         {
             FraudManager manager = new FraudManager();
-            return manager.UpdateAccountCase(input.accountNumber, input.caseStatus, input.validTill);
+            return manager.UpdateAccountCase(input);
         }
 
         [HttpGet]

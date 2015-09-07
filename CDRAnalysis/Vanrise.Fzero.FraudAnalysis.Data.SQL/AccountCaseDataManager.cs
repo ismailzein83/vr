@@ -20,40 +20,37 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         public bool UpdateAccountCase(string accountNumber, CaseStatus caseStatus, DateTime? validTill)
         {
             int userID = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
-
-            IAccountCaseDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountCaseDataManager>();
-            AccountCase accountCase = dataManager.GetLastAccountCaseByAccountNumber(accountNumber);
-
+            AccountCase accountCase = GetLastAccountCaseByAccountNumber(accountNumber);
             int caseID;
             bool operationSucceeded;
 
             if (accountCase == null || (accountCase.StatusID == CaseStatus.ClosedFraud) || (accountCase.StatusID == CaseStatus.ClosedWhiteList))
-                operationSucceeded = dataManager.InsertAccountCase(out caseID, accountNumber, userID, validTill);
+                operationSucceeded = InsertAccountCase(out caseID, accountNumber, userID, validTill);
             else
             {
                 caseID = accountCase.CaseID;
-                operationSucceeded = dataManager.UpdateAccountCaseStatus(accountCase.CaseID, caseStatus, validTill);
+                operationSucceeded = UpdateAccountCaseStatus(accountCase.CaseID, caseStatus, validTill);
             }
 
             if (!operationSucceeded) return false;
 
-            operationSucceeded = dataManager.InsertAccountCaseHistory(caseID, userID, caseStatus);
+            operationSucceeded = InsertAccountCaseHistory(caseID, userID, caseStatus);
 
             if (!operationSucceeded) return false;
 
-            operationSucceeded = dataManager.InsertOrUpdateAccountStatus(accountNumber, caseStatus);
+            operationSucceeded = InsertOrUpdateAccountStatus(accountNumber, caseStatus);
 
             if (!operationSucceeded) return false;
 
-            return dataManager.LinkDetailToCase(accountNumber, caseID, caseStatus);
+            return LinkDetailToCase(accountNumber, caseID, caseStatus);
         }
 
-        AccountCase IAccountCaseDataManager.GetLastAccountCaseByAccountNumber(string accountNumber)
+        public AccountCase GetLastAccountCaseByAccountNumber(string accountNumber)
         {
             return GetItemSP("FraudAnalysis.sp_AccountCase_GetLastByAccountNumber", AccountCaseMapper, accountNumber);
         }
 
-        bool IAccountCaseDataManager.InsertAccountCase(out int insertedID, string accountNumber, int userID, DateTime? validTill)
+        public bool InsertAccountCase(out int insertedID, string accountNumber, int userID, DateTime? validTill)
         {
             object accountCaseID;
 
@@ -64,25 +61,25 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return (recordsAffected > 0);
         }
 
-        bool IAccountCaseDataManager.UpdateAccountCaseStatus(int caseID, CaseStatus statusID, DateTime? validTill)
+        public bool UpdateAccountCaseStatus(int caseID, CaseStatus statusID, DateTime? validTill)
         {
             int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_Update", caseID, statusID, validTill);
             return (recordsAffected > 0);
         }
 
-        bool IAccountCaseDataManager.InsertAccountCaseHistory(int caseID, int userID, CaseStatus caseStatus)
+        public bool InsertAccountCaseHistory(int caseID, int userID, CaseStatus caseStatus)
         {
             int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCaseHistory_Insert", caseID, userID, caseStatus);
             return (recordsAffected > 0);
         }
 
-        bool IAccountCaseDataManager.InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus)
+        public bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus)
         {
             int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_InsertOrUpdate", accountNumber, caseStatus);
             return (recordsAffected > 0);
         }
 
-        bool IAccountCaseDataManager.LinkDetailToCase(string accountNumber, int caseID, CaseStatus caseStatus)
+        public bool LinkDetailToCase(string accountNumber, int caseID, CaseStatus caseStatus)
         {
             SuspicionOccuranceStatus occuranceStatus = (caseStatus.CompareTo(CaseStatus.Open) == 0 || caseStatus.CompareTo(CaseStatus.Pending) == 0) ? SuspicionOccuranceStatus.Open : SuspicionOccuranceStatus.Closed;
 

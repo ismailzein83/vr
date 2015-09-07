@@ -59,9 +59,26 @@ function SuspiciousNumberDetails2Controller($scope, SuspicionAnalysisAPIService,
             return SuspicionAnalysisAPIService.UpdateAccountCase({
                     accountNumber: $scope.accountNumber,
                     caseStatus: $scope.selectedCaseStatus.value,
-                    validTill: $scope.validTill
+                    validTill: $scope.validTill,
+                    from: $scope.from,
+                    to: $scope.to
                 })
                 .then(function (response) {
+                    if (VRNotificationService.notifyOnItemUpdated("Account Case", response)) {
+                        if ($scope.onAccountCaseUpdated != undefined) {
+
+                            var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", response.UpdatedObject.SuspicionLevelID);
+                            response.UpdatedObject.SuspicionLevelDescription = suspicionLevel.description;
+
+                            var accountStatus = UtilsService.getEnum(SuspicionOccuranceStatusEnum, "value", response.UpdatedObject.AccountStatusID);
+                            response.UpdatedObject.AccountStatusDescription = accountStatus.description;
+
+                            $scope.onAccountCaseUpdated(response.UpdatedObject);
+                        }
+                        
+                        $scope.modalContext.closeModal();
+                    }
+
                     $scope.modalContext.closeModal();
                 })
                 .catch(function (error) {

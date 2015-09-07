@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="FraudAnalysis_SuspiciousNumberDetails2Controller" width="'75%'">
+﻿<div vr-modalcontent draggable ng-controller="FraudAnalysis_SuspiciousNumberDetails2Controller" width="'75%'">
     <vr-modalbody vr-loader="isGettingData">
 
         <vr-form name="formSuspiciousNumberDetails">
@@ -18,7 +18,7 @@
             </vr-row>
 
             <vr-choices selectedindex="0">
-                <vr-choice isselected="historySelected">History</vr-choice>
+                <vr-choice isselected="historySelected">Occurances</vr-choice>
             </vr-choices>
 
             <div ng-show="historySelected">
@@ -52,7 +52,12 @@
                     </vr-select>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-datetimepicker label="Valid Till" value="validTill" type="dateTime" ng-show="whiteListSelected"></vr-datetimepicker>
+                    <vr-datetimepicker label="Valid Till"
+                                       value="validTill"
+                                       type="dateTime"
+                                       ng-if="whiteListSelected"
+                                       isrequired>
+                    </vr-datetimepicker>
                 </vr-columns>
             </vr-section>
         </vr-form>

@@ -177,16 +177,35 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredAccountSuspicionSummaries(input));
         }
 
+        public AccountSuspicionSummary GetAccountSuspicionSummaryByAccountNumber(string accountNumber, DateTime from, DateTime to)
+        {
+            ISuspiciousNumberDataManager dataManager = FraudDataManagerFactory.GetDataManager<ISuspiciousNumberDataManager>();
+            return dataManager.GetAccountSuspicionSummaryByAccountNumber(accountNumber, from, to);
+        }
+
         public Vanrise.Entities.IDataRetrievalResult<AccountSuspicionDetail> GetFilteredAccountSuspicionDetails(Vanrise.Entities.DataRetrievalInput<AccountSuspicionDetailQuery> input)
         {
             ISuspiciousNumberDataManager dataManager = FraudDataManagerFactory.GetDataManager<ISuspiciousNumberDataManager>();
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredAccountSuspicionDetails(input));
         }
 
-        public bool UpdateAccountCase(string accountNumber, CaseStatus caseStatus, DateTime? validTill)
+        public Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> UpdateAccountCase(AccountCaseUpdate input)
         {
+            Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
             ISuspiciousNumberDataManager dataManager = FraudDataManagerFactory.GetDataManager<ISuspiciousNumberDataManager>();
-            return dataManager.UpdateAccountCase(accountNumber, caseStatus, validTill);
+            bool updated = dataManager.UpdateAccountCase(input.accountNumber, input.caseStatus, input.validTill);
+
+            if (updated)
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = dataManager.GetAccountSuspicionSummaryByAccountNumber(input.accountNumber, input.from, input.to);
+            }
+
+            return updateOperationOutput;
         }
 
         public FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList, string accountNumber)

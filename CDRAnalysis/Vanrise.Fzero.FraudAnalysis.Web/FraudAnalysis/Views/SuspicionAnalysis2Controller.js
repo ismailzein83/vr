@@ -117,8 +117,8 @@ function SuspicionAnalysis2Controller($scope, SuspicionAnalysisAPIService, Strat
 
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Suspicious Number Details";
-            modalScope.onAccountCaseUpdated = function (accountCase) {
-                gridAPI.itemUpdated(accountCase);
+            modalScope.onAccountCaseUpdated = function (accountSuspicionSummary) {
+                gridAPI.itemUpdated(accountSuspicionSummary);
             }
         };
 

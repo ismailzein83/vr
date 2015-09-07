@@ -80,16 +80,21 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 if (input.Query.SelectedCaseStatusIDs != null && input.Query.SelectedCaseStatusIDs.Count() > 0)
                     selectedCaseStatusIDs = string.Join(",", input.Query.SelectedCaseStatusIDs.Select(n => ((int)n).ToString()).ToArray());
 
-                ExecuteNonQuerySP("FraudAnalysis.sp_FraudResult_CreateTempByFiltered", tempTableName, input.Query.AccountNumber, input.Query.From, input.Query.To, selectedStrategyIDs, selectedSuspicionLevelIDs, selectedCaseStatusIDs);
+                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByFiltered", tempTableName, input.Query.AccountNumber, input.Query.From, input.Query.To, selectedStrategyIDs, selectedSuspicionLevelIDs, selectedCaseStatusIDs);
 
             }, (reader) => AccountSuspicionSummaryMapper(reader), _columnMapper);
+        }
+
+        public AccountSuspicionSummary GetAccountSuspicionSummaryByAccountNumber(string accountNumber, DateTime from, DateTime to)
+        {
+            return GetItemSP("FraudAnalysis.sp_StrategyExecutionDetails_GetSummaryByAccountNumber", AccountSuspicionSummaryMapper, accountNumber, from, to);
         }
 
         public BigResult<AccountSuspicionDetail> GetFilteredAccountSuspicionDetails(Vanrise.Entities.DataRetrievalInput<AccountSuspicionDetailQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_FraudResult_GetByAccountNumber", tempTableName, input.Query.AccountNumber, input.Query.From, input.Query.To);
+                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_GetByAccountNumber", tempTableName, input.Query.AccountNumber, input.Query.From, input.Query.To);
             };
 
             return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, _columnMapper);
