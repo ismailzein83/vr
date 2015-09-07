@@ -284,28 +284,6 @@
                 </OutArgument>
               </vffba1:PrepareNumberProfilesForDBApply.Status>
             </vffba1:PrepareNumberProfilesForDBApply>
-            <vffba1:PrepareFraudResultForDBApply sap2010:WorkflowViewState.IdRef="PrepareFraudResultForDBApply_1">
-              <vffba1:PrepareFraudResultForDBApply.InputQueue>
-                <InArgument x:TypeArguments="vq:BaseQueue(vffe:SuspiciousNumberBatch)">
-                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:SuspiciousNumberBatch)">suspiciousNumberForFraudResultQueue</mca:CSharpValue>
-                </InArgument>
-              </vffba1:PrepareFraudResultForDBApply.InputQueue>
-              <vffba1:PrepareFraudResultForDBApply.OutputQueue>
-                <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
-                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">preparedFraudResultQueue</mca:CSharpReference>
-                </InOutArgument>
-              </vffba1:PrepareFraudResultForDBApply.OutputQueue>
-              <vffba1:PrepareFraudResultForDBApply.PreviousActivityStatus>
-                <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">GetSuspiciousNumberStatus</mca:CSharpValue>
-                </InArgument>
-              </vffba1:PrepareFraudResultForDBApply.PreviousActivityStatus>
-              <vffba1:PrepareFraudResultForDBApply.Status>
-                <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareFraudResultStatus</mca:CSharpReference>
-                </OutArgument>
-              </vffba1:PrepareFraudResultForDBApply.Status>
-            </vffba1:PrepareFraudResultForDBApply>
             <vffba1:ApplySuspiciousNumbersToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplySuspiciousNumbersToDB_1">
               <vffba1:ApplySuspiciousNumbersToDB.InputQueue>
                 <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
@@ -330,18 +308,6 @@
                 </InArgument>
               </vffba1:ApplyNumberProfilesToDB.PreviousActivityStatus>
             </vffba1:ApplyNumberProfilesToDB>
-            <vffba1:ApplyFraudResultToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyFraudResultToDB_1">
-              <vffba1:ApplyFraudResultToDB.InputQueue>
-                <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
-                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">preparedFraudResultQueue</mca:CSharpValue>
-                </InArgument>
-              </vffba1:ApplyFraudResultToDB.InputQueue>
-              <vffba1:ApplyFraudResultToDB.PreviousActivityStatus>
-                <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareFraudResultStatus</mca:CSharpValue>
-                </InArgument>
-              </vffba1:ApplyFraudResultToDB.PreviousActivityStatus>
-            </vffba1:ApplyFraudResultToDB>
           </Parallel>
           <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2">
             <InArgument x:TypeArguments="x:String">
@@ -360,25 +326,23 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbENEA+wCDgIBAUkFTREDAccFTgVjKQMBtgVkBeoCCgIBAksJS5UBAwHIBVsLW2MDAcMFVgtWhAEDAb8FUQtRWQMBuwVgC2BXAwG3BWcLZ5kBAgEDawnfAhQCAQ3iAgnoAiQCAQdsC4EBKgMBpQWCAQvZAhYCARPaAgveAhcCAQ7lAg/lAoMBAgEJ4gJk4gKBAQIBCHkReWkDAbIFdBF0ZgMBrgVvEW9fAwGqBX4Rfl0DAaYFkwENqAEfAwHcBKkBDc0BKwMB3QPOAQ3yASoDAd4C8wENiAI5AwGVAokCDZ4CNgMBzAGfAg20AjMDAYMBtQINwAIxAgFewQINzAIuAgE5zQIN2AIrAgEU3AIP3AKaAQIBD5YBE5YBYQMBkwWgAROgAXUDAYEFmwETmwF0AwHvBKUBE6UBXwMB3QS7ARO7AW0DAcoEsQETsQF0AwG4BMUBE8UBhAEDAaYErAETrAFhAwGUBMABE8ABfwMBggS2ARO2AYgBAwHwA8oBE8oBXwMB3gPvARPvAWoDAcsD5QET5QF3AwG5A9EBE9EBgAEDAacD2wET2wGPAQMBlQPqARPqAYABAwGDA+ABE+ABnAEDAfEC1gET1gGOAQMB3wKAAhOAAngDAcwC9gET9gGGAQMBugKFAhOFAoUBAwGoAvsBE/sBhQEDAZYClgITlgJ4AwGDAowCE4wChwEDAfEBmwITmwKCAQMB3wGRAhORAoIBAwHNAawCE6wCeAMBugGiAhOiApQBAwGoAbECE7ECfwMBlgGnAhOnAn8DAYQBvQITvQJ9AgFxuAITuAJ9AgFfyQITyQJ6AgFMxAITxAJ6AgE61QIT1QJ3AgEn0AIT0AJ3AgEV</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbDtEA8oCDgIBAUkFTREDAdkETgVjKQMByARkBcgCCgIBAksJS5UBAwHaBFsLW2MDAdUEVgtWhAEDAdEEUQtRWQMBzQRgC2BXAwHJBGcLZ5kBAgEDawm9AhQCAQ3AAgnGAiQCAQdsC4EBKgMBtwSCAQu3AhYCARO4Agu8AhcCAQ7DAg/DAoMBAgEJwAJkwAKBAQIBCHkReWkDAcQEdBF0ZgMBwARvEW9fAwG8BH4Rfl0DAbgEkwENqAEfAwHuA6kBDc0BKwMB7wLOAQ3yASoDAfAB8wENiAI5AwGnAYkCDZ4CNgIBXp8CDaoCMQIBOasCDbYCLgIBFLoCD7oCmgECAQ+WAROWAWEDAaUEoAEToAF1AwGTBJsBE5sBdAMBgQSlAROlAV8DAe8DuwETuwFtAwHcA7EBE7EBdAMBygPFARPFAYQBAwG4A6wBE6wBYQMBpgPAARPAAX8DAZQDtgETtgGIAQMBggPKARPKAV8DAfAC7wET7wFqAwHdAuUBE+UBdwMBywLRARPRAYABAwG5AtsBE9sBjwEDAacC6gET6gGAAQMBlQLgARPgAZwBAwGDAtYBE9YBjgEDAfEBgAITgAJ4AwHeAfYBE/YBhgEDAcwBhQIThQKFAQMBugH7ARP7AYUBAwGoAZYCE5YCeAMBlQGMAhOMAocBAwGDAZsCE5sCggECAXGRAhORAoIBAgFfpwITpwJ9AgFMogITogJ9AgE6swITswJ6AgEnrgITrgJ6AgEV</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="2481,62" />
-      <sap2010:ViewStateData Id="GetStrategiesExecutionInfo_1" sap:VirtualizedContainerService.HintSize="2481,22" />
-      <sap2010:ViewStateData Id="DeleteStrategyResults_1" sap:VirtualizedContainerService.HintSize="2234,22" />
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="2001,62" />
+      <sap2010:ViewStateData Id="GetStrategiesExecutionInfo_1" sap:VirtualizedContainerService.HintSize="2001,22" />
+      <sap2010:ViewStateData Id="DeleteStrategyResults_1" sap:VirtualizedContainerService.HintSize="1754,22" />
       <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="CreateNumberProfiles_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetSuspiciousNumber_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareSuspiciousNumbersForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareNumberProfilesForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="PrepareFraudResultForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplySuspiciousNumbersToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyNumberProfilesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ApplyFraudResultToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="2234,86" />
-      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="2234,62" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="2256,374">
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1754,86" />
+      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="1754,62" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="1776,374">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -386,15 +350,15 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="2481,524" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2503,812">
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="2001,524" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2023,812">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess_1" sap:VirtualizedContainerService.HintSize="2543,892" />
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess_1" sap:VirtualizedContainerService.HintSize="2063,892" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
