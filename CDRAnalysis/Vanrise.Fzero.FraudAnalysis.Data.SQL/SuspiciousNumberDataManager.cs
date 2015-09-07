@@ -13,6 +13,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
     public class SuspiciousNumberDataManager : BaseSQLDataManager, ISuspiciousNumberDataManager
     {
+        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
+
+        static SuspiciousNumberDataManager()
+        {
+            _columnMapper.Add("SuspicionLevelDescription", "SuspicionLevelID");
+            _columnMapper.Add("AccountStatusDescription", "AccountStatusID");
+        }
+
         public SuspiciousNumberDataManager()
             : base("CDRDBConnectionString")
         {
@@ -57,11 +65,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public BigResult<AccountSuspicionSummary> GetFilteredAccountSuspicionSummaries(Vanrise.Entities.DataRetrievalInput<AccountSuspicionSummaryQuery> input)
         {
-            Dictionary<string, string> mapper = new Dictionary<string, string>();
-
-            mapper.Add("SuspicionLevelDescription", "SuspicionLevelID");
-            mapper.Add("AccountStatusDescription", "AccountStatusID");
-
             return RetrieveData(input, (tempTableName) =>
             {
                 string selectedStrategyIDs = null;
@@ -79,22 +82,17 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
                 ExecuteNonQuerySP("FraudAnalysis.sp_FraudResult_CreateTempByFiltered", tempTableName, input.Query.AccountNumber, input.Query.From, input.Query.To, selectedStrategyIDs, selectedSuspicionLevelIDs, selectedCaseStatusIDs);
 
-            }, (reader) => AccountSuspicionSummaryMapper(reader), mapper);
+            }, (reader) => AccountSuspicionSummaryMapper(reader), _columnMapper);
         }
 
         public BigResult<AccountSuspicionDetail> GetFilteredAccountSuspicionDetails(Vanrise.Entities.DataRetrievalInput<AccountSuspicionDetailQuery> input)
         {
-            Dictionary<string, string> mapper = new Dictionary<string, string>();
-
-            mapper.Add("SuspicionLevelDescription", "SuspicionLevelID");
-            mapper.Add("AccountStatusDescription", "AccountStatusID");
-
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQuerySP("FraudAnalysis.sp_FraudResult_GetByAccountNumber", tempTableName, input.Query.AccountNumber, input.Query.From, input.Query.To);
             };
 
-            return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, mapper);
+            return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, _columnMapper);
         }
 
         public bool UpdateAccountCase(string accountNumber, CaseStatus caseStatus, DateTime? validTill)
