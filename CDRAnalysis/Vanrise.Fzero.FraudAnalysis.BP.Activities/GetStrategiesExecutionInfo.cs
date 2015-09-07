@@ -26,10 +26,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         public InArgument<DateTime> ToDate { get; set; }
 
 
-        [RequiredArgument]
-        public InArgument<int> PeriodID { get; set; }
-
-
         #endregion
 
         protected override void Execute(CodeActivityContext context)
@@ -48,7 +44,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                     StrategyExecution strategyExecution= new StrategyExecution();
 
-                    strategyManager.ExecuteStrategy(new StrategyExecution() { FromDate = this.FromDate.Get(context), ToDate = this.ToDate.Get(context), PeriodID = this.PeriodID.Get(context), StrategyID = strategyID, ProcessID = ContextExtensions.GetSharedInstanceData(context).InstanceInfo.ProcessInstanceID });
+                    strategyManager.ExecuteStrategy(new StrategyExecution() { FromDate = this.FromDate.Get(context), ToDate = this.ToDate.Get(context), PeriodID = strategy.PeriodId, StrategyID = strategyID, ProcessID = ContextExtensions.GetSharedInstanceData(context).InstanceInfo.ProcessInstanceID });
 
                     strategiesExecutionInfo.Add(new StrategyExecutionInfo { Strategy = strategy, StrategyExecution = strategyExecution });
                 }
