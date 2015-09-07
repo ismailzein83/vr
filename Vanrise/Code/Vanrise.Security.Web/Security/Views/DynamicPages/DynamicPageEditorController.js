@@ -407,7 +407,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         
         if ($scope.menuList.length > 0) {
             $scope.selectedMenuNode = treeAPI.setSelectedNode($scope.menuList, $scope.filter.ModuleId, "Id","Childs");
-            console.log($scope.selectedMenuNode);
+           // console.log($scope.selectedMenuNode);
             treeAPI.refreshTree($scope.menuList);
         }
             

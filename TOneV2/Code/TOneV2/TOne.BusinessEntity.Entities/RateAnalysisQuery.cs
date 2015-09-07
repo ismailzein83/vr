@@ -9,7 +9,7 @@ namespace TOne.BusinessEntity.Entities
    public class RateAnalysisQuery
     {
        public int ZoneId { get; set; }
-       public DateTime EffectedDate { get; set; }
+       public DateTime? EffectedDate { get; set; }
        public string CustomerId { get; set; }
        public string SupplierId { get; set; }
     }

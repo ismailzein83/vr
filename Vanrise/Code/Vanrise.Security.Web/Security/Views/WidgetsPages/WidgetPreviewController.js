@@ -57,7 +57,6 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, Util
             if ($scope.selectedPeriod.value != -1) {
 
                 date = $scope.selectedPeriod.getInterval();
-                console.log(date);
                 $scope.fromDate = date.from;
                 $scope.toDate = date.to;
             }

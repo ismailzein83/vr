@@ -19,7 +19,7 @@ function RateAnalysisController($scope, UtilsService, $q, CarrierAccountAPIServi
                 ZoneId: parameters.ZoneId,
                 CustomerId: parameters.CustomerId!=undefined?parameters.CustomerId:null,
                 SupplierId: parameters.SupplierId != undefined ? parameters.SupplierId : null,
-                EffectiveDate: parameters.EffectiveDate
+               // EffectiveDate: parameters.EffectiveDate
             }
 
         }
@@ -33,7 +33,7 @@ function RateAnalysisController($scope, UtilsService, $q, CarrierAccountAPIServi
         $scope.selectedCustomer;
         $scope.suppliers = [];
         $scope.customers = [];
-        $scope.effectiveDate = new Date();
+        $scope.effectiveDate;// = new Date();
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
             if (!isExpendable)
@@ -158,7 +158,7 @@ function RateAnalysisController($scope, UtilsService, $q, CarrierAccountAPIServi
            
         if (filter.CustomerId!=undefined)
             $scope.selectedCustomer = UtilsService.getItemByVal($scope.customers, filter.CustomerId, 'CarrierAccountID');
-        $scope.effectiveDate = filter.EffectiveDate;
+  //      $scope.effectiveDate = filter.EffectiveDate;
         ZoneAPIService.GetZoneById(filter.ZoneId).then(function (response) {
              $scope.selectedZone = response;
             if (mainGridAPI != undefined)

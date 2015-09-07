@@ -63,7 +63,6 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
         };
     }
     function setSubViewValue(settings) {
-        console.log(settings);
         if (settings == undefined)
             return;
         for (var i = 0; i < $scope.definitionTypes.length; i++) {
