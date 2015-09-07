@@ -105,10 +105,10 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                    
                     if ($attrs.type == "time") {
                         $scope.ctrl.value = {
-                            hours: selectedDate.getUTCHours(),
-                            minutes: selectedDate.getUTCMinutes(),
-                            seconds: selectedDate.getUTCSeconds(),
-                            milliseconds: selectedDate.getUTCMilliseconds()
+                            Hour: selectedDate.getUTCHours(),
+                            Minute: selectedDate.getUTCMinutes(),
+                            Second: selectedDate.getUTCSeconds(),
+                            Millisecond: selectedDate.getUTCMilliseconds()
                         };
                     }
                     else
@@ -170,16 +170,16 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                     return;
                 var date;
                 if ($attrs.type == "time") {
-                    if (ctrl.value.hours == undefined)
-                        ctrl.value.hours = 0;
-                    if (ctrl.value.minutes == undefined)
-                        ctrl.value.minutes = 0;
-                    if (ctrl.value.seconds == undefined)
-                        ctrl.value.seconds = 0;
-                    if (ctrl.value.milliseconds == undefined)
-                        ctrl.value.milliseconds = 0;
+                    if (ctrl.value.Hour == undefined)
+                        ctrl.value.Hour = 0;
+                    if (ctrl.value.Minute == undefined)
+                        ctrl.value.Minute = 0;
+                    if (ctrl.value.Second == undefined)
+                        ctrl.value.Second = 0;
+                    if (ctrl.value.Millisecond == undefined)
+                        ctrl.value.Millisecond = 0;
                     date = new Date();
-                    date.setHours(ctrl.value.hours, ctrl.value.minutes, ctrl.value.seconds, ctrl.value.milliseconds);
+                    date.setHours(ctrl.value.Hour, ctrl.value.Minute, ctrl.value.Second, ctrl.value.Millisecond);
                 }
                 else {
                     date = ctrl.value instanceof Date ? ctrl.value : (new Date(ctrl.value));
