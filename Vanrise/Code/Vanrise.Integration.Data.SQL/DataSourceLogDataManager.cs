@@ -37,7 +37,7 @@ namespace Vanrise.Integration.Data.SQL
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySPCmd("integration.sp_DataSourceLog_CreateTempForFiltered", (cmd) =>
+                ExecuteNonQuerySPCmd("integration.sp_DataSourceLog_CreateTempByFiltered", (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@TempTableName", tempTableName));
                     cmd.Parameters.Add(new SqlParameter("@DataSourceId", input.Query.DataSourceId));

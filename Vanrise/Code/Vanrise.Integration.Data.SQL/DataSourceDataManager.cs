@@ -32,7 +32,7 @@ namespace Vanrise.Integration.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("integration.sp_DataSource_CreateTempForFiltered", tempTableName);
+                ExecuteNonQuerySP("integration.sp_DataSource_CreateTemp", tempTableName);
             };
 
             return RetrieveData(input, createTempTableAction, DataSourceMapper, _columnMapper);

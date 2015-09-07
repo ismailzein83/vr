@@ -22,7 +22,7 @@ namespace Vanrise.Runtime.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("runtime.sp_SchedulerTask_CreateTempForFiltered", tempTableName, input.Query);
+                ExecuteNonQuerySP("runtime.sp_SchedulerTask_CreateTempByName", tempTableName, input.Query);
             };
 
             return RetrieveData(input, createTempTableAction, TaskMapper);
@@ -35,7 +35,7 @@ namespace Vanrise.Runtime.Data.SQL
 
         public List<SchedulerTask> GetTasksbyActionType(int actionTypeId)
         {
-            return GetItemsSP("runtime.sp_SchedulerTask_GetTasksbyActionType", TaskMapper, actionTypeId);
+            return GetItemsSP("runtime.sp_SchedulerTask_GetByActionTypeId", TaskMapper, actionTypeId);
         }
 
         public List<Entities.SchedulerTask> GetAllTasks()
