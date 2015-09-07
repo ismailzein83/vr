@@ -11,6 +11,13 @@ namespace Vanrise.Security.Data.SQL
 {
     public class WidgetDataManager : BaseSQLDataManager, IWidgetsDataManager
     {
+        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
+
+        static WidgetDataManager()
+        {
+            _columnMapper.Add("Name", "WidgetName");
+        }
+
         public WidgetDataManager()
             : base(GetConnectionStringName("SecurityDBConnStringKey", "SecurityDBConnString"))
         {
@@ -85,14 +92,12 @@ namespace Vanrise.Security.Data.SQL
         }
 
         public Vanrise.Entities.BigResult<WidgetDetails> GetFilteredWidgets(Vanrise.Entities.DataRetrievalInput<WidgetFilter> filter)
-        {
-            Dictionary<string, string> mapper = new Dictionary<string, string>();
-            mapper.Add("Name", "WidgetName");
+        {         
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQuerySP("sec.sp_Widget_CreateTempByFiltered", tempTableName, filter.Query.WidgetName, ToDBNullIfDefault(filter.Query.WidgetType));
             };
-            return RetrieveData(filter, createTempTableAction, WidgetMapper, mapper);
+            return RetrieveData(filter, createTempTableAction, WidgetMapper, _columnMapper);
         }
         public int CheckWidgetSetting(Widget widget)
         {

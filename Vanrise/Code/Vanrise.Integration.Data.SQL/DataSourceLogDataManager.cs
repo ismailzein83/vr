@@ -13,6 +13,13 @@ namespace Vanrise.Integration.Data.SQL
 {
     public class DataSourceLogDataManager : BaseSQLDataManager, IDataSourceLogDataManager
     {
+        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
+
+        static DataSourceLogDataManager()
+        {
+            _columnMapper.Add("SeverityDescription", "Severity");
+        }
+
         public DataSourceLogDataManager()
             : base(GetConnectionStringName("BusinessProcessTrackingDBConnStringKey", "BusinessProcessTrackingDBConnString"))
         {
@@ -26,9 +33,6 @@ namespace Vanrise.Integration.Data.SQL
 
         public Vanrise.Entities.BigResult<DataSourceLog> GetFilteredDataSourceLogs(Vanrise.Entities.DataRetrievalInput<DataSourceLogQuery> input)
         {
-            Dictionary<string, string> columnMapper = new Dictionary<string, string>();
-            columnMapper.Add("SeverityDescription", "Severity");
-
             DataTable dtSeverities = BuildSeveritiesTable(input.Query.Severities);
 
             Action<string> createTempTableAction = (tempTableName) =>
@@ -47,7 +51,7 @@ namespace Vanrise.Integration.Data.SQL
                 });
             };
 
-            return RetrieveData(input, createTempTableAction, DataSourceLogMapper, columnMapper);
+            return RetrieveData(input, createTempTableAction, DataSourceLogMapper, _columnMapper);
         }
 
         Vanrise.Integration.Entities.DataSourceLog DataSourceLogMapper(IDataReader reader)

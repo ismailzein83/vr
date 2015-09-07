@@ -10,6 +10,13 @@ namespace Vanrise.Integration.Data.SQL
 {
     public class DataSourceDataManager : BaseSQLDataManager, IDataSourceDataManager
     {
+        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
+
+        static DataSourceDataManager()
+        {
+            _columnMapper.Add("DataSourceId", "ID");
+        }
+
         public DataSourceDataManager()
             : base(GetConnectionStringName("IntegrationConnStringKey", "IntegrationDBConnString"))
         {
@@ -23,15 +30,12 @@ namespace Vanrise.Integration.Data.SQL
 
         public Vanrise.Entities.BigResult<Vanrise.Integration.Entities.DataSource> GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<object> input)
         {
-            Dictionary<string, string> columnMapper = new Dictionary<string, string>();
-            columnMapper.Add("DataSourceId", "ID");
-
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQuerySP("integration.sp_DataSource_CreateTempForFiltered", tempTableName);
             };
 
-            return RetrieveData(input, createTempTableAction, DataSourceMapper, columnMapper);
+            return RetrieveData(input, createTempTableAction, DataSourceMapper, _columnMapper);
         }
 
         public Entities.DataSource GetDataSource(int dataSourceId)
