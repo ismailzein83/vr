@@ -17,7 +17,7 @@ namespace TOne.BusinessEntity.Data.SQL
             Action<string> createTempTableAction = (tempTableName) =>
                 {
 
-                    ExecuteNonQuerySP("[BEntity].[SP_CarrierProfile_CreateTempForFiltered]", tempTableName, input.Query.Name, input.Query.CompanyName, input.Query.BillingEmail);
+                    ExecuteNonQuerySP("BEntity.SP_CarrierProfile_CreateTempByFiltered", tempTableName, input.Query.Name, input.Query.CompanyName, input.Query.BillingEmail);
                 };
             return RetrieveData(input, createTempTableAction, CarrierProfileMapper);
         }

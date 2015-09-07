@@ -33,7 +33,7 @@ namespace TOne.BusinessEntity.Data.SQL
             
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySPCmd("BEntity.sp_AccountManager_CreateTempForAssignedCarriers", (cmd) =>
+                ExecuteNonQuerySPCmd("BEntity.sp_AccountManager_CreateTempByFiltered", (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@TempTableName", tempTableName));
 
