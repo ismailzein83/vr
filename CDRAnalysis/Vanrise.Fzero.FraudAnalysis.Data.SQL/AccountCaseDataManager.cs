@@ -22,7 +22,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             int userID = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
 
             IAccountCaseDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountCaseDataManager>();
-            AccountCase1 accountCase = dataManager.GetLastAccountCaseByAccountNumber(accountNumber);
+            AccountCase accountCase = dataManager.GetLastAccountCaseByAccountNumber(accountNumber);
 
             int caseID;
             bool operationSucceeded;
@@ -45,19 +45,19 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             if (!operationSucceeded) return false;
 
-            return dataManager.UpdateFraudResultCase(accountNumber, caseID, caseStatus);
+            return dataManager.LinkDetailToCase(accountNumber, caseID, caseStatus);
         }
 
-        AccountCase1 IAccountCaseDataManager.GetLastAccountCaseByAccountNumber(string accountNumber)
+        AccountCase IAccountCaseDataManager.GetLastAccountCaseByAccountNumber(string accountNumber)
         {
-            return GetItemSP("FraudAnalysis.sp_AccountCase1_GetLastByAccountNumber", AccountCase1Mapper, accountNumber);
+            return GetItemSP("FraudAnalysis.sp_AccountCase_GetLastByAccountNumber", AccountCaseMapper, accountNumber);
         }
 
         bool IAccountCaseDataManager.InsertAccountCase(out int insertedID, string accountNumber, int userID, DateTime? validTill)
         {
             object accountCaseID;
 
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase1_Insert", out accountCaseID, accountNumber, userID, validTill);
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_Insert", out accountCaseID, accountNumber, userID, validTill);
 
             insertedID = (recordsAffected > 0) ? (int)accountCaseID : -1;
 
@@ -66,7 +66,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         bool IAccountCaseDataManager.UpdateAccountCaseStatus(int caseID, CaseStatus statusID, DateTime? validTill)
         {
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase1_Update", caseID, statusID, validTill);
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_Update", caseID, statusID, validTill);
             return (recordsAffected > 0);
         }
 
@@ -82,17 +82,17 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return (recordsAffected > 0);
         }
 
-        bool IAccountCaseDataManager.UpdateFraudResultCase(string accountNumber, int caseID, CaseStatus caseStatus)
+        bool IAccountCaseDataManager.LinkDetailToCase(string accountNumber, int caseID, CaseStatus caseStatus)
         {
             SuspicionOccuranceStatus occuranceStatus = (caseStatus.CompareTo(CaseStatus.Open) == 0 || caseStatus.CompareTo(CaseStatus.Pending) == 0) ? SuspicionOccuranceStatus.Open : SuspicionOccuranceStatus.Closed;
 
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_FraudResult_SetStatusToCaseStatus", accountNumber, caseID, occuranceStatus);
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_SetStatusToCaseStatus", accountNumber, caseID, occuranceStatus);
             return (recordsAffected > 0);
         }
 
-        private AccountCase1 AccountCase1Mapper(IDataReader reader)
+        private AccountCase AccountCaseMapper(IDataReader reader)
         {
-            return new AccountCase1
+            return new AccountCase
             {
                 CaseID = (int)reader["CaseID"],
                 AccountNumber = reader["AccountNumber"] as string,

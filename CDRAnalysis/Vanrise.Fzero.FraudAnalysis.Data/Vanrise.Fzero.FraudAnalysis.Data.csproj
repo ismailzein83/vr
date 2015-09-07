@@ -56,7 +56,6 @@
     <Compile Include="FraudDataManagerFactory.cs" />
     <Compile Include="IAccountCaseDataManager.cs" />
     <Compile Include="IDataManager.cs" />
-    <Compile Include="IFraudResultDataManager.cs" />
     <Compile Include="INumberProfileDataManager.cs" />
     <Compile Include="IDashboardManager.cs" />
     <Compile Include="INormalCDRDataManager.cs" />

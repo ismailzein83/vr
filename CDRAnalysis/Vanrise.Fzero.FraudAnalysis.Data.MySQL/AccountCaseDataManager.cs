@@ -20,7 +20,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             throw new NotImplementedException();
         }
 
-        public Entities.AccountCase1 GetLastAccountCaseByAccountNumber(string accountNumber)
+        public Entities.AccountCase GetLastAccountCaseByAccountNumber(string accountNumber)
         {
             throw new NotImplementedException();
         }
@@ -45,7 +45,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             throw new NotImplementedException();
         }
 
-        public bool UpdateFraudResultCase(string accountNumber, int caseID, Entities.CaseStatus caseStatus)
+        public bool LinkDetailToCase(string accountNumber, int caseID, Entities.CaseStatus caseStatus)
         {
             throw new NotImplementedException();
         }

@@ -14,7 +14,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         public Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<AccountCase> SaveAccountCase(AccountCase accountCaseObject)
         {
             ICaseManagementDataManager manager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
-            accountCaseObject.UserId= Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+            accountCaseObject.UserID= Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
             manager.SaveAccountCase(accountCaseObject);
             Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<AccountCase> updateOperationOutput = new Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<AccountCase>();
 
@@ -24,24 +24,24 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         }
 
 
-        public Vanrise.Entities.IDataRetrievalResult<AccountCase> GetFilteredAccountCases(Vanrise.Entities.DataRetrievalInput<AccountCaseResultQuery> input, IEnumerable<UserInfo> users)
-        {
-            ICaseManagementDataManager manager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
+        //public Vanrise.Entities.IDataRetrievalResult<AccountCase> GetFilteredAccountCases(Vanrise.Entities.DataRetrievalInput<AccountCaseResultQuery> input, IEnumerable<UserInfo> users)
+        //{
+        //    //ICaseManagementDataManager manager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
 
-            BigResult<AccountCase> accountCases = manager.GetFilteredAccountCases(input);
+        //    //BigResult<AccountCase> accountCases = manager.GetFilteredAccountCases(input);
 
-            foreach (var accountCase in accountCases.Data)
-            {
-                UserInfo userinfo = users.Where(x => x.UserId == accountCase.UserId).FirstOrDefault();
-                if (userinfo != null)
-                {
-                    accountCase.UserName = userinfo.Name;
-                }
-            }
+        //    //foreach (var accountCase in accountCases.Data)
+        //    //{
+        //    //    UserInfo userinfo = users.Where(x => x.UserId == accountCase.UserID).FirstOrDefault();
+        //    //    if (userinfo != null)
+        //    //    {
+        //    //        //accountCase.UserName = userinfo.Name;
+        //    //    }
+        //    //}
 
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, accountCases);
-        }
+        //    //return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, accountCases);
+        //}
 
 
     }

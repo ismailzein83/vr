@@ -18,16 +18,16 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         }
 
 
-        [HttpPost]
-        public object GetFilteredAccountCases(Vanrise.Entities.DataRetrievalInput<AccountCaseResultQuery> input)
-        {
+        //[HttpPost]
+        //public object GetFilteredAccountCases(Vanrise.Entities.DataRetrievalInput<AccountCaseResultQuery> input)
+        //{
 
-            CaseManagmentManager manager = new CaseManagmentManager();
+        //    CaseManagmentManager manager = new CaseManagmentManager();
 
-            UserManager userManager = new UserManager();
+        //    UserManager userManager = new UserManager();
 
-            return GetWebResponse(input, manager.GetFilteredAccountCases(input, userManager.GetUsers()));
-        }
+        //    return GetWebResponse(input, manager.GetFilteredAccountCases(input, userManager.GetUsers()));
+        //}
 
 
 
