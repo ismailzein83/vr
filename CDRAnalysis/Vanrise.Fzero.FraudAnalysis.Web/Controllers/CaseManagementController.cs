@@ -2,6 +2,7 @@
 using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Web.Base;
+using Vanrise.Security.Business;
 
 namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 {
@@ -21,9 +22,9 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         public object GetFilteredAccountCases(Vanrise.Entities.DataRetrievalInput<AccountCaseResultQuery> input)
         {
 
-            UserController userManager = new UserController();
-
             CaseManagmentManager manager = new CaseManagmentManager();
+
+            UserManager userManager = new UserManager();
 
             return GetWebResponse(input, manager.GetFilteredAccountCases(input, userManager.GetUsers()));
         }

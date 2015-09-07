@@ -4,6 +4,7 @@ using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Entities;
 using System.Linq;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {
@@ -23,7 +24,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         }
 
 
-        public Vanrise.Entities.IDataRetrievalResult<AccountCase> GetFilteredAccountCases(Vanrise.Entities.DataRetrievalInput<AccountCaseResultQuery> input, IEnumerable<User> users)
+        public Vanrise.Entities.IDataRetrievalResult<AccountCase> GetFilteredAccountCases(Vanrise.Entities.DataRetrievalInput<AccountCaseResultQuery> input, IEnumerable<UserInfo> users)
         {
             ICaseManagementDataManager manager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
 
@@ -31,10 +32,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             foreach (var accountCase in accountCases.Data)
             {
-                User user =users.Where(x => x.UserId == accountCase.UserId).FirstOrDefault();
-                if (user !=null)
+                UserInfo userinfo = users.Where(x => x.UserId == accountCase.UserId).FirstOrDefault();
+                if (userinfo != null)
                 {
-                    accountCase.UserName = user.Name;
+                    accountCase.UserName = userinfo.Name;
                 }
             }
 

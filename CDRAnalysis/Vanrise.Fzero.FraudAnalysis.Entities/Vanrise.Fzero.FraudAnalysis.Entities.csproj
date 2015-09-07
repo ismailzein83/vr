@@ -114,7 +114,6 @@
     <Compile Include="SuspiciousNumber.cs" />
     <Compile Include="Batches\SuspiciousNumberBatch.cs" />
     <Compile Include="ResultQuery\FraudResultQuery.cs" />
-    <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Entities\Vanrise.Fzero.CDRImport.Entities.csproj">
