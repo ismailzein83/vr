@@ -166,43 +166,43 @@
                 </InArgument>
               </vffba1:LoadCDRs.ToDate>
             </vffba1:LoadCDRs>
-            <vffba1:LoadNumberProfiles Parameters="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadNumberProfiles_1">
-              <vffba1:LoadNumberProfiles.FromDate>
+            <vffba1:CreateNumberProfiles Parameters="{x:Null}" sap2010:WorkflowViewState.IdRef="CreateNumberProfiles_1">
+              <vffba1:CreateNumberProfiles.FromDate>
                 <InArgument x:TypeArguments="s:DateTime">
                   <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
                 </InArgument>
-              </vffba1:LoadNumberProfiles.FromDate>
-              <vffba1:LoadNumberProfiles.InputQueue>
+              </vffba1:CreateNumberProfiles.FromDate>
+              <vffba1:CreateNumberProfiles.InputQueue>
                 <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:CDRBatch)">
                   <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:CDRBatch)">cdrQueue</mca:CSharpReference>
                 </InOutArgument>
-              </vffba1:LoadNumberProfiles.InputQueue>
-              <vffba1:LoadNumberProfiles.OutputQueue>
+              </vffba1:CreateNumberProfiles.InputQueue>
+              <vffba1:CreateNumberProfiles.OutputQueue>
                 <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">
                   <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">numberProfileQueue</mca:CSharpReference>
                 </InOutArgument>
-              </vffba1:LoadNumberProfiles.OutputQueue>
-              <vffba1:LoadNumberProfiles.PreviousActivityStatus>
+              </vffba1:CreateNumberProfiles.OutputQueue>
+              <vffba1:CreateNumberProfiles.PreviousActivityStatus>
                 <InArgument x:TypeArguments="vb:AsyncActivityStatus">
                   <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadCDRsStatus</mca:CSharpValue>
                 </InArgument>
-              </vffba1:LoadNumberProfiles.PreviousActivityStatus>
-              <vffba1:LoadNumberProfiles.Status>
+              </vffba1:CreateNumberProfiles.PreviousActivityStatus>
+              <vffba1:CreateNumberProfiles.Status>
                 <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
                   <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadNumberProfilesStatus</mca:CSharpReference>
                 </OutArgument>
-              </vffba1:LoadNumberProfiles.Status>
-              <vffba1:LoadNumberProfiles.Strategies>
-                <InArgument x:TypeArguments="scg:List(vffe:Strategy)">
-                  <mca:CSharpValue x:TypeArguments="scg:List(vffe:Strategy)">strategies</mca:CSharpValue>
+              </vffba1:CreateNumberProfiles.Status>
+              <vffba1:CreateNumberProfiles.StrategiesExecutionInfo>
+                <InArgument x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)">
+                  <mca:CSharpValue x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)">strategiesExecutionInfo</mca:CSharpValue>
                 </InArgument>
-              </vffba1:LoadNumberProfiles.Strategies>
-              <vffba1:LoadNumberProfiles.ToDate>
+              </vffba1:CreateNumberProfiles.StrategiesExecutionInfo>
+              <vffba1:CreateNumberProfiles.ToDate>
                 <InArgument x:TypeArguments="s:DateTime">
                   <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
                 </InArgument>
-              </vffba1:LoadNumberProfiles.ToDate>
-            </vffba1:LoadNumberProfiles>
+              </vffba1:CreateNumberProfiles.ToDate>
+            </vffba1:CreateNumberProfiles>
             <vffba1:GetSuspiciousNumber sap2010:WorkflowViewState.IdRef="GetSuspiciousNumber_2">
               <vffba1:GetSuspiciousNumber.InputQueue>
                 <InArgument x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">
@@ -360,7 +360,7 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbENEA+wCDgIBAUkFTREDAccFTgVjKQMBtgVkBeoCCgIBAksJS5UBAwHIBVsLW2MDAcMFVgtWhAEDAb8FUQtRWQMBuwVgC2BXAwG3BWcLZ5kBAgEDawnfAhQCAQ3iAgnoAiQCAQdsC4EBKgMBpQWCAQvZAhYCARPaAgveAhcCAQ7lAg/lAoMBAgEJ4gJk4gKBAQIBCHkReWkDAbIFdBF0ZgMBrgVvEW9fAwGqBX4Rfl0DAaYFkwENqAEfAwHcBKkBDc0BKQMB3QPOAQ3yASoDAd4C8wENiAI5AwGVAokCDZ4CNgMBzAGfAg20AjMDAYMBtQINwAIxAgFewQINzAIuAgE5zQIN2AIrAgEU3AIP3AKaAQIBD5YBE5YBYQMBkwWgAROgAXUDAYEFmwETmwF0AwHvBKUBE6UBXwMB3QTFARPFAWoDAcoEuwETuwFtAwG4BLEBE7EBdAMBpgSsAROsAWEDAZQEwAETwAF/AwGCBLYBE7YBiAEDAfADygETygFfAwHeA+8BE+8BagMBywPlARPlAXcDAbkD0QET0QGAAQMBpwPbARPbAY8BAwGVA+oBE+oBgAEDAYMD4AET4AGcAQMB8QLWARPWAY4BAwHfAoACE4ACeAMBzAL2ARP2AYYBAwG6AoUCE4UChQEDAagC+wET+wGFAQMBlgKWAhOWAngDAYMCjAITjAKHAQMB8QGbAhObAoIBAwHfAZECE5ECggEDAc0BrAITrAJ4AwG6AaICE6IClAEDAagBsQITsQJ/AwGWAacCE6cCfwMBhAG9AhO9An0CAXG4AhO4An0CAV/JAhPJAnoCAUzEAhPEAnoCATrVAhPVAncCASfQAhPQAncCARU=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbENEA+wCDgIBAUkFTREDAccFTgVjKQMBtgVkBeoCCgIBAksJS5UBAwHIBVsLW2MDAcMFVgtWhAEDAb8FUQtRWQMBuwVgC2BXAwG3BWcLZ5kBAgEDawnfAhQCAQ3iAgnoAiQCAQdsC4EBKgMBpQWCAQvZAhYCARPaAgveAhcCAQ7lAg/lAoMBAgEJ4gJk4gKBAQIBCHkReWkDAbIFdBF0ZgMBrgVvEW9fAwGqBX4Rfl0DAaYFkwENqAEfAwHcBKkBDc0BKwMB3QPOAQ3yASoDAd4C8wENiAI5AwGVAokCDZ4CNgMBzAGfAg20AjMDAYMBtQINwAIxAgFewQINzAIuAgE5zQIN2AIrAgEU3AIP3AKaAQIBD5YBE5YBYQMBkwWgAROgAXUDAYEFmwETmwF0AwHvBKUBE6UBXwMB3QS7ARO7AW0DAcoEsQETsQF0AwG4BMUBE8UBhAEDAaYErAETrAFhAwGUBMABE8ABfwMBggS2ARO2AYgBAwHwA8oBE8oBXwMB3gPvARPvAWoDAcsD5QET5QF3AwG5A9EBE9EBgAEDAacD2wET2wGPAQMBlQPqARPqAYABAwGDA+ABE+ABnAEDAfEC1gET1gGOAQMB3wKAAhOAAngDAcwC9gET9gGGAQMBugKFAhOFAoUBAwGoAvsBE/sBhQEDAZYClgITlgJ4AwGDAowCE4wChwEDAfEBmwITmwKCAQMB3wGRAhORAoIBAwHNAawCE6wCeAMBugGiAhOiApQBAwGoAbECE7ECfwMBlgGnAhOnAn8DAYQBvQITvQJ9AgFxuAITuAJ9AgFfyQITyQJ6AgFMxAITxAJ6AgE61QIT1QJ3AgEn0AIT0AJ3AgEV</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -368,7 +368,7 @@
       <sap2010:ViewStateData Id="GetStrategiesExecutionInfo_1" sap:VirtualizedContainerService.HintSize="2481,22" />
       <sap2010:ViewStateData Id="DeleteStrategyResults_1" sap:VirtualizedContainerService.HintSize="2234,22" />
       <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="LoadNumberProfiles_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="CreateNumberProfiles_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetSuspiciousNumber_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareSuspiciousNumbersForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareNumberProfilesForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
