@@ -50,7 +50,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         [RequiredArgument]
         public InArgument<DateTime> ToDate { get; set; }
 
-        [RequiredArgument]
         public InArgument<List<StrategyExecutionInfo>> StrategiesExecutionInfo { get; set; }
 
 

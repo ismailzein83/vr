@@ -91,9 +91,6 @@
     <Compile Include="GetStrategyExecutionDetails.cs" />
     <Compile Include="LoadCDRs.cs" />
     <Compile Include="CreateNumberProfiles.cs" />
-    <Compile Include="LoadNumberProfile.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="PrepareNumberProfilesForDBApply.cs" />
     <Compile Include="PrepareStrategyExecutionDetailsForDBApply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

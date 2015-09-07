@@ -43,12 +43,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         public void WriteRecordToStream(NumberProfile record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("0^{0}^{1}^{2}^{3}^{4}",
+            streamForBulkInsert.WriteRecord("0^{0}^{1}^{2}^{3}^{4}^{5}",
                                     record.AccountNumber,
                                     record.FromDate,
                                     record.ToDate,
                                     record.StrategyId,
-                                    Vanrise.Common.Serializer.Serialize(record.AggregateValues, true));
+                                    Vanrise.Common.Serializer.Serialize(record.AggregateValues, true),
+                                    record.StrategyExecutionID                                    
+                                    );
         }
 
         public BigResult<NumberProfile> GetNumberProfiles(Vanrise.Entities.DataRetrievalInput<NumberProfileResultQuery> input)
