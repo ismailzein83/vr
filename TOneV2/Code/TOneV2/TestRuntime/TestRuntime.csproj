@@ -318,6 +318,7 @@
     <Compile Include="RabihTask.cs" />
     <Compile Include="Tasks\MortadaTask.cs" />
     <Compile Include="Tasks\MustaphaTask.cs" />
+    <Compile Include="Tasks\SamerTask.cs" />
     <Compile Include="Tasks\ZeinabTask.cs" />
   </ItemGroup>
   <ItemGroup>

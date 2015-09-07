@@ -74,8 +74,8 @@ namespace TOne.CDRProcess.Activities
             PricingGenerator generator;
             generator = new PricingGenerator(cacheManager);
             ProtCodeMap codeMap = new ProtCodeMap(cacheManager);
-
-
+            SalePricing salePricing = new SalePricing(cacheManager);
+            CostPricing costPricing = new CostPricing(cacheManager);
             bool hasItem = false;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -119,8 +119,13 @@ namespace TOne.CDRProcess.Activities
                             {
                                 BillingCDRMain main = new BillingCDRMain(baseCDR);
                                 DateTime timePricing = DateTime.Now;
-                                main.cost = generator.GetRepricing<BillingCDRCost>(main);
-                                main.sale = generator.GetRepricing<BillingCDRSale>(main);
+                                main.sale = salePricing.GetRepricing(main);
+                                main.cost = costPricing.GetRepricing(main);
+
+
+
+                                //main.cost = generator.GetRepricing<BillingCDRCost>(main);
+                                //main.sale = generator.GetRepricing<BillingCDRSale>(main);
                                 TimeSpan spentPricingPerCDR = DateTime.Now.Subtract(timePricing);
                                 totalsecondsforpricing += spentPricingPerCDR.TotalSeconds;
                                 HandlePassThrough(main);

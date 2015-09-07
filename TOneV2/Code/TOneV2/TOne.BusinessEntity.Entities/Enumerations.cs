@@ -41,8 +41,8 @@ namespace TOne.BusinessEntity.Entities
     }
     public enum IsCeiling
     {
-        Y = 0,
-        N = 1,
+        N = 0,
+        Y = 1,
         Null=2
     }
 }

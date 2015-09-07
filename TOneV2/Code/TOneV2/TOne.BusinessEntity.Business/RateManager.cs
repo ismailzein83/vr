@@ -24,9 +24,9 @@ namespace TOne.BusinessEntity.Business
         {
             _dataManager.GetCalculatedZoneRates(effectiveTime, isFuture, zoneIds, out customerZoneRates, out supplierZoneRates);
         }
-        public List<ExchangeRate> GetExchangeRates(DateTime fromDate, DateTime toDate)
+        public List<ExchangeRate> GetExchangeRates(DateTime Date)
         {
-            return _dataManager.GetExchangeRates(fromDate, toDate);
+            return _dataManager.GetExchangeRates(Date);
         }
     }
 }

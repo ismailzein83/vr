@@ -177,9 +177,9 @@ namespace TOne.BusinessEntity.Data.SQL
             dtInfoTable.EndLoadData();
             return dtInfoTable;
         }
-        public List<ExchangeRate> GetExchangeRates(DateTime fromDate, DateTime toDate)
+        public List<ExchangeRate> GetExchangeRates(DateTime Date)
         {
-            return GetItemsSP("BEntity.sp_CurrencyExchangeRate_GetByExchangeDate", ExchangeRateMapper, fromDate, toDate);
+            return GetItemsSP("BEntity.sp_CurrencyExchangeRate_GetByExchangeDate", ExchangeRateMapper, Date);
         }
         private ExchangeRate ExchangeRateMapper(IDataReader reader)
         {
