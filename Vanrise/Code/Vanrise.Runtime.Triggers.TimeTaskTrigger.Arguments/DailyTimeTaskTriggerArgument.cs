@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments
 {
     public class DailyTimeTaskTriggerArgument : TimeTaskTriggerArgument
     {
-        public List<string> ScheduledHours { get; set; }
+        public List<Time> ScheduledTimesToRun { get; set; }
     }
 }

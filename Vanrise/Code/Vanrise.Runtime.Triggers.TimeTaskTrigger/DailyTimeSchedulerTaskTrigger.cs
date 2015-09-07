@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 using Vanrise.Runtime.Entities;
 using Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments;
 
@@ -16,17 +17,15 @@ namespace Vanrise.Runtime.Triggers.TimeTaskTrigger
 
             List<DateTime> listofScheduledDateTimes = new List<DateTime>();
 
-            foreach (string hour in dailyTimeTaskTriggerArgument.ScheduledHours)
+            foreach (Time time in dailyTimeTaskTriggerArgument.ScheduledTimesToRun)
             {
-                string[] timeParts = hour.Split(':');
-
-                TimeSpan scheduledTime = new TimeSpan(int.Parse(timeParts[0]), int.Parse(timeParts[1]), 0);
+                TimeSpan scheduledTime = new TimeSpan(time.Hour, time.Minute, 0);
                 TimeSpan spanTillThen = scheduledTime - DateTime.Now.TimeOfDay;
 
                 int daysTillThen = 0;
 
                 if (spanTillThen.Ticks < 0)
-                    daysTillThen += 7;
+                    daysTillThen += 1;
 
                 listofScheduledDateTimes.Add(DateTime.Now.AddDays(daysTillThen).Add(spanTillThen));
             }

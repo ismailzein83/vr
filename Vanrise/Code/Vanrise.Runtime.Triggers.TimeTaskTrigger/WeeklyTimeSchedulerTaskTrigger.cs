@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 using Vanrise.Runtime.Entities;
 using Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments;
 
@@ -18,11 +19,9 @@ namespace Vanrise.Runtime.Triggers.TimeTaskTrigger
 
             foreach (DayOfWeek day in weeklyTimeTaskTriggerArgument.ScheduledDays)
             {
-                foreach (string hour in weeklyTimeTaskTriggerArgument.ScheduledHours)
+                foreach (Time time in weeklyTimeTaskTriggerArgument.ScheduledTimesToRun)
                 {
-                    string[] timeParts = hour.Split(':');
-
-                    TimeSpan scheduledTime = new TimeSpan(int.Parse(timeParts[0]), int.Parse(timeParts[1]), 0);
+                    TimeSpan scheduledTime = new TimeSpan(time.Hour, time.Minute, 0);
                     TimeSpan spanTillThen = scheduledTime - DateTime.Now.TimeOfDay;
 
                     int daysTillThen = (int)day - (int)DateTime.Today.DayOfWeek;

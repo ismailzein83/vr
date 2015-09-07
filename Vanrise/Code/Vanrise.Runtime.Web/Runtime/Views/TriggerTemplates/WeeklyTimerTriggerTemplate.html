@@ -12,14 +12,14 @@
         <div>
             <vr-row>
                 <vr-columns width="1/2row">
-                    <vr-textbox value="time" label="Enter Time" />
+                    <vr-datetimepicker label="Runs at" type="time" value="selectedTime"></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="1/4row">
-                    <vr-button type="Add" data-onclick="addHour" standalone />
+                    <vr-button type="Add" data-onclick="addTime" standalone />
                 </vr-columns>
                 <vr-columns width="1/4row">
-                    <vr-row ng-repeat="hour in selectedHours">
-                        {{hour}} <i class="glyphicon glyphicon-remove hand-cursor" ng-click="removeHour(hour)"></i>
+                    <vr-row ng-repeat="time in selectedTimes">
+                        {{time.Hour}} : {{time.Minute}} <i class="glyphicon glyphicon-remove hand-cursor" ng-click="removeTime(time)"></i>
                     </vr-row>
                 </vr-columns>
             </vr-row>

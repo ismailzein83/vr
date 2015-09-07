@@ -10,14 +10,29 @@ function WeeklyTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, Days
         $scope.daysOfWeek = [];
 
         $scope.selectedDays = [];
-        $scope.selectedHours = [];
+        $scope.selectedTimes = [];
 
-        $scope.addHour = function () {
-            $scope.selectedHours.push($scope.time);
+        $scope.addTime = function () {
+            var timeIsValid = true;
+
+            if ($scope.selectedTime == undefined || $scope.selectedTime.length == 0) {
+                timeIsValid = false;
+            }
+            else {
+                angular.forEach($scope.selectedTimes, function (item) {
+                    //Time to be added should not be repeated in the list of selected times
+                    if ($scope.selectedTime === item) {
+                        timeIsValid = false;
+                    }
+                });
+            }
+
+            if (timeIsValid)
+                $scope.selectedTimes.push($scope.selectedTime);
         }
 
-        $scope.removeHour = function (hourToRemove) {
-            $scope.selectedHours.splice($scope.selectedHours.indexOf(hourToRemove), 1);
+        $scope.removeTime = function (timeToRemove) {
+            $scope.selectedTimes.splice($scope.selectedTimes.indexOf(timeToRemove), 1);
         }
 
         $scope.schedulerTypeTaskTrigger.getData = function () {
@@ -30,7 +45,7 @@ function WeeklyTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, Days
                 $type: "Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.WeeklyTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments",
                 TimerTriggerTypeFQTN: TimeSchedulerTypeEnum.Weekly.FQTN,
                 ScheduledDays: numbersOfSelectedDays,
-                ScheduledHours: $scope.selectedHours
+                ScheduledTimesToRun: $scope.selectedTimes
             };
         };
 
@@ -53,8 +68,8 @@ function WeeklyTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, Days
                 $scope.selectedDays.push(selectedDay);
             });
 
-            angular.forEach(data.ScheduledHours, function (item) {
-                $scope.selectedHours.push(item);
+            angular.forEach(data.ScheduledTimesToRun, function (item) {
+                $scope.selectedTimes.push(item);
             });
         }
 

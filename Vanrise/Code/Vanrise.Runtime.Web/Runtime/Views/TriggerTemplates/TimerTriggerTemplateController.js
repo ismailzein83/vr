@@ -34,14 +34,17 @@ function TimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, UtilsServi
             if ($scope.schedulerTypeTaskTrigger.loadTemplateData != undefined)
                 $scope.schedulerTypeTaskTrigger.loadTemplateData();
         }
-        else {
-            $scope.selectedType = undefined;
-        }
+
         isFormLoaded = true;
+    }
+
+    function setFormToDefault() {
+        $scope.selectedType = UtilsService.getItemByVal($scope.schedulerTypes, TimeSchedulerTypeEnum.Interval.FQTN, "FQTN");
     }
 
     function load() {
         UtilsService.waitMultipleAsyncOperations([loadSchedulerTypes]).finally(function () {
+            setFormToDefault();
             loadForm();
         }).catch(function (error) {
             VRNotificationService.notifyExceptionWithClose(error, $scope);

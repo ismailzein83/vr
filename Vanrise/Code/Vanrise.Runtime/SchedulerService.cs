@@ -32,11 +32,7 @@ namespace Vanrise.Runtime
                             try
                             {
                                 taskTrigger = (SchedulerTaskTrigger)Activator.CreateInstance(Type.GetType(item.TriggerInfo.FQTN));
-                                if (item.NextRunTime == null)
-                                {
-                                    item.NextRunTime = taskTrigger.CalculateNextTimeToRun(item.TaskSettings.TaskTriggerArgument);
-                                }
-                                else
+                                if (item.NextRunTime != null)
                                 {
                                     Dictionary<string, object> evaluatedExpressions = taskTrigger.EvaluateExpressions(item);
 
@@ -47,8 +43,6 @@ namespace Vanrise.Runtime
 
                                     taskAction.Execute(item, item.TaskSettings.TaskActionArgument, evaluatedExpressions);
                                     item.Status = Entities.SchedulerTaskStatus.Completed;
-
-                                    
                                 }
                             }
                             catch(Exception ex)
