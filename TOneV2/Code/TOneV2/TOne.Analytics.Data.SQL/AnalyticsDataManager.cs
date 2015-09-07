@@ -165,9 +165,9 @@ namespace TOne.Analytics.Data.SQL
                 }, fromDate, toDate);
         }
 
-        public bool UpdateRateServiceFlag(CarrierRateView appParamObj, int serviceIDsSummation)
+        public bool UpdateRateServiceFlag(int rateID, int serviceIDsSummation)
         {
-            int recordesEffected = ExecuteNonQuerySP("Analytics.sp_CarrierRateView_Update", appParamObj.RateID, serviceIDsSummation);
+            int recordesEffected = ExecuteNonQuerySP("Analytics.sp_CarrierRateView_Update", rateID, serviceIDsSummation);
             return (recordesEffected > 0);
         }
 

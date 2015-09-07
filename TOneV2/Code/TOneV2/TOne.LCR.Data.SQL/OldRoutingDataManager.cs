@@ -19,11 +19,13 @@ namespace TOne.LCR.Data.SQL
 
         private readonly ICarrierAccountDataManager _carrierAccountDataManager;
         private readonly IZoneDataManager _zoneDataManager;
+        private readonly IFlaggedServiceDataManager _flaggedServiceDataManager;
 
         public OldRoutingDataManager()
         {
             _carrierAccountDataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
             _zoneDataManager = BEDataManagerFactory.GetDataManager<IZoneDataManager>();
+            _flaggedServiceDataManager = BEDataManagerFactory.GetDataManager<IFlaggedServiceDataManager>();
         }
         const string query = @"";
 
@@ -43,7 +45,7 @@ namespace TOne.LCR.Data.SQL
                         routeInfo.CustomerID = _carrierAccountDataManager.GetCarrierAccount(reader["CustomerID"] as string);
                         routeInfo.Code = reader["Code"] as string;
                         routeInfo.OurZoneID = Zones.Where(z => z.Key == (int)reader["OurZoneID"]).FirstOrDefault().Value;
-                        routeInfo.OurServicesFlag = (short)reader["OurServicesFlag"];
+                        routeInfo.OurServicesFlag = _flaggedServiceDataManager.GetServiceFlag((short)reader["OurServicesFlag"]);
                         routeInfo.OurActiveRate = (float)reader["OurActiveRate"];
                         routeInfo.State = (byte)reader["State"] == 0 ? RouteState.Blocked : RouteState.Enabled;
                         routeInfo.Updated = (DateTime)reader["Updated"];
@@ -64,7 +66,7 @@ namespace TOne.LCR.Data.SQL
                         routeOption.RouteID = (int)reader["RouteID"];
                         routeOption.SupplierID = _carrierAccountDataManager.GetCarrierAccount(reader["SupplierID"] as string);
                         routeOption.SupplierZoneID = Zones.Where(z => z.Key == (int)reader["SupplierZoneID"]).FirstOrDefault().Value;
-                        routeOption.SupplierServicesFlag = (Int16)reader["SupplierServicesFlag"];
+                        routeOption.SupplierServicesFlag = _flaggedServiceDataManager.GetServiceFlag((Int16)reader["SupplierServicesFlag"]);
                         routeOption.SupplierActiveRate = (float)reader["SupplierActiveRate"];
                         routeOption.Priority = (byte)reader["Priority"];
                         routeOption.NumberOfTries = (byte)reader["NumberOfTries"];

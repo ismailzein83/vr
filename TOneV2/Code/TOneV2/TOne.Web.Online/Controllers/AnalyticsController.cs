@@ -46,9 +46,9 @@ namespace TOne.Web.Online.Controllers
             return _analyticsManager.GetRates(carrierType.ToString(), effectiveOn, carrierID, codeGroup, code, zoneName, from, to);
         }
         [HttpPost]
-        public bool UpdateRateServiceFlag(CarrierRateView appParamObj)
+        public bool UpdateRateServiceFlag([FromBody]string parameters)
         {
-            return _analyticsManager.UpdateRateServiceFlag(appParamObj);
+            return _analyticsManager.UpdateRateServiceFlag(parameters);
         }
         [HttpGet]
         public List<TOne.Analytics.Entities.CarrierSummaryView> GetCarrierSummary(TOne.BusinessEntity.Entities.CarrierType carrierType, DateTime fromDate, DateTime toDate, int from, int to, char groupByProfile = 'N', string customerID = null, string supplierID = null, int? topCount = null)

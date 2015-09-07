@@ -50,17 +50,20 @@ namespace TOne.Analytics.Business
                 flaggedServiceManager.AssignFlaggedServiceInfo(lst);
             return lst;
         }
-        public bool UpdateRateServiceFlag(CarrierRateView appParamObj)
+        public bool UpdateRateServiceFlag(string parameters)
         {
+            string[] split = parameters.Split('|');
+            int rateID = int.Parse(split[0]);
+            string serviceFlagSymbols = split[1];
             IAnalyticsDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<IAnalyticsDataManager>();
-            string[] nameServices = appParamObj.FlaggedServiceSymbol.Split(',');
+            string[] nameServices = serviceFlagSymbols.Split(',');
             FlaggedServiceManager flaggedServiceManager = new FlaggedServiceManager();
             int serviceID = 0;
             foreach (string serviceName in nameServices)
             {
                 serviceID += flaggedServiceManager.GetServiceFlags().Values.ToList().Where(s => s.Symbol.Equals(serviceName)).FirstOrDefault().FlaggedServiceID;
             }
-            bool updateActionSucc = dataManager.UpdateRateServiceFlag(appParamObj, serviceID);
+            bool updateActionSucc = dataManager.UpdateRateServiceFlag(rateID, serviceID);
 
             TOne.Entities.UpdateOperationOutput<CarrierRateView> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<CarrierRateView>();
 
@@ -70,7 +73,6 @@ namespace TOne.Analytics.Business
             if (updateActionSucc)
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = appParamObj;
             }
 
             return updateActionSucc;

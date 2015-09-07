@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Http;
 using TOne.LCR.Business;
 using TOne.LCR.Entities.Routing;
+using TOne.Web.Online.Models;
 
 namespace TOne.Web.Online.Controllers
 {
@@ -25,9 +26,12 @@ namespace TOne.Web.Online.Controllers
         /// <param name="lcrCount">Maximum count of Suppliers in LCR.</param>
         /// <returns></returns>
         [HttpGet]
-        public List<RouteInfo> GetRoutes(bool showBlocks, bool? isBlock, int topValue, int from, int to, string customerId = null, string supplierId = null, string code = null, string zone = null)
+        public List<RouteModel> GetRoutes(bool showBlocks, bool? isBlock, int topValue, int from, int to, string customerId = null, string supplierId = null, string code = null, string zone = null)
         {
-            return _routeManager.GetRoutes(showBlocks, isBlock, topValue, from, to, customerId, supplierId, code, zone);
+            List<RouteInfo> routeInfos = _routeManager.GetRoutes(showBlocks, isBlock, topValue, from, to, customerId, supplierId, code, zone);
+            List<RouteModel> routeModels = new List<RouteModel>();
+            routeModels = ModelMappers.RouteModelMapper.MapRouteModel(routeInfos);
+            return routeModels;
         }
     }
 }

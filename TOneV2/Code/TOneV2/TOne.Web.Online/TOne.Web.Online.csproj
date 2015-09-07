@@ -190,7 +190,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="ModelMappers\Mappers.cs" />
+    <Compile Include="ModelMappers\RouteModelMapper.cs" />
     <Compile Include="Models\MobileAppConfig.cs" />
+    <Compile Include="Models\RouteModel.cs" />
+    <Compile Include="Models\RouteOptionModel.cs" />
     <Compile Include="Models\SecurityToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\AuthenticationHandler.cs" />

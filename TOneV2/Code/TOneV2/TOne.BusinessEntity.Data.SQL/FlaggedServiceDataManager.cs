@@ -13,13 +13,15 @@ namespace TOne.BusinessEntity.Data.SQL
     {
         public Dictionary<short, FlaggedService> GetServiceFlags()
         {
+            short i = 0;
             Dictionary<short, FlaggedService> flaggedServices = new Dictionary<short, FlaggedService>();
             ExecuteReaderSP("BEntity.sp_FlaggedService_GetAll", (reader) =>
             {
                 while (reader.Read())
                 {
                     FlaggedService flaggedService = FlaggedServiceMapper(reader);
-                    flaggedServices.Add(flaggedService.FlaggedServiceID, flaggedService);
+                    flaggedServices.Add(i, flaggedService);
+                    i++;
                 }
             });
 

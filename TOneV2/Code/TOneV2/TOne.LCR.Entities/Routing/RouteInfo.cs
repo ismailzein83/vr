@@ -13,7 +13,7 @@ namespace TOne.LCR.Entities.Routing
         public CarrierAccount CustomerID { get; set; }
         public Zone OurZoneID { get; set; }
         public string Code { get; set; }
-        public short OurServicesFlag { get; set; }
+        public FlaggedService OurServicesFlag { get; set; }
         public float OurActiveRate { get; set; }
         public RouteState State { get; set; }
         public DateTime Updated { get; set; }
@@ -29,13 +29,14 @@ namespace TOne.LCR.Entities.Routing
     {
         public int RouteID { get; set; }
         public CarrierAccount SupplierID { get; set; }
-        public short SupplierServicesFlag { get; set; }
+        public FlaggedService SupplierServicesFlag { get; set; }
         public Zone SupplierZoneID { get; set; }
         public float SupplierActiveRate { get; set; }
         public byte Priority { get; set; }
         public byte NumberOfTries { get; set; }
         public byte? Percentage { get; set; }
         public RouteState State { get; set; }
+        public string SupplierInfoString { get; set; }
     }
 
     public enum TargetType

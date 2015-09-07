@@ -37,6 +37,6 @@ namespace TOne.Analytics.Data
         List<Entities.ProfitByDay> GetLastWeeksProfit(DateTime from, DateTime to);
 
         Entities.TrafficSummaryView GetSummary(DateTime fromDate, DateTime toDate);
-        bool UpdateRateServiceFlag(CarrierRateView appParamObj, int serviceIDsSummation);
+        bool UpdateRateServiceFlag(int rateID, int serviceIDsSummation);
     }
 }
