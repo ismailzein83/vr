@@ -170,6 +170,7 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                     return;
                 var date;
                 if ($attrs.type == "time") {
+                    var initialDate = new Date();
                     if (ctrl.value.Hour == undefined)
                         ctrl.value.Hour = 0;
                     if (ctrl.value.Minute == undefined)
@@ -178,8 +179,9 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                         ctrl.value.Second = 0;
                     if (ctrl.value.Millisecond == undefined)
                         ctrl.value.Millisecond = 0;
-                    date = new Date();
-                    date.setHours(ctrl.value.Hour, ctrl.value.Minute, ctrl.value.Second, ctrl.value.Millisecond);
+                    initialDate.setHours(ctrl.value.Hour, ctrl.value.Minute, ctrl.value.Second, ctrl.value.Millisecond);
+                    var convertedDate = convertUTCDateToLocalDate(initialDate);
+                    date = convertedDate;
                 }
                 else {
                     date = ctrl.value instanceof Date ? ctrl.value : (new Date(ctrl.value));
