@@ -21,7 +21,7 @@ namespace Vanrise.Security.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("[sec].[sp_User_CreateTempForFiltered]", tempTableName, input.Query.Name, input.Query.Email);
+                ExecuteNonQuerySP("sec.sp_User_CreateTempByFiltered", tempTableName, input.Query.Name, input.Query.Email);
             };
 
             return RetrieveData(input, createTempTableAction, UserMapper);
@@ -39,12 +39,12 @@ namespace Vanrise.Security.Data.SQL
 
         public User GetUserbyId(int userId)
         {
-            return GetItemSP("sec.sp_User_GetbyId", UserMapper, userId);
+            return GetItemSP("sec.sp_User_GetById", UserMapper, userId);
         }
 
         public User GetUserbyEmail(string email)
         {
-            return GetItemSP("sec.sp_User_GetbyEmail", UserMapper, email);
+            return GetItemSP("sec.sp_User_GetByEmail", UserMapper, email);
         }
 
         public bool AddUser(User userObject, out int insertedId)
@@ -67,7 +67,7 @@ namespace Vanrise.Security.Data.SQL
         {
             //TODO: implement an encryption module
             //string encPassword = manager.EncodePassword(password);
-            return ExecuteNonQuerySP("sec.sp_User_ResetPassword", userId, password) > 0;
+            return ExecuteNonQuerySP("sec.sp_User_UpdatePassword", userId, password) > 0;
         }
 
         public bool CheckUserName(string name)
@@ -78,12 +78,12 @@ namespace Vanrise.Security.Data.SQL
 
         public bool ChangePassword(int userId, string newPassword)
         {
-            int recordsAffected = ExecuteNonQuerySP("sec.sp_User_ChangeMyPassword", userId, newPassword);
+            int recordsAffected = ExecuteNonQuerySP("sec.sp_User_UpdatePassword", userId, newPassword);
             return (recordsAffected>0);
         }
 
         public bool EditUserProfile(string name,int userId) {
-            return ExecuteNonQuerySP("sec.sp_User_EditUserProfile", userId,name) >0 ;
+            return ExecuteNonQuerySP("sec.sp_User_UpdateName", userId,name) >0 ;
         }
         private User UserMapper(IDataReader reader)
         {

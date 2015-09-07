@@ -26,7 +26,7 @@ namespace Vanrise.Security.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("[sec].[sp_OrgChart_CreateTempForFiltered]", tempTableName, input.Query.Name);
+                ExecuteNonQuerySP("sec.sp_OrgChart_CreateTempByName", tempTableName, input.Query.Name);
             };
 
             return RetrieveData(input, createTempTableAction, OrgChartMapper);

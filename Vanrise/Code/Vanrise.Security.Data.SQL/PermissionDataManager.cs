@@ -24,7 +24,7 @@ namespace Vanrise.Security.Data.SQL
 
         public List<Entities.Permission> GetPermissionsByHolder(Entities.HolderType holderType, string holderId)
         {
-            return GetItemsSP("sec.sp_Permission_GetbyHolder", PermissionMapper, holderType, holderId);
+            return GetItemsSP("sec.sp_Permission_GetByHolder", PermissionMapper, holderType, holderId);
         }
 
         public bool UpdatePermission(Permission permission)
