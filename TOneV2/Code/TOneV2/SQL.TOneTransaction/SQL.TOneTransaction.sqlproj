@@ -140,7 +140,6 @@
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_Update.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_Insert.sql" />
     <Build Include="bp\Stored Procedures\sp_BPDefinition_Get.sql" />
-    <Build Include="runtime\Stored Procedures\sp_SchedulerTask_GetTasksbyActionType.sql" />
     <Build Include="integration\Tables\DataSource.sql" />
     <Build Include="integration\Tables\AdapterType.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSource_GetByTaskId.sql" />
@@ -166,11 +165,12 @@
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_GetDueTasks.sql" />
     <Build Include="runtime\User Defined Types\IDIntType.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSource_Delete.sql" />
-    <Build Include="integration\Stored Procedures\sp_DataSource_CreateTempForFiltered.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_Delete.sql" />
-    <Build Include="runtime\Stored Procedures\sp_SchedulerTask_CreateTempForFiltered.sql" />
     <Build Include="bp\Stored Procedures\sp_BPDefinition_CreateTempForFiltered.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSource_UpdateAdapterState.sql" />
+    <Build Include="runtime\Stored Procedures\sp_SchedulerTask_GetByActionTypeId.sql" />
+    <Build Include="runtime\Stored Procedures\sp_SchedulerTask_CreateTempByName.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSource_CreateTemp.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />

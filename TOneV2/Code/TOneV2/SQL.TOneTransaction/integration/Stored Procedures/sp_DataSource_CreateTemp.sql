@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [integration].[sp_DataSource_CreateTempForFiltered]
+CREATE PROCEDURE [integration].[sp_DataSource_CreateTemp]
 	@TempTableName VARCHAR(200)
 AS
 BEGIN

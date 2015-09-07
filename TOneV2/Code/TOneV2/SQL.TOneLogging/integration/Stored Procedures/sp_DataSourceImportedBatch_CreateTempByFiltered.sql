@@ -3,11 +3,12 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [integration].[sp_DataSourceLog_CreateTempForFiltered]
+CREATE PROCEDURE [integration].[sp_DataSourceImportedBatch_CreateTempByFiltered]
 (
 	@TempTableName VARCHAR(200),
 	@DataSourceId INT = NULL,
-	@Severities [integration].[SeverityType] READONLY,
+	@BatchName NVARCHAR(1000) = NULL,
+	@MappingResults [integration].[MappingResultType] READONLY,
 	@From DATETIME = NULL,
 	@To DATETIME = NULL
 )
@@ -19,15 +20,19 @@ BEGIN
 	IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 	    BEGIN
 			SELECT [ID],
-			[DataSourceId],
-			[Severity],
-			[Message],
+			[BatchDescription],
+			[BatchSize],
+			[RecordsCount],
+			[MappingResult],
+			[MapperMessage],
+			[QueueItemIds],
 			[LogEntryTime]
 			INTO #RESULT
-			FROM [integration].[DataSourceLog]
+			FROM [integration].[DataSourceImportedBatch]
 			WHERE 
 				(@DataSourceId IS NULL OR DataSourceId = @DataSourceId) AND
-				(Severity IN (SELECT Severity FROM @Severities)) AND
+				(@BatchName IS NULL OR BatchDescription LIKE '%' + @BatchName + '%') AND
+				MappingResult IN (SELECT MappingResult FROM @MappingResults) AND
 				(@From IS NULL OR LogEntryTime >= @From) AND
 				(@To IS NULL OR LogEntryTime <= @To)
 			

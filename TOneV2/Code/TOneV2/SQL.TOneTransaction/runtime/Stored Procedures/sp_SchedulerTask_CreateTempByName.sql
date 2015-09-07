@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [runtime].[sp_SchedulerTask_CreateTempForFiltered]
+CREATE PROCEDURE [runtime].[sp_SchedulerTask_CreateTempByName]
 	@TempTableName VARCHAR(200),
 	@Name Nvarchar(255)
 AS
