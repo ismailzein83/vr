@@ -65,7 +65,7 @@
     <Compile Include="Enums.cs" />
     <Compile Include="INumberProfileParameters.cs" />
     <Compile Include="NumberProfileParameters.cs" />
-    <Compile Include="SpecialInput.cs" />
+    <Compile Include="AccountCaseUpdate.cs" />
     <Compile Include="StrategyExecutionInfo.cs" />
     <Compile Include="StrategyCases.cs" />
     <Compile Include="BTSHighValueCases.cs" />

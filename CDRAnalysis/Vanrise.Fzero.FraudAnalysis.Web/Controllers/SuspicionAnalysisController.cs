@@ -36,7 +36,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         }
 
         [HttpPost]
-        public bool UpdateAccountCase(SpecialInput input)
+        public bool UpdateAccountCase(AccountCaseUpdate input)
         {
             FraudManager manager = new FraudManager();
             return manager.UpdateAccountCase(input.accountNumber, input.caseStatus, input.validTill);

@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-SuspicionAnalysis2Controller.$inject = ["$scope", "SuspicionAnalysisAPIService", "StrategyAPIService", "SuspicionLevelEnum", "CaseStatusEnum2", "UtilsService", "VRNotificationService", "VRModalService", "VRNavigationService"];
+SuspicionAnalysis2Controller.$inject = ["$scope", "SuspicionAnalysisAPIService", "StrategyAPIService", "SuspicionLevelEnum", "SuspicionOccuranceStatusEnum", "UtilsService", "VRNotificationService", "VRModalService", "VRNavigationService"];
 
-function SuspicionAnalysis2Controller($scope, SuspicionAnalysisAPIService, StrategyAPIService, SuspicionLevelEnum, CaseStatusEnum2, UtilsService, VRNotificationService, VRModalService, VRNavigationService) {
+function SuspicionAnalysis2Controller($scope, SuspicionAnalysisAPIService, StrategyAPIService, SuspicionLevelEnum, SuspicionOccuranceStatusEnum, UtilsService, VRNotificationService, VRModalService, VRNavigationService) {
 
     var gridAPI = undefined;
 
@@ -48,7 +48,7 @@ function SuspicionAnalysis2Controller($scope, SuspicionAnalysisAPIService, Strat
                         var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", item.SuspicionLevelID);
                         item.SuspicionLevelDescription = suspicionLevel.description;
 
-                        var accountStatus = UtilsService.getEnum(CaseStatusEnum2, "value", item.AccountStatusID);
+                        var accountStatus = UtilsService.getEnum(SuspicionOccuranceStatusEnum, "value", item.AccountStatusID);
                         item.AccountStatusDescription = accountStatus.description;
                     });
 
@@ -80,7 +80,7 @@ function SuspicionAnalysis2Controller($scope, SuspicionAnalysisAPIService, Strat
         $scope.isInitializing = true;
 
         $scope.suspicionLevels = UtilsService.getArrayEnum(SuspicionLevelEnum);
-        $scope.caseStatuses = UtilsService.getArrayEnum(CaseStatusEnum2);
+        $scope.caseStatuses = UtilsService.getArrayEnum(SuspicionOccuranceStatusEnum);
 
         return StrategyAPIService.GetStrategies(0, "") // get all the enabled and disabled strategies (2nd arg) for all periods (1st arg)
             .then(function (response) {

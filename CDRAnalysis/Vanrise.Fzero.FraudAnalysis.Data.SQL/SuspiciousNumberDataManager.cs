@@ -99,33 +99,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public bool UpdateAccountCase(string accountNumber, CaseStatus caseStatus, DateTime? validTill)
         {
-            int userID = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
-            
             IAccountCaseDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountCaseDataManager>();
-            AccountCase1 accountCase = dataManager.GetLastAccountCaseByAccountNumber(accountNumber);
-
-            int caseID;
-            bool operationSucceeded;
-            
-            if (accountCase == null || (accountCase.StatusID == CaseStatus.ClosedFraud) || (accountCase.StatusID == CaseStatus.ClosedWhiteList))
-                operationSucceeded = dataManager.InsertAccountCase(out caseID, accountNumber, userID, validTill);
-            else
-            {
-                caseID = accountCase.CaseID;
-                operationSucceeded = dataManager.UpdateAccountCaseStatus(accountCase.CaseID, accountCase.StatusID, validTill);
-            }
-
-            if (!operationSucceeded) return false;
-
-            operationSucceeded = dataManager.InsertAccountCaseHistory(caseID, userID, caseStatus);
-
-            if (!operationSucceeded) return false;
-
-            operationSucceeded = dataManager.InsertOrUpdateAccountStatus(accountNumber, caseStatus);
-
-            if (!operationSucceeded) return false;
-
-            return dataManager.SetStatusToCaseStatus(accountNumber, caseStatus);
+            return dataManager.UpdateAccountCase(accountNumber, caseStatus, validTill);
         }
 
         public FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList, string accountNumber)
