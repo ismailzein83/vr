@@ -20,7 +20,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Web.Controllers
         }
 
 
-        private List<User> UserMapper(List<Vanrise.Security.Entities.User> listUsers)
+        private List<User> UserMapper(List<Vanrise.Security.Entities.UserInfo> listUsers)
         {
             List<User> CDRUsers = new List<User>();
 
