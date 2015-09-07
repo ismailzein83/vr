@@ -20,9 +20,9 @@ function RepeatedNumbersController($scope, UtilsService, $q, RepeatedNumbersAPIS
         }
         $scope.onBlurChanged = function () {
 
-            var from = UtilsService.getShortDate($scope.fromDate);
+            var from = UtilsService.getShortDate($scope.basicSelected ? $scope.fromDate : $scope.fromDate1);
             var oldFrom = UtilsService.getShortDate(date.from);
-            var to = UtilsService.getShortDate($scope.toDate);
+            var to = UtilsService.getShortDate($scope.basicSelected ? $scope.toDate : $scope.toDate1);
             var oldTo = UtilsService.getShortDate(date.to);
             if (from != oldFrom || to != oldTo)
                 $scope.selectedPeriod = customize;
@@ -30,9 +30,11 @@ function RepeatedNumbersController($scope, UtilsService, $q, RepeatedNumbersAPIS
         }
         $scope.periodSelectionChanged = function () {
             if ($scope.selectedPeriod != undefined && $scope.selectedPeriod.value != -1) {
-                 date = UtilsService.getPeriod($scope.selectedPeriod.value);
-                $scope.fromDate = date.from;
-                $scope.toDate = date.to;
+                date = UtilsService.getPeriod($scope.selectedPeriod.value);
+                $scope.fromDate = date.from, $scope.toDate = date.to;
+                $scope.fromDate1 = date.from, $scope.toDate1 = date.to;
+                
+                
             }
 
         }
@@ -70,8 +72,8 @@ function RepeatedNumbersController($scope, UtilsService, $q, RepeatedNumbersAPIS
         var filter = buildFilter();
         var query = {
             SwitchIds: filter.SwitchIds,
-            From: $scope.fromDate,
-            To: $scope.toDate,
+            From: $scope.basicSelected ?$scope.fromDate:$scope.fromDate1,
+            To: $scope.basicSelected ? $scope.toDate : $scope.toDate1,
             Number: $scope.repeatMoreThan,
             Type: $scope.selectedCallsOption.value,
             PhoneNumberType:$scope.selectedPhoneNumberType.value

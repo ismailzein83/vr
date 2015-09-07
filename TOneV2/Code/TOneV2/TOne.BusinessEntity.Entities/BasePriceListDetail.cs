@@ -22,7 +22,7 @@ namespace TOne.BusinessEntity.Entities
         public Int16 ServicesFlag { get; set; }
         public DateTime BeginEffectiveDate { get; set; }
 
-        public DateTime EndEffectiveDate { get; set; }
+        public DateTime? EndEffectiveDate { get; set; }
         public string Notes { get; set; }
         public string CodeGroup { get; set; }	
     }

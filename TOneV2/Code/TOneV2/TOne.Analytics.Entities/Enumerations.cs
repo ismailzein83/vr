@@ -121,4 +121,9 @@ namespace TOne.Analytics.Entities
         Weekly = 2,
         Monthly = 3
     }
+    public enum Duration
+    {
+        Min=0,
+        Sec=1
+    }
 }

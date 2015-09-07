@@ -14,7 +14,7 @@ namespace TOne.Analytics.Entities
        public string InCDPN { get; set; }
        public string OutCDPN { get; set; }
        public string CGPN { get; set; }
-       public string DurationType { get; set; }
+       public Duration DurationType { get; set; }
        
        public string MinDuration { get; set; }
        public string MaxDuration { get; set; }

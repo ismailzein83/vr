@@ -1,8 +1,7 @@
-﻿RawCDRLogController.$inject = ['$scope', 'RawCDRLogAPIService', 'UtilsService', '$q', 'BusinessEntityAPIService_temp', 'RawCDRLogMeasureEnum', 'VRModalService','VRNotificationService'];
+﻿RawCDRLogController.$inject = ['$scope', 'RawCDRLogAPIService', 'UtilsService', '$q', 'BusinessEntityAPIService_temp', 'VRModalService','VRNotificationService','DurationEnum'];
 
-function RawCDRLogController($scope, RawCDRLogAPIService, UtilsService, $q, BusinessEntityAPIService, RawCDRLogMeasureEnum, VRModalService, VRNotificationService) {
+function RawCDRLogController($scope, RawCDRLogAPIService, UtilsService, $q, BusinessEntityAPIService, VRModalService, VRNotificationService, DurationEnum) {
     var mainGridAPI;
-    var measures = [];
     var CDROption = [];
     var isFilterScreenReady;
     defineScope();
@@ -10,8 +9,12 @@ function RawCDRLogController($scope, RawCDRLogAPIService, UtilsService, $q, Busi
     function defineScope() {
         $scope.fromDate = '2015/06/02';
         $scope.toDate = '2015/06/06';
+        $scope.fromDate1 = '2015/06/02';
+        $scope.toDate1 = '2015/06/06';
         $scope.nRecords = '100'
+        $scope.nRecords1 = '100'
         $scope.switches = [];
+        
         $scope.selectedSwitches = [];
         $scope.inCarrier;
         $scope.outCarrier;
@@ -23,7 +26,6 @@ function RawCDRLogController($scope, RawCDRLogAPIService, UtilsService, $q, Busi
         $scope.maxDuration;
         $scope.whereCondtion;
         $scope.data = [];
-        $scope.measures = measures;
         $scope.onInfoClick = function () {
             var settings = {};
             settings.onScopeReady = function (modalScope) {
@@ -57,9 +59,9 @@ function RawCDRLogController($scope, RawCDRLogAPIService, UtilsService, $q, Busi
         var filter = buildFilter();
         var query = {
             Switches: filter.SwitchIds,
-            FromDate: $scope.fromDate,
-            ToDate: $scope.toDate,
-            NRecords: $scope.nRecords,
+            FromDate: $scope.basicSelected ? $scope.fromDate : $scope.fromDate1,
+            ToDate: $scope.basicSelected ? $scope.toDate : $scope.toDate1,
+            NRecords: $scope.basicSelected ? $scope.nRecords : $scope.nRecords1,
             InCarrier: $scope.inCarrier,
             OutCarrier: $scope.outCarrier,
             InCDPN: $scope.inCDPN,
@@ -67,14 +69,14 @@ function RawCDRLogController($scope, RawCDRLogAPIService, UtilsService, $q, Busi
             CGPN: $scope.cgpn,
             MinDuration: $scope.minDuration,
             MaxDuration: $scope.maxDuration,
-            DurationType: $scope.selectedDurationType.description,
+            DurationType: $scope.selectedDurationType.value,
             WhereCondition: $scope.whereCondtion
         }
         return mainGridAPI.retrieveData(query);
     }
     function load() {
         loadDurationType();
-        loadMeasures();
+       
         loadSwitches();
     }
     function buildFilter() {
@@ -92,19 +94,11 @@ function RawCDRLogController($scope, RawCDRLogAPIService, UtilsService, $q, Busi
     }
 
 
-    function loadMeasures() {
-        for (var prop in RawCDRLogMeasureEnum) {
-            measures.push(RawCDRLogMeasureEnum[prop]);
-        }
-    }
     function loadDurationType() {
-        $scope.durationType = [{
-            value: 0,
-            description:"Sec"
-        }, {
-            value: 1,
-            description: "Min"
-        }]
+        $scope.durationType = [];
+        for (var prop in DurationEnum) {
+            $scope.durationType.push(DurationEnum[prop]);
+        }
         
         $scope.selectedDurationType = $scope.durationType[1];
     }

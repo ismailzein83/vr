@@ -6,6 +6,6 @@
     PhoneNumber: { value: 6, propertyName: "PhoneNumber", description: "PhoneNumber", isSum: true, type: "Text", isShown: false },
     ReleaseCode: { value: 7, propertyName: "ReleaseCode", description: "Rel. Code", isSum: true, type: "Text", isShown: true },
     ReleaseSource: { value: 8, propertyName: "ReleaseSource", description: "ReleaseSource", isSum: true, type: "Text", isShown: true },
-    FirstCall: { value: 9, propertyName: "FirstCall", description: "First Call", isSum: true, type: "DateTime", isShown: true },
-    LastCall: { value: 10, propertyName: "LastCall", description: "Last Call", isSum: true, type: "DateTime", isShown: true },
+    FirstCall: { value: 9, propertyName: "FirstCall", description: "First Call", isSum: true, type: "'DateTime'", isShown: true },
+    LastCall: { value: 10, propertyName: "LastCall", description: "Last Call", isSum: true, type: "'DateTime'", isShown: true },
 });

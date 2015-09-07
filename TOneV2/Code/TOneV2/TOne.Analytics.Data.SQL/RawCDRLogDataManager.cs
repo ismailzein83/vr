@@ -22,6 +22,7 @@ namespace TOne.Analytics.Data.SQL
                 {
                     cmd.Parameters.Add(new SqlParameter("@FromData", input.Query.FromDate));
                     cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.ToDate));
+                    cmd.Parameters.Add(new SqlParameter("@TopRecords", input.Query.NRecords));
  
                 });
             };
@@ -39,7 +40,7 @@ namespace TOne.Analytics.Data.SQL
 
 			                        WITH Switches AS (SELECT [SwitchID],[Name] FROM [Switch])
 
-                                    SELECT CDRID,
+                                    SELECT TOP (@TopRecords) CDRID,
 	                                        Name as SwitchName,
 	                                        IDonSwitch,
 	                                        Tag,
@@ -47,7 +48,7 @@ namespace TOne.Analytics.Data.SQL
 	                                        DATEADD(ms,-datepart(ms,AlertDateTime),AlertDateTime) as AlertDateTime,
 	                                        DATEADD(ms,-datepart(ms,ConnectDateTime),ConnectDateTime) as ConnectDateTime,
 	                                        DATEADD(ms,-datepart(ms,DisconnectDateTime),DisconnectDateTime) as DisconnectDateTime,
-	                                        DurationInSeconds,
+	                                        #Duration# as Duration,
 	                                        IN_TRUNK,
 	                                        IN_CIRCUIT,
 	                                        IN_CARRIER,
@@ -77,6 +78,10 @@ namespace TOne.Analytics.Data.SQL
                                         ORDER BY AttemptDateTime DESC
                                          END
                                 ");
+            if (query.DurationType == Duration.Sec)
+                queryBuilder.Replace("#Duration#", "DurationInSeconds");
+            else if (query.DurationType == Duration.Min)
+                queryBuilder.Replace("#Duration#", "DurationInSeconds/60");
 
             if (!string.IsNullOrEmpty(query.InCarrier))
                 whereBuilder.Append("AND (IN_CARRIER Like '%" + query.InCarrier + "%')");
@@ -136,7 +141,7 @@ namespace TOne.Analytics.Data.SQL
             rawCDRLog.CGPN = reader["CGPN"] as string;
             rawCDRLog.ConnectDateTime = GetReaderValue<DateTime>(reader, "ConnectDateTime");
             rawCDRLog.DisconnectDateTime = GetReaderValue<DateTime>(reader, "DisconnectDateTime");
-            rawCDRLog.DurationInSeconds = GetReaderValue<Decimal>(reader, "DurationInSeconds");
+            rawCDRLog.DurationInSeconds = GetReaderValue<Decimal>(reader, "Duration");
             rawCDRLog.Extra_Fields = reader["Extra_Fields"] as string;
             rawCDRLog.IDonSwitch = GetReaderValue<Int64>(reader, "IDonSwitch");
             rawCDRLog.IN_CARRIER = reader["IN_CARRIER"] as string;
