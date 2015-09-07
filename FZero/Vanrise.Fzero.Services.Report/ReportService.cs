@@ -39,16 +39,18 @@ namespace Vanrise.Fzero.Services.Report
         {
             base.RequestAdditionalTime(15000); // 10 minutes timeout for startup
             //Debugger.Launch(); // launch and attach debugger
-
-            // Create a timer with a ten second interval.
+            ErrorLog("1");
             aTimer = new System.Timers.Timer(7200000);// 2 hours
-            // Hook up the Elapsed event for the timer.
+            ErrorLog("2");
             aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-
+            ErrorLog("3");
             aTimer.Interval = 7200000;// 2 hours
+            ErrorLog("4");
             aTimer.Enabled = true;
+            ErrorLog("5");
 
             GC.KeepAlive(aTimer);
+            ErrorLog("6");
             OnTimedEvent(null, null);
         }
 
@@ -56,15 +58,19 @@ namespace Vanrise.Fzero.Services.Report
         {
             try
             {
+                ErrorLog("7");
                 if (HttpHelper.CheckInternetConnection("mail.vanrise.com", 26))
                 {
-
+                    ErrorLog("8");
                     foreach (MobileOperator i in MobileOperator.GetMobileOperators())
                     {
+                        ErrorLog("9");
                         if (i.AutoReport && i.User.ClientID != null)
                         {
+                            ErrorLog("9");
                             List<string> DistinctCLIs = new List<string>();
                             List<ViewGeneratedCall> listFraudCases = GeneratedCall.GetFraudCases(i.User.ClientID, i.ID);
+                            ErrorLog("10");
                             List<int> listDistinctFraudCases = new List<int>();
                             List<int> listRepeatedFraudCases = new List<int>();
                             foreach (ViewGeneratedCall v in listFraudCases)
