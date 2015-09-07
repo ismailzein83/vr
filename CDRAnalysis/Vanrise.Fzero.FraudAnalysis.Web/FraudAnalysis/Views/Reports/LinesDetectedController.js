@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-LinesDetectedController.$inject = ['$scope', 'ReportingAPIService', 'UserAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+LinesDetectedController.$inject = ['$scope', 'ReportingAPIService', 'UsersAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
-function LinesDetectedController($scope, ReportingAPIService, UserAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+function LinesDetectedController($scope, ReportingAPIService, UsersAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
 
     var mainGridAPI;
     var arrMenuAction = [];
