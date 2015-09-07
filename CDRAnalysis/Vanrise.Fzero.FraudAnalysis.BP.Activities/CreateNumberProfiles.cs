@@ -77,12 +77,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 var callClasses = predefinedDataManager.GetCallClasses();
                 
             List<Strategy> strategies = new List<Strategy>();
+            if(inputArgument.StrategiesExecutionInfo!=null)
                 foreach (var i in inputArgument.StrategiesExecutionInfo)
                 {
                     strategies.Add(i.Strategy);
                 }
 
-                var aggregateDefinitions = strategies != null ?
+                var aggregateDefinitions = strategies.Count >0 ?
                     new AggregateManager(strategies as IEnumerable<INumberProfileParameters>).GetAggregateDefinitions(callClasses)
                     :
                     new AggregateManager(new List<INumberProfileParameters> { inputArgument.Parameters }).GetAggregateDefinitions(callClasses)

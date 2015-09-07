@@ -42,9 +42,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 else
                 {
 
-                    StrategyExecution strategyExecution= new StrategyExecution();
+                    StrategyExecution strategyExecution = new StrategyExecution() { FromDate = this.FromDate.Get(context), ToDate = this.ToDate.Get(context), PeriodID = strategy.PeriodId, StrategyID = strategyID, ProcessID = ContextExtensions.GetSharedInstanceData(context).InstanceInfo.ProcessInstanceID };
 
-                    strategyManager.ExecuteStrategy(new StrategyExecution() { FromDate = this.FromDate.Get(context), ToDate = this.ToDate.Get(context), PeriodID = strategy.PeriodId, StrategyID = strategyID, ProcessID = ContextExtensions.GetSharedInstanceData(context).InstanceInfo.ProcessInstanceID });
+                    strategyManager.ExecuteStrategy(strategyExecution);
 
                     strategiesExecutionInfo.Add(new StrategyExecutionInfo { Strategy = strategy, StrategyExecution = strategyExecution });
                 }
