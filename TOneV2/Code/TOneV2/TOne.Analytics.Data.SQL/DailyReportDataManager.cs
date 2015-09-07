@@ -14,15 +14,18 @@ namespace TOne.Analytics.Data.SQL
 {
     public class DailyReportDataManager : BaseTOneDataManager, IDailyReportDataManager
     {
+        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
+
         private string commonWhereClauseConditions;
+
+        static DailyReportDataManager()
+        {
+            _columnMapper.Add("CostRateDescription", "CostRate");
+            _columnMapper.Add("SaleRateDescription", "SaleRate");
+        }
 
         public Vanrise.Entities.BigResult<DailyReportCall> GetFilteredDailyReportCalls(Vanrise.Entities.DataRetrievalInput<DailyReportQuery> input, List<string> assignedCustomerIDs, List<string> assignedSupplierIDs)
         {
-            Dictionary<string, string> mapper = new Dictionary<string, string>();
-
-            mapper.Add("CostRateDescription", "CostRate");
-            mapper.Add("SaleRateDescription", "SaleRate");
-
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.SelectedZoneIDs, input.Query.SelectedCustomerIDs, input.Query.SelectedSupplierIDs, assignedCustomerIDs, assignedSupplierIDs), (cmd) =>
@@ -31,7 +34,7 @@ namespace TOne.Analytics.Data.SQL
                 });
             };
 
-            return RetrieveData(input, createTempTableAction, DailyReportCallMapper, mapper);
+            return RetrieveData(input, createTempTableAction, DailyReportCallMapper, _columnMapper);
         }
 
         private string CreateTempTableIfNotExists(string tempTableName, List<int> selectedZoneIDs, List<string> selectedCustomerIDs, List<string> selectedSupplierIDs, List<string> assignedCustomerIDs, List<string> assignedSupplierIDs)

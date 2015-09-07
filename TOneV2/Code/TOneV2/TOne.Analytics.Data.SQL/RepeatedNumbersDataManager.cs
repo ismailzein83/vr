@@ -13,12 +13,18 @@ namespace TOne.Analytics.Data.SQL
 {
     public class RepeatedNumbersDataManager : BaseTOneDataManager, IRepeatedNumbersDataManager
     {
+        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
+
         bool isSwitch = false;
+
+        static RepeatedNumbersDataManager()
+        {
+            _columnMapper.Add("CustomerInfo", "CustomerID");
+            _columnMapper.Add("SwitchName", "SwitchID");
+        }
+
         public Vanrise.Entities.BigResult<RepeatedNumbers> GetRepeatedNumbersData(Vanrise.Entities.DataRetrievalInput<RepeatedNumbersInput> input)
         {
-            Dictionary<string, string> mapper = new Dictionary<string, string>();
-            mapper.Add("CustomerInfo", "CustomerID");
-            mapper.Add("SwitchName", "SwitchID");
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.SwitchIds), (cmd) =>
@@ -32,7 +38,7 @@ namespace TOne.Analytics.Data.SQL
                 });
             };
 
-           Vanrise.Entities.BigResult < RepeatedNumbers > repeatedNumbersData=  RetrieveData(input, createTempTableAction, BlockedAttemptsMapper, mapper);
+           Vanrise.Entities.BigResult < RepeatedNumbers > repeatedNumbersData=  RetrieveData(input, createTempTableAction, BlockedAttemptsMapper, _columnMapper);
              FillRepeatedNumbersList( repeatedNumbersData);
              return repeatedNumbersData;
         }

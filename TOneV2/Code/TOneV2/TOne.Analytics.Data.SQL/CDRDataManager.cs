@@ -15,10 +15,15 @@ namespace TOne.Analytics.Data.SQL
 {
     class CDRDataManager : BaseTOneDataManager, ICDRDataManager
     {
+        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
+
+        static CDRDataManager()
+        {
+            _columnMapper.Add("SwitchName", "SwitchID");
+        }
+
         public Vanrise.Entities.BigResult<BillingCDR> GetCDRData(Vanrise.Entities.DataRetrievalInput<CDRSummaryInput> input)
         {
-            Dictionary<string, string> mapper = new Dictionary<string, string>();
-            mapper.Add("SwitchName", "SwitchID");
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.Filter, input.Query.CDROption), (cmd) =>
@@ -29,7 +34,7 @@ namespace TOne.Analytics.Data.SQL
                 });
             };
 
-            Vanrise.Entities.BigResult<BillingCDR> cdrData=RetrieveData(input, createTempTableAction, CDRDataMapper, mapper);
+            Vanrise.Entities.BigResult<BillingCDR> cdrData=RetrieveData(input, createTempTableAction, CDRDataMapper, _columnMapper);
              FillCDRList(cdrData);
              return cdrData;
         }

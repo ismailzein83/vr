@@ -13,12 +13,18 @@ namespace TOne.Analytics.Data.SQL
 {
     public class BlockedAttemptsDataManager : BaseTOneDataManager, IBlockedAttemptsDataManager
     {
+        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
+
         private bool groupByNumber;
         private TrafficStatisticCommon trafficStatisticCommon = new TrafficStatisticCommon();
+
+        static BlockedAttemptsDataManager()
+        {
+            _columnMapper.Add("CustomerName", "CustomerID");
+        }
+
         public Vanrise.Entities.BigResult<BlockedAttempts> GetBlockedAttempts(Vanrise.Entities.DataRetrievalInput<BlockedAttemptsInput> input)
         {
-            Dictionary<string, string> mapper = new Dictionary<string, string>();
-            mapper.Add("CustomerName", "CustomerID");
             groupByNumber = input.Query.GroupByNumber;
             Action<string> createTempTableAction = (tempTableName) =>
             {
@@ -28,7 +34,7 @@ namespace TOne.Analytics.Data.SQL
                     cmd.Parameters.Add(new SqlParameter("@ToDateTime", input.Query.To));
                 });
             };
-            Vanrise.Entities.BigResult<BlockedAttempts> data=RetrieveData(input, createTempTableAction, BlockedAttemptsMapper, mapper);
+            Vanrise.Entities.BigResult<BlockedAttempts> data=RetrieveData(input, createTempTableAction, BlockedAttemptsMapper, _columnMapper);
             FillProperties(data);
             return data;
         }

@@ -12,10 +12,15 @@ namespace TOne.Analytics.Data.SQL
 {
     public class RawCDRLogDataManager : BaseTOneDataManager, IRawCDRLogDataManager
     {
-      public  Vanrise.Entities.BigResult<RawCDRLog> GetRawCDRData(Vanrise.Entities.DataRetrievalInput<RawCDRInput> input)
+        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
+
+        static RawCDRLogDataManager()
         {
-            Dictionary<string, string> mapper = new Dictionary<string, string>();
-            mapper.Add("SwitchName", "SwitchID");
+            _columnMapper.Add("SwitchName", "SwitchID");
+        }
+
+        public Vanrise.Entities.BigResult<RawCDRLog> GetRawCDRData(Vanrise.Entities.DataRetrievalInput<RawCDRInput> input)
+        {
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query), (cmd) =>
@@ -23,11 +28,11 @@ namespace TOne.Analytics.Data.SQL
                     cmd.Parameters.Add(new SqlParameter("@FromData", input.Query.FromDate));
                     cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.ToDate));
                     cmd.Parameters.Add(new SqlParameter("@TopRecords", input.Query.NRecords));
- 
+
                 });
             };
 
-            return RetrieveData(input, createTempTableAction, RawCDRLogDataMapper, mapper);
+            return RetrieveData(input, createTempTableAction, RawCDRLogDataMapper, _columnMapper);
         }
 
         #region Methods

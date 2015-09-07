@@ -13,32 +13,39 @@ namespace TOne.Analytics.Data.SQL
 {
     public class HourlyReportDataManager : BaseTOneDataManager, IHourlyReportDataManager
     {
-          private TrafficStatisticCommon trafficStatisticCommon = new TrafficStatisticCommon();
-          public GenericSummaryBigResult<HourlyReport> GetHourlyReportData(Vanrise.Entities.DataRetrievalInput<HourlyReportInput> input)
+        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
+
+        private TrafficStatisticCommon trafficStatisticCommon = new TrafficStatisticCommon();
+
+        static HourlyReportDataManager()
         {
-            Dictionary<string, string> mapper = new Dictionary<string, string>();
+            _columnMapper.Add("GroupKeyValues[0].Name", string.Empty);
+            _columnMapper.Add("Zone", "OurZoneID");
+            _columnMapper.Add("Customer", "CustomerID");
+            _columnMapper.Add("Supplier", "SupplierID");
+            _columnMapper.Add("Code Group", "CodeGroupID");
+            _columnMapper.Add("Switch", "SwitchID");
+            _columnMapper.Add("GateWay In", "GateWayInName");
+            _columnMapper.Add("GateWay Out", "GateWayOutName");
+            _columnMapper.Add("Port In", "Port_IN");
+            _columnMapper.Add("Port Out", "Port_OUT");
+            _columnMapper.Add("Code Sales", "OurCode");
+            _columnMapper.Add("Code Buy", "SupplierCode");
+            _columnMapper.Add("Data.Hour", "Hour");
+        }
+
+        public GenericSummaryBigResult<HourlyReport> GetHourlyReportData(Vanrise.Entities.DataRetrievalInput<HourlyReportInput> input)
+        {
             string columnId;
             trafficStatisticCommon.GetColumnNames(input.Query.GroupKeys[0], out columnId);
-            mapper.Add("GroupKeyValues[0].Name", columnId);
-            mapper.Add("Zone", "OurZoneID");
-            mapper.Add("Customer", "CustomerID");
-            mapper.Add("Supplier", "SupplierID");
-            mapper.Add("Code Group", "CodeGroupID");
-            mapper.Add("Switch", "SwitchID");
-            mapper.Add("GateWay In", "GateWayInName");
-            mapper.Add("GateWay Out", "GateWayOutName");
-            mapper.Add("Port In", "Port_IN");
-            mapper.Add("Port Out", "Port_OUT");
-            mapper.Add("Code Sales", "OurCode");
-            mapper.Add("Code Buy", "SupplierCode");
-            mapper.Add("Data.Hour", "Hour");
+            
+            _columnMapper["GroupKeyValues[0].Name"] = columnId;
 
-           
             string tempTable = null;
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 tempTable = tempTableName;
-                ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.Filter, input.Query.GroupKeys, input.Query.ConnectionList,input.Query.CarrierType), (cmd) =>
+                ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.Filter, input.Query.GroupKeys, input.Query.ConnectionList, input.Query.CarrierType), (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.From));
                     cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.To));
@@ -74,22 +81,22 @@ namespace TOne.Analytics.Data.SQL
                     };
                 }
                 return obj;
-            }, mapper, new GenericSummaryBigResult<HourlyReport>()) as GenericSummaryBigResult<HourlyReport>;
+            }, _columnMapper, new GenericSummaryBigResult<HourlyReport>()) as GenericSummaryBigResult<HourlyReport>;
             trafficStatisticCommon.FillBEProperties<HourlyReport>(rslt, input.Query.GroupKeys);
-           // FillBEProperties(rslt, input.Query.GroupKeys);
+            // FillBEProperties(rslt, input.Query.GroupKeys);
             if (input.Query.WithSummary)
                 rslt.Summary = GetSummary(tempTable);
             //GenericSummaryBigResult<HourlyReport> rslt = new GenericSummaryBigResult<HourlyReport>();
             return rslt;
 
         }
-          public IEnumerable<HourlyReport> GetHourlyReport(TrafficStatisticGroupKeys filterByColumn, string columnFilterValue, DateTime from, DateTime to)
-          {
-              string columnName;
-              HashSet<string> joinStatement = new HashSet<string>();
-              string groupByStatement;
-              trafficStatisticCommon.GetColumnStatements(filterByColumn, out columnName, joinStatement, out groupByStatement);
-              string query = String.Format(@"BEGIN with 
+        public IEnumerable<HourlyReport> GetHourlyReport(TrafficStatisticGroupKeys filterByColumn, string columnFilterValue, DateTime from, DateTime to)
+        {
+            string columnName;
+            HashSet<string> joinStatement = new HashSet<string>();
+            string groupByStatement;
+            trafficStatisticCommon.GetColumnStatements(filterByColumn, out columnName, joinStatement, out groupByStatement);
+            string query = String.Format(@"BEGIN with 
                              OurZones AS (SELECT ZoneID, Name, CodeGroup  FROM Zone z WITH (NOLOCK) WHERE SupplierID = 'SYS'),
                               AllResult AS(  
 			                SELECT
@@ -104,33 +111,33 @@ namespace TOne.Analytics.Data.SQL
                             Group BY {0},datepart(hour,LastCDRAttempt),dateadd(dd,0, datediff(dd,0,LastCDRAttempt))
 			                 )
                            SELECT * FROM AllResult ORDER BY Attempts END  ", columnName, joinStatement.Count != 0 ? string.Join(" ", joinStatement) : null, trafficStatisticCommon.GetColumnFilter(filterByColumn, columnFilterValue));
-              return GetItemsText(query, HourlyReportChartMapper,
-                  (cmd) =>
-                  {
-                      cmd.Parameters.Add(new SqlParameter("@FromDate", from));
-                      cmd.Parameters.Add(new SqlParameter("@ToDate", to));
-                  });
-          }
-  
-          
-          HourlyReport HourlyReportChartMapper(IDataReader reader)
-          {
+            return GetItemsText(query, HourlyReportChartMapper,
+                (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@FromDate", from));
+                    cmd.Parameters.Add(new SqlParameter("@ToDate", to));
+                });
+        }
 
-              HourlyReport trafficStatistics = new HourlyReport
-              {
-                  Attempts = GetReaderValue<int>(reader, "Attempts"),
-                  DurationsInMinutes = GetReaderValue<Decimal>(reader, "DurationsInMinutes") / 60,
-                  ACD = GetReaderValue<Decimal>(reader, "ACD")
-              };
-              return trafficStatistics;
 
-          }
+        HourlyReport HourlyReportChartMapper(IDataReader reader)
+        {
 
-          #region Private Methods
+            HourlyReport trafficStatistics = new HourlyReport
+            {
+                Attempts = GetReaderValue<int>(reader, "Attempts"),
+                DurationsInMinutes = GetReaderValue<Decimal>(reader, "DurationsInMinutes") / 60,
+                ACD = GetReaderValue<Decimal>(reader, "ACD")
+            };
+            return trafficStatistics;
 
-         
-       
-          private HourlyReport GetSummary(string tempTableName)
+        }
+
+        #region Private Methods
+
+
+
+        private HourlyReport GetSummary(string tempTableName)
         {
             String query = String.Format(@"SELECT
                                             SUM([Hour]) AS [Hour],
@@ -151,7 +158,7 @@ namespace TOne.Analytics.Data.SQL
 
 
         }
-          private string CreateTempTableIfNotExists(string tempTableName, GenericFilter filter, IEnumerable<TrafficStatisticGroupKeys> groupKeys, List<string> connectionList, CarrierType carrierType)
+        private string CreateTempTableIfNotExists(string tempTableName, GenericFilter filter, IEnumerable<TrafficStatisticGroupKeys> groupKeys, List<string> connectionList, CarrierType carrierType)
         {
             StringBuilder whereBuilder = new StringBuilder();
             string tableName = trafficStatisticCommon.GetTableName(groupKeys, filter);
@@ -199,10 +206,10 @@ namespace TOne.Analytics.Data.SQL
                                               END");
             StringBuilder groupKeysSelectPart = new StringBuilder();
             StringBuilder groupKeysGroupByPart = new StringBuilder();
-            HashSet<string> joinStatement=new HashSet<string> ();
+            HashSet<string> joinStatement = new HashSet<string>();
             //  string joinStatement = null;
             trafficStatisticCommon.AddFilterToQuery(filter, whereBuilder, joinStatement);
-            foreach(var groupKey in groupKeys)
+            foreach (var groupKey in groupKeys)
             {
                 string columnName;
                 string groupByStatement;
@@ -211,11 +218,11 @@ namespace TOne.Analytics.Data.SQL
                 {
                     groupByStatement = columnName;
                 }
-               groupKeysSelectPart.Append(columnName);
-               groupKeysSelectPart.Append(",");
-               if (groupKeysGroupByPart.Length > 0)
+                groupKeysSelectPart.Append(columnName);
+                groupKeysSelectPart.Append(",");
+                if (groupKeysGroupByPart.Length > 0)
                     groupKeysGroupByPart.Append(",");
-                   groupKeysGroupByPart.Append(groupByStatement);
+                groupKeysGroupByPart.Append(groupByStatement);
             }
             queryBuilder.Replace("#TEMPTABLE#", tempTableName);
             queryBuilder.Replace("#ConnectionFilter#", GetConnectionFilter(connectionList, carrierType));
@@ -236,42 +243,43 @@ namespace TOne.Analytics.Data.SQL
             queryBuilder.Replace("#GROUPBYPART#", groupKeysGroupByPart.ToString());
             return queryBuilder.ToString();
         }
-          private string GetConnectionFilter(List<string> connectionList,CarrierType carrierType)
-          {
-              StringBuilder whereBuilder =new StringBuilder ();
-              switch(carrierType){
-                  case CarrierType.Customer: trafficStatisticCommon.AddFilter<string>(whereBuilder, connectionList, "ts.Port_IN"); return whereBuilder.ToString();
-                  case CarrierType.Supplier: trafficStatisticCommon.AddFilter<string>(whereBuilder, connectionList, "ts.Port_OUT"); return whereBuilder.ToString();
-                  default :return null;
-              }
-          }
+        private string GetConnectionFilter(List<string> connectionList, CarrierType carrierType)
+        {
+            StringBuilder whereBuilder = new StringBuilder();
+            switch (carrierType)
+            {
+                case CarrierType.Customer: trafficStatisticCommon.AddFilter<string>(whereBuilder, connectionList, "ts.Port_IN"); return whereBuilder.ToString();
+                case CarrierType.Supplier: trafficStatisticCommon.AddFilter<string>(whereBuilder, connectionList, "ts.Port_OUT"); return whereBuilder.ToString();
+                default: return null;
+            }
+        }
 
-          HourlyReport HourlyReportMapper(IDataReader reader)
-          {
-              return FillHourlyReportFromReader(reader); 
-          }
-          HourlyReport FillHourlyReportFromReader(IDataReader reader)
-          {
-              HourlyReport hourlyReport = new HourlyReport();
-              hourlyReport.Hour = GetReaderValue<int>(reader, "Hour");
-              hourlyReport.Date = GetReaderValue<DateTime>(reader, "Date");
-              hourlyReport.Attempts = GetReaderValue<int>(reader, "Attempts");
-              hourlyReport.GrayArea =GetReaderValue<int>(reader, "NominalCapacityInE1s")>0?(( GetReaderValue<Decimal>(reader, "UtilizationInMinutes")- GetReaderValue<Decimal>(reader, "DurationsInMinutes")*100)/(GetReaderValue<int>(reader, "NominalCapacityInE1s"))):0;
-              hourlyReport.GreenArea =GetReaderValue<int>(reader, "NominalCapacityInE1s")>0?((GetReaderValue<Decimal>(reader, "DurationsInMinutes")*100)/(GetReaderValue<int>(reader, "NominalCapacityInE1s"))):0;
-              hourlyReport.DurationsInMinutes = GetReaderValue<Decimal>(reader, "DurationsInMinutes") ;
-              hourlyReport.ASR = GetReaderValue<Decimal>(reader, "ASR");
-              hourlyReport.ACD = GetReaderValue<Decimal>(reader, "ACD");
-              hourlyReport.NER = GetReaderValue<Decimal>(reader, "NER");         
-              hourlyReport.DeliveredASR = GetReaderValue<Decimal>(reader, "DeliveredASR");
-              hourlyReport.FailedAttempts = GetReaderValue<int>(reader, "FailedAttempts");
-              hourlyReport.MaxDurationInMinutes = GetReaderValue<Decimal>(reader, "MaxDuration");
-              hourlyReport.LastAttempt = GetReaderValue<DateTime>(reader, "LastAttempt");
-              hourlyReport.SuccessfulAttempt = GetReaderValue<int>(reader, "SuccessfulAttempt");
-              hourlyReport.UtilizationInMinutes = GetReaderValue<Decimal>(reader, "UtilizationInMinutes");
-              return hourlyReport;
-          }
+        HourlyReport HourlyReportMapper(IDataReader reader)
+        {
+            return FillHourlyReportFromReader(reader);
+        }
+        HourlyReport FillHourlyReportFromReader(IDataReader reader)
+        {
+            HourlyReport hourlyReport = new HourlyReport();
+            hourlyReport.Hour = GetReaderValue<int>(reader, "Hour");
+            hourlyReport.Date = GetReaderValue<DateTime>(reader, "Date");
+            hourlyReport.Attempts = GetReaderValue<int>(reader, "Attempts");
+            hourlyReport.GrayArea = GetReaderValue<int>(reader, "NominalCapacityInE1s") > 0 ? ((GetReaderValue<Decimal>(reader, "UtilizationInMinutes") - GetReaderValue<Decimal>(reader, "DurationsInMinutes") * 100) / (GetReaderValue<int>(reader, "NominalCapacityInE1s"))) : 0;
+            hourlyReport.GreenArea = GetReaderValue<int>(reader, "NominalCapacityInE1s") > 0 ? ((GetReaderValue<Decimal>(reader, "DurationsInMinutes") * 100) / (GetReaderValue<int>(reader, "NominalCapacityInE1s"))) : 0;
+            hourlyReport.DurationsInMinutes = GetReaderValue<Decimal>(reader, "DurationsInMinutes");
+            hourlyReport.ASR = GetReaderValue<Decimal>(reader, "ASR");
+            hourlyReport.ACD = GetReaderValue<Decimal>(reader, "ACD");
+            hourlyReport.NER = GetReaderValue<Decimal>(reader, "NER");
+            hourlyReport.DeliveredASR = GetReaderValue<Decimal>(reader, "DeliveredASR");
+            hourlyReport.FailedAttempts = GetReaderValue<int>(reader, "FailedAttempts");
+            hourlyReport.MaxDurationInMinutes = GetReaderValue<Decimal>(reader, "MaxDuration");
+            hourlyReport.LastAttempt = GetReaderValue<DateTime>(reader, "LastAttempt");
+            hourlyReport.SuccessfulAttempt = GetReaderValue<int>(reader, "SuccessfulAttempt");
+            hourlyReport.UtilizationInMinutes = GetReaderValue<Decimal>(reader, "UtilizationInMinutes");
+            return hourlyReport;
+        }
 
-          #endregion
+        #endregion
 
 
     }
