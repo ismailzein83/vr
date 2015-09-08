@@ -1,6 +1,6 @@
-﻿ErrorController.$inject = ['$scope', 'VRNavigationService'];
+﻿ErrorController.$inject = ['$scope', 'VRNavigationService', '$location'];
 
-function ErrorController($scope, VRNavigationService) {
+function ErrorController($scope, VRNavigationService, $location) {
 
     var parameters = VRNavigationService.getParameters($scope);
     if (parameters != undefined) {
@@ -9,7 +9,8 @@ function ErrorController($scope, VRNavigationService) {
     }
 
     $scope.goBackToPage = function () {
-        VRNavigationService.goto($scope.previousUrl);
+        $location.path($scope.previousUrl).replace();
+       // VRNavigationService.goto($scope.previousUrl);
     };
 
 }

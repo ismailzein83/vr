@@ -74,7 +74,7 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
                 error: error,
                 previousUrl: $location.url()
             }
-            VRNavigationService.goto("/Error", parameters);
+            VRNavigationService.goto("/Common/Views/Error", parameters);
         }
     }
 
