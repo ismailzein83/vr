@@ -80,6 +80,11 @@
           <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
         </InArgument>
       </vffba1:GetStrategiesExecutionInfo.FromDate>
+      <vffba1:GetStrategiesExecutionInfo.OverridePrevious>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">Input.OverridePrevious</mca:CSharpValue>
+        </InArgument>
+      </vffba1:GetStrategiesExecutionInfo.OverridePrevious>
       <vffba1:GetStrategiesExecutionInfo.StrategiesExecutionInfo>
         <OutArgument x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)">
           <mca:CSharpReference x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)">strategiesExecutionInfo</mca:CSharpReference>
@@ -104,28 +109,6 @@
       </If.Condition>
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
-          <vffba1:DeleteStrategyExecutionDetails sap2010:WorkflowViewState.IdRef="DeleteStrategyExecutionDetails_1">
-            <vffba1:DeleteStrategyExecutionDetails.FromDate>
-              <InArgument x:TypeArguments="s:DateTime">
-                <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
-              </InArgument>
-            </vffba1:DeleteStrategyExecutionDetails.FromDate>
-            <vffba1:DeleteStrategyExecutionDetails.OverridePrevious>
-              <InArgument x:TypeArguments="x:Boolean">
-                <mca:CSharpValue x:TypeArguments="x:Boolean">Input.OverridePrevious</mca:CSharpValue>
-              </InArgument>
-            </vffba1:DeleteStrategyExecutionDetails.OverridePrevious>
-            <vffba1:DeleteStrategyExecutionDetails.StrategiesExecutionInfo>
-              <InArgument x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)">
-                <mca:CSharpValue x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)">strategiesExecutionInfo</mca:CSharpValue>
-              </InArgument>
-            </vffba1:DeleteStrategyExecutionDetails.StrategiesExecutionInfo>
-            <vffba1:DeleteStrategyExecutionDetails.ToDate>
-              <InArgument x:TypeArguments="s:DateTime">
-                <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
-              </InArgument>
-            </vffba1:DeleteStrategyExecutionDetails.ToDate>
-          </vffba1:DeleteStrategyExecutionDetails>
           <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
             <Parallel.Variables>
               <Variable x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)" Name="numberProfileQueue" />
@@ -317,13 +300,12 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbDpEA8ECDgIBAUgFTBEDAcgDTQViKQMBuwNjBb8CCgIBAkoJSpUBAwHJA1oLWmMDAcUDVQtVhAEDAcIDUAtQWQMBvwNfC19XAwG8A2YLZpkBAgEDagm0AhQCAQu3Agm9AiQCAQZrC4ABMwMBrgOBAQuuAhYCARCvAguzAhcCAQy6Ag+6AoMBAgEItwJktwKBAQIBB3MRc2YDAbgDeBF4ggEDAbUDbhFuXwMBsgN9EX1dAwGvA48BDaQBHwMB9QKlAQ3JASsDAZICygEN6QEyAwG9AeoBDf8BNgMBhAGAAg2VAkACAUuWAg2hAi4CAS6iAg2tAjgCARGxAg+xApoBAgENkgETkgFhAwGgA5wBE5wBdQMBkgOXAROXAXQDAYQDoQEToQFfAwH2ArcBE7cBbQMB5wKtAROtAXQDAdkCwQETwQGEAQMBywKoAROoAWEDAb0CvAETvAGBAQMBrwKyAROyAYgBAwGhAsYBE8YBXwMBkwLNARPNAYABAwGEAtwBE9wBeQMB9gHmARPmAYQBAwHoAdcBE9cBnAEDAdoB4QET4QGHAQMBzAHSARPSAY8BAwG+AfcBE/cBfwMBrwHtARPtAYcBAwGhAfwBE/wBggEDAZMB8gET8gGCAQMBhQGNAhONAn8CAXaDAhODApQBAgFokgITkgKMAQIBWogCE4gCjAECAUyeAhOeAnoCAT2ZAhOZAnoCAS+qAhOqAoQBAgEgpQITpQKEAQIBEg==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbDZEA7ACDgIBAUgFTBEDAb4DTQVnKQMBrgNoBa4CCgIBAkoJSpUBAwG/A18LX2MDAbsDVQtVYAMBuANaC1qEAQMBtQNQC1BZAwGyA2QLZFcDAa8DawtrmQECAQNvCaMCFAIBC6YCCawCJAIBBnALnQIWAgEQngILogIXAgEMqQIPqQKDAQIBCKYCZKYCgQECAQd+DZMBHwMB9QKUAQ24ASsDAZICuQEN2AEyAwG9AdkBDe4BNgMBhAHvAQ2EAkACAUuFAg2QAi4CAS6RAg2cAjgCARGgAg+gApoBAgENgQETgQFhAwGgA4sBE4sBdQMBkgOGAROGAXQDAYQDkAETkAFfAwH2AqYBE6YBbQMB5wKcAROcAXQDAdkCsAETsAGEAQMBywKXAROXAWEDAb0CqwETqwGBAQMBrwKhAROhAYgBAwGhArUBE7UBXwMBkwK8ARO8AYABAwGEAssBE8sBeQMB9gHVARPVAYQBAwHoAcYBE8YBnAEDAdoB0AET0AGHAQMBzAHBARPBAY8BAwG+AeYBE+YBfwMBrwHcARPcAYcBAwGhAesBE+sBggEDAZMB4QET4QGCAQMBhQH8ARP8AX8CAXbyARPyAZQBAgFogQITgQKMAQIBWvcBE/cBjAECAUyNAhONAnoCAT2IAhOIAnoCAS+ZAhOZAoQBAgEglAITlAKEAQIBEg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="2001,62" />
       <sap2010:ViewStateData Id="GetStrategiesExecutionInfo_1" sap:VirtualizedContainerService.HintSize="2001,22" />
-      <sap2010:ViewStateData Id="DeleteStrategyExecutionDetails_1" sap:VirtualizedContainerService.HintSize="1754,22" />
       <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="CreateNumberProfiles_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetStrategyExecutionDetails_1" sap:VirtualizedContainerService.HintSize="200,40" />
@@ -333,7 +315,7 @@
       <sap2010:ViewStateData Id="ApplyStrategyExecutionDetailsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1754,86" />
       <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="1754,62" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="1776,374">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="1776,312">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -341,15 +323,15 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="2001,524" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2023,812">
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="2001,462" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2023,750">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess_1" sap:VirtualizedContainerService.HintSize="2063,892" />
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess_1" sap:VirtualizedContainerService.HintSize="2063,830" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

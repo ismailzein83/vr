@@ -86,7 +86,6 @@
   <ItemGroup>
     <Compile Include="ApplyNumberProfilesToDB.cs" />
     <Compile Include="ApplyStrategyExecutionDetailsToDB.cs" />
-    <Compile Include="DeleteStrategyExecutionDetails.cs" />
     <Compile Include="GetStrategiesExecutionInfo.cs" />
     <Compile Include="GetStrategyExecutionDetails.cs" />
     <Compile Include="LoadCDRs.cs" />

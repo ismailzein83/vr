@@ -105,7 +105,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public void DeleteStrategyExecutionDetails(int StrategyExecutionId)
         {
-            ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetail_Delete", StrategyExecutionId);
+            ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_Delete", StrategyExecutionId);
         }
 
     }

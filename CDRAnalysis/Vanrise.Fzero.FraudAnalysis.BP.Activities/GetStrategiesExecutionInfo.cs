@@ -26,6 +26,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         public InArgument<DateTime> ToDate { get; set; }
 
 
+        [RequiredArgument]
+        public InArgument<bool> OverridePrevious { get; set; }
+
+
         #endregion
 
         protected override void Execute(CodeActivityContext context)
@@ -34,6 +38,18 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
             StrategyManager strategyManager = new StrategyManager();
 
+            Console.WriteLine("Check if overiding previous results is required");
+            if (context.GetValue(OverridePrevious))
+            {
+                Console.WriteLine("Started overriding previous results");
+
+                foreach (var strategyId in context.GetValue(StrategyIds))
+                    strategyManager.OverrideStrategyExecution(strategyId, context.GetValue(FromDate), context.GetValue(ToDate));
+
+                Console.WriteLine("Ended overriding previous results");
+            }
+
+
             foreach (int strategyID in context.GetValue(StrategyIds))
             {
                 Strategy strategy = strategyManager.GetStrategy(strategyID);
@@ -41,7 +57,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     ContextExtensions.WriteTrackingMessage(context, LogEntryType.Warning, "Strategy named: {0} was not loaded because it is disabled", strategy.Name);
                 else
                 {
-
                     StrategyExecution strategyExecution = new StrategyExecution() { FromDate = this.FromDate.Get(context), ToDate = this.ToDate.Get(context), PeriodID = strategy.PeriodId, StrategyID = strategyID, ProcessID = ContextExtensions.GetSharedInstanceData(context).InstanceInfo.ProcessInstanceID };
 
                     strategyManager.ExecuteStrategy(strategyExecution);
