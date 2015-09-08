@@ -220,7 +220,6 @@ app.directive("getStyle",function(){
             var h = dom.scrollWidth;
             var w = dom.scrollHeight;
             element[0].style.top =  (100 * ((ph - 32) - ((ph - h) / 2) ) ) /ph  + "%";
-
             element[0].style.left = (100 * ((pw - (w/2)) / 2)) / pw + "%";
 
             //parent[0].style.backgroundColor = scope.getCellcolor();
