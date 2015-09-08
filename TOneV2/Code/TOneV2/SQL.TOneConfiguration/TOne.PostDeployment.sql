@@ -114,7 +114,6 @@ as (select * from (values
 (12,'CDR Log','CDR Log','#/view/Analytics/Views/CDR/CDRLog',4,null,null,null,0,16),
 (13,'Users','Users','#/view/Security/Views/UserManagement',5,'Root/Administration Module/Users:View',null,null,0,10),
 (14,'Groups','Groups','#/view/Security/Views/GroupManagement',5,'Root/Administration Module/Groups:View',null,null,0,11),
-(15,'DumySwitchs','DumySwitchs','#/view/BusinessEntity/Views/Switchs',3,null,null,null,0,14),
 (16,'Switches','Switches Managments','#/view/BusinessEntity/Views/SwitchManagment',5,null,null,null,0,13),
 (17,'Carrier Account','CarrierAccount Managments','#/view/BusinessEntity/Views/CarrierAccountManagement',3,null,null,null,0,11),
 (35,'System Entities','System Entities','#/view/Security/Views/BusinessEntityManagement',5,'Root/Administration Module/System Entities:View',null,null,0,12),
