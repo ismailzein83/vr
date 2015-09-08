@@ -38,6 +38,7 @@
 
             ctrl.clientSideFilterFunction;
             ctrl.hideGridMenu = ($attrs.hidegridmenu != undefined);
+            ctrl.hidePagingInfo = ($attrs.hidepaginginfo != undefined);
             ctrl.rotateHeader = true;
             ctrl.el = $element;
             ctrl.getCellLayoutStyle = function () {
