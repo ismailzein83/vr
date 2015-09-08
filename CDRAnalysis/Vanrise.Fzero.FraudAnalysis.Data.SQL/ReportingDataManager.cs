@@ -25,23 +25,40 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             Action<string> createTempTableAction = (tempTableName) =>
             {
 
-                string Query = " IF NOT OBJECT_ID('"+tempTableName+"', N'U') IS NOT NULL" 
-                             + " Begin "
-                             + " SELECT s.Name StrategyName"
-                             + " , Sum(Case when ac.StatusId = 1 then 1 else 0 end) as GeneratedCases"
-                             + " , Sum(Case when ac.StatusId = 3 then 1 when ac.StatusId = 4 then 1 else 0 end) as ClosedCases "
-                             + " , Sum(Case when ac.StatusId = 3 then 1 else 0 end) as FraudCases"
-                             + (!input.Query.GroupDaily ? " , null as DateDay" : " , CAST(ac.LogDate AS DATE)    as DateDay")
-                             + " into " + tempTableName 
-                             + " FROM [FraudAnalysis].[AccountCase]	ac with(nolock, index=IX_AccountCase_LogDate) inner join [FraudAnalysis].[Strategy] s"
-                             + " on ac.StrategyId = s.Id"
-                             + " Where ac.LogDate BETWEEN @FromDate and  @ToDate"
-                             + (input.Query.StrategiesList != "" ? " and ac.StrategyId IN (" + input.Query.StrategiesList + ")" : "")
-                             + " Group by s.Name"
-                             + (!input.Query.GroupDaily ? "" : " , CAST(ac.LogDate AS DATE) ")
-                             + " End";
-
-
+                string Query = " IF NOT OBJECT_ID('" + tempTableName + "', N'U') IS NOT NULL"
+                            + " Begin "
+                            + " SELECT  "
+                            + " temp.StrategyName, sum(temp.GeneratedCases) GeneratedCases, sum(temp.ClosedCases) ClosedCases"
+                            + " ,sum(temp.FraudCases) FraudCases, temp.ExecutionDate DateDay   "
+                            + " into " + tempTableName 
+                            + " from ("
+                            + " select s.Name StrategyName, count(sed.Id) as GeneratedCases ,  0 ClosedCases, 0 FraudCases"
+                            + (!input.Query.GroupDaily ? " , null as ExecutionDate" : " , CAST(se.ExecutionDate AS DATE)    as ExecutionDate")
+                            + " from FraudAnalysis.StrategyExecutionDetails sed with(nolock) "
+                            + " inner join FraudAnalysis.StrategyExecution se with(nolock)  on se.ID = sed.StrategyExecutionID"
+                            + " inner join [FraudAnalysis].[Strategy] s with(nolock)  on se.StrategyId = s.Id"
+                            + " where sed.caseId is null and se.ExecutionDate >= @FromDate and se.ExecutionDate <=  @ToDate "
+                            + (input.Query.StrategiesList != "" ? " and se.StrategyId IN (" + input.Query.StrategiesList + ")" : "")
+                            + " group by s.Name"
+                            + (!input.Query.GroupDaily ? "" : " , CAST(se.ExecutionDate AS DATE) ")
+                            + " union"
+                            + " SELECT  "
+                            + " s.Name StrategyName , 0 as GeneratedCases, Sum(Case when ac.Status = 3 then 1 when ac.Status = 4 then 1 else 0 end) as ClosedCases"
+                            + " ,Sum(Case when ac.Status = 3 then 1 else 0 end) as FraudCases"
+                            + (!input.Query.GroupDaily ? " , null as ExecutionDate" : " , CAST(se.ExecutionDate AS DATE)    as ExecutionDate")
+                            + " FROM [FraudAnalysis].[AccountCase]	ac with(nolock) "
+                            + " inner join FraudAnalysis.StrategyExecutionDetails sed with(nolock)  on sed.CaseID = ac.ID"
+                            + " inner join FraudAnalysis.StrategyExecution se with(nolock)  on se.ID = sed.StrategyExecutionID"
+                            + " inner join [FraudAnalysis].[Strategy] s with(nolock)  on se.StrategyId = s.Id"
+                            + " where se.ExecutionDate >= @FromDate and se.ExecutionDate <=  @ToDate "
+                            + (input.Query.StrategiesList != "" ? " and se.StrategyId IN (" + input.Query.StrategiesList + ")" : "")
+                            + " Group by s.Name "
+                            + (!input.Query.GroupDaily ? "" : " , CAST(se.ExecutionDate AS DATE) ")
+                            + " ) "
+                            + " as temp"
+                            + " group by temp.StrategyName"
+                            + " ,temp.ExecutionDate"
+                            + " End";
 
                 ExecuteNonQueryText(Query, (cmd) =>
                 {
