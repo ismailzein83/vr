@@ -22,7 +22,5 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         bool UpdateStrategy(Strategy strategy, int userId);
 
-        void DeleteStrategyResults(int StrategyId, DateTime FromDate, DateTime ToDate);
-        
     }
 }

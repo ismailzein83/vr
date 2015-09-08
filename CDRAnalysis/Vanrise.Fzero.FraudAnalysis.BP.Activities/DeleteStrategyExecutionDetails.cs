@@ -47,7 +47,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 }
 
                 foreach (var strategyId in StrategyIds)
-                    manager.DeleteStrategyResults(strategyId, context.GetValue(FromDate), context.GetValue(ToDate));
+                    manager.OverrideStrategyExecution(strategyId, context.GetValue(FromDate), context.GetValue(ToDate));
 
 
                 Console.WriteLine("Ended deleting previous results");

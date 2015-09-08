@@ -13,33 +13,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
 
         }
 
-        public Vanrise.Entities.BigResult<Strategy> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyResultQuery> input)
+
+
+        public List<string> GetStrategyNames(List<int> strategyIds)
         {
             throw new NotImplementedException();
         }
-
-        public bool UpdateStrategy(Strategy strategy, int userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<String> GetStrategyNames(List<int> strategyIds)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public List<Strategy> GetStrategies(int PeriodId)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public bool AddStrategy(Strategy strategyObject, out int insertedId, int userId)
-        {
-            throw new NotImplementedException();
-        }
-
 
         public Strategy GetStrategy(int strategyId)
         {
@@ -51,14 +30,17 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             throw new NotImplementedException();
         }
 
-
-        public void DeleteStrategyResults(int StrategyId, DateTime FromDate, DateTime ToDate)
+        public Vanrise.Entities.BigResult<Strategy> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyResultQuery> input)
         {
             throw new NotImplementedException();
         }
 
+        public bool AddStrategy(Strategy strategyObject, out int insertedId, int userId)
+        {
+            throw new NotImplementedException();
+        }
 
-        public bool ExecuteStrategy(StrategyExecution strategyExecutionObject, out int insertedId)
+        public bool UpdateStrategy(Strategy strategy, int userId)
         {
             throw new NotImplementedException();
         }

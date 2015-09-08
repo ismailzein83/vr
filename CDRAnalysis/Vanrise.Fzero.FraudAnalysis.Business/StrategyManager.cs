@@ -96,12 +96,19 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
 
-        public void DeleteStrategyResults(int StrategyId, DateTime FromDate, DateTime ToDate)
+        public void OverrideStrategyExecution(int StrategyId, DateTime FromDate, DateTime ToDate)
         {
 
-            IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+            IStrategyExecutionDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
 
-            manager.DeleteStrategyResults(StrategyId, FromDate, ToDate);
+            int StrategyExecutionId;
+
+            bool OverridenSuccessfully = manager.OverrideStrategyExecution(StrategyId, FromDate, ToDate,out StrategyExecutionId);
+
+            if (OverridenSuccessfully)
+            {
+                manager.DeleteStrategyExecutionDetails(StrategyExecutionId);
+            }
 
         }
 

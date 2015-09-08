@@ -39,6 +39,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         {
             throw new NotImplementedException();
         }
-      
+
+        public bool OverrideStrategyExecution(int StrategyID, DateTime From, DateTime To, out int updatedId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteStrategyExecutionDetails(int StrategyExecutionId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

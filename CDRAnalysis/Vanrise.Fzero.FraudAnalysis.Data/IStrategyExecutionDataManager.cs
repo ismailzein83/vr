@@ -12,6 +12,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         void ApplyStrategyExecutionDetailsToDB(object preparedStrategyExecutionDetails);
 
-        
+        bool OverrideStrategyExecution(int StrategyID, DateTime From, DateTime To, out int updatedId);
+
+        void DeleteStrategyExecutionDetails(int StrategyExecutionId);
+
     }
 }
