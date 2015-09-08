@@ -1,6 +1,6 @@
-﻿SuspiciousNumberDetails2Controller.$inject = ["$scope", "SuspicionAnalysisAPIService", "SuspicionLevelEnum", "CaseStatusEnum2", "SuspicionOccuranceStatusEnum", "UtilsService", "VRNavigationService", "VRNotificationService"];
+﻿SuspiciousNumberDetails2Controller.$inject = ["$scope", "CaseManagementAPIService", "SuspicionLevelEnum", "CaseStatusEnum2", "SuspicionOccuranceStatusEnum", "UtilsService", "VRNavigationService", "VRNotificationService"];
 
-function SuspiciousNumberDetails2Controller($scope, SuspicionAnalysisAPIService, SuspicionLevelEnum, CaseStatusEnum2, SuspicionOccuranceStatusEnum, UtilsService, VRNavigationService, VRNotificationService) {
+function SuspiciousNumberDetails2Controller($scope, CaseManagementAPIService, SuspicionLevelEnum, CaseStatusEnum2, SuspicionOccuranceStatusEnum, UtilsService, VRNavigationService, VRNotificationService) {
 
     var gridAPI = undefined;
 
@@ -35,7 +35,7 @@ function SuspiciousNumberDetails2Controller($scope, SuspicionAnalysisAPIService,
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
 
-            return SuspicionAnalysisAPIService.GetFilteredAccountSuspicionDetails(dataRetrievalInput)
+            return CaseManagementAPIService.GetFilteredAccountSuspicionDetails(dataRetrievalInput)
                 .then(function (response) {
                     console.log(response);
 
@@ -56,7 +56,7 @@ function SuspiciousNumberDetails2Controller($scope, SuspicionAnalysisAPIService,
 
         $scope.updateAccountCase = function () {
 
-            return SuspicionAnalysisAPIService.UpdateAccountCase({
+            return CaseManagementAPIService.UpdateAccountCase({
                     accountNumber: $scope.accountNumber,
                     caseStatus: $scope.selectedCaseStatus.value,
                     validTill: $scope.validTill,

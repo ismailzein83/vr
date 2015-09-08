@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-SuspiciousNumberDetailsController.$inject = ['$scope', 'StrategyAPIService', 'OperatorTypeEnum', 'NormalCDRAPIService', 'SuspicionAnalysisAPIService', 'NumberProfileAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CaseManagementAPIService', 'CaseStatusEnum'];
+SuspiciousNumberDetailsController.$inject = ['$scope', 'StrategyAPIService', 'OperatorTypeEnum', 'NormalCDRAPIService', 'CaseManagementAPIService', 'NumberProfileAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CaseStatusEnum'];
 
-function SuspiciousNumberDetailsController($scope, StrategyAPIService, OperatorTypeEnum, NormalCDRAPIService, SuspicionAnalysisAPIService, NumberProfileAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CaseManagementAPIService, CaseStatusEnum) {
+function SuspiciousNumberDetailsController($scope, StrategyAPIService, OperatorTypeEnum, NormalCDRAPIService, CaseManagementAPIService, NumberProfileAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CaseStatusEnum) {
     var normalCDRGridAPI;
     var numberProfileGridAPI;
     var relatedCaseGridAPI;
@@ -70,7 +70,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, OperatorT
         });
 
 
-        SuspicionAnalysisAPIService.GetOperatorType()
+        CaseManagementAPIService.GetOperatorType()
          .then(function (response) {
              defaultOperatorType = UtilsService.getItemByVal($scope.operatorTypes, response, "value")
 
@@ -234,7 +234,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, OperatorT
         .then(function () {
 
 
-            return SuspicionAnalysisAPIService.GetFraudResult($scope.fromDate, $scope.toDate, strategiesList.slice(0, -1), suspicionLevelsList.slice(0, -1), $scope.accountNumber).then(function (response) {
+            return CaseManagementAPIService.GetFraudResult($scope.fromDate, $scope.toDate, strategiesList.slice(0, -1), suspicionLevelsList.slice(0, -1), $scope.accountNumber).then(function (response) {
 
                 $scope.suspicionLevelName = response.SuspicionLevelName;
 

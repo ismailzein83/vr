@@ -144,7 +144,6 @@
     <Compile Include="Controllers\NumberProfileController.cs" />
     <Compile Include="Controllers\NormalCDRController.cs" />
     <Compile Include="Controllers\ReportingController.cs" />
-    <Compile Include="Controllers\SuspicionAnalysisController.cs" />
     <Compile Include="Controllers\StrategyController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -193,7 +192,6 @@
     <Content Include="FraudAnalysis\Services\APIServices\NumberProfileAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\NormalCDRAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\ReportingAPIService.js" />
-    <Content Include="FraudAnalysis\Services\APIServices\SuspicionAnalysisAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyAPIService.js" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\NumberProfilingProcessInput.html" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\NumberProfilingProcessInputController.js" />

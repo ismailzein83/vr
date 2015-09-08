@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-SuspicionAnalysisController.$inject = ['$scope', 'StrategyAPIService', 'SuspicionAnalysisAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CaseStatusEnum', 'SuspicionLevelsEnum'];
+SuspicionAnalysisController.$inject = ['$scope', 'StrategyAPIService', 'CaseManagementAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CaseStatusEnum', 'SuspicionLevelsEnum'];
 
-function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalysisAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CaseStatusEnum, SuspicionLevelsEnum) {
+function SuspicionAnalysisController($scope, StrategyAPIService, CaseManagementAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CaseStatusEnum, SuspicionLevelsEnum) {
 
     var mainGridAPI;
 
@@ -56,7 +56,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            return SuspicionAnalysisAPIService.GetFilteredSuspiciousNumbers(dataRetrievalInput)
+            return CaseManagementAPIService.GetFilteredSuspiciousNumbers(dataRetrievalInput)
             .then(function (response) {
                 onResponseReady(response);
             });

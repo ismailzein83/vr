@@ -60,6 +60,7 @@
     <Compile Include="AccountSuspicionDetailQuery.cs" />
     <Compile Include="AccountSuspicionSummary.cs" />
     <Compile Include="AccountSuspicionSummaryQuery.cs" />
+    <Compile Include="AccountThreshold.cs" />
     <Compile Include="Batches\StrategyExecutionDetailBatch.cs" />
     <Compile Include="CasesSummary.cs" />
     <Compile Include="Enums.cs" />
@@ -88,7 +89,6 @@
     <Compile Include="ResultQuery\NormalCDRResultQuery.cs" />
     <Compile Include="ResultQuery\CaseProductivityResultQuery.cs" />
     <Compile Include="ResultQuery\StrategyResultQuery.cs" />
-    <Compile Include="AccountThreshold.cs" />
     <Compile Include="Predefined\Period.cs" />
     <Compile Include="Aggregates\Condition.cs" />
     <Compile Include="Aggregates\ConsecutiveAggregate.cs" />
