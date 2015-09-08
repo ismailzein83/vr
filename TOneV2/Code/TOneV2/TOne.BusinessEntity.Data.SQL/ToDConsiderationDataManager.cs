@@ -66,7 +66,7 @@ namespace TOne.BusinessEntity.Data.SQL
             toDConsiderationInfo.BeginTime = reader["BeginTime"] as string;
             toDConsiderationInfo.EndTime = reader["EndTime"] as string;
             toDConsiderationInfo.WeekDay = reader["WeekDay"] != DBNull.Value ? (DayOfWeek)Enum.Parse(typeof(DayOfWeek), reader["WeekDay"].ToString()) : 0;
-            toDConsiderationInfo.HolidayDate = GetReaderValue<DateTime>(reader, "HolidayDate");
+            toDConsiderationInfo.HolidayDate = GetReaderValue<DateTime?>(reader, "HolidayDate");
             toDConsiderationInfo.HolidayName = reader["HolidayName"] as string;
             toDConsiderationInfo.RateType = reader["RateType"] != DBNull.Value ? (ToDRateType)Enum.Parse(typeof(ToDRateType), reader["RateType"].ToString()) : ToDRateType.Normal;
             toDConsiderationInfo.BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate");
