@@ -74,15 +74,16 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout) {
 
 
         });
-        //setTimeout(function () {
-        //    $scope.$apply(function () {
 
-
-        //    });
-
-        //}, 2000);
+       
 
     };
+    $scope.listData = [];
+    $scope.headers = ["value","name"];
+    for (var i = 0 ; i < 5 ; i++) {
+        $scope.listData[$scope.listData.length] = { value: i + 1, name: "test " + (i + 1) };
+    }
+    $scope.itemsSortable = {  animation: 150 };
 
     $scope.addItem = function () {
         var item = {
@@ -92,6 +93,16 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout) {
         };
         $scope.gridData.push(item);
         gridApi.itemAdded(item);
+    }
+
+    $scope.getCellcolor = function () {
+            var letters = '0123456789ABCDEF'.split('');
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color ;
+       
     }
     $scope.toggletime = function (e) {
             var el = angular.element(e.currentTarget);
@@ -154,7 +165,9 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout) {
     $scope.choiceSelectionChanged = function () {
         //console.log($scope.testObj);
     };
-
+    $scope.testValueChanged = function () {
+        console.log("ali")
+    }
     var choicesApi;
     $scope.choicesReady = function (api) {
         choicesApi = api;
@@ -196,3 +209,24 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout) {
 appControllers.controller('TestViewController', TestViewController);
 
 
+app.directive("getStyle",function(){
+    return{
+        link: function (scope, element) {
+          
+            var dom = element[0];
+            var parent = $(element).parent();
+            var ph = $(parent).height();
+            var pw = $(parent).width();
+            var h = dom.scrollWidth;
+            var w = dom.scrollHeight;
+            element[0].style.top =  (100 * ((ph - 32) - ((ph - h) / 2) ) ) /ph  + "%";
+
+            element[0].style.left = (100 * ((pw - (w/2)) / 2)) / pw + "%";
+
+            //parent[0].style.backgroundColor = scope.getCellcolor();
+
+
+            
+        }        
+    }      
+});

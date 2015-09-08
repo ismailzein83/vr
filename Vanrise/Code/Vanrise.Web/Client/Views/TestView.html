@@ -5,8 +5,8 @@
                 <input ng-click="logevent()" value="log" type="button" />
             </div>
 
-            <vr-textbox type="email" label="Email" value="email" ></vr-textbox>{{email}}
-        </vr-columns>       
+            <vr-textbox type="email" label="Email" value="email"></vr-textbox>{{email}}
+        </vr-columns>
         <vr-columns width="normal">
             <vr-textbox type="number" label="Number" value="number"></vr-textbox>{{number}}
         </vr-columns>
@@ -26,11 +26,15 @@
     </vr-row>
     <vr-progressbar value="progress"></vr-progressbar>
     <vr-row ng-init="fieldType = 'password'">
-         
+
         <vr-columns width="normal">
             <vr-fileupload value="doc" on-ready="vrFileReady" isrequired> </vr-fileuploadlabel>
-</vr-columns>
-        
+        </vr-columns>
+
+        <vr-columns width="normal">
+            <vr-datetimepicker type="time" value="effectiveOn" label="Time On" onvaluechanged="testValueChanged()"></vr-datetimepicker>{{effectiveOn}}
+        </vr-columns>
+
     </vr-row>
     <div class="row fileupload-buttonbar">
         <div class="col-lg-4">
@@ -47,7 +51,6 @@
                 </div>
                 <span ng-show="filesAdded.length > 0" class="glyphicon glyphicon-remove hand-cursor vr-file-remove" aria-hidden="true" ng-click="filesAdded.length = 0 "></span>
             </div>-->
-
             <!--{{num}}-->
         </div>
         <!-- The global progress state -->
@@ -62,21 +65,272 @@
     <span ng-repeat="f in filesAdded"> {{f.name}}</span>
     <!--<span ng-model="filesAdded"></span>-->
     <vr-row>
-        <vr-columns width="normal" >
-            <vr-datetimepicker  label="From" value="fromDate" isrequired></vr-datetimepicker>
-        </vr-columns>
-        {{fromDate}}
+        <vr-columns width="normal">
+            <div style="max-width:50px">
+                <div class="vr-numeric">
+                    <input ng-model="spiner" class="form-control" type="text" />
+                    <div class="vr-numeric-control" style="right: 20px;">
 
-        <vr-columns width="normal">
-            <vr-datetimepicker type="date" label="From" value="test" isrequired></vr-datetimepicker>
+                        <div class="hand-cursor arrow-box">
+
+                            <div class="caret-up"></div>
+
+                        </div>
+                        <div class="hand-cursor arrow-box ">
+
+                            <div class="caret-down"></div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
         </vr-columns>
-        <vr-columns width="normal">
-            <vr-datetimepicker type="time" label="Time Test" value="timeObj" isrequired></vr-datetimepicker>{{timeObj}}
+
+
+        <vr-columns width="normal" ng-init="up='dfsgsdfg'">
+            <vr-numeric value="numeric" downsign="safe" upsign="{{up}}"></vr-numeric>
+        </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-list datasource="listData">
+                <div transclude-to="header">
+                    <vr-row>
+                        <vr-columns width="normal">Value </vr-columns>
+                        <vr-columns width="normal">Name </vr-columns>
+                    </vr-row>
+                </div>
+
+                <div transclude-to="rowdiv">
+                </div>
+            </vr-list>
+
         </vr-columns>
     </vr-row>
 
 </vr-form>
+<vr-row>
+    <vr-columns width="fullrow">
+        <div class="wrapper" >
+            <div class="content">
+                <div class="box" style="width:50%"  >
+                    <div style="display:block;width:100%;height:50% ; border-bottom:1px solid">
+                        <div style=" display: table; position: relative; height: 100%; width: 100%;"><div style="display: table-cell; vertical-align: middle;">Average</div></div>
+                    </div>
+                    <div style="display:flex;width:100%;height:50% ;">
+                        <div style="display: inline-block; height: 100%; width: 100%; ">
+                            <div style=" display: table; position: relative; height: 100%; width: 100%;">
+                                <div style="display: table-cell; vertical-align: middle;">
+                                    In
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: inline-block;height:100%; width:100%; border-left: 1px solid;">
 
+                            <div style=" display: table; position: relative; height: 100%; width: 100%;">
+                                <div style="display: table-cell; vertical-align: middle;">
+                                    Out
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: inline-block; height: 100%; width:100%; border-left: 1px solid;">
+
+                            <div style=" display: table; position: relative; height: 100%; width: 100%;">
+                                <div style="display: table-cell; vertical-align: middle;">
+                                    <label>xxx dd</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!--<div class="box">
+                    <div class="vertical-text" get-style><label>Skills</label></div>
+                </div>
+                <div class="box">
+                    <div class="vertical-text" get-style><label>Resume sdfasd sdfasd </label></div>
+                </div>
+                <div class="box">
+                    <div class="vertical-text" get-style><label>contact</label></div>
+                </div>-->
+                <div class="box" style="width:50%"  >
+                    <div style="display:block;width:100%;height:50% ; border-bottom:1px solid">
+                        <div style=" display: table; position: relative; height: 100%; width: 100%;"><div style="display: table-cell; vertical-align: middle;">Average</div></div>
+                    </div>
+                    <div style="display:block;width:100%;height:50% ;">
+                        <div style="display: inline-block; height: 100%; width: 33%; margin-left: -3px; ">
+                            <div style=" display: table; position: relative; height: 100%; width: 100%;">
+                                <div style="display: table-cell; vertical-align: middle;">
+                                    In
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: inline-block;height:100%; width: 33%; border-left: 1px solid; margin-left: -3px;">
+
+                            <div style=" display: table; position: relative; height: 100%; width: 100%;">
+                                <div style="display: table-cell; vertical-align: middle;">
+                                    Out
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: inline-block; height: 100%; width: 34%; border-left: 1px solid; margin-left: -3px; ">
+
+                            <div style=" display: table; position: relative; height: 100%; width: 100%;">
+                                <div style="display: table-cell; vertical-align: middle;">
+                                    xxx dd
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="content">
+                <div class="box"  >
+                    <div class="vertical-text" get-style><label>Skills</label></div>
+                </div>
+                <div class="box"  >
+                    <div style="display:block;width:100%;height:50% ; border-bottom:1px solid">
+                        <div style=" display: table; position: relative; height: 100%; width: 100%;"><div style="display: table-cell; vertical-align: middle;">Average</div></div>
+                    </div>
+                    <div style="display:flex;width:100%;height:50% ;">
+                        <div style="display: inline-block; height: 100%; width: 100%; ">
+                            <div style=" display: table; position: relative; height: 100%; width: 100%;">
+                                <div style="display: table-cell; vertical-align: middle;">
+                                    In
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: inline-block; height: 100%; width: 100%; border-left: 1px solid; ">
+
+                            <div style=" display: table; position: relative; height: 100%; width: 100%;">
+                                <div style="display: table-cell; vertical-align: middle;">
+                                    Out
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: inline-block; height: 100%; width: 100%; border-left: 1px solid;">
+
+                            <div style=" display: table; position: relative; height: 100%; width: 100%;">
+                                <div style="display: table-cell; vertical-align: middle;">
+                                    xxx dd
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="box"  >
+                    <div style="display:flex;width:100%;height:100% ;">
+                        <div style="display: inline-block; height: 100%; width: 50%; ">
+                            <div class="vertical-text" get-style><label> Resume sdfasd  </label></div>
+
+                        </div>
+                        
+                        <div style="display: inline-block; height: 100%; width: 50%; border-left: 1px solid;">
+
+                            <div class="vertical-text" get-style><label> Resume sdfasd  </label></div>
+
+                        </div>
+
+                    </div>
+                </div>         
+
+                <div class="box"  >
+                    <div style="display:block;width:100%;height:50% ; border-bottom:1px solid">
+                        <div style=" display: table; position: relative; height: 100%; width: 100%;"><div style="display: table-cell; vertical-align: middle;">Average</div></div>
+                    </div>
+                    <div style="display:block;width:100%;height:50% ;">
+                        <div style="display: inline-block; height: 100%; width: 33%; margin-left: -3px; ">
+                            <div style=" display: table; position: relative; height: 100%; width: 100%;">
+                                <div style="display: table-cell; vertical-align: middle;">
+                                    In
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: inline-block;height:100%; width: 33%; border-left: 1px solid; margin-left: -3px;">
+
+                            <div style=" display: table; position: relative; height: 100%; width: 100%;">
+                                <div style="display: table-cell; vertical-align: middle;">
+                                    Out
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: inline-block; height: 100%; width: 34%; border-left: 1px solid; margin-left: -3px; ">
+
+                            <div style=" display: table; position: relative; height: 100%; width: 100%;">
+                                <div style="display: table-cell; vertical-align: middle;">
+                                    xxx dd
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="vertical-text" get-style><label>contact</label></div>
+                </div>
+
+            </div>
+        </div>
+   
+    </vr-columns>
+
+</vr-row>
+
+<style>
+    .content {
+        width: 100%;
+        height: 90px;
+    }
+
+        .content div {
+            text-align: center;
+        }
+
+    .box {
+        width: 20%;
+        height: 100%;
+        float: left;
+        font-size: 12px;
+        cursor: pointer;
+        filter: alpha(opacity=80);
+        opacity: 0.8;
+        border-left: 1px solid;
+        border-top: 1px solid;
+        border-bottom: 0px solid;
+    }
+
+    .content .box:last-child {
+        border-right: 1px solid;
+    }
+
+    .content:last-child {
+        border-bottom: 1px solid;
+    }
+
+    .vertical-text {
+        -ms-transform: rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+        -webkit-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+        width: 30px;
+        -moz-transform-origin: center bottom 0px;
+        width: 30px;
+        position: relative;
+        /*left:45%;*/
+    }
+
+        .vertical-text label {
+            margin: 0px;
+            white-space: nowrap;
+            line-height: 100%;
+        }
+</style>
 <div class="col-sm-3">
     time
     <div class="input-group date datetime-controle" id="datetimepicker2">
