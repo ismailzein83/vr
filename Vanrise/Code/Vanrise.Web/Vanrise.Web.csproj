@@ -224,6 +224,8 @@
     <Content Include="Client\Javascripts\Directives\Inputs\Form\vr-form-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Label\vr-label-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\QueryBuilder\vr-querybuilder-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\QueryBuilder\vr-querybuilder-group.html" />
+    <Content Include="Client\Javascripts\Directives\Inputs\QueryBuilder\vr-querybuilder-rule.html" />
     <Content Include="Client\Javascripts\Directives\Inputs\QueryBuilder\vr-querybuilder.html" />
     <Content Include="Client\Javascripts\Directives\Inputs\QueryBuilder\vr-querybuilder-group-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\QueryBuilder\vr-querybuilder-rule-directive.js" />
