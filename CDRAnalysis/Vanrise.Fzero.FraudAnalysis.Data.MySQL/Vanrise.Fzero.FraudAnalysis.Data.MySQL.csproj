@@ -58,7 +58,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountCaseDataManager.cs" />
     <Compile Include="DashboardManager.cs" />
     <Compile Include="NumberProfileDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -68,7 +67,6 @@
     <Compile Include="StrategyExecutionDataManager.cs" />
     <Compile Include="StrategyDataManager.cs" />
     <Compile Include="CaseManagementDataManager.cs" />
-    <Compile Include="SuspiciousNumberDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Entities\Vanrise.Fzero.CDRImport.Entities.csproj">

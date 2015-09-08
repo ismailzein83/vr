@@ -54,7 +54,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FraudDataManagerFactory.cs" />
-    <Compile Include="IAccountCaseDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="INumberProfileDataManager.cs" />
     <Compile Include="IDashboardManager.cs" />
@@ -63,7 +62,6 @@
     <Compile Include="IReportingDataManager.cs" />
     <Compile Include="IStrategyExecutionDataManager.cs" />
     <Compile Include="IStrategyDataManager.cs" />
-    <Compile Include="ISuspiciousNumberDataManager.cs" />
     <Compile Include="ICaseManagementDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
