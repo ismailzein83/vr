@@ -36,7 +36,7 @@ namespace TOne.Web.Online.Controllers
         }
 
         [HttpGet]
-        public Dictionary<short, FlaggedService> GetServiceFlags()
+        public List<FlaggedService> GetServiceFlags()
         {
             FlaggedServiceManager manager = new FlaggedServiceManager();
             return manager.GetServiceFlags();

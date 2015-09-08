@@ -61,7 +61,7 @@ namespace TOne.Analytics.Business
             int serviceID = 0;
             foreach (string serviceName in nameServices)
             {
-                serviceID += flaggedServiceManager.GetServiceFlags().Values.ToList().Where(s => s.Symbol.Equals(serviceName)).FirstOrDefault().FlaggedServiceID;
+                serviceID += flaggedServiceManager.GetServiceFlags().Where(s => s.Symbol.Equals(serviceName)).FirstOrDefault().FlaggedServiceID;
             }
             bool updateActionSucc = dataManager.UpdateRateServiceFlag(rateID, serviceID);
 

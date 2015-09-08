@@ -44,7 +44,7 @@ namespace TOne.BusinessEntity.Business
                 return rslt;
             }
 
-            foreach (FlaggedService service in flaggedServices.Values)
+            foreach (FlaggedService service in flaggedServices)
                 if ((service.FlaggedServiceID & serviceFlagId) == service.FlaggedServiceID)
                 {
                     rslt.Add(service);
@@ -56,7 +56,7 @@ namespace TOne.BusinessEntity.Business
 
         #region Public Methods
 
-        public Dictionary<short, FlaggedService> GetServiceFlags()
+        public List<FlaggedService> GetServiceFlags()
         {
             TOneCacheManager cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<TOneCacheManager>();
             return cacheManager.GetOrCreateObject("GetServiceFlags",
@@ -64,7 +64,7 @@ namespace TOne.BusinessEntity.Business
                 () =>
                 {
                     return _dataManager.GetServiceFlags();
-                });
+                }).Values.ToList();
         }
 
         public void AssignFlaggedServiceInfo(IFlaggedServiceEntity entity)
