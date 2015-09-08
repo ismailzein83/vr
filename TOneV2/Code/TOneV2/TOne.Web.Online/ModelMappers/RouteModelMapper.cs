@@ -27,6 +27,9 @@ namespace TOne.Web.Online.ModelMappers
         {
             return new RouteOptionModel
             {
+                FlaggedServiceID = routeOptionInfo.SupplierServicesFlag.FlaggedServiceID,
+                Symbol = routeOptionInfo.SupplierServicesFlag.Symbol,
+                ServiceColor = routeOptionInfo.SupplierServicesFlag.ServiceColor,
                 SupplierInfoString = routeOptionInfo.SupplierInfoString
             };
         }

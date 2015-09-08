@@ -11,9 +11,9 @@ namespace TOne.Web.Online.Models
         //public int RouteID { get; set; }
         //public string SupplierID { get; set; }
         //public string SupplierName { get; set; }
-        //public short FlaggedServiceID { get; set; }
-        //public string Symbol { get; set; }
-        //public string ServiceColor { get; set; }
+        public short FlaggedServiceID { get; set; }
+        public string Symbol { get; set; }
+        public string ServiceColor { get; set; }
         //public int SupplierZoneID { get; set; }
         //public string SupplierZoneName { get; set; }
         //public float SupplierActiveRate { get; set; }
