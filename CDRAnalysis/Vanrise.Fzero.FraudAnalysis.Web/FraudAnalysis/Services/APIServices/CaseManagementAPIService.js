@@ -22,23 +22,23 @@
     }
 
     function GetFilteredSuspiciousNumbers(input) {
-        return BaseAPIService.post("/api/SuspicionAnalysis/GetFilteredSuspiciousNumbers", input);
+        return BaseAPIService.post("/api/CaseManagement/GetFilteredSuspiciousNumbers", input);
     }
 
     function GetFilteredAccountSuspicionSummaries(input) {
-        return BaseAPIService.post("/api/SuspicionAnalysis/GetFilteredAccountSuspicionSummaries", input);
+        return BaseAPIService.post("/api/CaseManagement/GetFilteredAccountSuspicionSummaries", input);
     }
 
     function GetFilteredAccountSuspicionDetails(input) {
-        return BaseAPIService.post("/api/SuspicionAnalysis/GetFilteredAccountSuspicionDetails", input);
+        return BaseAPIService.post("/api/CaseManagement/GetFilteredAccountSuspicionDetails", input);
     }
 
     function UpdateAccountCase(input) {
-        return BaseAPIService.post("/api/SuspicionAnalysis/UpdateAccountCase", input);
+        return BaseAPIService.post("/api/CaseManagement/UpdateAccountCase", input);
     }
 
     function GetFraudResult(fromDate, toDate, strategiesList, suspicionLevelsList, accountNumber) {
-        return BaseAPIService.get("/api/SuspicionAnalysis/GetFraudResult", {
+        return BaseAPIService.get("/api/CaseManagement/GetFraudResult", {
             fromDate: fromDate,
             toDate: toDate,
             strategiesList: strategiesList,
@@ -48,7 +48,7 @@
     }
 
     function GetOperatorType() {
-        return BaseAPIService.get("/api/SuspicionAnalysis/GetOperatorType");
+        return BaseAPIService.get("/api/CaseManagement/GetOperatorType");
     }
 
     
