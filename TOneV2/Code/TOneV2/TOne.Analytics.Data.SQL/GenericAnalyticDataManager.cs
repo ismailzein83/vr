@@ -65,7 +65,7 @@ namespace TOne.Analytics.Data.SQL
                                                                 #CTEPART#
                                                                 AllResult AS( 
 			                                                    SELECT #SELECTPART#
-			                                                    FROM TrafficStats ts WITH(NOLOCK ,INDEX(IX_TrafficStats_DateTimeFirst))
+			                                                    FROM #TABLENAME# ts WITH(NOLOCK ,INDEX(IX_#TABLENAME#_DateTimeFirst))
                                                                 #JOINPART#
 			                                                    WHERE
 			                                                    FirstCDRAttempt BETWEEN @FromDate AND @ToDate
@@ -79,6 +79,7 @@ namespace TOne.Analytics.Data.SQL
             StringBuilder filterPartBuilder = new StringBuilder();
             StringBuilder groupByPartBuilder = new StringBuilder();
             StringBuilder ctePartBuilder = new StringBuilder();
+            string tableNamePartBuilder = "TrafficStats";
 
             //adding group fields related parts to the query
             foreach (AnalyticDimension groupField in input.Query.DimensionFields)
@@ -105,6 +106,8 @@ namespace TOne.Analytics.Data.SQL
                 
                 if (!String.IsNullOrEmpty(groupFieldConfig.NameColumn))
                     AddColumnToSelectPart(selectPartBuilder, String.Format("{0} AS DimensionName_{1}", groupFieldConfig.NameColumn, groupField));
+                if (groupField == AnalyticDimension.CodeSales || groupField == AnalyticDimension.CodeBuy)
+                    tableNamePartBuilder = "TrafficStatsByCode";
             }
 
             //adding Measures related parts to the query
@@ -122,18 +125,24 @@ namespace TOne.Analytics.Data.SQL
 
                 if (!String.IsNullOrEmpty(filterFieldConfig.IdColumn))
                     AddFilterToFilterPart(filterPartBuilder, dimensionFilter.FilterValues, filterFieldConfig.IdColumn);
-                    
 
-                //for (int i = 0; i <= dimensionFilter.FilterValues.Count(); i++ )
-                //    if (!String.IsNullOrEmpty(filterFieldConfig.IdColumn))
-                //    {
-                //        AddFilterToFilterPart(filterPartBuilder, String.Format(" AND {0} = {1}", filterFieldConfig.IdColumn, dimensionFilter.FilterValues[i]));
+                if (dimensionsFilterConfig.ContainsKey(dimensionFilter.Dimension))
+                {
+                    AnalyticDimensionConfig groupFieldConfig = dimensionsFilterConfig[dimensionFilter.Dimension];
 
-                //        AddFilter(filterPartBuilder, dimensionFilter.FilterValues, filterFieldConfig.IdColumn);
+                    if (groupFieldConfig.CTEStatement != null)
+                    {    
+                        AddStatementToCTEPart(ctePartBuilder, groupFieldConfig.CTEStatement);
 
-                //    }
-                        
+                        if (groupFieldConfig.JoinStatements != null)
+                            foreach (var statement in groupFieldConfig.JoinStatements)
+                            {
+                                AddStatementToJoinPart(joinPartBuilder, statement);
+                            }
+                    }
+                }
             }
+            queryBuilder.Replace("#TABLENAME#", tableNamePartBuilder);
             queryBuilder.Replace("#TEMPTABLE#", tempTableName);
             queryBuilder.Replace("#SELECTPART#", selectPartBuilder.ToString());
             queryBuilder.Replace("#JOINPART#", joinPartBuilder.ToString());
@@ -181,7 +190,7 @@ namespace TOne.Analytics.Data.SQL
 
         void AddStatementToJoinPart(StringBuilder joinPartBuilder, string statement)
         {
-            joinPartBuilder.Append(statement);
+            joinPartBuilder.Append(" " + statement + " ");
         }
 
         AnalyticRecord AnalyticRecordMapper(IDataReader reader, Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsConfig, Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig> measureFieldsConfig)

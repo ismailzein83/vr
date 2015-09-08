@@ -2,9 +2,9 @@
 
     "use strict";
 
-    GenericAnalyticGridController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticDimensionEnum'];
-    function GenericAnalyticGridController($scope, GenericAnalyticAPIService, GenericAnalyticDimensionEnum) {
-        var filter = [];
+    GenericAnalyticGridController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticDimensionEnum', 'AnalyticsService'];
+    function GenericAnalyticGridController($scope, GenericAnalyticAPIService, GenericAnalyticDimensionEnum, analyticsService) {
+        var filter = {};
         var measureFields = [];
         var selectedGroupKeys = [] , parentGroupKeys = [];
         
@@ -12,16 +12,16 @@
 
         function defineScope() {
 
-            measureFields = $scope.viewScope.measureFields;
+            measureFields = analyticsService.getGenericAnalyticMeasureValues();
             $scope.measures = $scope.viewScope.measures;
 
             $scope.selectedGroupKey;
-            $scope.groupKeys = [];
+            $scope.dimensions = [];
 
             $scope.groupKeySelectionChanged = function () {
 
                 if ($scope.selectedGroupKeyIndex != undefined) {
-                    $scope.selectedGroupKey = $scope.groupKeys[$scope.selectedGroupKeyIndex];
+                    $scope.selectedGroupKey = $scope.dimensions[$scope.selectedGroupKeyIndex];
 
                     
                     if (!$scope.selectedGroupKey.isDataLoaded && $scope.selectedGroupKey.gridAPI != undefined) {
@@ -32,8 +32,8 @@
             };
 
 
-            $scope.checkExpandablerow = function (groupKey) {
-             if ($scope.groupKeys.length > 1)
+            $scope.checkExpandablerow = function () {
+             if ($scope.dimensions.length > 1)
                     return true;
                 else 
                     return false;
@@ -41,10 +41,15 @@
         }
 
         function retrieveData(groupKey, withSummary) {
+            filter = {};
             buildFilter($scope);
 
+            var filterResult = [];
+
+            for (var prop in filter)
+                filterResult.push({ Dimension: prop, FilterValues: filter[prop] });
             var query = {
-                Filters: filter,
+                Filters: filterResult,
                 DimensionFields: [$scope.selectedGroupKey.value],
                 MeasureFields: measureFields,
                 FromTime: $scope.viewScope.fromDate,
@@ -71,22 +76,20 @@
                 for (var item in GenericAnalyticDimensionEnum) {
                     if (GenericAnalyticDimensionEnum.hasOwnProperty(item)) {
                         if (groupKey.value == GenericAnalyticDimensionEnum[item].value) {
-                            var obj = { Dimension: groupKey.value };
-                            obj.FilterValues = [scope.dataItem.DimensionValues[i].Id];
-                            filter.push(obj);
+                            if (filter[groupKey.value] === undefined) filter[groupKey.value] = [];
+                            filter[groupKey.value].push(scope.dataItem.DimensionValues[i].Id);
                         }
                     }
                 }
             }
 
             buildFilter(scope.gridParentScope);
-
         }
 
         function load() {
             defineScope();
             loadGroupKeys();
-            $scope.selectedGroupKey = $scope.groupKeys[0];
+            $scope.selectedGroupKey = $scope.dimensions[0];
         }
 
         function loadGroupKeys() {
@@ -102,27 +105,27 @@
             }
 
             LoadParentGroupKeys($scope.gridParentScope);
-            eliminateGroupKeysNotInParent(parentGroupKeys, $scope.groupKeys);
+            eliminateGroupKeysNotInParent(parentGroupKeys, $scope.dimensions);
         }
 
-        function addGroupKeyIfNotExistsInParent(groupKey) {
+        function addGroupKeyIfNotExistsInParent(dimension) {
             var parentGroupKeys = $scope.viewScope.selectedGroupKeys;
             for (var i = 0; i < parentGroupKeys.length; i++) {
-                if (parentGroupKeys[i].value == groupKey.value)
+                if (parentGroupKeys[i].value == dimension.value)
                     return;
             }
-                groupKey.onGridReady = function (api) {
-                    groupKey.gridAPI = api;
-                    if ($scope.selectedGroupKey == groupKey)
-                        retrieveData(groupKey, false);
+            dimension.onGridReady = function (api) {
+                dimension.gridAPI = api;
+                if ($scope.selectedGroupKey == dimension)
+                        retrieveData(dimension, false);
                 };
-                groupKey.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                dimension.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return GenericAnalyticAPIService.GetFiltered(dataRetrievalInput).then(function (response) {
                         $scope.selectedGroupKey.isDataLoaded = true;
                         onResponseReady(response);
                     })
                 };
-                $scope.groupKeys.push(groupKey);         
+                $scope.dimensions.push(dimension);         
         }
 
         function LoadParentGroupKeys(scope) {

@@ -80,11 +80,81 @@ namespace TOne.Analytics.Data.SQL
             s_AllDimensionsConfig.Add(AnalyticDimension.CodeGroup,
                 new AnalyticDimensionConfig
                 {
-                    IdColumn = "z.CodeGroup",
+                    IdColumn = "ourz.CodeGroup",
                     NameColumn = "c.Name",
                     JoinStatements = new List<string>() { @" LEFT JOIN  OurZones ourz ON ts.OurZoneID = ourz.ZoneID LEFT JOIN CodeGroup c ON ourz.CodeGroup=c.Code" },
-                    GroupByStatements = new List<string>() { " z.CodeGroup ,  c.Name" },
+                    GroupByStatements = new List<string>() { " ourz.CodeGroup,  c.Name" },
                     CTEStatement = " OurZones AS (SELECT ZoneID, Name, CodeGroup FROM Zone z WITH (NOLOCK) WHERE SupplierID = 'SYS') "
+                });
+
+            s_AllDimensionsConfig.Add(AnalyticDimension.Switch,
+                new AnalyticDimensionConfig
+                {
+                    IdColumn = "ts.SwitchID",
+                    NameColumn = "sw.Name",
+                    JoinStatements = new List<string>() { @"JOIN Switch sw WITH (NOLOCK) ON sw.SwitchID = ts.SwitchID" },
+                    GroupByStatements = new List<string>() { "ts.SwitchID, sw.Name" },
+                    CTEStatement = null
+                });
+
+            s_AllDimensionsConfig.Add(AnalyticDimension.GateWayIn,
+                new AnalyticDimensionConfig
+                {
+                    IdColumn = "ISNULL(cscIn.GateWayID,0)",
+                    NameColumn = "ISNULL(cscIn.GateWayName,'N/A')",
+                    JoinStatements = new List<string>() { @"Left JOIN SwitchConnectivity cscIn  ON (','+cscIn.Details+',' LIKE '%,'+ts.Port_IN +',%' ) AND(ts.SwitchID = cscIn.SwitchID) AND ts.CustomerID =cscIn.CarrierAccount " },
+                    GroupByStatements = new List<string>() { "cscIn.GateWayID, cscIn.GateWayName" },
+                    CTEStatement = "SwitchConnectivity AS ( SELECT csc.CarrierAccountID AS  CarrierAccount ,csc.SwitchID AS SwitchID ,csc.Details AS Details ,csc.BeginEffectiveDate AS BeginEffectiveDate ,csc.EndEffectiveDate AS EndEffectiveDate ,csc.[Name] AS GateWayName ,csc.[ID] AS GateWayID FROM   CarrierSwitchConnectivity csc WITH(NOLOCK)  WHERE (csc.EndEffectiveDate IS null))"
+                });
+
+            s_AllDimensionsConfig.Add(AnalyticDimension.GateWayOut,
+                new AnalyticDimensionConfig
+                {
+                    IdColumn = "ISNULL(cscOut.GateWayID,0)",
+                    NameColumn = "ISNULL(cscOut.GateWayName,'N/A')",
+                    JoinStatements = new List<string>() { @"Left JOIN SwitchConnectivityOut cscOut ON  (','+cscOut.Details+',' LIKE '%,'+ts.Port_OUT +',%') AND (ts.SwitchID = cscOut.SwitchID)  AND ts.SupplierID  =cscOut.CarrierAccount" },
+                    GroupByStatements = new List<string>() { "cscOut.GateWayID, cscOut.GateWayName" },
+                    CTEStatement = "SwitchConnectivityOut AS ( SELECT csc.CarrierAccountID AS  CarrierAccount ,csc.SwitchID AS SwitchID ,csc.Details AS Details ,csc.BeginEffectiveDate AS BeginEffectiveDate ,csc.EndEffectiveDate AS EndEffectiveDate ,csc.[Name] AS GateWayName ,csc.[ID] AS GateWayID FROM   CarrierSwitchConnectivity csc WITH(NOLOCK)  WHERE (csc.EndEffectiveDate IS null))"
+                });
+
+            s_AllDimensionsConfig.Add(AnalyticDimension.PortIn,
+                new AnalyticDimensionConfig
+                {
+                    IdColumn = "ts.Port_IN",
+                    NameColumn = "ts.Port_IN",
+                    JoinStatements = null,
+                    GroupByStatements = new List<string>() { "ts.Port_IN" },
+                    CTEStatement = null
+                });
+
+            s_AllDimensionsConfig.Add(AnalyticDimension.PortOut,
+                new AnalyticDimensionConfig
+                {
+                    IdColumn = "ts.Port_OUT",
+                    NameColumn = "ts.Port_OUT",
+                    JoinStatements = null,
+                    GroupByStatements = new List<string>() { "ts.Port_OUT" },
+                    CTEStatement = null
+                });
+
+            s_AllDimensionsConfig.Add(AnalyticDimension.CodeSales,
+                new AnalyticDimensionConfig
+                {
+                    IdColumn = "ts.OurCode",
+                    NameColumn = "ts.OurCode",
+                    JoinStatements = null,
+                    GroupByStatements = new List<string>() { "ts.OurCode" },
+                    CTEStatement = null
+                });
+
+            s_AllDimensionsConfig.Add(AnalyticDimension.CodeBuy,
+                new AnalyticDimensionConfig
+                {
+                    IdColumn = "ts.SupplierCode",
+                    NameColumn = "ts.SupplierCode",
+                    JoinStatements = null,
+                    GroupByStatements = new List<string>() { "ts.SupplierCode" },
+                    CTEStatement = null
                 });
         }
 

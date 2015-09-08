@@ -1,6 +1,11 @@
 ﻿app.constant('GenericAnalyticDimensionEnum', {
-    CustomerId: { name: "Customer", value: 0, description: "Customer" },
-    SupplierId: { name: "Supplier", value: 1, description: "Supplier"},
-    ZoneId: { name: "Zone", value: 2, description: "Zone" },
-    CodeGroupId: { name: "CodeGroup", value: 3, description: "CodeGroup" }
+    Customer: { name: "Customer", value: 0, description: "Customer" },
+    Supplier: { name: "Supplier", value: 1, description: "Supplier" },
+    Zone: { name: "Zone", value: 2, description: "Zone" },
+    CodeGroup: { name: "CodeGroup", value: 3, description: "CodeGroup" },
+    Switch: { name: "Switch", value: 4, description: "Switch" },
+    GateWayIn: { name: "GateWayIn", value: 5, description: "GateWayIn" },
+    GateWayOut: { name: "GateWayOut", value: 6, description: "GateWayOut" },
+    PortIn: { name: "PortIn", value: 7, description: "PortIn" },
+    PortOut: { name: "PortOut", value: 8, description: "PortOut" }
 });

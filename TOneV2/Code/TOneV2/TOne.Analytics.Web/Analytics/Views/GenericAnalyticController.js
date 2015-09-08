@@ -2,8 +2,8 @@
 
     "use strict";
 
-    GenericAnalyticController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticMeasureEnum',  'AnalyticsService'];
-    function GenericAnalyticController($scope, GenericAnalyticAPIService, GenericAnalyticMeasureEnum,  analyticsService) {
+    GenericAnalyticController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticMeasureEnum', 'AnalyticsService', 'BusinessEntityAPIService_temp'];
+    function GenericAnalyticController($scope, GenericAnalyticAPIService, GenericAnalyticMeasureEnum, analyticsService, BusinessEntityAPIService) {
 
         var gridApi, measureFields;
         load();
@@ -22,6 +22,14 @@
             $scope.currentSearchCriteria = {
                 groupKeys: []
             };
+
+            $scope.switches = [];
+            $scope.selectedSwitches = [];
+            $scope.codeGroups = [];
+            $scope.selectedCodeGroups = [];
+
+            loadSwitches();
+            loadCodeGroups();
             $scope.gridReady = function (api) {
                 gridApi = api;
             };
@@ -41,6 +49,10 @@
                     onResponseReady(response);
                 });
             };
+
+            $scope.checkExpandablerow = function (groupKeys) {
+                return groupKeys.length !== $scope.groupKeys.length;
+            };
         }
 
         function retrieveData() {
@@ -48,9 +60,12 @@
                 return;
             $scope.datasource = [];
 
-            var groupKeys = [];
-            var filters = [];
 
+            //var filters = [[3, ['93', '376', '684', '1684', '213', '355']]];
+            var filters = [];
+    
+
+            var groupKeys = [];
             $scope.selectedGroupKeys.forEach(function (group) {
                 groupKeys.push(group.value);
             });
@@ -63,12 +78,31 @@
                 FromTime: $scope.fromDate,
                 ToTime: $scope.toDate
             };
+            console.log(query);
             return gridApi.retrieveData(query);
         }
 
         function load() {
             defineScope();
         }
+
+        function loadSwitches() {
+            return BusinessEntityAPIService.GetSwitches().then(function (response) {
+                angular.forEach(response, function (itm) {
+                    $scope.switches.push(itm);
+                });
+            });
+        }
+
+        function loadCodeGroups() {
+            return BusinessEntityAPIService.GetCodeGroups().then(function (response) {
+                angular.forEach(response, function (itm) {
+                    $scope.codeGroups.push(itm);
+                });
+            });
+        }
+
+
     }
     appControllers.controller('Generic_GenericAnalyticController', GenericAnalyticController);
 

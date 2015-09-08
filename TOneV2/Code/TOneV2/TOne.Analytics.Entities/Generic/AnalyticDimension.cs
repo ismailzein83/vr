@@ -16,9 +16,8 @@ namespace TOne.Analytics.Entities
         GateWayIn = 5,
         GateWayOut = 6,
         PortIn = 7,
-        PortOut = 8
-        //    ,
-        //CodeSales = 9,
-        //CodeBuy = 10
+        PortOut = 8,
+        CodeSales = 9,
+        CodeBuy = 10
     }
 }
