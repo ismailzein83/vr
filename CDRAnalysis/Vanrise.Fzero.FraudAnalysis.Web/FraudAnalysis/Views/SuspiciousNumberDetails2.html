@@ -77,8 +77,14 @@
                                      dataretrievalfunction="dataRetrievalFunction_NumberProfiles"
                                      pagingtype="'PagingOnScroll'">
 
-                            <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" type="'Text'" widthfactor="10"></vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Aggregate Values'" field="'AggregateValues'" type="'Text'" widthfactor="90"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" type="'Text'"></vr-datagridcolumn>
+
+                            <vr-datagridcolumn ng-repeat="agg in aggregateDefinitions"
+                                               columnindex="$index + 1"
+                                               headertext="agg.name"
+                                               field="'AggregateValues[&quot;' + agg.name + '&quot;]'"
+                                               type="'Number'">
+                            </vr-datagridcolumn>
                         </vr-datagrid>
                     </vr-columns>
                 </vr-row>

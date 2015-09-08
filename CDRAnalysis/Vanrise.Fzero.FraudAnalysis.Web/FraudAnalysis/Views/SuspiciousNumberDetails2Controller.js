@@ -1,6 +1,6 @@
-﻿SuspiciousNumberDetails2Controller.$inject = ["$scope", "CaseManagementAPIService", "NormalCDRAPIService", "NumberProfileAPIService", "SuspicionLevelEnum", "CaseStatusEnum2", "SuspicionOccuranceStatusEnum", "CallTypeEnum", "UtilsService", "VRNavigationService", "VRNotificationService"];
+﻿SuspiciousNumberDetails2Controller.$inject = ["$scope", "CaseManagementAPIService", "NormalCDRAPIService", "NumberProfileAPIService", "StrategyAPIService", "SuspicionLevelEnum", "CaseStatusEnum2", "SuspicionOccuranceStatusEnum", "CallTypeEnum", "UtilsService", "VRNavigationService", "VRNotificationService"];
 
-function SuspiciousNumberDetails2Controller($scope, CaseManagementAPIService, NormalCDRAPIService, NumberProfileAPIService, SuspicionLevelEnum, CaseStatusEnum2, SuspicionOccuranceStatusEnum, CallTypeEnum, UtilsService, VRNavigationService, VRNotificationService) {
+function SuspiciousNumberDetails2Controller($scope, CaseManagementAPIService, NormalCDRAPIService, NumberProfileAPIService, StrategyAPIService,  SuspicionLevelEnum, CaseStatusEnum2, SuspicionOccuranceStatusEnum, CallTypeEnum, UtilsService, VRNavigationService, VRNotificationService) {
 
     var gridAPI_Occurances = undefined;
     var occurancesLoaded = false;
@@ -35,6 +35,7 @@ function SuspiciousNumberDetails2Controller($scope, CaseManagementAPIService, No
         $scope.occurances = [];
         $scope.normalCDRs = [];
         $scope.numberProfiles = [];
+        $scope.aggregateDefinitions = [];
 
         $scope.caseStatuses = [];
         $scope.selectedCaseStatus = undefined;
@@ -173,6 +174,16 @@ function SuspiciousNumberDetails2Controller($scope, CaseManagementAPIService, No
 
     function load() {
         $scope.caseStatuses = UtilsService.getArrayEnum(CaseStatusEnum2);
+
+        return StrategyAPIService.GetAggregates()
+            .then(function (response) {
+                angular.forEach(response, function (itm) {
+                    $scope.aggregateDefinitions.push({ name: itm.Name });
+                });
+            })
+            .catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
     }
 
     function retrieveData() {
