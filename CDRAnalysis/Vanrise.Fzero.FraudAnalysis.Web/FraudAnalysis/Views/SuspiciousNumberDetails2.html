@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent draggable ng-controller="FraudAnalysis_SuspiciousNumberDetails2Controller" width="'75%'">
+﻿<div vr-modalcontent draggable ng-controller="FraudAnalysis_SuspiciousNumberDetails2Controller" width="'95%'">
     <vr-modalbody vr-loader="isGettingData">
 
         <vr-form name="formSuspiciousNumberDetails">
@@ -17,16 +17,18 @@
                 </vr-columns>
             </vr-row>
 
-            <vr-choices selectedindex="0">
-                <vr-choice isselected="historySelected">Occurances</vr-choice>
+            <vr-choices selectedindex="selectedTabIndex" onselectionchanged="onSelectedTabChanged()">
+                <vr-choice isselected="occurancesSelected">Occurances</vr-choice>
+                <vr-choice isselected="normalCDRsSelected">Normal CDRs</vr-choice>
+                <vr-choice isselected="numberProfilesSelected">Number Profiles</vr-choice>
             </vr-choices>
 
-            <div ng-show="historySelected">
+            <div ng-show="occurancesSelected">
                 <vr-row>
                     <vr-columns width="fullrow" simplecol>
-                        <vr-datagrid datasource="logs"
-                                     on-ready="onGridReady"
-                                     dataretrievalfunction="dataRetrievalFunction"
+                        <vr-datagrid datasource="occurances"
+                                     on-ready="onGridReady_Occurances"
+                                     dataretrievalfunction="dataRetrievalFunction_Occurances"
                                      pagingtype="'PagingOnScroll'"
                                      idfield="DetialID">
 
@@ -34,7 +36,49 @@
                             <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelDescription'" type="'Text'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" type="'Text'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Status'" field="'AccountStatusDescription'" type="'Text'"></vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Day'" field="'DateDay'" type="'Date'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'From Date'" field="'FromDate'" type="'Date'"></vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-columns>
+                </vr-row>
+            </div>
+
+            <div ng-show="normalCDRsSelected">
+                <vr-row>
+                    <vr-columns width="fullrow" simplecol>
+                        <vr-datagrid datasource="normalCDRs"
+                                     on-ready="onGridReady_NormalCDRs"
+                                     dataretrievalfunction="dataRetrievalFunction_NormalCDRs"
+                                     pagingtype="'PagingOnScroll'"
+                                     idfield="Id">
+
+                            <vr-datagridcolumn headertext="'IMSI'" field="'IMSI'" type="'Number'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Day'" field="'ConnectDateTime'" type="'Date'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Destination'" field="'Destination'" type="'Number'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Duration (Secs)'" field="'DurationInSeconds'" type="'Number'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Call Class'" field="'Call_Class'" type="'Text'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Call Type'" field="'CallTypeDescription'" type="'Text'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'SubType'" field="'SubType'" type="'Text'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'IMEI'" field="'IMEI'" type="'Number'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Cell ID'" field="'CellId'" type="'Number'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Up Volume'" field="'UpVolume'" type="'Number'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Down Volume'" field="'DownVolume'" type="'Number'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Service Type'" field="'ServiceType'" type="'Number'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Service VAS Name'" field="'ServiceVASName'" type="'Text'"></vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-columns>
+                </vr-row>
+            </div>
+
+            <div ng-show="numberProfilesSelected">
+                <vr-row>
+                    <vr-columns width="fullrow" simplecol>
+                        <vr-datagrid datasource="numberProfiles"
+                                     on-ready="onGridReady_NumberProfiles"
+                                     dataretrievalfunction="dataRetrievalFunction_NumberProfiles"
+                                     pagingtype="'PagingOnScroll'">
+
+                            <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" type="'Text'" widthfactor="10"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Aggregate Values'" field="'AggregateValues'" type="'Text'" widthfactor="90"></vr-datagridcolumn>
                         </vr-datagrid>
                     </vr-columns>
                 </vr-row>
@@ -55,8 +99,7 @@
                     <vr-datetimepicker label="Valid Till"
                                        value="validTill"
                                        type="dateTime"
-                                       ng-if="whiteListSelected"
-                                       isrequired>
+                                       ng-show="whiteListSelected">
                     </vr-datetimepicker>
                 </vr-columns>
             </vr-section>

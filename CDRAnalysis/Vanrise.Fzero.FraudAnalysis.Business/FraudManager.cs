@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
@@ -114,7 +115,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return false;
         }
 
-
         public bool IsNumberSuspicious(NumberProfile profile, out SuspiciousNumber suspiciousNumber, int StrategyId)
         {
 
@@ -189,6 +189,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredAccountSuspicionDetails(input));
         }
 
+       
         public Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> UpdateAccountCase(AccountCaseUpdate input)
         {
             Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary>();

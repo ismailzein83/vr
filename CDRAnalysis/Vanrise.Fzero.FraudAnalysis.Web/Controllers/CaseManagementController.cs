@@ -12,6 +12,36 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 {
     public class CaseManagementController : BaseAPIController
     {
+        #region Old Methods
+
+        [HttpPost]
+        public object GetFilteredSuspiciousNumbers(Vanrise.Entities.DataRetrievalInput<FraudResultQuery> input)
+        {
+            FraudManager manager = new FraudManager();
+            return GetWebResponse(input, manager.GetFilteredSuspiciousNumbers(input));
+        }
+
+        [HttpGet]
+        public FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, string strategiesList, string suspicionLevelsList, string accountNumber)
+        {
+            FraudManager manager = new FraudManager();
+
+            List<int> strategiesIntList = new List<int>();
+            if (strategiesList != null)
+                strategiesIntList = strategiesList.Split(',').Select(h => int.Parse(h)).ToList();
+
+            List<int> suspicionLevelsIntList = new List<int>();
+            if (suspicionLevelsList != null)
+                suspicionLevelsIntList = suspicionLevelsList.Split(',').Select(h => int.Parse(h)).ToList();
+
+            return manager.GetFraudResult(fromDate, toDate, strategiesIntList, suspicionLevelsIntList, accountNumber);
+        }
+
+        [HttpGet]
+        public CommonEnums.OperatorType GetOperatorType()
+        {
+            return ConfigParameterManager.GetOperatorType();
+        }
 
         [HttpPost]
         public Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<AccountCase> SaveAccountCase(AccountCase accountCaseObject)
@@ -21,25 +51,10 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
             return manager.SaveAccountCase(accountCaseObject);
         }
 
+        #endregion
+        
 
-        //[HttpPost]
-        //public object GetFilteredAccountCases(Vanrise.Entities.DataRetrievalInput<AccountCaseResultQuery> input)
-        //{
-
-        //    CaseManagmentManager manager = new CaseManagmentManager();
-
-        //    UserManager userManager = new UserManager();
-
-        //    return GetWebResponse(input, manager.GetFilteredAccountCases(input, userManager.GetUsers()));
-        //}
-
-
-        [HttpPost]
-        public object GetFilteredSuspiciousNumbers(Vanrise.Entities.DataRetrievalInput<FraudResultQuery> input)
-        {
-            FraudManager manager = new FraudManager();
-            return GetWebResponse(input, manager.GetFilteredSuspiciousNumbers(input));
-        }
+        #region New Methods
 
         [HttpPost]
         public object GetFilteredAccountSuspicionSummaries(Vanrise.Entities.DataRetrievalInput<AccountSuspicionSummaryQuery> input)
@@ -55,6 +70,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredAccountSuspicionDetails(input));
         }
 
+        
         [HttpPost]
         public Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> UpdateAccountCase(AccountCaseUpdate input)
         {
@@ -62,33 +78,24 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
             return manager.UpdateAccountCase(input);
         }
 
-        [HttpGet]
-        public FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, string strategiesList, string suspicionLevelsList, string accountNumber)
+        #endregion
+
+
+        #region Junk Code
+
+        /*
+        [HttpPost]
+        public object GetFilteredAccountCases(Vanrise.Entities.DataRetrievalInput<AccountCaseResultQuery> input)
         {
-            FraudManager manager = new FraudManager();
 
-            List<int> strategiesIntList = new List<int>();
-            if (strategiesList != null)
-                strategiesIntList = strategiesList.Split(',').Select(h => int.Parse(h)).ToList();
+            CaseManagmentManager manager = new CaseManagmentManager();
 
+            UserManager userManager = new UserManager();
 
-
-            List<int> suspicionLevelsIntList = new List<int>();
-            if (suspicionLevelsList != null)
-                suspicionLevelsIntList = suspicionLevelsList.Split(',').Select(h => int.Parse(h)).ToList();
-
-
-
-            return manager.GetFraudResult(fromDate, toDate, strategiesIntList, suspicionLevelsIntList, accountNumber);
+            return GetWebResponse(input, manager.GetFilteredAccountCases(input, userManager.GetUsers()));
         }
+        */
 
-        [HttpGet]
-        public CommonEnums.OperatorType GetOperatorType()
-        {
-            return ConfigParameterManager.GetOperatorType();
-        }
-
-
-
+        #endregion
     }
 }

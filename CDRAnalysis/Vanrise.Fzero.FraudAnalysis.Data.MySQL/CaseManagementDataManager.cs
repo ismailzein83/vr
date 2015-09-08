@@ -1,5 +1,6 @@
 ﻿using System;
 using Vanrise.Data.MySQL;
+using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
@@ -32,7 +33,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             throw new NotImplementedException();
         }
 
-        public bool InsertAccountCase(out int insertedID, string accountNumber, int userID, DateTime? validTill)
+        public bool InsertAccountCase(out int insertedID, string accountNumber, int userID, CaseStatus caseStatus, DateTime? validTill)
         {
             throw new NotImplementedException();
         }
@@ -91,5 +92,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         {
             throw new NotImplementedException();
         }
+
+
+      
     }
 }

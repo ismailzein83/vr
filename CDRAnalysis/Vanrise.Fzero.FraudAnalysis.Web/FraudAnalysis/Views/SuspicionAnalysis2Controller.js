@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-SuspicionAnalysis2Controller.$inject = ["$scope", "StrategyAPIService", "SuspicionLevelEnum", "SuspicionOccuranceStatusEnum", "UtilsService", "VRNotificationService", "VRModalService", "VRNavigationService","CaseManagementAPIService"];
+SuspicionAnalysis2Controller.$inject = ["$scope", "CaseManagementAPIService", "StrategyAPIService", "SuspicionLevelEnum", "CaseStatusEnum2", "UtilsService", "VRNotificationService", "VRModalService", "VRNavigationService"];
 
-function SuspicionAnalysis2Controller($scope, StrategyAPIService, SuspicionLevelEnum, SuspicionOccuranceStatusEnum, UtilsService, VRNotificationService, VRModalService, VRNavigationService, CaseManagementAPIService) {
+function SuspicionAnalysis2Controller($scope, CaseManagementAPIService, StrategyAPIService, SuspicionLevelEnum, CaseStatusEnum2, UtilsService, VRNotificationService, VRModalService, VRNavigationService) {
 
     var gridAPI = undefined;
 
@@ -42,13 +42,12 @@ function SuspicionAnalysis2Controller($scope, StrategyAPIService, SuspicionLevel
 
             return CaseManagementAPIService.GetFilteredAccountSuspicionSummaries(dataRetrievalInput)
                 .then(function (response) {
-                    console.log(response);
 
                     angular.forEach(response.Data, function (item) {
                         var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", item.SuspicionLevelID);
                         item.SuspicionLevelDescription = suspicionLevel.description;
 
-                        var accountStatus = UtilsService.getEnum(SuspicionOccuranceStatusEnum, "value", item.AccountStatusID);
+                        var accountStatus = UtilsService.getEnum(CaseStatusEnum2, "value", item.AccountStatusID);
                         item.AccountStatusDescription = accountStatus.description;
                     });
 
@@ -72,7 +71,6 @@ function SuspicionAnalysis2Controller($scope, StrategyAPIService, SuspicionLevel
             SelectedCaseStatusIDs: UtilsService.getPropValuesFromArray($scope.selectedCaseStatuses, "value")
         };
 
-        console.log(query);
         return gridAPI.retrieveData(query);
     }
 
@@ -80,7 +78,7 @@ function SuspicionAnalysis2Controller($scope, StrategyAPIService, SuspicionLevel
         $scope.isInitializing = true;
 
         $scope.suspicionLevels = UtilsService.getArrayEnum(SuspicionLevelEnum);
-        $scope.caseStatuses = UtilsService.getArrayEnum(SuspicionOccuranceStatusEnum);
+        $scope.caseStatuses = UtilsService.getArrayEnum(CaseStatusEnum2);
 
         return StrategyAPIService.GetStrategies(0, "") // get all the enabled and disabled strategies (2nd arg) for all periods (1st arg)
             .then(function (response) {

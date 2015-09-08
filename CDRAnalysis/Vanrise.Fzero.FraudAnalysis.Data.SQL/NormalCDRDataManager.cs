@@ -74,11 +74,21 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public BigResult<CDR> GetNormalCDRs(Vanrise.Entities.DataRetrievalInput<NormalCDRResultQuery> input)
         {
+            Dictionary<string, string> mapper = new Dictionary<string, string>();
+            mapper.Add("CallClass", "Call_Class");
+            mapper.Add("CallTypeDescription", "Call_Type");
+            mapper.Add("SubType", "Sub_Type");
+            mapper.Add("CellId", "Cell_Id");
+            mapper.Add("UpVolume", "Up_Volume");
+            mapper.Add("DownVolume", "Down_Volume");
+            mapper.Add("ServiceType", "Service_Type");
+            mapper.Add("ServiceVASName", "Service_VAS_Name");
+
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQuerySP("FraudAnalysis.sp_FraudResult_CreateTempForFilteredNormalCDRs", tempTableName, input.Query.FromDate, input.Query.ToDate, input.Query.MSISDN);
             };
-            return RetrieveData(input, createTempTableAction, NormalCDRMapper);
+            return RetrieveData(input, createTempTableAction, NormalCDRMapper, mapper);
         }
 
 

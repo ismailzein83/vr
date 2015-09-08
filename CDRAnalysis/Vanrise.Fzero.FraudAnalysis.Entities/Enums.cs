@@ -27,4 +27,30 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         ClosedFraud = 3,
         ClosedWhiteList = 4
     }
+
+    public enum MyCallClassEnum
+    {
+        ZAINIQ = 1,
+        VAS = 2,
+        INV = 3,
+        INT = 4,
+        KOREKTEL = 5,
+        ASIACELL = 6
+    }
+
+    public enum MyCallTypeEnum
+    {
+        OutgoingVoiceCall = 1,
+        IncomingVoiceCall = 2,
+        CallForward = 3,
+        IncomingSMS = 4,
+        OutgoingSMS = 5,
+        RoamingCallForward = 6
+    }
+
+    public enum MySubTypeEnum
+    {
+        Prepaid = 1,
+        Postpaid = 2
+    }
 }

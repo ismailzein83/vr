@@ -20,6 +20,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public int StrategyId { get; set; }
 
+        public string StrategyName { get; set; }
+
         public int StrategyExecutionID { get; set; }
 
 
