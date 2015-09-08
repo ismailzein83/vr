@@ -126,12 +126,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
                 string Query = " IF NOT OBJECT_ID('" + tempTableName + "', N'U') IS NOT NULL"
                              + " Begin "
-                             + " SELECT ac.AccountNumber, SUM(cdr.DurationInSeconds)/60 AS Volume, COUNT(ac.ID) AS GeneratedCases, 'Fraud' AS ReasonofBlocking, count(distinct cast( cdr.connectdatetime as date)) AS ActiveDays "
+                             + " SELECT ac.AccountNumber, SUM(cdr.DurationInSeconds)/60 AS Volume, COUNT(distinct ac.ID) AS GeneratedCases, 'Fraud' AS ReasonofBlocking, count(distinct cast( cdr.connectdatetime as date)) AS ActiveDays "
                              + " , Count(distinct ac.AccountNumber) as BlockedLinesCount"
                              + " into " + tempTableName
                              + " FROM   FraudAnalysis.AccountCase AS ac WITH (nolock) INNER JOIN"
                              + " FraudAnalysis.NormalCDR AS cdr WITH (nolock, INDEX = IX_NormalCDR_MSISDN) ON ac.AccountNumber = cdr.MSISDN"
-                             + " Where ac.Status = 3 and cdr.Call_Type = 1 and cdr.ConnectDateTime BETWEEN @FromDate and  @ToDate"
+                             + " Where ac.Status = 3 and cdr.Call_Type = 1 and ac.CreatedTime BETWEEN @FromDate and  @ToDate"
                              + " GROUP BY ac.AccountNumber "
                              + " End";
 
