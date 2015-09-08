@@ -223,6 +223,10 @@
     <Content Include="Client\Javascripts\Directives\Inputs\FileUpload\vr-fileupload-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Form\vr-form-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Label\vr-label-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\QueryBuilder\vr-querybuilder-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\QueryBuilder\vr-querybuilder.html" />
+    <Content Include="Client\Javascripts\Directives\Inputs\QueryBuilder\vr-querybuilder-group-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\QueryBuilder\vr-querybuilder-rule-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Select\dropdown-dir-service.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Select\vr-select-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Select\vr-select.html" />
