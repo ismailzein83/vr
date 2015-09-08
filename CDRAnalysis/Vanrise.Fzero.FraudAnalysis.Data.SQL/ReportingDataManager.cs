@@ -78,22 +78,32 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             Action<string> createTempTableAction = (tempTableName) =>
             {
 
-                string Query = " IF NOT OBJECT_ID('" + tempTableName + "', N'U') IS NOT NULL"
-                             + " Begin "
-                             + " SELECT s.Name StrategyName"
-                             + " , Count(distinct ac.AccountNumber) as BlockedLinesCount"
-                             + (!input.Query.GroupDaily ? " , null as DateDay" : " , CAST(ac.LogDate AS DATE)    as DateDay")
 
-                             + (!input.Query.GroupDaily ? " , '' as AccountNumbers" : " , STUFF(( SELECT ', ' + [AccountNumber]  FROM [FraudAnalysis].[AccountCase] WHERE StatusId=3 and  (CAST(LogDate AS DATE) =  CAST(ac.LogDate AS DATE) and   ac.StrategyId= StrategyId )   FOR XML PATH(''),TYPE).value('(./text())[1]','VARCHAR(MAX)')  ,1,2,''    ) AS AccountNumbers  ")
-                             + " into " + tempTableName
-                             + " FROM [FraudAnalysis].[AccountCase]	ac with(nolock, index=IX_AccountCase_LogDate) inner join [FraudAnalysis].[Strategy] s"
-                             + " on ac.StrategyId = s.Id"
-                             + " Where ac.LogDate BETWEEN @FromDate and  @ToDate and ac.StatusId=3"
-                             + (input.Query.StrategiesList != "" ? " and ac.StrategyId IN (" + input.Query.StrategiesList + ")" : "")
-                             + " Group by s.Name, ac.StrategyId"
-                             + (!input.Query.GroupDaily ? "" : " , CAST(ac.LogDate AS DATE) ")
-                             + " End";
-
+                string Query =    " IF NOT OBJECT_ID('" + tempTableName + "', N'U') IS NOT NULL"
+                                + " Begin "
+                                + " SELECT s.Name StrategyName , Count(distinct ac.AccountNumber) as BlockedLinesCount"
+                                + (!input.Query.GroupDaily ? ",null DateDay" : " , CAST(se.ExecutionDate AS DATE) DateDay ")
+                                + " , STUFF(( "
+                                + " SELECT ', ' + ac1.[AccountNumber]  "
+                                + " FROM [FraudAnalysis].[AccountCase]  ac1"
+                                + " inner join FraudAnalysis.StrategyExecutionDetails sed1 on sed1.CaseID=ac1.ID"
+                                + " inner join FraudAnalysis.StrategyExecution se1 on se1.ID = sed1.StrategyExecutionID"
+                                + " inner join [FraudAnalysis].[Strategy] s1 on se1.StrategyId = s1.Id "
+                                + " WHERE Status=3  "
+                                + (!input.Query.GroupDaily ? "" : " and  CAST(se1.ExecutionDate AS DATE) =  CAST(se.ExecutionDate AS DATE) ")
+                                + " and   se1.StrategyId= StrategyId  "
+                                + " FOR XML PATH(''),TYPE).value('(./text())[1]','VARCHAR(MAX)')  ,1,2,''    ) AS AccountNumbers  "
+                                + " into " + tempTableName
+                                + " FROM [FraudAnalysis].[AccountCase]	ac "
+                                + " with(nolock) "
+                                + " inner join FraudAnalysis.StrategyExecutionDetails sed on sed.CaseID=ac.ID"
+                                + " inner join FraudAnalysis.StrategyExecution se on se.ID = sed.StrategyExecutionID"
+                                + " inner join [FraudAnalysis].[Strategy] s on se.StrategyId = s.Id"
+                                + " Where se.ExecutionDate >= @FromDate and  se.ExecutionDate <= @ToDate and ac.Status=3"
+                                + (input.Query.StrategiesList != "" ? " and se.StrategyId IN (" + input.Query.StrategiesList + ")" : "")
+                                + " Group by s.Name, se.StrategyId"
+                                + (!input.Query.GroupDaily ? "" : " , CAST(se.ExecutionDate AS DATE) ")
+                                + " End";
 
 
                 ExecuteNonQueryText(Query, (cmd) =>
@@ -116,12 +126,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
                 string Query = " IF NOT OBJECT_ID('" + tempTableName + "', N'U') IS NOT NULL"
                              + " Begin "
-                             + " SELECT ac.AccountNumber, SUM(cdr.DurationInSeconds)/60 AS Volume, COUNT(ac.ID) AS GeneratedCases, 'Fraud' AS ReasonofBlocking, 0 AS ActiveDays "
+                             + " SELECT ac.AccountNumber, SUM(cdr.DurationInSeconds)/60 AS Volume, COUNT(ac.ID) AS GeneratedCases, 'Fraud' AS ReasonofBlocking, count(distinct cast( cdr.connectdatetime as date)) AS ActiveDays "
                              + " , Count(distinct ac.AccountNumber) as BlockedLinesCount"
                              + " into " + tempTableName
-                             + " FROM   FraudAnalysis.AccountCase AS ac WITH (nolock, INDEX = IX_AccountCase_AccountNumber) INNER JOIN"
+                             + " FROM   FraudAnalysis.AccountCase AS ac WITH (nolock) INNER JOIN"
                              + " FraudAnalysis.NormalCDR AS cdr WITH (nolock, INDEX = IX_NormalCDR_MSISDN) ON ac.AccountNumber = cdr.MSISDN"
-                             + " Where ac.StatusID = 3 and cdr.Call_Type = 1 and cdr.ConnectDateTime BETWEEN @FromDate and  @ToDate"
+                             + " Where ac.Status = 3 and cdr.Call_Type = 1 and cdr.ConnectDateTime BETWEEN @FromDate and  @ToDate"
                              + " GROUP BY ac.AccountNumber "
                              + " End";
 
