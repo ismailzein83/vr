@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -234,7 +235,7 @@ namespace TOne.Analytics.Data.SQL
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.SuccessfulAttempts,
                 new AnalyticMeasureFieldConfig
                 {
-                    GetFieldExpression = (query) => "Sum(ts.SuccessfulAttempts) / 60"
+                    GetFieldExpression = (query) => "Sum(ts.SuccessfulAttempts)"
                 });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.FailedAttempts,
@@ -252,7 +253,9 @@ namespace TOne.Analytics.Data.SQL
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.DurationsInSeconds,
                 new AnalyticMeasureFieldConfig
                 {
-                    GetFieldExpression = (query) => "Sum(ts.DurationsInSeconds)"
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.DurationsInSeconds_Expression },
+                    MappedSQLColumn =  MeasureValueExpression.DurationsInSeconds_Expression.ColumnAlias,
+                    GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.DurationsInSeconds_Expression.ColumnAlias)
                 });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.PDDInSeconds,
@@ -314,6 +317,45 @@ namespace TOne.Analytics.Data.SQL
                 {
                     GetFieldExpression = (query) => "CONVERT(DECIMAL(10,2),Avg(ts.PDDinSeconds))"
                 });
+
+            s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.GreenArea,
+                new AnalyticMeasureFieldConfig
+                {
+                    GetColumnsExpressions = new List<Func<AnalyticQuery,MeasureValueExpression>> {
+                        (query) => MeasureValueExpression.DurationsInSeconds_Expression,
+                        (query) => MeasureValueExpression.UtilizationInSeconds_Expression,
+                        (query) => MeasureValueExpression.NominalCapacityInE1s_Expression
+                    },
+                    GetMeasureValue = (reader, record) => 
+                        {
+                            var nominalCapacity = GetReaderValue<int>(reader, MeasureValueExpression.NominalCapacityInE1s_Expression.ColumnAlias);
+                            var utilizationInMinutes = GetReaderValue<Decimal>(reader, MeasureValueExpression.UtilizationInSeconds_Expression.ColumnAlias) / 60;
+                            var durationInMinutes = GetReaderValue<Decimal>(reader, MeasureValueExpression.DurationsInSeconds_Expression.ColumnAlias) / 60;
+                            return nominalCapacity > 0 ? ((durationInMinutes * 100) / nominalCapacity) : 0;
+                        }
+                });
+
+            s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.GrayArea,
+                new AnalyticMeasureFieldConfig
+                {
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> {
+                        (query) => MeasureValueExpression.DurationsInSeconds_Expression,
+                        (query) => MeasureValueExpression.UtilizationInSeconds_Expression,
+                        (query) => MeasureValueExpression.NominalCapacityInE1s_Expression
+                    },
+                    GetMeasureValue = (reader, record) =>
+                    {
+                        var nominalCapacity = GetReaderValue<int>(reader, MeasureValueExpression.NominalCapacityInE1s_Expression.ColumnAlias);
+                        var utilizationInMinutes = GetReaderValue<Decimal>(reader, MeasureValueExpression.UtilizationInSeconds_Expression.ColumnAlias) / 60;
+                        var durationInMinutes = GetReaderValue<Decimal>(reader, MeasureValueExpression.DurationsInSeconds_Expression.ColumnAlias) / 60;
+                        return nominalCapacity > 0 ? ((utilizationInMinutes - durationInMinutes * 100) / nominalCapacity) : 0;
+                    }
+                });
+        }
+
+        static T GetReaderValue<T>(IDataReader reader, string fieldName)
+        {
+            return reader[fieldName] != DBNull.Value ? (T)reader[fieldName] : default(T);
         }
     }
 }

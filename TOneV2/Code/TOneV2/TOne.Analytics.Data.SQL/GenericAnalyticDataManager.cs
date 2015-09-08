@@ -48,7 +48,9 @@ namespace TOne.Analytics.Data.SQL
             for (int i = 0; i < input.Query.MeasureFields.Length; i++)
             {
                 var measureField = input.Query.MeasureFields[i];
-                columnsMappings.Add(String.Format("MeasureValues[{0}]", i), String.Format("Measure_{0}", measureField));
+                var measureFieldConfig = measureFieldsConfig[measureField];
+                if (measureFieldConfig.MappedSQLColumn != null)
+                    columnsMappings.Add(String.Format("MeasureValues[{0}]", i), measureFieldConfig.MappedSQLColumn);
             }
 
             return RetrieveData(input, createTempTableIfNotExistsAction, (reader) => AnalyticRecordMapper(reader, dimensionsConfig, measureFieldsConfig), columnsMappings);
@@ -111,11 +113,24 @@ namespace TOne.Analytics.Data.SQL
             }
 
             //adding Measures related parts to the query
+            List<string> addedMeasureColumns = new List<string>();
             foreach (AnalyticMeasureField measureField in input.Query.MeasureFields)
             {
                 AnalyticMeasureFieldConfig measureFieldConfig = measureFieldsConfig[measureField];
-
-                AddColumnToSelectPart(selectPartBuilder, String.Format("{0} AS Measure_{1}", measureFieldConfig.GetFieldExpression(input.Query), measureField));
+                if(measureFieldConfig.GetColumnsExpressions != null)
+                {
+                    foreach(var exp in measureFieldConfig.GetColumnsExpressions)
+                    {
+                        var measureColumn = exp(input.Query);
+                        if(!addedMeasureColumns.Contains(measureColumn.ColumnAlias))
+                        {
+                            AddColumnToSelectPart(selectPartBuilder, String.Format("{0} AS {1}", measureColumn.Expression, measureColumn.ColumnAlias));
+                            if (measureColumn.JoinStatement != null)
+                                AddStatementToJoinPart(joinPartBuilder, measureColumn.JoinStatement);
+                            addedMeasureColumns.Add(measureColumn.ColumnAlias);
+                        }
+                    }
+                }
             }
 
             foreach(DimensionFilter dimensionFilter in input.Query.Filters)
@@ -221,10 +236,9 @@ namespace TOne.Analytics.Data.SQL
             index = 0;
 
             foreach (var measureFieldConfig in measureFieldsConfig)
-            {
-
-                string columnName = String.Format("Measure_{0}", measureFieldConfig.Key);
-                record.MeasureValues[index] = GetReaderValue<object>(reader, columnName);
+            {                
+                if (measureFieldConfig.Value.GetMeasureValue != null)
+                    record.MeasureValues[index] = measureFieldConfig.Value.GetMeasureValue(reader, record);
 
                 index++;
             }

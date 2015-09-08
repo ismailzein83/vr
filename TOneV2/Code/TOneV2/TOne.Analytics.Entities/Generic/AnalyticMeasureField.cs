@@ -26,6 +26,8 @@ namespace TOne.Analytics.Entities
         LastCDRAttempt = 15,
         MaxDurationInSeconds = 16,
         PGAD = 17,
-        AveragePDD = 18
+        AveragePDD = 18,
+        GrayArea = 19,
+        GreenArea = 20
     }
 }
