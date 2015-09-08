@@ -8,7 +8,7 @@
              <vr-select datasource="ctrl.operators" datatextfield="description" datavaluefield="value" selectedvalues="ctrl.selectedOperator" hidefilterbox onselectionchanged="ctrl.onOperatorSelectionChanged"></vr-select>
          </vr-columns>
          <vr-columns width="normal" ng-if="ctrl.filterInput === ctrl.inputEnum.Select">
-             <vr-select datasource="ctrl.filterValues" datatextfield="name" datavaluefield="name" selectedvalues="ctrl.selectedFilterValues" hidefilterbox onselectionchanged="ctrl.onValueSelectionChanged"></vr-select>
+             <vr-select datasource="ctrl.filterValues"  selectedvalues="ctrl.selectedFilterValues" hidefilterbox onselectionchanged="ctrl.onValueSelectionChanged"></vr-select>
          </vr-columns>
          <vr-columns width="normal" ng-if="ctrl.filterInput === ctrl.inputEnum.Text">
              <vr-textbox value="ctrl.inputValueFrom"></vr-textbox>
