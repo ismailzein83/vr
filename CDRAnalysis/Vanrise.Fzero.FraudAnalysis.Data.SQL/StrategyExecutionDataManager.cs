@@ -43,7 +43,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
-
         public object FinishDBApplyStream(object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
@@ -82,7 +81,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             InsertBulkToTable(preparedStrategyExecutionDetails as BaseBulkInsertInfo);
         }
 
-
         public bool OverrideStrategyExecution(int StrategyID, DateTime From, DateTime To, out int updatedId)
         {
             object id;
@@ -101,7 +99,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 return false;
             }
         }
-
 
         public void DeleteStrategyExecutionDetails(int StrategyExecutionId)
         {

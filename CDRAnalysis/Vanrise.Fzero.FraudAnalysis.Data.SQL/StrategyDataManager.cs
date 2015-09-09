@@ -51,7 +51,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, StrategyMapper);
         }
 
-
         public bool AddStrategy(Strategy strategyObject, out int insertedId, int userId)
         {
             object id;
@@ -99,15 +98,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return false;
         }
 
-
         public List<String> GetStrategyNames(List<int> strategyIds)
         {
             return GetItemsSP("FraudAnalysis.sp_Strategy_GetStrategyNames", StrategyNameMapper, string.Join(",", strategyIds));
         }
-
-
-       
-
 
         #region Private Methods
 

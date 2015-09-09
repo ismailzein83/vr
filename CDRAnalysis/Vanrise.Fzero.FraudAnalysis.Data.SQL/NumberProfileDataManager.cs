@@ -62,8 +62,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, NumberProfileMapper);
         }
 
-
-
         #region Private Methods
         private NumberProfile NumberProfileMapper(IDataReader reader)
         {

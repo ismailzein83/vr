@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using Vanrise.Data.SQL;
 using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
@@ -23,7 +22,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return GetItemsSP("FraudAnalysis.sp_Dashboard_GetFraudCasesPerStrategy", StrategyCasesMapper, fromDate, toDate);
         }
 
-
         public BigResult<CasesSummary> GetCasesSummary(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
@@ -32,9 +30,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             };
             return RetrieveData(input, createTempTableAction, CasesSummaryMapper);
         }
-
-               
-
 
         public BigResult<BTSCases> GetBTSCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
         {
@@ -64,10 +59,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, DailyVolumeLoosesMapper);
         }
 
-
-
         #region Private Methods
-
 
         private CasesSummary CasesSummaryMapper(IDataReader reader)
         {
@@ -76,7 +68,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             casesSummary.StatusName = reader["StatusName"] as string;
             return casesSummary;
         }
-
 
         private StrategyCases StrategyCasesMapper(IDataReader reader)
         {
@@ -110,7 +101,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             dailyVolumeLoose.Volume = GetReaderValue<decimal>(reader, "Volume");
             return dailyVolumeLoose;
         }
-
 
         #endregion
 

@@ -24,26 +24,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             _columnMapper.Add("AccountStatusDescription", "AccountStatusID");
         }
 
-        #region Old Methods
-
-        public bool SaveAccountCase(AccountCase accountCaseObject)
-        {
-            throw new NotImplementedException();
-        }
-
-        public BigResult<AccountCase> GetFilteredAccountCases(DataRetrievalInput<AccountCaseResultQuery> input)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public void ApplySuspiciousNumbersToDB(object preparedSuspiciousNumbers)
-        {
-            InsertBulkToTable(preparedSuspiciousNumbers as BaseBulkInsertInfo);
-        }
-
-        #endregion
-
         public BigResult<AccountSuspicionSummary> GetFilteredAccountSuspicionSummaries(Vanrise.Entities.DataRetrievalInput<AccountSuspicionSummaryQuery> input)
         {
             Dictionary<string, string> mapper = new Dictionary<string, string>();
