@@ -46,12 +46,20 @@ function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIServ
     }
 
     function buildAccountCaseObjectFromScope() {
+
+        var selectedStrategyId=0
+
+        if ($scope.selectedStrategy != undefined)
+            selectedStrategyId = $scope.selectedStrategy.value;
+
         var accountCaseObject = {
-            StrategyId: $scope.selectedStrategy.value,
+            StrategyId: selectedStrategyId,
             AccountNumber: $scope.accountNumber,
             From: $scope.from,
             To: $scope.to
         };
+        console.log('accountCaseObject')
+        console.log(accountCaseObject)
         return accountCaseObject;
     }
 }
