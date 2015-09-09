@@ -90,10 +90,10 @@
     <Compile Include="ResultQuery\NormalCDRResultQuery.cs" />
     <Compile Include="ResultQuery\CaseProductivityResultQuery.cs" />
     <Compile Include="ResultQuery\StrategyResultQuery.cs" />
-    <Compile Include="Predefined\Period.cs" />
+    <Compile Include="Period.cs" />
     <Compile Include="Aggregates\Condition.cs" />
     <Compile Include="Aggregates\ConsecutiveAggregate.cs" />
-    <Compile Include="Predefined\CallClass.cs" />
+    <Compile Include="CallClass.cs" />
     <Compile Include="Aggregates\GroupCountAggregate.cs" />
     <Compile Include="OperationResults\InsertOperationOutput.cs" />
     <Compile Include="OperationResults\UpdateOperationOutput.cs" />
@@ -125,6 +125,9 @@
       <Project>{417276c2-f440-4445-a688-0838caba5e90}</Project>
       <Name>Vanrise.Fzero.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Predefined\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
