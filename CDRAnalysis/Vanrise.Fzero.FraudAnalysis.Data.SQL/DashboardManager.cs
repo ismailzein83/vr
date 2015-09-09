@@ -22,14 +22,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return GetItemsSP("FraudAnalysis.sp_Dashboard_GetFraudCasesPerStrategy", StrategyCasesMapper, fromDate, toDate);
         }
 
-        public BigResult<CasesSummary> GetCasesSummary(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
-        {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                ExecuteNonQuerySP("FraudAnalysis.sp_Dashboard_CreateTempForCasesSummary", tempTableName, input.Query.FromDate, input.Query.ToDate);
-            };
-            return RetrieveData(input, createTempTableAction, CasesSummaryMapper);
-        }
+       
 
         public BigResult<BTSCases> GetBTSCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
         {
@@ -50,24 +43,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, BTSHighValueCasesMapper);
         }
 
-        public BigResult<DailyVolumeLoose> GetDailyVolumeLooses(DataRetrievalInput<DashboardResultQuery> input)
-        {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                ExecuteNonQuerySP("FraudAnalysis.sp_Dashboard_CreateTempForDailyVolumeLooses", tempTableName, input.Query.FromDate, input.Query.ToDate);
-            };
-            return RetrieveData(input, createTempTableAction, DailyVolumeLoosesMapper);
-        }
 
         #region Private Methods
 
-        private CasesSummary CasesSummaryMapper(IDataReader reader)
-        {
-            var casesSummary = new CasesSummary();
-            casesSummary.CountCases = (int)reader["CountCases"];
-            casesSummary.StatusName = reader["StatusName"] as string;
-            return casesSummary;
-        }
 
         private StrategyCases StrategyCasesMapper(IDataReader reader)
         {
@@ -94,13 +72,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
-        private DailyVolumeLoose DailyVolumeLoosesMapper(IDataReader reader)
-        {
-            var dailyVolumeLoose = new DailyVolumeLoose();
-            dailyVolumeLoose.DateDay = (DateTime)reader["DateDay"];
-            dailyVolumeLoose.Volume = GetReaderValue<decimal>(reader, "Volume");
-            return dailyVolumeLoose;
-        }
+        
 
         #endregion
 

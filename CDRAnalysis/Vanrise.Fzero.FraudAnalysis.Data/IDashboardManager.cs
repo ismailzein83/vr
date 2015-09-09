@@ -9,13 +9,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
     {
         List<StrategyCases> GetStrategyCases(DateTime fromDate, DateTime toDate);
         
-        BigResult<CasesSummary> GetCasesSummary(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input);
        
         BigResult<BTSCases> GetBTSCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input);
 
         BigResult<BTSHighValueCases> GetTop10BTSHighValue(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input);
 
-        BigResult<DailyVolumeLoose> GetDailyVolumeLooses(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input);
 
     }
 }

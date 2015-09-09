@@ -21,7 +21,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         [HttpPost]
         public object GetCasesSummary(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
         {
-            DashboardManager manager = new DashboardManager();
+            CaseManagmentManager manager = new CaseManagmentManager();
             return GetWebResponse(input, manager.GetCasesSummary(input));
         }
 
@@ -42,7 +42,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         [HttpPost]
         public object GetDailyVolumeLooses(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
         {
-            DashboardManager manager = new DashboardManager();
+            CaseManagmentManager manager = new CaseManagmentManager();
             return GetWebResponse(input, manager.GetDailyVolumeLooses(input));
         }
 

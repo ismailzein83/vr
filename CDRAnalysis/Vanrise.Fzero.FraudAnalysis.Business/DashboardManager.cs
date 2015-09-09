@@ -13,11 +13,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return manager.GetStrategyCases(fromDate, toDate);
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<CasesSummary> GetCasesSummary(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
-        {
-            IDashboardManager manager = FraudDataManagerFactory.GetDataManager<IDashboardManager>();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, manager.GetCasesSummary(input));
-        }
+       
 
         public Vanrise.Entities.IDataRetrievalResult<BTSCases> GetBTSCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
         {
@@ -31,10 +27,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, manager.GetTop10BTSHighValue(input));
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<DailyVolumeLoose> GetDailyVolumeLooses(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
-        {
-            IDashboardManager manager = FraudDataManagerFactory.GetDataManager<IDashboardManager>();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, manager.GetDailyVolumeLooses(input));
-        }
+       
     }
 }
