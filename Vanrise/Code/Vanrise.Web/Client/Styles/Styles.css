@@ -1565,7 +1565,7 @@ input.ui-grid-filter-input[type="text"] {
     }
     .radio-btn-groupe label{
           padding: 1px 3px !important;
-          cursor:pointer !important;
+          cursor:pointer !important;        
     } 
     .radio-btn-groupe .clicked-btn{
        border-bottom-color:  #DDD !important;
@@ -1573,6 +1573,23 @@ input.ui-grid-filter-input[type="text"] {
        background-color: #6DA279 !important;
        color: #fff !important;
        font-weight: normal !important;
+    }
+    .switch-btn-groupe{
+        margin: 0px !important;
+        padding-bottom: 4px !important;
+        padding-left: 10px !important;
+        border:0px !important;
+
+    }
+    .switch-btn-groupe label{
+          padding: 1px 3px !important;
+          cursor:pointer !important;
+          border:0px !important;
+          font-size:11px;
+    } 
+    .switch-btn-groupe .clicked-btn{
+       border-bottom: 1px solid  #000 !important;
+       font-weight: bold !important;
     }
 
     .vr-choices-filter{
