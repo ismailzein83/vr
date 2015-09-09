@@ -93,12 +93,12 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
         });
     }
     function loadCustomers() {
-        CarrierAccountAPIService.GetCarriers(1).then(function (response) {
+        CarrierAccountAPIService.GetCarriers(1, true).then(function (response) {
             $scope.optionsCustomers = response;
         });
     }
     function loadSuppliers() {
-        CarrierAccountAPIService.GetCarriers(2).then(function (response) {
+        CarrierAccountAPIService.GetCarriers(2,false).then(function (response) {
             $scope.optionsSuppliers = response;
         });
     }
