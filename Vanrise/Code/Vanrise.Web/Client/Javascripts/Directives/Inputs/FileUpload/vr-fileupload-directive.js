@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', 'VRNotificationService', 'BaseAPIService', function (ValidationMessagesEnum, BaseDirService, VRNotificationService , BaseAPIService) {
+app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', 'VRNotificationService', 'BaseAPIService', 'UtilsService', 'SecurityService', 'FileAPIService', function (ValidationMessagesEnum, BaseDirService, VRNotificationService, BaseAPIService ,UtilsService, SecurityService, FileAPIService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -43,6 +43,17 @@ app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', 'VRNo
             var isInternalSetValue;
             filecontrol.fileupload({
                 url: base + '/api/VRFile/UploadFile',
+                beforeSend: function (xhr, data) {
+                    var userInfoCookie = SecurityService.getAccessCookie();
+                    if (userInfoCookie != undefined) {
+                        var userInfo = JSON.parse(userInfoCookie);
+                        xhr.setRequestHeader('Auth-Token', userInfo.Token);
+                    }
+                    else {
+                        xhr.setRequestHeader('Auth-Token', "");
+                    }
+
+                },
                 formData: function (form) { return form },
                 replaceFileInput: false,
                 datatype: 'json',
@@ -112,9 +123,12 @@ app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', 'VRNo
                 }
                
             });
-            ctrl.downloadFile = function(id){
-                var id =  ctrl.value.fileId ;
-                window.open("/api/VRFile/DownloadFile?fileId="+id,'_self');
+            ctrl.downloadFile = function(){
+                var id = ctrl.value.fileId;
+                FileAPIService.DownloadFile(id)
+                   .then(function (response) {
+                      UtilsService.downloadFile(response.data, response.headers);
+                   });
             }
             if ($attrs.hint != undefined)
                 ctrl.hint = $attrs.hint;

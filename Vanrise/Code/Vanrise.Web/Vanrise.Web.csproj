@@ -260,6 +260,7 @@
     <Content Include="Client\Javascripts\Modules\appControllers.js" />
     <Content Include="Client\Javascripts\Modules\appRouting.js" />
     <Content Include="Client\Javascripts\Modules\mainModule.js" />
+    <Content Include="Client\Javascripts\Services\FileAPIService.js" />
     <Content Include="Client\Javascripts\Services\APIServices\BaseAPIService.js" />
     <Content Include="Client\Javascripts\Services\APIServices\ValuesAPIService.js" />
     <Content Include="Client\Javascripts\Services\base-dir-service.js" />

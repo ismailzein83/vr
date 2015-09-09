@@ -82,33 +82,27 @@ namespace Vanrise.Web.Controllers
         }
 
         [HttpGet]
-        public HttpResponseMessage PreviewImage(long fileId)
+        public string PreviewImage(long fileId)
         {
 
             VRFileManager manager = new VRFileManager();
             VRFile file = manager.GetFile(fileId);
-            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
-           
+          //  HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+
             if (file.Extension == "jpg" || file.Extension == "png" || file.Extension == "jpeg" || file.Extension == "bmp" || file.Extension == "gif")
             {
                 byte[] bytes = file.Content;
-                MemoryStream memStreamRate = new System.IO.MemoryStream();
-                memStreamRate.Write(bytes, 0, bytes.Length);
-                memStreamRate.Seek(0, System.IO.SeekOrigin.Begin);
 
+                string base64String = "data:image/" + file.Extension + ";base64," + Convert.ToBase64String(bytes);
+                return base64String;
 
-                memStreamRate.Position = 0;
-                response.Content = new StreamContent(memStreamRate);
-
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue("image/" + file.Extension);
                
             }
             else
             {
-                response = new HttpResponseMessage(HttpStatusCode.NotFound);
+                return null;
             }
           
-            return response;
 
         }
 

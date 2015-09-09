@@ -1,6 +1,6 @@
 ﻿
 
-app.directive('vrPreviewImage', [ function () {
+app.directive('vrPreviewImage', ['FileAPIService', function (FileAPIService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -11,11 +11,29 @@ app.directive('vrPreviewImage', [ function () {
         },
         controller: function ($scope, $element, $attrs, $timeout) {
             var ctrl = this;
+            ctrl.image = ''
             ctrl.Style = {
                 "height": ctrl.height,
                 "width": ctrl.width
 
             };
+            ctrl.previewImage = function () {
+                FileAPIService.PreviewImage(ctrl.value).then(function (response) {
+                    if (response!=null)
+                        ctrl.image = response;
+                    else 
+                        ctrl.image = "/Client/Images/no_image.jpg";
+                })
+            }
+
+            $scope.$watch('ctrl.value', function () {                
+                if (ctrl.value != null && ctrl.value != undefined && ctrl.value != 0) {
+                    ctrl.previewImage();
+                }
+                else 
+                    ctrl.image = "/Client/Images/no_image.jpg";
+            });
+          
         },
         controllerAs: 'ctrl',
         compile: function (element, attrs) {           
@@ -29,8 +47,7 @@ app.directive('vrPreviewImage', [ function () {
             var labelTemplate = '';
             if (attrs.label != undefined)
                 labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
-            var imageTemplate = ' <img ng-if="ctrl.value!= null && ctrl.value!= 0 "  ng-src="api/VRFile/PreviewImage?fileId={{ctrl.value}}" style="width:100%;height:100%"/>'
-                                + '<img ng-if="ctrl.value == null && ctrl.value!= 0 " ng-src="/Client/Images/no_image.jpg"   style="width:100%;height:100%">';
+            var imageTemplate = ' <img ng-src="{{ctrl.image}}"  style="width:100%;height:100%"/>'
                  
 
 
