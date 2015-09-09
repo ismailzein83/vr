@@ -182,17 +182,12 @@
                 </InArgument>
               </vffba1:CreateNumberProfiles.ToDate>
             </vffba1:CreateNumberProfiles>
-            <vffba1:GetStrategyExecutionDetails sap2010:WorkflowViewState.IdRef="GetStrategyExecutionDetails_1">
+            <vffba1:GetStrategyExecutionDetails sap2010:WorkflowViewState.IdRef="GetStrategyExecutionDetails_2">
               <vffba1:GetStrategyExecutionDetails.InputQueueForNumberProfile>
                 <InArgument x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">
                   <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">numberProfileQueue</mca:CSharpValue>
                 </InArgument>
               </vffba1:GetStrategyExecutionDetails.InputQueueForNumberProfile>
-              <vffba1:GetStrategyExecutionDetails.OutputQueueForNumberProfile>
-                <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">
-                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">numberProfileToStoreQueue</mca:CSharpReference>
-                </InOutArgument>
-              </vffba1:GetStrategyExecutionDetails.OutputQueueForNumberProfile>
               <vffba1:GetStrategyExecutionDetails.OutputQueueForStrategyExecutionDetail>
                 <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailBatch)">
                   <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailBatch)">strategyExecutionDetailQueue</mca:CSharpReference>
@@ -214,28 +209,6 @@
                 </InArgument>
               </vffba1:GetStrategyExecutionDetails.StrategiesExecutionInfo>
             </vffba1:GetStrategyExecutionDetails>
-            <vffba1:PrepareNumberProfilesForDBApply sap2010:WorkflowViewState.IdRef="PrepareNumberProfilesForDBApply_1">
-              <vffba1:PrepareNumberProfilesForDBApply.InputQueue>
-                <InArgument x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">
-                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">numberProfileToStoreQueue</mca:CSharpValue>
-                </InArgument>
-              </vffba1:PrepareNumberProfilesForDBApply.InputQueue>
-              <vffba1:PrepareNumberProfilesForDBApply.OutputQueue>
-                <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
-                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">preparedNumberProfilesQueue</mca:CSharpReference>
-                </InOutArgument>
-              </vffba1:PrepareNumberProfilesForDBApply.OutputQueue>
-              <vffba1:PrepareNumberProfilesForDBApply.PreviousActivityStatus>
-                <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">GetStrategyExecutionDetailStatus</mca:CSharpValue>
-                </InArgument>
-              </vffba1:PrepareNumberProfilesForDBApply.PreviousActivityStatus>
-              <vffba1:PrepareNumberProfilesForDBApply.Status>
-                <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareNumberProfilesStatus</mca:CSharpReference>
-                </OutArgument>
-              </vffba1:PrepareNumberProfilesForDBApply.Status>
-            </vffba1:PrepareNumberProfilesForDBApply>
             <vffba1:PrepareStrategyExecutionDetailsForDBApply sap2010:WorkflowViewState.IdRef="PrepareStrategyExecutionDetailsForDBApply_1">
               <vffba1:PrepareStrategyExecutionDetailsForDBApply.InputQueue>
                 <InArgument x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailBatch)">
@@ -258,18 +231,6 @@
                 </OutArgument>
               </vffba1:PrepareStrategyExecutionDetailsForDBApply.Status>
             </vffba1:PrepareStrategyExecutionDetailsForDBApply>
-            <vffba1:ApplyNumberProfilesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyNumberProfilesToDB_1">
-              <vffba1:ApplyNumberProfilesToDB.InputQueue>
-                <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
-                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">preparedNumberProfilesQueue</mca:CSharpValue>
-                </InArgument>
-              </vffba1:ApplyNumberProfilesToDB.InputQueue>
-              <vffba1:ApplyNumberProfilesToDB.PreviousActivityStatus>
-                <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareNumberProfilesStatus</mca:CSharpValue>
-                </InArgument>
-              </vffba1:ApplyNumberProfilesToDB.PreviousActivityStatus>
-            </vffba1:ApplyNumberProfilesToDB>
             <vffba1:ApplyStrategyExecutionDetailsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyStrategyExecutionDetailsToDB_1">
               <vffba1:ApplyStrategyExecutionDetailsToDB.InputQueue>
                 <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
@@ -300,22 +261,20 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbDZEA7ACDgIBAUgFTBEDAb4DTQVnKQMBrgNoBa4CCgIBAkoJSpUBAwG/A18LX2MDAbsDVQtVYAMBuANaC1qEAQMBtQNQC1BZAwGyA2QLZFcDAa8DawtrmQECAQNvCaMCFAIBC6YCCawCJAIBBnALnQIWAgEQngILogIXAgEMqQIPqQKDAQIBCKYCZKYCgQECAQd+DZMBHwMB9QKUAQ24ASsDAZICuQEN2AEyAwG9AdkBDe4BNgMBhAHvAQ2EAkACAUuFAg2QAi4CAS6RAg2cAjgCARGgAg+gApoBAgENgQETgQFhAwGgA4sBE4sBdQMBkgOGAROGAXQDAYQDkAETkAFfAwH2AqYBE6YBbQMB5wKcAROcAXQDAdkCsAETsAGEAQMBywKXAROXAWEDAb0CqwETqwGBAQMBrwKhAROhAYgBAwGhArUBE7UBXwMBkwK8ARO8AYABAwGEAssBE8sBeQMB9gHVARPVAYQBAwHoAcYBE8YBnAEDAdoB0AET0AGHAQMBzAHBARPBAY8BAwG+AeYBE+YBfwMBrwHcARPcAYcBAwGhAesBE+sBggEDAZMB4QET4QGCAQMBhQH8ARP8AX8CAXbyARPyAZQBAgFogQITgQKMAQIBWvcBE/cBjAECAUyNAhONAnoCAT2IAhOIAnoCAS+ZAhOZAoQBAgEglAITlAKEAQIBEg==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbC1EA4kCDgIBAUgFTBEDAdoCTQVnKQMBygJoBYcCCgIBAkoJSpUBAwHbAl8LX2MDAdcCVQtVYAMB1AJaC1qEAQMB0QJQC1BZAwHOAmQLZFcDAcsCawtrmQECAQNvCfwBFAIBC/8BCYUCJAIBBnAL9gEWAgEQ9wEL+wEXAgEMggIPggKDAQIBCP8BZP8BgQECAQd+DZMBHwMBkQKUAQ24ASsDAa4BuQEN0wEyAgFn1AEN6QFAAgEu6gEN9QE4AgER+QEP+QGaAQIBDYEBE4EBYQMBvAKLAROLAXUDAa4ChgEThgF0AwGgApABE5ABXwMBkgKmAROmAW0DAYMCnAETnAF0AwH1AbABE7ABhAEDAecBlwETlwFhAwHZAasBE6sBgQEDAcsBoQEToQGIAQMBvQG1ARO1AV8DAa8BvAETvAGAAQMBoAHGARPGAXkDAZIB0AET0AGEAQMBhAHBARPBAZwBAgF2ywETywGHAQIBaOEBE+EBfwIBWdcBE9cBlAECAUvmARPmAYwBAgE93AET3AGMAQIBL/IBE/IBhAECASDtARPtAYQBAgES</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="2001,62" />
-      <sap2010:ViewStateData Id="GetStrategiesExecutionInfo_1" sap:VirtualizedContainerService.HintSize="2001,22" />
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="1521,62" />
+      <sap2010:ViewStateData Id="GetStrategiesExecutionInfo_1" sap:VirtualizedContainerService.HintSize="1521,22" />
       <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="CreateNumberProfiles_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="GetStrategyExecutionDetails_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="PrepareNumberProfilesForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="GetStrategyExecutionDetails_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareStrategyExecutionDetailsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ApplyNumberProfilesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyStrategyExecutionDetailsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1754,86" />
-      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="1754,62" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="1776,312">
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1274,86" />
+      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="1274,62" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="1296,312">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -323,15 +282,15 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="2001,462" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2023,750">
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1521,462" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1543,750">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess_1" sap:VirtualizedContainerService.HintSize="2063,830" />
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess_1" sap:VirtualizedContainerService.HintSize="1583,830" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
