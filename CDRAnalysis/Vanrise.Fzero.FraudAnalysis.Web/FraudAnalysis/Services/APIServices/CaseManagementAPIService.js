@@ -7,8 +7,14 @@
         GetFilteredAccountSuspicionDetails: GetFilteredAccountSuspicionDetails,
         GetFilteredCasesByAccountNumber: GetFilteredCasesByAccountNumber,
         GetFilteredDetailsByCaseID: GetFilteredDetailsByCaseID,
-        UpdateAccountCase: UpdateAccountCase
+        UpdateAccountCase: UpdateAccountCase,
+        CancelAccountCases: CancelAccountCases
     });
+
+
+    function CancelAccountCases(input) {
+        return BaseAPIService.post("/api/CaseManagement/CancelAccountCases", input);
+    }
 
     function GetFilteredAccountCases(input) {
         return BaseAPIService.post("/api/CaseManagement/GetFilteredAccountCases", input);

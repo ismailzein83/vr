@@ -1,4 +1,6 @@
-﻿CaseOccuranceGridController.$inject = ["$scope", "CaseManagementAPIService", "SuspicionLevelEnum", "SuspicionOccuranceStatusEnum", "UtilsService", "VRNotificationService"];
+﻿"use strict";
+
+CaseOccuranceGridController.$inject = ["$scope", "CaseManagementAPIService", "SuspicionLevelEnum", "SuspicionOccuranceStatusEnum", "UtilsService", "VRNotificationService"];
 
 function CaseOccuranceGridController($scope, CaseManagementAPIService, SuspicionLevelEnum, SuspicionOccuranceStatusEnum, UtilsService, VRNotificationService) {
 

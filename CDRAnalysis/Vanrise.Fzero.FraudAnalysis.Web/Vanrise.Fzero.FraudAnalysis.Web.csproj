@@ -193,6 +193,8 @@
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\NumberProfilingProcessInputController.js" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\NumberProfilingProcessInput_Scheduled.html" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\NumberProfilingProcessInput_ScheduledController.js" />
+    <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\CancelCases.html" />
+    <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\CancelCasesController.js" />
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\CaseOccuranceGrid.html" />
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\CaseOccuranceGridController.js" />
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\SuspicionAnalysis.html" />
