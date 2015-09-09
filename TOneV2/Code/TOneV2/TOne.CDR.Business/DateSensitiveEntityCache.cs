@@ -16,7 +16,7 @@ namespace TOne.CDR.Business
         {
             get
             {
-                lock (typeof(BasePricing))
+                lock (typeof(BasePricingManager))
                 {
                     if (_AnyZone == null)
                     {
@@ -97,7 +97,7 @@ namespace TOne.CDR.Business
                 isEffective = EndEffectiveDate.HasValue ? EndEffectiveDate.Value >= when : true;
             return isEffective;
         }
-
+         
         public List<T> GetEffectiveEntities(String customerID, int zoneID, DateTime whenEffective)
         {
             List<T> effective = new List<T>();
