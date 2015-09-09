@@ -61,6 +61,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CaseManagementDataManager - Copy.cs" />
     <Compile Include="NumberProfileDataManager.cs" />
     <Compile Include="CallClassDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
