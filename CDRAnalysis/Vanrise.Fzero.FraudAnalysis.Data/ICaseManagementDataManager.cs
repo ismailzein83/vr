@@ -41,5 +41,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         BigResult<DailyVolumeLoose> GetDailyVolumeLooses(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input);
 
+        bool CancelAccountCases(int strategyID, DateTime from, DateTime to, string accountNumber);
+
     }
 }

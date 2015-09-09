@@ -74,7 +74,7 @@
     <Compile Include="AggregateManager.cs" />
     <Compile Include="FilterManager.cs" />
     <Compile Include="FraudManager.cs" />
-    <Compile Include="ClassManager.cs" />
+    <Compile Include="CallClassManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CaseManagmentManager.cs" />
     <Compile Include="NumberProfileManager.cs" />

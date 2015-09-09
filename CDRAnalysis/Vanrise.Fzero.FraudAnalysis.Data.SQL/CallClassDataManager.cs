@@ -7,10 +7,10 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
-    public class ClassDataManager : BaseSQLDataManager, IClassDataManager
+    public class CallClassDataManager : BaseSQLDataManager, IClassDataManager
     {
 
-        public ClassDataManager()
+        public CallClassDataManager()
             : base("CDRDBConnectionString")
         {
 

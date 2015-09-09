@@ -4,7 +4,7 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {
-    public class ClassManager
+    public class CallClassManager
     {
 
         public List<CallClass> GetClasses()
