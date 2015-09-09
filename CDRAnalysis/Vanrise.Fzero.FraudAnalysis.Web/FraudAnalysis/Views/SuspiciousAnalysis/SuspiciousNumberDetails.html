@@ -51,18 +51,18 @@
                                      pagingtype="'PagingOnScroll'"
                                      idfield="Id">
 
-                            <vr-datagridcolumn headertext="'IMSI'" field="'IMSI'" type="'Number'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'IMSI'" field="'IMSI'" type="'Text'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Day'" field="'ConnectDateTime'" type="'Date'"></vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Destination'" field="'Destination'" type="'Number'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Destination'" field="'Destination'" type="'Text'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Duration (Secs)'" field="'DurationInSeconds'" type="'Number'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Call Class'" field="'Call_Class'" type="'Text'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Call Type'" field="'CallTypeDescription'" type="'Text'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'SubType'" field="'SubType'" type="'Text'"></vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'IMEI'" field="'IMEI'" type="'Number'"></vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Cell ID'" field="'CellId'" type="'Number'"></vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Up Volume'" field="'UpVolume'" type="'Number'"></vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Down Volume'" field="'DownVolume'" type="'Number'"></vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Service Type'" field="'ServiceType'" type="'Number'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'IMEI'" field="'IMEI'" type="'Text'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Cell ID'" field="'CellId'" type="'Text'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Up Volume'" field="'UpVolume'" type="'Text'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Down Volume'" field="'DownVolume'" type="'Text'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Service Type'" field="'ServiceType'" type="'Text'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Service VAS Name'" field="'ServiceVASName'" type="'Text'"></vr-datagridcolumn>
                         </vr-datagrid>
                     </vr-columns>
@@ -72,20 +72,22 @@
             <div ng-show="numberProfilesSelected">
                 <vr-row>
                     <vr-columns width="fullrow" simplecol>
-                        <vr-datagrid datasource="numberProfiles"
-                                     on-ready="onGridReady_NumberProfiles"
-                                     dataretrievalfunction="dataRetrievalFunction_NumberProfiles"
-                                     pagingtype="'PagingOnScroll'">
+                        <div class="big-data-grid">
+                            <vr-datagrid datasource="numberProfiles"
+                                         on-ready="onGridReady_NumberProfiles"
+                                         dataretrievalfunction="dataRetrievalFunction_NumberProfiles"
+                                         pagingtype="'PagingOnScroll'">
 
-                            <vr-datagridcolumn headertext="'From Date'" field="'FromDate'" type="'Date'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" type="'Text'"></vr-datagridcolumn>
 
-                            <vr-datagridcolumn ng-repeat="agg in aggregateDefinitions"
-                                               columnindex="$index + 1"
-                                               headertext="agg.name"
-                                               field="'AggregateValues[&quot;' + agg.name + '&quot;]'"
-                                               type="'Number'">
-                            </vr-datagridcolumn>
-                        </vr-datagrid>
+                                <vr-datagridcolumn ng-repeat="agg in aggregateDefinitions"
+                                                   columnindex="$index + 1"
+                                                   headertext="agg.name"
+                                                   field="'AggregateValues[&quot;' + agg.name + '&quot;]'"
+                                                   type="'Number'">
+                                </vr-datagridcolumn>
+                            </vr-datagrid>
+                        </div>
                     </vr-columns>
                 </vr-row>
             </div>

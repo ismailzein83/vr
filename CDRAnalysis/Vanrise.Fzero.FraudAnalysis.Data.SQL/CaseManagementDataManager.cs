@@ -8,7 +8,7 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
-    public class CaseManagementDataManager : BaseSQLDataManager, ICaseManagementDataManager
+    public partial class CaseManagementDataManager : BaseSQLDataManager, ICaseManagementDataManager
     {
         private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
 
@@ -18,11 +18,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
-            static CaseManagementDataManager()
+        static CaseManagementDataManager()
         {
             _columnMapper.Add("SuspicionLevelDescription", "SuspicionLevelID");
             _columnMapper.Add("AccountStatusDescription", "AccountStatusID");
         }
+
+        #region Account Suspicion Summaries
 
         public BigResult<AccountSuspicionSummary> GetFilteredAccountSuspicionSummaries(Vanrise.Entities.DataRetrievalInput<AccountSuspicionSummaryQuery> input)
         {
@@ -30,25 +32,153 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             mapper.Add("SuspicionLevelDescription", "SuspicionLevelID");
             mapper.Add("AccountStatusDescription", "AccountStatusID");
 
-            return RetrieveData(input, (tempTableName) =>
+            Action<string> createTempTableAction = (tempTableName) =>
             {
-                string selectedStrategyIDs = null;
-                string selectedSuspicionLevelIDs = null;
-                string selectedCaseStatusIDs = null;
+                //ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName,
+                //    input.Query.SelectedStrategyIDs,
+                //    input.Query.SelectedSuspicionLevelIDs,
+                //    input.Query.SelectedCaseStatusIDs),
+                //    (cmd) => {
+                //        cmd.Parameters.Add(new SqlParameter("@TargetDate", input.Query.TargetDate));
+                //    });
+            };
 
-                if (input.Query.SelectedStrategyIDs != null && input.Query.SelectedStrategyIDs.Count() > 0)
-                    selectedStrategyIDs = string.Join<int>(",", input.Query.SelectedStrategyIDs);
+            return RetrieveData(input, createTempTableAction, AccountSuspicionSummaryMapper, mapper);
 
-                if (input.Query.SelectedSuspicionLevelIDs != null && input.Query.SelectedSuspicionLevelIDs.Count() > 0)
-                    selectedSuspicionLevelIDs = string.Join(",", input.Query.SelectedSuspicionLevelIDs.Select(n => ((int)n).ToString()).ToArray());
+            //return RetrieveData(input, (tempTableName) =>
+            //{
+            //    string selectedStrategyIDs = null;
+            //    string selectedSuspicionLevelIDs = null;
+            //    string selectedCaseStatusIDs = null;
 
-                if (input.Query.SelectedCaseStatusIDs != null && input.Query.SelectedCaseStatusIDs.Count() > 0)
-                    selectedCaseStatusIDs = string.Join(",", input.Query.SelectedCaseStatusIDs.Select(n => ((int)n).ToString()).ToArray());
+            //    if (input.Query.SelectedStrategyIDs != null && input.Query.SelectedStrategyIDs.Count() > 0)
+            //        selectedStrategyIDs = string.Join<int>(",", input.Query.SelectedStrategyIDs);
 
-                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByAccountNumberForSummaries", tempTableName, input.Query.AccountNumber, input.Query.From, input.Query.To, selectedStrategyIDs, selectedSuspicionLevelIDs, selectedCaseStatusIDs);
+            //    if (input.Query.SelectedSuspicionLevelIDs != null && input.Query.SelectedSuspicionLevelIDs.Count() > 0)
+            //        selectedSuspicionLevelIDs = string.Join(",", input.Query.SelectedSuspicionLevelIDs.Select(n => ((int)n).ToString()).ToArray());
 
-            }, (reader) => AccountSuspicionSummaryMapper(reader), mapper);
+            //    if (input.Query.SelectedCaseStatusIDs != null && input.Query.SelectedCaseStatusIDs.Count() > 0)
+            //        selectedCaseStatusIDs = string.Join(",", input.Query.SelectedCaseStatusIDs.Select(n => ((int)n).ToString()).ToArray());
+
+            //    ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByAccountNumberForSummaries", tempTableName, input.Query.AccountNumber, input.Query.From, input.Query.To, selectedStrategyIDs, selectedSuspicionLevelIDs, selectedCaseStatusIDs);
+
+            //}, (reader) => AccountSuspicionSummaryMapper(reader), mapper);
         }
+
+//        private string CreateTempTableIfNotExists(string tempTableName, List<int> SelectedStrategyIDs, List<SuspicionOccuranceStatus> SelectedSuspicionLevelIDs, List<CaseStatus> SelectedCaseStatusIDs)
+//        {
+//            StringBuilder query = new StringBuilder(@"
+//                IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
+//                BEGIN
+//                
+//                WITH CarriersCTE AS
+//                (
+//                    SELECT
+//                        ca.CarrierAccountID,
+//                        cp.Name AS CarrierName,
+//                        ca.NameSuffix AS CarrierNameSuffix
+//                    FROM CarrierAccount ca INNER JOIN CarrierProfile cp ON cp.ProfileID = ca.ProfileID
+//                ),
+//
+//                ZonesCTE AS
+//                (
+//                    SELECT ZoneID, Name AS ZoneName From Zone WHERE IsEffective = 'Y'
+//                ),
+//
+//                TrafficCTE AS
+//                (
+//                    SELECT
+//                        OurZoneID AS ZoneID,
+//                        SupplierID AS SupplierID,
+//                        CustomerID AS CustomerID,
+//                        SUM(Attempts) AS Attempts,
+//                        SUM(SuccessfulAttempts) AS SuccessfulAttempts,
+//                        SUM(SuccessfulAttempts) * 100.0 / SUM(Attempts) AS ASR, 
+//                        CASE WHEN SUM(SuccessfulAttempts) > 0 THEN SUM(DurationsInSeconds) / (60.0 * SUM(SuccessfulAttempts)) ELSE 0 END AS ACD,
+//                        AVG(PDDinSeconds) AS PDD,
+//                        SUM(DurationsInSeconds / 60.) AS DurationInMinutes,
+//                        dbo.dateof(FirstCDRAttempt) AS CallDate
+//
+//                    FROM TrafficStats WITH(NOLOCK)
+//                    
+//                    #TRAFFIC_WHERE_CLAUSE#
+//                    
+//                    GROUP BY
+//                        dbo.dateof(FirstCDRAttempt),
+//                        SupplierID,
+//                        CustomerID,
+//                        OurZoneID
+//                ),
+//
+//                BillingCTE AS
+//                (
+//                    SELECT
+//                        SaleZoneID AS ZoneID,
+//                        SupplierID AS SupplierID,
+//                        CustomerID AS CustomerID,
+//                        AVG(Cost_Rate) AS CostRate,
+//                        AVG(Sale_Rate) AS SaleRate,
+//                        dbo.DateOf(CallDate) AS CallDate
+//
+//                    FROM Billing_Stats WITH(NOLOCK, INDEX(IX_Billing_Stats_Date))
+//    
+//                    #BILLING_WHERE_CLAUSE#
+//
+//                    GROUP BY
+//                        dbo.dateof(CallDate),
+//                        SaleZoneID,
+//                        SupplierID,
+//                        CustomerID
+//                )
+//
+//                SELECT
+//                    T.ZoneID,
+//                    Z.ZoneName,
+//                    T.CustomerID,
+//                    Customers.CarrierName AS CustomerName,
+//                    Customers.CarrierNameSuffix AS CustomerNameSuffix,
+//                    T.SupplierID,
+//                    Suppliers.CarrierName AS SupplierName,
+//                    Suppliers.CarrierNameSuffix AS SupplierNameSuffix,
+//                    T.Attempts,
+//                    T.SuccessfulAttempts,
+//                    T.ASR,
+//                    T.ACD,
+//                    T.PDD,
+//                    T.DurationInMinutes,
+//                    B.CostRate,
+//                    B.SaleRate
+//
+//                INTO #TEMP_TABLE_NAME#
+//
+//                FROM TrafficCTE T
+//                LEFT JOIN BillingCTE B ON (T.ZoneID IS NULL OR B.ZoneID = T.ZoneID) 
+//                    AND (T.SupplierID IS NULL OR B.SupplierID = T.SupplierID) 
+//                    AND (T.CustomerID IS NULL OR B.CustomerID =  T.CustomerID)
+//                    AND B.CallDate = T.CallDate
+//
+//                LEFT JOIN ZonesCTE Z ON Z.ZoneID = T.ZoneID
+//                LEFT JOIN CarriersCTE Customers ON Customers.CarrierAccountID = T.CustomerID
+//                LEFT JOIN CarriersCTE Suppliers ON Suppliers.CarrierAccountID = T.SupplierID
+//
+//                ORDER BY T.CallDate, T.Attempts DESC
+//                    
+//                END
+//            ");
+
+//            query.Replace("#TEMP_TABLE_NAME#", tempTableName);
+
+//            commonWhereClauseConditions = GetCommonWhereClauseConditions(selectedCustomerIDs, selectedSupplierIDs, assignedCustomerIDs, assignedSupplierIDs);
+
+//            query.Replace("#TRAFFIC_WHERE_CLAUSE#", GetTrafficWhereClause(selectedZoneIDs));
+
+//            query.Replace("#BILLING_WHERE_CLAUSE#", GetBillingWhereClause(selectedZoneIDs));
+
+//            return query.ToString();
+//        }
+
+        #endregion
+        
 
         public BigResult<AccountSuspicionDetail> GetFilteredAccountSuspicionDetails(Vanrise.Entities.DataRetrievalInput<AccountSuspicionDetailQuery> input)
         {
