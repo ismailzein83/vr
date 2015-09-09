@@ -154,7 +154,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, mapper);
         }
 
-        public BigResult<AccountCase> GetFilteredCasesByAccountNumber(Vanrise.Entities.DataRetrievalInput<AccountCaseQuery> input)
+        public BigResult<AccountCase> GetFilteredCasesByAccountNumber(Vanrise.Entities.DataRetrievalInput<AccountCaseResultQuery> input)
         {
             Dictionary<string, string> mapper = new Dictionary<string, string>();
             mapper.Add("CaseStatusDescription", "StatusID");

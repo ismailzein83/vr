@@ -56,7 +56,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountCaseResultQuery.cs" />
+    <Compile Include="ResultQuery\AccountCaseResultQuery.cs" />
     <Compile Include="AccountSuspicionDetail.cs" />
     <Compile Include="AccountSuspicionDetailQuery.cs" />
     <Compile Include="AccountSuspicionSummary.cs" />
@@ -68,7 +68,7 @@
     <Compile Include="Enums.cs" />
     <Compile Include="INumberProfileParameters.cs" />
     <Compile Include="NumberProfileParameters.cs" />
-    <Compile Include="AccountCaseUpdateQuery.cs" />
+    <Compile Include="ResultQuery\AccountCaseUpdateResultQuery.cs" />
     <Compile Include="StrategyExecutionInfo.cs" />
     <Compile Include="StrategyCases.cs" />
     <Compile Include="BTSHighValueCases.cs" />

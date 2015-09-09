@@ -19,7 +19,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredAccountSuspicionDetails(input));
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<AccountCase> GetFilteredCasesByAccountNumber(Vanrise.Entities.DataRetrievalInput<AccountCaseQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<AccountCase> GetFilteredCasesByAccountNumber(Vanrise.Entities.DataRetrievalInput<AccountCaseResultQuery> input)
         {
             ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredCasesByAccountNumber(input));
@@ -31,7 +31,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredDetailsByCaseID(input));
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> UpdateAccountCase(AccountCaseUpdate input)
+        public Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> UpdateAccountCase(AccountCaseUpdateResultQuery input)
         {
             Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary>();
 
@@ -39,12 +39,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             updateOperationOutput.UpdatedObject = null;
 
             ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
-            bool updated = dataManager.UpdateAccountCase(input.accountNumber, input.caseStatus, input.validTill);
+            bool updated = dataManager.UpdateAccountCase(input.AccountNumber, input.CaseStatus, input.ValidTill);
 
             if (updated)
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = dataManager.GetAccountSuspicionSummaryByAccountNumber(input.accountNumber, input.from, input.to);
+                updateOperationOutput.UpdatedObject = dataManager.GetAccountSuspicionSummaryByAccountNumber(input.AccountNumber, input.From, input.To);
             }
 
             return updateOperationOutput;
@@ -81,24 +81,24 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         }
 
 
-        public Vanrise.Entities.UpdateOperationOutput<AccountCase> UpdateAccountCase(AccountCaseUpdate input)
-        {
-            Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary>();
+        //public Vanrise.Entities.UpdateOperationOutput<AccountCase> UpdateAccountCase(AccountCaseUpdate input)
+        //{
+        //    Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary>();
 
-            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
+        //    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+        //    updateOperationOutput.UpdatedObject = null;
 
-            ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
-            bool updated = dataManager.CancelAccountCases(input.accountNumber, input.caseStatus, input.validTill);
+        //    ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
+        //    bool updated = dataManager.CancelAccountCases(input.accountNumber, input.caseStatus, input.validTill);
 
-            if (updated)
-            {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = dataManager.GetAccountSuspicionSummaryByAccountNumber(input.accountNumber, input.from, input.to);
-            }
+        //    if (updated)
+        //    {
+        //        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+        //        updateOperationOutput.UpdatedObject = dataManager.GetAccountSuspicionSummaryByAccountNumber(input.accountNumber, input.from, input.to);
+        //    }
 
-            return updateOperationOutput;
-        }
+        //    return updateOperationOutput;
+        //}
 
 
     }

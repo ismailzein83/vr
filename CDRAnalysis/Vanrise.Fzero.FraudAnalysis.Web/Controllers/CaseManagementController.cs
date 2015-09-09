@@ -33,7 +33,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         }
 
         [HttpPost]
-        public object GetFilteredCasesByAccountNumber(Vanrise.Entities.DataRetrievalInput<AccountCaseQuery> input)
+        public object GetFilteredCasesByAccountNumber(Vanrise.Entities.DataRetrievalInput<AccountCaseResultQuery> input)
         {
             CaseManagmentManager manager = new CaseManagmentManager();
             return GetWebResponse(input, manager.GetFilteredCasesByAccountNumber(input));
@@ -47,7 +47,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         }
 
         [HttpPost]
-        public Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> UpdateAccountCase(AccountCaseUpdate input)
+        public Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> UpdateAccountCase(AccountCaseUpdateResultQuery input)
         {
             CaseManagmentManager manager = new CaseManagmentManager();
             return manager.UpdateAccountCase(input);
