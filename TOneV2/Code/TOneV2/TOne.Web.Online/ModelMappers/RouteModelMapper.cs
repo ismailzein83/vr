@@ -20,6 +20,9 @@ namespace TOne.Web.Online.ModelMappers
                 OurZoneID = routeInfo.OurZoneID != null ? routeInfo.OurZoneID.ZoneId : 0,
                 OurZoneName = routeInfo.OurZoneID != null ? routeInfo.OurZoneID.Name : "",
                 RouteID = routeInfo.RouteID,
+                FlaggedServiceID = routeInfo.OurServicesFlag != null ? routeInfo.OurServicesFlag.FlaggedServiceID : (short)0,
+                Symbol = routeInfo.OurServicesFlag != null ? routeInfo.OurServicesFlag.Symbol : "",
+                ServiceColor = routeInfo.OurServicesFlag != null ? routeInfo.OurServicesFlag.ServiceColor : "",
                 SuppliersInfo = routeInfo.SuppliersInfo != null && routeInfo.SuppliersInfo.Count > 0 ? MapOptionModels(routeInfo.SuppliersInfo) : null
             };
         }
@@ -27,9 +30,6 @@ namespace TOne.Web.Online.ModelMappers
         {
             return new RouteOptionModel
             {
-                FlaggedServiceID = routeOptionInfo.SupplierServicesFlag.FlaggedServiceID,
-                Symbol = routeOptionInfo.SupplierServicesFlag.Symbol,
-                ServiceColor = routeOptionInfo.SupplierServicesFlag.ServiceColor,
                 SupplierInfoString = routeOptionInfo.SupplierInfoString
             };
         }

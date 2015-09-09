@@ -14,9 +14,9 @@ namespace TOne.Web.Online.Models
         public int OurZoneID { get; set; }
         public string OurZoneName { get; set; }
         public string Code { get; set; }
-        //public short FlaggedServiceID { get; set; }
-        //public string Symbol { get; set; }
-        //public string ServiceColor { get; set; }
+        public short FlaggedServiceID { get; set; }
+        public string Symbol { get; set; }
+        public string ServiceColor { get; set; }
         public float OurActiveRate { get; set; }
         //public RouteState State { get; set; }
         //public DateTime Updated { get; set; }
