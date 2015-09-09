@@ -7,14 +7,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class FraudResultQuery
+    public class DashboardResultQuery
     {
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
-        public string SuspicionLevelsList { get; set; }
-        public string StrategiesList { get; set; }
-        public string CaseStatusesList { get; set; }
-        public string AccountNumber { get; set; }
-
     }
 }

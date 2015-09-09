@@ -114,7 +114,6 @@
     <Compile Include="StrategyExecutionDetail.cs" />
     <Compile Include="SuspiciousNumber.cs" />
     <Compile Include="Batches\SuspiciousNumberBatch.cs" />
-    <Compile Include="ResultQuery\FraudResultQuery.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Entities\Vanrise.Fzero.CDRImport.Entities.csproj">
@@ -126,9 +125,7 @@
       <Name>Vanrise.Fzero.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Predefined\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
