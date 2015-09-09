@@ -18,6 +18,8 @@ namespace TOne.Analytics.Entities
         PortIn = 7,
         PortOut = 8,
         CodeSales = 9,
-        CodeBuy = 10
+        CodeBuy = 10,
+        Date = 11,
+        Hour = 12
     }
 }

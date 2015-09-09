@@ -226,7 +226,7 @@ namespace TOne.Analytics.Data.SQL
                     record.DimensionValues[index] = new AnalyticDimensionValue
                     {
                         Id = id,
-                        Name = reader[nameColumnName] as string
+                        Name =  reader[nameColumnName].ToString()
                     };
                 }
 

@@ -15,7 +15,7 @@
             $scope.toDate = now;
 
             measureFields = analyticsService.getGenericAnalyticMeasureValues();
-            $scope.measures = analyticsService.getGenericAnalyticMeasures();
+            //$scope.measures = analyticsService.getGenericAnalyticMeasures();
             $scope.groupKeys = analyticsService.getGenericAnalyticGroupKeys();
 
             $scope.selectedGroupKeys = [];
@@ -28,8 +28,12 @@
             $scope.codeGroups = [];
             $scope.selectedCodeGroups = [];
 
+            $scope.measures = [];
+            $scope.selectedMeasures = [];
+
             loadSwitches();
             loadCodeGroups();
+            loadMeasures();
             $scope.gridReady = function (api) {
                 gridApi = api;
             };
@@ -45,8 +49,8 @@
                         $scope.currentSearchCriteria.groupKeys.push(group);
                     });
                     //gridApi.setSummary(response.Summary);
-
                     onResponseReady(response);
+                    console.log(response);
                 });
             };
 
@@ -78,7 +82,7 @@
                 FromTime: $scope.fromDate,
                 ToTime: $scope.toDate
             };
-            console.log(query);
+            
             return gridApi.retrieveData(query);
         }
 
@@ -102,6 +106,10 @@
             });
         }
 
+
+        function loadMeasures() {
+            return $scope.measures = analyticsService.getGenericAnalyticMeasures();
+        }
 
     }
     appControllers.controller('Generic_GenericAnalyticController', GenericAnalyticController);

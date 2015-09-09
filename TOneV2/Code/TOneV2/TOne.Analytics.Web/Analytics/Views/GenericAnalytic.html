@@ -13,13 +13,17 @@
                     <vr-datetimepicker type="date" label="To:" value="toDate" isrequired></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="normal">
+                    <vr-select label="Measures" datasource="measures"
+                               datatextfield="description" datavaluefield="value" selectedvalues="selectedMeasures" ismultipleselection></vr-select>
+                </vr-columns>
+                <!--<vr-columns width="normal">
                     <vr-select label="Switches" datasource="switches"
                                datatextfield="Name" datavaluefield="SwitchId" selectedvalues="selectedSwitches" ismultipleselection></vr-select>
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-select label="Code Groups" datasource="codeGroups"
                                datatextfield="Name" datavaluefield="Code" selectedvalues="selectedCodeGroups" ismultipleselection></vr-select>
-                </vr-columns>
+                </vr-columns>-->
             </vr-row>
         </div>
         <vr-row removeline>
@@ -34,8 +38,9 @@
                 <vr-columns colnum="12">
                     <vr-datagrid datasource="::datasource" pagingtype="'Pager'" dataretrievalfunction="dataRetrievalFunction" on-ready="gridReady">
 
-                        <vr-datagridcolumn ng-repeat="groupKey in currentSearchCriteria.groupKeys" headertext="groupKey.description" field="'DimensionValues[' + $index + '].Name'" columnindex="$index" widthfactor="15"></vr-datagridcolumn>
-                        <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="'MeasureValues[' + $index + ']'" tag="measure"></vr-datagridcolumn>
+                        <vr-datagridcolumn ng-repeat="groupKey in currentSearchCriteria.groupKeys" headertext="groupKey.description"
+                                           field="'DimensionValues[' + $index + '].Name'" columnindex="$index" widthfactor="15"></vr-datagridcolumn>
+                        <vr-datagridcolumn ng-repeat="measure in selectedMeasures" headertext="measure.description" field="'MeasureValues[' + $index + ']'" tag="measure"></vr-datagridcolumn>
 
                         <vr-datagridexpandablerow ng-show="checkExpandablerow(currentSearchCriteria.groupKeys)">
                             <div ng-include="'/Client/Modules/Analytics/Views/GenericAnalyticGrid.html'"></div>

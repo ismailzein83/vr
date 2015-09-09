@@ -47,7 +47,7 @@
             var filterResult = [];
 
             for (var prop in filter)
-                filterResult.push({ Dimension: prop, FilterValues: filter[prop] });
+                filterResult.push({ Dimension: parseInt(prop), FilterValues: filter[prop] });
             var query = {
                 Filters: filterResult,
                 DimensionFields: [$scope.selectedGroupKey.value],
@@ -77,7 +77,7 @@
                     if (GenericAnalyticDimensionEnum.hasOwnProperty(item)) {
                         if (groupKey.value == GenericAnalyticDimensionEnum[item].value) {
                             if (filter[groupKey.value] === undefined) filter[groupKey.value] = [];
-                            filter[groupKey.value].push(scope.dataItem.DimensionValues[i].Id);
+                                filter[groupKey.value].push(scope.dataItem.DimensionValues[i].Id);
                         }
                     }
                 }

@@ -18,5 +18,5 @@
     Measure_UtilizationInSeconds: { value: 10, description: "Utilization", type: "Text" },
     Measure_NumberOfCalls: { value: 11, description: "Number Of Calls", type: "Text" },
     Measure_DeliveredNumberOfCalls: { value: 12, description: "Delivered Number Of Calls", type: "Text" },
-    Measure_AveragePDD: { value: 18, description: "avg PDD", type: "Text" }
+    Measure_AveragePDD: { value: 18, description: "Average PDD", type: "Text" }
 });

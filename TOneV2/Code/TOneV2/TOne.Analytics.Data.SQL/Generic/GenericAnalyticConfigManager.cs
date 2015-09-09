@@ -157,6 +157,26 @@ namespace TOne.Analytics.Data.SQL
                     GroupByStatements = new List<string>() { "ts.SupplierCode" },
                     CTEStatement = null
                 });
+
+            s_AllDimensionsConfig.Add(AnalyticDimension.Date,
+                new AnalyticDimensionConfig
+                {
+                    IdColumn = "dateadd(dd,0, datediff(dd,0,LastCDRAttempt))",
+                    NameColumn = "dateadd(dd,0, datediff(dd,0,LastCDRAttempt))",
+                    JoinStatements = null,
+                    GroupByStatements = new List<string>() { "dateadd(dd,0, datediff(dd,0,LastCDRAttempt))" },
+                    CTEStatement = null
+                });
+
+            s_AllDimensionsConfig.Add(AnalyticDimension.Hour,
+                new AnalyticDimensionConfig
+                {
+                    IdColumn = " datepart(hour,LastCDRAttempt)",
+                    NameColumn = " datepart(hour,LastCDRAttempt)",
+                    JoinStatements = null,
+                    GroupByStatements = new List<string>() { " datepart(hour,LastCDRAttempt)" },
+                    CTEStatement = null
+                });
         }
 
         private static void FillMeasureFieldsConfig()
@@ -166,16 +186,19 @@ namespace TOne.Analytics.Data.SQL
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.FirstCDRAttempt,
                 new AnalyticMeasureFieldConfig
                 {
-                    GetFieldExpression = (query) => "Min(FirstCDRAttempt)"
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.FirstCDRAttempt_Expression},
+                    MappedSQLColumn = MeasureValueExpression.FirstCDRAttempt_Expression.ColumnAlias,
+                    GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.FirstCDRAttempt_Expression.ColumnAlias)
                 });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.ASR,
-               new AnalyticMeasureFieldConfig
-               {
-                   GetFieldExpression = (query) =>
+                new AnalyticMeasureFieldConfig
+                {
+                     GetColumnsExpressions = new List<Func<AnalyticQuery,MeasureValueExpression>>{
+                        (query) =>
                        {
                            string s = "";
-                           foreach(AnalyticDimension  dimension in query.DimensionFields)
+                           foreach (AnalyticDimension dimension in query.DimensionFields)
                            {
                                if (dimension == AnalyticDimension.Supplier || dimension == AnalyticDimension.PortOut || dimension == AnalyticDimension.GateWayOut
                                    //|| (filter.SupplierIds != null && filter.SupplierIds.Count != 0)
@@ -184,70 +207,102 @@ namespace TOne.Analytics.Data.SQL
                                else
                                    s = "NumberOfCalls";
                            }
-                           return String.Format("Case WHEN (Sum(ts.{0})-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))>0 THEN CONVERT(DECIMAL(10,2),SUM(ts.SuccessfulAttempts)*100.0/(Sum(ts.{0})-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))) ELSE 0 END ", s);
+                           return new MeasureValueExpression
+                           {
+                               Expression = String.Format("Case WHEN (Sum(ts.{0})-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))>0 THEN CONVERT(DECIMAL(10,2),SUM(ts.SuccessfulAttempts)*100.0/(Sum(ts.{0})-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))) ELSE 0 END ", s),
+                               ColumnAlias = "Measure_ASR"
+                           };
                        }
-               });
+                   },
+                     MappedSQLColumn = "Measure_ASR",
+                     GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, "Measure_ASR")
+                });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.ABR,
                new AnalyticMeasureFieldConfig
                {
-                   GetFieldExpression = (query) =>
-                   {
-                       string s = "";
-                       foreach (AnalyticDimension dimension in query.DimensionFields)
+                   GetColumnsExpressions = new List<Func<AnalyticQuery,MeasureValueExpression>>{
+                        (query) =>
                        {
-                           if (dimension == AnalyticDimension.Supplier || dimension == AnalyticDimension.PortOut || dimension == AnalyticDimension.GateWayOut
-                               //|| (filter.SupplierIds != null && filter.SupplierIds.Count != 0)
-                               )
-                               s = "Attempts";
-                           else
-                               s = "NumberOfCalls";
+                           string s = "";
+                           foreach (AnalyticDimension dimension in query.DimensionFields)
+                           {
+                               if (dimension == AnalyticDimension.Supplier || dimension == AnalyticDimension.PortOut || dimension == AnalyticDimension.GateWayOut
+                                   //|| (filter.SupplierIds != null && filter.SupplierIds.Count != 0)
+                                   )
+                                   s = "Attempts";
+                               else
+                                   s = "NumberOfCalls";
+                           }
+                           return new MeasureValueExpression
+                           {
+                               Expression = String.Format("Case WHEN SUM(ts.{0})>0 THEN CONVERT(DECIMAL(10,2),SUM(ts.SuccessfulAttempts)*100.0/Sum(ts.{0})) ELSE 0 END ", s),
+                               ColumnAlias = "Measure_ABR"
+                           };
                        }
-                       return String.Format("Case WHEN SUM(ts.{0})>0 THEN CONVERT(DECIMAL(10,2),SUM(ts.SuccessfulAttempts)*100.0/Sum(ts.{0})) ELSE 0 END ", s);
-                   }
+                   },
+                   MappedSQLColumn = "Measure_ABR",
+                   GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, "Measure_ABR")
+
                });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.NER,
                new AnalyticMeasureFieldConfig
                {
-                   GetFieldExpression = (query) =>
-                   {
-                       string s = "";
-                       foreach (AnalyticDimension dimension in query.DimensionFields)
+                    GetColumnsExpressions = new List<Func<AnalyticQuery,MeasureValueExpression>>{
+                        (query) =>
                        {
-                           if (dimension == AnalyticDimension.Supplier || dimension == AnalyticDimension.PortOut || dimension == AnalyticDimension.GateWayOut
-                               //|| (filter.SupplierIds != null && filter.SupplierIds.Count != 0)
-                               )
-                               s = "Attempts";
-                           else
-                               s = "NumberOfCalls";
+                           string s = "";
+                           foreach (AnalyticDimension dimension in query.DimensionFields)
+                           {
+                               if (dimension == AnalyticDimension.Supplier || dimension == AnalyticDimension.PortOut || dimension == AnalyticDimension.GateWayOut
+                                   //|| (filter.SupplierIds != null && filter.SupplierIds.Count != 0)
+                                   )
+                                   s = "Attempts";
+                               else
+                                   s = "NumberOfCalls";
+                           }
+                           return new MeasureValueExpression
+                           {
+                               Expression = String.Format("Case WHEN (Sum(ts.{0})-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))>0 THEN CONVERT(DECIMAL(10,2),SUM(ts.DeliveredNumberOfCalls)*100.0/(Sum(ts.{0})-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))) ELSE 0 END ", s),
+                               ColumnAlias = "Measure_NER"
+                           };
                        }
-                       return String.Format("Case WHEN (Sum(ts.{0})-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))>0 THEN CONVERT(DECIMAL(10,2),SUM(ts.DeliveredNumberOfCalls)*100.0/(Sum(ts.{0})-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))) ELSE 0 END ", s);
-                   }
+                   },
+                    MappedSQLColumn = "Measure_NER",
+                    GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, "Measure_NER")
                });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.Attempts,
                 new AnalyticMeasureFieldConfig
                 {
-                    GetFieldExpression = (query) => "Sum(ts.Attempts)"
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.Attempts_Expression},
+                    MappedSQLColumn = MeasureValueExpression.Attempts_Expression.ColumnAlias,
+                    GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.Attempts_Expression.ColumnAlias)
                 });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.SuccessfulAttempts,
                 new AnalyticMeasureFieldConfig
                 {
-                    GetFieldExpression = (query) => "Sum(ts.SuccessfulAttempts)"
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.SuccessfulAttempts_Expression},
+                    MappedSQLColumn = MeasureValueExpression.SuccessfulAttempts_Expression.ColumnAlias,
+                    GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.SuccessfulAttempts_Expression.ColumnAlias)
                 });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.FailedAttempts,
                 new AnalyticMeasureFieldConfig
                 {
-                    GetFieldExpression = (query) => "Sum(ts.Attempts-ts.SuccessfulAttempts)"
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.FailedAttempts_Expression },
+                    MappedSQLColumn = MeasureValueExpression.FailedAttempts_Expression.ColumnAlias,
+                    GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.FailedAttempts_Expression.ColumnAlias)
                 });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.DeliveredAttempts,
                 new AnalyticMeasureFieldConfig
                 {
-                    GetFieldExpression = (query) => "Sum(ts.DeliveredAttempts)"
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.DeliveredAttempts_Expression },
+                    MappedSQLColumn = MeasureValueExpression.DeliveredAttempts_Expression.ColumnAlias,
+                    GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.DeliveredAttempts_Expression.ColumnAlias)
                 });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.DurationsInSeconds,
@@ -261,61 +316,88 @@ namespace TOne.Analytics.Data.SQL
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.PDDInSeconds,
                 new AnalyticMeasureFieldConfig
                 {
-                    GetFieldExpression = (query) => "AVG(ts.PDDInSeconds)"
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.PDDInSeconds_Expression },
+                    MappedSQLColumn = MeasureValueExpression.PDDInSeconds_Expression.ColumnAlias,
+                    GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.PDDInSeconds_Expression.ColumnAlias)
                 });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.UtilizationInSeconds,
                 new AnalyticMeasureFieldConfig
                 {
-                    GetFieldExpression = (query) => "AVG(ts.UtilizationInSeconds)"
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.UtilizationInSeconds_Expression },
+                    MappedSQLColumn = MeasureValueExpression.UtilizationInSeconds_Expression.ColumnAlias,
+                    GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.UtilizationInSeconds_Expression.ColumnAlias)
                 });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.NumberOfCalls,
                 new AnalyticMeasureFieldConfig
                 {
-                    GetFieldExpression = (query) => "Sum(ts.NumberOfCalls)"
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.NumberOfCalls_Expression },
+                    MappedSQLColumn = MeasureValueExpression.NumberOfCalls_Expression.ColumnAlias,
+                    GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.NumberOfCalls_Expression.ColumnAlias)
                 });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.DeliveredNumberOfCalls,
                 new AnalyticMeasureFieldConfig
                 {
-                    GetFieldExpression = (query) => "Sum(ts.DeliveredNumberOfCalls)"
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.DeliveredNumberOfCalls_Expression },
+                    MappedSQLColumn = MeasureValueExpression.DeliveredNumberOfCalls_Expression.ColumnAlias,
+                    GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.DeliveredNumberOfCalls_Expression.ColumnAlias)
                 });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.CeiledDuration,
                 new AnalyticMeasureFieldConfig
                 {
-                    GetFieldExpression = (query) => "Sum(ts.CeiledDuration)"
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.CeiledDuration_Expression },
+                    MappedSQLColumn = MeasureValueExpression.CeiledDuration_Expression.ColumnAlias,
+                    GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.CeiledDuration_Expression.ColumnAlias)
                 });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.ACD,
                 new AnalyticMeasureFieldConfig
                 {
-                    GetFieldExpression = (query) => "case when Sum(ts.SuccessfulAttempts) > 0 then CONVERT(DECIMAL(10,2),Sum(ts.DurationsInSeconds)/(60.0*Sum(ts.SuccessfulAttempts))) ELSE 0 end"
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> {
+                        (query) => MeasureValueExpression.SuccessfulAttempts_Expression,
+                        (query) => MeasureValueExpression.DurationsInSeconds_Expression
+                    },
+                    GetMeasureValue = (reader, record) =>
+                    {
+                        var successfulAttempts = GetReaderValue<int>(reader, MeasureValueExpression.SuccessfulAttempts_Expression.ColumnAlias);
+                        var durationInMinutes = GetReaderValue<Decimal>(reader, MeasureValueExpression.DurationsInSeconds_Expression.ColumnAlias) / 60;
+                        return successfulAttempts > 0 ? (durationInMinutes * successfulAttempts) : 0;
+                    }
                 });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.LastCDRAttempt,
                 new AnalyticMeasureFieldConfig
                 {
-                    GetFieldExpression = (query) => "DATEADD(ms,-datepart(ms,Max(LastCDRAttempt)),Max(LastCDRAttempt))"
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.LastCDRAttempt_Expression },
+                    MappedSQLColumn = MeasureValueExpression.LastCDRAttempt_Expression.ColumnAlias,
+                    GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.LastCDRAttempt_Expression.ColumnAlias)
                 });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.MaxDurationInSeconds,
                 new AnalyticMeasureFieldConfig
                 {
-                    GetFieldExpression = (query) => "CONVERT(DECIMAL(10,2),Max (ts.MaxDurationInSeconds)/60.0)"
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.MaxDurationInSeconds_Expression },
+                    MappedSQLColumn = MeasureValueExpression.MaxDurationInSeconds_Expression.ColumnAlias,
+                    GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.MaxDurationInSeconds_Expression.ColumnAlias)
                 });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.PGAD,
                 new AnalyticMeasureFieldConfig
                 {
-                    GetFieldExpression = (query) => "CONVERT(DECIMAL(10,2),Avg(ts.PGAD))"
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.PGAD_Expression },
+                    MappedSQLColumn = MeasureValueExpression.PGAD_Expression.ColumnAlias,
+                    GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.PGAD_Expression.ColumnAlias)
                 });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.AveragePDD,
                 new AnalyticMeasureFieldConfig
                 {
-                    GetFieldExpression = (query) => "CONVERT(DECIMAL(10,2),Avg(ts.PDDinSeconds))"
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.AveragePDD_Expression },
+                    MappedSQLColumn = MeasureValueExpression.AveragePDD_Expression.ColumnAlias,
+                    GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.AveragePDD_Expression.ColumnAlias)
                 });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.GreenArea,
