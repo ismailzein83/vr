@@ -95,7 +95,7 @@
         <vr-columns width="1/2row">
             <vr-list datasource="listData">
                 <div transclude-to="header">
-                    <vr-row>
+                    <vr-row removeline>
                         <vr-columns width="normal">Value </vr-columns>
                         <vr-columns width="normal">Name </vr-columns>
                     </vr-row>
@@ -111,9 +111,9 @@
 </vr-form>
 <vr-row>
     <vr-columns width="fullrow">
-        <div class="wrapper" >
+        <div class="wrapper" style="display:none">
             <div class="content">
-                <div class="box" style="width:50%"  >
+                <div class="box" style="width:50%">
                     <div style="display:block;width:100%;height:50% ; border-bottom:1px solid">
                         <div style=" display: table; position: relative; height: 100%; width: 100%;"><div style="display: table-cell; vertical-align: middle;">Average</div></div>
                     </div>
@@ -154,7 +154,7 @@
                 <div class="box">
                     <div class="vertical-text" get-style><label>contact</label></div>
                 </div>-->
-                <div class="box" style="width:50%"  >
+                <div class="box" style="width:50%">
                     <div style="display:block;width:100%;height:50% ; border-bottom:1px solid">
                         <div style=" display: table; position: relative; height: 100%; width: 100%;"><div style="display: table-cell; vertical-align: middle;">Average</div></div>
                     </div>
@@ -188,10 +188,10 @@
                 </div>
             </div>
             <div class="content">
-                <div class="box"  >
+                <div class="box">
                     <div class="vertical-text" get-style><label>Skills</label></div>
                 </div>
-                <div class="box"  >
+                <div class="box">
                     <div style="display:block;width:100%;height:50% ; border-bottom:1px solid">
                         <div style=" display: table; position: relative; height: 100%; width: 100%;"><div style="display: table-cell; vertical-align: middle;">Average</div></div>
                     </div>
@@ -223,13 +223,13 @@
 
                     </div>
                 </div>
-                <div class="box"  >
+                <div class="box">
                     <div style="display:flex;width:100%;height:100% ;">
                         <div style="display: inline-block; height: 100%; width: 50%; ">
                             <div class="vertical-text" get-style><label> Resume sdfasd  </label></div>
 
                         </div>
-                        
+
                         <div style="display: inline-block; height: 100%; width: 50%; border-left: 1px solid;">
 
                             <div class="vertical-text" get-style><label> Resume sdfasd  </label></div>
@@ -237,9 +237,9 @@
                         </div>
 
                     </div>
-                </div>         
+                </div>
 
-                <div class="box"  >
+                <div class="box">
                     <div style="display:block;width:100%;height:50% ; border-bottom:1px solid">
                         <div style=" display: table; position: relative; height: 100%; width: 100%;"><div style="display: table-cell; vertical-align: middle;">Average</div></div>
                     </div>
@@ -268,7 +268,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <div class="box">
@@ -277,15 +276,55 @@
 
             </div>
         </div>
-   
+
     </vr-columns>
 
-</vr-row>
 
+
+
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <div class="wrapper">
+            <div class="content">
+                <div class="box" ng-repeat="b in groupeHeaders" ng-style="{'width':100/groupeHeaders.length+'%'}">
+                    <div ng-if="b.type=='leaf' && b.rotated == false" style=" display: table; position: relative; height: 100%; width: 100%;">
+                        <div style="display: table-cell; vertical-align: middle;">
+                            {{b.lable}}
+                        </div>
+                    </div>
+                    <div ng-if="b.type=='root' && b.rotated == false" style=" display: block;  height: 100%; width: 100%;">
+                        <div style="display:block;width:100%;height:50% ; border-bottom:1px solid">
+                            <div style=" display: table; position: relative; height: 100%; width: 100%;">
+                                <div style="display: table-cell; vertical-align: middle;">{{b.lable}}</div>
+                            </div>
+                        </div>
+                        <div ng-if=" b.groupe.length > 0" class="groupe-list" style="display:flex;width:100%;height:50% ;">
+                            <div ng-repeat="c in b.groupe" class="groupe-cell" style="display: inline-block; height: 100%; width: 100%;">
+                                <div style=" display: table; position: relative; height: 100%; width: 100%;">
+                                    <div style="display: table-cell; vertical-align: middle;">
+                                        {{c.lable}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="b.type=='leaf' && b.rotated == true" >
+
+                        <!--<div style="display: table-cell; vertical-align: middle;">-->
+                            <div  ><label class="vertical-text">{{b.lable}}</label></div>
+                        <!--</div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </vr-columns>
+</vr-row>
 <style>
     .content {
         width: 100%;
-        height: 90px;
+        height: 150px;
     }
 
         .content div {
@@ -308,7 +347,9 @@
     .content .box:last-child {
         border-right: 1px solid;
     }
-
+    .groupe-list .groupe-cell:last-child {
+        border-left: 1px solid;
+    }
     .content:last-child {
         border-bottom: 1px solid;
     }
@@ -318,15 +359,14 @@
         -moz-transform: rotate(-90deg);
         -webkit-transform: rotate(-90deg);
         transform: rotate(-90deg);
-        width: 30px;
-        -moz-transform-origin: center bottom ;
+        /*width: 33px;
+        -moz-transform-origin: center bottom;*/
         position: relative;
     }
 
         .vertical-text label {
             margin: 0px;
             white-space: nowrap;
-            line-height: 100%;
         }
 </style>
 <div class="col-sm-3">

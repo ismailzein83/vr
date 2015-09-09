@@ -165,6 +165,45 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout) {
     $scope.choiceSelectionChanged = function () {
         //console.log($scope.testObj);
     };
+    $scope.groupeHeaders = [
+        { lable: "test", type: "leaf", rotated: false },
+        { lable: "test 2", type: "leaf", rotated: true },
+        { lable: "test 2", type: "leaf", rotated: true },
+        { lable: "test 2", type: "leaf", rotated: true },
+        { lable: "test 2", type: "leaf", rotated: true },
+        { lable: "test 2", type: "leaf", rotated: true },
+        {
+            lable: "test 3", type: "root", rotated: false,
+            groupe: [
+                { lable: "leaf 1", type: "leaf", rotated: false },
+                { lable: "leaf 2", type: "leaf", rotated: false },
+            ]
+        },
+        {
+            lable: "test 3", type: "root", rotated: false,
+            groupe: [
+                { lable: "leaf 1", type: "leaf", rotated: false },
+                { lable: "leaf 2", type: "leaf", rotated: false },
+            ]
+        },
+        { lable: "test", type: "leaf", rotated: false },
+        { lable: "test 2", type: "leaf", rotated: true },
+        { lable: "test 2", type: "leaf", rotated: true },
+        { lable: "test 2", type: "leaf", rotated: true },
+        { lable: "test 2", type: "leaf", rotated: true },
+        { lable: "test 2", type: "leaf", rotated: true },
+        { lable: "test 2", type: "leaf", rotated: true }
+        ,
+        { lable: "test", type: "leaf", rotated: false },
+        { lable: "test 2 gggg fgfff", type: "leaf", rotated: true }
+        //{ lable: "test 2", type: "leaf", rotated: true },
+        //{ lable: "test 2", type: "leaf", rotated: true },
+        //{ lable: "test 2", type: "leaf", rotated: true },
+        //{ lable: "test 2", type: "leaf", rotated: true },
+        //{ lable: "test 2", type: "leaf", rotated: true }
+
+
+    ];
     $scope.testValueChanged = function () {
         console.log("ali")
     }
@@ -214,12 +253,13 @@ app.directive("getStyle",function(){
         link: function (scope, element) {
           
             var dom = element[0];
+            var selw = $(element).width();
             var parent = $(element).parent();
             var ph = $(parent).height();
             var pw = $(parent).width();
             var h = dom.scrollWidth;
             var w = dom.scrollHeight;
-            element[0].style.top =  (100 * ((ph - 32) - ((ph - h) / 2) ) ) /ph  + "%";
+            element[0].style.top = (100 * ((ph - 25 ) - ((ph - h) / 2))) / ph + "%";
             element[0].style.left = (100 * ((pw - (w/2)) / 2)) / pw + "%";
 
             //parent[0].style.backgroundColor = scope.getCellcolor();
