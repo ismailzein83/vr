@@ -305,10 +305,6 @@
       <Project>{c195cfd3-948d-447c-83b4-3365d0515ec9}</Project>
       <Name>Vanrise.Fzero.FraudAnalysis.Business</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Data.MySQL\Vanrise.Fzero.FraudAnalysis.Data.MySQL.csproj">
-      <Project>{dd4f4480-110d-4bc4-8ea0-688fc59c9b34}</Project>
-      <Name>Vanrise.Fzero.FraudAnalysis.Data.MySQL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Data.SQL\Vanrise.Fzero.FraudAnalysis.Data.SQL.csproj">
       <Project>{ce9ee251-4bb3-457a-925a-7b53a990cf34}</Project>
       <Name>Vanrise.Fzero.FraudAnalysis.Data.SQL</Name>
