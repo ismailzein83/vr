@@ -173,16 +173,21 @@ function SuspiciousNumberDetails2Controller($scope, CaseManagementAPIService, No
     }
 
     function load() {
+        $scope.isInitializing = true;
+
         $scope.caseStatuses = UtilsService.getArrayEnum(CaseStatusEnum2);
 
         return StrategyAPIService.GetAggregates()
             .then(function (response) {
-                angular.forEach(response, function (itm) {
-                    $scope.aggregateDefinitions.push({ name: itm.Name });
+                angular.forEach(response, function (item) {
+                    $scope.aggregateDefinitions.push({ name: item.Name });
                 });
             })
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            })
+            .finally(function () {
+                $scope.isInitializing = false;
             });
     }
 
