@@ -1,3 +1,37 @@
-﻿<div ng-controller="FraudAnalysis_CancelCasesController" >
+﻿<vr-panel ng-controller="FraudAnalysis_CancelCasesController">
+    <vr-form name="formCancel">
+        <div>
+            <vr-row removelines>
+                <vr-columns width="normal">
+                    <vr-textbox label="Account Number" value="accountNumber"></vr-textbox>
+                </vr-columns>
 
-</div>
+                <vr-columns width="normal">
+                    <vr-datetimepicker label="From" value="from" type="dateTime" isrequired></vr-datetimepicker>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-datetimepicker label="To" value="to" type="dateTime" isrequired></vr-datetimepicker>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-select label="Strategy"
+                               datasource="strategies"
+                               selectedvalue="selectedStrategy"
+                               datavaluefield="value"
+                               datatextfield="description">
+                    </vr-select>
+                </vr-columns>
+            </vr-row>
+        </div>
+
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="false" >
+                <div transclude-to="buttons">
+                    <vr-button type="Cancel" formname="formCancel" data-onclick="cancelClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+
+    </vr-form>
+</vr-panel>
