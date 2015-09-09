@@ -57,7 +57,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_FraudResult_CreateTempForFilteredNumberProfiles", tempTableName, input.Query.FromDate, input.Query.ToDate, input.Query.AccountNumber);
+                ExecuteNonQuerySP("FraudAnalysis.sp_NumberProfile_CreateTempForFilteredNumberProfiles", tempTableName, input.Query.FromDate, input.Query.ToDate, input.Query.AccountNumber);
             };
             return RetrieveData(input, createTempTableAction, NumberProfileMapper);
         }
