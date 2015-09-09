@@ -72,7 +72,6 @@
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
       <Parallel.Variables>
         <Variable x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)" Name="numberProfileQueue" />
-        <Variable x:TypeArguments="vq:BaseQueue(vffe:SuspiciousNumberBatch)" Name="suspiciousNumberQueue" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="createNumberProfilesStatus" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="GetSuspiciousNumberStatus" />
         <Variable x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)" Name="numberProfileToStoreQueue" />
@@ -82,7 +81,6 @@
         <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="preparedNumberProfilesQueue" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareSuspiciousNumbersStatus" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareNumberProfilesStatus" />
-        <Variable x:TypeArguments="vq:BaseQueue(vffe:SuspiciousNumberBatch)" Name="suspiciousNumberForFraudResultQueue" />
         <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="preparedFraudResultQueue" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareFraudResultStatus" />
       </Parallel.Variables>
