@@ -152,7 +152,7 @@ namespace TOne.BusinessEntity.Data.SQL
                         CustomerPaymentType = (byte)reader["CustomerPaymentType"],
                         SupplierPaymentType = (byte)reader["SupplierPaymentType"],
                         NameSuffix = reader["NameSuffix"] as string,
-                        IsCustomerCeiling = reader["IsSupplierCeiling"] as string != null ? (IsCeiling)Enum.Parse(typeof(IsCeiling), reader["IsCustomerCeiling"] as string) : IsCeiling.Null,
+                        IsCustomerCeiling = reader["IsCustomerCeiling"] as string != null ? (IsCeiling)Enum.Parse(typeof(IsCeiling), reader["IsCustomerCeiling"] as string) : IsCeiling.Null,
 
                         IsSupplierCeiling = reader["IsSupplierCeiling"] as string != null ? (IsCeiling)Enum.Parse(typeof(IsCeiling), reader["IsSupplierCeiling"] as string) : IsCeiling.Null,
                         SupplierGMTTime = GetReaderValue<Int16>(reader, "GMTTime"),
@@ -210,7 +210,7 @@ namespace TOne.BusinessEntity.Data.SQL
                 CustomerPaymentType = (byte)reader["CustomerPaymentType"],
                 SupplierPaymentType = (byte)reader["SupplierPaymentType"],
                 NameSuffix = reader["NameSuffix"] as string,
-                IsCustomerCeiling = reader["IsSupplierCeiling"] as string != null ? (IsCeiling)Enum.Parse(typeof(IsCeiling), reader["IsCustomerCeiling"] as string) : IsCeiling.Null,
+                IsCustomerCeiling = reader["IsCustomerCeiling"] as string != null ? (IsCeiling)Enum.Parse(typeof(IsCeiling), reader["IsCustomerCeiling"] as string) : IsCeiling.Null,
 
                 IsSupplierCeiling = reader["IsSupplierCeiling"] as string != null ? (IsCeiling)Enum.Parse(typeof(IsCeiling), reader["IsSupplierCeiling"] as string) : IsCeiling.Null,
                 CarrierAccountName = GetCarrierAccountName(reader["ProfileName"] as string, reader["NameSuffix"] as string)

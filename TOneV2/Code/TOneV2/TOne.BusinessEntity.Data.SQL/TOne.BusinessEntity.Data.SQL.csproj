@@ -73,8 +73,10 @@
     <Compile Include="RateAnalysisDataManager.cs" />
     <Compile Include="RateDataManager.cs" />
     <Compile Include="FlaggedServiceDataManager.cs" />
+    <Compile Include="SaleRateDataManager.cs" />
     <Compile Include="SupplierCommissionDataManager.cs" />
     <Compile Include="SupplierPricelistsDataManager.cs" />
+    <Compile Include="SupplierRateDataManager.cs" />
     <Compile Include="SupplierTariffDataManager.cs" />
     <Compile Include="CustomerToDDataManager .cs" />
     <Compile Include="SwitchDataManager.cs" />

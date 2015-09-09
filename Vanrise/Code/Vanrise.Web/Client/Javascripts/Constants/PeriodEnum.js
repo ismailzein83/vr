@@ -5,7 +5,7 @@
         var date = new Date();
         return {
             from: new Date(date.getFullYear(), 0, 1),
-            to: new Date()
+            to: new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59)
         }
     }
 
@@ -20,10 +20,10 @@
             var diffToMonday = thisWeek.getDate() - day + (day === 0 ? -6 : 1);
             lastMonday = new Date(thisWeek.setDate(diffToMonday));
         }
-
+        var today=new Date();
         return {
-            from: lastMonday,
-            to: new Date()
+            from: new Date(lastMonday.getFullYear(), lastMonday.getMonth(), lastMonday.getDate(), 00, 00, 00),
+            to: new Date(today.getFullYear(),today.getMonth(),today.getDay(),23,59,59)
         }
     }
 
@@ -34,8 +34,8 @@
         var beforeLastMonday = new Date(beforeOneWeek.setDate(diffToMonday));
         var lastSunday = new Date(beforeOneWeek.setDate(diffToMonday + 6));
         return {
-            from: beforeLastMonday,
-            to: lastSunday
+            from: new Date(beforeLastMonday.getFullYear(), beforeLastMonday.getMonth(), beforeLastMonday.getDate(), 00, 00, 00),
+            to: new Date(lastSunday.getFullYear(),lastSunday.getMonth(),lastSunday.getDate(),23,59,59)
         }
     }
 
@@ -43,24 +43,23 @@
         var date = new Date();
         return {
             from: new Date(date.getFullYear(), date.getMonth(), 1),
-            to: new Date()
+            to: new Date(date.getFullYear(),date.getMonth(),date.getDate(),23,59,59)
         }
     }
 
     function getTodayInterval() {
         var date = new Date();
         return {
-            from: date,
-            to: date
+            from: new Date(date.getFullYear(), date.getMonth(), date.getDate(), 00,00,00),
+            to: new Date(date.getFullYear(),date.getMonth(),date.getDate(),23,59,59)
         }
     }
 
     function getYesterdayInterval() {
         var date = new Date();
-        date.setDate(date.getDate() - 1);
         return {
-            from: date,
-            to: date
+            from: new Date(date.getFullYear(),date.getMonth(),date.getDate()-1,00,00,00),
+            to: new Date(date.getFullYear(),date.getMonth(),date.getDate()-1,23,59,59)
         }
     }
 
@@ -68,15 +67,15 @@
         var date = new Date();
         return {
             from: new Date(date.getFullYear(), date.getMonth() - 1, 1),
-            to: new Date(date.getFullYear(), date.getMonth(), 0)
+            to: new Date(date.getFullYear(), date.getMonth(),0,23,59,59)
         }
     }
 
     function getLastYearInterval() {
         var date = new Date();
         return {
-            from: new Date(date.getFullYear() - 1, 0, 1),
-            to: new Date(date.getFullYear() - 1, 11, 31)
+            from: new Date(date.getFullYear() - 1, 0, 1,00,00,00),
+            to: new Date(date.getFullYear() - 1, 11, 31,23,59,59)
         }
     }
 

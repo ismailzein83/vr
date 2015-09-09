@@ -48,5 +48,26 @@ namespace TOne.BusinessEntity.Data.SQL
 
             return supplierTariff;
         }
+        private SupplierTariff TariffMapper(IDataReader reader)
+        {
+            return new SupplierTariff
+            {
+                TariffID = (int)(long)reader["TariffID"],
+                ZoneID = GetReaderValue<int>(reader, "ZoneID"),
+                SupplierID = reader["SupplierID"] as string,
+                CallFee = GetReaderValue<decimal>(reader, "CallFee"),
+                FirstPeriodRate = GetReaderValue<decimal>(reader, "FirstPeriodRate"),
+                FirstPeriod = GetReaderValue<byte>(reader, "FirstPeriod"),
+                RepeatFirstPeriod = reader["RepeatFirstPeriod"] as string == "Y",
+                FractionUnit = GetReaderValue<byte>(reader, "FractionUnit"),
+                BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate"),
+                EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate")
+            };
+        }
+
+        public List<SupplierTariff> GetSupplierTariffs(DateTime when)
+        {
+            return GetItemsSP("BEntity.sp_Tariff_GetCost", TariffMapper, when);
+        }
     }
 }

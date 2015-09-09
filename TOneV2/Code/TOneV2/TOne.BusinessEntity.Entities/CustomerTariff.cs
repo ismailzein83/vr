@@ -8,6 +8,7 @@ namespace TOne.BusinessEntity.Entities
 {
     public class CustomerTariff
     {
+        
         public long TariffID { get; set; }
         public string CustomerID { get; set; }
         public string CustomerName { get; set; }
@@ -22,5 +23,22 @@ namespace TOne.BusinessEntity.Entities
         public DateTime? EndEffectiveDate { get; set; }
         public string EndEffectiveDateDescription { get; set; }
         public string IsEffective { get; set; }
+        public bool RepeatFirstPeriod { get; set; }
+
+        public CustomerTariff Clone()
+        {
+            CustomerTariff copy = new CustomerTariff();
+            copy.TariffID = this.TariffID;
+            copy.ZoneID = this.ZoneID;
+            copy.CustomerID = this.CustomerID;
+            copy.CallFee = this.CallFee;
+            copy.FirstPeriodRate = this.FirstPeriodRate;
+            copy.FirstPeriod = this.FirstPeriod;
+            copy.RepeatFirstPeriod = this.RepeatFirstPeriod;
+            copy.FractionUnit = this.FractionUnit;
+            copy.BeginEffectiveDate = this.BeginEffectiveDate;
+            copy.EndEffectiveDate = this.EndEffectiveDate;
+            return copy;
+        }
     }
 }

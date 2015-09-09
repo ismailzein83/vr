@@ -10,6 +10,6 @@ namespace TOne.BusinessEntity.Data
     public interface ICustomerTODDataManager : IDataManager
     {
         Vanrise.Entities.BigResult<CustomerTODConsiderationInfo> GetCustomerToDConsiderationByCriteria(Vanrise.Entities.DataRetrievalInput<TODQuery> input);
-
+        List<CustomerTODConsiderationInfo> GetCustomersToDConsideration(DateTime when);
     }
 }

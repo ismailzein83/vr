@@ -10,5 +10,6 @@ namespace TOne.BusinessEntity.Data
     public interface ICustomerTariffDataManager : IDataManager
     {
         Vanrise.Entities.BigResult<CustomerTariff> GetFilteredCustomerTariffs(Vanrise.Entities.DataRetrievalInput<CustomerTariffQuery> input);
+        List<CustomerTariff> GetSaleTariffs(DateTime when);
     }
 }

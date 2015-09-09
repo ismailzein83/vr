@@ -10,48 +10,16 @@ using TOne.Entities;
 
 namespace TOne.CDR.Business
 {
-    public class BasePricing
+    public class BasePricingManager
     {
          TOneCacheManager _cacheManager;
         protected List<Currency> Currencies;
-         public BasePricing(TOneCacheManager cacheManager)
+         public BasePricingManager(TOneCacheManager cacheManager)
         {
             _cacheManager = cacheManager;
              CurrencyManager currencyManager = new CurrencyManager();
              this.Currencies = currencyManager.GetCurrencies();
         }
-
-
-        public List<Rate> GetRates(String customerID, int zoneID, DateTime whenEffective)
-        {
-            return GetEffectiveEntities<Rate>(customerID, zoneID, whenEffective);
-        }
-        public List<ToDConsideration> GetToDConsiderations(String customerID, int zoneID, DateTime whenEffective)
-        {
-            return GetEffectiveEntities<ToDConsideration>(customerID, zoneID, whenEffective);
-        }
-        public List<Commission> GetCommissions(String customerID, int zoneID, DateTime whenEffective)
-        {
-            return GetEffectiveEntities<Commission>(customerID, zoneID, whenEffective);
-        }
-
-        public List<Tariff> GetTariffs(String customerID, int zoneID, DateTime whenEffective)
-        {
-            return GetEffectiveEntities<Tariff>(customerID, zoneID, whenEffective);
-        }
-        public List<T> GetEffectiveEntities<T>(String customerID, int zoneID, DateTime whenEffective) where T : IZoneSupplied
-        {
-            return _cacheManager.GetOrCreateObject(String.Format("GetEffectiveEntities_{0}_{1}_{2:ddMMMyy}", typeof(T).Name, customerID, whenEffective.Date),
-                CacheObjectType.Pricing,
-                () =>
-                {
-
-                    DateSensitiveEntityCache<T> rates = null;
-                    rates = new DateSensitiveEntityCache<T>(customerID, 0, whenEffective, true);
-                    return rates;
-                }).GetEffectiveEntities(customerID, zoneID, whenEffective);
-        }
-
         public  decimal GetRate(decimal rate, Currency originalCurrency, Currency otherCurrency, DateTime date)
         {
             decimal result = rate;

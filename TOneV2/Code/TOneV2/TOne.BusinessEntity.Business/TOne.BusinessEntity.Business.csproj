@@ -75,7 +75,9 @@
     <Compile Include="CustomerTariffManager.cs" />
     <Compile Include="RateAnalysisManager.cs" />
     <Compile Include="CustomerTODManager.cs" />
+    <Compile Include="SaleRateManager.cs" />
     <Compile Include="SupplierCommissionManager.cs" />
+    <Compile Include="SupplierRateManager.cs" />
     <Compile Include="SupplierTODManager.cs" />
     <Compile Include="SupplierPricelistsManager.cs" />
     <Compile Include="SupplierTariffManager.cs" />
