@@ -69,12 +69,12 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(CreateNumberProfilesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-                IClassDataManager predefinedDataManager = FraudDataManagerFactory.GetDataManager<IClassDataManager>();
+                IClassDataManager manager = FraudDataManagerFactory.GetDataManager<IClassDataManager>();
                 IStrategyDataManager strategyManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
                 INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
                 int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"]);
                 handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started Loading CDRs from Database to Memory");
-                var callClasses = predefinedDataManager.GetCallClasses();
+                var callClasses = manager.GetCallClasses();
                 
             List<Strategy> strategies = new List<Strategy>();
             if(inputArgument.StrategiesExecutionInfo!=null)
