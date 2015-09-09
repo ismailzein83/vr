@@ -76,11 +76,7 @@
     <Content Include="Libraries\Rebex.TerminalEmulation.xml" />
     <Content Include="Libraries\Telerik.Web.UI.dll" />
     <Content Include="Libraries\Telerik.Web.UI.xml" />
-    <Content Include="Libraries\Vanrise.CommonLibrary.dll" />
     <Content Include="Notes\Web Virtual Directories.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Libraries\Vanrise.CommonLibrary.dll.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

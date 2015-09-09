@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Fzero.Entities;
 using Vanrise.Common;
+using Vanrise.Fzero.Entities;
 
 namespace Vanrise.Fzero.Business
 {
@@ -14,14 +10,6 @@ namespace Vanrise.Fzero.Business
         #region Singleton
 
         static ConfigParameterManager _current = new ConfigParameterManager();
-
-        public static ConfigParameterManager Current
-        {
-            get
-            {
-                return _current;
-            }
-        }
 
         private ConfigParameterManager()
         {
@@ -32,9 +20,9 @@ namespace Vanrise.Fzero.Business
 
         #region Public Methods
 
-        public static CommonEnums.OperatorType GetOperatorType()
+        public static OperatorTypeEnum GetOperatorType()
         {
-            return (CommonEnums.OperatorType)Enum.ToObject(typeof(CommonEnums.OperatorType), GetIntValue(ConfigParameterName.OperatorType));
+            return (OperatorTypeEnum)Enum.ToObject(typeof(OperatorTypeEnum), GetIntValue(ConfigParameterName.OperatorType));
         }
 
         #endregion

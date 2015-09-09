@@ -21,7 +21,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public string ToolTip { get; set; }
 
-        public CommonEnums.OperatorType OperatorTypeAllowed { get; set; }
+        public OperatorTypeEnum OperatorTypeAllowed { get; set; }
 
         public string UpSign { get; set; }
 

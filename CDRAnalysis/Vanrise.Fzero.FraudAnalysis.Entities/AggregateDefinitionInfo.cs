@@ -9,7 +9,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public string Name { get; set; }
 
-        public CommonEnums.OperatorType OperatorTypeAllowed { get; set; }
+        public OperatorTypeEnum OperatorTypeAllowed { get; set; }
 
     }
 }

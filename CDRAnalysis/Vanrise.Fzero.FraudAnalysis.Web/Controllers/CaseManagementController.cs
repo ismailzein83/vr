@@ -15,7 +15,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
 
         [HttpGet]
-        public CommonEnums.OperatorType GetOperatorType()
+        public OperatorTypeEnum GetOperatorType()
         {
             return ConfigParameterManager.GetOperatorType();
         }
