@@ -1,14 +1,11 @@
-﻿//to do: DeleteStrategyResults should be removed
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Vanrise.Data;
 using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data
 {
-    public interface IStrategyDataManager : IDataManager//, IBulkApplyDataManager<StrategyExecutionDetail>
+    public interface IStrategyDataManager : IDataManager
     {
         List<String> GetStrategyNames(List<int> strategyIds);
 

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
-using System.Linq;
-using Vanrise.Fzero.CDRImport.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 {
@@ -16,7 +15,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
         public DateTime ToDate { get; set; }
 
         public bool OverridePrevious { get; set; }
-
 
         public override string GetTitle()
         {

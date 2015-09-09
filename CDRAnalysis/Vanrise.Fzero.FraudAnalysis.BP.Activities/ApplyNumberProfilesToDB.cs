@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Activities;
-using Vanrise.Queueing;
 using Vanrise.BusinessProcess;
 using Vanrise.Fzero.FraudAnalysis.Data;
+using Vanrise.Queueing;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
