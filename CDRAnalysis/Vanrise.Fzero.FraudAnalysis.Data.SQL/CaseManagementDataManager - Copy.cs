@@ -10,9 +10,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
     public partial class CaseManagementDataManager : BaseSQLDataManager, ICaseManagementDataManager
     {
-        public bool CancelAccountCases(int strategyID, DateTime from, DateTime to, string accountNumber)
+        public bool CancelAccountCases(int strategyID, string accountNumber, DateTime from, DateTime to)
         {
-            throw new NotImplementedException();
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_Cancel", strategyID, accountNumber, from, to);
+            return (recordsAffected > 0);
         }
     }
 }
