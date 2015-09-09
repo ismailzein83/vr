@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
@@ -6,6 +7,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 {
     public interface ICaseManagementDataManager : IDataManager 
     {
+        List<StrategyCases> GetStrategyCases(DateTime fromDate, DateTime toDate);
+
+        BigResult<BTSCases> GetBTSCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input);
+
+        BigResult<BTSHighValueCases> GetTop10BTSHighValue(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input);
+
         bool UpdateAccountCase(string accountNumber, CaseStatus caseStatus, DateTime? validTill);
 
         AccountCase GetLastAccountCaseByAccountNumber(string accountNumber);

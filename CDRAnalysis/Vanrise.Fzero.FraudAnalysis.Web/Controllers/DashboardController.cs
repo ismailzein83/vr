@@ -14,7 +14,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         [HttpGet]
         public IEnumerable<StrategyCases> GetStrategyCases(DateTime fromDate, DateTime toDate)
         {
-            DashboardManager manager = new DashboardManager();
+            CaseManagmentManager manager = new CaseManagmentManager();
             return manager.GetStrategyCases(fromDate, toDate);
         }
 
@@ -28,14 +28,14 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         [HttpPost]
         public object GetBTSCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
         {
-            DashboardManager manager = new DashboardManager();
+            CaseManagmentManager manager = new CaseManagmentManager();
             return GetWebResponse(input, manager.GetBTSCases(input));
         }
 
         [HttpPost]
         public object GetTop10BTSHighValue(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
         {
-            DashboardManager manager = new DashboardManager();
+            CaseManagmentManager manager = new CaseManagmentManager();
             return GetWebResponse(input, manager.GetTop10BTSHighValue(input));
         }
 

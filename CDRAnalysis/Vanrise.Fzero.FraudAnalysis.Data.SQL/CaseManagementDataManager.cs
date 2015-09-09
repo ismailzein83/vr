@@ -169,6 +169,31 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, DailyVolumeLoosesMapper);
         }
 
+        public BigResult<BTSCases> GetBTSCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
+        {
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_CreateTempForTopTenBTS", tempTableName, input.Query.FromDate, input.Query.ToDate);
+            };
+            return RetrieveData(input, createTempTableAction, BTSCasesMapper);
+        }
+
+
+        public List<StrategyCases> GetStrategyCases(DateTime fromDate, DateTime toDate)
+        {
+            return GetItemsSP("FraudAnalysis.sp_AccountCase_GetFraudCasesPerStrategy", StrategyCasesMapper, fromDate, toDate);
+        }
+
+
+        public BigResult<BTSHighValueCases> GetTop10BTSHighValue(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
+        {
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_CreateTempForTopTenHighValueBTS", tempTableName, input.Query.FromDate, input.Query.ToDate);
+            };
+            return RetrieveData(input, createTempTableAction, BTSHighValueCasesMapper);
+        }
+
 
         #region Private Members
 
@@ -229,6 +254,33 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             dailyVolumeLoose.Volume = GetReaderValue<decimal>(reader, "Volume");
             return dailyVolumeLoose;
         }
+
+        private BTSCases BTSCasesMapper(IDataReader reader)
+        {
+            var bTSCases = new BTSCases();
+            bTSCases.CountCases = (int)reader["CountCases"];
+            bTSCases.BTS_Id = GetReaderValue<int?>(reader, "BTS_Id");
+            return bTSCases;
+        }
+
+        private StrategyCases StrategyCasesMapper(IDataReader reader)
+        {
+            var strategyCases = new StrategyCases();
+            strategyCases.CountCases = (int)reader["CountCases"];
+            strategyCases.StrategyName = reader["StrategyName"] as string;
+            return strategyCases;
+        }
+
+
+
+        private BTSHighValueCases BTSHighValueCasesMapper(IDataReader reader)
+        {
+            var bTSHighValueCases = new BTSHighValueCases();
+            bTSHighValueCases.Volume = (decimal)reader["Volume"];
+            bTSHighValueCases.BTS_Id = GetReaderValue<int?>(reader, "BTS_Id");
+            return bTSHighValueCases;
+        }
+
 
         #endregion
     }
