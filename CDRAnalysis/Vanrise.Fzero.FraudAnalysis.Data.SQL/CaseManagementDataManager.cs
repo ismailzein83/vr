@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text;
 using Vanrise.Data.SQL;
 using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
@@ -65,117 +66,76 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             //}, (reader) => AccountSuspicionSummaryMapper(reader), mapper);
         }
 
-//        private string CreateTempTableIfNotExists(string tempTableName, List<int> SelectedStrategyIDs, List<SuspicionOccuranceStatus> SelectedSuspicionLevelIDs, List<CaseStatus> SelectedCaseStatusIDs)
-//        {
-//            StringBuilder query = new StringBuilder(@"
-//                IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
-//                BEGIN
-//                
-//                WITH CarriersCTE AS
-//                (
-//                    SELECT
-//                        ca.CarrierAccountID,
-//                        cp.Name AS CarrierName,
-//                        ca.NameSuffix AS CarrierNameSuffix
-//                    FROM CarrierAccount ca INNER JOIN CarrierProfile cp ON cp.ProfileID = ca.ProfileID
-//                ),
-//
-//                ZonesCTE AS
-//                (
-//                    SELECT ZoneID, Name AS ZoneName From Zone WHERE IsEffective = 'Y'
-//                ),
-//
-//                TrafficCTE AS
-//                (
-//                    SELECT
-//                        OurZoneID AS ZoneID,
-//                        SupplierID AS SupplierID,
-//                        CustomerID AS CustomerID,
-//                        SUM(Attempts) AS Attempts,
-//                        SUM(SuccessfulAttempts) AS SuccessfulAttempts,
-//                        SUM(SuccessfulAttempts) * 100.0 / SUM(Attempts) AS ASR, 
-//                        CASE WHEN SUM(SuccessfulAttempts) > 0 THEN SUM(DurationsInSeconds) / (60.0 * SUM(SuccessfulAttempts)) ELSE 0 END AS ACD,
-//                        AVG(PDDinSeconds) AS PDD,
-//                        SUM(DurationsInSeconds / 60.) AS DurationInMinutes,
-//                        dbo.dateof(FirstCDRAttempt) AS CallDate
-//
-//                    FROM TrafficStats WITH(NOLOCK)
-//                    
-//                    #TRAFFIC_WHERE_CLAUSE#
-//                    
-//                    GROUP BY
-//                        dbo.dateof(FirstCDRAttempt),
-//                        SupplierID,
-//                        CustomerID,
-//                        OurZoneID
-//                ),
-//
-//                BillingCTE AS
-//                (
-//                    SELECT
-//                        SaleZoneID AS ZoneID,
-//                        SupplierID AS SupplierID,
-//                        CustomerID AS CustomerID,
-//                        AVG(Cost_Rate) AS CostRate,
-//                        AVG(Sale_Rate) AS SaleRate,
-//                        dbo.DateOf(CallDate) AS CallDate
-//
-//                    FROM Billing_Stats WITH(NOLOCK, INDEX(IX_Billing_Stats_Date))
-//    
-//                    #BILLING_WHERE_CLAUSE#
-//
-//                    GROUP BY
-//                        dbo.dateof(CallDate),
-//                        SaleZoneID,
-//                        SupplierID,
-//                        CustomerID
-//                )
-//
-//                SELECT
-//                    T.ZoneID,
-//                    Z.ZoneName,
-//                    T.CustomerID,
-//                    Customers.CarrierName AS CustomerName,
-//                    Customers.CarrierNameSuffix AS CustomerNameSuffix,
-//                    T.SupplierID,
-//                    Suppliers.CarrierName AS SupplierName,
-//                    Suppliers.CarrierNameSuffix AS SupplierNameSuffix,
-//                    T.Attempts,
-//                    T.SuccessfulAttempts,
-//                    T.ASR,
-//                    T.ACD,
-//                    T.PDD,
-//                    T.DurationInMinutes,
-//                    B.CostRate,
-//                    B.SaleRate
-//
-//                INTO #TEMP_TABLE_NAME#
-//
-//                FROM TrafficCTE T
-//                LEFT JOIN BillingCTE B ON (T.ZoneID IS NULL OR B.ZoneID = T.ZoneID) 
-//                    AND (T.SupplierID IS NULL OR B.SupplierID = T.SupplierID) 
-//                    AND (T.CustomerID IS NULL OR B.CustomerID =  T.CustomerID)
-//                    AND B.CallDate = T.CallDate
-//
-//                LEFT JOIN ZonesCTE Z ON Z.ZoneID = T.ZoneID
-//                LEFT JOIN CarriersCTE Customers ON Customers.CarrierAccountID = T.CustomerID
-//                LEFT JOIN CarriersCTE Suppliers ON Suppliers.CarrierAccountID = T.SupplierID
-//
-//                ORDER BY T.CallDate, T.Attempts DESC
-//                    
-//                END
-//            ");
+        private string CreateTempTableIfNotExists(string tempTableName, List<int> SelectedStrategyIDs, List<SuspicionOccuranceStatus> SelectedSuspicionLevelIDs, List<CaseStatus> SelectedCaseStatusIDs)
+        {
+            if (SelectedCaseStatusIDs.Count <= 2
+                && (SelectedCaseStatusIDs.Contains(CaseStatus.Open) || SelectedCaseStatusIDs.Contains(CaseStatus.Pending))) {
 
-//            query.Replace("#TEMP_TABLE_NAME#", tempTableName);
+            }
+            StringBuilder query = new StringBuilder(@"
+                IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
+                BEGIN
+		            WITH OpenAccounts AS
+		            (
+			            SELECT
+				            sed.AccountNumber,
+				            MAX(sed.SuspicionLevelID) AS SuspicionLevelID,
+				            COUNT(*) AS NumberOfOccurances,
+				            MAX(se.ExecutionDate) AS LastOccurance,
+				            CASE WHEN ISNULL(accStatus.[Status], 0) IN (0, 2) THEN ISNULL(accStatus.[Status], 0) ELSE 0 END AS AccountStatusID
+			  
+			            FROM FraudAnalysis.StrategyExecutionDetails sed
+			            INNER JOIN FraudAnalysis.StrategyExecution se ON se.ID = sed.StrategyExecutionID
+			            LEFT JOIN FraudAnalysis.AccountStatus accStatus ON accStatus.AccountNumber = sed.AccountNumber
 
-//            commonWhereClauseConditions = GetCommonWhereClauseConditions(selectedCustomerIDs, selectedSupplierIDs, assignedCustomerIDs, assignedSupplierIDs);
+			            WHERE sed.SuspicionOccuranceStatus = 0
+				            AND se.FromDate >= @From
+				            AND se.FromDate <= @To
+				            AND (@SelectedSuspicionLevelIDs IS NULL OR sed.SuspicionLevelID IN (SELECT SuspicionLevelID FROM @SuspicionLevelIDsTable))
+			            GROUP BY sed.AccountNumber, accStatus.[Status]
+		            ),
+		      
+		            ClosedAccounts AS
+		            (
+			            SELECT
+				            sed.AccountNumber,
+				            MAX(sed.SuspicionLevelID) AS SuspicionLevelID,
+				            COUNT(*) AS NumberOfOccurances,
+				            MAX(se.ExecutionDate) AS LastOccurance,
+				            accStatus.[Status] AS AccountStatusID
 
-//            query.Replace("#TRAFFIC_WHERE_CLAUSE#", GetTrafficWhereClause(selectedZoneIDs));
+			            FROM FraudAnalysis.AccountStatus accStatus 
+			            LEFT JOIN FraudAnalysis.StrategyExecutionDetails sed ON accStatus.AccountNumber = sed.AccountNumber
+			            LEFT JOIN FraudAnalysis.StrategyExecution se ON se.ID = sed.StrategyExecutionID
+			            LEFT JOIN OpenAccounts openAcc ON openAcc.AccountNumber = sed.AccountNumber 
 
-//            query.Replace("#BILLING_WHERE_CLAUSE#", GetBillingWhereClause(selectedZoneIDs));
+			            WHERE openAcc.AccountNumber IS NULL AND accStatus.Status IN (3, 4) --3: Fraud, 4: WhiteList
+				            AND se.FromDate >= @From
+				            AND se.FromDate <= @To
+				            AND (@SelectedSuspicionLevelIDs IS NULL OR sed.SuspicionLevelID IN (SELECT SuspicionLevelID FROM @SuspicionLevelIDsTable))
+			            GROUP BY sed.AccountNumber, accStatus.[Status]
+		            )
 
-//            return query.ToString();
-//        }
+		            SELECT * INTO #RESULT
+		            FROM (SELECT * FROM OpenAccounts UNION SELECT * FROM ClosedAccounts) AllAccounts
+		            WHERE AllAccounts.AccountStatusID = 0
+
+		            DECLARE @sql VARCHAR(1000)
+		            SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';
+		            EXEC(@sql)
+                END
+            ");
+
+            query.Replace("#TEMP_TABLE_NAME#", tempTableName);
+
+            //commonWhereClauseConditions = GetCommonWhereClauseConditions(selectedCustomerIDs, selectedSupplierIDs, assignedCustomerIDs, assignedSupplierIDs);
+
+            //query.Replace("#TRAFFIC_WHERE_CLAUSE#", GetTrafficWhereClause(selectedZoneIDs));
+
+            //query.Replace("#BILLING_WHERE_CLAUSE#", GetBillingWhereClause(selectedZoneIDs));
+
+            return query.ToString();
+        }
 
         #endregion
         
