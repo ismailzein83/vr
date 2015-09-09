@@ -68,14 +68,11 @@ namespace TOne.CDRProcess.Activities
         protected override void DoWork(GenerateBillingAndPricingCDRsInput inputArgument, Vanrise.BusinessProcess.AsyncActivityStatus previousActivityStatus, Vanrise.BusinessProcess.AsyncActivityHandle handle)
         {
             TOneCacheManager cacheManager = handle.CustomData["CacheManager"] as TOneCacheManager;
-
-
-
             PricingGenerator generator;
             generator = new PricingGenerator(cacheManager);
             ProtCodeMap codeMap = new ProtCodeMap(cacheManager);
-            SalePricing salePricing = new SalePricing(cacheManager);
-            CostPricing costPricing = new CostPricing(cacheManager);
+            SalePricingManager salePricing = new SalePricingManager(cacheManager);
+            CostPricingManager costPricing = new CostPricingManager(cacheManager);
             bool hasItem = false;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
