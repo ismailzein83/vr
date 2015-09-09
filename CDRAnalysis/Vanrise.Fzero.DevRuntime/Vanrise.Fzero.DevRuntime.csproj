@@ -246,12 +246,6 @@
     <Compile Include="Tasks\HaririTask.cs" />
     <Compile Include="Tasks\WalidTaskProfile.cs" />
     <Compile Include="Tasks\WalidTask.cs" />
-    <Compile Include="WF.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="WF.Designer.cs">
-      <DependentUpon>WF.cs</DependentUpon>
-    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -267,33 +261,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="WF.resx">
-      <DependentUpon>WF.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.BP.Activities\Vanrise.Fzero.CDRImport.BP.Activities.csproj">
-      <Project>{c0443807-ce4e-4d37-8ccd-810c5bed4fd2}</Project>
-      <Name>Vanrise.Fzero.CDRImport.BP.Activities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.BP.Arguments\Vanrise.Fzero.CDRImport.BP.Arguments.csproj">
-      <Project>{14794a4a-32a7-4273-b3a3-0c1b67831d60}</Project>
-      <Name>Vanrise.Fzero.CDRImport.BP.Arguments</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.BP\Vanrise.Fzero.CDRImport.BP.csproj">
-      <Project>{57ed5df8-602d-49ae-86fc-416d446f5ce2}</Project>
-      <Name>Vanrise.Fzero.CDRImport.BP</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Business\Vanrise.Fzero.CDRImport.Business.csproj">
       <Project>{a4b118be-ded8-429c-9ef8-eab394085dff}</Project>
       <Name>Vanrise.Fzero.CDRImport.Business</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Data.MYSQL\Vanrise.Fzero.CDRImport.Data.MYSQL.csproj">
-      <Project>{656b4be0-3309-4f19-9f73-58eedb56b20f}</Project>
-      <Name>Vanrise.Fzero.CDRImport.Data.MYSQL</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Data.SQL\Vanrise.Fzero.CDRImport.Data.SQL.csproj">
       <Project>{3a5581db-9680-4cd4-af20-0339d02f5447}</Project>
