@@ -113,7 +113,6 @@
     <Compile Include="StrategyExecution.cs" />
     <Compile Include="StrategyExecutionDetail.cs" />
     <Compile Include="SuspiciousNumber.cs" />
-    <Compile Include="Batches\SuspiciousNumberBatch.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Entities\Vanrise.Fzero.CDRImport.Entities.csproj">
