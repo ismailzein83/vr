@@ -1,15 +1,8 @@
 ﻿app.constant('CaseStatusEnum', {
-    Open:         { id: 1, name: 'Open' },
-    Pending:      { id: 2, name: 'Pending' },
-    ClosedFraud:  { id: 3, name: 'Closed: Fraud' },
-    ClosedWhite:  { id: 4, name: 'Closed: White List' },
-    Cancelled:    { id: 5, name: 'Cancelled' }
-});
-
-app.constant('SuspicionLevelsEnum', {
-    Suspicious: { id: 2, name: 'Suspicious' },
-    HighlySuspicious: { id: 3, name: 'Highly Suspicious' },
-    Fraud: { id: 4, name: 'Fraud' }
+    Open: { value: 0, description: "Open" },
+    Pending: { value: 2, description: "Pending" },
+    ClosedFraud: { value: 3, description: "Closed: Fraud" },
+    ClosedWhitelist: { value: 4, description: "Closed: White List" }
 });
 
 app.constant('KindEnum', {
@@ -45,12 +38,6 @@ app.constant('PercentageEnum', {
     SeventyFiveMinus: { description: '-75%', value: 0.25 }
 });
 
-app.constant("CaseStatusEnum2", {
-    Open: { value: 0, description: "Open" },
-    Pending: { value: 2, description: "Pending" },
-    ClosedFraud: { value: 3, description: "Closed: Fraud" },
-    ClosedWhitelist: { value: 4, description: "Closed: White List" }
-}); 
 
 app.constant("SuspicionLevelEnum", {
     Suspicious: { value: 2, description: "Suspicious" },

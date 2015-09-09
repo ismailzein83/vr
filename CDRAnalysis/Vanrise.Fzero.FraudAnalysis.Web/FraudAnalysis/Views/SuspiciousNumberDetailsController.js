@@ -1,6 +1,6 @@
-﻿SuspiciousNumberDetails2Controller.$inject = ["$scope", "CaseManagementAPIService", "NormalCDRAPIService", "NumberProfileAPIService", "StrategyAPIService", "SuspicionLevelEnum", "CaseStatusEnum2", "SuspicionOccuranceStatusEnum", "CallTypeEnum", "UtilsService", "VRNavigationService", "VRNotificationService"];
+﻿SuspiciousNumberDetailsController.$inject = ["$scope", "CaseManagementAPIService", "NormalCDRAPIService", "NumberProfileAPIService", "StrategyAPIService", "SuspicionLevelEnum", "CaseStatusEnum", "SuspicionOccuranceStatusEnum", "CallTypeEnum", "UtilsService", "VRNavigationService", "VRNotificationService"];
 
-function SuspiciousNumberDetails2Controller($scope, CaseManagementAPIService, NormalCDRAPIService, NumberProfileAPIService, StrategyAPIService,  SuspicionLevelEnum, CaseStatusEnum2, SuspicionOccuranceStatusEnum, CallTypeEnum, UtilsService, VRNavigationService, VRNotificationService) {
+function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, NormalCDRAPIService, NumberProfileAPIService, StrategyAPIService,  SuspicionLevelEnum, CaseStatusEnum, SuspicionOccuranceStatusEnum, CallTypeEnum, UtilsService, VRNavigationService, VRNotificationService) {
 
     var gridAPI_Occurances = undefined;
     var occurancesLoaded = false;
@@ -27,11 +27,7 @@ function SuspiciousNumberDetails2Controller($scope, CaseManagementAPIService, No
 
     function defineScope() {
 
-        $scope.from = "01/01/2014 00:00";
-        $scope.to = "02/01/2014 00:00";
-
         $scope.selectedTabIndex = 0;
-
         $scope.occurances = [];
         $scope.normalCDRs = [];
         $scope.numberProfiles = [];
@@ -129,7 +125,7 @@ function SuspiciousNumberDetails2Controller($scope, CaseManagementAPIService, No
                             var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", response.UpdatedObject.SuspicionLevelID);
                             response.UpdatedObject.SuspicionLevelDescription = suspicionLevel.description;
 
-                            var accountStatus = UtilsService.getEnum(CaseStatusEnum2, "value", response.UpdatedObject.AccountStatusID);
+                            var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", response.UpdatedObject.AccountStatusID);
                             response.UpdatedObject.AccountStatusDescription = accountStatus.description;
 
                             $scope.onAccountCaseUpdated(response.UpdatedObject);
@@ -168,14 +164,14 @@ function SuspiciousNumberDetails2Controller($scope, CaseManagementAPIService, No
         }
 
         $scope.toggleValidTill = function (selectedStatus) {
-            $scope.whiteListSelected = (selectedStatus != undefined && selectedStatus.value == CaseStatusEnum2.ClosedWhitelist.value) ? true : false;
+            $scope.whiteListSelected = (selectedStatus != undefined && selectedStatus.value == CaseStatusEnum.ClosedWhitelist.value) ? true : false;
         }
     }
 
     function load() {
         $scope.isInitializing = true;
 
-        $scope.caseStatuses = UtilsService.getArrayEnum(CaseStatusEnum2);
+        $scope.caseStatuses = UtilsService.getArrayEnum(CaseStatusEnum);
 
         return StrategyAPIService.GetAggregates()
             .then(function (response) {
@@ -237,4 +233,4 @@ function SuspiciousNumberDetails2Controller($scope, CaseManagementAPIService, No
     }
 }
 
-appControllers.controller("FraudAnalysis_SuspiciousNumberDetails2Controller", SuspiciousNumberDetails2Controller);
+appControllers.controller("FraudAnalysis_SuspiciousNumberDetailsController", SuspiciousNumberDetailsController);

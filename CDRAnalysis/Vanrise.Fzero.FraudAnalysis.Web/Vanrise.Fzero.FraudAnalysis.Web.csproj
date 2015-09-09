@@ -197,8 +197,8 @@
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\NumberProfilingProcessInputController.js" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\NumberProfilingProcessInput_Scheduled.html" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\NumberProfilingProcessInput_ScheduledController.js" />
-    <Content Include="FraudAnalysis\Views\SuspicionAnalysis2.html" />
-    <Content Include="FraudAnalysis\Views\SuspicionAnalysis2Controller.js" />
+    <Content Include="FraudAnalysis\Views\SuspicionAnalysis.html" />
+    <Content Include="FraudAnalysis\Views\SuspicionAnalysisController.js" />
     <Content Include="FraudAnalysis\Views\OutPut\Dashboard.html" />
     <Content Include="FraudAnalysis\Views\OutPut\DashboardController.js" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\ExecuteStrategyProcessInput_Scheduled.html" />
@@ -229,8 +229,8 @@
     <Content Include="FraudAnalysis\Views\Strategy\StrategyManagement.html" />
     <Content Include="FraudAnalysis\Views\Strategy\StrategyManagementController.js" />
     <Content Include="FraudAnalysis\Views\Strategy\StrategyEditorController.js" />
-    <Content Include="FraudAnalysis\Views\SuspiciousNumberDetails2.html" />
-    <Content Include="FraudAnalysis\Views\SuspiciousNumberDetails2Controller.js" />
+    <Content Include="FraudAnalysis\Views\SuspiciousNumberDetails.html" />
+    <Content Include="FraudAnalysis\Views\SuspiciousNumberDetailsController.js" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
