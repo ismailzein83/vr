@@ -8,14 +8,19 @@
                     </vr-select>
                 </vr-columns>
                 <vr-columns colnum="2">
-                    <div class="btn-group btn-group-custom" role="group" ng-init="option=1">
-                        <label class="hand-cursor vr-control-label" ng-class="option == 1?'clicked-btn':''" ng-click="option = 1">By Zones</label>
-                        <label>|</label>
-                        <label class="hand-cursor vr-control-label" ng-class="option == 2?'clicked-btn':''" ng-click="option = 2">By Code</label>
-                    </div>
-                    <vr-select ng-show="option == 1" ismultipleselection datasource="zones" selectedvalues="selectedZones" datatextfield="Name" datavaluefield="ZoneId"
-                               entityname="Zones"></vr-select>
-                    <vr-textbox ng-show="option == 2" value="code" place-holder="'Type Code'"></vr-textbox>
+                    <vr-choices islabelsuitch ng-init="zoneSelected = true" selectedindex="selectedChoiceIndex" onselectionchanged="onSelectionChanged()">
+                        <vr-choice isselected="zoneSelected">Zone</vr-choice>
+                        <vr-choice isselected="codeSelected">Code</vr-choice>
+                    </vr-choices>
+                    <vr-row removeline>
+                        <vr-columns width="fullrow" ng-show="zoneSelected">
+                            <vr-select ismultipleselection datasource="zones" selectedvalues="selectedZones" datatextfield="Name" datavaluefield="ZoneId"
+                                       entityname="Zones"></vr-select>
+                        </vr-columns>
+                        <vr-columns width="fullrow" ng-show="codeSelected">
+                            <vr-textbox type="number" value="code" place-holder="'Type Code'"></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
                 </vr-columns>
             </vr-row>
             <vr-row></vr-row>
