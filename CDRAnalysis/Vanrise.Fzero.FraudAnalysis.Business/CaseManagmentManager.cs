@@ -81,24 +81,23 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         }
 
 
-        //public Vanrise.Entities.UpdateOperationOutput<AccountCase> UpdateAccountCase(AccountCaseUpdate input)
-        //{
-        //    Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary>();
+        public Vanrise.Entities.UpdateOperationOutput<AccountCase> UpdateAccountCase(CancelAccountCasesResultQuery input)
+        {
+            Vanrise.Entities.UpdateOperationOutput<AccountCase> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountCase>();
 
-        //    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-        //    updateOperationOutput.UpdatedObject = null;
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
 
-        //    ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
-        //    bool updated = dataManager.CancelAccountCases(input.accountNumber, input.caseStatus, input.validTill);
+            ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
+            bool updated = dataManager.CancelAccountCases(input.StrategyID, input.AccountNumber, input.From, input.To);
 
-        //    if (updated)
-        //    {
-        //        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-        //        updateOperationOutput.UpdatedObject = dataManager.GetAccountSuspicionSummaryByAccountNumber(input.accountNumber, input.from, input.to);
-        //    }
+            if (updated)
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+            }
 
-        //    return updateOperationOutput;
-        //}
+            return updateOperationOutput;
+        }
 
 
     }

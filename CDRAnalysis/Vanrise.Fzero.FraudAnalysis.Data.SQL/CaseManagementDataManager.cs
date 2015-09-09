@@ -297,6 +297,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, BTSHighValueCasesMapper);
         }
 
+        public bool CancelAccountCases(int strategyID, string accountNumber, DateTime from, DateTime to)
+        {
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_Cancel", strategyID, accountNumber, from, to);
+            return (recordsAffected > 0);
+        }
+
         #region Private Members
 
         private AccountSuspicionSummary AccountSuspicionSummaryMapper(IDataReader reader)
