@@ -1,6 +1,6 @@
 ﻿
 
-CREATE PROCEDURE [FraudAnalysis].[sp_Dashboard_CreateTempForCasesSummary]
+CREATE PROCEDURE [FraudAnalysis].[sp_AccountCase_CreateTempForCasesSummary]
 (
 	@TempTableName varchar(200),	
 	@FromDate datetime,

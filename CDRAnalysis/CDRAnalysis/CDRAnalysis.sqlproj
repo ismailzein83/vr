@@ -82,10 +82,6 @@
     <Build Include="FraudAnalysis\Tables\Period.sql" />
     <Build Include="FraudAnalysis\Tables\CallType.sql" />
     <Build Include="FraudAnalysis\Tables\CallClass.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempForFilteredNormalCDRs.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempForFilteredNumberProfiles.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_CreateTempForTopTenBTS.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_CreateTempForCasesSummary.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_CreateTempForFilteredStrategies.sql" />
     <Build Include="Security\FraudAnalysis.sql" />
     <Build Include="FraudAnalysis\Tables\Strategy.sql" />
@@ -99,7 +95,6 @@
     <Build Include="FraudAnalysis\Tables\CallType.sql" />
     <Build Include="FraudAnalysis\Tables\CallClass.sql" />
     <Build Include="dbo\Functions\CSVToTable.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempForFilteredSuspiciousNumbers.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_NormalCDR_Load.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_CallClass_GetAll.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetStrategyNames.sql" />
@@ -108,19 +103,13 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_CreateTempForTopTenBTS.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_CreateTempForCasesSummary.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_CreateTempForFilteredStrategies.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_GetFraudCasesPerStrategy.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetStrategies.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetStrategy.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Update.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Insert.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_Get.sql" />
-    <Build Include="FraudAnalysis\User Defined Types\AccountCaseType.sql" />
     <Build Include="Security\FraudAnalysis.sql" />
     <Build Include="FraudAnalysis\Tables\SuspicionLevel.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_Insert.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_CreateTempForDailyVolumeLooses.sql" />
-    <Build Include="FraudAnalysis\Tables\AccountStatusHistory.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_Dashboard_CreateTempForTopTenHighValueBTS.sql" />
     <Build Include="FraudAnalysis\Tables\StrategyExecutionDetails.sql" />
     <Build Include="FraudAnalysis\Tables\StrategyExecution.sql" />
     <Build Include="FraudAnalysis\Tables\AccountStatus.sql" />
@@ -135,7 +124,16 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_GetLastByAccountNumber.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionDetails_GetByAccountNumber.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionDetails_Delete.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionDetails_CreateTempByFiltered.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecution_Override.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionDetails_CreateTempByCaseID.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionDetails_CreateTempByAccountNumberForSummaries.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_NumberProfile_CreateTempForFilteredNumberProfiles.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_NormalCDR_CreateTempForFilteredNormalCDRs.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_GetFraudCasesPerStrategy.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_CreateTempForTopTenHighValueBTS.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_CreateTempForTopTenBTS.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_CreateTempForDailyVolumeLooses.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_CreateTempForCasesSummary.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_CreateTempByAccountNumber.sql" />
   </ItemGroup>
 </Project>

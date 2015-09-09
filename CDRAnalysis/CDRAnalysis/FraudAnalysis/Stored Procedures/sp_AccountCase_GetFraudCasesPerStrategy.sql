@@ -1,7 +1,7 @@
 ﻿
 
 
-CREATE PROCEDURE [FraudAnalysis].[sp_Dashboard_GetFraudCasesPerStrategy]
+CREATE PROCEDURE [FraudAnalysis].[sp_AccountCase_GetFraudCasesPerStrategy]
 (
 	@FromDate datetime,
 	@ToDate datetime

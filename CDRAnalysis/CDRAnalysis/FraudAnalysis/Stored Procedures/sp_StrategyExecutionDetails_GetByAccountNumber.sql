@@ -15,7 +15,7 @@ BEGIN
 			sed.AccountNumber,
 			sed.SuspicionLevelId AS SuspicionLevelID,
 			s.Name AS StrategyName,
-			sed.SuspicionOccuranceStatus AS AccountStatusID,
+			sed.SuspicionOccuranceStatus AS SuspicionOccuranceStatus,
 			se.FromDate,
 			se.ToDate
 			
