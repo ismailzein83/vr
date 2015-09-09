@@ -1,10 +1,6 @@
 ﻿
 namespace Vanrise.Fzero.CDRImport.Entities
 {
-   
-
-    
-
     public enum CallTypeEnum
     {
         NotDefined = 0,
