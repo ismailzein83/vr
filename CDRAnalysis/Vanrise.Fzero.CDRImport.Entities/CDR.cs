@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Fzero.CDRImport.Entities
 {
@@ -39,8 +35,6 @@ namespace Vanrise.Fzero.CDRImport.Entities
         public string OutTrunk { get; set; }
         public int? ServiceType { get; set; }
         public string ServiceVASName { get; set; }
-
-
 
     }
 }
