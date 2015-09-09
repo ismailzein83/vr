@@ -63,6 +63,7 @@
     <Compile Include="AccountSuspicionSummaryQuery.cs" />
     <Compile Include="AccountThreshold.cs" />
     <Compile Include="Batches\StrategyExecutionDetailBatch.cs" />
+    <Compile Include="CaseDetailQuery.cs" />
     <Compile Include="CasesSummary.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="INumberProfileParameters.cs" />

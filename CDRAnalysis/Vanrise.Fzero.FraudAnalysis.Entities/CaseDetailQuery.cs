@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class AccountSuspicionDetail
+    public class CaseDetailQuery
     {
-        public long DetailID { get; set; }
         public string AccountNumber { get; set; }
-        public SuspicionLevelEnum SuspicionLevelID { get; set; }
-        public string StrategyName { get; set; }
-        public SuspicionOccuranceStatus SuspicionOccuranceStatus { get; set; }
+
+        public int CaseID { get; set; }
+
         public DateTime FromDate { get; set; }
+
         public DateTime ToDate { get; set; }
     }
 }

@@ -79,8 +79,8 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                     var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", item.SuspicionLevelID);
                     item.SuspicionLevelDescription = suspicionLevel.description;
 
-                    var accountStatus = UtilsService.getEnum(SuspicionOccuranceStatusEnum, "value", item.AccountStatusID);
-                    item.AccountStatusDescription = accountStatus.description;
+                    var detailStatus = UtilsService.getEnum(SuspicionOccuranceStatusEnum, "value", item.SuspicionOccuranceStatus);
+                    item.SuspicionOccuranceStatusDescription = detailStatus.description;
                 });
 
                 onResponseReady(response);
@@ -125,6 +125,12 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             return CaseManagementAPIService.GetFilteredCasesByAccountNumber(dataRetrievalInput)
             .then(function (response) {
                 casesLoaded = true;
+
+                angular.forEach(response.Data, function (item) {
+                    var caseStatus = UtilsService.getEnum(CaseStatusEnum, "value", item.StatusID);
+                    item.CaseStatusDescription = caseStatus.description;
+                });
+
                 onResponseReady(response);
             })
             .catch(function (error) {

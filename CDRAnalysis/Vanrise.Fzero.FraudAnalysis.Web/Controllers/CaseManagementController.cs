@@ -40,6 +40,13 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         }
 
         [HttpPost]
+        public object GetFilteredDetailsByCaseID(Vanrise.Entities.DataRetrievalInput<CaseDetailQuery> input)
+        {
+            CaseManagmentManager manager = new CaseManagmentManager();
+            return GetWebResponse(input, manager.GetFilteredDetailsByCaseID(input));
+        }
+
+        [HttpPost]
         public Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> UpdateAccountCase(AccountCaseUpdate input)
         {
             CaseManagmentManager manager = new CaseManagmentManager();

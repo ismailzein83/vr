@@ -1,0 +1,16 @@
+﻿<div ng-controller="FraudAnalysis_CaseOccuranceGridController">
+
+    <vr-datagrid datasource="details"
+                 dataretrievalfunction="dataRetrievalFunction"
+                 pagingtype="'Pager'"
+                 on-ready="gridReady"
+                 idfield="DetailID"
+                 issubgrid>
+
+        <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelDescription'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Status'" field="'SuspicionOccuranceStatusDescription'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'From Date'" field="'FromDate'" type="'Date'"></vr-datagridcolumn>
+    </vr-datagrid>
+
+</div>

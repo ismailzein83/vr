@@ -102,10 +102,14 @@
 
                             <vr-datagridcolumn headertext="'Case ID'" field="'CaseID'" type="'Number'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'User'" field="'UserName'" type="'Text'"></vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Status'" field="'CaseStatusID'" type="'Number'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Status'" field="'CaseStatusDescription'" type="'Text'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Last Status Update'" field="'StatusUpdatedTime'" type="'Datetime'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Valid Till'" field="'ValidTill'" type="'Datetime'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Created Time'" field="'CreatedTime'" type="'Datetime'"></vr-datagridcolumn>
+
+                            <vr-datagridexpandablerow>
+                                <div ng-include="'/Client/Modules/FraudAnalysis/Views/SuspiciousAnalysis/CaseOccuranceGrid.html'"></div>
+                            </vr-datagridexpandablerow>
                         </vr-datagrid>
                     </vr-columns>
                 </vr-row>

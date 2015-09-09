@@ -67,6 +67,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         public BigResult<AccountCase> GetFilteredCasesByAccountNumber(Vanrise.Entities.DataRetrievalInput<AccountCaseQuery> input)
         {
             Dictionary<string, string> mapper = new Dictionary<string, string>();
+            mapper.Add("CaseStatusDescription", "StatusID");
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
@@ -74,6 +75,20 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             };
 
             return RetrieveData(input, createTempTableAction, AccountCaseMapper, mapper);
+        }
+
+        public BigResult<AccountSuspicionDetail> GetFilteredDetailsByCaseID(Vanrise.Entities.DataRetrievalInput<CaseDetailQuery> input)
+        {
+            Dictionary<string, string> mapper = new Dictionary<string, string>();
+            mapper.Add("SuspicionLevelDescription", "SuspicionLevelID");
+            mapper.Add("SuspicionOccuranceStatusDescription", "SuspicionOccuranceStatus");
+
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByCaseID", tempTableName, input.Query.AccountNumber, input.Query.CaseID, input.Query.FromDate, input.Query.ToDate);
+            };
+
+            return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, mapper);
         }
 
         public AccountSuspicionSummary GetAccountSuspicionSummaryByAccountNumber(string accountNumber, DateTime from, DateTime to)
@@ -218,7 +233,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             detail.AccountNumber = reader["AccountNumber"] as string;
             detail.SuspicionLevelID = (SuspicionLevelEnum)reader["SuspicionLevelID"];
             detail.StrategyName = reader["StrategyName"] as string;
-            detail.AccountStatusID = GetReaderValue<CaseStatus>(reader, "AccountStatusID");
+            detail.SuspicionOccuranceStatus = GetReaderValue<SuspicionOccuranceStatus>(reader, "SuspicionOccuranceStatus");
             detail.FromDate = (DateTime)reader["FromDate"];
             detail.ToDate = (DateTime)reader["ToDate"];
             
@@ -232,6 +247,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 CaseID = (int)reader["CaseID"],
                 AccountNumber = reader["AccountNumber"] as string,
                 UserID = (int)reader["UserID"],
+                UserName = reader["UserName"] as string,
                 StatusID = (CaseStatus)reader["StatusID"],
                 StatusUpdatedTime = (DateTime)reader["StatusUpdatedTime"],
                 ValidTill = GetReaderValue<DateTime?>(reader, "ValidTill"),
@@ -271,8 +287,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return strategyCases;
         }
 
-
-
         private BTSHighValueCases BTSHighValueCasesMapper(IDataReader reader)
         {
             var bTSHighValueCases = new BTSHighValueCases();
@@ -280,7 +294,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             bTSHighValueCases.BTS_Id = GetReaderValue<int?>(reader, "BTS_Id");
             return bTSHighValueCases;
         }
-
 
         #endregion
     }
