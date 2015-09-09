@@ -222,17 +222,15 @@
     <Content Include="FraudAnalysis\Views\Strategy\StrategyEditor.html" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\ExecuteStrategyProcessInput.html" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\ExecuteStrategyProcessInputController.js" />
-    <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\SuspicionAnalysis.html" />
-    <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\SuspicionAnalysisController.js" />
-    <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\SuspiciousNumberDetails.html" />
-    <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\SuspiciousNumberDetailsController.js" />
     <Content Include="FraudAnalysis\Views\Strategy\StrategyManagement.html" />
     <Content Include="FraudAnalysis\Views\Strategy\StrategyManagementController.js" />
     <Content Include="FraudAnalysis\Views\Strategy\StrategyEditorController.js" />
     <Content Include="FraudAnalysis\Views\SuspiciousNumberDetails.html" />
     <Content Include="FraudAnalysis\Views\SuspiciousNumberDetailsController.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="FraudAnalysis\Views\SuspiciousAnalysis\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
