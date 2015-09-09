@@ -11,6 +11,9 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
     var gridAPI_NumberProfiles = undefined;
     var numberProfilesLoaded = false;
 
+    var gridAPI_CaseHistory = undefined;
+    var casesLoaded = false;
+
     loadParameters();
     defineScope();
     load();
@@ -32,6 +35,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         $scope.normalCDRs = [];
         $scope.numberProfiles = [];
         $scope.aggregateDefinitions = [];
+        $scope.cases = [];
 
         $scope.caseStatuses = [];
         $scope.selectedCaseStatus = undefined;
@@ -56,6 +60,13 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
             if ($scope.numberProfilesSelected)
                 return retrieveData_NumberProfiles();
+        }
+
+        $scope.onGridReady_CaseHistory = function (api) {
+            gridAPI_CaseHistory = api;
+
+            if ($scope.caseHistorySelected)
+                return retrieveData_CaseHistory();
         }
 
         $scope.dataRetrievalFunction_Occurances = function (dataRetrievalInput, onResponseReady) {
@@ -102,6 +113,18 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             return NumberProfileAPIService.GetNumberProfiles(dataRetrievalInput)
             .then(function (response) {
                 numberProfilesLoaded = true;
+                onResponseReady(response);
+            })
+            .catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            });
+        }
+
+        $scope.dataRetrievalFunction_CaseHistory = function (dataRetrievalInput, onResponseReady) {
+
+            return CaseManagementAPIService.GetFilteredCasesByAccountNumber(dataRetrievalInput)
+            .then(function (response) {
+                casesLoaded = true;
                 onResponseReady(response);
             })
             .catch(function (error) {
@@ -156,6 +179,9 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             else if ($scope.selectedTabIndex == 2)
                 numberProfilesLoaded = false; // re-load the number profiles
 
+            else if ($scope.selectedTabIndex == 3)
+                numberProfilesLoaded = false; // re-load the account cases
+
             return retrieveData();
         }
 
@@ -197,6 +223,9 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
         else if (gridAPI_NumberProfiles != undefined && $scope.selectedTabIndex == 2 && !numberProfilesLoaded)
             return retrieveData_NumberProfiles();
+
+        else if (gridAPI_CaseHistory != undefined && $scope.selectedTabIndex == 3 && !casesLoaded)
+            return retrieveData_CaseHistory();
     }
 
     function retrieveData_Occurances() {
@@ -230,6 +259,17 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         };
 
         return gridAPI_NumberProfiles.retrieveData(query);
+    }
+
+    function retrieveData_CaseHistory() {
+
+        var query = {
+            AccountNumber: $scope.accountNumber,
+            From: $scope.from,
+            To: $scope.to
+        };
+
+        return gridAPI_CaseHistory.retrieveData(query);
     }
 }
 

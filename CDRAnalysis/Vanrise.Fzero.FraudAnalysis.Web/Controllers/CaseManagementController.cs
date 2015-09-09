@@ -12,13 +12,11 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 {
     public class CaseManagementController : BaseAPIController
     {
-
-
-        [HttpGet]
-        public OperatorTypeEnum GetOperatorType()
-        {
-            return ConfigParameterManager.GetOperatorType();
-        }
+        //[HttpGet]
+        //public OperatorTypeEnum GetOperatorType()
+        //{
+        //    return ConfigParameterManager.GetOperatorType();
+        //}
 
         [HttpPost]
         public object GetFilteredAccountSuspicionSummaries(Vanrise.Entities.DataRetrievalInput<AccountSuspicionSummaryQuery> input)
@@ -34,13 +32,18 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredAccountSuspicionDetails(input));
         }
 
-        
+        [HttpPost]
+        public object GetFilteredCasesByAccountNumber(Vanrise.Entities.DataRetrievalInput<AccountCaseQuery> input)
+        {
+            CaseManagmentManager manager = new CaseManagmentManager();
+            return GetWebResponse(input, manager.GetFilteredCasesByAccountNumber(input));
+        }
+
         [HttpPost]
         public Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> UpdateAccountCase(AccountCaseUpdate input)
         {
             CaseManagmentManager manager = new CaseManagmentManager();
             return manager.UpdateAccountCase(input);
         }
-        
     }
 }

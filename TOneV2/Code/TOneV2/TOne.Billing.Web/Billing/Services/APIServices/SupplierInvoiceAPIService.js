@@ -4,6 +4,7 @@ var serviceObj = function (BaseAPIService) {
     return ({
         GetFilteredSupplierInvoices: GetFilteredSupplierInvoices,
         GetFilteredSupplierInvoiceDetails: GetFilteredSupplierInvoiceDetails,
+        GetFilteredSupplierInvoiceDetailsGroupedByDay: GetFilteredSupplierInvoiceDetailsGroupedByDay,
         DeleteInvoice: DeleteInvoice,
         ToggleInvoiceLock: ToggleInvoiceLock
     });
@@ -14,6 +15,10 @@ var serviceObj = function (BaseAPIService) {
 
     function GetFilteredSupplierInvoiceDetails(input) {
         return BaseAPIService.post('/api/SupplierInvoice/GetFilteredSupplierInvoiceDetails', input);
+    }
+
+    function GetFilteredSupplierInvoiceDetailsGroupedByDay(input) {
+        return BaseAPIService.post('/api/SupplierInvoice/GetFilteredSupplierInvoiceDetailsGroupedByDay', input);
     }
 
     function DeleteInvoice(invoiceID) {

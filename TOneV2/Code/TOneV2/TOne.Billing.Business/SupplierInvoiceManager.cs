@@ -23,6 +23,12 @@ namespace TOne.Billing.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredSupplierInvoiceDetails(input));
         }
 
+        public Vanrise.Entities.IDataRetrievalResult<SupplierInvoiceDetailGroupedByDay> GetFilteredSupplierInvoiceDetailsGroupedByDay(Vanrise.Entities.DataRetrievalInput<SupplierInvoiceDetailGroupedByDayQuery> input)
+        {
+            ISupplierInvoiceDataManager dataManager = BillingDataManagerFactory.GetDataManager<ISupplierInvoiceDataManager>();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredSupplierInvoiceDetailsGroupedByDay(input));
+        }
+
         public Vanrise.Entities.DeleteOperationOutput<object> DeleteInvoice(int invoiceID)
         {
             DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();

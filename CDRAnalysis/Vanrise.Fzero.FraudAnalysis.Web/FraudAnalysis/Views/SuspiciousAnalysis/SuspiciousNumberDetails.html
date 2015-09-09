@@ -21,6 +21,7 @@
                 <vr-choice isselected="occurancesSelected">Occurances</vr-choice>
                 <vr-choice isselected="normalCDRsSelected">Normal CDRs</vr-choice>
                 <vr-choice isselected="numberProfilesSelected">Number Profiles</vr-choice>
+                <vr-choice isselected="caseHistorySelected">Case History</vr-choice>
             </vr-choices>
 
             <div ng-show="occurancesSelected">
@@ -85,6 +86,26 @@
                                                field="'AggregateValues[&quot;' + agg.name + '&quot;]'"
                                                type="'Number'">
                             </vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-columns>
+                </vr-row>
+            </div>
+
+            <div ng-show="caseHistorySelected">
+                <vr-row>
+                    <vr-columns width="fullrow" simplecol>
+                        <vr-datagrid datasource="cases"
+                                     on-ready="onGridReady_CaseHistory"
+                                     dataretrievalfunction="dataRetrievalFunction_CaseHistory"
+                                     pagingtype="'PagingOnScroll'"
+                                     idfield="CaseID">
+
+                            <vr-datagridcolumn headertext="'Case ID'" field="'CaseID'" type="'Number'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'User'" field="'UserName'" type="'Text'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Status'" field="'CaseStatusID'" type="'Number'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Last Status Update'" field="'StatusUpdatedTime'" type="'Datetime'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Valid Till'" field="'ValidTill'" type="'Datetime'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Created Time'" field="'CreatedTime'" type="'Datetime'"></vr-datagridcolumn>
                         </vr-datagrid>
                     </vr-columns>
                 </vr-row>

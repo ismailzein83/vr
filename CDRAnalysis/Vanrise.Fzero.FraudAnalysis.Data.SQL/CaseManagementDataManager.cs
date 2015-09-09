@@ -64,6 +64,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, mapper);
         }
 
+        public BigResult<AccountCase> GetFilteredCasesByAccountNumber(Vanrise.Entities.DataRetrievalInput<AccountCaseQuery> input)
+        {
+            Dictionary<string, string> mapper = new Dictionary<string, string>();
+
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_GetByAccountNumber", tempTableName, input.Query.AccountNumber, input.Query.From, input.Query.To);
+            };
+
+            return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, mapper);
+        }
+
         public AccountSuspicionSummary GetAccountSuspicionSummaryByAccountNumber(string accountNumber, DateTime from, DateTime to)
         {
             return GetItemSP("FraudAnalysis.sp_StrategyExecutionDetails_GetSummaryByAccountNumber", AccountSuspicionSummaryMapper, accountNumber, from, to);
@@ -140,7 +152,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
-        #region Private
+        #region Private Members
 
         private AccountSuspicionSummary AccountSuspicionSummaryMapper(IDataReader reader)
         {
@@ -185,7 +197,5 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
         #endregion
-
-
     }
 }

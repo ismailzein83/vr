@@ -24,6 +24,13 @@ namespace TOne.Billing.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredSupplierInvoiceDetails(input));
         }
 
+        [HttpPost]
+        public object GetFilteredSupplierInvoiceDetailsGroupedByDay(Vanrise.Entities.DataRetrievalInput<SupplierInvoiceDetailGroupedByDayQuery> input)
+        {
+            SupplierInvoiceManager manager = new SupplierInvoiceManager();
+            return GetWebResponse(input, manager.GetFilteredSupplierInvoiceDetailsGroupedByDay(input));
+        }
+
         [HttpGet]
         public Vanrise.Entities.DeleteOperationOutput<object> DeleteInvoice(int invoiceID)
         {

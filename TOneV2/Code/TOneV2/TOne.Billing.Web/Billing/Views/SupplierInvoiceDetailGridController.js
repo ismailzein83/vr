@@ -10,6 +10,7 @@ function SupplierInvoiceDetailGridController($scope, SupplierInvoiceAPIService, 
     function defineScope() {
 
         $scope.details = [];
+        $scope.dayGroupedDetails = [];
         
         $scope.gridReady = function (api) {
             gridApi = api;
@@ -18,13 +19,26 @@ function SupplierInvoiceDetailGridController($scope, SupplierInvoiceAPIService, 
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
 
-            return SupplierInvoiceAPIService.GetFilteredSupplierInvoiceDetails(dataRetrievalInput)
+            if ($scope.viewScope.groupByDay) {
+
+                return SupplierInvoiceAPIService.GetFilteredSupplierInvoiceDetailsGroupedByDay(dataRetrievalInput)
                 .then(function (response) {
                     onResponseReady(response);
                 })
                 .catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });
+            }
+            else {
+
+                return SupplierInvoiceAPIService.GetFilteredSupplierInvoiceDetails(dataRetrievalInput)
+                .then(function (response) {
+                    onResponseReady(response);
+                })
+                .catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                });
+            }
         }
     }
 
@@ -32,10 +46,14 @@ function SupplierInvoiceDetailGridController($scope, SupplierInvoiceAPIService, 
     }
 
     function retrieveData() {
-        var query = {
-            InvoiceID: $scope.dataItem.InvoiceID
-        };
-        
+        var query = ($scope.viewScope.groupByDay) ?
+            {
+                SupplierID: $scope.viewScope.selectedSupplier.CarrierAccountID,
+                From: $scope.viewScope.from,
+                To: $scope.viewScope.to
+            } :
+            { InvoiceID: $scope.dataItem.InvoiceID };
+
         return gridApi.retrieveData(query);
     }
 }

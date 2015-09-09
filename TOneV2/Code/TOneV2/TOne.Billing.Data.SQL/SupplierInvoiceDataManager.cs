@@ -32,6 +32,16 @@ namespace TOne.Billing.Data.SQL
             return RetrieveData(input, createTempTableAction, SupplierInvoiceDetailMapper);
         }
 
+        public Vanrise.Entities.BigResult<SupplierInvoiceDetailGroupedByDay> GetFilteredSupplierInvoiceDetailsGroupedByDay(Vanrise.Entities.DataRetrievalInput<SupplierInvoiceDetailGroupedByDayQuery> input)
+        {
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("Billing.sp_BillingCDRCost_CreateTempBySupplierID", tempTableName, input.Query.SupplierID, input.Query.From, input.Query.To);
+            };
+
+            return RetrieveData(input, createTempTableAction, SupplierInvoiceDetailGroupedByDayMapper);
+        }
+
         public bool DeleteInvoice(int invoiceID)
         {
             int recordsEffected = ExecuteNonQuerySP("Billing.sp_BillingInvoice_Delete", invoiceID);
@@ -83,6 +93,19 @@ namespace TOne.Billing.Data.SQL
             };
 
             return supplierInvoiceDetail;
+        }
+
+        private SupplierInvoiceDetailGroupedByDay SupplierInvoiceDetailGroupedByDayMapper(IDataReader reader)
+        {
+            SupplierInvoiceDetailGroupedByDay detail = new SupplierInvoiceDetailGroupedByDay
+            {
+                Day = GetReaderValue<String>(reader, "Day"),
+                DurationInMinutes = GetReaderValue<decimal>(reader, "DurationInMinutes"),
+                Amount = GetReaderValue<float>(reader, "Amount"),
+                CurrencyID = GetReaderValue<string>(reader, "CurrencyID")
+            };
+
+            return detail;
         }
 
         private string GetCarrierName(string name, string suffix) {

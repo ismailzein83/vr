@@ -1,6 +1,7 @@
 ﻿<div ng-controller="Billing_SupplierInvoiceDetailGridController">
 
-    <vr-datagrid datasource="details"
+    <vr-datagrid ng-if="!viewScope.groupByDay"
+                 datasource="details"
                  dataretrievalfunction="dataRetrievalFunction"
                  pagingtype="'PagingOnScroll'"
                  on-ready="gridReady"
@@ -14,6 +15,19 @@
         <vr-datagridcolumn field="'Duration'" headertext="'Duration (Mins)'" type="'Number'"></vr-datagridcolumn>
         <vr-datagridcolumn field="'Rate'" headertext="'Rate'" type="'Number'"></vr-datagridcolumn>
         <vr-datagridcolumn field="'RateType'" headertext="'Rate Type'" type="'Number'"></vr-datagridcolumn>
+        <vr-datagridcolumn field="'Amount'" headertext="'Amount'" type="'Number'"></vr-datagridcolumn>
+        <vr-datagridcolumn field="'CurrencyID'" headertext="'Currency'" type="'Text'"></vr-datagridcolumn>
+    </vr-datagrid>
+
+    <vr-datagrid ng-if="viewScope.groupByDay"
+                 datasource="dayGroupedDetails"
+                 dataretrievalfunction="dataRetrievalFunction"
+                 pagingtype="'PagingOnScroll'"
+                 on-ready="gridReady"
+                 issubgrid>
+
+        <vr-datagridcolumn field="'Day'" headertext="'Day'" type="'Date'"></vr-datagridcolumn>
+        <vr-datagridcolumn field="'DurationInMinutes'" headertext="'Duration (Mins)'" type="'Number'"></vr-datagridcolumn>
         <vr-datagridcolumn field="'Amount'" headertext="'Amount'" type="'Number'"></vr-datagridcolumn>
         <vr-datagridcolumn field="'CurrencyID'" headertext="'Currency'" type="'Text'"></vr-datagridcolumn>
     </vr-datagrid>
