@@ -147,7 +147,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             var summary = new AccountSuspicionSummary();
 
             summary.AccountNumber = reader["AccountNumber"] as string;
-            summary.SuspicionLevelID = (SuspicionLevel)reader["SuspicionLevelID"];
+            summary.SuspicionLevelID = (SuspicionLevelEnum)reader["SuspicionLevelID"];
             summary.NumberOfOccurances = (int)reader["NumberOfOccurances"];
             summary.LastOccurance = (DateTime)reader["LastOccurance"];
             summary.AccountStatusID = GetReaderValue<CaseStatus>(reader, "AccountStatusID");
@@ -161,7 +161,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             detail.DetailID = (long)reader["DetailID"];
             detail.AccountNumber = reader["AccountNumber"] as string;
-            detail.SuspicionLevelID = (SuspicionLevel)reader["SuspicionLevelID"];
+            detail.SuspicionLevelID = (SuspicionLevelEnum)reader["SuspicionLevelID"];
             detail.StrategyName = reader["StrategyName"] as string;
             detail.AccountStatusID = GetReaderValue<CaseStatus>(reader, "AccountStatusID");
             detail.FromDate = (DateTime)reader["FromDate"];

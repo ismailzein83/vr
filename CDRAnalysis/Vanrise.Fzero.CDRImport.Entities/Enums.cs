@@ -1,18 +1,9 @@
 ﻿
 namespace Vanrise.Fzero.CDRImport.Entities
 {
-    public enum PeriodEnum
-    {
-        Hourly = 1,
-        Daily = 2
-    };
+   
 
-    public enum SuspicionLevelEnum
-    {
-        Suspicious = 2,
-        Highly_Suspicious = 3,
-        Fraud = 4
-    };
+    
 
     public enum CallTypeEnum
     {
