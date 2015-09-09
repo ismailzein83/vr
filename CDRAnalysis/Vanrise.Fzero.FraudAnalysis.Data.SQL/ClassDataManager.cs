@@ -7,10 +7,10 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
-    public class PredefinedDataManager : BaseSQLDataManager, IPredefinedDataManager
+    public class ClassDataManager : BaseSQLDataManager, IClassDataManager
     {
 
-        public PredefinedDataManager()
+        public ClassDataManager()
             : base("CDRDBConnectionString")
         {
 
@@ -19,21 +19,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         public List<CallClass> GetCallClasses()
         {
             return GetItemsSP("FraudAnalysis.sp_CallClass_GetAll", CallClassMapper);
-        }
-
-        public List<Period> GetPeriods()
-        {
-
-            var enumerationType = typeof(PeriodEnum);
-            List<Period> periods = new List<Period>();
-
-            foreach (int value in Enum.GetValues(enumerationType))
-            {
-                var name = Enum.GetName(enumerationType, value);
-                periods.Add(new Period() { Id = value, Name = name });
-            }
-
-            return periods;
         }
 
         #region Private Methods

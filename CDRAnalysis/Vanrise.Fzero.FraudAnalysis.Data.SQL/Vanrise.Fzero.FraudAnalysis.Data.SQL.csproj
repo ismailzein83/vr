@@ -62,9 +62,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NumberProfileDataManager.cs" />
+    <Compile Include="ClassDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NormalCDRDataManager.cs" />
-    <Compile Include="PredefinedDataManager.cs" />
+    <Compile Include="PeriodDataManager.cs" />
     <Compile Include="ReportingDataManager.cs" />
     <Compile Include="StrategyExecutionDataManager.cs" />
     <Compile Include="StrategyDataManager.cs" />

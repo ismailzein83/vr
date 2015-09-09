@@ -69,7 +69,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(CreateNumberProfilesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-                IPredefinedDataManager predefinedDataManager = FraudDataManagerFactory.GetDataManager<IPredefinedDataManager>();
+                IClassDataManager predefinedDataManager = FraudDataManagerFactory.GetDataManager<IClassDataManager>();
                 IStrategyDataManager strategyManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
                 INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
                 int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"]);
