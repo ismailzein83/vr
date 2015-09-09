@@ -70,7 +70,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_GetByAccountNumber", tempTableName, input.Query.AccountNumber, input.Query.From, input.Query.To);
+                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_CreateTempByAccountNumber", tempTableName, input.Query.AccountNumber, input.Query.From, input.Query.To);
             };
 
             return RetrieveData(input, createTempTableAction, AccountCaseMapper, mapper);
