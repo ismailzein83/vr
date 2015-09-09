@@ -16,10 +16,11 @@ BEGIN
 		MAX(sed.SuspicionLevelID) AS SuspicionLevelID,
 		COUNT(*) AS NumberOfOccurances,
 		MAX(se.FromDate) AS LastOccurance,
-		MAX(sed.SuspicionOccuranceStatus) AS AccountStatusID
+		ISNULL(MAX(accStatus.[Status]), 0) AS AccountStatusID
 	
 	FROM FraudAnalysis.StrategyExecutionDetails sed
 	INNER JOIN FraudAnalysis.StrategyExecution se ON se.ID = sed.StrategyExecutionID
+	LEFT JOIN FraudAnalysis.AccountStatus accStatus ON accStatus.AccountNumber = sed.AccountNumber -- I think that using an INNER JOIN is better in this case...
 	
 	WHERE sed.AccountNumber = @AccountNumber
 		AND (se.FromDate >= @From AND se.ToDate <= @To)

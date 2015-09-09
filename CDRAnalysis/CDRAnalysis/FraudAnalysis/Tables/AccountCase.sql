@@ -6,8 +6,10 @@
     [StatusUpdatedTime] DATETIME     NOT NULL,
     [ValidTill]         DATETIME     NULL,
     [CreatedTime]       DATETIME     CONSTRAINT [DF_AccountCase1_CreatedTime] DEFAULT (getdate()) NULL,
-    CONSTRAINT [PK_AccountCase1] PRIMARY KEY CLUSTERED ([ID] ASC)
+    CONSTRAINT [PK_AccountCase] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

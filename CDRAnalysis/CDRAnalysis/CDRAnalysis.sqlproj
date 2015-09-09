@@ -114,7 +114,6 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Update.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Insert.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_Get.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_DeleteStrategyResults.sql" />
     <Build Include="FraudAnalysis\User Defined Types\AccountCaseType.sql" />
     <Build Include="Security\FraudAnalysis.sql" />
     <Build Include="FraudAnalysis\Tables\SuspicionLevel.sql" />
@@ -130,11 +129,13 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionDetails_SetStatusToCaseStatus.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionDetails_GetSummaryByAccountNumber.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecution_Insert.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_GetByAccountNumber.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_CreateTempByFiltered.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_InsertOrUpdate.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCaseHistory_Insert.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_Update.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_GetLastByAccountNumber.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionDetails_GetByAccountNumber.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionDetails_Delete.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionDetails_CreateTempByFiltered.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecution_Override.sql" />
   </ItemGroup>
 </Project>

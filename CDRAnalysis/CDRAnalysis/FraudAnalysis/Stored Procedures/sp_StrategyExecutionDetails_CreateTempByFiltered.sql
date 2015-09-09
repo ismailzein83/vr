@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [FraudAnalysis].[sp_FraudResult_CreateTempByFiltered]
+CREATE PROCEDURE [FraudAnalysis].[sp_StrategyExecutionDetails_CreateTempByFiltered]
 	@TempTableName VARCHAR(200),
 	@AccountNumber VARCHAR(50) = NULL,
 	@From DATETIME,
@@ -43,19 +43,20 @@ BEGIN
 			MAX(sed.SuspicionLevelID) AS SuspicionLevelID,
 			COUNT(*) AS NumberOfOccurances,
 			MAX(se.FromDate) AS LastOccurance,
-			MAX(sed.SuspicionOccuranceStatus) AS AccountStatusID
+			ISNULL(MAX(accStatus.[Status]), 0) AS AccountStatusID
 		
 		INTO #RESULT
 		
 		FROM FraudAnalysis.StrategyExecutionDetails sed
 		INNER JOIN FraudAnalysis.StrategyExecution se ON se.ID = sed.StrategyExecutionID
+		LEFT JOIN FraudAnalysis.AccountStatus accStatus ON accStatus.AccountNumber = sed.AccountNumber
 		
 		WHERE
 			--fr.[Status] = 0
-			(se.FromDate >= @From AND se.ToDate<= @To)
+			(se.FromDate >= @From AND se.ToDate <= @To)
 			AND (@AccountNumber IS NULL OR sed.AccountNumber = @AccountNumber)
 			AND (@SelectedSuspicionLevelIDs IS NULL OR sed.SuspicionLevelID IN (SELECT SuspicionLevelID FROM @SuspicionLevelIDsTable))
-			AND (@SelectedCaseStatusIDs IS NULL OR sed.SuspicionOccuranceStatus IN (SELECT CaseStatusID FROM @CaseStatusIDsTable))
+			AND (@SelectedCaseStatusIDs IS NULL OR accStatus.[Status] IN (SELECT CaseStatusID FROM @CaseStatusIDsTable))
 		
 		GROUP BY sed.AccountNumber
 		

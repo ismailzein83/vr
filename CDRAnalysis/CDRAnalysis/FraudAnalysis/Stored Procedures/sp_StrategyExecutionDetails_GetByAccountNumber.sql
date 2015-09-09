@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [FraudAnalysis].[sp_FraudResult_GetByAccountNumber]
+CREATE PROCEDURE [FraudAnalysis].[sp_StrategyExecutionDetails_GetByAccountNumber]
 	@TempTableName VARCHAR(200),
 	@AccountNumber VARCHAR(50),
 	@From DATETIME,
@@ -16,7 +16,7 @@ BEGIN
 			sed.SuspicionLevelId AS SuspicionLevelID,
 			s.Name AS StrategyName,
 			sed.SuspicionOccuranceStatus AS AccountStatusID,
-			se.FromDate, 
+			se.FromDate,
 			se.ToDate
 			
 		INTO #RESULT

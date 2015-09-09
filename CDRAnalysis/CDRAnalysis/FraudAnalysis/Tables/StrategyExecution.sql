@@ -6,6 +6,9 @@
     [ToDate]        DATETIME NOT NULL,
     [PeriodID]      INT      NOT NULL,
     [ExecutionDate] DATETIME NOT NULL,
+    [IsOverriden]   BIT      CONSTRAINT [DF_StrategyExecution_IsOverriden] DEFAULT ((0)) NOT NULL,
     CONSTRAINT [PK_StrategyExecution] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
