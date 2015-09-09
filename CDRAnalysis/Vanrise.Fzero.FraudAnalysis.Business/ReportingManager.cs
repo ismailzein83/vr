@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Vanrise.Entities;
+﻿using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
@@ -8,7 +6,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class ReportingManager
     {
-
         public Vanrise.Entities.IDataRetrievalResult<CaseProductivity> GetFilteredCasesProductivity(Vanrise.Entities.DataRetrievalInput<CaseProductivityResultQuery> input)
         {
             IReportingDataManager manager = FraudDataManagerFactory.GetDataManager<IReportingDataManager>();
@@ -27,8 +24,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, blockedLines);
         }
 
-
-
         public Vanrise.Entities.IDataRetrievalResult<LinesDetected> GetFilteredLinesDetected(Vanrise.Entities.DataRetrievalInput<LinesDetectedResultQuery> input)
         {
             IReportingDataManager manager = FraudDataManagerFactory.GetDataManager<IReportingDataManager>();
@@ -37,7 +32,5 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, linesDetected);
         }
-
-
     }
 }

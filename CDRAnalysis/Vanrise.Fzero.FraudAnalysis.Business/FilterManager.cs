@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vanrise.Fzero.FraudAnalysis.Entities;
 using System.Linq;
 using Vanrise.Fzero.Business;
 using Vanrise.Fzero.Entities;
+using Vanrise.Fzero.FraudAnalysis.Entities;
 
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class FilterManager
     {
-
-
 
         public Decimal GetCriteriaValue(FilterDefinition criteria, NumberProfile numberProfile)
         {
@@ -195,8 +193,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         {
             return numberProfile.AggregateValues["Count Fail Consecutive Calls"];
         }
-
-
 
     }
 }

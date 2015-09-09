@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vanrise.Fzero.FraudAnalysis.Entities;
 using System.Linq;
 using Vanrise.Fzero.Business;
-using Vanrise.Fzero.Entities;
 using Vanrise.Fzero.CDRImport.Entities;
+using Vanrise.Fzero.Entities;
+using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class AggregateManager
     {
-
         IEnumerable<INumberProfileParameters> _parameters;
         HashSet<int> _nightCallHours = new HashSet<int>() { 0, 1, 2, 3, 4, 5 };
-
 
         public AggregateManager(IEnumerable<INumberProfileParameters> parameters)
         {
@@ -24,7 +22,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         {
 
         }
-
 
         public List<AggregateDefinition> GetAggregateDefinitions(List<CallClass> callClasses)
         {
@@ -393,7 +390,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return AggregateDefinitions.Where(x => x.OperatorTypeAllowed == ConfigParameterManager.GetOperatorType() || x.OperatorTypeAllowed == CommonEnums.OperatorType.Mobile).ToList(); 
         }
 
-
         public List<AggregateDefinitionInfo> GetAggregateDefinitionsInfo()
         {
 
@@ -618,7 +614,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             return AggregateDefinitionsInfo.Where(x => x.OperatorTypeAllowed == ConfigParameterManager.GetOperatorType() || x.OperatorTypeAllowed == CommonEnums.OperatorType.Mobile).ToList(); 
         }
-
 
     }
 }

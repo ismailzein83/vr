@@ -18,17 +18,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
         bool InsertAccountCaseHistory(int caseID, int userID, CaseStatus caseStatus);
         bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus);
         bool LinkDetailToCase(string accountNumber, int caseID, CaseStatus caseStatus);
-        void UpdateSusbcriberCases(List<AccountCaseType> cases);
 
-        BigResult<FraudResult> GetFilteredSuspiciousNumbers(Vanrise.Entities.DataRetrievalInput<FraudResultQuery> input);
 
         BigResult<AccountSuspicionSummary> GetFilteredAccountSuspicionSummaries(Vanrise.Entities.DataRetrievalInput<AccountSuspicionSummaryQuery> input);
 
         AccountSuspicionSummary GetAccountSuspicionSummaryByAccountNumber(string accountNumber, DateTime from, DateTime to);
 
         BigResult<AccountSuspicionDetail> GetFilteredAccountSuspicionDetails(Vanrise.Entities.DataRetrievalInput<AccountSuspicionDetailQuery> input);
-
-        FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, List<int> strategiesList, List<int> suspicionLevelsList, string accountNumber);
 
         void ApplySuspiciousNumbersToDB(object preparedSuspiciousNumbers);
 

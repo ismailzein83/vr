@@ -118,7 +118,7 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
             }
         };
 
-        VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/SuspiciousNumberDetails.html", parameters, modalSettings);
+        VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/SuspiciousAnalysis/SuspiciousNumberDetails.html", parameters, modalSettings);
     }
 }
 

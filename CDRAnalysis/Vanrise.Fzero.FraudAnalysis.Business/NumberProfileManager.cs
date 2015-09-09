@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Vanrise.Fzero.FraudAnalysis.Data;
+﻿using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
-using Vanrise.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {
@@ -14,6 +11,5 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, manager.GetNumberProfiles(input));
         }
-
     }
 }

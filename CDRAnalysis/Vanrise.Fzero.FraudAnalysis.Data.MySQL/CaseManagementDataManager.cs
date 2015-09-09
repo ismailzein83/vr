@@ -83,11 +83,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             throw new NotImplementedException();
         }
 
-        public FraudResult GetFraudResult(DateTime fromDate, DateTime toDate, System.Collections.Generic.List<int> strategiesList, System.Collections.Generic.List<int> suspicionLevelsList, string accountNumber)
-        {
-            throw new NotImplementedException();
-        }
-
         public void ApplySuspiciousNumbersToDB(object preparedSuspiciousNumbers)
         {
             throw new NotImplementedException();

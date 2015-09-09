@@ -1,48 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
-using Vanrise.Entities;
-using System.Linq;
-using Vanrise.Security.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class CaseManagmentManager
     {
-
-        public Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<AccountCase> SaveAccountCase(AccountCase accountCaseObject)
+        public Vanrise.Entities.IDataRetrievalResult<AccountSuspicionSummary> GetFilteredAccountSuspicionSummaries(Vanrise.Entities.DataRetrievalInput<AccountSuspicionSummaryQuery> input)
         {
-            ICaseManagementDataManager manager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
-            accountCaseObject.UserID= Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
-            manager.SaveAccountCase(accountCaseObject);
-            Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<AccountCase> updateOperationOutput = new Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<AccountCase>();
-
-            updateOperationOutput.Result = Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationResult.Succeeded;
-            updateOperationOutput.UpdatedObject = accountCaseObject;
-            return updateOperationOutput;
+            ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredAccountSuspicionSummaries(input));
         }
 
 
-        //public Vanrise.Entities.IDataRetrievalResult<AccountCase> GetFilteredAccountCases(Vanrise.Entities.DataRetrievalInput<AccountCaseResultQuery> input, IEnumerable<UserInfo> users)
-        //{
-        //    //ICaseManagementDataManager manager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
+        public Vanrise.Entities.IDataRetrievalResult<AccountSuspicionDetail> GetFilteredAccountSuspicionDetails(Vanrise.Entities.DataRetrievalInput<AccountSuspicionDetailQuery> input)
+        {
+            ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredAccountSuspicionDetails(input));
+        }
 
-        //    //BigResult<AccountCase> accountCases = manager.GetFilteredAccountCases(input);
+        public Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> UpdateAccountCase(AccountCaseUpdate input)
+        {
+            Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary>();
 
-        //    //foreach (var accountCase in accountCases.Data)
-        //    //{
-        //    //    UserInfo userinfo = users.Where(x => x.UserId == accountCase.UserID).FirstOrDefault();
-        //    //    if (userinfo != null)
-        //    //    {
-        //    //        //accountCase.UserName = userinfo.Name;
-        //    //    }
-        //    //}
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
 
+            ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
+            bool updated = dataManager.UpdateAccountCase(input.accountNumber, input.caseStatus, input.validTill);
 
-        //    //return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, accountCases);
-        //}
+            if (updated)
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = dataManager.GetAccountSuspicionSummaryByAccountNumber(input.accountNumber, input.from, input.to);
+            }
 
-
+            return updateOperationOutput;
+        }
     }
 }

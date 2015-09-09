@@ -2,15 +2,11 @@
 using System.Collections.Generic;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
-using Vanrise.Entities;
-using System.Linq;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class StrategyManager
     {
-
-
         public Strategy GetStrategy(int StrategyId)
         {
 
@@ -29,14 +25,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         }
 
-
         public Vanrise.Entities.IDataRetrievalResult<Strategy> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyResultQuery> input)
         {
             IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, manager.GetFilteredStrategies(input));
         }
-
 
         public Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<Strategy> UpdateStrategy(Strategy strategyObject)
         {
@@ -54,7 +48,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 updateOperationOutput.Result = Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationResult.Failed;
             return updateOperationOutput;
         }
-
 
         public Vanrise.Fzero.FraudAnalysis.Entities.InsertOperationOutput<Strategy> AddStrategy(Strategy strategyObject)
         {
@@ -78,7 +71,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         }
 
 
-
         public Vanrise.Fzero.FraudAnalysis.Entities.InsertOperationOutput<StrategyExecution> ExecuteStrategy(StrategyExecution strategyExecutionObject)
         {
             Vanrise.Fzero.FraudAnalysis.Entities.InsertOperationOutput<StrategyExecution> insertOperationOutput = new Vanrise.Fzero.FraudAnalysis.Entities.InsertOperationOutput<StrategyExecution>();
@@ -93,7 +85,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             return insertOperationOutput;
         }
-
 
 
         public void OverrideStrategyExecution(int StrategyId, DateTime FromDate, DateTime ToDate)
@@ -111,7 +102,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             }
 
         }
-
 
     }
 }
