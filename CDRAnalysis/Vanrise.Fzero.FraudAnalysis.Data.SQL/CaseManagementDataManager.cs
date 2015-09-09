@@ -45,7 +45,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 if (input.Query.SelectedCaseStatusIDs != null && input.Query.SelectedCaseStatusIDs.Count() > 0)
                     selectedCaseStatusIDs = string.Join(",", input.Query.SelectedCaseStatusIDs.Select(n => ((int)n).ToString()).ToArray());
 
-                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByFiltered", tempTableName, input.Query.AccountNumber, input.Query.From, input.Query.To, selectedStrategyIDs, selectedSuspicionLevelIDs, selectedCaseStatusIDs);
+                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByAccountNumberForSummaries", tempTableName, input.Query.AccountNumber, input.Query.From, input.Query.To, selectedStrategyIDs, selectedSuspicionLevelIDs, selectedCaseStatusIDs);
 
             }, (reader) => AccountSuspicionSummaryMapper(reader), mapper);
         }
@@ -54,7 +54,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             Dictionary<string, string> mapper = new Dictionary<string, string>();
             mapper.Add("SuspicionLevelDescription", "SuspicionLevelID");
-            mapper.Add("AccountStatusDescription", "AccountStatusID");
+            mapper.Add("SuspicionOccuranceStatusDescription", "SuspicionOccuranceStatus");
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
@@ -193,12 +193,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, BTSCasesMapper);
         }
 
-
         public List<StrategyCases> GetStrategyCases(DateTime fromDate, DateTime toDate)
         {
             return GetItemsSP("FraudAnalysis.sp_AccountCase_GetFraudCasesPerStrategy", StrategyCasesMapper, fromDate, toDate);
         }
-
 
         public BigResult<BTSHighValueCases> GetTop10BTSHighValue(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
         {
@@ -208,7 +206,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             };
             return RetrieveData(input, createTempTableAction, BTSHighValueCasesMapper);
         }
-
 
         #region Private Members
 

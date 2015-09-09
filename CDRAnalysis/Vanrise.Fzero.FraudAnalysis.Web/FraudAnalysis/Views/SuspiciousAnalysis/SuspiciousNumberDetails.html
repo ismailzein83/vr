@@ -33,10 +33,9 @@
                                      pagingtype="'PagingOnScroll'"
                                      idfield="DetialID">
 
-                            <vr-datagridcolumn headertext="'Account Number'" field="'AccountNumber'" type="'Text'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelDescription'" type="'Text'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" type="'Text'"></vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Status'" field="'AccountStatusDescription'" type="'Text'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Status'" field="'SuspicionOccuranceStatusDescription'" type="'Text'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'From Date'" field="'FromDate'" type="'Date'"></vr-datagridcolumn>
                         </vr-datagrid>
                     </vr-columns>
@@ -78,7 +77,7 @@
                                      dataretrievalfunction="dataRetrievalFunction_NumberProfiles"
                                      pagingtype="'PagingOnScroll'">
 
-                            <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" type="'Text'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'From Date'" field="'FromDate'" type="'Date'"></vr-datagridcolumn>
 
                             <vr-datagridcolumn ng-repeat="agg in aggregateDefinitions"
                                                columnindex="$index + 1"
