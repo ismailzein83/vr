@@ -1,31 +1,43 @@
 ﻿"use strict";
 
-CancelCasesController.$inject = ["$scope", "CaseManagementAPIService", "StrategyAPIService", "VRNotificationService" ];
+CancelCasesController.$inject = ["$scope", "CaseManagementAPIService", "StrategyAPIService", "VRNotificationService"];
 
 function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIService, VRNotificationService) {
     definescope();
     load();
 
-    function definescope()
-    {
+    function definescope() {
         $scope.strategies = [];
         $scope.selectedStrategy = '';
+
         $scope.cancelClicked = function () {
-            var accountCaseObject = buildAccountCaseObjectFromScope();
-            return CaseManagementAPIService.CancelAccountCases(accountCaseObject)
-                                  .then(function (response) {
-                                      if (VRNotificationService.notifyOnItemUpdated("Account Cases", response)) {
-                                         console.log(response)
-                                      }
-                                  }).catch(function (error) {
-                                      VRNotificationService.notifyException(error, $scope);
-                                  });
+            return cancelCases();
         }
 
     }
+    
+    function cancelCases() {
+        var message = 'Are you sure that you cancel case(s)?';
 
-    function load()
-    {
+        VRNotificationService.showConfirmation(message)
+            .then(function (response) {
+                if (response == true) {
+
+                    var accountCaseObject = buildAccountCaseObjectFromScope();
+                    return CaseManagementAPIService.CancelAccountCases(accountCaseObject)
+                                          .then(function (response) {
+                                              if (VRNotificationService.notifyOnItemUpdated("Account Cases", response)) {
+                                                  console.log(response)
+                                              }
+                                          }).catch(function (error) {
+                                              VRNotificationService.notifyException(error, $scope);
+                                          });
+                }
+            });
+    }
+
+
+    function load() {
         $scope.isInitializing = true;
 
         return StrategyAPIService.GetStrategies(0, "") // get all the enabled and disabled strategies (2nd arg) for all periods (1st arg)
@@ -47,7 +59,7 @@ function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIServ
 
     function buildAccountCaseObjectFromScope() {
 
-        var selectedStrategyId=0
+        var selectedStrategyId = 0
 
         if ($scope.selectedStrategy != undefined)
             selectedStrategyId = $scope.selectedStrategy.value;
