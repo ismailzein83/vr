@@ -7,16 +7,16 @@
          <vr-columns width="normal">
              <vr-select datasource="ctrl.operators" datatextfield="description" datavaluefield="value" selectedvalues="ctrl.selectedOperator" hidefilterbox onselectionchanged="ctrl.onOperatorSelectionChanged"></vr-select>
          </vr-columns>
-         <vr-columns width="normal" ng-if="ctrl.filterInput === ctrl.inputEnum.Select">
-             <vr-select datasource="ctrl.filterValues"  selectedvalues="ctrl.selectedFilterValues" hidefilterbox onselectionchanged="ctrl.onValueSelectionChanged"></vr-select>
+         <vr-columns width="normal" ng-if="(ctrl.filterInput === ctrl.inputEnum.Select) && (ctrl.hasInput)">
+             <vr-select datasource="ctrl.filterValues" selectedvalues="ctrl.selectedFilterValues" hidefilterbox onselectionchanged="ctrl.onValueSelectionChanged"></vr-select>
          </vr-columns>
-         <vr-columns width="normal" ng-if="ctrl.filterInput === ctrl.inputEnum.Text">
+         <vr-columns width="normal" ng-if="(ctrl.filterInput === ctrl.inputEnum.Text) && (ctrl.hasInput)">
              <vr-textbox value="ctrl.inputValueFrom"></vr-textbox>
          </vr-columns>
-         <vr-columns width="normal" ng-if="(ctrl.filterInput === ctrl.inputEnum.Text) && (ctrl.hasMultipleInput)">
+         <vr-columns width="normal" ng-if="(ctrl.filterInput === ctrl.inputEnum.Text) && (ctrl.hasMultipleInput) && (ctrl.hasInput)">
              <vr-textbox value="ctrl.inputValueTo"></vr-textbox>
          </vr-columns>
-         <vr-columns width="normal" ng-if="ctrl.filterInput === ctrl.inputEnum.Switch">
+         <vr-columns width="normal" ng-if="(ctrl.filterInput === ctrl.inputEnum.Switch) && (ctrl.hasInput)">
              <vr-switch value="ctrl.switchValue"></vr-switch>
          </vr-columns>
          <vr-columns width="normal">

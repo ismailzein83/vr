@@ -20,22 +20,28 @@
         Array: { value: 6, description: "boolean", input: inputEnum.Select }
     };
 
+    var inputTypeEnum = {
+        MultipleInput: { value: 0, description: "MultipleInput" },
+        NoInput: { value: 1, description: "NoInput" }
+    };
+
     app.constant('QueryBuilderFilterOperatorEnum', {
         Equal: { value: 0, description: "equal", types: [typeEnum.Array, typeEnum.Boolean, typeEnum.Double] },
         NotEqual: { value: 1, description: "not equal", types: [typeEnum.Array, typeEnum.Double] },
         In: { value: 2, description: "in", types: [typeEnum.Array, typeEnum.Double] },
         NotIn: { value: 3, description: "not in", types: [typeEnum.Array, typeEnum.Double] },
-        IsNull: { value: 4, description: "is null", types: [typeEnum.Array, typeEnum.Double] },
-        IsNotNull: { value: 5, description: "is not null", types: [typeEnum.Array, typeEnum.Double] },
+        IsNull: { value: 4, description: "is null", types: [typeEnum.Array, typeEnum.Double], InputType: inputTypeEnum.NoInput },
+        IsNotNull: { value: 5, description: "is not null", types: [typeEnum.Array, typeEnum.Double], InputType: inputTypeEnum.NoInput },
         Less: { value: 6, description: "less", types: [typeEnum.Double] },
         LessOrEqual: { value: 7, description: "less or equal", types: [typeEnum.Double] },
         Greater: { value: 8, description: "greater", types: [typeEnum.Double] },
         GreaterOrEqual: { value: 9, description: "greater or equal", types: [typeEnum.Double] },
-        Between: { value: 10, description: "between", types: [typeEnum.Double], hasMultipleInput: true },
-        NotBetween: { value: 11, description: "not between", types: [typeEnum.Double], hasMultipleInput: true }
+        Between: { value: 10, description: "between", types: [typeEnum.Double], InputType: inputTypeEnum.MultipleInput },
+        NotBetween: { value: 11, description: "not between", types: [typeEnum.Double], InputType: inputTypeEnum.MultipleInput }
 
     });
 
+    app.constant('QueryBuilderFilterInputTypeEnum', inputTypeEnum);
     app.constant('QueryBuilderFilterTypeEnum', typeEnum);
     app.constant('QueryBuilderFilterInputEnum', inputEnum);
     
@@ -45,9 +51,9 @@
 
     "use strict";
 
-    vrDirectiveObj.$inject = ['QueryBuilderFilterInputEnum', 'QueryBuilderFilterTypeEnum', 'QueryBuilderFilterOperatorEnum'];
+    vrDirectiveObj.$inject = ['QueryBuilderFilterInputEnum', 'QueryBuilderFilterTypeEnum', 'QueryBuilderFilterOperatorEnum', 'QueryBuilderFilterInputTypeEnum'];
 
-    function vrDirectiveObj(inputEnum , typeEnum,operatorEnum) {
+    function vrDirectiveObj(inputEnum , typeEnum,operatorEnum , inputTypeEnum) {
 
         return {
             restrict: 'E',
@@ -97,13 +103,31 @@
                     ctrl.filterValues = selectedItem.values;
                 }
 
+                function changeInput(operatorItem) {
+                    ctrl.hasInput = true;
+                    ctrl.hasMultipleInput = false;
+
+                    if (operatorItem === undefined || operatorItem === null || operatorItem.InputType === undefined) {
+                        ctrl.hasInput = true;
+                        ctrl.hasMultipleInput = false;
+                        return;
+                    }
+
+                    if (operatorItem.InputType === inputTypeEnum.NoInput) {
+                        ctrl.hasInput = false;
+                        ctrl.hasMultipleInput = false;
+                        return;
+                    }
+
+                    if (operatorItem.InputType === inputTypeEnum.MultipleInput) {
+                        ctrl.hasInput = true;
+                        ctrl.hasMultipleInput = true;
+                        return;
+                    }
+                }
+
                 function onOperatorSelectionChanged(selectedItem) {
-                    if (selectedItem === undefined || selectedItem === null)
-                        ctrl.hasMultipleInput = false;
-                    else if (selectedItem.hasMultipleInput === undefined)
-                        ctrl.hasMultipleInput = false;
-                    else
-                        ctrl.hasMultipleInput = selectedItem.hasMultipleInput;
+                    changeInput(selectedItem);
                 }
 
                 function onValueSelectionChanged() {
