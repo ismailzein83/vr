@@ -105,5 +105,34 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_Delete", StrategyExecutionId);
         }
 
+        public void LoadAccountNumbersfromStrategyExecutionDetails(DateTime from, DateTime to, int? batchSize, Action<string> onBatchReady)
+        {
+            ExecuteReaderSP("FraudAnalysis.sp_StrategyExecutionDetails_Load", (reader) =>
+            {
+                int count = 0;
+                int currentIndex = 0;
+
+                while (reader.Read())
+                {
+                    currentIndex++;
+                    if (currentIndex == 10)
+                    {
+                        count += currentIndex;
+                        currentIndex = 0;
+
+                    }
+
+                    onBatchReady(reader["AccountNumber"] as string);
+                }
+
+
+
+            }, from, to
+               );
+        }
+
+
+
+
     }
 }

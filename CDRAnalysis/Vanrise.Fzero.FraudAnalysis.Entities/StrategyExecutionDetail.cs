@@ -8,6 +8,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
     public class StrategyExecutionDetail
     {
+        public int ID { get; set; }
+
         public int StrategyExecutionID { get; set; }
 
         public string AccountNumber { get; set; }
@@ -18,7 +20,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public SuspicionOccuranceStatus SuspicionOccuranceStatus { get; set; }
 
-        public int CaseID { get; set; }
+        public int? CaseID { get; set; }
 
         public Dictionary<String, Decimal> AggregateValues { get; set; }
     }
