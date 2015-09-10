@@ -19,25 +19,23 @@ function RepeatedNumbersController($scope, UtilsService, $q, RepeatedNumbersAPIS
             description: "Customize"
         }
         $scope.onBlurFromChanged = function () {
-            var from = UtilsService.getShortDate($scope.basicSelected ? $scope.fromDate : $scope.fromDate1);
+            var from = UtilsService.getShortDate( $scope.fromDate );
             var oldFrom = UtilsService.getShortDate(date.from);
             if (from != oldFrom)
                 $scope.selectedPeriod = customize;
-            $scope.basicSelected ? $scope.fromDate1 = $scope.fromDate : $scope.fromDate = $scope.fromDate1
+           
         }
         $scope.onBlurToChanged = function () {
-            var to = UtilsService.getShortDate($scope.basicSelected ? $scope.toDate : $scope.toDate1);
+            var to = UtilsService.getShortDate( $scope.toDate);
             var oldTo = UtilsService.getShortDate(date.to);
             if (to != oldTo)
                 $scope.selectedPeriod = customize;
-            console.log(UtilsService.dateToServerFormat($scope.toDate));
-            $scope.basicSelected ? $scope.toDate1 = $scope.toDate : $scope.toDate = $scope.toDate1
+ 
         }
         $scope.periodSelectionChanged = function () {
             if ($scope.selectedPeriod != undefined && $scope.selectedPeriod.value != -1) {
                 date = UtilsService.getPeriod($scope.selectedPeriod.value);
                 $scope.fromDate = date.from, $scope.toDate = date.to;
-                $scope.fromDate1 = date.from, $scope.toDate1 = date.to;
                 
                 
             }
@@ -77,8 +75,8 @@ function RepeatedNumbersController($scope, UtilsService, $q, RepeatedNumbersAPIS
         var filter = buildFilter();
         var query = {
             SwitchIds: filter.SwitchIds,
-            From: $scope.basicSelected ?$scope.fromDate:$scope.fromDate1,
-            To: $scope.basicSelected ? $scope.toDate : $scope.toDate1,
+            From: $scope.fromDate,
+            To:  $scope.toDate,
             Number: $scope.repeatMoreThan,
             Type: $scope.selectedCallsOption.value,
             PhoneNumberType:$scope.selectedPhoneNumberType.value

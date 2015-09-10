@@ -9,8 +9,8 @@ function BlockedAttemptsController($scope, UtilsService, $q, BlockedAttemptsAPIS
 
     function defineScope() {
         definePeriods();
-        $scope.basicToDate;
-        $scope.basicFromDate;
+        $scope.toDate;
+        $scope.fromDate;
         $scope.advancedFromDate;
         $scope.advancedToDate;
         $scope.isShown = false;
@@ -22,28 +22,24 @@ function BlockedAttemptsController($scope, UtilsService, $q, BlockedAttemptsAPIS
         $scope.periodSelectionChanged = function () {
             if ($scope.selectedPeriod != undefined && $scope.selectedPeriod.value != -1) {
                 date = UtilsService.getPeriod($scope.selectedPeriod.value);
-                $scope.basicFromDate = date.from;
-                $scope.basicToDate = date.to;
-                $scope.advancedFromDate = date.from;
-                $scope.advancedToDate = date.to;
+                $scope.fromDate = date.from;
+                $scope.toDate = date.to;
             }
 
         }
         $scope.onBlurFromChanged= function () 
         {
-            var from = UtilsService.getShortDate($scope.basicSelected ? $scope.basicFromDate : $scope.advancedFromDate);
+            var from = UtilsService.getShortDate($scope.fromDate);
             var oldFrom = UtilsService.getShortDate(date.from);
             if (from != oldFrom)
                 $scope.selectedPeriod = customize;
-            $scope.basicSelected ? $scope.advancedFromDate = $scope.basicFromDate : $scope.basicFromDate = $scope.advancedFromDate
         }
         $scope.onBlurToChanged = function () {
-            var to = UtilsService.getShortDate($scope.basicSelected ? $scope.basicToDate : $scope.advancedToDate);
+            var to = UtilsService.getShortDate( $scope.toDate);
             var oldTo = UtilsService.getShortDate(date.to);
             if (to != oldTo)
                 $scope.selectedPeriod = customize;
-            console.log(UtilsService.dateToServerFormat($scope.basicToDate));
-            $scope.basicSelected ? $scope.advancedToDate = $scope.basicToDate : $scope.basicToDate = $scope.advancedToDate
+           
         }
         $scope.data = [];
         $scope.switches = [];
@@ -81,8 +77,8 @@ function BlockedAttemptsController($scope, UtilsService, $q, BlockedAttemptsAPIS
         var filter=buildFilter();
         var query = {
             Filter: filter,
-            From: $scope.basicFromDate,
-            To: $scope.basicToDate,
+            From: $scope.fromDate,
+            To: $scope.toDate,
             GroupByNumber: $scope.groupByNumber
         };
         return mainGridAPI.retrieveData(query);
@@ -101,8 +97,8 @@ function BlockedAttemptsController($scope, UtilsService, $q, BlockedAttemptsAPIS
                     //maxHeight: "800px"
                 };
                 var parameters = {
-                    fromDate: $scope.basicFromDate,
-                    toDate: $scope.basicToDate,
+                    fromDate: $scope.fromDate,
+                    toDate: $scope.toDate,
                     customerIds: dataItem.CustomerID != null || dataItem.CustomerID != undefined ? [dataItem.CustomerID] : null,
                     zoneIds: dataItem.OurZoneID != null || dataItem.OurZoneID != undefined ? [dataItem.OurZoneID] : null,
                     supplierIds: dataItem.SupplierID != null || dataItem.SupplierID != undefined ? [dataItem.SupplierID] : null,

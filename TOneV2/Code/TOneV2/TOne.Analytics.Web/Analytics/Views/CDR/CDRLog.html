@@ -11,7 +11,7 @@
                     </vr-columns>
                 </vr-row>
                 <vr-row removeline>
-                    <vr-columns width="fullrow" ng-if="basicSelected">
+                    <vr-columns width="fullrow">
                         <vr-row>
                             <vr-columns width="normal">
                                 <vr-textbox type="number" value="nRecords" label="Limit Results to" isrequired></vr-textbox>
@@ -22,38 +22,23 @@
                             <vr-columns width="normal">
                                 <vr-datetimepicker type="dateTime" label="To" value="toDate" isrequired></vr-datetimepicker>
                             </vr-columns>
-                        </vr-row>
-                    </vr-columns>
-                </vr-row>
-                <vr-row removeline>
-                    <vr-columns width="fullrow" ng-show="advancedSelected">
-                        <vr-row>
-                            <vr-columns width="normal">
-                                <vr-textbox value="nRecords" type="number" label="Limit Results to" isrequired></vr-textbox>
-                            </vr-columns>
-                            <vr-columns width="normal">
-                                <vr-datetimepicker type="dateTime" label="From" value="fromDate" isrequired></vr-datetimepicker>
-                            </vr-columns>
-                            <vr-columns width="normal">
-                                <vr-datetimepicker type="dateTime" label="To" value="toDate" isrequired></vr-datetimepicker>
-                            </vr-columns>
-                            <vr-columns width="normal">
+
+                            <vr-columns width="normal" ng-show="advancedSelected">
                                 <vr-select datasource="switches" datatextfield="Name" datavaluefield="SwitchId" selectedvalues="selectedSwitches" label="Switches" ismultipleselection></vr-select>
                             </vr-columns>
-                            <vr-columns width="normal">
+                            <vr-columns width="normal" ng-show="advancedSelected">
                                 <vr-be-carriergroup type="'Customer'" selectedvalues="selectedCustomers"></vr-be-carriergroup>
                             </vr-columns>
-                            <vr-columns width="normal">
+                            <vr-columns width="normal" ng-show="advancedSelected">
                                 <vr-be-carriergroup type="'Supplier'" selectedvalues="selectedSuppliers"></vr-be-carriergroup>
                             </vr-columns>
-                            <vr-columns width="normal">
+                            <vr-columns width="normal" ng-show="advancedSelected">
                                 <vr-select ismultipleselection datasource="searchZones" label="Zones" selectedvalues="selectedZones" datatextfield="Name" datavaluefield="ZoneId"
                                            entityname="Zones"></vr-select>
                             </vr-columns>
-                            <vr-columns width="normal">
+                            <vr-columns width="normal" ng-show="advancedSelected">
                                 <vr-select datasource="CDROption" datatextfield="description" datavaluefield="value" selectedvalues="selectedCDROption" label="CDR Option" isrequired></vr-select>
                             </vr-columns>
-                            
                         </vr-row>
                     </vr-columns>
                 </vr-row>

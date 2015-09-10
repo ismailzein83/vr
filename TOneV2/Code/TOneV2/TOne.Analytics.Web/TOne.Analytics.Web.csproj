@@ -138,7 +138,6 @@
   <ItemGroup>
     <Content Include="Analytics\Constants\BillingCDRMeasureEnum.js" />
     <Content Include="Analytics\Constants\BillingCDROptionMeasureEnum.js" />
-    <Content Include="Analytics\Constants\BlockedAttemptsMeasureEnum.js" />
     <Content Include="Analytics\Constants\CallsOptionEnum.js" />
     <Content Include="Analytics\Constants\DurationEnum.js" />
     <Content Include="Analytics\Constants\GenericAnalyticDimensionEnum.js" />
