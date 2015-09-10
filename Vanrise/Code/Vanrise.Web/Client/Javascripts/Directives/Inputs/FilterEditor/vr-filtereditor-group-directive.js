@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function vrDirectiveObj() {
+    function vrDirectiveObj(baseDirService) {
 
         return {
             restrict: 'E',
@@ -11,12 +11,44 @@
                 filters: '='
             },
             controller: function () {
-                this.deleteRule1 = function() {
-                    console.log('deleteRule1');
-                };
-                this.deleteRule2 = function () {
-                    console.log('deleteRule2');
-                };
+                var ctrl = this;
+
+                ctrl.rules = [];
+                ctrl.condition = "AND";
+
+                function toggle() {
+                    if (ctrl.condition === "OR")
+                        ctrl.condition = "AND";
+                    else
+                        ctrl.condition = "OR";
+                }
+                function deleteRule(rule) {
+                    var index = ctrl.rules.indexOf(rule);
+                    ctrl.rules.splice(index, 1);
+                }
+
+                function addRule() {
+                    var rule = { id: baseDirService.guid() };
+                    rule.deleteRule = function() { deleteRule(rule); };
+                    ctrl.rules.push(rule);
+                }
+
+                function addGroup() {
+
+                }
+
+                function deleteGroup() {
+                    
+                }
+
+                angular.extend(this, {
+                    deleteRule: deleteRule,
+                    addRule: addRule,
+                    addGroup: addGroup,
+                    deleteGroup: deleteGroup,
+                    toggle: toggle
+                });
+
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -26,7 +58,7 @@
         };
     }
 
-    //vrDirectiveObj.$inject = [];
+    vrDirectiveObj.$inject = ['BaseDirService'];
     app.directive('vrFiltereditorGroup', vrDirectiveObj);
 
 })(app);
