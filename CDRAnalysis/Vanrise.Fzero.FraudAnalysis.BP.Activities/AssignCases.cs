@@ -40,7 +40,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
 
-                int cdrsCount = 0;
+                int numbersCount = 0;
                 DoWhilePreviousRunning(previousActivityStatus, handle, () =>
                 {
                     bool hasItem = false;
@@ -57,8 +57,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                 {
                                     dataManager.UpdateAccountCase(number, CaseStatus.Open, null);
                                 }
-                                cdrsCount += numbers.Count;
-                                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} Cases assigned", cdrsCount);
+                                numbersCount += numbers.Count;
+                                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} Cases assigned", numbersCount);
 
                             });
                     }

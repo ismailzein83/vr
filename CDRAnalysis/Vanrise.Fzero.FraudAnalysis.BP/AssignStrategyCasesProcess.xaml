@@ -85,7 +85,7 @@
           </OutArgument>
         </vffba1:LoadAccountNumbers.Status>
       </vffba1:LoadAccountNumbers>
-      <vffba1:AssignCases Status="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignCases_1">
+      <vffba1:AssignCases Status="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignCases_3">
         <vffba1:AssignCases.InputQueue>
           <InArgument x:TypeArguments="vq:BaseQueue(vffe:AccountNumberBatch)">
             <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:AccountNumberBatch)">accountNumberQueue</mca:CSharpValue>
@@ -109,7 +109,7 @@
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="554,62" />
       <sap2010:ViewStateData Id="LoadAccountNumbers_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="AssignCases_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="AssignCases_3" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
       <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="554,62" />
       <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,414">
