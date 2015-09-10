@@ -84,7 +84,7 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, UtilsS
 
     function addWidget() {
         return WidgetAPIService.AddWidget($scope.widget).then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Widget", response)) {
+            if (VRNotificationService.notifyOnItemAdded("Widget", response, "Name")) {
                     if ($scope.onWidgetAdded != undefined)
                         $scope.onWidgetAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -97,7 +97,7 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, UtilsS
     function updateWidget() {
 
             return WidgetAPIService.UpdateWidget($scope.widget).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Widget", response)) {
+                if (VRNotificationService.notifyOnItemUpdated("Widget", response, "Name")) {
                     if ($scope.onWidgetUpdated != undefined)
                         $scope.onWidgetUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();

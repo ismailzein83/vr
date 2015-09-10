@@ -28,7 +28,7 @@ namespace Vanrise.Security.Business
             int checkSetting = dataManager.CheckWidgetSetting(widget);
             if (checkSetting == 1)
             {
-                insertOperationOutput.Message = "Widget with same settings exist !!";
+                insertOperationOutput.Message = "Widget with same settings exist";
                 return insertOperationOutput;
             }
 
@@ -58,7 +58,7 @@ namespace Vanrise.Security.Business
             int checkSetting = dataManager.CheckWidgetSetting(widget);
             if (checkSetting == 1)
             {
-                updateOperationOutput.Message = "Widget with same settings exist !!";
+                updateOperationOutput.Message = "Widget with same settings exist";
                 return updateOperationOutput;
             }
             bool updateActionSucc = dataManager.UpdateWidget(widget);
@@ -92,7 +92,7 @@ namespace Vanrise.Security.Business
                 {
                     if (bodyContent.WidgetId == widgetId)
                     {
-                        deleteOperationOutput.Message="This Widget is used in dynamic pages!!";
+                        deleteOperationOutput.Result = DeleteOperationResult.InUse;
                         return deleteOperationOutput;
                     }
                 }
@@ -100,7 +100,7 @@ namespace Vanrise.Security.Business
                 {
                     if (summaryContent.WidgetId == widgetId)
                     {
-                        deleteOperationOutput.Message = "This Widget is used in dynamic pages!!";
+                        deleteOperationOutput.Result = DeleteOperationResult.InUse;
                         return deleteOperationOutput;
                     }
                 }

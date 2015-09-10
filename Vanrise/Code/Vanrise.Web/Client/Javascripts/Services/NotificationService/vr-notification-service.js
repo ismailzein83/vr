@@ -78,68 +78,80 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
         }
     }
 
-    function notifyOnItemAdded(itemType, insertOperationOutput) {//insertOperationOutput is of type InsertOperationOutput
+    function notifyOnItemAction(notificationType, message, additionalMessage)
+    {
+        if (additionalMessage != null && additionalMessage != undefined && additionalMessage != "")
+        {
+            message += " (" + additionalMessage + ")";
+        }
+
+        switch(notificationType)
+        {
+            case "success":
+                showSuccess(message); break;
+            case "warning":
+                showWarning(message); break;
+            case "error":
+                showError(message); break;
+        }
+    }
+
+    function notifyOnItemAdded(itemType, insertOperationOutput, keyProperty) {//insertOperationOutput is of type InsertOperationOutput
         switch (insertOperationOutput.Result) {
-            case InsertOperationResultEnum.Succeeded.value: showSuccess(itemType + " added successfully");
+            case InsertOperationResultEnum.Succeeded.value:
+                var msg = itemType + " added successfully";
+                notifyOnItemAction("success", msg, insertOperationOutput.Message);
                 return true;
                 break;
             case InsertOperationResultEnum.Failed.value:
-                if (insertOperationOutput.Message != undefined) {
-                    showError(insertOperationOutput.Message); break;
-                }
-
-                else {
-                    showError("Failed to add " + itemType); break;
-                }
-            case InsertOperationResultEnum.SameExists.value: 
-                switch (itemType) {
-                    case "View": showWarning("Same View Name already exists"); break;
-                    case "Widget": showWarning("Same Widget Name already exists"); break;
-                    case "User": showWarning("Same Email already exists"); break;
-                    default: showWarning(itemType + " with the same key already exists"); break;
-                }
+                var msg = "Failed to add " + itemType;
+                notifyOnItemAction("error", msg, insertOperationOutput.Message);
+                break;
+            case InsertOperationResultEnum.SameExists.value:
+                if (keyProperty == null && keyProperty == undefined && keyProperty == "")
+                    keyProperty = "key";
+                var msg = itemType + " with the same " + keyProperty + " already exists";
+                notifyOnItemAction("warning", msg, insertOperationOutput.Message);
                 break;
         }
         return false;
     }
-    function notifyOnItemDeleted(itemType, deleteOperationOutput) {//updateOperationOutput is of type UpdateOperationOutput
+    function notifyOnItemDeleted(itemType, deleteOperationOutput, usedIn) {//updateOperationOutput is of type UpdateOperationOutput
         switch (deleteOperationOutput.Result) {
-            case DeleteOperationResultEnum.Succeeded.value: showSuccess(itemType + " deleted successfully");
+            case DeleteOperationResultEnum.Succeeded.value:
+                var msg = itemType + " deleted successfully"
+                notifyOnItemAction("success", msg, deleteOperationOutput.Message);
                 return true;
                 break;
             case DeleteOperationResultEnum.InUse.value:
-                showError("Failed to delete " + itemType + " because it is already in use");
+                var msg = "Failed to delete " + itemType + ". It is already in use";
+                if (usedIn != null && usedIn != undefined && usedIn != "")
+                    msg += " in " + usedIn;
+                notifyOnItemAction("error", msg, deleteOperationOutput.Message);
                 break;
             case DeleteOperationResultEnum.Failed.value:
-                if (deleteOperationOutput.Message != null) {
-                    showError(deleteOperationOutput.Message); break;
-                }
-                else {
-                    showError("Failed to delete " + itemType); break;
-                }
-               
+                var msg = "Failed to delete " + itemType;
+                notifyOnItemAction("error", msg, deleteOperationOutput.Message);
+                break;
         }
         return false;
     }
-    function notifyOnItemUpdated(itemType, updateOperationOutput) {//updateOperationOutput is of type UpdateOperationOutput
+    function notifyOnItemUpdated(itemType, updateOperationOutput, keyProperty) {//updateOperationOutput is of type UpdateOperationOutput
         switch (updateOperationOutput.Result) {
-            case UpdateOperationResultEnum.Succeeded.value: showSuccess(itemType + " updated successfully");
+            case UpdateOperationResultEnum.Succeeded.value:
+                var msg = itemType + " updated successfully";
+                notifyOnItemAction("success", msg, updateOperationOutput.Message);
                 return true;
                 break;
             case UpdateOperationResultEnum.Failed.value:
-                if (updateOperationOutput.Message != undefined) {
-                    showError(updateOperationOutput.Message); break;
-                }
-
-                else {
-                    showError("Failed to update " + itemType); break;
-                }
+                var msg = "Failed to update " + itemType;
+                notifyOnItemAction("error", msg, updateOperationOutput.Message);
+                break;
             case UpdateOperationResultEnum.SameExists.value:
-                switch (itemType) {
-                    case "View": showWarning("Same View Name already exists"); break;
-                    case "Widget": showWarning("Same Widget Name already exists"); break;
-                    default: showWarning(itemType + " with the same key already exists"); break;
-                }
+                if (keyProperty == null && keyProperty == undefined && keyProperty == "")
+                    keyProperty = "key";
+                var msg = itemType + " with the same " + keyProperty + " already exists";
+                notifyOnItemAction("warning", msg, updateOperationOutput.Message);
                 break;
         }
         return false;
@@ -151,34 +163,13 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
                 return true;
                 break;
             case AuthenticateOperationResultEnum.Inactive.value:
-                if (authenticateOperationOutput.Message != undefined) {
-                    showError(authenticateOperationOutput.Message); break;
-                }
-                else {
-                    showError("Login Failed. Inactive User"); break;
-                }
+                 showError("Login Failed. Inactive User"); break;
             case AuthenticateOperationResultEnum.WrongCredentials.value:
-                if (authenticateOperationOutput.Message != undefined) {
-                    showError(authenticateOperationOutput.Message); break;
-                }
-                else {
-                    showError("Login Failed. Wrong Credentials"); break;
-                }
+                 showError("Login Failed. Wrong Credentials"); break;
             case AuthenticateOperationResultEnum.UserNotExists.value:
-                if (authenticateOperationOutput.Message != undefined) {
-                    showError(authenticateOperationOutput.Message); break;
-                }
-                else {
                     showError("Login Failed. User does not exist"); break;
-                }
             case AuthenticateOperationResultEnum.Failed.value:
-                if (authenticateOperationOutput.Message != undefined) {
-                    showError(authenticateOperationOutput.Message); break;
-                }
-                else {
                     showError("Login Failed. An error occurred"); break;
-                }
-
         }
         return false;
     }

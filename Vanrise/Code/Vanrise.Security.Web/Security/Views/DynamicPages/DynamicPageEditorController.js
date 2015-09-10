@@ -241,7 +241,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
     function addView() {
        
         return ViewAPIService.AddView($scope.View).then(function (response) {
-            if (VRNotificationService.notifyOnItemAdded("View", response)) {
+            if (VRNotificationService.notifyOnItemAdded("View", response, "Name")) {
                 if ($scope.onPageAdded != undefined)
                     $scope.onPageAdded(response.InsertedObject);
                 $scope.modalContext.closeModal();
@@ -254,7 +254,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
     function updateView() {
        
         return ViewAPIService.UpdateView($scope.View).then(function (response) {
-            if (VRNotificationService.notifyOnItemUpdated("View", response)) {
+            if (VRNotificationService.notifyOnItemUpdated("View", response, "Name")) {
 
                 if ($scope.onPageUpdated != undefined)
                     $scope.onPageUpdated(response.UpdatedObject);

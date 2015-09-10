@@ -75,7 +75,7 @@ function UserEditorController($scope, UsersAPIService, VRModalService, VRNotific
         var userObject = buildUserObjFromScope();
         return UsersAPIService.AddUser(userObject)
         .then(function (response) {
-            if (VRNotificationService.notifyOnItemAdded("User", response)) {
+            if (VRNotificationService.notifyOnItemAdded("User", response, "Email")) {
                 if ($scope.onUserAdded != undefined)
                     $scope.onUserAdded(response.InsertedObject);
                 $scope.modalContext.closeModal();
@@ -90,7 +90,7 @@ function UserEditorController($scope, UsersAPIService, VRModalService, VRNotific
         var userObject = buildUserObjFromScope();
         UsersAPIService.UpdateUser(userObject)
         .then(function (response) {
-            if (VRNotificationService.notifyOnItemUpdated("User", response)) {
+            if (VRNotificationService.notifyOnItemUpdated("User", response, "Email")) {
                 if ($scope.onUserUpdated != undefined)
                     $scope.onUserUpdated(response.UpdatedObject);
                 $scope.modalContext.closeModal();

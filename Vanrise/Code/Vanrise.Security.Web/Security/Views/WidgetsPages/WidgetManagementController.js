@@ -74,7 +74,7 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
                 return WidgetAPIService.DeleteWidget(dataItem.Id).then(function (responseObject) {
                     if (responseObject.Result == DeleteOperationResultEnum.Succeeded.value)
                         mainGridAPI.itemDeleted(dataItem);
-                    VRNotificationService.notifyOnItemDeleted("Widget", responseObject);
+                    VRNotificationService.notifyOnItemDeleted("Widget", responseObject, "dynamic pages");
                     $scope.isGettingData = false;
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
