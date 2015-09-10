@@ -261,9 +261,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return GetItemSP("FraudAnalysis.sp_StrategyExecutionDetails_GetSummaryByAccountNumber", AccountSuspicionSummaryMapper, accountNumber, from, to);
         }
 
-        public bool UpdateAccountCase(string accountNumber, CaseStatus caseStatus, DateTime? validTill)
+        public bool UpdateAccountCase(string accountNumber, CaseStatus caseStatus, DateTime? validTill, bool hasUserId)
         {
-            int userID = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+            int? userID = null;
+            if(hasUserId)
+             userID = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
             AccountCase accountCase = GetLastAccountCaseByAccountNumber(accountNumber);
             int caseID;
             bool succeeded;
@@ -294,7 +296,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return GetItemSP("FraudAnalysis.sp_AccountCase_GetLastByAccountNumber", AccountCaseMapper, accountNumber);
         }
 
-        public bool InsertAccountCase(out int insertedID, string accountNumber, int userID, CaseStatus caseStatus, DateTime? validTill)
+        public bool InsertAccountCase(out int insertedID, string accountNumber, int? userID, CaseStatus caseStatus, DateTime? validTill)
         {
             object accountCaseID;
 
@@ -311,7 +313,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return (recordsAffected > 0);
         }
 
-        public bool InsertAccountCaseHistory(int caseID, int userID, CaseStatus caseStatus)
+        public bool InsertAccountCaseHistory(int caseID, int? userID, CaseStatus caseStatus)
         {
             int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCaseHistory_Insert", caseID, userID, caseStatus);
             return (recordsAffected > 0);
@@ -463,5 +465,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
         #endregion
+
+
+
     }
 }

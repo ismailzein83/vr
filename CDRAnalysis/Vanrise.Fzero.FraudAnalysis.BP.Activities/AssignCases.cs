@@ -40,30 +40,23 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
 
-                int numbersCount = 0;
-                DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            {
+                bool hasItem = false;
+                do
                 {
-                    bool hasItem = false;
-                    do
-                    {
 
-                        hasItem = inputArgument.InputQueue.TryDequeue(
-                            (accountNumberBatch) =>
-                            {
-                                var serializedNumbers = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(accountNumberBatch.AccountNumberBatchFilePath));
-                                System.IO.File.Delete(accountNumberBatch.AccountNumberBatchFilePath);
-                                var numbers = Vanrise.Common.ProtoBufSerializer.Deserialize<List<string>>(serializedNumbers);
-                                foreach (var number in numbers)
-                                {
-                                    dataManager.UpdateAccountCase(number, CaseStatus.Open, null);
-                                }
-                                numbersCount += numbers.Count;
-                                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} Cases assigned", numbersCount);
-
-                            });
-                    }
-                    while (!ShouldStop(handle) && hasItem);
-                });
+                    hasItem = inputArgument.InputQueue.TryDequeue(
+                        (accountNumberBatch) =>
+                        {
+                            var serializedNumbers = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(accountNumberBatch.AccountNumberBatchFilePath));
+                            System.IO.File.Delete(accountNumberBatch.AccountNumberBatchFilePath);
+                            var number = Vanrise.Common.ProtoBufSerializer.Deserialize<string>(serializedNumbers);
+                            dataManager.UpdateAccountCase(number, CaseStatus.Open, null, false);
+                        });
+                }
+                while (!ShouldStop(handle) && hasItem);
+            });
         }
 
 

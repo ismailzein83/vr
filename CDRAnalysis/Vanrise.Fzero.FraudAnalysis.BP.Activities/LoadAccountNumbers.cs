@@ -41,29 +41,16 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(LoadAccountNumbersInput inputArgument, AsyncActivityHandle handle)
         {
-            List<String> numbers = new List<String>();
-            int totalCount = 0;
             IStrategyExecutionDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
-            dataManager.LoadAccountNumbersfromStrategyExecutionDetails(0, (number) =>
+            dataManager.LoadAccountNumbersfromStrategyExecutionDetails((number) =>
                 {
-                    numbers.Add(number);
-                    if (numbers.Count >= 10)
-                    {
-                        totalCount += numbers.Count;
-                        inputArgument.OutputQueue.Enqueue(BuildAccountNumberBatch(numbers));
-                        handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} Account Numbers loaded", totalCount);
-                        numbers = new List<string>();
-                    }
+                    inputArgument.OutputQueue.Enqueue(BuildAccountNumberBatch(number));
                 });
-            if (numbers.Count > 0)
-            {
-                inputArgument.OutputQueue.Enqueue(BuildAccountNumberBatch(numbers));
-            }
         }
 
-        private AccountNumberBatch BuildAccountNumberBatch(List<string> numbers)
+        private AccountNumberBatch BuildAccountNumberBatch(string number)
         {
-            var numbersBytes = Vanrise.Common.Compressor.Compress(Vanrise.Common.ProtoBufSerializer.Serialize(numbers));
+            var numbersBytes = Vanrise.Common.Compressor.Compress(Vanrise.Common.ProtoBufSerializer.Serialize(number));
             string filePath = !String.IsNullOrEmpty(configuredDirectory) ? System.IO.Path.Combine(configuredDirectory, Guid.NewGuid().ToString()) : System.IO.Path.GetTempFileName();
             System.IO.File.WriteAllBytes(filePath, numbersBytes);
             return new AccountNumberBatch

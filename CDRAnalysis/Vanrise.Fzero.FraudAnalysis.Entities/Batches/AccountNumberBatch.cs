@@ -9,8 +9,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
     public class AccountNumberBatch
     {
-        public List<String> AccountNumbers;
-
         public string AccountNumberBatchFilePath { get; set; }
     }
 }

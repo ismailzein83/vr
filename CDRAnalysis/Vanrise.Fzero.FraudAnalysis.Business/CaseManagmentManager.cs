@@ -39,7 +39,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             updateOperationOutput.UpdatedObject = null;
 
             ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
-            bool updated = dataManager.UpdateAccountCase(input.AccountNumber, input.CaseStatus, input.ValidTill);
+            bool updated = dataManager.UpdateAccountCase(input.AccountNumber, input.CaseStatus, input.ValidTill, true);
 
             if (updated)
             {

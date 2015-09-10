@@ -14,6 +14,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         void DeleteStrategyExecutionDetails(int StrategyExecutionId);
 
-        void LoadAccountNumbersfromStrategyExecutionDetails(int? batchSize, Action<string> onBatchReady);
+        void LoadAccountNumbersfromStrategyExecutionDetails(Action<string> onBatchReady);
     }
 }
