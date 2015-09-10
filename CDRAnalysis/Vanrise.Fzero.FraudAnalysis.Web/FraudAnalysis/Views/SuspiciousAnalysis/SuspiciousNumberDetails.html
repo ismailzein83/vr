@@ -73,20 +73,22 @@
                 <vr-row>
                     <vr-columns width="fullrow" simplecol>
                         <div class="big-data-grid">
-                            <vr-datagrid datasource="numberProfiles"
-                                         on-ready="onGridReady_NumberProfiles"
-                                         dataretrievalfunction="dataRetrievalFunction_NumberProfiles"
-                                         pagingtype="'PagingOnScroll'">
+                            <div class="container">
+                                <vr-datagrid datasource="numberProfiles"
+                                             on-ready="onGridReady_NumberProfiles"
+                                             dataretrievalfunction="dataRetrievalFunction_NumberProfiles"
+                                             pagingtype="'PagingOnScroll'">
 
-                                <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" type="'Text'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" type="'Text'"></vr-datagridcolumn>
 
-                                <vr-datagridcolumn ng-repeat="agg in aggregateDefinitions"
-                                                   columnindex="$index + 1"
-                                                   headertext="agg.name"
-                                                   field="'AggregateValues[&quot;' + agg.name + '&quot;]'"
-                                                   type="'Number'">
-                                </vr-datagridcolumn>
-                            </vr-datagrid>
+                                    <vr-datagridcolumn ng-repeat="agg in aggregateDefinitions"
+                                                       columnindex="$index + 1"
+                                                       headertext="agg.name"
+                                                       field="'AggregateValues[&quot;' + agg.name + '&quot;]'"
+                                                       type="'Number'">
+                                    </vr-datagridcolumn>
+                                </vr-datagrid>
+                            </div>
                         </div>
                     </vr-columns>
                 </vr-row>

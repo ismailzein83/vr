@@ -1917,10 +1917,14 @@ opacity:0.9 ;
 
 /* end of vr-numeric*/
 .big-data-grid{
-    width:100%;
-    overflow-x:auto;
-    padding-left:15px;
+    width: calc(100% + 15px);
+    overflow-x: auto;
+    margin: 0px -15px;
 }
+.big-data-grid .container{   
+    padding: 15px;
+}
+
 
 .big-data-grid .vr-datagrid{
     width:3000px !important;
