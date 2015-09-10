@@ -12,7 +12,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public DateTime From { get; set; }
         public DateTime To { get; set; }
         public List<int> SelectedStrategyIDs { get; set; }
-        public List<SuspicionLevelEnum> SelectedSuspicionLevelIDs { get; set; }
+        public List<SuspicionLevel> SelectedSuspicionLevelIDs { get; set; }
         public List<CaseStatus> SelectedCaseStatusIDs { get; set; }
     }
 }

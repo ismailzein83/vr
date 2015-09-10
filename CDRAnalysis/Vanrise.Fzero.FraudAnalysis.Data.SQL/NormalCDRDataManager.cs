@@ -29,7 +29,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 while (reader.Read())
                 {
                     CDR normalCDR = new CDR();
-                    normalCDR.CallType =  GetReaderValue<CallTypeEnum>(reader, "Call_Type");
+                    normalCDR.CallType =  GetReaderValue<CallType>(reader, "Call_Type");
                     normalCDR.BTSId = GetReaderValue<int?>(reader, "BTS_Id");
                     normalCDR.ConnectDateTime = GetReaderValue<DateTime?>(reader, "ConnectDateTime");
                     normalCDR.Id = (int)reader["Id"];
@@ -96,7 +96,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         private CDR NormalCDRMapper(IDataReader reader)
         {
             var normalCDR = new CDR();
-            normalCDR.CallType = (CallTypeEnum)Enum.ToObject(typeof(CallTypeEnum), GetReaderValue<int>(reader, "Call_Type"));
+            normalCDR.CallType = (CallType)Enum.ToObject(typeof(CallType), GetReaderValue<int>(reader, "Call_Type"));
             normalCDR.ConnectDateTime = GetReaderValue<DateTime?>(reader, "ConnectDateTime");
             normalCDR.IMSI = reader["IMSI"] as string;
             normalCDR.DurationInSeconds = GetReaderValue<Decimal?>(reader, "DurationInSeconds");

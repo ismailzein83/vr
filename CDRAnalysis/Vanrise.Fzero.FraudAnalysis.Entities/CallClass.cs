@@ -8,7 +8,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     {
         public int Id { get; set; }
         public string Description { get; set; }
-        public NetTypeEnum NetType { get; set; }
+        public NetType NetType { get; set; }
     }
 
     

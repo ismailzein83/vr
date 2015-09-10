@@ -69,7 +69,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             }, (reader) => AccountSuspicionSummaryMapper(reader), mapper);
         }
 
-        private string CreateTempTableIfNotExists(string tempTableName, List<int> SelectedStrategyIDs, List<SuspicionLevelEnum> SelectedSuspicionLevelIDs, List<CaseStatus> SelectedCaseStatusIDs)
+        private string CreateTempTableIfNotExists(string tempTableName, List<int> SelectedStrategyIDs, List<SuspicionLevel> SelectedSuspicionLevelIDs, List<CaseStatus> SelectedCaseStatusIDs)
         {
             StringBuilder query = new StringBuilder();
 
@@ -201,7 +201,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return query.ToString();
         }
 
-        private string GetCommonWhereClauseConditions(List<SuspicionLevelEnum> SelectedSuspicionLevelIDs)
+        private string GetCommonWhereClauseConditions(List<SuspicionLevel> SelectedSuspicionLevelIDs)
         {
             StringBuilder conditions = new StringBuilder();
 
@@ -386,7 +386,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             var summary = new AccountSuspicionSummary();
 
             summary.AccountNumber = reader["AccountNumber"] as string;
-            summary.SuspicionLevelID = (SuspicionLevelEnum)reader["SuspicionLevelID"];
+            summary.SuspicionLevelID = (SuspicionLevel)reader["SuspicionLevelID"];
             summary.NumberOfOccurances = (int)reader["NumberOfOccurances"];
             summary.LastOccurance = (DateTime)reader["LastOccurance"];
             summary.AccountStatusID = GetReaderValue<CaseStatus>(reader, "AccountStatusID");
@@ -400,7 +400,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             detail.DetailID = (long)reader["DetailID"];
             detail.AccountNumber = reader["AccountNumber"] as string;
-            detail.SuspicionLevelID = (SuspicionLevelEnum)reader["SuspicionLevelID"];
+            detail.SuspicionLevelID = (SuspicionLevel)reader["SuspicionLevelID"];
             detail.StrategyName = reader["StrategyName"] as string;
             detail.SuspicionOccuranceStatus = GetReaderValue<SuspicionOccuranceStatus>(reader, "SuspicionOccuranceStatus");
             detail.FromDate = (DateTime)reader["FromDate"];

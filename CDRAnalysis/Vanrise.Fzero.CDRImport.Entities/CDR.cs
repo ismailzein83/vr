@@ -22,7 +22,7 @@ namespace Vanrise.Fzero.CDRImport.Entities
         public DateTime? DisconnectDateTime { get; set; }
         public string CallClass { get; set; }
         public Int16? IsOnNet { get; set; }
-        public CallTypeEnum? CallType { get; set; }
+        public CallType? CallType { get; set; }
         public string SubType { get; set; }
         public string IMEI { get; set; }
         public int? BTSId { get; set; }

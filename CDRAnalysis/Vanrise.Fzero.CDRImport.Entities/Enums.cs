@@ -1,7 +1,7 @@
 ﻿
 namespace Vanrise.Fzero.CDRImport.Entities
 {
-    public enum CallTypeEnum
+    public enum CallType
     {
         NotDefined = 0,
         OutgoingVoiceCall = 1,
@@ -12,7 +12,7 @@ namespace Vanrise.Fzero.CDRImport.Entities
         RoamingCallForward = 26
     };
 
-    public enum NetTypeEnum
+    public enum NetType
     {
         Others = 0,
         Local = 1,

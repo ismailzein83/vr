@@ -25,15 +25,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         public List<AggregateDefinition> GetAggregateDefinitions(List<CallClass> callClasses)
         {
-            Dictionary<string, NetTypeEnum> callClassNetTypes = new Dictionary<string, NetTypeEnum>();
+            Dictionary<string, NetType> callClassNetTypes = new Dictionary<string, NetType>();
             foreach (CallClass callClass in callClasses)
             {
                 callClassNetTypes.Add(callClass.Description, callClass.NetType);
             }
 
-            Func<CDR, NetTypeEnum, bool> IsMatchNetType = (cdr, compareToNetType) =>
+            Func<CDR, NetType, bool> IsMatchNetType = (cdr, compareToNetType) =>
             {
-                NetTypeEnum netType;
+                NetType netType;
                 if (String.IsNullOrEmpty(cdr.CallClass) || !callClassNetTypes.TryGetValue(cdr.CallClass, out netType))
                     return false;
                 else
@@ -50,7 +50,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     Id = 1,
                     Aggregation = new CountAggregate((cdr) =>
                     {
-                        return (cdr.CallType == CallTypeEnum.OutgoingVoiceCall);
+                        return (cdr.CallType == CallType.OutgoingVoiceCall);
                     })
                 });
 
@@ -60,7 +60,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Id = 2,
                 Aggregation = new CountAggregate((cdr) =>
                 {
-                    return (cdr.CallType == CallTypeEnum.IncomingVoiceCall);
+                    return (cdr.CallType == CallType.IncomingVoiceCall);
                 })
             });
 
@@ -80,7 +80,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Id = 4,
                 Aggregation = new CountAggregate((cdr) =>
                 {
-                    return (cdr.CallType == CallTypeEnum.OutgoingVoiceCall) && (cdr.DurationInSeconds == 0);
+                    return (cdr.CallType == CallType.OutgoingVoiceCall) && (cdr.DurationInSeconds == 0);
                 })
             });
 
@@ -90,7 +90,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Id = 5,
                 Aggregation = new CountAggregate((cdr) =>
                 {
-                    return (cdr.CallType == CallTypeEnum.IncomingVoiceCall) && (cdr.DurationInSeconds == 0);
+                    return (cdr.CallType == CallType.IncomingVoiceCall) && (cdr.DurationInSeconds == 0);
                 })
             });
 
@@ -101,7 +101,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Id = 6,
                 Aggregation = new CountAggregate((cdr) =>
                 {
-                    return (cdr.CallType == CallTypeEnum.OutgoingSms);
+                    return (cdr.CallType == CallType.OutgoingSms);
                 })
             });
 
@@ -112,7 +112,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Id = 7,
                 Aggregation = new CountAggregate((cdr) =>
                 {
-                    return ((cdr.CallType == CallTypeEnum.OutgoingVoiceCall) && (IsMatchNetType(cdr, NetTypeEnum.Others)));
+                    return ((cdr.CallType == CallType.OutgoingVoiceCall) && (IsMatchNetType(cdr, NetType.Others)));
                 })
             });
 
@@ -121,7 +121,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Id = 8,
                 Aggregation = new CountAggregate((cdr) =>
                 {
-                    return ((cdr.CallType == CallTypeEnum.OutgoingVoiceCall) && (IsMatchNetType(cdr, NetTypeEnum.Local)));
+                    return ((cdr.CallType == CallType.OutgoingVoiceCall) && (IsMatchNetType(cdr, NetType.Local)));
                 })
             });
 
@@ -131,7 +131,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Id = 9,
                 Aggregation = new CountAggregate((cdr) =>
                 {
-                    return ((cdr.CallType == CallTypeEnum.OutgoingVoiceCall) && (IsMatchNetType(cdr, NetTypeEnum.International)));
+                    return ((cdr.CallType == CallType.OutgoingVoiceCall) && (IsMatchNetType(cdr, NetType.International)));
                 })
             });
 
@@ -141,7 +141,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Id = 10,
                 Aggregation = new CountAggregate((cdr) =>
                 {
-                    return ((cdr.CallType == CallTypeEnum.IncomingVoiceCall) && (IsMatchNetType(cdr, NetTypeEnum.International)));
+                    return ((cdr.CallType == CallType.IncomingVoiceCall) && (IsMatchNetType(cdr, NetType.International)));
                 })
             });
 
@@ -153,7 +153,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Aggregation = new AverageAggregate(
                     (cdr) =>
                     {
-                        return (cdr.CallType == CallTypeEnum.OutgoingVoiceCall && cdr.DurationInSeconds.HasValue && cdr.DurationInSeconds > 0);
+                        return (cdr.CallType == CallType.OutgoingVoiceCall && cdr.DurationInSeconds.HasValue && cdr.DurationInSeconds > 0);
                     }
                      ,
 
@@ -170,7 +170,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Aggregation = new AverageAggregate(
                    (cdr) =>
                    {
-                       return (cdr.CallType == CallTypeEnum.IncomingVoiceCall && cdr.DurationInSeconds.HasValue && cdr.DurationInSeconds > 0);
+                       return (cdr.CallType == CallType.IncomingVoiceCall && cdr.DurationInSeconds.HasValue && cdr.DurationInSeconds > 0);
                    }
                     ,
                (cdr) =>
@@ -187,7 +187,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Aggregation = new SumAggregate(
                 (cdr) =>
                 {
-                    return (cdr.CallType == CallTypeEnum.OutgoingVoiceCall && cdr.DurationInSeconds.HasValue) ? cdr.DurationInSeconds.Value / 60 : 0;
+                    return (cdr.CallType == CallType.OutgoingVoiceCall && cdr.DurationInSeconds.HasValue) ? cdr.DurationInSeconds.Value / 60 : 0;
                 }
             )
             });
@@ -202,7 +202,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Aggregation = new SumAggregate(
                 (cdr) =>
                 {
-                    return (cdr.CallType == CallTypeEnum.IncomingVoiceCall && cdr.DurationInSeconds.HasValue) ? cdr.DurationInSeconds.Value : 0;
+                    return (cdr.CallType == CallType.IncomingVoiceCall && cdr.DurationInSeconds.HasValue) ? cdr.DurationInSeconds.Value : 0;
                 }
             )
             });
@@ -218,7 +218,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
                    (cdr) =>
                    {
-                       return (cdr.CallType == CallTypeEnum.IncomingVoiceCall || cdr.CallType == CallTypeEnum.OutgoingVoiceCall || cdr.CallType == CallTypeEnum.IncomingSms || cdr.CallType == CallTypeEnum.OutgoingSms);
+                       return (cdr.CallType == CallType.IncomingVoiceCall || cdr.CallType == CallType.OutgoingVoiceCall || cdr.CallType == CallType.IncomingSms || cdr.CallType == CallType.OutgoingSms);
                    }
                )
             });
@@ -235,7 +235,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
                       (cdr) =>
                       {
-                          return (cdr.BTSId.HasValue && (cdr.CallType == CallTypeEnum.IncomingVoiceCall || cdr.CallType == CallTypeEnum.OutgoingVoiceCall || cdr.CallType == CallTypeEnum.IncomingSms || cdr.CallType == CallTypeEnum.OutgoingSms));
+                          return (cdr.BTSId.HasValue && (cdr.CallType == CallType.IncomingVoiceCall || cdr.CallType == CallType.OutgoingVoiceCall || cdr.CallType == CallType.IncomingSms || cdr.CallType == CallType.OutgoingSms));
                       }
                   )
             });
@@ -252,7 +252,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
                      (cdr) =>
                      {
-                         return (cdr.CallType == CallTypeEnum.OutgoingVoiceCall);
+                         return (cdr.CallType == CallType.OutgoingVoiceCall);
                      }
                  )
             });
@@ -269,7 +269,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
                      (cdr) =>
                      {
-                         return (cdr.CallType == CallTypeEnum.IncomingVoiceCall);
+                         return (cdr.CallType == CallType.IncomingVoiceCall);
                      }
                  )
             });
@@ -280,7 +280,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     Id = 19,
                 Aggregation = new CountAggregate((cdr) =>
                 {
-                    return ((cdr.CallType == CallTypeEnum.IncomingVoiceCall) && (IsMatchNetType(cdr, NetTypeEnum.Others)));
+                    return ((cdr.CallType == CallType.IncomingVoiceCall) && (IsMatchNetType(cdr, NetType.Others)));
                 })
             });
 
@@ -290,7 +290,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     Id = 20,
                 Aggregation = new CountAggregate((cdr) =>
                 {
-                    return ((cdr.CallType == CallTypeEnum.IncomingVoiceCall) && (IsMatchNetType(cdr, NetTypeEnum.Local)));
+                    return ((cdr.CallType == CallType.IncomingVoiceCall) && (IsMatchNetType(cdr, NetType.Local)));
                 })
             });
 
@@ -306,7 +306,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
                      (cdr) =>
                      {
-                         return (cdr.CallType == CallTypeEnum.OutgoingVoiceCall && cdr.ConnectDateTime.HasValue && _nightCallHours.Contains(cdr.ConnectDateTime.Value.Hour));
+                         return (cdr.CallType == CallType.OutgoingVoiceCall && cdr.ConnectDateTime.HasValue && _nightCallHours.Contains(cdr.ConnectDateTime.Value.Hour));
                      }
                  )
             });
@@ -317,7 +317,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     Id = 22,
                 Aggregation = new CountAggregate((cdr, strategy) =>
                 {
-                    return (cdr.CallType == CallTypeEnum.OutgoingVoiceCall && cdr.ConnectDateTime.HasValue && strategy.PeakHoursIds.Contains(cdr.ConnectDateTime.Value.Hour));
+                    return (cdr.CallType == CallType.OutgoingVoiceCall && cdr.ConnectDateTime.HasValue && strategy.PeakHoursIds.Contains(cdr.ConnectDateTime.Value.Hour));
                 }, _parameters)
             });
 
@@ -328,7 +328,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Aggregation = new ConsecutiveAggregate(
                       (cdr, strategy) =>
                       {
-                          return (cdr.CallType == CallTypeEnum.OutgoingVoiceCall && cdr.DurationInSeconds > 0);
+                          return (cdr.CallType == CallType.OutgoingVoiceCall && cdr.DurationInSeconds > 0);
                       }
                       , _parameters
                   )
@@ -343,7 +343,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Aggregation = new GroupCountAggregate(
                       (cdr, strategy) =>
                       {
-                          return (cdr.CallType == CallTypeEnum.OutgoingVoiceCall);
+                          return (cdr.CallType == CallType.OutgoingVoiceCall);
                       }
                       , _parameters
                   )
@@ -357,7 +357,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Aggregation = new FailedConsecutiveAggregate(
                       (cdr, strategy) =>
                       {
-                          return (cdr.CallType == CallTypeEnum.OutgoingVoiceCall && cdr.DurationInSeconds == 0);
+                          return (cdr.CallType == CallType.OutgoingVoiceCall && cdr.DurationInSeconds == 0);
                       }
                       , _parameters
                   )
@@ -369,7 +369,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     Id = 26,
                 Aggregation = new CountAggregate((cdr, strategy) =>
                 {
-                    return (cdr.CallType == CallTypeEnum.IncomingVoiceCall && cdr.DurationInSeconds <= strategy.MaxLowDurationCall);
+                    return (cdr.CallType == CallType.IncomingVoiceCall && cdr.DurationInSeconds <= strategy.MaxLowDurationCall);
                 }, _parameters)
             });
 

@@ -10,7 +10,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     {
         public long DetailID { get; set; }
         public string AccountNumber { get; set; }
-        public SuspicionLevelEnum SuspicionLevelID { get; set; }
+        public SuspicionLevel SuspicionLevelID { get; set; }
         public string StrategyName { get; set; }
         public SuspicionOccuranceStatus SuspicionOccuranceStatus { get; set; }
         public DateTime FromDate { get; set; }

@@ -12,7 +12,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         Daily = 2
     };
 
-    public enum SuspicionLevelEnum
+    public enum SuspicionLevel
     {
         Suspicious = 2,
         Highly_Suspicious = 3,
