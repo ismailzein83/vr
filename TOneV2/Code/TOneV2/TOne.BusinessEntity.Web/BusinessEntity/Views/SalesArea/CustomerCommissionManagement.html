@@ -3,13 +3,13 @@
         <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
             <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-select datasource="customers" datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedCustomer" label="Customer" entityname="Customer"></vr-select>
+                    <vr-select datasource="customers" withlocalfilter datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedCustomer" label="Customer" entityname="Customer"></vr-select>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-be-zones selectedvalues="selectedZone" ></vr-be-zones>
+                    <vr-be-zones selectedvalues="selectedZones" ismultipleselection></vr-be-zones>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-datetimepicker label="Effective From" value="effectiveFrom" type="date" ></vr-datetimepicker>
+                    <vr-datetimepicker label="Effective On" value="effectiveFrom" type="date" isrequired></vr-datetimepicker>
                 </vr-columns>
             </vr-row>
 
@@ -30,8 +30,8 @@
                 <vr-datagrid datasource="data" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'" on-ready="onMainGridReady">
                     <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'"  ></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" ></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'From Rate'" field="'FromRate'" type="'Number'"  ></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'To Rate'" field="'ToRate'" type="'Number'" ></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'From Rate'" field="'FromRate'"   ></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'To Rate'" field="'ToRate'"  ></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Percentage'" field="'Percentage'" type="'Number'" ></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Amount'" field="'Amount'" type="'Number'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'BED'" field="'BeginEffectiveDate'" type="'Date'" ></vr-datagridcolumn>

@@ -79,7 +79,6 @@
     <Compile Include="CDRGenerator.cs" />
     <Compile Include="CDRQueueFactory.cs" />
     <Compile Include="CostPricingManager.cs" />
-    <Compile Include="DateSensitiveEntityCache.cs" />
     <Compile Include="PricingGenerator.cs" />
     <Compile Include="PricingGeneratorEntities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

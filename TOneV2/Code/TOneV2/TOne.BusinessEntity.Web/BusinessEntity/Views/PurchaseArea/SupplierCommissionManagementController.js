@@ -9,8 +9,8 @@ function SupplierCommissionManagementController($scope, UtilsService, $q, Carrie
         $scope.showResult = false;
         $scope.selectedSupplier;
         $scope.suppliers = [];
-        $scope.selectedZone;
-        $scope.effectiveFrom;
+        $scope.selectedZones=[];
+        $scope.effectiveFrom = new Date();
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
         }
@@ -31,7 +31,7 @@ function SupplierCommissionManagementController($scope, UtilsService, $q, Carrie
         var query = {
 
             SupplierId: $scope.selectedSupplier != undefined ? $scope.selectedSupplier.CarrierAccountID : null,
-            ZoneId: $scope.selectedZone != undefined ? $scope.selectedZone.ZoneId : undefined,
+            ZoneIds: $scope.selectedZones.length > 0 ? UtilsService.getPropValuesFromArray($scope.selectedZones, 'ZoneId') : undefined,
             EffectiveFrom: $scope.effectiveFrom
         }
 
@@ -46,7 +46,7 @@ function SupplierCommissionManagementController($scope, UtilsService, $q, Carrie
             angular.forEach(response, function (itm) {
                 $scope.suppliers.push(itm);
             });
-            $scope.selectedSupplier = $scope.suppliers[0];
+           // $scope.selectedSupplier = $scope.suppliers[0];
         });
 
     }

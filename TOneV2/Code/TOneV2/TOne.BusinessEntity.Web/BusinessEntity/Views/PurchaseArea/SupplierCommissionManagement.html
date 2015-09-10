@@ -3,13 +3,13 @@
         <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
             <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-select datasource="suppliers" datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedSupplier" label="Supplier" entityname="Supplier"></vr-select>
+                    <vr-select datasource="suppliers" withlocalfilter datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedSupplier" label="Supplier" entityname="Supplier"></vr-select>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-be-costzones selectedvalues="selectedZone" carrierid="selectedSupplier"></vr-be-costzones>
+                    <vr-be-costzones selectedvalues="selectedZones" carrierid="selectedSupplier.CarrierAccountID" ismultipleselection></vr-be-costzones>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-datetimepicker label="Effective From" value="effectiveFrom" type="date"></vr-datetimepicker>
+                    <vr-datetimepicker label="Effective On" value="effectiveFrom" type="date" isrequired></vr-datetimepicker>
                 </vr-columns>
             </vr-row>
 
@@ -31,8 +31,8 @@
                     <vr-datagridcolumn headertext="'SupplierName'" field="'SupplierName'" ></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" ></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Currency'" field="'Currency'" ></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'From Rate'" field="'FromRate'" type="'Number'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'To Rate'" field="'ToRate'" type="'Number'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'From Rate'" field="'FromRate'" ></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'To Rate'" field="'ToRate'" ></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Percentage'" field="'Percentage'" type="'Number'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Amount'" field="'Amount'" type="'Number'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'BED'" field="'BeginEffectiveDate'" type="'Date'"></vr-datagridcolumn>

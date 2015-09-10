@@ -8,9 +8,9 @@ function CustomerCommissionManagementController($scope, UtilsService, $q, Carrie
         $scope.data = [];
         $scope.showResult = false;
         $scope.selectedCustomer;
-        $scope.selectedZone;
+        $scope.selectedZones=[];
         $scope.customers = [];
-        $scope.effectiveFrom;
+        $scope.effectiveFrom=new Date();
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
         }
@@ -31,7 +31,7 @@ function CustomerCommissionManagementController($scope, UtilsService, $q, Carrie
         var query ={
             
             CustomerId: $scope.selectedCustomer != undefined ? $scope.selectedCustomer.CarrierAccountID : null,
-            ZoneId: $scope.selectedZone != undefined ? $scope.selectedZone.ZoneId : undefined,
+            ZoneIds: $scope.selectedZones.length > 0 ? UtilsService.getPropValuesFromArray($scope.selectedZones, 'ZoneId') : undefined,
             EffectiveFrom: $scope.effectiveFrom
             }
 
@@ -46,7 +46,6 @@ function CustomerCommissionManagementController($scope, UtilsService, $q, Carrie
             angular.forEach(response, function (itm) {
                 $scope.customers.push(itm);
             });
-            $scope.selectedCustomer = $scope.customers[0];
         });
 
     }

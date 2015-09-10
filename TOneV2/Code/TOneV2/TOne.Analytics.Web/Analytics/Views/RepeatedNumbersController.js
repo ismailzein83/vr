@@ -18,15 +18,20 @@ function RepeatedNumbersController($scope, UtilsService, $q, RepeatedNumbersAPIS
             value: -1,
             description: "Customize"
         }
-        $scope.onBlurChanged = function () {
-
+        $scope.onBlurFromChanged = function () {
             var from = UtilsService.getShortDate($scope.basicSelected ? $scope.fromDate : $scope.fromDate1);
             var oldFrom = UtilsService.getShortDate(date.from);
+            if (from != oldFrom)
+                $scope.selectedPeriod = customize;
+            $scope.basicSelected ? $scope.fromDate1 = $scope.fromDate : $scope.fromDate = $scope.fromDate1
+        }
+        $scope.onBlurToChanged = function () {
             var to = UtilsService.getShortDate($scope.basicSelected ? $scope.toDate : $scope.toDate1);
             var oldTo = UtilsService.getShortDate(date.to);
-            if (from != oldFrom || to != oldTo)
+            if (to != oldTo)
                 $scope.selectedPeriod = customize;
-
+            console.log(UtilsService.dateToServerFormat($scope.toDate));
+            $scope.basicSelected ? $scope.toDate1 = $scope.toDate : $scope.toDate = $scope.toDate1
         }
         $scope.periodSelectionChanged = function () {
             if ($scope.selectedPeriod != undefined && $scope.selectedPeriod.value != -1) {

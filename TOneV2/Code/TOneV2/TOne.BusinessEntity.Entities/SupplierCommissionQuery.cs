@@ -9,7 +9,7 @@ namespace TOne.BusinessEntity.Entities
     public class SupplierCommissionQuery
     {
         public string SupplierId { get; set; }
-        public int? ZoneId { get; set; }
+        public List<int> ZoneIds { get; set; }
         public DateTime? EffectiveFrom { get; set; }
     }
 }

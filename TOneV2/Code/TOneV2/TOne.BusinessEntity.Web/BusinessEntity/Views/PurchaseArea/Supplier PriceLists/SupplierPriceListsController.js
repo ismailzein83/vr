@@ -39,7 +39,7 @@ function SupplierPricelistsController($scope, UtilsService, $q, CarrierAccountAP
             angular.forEach(response, function (itm) {
                 $scope.suppliers.push(itm);
             });
-            $scope.selectedSupplier = $scope.suppliers[0];
+          
         });
 
     }

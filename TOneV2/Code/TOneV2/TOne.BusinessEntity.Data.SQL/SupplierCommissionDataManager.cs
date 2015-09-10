@@ -13,9 +13,13 @@ namespace TOne.BusinessEntity.Data.SQL
     {
         public Vanrise.Entities.BigResult<SupplierCommission> GetSupplierCommissions(Vanrise.Entities.DataRetrievalInput<SupplierCommissionQuery> input)
        {
+           string ZoneIDs = null;
+           if (input.Query.ZoneIds!=null && input.Query.ZoneIds.Count() > 0)
+               ZoneIDs = string.Join<int>(",", input.Query.ZoneIds);
+
            Action<string> createTempTableAction = (tempTableName) =>
            {
-               ExecuteNonQuerySP("BEntity.sp_Commision_CreateTempBySupplier", tempTableName, input.Query.SupplierId, input.Query.ZoneId, input.Query.EffectiveFrom);
+               ExecuteNonQuerySP("BEntity.sp_Commision_CreateTempBySupplier", tempTableName, input.Query.SupplierId, ZoneIDs, input.Query.EffectiveFrom);
            };
            return RetrieveData(input, createTempTableAction, CommissionTempTableMapper);
        }
