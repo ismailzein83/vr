@@ -149,7 +149,8 @@ as (select * from (values
 (287,'Supplier TOD','Supplier TOD','#/view/BusinessEntity/Views/PurchaseArea/SupplierTODManagement',18,null,null,null,0,11),
 (288,'Supplier Invoice','Supplier Invoice','#/view/Billing/Views/SupplierInvoiceManagement',11,null,null,null,0,10),
 (297,	'Supplier Commission',	'Supplier Commission',	'#/view/BusinessEntity/Views/PurchaseArea/SupplierCommissionManagement',	18,	NULL,	NULL,	NULL,	0,	NULL),
-(299,	'Customer Commission',	'Customer Commission',	'#/view/BusinessEntity/Views/SalesArea/CustomerCommissionManagement',	19,	NULL,	NULL,	NULL,	0,	NULL)
+(299,	'Customer Commission',	'Customer Commission',	'#/view/BusinessEntity/Views/SalesArea/CustomerCommissionManagement',	19,	NULL,	NULL,	NULL,	0,	NULL),
+(307,	'Generic Analytic',	'Generic Analytic',	'#/view/Analytics/Views/GenericAnalytic',	21,	NULL,	NULL,	NULL,	0,	12)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank]))
 merge	[sec].[View] as t
