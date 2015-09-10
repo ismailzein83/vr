@@ -71,7 +71,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                                  record.SuspicionLevelID,
                                  Vanrise.Common.Serializer.Serialize(record.FilterValues, true),
                                  Vanrise.Common.Serializer.Serialize(record.AggregateValues, true),
-                                 record.CaseID,
+                                 null,
                                  (int) record.SuspicionOccuranceStatus
                                  );
         }

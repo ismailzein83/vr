@@ -38,6 +38,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(AssignCasesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
+            ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
+
                 int cdrsCount = 0;
                 DoWhilePreviousRunning(previousActivityStatus, handle, () =>
                 {
@@ -53,8 +55,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                 var numbers = Vanrise.Common.ProtoBufSerializer.Deserialize<List<string>>(serializedNumbers);
                                 foreach (var number in numbers)
                                 {
-                                   // Cases Here
-                                    Console.WriteLine(number);
+                                    dataManager.UpdateAccountCase(number, CaseStatus.Open, null);
                                 }
                                 cdrsCount += numbers.Count;
                                 handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} Cases assigned", cdrsCount);
