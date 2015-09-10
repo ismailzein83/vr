@@ -1,33 +1,49 @@
-﻿BlockedAttemptsController.$inject = ['$scope', 'UtilsService', '$q', 'BlockedAttemptsAPIService', 'VRNotificationService', 'DataRetrievalResultTypeEnum', 'PeriodEnum', 'BlockedAttemptsMeasureEnum', 'CarrierAccountAPIService', 'CarrierTypeEnum', 'ZonesService', 'BusinessEntityAPIService_temp','AnalyticsService','VRModalService'];
+﻿BlockedAttemptsController.$inject = ['$scope', 'UtilsService', '$q', 'BlockedAttemptsAPIService', 'VRNotificationService', 'DataRetrievalResultTypeEnum', 'PeriodEnum', 'CarrierAccountAPIService', 'CarrierTypeEnum', 'ZonesService', 'BusinessEntityAPIService_temp','AnalyticsService','VRModalService'];
 
-function BlockedAttemptsController($scope, UtilsService, $q, BlockedAttemptsAPIService, VRNotificationService, DataRetrievalResultTypeEnum, PeriodEnum, BlockedAttemptsMeasureEnum, CarrierAccountAPIService, CarrierTypeEnum, ZonesService, BusinessEntityAPIService, AnalyticsService, VRModalService) {
+function BlockedAttemptsController($scope, UtilsService, $q, BlockedAttemptsAPIService, VRNotificationService, DataRetrievalResultTypeEnum, PeriodEnum, CarrierAccountAPIService, CarrierTypeEnum, ZonesService, BusinessEntityAPIService, AnalyticsService, VRModalService) {
 
     var mainGridAPI;
     var measures = [];
-    var selectedPeriod;
     defineScope();
     load();
 
     function defineScope() {
         definePeriods();
-        $scope.onValueChanged = function () {
-            if ($scope.selectedPeriod != selectedPeriod) {
-                var customize = {
-                    value: -1,
-                    description: "Customize"
-                }
-                selectedPeriod = $scope.selectedPeriod;
-                $scope.selectedPeriod = customize;
-            }
-
+        $scope.basicToDate;
+        $scope.basicFromDate;
+        $scope.advancedFromDate;
+        $scope.advancedToDate;
+        $scope.isShown = false;
+        var date;
+        var customize = {
+            value: -1,
+            description: "Customize"
         }
         $scope.periodSelectionChanged = function () {
             if ($scope.selectedPeriod != undefined && $scope.selectedPeriod.value != -1) {
-                var date = UtilsService.getPeriod($scope.selectedPeriod.value);
-                $scope.fromDate = date.from;
-                $scope.toDate = date.to;
+                date = UtilsService.getPeriod($scope.selectedPeriod.value);
+                $scope.basicFromDate = date.from;
+                $scope.basicToDate = date.to;
+                $scope.advancedFromDate = date.from;
+                $scope.advancedToDate = date.to;
             }
 
+        }
+        $scope.onBlurFromChanged= function () 
+        {
+            var from = UtilsService.getShortDate($scope.basicSelected ? $scope.basicFromDate : $scope.advancedFromDate);
+            var oldFrom = UtilsService.getShortDate(date.from);
+            if (from != oldFrom)
+                $scope.selectedPeriod = customize;
+            $scope.basicSelected ? $scope.advancedFromDate = $scope.basicFromDate : $scope.basicFromDate = $scope.advancedFromDate
+        }
+        $scope.onBlurToChanged = function () {
+            var to = UtilsService.getShortDate($scope.basicSelected ? $scope.basicToDate : $scope.advancedToDate);
+            var oldTo = UtilsService.getShortDate(date.to);
+            if (to != oldTo)
+                $scope.selectedPeriod = customize;
+            console.log(UtilsService.dateToServerFormat($scope.basicToDate));
+            $scope.basicSelected ? $scope.advancedToDate = $scope.basicToDate : $scope.basicToDate = $scope.advancedToDate
         }
         $scope.data = [];
         $scope.switches = [];
@@ -52,6 +68,7 @@ function BlockedAttemptsController($scope, UtilsService, $q, BlockedAttemptsAPIS
 
        
         $scope.searchClicked = function () {
+            
             return retrieveData();
         };
         $scope.searchZones = function (text) {
@@ -60,21 +77,17 @@ function BlockedAttemptsController($scope, UtilsService, $q, BlockedAttemptsAPIS
     }
 
     function retrieveData() {
-        for (var i = 0; i < $scope.measures.length; i++) {
-            if ($scope.measures[i].value == BlockedAttemptsMeasureEnum.CLI.value || $scope.measures[i].value == BlockedAttemptsMeasureEnum.PhoneNumber.value)
-                $scope.measures[i].isShown = $scope.groupByNumber;
-        }
+            $scope.isShown = $scope.groupByNumber;
         var filter=buildFilter();
         var query = {
             Filter: filter,
-            From: $scope.fromDate,
-            To: $scope.toDate,
+            From: $scope.basicFromDate,
+            To: $scope.basicToDate,
             GroupByNumber: $scope.groupByNumber
         };
         return mainGridAPI.retrieveData(query);
     }
     function load() {
-        loadMeasures();
         loadSwitches();
     }
 
@@ -88,8 +101,8 @@ function BlockedAttemptsController($scope, UtilsService, $q, BlockedAttemptsAPIS
                     //maxHeight: "800px"
                 };
                 var parameters = {
-                    fromDate: $scope.fromDate,
-                    toDate: $scope.toDate,
+                    fromDate: $scope.basicFromDate,
+                    toDate: $scope.basicToDate,
                     customerIds: dataItem.CustomerID != null || dataItem.CustomerID != undefined ? [dataItem.CustomerID] : null,
                     zoneIds: dataItem.OurZoneID != null || dataItem.OurZoneID != undefined ? [dataItem.OurZoneID] : null,
                     supplierIds: dataItem.SupplierID != null || dataItem.SupplierID != undefined ? [dataItem.SupplierID] : null,
@@ -106,12 +119,6 @@ function BlockedAttemptsController($scope, UtilsService, $q, BlockedAttemptsAPIS
                 VRModalService.showModal('/Client/Modules/Analytics/Views/CDR/CDRLog.html', parameters, modalSettings);
             }
         }];
-    }
-
-    function loadMeasures() {
-        for (var prop in BlockedAttemptsMeasureEnum) {
-            measures.push(BlockedAttemptsMeasureEnum[prop]);
-        }
     }
 
     function buildFilter() {
@@ -147,7 +154,7 @@ function BlockedAttemptsController($scope, UtilsService, $q, BlockedAttemptsAPIS
         $scope.periods = [];
         for (var p in PeriodEnum)
             $scope.periods.push(PeriodEnum[p]);
-        $scope.selectedPeriod = $scope.periods[0];
+        $scope.selectedPeriod = PeriodEnum.Today;
     }
 
 };
