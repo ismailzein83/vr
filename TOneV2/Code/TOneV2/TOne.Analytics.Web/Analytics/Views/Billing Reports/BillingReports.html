@@ -74,8 +74,8 @@
                     <vr-label>Exchange accounts</vr-label>
                     <vr-switch value="params.isExchange"></vr-switch>
                 </vr-columns>
-                <vr-columns colnum="3"  ng-init="a = 'test ggg hjjj'">
-                    <vr-textbox  type="number" label="Top" value="params.top"></vr-textbox>
+                <vr-columns colnum="3" ng-if="reporttype.ParameterSettings.RequiresTop" >
+                    <vr-textbox type="number" label="Top" value="params.top"></vr-textbox>
                 </vr-columns>
             </vr-row>
         </div>
