@@ -28,8 +28,8 @@
     app.constant('FilterEditorOperatorEnum', {
         Equal: { value: 0, description: "equal", types: [typeEnum.Boolean, typeEnum.Double] },
         NotEqual: { value: 1, description: "not equal", types: [typeEnum.Double] },
-        In: { value: 2, description: "in", types: [typeEnum.Array, typeEnum.Double] },
-        NotIn: { value: 3, description: "not in", types: [typeEnum.Array, typeEnum.Double] },
+        In: { value: 2, description: "in", types: [typeEnum.Array] },
+        NotIn: { value: 3, description: "not in", types: [typeEnum.Array] },
         IsNull: { value: 4, description: "is null", types: [typeEnum.Array, typeEnum.Double], InputType: inputTypeEnum.NoInput },
         IsNotNull: { value: 5, description: "is not null", types: [typeEnum.Array, typeEnum.Double], InputType: inputTypeEnum.NoInput },
         Less: { value: 6, description: "less", types: [typeEnum.Double] },
