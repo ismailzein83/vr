@@ -35,6 +35,9 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
     }
     function defineScope() {
 
+        $scope.fromDate = '2013/01/01';
+        $scope.toDate = '2015/01/01';
+
         $scope.optionsZones = function (filterText) {
             return ZonesService.getSalesZones(filterText);
         };
