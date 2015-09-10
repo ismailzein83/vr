@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-StrategyEditorController.$inject = ['$scope', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'SuspicionLevelsEnum', 'HourEnum'];
+StrategyEditorController.$inject = ['$scope', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'SuspicionLevelEnum', 'HourEnum'];
 
-function StrategyEditorController($scope, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, SuspicionLevelsEnum, HourEnum) {
+function StrategyEditorController($scope, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, SuspicionLevelEnum, HourEnum) {
 
     var editMode;
     loadParameters();
@@ -42,8 +42,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
         $scope.suspicionLevels = [];
-        angular.forEach(SuspicionLevelsEnum, function (itm) {
-            $scope.suspicionLevels.push({ id: itm.id, name: itm.name })
+        angular.forEach(SuspicionLevelEnum, function (itm) {
+            $scope.suspicionLevels.push({ id: itm.value, name: itm.description })
         });
 
 
