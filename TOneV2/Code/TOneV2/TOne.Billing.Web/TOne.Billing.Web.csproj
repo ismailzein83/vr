@@ -127,6 +127,7 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\CustomerInvoiceController.cs" />
     <Compile Include="Controllers\SupplierInvoiceController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -146,6 +147,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Billing\Services\APIServices\SupplierInvoiceAPIService.js" />
+    <Content Include="Billing\Views\CustomerInvoice.html" />
+    <Content Include="Billing\Views\CustomerInvoiceController.js" />
     <Content Include="Billing\Views\SupplierInvoiceDetailGrid.html" />
     <Content Include="Billing\Views\SupplierInvoiceDetailGridController.js" />
     <Content Include="Billing\Views\SupplierInvoiceManagement.html" />
