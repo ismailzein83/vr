@@ -27,12 +27,12 @@
     <div ng-show="showResult">
         <vr-row>
             <vr-columns width="fullrow" simplecol>
-                <vr-datagrid datasource="data" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'" on-ready="onMainGridReady">
-                    <vr-datagridcolumn headertext="'SupplierName'" field="'SupplierName'" ></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" ></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Currency'" field="'Currency'" ></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'From Rate'" field="'FromRate'" ></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'To Rate'" field="'ToRate'" ></vr-datagridcolumn>
+                <vr-datagrid datasource="data" dataretrievalfunction="dataRetrievalFunction" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady">
+                    <vr-datagridcolumn headertext="'SupplierName'" field="'SupplierName'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Currency'" field="'Currency'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'From Rate'" field="'FromRate'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'To Rate'" field="'ToRate'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Percentage'" field="'Percentage'" type="'Number'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Amount'" field="'Amount'" type="'Number'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'BED'" field="'BeginEffectiveDate'" type="'Date'"></vr-datagridcolumn>
