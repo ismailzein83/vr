@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.Fzero.FraudAnalysis.BP.AssignStrategyCasesProcess" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="Vanrise.Fzero.FraudAnalysis.BP.AssignStrategyCasesProcess_1"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.Fzero.FraudAnalysis.BP.AssignStrategyCasesProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
@@ -8,10 +8,16 @@
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
- xmlns:vffba="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Activities;assembly=Vanrise.Fzero.FraudAnalysis.BP.Activities"
+ xmlns:vffba="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Arguments;assembly=Vanrise.Fzero.FraudAnalysis.BP.Arguments"
+ xmlns:vffba1="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Activities;assembly=Vanrise.Fzero.FraudAnalysis.BP.Activities"
  xmlns:vffe="clr-namespace:Vanrise.Fzero.FraudAnalysis.Entities;assembly=Vanrise.Fzero.FraudAnalysis.Entities"
  xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(vffba:AssignStrategyCasesProcessInput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>Vanrise.Fzero.FraudAnalysis.BP.AssignStrategyCasesProcess_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System</x:String>
@@ -21,6 +27,8 @@
       <x:String>System.Text</x:String>
       <x:String>Vanrise.Queueing</x:String>
       <x:String>Vanrise.BusinessProcess</x:String>
+      <x:String>Vanrise.Fzero.FraudAnalysis.BP</x:String>
+      <x:String>Vanrise.Fzero.FraudAnalysis.BP.Arguments</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -65,37 +73,37 @@
         <Variable x:TypeArguments="vq:BaseQueue(vffe:AccountNumberBatch)" Name="accountNumberQueue" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="LoadAccountNumberStatus" />
       </Parallel.Variables>
-      <vffba:LoadAccountNumbers sap2010:WorkflowViewState.IdRef="LoadAccountNumbers_1">
-        <vffba:LoadAccountNumbers.OutputQueue>
+      <vffba1:LoadAccountNumbers sap2010:WorkflowViewState.IdRef="LoadAccountNumbers_1">
+        <vffba1:LoadAccountNumbers.OutputQueue>
           <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:AccountNumberBatch)">
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:AccountNumberBatch)">accountNumberQueue</mca:CSharpReference>
           </InOutArgument>
-        </vffba:LoadAccountNumbers.OutputQueue>
-        <vffba:LoadAccountNumbers.Status>
+        </vffba1:LoadAccountNumbers.OutputQueue>
+        <vffba1:LoadAccountNumbers.Status>
           <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">LoadAccountNumberStatus</mca:CSharpReference>
           </OutArgument>
-        </vffba:LoadAccountNumbers.Status>
-      </vffba:LoadAccountNumbers>
-      <vffba:AssignCases Status="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignCases_1">
-        <vffba:AssignCases.InputQueue>
+        </vffba1:LoadAccountNumbers.Status>
+      </vffba1:LoadAccountNumbers>
+      <vffba1:AssignCases Status="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignCases_1">
+        <vffba1:AssignCases.InputQueue>
           <InArgument x:TypeArguments="vq:BaseQueue(vffe:AccountNumberBatch)">
             <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:AccountNumberBatch)">accountNumberQueue</mca:CSharpValue>
           </InArgument>
-        </vffba:AssignCases.InputQueue>
-        <vffba:AssignCases.PreviousActivityStatus>
+        </vffba1:AssignCases.InputQueue>
+        <vffba1:AssignCases.PreviousActivityStatus>
           <InArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">LoadAccountNumberStatus</mca:CSharpValue>
           </InArgument>
-        </vffba:AssignCases.PreviousActivityStatus>
-      </vffba:AssignCases>
+        </vffba1:AssignCases.PreviousActivityStatus>
+      </vffba1:AssignCases>
     </Parallel>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2">
       <InArgument x:TypeArguments="x:String">
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("Assigning Cases Ended")</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>d1FDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEFzc2lnblN0cmF0ZWd5Q2FzZXNQcm9jZXNzLnhhbWwMOQNjDgIBAToFPhECARM/BVwQAgEEXQVhEQIBAjwJPG8CARREB08iAgEMUAdbGwIBBV8JX20CAQNMDUx4AgEQRw1HggECAQ1YDVhwAgEJUw1TegIBBg==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1FDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEFzc2lnblN0cmF0ZWd5Q2FzZXNQcm9jZXNzLnhhbWwMQQNrDgIBAUIFRhECARhHBWQQAgEFZQVpEQIBAkQJRG8CARlMB1cjAgEPWAdjHAIBBmcJZ20CAQNUDVR4AgEUTw1PggECARBgDWBwAgELWw1begIBBw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

@@ -32,7 +32,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
             if (this.OutputQueue.Get(context) == null)
-                this.OutputQueue.Set(context, new MemoryQueue<StrategyExecutionDetailBatch>());
+                this.OutputQueue.Set(context, new MemoryQueue<AccountNumberBatch>());
 
             base.OnBeforeExecute(context, handle);
         }
