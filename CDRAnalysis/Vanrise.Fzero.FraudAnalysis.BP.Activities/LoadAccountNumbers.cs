@@ -42,9 +42,20 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         protected override void DoWork(LoadAccountNumbersInput inputArgument, AsyncActivityHandle handle)
         {
             IStrategyExecutionDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
+            int index = 0;
+            int totalIndex = 0;
             dataManager.LoadAccountNumbersfromStrategyExecutionDetails((number) =>
                 {
                     inputArgument.OutputQueue.Enqueue(BuildAccountNumberBatch(number));
+                    index++;
+                    totalIndex ++;
+                    if (index == 1000)
+                    {
+                        Console.WriteLine("{0} Accounts Loaded", totalIndex);
+                        index = 0;
+                    }
+                        
+                    
                 });
         }
 

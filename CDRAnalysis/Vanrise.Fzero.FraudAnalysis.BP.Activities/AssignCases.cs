@@ -42,6 +42,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
+                int index = 0;
+                int totalIndex = 0;
+
                 bool hasItem = false;
                 do
                 {
@@ -52,7 +55,17 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                             var serializedNumbers = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(accountNumberBatch.AccountNumberBatchFilePath));
                             System.IO.File.Delete(accountNumberBatch.AccountNumberBatchFilePath);
                             var number = Vanrise.Common.ProtoBufSerializer.Deserialize<string>(serializedNumbers);
-                            //dataManager.UpdateAccountCase(number, CaseStatus.Open, null, false);
+
+                            index++;
+                            totalIndex++;
+                            if (index == 1000)
+                            {
+                                Console.WriteLine("{0} Accounts Dequeued", totalIndex);
+                                index = 0;
+                            }
+
+
+                            dataManager.UpdateAccountCase(number, CaseStatus.Open, null, false);
                         });
                 }
                 while (!ShouldStop(handle) && hasItem);
