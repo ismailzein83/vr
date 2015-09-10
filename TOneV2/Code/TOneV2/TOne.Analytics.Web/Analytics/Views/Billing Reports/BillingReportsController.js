@@ -19,8 +19,6 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
     $scope.optionsZone = [];
     $scope.reportsTypes = [];
     $scope.params = {
-        fromDate: "",
-        toDate: "",
         groupByCustomer: false,
         customer: null,
         supplier: null,
@@ -35,9 +33,8 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
     }
     function defineScope() {
 
-        $scope.fromDate = '2013/01/01';
-        $scope.toDate = '2015/01/01';
-
+        $scope.fromDate = '01/01/2013';
+        $scope.toDate =  new Date();
         $scope.optionsZones = function (filterText) {
             return ZonesService.getSalesZones(filterText);
         };
@@ -45,8 +42,8 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
         $scope.openReport = function () {
             var paramsurl = "";
             paramsurl += "reportId=" + $scope.reporttype.ReportDefinitionId;
-            paramsurl += "&fromDate=" + $scope.dateToString($scope.params.fromDate);
-            paramsurl += "&toDate=" + $scope.dateToString($scope.params.toDate);
+            paramsurl += "&fromDate=" + $scope.dateToString($scope.fromDate);
+            paramsurl += "&toDate=" + $scope.dateToString($scope.toDate);
             paramsurl += "&groupByCustomer=" + $scope.params.groupByCustomer;
             paramsurl += "&isCost=" + $scope.params.isCost;
             paramsurl += "&service=" + $scope.params.service;
@@ -66,9 +63,7 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
         }
         $scope.resetReportParams = function () {
 
-            $scope.params = {
-                fromDate: "",
-                toDate: "",
+            $scope.params = {              
                 groupByCustomer: false,
                 customer: null,
                 supplier: null,
