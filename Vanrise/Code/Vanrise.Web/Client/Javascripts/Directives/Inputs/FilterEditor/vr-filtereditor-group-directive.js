@@ -18,24 +18,15 @@
                     console.log('deleteRule2');
                 };
             },
-            compile: function () {
-
-                return {
-                    pre: function ($scope) {
-                        var ctrl = $scope.ctrl;
-
-                    }
-                }
-            },
             controllerAs: 'ctrl',
             bindToController: true,
             templateUrl: function () {
-                return "/Client/Javascripts/Directives/Inputs/QueryBuilder/vr-querybuilder-group.html";
+                return "/Client/Javascripts/Directives/Inputs/FilterEditor/vr-filtereditor-group.html";
             }
         };
     }
 
     //vrDirectiveObj.$inject = [];
-    app.directive('vrQuerybuilderGroup', vrDirectiveObj);
+    app.directive('vrFiltereditorGroup', vrDirectiveObj);
 
 })(app);

@@ -13,23 +13,15 @@
             controller: function () {
 
             },
-            compile: function () {
-
-                return {
-                    pre: function ($scope) {
-
-                    }
-                }
-            },
             controllerAs: 'ctrl',
             bindToController: true,
             templateUrl: function () {
-                return "/Client/Javascripts/Directives/Inputs/QueryBuilder/vr-querybuilder.html";
+                return "/Client/Javascripts/Directives/Inputs/FilterEditor/vr-filtereditor.html";
             }
         };
     }
 
     //vrDirectiveObj.$inject = [];
-    app.directive('vrQuerybuilder', vrDirectiveObj);
+    app.directive('vrFiltereditor', vrDirectiveObj);
 
 })(app);

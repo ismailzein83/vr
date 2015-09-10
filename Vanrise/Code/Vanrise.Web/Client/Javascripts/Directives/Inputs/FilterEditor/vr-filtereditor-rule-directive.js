@@ -25,7 +25,7 @@
         NoInput: { value: 1, description: "NoInput" }
     };
 
-    app.constant('QueryBuilderFilterOperatorEnum', {
+    app.constant('FilterEditorOperatorEnum', {
         Equal: { value: 0, description: "equal", types: [typeEnum.Array, typeEnum.Boolean, typeEnum.Double] },
         NotEqual: { value: 1, description: "not equal", types: [typeEnum.Array, typeEnum.Double] },
         In: { value: 2, description: "in", types: [typeEnum.Array, typeEnum.Double] },
@@ -41,9 +41,9 @@
 
     });
 
-    app.constant('QueryBuilderFilterInputTypeEnum', inputTypeEnum);
-    app.constant('QueryBuilderFilterTypeEnum', typeEnum);
-    app.constant('QueryBuilderFilterInputEnum', inputEnum);
+    app.constant('FilterEditorInputTypeEnum', inputTypeEnum);
+    app.constant('FilterEditorFieldTypeEnum', typeEnum);
+    app.constant('FilterEditorInputEnum', inputEnum);
     
 })(app);
 
@@ -51,7 +51,7 @@
 
     "use strict";
 
-    vrDirectiveObj.$inject = ['QueryBuilderFilterInputEnum', 'QueryBuilderFilterTypeEnum', 'QueryBuilderFilterOperatorEnum', 'QueryBuilderFilterInputTypeEnum'];
+    vrDirectiveObj.$inject = ['FilterEditorInputEnum', 'FilterEditorFieldTypeEnum', 'FilterEditorOperatorEnum', 'FilterEditorInputTypeEnum'];
 
     function vrDirectiveObj(inputEnum , typeEnum,operatorEnum , inputTypeEnum) {
 
@@ -145,12 +145,12 @@
             controllerAs: 'ctrl',
             bindToController: true,
             templateUrl: function () {
-                return "/Client/Javascripts/Directives/Inputs/QueryBuilder/vr-querybuilder-rule.html";
+                return "/Client/Javascripts/Directives/Inputs/FilterEditor/vr-filtereditor-rule.html";
             }
         };
     }
 
     
-    app.directive('vrQuerybuilderRule', vrDirectiveObj);
+    app.directive('vrFiltereditorRule', vrDirectiveObj);
 
 })(app);
