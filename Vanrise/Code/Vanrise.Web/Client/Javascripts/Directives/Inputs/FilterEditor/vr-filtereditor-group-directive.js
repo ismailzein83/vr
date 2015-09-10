@@ -8,20 +8,26 @@
             restrict: 'E',
             require: '^form',
             scope: {
-                filters: '='
+                filters: '=',
+                maingroup: '=',
+                ondelete:'='
             },
             controller: function () {
                 var ctrl = this;
 
-                ctrl.rules = [];
-                ctrl.condition = "AND";
-
+                function onLoad() {
+                    ctrl.rules = [];
+                    ctrl.groups = [];
+                    ctrl.condition = "AND";
+                }
+                
                 function toggle() {
                     if (ctrl.condition === "OR")
                         ctrl.condition = "AND";
                     else
                         ctrl.condition = "OR";
                 }
+
                 function deleteRule(rule) {
                     var index = ctrl.rules.indexOf(rule);
                     ctrl.rules.splice(index, 1);
@@ -33,13 +39,21 @@
                     ctrl.rules.push(rule);
                 }
 
-                function addGroup() {
-
-                }
-
                 function deleteGroup() {
-                    
+                    if (ctrl.ondelete)
+                        ctrl.ondelete();
                 }
+
+                function addGroup() {
+                    var group = { id: baseDirService.guid(), filters: ctrl.filters };
+                    group.deleteGroup = function () {
+                        var index = ctrl.groups.indexOf(group);
+                        ctrl.groups.splice(index, 1);
+                    };
+                    ctrl.groups.push(group);
+                }
+
+                
 
                 angular.extend(this, {
                     deleteRule: deleteRule,
@@ -48,6 +62,8 @@
                     deleteGroup: deleteGroup,
                     toggle: toggle
                 });
+
+                onLoad();
 
             },
             controllerAs: 'ctrl',

@@ -7,8 +7,8 @@
             <button type="button" class="btn btn-xs btn-success" data-add="group" ng-click="ctrl.addGroup()">
                 <i class="glyphicon glyphicon-plus-sign"></i> Add group
             </button>
-            <button type="button" class="btn btn-xs btn-danger" data-delete="group" ng-click="ctrl.deleteGroup()">
-                <i class="glyphicon glyphicon-remove"></i> Delete
+            <button ng-if="ctrl.maingroup == 'false'" type="button" class="btn btn-xs btn-danger" data-add="group" ng-click="ctrl.deleteGroup()">
+                <i class="glyphicon glyphicon-remove"></i> Delete group
             </button>
         </div>
         <div class="btn-group group-conditions">
@@ -24,6 +24,9 @@
     <dd class="rules-group-body">
         <ul class="rules-list">
             <vr-filtereditor-rule ng-repeat="rule in ctrl.rules" filters="ctrl.filters" deleterule="rule.deleteRule"></vr-filtereditor-rule>
+            <div ng-repeat="group in ctrl.groups">
+                <vr-directivewrapper directive="'vr-filtereditor-group'" filters="group.filters" maingroup="'false'" ondelete="group.deleteGroup"></vr-directivewrapper>
+            </div>
         </ul>
     </dd>
 </dl>
