@@ -9,73 +9,68 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
+--sec.Module-----
+set nocount on;
+set identity_insert [sec].[Module] on;
+;with cte_data([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,'Administration',null,null,null,'/images/menu-icons/Administration.png',null,1),
+(2,'Fraud Analysis',null,null,null,'/images/menu-icons/other.png',null,1),
+(3,'Workflow Management',null,null,null,'/images/menu-icons/Business Entities.png',null,1),
+(4,'Data Sources',null,null,null,'/images/menu-icons/plug.png',null,1),
+(5,'Reports',null,null,null,'/images/menu-icons/busines intel.png',null,1)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
+merge	[sec].[Module] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic]
+when not matched by target then
+	insert([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
+	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic])
+when not matched by source then
+	delete;
+set identity_insert [sec].[Module] off;
 
-
-
-
-
-MERGE INTO sec.[Module] AS Target 
-USING (VALUES 
-	( N'Administration',      NULL, NULL, NULL, N'glyphicon-flash',        NULL, N'True'),
-	( N'Fraud Analysis',      NULL, NULL, NULL, N'glyphicon-indent-right', NULL, N'True'),
-	( N'Workflow Managment',  NULL, NULL, NULL, N'glyphicon-qrcode',       NULL, N'True'),
-	( N'Data Sources',        NULL, NULL, NULL, N'glyphicon-tasks',        NULL, N'True')
-) 
-AS Source ([Name]  ,[Title]  ,[Url]  ,[ParentId]  ,[Icon]  ,[Rank]  ,[AllowDynamic])
-ON Target.[Name] = Source.[Name] 
--- update matched rows 
-WHEN MATCHED THEN 
-UPDATE SET	[Title] = Source.[Title],
-			[Url]  = Source.[Url], 
-			[ParentId]  = Source.[ParentId], 
-			[Icon]  = Source.[Icon], 
-			[Rank]  = Source.[Rank], 
-			[AllowDynamic]  = Source.[AllowDynamic] 
-			
--- insert new rows 
-WHEN NOT MATCHED BY TARGET THEN 
-INSERT ([Name]  ,[Title]  ,[Url]  ,[ParentId]  ,[Icon]  ,[Rank]  ,[AllowDynamic])
-VALUES ([Name]  ,[Title]  ,[Url]  ,[ParentId]  ,[Icon]  ,[Rank]  ,[AllowDynamic])
----- delete rows that are in the target but not the source 
-WHEN NOT MATCHED BY SOURCE THEN 
-DELETE
-;
-
-MERGE INTO sec.[View] AS Target 
-USING (VALUES 
-	(	N'Users',	N'Users',	N'#/view/Security/Views/UserManagement',	N'1',	N'Root/Administration Module/Users:View'	,NULL,	NULL,	N'0'	,NULL),
-	(	N'Groups',	N'Groups',	N'#/view/Security/Views/GroupManagement',	N'1',	N'Root/Administration Module/Groups:View',	NULL,	NULL,	N'0',	NULL),
-	(	N'System Entites',	N'System Entites',	N'#/view/Security/Views/BusinessEntityManagement',	N'1',	N'Root/Administration Module/System Entities:View',	NULL,	NULL,	N'0',	NULL),
-	(	N'Suspicious Cases',	N'Suspicious Cases',	N'#/view/FraudAnalysis/Views/SuspiciousAnalysis/SuspicionAnalysist',	N'2'	,N'Root/Suspicion Analysis Module:View',	NULL	,NULL,	N'0',	2),
-	(	N'History',	N'Business Process History',	N'#view/BusinessProcess/Views/BPHistory',	N'3',	N'Root/Business Process Module/History:View',	NULL,	NULL,	N'0',	NULL),
-	(	N'Scheduler Service',	N'Scheduler Service'	,N'#/view/Runtime/Views/SchedulerTaskManagement',	N'3',	N'Root/Business Process Module/Management:View',	NULL,	NULL,	N'0'	,NULL),
-	(	N'Management',	N'Business Process Management',	N'#view/BusinessProcess/Views/BPDefinitionManagement',	N'3',	N'Root/Business Process Module/Management:View',	NULL,	NULL,	N'0',	NULL),
-	(	N'Dashboard',	N'Dashboard',	N'#/view/FraudAnalysis/Views/Output/Dashboard',	N'2',	N'Root/Dashboard Module:View',	NULL	,NULL,	N'0',	3),
-	(	N'Detection Strategies'	,N'Detection Strategies'	,N'#/view/FraudAnalysis/Views/Strategy/StrategyManagement',	N'2',	N'Root/Strategy Module:View'	,NULL,	NULL,	N'0',	1),
-	(	N'Datasource Management'	,N'Management',	N'#/view/Integration/Views/DataSourceManagement',	N'4',	N'Root/Integration Module:View',	NULL,	NULL,	N'0'	, NULL),
-	(	N'Logs'	,N'Logs',	N'#/view/Integration/Views/DataSourceLogManagement',	N'4',	N'Root/Integration Module:View',	NULL,	NULL,	N'0'	, NULL),
-	(	N'Imported Batches'	,N'Imported Batches',	N'#/view/Integration/Views/DataSourceImportedBatchManagement',	N'4',	N'Root/Integration Module:View',	NULL,	NULL,	N'0'	, NULL)
-) 
-AS Source ([Name]  ,[Title]  ,[Url]  ,[Module]  ,[RequiredPermissions]  ,[Audience]  ,[Content]  ,[Type]    ,[Rank])
-ON Target.[Name] = Source.[Name] 
--- update matched rows 
-WHEN MATCHED THEN 
-UPDATE SET	[Title] = Source.[Title],
-			[Url] = Source.[Url],
-			[Module]  = Source.[Module],
-			[RequiredPermissions]  = Source.[RequiredPermissions],
-			[Audience]  = Source.[Audience],
-			[Content]  = Source.[Content],
-			[Type]  = Source.[Type],
-			[Rank]  = Source.[Rank]
--- insert new rows 
-WHEN NOT MATCHED BY TARGET THEN 
-INSERT ([Name]  ,[Title]  ,[Url]  ,[Module]  ,[RequiredPermissions]  ,[Audience]  ,[Content]  ,[Type]    ,[Rank])
-VALUES ([Name]  ,[Title]  ,[Url]  ,[Module]  ,[RequiredPermissions]  ,[Audience]  ,[Content]  ,[Type]    ,[Rank])
----- delete rows that are in the target but not the source 
-WHEN NOT MATCHED BY SOURCE THEN 
-DELETE
-;
+--sec.[View]-----
+set nocount on;
+set identity_insert [sec].[View] on;
+;with cte_data([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(3,'Users','Users','#/view/Security/Views/UserManagement',1,'Root/Administration Module/Users:View',null,null,0,null),
+(4,'Groups','Groups','#/view/Security/Views/GroupManagement',1,'Root/Administration Module/Groups:View',null,null,0,null),
+(5,'System Entities','System Entities','#/view/Security/Views/BusinessEntityManagement',1,'Root/Administration Module/System Entities:View',null,null,0,null),
+(8,'Suspicious Accounts','Suspicious Accounts','#/view/FraudAnalysis/Views/SuspiciousAnalysis/SuspicionAnalysis',2,'Root/Suspicion Analysis Module:View',null,null,0,2),
+(11,'History','Business Process History','#view/BusinessProcess/Views/BPHistory',3,'Root/Business Process Module/History:View',null,null,0,null),
+(13,'Scheduler Service','Scheduler Service','#/view/Runtime/Views/SchedulerTaskManagement',3,'Root/Business Process Module/Management:View',null,null,0,null),
+(17,'Management','Business Process Management','#view/BusinessProcess/Views/BPDefinitionManagement',3,'Root/Business Process Module/Management:View',null,null,0,null),
+(18,'Dashboard','Dashboard','#/view/FraudAnalysis/Views/Output/Dashboard',5,'Root/Dashboard Module:View',null,null,0,3),
+(25,'Strategy Management','Strategy Management','#/view/FraudAnalysis/Views/Strategy/StrategyManagement',2,'Root/Strategy Module:View',null,null,0,1),
+(26,'Datasource Management','Datasource Management','#/view/Integration/Views/DataSourceManagement',4,'Root/Integration Module:View',null,null,0,null),
+(27,'Logs','Logs','#/view/Integration/Views/DataSourceLogManagement',4,'Root/Integration Module:View',null,null,0,null),
+(28,'Imported Batches','Imported Batches','#/view/Integration/Views/DataSourceImportedBatchManagement',4,'Root/Integration Module:View',null,null,0,null),
+(29,'Cases Productivity','Cases Productivity','#/view/FraudAnalysis/Views/Reports/CasesProductivity',5,'Root/Reporting Module:View',null,null,0,1),
+(30,'Blocked Lines','Blocked Lines','#/view/FraudAnalysis/Views/Reports/BlockedLines',5,'Root/Reporting Module:View',null,null,0,2),
+(31,'Lines Detected','Lines Detected','#/view/FraudAnalysis/Views/Reports/LinesDetected',5,'Root/Reporting Module:View',null,null,0,3),
+(34,'Cancel Cases','Cancel Cases','#/view/FraudAnalysis/Views/SuspiciousAnalysis/CancelCases',2,'Root/Suspicion Analysis Module:View',null,null,0,3)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank]))
+merge	[sec].[View] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[RequiredPermissions] = s.[RequiredPermissions],[Audience] = s.[Audience],[Content] = s.[Content],[Type] = s.[Type],[Rank] = s.[Rank]
+when not matched by target then
+	insert([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank])
+	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[RequiredPermissions],s.[Audience],s.[Content],s.[Type],s.[Rank])
+when not matched by source then
+	delete;
+set identity_insert [sec].[View] off;
 
 
 --[sec].[BusinessEntityModule]----
