@@ -31,13 +31,11 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         #endregion
 
-        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
-        {
-            base.OnBeforeExecute(context, handle);
-        }
-
         protected override void DoWork(AssignCasesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
+
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started Assigning Cases ");
+
             ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
@@ -70,8 +68,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 }
                 while (!ShouldStop(handle) && hasItem);
             });
-        }
 
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finshed Assigning Cases ");
+        }
 
         protected override AssignCasesInput GetInputArgument2(System.Activities.AsyncCodeActivityContext context)
         {

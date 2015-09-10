@@ -205,13 +205,5 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             };
         }
 
-        private class StrategyNumberProfile
-        {
-            public Strategy Strategy { get; set; }
-
-            public NumberProfile CurrentNumberProfile { get; set; }
-
-            public List<AggregateDefinition> AggregateDefinitions { get; set; }
-        }
     }
 }
