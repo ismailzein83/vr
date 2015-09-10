@@ -73,7 +73,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 IStrategyDataManager strategyManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
                 INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
                 int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"]);
-                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started Loading CDRs from Database to Memory");
                 var callClasses = manager.GetCallClasses();
                 
             List<Strategy> strategies = new List<Strategy>();
