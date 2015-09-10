@@ -16,7 +16,8 @@
                 maxvalue: '@',
                 decimalprecision: '@',
                 maxlength:'@',
-                customvalidate: '&'
+                customvalidate: '&',
+                placeholder:'@'
             },
             controller: function () {
 
@@ -78,6 +79,8 @@
                         ctrl.notifyUserChange = function () {
                             isUserChange = true;
                         };
+                        ctrl.placelHolder = (attrs.placeholder != undefined) ? ctrl.placeholder : '';
+                        console.log()
                         ctrl.readOnly = attrs.readonly != undefined;
                         if (attrs.hint != undefined) {
                             ctrl.hint = attrs.hint;
@@ -129,7 +132,7 @@
                         console.log(attrs.hint);
                     }
                     var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
-                            + '<input  ng-readonly="ctrl.readOnly" id="mainInput" ng-style="ctrl.getInputeStyle()" ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" size="10" class="form-control" data-autoclose="1" type="' + type + '" >'
+                            + '<input  ng-readonly="ctrl.readOnly" id="mainInput" placeholder="{{ctrl.placelHolder}}" ng-style="ctrl.getInputeStyle()" ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" size="10" class="form-control" data-autoclose="1" type="' + type + '" >'
                             + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" html="true" style="color:#337AB7"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
                         + '</div>';
                 
