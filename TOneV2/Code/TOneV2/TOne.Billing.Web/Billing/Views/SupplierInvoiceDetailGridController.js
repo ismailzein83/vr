@@ -49,11 +49,12 @@ function SupplierInvoiceDetailGridController($scope, SupplierInvoiceAPIService, 
         var query = ($scope.viewScope.groupByDay) ?
             {
                 SupplierID: $scope.viewScope.selectedSupplier.CarrierAccountID,
-                From: $scope.viewScope.from,
-                To: $scope.viewScope.to
+                From: $scope.dataItem.BeginDate,
+                To: $scope.dataItem.EndDate
             } :
             { InvoiceID: $scope.dataItem.InvoiceID };
 
+        console.log(query);
         return gridApi.retrieveData(query);
     }
 }

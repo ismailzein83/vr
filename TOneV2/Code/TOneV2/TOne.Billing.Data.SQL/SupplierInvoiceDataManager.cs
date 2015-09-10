@@ -34,6 +34,8 @@ namespace TOne.Billing.Data.SQL
 
         public Vanrise.Entities.BigResult<SupplierInvoiceDetailGroupedByDay> GetFilteredSupplierInvoiceDetailsGroupedByDay(Vanrise.Entities.DataRetrievalInput<SupplierInvoiceDetailGroupedByDayQuery> input)
         {
+            Dictionary<string, string> mapper = new Dictionary<string, string>();
+
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQuerySP("Billing.sp_BillingCDRCost_CreateTempBySupplierID", tempTableName, input.Query.SupplierID, input.Query.From, input.Query.To);
@@ -97,14 +99,11 @@ namespace TOne.Billing.Data.SQL
 
         private SupplierInvoiceDetailGroupedByDay SupplierInvoiceDetailGroupedByDayMapper(IDataReader reader)
         {
-            SupplierInvoiceDetailGroupedByDay detail = new SupplierInvoiceDetailGroupedByDay
-            {
-                Day = GetReaderValue<String>(reader, "Day"),
-                DurationInMinutes = GetReaderValue<decimal>(reader, "DurationInMinutes"),
-                Amount = GetReaderValue<float>(reader, "Amount"),
-                CurrencyID = GetReaderValue<string>(reader, "CurrencyID")
-            };
-
+            SupplierInvoiceDetailGroupedByDay detail = new SupplierInvoiceDetailGroupedByDay();
+             detail.Day = (DateTime)reader["Day"];
+                detail.DurationInMinutes = GetReaderValue<decimal?>(reader, "DurationInMinutes");
+                detail.Amount = GetReaderValue<Double?>(reader, "Amount");
+                detail.CurrencyID = GetReaderValue<string>(reader, "CurrencyID");
             return detail;
         }
 

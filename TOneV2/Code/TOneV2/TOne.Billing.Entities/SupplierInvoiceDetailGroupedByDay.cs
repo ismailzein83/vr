@@ -8,9 +8,9 @@ namespace TOne.Billing.Entities
 {
     public class SupplierInvoiceDetailGroupedByDay
     {
-        public String Day { get; set; }
-        public decimal DurationInMinutes { get; set; }
-        public float Amount { get; set; }
+        public DateTime Day { get; set; }
+        public decimal? DurationInMinutes { get; set; }
+        public Double? Amount { get; set; }
         public string CurrencyID { get; set; }
     }
 }
