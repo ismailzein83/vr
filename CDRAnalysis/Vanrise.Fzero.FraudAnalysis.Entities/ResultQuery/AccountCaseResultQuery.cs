@@ -9,9 +9,5 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     public class AccountCaseResultQuery
     {
         public string AccountNumber { get; set; }
-
-        public DateTime From { get; set; }
-
-        public DateTime To { get; set; }
     }
 }

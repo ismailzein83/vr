@@ -8,11 +8,7 @@
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-datetimepicker label="From" value="from" type="dateTime" isrequired></vr-datetimepicker>
-                </vr-columns>
-
-                <vr-columns width="normal">
-                    <vr-datetimepicker label="To" value="to" type="dateTime" isrequired></vr-datetimepicker>
+                    <vr-datetimepicker label="Execution Date" value="executionDate" type="dateTime" isrequired></vr-datetimepicker>
                 </vr-columns>
 
                 <vr-columns width="normal">
@@ -26,9 +22,9 @@
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-select label="Suspicion Level"
-                               datasource="suspicionLevels"
-                               selectedvalues="selectedSuspicionLevels"
+                    <vr-select label="Status"
+                               datasource="accountStatuses"
+                               selectedvalues="selectedAccountStatuses"
                                datavaluefield="value"
                                datatextfield="description"
                                ismultipleselection>
@@ -36,9 +32,9 @@
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-select label="Status"
-                               datasource="caseStatuses"
-                               selectedvalues="selectedCaseStatuses"
+                    <vr-select label="Suspicion Level"
+                               datasource="suspicionLevels"
+                               selectedvalues="selectedSuspicionLevels"
                                datavaluefield="value"
                                datatextfield="description"
                                ismultipleselection>

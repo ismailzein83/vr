@@ -9,10 +9,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     public class AccountSuspicionSummaryQuery
     {
         public string AccountNumber { get; set; }
-        public DateTime From { get; set; }
-        public DateTime To { get; set; }
-        public List<int> SelectedStrategyIDs { get; set; }
-        public List<SuspicionLevel> SelectedSuspicionLevelIDs { get; set; }
-        public List<CaseStatus> SelectedCaseStatusIDs { get; set; }
+
+        public DateTime ExecutionDate { get; set; }
+
+        public List<int> StrategyIDs { get; set; }
+
+        public List<CaseStatus> AccountStatusIDs { get; set; }
+
+        public List<SuspicionLevel> SuspicionLevelIDs { get; set; }
     }
 }

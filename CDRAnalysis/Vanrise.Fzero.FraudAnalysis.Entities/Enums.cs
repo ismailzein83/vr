@@ -15,7 +15,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     public enum SuspicionLevel
     {
         Suspicious = 2,
-        Highly_Suspicious = 3,
+        HighlySuspicious = 3,
         Fraud = 4
     };
 

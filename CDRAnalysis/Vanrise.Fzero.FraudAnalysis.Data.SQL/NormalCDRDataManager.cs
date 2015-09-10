@@ -85,7 +85,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_NormalCDR_CreateTempForFilteredNormalCDRs", tempTableName, input.Query.FromDate, input.Query.ToDate, input.Query.MSISDN);
+                ExecuteNonQuerySP("FraudAnalysis.sp_NormalCDR_CreateTempForFilteredNormalCDRs", tempTableName, input.Query.MSISDN, input.Query.FromDate, input.Query.ToDate);
             };
             return RetrieveData(input, createTempTableAction, NormalCDRMapper, mapper);
         }

@@ -51,20 +51,20 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             return RetrieveData(input, (tempTableName) =>
             {
-                string selectedStrategyIDs = null;
-                string selectedSuspicionLevelIDs = null;
-                string selectedCaseStatusIDs = null;
+                string strategyIDs = null;
+                string suspicionLevelIDs = null;
+                string accountStatusIDs = null;
 
-                if (input.Query.SelectedStrategyIDs != null && input.Query.SelectedStrategyIDs.Count() > 0)
-                    selectedStrategyIDs = string.Join<int>(",", input.Query.SelectedStrategyIDs);
+                if (input.Query.StrategyIDs != null && input.Query.StrategyIDs.Count() > 0)
+                    strategyIDs = string.Join<int>(",", input.Query.StrategyIDs);
 
-                if (input.Query.SelectedSuspicionLevelIDs != null && input.Query.SelectedSuspicionLevelIDs.Count() > 0)
-                    selectedSuspicionLevelIDs = string.Join(",", input.Query.SelectedSuspicionLevelIDs.Select(n => ((int)n).ToString()).ToArray());
+                if (input.Query.SuspicionLevelIDs != null && input.Query.SuspicionLevelIDs.Count() > 0)
+                    suspicionLevelIDs = string.Join(",", input.Query.SuspicionLevelIDs.Select(n => ((int)n).ToString()).ToArray());
 
-                if (input.Query.SelectedCaseStatusIDs != null && input.Query.SelectedCaseStatusIDs.Count() > 0)
-                    selectedCaseStatusIDs = string.Join(",", input.Query.SelectedCaseStatusIDs.Select(n => ((int)n).ToString()).ToArray());
+                if (input.Query.AccountStatusIDs != null && input.Query.AccountStatusIDs.Count() > 0)
+                    accountStatusIDs = string.Join(",", input.Query.AccountStatusIDs.Select(n => ((int)n).ToString()).ToArray());
 
-                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByAccountNumberForSummaries", tempTableName, input.Query.AccountNumber, input.Query.From, input.Query.To, selectedStrategyIDs, selectedSuspicionLevelIDs, selectedCaseStatusIDs);
+                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByAccountNumberForSummaries", tempTableName, input.Query.AccountNumber, input.Query.ExecutionDate, strategyIDs, accountStatusIDs, suspicionLevelIDs);
 
             }, (reader) => AccountSuspicionSummaryMapper(reader), mapper);
         }
@@ -220,11 +220,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             Dictionary<string, string> mapper = new Dictionary<string, string>();
             mapper.Add("SuspicionLevelDescription", "SuspicionLevelID");
-            mapper.Add("SuspicionOccuranceStatusDescription", "SuspicionOccuranceStatus");
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_GetByAccountNumber", tempTableName, input.Query.AccountNumber, input.Query.From, input.Query.To);
+                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByAccountNumber", tempTableName, input.Query.AccountNumber, input.Query.ExecutionDate);
             };
 
             return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, mapper);
@@ -237,7 +236,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_CreateTempByAccountNumber", tempTableName, input.Query.AccountNumber, input.Query.From, input.Query.To);
+                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_CreateTempByAccountNumber", tempTableName, input.Query.AccountNumber);
             };
 
             return RetrieveData(input, createTempTableAction, AccountCaseMapper, mapper);
@@ -251,7 +250,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByCaseID", tempTableName, input.Query.AccountNumber, input.Query.CaseID, input.Query.FromDate, input.Query.ToDate);
+                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByCaseID", tempTableName, input.Query.AccountNumber, input.Query.CaseID);
             };
 
             return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, mapper);
@@ -399,12 +398,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             var detail = new AccountSuspicionDetail(); // a detail is a fraud result instance
 
             detail.DetailID = (long)reader["DetailID"];
-            detail.AccountNumber = reader["AccountNumber"] as string;
             detail.SuspicionLevelID = (SuspicionLevel)reader["SuspicionLevelID"];
             detail.StrategyName = reader["StrategyName"] as string;
-            detail.SuspicionOccuranceStatus = GetReaderValue<SuspicionOccuranceStatus>(reader, "SuspicionOccuranceStatus");
             detail.FromDate = (DateTime)reader["FromDate"];
             detail.ToDate = (DateTime)reader["ToDate"];
+            detail.AggregateValues = Vanrise.Common.Serializer.Deserialize<Dictionary<string, decimal>>(GetReaderValue<string>(reader, "AggregateValues"));
             
             return detail;
         }

@@ -47,9 +47,7 @@ function CaseOccuranceGridController($scope, CaseManagementAPIService, Suspicion
 
         var query = {
             AccountNumber: $scope.dataItem.AccountNumber,
-            CaseID: $scope.dataItem.CaseID,
-            FromDate: $scope.viewScope.from,
-            ToDate: $scope.viewScope.to
+            CaseID: $scope.dataItem.CaseID
         };
 
         return gridApi.retrieveData(query);

@@ -12,17 +12,16 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
     function defineScope() {
         $scope.accountNumber = undefined;
 
-        $scope.from = Date.now();
-        $scope.to = Date.now();
+        $scope.executionDate = Date.now();
 
         $scope.strategies = [];
         $scope.selectedStrategies = [];
 
+        $scope.accountStatuses = [];
+        $scope.selectedAccountStatuses = [];
+
         $scope.suspicionLevels = [];
         $scope.selectedSuspicionLevels = [];
-
-        $scope.caseStatuses = [];
-        $scope.selectedCaseStatuses = [];
 
         $scope.accountSuspicionSummaries = [];
         $scope.gridMenuActions = [];
@@ -61,12 +60,11 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
 
     function retrieveData() {
         var query = {
-            AccountNumber : $scope.accountNumber,
-            From: $scope.from,
-            To: $scope.to,
-            SelectedStrategyIDs: UtilsService.getPropValuesFromArray($scope.selectedStrategies, "value"),
-            SelectedSuspicionLevelIDs: UtilsService.getPropValuesFromArray($scope.selectedSuspicionLevels, "value"),
-            SelectedCaseStatusIDs: UtilsService.getPropValuesFromArray($scope.selectedCaseStatuses, "value")
+            AccountNumber: ($scope.accountNumber != undefined && $scope.accountNumber != "") ? $scope.accountNumber : null,
+            ExecutionDate: $scope.executionDate,
+            StrategyIDs: UtilsService.getPropValuesFromArray($scope.selectedStrategies, "value"),
+            AccountStatusIDs: UtilsService.getPropValuesFromArray($scope.selectedAccountStatuses, "value"),
+            SuspicionLevelIDs: UtilsService.getPropValuesFromArray($scope.selectedSuspicionLevels, "value")
         };
 
         return gridAPI.retrieveData(query);
@@ -76,7 +74,8 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
         $scope.isInitializing = true;
 
         $scope.suspicionLevels = UtilsService.getArrayEnum(SuspicionLevelEnum);
-        $scope.caseStatuses = UtilsService.getArrayEnum(CaseStatusEnum);
+        $scope.accountStatuses = UtilsService.getArrayEnum(CaseStatusEnum);
+        $scope.selectedAccountStatuses.push($scope.accountStatuses[0]); // select the Open status by default
 
         return StrategyAPIService.GetStrategies(0, "") // get all the enabled and disabled strategies (2nd arg) for all periods (1st arg)
             .then(function (response) {
@@ -107,8 +106,7 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
 
         var parameters = {
             AccountNumber: gridObject.AccountNumber,
-            From: $scope.from,
-            To: $scope.to
+            ExecutionDate: $scope.executionDate
         };
 
         modalSettings.onScopeReady = function (modalScope) {

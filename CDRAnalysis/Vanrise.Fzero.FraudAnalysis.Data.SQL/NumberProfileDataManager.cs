@@ -65,8 +65,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             var numberProfile = new NumberProfile();
 
-            numberProfile.FromDate = (DateTime)reader["FromDate"];
-            numberProfile.ToDate = (DateTime)reader["ToDate"];
+            //numberProfile.FromDate = (DateTime)reader["FromDate"];
+            //numberProfile.ToDate = (DateTime)reader["ToDate"];
             //numberProfile.StrategyId = (int)reader["StrategyId"];
             numberProfile.StrategyName = reader["StrategyName"] as string;
             numberProfile.AccountNumber = reader["AccountNumber"] as string;
