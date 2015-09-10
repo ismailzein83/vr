@@ -72,9 +72,10 @@
         <div id="sidebar-wrapper" ng-style="toogled==true?{'width':'225px'}:{'width':'2px'}">
 
             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" ng-show="toogled==true" ng-mouseout="mouseout()" ng-mouseover="mouseover()">
-                <div class="panel panel-default toggle-panel ">
-                    <div class="panel-heading dll-menu" style="height: 36px;">
-                        <span style="font-size: 17px; margin: 6px 4px; position: absolute; right: -1px; top:5px;" ng-click="pinpanel()" class=" hand-cursor glyphicon glyphicon-pushpin " ng-class="pinned==true?'unpined-icon':''"></span>
+                <div class="panel panel-default toggle-panel ">                    
+                    <div class="panel-heading dll-menu" style="height: 36px;">                        
+                        <span class=" hand-cursor glyphicon glyphicon glyphicon-pushpin " style="font-size: 17px; margin: 6px 4px; position: absolute; right: -1px; top:5px;" ng-click="pinpanel()" ng-class="pinned==true?'unpined-icon':''"></span>
+                        <span class=" hand-cursor glyphicon glyphicon-chevron-left" ng-click="hideToogled()" style="font-size: 17px; margin: 6px 4px; position: absolute; right: 16px; top:5px;" ng-if="pinned==true"></span>   
                     </div>
                 </div>
                 <div ng-repeat="item in menuItems" class="panel panel-default menu-item-list">
@@ -123,9 +124,10 @@
             </div>
 
             <div id="collapsedmenu" style="background-color:#ddd;height:100%;width:40px;position:fixed;z-index:10" ng-show="toogled==false">
-                <div class="dropdown dropdown-custom-serf leftdiv">
-                    <div class="dropdown-toggle hand-cursor glyphicon glyphicon glyphicon-pushpin dropdown-item" style="font-size: 17px;top:9px" ng-click="pinpanel()" ng-class="pinned==true?'unpined-icon unpined-icon-pos':''">
-
+                <div class="dropdown dropdown-custom-serf leftdiv" >
+                    <div class="dropdown-toggle hand-cursor dropdown-item"  style="font-size: 17px;top:9px;left:5px;display:block" >
+                        <span class=" hand-cursor glyphicon glyphicon glyphicon-pushpin " ng-class="pinned==true?'unpined-icon':''" style="font-size: 17px !important;top: 8px;left: 10px;" ng-click="pinpanel()" ></span>
+                        <span class=" hand-cursor glyphicon glyphicon-chevron-right" ng-click="showToogled()" style="font-size: 17px !important;top: -17px;right: 10px;" ng-if="pinned==true"></span>
                     </div>
                 </div>
                 <div ng-mouseout="mouseout()" ng-mouseover="mouseover()" style="height:100%">

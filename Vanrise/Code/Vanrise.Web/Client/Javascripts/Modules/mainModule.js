@@ -42,7 +42,12 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
 
 
     }
-    
+    $scope.showToogled = function () {
+        $scope.toogled = true;
+    }
+    $scope.hideToogled = function () {
+        $scope.toogled = false;
+    }
     var timer;
     $scope.show = false;
     $scope.mouseover = function () {
