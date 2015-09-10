@@ -16,4 +16,5 @@
 	Runtime			C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
 	Queueing		C:\TFS\BusinessProcess\Code\Vanrise.Queueing.Web\Queueing
 	Billing			C:\TFS\TOneV2\Code\TOneV2\TOne.Billing.Web\Billing
+	CDR				C:\TFS\TOneV2\Code\TOneV2\TOne.CDR.Web\CDR
 					

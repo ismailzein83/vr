@@ -401,6 +401,10 @@
       <Project>{cab55227-6fda-4012-8a59-168ad30f96d2}</Project>
       <Name>TOne.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.CDR.Web\TOne.CDR.Web.csproj">
+      <Project>{a5fb7fdc-5ef5-4c01-8650-306bf0e04f49}</Project>
+      <Name>TOne.CDR.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.CDRProcess.Arguments\TOne.CDRProcess.Arguments.csproj">
       <Project>{34c38ef3-c2d1-41d7-ab7c-e375f030b5f3}</Project>
       <Name>TOne.CDRProcess.Arguments</Name>
