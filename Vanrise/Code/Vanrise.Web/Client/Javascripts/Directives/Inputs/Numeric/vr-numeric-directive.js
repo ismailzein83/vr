@@ -18,7 +18,9 @@
                 stepvalue: '@',
                 upsign: '@',
                 downsign: '@',
-                customvalidate: '&'
+                customvalidate: '&',
+                placeholder: '@'
+
             },
             controller: function ($scope, $element) {
 
@@ -95,6 +97,7 @@
                         ctrl.maxValue = (attrs.maxvalue != undefined) ? parseInt(ctrl.maxvalue) : undefined;
                         ctrl.stepValue = (attrs.stepvalue != undefined) ? parseInt(ctrl.stepvalue) : 1;
                         ctrl.unitValue = (attrs.unit != undefined) ? ctrl.unit : '';
+                        ctrl.placelHolder = (attrs.placeholder != undefined) ? ctrl.placeholder : '';
                         ctrl.increment = function () {
                             var avrege;
                             if (isNaN(parseFloat(ctrl.value))) {
@@ -181,7 +184,7 @@
                     labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';               
                 var numericTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
                                             + '<div  class="vr-numeric" ng-style="ctrl.getInputeStyle()">'
-                                                   + '<input class="form-control  border-radius input-box" type="text" ng-change="ctrl.notifyUserChange()" id="mainInput" ng-model="ctrl.value" >'
+                                                   + '<input class="form-control  border-radius input-box" type="text" placeholder="{{ctrl.placelHolder}}" ng-change="ctrl.notifyUserChange()" id="mainInput" ng-model="ctrl.value" >'
                                                     + '<div class="vr-numeric-control" ng-class="ctrl.getNumericControlClass()">'
                                                         + '<span class="unit" ng-bind="ctrl.unitValue"></span>'
                                                         + '<div class="hand-cursor arrow-box" ng-click="ctrl.increment()" ng-style="{\'color\':ctrl.upColor}">'

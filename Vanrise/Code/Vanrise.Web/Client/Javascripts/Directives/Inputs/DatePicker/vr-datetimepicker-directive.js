@@ -31,7 +31,8 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
         scope: {
             value: '=',
             hint:'@',
-            customvalidate: '&'
+            customvalidate: '&',
+            placeholder: '@'
         },
         controller: function ($scope, $element, $attrs) {
             var divDatePicker = $element.find('#divDatePicker');
@@ -130,6 +131,7 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
 
 
             var ctrl = $scope.ctrl;
+            ctrl.placelHolder = ($attrs.placeholder != undefined) ? ctrl.placeholder : '';
             ctrl.updateModelOnKeyUp = function (e) {
                 var $this = angular.element(e.currentTarget);
                 if (moment($this.val(), format, true).isValid()) {
@@ -276,11 +278,11 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                  '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false"  >'
                   + '<div id="mainInput" ng-model="ctrl.value" class="form-control " ng-style="ctrl.getInputeStyle()" style="border-radius: 4px;height: auto;padding: 0px;">'
                         + '<div  class="input-group date datetime-controle"  id="divDatePicker"  >'
-                                + '<input class="form-control vr-date-input" ng-style="ctrl.getInputeStyle()" style="height:25px;padding:0px 5px;"  ng-keyup="ctrl.updateModelOnKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
+                                + '<input class="form-control vr-date-input"  placeholder="{{ctrl.placelHolder}}" ng-style="ctrl.getInputeStyle()" style="height:25px;padding:0px 5px;"  ng-keyup="ctrl.updateModelOnKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
                                 + icontemplate
                             + '</div>'
                       + '</div>'
-                      + '<span  ng-if="ctrl.hint!=undefined" ng-mouseenter="ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7;top:-10px" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>'
+                      + '<span  ng-if="ctrl.hint!=undefined"  ng-mouseenter="ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7;top:-10px" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>'
 
                     + '</div>';
 

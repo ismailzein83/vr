@@ -80,11 +80,9 @@
                             isUserChange = true;
                         };
                         ctrl.placelHolder = (attrs.placeholder != undefined) ? ctrl.placeholder : '';
-                        console.log()
                         ctrl.readOnly = attrs.readonly != undefined;
                         if (attrs.hint != undefined) {
                             ctrl.hint = attrs.hint;
-                            console.log(attrs.hint);
                         }
                             ctrl.hint = attrs.hint;
                         ctrl.getInputeStyle = function () {
