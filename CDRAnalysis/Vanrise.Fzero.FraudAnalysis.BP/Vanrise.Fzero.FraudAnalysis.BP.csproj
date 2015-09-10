@@ -108,7 +108,7 @@
     </XamlAppDef>
   </ItemGroup>
   <ItemGroup>
-    <XamlAppDef Include="AssignStrategyExecutionCasesProcess.xaml">
+    <XamlAppDef Include="AssignStrategyCasesProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>

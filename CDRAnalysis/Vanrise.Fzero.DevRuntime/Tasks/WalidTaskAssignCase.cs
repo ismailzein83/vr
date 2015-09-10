@@ -25,7 +25,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             BPClient bpClient = new BPClient();
             var input = new CreateProcessInput
             {
-                InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.AssignStrategyExecutionCasesProcessInput
+                InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.AssignStrategyCasesProcessInput
                 {
 
                 }

@@ -4,7 +4,7 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 {
-    public class AssignStrategyExecutionCasesProcessInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
+    public class AssignStrategyCasesProcessInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
     {
         public override string GetTitle()
         {
