@@ -115,26 +115,30 @@
                     </vr-columns>
                 </vr-row>
             </div>
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-section title="Update Case">
+                        <vr-columns width="normal">
+                            <vr-select label="Status"
+                                       datasource="caseStatuses"
+                                       selectedvalues="selectedCaseStatus"
+                                       datavaluefield="value"
+                                       datatextfield="description"
+                                       onselectionchanged="toggleValidTill"
+                                       isrequired>
+                            </vr-select>
+                        </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-datetimepicker label="Valid Till"
+                                               value="validTill"
+                                               type="dateTime"
+                                               ng-show="whiteListSelected">
+                            </vr-datetimepicker>
+                        </vr-columns>
+                    </vr-section>
+                </vr-columns>
+            </vr-row>
 
-            <vr-section title="Update Case">
-                <vr-columns width="normal">
-                    <vr-select label="Status"
-                               datasource="caseStatuses"
-                               selectedvalues="selectedCaseStatus"
-                               datavaluefield="value"
-                               datatextfield="description"
-                               onselectionchanged="toggleValidTill"
-                               isrequired>
-                    </vr-select>
-                </vr-columns>
-                <vr-columns width="normal">
-                    <vr-datetimepicker label="Valid Till"
-                                       value="validTill"
-                                       type="dateTime"
-                                       ng-show="whiteListSelected">
-                    </vr-datetimepicker>
-                </vr-columns>
-            </vr-section>
         </vr-form>
     </vr-modalbody>
     <div>
