@@ -16,12 +16,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
     public class LoadAccountNumbersInput
     {
         public BaseQueue<AccountNumberBatch> OutputQueue { get; set; }
-
-        public DateTime FromDate { get; set; }
-
-
-        public DateTime ToDate { get; set; }
-
     }
 
     #endregion
@@ -32,14 +26,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<AccountNumberBatch>> OutputQueue { get; set; }
-
-        [RequiredArgument]
-        public InArgument<DateTime> FromDate { get; set; }
-
-
-        [RequiredArgument]
-        public InArgument<DateTime> ToDate { get; set; }
-
 
         #endregion
 
@@ -58,7 +44,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             List<String> numbers = new List<String>();
             int totalCount = 0;
             IStrategyExecutionDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
-            dataManager.LoadAccountNumbersfromStrategyExecutionDetails(inputArgument.FromDate, inputArgument.ToDate, 0, (number) =>
+            dataManager.LoadAccountNumbersfromStrategyExecutionDetails(0, (number) =>
                 {
                     numbers.Add(number);
                     if (numbers.Count >= 10)
@@ -90,8 +76,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             return new LoadAccountNumbersInput
             {
-                FromDate = this.FromDate.Get(context),
-                ToDate = this.ToDate.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)
             };
         }
