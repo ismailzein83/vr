@@ -56,6 +56,16 @@ namespace TOne.Analytics.Data.SQL
                     CTEStatement = null
                 });
 
+            s_AllDimensionsConfig.Add(AnalyticDimension.SupplierZone,
+                new AnalyticDimensionConfig
+                {
+                    IdColumn = "ts.SupplierZoneID",
+                    NameColumn = "z.Name",
+                    JoinStatements = new List<string>() { " JOIN Zone z WITH (NOLOCK) ON z.ZoneID = ts.SupplierZoneID " },
+                    GroupByStatements = new List<string>() { " ts.SupplierZoneID, z.Name " },
+                    CTEStatement = null
+                });
+
             s_AllDimensionsConfig.Add(AnalyticDimension.Customer,
                 new AnalyticDimensionConfig
                 {
@@ -151,8 +161,8 @@ namespace TOne.Analytics.Data.SQL
             s_AllDimensionsConfig.Add(AnalyticDimension.CodeBuy,
                 new AnalyticDimensionConfig
                 {
-                    IdColumn = "ts.SupplierCode",
-                    NameColumn = "ts.SupplierCode",
+                    IdColumn = "ISNULL(ts.SupplierCode,'N/A')",
+                    NameColumn = "ISNULL(ts.SupplierCode,'N/A')",
                     JoinStatements = null,
                     GroupByStatements = new List<string>() { "ts.SupplierCode" },
                     CTEStatement = null
@@ -302,7 +312,7 @@ namespace TOne.Analytics.Data.SQL
                 {
                     GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.DeliveredAttempts_Expression },
                     MappedSQLColumn = MeasureValueExpression.DeliveredAttempts_Expression.ColumnAlias,
-                    GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.DeliveredAttempts_Expression.ColumnAlias)
+                    GetMeasureValue = (reader, record) => GetReaderValue<int>(reader, MeasureValueExpression.DeliveredAttempts_Expression.ColumnAlias)
                 });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.DurationsInSeconds,
@@ -365,6 +375,21 @@ namespace TOne.Analytics.Data.SQL
                         var successfulAttempts = GetReaderValue<int>(reader, MeasureValueExpression.SuccessfulAttempts_Expression.ColumnAlias);
                         var durationInMinutes = GetReaderValue<Decimal>(reader, MeasureValueExpression.DurationsInSeconds_Expression.ColumnAlias) / 60;
                         return successfulAttempts > 0 ? (durationInMinutes * successfulAttempts) : 0;
+                    }
+                });
+
+            s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.DeliveredASR,
+                new AnalyticMeasureFieldConfig
+                {
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> {
+                                    (query) => MeasureValueExpression.Attempts_Expression,
+                                    (query) => MeasureValueExpression.DeliveredAttempts_Expression
+                                },
+                    GetMeasureValue = (reader, record) =>
+                    {
+                        var attempts = GetReaderValue<int>(reader, MeasureValueExpression.Attempts_Expression.ColumnAlias);
+                        var deliveredAttempts = GetReaderValue<int>(reader, MeasureValueExpression.DeliveredAttempts_Expression.ColumnAlias) * 100;
+                        return deliveredAttempts / attempts;
                     }
                 });
 
@@ -431,6 +456,46 @@ namespace TOne.Analytics.Data.SQL
                         var utilizationInMinutes = GetReaderValue<Decimal>(reader, MeasureValueExpression.UtilizationInSeconds_Expression.ColumnAlias) / 60;
                         var durationInMinutes = GetReaderValue<Decimal>(reader, MeasureValueExpression.DurationsInSeconds_Expression.ColumnAlias) / 60;
                         return nominalCapacity > 0 ? ((utilizationInMinutes - durationInMinutes * 100) / nominalCapacity) : 0;
+                    }
+                });
+
+            s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.BillingNumberOfCalls,
+                new AnalyticMeasureFieldConfig
+                {
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.BillingNumberOfCalls_Expression },
+                    MappedSQLColumn = MeasureValueExpression.BillingNumberOfCalls_Expression.ColumnAlias,
+                    GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.BillingNumberOfCalls_Expression.ColumnAlias)
+                });
+
+            s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.CostNets,
+                new AnalyticMeasureFieldConfig
+                {
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.CostNets_Expression },
+                    MappedSQLColumn = MeasureValueExpression.CostNets_Expression.ColumnAlias,
+                    GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.CostNets_Expression.ColumnAlias)
+                });
+
+            s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.SaleNets,
+                new AnalyticMeasureFieldConfig
+                {
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.SaleNets_Expression },
+                    MappedSQLColumn = MeasureValueExpression.SaleNets_Expression.ColumnAlias,
+                    GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.SaleNets_Expression.ColumnAlias)
+                });
+
+            s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.Profit,
+                new AnalyticMeasureFieldConfig
+                {
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> {
+                                    (query) => MeasureValueExpression.CostNets_Expression,
+                                    (query) => MeasureValueExpression.SaleNets_Expression
+                                },
+                    MappedSQLColumn = "Measure_Profit",
+                    GetMeasureValue = (reader, record) =>
+                    {
+                        var costNets = GetReaderValue<double>(reader, MeasureValueExpression.CostNets_Expression.ColumnAlias);
+                        var saleNets = GetReaderValue<double>(reader, MeasureValueExpression.SaleNets_Expression.ColumnAlias);
+                        return saleNets - costNets;
                     }
                 });
         }

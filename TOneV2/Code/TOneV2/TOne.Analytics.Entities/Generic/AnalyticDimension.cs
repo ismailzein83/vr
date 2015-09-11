@@ -20,6 +20,7 @@ namespace TOne.Analytics.Entities
         CodeSales = 9,
         CodeBuy = 10,
         Date = 11,
-        Hour = 12
+        Hour = 12,
+        SupplierZone = 13
     }
 }

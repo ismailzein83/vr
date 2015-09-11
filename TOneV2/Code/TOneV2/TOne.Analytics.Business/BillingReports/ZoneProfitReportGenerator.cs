@@ -13,7 +13,7 @@ namespace TOne.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(TOne.Entities.ReportParameters parameters)
         {
             BillingStatisticManager manager = new BillingStatisticManager();
-            List<ZoneProfitFormatted> zoneProfit = manager.GetZoneProfit(parameters.FromTime, parameters.ToTime ,parameters.SupplierId, parameters.CustomerId ,parameters.GroupByCustomer ,parameters.SupplierAMUId ,parameters.CustomerAMUId );
+            List<ZoneProfitFormatted> zoneProfit = manager.GetZoneProfit(parameters.FromTime, parameters.ToTime, parameters.CustomerId, parameters.SupplierId, parameters.GroupByCustomer, parameters.SupplierAMUId, parameters.CustomerAMUId);
 
             //List<CarrierSummaryDailyFormatted> zs = manager.GetDailyCarrierSummary(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2015-05-01 00:00:00"), null, null, false, true, null , null );
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();

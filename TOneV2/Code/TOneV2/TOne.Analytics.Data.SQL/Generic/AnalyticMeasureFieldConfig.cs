@@ -10,8 +10,6 @@ namespace TOne.Analytics.Data.SQL
 {
     public class AnalyticMeasureFieldConfig
     {
-        public Func<AnalyticQuery, string> GetFieldExpression { get; set; }
-
         public List<Func<AnalyticQuery, MeasureValueExpression>> GetColumnsExpressions { get; set; }
 
         /// <summary>
@@ -29,7 +27,6 @@ namespace TOne.Analytics.Data.SQL
         public string ColumnAlias { get; set; }
 
         public string JoinStatement { get; set; }
-
 
         #region Measure Values Columns
 
@@ -49,12 +46,33 @@ namespace TOne.Analytics.Data.SQL
         public static MeasureValueExpression PGAD_Expression = new MeasureValueExpression { ColumnAlias = "Measure_PGAD", Expression = "CONVERT(DECIMAL(10,2),Avg(ts.PGAD))" };
         public static MeasureValueExpression AveragePDD_Expression = new MeasureValueExpression { ColumnAlias = "Measure_AveragePDD", Expression = "CONVERT(DECIMAL(10,2),Avg(ts.PDDinSeconds))" };
 
-
-
-
         public static MeasureValueExpression NominalCapacityInE1s_Expression = new MeasureValueExpression { ColumnAlias = "Measure_NominalCapacityInE1s", Expression = " sum(isnull(CustCA.NominalCapacityInE1s,0))*30*60", JoinStatement = " LEFT JOIN CarrierAccount AS CustCA WITH (NOLOCK) ON ts.CustomerID = CustCA.CarrierAccountID" };
-        
+
+        public static MeasureValueExpression BillingNumberOfCalls_Expression = new MeasureValueExpression { ColumnAlias = "Measure_BillingNumberOfCalls", Expression = "ISNULL(SUM(BS.NumberOfCalls), 0)" };
+        public static MeasureValueExpression CostNets_Expression = new MeasureValueExpression { ColumnAlias = "Measure_CostNets", Expression = "ISNULL(SUM(BS.Cost_Nets / ISNULL(BS.CCLastRate,1)), 0)" };
+        public static MeasureValueExpression SaleNets_Expression = new MeasureValueExpression { ColumnAlias = "Measure_SaleNets", Expression = "ISNULL(SUM(BS.Sale_Nets / ISNULL(BS.CSLastRate,1)), 0)" };
+        public static MeasureValueExpression SaleRate_Expression = new MeasureValueExpression { ColumnAlias = "Measure_SaleRate", Expression = "ISNULL(SUM(BS.Sale_Rate / ISNULL(BS.CSLastRate,1)), 0)" };
+        public static MeasureValueExpression CostRate_Expression = new MeasureValueExpression { ColumnAlias = "Measure_CostRate", Expression = "ISNULL(SUM(BS.Cost_Rate / ISNULL(BS.CCLastRate,1)), 0)" };
+        public static MeasureValueExpression PricedDuration_Expression = new MeasureValueExpression { ColumnAlias = "Measure_PricedDuration", Expression = "ISNULL(SUM(BS.CostDuration) / 60, 0)" };
+
         #endregion
+
+        
+    }
+    public class CTEStatement
+    {
+        public const string Billing = "Billing_Currency AS ( SELECT BS.NumberOfCalls NumberOfCalls, BS.Cost_Nets Cost_Nets, BS.Sale_Nets  Sale_Nets, BS.SaleZoneID SaleZoneID, CS.LastRate CSLastRate, CC.LastRate CCLastRate FROM  Billing_Stats BS WITH(NOLOCK,Index(IX_Billing_Stats_Date))  LEFT JOIN Currency CS WITH (NOLOCK) ON  CS.CurrencyID = BS.sale_currency LEFT JOIN Currency CC WITH (NOLOCK) ON  CC.CurrencyID = BS.cost_currency WHERE  BS.CallDate >= @fromDate AND BS.CallDate < @ToDate )";
+        public const string Switch = "";
+    }
+
+    public class JoinStatement
+    {
+        public const string Billing = "LEFT JOIN Billing_Currency BS WITH (NOLOCK) ON  ts.OurZoneID = BS.SaleZoneID";
+    }
+
+    public class WhereStatement
+    {
+        public const string Billing = "AND TS.CustomerID NOT IN (SELECT grasc.CID FROM dbo.GetRepresentedAsSwitchCarriers() grasc) AND TS.SupplierID NOT IN (SELECT grasc.CID FROM dbo.GetRepresentedAsSwitchCarriers() grasc)";
     }
 
 }

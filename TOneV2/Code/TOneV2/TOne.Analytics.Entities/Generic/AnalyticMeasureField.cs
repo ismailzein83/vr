@@ -28,6 +28,11 @@ namespace TOne.Analytics.Entities
         PGAD = 17,
         AveragePDD = 18,
         GrayArea = 19,
-        GreenArea = 20
+        GreenArea = 20,
+        DeliveredASR = 21,
+        BillingNumberOfCalls = 22,
+        CostNets = 23,
+        SaleNets = 24,
+        Profit = 25
     }
 }

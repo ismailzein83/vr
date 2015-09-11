@@ -2,8 +2,8 @@
 
     "use strict";
 
-    GenericAnalyticGridController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticDimensionEnum', 'AnalyticsService'];
-    function GenericAnalyticGridController($scope, GenericAnalyticAPIService, GenericAnalyticDimensionEnum, analyticsService) {
+    GenericAnalyticSubGridController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticDimensionEnum', 'AnalyticsService'];
+    function GenericAnalyticSubGridController($scope, GenericAnalyticAPIService, GenericAnalyticDimensionEnum, analyticsService) {
         var filter = {};
         var measureFields = [];
         var selectedGroupKeys = [] , parentGroupKeys = [];
@@ -151,6 +151,6 @@
         }
 
     }
-    appControllers.controller('GenericAnalyticGridController', GenericAnalyticGridController);
+    appControllers.controller('GenericAnalyticSubGridController', GenericAnalyticSubGridController);
 
 })(appControllers);

@@ -83,6 +83,9 @@ namespace TOne.Analytics.Data.SQL
             StringBuilder ctePartBuilder = new StringBuilder();
             string tableNamePartBuilder = "TrafficStats";
 
+            List<string> lstCTEStatements = new List<string>();
+            List<string> lstJoinStatement = new List<string>();
+            List<string> lstWhereStatement = new List<string>();
             //adding group fields related parts to the query
             foreach (AnalyticDimension groupField in input.Query.DimensionFields)
             {                
@@ -127,6 +130,29 @@ namespace TOne.Analytics.Data.SQL
                             AddColumnToSelectPart(selectPartBuilder, String.Format("{0} AS {1}", measureColumn.Expression, measureColumn.ColumnAlias));
                             if (measureColumn.JoinStatement != null)
                                 AddStatementToJoinPart(joinPartBuilder, measureColumn.JoinStatement);
+
+
+                            //Measures related to Billing
+                            if (measureField == AnalyticMeasureField.BillingNumberOfCalls || measureField == AnalyticMeasureField.CostNets ||
+                                measureField == AnalyticMeasureField.SaleNets || measureField == AnalyticMeasureField.Profit)
+                            {
+                                if(!lstCTEStatements.Contains(CTEStatement.Billing))
+                                {
+                                    lstCTEStatements.Add(CTEStatement.Billing);
+                                    AddStatementToCTEPart(ctePartBuilder, CTEStatement.Billing);
+                                }
+                                if (!lstJoinStatement.Contains(JoinStatement.Billing))
+                                {
+                                    lstJoinStatement.Add(JoinStatement.Billing);
+                                    AddStatementToJoinPart(joinPartBuilder, JoinStatement.Billing);
+                                }
+                                if (!lstWhereStatement.Contains(WhereStatement.Billing))
+                                {
+                                    lstWhereStatement.Add(WhereStatement.Billing);
+                                    AddFilterToFilterPart(filterPartBuilder, WhereStatement.Billing);
+                                }
+                            }
+
                             addedMeasureColumns.Add(measureColumn.ColumnAlias);
                         }
                     }
@@ -135,6 +161,10 @@ namespace TOne.Analytics.Data.SQL
 
             foreach(DimensionFilter dimensionFilter in input.Query.Filters)
             {
+
+                if (dimensionFilter.Dimension == AnalyticDimension.CodeSales || dimensionFilter.Dimension == AnalyticDimension.CodeBuy)
+                    tableNamePartBuilder = "TrafficStatsByCode";
+
                 AnalyticDimensionConfig filterFieldConfig = dimensionsFilterConfig[dimensionFilter.Dimension];
 
 
@@ -172,11 +202,16 @@ namespace TOne.Analytics.Data.SQL
         {
             if (values != null && values.Count() > 0)
             {
-                if (values[0].GetType() == typeof(string))
-                    filterBuilder.AppendFormat("AND {0} = '{1}'", column, String.Join(", ", values));
+                if (values[0].GetType() == typeof(string) || values[0].GetType() == typeof(DateTime))
+                    filterBuilder.AppendFormat(" AND {0} = '{1}' ", column, String.Join(", ", values));
                 else
-                    filterBuilder.AppendFormat("AND {0} = {1}", column, String.Join(", ", values));
+                    filterBuilder.AppendFormat(" AND {0} = {1} ", column, String.Join(", ", values));
             }
+        }
+        public void AddFilterToFilterPart(StringBuilder filterBuilder, string statement)
+        {
+            if (statement.Length != 0)
+                filterBuilder.Append(" " + statement + " ");
         }
 
         void AddColumnToSelectPart(StringBuilder selectPartBuilder, string column)
@@ -200,7 +235,7 @@ namespace TOne.Analytics.Data.SQL
         void AddStatementToCTEPart(StringBuilder ctePartBuilder, string statement)
         {
             if (statement.Length != 0)
-                ctePartBuilder.Append(statement + " , ");
+                ctePartBuilder.Append( " " + statement + " , ");
         }
 
         void AddStatementToJoinPart(StringBuilder joinPartBuilder, string statement)
