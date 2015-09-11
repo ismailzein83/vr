@@ -16,7 +16,6 @@ namespace Vanrise.Fzero.DevRuntime
     {
         static void Main(string[] args)
         {
-           
             if(ConfigurationManager.AppSettings["IsRuntimeService"] == "true")
             {
                 BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
