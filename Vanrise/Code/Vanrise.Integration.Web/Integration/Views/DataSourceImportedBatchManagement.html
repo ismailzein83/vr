@@ -38,7 +38,8 @@
         <vr-row>
             <vr-columns width="fullrow" simplecol>
 
-                <vr-datagrid datasource="importedBatches"
+                <vr-datagrid defaultsortbyfieldname="'ID'" defaultsortdirection="'DESC'"
+                             datasource="importedBatches"
                              dataretrievalfunction="dataRetrievalFunction"
                              pagingtype="'PagingOnScroll'"
                              on-ready="gridReady">
