@@ -263,13 +263,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public List<RelatedNumber> GetRelatedNumbersByAccountNumber(string accountNumber)
         {
-            List<string> relatedNumbers = ExecuteScalarSP("FraudAnalysis.sp_RelatedNumbers_GetByAccountNumber", accountNumber).ToString().Split(',').ToList();
-
-            List<RelatedNumber> list = new List<RelatedNumber>();
+            string result = ExecuteScalarSP("FraudAnalysis.sp_RelatedNumbers_GetByAccountNumber", accountNumber) as string;
             
-            foreach (string number in relatedNumbers)
+            List<RelatedNumber> list = new List<RelatedNumber>();
+
+            if (result != null)
             {
-                list.Add(new RelatedNumber() { AccountNumber = number });
+                List<string> relatedNumbers = result.ToString().Split(',').ToList();
+
+                foreach (string number in relatedNumbers)
+                {
+                    list.Add(new RelatedNumber() { AccountNumber = number });
+                }
             }
 
             return list;

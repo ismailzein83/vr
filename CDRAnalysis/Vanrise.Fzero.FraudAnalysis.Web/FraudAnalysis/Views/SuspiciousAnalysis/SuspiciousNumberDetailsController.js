@@ -25,7 +25,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
-        console.log(parameters);
+
         if (parameters != undefined && parameters != null) {
             $scope.accountNumber = parameters.AccountNumber;
             $scope.fromDate = parameters.FromDate;
@@ -34,9 +34,12 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
     }
 
     function defineScope() {
+        $scope.showOccurancesGrid = true;
+        $scope.message = undefined;
         $scope.detailAggregateValues = [];
+        $scope.showProfileOptions = true;
         $scope.showDate = false;
-        $scope.selectedProfileSource = '';
+        $scope.selectedProfileSource = undefined;
         $scope.selectedTabIndex = 0;
         $scope.occurances = [];
         $scope.normalCDRs = [];
@@ -84,8 +87,15 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             return CaseManagementAPIService.GetFilteredAccountSuspicionDetails(dataRetrievalInput)
             .then(function (response) {
                 occurancesLoaded = true;
-                console.log(response);
-                $scope.detailAggregateValues.push(response.Data[0]) ;
+                
+                if (response.Data.length > 0)
+                    $scope.detailAggregateValues.push(response.Data[0]);
+                else {
+                    $scope.showOccurancesGrid = false;
+                    $scope.message = "No records found";
+                    $scope.showProfileOptions = false;
+                    $scope.showDate = true;
+                }
 
                 angular.forEach(response.Data, function (item) {
                     var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", item.SuspicionLevelID);
@@ -321,7 +331,6 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         return CaseManagementAPIService.GetRelatedNumbersByAccountNumber($scope.accountNumber)
             .then(function (response) {
                 relatedNumbersLoaded = true;
-                console.log(response);
 
                 angular.forEach(response, function (item) {
                     $scope.relatedNumbers.push({ RelatedNumber: item.AccountNumber });
@@ -340,9 +349,6 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
     }
 
     function detailRelatedNumber(gridObject) {
-        console.log("gridObject");
-        console.log(gridObject);
-
         var modalSettings = {};
 
         var parameters = {
