@@ -1923,6 +1923,7 @@ opacity:0.9 ;
 }
 .big-data-grid .container{   
     padding: 15px;
+    width:100%  !important;
 }
 
 
