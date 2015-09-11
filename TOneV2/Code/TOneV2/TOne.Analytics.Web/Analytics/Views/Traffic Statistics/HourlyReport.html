@@ -68,13 +68,14 @@
                             <vr-be-carriergroup type="'Supplier'" selectedvalues="selectedSuppliers"></vr-be-carriergroup>
                         </vr-columns>
                         <vr-columns width="normal">
-                            <vr-choices selectedindex="selectedConnectionIndex" onselectionchanged="onSelectionChanged()">
+                            <vr-choices islabelswitch selectedindex="selectedConnectionIndex" onselectionchanged="onSelectionChanged()">
                                 <vr-choice isselected="noneSelected">None</vr-choice>
                                 <vr-choice isselected="inSelected">In</vr-choice>
                                 <vr-choice isselected="outSelected">Out</vr-choice>
                             </vr-choices>
-                            <vr-select label="Connection" datasource="connections"
-                                       datatextfield="DisplayName" datavaluefield="ID" selectedvalues="selectedConnections" ismultipleselection></vr-select>
+                            <vr-select ng-show="!noneSelected" datasource="connections"
+                                       datatextfield="DisplayName" entityname="Connection" datavaluefield="ID" selectedvalues="selectedConnections" ismultipleselection></vr-select>
+                            <div ng-show="noneSelected" style="height:29px"></div>
                         </vr-columns>
                         </vr-row>
 </vr-columns>

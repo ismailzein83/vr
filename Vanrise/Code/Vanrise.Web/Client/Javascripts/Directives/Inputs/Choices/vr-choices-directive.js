@@ -86,8 +86,8 @@ app.directive('vrChoices', [function () {
         bindToController: true,
         compile: function (element, attrs) {
             var radioclass = (attrs.isradio != undefined) ? " radio-btn-groupe " : "";
-            var suitchclass = (attrs.islabelsuitch != undefined) ? " switch-btn-groupe " : "";
-            element.html('<div class="btn-group btn-group-custom vr-tabs ' + radioclass + suitchclass +'"   >' + element.html() + '</div>');
+            var switchclass = (attrs.islabelswitch != undefined) ? " switch-btn-groupe " : "";
+            element.html('<div class="btn-group btn-group-custom vr-tabs ' + radioclass + switchclass + '"   >' + element.html() + '</div>');
 
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
