@@ -168,9 +168,8 @@
                     <vr-columns width="fullrow" simplecol>
                         <vr-datagrid datasource="relatedNumbers"
                                      on-ready="onGridReady_RelatedNumbers"
-                                     dataretrievalfunction="dataRetrievalFunction_RelatedNumbers"
-                                     pagingtype="'PagingOnScroll'"
-                                     idfield="RelatedNumberID">
+                                     menuactions="relatedNumberMenuActions">
+
 
                             <vr-datagridcolumn headertext="'Related Number'" field="'RelatedNumber'" type="'Text'"></vr-datagridcolumn>
                         </vr-datagrid>

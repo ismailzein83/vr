@@ -31,10 +31,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredDetailsByCaseID(input));
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<RelatedNumber> GetFilteredRelatedNumbersByAccountNumber(Vanrise.Entities.DataRetrievalInput<RelatedNumberResultQuery> input)
+        public List<RelatedNumber> GetRelatedNumbersByAccountNumber(string accountNumber)
         {
             ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredRelatedNumbersByAccountNumber(input));
+            return dataManager.GetRelatedNumbersByAccountNumber(accountNumber);
         }
 
         public Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> UpdateAccountCase(AccountCaseUpdateResultQuery input)
@@ -55,7 +55,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             return updateOperationOutput;
         }
-        
+
         public Vanrise.Entities.IDataRetrievalResult<DailyVolumeLoose> GetDailyVolumeLooses(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
         {
             ICaseManagementDataManager manager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
@@ -63,10 +63,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         }
 
         public Vanrise.Entities.IDataRetrievalResult<CasesSummary> GetCasesSummary(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
-         {
-             ICaseManagementDataManager manager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
-             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, manager.GetCasesSummary(input));
-         }
+        {
+            ICaseManagementDataManager manager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, manager.GetCasesSummary(input));
+        }
 
         public IEnumerable<StrategyCases> GetStrategyCases(DateTime fromDate, DateTime toDate)
         {
@@ -141,8 +141,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             ICaseManagementDataManager manager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
 
             AccountCase accountCase = manager.GetLastAccountCaseByAccountNumber(accountNumber);
-            int caseID; 
-            bool succeeded= false;
+            int caseID;
+            bool succeeded = false;
 
             if (accountCase == null || (accountCase.StatusID == CaseStatus.ClosedFraud) || (accountCase.StatusID == CaseStatus.ClosedWhiteList))
             {
@@ -157,13 +157,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 succeeded = manager.InsertOrUpdateAccountStatus(accountNumber, CaseStatus.Open);
 
             }
-                
+
             else
             {
                 caseID = accountCase.CaseID;
             }
 
-            
+
 
             if (!succeeded) return false;
 

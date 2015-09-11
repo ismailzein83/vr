@@ -46,11 +46,11 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredDetailsByCaseID(input));
         }
 
-        [HttpPost]
-        public object GetFilteredRelatedNumbersByAccountNumber(Vanrise.Entities.DataRetrievalInput<RelatedNumberResultQuery> input)
+        [HttpGet]
+        public List<RelatedNumber> GetRelatedNumbersByAccountNumber(string accountNumber)
         {
             CaseManagmentManager manager = new CaseManagmentManager();
-            return GetWebResponse(input, manager.GetFilteredRelatedNumbersByAccountNumber(input));
+            return manager.GetRelatedNumbersByAccountNumber(accountNumber);
         }
 
         [HttpPost]

@@ -1,6 +1,6 @@
-﻿SuspiciousNumberDetailsController.$inject = ["$scope", "CaseManagementAPIService", "NormalCDRAPIService", "NumberProfileAPIService", "StrategyAPIService", "UsersAPIService", "SuspicionLevelEnum", "CaseStatusEnum", "SuspicionOccuranceStatusEnum", "CallTypeEnum", "UtilsService", "VRNavigationService", "VRNotificationService"];
+﻿SuspiciousNumberDetailsController.$inject = ["$scope", "CaseManagementAPIService", "NormalCDRAPIService", "NumberProfileAPIService", "StrategyAPIService", "UsersAPIService", "SuspicionLevelEnum", "CaseStatusEnum", "SuspicionOccuranceStatusEnum", "CallTypeEnum", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService"];
 
-function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, NormalCDRAPIService, NumberProfileAPIService, StrategyAPIService, UsersAPIService, SuspicionLevelEnum, CaseStatusEnum, SuspicionOccuranceStatusEnum, CallTypeEnum, UtilsService, VRNavigationService, VRNotificationService) {
+function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, NormalCDRAPIService, NumberProfileAPIService, StrategyAPIService, UsersAPIService, SuspicionLevelEnum, CaseStatusEnum, SuspicionOccuranceStatusEnum, CallTypeEnum, UtilsService, VRNavigationService, VRNotificationService, VRModalService) {
     var gridAPI_Occurances = undefined;
     var occurancesLoaded = false;
 
@@ -15,6 +15,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
     var gridAPI_RelatedNumbers = undefined;
     var relatedNumbersLoaded = false;
+    var relatedNumberMenuActions = [];
 
     var users = [];
 
@@ -148,18 +149,6 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             });
         }
 
-        $scope.dataRetrievalFunction_RelatedNumbers = function (dataRetrievalInput, onResponseReady) {
-
-            return CaseManagementAPIService.GetFilteredRelatedNumbersByAccountNumber(dataRetrievalInput)
-                .then(function (response) {
-
-                    relatedNumbersLoaded = true;
-                    onResponseReady(response);
-                })
-                .catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                });
-        }
 
         $scope.updateAccountCase = function () {
 
@@ -228,6 +217,8 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         $scope.toggleValidTill = function (selectedStatus) {
             $scope.whiteListSelected = (selectedStatus != undefined && selectedStatus.value == CaseStatusEnum.ClosedWhitelist.value) ? true : false;
         }
+
+        defineRelatedNumberMenuActions();
     }
 
     function load() {
@@ -260,7 +251,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             return retrieveData_CaseHistory();
 
         else if (gridAPI_RelatedNumbers != undefined && $scope.selectedTabIndex == 4 && !relatedNumbersLoaded)
-            return retrieveData_RelatedNumbers();
+            return loadRelatedNumbers();
     }
 
     function retrieveData_Occurances() {
@@ -305,15 +296,6 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         return gridAPI_CaseHistory.retrieveData(query);
     }
 
-    function retrieveData_RelatedNumbers() {
-
-        var query = {
-            AccountNumber: $scope.accountNumber
-        };
-
-        return gridAPI_RelatedNumbers.retrieveData(query);
-    }
-
     function loadAggregateDefinitions() {
         return StrategyAPIService.GetAggregates()
             .then(function (response) {
@@ -332,6 +314,51 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                     users.push(item);
                 });
             });
+    }
+
+    function loadRelatedNumbers() {
+
+        return CaseManagementAPIService.GetRelatedNumbersByAccountNumber($scope.accountNumber)
+            .then(function (response) {
+                relatedNumbersLoaded = true;
+                console.log(response);
+
+                angular.forEach(response, function (item) {
+                    $scope.relatedNumbers.push({ RelatedNumber: item.AccountNumber });
+                });
+            })
+            .catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
+    }
+
+    function defineRelatedNumberMenuActions() {
+        $scope.relatedNumberMenuActions = [{
+            name: "Details",
+            clicked: detailRelatedNumber
+        }];
+    }
+
+    function detailRelatedNumber(gridObject) {
+        console.log("gridObject");
+        console.log(gridObject);
+
+        var modalSettings = {};
+
+        var parameters = {
+            AccountNumber: gridObject.RelatedNumber,
+            FromDate: $scope.fromDate,
+            ToDate: $scope.toDate
+        };
+
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.title = "Suspicious Number Details";
+            modalScope.onAccountCaseUpdated = function (accountSuspicionSummary) {
+                gridAPI.itemUpdated(accountSuspicionSummary);
+            }
+        };
+
+        VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/SuspiciousAnalysis/SuspiciousNumberDetails.html", parameters, modalSettings);
     }
 }
 

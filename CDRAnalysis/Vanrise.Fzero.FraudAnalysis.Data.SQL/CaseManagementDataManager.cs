@@ -261,14 +261,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return GetItemSP("FraudAnalysis.sp_StrategyExecutionDetails_GetSummaryByAccountNumber", AccountSuspicionSummaryMapper, accountNumber, from, to);
         }
 
-        public BigResult<RelatedNumber> GetFilteredRelatedNumbersByAccountNumber(Vanrise.Entities.DataRetrievalInput<RelatedNumberResultQuery> input)
+        public List<RelatedNumber> GetRelatedNumbersByAccountNumber(string accountNumber)
         {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                ExecuteNonQuerySP("FraudAnalysis.sp_RelatedNumbers_CreateTempByAccountNumber", tempTableName, input.Query.AccountNumber);
-            };
+            List<string> relatedNumbers = ExecuteScalarSP("FraudAnalysis.sp_RelatedNumbers_GetByAccountNumber", accountNumber).ToString().Split(',').ToList();
 
-            return RetrieveData(input, createTempTableAction, RelatedNumberMapper);
+            List<RelatedNumber> list = new List<RelatedNumber>();
+            
+            foreach (string number in relatedNumbers)
+            {
+                list.Add(new RelatedNumber() { AccountNumber = number });
+            }
+
+            return list;
         }
 
         
@@ -445,12 +449,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             bTSHighValueCases.Volume = (decimal)reader["Volume"];
             bTSHighValueCases.BTS_Id = GetReaderValue<int?>(reader, "BTS_Id");
             return bTSHighValueCases;
-        }
-
-        private RelatedNumber RelatedNumberMapper(IDataReader reader)
-        {
-            RelatedNumber relatedNumber = new RelatedNumber();
-            return relatedNumber;
         }
 
         #endregion

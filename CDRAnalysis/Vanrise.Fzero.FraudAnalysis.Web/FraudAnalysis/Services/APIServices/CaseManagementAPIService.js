@@ -7,7 +7,7 @@
         GetFilteredAccountSuspicionDetails: GetFilteredAccountSuspicionDetails,
         GetFilteredCasesByAccountNumber: GetFilteredCasesByAccountNumber,
         GetFilteredDetailsByCaseID: GetFilteredDetailsByCaseID,
-        GetFilteredRelatedNumbersByAccountNumber: GetFilteredRelatedNumbersByAccountNumber,
+        GetRelatedNumbersByAccountNumber: GetRelatedNumbersByAccountNumber,
         UpdateAccountCase: UpdateAccountCase,
         CancelAccountCases: CancelAccountCases
     });
@@ -43,8 +43,10 @@
         return BaseAPIService.post("/api/CaseManagement/GetFilteredDetailsByCaseID", input);
     }
 
-    function GetFilteredRelatedNumbersByAccountNumber(input) {
-        return BaseAPIService.post("/api/CaseManagement/GetFilteredRelatedNumbersByAccountNumber", input);
+    function GetRelatedNumbersByAccountNumber(accountNumber) {
+        return BaseAPIService.get("/api/CaseManagement/GetRelatedNumbersByAccountNumber", {
+            accountNumber: accountNumber
+        });
     }
 
     function UpdateAccountCase(input) {
