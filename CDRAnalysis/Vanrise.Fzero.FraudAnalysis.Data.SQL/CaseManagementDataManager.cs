@@ -417,7 +417,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 CaseID = (int)reader["CaseID"],
                 AccountNumber = reader["AccountNumber"] as string,
                 UserID = (int)reader["UserID"],
-                UserName = reader["UserName"] as string,
                 StatusID = (CaseStatus)reader["StatusID"],
                 StatusUpdatedTime = (DateTime)reader["StatusUpdatedTime"],
                 ValidTill = GetReaderValue<DateTime?>(reader, "ValidTill"),
