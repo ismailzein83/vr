@@ -23,7 +23,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         bool InsertAccountCaseHistory(int caseID, int? userID, CaseStatus caseStatus);
 
-        bool InsertOrUpdateAccountStatus(AccountStatus accountStatus);
+        bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus);
 
         bool LinkDetailToCase(string accountNumber, int caseID, CaseStatus caseStatus);
 
