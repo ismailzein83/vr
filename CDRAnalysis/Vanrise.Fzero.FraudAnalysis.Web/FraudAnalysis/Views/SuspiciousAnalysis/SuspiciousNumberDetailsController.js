@@ -21,7 +21,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
-
+        console.log(parameters);
         if (parameters != undefined && parameters != null) {
             $scope.accountNumber = parameters.AccountNumber;
             $scope.fromDate = parameters.FromDate;
@@ -83,7 +83,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             return CaseManagementAPIService.GetFilteredAccountSuspicionDetails(dataRetrievalInput)
             .then(function (response) {
                 occurancesLoaded = true;
-
+                console.log(response);
                 $scope.detailAggregateValues.push(response.Data[0]) ;
 
                 angular.forEach(response.Data, function (item) {
