@@ -141,7 +141,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             ICaseManagementDataManager manager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
 
             AccountCase accountCase = manager.GetLastAccountCaseByAccountNumber(accountNumber);
-             bool succeeded= false;
+            int caseID; 
+            bool succeeded= false;
 
             if (accountCase == null || (accountCase.StatusID == CaseStatus.ClosedFraud) || (accountCase.StatusID == CaseStatus.ClosedWhiteList))
             {
@@ -150,6 +151,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 if (!succeeded) return false;
 
                 succeeded = manager.InsertAccountCaseHistory(caseID, null, CaseStatus.Open);
+
+                if (!succeeded) return false;
+
+                succeeded = manager.InsertOrUpdateAccountStatus(accountNumber, CaseStatus.Open);
+
             }
                 
             else
@@ -157,10 +163,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 caseID = accountCase.CaseID;
             }
 
-
-            if (!succeeded) return false;
-
-            succeeded = manager.InsertOrUpdateAccountStatus(accountNumber, CaseStatus.Open);
+            
 
             if (!succeeded) return false;
 
