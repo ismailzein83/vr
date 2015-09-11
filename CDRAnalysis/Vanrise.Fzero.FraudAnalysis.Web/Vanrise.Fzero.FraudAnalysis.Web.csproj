@@ -189,9 +189,13 @@
     <Content Include="FraudAnalysis\Services\APIServices\NormalCDRAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\ReportingAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyAPIService.js" />
+    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\AssignStrategyCasesProcessInput.html" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\NumberProfilingProcessInput.html" />
+    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\AssignStrategyCasesProcessInputController.js" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\NumberProfilingProcessInputController.js" />
+    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\AssignStrategyCasesProcessInput_Scheduled.html" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\NumberProfilingProcessInput_Scheduled.html" />
+    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\AssignStrategyCasesProcessInput_ScheduledController.js" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\NumberProfilingProcessInput_ScheduledController.js" />
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\CancelCases.html" />
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\CancelCasesController.js" />
