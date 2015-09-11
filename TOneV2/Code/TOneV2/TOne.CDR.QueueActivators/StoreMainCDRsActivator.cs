@@ -15,14 +15,12 @@ namespace TOne.CDR.QueueActivators
 
         public override void ProcessItem(PersistentQueueItem item, ItemsToEnqueue outputItems)
         {
-            ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
+            ICDRMainDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRMainDataManager>();
 
             CDRMainBatch cdr = item as CDRMainBatch;
 
             if (cdr == null || cdr.MainCDRs == null) return;
-
-            Object preparedMainCdRs = dataManager.PrepareMainCDRsForDBApply(cdr.MainCDRs);
-            dataManager.ApplyMainCDRsToDB(preparedMainCdRs);
+            dataManager.SaveMainCDRsToDB(cdr.MainCDRs);
 
         }
     }

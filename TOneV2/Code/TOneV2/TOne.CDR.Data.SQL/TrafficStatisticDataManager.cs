@@ -307,5 +307,71 @@ namespace TOne.CDR.Data.SQL
 
         #endregion
 
+
+
+        public void ApplyTrafficStatsForDB(object preparedTrafficStats)
+        {
+            InsertBulkToTable(preparedTrafficStats as BaseBulkInsertInfo);
+        }
+
+        public void SaveTrafficStatsForDB(List<TrafficStatistic> trafficStatistics)
+        {
+            Object dbApplyStream = InitialiazeStreamForDBApply();
+            foreach (TrafficStatistic trafficStatistic in trafficStatistics)
+                WriteRecordToStream(trafficStatistic, dbApplyStream);
+            Object preparedtrafficStatistics = FinishDBApplyStream(dbApplyStream);
+            ApplyTrafficStatsForDB(preparedtrafficStatistics);
+        }
+
+        public object FinishDBApplyStream(object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.Close();
+            return new StreamBulkInsertInfo
+            {
+                TableName = "[dbo].[TrafficStats]",
+                Stream = streamForBulkInsert,
+                TabLock = false,
+                KeepIdentity = false,
+                FieldSeparator = '^',
+            };
+        }
+
+        public object InitialiazeStreamForDBApply()
+        {
+            return base.InitializeStreamForBulkInsert();
+        }
+
+        public void WriteRecordToStream(TrafficStatistic record, object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^{22}^{23}",
+                       0,
+                       record.SwitchId,
+                       record.Port_IN,
+                       record.Port_OUT,
+                       record.CustomerId,
+                       record.OurZoneId,
+                       record.OriginatingZoneId,
+                       record.SupplierId,
+                       record.SupplierZoneId,
+                       record.FirstCDRAttempt,
+                       record.LastCDRAttempt,
+                       record.Attempts,
+                       record.DeliveredAttempts,
+                       record.SuccessfulAttempts,
+                       record.DurationsInSeconds,
+                       record.PDDInSeconds,
+                       record.MaxDurationInSeconds,
+                       record.UtilizationInSeconds,
+                       record.NumberOfCalls,
+                       record.DeliveredNumberOfCalls,
+                       Math.Round(record.PGAD, 5),
+                       record.CeiledDuration,
+                       record.ReleaseSourceAParty,
+                       record.ReleaseSourceS
+                       );
+        
+        }
     }
 }

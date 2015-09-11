@@ -78,6 +78,9 @@
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Data">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Queueing">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
     </Reference>
@@ -87,7 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplyTrafficStatsToDB.cs" />
-    <Compile Include="ApplyInvalidCDRsToDB.cs" />
+    <Compile Include="Apply To DB\ApplyInvalidCDRsToDB.cs" />
     <Compile Include="ApplyMainCDRsToDB.cs" />
     <Compile Include="BPTrakingSeverity.cs" />
     <Compile Include="ClearTimeRangeBillingRecords.cs" />

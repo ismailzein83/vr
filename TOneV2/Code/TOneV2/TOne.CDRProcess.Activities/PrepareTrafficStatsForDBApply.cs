@@ -47,25 +47,8 @@ namespace TOne.CDRProcess.Activities
 
         protected override void DoWork(PrepareTrafficStatsForDBApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            TimeSpan totalTime = default(TimeSpan);
-            //ITrafficStatisticDataManager dataManager=TrafficStatisticDataManager.
-            ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
-            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
-            {
-                bool hasItem = false;
-                do
-                {
-                    hasItem = inputArgument.InputQueue.TryDequeue(
-                        (Stats) =>
-                        {
-                            DateTime start = DateTime.Now;
-                            Object preparedMainCDRs = dataManager.PrepareTrafficStatsForDBApply(Stats.TrafficStatistics.Values.ToList());
-                            inputArgument.OutputQueue.Enqueue(preparedMainCDRs);
-                            totalTime += (DateTime.Now - start);
-                        });
-                }
-                while (!ShouldStop(handle) && hasItem);
-            });
+            ITrafficStatisticDataManager dataManager = CDRDataManagerFactory.GetDataManager<ITrafficStatisticDataManager>();
+            PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, TrafficStatistics =>TrafficStatistics.TrafficStatistics.Values);
         }
     }
 }

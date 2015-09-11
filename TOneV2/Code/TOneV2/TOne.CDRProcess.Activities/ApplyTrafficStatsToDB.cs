@@ -36,7 +36,7 @@ namespace TOne.CDRProcess.Activities
 
         protected override void DoWork(ApplyTrafficStatsToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
+            ITrafficStatisticDataManager dataManager = CDRDataManagerFactory.GetDataManager<ITrafficStatisticDataManager>();
             TimeSpan totalTime = default(TimeSpan);
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -48,7 +48,7 @@ namespace TOne.CDRProcess.Activities
                         {
                             // Console.WriteLine("{0}: start writting {1} records to database", DateTime.Now, preparedInvalidCDRs..Count);
                             // DateTime start = DateTime.Now;
-                            dataManager.ApplyTrafficStatsToDB(preparedTrafficStats);
+                            dataManager.ApplyTrafficStatsForDB(preparedTrafficStats);
                             // totalTime += (DateTime.Now - start);
                             //Console.WriteLine("{0}: writting batch to database is done in {1}", DateTime.Now, (DateTime.Now - start));
                         });

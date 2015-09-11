@@ -36,7 +36,7 @@ namespace TOne.CDRProcess.Activities
 
         protected override void DoWork(ApplyMainCDRsToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
+            ICDRMainDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRMainDataManager>();
             //TimeSpan totalTime = default(TimeSpan);
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {

@@ -32,7 +32,7 @@ namespace TOne.CDRProcess.Activities
 
         protected override void DoWork(StoreInvalidCDRsToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
+            ICDRInvalidDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRInvalidDataManager>();
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;
@@ -43,8 +43,7 @@ namespace TOne.CDRProcess.Activities
                         {
                             if (cdr.InvalidCDRs != null)
                             {
-                                Object preparedInvalidCDRs = dataManager.PrepareInvalidCDRsForDBApply(cdr.InvalidCDRs);
-                                dataManager.ApplyInvalidCDRsToDB(preparedInvalidCDRs);
+                                dataManager.SaveInvalidCDRsToDB(cdr.InvalidCDRs);
                             }
                         });
                 }

@@ -47,23 +47,16 @@ namespace TOne.CDRProcess.Activities
 
         protected override void DoWork(PrepareMainCDRsForDBApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            TimeSpan totalTime = default(TimeSpan);
-            ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
-            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            ICDRMainDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRMainDataManager>();
+            PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, mainCDRs =>
             {
-                bool hasItem = false;
-                do
+                long lastPricedMainID;
+                dataManager.ReserverIdRange(false, true, mainCDRs.MainCDRs.Count, out lastPricedMainID);
+                foreach (TOne.CDR.Entities.BillingCDRMain mainCDR in mainCDRs.MainCDRs)
                 {
-                    hasItem = inputArgument.InputQueue.TryDequeue(
-                        (mainCDR) =>
-                        {
-                            DateTime start = DateTime.Now;
-                            Object preparedMainCDRs = dataManager.PrepareMainCDRsForDBApply(mainCDR.MainCDRs);
-                            inputArgument.OutputQueue.Enqueue(preparedMainCDRs);
-                            totalTime += (DateTime.Now - start);
-                        });
+                    mainCDR.ID = --lastPricedMainID;
                 }
-                while (!ShouldStop(handle) && hasItem);
+                return mainCDRs.MainCDRs;
             });
         }
     }

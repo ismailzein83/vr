@@ -31,7 +31,7 @@ namespace TOne.CDRProcess.Activities
 
         protected override void DoWork(StoreMainCDRsToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
+            ICDRMainDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRMainDataManager>();
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;
@@ -41,8 +41,7 @@ namespace TOne.CDRProcess.Activities
                         (CDR) =>
                         {
                             if (CDR.MainCDRs != null) {
-                                Object preparedMainCDRs = dataManager.PrepareMainCDRsForDBApply(CDR.MainCDRs);
-                                dataManager.ApplyMainCDRsToDB(preparedMainCDRs);
+                                dataManager.SaveMainCDRsToDB(CDR.MainCDRs);
                             }
                         });
                 }

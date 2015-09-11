@@ -47,24 +47,18 @@ namespace TOne.CDRProcess.Activities
 
         protected override void DoWork(PrepareInvalidCDRsForDBApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            TimeSpan totalTime = default(TimeSpan);
-            ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
-            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
-            {
-                bool hasItem = false;
-                do
+            
+            ICDRInvalidDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRInvalidDataManager>();
+            PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, invalidCDRs =>
                 {
-                    hasItem = inputArgument.InputQueue.TryDequeue(
-                        (mainCDR) =>
-                        {
-                            DateTime start = DateTime.Now;
-                            Object preparedInvalidCDRs = dataManager.PrepareInvalidCDRsForDBApply(mainCDR.InvalidCDRs);
-                            inputArgument.OutputQueue.Enqueue(preparedInvalidCDRs);
-                            totalTime += (DateTime.Now - start);
-                        });
-                }
-                while (!ShouldStop(handle) && hasItem);
-            });
+                    long lastPricedInvalidID;
+                    dataManager.ReserverIdRange(false, true, invalidCDRs.InvalidCDRs.Count, out lastPricedInvalidID);
+                    foreach (TOne.CDR.Entities.BillingCDRInvalid invalidCDR in invalidCDRs.InvalidCDRs)
+                    {
+                        invalidCDR.ID = --lastPricedInvalidID;
+                    }
+                  return invalidCDRs.InvalidCDRs;
+                });
         }
     }
 }
