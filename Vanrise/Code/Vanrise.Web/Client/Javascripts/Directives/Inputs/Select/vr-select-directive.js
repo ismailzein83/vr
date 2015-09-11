@@ -217,7 +217,7 @@
                 //Exports
                 angular.extend(this, {
                     isDropDownOpened: isDropDownOpened,
-                    isPagination: isPagination,
+                    isHideRemoveIcon: isHideRemoveIcon,
                     isContainerVisible: isContainerVisible,
                     isMultiple: isMultiple,
                     isRemoteLoad: isRemoteLoad,
