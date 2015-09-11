@@ -284,7 +284,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             if (!succeeded) return false;
 
-            succeeded = InsertOrUpdateAccountStatus(accountNumber, caseStatus);
+            AccountStatus accountStatus = new AccountStatus();
+            succeeded = InsertOrUpdateAccountStatus(accountStatus);
 
             if (!succeeded) return false;
 
@@ -319,9 +320,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return (recordsAffected > 0);
         }
 
-        public bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus)
+        public bool InsertOrUpdateAccountStatus(AccountStatus accountStatus)
         {
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_InsertOrUpdate", accountNumber, caseStatus);
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_InsertOrUpdate", accountStatus.AccountNumber, accountStatus.Status);
             return (recordsAffected > 0);
         }
 

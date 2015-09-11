@@ -23,5 +23,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public int? CaseID { get; set; }
 
         public Dictionary<String, Decimal> AggregateValues { get; set; }
+
+        public Dictionary<String, List<String>> StrategyExecutionAccountInfo { get; set; } //AccountNumberByIMEI
+
     }
 }
