@@ -14,6 +14,7 @@
                 <vr-choice isselected="normalCDRsSelected">Normal CDRs</vr-choice>
                 <vr-choice isselected="numberProfilesSelected">Number Profiles</vr-choice>
                 <vr-choice isselected="caseHistorySelected">Case History</vr-choice>
+                <vr-choice isselected="relatedNumbersSelected">Related Numbers</vr-choice>
             </vr-choices>
 
             <div ng-show="occurancesSelected">
@@ -157,6 +158,21 @@
                             <vr-datagridexpandablerow>
                                 <div ng-include="'/Client/Modules/FraudAnalysis/Views/SuspiciousAnalysis/Includes/CaseOccuranceGrid.html'"></div>
                             </vr-datagridexpandablerow>
+                        </vr-datagrid>
+                    </vr-columns>
+                </vr-row>
+            </div>
+
+            <div ng-show="relatedNumbersSelected">
+                <vr-row>
+                    <vr-columns width="fullrow" simplecol>
+                        <vr-datagrid datasource="relatedNumbers"
+                                     on-ready="onGridReady_RelatedNumbers"
+                                     dataretrievalfunction="dataRetrievalFunction_RelatedNumbers"
+                                     pagingtype="'PagingOnScroll'"
+                                     idfield="RelatedNumberID">
+
+                            <vr-datagridcolumn headertext="'Related Number'" field="'RelatedNumber'" type="'Text'"></vr-datagridcolumn>
                         </vr-datagrid>
                     </vr-columns>
                 </vr-row>

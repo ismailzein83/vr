@@ -13,6 +13,9 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
     var gridAPI_CaseHistory = undefined;
     var casesLoaded = false;
 
+    var gridAPI_RelatedNumbers = undefined;
+    var relatedNumbersLoaded = false;
+
     var users = [];
 
     loadParameters();
@@ -41,8 +44,9 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         $scope.cases = [];
         $scope.profileSources = [];
         $scope.profileSources = [ { value: 0, description: "From Strategy Execution" }, { value: 1, description: "From Profiling" }  ];
-
         $scope.selectedProfileSource = $scope.profileSources[0];
+
+        $scope.relatedNumbers = [];
 
         $scope.fromDate_NormalCDRs = $scope.fromDate;
         $scope.toDate_NormalCDRs = $scope.toDate;
@@ -55,16 +59,11 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
         $scope.onGridReady_Occurances = function (api) {
             gridAPI_Occurances = api;
-
-            if ($scope.occurancesSelected)
-                return retrieveData_Occurances();
+            return retrieveData_Occurances();
         }
 
         $scope.onGridReady_NormalCDRs = function (api) {
             gridAPI_NormalCDRs = api;
-
-            if ($scope.normalCDRsSelected)
-                return retrieveData_NormalCDRs();
         }
 
         $scope.onGridReady_NumberProfiles = function (api) {
@@ -73,9 +72,10 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
         $scope.onGridReady_CaseHistory = function (api) {
             gridAPI_CaseHistory = api;
+        }
 
-            if ($scope.caseHistorySelected);
-                //return retrieveData_CaseHistory();
+        $scope.onGridReady_RelatedNumbers = function (api) {
+            gridAPI_RelatedNumbers = api;
         }
 
         $scope.dataRetrievalFunction_Occurances = function (dataRetrievalInput, onResponseReady) {
@@ -146,6 +146,19 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
+        }
+
+        $scope.dataRetrievalFunction_RelatedNumbers = function (dataRetrievalInput, onResponseReady) {
+
+            return CaseManagementAPIService.GetFilteredRelatedNumbersByAccountNumber(dataRetrievalInput)
+                .then(function (response) {
+
+                    relatedNumbersLoaded = true;
+                    onResponseReady(response);
+                })
+                .catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                });
         }
 
         $scope.updateAccountCase = function () {
@@ -231,6 +244,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             });
     }
 
+    // retrieveData is invoked when the selected tab changes or when the date fields are changed
     function retrieveData() {
 
         if (gridAPI_Occurances != undefined && $scope.selectedTabIndex == 0 && !occurancesLoaded)
@@ -244,6 +258,9 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
         else if (gridAPI_CaseHistory != undefined && $scope.selectedTabIndex == 3 && !casesLoaded)
             return retrieveData_CaseHistory();
+
+        else if (gridAPI_RelatedNumbers != undefined && $scope.selectedTabIndex == 4 && !relatedNumbersLoaded)
+            return retrieveData_RelatedNumbers();
     }
 
     function retrieveData_Occurances() {
@@ -286,6 +303,15 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         };
 
         return gridAPI_CaseHistory.retrieveData(query);
+    }
+
+    function retrieveData_RelatedNumbers() {
+
+        var query = {
+            AccountNumber: $scope.accountNumber
+        };
+
+        return gridAPI_RelatedNumbers.retrieveData(query);
     }
 
     function loadAggregateDefinitions() {

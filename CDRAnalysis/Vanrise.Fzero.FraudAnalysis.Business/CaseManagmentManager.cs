@@ -31,6 +31,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredDetailsByCaseID(input));
         }
 
+        public Vanrise.Entities.IDataRetrievalResult<RelatedNumber> GetFilteredRelatedNumbersByAccountNumber(Vanrise.Entities.DataRetrievalInput<RelatedNumberResultQuery> input)
+        {
+            ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredRelatedNumbersByAccountNumber(input));
+        }
+
         public Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> UpdateAccountCase(AccountCaseUpdateResultQuery input)
         {
             Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary>();
