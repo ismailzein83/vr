@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="AccountStatus.cs" />
     <Compile Include="Batches\AccountNumberBatch.cs" />
+    <Compile Include="RelatedNumber.cs" />
     <Compile Include="ResultQuery\RelatedNumberResultQuery.cs" />
     <Compile Include="ResultQuery\CancelAccountCasesResultQuery.cs" />
     <Compile Include="ResultQuery\AccountCaseResultQuery.cs" />
