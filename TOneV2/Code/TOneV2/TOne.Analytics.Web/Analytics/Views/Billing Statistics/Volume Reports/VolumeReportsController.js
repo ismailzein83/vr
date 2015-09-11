@@ -68,7 +68,7 @@ function VolumeReportsController($scope, BillingStatisticsAPIService, VolumeRepo
     }
 
     function loadCustomers() {
-        return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
+        return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Customer.value,false).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.customers.push(itm);
             });
@@ -76,7 +76,7 @@ function VolumeReportsController($scope, BillingStatisticsAPIService, VolumeRepo
     }
 
     function loadSuppliers() {
-        return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Supplier.value).then(function (response) {
+        return CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Supplier.value,false).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.suppliers.push(itm);
             });
