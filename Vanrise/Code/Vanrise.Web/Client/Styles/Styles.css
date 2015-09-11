@@ -767,7 +767,8 @@ input.ui-grid-filter-input[type="text"] {
 }
 
 .dropdown-menu-custom-serf {
-    top: -1px;
+    top: 7px;
+    min-width:165px;
     left: 40px;
     border-radius: 0px;
     background-color:#f0f0f0 !important;
