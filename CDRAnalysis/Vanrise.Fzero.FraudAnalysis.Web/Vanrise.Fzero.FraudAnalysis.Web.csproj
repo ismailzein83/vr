@@ -202,15 +202,7 @@
     <Content Include="FraudAnalysis\Views\OutPut\Dashboard.html" />
     <Content Include="FraudAnalysis\Views\OutPut\DashboardController.js" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\ExecuteStrategyProcessInput_Scheduled.html" />
-    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\SaveCDRToDBProcessInput_Scheduled.html" />
-    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\CDRImportProcessInput_Scheduled.html" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\ExecuteStrategyProcessInput_ScheduledController.js" />
-    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\SaveCDRToDBProcessInput_ScheduledController.js" />
-    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\CDRImportProcessInput_ScheduledController.js" />
-    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\SaveCDRToDBProcessInput.html" />
-    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\CDRImportProcessInput.html" />
-    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\SaveCDRToDBProcessInputController.js" />
-    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\CDRImportProcessInputController.js" />
     <Content Include="FraudAnalysis\Views\Reports\LinesDetected.html" />
     <Content Include="FraudAnalysis\Views\Reports\BlockedLines.html" />
     <Content Include="FraudAnalysis\Views\Reports\LinesDetectedController.js" />
