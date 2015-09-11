@@ -118,7 +118,6 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCaseHistory_Insert.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_Update.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_GetLastByAccountNumber.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionDetails_GetByAccountNumber.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionDetails_Delete.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecution_Override.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionDetails_CreateTempByCaseID.sql" />
@@ -131,5 +130,10 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_CreateTempForDailyVolumeLooses.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_CreateTempForCasesSummary.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_CreateTempByAccountNumber.sql" />
+    <Build Include="FraudAnalysis\Tables\RelatedNumbers.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionDetails_Load.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionDetails_CreateTempByAccountNumber.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_RelatedNumbers_GetByAccountNumber.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_Cancel.sql" />
   </ItemGroup>
 </Project>

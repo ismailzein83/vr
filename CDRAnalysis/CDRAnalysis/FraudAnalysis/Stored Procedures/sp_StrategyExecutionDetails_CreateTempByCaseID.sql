@@ -6,9 +6,7 @@
 CREATE PROCEDURE [FraudAnalysis].[sp_StrategyExecutionDetails_CreateTempByCaseID]
 	@TempTableName VARCHAR(200),
 	@AccountNumber VARCHAR(50),
-	@CaseID INT,
-	@FromDate DATETIME,
-	@ToDate DATETIME
+	@CaseID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -21,7 +19,8 @@ BEGIN
 			s.Name AS StrategyName,
 			d.SuspicionOccuranceStatus,
 			e.FromDate,
-			e.ToDate
+			e.ToDate,
+			d.AggregateValues
 		
 		INTO #RESULT
 		
@@ -30,8 +29,6 @@ BEGIN
 		INNER JOIN FraudAnalysis.Strategy s ON e.StrategyID = s.Id
 		
 		WHERE d.AccountNumber = @AccountNumber
-			AND e.FromDate >= @FromDate
-			AND e.ToDate <= @ToDate
 	
 		DECLARE @sql VARCHAR(1000)
 		SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';

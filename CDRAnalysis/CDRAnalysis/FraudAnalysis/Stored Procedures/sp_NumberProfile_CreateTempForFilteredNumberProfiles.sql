@@ -2,10 +2,10 @@
 
 CREATE PROCEDURE [FraudAnalysis].[sp_NumberProfile_CreateTempForFilteredNumberProfiles]
 (
-	@TempTableName VARCHAR(200),	
-	@FromDate DATETIME,
-	@ToDate DATETIME,
-	@AccountNumber VARCHAR(100)
+	@TempTableName VARCHAR(200),
+	@FromDate DateTime,
+	@ToDate DateTime,
+	@AccountNumber VARCHAR(100) 
 )
 AS
 BEGIN
@@ -13,7 +13,7 @@ BEGIN
 	
 	IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
     BEGIN
-		(SELECT AccountNumber,
+		SELECT AccountNumber,
 			FromDate,
 			ToDate,
 			AggregateValues,
@@ -21,32 +21,9 @@ BEGIN
 			
         INTO #Result
         
-		FROM FraudAnalysis.NumberProfile
+		FROM FraudAnalysis.NumberProfile np
 		
-		WHERE AccountNumber=@AccountNumber
-			AND FromDate >= @FromDate
-			AND ToDate <= @ToDate)
-			
-			
-			union 
-			
-			(
-			
-			SELECT sed.AccountNumber, se.FromDate, se.ToDate, sed. [AggregateValues], s.Name StrategyName
-     
-  FROM [FraudAnalysis].[StrategyExecutionDetails] sed
-    
-  inner join [FraudAnalysis].[StrategyExecution] se on sed.StrategyExecutionID =  se.ID
-  inner join [FraudAnalysis].[Strategy] s on s.ID=se.StrategyID
-    
-  where  se.FromDate >= @FromDate and se.ToDate<=@ToDate and sed.AccountNumber=@AccountNumber
-			
-			)
-			
-			
-			
-			
-			
+		WHERE np.AccountNumber=@AccountNumber and np.FromDate >=@FromDate and np.ToDate<=@ToDate
 		
 		DECLARE @sql VARCHAR(1000)
 		SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #Result';

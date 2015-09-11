@@ -2,10 +2,10 @@
 
 CREATE PROCEDURE [FraudAnalysis].[sp_NormalCDR_CreateTempForFilteredNormalCDRs]
 (
-	@TempTableName varchar(200),	
+	@TempTableName VARCHAR(200),
+	@MSISDN VARCHAR(30),
 	@FromDate DATETIME,
-	@ToDate DATETIME,
-	@MSISDN varCHAR(100)
+	@ToDate DATETIME
 )
 AS
 BEGIN
@@ -27,15 +27,19 @@ BEGIN
 			Service_Type,
 			Service_VAS_Name
 			
-		into #Result
+		INTO #RESULT
 		
-		FROM FraudAnalysis.NormalCDR as cdr
+		FROM FraudAnalysis.NormalCDR AS cdr
 		
-		where MSISDN=@MSISDN and  ConnectDateTime between   @FromDate and @ToDate
+		WHERE MSISDN = @MSISDN
+		AND ConnectDateTime >= @FromDate
+		AND ConnectDateTime <= @ToDate
 		
-		declare @sql varchar(1000)
-		set @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #Result';
-		exec(@sql)
+		ORDER BY ConnectDateTime DESC
+		
+		DECLARE @sql VARCHAR(1000)
+		SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';
+		EXEC(@sql)
 	END
 	
 	SET NOCOUNT OFF

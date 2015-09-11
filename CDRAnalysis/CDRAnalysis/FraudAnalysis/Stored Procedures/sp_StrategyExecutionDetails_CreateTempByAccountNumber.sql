@@ -1,9 +1,9 @@
 ﻿
-CREATE PROCEDURE [FraudAnalysis].[sp_StrategyExecutionDetails_GetByAccountNumber]
+CREATE PROCEDURE [FraudAnalysis].[sp_StrategyExecutionDetails_CreateTempByAccountNumber]
 	@TempTableName VARCHAR(200),
 	@AccountNumber VARCHAR(50),
-	@From DATETIME,
-	@To DATETIME
+	@FromDate DATETIME,
+	@ToDate DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -12,12 +12,12 @@ BEGIN
 	BEGIN
 		SELECT
 			sed.ID AS DetailID,
-			sed.AccountNumber,
-			sed.SuspicionLevelId AS SuspicionLevelID,
+			sed.SuspicionLevelID,
 			s.Name AS StrategyName,
-			sed.SuspicionOccuranceStatus AS SuspicionOccuranceStatus,
+			sed.SuspicionOccuranceStatus,
 			se.FromDate,
-			se.ToDate
+			se.ToDate,
+			sed.AggregateValues
 			
 		INTO #RESULT
 			
@@ -26,7 +26,10 @@ BEGIN
 			inner join FraudAnalysis.Strategy s ON se.StrategyID = s.Id
 		
 		WHERE sed.AccountNumber = @AccountNumber
-			AND (se.FromDate >= @From AND se.ToDate <= @To)
+			AND sed.SuspicionOccuranceStatus = 0
+			AND se.ExecutionDate >= @FromDate AND se.ExecutionDate <= @ToDate
+		
+		ORDER BY se.ExecutionDate DESC
 		
 		DECLARE @sql VARCHAR(1000)
 		SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';
