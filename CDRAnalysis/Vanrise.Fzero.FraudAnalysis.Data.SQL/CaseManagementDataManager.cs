@@ -396,6 +396,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             detail.SuspicionOccuranceStatus = (SuspicionOccuranceStatus)reader["SuspicionOccuranceStatus"];
             detail.FromDate = (DateTime)reader["FromDate"];
             detail.ToDate = (DateTime)reader["ToDate"];
+            detail.ExecutionDate = (DateTime)reader["ExecutionDate"];
             detail.AggregateValues = Vanrise.Common.Serializer.Deserialize<Dictionary<string, decimal>>(GetReaderValue<string>(reader, "AggregateValues"));
             
             return detail;

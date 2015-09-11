@@ -20,6 +20,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public DateTime ToDate { get; set; }
 
+        public DateTime ExecutionDate { get; set; }
+
         public Dictionary<string, decimal> AggregateValues { get; set; }
     }
 }

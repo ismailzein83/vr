@@ -235,6 +235,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         $scope.isInitializing = true;
         
         $scope.caseStatuses = UtilsService.getArrayEnum(CaseStatusEnum);
+        $scope.caseStatuses = $scope.caseStatuses.slice(1); // remove the open option
 
         return UtilsService.waitMultipleAsyncOperations([loadAggregateDefinitions, loadUsers])
             .catch(function (error) {
