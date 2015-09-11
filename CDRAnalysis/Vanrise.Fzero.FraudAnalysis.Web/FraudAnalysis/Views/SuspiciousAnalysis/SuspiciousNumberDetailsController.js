@@ -197,8 +197,8 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         $scope.onProfileSourceChanged = function () {
             $scope.showDate = ($scope.selectedProfileSource.value == 1);
             
-            //if (!$scope.strategyExecutionSelected)
-            //    return retrieveData_NumberProfiles();
+            if ($scope.showDate)
+                return retrieveData_NumberProfiles();
         }
 
         $scope.toggleValidTill = function (selectedStatus) {
@@ -240,8 +240,8 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         else if (gridAPI_NormalCDRs != undefined && $scope.selectedTabIndex == 1 && !normalCDRsLoaded)
             return retrieveData_NormalCDRs();
 
-        else if (gridAPI_NumberProfiles != undefined && $scope.selectedTabIndex == 2 && !numberProfilesLoaded);
-            //return retrieveData_NumberProfiles();
+        else if (gridAPI_NumberProfiles != undefined && $scope.selectedTabIndex == 2 && !numberProfilesLoaded)
+             return retrieveData_NumberProfiles();
 
         else if (gridAPI_CaseHistory != undefined && $scope.selectedTabIndex == 3 && !casesLoaded)
             return retrieveData_CaseHistory();
@@ -272,7 +272,9 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
     function retrieveData_NumberProfiles() {
 
         var query = {
-            AccountNumber: $scope.accountNumber
+            AccountNumber: $scope.accountNumber,
+            FromDate: $scope.fromDate_NumberProfiles,
+            ToDate: $scope.toDate_NumberProfiles
         };
 
         return gridAPI_NumberProfiles.retrieveData(query);

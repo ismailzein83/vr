@@ -64,10 +64,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         private NumberProfile NumberProfileMapper(IDataReader reader)
         {
             var numberProfile = new NumberProfile();
-
-            //numberProfile.FromDate = (DateTime)reader["FromDate"];
-            //numberProfile.ToDate = (DateTime)reader["ToDate"];
-            //numberProfile.StrategyId = (int)reader["StrategyId"];
+            numberProfile.FromDate = (DateTime)reader["FromDate"];
+            numberProfile.ToDate = (DateTime)reader["ToDate"];
             numberProfile.StrategyName = reader["StrategyName"] as string;
             numberProfile.AccountNumber = reader["AccountNumber"] as string;
             numberProfile.AggregateValues = Vanrise.Common.Serializer.Deserialize<Dictionary<string, decimal>>(GetReaderValue<string>(reader, "AggregateValues"));

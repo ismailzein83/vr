@@ -103,7 +103,7 @@
                     </vr-columns>
                 </vr-row>
                 <vr-row>
-                    <vr-columns width="fullrow" simplecol>
+                    <vr-columns width="fullrow" >
                         <div class="big-data-grid" ng-hide="showDate">
                             <div class="container">
                                 <vr-datagrid datasource="detailAggregateValues">
@@ -117,15 +117,15 @@
                             </div>
                         </div>
 
-                        <div class="big-data-grid">
-                            <div class="container" ng-show="showDate">
+                        <div class="big-data-grid" ng-show="showDate">
+                            <div class="container">
                                 <vr-datagrid datasource="numberProfile"
                                              on-ready="onGridReady_NumberProfiles"
                                              dataretrievalfunction="dataRetrievalFunction_NumberProfiles"
                                              pagingtype="'PagingOnScroll'">
-
+                                    <vr-datagridcolumn headertext="'From Date'" field="'FromDate'" type="'Datetime'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'To Date'" field="'ToDate'" type="'Datetime'"></vr-datagridcolumn>
                                     <vr-datagridcolumn ng-repeat="agg in aggregateDefinitions"
-                                                       columnindex="$index + 1"
                                                        headertext="agg.name"
                                                        field="'AggregateValues[&quot;' + agg.name + '&quot;]'"
                                                        type="'Number'">
