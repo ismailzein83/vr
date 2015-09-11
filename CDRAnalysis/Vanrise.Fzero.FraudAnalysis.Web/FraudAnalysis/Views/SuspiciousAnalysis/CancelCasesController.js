@@ -17,9 +17,7 @@ function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIServ
     }
     
     function cancelCases() {
-        var message = 'Are you sure that you cancel case(s)?';
-
-        VRNotificationService.showConfirmation(message)
+        VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response == true) {
 

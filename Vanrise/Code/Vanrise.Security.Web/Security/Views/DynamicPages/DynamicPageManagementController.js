@@ -115,8 +115,7 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
     }
     function deletePage(dataItem) {
 
-        var message = "Do you want to delete " + dataItem.Name;
-        VRNotificationService.showConfirmation(message).then(function (response) {
+        VRNotificationService.showConfirmation().then(function (response) {
             
             if (response == true) {
                 return ViewAPIService.DeleteView(dataItem.ViewId).then(function (responseObject) {

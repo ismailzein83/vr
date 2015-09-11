@@ -116,9 +116,7 @@ function SupplierInvoiceManagementController($scope, CarrierAccountAPIService, C
     function getSupplierAmount(invoiceObject) { }
 
     function toggleIsLocked(invoiceObject) {
-        var message = 'Are you sure that you want to lock/unlock the invoice?';
-
-        VRNotificationService.showConfirmation(message)
+        VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response == true) {
 
@@ -149,9 +147,7 @@ function SupplierInvoiceManagementController($scope, CarrierAccountAPIService, C
     function compareInvoice(invoiceObject) { }
 
     function deleteInvoice(invoiceObject) {
-        var message = 'Are you sure that you want to delete the invoice?';
-
-        VRNotificationService.showConfirmation(message)
+        VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response == true) {
 

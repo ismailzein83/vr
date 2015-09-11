@@ -90,9 +90,7 @@ function OrgChartManagementController($scope, OrgChartAPIService, VRModalService
     }
 
     function deleteOrgChart(orgChartObject) {
-        var message = 'Do you want to delete ' + orgChartObject.Name + '?';
-
-        VRNotificationService.showConfirmation(message)
+        VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response == true) {
 

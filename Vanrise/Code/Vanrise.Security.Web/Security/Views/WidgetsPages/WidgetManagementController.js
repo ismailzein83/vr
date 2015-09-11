@@ -67,9 +67,7 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
 
     }
     function deleteWidget(dataItem) {
-       
-        var message = "Do you want to delete " + dataItem.Name + "?";
-        VRNotificationService.showConfirmation(message).then(function (response) {
+        VRNotificationService.showConfirmation().then(function (response) {
             if (response == true) {
                 return WidgetAPIService.DeleteWidget(dataItem.Id).then(function (responseObject) {
                     if (responseObject.Result == DeleteOperationResultEnum.Succeeded.value)

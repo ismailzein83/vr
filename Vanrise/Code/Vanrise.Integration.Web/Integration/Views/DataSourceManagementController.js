@@ -84,9 +84,7 @@ function DataSourceManagementController($scope, DataSourceAPIService, VRModalSer
     }
 
     function deleteDataSource(dataSourceObj) {
-        var message = 'Do you want to delete ' + dataSourceObj.Name + '?';
-
-        VRNotificationService.showConfirmation(message)
+        VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response == true) {
 

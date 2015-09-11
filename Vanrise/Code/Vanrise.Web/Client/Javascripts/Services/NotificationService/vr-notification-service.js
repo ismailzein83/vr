@@ -22,7 +22,11 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
         };
         var deferred = $q.defer();
         settings.onScopeReady = function (modalScope) {
-            modalScope.message = message;
+            if (message != null && message != undefined && message != "")
+                modalScope.message = message;
+            else
+                modalScope.message = "Are you sure you want to continue?";
+            
             modalScope.yesClicked = function () {
                 modalScope.modalContext.closeModal();
                 deferred.resolve(true);

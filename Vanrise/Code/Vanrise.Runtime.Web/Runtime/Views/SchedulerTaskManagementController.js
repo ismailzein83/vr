@@ -89,9 +89,7 @@ function SchedulerTaskManagementController($scope, SchedulerTaskAPIService, VRMo
     }
 
     function deleteTask(taskObj) {
-        var message = 'Do you want to delete ' + taskObj.Name + '?';
-
-        VRNotificationService.showConfirmation(message)
+        VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response == true) {
 
