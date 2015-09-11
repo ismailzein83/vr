@@ -242,6 +242,9 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         else if (gridAPI_NormalCDRs != undefined && $scope.selectedTabIndex == 1 && !normalCDRsLoaded)
             return retrieveData_NormalCDRs();
 
+        else if (gridAPI_NumberProfiles != undefined && $scope.selectedTabIndex == 2 && !numberProfilesLoaded)
+            return retrieveData_NumberProfiles();
+
         else if (gridAPI_CaseHistory != undefined && $scope.selectedTabIndex == 3 && !casesLoaded)
             return retrieveData_CaseHistory();
     }
