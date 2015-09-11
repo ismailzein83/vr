@@ -63,7 +63,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                             }
 
 
-                            manager.UpdateAccountCase(number, CaseStatus.Open, null, false);
+                            manager.AssignAccountCase(number);
                         });
                 }
                 while (!ShouldStop(handle) && hasItem);

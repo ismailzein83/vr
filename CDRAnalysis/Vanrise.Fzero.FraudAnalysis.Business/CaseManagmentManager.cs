@@ -45,7 +45,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             updateOperationOutput.UpdatedObject = null;
             ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
             CaseManagmentManager manager = new CaseManagmentManager();
-            bool updated = manager.UpdateAccountCase(input.AccountNumber, input.CaseStatus, input.ValidTill, true);
+            bool updated = manager.UpdateAccountCase(input.AccountNumber, input.CaseStatus, input.ValidTill);
 
             if (updated)
             {
@@ -105,13 +105,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return updateOperationOutput;
         }
 
-        public bool UpdateAccountCase(string accountNumber, CaseStatus caseStatus, DateTime? validTill, bool hasUserId)
+        public bool UpdateAccountCase(string accountNumber, CaseStatus caseStatus, DateTime? validTill)
         {
             ICaseManagementDataManager manager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
 
-            int? userID = null;
-            if (hasUserId)
-                userID = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+            int userID = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
             AccountCase accountCase = manager.GetLastAccountCaseByAccountNumber(accountNumber);
             int caseID;
             bool succeeded;
@@ -135,6 +133,39 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             if (!succeeded) return false;
 
             return manager.LinkDetailToCase(accountNumber, caseID, caseStatus);
+        }
+
+
+        public bool AssignAccountCase(string accountNumber)
+        {
+            ICaseManagementDataManager manager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
+
+            AccountCase accountCase = manager.GetLastAccountCaseByAccountNumber(accountNumber);
+            int caseID;
+            bool succeeded= false;
+
+            if (accountCase == null || (accountCase.StatusID == CaseStatus.ClosedFraud) || (accountCase.StatusID == CaseStatus.ClosedWhiteList))
+            {
+                succeeded = manager.InsertAccountCase(out caseID, accountNumber, null, CaseStatus.Open, null);
+
+                if (!succeeded) return false;
+
+                succeeded = manager.InsertAccountCaseHistory(caseID, null, CaseStatus.Open);
+            }
+                
+            else
+            {
+                caseID = accountCase.CaseID;
+            }
+
+
+            if (!succeeded) return false;
+
+            succeeded = manager.InsertOrUpdateAccountStatus(accountNumber, CaseStatus.Open);
+
+            if (!succeeded) return false;
+
+            return manager.LinkDetailToCase(accountNumber, caseID, CaseStatus.Open);
         }
 
     }
