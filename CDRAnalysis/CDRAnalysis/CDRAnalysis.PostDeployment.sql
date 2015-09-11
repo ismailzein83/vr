@@ -10,133 +10,163 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
+--[FraudAnalysis].[CallClass]---
+set nocount on;
+set identity_insert [FraudAnalysis].[CallClass] on;
+;with cte_data([ID],[Description],[NetType])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,'ZAINIQ',1),
+(2,'VAS',1),
+(3,'INV',1),
+(4,'INT',2),
+(5,'KOREKTEL',0),
+(6,'ASIACELL',0)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Description],[NetType]))
+merge	[FraudAnalysis].[CallClass] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Description] = s.[Description],[NetType] = s.[NetType]
+when not matched by target then
+	insert([ID],[Description],[NetType])
+	values(s.[ID],s.[Description],s.[NetType])
+when not matched by source then
+	delete;
+set identity_insert [FraudAnalysis].[CallClass] off;
+
+--[FraudAnalysis].[CallType]------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [FraudAnalysis].[CallType] on;
+;with cte_data([ID],[Code],[Description])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,1,'outgoing Voice'),
+(2,2,'Incoming Voice Call'),
+(3,29,'call Forward'),
+(4,30,'Incoming Sms'),
+(5,31,'Outgoing Sms'),
+(6,26,'Roaming call forward')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Code],[Description]))
+merge	[FraudAnalysis].[CallType] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Code] = s.[Code],[Description] = s.[Description]
+when not matched by target then
+	insert([ID],[Code],[Description])
+	values(s.[ID],s.[Code],s.[Description])
+when not matched by source then
+	delete;
+set identity_insert [FraudAnalysis].[CallType] off;
 
 
-
-MERGE INTO FraudAnalysis.[CallClass] AS Target 
-USING (VALUES 
-	(N'ZAINIQ', N'1'),
-	(N'VAS', N'1'),
-	(N'INV', N'1'),
-	(N'INT', N'2'),
-	(N'KOREKTEL', N'0'),
-	(N'ASIACELL', N'0')
-) 
-AS Source ([Description]  ,[NetType])
-ON Target.[Description] = Source.[Description] 
--- update matched rows 
-WHEN MATCHED THEN 
-UPDATE SET	[NetType] = Source.[NetType]
-			
--- insert new rows 
-WHEN NOT MATCHED BY TARGET THEN 
-INSERT ([Description]  ,[NetType])
-VALUES ([Description]  ,[NetType])
----- delete rows that are in the target but not the source 
-WHEN NOT MATCHED BY SOURCE THEN 
-DELETE
-;
-
-
-
-MERGE INTO FraudAnalysis.[CallType] AS Target 
-USING (VALUES 
-	( N'1', N'outgoing Voice'),
-	( N'2', N'Incoming Voice Call'),
-	( N'29', N'call Forward'),
-	( N'30', N'Incoming Sms'),
-	( N'31', N'Outgoing Sms'),
-	( N'26', N'Roaming call forward')
-) 
-AS Source ([Code] ,[Description])
-ON Target.[Code] = Source.[Code] 
--- update matched rows 
-WHEN MATCHED THEN 
-UPDATE SET	[Description]  = Source.[Description] 
-			
--- insert new rows 
-WHEN NOT MATCHED BY TARGET THEN 
-INSERT ([Code] ,[Description])
-VALUES ([Code] ,[Description])
----- delete rows that are in the target but not the source 
-WHEN NOT MATCHED BY SOURCE THEN 
-DELETE
-;
+--[FraudAnalysis].[CaseStatus]----------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,'Open'),
+(2,'Pending'),
+(3,'Closed: Fraud'),
+(4,'Closed: White List'),
+(5,'Cancelled')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name]))
+merge	[FraudAnalysis].[CaseStatus] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name]
+when not matched by target then
+	insert([ID],[Name])
+	values(s.[ID],s.[Name])
+when not matched by source then
+	delete;
 
 
-MERGE INTO FraudAnalysis.[CaseStatus] AS Target 
-USING (VALUES 
-	( N'1',N'Open'),
-	( N'2',N'Pending'),
-	( N'3',N'Closed: Fraud'),
-	( N'4',N'Closed: White List'),
-	( N'5',N'Cancelled')
-) 
-AS Source ([Id], [Name])
-ON Target.[Name] = Source.[Name] 
--- insert new rows 
-WHEN NOT MATCHED BY TARGET THEN 
-INSERT ([Id], [Name])
-VALUES ([Id], [Name])
----- delete rows that are in the target but not the source 
-WHEN NOT MATCHED BY SOURCE THEN 
-DELETE
-;
+--[FraudAnalysis].[Period]--------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [FraudAnalysis].[Period] on;
+;with cte_data([ID],[Description])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,'Hourly'),
+(2,'Daily')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Description]))
+merge	[FraudAnalysis].[Period] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Description] = s.[Description]
+when not matched by target then
+	insert([ID],[Description])
+	values(s.[ID],s.[Description])
+when not matched by source then
+	delete;
+set identity_insert [FraudAnalysis].[Period] off;
 
 
-MERGE INTO FraudAnalysis.[Period] AS Target 
-USING (VALUES 
-	( N'Hourly'),
-	( N'Daily')
-) 
-AS Source ([Description])
-ON Target.[Description] = Source.[Description] 
--- insert new rows 
-WHEN NOT MATCHED BY TARGET THEN 
-INSERT ([Description])
-VALUES ([Description])
----- delete rows that are in the target but not the source 
-WHEN NOT MATCHED BY SOURCE THEN 
-DELETE
-;
+--[FraudAnalysis].[SubType]-------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [FraudAnalysis].[SubType] on;
+;with cte_data([ID],[Description])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,'Prepaid'),
+(2,'Postpaid')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Description]))
+merge	[FraudAnalysis].[SubType] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Description] = s.[Description]
+when not matched by target then
+	insert([ID],[Description])
+	values(s.[ID],s.[Description])
+when not matched by source then
+	delete;
+set identity_insert [FraudAnalysis].[SubType] off;
 
 
-
-MERGE INTO FraudAnalysis.[SubType] AS Target 
-USING (VALUES 
-	( N'Prepaid'),
-	( N'Postpaid')
-) 
-AS Source ([Description])
-ON Target.[Description] = Source.[Description] 
--- insert new rows 
-WHEN NOT MATCHED BY TARGET THEN 
-INSERT ([Description])
-VALUES ([Description])
----- delete rows that are in the target but not the source 
-WHEN NOT MATCHED BY SOURCE THEN 
-DELETE
-;
-
-
-
-MERGE INTO FraudAnalysis.[SuspicionLevel] AS Target 
-USING (VALUES 
-	( N'Clean'),
-	( N'Suspicious'),
-	( N'Highly Suspicious'),
-	( N'Fraud')
-) 
-AS Source ([Name])
-ON Target.[Name] = Source.[Name] 
--- insert new rows 
-WHEN NOT MATCHED BY TARGET THEN 
-INSERT ([Name])
-VALUES ([Name])
----- delete rows that are in the target but not the source 
-WHEN NOT MATCHED BY SOURCE THEN 
-DELETE
-;
+--[FraudAnalysis].[SuspicionLevel]------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [FraudAnalysis].[SuspicionLevel] on;
+;with cte_data([ID],[Name])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,'Clean'),
+(2,'Suspicious'),
+(3,'Highly Suspicious'),
+(4,'Fraud')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name]))
+merge	[FraudAnalysis].[SuspicionLevel] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name]
+when not matched by target then
+	insert([ID],[Name])
+	values(s.[ID],s.[Name])
+when not matched by source then
+	delete;
+set identity_insert [FraudAnalysis].[SuspicionLevel] off;
 
 
 
