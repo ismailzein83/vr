@@ -9,7 +9,7 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
---sec.Module-----
+--[sec].[Module]----
 set nocount on;
 set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
@@ -35,7 +35,7 @@ when not matched by source then
 	delete;
 set identity_insert [sec].[Module] off;
 
---sec.[View]-----
+--[sec].[View]----
 set nocount on;
 set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank])
@@ -73,7 +73,7 @@ when not matched by source then
 set identity_insert [sec].[View] off;
 
 
---[sec].[BusinessEntityModule]----
+--[sec].[BusinessEntityModule]-----
 set nocount on;
 set identity_insert [sec].[BusinessEntityModule] on;
 ;with cte_data([Id],[Name],[ParentId],[BreakInheritance],[PermissionOptions])
@@ -81,12 +81,13 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1,'Root',null,0,'["View","Full Control"]'),
 (2,'Strategy Module',1,0,'["View","Add","Edit", "Add System built in", "Full Control"]'),
-(3,'Suspicion Analysis Module',1,0,'["View"]'),
+(3,'Suspicious Cases Module',1,0,'["View"]'),
 (4,'Reporting Module',1,0,'["View"]'),
 (5,'Dashboard Module',1,0,'["View"]'),
 (6,'Business Process Module',1,0,'["View"]'),
 (7,'Integration Module',1,0,'["View"]'),
-(8,'Administration Module',1,0,'["View","Add","Edit", "Delete", "Full Control"]')
+(8,'Administration Module',1,0,'["View","Add","Edit", "Delete", "Full Control"]'),
+(9,'Reporting Module',1,0,'["View"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[ParentId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntityModule] as t
@@ -111,7 +112,7 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1,'Users',8,0,'["View", "Add", "Edit", "Reset Password"]'),
 (2,'Groups',8,0,'["View", "Add", "Edit", "Delete"]'),
-(3,'System Entities',8,0,'["View", "Assign Permissions"]'),
+(3,'System Entities',8,1,'["View", "Assign Permissions"]'),
 (4,'History',6,0,'["View"]'),
 (5,'Managment',6,0,'["View"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
