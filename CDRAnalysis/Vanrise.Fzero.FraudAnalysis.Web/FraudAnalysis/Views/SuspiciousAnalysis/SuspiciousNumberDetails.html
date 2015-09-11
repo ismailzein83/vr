@@ -73,14 +73,6 @@
             <div ng-show="numberProfilesSelected">
                 <vr-row>
                     <vr-columns width="normal">
-                        <vr-datetimepicker label="From" value="fromDate_NumberProfiles" type="dateTime" onvaluechanged="filterData" isrequired ng-show="strategyExecutionSelected"></vr-datetimepicker>
-                    </vr-columns>
-
-                    <vr-columns width="normal">
-                        <vr-datetimepicker label="To" value="toDate_NumberProfiles" type="dateTime" onvaluechanged="filterData" isrequired ng-show="strategyExecutionSelected"></vr-datetimepicker>
-                    </vr-columns>
-
-                    <vr-columns width="normal">
                         <vr-select label="Profile Source"
                                    datasource="profileSources"
                                    selectedvalues="selectedProfileSource"
@@ -89,10 +81,30 @@
                                    onselectionchanged="onProfileSourceChanged">
                         </vr-select>
                     </vr-columns>
+
+                    <vr-columns width="normal">
+                        <vr-datetimepicker label="From"
+                                           value="fromDate_NumberProfiles"
+                                           type="dateTime"
+                                           onvaluechanged="filterData"
+                                           isrequired
+                                           ng-show="showDate">
+                        </vr-datetimepicker>
+                    </vr-columns>
+
+                    <vr-columns width="normal">
+                        <vr-datetimepicker label="To"
+                                           value="toDate_NumberProfiles"
+                                           type="dateTime"
+                                           onvaluechanged="filterData"
+                                           isrequired
+                                           ng-show="showDate">
+                        </vr-datetimepicker>
+                    </vr-columns>
                 </vr-row>
                 <vr-row>
                     <vr-columns width="fullrow" simplecol>
-                        <div class="big-data-grid" ng-show="strategyExecutionSelected">
+                        <div class="big-data-grid" ng-hide="showDate">
                             <div class="container">
                                 <!--<vr-datagrid datasource="executionDetailNumberProfile">
 
@@ -107,7 +119,7 @@
                         </div>
 
                         <div class="big-data-grid">
-                            <div class="container" ng-hide="strategyExecutionSelected">
+                            <div class="container" ng-show="showDate">
                                 <vr-datagrid datasource="numberProfile"
                                              on-ready="onGridReady_NumberProfiles"
                                              dataretrievalfunction="dataRetrievalFunction_NumberProfiles"
@@ -135,7 +147,7 @@
                                      pagingtype="'PagingOnScroll'"
                                      idfield="CaseID">
 
-                            <vr-datagridcolumn headertext="'Case ID'" field="'CaseID'" type="'Number'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Case ID'" field="'CaseID'" type="'Text'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'User'" field="'UserName'" type="'Text'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Status'" field="'CaseStatusDescription'" type="'Text'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Last Status Update'" field="'StatusUpdatedTime'" type="'Datetime'"></vr-datagridcolumn>

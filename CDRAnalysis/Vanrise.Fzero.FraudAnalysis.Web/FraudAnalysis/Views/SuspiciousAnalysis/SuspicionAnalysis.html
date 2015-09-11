@@ -8,7 +8,11 @@
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-datetimepicker label="Execution Date" value="executionDate" type="dateTime" isrequired></vr-datetimepicker>
+                    <vr-datetimepicker label="From" value="fromDate" type="dateTime" isrequired></vr-datetimepicker>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-datetimepicker label="To" value="toDate" type="dateTime" isrequired></vr-datetimepicker>
                 </vr-columns>
 
                 <vr-columns width="normal">
@@ -68,8 +72,6 @@
                     <vr-datagridcolumn headertext="'Occurances'" field="'NumberOfOccurances'" type="'Number'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Last Occurance'" field="'LastOccurance'" type="'Datetime'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Status'" field="'AccountStatusDescription'" type="'Text'"></vr-datagridcolumn>
-
-                    <!--<vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" type="'Text'"></vr-datagridcolumn>-->
                 </vr-datagrid>
             </vr-columns>
         </vr-row>

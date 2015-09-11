@@ -12,7 +12,8 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
     function defineScope() {
         $scope.accountNumber = undefined;
 
-        $scope.executionDate = Date.now();
+        $scope.fromDate = Date.now();
+        $scope.toDate = Date.now();
 
         $scope.strategies = [];
         $scope.selectedStrategies = [];
@@ -61,7 +62,8 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
     function retrieveData() {
         var query = {
             AccountNumber: ($scope.accountNumber != undefined && $scope.accountNumber != "") ? $scope.accountNumber : null,
-            ExecutionDate: $scope.executionDate,
+            FromDate: $scope.fromDate,
+            ToDate: $scope.toDate,
             StrategyIDs: UtilsService.getPropValuesFromArray($scope.selectedStrategies, "value"),
             AccountStatusIDs: UtilsService.getPropValuesFromArray($scope.selectedAccountStatuses, "value"),
             SuspicionLevelIDs: UtilsService.getPropValuesFromArray($scope.selectedSuspicionLevels, "value")
@@ -106,7 +108,8 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
 
         var parameters = {
             AccountNumber: gridObject.AccountNumber,
-            ExecutionDate: $scope.executionDate
+            FromDate: $scope.fromDate,
+            ToDate: $scope.toDate
         };
 
         modalSettings.onScopeReady = function (modalScope) {

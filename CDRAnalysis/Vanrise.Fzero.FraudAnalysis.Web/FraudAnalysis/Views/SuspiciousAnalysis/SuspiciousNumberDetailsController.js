@@ -23,7 +23,8 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
         if (parameters != undefined && parameters != null) {
             $scope.accountNumber = parameters.AccountNumber;
-            $scope.executionDate = parameters.ExecutionDate;
+            $scope.fromDate = parameters.FromDate;
+            $scope.toDate = parameters.ToDate;
         }
     }
 
@@ -33,13 +34,13 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         $scope.occurances = [];
         $scope.normalCDRs = [];
         $scope.numberProfile = [];
-        $scope.aggregateDefinitions = [];
+        $scope.aggregateDefinitions = []; // column names
         $scope.cases = [];
 
-        $scope.fromDate_NormalCDRs = Date.now();
-        $scope.toDate_NormalCDRs = Date.now();
-        $scope.fromDate_NumberProfiles = Date.now();
-        $scope.toDate_NumberProfiles = Date.now();
+        $scope.fromDate_NormalCDRs = $scope.fromDate;
+        $scope.toDate_NormalCDRs = $scope.toDate;
+        $scope.fromDate_NumberProfiles = $scope.fromDate;
+        $scope.toDate_NumberProfiles = $scope.toDate;
 
         $scope.caseStatuses = [];
         $scope.selectedCaseStatus = undefined;
@@ -76,8 +77,8 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             .then(function (response) {
                 occurancesLoaded = true;
 
-                $scope.executionDetailNumberProfile = [];
-                angular.forEach(response.Data[0].AggregateValues, function (item) {
+                console.log(response.Data[0].AggregateValues);
+                //angular.forEach(response.Data[0].AggregateValues, function (item) {
                     $scope.executionDetailNumberProfile.push(item)
                 });
 
@@ -194,10 +195,10 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         }
 
         $scope.onProfileSourceChanged = function () {
-            $scope.strategyExecutionSelected = ($scope.selectedProfileSource.value == 0);
+            $scope.showDate = ($scope.selectedProfileSource.value == 1);
             
-            if (!$scope.strategyExecutionSelected)
-                return retrieveData_NumberProfiles();
+            //if (!$scope.strategyExecutionSelected)
+            //    return retrieveData_NumberProfiles();
         }
 
         $scope.toggleValidTill = function (selectedStatus) {
@@ -209,10 +210,11 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         $scope.isInitializing = true;
 
         $scope.profileSources = [
-            { value: 0, description: "Strategy Execution" },
-            { value: 1, description: "Profiling" }
+            { value: 0, description: "Strategy Execution Details" },
+            { value: 1, description: "Number Profile" }
         ];
-        $scope.selectedProfileSource = $scope.profileSources[0]; // set strategy execution as the default profile source
+
+        $scope.selectedProfileSource = $scope.profileSources[0];
 
         $scope.caseStatuses = UtilsService.getArrayEnum(CaseStatusEnum);
 
@@ -249,7 +251,8 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
         var query = {
             AccountNumber: $scope.accountNumber,
-            ExecutionDate: $scope.executionDate
+            FromDate: $scope.fromDate,
+            ToDate: $scope.toDate
         };
 
         return gridAPI_Occurances.retrieveData(query);
@@ -263,7 +266,6 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             ToDate: $scope.toDate_NormalCDRs,
         };
 
-        console.log(query);
         return gridAPI_NormalCDRs.retrieveData(query);
     }
 

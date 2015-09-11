@@ -64,7 +64,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 if (input.Query.AccountStatusIDs != null && input.Query.AccountStatusIDs.Count() > 0)
                     accountStatusIDs = string.Join(",", input.Query.AccountStatusIDs.Select(n => ((int)n).ToString()).ToArray());
 
-                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByAccountNumberForSummaries", tempTableName, input.Query.AccountNumber, input.Query.ExecutionDate, strategyIDs, accountStatusIDs, suspicionLevelIDs);
+                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByAccountNumberForSummaries", tempTableName, input.Query.AccountNumber, input.Query.FromDate, input.Query.ToDate, strategyIDs, accountStatusIDs, suspicionLevelIDs);
 
             }, (reader) => AccountSuspicionSummaryMapper(reader), mapper);
         }
@@ -223,7 +223,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByAccountNumber", tempTableName, input.Query.AccountNumber, input.Query.ExecutionDate);
+                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByAccountNumber", tempTableName, input.Query.AccountNumber, input.Query.FromDate, input.Query.ToDate);
             };
 
             return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, mapper);
@@ -402,6 +402,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             detail.DetailID = (long)reader["DetailID"];
             detail.SuspicionLevelID = (SuspicionLevel)reader["SuspicionLevelID"];
             detail.StrategyName = reader["StrategyName"] as string;
+            detail.SuspicionOccuranceStatus = (SuspicionOccuranceStatus)reader["SuspicionOccuranceStatus"];
             detail.FromDate = (DateTime)reader["FromDate"];
             detail.ToDate = (DateTime)reader["ToDate"];
             detail.AggregateValues = Vanrise.Common.Serializer.Deserialize<Dictionary<string, decimal>>(GetReaderValue<string>(reader, "AggregateValues"));
@@ -465,8 +466,5 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
         #endregion
-
-
-
     }
 }
