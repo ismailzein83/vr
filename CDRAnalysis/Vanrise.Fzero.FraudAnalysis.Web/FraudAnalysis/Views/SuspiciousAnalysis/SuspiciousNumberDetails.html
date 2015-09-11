@@ -110,7 +110,7 @@
 
                                     <vr-datagridcolumn ng-repeat="agg in aggregateDefinitions"
                                                        headertext="agg.name"
-                                                       field=""
+                                                       field="'AggregateValues[&quot;' + agg.name + '&quot;]'"
                                                        type="'Number'">
                                     </vr-datagridcolumn>
                                 </vr-datagrid>

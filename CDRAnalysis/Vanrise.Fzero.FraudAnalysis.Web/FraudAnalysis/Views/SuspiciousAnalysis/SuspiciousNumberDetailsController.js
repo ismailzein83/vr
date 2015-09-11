@@ -29,6 +29,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
     }
 
     function defineScope() {
+        $scope.detailAggregateValues = [];
         $scope.showDate = false;
         $scope.selectedProfileSource = '';
         $scope.selectedTabIndex = 0;
@@ -82,10 +83,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             .then(function (response) {
                 occurancesLoaded = true;
 
-                var object = response.Data[0].AggregateValues;
-                $scope.detailAggregateValues = $.map(object, function (value, index) {
-                    return [value];
-                });
+                $scope.detailAggregateValues.push(response.Data[0]) ;
 
                 angular.forEach(response.Data, function (item) {
                     var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", item.SuspicionLevelID);
