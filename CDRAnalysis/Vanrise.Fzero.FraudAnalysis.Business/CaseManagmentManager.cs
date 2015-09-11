@@ -141,8 +141,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             ICaseManagementDataManager manager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
 
             AccountCase accountCase = manager.GetLastAccountCaseByAccountNumber(accountNumber);
-            int caseID;
-            bool succeeded= false;
+             bool succeeded= false;
 
             if (accountCase == null || (accountCase.StatusID == CaseStatus.ClosedFraud) || (accountCase.StatusID == CaseStatus.ClosedWhiteList))
             {
