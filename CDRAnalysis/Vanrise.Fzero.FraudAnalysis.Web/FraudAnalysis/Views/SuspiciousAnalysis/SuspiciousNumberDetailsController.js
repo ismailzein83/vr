@@ -77,9 +77,9 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             .then(function (response) {
                 occurancesLoaded = true;
 
-                console.log(response.Data[0].AggregateValues);
-                //angular.forEach(response.Data[0].AggregateValues, function (item) {
-                    $scope.executionDetailNumberProfile.push(item)
+                var object = response.Data[0].AggregateValues;
+                $scope.detailAggregateValues = $.map(object, function (value, index) {
+                    return [value];
                 });
 
                 angular.forEach(response.Data, function (item) {
