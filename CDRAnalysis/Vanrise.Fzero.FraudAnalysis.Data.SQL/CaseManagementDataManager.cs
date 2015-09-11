@@ -271,35 +271,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, RelatedNumberMapper);
         }
 
-        public bool UpdateAccountCase(string accountNumber, CaseStatus caseStatus, DateTime? validTill, bool hasUserId)
-        {
-            int? userID = null;
-            if(hasUserId)
-             userID = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
-            AccountCase accountCase = GetLastAccountCaseByAccountNumber(accountNumber);
-            int caseID;
-            bool succeeded;
-
-            if (accountCase == null || (accountCase.StatusID == CaseStatus.ClosedFraud) || (accountCase.StatusID == CaseStatus.ClosedWhiteList))
-                succeeded = InsertAccountCase(out caseID, accountNumber, userID, caseStatus, validTill);
-            else
-            {
-                caseID = accountCase.CaseID;
-                succeeded = UpdateAccountCaseStatus(accountCase.CaseID, caseStatus, validTill);
-            }
-
-            if (!succeeded) return false;
-
-            succeeded = InsertAccountCaseHistory(caseID, userID, caseStatus);
-
-            if (!succeeded) return false;
-
-            succeeded = InsertOrUpdateAccountStatus(accountNumber, caseStatus);
-
-            if (!succeeded) return false;
-
-            return LinkDetailToCase(accountNumber, caseID, caseStatus);
-        }
+        
 
         public AccountCase GetLastAccountCaseByAccountNumber(string accountNumber)
         {

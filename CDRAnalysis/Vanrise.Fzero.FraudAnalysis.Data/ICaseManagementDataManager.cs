@@ -13,8 +13,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         BigResult<BTSHighValueCases> GetTop10BTSHighValue(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input);
 
-        bool UpdateAccountCase(string accountNumber, CaseStatus caseStatus, DateTime? validTill, bool hasUserId);
-
         AccountCase GetLastAccountCaseByAccountNumber(string accountNumber);
 
         bool InsertAccountCase(out int insertedID, string accountNumber, int? userID, CaseStatus caseStatus, DateTime? validTill);

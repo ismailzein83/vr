@@ -36,7 +36,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started Assigning Cases ");
 
-            ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
+            CaseManagmentManager manager = new CaseManagmentManager();
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -63,7 +63,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                             }
 
 
-                            dataManager.UpdateAccountCase(number, CaseStatus.Open, null, false);
+                            manager.UpdateAccountCase(number, CaseStatus.Open, null, false);
                         });
                 }
                 while (!ShouldStop(handle) && hasItem);
