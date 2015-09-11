@@ -82,12 +82,12 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
                 }
                 catch (Exception ex)
                 {
-                    LogError("An error occurred in File Adapter while importing data. Exception Details: {0}", ex.ToString());
+                    base.LogError("An error occurred in File Adapter while importing data. Exception Details: {0}", ex.ToString());
                 }
             }
             else
             {
-                LogError("Could not find Directory {0}", fileAdapterArgument.Directory);
+                base.LogError("Could not find Directory {0}", fileAdapterArgument.Directory);
                 throw new DirectoryNotFoundException();
             }
         }
