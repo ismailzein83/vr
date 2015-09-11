@@ -1,7 +1,6 @@
-﻿SuspiciousNumberDetailsController.$inject = ["$scope", "CaseManagementAPIService", "NormalCDRAPIService", "NumberProfileAPIService", "StrategyAPIService", "SuspicionLevelEnum", "CaseStatusEnum", "SuspicionOccuranceStatusEnum", "CallTypeEnum", "UtilsService", "VRNavigationService", "VRNotificationService"];
+﻿SuspiciousNumberDetailsController.$inject = ["$scope", "CaseManagementAPIService", "NormalCDRAPIService", "NumberProfileAPIService", "StrategyAPIService", "UsersAPIService", "SuspicionLevelEnum", "CaseStatusEnum", "SuspicionOccuranceStatusEnum", "CallTypeEnum", "UtilsService", "VRNavigationService", "VRNotificationService"];
 
-function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, NormalCDRAPIService, NumberProfileAPIService, StrategyAPIService,  SuspicionLevelEnum, CaseStatusEnum, SuspicionOccuranceStatusEnum, CallTypeEnum, UtilsService, VRNavigationService, VRNotificationService) {
-
+function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, NormalCDRAPIService, NumberProfileAPIService, StrategyAPIService, UsersAPIService, SuspicionLevelEnum, CaseStatusEnum, SuspicionOccuranceStatusEnum, CallTypeEnum, UtilsService, VRNavigationService, VRNotificationService) {
     var gridAPI_Occurances = undefined;
     var occurancesLoaded = false;
 
@@ -13,6 +12,8 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
     var gridAPI_CaseHistory = undefined;
     var casesLoaded = false;
+
+    var users = [];
 
     loadParameters();
     defineScope();
@@ -136,6 +137,8 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                 angular.forEach(response.Data, function (item) {
                     var caseStatus = UtilsService.getEnum(CaseStatusEnum, "value", item.StatusID);
                     item.CaseStatusDescription = caseStatus.description;
+
+                    item.UserName = (UtilsService.getItemByVal(users, item.UserID, "UserId") != null) ? UtilsService.getItemByVal(users, item.UserID, "UserId").Name : null;
                 });
 
                 onResponseReady(response);
@@ -151,8 +154,8 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                     accountNumber: $scope.accountNumber,
                     caseStatus: $scope.selectedCaseStatus.value,
                     validTill: $scope.validTill,
-                    from: $scope.from,
-                    to: $scope.to
+                    FromDate: $scope.fromDate,
+                    ToDate: $scope.toDate
                 })
                 .then(function (response) {
                     if (VRNotificationService.notifyOnItemUpdated("Account Case", response)) {
@@ -217,15 +220,9 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
     function load() {
         $scope.isInitializing = true;
         
-
         $scope.caseStatuses = UtilsService.getArrayEnum(CaseStatusEnum);
 
-        return StrategyAPIService.GetAggregates()
-            .then(function (response) {
-                angular.forEach(response, function (item) {
-                    $scope.aggregateDefinitions.push({ name: item.Name });
-                });
-            })
+        return UtilsService.waitMultipleAsyncOperations([loadAggregateDefinitions, loadUsers])
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             })
@@ -289,6 +286,26 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         };
 
         return gridAPI_CaseHistory.retrieveData(query);
+    }
+
+    function loadAggregateDefinitions() {
+        return StrategyAPIService.GetAggregates()
+            .then(function (response) {
+
+                angular.forEach(response, function (item) {
+                    $scope.aggregateDefinitions.push({ name: item.Name });
+                });
+            })
+    }
+
+    function loadUsers() {
+        return UsersAPIService.GetUsers()
+            .then(function (response) {
+
+                angular.forEach(response, function (item) {
+                    users.push(item);
+                });
+            });
     }
 }
 

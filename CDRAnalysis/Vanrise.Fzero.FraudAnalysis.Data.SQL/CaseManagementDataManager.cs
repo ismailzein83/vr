@@ -412,16 +412,17 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         private AccountCase AccountCaseMapper(IDataReader reader)
         {
-            return new AccountCase
-            {
-                CaseID = (int)reader["CaseID"],
-                AccountNumber = reader["AccountNumber"] as string,
-                UserID = (int)reader["UserID"],
-                StatusID = (CaseStatus)reader["StatusID"],
-                StatusUpdatedTime = (DateTime)reader["StatusUpdatedTime"],
-                ValidTill = GetReaderValue<DateTime?>(reader, "ValidTill"),
-                CreatedTime = GetReaderValue<DateTime?>(reader, "CreatedTime")
-            };
+            AccountCase accountCase = new AccountCase();
+
+            accountCase.CaseID = (int)reader["CaseID"];
+            accountCase.AccountNumber = reader["AccountNumber"] as string;
+            accountCase.UserID = GetReaderValue<int>(reader, "UserID");
+            accountCase.StatusID = (CaseStatus)reader["StatusID"];
+            accountCase.StatusUpdatedTime = (DateTime)reader["StatusUpdatedTime"];
+            accountCase.ValidTill = GetReaderValue<DateTime?>(reader, "ValidTill");
+            accountCase.CreatedTime = GetReaderValue<DateTime?>(reader, "CreatedTime");
+            
+            return accountCase;
         }
 
         private CasesSummary CasesSummaryMapper(IDataReader reader)

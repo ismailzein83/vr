@@ -11,7 +11,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public string AccountNumber { get; set; }
         public CaseStatus CaseStatus { get; set; }
         public DateTime? ValidTill { get; set; }
-        public DateTime From { get; set; }
-        public DateTime To { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
     }
 }
