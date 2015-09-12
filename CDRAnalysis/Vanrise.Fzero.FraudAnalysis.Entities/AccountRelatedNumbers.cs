@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class AccountNumbersByIMEI : Dictionary<String, HashSet<String>> //Dictionary<IMEI, List<AccountNumbers>
+    public class AccountRelatedNumbers : Dictionary<String, HashSet<String>> //  Dictionary<AccountNumber, HashSet<IMEI>>
     {
     }
-
 }

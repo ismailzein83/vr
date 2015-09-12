@@ -6,6 +6,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 {
     public class FindRelatedNumbersProcessInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
     {
+        public DateTime FromDate { get; set; }
+
+        public DateTime ToDate { get; set; }
+
         public override string GetTitle()
         {
             return String.Format("Find Related Numbers Process ({0:dd-MMM-yy HH:mm})", DateTime.Now);

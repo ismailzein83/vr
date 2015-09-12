@@ -32,7 +32,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     foreach ( var imei in accountStatus.AccountInfo.IMEIs)
                     {
 	                        // This code does two hash lookups.
-	                        List<String> accountNumbers;
+	                        HashSet<String> accountNumbers;
 	                        if (accountNumbersByIMEI.TryGetValue(imei, out accountNumbers))
 	                        {
                                 accountNumbers.Add(accountStatus.AccountNumber);
@@ -40,7 +40,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 	                        }
                             else
                             {
-                                accountNumbers = new List<string>();
+                                accountNumbers = new HashSet<string>();
                                 accountNumbers.Add(accountStatus.AccountNumber);
                                 accountNumbersByIMEI.Add(imei, accountNumbers);
                             }
