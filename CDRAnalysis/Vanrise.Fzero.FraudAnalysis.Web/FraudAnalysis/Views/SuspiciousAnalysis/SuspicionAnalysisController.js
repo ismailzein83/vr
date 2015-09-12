@@ -108,6 +108,7 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
 
         var parameters = {
             AccountNumber: gridObject.AccountNumber,
+            AccountStatusID: gridObject.AccountStatusID,
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate
         };

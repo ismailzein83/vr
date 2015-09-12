@@ -28,6 +28,10 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
         if (parameters != undefined && parameters != null) {
             $scope.accountNumber = parameters.AccountNumber;
+
+            var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", parameters.AccountStatusID);
+            $scope.accountStatus = accountStatus.description;
+
             $scope.fromDate = parameters.FromDate;
             $scope.toDate = parameters.ToDate;
         }
