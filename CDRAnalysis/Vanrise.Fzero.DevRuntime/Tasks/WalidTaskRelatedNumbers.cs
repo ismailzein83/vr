@@ -25,10 +25,10 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             BPClient bpClient = new BPClient();
             var input = new CreateProcessInput
             {
-                //InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.f
-                //{
+                InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.FindRelatedNumbersProcessInput
+                {
 
-                //}
+                }
             };
             bpClient.CreateNewProcess(input);
         }

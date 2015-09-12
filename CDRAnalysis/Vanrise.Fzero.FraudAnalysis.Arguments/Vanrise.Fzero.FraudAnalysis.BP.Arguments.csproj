@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FindRelatedNumbersProcessInput.cs" />
     <Compile Include="AssignStrategyCasesProcessInput.cs" />
     <Compile Include="NumberProfilingProcessInput.cs" />
     <Compile Include="ExecuteStrategyProcessInput.cs" />

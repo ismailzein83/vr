@@ -1,4 +1,4 @@
-﻿var FraudAnalysis_AssignStrategyCasesProcessInput_Scheduled = function ($scope, $http, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+﻿var FindRelatedNumbersProcessInput_Scheduled = function ($scope, $http, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
     var pageLoaded = false;
     defineScope();
     load();
@@ -29,8 +29,8 @@
 
 }
 
-FraudAnalysis_AssignStrategyCasesProcessInput_Scheduled.$inject = ['$scope', '$http', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
-appControllers.controller('FraudAnalysis_FraudAnalysis_AssignStrategyCasesProcessInput_Scheduled', FraudAnalysis_AssignStrategyCasesProcessInput_Scheduled)
+FindRelatedNumbersProcessInput_Scheduled.$inject = ['$scope', '$http', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+appControllers.controller('FraudAnalysis_FindRelatedNumbersProcessInput_Scheduled', FindRelatedNumbersProcessInput_Scheduled)
 
 
 
