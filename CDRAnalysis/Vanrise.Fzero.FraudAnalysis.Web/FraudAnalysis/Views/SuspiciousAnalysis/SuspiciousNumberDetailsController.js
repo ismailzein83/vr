@@ -28,13 +28,6 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
         if (parameters != undefined && parameters != null) {
             $scope.accountNumber = parameters.AccountNumber;
-
-            $scope.AccountStatusID = parameters.AccountStatusID;
-            var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", parameters.AccountStatusID);
-            $scope.accountStatus = accountStatus.description;
-
-            $scope.showCaseStatuses = (parameters.AccountStatusID == CaseStatusEnum.ClosedFraud.value || parameters.AccountStatusID == CaseStatusEnum.ClosedWhitelist) ? false : true;
-            
             $scope.fromDate = parameters.FromDate;
             $scope.toDate = parameters.ToDate;
         }
@@ -102,6 +95,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                     $scope.message = "No records found";
                     $scope.showProfileOptions = false;
                     $scope.showDate = true;
+                    $scope.showCaseStatuses = false;
                 }
 
                 angular.forEach(response.Data, function (item) {
@@ -244,10 +238,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         $scope.caseStatuses = UtilsService.getArrayEnum(CaseStatusEnum);
         $scope.caseStatuses = $scope.caseStatuses.slice(1); // remove the open option
 
-        if ($scope.AccountStatusID == CaseStatusEnum.Pending.value)
-            $scope.caseStatuses = $scope.caseStatuses.slice(1); // remove the pending option
-
-        return UtilsService.waitMultipleAsyncOperations([loadAggregateDefinitions, loadUsers])
+        return UtilsService.waitMultipleAsyncOperations([loadAggregateDefinitions, loadUsers, loadAccountStatus])
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             })
@@ -349,6 +340,24 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             })
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            });
+    }
+
+    function loadAccountStatus() {
+        return CaseManagementAPIService.GetAccountStatus($scope.accountNumber)
+            .then(function (response) {
+
+                if (response != null) {
+                    var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", response);
+                    $scope.accountStatus = accountStatus.description;
+
+                    $scope.showCaseStatuses = (response == CaseStatusEnum.ClosedFraud.value || response == CaseStatusEnum.ClosedWhitelist) ? false : true;
+
+                    if (response == CaseStatusEnum.Pending.value)
+                        $scope.caseStatuses = $scope.caseStatuses.slice(1); // remove the pending option
+                }
+                else
+                    $scope.showCaseStatuses = false;
             });
     }
 

@@ -279,8 +279,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             }
 
             return list;
+        
         }
 
+        public CaseStatus? GetAccountStatus(string accountNumber)
+        {
+            int? result = (int?)ExecuteScalarSP("FraudAnalysis.sp_AccountStatus_GetByAccountNumber", accountNumber);
+            return (CaseStatus?)result;
+        }
 
         #region Methods that update an account case
 
@@ -333,7 +339,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
         #endregion
-
 
         public BigResult<CasesSummary> GetCasesSummary(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
         {

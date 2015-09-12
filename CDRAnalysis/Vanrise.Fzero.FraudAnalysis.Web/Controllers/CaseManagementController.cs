@@ -53,6 +53,13 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
             return manager.GetRelatedNumbersByAccountNumber(accountNumber);
         }
 
+        [HttpGet]
+        public CaseStatus? GetAccountStatus(string accountNumber)
+        {
+            CaseManagmentManager manager = new CaseManagmentManager();
+            return manager.GetAccountStatus(accountNumber);
+        }
+
         [HttpPost]
         public Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> UpdateAccountCase(AccountCaseUpdateResultQuery input)
         {

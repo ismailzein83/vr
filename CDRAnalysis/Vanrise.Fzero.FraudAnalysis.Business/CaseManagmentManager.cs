@@ -37,6 +37,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return dataManager.GetRelatedNumbersByAccountNumber(accountNumber);
         }
 
+        public CaseStatus? GetAccountStatus(string accountNumber)
+        {
+            ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
+            return dataManager.GetAccountStatus(accountNumber);
+        }
+
         public Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> UpdateAccountCase(AccountCaseUpdateResultQuery input)
         {
             Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary>();

@@ -37,6 +37,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         List<RelatedNumber> GetRelatedNumbersByAccountNumber(string accountNumber);
 
+        CaseStatus? GetAccountStatus(string accountNumber);
+
         BigResult<CasesSummary> GetCasesSummary(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input);
 
         BigResult<AccountCase> GetFilteredCasesByAccountNumber(Vanrise.Entities.DataRetrievalInput<AccountCaseResultQuery> input);
