@@ -233,6 +233,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         public BigResult<AccountCase> GetFilteredCasesByAccountNumber(Vanrise.Entities.DataRetrievalInput<AccountCaseResultQuery> input)
         {
             Dictionary<string, string> mapper = new Dictionary<string, string>();
+            mapper.Add("UserName", "UserID");
             mapper.Add("CaseStatusDescription", "StatusID");
 
             Action<string> createTempTableAction = (tempTableName) =>

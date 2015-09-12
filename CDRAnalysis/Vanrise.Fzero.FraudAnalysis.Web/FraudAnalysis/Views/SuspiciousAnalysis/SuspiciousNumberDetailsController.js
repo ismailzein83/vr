@@ -34,6 +34,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
     }
 
     function defineScope() {
+        $scope.showCaseStatuses = true;
         $scope.showOccurancesGrid = true;
         $scope.message = undefined;
         $scope.detailAggregateValues = [];
@@ -95,7 +96,6 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                     $scope.message = "No records found";
                     $scope.showProfileOptions = false;
                     $scope.showDate = true;
-                    $scope.showCaseStatuses = false;
                 }
 
                 angular.forEach(response.Data, function (item) {
@@ -351,7 +351,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                     var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", response);
                     $scope.accountStatus = accountStatus.description;
 
-                    $scope.showCaseStatuses = (response == CaseStatusEnum.ClosedFraud.value || response == CaseStatusEnum.ClosedWhitelist) ? false : true;
+                    $scope.showCaseStatuses = (response == CaseStatusEnum.ClosedFraud.value || response == CaseStatusEnum.ClosedWhitelist.value) ? false : true;
 
                     if (response == CaseStatusEnum.Pending.value)
                         $scope.caseStatuses = $scope.caseStatuses.slice(1); // remove the pending option
