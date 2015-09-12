@@ -107,32 +107,33 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         public bool UpdateAccountCase(string accountNumber, CaseStatus caseStatus, DateTime? validTill)
         {
-            ICaseManagementDataManager manager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
+            ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
 
             int userID = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
-            AccountCase accountCase = manager.GetLastAccountCaseByAccountNumber(accountNumber);
             int caseID;
             bool succeeded;
 
+            AccountCase accountCase = dataManager.GetLastAccountCaseByAccountNumber(accountNumber);
+
             if (accountCase == null || (accountCase.StatusID == CaseStatus.ClosedFraud) || (accountCase.StatusID == CaseStatus.ClosedWhiteList))
-                succeeded = manager.InsertAccountCase(out caseID, accountNumber, userID, caseStatus, validTill);
+                succeeded = dataManager.InsertAccountCase(out caseID, accountNumber, userID, caseStatus, validTill);
             else
             {
                 caseID = accountCase.CaseID;
-                succeeded = manager.UpdateAccountCaseStatus(accountCase.CaseID, caseStatus, validTill);
+                succeeded = dataManager.UpdateAccountCaseStatus(accountCase.CaseID, userID, caseStatus, validTill);
             }
 
             if (!succeeded) return false;
 
-            succeeded = manager.InsertAccountCaseHistory(caseID, userID, caseStatus);
+            succeeded = dataManager.InsertAccountCaseHistory(caseID, userID, caseStatus);
 
             if (!succeeded) return false;
 
-            succeeded = manager.InsertOrUpdateAccountStatus(accountNumber, caseStatus);
+            succeeded = dataManager.InsertOrUpdateAccountStatus(accountNumber, caseStatus);
 
             if (!succeeded) return false;
 
-            return manager.LinkDetailToCase(accountNumber, caseID, caseStatus);
+            return dataManager.LinkDetailToCase(accountNumber, caseID, caseStatus);
         }
 
 

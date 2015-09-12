@@ -280,49 +280,53 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return list;
         }
 
-        
 
-        public AccountCase GetLastAccountCaseByAccountNumber(string accountNumber)
-        {
-            return GetItemSP("FraudAnalysis.sp_AccountCase_GetLastByAccountNumber", AccountCaseMapper, accountNumber);
-        }
+        #region Methods that update an account case
 
-        public bool InsertAccountCase(out int insertedID, string accountNumber, int? userID, CaseStatus caseStatus, DateTime? validTill)
-        {
-            object accountCaseID;
+            public AccountCase GetLastAccountCaseByAccountNumber(string accountNumber)
+            {
+                return GetItemSP("FraudAnalysis.sp_AccountCase_GetLastByAccountNumber", AccountCaseMapper, accountNumber);
+            }
 
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_Insert", out accountCaseID, accountNumber, userID, caseStatus, validTill);
+            public bool InsertAccountCase(out int insertedID, string accountNumber, int? userID, CaseStatus caseStatus, DateTime? validTill)
+            {
+                object accountCaseID;
 
-            insertedID = (recordsAffected > 0) ? (int)accountCaseID : -1;
+                int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_Insert", out accountCaseID, accountNumber, userID, caseStatus, validTill);
 
-            return (recordsAffected > 0);
-        }
+                insertedID = (recordsAffected > 0) ? (int)accountCaseID : -1;
 
-        public bool UpdateAccountCaseStatus(int caseID, CaseStatus statusID, DateTime? validTill)
-        {
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_Update", caseID, statusID, validTill);
-            return (recordsAffected > 0);
-        }
+                return (recordsAffected > 0);
+            }
 
-        public bool InsertAccountCaseHistory(int caseID, int? userID, CaseStatus caseStatus)
-        {
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCaseHistory_Insert", caseID, userID, caseStatus);
-            return (recordsAffected > 0);
-        }
+            public bool UpdateAccountCaseStatus(int caseID, int userID, CaseStatus statusID, DateTime? validTill)
+            {
+                int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_Update", caseID, userID, statusID, validTill);
+                return (recordsAffected > 0);
+            }
 
-        public bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus)
-        {
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_InsertOrUpdate", accountNumber, caseStatus);
-            return (recordsAffected > 0);
-        }
+            public bool InsertAccountCaseHistory(int caseID, int? userID, CaseStatus caseStatus)
+            {
+                int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCaseHistory_Insert", caseID, userID, caseStatus);
+                return (recordsAffected > 0);
+            }
 
-        public bool LinkDetailToCase(string accountNumber, int caseID, CaseStatus caseStatus)
-        {
-            SuspicionOccuranceStatus occuranceStatus = (caseStatus.CompareTo(CaseStatus.Open) == 0 || caseStatus.CompareTo(CaseStatus.Pending) == 0) ? SuspicionOccuranceStatus.Open : SuspicionOccuranceStatus.Closed;
+            public bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus)
+            {
+                int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_InsertOrUpdate", accountNumber, caseStatus);
+                return (recordsAffected > 0);
+            }
 
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_SetStatusToCaseStatus", accountNumber, caseID, occuranceStatus);
-            return (recordsAffected > 0);
-        }
+            public bool LinkDetailToCase(string accountNumber, int caseID, CaseStatus caseStatus)
+            {
+                SuspicionOccuranceStatus occuranceStatus = (caseStatus.CompareTo(CaseStatus.Open) == 0 || caseStatus.CompareTo(CaseStatus.Pending) == 0) ? SuspicionOccuranceStatus.Open : SuspicionOccuranceStatus.Closed;
+
+                int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_SetStatusToCaseStatus", accountNumber, caseID, occuranceStatus);
+                return (recordsAffected > 0);
+            }
+
+        #endregion
+
 
         public BigResult<CasesSummary> GetCasesSummary(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
         {
