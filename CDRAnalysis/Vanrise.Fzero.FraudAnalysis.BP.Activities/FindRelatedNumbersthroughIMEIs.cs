@@ -8,6 +8,7 @@ using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Queueing;
+using System.Linq;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
@@ -43,7 +44,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
 
 
-            AccountNumbersByIMEI accountNumbersByIMEI = new AccountNumbersByIMEI();
+            AccountNumbersByIMEI accountNumbersByIMEI = inputArgument.AccountsNumbersByIMEI;
 
             IRelatedNumberDataManager dataManager = FraudDataManagerFactory.GetDataManager<IRelatedNumberDataManager>();
 
@@ -61,9 +62,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                             var serializedCDRs = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(cdrBatch.CDRBatchFilePath));
                             System.IO.File.Delete(cdrBatch.CDRBatchFilePath);
                             var cdrs = Vanrise.Common.ProtoBufSerializer.Deserialize<List<CDR>>(serializedCDRs);
-                            foreach (var cdr in cdrs)
+                            foreach (var cdr in cdrs.Where(x=>x.IMEI !=null))
                             {
-
                                 HashSet<String> accountNumbers;
                                 if (accountNumbersByIMEI.TryGetValue(cdr.IMEI, out accountNumbers))
                                 {
@@ -93,9 +93,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
 
             dataManager.SavetoDB(accountRelatedNumbers);
-                          
+
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs from Database to Memory");
-            
+
         }
 
 

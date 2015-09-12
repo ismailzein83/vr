@@ -16,62 +16,30 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
-
-        public object FinishDBApplyStream(object dbApplyStream)
+        public void SavetoDB(AccountRelatedNumbers record)
         {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.Close();
-            return new StreamBulkInsertInfo
-            {
-                TableName = "[FraudAnalysis].[RelatedNumbers]",
-                Stream = streamForBulkInsert,
-                TabLock = false,
-                KeepIdentity = false,
-                FieldSeparator = '^'
-            };
-        }
 
-        public object InitialiazeStreamForDBApply()
-        {
-            return base.InitializeStreamForBulkInsert();
-        }
-
-        public void ApplyAccountRelatedNumbersToDB(object preparedAccountRelatedNumbers)
-        {
-            InsertBulkToTable(preparedAccountRelatedNumbers as BaseBulkInsertInfo);
-        }
-
-
-        public void WriteRecordToStream(AccountRelatedNumbers record, object dbApplyStream)
-        {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            StreamForBulkInsert stream = InitializeStreamForBulkInsert();
 
             foreach (KeyValuePair<string, HashSet<string>> entry in record)
             {
-                streamForBulkInsert.WriteRecord("{0}^{1}",
+                stream.WriteRecord("{0}^{1}",
                                 entry.Key,
                                 string.Join<string>(",", entry.Value)
                                 );
             }
 
+            stream.Close();
 
-
+            InsertBulkToTable(
+                new StreamBulkInsertInfo
+                {
+                    TableName = "[FraudAnalysis].[RelatedNumbers]",
+                    Stream = stream,
+                    TabLock = true,
+                    KeepIdentity = false,
+                    FieldSeparator = ','
+                });
         }
-
-
-        public void SavetoDB(AccountRelatedNumbers record)
-        {
-            object dbApplyStream = InitialiazeStreamForDBApply();
-
-            WriteRecordToStream(record, dbApplyStream);
-
-            Object preparedItemsForDBApply = FinishDBApplyStream(dbApplyStream);
-
-            ApplyAccountRelatedNumbersToDB(preparedItemsForDBApply);
-        }
-
-
-
-
     }
 }

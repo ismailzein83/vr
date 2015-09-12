@@ -4,10 +4,8 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data
 {
-    public interface IRelatedNumberDataManager : IDataManager, IBulkApplyDataManager<AccountRelatedNumbers>
+    public interface IRelatedNumberDataManager : IDataManager
     {
-        void ApplyAccountRelatedNumbersToDB(object preparedAccountRelatedNumbers);
-
         void SavetoDB(AccountRelatedNumbers record);
     }
 }
