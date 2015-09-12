@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountStatusDataManager.cs" />
+    <Compile Include="RelatedNumberDataManager.cs" />
     <Compile Include="NumberProfileDataManager.cs" />
     <Compile Include="CallClassDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
