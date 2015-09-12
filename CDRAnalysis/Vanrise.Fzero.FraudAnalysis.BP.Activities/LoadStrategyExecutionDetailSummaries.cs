@@ -13,14 +13,14 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
     #region Arguments Classes
 
-    public class LoadAccountNumbersInput
+    public class LoadStrategyExecutionDetailSummariesInput
     {
         public BaseQueue<StrategyExecutionDetailSummaryBatch> OutputQueue { get; set; }
     }
 
     #endregion
 
-    public sealed class LoadAccountNumbers : BaseAsyncActivity<LoadAccountNumbersInput>
+    public sealed class LoadStrategyExecutionDetailSummaries : BaseAsyncActivity<LoadStrategyExecutionDetailSummariesInput>
     {
         #region Arguments
 
@@ -37,16 +37,16 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             base.OnBeforeExecute(context, handle);
         }
 
-        static string configuredDirectory = ConfigurationManager.AppSettings["LoadAccountNumbersDirectory"];
+        static string configuredDirectory = ConfigurationManager.AppSettings["LoadStrategyExecutionDetailSummariesDirectory"];
 
-        protected override void DoWork(LoadAccountNumbersInput inputArgument, AsyncActivityHandle handle)
+        protected override void DoWork(LoadStrategyExecutionDetailSummariesInput inputArgument, AsyncActivityHandle handle)
         {
             IStrategyExecutionDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
             int index = 0;
             int totalIndex = 0;
             List<StrategyExecutionDetailSummary> strategyExecutionDetailSummaries = new List<StrategyExecutionDetailSummary>();
 
-            dataManager.LoadAccountNumbersfromStrategyExecutionDetails((strategyExecutionDetailSummary) =>
+            dataManager.LoadStrategyExecutionDetailSummaries((strategyExecutionDetailSummary) =>
                 {
 
                     index++;
@@ -77,9 +77,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         }
        
 
-        protected override LoadAccountNumbersInput GetInputArgument(AsyncCodeActivityContext context)
+        protected override LoadStrategyExecutionDetailSummariesInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            return new LoadAccountNumbersInput
+            return new LoadStrategyExecutionDetailSummariesInput
             {
                 OutputQueue = this.OutputQueue.Get(context)
             };

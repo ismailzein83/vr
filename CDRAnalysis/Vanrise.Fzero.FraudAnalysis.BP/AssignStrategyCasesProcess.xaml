@@ -71,21 +71,21 @@
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_2">
       <Parallel.Variables>
         <Variable x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailSummaryBatch)" Name="strategyExecutionDetailSummaries" />
-        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadAccountNumbersStatus" />
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadStrategyExecutionDetailSummariesStatus" />
         <Variable x:TypeArguments="x:String" Name="variable1" />
       </Parallel.Variables>
-      <vffba1:LoadAccountNumbers sap2010:WorkflowViewState.IdRef="LoadAccountNumbers_2">
-        <vffba1:LoadAccountNumbers.OutputQueue>
+      <vffba1:LoadStrategyExecutionDetailSummaries sap2010:WorkflowViewState.IdRef="LoadStrategyExecutionDetailSummaries_2">
+        <vffba1:LoadStrategyExecutionDetailSummaries.OutputQueue>
           <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailSummaryBatch)">
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailSummaryBatch)">strategyExecutionDetailSummaries</mca:CSharpReference>
           </InOutArgument>
-        </vffba1:LoadAccountNumbers.OutputQueue>
-        <vffba1:LoadAccountNumbers.Status>
+        </vffba1:LoadStrategyExecutionDetailSummaries.OutputQueue>
+        <vffba1:LoadStrategyExecutionDetailSummaries.Status>
           <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadAccountNumbersStatus</mca:CSharpReference>
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadStrategyExecutionDetailSummariesStatus</mca:CSharpReference>
           </OutArgument>
-        </vffba1:LoadAccountNumbers.Status>
-      </vffba1:LoadAccountNumbers>
+        </vffba1:LoadStrategyExecutionDetailSummaries.Status>
+      </vffba1:LoadStrategyExecutionDetailSummaries>
       <vffba1:AssignCases Status="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignCases_2">
         <vffba1:AssignCases.InputQueue>
           <InArgument x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailSummaryBatch)">
@@ -94,7 +94,7 @@
         </vffba1:AssignCases.InputQueue>
         <vffba1:AssignCases.PreviousActivityStatus>
           <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadAccountNumbersStatus</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadStrategyExecutionDetailSummariesStatus</mca:CSharpValue>
           </InArgument>
         </vffba1:AssignCases.PreviousActivityStatus>
       </vffba1:AssignCases>
@@ -109,7 +109,7 @@
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="554,62" />
-      <sap2010:ViewStateData Id="LoadAccountNumbers_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="LoadStrategyExecutionDetailSummaries_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="AssignCases_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="554,86" />
       <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="554,62" />
