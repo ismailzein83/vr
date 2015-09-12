@@ -27,7 +27,8 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             {
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.FindRelatedNumbersProcessInput
                 {
-
+                    FromDate = DateTime.Parse("2010-01-01"),
+                    ToDate = DateTime.Parse("2020-01-02")
                 }
             };
             bpClient.CreateNewProcess(input);

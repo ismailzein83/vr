@@ -93,12 +93,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
 
             dataManager.SavetoDB(accountRelatedNumbers);
-
-              
-
+                          
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs from Database to Memory");
-
-
+            
         }
 
 
