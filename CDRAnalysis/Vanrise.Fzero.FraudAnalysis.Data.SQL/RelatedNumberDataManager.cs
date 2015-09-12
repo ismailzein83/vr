@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Collections.Generic;
 using Vanrise.Data.SQL;
-using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
 

@@ -1,6 +1,4 @@
-﻿using Vanrise.Data;
-using Vanrise.Entities;
-using Vanrise.Fzero.FraudAnalysis.Entities;
+﻿using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data
 {
