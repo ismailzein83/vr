@@ -52,7 +52,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                         {
                             var serializedNumbers = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(accountNumberBatch.AccountNumberBatchFilePath));
                             System.IO.File.Delete(accountNumberBatch.AccountNumberBatchFilePath);
-                            var number = Vanrise.Common.ProtoBufSerializer.Deserialize<string>(serializedNumbers);
+                            var strategyExecutionDetail = Vanrise.Common.ProtoBufSerializer.Deserialize<StrategyExecutionDetail>(serializedNumbers);
 
                             index++;
                             totalIndex++;
@@ -63,7 +63,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                             }
 
 
-                            manager.AssignAccountCase(number);
+                            manager.AssignAccountCase(strategyExecutionDetail.AccountNumber, strategyExecutionDetail.IMEIs);
                         });
                 }
                 while (!ShouldStop(handle) && hasItem);

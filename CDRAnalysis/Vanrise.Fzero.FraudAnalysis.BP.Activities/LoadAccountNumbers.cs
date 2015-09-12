@@ -44,9 +44,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             IStrategyExecutionDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
             int index = 0;
             int totalIndex = 0;
-            dataManager.LoadAccountNumbersfromStrategyExecutionDetails((number) =>
+            dataManager.LoadAccountNumbersfromStrategyExecutionDetails((strategyExecutionDetail) =>
                 {
-                    inputArgument.OutputQueue.Enqueue(BuildAccountNumberBatch(number));
+                    inputArgument.OutputQueue.Enqueue(BuildAccountNumberBatch(strategyExecutionDetail));
                     index++;
                     totalIndex ++;
                     if (index == 1000)
@@ -59,9 +59,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 });
         }
 
-        private AccountNumberBatch BuildAccountNumberBatch(string number)
+        private AccountNumberBatch BuildAccountNumberBatch(StrategyExecutionDetail strategyExecutionDetail)
         {
-            var numbersBytes = Vanrise.Common.Compressor.Compress(Vanrise.Common.ProtoBufSerializer.Serialize(number));
+            var numbersBytes = Vanrise.Common.Compressor.Compress(Vanrise.Common.ProtoBufSerializer.Serialize(strategyExecutionDetail));
             string filePath = !String.IsNullOrEmpty(configuredDirectory) ? System.IO.Path.Combine(configuredDirectory, Guid.NewGuid().ToString()) : System.IO.Path.GetTempFileName();
             System.IO.File.WriteAllBytes(filePath, numbersBytes);
             return new AccountNumberBatch

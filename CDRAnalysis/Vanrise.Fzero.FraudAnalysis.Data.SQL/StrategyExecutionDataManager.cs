@@ -73,7 +73,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                                  Vanrise.Common.Serializer.Serialize(record.AggregateValues, true),
                                  null,
                                  (int)record.SuspicionOccuranceStatus,
-                                 string.Join<string>(",", record.IMEIs)    
+                                 string.Join<string>(",", record.IMEIs)
                                  );
         }
 
@@ -106,13 +106,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_Delete", StrategyExecutionId);
         }
 
-        public void LoadAccountNumbersfromStrategyExecutionDetails(Action<string> onBatchReady)
+        public void LoadAccountNumbersfromStrategyExecutionDetails(Action<StrategyExecutionDetail> onBatchReady)
         {
             ExecuteReaderSP("FraudAnalysis.sp_StrategyExecutionDetails_Load", (reader) =>
             {
                 while (reader.Read())
                 {
-                    onBatchReady(reader["AccountNumber"] as string);
+                    onBatchReady(new StrategyExecutionDetail() { AccountNumber = (reader["AccountNumber"] as string)   });
                 }
 
 
