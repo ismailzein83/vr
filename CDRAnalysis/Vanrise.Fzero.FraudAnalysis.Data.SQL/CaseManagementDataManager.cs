@@ -320,7 +320,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus, AccountInfo accountInfo)
         {
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_InsertOrUpdate", accountNumber, caseStatus, Vanrise.Common.Serializer.Serialize(accountInfo));
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_InsertOrUpdate_with_AccountInfo", accountNumber, caseStatus, Vanrise.Common.Serializer.Serialize(accountInfo));
             return (recordsAffected > 0);
         }
 
