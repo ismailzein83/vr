@@ -17,7 +17,7 @@
 
         $scope.schedulerTaskAction.processInputArguments.getData = function () {
             return {
-                $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.AssignStrategyExecutionCasesProcess, Vanrise.Fzero.FraudAnalysis.BP.Arguments"
+                $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.FindRelatedNumbersProcess, Vanrise.Fzero.FraudAnalysis.BP.Arguments"
             };
         };
 

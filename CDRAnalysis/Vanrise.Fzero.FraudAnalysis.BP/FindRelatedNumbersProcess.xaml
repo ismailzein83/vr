@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.Fzero.FraudAnalysis.BP.FindRelatedNumbersProcess" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="Vanrise.Fzero.FraudAnalysis.BP.FindRelatedNumbersProcess_1"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.Fzero.FraudAnalysis.BP.FindRelatedNumbersProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
@@ -7,9 +7,15 @@
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
- xmlns:vffba="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Activities;assembly=Vanrise.Fzero.FraudAnalysis.BP.Activities"
+ xmlns:vffba="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Arguments;assembly=Vanrise.Fzero.FraudAnalysis.BP.Arguments"
+ xmlns:vffba1="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Activities;assembly=Vanrise.Fzero.FraudAnalysis.BP.Activities"
  xmlns:vffe="clr-namespace:Vanrise.Fzero.FraudAnalysis.Entities;assembly=Vanrise.Fzero.FraudAnalysis.Entities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(vffba:FindRelatedNumbersProcessInput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>Vanrise.Fzero.FraudAnalysis.BP.FindRelatedNumbersProcess_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System</x:String>
@@ -18,6 +24,7 @@
       <x:String>System.Linq</x:String>
       <x:String>System.Text</x:String>
       <x:String>Vanrise.Fzero.FraudAnalysis.Entities</x:String>
+      <x:String>Vanrise.Fzero.FraudAnalysis.BP.Arguments</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -55,14 +62,14 @@
     <Sequence.Variables>
       <Variable x:TypeArguments="vffe:AccountNumbersByIMEI" Name="accountNumbersByIMEI" />
     </Sequence.Variables>
-    <vffba:GetAccountNumbersByIMEI sap2010:WorkflowViewState.IdRef="GetAccountNumbersByIMEI_1">
-      <vffba:GetAccountNumbersByIMEI.AccountNumbersByIMEI>
+    <vffba1:GetAccountNumbersByIMEI sap2010:WorkflowViewState.IdRef="GetAccountNumbersByIMEI_1">
+      <vffba1:GetAccountNumbersByIMEI.AccountNumbersByIMEI>
         <InOutArgument x:TypeArguments="vffe:AccountNumbersByIMEI">
           <mca:CSharpReference x:TypeArguments="vffe:AccountNumbersByIMEI">accountNumbersByIMEI</mca:CSharpReference>
         </InOutArgument>
-      </vffba:GetAccountNumbersByIMEI.AccountNumbersByIMEI>
-    </vffba:GetAccountNumbersByIMEI>
-    <sads:DebugSymbol.Symbol>d1BDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbmRSZWxhdGVkTnVtYmVyc1Byb2Nlc3MueGFtbAM2A0IOAgEBOgVAJQIBAj0LPXYCAQM=</sads:DebugSymbol.Symbol>
+      </vffba1:GetAccountNumbersByIMEI.AccountNumbersByIMEI>
+    </vffba1:GetAccountNumbersByIMEI>
+    <sads:DebugSymbol.Symbol>d1BDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbmRSZWxhdGVkTnVtYmVyc1Byb2Nlc3MueGFtbAM9A0kOAgEBQQVHJgIBAkQLRHYCAQM=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

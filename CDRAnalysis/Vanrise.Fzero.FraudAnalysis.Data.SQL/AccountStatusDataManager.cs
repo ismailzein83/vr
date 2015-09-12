@@ -19,7 +19,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public void LoadAccountStatus(Action<AccountStatus> onBatchReady)
         {
-            ExecuteReaderSP("sp_AccountStatus_Load", (reader) =>
+            ExecuteReaderSP("FraudAnalysis.sp_AccountStatus_Load", (reader) =>
             {
                 while (reader.Read())
                 {
