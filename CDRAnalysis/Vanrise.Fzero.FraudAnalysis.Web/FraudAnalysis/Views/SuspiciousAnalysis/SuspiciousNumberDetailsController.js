@@ -29,9 +29,12 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         if (parameters != undefined && parameters != null) {
             $scope.accountNumber = parameters.AccountNumber;
 
+            $scope.AccountStatusID = parameters.AccountStatusID;
             var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", parameters.AccountStatusID);
             $scope.accountStatus = accountStatus.description;
 
+            $scope.showCaseStatuses = (parameters.AccountStatusID == CaseStatusEnum.ClosedFraud.value || parameters.AccountStatusID == CaseStatusEnum.ClosedWhitelist) ? false : true;
+            
             $scope.fromDate = parameters.FromDate;
             $scope.toDate = parameters.ToDate;
         }
@@ -240,6 +243,9 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         
         $scope.caseStatuses = UtilsService.getArrayEnum(CaseStatusEnum);
         $scope.caseStatuses = $scope.caseStatuses.slice(1); // remove the open option
+
+        if ($scope.AccountStatusID == CaseStatusEnum.Pending.value)
+            $scope.caseStatuses = $scope.caseStatuses.slice(1); // remove the pending option
 
         return UtilsService.waitMultipleAsyncOperations([loadAggregateDefinitions, loadUsers])
             .catch(function (error) {
