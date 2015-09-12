@@ -137,8 +137,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             return dataManager.LinkDetailToCase(accountNumber, caseID, caseStatus);
         }
-
-        public bool AssignAccountCase(string accountNumber , HashSet<string> IMEIs )
+        
+        public bool AssignAccountCase(string accountNumber , HashSet<string> imeis )
         {
             ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
 
@@ -156,7 +156,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
                 if (!succeeded) return false;
 
-                succeeded = dataManager.InsertOrUpdateAccountStatus(accountNumber, CaseStatus.Open);
+                succeeded = dataManager.InsertOrUpdateAccountStatus(accountNumber, CaseStatus.Open, new AccountInfo() { IMEIs = imeis });
             }
             else
             {

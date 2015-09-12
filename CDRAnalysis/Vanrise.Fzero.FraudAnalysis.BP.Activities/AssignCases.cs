@@ -16,7 +16,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
     public class AssignCasesInput
     {
-        public BaseQueue<AccountNumberBatch> InputQueue { get; set; }
+        public BaseQueue<StrategyExecutionDetailSummaryBatch> InputQueue { get; set; }
     }
 
     #endregion
@@ -27,7 +27,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         #region Arguments
 
         [RequiredArgument]
-        public InArgument<BaseQueue<AccountNumberBatch>> InputQueue { get; set; }
+        public InArgument<BaseQueue<StrategyExecutionDetailSummaryBatch>> InputQueue { get; set; }
 
         #endregion
 
@@ -48,11 +48,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 {
 
                     hasItem = inputArgument.InputQueue.TryDequeue(
-                        (accountNumberBatch) =>
+                        (strategyExecutionDetailSummaryBatch) =>
                         {
-                            var serializedNumbers = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(accountNumberBatch.AccountNumberBatchFilePath));
-                            System.IO.File.Delete(accountNumberBatch.AccountNumberBatchFilePath);
-                            var strategyExecutionDetail = Vanrise.Common.ProtoBufSerializer.Deserialize<StrategyExecutionDetail>(serializedNumbers);
 
                             index++;
                             totalIndex++;
@@ -62,8 +59,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                 index = 0;
                             }
 
-
-                            manager.AssignAccountCase(strategyExecutionDetail.AccountNumber, strategyExecutionDetail.IMEIs);
+                            foreach (var strategyExecutionDetailSummary in strategyExecutionDetailSummaryBatch.StrategyExecutionDetailSummaries)
+                                manager.AssignAccountCase(strategyExecutionDetailSummary.AccountNumber, strategyExecutionDetailSummary.IMEIs);
                         });
                 }
                 while (!ShouldStop(handle) && hasItem);

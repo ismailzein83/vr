@@ -9,6 +9,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public CaseStatus Status { get; set; }
 
-        public Dictionary<String, List<String>> AccountInfo { get; set; } //AccountNumberByIMEI
+        public AccountInfo AccountInfo { get; set; } 
     }
 }

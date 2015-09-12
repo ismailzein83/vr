@@ -205,7 +205,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             StringBuilder conditions = new StringBuilder();
 
-            if (SelectedSuspicionLevelIDs != null && SelectedSuspicionLevelIDs.Count > 0) {
+            if (SelectedSuspicionLevelIDs != null && SelectedSuspicionLevelIDs.Count > 0)
+            {
 
                 string selectedSuspicionLevelIDs = string.Join(",", SelectedSuspicionLevelIDs.Select(n => ((int)n).ToString()).ToArray());
                 conditions.Append("AND sed.SuspicionLevelID IN (" + selectedSuspicionLevelIDs + ")");
@@ -264,7 +265,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         public List<RelatedNumber> GetRelatedNumbersByAccountNumber(string accountNumber)
         {
             string result = ExecuteScalarSP("FraudAnalysis.sp_RelatedNumbers_GetByAccountNumber", accountNumber) as string;
-            
+
             List<RelatedNumber> list = new List<RelatedNumber>();
 
             if (result != null)
@@ -283,47 +284,53 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         #region Methods that update an account case
 
-            public AccountCase GetLastAccountCaseByAccountNumber(string accountNumber)
-            {
-                return GetItemSP("FraudAnalysis.sp_AccountCase_GetLastByAccountNumber", AccountCaseMapper, accountNumber);
-            }
+        public AccountCase GetLastAccountCaseByAccountNumber(string accountNumber)
+        {
+            return GetItemSP("FraudAnalysis.sp_AccountCase_GetLastByAccountNumber", AccountCaseMapper, accountNumber);
+        }
 
-            public bool InsertAccountCase(out int insertedID, string accountNumber, int? userID, CaseStatus caseStatus, DateTime? validTill)
-            {
-                object accountCaseID;
+        public bool InsertAccountCase(out int insertedID, string accountNumber, int? userID, CaseStatus caseStatus, DateTime? validTill)
+        {
+            object accountCaseID;
 
-                int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_Insert", out accountCaseID, accountNumber, userID, caseStatus, validTill);
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_Insert", out accountCaseID, accountNumber, userID, caseStatus, validTill);
 
-                insertedID = (recordsAffected > 0) ? (int)accountCaseID : -1;
+            insertedID = (recordsAffected > 0) ? (int)accountCaseID : -1;
 
-                return (recordsAffected > 0);
-            }
+            return (recordsAffected > 0);
+        }
 
-            public bool UpdateAccountCaseStatus(int caseID, int userID, CaseStatus statusID, DateTime? validTill)
-            {
-                int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_Update", caseID, userID, statusID, validTill);
-                return (recordsAffected > 0);
-            }
+        public bool UpdateAccountCaseStatus(int caseID, int userID, CaseStatus statusID, DateTime? validTill)
+        {
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_Update", caseID, userID, statusID, validTill);
+            return (recordsAffected > 0);
+        }
 
-            public bool InsertAccountCaseHistory(int caseID, int? userID, CaseStatus caseStatus)
-            {
-                int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCaseHistory_Insert", caseID, userID, caseStatus);
-                return (recordsAffected > 0);
-            }
+        public bool InsertAccountCaseHistory(int caseID, int? userID, CaseStatus caseStatus)
+        {
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCaseHistory_Insert", caseID, userID, caseStatus);
+            return (recordsAffected > 0);
+        }
 
-            public bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus)
-            {
-                int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_InsertOrUpdate", accountNumber, caseStatus);
-                return (recordsAffected > 0);
-            }
+        public bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus)
+        {
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_InsertOrUpdate", accountNumber, caseStatus);
+            return (recordsAffected > 0);
+        }
 
-            public bool LinkDetailToCase(string accountNumber, int caseID, CaseStatus caseStatus)
-            {
-                SuspicionOccuranceStatus occuranceStatus = (caseStatus.CompareTo(CaseStatus.Open) == 0 || caseStatus.CompareTo(CaseStatus.Pending) == 0) ? SuspicionOccuranceStatus.Open : SuspicionOccuranceStatus.Closed;
+        public bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus, AccountInfo accountInfo)
+        {
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_InsertOrUpdate", accountNumber, caseStatus, Vanrise.Common.Serializer.Serialize(accountInfo));
+            return (recordsAffected > 0);
+        }
 
-                int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_SetStatusToCaseStatus", accountNumber, caseID, occuranceStatus);
-                return (recordsAffected > 0);
-            }
+        public bool LinkDetailToCase(string accountNumber, int caseID, CaseStatus caseStatus)
+        {
+            SuspicionOccuranceStatus occuranceStatus = (caseStatus.CompareTo(CaseStatus.Open) == 0 || caseStatus.CompareTo(CaseStatus.Pending) == 0) ? SuspicionOccuranceStatus.Open : SuspicionOccuranceStatus.Closed;
+
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_SetStatusToCaseStatus", accountNumber, caseID, occuranceStatus);
+            return (recordsAffected > 0);
+        }
 
         #endregion
 
@@ -402,7 +409,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             detail.ToDate = (DateTime)reader["ToDate"];
             detail.ExecutionDate = (DateTime)reader["ExecutionDate"];
             detail.AggregateValues = Vanrise.Common.Serializer.Deserialize<Dictionary<string, decimal>>(GetReaderValue<string>(reader, "AggregateValues"));
-            
+
             return detail;
         }
 
@@ -417,7 +424,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             accountCase.StatusUpdatedTime = (DateTime)reader["StatusUpdatedTime"];
             accountCase.ValidTill = GetReaderValue<DateTime?>(reader, "ValidTill");
             accountCase.CreatedTime = GetReaderValue<DateTime?>(reader, "CreatedTime");
-            
+
             return accountCase;
         }
 

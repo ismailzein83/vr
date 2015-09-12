@@ -106,7 +106,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_Delete", StrategyExecutionId);
         }
 
-        public void LoadAccountNumbersfromStrategyExecutionDetails(Action<StrategyExecutionDetail> onBatchReady)
+        public void LoadAccountNumbersfromStrategyExecutionDetails(Action<StrategyExecutionDetailSummary> onBatchReady)
         {
             ExecuteReaderSP("FraudAnalysis.sp_StrategyExecutionDetails_Load", (reader) =>
             {
@@ -120,7 +120,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
                     }
 
-                    onBatchReady(new StrategyExecutionDetail() { AccountNumber = (reader["AccountNumber"] as string), IMEIs = iMEIs });
+                    onBatchReady(new StrategyExecutionDetailSummary() { AccountNumber = (reader["AccountNumber"] as string), IMEIs = iMEIs });
                 }
 
 

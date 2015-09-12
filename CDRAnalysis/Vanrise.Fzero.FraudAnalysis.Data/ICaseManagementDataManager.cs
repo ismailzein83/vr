@@ -23,6 +23,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus);
 
+        bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus, AccountInfo accountInfo);
+
         bool LinkDetailToCase(string accountNumber, int caseID, CaseStatus caseStatus);
 
         BigResult<AccountSuspicionSummary> GetFilteredAccountSuspicionSummaries(Vanrise.Entities.DataRetrievalInput<AccountSuspicionSummaryQuery> input);

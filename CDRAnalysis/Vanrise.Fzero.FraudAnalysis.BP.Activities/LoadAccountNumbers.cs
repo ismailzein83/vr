@@ -15,7 +15,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
     public class LoadAccountNumbersInput
     {
-        public BaseQueue<AccountNumberBatch> OutputQueue { get; set; }
+        public BaseQueue<StrategyExecutionDetailSummaryBatch> OutputQueue { get; set; }
     }
 
     #endregion
@@ -25,14 +25,14 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         #region Arguments
 
         [RequiredArgument]
-        public InOutArgument<BaseQueue<AccountNumberBatch>> OutputQueue { get; set; }
+        public InOutArgument<BaseQueue<StrategyExecutionDetailSummaryBatch>> OutputQueue { get; set; }
 
         #endregion
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
             if (this.OutputQueue.Get(context) == null)
-                this.OutputQueue.Set(context, new MemoryQueue<AccountNumberBatch>());
+                this.OutputQueue.Set(context, new MemoryQueue<StrategyExecutionDetailSummaryBatch>());
 
             base.OnBeforeExecute(context, handle);
         }
@@ -44,31 +44,38 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             IStrategyExecutionDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
             int index = 0;
             int totalIndex = 0;
-            dataManager.LoadAccountNumbersfromStrategyExecutionDetails((strategyExecutionDetail) =>
+            List<StrategyExecutionDetailSummary> strategyExecutionDetailSummaries = new List<StrategyExecutionDetailSummary>();
+
+            dataManager.LoadAccountNumbersfromStrategyExecutionDetails((strategyExecutionDetailSummary) =>
                 {
-                    inputArgument.OutputQueue.Enqueue(BuildAccountNumberBatch(strategyExecutionDetail));
+
                     index++;
-                    totalIndex ++;
+                    totalIndex++;
+
+                    strategyExecutionDetailSummaries.Add(strategyExecutionDetailSummary);
+
+                   
                     if (index == 1000)
                     {
+                        inputArgument.OutputQueue.Enqueue(new StrategyExecutionDetailSummaryBatch() { StrategyExecutionDetailSummaries = strategyExecutionDetailSummaries });
                         Console.WriteLine("{0} Accounts Loaded", totalIndex);
                         index = 0;
+                        strategyExecutionDetailSummaries = new List<StrategyExecutionDetailSummary>();
                     }
-                        
+                     
+                    
                     
                 });
-        }
 
-        private AccountNumberBatch BuildAccountNumberBatch(StrategyExecutionDetail strategyExecutionDetail)
-        {
-            var numbersBytes = Vanrise.Common.Compressor.Compress(Vanrise.Common.ProtoBufSerializer.Serialize(strategyExecutionDetail));
-            string filePath = !String.IsNullOrEmpty(configuredDirectory) ? System.IO.Path.Combine(configuredDirectory, Guid.NewGuid().ToString()) : System.IO.Path.GetTempFileName();
-            System.IO.File.WriteAllBytes(filePath, numbersBytes);
-            return new AccountNumberBatch
+
+            if (strategyExecutionDetailSummaries.Count > 0)
             {
-                AccountNumberBatchFilePath = filePath
-            };
+                inputArgument.OutputQueue.Enqueue(new StrategyExecutionDetailSummaryBatch() { StrategyExecutionDetailSummaries = strategyExecutionDetailSummaries });
+                strategyExecutionDetailSummaries = new List<StrategyExecutionDetailSummary>();
+            }
+
         }
+       
 
         protected override LoadAccountNumbersInput GetInputArgument(AsyncCodeActivityContext context)
         {

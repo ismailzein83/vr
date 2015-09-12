@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class AccountNumberBatch
+    public class StrategyExecutionDetailSummary
     {
-        public string AccountNumberBatchFilePath { get; set; }
+        public string AccountNumber { get; set; }
+
+        public HashSet<string> IMEIs { get; set; }
+
     }
 }

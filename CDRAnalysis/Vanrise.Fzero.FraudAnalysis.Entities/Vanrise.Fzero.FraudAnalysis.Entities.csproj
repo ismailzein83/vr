@@ -56,8 +56,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountInfo.cs" />
     <Compile Include="AccountStatus.cs" />
-    <Compile Include="Batches\AccountNumberBatch.cs" />
+    <Compile Include="Batches\StrategyExecutionDetailSummaryBatch.cs" />
     <Compile Include="RelatedNumber.cs" />
     <Compile Include="ResultQuery\RelatedNumberResultQuery.cs" />
     <Compile Include="ResultQuery\CancelAccountCasesResultQuery.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="INumberProfileParameters.cs" />
     <Compile Include="NumberProfileParameters.cs" />
     <Compile Include="ResultQuery\AccountCaseUpdateResultQuery.cs" />
+    <Compile Include="StrategyExecutionDetailSummary.cs" />
     <Compile Include="StrategyExecutionInfo.cs" />
     <Compile Include="StrategyCases.cs" />
     <Compile Include="BTSHighValueCases.cs" />
