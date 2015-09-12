@@ -43,11 +43,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         public void WriteRecordToStream(NumberProfile record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("0^{0}^{1}^{2}^{3}",
+            streamForBulkInsert.WriteRecord("0^{0}^{1}^{2}^{3}^{4}",
                                     record.AccountNumber,
                                     record.FromDate,
                                     record.ToDate,
-                                    Vanrise.Common.Serializer.Serialize(record.AggregateValues, true)
+                                    Vanrise.Common.Serializer.Serialize(record.AggregateValues, true),
+                                    string.Join<string>(",", record.IMEIs)    
                                     );
         }
 

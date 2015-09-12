@@ -107,6 +107,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     strategyExecutionDetail.AggregateValues = numberProfile.AggregateValues;
                     strategyExecutionDetail.SuspicionOccuranceStatus = SuspicionOccuranceStatus.Open;
                     strategyExecutionDetail.StrategyExecutionID = numberProfile.StrategyExecutionID;
+                    strategyExecutionDetail.IMEIs = numberProfile.IMEIs;
                     return true;
                 }
             }

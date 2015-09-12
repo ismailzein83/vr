@@ -89,6 +89,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     ;
                 string currentAccountNumber = null;
 
+                HashSet<string> IMEIs = new HashSet<string>();
+             
+
                 List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
                 int cdrsCount = 0;
                 int numberProfilesCount = 0;
@@ -110,8 +113,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                     {
                                         if (currentAccountNumber != null)
                                         {
-                                            FinishNumberProfileProcessing(currentAccountNumber, ref numberProfileBatch, ref numberProfilesCount, inputArgument, handle, batchSize, aggregateDefinitions);
+                                            FinishNumberProfileProcessing(currentAccountNumber, ref numberProfileBatch, ref numberProfilesCount, inputArgument, handle, batchSize, aggregateDefinitions, IMEIs);
                                         }
+                                        IMEIs = new HashSet<string>();
                                         currentAccountNumber = cdr.MSISDN;
                                         foreach (var aggregateDef in aggregateDefinitions)
                                         {
@@ -121,6 +125,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                     }
                                     else
                                     {
+                                        IMEIs.Add(cdr.IMEI);
                                         foreach (var aggregateDef in aggregateDefinitions)
                                         {
                                             aggregateDef.Aggregation.EvaluateCDR(cdr);
@@ -135,14 +140,14 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     while (!ShouldStop(handle) && hasItem);
                 });
                 if (currentAccountNumber != null)
-                    FinishNumberProfileProcessing(currentAccountNumber, ref numberProfileBatch, ref numberProfilesCount, inputArgument, handle, 0, aggregateDefinitions);
+                    FinishNumberProfileProcessing(currentAccountNumber, ref numberProfileBatch, ref numberProfilesCount, inputArgument, handle, 0, aggregateDefinitions, IMEIs);
 
                 handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs from Database to Memory");
 
            
         }
 
-        private void FinishNumberProfileProcessing(string accountNumber, ref List<NumberProfile> numberProfileBatch, ref int numberProfilesCount, CreateNumberProfilesInput inputArgument, AsyncActivityHandle handle, int batchSize, List<AggregateDefinition> AggregateDefinitions)
+        private void FinishNumberProfileProcessing(string accountNumber, ref List<NumberProfile> numberProfileBatch, ref int numberProfilesCount, CreateNumberProfilesInput inputArgument, AsyncActivityHandle handle, int batchSize, List<AggregateDefinition> AggregateDefinitions,HashSet<string> IMEIs)
         {
 
             if (inputArgument.StrategiesExecutionInfo != null)
@@ -155,7 +160,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                         FromDate = inputArgument.FromDate,
                         ToDate = inputArgument.ToDate,
                         StrategyId = strategyExecutionInfo.Strategy.Id,
-                        StrategyExecutionID= strategyExecutionInfo.StrategyExecution.ID
+                        StrategyExecutionID= strategyExecutionInfo.StrategyExecution.ID,
+                        IMEIs =IMEIs
                     };
                     foreach (var aggregateDef in AggregateDefinitions)
                     {
@@ -170,7 +176,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 {
                     AccountNumber = accountNumber,
                     FromDate = inputArgument.FromDate,
-                    ToDate = inputArgument.ToDate
+                    ToDate = inputArgument.ToDate,
+                    IMEIs = IMEIs
                 };
                 foreach (var aggregateDef in AggregateDefinitions)
                 {
