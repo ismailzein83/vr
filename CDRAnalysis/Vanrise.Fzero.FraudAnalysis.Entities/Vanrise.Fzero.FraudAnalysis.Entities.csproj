@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountInfo.cs" />
+    <Compile Include="AccountNumbersByIMEI.cs" />
     <Compile Include="AccountStatus.cs" />
     <Compile Include="Batches\StrategyExecutionDetailSummaryBatch.cs" />
     <Compile Include="RelatedNumber.cs" />

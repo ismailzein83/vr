@@ -89,6 +89,7 @@
     <Compile Include="AssignCases.cs" />
     <Compile Include="GetStrategiesExecutionInfo.cs" />
     <Compile Include="GetStrategyExecutionDetails.cs" />
+    <Compile Include="GetAccountNumbersByIMEI.cs" />
     <Compile Include="LoadStrategyExecutionDetailSummaries.cs" />
     <Compile Include="LoadCDRs.cs" />
     <Compile Include="CreateNumberProfiles.cs" />

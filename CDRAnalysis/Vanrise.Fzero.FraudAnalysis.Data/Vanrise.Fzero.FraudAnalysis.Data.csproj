@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="FraudDataManagerFactory.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="IAccountStatusDataManager.cs" />
     <Compile Include="INumberProfileDataManager.cs" />
     <Compile Include="INormalCDRDataManager.cs" />
     <Compile Include="IPeriodDataManager.cs" />

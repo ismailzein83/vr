@@ -37,7 +37,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             base.OnBeforeExecute(context, handle);
         }
 
-        static string configuredDirectory = ConfigurationManager.AppSettings["LoadStrategyExecutionDetailSummariesDirectory"];
 
         protected override void DoWork(LoadStrategyExecutionDetailSummariesInput inputArgument, AsyncActivityHandle handle)
         {
