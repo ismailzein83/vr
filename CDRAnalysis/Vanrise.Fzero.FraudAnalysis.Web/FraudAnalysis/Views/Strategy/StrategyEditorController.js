@@ -294,7 +294,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                 var levelCriteriaItem = {
                     filterId: filterDef.FilterId,
                     upSign: filterDef.upSign,
-                    downSign: filterDef.downSign
+                    downSign: filterDef.downSign,
+                    percentage :0
                 };
 
                 var existingItem = UtilsService.getItemByVal(level.StrategyLevelCriterias, filterDef.filterId, "FilterId");

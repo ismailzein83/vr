@@ -120,7 +120,7 @@
                                 <vr-button type="Add" data-onclick="AddSuspicionLevel" standalone></vr-button>
                             </div>
                             <vr-datagrid datasource="strategyLevels" maxheight="400px">
-                                <vr-datagridcolumn headertext="'Suspicion Level'" > <vr-form name="formSuspicionLevel">    <vr-select    datasource="viewScope.suspicionLevels" datatextfield="name" datavaluefield="id" ng-init="dataItem.suspicionLevel = (dataItem.suspicionLevel == undefined ? viewScope.suspicionLevels[0] : dataItem.suspicionLevel)" selectedvalues="dataItem.suspicionLevel" isrequired  columnindex="0"></vr-select>       </vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Suspicion Level'" > <vr-form name="formSuspicionLevel">    <vr-select hideremoveicon datasource="viewScope.suspicionLevels" datatextfield="name" datavaluefield="id" ng-init="dataItem.suspicionLevel = (dataItem.suspicionLevel == undefined ? viewScope.suspicionLevels[0] : dataItem.suspicionLevel)" selectedvalues="dataItem.suspicionLevel" isrequired columnindex="0"></vr-select>       </vr-datagridcolumn>
                                 <vr-datagridcolumn ng-repeat="filter in strategyFilters" ng-show="filter.isSelected" columnindex="$index + 1" headertext="'Filter: ' + filter.filterId" headerdescription="filter.description" tag="filter">
                                     <span ng-init="filterIndex = viewScope.strategyFilters.indexOf(colDef.tag) ">
                                         <div style="max-width: 50px; float: left">
