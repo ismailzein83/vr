@@ -26,22 +26,22 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
                 string Query = " IF NOT OBJECT_ID('" + tempTableName + "', N'U') IS NOT NULL"
                             + " Begin "
-                            + " SELECT  "
+                            + " SELECT  temp.ClosedoverGenerated ClosedoverGenerated , "
                             + " temp.StrategyName, sum(temp.GeneratedCases) GeneratedCases, sum(temp.ClosedCases) ClosedCases"
                             + " ,sum(temp.FraudCases) FraudCases, temp.ExecutionDate DateDay   "
                             + " into " + tempTableName 
                             + " from ("
-                            + " select s.Name StrategyName, count(sed.Id) as GeneratedCases ,  0 ClosedCases, 0 FraudCases"
+                            + " select 0 ClosedoverGenerated, s.Name StrategyName, count(sed.Id) as GeneratedCases ,  0 ClosedCases, 0 FraudCases"
                             + (!input.Query.GroupDaily ? " , null as ExecutionDate" : " , CAST(se.ExecutionDate AS DATE)    as ExecutionDate")
                             + " from FraudAnalysis.StrategyExecutionDetails sed with(nolock) "
                             + " inner join FraudAnalysis.StrategyExecution se with(nolock)  on se.ID = sed.StrategyExecutionID"
                             + " inner join [FraudAnalysis].[Strategy] s with(nolock)  on se.StrategyId = s.Id"
                             + " where sed.caseId is null and se.ExecutionDate >= @FromDate and se.ExecutionDate <=  @ToDate "
                             + (input.Query.StrategiesList != "" ? " and se.StrategyId IN (" + input.Query.StrategiesList + ")" : "")
-                            + " group by s.Name"
+                            + " group by s.Name "
                             + (!input.Query.GroupDaily ? "" : " , CAST(se.ExecutionDate AS DATE) ")
                             + " union"
-                            + " SELECT  "
+                            + " SELECT  0 ClosedoverGenerated,"
                             + " s.Name StrategyName , 0 as GeneratedCases, Sum(Case when ac.Status = 3 then 1 when ac.Status = 4 then 1 else 0 end) as ClosedCases"
                             + " ,Sum(Case when ac.Status = 3 then 1 else 0 end) as FraudCases"
                             + (!input.Query.GroupDaily ? " , null as ExecutionDate" : " , CAST(se.ExecutionDate AS DATE)    as ExecutionDate")
@@ -56,7 +56,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                             + " ) "
                             + " as temp"
                             + " group by temp.StrategyName"
-                            + " ,temp.ExecutionDate"
+                            + " ,temp.ExecutionDate, temp.ClosedoverGenerated"
                             + " End";
 
                 ExecuteNonQueryText(Query, (cmd) =>
