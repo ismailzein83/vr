@@ -9,6 +9,7 @@
         GetFilteredDetailsByCaseID: GetFilteredDetailsByCaseID,
         GetRelatedNumbersByAccountNumber: GetRelatedNumbersByAccountNumber,
         GetAccountStatus: GetAccountStatus,
+        GetFilteredAccountCaseLogsByCaseID: GetFilteredAccountCaseLogsByCaseID,
         UpdateAccountCase: UpdateAccountCase,
         CancelAccountCases: CancelAccountCases
     });
@@ -54,6 +55,10 @@
         return BaseAPIService.get("/api/CaseManagement/GetAccountStatus", {
             accountNumber: accountNumber
         });
+    }
+
+    function GetFilteredAccountCaseLogsByCaseID(input) {
+        return BaseAPIService.post("/api/CaseManagement/GetFilteredAccountCaseLogsByCaseID", input);
     }
 
     function UpdateAccountCase(input) {

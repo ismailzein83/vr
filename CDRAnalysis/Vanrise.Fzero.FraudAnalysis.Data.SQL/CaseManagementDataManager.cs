@@ -7,6 +7,7 @@ using System.Text;
 using Vanrise.Data.SQL;
 using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
+using Vanrise.Fzero.FraudAnalysis.Entities.ResultQuery;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
@@ -289,6 +290,20 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return (CaseStatus?)result;
         }
 
+        public BigResult<AccountCaseLog> GetFilteredAccountCaseLogsByCaseID(Vanrise.Entities.DataRetrievalInput<AccountCaseLogResultQuery> input)
+        {
+            Dictionary<string, string> mapper = new Dictionary<string, string>();
+            mapper.Add("UserName", "UserID");            
+            mapper.Add("AccountCaseStatusDescription", "AccountCaseStatusID");
+
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCaseHistory_CreateTempByCaseID", tempTableName, input.Query.CaseID);
+            };
+
+            return RetrieveData(input, createTempTableAction, AccountCaseLogMapper, mapper);
+        }
+
         #region Methods that update an account case
 
         public AccountCase GetLastAccountCaseByAccountNumber(string accountNumber)
@@ -432,6 +447,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             accountCase.CreatedTime = GetReaderValue<DateTime?>(reader, "CreatedTime");
 
             return accountCase;
+        }
+
+        private AccountCaseLog AccountCaseLogMapper(IDataReader reader)
+        {
+            AccountCaseLog log = new AccountCaseLog();
+
+            log.LogID = (int)reader["LogID"];
+            log.UserID = GetReaderValue<int?>(reader, "UserID");
+            log.AccountCaseStatusID = (CaseStatus)reader["AccountCaseStatusID"];
+            log.StatusTime = (DateTime)reader["StatusTime"];
+
+            return log;
         }
 
         private CasesSummary CasesSummaryMapper(IDataReader reader)

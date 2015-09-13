@@ -6,6 +6,7 @@ using Vanrise.Fzero.Business;
 using Vanrise.Fzero.Entities;
 using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Entities;
+using Vanrise.Fzero.FraudAnalysis.Entities.ResultQuery;
 using Vanrise.Web.Base;
 
 namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
@@ -58,6 +59,13 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         {
             CaseManagmentManager manager = new CaseManagmentManager();
             return manager.GetAccountStatus(accountNumber);
+        }
+
+        [HttpPost]
+        public object GetFilteredAccountCaseLogsByCaseID(Vanrise.Entities.DataRetrievalInput<AccountCaseLogResultQuery> input)
+        {
+            CaseManagmentManager manager = new CaseManagmentManager();
+            return GetWebResponse(input, manager.GetFilteredAccountCaseLogsByCaseID(input));
         }
 
         [HttpPost]

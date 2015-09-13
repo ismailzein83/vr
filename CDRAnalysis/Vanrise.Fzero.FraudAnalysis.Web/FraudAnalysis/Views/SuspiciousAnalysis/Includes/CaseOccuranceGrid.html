@@ -1,18 +1,38 @@
 ﻿<div ng-controller="FraudAnalysis_CaseOccuranceGridController">
 
-    <vr-datagrid datasource="details"
-                 dataretrievalfunction="dataRetrievalFunction"
-                 pagingtype="'Pager'"
-                 on-ready="gridReady"
-                 idfield="DetailID"
-                 issubgrid>
+    <vr-choices selectedindex="selectedTabIndex" onselectionchanged="onSelectedTabChanged()">
+        <vr-choice isselected="caseOccurancesSelected">Occurances</vr-choice>
+        <vr-choice isselected="caseLogsSelected">History</vr-choice>
+    </vr-choices>
 
-        <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelDescription'" type="'Text'"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" type="'Text'"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Status'" field="'SuspicionOccuranceStatusDescription'" type="'Text'"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'From Time'" field="'FromDate'" type="'Datetime'"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'To Time'" field="'ToDate'" type="'Datetime'"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Execution Time'" field="'ExecutionDate'" type="'Datetime'"></vr-datagridcolumn>
-    </vr-datagrid>
+    <div ng-show="caseOccurancesSelected">
+        <vr-datagrid datasource="details"
+                     dataretrievalfunction="dataRetrievalFunction"
+                     pagingtype="'Pager'"
+                     on-ready="gridReady"
+                     idfield="DetailID"
+                     issubgrid>
 
+            <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelDescription'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Status'" field="'SuspicionOccuranceStatusDescription'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'From Time'" field="'FromDate'" type="'Datetime'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'To Time'" field="'ToDate'" type="'Datetime'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Execution Time'" field="'ExecutionDate'" type="'Datetime'"></vr-datagridcolumn>
+        </vr-datagrid>
+    </div>
+
+    <div ng-show="caseLogsSelected">
+        <vr-datagrid datasource="logs"
+                     dataretrievalfunction="dataRetrievalFunction_Logs"
+                     pagingtype="'Pager'"
+                     on-ready="gridReady_Logs"
+                     idfield="LogID"
+                     issubgrid>
+
+            <vr-datagridcolumn headertext="'User'" field="'UserName'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Status'" field="'AccountCaseStatusDescription'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Status Time'" field="'StatusTime'" type="'Datetime'"></vr-datagridcolumn>
+        </vr-datagrid>
+    </div>
 </div>

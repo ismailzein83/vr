@@ -56,12 +56,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountCaseLog.cs" />
     <Compile Include="AccountInfo.cs" />
     <Compile Include="AccountNumbersByIMEI.cs" />
     <Compile Include="AccountStatus.cs" />
     <Compile Include="Batches\StrategyExecutionDetailSummaryBatch.cs" />
     <Compile Include="AccountRelatedNumbers.cs" />
     <Compile Include="RelatedNumber.cs" />
+    <Compile Include="ResultQuery\AccountCaseLogResultQuery.cs" />
     <Compile Include="ResultQuery\RelatedNumberResultQuery.cs" />
     <Compile Include="ResultQuery\CancelAccountCasesResultQuery.cs" />
     <Compile Include="ResultQuery\AccountCaseResultQuery.cs" />

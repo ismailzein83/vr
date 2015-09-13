@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
+using Vanrise.Fzero.FraudAnalysis.Entities.ResultQuery;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {
@@ -41,6 +42,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         {
             ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
             return dataManager.GetAccountStatus(accountNumber);
+        }
+
+        public Vanrise.Entities.IDataRetrievalResult<AccountCaseLog> GetFilteredAccountCaseLogsByCaseID(Vanrise.Entities.DataRetrievalInput<AccountCaseLogResultQuery> input)
+        {
+            ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredAccountCaseLogsByCaseID(input));
         }
 
         public Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> UpdateAccountCase(AccountCaseUpdateResultQuery input)

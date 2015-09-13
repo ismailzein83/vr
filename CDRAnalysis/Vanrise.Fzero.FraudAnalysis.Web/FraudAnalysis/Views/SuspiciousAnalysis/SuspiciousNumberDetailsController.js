@@ -18,8 +18,6 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
     var IMEIs = [];
     var relatedNumberMenuActions = [];
 
-    var users = [];
-
     loadParameters();
     defineScope();
     load();
@@ -35,6 +33,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
     }
 
     function defineScope() {
+        $scope.users = []; // the users array must be defined on the scope so that it can be passed to the case logs subgrid via viewScope
 
         $scope.showCaseStatuses = true;
         $scope.showOccurancesGrid = true;
@@ -127,7 +126,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                 onResponseReady(response);
             })
             .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                VRNotificationService.notifyException(error, $scope);
             });
         }
 
@@ -145,7 +144,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                 onResponseReady(response);
             })
             .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                VRNotificationService.notifyException(error, $scope);
             });
         }
 
@@ -157,7 +156,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                 onResponseReady(response);
             })
             .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                VRNotificationService.notifyException(error, $scope);
             });
         }
 
@@ -171,13 +170,14 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                     var caseStatus = UtilsService.getEnum(CaseStatusEnum, "value", item.StatusID);
                     item.CaseStatusDescription = caseStatus.description;
 
-                    item.UserName = (UtilsService.getItemByVal(users, item.UserID, "UserId") != null) ? UtilsService.getItemByVal(users, item.UserID, "UserId").Name : null;
+                    var user = UtilsService.getItemByVal($scope.users, item.UserID, "UserId");
+                    item.UserName = (user != null) ? user.Name : "System";
                 });
 
                 onResponseReady(response);
             })
             .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                VRNotificationService.notifyException(error, $scope);
             });
         }
 
@@ -370,7 +370,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             .then(function (response) {
 
                 angular.forEach(response, function (item) {
-                    users.push(item);
+                    $scope.users.push(item);
                 });
             });
     }

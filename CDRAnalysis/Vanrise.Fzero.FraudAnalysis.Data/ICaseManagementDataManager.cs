@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
+using Vanrise.Fzero.FraudAnalysis.Entities.ResultQuery;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data
 {
@@ -38,6 +39,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
         List<RelatedNumber> GetRelatedNumbersByAccountNumber(string accountNumber);
 
         CaseStatus? GetAccountStatus(string accountNumber);
+
+        BigResult<AccountCaseLog> GetFilteredAccountCaseLogsByCaseID(Vanrise.Entities.DataRetrievalInput<AccountCaseLogResultQuery> input);
 
         BigResult<CasesSummary> GetCasesSummary(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input);
 
