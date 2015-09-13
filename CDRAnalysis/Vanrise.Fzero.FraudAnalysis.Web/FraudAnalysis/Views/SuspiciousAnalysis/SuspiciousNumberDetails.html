@@ -28,6 +28,7 @@
                                      on-ready="onGridReady_Occurances"
                                      dataretrievalfunction="dataRetrievalFunction_Occurances"
                                      pagingtype="'PagingOnScroll'"
+                                     maxheight="500px"
                                      idfield="DetialID">
 
                             <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelDescription'" type="'Text'"></vr-datagridcolumn>
@@ -119,7 +120,8 @@
                     <vr-columns width="fullrow">
                         <div class="big-data-grid" ng-hide="showDate">
                             <div class="container">
-                                <vr-datagrid datasource="detailAggregateValues">
+                                <vr-datagrid datasource="detailAggregateValues"
+                                             maxheight="500px">
 
                                     <vr-datagridcolumn ng-repeat="agg in aggregateDefinitions"
                                                        headertext="agg.name"
@@ -135,7 +137,8 @@
                                 <vr-datagrid datasource="numberProfile"
                                              on-ready="onGridReady_NumberProfiles"
                                              dataretrievalfunction="dataRetrievalFunction_NumberProfiles"
-                                             pagingtype="'PagingOnScroll'">
+                                             pagingtype="'PagingOnScroll'"
+                                             maxheight="500px">
 
                                     <vr-datagridcolumn headertext="'From Time'" field="'FromDate'" type="'Datetime'"></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'To Time'" field="'ToDate'" type="'Datetime'"></vr-datagridcolumn>
@@ -159,6 +162,7 @@
                                      on-ready="onGridReady_CaseHistory"
                                      dataretrievalfunction="dataRetrievalFunction_CaseHistory"
                                      pagingtype="'PagingOnScroll'"
+                                     maxheight="500px"
                                      idfield="CaseID">
 
                             <vr-datagridcolumn headertext="'Case ID'" field="'CaseID'" type="'Text'"></vr-datagridcolumn>
@@ -193,7 +197,8 @@
                     <vr-columns width="fullrow" simplecol>
                         <vr-datagrid datasource="relatedNumbers"
                                      on-ready="onGridReady_RelatedNumbers"
-                                     menuactions="relatedNumberMenuActions">
+                                     menuactions="relatedNumberMenuActions"
+                                     maxheight="500px">
 
                             <vr-datagridcolumn headertext="'Related Number'" field="'RelatedNumber'" type="'Text'"></vr-datagridcolumn>
                         </vr-datagrid>
