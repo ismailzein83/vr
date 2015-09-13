@@ -64,23 +64,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                             var cdrs = Vanrise.Common.ProtoBufSerializer.Deserialize<List<CDR>>(serializedCDRs);
                             foreach (var cdr in cdrs.Where(x => x.IMEI != null && x.IMEI != "000000000000000"))
                             {
-                                if (cdr.MSISDN == "418209067552568")
-                                {
-                                    Console.WriteLine("MSISDN: 418209067552568 then IMEI: " +  cdr.IMEI);
-                                }
-
-
-                                if (cdr.MSISDN == "418209068239574")
-                                {
-                                    Console.WriteLine("MSISDN: 418209068239574 then IMEI: " + cdr.IMEI);
-                                }
-
-
-                                if (cdr.IMEI == "359688000000150")
-                                {
-                                    Console.WriteLine("IMEI: 359688000000150 then MSISDN: " + cdr.MSISDN);
-                                }
-
 
                                 HashSet<String> accountNumbers;
                                 if (accountNumbersByIMEI.TryGetValue(cdr.IMEI, out accountNumbers))
@@ -90,16 +73,21 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                     {
                                         foreach (var accountNumber in accountNumbers)
                                             if (accountNumber != cdr.MSISDN)
+                                            {
                                                 relatedNumbers.Add(accountNumber);
-                                        accountRelatedNumbers[cdr.MSISDN] = accountNumbers;
+                                                accountRelatedNumbers[cdr.MSISDN] = accountNumbers;
+                                            }
                                     }
                                     else
                                     {
                                         relatedNumbers = new HashSet<string>();
                                         foreach (var accountNumber in accountNumbers)
                                             if (accountNumber != cdr.MSISDN)
+                                            {
                                                 relatedNumbers.Add(accountNumber);
-                                        accountRelatedNumbers.Add(cdr.MSISDN, accountNumbers);
+                                                accountRelatedNumbers.Add(cdr.MSISDN, accountNumbers);
+                                            }
+
                                     }
                                 }
                             }
