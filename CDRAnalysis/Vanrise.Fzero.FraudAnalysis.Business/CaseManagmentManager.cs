@@ -174,6 +174,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             else
             {
                 caseID = accountCase.CaseID;
+                succeeded = true;
             }
 
             if (!succeeded) return false;

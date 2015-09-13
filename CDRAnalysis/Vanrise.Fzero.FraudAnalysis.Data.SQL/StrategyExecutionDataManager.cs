@@ -114,11 +114,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 {
 
                     HashSet<string> iMEIs = new HashSet<string>();
-                    foreach(var i in  GetReaderValue<string>(reader,"IMEIs" ).Split(',') )
-                    {
-                        iMEIs.Add(i);
 
-                    }
+                    string IMEIs = GetReaderValue<string>(reader, "IMEIs");
+                    if (IMEIs != null)
+                        foreach (var i in IMEIs.Split(','))
+                        {
+                            iMEIs.Add(i);
+
+                        }
 
                     onBatchReady(new StrategyExecutionDetailSummary() { AccountNumber = (reader["AccountNumber"] as string), IMEIs = iMEIs });
                 }

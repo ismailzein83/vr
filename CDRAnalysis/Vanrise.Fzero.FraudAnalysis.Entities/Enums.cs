@@ -22,14 +22,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
     public enum SuspicionOccuranceStatus
     {
-        Open = 0,
+        Open = 1,
         Closed = 10,
         Deleted = 20
     }
 
     public enum CaseStatus
     {
-        Open = 0,
+        Open = 1,
         Pending = 2,
         ClosedFraud = 3,
         ClosedWhiteList = 4
