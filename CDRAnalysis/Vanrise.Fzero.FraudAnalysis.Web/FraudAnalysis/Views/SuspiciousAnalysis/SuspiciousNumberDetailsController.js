@@ -14,7 +14,8 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
     var casesLoaded = false;
 
     var gridAPI_RelatedNumbers = undefined;
-    var relatedNumbersLoaded = false;
+    var sequencedNumbers = [];
+    var IMEIs = [];
     var relatedNumberMenuActions = [];
 
     var users = [];
@@ -34,6 +35,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
     }
 
     function defineScope() {
+
         $scope.showCaseStatuses = true;
         $scope.showOccurancesGrid = true;
         $scope.message = undefined;
@@ -47,10 +49,21 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         $scope.numberProfile = [];
         $scope.aggregateDefinitions = []; // column names
         $scope.cases = [];
+
         $scope.profileSources = [];
-        $scope.profileSources = [ { value: 0, description: "From Strategy Execution" }, { value: 1, description: "From Profiling" }  ];
+        $scope.profileSources = [
+            { value: 0, description: "From Strategy Execution" },
+            { value: 1, description: "From Profiling" }
+        ];
         $scope.selectedProfileSource = $scope.profileSources[0];
 
+        // Related Numbers
+        $scope.reasons = [];
+        $scope.reasons = [
+            { value: 0, description: "Sequence" },
+            { value: 1, description: "IMEIs" }
+        ];
+        $scope.selectedReason = $scope.reasons[0];
         $scope.relatedNumbers = [];
 
         $scope.fromDate_NormalCDRs = $scope.fromDate;
@@ -81,6 +94,14 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
         $scope.onGridReady_RelatedNumbers = function (api) {
             gridAPI_RelatedNumbers = api;
+
+            if (sequencedNumbers.length == 0) {
+                setSequencedNumbers();
+
+                angular.forEach(sequencedNumbers, function (item) {
+                    $scope.relatedNumbers.push(item);
+                });
+            }
         }
 
         $scope.dataRetrievalFunction_Occurances = function (dataRetrievalInput, onResponseReady) {
@@ -160,7 +181,6 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             });
         }
 
-
         $scope.updateAccountCase = function () {
 
             return CaseManagementAPIService.UpdateAccountCase({
@@ -228,6 +248,33 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         $scope.toggleValidTill = function (selectedStatus) {
             $scope.whiteListSelected = (selectedStatus != undefined && selectedStatus.value == CaseStatusEnum.ClosedWhitelist.value) ? true : false;
         }
+        
+        $scope.onReasonChanged = function () {
+
+            if ($scope.selectedReason != undefined) {
+                if ($scope.selectedReason.value == 0) {
+
+                    if (sequencedNumbers.length == 0)
+                        setSequencedNumbers();
+
+                    angular.forEach(sequencedNumbers, function (item) {
+                        $scope.relatedNumbers.push(item);
+                    });
+                }
+                else {
+
+                    if (IMEIs.length == 0)
+                        loadRelatedNumbers();
+                    else {
+                        $scope.relatedNumbers = [];
+
+                        angular.forEach(IMEIs, function (item) {
+                            $scope.relatedNumbers.push(item);
+                        });
+                    }
+                }
+            }
+        }
 
         defineRelatedNumberMenuActions();
     }
@@ -262,8 +309,8 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         else if (gridAPI_CaseHistory != undefined && $scope.selectedTabIndex == 3 && !casesLoaded)
             return retrieveData_CaseHistory();
 
-        else if (gridAPI_RelatedNumbers != undefined && $scope.selectedTabIndex == 4 && !relatedNumbersLoaded)
-            return loadRelatedNumbers();
+        //else if (gridAPI_RelatedNumbers != undefined && $scope.selectedTabIndex == 4 && !IMEIsLoaded);
+        //    return loadRelatedNumbers();
     }
 
     function retrieveData_Occurances() {
@@ -329,10 +376,10 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
     }
 
     function loadRelatedNumbers() {
+        $scope.relatedNumbers = [];
 
         return CaseManagementAPIService.GetRelatedNumbersByAccountNumber($scope.accountNumber)
             .then(function (response) {
-                relatedNumbersLoaded = true;
 
                 angular.forEach(response, function (item) {
                     $scope.relatedNumbers.push({ RelatedNumber: item.AccountNumber });
@@ -366,6 +413,19 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             name: "Details",
             clicked: detailRelatedNumber
         }];
+    }
+
+    function setSequencedNumbers() {
+
+        for (var i = 10; i >= 1; i--) {
+            sequencedNumbers.push({ RelatedNumber: ($scope.accountNumber - i) });
+        }
+
+        sequencedNumbers.push({ RelatedNumber: $scope.accountNumber });
+
+        for (var i = 1; i <= 10; i++) {
+            sequencedNumbers.push({ RelatedNumber: (Number($scope.accountNumber) + i) });
+        }
     }
 
     function detailRelatedNumber(gridObject) {
