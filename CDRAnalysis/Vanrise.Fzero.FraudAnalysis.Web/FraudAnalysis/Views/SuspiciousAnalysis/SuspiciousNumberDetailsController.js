@@ -34,30 +34,39 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
     function defineScope() {
         $scope.users = []; // the users array must be defined on the scope so that it can be passed to the case logs subgrid via viewScope
+        $scope.selectedTabIndex = 0;
 
-        $scope.showCaseStatuses = true;
+        // Current Occurances
+        $scope.occurances = [];
         $scope.showOccurancesGrid = true;
         $scope.message = undefined;
-        $scope.detailAggregateValues = [];
-        $scope.showProfileOptions = true;
-        $scope.showDate = false;
-        $scope.selectedProfileSource = undefined;
-        $scope.selectedTabIndex = 0;
-        $scope.occurances = [];
-        $scope.normalCDRs = [];
-        $scope.numberProfile = [];
-        $scope.aggregateDefinitions = []; // column names
-        $scope.cases = [];
 
-        $scope.profileSources = [];
+        // Normal CDRs
+        $scope.fromDate_NormalCDRs = $scope.fromDate;
+        $scope.toDate_NormalCDRs = $scope.toDate;
+        $scope.normalCDRs = [];
+
+        // Number Profiles
         $scope.profileSources = [
             { value: 0, description: "From Strategy Execution" },
             { value: 1, description: "From Profiling" }
         ];
         $scope.selectedProfileSource = $scope.profileSources[0];
 
+        $scope.fromDate_NumberProfiles = $scope.fromDate;
+        $scope.toDate_NumberProfiles = $scope.toDate;
+
+        $scope.aggregateDefinitions = []; // column names
+        $scope.detailAggregateValues = [];
+        $scope.numberProfile = [];
+        
+        $scope.showProfileOptions = true;
+        $scope.showDate = false;
+        
+        // Case History
+        $scope.cases = [];
+
         // Related Numbers
-        $scope.reasons = [];
         $scope.reasons = [
             { value: 0, description: "Sequence" },
             { value: 1, description: "IMEIs" }
@@ -65,13 +74,10 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         $scope.selectedReason = $scope.reasons[0];
         $scope.relatedNumbers = [];
 
-        $scope.fromDate_NormalCDRs = $scope.fromDate;
-        $scope.toDate_NormalCDRs = $scope.toDate;
-        $scope.fromDate_NumberProfiles = $scope.fromDate;
-        $scope.toDate_NumberProfiles = $scope.toDate;
-
+        // Update Case
         $scope.caseStatuses = [];
         $scope.selectedCaseStatus = undefined;
+        $scope.showCaseStatuses = true;
         $scope.whiteListSelected = false;
 
         $scope.onGridReady_Occurances = function (api) {
@@ -107,21 +113,25 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
             return CaseManagementAPIService.GetFilteredAccountSuspicionDetails(dataRetrievalInput)
             .then(function (response) {
+                console.log(response);
                 occurancesLoaded = true;
                 
-                if (response.Data.length > 0)
-                    $scope.detailAggregateValues.push(response.Data[0]);
-                else {
-                    $scope.showOccurancesGrid = false;
-                    $scope.message = "No records found";
-                    $scope.showProfileOptions = false;
-                    $scope.showDate = true;
-                }
+                if (response.Data != undefined) { // else, the export button was clicked
 
-                angular.forEach(response.Data, function (item) {
-                    var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", item.SuspicionLevelID);
-                    item.SuspicionLevelDescription = suspicionLevel.description;
-                });
+                    if (response.Data.length > 0)
+                        $scope.detailAggregateValues.push(response.Data[0]);
+                    else {
+                        $scope.showOccurancesGrid = false;
+                        $scope.message = "No records found";
+                        $scope.showProfileOptions = false;
+                        $scope.showDate = true;
+                    }
+
+                    angular.forEach(response.Data, function (item) {
+                        var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", item.SuspicionLevelID);
+                        item.SuspicionLevelDescription = suspicionLevel.description;
+                    });
+                }
 
                 onResponseReady(response);
             })
@@ -355,6 +365,24 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         return gridAPI_CaseHistory.retrieveData(query);
     }
 
+    function loadAccountStatus() {
+        return CaseManagementAPIService.GetAccountStatus($scope.accountNumber)
+            .then(function (response) {
+
+                if (response != null) {
+                    var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", response);
+                    $scope.accountStatus = accountStatus.description;
+
+                    $scope.showCaseStatuses = (response == CaseStatusEnum.ClosedFraud.value || response == CaseStatusEnum.ClosedWhitelist.value) ? false : true;
+
+                    if (response == CaseStatusEnum.Pending.value)
+                        $scope.caseStatuses = $scope.caseStatuses.slice(1); // remove the pending option
+                }
+                else
+                    $scope.showCaseStatuses = false;
+            });
+    }
+
     function loadAggregateDefinitions() {
         return StrategyAPIService.GetAggregates()
             .then(function (response) {
@@ -390,24 +418,6 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             });
     }
 
-    function loadAccountStatus() {
-        return CaseManagementAPIService.GetAccountStatus($scope.accountNumber)
-            .then(function (response) {
-
-                if (response != null) {
-                    var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", response);
-                    $scope.accountStatus = accountStatus.description;
-
-                    $scope.showCaseStatuses = (response == CaseStatusEnum.ClosedFraud.value || response == CaseStatusEnum.ClosedWhitelist.value) ? false : true;
-
-                    if (response == CaseStatusEnum.Pending.value)
-                        $scope.caseStatuses = $scope.caseStatuses.slice(1); // remove the pending option
-                }
-                else
-                    $scope.showCaseStatuses = false;
-            });
-    }
-
     function defineRelatedNumberMenuActions() {
         $scope.relatedNumberMenuActions = [{
             name: "Details",
@@ -420,8 +430,6 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         for (var i = 10; i >= 1; i--) {
             sequencedNumbers.push({ RelatedNumber: ($scope.accountNumber - i) });
         }
-
-        sequencedNumbers.push({ RelatedNumber: $scope.accountNumber });
 
         for (var i = 1; i <= 10; i++) {
             sequencedNumbers.push({ RelatedNumber: (Number($scope.accountNumber) + i) });

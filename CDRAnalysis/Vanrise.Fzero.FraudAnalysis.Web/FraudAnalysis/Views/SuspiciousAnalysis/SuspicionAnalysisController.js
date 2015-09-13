@@ -18,10 +18,10 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
         $scope.strategies = [];
         $scope.selectedStrategies = [];
 
-        $scope.accountStatuses = [];
-        $scope.selectedAccountStatuses = [];
+        $scope.accountStatuses = UtilsService.getArrayEnum(CaseStatusEnum);
+        $scope.selectedAccountStatuses = [$scope.accountStatuses[0]]; // select the Open status by default
 
-        $scope.suspicionLevels = [];
+        $scope.suspicionLevels = UtilsService.getArrayEnum(SuspicionLevelEnum);
         $scope.selectedSuspicionLevels = [];
 
         $scope.accountSuspicionSummaries = [];
@@ -74,11 +74,7 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
 
     function load() {
         $scope.isInitializing = true;
-
-        $scope.suspicionLevels = UtilsService.getArrayEnum(SuspicionLevelEnum);
-        $scope.accountStatuses = UtilsService.getArrayEnum(CaseStatusEnum);
-        $scope.selectedAccountStatuses.push($scope.accountStatuses[0]); // select the Open status by default
-
+                
         return StrategyAPIService.GetStrategies(0, "") // get all the enabled and disabled strategies (2nd arg) for all periods (1st arg)
             .then(function (response) {
                 angular.forEach(response, function (item) {
