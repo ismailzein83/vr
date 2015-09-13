@@ -63,13 +63,18 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                             System.IO.File.Delete(cdrBatch.CDRBatchFilePath);
                             var cdrs = Vanrise.Common.ProtoBufSerializer.Deserialize<List<CDR>>(serializedCDRs);
 
+
+                            HashSet<String> accountNumbers ;
+                            HashSet<String> relatedNumbers ;
+
+
                             foreach (var cdr in cdrs.Where(x => x.IMEI != null && x.IMEI != "000000000000000"))
                             {
+                                accountNumbers = new HashSet<string>();
+                                relatedNumbers = new HashSet<string>();
 
-                                HashSet<String> accountNumbers;
                                 if (accountNumbersByIMEI.TryGetValue(cdr.IMEI, out accountNumbers))
                                 {
-                                    HashSet<String> relatedNumbers = new HashSet<string>();
                                     foreach (var accountNumber in accountNumbers)
                                         if (accountNumber != cdr.MSISDN)
                                         {
@@ -98,6 +103,15 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 while (!ShouldStop(handle) && hasItem);
             });
 
+            foreach (KeyValuePair<string, HashSet<string>> dicItem in accountRelatedNumbers)
+            {
+                foreach (string relatedNumber in dicItem.Value.ToList())
+                {
+                    if (relatedNumber == dicItem.Key)
+                        dicItem.Value.Remove(dicItem.Key);
+                }
+            }
+                
 
             dataManager.SavetoDB(accountRelatedNumbers);
 
