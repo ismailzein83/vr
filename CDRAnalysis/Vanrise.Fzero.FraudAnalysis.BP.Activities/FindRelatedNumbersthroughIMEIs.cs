@@ -62,7 +62,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                             var serializedCDRs = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(cdrBatch.CDRBatchFilePath));
                             System.IO.File.Delete(cdrBatch.CDRBatchFilePath);
                             var cdrs = Vanrise.Common.ProtoBufSerializer.Deserialize<List<CDR>>(serializedCDRs);
-                            foreach (var cdr in cdrs.Where(x=>x.IMEI !=null))
+                            foreach (var cdr in cdrs.Where(x => x.IMEI != null && x.IMEI != "000000000000000"))
                             {
                                 HashSet<String> accountNumbers;
                                 if (accountNumbersByIMEI.TryGetValue(cdr.IMEI, out accountNumbers))
@@ -71,14 +71,16 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                     if (accountRelatedNumbers.TryGetValue(cdr.MSISDN, out relatedNumbers))
                                     {
                                         foreach (var accountNumber in accountNumbers)
-                                            relatedNumbers.Add(accountNumber);
+                                            if (accountNumber != cdr.MSISDN)
+                                                relatedNumbers.Add(accountNumber);
                                         accountRelatedNumbers[cdr.MSISDN] = accountNumbers;
                                     }
                                     else
                                     {
                                         relatedNumbers = new HashSet<string>();
                                         foreach (var accountNumber in accountNumbers)
-                                            relatedNumbers.Add(accountNumber);
+                                            if (accountNumber != cdr.MSISDN)
+                                                relatedNumbers.Add(accountNumber);
                                         accountRelatedNumbers.Add(cdr.MSISDN, accountNumbers);
                                     }
                                 }

@@ -35,7 +35,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     Stream = stream,
                     TabLock = true,
                     KeepIdentity = false,
-                    FieldSeparator = ','
+                    FieldSeparator = '^'
                 });
         }
     }
