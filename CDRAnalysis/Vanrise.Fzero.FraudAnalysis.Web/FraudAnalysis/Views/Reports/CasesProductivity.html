@@ -33,7 +33,7 @@
 
     <div>
         <vr-row>
-            <vr-columns colnum="12" simplecol>
+            <vr-columns colnum="12" ng-show="showGrid">
 
                 <vr-datagrid datasource="casesProductivity" dataretrievalfunction="dataRetrievalFunction" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady"  >
                     <vr-datagridcolumn headertext="'Strategy Name'" field="'StrategyName'"></vr-datagridcolumn>

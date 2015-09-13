@@ -24,7 +24,7 @@
 
     <div>
         <vr-row>
-            <vr-columns colnum="12" simplecol>
+            <vr-columns colnum="12" ng-show="showGrid">
 
                 <vr-datagrid datasource="detectedLines" dataretrievalfunction="dataRetrievalFunction" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady" >
                     <vr-datagridcolumn headertext="'Account Number'" field="'AccountNumber'"></vr-datagridcolumn>

@@ -13,6 +13,8 @@ function LinesDetectedController($scope, ReportingAPIService, UsersAPIService, $
 
     function defineScope() {
 
+        $scope.showGrid = false;
+
         $scope.gridMenuActions = [];
 
         var Now = new Date();
@@ -29,7 +31,9 @@ function LinesDetectedController($scope, ReportingAPIService, UsersAPIService, $
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
         };
+
         $scope.searchClicked = function () {
+            $scope.showGrid = true;
             return retrieveData();
         }
 

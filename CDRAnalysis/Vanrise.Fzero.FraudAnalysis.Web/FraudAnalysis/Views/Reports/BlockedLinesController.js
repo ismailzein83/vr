@@ -13,6 +13,8 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
 
     function defineScope() {
 
+        $scope.showGrid = false;
+
         $scope.gridMenuActions = [];
 
         var Now = new Date();
@@ -39,6 +41,7 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
             mainGridAPI = api;
         };
         $scope.searchClicked = function () {
+            $scope.showGrid = true;
             return retrieveData();
         }
 

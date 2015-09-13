@@ -21,7 +21,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public BigResult<CaseProductivity> GetFilteredCasesProductivity(Vanrise.Entities.DataRetrievalInput<CaseProductivityResultQuery> input)
         {
-
             Action<string> createTempTableAction = (tempTableName) =>
             {
 
@@ -66,7 +65,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.ToDate));
                 });
             };
-
 
             return RetrieveData(input, createTempTableAction, CaseProductivityMapper);
         }
@@ -156,7 +154,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             CaseProductivity caseProductivity = new CaseProductivity();
             caseProductivity.ClosedCases = (int)reader["ClosedCases"];
             caseProductivity.GeneratedCases = (int)reader["GeneratedCases"];
-            caseProductivity.ClosedoverGenerated = Convert.ToDecimal(caseProductivity.ClosedCases)/Convert.ToDecimal(caseProductivity.GeneratedCases);
+            
+            caseProductivity.ClosedoverGenerated = ((decimal)caseProductivity.GeneratedCases != (decimal)0) ? 
+                Convert.ToDecimal(caseProductivity.ClosedCases)/Convert.ToDecimal(caseProductivity.GeneratedCases) : 0;
             caseProductivity.FraudCases = (int)reader["FraudCases"];
             caseProductivity.StrategyName = reader["StrategyName"] as string;
             caseProductivity.DateDay = GetReaderValue<DateTime?>(reader , "DateDay");

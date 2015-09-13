@@ -13,6 +13,8 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
 
     function defineScope() {
 
+        $scope.showGrid = false;
+
         var Now = new Date();
 
         var Yesterday = new Date();
@@ -35,7 +37,9 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
         };
+
         $scope.searchClicked = function () {
+            $scope.showGrid = true;
             return retrieveData();
         }
 
