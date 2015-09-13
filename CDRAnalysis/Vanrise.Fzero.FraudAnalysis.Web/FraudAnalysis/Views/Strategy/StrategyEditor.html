@@ -15,7 +15,7 @@
                 </vr-columns>
 
                 <vr-columns colnum="2">
-                    <vr-switch value="isEnabled" label="Is Enabled"></vr-switch>
+                    <vr-switch value="isEnabled" label="Enabled"></vr-switch>
                 </vr-columns>
 
                 <vr-columns colnum="2">
@@ -33,7 +33,7 @@
                 <vr-columns colnum="12">
 
                     <vr-choices onselectionchanged="ctrl.viewVisibilityChanged">
-                        <vr-choice isselected="ctrl.isFilterTabShown">Filters</vr-choice>
+                        <vr-choice isselected="ctrl.isFilterTabShown">Strategy Filters</vr-choice>
                         <vr-choice isselected="ctrl.isLevelsTabShow">Suspicion Rules</vr-choice>
                     </vr-choices>
 
@@ -72,14 +72,14 @@
                                         <vr-row ng-show="strategyFilters[15].isSelected">
 
                                             <vr-columns colnum="11">
-                                                <vr-textbox value="gapBetweenConsecutiveCalls" type="number" label="Gap Between Consecutive Calls" isrequired></vr-textbox>
+                                                <vr-textbox value="gapBetweenConsecutiveCalls" type="number" label="Gap between Consecutive Calls in Seconds" isrequired></vr-textbox>
                                             </vr-columns>
                                         </vr-row>
 
                                         <vr-row ng-show="strategyFilters[16].isSelected ">
 
                                             <vr-columns colnum="11">
-                                                <vr-textbox value="gapBetweenFailedConsecutiveCalls" type="number" label="Gap Between Failed Consecutive Calls" isrequired></vr-textbox>
+                                                <vr-textbox value="gapBetweenFailedConsecutiveCalls" type="number" label="Gap between Failed Consecutive Calls in Seconds" isrequired></vr-textbox>
                                             </vr-columns>
                                         </vr-row>
 
@@ -88,14 +88,14 @@
 
 
                                             <vr-columns colnum="11">
-                                                <vr-textbox value="maxLowDurationCall" type="number" label="Max. Low Duration Call (s) " isrequired></vr-textbox>
+                                                <vr-textbox value="maxLowDurationCall" type="number" label="Maximum Low Duration Call (s) " isrequired></vr-textbox>
                                             </vr-columns>
 
                                         </vr-row>
                                         <vr-row ng-show="strategyFilters[8].isSelected">
 
                                             <vr-columns colnum="11">
-                                                <vr-textbox value="minCountofCallsinActiveHour" type="number" label="Min. Call Count in Active Hours" isrequired></vr-textbox>
+                                                <vr-textbox value="minCountofCallsinActiveHour" type="number" label="Minimum Count of Calls per Hour " isrequired></vr-textbox>
                                             </vr-columns>
 
                                         </vr-row>

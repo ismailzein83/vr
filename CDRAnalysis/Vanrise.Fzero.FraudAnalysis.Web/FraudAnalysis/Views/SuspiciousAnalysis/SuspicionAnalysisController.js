@@ -12,8 +12,13 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
     function defineScope() {
         $scope.accountNumber = undefined;
 
-        $scope.fromDate = Date.now();
-        $scope.toDate = Date.now();
+        var Now = new Date();
+
+        var Yesterday = new Date();
+        Yesterday.setDate(Yesterday.getDate() - 1);
+
+        $scope.fromDate = Yesterday;
+        $scope.toDate = Now;
 
         $scope.strategies = [];
         $scope.selectedStrategies = [];
