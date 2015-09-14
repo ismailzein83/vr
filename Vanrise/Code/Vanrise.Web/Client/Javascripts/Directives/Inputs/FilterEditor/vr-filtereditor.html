@@ -140,6 +140,12 @@
     }
 </style>
 
-<div id="builder-basic" class="query-builder form-inline">
-    <vr-filtereditor-group filters="ctrl.filters" mainGroup="true"></vr-filtereditor-group>
-</div>
+<vr-row>
+
+    <vr-columns width="fullrow">
+        <div id="builder-basic" class="query-builder form-inline">
+            <vr-filtereditor-group filters="ctrl.filters" maingroup="true" result="ctrl.result" ></vr-filtereditor-group>
+        </div>
+    </vr-columns>
+
+</vr-row>

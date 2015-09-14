@@ -8,7 +8,8 @@
             restrict: 'E',
             require: '^form',
             scope: {
-                filters: '='
+                filters: '=',
+                result: '='
             },
             controller: function () {
 

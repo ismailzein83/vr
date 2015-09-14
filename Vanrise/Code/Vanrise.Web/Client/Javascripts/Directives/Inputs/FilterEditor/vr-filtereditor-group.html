@@ -23,9 +23,9 @@
     </dt>
     <dd class="rules-group-body">
         <ul class="rules-list">
-            <vr-filtereditor-rule ng-repeat="rule in ctrl.rules" filters="ctrl.filters" deleterule="rule.deleteRule"></vr-filtereditor-rule>
+            <vr-filtereditor-rule ng-repeat="rule in ctrl.rules" filters="ctrl.filters" deleterule="rule.deleteRule" outputfilter="rule.filter"></vr-filtereditor-rule>
             <div ng-repeat="group in ctrl.groups">
-                <vr-directivewrapper directive="'vr-filtereditor-group'" filters="group.filters" maingroup="'false'" ondelete="group.deleteGroup"></vr-directivewrapper>
+                <vr-directivewrapper directive="'vr-filtereditor-group'" filters="group.filters" maingroup="'false'" result="group.rules" ondelete="group.deleteGroup"></vr-directivewrapper>
             </div>
         </ul>
     </dd>

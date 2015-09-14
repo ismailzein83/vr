@@ -11,11 +11,46 @@
             require: '^form',
             scope: {
                 filters: '=',
-                deleterule:'='
+                deleterule: '=',
+                outputfilter:'='
             },
-            controller: function () {
+            controller: function ($scope) {
                 var ctrl = this;
                 
+                function setOutput() {
+                    ctrl.outputfilter = {
+                        field: ctrl.selectedFilter,
+                        operator: ctrl.selectedOperator
+                    };
+
+                    if ((ctrl.filterInput === ctrl.inputEnum.Select) && (ctrl.hasInput)) {
+                        ctrl.outputfilter.value = ctrl.selectedFilterValues;
+                    }
+                    else if ((ctrl.filterInput === ctrl.inputEnum.Text) && (ctrl.hasInput)) {
+                        ctrl.outputfilter.value = ctrl.inputValueFrom;
+                    }
+                    else if ((ctrl.filterInput === ctrl.inputEnum.Text) && (ctrl.hasMultipleInput) && (ctrl.hasInput)) {
+                        ctrl.outputfilter.value = [ctrl.inputValueFrom, ctrl.inputValueTo];
+                    }
+                    else if ((ctrl.filterInput === ctrl.inputEnum.Switch) && (ctrl.hasInput)) {
+                        ctrl.outputfilter.value = ctrl.switchValue;
+                    }
+                }
+
+                $scope.$watch('ctrl.switchValue', function (newValue) {
+                    ctrl.switchValue = newValue;
+                    setOutput();
+                });
+
+                $scope.$watch('ctrl.inputValueFrom', function (newValue) {
+                    ctrl.inputValueFrom = newValue;
+                    setOutput();
+                });
+
+                $scope.$watch('ctrl.inputValueTo', function (newValue) {
+                    ctrl.inputValueTo = newValue;
+                    setOutput();
+                });
 
                 function onLoad() {
                     ctrl.inputEnum = inputEnum;
@@ -29,6 +64,7 @@
                     ctrl.hasMultipleInput = false;
                     ctrl.selectedFilterValues = [];
                     ctrl.selectedFilter = ctrl.filters[0];
+                    setOutput();
                 }
                 
                 function getSelectOperator(selectedtype) {
@@ -52,6 +88,7 @@
                     ctrl.selectedOperator = ctrl.operators[0];
                     ctrl.filterInput = selectedItem.type.input;
                     ctrl.filterValues = selectedItem.values;
+                    setOutput();
                 }
 
                 function changeInput(operatorItem) {
@@ -75,14 +112,16 @@
                         ctrl.hasMultipleInput = true;
                         return;
                     }
+                    setOutput();
                 }
 
                 function onOperatorSelectionChanged(selectedItem) {
                     changeInput(selectedItem);
+                    setOutput();
                 }
 
                 function onValueSelectionChanged() {
-                    
+                    setOutput();
                 }
 
                 angular.extend(this, {
