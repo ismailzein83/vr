@@ -89,11 +89,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplyTrafficStatsToDB.cs" />
-    <Compile Include="Apply To DB\ApplyInvalidCDRsToDB.cs" />
-    <Compile Include="ApplyMainCDRsToDB.cs" />
+    <Compile Include="Traffic Statistic\ApplyTrafficStatsToDB.cs" />
+    <Compile Include="CDR Invalid\ApplyInvalidCDRsToDB.cs" />
+    <Compile Include="CDR Main\ApplyMainCDRsToDB.cs" />
     <Compile Include="BPTrakingSeverity.cs" />
-    <Compile Include="ClearTimeRangeBillingRecords.cs" />
+    <Compile Include="CDR Main\CDR Cost\ClearTimeRangeCDRCostRecords.cs" />
+    <Compile Include="CDR Invalid\ClearTimeRangeCDRInvalidRecords.cs" />
+    <Compile Include="CDR Main\ClearTimeRangeCDRMainRecords.cs" />
+    <Compile Include="CDR Main\CDR Sale\ClearTimeRangeCDRSaleRecords.cs" />
+    <Compile Include="Traffic Statistic\ClearTimeRangeTrafficStatsRecords.cs" />
     <Compile Include="CreateBillingAndStatsTables.cs" />
     <Compile Include="DivideDayIntoTimeRanges.cs" />
     <Compile Include="Entities\CDRBatch.cs" />
@@ -101,28 +105,28 @@
     <Compile Include="Entities\CDRBillingBatch.cs" />
     <Compile Include="Entities\CDRManager.cs" />
     <Compile Include="Entities\CDRSharedQueueManager.cs" />
-    <Compile Include="GenerateDailyTrafficStatistics.cs" />
-    <Compile Include="GenerateTrafficStatisticsForRepricing.cs" />
-    <Compile Include="GenerateTrafficStatistics.cs" />
-    <Compile Include="ImportCDRs.cs" />
-    <Compile Include="PrepareInvalidCDRsForDBApply.cs" />
-    <Compile Include="PrepareTrafficStatsForDBApply.cs" />
-    <Compile Include="PrepareMainCDRsForDBApply.cs" />
+    <Compile Include="Traffic Statistic\GenerateDailyTrafficStatistics.cs" />
+    <Compile Include="Traffic Statistic\GenerateTrafficStatisticsForRepricing.cs" />
+    <Compile Include="Traffic Statistic\GenerateTrafficStatistics.cs" />
+    <Compile Include="CDR\ImportCDRs.cs" />
+    <Compile Include="CDR Invalid\PrepareInvalidCDRsForDBApply.cs" />
+    <Compile Include="Traffic Statistic\PrepareTrafficStatsForDBApply.cs" />
+    <Compile Include="CDR Main\PrepareMainCDRsForDBApply.cs" />
     <Compile Include="ProcessBillingCDR.cs" />
     <Compile Include="InitializeObjects.cs" />
-    <Compile Include="LoadCDRs.cs" />
+    <Compile Include="CDR\LoadCDRs.cs" />
     <Compile Include="OLD\ProcessCDRs.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GenerateBillingAndPricingCDRs.cs" />
     <Compile Include="ProcessRawCDRs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StoreDailyStatisticsToDB.cs" />
-    <Compile Include="StoreStatisticsToDB.cs" />
+    <Compile Include="Traffic Statistic\StoreDailyStatisticsToDB.cs" />
+    <Compile Include="Traffic Statistic\StoreStatisticsToDB.cs" />
     <Compile Include="UpdateTrafficStatisticsInDB.cs" />
-    <Compile Include="StoreCDRsToDB.cs" />
-    <Compile Include="StoreInvalidCDRsToDB.cs" />
-    <Compile Include="StoreMainCDRsToDB.cs" />
+    <Compile Include="CDR\StoreCDRsToDB.cs" />
+    <Compile Include="CDR Invalid\StoreInvalidCDRsToDB.cs" />
+    <Compile Include="CDR Main\StoreMainCDRsToDB.cs" />
     <Compile Include="UpdateBillingStatistics.cs" />
     <Compile Include="UpdateDailyPostpaidAmounts.cs" />
     <Compile Include="UpdateDailyPrepaidAmounts.cs" />

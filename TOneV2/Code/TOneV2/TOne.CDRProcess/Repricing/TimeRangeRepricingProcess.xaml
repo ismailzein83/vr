@@ -61,14 +61,16 @@
       <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>TABS</AssemblyReference>
       <AssemblyReference>TABS.Addons.Utilities</AssemblyReference>
+      <AssemblyReference>TABS.Plugins.Framework</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Caching</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
-      <AssemblyReference>TABS.Plugins.Framework</AssemblyReference>
-      <AssemblyReference>TABS</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing.Entities</AssemblyReference>
       <AssemblyReference>TOne.Business</AssemblyReference>
       <AssemblyReference>TOne.Caching</AssemblyReference>
       <AssemblyReference>TOne.CDR.Business</AssemblyReference>
@@ -102,13 +104,102 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("{0}: repricing for {1} - {2} started", DateTime.Now, Input.Range.From, Input.Range.To)</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <tca1:ClearTimeRangeBillingRecords Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ClearTimeRangeBillingRecords_1">
-      <tca1:ClearTimeRangeBillingRecords.TimeRange>
-        <InArgument x:TypeArguments="tca:TimeRange">
-          <mca:CSharpValue x:TypeArguments="tca:TimeRange">Input.Range</mca:CSharpValue>
-        </InArgument>
-      </tca1:ClearTimeRangeBillingRecords.TimeRange>
-    </tca1:ClearTimeRangeBillingRecords>
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_3">
+      <tca1:ClearTimeRangeCDRMainRecords Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ClearTimeRangeCDRMainRecords_1">
+        <tca1:ClearTimeRangeCDRMainRecords.CustomersIds>
+          <InArgument x:TypeArguments="scg:List(x:String)">
+            <mca:CSharpValue x:TypeArguments="scg:List(x:String)">Input.CustomersIds</mca:CSharpValue>
+          </InArgument>
+        </tca1:ClearTimeRangeCDRMainRecords.CustomersIds>
+        <tca1:ClearTimeRangeCDRMainRecords.SupplierIds>
+          <InArgument x:TypeArguments="scg:List(x:String)">
+            <mca:CSharpValue x:TypeArguments="scg:List(x:String)">Input.SupplierIds</mca:CSharpValue>
+          </InArgument>
+        </tca1:ClearTimeRangeCDRMainRecords.SupplierIds>
+        <tca1:ClearTimeRangeCDRMainRecords.TimeRange>
+          <InArgument x:TypeArguments="tca:TimeRange">
+            <mca:CSharpValue x:TypeArguments="tca:TimeRange">Input.Range</mca:CSharpValue>
+          </InArgument>
+        </tca1:ClearTimeRangeCDRMainRecords.TimeRange>
+      </tca1:ClearTimeRangeCDRMainRecords>
+      <tca1:ClearTimeRangeCDRCostRecords Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ClearTimeRangeCDRCostRecords_1">
+        <tca1:ClearTimeRangeCDRCostRecords.CustomersIds>
+          <InArgument x:TypeArguments="scg:List(x:String)">
+            <mca:CSharpValue x:TypeArguments="scg:List(x:String)">Input.CustomersIds</mca:CSharpValue>
+          </InArgument>
+        </tca1:ClearTimeRangeCDRCostRecords.CustomersIds>
+        <tca1:ClearTimeRangeCDRCostRecords.SupplierIds>
+          <InArgument x:TypeArguments="scg:List(x:String)">
+            <mca:CSharpValue x:TypeArguments="scg:List(x:String)">Input.SupplierIds</mca:CSharpValue>
+          </InArgument>
+        </tca1:ClearTimeRangeCDRCostRecords.SupplierIds>
+        <tca1:ClearTimeRangeCDRCostRecords.TimeRange>
+          <InArgument x:TypeArguments="tca:TimeRange">
+            <mca:CSharpValue x:TypeArguments="tca:TimeRange">Input.Range</mca:CSharpValue>
+          </InArgument>
+        </tca1:ClearTimeRangeCDRCostRecords.TimeRange>
+      </tca1:ClearTimeRangeCDRCostRecords>
+      <tca1:ClearTimeRangeCDRSaleRecords Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ClearTimeRangeCDRSaleRecords_1">
+        <tca1:ClearTimeRangeCDRSaleRecords.CustomersIds>
+          <InArgument x:TypeArguments="scg:List(x:String)">
+            <mca:CSharpValue x:TypeArguments="scg:List(x:String)">Input.CustomersIds</mca:CSharpValue>
+          </InArgument>
+        </tca1:ClearTimeRangeCDRSaleRecords.CustomersIds>
+        <tca1:ClearTimeRangeCDRSaleRecords.SupplierIds>
+          <InArgument x:TypeArguments="scg:List(x:String)">
+            <mca:CSharpValue x:TypeArguments="scg:List(x:String)">Input.SupplierIds</mca:CSharpValue>
+          </InArgument>
+        </tca1:ClearTimeRangeCDRSaleRecords.SupplierIds>
+        <tca1:ClearTimeRangeCDRSaleRecords.TimeRange>
+          <InArgument x:TypeArguments="tca:TimeRange">
+            <mca:CSharpValue x:TypeArguments="tca:TimeRange">Input.Range</mca:CSharpValue>
+          </InArgument>
+        </tca1:ClearTimeRangeCDRSaleRecords.TimeRange>
+      </tca1:ClearTimeRangeCDRSaleRecords>
+      <tca1:ClearTimeRangeCDRInvalidRecords Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ClearTimeRangeCDRInvalidRecords_1">
+        <tca1:ClearTimeRangeCDRInvalidRecords.CustomersIds>
+          <InArgument x:TypeArguments="scg:List(x:String)">
+            <mca:CSharpValue x:TypeArguments="scg:List(x:String)">Input.CustomersIds</mca:CSharpValue>
+          </InArgument>
+        </tca1:ClearTimeRangeCDRInvalidRecords.CustomersIds>
+        <tca1:ClearTimeRangeCDRInvalidRecords.SupplierIds>
+          <InArgument x:TypeArguments="scg:List(x:String)">
+            <mca:CSharpValue x:TypeArguments="scg:List(x:String)">Input.SupplierIds</mca:CSharpValue>
+          </InArgument>
+        </tca1:ClearTimeRangeCDRInvalidRecords.SupplierIds>
+        <tca1:ClearTimeRangeCDRInvalidRecords.TimeRange>
+          <InArgument x:TypeArguments="tca:TimeRange">
+            <mca:CSharpValue x:TypeArguments="tca:TimeRange">Input.Range</mca:CSharpValue>
+          </InArgument>
+        </tca1:ClearTimeRangeCDRInvalidRecords.TimeRange>
+      </tca1:ClearTimeRangeCDRInvalidRecords>
+      <If sap2010:WorkflowViewState.IdRef="If_1">
+        <If.Condition>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.GenerateTrafficStatistic</mca:CSharpValue>
+          </InArgument>
+        </If.Condition>
+        <If.Then>
+          <tca1:ClearTimeRangeTrafficStatsRecords Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ClearTimeRangeTrafficStatsRecords_1">
+            <tca1:ClearTimeRangeTrafficStatsRecords.CustomersIds>
+              <InArgument x:TypeArguments="scg:List(x:String)">
+                <mca:CSharpValue x:TypeArguments="scg:List(x:String)">Input.CustomersIds</mca:CSharpValue>
+              </InArgument>
+            </tca1:ClearTimeRangeTrafficStatsRecords.CustomersIds>
+            <tca1:ClearTimeRangeTrafficStatsRecords.SupplierIds>
+              <InArgument x:TypeArguments="scg:List(x:String)">
+                <mca:CSharpValue x:TypeArguments="scg:List(x:String)">Input.SupplierIds</mca:CSharpValue>
+              </InArgument>
+            </tca1:ClearTimeRangeTrafficStatsRecords.SupplierIds>
+            <tca1:ClearTimeRangeTrafficStatsRecords.TimeRange>
+              <InArgument x:TypeArguments="tca:TimeRange">
+                <mca:CSharpValue x:TypeArguments="tca:TimeRange">Input.Range</mca:CSharpValue>
+              </InArgument>
+            </tca1:ClearTimeRangeTrafficStatsRecords.TimeRange>
+          </tca1:ClearTimeRangeTrafficStatsRecords>
+        </If.Then>
+      </If>
+    </Parallel>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_2">
       <Parallel.Variables>
         <Variable x:TypeArguments="vq:BaseQueue(tce:CDRBatch)" Name="queueCDRs" />
@@ -154,6 +245,11 @@
         </tca1:LoadCDRs.To>
       </tca1:LoadCDRs>
       <tca1:GenerateBillingAndPricingCDRs sap2010:WorkflowViewState.IdRef="GenerateBillingAndPricingCDRs_1">
+        <tca1:GenerateBillingAndPricingCDRs.CustomersIds>
+          <InArgument x:TypeArguments="scg:List(x:String)">
+            <mca:CSharpValue x:TypeArguments="scg:List(x:String)">Input.CustomersIds</mca:CSharpValue>
+          </InArgument>
+        </tca1:GenerateBillingAndPricingCDRs.CustomersIds>
         <tca1:GenerateBillingAndPricingCDRs.InputQueue>
           <InArgument x:TypeArguments="vq:BaseQueue(tce:CDRBatch)">
             <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tce:CDRBatch)">queueCDRs</mca:CSharpValue>
@@ -184,29 +280,43 @@
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">billingAndPricingTaskStatus</mca:CSharpReference>
           </OutArgument>
         </tca1:GenerateBillingAndPricingCDRs.Status>
+        <tca1:GenerateBillingAndPricingCDRs.SupplierIds>
+          <InArgument x:TypeArguments="scg:List(x:String)">
+            <mca:CSharpValue x:TypeArguments="scg:List(x:String)">Input.SupplierIds</mca:CSharpValue>
+          </InArgument>
+        </tca1:GenerateBillingAndPricingCDRs.SupplierIds>
       </tca1:GenerateBillingAndPricingCDRs>
-      <tca1:GenerateTrafficStatisticsForRepricing sap2010:WorkflowViewState.IdRef="GenerateTrafficStatisticsForRepricing_1">
-        <tca1:GenerateTrafficStatisticsForRepricing.InputQueue>
-          <InArgument x:TypeArguments="vq:BaseQueue(tce:CDRBillingBatch)">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tce:CDRBillingBatch)">queueBillingCDRs</mca:CSharpValue>
+      <If sap2010:WorkflowViewState.IdRef="If_3">
+        <If.Condition>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.GenerateTrafficStatistic</mca:CSharpValue>
           </InArgument>
-        </tca1:GenerateTrafficStatisticsForRepricing.InputQueue>
-        <tca1:GenerateTrafficStatisticsForRepricing.OutputQueue>
-          <InOutArgument x:TypeArguments="vq:BaseQueue(tce:TrafficStatisticBatch)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(tce:TrafficStatisticBatch)">queueTrafficStats</mca:CSharpReference>
-          </InOutArgument>
-        </tca1:GenerateTrafficStatisticsForRepricing.OutputQueue>
-        <tca1:GenerateTrafficStatisticsForRepricing.PreviousActivityStatus>
-          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">billingAndPricingTaskStatus</mca:CSharpValue>
-          </InArgument>
-        </tca1:GenerateTrafficStatisticsForRepricing.PreviousActivityStatus>
-        <tca1:GenerateTrafficStatisticsForRepricing.Status>
-          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">TrafficStatsTaskStatus</mca:CSharpReference>
-          </OutArgument>
-        </tca1:GenerateTrafficStatisticsForRepricing.Status>
-      </tca1:GenerateTrafficStatisticsForRepricing>
+        </If.Condition>
+        <If.Then>
+          <tca1:GenerateTrafficStatisticsForRepricing sap2010:WorkflowViewState.IdRef="GenerateTrafficStatisticsForRepricing_1">
+            <tca1:GenerateTrafficStatisticsForRepricing.InputQueue>
+              <InArgument x:TypeArguments="vq:BaseQueue(tce:CDRBillingBatch)">
+                <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tce:CDRBillingBatch)">queueBillingCDRs</mca:CSharpValue>
+              </InArgument>
+            </tca1:GenerateTrafficStatisticsForRepricing.InputQueue>
+            <tca1:GenerateTrafficStatisticsForRepricing.OutputQueue>
+              <InOutArgument x:TypeArguments="vq:BaseQueue(tce:TrafficStatisticBatch)">
+                <mca:CSharpReference x:TypeArguments="vq:BaseQueue(tce:TrafficStatisticBatch)">queueTrafficStats</mca:CSharpReference>
+              </InOutArgument>
+            </tca1:GenerateTrafficStatisticsForRepricing.OutputQueue>
+            <tca1:GenerateTrafficStatisticsForRepricing.PreviousActivityStatus>
+              <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">billingAndPricingTaskStatus</mca:CSharpValue>
+              </InArgument>
+            </tca1:GenerateTrafficStatisticsForRepricing.PreviousActivityStatus>
+            <tca1:GenerateTrafficStatisticsForRepricing.Status>
+              <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+                <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">TrafficStatsTaskStatus</mca:CSharpReference>
+              </OutArgument>
+            </tca1:GenerateTrafficStatisticsForRepricing.Status>
+          </tca1:GenerateTrafficStatisticsForRepricing>
+        </If.Then>
+      </If>
       <tca1:PrepareMainCDRsForDBApply sap2010:WorkflowViewState.IdRef="PrepareMainCDRsForDBApply_1">
         <tca1:PrepareMainCDRsForDBApply.InputQueue>
           <InArgument x:TypeArguments="vq:BaseQueue(tce:CDRMainBatch)">
@@ -251,29 +361,37 @@
           </OutArgument>
         </tca1:PrepareInvalidCDRsForDBApply.Status>
       </tca1:PrepareInvalidCDRsForDBApply>
-      <tca1:PrepareTrafficStatsForDBApply>
-        <tca1:PrepareTrafficStatsForDBApply.InputQueue>
-          <InArgument x:TypeArguments="vq:BaseQueue(tce:TrafficStatisticBatch)">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tce:TrafficStatisticBatch)">queueTrafficStats</mca:CSharpValue>
+      <If sap2010:WorkflowViewState.IdRef="If_2">
+        <If.Condition>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.GenerateTrafficStatistic</mca:CSharpValue>
           </InArgument>
-        </tca1:PrepareTrafficStatsForDBApply.InputQueue>
-        <tca1:PrepareTrafficStatsForDBApply.OutputQueue>
-          <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedTrafficStatsObject</mca:CSharpReference>
-          </InOutArgument>
-        </tca1:PrepareTrafficStatsForDBApply.OutputQueue>
-        <tca1:PrepareTrafficStatsForDBApply.PreviousActivityStatus>
-          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">billingAndPricingTaskStatus</mca:CSharpValue>
-          </InArgument>
-        </tca1:PrepareTrafficStatsForDBApply.PreviousActivityStatus>
-        <tca1:PrepareTrafficStatsForDBApply.Status>
-          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">preparedTrafficStatsTaskStatus</mca:CSharpReference>
-          </OutArgument>
-        </tca1:PrepareTrafficStatsForDBApply.Status>
-        <sap2010:WorkflowViewState.IdRef>PrepareTrafficStatsForDBApply_1</sap2010:WorkflowViewState.IdRef>
-      </tca1:PrepareTrafficStatsForDBApply>
+        </If.Condition>
+        <If.Then>
+          <tca1:PrepareTrafficStatsForDBApply sap2010:WorkflowViewState.IdRef="PrepareTrafficStatsForDBApply_1">
+            <tca1:PrepareTrafficStatsForDBApply.InputQueue>
+              <InArgument x:TypeArguments="vq:BaseQueue(tce:TrafficStatisticBatch)">
+                <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tce:TrafficStatisticBatch)">queueTrafficStats</mca:CSharpValue>
+              </InArgument>
+            </tca1:PrepareTrafficStatsForDBApply.InputQueue>
+            <tca1:PrepareTrafficStatsForDBApply.OutputQueue>
+              <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+                <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedTrafficStatsObject</mca:CSharpReference>
+              </InOutArgument>
+            </tca1:PrepareTrafficStatsForDBApply.OutputQueue>
+            <tca1:PrepareTrafficStatsForDBApply.PreviousActivityStatus>
+              <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">billingAndPricingTaskStatus</mca:CSharpValue>
+              </InArgument>
+            </tca1:PrepareTrafficStatsForDBApply.PreviousActivityStatus>
+            <tca1:PrepareTrafficStatsForDBApply.Status>
+              <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+                <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">preparedTrafficStatsTaskStatus</mca:CSharpReference>
+              </OutArgument>
+            </tca1:PrepareTrafficStatsForDBApply.Status>
+          </tca1:PrepareTrafficStatsForDBApply>
+        </If.Then>
+      </If>
       <tca1:ApplyMainCDRsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyMainCDRsToDB_1">
         <tca1:ApplyMainCDRsToDB.InputQueue>
           <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
@@ -298,19 +416,27 @@
           </InArgument>
         </tca1:ApplyInvalidCDRsToDB.PreviousActivityStatus>
       </tca1:ApplyInvalidCDRsToDB>
-      <tca1:ApplyTrafficStatsToDB Status="{x:Null}">
-        <tca1:ApplyTrafficStatsToDB.InputQueue>
-          <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedTrafficStatsObject</mca:CSharpValue>
+      <If sap2010:WorkflowViewState.IdRef="If_4">
+        <If.Condition>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.GenerateTrafficStatistic</mca:CSharpValue>
           </InArgument>
-        </tca1:ApplyTrafficStatsToDB.InputQueue>
-        <tca1:ApplyTrafficStatsToDB.PreviousActivityStatus>
-          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">preparedTrafficStatsTaskStatus</mca:CSharpValue>
-          </InArgument>
-        </tca1:ApplyTrafficStatsToDB.PreviousActivityStatus>
-        <sap2010:WorkflowViewState.IdRef>ApplyTrafficStatsToDB_1</sap2010:WorkflowViewState.IdRef>
-      </tca1:ApplyTrafficStatsToDB>
+        </If.Condition>
+        <If.Then>
+          <tca1:ApplyTrafficStatsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyTrafficStatsToDB_1">
+            <tca1:ApplyTrafficStatsToDB.InputQueue>
+              <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+                <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedTrafficStatsObject</mca:CSharpValue>
+              </InArgument>
+            </tca1:ApplyTrafficStatsToDB.InputQueue>
+            <tca1:ApplyTrafficStatsToDB.PreviousActivityStatus>
+              <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">preparedTrafficStatsTaskStatus</mca:CSharpValue>
+              </InArgument>
+            </tca1:ApplyTrafficStatsToDB.PreviousActivityStatus>
+          </tca1:ApplyTrafficStatsToDB>
+        </If.Then>
+      </If>
     </Parallel>
     <Assign sap2010:WorkflowViewState.IdRef="Assign_4">
       <Assign.To>
@@ -328,32 +454,41 @@
         </InArgument>
       </Assign.Value>
     </Assign>
-    <sads:DebugSymbol.Symbol>d1JDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xSZXByaWNpbmdcVGltZVJhbmdlUmVwcmljaW5nUHJvY2Vzcy54YW1sNlMDzAIOAgEBWAVjDgMBlgVkBWgRAwGQBWkFbykDAYoFcAW6AhACAQ27AgXKAg4CAQJgC2BXAwGcBVsLW1gDAZcFZglmrAEDAZEFbAtsWQMBiwWBAQebARcDAaoEnAEHuwEsAwG3A7wBB9EBNAMB6gLSAQfnASgDAZ0C6AEH/QErAwHQAf4BB5QCLAMBgwGVAgegAiACAVyhAgesAiMCATWtAge5AiQCAQ7DAgvHAhQCAQi+Agu+AnICAQOYAQ2YAVsDAfcEhAENhAFdAwHkBJMBDZMBcwMB0QSJAQ2JAW4DAb4EjgENjgFaAwGrBLMBDbMBawMBlwSfAQ2fAWYDAYQEpAENpAF8AwHxA7gBDbgBfAMB3gOpAQ2pAXwDAcsDrgENrgF2AwG4A8kBDckBdAMBpAO/AQ2/AXQDAZEDzgENzgF3AwH+AsQBDcQBgwEDAesC3wEN3wF0AwHXAtUBDdUBbgMBxALkAQ3kAXoDAbEC2gEN2gF8AwGeAvUBDfUBdAMBigLrAQ3rAXQDAfcB+gEN+gF9AwHkAfABDfABfwMB0QGLAg2LAnQDAb0BgQINgQJ7AwGqAZACDZACfwMBlwGGAg2GAoABAwGEAZ0CDZ0CcgIBcJgCDZgCdAIBXakCDakCdQIBSaQCDaQCdwIBNrUCDbUCdwIBIrACDbACeAIBDw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1JDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xSZXByaWNpbmdcVGltZVJhbmdlUmVwcmljaW5nUHJvY2Vzcy54YW1sU1UDygMOAgEBWgVlDgMByQZmBWoRAwHDBmsFygEQAwHsBcsBBbgDEAIBDbkDBcgDDgIBAmILYlcDAc8GXQtdWAMBygZoCWisAQMBxAZsB3wrAwGzBn0HjQErAwGjBo4BB54BKwMBkwafAQevAS4DAYMGsAEHyQEMAwHtBdwBB/YBFwMBjAX3AQegAiwDAfMDoQIHvwIMAwGSA8ACB9UCKAMBxQLWAgfrAisDAfgB7AIHigMMAwGXAYsDB5YDIAIBcJcDB6IDIwIBSaMDB7cDDAIBDsEDC8UDFAIBCLwDC7wDcgIBA28Nb2cDAb4GdA10ZgMBuQZ5DXlbAwG0BoABDYABZwMBrgaFAQ2FAWYDAakGigENigFbAwGkBpEBDZEBZwMBngaWAQ2WAWYDAZkGmwENmwFbAwGUBqIBDaIBZwMBjganAQ2nAWYDAYkGrAENrAFbAwGEBrMBDbMBagMB7gW3AQvHATQDAfMF8wEN8wFbAwHZBd8BDd8BXQMBxgXuAQ3uAXMDAbMF5AEN5AFuAwGgBekBDekBWgMBjQX6AQ36AWcDAfkEkwINkwJrAwHmBP8BDf8BZgMB0wSdAg2dAmYDAcAEhAINhAJ8AwGtBJgCDZgCfAMBmgSJAg2JAnwDAYcEjgINjgJ2AwH0A6QCDaQCagMBkwOoAgu9AjgDAaYDzQINzQJ0AwH/AsMCDcMCbgMB7ALSAg3SAnoDAdkCyAINyAJ8AwHGAuMCDeMCdAMBsgLZAg3ZAnQDAZ8C6AIN6AJ9AwGMAt4CDd4CfwMB+QHvAg3vAmoDAZgB8wILiAMwAwGrAZMDDZMDcgMBhAGOAw2OA3QCAXGfAw2fA3UCAV2aAw2aA3cCAUqmAw2mA2oCAQ+qAwu1AygCASK6ARG6AWsDAf4FvwERvwFqAwH5BcQBEcQBXwMB9AW1AhG1AngDAeADqwIRqwJ4AwHNA7oCEboCewMBugOwAhGwAocBAwGnA4ADEYADeAMB5QH2AhH2An8DAdIBhQMRhQODAQMBvwH7AhH7AoQBAwGsAbIDEbIDewIBNq0DEa0DfAIBIw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="2234,62" />
-      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="2234,62" />
-      <sap2010:ViewStateData Id="ClearTimeRangeBillingRecords_1" sap:VirtualizedContainerService.HintSize="2234,22" />
-      <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="GenerateBillingAndPricingCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="GenerateTrafficStatisticsForRepricing_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="PrepareMainCDRsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="PrepareInvalidCDRsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="PrepareTrafficStatsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ApplyMainCDRsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ApplyInvalidCDRsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ApplyTrafficStatsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="2234,86" />
-      <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="2234,62" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="2256,578">
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="3026,62" />
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="3026,62" />
+      <sap2010:ViewStateData Id="ClearTimeRangeCDRMainRecords_1" sap:VirtualizedContainerService.HintSize="200,210" />
+      <sap2010:ViewStateData Id="ClearTimeRangeCDRCostRecords_1" sap:VirtualizedContainerService.HintSize="200,210" />
+      <sap2010:ViewStateData Id="ClearTimeRangeCDRSaleRecords_1" sap:VirtualizedContainerService.HintSize="200,210" />
+      <sap2010:ViewStateData Id="ClearTimeRangeCDRInvalidRecords_1" sap:VirtualizedContainerService.HintSize="200,210" />
+      <sap2010:ViewStateData Id="ClearTimeRangeTrafficStatsRecords_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,210" />
+      <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="3026,256" />
+      <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,210" />
+      <sap2010:ViewStateData Id="GenerateBillingAndPricingCDRs_1" sap:VirtualizedContainerService.HintSize="200,210" />
+      <sap2010:ViewStateData Id="GenerateTrafficStatisticsForRepricing_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="464,210" />
+      <sap2010:ViewStateData Id="PrepareMainCDRsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,210" />
+      <sap2010:ViewStateData Id="PrepareInvalidCDRsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,210" />
+      <sap2010:ViewStateData Id="PrepareTrafficStatsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="464,210" />
+      <sap2010:ViewStateData Id="ApplyMainCDRsToDB_1" sap:VirtualizedContainerService.HintSize="200,210" />
+      <sap2010:ViewStateData Id="ApplyInvalidCDRsToDB_1" sap:VirtualizedContainerService.HintSize="200,210" />
+      <sap2010:ViewStateData Id="ApplyTrafficStatsToDB_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="464,210" />
+      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="3026,256" />
+      <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="3026,62" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="3048,982">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.CDRProcess.TimeRangeRepricingProcess_1" sap:VirtualizedContainerService.HintSize="2296,658" />
+      <sap2010:ViewStateData Id="TOne.CDRProcess.TimeRangeRepricingProcess_1" sap:VirtualizedContainerService.HintSize="3088,1062" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

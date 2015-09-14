@@ -15,7 +15,7 @@ namespace TOne.CDR.QueueActivators
 
         public override void ProcessItem(PersistentQueueItem item, ItemsToEnqueue outputItems)
         {
-            TrafficStatisticGenerator trafficStatGenerator = new TrafficStatisticGenerator();
+            TrafficStatisticManager trafficStatGenerator = new TrafficStatisticManager();
 
             CDRBillingBatch billingCdr = item as CDRBillingBatch;
 

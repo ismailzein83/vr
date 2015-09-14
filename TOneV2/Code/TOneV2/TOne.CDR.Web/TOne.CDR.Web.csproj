@@ -117,7 +117,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="CDR\Views\" />
     <Folder Include="Controllers\" />
   </ItemGroup>
   <ItemGroup>
@@ -128,6 +127,10 @@
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CDR\Views\Repricing.html" />
+    <Content Include="CDR\Views\RepricingController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

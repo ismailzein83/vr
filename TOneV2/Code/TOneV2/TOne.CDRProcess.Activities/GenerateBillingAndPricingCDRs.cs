@@ -28,7 +28,8 @@ namespace TOne.CDRProcess.Activities
         public BaseQueue<TOne.CDR.Entities.CDRMainBatch> OutputMainCDRQueue { get; set; }
 
         public BaseQueue<TOne.CDR.Entities.CDRInvalidBatch> OutputInvalidCDRQueue { get; set; }
-
+        public List<string> SupplierIds { get; set; }
+        public List<string> CustomersIds { get; set; }
     }
 
     #endregion
@@ -49,6 +50,8 @@ namespace TOne.CDRProcess.Activities
         [RequiredArgument]
         public InOutArgument<BaseQueue<TOne.CDR.Entities.CDRInvalidBatch>> OutputInvalidCDRQueue { get; set; }
 
+        public InArgument<List<string>> SupplierIds { get; set; }
+        public InArgument<List<string>> CustomersIds { get; set; }
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, Vanrise.BusinessProcess.AsyncActivityHandle handle)
         {
@@ -110,43 +113,47 @@ namespace TOne.CDRProcess.Activities
                             totalsecondsforidentifications += spentIndentification.TotalSeconds;
                             BillingCDRBase baseCDR = GetBillingCDRBase(cdrBase);
 
-                            billingCDRs.CDRs.Add(baseCDR);
-
-                            if (baseCDR.IsValid)
+                            
+                            if ((inputArgument.CustomersIds==null && inputArgument.SupplierIds==null)|| (inputArgument.CustomersIds.Contains(baseCDR.CustomerID) && inputArgument.SupplierIds.Contains(baseCDR.SupplierID))  )
                             {
-                                BillingCDRMain main = new BillingCDRMain(baseCDR);
-                                DateTime timePricing = DateTime.Now;
-                                main.sale = salePricing.GetRepricing(main);
-                                main.cost = costPricing.GetRepricing(main);
-
-
-
-                                //main.cost = generator.GetRepricing<BillingCDRCost>(main);
-                                //main.sale = generator.GetRepricing<BillingCDRSale>(main);
-                                TimeSpan spentPricingPerCDR = DateTime.Now.Subtract(timePricing);
-                                totalsecondsforpricing += spentPricingPerCDR.TotalSeconds;
-                                HandlePassThrough(main);
-
-                                if (main != null && main.cost != null && main.SupplierCode != null)
-                                    main.cost.Code = main.SupplierCode;
-
-                                if (main != null && main.sale != null && main.OurCode != null)
-                                    main.sale.Code = main.OurCode;
-                                if (main.sale != null)
+                                billingCDRs.CDRs.Add(baseCDR);
+                                if (baseCDR.IsValid)
                                 {
-                                    main.sale.Attempt = main.Attempt;
-                                    main.sale.Updated = DateTime.Now;
-                                }
-                                if (main.cost != null)
-                                {
-                                    main.cost.Attempt = main.Attempt;
-                                    main.cost.Updated = DateTime.Now;
-                                }
-                                CDRMains.MainCDRs.Add(main);
+                                    BillingCDRMain main = new BillingCDRMain(baseCDR);
+                                    DateTime timePricing = DateTime.Now;
+                                    main.sale = salePricing.GetRepricing(main);
+                                    main.cost = costPricing.GetRepricing(main);
 
+
+
+                                    //main.cost = generator.GetRepricing<BillingCDRCost>(main);
+                                    //main.sale = generator.GetRepricing<BillingCDRSale>(main);
+                                    TimeSpan spentPricingPerCDR = DateTime.Now.Subtract(timePricing);
+                                    totalsecondsforpricing += spentPricingPerCDR.TotalSeconds;
+                                    HandlePassThrough(main);
+
+                                    if (main != null && main.cost != null && main.SupplierCode != null)
+                                        main.cost.Code = main.SupplierCode;
+
+                                    if (main != null && main.sale != null && main.OurCode != null)
+                                        main.sale.Code = main.OurCode;
+                                    if (main.sale != null)
+                                    {
+                                        main.sale.Attempt = main.Attempt;
+                                        main.sale.Updated = DateTime.Now;
+                                    }
+                                    if (main.cost != null)
+                                    {
+                                        main.cost.Attempt = main.Attempt;
+                                        main.cost.Updated = DateTime.Now;
+                                    }
+                                    CDRMains.MainCDRs.Add(main);
+
+                                }
+                                else
+                                    CDRInvalids.InvalidCDRs.Add(new BillingCDRInvalid(baseCDR));
                             }
-                            else
-                                CDRInvalids.InvalidCDRs.Add(new BillingCDRInvalid(baseCDR));
+                           
 
                         }
                         TimeSpan spent = DateTime.Now.Subtract(startPricing);
@@ -169,7 +176,9 @@ namespace TOne.CDRProcess.Activities
                 InputQueue = this.InputQueue.Get(context),
                 OutputBillingQueue = this.OutputBillingQueue.Get(context),
                 OutputMainCDRQueue = this.OutputMainCDRQueue.Get(context),
-                OutputInvalidCDRQueue = this.OutputInvalidCDRQueue.Get(context)
+                OutputInvalidCDRQueue = this.OutputInvalidCDRQueue.Get(context),
+                SupplierIds=this.SupplierIds.Get(context),
+                CustomersIds=this.CustomersIds.Get(context)
             };
         }
 

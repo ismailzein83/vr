@@ -68,8 +68,8 @@ namespace TOne.CDRProcess.Activities
         protected override LoadCDRsOutput DoWorkWithResult(LoadCDRsInput inputArgument, AsyncActivityHandle handle)
         {
             int cdrCount = 0;
-            CDRManager manager = new CDRManager();
-            manager.LoadCDRRange(inputArgument.From, inputArgument.To, 10000, (cdrs) =>
+            TOne.CDR.Business.CDRManager cdrmanager = new TOne.CDR.Business.CDRManager();
+            cdrmanager.LoadCDRRange(inputArgument.From, inputArgument.To, 10000, (cdrs) =>
             {
                 cdrCount += cdrs.Count;
                 inputArgument.OutputQueue.Enqueue(new TOne.CDR.Entities.CDRBatch { CDRs = cdrs });

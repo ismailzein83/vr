@@ -27,56 +27,12 @@ namespace TOne.CDR.Data.SQL
         //    return idAsObj != DBNull.Value ? (long)idAsObj : 0;
         //}
 
-        public void DeleteCDRMain(DateTime from, DateTime to)
-        {
-            ExecuteNonQueryText(String.Format(query_DeleteTemplate, "Billing_CDR_Main", "Attempt", Guid.NewGuid().ToString().Replace("-", ""), "IX_Billing_CDR_Main_Attempt"),
-                (cmd) =>
-                {
-                    cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@From", from));
-                    cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@To", to));
-                });
-        }
-
-        public void DeleteCDRInvalid(DateTime from, DateTime to)
-        {
-            ExecuteNonQueryText(String.Format(query_DeleteTemplate, "Billing_CDR_Invalid", "Attempt", Guid.NewGuid().ToString().Replace("-", ""), "IX_Billing_CDR_Invalid_Attempt"),
-                (cmd) =>
-                {
-                    cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@From", from));
-                    cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@To", to));
-                });
-        }
-
-        public void DeleteCDRSale(DateTime from, DateTime to)
-        {
-            ExecuteNonQueryText(String.Format(query_DeleteTemplate, "Billing_CDR_Sale", "Attempt", Guid.NewGuid().ToString().Replace("-", ""), "IX_Billing_CDR_Sale_Attempt"),
-               (cmd) =>
-               {
-                   cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@From", from));
-                   cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@To", to));
-               });
-        }
-
-        public void DeleteCDRCost(DateTime from, DateTime to)
-        {
-            ExecuteNonQueryText(String.Format(query_DeleteTemplate, "Billing_CDR_Cost", "Attempt", Guid.NewGuid().ToString().Replace("-", ""), "IX_Billing_CDR_Cost_Attempt"),
-               (cmd) =>
-               {
-                   cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@From", from));
-                   cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@To", to));
-               });
-        }
+       
 
 
-        public void DeleteTrafficStats(DateTime from, DateTime to)
-        {
-            ExecuteNonQueryText(String.Format(query_DeleteTemplate, "TrafficStats", "FirstCDRAttempt", Guid.NewGuid().ToString().Replace("-", ""), "IX_TrafficStats_DateTimeFirst"),
-               (cmd) =>
-               {
-                   cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@From", from));
-                   cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@To", to));
-               });
-        }
+
+
+     
 
         public void DeleteDailyTrafficStats(DateTime date)
         {

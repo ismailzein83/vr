@@ -15,5 +15,6 @@ namespace TOne.CDR.Data
         void UpdateTrafficStatisticDailyBatch(DateTime batchDate,TrafficStatisticsDailyByKey trafficStatisticsByKey);
         void ApplyTrafficStatsForDB(Object preparedTrafficStats);
         void SaveTrafficStatsForDB(List<TrafficStatistic> trafficStatistics);
+        void DeleteTrafficStats(DateTime from, DateTime to, List<string> customerIds, List<string> supplierIds);
     }
 }

@@ -70,7 +70,9 @@
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Caching</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing.Entities</AssemblyReference>
       <AssemblyReference>TOne.Business</AssemblyReference>
       <AssemblyReference>TOne.Caching</AssemblyReference>
       <AssemblyReference>TOne.CDR.Business</AssemblyReference>
@@ -229,7 +231,10 @@
                     <mca:CSharpValue x:TypeArguments="tca:TimeRangeRepricingProcessInput" xml:space="preserve">new TimeRangeRepricingProcessInput
             {
                 Range = timeRange,
-                CacheManagerID = cacheManagerId
+                CacheManagerID = cacheManagerId,
+                GenerateTrafficStatistic=Input.GenerateTrafficStatistic,
+                CustomersIds=Input.CustomersIds,
+                SupplierIds=Input.SupplierIds
             }</mca:CSharpValue>
                   </InArgument>
                 </local:TimeRangeRepricingProcess.Input>
@@ -293,7 +298,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Message>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d05DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xSZXByaWNpbmdcRGFpbHlSZXByaWNpbmdQcm9jZXNzLnhhbWwyVQOpAg4CAQFbBWYOAwGkAWcFbSADAZ4BbgV0HgMBmAF1BYUBJAMBiAGGAQX4AQoCASv5AQWEAikCASCFAgWLAiQCARqMAgWSAiYCARSTAgWZAicCAQ6aAgWgAh4CAQihAgWnAiACAQJjC2NXAwGqAV4LXlgDAaUBagtqoAEDAZ8BcQtxXQMBmQF9C32tAQMBkwGCAQuCAWoDAY4BeAt4XQMBiQGJAQuJAW0CASyNAQnHARsCAVTKAQn2AR8CATGBAguBAl0CASb8AQv8AVUCASGIAguIAl0CARuPAguPAl0CARWWAguWAl0CAQ+dAgudAlUCAQmkAgukAqsBAgEDkAEPkAFtAwGDAZcBDcUBGAIBVdcBD9cBbQIBT9IBD9IBlgECAUrNAQ/NAZYBAgFF3gEN9AEYAgEynAEPqwEgAgFxrAEPxAEUAgFW4gEP7AExAgE77QEP8wEqAgEznwEVowEgAgF7qAEVqAGIAQIBc5wBgAGcAYYBAgFyrwEVrwGWAQIBV7MBE7kBJwIBaLwBE8IBLgIBX+IBdeIBkgECAUPlARXpASACATzwARXwAcMCAgE0tgEZtgH1AQIBab8BGb8BpwMCAWA=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d05DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xSZXByaWNpbmdcRGFpbHlSZXByaWNpbmdQcm9jZXNzLnhhbWwyVwOuAg4CAQFdBWgOAwGkAWkFbyADAZ4BcAV2HgMBmAF3BYcBJAMBiAGIAQX9AQoCASv+AQWJAikCASCKAgWQAiQCARqRAgWXAiYCARSYAgWeAicCAQ6fAgWlAh4CAQimAgWsAiACAQJlC2VXAwGqAWALYFgDAaUBbAtsoAEDAZ8BcwtzXQMBmQF/C3+tAQMBkwGEAQuEAWoDAY4Begt6XQMBiQGLAQuLAW0CASyPAQnJARsCAVTMAQn7AR8CATGGAguGAl0CASaBAguBAlUCASGNAguNAl0CARuUAguUAl0CARWbAgubAl0CAQ+iAguiAlUCAQmpAgupAqsBAgEDkgEPkgFtAwGDAZkBDccBGAIBVdkBD9kBbQIBT9QBD9QBlgECAUrPAQ/PAZYBAgFF4AEN+QEYAgEyngEPrQEgAgFxrgEPxgEUAgFW5AEP8QExAgE78gEP+AEqAgEzoQEVpQEgAgF7qgEVqgGIAQIBc54BgAGeAYYBAgFysQEVsQGWAQIBV7UBE7sBJwIBaL4BE8QBLgIBX+QBdeQBkgECAUPnARXuASACATz1ARX1AcMCAgE0uAEZuAH1AQIBacEBGcEBpwMCAWA=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

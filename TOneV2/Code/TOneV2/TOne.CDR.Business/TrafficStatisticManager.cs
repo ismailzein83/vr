@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.CDR.Data;
 using TOne.CDR.Entities;
 
 namespace TOne.CDR.Business
 {
-    public class TrafficStatisticGenerator
+    public class TrafficStatisticManager
     {
         public void UpdateTrafficStatisticFromCDR(TrafficStatistic trafficStatistic, BillingCDRBase cdr)
         {
@@ -16,7 +17,11 @@ namespace TOne.CDR.Business
             if (cdr.Attempt > trafficStatistic.LastCDRAttempt) trafficStatistic.LastCDRAttempt = cdr.Attempt;
             if (trafficStatistic.FirstCDRAttempt == DateTime.MinValue || cdr.Attempt < trafficStatistic.FirstCDRAttempt) trafficStatistic.FirstCDRAttempt = cdr.Attempt;
         }
-
+        public void DeleteTrafficStats(DateTime from, DateTime to, List<string> customerIds, List<string> supplierIds)
+        {
+            ITrafficStatisticDataManager dataManager =  CDRDataManagerFactory.GetDataManager<ITrafficStatisticDataManager>();
+            dataManager.DeleteTrafficStats(from, to, customerIds, supplierIds);
+        }
         public void UpdateBaseTrafficStatisticFromCDR(BaseTrafficStatistic trafficStatistic, BillingCDRBase cdr)
         {
 

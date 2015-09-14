@@ -8,7 +8,9 @@ namespace TOne.CDRProcess.Arguments
     public class DailyRepricingProcessInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
     {
         public DateTime RepricingDay { get; set; }
-
+        public bool GenerateTrafficStatistic { get; set; }
+        public List<string> CustomersIds { get; set; }
+        public List<string> SupplierIds { get; set; }
         public bool DivideProcessIntoSubProcesses { get; set; }
 
         public override string GetTitle()

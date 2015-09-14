@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.CDR.Data;
+using TOne.CDR.Business;
 using TOne.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.Queueing;
@@ -36,7 +36,7 @@ namespace TOne.CDRProcess.Activities
 
         protected override void DoWork(ApplyInvalidCDRsToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            ICDRInvalidDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRInvalidDataManager>();
+            CDRInvalidManager dataManager =new CDRInvalidManager();
             TimeSpan totalTime = default(TimeSpan);
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {

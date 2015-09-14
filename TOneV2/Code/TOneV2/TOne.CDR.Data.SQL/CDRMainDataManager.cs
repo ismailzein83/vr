@@ -160,5 +160,48 @@ namespace TOne.CDR.Data.SQL
             ApplyMainCDRsToDB(preparedInvalidCDRs);
         }
 
+        public void DeleteCDRMain(DateTime from, DateTime to, List<string> customerIds, List<string> supplierIds)
+        {
+            ExecuteNonQueryText(GetQuery( customerIds, supplierIds,"Billing_CDR_Main","IX_Billing_CDR_Main_Attempt"),
+                (cmd) =>
+                {
+                    cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@From", from));
+                    cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@To", to));
+                });
+        }
+        public void DeleteCDRSale(DateTime from, DateTime to, List<string> customerIds, List<string> supplierIds)
+        {
+            ExecuteNonQueryText(GetQuery( customerIds, supplierIds,"Billing_CDR_Sale","IX_Billing_CDR_Sale_Attempt"),
+               (cmd) =>
+               {
+                   cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@From", from));
+                   cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@To", to));
+               });
+        }
+
+        public void DeleteCDRCost(DateTime from, DateTime to, List<string> customerIds, List<string> supplierIds)
+        {
+            ExecuteNonQueryText(GetQuery( customerIds, supplierIds,"Billing_CDR_Cost","IX_Billing_CDR_Cost_Attempt"),
+               (cmd) =>
+               {
+                   cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@From", from));
+                   cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@To", to));
+               });
+        }
+        private string GetQuery(List<string> customerIds, List<string> supplierIds,string tableName,string index)
+        {
+
+            StringBuilder queryBuilder = new StringBuilder();
+            queryBuilder.Append(String.Format(query_DeleteTemplate, tableName, "Attempt", Guid.NewGuid().ToString().Replace("-", ""), index));
+            if (customerIds != null && customerIds.Count > 0)
+                queryBuilder.AppendFormat("AND CustomerID IN ('{0}')", String.Join("', '", customerIds));
+            if (supplierIds != null && supplierIds.Count > 0)
+                queryBuilder.AppendFormat("AND SupplierID IN ('{0}')", String.Join("', '", supplierIds));
+            return queryBuilder.ToString();
+        }  
+        #region Queries 
+             const string query_DeleteTemplate = @"DELETE {0} FROM {0} WITH(NOLOCK, INDEX({3})) WHERE  {1} >= @From AND {1} < @To --{2} ";
+        #endregion
+
     }
 }

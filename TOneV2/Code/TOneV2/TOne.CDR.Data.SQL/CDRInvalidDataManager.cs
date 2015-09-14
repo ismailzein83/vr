@@ -82,5 +82,29 @@ namespace TOne.CDR.Data.SQL
            Object preparedInvalidCDRs =FinishDBApplyStream(dbApplyStream);
            ApplyInvalidCDRsToDB(preparedInvalidCDRs);
         }
+        public void DeleteCDRInvalid(DateTime from, DateTime to,List<string> customerIds,List<string> supplierIds)
+        {
+            
+
+            ExecuteNonQueryText(GetQuery(customerIds,supplierIds),
+                (cmd) =>
+                {
+                    cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@From", from));
+                    cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@To", to));
+                });
+        }
+        private string GetQuery(List<string> customerIds,List<string> supplierIds){
+
+           StringBuilder queryBuilder=new StringBuilder();
+            queryBuilder.Append(String.Format(query_DeleteTemplate, "Billing_CDR_Invalid", "Attempt", Guid.NewGuid().ToString().Replace("-", ""), "IX_Billing_CDR_Invalid_Attempt"));
+            if(customerIds!=null && customerIds.Count>0)
+                 queryBuilder.AppendFormat("AND CustomerID IN ('{0}')", String.Join("', '", customerIds));
+             if(supplierIds!=null && supplierIds.Count>0)
+                 queryBuilder.AppendFormat("AND SupplierID IN ('{0}')", String.Join("', '", supplierIds));
+            return queryBuilder.ToString();
+        }  
+        #region Queries
+        const string query_DeleteTemplate = @"DELETE {0} FROM {0} WITH(NOLOCK, INDEX({3})) WHERE  {1} >= @From AND {1} < @To --{2} ";
+        #endregion
     }
 }

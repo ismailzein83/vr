@@ -13,5 +13,8 @@ namespace TOne.CDR.Data
         void ReserverIdRange(bool isMain, bool isNegative, int numberOfIds, out long id);
         void ApplyInvalidCDRsToDB(Object preparedInvalidCDRs);
         void SaveInvalidCDRsToDB(List<BillingCDRInvalid> cdrsInvalid);
+        void DeleteCDRInvalid(DateTime from, DateTime to, List<string> customerIds, List<string> supplierIds);
+        
+     
     }
 }

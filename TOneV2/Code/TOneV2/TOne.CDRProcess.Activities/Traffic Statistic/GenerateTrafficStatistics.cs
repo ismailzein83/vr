@@ -48,7 +48,7 @@ namespace TOne.CDRProcess.Activities
 
         protected override void DoWork(GenerateTrafficStatisticsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            TrafficStatisticGenerator trafficStatGenerator = new TrafficStatisticGenerator();
+            TrafficStatisticManager trafficStatGenerator = new TrafficStatisticManager();
 
             int sampleIntervalInMinute = (int)(60 / TABS.SystemParameter.TrafficStatsSamplesPerHour.NumericValue.Value);
             bool hasItem = false;

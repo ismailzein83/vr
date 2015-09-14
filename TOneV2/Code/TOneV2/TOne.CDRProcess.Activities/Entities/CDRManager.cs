@@ -11,12 +11,7 @@ namespace TOne.CDRProcess.Activities
     public class CDRManager
     {
         log4net.ILog log = log4net.LogManager.GetLogger("TOne.CDRProcess.Activities.CDRManager");
-        public void LoadCDRRange(DateTime from, DateTime to, int? batchSize, Action<List<TABS.CDR>> onBatchReady)
-        {
-            ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
-            dataManager.LoadCDRRange(from, to, batchSize, onBatchReady);
-        }
-
+     
         #region CDR Import Process
 
        
@@ -94,55 +89,7 @@ namespace TOne.CDRProcess.Activities
         //    return id;
         //}
 
-        public void DeleteCDRMain(DateTime from, DateTime to)
-        {
-            //BulkManager.ExecuteActionWithTableLock(BulkManager.MAIN_TABLE_NAME,
-            //    () =>
-            //    {
-            ICDRTargetDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRTargetDataManager>();
-            dataManager.DeleteCDRMain(from, to);
-            //});
-        }
 
-        public void DeleteCDRInvalid(DateTime from, DateTime to)
-        {
-            //BulkManager.ExecuteActionWithTableLock(BulkManager.INVALID_TABLE_NAME,
-            //    () =>
-            //    {
-            ICDRTargetDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRTargetDataManager>();
-            dataManager.DeleteCDRInvalid(from, to);
-            //});
-        }
-
-        public void DeleteCDRSale(DateTime from, DateTime to)
-        {
-            //BulkManager.ExecuteActionWithTableLock(BulkManager.SALE_TABLE_NAME,
-            //    () =>
-            //    {
-            ICDRTargetDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRTargetDataManager>();
-            dataManager.DeleteCDRSale(from, to);
-            //});
-        }
-
-        public void DeleteCDRCost(DateTime from, DateTime to)
-        {
-            //BulkManager.ExecuteActionWithTableLock(BulkManager.COST_TABLE_NAME,
-            //    () =>
-            //    {
-            ICDRTargetDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRTargetDataManager>();
-            dataManager.DeleteCDRCost(from, to);
-            //});
-        }
-
-        public void DeleteTrafficStats(DateTime from, DateTime to)
-        {
-            //BulkManager.ExecuteActionWithTableLock(BulkManager.TRAFFICSTATS_TABLE_NAME,
-            //    () =>
-            //    {
-            ICDRTargetDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRTargetDataManager>();
-            dataManager.DeleteTrafficStats(from, to);
-            //});
-        }
 
         //public void DeleteDailyTrafficStats(DateTime from, DateTime to)
         //{
