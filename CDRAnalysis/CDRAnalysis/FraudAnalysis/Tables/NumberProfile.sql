@@ -3,8 +3,11 @@
     [AccountNumber]   VARCHAR (30)   NULL,
     [FromDate]        DATETIME       NULL,
     [ToDate]          DATETIME       NULL,
-    [AggregateValues] NVARCHAR (MAX) NULL
+    [AggregateValues] NVARCHAR (MAX) NULL,
+    [IMEIs]           NVARCHAR (MAX) NULL
 );
+
+
 
 
 

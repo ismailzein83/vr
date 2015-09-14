@@ -135,5 +135,9 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionDetails_CreateTempByAccountNumber.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_RelatedNumbers_GetByAccountNumber.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_Cancel.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_Load.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_InsertOrUpdate_with_AccountInfo.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_GetByAccountNumber.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCaseHistory_CreateTempByCaseID.sql" />
   </ItemGroup>
 </Project>

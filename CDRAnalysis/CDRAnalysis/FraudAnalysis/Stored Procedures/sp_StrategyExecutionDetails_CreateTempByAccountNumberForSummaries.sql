@@ -45,13 +45,13 @@ BEGIN
 				MAX(sed.SuspicionLevelID) AS SuspicionLevelID,
 				COUNT(*) AS NumberOfOccurances,
 				MAX(se.ExecutionDate) AS LastOccurance,
-				CASE WHEN ISNULL(accStatus.[Status], 0) IN (0, 2) THEN ISNULL(accStatus.[Status], 0) ELSE 0 END AS AccountStatusID
+				CASE WHEN ISNULL(accStatus.[Status], 1) IN (1, 2) THEN ISNULL(accStatus.[Status], 1) ELSE 1 END AS AccountStatusID
 
 			FROM FraudAnalysis.StrategyExecutionDetails sed
 			INNER JOIN FraudAnalysis.StrategyExecution se ON se.ID = sed.StrategyExecutionID
 			LEFT JOIN FraudAnalysis.AccountStatus accStatus ON accStatus.AccountNumber = sed.AccountNumber
 
-			WHERE sed.SuspicionOccuranceStatus = 0
+			WHERE sed.SuspicionOccuranceStatus = 1
 				AND se.ExecutionDate >= @FromDate AND se.ExecutionDate <= @ToDate
 				AND (@AccountNumber IS NULL OR sed.AccountNumber = @AccountNumber)
 				AND (@StrategyIDs IS NULL OR se.StrategyID IN (SELECT StrategyID FROM @StrategyIDsTable))

@@ -17,6 +17,7 @@ BEGIN
 			sed.SuspicionOccuranceStatus,
 			se.FromDate,
 			se.ToDate,
+			se.ExecutionDate,
 			sed.AggregateValues
 			
 		INTO #RESULT
@@ -26,7 +27,7 @@ BEGIN
 			inner join FraudAnalysis.Strategy s ON se.StrategyID = s.Id
 		
 		WHERE sed.AccountNumber = @AccountNumber
-			AND sed.SuspicionOccuranceStatus = 0
+			AND sed.SuspicionOccuranceStatus = 1
 			AND se.ExecutionDate >= @FromDate AND se.ExecutionDate <= @ToDate
 		
 		ORDER BY se.ExecutionDate DESC

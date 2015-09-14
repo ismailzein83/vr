@@ -20,6 +20,7 @@ BEGIN
 			d.SuspicionOccuranceStatus,
 			e.FromDate,
 			e.ToDate,
+			e.ExecutionDate,
 			d.AggregateValues
 		
 		INTO #RESULT

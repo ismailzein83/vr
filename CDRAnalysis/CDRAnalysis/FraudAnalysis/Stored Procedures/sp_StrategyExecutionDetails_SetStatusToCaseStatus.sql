@@ -9,5 +9,5 @@ BEGIN
 	SET	CaseID = @CaseID,
 		[SuspicionOccuranceStatus] = @OccuranceStatusID
 	WHERE AccountNumber = @AccountNumber
-		--AND CaseID IS NULL
+		AND (CaseID IS NULL OR CaseID = @CaseID)
 END
