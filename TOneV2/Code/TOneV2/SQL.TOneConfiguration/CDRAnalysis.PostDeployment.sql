@@ -130,6 +130,28 @@ when not matched by source then
 	delete;
 set identity_insert [sec].[BusinessEntity] off;
 
+--[sec].[Permission]--------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(0,'1',0,'1','[{"Name":"Full Control","Value":1}]'),
+(0,'1',1,'3','[{"Name":"View","Value":1}, {"Name":"Assign Permissions","Value":1}]')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags]))
+merge	[sec].[Permission] as t
+using	cte_data as s
+on		1=1 and t.[HolderType] = s.[HolderType] and t.[HolderId] = s.[HolderId] and t.[EntityType] = s.[EntityType] and t.[EntityId] = s.[EntityId]
+when matched then
+	update set
+	[PermissionFlags] = s.[PermissionFlags]
+when not matched by target then
+	insert([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
+	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags])
+when not matched by source then
+	delete;
+
 
 
 
