@@ -13,6 +13,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
+
+        public void CreateTempTable()
+        {
+            ExecuteNonQuerySP("FraudAnalysis.sp_RelatedNumbers_CreateTempTable");
+        }
+
+
         public void SavetoDB(AccountRelatedNumbers record)
         {
 
@@ -31,12 +38,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             InsertBulkToTable(
                 new StreamBulkInsertInfo
                 {
-                    TableName = "[FraudAnalysis].[RelatedNumbers]",
+                    TableName = "[FraudAnalysis].[RelatedNumbers_temp]",
                     Stream = stream,
                     TabLock = true,
                     KeepIdentity = false,
                     FieldSeparator = '^'
                 });
+        }
+
+
+        public void SwapTableWithTemp()
+        {
+            ExecuteNonQuerySP("FraudAnalysis.sp_RelatedNumbers_SwapTableWithTemp");
         }
     }
 }

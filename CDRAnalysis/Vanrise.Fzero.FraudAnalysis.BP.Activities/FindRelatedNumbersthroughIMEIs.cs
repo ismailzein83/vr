@@ -111,9 +111,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                         dicItem.Value.Remove(dicItem.Key);
                 }
             }
-                
 
+            dataManager.CreateTempTable();
             dataManager.SavetoDB(accountRelatedNumbers);
+            dataManager.SwapTableWithTemp();
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs from Database to Memory");
 
