@@ -1,14 +1,13 @@
 ﻿"use strict";
 
-DashboardController.$inject = ['$scope', 'DashboardAPIService' , 'DataSourceImportedBatchAPIService', 'Integration_MappingResultEnum'];
+DashboardController.$inject = ['$scope', 'DashboardAPIService' ];
 
-function DashboardController($scope, DashboardAPIService,  DataSourceImportedBatchAPIService, Integration_MappingResultEnum) {
+function DashboardController($scope, DashboardAPIService) {
 
     var mainGridAPI_CasesSummary;
     var mainGridAPI_BTSCases;
     var mainGridAPI_BTSHighValueCases;
     var mainGridAPI_DailyVolumeLooses;
-    var mainGridAPI_ImportedBatches;
 
 
     var chartSelectedMeasureAPI;
@@ -31,7 +30,6 @@ function DashboardController($scope, DashboardAPIService,  DataSourceImportedBat
         $scope.bTSCases = [];
         $scope.bTSHighValueCases = [];
         $scope.dailyVolumeLooses = [];
-        $scope.importedBatches = [];
 
 
 
@@ -55,11 +53,6 @@ function DashboardController($scope, DashboardAPIService,  DataSourceImportedBat
         $scope.onMainGridReady_DailyVolumeLooses = function (api) {
             mainGridAPI_DailyVolumeLooses = api;
             return retrieveData_DailyVolumeLooses();
-        };
-
-        $scope.onMainGridReady_ImportedBatches = function (api) {
-            mainGridAPI_ImportedBatches = api;
-            return retrieveData_ImportedBatches();
         };
 
 
@@ -110,13 +103,6 @@ function DashboardController($scope, DashboardAPIService,  DataSourceImportedBat
         }
 
 
-        $scope.dataRetrievalFunction_ImportedBatches = function (dataRetrievalInput, onResponseReady) {
-            return DataSourceImportedBatchAPIService.GetFilteredDataSourceImportedBatches(dataRetrievalInput)
-            .then(function (response) {
-                onResponseReady(response);
-            });
-        }
-
     }
 
     function load() {
@@ -147,18 +133,6 @@ function DashboardController($scope, DashboardAPIService,  DataSourceImportedBat
 
     function retrieveData_DailyVolumeLooses() {
         return mainGridAPI_DailyVolumeLooses.retrieveData(BuildSearchQuery());
-    }
-
-    function retrieveData_ImportedBatches() {
-        var query = {
-            DataSourceId: null,
-            BatchName: null,
-            MappingResults: getMappedMappingResults(),
-            From: $scope.fromDate,
-            To: $scope.toDate
-        };
-
-        return mainGridAPI_ImportedBatches.retrieveData(query);
     }
 
     function getMappedMappingResults() {

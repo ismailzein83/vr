@@ -24,7 +24,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 while (reader.Read())
                 {
                     AccountStatus accountStatus = new AccountStatus();
-                    accountStatus.AccountInfo = Vanrise.Common.Serializer.Deserialize<AccountInfo>(GetReaderValue<string>(reader, "AccountInfo"));
+
+                    string accountInfo = GetReaderValue<string>(reader, "AccountInfo");
+                    if (accountInfo == null)
+                        accountStatus.AccountInfo = new AccountInfo() { IMEIs = new HashSet<string>()};
+                    else
+                        accountStatus.AccountInfo = Vanrise.Common.Serializer.Deserialize<AccountInfo>(accountInfo);
+
+
                     accountStatus.AccountNumber = reader["AccountNumber"] as string;
                     accountStatus.Status = GetReaderValue<CaseStatus>(reader, "Status");
                     onBatchReady(accountStatus);

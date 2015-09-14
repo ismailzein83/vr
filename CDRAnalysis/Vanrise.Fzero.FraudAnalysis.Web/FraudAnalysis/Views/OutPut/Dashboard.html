@@ -95,27 +95,6 @@
                 </vr-section>
             </vr-columns>
 
-            <vr-columns colnum="3">
-                <vr-section title="Imported Batches">
-                    <div>
-                        <vr-row>
-                            <vr-columns colnum="12" simplecol>
-                                <vr-datagrid hidegridmenu datasource="importedBatches"
-                                             dataretrievalfunction="dataRetrievalFunction_ImportedBatches"
-                                             maxheight="200px"
-                                             pagingtype="'PagingOnScroll'"
-                                             on-ready="onMainGridReady_ImportedBatches" hidepaginginfo>
-                                    <vr-datagridcolumn headertext="'Import Date'" field="'LogEntryTime'" type="'Datetime'"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Batch Size'" field="'BatchSize'" type="'Number'"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Records Count'" field="'RecordsCount'" type="'Number'"></vr-datagridcolumn>
-                                </vr-datagrid>
-
-
-                            </vr-columns>
-                        </vr-row>
-                    </div>
-                </vr-section>
-            </vr-columns>
         </vr-row>
     </vr-form>
 </vr-panel>
