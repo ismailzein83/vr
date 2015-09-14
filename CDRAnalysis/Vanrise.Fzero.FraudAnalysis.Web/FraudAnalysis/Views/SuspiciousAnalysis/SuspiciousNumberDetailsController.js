@@ -394,6 +394,13 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             .then(function (response) {
 
                 if (response != null) {
+                    
+                    if (response == CaseStatusEnum.ClosedFraud.value)
+                        $scope.caseStatuses = $scope.caseStatuses.splice(2); // remove the closed: fruad option
+
+                    else if (response == CaseStatusEnum.ClosedWhitelist.value)
+                        $scope.caseStatuses = $scope.caseStatuses.splice(3); // remove the closed: white list option
+
                     var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", response);
                     $scope.accountStatus = accountStatus.description;
                 }
