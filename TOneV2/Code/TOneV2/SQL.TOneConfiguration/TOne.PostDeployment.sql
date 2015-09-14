@@ -69,7 +69,7 @@ as (select * from (values
 (1,'Routing','Routing','Routing',null,'/images/menu-icons/Routing.png',16,0),
 (2,'Business Intelligence','Business Intelligence','BI',null,'/images/menu-icons/busines intel.png',19,1),
 (3,'Business Entities','Business Entities','Business Entities',null,'/images/menu-icons/Business Entities.png',11,0),
-(4,'NOC','NOC','NOC',null,'/images/menu-icons/NOC.png',18,1),
+(4,'NOC','Traffic Analysis','NOC',null,'/images/menu-icons/NOC.png',18,1),
 (5,'Administration','Administration','Administration',null,'/images/menu-icons/Administration.png',10,0),
 (10,'Business Process','Business Process','Business Process',5,null,17,0),
 (11,'Billing','Billing','Billing',null,'/images/menu-icons/billing.png',15,0),
