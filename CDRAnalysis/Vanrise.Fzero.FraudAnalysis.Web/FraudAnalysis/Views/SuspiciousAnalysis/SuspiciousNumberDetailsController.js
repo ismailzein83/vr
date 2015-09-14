@@ -16,7 +16,6 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
     var gridAPI_RelatedNumbers = undefined;
     var sequencedNumbers = [];
     var IMEIs = [];
-    var relatedNumberMenuActions = [];
 
     loadParameters();
     defineScope();
@@ -108,6 +107,9 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                 });
             }
         }
+        $scope.relatedNumberClicked = function (dataItem) {
+            openRelatedNumber(dataItem.RelatedNumber);
+        };
 
         $scope.dataRetrievalFunction_Occurances = function (dataRetrievalInput, onResponseReady) {
 
@@ -286,7 +288,6 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             }
         }
 
-        defineRelatedNumberMenuActions();
     }
 
     function load() {
@@ -418,13 +419,6 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             });
     }
 
-    function defineRelatedNumberMenuActions() {
-        $scope.relatedNumberMenuActions = [{
-            name: "Details",
-            clicked: detailRelatedNumber
-        }];
-    }
-
     function setSequencedNumbers() {
 
         for (var i = 10; i >= 1; i--) {
@@ -436,11 +430,11 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         }
     }
 
-    function detailRelatedNumber(gridObject) {
+    function openRelatedNumber(relatedNumber) {
         var modalSettings = {};
 
         var parameters = {
-            AccountNumber: gridObject.RelatedNumber,
+            AccountNumber: relatedNumber,
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate
         };

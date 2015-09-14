@@ -196,11 +196,10 @@
                 <vr-row>
                     <vr-columns width="fullrow" simplecol>
                         <vr-datagrid datasource="relatedNumbers"
-                                     on-ready="onGridReady_RelatedNumbers"
-                                     menuactions="relatedNumberMenuActions"
-                                     maxheight="500px">
+                                     data-on-ready="onGridReady_RelatedNumbers"
+                                     maxheight="300px">
 
-                            <vr-datagridcolumn headertext="'Related Number'" field="'RelatedNumber'" type="'Text'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Related Number'" field="'RelatedNumber'" type="'Text'" isclickable="true" onclicked="relatedNumberClicked"></vr-datagridcolumn>
                         </vr-datagrid>
                     </vr-columns>
                 </vr-row>
