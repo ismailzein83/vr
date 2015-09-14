@@ -137,6 +137,17 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         return array;
     }
 
+    function getEnumPropertyAsArray(enumObj, propertyFilter) {
+        var array = [];
+
+        for (var item in enumObj) {
+            if (enumObj.hasOwnProperty(item)) {
+                array.push(enumObj[item][propertyFilter]);
+            }
+        }
+        return array;
+    }
+
     function fillArray(array, data) {
         for (var i = 0; i < data.length; i++) {
             array.push(data[i]);
@@ -434,6 +445,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         getArrayEnum: getArrayEnum,
         validateDates: validateDates,
         getEnumDescription: getEnumDescription,
+        getEnumPropertyAsArray: getEnumPropertyAsArray,
         fillArray: fillArray
     });
 
