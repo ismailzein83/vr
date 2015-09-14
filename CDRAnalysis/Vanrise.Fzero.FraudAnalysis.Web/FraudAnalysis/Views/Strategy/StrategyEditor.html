@@ -48,8 +48,7 @@
                                         <vr-datagridcolumn headertext="'Description'" field="'description'" widthfactor="20">                   </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Threshold'"> 
                                             <div style="max-width: 150px; float: left">
-                                                <vr-label>  {{dataItem.label}}</vr-label>
-                                                <vr-textbox value="dataItem.threshold" type="number" isrequired ng-if="dataItem.isSelected" title="{{dataItem.toolTip}}" minvalue="{{dataItem.minValue}}" maxvalue="{{dataItem.maxValue}}" decimalprecision="{{dataItem.decimalPrecision}}"></vr-textbox>
+                                                <vr-textbox placeholder="{{dataItem.label}}" value="dataItem.threshold" type="number" isrequired ng-if="dataItem.isSelected" title="{{dataItem.toolTip}}" minvalue="{{dataItem.minValue}}" maxvalue="{{dataItem.maxValue}}" decimalprecision="{{dataItem.decimalPrecision}}"></vr-textbox>
                                             </div>                                               
                                         </vr-datagridcolumn>
                                     </vr-datagrid>
