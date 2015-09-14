@@ -1,6 +1,6 @@
-﻿SuspiciousNumberDetailsController.$inject = ["$scope", "CaseManagementAPIService", "NormalCDRAPIService", "NumberProfileAPIService", "StrategyAPIService", "UsersAPIService", "SuspicionLevelEnum", "SuspicionLevelColorEnum", "CaseStatusEnum", "CaseStatusColorEnum", "CallTypeEnum", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService"];
+﻿SuspiciousNumberDetailsController.$inject = ["$scope", "CaseManagementAPIService", "NormalCDRAPIService", "NumberProfileAPIService", "StrategyAPIService", "UsersAPIService", "SuspicionLevelEnum", "CaseStatusEnum", "CallTypeEnum", "LabelColorsEnum", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService"];
 
-function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, NormalCDRAPIService, NumberProfileAPIService, StrategyAPIService, UsersAPIService, SuspicionLevelEnum, SuspicionLevelColorEnum, CaseStatusEnum, CaseStatusColorEnum, CallTypeEnum, UtilsService, VRNavigationService, VRNotificationService, VRModalService) {
+function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, NormalCDRAPIService, NumberProfileAPIService, StrategyAPIService, UsersAPIService, SuspicionLevelEnum, CaseStatusEnum, CallTypeEnum, LabelColorsEnum, UtilsService, VRNavigationService, VRNotificationService, VRModalService) {
     var gridAPI_Occurances = undefined;
     var occurancesLoaded = false;
 
@@ -302,17 +302,17 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
         $scope.getSuspicionLevelColor = function (dataItem) {
 
-            if (dataItem.SuspicionLevelID == SuspicionLevelEnum.Suspicious.value) return SuspicionLevelColorEnum.Suspicious.color;
-            else if (dataItem.SuspicionLevelID == SuspicionLevelEnum.HighlySuspicious.value) return SuspicionLevelColorEnum.HighlySuspicious.color;
-            else if (dataItem.SuspicionLevelID == SuspicionLevelEnum.Fraud.value) return SuspicionLevelColorEnum.Fraud.color;
+            if (dataItem.SuspicionLevelID == SuspicionLevelEnum.Suspicious.value) return LabelColorsEnum.WarningLevel1.color;
+            else if (dataItem.SuspicionLevelID == SuspicionLevelEnum.HighlySuspicious.value) return LabelColorsEnum.WarningLevel2.color;
+            else if (dataItem.SuspicionLevelID == SuspicionLevelEnum.Fraud.value) return LabelColorsEnum.Error.color;
         }
 
         $scope.getCaseStatusColor = function (dataItem) {
 
-            if (dataItem.StatusID == CaseStatusEnum.Open.value) return CaseStatusColorEnum.Open.color;
-            else if (dataItem.StatusID == CaseStatusEnum.Pending.value) return CaseStatusColorEnum.Pending.color;
-            else if (dataItem.StatusID == CaseStatusEnum.ClosedFraud.value) return CaseStatusColorEnum.ClosedFraud.color;
-            else if (dataItem.StatusID == CaseStatusEnum.ClosedWhitelist.value) return CaseStatusColorEnum.ClosedWhiteList.color;
+            if (dataItem.StatusID == CaseStatusEnum.Open.value) return LabelColorsEnum.New.color;
+            else if (dataItem.StatusID == CaseStatusEnum.Pending.value) return LabelColorsEnum.Processing.color;
+            else if (dataItem.StatusID == CaseStatusEnum.ClosedFraud.value) return LabelColorsEnum.Error.color;
+            else if (dataItem.StatusID == CaseStatusEnum.ClosedWhitelist.value) return LabelColorsEnum.Success.color;
         }
     }
 
