@@ -122,7 +122,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                         $scope.detailAggregateValues.push(response.Data[0]);
                     else {
                         $scope.showOccurancesGrid = false;
-                        $scope.message = "No records found";
+                        $scope.message = "No opened occurances were found for the current account number";
                         $scope.showProfileOptions = false;
                         $scope.showDate = true;
                     }
