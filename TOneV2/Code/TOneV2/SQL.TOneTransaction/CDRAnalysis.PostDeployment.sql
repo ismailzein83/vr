@@ -35,4 +35,50 @@ when not matched by source then
 	delete;
 set identity_insert [bp].[BPDefinition] off;
 
+--[queue].[ExecutionFlowDefinition]-----------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [queue].[ExecutionFlowDefinition] on;
+;with cte_data([ID],[Name],[Title],[ExecutionTree])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,'CDRImportDefintion','CDR Import Definition','{"$type":"Vanrise.Queueing.Entities.QueueExecutionFlowTree, Vanrise.Queueing.Entities","Activities":{"$type":"System.Collections.Generic.List`1[[Vanrise.Queueing.Entities.BaseExecutionActivity, Vanrise.Queueing.Entities]], mscorlib","$values":[{"$type":"Vanrise.Queueing.Entities.QueueStageExecutionActivity, Vanrise.Queueing.Entities","StageName":"CDR Import","QueueName":"CDRQueue","QueueSettings":{"$type":"Vanrise.Queueing.Entities.QueueSettings, Vanrise.Queueing.Entities","SingleConcurrentReader":false,"QueueActivatorFQTN":"Vanrise.Fzero.CDRImport.Business.CDRImportActivator, Vanrise.Fzero.CDRImport.Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"},"QueueTypeFQTN":"Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch, Vanrise.Fzero.CDRImport.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"}]}}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Title],[ExecutionTree]))
+merge	[queue].[ExecutionFlowDefinition] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[ExecutionTree] = s.[ExecutionTree]
+when not matched by target then
+	insert([ID],[Name],[Title],[ExecutionTree])
+	values(s.[ID],s.[Name],s.[Title],s.[ExecutionTree])
+when not matched by source then
+	delete;
+set identity_insert [queue].[ExecutionFlowDefinition] off;
+
+--[queue].[ExecutionFlow]---------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [queue].[ExecutionFlow] on;
+;with cte_data([ID],[Name],[ExecutionFlowDefinitionID])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,'CDR Import Execution Flow',1)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[ExecutionFlowDefinitionID]))
+merge	[queue].[ExecutionFlow] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[ExecutionFlowDefinitionID] = s.[ExecutionFlowDefinitionID]
+when not matched by target then
+	insert([ID],[Name],[ExecutionFlowDefinitionID])
+	values(s.[ID],s.[Name],s.[ExecutionFlowDefinitionID])
+when not matched by source then
+	delete;
+set identity_insert [queue].[ExecutionFlow] off;
+
 
