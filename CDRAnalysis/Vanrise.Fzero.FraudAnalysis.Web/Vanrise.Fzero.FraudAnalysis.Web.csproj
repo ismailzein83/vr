@@ -182,7 +182,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FraudAnalysis\Constants\Enums.js" />
+    <Content Include="FraudAnalysis\Constants\CaseStatusEnum.js" />
+    <Content Include="FraudAnalysis\Constants\KindEnum.js" />
+    <Content Include="FraudAnalysis\Constants\OperatorTypeEnum.js" />
+    <Content Include="FraudAnalysis\Constants\StatusEnum.js" />
+    <Content Include="FraudAnalysis\Constants\PercentageEnum.js" />
+    <Content Include="FraudAnalysis\Constants\CallTypeEnum.js" />
+    <Content Include="FraudAnalysis\Constants\SuspicionOccuranceStatusEnum.js" />
+    <Content Include="FraudAnalysis\Constants\SuspicionLevelEnum.js" />
+    <Content Include="FraudAnalysis\Constants\HourEnum.js" />
     <Content Include="FraudAnalysis\Services\APIServices\CaseManagementAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\DashboardAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\NumberProfileAPIService.js" />

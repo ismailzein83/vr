@@ -390,7 +390,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             .then(function (response) {
 
                 angular.forEach(response, function (item) {
-                    $scope.aggregateDefinitions.push({ name: item.Name });
+                    $scope.aggregateDefinitions.push({ name: item.Name , numberPrecision: item.NumberPrecision });
                 });
             })
     }

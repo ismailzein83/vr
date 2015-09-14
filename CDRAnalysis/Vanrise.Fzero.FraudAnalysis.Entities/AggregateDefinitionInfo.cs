@@ -11,5 +11,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public OperatorTypeEnum OperatorTypeAllowed { get; set; }
 
+        public string NumberPrecision { get; set; }
+
     }
 }

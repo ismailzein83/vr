@@ -126,7 +126,8 @@
                                     <vr-datagridcolumn ng-repeat="agg in aggregateDefinitions"
                                                        headertext="agg.name"
                                                        field="'AggregateValues[&quot;' + agg.name + '&quot;]'"
-                                                       type="'Number'">
+                                                       type="'Number'"
+                                                       numberprecision="agg.numberPrecision">
                                     </vr-datagridcolumn>
                                 </vr-datagrid>
                             </div>
@@ -146,7 +147,8 @@
                                     <vr-datagridcolumn ng-repeat="agg in aggregateDefinitions"
                                                        headertext="agg.name"
                                                        field="'AggregateValues[&quot;' + agg.name + '&quot;]'"
-                                                       type="'Number'">
+                                                       type="'Number'"
+                                                       numberprecision="agg.numberPrecision">
                                     </vr-datagridcolumn>
                                 </vr-datagrid>
                             </div>
