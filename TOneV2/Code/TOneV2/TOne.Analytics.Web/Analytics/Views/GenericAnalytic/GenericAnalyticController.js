@@ -2,8 +2,8 @@
 
     "use strict";
 
-    GenericAnalyticController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticMeasureEnum', 'AnalyticsService', 'BusinessEntityAPIService_temp'];
-    function GenericAnalyticController($scope, GenericAnalyticAPIService, GenericAnalyticMeasureEnum, analyticsService, BusinessEntityAPIService) {
+    GenericAnalyticController.$inject = ['$scope','GenericAnalyticDimensionEnum', 'AnalyticsService', 'BusinessEntityAPIService_temp', 'ZonesService'];
+    function GenericAnalyticController($scope, GenericAnalyticDimensionEnum, analyticsService, BusinessEntityAPIService, ZonesService) {
 
         var measureFields;
         load();
@@ -14,13 +14,8 @@
             $scope.fromDate = new Date(2013, 1, 1);
             $scope.toDate = now;
             $scope.subViewConnector = {};
-
-            $scope.click = function () {
-                console.log($scope.subViewConnector.getValue());
-                $scope.subViewConnector.setValue("setValue");
-            }
+            
             measureFields = analyticsService.getGenericAnalyticMeasureValues();
-            //$scope.measures = analyticsService.getGenericAnalyticMeasures();
             $scope.groupKeys = analyticsService.getGenericAnalyticGroupKeys();
 
             $scope.selectedGroupKeys = [];
@@ -28,24 +23,35 @@
                 groupKeys: []
             };
 
+            $scope.zones = [];
+            $scope.selectedZones = [];
+
+            $scope.searchZones = function (text) {
+                return ZonesService.getSalesZones(text);
+            }
+
             $scope.switches = [];
             $scope.selectedSwitches = [];
+
             $scope.codeGroups = [];
             $scope.selectedCodeGroups = [];
 
             $scope.measures = [];
             $scope.selectedMeasures = [];
 
+            $scope.customers = [];
+            $scope.selectedCustomers = [];
+            $scope.suppliers = [];
+            $scope.selectedSuppliers = [];
+
+
             loadSwitches();
             loadCodeGroups();
             loadMeasures();
        
-
             $scope.searchClicked = function () { 
                 return retrieveData();
             };
-
-            
 
             $scope.checkExpandablerow = function (groupKeys) {
                 return groupKeys.length !== $scope.groupKeys.length;
@@ -53,15 +59,52 @@
 
             $scope.groupSelectionChanged = function () {
                 $scope.currentSearchCriteria.groupKeys.length = 0;
-
             };
         }
 
         function retrieveData() {
-           
-            
 
             var filters = [];
+
+            var filterCodeGroup = {
+                Dimension: GenericAnalyticDimensionEnum.CodeGroup.value,
+                FilterValues: []
+            };
+            var filterSwitch = {
+                Dimension: GenericAnalyticDimensionEnum.Switch.value,
+                FilterValues: []
+            };
+            var filterZone = {
+                Dimension: GenericAnalyticDimensionEnum.Zone.value,
+                FilterValues: []
+            };
+            var filterCustomer = {
+                Dimension: GenericAnalyticDimensionEnum.Customer.value,
+                FilterValues: []
+            };
+
+
+            $scope.selectedCodeGroups.forEach(function (item) {
+                filterCodeGroup.FilterValues.push(item.Code);
+            });
+            $scope.selectedSwitches.forEach(function (item) {
+                filterSwitch.FilterValues.push(item.SwitchId);
+            });
+            $scope.selectedZones.forEach(function (item) {
+                filterZone.FilterValues.push(item.ZoneId);
+            });
+            $scope.selectedCustomers.forEach(function (item) {
+                filterCustomer.FilterValues.push(item.CarrierAccountID);
+            });
+
+            if (filterCodeGroup.FilterValues.length > 0)
+                filters.push(filterCodeGroup);
+            if (filterSwitch.FilterValues.length > 0)
+                filters.push(filterSwitch);
+            if (filterZone.FilterValues.length > 0)
+                filters.push(filterZone);
+            if (filterCustomer.FilterValues.length > 0)
+                filters.push(filterCustomer);
 
             var groupKeys = [];
             $scope.selectedGroupKeys.forEach(function (group) {
@@ -70,14 +113,11 @@
 
             var query = {
                 Filters: filters,
-                DimensionFields: groupKeys,
+                DimensionFields: $scope.selectedGroupKeys,
                 MeasureFields: measureFields,
                 FromTime: $scope.fromDate,
-                ToTime: $scope.toDate,
-                GroupKeys:$scope.selectedGroupKeys
+                ToTime: $scope.toDate
             };
-            console.log(query);
-
             $scope.subViewConnector.retrieveData(query);
         }
 
@@ -101,11 +141,9 @@
             });
         }
 
-
         function loadMeasures() {
             return $scope.measures = $scope.selectedMeasures = analyticsService.getGenericAnalyticMeasures();
         }
-
     }
     appControllers.controller('Generic_GenericAnalyticController', GenericAnalyticController);
 

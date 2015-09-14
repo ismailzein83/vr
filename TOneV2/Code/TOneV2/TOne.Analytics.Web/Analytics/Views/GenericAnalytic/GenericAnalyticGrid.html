@@ -1,13 +1,13 @@
 ﻿
 <div ng-controller="GenericAnalyticGridController">
-    <vr-datagrid datasource="::datasource" pagingtype="'Pager'" dataretrievalfunction="dataRetrievalFunction" on-ready="gridReady">
+    <vr-datagrid datasource="datasource" pagingtype="'Pager'" dataretrievalfunction="dataRetrievalFunction" on-ready="gridReady">
 
         <vr-datagridcolumn ng-repeat="groupKey in currentSearchCriteria.groupKeys" headertext="groupKey.description" type="groupKey.type"
                            field="'DimensionValues[' + $index + '].Name'" columnindex="$index" widthfactor="15"></vr-datagridcolumn>
         <vr-datagridcolumn ng-repeat="measure in selectedMeasures" headertext="measure.description" type="measure.type" field="'MeasureValues[' + $index + ']'" tag="measure"></vr-datagridcolumn>
 
         <vr-datagridexpandablerow ng-show="checkExpandablerow(currentSearchCriteria.groupKeys)">
-            <div ng-include="'/Client/Modules/Analytics/Views/GenericAnalyticSubGrid.html'"></div>
+            <div ng-include="'/Client/Modules/Analytics/Views/GenericAnalytic/GenericAnalyticSubGrid.html'"></div>
         </vr-datagridexpandablerow>
     </vr-datagrid>
 </div>

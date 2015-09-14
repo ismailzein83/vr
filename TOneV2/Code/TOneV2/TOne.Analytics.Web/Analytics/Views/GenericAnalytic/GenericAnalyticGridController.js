@@ -2,8 +2,8 @@
 
     "use strict";
 
-    GenericAnalyticGridController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticDimensionEnum', 'AnalyticsService'];
-    function GenericAnalyticGridController($scope, GenericAnalyticAPIService, GenericAnalyticDimensionEnum, analyticsService) {
+    GenericAnalyticGridController.$inject = ['$scope', 'GenericAnalyticAPIService'];
+    function GenericAnalyticGridController($scope, GenericAnalyticAPIService) {
         var gridApi;
         defineScope();
         function defineScope() {
@@ -22,22 +22,29 @@
 
             $scope.subViewConnector.getValue = function () {
                 return "GetValue";
-            }
+            };
 
             $scope.subViewConnector.retrieveData = function (value) {
                 $scope.subViewConnector.value = value;
                 if (gridApi == undefined)
                     return;
-                selectedGroupKeys = value.GroupKeys;
+
+                var groupKeys = [];
+                value.DimensionFields.forEach(function (group) {
+                    groupKeys.push(group.value);
+                });
+
+
+                selectedGroupKeys = value.DimensionFields;
                 var query = {
                     Filters: value.Filters,
-                    DimensionFields: value.DimensionFields,
+                    DimensionFields: groupKeys,
                     MeasureFields: value.MeasureFields,
                     FromTime: value.FromTime,
-                    ToTime: value.ToTime,
+                    ToTime: value.ToTime
                 }
                 gridApi.retrieveData(query);
-            }
+            };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return GenericAnalyticAPIService.GetFiltered(dataRetrievalInput)

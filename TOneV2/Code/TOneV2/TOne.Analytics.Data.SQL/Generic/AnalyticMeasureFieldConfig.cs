@@ -62,7 +62,8 @@ namespace TOne.Analytics.Data.SQL
     public class CTEStatement
     {
         public const string Billing = "Billing_Currency AS ( SELECT BS.NumberOfCalls NumberOfCalls, BS.Cost_Nets Cost_Nets, BS.Sale_Nets  Sale_Nets, BS.SaleZoneID SaleZoneID, CS.LastRate CSLastRate, CC.LastRate CCLastRate FROM  Billing_Stats BS WITH(NOLOCK,Index(IX_Billing_Stats_Date))  LEFT JOIN Currency CS WITH (NOLOCK) ON  CS.CurrencyID = BS.sale_currency LEFT JOIN Currency CC WITH (NOLOCK) ON  CC.CurrencyID = BS.cost_currency WHERE  BS.CallDate >= @fromDate AND BS.CallDate < @ToDate )";
-        public const string Switch = "";
+        public const string CodeGroup = "OurZones AS (SELECT ZoneID, Name, CodeGroup FROM Zone z WITH (NOLOCK) WHERE SupplierID = 'SYS')";
+        public const string SwitchConnectivity = "SwitchConnectivity AS ( SELECT csc.CarrierAccountID AS  CarrierAccount ,csc.SwitchID AS SwitchID ,csc.Details AS Details ,csc.BeginEffectiveDate AS BeginEffectiveDate ,csc.EndEffectiveDate AS EndEffectiveDate ,csc.[Name] AS GateWayName ,csc.[ID] AS GateWayID FROM   CarrierSwitchConnectivity csc WITH(NOLOCK)  WHERE (csc.EndEffectiveDate IS null))";
     }
 
     public class JoinStatement

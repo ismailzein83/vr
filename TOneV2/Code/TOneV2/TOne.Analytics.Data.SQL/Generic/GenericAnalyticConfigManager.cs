@@ -52,8 +52,7 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = "ts.OurZoneID",
                     NameColumn = "z.Name",
                     JoinStatements = new List<string>() { " JOIN Zone z WITH (NOLOCK) ON z.ZoneID = ts.OurZoneID " },
-                    GroupByStatements = new List<string>() { " ts.OurZoneID, z.Name " },
-                    CTEStatement = null
+                    GroupByStatements = new List<string>() { " ts.OurZoneID, z.Name " }
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.SupplierZone,
@@ -62,8 +61,7 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = "ts.SupplierZoneID",
                     NameColumn = "z.Name",
                     JoinStatements = new List<string>() { " JOIN Zone z WITH (NOLOCK) ON z.ZoneID = ts.SupplierZoneID " },
-                    GroupByStatements = new List<string>() { " ts.SupplierZoneID, z.Name " },
-                    CTEStatement = null
+                    GroupByStatements = new List<string>() { " ts.SupplierZoneID, z.Name " }
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.Customer,
@@ -73,8 +71,7 @@ namespace TOne.Analytics.Data.SQL
                     NameColumn = "case when cust.NameSuffix != '' THEN  custProf.Name + '(' + cust.NameSuffix + ')' else custProf.Name end",
                     JoinStatements = new List<string>() { @" JOIN CarrierAccount cust WITH (NOLOCK) ON cust.CarrierAccountID = ts.CustomerID
                                          JOIN CarrierProfile custProf on cust.ProfileID = custProf.ProfileID " },
-                    GroupByStatements = new List<string>() { " ts.CustomerID, cust.NameSuffix, custProf.Name " },
-                    CTEStatement = null
+                    GroupByStatements = new List<string>() { " ts.CustomerID, cust.NameSuffix, custProf.Name " }
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.Supplier,
@@ -84,8 +81,7 @@ namespace TOne.Analytics.Data.SQL
                     NameColumn = "case when supp.NameSuffix != '' THEN  suppProf.Name + '(' + supp.NameSuffix + ')' else suppProf.Name end",
                     JoinStatements = new List<string>() { @" JOIN CarrierAccount supp WITH (NOLOCK) ON supp.CarrierAccountID = ts.SupplierID
                                                      JOIN CarrierProfile suppProf on supp.ProfileID = suppProf.ProfileID " },
-                    GroupByStatements = new List<string>() { " ts.SupplierID, supp.NameSuffix, suppProf.Name " },
-                    CTEStatement = null
+                    GroupByStatements = new List<string>() { " ts.SupplierID, supp.NameSuffix, suppProf.Name " }
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.CodeGroup,
@@ -93,9 +89,8 @@ namespace TOne.Analytics.Data.SQL
                 {
                     IdColumn = "ourz.CodeGroup",
                     NameColumn = "c.Name",
-                    JoinStatements = new List<string>() { @" LEFT JOIN  OurZones ourz ON ts.OurZoneID = ourz.ZoneID LEFT JOIN CodeGroup c ON ourz.CodeGroup=c.Code" },
-                    GroupByStatements = new List<string>() { " ourz.CodeGroup,  c.Name" },
-                    CTEStatement = " OurZones AS (SELECT ZoneID, Name, CodeGroup FROM Zone z WITH (NOLOCK) WHERE SupplierID = 'SYS') "
+                    JoinStatements = new List<string>() { @" LEFT JOIN  OurZones ourz ON ts.OurZoneID = ourz.ZoneID LEFT JOIN CodeGroup c ON ourz.CodeGroup = c.Code" },
+                    GroupByStatements = new List<string>() { " ourz.CodeGroup,  c.Name" }
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.Switch,
@@ -104,8 +99,7 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = "ts.SwitchID",
                     NameColumn = "sw.Name",
                     JoinStatements = new List<string>() { @"JOIN Switch sw WITH (NOLOCK) ON sw.SwitchID = ts.SwitchID" },
-                    GroupByStatements = new List<string>() { "ts.SwitchID, sw.Name" },
-                    CTEStatement = null
+                    GroupByStatements = new List<string>() { "ts.SwitchID, sw.Name" }
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.GateWayIn,
@@ -113,19 +107,17 @@ namespace TOne.Analytics.Data.SQL
                 {
                     IdColumn = "ISNULL(cscIn.GateWayID,0)",
                     NameColumn = "ISNULL(cscIn.GateWayName,'N/A')",
-                    JoinStatements = new List<string>() { @"Left JOIN SwitchConnectivity cscIn  ON (','+cscIn.Details+',' LIKE '%,'+ts.Port_IN +',%' ) AND(ts.SwitchID = cscIn.SwitchID) AND ts.CustomerID =cscIn.CarrierAccount " },
-                    GroupByStatements = new List<string>() { "cscIn.GateWayID, cscIn.GateWayName" },
-                    CTEStatement = "SwitchConnectivity AS ( SELECT csc.CarrierAccountID AS  CarrierAccount ,csc.SwitchID AS SwitchID ,csc.Details AS Details ,csc.BeginEffectiveDate AS BeginEffectiveDate ,csc.EndEffectiveDate AS EndEffectiveDate ,csc.[Name] AS GateWayName ,csc.[ID] AS GateWayID FROM   CarrierSwitchConnectivity csc WITH(NOLOCK)  WHERE (csc.EndEffectiveDate IS null))"
+                    JoinStatements = new List<string>() { @"Left JOIN SwitchConnectivity cscIn  ON (','+cscIn.Details+',' LIKE '%,'+ts.Port_IN +',%' ) AND(ts.SwitchID = cscIn.SwitchID) AND ts.CustomerID = cscIn.CarrierAccount " },
+                    GroupByStatements = new List<string>() { "cscIn.GateWayID, cscIn.GateWayName" }
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.GateWayOut,
                 new AnalyticDimensionConfig
                 {
-                    IdColumn = "ISNULL(cscOut.GateWayID,0)",
-                    NameColumn = "ISNULL(cscOut.GateWayName,'N/A')",
-                    JoinStatements = new List<string>() { @"Left JOIN SwitchConnectivityOut cscOut ON  (','+cscOut.Details+',' LIKE '%,'+ts.Port_OUT +',%') AND (ts.SwitchID = cscOut.SwitchID)  AND ts.SupplierID  =cscOut.CarrierAccount" },
-                    GroupByStatements = new List<string>() { "cscOut.GateWayID, cscOut.GateWayName" },
-                    CTEStatement = "SwitchConnectivityOut AS ( SELECT csc.CarrierAccountID AS  CarrierAccount ,csc.SwitchID AS SwitchID ,csc.Details AS Details ,csc.BeginEffectiveDate AS BeginEffectiveDate ,csc.EndEffectiveDate AS EndEffectiveDate ,csc.[Name] AS GateWayName ,csc.[ID] AS GateWayID FROM   CarrierSwitchConnectivity csc WITH(NOLOCK)  WHERE (csc.EndEffectiveDate IS null))"
+                    IdColumn = "ISNULL(cscIn.GateWayID,0)",
+                    NameColumn = "ISNULL(cscIn.GateWayName,'N/A')",
+                    JoinStatements = new List<string>() { @"Left JOIN SwitchConnectivity cscIn ON  (','+cscIn.Details+',' LIKE '%,'+ts.Port_OUT +',%') AND (ts.SwitchID = cscIn.SwitchID)  AND ts.SupplierID  = cscIn.CarrierAccount" },
+                    GroupByStatements = new List<string>() { "cscIn.GateWayID, cscIn.GateWayName" }
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.PortIn,
@@ -134,8 +126,7 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = "ts.Port_IN",
                     NameColumn = "ts.Port_IN",
                     JoinStatements = null,
-                    GroupByStatements = new List<string>() { "ts.Port_IN" },
-                    CTEStatement = null
+                    GroupByStatements = new List<string>() { "ts.Port_IN" }
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.PortOut,
@@ -144,8 +135,7 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = "ts.Port_OUT",
                     NameColumn = "ts.Port_OUT",
                     JoinStatements = null,
-                    GroupByStatements = new List<string>() { "ts.Port_OUT" },
-                    CTEStatement = null
+                    GroupByStatements = new List<string>() { "ts.Port_OUT" }
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.CodeSales,
@@ -154,8 +144,7 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = "ts.OurCode",
                     NameColumn = "ts.OurCode",
                     JoinStatements = null,
-                    GroupByStatements = new List<string>() { "ts.OurCode" },
-                    CTEStatement = null
+                    GroupByStatements = new List<string>() { "ts.OurCode" }
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.CodeBuy,
@@ -164,8 +153,7 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = "ISNULL(ts.SupplierCode,'N/A')",
                     NameColumn = "ISNULL(ts.SupplierCode,'N/A')",
                     JoinStatements = null,
-                    GroupByStatements = new List<string>() { "ts.SupplierCode" },
-                    CTEStatement = null
+                    GroupByStatements = new List<string>() { "ts.SupplierCode" }
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.Date,
@@ -174,8 +162,7 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = "dateadd(dd,0, datediff(dd,0,LastCDRAttempt))",
                     NameColumn = "dateadd(dd,0, datediff(dd,0,LastCDRAttempt))",
                     JoinStatements = null,
-                    GroupByStatements = new List<string>() { "dateadd(dd,0, datediff(dd,0,LastCDRAttempt))" },
-                    CTEStatement = null
+                    GroupByStatements = new List<string>() { "dateadd(dd,0, datediff(dd,0,LastCDRAttempt))" }
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.Hour,
@@ -184,8 +171,7 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = " datepart(hour,LastCDRAttempt)",
                     NameColumn = " datepart(hour,LastCDRAttempt)",
                     JoinStatements = null,
-                    GroupByStatements = new List<string>() { " datepart(hour,LastCDRAttempt)" },
-                    CTEStatement = null
+                    GroupByStatements = new List<string>() { " datepart(hour,LastCDRAttempt)" }
                 });
         }
 

@@ -100,12 +100,34 @@ namespace TOne.Analytics.Data.SQL
                 if(groupFieldConfig.JoinStatements != null)
                     foreach (var statement in groupFieldConfig.JoinStatements)
                     {
-                        AddStatementToJoinPart(joinPartBuilder, statement);
+                        if (!lstJoinStatement.Contains(statement))
+                        {
+                            lstJoinStatement.Add(statement);
+                            AddStatementToJoinPart(joinPartBuilder, statement);
+                        }
                     }
 
-                if (groupFieldConfig.CTEStatement != null)
-                    AddStatementToCTEPart(ctePartBuilder, groupFieldConfig.CTEStatement);
-                
+                //if (groupFieldConfig.CTEStatement != null)
+                //    AddStatementToCTEPart(ctePartBuilder, groupFieldConfig.CTEStatement);
+
+                if (groupField == AnalyticDimension.CodeGroup)
+                {
+                    if (!lstCTEStatements.Contains(CTEStatement.CodeGroup))
+                    {
+                        lstCTEStatements.Add(CTEStatement.CodeGroup);
+                        AddStatementToCTEPart(ctePartBuilder, CTEStatement.CodeGroup);
+                    }
+                }
+
+                if (groupField == AnalyticDimension.GateWayIn || groupField == AnalyticDimension.GateWayOut)
+                {
+                    if (!lstCTEStatements.Contains(CTEStatement.SwitchConnectivity))
+                    {
+                        lstCTEStatements.Add(CTEStatement.SwitchConnectivity);
+                        AddStatementToCTEPart(ctePartBuilder, CTEStatement.SwitchConnectivity);
+                    }
+                }
+
                 if(!String.IsNullOrEmpty(groupFieldConfig.IdColumn))
                     AddColumnToSelectPart(selectPartBuilder, String.Format("{0} AS DimensionId_{1}", groupFieldConfig.IdColumn, groupField));
                 
@@ -129,8 +151,13 @@ namespace TOne.Analytics.Data.SQL
                         {
                             AddColumnToSelectPart(selectPartBuilder, String.Format("{0} AS {1}", measureColumn.Expression, measureColumn.ColumnAlias));
                             if (measureColumn.JoinStatement != null)
-                                AddStatementToJoinPart(joinPartBuilder, measureColumn.JoinStatement);
-
+                            {
+                                if (!lstJoinStatement.Contains(measureColumn.JoinStatement))
+                                {
+                                    lstJoinStatement.Add(measureColumn.JoinStatement);
+                                    AddStatementToJoinPart(joinPartBuilder, measureColumn.JoinStatement);
+                                }
+                            }   
 
                             //Measures related to Billing
                             if (measureField == AnalyticMeasureField.BillingNumberOfCalls || measureField == AnalyticMeasureField.CostNets ||
@@ -175,16 +202,29 @@ namespace TOne.Analytics.Data.SQL
                 {
                     AnalyticDimensionConfig groupFieldConfig = dimensionsFilterConfig[dimensionFilter.Dimension];
 
-                    if (groupFieldConfig.CTEStatement != null)
-                    {    
-                        AddStatementToCTEPart(ctePartBuilder, groupFieldConfig.CTEStatement);
+                    if (dimensionFilter.Dimension == AnalyticDimension.CodeGroup)
+                    {
+                        if (!lstCTEStatements.Contains(CTEStatement.CodeGroup))
+                        {
+                            lstCTEStatements.Add(CTEStatement.CodeGroup);
+                            AddStatementToCTEPart(ctePartBuilder, CTEStatement.CodeGroup);
+                        }
+                    }
 
-                        if (groupFieldConfig.JoinStatements != null)
-                            foreach (var statement in groupFieldConfig.JoinStatements)
+                    //if (groupFieldConfig.CTEStatement != null)
+                    //{    
+                    //    AddStatementToCTEPart(ctePartBuilder, groupFieldConfig.CTEStatement);
+                    //}
+
+                    if (groupFieldConfig.JoinStatements != null)
+                        foreach (var statement in groupFieldConfig.JoinStatements)
+                        {
+                            if (!lstJoinStatement.Contains(statement))
                             {
+                                lstJoinStatement.Add(statement);
                                 AddStatementToJoinPart(joinPartBuilder, statement);
                             }
-                    }
+                        }
                 }
             }
             queryBuilder.Replace("#TABLENAME#", tableNamePartBuilder);
@@ -203,9 +243,9 @@ namespace TOne.Analytics.Data.SQL
             if (values != null && values.Count() > 0)
             {
                 if (values[0].GetType() == typeof(string) || values[0].GetType() == typeof(DateTime))
-                    filterBuilder.AppendFormat(" AND {0} = '{1}' ", column, String.Join(", ", values));
+                    filterBuilder.AppendFormat(" AND {0} IN ('{1}') ", column, String.Join(", ", values));
                 else
-                    filterBuilder.AppendFormat(" AND {0} = {1} ", column, String.Join(", ", values));
+                    filterBuilder.AppendFormat(" AND {0} IN ({1}) ", column, String.Join(", ", values));
             }
         }
         public void AddFilterToFilterPart(StringBuilder filterBuilder, string statement)
