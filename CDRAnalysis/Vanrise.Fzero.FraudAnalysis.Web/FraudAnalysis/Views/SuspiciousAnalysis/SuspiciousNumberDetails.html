@@ -5,11 +5,13 @@
 
             <vr-row>
                 <vr-columns width="normal">
-                    <vr-textbox label="Account Number" value="accountNumber" readonly></vr-textbox>
+                    <vr-label>Account Number: </vr-label>
+                    <vr-label isvalue>{{accountNumber}}</vr-label>
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-textbox label="Account Status" value="accountStatus" readonly></vr-textbox>
+                    <vr-label>Account Status: </vr-label>
+                    <vr-label isvalue>{{accountStatus}}</vr-label>
                 </vr-columns>
             </vr-row>
 
@@ -208,7 +210,7 @@
             </div>
 
             <vr-row>
-                <vr-columns width="fullrow" ng-show="showCaseStatuses">
+                <vr-columns width="fullrow">
                     <vr-section title="Update Case">
                         <vr-columns width="normal">
                             <vr-select label="Status"
@@ -221,10 +223,12 @@
                             </vr-select>
                         </vr-columns>
                         <vr-columns width="normal">
+                            <vr-textbox label="Reason" value="updateReason"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="normal" ng-show="whiteListSelected">
                             <vr-datetimepicker label="Valid Till"
                                                value="validTill"
-                                               type="dateTime"
-                                               ng-show="whiteListSelected">
+                                               type="dateTime">
                             </vr-datetimepicker>
                         </vr-columns>
                     </vr-section>

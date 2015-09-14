@@ -74,9 +74,11 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         $scope.relatedNumbers = [];
 
         // Update Case
-        $scope.caseStatuses = [];
+        $scope.caseStatuses = UtilsService.getArrayEnum(CaseStatusEnum);
+        $scope.caseStatuses = $scope.caseStatuses.slice(1); // remove the open option
         $scope.selectedCaseStatus = undefined;
-        $scope.showCaseStatuses = true;
+        $scope.updateReason = undefined;
+        $scope.validTill = undefined;
         $scope.whiteListSelected = false;
 
         $scope.onGridReady_Occurances = function (api) {
@@ -125,7 +127,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                         $scope.detailAggregateValues.push(response.Data[0]);
                     else {
                         $scope.showOccurancesGrid = false;
-                        $scope.message = "No opened occurances were found for the current account number";
+                        $scope.message = "No open occurances were found for the current account number";
                         $scope.showProfileOptions = false;
                         $scope.showDate = true;
                     }
@@ -201,19 +203,23 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                     caseStatus: $scope.selectedCaseStatus.value,
                     validTill: $scope.validTill,
                     FromDate: $scope.fromDate,
-                    ToDate: $scope.toDate
+                    ToDate: $scope.toDate,
+                    Reason: $scope.updateReason
                 })
                 .then(function (response) {
                     if (VRNotificationService.notifyOnItemUpdated("Account Case", response)) {
                         if ($scope.onAccountCaseUpdated != undefined) {
 
-                            var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", response.UpdatedObject.SuspicionLevelID);
-                            response.UpdatedObject.SuspicionLevelDescription = suspicionLevel.description;
+                            if (response.UpdatedObject != null) {
 
-                            var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", response.UpdatedObject.AccountStatusID);
-                            response.UpdatedObject.AccountStatusDescription = accountStatus.description;
+                                var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", response.UpdatedObject.SuspicionLevelID);
+                                response.UpdatedObject.SuspicionLevelDescription = suspicionLevel.description;
 
-                            $scope.onAccountCaseUpdated(response.UpdatedObject);
+                                var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", response.UpdatedObject.AccountStatusID);
+                                response.UpdatedObject.AccountStatusDescription = accountStatus.description;
+
+                                $scope.onAccountCaseUpdated(response.UpdatedObject);
+                            }
                         }
                         
                         $scope.modalContext.closeModal();
@@ -308,9 +314,6 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
     function load() {
         $scope.isInitializing = true;
         
-        $scope.caseStatuses = UtilsService.getArrayEnum(CaseStatusEnum);
-        $scope.caseStatuses = $scope.caseStatuses.slice(1); // remove the open option
-
         return UtilsService.waitMultipleAsyncOperations([loadAggregateDefinitions, loadUsers, loadAccountStatus])
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
@@ -388,14 +391,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                 if (response != null) {
                     var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", response);
                     $scope.accountStatus = accountStatus.description;
-
-                    $scope.showCaseStatuses = (response == CaseStatusEnum.ClosedFraud.value || response == CaseStatusEnum.ClosedWhitelist.value) ? false : true;
-
-                    if (response == CaseStatusEnum.Pending.value)
-                        $scope.caseStatuses = $scope.caseStatuses.slice(1); // remove the pending option
                 }
-                else
-                    $scope.showCaseStatuses = false;
             });
     }
 

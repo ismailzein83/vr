@@ -16,11 +16,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         AccountCase GetLastAccountCaseByAccountNumber(string accountNumber);
 
-        bool InsertAccountCase(out int insertedID, string accountNumber, int? userID, CaseStatus caseStatus, DateTime? validTill);
+        bool InsertAccountCase(out int insertedID, string accountNumber, int? userID, CaseStatus caseStatus, DateTime? validTill, string reason);
 
-        bool UpdateAccountCaseStatus(int caseID, int userID, CaseStatus statusID, DateTime? validTill);
+        bool UpdateAccountCase(int caseID, int userID, CaseStatus statusID, DateTime? validTill, string reason);
 
-        bool InsertAccountCaseHistory(int caseID, int? userID, CaseStatus caseStatus);
+        bool InsertAccountCaseHistory(int caseID, int? userID, CaseStatus caseStatus, string reason);
 
         bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus);
 
