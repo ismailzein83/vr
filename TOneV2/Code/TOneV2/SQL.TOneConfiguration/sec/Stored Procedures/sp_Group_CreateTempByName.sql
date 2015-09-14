@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 
-CREATE PROCEDURE [sec].[SP_Group_CreateTempForFiltered]
+CREATE PROCEDURE [sec].[sp_Group_CreateTempByName]
 	@TempTableName VARCHAR(200) = NULL,
 	@Name VARCHAR(30) =  NULL
 AS

@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [sec].[sp_User_CreateTempForFiltered]
+﻿CREATE PROCEDURE [sec].[sp_User_CreateTempByFiltered]
 (
 	@TempTableName VARCHAR(200) = NULL,
 	@Name NVARCHAR(255) = NULL,

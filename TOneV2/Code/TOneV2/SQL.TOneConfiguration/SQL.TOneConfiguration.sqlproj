@@ -90,7 +90,6 @@
     <Build Include="sec\Stored Procedures\sp_BusinessEntityModule_ToggleBreakInheritance.sql" />
     <Build Include="sec\Stored Procedures\sp_BusinessEntity_ToggleBreakInheritance.sql" />
     <Build Include="sec\Stored Procedures\sp_User_GetbyId.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_ResetPassword.sql" />
     <Build Include="sec\Stored Procedures\sp_User_CheckUserName.sql" />
     <Build Include="sec\Stored Procedures\sp_Permission_Delete.sql" />
     <Build Include="sec\Stored Procedures\sp_OrgChart_GetAll.sql" />
@@ -128,17 +127,14 @@
     <Build Include="sec\Stored Procedures\sp_OrgChartLinkedEntity_GetLinkedOrgChartId.sql" />
     <Build Include="sec\Tables\UserGroup_2.sql" />
     <Build Include="sec\Tables\Group_2.sql" />
-    <Build Include="sec\Stored Procedures\SP_User_CreateTempForFiltered_2.sql" />
     <Build Include="sec\Stored Procedures\sp_Group_Update_2.sql" />
     <Build Include="sec\Stored Procedures\sp_Group_Insert_2.sql" />
     <Build Include="sec\Stored Procedures\sp_Group_GetUserGroups_2.sql" />
     <Build Include="sec\Stored Procedures\sp_Group_GetAll_2.sql" />
     <Build Include="sec\Stored Procedures\sp_Group_Get_2.sql" />
-    <Build Include="sec\Stored Procedures\SP_Group_CreateTempForFiltered_2.sql" />
     <Build Include="sec\Stored Procedures\sp_Group_AssignMembers_2.sql" />
     <Build Include="Security\BEntity_2.sql" />
     <Build Include="sec\Stored Procedures\sp_View_UpdateRank.sql" />
-    <Build Include="sec\Stored Procedures\sp_OrgChart_CreateTempForFiltered.sql" />
     <Build Include="common\Tables\File.sql" />
     <Build Include="sec\Stored Procedures\sp_Module_UpdateRank.sql" />
     <Build Include="common\Stored Procedures\sp_File_SetUsed.sql" />
@@ -146,12 +142,15 @@
     <Build Include="common\Stored Procedures\sp_File_GetInfoById.sql" />
     <Build Include="common\Stored Procedures\sp_File_Insert.sql" />
     <Build Include="Security\common.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_EditUserProfile.sql" />
     <Build Include="sec\Stored Procedures\sp_User_CheckUserPassword.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_ChangeMyPassword.sql" />
     <Build Include="sec\Stored Procedures\sp_Widget_CreateTempByFiltered.sql" />
     <Build Include="sec\Stored Procedures\sp_View_GetByType.sql" />
     <Build Include="sec\Stored Procedures\sp_View_CreateTempByFiltered.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_UpdatePassword.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_UpdateName.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_CreateTempByFiltered.sql" />
+    <Build Include="sec\Stored Procedures\sp_OrgChart_CreateTempByName.sql" />
+    <Build Include="sec\Stored Procedures\sp_Group_CreateTempByName.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

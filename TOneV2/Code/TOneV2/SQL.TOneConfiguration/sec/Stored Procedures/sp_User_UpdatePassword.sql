@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [sec].[sp_User_ChangeMyPassword] 
+﻿CREATE PROCEDURE [sec].[sp_User_UpdatePassword] 
     @ID int,
 	@NewPassword Nvarchar(255)
 AS

@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [sec].[sp_OrgChart_CreateTempForFiltered]
+CREATE PROCEDURE [sec].[sp_OrgChart_CreateTempByName]
 	@TempTableName VARCHAR(200),
 	@Name VARCHAR(100) = NULL
 AS

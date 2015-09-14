@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [sec].[sp_User_EditUserProfile] 
+﻿CREATE PROCEDURE [sec].[sp_User_UpdateName] 
 	@ID int,
 	@Name Nvarchar(255)
 AS
