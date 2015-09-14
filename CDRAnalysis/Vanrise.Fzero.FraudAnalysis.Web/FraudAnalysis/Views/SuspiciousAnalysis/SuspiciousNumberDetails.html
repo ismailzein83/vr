@@ -19,8 +19,8 @@
                 <vr-choice isselected="occurancesSelected">Current Occurrences</vr-choice>
                 <vr-choice isselected="normalCDRsSelected">CDRs</vr-choice>
                 <vr-choice isselected="numberProfilesSelected">Number Profiles</vr-choice>
-                <vr-choice isselected="caseHistorySelected">Case History</vr-choice>
-                <vr-choice isselected="relatedNumbersSelected">Related Numbers</vr-choice>
+                <vr-choice isselected="caseHistorySelected">History</vr-choice>
+                <vr-choice isselected="relatedNumbersSelected" ng-show="showRelatedNumbers">Related Numbers</vr-choice>
             </vr-choices>
 
             <div ng-show="occurancesSelected">
@@ -188,20 +188,20 @@
                 <vr-row>
                     <vr-columns width="normal">
                         <vr-select label="Reason"
-                                   datasource="reasons"
-                                   selectedvalues="selectedReason"
-                                   datavaluefield="value"
-                                   datatextfield="description"
-                                   onselectionchanged="onReasonChanged"
-                                   hideremoveicon>
+                                    datasource="reasons"
+                                    selectedvalues="selectedReason"
+                                    datavaluefield="value"
+                                    datatextfield="description"
+                                    onselectionchanged="onReasonChanged"
+                                    hideremoveicon>
                         </vr-select>
                     </vr-columns>
                 </vr-row>
                 <vr-row>
                     <vr-columns width="fullrow" simplecol>
                         <vr-datagrid datasource="relatedNumbers"
-                                     data-on-ready="onGridReady_RelatedNumbers"
-                                     maxheight="300px">
+                                        data-on-ready="onGridReady_RelatedNumbers"
+                                        maxheight="300px">
 
                             <vr-datagridcolumn headertext="'Related Number'" field="'RelatedNumber'" type="'Text'" isclickable="true" onclicked="relatedNumberClicked"></vr-datagridcolumn>
                         </vr-datagrid>

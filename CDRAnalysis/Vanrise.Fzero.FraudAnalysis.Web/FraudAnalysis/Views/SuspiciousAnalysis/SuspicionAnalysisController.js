@@ -120,13 +120,15 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
         var parameters = {
             AccountNumber: accountNumber,
             FromDate: $scope.fromDate,
-            ToDate: $scope.toDate
+            ToDate: $scope.toDate,
+            ModalLevel: 1
         };
 
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Suspicious Number Details";
             modalScope.onAccountCaseUpdated = function (accountSuspicionSummary) {
-                gridAPI.itemUpdated(accountSuspicionSummary);
+                if (accountSuspicionSummary.AccountNumber != null)
+                    gridAPI.itemUpdated(accountSuspicionSummary);
             }
         };
 

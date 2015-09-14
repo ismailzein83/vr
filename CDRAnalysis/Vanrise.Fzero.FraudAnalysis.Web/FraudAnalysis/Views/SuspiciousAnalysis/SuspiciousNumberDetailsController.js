@@ -17,6 +17,8 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
     var sequencedNumbers = [];
     var IMEIs = [];
 
+    var modalLevel = undefined;
+
     loadParameters();
     defineScope();
     load();
@@ -28,6 +30,9 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             $scope.accountNumber = parameters.AccountNumber;
             $scope.fromDate = parameters.FromDate;
             $scope.toDate = parameters.ToDate;
+
+            modalLevel = parameters.ModalLevel;
+            $scope.showRelatedNumbers = (modalLevel == 1);
         }
     }
 
@@ -210,16 +215,16 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                     if (VRNotificationService.notifyOnItemUpdated("Account Case", response)) {
                         if ($scope.onAccountCaseUpdated != undefined) {
 
-                            if (response.UpdatedObject != null) {
+                            if (response.UpdatedObject.AccountNumber != null) {
 
                                 var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", response.UpdatedObject.SuspicionLevelID);
                                 response.UpdatedObject.SuspicionLevelDescription = suspicionLevel.description;
 
                                 var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", response.UpdatedObject.AccountStatusID);
                                 response.UpdatedObject.AccountStatusDescription = accountStatus.description;
-
-                                $scope.onAccountCaseUpdated(response.UpdatedObject);
                             }
+
+                            $scope.onAccountCaseUpdated(response.UpdatedObject);
                         }
                         
                         $scope.modalContext.closeModal();
@@ -447,13 +452,14 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         var parameters = {
             AccountNumber: relatedNumber,
             FromDate: $scope.fromDate,
-            ToDate: $scope.toDate
+            ToDate: $scope.toDate,
+            ModalLevel: modalLevel + 1
         };
 
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Suspicious Number Details";
             modalScope.onAccountCaseUpdated = function (accountSuspicionSummary) {
-                gridAPI.itemUpdated(accountSuspicionSummary);
+                $scope.onAccountCaseUpdated(accountSuspicionSummary);
             }
         };
 
