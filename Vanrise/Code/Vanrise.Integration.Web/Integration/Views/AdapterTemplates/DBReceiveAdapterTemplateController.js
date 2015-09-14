@@ -36,7 +36,7 @@ function DBReceiveAdapterTemplateController($scope, DataSourceAPIService, VRNoti
     var isFormLoaded;
     function loadForm() {
 
-        if ($scope.dataSourceAdapter.argument.data == undefined || $scope.dataSourceAdapter.adapterState.data == undefined || isFormLoaded)
+        if ($scope.dataSourceAdapter.argument.data == undefined || isFormLoaded)
             return;
 
         var argumentData = $scope.dataSourceAdapter.argument.data;

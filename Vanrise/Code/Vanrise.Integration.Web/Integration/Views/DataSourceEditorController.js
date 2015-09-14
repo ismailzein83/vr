@@ -165,8 +165,9 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
         $scope.selectedAdapterType = UtilsService.getItemByVal($scope.adapterTypes, dataSourceObj.DataSourceData.AdapterTypeId, "AdapterTypeId");
         $scope.dataSourceName = dataSourceObj.DataSourceData.Name;
 
-        $scope.dataSourceAdapter.argument.data = dataSourceObj.DataSourceData.Settings.AdapterArgument;
         $scope.dataSourceAdapter.adapterState.data = dataSourceObj.DataSourceData.AdapterState;
+        $scope.dataSourceAdapter.argument.data = dataSourceObj.DataSourceData.Settings.AdapterArgument;
+        
         if ($scope.dataSourceAdapter.loadTemplateData != undefined)
             $scope.dataSourceAdapter.loadTemplateData();
 

@@ -43,12 +43,9 @@ function TimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, UtilsServi
     }
 
     function load() {
-        UtilsService.waitMultipleAsyncOperations([loadSchedulerTypes]).finally(function () {
-            setFormToDefault();
-            loadForm();
-        }).catch(function (error) {
-            VRNotificationService.notifyExceptionWithClose(error, $scope);
-        });
+        loadSchedulerTypes();
+        setFormToDefault();
+        loadForm();
     }
 
     function loadSchedulerTypes() {

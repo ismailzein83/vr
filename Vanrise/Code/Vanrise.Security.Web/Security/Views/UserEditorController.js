@@ -88,7 +88,7 @@ function UserEditorController($scope, UsersAPIService, VRModalService, VRNotific
 
     function updateUser() {
         var userObject = buildUserObjFromScope();
-        UsersAPIService.UpdateUser(userObject)
+        return UsersAPIService.UpdateUser(userObject)
         .then(function (response) {
             if (VRNotificationService.notifyOnItemUpdated("User", response, "Email")) {
                 if ($scope.onUserUpdated != undefined)

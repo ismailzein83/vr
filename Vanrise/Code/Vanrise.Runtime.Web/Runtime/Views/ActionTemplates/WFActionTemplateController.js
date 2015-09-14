@@ -12,6 +12,10 @@ function WFActionTemplateController($scope, BusinessProcessAPIService, UtilsServ
         $scope.schedulerTaskAction.processInputArguments = {};
         $scope.schedulerTaskAction.rawExpressions = {};
 
+        $scope.schedulerTaskAction.processInputArguments.data = undefined;
+        $scope.schedulerTaskAction.rawExpressions.data = undefined;
+        $scope.selectedBPDefintion = undefined;
+
         $scope.schedulerTaskAction.getData = function () {
             return {
                 $type: "Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.WFTaskActionArgument, Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments",
@@ -42,23 +46,17 @@ function WFActionTemplateController($scope, BusinessProcessAPIService, UtilsServ
             $scope.selectedBPDefintion = UtilsService.getItemByVal($scope.bpDefinitions, data.BPDefinitionID, "BPDefinitionID");
 
             $scope.schedulerTaskAction.rawExpressions.data = data.RawExpressions;
-
             $scope.schedulerTaskAction.processInputArguments.data = data.ProcessInputArguments;
+
             if ($scope.schedulerTaskAction.processInputArguments.loadTemplateData != undefined)
                 $scope.schedulerTaskAction.processInputArguments.loadTemplateData();
-        }
-        else {
-            $scope.schedulerTaskAction.processInputArguments.data = undefined;
-            $scope.schedulerTaskAction.rawExpressions.data = undefined;
-            $scope.selectedBPDefintion = undefined;
         }
 
         isFormLoaded = true;
     }
 
     function load() {
-
-        UtilsService.waitMultipleAsyncOperations([loadDefinitions]).finally(function () {
+        loadDefinitions().then(function () {
 
             loadForm();
 

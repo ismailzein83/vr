@@ -8,6 +8,9 @@ function ScheduleDailyRepricingProcessTemplateController($scope, UtilsService) {
     function defineScope() {
 
         $scope.bpDefinitions = [];
+        $scope.repricingDay = undefined;
+        $scope.selectedDateOption = undefined;
+        $scope.divideProcessIntoSubProcesses = undefined;
 
         $scope.dateOptions = [{ Name: "Trigger Date", Value: 0 }, { Name: "Specific Date", Value: 1 }];
         $scope.selectedDateOption = UtilsService.getItemByVal($scope.dateOptions, 0, "Value");
@@ -50,9 +53,10 @@ function ScheduleDailyRepricingProcessTemplateController($scope, UtilsService) {
         }
     }
 
+    var isFormLoaded;
     function loadForm() {
 
-        if ($scope.schedulerTaskAction.processInputArguments.data == undefined)
+        if ($scope.schedulerTaskAction.processInputArguments.data == undefined || isFormLoaded)
             return;
         var data = $scope.schedulerTaskAction.processInputArguments.data;
         if (data != null) {
@@ -63,11 +67,8 @@ function ScheduleDailyRepricingProcessTemplateController($scope, UtilsService) {
             $scope.selectedDateOption = UtilsService.getItemByVal($scope.dateOptions, dateOptionSelection, "Value");
             
         }
-        else {
-            $scope.repricingDay = '';
-            $scope.selectedDateOption = undefined;
-            $scope.divideProcessIntoSubProcesses = '';
-        }
+
+        isFormLoaded = true;
     }
 
     function load() {
