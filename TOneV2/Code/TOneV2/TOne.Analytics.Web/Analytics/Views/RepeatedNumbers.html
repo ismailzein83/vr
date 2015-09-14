@@ -60,7 +60,7 @@
         <vr-row>
             <vr-columns colnum="12" simplecol>
                 <vr-datagrid on-ready="onMainGridReady" datasource="data"
-                             menuactions="gridMenuActions" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'">
+                             menuactions="gridMenuActions" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'" defaultsortbyfieldname="'Attempts'" defaultsortdirection="'DESC'">
                     <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" ng-show="measure.isShown" field="measure.propertyName" summaryfield="measure.propertyName" type="measure.type" tag="measure"></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>

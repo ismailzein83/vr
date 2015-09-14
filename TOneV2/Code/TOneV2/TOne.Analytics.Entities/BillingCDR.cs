@@ -23,7 +23,7 @@ namespace TOne.Analytics.Entities
         public int PDD { get; set; }
         public String CDPN { get; set; }
         public String CDPNOut { get; set; }
-        public int DurationInSeconds { get; set; }
+        public Decimal DurationInSeconds { get; set; }
         public String ReleaseCode { get; set; }
         public String ReleaseSource { get; set; }
         public String SupplierID { get; set; }

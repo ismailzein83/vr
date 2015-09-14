@@ -98,9 +98,11 @@ function RepeatedNumbersController($scope, UtilsService, $q, RepeatedNumbersAPIS
                     width: "80%"//,
                     //maxHeight: "800px"
                 };
+                console.log(new Date($scope.fromDate).toString());
+                console.log(new Date($scope.fromDate));
                 var parameters = {
-                    fromDate: $scope.fromDate,
-                    toDate: $scope.toDate,
+                    fromDate: new Date($scope.fromDate).toLocaleString(),
+                    toDate: new Date($scope.toDate).toUTCString(),
                     customerIds: dataItem.CustomerID != null || dataItem.CustomerID != undefined ? [dataItem.CustomerID] : null,
                     zoneIds: dataItem.OurZoneID != null || dataItem.OurZoneID != undefined ? [dataItem.OurZoneID] : null,
                     supplierIds: dataItem.SupplierID != null || dataItem.SupplierID != undefined ? [dataItem.SupplierID] : null,
@@ -171,7 +173,7 @@ function RepeatedNumbersController($scope, UtilsService, $q, RepeatedNumbersAPIS
         $scope.periods = [];
         for (var p in PeriodEnum)
             $scope.periods.push(PeriodEnum[p]);
-        $scope.selectedPeriod = $scope.periods[0];
+        $scope.selectedPeriod = PeriodEnum.Today;
     }
 
 };

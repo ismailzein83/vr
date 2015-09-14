@@ -44,27 +44,29 @@ namespace TOne.Analytics.Data.SQL
         private string CreateTempTableIfNotExists(string tempTableName, CDRFilter filter, BillingCDROptionMeasures CDROption)
         {
             string queryData = "";
+            StringBuilder whereBuilder = new StringBuilder();
+            AddFilterToQuery(filter, whereBuilder);
             switch(CDROption)
             {
-                case BillingCDROptionMeasures.All: queryData = String.Format(@"{0} UNION ALL {1}", GetSingleQuery("Billing_CDR_Main", "MainCDR"), GetSingleQuery("Billing_CDR_Invalid", "Invalid"));
+                case BillingCDROptionMeasures.All: queryData = String.Format(@"{0} UNION ALL {1}", GetSingleQuery("Billing_CDR_Main", "MainCDR",tempTableName, whereBuilder), GetSingleQuery("Billing_CDR_Invalid", "Invalid",null, whereBuilder));
                     break;
-                case BillingCDROptionMeasures.Invalid: queryData = GetSingleQuery("Billing_CDR_Invalid", "Invalid"); break;
-                case BillingCDROptionMeasures.Successful: queryData = GetSingleQuery("Billing_CDR_Main", "MainCDR"); break;
+                case BillingCDROptionMeasures.Invalid: queryData = GetSingleQuery("Billing_CDR_Invalid", "Invalid",tempTableName, whereBuilder); break;
+                case BillingCDROptionMeasures.Successful: queryData = GetSingleQuery("Billing_CDR_Main", "MainCDR",tempTableName, whereBuilder); break;
             }
-            StringBuilder whereBuilder = new StringBuilder();
+          
             StringBuilder queryBuilder = new StringBuilder(@"
                             IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
-	                            BEGIN
+	                            BEGIN 
+                        Select TOP(@nRecords) newtable.* INTO #TEMPTABLE# FROM (#Query#) as newtable
 
-			                        SELECT Top (@nRecords) newtable.* INTO #TEMPTABLE# FROM (#Query#)as newtable  where (Attempt between @FromDate AND @ToDate) #FILTER#
-
-
-                            END
+                                 END
                                 ");
             queryBuilder.Replace("#TEMPTABLE#", tempTableName);
             queryBuilder.Replace("#Query#", queryData);
-            AddFilterToQuery(filter, whereBuilder);
-            queryBuilder.Replace("#FILTER#", whereBuilder.ToString());
+           
+
+           
+        
             return queryBuilder.ToString();
        
         }
@@ -90,10 +92,11 @@ namespace TOne.Analytics.Data.SQL
         }
 
 
-        private string GetSingleQuery(string tableName,string alias){
-            StringBuilder whereBuilder = new StringBuilder();
+        private string GetSingleQuery(string tableName, string alias, string tempTableName,StringBuilder whereBuilder)
+        {
             return String.Format(@"
-                        SELECT 
+                                    
+                        SELECT TOP(@nRecords)
                         {1}.ID,
                         DATEADD(ms,-datepart(ms,Attempt),Attempt) AS Attempt,
                         {1}.Alert,
@@ -113,8 +116,8 @@ namespace TOne.Analytics.Data.SQL
                         {1}.SwitchID ,
                         {1}.SwitchCdrID,
                         {1}.Tag,
-                        {1}.Extra_Fields FROM {0} {1} 
-                            ", tableName, alias);
+                        {1}.Extra_Fields  FROM {0} {1} 
+                            where ({1}.Attempt between @FromDate AND @ToDate)  {2}  ", tableName, alias, whereBuilder.ToString());
                         }
         
         private BillingCDR CDRDataMapper(IDataReader reader)
@@ -126,10 +129,10 @@ namespace TOne.Analytics.Data.SQL
         }
         private void AddFilterToQuery(CDRFilter filter, StringBuilder whereBuilder)
         {
-            AddFilter(whereBuilder, filter.SwitchIds, "newtable.SwitchId");
-            AddFilter(whereBuilder, filter.CustomerIds, "newtable.CustomerID");
-            AddFilter(whereBuilder, filter.SupplierIds, "newtable.SupplierID");
-            AddFilter(whereBuilder, filter.ZoneIds, "newtable.OurZoneID");
+            AddFilter(whereBuilder, filter.SwitchIds, "SwitchId");
+            AddFilter(whereBuilder, filter.CustomerIds, "CustomerID");
+            AddFilter(whereBuilder, filter.SupplierIds, "SupplierID");
+            AddFilter(whereBuilder, filter.ZoneIds, "OurZoneID");
         }
 
         void AddFilter<T>(StringBuilder whereBuilder, IEnumerable<T> values, string column)
@@ -150,7 +153,7 @@ namespace TOne.Analytics.Data.SQL
                 cdr.PDD = GetReaderValue<int>(reader, "PDD");
                 cdr.Alert = GetReaderValue<DateTime>(reader, "Alert");
                 cdr.Connect = GetReaderValue<DateTime>(reader, "Connect");
-                cdr.DurationInSeconds = GetReaderOfNumeric(reader, "DurationInSeconds");
+                cdr.DurationInSeconds = GetReaderValue<Decimal>(reader, "DurationInSeconds");
                 cdr.CustomerID = reader["CustomerID"] as string;
                 cdr.OurZoneID = GetReaderValue<int>(reader, "OurZoneID");
                 cdr.OriginatingZoneID = GetReaderValue<int>(reader, "OriginatingZoneID");

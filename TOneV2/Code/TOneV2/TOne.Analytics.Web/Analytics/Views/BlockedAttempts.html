@@ -64,16 +64,16 @@
         <vr-row>
             <vr-columns colnum="12" simplecol>
                 <vr-datagrid on-ready="onMainGridReady" datasource="data"
-                             menuactions="gridMenuActions" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'">
-                    <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'" ></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Zone'" field="'OurZoneName'" ></vr-datagridcolumn>
+                             menuactions="gridMenuActions" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'" defaultsortbyfieldname="'BlockAttempt'" defaultsortdirection="'DESC'">
+                    <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Zone'" field="'OurZoneName'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Block Attempt'" field="'BlockAttempt'" type="'Number'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'CLI'" field="'CLI'" ng-show="isShown"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'PhoneNumber'" field="'PhoneNumber'" ng-show="isShown"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Rel. Code'" field="'ReleaseCode'" ></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'ReleaseSource'" field="'ReleaseSource'" ></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Rel. Code'" field="'ReleaseCode'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'ReleaseSource'" field="'ReleaseSource'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'First Call'" field="'FirstCall'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Last Call'" field="'LastCall'" ></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Last Call'" field="'LastCall'"></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
         </vr-row>

@@ -121,8 +121,10 @@ function BlockedAttemptsController($scope, UtilsService, $q, BlockedAttemptsAPIS
         var filter = {};
         filter.SwitchIds = getFilterIds($scope.selectedSwitches, "SwitchId");
         filter.CustomerIds = getFilterIds($scope.selectedCustomers, "CarrierAccountID");
-        filter.Zones = getFilterIds($scope.selectedZones, "Zone");
+
+        filter.ZoneIds = getFilterIds($scope.selectedZones, "ZoneId");
         return filter;
+    
     }
 
     function getFilterIds(values, idProp) {
