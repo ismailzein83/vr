@@ -14,9 +14,8 @@
                      maxheight="500px"
                      issubgrid>
 
-            <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelDescription'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelDescription'" type="'Text'" getcolor="getSuspicionLevelColor"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Status'" field="'SuspicionOccuranceStatusDescription'" type="'Text'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'From Time'" field="'FromDate'" type="'Datetime'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'To Time'" field="'ToDate'" type="'Datetime'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Execution Time'" field="'ExecutionDate'" type="'Datetime'"></vr-datagridcolumn>
@@ -32,8 +31,8 @@
                      maxheight="500px"
                      issubgrid>
 
-            <vr-datagridcolumn headertext="'User'" field="'UserName'" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Status'" field="'AccountCaseStatusDescription'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Status'" field="'AccountCaseStatusDescription'" type="'Text'" getcolor="getCaseStatusColor"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Analyst'" field="'UserName'" type="'Text'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Status Time'" field="'StatusTime'" type="'Datetime'"></vr-datagridcolumn>
         </vr-datagrid>
     </div>
