@@ -144,8 +144,10 @@
 
     <vr-columns width="fullrow">
         <div id="builder-basic" class="query-builder form-inline">
-            <vr-filtereditor-group filters="ctrl.filters" maingroup="true" result="ctrl.result" ></vr-filtereditor-group>
+            <vr-filtereditor-group filters="ctrl.filters" maingroup="true" result="ctrl.result"></vr-filtereditor-group>
         </div>
+
+        {{ctrl.getResult()}}
     </vr-columns>
 
 </vr-row>

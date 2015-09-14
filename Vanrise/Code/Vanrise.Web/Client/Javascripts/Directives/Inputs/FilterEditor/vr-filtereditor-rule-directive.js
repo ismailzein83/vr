@@ -24,16 +24,16 @@
                     };
 
                     if ((ctrl.filterInput === ctrl.inputEnum.Select) && (ctrl.hasInput)) {
-                        ctrl.outputfilter.value = ctrl.selectedFilterValues;
-                    }
-                    else if ((ctrl.filterInput === ctrl.inputEnum.Text) && (ctrl.hasInput)) {
-                        ctrl.outputfilter.value = ctrl.inputValueFrom;
+                        ctrl.outputfilter.value = [ctrl.selectedFilterValues];
                     }
                     else if ((ctrl.filterInput === ctrl.inputEnum.Text) && (ctrl.hasMultipleInput) && (ctrl.hasInput)) {
                         ctrl.outputfilter.value = [ctrl.inputValueFrom, ctrl.inputValueTo];
                     }
+                    else if ((ctrl.filterInput === ctrl.inputEnum.Text) && (ctrl.hasInput)) {
+                        ctrl.outputfilter.value = [ctrl.inputValueFrom];
+                    }
                     else if ((ctrl.filterInput === ctrl.inputEnum.Switch) && (ctrl.hasInput)) {
-                        ctrl.outputfilter.value = ctrl.switchValue;
+                        ctrl.outputfilter.value = [ctrl.switchValue];
                     }
                 }
 
