@@ -212,8 +212,13 @@
 
         function getCellTemplateWithFilter(template, col) {
             if (col.type == "Number") {
+                var numberPrecision = 2;
+                if (col.numberPrecision == "NoDecimal")
+                    numberPrecision = 0;
+                else if (col.numberPrecision == "LongPrecision")
+                    numberPrecision = 4;
                 template = template.replace("#TEXTALIGN#", "right;padding-right:2px");
-                template = UtilsService.replaceAll(template, "#CELLFILTER#", "| number:2");
+                template = UtilsService.replaceAll(template, "#CELLFILTER#", "| number:" + numberPrecision);
                 template = UtilsService.replaceAll(template, "#PERCENTAGE#", "");
             }
             else if (col.type == "Progress" || col.type == "MultiProgress") {

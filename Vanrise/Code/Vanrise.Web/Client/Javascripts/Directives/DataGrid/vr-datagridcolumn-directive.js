@@ -18,6 +18,7 @@
                     var isClickable = iAttrs.isclickable != undefined ? $scope.$eval(iAttrs.isclickable) : undefined;
                     var onClicked = iAttrs.onclicked != undefined ? $scope.$eval(iAttrs.onclicked) : undefined;
                     var type = iAttrs.type != undefined ? $scope.$eval(iAttrs.type) : undefined;
+                    var numberPrecision = iAttrs.numberprecision != undefined ? $scope.$eval(iAttrs.numberprecision) : undefined;
                     var tag = iAttrs.tag != undefined ? $scope.$eval(iAttrs.tag) : undefined;
                     var onSortChanged = iAttrs.onsortchanged != undefined ? $scope.$eval(iAttrs.onsortchanged) : undefined;
                     var columnIndex = iAttrs.columnindex != undefined ? $scope.$eval(iAttrs.columnindex) : undefined;
@@ -33,6 +34,7 @@
                         isClickable: isClickable,
                         onClicked: onClicked,
                         type: type,
+                        numberPrecision: numberPrecision,
                         tag: tag,
                         onSortChanged: onSortChanged,
                         cellTemplate: cellTemplate,
