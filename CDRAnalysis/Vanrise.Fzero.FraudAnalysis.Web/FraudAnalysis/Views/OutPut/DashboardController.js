@@ -16,9 +16,6 @@ function DashboardController($scope, DashboardAPIService,  DataSourceImportedBat
     defineScope();
     load();
 
-
-
-
     function defineScope() {
 
         var Now = new Date();
@@ -126,7 +123,6 @@ function DashboardController($scope, DashboardAPIService,  DataSourceImportedBat
 
     }
 
-
     function BuildSearchQuery()
     {
         var query = {
@@ -140,7 +136,6 @@ function DashboardController($scope, DashboardAPIService,  DataSourceImportedBat
     function retrieveData_CasesSummary() {
         return mainGridAPI_CasesSummary.retrieveData(BuildSearchQuery());
     }
-
 
     function retrieveData_BTSCases() {
         return mainGridAPI_BTSCases.retrieveData(BuildSearchQuery());
