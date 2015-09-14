@@ -107,6 +107,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                 });
             }
         }
+
         $scope.relatedNumberClicked = function (dataItem) {
             openRelatedNumber(dataItem.RelatedNumber);
         };
@@ -115,7 +116,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
             return CaseManagementAPIService.GetFilteredAccountSuspicionDetails(dataRetrievalInput)
             .then(function (response) {
-                console.log(response);
+
                 occurancesLoaded = true;
                 
                 if (response.Data != undefined) { // else, the export button was clicked

@@ -166,11 +166,11 @@
                                      idfield="CaseID">
 
                             <vr-datagridcolumn headertext="'Case ID'" field="'CaseID'" type="'Text'"></vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'User'" field="'UserName'" type="'Text'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Status'" field="'CaseStatusDescription'" type="'Text'"></vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Last Status Update'" field="'StatusUpdatedTime'" type="'Datetime'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Analyst'" field="'UserName'" type="'Text'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Create Time'" field="'CreatedTime'" type="'Datetime'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Status Update Time'" field="'StatusUpdatedTime'" type="'Datetime'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Valid Till'" field="'ValidTill'" type="'Datetime'"></vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Created Time'" field="'CreatedTime'" type="'Datetime'"></vr-datagridcolumn>
 
                             <vr-datagridexpandablerow>
                                 <div ng-include="'/Client/Modules/FraudAnalysis/Views/SuspiciousAnalysis/Includes/CaseOccuranceGrid.html'"></div>
