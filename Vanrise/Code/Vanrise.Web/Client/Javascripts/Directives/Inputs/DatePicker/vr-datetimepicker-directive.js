@@ -275,10 +275,10 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                              + ' <span ng-show="showtd"  class="input-group-addon vr-small-addon " ng-click="ctrl.toggleTime($event)" > <i class="glyphicon glyphicon-time"></i></span>';
 
             var dateTemplate =
-                 '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false"  style="height:25px;" >'
+                 '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false"  style="height:29px;" >'
                   + '<div id="mainInput" ng-model="ctrl.value" class="form-control " ng-style="ctrl.getInputeStyle()" style="border-radius: 4px;height: auto;padding: 0px;">'
                         + '<div  class="input-group date datetime-controle"  id="divDatePicker"  >'
-                                + '<input class="form-control vr-date-input"  placeholder="{{ctrl.placelHolder}}" ng-style="ctrl.getInputeStyle()" style="height:25px;padding:0px 5px;"  ng-keyup="ctrl.updateModelOnKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
+                                + '<input class="form-control vr-date-input"  placeholder="{{ctrl.placelHolder}}" ng-style="ctrl.getInputeStyle()" style="padding:0px 5px;"  ng-keyup="ctrl.updateModelOnKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
                                 + icontemplate
                             + '</div>'
                       + '</div>'

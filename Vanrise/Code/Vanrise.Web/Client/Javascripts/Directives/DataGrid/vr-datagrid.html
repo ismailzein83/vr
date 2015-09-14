@@ -5,11 +5,11 @@
     </vr-choices>  
     <div class="vr-datagrid-header" ng-hide="ctrl.hideheader" ng-style="ctrl.headerStyle" ng-class="ctrl.ngClassLevel">
         
-        <div ng-show="!ctrl.hideGridMenu" class="vr-grid-menu-box hand-cursor out-div" ng-class="ctrl.updateItems.length > 0?'with-choices':''" ng-init="showgmenu=false" ng-class="showgmenu==true?'toggle-dd':''" ng-click="showgmenu=!showgmenu">
+        <div ng-show="!ctrl.hideGridMenu" class="vr-grid-menu-box hand-cursor out-div" ng-class="ctrl.updateItems.length > 0?'with-choices':''" ng-class="ctrl.showgmenu==true?'toggle-dd':''" ng-click="ctrl.toggelGridMenu($event)">
             <span class="vr-grid-menu-h-circle hand-cursor" ng-class="ctrl.ngClassLevel"></span>
             <span class="glyphicon glyphicon-wrench vr-grid-menu-h-dote hand-cursor"></span>
         </div>
-        <ul class="vr-grid-menu out-div" ng-class="ctrl.updateItems.length > 0?'menu-with-choices':''" ng-show="showgmenu==true && ctrl.hideGridMenu == false " click-outside="showgmenu=false" outside-if-not="out-div">
+        <ul class="vr-grid-menu out-div" ng-class="ctrl.updateItems.length > 0?'menu-with-choices':''" ng-show="ctrl.showgmenu==true && ctrl.hideGridMenu == false " click-outside="ctrl.toggelGridMenu($event, false)" outside-if-not="out-div">
             <li role="presentation" vr-disabled="ctrl.isExporting">
                 <span style="padding-left:4px;color:black;text-align:center" class="hand-cursor" aria-hidden="true" ng-click="ctrl.onExportClicked()">Export</span>
                 <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin-left:3px" ng-show="ctrl.isExporting" />
@@ -58,7 +58,7 @@
 <div ng-show="ctrl.showPager && ctrl.pagerSettings.numberOfPages > 1" ng-class="ctrl.ngClassLevel">
     <vr-pagination pagersettings="ctrl.pagerSettings"></vr-pagination>
 </div>
-<div ng-show="!ctrl.hidePagingInfo && !ctrl.showPager" ng-class="ctrl.ngClassLevel" class="vr-remote-footer">
+<div ng-show="!ctrl.hidePagingInfo && !ctrl.showPager &&  ctrl.datasource.length > 0" ng-class="ctrl.ngClassLevel" class="vr-remote-footer">
     <div class="pull-right" style="font-size: 10px; margin-right: 5px; margin-top: 5px; "> Total count ({{ctrl.pagerSettings.totalDataCount}})</div>
 </div>
 <div id="rowTemplate">

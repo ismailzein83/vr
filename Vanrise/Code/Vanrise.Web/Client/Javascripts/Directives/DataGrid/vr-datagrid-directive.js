@@ -38,6 +38,48 @@
 
             ctrl.clientSideFilterFunction;
             ctrl.hideGridMenu = ($attrs.hidegridmenu != undefined);
+
+            ctrl.showgmenu = false;
+            ctrl.toggelGridMenu = function (e, bool) {
+                if (bool != undefined)
+                    ctrl.showgmenu = bool;
+                else {
+                    if (ctrl.showgmenu == false) {
+                        setTimeout(function () {
+                           
+                            var self = angular.element(e.currentTarget);
+                            var selfHeight = $(self).height();
+                            var selfOffset = $(self).offset();
+                            var menu = self.parent().find('.vr-grid-menu')[0];
+                            $(menu).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop()+ 5, left: 'auto' });
+                            $scope.$apply(function () {
+                                ctrl.showgmenu = true;
+                            })
+                        }, 1);
+                    }
+                    else
+                        ctrl.showgmenu = false;
+                }
+            }
+
+            setTimeout(function () {
+                $('.vr-grid-menu').parents('div').scroll(function () {
+                        var menu = $(window).find('.vr-grid-menu')[0];
+                        $(menu).css({ display: 'none' });
+                        $scope.$apply(function () {
+                            ctrl.showgmenu = false;
+                        })
+                    });
+                $(window).on('scroll', function () {
+                        var menu = $(window).find('.vr-grid-menu')[0];
+                        $(menu).css({ display: 'none' });
+                        $scope.$apply(function () {
+                            ctrl.showgmenu = false;
+                        })
+                    });
+
+            }, 1);
+            
             ctrl.hidePagingInfo = ($attrs.hidepaginginfo != undefined);
             ctrl.rotateHeader = true;
             ctrl.el = $element;
