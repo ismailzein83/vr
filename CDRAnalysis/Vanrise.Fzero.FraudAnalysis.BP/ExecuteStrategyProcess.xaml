@@ -1,6 +1,5 @@
 ﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
- xmlns:local="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
  xmlns:s="clr-namespace:System;assembly=mscorlib"
@@ -10,6 +9,7 @@
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:vc="clr-namespace:Vanrise.Common;assembly=Vanrise.Common"
  xmlns:vffba="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Arguments;assembly=Vanrise.Fzero.FraudAnalysis.BP.Arguments"
@@ -250,29 +250,13 @@
               <mca:CSharpValue x:TypeArguments="x:String">String.Format("End Executing Strategies Count: {0}", Input.StrategyIds.Count)</mca:CSharpValue>
             </InArgument>
           </WriteLine>
-          <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_3">
-            <InArgument x:TypeArguments="x:String">
-              <mca:CSharpValue x:TypeArguments="x:String">String.Format("Started Assigning Cases")</mca:CSharpValue>
-            </InArgument>
-          </WriteLine>
-          <local:AssignStrategyCasesProcess Input="{x:Null}" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="Vanrise.Fzero.FraudAnalysis.BP.AssignStrategyCasesProcess_1">
-            <sap2010:WorkflowViewState.ViewStateManager>
-              <sap2010:ViewStateManager>
-                <sap2010:ViewStateData Id="WriteLine_1" sap2010:WorkflowViewState.IdRef="ViewStateData_1" />
-                <sap2010:ViewStateData Id="LoadStrategyExecutionDetailSummaries_2" sap2010:WorkflowViewState.IdRef="ViewStateData_2" />
-                <sap2010:ViewStateData Id="AssignCases_2" sap2010:WorkflowViewState.IdRef="ViewStateData_3" />
-                <sap2010:ViewStateData Id="Parallel_2" sap2010:WorkflowViewState.IdRef="ViewStateData_4" />
-                <sap2010:ViewStateData Id="WriteLine_2" sap2010:WorkflowViewState.IdRef="ViewStateData_5" />
-                <sap2010:ViewStateData Id="Sequence_1" sap2010:WorkflowViewState.IdRef="ViewStateData_6" />
-                <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.AssignStrategyCasesProcess_1" sap2010:WorkflowViewState.IdRef="ViewStateData_7" />
-              </sap2010:ViewStateManager>
-            </sap2010:WorkflowViewState.ViewStateManager>
-          </local:AssignStrategyCasesProcess>
-          <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_4">
-            <InArgument x:TypeArguments="x:String">
-              <mca:CSharpValue x:TypeArguments="x:String">String.Format("Ended Assigning Cases")</mca:CSharpValue>
-            </InArgument>
-          </WriteLine>
+          <vbw:RunProcess ProcessCompletedEventPayload="{x:Null}" ProcessInstanceId="{x:Null}" WaitProcessCompleted="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1">
+            <vbw:RunProcess.Input>
+              <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
+                <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument">new AssignStrategyCasesProcessInput ()</mca:CSharpValue>
+              </InArgument>
+            </vbw:RunProcess.Input>
+          </vbw:RunProcess>
         </Sequence>
       </If.Then>
       <If.Else>
@@ -285,52 +269,37 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbDJFA6ECDgIBAUkFTREDAeMCTgVoKQMB0wJpBZ8CCgIBAksJS5UBAwHkAmALYGMDAeACVgtWYAMB3QJbC1uEAQMB2gJRC1FZAwHXAmULZVcDAdQCbAtsmQECAQNwCZQCFAIBC5cCCZ0CJAIBBnEL9wEWAgEZ+AEL/AEXAgEV/QELgQIXAgERggILjgIuAgEQjwILkwIXAgEMmgIPmgKDAQIBCJcCZJcCgQECAQd/DZQBHwMBmgKVAQ25ASsDAbcBugEN1AEyAgFw1QEN6gFAAgE36wEN9gE4AgEa+gEP+gGaAQIBFv8BD/8BdQIBEpECD5ECcwIBDYIBE4IBYQMBxQKMAROMAXUDAbcChwEThwF0AwGpApEBE5EBXwMBmwKnAROnAW0DAYwCnQETnQF0AwH+AbEBE7EBhAEDAfABmAETmAFhAwHiAawBE6wBgQEDAdQBogETogGIAQMBxgG2ARO2AV8DAbgBvQETvQGAAQMBqQHHARPHAXkDAZsB0QET0QGEAQMBjQHCARPCAZwBAgF/zAETzAGHAQIBceIBE+IBfwIBYtgBE9gBlAECAVTnARPnAYwBAgFG3QET3QGMAQIBOPMBE/MBhAECASnuARPuAYQBAgEb</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbC9FA5ECDgIBAUkFTREDAd4CTgVoKQMBzgJpBY8CCgIBAksJS5UBAwHfAmALYGMDAdsCVgtWYAMB2AJbC1uEAQMB1QJRC1FZAwHSAmULZVcDAc8CbAtsmQECAQNwCYQCFAIBC4cCCY0CJAIBBnEL9wEWAgEU+AEL/AEXAgEQ/QELgwIcAgEMigIPigKDAQIBCIcCZIcCgQECAQd/DZQBHwMBlQKVAQ25ASsDAbIBugEN1AEyAgFr1QEN6gFAAgEy6wEN9gE4AgEV+gEP+gGaAQIBEYACEYACiQECAQ2CAROCAWEDAcACjAETjAF1AwGyAocBE4cBdAMBpAKRARORAV8DAZYCpwETpwFtAwGHAp0BE50BdAMB+QGxAROxAYQBAwHrAZgBE5gBYQMB3QGsAROsAYEBAwHPAaIBE6IBiAEDAcEBtgETtgFfAwGzAb0BE70BgAEDAaQBxwETxwF5AwGWAdEBE9EBhAEDAYgBwgETwgGcAQIBeswBE8wBhwECAWziARPiAX8CAV3YARPYAZQBAgFP5wET5wGMAQIBQd0BE90BjAECATPzARPzAYQBAgEk7gET7gGEAQIBFg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="1520,62.4" />
-      <sap2010:ViewStateData Id="GetStrategiesExecutionInfo_1" sap:VirtualizedContainerService.HintSize="1520,22.4" />
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="1521,62" />
+      <sap2010:ViewStateData Id="GetStrategiesExecutionInfo_1" sap:VirtualizedContainerService.HintSize="1521,22" />
       <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="CreateNumberProfiles_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetStrategyExecutionDetails_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareStrategyExecutionDetailsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyStrategyExecutionDetailsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1273.6,86.4" />
-      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="1273.6,62.4" />
-      <sap2010:ViewStateData Id="WriteLine_3" sap:VirtualizedContainerService.HintSize="1273.6,62.4" />
-      <sap2010:ViewStateData Id="ViewStateData_1" sap:VirtualizedContainerService.HintSize="554,62" />
-      <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ViewStateData_3" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ViewStateData_4" sap:VirtualizedContainerService.HintSize="554,86" />
-      <sap2010:ViewStateData Id="ViewStateData_5" sap:VirtualizedContainerService.HintSize="554,62" />
-      <sap2010:ViewStateData Id="ViewStateData_6" sap:VirtualizedContainerService.HintSize="576,414">
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1274,86" />
+      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="1274,62" />
+      <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="1274,22" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="1296,374">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ViewStateData_7" sap:VirtualizedContainerService.HintSize="616,494" />
-      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.AssignStrategyCasesProcess_1" sap:VirtualizedContainerService.HintSize="1273.6,22.4" />
-      <sap2010:ViewStateData Id="WriteLine_4" sap:VirtualizedContainerService.HintSize="1273.6,62.4" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="1296,580.8">
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1521,524" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1543,812">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="200,22.4" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1520,732.8" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1542.4,1022.4">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess_1" sap:VirtualizedContainerService.HintSize="1582.4,1102.4" />
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess_1" sap:VirtualizedContainerService.HintSize="1583,892" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
