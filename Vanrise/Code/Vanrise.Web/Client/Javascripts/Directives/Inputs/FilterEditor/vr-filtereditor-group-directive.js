@@ -19,7 +19,7 @@
                 function setResult() {
                     ctrl.result['rules'] = ctrl.rules;
                     ctrl.result['condition'] = ctrl.condition;
-                    ctrl.result['group'] = ctrl.groups;
+                    ctrl.result['groups'] = ctrl.groups;
                 }
 
                 function onLoad() {

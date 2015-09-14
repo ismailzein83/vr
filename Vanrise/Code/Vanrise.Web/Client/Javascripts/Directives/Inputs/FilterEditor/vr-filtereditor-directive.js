@@ -55,8 +55,8 @@
 
                     });
 
-                    if (filter.group !== undefined) {
-                        filter.group.forEach(function (group) {
+                    if (filter.groups !== undefined) {
+                        filter.groups.forEach(function (group) {
                             if (group !== undefined && group !== null && group.rules !== undefined)
                                 result += "  " + condition + " ( " + filterToString(group.rules) + " ) ";
                         });
