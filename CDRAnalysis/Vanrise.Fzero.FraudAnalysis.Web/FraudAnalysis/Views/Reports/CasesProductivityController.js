@@ -50,6 +50,9 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
             });
         }
 
+        $scope.onGroupDailyChanged = function () {
+            return retrieveData();
+        }
     }
 
     function load() {

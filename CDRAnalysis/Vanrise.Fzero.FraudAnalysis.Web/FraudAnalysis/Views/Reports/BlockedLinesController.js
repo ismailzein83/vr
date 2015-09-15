@@ -51,6 +51,11 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
                 onResponseReady(response);
             });
         }
+
+        $scope.onGroupDailyChanged = function () {
+            return retrieveData();
+        }
+
         defineMenuActions();
     }
 
