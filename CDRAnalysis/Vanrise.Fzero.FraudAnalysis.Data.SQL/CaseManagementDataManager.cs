@@ -50,7 +50,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 if (input.Query.AccountStatusIDs != null && input.Query.AccountStatusIDs.Count() > 0)
                     accountStatusIDs = string.Join(",", input.Query.AccountStatusIDs.Select(n => ((int)n).ToString()).ToArray());
 
-                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByAccountNumberForSummaries", tempTableName, input.Query.AccountNumber, input.Query.FromDate, input.Query.ToDate, strategyIDs, accountStatusIDs, suspicionLevelIDs);
+                ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_CreateTempByAccountNumberForSummaries", tempTableName, input.Query.AccountNumber, input.Query.FromDate, input.Query.ToDate, strategyIDs, accountStatusIDs, suspicionLevelIDs);
 
             }, (reader) => AccountSuspicionSummaryMapper(reader), mapper);
         }
