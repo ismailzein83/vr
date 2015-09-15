@@ -18,11 +18,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             LoadLevelsByPriority(strategy);
         }
 
-        public FraudManager()
-        {
-
-        }
-
         void LoadLevelsByPriority(Strategy strategy)
         {
             if (strategy == null)
@@ -35,9 +30,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             var FilterManager = new FilterManager();
             Dictionary<int, FilterDefinition> criteriaDefinitions = FilterManager.GetCriteriaDefinitions();
-            if (criteriaDefinitions == null)
-                throw new ArgumentNullException("criteriaDefinitions");
-
             _levelsByPriority = new List<StrategyLevelWithCriterias>();
 
 

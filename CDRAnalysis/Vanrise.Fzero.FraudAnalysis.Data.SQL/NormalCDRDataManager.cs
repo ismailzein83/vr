@@ -10,11 +10,19 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
     public class NormalCDRDataManager : BaseSQLDataManager, INormalCDRDataManager
     {
+        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
 
         public NormalCDRDataManager()
             : base("CDRDBConnectionString")
         {
-
+            _columnMapper.Add("CallClass", "Call_Class");
+            _columnMapper.Add("CallTypeDescription", "Call_Type");
+            _columnMapper.Add("SubType", "Sub_Type");
+            _columnMapper.Add("CellId", "Cell_Id");
+            _columnMapper.Add("UpVolume", "Up_Volume");
+            _columnMapper.Add("DownVolume", "Down_Volume");
+            _columnMapper.Add("ServiceType", "Service_Type");
+            _columnMapper.Add("ServiceVASName", "Service_VAS_Name");
         }
 
         public void LoadCDR(DateTime from, DateTime to, int? batchSize, Action<CDR> onBatchReady)
@@ -69,25 +77,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             }, from, to
                );
         }
-
-
+        
         public BigResult<CDR> GetNormalCDRs(Vanrise.Entities.DataRetrievalInput<NormalCDRResultQuery> input)
         {
-            Dictionary<string, string> mapper = new Dictionary<string, string>();
-            mapper.Add("CallClass", "Call_Class");
-            mapper.Add("CallTypeDescription", "Call_Type");
-            mapper.Add("SubType", "Sub_Type");
-            mapper.Add("CellId", "Cell_Id");
-            mapper.Add("UpVolume", "Up_Volume");
-            mapper.Add("DownVolume", "Down_Volume");
-            mapper.Add("ServiceType", "Service_Type");
-            mapper.Add("ServiceVASName", "Service_VAS_Name");
-
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQuerySP("FraudAnalysis.sp_NormalCDR_CreateTempForFilteredNormalCDRs", tempTableName, input.Query.MSISDN, input.Query.FromDate, input.Query.ToDate);
             };
-            return RetrieveData(input, createTempTableAction, NormalCDRMapper, mapper);
+            return RetrieveData(input, createTempTableAction, NormalCDRMapper, _columnMapper);
         }
 
 
@@ -96,7 +93,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         private CDR NormalCDRMapper(IDataReader reader)
         {
             var normalCDR = new CDR();
-            normalCDR.CallType = (CallType)Enum.ToObject(typeof(CallType), GetReaderValue<int>(reader, "Call_Type"));
+            normalCDR.CallType = (CallType)reader["Call_Type"];
             normalCDR.ConnectDateTime = GetReaderValue<DateTime?>(reader, "ConnectDateTime");
             normalCDR.IMSI = reader["IMSI"] as string;
             normalCDR.DurationInSeconds = GetReaderValue<Decimal?>(reader, "DurationInSeconds");

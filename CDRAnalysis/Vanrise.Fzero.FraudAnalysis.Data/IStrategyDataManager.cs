@@ -15,9 +15,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         BigResult<Strategy> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyResultQuery> input);
 
-        bool AddStrategy(Strategy strategyObject, out int insertedId, int userId);
+        bool AddStrategy(Strategy strategyObject, out int insertedId);
 
-        bool UpdateStrategy(Strategy strategy, int userId);
+        bool UpdateStrategy(Strategy strategy);
 
     }
 }

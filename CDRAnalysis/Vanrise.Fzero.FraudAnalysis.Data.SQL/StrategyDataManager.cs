@@ -51,11 +51,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, StrategyMapper);
         }
 
-        public bool AddStrategy(Strategy strategyObject, out int insertedId, int userId)
+        public bool AddStrategy(Strategy strategyObject, out int insertedId)
         {
             object id;
             int recordesEffected = ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_Insert", out id,
-                userId,
+                strategyObject.UserId,
                 !string.IsNullOrEmpty(strategyObject.Name) ? strategyObject.Name : null,
                 !string.IsNullOrEmpty(strategyObject.Description) ? strategyObject.Description : null,
                 DateTime.Now,
@@ -80,12 +80,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
-        public bool UpdateStrategy(Strategy strategyObject, int userId)
+        public bool UpdateStrategy(Strategy strategyObject)
         {
 
             int recordesEffected = ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_Update",
                 strategyObject.Id,
-                 userId,
+                 strategyObject.UserId,
                 !string.IsNullOrEmpty(strategyObject.Name) ? strategyObject.Name : null,
                 !string.IsNullOrEmpty(strategyObject.Description) ? strategyObject.Description : null,
                 DateTime.Now,

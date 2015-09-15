@@ -106,8 +106,6 @@
     <Compile Include="Aggregates\ConsecutiveAggregate.cs" />
     <Compile Include="CallClass.cs" />
     <Compile Include="Aggregates\GroupCountAggregate.cs" />
-    <Compile Include="OperationResults\InsertOperationOutput.cs" />
-    <Compile Include="OperationResults\UpdateOperationOutput.cs" />
     <Compile Include="FraudResult.cs" />
     <Compile Include="Aggregates\SumAggregate.cs" />
     <Compile Include="Aggregates\DistinctCountAggregate.cs" />

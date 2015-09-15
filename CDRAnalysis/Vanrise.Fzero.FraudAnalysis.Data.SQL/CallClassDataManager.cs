@@ -28,7 +28,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             var callClass = new CallClass();
             callClass.Id = (int)reader["Id"];
             callClass.Description = reader["Description"] as string;
-            callClass.NetType = (NetType)Enum.ToObject(typeof(NetType), GetReaderValue<int>(reader, "NetType"));
+            callClass.NetType = (NetType)reader["NetType"];
             return callClass;
         }
 

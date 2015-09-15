@@ -3,6 +3,7 @@ using System.Web.Http;
 using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Web.Base;
+using Vanrise.Entities;
 
 namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 {
@@ -41,7 +42,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
 
         [HttpPost]
-        public Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<Strategy> UpdateStrategy(Strategy strategyObject)
+        public UpdateOperationOutput<Strategy> UpdateStrategy(Strategy strategyObject)
         {
             StrategyManager manager = new StrategyManager();
 
@@ -49,7 +50,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         }
 
         [HttpPost]
-        public Vanrise.Fzero.FraudAnalysis.Entities.InsertOperationOutput<Strategy> AddStrategy(Strategy strategyObject)
+        public InsertOperationOutput<Strategy> AddStrategy(Strategy strategyObject)
         {
             StrategyManager manager = new StrategyManager();
 
@@ -70,6 +71,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         public List<AggregateDefinitionInfo> GetAggregates()
         {
             AggregateManager manager = new AggregateManager();
+
             return manager.GetAggregateDefinitionsInfo();
         }
 

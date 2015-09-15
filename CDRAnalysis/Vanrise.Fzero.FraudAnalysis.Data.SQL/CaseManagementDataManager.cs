@@ -25,16 +25,17 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             _columnMapper.Add("SuspicionLevelDescription", "SuspicionLevelID");
             _columnMapper.Add("AccountStatusDescription", "AccountStatusID");
+            _columnMapper.Add("UserName", "UserID");
+            _columnMapper.Add("CaseStatusDescription", "StatusID");
+            _columnMapper.Add("SuspicionOccuranceStatusDescription", "SuspicionOccuranceStatus");
+            _columnMapper.Add("AccountCaseStatusDescription", "AccountCaseStatusID");
         }
 
         #region Account Suspicion Summaries
 
         public BigResult<AccountSuspicionSummary> GetFilteredAccountSuspicionSummaries(Vanrise.Entities.DataRetrievalInput<AccountSuspicionSummaryQuery> input)
         {
-            Dictionary<string, string> mapper = new Dictionary<string, string>();
-            mapper.Add("SuspicionLevelDescription", "SuspicionLevelID");
-            mapper.Add("AccountStatusDescription", "AccountStatusID");
-
+           
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.AccountNumber, input.Query.StrategyIDs, input.Query.AccountStatusIDs, input.Query.SuspicionLevelIDs), (cmd) =>
@@ -44,7 +45,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 });
             };
 
-            return RetrieveData(input, createTempTableAction, AccountSuspicionSummaryMapper, mapper);
+            return RetrieveData(input, createTempTableAction, AccountSuspicionSummaryMapper, _columnMapper);
         }
 
         private string CreateTempTableIfNotExists(string tempTableName, string accountNumber, List<int> strategyIDs, List<CaseStatus> accountStatusIDs, List<SuspicionLevel> suspicionLevelIDs)
@@ -117,7 +118,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             foreach (CaseStatus item in items)
                 list.Add((int)item);
-            
+
             return list;
         }
 
@@ -136,43 +137,36 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public BigResult<AccountSuspicionDetail> GetFilteredAccountSuspicionDetails(Vanrise.Entities.DataRetrievalInput<AccountSuspicionDetailQuery> input)
         {
-            Dictionary<string, string> mapper = new Dictionary<string, string>();
-            mapper.Add("SuspicionLevelDescription", "SuspicionLevelID");
-
+           
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByAccountNumber", tempTableName, input.Query.AccountNumber, input.Query.FromDate, input.Query.ToDate);
             };
 
-            return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, mapper);
+            return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, _columnMapper);
         }
 
         public BigResult<AccountCase> GetFilteredCasesByAccountNumber(Vanrise.Entities.DataRetrievalInput<AccountCaseResultQuery> input)
         {
-            Dictionary<string, string> mapper = new Dictionary<string, string>();
-            mapper.Add("UserName", "UserID");
-            mapper.Add("CaseStatusDescription", "StatusID");
-
+           
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_CreateTempByAccountNumber", tempTableName, input.Query.AccountNumber);
             };
 
-            return RetrieveData(input, createTempTableAction, AccountCaseMapper, mapper);
+            return RetrieveData(input, createTempTableAction, AccountCaseMapper, _columnMapper);
         }
 
         public BigResult<AccountSuspicionDetail> GetFilteredDetailsByCaseID(Vanrise.Entities.DataRetrievalInput<CaseDetailQuery> input)
         {
-            Dictionary<string, string> mapper = new Dictionary<string, string>();
-            mapper.Add("SuspicionLevelDescription", "SuspicionLevelID");
-            mapper.Add("SuspicionOccuranceStatusDescription", "SuspicionOccuranceStatus");
+          
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByCaseID", tempTableName, input.Query.AccountNumber, input.Query.CaseID);
             };
 
-            return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, mapper);
+            return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, _columnMapper);
         }
 
         public AccountSuspicionSummary GetAccountSuspicionSummaryByAccountNumber(string accountNumber, DateTime from, DateTime to)
@@ -197,7 +191,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             }
 
             return list;
-        
+
         }
 
         public CaseStatus? GetAccountStatus(string accountNumber)
@@ -208,16 +202,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public BigResult<AccountCaseLog> GetFilteredAccountCaseLogsByCaseID(Vanrise.Entities.DataRetrievalInput<AccountCaseLogResultQuery> input)
         {
-            Dictionary<string, string> mapper = new Dictionary<string, string>();
-            mapper.Add("UserName", "UserID");            
-            mapper.Add("AccountCaseStatusDescription", "AccountCaseStatusID");
+           
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQuerySP("FraudAnalysis.sp_AccountCaseHistory_CreateTempByCaseID", tempTableName, input.Query.CaseID);
             };
 
-            return RetrieveData(input, createTempTableAction, AccountCaseLogMapper, mapper);
+            return RetrieveData(input, createTempTableAction, AccountCaseLogMapper, _columnMapper);
         }
 
         #region Methods that update an account case

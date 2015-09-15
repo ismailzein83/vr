@@ -22,7 +22,7 @@ namespace Vanrise.Fzero.Business
 
         public static OperatorTypeEnum GetOperatorType()
         {
-            return (OperatorTypeEnum)Enum.ToObject(typeof(OperatorTypeEnum), GetIntValue(ConfigParameterName.OperatorType));
+            return (OperatorTypeEnum) ConfigParameterName.OperatorType;
         }
 
         #endregion
