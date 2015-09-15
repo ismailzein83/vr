@@ -9,6 +9,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public string Description { get; set; }
 
+        public string Abbreviation { get; set; }
+
         public string Label { get; set; }
 
         public float MinValue { get; set; }

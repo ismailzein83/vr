@@ -161,6 +161,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                 var filterItem = {
                     FilterId: filter.filterId,
                     Description: filter.description,
+                    Abbreviation: filter.abbreviation,
                     Threshold: filter.threshold
 
 
@@ -218,6 +219,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             var filterItem = {
                 filterId: filterDef.filterId,
                 description: filterDef.description,
+                abbreviation: filter.abbreviation,
                 label: filterDef.label,
                 minValue: filterDef.minValue,
                 maxValue: filterDef.maxValue,
@@ -258,6 +260,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             var filterItem = {
                 filterId: filterDef.filterId,
                 description: filterDef.description,
+                abbreviation: filterDef.abbreviation,
                 label: filterDef.label,
                 minValue: filterDef.minValue,
                 maxValue: filterDef.maxValue,
@@ -396,6 +399,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                 $scope.filterDefinitions.push({
                     filterId: itm.FilterId,
                     description: itm.Description,
+                    abbreviation: itm.Abbreviation,
                     label: itm.Label,
                     minValue: itm.MinValue,
                     maxValue: itm.MaxValue,

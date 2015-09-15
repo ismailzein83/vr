@@ -52,7 +52,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 foreach (var j in i.StrategyLevelCriterias)
                 {
                     LevelCriteriaInfo levelCriteriasThresholdPercentage = new LevelCriteriaInfo();
-                    levelCriteriasThresholdPercentage.CriteriaDefinitions = new FilterDefinition() { CompareOperator = criteriaDefinitions.Where(x => x.Value.FilterId == j.FilterId).FirstOrDefault().Value.CompareOperator, FilterId = j.FilterId, Description = criteriaDefinitions.Where(x => x.Value.FilterId == j.FilterId).FirstOrDefault().Value.Description };
+                    levelCriteriasThresholdPercentage.CriteriaDefinitions = new FilterDefinition() { CompareOperator = criteriaDefinitions.Where(x => x.Value.FilterId == j.FilterId).FirstOrDefault().Value.CompareOperator, FilterId = j.FilterId,  Description = criteriaDefinitions.Where(x => x.Value.FilterId == j.FilterId).FirstOrDefault().Value.Description };
                     levelCriteriasThresholdPercentage.Percentage = j.Percentage;
                     levelCriteriasThresholdPercentage.Threshold = strategy.StrategyFilters.Where(x => x.FilterId == j.FilterId).FirstOrDefault().Threshold;
                     strategyLevelWithCriterias.LevelCriteriasThresholdPercentage.Add(levelCriteriasThresholdPercentage);
