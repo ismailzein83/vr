@@ -7,6 +7,7 @@
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
+                color:"@"
             },
             controller: function () {
 
@@ -16,7 +17,8 @@
             compile: function (tElement, tAttrs) {
                 var isStandalone = tAttrs.standalone;
                 var isValue = tAttrs.isvalue != undefined;
-                var newElement = '<label class="control-label vr-control-label" style="' + (isStandalone === "true" ? 'padding-top:6px;' : '') + (isValue ? 'font-weight:bold;' : '') + '" >'
+                var color = (tAttrs.color != undefined) ? tAttrs.color : "";
+                var newElement = '<label class="control-label vr-control-label ' + color +' " style="' + (isStandalone === "true" ? 'padding-top:6px;' : '') + (isValue ? 'font-weight:bold;' : '') + '" >'
                     + tElement.context.innerHTML + '</label>';
                 tElement.html(newElement);
             }
