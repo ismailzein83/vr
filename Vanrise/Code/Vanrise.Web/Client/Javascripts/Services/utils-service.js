@@ -382,6 +382,10 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         else
             return date;
     }
+    function cloneDateTime(date) {
+        return new Date(date).toUTCString().replace(' GMT', '');
+    }
+
 
 
     function getPeriod(periodType) {
@@ -446,7 +450,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         validateDates: validateDates,
         getEnumDescription: getEnumDescription,
         getEnumPropertyAsArray: getEnumPropertyAsArray,
-        fillArray: fillArray
+        fillArray: fillArray,
+        cloneDateTime: cloneDateTime
     });
 
 }]);
