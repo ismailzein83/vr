@@ -19,7 +19,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public Strategy GetStrategy(int strategyId)
         {
-            return GetItemsSP("FraudAnalysis.sp_Strategy_GetStrategy", StrategyMapper, strategyId).FirstOrDefault();
+            return GetItemSP("FraudAnalysis.sp_Strategy_GetStrategy", StrategyMapper, strategyId);
         }
 
         public List<Strategy> GetStrategies(int PeriodId, bool? IsEnabled)

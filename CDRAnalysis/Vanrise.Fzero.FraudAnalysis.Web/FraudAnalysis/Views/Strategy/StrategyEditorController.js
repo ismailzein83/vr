@@ -219,7 +219,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             var filterItem = {
                 filterId: filterDef.filterId,
                 description: filterDef.description,
-                abbreviation: filter.abbreviation,
+                abbreviation: filterDef.abbreviation,
                 label: filterDef.label,
                 minValue: filterDef.minValue,
                 maxValue: filterDef.maxValue,
