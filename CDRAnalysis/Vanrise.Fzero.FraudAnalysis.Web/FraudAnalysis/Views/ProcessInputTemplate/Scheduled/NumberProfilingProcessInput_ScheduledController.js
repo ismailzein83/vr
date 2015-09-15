@@ -33,7 +33,6 @@
                 $scope.PeakHoursIds.push(itm.id)
             });
 
-            console.log($scope.PeakHoursIds)
 
             return {
                 $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.NumberProfilingProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
@@ -68,7 +67,7 @@
                 $scope.minCountofCallsinActiveHour = data.Parameters.MinimumCountofCallsinActiveHour;
                 $scope.selectedPeriod = UtilsService.getItemByVal($scope.periods, data.PeriodId, "Id");
                 $scope.selectedPeakHours.length = 0;
-                console.log(data)
+                
                 angular.forEach(data.Parameters.PeakHoursIds, function (peakHour) {
                     $scope.selectedPeakHours.push(UtilsService.getItemByVal($scope.hours, peakHour, "id"));
                 });

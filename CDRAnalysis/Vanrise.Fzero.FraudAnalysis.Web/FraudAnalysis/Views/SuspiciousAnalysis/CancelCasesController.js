@@ -25,7 +25,6 @@ function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIServ
                     return CaseManagementAPIService.CancelAccountCases(accountCaseObject)
                                           .then(function (response) {
                                               if (VRNotificationService.notifyOnItemUpdated("Account Cases", response)) {
-                                                  console.log(response)
                                               }
                                           }).catch(function (error) {
                                               VRNotificationService.notifyException(error, $scope);
@@ -68,8 +67,6 @@ function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIServ
             From: $scope.from,
             To: $scope.to
         };
-        console.log('accountCaseObject')
-        console.log(accountCaseObject)
         return accountCaseObject;
     }
 }
