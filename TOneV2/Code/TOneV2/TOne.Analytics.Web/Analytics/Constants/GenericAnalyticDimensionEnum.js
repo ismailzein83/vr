@@ -12,5 +12,6 @@
     CodeBuy: { name: "CodeBuy", value: 10, description: "CodeBuy", type: "Text" },
     Date: { name: "Date", value: 11, description: "Date", type: "Text" },
     Hour: { name: "Hour", value: 12, description: "Hour", type: "Number" },
-    SupplierZone: { name: "SupplierZone", value: 13, description: "SupplierZone", type: "Text" }
+    SupplierZone: { name: "SupplierZone", value: 13, description: "SupplierZone", type: "Text" },
+    Currency: { name: "Currency", value: 14, description: "Currency", type: "Text" }
 });

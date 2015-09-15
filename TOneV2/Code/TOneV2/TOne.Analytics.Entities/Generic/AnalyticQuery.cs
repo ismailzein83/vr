@@ -12,6 +12,8 @@ namespace TOne.Analytics.Entities
 
         public DateTime ToTime { get; set; }
         
+        public string Currency { get; set; }
+        
         public AnalyticDimension[] DimensionFields { get; set; }
 
         public AnalyticMeasureField[] MeasureFields { get; set; }

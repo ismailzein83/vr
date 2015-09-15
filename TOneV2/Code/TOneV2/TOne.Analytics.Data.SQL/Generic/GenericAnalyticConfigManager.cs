@@ -173,6 +173,15 @@ namespace TOne.Analytics.Data.SQL
                     JoinStatements = null,
                     GroupByStatements = new List<string>() { " datepart(hour,LastCDRAttempt)" }
                 });
+
+            s_AllDimensionsConfig.Add(AnalyticDimension.Currency,
+                new AnalyticDimensionConfig
+                {
+                    IdColumn = "ts.SupplierID",
+                    NameColumn = "ts.SupplierID",
+                    JoinStatements = new List<string>() {"LEFT JOIN @ExchangeRates ERC ON ERC.Currency = bs.Cost_Currency AND ERC.Date = bs.CallDate LEFT JOIN @ExchangeRates ERS ON ERS.Currency = bs.Sale_Currency AND ERS.Date = bs.CallDate"},
+                    GroupByStatements = new List<string>() { " datepart(hour,LastCDRAttempt)" }
+                });
         }
 
         private static void FillMeasureFieldsConfig()

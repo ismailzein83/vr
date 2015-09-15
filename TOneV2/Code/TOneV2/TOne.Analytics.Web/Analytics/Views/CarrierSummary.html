@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="Generic_GenericAnalyticController">
+﻿<vr-panel ng-controller="Carrier_CarrierSummaryController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
@@ -17,27 +17,14 @@
                                datatextfield="description" datavaluefield="value" selectedvalues="selectedMeasures" ismultipleselection></vr-select>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-select label="Switches" datasource="switches"
-                               datatextfield="Name" datavaluefield="SwitchId" selectedvalues="selectedSwitches" ismultipleselection></vr-select>
-                </vr-columns>
-                <vr-columns width="normal">
-                    <vr-select label="Code Groups" datasource="codeGroups"
-                               datatextfield="Name" datavaluefield="Code" selectedvalues="selectedCodeGroups" ismultipleselection></vr-select>
-                </vr-columns>
-
-                <vr-columns width="normal">
                     <vr-be-carriergroup type="'Customer'" selectedvalues="selectedCustomers"></vr-be-carriergroup>
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-be-carriergroup type="'Supplier'" selectedvalues="selectedSuppliers"></vr-be-carriergroup>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-select ismultipleselection datasource="searchZones" label="Zones" selectedvalues="selectedZones" datatextfield="Name" datavaluefield="ZoneId"
-                               entityname="Zones"></vr-select>
-                </vr-columns>
-                <vr-columns width="normal">
                     <vr-label>Currency</vr-label>
-                    <vr-select datasource="optionsCurrencies.datasource" selectedvalues="optionsCurrencies.selectedvalues" datatextfield="CurrencyFullName" datavaluefield="CurrencyId"
+                    <vr-select datasource="optionsCurrencies.datasource" selectedvalues="optionsCurrencies.selectedvalues" withlocalfilter datatextfield="CurrencyFullName" datavaluefield="CurrencyId"
                                entityname="Currencies">
                     </vr-select>
                 </vr-columns>
@@ -46,7 +33,6 @@
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <!--<vr-button type="Add" formname="formFilter" data-onclick="click"></vr-button>-->
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
                 </div>
             </vr-actionbar>

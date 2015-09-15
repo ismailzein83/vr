@@ -53,7 +53,8 @@
                 DimensionFields: [$scope.selectedGroupKey.value],
                 MeasureFields: measureFields,
                 FromTime: $scope.viewScope.fromDate,
-                ToTime: $scope.viewScope.toDate
+                ToTime: $scope.viewScope.toDate,
+                Currency: $scope.viewScope.optionsCurrencies.selectedvalues
             };
             return groupKey.gridAPI.retrieveData(query);
         }

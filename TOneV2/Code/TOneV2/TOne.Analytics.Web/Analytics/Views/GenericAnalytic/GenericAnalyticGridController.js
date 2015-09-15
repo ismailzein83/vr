@@ -41,7 +41,8 @@
                     DimensionFields: groupKeys,
                     MeasureFields: value.MeasureFields,
                     FromTime: value.FromTime,
-                    ToTime: value.ToTime
+                    ToTime: value.ToTime,
+                    Currency: value.Currency
                 }
                 gridApi.retrieveData(query);
             };

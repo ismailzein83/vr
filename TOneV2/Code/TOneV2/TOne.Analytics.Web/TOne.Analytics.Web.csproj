@@ -181,6 +181,8 @@
     <Content Include="Analytics\Views\Billing Statistics\Volume Reports\Volume Reports Templates\TrafficVolumeTemplateController.js" />
     <Content Include="Analytics\Views\BlockedAttempts.html" />
     <Content Include="Analytics\Views\BlockedAttemptsController.js" />
+    <Content Include="Analytics\Views\CarrierSummary.html" />
+    <Content Include="Analytics\Views\CarrierSummaryController.js" />
     <Content Include="Analytics\Views\GenericAnalytic\GenericAnalyticSubGrid.html" />
     <Content Include="Analytics\Views\GenericAnalytic\GenericAnalyticSubGridController.js" />
     <Content Include="Analytics\Views\GenericAnalytic\GenericAnalytic.html" />

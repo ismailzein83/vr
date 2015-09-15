@@ -31,11 +31,20 @@ namespace TOne.Analytics.Data.SQL
             Action<string> createTempTableIfNotExistsAction = (tempTableName) =>
             {
                 string query = BuildAnalyticSummaryQuery(input, tempTableName, dimensionsConfig, measureFieldsConfig, dimensionsFilterConfig);
-                ExecuteNonQueryText(query, (cmd) =>
-                {
-                    cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromTime));
-                    cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.ToTime));
-                });
+
+                if(input.Query.Currency != null)
+                    ExecuteNonQueryText(query, (cmd) =>
+                    {
+                        cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromTime));
+                        cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.ToTime));
+                        cmd.Parameters.Add(new SqlParameter("@Currency", input.Query.Currency));
+                    });
+                else
+                    ExecuteNonQueryText(query, (cmd) =>
+                    {
+                        cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromTime));
+                        cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.ToTime));
+                    });
             };
 
             Dictionary<string, string> columnsMappings = new Dictionary<string, string>();
@@ -63,7 +72,8 @@ namespace TOne.Analytics.Data.SQL
         {
             StringBuilder queryBuilder = new StringBuilder(@"IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
 	                                                        BEGIN
-                                                                WITH 
+                                                                #CURRENCY#
+                                                                ;WITH 
                                                                 #CTEPART#
                                                                 AllResult AS( 
 			                                                    SELECT #SELECTPART#
@@ -82,6 +92,10 @@ namespace TOne.Analytics.Data.SQL
             StringBuilder groupByPartBuilder = new StringBuilder();
             StringBuilder ctePartBuilder = new StringBuilder();
             string tableNamePartBuilder = "TrafficStats";
+            string currencyPartBuilder = "";
+
+            if (input.Query.Currency != null)
+                currencyPartBuilder = CTEStatement.Currency;
 
             List<string> lstCTEStatements = new List<string>();
             List<string> lstJoinStatement = new List<string>();
@@ -227,6 +241,7 @@ namespace TOne.Analytics.Data.SQL
                         }
                 }
             }
+            queryBuilder.Replace("#CURRENCY#", currencyPartBuilder);
             queryBuilder.Replace("#TABLENAME#", tableNamePartBuilder);
             queryBuilder.Replace("#TEMPTABLE#", tempTableName);
             queryBuilder.Replace("#SELECTPART#", selectPartBuilder.ToString());
@@ -243,7 +258,21 @@ namespace TOne.Analytics.Data.SQL
             if (values != null && values.Count() > 0)
             {
                 if (values[0].GetType() == typeof(string) || values[0].GetType() == typeof(DateTime))
-                    filterBuilder.AppendFormat(" AND {0} IN ('{1}') ", column, String.Join(", ", values));
+                {
+                    StringBuilder builder = new StringBuilder();
+                    if(values.Count == 1)
+                        builder.Append("'").Append(values[0]).Append("'");
+                    else
+                    {
+                        foreach (T val in values)
+                        {
+                            builder.Append("'").Append(val).Append("' ,");
+                        }
+                        builder.Length--;
+                    }
+                        
+                    filterBuilder.AppendFormat(" AND {0} IN ({1}) ", column, builder);
+                }
                 else
                     filterBuilder.AppendFormat(" AND {0} IN ({1}) ", column, String.Join(", ", values));
             }

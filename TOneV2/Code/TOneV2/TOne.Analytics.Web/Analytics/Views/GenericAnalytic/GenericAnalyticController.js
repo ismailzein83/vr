@@ -2,8 +2,8 @@
 
     "use strict";
 
-    GenericAnalyticController.$inject = ['$scope','GenericAnalyticDimensionEnum', 'AnalyticsService', 'BusinessEntityAPIService_temp', 'ZonesService'];
-    function GenericAnalyticController($scope, GenericAnalyticDimensionEnum, analyticsService, BusinessEntityAPIService, ZonesService) {
+    GenericAnalyticController.$inject = ['$scope','GenericAnalyticDimensionEnum', 'AnalyticsService', 'BusinessEntityAPIService_temp', 'ZonesService', 'CurrencyAPIService'];
+    function GenericAnalyticController($scope, GenericAnalyticDimensionEnum, analyticsService, BusinessEntityAPIService, ZonesService, CurrencyAPIService) {
 
         var measureFields;
         load();
@@ -30,6 +30,11 @@
                 return ZonesService.getSalesZones(text);
             }
 
+            $scope.optionsCurrencies = {
+                selectedvalues: '',
+                datasource: []
+            };
+
             $scope.switches = [];
             $scope.selectedSwitches = [];
 
@@ -48,7 +53,8 @@
             loadSwitches();
             loadCodeGroups();
             loadMeasures();
-       
+            loadCurrencies();
+
             $scope.searchClicked = function () { 
                 return retrieveData();
             };
@@ -116,7 +122,8 @@
                 DimensionFields: $scope.selectedGroupKeys,
                 MeasureFields: measureFields,
                 FromTime: $scope.fromDate,
-                ToTime: $scope.toDate
+                ToTime: $scope.toDate,
+                Currency: $scope.optionsCurrencies.selectedvalues == null ? null : $scope.optionsCurrencies.selectedvalues.CurrencyID
             };
             $scope.subViewConnector.retrieveData(query);
         }
@@ -143,6 +150,12 @@
 
         function loadMeasures() {
             return $scope.measures = $scope.selectedMeasures = analyticsService.getGenericAnalyticMeasures();
+        }
+
+        function loadCurrencies() {
+            return CurrencyAPIService.GetCurrencies().then(function (response) {
+                $scope.optionsCurrencies.datasource = response;
+            });
         }
     }
     appControllers.controller('Generic_GenericAnalyticController', GenericAnalyticController);
