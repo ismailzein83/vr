@@ -108,7 +108,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public void LoadStrategyExecutionDetailSummaries(Action<StrategyExecutionDetailSummary> onBatchReady)
         {
-            ExecuteReaderSP("FraudAnalysis.sp_StrategyExecutionDetails_Load", (reader) =>
+            ExecuteReaderSP("FraudAnalysis.sp_StrategyExecutionDetails_GetByNULLCaseID", (reader) =>
             {
                 while (reader.Read())
                 {

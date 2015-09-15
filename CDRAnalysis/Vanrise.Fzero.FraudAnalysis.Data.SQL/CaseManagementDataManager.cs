@@ -175,7 +175,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public List<RelatedNumber> GetRelatedNumbersByAccountNumber(string accountNumber)
         {
-            string result = ExecuteScalarSP("FraudAnalysis.sp_RelatedNumbers_GetByAccountNumber", accountNumber) as string;
+            string result = ExecuteScalarSP("FraudAnalysis.sp_RelatedNumbers_GetRelatedNumbersByAccountNumber", accountNumber) as string;
 
             List<RelatedNumber> list = new List<RelatedNumber>();
 
@@ -195,7 +195,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public CaseStatus? GetAccountStatus(string accountNumber)
         {
-            int? result = (int?)ExecuteScalarSP("FraudAnalysis.sp_AccountStatus_GetByAccountNumber", accountNumber);
+            int? result = (int?)ExecuteScalarSP("FraudAnalysis.sp_AccountStatus_GetStatusByAccountNumber", accountNumber);
             return (CaseStatus?)result;
         }
 
@@ -243,13 +243,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus)
         {
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_InsertOrUpdate", accountNumber, caseStatus);
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_InsertOrUpdateStatus", accountNumber, caseStatus);
             return (recordsAffected > 0);
         }
 
         public bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus, AccountInfo accountInfo)
         {
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_InsertOrUpdate_with_AccountInfo", accountNumber, caseStatus, Vanrise.Common.Serializer.Serialize(accountInfo));
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_InsertOrUpdate", accountNumber, caseStatus, Vanrise.Common.Serializer.Serialize(accountInfo));
             return (recordsAffected > 0);
         }
 
@@ -257,7 +257,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             SuspicionOccuranceStatus occuranceStatus = (caseStatus.CompareTo(CaseStatus.Open) == 0 || caseStatus.CompareTo(CaseStatus.Pending) == 0) ? SuspicionOccuranceStatus.Open : SuspicionOccuranceStatus.Closed;
 
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_SetStatusToCaseStatus", accountNumber, caseID, occuranceStatus);
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_UpdateStatus", accountNumber, caseID, occuranceStatus);
             return (recordsAffected > 0);
         }
 
@@ -267,7 +267,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_CreateTempForCasesSummary", tempTableName, input.Query.FromDate, input.Query.ToDate);
+                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_GetStatusSummary", tempTableName, input.Query.FromDate, input.Query.ToDate);
             };
             return RetrieveData(input, createTempTableAction, CasesSummaryMapper);
         }
@@ -276,7 +276,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_CreateTempForDailyVolumeLooses", tempTableName, input.Query.FromDate, input.Query.ToDate);
+                ExecuteNonQuerySP("FraudAnalysis.sp_NormalCDR_GetSuspicionDailyVolume", tempTableName, input.Query.FromDate, input.Query.ToDate);
             };
             return RetrieveData(input, createTempTableAction, DailyVolumeLoosesMapper);
         }
@@ -285,7 +285,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_CreateTempForTopTenBTS", tempTableName, input.Query.FromDate, input.Query.ToDate);
+                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_GetTopTenBTS", tempTableName, input.Query.FromDate, input.Query.ToDate);
             };
             return RetrieveData(input, createTempTableAction, BTSCasesMapper);
         }
@@ -299,7 +299,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_CreateTempForTopTenHighValueBTS", tempTableName, input.Query.FromDate, input.Query.ToDate);
+                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_GetTopTenHighValueBTS", tempTableName, input.Query.FromDate, input.Query.ToDate);
             };
             return RetrieveData(input, createTempTableAction, BTSHighValueCasesMapper);
         }

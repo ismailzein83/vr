@@ -27,7 +27,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public void LoadCDR(DateTime from, DateTime to, int? batchSize, Action<CDR> onBatchReady)
         {
-            ExecuteReaderSP("FraudAnalysis.sp_NormalCDR_Load", (reader) =>
+            ExecuteReaderSP("FraudAnalysis.sp_NormalCDR_GetByConnectDateTime", (reader) =>
             {
 
 
@@ -82,7 +82,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_NormalCDR_CreateTempForFilteredNormalCDRs", tempTableName, input.Query.MSISDN, input.Query.FromDate, input.Query.ToDate);
+                ExecuteNonQuerySP("FraudAnalysis.sp_NormalCDR_CreateTempByMSISDN", tempTableName, input.Query.MSISDN, input.Query.FromDate, input.Query.ToDate);
             };
             return RetrieveData(input, createTempTableAction, NormalCDRMapper, _columnMapper);
         }

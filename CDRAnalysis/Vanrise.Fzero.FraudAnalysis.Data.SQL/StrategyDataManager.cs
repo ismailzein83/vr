@@ -19,12 +19,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public Strategy GetStrategy(int strategyId)
         {
-            return GetItemSP("FraudAnalysis.sp_Strategy_GetStrategy", StrategyMapper, strategyId);
+            return GetItemSP("FraudAnalysis.sp_Strategy_GetByID", StrategyMapper, strategyId);
         }
 
         public List<Strategy> GetStrategies(int PeriodId, bool? IsEnabled)
         {
-            return GetItemsSP("FraudAnalysis.sp_Strategy_GetStrategies", StrategyMapper, PeriodId, IsEnabled);
+            return GetItemsSP("FraudAnalysis.sp_Strategy_GetAllEnabledByPeriod", StrategyMapper, PeriodId, IsEnabled);
         }
 
         public BigResult<Strategy> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyResultQuery> input)
@@ -44,7 +44,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_CreateTempForFilteredStrategies", tempTableName, input.Query.Name, input.Query.Description, input.Query.PeriodsList, input.Query.UsersList, IsDefault, IsEnabled, input.Query.FromDate, input.Query.ToDate);
+                ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_CreateTempByFiltered", tempTableName, input.Query.Name, input.Query.Description, input.Query.PeriodsList, input.Query.UsersList, IsDefault, IsEnabled, input.Query.FromDate, input.Query.ToDate);
             };
 
           
@@ -97,7 +97,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public List<String> GetStrategyNames(List<int> strategyIds)
         {
-            return GetItemsSP("FraudAnalysis.sp_Strategy_GetStrategyNames", StrategyNameMapper, string.Join(",", strategyIds));
+            return GetItemsSP("FraudAnalysis.sp_Strategy_GetNamesByIDs", StrategyNameMapper, string.Join(",", strategyIds));
         }
 
         #region Private Methods
