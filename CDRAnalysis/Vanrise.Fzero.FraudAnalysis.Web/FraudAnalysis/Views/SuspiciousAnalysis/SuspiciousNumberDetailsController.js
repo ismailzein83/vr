@@ -214,7 +214,6 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                 .then(function (response) {
                     if (VRNotificationService.notifyOnItemUpdated("Account Case", response)) {
                         if ($scope.onAccountCaseUpdated != undefined) {
-                            console.log(response.UpdatedObject);
 
                             if (response.UpdatedObject.SuspicionLevelID != 0) {
                                 var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", response.UpdatedObject.SuspicionLevelID);
