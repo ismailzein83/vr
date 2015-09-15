@@ -353,7 +353,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     }
 
     function addStrategy() {
-        $scope.issaving = true;
         var strategyObject = buildStrategyObjFromScope();
 
         if (isValid(strategyObject)) {

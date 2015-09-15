@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-DashboardController.$inject = ['$scope', 'DashboardAPIService' ];
+DashboardController.$inject = ['$scope', 'UtilsService', 'DashboardAPIService'];
 
-function DashboardController($scope, DashboardAPIService) {
+function DashboardController($scope,UtilsService, DashboardAPIService) {
 
     var mainGridAPI_CasesSummary;
     var mainGridAPI_BTSCases;
@@ -137,7 +137,7 @@ function DashboardController($scope, DashboardAPIService) {
 
     function getMappedMappingResults() {
 
-        $scope.selectedMappingResults = getArrayEnum(Integration_MappingResultEnum);
+        $scope.selectedMappingResults = UtilsService.getArrayEnum(Integration_MappingResultEnum);
 
         var mappedMappingResults = [];
 
@@ -146,18 +146,6 @@ function DashboardController($scope, DashboardAPIService) {
         }
 
         return mappedMappingResults;
-    }
-
-    function getArrayEnum(enumObj) {
-        var array = [];
-
-        for (var item in enumObj) {
-            if (enumObj.hasOwnProperty(item)) {
-                array.push(enumObj[item]);
-            }
-        }
-
-        return array;
     }
 
     function getData_StrategyCases() {
