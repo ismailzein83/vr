@@ -35,170 +35,101 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             mapper.Add("SuspicionLevelDescription", "SuspicionLevelID");
             mapper.Add("AccountStatusDescription", "AccountStatusID");
 
-            return RetrieveData(input, (tempTableName) =>
+            Action<string> createTempTableAction = (tempTableName) =>
             {
-                string strategyIDs = null;
-                string suspicionLevelIDs = null;
-                string accountStatusIDs = null;
+                ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.AccountNumber, input.Query.StrategyIDs, input.Query.AccountStatusIDs, input.Query.SuspicionLevelIDs), (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromDate));
+                    cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.ToDate));
+                });
+            };
 
-                if (input.Query.StrategyIDs != null && input.Query.StrategyIDs.Count() > 0)
-                    strategyIDs = string.Join<int>(",", input.Query.StrategyIDs);
-
-                if (input.Query.SuspicionLevelIDs != null && input.Query.SuspicionLevelIDs.Count() > 0)
-                    suspicionLevelIDs = string.Join(",", input.Query.SuspicionLevelIDs.Select(n => ((int)n).ToString()).ToArray());
-
-                if (input.Query.AccountStatusIDs != null && input.Query.AccountStatusIDs.Count() > 0)
-                    accountStatusIDs = string.Join(",", input.Query.AccountStatusIDs.Select(n => ((int)n).ToString()).ToArray());
-
-                ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_CreateTempByAccountNumberForSummaries", tempTableName, input.Query.AccountNumber, input.Query.FromDate, input.Query.ToDate, strategyIDs, accountStatusIDs, suspicionLevelIDs);
-
-            }, (reader) => AccountSuspicionSummaryMapper(reader), mapper);
+            return RetrieveData(input, createTempTableAction, AccountSuspicionSummaryMapper, mapper);
         }
 
-        private string CreateTempTableIfNotExists(string tempTableName, List<int> SelectedStrategyIDs, List<SuspicionLevel> SelectedSuspicionLevelIDs, List<CaseStatus> SelectedCaseStatusIDs)
+        private string CreateTempTableIfNotExists(string tempTableName, string accountNumber, List<int> strategyIDs, List<CaseStatus> accountStatusIDs, List<SuspicionLevel> suspicionLevelIDs)
         {
-            StringBuilder query = new StringBuilder();
+            StringBuilder query = new StringBuilder(@"
+                IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
+                BEGIN
+                
+                SELECT
+			        accStatus.AccountNumber,
+			        MAX(sed.SuspicionLevelID) AS SuspicionLevelID,
+			        CASE WHEN accStatus.[Status] IN (1, 2) THEN SUM (CASE WHEN sed.SuspicionOccuranceStatus = 1 THEN 1 ELSE 0 END) ELSE COUNT(*) END AS NumberOfOccurances,
+			        MAX(se.ExecutionDate) AS LastOccurance,
+			        accStatus.[Status] AS AccountStatusID
+		
+		        INTO #TEMP_TABLE_NAME#
+		
+		        FROM FraudAnalysis.AccountStatus accStatus
+		        LEFT JOIN FraudAnalysis.StrategyExecutionDetails sed ON accStatus.AccountNumber = sed.AccountNumber
+		        LEFT JOIN FraudAnalysis.StrategyExecution se ON se.ID = sed.StrategyExecutionID
+		
+                #WHERE_CLAUSE#
+		
+		        GROUP BY accStatus.AccountNumber, accStatus.[Status]
 
-            if (SelectedCaseStatusIDs != null && !SelectedCaseStatusIDs.Contains(CaseStatus.Open) && !SelectedCaseStatusIDs.Contains(CaseStatus.Pending))
-            {
-                query.Append(@"
-                    IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
-                        BEGIN
-			                SELECT
-				                sed.AccountNumber,
-				                MAX(sed.SuspicionLevelID) AS SuspicionLevelID,
-				                COUNT(*) AS NumberOfOccurances,
-				                MAX(se.ExecutionDate) AS LastOccurance,
-				                accStatus.[Status] AS AccountStatusID
-
-                            INTO #RESULT
-
-			                FROM FraudAnalysis.AccountStatus accStatus 
-			                LEFT JOIN FraudAnalysis.StrategyExecutionDetails sed ON accStatus.AccountNumber = sed.AccountNumber
-			                LEFT JOIN FraudAnalysis.StrategyExecution se ON se.ID = sed.StrategyExecutionID
-			                LEFT JOIN OpenAccounts openAcc ON openAcc.AccountNumber = sed.AccountNumber
-
-			                WHERE openAcc.AccountNumber IS NULL AND accStatus.Status IN (3, 4) --3: Fraud, 4: WhiteList
-				                AND se.FromDate >= @From
-				                AND se.FromDate <= @To
-				                #COMMON_WHERE_CLAUSE_CONDITIONS#
-
-			                GROUP BY sed.AccountNumber, accStatus.[Status]
-
-                            DECLARE @sql VARCHAR(1000)
-		                    SET @sql = 'SELECT * INTO #TEMP_TABLE_NAME# FROM #RESULT';
-		                    EXEC(@sql)
-                        END
-                ");
-            }
-            else if (SelectedCaseStatusIDs != null && !SelectedCaseStatusIDs.Contains(CaseStatus.ClosedFraud) && !SelectedCaseStatusIDs.Contains(CaseStatus.ClosedWhiteList))
-            {
-                query.Append(@"
-                    IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
-                        BEGIN
-			                SELECT
-				                sed.AccountNumber,
-				                MAX(sed.SuspicionLevelID) AS SuspicionLevelID,
-				                COUNT(*) AS NumberOfOccurances,
-				                MAX(se.ExecutionDate) AS LastOccurance,
-				                CASE WHEN ISNULL(accStatus.[Status], 0) IN (0, 2) THEN ISNULL(accStatus.[Status], 0) ELSE 0 END AS AccountStatusID
-
-                            INTO #RESULT
-
-			                FROM FraudAnalysis.StrategyExecutionDetails sed
-			                INNER JOIN FraudAnalysis.StrategyExecution se ON se.ID = sed.StrategyExecutionID
-			                LEFT JOIN FraudAnalysis.AccountStatus accStatus ON accStatus.AccountNumber = sed.AccountNumber
-
-			                WHERE sed.SuspicionOccuranceStatus = 0
-				                AND se.FromDate >= @From
-				                AND se.FromDate <= @To
-                                #COMMON_WHERE_CLAUSE_CONDITIONS#
-
-			                GROUP BY sed.AccountNumber, accStatus.[Status]
-
-                            DECLARE @sql VARCHAR(1000)
-		                    SET @sql = 'SELECT * INTO #TEMP_TABLE_NAME# FROM #RESULT';
-		                    EXEC(@sql)
-                        END
-                ");
-            }
-            else
-            {
-                query.Append(@"
-                    IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
-                        BEGIN
-                            WITH OpenAccounts AS
-		                    (
-			                    SELECT
-				                    sed.AccountNumber,
-				                    MAX(sed.SuspicionLevelID) AS SuspicionLevelID,
-				                    COUNT(*) AS NumberOfOccurances,
-				                    MAX(se.ExecutionDate) AS LastOccurance,
-				                    CASE WHEN ISNULL(accStatus.[Status], 0) IN (0, 2) THEN ISNULL(accStatus.[Status], 0) ELSE 0 END AS AccountStatusID
-			  
-			                    FROM FraudAnalysis.StrategyExecutionDetails sed
-			                    INNER JOIN FraudAnalysis.StrategyExecution se ON se.ID = sed.StrategyExecutionID
-			                    LEFT JOIN FraudAnalysis.AccountStatus accStatus ON accStatus.AccountNumber = sed.AccountNumber
-
-			                    WHERE sed.SuspicionOccuranceStatus = 0
-				                    AND se.FromDate >= @From
-				                    AND se.FromDate <= @To
-				                    #COMMON_WHERE_CLAUSE_CONDITIONS#
-
-			                    GROUP BY sed.AccountNumber, accStatus.[Status]
-		                    ),
-		      
-		                    ClosedAccounts AS
-		                    (
-			                    SELECT
-				                    sed.AccountNumber,
-				                    MAX(sed.SuspicionLevelID) AS SuspicionLevelID,
-				                    COUNT(*) AS NumberOfOccurances,
-				                    MAX(se.ExecutionDate) AS LastOccurance,
-				                    accStatus.[Status] AS AccountStatusID
-
-			                    FROM FraudAnalysis.AccountStatus accStatus 
-			                    LEFT JOIN FraudAnalysis.StrategyExecutionDetails sed ON accStatus.AccountNumber = sed.AccountNumber
-			                    LEFT JOIN FraudAnalysis.StrategyExecution se ON se.ID = sed.StrategyExecutionID
-			                    LEFT JOIN OpenAccounts openAcc ON openAcc.AccountNumber = sed.AccountNumber 
-
-			                    WHERE openAcc.AccountNumber IS NULL AND accStatus.Status IN (3, 4) --3: Fraud, 4: WhiteList
-				                    AND se.FromDate >= @From
-				                    AND se.FromDate <= @To
-				                    #COMMON_WHERE_CLAUSE_CONDITIONS#
-
-			                    GROUP BY sed.AccountNumber, accStatus.[Status]
-		                    )
-
-		                    SELECT * INTO #RESULT
-		                    FROM (SELECT * FROM OpenAccounts UNION SELECT * FROM ClosedAccounts) AllAccounts
-		                    WHERE AllAccounts.AccountStatusID = 0
-
-                            DECLARE @sql VARCHAR(1000)
-		                    SET @sql = 'SELECT * INTO #TEMP_TABLE_NAME# FROM #RESULT';
-		                    EXEC(@sql)
-                        END
-                ");
-            }
-
+                END
+            ");
+            
             query.Replace("#TEMP_TABLE_NAME#", tempTableName);
-            query.Replace("#COMMON_WHERE_CLAUSE_CONDITIONS#", GetCommonWhereClauseConditions(SelectedSuspicionLevelIDs));
+            query.Replace("#WHERE_CLAUSE#", GetWhereClause(accountNumber, strategyIDs, accountStatusIDs, suspicionLevelIDs));
 
             return query.ToString();
         }
 
-        private string GetCommonWhereClauseConditions(List<SuspicionLevel> SelectedSuspicionLevelIDs)
+        private string GetWhereClause(string accountNumber, List<int> strategyIDs, List<CaseStatus> accountStatusIDs, List<SuspicionLevel> suspicionLevelIDs)
         {
-            StringBuilder conditions = new StringBuilder();
+            StringBuilder whereClause = new StringBuilder();
 
-            if (SelectedSuspicionLevelIDs != null && SelectedSuspicionLevelIDs.Count > 0)
-            {
+            whereClause.Append("WHERE se.ExecutionDate >= @FromDate AND se.ExecutionDate <= @ToDate");
 
-                string selectedSuspicionLevelIDs = string.Join(",", SelectedSuspicionLevelIDs.Select(n => ((int)n).ToString()).ToArray());
-                conditions.Append("AND sed.SuspicionLevelID IN (" + selectedSuspicionLevelIDs + ")");
-            }
+            if (accountNumber != null)
+                whereClause.Append(" AND sed.AccountNumber = @AccountNumber");
 
-            return conditions.ToString();
+            if (strategyIDs != null)
+                whereClause.Append(" AND se.StrategyID IN (" + GetCommaSeparatedList(strategyIDs) + ")");
+
+            if (accountStatusIDs != null)
+                whereClause.Append(" AND accStatus.[Status] IN (" + GetCommaSeparatedList(GetCaseStatusListAsIntList(accountStatusIDs)) + ")");
+
+            if (suspicionLevelIDs != null)
+                whereClause.Append(" AND sed.SuspicionLevelID IN (" + GetCommaSeparatedList(GetSuspicionLevelListAsIntList(suspicionLevelIDs)) + ")");
+
+            return whereClause.ToString();
+        }
+
+        private string GetCommaSeparatedList<T>(IEnumerable<T> items)
+        {
+            if (items == null) return null;
+
+            if (typeof(T) == typeof(int))
+                return string.Join(",", items);
+            else
+                return "'" + string.Join("', '", items) + "'";
+        }
+
+        // ra23a... ba3rif
+        private List<int> GetCaseStatusListAsIntList(List<CaseStatus> items)
+        {
+            List<int> list = new List<int>();
+
+            foreach (CaseStatus item in items)
+                list.Add((int)item);
+            
+            return list;
+        }
+
+        // ra23a... ba3rif
+        private List<int> GetSuspicionLevelListAsIntList(List<SuspicionLevel> items)
+        {
+            List<int> list = new List<int>();
+
+            foreach (SuspicionLevel item in items)
+                list.Add((int)item);
+
+            return list;
         }
 
         #endregion
@@ -246,7 +177,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public AccountSuspicionSummary GetAccountSuspicionSummaryByAccountNumber(string accountNumber, DateTime from, DateTime to)
         {
-            return GetItemSP("FraudAnalysis.sp_StrategyExecutionDetails_GetSummaryByAccountNumber", AccountSuspicionSummaryMapper, accountNumber, from, to);
+            return GetItemSP("FraudAnalysis.sp_AccountStatus_GetSummaryByAccountNumber", AccountSuspicionSummaryMapper, accountNumber, from, to);
         }
 
         public List<RelatedNumber> GetRelatedNumbersByAccountNumber(string accountNumber)

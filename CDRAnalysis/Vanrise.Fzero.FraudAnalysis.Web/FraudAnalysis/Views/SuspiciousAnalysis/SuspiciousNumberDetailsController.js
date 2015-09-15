@@ -215,14 +215,14 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                     if (VRNotificationService.notifyOnItemUpdated("Account Case", response)) {
                         if ($scope.onAccountCaseUpdated != undefined) {
 
-                            if (response.UpdatedObject.AccountNumber != null) {
+                            //if (response.UpdatedObject.AccountNumber != null) {
 
                                 var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", response.UpdatedObject.SuspicionLevelID);
                                 response.UpdatedObject.SuspicionLevelDescription = suspicionLevel.description;
 
                                 var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", response.UpdatedObject.AccountStatusID);
                                 response.UpdatedObject.AccountStatusDescription = accountStatus.description;
-                            }
+                            //}
 
                             $scope.onAccountCaseUpdated(response.UpdatedObject);
                         }
@@ -402,7 +402,8 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                         $scope.caseStatuses = $scope.caseStatuses.splice(3); // remove the closed: white list option
 
                     var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", response);
-                    $scope.accountStatus = accountStatus.description;
+                    $scope.accountStatusID = response;
+                    $scope.accountStatusDescription = accountStatus.description;
                 }
             });
     }

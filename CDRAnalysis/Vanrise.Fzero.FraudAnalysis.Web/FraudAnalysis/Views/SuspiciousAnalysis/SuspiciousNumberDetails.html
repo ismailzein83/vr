@@ -11,7 +11,7 @@
 
                 <vr-columns width="normal">
                     <vr-label>Account Status: </vr-label>
-                    <vr-label isvalue>{{accountStatus}}</vr-label>
+                    <vr-label isvalue color="{{getCaseStatusColor({ StatusID: accountStatusID })}}">{{accountStatusDescription}}</vr-label>
                 </vr-columns>
             </vr-row>
 

@@ -65,8 +65,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
 
                 ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
-                AccountSuspicionSummary summary = dataManager.GetAccountSuspicionSummaryByAccountNumber(input.AccountNumber, input.FromDate, input.ToDate);
-                updateOperationOutput.UpdatedObject = (summary != null) ? summary : new AccountSuspicionSummary();
+                
+                updateOperationOutput.UpdatedObject = dataManager.GetAccountSuspicionSummaryByAccountNumber(input.AccountNumber, input.FromDate, input.ToDate);
+                //updateOperationOutput.UpdatedObject = (summary != null) ? summary : new AccountSuspicionSummary();
             }
 
             return updateOperationOutput;
