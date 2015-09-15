@@ -127,7 +127,7 @@
 
     };
  
-    var cellTemplate = '<div style="text-align: #TEXTALIGN#;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" >'
+    var cellTemplate = '<div style="text-align: #TEXTALIGN#;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" title="{{::$parent.ctrl.getColumnValue(colDef, dataItem) #CELLFILTER#}}" >'
         + ''
       + '<a ng-if="$parent.ctrl.isColumnClickable(colDef, dataItem)"  ng-class="::$parent.ctrl.getCellClass(colDef, dataItem)" ng-click="$parent.ctrl.onColumnClicked(colDef, dataItem)" style="cursor:pointer;"> {{::$parent.ctrl.getColumnValue(colDef, dataItem) #CELLFILTER#}}#PERCENTAGE#</a>'
       + '<span ng-if="(!$parent.ctrl.isColumnClickable(colDef, dataItem))" ng-style="::$parent.ctrl.getCellLayoutStyle()" ng-class="::$parent.ctrl.getCellClass(colDef, dataItem)"> {{::$parent.ctrl.getColumnValue(colDef, dataItem) #CELLFILTER#}}#PERCENTAGE#</span>'
@@ -206,8 +206,7 @@
             }
 
             colDef.onSort = function () {
-                
-                if (col.onSortChanged != undefined && !col.disableSorting) {
+                if (col.onSortChanged != undefined && col.disableSorting == false) {
                     
                     var sortDirection = colDef.sortDirection != "ASC" ? "ASC" : "DESC";
                     var promise = col.onSortChanged(colDef, sortDirection);//this function should return a promise in case it is getting data

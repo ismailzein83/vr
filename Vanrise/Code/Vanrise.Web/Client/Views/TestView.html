@@ -32,9 +32,15 @@
         </vr-columns>
 
         <vr-columns width="normal">
-            <vr-datetimepicker type="time" value="effectiveOn" label="Time On" onvaluechanged="testValueChanged()"></vr-datetimepicker>{{effectiveOn}}
+            <vr-datetimepicker type="dateTime" value="effectiveOn" label="Time from" ></vr-datetimepicker>{{effectiveOn}}
         </vr-columns>
-
+        <vr-columns width="normal">
+            <vr-datetimepicker type="dateTime" value="effectiveOn2" label="Time On" ></vr-datetimepicker>{{effectiveOn2}}
+        </vr-columns>
+        <vr-columns width="normal" ng-repeat="c in colorlist">
+            <vr-label color="{{c.color}}"> info test </vr-label>
+        </vr-columns>
+        {{colorlist.length}}
     </vr-row>
     <div class="row fileupload-buttonbar">
         <div class="col-lg-4">
@@ -111,85 +117,10 @@
 </vr-form>
 <vr-row>
     <vr-columns width="fullrow">
-        <div class="wrapper" style="display:none">
-            <div class="content">
-                <div class="box" style="width:50%">
-                    <div style="display:block;width:100%;height:50% ; border-bottom:1px solid">
-                        <div style=" display: table; position: relative; height: 100%; width: 100%;"><div style="display: table-cell; vertical-align: middle;">Average</div></div>
-                    </div>
-                    <div style="display:flex;width:100%;height:50% ;">
-                        <div style="display: inline-block; height: 100%; width: 100%; ">
-                            <div style=" display: table; position: relative; height: 100%; width: 100%;">
-                                <div style="display: table-cell; vertical-align: middle;">
-                                    In
-                                </div>
-                            </div>
-                        </div>
-                        <div style="display: inline-block;height:100%; width:100%; border-left: 1px solid;">
-
-                            <div style=" display: table; position: relative; height: 100%; width: 100%;">
-                                <div style="display: table-cell; vertical-align: middle;">
-                                    Out
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style="display: inline-block; height: 100%; width:100%; border-left: 1px solid;">
-
-                            <div style=" display: table; position: relative; height: 100%; width: 100%;">
-                                <div style="display: table-cell; vertical-align: middle;">
-                                    <label>xxx dd</label>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <!--<div class="box">
-                    <div class="vertical-text" get-style><label>Skills</label></div>
-                </div>
-                <div class="box">
-                    <div class="vertical-text" get-style><label>Resume sdfasd sdfasd </label></div>
-                </div>
-                <div class="box">
-                    <div class="vertical-text" get-style><label>contact</label></div>
-                </div>-->
-                <div class="box" style="width:50%">
-                    <div style="display:block;width:100%;height:50% ; border-bottom:1px solid">
-                        <div style=" display: table; position: relative; height: 100%; width: 100%;"><div style="display: table-cell; vertical-align: middle;">Average</div></div>
-                    </div>
-                    <div style="display:block;width:100%;height:50% ;">
-                        <div style="display: inline-block; height: 100%; width: 33%; margin-left: -3px; ">
-                            <div style=" display: table; position: relative; height: 100%; width: 100%;">
-                                <div style="display: table-cell; vertical-align: middle;">
-                                    In
-                                </div>
-                            </div>
-                        </div>
-                        <div style="display: inline-block;height:100%; width: 33%; border-left: 1px solid; margin-left: -3px;">
-
-                            <div style=" display: table; position: relative; height: 100%; width: 100%;">
-                                <div style="display: table-cell; vertical-align: middle;">
-                                    Out
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style="display: inline-block; height: 100%; width: 34%; border-left: 1px solid; margin-left: -3px; ">
-
-                            <div style=" display: table; position: relative; height: 100%; width: 100%;">
-                                <div style="display: table-cell; vertical-align: middle;">
-                                    xxx dd
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
+        <div class="wrapper" >
             <div class="content">
                 <div class="box">
-                    <div class="vertical-text" get-style><label>Skills</label></div>
+                    <div class="vertical-text" get-style pullrigth><label>Skills</label></div>
                 </div>
                 <div class="box">
                     <div style="display:block;width:100%;height:50% ; border-bottom:1px solid">
@@ -271,7 +202,7 @@
                     </div>
                 </div>
                 <div class="box">
-                    <div class="vertical-text" get-style><label>contact</label></div>
+                    <div class="vertical-text" get-style ><label>contact</label></div>
                 </div>
 
             </div>
@@ -309,11 +240,10 @@
                             </div>
                         </div>
                     </div>
-                    <div ng-if="b.type=='leaf' && b.rotated == true" >
-
-                        <!--<div style="display: table-cell; vertical-align: middle;">-->
-                            <div  ><label class="vertical-text">{{b.lable}}</label></div>
-                        <!--</div>-->
+                    <div ng-if="b.type=='leaf' && b.rotated == true" style=" display: block;  height: 100%; width: 100%;">
+                        <div class="vertical-text" get-style position="{{b.position}}"><label>{{b.lable}}</label></div>
+                                <!--<div>onther one</div>-->
+                        
                     </div>
                 </div>
             </div>
@@ -323,8 +253,8 @@
 </vr-row>
 <style>
     .content {
-        width: 100%;
-        height: 150px;
+        width: 70%;
+        height: 350px;
     }
 
         .content div {
@@ -359,8 +289,8 @@
         -moz-transform: rotate(-90deg);
         -webkit-transform: rotate(-90deg);
         transform: rotate(-90deg);
-        /*width: 33px;
-        -moz-transform-origin: center bottom;*/
+        width:33px;
+        -moz-transform-origin: center bottom;
         position: relative;
     }
 

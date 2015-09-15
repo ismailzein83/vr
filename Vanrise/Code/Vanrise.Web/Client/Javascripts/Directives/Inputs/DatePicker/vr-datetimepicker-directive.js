@@ -135,9 +135,22 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
             ctrl.updateModelOnKeyUp = function (e) {
                 var $this = angular.element(e.currentTarget);
                 if (moment($this.val(), format, true).isValid()) {
-                    setTimeout(function () {
-                        divDatePicker.data("DateTimePicker").date($this.val());
-                    }, 1)
+                    if (parseInt(new Date($this.val()).getFullYear()) < 1970) {
+                        setTimeout(function () {
+                            divDatePicker.data("DateTimePicker").date(new Date());
+                        }, 1)
+                    }
+
+                    else {
+                        setTimeout(function () {
+                            divDatePicker.data("DateTimePicker").date($this.val());
+                        }, 1)
+                    }
+
+                }
+                else {
+
+                    divDatePicker.data("DateTimePicker").date(new Date());
                 }
 
             }

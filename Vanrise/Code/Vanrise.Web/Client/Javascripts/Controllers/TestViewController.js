@@ -1,6 +1,6 @@
 ﻿'use strict'
 
-var TestViewController = function ($scope, $http, ValuesAPIService, $timeout) {
+var TestViewController = function ($scope, $http, ValuesAPIService, $timeout, UtilsService, LabelColorsEnum) {
     
     $scope.timeObj = {
         hours: 23,
@@ -19,6 +19,14 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout) {
     $scope.doc =  {
         fileId : 1
     };
+    $scope.colorlist = [];
+    for (var prop in LabelColorsEnum) {
+        $scope.colorlist.push(LabelColorsEnum[prop]);
+    }
+    console.log($scope.colorlist)
+    $scope.getColor = function () {
+        return LabelColorsEnum.Info.color;
+    }
     $scope.progress =[];
     $scope.progress.push(10);
     $scope.progress.push(20);
@@ -79,6 +87,13 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout) {
 
     };
     $scope.listData = [];
+    $scope.effectiveOn = new Date();
+    setTimeout(function () {
+        $scope.$apply(function () {
+            $scope.effectiveOn2 = UtilsService.cloneDateTime($scope.effectiveOn);
+            console.log()
+        })
+    },2000)
     $scope.headers = ["value","name"];
     for (var i = 0 ; i < 5 ; i++) {
         $scope.listData[$scope.listData.length] = { value: i + 1, name: "test " + (i + 1) };
@@ -165,42 +180,19 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout) {
     $scope.choiceSelectionChanged = function () {
         //console.log($scope.testObj);
     };
-    $scope.groupeHeaders = [
-        { lable: "test", type: "leaf", rotated: false },
-        { lable: "test 2", type: "leaf", rotated: true },
-        { lable: "test 2", type: "leaf", rotated: true },
-        { lable: "test 2", type: "leaf", rotated: true },
-        { lable: "test 2", type: "leaf", rotated: true },
-        { lable: "test 2", type: "leaf", rotated: true },
-        {
-            lable: "test 3", type: "root", rotated: false,
-            groupe: [
-                { lable: "leaf 1", type: "leaf", rotated: false },
-                { lable: "leaf 2", type: "leaf", rotated: false },
-            ]
-        },
-        {
-            lable: "test 3", type: "root", rotated: false,
-            groupe: [
-                { lable: "leaf 1", type: "leaf", rotated: false },
-                { lable: "leaf 2", type: "leaf", rotated: false },
-            ]
-        },
-        { lable: "test", type: "leaf", rotated: false },
-        { lable: "test 2", type: "leaf", rotated: true },
-        { lable: "test 2", type: "leaf", rotated: true },
-        { lable: "test 2", type: "leaf", rotated: true },
-        { lable: "test 2", type: "leaf", rotated: true },
-        { lable: "test 2", type: "leaf", rotated: true },
-        { lable: "test 2", type: "leaf", rotated: true }
-        ,
-        { lable: "test", type: "leaf", rotated: false },
-        { lable: "test 2 gggg fgfff", type: "leaf", rotated: true }
-        //{ lable: "test 2", type: "leaf", rotated: true },
-        //{ lable: "test 2", type: "leaf", rotated: true },
-        //{ lable: "test 2", type: "leaf", rotated: true },
-        //{ lable: "test 2", type: "leaf", rotated: true },
-        //{ lable: "test 2", type: "leaf", rotated: true }
+    $scope.groupeHeaders = [       
+        { lable: "test 2", type: "leaf", rotated: true, position: "pulltop pullleft " },
+        { lable: "www", type: "leaf", rotated: true, position: " pullleft " },
+        { lable: "wfrwfwcvscdsw", type: "leaf", rotated: true, position: "pullbottom pullleft " },
+        { lable: "sfsdf", type: "leaf", rotated: true, position: "pulltop pullrigth " },
+        { lable: "sddddddd", type: "leaf", rotated: true, position: "pullrigth pullbottom " },
+        { lable: "Gammaracanthuskytodermogammarus loricatobaicalensis", type: "leaf", rotated: true, position: "" },
+        { lable: "dddd ddd dddd ddd", type: "leaf", rotated: true, position: "pullbottom pullrigth " },
+        { lable: "sdfasd asfdasf asdfasvf", type: "leaf", rotated: true, position: " pullrigth " },
+        { lable: "d", type: "leaf", rotated: true, position: "pulltop pullleft " },
+        { lable: "sdafasfasdfsd sfasdfsdsd", type: "leaf", rotated: true, position: "pullbottom pullleft " },
+        { lable: "33 33 33cv 33", type: "leaf", rotated: true, position: "pullrigth pullbottom " },
+        { lable: "eee ffff 55555 ", type: "leaf", rotated: true, position: "" }
 
 
     ];
@@ -250,17 +242,71 @@ appControllers.controller('TestViewController', TestViewController);
 
 app.directive("getStyle",function(){
     return{
-        link: function (scope, element) {
+        link: function (scope, element, attrs) {
           
-            var dom = element[0];
-            var selw = $(element).width();
-            var parent = $(element).parent();
-            var ph = $(parent).height();
-            var pw = $(parent).width();
-            var h = dom.scrollWidth;
-            var w = dom.scrollHeight;
-            element[0].style.top = (100 * ((ph - 25 ) - ((ph - h) / 2))) / ph + "%";
-            element[0].style.left = (100 * ((pw - (w/2)) / 2)) / pw + "%";
+
+
+
+            setTimeout(function () {
+              
+                var dom = element[0];
+                var selw = $(element).width();
+                var parent = $(element).parent();
+                var ph = $(parent).height();
+                var pw = $(parent).width();
+                var h = dom.scrollWidth;
+                var w = dom.scrollHeight;
+                var pos = [];
+                if (attrs.position != undefined && attrs.position!="") {
+                    pos = attrs.position.split(" ");
+
+                }
+                if (pos.indexOf("pullbottom") > -1 )
+                    element[0].style.top = (100 * ((ph - 33))) / ph + "%"; // bottom formular
+                else if (pos.indexOf("pulltop") > -1)
+                    element[0].style.top = (100 * ((ph - (ph - h) ) - 33)) / ph + "%"; //  top formula 
+                else
+                    element[0].style.top = (100 * ((ph - 33) - ((ph - h) / 2))) / ph + "%"; // center  formula
+
+
+
+                if (pos.indexOf("pullrigth") > -1)
+                    element[0].style.left = (100 * ((pw) - (w))) / pw + "%";
+
+                else if (pos.indexOf("pullleft") > -1)
+                        element[0].style.left =  "0%";
+                else
+                   element[0].style.left = (100 * ((pw / 2) - (w / 3))) / pw + "%";
+
+            }, 1)
+
+            //setTimeout(function () {
+
+            //    var dom = element[0];
+            //    var selw = $(element).width();
+            //    var parent = $(element).parent();
+            //    var ph = $(parent).height();
+            //    var pw = $(parent).width();
+            //    var h = dom.scrollWidth;
+            //    var w = dom.scrollHeight;
+
+            //    if (attrs.pullbottom != undefined)
+            //        element[0].style.top = (100 * ((ph))) / ph + "%"; // bottom formular
+            //    else if (attrs.pulltop != undefined)
+            //        element[0].style.top = (100 * ((ph - (ph - h)) )) / ph + "%"; //  top formula 
+            //    else
+            //        element[0].style.top = (100 * ((ph ) - ((ph - h) / 2))) / ph + "%"; // center  formula
+
+            //    if (attrs.pullrigth != undefined)
+            //        element[0].style.left = (100 * ((pw) - (w))) / pw + "%";
+
+            //    else if (attrs.pullleft != undefined)
+            //        element[0].style.left = "0%";
+
+            //    else
+            //        element[0].style.left = (100 * ((pw / 2) - (w / 3))) / pw + "%";
+
+            //}, 1)
 
             //parent[0].style.backgroundColor = scope.getCellcolor();
 
