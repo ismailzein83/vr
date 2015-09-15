@@ -269,7 +269,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         }
 
         $scope.toggleValidTill = function (selectedStatus) {
-            $scope.whiteListSelected = (selectedStatus != undefined && selectedStatus.value == CaseStatusEnum.ClosedWhitelist.value) ? true : false;
+            $scope.whiteListSelected = (selectedStatus != undefined && selectedStatus.value == CaseStatusEnum.ClosedWhitelist.value);
         }
         
         $scope.onReasonChanged = function () {

@@ -35,7 +35,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public BigResult<AccountSuspicionSummary> GetFilteredAccountSuspicionSummaries(Vanrise.Entities.DataRetrievalInput<AccountSuspicionSummaryQuery> input)
         {
-           
+
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.AccountNumber, input.Query.StrategyIDs, input.Query.AccountStatusIDs, input.Query.SuspicionLevelIDs), (cmd) =>
@@ -73,7 +73,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
                 END
             ");
-            
+
             query.Replace("#TEMP_TABLE_NAME#", tempTableName);
             query.Replace("#WHERE_CLAUSE#", GetWhereClause(accountNumber, strategyIDs, accountStatusIDs, suspicionLevelIDs));
 
@@ -111,7 +111,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 return "'" + string.Join("', '", items) + "'";
         }
 
-        // ra23a... ba3rif
         private List<int> GetCaseStatusListAsIntList(List<CaseStatus> items)
         {
             List<int> list = new List<int>();
@@ -122,7 +121,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return list;
         }
 
-        // ra23a... ba3rif
+
         private List<int> GetSuspicionLevelListAsIntList(List<SuspicionLevel> items)
         {
             List<int> list = new List<int>();
@@ -137,7 +136,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public BigResult<AccountSuspicionDetail> GetFilteredAccountSuspicionDetails(Vanrise.Entities.DataRetrievalInput<AccountSuspicionDetailQuery> input)
         {
-           
+
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByAccountNumber", tempTableName, input.Query.AccountNumber, input.Query.FromDate, input.Query.ToDate);
@@ -148,7 +147,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public BigResult<AccountCase> GetFilteredCasesByAccountNumber(Vanrise.Entities.DataRetrievalInput<AccountCaseResultQuery> input)
         {
-           
+
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_CreateTempByAccountNumber", tempTableName, input.Query.AccountNumber);
@@ -159,7 +158,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public BigResult<AccountSuspicionDetail> GetFilteredDetailsByCaseID(Vanrise.Entities.DataRetrievalInput<CaseDetailQuery> input)
         {
-          
+
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
@@ -202,7 +201,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public BigResult<AccountCaseLog> GetFilteredAccountCaseLogsByCaseID(Vanrise.Entities.DataRetrievalInput<AccountCaseLogResultQuery> input)
         {
-           
+
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
