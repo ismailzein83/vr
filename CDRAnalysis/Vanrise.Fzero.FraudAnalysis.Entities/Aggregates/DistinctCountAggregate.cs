@@ -15,8 +15,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         Func<CDR, Object> _cdrExpressionToCountDistinct;
         HashSet<Object> _distinctItems = new HashSet<Object>();
 
-        Dictionary<INumberProfileParameters, DistinctCountAggregateStrategyInfo> _strategiesInfo;
-        IEnumerable<INumberProfileParameters> _parameters;
+        Dictionary<INumberProfileParameters, DistinctCountAggregateStrategyInfo> _strategiesInfo = new Dictionary<INumberProfileParameters, DistinctCountAggregateStrategyInfo>();
        
 
         public DistinctCountAggregate(Func<CDR, Object> cdrExpressionToCountDistinct, Func<CDR, bool> condition)
@@ -29,8 +28,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         {
             this._cdrExpressionToCountDistinct = cdrExpressionToCountDistinct;
             this._conditionWithStrategy = condition;
-            _parameters = parameters;
-            foreach (var strategy in _parameters)
+            foreach (var strategy in parameters)
                 _strategiesInfo.Add(strategy, new DistinctCountAggregateStrategyInfo());
         }
 

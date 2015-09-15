@@ -44,16 +44,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         }
 
 
-
-        private class AverageAggregateStrategyInfo
-        {
-            public decimal Sum { get; set; }
-            public decimal Count { get; set; }
-        }
-        
-
-
-
     }
 
 

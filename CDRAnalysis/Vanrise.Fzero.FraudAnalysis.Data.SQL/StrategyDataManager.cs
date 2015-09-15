@@ -56,8 +56,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             object id;
             int recordesEffected = ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_Insert", out id,
                 strategyObject.UserId,
-                !string.IsNullOrEmpty(strategyObject.Name) ? strategyObject.Name : null,
-                !string.IsNullOrEmpty(strategyObject.Description) ? strategyObject.Description : null,
+                strategyObject.Name,
+                strategyObject.Description,
                 DateTime.Now,
                 strategyObject.IsDefault,
                 strategyObject.IsEnabled,
@@ -82,7 +82,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public bool UpdateStrategy(Strategy strategyObject)
         {
-
             int recordesEffected = ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_Update",
                 strategyObject.Id,
                  strategyObject.UserId,
@@ -93,9 +92,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 strategyObject.IsEnabled,
                 strategyObject.PeriodId,
                 Vanrise.Common.Serializer.Serialize(strategyObject));
-            if (recordesEffected > 0)
-                return true;
-            return false;
+            return (recordesEffected > 0);
         }
 
         public List<String> GetStrategyNames(List<int> strategyIds)
@@ -107,7 +104,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         private Strategy StrategyMapper(IDataReader reader)
         {
-            var strategy = Vanrise.Common.Serializer.Deserialize<Strategy>(GetReaderValue<string>(reader, "StrategyContent"));
+            var strategy = Vanrise.Common.Serializer.Deserialize<Strategy>(reader["StrategyContent"] as string);
             strategy.Id = (int)reader["Id"];
             strategy.UserId = (int)reader["UserId"];
             return strategy;
