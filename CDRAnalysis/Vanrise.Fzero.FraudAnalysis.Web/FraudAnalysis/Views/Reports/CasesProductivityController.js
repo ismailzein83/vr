@@ -33,7 +33,6 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
 
         $scope.selectedStrategies = [];
 
-
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
         };
@@ -51,14 +50,14 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
         }
 
         $scope.onGroupDailyChanged = function () {
-            return retrieveData();
+            if ($scope.showGrid)
+                return retrieveData();
         }
     }
 
     function load() {
 
     }
-
 
     function loadStrategies() {
         var periodId = 0; // all periods
@@ -69,8 +68,6 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
             });
         });
     }
-
-
 
     function removeLastComma(strng) {
         var n = strng.lastIndexOf(",");
@@ -97,4 +94,5 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
         return mainGridAPI.retrieveData(query);
     }
 }
+
 appControllers.controller('FraudAnalysis_CasesProductivityController', CasesProductivityController);

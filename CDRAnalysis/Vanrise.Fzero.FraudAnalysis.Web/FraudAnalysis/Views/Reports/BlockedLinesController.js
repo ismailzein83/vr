@@ -10,7 +10,6 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
     defineScope();
     load();
 
-
     function defineScope() {
 
         $scope.showGrid = false;
@@ -36,10 +35,10 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
         $scope.selectedStrategies = [];
         $scope.accountNumbers = [];
 
-
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
         };
+
         $scope.searchClicked = function () {
             $scope.showGrid = true;
             return retrieveData();
@@ -53,7 +52,8 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
         }
 
         $scope.onGroupDailyChanged = function () {
-            return retrieveData();
+            if ($scope.showGrid)
+                return retrieveData();
         }
 
         defineMenuActions();
@@ -91,7 +91,6 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
         VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/Reports/BlockedLinesDetails.html", params, settings);
     }
 
-
     function loadStrategies() {
         var periodId = 0; // all periods
         var isEnabled = ''; // all enabled and disabled
@@ -101,8 +100,6 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
             });
         });
     }
-
-
 
     function removeLastComma(strng) {
         var n = strng.lastIndexOf(",");
@@ -129,4 +126,5 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
         return mainGridAPI.retrieveData(query);
     }
 }
+
 appControllers.controller('FraudAnalysis_BlockedLinesController', BlockedLinesController);
