@@ -47,9 +47,12 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
                 .then(function (response) {
 
                     angular.forEach(response.Data, function (item) {
-                        var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", item.SuspicionLevelID);
-                        item.SuspicionLevelDescription = suspicionLevel.description;
 
+                        if (item.SuspicionLevelID != 0) {
+                            var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", item.SuspicionLevelID);
+                            item.SuspicionLevelDescription = suspicionLevel.description;
+                        }
+                        
                         var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", item.AccountStatusID);
                         item.AccountStatusDescription = accountStatus.description;
                     });

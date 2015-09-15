@@ -11,7 +11,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public string AccountNumber { get; set; }
         public SuspicionLevel SuspicionLevelID { get; set; }
         public int NumberOfOccurances { get; set; }
-        public DateTime LastOccurance { get; set; }
+        public DateTime? LastOccurance { get; set; }
         public CaseStatus AccountStatusID { get; set; }
     }
 }

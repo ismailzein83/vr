@@ -83,10 +83,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             StringBuilder whereClause = new StringBuilder();
 
-            whereClause.Append("WHERE se.ExecutionDate >= @FromDate AND se.ExecutionDate <= @ToDate");
+            whereClause.Append("WHERE (se.ExecutionDate IS NULL OR (se.ExecutionDate >= @FromDate AND se.ExecutionDate <= @ToDate))");
 
             if (accountNumber != null)
-                whereClause.Append(" AND sed.AccountNumber = @AccountNumber");
+                whereClause.Append(" AND accStatus.AccountNumber = '" + accountNumber + "'");
 
             if (strategyIDs != null)
                 whereClause.Append(" AND se.StrategyID IN (" + GetCommaSeparatedList(strategyIDs) + ")");
@@ -326,9 +326,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             var summary = new AccountSuspicionSummary();
 
             summary.AccountNumber = reader["AccountNumber"] as string;
-            summary.SuspicionLevelID = (SuspicionLevel)reader["SuspicionLevelID"];
+            summary.SuspicionLevelID = GetReaderValue<SuspicionLevel>(reader, "SuspicionLevelID");
             summary.NumberOfOccurances = (int)reader["NumberOfOccurances"];
-            summary.LastOccurance = (DateTime)reader["LastOccurance"];
+            summary.LastOccurance = GetReaderValue<DateTime?>(reader, "LastOccurance");
             summary.AccountStatusID = GetReaderValue<CaseStatus>(reader, "AccountStatusID");
 
             return summary;

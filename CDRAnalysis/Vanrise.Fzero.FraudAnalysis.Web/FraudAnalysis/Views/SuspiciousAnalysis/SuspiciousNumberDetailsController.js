@@ -214,15 +214,15 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                 .then(function (response) {
                     if (VRNotificationService.notifyOnItemUpdated("Account Case", response)) {
                         if ($scope.onAccountCaseUpdated != undefined) {
+                            console.log(response.UpdatedObject);
 
-                            //if (response.UpdatedObject.AccountNumber != null) {
-
+                            if (response.UpdatedObject.SuspicionLevelID != 0) {
                                 var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", response.UpdatedObject.SuspicionLevelID);
                                 response.UpdatedObject.SuspicionLevelDescription = suspicionLevel.description;
+                            }
 
-                                var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", response.UpdatedObject.AccountStatusID);
-                                response.UpdatedObject.AccountStatusDescription = accountStatus.description;
-                            //}
+                            var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", response.UpdatedObject.AccountStatusID);
+                            response.UpdatedObject.AccountStatusDescription = accountStatus.description;
 
                             $scope.onAccountCaseUpdated(response.UpdatedObject);
                         }
