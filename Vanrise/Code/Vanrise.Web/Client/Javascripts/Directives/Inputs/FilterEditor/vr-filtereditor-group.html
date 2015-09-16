@@ -23,10 +23,12 @@
     </dt>
     <dd class="rules-group-body">
         <ul class="rules-list">
-            <vr-filtereditor-rule ng-repeat="rule in ctrl.rules" filters="ctrl.filters" deleterule="rule.deleteRule" outputfilter="rule.filter"></vr-filtereditor-rule>
-            <div ng-repeat="group in ctrl.groups">
-                <vr-directivewrapper directive="'vr-filtereditor-group'" filters="group.filters" maingroup="'false'" result="group.rules" ondelete="group.deleteGroup"></vr-directivewrapper>
+            <vr-filtereditor-rule ng-repeat='(key, rule) in ctrl.rules track by key' filters="ctrl.filters" deleterule="rule.deleteRule" outputfilter="rule.filter"></vr-filtereditor-rule>
+
+            <div ng-repeat="(key, group) in ctrl.groups track by key">
+                <vr-directivewrapper directive="'vr-filtereditor-group'" filters="scopeFilters" maingroup="'false'" result="group.rules" ondelete="group.deleteGroup"></vr-directivewrapper>
             </div>
+
         </ul>
     </dd>
 </dl>

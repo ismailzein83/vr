@@ -147,7 +147,8 @@
             <vr-filtereditor-group filters="ctrl.filters" maingroup="true" result="ctrl.result"></vr-filtereditor-group>
         </div>
 
-        {{ctrl.getResult()}}
+        <span ng-if="ctrl.showresult">{{ctrl.getResult()}}</span>
+        
     </vr-columns>
 
 </vr-row>

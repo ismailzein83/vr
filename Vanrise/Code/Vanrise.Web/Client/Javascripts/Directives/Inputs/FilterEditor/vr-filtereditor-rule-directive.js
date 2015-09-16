@@ -2,8 +2,6 @@
 
     "use strict";
 
-    vrDirectiveObj.$inject = ['FilterEditorInputEnum', 'FilterEditorFieldTypeEnum', 'FilterEditorOperatorEnum', 'FilterEditorInputTypeEnum'];
-
     function vrDirectiveObj(inputEnum , typeEnum,operatorEnum , inputTypeEnum) {
 
         return {
@@ -17,10 +15,24 @@
             controller: function ($scope) {
                 var ctrl = this;
                 
+                function getField(filter) {
+                    if (filter) {
+                        return filter.field;
+                    }
+                    return undefined;
+                }
+
+                function getOperator(operator) {
+                    if (operator) {
+                        return operator.value;
+                    }
+                    return undefined;
+                }
+
                 function setOutput() {
                     ctrl.outputfilter = {
-                        field: ctrl.selectedFilter,
-                        operator: ctrl.selectedOperator
+                        field: getField(ctrl.selectedFilter),
+                        operator: getOperator(ctrl.selectedOperator)
                     };
 
                     if ((ctrl.filterInput === ctrl.inputEnum.Select) && (ctrl.hasInput)) {
@@ -37,20 +49,23 @@
                     }
                 }
 
-                $scope.$watch('ctrl.switchValue', function (newValue) {
-                    ctrl.switchValue = newValue;
-                    setOutput();
-                });
+                function watch() {
 
-                $scope.$watch('ctrl.inputValueFrom', function (newValue) {
-                    ctrl.inputValueFrom = newValue;
-                    setOutput();
-                });
+                    $scope.$watch('ctrl.switchValue', function (newValue) {
+                        ctrl.switchValue = newValue;
+                        setOutput();
+                    });
 
-                $scope.$watch('ctrl.inputValueTo', function (newValue) {
-                    ctrl.inputValueTo = newValue;
-                    setOutput();
-                });
+                    $scope.$watch('ctrl.inputValueFrom', function (newValue) {
+                        ctrl.inputValueFrom = newValue;
+                        setOutput();
+                    });
+
+                    $scope.$watch('ctrl.inputValueTo', function (newValue) {
+                        ctrl.inputValueTo = newValue;
+                        setOutput();
+                    });
+                }
 
                 function onLoad() {
                     ctrl.inputEnum = inputEnum;
@@ -65,6 +80,7 @@
                     ctrl.selectedFilterValues = [];
                     ctrl.selectedFilter = ctrl.filters[0];
                     setOutput();
+                    watch();
                 }
                 
                 function getSelectOperator(selectedtype) {
@@ -140,7 +156,8 @@
         };
     }
 
-    
+    vrDirectiveObj.$inject = ['FilterEditorInputEnum', 'FilterEditorFieldTypeEnum', 'FilterEditorOperatorEnum', 'FilterEditorInputTypeEnum'];
+
     app.directive('vrFiltereditorRule', vrDirectiveObj);
 
 })(app);

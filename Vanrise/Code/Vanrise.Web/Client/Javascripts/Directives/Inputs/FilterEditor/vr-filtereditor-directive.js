@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function vrDirectiveObj() {
+    function vrDirectiveObj(operatorEnum, utilsService) {
         
         return {
             restrict: 'E',
@@ -10,15 +10,23 @@
             scope: {
                 filters: '=',
                 result: '=',
-                resultString:'='
+                resultString: '=',
+                showresult: '='
             },
             controller: function () {
                 var ctrl = this;
-                ctrl.resultString = "";
+                
+                function onLoad() {
+                    ctrl.resultString = "";
+                }
 
                 function getField(fieldName, operator, valueFrom, valueTo, condition) {
                     if (condition === undefined) condition = " ";
                     if (valueFrom === undefined) valueFrom = " ";
+                    
+                    operator = utilsService.getEnum(operatorEnum, "value", operator);
+
+                    if (operator) operator = operator.description;
 
                     if (valueTo === undefined)
                         return " ( " + fieldName + " " + operator + " " + valueFrom + " ) " + condition + " ";
@@ -27,39 +35,44 @@
                 }
 
                 function filterToString(filter) {
+                    
                     var rules = filter.rules;
                     var condition = filter.condition;
                     var result = "";
 
                     if (rules === undefined || rules === null) return "";
+                    var index = 0;
+                    var lastItemIndex = Object.keys(rules).length;
+                    for (var prop in rules) {
+                        if (rules.hasOwnProperty(prop)) {
+                            index++;
+                            var rule = rules[prop];
+                            var valueFrom, valueTo;
+                            if (rule.filter.value) {
 
-                    rules.forEach(function (rule, index) {
-                        var valueFrom, valueTo;
-                        if (rule.filter.value) {
-
-                            if (rule.filter.value.length === 1)
-                                valueFrom = rule.filter.value[0];
-                            else {
-                                valueFrom = rule.filter.value[0];
-                                valueTo = rule.filter.value[1];
+                                if (rule.filter.value.length === 1)
+                                    valueFrom = rule.filter.value[0];
+                                else {
+                                    valueFrom = rule.filter.value[0];
+                                    valueTo = rule.filter.value[1];
+                                }
                             }
-                        }
-
-                        if (rule.filter.field !== undefined && rule.filter.field.field !== undefined && rule.filter.operator !== undefined) {
-
-                            if (index === rules.length - 1)
-                                result += getField(rule.filter.field.field, rule.filter.operator.description, valueFrom, valueTo);
+                            if (index === lastItemIndex)
+                                result += getField(rule.filter.field, rule.filter.operator, valueFrom, valueTo);
                             else
-                                result += getField(rule.filter.field.field, rule.filter.operator.description, valueFrom, valueTo, condition);
+                                result += getField(rule.filter.field, rule.filter.operator, valueFrom, valueTo, condition);
                         }
-
-                    });
+                    }
 
                     if (filter.groups !== undefined) {
-                        filter.groups.forEach(function (group) {
-                            if (group !== undefined && group !== null && group.rules !== undefined)
-                                result += "  " + condition + " ( " + filterToString(group.rules) + " ) ";
-                        });
+
+                        for (var item in filter.groups) {
+                            if (filter.groups.hasOwnProperty(item)) {
+                                var group = filter.groups[item];
+                                if (group.rules !== undefined)
+                                    result += "  " + condition + " ( " + filterToString(group.rules) + " ) ";
+                            }
+                        }
                     }
                     return result;
                 }
@@ -73,7 +86,8 @@
                 angular.extend(this, {
                     getResult: getResult
                 });
-                
+
+                onLoad();
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -83,7 +97,7 @@
         };
     }
 
-    //vrDirectiveObj.$inject = [];
+    vrDirectiveObj.$inject = ['FilterEditorOperatorEnum', 'UtilsService'];
     app.directive('vrFiltereditor', vrDirectiveObj);
 
 })(app);
