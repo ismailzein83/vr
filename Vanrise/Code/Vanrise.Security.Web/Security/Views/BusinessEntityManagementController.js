@@ -1,6 +1,6 @@
-﻿BusinessEntityManagementController.$inject = ['$scope', 'BusinessEntitiesAPIService', 'PermissionAPIService', 'PermissionFlagEnum', 'HolderTypeEnum', 'VRModalService'];
+﻿BusinessEntityManagementController.$inject = ['$scope', 'BusinessEntitiesAPIService', 'PermissionAPIService', 'PermissionFlagEnum', 'HolderTypeEnum', 'VRModalService', 'VRNotificationService'];
 
-function BusinessEntityManagementController($scope, BusinessEntityAPIService, PermissionAPIService, PermissionFlagEnum, HolderTypeEnum, VRModalService) {
+function BusinessEntityManagementController($scope, BusinessEntityAPIService, PermissionAPIService, PermissionFlagEnum, HolderTypeEnum, VRModalService, VRNotificationService) {
 
     var treeAPI;
     var mainGridAPI;
@@ -50,7 +50,6 @@ function BusinessEntityManagementController($scope, BusinessEntityAPIService, Pe
         loadTree().finally(function () {
             $scope.isGettingData = false;
             treeAPI.refreshTree($scope.beList);
-            console.log($scope.beList);
         });
     }
 
@@ -58,6 +57,8 @@ function BusinessEntityManagementController($scope, BusinessEntityAPIService, Pe
         return BusinessEntityAPIService.GetEntityNodes()
            .then(function (response) {
                $scope.beList = response;
+           }).catch(function (error) {
+               VRNotificationService.notifyExceptionWithClose(error, $scope);
            });
     }
 
@@ -72,6 +73,8 @@ function BusinessEntityManagementController($scope, BusinessEntityAPIService, Pe
                 item.PermissionType = item.isInherited ? 'Inherited (' + item.PermissionPath + ')' : 'Direct';
                 $scope.permissions.push(item);
             });
+        }).catch(function (error) {
+            VRNotificationService.notifyException(error, $scope);
         });
     }
 
@@ -174,15 +177,27 @@ function BusinessEntityManagementController($scope, BusinessEntityAPIService, Pe
     }
 
     function deletePermission(permissionObj) {
-        return PermissionAPIService.DeletePermission(permissionObj.HolderType, permissionObj.HolderId, permissionObj.EntityType, permissionObj.EntityId)
-           .then(function (response) {
-               refreshGrid();
-           });
+        VRNotificationService.showConfirmation()
+            .then(function (response) {
+                if (response == true) {
+                    $scope.isLoadingGrid = true;
+                    return PermissionAPIService.DeletePermission(permissionObj.HolderType, permissionObj.HolderId, permissionObj.EntityType, permissionObj.EntityId)
+                        .then(function (response) {
+                            refreshGrid();
+                        }).catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                            $scope.isLoadingGrid = false;
+                        });
+                }
+            });
     }
 
     function refreshGrid() {
+        $scope.isLoadingGrid = true;
         mainGridAPI.clearDataAndContinuePaging();
-        getData();
+        getData().finally(function () {
+            $scope.isLoadingGrid = false;
+        });
     }
 
     function toggleInheritance()

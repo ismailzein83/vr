@@ -77,14 +77,8 @@ function WeeklyTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, Days
     }
 
     function load() {
-        loadDaysOfWeek();
+        $scope.daysOfWeek = UtilsService.getArrayEnum(DaysOfWeekEnum);
         loadForm();
-    }
-
-    function loadDaysOfWeek() {
-        for (var prop in DaysOfWeekEnum) {
-            $scope.daysOfWeek.push(DaysOfWeekEnum[prop]);
-        }
     }
 }
 appControllers.controller('Runtime_WeeklyTimeTriggerTemplateController', WeeklyTimeTriggerTemplateController);

@@ -48,15 +48,9 @@ function IntervalTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, In
     }
 
     function load() {
-        loadIntervalTypes();
+        $scope.intervalTypes = UtilsService.getArrayEnum(IntervalTimeTypeEnum);
         setFormToDefault();
         loadForm();
-    }
-
-    function loadIntervalTypes() {
-        for (var prop in IntervalTimeTypeEnum) {
-            $scope.intervalTypes.push(IntervalTimeTypeEnum[prop]);
-        }
     }
 }
 appControllers.controller('Runtime_IntervalTimeTriggerTemplateController', IntervalTimeTriggerTemplateController);

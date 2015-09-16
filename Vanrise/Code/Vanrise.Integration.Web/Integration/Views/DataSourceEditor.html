@@ -11,14 +11,14 @@
             <div ng-show="definitionSettignsSelected">
                 <vr-row>
                     <vr-columns colnum="6">
-                        <vr-textbox value="dataSourceName" label="Data Source Name" isrequired></vr-textbox>
+                        <vr-textbox value="dataSourceName" label="Name" isrequired></vr-textbox>
                     </vr-columns>
                 </vr-row>
             </div>
             <div ng-show="adapterSettignsSelected">
                 <vr-row>
                     <vr-columns colnum="4">
-                        <vr-select datatextfield="Name" datavaluefield="AdapterTypeId"
+                        <vr-select datatextfield="Name" label="Type" datavaluefield="AdapterTypeId"
                                    datasource="adapterTypes" selectedvalues="selectedAdapterType"></vr-select>
                     </vr-columns>
                 </vr-row>
@@ -27,11 +27,12 @@
                 </vr-row>
             </div>
             <div ng-show="mappperSettignsSelected">
+                <vr-label>Write your custom code here</vr-label>
                 <textarea ng-model="customCode" rows="15" cols="64" style="margin-top: 15px;"></textarea>
             </div>
             <div ng-show="schedulerSettignsSelected">
                 <vr-row>
-                    <vr-switch value="isEnabled" label="Is Enabled"></vr-switch>
+                    <vr-switch value="isEnabled" label="Enabled"></vr-switch>
                 </vr-row>
                 <vr-row>
                     <div ng-include="'/Client/Modules/Runtime/Views/TriggerTemplates/TimerTriggerTemplate.html'"></div>
@@ -40,7 +41,7 @@
             <div ng-show="executionFlowSettignsSelected">
                 <vr-row>
                     <vr-columns colnum="6">
-                        <vr-select datasource="executionFlows" datatextfield="Name" datavaluefield="ExecutionFlowId" label="Execution Flow" selectedvalues="selectedExecutionFlow" isrequired></vr-select>
+                        <vr-select datasource="executionFlows" datatextfield="Name" datavaluefield="ExecutionFlowId" label="Associated Flow" selectedvalues="selectedExecutionFlow" isrequired></vr-select>
                     </vr-columns>
                     <vr-columns colnum="6">
                         <vr-button type="Add" formname="formDataSourceEditor" data-onclick="addExecutionFlow" standalone></vr-button>

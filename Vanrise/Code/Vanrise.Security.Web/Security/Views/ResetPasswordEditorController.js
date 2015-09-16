@@ -24,7 +24,7 @@ function ResetPasswordEditorController($scope, UsersAPIService, VRNavigationServ
                 Password: $scope.txtPassword
             }
 
-            UsersAPIService.ResetPassword(ResetPasswordInput)
+            return UsersAPIService.ResetPassword(ResetPasswordInput)
                 .then(function (response) {
                     if (VRNotificationService.notifyOnItemUpdated("User's password is", response)) {
                         if ($scope.onPasswordReset != undefined)

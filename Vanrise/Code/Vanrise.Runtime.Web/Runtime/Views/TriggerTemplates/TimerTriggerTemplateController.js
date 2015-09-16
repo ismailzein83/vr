@@ -43,15 +43,9 @@ function TimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, UtilsServi
     }
 
     function load() {
-        loadSchedulerTypes();
+        $scope.schedulerTypes = UtilsService.getArrayEnum(TimeSchedulerTypeEnum);
         setFormToDefault();
         loadForm();
-    }
-
-    function loadSchedulerTypes() {
-        for (var prop in TimeSchedulerTypeEnum) {
-            $scope.schedulerTypes.push(TimeSchedulerTypeEnum[prop]);
-        }
     }
 }
 appControllers.controller('Runtime_TimeTriggerTemplateController', TimeTriggerTemplateController);

@@ -1,11 +1,11 @@
-﻿<div vr-modalcontent ng-controller="Security_GroupEditorController">
-    <vr-modalbody width="'50%'" vr-loader="isGettingData">
+﻿<div vr-modalcontent ng-controller="Security_GroupEditorController" vr-loader="isGettingData">
+    <vr-modalbody width="'50%'">
         <vr-form name="formGroupEditor">
             <vr-row>
                 <vr-textbox value="name" label="Name" isrequired></vr-textbox>
             </vr-row>
             <vr-row>
-                <vr-textarea label="Description"  value="description" />
+                <vr-textarea label="Description" value="description" />
             </vr-row>
             <vr-row>
                 <vr-label>Group Members</vr-label>

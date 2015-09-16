@@ -122,7 +122,7 @@ function GroupEditorController($scope, GroupAPIService, UsersAPIService, VRModal
     function updateGroup() {
         var groupObj = buildGroupObjFromScope();
 
-        GroupAPIService.UpdateGroup(groupObj)
+        return GroupAPIService.UpdateGroup(groupObj)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Group", response)) {
                     if ($scope.onGroupUpdated != undefined)

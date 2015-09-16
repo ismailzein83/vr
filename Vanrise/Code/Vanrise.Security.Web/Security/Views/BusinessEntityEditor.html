@@ -1,18 +1,16 @@
-﻿<div vr-modalcontent ng-controller="Security_BusinessEntityEditorController" width="'50%'">
-    <vr-modalbody vr-loader="isGettingData">
+﻿<div vr-modalcontent ng-controller="Security_BusinessEntityEditorController" width="'50%'" vr-loader="isGettingData">
+    <vr-modalbody>
         <vr-form name="formBusinessEntityEditor">
             <vr-row>
                 <vr-columns colnum="6" ng-show="!isEditMode">
                     <vr-section title="Permission Holders">
                         <vr-columns colnum="12">
 
-                            <vr-select ismultipleselection label="Users" datasource="optionsUsers.datasource" selectedvalues="optionsUsers.selectedvalues" datatextfield="Name" datavaluefield="UserId"
-                                       entityname="Users">
+                            <vr-select ismultipleselection label="Users" datasource="users" selectedvalues="selectedUsers" datatextfield="Name" datavaluefield="UserId">
                             </vr-select>
                         </vr-columns>
                         <vr-columns colnum="12">
-                            <vr-select ismultipleselection label="Groups" datasource="optionsGroups.datasource" selectedvalues="optionsGroups.selectedvalues" datatextfield="Name" datavaluefield="GroupId"
-                                       entityname="Groups">
+                            <vr-select ismultipleselection label="Groups" datasource="groups" selectedvalues="selectedGroups" datatextfield="Name" datavaluefield="GroupId">
                             </vr-select>
                         </vr-columns>
                     </vr-section>
