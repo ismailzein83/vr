@@ -8,8 +8,6 @@ function LinesDetectedController($scope, ReportingAPIService, UsersAPIService, $
     var arrMenuAction = [];
 
     defineScope();
-    load();
-
 
     function defineScope() {
 
@@ -45,9 +43,7 @@ function LinesDetectedController($scope, ReportingAPIService, UsersAPIService, $
         }
     }
 
-    function load() {
-
-    }
+  
 
     function retrieveData() {
 

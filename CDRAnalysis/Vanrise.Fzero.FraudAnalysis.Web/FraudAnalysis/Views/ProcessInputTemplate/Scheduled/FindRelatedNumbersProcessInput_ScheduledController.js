@@ -3,9 +3,7 @@
 FindRelatedNumbersProcessInput_Scheduled.$inject = ['$scope', '$http', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
 FindRelatedNumbersProcessInput_Scheduled($scope, $http, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
-    var pageLoaded = false;
     defineScope();
-    load();
 
     function defineScope() {
 
@@ -27,9 +25,7 @@ FindRelatedNumbersProcessInput_Scheduled($scope, $http, $routeParams, notify, VR
 
     };
 
-    function load() {
-
-    }
+   
 
 }
 

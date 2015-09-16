@@ -3,9 +3,9 @@
 NumberProfilingProcessInputController.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'HourEnum'];
 
 function NumberProfilingProcessInputController($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, HourEnum) {
-    var pageLoaded = false;
 
     defineScope();
+
     load();
 
     function defineScope() {

@@ -44,12 +44,11 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
         $scope.selectedIsEnabled = [];
 
         $scope.periods = [];
-        loadPeriods();
+        
         $scope.selectedPeriods = [];
 
 
         $scope.users = [];
-        loadUsers();
         $scope.selectedUsers = [];
 
 
@@ -63,8 +62,14 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
                     angular.forEach(response.Data, function (itm) {
                         itm.IsDefaultText = itm.IsDefault ? KindEnum.SystemBuiltIn.name : KindEnum.UserDefined.name;
                         itm.IsEnabledText = itm.IsEnabled ? StatusEnum.Enabled.name : StatusEnum.Disabled.name;
-                        itm.StrategyType = UtilsService.getItemByVal($scope.periods, itm.PeriodId, "Id").Name;
-                        itm.Analyst = UtilsService.getItemByVal($scope.users, itm.UserId, "UserId").Name
+
+                        var currentPeriod = UtilsService.getItemByVal($scope.periods, itm.PeriodId, "Id")
+                        if (!undefined)
+                            itm.StrategyType = currentPeriod.Name;
+
+                        var currentAnalyst = UtilsService.getItemByVal($scope.users, itm.UserId, "UserId")
+                        if (!undefined)
+                            itm.Analyst = currentAnalyst.Name
                     });
 
                     onResponseReady(response);
@@ -75,7 +80,8 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
     }
 
     function load() {
-
+        loadPeriods();
+        loadUsers();
     }
 
     function defineMenuActions() {
@@ -119,7 +125,7 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate
         };
-        
+
         console.log(query);
         return mainGridAPI.retrieveData(query);
     }
@@ -148,8 +154,15 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
             modalScope.onStrategyAdded = function (strategy) {
                 strategy.IsDefaultText = strategy.IsDefault ? KindEnum.SystemBuiltIn.name : KindEnum.UserDefined.name;
                 strategy.IsEnabledText = strategy.IsEnabled ? StatusEnum.Enabled.name : StatusEnum.Disabled.name;
-                strategy.StrategyType = UtilsService.getItemByVal($scope.periods, strategy.PeriodId, "Id").Name;
-                strategy.Analyst = UtilsService.getItemByVal($scope.users, strategy.UserId, "UserId").Name
+
+                var currentPeriod = UtilsService.getItemByVal($scope.periods, strategy.PeriodId, "Id")
+                if (!undefined)
+                    strategy.StrategyType = currentPeriod.Name;
+
+                var currentAnalyst = UtilsService.getItemByVal($scope.users, strategy.UserId, "UserId")
+                if (!undefined)
+                    strategy.Analyst = currentAnalyst.Name
+              
                 mainGridAPI.itemAdded(strategy);
             };
         };
@@ -170,9 +183,14 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
             modalScope.onStrategyUpdated = function (strategy) {
                 strategy.IsDefaultText = strategy.IsDefault ? KindEnum.SystemBuiltIn.name : KindEnum.UserDefined.name;
                 strategy.IsEnabledText = strategy.IsEnabled ? StatusEnum.Enabled.name : StatusEnum.Disabled.name;
-                strategy.StrategyType = UtilsService.getItemByVal($scope.periods, strategy.PeriodId, "Id").Name;
-                strategy.Analyst = UtilsService.getItemByVal($scope.users, strategy.UserId, "UserId").Name
-               
+                var currentPeriod = UtilsService.getItemByVal($scope.periods, strategy.PeriodId, "Id")
+                if (!undefined)
+                    strategy.StrategyType = currentPeriod.Name;
+
+                var currentAnalyst = UtilsService.getItemByVal($scope.users, strategy.UserId, "UserId")
+                if (!undefined)
+                    strategy.Analyst = currentAnalyst.Name
+
                 mainGridAPI.itemUpdated(strategy);
             };
         };

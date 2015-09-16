@@ -4,10 +4,8 @@ BlockedLinesDetailsController.$inject = ['$scope', '$routeParams', 'notify', 'VR
 
 function BlockedLinesDetailsController($scope,  $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
 
-    var editMode;
     loadParameters();
     defineScope();
-    load();
 
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
@@ -22,10 +20,6 @@ function BlockedLinesDetailsController($scope,  $routeParams, notify, VRModalSer
             $scope.modalContext.closeModal()
         };
     }
-
-
-    function load() {
-       
-    }
+   
 }
 appControllers.controller('BlockedLinesDetailsController', BlockedLinesDetailsController);

@@ -88,8 +88,7 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
 
     function loadStrategies() {
         var periodId = 0; // all periods
-        var isEnabled = ''; // all enabled and disabled
-        return StrategyAPIService.GetStrategies(periodId, isEnabled).then(function (response) {
+        return StrategyAPIService.GetStrategies(periodId, '').then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.strategies.push({ id: itm.Id, name: itm.Name });
             });

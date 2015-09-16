@@ -3,8 +3,9 @@
 NumberProfilingProcessInput_Scheduled.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'HourEnum'];
 
 function NumberProfilingProcessInput_Scheduled($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, HourEnum) {
-    var pageLoaded = false;
+
     defineScope();
+
     load();
 
     function defineScope() {

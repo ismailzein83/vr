@@ -343,9 +343,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
         else if (gridAPI_CaseHistory != undefined && $scope.selectedTabIndex == 3 && !casesLoaded)
             return retrieveData_CaseHistory();
-
-        //else if (gridAPI_RelatedNumbers != undefined && $scope.selectedTabIndex == 4 && !IMEIsLoaded);
-        //    return loadRelatedNumbers();
+        
     }
 
     function retrieveData_Occurances() {

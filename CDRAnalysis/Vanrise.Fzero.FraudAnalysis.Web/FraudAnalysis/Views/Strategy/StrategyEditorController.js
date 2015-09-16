@@ -29,7 +29,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         $scope.maxLowDurationCall = 8;
         $scope.minCountofCallsinActiveHour = 5;
 
-        $scope.selectedPeriod = '';
+        $scope.selectedPeriod;
         $scope.periods = [];
         $scope.strategyFilters = [];
         $scope.selectedPeakHours = [];
@@ -163,17 +163,10 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                     Description: filter.description,
                     Abbreviation: filter.abbreviation,
                     Threshold: filter.threshold
-
-
                 };
-
-
-
                 strategyObject.StrategyFilters.push(filterItem);
             }
-
         });
-
 
         angular.forEach($scope.strategyLevels, function (level) {
 
@@ -276,7 +269,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             if (existingItem != undefined && existingItem != null) {
                 filterItem.isSelected = true;
                 filterItem.threshold = existingItem.Threshold;
-
             }
             $scope.strategyFilters.push(filterItem);
 
@@ -367,8 +359,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
               VRNotificationService.notifyException(error, $scope);
           });
         }
-
-
     }
 
     function updateStrategy() {
@@ -386,9 +376,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                                   VRNotificationService.notifyException(error, $scope);
                               });
         }
-
-
-
     }
 
     function loadFilters() {

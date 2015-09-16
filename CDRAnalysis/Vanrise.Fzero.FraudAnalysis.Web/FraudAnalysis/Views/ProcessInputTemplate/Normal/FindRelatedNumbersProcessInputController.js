@@ -4,8 +4,6 @@ FindRelatedNumbersProcessInputController.$inject = ['$scope', '$http', '$routePa
 
 function FindRelatedNumbersProcessInputController($scope, $http, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
 
-    var pageLoaded = false;
-
     defineScope();
 
     function defineScope() {

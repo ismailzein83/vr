@@ -3,7 +3,6 @@
 AssignStrategyCasesProcessInputController.$inject = ['$scope', '$http', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
 function AssignStrategyCasesProcessInputController ($scope, $http, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
-    var pageLoaded = false;
 
     defineScope();
 

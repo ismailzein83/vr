@@ -3,9 +3,7 @@
 AssignStrategyCasesProcessInput_Scheduled.$inject = ['$scope', '$http', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
 function AssignStrategyCasesProcessInput_Scheduled($scope, $http, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
-    var pageLoaded = false;
     defineScope();
-    load();
 
     function defineScope() {
         $scope.processInputArguments = [];
@@ -21,9 +19,7 @@ function AssignStrategyCasesProcessInput_Scheduled($scope, $http, $routeParams, 
 
     };
 
-    function load() {
-
-    }
+   
 }
 
 appControllers.controller('FraudAnalysis_FraudAnalysis_AssignStrategyCasesProcessInput_Scheduled', AssignStrategyCasesProcessInput_Scheduled)

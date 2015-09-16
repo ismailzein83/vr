@@ -8,7 +8,6 @@ function CaseOccuranceGridController($scope, CaseManagementAPIService, Suspicion
     var gridApi_Logs = undefined;
 
     defineScope();
-    load();
 
     function defineScope() {
 
@@ -92,8 +91,7 @@ function CaseOccuranceGridController($scope, CaseManagementAPIService, Suspicion
         }
     }
 
-    function load() {
-    }
+    
 
     function retrieveData() {
 
