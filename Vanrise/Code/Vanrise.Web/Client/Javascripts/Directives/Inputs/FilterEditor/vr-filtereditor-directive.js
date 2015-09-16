@@ -72,7 +72,10 @@
                             if (filter.groups.hasOwnProperty(item)) {
                                 var group = filter.groups[item];
                                 if (group.rules !== undefined)
-                                    result += "  " + condition + " ( " + filterToString(group.rules) + " ) ";
+                                    if (result === '')
+                                        result +=  " ( " + filterToString(group.rules) + " ) ";
+                                    else
+                                        result += "  " + condition + " ( " + filterToString(group.rules) + " ) ";
                             }
                         }
                     }
