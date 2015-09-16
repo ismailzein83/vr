@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function vrDirectiveObj(inputEnum , typeEnum,operatorEnum , inputTypeEnum) {
+    function vrDirectiveObj(inputEnum, typeEnum, operatorEnum, inputTypeEnum, utilsService) {
 
         return {
             restrict: 'E',
@@ -38,6 +38,12 @@
                     if ((ctrl.filterInput === ctrl.inputEnum.Select) && (ctrl.hasInput)) {
                         ctrl.outputfilter.value = [ctrl.selectedFilterValues];
                     }
+                    else if ((ctrl.filterInput === ctrl.inputEnum.Datetime) && (ctrl.hasMultipleInput) && (ctrl.hasInput)) {
+                        ctrl.outputfilter.value = [ctrl.fromDate, ctrl.toDate];
+                    }
+                    else if ((ctrl.filterInput === ctrl.inputEnum.Datetime) && (ctrl.hasInput)) {
+                        ctrl.outputfilter.value = [ctrl.fromDate];
+                    }
                     else if ((ctrl.filterInput === ctrl.inputEnum.Text) && (ctrl.hasMultipleInput) && (ctrl.hasInput)) {
                         ctrl.outputfilter.value = [ctrl.inputValueFrom, ctrl.inputValueTo];
                     }
@@ -50,6 +56,17 @@
                 }
 
                 function watch() {
+
+                    $scope.$watch('ctrl.fromDate', function (newValue) {
+                        ctrl.fromDate = newValue;
+                        setOutput();
+                    });
+
+                    $scope.$watch('ctrl.toDate', function (newValue) {
+                        ctrl.toDate = newValue;
+                        setOutput();
+                    });
+
 
                     $scope.$watch('ctrl.switchValue', function (newValue) {
                         ctrl.switchValue = newValue;
@@ -74,7 +91,7 @@
                     ctrl.filterValues = [];
                     ctrl.inputValueFrom = '';
                     ctrl.inputValueTo = '';
-                    ctrl.switchValue = '';
+                    ctrl.switchValue = false;
                     ctrl.filterInputCount = 0;
                     ctrl.hasMultipleInput = false;
                     ctrl.selectedFilterValues = [];
@@ -140,10 +157,15 @@
                     setOutput();
                 }
 
+                function customvalidateDate(toDate) {
+                    return utilsService.validateDates(ctrl.fromDate, toDate);
+                }
+
                 angular.extend(this, {
                     onfilterselectionChanged: onfilterselectionChanged,
                     onOperatorSelectionChanged: onOperatorSelectionChanged,
-                    onValueSelectionChanged: onValueSelectionChanged
+                    onValueSelectionChanged: onValueSelectionChanged,
+                    customvalidateDate: customvalidateDate
                 });
 
                 onLoad();
@@ -156,7 +178,7 @@
         };
     }
 
-    vrDirectiveObj.$inject = ['FilterEditorInputEnum', 'FilterEditorFieldTypeEnum', 'FilterEditorOperatorEnum', 'FilterEditorInputTypeEnum'];
+    vrDirectiveObj.$inject = ['FilterEditorInputEnum', 'FilterEditorFieldTypeEnum', 'FilterEditorOperatorEnum', 'FilterEditorInputTypeEnum', 'UtilsService'];
 
     app.directive('vrFiltereditorRule', vrDirectiveObj);
 

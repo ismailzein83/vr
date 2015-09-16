@@ -34,6 +34,12 @@
                         return " ( " + fieldName + " " + operator + " " + valueFrom + " AND " + valueTo + " ) " + condition + " ";
                 }
 
+                function getValue(value) {
+                    if (value instanceof Date)
+                        return value.toISOString().substring(0, 10);
+                    return value;
+                }
+
                 function filterToString(filter) {
                     
                     var rules = filter.rules;
@@ -49,13 +55,9 @@
                             var rule = rules[prop];
                             var valueFrom, valueTo;
                             if (rule.filter.value) {
-
-                                if (rule.filter.value.length === 1)
-                                    valueFrom = rule.filter.value[0];
-                                else {
-                                    valueFrom = rule.filter.value[0];
-                                    valueTo = rule.filter.value[1];
-                                }
+                                valueFrom = getValue(rule.filter.value[0]);
+                                if (rule.filter.value.length === 2)
+                                    valueTo = getValue(rule.filter.value[1]);
                             }
                             if (index === lastItemIndex)
                                 result += getField(rule.filter.field, rule.filter.operator, valueFrom, valueTo);

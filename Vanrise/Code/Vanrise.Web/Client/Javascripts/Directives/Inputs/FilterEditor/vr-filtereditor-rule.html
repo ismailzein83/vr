@@ -2,17 +2,26 @@
      
      <vr-row>
          <vr-columns width="normal">
-             <vr-select datasource="ctrl.filters" datatextfield="field" datavaluefield="field" selectedvalues="ctrl.selectedFilter" hidefilterbox onselectionchanged="ctrl.onfilterselectionChanged"></vr-select>
+             <vr-select datasource="ctrl.filters" hideremoveicon datatextfield="field" datavaluefield="field" selectedvalues="ctrl.selectedFilter" hidefilterbox onselectionchanged="ctrl.onfilterselectionChanged"></vr-select>
          </vr-columns>
          <vr-columns width="normal">
-             <vr-select datasource="ctrl.operators" datatextfield="description" datavaluefield="value" selectedvalues="ctrl.selectedOperator" hidefilterbox onselectionchanged="ctrl.onOperatorSelectionChanged"></vr-select>
+             <vr-select datasource="ctrl.operators" hideremoveicon datatextfield="description" datavaluefield="value" selectedvalues="ctrl.selectedOperator" hidefilterbox onselectionchanged="ctrl.onOperatorSelectionChanged"></vr-select>
          </vr-columns>
          <vr-columns width="normal" ng-if="(ctrl.filterInput === ctrl.inputEnum.Select) && (ctrl.hasInput)">
-             <vr-select datasource="ctrl.filterValues" selectedvalues="ctrl.selectedFilterValues" hidefilterbox onselectionchanged="ctrl.onValueSelectionChanged"></vr-select>
+             <vr-select datasource="ctrl.filterValues" hideremoveicon selectedvalues="ctrl.selectedFilterValues" hidefilterbox onselectionchanged="ctrl.onValueSelectionChanged"></vr-select>
          </vr-columns>
+
+         <vr-columns width="normal" ng-if="(ctrl.filterInput === ctrl.inputEnum.Datetime) && (ctrl.hasInput)">
+             <vr-datetimepicker type="date" value="ctrl.fromDate" label="From"></vr-datetimepicker>
+         </vr-columns>
+         <vr-columns width="normal" ng-if="(ctrl.filterInput === ctrl.inputEnum.Datetime) && (ctrl.hasMultipleInput) && (ctrl.hasInput)">
+             <vr-datetimepicker type="date" value="ctrl.toDate" label="To" customvalidate="ctrl.customvalidateDate"></vr-datetimepicker>
+         </vr-columns>
+
          <vr-columns width="normal" ng-if="(ctrl.filterInput === ctrl.inputEnum.Text) && (ctrl.hasInput)">
              <vr-textbox value="ctrl.inputValueFrom"></vr-textbox>
          </vr-columns>
+
          <vr-columns width="normal" ng-if="(ctrl.filterInput === ctrl.inputEnum.Text) && (ctrl.hasMultipleInput) && (ctrl.hasInput)">
              <vr-textbox value="ctrl.inputValueTo"></vr-textbox>
          </vr-columns>
