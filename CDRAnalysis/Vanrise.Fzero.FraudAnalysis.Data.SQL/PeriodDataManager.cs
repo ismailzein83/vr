@@ -19,20 +19,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public List<Period> GetPeriods()
         {
-
-            var enumerationType = typeof(PeriodEnum);
-            List<Period> periods = new List<Period>();
-
-            foreach (int value in Enum.GetValues(enumerationType))
-            {
-                var name = Enum.GetName(enumerationType, value);
-                periods.Add(new Period() { Id = value, Name = name });
-            }
-
-            return periods;
-
-
-            //return Enum.GetValues(typeof(Period)).Cast<Period>().ToList<Period>();
+            return Enum.GetValues(typeof(PeriodEnum)).Cast<PeriodEnum>().Select(x => new Period { Id = (int)x, Name = x.ToString() }).ToList();
         }
 
     }
