@@ -82,7 +82,6 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
         // Update Case
         $scope.caseStatuses = UtilsService.getArrayEnum(CaseStatusEnum);
-        $scope.caseStatuses = $scope.caseStatuses.slice(1); // remove the open option
         $scope.selectedCaseStatus = undefined;
         $scope.updateReason = undefined;
         $scope.validTill = undefined;
@@ -393,12 +392,15 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             .then(function (response) {
 
                 if (response != null) {
-                    
+                    // open, pending, fraud, whitelist
+
+                    $scope.caseStatuses.splice(0, 1); // remove the open option
+
                     if (response == CaseStatusEnum.ClosedFraud.value)
-                        $scope.caseStatuses = $scope.caseStatuses.splice(2); // remove the closed: fruad option
+                        $scope.caseStatuses.splice(1, 1); // remove the closed: fruad option
 
                     else if (response == CaseStatusEnum.ClosedWhitelist.value)
-                        $scope.caseStatuses = $scope.caseStatuses.splice(3); // remove the closed: white list option
+                        $scope.caseStatuses.splice(2, 1); // remove the closed: white list option
 
                     var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", response);
                     $scope.accountStatusID = response;
