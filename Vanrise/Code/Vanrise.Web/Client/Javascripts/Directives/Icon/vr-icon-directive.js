@@ -5,7 +5,8 @@ app.directive('vrIcon', [function ($compile) {
     var option = {
         true: "Client/Images/true.png",
         false: "Client/Images/onebit_33.png",
-        Y: "Client/Images/true.png"
+        'Y': "Client/Images/true.png",
+        'N': "Client/Images/onebit_33.png"
     }
     var directiveDefinitionObject = {
 
@@ -17,7 +18,7 @@ app.directive('vrIcon', [function ($compile) {
             var ctrl = this;
             ctrl.icon = "";
             var value = ctrl.icontype;      
-            ctrl.icon = option[value];
+            ctrl.icon =  option[value] != undefined ? option[value]:"Client/Images/true.png";
 
         },
         controllerAs: 'ctrl',
