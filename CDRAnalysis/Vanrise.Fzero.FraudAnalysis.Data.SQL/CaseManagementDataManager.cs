@@ -90,27 +90,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 whereClause.Append(" AND accStatus.AccountNumber = '" + accountNumber + "'");
 
             if (strategyIDs != null)
-                whereClause.Append(" AND se.StrategyID IN (" + GetCommaSeparatedList(strategyIDs) + ")");
+                whereClause.Append(" AND se.StrategyID IN (" + string.Join(",", strategyIDs) + ")");
 
             if (accountStatusIDs != null)
-                whereClause.Append(" AND accStatus.[Status] IN (" + GetCommaSeparatedList(GetCaseStatusListAsIntList(accountStatusIDs)) + ")");
+                whereClause.Append(" AND accStatus.[Status] IN (" + string.Join(",", GetCaseStatusListAsIntList(accountStatusIDs)) + ")");
 
             if (suspicionLevelIDs != null)
-                whereClause.Append(" AND sed.SuspicionLevelID IN (" + GetCommaSeparatedList(GetSuspicionLevelListAsIntList(suspicionLevelIDs)) + ")");
+                whereClause.Append(" AND sed.SuspicionLevelID IN (" + string.Join(",", GetSuspicionLevelListAsIntList(suspicionLevelIDs)) + ")");
 
             return whereClause.ToString();
         }
 
-        private string GetCommaSeparatedList<T>(IEnumerable<T> items)
-        {
-            if (items == null) return null;
-
-            if (typeof(T) == typeof(int))
-                return string.Join(",", items);
-            else
-                return "'" + string.Join("', '", items) + "'";
-        }
-
+        
         private List<int> GetCaseStatusListAsIntList(List<CaseStatus> items)
         {
             List<int> list = new List<int>();
