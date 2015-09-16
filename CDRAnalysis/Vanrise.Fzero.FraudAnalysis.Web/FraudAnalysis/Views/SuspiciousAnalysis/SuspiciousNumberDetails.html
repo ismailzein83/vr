@@ -1,5 +1,5 @@
 ﻿<div vr-modalcontent draggable ng-controller="FraudAnalysis_SuspiciousNumberDetailsController" width="'95%'">
-    <vr-modalbody vr-loader="isInitializing" maxheight="'800px'">
+    <vr-modalbody vr-loader="isInitializing" maxheight="'600px'">
 
         <vr-form name="formSuspiciousNumberDetails">
 
@@ -30,7 +30,7 @@
                                      on-ready="onGridReady_Occurances"
                                      dataretrievalfunction="dataRetrievalFunction_Occurances"
                                      pagingtype="'PagingOnScroll'"
-                                     maxheight="500px"
+                                     maxheight="250px"
                                      idfield="DetialID">
 
                             <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelDescription'" type="'Text'" getcolor="getSuspicionLevelColor"></vr-datagridcolumn>
@@ -64,7 +64,7 @@
                                      on-ready="onGridReady_NormalCDRs"
                                      dataretrievalfunction="dataRetrievalFunction_NormalCDRs"
                                      pagingtype="'PagingOnScroll'"
-                                     maxheight="500px"
+                                     maxheight="250px"
                                      idfield="Id">
 
                             <vr-datagridcolumn headertext="'IMSI'" field="'IMSI'" type="'Text'"></vr-datagridcolumn>
@@ -142,7 +142,7 @@
                                              on-ready="onGridReady_NumberProfiles"
                                              dataretrievalfunction="dataRetrievalFunction_NumberProfiles"
                                              pagingtype="'PagingOnScroll'"
-                                             maxheight="500px">
+                                             maxheight="250px">
 
                                     <vr-datagridcolumn headertext="'From Time'" field="'FromDate'" type="'Datetime'"></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'To Time'" field="'ToDate'" type="'Datetime'"></vr-datagridcolumn>
