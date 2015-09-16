@@ -12,13 +12,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
     public class ReportingDataManager : BaseSQLDataManager, IReportingDataManager
     {
-
-
         public ReportingDataManager()
             : base("CDRDBConnectionString")
         {
 
         }
+
+        #region Get Filtered Cases Productivity
 
         public BigResult<CaseProductivity> GetFilteredCasesProductivity(DataRetrievalInput<CaseProductivityResultQuery> input)
         {
@@ -105,57 +105,110 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return whereClause.ToString();
         }
 
+        #endregion
+
+        #region Get Filtered Blocked Lines
+
         public BigResult<BlockedLines> GetFilteredBlockedLines(DataRetrievalInput<BlockedLinesResultQuery> input)
         {
-
             Action<string> createTempTableAction = (tempTableName) =>
             {
-
-
-                string Query = " IF NOT OBJECT_ID('" + tempTableName + "', N'U') IS NOT NULL"
-                                + " Begin "
-                                + " SELECT s.Name StrategyName , Count(distinct ac.AccountNumber) as BlockedLinesCount"
-                                + (!input.Query.GroupDaily ? ",null DateDay" : " , CAST(se.ExecutionDate AS DATE) DateDay ")
-                                + " , STUFF(( "
-                                + " SELECT ', ' + ac1.[AccountNumber]  "
-                                + " FROM [FraudAnalysis].[AccountCase]  ac1"
-                                + " inner join FraudAnalysis.StrategyExecutionDetails sed1 on sed1.CaseID=ac1.ID"
-                                + " inner join FraudAnalysis.StrategyExecution se1 on se1.ID = sed1.StrategyExecutionID"
-                                + " inner join [FraudAnalysis].[Strategy] s1 on se1.StrategyId = s1.Id "
-                                + " WHERE Status=3  "
-                                + (!input.Query.GroupDaily ? "" : " and  CAST(se1.ExecutionDate AS DATE) =  CAST(se.ExecutionDate AS DATE) ")
-                                + " and   se1.StrategyId= StrategyId  "
-                                + " FOR XML PATH(''),TYPE).value('(./text())[1]','VARCHAR(MAX)')  ,1,2,''    ) AS AccountNumbers  "
-                                + " into " + tempTableName
-                                + " FROM [FraudAnalysis].[AccountCase]	ac "
-                                + " with(nolock) "
-                                + " inner join FraudAnalysis.StrategyExecutionDetails sed on sed.CaseID=ac.ID"
-                                + " inner join FraudAnalysis.StrategyExecution se on se.ID = sed.StrategyExecutionID"
-                                + " inner join [FraudAnalysis].[Strategy] s on se.StrategyId = s.Id"
-                                + " Where se.ExecutionDate >= @FromDate and  se.ExecutionDate <= @ToDate and ac.Status=3"
-                                + (input.Query.StrategiesList != "" ? " and se.StrategyId IN (" + input.Query.StrategiesList + ")" : "")
-                                + " Group by s.Name, se.StrategyId"
-                                + (!input.Query.GroupDaily ? "" : " , CAST(se.ExecutionDate AS DATE) ")
-                                + " End";
-
-
-                ExecuteNonQueryText(Query, (cmd) =>
+                ExecuteNonQueryText(CreateTempTableIfNotExistsForFilteredBlockedLines(tempTableName, input.Query.GroupDaily, input.Query.StrategyIDs), (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromDate));
                     cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.ToDate));
                 });
             };
 
-
             return RetrieveData(input, createTempTableAction, BlockedLinesMapper);
         }
 
+        private string CreateTempTableIfNotExistsForFilteredBlockedLines(string tempTableName, bool groupDaily, List<int> strategyIDs)
+        {
+            StringBuilder query = new StringBuilder(@"
+                IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
+                BEGIN
+                    SELECT s.Name AS StrategyName,
+                    COUNT(DISTINCT ac.AccountNumber) AS BlockedLinesCount,
+                    #DATE_DAY#
+                    STUFF((
+                        SELECT ', ' + ac1.[AccountNumber]
+                        
+                        FROM [FraudAnalysis].[AccountCase] ac1
+                        INNER JOIN FraudAnalysis.StrategyExecutionDetails sed1 ON sed1.CaseID = ac1.ID
+                        INNER JOIN FraudAnalysis.StrategyExecution se1 ON se1.ID = sed1.StrategyExecutionID
+                        INNER JOIN [FraudAnalysis].[Strategy] s1 ON se1.StrategyId = s1.Id
+                        
+                        #INNER_WHERE_CLAUSE#
+                        
+                        FOR XML PATH(''),TYPE
+                    ).value('(./text())[1]','VARCHAR(MAX)'),1,2,'') AS AccountNumbers
+
+                    INTO #TEMP_TABLE_NAME#
+
+                    FROM [FraudAnalysis].[AccountCase] ac WITH(NOLOCK)
+                    INNER JOIN FraudAnalysis.StrategyExecutionDetails sed ON sed.CaseID=ac.ID
+                    INNER JOIN FraudAnalysis.StrategyExecution se ON se.ID = sed.StrategyExecutionID
+                    INNER JOIN [FraudAnalysis].[Strategy] s ON se.StrategyId = s.Id
+                    
+                    #OUTER_WHERE_CLAUSE#
+                    
+                    #GROUP_BY_CLAUSE#
+                END
+            ");
+
+            query.Replace("#TEMP_TABLE_NAME#", tempTableName);
+            query.Replace("#DATE_DAY#", (!groupDaily) ? "NULL AS DateDay," : "CAST(se.ExecutionDate AS DATE) AS DateDay,");
+            query.Replace("#INNER_WHERE_CLAUSE#", GetInnerWhereClauseFilteredBlockedLines(groupDaily));
+            query.Replace("#OUTER_WHERE_CLAUSE#", GetOuterWhereClauseFilteredBlockedLines(strategyIDs));
+            query.Replace("#GROUP_BY_CLAUSE#", GetGroupByClauseFilteredBlockedLines(groupDaily));
+
+            return query.ToString();
+        }
+
+        private string GetInnerWhereClauseFilteredBlockedLines(bool groupDaily)
+        {
+            StringBuilder whereClause = new StringBuilder();
+
+            whereClause.Append("WHERE Status = 3");
+            whereClause.Append(" AND se1.StrategyId = StrategyId");
+            whereClause.Append((!groupDaily) ? null : " AND CAST(se1.ExecutionDate AS DATE) = CAST(se.ExecutionDate AS DATE)");
+
+            return whereClause.ToString();
+        }
+
+        private string GetOuterWhereClauseFilteredBlockedLines(List<int> strategyIDs)
+        {
+            StringBuilder whereClause = new StringBuilder();
+
+            whereClause.Append("WHERE se.ExecutionDate >= @FromDate");
+            whereClause.Append(" AND se.ExecutionDate <= @ToDate");
+            whereClause.Append(" AND ac.Status = 3");
+            
+            if (strategyIDs != null && strategyIDs.Count > 0)
+                whereClause.Append(" AND se.StrategyId IN (" + string.Join(",", strategyIDs) + ")");
+
+            return whereClause.ToString();
+        }
+
+        private string GetGroupByClauseFilteredBlockedLines(bool groupDaily)
+        {
+            StringBuilder groupByClause = new StringBuilder();
+
+            groupByClause.Append("GROUP BY s.Name, se.StrategyId");
+            groupByClause.Append((!groupDaily) ? null : ", CAST(se.ExecutionDate AS DATE)");
+
+            return groupByClause.ToString();
+        }
+
+        #endregion
+
+        #region Get Filtered Lines Detected
+
         public BigResult<LinesDetected> GetFilteredLinesDetected(DataRetrievalInput<LinesDetectedResultQuery> input)
         {
-
             Action<string> createTempTableAction = (tempTableName) =>
             {
-
                 string Query = " IF NOT OBJECT_ID('" + tempTableName + "', N'U') IS NOT NULL"
                              + " Begin "
                              + " SELECT ac.AccountNumber, SUM(cdr.DurationInSeconds)/60 AS Volume, COUNT(distinct ac.ID) AS GeneratedCases, 'Fraud' AS ReasonofBlocking, count(distinct cast( cdr.connectdatetime as date)) AS ActiveDays "
@@ -167,8 +220,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                              + " GROUP BY ac.AccountNumber "
                              + " End";
 
-
-
                 ExecuteNonQueryText(Query, (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromDate));
@@ -176,9 +227,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 });
             };
 
-
             return RetrieveData(input, createTempTableAction, LinesDetectedMapper);
         }
+
+        #endregion
 
         #region Private Methods
 
@@ -195,8 +247,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             caseProductivity.DateDay = GetReaderValue<DateTime?>(reader, "DateDay");
             return caseProductivity;
         }
-
-
 
         private BlockedLines BlockedLinesMapper(IDataReader reader)
         {
@@ -220,6 +270,5 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
         #endregion
-
     }
 }

@@ -104,15 +104,8 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
 
     function retrieveData() {
 
-        var strategiesList = '';
-
-        angular.forEach($scope.selectedStrategies, function (itm) {
-            strategiesList = strategiesList + itm.id + ','
-        });
-
-
         var query = {
-            StrategiesList: removeLastComma(strategiesList),
+            StrategyIDs: UtilsService.getPropValuesFromArray($scope.selectedStrategies, "id"),
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate,
             GroupDaily: $scope.groupDaily

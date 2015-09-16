@@ -35,7 +35,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public BigResult<AccountSuspicionSummary> GetFilteredAccountSuspicionSummaries(Vanrise.Entities.DataRetrievalInput<AccountSuspicionSummaryQuery> input)
         {
-
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.AccountNumber, input.Query.StrategyIDs, input.Query.AccountStatusIDs, input.Query.SuspicionLevelIDs), (cmd) =>
@@ -45,7 +44,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 });
             };
 
-            return RetrieveData(input, createTempTableAction, AccountSuspicionSummaryMapper, _columnMapper);
+            return RetrieveData(input, createTempTableAction, AccountSuspicionSummaryMapper);
         }
 
         private string CreateTempTableIfNotExists(string tempTableName, string accountNumber, List<int> strategyIDs, List<CaseStatus> accountStatusIDs, List<SuspicionLevel> suspicionLevelIDs)
