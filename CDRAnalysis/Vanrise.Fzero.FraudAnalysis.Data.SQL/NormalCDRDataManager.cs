@@ -12,8 +12,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
     {
         private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
 
-        public NormalCDRDataManager()
-            : base("CDRDBConnectionString")
+        static NormalCDRDataManager()
         {
             _columnMapper.Add("CallClass", "Call_Class");
             _columnMapper.Add("CallTypeDescription", "Call_Type");
@@ -23,6 +22,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             _columnMapper.Add("DownVolume", "Down_Volume");
             _columnMapper.Add("ServiceType", "Service_Type");
             _columnMapper.Add("ServiceVASName", "Service_VAS_Name");
+
+        }
+
+        public NormalCDRDataManager()
+            : base("CDRDBConnectionString")
+        {
+
         }
 
         public void LoadCDR(DateTime from, DateTime to, int? batchSize, Action<CDR> onBatchReady)
@@ -37,7 +43,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 while (reader.Read())
                 {
                     CDR normalCDR = new CDR();
-                    normalCDR.CallType =  GetReaderValue<CallType>(reader, "Call_Type");
+                    normalCDR.CallType = GetReaderValue<CallType>(reader, "Call_Type");
                     normalCDR.BTSId = GetReaderValue<int?>(reader, "BTS_Id");
                     normalCDR.ConnectDateTime = GetReaderValue<DateTime?>(reader, "ConnectDateTime");
                     normalCDR.Id = (int)reader["Id"];
@@ -66,7 +72,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     {
                         count += currentIndex;
                         currentIndex = 0;
-                        
+
                     }
 
                     onBatchReady(normalCDR);
@@ -77,7 +83,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             }, from, to
                );
         }
-        
+
         public BigResult<CDR> GetNormalCDRs(Vanrise.Entities.DataRetrievalInput<NormalCDRResultQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
