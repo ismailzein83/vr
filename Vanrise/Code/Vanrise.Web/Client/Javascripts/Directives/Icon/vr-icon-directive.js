@@ -2,7 +2,11 @@
 
 
 app.directive('vrIcon', [function ($compile) {
-    
+    var option = {
+        true: "Client/Images/true.png",
+        false: "Client/Images/onebit_33.png",
+        Y: "Client/Images/true.png"
+    }
     var directiveDefinitionObject = {
 
         restrict: 'E',
@@ -12,12 +16,7 @@ app.directive('vrIcon', [function ($compile) {
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             ctrl.icon = "";
-            var value = ctrl.icontype;            
-            var option = {
-                true: "Client/Images/true.png",
-                false: "Client/Images/onebit_33.png",
-                Y: "Client/Images/true.png"
-            }
+            var value = ctrl.icontype;      
             ctrl.icon = option[value];
 
         },
