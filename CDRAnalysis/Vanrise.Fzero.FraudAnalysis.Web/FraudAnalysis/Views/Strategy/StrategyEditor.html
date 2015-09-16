@@ -2,23 +2,23 @@
     <vr-modalbody vr-loader="isGettingData">
         <vr-form name="formStrategyEditor">
             <vr-row removeline>
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-textbox value="name" label="Name" isrequired></vr-textbox>
                 </vr-columns>
 
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-select label="Type" datasource="periods" datatextfield="Name" datavaluefield="Id" selectedvalues="selectedPeriod" onselectionchanged="selectedPeriodChanged" isrequired></vr-select>
                 </vr-columns>
 
-                <vr-columns colnum="4">
+                <vr-columns width="1/3row">
                     <vr-textbox value="description" label="Description" isrequired></vr-textbox>
                 </vr-columns>
 
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-switch value="isEnabled" label="Enabled"></vr-switch>
                 </vr-columns>
 
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-switch value="isDefault" label="System built in" permissions="Root/Strategy Module:Add System built in"></vr-switch>
                 </vr-columns>
 
@@ -30,7 +30,7 @@
 
             <vr-row>
 
-                <vr-columns colnum="12">
+                <vr-columns width="fullrow">
 
                     <vr-choices onselectionchanged="ctrl.viewVisibilityChanged">
                         <vr-choice isselected="ctrl.isFilterTabShown">Strategy Filters</vr-choice>
@@ -40,29 +40,29 @@
                     <div ng-show="ctrl.isFilterTabShown">
                         <vr-row>
 
-                            <vr-columns colnum="9">
+                            <vr-columns width="1/2row">
                                 <div>
-                                    <vr-datagrid datasource="strategyFilters" maxheight="400px" hidepaginginfo  >
+                                    <vr-datagrid datasource="strategyFilters" maxheight="400px" hidepaginginfo>
                                         <vr-datagridcolumn headertext="' '" widthfactor="3">     <vr-switch value="dataItem.isSelected" ng-show="viewScope.showSwitch(dataItem)"></vr-switch>            </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Filter '" field="'abbreviation'" widthfactor="3">                   </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Description'" field="'description'" widthfactor="20">                   </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Threshold'"> 
+                                        <vr-datagridcolumn headertext="'Threshold'">
                                             <div style="max-width: 150px; float: left">
                                                 <vr-textbox placeholder="{{dataItem.label}}" value="dataItem.threshold" type="number" isrequired ng-if="dataItem.isSelected" title="{{dataItem.toolTip}}" minvalue="{{dataItem.minValue}}" maxvalue="{{dataItem.maxValue}}" decimalprecision="{{dataItem.decimalPrecision}}"></vr-textbox>
-                                            </div>                                               
+                                            </div>
                                         </vr-datagridcolumn>
                                     </vr-datagrid>
                                 </div>
                             </vr-columns>
 
 
-                            <vr-columns colnum="3">
+                            <vr-columns width="large">
                                 <vr-section title="Strategy Parameters">
                                     <div style="max-height:385px;overflow-y:auto;overflow-x:hidden">
 
                                         <vr-row ng-show="strategyFilters[13].isSelected">
 
-                                            <vr-columns colnum="11">
+                                            <vr-columns width="fullrow">
 
                                                 <vr-select datasource="hours" datatextfield="name" datavaluefield="id" label="Peak Hours" selectedvalues="selectedPeakHours" ismultipleselection isrequired></vr-select>
                                             </vr-columns>
@@ -70,14 +70,14 @@
 
                                         <vr-row ng-show="strategyFilters[15].isSelected">
 
-                                            <vr-columns colnum="11">
+                                            <vr-columns width="fullrow">
                                                 <vr-textbox value="gapBetweenConsecutiveCalls" type="number" label="Gap between Consecutive Calls in Seconds" isrequired></vr-textbox>
                                             </vr-columns>
                                         </vr-row>
 
                                         <vr-row ng-show="strategyFilters[16].isSelected ">
 
-                                            <vr-columns colnum="11">
+                                            <vr-columns width="fullrow">
                                                 <vr-textbox value="gapBetweenFailedConsecutiveCalls" type="number" label="Gap between Failed Consecutive Calls in Seconds" isrequired></vr-textbox>
                                             </vr-columns>
                                         </vr-row>
@@ -86,14 +86,14 @@
                                         <vr-row ng-show="strategyFilters[17].isSelected">
 
 
-                                            <vr-columns colnum="11">
+                                            <vr-columns width="fullrow">
                                                 <vr-textbox value="maxLowDurationCall" type="number" label="Maximum Low Duration Call (s) " isrequired></vr-textbox>
                                             </vr-columns>
 
                                         </vr-row>
                                         <vr-row ng-show="strategyFilters[8].isSelected">
 
-                                            <vr-columns colnum="11">
+                                            <vr-columns width="fullrow">
                                                 <vr-textbox value="minCountofCallsinActiveHour" type="number" label="Minimum Count of Calls per Hour " isrequired></vr-textbox>
                                             </vr-columns>
 

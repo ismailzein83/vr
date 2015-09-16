@@ -3,18 +3,18 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired></vr-datetimepicker>
                 </vr-columns>
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired></vr-datetimepicker>
                 </vr-columns>
 
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-select datasource="strategies" datatextfield="name" datavaluefield="id" label="Strategy" selectedvalues="selectedStrategies" ismultipleselection></vr-select>
                 </vr-columns>
 
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-switch value="groupDaily" label="Group Daily" onvaluechanged="onGroupDailyChanged"></vr-switch>
                 </vr-columns>
 
@@ -33,7 +33,7 @@
 
     <div>
         <vr-row>
-            <vr-columns colnum="12" ng-show="showGrid">
+            <vr-columns width="fullrow" ng-show="showGrid">
 
                 <vr-datagrid datasource="casesProductivity" dataretrievalfunction="dataRetrievalFunction" maxheight="400px" pagingtype="'Pager'" on-ready="onMainGridReady">
                     <vr-datagridcolumn headertext="'Strategy Name'" field="'StrategyName'"></vr-datagridcolumn>

@@ -2,10 +2,10 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired ></vr-datetimepicker>
                 </vr-columns>
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired  ></vr-datetimepicker>
                 </vr-columns>
             </vr-row>
@@ -20,11 +20,11 @@
 
         <vr-row>
 
-            <vr-columns colnum="6">
+            <vr-columns width="1/2row">
                 <vr-section title="Strategies Cases">
                     <div vr-loader="isGettingStrategyCases" ng-show="showResult">
                         <vr-row>
-                            <vr-columns colnum="12" simplecol>
+                            <vr-columns width="fullrow" simplecol>
                                 <vr-chart data-on-ready="chartSelectedMeasureReady" menuactions="getChartMenuActions"></vr-chart>
                             </vr-columns>
                         </vr-row>
@@ -32,11 +32,11 @@
                 </vr-section>
             </vr-columns>
 
-            <vr-columns colnum="3">
+            <vr-columns width="1/4row">
                 <vr-section title="Cases Summary">
                     <div >
                         <vr-row>
-                            <vr-columns colnum="12" simplecol>
+                            <vr-columns width="fullrow" simplecol>
                                 <vr-datagrid hidegridmenu datasource="casesSummary" dataretrievalfunction="dataRetrievalFunction_CaseSummary" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady_CasesSummary"  hidepaginginfo  >
                                     <vr-datagridcolumn headertext="'Status'" field="'StatusName'"></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'Count Cases'" field="'CountCases'" type="'Number'"  ></vr-datagridcolumn>
@@ -49,11 +49,11 @@
 
 
 
-            <vr-columns colnum="3">
+            <vr-columns width="1/4row">
                 <vr-section title="Top 10 Suspicious BTSs">
                     <div>
                         <vr-row>
-                            <vr-columns colnum="12" simplecol>
+                            <vr-columns width="fullrow" simplecol>
                                 <vr-datagrid hidegridmenu datasource="bTSCases" dataretrievalfunction="dataRetrievalFunction_BTSCases" maxheight="200px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady_BTSCases" hidepaginginfo>
                                     <vr-datagridcolumn headertext="'BTS Id'" field="'BTS_Id'"></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'Count Cases'" field="'CountCases'" type="'Number'"></vr-datagridcolumn>
@@ -65,11 +65,11 @@
             </vr-columns>
 
 
-            <vr-columns colnum="3">
+            <vr-columns width="1/4row">
                 <vr-section title="Top 10 High Value BTS">
                     <div>
                         <vr-row>
-                            <vr-columns colnum="12" simplecol>
+                            <vr-columns width="fullrow" simplecol>
                                 <vr-datagrid hidegridmenu datasource="bTSHighValueCases" dataretrievalfunction="dataRetrievalFunction_BTSHighValueCases" maxheight="200px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady_BTSHighValueCases" hidepaginginfo>
                                     <vr-datagridcolumn headertext="'BTS Id'" field="'BTS_Id'"></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'Volume (minutes)'" field="'Volume'" type="'Number'"></vr-datagridcolumn>
@@ -80,11 +80,11 @@
                 </vr-section>
             </vr-columns>
 
-            <vr-columns colnum="3">
+            <vr-columns width="1/4row">
                 <vr-section title="Daily Volume Loses">
                     <div>
                         <vr-row>
-                            <vr-columns colnum="12" simplecol>
+                            <vr-columns width="fullrow" simplecol>
                                 <vr-datagrid hidegridmenu datasource="dailyVolumeLooses" dataretrievalfunction="dataRetrievalFunction_DailyVolumeLooses" maxheight="200px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady_DailyVolumeLooses" hidepaginginfo>
                                     <vr-datagridcolumn headertext="'Day'" field="'DateDay'" type="'Datetime'"></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'Volume'" field="'Volume'" type="'Number'"></vr-datagridcolumn>
