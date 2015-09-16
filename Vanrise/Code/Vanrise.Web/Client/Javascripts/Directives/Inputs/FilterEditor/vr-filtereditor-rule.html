@@ -12,10 +12,10 @@
          </vr-columns>
 
          <vr-columns width="normal" ng-if="(ctrl.filterInput === ctrl.inputEnum.Datetime) && (ctrl.hasInput)">
-             <vr-datetimepicker type="date" value="ctrl.fromDate" label="From"></vr-datetimepicker>
+             <vr-datetimepicker type="date" value="ctrl.fromDate"></vr-datetimepicker>
          </vr-columns>
          <vr-columns width="normal" ng-if="(ctrl.filterInput === ctrl.inputEnum.Datetime) && (ctrl.hasMultipleInput) && (ctrl.hasInput)">
-             <vr-datetimepicker type="date" value="ctrl.toDate" label="To" customvalidate="ctrl.customvalidateDate"></vr-datetimepicker>
+             <vr-datetimepicker type="date" value="ctrl.toDate"  customvalidate="ctrl.customvalidateDate"></vr-datetimepicker>
          </vr-columns>
 
          <vr-columns width="normal" ng-if="(ctrl.filterInput === ctrl.inputEnum.Text) && (ctrl.hasInput)">
