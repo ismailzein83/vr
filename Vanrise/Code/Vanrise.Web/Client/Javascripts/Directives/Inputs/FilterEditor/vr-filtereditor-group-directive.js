@@ -33,6 +33,7 @@
                         ctrl.condition = "AND";
                     else
                         ctrl.condition = "OR";
+                    ctrl.result['condition'] = ctrl.condition;
                 }
 
                 function addRule() {

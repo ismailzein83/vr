@@ -18,13 +18,21 @@
              <vr-datetimepicker type="date" value="ctrl.toDate"  customvalidate="ctrl.customvalidateDate"></vr-datetimepicker>
          </vr-columns>
 
+         <vr-columns width="normal" ng-if="(ctrl.filterInput === ctrl.inputEnum.Number) && (ctrl.hasInput)">
+             <vr-textbox value="ctrl.inputValueFrom" type="number"></vr-textbox>
+         </vr-columns>
+         <vr-columns width="normal" ng-if="(ctrl.filterInput === ctrl.inputEnum.Number) && (ctrl.hasMultipleInput) && (ctrl.hasInput)">
+             <vr-textbox value="ctrl.inputValueTo" type="number"></vr-textbox>
+         </vr-columns>
+
          <vr-columns width="normal" ng-if="(ctrl.filterInput === ctrl.inputEnum.Text) && (ctrl.hasInput)">
-             <vr-textbox value="ctrl.inputValueFrom"></vr-textbox>
+             <vr-textbox value="ctrl.inputValueFrom" ></vr-textbox>
          </vr-columns>
 
          <vr-columns width="normal" ng-if="(ctrl.filterInput === ctrl.inputEnum.Text) && (ctrl.hasMultipleInput) && (ctrl.hasInput)">
              <vr-textbox value="ctrl.inputValueTo"></vr-textbox>
          </vr-columns>
+
          <vr-columns width="normal" ng-if="(ctrl.filterInput === ctrl.inputEnum.Switch) && (ctrl.hasInput)">
              <vr-switch value="ctrl.switchValue"></vr-switch>
          </vr-columns>

@@ -6,13 +6,14 @@
         Text: { value: 0, description: "text" },
         Switch: { value: 1, description: "switch" },
         Select: { value: 2, description: "select" },
-        Datetime: { value: 3, description: "datetime" }
+        Datetime: { value: 3, description: "datetime" },
+        Number: { value: 4, description: "number" }
     };
 
     var typeEnum = {
         String: { value: 0, description: "string", input: inputEnum.Text },
         //Integer: { value: 1, description: "integer", input: inputEnum.Text },
-        Double: { value: 2, description: "double", input: inputEnum.Text },
+        Double: { value: 2, description: "double", input: inputEnum.Number },
         //Date: { value: 3, description: "date", input: inputEnum.Datetime },
         //Time: { value: 4, description: "time", input: inputEnum.Datetime },
         Datetime: { value: 5, description: "datetime", input: inputEnum.Datetime },
