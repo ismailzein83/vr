@@ -6,34 +6,29 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
 
     var mainGridAPI;
     var arrMenuAction = [];
+    var accountNumbers = [];
 
     defineScope();
     load();
 
     function defineScope() {
-
         $scope.showGrid = false;
-
         $scope.gridMenuActions = [];
-
-        var Now = new Date();
 
         var Yesterday = new Date();
         Yesterday.setDate(Yesterday.getDate() - 1);
 
         $scope.fromDate = Yesterday;
-        $scope.toDate = Now;
+        $scope.toDate = new Date();
 
-        $scope.gridMenuActions = [];
 
         $scope.strategies = [];
 
         $scope.blockedLines = [];
 
-        loadStrategies();
 
         $scope.selectedStrategies = [];
-        $scope.accountNumbers = [];
+        
 
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
@@ -60,7 +55,7 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
     }
 
     function load() {
-
+        loadStrategies();
     }
 
     function defineMenuActions() {
@@ -73,12 +68,12 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
     function viewList(itm) {
 
         angular.forEach(itm.AccountNumbers, function (itm) {
-            $scope.accountNumbers.push({ accountNumber: itm })
+            accountNumbers.push({ accountNumber: itm })
         });
 
 
         var params = {
-            accountNumbers: $scope.accountNumbers
+            accountNumbers: accountNumbers
         };
 
         var settings = {
