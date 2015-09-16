@@ -7,6 +7,8 @@ app.directive('vrIcon', [function ($compile) {
         false: "Client/Images/onebit_33.png",
         'Y': "Client/Images/true.png",
         'N': "Client/Images/onebit_33.png",
+        'Enabled': "Client/Images/true.png",
+        'Disabled': "Client/Images/onebit_33.png",
         '1': "Client/Images/true.png",
         '0': "Client/Images/onebit_33.png"
     }
@@ -38,7 +40,7 @@ app.directive('vrIcon', [function ($compile) {
     function getTemplate(ctrl) {
         
         var template = ''
-        template += '<div style="text-align: left;"><img style="width:16px;height:16px" title="' + ctrl.icontype + '"  src="' + ctrl.icon + '"  /></div>'
+        template += '<div style="text-align: left;"><img style="width:12px;height:12px" title="' + ctrl.icontype + '"  src="' + ctrl.icon + '"  /></div>'
            
         return template;
     }
