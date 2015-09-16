@@ -6,7 +6,9 @@ app.directive('vrIcon', [function ($compile) {
         true: "Client/Images/true.png",
         false: "Client/Images/onebit_33.png",
         'Y': "Client/Images/true.png",
-        'N': "Client/Images/onebit_33.png"
+        'N': "Client/Images/onebit_33.png",
+        '1': "Client/Images/true.png",
+        '0': "Client/Images/onebit_33.png"
     }
     var directiveDefinitionObject = {
 

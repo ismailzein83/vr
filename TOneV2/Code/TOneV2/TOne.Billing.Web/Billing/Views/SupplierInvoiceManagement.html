@@ -58,8 +58,12 @@
                     <vr-datagridcolumn field="'Duration'" headertext="'Duration (Mins)'" type="'Number'"></vr-datagridcolumn>
                     <vr-datagridcolumn field="'Amount'" headertext="'Amount'" type="'Number'"></vr-datagridcolumn>
                     <vr-datagridcolumn field="'CurrencyID'" headertext="'Currency'" type="'Text'"></vr-datagridcolumn>
-                    <vr-datagridcolumn field="'IsLocked'" headertext="'Is Locked'" type="'Text'"></vr-datagridcolumn>
-                    <vr-datagridcolumn field="'IsPaid'" headertext="'Is Paid'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn  headertext="'Is Locked'" type="'Text'">
+                        <vr-icon icontype="dataItem.IsLocked"></vr-icon>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn  headertext="'Is Paid'" type="'Text'">
+                        <vr-icon icontype="dataItem.IsPaid"></vr-icon>
+                    </vr-datagridcolumn>
                     <vr-datagridcolumn field="'InvoiceNotes'" headertext="'Invoice Notes'" type="'Text'"></vr-datagridcolumn>
 
                     <vr-datagridexpandablerow>
