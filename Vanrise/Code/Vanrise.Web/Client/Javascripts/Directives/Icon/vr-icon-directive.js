@@ -7,17 +7,18 @@ app.directive('vrIcon', [function ($compile) {
 
         restrict: 'E',
         scope: {
-            value: '='
+            icontype: '='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             ctrl.icon = "";
-
-            if (ctrl.value == true)
-               ctrl.icon = "Client/Images/true.png";
-            else if (ctrl.value == false)
-                 ctrl.icon = "Client/Images/onebit_33.png";
-  
+            var value = ctrl.icontype;            
+            var option = {
+                true: "Client/Images/true.png",
+                false: "Client/Images/onebit_33.png",
+                Y: "Client/Images/true.png"
+            }
+            ctrl.icon = option[value];
 
         },
         controllerAs: 'ctrl',
@@ -35,7 +36,7 @@ app.directive('vrIcon', [function ($compile) {
     function getTemplate(ctrl) {
         
         var template = ''
-        template += '<div style="text-align: left;"><img style="width:16px;height:16px" title="' + ctrl.value + '"  src="' + ctrl.icon + '"  /></div>'
+        template += '<div style="text-align: left;"><img style="width:16px;height:16px" title="' + ctrl.icontype + '"  src="' + ctrl.icon + '"  /></div>'
            
         return template;
     }

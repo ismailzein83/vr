@@ -158,12 +158,16 @@
     <Content Include="Client\Images\01.png" />
     <Content Include="Client\Images\02.png" />
     <Content Include="Client\Images\doruknet-logo.png" />
+    <Content Include="Client\Images\false.png" />
     <Content Include="Client\Images\no_image.jpg" />
     <Content Include="Client\Images\loader-mask.gif" />
     <Content Include="Client\Images\log in.png" />
     <Content Include="Client\Images\logout.png" />
     <Content Include="Client\Images\member.png" />
+    <Content Include="Client\Images\onebit_33.png" />
+    <Content Include="Client\Images\onebit_34.png" />
     <Content Include="Client\Images\support.png" />
+    <Content Include="Client\Images\true.png" />
     <Content Include="Client\Javascripts\Constants\AuthenticateOperationResultEnum.js" />
     <Content Include="Client\Javascripts\Constants\ChartDefinitionTypeEnum.js" />
     <Content Include="Client\Javascripts\Constants\ColumnWidthEnum.js" />
@@ -256,6 +260,7 @@
     <Content Include="Client\Javascripts\Directives\Old\vr-gridview-standard.html" />
     <Content Include="Client\Javascripts\Directives\Pagination\vr-pagination-directive.js" />
     <Content Include="Client\Javascripts\Directives\Pagination\vr-pagination.html" />
+    <Content Include="Client\Javascripts\Directives\Icon\vr-icon-directive.js" />
     <Content Include="Client\Javascripts\Directives\ProgressBar\vr-progressbar-directive.js" />
     <Content Include="Client\Javascripts\Directives\TreeView\vr-treeview-directive.js" />
     <Content Include="Client\Javascripts\Modules\appControllers.js" />
