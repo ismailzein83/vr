@@ -54,4 +54,12 @@ namespace Vanrise.Common
         }
     }
 
+    public class DefaultExceptionLogger : ExceptionLogger
+    {
+        protected override void OnWriteException(Exception ex)
+        {
+            LoggerFactory.GetLogger().WriteError(ex.ToString());
+        }
+    }
+
 }

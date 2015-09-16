@@ -75,6 +75,7 @@
     <Compile Include="Data\CommonDataManagerFactory.cs" />
     <Compile Include="Data\IDataManager.cs" />
     <Compile Include="Data\IVRFileDataManager.cs" />
+    <Compile Include="Logging\HandleLoggerException.cs" />
     <Compile Include="VRFileManager.cs" />
     <Compile Include="Logging\ExceptionLogger.cs" />
     <Compile Include="Logging\Logger.cs" />

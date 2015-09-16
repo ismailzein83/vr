@@ -105,7 +105,7 @@ namespace Vanrise.Common
                             }
                             catch(Exception ex)
                             {
-                                LoggerFactory.GetExceptionLogger().WriteException(ex);
+                                HandleLoggerException.WriteException(ex);
                             }
                         }
                     }

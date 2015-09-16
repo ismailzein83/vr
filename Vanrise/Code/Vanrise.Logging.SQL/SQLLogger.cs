@@ -67,7 +67,7 @@ namespace Vanrise.Logging.SQL
             }
             catch (Exception ex)
             {
-                Common.LoggerFactory.GetExceptionLogger().WriteException(ex);
+                Common.HandleLoggerException.WriteException(ex);
             }
 
             lock (this)
