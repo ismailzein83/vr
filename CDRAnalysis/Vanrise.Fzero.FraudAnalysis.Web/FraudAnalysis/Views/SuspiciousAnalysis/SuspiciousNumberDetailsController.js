@@ -1,4 +1,6 @@
-﻿SuspiciousNumberDetailsController.$inject = ["$scope", "CaseManagementAPIService", "NormalCDRAPIService", "NumberProfileAPIService", "StrategyAPIService", "UsersAPIService", "SuspicionLevelEnum", "CaseStatusEnum", "CallTypeEnum", "LabelColorsEnum", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService"];
+﻿"use strict";
+
+SuspiciousNumberDetailsController.$inject = ["$scope", "CaseManagementAPIService", "NormalCDRAPIService", "NumberProfileAPIService", "StrategyAPIService", "UsersAPIService", "SuspicionLevelEnum", "CaseStatusEnum", "CallTypeEnum", "LabelColorsEnum", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService"];
 
 function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, NormalCDRAPIService, NumberProfileAPIService, StrategyAPIService, UsersAPIService, SuspicionLevelEnum, CaseStatusEnum, CallTypeEnum, LabelColorsEnum, UtilsService, VRNavigationService, VRNotificationService, VRModalService) {
     var gridAPI_Occurances = undefined;

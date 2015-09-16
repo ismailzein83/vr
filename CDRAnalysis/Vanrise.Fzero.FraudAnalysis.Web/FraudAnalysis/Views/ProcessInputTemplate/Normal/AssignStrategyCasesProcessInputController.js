@@ -1,4 +1,8 @@
-﻿var AssignStrategyCasesProcessInputController = function ($scope, $http, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
+﻿"use strict";
+
+AssignStrategyCasesProcessInputController.$inject = ['$scope', '$http', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+
+function AssignStrategyCasesProcessInputController ($scope, $http, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
     var pageLoaded = false;
 
     defineScope();
@@ -27,7 +31,6 @@
 
 }
 
-AssignStrategyCasesProcessInputController.$inject = ['$scope', '$http', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 appControllers.controller('FraudAnalysis_AssignStrategyCasesProcessInputController', AssignStrategyCasesProcessInputController)
 
 

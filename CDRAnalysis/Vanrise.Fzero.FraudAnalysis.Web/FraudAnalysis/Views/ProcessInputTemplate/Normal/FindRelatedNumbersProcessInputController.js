@@ -1,4 +1,9 @@
-﻿var FindRelatedNumbersProcessInputController = function ($scope, $http, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
+﻿"use strict";
+
+FindRelatedNumbersProcessInputController.$inject = ['$scope', '$http', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+
+function FindRelatedNumbersProcessInputController($scope, $http, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
+
     var pageLoaded = false;
 
     defineScope();
@@ -20,16 +25,10 @@
             });
 
             return $scope.createProcessInputObjects;
-
         };
-
-
     }
-
-
 }
 
-FindRelatedNumbersProcessInputController.$inject = ['$scope', '$http', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 appControllers.controller('FraudAnalysis_FindRelatedNumbersProcessInputController', FindRelatedNumbersProcessInputController)
 
 

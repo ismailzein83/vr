@@ -1,4 +1,8 @@
-﻿var NumberProfilingProcessInput_Scheduled = function ($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, HourEnum) {
+﻿"use strict";
+
+NumberProfilingProcessInput_Scheduled.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'HourEnum'];
+
+function NumberProfilingProcessInput_Scheduled($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, HourEnum) {
     var pageLoaded = false;
     defineScope();
     load();
@@ -67,7 +71,7 @@
                 $scope.minCountofCallsinActiveHour = data.Parameters.MinimumCountofCallsinActiveHour;
                 $scope.selectedPeriod = UtilsService.getItemByVal($scope.periods, data.PeriodId, "Id");
                 $scope.selectedPeakHours.length = 0;
-                
+
                 angular.forEach(data.Parameters.PeakHoursIds, function (peakHour) {
                     $scope.selectedPeakHours.push(UtilsService.getItemByVal($scope.hours, peakHour, "id"));
                 });
@@ -95,7 +99,6 @@
     }
 }
 
-NumberProfilingProcessInput_Scheduled.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'HourEnum'];
 appControllers.controller('FraudAnalysis_NumberProfilingProcessInput_Scheduled', NumberProfilingProcessInput_Scheduled)
 
 

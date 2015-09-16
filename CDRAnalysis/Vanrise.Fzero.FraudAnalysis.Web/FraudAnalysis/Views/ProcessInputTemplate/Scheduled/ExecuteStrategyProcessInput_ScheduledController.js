@@ -1,4 +1,8 @@
-﻿var ExecuteStrategyProcessInput_Scheduled = function ($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+﻿"use strict";
+
+ExecuteStrategyProcessInput_Scheduled.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+
+function ExecuteStrategyProcessInput_Scheduled($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
     var pageLoaded = false;
     defineScope();
     load();
@@ -6,21 +10,14 @@
     function defineScope() {
 
         $scope.processInputArguments = [];
-
-
         $scope.strategies = [];
         $scope.selectedStrategies = [];
         $scope.selectedStrategyIds = [];
-
-
-
         $scope.periods = [];
         $scope.selectedPeriod = "";
-
         $scope.schedulerTaskAction.rawExpressions.getData = function () {
             return { "ScheduleTime": "ScheduleTime" };
         };
-
 
         $scope.schedulerTaskAction.processInputArguments.getData = function () {
             angular.forEach($scope.selectedStrategies, function (itm) {
@@ -30,10 +27,9 @@
             return {
                 $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
                 StrategyIds: $scope.selectedStrategyIds,
-                OverridePrevious : false
+                OverridePrevious: false
             };
         };
-
     }
 
 
@@ -117,7 +113,6 @@
 
 }
 
-ExecuteStrategyProcessInput_Scheduled.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 appControllers.controller('FraudAnalysis_ExecuteStrategyProcessInput_Scheduled', ExecuteStrategyProcessInput_Scheduled)
 
 

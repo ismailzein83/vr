@@ -1,4 +1,8 @@
-﻿var NumberProfilingProcessInputController = function ($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, HourEnum) {
+﻿"use strict";
+
+NumberProfilingProcessInputController.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'HourEnum'];
+
+function NumberProfilingProcessInputController($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, HourEnum) {
     var pageLoaded = false;
 
     defineScope();
@@ -38,14 +42,14 @@
                     var fromDate = new Date(runningDate);
                     var toDate = new Date(runningDate.setHours(runningDate.getHours() + 1));
 
-                    
+
 
                     $scope.createProcessInputObjects.push({
                         InputArguments: {
                             $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.NumberProfilingProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
                             FromDate: new Date(fromDate),
                             ToDate: new Date(toDate),
-                            PeriodId:$scope.selectedPeriod.Id,
+                            PeriodId: $scope.selectedPeriod.Id,
                             Parameters: { GapBetweenConsecutiveCalls: $scope.gapBetweenConsecutiveCalls, GapBetweenFailedConsecutiveCalls: $scope.gapBetweenFailedConsecutiveCalls, MaxLowDurationCall: $scope.maxLowDurationCall, MinimumCountofCallsinActiveHour: $scope.minCountofCallsinActiveHour, PeakHoursIds: $scope.PeakHoursIds }
                         }
                     });
@@ -95,7 +99,6 @@
 
 }
 
-NumberProfilingProcessInputController.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'HourEnum'];
 appControllers.controller('FraudAnalysis_NumberProfilingProcessInputController', NumberProfilingProcessInputController)
 
 
