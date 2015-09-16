@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Linq;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -77,7 +78,6 @@ namespace CallGeneratorLibrary.Repositories
             }
             catch (System.Exception ex)
             {
-
                 Logger.LogException(ex);
             }
             return GenCall;
@@ -163,6 +163,19 @@ namespace CallGeneratorLibrary.Repositories
                 Logger.LogException(ex);
             }
             return success;
+        }
+
+        private static void WriteToEventLog(string message)
+        {
+            string cs = "VanCGenSer";
+            EventLog elog = new EventLog();
+            if (!EventLog.SourceExists(cs))
+            {
+                EventLog.CreateEventSource(cs, cs);
+            }
+            elog.Source = cs;
+            elog.EnableRaisingEvents = true;
+            elog.WriteEntry(message);
         }
     }
 }

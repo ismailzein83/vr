@@ -35,6 +35,7 @@ namespace CallGeneratorService
                     CallGeneratorLibrary.Utilities.ScheduleManager.CLISchedule();
 
                     GeneratedCall GenCall = GeneratedCallRepository.GetTopGeneratedCall();
+
                     if (GenCall != null)
                     {
                         bool ClientFound = false;

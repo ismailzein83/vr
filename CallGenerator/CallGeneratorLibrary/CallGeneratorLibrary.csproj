@@ -9,12 +9,13 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CallGeneratorLibrary</RootNamespace>
     <AssemblyName>CallGeneratorLibrary</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -55,6 +56,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CallGeneratorModel.dbml</DependentUpon>
     </Compile>
+    <Compile Include="CallGeneratorModelDataContext.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\ObjectCopier.cs" />

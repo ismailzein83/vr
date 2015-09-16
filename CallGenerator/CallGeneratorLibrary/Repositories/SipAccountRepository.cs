@@ -16,9 +16,11 @@ namespace CallGeneratorLibrary.Repositories
 
             try
             {
+                WriteToEventLogEx("sip rep");
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
                     log = context.SipAccounts.Where(l => l.Id == Id).FirstOrDefault<SipAccount>();
+                    WriteToEventLogEx(log.Username);
                 }
             }
             catch (System.Exception ex)

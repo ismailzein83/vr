@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="CallGenerator" Class="CallGeneratorModelDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=LENOVO\SQL2008R2;Initial Catalog=CallGenerator;Persist Security Info=True;User ID=sa" SettingsObjectName="CallGeneratorLibrary.Properties.Settings" SettingsPropertyName="CallGeneratorConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.ScheduleLogs" Member="ScheduleLogs">
     <Type Name="ScheduleLog">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
