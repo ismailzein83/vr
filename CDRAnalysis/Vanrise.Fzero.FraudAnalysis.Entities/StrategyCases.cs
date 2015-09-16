@@ -6,7 +6,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     {
         public string StrategyName { get; set; }
 
-        public int CountCases { get; set; }
+        public string CountCases { get; set; }
 
     }
 

@@ -386,7 +386,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         private StrategyCases StrategyCasesMapper(IDataReader reader)
         {
             var strategyCases = new StrategyCases();
-            strategyCases.CountCases = (int)reader["CountCases"];
+            strategyCases.CountCases = (int)reader["CountCases"] as string;
             strategyCases.StrategyName = reader["StrategyName"] as string;
             return strategyCases;
         }

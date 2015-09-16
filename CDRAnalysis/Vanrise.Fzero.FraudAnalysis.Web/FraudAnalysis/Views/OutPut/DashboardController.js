@@ -31,9 +31,6 @@ function DashboardController($scope,UtilsService, DashboardAPIService) {
         $scope.bTSHighValueCases = [];
         $scope.dailyVolumeLooses = [];
 
-
-
-
         $scope.onMainGridReady_CasesSummary = function (api) {
             mainGridAPI_CasesSummary = api;
             return retrieveData_CasesSummary();
@@ -55,12 +52,10 @@ function DashboardController($scope,UtilsService, DashboardAPIService) {
             return retrieveData_DailyVolumeLooses();
         };
 
-
         $scope.chartSelectedMeasureReady = function (api) {
             chartSelectedMeasureAPI = api;
             getData_StrategyCases();
         };
-
 
         $scope.searchClicked = function () {
             retrieveData_CasesSummary();
@@ -78,8 +73,6 @@ function DashboardController($scope,UtilsService, DashboardAPIService) {
             });
         }
 
-
-
         $scope.dataRetrievalFunction_BTSCases = function (dataRetrievalInput, onResponseReady) {
             return DashboardAPIService.GetBTSCases(dataRetrievalInput)
             .then(function (response) {
@@ -94,14 +87,12 @@ function DashboardController($scope,UtilsService, DashboardAPIService) {
             })
         }
 
-
         $scope.dataRetrievalFunction_DailyVolumeLooses = function (dataRetrievalInput, onResponseReady) {
             return DashboardAPIService.GetDailyVolumeLooses(dataRetrievalInput)
             .then(function (response) {
                 onResponseReady(response);
             });
         }
-
 
     }
 
