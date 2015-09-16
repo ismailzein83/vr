@@ -13,9 +13,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public string Description { get; set; }
 
-        public string PeriodsList { get; set; }
+        public List<PeriodEnum> PeriodIDs { get; set; }
 
-        public string UsersList { get; set; }
+        public List<int> UserIDs { get; set; }
 
         public string IsDefaultList { get; set; }
 

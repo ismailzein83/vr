@@ -35,20 +35,22 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             else if (input.Query.IsDefaultList.Contains("false"))
                 IsDefault = false;
 
-
             bool? IsEnabled = null;
             if (input.Query.IsEnabledList.Contains("true"))
                 IsEnabled = true;
             else if (input.Query.IsEnabledList.Contains("false"))
                 IsEnabled = false;
 
-            Action<string> createTempTableAction = (tempTableName) =>
+            return RetrieveData(input, (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_CreateTempByFiltered", tempTableName, input.Query.Name, input.Query.Description, input.Query.PeriodsList, input.Query.UsersList, IsDefault, IsEnabled, input.Query.FromDate, input.Query.ToDate);
-            };
+                string periodIDs = (input.Query.PeriodIDs != null && input.Query.PeriodIDs.Count() > 0) ?
+                    string.Join(",", input.Query.PeriodIDs.Select(n => (int)n)) : null;
 
-          
-            return RetrieveData(input, createTempTableAction, StrategyMapper);
+                string userIDs = (input.Query.UserIDs != null && input.Query.UserIDs.Count() > 0) ? string.Join<int>(",", input.Query.UserIDs) : null;
+
+                ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_CreateTempByFiltered", tempTableName, input.Query.Name, input.Query.Description, periodIDs, userIDs, IsDefault, IsEnabled, input.Query.FromDate, input.Query.ToDate);
+
+            }, (reader) => StrategyMapper(reader));
         }
 
         public bool AddStrategy(Strategy strategyObject, out int insertedId)
@@ -97,7 +99,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public List<String> GetStrategyNames(List<int> strategyIds)
         {
-            return GetItemsSP("FraudAnalysis.sp_Strategy_GetNamesByIDs", StrategyNameMapper, string.Join(",", strategyIds));
+            string strategyIDs = (strategyIds != null && strategyIds.Count > 0) ? string.Join(",", strategyIds) : null;
+
+            return GetItemsSP("FraudAnalysis.sp_Strategy_GetNamesByIDs", StrategyNameMapper, strategyIDs);
         }
 
         #region Private Methods
@@ -116,6 +120,5 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
         #endregion
-
     }
 }

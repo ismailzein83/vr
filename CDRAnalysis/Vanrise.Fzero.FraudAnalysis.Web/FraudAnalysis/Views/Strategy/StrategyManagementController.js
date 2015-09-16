@@ -56,17 +56,19 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
         $scope.addNewStrategy = addNewStrategy;
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            return StrategyAPIService.GetFilteredStrategies(dataRetrievalInput)
-            .then(function (response) {
-                angular.forEach(response.Data, function (itm) {
-                    itm.IsDefaultText = itm.IsDefault ? KindEnum.SystemBuiltIn.name : KindEnum.UserDefined.name;
-                    itm.IsEnabledText = itm.IsEnabled ? StatusEnum.Enabled.name : StatusEnum.Disabled.name;
-                    itm.StrategyType = UtilsService.getItemByVal($scope.periods, itm.PeriodId, "Id").Name;
-                    itm.Analyst = UtilsService.getItemByVal($scope.users, itm.UserId, "UserId").Name
-                });
 
-                onResponseReady(response);
-            });
+            return StrategyAPIService.GetFilteredStrategies(dataRetrievalInput)
+                .then(function (response) {
+
+                    angular.forEach(response.Data, function (itm) {
+                        itm.IsDefaultText = itm.IsDefault ? KindEnum.SystemBuiltIn.name : KindEnum.UserDefined.name;
+                        itm.IsEnabledText = itm.IsEnabled ? StatusEnum.Enabled.name : StatusEnum.Disabled.name;
+                        itm.StrategyType = UtilsService.getItemByVal($scope.periods, itm.PeriodId, "Id").Name;
+                        itm.Analyst = UtilsService.getItemByVal($scope.users, itm.UserId, "UserId").Name
+                    });
+
+                    onResponseReady(response);
+                });
         }
 
         defineMenuActions();
@@ -95,20 +97,6 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
         var name = $scope.name != undefined ? $scope.name : '';
         var description = $scope.description != undefined ? $scope.description : '';
 
-        var periodsList = '';
-
-        angular.forEach($scope.selectedPeriods, function (itm) {
-            periodsList = periodsList + itm.Id + ','
-        });
-
-
-        var usersList = '';
-
-        angular.forEach($scope.selectedUsers, function (itm) {
-            usersList = usersList + itm.UserId + ','
-        });
-
-
         var isDefaultsList = '';
 
         angular.forEach($scope.selectedIsDefault, function (itm) {
@@ -121,19 +109,18 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
             isEnabledList = isEnabledList + itm.value + ','
         });
 
-
-
         var query = {
             Name: name,
             Description: description,
-            PeriodsList: removeLastComma(periodsList),
-            UsersList: removeLastComma(usersList),
+            PeriodIDs: ($scope.selectedPeriods.length > 0) ? UtilsService.getPropValuesFromArray($scope.selectedPeriods, "Id") : null,
+            UserIDs: ($scope.selectedUsers.length > 0) ? UtilsService.getPropValuesFromArray($scope.selectedUsers, "UserId") : null,
             IsDefaultList: removeLastComma(isDefaultsList),
             IsEnabledList: removeLastComma(isEnabledList),
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate
         };
-
+        
+        console.log(query);
         return mainGridAPI.retrieveData(query);
     }
 

@@ -34,5 +34,4 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         ClosedFraud = 3,
         ClosedWhiteList = 4
     }
-   
 }
