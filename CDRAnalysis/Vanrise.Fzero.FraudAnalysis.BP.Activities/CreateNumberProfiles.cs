@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Vanrise.BusinessProcess;
 using Vanrise.Common;
 using Vanrise.Fzero.CDRImport.Entities;
+using Vanrise.Fzero.FraudAnalysis.Aggregates;
 using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;

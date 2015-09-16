@@ -4,6 +4,7 @@ using System.Linq;
 using Vanrise.Fzero.Business;
 using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Fzero.Entities;
+using Vanrise.Fzero.FraudAnalysis.Aggregates;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business

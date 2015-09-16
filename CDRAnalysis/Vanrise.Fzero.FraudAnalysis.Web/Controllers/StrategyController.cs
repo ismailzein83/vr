@@ -4,6 +4,7 @@ using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Web.Base;
 using Vanrise.Entities;
+using Vanrise.Fzero.FraudAnalysis.Aggregates;
 
 namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 {

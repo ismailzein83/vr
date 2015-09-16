@@ -1,6 +1,6 @@
 ﻿using Vanrise.Fzero.Entities;
 
-namespace Vanrise.Fzero.FraudAnalysis.Entities
+namespace Vanrise.Fzero.FraudAnalysis.Aggregates
 {
     public class AggregateDefinitionInfo
     {

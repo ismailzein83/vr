@@ -1,5 +1,5 @@
 ﻿
-namespace Vanrise.Fzero.FraudAnalysis.Entities
+namespace Vanrise.Fzero.FraudAnalysis.Aggregates
 {
     public class Condition
     {

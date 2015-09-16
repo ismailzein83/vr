@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Vanrise.Fzero.CDRImport.Entities;
+using Vanrise.Fzero.FraudAnalysis.Entities;
 
-namespace Vanrise.Fzero.FraudAnalysis.Entities
+namespace Vanrise.Fzero.FraudAnalysis.Aggregates
 {
-    public class FailedConsecutiveAggregate : IAggregate
+    public class ConsecutiveAggregate : IAggregate
     {
 
         Func<CDR, INumberProfileParameters, bool> _condition;
@@ -14,7 +15,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         Dictionary<INumberProfileParameters, ConsecutiveAggregateStrategyInfo> _strategiesInfo;
         IEnumerable<INumberProfileParameters> _parameters;
 
-        public FailedConsecutiveAggregate(Func<CDR, INumberProfileParameters, bool> condition, IEnumerable<INumberProfileParameters> parameters)
+        public ConsecutiveAggregate(Func<CDR, INumberProfileParameters, bool> condition, IEnumerable<INumberProfileParameters> parameters)
         {
             this._condition = condition;
             _strategiesInfo = new Dictionary<INumberProfileParameters, ConsecutiveAggregateStrategyInfo>();
@@ -38,7 +39,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
             {
                 if (this._condition == null || this._condition(cdr, strategyCountEntry.Key))
                 {
-                    if ((strategyCountEntry.Value.PreviousDateTime != DateTime.MinValue) && cdr.ConnectDateTime.Value.Subtract(strategyCountEntry.Value.PreviousDateTime).TotalSeconds <= strategyCountEntry.Key.GapBetweenFailedConsecutiveCalls)
+                    if ((strategyCountEntry.Value.PreviousDateTime != DateTime.MinValue) && cdr.ConnectDateTime.Value.Subtract(strategyCountEntry.Value.PreviousDateTime).TotalSeconds <= strategyCountEntry.Key.GapBetweenConsecutiveCalls)
                     {
                         strategyCountEntry.Value.Count++;
                     }
