@@ -13,7 +13,9 @@
 
             $scope.createProcessInputObjects.push({
                 InputArguments: {
-                    $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.FindRelatedNumbersProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments"
+                    $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.FindRelatedNumbersProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
+                    FromDate: new Date($scope.fromDate),
+                    ToDate: new Date($scope.toDate)
                 }
             });
 
