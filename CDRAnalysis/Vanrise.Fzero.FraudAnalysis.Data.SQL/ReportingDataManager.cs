@@ -36,29 +36,30 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             StringBuilder query = new StringBuilder(@"
                 IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
                 BEGIN
-                
-                SELECT  0 ClosedoverGenerated,
-                        s.Name StrategyName , Count(ac.ID)  as GeneratedCases, Sum(Case when ac.Status = 3 then 1 when ac.Status = 4 then 1 else 0 end) as ClosedCases
-                        ,Sum(Case when ac.Status = 3 then 1 else 0 end) as FraudCases  #Select_CLAUSE#
-                        		
-		                INTO #TEMP_TABLE_NAME#
-		
-		                FROM [FraudAnalysis].[AccountCase]	ac with(nolock) 
-                        inner join FraudAnalysis.StrategyExecutionDetails sed with(nolock)  on sed.CaseID = ac.ID
-                        inner join FraudAnalysis.StrategyExecution se with(nolock)  on se.ID = sed.StrategyExecutionID
-                        inner join [FraudAnalysis].[Strategy] s with(nolock)  on se.StrategyId = s.Id
-		
-                        #WHERE_CLAUSE#
-		
-		                #GroupBy_CLAUSE#
-
-                        END
+                    SELECT 0 ClosedoverGenerated,
+                        s.Name AS StrategyName,
+                        COUNT(ac.ID) AS GeneratedCases,
+                        SUM(CASE WHEN ac.Status = 3 THEN 1 WHEN ac.Status = 4 THEN 1 ELSE 0 END) AS ClosedCases,
+                        SUM(CASE WHEN ac.Status = 3 THEN 1 ELSE 0 END) AS FraudCases
+                        #SELECT_CLAUSE#
+                        
+		            INTO #TEMP_TABLE_NAME#
+		            
+		            FROM [FraudAnalysis].[AccountCase] ac WITH(NOLOCK)
+                    INNER JOIN FraudAnalysis.StrategyExecutionDetails sed WITH(NOLOCK) ON sed.CaseID = ac.ID
+                    INNER JOIN FraudAnalysis.StrategyExecution se WITH(NOLOCK) ON se.ID = sed.StrategyExecutionID
+                    INNER JOIN [FraudAnalysis].[Strategy] s WITH(NOLOCK) ON se.StrategyId = s.Id
+		            
+                    #WHERE_CLAUSE#
+		            
+		            #GROUP_BY_CLAUSE#
+                END
             ");
 
-            query.Replace("#GroupBy_CLAUSE#", GetGroupByClause(groupDaily));
-            query.Replace("#Select_CLAUSE#", GetSelectClause(groupDaily));
             query.Replace("#TEMP_TABLE_NAME#", tempTableName);
+            query.Replace("#SELECT_CLAUSE#", GetSelectClause(groupDaily));
             query.Replace("#WHERE_CLAUSE#", GetWhereClause(fromDate, toDate, groupDaily, strategyIDs));
+            query.Replace("#GROUP_BY_CLAUSE#", GetGroupByClause(groupDaily));
 
             return query.ToString();
         }
@@ -68,9 +69,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             StringBuilder selectClause = new StringBuilder();
 
             if (GroupDaily)
-                selectClause.Append(" , CAST(se.ExecutionDate AS DATE)    as DateDay");
+                selectClause.Append(", CAST(se.ExecutionDate AS DATE) AS DateDay");
             else
-                selectClause.Append(" , null as DateDay");
+                selectClause.Append(", NULL AS DateDay");
 
             return selectClause.ToString();
         }
@@ -99,8 +100,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             if (toDate != null)
                 whereClause.Append(" AND se.ExecutionDate <= '" + toDate + "'");
 
-            if (strategyIDs != null)
-                whereClause.Append(" and se.StrategyId IN (" + String.Join(",", strategyIDs) + ")");
+            if (strategyIDs != null && strategyIDs.Count > 0)
+                whereClause.Append(" and se.StrategyId IN (" + string.Join(",", strategyIDs) + ")");
 
             return whereClause.ToString();
         }
@@ -204,27 +205,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         #endregion
 
         #region Get Filtered Lines Detected
-
+        
         public BigResult<LinesDetected> GetFilteredLinesDetected(DataRetrievalInput<LinesDetectedResultQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                string Query = " IF NOT OBJECT_ID('" + tempTableName + "', N'U') IS NOT NULL"
-                             + " Begin "
-                             + " SELECT ac.AccountNumber, SUM(cdr.DurationInSeconds)/60 AS Volume, COUNT(distinct ac.ID) AS GeneratedCases, 'Fraud' AS ReasonofBlocking, count(distinct cast( cdr.connectdatetime as date)) AS ActiveDays "
-                             + " , Count(distinct ac.AccountNumber) as BlockedLinesCount"
-                             + " into " + tempTableName
-                             + " FROM   FraudAnalysis.AccountCase AS ac WITH (nolock) INNER JOIN"
-                             + " FraudAnalysis.NormalCDR AS cdr WITH (nolock, INDEX = IX_NormalCDR_MSISDN) ON ac.AccountNumber = cdr.MSISDN"
-                             + " Where ac.Status = 3 and cdr.Call_Type = 1 and ac.CreatedTime BETWEEN @FromDate and  @ToDate"
-                             + " GROUP BY ac.AccountNumber "
-                             + " End";
-
-                ExecuteNonQueryText(Query, (cmd) =>
-                {
-                    cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromDate));
-                    cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.ToDate));
-                });
+                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_GetBlockedLines", tempTableName, input.Query.FromDate, input.Query.ToDate);
             };
 
             return RetrieveData(input, createTempTableAction, LinesDetectedMapper);

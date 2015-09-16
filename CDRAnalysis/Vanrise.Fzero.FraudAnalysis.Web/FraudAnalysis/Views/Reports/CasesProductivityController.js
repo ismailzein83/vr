@@ -10,7 +10,6 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
     defineScope();
     load();
 
-
     function defineScope() {
 
         $scope.showGrid = false;
@@ -63,25 +62,16 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
         var periodId = 0; // all periods
         var isEnabled = ''; // all enabled and disabled
         return StrategyAPIService.GetStrategies(periodId, isEnabled).then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.strategies.push({ id: itm.Id, name: itm.Name });
+            angular.forEach(response, function (item) {
+                $scope.strategies.push({ id: item.Id, name: item.Name });
             });
         });
     }
 
-   
-
     function retrieveData() {
 
-        var selectedStrategiesIDs = [];
-
-        angular.forEach($scope.selectedStrategies, function (itm) {
-            selectedStrategiesIDs.push(itm.Id);
-        });
-
-
         var query = {
-            StrategiesList: selectedStrategiesIDs,
+            StrategyIDs: UtilsService.getPropValuesFromArray($scope.selectedStrategies, "id"),
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate,
             GroupDaily: $scope.groupDaily
