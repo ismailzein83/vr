@@ -44,15 +44,7 @@ app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', 'VRNo
             filecontrol.fileupload({
                 url: base + '/api/VRFile/UploadFile',
                 beforeSend: function (xhr, data) {
-                    var userInfoCookie = SecurityService.getAccessCookie();
-                    if (userInfoCookie != undefined) {
-                        var userInfo = JSON.parse(userInfoCookie);
-                        xhr.setRequestHeader('Auth-Token', userInfo.Token);
-                    }
-                    else {
-                        xhr.setRequestHeader('Auth-Token', "");
-                    }
-
+                    xhr.setRequestHeader('Auth-Token', SecurityService.getUserToken());
                 },
                 formData: function (form) { return form },
                 replaceFileInput: false,

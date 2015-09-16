@@ -3,17 +3,7 @@ app.config(['$httpProvider', function ($httpProvider) {
     $httpProvider.interceptors.push(function ($q, $injector) {
         return {
             'request': function (config) {
-                var userInfoCookie = $injector.get('SecurityService').getAccessCookie();
-                if (userInfoCookie != undefined)
-                {
-                    var userInfo = JSON.parse(userInfoCookie);
-                    config.headers['Auth-Token'] = userInfo.Token;
-                }
-                else
-                {
-                    config.headers['Auth-Token'] = "";
-                }
-                
+                config.headers['Auth-Token'] = $injector.get('SecurityService').getUserToken();
                 return config;
             }
         };

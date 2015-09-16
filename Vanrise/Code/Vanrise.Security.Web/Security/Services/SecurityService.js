@@ -5,8 +5,9 @@ app.service('SecurityService', ['$rootScope', 'UtilsService', 'PermissionFlagEnu
     return ({
         isAllowed: isAllowed,
         createAccessCookie: createAccessCookie,
-        getAccessCookie: getAccessCookie,
-        deleteAccessCookie: deleteAccessCookie
+        deleteAccessCookie: deleteAccessCookie,
+        getLoggedInUserInfo: getLoggedInUserInfo,
+        getUserToken: getUserToken
     });
 
     function isAllowed(attrValue) {
@@ -101,12 +102,28 @@ app.service('SecurityService', ['$rootScope', 'UtilsService', 'PermissionFlagEnu
     }
 
     function createAccessCookie(userInfo) {
-        var expiresDate = new Date(new Date().getTime() + parseInt(30) * 1000 * 60 * 60 * 24);
-        $cookies.put('Vanrise_AccessCookie-' + location.port, userInfo, { path: '/', domain: location.hostname, expires: expiresDate, secure: false });
+        //var expiresDate = new Date(new Date().getTime() + parseInt(30) * 1000 * 60 * 60 * 24);
+        $cookies.put('Vanrise_AccessCookie-' + location.port, userInfo, { path: '/', domain: location.hostname, expires: '', secure: false });
     }
 
     function getAccessCookie() {
         return $cookies.get('Vanrise_AccessCookie-' + location.port);
+    }
+
+    function getLoggedInUserInfo() {
+        var accessCookie = getAccessCookie();
+        if (accessCookie != undefined)
+            return JSON.parse(accessCookie);
+        else
+            return undefined;
+    }
+
+    function getUserToken() {
+        var accessCookie = getAccessCookie();
+        if (accessCookie != undefined)
+            return JSON.parse(accessCookie).Token;
+        else
+            return undefined;
     }
 
     function deleteAccessCookie() {

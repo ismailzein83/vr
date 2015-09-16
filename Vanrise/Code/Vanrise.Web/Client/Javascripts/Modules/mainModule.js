@@ -4,9 +4,9 @@
 var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
 .controller('mainCtrl', function mainCtrl($scope, $rootScope, MenuAPIService, SecurityService, PermissionAPIService, notify, $animate, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService) {
     
-    var accessCookie = SecurityService.getAccessCookie();
+    var userInfo = SecurityService.getLoggedInUserInfo();
     
-    if (accessCookie === undefined) {
+    if (userInfo === undefined) {
         window.location.href = '/Security/Login';
         return;
     }
@@ -17,7 +17,6 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
     }
     );
     
-    var userInfo = JSON.parse(accessCookie);
     $scope.userDisplayName = userInfo.UserDisplayName;
     
  
