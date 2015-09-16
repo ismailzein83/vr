@@ -6,13 +6,13 @@ function NumberProfilingProcessInputController($scope, $http, StrategyAPIService
     var pageLoaded = false;
 
     defineScope();
+    load();
 
     function defineScope() {
 
         $scope.createProcessInputObjects = [];
 
         $scope.periods = [];
-        loadPeriods();
         $scope.selectedPeriod = "";
 
 
@@ -87,7 +87,9 @@ function NumberProfilingProcessInputController($scope, $http, StrategyAPIService
 
     }
 
-
+    function load() {
+        loadPeriods();
+    }
 
     function loadPeriods() {
         return StrategyAPIService.GetPeriods().then(function (response) {

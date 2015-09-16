@@ -7,6 +7,8 @@ function ExecuteStrategyProcessInputController ($scope, $http, StrategyAPIServic
 
     defineScope();
 
+    load();
+
     function defineScope() {
 
         $scope.createProcessInputObjects = [];
@@ -14,12 +16,8 @@ function ExecuteStrategyProcessInputController ($scope, $http, StrategyAPIServic
         $scope.strategies = [];
         $scope.selectedStrategies = [];
         $scope.selectedStrategyIds = [];
-
         $scope.periods = [];
-        loadPeriods();
         $scope.selectedPeriod = "";
-
-
 
         $scope.createProcessInput.getData = function () {
 
@@ -82,7 +80,10 @@ function ExecuteStrategyProcessInputController ($scope, $http, StrategyAPIServic
 
     }
 
-
+    function load()
+    {
+        loadPeriods();
+    }
 
     function loadPeriods() {
         return StrategyAPIService.GetPeriods().then(function (response) {
