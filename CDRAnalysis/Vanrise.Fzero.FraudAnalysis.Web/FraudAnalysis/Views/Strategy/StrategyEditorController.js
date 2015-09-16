@@ -190,7 +190,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                         FilterId: $scope.strategyFilters[index].filterId
                     };
 
-                    levelCriteriaItem.Percentage = ((levelCriteria.percentage +100) /100)   ;
+                    levelCriteriaItem.Percentage = ((parseFloat(levelCriteria.percentage) + 100) / 100);
+                    console.log(levelCriteriaItem.percentage)
 
                     strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem);
                 }
@@ -296,8 +297,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                 var existingItem = UtilsService.getItemByVal(level.StrategyLevelCriterias, filterDef.filterId, "FilterId");
                 if (existingItem != undefined && existingItem != null) {
                     levelCriteriaItem.isSelected = true;
-                    levelCriteriaItem.percentage = ((existingItem.Percentage * 100) - 100);
-                    
+                    levelCriteriaItem.percentage = ((parseFloat(existingItem.Percentage) * 100) - 100);
                 }
                 strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem);
             });

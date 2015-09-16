@@ -16,7 +16,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Aggregates
         Func<CDR, Object> _cdrExpressionToCountDistinct;
         HashSet<Object> _distinctItems = new HashSet<Object>();
 
-        Dictionary<INumberProfileParameters, DistinctCountAggregateStrategyInfo> _strategiesInfo = new Dictionary<INumberProfileParameters, DistinctCountAggregateStrategyInfo>();
+        Dictionary<INumberProfileParameters, DistinctCountAggregateStrategyInfo> _strategiesInfo ;
        
 
         public DistinctCountAggregate(Func<CDR, Object> cdrExpressionToCountDistinct, Func<CDR, bool> condition)
