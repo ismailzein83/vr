@@ -10,14 +10,14 @@
             scope: {
                 filters: '=',
                 result: '=',
-                resultString: '=',
+                resultstring: '=',
                 showresult: '='
             },
             controller: function () {
                 var ctrl = this;
                 
                 function onLoad() {
-                    ctrl.resultString = "";
+                    ctrl.resultstring = "";
                 }
 
                 function getField(fieldName, operator, valueFrom, valueTo, condition) {
@@ -81,8 +81,8 @@
 
                 function getResult() {
                     if (ctrl.result !== undefined)
-                        ctrl.resultString = filterToString(ctrl.result);
-                    return ctrl.resultString;
+                        ctrl.resultstring = filterToString(ctrl.result);
+                    return ctrl.resultstring;
                 }
 
                 angular.extend(this, {
