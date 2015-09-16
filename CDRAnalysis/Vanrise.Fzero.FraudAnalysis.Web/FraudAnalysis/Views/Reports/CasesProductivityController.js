@@ -69,23 +69,19 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
         });
     }
 
-    function removeLastComma(strng) {
-        var n = strng.lastIndexOf(",");
-        var a = strng.substring(0, n)
-        return a;
-    }
+   
 
     function retrieveData() {
 
-        var strategiesList = '';
+        var selectedStrategiesIDs = [];
 
         angular.forEach($scope.selectedStrategies, function (itm) {
-            strategiesList = strategiesList + itm.id + ','
+            selectedStrategiesIDs.push(itm.Id);
         });
 
 
         var query = {
-            StrategiesList: removeLastComma(strategiesList),
+            StrategiesList: selectedStrategiesIDs,
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate,
             GroupDaily: $scope.groupDaily

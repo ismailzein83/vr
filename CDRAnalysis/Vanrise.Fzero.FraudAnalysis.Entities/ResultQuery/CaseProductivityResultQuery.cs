@@ -9,7 +9,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
     public class CaseProductivityResultQuery
     {
-        public string StrategiesList { get; set; }
+        public List<int> StrategyIDs { get; set; }
 
         public DateTime? FromDate { get; set; }
 
