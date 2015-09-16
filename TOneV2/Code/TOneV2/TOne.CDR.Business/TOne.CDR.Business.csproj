@@ -84,6 +84,7 @@
     <Compile Include="CDRMainManager.cs" />
     <Compile Include="CDRManager.cs" />
     <Compile Include="CDRQueueFactory.cs" />
+    <Compile Include="CodeMap.cs" />
     <Compile Include="CostPricingManager.cs" />
     <Compile Include="PricingGenerator.cs" />
     <Compile Include="PricingGeneratorEntities.cs" />

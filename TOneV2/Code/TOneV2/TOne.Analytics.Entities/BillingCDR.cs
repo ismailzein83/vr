@@ -35,7 +35,7 @@ namespace TOne.Analytics.Entities
         public String Extra_Fields { get; set; }
         public DateTime Alert { get; set; }
         public DateTime Connect { get; set; }
-       
+        public string IsRerouted { get; set; }
 
     }
 }

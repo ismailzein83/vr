@@ -98,11 +98,10 @@ function RepeatedNumbersController($scope, UtilsService, $q, RepeatedNumbersAPIS
                     width: "80%"//,
                     //maxHeight: "800px"
                 };
-                console.log(new Date($scope.fromDate).toString());
-                console.log(new Date($scope.fromDate));
+
                 var parameters = {
-                    fromDate: new Date($scope.fromDate).toLocaleString(),
-                    toDate: new Date($scope.toDate).toUTCString(),
+                    fromDate: UtilsService.cloneDateTime($scope.fromDate) ,
+                    toDate: UtilsService.cloneDateTime($scope.toDate),
                     customerIds: dataItem.CustomerID != null || dataItem.CustomerID != undefined ? [dataItem.CustomerID] : null,
                     zoneIds: dataItem.OurZoneID != null || dataItem.OurZoneID != undefined ? [dataItem.OurZoneID] : null,
                     supplierIds: dataItem.SupplierID != null || dataItem.SupplierID != undefined ? [dataItem.SupplierID] : null,

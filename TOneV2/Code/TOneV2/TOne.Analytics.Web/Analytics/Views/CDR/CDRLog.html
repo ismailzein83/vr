@@ -57,7 +57,23 @@
              <vr-row>
                  <vr-columns width="fullrow" simplecol>
                      <vr-datagrid datasource="data" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'" on-ready="onMainGridReady" maxheight="500px">
-                         <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" type="measure.type"></vr-datagridcolumn>
+
+                         <vr-datagridcolumn headertext="'Switch Name'" field="'SwitchName'" type="'Text'"></vr-datagridcolumn>
+                         <vr-datagridcolumn headertext="'Our Zone Name'" field="'OurZoneName'" type="'Text'"></vr-datagridcolumn>
+                         <vr-datagridcolumn headertext="'Originating Zone Name'" field="'OriginatingZoneName'" type="'Text'"></vr-datagridcolumn>
+                         <vr-datagridcolumn headertext="'Call Date'" field="'Attempt'" type="'Datetime'"></vr-datagridcolumn>
+                         <vr-datagridcolumn headertext="'Customer Info'" field="'CustomerInfo'" type="'Text'"></vr-datagridcolumn>
+                         <vr-datagridcolumn headertext="'CGPN'" field="'CGPN'" type="'Text'"></vr-datagridcolumn>
+                         <vr-datagridcolumn headertext="'PDD'" field="'PDD'" type="'Number'"></vr-datagridcolumn>
+                         <vr-datagridcolumn headertext="'Number'" field="'CDPN'" type="'Text'"></vr-datagridcolumn>
+                         <vr-datagridcolumn headertext="'CDPNOut'" field="'CDPNOut'" type="'Text'"></vr-datagridcolumn>
+                         <vr-datagridcolumn headertext="'Duration In Seconds'" field="'DurationInSeconds'" type="'Text'"></vr-datagridcolumn>
+                         <vr-datagridcolumn headertext="'Release Code'" field="'ReleaseCode'" type="'Text'"></vr-datagridcolumn>
+                         <vr-datagridcolumn headertext="'Release Source'" field="'ReleaseSource'" type="'Text'"></vr-datagridcolumn>
+                         <vr-datagridcolumn headertext="'Supplier Name'" field="'SupplierName'" type="'Text'"></vr-datagridcolumn>
+                         <vr-datagridcolumn headertext="'Supplier Zone Name'" field="'SupplierZoneName'" type="'Text'"></vr-datagridcolumn>
+                         <vr-datagridcolumn headertext="'Re.Routed'" field="'IsRerouted'" type="'Text'"></vr-datagridcolumn>
+
 
 
                      </vr-datagrid>

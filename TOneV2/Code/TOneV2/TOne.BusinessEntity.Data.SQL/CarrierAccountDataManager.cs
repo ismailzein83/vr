@@ -153,7 +153,7 @@ namespace TOne.BusinessEntity.Data.SQL
                         SupplierPaymentType = (byte)reader["SupplierPaymentType"],
                         NameSuffix = reader["NameSuffix"] as string,
                         IsCustomerCeiling = reader["IsCustomerCeiling"] as string != null ? (IsCeiling)Enum.Parse(typeof(IsCeiling), reader["IsCustomerCeiling"] as string) : IsCeiling.Null,
-
+                        RepresentsASwitch=(GetReaderValue<char>(reader,"RepresentsASwitch").Equals("Y"))?true:false,
                         IsSupplierCeiling = reader["IsSupplierCeiling"] as string != null ? (IsCeiling)Enum.Parse(typeof(IsCeiling), reader["IsSupplierCeiling"] as string) : IsCeiling.Null,
                         SupplierGMTTime = GetReaderValue<Int16>(reader, "GMTTime"),
                         CarrierGroupName = reader["CarrierGroupName"] as string,
@@ -279,7 +279,9 @@ namespace TOne.BusinessEntity.Data.SQL
                         SupplierPaymentType = (byte)reader["SupplierPaymentType"],
                         NameSuffix = reader["NameSuffix"] as string,
                         GroupIds = SplitGroups(reader["CarrierGroups"] as string),
-                        CarrierGroupID = GetReaderValue<int?>(reader,"CarrierGroupID")
+                        CarrierGroupID = GetReaderValue<int?>(reader,"CarrierGroupID"),
+                        RepresentsASwitch = GetReaderValue<string>(reader, "RepresentsASwitch").Equals("Y")?true:false,
+                        IsOriginatingZonesEnabled= GetReaderValue<string>(reader, "IsOriginatingZonesEnabled").Equals("Y")?true:false
                     });
             });
             return dic;

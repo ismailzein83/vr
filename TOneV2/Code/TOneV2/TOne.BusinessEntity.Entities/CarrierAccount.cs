@@ -28,5 +28,8 @@ namespace TOne.BusinessEntity.Entities
         public IsCeiling IsSupplierCeiling{ get; set; }
         public int CarrierMaskId { get; set; }
         public Int16 SupplierGMTTime { get; set; }
+        public bool RepresentsASwitch { get; set; }
+
+        public bool IsOriginatingZonesEnabled { get; set; }
     }
 }

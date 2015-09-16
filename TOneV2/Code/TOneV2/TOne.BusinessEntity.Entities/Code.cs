@@ -23,5 +23,7 @@ namespace TOne.BusinessEntity.Entities
         public string SupplierId { get; set; }
 
         public byte[] Timestamp { get; set; }
+        public int ServicesFlag { get; set; }
+        public string Name { get; set; }
     }
 }

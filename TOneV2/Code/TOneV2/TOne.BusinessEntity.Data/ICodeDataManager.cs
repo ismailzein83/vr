@@ -22,5 +22,6 @@ namespace TOne.BusinessEntity.Data
         List<string> GetDistinctCodePrefixes(int codePrefixLength, DateTime effectiveOn, bool isFuture);
         List<Code> GetCodes(int zoneID, DateTime effectiveOn);
         string GetCodeGroupName(int codeGroupId);
+        List<Code> GetSupplierCodes(string supplierId, char rootCode, DateTime whenEffective);
     }
 }

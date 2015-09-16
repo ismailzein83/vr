@@ -48,10 +48,10 @@ namespace TOne.Analytics.Data.SQL
             AddFilterToQuery(filter, whereBuilder);
             switch(CDROption)
             {
-                case BillingCDROptionMeasures.All: queryData = String.Format(@"{0} UNION ALL {1}", GetSingleQuery("Billing_CDR_Main", "MainCDR",tempTableName, whereBuilder), GetSingleQuery("Billing_CDR_Invalid", "Invalid",null, whereBuilder));
+                case BillingCDROptionMeasures.All: queryData = String.Format(@"{0} UNION ALL {1}", GetSingleQuery("Billing_CDR_Main", "MainCDR", tempTableName, whereBuilder, "'N' as IsRerouted"), GetSingleQuery("Billing_CDR_Invalid", "Invalid", null, whereBuilder, "Invalid.IsRerouted"));
                     break;
-                case BillingCDROptionMeasures.Invalid: queryData = GetSingleQuery("Billing_CDR_Invalid", "Invalid",tempTableName, whereBuilder); break;
-                case BillingCDROptionMeasures.Successful: queryData = GetSingleQuery("Billing_CDR_Main", "MainCDR",tempTableName, whereBuilder); break;
+                case BillingCDROptionMeasures.Invalid: queryData = GetSingleQuery("Billing_CDR_Invalid", "Invalid", tempTableName, whereBuilder, "Invalid.IsRerouted"); break;
+                case BillingCDROptionMeasures.Successful: queryData = GetSingleQuery("Billing_CDR_Main", "MainCDR", tempTableName, whereBuilder, "'N' as IsRerouted"); break;
             }
           
             StringBuilder queryBuilder = new StringBuilder(@"
@@ -92,7 +92,7 @@ namespace TOne.Analytics.Data.SQL
         }
 
 
-        private string GetSingleQuery(string tableName, string alias, string tempTableName,StringBuilder whereBuilder)
+        private string GetSingleQuery(string tableName, string alias, string tempTableName,StringBuilder whereBuilder,string isRerouted)
         {
             return String.Format(@"
                                     
@@ -116,8 +116,9 @@ namespace TOne.Analytics.Data.SQL
                         {1}.SwitchID ,
                         {1}.SwitchCdrID,
                         {1}.Tag,
-                        {1}.Extra_Fields  FROM {0} {1} 
-                            where ({1}.Attempt between @FromDate AND @ToDate)  {2}  ", tableName, alias, whereBuilder.ToString());
+                        {1}.Extra_Fields,
+                        {3} FROM {0} {1} 
+                            where ({1}.Attempt between @FromDate AND @ToDate)  {2}  ", tableName, alias, whereBuilder.ToString(), isRerouted);
                         }
         
         private BillingCDR CDRDataMapper(IDataReader reader)
@@ -168,6 +169,7 @@ namespace TOne.Analytics.Data.SQL
                 cdr.Tag = reader["Tag"] as string;
                 cdr.Extra_Fields = reader["Extra_Fields"] as string;
                 cdr.CDPNOut = reader["CDPNOut"] as string;
+                cdr.IsRerouted = reader["IsRerouted"] as string;
 
         }
         public int GetReaderOfNumeric(IDataReader reader, String value)

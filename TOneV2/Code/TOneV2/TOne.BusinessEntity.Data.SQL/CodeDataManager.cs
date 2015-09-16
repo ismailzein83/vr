@@ -191,5 +191,24 @@ namespace TOne.BusinessEntity.Data.SQL
            }, codePrefix);
             return codeGroups;
         }
+
+        public List<Code> GetSupplierCodes(string supplierId, char rootCode, DateTime whenEffective)
+        {
+            return GetItemsSP("BEntity.sp_Code_GetBySupplier", (reader) =>
+            {
+                return new Entities.Code
+                {
+                    ID = (long)reader["ID"],
+                    Value = reader["Code"] as string,
+                    ZoneId = (int)reader["ZoneID"],
+                    BeginEffectiveDate = reader["BeginEffectiveDate"] as Nullable<DateTime>,
+                    EndEffectiveDate = GetReaderValue<Nullable<DateTime>>(reader, "EndEffectiveDate"),
+                    CodeGroup = reader["CodeGroup"] as string,
+                    SupplierId = reader["SupplierID"] as string,
+                    ServicesFlag = GetReaderValue<Int16>(reader, "ServicesFlag"),
+                    Name = reader["Name"] as string,
+                };
+            }, whenEffective, supplierId, rootCode);
+        }
     }
 }

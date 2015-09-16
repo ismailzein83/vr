@@ -13,6 +13,7 @@ using Vanrise.Queueing;
 using Vanrise.BusinessProcess;
 using TOne.CDR.Business;
 using Vanrise.Common;
+using TOne.BusinessEntity.Business;
 
 namespace TOne.CDRProcess.Activities
 {
@@ -73,7 +74,7 @@ namespace TOne.CDRProcess.Activities
             TOneCacheManager cacheManager = handle.CustomData["CacheManager"] as TOneCacheManager;
             PricingGenerator generator;
             generator = new PricingGenerator(cacheManager);
-            ProtCodeMap codeMap = new ProtCodeMap(cacheManager);
+            TOne.CDR.Business.CodeMap codeMap = new TOne.CDR.Business.CodeMap(cacheManager);
             SalePricingManager salePricing = new SalePricingManager(cacheManager);
             CostPricingManager costPricing = new CostPricingManager(cacheManager);
             bool hasItem = false;
@@ -108,24 +109,18 @@ namespace TOne.CDRProcess.Activities
 
                             DateTime StartIdentification = DateTime.Now;
 
-                            Billing_CDR_Base cdrBase = GenerateBillingCdr(codeMap, cdr);
+                            BillingCDRBase baseCDR = GenerateBillingCdr(codeMap, cdr);
                             TimeSpan spentIndentification = DateTime.Now.Subtract(StartIdentification);
                             totalsecondsforidentifications += spentIndentification.TotalSeconds;
-                            BillingCDRBase baseCDR = GetBillingCDRBase(cdrBase);
-
-                            
                             if ((inputArgument.CustomersIds==null && inputArgument.SupplierIds==null)|| (inputArgument.CustomersIds.Contains(baseCDR.CustomerID) && inputArgument.SupplierIds.Contains(baseCDR.SupplierID))  )
                             {
                                 billingCDRs.CDRs.Add(baseCDR);
-                                if (baseCDR.IsValid)
+                                if (baseCDR is BillingCDRMain)
                                 {
                                     BillingCDRMain main = new BillingCDRMain(baseCDR);
                                     DateTime timePricing = DateTime.Now;
                                     main.sale = salePricing.GetRepricing(main);
                                     main.cost = costPricing.GetRepricing(main);
-
-
-
                                     //main.cost = generator.GetRepricing<BillingCDRCost>(main);
                                     //main.sale = generator.GetRepricing<BillingCDRSale>(main);
                                     TimeSpan spentPricingPerCDR = DateTime.Now.Subtract(timePricing);
@@ -207,10 +202,8 @@ namespace TOne.CDRProcess.Activities
             }
         }
 
-        private BillingCDRBase GetBillingCDRBase(Billing_CDR_Base cdrBase)
+        private BillingCDRBase GetBillingCDRBase(Billing_CDR_Base cdrBase,BillingCDRBase cdr)
         {
-            BillingCDRBase cdr = new BillingCDRBase();
-
             cdr.Alert = cdrBase.Alert;
             cdr.Attempt = cdrBase.Attempt;
             cdr.CDPN = cdrBase.CDPN;
@@ -243,85 +236,106 @@ namespace TOne.CDRProcess.Activities
             return cdr;
         }
 
-        private Billing_CDR_Base GenerateBillingCdr(TOne.Business.ProtCodeMap codeMap, TABS.CDR cdr)
+
+        private BillingCDRBase GenerateBillingCdr(TOne.CDR.Business.CodeMap codeMap, TABS.CDR cdr)
         {
             Billing_CDR_Base billingCDR = null;
-
+            BillingCDRBase billingCDRMapped = null;
             if (cdr.DurationInSeconds > 0)
             {
                 billingCDR = new Billing_CDR_Main();
+                billingCDRMapped = new BillingCDRMain();
             }
             else
+            {
                 billingCDR = new Billing_CDR_Invalid();
-
+                billingCDRMapped = new BillingCDRInvalid();
+            }
+                
             bool valid = cdr.Switch.SwitchManager.FillCDRInfo(cdr.Switch, cdr, billingCDR);
+            billingCDRMapped = GetBillingCDRBase(billingCDR, billingCDRMapped);
 
-            GenerateZones(codeMap, billingCDR);
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            TOne.BusinessEntity.Entities.CarrierAccount customer = new BusinessEntity.Entities.CarrierAccount();
+            TOne.BusinessEntity.Entities.CarrierAccount supplier = new BusinessEntity.Entities.CarrierAccount();
+            if (billingCDRMapped.CustomerID != null && billingCDRMapped.SupplierID != null)
+            {
+                customer = carrierAccountManager.GetCarrierAccount(billingCDR.CustomerID);
+                supplier = carrierAccountManager.GetCarrierAccount(billingCDR.SupplierID);
+            }
 
-            // If there is a duration and missing supplier (zone) or Customer (zone) info
-            // then it is considered invalid
-            if (billingCDR is Billing_CDR_Main)
+
+            GenerateZones(codeMap, billingCDRMapped, customer, supplier);
+
+            ZoneManager zoneManager = new ZoneManager();
+            TOne.BusinessEntity.Entities.Zone supplierZone = null;
+            TOne.BusinessEntity.Entities.Zone ourZone = null;
+            if (billingCDRMapped.SupplierZoneID!=-1)
+            {
+               
+                supplierZone = zoneManager.GetZone(billingCDRMapped.SupplierZoneID);
+                ourZone = zoneManager.GetZone(billingCDRMapped.OurZoneID);
+            }
+            if (billingCDRMapped is BillingCDRMain)
                 if (!valid
-                    || billingCDR.Customer.RepresentsASwitch
-                    || billingCDR.Supplier.RepresentsASwitch
-                    || billingCDR.CustomerID == null
-                    || billingCDR.SupplierID == null
-                    || billingCDR.OurZone == null
-                    || billingCDR.SupplierZone == null
-                    || billingCDR.Customer.ActivationStatus == ActivationStatus.Inactive
-                    || billingCDR.Supplier.ActivationStatus == ActivationStatus.Inactive)
+                    || customer.RepresentsASwitch
+                    || supplier.RepresentsASwitch
+                    || billingCDRMapped.CustomerID == null
+                    || billingCDRMapped.SupplierID == null
+                   || ourZone == null
+                    || supplierZone == null
+                    || customer.ActivationStatus == 0
+                    || supplier.ActivationStatus == 0)
                 {
-                    billingCDR = new Billing_CDR_Invalid(billingCDR);
+                    billingCDRMapped = new BillingCDRInvalid(billingCDRMapped);
                 }
-            return billingCDR;
+            return billingCDRMapped;
         }
 
         private System.Text.RegularExpressions.Regex InvalidCGPNDigits = new System.Text.RegularExpressions.Regex("[^0-9]", System.Text.RegularExpressions.RegexOptions.Compiled);
-        private void GenerateZones(TOne.Business.ProtCodeMap codeMap, Billing_CDR_Base cdr)
+        private void GenerateZones(TOne.CDR.Business.CodeMap codeMap, BillingCDRBase cdr, TOne.BusinessEntity.Entities.CarrierAccount customer, TOne.BusinessEntity.Entities.CarrierAccount supplier)
         {
             // Our Zone
-            Code ourCurrentCode = codeMap.Find(cdr.CDPN, CarrierAccount.SYSTEM, cdr.Attempt);
+            TOne.BusinessEntity.Entities.Code ourCurrentCode = codeMap.Find(cdr.CDPN, "SYS", cdr.Attempt);
             if (ourCurrentCode != null)
             {
-                cdr.OurZone = ourCurrentCode.Zone;
+                cdr.OurZoneID = ourCurrentCode.ZoneId;
                 cdr.OurCode = ourCurrentCode.Value;
             }
 
             // Originating Zone
-            if (cdr.CustomerID != null && CarrierAccount.All.ContainsKey(cdr.CustomerID))
+            if (customer != null)
             {
-                CarrierAccount customer = CarrierAccount.All[cdr.CustomerID];
                 if (customer.IsOriginatingZonesEnabled)
                 {
                     if (cdr.CGPN != null && cdr.CGPN.Trim().Length > 0)
                     {
                         string orginatingCode = InvalidCGPNDigits.Replace(cdr.CGPN, "");
-                        Code originatingCode = codeMap.Find(orginatingCode, CarrierAccount.SYSTEM, cdr.Attempt);
+                        TOne.BusinessEntity.Entities.Code originatingCode = codeMap.Find(orginatingCode, "SYS", cdr.Attempt);
                         if (originatingCode != null)
-                            cdr.OriginatingZone = originatingCode.Zone;
+                            cdr.OriginatingZoneID = originatingCode.ZoneId;
                     }
                 }
             }
 
             // Supplier Zone
-            if (cdr.SupplierID != null && CarrierAccount.All.ContainsKey(cdr.SupplierID))
+            if (supplier != null)
             {
-                CarrierAccount supplier = CarrierAccount.All[cdr.SupplierID];
-                Code supplierCode = null;
+                TOne.BusinessEntity.Entities.Code supplierCode = null;
 
                 if (TABS.SystemParameter.AllowCostZoneCalculationFromCDPNOut.BooleanValue.Value)
                 {
                     if (string.IsNullOrEmpty(cdr.CDPNOut))
-                        supplierCode = codeMap.Find(cdr.CDPN, supplier, cdr.Attempt);
+                        supplierCode = codeMap.Find(cdr.CDPN, supplier.CarrierAccountId, cdr.Attempt);
                     else
-                        supplierCode = codeMap.Find(cdr.CDPNOut, supplier, cdr.Attempt);
+                        supplierCode = codeMap.Find(cdr.CDPNOut, supplier.CarrierAccountId, cdr.Attempt);
                 }
                 else
-                    supplierCode = codeMap.Find(cdr.CDPN, supplier, cdr.Attempt);
+                    supplierCode = codeMap.Find(cdr.CDPN, supplier.CarrierAccountId, cdr.Attempt);
 
-                if (supplierCode != null)
+                if (supplierCode != null && supplierCode.ZoneId!=-1)
                 {
-                    cdr.SupplierZone = supplierCode.Zone;
+                    cdr.SupplierZoneID = supplierCode.ZoneId;
                     cdr.SupplierCode = supplierCode.Value;
                 }
             }
