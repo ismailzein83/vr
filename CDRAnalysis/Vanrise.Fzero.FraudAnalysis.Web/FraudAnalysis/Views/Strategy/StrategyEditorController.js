@@ -437,4 +437,4 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     }
 
 }
-appControllers.controller('StrategyEditorController', StrategyEditorController);
+appControllers.controller('FraudAnalysis_StrategyEditorController', StrategyEditorController);

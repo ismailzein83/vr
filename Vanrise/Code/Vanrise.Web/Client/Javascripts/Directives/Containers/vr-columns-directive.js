@@ -20,7 +20,9 @@
                         case "fullrow": numberOfColumns = 12; break;
                         case "1/2row": numberOfColumns = 6; break;
                         case "1/4row": numberOfColumns = 3; break;
+                        case "3/4row": numberOfColumns = 9; break;
                         case "1/3row": numberOfColumns = 4; break;
+                        case "2/3row": numberOfColumns = 8; break;
                     }
                 }
 
