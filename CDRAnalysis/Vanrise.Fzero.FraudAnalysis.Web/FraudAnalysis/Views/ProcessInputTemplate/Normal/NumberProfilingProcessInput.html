@@ -1,35 +1,35 @@
 ﻿<div ng-controller="FraudAnalysis_NumberProfilingProcessInputController">
     <vr-form name="formCreateProcessInput">
         <vr-row removeline>
-            <vr-columns width="normal">
+            <vr-columns width="1/3row">
                 <vr-select datasource="periods" datatextfield="Name" datavaluefield="Id" label="Period" selectedvalues="selectedPeriod" isrequired></vr-select>
             </vr-columns>
 
-            <vr-columns width="normal">
+            <vr-columns width="1/3row">
                 <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired></vr-datetimepicker>
             </vr-columns>
 
-            <vr-columns width="normal">
+            <vr-columns width="1/3row">
                 <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired></vr-datetimepicker>
             </vr-columns>
 
-            <vr-columns width="normal">
+            <vr-columns width="1/3row">
                 <vr-select datasource="hours" datatextfield="name" datavaluefield="id" label="Peak Hours" selectedvalues="selectedPeakHours" ismultipleselection isrequired></vr-select>
             </vr-columns>
        
-            <vr-columns width="normal">
-                <vr-textbox value="gapBetweenConsecutiveCalls" type="number" label="Gap Between Consecutive Calls" isrequired></vr-textbox>
+            <vr-columns width="1/3row">
+                <vr-textbox value="gapBetweenConsecutiveCalls" type="number" label="Gap Between Cons. Calls"  isrequired></vr-textbox>
             </vr-columns>
 
-            <vr-columns width="normal">
-                <vr-textbox value="gapBetweenFailedConsecutiveCalls" type="number" label="Gap Between Failed Consecutive Calls" isrequired></vr-textbox>
+            <vr-columns width="1/3row">
+                <vr-textbox value="gapBetweenFailedConsecutiveCalls" type="number" label="Gap Between Failed Cons. Calls" isrequired></vr-textbox>
             </vr-columns>
 
-            <vr-columns width="normal">
+            <vr-columns width="1/3row">
                 <vr-textbox value="maxLowDurationCall" type="number" label="Max. Low Duration Call (s) " isrequired></vr-textbox>
             </vr-columns>
 
-            <vr-columns width="normal">
+            <vr-columns width="1/3row">
                 <vr-textbox value="minCountofCallsinActiveHour" type="number" label="Min. Call Count in Active Hours" isrequired></vr-textbox>
             </vr-columns>
 
