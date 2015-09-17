@@ -28,8 +28,6 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
 
         $scope.casesProductivity = [];
 
-        loadStrategies();
-
         $scope.selectedStrategies = [];
 
         $scope.onMainGridReady = function (api) {
@@ -55,17 +53,22 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
     }
 
     function load() {
+        $scope.isInitializing = true;
 
-    }
-
-    function loadStrategies() {
         var periodId = 0; // all periods
         var isEnabled = ''; // all enabled and disabled
-        return StrategyAPIService.GetStrategies(periodId, isEnabled).then(function (response) {
-            angular.forEach(response, function (item) {
-                $scope.strategies.push({ id: item.Id, name: item.Name });
+        return StrategyAPIService.GetStrategies(periodId, isEnabled)
+            .then(function (response) {
+                angular.forEach(response, function (item) {
+                    $scope.strategies.push({ id: item.Id, name: item.Name });
+                });
+            })
+            .catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            })
+            .finally(function () {
+                $scope.isInitializing = false;
             });
-        });
     }
 
     function retrieveData() {

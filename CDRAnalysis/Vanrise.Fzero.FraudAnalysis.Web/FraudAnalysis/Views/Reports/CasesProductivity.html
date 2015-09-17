@@ -1,7 +1,7 @@
 ﻿<vr-panel ng-controller="FraudAnalysis_CasesProductivityController">
 
     <vr-form name="formFilter">
-        <div ng-hide="filterSectionCollapsed">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
             <vr-row removeline>
                 <vr-columns width="normal">
                     <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired></vr-datetimepicker>
@@ -20,6 +20,7 @@
 
             </vr-row>
         </div>
+
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
@@ -27,8 +28,6 @@
                 </div>
             </vr-actionbar>
         </vr-row>
-
-
     </vr-form>
 
     <div>

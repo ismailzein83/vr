@@ -18,8 +18,11 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
 
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
-            return retrieveData();
+
+            if (!$scope.isInitializing) // if the filters are loaded
+                return retrieveData();
         };
+
         $scope.searchClicked = function () {
             return retrieveData();
         }
@@ -72,8 +75,19 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
     }
 
     function load() {
-        loadPeriods();
-        loadUsers();
+        $scope.isInitializing = true;
+
+        return UtilsService.waitMultipleAsyncOperations([loadUsers, loadPeriods])
+            .then(function () {
+                if (mainGridAPI != undefined) // i.e. the grid has been waiting for the periods to load before it gets the data
+                    return retrieveData();
+            })
+            .catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            })
+            .finally(function () {
+                $scope.isInitializing = false;
+            });
     }
 
     function defineMenuActions() {
@@ -122,19 +136,21 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
     }
 
     function loadUsers() {
-        return UsersAPIService.GetUsers().then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.users.push(itm);
+        return UsersAPIService.GetUsers()
+            .then(function (response) {
+                angular.forEach(response, function (item) {
+                    $scope.users.push(item);
+                });
             });
-        });
     }
 
     function loadPeriods() {
-        return StrategyAPIService.GetPeriods().then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.periods.push(itm);
+        return StrategyAPIService.GetPeriods()
+            .then(function (response) {
+                angular.forEach(response, function (item) {
+                    $scope.periods.push(item);
+                });
             });
-        });
     }
 
     function addNewStrategy() {

@@ -21,14 +21,10 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
         $scope.fromDate = Yesterday;
         $scope.toDate = new Date();
 
-
         $scope.strategies = [];
+        $scope.selectedStrategies = [];
 
         $scope.blockedLines = [];
-
-
-        $scope.selectedStrategies = [];
-        
 
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
@@ -55,7 +51,21 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
     }
 
     function load() {
-        loadStrategies();
+        $scope.isInitializing = true;
+
+        var periodId = 0; // all periods
+        return StrategyAPIService.GetStrategies(periodId, '')
+            .then(function (response) {
+                angular.forEach(response, function (item) {
+                    $scope.strategies.push({ id: item.Id, name: item.Name });
+                });
+            })
+            .catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            })
+            .finally(function () {
+                $scope.isInitializing = false;
+            });
     }
 
     function defineMenuActions() {
@@ -71,7 +81,6 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
             accountNumbers.push({ accountNumber: itm })
         });
 
-
         var params = {
             accountNumbers: accountNumbers
         };
@@ -83,19 +92,9 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "Blocked Lines List";
         };
+
         VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/Reports/BlockedLinesDetails.html", params, settings);
     }
-
-    function loadStrategies() {
-        var periodId = 0; // all periods
-        return StrategyAPIService.GetStrategies(periodId, '').then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.strategies.push({ id: itm.Id, name: itm.Name });
-            });
-        });
-    }
-
-   
 
     function retrieveData() {
 

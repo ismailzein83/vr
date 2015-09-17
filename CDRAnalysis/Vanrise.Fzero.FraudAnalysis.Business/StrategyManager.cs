@@ -19,11 +19,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         public IEnumerable<Strategy> GetStrategies(int PeriodId, bool? IsEnabled)
         {
-
             IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
-
             return manager.GetStrategies(PeriodId, IsEnabled);
-
         }
 
         public Vanrise.Entities.IDataRetrievalResult<Strategy> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyResultQuery> input)
