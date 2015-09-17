@@ -51,11 +51,11 @@
             <div ng-show="normalCDRsSelected">
                 <vr-row>
                     <vr-columns width="normal">
-                        <vr-datetimepicker label="From" value="fromDate_NormalCDRs" type="dateTime" onvaluechanged="filterData" isrequired></vr-datetimepicker>
+                        <vr-datetimepicker label="From" value="fromDate_NormalCDRs" type="dateTime" onblurdatetime="filterData" isrequired></vr-datetimepicker>
                     </vr-columns>
 
                     <vr-columns width="normal">
-                        <vr-datetimepicker label="To" value="toDate_NormalCDRs" type="dateTime" onvaluechanged="filterData" isrequired></vr-datetimepicker>
+                        <vr-datetimepicker label="To" value="toDate_NormalCDRs" type="dateTime" onblurdatetime="filterData" isrequired></vr-datetimepicker>
                     </vr-columns>
                 </vr-row>
                 <vr-row>
@@ -102,7 +102,7 @@
                         <vr-datetimepicker label="From"
                                            value="fromDate_NumberProfiles"
                                            type="dateTime"
-                                           onvaluechanged="filterData"
+                                           onblurdatetime="filterData"
                                            isrequired
                                            ng-show="showDate">
                         </vr-datetimepicker>
@@ -112,7 +112,7 @@
                         <vr-datetimepicker label="To"
                                            value="toDate_NumberProfiles"
                                            type="dateTime"
-                                           onvaluechanged="filterData"
+                                           onblurdatetime="filterData"
                                            isrequired
                                            ng-show="showDate">
                         </vr-datetimepicker>
