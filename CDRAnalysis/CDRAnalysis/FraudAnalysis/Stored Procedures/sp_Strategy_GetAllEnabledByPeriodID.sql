@@ -1,6 +1,6 @@
 ﻿
 
-CREATE PROCEDURE [FraudAnalysis].[sp_Strategy_GetStrategies] 
+CREATE PROCEDURE [FraudAnalysis].[sp_Strategy_GetAllEnabledByPeriodID] 
 (
 	@PeriodId int,
 	@IsEnabled bit

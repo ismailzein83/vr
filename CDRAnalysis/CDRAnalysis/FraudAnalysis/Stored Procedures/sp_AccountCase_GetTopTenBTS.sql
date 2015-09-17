@@ -1,6 +1,6 @@
 ﻿
 
-CREATE PROCEDURE [FraudAnalysis].[sp_AccountCase_CreateTempForTopTenHighValueBTS]
+CREATE PROCEDURE [FraudAnalysis].[sp_AccountCase_GetTopTenBTS]
 (
 	@TempTableName varchar(200),	
 	@FromDate datetime,
@@ -11,25 +11,22 @@ CREATE PROCEDURE [FraudAnalysis].[sp_AccountCase_CreateTempForTopTenHighValueBTS
 		SET NOCOUNT ON
 		
 		IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
-	    BEGIN	
-			select cdr.DurationInSeconds as Volume, cdr.BTS_id  
-			into #Result2
-			from FraudAnalysis.NormalCDR cdr 
-			with (nolock, index=IX_NormalCDR_MSISDN)
-			where cdr.ConnectDateTime between @FromDate and @ToDate
-			
-			
-			select top 10 sum(cdr.Volume) as Volume, cdr.BTS_id
+	    BEGIN
+		
+			select top 10 count(distinct ac.AccountNumber) as CountCases, cdr.BTS_id BTS_Id 
 			into #Result
-			from #Result2 cdr
+			from FraudAnalysis.NormalCDR cdr 
+			inner join FraudAnalysis.AccountCase ac on cdr.MSISDN=ac.AccountNumber
+			
+			
+			where ac.CreatedTime between @FromDate and @ToDate and ac.Status = 3
 			group by BTS_id
-			order by sum(cdr.Volume) desc
+			order by count(distinct ac.AccountNumber) desc
 		
 			
 			
 			declare @sql varchar(1000)
 			set @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #Result';
-			
 			exec(@sql)
 			
 		END

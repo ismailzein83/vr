@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [FraudAnalysis].[sp_StrategyExecutionDetails_SetStatusToCaseStatus]
+CREATE PROCEDURE [FraudAnalysis].[sp_StrategyExecutionDetails_UpdateStatus]
 	@AccountNumber VARCHAR(50),
 	@CaseID INT,
 	@OccuranceStatusID INT
@@ -9,5 +9,5 @@ BEGIN
 	SET	CaseID = @CaseID,
 		[SuspicionOccuranceStatus] = @OccuranceStatusID
 	WHERE AccountNumber = @AccountNumber
-		AND (CaseID IS NULL OR CaseID = @CaseID)
+		AND (CaseID IS NULL OR CaseID = @CaseID) -- true when an open or pending case is updated
 END

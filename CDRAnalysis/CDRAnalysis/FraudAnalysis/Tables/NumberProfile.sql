@@ -16,6 +16,8 @@
 
 
 
+
+
 GO
 
 
@@ -23,4 +25,14 @@ GO
 GO
 CREATE NONCLUSTERED INDEX [IX_NumberProfile_AccountNumber]
     ON [FraudAnalysis].[NumberProfile]([AccountNumber] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_NumberProfile_ToDate]
+    ON [FraudAnalysis].[NumberProfile]([ToDate] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_NumberProfile_FromDate]
+    ON [FraudAnalysis].[NumberProfile]([FromDate] ASC);
 

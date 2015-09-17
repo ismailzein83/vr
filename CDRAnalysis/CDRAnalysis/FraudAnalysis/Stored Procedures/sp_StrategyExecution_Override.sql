@@ -3,13 +3,10 @@
 CREATE PROCEDURE [FraudAnalysis].[sp_StrategyExecution_Override] 
     @StrategyId int, 
 	@FromDate DateTime,
-	@ToDate DateTime,
-	@Id int out
+	@ToDate DateTime
 AS
 BEGIN
-        SET @Id = (select top 1 ID from FraudAnalysis.StrategyExecution where StrategyId = @StrategyId and FromDate=@FromDate and ToDate =@ToDate order by ID  desc)
-        
-        update FraudAnalysis.StrategyExecution set IsOverriden=1 where Id = @Id 
+        update FraudAnalysis.StrategyExecution set IsOverriden=1 where Id = (select top 1 ID from FraudAnalysis.StrategyExecution with(nolock) where StrategyId = @StrategyId and FromDate=@FromDate and ToDate =@ToDate order by ID  desc)
 END
 
 SET NOCOUNT OFF

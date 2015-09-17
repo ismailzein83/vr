@@ -1,6 +1,6 @@
 ﻿
 
-CREATE PROCEDURE [FraudAnalysis].[sp_StrategyExecutionDetails_Delete] 
+Create PROCEDURE [FraudAnalysis].[sp_StrategyExecutionDetails_DeleteByStrategyExecutionID] 
     @StrategyExecutionID int
 AS
 BEGIN

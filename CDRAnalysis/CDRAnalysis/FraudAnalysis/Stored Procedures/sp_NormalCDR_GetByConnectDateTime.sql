@@ -2,7 +2,7 @@
 
 
 
-CREATE PROCEDURE [FraudAnalysis].[sp_NormalCDR_Load] 
+CREATE PROCEDURE [FraudAnalysis].[sp_NormalCDR_GetByConnectDateTime] 
 (
 	@From datetime ,
 	@To datetime

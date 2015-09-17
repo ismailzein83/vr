@@ -1,6 +1,6 @@
 ﻿
 
-CREATE PROCEDURE [FraudAnalysis].[sp_Strategy_GetStrategy] 
+CREATE PROCEDURE [FraudAnalysis].[sp_Strategy_GetByID] 
 	@Id int
 AS
 BEGIN

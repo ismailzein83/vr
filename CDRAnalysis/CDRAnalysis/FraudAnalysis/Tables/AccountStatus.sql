@@ -7,3 +7,10 @@
 
 
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_AccountStatus_Status]
+    ON [FraudAnalysis].[AccountStatus]([Status] ASC);
+

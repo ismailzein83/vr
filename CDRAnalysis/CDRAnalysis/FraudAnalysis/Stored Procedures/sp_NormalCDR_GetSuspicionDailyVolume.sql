@@ -1,6 +1,6 @@
 ﻿
 
-CREATE PROCEDURE [FraudAnalysis].[sp_AccountCase_CreateTempForDailyVolumeLooses]
+CREATE PROCEDURE [FraudAnalysis].[sp_NormalCDR_GetSuspicionDailyVolume]
 (
 	@TempTableName varchar(200),	
 	@FromDate datetime,

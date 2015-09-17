@@ -3,7 +3,7 @@
 
 
 
-CREATE PROCEDURE [FraudAnalysis].[sp_AccountStatus_Load] 
+CREATE PROCEDURE [FraudAnalysis].[sp_AccountStatus_GetByStatuses] 
 
 AS
 BEGIN

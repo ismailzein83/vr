@@ -6,9 +6,10 @@
 CREATE PROCEDURE [FraudAnalysis].[sp_AccountCaseHistory_Insert]
 	@CaseID INT,
 	@UserID INT,
-	@StatusID INT
+	@StatusID INT,
+	@Reason TEXT = NULL
 AS
 BEGIN
-	INSERT INTO FraudAnalysis.AccountCaseHistory (CaseID, UserID, [Status], StatusTime)
-	VALUES (@CaseID, @UserID, @StatusID, GETDATE())
+	INSERT INTO FraudAnalysis.AccountCaseHistory (CaseID, UserID, [Status], StatusTime, Reason)
+	VALUES (@CaseID, @UserID, @StatusID, GETDATE(), @Reason)
 END

@@ -12,3 +12,15 @@
 
 
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_StrategyExecution_Strategy]
+    ON [FraudAnalysis].[StrategyExecution]([StrategyID] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_StrategyExecution_ExecutionDate]
+    ON [FraudAnalysis].[StrategyExecution]([ExecutionDate] ASC);
+

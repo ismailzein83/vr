@@ -2,7 +2,7 @@
 
 
 
-CREATE PROCEDURE [FraudAnalysis].[sp_StrategyExecutionDetails_Load] 
+CREATE PROCEDURE [FraudAnalysis].[sp_StrategyExecutionDetails_GetByNULLCaseID] 
 
 AS
 BEGIN

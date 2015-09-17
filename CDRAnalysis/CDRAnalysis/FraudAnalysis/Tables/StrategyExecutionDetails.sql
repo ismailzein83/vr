@@ -13,3 +13,25 @@
 
 
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_StrategyExecutionDetails_SuspicionLevel]
+    ON [FraudAnalysis].[StrategyExecutionDetails]([SuspicionLevelID] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_StrategyExecutionDetails_StrategyExecutionID]
+    ON [FraudAnalysis].[StrategyExecutionDetails]([StrategyExecutionID] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_StrategyExecutionDetails_Status]
+    ON [FraudAnalysis].[StrategyExecutionDetails]([SuspicionOccuranceStatus] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_StrategyExecutionDetails_AccountNumber]
+    ON [FraudAnalysis].[StrategyExecutionDetails]([AccountNumber] ASC);
+

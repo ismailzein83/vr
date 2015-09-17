@@ -1,6 +1,6 @@
 ﻿
 
-CREATE PROCEDURE [FraudAnalysis].[sp_NormalCDR_CreateTempForFilteredNormalCDRs]
+CREATE PROCEDURE [FraudAnalysis].[sp_NormalCDR_CreateTempByMSISDN]
 (
 	@TempTableName VARCHAR(200),
 	@MSISDN VARCHAR(30),

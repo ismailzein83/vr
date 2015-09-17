@@ -15,7 +15,8 @@ BEGIN
 		SELECT ID AS LogID,
 			UserID,
 			[Status] AS AccountCaseStatusID,
-			StatusTime
+			StatusTime,
+			Reason
 			
 		INTO #RESULT
 		

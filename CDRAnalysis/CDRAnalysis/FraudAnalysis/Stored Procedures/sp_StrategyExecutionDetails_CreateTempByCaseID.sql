@@ -30,6 +30,7 @@ BEGIN
 		INNER JOIN FraudAnalysis.Strategy s ON e.StrategyID = s.Id
 		
 		WHERE d.AccountNumber = @AccountNumber
+			AND d.CaseID = @CaseID
 	
 		DECLARE @sql VARCHAR(1000)
 		SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';
