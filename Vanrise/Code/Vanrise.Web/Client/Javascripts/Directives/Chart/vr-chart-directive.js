@@ -187,56 +187,61 @@ app.directive('vrChart', ['ChartDirService', 'VRModalService', 'UtilsService', f
                 }
             });
             api.hideChart();
-            chartElement.highcharts({
-                chart: {
-                    type: chartDefinition.type,
-                    options3d: {
-                        enabled: true,
-                        alpha: 35,
-                        beta: 0
-                    }
-                },
-                title: {
-                    text: chartDefinition.title
-                },
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        depth: 35,
-                        dataLabels: {
-                            enabled: !currentChartSettings.showValuesWithLegends,
-                            format: '{point.name}'
-                        },
-                        showInLegend: true,
-                    }
-                },
-                legend: {
-                    enabled: true,
-                    layout: 'vertical',
-                    align: 'right',
-                    verticalAlign: 'top',
-                    y: 15,
-                    borderWidth: 0,
-                    useHTML: true,
-                    labelFormatter: function () {
-                        if (currentChartSettings.showValuesWithLegends)
-                            return '<div style="width:200px"><span style="float:left" title="' + this.name + '">' + (this.name != null && this.name.length > 15 ? this.name.substring(0, 15) + '..' : this.name) + '</span><span style="float:right">' + this.y.toFixed(2) + '</span></div>';
-                        else
-                            return '<div style="width:10px" title="' + this.name + '">' + (this.name != null && this.name.length > 2 ? this.name.substring(0, 2) : this.name) + '</div>';
-                    }
-                },
-                yAxis: {
+            setTimeout(function () {
+                chartElement.highcharts({
+                    chart: {
+                        type: chartDefinition.type,
+                        options3d: {
+                            enabled: true,
+                            alpha: 35,
+                            beta: 0
+                        }
+                    },
                     title: {
-                        text: chartDefinition.yAxisTitle
-                    }
-                },
-                series: series,
-                tooltip: {
-                    shared: true
-                },
-            });
-            isChartAvailable = true;
+                        text: chartDefinition.title
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            depth: 35,
+                            dataLabels: {
+                                enabled: !currentChartSettings.showValuesWithLegends,
+                                format: '{point.name}'
+                            },
+                            showInLegend: true,
+                        }
+                    },
+                    legend: {
+                        enabled: true,
+                        layout: 'vertical',
+                        align: 'right',
+                        verticalAlign: 'top',
+                        y: 15,
+                        borderWidth: 0,
+                        useHTML: true,
+                        labelFormatter: function () {
+                            if (currentChartSettings.showValuesWithLegends)
+                                return '<div style="width:200px"><span style="float:left" title="' + this.name + '">' + (this.name != null && this.name.length > 15 ? this.name.substring(0, 15) + '..' : this.name) + '</span><span style="float:right">' + this.y.toFixed(2) + '</span></div>';
+                            else
+                                return '<div style="width:10px" title="' + this.name + '">' + (this.name != null && this.name.length > 2 ? this.name.substring(0, 2) : this.name) + '</div>';
+                        }
+                    },
+                    yAxis: {
+                        title: {
+                            text: chartDefinition.yAxisTitle
+                        }
+                    },
+                    series: series,
+                    tooltip: {
+                        shared: true
+                    },
+                });
+                resizeChart(1);
+                isChartAvailable = true;
+            },1)
+           
+            
         }
 
         function renderChart(chartSource) {
@@ -386,7 +391,8 @@ app.directive('vrChart', ['ChartDirService', 'VRModalService', 'UtilsService', f
                     xAxisDefinition: xAxisDefinition
                 };
                 initializeChartSettings();
-                renderChart(currentChartSource);
+               // renderChart(currentChartSource);
+                $(window).resize();
             };
 
             if (ctrl.onReady && typeof (ctrl.onReady) == 'function')
@@ -410,6 +416,18 @@ app.directive('vrChart', ['ChartDirService', 'VRModalService', 'UtilsService', f
         function defineMenu(menuActions) {
             menuActionsAttribute = menuActions;
         }
+        function resizeChart(time) {
+            setTimeout(function () {
+                chartElement.highcharts().setSize(chartElement.parent().width() , chartElement.height(), true);
+
+            }, time)
+        }
+        $scope.$on('menu-full', function (event, args) {
+            resizeChart(500);
+        });
+        $scope.$on('menu-collapsed', function (event, args) {           
+            resizeChart(500);
+        });
 
         this.initializeController = initializeController;
         this.defineAPI = defineAPI;

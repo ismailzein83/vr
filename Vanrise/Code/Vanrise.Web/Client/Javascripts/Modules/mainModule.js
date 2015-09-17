@@ -43,9 +43,12 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
     }
     $scope.showToogled = function () {
         $scope.toogled = true;
+        $rootScope.$broadcast("menu-full");
     }
     $scope.hideToogled = function () {
-        $scope.toogled = false;
+        $scope.toogled = false;       
+        $rootScope.$broadcast("menu-collapsed");
+        
     }
     var timer;
     $scope.show = false;
@@ -54,13 +57,16 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             return
         $timeout.cancel(timer);
         $scope.toogled = true;
+        $rootScope.$broadcast("menu-full");
     };
     $scope.mouseout = function () {
-        if ($scope.pinned == true)
+        if ($scope.pinned == true )
             return
        timer = $timeout(function () {
            $scope.toogled = false;
-       }, 250);
+           $rootScope.$broadcast("menu-collapsed");
+       }, 500);
+
     };
 
     $scope.logout = function () {

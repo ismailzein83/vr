@@ -134,24 +134,12 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
             ctrl.placelHolder = ($attrs.placeholder != undefined) ? ctrl.placeholder : '';
             ctrl.updateModelOnKeyUp = function (e) {
                 var $this = angular.element(e.currentTarget);
-                if (moment($this.val(), format, true).isValid()) {
-                    if (parseInt(new Date($this.val()).getFullYear()) < 1970) {
-                        setTimeout(function () {
-                            divDatePicker.data("DateTimePicker").date(new Date());
-                        }, 1)
-                    }
-
-                    else {
-                        setTimeout(function () {
+                setTimeout(function () {
+                    if (moment($this.val(), format, true).isValid()) {
                             divDatePicker.data("DateTimePicker").date($this.val());
-                        }, 1)
                     }
-
-                }
-                else {
-
-                    divDatePicker.data("DateTimePicker").date(new Date());
-                }
+                }, 1)
+                
 
             }
 
@@ -220,6 +208,11 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
             });
 
             $scope.ctrl.onBlurDirective = function (e) {
+                var dateTab = (ctrl.value).toString().split("T")[0].split("-");
+                var year = parseInt(dateTab[0].split(" ")[3])
+                if (year < 1970) {
+                    ctrl.value = new Date();
+                }
                 if ($attrs.onblurdatetime != undefined) {
                     var onblurdatetimeMethod = $scope.$parent.$eval($attrs.onblurdatetime);
                     if (onblurdatetimeMethod != undefined && onblurdatetimeMethod != null && typeof (onblurdatetimeMethod) == 'function') {

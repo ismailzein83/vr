@@ -10761,6 +10761,7 @@
                         day.add(1, 'M');
                     }
                     setValue(day.date(parseInt($(e.target).text(), 10)));
+                    hide();
                     if (!hasTime() && !options.keepOpen && !options.inline) {
                         hide();
                     }
