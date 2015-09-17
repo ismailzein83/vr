@@ -42,7 +42,7 @@
 
                             <vr-columns width="3/4row">
                                 <div>
-                                    <vr-datagrid datasource="strategyFilters" maxheight="400px" hidepaginginfo>
+                                    <vr-datagrid datasource="strategyFilters" maxheight="400px" hidepaginginfo hidegridmenu   >
                                         
                                         <vr-datagridcolumn headertext="''" widthfactor="3" disablesorting>
                                             <vr-switch value="dataItem.isSelected" ng-show="viewScope.showSwitch(dataItem)"></vr-switch>
@@ -123,7 +123,7 @@
                             <div>
                                 <vr-button type="Add" data-onclick="AddSuspicionLevel" standalone></vr-button>
                             </div>
-                            <vr-datagrid datasource="strategyLevels" maxheight="400px" hidepaginginfo>
+                            <vr-datagrid datasource="strategyLevels" maxheight="400px" hidepaginginfo hidegridmenu>
                                 <vr-datagridcolumn headertext="'Suspicion Level'"> <vr-form name="formSuspicionLevel">    <vr-select hideremoveicon datasource="viewScope.suspicionLevels" datatextfield="name" datavaluefield="id" ng-init="dataItem.suspicionLevel = (dataItem.suspicionLevel == undefined ? viewScope.suspicionLevels[0] : dataItem.suspicionLevel)" selectedvalues="dataItem.suspicionLevel" isrequired columnindex="0"></vr-select>       </vr-datagridcolumn>
                                 <vr-datagridcolumn ng-repeat="filter in strategyFilters" ng-show="filter.isSelected" columnindex="$index + 1" headertext="'Filter: ' + filter.filterId" headerdescription="filter.description" tag="filter">
                                     <span ng-init="filterIndex = viewScope.strategyFilters.indexOf(colDef.tag) ">

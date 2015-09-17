@@ -95,11 +95,7 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
         });
     }
 
-    function removeLastComma(strng) {
-        var n = strng.lastIndexOf(",");
-        var a = strng.substring(0, n)
-        return a;
-    }
+   
 
     function retrieveData() {
 

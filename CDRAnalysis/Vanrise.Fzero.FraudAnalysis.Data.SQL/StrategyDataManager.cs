@@ -10,11 +10,20 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
     public class StrategyDataManager : BaseSQLDataManager, IStrategyDataManager
     {
+        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
 
         public StrategyDataManager()
             : base("CDRDBConnectionString")
         {
 
+        }
+
+        static StrategyDataManager()
+        {
+            _columnMapper.Add("IsDefaultText", "PeriodId");
+            _columnMapper.Add("IsEnabledText", "IsEnabled");
+            _columnMapper.Add("Analyst", "UserID");
+            _columnMapper.Add("LastUpdatedOn", "LastUpdatedOn");
         }
 
         public Strategy GetStrategy(int strategyId)
@@ -50,7 +59,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
                 ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_CreateTempByFiltered", tempTableName, input.Query.Name, input.Query.Description, periodIDs, userIDs, IsDefault, IsEnabled, input.Query.FromDate, input.Query.ToDate);
 
-            }, (reader) => StrategyMapper(reader));
+            }, (reader) => StrategyMapper(reader), _columnMapper);
         }
 
         public bool AddStrategy(Strategy strategyObject, out int insertedId)
