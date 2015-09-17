@@ -396,7 +396,10 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
                     $scope.caseStatuses.splice(0, 1); // remove the open option
 
-                    if (response == CaseStatusEnum.ClosedFraud.value)
+                    if (response == CaseStatusEnum.Pending.value)
+                        $scope.caseStatuses.splice(0, 1); // remove the pending option
+
+                    else if (response == CaseStatusEnum.ClosedFraud.value)
                         $scope.caseStatuses.splice(1, 1); // remove the closed: fruad option
 
                     else if (response == CaseStatusEnum.ClosedWhitelist.value)

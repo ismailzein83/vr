@@ -44,7 +44,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 });
             };
 
-            return RetrieveData(input, createTempTableAction, AccountSuspicionSummaryMapper);
+            return RetrieveData(input, createTempTableAction, AccountSuspicionSummaryMapper, _columnMapper);
         }
 
         private string CreateTempTableIfNotExists(string tempTableName, string accountNumber, List<int> strategyIDs, List<CaseStatus> accountStatusIDs, List<SuspicionLevel> suspicionLevelIDs)
