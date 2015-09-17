@@ -8,6 +8,12 @@ function FindRelatedNumbersProcessInputController($scope, $http, $routeParams, n
 
     function defineScope() {
 
+        var yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+
+        $scope.fromDate = yesterday;
+        $scope.toDate = new Date();
+
         $scope.createProcessInputObjects = [];
 
         $scope.createProcessInput.getData = function () {

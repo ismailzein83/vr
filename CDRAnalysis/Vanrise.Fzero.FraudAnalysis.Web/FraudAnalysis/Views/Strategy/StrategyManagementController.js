@@ -12,6 +12,12 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
 
     function defineScope() {
 
+        var yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+
+        $scope.fromDate = yesterday;
+        $scope.toDate = new Date();
+
         $scope.gridMenuActions = [];
 
         $scope.strategies = [];

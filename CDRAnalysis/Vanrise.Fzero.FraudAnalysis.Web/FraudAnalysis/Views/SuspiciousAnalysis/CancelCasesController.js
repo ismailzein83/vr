@@ -7,6 +7,13 @@ function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIServ
     load();
 
     function definescope() {
+
+        var yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+
+        $scope.from = yesterday;
+        $scope.to = new Date();
+
         $scope.strategies = [];
         $scope.selectedStrategies = [];
 

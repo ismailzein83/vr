@@ -10,6 +10,12 @@ function NumberProfilingProcessInputController($scope, $http, StrategyAPIService
 
     function defineScope() {
 
+        var yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+
+        $scope.fromDate = yesterday;
+        $scope.toDate = new Date();
+
         $scope.createProcessInputObjects = [];
 
         $scope.periods = [];
