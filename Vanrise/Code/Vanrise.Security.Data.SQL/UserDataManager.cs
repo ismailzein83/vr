@@ -100,7 +100,7 @@ namespace Vanrise.Security.Data.SQL
                 Name = reader["Name"] as string,
                 Password = reader["Password"] as string,
                 Email = reader["Email"] as string,
-                LastLogin = GetReaderValue<DateTime>(reader, "LastLogin"),
+                LastLogin = GetReaderValue<DateTime?>(reader, "LastLogin"),
                 Status = (Entities.UserStatus) reader["Status"],
                 Description = reader["Description"] as string
             };

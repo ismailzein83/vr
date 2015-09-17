@@ -18,7 +18,7 @@ namespace Vanrise.Security.Entities
 
         public string Password { get; set; }
 
-        public DateTime LastLogin { get; set; }
+        public DateTime? LastLogin { get; set; }
 
         public string Description { get; set; }
 
