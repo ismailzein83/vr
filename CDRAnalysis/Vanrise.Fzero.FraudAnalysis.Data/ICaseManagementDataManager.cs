@@ -50,5 +50,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         bool CancelAccountCases(int strategyID, string accountNumber, DateTime from, DateTime to);
 
+        List<int> DeleteAccountCases_ByCaseIDs(List<int> caseIDs);
+
     }
 }

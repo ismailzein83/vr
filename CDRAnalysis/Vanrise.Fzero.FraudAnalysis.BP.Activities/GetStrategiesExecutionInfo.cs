@@ -43,8 +43,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             {
                 Console.WriteLine("Started overriding previous results");
 
-                foreach (var strategyId in context.GetValue(StrategyIds))
-                    strategyManager.OverrideStrategyExecution(strategyId, context.GetValue(FromDate), context.GetValue(ToDate));
+                strategyManager.OverrideStrategyExecution(context.GetValue(StrategyIds), context.GetValue(FromDate), context.GetValue(ToDate));
 
                 Console.WriteLine("Ended overriding previous results");
             }

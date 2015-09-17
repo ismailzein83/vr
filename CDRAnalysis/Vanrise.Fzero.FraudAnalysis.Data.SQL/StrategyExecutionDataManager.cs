@@ -82,28 +82,16 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             InsertBulkToTable(preparedStrategyExecutionDetails as BaseBulkInsertInfo);
         }
 
-        public bool OverrideStrategyExecution(int StrategyID, DateTime From, DateTime To, out int updatedId)
+        public bool OverrideStrategyExecution(int StrategyID, DateTime From, DateTime To)
         {
-            object id;
-            int recordesEffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecution_Override", out id,
-                StrategyID, From, To
-            );
+            int recordesEffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecution_Override", StrategyID, From, To );
 
-            if (recordesEffected > 0)
-            {
-                updatedId = (int)id;
-                return true;
-            }
-            else
-            {
-                updatedId = 0;
-                return false;
-            }
+            return (recordesEffected > 0);
         }
 
-        public void DeleteStrategyExecutionDetails(int StrategyExecutionId)
+        public void DeleteStrategyExecutionDetails_StrategyExecutionID(int StrategyExecutionId)
         {
-            ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_Delete", StrategyExecutionId);
+            ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_DeleteByStrategyExecutionID", StrategyExecutionId);
         }
 
         public void LoadStrategyExecutionDetailSummaries(Action<StrategyExecutionDetailSummary> onBatchReady)
@@ -133,6 +121,28 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
+        public List<int> GetCasesIDsofStrategyExecutionDetails(string accountNumber, DateTime? fromDate, DateTime? toDate, List<int> strategyIDs)
+        {
+            return GetItemsSP("FraudAnalysis.sp_StrategyExecutionDetails_GetCaseIDs", CaseMapper, accountNumber, fromDate, toDate, string.Join(",", strategyIDs));
+        }
+
+
+        public void DeleteStrategyExecutionDetails_ByFilters(string accountNumber, DateTime? fromDate, DateTime? toDate, List<int> strategyIDs)
+        {
+            ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_DeleteByFilters", accountNumber, fromDate, toDate, string.Join(",", strategyIDs));
+        }
+
+      
+
+
+        #region Private Members
+
+        private int CaseMapper(IDataReader reader)
+        {
+            return  (int)  reader["CaseID"] ;
+        }
+
+        #endregion 
 
 
     }

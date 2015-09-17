@@ -300,7 +300,19 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return (recordsAffected > 0);
         }
 
+
+        public List<int> DeleteAccountCases_ByCaseIDs(List<int> caseIDs)
+        {
+            return GetItemsSP("FraudAnalysis.sp_AccountCase_DeleteByCaseIDs", CaseMapper, string.Join(",", caseIDs));
+        }
+
+
         #region Private Members
+
+        private int CaseMapper(IDataReader reader)
+        {
+            return (int)reader["CaseID"];
+        }
 
         private AccountSuspicionSummary AccountSuspicionSummaryMapper(IDataReader reader)
         {

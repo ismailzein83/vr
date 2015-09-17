@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Vanrise.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
@@ -10,10 +11,16 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         void ApplyStrategyExecutionDetailsToDB(object preparedStrategyExecutionDetails);
 
-        bool OverrideStrategyExecution(int StrategyID, DateTime From, DateTime To, out int updatedId);
+        bool OverrideStrategyExecution(int StrategyID, DateTime From, DateTime To);
 
-        void DeleteStrategyExecutionDetails(int StrategyExecutionId);
+        void DeleteStrategyExecutionDetails_StrategyExecutionID(int StrategyExecutionId);
 
         void LoadStrategyExecutionDetailSummaries(Action<StrategyExecutionDetailSummary> onBatchReady);
+
+        List<int> GetCasesIDsofStrategyExecutionDetails(string accountNumber, DateTime? fromDate, DateTime? toDate, List<int> strategyIDs);
+
+        void DeleteStrategyExecutionDetails_ByFilters(string accountNumber, DateTime? fromDate, DateTime? toDate, List<int> strategyIDs);
+
+        
     }
 }

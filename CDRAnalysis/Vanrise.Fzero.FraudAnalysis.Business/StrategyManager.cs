@@ -36,7 +36,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         public UpdateOperationOutput<Strategy> UpdateStrategy(Strategy strategyObject)
         {
             IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
-            strategyObject.UserId=Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+            strategyObject.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
             bool updateActionSucc = manager.UpdateStrategy(strategyObject);
             UpdateOperationOutput<Strategy> updateOperationOutput = new UpdateOperationOutput<Strategy>();
 
@@ -87,21 +87,25 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return insertOperationOutput;
         }
 
-        public void OverrideStrategyExecution(int StrategyId, DateTime FromDate, DateTime ToDate)
+        public void OverrideStrategyExecution(List<int> strategyIDs, DateTime from, DateTime to)
         {
+            IStrategyExecutionDataManager strategyExecutionDataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
+            ICaseManagementDataManager caseManagementDataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
 
-            IStrategyExecutionDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
-
-            int StrategyExecutionId;
-
-            bool OverridenSuccessfully = manager.OverrideStrategyExecution(StrategyId, FromDate, ToDate,out StrategyExecutionId);
-
-            if (OverridenSuccessfully)
+            foreach (var strategyID in strategyIDs)
             {
-                manager.DeleteStrategyExecutionDetails(StrategyExecutionId);
+                strategyExecutionDataManager.OverrideStrategyExecution(strategyID, from, to);
             }
 
-        }
 
+            List<int> CaseIDs = strategyExecutionDataManager.GetCasesIDsofStrategyExecutionDetails(null, from, to, strategyIDs);
+
+            if (CaseIDs !=null && CaseIDs.Count > 0)
+            {
+                strategyExecutionDataManager.DeleteStrategyExecutionDetails_ByFilters(null, from, to, strategyIDs);
+
+                caseManagementDataManager.DeleteAccountCases_ByCaseIDs(CaseIDs);
+            }
+        }
     }
 }
