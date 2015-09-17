@@ -1,11 +1,11 @@
 ﻿<div ng-controller="FraudAnalysis_ExecuteStrategyProcessInput_Scheduled">
     <vr-form name="formCreateProcessInput">
         <vr-row removeline>
-            <vr-columns width="1/4row">
-                <vr-select datasource="periods" datatextfield="Name" datavaluefield="Id" label="Period" selectedvalues="selectedPeriod" isrequired onselectionchanged="selectedPeriodChanged"></vr-select>
+            <vr-columns width="1/2row">
+                <vr-select datasource="periods" datatextfield="Name" datavaluefield="Id" label="Period" selectedvalues="selectedPeriod" isrequired hideremoveicon  onselectionchanged="selectedPeriodChanged"></vr-select>
             </vr-columns>
 
-            <vr-columns width="1/4row">
+            <vr-columns width="1/2row">
                 <vr-select datasource="strategies" datatextfield="name" datavaluefield="id" label="Strategy" ismultipleselection selectedvalues="selectedStrategies" isrequired>  </vr-select>
             </vr-columns>
         </vr-row>

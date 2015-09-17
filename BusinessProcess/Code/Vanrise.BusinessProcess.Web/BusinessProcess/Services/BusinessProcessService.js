@@ -8,15 +8,15 @@
 
         function getStatusColor(status) {
 
-            if (status === BPInstanceStatusEnum.New.value) return LabelColorsEnum.Primary.Color;
-            if (status === BPInstanceStatusEnum.Running.value) return LabelColorsEnum.Info.Color;
-            if (status === BPInstanceStatusEnum.ProcessFailed.value) return LabelColorsEnum.Error.Color;
-            if (status === BPInstanceStatusEnum.Completed.value) return LabelColorsEnum.Success.Color;
-            if (status === BPInstanceStatusEnum.Aborted.value) return LabelColorsEnum.Warning.Color;
-            if (status === BPInstanceStatusEnum.Suspended.value) return LabelColorsEnum.Warning.Color;
-            if (status === BPInstanceStatusEnum.Terminated.value) return LabelColorsEnum.Error.Color;
+            if (status === BPInstanceStatusEnum.New.value) return LabelColorsEnum.Primary.color;
+            if (status === BPInstanceStatusEnum.Running.value) return LabelColorsEnum.Info.color;
+            if (status === BPInstanceStatusEnum.ProcessFailed.value) return LabelColorsEnum.Error.color;
+            if (status === BPInstanceStatusEnum.Completed.value) return LabelColorsEnum.Success.color;
+            if (status === BPInstanceStatusEnum.Aborted.value) return LabelColorsEnum.Warning.color;
+            if (status === BPInstanceStatusEnum.Suspended.value) return LabelColorsEnum.Warning.color;
+            if (status === BPInstanceStatusEnum.Terminated.value) return LabelColorsEnum.Error.color;
 
-            return LabelColorsEnum.Info.Color;
+            return LabelColorsEnum.Info.color;
         };
 
         function getStatusDescription(status) {
