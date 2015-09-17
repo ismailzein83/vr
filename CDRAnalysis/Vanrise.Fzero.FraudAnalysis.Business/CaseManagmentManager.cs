@@ -67,7 +67,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
 
                 updateOperationOutput.UpdatedObject = dataManager.GetAccountSuspicionSummaryByAccountNumber(input.AccountNumber, input.FromDate, input.ToDate);
-                //updateOperationOutput.UpdatedObject = (summary != null) ? summary : new AccountSuspicionSummary();
             }
 
             return updateOperationOutput;
@@ -103,7 +102,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, manager.GetTop10BTSHighValue(input));
         }
 
-
         public Vanrise.Entities.UpdateOperationOutput<AccountCase> CancelAccountCases(CancelAccountCasesResultQuery input)
         {
             Vanrise.Entities.UpdateOperationOutput<AccountCase> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountCase>();
@@ -127,7 +125,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
             return updateOperationOutput;
         }
-
 
         public bool UpdateAccountCase(string accountNumber, CaseStatus caseStatus, DateTime? validTill, string reason)
         {
@@ -154,8 +151,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             return true;
         }
-
-
 
         public bool AssignAccountCase(string accountNumber, HashSet<string> imeis)
         {
