@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent width="'95%'" ng-controller="FraudAnalysis_StrategyEditorController">
+﻿<div vr-modalcontent ng-controller="FraudAnalysis_StrategyEditorController" width="'95%'" draggable="true">
     <vr-modalbody vr-loader="isGettingData">
         <vr-form name="formStrategyEditor">
             <vr-row removeline>
@@ -42,15 +42,15 @@
 
                             <vr-columns width="3/4row">
                                 <div>
-                                    <vr-datagrid datasource="strategyFilters" maxheight="400px" hidepaginginfo hidegridmenu   >
-                                        
+                                    <vr-datagrid datasource="strategyFilters" maxheight="400px" hidepaginginfo hidegridmenu>
+
                                         <vr-datagridcolumn headertext="''" widthfactor="3" disablesorting>
                                             <vr-switch value="dataItem.isSelected" ng-show="viewScope.showSwitch(dataItem)"></vr-switch>
                                         </vr-datagridcolumn>
 
                                         <vr-datagridcolumn headertext="'Filter'" field="'abbreviation'" widthfactor="3" disablesorting></vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Description'" field="'description'" widthfactor="20" disablesorting></vr-datagridcolumn>
-                                        
+
                                         <vr-datagridcolumn headertext="'Threshold'" disablesorting>
                                             <div style="max-width: 150px; float: left">
                                                 <vr-textbox placeholder="{{dataItem.label}}" value="dataItem.threshold" type="number" isrequired ng-if="dataItem.isSelected" title="{{dataItem.toolTip}}" minvalue="{{dataItem.minValue}}" maxvalue="{{dataItem.maxValue}}" decimalprecision="{{dataItem.decimalPrecision}}"></vr-textbox>
@@ -124,8 +124,8 @@
                                 <vr-button type="Add" data-onclick="AddSuspicionLevel" standalone></vr-button>
                             </div>
                             <vr-datagrid datasource="strategyLevels" maxheight="400px" hidepaginginfo hidegridmenu>
-                                <vr-datagridcolumn headertext="'Suspicion Level'"> <vr-form name="formSuspicionLevel">    <vr-select hideremoveicon datasource="viewScope.suspicionLevels" datatextfield="name" datavaluefield="id" ng-init="dataItem.suspicionLevel = (dataItem.suspicionLevel == undefined ? viewScope.suspicionLevels[0] : dataItem.suspicionLevel)" selectedvalues="dataItem.suspicionLevel" isrequired columnindex="0"></vr-select>       </vr-datagridcolumn>
-                                <vr-datagridcolumn ng-repeat="filter in strategyFilters" ng-show="filter.isSelected" columnindex="$index + 1" headertext="'Filter: ' + filter.filterId" headerdescription="filter.description" tag="filter">
+                                <vr-datagridcolumn headertext="'Suspicion Level'" disablesorting> <vr-form name="formSuspicionLevel">    <vr-select hideremoveicon datasource="viewScope.suspicionLevels" datatextfield="name" datavaluefield="id" ng-init="dataItem.suspicionLevel = (dataItem.suspicionLevel == undefined ? viewScope.suspicionLevels[0] : dataItem.suspicionLevel)" selectedvalues="dataItem.suspicionLevel" isrequired columnindex="0"></vr-select>       </vr-datagridcolumn>
+                                <vr-datagridcolumn ng-repeat="filter in strategyFilters" ng-show="filter.isSelected" columnindex="$index + 1" headertext="'Filter: ' + filter.filterId" headerdescription="filter.description" tag="filter" disablesorting>
                                     <span ng-init="filterIndex = viewScope.strategyFilters.indexOf(colDef.tag) ">
                                         <div style="max-width: 50px; float: left">
                                             <vr-switch value="dataItem.StrategyLevelCriterias[filterIndex].isSelected"></vr-switch>
