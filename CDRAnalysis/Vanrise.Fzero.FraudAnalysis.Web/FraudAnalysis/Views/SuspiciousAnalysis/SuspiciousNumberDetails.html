@@ -30,7 +30,7 @@
                                      on-ready="onGridReady_Occurances"
                                      dataretrievalfunction="dataRetrievalFunction_Occurances"
                                      pagingtype="'PagingOnScroll'"
-                                     maxheight="250px"
+                                     maxheight="150px"
                                      idfield="DetialID">
 
                             <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelDescription'" type="'Text'" getcolor="getSuspicionLevelColor"></vr-datagridcolumn>
@@ -64,7 +64,7 @@
                                      on-ready="onGridReady_NormalCDRs"
                                      dataretrievalfunction="dataRetrievalFunction_NormalCDRs"
                                      pagingtype="'PagingOnScroll'"
-                                     maxheight="250px"
+                                     maxheight="150px"
                                      idfield="Id">
 
                             <vr-datagridcolumn headertext="'IMSI'" field="'IMSI'" type="'Text'"></vr-datagridcolumn>
@@ -123,7 +123,7 @@
                         <div class="big-data-grid" ng-hide="showDate">
                             <div class="container">
                                 <vr-datagrid datasource="detailAggregateValues"
-                                             maxheight="500px"
+                                             maxheight="150px"
                                              hidegridmenu>
 
                                     <vr-datagridcolumn ng-repeat="agg in aggregateDefinitions"
@@ -143,7 +143,7 @@
                                              on-ready="onGridReady_NumberProfiles"
                                              dataretrievalfunction="dataRetrievalFunction_NumberProfiles"
                                              pagingtype="'PagingOnScroll'"
-                                             maxheight="250px"
+                                             maxheight="150px"
                                              hidegridmenu>
 
                                     <vr-datagridcolumn headertext="'From Time'" field="'FromDate'" type="'Datetime'"></vr-datagridcolumn>
@@ -170,7 +170,7 @@
                                      on-ready="onGridReady_CaseHistory"
                                      dataretrievalfunction="dataRetrievalFunction_CaseHistory"
                                      pagingtype="'PagingOnScroll'"
-                                     maxheight="500px"
+                                     maxheight="150px"
                                      idfield="CaseID">
 
                             <vr-datagridcolumn headertext="'Case ID'" field="'CaseID'" type="'Text'"></vr-datagridcolumn>
@@ -205,7 +205,7 @@
                     <vr-columns width="fullrow" simplecol>
                         <vr-datagrid datasource="relatedNumbers"
                                      data-on-ready="onGridReady_RelatedNumbers"
-                                     maxheight="300px"
+                                     maxheight="150px"
                                      hidegridmenu>
 
                             <vr-datagridcolumn headertext="'Related Number'" field="'RelatedNumber'" type="'Text'" isclickable="true" onclicked="relatedNumberClicked" disablesorting></vr-datagridcolumn>
@@ -238,7 +238,7 @@
                         </vr-row>
                         <vr-row>
                             <vr-columns width="fullrow">
-                                <vr-textarea label="Reason" value="updateReason"></vr-textarea>
+                                <vr-textbox label="Reason" value="updateReason"></vr-textbox>
                             </vr-columns>
                         </vr-row>
                     </vr-section>
