@@ -22,7 +22,7 @@
                 <vr-columns width="fullrow">
                     <vr-datagrid datasource="filteredDefinitions" on-ready="onGridReady" menuactions="gridMenuActions"  pagingtype="'PagingOnScroll'" dataretrievalfunction="dataRetrievalFunction" >
                         <vr-datagridcolumn headertext="'Process'" field="'Title'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Open Instances'">{{dataItem.openedInstances.length}}</vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Open Instances'" type="'Number'" >  <span style="display:inline-block; width:100%;text-align:right" ng-if="dataItem.openedInstances.length>0">  {{dataItem.openedInstances.length}}    </span>  </vr-datagridcolumn>
                         <vr-datagridexpandablerow>
 
                             <vr-choices>

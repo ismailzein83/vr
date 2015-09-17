@@ -94,7 +94,7 @@ function BPDefinitionManagementController($scope, BusinessProcessService, Busine
         interval = $interval(function callAtInterval() {
             getRecentInstancesData();
             getScheduledTasksData();
-        }, 1000);
+        }, 2000);
     }
 
     function stopGetData() {
