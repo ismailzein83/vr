@@ -131,7 +131,7 @@
                                             <vr-switch value="dataItem.StrategyLevelCriterias[filterIndex].isSelected"></vr-switch>
                                         </div>
                                         <div style="max-width:100px;float:left">
-                                            <vr-numeric ng-show="dataItem.StrategyLevelCriterias[filterIndex].isSelected" value="dataItem.StrategyLevelCriterias[filterIndex].percentage" minvalue="-75" maxvalue="75" stepvalue="25" upsign="{{dataItem.StrategyLevelCriterias[filterIndex].upSign}}" downsign="{{dataItem.StrategyLevelCriterias[filterIndex].downSign}}" unit="%" isrequired></vr-numeric>
+                                            <vr-numeric ng-show="dataItem.StrategyLevelCriterias[filterIndex].isSelected" hint="{{  viewScope.strategyFilters[filterIndex].label +': '+    (dataItem.StrategyLevelCriterias[filterIndex].percentage + (dataItem.StrategyLevelCriterias[filterIndex].percentage*viewScope.strategyFilters[filterIndex].threshold/100)) }}" value="dataItem.StrategyLevelCriterias[filterIndex].percentage" minvalue="-90" maxvalue="90" stepvalue="10" upsign="{{dataItem.StrategyLevelCriterias[filterIndex].upSign}}" downsign="{{dataItem.StrategyLevelCriterias[filterIndex].downSign}}" unit="%" isrequired></vr-numeric>
                                         </div>
                                     </span>
                                 </vr-datagridcolumn>
