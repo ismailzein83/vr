@@ -23,6 +23,8 @@ namespace Vanrise.Security.Data
 
         bool UpdateUser(User user);
 
+        bool UpdateLastLogin(int userID);
+
         bool ResetPassword(int userId, string password);
 
         bool CheckUserName(string name);

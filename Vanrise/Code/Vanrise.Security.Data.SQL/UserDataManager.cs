@@ -63,6 +63,12 @@ namespace Vanrise.Security.Data.SQL
             return (recordesEffected > 0);
         }
 
+        public bool UpdateLastLogin(int userID)
+        {
+            int recordsAffected = (int)ExecuteNonQuerySP("sec.sp_User_UpdateLastLogin", userID);
+            return (recordsAffected > 0);
+        }
+
         public bool ResetPassword(int userId, string password)
         {
             //TODO: implement an encryption module
@@ -85,6 +91,7 @@ namespace Vanrise.Security.Data.SQL
         public bool EditUserProfile(string name,int userId) {
             return ExecuteNonQuerySP("sec.sp_User_UpdateName", userId,name) >0 ;
         }
+        
         private User UserMapper(IDataReader reader)
         {
             return new Entities.User

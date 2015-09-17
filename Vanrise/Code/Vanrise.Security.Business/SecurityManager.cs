@@ -50,10 +50,13 @@ namespace Vanrise.Security.Business
                         IssuedAt = DateTime.Now,
                         ExpiresAt = DateTime.Now.AddMinutes(expirationPeriodInMinutes)
                     };
+
                     string encrypted = Common.Cryptography.Encrypt(Common.Serializer.Serialize(userInfo), ConfigurationManager.AppSettings[SecurityContext.SECURITY_ENCRYPTION_SECRETE_KEY]);
                     authToken.Token = encrypted;
                     authenticationOperationOutput.Result = AuthenticateOperationResult.Succeeded;
                     authenticationOperationOutput.AuthenticationObject = authToken;
+
+                    dataManager.UpdateLastLogin(user.UserId);
                 }
 
             }
