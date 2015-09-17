@@ -156,7 +156,7 @@
                                 var innerTooltip = self.parent().find('.tooltip-inner')[0];
                                 var innerTooltipArrow = self.parent().find('.tooltip-arrow')[0];
                                 $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight +5, left: selfOffset.left - 30 });
-                                $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight , left: selfOffset.left  });
+                                $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight +10 , left: selfOffset.left  });
 
                             }, 1)
                         }
