@@ -1,21 +1,21 @@
 ﻿"use strict";
 
-CancelCasesController.$inject = ["$scope", "CaseManagementAPIService", "StrategyAPIService", "VRNotificationService"];
+CancelCasesController.$inject = ["$scope", "CaseManagementAPIService", "StrategyAPIService", "VRNotificationService", "UtilsService"];
 
-function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIService, VRNotificationService) {
+function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIService, VRNotificationService, UtilsService) {
     definescope();
     load();
 
     function definescope() {
         $scope.strategies = [];
-        $scope.selectedStrategy = '';
+        $scope.selectedStrategies = [];
 
         $scope.cancelClicked = function () {
             return cancelCases();
         }
 
     }
-    
+
     function cancelCases() {
         VRNotificationService.showConfirmation()
             .then(function (response) {
@@ -56,13 +56,8 @@ function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIServ
 
     function buildAccountCaseObjectFromScope() {
 
-        var selectedStrategyId = 0
-
-        if ($scope.selectedStrategy != undefined)
-            selectedStrategyId = $scope.selectedStrategy.value;
-
         var accountCaseObject = {
-            StrategyId: selectedStrategyId,
+            StrategyIds: UtilsService.getPropValuesFromArray($scope.selectedStrategies, "value"),
             AccountNumber: $scope.accountNumber,
             From: $scope.from,
             To: $scope.to

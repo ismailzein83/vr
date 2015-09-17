@@ -65,7 +65,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
 
                 ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
-                
+
                 updateOperationOutput.UpdatedObject = dataManager.GetAccountSuspicionSummaryByAccountNumber(input.AccountNumber, input.FromDate, input.ToDate);
                 //updateOperationOutput.UpdatedObject = (summary != null) ? summary : new AccountSuspicionSummary();
             }
@@ -111,16 +111,23 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
-            ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
-            bool updated = dataManager.CancelAccountCases(input.StrategyID, input.AccountNumber, input.From, input.To);
+            IStrategyExecutionDataManager strategyExecutionDataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
+            ICaseManagementDataManager caseManagementDataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
 
-            if (updated)
+            List<int> CaseIDs = strategyExecutionDataManager.GetCasesIDsofStrategyExecutionDetails(input.AccountNumber, input.From, input.To, input.StrategyIDs);
+
+            if (CaseIDs != null && CaseIDs.Count > 0)
             {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                strategyExecutionDataManager.DeleteStrategyExecutionDetails_ByFilters(input.AccountNumber, input.From, input.To, input.StrategyIDs);
+
+                caseManagementDataManager.DeleteAccountCases_ByCaseIDs(CaseIDs);
             }
 
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
             return updateOperationOutput;
         }
+
 
         public bool UpdateAccountCase(string accountNumber, CaseStatus caseStatus, DateTime? validTill, string reason)
         {
@@ -149,7 +156,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         }
 
 
-       
+
         public bool AssignAccountCase(string accountNumber, HashSet<string> imeis)
         {
             ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();

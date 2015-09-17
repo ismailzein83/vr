@@ -123,13 +123,23 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public List<int> GetCasesIDsofStrategyExecutionDetails(string accountNumber, DateTime? fromDate, DateTime? toDate, List<int> strategyIDs)
         {
-            return GetItemsSP("FraudAnalysis.sp_StrategyExecutionDetails_GetCaseIDs", CaseMapper, accountNumber, fromDate, toDate, string.Join(",", strategyIDs));
+            string StrategiesCommaSeperatedList = null;
+
+            if(strategyIDs !=null)
+                StrategiesCommaSeperatedList=string.Join(",", strategyIDs);
+
+            return GetItemsSP("FraudAnalysis.sp_StrategyExecutionDetails_GetCaseIDs", CaseMapper, accountNumber, fromDate, toDate, StrategiesCommaSeperatedList);
         }
 
 
         public void DeleteStrategyExecutionDetails_ByFilters(string accountNumber, DateTime? fromDate, DateTime? toDate, List<int> strategyIDs)
         {
-            ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_DeleteByFilters", accountNumber, fromDate, toDate, string.Join(",", strategyIDs));
+            string StrategiesCommaSeperatedList = null;
+
+            if (strategyIDs != null)
+                StrategiesCommaSeperatedList = string.Join(",", strategyIDs);
+
+            ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_DeleteByFilters", accountNumber, fromDate, toDate, StrategiesCommaSeperatedList);
         }
 
       
