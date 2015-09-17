@@ -418,7 +418,8 @@ app.directive('vrChart', ['ChartDirService', 'VRModalService', 'UtilsService', f
         }
         function resizeChart(time) {
             setTimeout(function () {
-                chartElement.highcharts().setSize(chartElement.parent().width() , chartElement.height(), true);
+                if (chartElement.highcharts()!=undefined)
+                     chartElement.highcharts().setSize(chartElement.parent().width() , chartElement.height(), true);
 
             }, time)
         }
