@@ -38,20 +38,15 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         StrategyEditorController.isFilterTabShown = true;
         StrategyEditorController.isLevelsTabShow = false;
 
-
-
-
         $scope.suspicionLevels = [];
         angular.forEach(SuspicionLevelEnum, function (itm) {
             $scope.suspicionLevels.push({ id: itm.value, name: itm.description })
         });
 
-
         $scope.hours = [];
         angular.forEach(HourEnum, function (itm) {
             $scope.hours.push({ id: itm.id, name: itm.name })
         });
-
 
         angular.forEach($scope.hours, function (itm) {
             if (itm.id >= 12 && itm.id <= 17)
@@ -81,9 +76,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             $scope.strategyLevels.push(strategyLevelItem);
         };
 
-
-
-
         $scope.SaveStrategy = function () {
             if (editMode) {
 
@@ -103,6 +95,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             $scope.strategyLevels.splice(index, 1);
         }
 
+        
     }
 
     function load() {
@@ -191,7 +184,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                     };
 
                     levelCriteriaItem.Percentage = ((parseFloat(levelCriteria.percentage) + 100) / 100);
-                    console.log(levelCriteriaItem.percentage)
+                    //console.log(levelCriteriaItem.percentage)
 
                     strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem);
                 }
@@ -275,7 +268,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
         });
 
-
         $scope.isGettingSuspicionLevels = true;
         angular.forEach(strategyObject.StrategyLevels, function (level) {
 
@@ -305,8 +297,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             $scope.strategyLevels.push(strategyLevelItem);
 
         });
-
-
     }
 
     function isValid(strategyObject) {
@@ -404,6 +394,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             angular.forEach(response, function (itm) {
                 $scope.periods.push(itm);
             });
+
+            $scope.selectedPeriod = $scope.periods[0]; // Mohamad
         });
     }
 
@@ -414,14 +406,14 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     };
 
     $scope.showSwitch = function (filter) {
+
         if (filter.excludeHourly && $scope.selectedPeriod.Id == 1) {
             filter.isSelected = false;
             return false;
         }
         else
             return true;
-
     }
-
 }
+
 appControllers.controller('FraudAnalysis_StrategyEditorController', StrategyEditorController);

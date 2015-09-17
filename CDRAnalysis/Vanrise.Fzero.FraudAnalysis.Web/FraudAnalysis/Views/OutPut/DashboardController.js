@@ -62,7 +62,6 @@ function DashboardController($scope,UtilsService, DashboardAPIService) {
             getData_StrategyCases()
             retrieveData_BTSCases()
             retrieveData_DailyVolumeLooses()
-            retrieveData_ImportedBatches()
             retrieveData_BTSHighValueCases()
         };
 
@@ -93,7 +92,6 @@ function DashboardController($scope,UtilsService, DashboardAPIService) {
                 onResponseReady(response);
             });
         }
-
     }
 
     function load() {

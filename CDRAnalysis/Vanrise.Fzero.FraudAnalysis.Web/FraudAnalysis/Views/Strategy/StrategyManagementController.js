@@ -126,7 +126,6 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
             ToDate: $scope.toDate
         };
 
-        console.log(query);
         return mainGridAPI.retrieveData(query);
     }
 
