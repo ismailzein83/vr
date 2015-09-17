@@ -37,8 +37,8 @@
 
                 <vr-datagrid datasource="blockedLines" dataretrievalfunction="dataRetrievalFunction" maxheight="400px" pagingtype="'Pager'" on-ready="onMainGridReady" menuactions="gridMenuActions">
                     <vr-datagridcolumn headertext="'Strategy Name'" field="'StrategyName'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Blocked Lines'" field="'BlockedLinesCount'" type="'Number'" numberprecision="'NoDecimal'"></vr-datagridcolumn>
                     <vr-datagridcolumn ng-show="groupDaily" headertext="'Date Day'" field="'DateDay'" type="'Datetime'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Blocked Lines'" field="'BlockedLinesCount'" type="'Number'" numberprecision="'NoDecimal'"></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
         </vr-row>
