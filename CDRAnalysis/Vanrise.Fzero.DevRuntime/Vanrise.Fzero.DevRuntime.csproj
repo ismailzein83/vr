@@ -244,6 +244,7 @@
     <Compile Include="Tasks\IsmailTask.cs" />
     <Compile Include="Tasks\MortadaTask.cs" />
     <Compile Include="Tasks\HaririTask.cs" />
+    <Compile Include="Tasks\WalidTaskExec.cs" />
     <Compile Include="Tasks\WalidTaskRelatedNumbers.cs" />
     <Compile Include="Tasks\WalidTaskAssignCase.cs" />
     <Compile Include="Tasks\WalidTaskProfile.cs" />
