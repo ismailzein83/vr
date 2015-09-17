@@ -96,7 +96,6 @@
     <Build Include="FraudAnalysis\Tables\CallClass.sql" />
     <Build Include="dbo\Functions\CSVToTable.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_CallClass_GetAll.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_CreateTempForFilteredStrategies.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Update.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Insert.sql" />
     <Build Include="Security\FraudAnalysis.sql" />
