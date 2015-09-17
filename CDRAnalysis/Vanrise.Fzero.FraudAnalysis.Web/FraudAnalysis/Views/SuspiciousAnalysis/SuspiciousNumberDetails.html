@@ -123,7 +123,8 @@
                         <div class="big-data-grid" ng-hide="showDate">
                             <div class="container">
                                 <vr-datagrid datasource="detailAggregateValues"
-                                             maxheight="500px">
+                                             maxheight="500px"
+                                             hidegridmenu>
 
                                     <vr-datagridcolumn ng-repeat="agg in aggregateDefinitions"
                                                        headertext="agg.name"
@@ -142,7 +143,8 @@
                                              on-ready="onGridReady_NumberProfiles"
                                              dataretrievalfunction="dataRetrievalFunction_NumberProfiles"
                                              pagingtype="'PagingOnScroll'"
-                                             maxheight="250px">
+                                             maxheight="250px"
+                                             hidegridmenu>
 
                                     <vr-datagridcolumn headertext="'From Time'" field="'FromDate'" type="'Datetime'"></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'To Time'" field="'ToDate'" type="'Datetime'"></vr-datagridcolumn>
@@ -190,20 +192,21 @@
                 <vr-row>
                     <vr-columns width="normal">
                         <vr-select label="Reason"
-                                    datasource="reasons"
-                                    selectedvalues="selectedReason"
-                                    datavaluefield="value"
-                                    datatextfield="description"
-                                    onselectionchanged="onReasonChanged"
-                                    hideremoveicon>
+                                   datasource="reasons"
+                                   selectedvalues="selectedReason"
+                                   datavaluefield="value"
+                                   datatextfield="description"
+                                   onselectionchanged="onReasonChanged"
+                                   hideremoveicon>
                         </vr-select>
                     </vr-columns>
                 </vr-row>
                 <vr-row>
                     <vr-columns width="fullrow" simplecol>
                         <vr-datagrid datasource="relatedNumbers"
-                                        data-on-ready="onGridReady_RelatedNumbers"
-                                        maxheight="300px">
+                                     data-on-ready="onGridReady_RelatedNumbers"
+                                     maxheight="300px"
+                                     hidegridmenu>
 
                             <vr-datagridcolumn headertext="'Related Number'" field="'RelatedNumber'" type="'Text'" isclickable="true" onclicked="relatedNumberClicked" disablesorting></vr-datagridcolumn>
                         </vr-datagrid>
@@ -225,7 +228,7 @@
                                            isrequired>
                                 </vr-select>
                             </vr-columns>
-                            
+
                             <vr-columns width="normal" ng-show="whiteListSelected">
                                 <vr-datetimepicker label="Valid Till"
                                                    value="validTill"

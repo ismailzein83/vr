@@ -10,13 +10,11 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
     defineScope();
     load();
 
-
     function defineScope() {
 
         $scope.gridMenuActions = [];
 
         $scope.strategies = [];
-
 
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
@@ -26,7 +24,6 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
             return retrieveData();
         }
 
-
         $scope.isDefault = [];
         angular.forEach(KindEnum, function (kind) {
             $scope.isDefault.push({ value: kind.value, name: kind.name })
@@ -34,12 +31,10 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
 
         $scope.selectedIsDefault = [];
 
-
         $scope.isEnabled = [];
         angular.forEach(StatusEnum, function (itm) {
             $scope.isEnabled.push({ value: itm.value, name: itm.name })
         });
-
 
         $scope.selectedIsEnabled = [];
 
@@ -47,10 +42,8 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
         
         $scope.selectedPeriods = [];
 
-
         $scope.users = [];
         $scope.selectedUsers = [];
-
 
         $scope.addNewStrategy = addNewStrategy;
 
@@ -61,7 +54,6 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
 
                     angular.forEach(response.Data, function (itm) {
                         itm.IsDefaultText = itm.IsDefault ? KindEnum.SystemBuiltIn.name : KindEnum.UserDefined.name;
-                        itm.IsEnabledText = itm.IsEnabled ? StatusEnum.Enabled.name : StatusEnum.Disabled.name;
 
                         var currentPeriod = UtilsService.getItemByVal($scope.periods, itm.PeriodId, "Id")
                         if (!undefined)
@@ -152,7 +144,6 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
             modalScope.title = "New Strategy";
             modalScope.onStrategyAdded = function (strategy) {
                 strategy.IsDefaultText = strategy.IsDefault ? KindEnum.SystemBuiltIn.name : KindEnum.UserDefined.name;
-                strategy.IsEnabledText = strategy.IsEnabled ? StatusEnum.Enabled.name : StatusEnum.Disabled.name;
 
                 var currentPeriod = UtilsService.getItemByVal($scope.periods, strategy.PeriodId, "Id")
                 if (!undefined)
@@ -181,7 +172,7 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
             modalScope.title = "Edit Strategy";
             modalScope.onStrategyUpdated = function (strategy) {
                 strategy.IsDefaultText = strategy.IsDefault ? KindEnum.SystemBuiltIn.name : KindEnum.UserDefined.name;
-                strategy.IsEnabledText = strategy.IsEnabled ? StatusEnum.Enabled.name : StatusEnum.Disabled.name;
+
                 var currentPeriod = UtilsService.getItemByVal($scope.periods, strategy.PeriodId, "Id")
                 if (!undefined)
                     strategy.StrategyType = currentPeriod.Name;
@@ -196,4 +187,5 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
         VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/Strategy/StrategyEditor.html", params, settings);
     }
 }
+
 appControllers.controller('FraudAnalysis_StrategyManagementController', StrategyManagementController);

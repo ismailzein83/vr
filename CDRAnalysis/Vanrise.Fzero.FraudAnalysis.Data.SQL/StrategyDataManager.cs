@@ -21,7 +21,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         static StrategyDataManager()
         {
             _columnMapper.Add("IsDefaultText", "PeriodId");
-            _columnMapper.Add("IsEnabledText", "IsEnabled");
             _columnMapper.Add("Analyst", "UserID");
             _columnMapper.Add("LastUpdatedOn", "LastUpdatedOn");
         }
