@@ -84,6 +84,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             else
             {
                 insertedId = 0;
+
                 return false;
             }
 
@@ -95,8 +96,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             int recordesEffected = ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_Update",
                 strategyObject.Id,
                  strategyObject.UserId,
-                !string.IsNullOrEmpty(strategyObject.Name) ? strategyObject.Name : null,
-                !string.IsNullOrEmpty(strategyObject.Description) ? strategyObject.Description : null,
+                strategyObject.Name,
+                strategyObject.Description,
                 DateTime.Now,
                 strategyObject.IsDefault,
                 strategyObject.IsEnabled,
