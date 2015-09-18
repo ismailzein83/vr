@@ -19,7 +19,9 @@ as (select * from (values
 (2,'Fraud Analysis',null,null,null,'/images/menu-icons/other.png',null,1),
 (3,'Workflow Management',null,null,null,'/images/menu-icons/Business Entities.png',null,1),
 (4,'Data Sources',null,null,null,'/images/menu-icons/plug.png',null,1),
-(5,'Reports',null,null,null,'/images/menu-icons/busines intel.png',null,1)
+(5,'Reports',null,null,null,'/images/menu-icons/busines intel.png',null,1),
+(6,'Business Intelligence','Business Intelligence','BI',null,'/images/menu-icons/busines intel.png',19,1),
+(7,'Dynamic Management','Dynamic Management','Dynamic Management',1,null,16,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -56,7 +58,9 @@ as (select * from (values
 (29,'Cases Productivity','Cases Productivity','#/view/FraudAnalysis/Views/Reports/CasesProductivity',5,'Root/Reporting Module:View',null,null,0,1),
 (30,'Blocked Lines','Blocked Lines','#/view/FraudAnalysis/Views/Reports/BlockedLines',5,'Root/Reporting Module:View',null,null,0,2),
 (31,'Lines Detected','Lines Detected','#/view/FraudAnalysis/Views/Reports/LinesDetected',5,'Root/Reporting Module:View',null,null,0,3),
-(34,'Cancel Cases','Cancel Cases','#/view/FraudAnalysis/Views/SuspiciousAnalysis/CancelCases',2,'Root/Suspicion Analysis Module:View',null,null,0,3)
+(34,'Cancel Cases','Cancel Cases','#/view/FraudAnalysis/Views/SuspiciousAnalysis/CancelCases',2,'Root/Suspicion Analysis Module:View',null,null,0,3),
+(40,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',7,'Root/Administration Module/Dynamic Pages:View',null,null,0,10),
+(41,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',7,'Root/Administration Module/Dynamic Pages:View',null,null,0,11)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank]))
 merge	[sec].[View] as t
