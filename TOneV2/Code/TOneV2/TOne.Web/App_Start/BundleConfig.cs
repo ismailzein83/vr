@@ -22,7 +22,8 @@ namespace TOne.Web
                 "~/Client/Modules/Billing", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Queueing", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/CDR", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/WhS_CodePreparation", "*.js", true));
+                "~/Client/Modules/WhS_CodePreparation", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/WhS_BusinessEntity", "*.js", true));
         }
     }
 }
