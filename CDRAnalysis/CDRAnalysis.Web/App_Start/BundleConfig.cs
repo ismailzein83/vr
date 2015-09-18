@@ -13,6 +13,7 @@ namespace CDRAnalysis.Web
             bundles.Add(new ScriptBundle("~/bundles/ModulesJavascripts").IncludeDirectory(
                 "~/Client/Modules/FraudAnalysis", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/BI", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Runtime", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Integration", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/BusinessProcess", "*.js", true));

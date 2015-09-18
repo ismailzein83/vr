@@ -8,3 +8,4 @@ Security				C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
 BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
 Runtime                 C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
 Integration				C:\TFS\Vanrise\Code\Vanrise.Integration.Web\Integration
+BI						C:\TFS\Vanrise\Code\Vanrise.BI.Web\BI

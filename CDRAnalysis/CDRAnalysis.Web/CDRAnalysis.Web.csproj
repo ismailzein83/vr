@@ -131,6 +131,21 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BI.Business">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.BI.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BI.Data">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.BI.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BI.Data.SQL">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.BI.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BI.Entities">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.BI.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BI.Web">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.BI.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
