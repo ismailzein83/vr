@@ -24,7 +24,8 @@ namespace Vanrise.Runtime
 
             foreach (Entities.SchedulerTask item in tasks)
             {
-                if (item.IsEnabled && dataManager.TryLockTask(item.TaskId, currentRuntimeProcessId, runningRuntimeProcessesIds))
+                if (item.IsEnabled && item.TaskSettings.StartEffDate < DateTime.Now && (item.TaskSettings.EndEffDate == null || item.TaskSettings.EndEffDate > DateTime.Now) &&
+                    dataManager.TryLockTask(item.TaskId, currentRuntimeProcessId, runningRuntimeProcessesIds))
                 {
                     Task task = new Task(() =>
                         {
@@ -43,6 +44,7 @@ namespace Vanrise.Runtime
 
                                     taskAction.Execute(item, item.TaskSettings.TaskActionArgument, evaluatedExpressions);
                                     item.Status = Entities.SchedulerTaskStatus.Completed;
+                                    item.LastRunTime = DateTime.Now;
                                 }
                             }
                             catch(Exception ex)
@@ -54,8 +56,7 @@ namespace Vanrise.Runtime
                             {
                                 if(taskTrigger != null)
                                 {
-                                    item.NextRunTime = taskTrigger.CalculateNextTimeToRun(item.TaskSettings.TaskTriggerArgument);
-                                    item.LastRunTime = DateTime.Now;
+                                    item.NextRunTime = taskTrigger.CalculateNextTimeToRun(item, item.TaskSettings.TaskTriggerArgument);
                                 }
                                 
                                 dataManager.UpdateTask(item);

@@ -77,5 +77,9 @@ namespace Vanrise.Runtime.Entities
         public BaseTaskActionArgument TaskActionArgument { get; set; }
 
         public BaseTaskTriggerArgument TaskTriggerArgument { get; set; }
+
+        public DateTime StartEffDate { get; set; }
+
+        public DateTime? EndEffDate { get; set; }
     }
 }

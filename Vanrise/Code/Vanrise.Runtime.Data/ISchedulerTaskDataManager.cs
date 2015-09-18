@@ -23,6 +23,8 @@ namespace Vanrise.Runtime.Data
 
         bool UpdateTask(Entities.SchedulerTask taskObject);
 
+        bool UpdateTaskInfo(int taskId, string name, bool isEnabled, int triggerTypeId, int actionTypeId, SchedulerTaskSettings taskSettings);
+
         bool DeleteTask(int taskId);
 
         bool TryLockTask(int taskId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds);

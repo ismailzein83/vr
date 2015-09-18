@@ -88,7 +88,8 @@ namespace Vanrise.Integration.Business
             updateOperationOutput.UpdatedObject = null;
 
             Vanrise.Runtime.Data.ISchedulerTaskDataManager taskDataManager = Vanrise.Runtime.Data.RuntimeDataManagerFactory.GetDataManager<Vanrise.Runtime.Data.ISchedulerTaskDataManager>();
-            bool taskUpdateActionSucc = taskDataManager.UpdateTask(taskObject);
+            bool taskUpdateActionSucc = taskDataManager.UpdateTaskInfo(taskObject.TaskId, taskObject.Name, taskObject.IsEnabled, 
+                taskObject.TriggerTypeId, taskObject.ActionTypeId, taskObject.TaskSettings);
 
             if (taskUpdateActionSucc)
             {

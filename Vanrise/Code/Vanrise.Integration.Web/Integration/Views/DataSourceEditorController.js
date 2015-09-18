@@ -71,6 +71,9 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
 
         $scope.schedulerTaskTrigger = {};
         $scope.timeTriggerTemplateURL = undefined;
+
+        $scope.startEffDate = new Date();
+        $scope.endEffDate = undefined;
     }
 
     function load() {
@@ -91,27 +94,20 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
     }
 
     function getDataSourceToEdit() {
-        return UtilsService.waitMultipleAsyncOperations([getDataSource]).then(function () {
-            getDataSourceTask();
+        return DataSourceAPIService.GetDataSource(dataSourceId).then(function (dataSourceResponse) {
+
+            getDataSourceTask(dataSourceResponse);
             
         }).catch(function (error) {
             VRNotificationService.notifyException(error, $scope);
             $scope.isGettingData = false;
         });
     }
-    
-    var dataSourceObjToEdit;
-    function getDataSource() {
-        return DataSourceAPIService.GetDataSource(dataSourceId)
-           .then(function (dataSourceResponse) {
-               dataSourceObjToEdit = dataSourceResponse;
-           });
-    }
 
-    function getDataSourceTask() {
-        return SchedulerTaskAPIService.GetTask(dataSourceObjToEdit.TaskId)
+    function getDataSourceTask(dataSourceResponse) {
+        return SchedulerTaskAPIService.GetTask(dataSourceResponse.TaskId)
                .then(function (taskResponse) {
-                   var dataSourceObj = { DataSourceData: dataSourceObjToEdit, TaskData: taskResponse }
+                   var dataSourceObj = { DataSourceData: dataSourceResponse, TaskData: taskResponse }
                    fillScopeFromDataSourceObj(dataSourceObj);
                })
                .catch(function (error) {
@@ -155,7 +151,12 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
             TaskType: 0,
             TriggerTypeId: 1,
             ActionTypeId: 2,
-            TaskSettings: { TaskTriggerArgument: $scope.schedulerTaskTrigger.getData() }
+            TaskSettings:
+                {
+                    TaskTriggerArgument: $scope.schedulerTaskTrigger.getData(),
+                    StartEffDate: $scope.startEffDate,
+                    EndEffDate: $scope.endEffDate
+                }
         };
 
         return { DataSourceData: dataSourceData, TaskData: taskData };
@@ -173,7 +174,9 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
 
         $scope.customCode = dataSourceObj.DataSourceData.Settings.MapperCustomCode;
         $scope.isEnabled = dataSourceObj.TaskData.IsEnabled;
-        
+
+        $scope.startEffDate = dataSourceObj.TaskData.TaskSettings.StartEffDate;
+        $scope.endEffDate = dataSourceObj.TaskData.TaskSettings.EndEffDate;
 
         $scope.schedulerTaskTrigger.data = dataSourceObj.TaskData.TaskSettings.TaskTriggerArgument;
         if ($scope.schedulerTaskTrigger.loadTemplateData != undefined)

@@ -67,6 +67,13 @@ namespace Vanrise.Runtime.Data.SQL
             return (recordesEffected > 0);
         }
 
+        public bool UpdateTaskInfo(int taskId, string name, bool isEnabled, int triggerTypeId, int actionTypeId, SchedulerTaskSettings taskSettings)
+        {
+            int recordesEffected = ExecuteNonQuerySP("runtime.sp_SchedulerTask_UpdateInfo", taskId, name,
+                isEnabled, triggerTypeId, actionTypeId, Common.Serializer.Serialize(taskSettings));
+            return (recordesEffected > 0);
+        }
+
         public bool DeleteTask(int taskId)
         {
             int recordsEffected = ExecuteNonQuerySP("runtime.sp_SchedulerTask_Delete", taskId);

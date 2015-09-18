@@ -35,6 +35,14 @@
                     <vr-switch value="isEnabled" label="Enabled"></vr-switch>
                 </vr-row>
                 <vr-row>
+                    <vr-columns width="1/2row">
+                        <vr-datetimepicker value="startEffDate" label="Start Eff Date" isrequired></vr-datetimepicker>
+                    </vr-columns>
+                    <vr-columns width="1/2row">
+                        <vr-datetimepicker value="endEffDate" label="End Eff Date"></vr-datetimepicker>
+                    </vr-columns>
+                </vr-row>
+                <vr-row>
                     <div ng-include="'/Client/Modules/Runtime/Views/TriggerTemplates/TimerTriggerTemplate.html'"></div>
                 </vr-row>
             </div>
@@ -44,7 +52,7 @@
                         <vr-select datasource="executionFlows" datatextfield="Name" datavaluefield="ExecutionFlowId" label="Associated Flow" selectedvalues="selectedExecutionFlow" isrequired></vr-select>
                     </vr-columns>
                     <vr-columns colnum="6">
-                        <vr-button type="Add" formname="formDataSourceEditor" data-onclick="addExecutionFlow" standalone></vr-button>
+                        <vr-button type="Add" data-onclick="addExecutionFlow" standalone></vr-button>
                     </vr-columns>
                 </vr-row>
             </div>

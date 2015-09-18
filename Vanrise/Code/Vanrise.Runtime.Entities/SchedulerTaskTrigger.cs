@@ -8,7 +8,7 @@ namespace Vanrise.Runtime.Entities
 {
     public abstract class SchedulerTaskTrigger
     {
-        public abstract DateTime CalculateNextTimeToRun(BaseTaskTriggerArgument taskTriggerArgument);
+        public abstract DateTime CalculateNextTimeToRun(SchedulerTask task, BaseTaskTriggerArgument taskTriggerArgument);
 
         public abstract Dictionary<string, object> EvaluateExpressions(SchedulerTask task);
     }

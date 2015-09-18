@@ -66,7 +66,8 @@ namespace Vanrise.Runtime.Business
         {
             ISchedulerTaskDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
 
-            bool updateActionSucc = dataManager.UpdateTask(taskObject);
+            bool updateActionSucc = dataManager.UpdateTaskInfo(taskObject.TaskId, taskObject.Name, taskObject.IsEnabled, taskObject.TriggerTypeId, taskObject.ActionTypeId, 
+                taskObject.TaskSettings);
             UpdateOperationOutput<SchedulerTask> updateOperationOutput = new UpdateOperationOutput<SchedulerTask>();
 
             updateOperationOutput.Result = UpdateOperationResult.Failed;

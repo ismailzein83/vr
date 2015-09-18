@@ -50,6 +50,9 @@ function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsSer
 
         $scope.actionTypes = [];
         $scope.schedulerTaskAction = {};
+
+        $scope.startEffDate = new Date();
+        $scope.endEffDate = undefined;
     }
 
     function load() {
@@ -126,7 +129,13 @@ function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsSer
             TaskType: 1,
             TriggerTypeId: $scope.selectedTriggerType.TriggerTypeId,
             ActionTypeId: $scope.selectedActionType.ActionTypeId,
-            TaskSettings: { TaskTriggerArgument: $scope.schedulerTaskTrigger.getData(), TaskActionArgument: $scope.schedulerTaskAction.getData()}
+            TaskSettings:
+                {
+                    TaskTriggerArgument: $scope.schedulerTaskTrigger.getData(),
+                    TaskActionArgument: $scope.schedulerTaskAction.getData(),
+                    StartEffDate: $scope.startEffDate,
+                    EndEffDate: $scope.endEffDate
+                }
         };
         return taskObject;
     }
@@ -145,6 +154,9 @@ function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsSer
         $scope.schedulerTaskAction.data = taskObject.TaskSettings.TaskActionArgument;
         if ($scope.schedulerTaskAction.loadTemplateData != undefined)
             $scope.schedulerTaskAction.loadTemplateData();
+
+        $scope.startEffDate = taskObject.TaskSettings.StartEffDate;
+        $scope.endEffDate = taskObject.TaskSettings.EndEffDate;
     }
 
     function insertTask() {

@@ -34,12 +34,12 @@ namespace Vanrise.Runtime.Triggers.TimeTaskTrigger
             return evaluatedExpressions;
         }
 
-        public override DateTime CalculateNextTimeToRun(BaseTaskTriggerArgument taskTriggerArgument)
+        public override DateTime CalculateNextTimeToRun(SchedulerTask task, BaseTaskTriggerArgument taskTriggerArgument)
         {
             TimeTaskTriggerArgument timeTaskTriggerArgument = (TimeTaskTriggerArgument)taskTriggerArgument;
             TimeSchedulerTaskTrigger timerTaskTrigger = (TimeSchedulerTaskTrigger)Activator.CreateInstance(Type.GetType(timeTaskTriggerArgument.TimerTriggerTypeFQTN));
 
-            return timerTaskTrigger.CalculateNextTimeToRun(timeTaskTriggerArgument);
+            return timerTaskTrigger.CalculateNextTimeToRun(task, timeTaskTriggerArgument);
         }
     }
 }
