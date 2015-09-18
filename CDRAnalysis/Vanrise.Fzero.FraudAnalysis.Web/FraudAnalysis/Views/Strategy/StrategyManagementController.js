@@ -56,11 +56,8 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
             return StrategyAPIService.GetFilteredStrategies(dataRetrievalInput)
                 .then(function (response) {
 
-                    angular.forEach(response.Data, function (itm) {
-                        itm.IsDefaultText = itm.IsDefault ? KindEnum.SystemBuiltIn.name : KindEnum.UserDefined.name;
-                        itm.StrategyType = (UtilsService.getItemByVal($scope.periods, itm.PeriodId, "Id") != null ? UtilsService.getItemByVal($scope.periods, itm.PeriodId, "Id").Name : null)
-                        itm.Analyst = (UtilsService.getItemByVal($scope.users, itm.UserId, "UserId") != null ? UtilsService.getItemByVal($scope.users, itm.UserId, "UserId").Name : null)
-
+                    angular.forEach(response.Data, function (strategy) {
+                        fillStrategy(strategy);
                     });
 
                     onResponseReady(response);
@@ -68,6 +65,13 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
         }
 
         defineMenuActions();
+    }
+
+
+    function fillStrategy(strategy) {
+        strategy.IsDefaultText = strategy.IsDefault ? KindEnum.SystemBuiltIn.name : KindEnum.UserDefined.name;
+        strategy.StrategyType = (UtilsService.getItemByVal($scope.periods, strategy.PeriodId, "Id") != null ? UtilsService.getItemByVal($scope.periods, strategy.PeriodId, "Id").Name : null)
+        strategy.Analyst = (UtilsService.getItemByVal($scope.users, strategy.UserId, "UserId") != null ? UtilsService.getItemByVal($scope.users, strategy.UserId, "UserId").Name : null)
     }
 
     function load() {
@@ -154,11 +158,9 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
 
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "New Strategy";
-            modalScope.onStrategyAdded = function (itm) {
-                itm.IsDefaultText = itm.IsDefault ? KindEnum.SystemBuiltIn.name : KindEnum.UserDefined.name;
-                itm.StrategyType = (UtilsService.getItemByVal($scope.periods, itm.PeriodId, "Id") != null ? UtilsService.getItemByVal($scope.periods, itm.PeriodId, "Id").Name : null)
-                itm.Analyst = (UtilsService.getItemByVal($scope.users, itm.UserId, "UserId") != null ? UtilsService.getItemByVal($scope.users, itm.UserId, "UserId").Name : null)
-                mainGridAPI.itemAdded(itm);
+            modalScope.onStrategyAdded = function (strategy) {
+                fillStrategy(strategy);
+                mainGridAPI.itemAdded(strategy);
             };
         };
         VRModalService.showModal('/Client/Modules/FraudAnalysis/Views/Strategy/StrategyEditor.html', null, settings);
@@ -175,12 +177,9 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
 
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "Edit Strategy";
-            modalScope.onStrategyUpdated = function (itm) {
-                itm.IsDefaultText = itm.IsDefault ? KindEnum.SystemBuiltIn.name : KindEnum.UserDefined.name;
-                itm.StrategyType = (UtilsService.getItemByVal($scope.periods, itm.PeriodId, "Id") != null ? UtilsService.getItemByVal($scope.periods, itm.PeriodId, "Id").Name : null)
-                itm.Analyst = (UtilsService.getItemByVal($scope.users, itm.UserId, "UserId") != null ? UtilsService.getItemByVal($scope.users, itm.UserId, "UserId").Name : null)
-
-                mainGridAPI.itemUpdated(itm);
+            modalScope.onStrategyUpdated = function (strategy) {
+                fillStrategy(strategy);
+                mainGridAPI.itemUpdated(strategy);
             };
         };
         VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/Strategy/StrategyEditor.html", params, settings);

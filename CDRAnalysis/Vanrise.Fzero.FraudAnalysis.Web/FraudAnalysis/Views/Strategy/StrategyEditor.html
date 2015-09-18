@@ -118,25 +118,29 @@
                         </vr-row>
                     </div>
 
-                    <div ng-show="ctrl.isLevelsTabShow">
+                    <div ng-show="ctrl.isLevelsTabShow" class="big-data-grid">
                         <div>
                             <div>
                                 <vr-button type="Add" data-onclick="AddSuspicionLevel" standalone></vr-button>
                             </div>
-                            <vr-datagrid datasource="strategyLevels" maxheight="400px" hidepaginginfo hidegridmenu>
-                                <vr-datagridcolumn headertext="'Suspicion Level'" disablesorting> <vr-form name="formSuspicionLevel">    <vr-select hideremoveicon datasource="viewScope.suspicionLevels" datatextfield="name" datavaluefield="id" ng-init="dataItem.suspicionLevel = (dataItem.suspicionLevel == undefined ? viewScope.suspicionLevels[0] : dataItem.suspicionLevel)" selectedvalues="dataItem.suspicionLevel" isrequired columnindex="0"></vr-select>       </vr-datagridcolumn>
-                                <vr-datagridcolumn ng-repeat="filter in strategyFilters" ng-show="filter.isSelected" columnindex="$index + 1" headertext="'Filter: ' + filter.filterId" headerdescription="filter.description" tag="filter" disablesorting>
-                                    <span ng-init="filterIndex = viewScope.strategyFilters.indexOf(colDef.tag) ">
-                                        <div style="max-width: 50px; float: left">
-                                            <vr-switch value="dataItem.StrategyLevelCriterias[filterIndex].isSelected"></vr-switch>
-                                        </div>
-                                        <div style="max-width:100px;float:left">
-                                            <vr-numeric ng-show="dataItem.StrategyLevelCriterias[filterIndex].isSelected" hint="{{  viewScope.strategyFilters[filterIndex].label +': '+    (viewScope.strategyFilters[filterIndex].threshold + (dataItem.StrategyLevelCriterias[filterIndex].percentage*viewScope.strategyFilters[filterIndex].threshold/100)) }}" value="dataItem.StrategyLevelCriterias[filterIndex].percentage" minvalue="-90" maxvalue="90" stepvalue="10" upsign="{{dataItem.StrategyLevelCriterias[filterIndex].upSign}}" downsign="{{dataItem.StrategyLevelCriterias[filterIndex].downSign}}" unit="%" isrequired></vr-numeric>
-                                        </div>
-                                    </span>
-                                </vr-datagridcolumn>
-                                <vr-datagridcolumn widthfactor="2"><span class="hand-cursor glyphicon glyphicon-remove" ng-click="viewScope.deleteRule(dataItem)"></span> </vr-datagridcolumn>
-                            </vr-datagrid>
+
+                            <div class="container">
+                                <vr-datagrid datasource="strategyLevels" maxheight="400px" hidepaginginfo hidegridmenu>
+                                    <vr-datagridcolumn widthfactor="10" headertext="'Suspicion Level'" disablesorting> <vr-form name="formSuspicionLevel">    <vr-select hideremoveicon datasource="viewScope.suspicionLevels" datatextfield="name" datavaluefield="id" ng-init="dataItem.suspicionLevel = (dataItem.suspicionLevel == undefined ? viewScope.suspicionLevels[0] : dataItem.suspicionLevel)" selectedvalues="dataItem.suspicionLevel" isrequired columnindex="0"></vr-select>       </vr-datagridcolumn>
+                                    <vr-datagridcolumn widthfactor="10"  ng-repeat="filter in strategyFilters" ng-show="filter.isSelected" columnindex="$index + 1" headertext="'Filter: ' + filter.filterId" headerdescription="filter.description" tag="filter" disablesorting>
+                                        <span ng-init="filterIndex = viewScope.strategyFilters.indexOf(colDef.tag) ">
+                                            <div style="max-width: 50px; float: left">
+                                                <vr-switch value="dataItem.StrategyLevelCriterias[filterIndex].isSelected"></vr-switch>
+                                            </div>
+                                            <div style="max-width:100px;float:left">
+                                                <vr-numeric ng-show="dataItem.StrategyLevelCriterias[filterIndex].isSelected" hint="{{  viewScope.strategyFilters[filterIndex].label +': '+    (viewScope.strategyFilters[filterIndex].threshold + (dataItem.StrategyLevelCriterias[filterIndex].percentage*viewScope.strategyFilters[filterIndex].threshold/100)) }}" value="dataItem.StrategyLevelCriterias[filterIndex].percentage" minvalue="-90" maxvalue="90" stepvalue="10" upsign="{{dataItem.StrategyLevelCriterias[filterIndex].upSign}}" downsign="{{dataItem.StrategyLevelCriterias[filterIndex].downSign}}" unit="%" isrequired></vr-numeric>
+                                            </div>
+                                        </span>
+                                    </vr-datagridcolumn>
+                                    <vr-datagridcolumn widthfactor="2"><span class="hand-cursor glyphicon glyphicon-remove" ng-click="viewScope.deleteRule(dataItem)"></span> </vr-datagridcolumn>
+                                </vr-datagrid>
+
+                            </div>
                         </div>
                     </div>
                 </vr-columns>
