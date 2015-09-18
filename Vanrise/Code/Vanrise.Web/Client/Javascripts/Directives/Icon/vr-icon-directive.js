@@ -3,15 +3,17 @@
 
 app.directive('vrIcon', [function ($compile) {
     var option = {
-        true: "Client/Images/true.png",
-        false: "Client/Images/onebit_33.png",
-        'Y': "Client/Images/true.png",
-        'N': "Client/Images/onebit_33.png",
-        'Enabled': "Client/Images/true.png",
-        'Disabled': "Client/Images/onebit_33.png",
-        '1': "Client/Images/true.png",
-        '0': "Client/Images/onebit_33.png"
+        true:{value: "Client/Images/true.png",isimage:true},
+        false:{value: "Client/Images/onebit_33.png",isimage:true} ,
+        'Y': {value: "Client/Images/true.png",isimage:true},
+        'N': {value: "Client/Images/onebit_33.png",isimage:true},
+        'Enabled':{value: "Client/Images/true.png",isimage:true} ,
+        'Disabled':{value: "Client/Images/onebit_33.png",isimage:true} ,
+        '1': {value: "Client/Images/true.png",isimage:true},
+        '0':{value: "Client/Images/onebit_33.png",isimage:true},
+        'music': { value: "glyphicon-music", isimage: false }
     }
+   
     var directiveDefinitionObject = {
 
         restrict: 'E',
@@ -21,15 +23,18 @@ app.directive('vrIcon', [function ($compile) {
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             ctrl.icon = "";
-            var value = ctrl.icontype;      
-            ctrl.icon =  option[value] != undefined ? option[value]:"Client/Images/true.png";
+            ctrl.class = "";
+            var value = ctrl.icontype;
+            ctrl.icon = option[value] != undefined ? option[value] : { value: "Client/Images/true.png", isimage: true };
+          
+
 
         },
         controllerAs: 'ctrl',
         bindToController: true,
         link: function preLink($scope, iElement, iAttrs) {
             var ctrl = $scope.ctrl;
-            var template = getTemplate(ctrl)
+            var template = getTemplate(ctrl,iAttrs)
            iElement.replaceWith(template);
 
         },
@@ -37,11 +42,14 @@ app.directive('vrIcon', [function ($compile) {
 
     };
 
-    function getTemplate(ctrl) {
+    function getTemplate(ctrl,attr) {
         
         var template = ''
-        template += '<div style="text-align: left;"><img style="width:12px;height:12px" title="' + ctrl.icontype + '"  src="' + ctrl.icon + '"  /></div>'
-           
+        if (ctrl.icon.isimage)
+            template += '<div style="text-align: left;"><img style="width:12px;height:12px" title="' + ctrl.icontype + '"  src="' + ctrl.icon.value + '"  /></div>'
+        else
+            template += '<div style="text-align: left;"><span class="glyphicon ' + ctrl.icon.value + '"  /></div>'
+
         return template;
     }
   

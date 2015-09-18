@@ -208,9 +208,9 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
             });
 
             $scope.ctrl.onBlurDirective = function (e) {
-                var dateTab = (ctrl.value).toString().split("T")[0].split("-");
-                var year = parseInt(dateTab[0].split(" ")[3]);
-                if (year < 1970 || isNaN(year)) {
+                var dateTab = new Date(ctrl.value).toDateString().split(" ");
+                var year = parseInt(dateTab[3]);
+                if ($attrs.type != "time" && (year < 1970 || isNaN(year))) {
                     ctrl.value = new Date();
                 }
                 if ($attrs.onblurdatetime != undefined) {

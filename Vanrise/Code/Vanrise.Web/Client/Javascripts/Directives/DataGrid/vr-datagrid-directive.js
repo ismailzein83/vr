@@ -643,7 +643,10 @@
 
             if (loadMoreDataFunction != undefined) {
                 pagingOnScrollEnabled = true;
-                setMaxHeight(ctrl.maxheight);
+                if (ctrl.maxheight1=undefined)
+                    setMaxHeight(ctrl.maxheight);
+                else
+                    setMaxHeight("500px");
             }
 
             //this event is called by the vrDatagridrows directive
