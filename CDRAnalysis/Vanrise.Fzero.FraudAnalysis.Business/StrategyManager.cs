@@ -32,10 +32,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         public UpdateOperationOutput<Strategy> UpdateStrategy(Strategy strategyObject)
         {
-            IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+            IStrategyDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+
             strategyObject.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
-            bool updateActionSucc = manager.UpdateStrategy(strategyObject);
+            bool updateActionSucc = dataManager.UpdateStrategy(strategyObject);
+            
             UpdateOperationOutput<Strategy> updateOperationOutput = new UpdateOperationOutput<Strategy>();
+            
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
 
             if (updateActionSucc)
             {
@@ -43,7 +48,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 updateOperationOutput.UpdatedObject = strategyObject;
             }
             else
+            {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
             return updateOperationOutput;
         }
 

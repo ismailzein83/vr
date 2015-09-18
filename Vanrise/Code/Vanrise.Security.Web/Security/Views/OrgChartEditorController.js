@@ -248,7 +248,7 @@ function OrgChartEditorController($scope, OrgChartAPIService, UsersAPIService, U
 
         return OrgChartAPIService.UpdateOrgChart(orgChartObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Org Chart", response)) {
+                if (VRNotificationService.notifyOnItemUpdated("Org Chart", response, "Name")) {
                     if ($scope.onOrgChartUpdated != undefined)
                         $scope.onOrgChartUpdated(response.UpdatedObject);
 

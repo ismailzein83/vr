@@ -98,36 +98,21 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
         }];
     }
 
-    function removeLastComma(strng) {
-        var n = strng.lastIndexOf(",");
-        var a = strng.substring(0, n)
-        return a;
-    }
-
     function retrieveData() {
 
-        var name = $scope.name != undefined ? $scope.name : '';
-        var description = $scope.description != undefined ? $scope.description : '';
-
-        var isDefaultsList = '';
-
-        angular.forEach($scope.selectedIsDefault, function (itm) {
-            isDefaultsList = isDefaultsList + itm.value + ','
-        });
-
-        var isEnabledList = '';
-
-        angular.forEach($scope.selectedIsEnabled, function (itm) {
-            isEnabledList = isEnabledList + itm.value + ','
-        });
-
         var query = {
-            Name: name,
-            Description: description,
+            Name: ($scope.name != undefined) ? $scope.name : null,
+            Description: ($scope.description != undefined) ? $scope.description : null,
+
             PeriodIDs: ($scope.selectedPeriods.length > 0) ? UtilsService.getPropValuesFromArray($scope.selectedPeriods, "Id") : null,
             UserIDs: ($scope.selectedUsers.length > 0) ? UtilsService.getPropValuesFromArray($scope.selectedUsers, "UserId") : null,
-            IsDefaultList: removeLastComma(isDefaultsList),
-            IsEnabledList: removeLastComma(isEnabledList),
+
+            IsDefault: ($scope.selectedIsDefault.length > 0) ?
+                ($scope.selectedIsDefault.length == 2 || $scope.selectedIsDefault[0].value == KindEnum.SystemBuiltIn.value) : null,
+
+            IsEnabled: ($scope.selectedIsEnabled.length > 0) ?
+                ($scope.selectedIsEnabled.length == 2 || $scope.selectedIsEnabled[0].value == StatusEnum.Enabled.value) : null,
+
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate
         };

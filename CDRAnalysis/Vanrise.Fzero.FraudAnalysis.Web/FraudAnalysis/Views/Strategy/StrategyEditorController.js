@@ -357,7 +357,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         if (isValid(strategyObject)) {
             return StrategyAPIService.UpdateStrategy(strategyObject)
                               .then(function (response) {
-                                  if (VRNotificationService.notifyOnItemUpdated("Strategy", response)) {
+                                  if (VRNotificationService.notifyOnItemUpdated("Strategy", response, "Name")) {
                                       if ($scope.onStrategyUpdated != undefined)
                                           $scope.onStrategyUpdated(response.UpdatedObject);
                                       $scope.modalContext.closeModal();

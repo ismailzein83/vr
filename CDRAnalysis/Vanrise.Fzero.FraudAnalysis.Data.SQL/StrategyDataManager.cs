@@ -37,18 +37,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public BigResult<Strategy> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyResultQuery> input)
         {
-            bool? IsDefault = null;
-            if (input.Query.IsDefaultList.Contains("true"))
-                IsDefault = true;
-            else if (input.Query.IsDefaultList.Contains("false"))
-                IsDefault = false;
-
-            bool? IsEnabled = null;
-            if (input.Query.IsEnabledList.Contains("true"))
-                IsEnabled = true;
-            else if (input.Query.IsEnabledList.Contains("false"))
-                IsEnabled = false;
-
             return RetrieveData(input, (tempTableName) =>
             {
                 string periodIDs = (input.Query.PeriodIDs != null && input.Query.PeriodIDs.Count() > 0) ?
@@ -56,7 +44,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
                 string userIDs = (input.Query.UserIDs != null && input.Query.UserIDs.Count() > 0) ? string.Join<int>(",", input.Query.UserIDs) : null;
 
-                ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_CreateTempByFiltered", tempTableName, input.Query.Name, input.Query.Description, periodIDs, userIDs, IsDefault, IsEnabled, input.Query.FromDate, input.Query.ToDate);
+                ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_CreateTempByFiltered", tempTableName, input.Query.Name, input.Query.Description, periodIDs, userIDs, input.Query.IsDefault, input.Query.IsEnabled, input.Query.FromDate, input.Query.ToDate);
 
             }, (reader) => StrategyMapper(reader), _columnMapper);
         }
@@ -95,7 +83,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             int recordsEffected = ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_Update",
                 strategyObject.Id,
-                 strategyObject.UserId,
+                strategyObject.UserId,
                 strategyObject.Name,
                 strategyObject.Description,
                 DateTime.Now,
@@ -103,6 +91,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 strategyObject.IsEnabled,
                 strategyObject.PeriodId,
                 Vanrise.Common.Serializer.Serialize(strategyObject));
+
             return (recordsEffected > 0);
         }
 
