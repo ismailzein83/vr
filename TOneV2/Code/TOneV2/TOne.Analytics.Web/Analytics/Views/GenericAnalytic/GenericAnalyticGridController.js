@@ -59,6 +59,10 @@
                     onResponseReady(response);
                 });
             };
+
+            $scope.checkExpandablerow = function (groupKeys) {
+                return groupKeys.length !== $scope.groupKeys.length;
+            };
         }
     }
     appControllers.controller('GenericAnalyticGridController', GenericAnalyticGridController);

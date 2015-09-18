@@ -23,6 +23,7 @@
             $scope.dimensions = [];
 
             $scope.groupKeySelectionChanged = function () {
+                
 
                 if ($scope.selectedGroupKeyIndex != undefined) {
                     $scope.selectedGroupKey = $scope.dimensions[$scope.selectedGroupKeyIndex];
@@ -66,7 +67,7 @@
                 return;
             var parentGroupKeys;
             if (scope.gridParentScope == $scope.viewScope)
-                parentGroupKeys = scope.gridParentScope.selectedGroupKeys;
+                parentGroupKeys = scope.gridParentScope.selectedobject.selecteddimensions;
             else
                 parentGroupKeys = [scope.gridParentScope.selectedGroupKey];
 
@@ -114,7 +115,7 @@
         }
 
         function addGroupKeyIfNotExistsInParent(dimension) {
-            var parentGroupKeys = $scope.viewScope.selectedGroupKeys;
+            var parentGroupKeys = $scope.viewScope.selectedobject.selecteddimensions;
             for (var i = 0; i < parentGroupKeys.length; i++) {
                 if (parentGroupKeys[i].value == dimension.value)
                     return;
@@ -136,8 +137,8 @@
         function LoadParentGroupKeys(scope) {
             if (scope == $scope.viewScope) 
                 {
-                    for (var i = 0; i < scope.selectedGroupKeys.length; i++) {
-                        parentGroupKeys.push(scope.selectedGroupKeys[i]);
+                for (var i = 0; i < scope.selectedobject.selecteddimensions.length; i++) {
+                    parentGroupKeys.push(scope.selectedobject.selecteddimensions[i]);
                     }
                     return;
                 }

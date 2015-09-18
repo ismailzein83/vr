@@ -2,31 +2,45 @@
 
     "use strict";
 
-    function vrDirectiveObj(analyticsService, BusinessEntityAPIService, ZonesService, CarrierAccountConnectionAPIService, CarrierTypeEnum, GenericAnalyticDimensionEnum) {
+    function vrDirectiveObj(analyticsService, BusinessEntityAPIService, ZonesService, CarrierAccountConnectionAPIService, CarrierTypeEnum, GenericAnalyticDimensionEnum, CurrencyAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
                 dimensionsvalues: "=",
                 filtervalues: "=",
-                filters: "="
+                selectedobject: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
                 function onLoad() {
                     ctrl.GenericAnalyticDimensionEnum = GenericAnalyticDimensionEnum;
+
+
                     ctrl.switches = [];
                     ctrl.selectedSwitches = [];
+
                     ctrl.codeGroups = [];
                     ctrl.selectedCodeGroups = [];
 
                     ctrl.customers = [];
                     ctrl.selectedCustomers = [];
+
                     ctrl.suppliers = [];
                     ctrl.selectedSuppliers = [];
 
-                    ctrl.filters = [];
+                    ctrl.zones = [];
+                    ctrl.selectedZones = [];
+
+                    ctrl.connections = [];
+                    ctrl.selectedConnections = [];
+                    ctrl.selectedConnectionIndex;
+
+                    ctrl.currency = {
+                        selectedvalues: '',
+                        datasource: []
+                    };
 
                     ctrl.filterCustomer = {
                         Dimension: GenericAnalyticDimensionEnum.Customer.value,
@@ -37,26 +51,17 @@
                         FilterValues: []
                     };
 
-
-                    ///////////////////////////////////////////////
-                    var now = new Date();
-                    ctrl.fromDate = new Date(2013, 1, 1);
-                    ctrl.toDate = now;
-                    //////////////////////////////////////////////
-
-
-                    ctrl.zones = [];
-                    ctrl.selectedZones = [];
-
-                    ctrl.selectedGroupKeys = [];
-
-
-                    ctrl.connections = [];
-                    ctrl.selectedConnections = [];
-                    ctrl.selectedConnectionIndex;
+                    ctrl.selectedobject = {
+                        selecteddimensions: [],
+                        selectedfilters: [],
+                        fromdate: new Date(2013, 1, 1),
+                        todate: new Date(),
+                        currency: ctrl.currency == null ? null : ctrl.currency.selectedvalues.CurrencyID
+                    };
 
                     loadSwitches();
                     loadCodeGroups();
+                    loadCurrencies();
                 }
 
                 function loadSwitches() {
@@ -71,6 +76,12 @@
                     });
                 }
                 
+                function loadCurrencies() {
+                    return CurrencyAPIService.GetCurrencies().then(function (response) {
+                        ctrl.currency.datasource = response;
+                    });
+                }
+
                 function searchZones(text) {
                     return ZonesService.getSalesZones(text);
                 }
@@ -93,39 +104,31 @@
 
                 function onselectionvalueschanged() {
 
+                    ctrl.selectedobject.selectedfilters = [];
+                    ctrl.filterCustomer.FilterValues = [];
+                    ctrl.filterSupplier.FilterValues = [];
+
+                    
 
                     ctrl.selectedCustomers.forEach(function (item) {
                         ctrl.filterCustomer.FilterValues.push(item.CarrierAccountID);
                     });
 
-                    console.log(ctrl.filterCustomer);
-                    //if (ctrl.filterCustomer.FilterValues.length > 0)
-                    //    ctrl.filters.push(ctrl.filterCustomer);
+                    if (ctrl.filterCustomer.FilterValues.length > 0)
+                        ctrl.selectedobject.selectedfilters.push(ctrl.filterCustomer);
 
+                    ctrl.selectedSuppliers.forEach(function (item) {
+                        ctrl.filterSupplier.FilterValues.push(item.CarrierAccountID);
+                    });
 
-                    //ctrl.filters = ctrl.selectedSuppliers;
-                }
-
-
-                function onselectionvalueschanged2() {
-
-
-
-                    //ctrl.selectedSuppliers.forEach(function (item) {
-                    //    ctrl.filterSupplier.FilterValues.push(item.CarrierAccountID);
-                    //});
-
-                    //if (ctrl.filterSupplier.FilterValues.length > 0)
-                    //    ctrl.filters.push(ctrl.filterSupplier);
-
-                    //ctrl.filters = ctrl.selectedSuppliers;
+                    if (ctrl.filterSupplier.FilterValues.length > 0)
+                        ctrl.selectedobject.selectedfilters.push(ctrl.filterSupplier);
                 }
 
                 angular.extend(this, {
                     searchZones: searchZones,
                     onSelectionChanged: onSelectionChanged,
-                    onselectionvalueschanged: onselectionvalueschanged,
-                    onselectionvalueschanged2: onselectionvalueschanged2
+                    onselectionvalueschanged: onselectionvalueschanged
                 });
                
                 
@@ -133,20 +136,6 @@
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    post: function ($scope, iElem, iAttrs, ctrl) {
-                        $scope.$watch('ctrl.selectedvalues.length', function () {
-                            if (iAttrs.onselectionchanged != undefined) {
-                                var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onselectionchanged);
-                                if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
-                                    onvaluechangedMethod();
-                                }
-                            }
-                        });
-                    }
-                }
-            },
             templateUrl: function () {
                 return "/Client/Modules/Analytics/Directives/vr-generalfilter.html";
             }
@@ -155,7 +144,7 @@
         return directiveDefinitionObject;
     }
     
-    vrDirectiveObj.$inject = ['AnalyticsService', 'BusinessEntityAPIService_temp', 'ZonesService', 'CarrierAccountConnectionAPIService','CarrierTypeEnum', 'GenericAnalyticDimensionEnum'];
+    vrDirectiveObj.$inject = ['AnalyticsService', 'BusinessEntityAPIService_temp', 'ZonesService', 'CarrierAccountConnectionAPIService','CarrierTypeEnum', 'GenericAnalyticDimensionEnum','CurrencyAPIService'];
     
     app.directive('vrAnGeneralfilter', vrDirectiveObj);
 

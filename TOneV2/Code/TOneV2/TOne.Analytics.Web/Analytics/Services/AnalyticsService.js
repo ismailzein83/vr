@@ -103,14 +103,6 @@
             return measureValues;
         }
 
-        function getGenericAnalyticGroupKeys() {
-            var groupKeys = [];
-            for (var prop in GenericAnalyticDimensionEnum) {
-                    groupKeys.push(GenericAnalyticDimensionEnum[prop]);
-            }
-            return groupKeys;
-        }
-
         function getDefaultTrafficStatisticGroupKeys() {
             var groupKeys = [];
             groupKeys.push(trafficStatisticGroupKeysEnum.OurZone);
@@ -277,7 +269,6 @@
         return ({
             getGenericAnalyticMeasureValues:getGenericAnalyticMeasureValues,
             getGenericAnalyticMeasures:getGenericAnalyticMeasures,
-            getGenericAnalyticGroupKeys: getGenericAnalyticGroupKeys,
             getTrafficStatisticGroupKeys: getTrafficStatisticGroupKeys,
             getDefaultTrafficStatisticGroupKeys: getDefaultTrafficStatisticGroupKeys,
             getPeriods: getPeriods,

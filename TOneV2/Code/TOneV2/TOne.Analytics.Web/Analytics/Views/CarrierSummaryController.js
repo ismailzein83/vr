@@ -2,131 +2,80 @@
 
     "use strict";
 
-    CarrierSummaryController.$inject = ['$scope', 'GenericAnalyticDimensionEnum', 'AnalyticsService', 'BusinessEntityAPIService_temp', 'ZonesService', 'CurrencyAPIService'];
-    function CarrierSummaryController($scope, GenericAnalyticDimensionEnum, analyticsService, BusinessEntityAPIService, ZonesService, CurrencyAPIService) {
+    CarrierSummaryController.$inject = ['$scope', 'GenericAnalyticDimensionEnum', 'AnalyticsService', 'BusinessEntityAPIService_temp', 'ZonesService', 'CurrencyAPIService', 'GenericAnalyticMeasureEnum'];
+    function CarrierSummaryController($scope, GenericAnalyticDimensionEnum, analyticsService, BusinessEntityAPIService, ZonesService, CurrencyAPIService, GenericAnalyticMeasureEnum) {
 
         var measureFieldsValues = [];
         load();
 
         function defineScope() {
 
-            var now = new Date();
-            $scope.fromDate = new Date(2013, 1, 1);
-            $scope.toDate = now;
             $scope.subViewConnector = {};
 
             $scope.groupKeys = [];
             $scope.filterKeys = [];
-            $scope.selectedfilters = [];
-
-
-            for(var item in GenericAnalyticDimensionEnum) {
-                if (GenericAnalyticDimensionEnum[item].name == "Customer")
-                    $scope.groupKeys.push(GenericAnalyticDimensionEnum[item]);
-            }
-
-            for (var item in GenericAnalyticDimensionEnum) {
-                if ((GenericAnalyticDimensionEnum[item].name == "Customer") ||
-                    (GenericAnalyticDimensionEnum[item].name == "Supplier"))
-                    $scope.filterKeys.push(GenericAnalyticDimensionEnum[item]);
-            }
-
-            analyticsService.getGenericAnalyticMeasureValues().forEach(function (item) {
-                if (item == 0 || item == 1 || item == 2 || item == 3 || item == 4 || item == 5 || item == 6 || item == 7)
-                    measureFieldsValues.push(item);
-            });
-
-            //$scope.selectedGroupKeys = [];
-            //$scope.currentSearchCriteria = {
-            //    groupKeys: []
-            //};
-
             $scope.measures = [];
-            $scope.selectedMeasures = [];
+            $scope.selectedobject = {};
 
-            //$scope.customers = [];
-            //$scope.selectedCustomers = [];
-            //$scope.suppliers = [];
-            //$scope.selectedSuppliers = [];
-
-            //$scope.optionsCurrencies = {
-            //    selectedvalues: '',
-            //    datasource: []
-            //};
-
+            loadGroupKeys();
+            loadFilterKeys();
             loadMeasures();
-           // loadCurrencies();
 
             $scope.searchClicked = function () {
                 return retrieveData();
             };
-
-            $scope.checkExpandablerow = function (groupKeys) {
-                return groupKeys.length !== $scope.groupKeys.length;
-            };
-
-            $scope.groupSelectionChanged = function () {
-                $scope.currentSearchCriteria.groupKeys.length = 0;
-            };
         }
 
         function retrieveData() {
-
-            console.log($scope.selectedfilters);
-
-            //var filters = [];
-
-            //var filterCustomer = {
-            //    Dimension: GenericAnalyticDimensionEnum.Customer.value,
-            //    FilterValues: []
-            //};
-
-            //var filterSupplier = {
-            //    Dimension: GenericAnalyticDimensionEnum.Supplier.value,
-            //    FilterValues: []
-            //};
-
-            //$scope.selectedCustomers.forEach(function (item) {
-            //    filterCustomer.FilterValues.push(item.CarrierAccountID);
-            //});
-            //$scope.selectedSuppliers.forEach(function (item) {
-            //    filterSupplier.FilterValues.push(item.CarrierAccountID);
-            //});
-
-            //if (filterCustomer.FilterValues.length > 0)
-            //    filters.push(filterCustomer);
-            //if (filterSupplier.FilterValues.length > 0)
-            //    filters.push(filterSupplier);
-
-            //var query = {
-            //    Filters: filters,
-            //    DimensionFields: $scope.selectedGroupKeys,
-            //    MeasureFields: measureFieldsValues,
-            //    FromTime: $scope.fromDate,
-            //    ToTime: $scope.toDate,
-            //    Currency: $scope.optionsCurrencies.selectedvalues == null ? null : $scope.optionsCurrencies.selectedvalues.CurrencyID
-            //};
-            //$scope.subViewConnector.retrieveData(query);
+            var query = {
+                Filters: $scope.selectedobject.selectedfilters,
+                DimensionFields: $scope.selectedobject.selecteddimensions,
+                MeasureFields: measureFieldsValues,
+                FromTime: $scope.selectedobject.fromdate,
+                ToTime: $scope.selectedobject.todate,
+                Currency: $scope.selectedobject.currency
+            };
+            $scope.subViewConnector.retrieveData(query);
         }
 
         function load() {
             defineScope();
         }
 
-        function loadMeasures() {
-
-            analyticsService.getGenericAnalyticMeasures().forEach(function (item) {
-                if (item.name == "FirstCDRAttempt" || item.name == "ABR" || item.name == "ASR" || item.name == "NER" || item.name == "Attempts" || item.name == "SuccessfulAttempts" || item.name == "FailedAttempts" || item.name == "DeliveredAttempts")
-                    $scope.selectedMeasures.push(item);
-            });
-            $scope.measures = $scope.selectedMeasures;
+        function loadGroupKeys() {
+            for (var item in GenericAnalyticDimensionEnum) {
+                if ((GenericAnalyticDimensionEnum[item].name == GenericAnalyticDimensionEnum.Customer.name) ||
+                    (GenericAnalyticDimensionEnum[item].name == GenericAnalyticDimensionEnum.Supplier.name))
+                    $scope.groupKeys.push(GenericAnalyticDimensionEnum[item]);
+            }
         }
 
-        //function loadCurrencies() {
-        //    return CurrencyAPIService.GetCurrencies().then(function (response) {
-        //        $scope.optionsCurrencies.datasource = response;
-        //    });
-        //}
+        function loadFilterKeys() {
+            for (var item in GenericAnalyticDimensionEnum) {
+                if ((GenericAnalyticDimensionEnum[item].name == GenericAnalyticDimensionEnum.Customer.name) ||
+                    (GenericAnalyticDimensionEnum[item].name == GenericAnalyticDimensionEnum.Supplier.name))
+                    $scope.filterKeys.push(GenericAnalyticDimensionEnum[item]);
+            }
+        }
+
+        function loadMeasures() {
+            for (var item in GenericAnalyticMeasureEnum) {
+                if ((GenericAnalyticMeasureEnum[item].value == GenericAnalyticMeasureEnum.Measure_FirstCDRAttempt.value) ||
+                    (GenericAnalyticMeasureEnum[item].value == GenericAnalyticMeasureEnum.Measure_ABR.value) ||
+                    (GenericAnalyticMeasureEnum[item].value == GenericAnalyticMeasureEnum.Measure_ASR.value) ||
+                    (GenericAnalyticMeasureEnum[item].value == GenericAnalyticMeasureEnum.Measure_NER.value) ||
+                    (GenericAnalyticMeasureEnum[item].value == GenericAnalyticMeasureEnum.Measure_Attempts.value) ||
+                    (GenericAnalyticMeasureEnum[item].value == GenericAnalyticMeasureEnum.Measure_SuccessfulAttempts.value) ||
+                    (GenericAnalyticMeasureEnum[item].value == GenericAnalyticMeasureEnum.Measure_FailedAttempts.value) ||
+                    (GenericAnalyticMeasureEnum[item].value == GenericAnalyticMeasureEnum.Measure_DeliveredAttempts.value))
+                {
+                    measureFieldsValues.push(GenericAnalyticMeasureEnum[item].value);
+                    $scope.measures.push(GenericAnalyticMeasureEnum[item]);
+                }
+                
+            }
+        }
+
     }
     appControllers.controller('Carrier_CarrierSummaryController', CarrierSummaryController);
 
