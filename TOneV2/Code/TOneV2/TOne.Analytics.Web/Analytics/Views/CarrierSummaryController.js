@@ -16,37 +16,46 @@
             $scope.subViewConnector = {};
 
             $scope.groupKeys = [];
+            $scope.filterKeys = [];
+            $scope.selectedfilters = [];
 
-            analyticsService.getGenericAnalyticGroupKeys().forEach(function (item) {
-                if (item.name == "Customer" || item.name == "Supplier" || item.name == "Zone")
-                    $scope.groupKeys.push(item);
-            });
+
+            for(var item in GenericAnalyticDimensionEnum) {
+                if (GenericAnalyticDimensionEnum[item].name == "Customer")
+                    $scope.groupKeys.push(GenericAnalyticDimensionEnum[item]);
+            }
+
+            for (var item in GenericAnalyticDimensionEnum) {
+                if ((GenericAnalyticDimensionEnum[item].name == "Customer") ||
+                    (GenericAnalyticDimensionEnum[item].name == "Supplier"))
+                    $scope.filterKeys.push(GenericAnalyticDimensionEnum[item]);
+            }
 
             analyticsService.getGenericAnalyticMeasureValues().forEach(function (item) {
-                if (item == 0 || item == 1 || item == 3)
+                if (item == 0 || item == 1 || item == 2 || item == 3 || item == 4 || item == 5 || item == 6 || item == 7)
                     measureFieldsValues.push(item);
             });
 
-            $scope.selectedGroupKeys = [];
-            $scope.currentSearchCriteria = {
-                groupKeys: []
-            };
+            //$scope.selectedGroupKeys = [];
+            //$scope.currentSearchCriteria = {
+            //    groupKeys: []
+            //};
 
             $scope.measures = [];
             $scope.selectedMeasures = [];
 
-            $scope.customers = [];
-            $scope.selectedCustomers = [];
-            $scope.suppliers = [];
-            $scope.selectedSuppliers = [];
+            //$scope.customers = [];
+            //$scope.selectedCustomers = [];
+            //$scope.suppliers = [];
+            //$scope.selectedSuppliers = [];
 
-            $scope.optionsCurrencies = {
-                selectedvalues: '',
-                datasource: []
-            };
+            //$scope.optionsCurrencies = {
+            //    selectedvalues: '',
+            //    datasource: []
+            //};
 
             loadMeasures();
-            loadCurrencies();
+           // loadCurrencies();
 
             $scope.searchClicked = function () {
                 return retrieveData();
@@ -63,39 +72,41 @@
 
         function retrieveData() {
 
-            var filters = [];
+            console.log($scope.selectedfilters);
 
-            var filterCustomer = {
-                Dimension: GenericAnalyticDimensionEnum.Customer.value,
-                FilterValues: []
-            };
+            //var filters = [];
 
-            var filterSupplier = {
-                Dimension: GenericAnalyticDimensionEnum.Supplier.value,
-                FilterValues: []
-            };
+            //var filterCustomer = {
+            //    Dimension: GenericAnalyticDimensionEnum.Customer.value,
+            //    FilterValues: []
+            //};
 
-            $scope.selectedCustomers.forEach(function (item) {
-                filterCustomer.FilterValues.push(item.CarrierAccountID);
-            });
-            $scope.selectedSuppliers.forEach(function (item) {
-                filterSupplier.FilterValues.push(item.CarrierAccountID);
-            });
+            //var filterSupplier = {
+            //    Dimension: GenericAnalyticDimensionEnum.Supplier.value,
+            //    FilterValues: []
+            //};
 
-            if (filterCustomer.FilterValues.length > 0)
-                filters.push(filterCustomer);
-            if (filterSupplier.FilterValues.length > 0)
-                filters.push(filterSupplier);
+            //$scope.selectedCustomers.forEach(function (item) {
+            //    filterCustomer.FilterValues.push(item.CarrierAccountID);
+            //});
+            //$scope.selectedSuppliers.forEach(function (item) {
+            //    filterSupplier.FilterValues.push(item.CarrierAccountID);
+            //});
 
-            var query = {
-                Filters: filters,
-                DimensionFields: $scope.selectedGroupKeys,
-                MeasureFields: measureFieldsValues,
-                FromTime: $scope.fromDate,
-                ToTime: $scope.toDate,
-                Currency: $scope.optionsCurrencies.selectedvalues == null ? null : $scope.optionsCurrencies.selectedvalues.CurrencyID
-            };
-            $scope.subViewConnector.retrieveData(query);
+            //if (filterCustomer.FilterValues.length > 0)
+            //    filters.push(filterCustomer);
+            //if (filterSupplier.FilterValues.length > 0)
+            //    filters.push(filterSupplier);
+
+            //var query = {
+            //    Filters: filters,
+            //    DimensionFields: $scope.selectedGroupKeys,
+            //    MeasureFields: measureFieldsValues,
+            //    FromTime: $scope.fromDate,
+            //    ToTime: $scope.toDate,
+            //    Currency: $scope.optionsCurrencies.selectedvalues == null ? null : $scope.optionsCurrencies.selectedvalues.CurrencyID
+            //};
+            //$scope.subViewConnector.retrieveData(query);
         }
 
         function load() {
@@ -105,17 +116,17 @@
         function loadMeasures() {
 
             analyticsService.getGenericAnalyticMeasures().forEach(function (item) {
-                if (item.name == "Attempts" || item.name == "FirstCDRAttempt" || item.name == "SuccessfulAttempts")
+                if (item.name == "FirstCDRAttempt" || item.name == "ABR" || item.name == "ASR" || item.name == "NER" || item.name == "Attempts" || item.name == "SuccessfulAttempts" || item.name == "FailedAttempts" || item.name == "DeliveredAttempts")
                     $scope.selectedMeasures.push(item);
             });
             $scope.measures = $scope.selectedMeasures;
         }
 
-        function loadCurrencies() {
-            return CurrencyAPIService.GetCurrencies().then(function (response) {
-                $scope.optionsCurrencies.datasource = response;
-            });
-        }
+        //function loadCurrencies() {
+        //    return CurrencyAPIService.GetCurrencies().then(function (response) {
+        //        $scope.optionsCurrencies.datasource = response;
+        //    });
+        //}
     }
     appControllers.controller('Carrier_CarrierSummaryController', CarrierSummaryController);
 

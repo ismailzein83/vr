@@ -7,7 +7,7 @@
         var gridApi;
         defineScope();
         function defineScope() {
-
+            
             $scope.datasource = [];
 
             $scope.gridReady = function (api) {
@@ -48,6 +48,7 @@
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                
                 return GenericAnalyticAPIService.GetFiltered(dataRetrievalInput)
                 .then(function (response) {
                     $scope.currentSearchCriteria.groupKeys.length = 0;

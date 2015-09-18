@@ -49,7 +49,7 @@ namespace TOne.Analytics.Data.SQL
             s_AllDimensionsConfig.Add(AnalyticDimension.Zone,
                 new AnalyticDimensionConfig
                 {
-                    IdColumn = "ts.OurZoneID",
+                    IdColumn = "ISNULL(ts.OurZoneID,'N/A')",
                     NameColumn = "z.Name",
                     JoinStatements = new List<string>() { " JOIN Zone z WITH (NOLOCK) ON z.ZoneID = ts.OurZoneID " },
                     GroupByStatements = new List<string>() { " ts.OurZoneID, z.Name " }
@@ -58,7 +58,7 @@ namespace TOne.Analytics.Data.SQL
             s_AllDimensionsConfig.Add(AnalyticDimension.SupplierZone,
                 new AnalyticDimensionConfig
                 {
-                    IdColumn = "ts.SupplierZoneID",
+                    IdColumn = "ISNULL(ts.SupplierZoneID,'N/A')",
                     NameColumn = "z.Name",
                     JoinStatements = new List<string>() { " JOIN Zone z WITH (NOLOCK) ON z.ZoneID = ts.SupplierZoneID " },
                     GroupByStatements = new List<string>() { " ts.SupplierZoneID, z.Name " }
@@ -67,20 +67,20 @@ namespace TOne.Analytics.Data.SQL
             s_AllDimensionsConfig.Add(AnalyticDimension.Customer,
                 new AnalyticDimensionConfig
                 {
-                    IdColumn = "ts.CustomerID",
-                    NameColumn = "case when cust.NameSuffix != '' THEN  custProf.Name + '(' + cust.NameSuffix + ')' else custProf.Name end",
-                    JoinStatements = new List<string>() { @" JOIN CarrierAccount cust WITH (NOLOCK) ON cust.CarrierAccountID = ts.CustomerID
-                                         JOIN CarrierProfile custProf on cust.ProfileID = custProf.ProfileID " },
+                    IdColumn = "ISNULL(ts.CustomerID,'N/A')",
+                    NameColumn = "ISNULL(case when cust.NameSuffix != '' THEN  custProf.Name + '(' + cust.NameSuffix + ')' else custProf.Name end,'N/A')",
+                    JoinStatements = new List<string>() { @"LEFT JOIN CarrierAccount cust WITH (NOLOCK) ON cust.CarrierAccountID = ts.CustomerID
+                                                            LEFT JOIN CarrierProfile custProf on cust.ProfileID = custProf.ProfileID " },
                     GroupByStatements = new List<string>() { " ts.CustomerID, cust.NameSuffix, custProf.Name " }
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.Supplier,
                 new AnalyticDimensionConfig
                 {
-                    IdColumn = "ts.SupplierID",
-                    NameColumn = "case when supp.NameSuffix != '' THEN  suppProf.Name + '(' + supp.NameSuffix + ')' else suppProf.Name end",
-                    JoinStatements = new List<string>() { @" JOIN CarrierAccount supp WITH (NOLOCK) ON supp.CarrierAccountID = ts.SupplierID
-                                                     JOIN CarrierProfile suppProf on supp.ProfileID = suppProf.ProfileID " },
+                    IdColumn = "ISNULL(ts.SupplierID,'N/A')",
+                    NameColumn = "ISNULL(case when supp.NameSuffix != '' THEN  suppProf.Name + '(' + supp.NameSuffix + ')' else suppProf.Name end,'N/A')",
+                    JoinStatements = new List<string>() { @"LEFT JOIN CarrierAccount supp WITH (NOLOCK) ON supp.CarrierAccountID = ts.SupplierID
+                                                            LEFT JOIN CarrierProfile suppProf on supp.ProfileID = suppProf.ProfileID " },
                     GroupByStatements = new List<string>() { " ts.SupplierID, supp.NameSuffix, suppProf.Name " }
                 });
 
@@ -107,17 +107,17 @@ namespace TOne.Analytics.Data.SQL
                 {
                     IdColumn = "ISNULL(cscIn.GateWayID,0)",
                     NameColumn = "ISNULL(cscIn.GateWayName,'N/A')",
-                    JoinStatements = new List<string>() { @"Left JOIN SwitchConnectivity cscIn  ON (','+cscIn.Details+',' LIKE '%,'+ts.Port_IN +',%' ) AND(ts.SwitchID = cscIn.SwitchID) AND ts.CustomerID = cscIn.CarrierAccount " },
+                    JoinStatements = new List<string>() { @"LEFT JOIN SwitchConnectivity cscIn  ON (','+cscIn.Details+',' LIKE '%,'+ts.Port_IN +',%' ) AND(ts.SwitchID = cscIn.SwitchID) AND ts.CustomerID = cscIn.CarrierAccount " },
                     GroupByStatements = new List<string>() { "cscIn.GateWayID, cscIn.GateWayName" }
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.GateWayOut,
                 new AnalyticDimensionConfig
                 {
-                    IdColumn = "ISNULL(cscIn.GateWayID,0)",
-                    NameColumn = "ISNULL(cscIn.GateWayName,'N/A')",
-                    JoinStatements = new List<string>() { @"Left JOIN SwitchConnectivity cscIn ON  (','+cscIn.Details+',' LIKE '%,'+ts.Port_OUT +',%') AND (ts.SwitchID = cscIn.SwitchID)  AND ts.SupplierID  = cscIn.CarrierAccount" },
-                    GroupByStatements = new List<string>() { "cscIn.GateWayID, cscIn.GateWayName" }
+                    IdColumn = "ISNULL(cscOut.GateWayID,0)",
+                    NameColumn = "ISNULL(cscOut.GateWayName,'N/A')",
+                    JoinStatements = new List<string>() { @"LEFT JOIN SwitchConnectivity cscOut ON  (','+cscOut.Details+',' LIKE '%,'+ts.Port_OUT +',%') AND (ts.SwitchID = cscOut.SwitchID)  AND ts.SupplierID  = cscOut.CarrierAccount" },
+                    GroupByStatements = new List<string>() { "cscOut.GateWayID, cscOut.GateWayName" }
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.PortIn,
@@ -196,33 +196,6 @@ namespace TOne.Analytics.Data.SQL
                     GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.FirstCDRAttempt_Expression.ColumnAlias)
                 });
 
-            s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.ASR,
-                new AnalyticMeasureFieldConfig
-                {
-                     GetColumnsExpressions = new List<Func<AnalyticQuery,MeasureValueExpression>>{
-                        (query) =>
-                       {
-                           string s = "";
-                           foreach (AnalyticDimension dimension in query.DimensionFields)
-                           {
-                               if (dimension == AnalyticDimension.Supplier || dimension == AnalyticDimension.PortOut || dimension == AnalyticDimension.GateWayOut
-                                   //|| (filter.SupplierIds != null && filter.SupplierIds.Count != 0)
-                                   )
-                                   s = "Attempts";
-                               else
-                                   s = "NumberOfCalls";
-                           }
-                           return new MeasureValueExpression
-                           {
-                               Expression = String.Format("Case WHEN (Sum(ts.{0})-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))>0 THEN CONVERT(DECIMAL(10,2),SUM(ts.SuccessfulAttempts)*100.0/(Sum(ts.{0})-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))) ELSE 0 END ", s),
-                               ColumnAlias = "Measure_ASR"
-                           };
-                       }
-                   },
-                     MappedSQLColumn = "Measure_ASR",
-                     GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, "Measure_ASR")
-                });
-
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.ABR,
                new AnalyticMeasureFieldConfig
                {
@@ -249,6 +222,33 @@ namespace TOne.Analytics.Data.SQL
                    MappedSQLColumn = "Measure_ABR",
                    GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, "Measure_ABR")
 
+               });
+
+            s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.ASR,
+               new AnalyticMeasureFieldConfig
+               {
+                   GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>>{
+                        (query) =>
+                       {
+                           string s = "";
+                           foreach (AnalyticDimension dimension in query.DimensionFields)
+                           {
+                               if (dimension == AnalyticDimension.Supplier || dimension == AnalyticDimension.PortOut || dimension == AnalyticDimension.GateWayOut
+                                   //|| (filter.SupplierIds != null && filter.SupplierIds.Count != 0)
+                                   )
+                                   s = "Attempts";
+                               else
+                                   s = "NumberOfCalls";
+                           }
+                           return new MeasureValueExpression
+                           {
+                               Expression = String.Format("Case WHEN (Sum(ts.{0})-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))>0 THEN CONVERT(DECIMAL(10,2),SUM(ts.SuccessfulAttempts)*100.0/(Sum(ts.{0})-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))) ELSE 0 END ", s),
+                               ColumnAlias = "Measure_ASR"
+                           };
+                       }
+                   },
+                   MappedSQLColumn = "Measure_ASR",
+                   GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, "Measure_ASR")
                });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.NER,
@@ -431,7 +431,6 @@ namespace TOne.Analytics.Data.SQL
                     GetMeasureValue = (reader, record) => 
                         {
                             var nominalCapacity = GetReaderValue<int>(reader, MeasureValueExpression.NominalCapacityInE1s_Expression.ColumnAlias);
-                            var utilizationInMinutes = GetReaderValue<Decimal>(reader, MeasureValueExpression.UtilizationInSeconds_Expression.ColumnAlias) / 60;
                             var durationInMinutes = GetReaderValue<Decimal>(reader, MeasureValueExpression.DurationsInSeconds_Expression.ColumnAlias) / 60;
                             return nominalCapacity > 0 ? ((durationInMinutes * 100) / nominalCapacity) : 0;
                         }

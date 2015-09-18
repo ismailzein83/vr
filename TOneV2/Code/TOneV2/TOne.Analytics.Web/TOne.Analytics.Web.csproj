@@ -153,6 +153,8 @@
     <Content Include="Analytics\Constants\TrafficMonitorMeasureEnum.js" />
     <Content Include="Analytics\Constants\VariationReportOptionsEnum.js" />
     <Content Include="Analytics\Constants\VolumeReportsTimePeriodEnum.js" />
+    <Content Include="Analytics\Directives\vr-an-generalfilter-directive.js" />
+    <Content Include="Analytics\Directives\vr-generalfilter.html" />
     <Content Include="Analytics\Factory\FilterFactory.js" />
     <Content Include="Analytics\Services\APIServices\AnalyticsAPIService.js" />
     <Content Include="Analytics\Services\AnalyticsService.js" />
@@ -194,6 +196,8 @@
     <Content Include="Analytics\Views\DailyReportController.js" />
     <Content Include="Analytics\Views\GenericAnalytic\GenericAnalyticGrid.html" />
     <Content Include="Analytics\Views\GenericAnalytic\GenericAnalyticGridController.js" />
+    <Content Include="Analytics\Views\GHourlyReport.html" />
+    <Content Include="Analytics\Views\GHourlyReportController.js" />
     <Content Include="Analytics\Views\RawCDRLog.html" />
     <Content Include="Analytics\Views\RawCDRLogController.js" />
     <Content Include="Analytics\Views\RawCDRLogTemplate\RawCDRLogTemplate.html" />

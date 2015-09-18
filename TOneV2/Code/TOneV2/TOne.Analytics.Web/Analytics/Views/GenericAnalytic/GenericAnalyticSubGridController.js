@@ -12,7 +12,11 @@
 
         function defineScope() {
 
-            measureFields = analyticsService.getGenericAnalyticMeasureValues();
+            $scope.viewScope.measures.forEach(function (item) {
+                measureFields.push(item.value);
+            });
+
+            //measureFields = analyticsService.getGenericAnalyticMeasureValues();
             $scope.measures = $scope.viewScope.measures;
 
             $scope.selectedGroupKey;
@@ -22,15 +26,12 @@
 
                 if ($scope.selectedGroupKeyIndex != undefined) {
                     $scope.selectedGroupKey = $scope.dimensions[$scope.selectedGroupKeyIndex];
-
                     
                     if (!$scope.selectedGroupKey.isDataLoaded && $scope.selectedGroupKey.gridAPI != undefined) {
                         retrieveData($scope.selectedGroupKey, false);
                     }
-
                 }
             };
-
 
             $scope.checkExpandablerow = function () {
              if ($scope.dimensions.length > 1)
@@ -54,7 +55,7 @@
                 MeasureFields: measureFields,
                 FromTime: $scope.viewScope.fromDate,
                 ToTime: $scope.viewScope.toDate,
-                Currency: $scope.viewScope.optionsCurrencies.selectedvalues
+                Currency: $scope.viewScope.optionsCurrencies == null ? null : $scope.viewScope.optionsCurrencies.selectedvalues
             };
             return groupKey.gridAPI.retrieveData(query);
         }
@@ -68,8 +69,6 @@
                 parentGroupKeys = scope.gridParentScope.selectedGroupKeys;
             else
                 parentGroupKeys = [scope.gridParentScope.selectedGroupKey];
-
-
 
             for (var i = 0; i < parentGroupKeys.length; i++) {
                 var groupKey = parentGroupKeys[i];
@@ -91,13 +90,18 @@
             defineScope();
             loadGroupKeys();
             $scope.selectedGroupKey = $scope.dimensions[0];
+
+           
         }
 
+        //GenericAnalyticDimensionEnum
+        //$scope.gridParentScope.groupKeys
         function loadGroupKeys() {
-            for (var prop in GenericAnalyticDimensionEnum) {
+
+            for (var prop in $scope.viewScope.groupKeys) {
                 var groupKey = {
-                    name: GenericAnalyticDimensionEnum[prop].name,
-                    value: GenericAnalyticDimensionEnum[prop].value,
+                    name: $scope.viewScope.groupKeys[prop].name,
+                    value: $scope.viewScope.groupKeys[prop].value,
                     data: [],
                     isDataLoaded: false
                 };

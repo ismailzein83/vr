@@ -30,7 +30,7 @@ namespace TOne.Analytics.Data.SQL
 
         #region Measure Values Columns
 
-        public static MeasureValueExpression FirstCDRAttempt_Expression = new MeasureValueExpression { ColumnAlias = "Measure_FirstCDRAttempt", Expression = "Min(ts.FirstCDRAttempt)" };
+        public static MeasureValueExpression FirstCDRAttempt_Expression = new MeasureValueExpression { ColumnAlias = "Measure_FirstCDRAttempt", Expression = "CONVERT(VARCHAR(10),Min(ts.FirstCDRAttempt),110)" };
         public static MeasureValueExpression Attempts_Expression = new MeasureValueExpression { ColumnAlias = "Measure_Attempts", Expression = "Sum(ts.Attempts)" };
         public static MeasureValueExpression SuccessfulAttempts_Expression = new MeasureValueExpression { ColumnAlias = "Measure_SuccessfulAttempts", Expression = "Sum(ts.SuccessfulAttempts)" };
         public static MeasureValueExpression FailedAttempts_Expression = new MeasureValueExpression { ColumnAlias = "Measure_FailedAttempts", Expression = "Sum(ts.Attempts-ts.SuccessfulAttempts)" };
@@ -41,7 +41,7 @@ namespace TOne.Analytics.Data.SQL
         public static MeasureValueExpression NumberOfCalls_Expression = new MeasureValueExpression { ColumnAlias = "Measure_NumberOfCalls", Expression = "Sum(ts.NumberOfCalls)" };
         public static MeasureValueExpression DeliveredNumberOfCalls_Expression = new MeasureValueExpression { ColumnAlias = "Measure_DeliveredNumberOfCalls", Expression = "Sum(ts.DeliveredNumberOfCalls)" };
         public static MeasureValueExpression CeiledDuration_Expression = new MeasureValueExpression { ColumnAlias = "Measure_CeiledDuration", Expression = "Sum(ts.CeiledDuration)" };
-        public static MeasureValueExpression LastCDRAttempt_Expression = new MeasureValueExpression { ColumnAlias = "Measure_LastCDRAttempt", Expression = "DATEADD(ms,-datepart(ms,Max(LastCDRAttempt)),Max(LastCDRAttempt))" };
+        public static MeasureValueExpression LastCDRAttempt_Expression = new MeasureValueExpression { ColumnAlias = "Measure_LastCDRAttempt", Expression = "CONVERT(VARCHAR(10),DATEADD(ms,-datepart(ms,Max(LastCDRAttempt)),Max(LastCDRAttempt)),110)" };
         public static MeasureValueExpression MaxDurationInSeconds_Expression = new MeasureValueExpression { ColumnAlias = "Measure_MaxDurationInSeconds", Expression = "CONVERT(DECIMAL(10,2),Max (ts.MaxDurationInSeconds)/60.0)" };
         public static MeasureValueExpression PGAD_Expression = new MeasureValueExpression { ColumnAlias = "Measure_PGAD", Expression = "CONVERT(DECIMAL(10,2),Avg(ts.PGAD))" };
         public static MeasureValueExpression AveragePDD_Expression = new MeasureValueExpression { ColumnAlias = "Measure_AveragePDD", Expression = "CONVERT(DECIMAL(10,2),Avg(ts.PDDinSeconds))" };
@@ -56,8 +56,6 @@ namespace TOne.Analytics.Data.SQL
         public static MeasureValueExpression PricedDuration_Expression = new MeasureValueExpression { ColumnAlias = "Measure_PricedDuration", Expression = "ISNULL(SUM(BS.CostDuration) / 60, 0)" };
 
         #endregion
-
-        
     }
     public class CTEStatement
     {

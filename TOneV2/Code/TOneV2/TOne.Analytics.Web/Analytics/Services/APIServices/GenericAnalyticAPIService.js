@@ -5,7 +5,6 @@ var serviceObj = function (BaseAPIService) {
     });
 
     function GetFiltered(input) {
-        console.log(input);
         return BaseAPIService.post("/api/GenericAnalytic/GetFiltered", input);
     }
 }
