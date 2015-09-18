@@ -13,7 +13,7 @@ function NumberProfilingProcessInput_Scheduled($scope, $http, StrategyAPIService
         $scope.processInputArguments = [];
 
         $scope.periods = [];
-        $scope.selectedPeriod = "";
+        $scope.selectedPeriod ;
 
 
 

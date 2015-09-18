@@ -23,7 +23,7 @@ function ExecuteStrategyProcessInputController ($scope, $http, StrategyAPIServic
         $scope.selectedStrategies = [];
         $scope.selectedStrategyIds = [];
         $scope.periods = [];
-        $scope.selectedPeriod = "";
+        $scope.selectedPeriod ;
 
         $scope.createProcessInput.getData = function () {
 

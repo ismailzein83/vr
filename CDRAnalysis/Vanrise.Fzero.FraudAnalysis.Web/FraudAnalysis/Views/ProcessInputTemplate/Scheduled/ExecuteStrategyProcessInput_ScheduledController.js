@@ -14,7 +14,7 @@ function ExecuteStrategyProcessInput_Scheduled($scope, $http, StrategyAPIService
         $scope.selectedStrategies = [];
         $scope.selectedStrategyIds = [];
         $scope.periods = [];
-        $scope.selectedPeriod = "";
+        $scope.selectedPeriod ;
         $scope.schedulerTaskAction.rawExpressions.getData = function () {
             return { "ScheduleTime": "ScheduleTime" };
         };

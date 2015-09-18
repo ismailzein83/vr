@@ -19,7 +19,7 @@ function NumberProfilingProcessInputController($scope, $http, StrategyAPIService
         $scope.createProcessInputObjects = [];
 
         $scope.periods = [];
-        $scope.selectedPeriod = "";
+        $scope.selectedPeriod ;
 
 
         $scope.hours = [];
