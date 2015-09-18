@@ -16,9 +16,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
           
         }
-        public List<SaleZone> GetSaleZones()
+        public List<SaleZone> GetSaleZones(int packageId)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetAll", SaleZoneMapper);
+            return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetAll", SaleZoneMapper, packageId);
         }
         SaleZone SaleZoneMapper(IDataReader reader)
         {

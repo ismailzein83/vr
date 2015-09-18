@@ -3,10 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.Data.SQL;
 
 namespace TOne.WhS.CodePreparation.Data.SQL
 {
-    public class CodePreparationDataManager
+    public class CodePreparationDataManager : BaseTOneDataManager, ICodePreparationDataManager
     {
+        public CodePreparationDataManager()
+            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
+        {
+
+        }
     }
 }

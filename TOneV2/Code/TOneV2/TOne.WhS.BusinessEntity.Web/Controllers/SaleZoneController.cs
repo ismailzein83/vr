@@ -12,10 +12,10 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
     public class SaleZoneController : BaseAPIController
     {
         [HttpGet]
-        public List<SaleZone> GetSaleZones()
+        public List<SaleZone> GetSaleZonesByPackage(int packageId)
         {
             SaleZoneManager manager = new SaleZoneManager();
-            return manager.GetSaleZones();
+            return manager.GetSaleZones(packageId);
         }
     }
 }

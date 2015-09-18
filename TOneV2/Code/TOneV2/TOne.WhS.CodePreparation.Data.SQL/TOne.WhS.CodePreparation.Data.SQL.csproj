@@ -53,6 +53,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.Data.SQL\TOne.Data.SQL.csproj">
+      <Project>{f0bcbe72-f000-46ae-85a4-79155751c767}</Project>
+      <Name>TOne.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.CodePreparation.Data\TOne.WhS.CodePreparation.Data.csproj">
+      <Project>{0065e0fc-083f-4723-ae27-172964e14f72}</Project>
+      <Name>TOne.WhS.CodePreparation.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.CodePreparation.Entities\TOne.WhS.CodePreparation.Entities.csproj">
       <Project>{38ea7d60-7221-43ba-80a8-af46b874f819}</Project>
       <Name>TOne.WhS.CodePreparation.Entities</Name>

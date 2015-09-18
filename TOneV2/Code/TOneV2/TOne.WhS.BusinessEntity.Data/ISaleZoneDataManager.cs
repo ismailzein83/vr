@@ -9,6 +9,6 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ISaleZoneDataManager:IDataManager
     {
-        List<SaleZone> GetSaleZones();
+        List<SaleZone> GetSaleZones(int packageId);
     }
 }

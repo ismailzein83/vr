@@ -1,5 +1,5 @@
 ﻿
-app.service('SaleZonePackageAPIService', function (BaseAPIService) {
+app.service('WhS_BE_SaleZonePackageAPIService', function (BaseAPIService) {
 
     return ({
 
@@ -8,7 +8,7 @@ app.service('SaleZonePackageAPIService', function (BaseAPIService) {
 
 
     function GetSaleZonePackages() {
-        return BaseAPIService.get("/api/SaleZone/GetSaleZonePackages");
+        return BaseAPIService.get("/api/SaleZonePackage/GetSaleZonePackages");
     }
 
 });

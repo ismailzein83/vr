@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.CodePreparation.Data
 {
-   public interface ICodePreparationDataManager
+   public interface ICodePreparationDataManager:IDataManager
     {
     }
 }

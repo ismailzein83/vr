@@ -10,10 +10,10 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SaleZoneManager
     {
-        public List<SaleZone> GetSaleZones()
+        public List<SaleZone> GetSaleZones(int packageId)
         {
             ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
-            return dataManager.GetSaleZones();
+            return dataManager.GetSaleZones(packageId);
         }
     }
 }

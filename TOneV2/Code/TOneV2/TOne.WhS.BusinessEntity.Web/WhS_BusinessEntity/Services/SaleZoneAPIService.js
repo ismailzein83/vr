@@ -7,8 +7,10 @@ app.service('SaleZoneAPIService', function (BaseAPIService) {
     });
      
 
-    function GetSaleZones() {
-        return BaseAPIService.get("/api/SaleZone/GetSaleZones");
+    function GetSaleZones(packageId) {
+        return BaseAPIService.get("/api/SaleZone/GetSaleZones", {
+            packageId: packageId
+        });
     }
 
 });
