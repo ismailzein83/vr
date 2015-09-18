@@ -37,9 +37,9 @@
                 <vr-datagrid datasource="casesProductivity" dataretrievalfunction="dataRetrievalFunction" maxheight="400px" pagingtype="'Pager'" on-ready="onMainGridReady">
                     <vr-datagridcolumn headertext="'Strategy Name'" field="'StrategyName'"></vr-datagridcolumn>
                     <vr-datagridcolumn ng-show="groupDaily" headertext="'Date Day'" field="'DateDay'" type="'Datetime'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Generated Cases'" field="'GeneratedCases'" type="'Number'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Closed Cases'" field="'ClosedCases'" type="'Number'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Fraud Cases'" field="'FraudCases'" type="'Number'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Generated Cases'" field="'GeneratedCases'" type="'Number'" numberprecision="'NoDecimal'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Closed Cases'" field="'ClosedCases'" type="'Number'" numberprecision="'NoDecimal'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Fraud Cases'" field="'FraudCases'" type="'Number'" numberprecision="'NoDecimal'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Closed / Generated'" field="'ClosedoverGenerated'" type="'Number'"></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>

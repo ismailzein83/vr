@@ -81,13 +81,13 @@
             </vr-columns>
 
             <vr-columns width="1/4row">
-                <vr-section title="Daily Volume Loses">
+                <vr-section title="Daily Volume Losses">
                     <div>
                         <vr-row>
                             <vr-columns width="fullrow" simplecol>
                                 <vr-datagrid hidegridmenu datasource="dailyVolumeLooses" dataretrievalfunction="dataRetrievalFunction_DailyVolumeLooses" maxheight="200px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady_DailyVolumeLooses" hidepaginginfo>
                                     <vr-datagridcolumn headertext="'Day'" field="'DateDay'" type="'Datetime'"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Volume'" field="'Volume'" type="'Number'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Volume (Minutes)'" field="'Volume'" type="'Number'"></vr-datagridcolumn>
                                 </vr-datagrid>
                             </vr-columns>
                         </vr-row>

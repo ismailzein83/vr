@@ -93,7 +93,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, NormalCDRMapper, _columnMapper);
         }
 
-
         #region Private Methods
 
         private CDR NormalCDRMapper(IDataReader reader)
@@ -109,16 +108,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             normalCDR.CellId = reader["Cell_Id"] as string;
             normalCDR.UpVolume = GetReaderValue<Decimal?>(reader, "Up_Volume");
             normalCDR.DownVolume = GetReaderValue<Decimal?>(reader, "Down_Volume");
-            normalCDR.ServiceType = GetReaderValue<int>(reader, "Service_Type");
+            normalCDR.ServiceType = GetReaderValue<int?>(reader, "Service_Type");
             normalCDR.ServiceVASName = reader["Service_VAS_Name"] as string;
             normalCDR.Destination = reader["Destination"] as string;
             return normalCDR;
         }
 
-
         #endregion
-
-
-
     }
 }
