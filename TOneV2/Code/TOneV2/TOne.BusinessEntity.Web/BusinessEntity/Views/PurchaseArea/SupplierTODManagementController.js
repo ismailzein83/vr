@@ -15,7 +15,7 @@ function SupplierTODManagementController($scope, CarrierAccountAPIService, Zones
         defineMenuActions();
         $scope.gridReady = function (api) {
             gridApi = api;
-            return retrieveData();
+           // return retrieveData();
         };
         $scope.searchZones = function (text) {
             return ZonesService.getSalesZones(text);
