@@ -14,7 +14,8 @@ app.directive('vrButton', ['ButtonDirService', 'SecurityService', function (Butt
         controller: function ($scope, $element) {
             
             var isSubmitting = false;
-
+            var ctrl = this;
+           
             this.onInternalClick = function () {
                 if (this.onclick != undefined && typeof (this.onclick) == 'function') {
                     var promise = this.onclick();//this function should return a promise in case it is performing asynchronous task
@@ -26,7 +27,14 @@ app.directive('vrButton', ['ButtonDirService', 'SecurityService', function (Butt
                     }
                 }
             };
-
+            $scope.$on('submit' + this.formname, function () {
+                if (ctrl.formname != undefined) {
+                    var form = $scope.$parent.$eval(ctrl.formname);
+                    if (form != undefined && form.$invalid)
+                        return true;
+                }
+                ctrl.onInternalClick();
+            }) ;
             this.showIcon = function () {
                 return !isSubmitting;
             };
