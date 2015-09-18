@@ -64,7 +64,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         public bool AddStrategy(Strategy strategyObject, out int insertedId)
         {
             object id;
-            int recordesEffected = ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_Insert", out id,
+            int recordsEffected = ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_Insert", out id,
                 strategyObject.UserId,
                 strategyObject.Name,
                 strategyObject.Description,
@@ -76,7 +76,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             );
 
-            if (recordesEffected > 0)
+            if (recordsEffected > 0)
             {
                 insertedId = (int)id;
                 return true;
@@ -93,7 +93,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public bool UpdateStrategy(Strategy strategyObject)
         {
-            int recordesEffected = ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_Update",
+            int recordsEffected = ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_Update",
                 strategyObject.Id,
                  strategyObject.UserId,
                 strategyObject.Name,
@@ -103,7 +103,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 strategyObject.IsEnabled,
                 strategyObject.PeriodId,
                 Vanrise.Common.Serializer.Serialize(strategyObject));
-            return (recordesEffected > 0);
+            return (recordsEffected > 0);
         }
 
         public List<String> GetStrategyNames(List<int> strategyIds)

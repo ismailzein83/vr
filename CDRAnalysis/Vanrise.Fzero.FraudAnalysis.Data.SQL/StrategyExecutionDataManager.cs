@@ -20,7 +20,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         public bool ExecuteStrategy(StrategyExecution strategyExecutionObject, out int insertedId)
         {
             object id;
-            int recordesEffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecution_Insert", out id,
+            int recordsEffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecution_Insert", out id,
                 strategyExecutionObject.ProcessID,
                 strategyExecutionObject.StrategyID,
                 strategyExecutionObject.FromDate,
@@ -29,7 +29,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 DateTime.Now
             );
 
-            if (recordesEffected > 0)
+            if (recordsEffected > 0)
             {
                 insertedId = (int)id;
                 return true;
@@ -84,9 +84,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public bool OverrideStrategyExecution(int StrategyID, DateTime From, DateTime To)
         {
-            int recordesEffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecution_Override", StrategyID, From, To );
+            int recordsEffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecution_Override", StrategyID, From, To);
 
-            return (recordesEffected > 0);
+            return (recordsEffected > 0);
         }
 
         public void DeleteStrategyExecutionDetails_StrategyExecutionID(int StrategyExecutionId)
