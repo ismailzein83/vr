@@ -12,7 +12,6 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
 
     function defineScope() {
 
-
         $scope.gridMenuActions = [];
 
         $scope.strategies = [];
@@ -32,14 +31,12 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
         angular.forEach(KindEnum, function (kind) {
             $scope.isDefault.push({ value: kind.value, name: kind.name })
         });
-
         $scope.selectedIsDefault = [];
 
         $scope.isEnabled = [];
         angular.forEach(StatusEnum, function (itm) {
             $scope.isEnabled.push({ value: itm.value, name: itm.name })
         });
-
         $scope.selectedIsEnabled = [];
 
         $scope.periods = [];
@@ -66,7 +63,6 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
 
         defineMenuActions();
     }
-
 
     function fillStrategy(strategy) {
         strategy.IsDefaultText = strategy.IsDefault ? KindEnum.SystemBuiltIn.name : KindEnum.UserDefined.name;
@@ -107,11 +103,8 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
             PeriodIDs: ($scope.selectedPeriods.length > 0) ? UtilsService.getPropValuesFromArray($scope.selectedPeriods, "Id") : null,
             UserIDs: ($scope.selectedUsers.length > 0) ? UtilsService.getPropValuesFromArray($scope.selectedUsers, "UserId") : null,
 
-            IsDefault: ($scope.selectedIsDefault.length > 0) ?
-                ($scope.selectedIsDefault.length == 2 || $scope.selectedIsDefault[0].value == KindEnum.SystemBuiltIn.value) : null,
-
-            IsEnabled: ($scope.selectedIsEnabled.length > 0) ?
-                ($scope.selectedIsEnabled.length == 2 || $scope.selectedIsEnabled[0].value == StatusEnum.Enabled.value) : null,
+            IsDefault: ($scope.selectedIsDefault.length > 0) ? UtilsService.getPropValuesFromArray($scope.selectedIsDefault, "value") : null,
+            IsEnabled: ($scope.selectedIsEnabled.length > 0) ? UtilsService.getPropValuesFromArray($scope.selectedIsEnabled, "value") : null,
 
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate

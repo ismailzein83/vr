@@ -17,9 +17,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public List<int> UserIDs { get; set; }
 
-        public bool? IsDefault { get; set; }
+        public List<StrategyKindEnum> IsDefault { get; set; }
 
-        public bool? IsEnabled { get; set; }
+        public List<StrategyStatusEnum> IsEnabled { get; set; }
 
         public DateTime? FromDate { get; set; }
 

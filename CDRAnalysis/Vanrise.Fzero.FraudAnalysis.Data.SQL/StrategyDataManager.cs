@@ -44,7 +44,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
                 string userIDs = (input.Query.UserIDs != null && input.Query.UserIDs.Count() > 0) ? string.Join<int>(",", input.Query.UserIDs) : null;
 
-                ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_CreateTempByFiltered", tempTableName, input.Query.Name, input.Query.Description, periodIDs, userIDs, input.Query.IsDefault, input.Query.IsEnabled, input.Query.FromDate, input.Query.ToDate);
+                string isDefault = (input.Query.IsDefault != null && input.Query.IsDefault.Count > 0) ?
+                    string.Join(",", input.Query.IsDefault.Select(n => (int)n)) : null;
+
+                string isEnabled = (input.Query.IsEnabled != null && input.Query.IsEnabled.Count > 0) ?
+                    string.Join(",", input.Query.IsEnabled.Select(n => (int)n)) : null;
+
+                ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_CreateTempByFiltered", tempTableName, input.Query.Name, input.Query.Description, periodIDs, userIDs, isDefault, isEnabled, input.Query.FromDate, input.Query.ToDate);
 
             }, (reader) => StrategyMapper(reader), _columnMapper);
         }

@@ -6,6 +6,18 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
+    public enum StrategyKindEnum
+    {
+        UserDefined = 0,
+        SystemBuiltIn = 1
+    }
+
+    public enum StrategyStatusEnum
+    {
+        Disabled = 0,
+        Enabled = 1
+    }
+
     public enum PeriodEnum
     {
         Hourly = 1,
@@ -18,7 +30,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         HighlySuspicious = 3,
         Fraud = 4
     };
-
 
     public enum SuspicionOccuranceStatus
     {
