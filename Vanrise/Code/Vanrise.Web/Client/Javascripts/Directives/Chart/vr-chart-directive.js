@@ -391,8 +391,8 @@ app.directive('vrChart', ['ChartDirService', 'VRModalService', 'UtilsService', f
                     xAxisDefinition: xAxisDefinition
                 };
                 initializeChartSettings();
-               // renderChart(currentChartSource);
-                $(window).resize();
+                renderChart(currentChartSource);
+                resizeChart(1);
             };
 
             if (ctrl.onReady && typeof (ctrl.onReady) == 'function')
