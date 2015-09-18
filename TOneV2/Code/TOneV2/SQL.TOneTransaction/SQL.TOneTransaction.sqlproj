@@ -171,6 +171,7 @@
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_GetByActionTypeId.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_CreateTempByName.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSource_CreateTemp.sql" />
+    <Build Include="runtime\Stored Procedures\sp_SchedulerTask_UpdateInfo.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
