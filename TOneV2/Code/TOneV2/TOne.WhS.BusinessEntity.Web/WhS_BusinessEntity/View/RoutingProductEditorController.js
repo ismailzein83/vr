@@ -65,7 +65,7 @@ function RoutingProductEditorController($scope, RoutingProductAPIService, UtilsS
     }
 
     function getRoutingProduct() {
-        return DataSourceAPIService.GetDataSource(dataSourceId).then(function (routingProduct) {
+        return RoutingProductAPIService.GetRoutingProduct(routingProductId).then(function (routingProduct) {
 
             fillScopeFromRoutingProductObj(routingProduct);
 
@@ -117,7 +117,7 @@ function RoutingProductEditorController($scope, RoutingProductAPIService, UtilsS
             $scope.suppliersGroup.loadTemplateData();
     }
 
-    function insertDataSource() {
+    function insertRoutingProduct() {
         var routingProductObject = buildRoutingProductObjFromScope();
         return RoutingProductAPIService.AddRoutingProduct(routingProductObject)
         .then(function (response) {
@@ -132,7 +132,7 @@ function RoutingProductEditorController($scope, RoutingProductAPIService, UtilsS
 
     }
 
-    function updateDataSource() {
+    function updateRoutingProduct() {
         var dataSourceObject = buildRoutingProductObjFromScope();
         RoutingProductAPIService.UpdateRoutingProduct(routingProductObject)
         .then(function (response) {

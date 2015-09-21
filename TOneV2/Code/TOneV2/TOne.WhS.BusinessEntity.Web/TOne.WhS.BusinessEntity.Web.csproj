@@ -149,6 +149,8 @@
     <Content Include="WhS_BusinessEntity\View\RoutingProductEditorController.js" />
     <Content Include="WhS_BusinessEntity\View\RoutingProductManagement.html" />
     <Content Include="WhS_BusinessEntity\View\RoutingProductManagementController.js" />
+    <Content Include="WhS_BusinessEntity\View\Templates\SelectiveSuppliersTemplate.html" />
+    <Content Include="WhS_BusinessEntity\View\Templates\SelectiveSuppliersTemplateController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

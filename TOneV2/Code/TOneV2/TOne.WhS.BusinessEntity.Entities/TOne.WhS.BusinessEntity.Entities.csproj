@@ -68,10 +68,10 @@
     <Compile Include="SaleZone\SaleCode.cs" />
     <Compile Include="SaleZone\SaleRate.cs" />
     <Compile Include="SaleZone\SaleZone.cs" />
-    <Compile Include="SaleZone\SaleZoneGroup.cs" />
+    <Compile Include="SaleZone\SaleZoneGroupSettings.cs" />
     <Compile Include="SaleZone\SaleZonePackage.cs" />
     <Compile Include="CarrierAccount\CarrierAccountSupplierSettings.cs" />
-    <Compile Include="CarrierAccount\SuppliersGroup.cs" />
+    <Compile Include="CarrierAccount\SuppliersGroupSettings.cs" />
     <Compile Include="SaleZone\SaleZoneService.cs" />
     <Compile Include="SupplierZone\SupplierCode.cs" />
     <Compile Include="SupplierZone\SupplierRate.cs" />
