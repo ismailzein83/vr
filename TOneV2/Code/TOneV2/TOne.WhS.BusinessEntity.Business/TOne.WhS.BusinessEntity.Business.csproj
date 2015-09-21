@@ -49,8 +49,16 @@
     <Compile Include="CarrierAccountManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteRuleManager.cs" />
+    <Compile Include="RouteRulesByCriteria\RouteRulesByCode.cs" />
     <Compile Include="RouteRulesByCriteria\RouteRulesByCodeCustomer.cs" />
+    <Compile Include="RouteRulesByCriteria\RouteRulesByCustomer.cs" />
+    <Compile Include="RouteRulesByCriteria\RouteRulesByOthers.cs" />
+    <Compile Include="RouteRulesByCriteria\RouteRulesByProduct.cs" />
+    <Compile Include="RouteRulesByCriteria\RouteRulesBySubCode.cs" />
     <Compile Include="RouteRulesByCriteria\RouteRulesBySubCodeCustomer.cs" />
+    <Compile Include="RouteRulesByCriteria\RouteRulesByZone.cs" />
+    <Compile Include="RouteRulesByCriteria\RouteRulesByZoneCustomer.cs" />
+    <Compile Include="RouteRulesByCriteria\RouteRulesByZoneProduct.cs" />
     <Compile Include="SaleCodeManager.cs" />
     <Compile Include="SaleZoneGroup.cs" />
     <Compile Include="SaleZoneManager.cs" />

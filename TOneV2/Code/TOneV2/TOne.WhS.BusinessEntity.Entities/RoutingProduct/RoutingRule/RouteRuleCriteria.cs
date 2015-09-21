@@ -20,6 +20,33 @@ namespace TOne.WhS.BusinessEntity.Entities
         public List<int> CustomerIds { get; set; }
 
         public List<int> ExcludedCustomerIds { get; set; }
+
+        public bool HasCustomerFilter()
+        {
+            return this.CustomerIds != null && this.CustomerIds.Count > 0;
+        }
+
+        public bool HasCodeFilter()
+        {
+            return this.Codes != null && this.Codes.Count > 0;
+        }
+
+        public bool HasZoneFilter()
+        {
+            return this.ZoneIds != null && this.ZoneIds.Count > 0;
+        }
+
+        public bool IsAnyExcluded(int? customerId, string code, long zoneId)
+        {            
+            return (customerId != null && IsItemInList(customerId.Value, this.ExcludedCustomerIds)) 
+                || IsItemInList(code, this.ExcludedCodes) 
+                || IsItemInList(zoneId, this.ExcludedZoneIds);
+        }
+
+        bool IsItemInList<T>(T item, List<T> list)
+        {
+            return item != null && list != null && list.Contains(item);
+        }
     }
 
     public class RouteRuleCriteriaCode

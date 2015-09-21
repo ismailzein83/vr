@@ -7,22 +7,21 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class RouteRulesByCodeCustomer : RouteRulesByCriteria
+    public class RouteRulesBySubCode : RouteRulesByCriteria
     {
-        Dictionary<int, Dictionary<string, List<RouteRule>>> _rulesByCodeCustomer = new Dictionary<int, Dictionary<string, List<RouteRule>>>();
+        Dictionary<string, List<RouteRule>> _rulesByCode = new Dictionary<string, List<RouteRule>>();
 
         public override void SetSource(List<RouteRule> rules)
         {
-            foreach(var rule in rules)
+            foreach (var rule in rules)
             {
-                if (rule.Criteria.HasCustomerFilter() && rule.Criteria.HasCodeFilter())
+                if (rule.Criteria.HasCodeFilter() && !rule.Criteria.HasCustomerFilter())
                 {
-                    foreach (var customerId in rule.Criteria.CustomerIds)
+                    foreach (var codeCriteria in rule.Criteria.Codes)
                     {
-                        Dictionary<string, List<RouteRule>> customerRulesByCode = GetOrCreateDictionaryItem(customerId, _rulesByCodeCustomer);
-                        foreach(var codeCriteria in rule.Criteria.Codes)
+                        if (codeCriteria.WithSubCodes)
                         {
-                            List<RouteRule> codeRules = GetOrCreateDictionaryItem(codeCriteria.Code, customerRulesByCode);
+                            List<RouteRule> codeRules = GetOrCreateDictionaryItem(codeCriteria.Code, _rulesByCode);
                             codeRules.Add(rule);
                         }
                     }
@@ -31,14 +30,15 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         public override RouteRule GetMostMatchedRule(int? customerId, int? productId, string code, long saleZoneId)
-        {            
-            if (customerId != null && code != null)
+        {
+            if (code != null)
             {
-                Dictionary<string, List<RouteRule>> customerRulesByCode;
-                if (_rulesByCodeCustomer.TryGetValue(customerId.Value, out customerRulesByCode))
+                StringBuilder codeIterator = new StringBuilder(code);
+                while (codeIterator.Length > 1)
                 {
                     List<RouteRule> codeRules;
-                    if (customerRulesByCode.TryGetValue(code, out codeRules))
+                    string parentCode = codeIterator.ToString();
+                    if (_rulesByCode.TryGetValue(parentCode, out codeRules))
                     {
                         foreach (var r in codeRules)
                         {
@@ -48,6 +48,7 @@ namespace TOne.WhS.BusinessEntity.Business
                             }
                         }
                     }
+                    codeIterator.Remove(codeIterator.Length - 1, 1);
                 }
             }
             return null;
