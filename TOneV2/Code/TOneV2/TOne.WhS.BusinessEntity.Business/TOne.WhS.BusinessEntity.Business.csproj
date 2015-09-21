@@ -46,7 +46,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CarrierAccountManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RouteRuleManager.cs" />
+    <Compile Include="RouteRulesByCriteria\RouteRulesByCodeCustomer.cs" />
+    <Compile Include="RouteRulesByCriteria\RouteRulesBySubCodeCustomer.cs" />
     <Compile Include="SaleCodeManager.cs" />
     <Compile Include="SaleZoneManager.cs" />
     <Compile Include="SaleZonePackageManager.cs" />

@@ -61,8 +61,10 @@
     <Compile Include="RoutingProduct\RoutingProductQuery.cs" />
     <Compile Include="RoutingProduct\RoutingProductSettings.cs" />
     <Compile Include="RoutingProduct\RoutingRule\RouteRule.cs" />
+    <Compile Include="RoutingProduct\RoutingRule\RouteRulesByCriteria.cs" />
     <Compile Include="RoutingProduct\RoutingRule\RouteRuleCriteria.cs" />
     <Compile Include="RoutingProduct\RoutingRule\RouteRuleSettings.cs" />
+    <Compile Include="RoutingProduct\RoutingRule\StructuredRouteRules.cs" />
     <Compile Include="SaleZone\SaleCode.cs" />
     <Compile Include="SaleZone\SaleRate.cs" />
     <Compile Include="SaleZone\SaleZone.cs" />
