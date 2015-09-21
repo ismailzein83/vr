@@ -49,7 +49,7 @@
         }
 
         function getFilteredCarrierAccounts(input) {
-            return baseApiService.post(UtilsService.getRoute(BusinessEntity_ModuleConfig.moduleName, "CarrierAccount", "GetFilteredCarrierAccounts"), input);
+            return baseApiService.post(UtilsService.getServiceURL(BusinessEntity_ModuleConfig.moduleName, "CarrierAccount", "GetFilteredCarrierAccounts"), input);
         }
 
         function getCarrierAccounts(profileName, profileCompanyName, from, to) {

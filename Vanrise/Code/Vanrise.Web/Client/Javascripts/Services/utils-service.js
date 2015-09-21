@@ -430,7 +430,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
     }
 
 
-    function getRoute(moduleName, controllerName, actionName) {
+    function getServiceURL(moduleName, controllerName, actionName) {
         return '/api/' + moduleName + '/' + controllerName + '/' + actionName;
     }
 
@@ -457,7 +457,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         getEnumPropertyAsArray: getEnumPropertyAsArray,
         fillArray: fillArray,
         cloneDateTime: cloneDateTime,
-        getRoute: getRoute
+        getServiceURL: getServiceURL
     });
 
 }]);
