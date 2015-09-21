@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BillingDataManagerFactory.cs" />
+    <Compile Include="ICustomerInvoiceDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="ISupplierInvoiceDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

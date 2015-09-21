@@ -123,7 +123,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Billing\Constants\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
@@ -146,6 +145,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Billing\Constants\PeriodRangeEnum.js" />
+    <Content Include="Billing\Services\APIServices\CustomerInvoiceAPIService.js" />
     <Content Include="Billing\Services\APIServices\SupplierInvoiceAPIService.js" />
     <Content Include="Billing\Views\CustomerInvoice.html" />
     <Content Include="Billing\Views\CustomerInvoiceController.js" />
