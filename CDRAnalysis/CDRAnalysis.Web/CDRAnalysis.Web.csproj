@@ -308,6 +308,14 @@
       <Project>{3b35c6e1-fd21-4e32-a8bd-f11377a545a0}</Project>
       <Name>Vanrise.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PSTN.BusinessEntity.Data.SQL\PSTN.BusinessEntity.Data.SQL.csproj">
+      <Project>{ad66d689-5821-4a9e-a6c3-ce391e42bd75}</Project>
+      <Name>PSTN.BusinessEntity.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PSTN.BusinessEntity.Web\PSTN.BusinessEntity.Web.csproj">
+      <Project>{54c7baa5-24c5-4a02-85ed-6a06c1ef1f6a}</Project>
+      <Name>PSTN.BusinessEntity.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Arguments\Vanrise.Fzero.FraudAnalysis.BP.Arguments.csproj">
       <Project>{8de7b4ac-2ea9-4a88-9a44-e73a21e26398}</Project>
       <Name>Vanrise.Fzero.FraudAnalysis.BP.Arguments</Name>

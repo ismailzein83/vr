@@ -57,9 +57,23 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Business", "V
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.FraudAnalysis.Aggregates", "Vanrise.Fzero.FraudAnalysis.Aggregates\Vanrise.Fzero.FraudAnalysis.Aggregates.csproj", "{D141B2FC-57F5-40EA-B00E-69D953B1582E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PSTN_BusinessEntity", "PSTN_BusinessEntity", "{0E777FBB-91E1-4BFE-AF5C-14EA29704D55}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{3C4E16DF-262A-415D-857B-EA66894D6882}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSTN.BusinessEntity.Entities", "PSTN.BusinessEntity.Entities\PSTN.BusinessEntity.Entities.csproj", "{026C2D4E-9FBF-491D-BE9A-4249168A33FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSTN.BusinessEntity.Data", "PSTN.BusinessEntity.Data\PSTN.BusinessEntity.Data.csproj", "{72DDA9A2-C512-4E8D-BEC6-2B0A9477F98D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSTN.BusinessEntity.Data.SQL", "PSTN.BusinessEntity.Data.SQL\PSTN.BusinessEntity.Data.SQL.csproj", "{AD66D689-5821-4A9E-A6C3-CE391E42BD75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSTN.BusinessEntity.Business", "PSTN.BusinessEntity.Business\PSTN.BusinessEntity.Business.csproj", "{737D629A-9316-47C3-8320-E54364F30FB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSTN.BusinessEntity.Web", "PSTN.BusinessEntity.Web\PSTN.BusinessEntity.Web.csproj", "{54C7BAA5-24C5-4A02-85ED-6A06C1EF1F6A}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 22
+		SccNumberOfProjects = 27
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -147,6 +161,26 @@ Global
 		SccProjectTopLevelParentUniqueName21 = CDRAnalysis.sln
 		SccProjectName21 = Vanrise.Fzero.FraudAnalysis.Aggregates
 		SccLocalPath21 = Vanrise.Fzero.FraudAnalysis.Aggregates
+		SccProjectUniqueName22 = PSTN.BusinessEntity.Entities\\PSTN.BusinessEntity.Entities.csproj
+		SccProjectTopLevelParentUniqueName22 = CDRAnalysis.sln
+		SccProjectName22 = PSTN.BusinessEntity.Entities
+		SccLocalPath22 = PSTN.BusinessEntity.Entities
+		SccProjectUniqueName23 = PSTN.BusinessEntity.Data\\PSTN.BusinessEntity.Data.csproj
+		SccProjectTopLevelParentUniqueName23 = CDRAnalysis.sln
+		SccProjectName23 = PSTN.BusinessEntity.Data
+		SccLocalPath23 = PSTN.BusinessEntity.Data
+		SccProjectUniqueName24 = PSTN.BusinessEntity.Data.SQL\\PSTN.BusinessEntity.Data.SQL.csproj
+		SccProjectTopLevelParentUniqueName24 = CDRAnalysis.sln
+		SccProjectName24 = PSTN.BusinessEntity.Data.SQL
+		SccLocalPath24 = PSTN.BusinessEntity.Data.SQL
+		SccProjectUniqueName25 = PSTN.BusinessEntity.Business\\PSTN.BusinessEntity.Business.csproj
+		SccProjectTopLevelParentUniqueName25 = CDRAnalysis.sln
+		SccProjectName25 = PSTN.BusinessEntity.Business
+		SccLocalPath25 = PSTN.BusinessEntity.Business
+		SccProjectUniqueName26 = PSTN.BusinessEntity.Web\\PSTN.BusinessEntity.Web.csproj
+		SccProjectTopLevelParentUniqueName26 = CDRAnalysis.sln
+		SccProjectName26 = PSTN.BusinessEntity.Web
+		SccLocalPath26 = PSTN.BusinessEntity.Web
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -285,6 +319,36 @@ Global
 		{D141B2FC-57F5-40EA-B00E-69D953B1582E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D141B2FC-57F5-40EA-B00E-69D953B1582E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D141B2FC-57F5-40EA-B00E-69D953B1582E}.Release|x64.ActiveCfg = Release|Any CPU
+		{026C2D4E-9FBF-491D-BE9A-4249168A33FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{026C2D4E-9FBF-491D-BE9A-4249168A33FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{026C2D4E-9FBF-491D-BE9A-4249168A33FE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{026C2D4E-9FBF-491D-BE9A-4249168A33FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{026C2D4E-9FBF-491D-BE9A-4249168A33FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{026C2D4E-9FBF-491D-BE9A-4249168A33FE}.Release|x64.ActiveCfg = Release|Any CPU
+		{72DDA9A2-C512-4E8D-BEC6-2B0A9477F98D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72DDA9A2-C512-4E8D-BEC6-2B0A9477F98D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72DDA9A2-C512-4E8D-BEC6-2B0A9477F98D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{72DDA9A2-C512-4E8D-BEC6-2B0A9477F98D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72DDA9A2-C512-4E8D-BEC6-2B0A9477F98D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72DDA9A2-C512-4E8D-BEC6-2B0A9477F98D}.Release|x64.ActiveCfg = Release|Any CPU
+		{AD66D689-5821-4A9E-A6C3-CE391E42BD75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD66D689-5821-4A9E-A6C3-CE391E42BD75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD66D689-5821-4A9E-A6C3-CE391E42BD75}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AD66D689-5821-4A9E-A6C3-CE391E42BD75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD66D689-5821-4A9E-A6C3-CE391E42BD75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD66D689-5821-4A9E-A6C3-CE391E42BD75}.Release|x64.ActiveCfg = Release|Any CPU
+		{737D629A-9316-47C3-8320-E54364F30FB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{737D629A-9316-47C3-8320-E54364F30FB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{737D629A-9316-47C3-8320-E54364F30FB9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{737D629A-9316-47C3-8320-E54364F30FB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{737D629A-9316-47C3-8320-E54364F30FB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{737D629A-9316-47C3-8320-E54364F30FB9}.Release|x64.ActiveCfg = Release|Any CPU
+		{54C7BAA5-24C5-4A02-85ED-6A06C1EF1F6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54C7BAA5-24C5-4A02-85ED-6A06C1EF1F6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54C7BAA5-24C5-4A02-85ED-6A06C1EF1F6A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{54C7BAA5-24C5-4A02-85ED-6A06C1EF1F6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54C7BAA5-24C5-4A02-85ED-6A06C1EF1F6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54C7BAA5-24C5-4A02-85ED-6A06C1EF1F6A}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -311,5 +375,13 @@ Global
 		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0} = {3CAFC6CA-8D5A-4FAE-9661-2B90354B0D07}
 		{9BC5681C-2FD8-4A88-858C-F4DA9CCA7C15} = {3CAFC6CA-8D5A-4FAE-9661-2B90354B0D07}
 		{56B47F3B-A88D-4C9D-9706-87C7BAA05FB5} = {161A5C58-A6E9-44C5-B0FC-1012582BFDDB}
+		{026C2D4E-9FBF-491D-BE9A-4249168A33FE} = {0E777FBB-91E1-4BFE-AF5C-14EA29704D55}
+		{72DDA9A2-C512-4E8D-BEC6-2B0A9477F98D} = {0E777FBB-91E1-4BFE-AF5C-14EA29704D55}
+		{AD66D689-5821-4A9E-A6C3-CE391E42BD75} = {0E777FBB-91E1-4BFE-AF5C-14EA29704D55}
+		{737D629A-9316-47C3-8320-E54364F30FB9} = {0E777FBB-91E1-4BFE-AF5C-14EA29704D55}
+		{54C7BAA5-24C5-4A02-85ED-6A06C1EF1F6A} = {0E777FBB-91E1-4BFE-AF5C-14EA29704D55}
+		{2068D29A-9DB3-4E50-83A3-C360CD6C3AC4} = {3C4E16DF-262A-415D-857B-EA66894D6882}
+		{7A71D2CF-9B16-4D57-89F1-C5B263DCFB77} = {3C4E16DF-262A-415D-857B-EA66894D6882}
+		{0E777FBB-91E1-4BFE-AF5C-14EA29704D55} = {3C4E16DF-262A-415D-857B-EA66894D6882}
 	EndGlobalSection
 EndGlobal

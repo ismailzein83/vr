@@ -9,3 +9,4 @@ BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\Busine
 Runtime                 C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
 Integration				C:\TFS\Vanrise\Code\Vanrise.Integration.Web\Integration
 BI						C:\TFS\Vanrise\Code\Vanrise.BI.Web\BI
+PSTN_BusinessEntity		C:\TFS\CDRAnalysis\PSTN.BusinessEntity.Web\PSTN_BusinessEntity
