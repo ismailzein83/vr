@@ -9,6 +9,7 @@ using TOne.BusinessEntity.Entities;
 
 namespace TOne.BusinessEntity.Web.Controllers
 {
+    [RoutePrefix(Constants.ROUTE_PREFIX + "CarrierAccount")]
     public class CarrierAccountController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpGet]
@@ -28,6 +29,7 @@ namespace TOne.BusinessEntity.Web.Controllers
         }
 
         [HttpPost]
+        [Route("GetFilteredCarrierAccounts")]
         public object GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input)
         {
             CarrierAccountManager manager = new CarrierAccountManager();

@@ -126,6 +126,7 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CodeController.cs" />
     <Compile Include="Controllers\CustomerCommissionController.cs" />
     <Compile Include="Controllers\CustomerPricelistsController.cs" />
@@ -152,6 +153,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="BusinessEntity\Constant\ModuleConfig.js" />
     <Content Include="BusinessEntity\Constant\AccountTypeEnum.js" />
     <Content Include="BusinessEntity\Constant\ActivationStatusEnum.js" />
     <Content Include="BusinessEntity\Constant\ChangeEnum.js" />

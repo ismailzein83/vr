@@ -2,9 +2,9 @@
 
     "use strict";
 
-    serviceObj.$inject = ['BaseAPIService', 'CarrierTypeEnum'];
+    serviceObj.$inject = ['BaseAPIService', 'CarrierTypeEnum', 'UtilsService', 'BusinessEntity_ModuleConfig'];
 
-    function serviceObj(baseApiService, carrierTypeEnum) {
+    function serviceObj(baseApiService, carrierTypeEnum, UtilsService, BusinessEntity_ModuleConfig) {
         
         function getCarriers(carrierType, isAssignedCarrier) {
             if (isAssignedCarrier == undefined) {
@@ -49,7 +49,7 @@
         }
 
         function getFilteredCarrierAccounts(input) {
-            return baseApiService.post("/api/CarrierAccount/GetFilteredCarrierAccounts", input);
+            return baseApiService.post(UtilsService.getRoute(BusinessEntity_ModuleConfig.moduleName, "CarrierAccount", "GetFilteredCarrierAccounts"), input);
         }
 
         function getCarrierAccounts(profileName, profileCompanyName, from, to) {
