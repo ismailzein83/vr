@@ -18,7 +18,7 @@ DECLARE @StrategyIDsTable TABLE (StrategyID INT);
 
 
          Delete details from FraudAnalysis.StrategyExecutionDetails  details
-			inner join CDRAnalysisMobile_Wf.FraudAnalysis.StrategyExecution exe on details.StrategyExecutionID=exe.ID
+			inner join FraudAnalysis.StrategyExecution exe on details.StrategyExecutionID=exe.ID
 			where (@StrategyIDs is null or exe.StrategyID in (SELECT StrategyID FROM @StrategyIDsTable) ) 
 			and (@FromDate is null or exe.FromDate >= @FromDate)
 			and (@ToDate is null or exe.ToDate <= @ToDate)

@@ -147,5 +147,6 @@
     <Build Include="PSTN_BE\Tables\Switch.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_SwitchType_GetAll.sql" />
     <Build Include="Security\PSTN_BE.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_Switch_CreateTempByFiltered.sql" />
   </ItemGroup>
 </Project>

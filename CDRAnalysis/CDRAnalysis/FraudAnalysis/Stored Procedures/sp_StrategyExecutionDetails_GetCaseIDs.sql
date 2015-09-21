@@ -24,7 +24,7 @@
 
 		Select distinct CaseID 
 		from CDRAnalysisMobile_Wf.FraudAnalysis.StrategyExecutionDetails details
-		inner join CDRAnalysisMobile_Wf.FraudAnalysis.StrategyExecution exe on details.StrategyExecutionID=exe.ID
+		inner join FraudAnalysis.StrategyExecution exe on details.StrategyExecutionID=exe.ID
 		where 
 		--exe.StrategyID in (SELECT StrategyID FROM @StrategyIDsTable) and  
 		(@FromDate is null or exe.FromDate >= @FromDate)
