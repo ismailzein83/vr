@@ -107,6 +107,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -116,10 +120,9 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="WhS_BusinessEntity\View\" />
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="Controllers\RoutingProductController.cs" />
     <Compile Include="Controllers\SaleZoneController.cs" />
     <Compile Include="Controllers\SaleZonePackageController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -139,8 +142,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WhS_BusinessEntity\Services\RoutingProductAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\SaleZoneAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\SaleZonePackageAPIService.js" />
+    <Content Include="WhS_BusinessEntity\View\RoutingProductEditor.html" />
+    <Content Include="WhS_BusinessEntity\View\RoutingProductEditorController.js" />
+    <Content Include="WhS_BusinessEntity\View\RoutingProductManagement.html" />
+    <Content Include="WhS_BusinessEntity\View\RoutingProductManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

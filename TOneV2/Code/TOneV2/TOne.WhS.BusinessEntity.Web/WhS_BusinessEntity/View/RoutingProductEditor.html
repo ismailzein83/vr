@@ -1,0 +1,68 @@
+﻿<div vr-modalcontent ng-controller="WhS_BusinessEntity_RoutingProductEditorController" vr-loader="isGettingData">
+    <vr-modalbody width="'50%'">
+        <vr-form name="formRoutingProductEditor">
+            <vr-choices selectedindex="0">
+                <vr-choice isselected="definitionSettignsSelected">Definition</vr-choice>
+                <vr-choice isselected="saleZonesSelected">Sale Zones</vr-choice>
+                <vr-choice isselected="suppliersSelected">Suppliers</vr-choice>
+            </vr-choices>
+            <div ng-show="definitionSettignsSelected">
+                <vr-row>
+                    <vr-columns colnum="6">
+                        <vr-textbox value="routingProductName" label="Name" isrequired></vr-textbox>
+                    </vr-columns>
+                </vr-row>
+            </div>
+            <div ng-show="adapterSettignsSelected">
+                <vr-row>
+                    <vr-columns colnum="4">
+                        <vr-select datatextfield="Name" label="Type" datavaluefield="AdapterTypeId"
+                                   datasource="adapterTypes" selectedvalues="selectedAdapterType"></vr-select>
+                    </vr-columns>
+                </vr-row>
+                <vr-row>
+                    <div ng-include="selectedAdapterType.Info.AdapterTemplateURL"></div>
+                </vr-row>
+            </div>
+            <div ng-show="mappperSettignsSelected">
+                <vr-label>Write your custom code here</vr-label>
+                <textarea ng-model="customCode" rows="15" cols="64" style="margin-top: 15px;"></textarea>
+            </div>
+            <div ng-show="schedulerSettignsSelected">
+                <vr-row>
+                    <vr-switch value="isEnabled" label="Enabled"></vr-switch>
+                </vr-row>
+                <vr-row>
+                    <vr-columns width="1/2row">
+                        <vr-datetimepicker value="startEffDate" label="Start Eff Date" isrequired></vr-datetimepicker>
+                    </vr-columns>
+                    <vr-columns width="1/2row">
+                        <vr-datetimepicker value="endEffDate" label="End Eff Date"></vr-datetimepicker>
+                    </vr-columns>
+                </vr-row>
+                <vr-row>
+                    <div ng-include="'/Client/Modules/Runtime/Views/TriggerTemplates/TimerTriggerTemplate.html'"></div>
+                </vr-row>
+            </div>
+            <div ng-show="executionFlowSettignsSelected">
+                <vr-row>
+                    <vr-columns colnum="6">
+                        <vr-select datasource="executionFlows" datatextfield="Name" datavaluefield="ExecutionFlowId" label="Associated Flow" selectedvalues="selectedExecutionFlow" isrequired></vr-select>
+                    </vr-columns>
+                    <vr-columns colnum="6">
+                        <vr-button type="Add" data-onclick="addExecutionFlow" standalone></vr-button>
+                    </vr-columns>
+                </vr-row>
+            </div>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formDataSourceEditor" data-onclick="SaveDataSource"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>
