@@ -1,6 +1,6 @@
-﻿SupplierInvoiceManagementController.$inject = ['$scope', 'CarrierAccountAPIService', 'CarrierTypeEnum', 'SupplierInvoiceAPIService', 'VRNotificationService'];
+﻿SupplierInvoiceManagementController.$inject = ['$scope', 'CarrierAccountAPIService', 'CarrierTypeEnum', 'SupplierInvoiceAPIService', 'AnalyticsService', 'VRNotificationService'];
 
-function SupplierInvoiceManagementController($scope, CarrierAccountAPIService, CarrierTypeEnum, SupplierInvoiceAPIService, VRNotificationService) {
+function SupplierInvoiceManagementController($scope, CarrierAccountAPIService, CarrierTypeEnum, SupplierInvoiceAPIService, AnalyticsService, VRNotificationService) {
 
     var gridApi = undefined;
 
@@ -10,12 +10,24 @@ function SupplierInvoiceManagementController($scope, CarrierAccountAPIService, C
     function defineScope() {
         $scope.suppliers = [];
         $scope.selectedSupplier = undefined;
+
+        $scope.periods = AnalyticsService.getPeriods();
+        $scope.selectedPeriod = $scope.periods[0];
         $scope.from = Date.now();
         $scope.to = Date.now();
 
         $scope.invoices = [];
         $scope.showGrid = false;
         defineMenuActions();
+
+        $scope.periodSelectionChanged = function (selectedOption) {
+
+            if ($scope.selectedPeriod != undefined && $scope.selectedPeriod.value != -1) {
+                var date = $scope.selectedPeriod.getInterval();
+                $scope.from = date.from;
+                $scope.to = date.to;
+            }
+        }
 
         $scope.searchClicked = function () {
             $scope.showGrid = true;
@@ -30,7 +42,7 @@ function SupplierInvoiceManagementController($scope, CarrierAccountAPIService, C
 
             return SupplierInvoiceAPIService.GetFilteredSupplierInvoices(dataRetrievalInput)
                 .then(function (response) {
-                    console.log(response);
+
                     onResponseReady(response);
                 })
                 .catch(function (error) {
@@ -43,7 +55,7 @@ function SupplierInvoiceManagementController($scope, CarrierAccountAPIService, C
         $scope.isInitializing = true;
 
         // load the suppliers
-        CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Supplier.value, false)
+        CarrierAccountAPIService.GetCarriers(CarrierTypeEnum.Supplier.value, true)
             .then(function (response) {
                 angular.forEach(response, function (item) {
                     $scope.suppliers.push(item);
@@ -64,7 +76,6 @@ function SupplierInvoiceManagementController($scope, CarrierAccountAPIService, C
             To: $scope.to
         };
 
-        console.log(query);
         return gridApi.retrieveData(query);
     }
 

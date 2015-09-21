@@ -26,6 +26,5 @@ namespace TOne.Billing.Entities
 		public string CurrencyID { get; set; }
 		public string IsLocked  { get; set; }
 		public string IsPaid { get; set; }
-        public string InvoiceNotes { get; set; }
     }
 }

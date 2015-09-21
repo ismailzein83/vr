@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.Billing.Entities;
+using TOne.BusinessEntity.Entities;
 using TOne.Data.SQL;
 
 namespace TOne.Billing.Data.SQL
@@ -24,12 +25,15 @@ namespace TOne.Billing.Data.SQL
 
         public Vanrise.Entities.BigResult<SupplierInvoiceDetail> GetFilteredSupplierInvoiceDetails(Vanrise.Entities.DataRetrievalInput<SupplierInvoiceDetailQuery> input)
         {
+            Dictionary<string, string> mapper = new Dictionary<string, string>();
+            mapper.Add("RateTypeDescription", "RateType");
+
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQuerySP("Billing.sp_BillingInvoiceDetails_CreateTempByInvoiceID", tempTableName, input.Query.InvoiceID);
             };
 
-            return RetrieveData(input, createTempTableAction, SupplierInvoiceDetailMapper);
+            return RetrieveData(input, createTempTableAction, SupplierInvoiceDetailMapper, mapper);
         }
 
         public Vanrise.Entities.BigResult<SupplierInvoiceDetailGroupedByDay> GetFilteredSupplierInvoiceDetailsGroupedByDay(Vanrise.Entities.DataRetrievalInput<SupplierInvoiceDetailGroupedByDayQuery> input)
@@ -72,7 +76,6 @@ namespace TOne.Billing.Data.SQL
                 CurrencyID = GetReaderValue<string>(reader, "CurrencyID"),
                 IsLocked = reader["IsLocked"] as string,
                 IsPaid = reader["IsPaid"] as string,
-                InvoiceNotes = GetReaderValue<string>(reader, "InvoiceNotes")
             };
 
             return supplierInvoice;
@@ -80,21 +83,24 @@ namespace TOne.Billing.Data.SQL
 
         private SupplierInvoiceDetail SupplierInvoiceDetailMapper(IDataReader reader)
         {
-            SupplierInvoiceDetail supplierInvoiceDetail = new SupplierInvoiceDetail
-            {
-                DetailID = (long)reader["DetailID"],
-                FromDate = GetReaderValue<DateTime>(reader, "FromDate"),
-                TillDate = GetReaderValue<DateTime>(reader, "TillDate"),
-                Destination = GetReaderValue<string>(reader, "Destination"),
-                NumberOfCalls = GetReaderValue<int>(reader, "NumberOfCalls"),
-                Duration = GetReaderValue<decimal>(reader, "Duration"),
-                Rate = GetReaderValue<decimal>(reader, "Rate"),
-                RateType = GetReaderValue<string>(reader, "RateType"),
-                Amount = GetReaderValue<decimal>(reader, "Amount"),
-                CurrencyID = GetReaderValue<string>(reader, "CurrencyID")
-            };
+            SupplierInvoiceDetail detail = new SupplierInvoiceDetail();
 
-            return supplierInvoiceDetail;
+            detail.DetailID = (long)reader["DetailID"];
+            detail.FromDate = GetReaderValue<DateTime>(reader, "FromDate");
+            detail.TillDate = GetReaderValue<DateTime>(reader, "TillDate");
+            detail.Destination = GetReaderValue<string>(reader, "Destination");
+            detail.NumberOfCalls = GetReaderValue<int>(reader, "NumberOfCalls");
+            detail.Duration = GetReaderValue<decimal>(reader, "Duration");
+            detail.Rate = GetReaderValue<decimal>(reader, "Rate");
+            
+            string rateTypeString = GetReaderValue<string>(reader, "RateType");
+            int? rateTypeInt = Convert.ToInt32(rateTypeString);
+            detail.RateType = (RateType)rateTypeInt;
+            
+            detail.Amount = GetReaderValue<decimal>(reader, "Amount");
+            detail.CurrencyID = GetReaderValue<string>(reader, "CurrencyID");
+
+            return detail;
         }
 
         private SupplierInvoiceDetailGroupedByDay SupplierInvoiceDetailGroupedByDayMapper(IDataReader reader)

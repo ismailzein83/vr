@@ -32,12 +32,14 @@ namespace TOne.Analytics.Entities
         CodeSales = 10,
         CodeBuy = 11
     }
+
     public enum CarrierZoneSummaryStatsGroupKeys
     {
         CustomerId = 0,
         SupplierId = 1,
         ZoneId = 2
     }
+
     public enum ReleaseCodeMeasure
     {
         RelCode = 0,
@@ -74,6 +76,7 @@ namespace TOne.Analytics.Entities
         //CeiledDuration = 12,
         //ReleaseSourceAParty = 13
     }
+
     public enum BillingCDRMeasures
     {
          SwitchName= 0,
@@ -91,19 +94,14 @@ namespace TOne.Analytics.Entities
          SupplierName= 12, 
          SupplierZoneName=  13, 
     }
+
     public enum BillingCDROptionMeasures
     {
         Successful = 0,
         Invalid = 1,
         All = 2
     }
-
-    public enum RateType : byte
-    {
-        Normal = 0,
-        OffPeak = 1,
-        Weekend = 2
-    }
+    
     public enum Change : short
     {
         None = 0,
@@ -111,7 +109,6 @@ namespace TOne.Analytics.Entities
         Decrease = -1,
         New = 2
     }
-
     
     public enum VolumeReportsTimePeriod
     {
@@ -121,6 +118,7 @@ namespace TOne.Analytics.Entities
         Weekly = 2,
         Monthly = 3
     }
+
     public enum Duration
     {
         Min=0,

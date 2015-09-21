@@ -1,6 +1,6 @@
-﻿SupplierInvoiceDetailGridController.$inject = ['$scope', 'SupplierInvoiceAPIService', 'VRNotificationService'];
+﻿SupplierInvoiceDetailGridController.$inject = ['$scope', 'SupplierInvoiceAPIService', "RateTypeEnum", "UtilsService", 'VRNotificationService'];
 
-function SupplierInvoiceDetailGridController($scope, SupplierInvoiceAPIService, VRNotificationService) {
+function SupplierInvoiceDetailGridController($scope, SupplierInvoiceAPIService, RateTypeEnum, UtilsService, VRNotificationService) {
 
     var gridApi = undefined;
 
@@ -33,6 +33,12 @@ function SupplierInvoiceDetailGridController($scope, SupplierInvoiceAPIService, 
 
                 return SupplierInvoiceAPIService.GetFilteredSupplierInvoiceDetails(dataRetrievalInput)
                 .then(function (response) {
+
+                    angular.forEach(response.Data, function (item) {
+                        var rateType = UtilsService.getEnum(RateTypeEnum, "value", item.RateType);
+                        item.RateTypeDescription = rateType.description;
+                    });
+
                     onResponseReady(response);
                 })
                 .catch(function (error) {
@@ -54,7 +60,6 @@ function SupplierInvoiceDetailGridController($scope, SupplierInvoiceAPIService, 
             } :
             { InvoiceID: $scope.dataItem.InvoiceID };
 
-        console.log(query);
         return gridApi.retrieveData(query);
     }
 }

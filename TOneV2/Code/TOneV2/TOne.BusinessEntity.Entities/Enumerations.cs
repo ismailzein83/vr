@@ -45,4 +45,11 @@ namespace TOne.BusinessEntity.Entities
         Y = 1,
         Null=2
     }
+
+    public enum RateType : byte
+    {
+        Normal = 0,
+        OffPeak = 1,
+        Weekend = 2
+    }
 }
