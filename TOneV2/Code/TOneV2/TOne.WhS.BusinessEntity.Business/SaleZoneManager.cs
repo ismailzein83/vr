@@ -15,5 +15,21 @@ namespace TOne.WhS.BusinessEntity.Business
             ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
             return dataManager.GetSaleZones(packageId);
         }
+
+        public Dictionary<string, List<SaleCode>> GetSaleZonesWithCodes(int packageId)
+        {
+            Dictionary<string, List<SaleCode>> saleZoneDictionary = new Dictionary<string, List<SaleCode>>();
+            List<SaleZone> salezones = GetSaleZones(packageId);
+            SaleCodeManager manager = new SaleCodeManager();
+            foreach(SaleZone saleZone in salezones){
+
+                List<SaleCode> saleCodes = manager.GetSaleCodesByZoneID(saleZone.SaleZoneId);
+                List<SaleCode> saleCodesOut;
+                if (!saleZoneDictionary.TryGetValue(saleZone.Name, out saleCodesOut))
+                    saleZoneDictionary.Add(saleZone.Name, saleCodes);
+            }
+
+            return saleZoneDictionary;
+        }
     }
 }

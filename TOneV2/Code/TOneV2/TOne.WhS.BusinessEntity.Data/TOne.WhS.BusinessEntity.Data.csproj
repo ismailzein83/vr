@@ -44,10 +44,14 @@
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Data">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BEDataManagerFactory.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="ISaleCodeDataManager.cs" />
     <Compile Include="ISaleZoneDataManager.cs" />
     <Compile Include="ISaleZonePackageDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

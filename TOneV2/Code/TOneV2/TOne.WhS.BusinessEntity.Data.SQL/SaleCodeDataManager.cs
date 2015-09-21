@@ -10,28 +10,28 @@ using Vanrise.Data.SQL;
 
 namespace TOne.WhS.BusinessEntity.Data.SQL
 {
-    public class SaleZoneDataManager : BaseTOneDataManager, ISaleZoneDataManager
+    public class SaleCodeDataManager : BaseTOneDataManager, ISaleCodeDataManager
     {
-        public SaleZoneDataManager()
+        public SaleCodeDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
           
         }
-        public List<SaleZone> GetSaleZones(int packageId)
+        public List<SaleCode> GetSaleCodesByZoneID(long zoneID)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetAll", SaleZoneMapper, packageId);
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_ByZondId", SaleCodeMapper, zoneID);
         }
-        SaleZone SaleZoneMapper(IDataReader reader)
+        SaleCode SaleCodeMapper(IDataReader reader)
         {
-            SaleZone saleZonePackage = new SaleZone
+            SaleCode saleCode = new SaleCode
             {
-                SaleZoneId = (int)reader["ID"],
-                SaleZonePackageId = (int)reader["PackageID"],
-                Name = reader["Name"] as string,
+                SaleCodeId = (long)reader["ID"],
+                Code = reader["Code"] as string,
+                ZoneId = GetReaderValue<int>(reader, "ZoneID"),
                 BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BED"),
                 EndEffectiveDate = GetReaderValue<DateTime>(reader, "EED")
             };
-            return saleZonePackage;
+            return saleCode;
         }
 
         public object FinishDBApplyStream(object dbApplyStream)
@@ -40,7 +40,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             streamForBulkInsert.Close();
             return new StreamBulkInsertInfo
             {
-                TableName = "[TOneWhS_BE].[SaleZone]",
+                TableName = "[TOneWhS_BE].[SaleCode]",
                 Stream = streamForBulkInsert,
                 TabLock = false,
                 KeepIdentity = false,
@@ -53,20 +53,19 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return base.InitializeStreamForBulkInsert();
         }
 
-        public void WriteRecordToStream(SaleZone record, object dbApplyStream)
+        public void WriteRecordToStream(SaleCode record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}",
                        0,
-                       record.SaleZonePackageId,
-                       record.Name,
+                       record.Code,
+                       record.ZoneId,
                        record.BeginEffectiveDate,
-                       null );
+                       null);
         }
-        public void ApplySaleZonesForDB(object preparedSaleZones)
+        public void ApplySaleCodesForDB(object preparedSaleCodes)
         {
-            InsertBulkToTable(preparedSaleZones as BaseBulkInsertInfo);
+            InsertBulkToTable(preparedSaleCodes as BaseBulkInsertInfo);
         }
-
     }
 }

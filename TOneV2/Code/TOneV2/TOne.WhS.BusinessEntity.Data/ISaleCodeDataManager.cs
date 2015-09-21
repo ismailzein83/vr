@@ -8,8 +8,8 @@ using Vanrise.Data;
 
 namespace TOne.WhS.BusinessEntity.Data
 {
-    public interface ISaleZoneDataManager : IDataManager, IBulkApplyDataManager<SaleZone>
+    public interface ISaleCodeDataManager : IDataManager, IBulkApplyDataManager<SaleCode>
     {
-        List<SaleZone> GetSaleZones(int packageId);
+        List<SaleCode> GetSaleCodesByZoneID(long zoneID);
     }
 }
