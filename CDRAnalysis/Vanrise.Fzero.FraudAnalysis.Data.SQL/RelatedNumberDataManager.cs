@@ -27,10 +27,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             foreach (KeyValuePair<string, HashSet<string>> entry in record)
             {
-                stream.WriteRecord("{0}~{1}",
-                                entry.Key,
-                                string.Join<string>(",", entry.Value)
-                                );
+                if (entry.Value.Count > 0)
+                    stream.WriteRecord("{0}*{1}",
+                                    entry.Key,
+                                    string.Join<string>(",", entry.Value)
+                                    );
             }
 
             stream.Close();
@@ -42,7 +43,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     Stream = stream,
                     TabLock = true,
                     KeepIdentity = false,
-                    FieldSeparator = '~'
+                    FieldSeparator = '*'
                 });
         }
 

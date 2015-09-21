@@ -78,11 +78,12 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                     foreach (var accountNumber in accountNumbers)
                                         if (accountNumber != cdr.MSISDN)
                                         {
+                                            
                                             if (accountRelatedNumbers.TryGetValue(accountNumber, out relatedNumbers))
                                             {
                                                 if (accountNumber != cdr.MSISDN)
-                                                    relatedNumbers.Add(accountNumber);
-                                                accountRelatedNumbers[cdr.MSISDN] = accountNumbers;
+                                                    relatedNumbers.Add(cdr.MSISDN);
+                                                accountRelatedNumbers[accountNumber] = relatedNumbers;
                                             }
                                             else
                                             {
