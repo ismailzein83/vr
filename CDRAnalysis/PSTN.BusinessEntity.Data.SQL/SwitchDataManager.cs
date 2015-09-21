@@ -1,4 +1,5 @@
 ﻿using PSTN.BusinessEntity.Entities;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -32,12 +33,13 @@ namespace PSTN.BusinessEntity.Data.SQL
         }
         
         public Switch GetSwitchByID(int switchID) {
-            return GetItemSP("PSTN_BE.sp_Switch_GetByID", SwitchMapper, switchID);
+            Switch mySwitch = GetItemSP("PSTN_BE.sp_Switch_GetByID", SwitchMapper, switchID);
+            return mySwitch;
         }
 
         public bool UpdateSwitch(Switch switchObject)
         {
-            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_Switch_Update", switchObject.ID, switchObject.Name, switchObject.TypeID, switchObject.AreaCode);
+            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_Switch_Update", switchObject.ID, switchObject.Name, switchObject.TypeID, switchObject.AreaCode, switchObject.TimeOffset.ToString());
             return (recordsAffected > 0);
         }
 
@@ -45,7 +47,7 @@ namespace PSTN.BusinessEntity.Data.SQL
         {
             object switchID;
 
-            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_Switch_Insert", out switchID, switchObject.Name, switchObject.TypeID, switchObject.AreaCode);
+            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_Switch_Insert", out switchID, switchObject.Name, switchObject.TypeID, switchObject.AreaCode, switchObject.TimeOffset.ToString());
 
             insertedID = (recordsAffected > 0) ? (int)switchID : -1;
             return (recordsAffected > 0);
@@ -69,8 +71,9 @@ namespace PSTN.BusinessEntity.Data.SQL
 
             switchObject.ID = (int)reader["ID"];
             switchObject.Name = reader["Name"] as string;
-            switchObject.TypeID = GetReaderValue<int?>(reader, "TypeID");
-            switchObject.AreaCode = GetReaderValue<string>(reader, "AreaCode");
+            switchObject.TypeID = (int)reader["TypeID"];
+            switchObject.AreaCode = reader["AreaCode"] as string;
+            switchObject.TimeOffset = reader["TimeOffset"] as string;
 
             return switchObject;
         }

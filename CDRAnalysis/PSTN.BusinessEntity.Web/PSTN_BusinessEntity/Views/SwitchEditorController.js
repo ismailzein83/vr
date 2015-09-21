@@ -23,6 +23,7 @@ function SwitchEditorController($scope, SwitchAPIService, UtilsService, VRNaviga
         $scope.types = [];
         $scope.selectedType = undefined;
         $scope.areaCode = undefined;
+        $scope.timeOffset = undefined;
 
         $scope.saveSwitch = function () {
             if (editMode)
@@ -33,6 +34,23 @@ function SwitchEditorController($scope, SwitchAPIService, UtilsService, VRNaviga
 
         $scope.close = function () {
             $scope.modalContext.closeModal()
+        }
+
+        $scope.validateTimeOffset = function (value) {
+
+            if (value == undefined) return null;
+
+            if (value.length == 0) return null;
+
+            if (value.length != 8) return "Format: HH:MM:SS";
+
+            for (var i = 0; i < value.length; i++) {
+
+                if ((i == 2 || i == 5) && value.charAt(i) != ":")
+                    return "Format: HH:MM:SS";
+                else if (value.charAt(i) != ":" && isNaN(parseInt(value.charAt(i))))
+                    return "Format: HH:MM:SS";
+            }
         }
     }
 
@@ -70,11 +88,11 @@ function SwitchEditorController($scope, SwitchAPIService, UtilsService, VRNaviga
         $scope.name = switchObject.Name;
         $scope.selectedType = UtilsService.getItemByVal($scope.types, switchObject.TypeID, "ID");
         $scope.areaCode = switchObject.AreaCode;
+        $scope.timeOffset = switchObject.TimeOffset;
     }
 
     function updateSwitch() {
         var switchObject = buildSwitchObjectFromScope();
-        console.log(switchObject);
 
         return SwitchAPIService.UpdateSwitch(switchObject)
             .then(function (response) {
@@ -92,7 +110,6 @@ function SwitchEditorController($scope, SwitchAPIService, UtilsService, VRNaviga
 
     function insertSwitch() {
         var switchObject = buildSwitchObjectFromScope();
-        console.log(switchObject);
 
         return SwitchAPIService.AddSwitch(switchObject)
             .then(function (response) {
@@ -113,7 +130,8 @@ function SwitchEditorController($scope, SwitchAPIService, UtilsService, VRNaviga
             ID: switchID,
             Name: $scope.name,
             TypeID: ($scope.selectedType != undefined) ? $scope.selectedType.ID : null,
-            AreaCode: $scope.areaCode
+            AreaCode: $scope.areaCode,
+            TimeOffset: $scope.timeOffset
         };
     }
 }
