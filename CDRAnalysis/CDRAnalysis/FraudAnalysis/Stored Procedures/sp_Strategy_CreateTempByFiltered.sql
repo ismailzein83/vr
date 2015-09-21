@@ -2,12 +2,12 @@
 CREATE PROCEDURE [FraudAnalysis].[sp_Strategy_CreateTempByFiltered]
 (
 	@TempTableName varchar(200),	
-	@Name Nvarchar(255),
-	@Description Nvarchar(255), 
+	@Name NVARCHAR(255) = NULL,
+	@Description NVARCHAR(255) = NULL, 
 	@PeriodIDs VARCHAR(MAX) = NULL,
 	@UserIDs VARCHAR(MAX) = NULL,
-	@IsDefault bit,
-	@IsEnabled bit,
+	@IsDefault VARCHAR(MAX) = NULL,
+	@IsEnabled VARCHAR(MAX) = NULL,
 	@FromDate datetime,
 	@ToDate datetime
 )
@@ -30,15 +30,41 @@ CREATE PROCEDURE [FraudAnalysis].[sp_Strategy_CreateTempByFiltered]
 				INSERT INTO @UserIDsTable (UserID)
 				SELECT CONVERT(INT, ParsedString) FROM [FraudAnalysis].[ParseStringList](@UserIDs);
 			END
+			
+			IF (@IsDefault IS NOT NULL)
+			BEGIN
+				DECLARE @IsDefaultTable TABLE (Value INT);
+				INSERT INTO @IsDefaultTable (Value)
+				SELECT CONVERT(INT, ParsedString) FROM [FraudAnalysis].[ParseStringList](@IsDefault);
+			END
+			
+			IF (@IsEnabled IS NOT NULL)
+			BEGIN
+				DECLARE @IsEnabledTable TABLE (Value INT);
+				INSERT INTO @IsEnabledTable (Value)
+				SELECT CONVERT(INT, ParsedString) FROM [FraudAnalysis].[ParseStringList](@IsEnabled);
+			END
 	    		
-			SELECT s.[Id],s.[Name], s.[StrategyContent] , s.[UserId], s.[PeriodId], p.Description as StrategyType
+			SELECT s.[Id],
+				s.[Name],
+				s.[StrategyContent],
+				s.[UserId],
+				s.[PeriodId],
+				p.[Description] AS StrategyType,
+				s.IsEnabled,
+				s.LastUpdatedOn
+				
 			into #Result
+			
 			FROM FraudAnalysis.[Strategy] s
-			inner join FraudAnalysis.Period p on p.Id=s.PeriodId
+			INNER JOIN FraudAnalysis.Period p ON p.ID = s.PeriodID
+			
 			WHERE (@Name IS NULL OR s.Name  LIKE '%' + @Name + '%' )
 			AND (@Description IS NULL OR s.Description  LIKE '%' + @Description + '%' )
-			and (@IsDefault is null or s.IsDefault=@IsDefault)
-			and (@IsEnabled is null or s.IsEnabled=@IsEnabled)
+			
+			AND (@IsDefault IS NULL OR s.IsDefault IN (SELECT Value FROM @IsDefaultTable))
+			AND (@IsEnabled IS NULL OR s.IsEnabled IN (SELECT Value FROM @IsEnabledTable))
+			
 			and 
 			(( @FromDate is null and @ToDate is null )
 			or ( @FromDate is not null and @ToDate is null and  s.LastUpdatedOn >= @FromDate)

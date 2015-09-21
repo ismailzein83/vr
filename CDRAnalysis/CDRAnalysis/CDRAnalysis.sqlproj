@@ -70,6 +70,9 @@
     <Folder Include="Security\" />
     <Folder Include="FraudAnalysis\Functions\" />
     <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="PSTN_BE\" />
+    <Folder Include="PSTN_BE\Tables\" />
+    <Folder Include="PSTN_BE\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="CDRAnalysis.PostDeployment.sql" />
@@ -79,9 +82,7 @@
     <Build Include="FraudAnalysis\Tables\NumberProfile.sql" />
     <Build Include="FraudAnalysis\Tables\CaseStatus.sql" />
     <Build Include="FraudAnalysis\Tables\NormalCDR.sql" />
-    <Build Include="FraudAnalysis\Tables\SubType.sql" />
     <Build Include="FraudAnalysis\Tables\Period.sql" />
-    <Build Include="FraudAnalysis\Tables\CallType.sql" />
     <Build Include="FraudAnalysis\Tables\CallClass.sql" />
     <Build Include="Security\FraudAnalysis.sql" />
     <Build Include="FraudAnalysis\Tables\Strategy.sql" />
@@ -94,12 +95,10 @@
     <Build Include="FraudAnalysis\Tables\Period.sql" />
     <Build Include="FraudAnalysis\Tables\CallType.sql" />
     <Build Include="FraudAnalysis\Tables\CallClass.sql" />
-    <Build Include="dbo\Functions\CSVToTable.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_CallClass_GetAll.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Update.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Insert.sql" />
     <Build Include="Security\FraudAnalysis.sql" />
-    <Build Include="FraudAnalysis\Tables\SuspicionLevel.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_Insert.sql" />
     <Build Include="FraudAnalysis\Tables\StrategyExecutionDetails.sql" />
     <Build Include="FraudAnalysis\Tables\StrategyExecution.sql" />
@@ -144,5 +143,11 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_GetBlockedLines.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_DeleteByCaseIDs.sql" />
     <Build Include="dbo\Stored Procedures\LKUPtable_GenerateMergeScript.sql" />
+    <Build Include="PSTN_BE\Tables\SwitchType.sql" />
+    <Build Include="PSTN_BE\Tables\SwitchTrunkLink.sql" />
+    <Build Include="PSTN_BE\Tables\SwitchTrunk.sql" />
+    <Build Include="PSTN_BE\Tables\Switch.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_SwitchType_GetAll.sql" />
+    <Build Include="Security\PSTN_BE.sql" />
   </ItemGroup>
 </Project>

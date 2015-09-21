@@ -16,7 +16,7 @@ BEGIN
 		SELECT ac.AccountNumber,
 			SUM(cdr.DurationInSeconds) / 60 AS Volume,
 			COUNT(DISTINCT ac.ID) AS GeneratedCases,
-			'Fraud' AS ReasonofBlocking,
+			ac.Reason AS ReasonofBlocking,
 			COUNT(DISTINCT CAST(cdr.connectdatetime AS DATE)) AS ActiveDays,
 			COUNT(DISTINCT ac.AccountNumber) AS BlockedLinesCount
 		
@@ -30,7 +30,7 @@ BEGIN
 		AND ac.CreatedTime BETWEEN @FromDate
 		AND @ToDate
 
-		GROUP BY ac.AccountNumber
+		GROUP BY ac.AccountNumber,ac.Reason
 		
 		DECLARE @sql VARCHAR(1000)
 		SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';

@@ -68,7 +68,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                             HashSet<String> relatedNumbers ;
 
 
-                            foreach (var cdr in cdrs.Where(x => x.IMEI != null && x.IMEI != "000000000000000"))
+                            foreach (var cdr in cdrs.Where(x => x.IMEI != null ))
                             {
                                 accountNumbers = new HashSet<string>();
                                 relatedNumbers = new HashSet<string>();

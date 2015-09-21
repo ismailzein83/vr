@@ -12,14 +12,17 @@ CREATE PROCEDURE [FraudAnalysis].[sp_Strategy_Update]
 	@StrategyContent Nvarchar(max)
 AS
 BEGIN
-	UPDATE FraudAnalysis.[Strategy]
-    SET Description = @Description
-      ,UserId = @UserId
-      ,LastUpdatedOn = @LastUpdatedOn
-      ,Name = @Name
-      ,IsDefault = @IsDefault
-      ,IsEnabled = @IsEnabled
-      ,StrategyContent = @StrategyContent
-      ,PeriodId=@PeriodId
-	 WHERE Id = @Id
+	IF NOT EXISTS(SELECT 1 FROM FraudAnalysis.[Strategy] WHERE ID != @Id AND Name = @Name)
+	BEGIN
+		UPDATE FraudAnalysis.[Strategy]
+		SET Description = @Description
+		  ,UserId = @UserId
+		  ,LastUpdatedOn = @LastUpdatedOn
+		  ,Name = @Name
+		  ,IsDefault = @IsDefault
+		  ,IsEnabled = @IsEnabled
+		  ,StrategyContent = @StrategyContent
+		  ,PeriodId=@PeriodId
+		 WHERE Id = @Id
+	END
 END
