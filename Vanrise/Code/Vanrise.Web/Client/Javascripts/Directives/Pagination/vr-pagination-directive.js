@@ -9,37 +9,37 @@ app.directive('vrPagination', [function () {
             pagersettings: '='
         },
         controller: function ($scope, $element, $attrs) {
-            var ctrl = this;
-            ctrl.topCounts = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
-            if (ctrl.pagersettings != undefined) {
-                ctrl.pagersettings.itemsPerPage = ctrl.topCounts[1];
-                ctrl.pagersettings.getPageInfo = function () {
-                    var fromRow = (ctrl.pagersettings.currentPage - 1) * ctrl.pagersettings.itemsPerPage + 1;
+            var pagerCtrl = this;
+            pagerCtrl.topCounts = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
+            if (pagerCtrl.pagersettings != undefined) {
+                pagerCtrl.pagersettings.itemsPerPage = pagerCtrl.topCounts[1];
+                pagerCtrl.pagersettings.getPageInfo = function () {
+                    var fromRow = (pagerCtrl.pagersettings.currentPage - 1) * pagerCtrl.pagersettings.itemsPerPage + 1;
                     return {
                         fromRow: fromRow,
-                        toRow: fromRow + ctrl.pagersettings.itemsPerPage - 1
+                        toRow: fromRow + pagerCtrl.pagersettings.itemsPerPage - 1
                     };
                 };
 
-                ctrl.pageChanged = function () {
-                    if (ctrl.pagersettings.pageChanged != undefined)
-                        ctrl.pagersettings.pageChanged();
+                pagerCtrl.pageChanged = function () {
+                    if (pagerCtrl.pagersettings.pageChanged != undefined)
+                        pagerCtrl.pagersettings.pageChanged();
                 };
 
-                ctrl.pageSizeChanged = function () {
-                    if (ctrl.pagersettings.pageChanged != undefined)
-                        ctrl.pagersettings.pageChanged();
+                pagerCtrl.pageSizeChanged = function () {
+                    if (pagerCtrl.pagersettings.pageChanged != undefined)
+                        pagerCtrl.pagersettings.pageChanged();
                 };
             }
 
 
         },
-        controllerAs: 'ctrl',
+        controllerAs: 'pagerCtrl',
         bindToController: true,
         compile: function (element, attrs) {
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
-                    var ctrl = $scope.ctrl;
+                    //var ctrl = $scope.ctrl;
                 }
             }
         },
