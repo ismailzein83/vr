@@ -146,6 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Billing\Constants\PeriodRangeEnum.js" />
+    <Content Include="Billing\Constants\RateTypeEnum.js" />
     <Content Include="Billing\Services\APIServices\CustomerInvoiceAPIService.js" />
     <Content Include="Billing\Services\APIServices\SupplierInvoiceAPIService.js" />
     <Content Include="Billing\Views\CustomerInvoice.html" />
