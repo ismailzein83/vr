@@ -19,13 +19,13 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
         public List<SaleZone> GetSaleZones(int packageId)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetAll", SaleZoneMapper, packageId);
+            return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetByPackage", SaleZoneMapper, packageId);
         }
         SaleZone SaleZoneMapper(IDataReader reader)
         {
             SaleZone saleZonePackage = new SaleZone
             {
-                SaleZoneId = (int)reader["ID"],
+                SaleZoneId = (long)reader["ID"],
                 SaleZonePackageId = (int)reader["PackageID"],
                 Name = reader["Name"] as string,
                 BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BED"),
@@ -61,12 +61,53 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                        record.SaleZonePackageId,
                        record.Name,
                        record.BeginEffectiveDate,
-                       null );
+                       record.EndEffectiveDate);
         }
         public void ApplySaleZonesForDB(object preparedSaleZones)
         {
             InsertBulkToTable(preparedSaleZones as BaseBulkInsertInfo);
         }
 
+
+
+        public void DeleteSaleZones(List<SaleZone> saleZones)
+        {
+            DataTable dtSaleZonesToUpdate = GetSaleZonesTable();
+
+            dtSaleZonesToUpdate.BeginLoadData();
+
+            foreach (var item in saleZones)
+            {
+                SaleZone saleZone = new SaleZone
+                {   SaleZoneId=item.SaleZoneId,
+                    EndEffectiveDate = item.EndEffectiveDate
+                };
+                    DataRow dr = dtSaleZonesToUpdate.NewRow();
+                    FillSaleZoneRow(dr, saleZone);
+                    dtSaleZonesToUpdate.Rows.Add(dr);
+            }
+            if (dtSaleZonesToUpdate.Rows.Count > 0)
+                ExecuteNonQuerySPCmd("[TOneWhS_BE].[sp_SaleZone_Update]",
+                    (cmd) =>
+                    {
+                        var dtPrm = new System.Data.SqlClient.SqlParameter("@SaleZones", SqlDbType.Structured);
+                        dtPrm.Value = dtSaleZonesToUpdate;
+                        cmd.Parameters.Add(dtPrm);}
+                    );
+        }
+        
+
+        DataTable GetSaleZonesTable()
+        {
+            DataTable dt = new DataTable("SaleZones");
+            dt.Columns.Add("ID", typeof(long));
+            dt.Columns.Add("EED", typeof(DateTime));
+            return dt;
+        }
+        void FillSaleZoneRow(DataRow dr, SaleZone saleZone)
+        {
+            dr["ID"] = saleZone.SaleZoneId;
+            dr["EED"] = saleZone.EndEffectiveDate;
+        }
     }
 }

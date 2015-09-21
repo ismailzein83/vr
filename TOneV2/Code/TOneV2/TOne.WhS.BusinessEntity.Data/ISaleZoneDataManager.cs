@@ -11,5 +11,7 @@ namespace TOne.WhS.BusinessEntity.Data
     public interface ISaleZoneDataManager : IDataManager, IBulkApplyDataManager<SaleZone>
     {
         List<SaleZone> GetSaleZones(int packageId);
+        void ApplySaleZonesForDB(object preparedSaleZones);
+        void DeleteSaleZones(List<SaleZone> saleZones);
     }
 }
