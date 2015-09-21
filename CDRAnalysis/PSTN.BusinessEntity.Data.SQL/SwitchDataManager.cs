@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading;
 
 namespace PSTN.BusinessEntity.Data.SQL
 {
@@ -11,6 +12,7 @@ namespace PSTN.BusinessEntity.Data.SQL
 
         public List<SwitchType> GetSwitchTypes()
         {
+            //Thread.Sleep(3000);
             return GetItemsSP("PSTN_BE.sp_SwitchType_GetAll", SwitchTypeMapper);
         }
 
@@ -27,6 +29,26 @@ namespace PSTN.BusinessEntity.Data.SQL
                 ExecuteNonQuerySP("PSTN_BE.sp_Switch_CreateTempByFiltered", tempTableName, input.Query.Name, typeIDs, input.Query.AreaCode);
 
             }, (reader) => SwitchMapper(reader), mapper);
+        }
+        
+        public Switch GetSwitchByID(int switchID) {
+            return GetItemSP("PSTN_BE.sp_Switch_GetByID", SwitchMapper, switchID);
+        }
+
+        public bool UpdateSwitch(Switch switchObject)
+        {
+            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_Switch_Update", switchObject.ID, switchObject.Name, switchObject.TypeID, switchObject.AreaCode);
+            return (recordsAffected > 0);
+        }
+
+        public bool AddSwitch(Switch switchObject, out int insertedID)
+        {
+            object switchID;
+
+            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_Switch_Insert", out switchID, switchObject.Name, switchObject.TypeID, switchObject.AreaCode);
+
+            insertedID = (recordsAffected > 0) ? (int)switchID : -1;
+            return (recordsAffected > 0);
         }
 
         #region Mappers

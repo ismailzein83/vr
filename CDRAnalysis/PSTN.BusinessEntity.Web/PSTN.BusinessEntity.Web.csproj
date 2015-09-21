@@ -141,6 +141,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchAPIService.js" />
+    <Content Include="PSTN_BusinessEntity\Views\SwitchEditor.html" />
+    <Content Include="PSTN_BusinessEntity\Views\SwitchEditorController.js" />
     <Content Include="PSTN_BusinessEntity\Views\SwitchManagement.html" />
     <Content Include="PSTN_BusinessEntity\Views\SwitchManagementController.js" />
   </ItemGroup>

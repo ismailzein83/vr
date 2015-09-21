@@ -2,6 +2,7 @@
 using PSTN.BusinessEntity.Entities;
 using System.Collections.Generic;
 using System.Web.Http;
+using Vanrise.Entities;
 
 namespace PSTN.BusinessEntity.Web.Controllers
 {
@@ -19,6 +20,27 @@ namespace PSTN.BusinessEntity.Web.Controllers
         {
             SwitchManager manager = new SwitchManager();
             return GetWebResponse(input, manager.GetFilteredSwitches(input));
+        }
+
+        [HttpGet]
+        public Switch GetSwitchByID(int switchID)
+        {
+            SwitchManager manager = new SwitchManager();
+            return manager.GetSwitchByID(switchID);
+        }
+
+        [HttpPost]
+        public UpdateOperationOutput<Switch> UpdateSwitch(Switch switchObject)
+        {
+            SwitchManager manager = new SwitchManager();
+            return manager.UpdateSwitch(switchObject);
+        }
+
+        [HttpPost]
+        public InsertOperationOutput<Switch> AddSwitch(Switch switchObject)
+        {
+            SwitchManager manager = new SwitchManager();
+            return manager.AddSwitch(switchObject);
         }
     }
 }

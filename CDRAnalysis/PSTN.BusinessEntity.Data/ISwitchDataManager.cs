@@ -8,5 +8,11 @@ namespace PSTN.BusinessEntity.Data
         List<SwitchType> GetSwitchTypes();
 
         Vanrise.Entities.BigResult<Switch> GetFilteredSwitches(Vanrise.Entities.DataRetrievalInput<SwitchQuery> input);
+
+        Switch GetSwitchByID(int switchID);
+
+        bool UpdateSwitch(Switch switchObject);
+
+        bool AddSwitch(Switch switchObject, out int insertedID);
     }
 }

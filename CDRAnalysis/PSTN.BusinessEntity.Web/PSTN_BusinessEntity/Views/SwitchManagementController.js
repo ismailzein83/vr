@@ -1,6 +1,6 @@
-﻿SwitchManagementController.$inject = ["$scope", "SwitchAPIService", "UtilsService", "VRNotificationService"];
+﻿SwitchManagementController.$inject = ["$scope", "SwitchAPIService", "UtilsService", "VRNotificationService", "VRModalService"];
 
-function SwitchManagementController($scope, SwitchAPIService, UtilsService, VRNotificationService) {
+function SwitchManagementController($scope, SwitchAPIService, UtilsService, VRNotificationService, VRModalService) {
 
     var gridAPI = undefined;
 
@@ -25,7 +25,21 @@ function SwitchManagementController($scope, SwitchAPIService, UtilsService, VRNo
         }
 
         $scope.addSwitch = function () {
+            var settings = {};
 
+            settings.onScopeReady = function (modalScope) {
+                modalScope.title = "Add a Switch";
+
+                modalScope.onSwitchAdded = function (switchObject) {
+
+                    switchObject.TypeDescription = (switchObject.TypeID != null) ?
+                        UtilsService.getItemByVal($scope.types, switchObject.TypeID, "ID").Name : null;
+
+                    gridAPI.itemAdded(switchObject);
+                };
+            };
+
+            VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/SwitchEditor.html", null, settings);
         }
 
         // grid functions
@@ -41,7 +55,7 @@ function SwitchManagementController($scope, SwitchAPIService, UtilsService, VRNo
                 .then(function (response) {
                     
                     angular.forEach(response.Data, function (item) {
-                        item.TypeDescription = UtilsService.getItemByVal($scope.types, item.TypeID, "ID").Name;
+                        item.TypeDescription = (item.TypeID != null) ? UtilsService.getItemByVal($scope.types, item.TypeID, "ID").Name : null;
                     });
 
                     onResponseReady(response);
@@ -91,8 +105,26 @@ function SwitchManagementController($scope, SwitchAPIService, UtilsService, VRNo
         }];
     }
     
-    function editSwitch() {
+    function editSwitch(gridObject) {
+        var modalSettings = {};
 
+        var parameters = {
+            SwitchID: gridObject.ID
+        };
+
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.title = "Edit Switch: " + gridObject.Name;
+
+            modalScope.onSwitchUpdated = function (switchObject) {
+                
+                switchObject.TypeDescription = (switchObject.TypeID != null) ?
+                    UtilsService.getItemByVal($scope.types, switchObject.TypeID, "ID").Name : null;
+
+                gridAPI.itemUpdated(switchObject);
+            };
+        };
+
+        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/SwitchEditor.html", parameters, modalSettings);
     }
 }
 
