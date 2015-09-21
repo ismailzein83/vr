@@ -1,5 +1,5 @@
 ﻿
-app.service('SaleZoneAPIService', function (BaseAPIService) {
+app.service('WhS_BE_SaleZoneAPIService', function (BaseAPIService) {
 
     return ({
 
