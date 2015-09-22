@@ -35,14 +35,14 @@ function RoutingProductEditorController($scope, WhS_BE_RoutingProductAPIService,
         $scope.saleZoneGroupTemplates = [];
         $scope.selectedSaleZoneGroupTemplate = undefined;
 
-        $scope.suppliersGroupTemplates = [];
+        $scope.supplierGroupTemplates = [];
         $scope.selectedSupplierGroupTemplate = undefined;
 
         $scope.saleZonePackages = [];
         $scope.selectedSaleZonePackage = undefined;
 
         $scope.saleZoneGroups = {};
-        $scope.suppliersGroups = {};
+        $scope.supplierGroups = {};
     }
 
     function load() {
@@ -75,7 +75,7 @@ function RoutingProductEditorController($scope, WhS_BE_RoutingProductAPIService,
 
     function loadSaleZonePackages() {
         return WhS_BE_SaleZonePackageAPIService.GetSaleZonePackages().then(function (response) {
-            angular.foreach(response, function (item) {
+            angular.forEach(response, function (item) {
                 $scope.saleZonePackages.push(item);
             });
         });
@@ -92,7 +92,7 @@ function RoutingProductEditorController($scope, WhS_BE_RoutingProductAPIService,
     function loadSupplierGroupTemplates() {
         return WhS_BE_RoutingProductAPIService.GetSupplierGroupTemplates().then(function (response) {
             angular.forEach(response, function (item) {
-                $scope.suppliersGroupTemplates.push(item);
+                $scope.supplierGroupTemplates.push(item);
             });
         });
     }
@@ -105,9 +105,9 @@ function RoutingProductEditorController($scope, WhS_BE_RoutingProductAPIService,
             SaleZonePackageId: $scope.selectedSaleZonePackage.SaleZonePackageId,
             Settings: {
                 SaleZoneGroupConfigId: $scope.selectedSaleZoneGroupTemplate.TemplateConfigID,
-                SaleZoneGroupSettings: $scope.saleZoneGroups.getData(),
-                SuppliersGroupConfigId: $scope.selectedSupplierGroupTemplate.TemplateConfigID,
-                SupplierGroupSettings: $scope.suppliersGroup.getData()
+                SaleZoneGroupSettings: $scope.saleZoneGroups.getData != undefined ?  $scope.saleZoneGroups.getData() : null,
+                SupplierGroupConfigId: $scope.selectedSupplierGroupTemplate.TemplateConfigID,
+                SupplierGroupSettings: $scope.supplierGroups.getData != undefined ? $scope.supplierGroups.getData() : null
             }
         };
 
@@ -119,17 +119,17 @@ function RoutingProductEditorController($scope, WhS_BE_RoutingProductAPIService,
         $scope.selectedSaleZonePackage = UtilsService.getItemByVal($scope.saleZonePackages, routingProductObj.SaleZonePackageId, "SaleZonePackageId");
 
         $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, routingProductObj.SaleZoneGroupConfigId, "TemplateConfigID");
-        $scope.selectedSupplierGroupTemplate = UtilsService.getItemByVal($scope.suppliersGroupTemplates, routingProductObj.SuppliersGroupConfigId, "TemplateConfigID");
+        $scope.selectedSupplierGroupTemplate = UtilsService.getItemByVal($scope.supplierGroupTemplates, routingProductObj.SupplierGroupConfigId, "TemplateConfigID");
 
         $scope.saleZoneGroups.data = routingProductObj.Settings.Zones;
 
         if ($scope.saleZoneGroups.loadTemplateData != undefined)
             $scope.saleZoneGroups.loadTemplateData();
 
-        $scope.suppliersGroup.data = routingProductObj.Settings.Suppliers;
+        $scope.supplierGroup.data = routingProductObj.Settings.Suppliers;
 
-        if ($scope.suppliersGroup.loadTemplateData != undefined)
-            $scope.suppliersGroup.loadTemplateData();
+        if ($scope.supplierGroup.loadTemplateData != undefined)
+            $scope.supplierGroup.loadTemplateData();
     }
 
     function insertRoutingProduct() {

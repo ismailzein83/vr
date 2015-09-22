@@ -12,7 +12,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public SaleZoneGroupSettings SaleZoneGroupSettings { get; set; }
 
-        public int SuppliersGroupConfigId { get; set; }
+        public int SupplierGroupConfigId { get; set; }
 
         public SupplierGroupSettings SupplierGroupSettings { get; set; }
     }    

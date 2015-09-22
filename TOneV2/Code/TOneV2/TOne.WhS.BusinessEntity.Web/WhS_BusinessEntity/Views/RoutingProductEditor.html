@@ -12,24 +12,27 @@
                         <vr-textbox value="routingProductName" label="Name" isrequired></vr-textbox>
                     </vr-columns>
                     <vr-columns width="1/2row">
-                        <vr-select label="Sale Zone Package" datasource="saleZonePackages" selectedvalues="selectedSaleZonePackage"></vr-select>
+                        <vr-select datatextfield="Name" datavaluefield="SaleZonePackageId"
+                                    label="Sale Zone Package" datasource="saleZonePackages" selectedvalues="selectedSaleZonePackage"></vr-select>
                     </vr-columns>
                 </vr-row>
             </div>
             <div ng-show="saleZonesSelected">
                 <vr-row>
-                    <vr-columns>
-                        <vr-select label="Type" datasource="saleZoneGroupTemplates" selectedvalues="selectedSaleZoneGroupTemplate"></vr-select>
+                    <vr-columns width="1/2row">
+                        <vr-select datatextfield="Name" datavaluefield="TemplateConfigID"
+                                   label="Type" datasource="saleZoneGroupTemplates" selectedvalues="selectedSaleZoneGroupTemplate"></vr-select>
                     </vr-columns>
                 </vr-row>
                 <vr-row>
                     <div ng-include="selectedSaleZoneGroupTemplate.TemplateURL"></div>
                 </vr-row>
             </div>
-            <div ng-show="saleZonesSelected">
+            <div ng-show="suppliersSelected">
                 <vr-row>
-                    <vr-columns>
-                        <vr-select label="Type" datasource="suppliersGroupTemplates" selectedvalues="selectedSupplierGroupTemplate"></vr-select>
+                    <vr-columns width="1/2row">
+                        <vr-select datatextfield="Name" datavaluefield="TemplateConfigID"
+                                   label="Type" datasource="supplierGroupTemplates" selectedvalues="selectedSupplierGroupTemplate"></vr-select>
                     </vr-columns>
                 </vr-row>
                 <vr-row>

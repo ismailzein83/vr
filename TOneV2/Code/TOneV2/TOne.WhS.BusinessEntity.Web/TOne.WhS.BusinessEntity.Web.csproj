@@ -148,12 +148,12 @@
     <Content Include="WhS_BusinessEntity\Services\RoutingProductAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\SaleZoneAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\SaleZonePackageAPIService.js" />
-    <Content Include="WhS_BusinessEntity\View\RoutingProductEditor.html" />
-    <Content Include="WhS_BusinessEntity\View\RoutingProductEditorController.js" />
-    <Content Include="WhS_BusinessEntity\View\RoutingProductManagement.html" />
-    <Content Include="WhS_BusinessEntity\View\RoutingProductManagementController.js" />
-    <Content Include="WhS_BusinessEntity\View\Templates\SelectiveSuppliersTemplate.html" />
-    <Content Include="WhS_BusinessEntity\View\Templates\SelectiveSuppliersTemplateController.js" />
+    <Content Include="WhS_BusinessEntity\Views\RoutingProductEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\RoutingProductEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Views\RoutingProductManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\RoutingProductManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\Templates\SelectiveSuppliersTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Views\Templates\SelectiveSuppliersTemplateController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -17,6 +17,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             _columnMapper.Add("RoutingProductId", "ID");
         }
 
+        public RoutingProductDataManager()
+            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
+        {
+
+        }
+
         public Vanrise.Entities.BigResult<Entities.RoutingProduct> GetFilteredRoutingProducts(Vanrise.Entities.DataRetrievalInput<Entities.RoutingProductQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>

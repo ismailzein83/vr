@@ -5,7 +5,9 @@ app.service('WhS_BE_RoutingProductAPIService', function (BaseAPIService) {
 
         GetFilteredRoutingProducts: GetFilteredRoutingProducts,
         AddRoutingProduct: AddRoutingProduct,
-        UpdateRoutingProduct: UpdateRoutingProduct
+        UpdateRoutingProduct: UpdateRoutingProduct,
+        GetSaleZoneGroupTemplates: GetSaleZoneGroupTemplates,
+        GetSupplierGroupTemplates: GetSupplierGroupTemplates
     });
 
 
