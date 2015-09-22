@@ -149,6 +149,8 @@
     <Content Include="PSTN_BusinessEntity\Views\SwitchEditorController.js" />
     <Content Include="PSTN_BusinessEntity\Views\SwitchManagement.html" />
     <Content Include="PSTN_BusinessEntity\Views\SwitchManagementController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\SwitchTrunkEditor.html" />
+    <Content Include="PSTN_BusinessEntity\Views\SwitchTrunkEditorController.js" />
     <Content Include="PSTN_BusinessEntity\Views\SwitchTrunkManagement.html" />
     <Content Include="PSTN_BusinessEntity\Views\SwitchTrunkManagementController.js" />
   </ItemGroup>

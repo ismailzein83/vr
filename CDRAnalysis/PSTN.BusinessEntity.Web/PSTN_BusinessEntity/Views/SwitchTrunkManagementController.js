@@ -1,6 +1,6 @@
-﻿SwitchTrunkManagementController.$inject = ["$scope", "SwitchTrunkAPIService", "SwitchAPIService", "SwitchTrunkTypeEnum", "SwitchTrunkDirectionEnum", "UtilsService", "VRNotificationService"];
+﻿SwitchTrunkManagementController.$inject = ["$scope", "SwitchTrunkAPIService", "SwitchAPIService", "SwitchTrunkTypeEnum", "SwitchTrunkDirectionEnum", "UtilsService", "VRNotificationService", "VRModalService"];
 
-function SwitchTrunkManagementController($scope, SwitchTrunkAPIService, SwitchAPIService, SwitchTrunkTypeEnum, SwitchTrunkDirectionEnum, UtilsService, VRNotificationService) {
+function SwitchTrunkManagementController($scope, SwitchTrunkAPIService, SwitchAPIService, SwitchTrunkTypeEnum, SwitchTrunkDirectionEnum, UtilsService, VRNotificationService, VRModalService) {
 
     var gridAPI = undefined;
 
@@ -28,6 +28,27 @@ function SwitchTrunkManagementController($scope, SwitchTrunkAPIService, SwitchAP
             return retrieveData();
         }
 
+        $scope.addTrunk = function () {
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.title = "Add a Switch Trunk";
+
+                modalScope.onTrunkAdded = function (trunkObject) {
+
+                    var type = UtilsService.getEnum(SwitchTrunkTypeEnum, "value", trunkObject.Type);
+                    trunkObject.TypeDescription = type.description;
+
+                    var direction = UtilsService.getEnum(SwitchTrunkDirectionEnum, "value", trunkObject.Direction);
+                    trunkObject.DirectionDescription = direction.description;
+
+                    gridAPI.itemAdded(trunkObject);
+                };
+            };
+
+            VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/SwitchTrunkEditor.html", null, settings);
+        }
+
         // grid functions
         $scope.gridReady = function (api) {
             gridAPI = api;
@@ -38,7 +59,6 @@ function SwitchTrunkManagementController($scope, SwitchTrunkAPIService, SwitchAP
 
             return SwitchTrunkAPIService.GetFilteredSwitchTrunks(dataRetrievalInput)
                 .then(function (response) {
-                    console.log(response.Data);
 
                     angular.forEach(response.Data, function (item) {
                         var type = UtilsService.getEnum(SwitchTrunkTypeEnum, "value", item.Type);
@@ -95,6 +115,28 @@ function SwitchTrunkManagementController($scope, SwitchTrunkAPIService, SwitchAP
     }
 
     function editTrunk(gridObject) {
+        var modalSettings = {};
+
+        var parameters = {
+            TrunkID: gridObject.ID
+        };
+
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.title = "Edit Switch Trunk: " + gridObject.Name;
+
+            modalScope.onTrunkUpdated = function (trunkObject) {
+
+                var type = UtilsService.getEnum(SwitchTrunkTypeEnum, "value", trunkObject.Type);
+                trunkObject.TypeDescription = type.description;
+
+                var direction = UtilsService.getEnum(SwitchTrunkDirectionEnum, "value", trunkObject.Direction);
+                trunkObject.DirectionDescription = direction.description;
+
+                gridAPI.itemUpdated(trunkObject);
+            };
+        };
+
+        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/SwitchTrunkEditor.html", parameters, modalSettings);
     }
 }
 

@@ -31,8 +31,6 @@ namespace PSTN.BusinessEntity.Business
             return dataManager.GetSwitches();
         }
 
-        
-
         public UpdateOperationOutput<Switch> UpdateSwitch(Switch switchObject)
         {
             ISwitchDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchDataManager>();

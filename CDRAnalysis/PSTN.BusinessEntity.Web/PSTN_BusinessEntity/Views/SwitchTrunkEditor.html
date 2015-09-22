@@ -1,0 +1,60 @@
+﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_SwitchTrunkEditorController" vr-loader="isGettingData" width="'50%'">
+
+    <vr-modalbody>
+        <vr-form name="formSwitchTrunkEditor">
+
+            <vr-row>
+                <vr-columns width="1/4row">
+                    <vr-textbox label="Name" value="name" isrequired></vr-textbox>
+                </vr-columns>
+
+                <vr-columns width="1/4row">
+                    <vr-textbox label="Symbol" value="symbol" isrequired></vr-textbox>
+                </vr-columns>
+
+                <vr-columns width="1/4row">
+                    <vr-select label="Switch"
+                               datasource="switches"
+                               selectedvalues="selectedSwitch"
+                               datavaluefield="ID"
+                               datatextfield="Name"
+                               entityname="Switch"
+                               isrequired>
+                    </vr-select>
+                </vr-columns>
+
+                <vr-columns width="1/4row">
+                    <vr-select label="Type"
+                               datasource="types"
+                               selectedvalues="selectedType"
+                               datavaluefield="value"
+                               datatextfield="description"
+                               entityname="Type"
+                               isrequired>
+                    </vr-select>
+                </vr-columns>
+
+                <vr-columns width="1/4row">
+                    <vr-select label="Direction"
+                               datasource="directions"
+                               selectedvalues="selectedDirection"
+                               datavaluefield="value"
+                               datatextfield="description"
+                               entityname="Direction"
+                               isrequired>
+                    </vr-select>
+                </vr-columns>
+            </vr-row>
+
+        </vr-form>
+    </vr-modalbody>
+
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formSwitchTrunkEditor" data-onclick="saveTrunk"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

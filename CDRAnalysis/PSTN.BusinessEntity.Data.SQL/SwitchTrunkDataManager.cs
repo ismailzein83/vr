@@ -31,6 +31,27 @@ namespace PSTN.BusinessEntity.Data.SQL
             }, (reader) => SwitchTrunkDetailMapper(reader), mapper);
         }
 
+        public SwitchTrunkDetail GetSwitchTrunkByID(int trunkID)
+        {
+            return GetItemSP("PSTN_BE.sp_SwitchTrunk_GetByID", SwitchTrunkDetailMapper, trunkID);
+        }
+
+        public bool AddSwitchTrunk(SwitchTrunk trunkObject, out int insertedID)
+        {
+            object trunkID;
+
+            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_SwitchTrunk_Insert", out trunkID, trunkObject.Name, trunkObject.Symbol, trunkObject.SwitchID, trunkObject.Type, trunkObject.Direction);
+
+            insertedID = (recordsAffected > 0) ? (int)trunkID : -1;
+            return (recordsAffected > 0);
+        }
+
+        public bool UpdateSwitchTrunk(SwitchTrunk trunkObject)
+        {
+            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_SwitchTrunk_Update", trunkObject.ID, trunkObject.Name, trunkObject.Symbol, trunkObject.SwitchID, trunkObject.Type, trunkObject.Direction);
+            return (recordsAffected > 0);
+        }
+
         #region Mappers
 
         SwitchTrunkDetail SwitchTrunkDetailMapper(IDataReader reader)
