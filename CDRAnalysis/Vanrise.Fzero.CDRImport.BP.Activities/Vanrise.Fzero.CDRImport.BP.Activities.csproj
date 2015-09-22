@@ -36,7 +36,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Activities" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.DurableInstancing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,6 +46,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="Vanrise.BusinessProcess">
       <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Caching">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
@@ -55,7 +60,7 @@
   <ItemGroup>
     <Compile Include="ApplyNumberProfilesToDB.cs" />
     <Compile Include="CreateNumberProfiles.cs" />
-    <Compile Include="LoadCDRs.cs" />
+    <Compile Include="LoadStagingCDRs.cs" />
     <Compile Include="PrepareNumberProfilesForDBApply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

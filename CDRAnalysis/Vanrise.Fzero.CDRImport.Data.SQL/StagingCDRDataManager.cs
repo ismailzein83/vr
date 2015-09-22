@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Vanrise.Data.SQL;
 using Vanrise.Fzero.CDRImport.Entities;
+using System;
 
 namespace Vanrise.Fzero.CDRImport.Data.SQL
 {
@@ -43,5 +44,45 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                     FieldSeparator = ','
                 });
         }
+
+
+        public void LoadStagingCDR(DateTime from, DateTime to, int? batchSize, Action<StagingCDR> onBatchReady)
+        {
+            ExecuteReaderSP("FraudAnalysis.sp_StagingCDR_GetByConnectDateTime", (reader) =>
+            {
+
+
+                int count = 0;
+                int currentIndex = 0;
+
+                while (reader.Read())
+                {
+                    StagingCDR stagingCDR = new StagingCDR();
+                    stagingCDR.CDPN = reader["CDPN"] as string;
+                    stagingCDR.CGPN = reader["CGPN"] as string;
+                    stagingCDR.ConnectDateTime = GetReaderValue<DateTime?>(reader, "ConnectDateTime");
+                    stagingCDR.InTrunkSymbol = reader["InTrunkSymbol"] as string;
+                    stagingCDR.OutTrunkSymbol = reader["OutTrunkSymbol"] as string;
+                    stagingCDR.DurationInSeconds = GetReaderValue<Decimal?>(reader, "DurationInSeconds");
+                    stagingCDR.DisconnectDateTime = GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
+                    stagingCDR.SwitchID = GetReaderValue<int>(reader, "SwitchID");
+
+                    currentIndex++;
+                    if (currentIndex == 100000)
+                    {
+                        count += currentIndex;
+                        currentIndex = 0;
+                    }
+
+                    onBatchReady(stagingCDR);
+                }
+
+
+
+            }, from, to
+               );
+        }
+
+
     }
 }
