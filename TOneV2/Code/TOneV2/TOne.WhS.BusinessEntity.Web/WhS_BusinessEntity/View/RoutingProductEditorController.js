@@ -47,7 +47,7 @@ function RoutingProductEditorController($scope, WhS_BE_RoutingProductAPIService,
 
     function load() {
         $scope.isGettingData = true;
-        return UtilsService.waitMultipleAsyncOperations([loadSaleZonePackages, loadSaleZoneGroupTemplates, loadSuppliersGroupTemplates]).then(function () {
+        return UtilsService.waitMultipleAsyncOperations([loadSaleZonePackages, loadSaleZoneGroupTemplates, loadSupplierGroupTemplates]).then(function () {
             if (editMode) {
                 getRoutingProduct();
             }
@@ -89,8 +89,8 @@ function RoutingProductEditorController($scope, WhS_BE_RoutingProductAPIService,
         });
     }
 
-    function loadSuppliersGroupTemplates() {
-        return WhS_BE_RoutingProductAPIService.GetSuppliersGroupTemplates().then(function (response) {
+    function loadSupplierGroupTemplates() {
+        return WhS_BE_RoutingProductAPIService.GetSupplierGroupTemplates().then(function (response) {
             angular.forEach(response, function (item) {
                 $scope.suppliersGroupTemplates.push(item);
             });

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -49,6 +50,12 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
             dataManager.DeleteSaleZones(saleZones);
+        }
+
+        public List<Vanrise.Entities.TemplateConfig> GetSaleZoneGroupTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.SaleZoneGroupConfigType);
         }
     }
 }

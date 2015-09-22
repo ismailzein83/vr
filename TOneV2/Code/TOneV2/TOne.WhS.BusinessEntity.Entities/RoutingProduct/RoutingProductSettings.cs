@@ -14,6 +14,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public int SuppliersGroupConfigId { get; set; }
 
-        public SuppliersGroupSettings Suppliers { get; set; }
+        public SupplierGroupSettings Suppliers { get; set; }
     }    
 }

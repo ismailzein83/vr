@@ -7,25 +7,25 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public abstract class SuppliersGroup
+    public abstract class SupplierGroup
     {
-        public abstract List<CarrierAccount> GetSuppliers(SuppliersGroupSettings settings);
+        public abstract List<CarrierAccount> GetSuppliers(SupplierGroupSettings settings);
     }
 
-    public class SelectiveSuppliers : SuppliersGroup
+    public class SelectiveSuppliers : SupplierGroup
     {
-        public override List<CarrierAccount> GetSuppliers(SuppliersGroupSettings settings)
+        public override List<CarrierAccount> GetSuppliers(SupplierGroupSettings settings)
         {
-            SelectiveSuppliersSettings selectiveSettings = settings as SelectiveSuppliersSettings;
+            SelectiveSupplierSettings selectiveSettings = settings as SelectiveSupplierSettings;
 
             ICarrierAccountManager carrierAccountManager = BEManagerFactory.GetManager<ICarrierAccountManager>();
             return carrierAccountManager.GetSuppliers(selectiveSettings.SupplierIds);
         }
     }
 
-    public class AllSuppliers : SuppliersGroup
+    public class AllSuppliers : SupplierGroup
     {
-        public override List<CarrierAccount> GetSuppliers(SuppliersGroupSettings settings)
+        public override List<CarrierAccount> GetSuppliers(SupplierGroupSettings settings)
         {
             ICarrierAccountManager carrierAccountManager = BEManagerFactory.GetManager<ICarrierAccountManager>();
             return carrierAccountManager.GetAllSuppliers();

@@ -9,6 +9,8 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface IRoutingProductDataManager : IDataManager
     {
+        Vanrise.Entities.BigResult<Entities.RoutingProduct> GetFilteredRoutingProducts(Vanrise.Entities.DataRetrievalInput<Entities.RoutingProductQuery> input);
+
         bool Insert(RoutingProduct routingProduct, out int insertedId);
 
         bool Update(RoutingProduct routingProduct);

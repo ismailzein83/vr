@@ -25,7 +25,7 @@ app.service('WhS_BE_RoutingProductAPIService', function (BaseAPIService) {
         return BaseAPIService.get("/api/RoutingProduct/GetSaleZoneGroupTemplates");
     }
 
-    function GetSuppliersGroupTemplates() {
-        return BaseAPIService.get("/api/RoutingProduct/GetSuppliersGroupTemplates");
+    function GetSupplierGroupTemplates() {
+        return BaseAPIService.get("/api/RoutingProduct/GetSupplierGroupTemplates");
     }
 });

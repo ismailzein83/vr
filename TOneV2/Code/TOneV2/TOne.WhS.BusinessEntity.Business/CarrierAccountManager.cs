@@ -18,7 +18,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public List<Vanrise.Entities.TemplateConfig> GetCustomersGroupTemplates()
         {
             TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.CustomersGroupConfigType);
+            return manager.GetTemplateConfigurations(Constants.CustomerGroupConfigType);
         }
 
         private CustomerGroupBehavior GetCustomersGroupBehavior(int configId)
@@ -43,6 +43,12 @@ namespace TOne.WhS.BusinessEntity.Business
                 return customerGroupBehavior.GetCustomerIds(customerGroupSettings);
             else
                 return null;
+        }
+
+        public List<Vanrise.Entities.TemplateConfig> GetSupplierGroupTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.SupplierGroupConfigType);
         }
     }
 }

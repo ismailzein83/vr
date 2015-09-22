@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,15 +10,22 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class RoutingProductDataManager : BaseSQLDataManager, IRoutingProductDataManager
     {
-        //public Vanrise.Entities.BigResult<Entities.RoutingProduct> GetFilteredRoutingProducts(Vanrise.Entities.DataRetrievalInput<object> input)
-        //{
-        //    Action<string> createTempTableAction = (tempTableName) =>
-        //    {
-        //        ExecuteNonQuerySP("integration.sp_DataSource_CreateTemp", tempTableName);
-        //    };
+        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
 
-        //    return RetrieveData(input, createTempTableAction, DataSourceMapper, _columnMapper);
-        //}
+        static RoutingProductDataManager()
+        {
+            _columnMapper.Add("RoutingProductId", "ID");
+        }
+
+        public Vanrise.Entities.BigResult<Entities.RoutingProduct> GetFilteredRoutingProducts(Vanrise.Entities.DataRetrievalInput<Entities.RoutingProductQuery> input)
+        {
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("TOneWhS_BE.sp_RoutingProduct_CreateTempByFiltered", tempTableName);
+            };
+
+            return RetrieveData(input, createTempTableAction, RoutingProductMapper, _columnMapper);
+        }
 
         public bool Insert(Entities.RoutingProduct routingProduct, out int insertedId)
         {
@@ -36,5 +44,19 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 Vanrise.Common.Serializer.Serialize(routingProduct.Settings));
             return (recordesEffected > 0);
         }
+
+        Entities.RoutingProduct RoutingProductMapper(IDataReader reader)
+        {
+            Entities.RoutingProduct routingProduct = new Entities.RoutingProduct
+            {
+                RoutingProductId = (int)reader["ID"],
+                Name = reader["Name"] as string,
+                SaleZonePackageId = int.Parse(reader["SaleZonePackageID"] as string),
+                Settings = Vanrise.Common.Serializer.Deserialize<Entities.RoutingProductSettings>(reader["Settings"] as string)
+            };
+
+            return routingProduct;
+        }
+
     }
 }

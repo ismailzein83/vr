@@ -11,16 +11,10 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class RoutingProductManager
     {
-        public List<Vanrise.Entities.TemplateConfig> GetSaleZoneGroupTemplates()
+        public Vanrise.Entities.IDataRetrievalResult<RoutingProduct> GetFilteredRoutingProducts(Vanrise.Entities.DataRetrievalInput<RoutingProductQuery> input)
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.SaleZoneGroupConfigType);
-        }
-
-        public List<Vanrise.Entities.TemplateConfig> GetSuppliersGroupTemplates()
-        {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.SuppliersGroupConfigType);
+            IRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredRoutingProducts(input));
         }
 
         public TOne.Entities.InsertOperationOutput<RoutingProduct> AddRoutingProduct(RoutingProduct routingProduct)

@@ -15,23 +15,22 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         [HttpPost]
         public object GetFilteredRoutingProducts(Vanrise.Entities.DataRetrievalInput<RoutingProductQuery> input)
         {
-            //UserManager manager = new UserManager();
-            //return GetWebResponse(input, manager.GetFilteredUsers(input));
-            return null;
-        }
+            RoutingProductManager manager = new RoutingProductManager();
+            return GetWebResponse(input, manager.GetFilteredRoutingProducts(input));
+        }        
 
         [HttpGet]
         public List<TemplateConfig> GetSaleZoneGroupTemplates()
         {
-            RoutingProductManager manager = new RoutingProductManager();
+            SaleZoneManager manager = new SaleZoneManager();
             return manager.GetSaleZoneGroupTemplates();
         }
 
         [HttpGet]
-        public List<TemplateConfig> GetSuppliersGroupTemplates()
+        public List<TemplateConfig> GetSupplierGroupTemplates()
         {
-            RoutingProductManager manager = new RoutingProductManager();
-            return manager.GetSuppliersGroupTemplates();
+            CarrierAccountManager manager = new CarrierAccountManager();
+            return manager.GetSupplierGroupTemplates();
         }
 
         [HttpPost]

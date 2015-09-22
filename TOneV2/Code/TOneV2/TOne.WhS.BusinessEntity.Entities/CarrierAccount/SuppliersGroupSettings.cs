@@ -6,18 +6,13 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public abstract class SuppliersGroupSettings
+    public abstract class SupplierGroupSettings
     {
         
     }
 
-    public class SelectiveSuppliersSettings : SuppliersGroupSettings
+    public class SelectiveSupplierSettings : SupplierGroupSettings
     {
         public List<int> SupplierIds { get; set; }
     }
-
-    //public class AllSuppliersSettings : SuppliersGroupSettings
-    //{
-        
-    //}
 }

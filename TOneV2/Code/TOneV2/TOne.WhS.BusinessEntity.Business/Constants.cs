@@ -8,10 +8,10 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public static class Constants
     {
-        public const string SaleZoneGroupConfigType = "Sale Zone Group";
-        
-        public const string SuppliersGroupConfigType = "Suppliers Group";
+        public const string SaleZoneGroupConfigType = "WhS_BE_SaleZoneGroup";
 
-        public const string CustomersGroupConfigType = "WhS_BusinessEntity_CustomersGroup";
+        public const string SupplierGroupConfigType = "WhS_BE_SupplierGroup";
+
+        public const string CustomerGroupConfigType = "WhS_BE_CustomersGroup";
     }
 }
