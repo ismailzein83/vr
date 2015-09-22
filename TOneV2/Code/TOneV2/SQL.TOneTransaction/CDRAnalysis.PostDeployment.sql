@@ -68,7 +68,8 @@ set identity_insert [queue].[ExecutionFlow] on;
 ;with cte_data([ID],[Name],[ExecutionFlowDefinitionID])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'CDR Import Execution Flow',1)
+(1,'CDR Import Execution Flow',1),
+(4,	'Staging CDR Import',	2)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[ExecutionFlowDefinitionID]))
 merge	[queue].[ExecutionFlow] as t
