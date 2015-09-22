@@ -7,63 +7,52 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class RouteRulesBySubCodeCustomer : RouteRulesByCriteria
+    public class RouteRulesByCustomerSubCode : RouteRulesByTwoIds<int, string>
     {
-        Dictionary<int, Dictionary<string, List<RouteRule>>> _rulesByCodeCustomer = new Dictionary<int, Dictionary<string, List<RouteRule>>>();
-
-        public override void SetSource(List<RouteRule> rules)
+        protected override bool IsRuleMatched(RouteRule rule, out IEnumerable<int> ids1, out IEnumerable<string> ids2)
         {
-            foreach (var rule in rules)
+            if (rule.Criteria.HasCustomerFilter() && rule.Criteria.HasCodeFilter())
             {
-                if (rule.Criteria.HasCustomerFilter() && rule.Criteria.HasCodeFilter())
-                {
-                    foreach (var customerId in rule.Criteria.CustomerIds)
-                    {
-                        Dictionary<string, List<RouteRule>> customerRulesByCode = null;
-                        
-                        foreach (var codeCriteria in rule.Criteria.Codes)
-                        {
-                            if (codeCriteria.WithSubCodes)
-                            {
-                                if (customerRulesByCode == null)
-                                {
-                                    customerRulesByCode = GetOrCreateDictionaryItem(customerId, _rulesByCodeCustomer);
-                                }
-                                List<RouteRule> codeRules = GetOrCreateDictionaryItem(codeCriteria.Code, customerRulesByCode);
-                                codeRules.Add(rule);
-                            }
-                            
-                        }
-                    }
-                }
+                ids1 = rule.Criteria.CustomerIds;
+                ids2 = rule.Criteria.Codes.Where(code => code.WithSubCodes).Select(code => code.Code);
+                return ids2.Count() > 0;
+            }
+            else
+            {
+                ids1 = null;
+                ids2 = null;
+                return false;
+            }
+        }
+
+        protected override bool AreIdsAvailable(int? customerId, int? productId, string code, long saleZoneId, out int id1, out string id2)
+        {
+            if (customerId != null && code != null)
+            {
+                id1 = customerId.Value;
+                id2 = code;
+                return true;
+            }
+            else
+            {
+                id1 = 0;
+                id2 = null;
+                return false;
             }
         }
 
         public override RouteRule GetMostMatchedRule(int? customerId, int? productId, string code, long saleZoneId)
         {
-            if (customerId != null && code != null)
+            if (code != null)
             {
-                Dictionary<string, List<RouteRule>> customerRulesByCode;
-                if (_rulesByCodeCustomer.TryGetValue(customerId.Value, out customerRulesByCode))
+                StringBuilder codeIterator = new StringBuilder(code);
+                while (codeIterator.Length > 1)
                 {
-                    StringBuilder codeIterator = new StringBuilder(code);
-                    while (codeIterator.Length > 1)
-                    {
-                        string parentCode = codeIterator.ToString();
-                        List<RouteRule> codeRules;
-                        if (customerRulesByCode.TryGetValue(parentCode, out codeRules))
-                        {
-                            foreach (var r in codeRules)
-                            {
-                                if (!r.Criteria.IsAnyExcluded(customerId, code, saleZoneId))
-                                {
-                                    return r;
-                                }
-                            }
-
-                        }
-                        codeIterator.Remove(codeIterator.Length - 1, 1);
-                    }
+                    string parentCode = codeIterator.ToString();
+                    RouteRule rule = base.GetMostMatchedRule(customerId, productId, parentCode, saleZoneId);
+                    if (rule != null)
+                        return rule;
+                    codeIterator.Remove(codeIterator.Length - 1, 1);
                 }
             }
             return null;

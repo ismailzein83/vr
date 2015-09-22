@@ -7,26 +7,26 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class RouteRulesBySubCode : RouteRulesByCriteria
+    public class RouteRulesBySubCode : RouteRulesByOneId<string>
     {
-        Dictionary<string, List<RouteRule>> _rulesByCode = new Dictionary<string, List<RouteRule>>();
-
-        public override void SetSource(List<RouteRule> rules)
+        protected override bool IsRuleMatched(RouteRule rule, out IEnumerable<string> ids)
         {
-            foreach (var rule in rules)
+            if (rule.Criteria.HasCodeFilter() && !rule.Criteria.HasCustomerFilter())
             {
-                if (rule.Criteria.HasCodeFilter() && !rule.Criteria.HasCustomerFilter())
-                {
-                    foreach (var codeCriteria in rule.Criteria.Codes)
-                    {
-                        if (codeCriteria.WithSubCodes)
-                        {
-                            List<RouteRule> codeRules = GetOrCreateDictionaryItem(codeCriteria.Code, _rulesByCode);
-                            codeRules.Add(rule);
-                        }
-                    }
-                }
+                ids = rule.Criteria.Codes.Where(code => code.WithSubCodes).Select(code => code.Code);
+                return ids.Count() > 0;
             }
+            else
+            {
+                ids = null;
+                return false;
+            }
+        }
+
+        protected override bool IsIdAvailable(int? customerId, int? productId, string code, long saleZoneId, out string id)
+        {
+            id = code;
+            return (id != null);
         }
 
         public override RouteRule GetMostMatchedRule(int? customerId, int? productId, string code, long saleZoneId)
@@ -36,18 +36,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 StringBuilder codeIterator = new StringBuilder(code);
                 while (codeIterator.Length > 1)
                 {
-                    List<RouteRule> codeRules;
                     string parentCode = codeIterator.ToString();
-                    if (_rulesByCode.TryGetValue(parentCode, out codeRules))
-                    {
-                        foreach (var r in codeRules)
-                        {
-                            if (!r.Criteria.IsAnyExcluded(customerId, code, saleZoneId))
-                            {
-                                return r;
-                            }
-                        }
-                    }
+                    RouteRule rule = base.GetMostMatchedRule(customerId, productId, parentCode, saleZoneId);
+                    if (rule != null)
+                        return rule;
                     codeIterator.Remove(codeIterator.Length - 1, 1);
                 }
             }

@@ -7,45 +7,38 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class RouteRulesByZoneProduct : RouteRulesByCriteria
+    public class RouteRulesByProductZone : RouteRulesByTwoIds<int, long>
     {
-        Dictionary<int, Dictionary<long, List<RouteRule>>> _rulesByZoneProduct = new Dictionary<int, Dictionary<long, List<RouteRule>>>();
-
-        public override void SetSource(List<RouteRule> rules)
+        protected override bool IsRuleMatched(RouteRule rule, out IEnumerable<int> ids1, out IEnumerable<long> ids2)
         {
-            foreach (var rule in rules)
-            {
-                if (rule.Criteria.RoutingProductId != null && rule.Criteria.HasZoneFilter())
-                {
-                    Dictionary<long, List<RouteRule>> productRulesByZone = GetOrCreateDictionaryItem(rule.Criteria.RoutingProductId.Value, _rulesByZoneProduct);
-                    foreach (var zoneId in rule.Criteria.ZoneIds)
-                    {
-                        List<RouteRule> zoneRules = GetOrCreateDictionaryItem(zoneId, productRulesByZone);
-                        zoneRules.Add(rule);
-                    }
-                }
-            }
+             if (rule.Criteria.RoutingProductId != null && rule.Criteria.HasZoneFilter())
+             {
+                 ids1 = new List<int> { rule.Criteria.RoutingProductId.Value };
+                 ids2 = rule.Criteria.ZoneIds;
+                 return true;
+             }
+             else
+             {
+                 ids1 = null;
+                 ids2 = null;
+                 return false;
+             }
         }
 
-        public override RouteRule GetMostMatchedRule(int? customerId, int? productId, string code, long saleZoneId)
+        protected override bool AreIdsAvailable(int? customerId, int? productId, string code, long saleZoneId, out int id1, out long id2)
         {
             if (productId != null)
             {
-                Dictionary<long, List<RouteRule>> productRulesByZone;
-                if (_rulesByZoneProduct.TryGetValue(productId.Value, out productRulesByZone))
-                {
-                    List<RouteRule> zoneRules;
-                    if (productRulesByZone.TryGetValue(saleZoneId, out zoneRules))
-                    {
-                        foreach (var r in zoneRules)
-                        {
-                            if (!r.Criteria.IsAnyExcluded(customerId, code, saleZoneId))
-                                return r;
-                        }
-                    }
-                }
+                id1 = productId.Value;
+                id2 = saleZoneId;
+                return true;
             }
-            return null;
+            else
+            {
+                id1 = 0;
+                id2 = 0;
+                return false;
+            }
         }
     }
 }

@@ -12,12 +12,12 @@ namespace TOne.WhS.BusinessEntity.Business
         public StructuredRouteRules StructureRules(List<RouteRule> rules)
         {
             StructuredRouteRules structuredRouteRules = new StructuredRouteRules { RouteRulesByCriteria = new List<RouteRulesByCriteria>() };
-            structuredRouteRules.RouteRulesByCriteria.Add(new RouteRulesByCodeCustomer());
-            structuredRouteRules.RouteRulesByCriteria.Add(new RouteRulesBySubCodeCustomer());
+            structuredRouteRules.RouteRulesByCriteria.Add(new RouteRulesByCustomerCode());
+            structuredRouteRules.RouteRulesByCriteria.Add(new RouteRulesByCustomerSubCode());
             structuredRouteRules.RouteRulesByCriteria.Add(new RouteRulesByCode());
             structuredRouteRules.RouteRulesByCriteria.Add(new RouteRulesBySubCode());
-            structuredRouteRules.RouteRulesByCriteria.Add(new RouteRulesByZoneCustomer());
-            structuredRouteRules.RouteRulesByCriteria.Add(new RouteRulesByZoneProduct());
+            structuredRouteRules.RouteRulesByCriteria.Add(new RouteRulesByCustomerZone());
+            structuredRouteRules.RouteRulesByCriteria.Add(new RouteRulesByProductZone());
             structuredRouteRules.RouteRulesByCriteria.Add(new RouteRulesByZone());
             structuredRouteRules.RouteRulesByCriteria.Add(new RouteRulesByCustomer());
             structuredRouteRules.RouteRulesByCriteria.Add(new RouteRulesByProduct());

@@ -31,5 +31,10 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return null;
         }
+
+        public override bool IsEmpty()
+        {
+            return _rulesByOthers.Count == 0;
+        }
     }
 }

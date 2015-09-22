@@ -7,42 +7,26 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class RouteRulesByCode : RouteRulesByCriteria
-    {
-        Dictionary<string, List<RouteRule>> _rulesByCode = new Dictionary<string, List<RouteRule>>();
-
-        public override void SetSource(List<RouteRule> rules)
+    public class RouteRulesByCode : RouteRulesByOneId<string>
+    {      
+        protected override bool IsRuleMatched(RouteRule rule, out IEnumerable<string> ids)
         {
-            foreach (var rule in rules)
+            if (rule.Criteria.HasCodeFilter() && !rule.Criteria.HasCustomerFilter())
             {
-                if (rule.Criteria.HasCodeFilter() && !rule.Criteria.HasCustomerFilter())
-                {
-                    foreach (var codeCriteria in rule.Criteria.Codes)
-                    {
-                        List<RouteRule> codeRules = GetOrCreateDictionaryItem(codeCriteria.Code, _rulesByCode);
-                        codeRules.Add(rule);
-                    }
-                }
+                ids = rule.Criteria.Codes.Select(code => code.Code);
+                return true;
+            }
+            else
+            {
+                ids = null;
+                return false;
             }
         }
 
-        public override RouteRule GetMostMatchedRule(int? customerId, int? productId, string code, long saleZoneId)
+        protected override bool IsIdAvailable(int? customerId, int? productId, string code, long saleZoneId, out string id)
         {
-            if (code != null)
-            {
-                List<RouteRule> codeRules;
-                if (_rulesByCode.TryGetValue(code, out codeRules))
-                {
-                    foreach (var r in codeRules)
-                    {
-                        if (!r.Criteria.IsAnyExcluded(customerId, code, saleZoneId))
-                        {
-                            return r;
-                        }
-                    }
-                }
-            }
-            return null;
+            id = code;
+            return (id != null);
         }
     }
 }
