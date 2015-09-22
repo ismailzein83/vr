@@ -73,6 +73,7 @@
     <Folder Include="PSTN_BE\" />
     <Folder Include="PSTN_BE\Tables\" />
     <Folder Include="PSTN_BE\Stored Procedures\" />
+    <Folder Include="dbo\Tables\" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="CDRAnalysis.PostDeployment.sql" />
@@ -148,5 +149,15 @@
     <Build Include="PSTN_BE\Stored Procedures\sp_SwitchType_GetAll.sql" />
     <Build Include="Security\PSTN_BE.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_Switch_CreateTempByFiltered.sql" />
+    <Build Include="FraudAnalysis\Tables\StagingCDR.sql" />
+    <Build Include="dbo\Tables\PSTNSampleData.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_Insert.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_GetByID.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_CreateTempByFiltered.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_Switch_Update.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_Switch_Insert.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_Switch_GetByID.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_Switch_GetAll.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_StagingCDR_GetByConnectDateTime.sql" />
   </ItemGroup>
 </Project>

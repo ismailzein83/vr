@@ -21,14 +21,9 @@ BEGIN
 			SELECT CONVERT(INT, ParsedString) FROM [FraudAnalysis].[ParseStringList](@SelectedTypeIDs)
 		END
 		
-		SELECT ID,
-			Name,
-			TypeID,
-			AreaCode
+		SELECT ID, Name, TypeID, AreaCode, TimeOffset
 		
-		INTO #RESULT
-		
-		FROM PSTN_BE.Switch
+		INTO #RESULT FROM PSTN_BE.Switch
 		
 		WHERE (@Name IS NULL OR Name LIKE '%' + @Name + '%')
 			AND (@SelectedTypeIDs IS NULL OR TypeID IN (SELECT TypeID FROM @TypeIDsTable))
