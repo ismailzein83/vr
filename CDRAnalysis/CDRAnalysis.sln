@@ -71,9 +71,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSTN.BusinessEntity.Busines
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSTN.BusinessEntity.Web", "PSTN.BusinessEntity.Web\PSTN.BusinessEntity.Web.csproj", "{54C7BAA5-24C5-4A02-85ED-6A06C1EF1F6A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.CDRImport.BP", "Vanrise.Fzero.CDRImport.BP\Vanrise.Fzero.CDRImport.BP.csproj", "{820B1C48-13BC-4522-BDD9-E061BB593406}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.CDRImport.BP.Activities", "Vanrise.Fzero.CDRImport.BP.Activities\Vanrise.Fzero.CDRImport.BP.Activities.csproj", "{FBAEC289-55E4-4326-B657-AA0E8CF38BFF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.CDRImport.BP.Arguments", "Vanrise.Fzero.CDRImport.BP.Arguments\Vanrise.Fzero.CDRImport.BP.Arguments.csproj", "{8C629DFD-0E97-4205-9F18-2A25962DE38F}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 27
+		SccNumberOfProjects = 30
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -181,6 +187,18 @@ Global
 		SccProjectTopLevelParentUniqueName26 = CDRAnalysis.sln
 		SccProjectName26 = PSTN.BusinessEntity.Web
 		SccLocalPath26 = PSTN.BusinessEntity.Web
+		SccProjectUniqueName27 = Vanrise.Fzero.CDRImport.BP\\Vanrise.Fzero.CDRImport.BP.csproj
+		SccProjectTopLevelParentUniqueName27 = CDRAnalysis.sln
+		SccProjectName27 = Vanrise.Fzero.CDRImport.BP
+		SccLocalPath27 = Vanrise.Fzero.CDRImport.BP
+		SccProjectUniqueName28 = Vanrise.Fzero.CDRImport.BP.Activities\\Vanrise.Fzero.CDRImport.BP.Activities.csproj
+		SccProjectTopLevelParentUniqueName28 = CDRAnalysis.sln
+		SccProjectName28 = Vanrise.Fzero.CDRImport.BP.Activities
+		SccLocalPath28 = Vanrise.Fzero.CDRImport.BP.Activities
+		SccProjectUniqueName29 = Vanrise.Fzero.CDRImport.BP.Arguments\\Vanrise.Fzero.CDRImport.BP.Arguments.csproj
+		SccProjectTopLevelParentUniqueName29 = CDRAnalysis.sln
+		SccProjectName29 = Vanrise.Fzero.CDRImport.BP.Arguments
+		SccLocalPath29 = Vanrise.Fzero.CDRImport.BP.Arguments
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -349,15 +367,39 @@ Global
 		{54C7BAA5-24C5-4A02-85ED-6A06C1EF1F6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54C7BAA5-24C5-4A02-85ED-6A06C1EF1F6A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{54C7BAA5-24C5-4A02-85ED-6A06C1EF1F6A}.Release|x64.ActiveCfg = Release|Any CPU
+		{820B1C48-13BC-4522-BDD9-E061BB593406}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{820B1C48-13BC-4522-BDD9-E061BB593406}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{820B1C48-13BC-4522-BDD9-E061BB593406}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{820B1C48-13BC-4522-BDD9-E061BB593406}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{820B1C48-13BC-4522-BDD9-E061BB593406}.Release|Any CPU.Build.0 = Release|Any CPU
+		{820B1C48-13BC-4522-BDD9-E061BB593406}.Release|x64.ActiveCfg = Release|Any CPU
+		{FBAEC289-55E4-4326-B657-AA0E8CF38BFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBAEC289-55E4-4326-B657-AA0E8CF38BFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBAEC289-55E4-4326-B657-AA0E8CF38BFF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FBAEC289-55E4-4326-B657-AA0E8CF38BFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBAEC289-55E4-4326-B657-AA0E8CF38BFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBAEC289-55E4-4326-B657-AA0E8CF38BFF}.Release|x64.ActiveCfg = Release|Any CPU
+		{8C629DFD-0E97-4205-9F18-2A25962DE38F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C629DFD-0E97-4205-9F18-2A25962DE38F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C629DFD-0E97-4205-9F18-2A25962DE38F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8C629DFD-0E97-4205-9F18-2A25962DE38F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C629DFD-0E97-4205-9F18-2A25962DE38F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C629DFD-0E97-4205-9F18-2A25962DE38F}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{73E469C6-3CCB-4414-8EF1-3EA3600F1EBA} = {7A71D2CF-9B16-4D57-89F1-C5B263DCFB77}
+		{7A71D2CF-9B16-4D57-89F1-C5B263DCFB77} = {3C4E16DF-262A-415D-857B-EA66894D6882}
+		{2068D29A-9DB3-4E50-83A3-C360CD6C3AC4} = {3C4E16DF-262A-415D-857B-EA66894D6882}
+		{0E777FBB-91E1-4BFE-AF5C-14EA29704D55} = {3C4E16DF-262A-415D-857B-EA66894D6882}
 		{3A5581DB-9680-4CD4-AF20-0339D02F5447} = {7A71D2CF-9B16-4D57-89F1-C5B263DCFB77}
 		{8EA7F723-709A-480A-9ECF-BE40C336A0CB} = {7A71D2CF-9B16-4D57-89F1-C5B263DCFB77}
+		{73E469C6-3CCB-4414-8EF1-3EA3600F1EBA} = {7A71D2CF-9B16-4D57-89F1-C5B263DCFB77}
 		{A4B118BE-DED8-429C-9EF8-EAB394085DFF} = {7A71D2CF-9B16-4D57-89F1-C5B263DCFB77}
+		{820B1C48-13BC-4522-BDD9-E061BB593406} = {7A71D2CF-9B16-4D57-89F1-C5B263DCFB77}
+		{FBAEC289-55E4-4326-B657-AA0E8CF38BFF} = {7A71D2CF-9B16-4D57-89F1-C5B263DCFB77}
+		{8C629DFD-0E97-4205-9F18-2A25962DE38F} = {7A71D2CF-9B16-4D57-89F1-C5B263DCFB77}
 		{5995A72F-0E1A-4C75-948D-6E0E2C717E49} = {B646C60C-E175-44BC-A0DB-617DE07E99AE}
 		{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983} = {1FFAF5A6-AC9C-4361-9ACD-1BFDDD87A336}
 		{417276C2-F440-4445-A688-0838CABA5E90} = {1FFAF5A6-AC9C-4361-9ACD-1BFDDD87A336}
@@ -380,8 +422,5 @@ Global
 		{AD66D689-5821-4A9E-A6C3-CE391E42BD75} = {0E777FBB-91E1-4BFE-AF5C-14EA29704D55}
 		{737D629A-9316-47C3-8320-E54364F30FB9} = {0E777FBB-91E1-4BFE-AF5C-14EA29704D55}
 		{54C7BAA5-24C5-4A02-85ED-6A06C1EF1F6A} = {0E777FBB-91E1-4BFE-AF5C-14EA29704D55}
-		{2068D29A-9DB3-4E50-83A3-C360CD6C3AC4} = {3C4E16DF-262A-415D-857B-EA66894D6882}
-		{7A71D2CF-9B16-4D57-89F1-C5B263DCFB77} = {3C4E16DF-262A-415D-857B-EA66894D6882}
-		{0E777FBB-91E1-4BFE-AF5C-14EA29704D55} = {3C4E16DF-262A-415D-857B-EA66894D6882}
 	EndGlobalSection
 EndGlobal
