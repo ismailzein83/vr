@@ -245,6 +245,7 @@
     <Compile Include="Tasks\MortadaTask.cs" />
     <Compile Include="Tasks\HaririTask.cs" />
     <Compile Include="Tasks\WalidTaskExec.cs" />
+    <Compile Include="Tasks\StagingtoNormalCDR.cs" />
     <Compile Include="Tasks\WalidTaskRelatedNumbers.cs" />
     <Compile Include="Tasks\WalidTaskAssignCase.cs" />
     <Compile Include="Tasks\WalidTaskProfile.cs" />
@@ -269,6 +270,18 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.BP.Activities\Vanrise.Fzero.CDRImport.BP.Activities.csproj">
+      <Project>{fbaec289-55e4-4326-b657-aa0e8cf38bff}</Project>
+      <Name>Vanrise.Fzero.CDRImport.BP.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.BP.Arguments\Vanrise.Fzero.CDRImport.BP.Arguments.csproj">
+      <Project>{8c629dfd-0e97-4205-9f18-2a25962de38f}</Project>
+      <Name>Vanrise.Fzero.CDRImport.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.BP\Vanrise.Fzero.CDRImport.BP.csproj">
+      <Project>{820b1c48-13bc-4522-bdd9-e061bb593406}</Project>
+      <Name>Vanrise.Fzero.CDRImport.BP</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Business\Vanrise.Fzero.CDRImport.Business.csproj">
       <Project>{a4b118be-ded8-429c-9ef8-eab394085dff}</Project>
       <Name>Vanrise.Fzero.CDRImport.Business</Name>

@@ -59,9 +59,12 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
         {
             List<StagingCDR> cdrs = new List<StagingCDR>();
             int totalCount = 0;
+            int index=0;
             IStagingCDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<IStagingCDRDataManager>();
             dataManager.LoadStagingCDR(inputArgument.FromDate, inputArgument.ToDate, 0, (cdr) =>
                 {
+                    index++;
+                    Console.WriteLine(index);
                     cdrs.Add(cdr);
                     if (cdrs.Count >= 100000)
                     {

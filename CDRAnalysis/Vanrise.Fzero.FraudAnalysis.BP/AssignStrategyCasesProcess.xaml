@@ -72,7 +72,6 @@
       <Parallel.Variables>
         <Variable x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailSummaryBatch)" Name="strategyExecutionDetailSummaries" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadStrategyExecutionDetailSummariesStatus" />
-        <Variable x:TypeArguments="x:String" Name="variable1" />
       </Parallel.Variables>
       <vffba1:LoadStrategyExecutionDetailSummaries sap2010:WorkflowViewState.IdRef="LoadStrategyExecutionDetailSummaries_2">
         <vffba1:LoadStrategyExecutionDetailSummaries.OutputQueue>
@@ -104,7 +103,7 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("Assigning Cases Ended")</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>d1FDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEFzc2lnblN0cmF0ZWd5Q2FzZXNQcm9jZXNzLnhhbWwMQQNsDgIBAUIFRhECARxHBWUQAgEFZgVqEQIBAkQJRG8CAR1NB1gjAgERWQdkHAIBBmgJaG0CAQNVDVV5AgEXUA1QoQECARJhDWFxAgEMXA1cmQECAQc=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1FDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEFzc2lnblN0cmF0ZWd5Q2FzZXNQcm9jZXNzLnhhbWwMQQNrDgIBAUIFRhECARhHBWQQAgEFZQVpEQIBAkQJRG8CARlMB1c1AgEPWAdjHAIBBmcJZ20CAQNUDVSLAQIBFE8NT6EBAgEQYA1ggwECAQtbDVuZAQIBBw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
