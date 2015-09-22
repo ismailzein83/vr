@@ -113,7 +113,7 @@ function SwitchEditorController($scope, SwitchAPIService, UtilsService, VRNaviga
 
         return SwitchAPIService.AddSwitch(switchObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Switch", response)) {
+                if (VRNotificationService.notifyOnItemAdded("Switch", response, "Name")) {
                     if ($scope.onSwitchAdded != undefined)
                         $scope.onSwitchAdded(response.InsertedObject);
 
