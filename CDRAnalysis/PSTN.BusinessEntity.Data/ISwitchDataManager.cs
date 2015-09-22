@@ -13,10 +13,12 @@ namespace PSTN.BusinessEntity.Data
 
         List<Switch> GetSwitches();
 
+        Switch GetSwitchByDataSourceID(int dataSourceID);
+
         bool UpdateSwitch(Switch switchObject);
 
         bool AddSwitch(Switch switchObject, out int insertedID);
 
-        Switch GetSwitchByDataSourceID(int dataSourceID);
+        bool DeleteSwitch(int switchID);
     }
 }

@@ -6,7 +6,8 @@
         GetSwitchByID: GetSwitchByID,
         GetSwitches: GetSwitches,
         UpdateSwitch: UpdateSwitch,
-        AddSwitch: AddSwitch
+        AddSwitch: AddSwitch,
+        DeleteSwitch: DeleteSwitch
     });
 
     function GetSwitchTypes() {
@@ -33,5 +34,11 @@
 
     function AddSwitch(switchObject) {
         return BaseAPIService.post("/api/Switch/AddSwitch", switchObject);
+    }
+
+    function DeleteSwitch(switchID) {
+        return BaseAPIService.get("/api/Switch/DeleteSwitch", {
+            switchID: switchID
+        });
     }
 });

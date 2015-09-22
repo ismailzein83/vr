@@ -66,6 +66,12 @@ namespace PSTN.BusinessEntity.Data.SQL
             return (recordsAffected > 0);
         }
 
+        public bool DeleteSwitch(int switchID)
+        {
+            int recordsEffected = ExecuteNonQuerySP("PSTN_BE.sp_Switch_Delete", switchID);
+            return (recordsEffected > 0);
+        }
+
         #region Mappers
 
         SwitchType SwitchTypeMapper(IDataReader reader)

@@ -11,5 +11,7 @@ namespace PSTN.BusinessEntity.Data
         bool AddSwitchTrunk(SwitchTrunk trunkObject, out int insertedID);
 
         bool UpdateSwitchTrunk(SwitchTrunk trunkObject);
+
+        bool DeleteSwitchTrunk(int trunkID);
     }
 }

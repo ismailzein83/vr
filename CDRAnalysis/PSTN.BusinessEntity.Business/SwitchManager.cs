@@ -84,5 +84,20 @@ namespace PSTN.BusinessEntity.Business
 
             return insertOperationOutput;
         }
+
+        public DeleteOperationOutput<object> DeleteSwitch(int switchID)
+        {
+            DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
+            deleteOperationOutput.Result = DeleteOperationResult.Failed;
+
+            ISwitchDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchDataManager>();
+
+            bool deleted = dataManager.DeleteSwitch(switchID);
+
+            if (deleted)
+                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+
+            return deleteOperationOutput;
+        }
     }
 }

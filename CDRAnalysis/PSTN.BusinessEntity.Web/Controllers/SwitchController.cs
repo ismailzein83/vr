@@ -49,5 +49,12 @@ namespace PSTN.BusinessEntity.Web.Controllers
             SwitchManager manager = new SwitchManager();
             return manager.AddSwitch(switchObject);
         }
+
+        [HttpGet]
+        public DeleteOperationOutput<object> DeleteSwitch(int switchID)
+        {
+            SwitchManager manager = new SwitchManager();
+            return manager.DeleteSwitch(switchID);
+        }
     }
 }

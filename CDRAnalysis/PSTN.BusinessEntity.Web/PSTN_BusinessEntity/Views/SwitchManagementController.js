@@ -120,10 +120,16 @@ function SwitchManagementController($scope, SwitchAPIService, DataSourceAPIServi
     }
 
     function defineMenuActions() {
-        $scope.gridMenuActions = [{
-            name: "Edit",
-            clicked: editSwitch
-        }];
+        $scope.gridMenuActions = [
+            {
+                name: "Edit",
+                clicked: editSwitch
+            },
+            {
+                name: "Delete",
+                clicked: deleteSwitch
+            }
+        ];
     }
     
     function editSwitch(gridObject) {
@@ -148,6 +154,23 @@ function SwitchManagementController($scope, SwitchAPIService, DataSourceAPIServi
         };
 
         VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/SwitchEditor.html", parameters, modalSettings);
+    }
+
+    function deleteSwitch(gridObject) { // ?
+
+        VRNotificationService.showConfirmation()
+            .then(function (response) {
+                if (response == true) {
+                    return SwitchAPIService.DeleteSwitch(gridObject.ID)
+                        .then(function (deletionResponse) {
+                            VRNotificationService.notifyOnItemDeleted("Switch", deletionResponse);
+                            return retrieveData(); // ?
+                        })
+                        .catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                }
+            });
     }
 }
 

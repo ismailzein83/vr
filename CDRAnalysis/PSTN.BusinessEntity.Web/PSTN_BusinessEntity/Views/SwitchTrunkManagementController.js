@@ -108,10 +108,16 @@ function SwitchTrunkManagementController($scope, SwitchTrunkAPIService, SwitchAP
     }
 
     function defineMenuActions() {
-        $scope.gridMenuActions = [{
-            name: "Edit",
-            clicked: editTrunk
-        }];
+        $scope.gridMenuActions = [
+            {
+                name: "Edit",
+                clicked: editTrunk
+            },
+            {
+                name: "Delete",
+                clicked: deleteTrunk
+            }
+        ];
     }
 
     function editTrunk(gridObject) {
@@ -137,6 +143,22 @@ function SwitchTrunkManagementController($scope, SwitchTrunkAPIService, SwitchAP
         };
 
         VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/SwitchTrunkEditor.html", parameters, modalSettings);
+    }
+
+    function deleteTrunk(gridObject) { // ?
+        VRNotificationService.showConfirmation()
+            .then(function (response) {
+                if (response == true) {
+                    return SwitchTrunkAPIService.DeleteSwitchTrunk(gridObject.ID)
+                        .then(function (deletionResponse) {
+                            VRNotificationService.notifyOnItemDeleted("Switch Trunk", deletionResponse);
+                            return retrieveData(); // ?
+                        })
+                        .catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                }
+            });
     }
 }
 

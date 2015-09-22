@@ -52,6 +52,12 @@ namespace PSTN.BusinessEntity.Data.SQL
             return (recordsAffected > 0);
         }
 
+        public bool DeleteSwitchTrunk(int trunkID)
+        {
+            int recordsEffected = ExecuteNonQuerySP("PSTN_BE.sp_SwitchTrunk_Delete", trunkID);
+            return (recordsEffected > 0);
+        }
+
         #region Mappers
 
         SwitchTrunkDetail SwitchTrunkDetailMapper(IDataReader reader)
