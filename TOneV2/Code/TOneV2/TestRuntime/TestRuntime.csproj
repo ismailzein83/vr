@@ -402,6 +402,14 @@
       <Project>{244516F9-E7B8-47D0-B3AF-EC24631BA485}</Project>
       <Name>TOne.LCRProcess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.CodePreparation.BP.Arguments\TOne.WhS.CodePreparation.BP.Arguments.csproj">
+      <Project>{ac6889a0-853c-4ff2-b2e4-a5b358065ec3}</Project>
+      <Name>TOne.WhS.CodePreparation.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.CodePreparation.BP\TOne.WhS.CodePreparation.BP.csproj">
+      <Project>{3ee2e4dc-7474-4cf9-87eb-3dea72c97496}</Project>
+      <Name>TOne.WhS.CodePreparation.BP</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
