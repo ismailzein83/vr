@@ -1,6 +1,6 @@
-﻿RoutingProductEditorController.$inject = ['$scope', 'RoutingProductAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService'];
+﻿RoutingProductEditorController.$inject = ['$scope', 'WhS_BE_RoutingProductAPIService', 'WhS_BE_SaleZonePackageAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService'];
 
-function RoutingProductEditorController($scope, RoutingProductAPIService, UtilsService, VRNotificationService, VRNavigationService) {
+function RoutingProductEditorController($scope, WhS_BE_RoutingProductAPIService, WhS_BE_SaleZonePackageAPIService, UtilsService, VRNotificationService, VRNavigationService) {
 
     var editMode;
     var routingProductId;
@@ -32,25 +32,22 @@ function RoutingProductEditorController($scope, RoutingProductAPIService, UtilsS
             $scope.modalContext.closeModal()
         };
 
+        $scope.saleZoneGroupTemplates = [];
+        $scope.selectedSaleZoneGroupTemplate = undefined;
+
+        $scope.suppliersGroupTemplates = [];
+        $scope.selectedSupplierGroupTemplate = undefined;
+
+        $scope.saleZonePackages = [];
+        $scope.selectedSaleZonePackage = undefined;
+
         $scope.saleZoneGroups = {};
         $scope.suppliersGroups = {};
-
-        //$scope.adapterTypes = [];
-        //$scope.executionFlows = [];
-        //$scope.dataSourceAdapter = {};
-        //$scope.dataSourceAdapter.argument = {};
-        //$scope.dataSourceAdapter.adapterState = {};
-
-        //$scope.schedulerTaskTrigger = {};
-        //$scope.timeTriggerTemplateURL = undefined;
-
-        //$scope.startEffDate = new Date();
-        //$scope.endEffDate = undefined;
     }
 
     function load() {
         $scope.isGettingData = true;
-        return UtilsService.waitMultipleAsyncOperations([loadSaleZoneGroups, loadSuppliersGroups]).then(function () {
+        return UtilsService.waitMultipleAsyncOperations([loadSaleZonePackages, loadSaleZoneGroupTemplates, loadSuppliersGroupTemplates]).then(function () {
             if (editMode) {
                 getRoutingProduct();
             }
@@ -65,7 +62,7 @@ function RoutingProductEditorController($scope, RoutingProductAPIService, UtilsS
     }
 
     function getRoutingProduct() {
-        return RoutingProductAPIService.GetRoutingProduct(routingProductId).then(function (routingProduct) {
+        return WhS_BE_RoutingProductAPIService.GetRoutingProduct(routingProductId).then(function (routingProduct) {
 
             fillScopeFromRoutingProductObj(routingProduct);
 
@@ -76,20 +73,28 @@ function RoutingProductEditorController($scope, RoutingProductAPIService, UtilsS
         });
     }
 
-    function loadSaleZoneGroups() {
-        //return DataSourceAPIService.GetDataSourceAdapterTypes().then(function (response) {
-        //    angular.forEach(response, function (item) {
-        //        $scope.adapterTypes.push(item);
-        //    });
-        //});
+    function loadSaleZonePackages() {
+        return WhS_BE_SaleZonePackageAPIService.GetSaleZonePackages().then(function (response) {
+            angular.foreach(response, function (item) {
+                $scope.saleZonePackages.push(item);
+            });
+        });
     }
 
-    function loadSuppliersGroups() {
-        //return DataSourceAPIService.GetExecutionFlows().then(function (response) {
-        //    angular.forEach(response, function (item) {
-        //        $scope.executionFlows.push(item);
-        //    });
-        //});
+    function loadSaleZoneGroupTemplates() {
+        return WhS_BE_RoutingProductAPIService.GetSaleZoneGroupTemplates().then(function (response) {
+            angular.forEach(response, function (item) {
+                $scope.saleZoneGroupTemplates.push(item);
+            });
+        });
+    }
+
+    function loadSuppliersGroupTemplates() {
+        return WhS_BE_RoutingProductAPIService.GetSuppliersGroupTemplates().then(function (response) {
+            angular.forEach(response, function (item) {
+                $scope.suppliersGroupTemplates.push(item);
+            });
+        });
     }
 
     function buildRoutingProductObjFromScope() {
@@ -97,7 +102,13 @@ function RoutingProductEditorController($scope, RoutingProductAPIService, UtilsS
         var routingProduct = {
             RoutingProductId: (routingProductId != null) ? routingProductId : 0,
             Name: $scope.routingProductName,
-            Settings: { Zones: $scope.saleZoneGroups.getData(), Suppliers: $scope.suppliersGroup.getData()}
+            SaleZonePackageId: $scope.selectedSaleZonePackage.SaleZonePackageId,
+            Settings: {
+                SaleZoneGroupConfigId: $scope.selectedSaleZoneGroupTemplate.TemplateConfigID,
+                Zones: $scope.saleZoneGroups.getData(),
+                SuppliersGroupConfigId: $scope.selectedSupplierGroupTemplate.TemplateConfigID,
+                Suppliers: $scope.suppliersGroup.getData()
+            }
         };
 
         return routingProduct;
@@ -105,6 +116,10 @@ function RoutingProductEditorController($scope, RoutingProductAPIService, UtilsS
 
     function fillScopeFromRoutingProductObj(routingProductObj) {
         $scope.routingProductName = routingProductObj.Name;
+        $scope.selectedSaleZonePackage = UtilsService.getItemByVal($scope.saleZonePackages, routingProductObj.SaleZonePackageId, "SaleZonePackageId");
+
+        $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, routingProductObj.SaleZoneGroupConfigId, "TemplateConfigID");
+        $scope.selectedSupplierGroupTemplate = UtilsService.getItemByVal($scope.suppliersGroupTemplates, routingProductObj.SuppliersGroupConfigId, "TemplateConfigID");
 
         $scope.saleZoneGroups.data = routingProductObj.Settings.Zones;
 
@@ -119,7 +134,7 @@ function RoutingProductEditorController($scope, RoutingProductAPIService, UtilsS
 
     function insertRoutingProduct() {
         var routingProductObject = buildRoutingProductObjFromScope();
-        return RoutingProductAPIService.AddRoutingProduct(routingProductObject)
+        return WhS_BE_RoutingProductAPIService.AddRoutingProduct(routingProductObject)
         .then(function (response) {
             if (VRNotificationService.notifyOnItemAdded("Routing Product", response)) {
                 if ($scope.onRoutingProductAdded != undefined)
@@ -133,10 +148,10 @@ function RoutingProductEditorController($scope, RoutingProductAPIService, UtilsS
     }
 
     function updateRoutingProduct() {
-        var dataSourceObject = buildRoutingProductObjFromScope();
-        RoutingProductAPIService.UpdateRoutingProduct(routingProductObject)
+        var routingProductObject = buildRoutingProductObjFromScope();
+        WhS_BE_RoutingProductAPIService.UpdateRoutingProduct(routingProductObject)
         .then(function (response) {
-            if (VRNotificationService.notifyOnItemUpdated("Data Source", response)) {
+            if (VRNotificationService.notifyOnItemUpdated("Routing Product", response)) {
                 if ($scope.onRoutingProductUpdated != undefined)
                     $scope.onRoutingProductUpdated(response.UpdatedObject);
                 $scope.modalContext.closeModal();

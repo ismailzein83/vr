@@ -65,6 +65,7 @@
     <Compile Include="RoutingProduct\RoutingRule\RouteRuleCriteria.cs" />
     <Compile Include="RoutingProduct\RoutingRule\RouteRuleSettings.cs" />
     <Compile Include="RoutingProduct\RoutingRule\StructuredRouteRules.cs" />
+    <Compile Include="SaleZone\SaleZoneInfo.cs" />
     <Compile Include="SaleZone\SaleCode.cs" />
     <Compile Include="SaleZone\SaleRate.cs" />
     <Compile Include="SaleZone\SaleZone.cs" />

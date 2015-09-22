@@ -16,8 +16,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public List<int> SupplierIds { get; set; }
     }
 
-    public class AllSuppliersSettings : SuppliersGroupSettings
-    {
+    //public class AllSuppliersSettings : SuppliersGroupSettings
+    //{
         
-    }
+    //}
 }

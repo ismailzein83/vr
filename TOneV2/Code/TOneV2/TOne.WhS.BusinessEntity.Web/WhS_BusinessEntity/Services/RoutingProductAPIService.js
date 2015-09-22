@@ -1,5 +1,5 @@
 ﻿
-app.service('RoutingProductAPIService', function (BaseAPIService) {
+app.service('WhS_BE_RoutingProductAPIService', function (BaseAPIService) {
 
     return ({
 
@@ -21,4 +21,11 @@ app.service('RoutingProductAPIService', function (BaseAPIService) {
         return BaseAPIService.post("/api/RoutingProduct/UpdateRoutingProduct", routingProductObject);
     }
 
+    function GetSaleZoneGroupTemplates() {
+        return BaseAPIService.get("/api/RoutingProduct/GetSaleZoneGroupTemplates");
+    }
+
+    function GetSuppliersGroupTemplates() {
+        return BaseAPIService.get("/api/RoutingProduct/GetSuppliersGroupTemplates");
+    }
 });

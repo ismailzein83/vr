@@ -7,7 +7,10 @@ function SelectiveSuppliersTemplateController($scope, SaleZoneAPIService, UtilsS
 
     function defineScope() {
 
-        $scope.saleZones = [];
+        $scope.searchZones = function (filter) {
+            return SaleZoneAPIService.GetSalesZonesInfo($scope.saleZoneGroups.saleZonePackageId, filter);
+        }
+
         $scope.selectedSaleZones = [];
 
         $scope.saleZoneGroups.getData = function () {
@@ -23,10 +26,7 @@ function SelectiveSuppliersTemplateController($scope, SaleZoneAPIService, UtilsS
         }
 
         $scope.dataSourceAdapter.resetSaleZoneSelection = function () {
-            $scope.saleZones = [];
             $scope.selectedSaleZones = [];
-
-            
         }
     }
 
@@ -38,43 +38,20 @@ function SelectiveSuppliersTemplateController($scope, SaleZoneAPIService, UtilsS
 
         var data = $scope.saleZoneGroups.data;
         if (data != null) {
-            angular.forEach(response, function (item) {
-                var saleZone = UtilsService.getItemByVal($scope.)
-                $scope.selectedSaleZones.push()
+            SaleZoneAPIService.GetSaleZonesInfoByIds($scope.saleZoneGroups.saleZonePackageId, $scope.saleZoneGroups.data.ZoneIds).then(function (response) {
+                angular.forEach(response, function (item) {
+                    $scope.selectedSaleZones.push(item);
+                });
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
-            $scope.selectedSaleZones = Utils. data.ConnectionString;
-            $scope.query = argumentData.Query;
-        }
-
-        var adapterState = $scope.dataSourceAdapter.adapterState.data;
-        if (adapterState != null) {
-            $scope.lastImportedId = adapterState.LastImportedId;
         }
 
         isFormLoaded = true;
     }
 
     function load() {
-        return SaleZoneAPIService.GetSaleZones($scope.saleZoneGroups.saleZonePackageId).then(function (response){
-            angular.forEach(response, function (item) {
-                $scope.saleZones.push(item);
-                loadForm();
-            });
-        }).catch(function (error) {
-            VRNotificationService.notifyException(error, $scope);
-        });
-        
-        getSaleZones().then(function())
-        {
-
-        
+        loadForm();
     }
-
-    function getSaleZones()
-    {
-        
-    }
-
-
 }
-appControllers.controller('WhS_BusinessEntity_SelectiveSuppliersTemplateController', SelectiveSuppliersTemplateController);
+appControllers.controller('WhS_BE_SelectiveSuppliersTemplateController', SelectiveSuppliersTemplateController);
