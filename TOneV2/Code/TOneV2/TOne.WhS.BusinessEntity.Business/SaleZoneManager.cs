@@ -10,23 +10,23 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SaleZoneManager
     {
-        public List<SaleZone> GetSaleZones(int packageId)
+        public List<SaleZone> GetSaleZones(int packageId,DateTime effectiveDate)
         {
             ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
-            return dataManager.GetSaleZones(packageId);
+            return dataManager.GetSaleZones(packageId,effectiveDate);
         }
 
-        public Dictionary<string, List<SaleCode>> GetSaleZonesWithCodes(int packageId)
+        public Dictionary<string, List<SaleCode>> GetSaleZonesWithCodes(int packageId,DateTime effectiveDate)
         {
             Dictionary<string, List<SaleCode>> saleZoneDictionary = new Dictionary<string, List<SaleCode>>();
-            List<SaleZone> salezones = GetSaleZones(packageId);
+            List<SaleZone> salezones = GetSaleZones(packageId, effectiveDate);
             if (salezones != null && salezones.Count>0)
             {
                 SaleCodeManager manager = new SaleCodeManager();
                 foreach (SaleZone saleZone in salezones)
                 {
 
-                    List<SaleCode> saleCodes = manager.GetSaleCodesByZoneID(saleZone.SaleZoneId);
+                    List<SaleCode> saleCodes = manager.GetSaleCodesByZoneID(saleZone.SaleZoneId, effectiveDate);
                     List<SaleCode> saleCodesOut;
                     if (!saleZoneDictionary.TryGetValue(saleZone.Name, out saleCodesOut))
                         saleZoneDictionary.Add(saleZone.Name, saleCodes);

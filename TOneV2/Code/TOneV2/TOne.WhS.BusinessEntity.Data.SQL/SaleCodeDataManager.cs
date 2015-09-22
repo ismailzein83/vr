@@ -17,9 +17,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
           
         }
-        public List<SaleCode> GetSaleCodesByZoneID(long zoneID)
+        public List<SaleCode> GetSaleCodesByZoneID(long zoneID,DateTime effectiveDate)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleCode_ByZondId", SaleCodeMapper, zoneID);
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_ByZondId", SaleCodeMapper, zoneID, effectiveDate);
         }
         SaleCode SaleCodeMapper(IDataReader reader)
         {
@@ -27,7 +27,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             {
                 SaleCodeId = (long)reader["ID"],
                 Code = reader["Code"] as string,
-                ZoneId = GetReaderValue<int>(reader, "ZoneID"),
+                ZoneId = GetReaderValue<long>(reader, "ZoneID"),
                 BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BED"),
                 EndEffectiveDate = GetReaderValue<DateTime>(reader, "EED")
             };
@@ -66,6 +66,49 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public void ApplySaleCodesForDB(object preparedSaleCodes)
         {
             InsertBulkToTable(preparedSaleCodes as BaseBulkInsertInfo);
+        }
+
+
+        public void DeleteSaleCodes(List<SaleCode> saleCodes)
+        {
+            DataTable dtSaleZCodesToUpdate = GetSaleCodesTable();
+
+            dtSaleZCodesToUpdate.BeginLoadData();
+
+            foreach (var item in saleCodes)
+            {
+                SaleCode saleCode = new SaleCode
+                {
+                    SaleCodeId = item.SaleCodeId,
+                    EndEffectiveDate = item.EndEffectiveDate
+                };
+                DataRow dr = dtSaleZCodesToUpdate.NewRow();
+                FillSaleCodeRow(dr, saleCode);
+                dtSaleZCodesToUpdate.Rows.Add(dr);
+            }
+            if (dtSaleZCodesToUpdate.Rows.Count > 0)
+                ExecuteNonQuerySPCmd("[TOneWhS_BE].[sp_SaleCode_Update]",
+                    (cmd) =>
+                    {
+                        var dtPrm = new System.Data.SqlClient.SqlParameter("@SaleCodes", SqlDbType.Structured);
+                        dtPrm.Value = dtSaleZCodesToUpdate;
+                        cmd.Parameters.Add(dtPrm);
+                    }
+                    );
+        }
+
+
+        DataTable GetSaleCodesTable()
+        {
+            DataTable dt = new DataTable("SaleCodes");
+            dt.Columns.Add("ID", typeof(long));
+            dt.Columns.Add("EED", typeof(DateTime));
+            return dt;
+        }
+        void FillSaleCodeRow(DataRow dr, SaleCode saleCode)
+        {
+            dr["ID"] = saleCode.SaleCodeId;
+            dr["EED"] = saleCode.EndEffectiveDate;
         }
     }
 }
