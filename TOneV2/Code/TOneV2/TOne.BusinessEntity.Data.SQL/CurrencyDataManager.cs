@@ -10,7 +10,7 @@ using TOne.Data.SQL;
 
 namespace TOne.BusinessEntity.Data.SQL
 {
-    public class CurrencyDataManager : BaseTOneDataManager, ICurrencyDataManager 
+    public class CurrencyDataManager : BaseTOneDataManager, ICurrencyDataManager
     {
         public List<Currency> GetCurrencies()
         {
@@ -32,6 +32,16 @@ namespace TOne.BusinessEntity.Data.SQL
                 CurrencyFullName = (reader["CurrencyID"] + " - " + reader["Name"]) as string
             };
             return module;
+        }
+
+        public List<Currency> GetVisibleCurrencies()
+        {
+            return GetItemsSP("[BEntity].[sp_Currency_GetVisible]", CurrencyMapper);
+        }
+
+        public Currency GetCurrencyByCarrierId(string carrierId)
+        {
+            return GetItemSP("[BEntity].[sp_Currency_GetCurrencyByCarrierId]", CurrencyMapper, carrierId);
         }
     }
 }

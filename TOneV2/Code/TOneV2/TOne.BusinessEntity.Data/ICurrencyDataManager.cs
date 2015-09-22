@@ -10,5 +10,9 @@ namespace TOne.BusinessEntity.Data
     public interface ICurrencyDataManager : IDataManager
     {
         List<Currency> GetCurrencies();
+
+        List<Currency> GetVisibleCurrencies();
+
+        Currency GetCurrencyByCarrierId(string carrierId);
     }
 }
