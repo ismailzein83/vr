@@ -13,7 +13,8 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             if (rule.Criteria.HasCustomerFilter() && !rule.Criteria.HasZoneFilter() && !rule.Criteria.HasCodeFilter())
             {
-                ids = rule.Criteria.CustomerIds;
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                ids = carrierAccountManager.GetCustomerIds(rule.Criteria.CustomersGroupConfigId.Value, rule.Criteria.CustomerGroupSettings);
                 return true;
             }
             else

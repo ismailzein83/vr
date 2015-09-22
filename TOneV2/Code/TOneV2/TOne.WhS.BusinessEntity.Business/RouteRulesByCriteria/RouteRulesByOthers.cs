@@ -26,7 +26,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             foreach (var r in _rulesByOthers)
             {
-                if (!r.Criteria.IsAnyExcluded(customerId, code, saleZoneId))
+                if (!RouteRuleManager.IsAnyFilterExcludedInRuleCriteria(r.Criteria, customerId, code, saleZoneId))
                     return r;
             }
             return null;

@@ -13,6 +13,10 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public List<string> ExcludedCodes { get; set; }
 
+        public int? SaleZoneGroupConfigId { get; set; }
+
+        public SaleZoneGroupSettings SaleZoneGroupSettings { get; set; }
+
         public List<long> ZoneIds { get; set; }
 
         public List<long> ExcludedZoneIds { get; set; }
@@ -21,15 +25,9 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public CustomerGroupSettings CustomerGroupSettings { get; set; }
 
-        public List<int> CustomerIds { get; set; }
-
-        public List<int> ExcludedCustomerIds { get; set; }
-
-
-
         public bool HasCustomerFilter()
         {
-            return this.CustomersGroupConfigId.HasValue && (this.CustomerGroupSettings == null || !this.CustomerGroupSettings.IsAllExcept); //this.CustomerIds != null && this.CustomerIds.Count > 0;
+            return this.CustomersGroupConfigId.HasValue && (this.CustomerGroupSettings == null || !this.CustomerGroupSettings.IsAllExcept); 
         }
 
         public bool HasCodeFilter()
@@ -39,19 +37,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public bool HasZoneFilter()
         {
-            return this.ZoneIds != null && this.ZoneIds.Count > 0;
-        }
-
-        public bool IsAnyExcluded(int? customerId, string code, long zoneId)
-        {            
-            return (customerId != null && IsItemInList(customerId.Value, this.ExcludedCustomerIds)) 
-                || IsItemInList(code, this.ExcludedCodes) 
-                || IsItemInList(zoneId, this.ExcludedZoneIds);
-        }
-
-        bool IsItemInList<T>(T item, List<T> list)
-        {
-            return item != null && list != null && list.Contains(item);
+            return this.SaleZoneGroupConfigId.HasValue && (this.SaleZoneGroupSettings == null || !this.SaleZoneGroupSettings.IsAllExcept);
         }
     }
 

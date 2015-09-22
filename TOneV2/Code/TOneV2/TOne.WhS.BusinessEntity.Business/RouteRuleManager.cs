@@ -26,5 +26,28 @@ namespace TOne.WhS.BusinessEntity.Business
                 r.SetSource(rules);
             return structuredRouteRules;
         }
+
+        public static bool IsAnyFilterExcludedInRuleCriteria(RouteRuleCriteria ruleCriteria, int? customerId, string code, long zoneId)
+        {
+            if(customerId.HasValue)
+            {
+                if(ruleCriteria.CustomersGroupConfigId.HasValue && ruleCriteria.CustomerGroupSettings != null && ruleCriteria.CustomerGroupSettings.IsAllExcept)
+                {
+                    CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                    IEnumerable<int> excludedCustomerIds = carrierAccountManager.GetCustomerIds(ruleCriteria.CustomersGroupConfigId.Value, ruleCriteria.CustomerGroupSettings);
+                    if (excludedCustomerIds != null && excludedCustomerIds.Contains(customerId.Value))
+                        return true;
+                }
+            }
+            if (code != null && ruleCriteria.ExcludedCodes != null && ruleCriteria.ExcludedCodes.Contains(code))
+                return true;
+            return false;
+            //return  IsItemInList(zoneId, ruleCriteria.ExcludedZoneIds);
+        }
+
+        static bool IsItemInList<T>(T item, List<T> list)
+        {
+            return item != null && list != null && list.Contains(item);
+        }
     }
 }
