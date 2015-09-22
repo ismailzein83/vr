@@ -17,13 +17,19 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public List<long> ExcludedZoneIds { get; set; }
 
+        public int? CustomersGroupConfigId { get; set; }
+
+        public CustomerGroupSettings CustomerGroupSettings { get; set; }
+
         public List<int> CustomerIds { get; set; }
 
         public List<int> ExcludedCustomerIds { get; set; }
 
+
+
         public bool HasCustomerFilter()
         {
-            return this.CustomerIds != null && this.CustomerIds.Count > 0;
+            return this.CustomersGroupConfigId.HasValue && (this.CustomerGroupSettings == null || !this.CustomerGroupSettings.IsAllExcept); //this.CustomerIds != null && this.CustomerIds.Count > 0;
         }
 
         public bool HasCodeFilter()

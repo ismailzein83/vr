@@ -11,5 +11,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public const string SaleZoneGroupConfigType = "Sale Zone Group";
         
         public const string SuppliersGroupConfigType = "Suppliers Group";
+
+        public const string CustomersGroupConfigType = "WhS_BusinessEntity_CustomersGroup";
     }
 }
