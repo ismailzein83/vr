@@ -16,5 +16,7 @@ namespace PSTN.BusinessEntity.Data
         bool UpdateSwitch(Switch switchObject);
 
         bool AddSwitch(Switch switchObject, out int insertedID);
+
+        Switch GetSwitchByDataSourceID(int dataSourceID);
     }
 }
