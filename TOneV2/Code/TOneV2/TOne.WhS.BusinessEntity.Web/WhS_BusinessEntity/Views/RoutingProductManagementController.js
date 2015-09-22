@@ -13,6 +13,7 @@ function RoutingProductManagementController($scope, WhS_BE_RoutingProductAPIServ
         $scope.gridMenuActions = [];
 
         $scope.saleZonePackages = [];
+        $scope.selectedSaleZonePackages = [];
 
         defineMenuActions();
 
@@ -22,7 +23,7 @@ function RoutingProductManagementController($scope, WhS_BE_RoutingProductAPIServ
         };
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            return RoutingProductAPIService.GetFilteredRoutingProducts(dataRetrievalInput)
+            return WhS_BE_RoutingProductAPIService.GetFilteredRoutingProducts(dataRetrievalInput)
                 .then(function (response) {
                     onResponseReady(response);
                 })

@@ -11,6 +11,8 @@ namespace TOne.WhS.BusinessEntity.Data
     {
         Vanrise.Entities.BigResult<Entities.RoutingProduct> GetFilteredRoutingProducts(Vanrise.Entities.DataRetrievalInput<Entities.RoutingProductQuery> input);
 
+        RoutingProduct GetRoutingProduct(int routingProductId);
+
         bool Insert(RoutingProduct routingProduct, out int insertedId);
 
         bool Update(RoutingProduct routingProduct);

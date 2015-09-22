@@ -4,6 +4,7 @@ app.service('WhS_BE_RoutingProductAPIService', function (BaseAPIService) {
     return ({
 
         GetFilteredRoutingProducts: GetFilteredRoutingProducts,
+        GetRoutingProduct: GetRoutingProduct,
         AddRoutingProduct: AddRoutingProduct,
         UpdateRoutingProduct: UpdateRoutingProduct,
         GetSaleZoneGroupTemplates: GetSaleZoneGroupTemplates,
@@ -11,8 +12,14 @@ app.service('WhS_BE_RoutingProductAPIService', function (BaseAPIService) {
     });
 
 
-    function GetFilteredRoutingProducts() {
-        return BaseAPIService.post("/api/RoutingProduct/GetFilteredRoutingProducts");
+    function GetFilteredRoutingProducts(input) {
+        return BaseAPIService.post("/api/RoutingProduct/GetFilteredRoutingProducts", input);
+    }
+
+    function GetRoutingProduct(routingProductId) {
+        return BaseAPIService.get("/api/RoutingProduct/GetRoutingProduct", {
+            routingProductId: routingProductId
+        });
     }
 
     function AddRoutingProduct(routingProductObject) {

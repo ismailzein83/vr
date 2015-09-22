@@ -27,10 +27,19 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("TOneWhS_BE.sp_RoutingProduct_CreateTempByFiltered", tempTableName);
+                string saleZonePackageIdsParam = null;
+                if (input.Query.SaleZonePackageIds != null)
+                    saleZonePackageIdsParam = string.Join(",", input.Query.SaleZonePackageIds);
+                
+                ExecuteNonQuerySP("TOneWhS_BE.sp_RoutingProduct_CreateTempByFiltered", tempTableName, input.Query.Name, saleZonePackageIdsParam);
             };
 
             return RetrieveData(input, createTempTableAction, RoutingProductMapper, _columnMapper);
+        }
+
+        public Entities.RoutingProduct GetRoutingProduct(int routingProductId)
+        {
+            return GetItemSP("TOneWhS_BE.sp_RoutingProduct_Get", RoutingProductMapper, routingProductId);
         }
 
         public bool Insert(Entities.RoutingProduct routingProduct, out int insertedId)
@@ -57,12 +66,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             {
                 RoutingProductId = (int)reader["ID"],
                 Name = reader["Name"] as string,
-                SaleZonePackageId = int.Parse(reader["SaleZonePackageID"] as string),
+                SaleZonePackageId = (int)reader["SaleZonePackageID"],
                 Settings = Vanrise.Common.Serializer.Deserialize<Entities.RoutingProductSettings>(reader["Settings"] as string)
             };
 
             return routingProduct;
         }
-
     }
 }

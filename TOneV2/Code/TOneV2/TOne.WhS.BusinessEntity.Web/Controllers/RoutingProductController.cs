@@ -33,6 +33,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return manager.GetSupplierGroupTemplates();
         }
 
+        [HttpGet]
+        public RoutingProduct GetRoutingProduct(int routingProductId)
+        {
+            RoutingProductManager manager = new RoutingProductManager();
+            return manager.GetRoutingProduct(routingProductId);
+        }
+
         [HttpPost]
         public TOne.Entities.InsertOperationOutput<RoutingProduct> AddRoutingProduct(RoutingProduct routingProduct)
         {

@@ -118,18 +118,19 @@ function RoutingProductEditorController($scope, WhS_BE_RoutingProductAPIService,
         $scope.routingProductName = routingProductObj.Name;
         $scope.selectedSaleZonePackage = UtilsService.getItemByVal($scope.saleZonePackages, routingProductObj.SaleZonePackageId, "SaleZonePackageId");
 
-        $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, routingProductObj.SaleZoneGroupConfigId, "TemplateConfigID");
-        $scope.selectedSupplierGroupTemplate = UtilsService.getItemByVal($scope.supplierGroupTemplates, routingProductObj.SupplierGroupConfigId, "TemplateConfigID");
+        $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, routingProductObj.Settings.SaleZoneGroupConfigId, "TemplateConfigID");
+        $scope.selectedSupplierGroupTemplate = UtilsService.getItemByVal($scope.supplierGroupTemplates, routingProductObj.Settings.SupplierGroupConfigId, "TemplateConfigID");
 
-        $scope.saleZoneGroups.data = routingProductObj.Settings.Zones;
+        $scope.saleZoneGroups.data = routingProductObj.Settings.SaleZoneGroupSettings;
 
         if ($scope.saleZoneGroups.loadTemplateData != undefined)
             $scope.saleZoneGroups.loadTemplateData();
 
-        $scope.supplierGroup.data = routingProductObj.Settings.Suppliers;
+        $scope.supplierGroups.data = routingProductObj.Settings.SupplierGroupSettings;
 
-        if ($scope.supplierGroup.loadTemplateData != undefined)
-            $scope.supplierGroup.loadTemplateData();
+        if ($scope.supplierGroups.loadTemplateData != undefined)
+            $scope.supplierGroups.loadTemplateData();
+
     }
 
     function insertRoutingProduct() {
