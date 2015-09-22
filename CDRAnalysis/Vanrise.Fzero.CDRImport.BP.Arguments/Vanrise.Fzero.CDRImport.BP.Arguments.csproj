@@ -46,7 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NumberProfilingProcessInput.cs" />
+    <Compile Include="StagingtoNormalCDRProcessInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
