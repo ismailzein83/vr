@@ -35,12 +35,15 @@ namespace Vanrise.Fzero.DevRuntime
                 Console.ReadKey();
 
 
+                //PSTN.BusinessEntity.Business.SwitchManager switchManager = new PSTN.BusinessEntity.Business.SwitchManager();
+                //PSTN.BusinessEntity.Entities.Switch currentSwitch;
+                //currentSwitch = switchManager.GetSwitchByDataSourceID(dataSourceId);
 
-
+                
 
 
                 //LogVerbose("Started");
-                //Vanrise.Fzero.CDRImport.Entities.StagingImportedCDRBatch batch = new Vanrise.Fzero.CDRImport.Entities.StagingImportedCDRBatch();
+                //Vanrise.Fzero.CDRImport.Entities.ImportedStagingCDRBatch batch = new Vanrise.Fzero.CDRImport.Entities.ImportedStagingCDRBatch();
                 //batch.StagingCDRs = new List<Vanrise.Fzero.CDRImport.Entities.StagingCDR>();
                 //Vanrise.Integration.Entities.DBReaderImportedData ImportedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
 
@@ -55,12 +58,19 @@ namespace Vanrise.Fzero.DevRuntime
                 //    stagingCDR.CDPN = reader["CDPN"] as string;
                 //    stagingCDR.CGPN = reader["CGPN"] as string;
                 //    stagingCDR.ConnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "ConnectDateTime");
+                //    if (stagingCDR.ConnectDateTime !=null)
+                //        stagingCDR.ConnectDateTime = stagingCDR.ConnectDateTime.Value.Add(currentSwitch.TimeOffset);
                 //    stagingCDR.DurationInSeconds = Utils.GetReaderValue<Decimal?>(reader, "DurationInSeconds");
                 //    stagingCDR.DisconnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
+
+                //    if (stagingCDR.DisconnectDateTime != null)
+                //        stagingCDR.DisconnectDateTime = stagingCDR.DisconnectDateTime.Value.Add(currentSwitch.TimeOffset);
+
                 //    stagingCDR.InTrunkSymbol = reader["InTrunkSymbol"] as string;
                 //    stagingCDR.OutTrunkSymbol = reader["OutTrunkSymbol"] as string;
-                //    stagingCDR.SwitchID = 1;
-                //    index = Utils.GetReaderValue<DateTime?>(reader, "ID").ToString();
+                //    stagingCDR.SwitchID = currentSwitch.ID;
+
+                //    index = Utils.GetReaderValue<int?>(reader, "ID").ToString();
 
                 //    batch.StagingCDRs.Add(stagingCDR);
                 //}

@@ -270,6 +270,26 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PSTN.BusinessEntity.Business\PSTN.BusinessEntity.Business.csproj">
+      <Project>{737d629a-9316-47c3-8320-e54364f30fb9}</Project>
+      <Name>PSTN.BusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PSTN.BusinessEntity.Data.SQL\PSTN.BusinessEntity.Data.SQL.csproj">
+      <Project>{ad66d689-5821-4a9e-a6c3-ce391e42bd75}</Project>
+      <Name>PSTN.BusinessEntity.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PSTN.BusinessEntity.Data\PSTN.BusinessEntity.Data.csproj">
+      <Project>{72dda9a2-c512-4e8d-bec6-2b0a9477f98d}</Project>
+      <Name>PSTN.BusinessEntity.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PSTN.BusinessEntity.Entities\PSTN.BusinessEntity.Entities.csproj">
+      <Project>{026c2d4e-9fbf-491d-be9a-4249168a33fe}</Project>
+      <Name>PSTN.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PSTN.BusinessEntity.Web\PSTN.BusinessEntity.Web.csproj">
+      <Project>{54c7baa5-24c5-4a02-85ed-6a06c1ef1f6a}</Project>
+      <Name>PSTN.BusinessEntity.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Fzero.CDRImport.BP.Activities\Vanrise.Fzero.CDRImport.BP.Activities.csproj">
       <Project>{fbaec289-55e4-4326-b657-aa0e8cf38bff}</Project>
       <Name>Vanrise.Fzero.CDRImport.BP.Activities</Name>

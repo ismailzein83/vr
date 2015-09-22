@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System;
 
 namespace PSTN.BusinessEntity.Data.SQL
 {
@@ -85,7 +86,7 @@ namespace PSTN.BusinessEntity.Data.SQL
             switchObject.Name = reader["Name"] as string;
             switchObject.TypeID = (int)reader["TypeID"];
             switchObject.AreaCode = reader["AreaCode"] as string;
-            switchObject.TimeOffset = reader["TimeOffset"] as string;
+            switchObject.TimeOffset =   TimeSpan.Parse (reader["TimeOffset"] as string);
             switchObject.DataSourceID = (int)reader["DataSourceID"];
 
             return switchObject;
