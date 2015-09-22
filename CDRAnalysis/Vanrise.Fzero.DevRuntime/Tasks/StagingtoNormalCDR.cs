@@ -27,7 +27,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             {
                 InputArguments = new Vanrise.Fzero.CDRImport.BP.Arguments.StagingtoNormalCDRProcessInput
                 {
-                    FromDate = DateTime.Parse("2010-01-01"),
+                    FromDate = DateTime.Parse("1980-01-01"),
                     ToDate = DateTime.Parse("2020-01-02")
                 }
             };
