@@ -11,12 +11,11 @@
                 filtervalues: "=",
                 selectedobject: "="
             },
-            controller: function ($scope, $element, $attrs) {
+            controller: function () {
                 var ctrl = this;
 
                 function onLoad() {
                     ctrl.GenericAnalyticDimensionEnum = GenericAnalyticDimensionEnum;
-
 
                     ctrl.switches = [];
                     ctrl.selectedSwitches = [];
@@ -56,12 +55,13 @@
                         selectedfilters: [],
                         fromdate: new Date(2013, 1, 1),
                         todate: new Date(),
-                        currency: ctrl.currency == null ? null : ctrl.currency.selectedvalues.CurrencyID
+                        currency: (ctrl.currency.selectedvalues == null || ctrl.currency.selectedvalues == "" ) ? null : ctrl.currency.selectedvalues.CurrencyID
                     };
 
                     loadSwitches();
                     loadCodeGroups();
                     loadCurrencies();
+                    loadConnections();
                 }
 
                 function loadSwitches() {
@@ -82,6 +82,14 @@
                     });
                 }
 
+                function loadConnections() {
+                    return CarrierAccountConnectionAPIService.GetConnectionByCarrierType(CarrierTypeEnum.Customer.value).then(function (response) {
+                        ctrl.selectedConnections.length = 0;
+                        ctrl.connections.length = 0;
+                        ctrl.connections = response;
+                    });
+                }
+
                 function searchZones(text) {
                     return ZonesService.getSalesZones(text);
                 }
@@ -89,10 +97,9 @@
                 function onSelectionChanged() {
                     var value;
                     switch (ctrl.selectedConnectionIndex) {
-                        case 0: ctrl.selectedConnections.length = 0; ctrl.connections.length = 0; return;
-                        case 1: value = CarrierTypeEnum.Customer.value;
+                        case 0: value = CarrierTypeEnum.Customer.value;
                             break;
-                        case 2: value = CarrierTypeEnum.Supplier.value;
+                        case 1: value = CarrierTypeEnum.Supplier.value;
                             break;
                     }
                     return CarrierAccountConnectionAPIService.GetConnectionByCarrierType(value).then(function (response) {
@@ -103,26 +110,22 @@
                 }
 
                 function onselectionvalueschanged() {
-
                     ctrl.selectedobject.selectedfilters = [];
                     ctrl.filterCustomer.FilterValues = [];
                     ctrl.filterSupplier.FilterValues = [];
 
-                    
-
                     ctrl.selectedCustomers.forEach(function (item) {
                         ctrl.filterCustomer.FilterValues.push(item.CarrierAccountID);
                     });
-
                     if (ctrl.filterCustomer.FilterValues.length > 0)
                         ctrl.selectedobject.selectedfilters.push(ctrl.filterCustomer);
 
                     ctrl.selectedSuppliers.forEach(function (item) {
                         ctrl.filterSupplier.FilterValues.push(item.CarrierAccountID);
                     });
-
                     if (ctrl.filterSupplier.FilterValues.length > 0)
                         ctrl.selectedobject.selectedfilters.push(ctrl.filterSupplier);
+                    ctrl.selectedobject.currency = (ctrl.currency.selectedvalues == null || ctrl.currency.selectedvalues == "") ? null : ctrl.currency.selectedvalues.CurrencyID;
                 }
 
                 angular.extend(this, {

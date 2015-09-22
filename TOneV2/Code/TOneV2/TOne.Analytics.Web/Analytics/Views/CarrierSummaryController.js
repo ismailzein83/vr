@@ -2,10 +2,9 @@
 
     "use strict";
 
-    CarrierSummaryController.$inject = ['$scope', 'GenericAnalyticDimensionEnum', 'AnalyticsService', 'BusinessEntityAPIService_temp', 'ZonesService', 'CurrencyAPIService', 'GenericAnalyticMeasureEnum'];
-    function CarrierSummaryController($scope, GenericAnalyticDimensionEnum, analyticsService, BusinessEntityAPIService, ZonesService, CurrencyAPIService, GenericAnalyticMeasureEnum) {
+    CarrierSummaryController.$inject = ['$scope', 'GenericAnalyticDimensionEnum', 'GenericAnalyticMeasureEnum'];
+    function CarrierSummaryController($scope, GenericAnalyticDimensionEnum, GenericAnalyticMeasureEnum) {
 
-        var measureFieldsValues = [];
         load();
 
         function defineScope() {
@@ -16,26 +15,27 @@
             $scope.filterKeys = [];
             $scope.measures = [];
             $scope.selectedobject = {};
-
+            $scope.showResult = false;
             loadGroupKeys();
             loadFilterKeys();
             loadMeasures();
-
             $scope.searchClicked = function () {
                 return retrieveData();
+                
             };
         }
 
         function retrieveData() {
-            var query = {
-                Filters: $scope.selectedobject.selectedfilters,
-                DimensionFields: $scope.selectedobject.selecteddimensions,
-                MeasureFields: measureFieldsValues,
-                FromTime: $scope.selectedobject.fromdate,
-                ToTime: $scope.selectedobject.todate,
-                Currency: $scope.selectedobject.currency
-            };
-            $scope.subViewConnector.retrieveData(query);
+                var query = {
+                    Filters: $scope.selectedobject.selectedfilters,
+                    DimensionFields: $scope.selectedobject.selecteddimensions,
+                    MeasureFields: $scope.measures,
+                    FromTime: $scope.selectedobject.fromdate,
+                    ToTime: $scope.selectedobject.todate,
+                    Currency: $scope.selectedobject.currency
+                };
+                $scope.showResult = true;
+                return $scope.subViewConnector.retrieveData(query);
         }
 
         function load() {
@@ -43,39 +43,28 @@
         }
 
         function loadGroupKeys() {
-            for (var item in GenericAnalyticDimensionEnum) {
-                if ((GenericAnalyticDimensionEnum[item].name == GenericAnalyticDimensionEnum.Customer.name) ||
-                    (GenericAnalyticDimensionEnum[item].name == GenericAnalyticDimensionEnum.Supplier.name))
-                    $scope.groupKeys.push(GenericAnalyticDimensionEnum[item]);
-            }
+            $scope.groupKeys.push(GenericAnalyticDimensionEnum.Customer);
+            $scope.groupKeys.push(GenericAnalyticDimensionEnum.Supplier);
+            $scope.groupKeys.push(GenericAnalyticDimensionEnum.Zone);
         }
 
         function loadFilterKeys() {
-            for (var item in GenericAnalyticDimensionEnum) {
-                if ((GenericAnalyticDimensionEnum[item].name == GenericAnalyticDimensionEnum.Customer.name) ||
-                    (GenericAnalyticDimensionEnum[item].name == GenericAnalyticDimensionEnum.Supplier.name))
-                    $scope.filterKeys.push(GenericAnalyticDimensionEnum[item]);
-            }
+            $scope.filterKeys.push(GenericAnalyticDimensionEnum.Customer);
+            $scope.filterKeys.push(GenericAnalyticDimensionEnum.Supplier);
+            $scope.filterKeys.push(GenericAnalyticDimensionEnum.Zone);
+            $scope.filterKeys.push(GenericAnalyticDimensionEnum.Currency);
         }
 
         function loadMeasures() {
-            for (var item in GenericAnalyticMeasureEnum) {
-                if ((GenericAnalyticMeasureEnum[item].value == GenericAnalyticMeasureEnum.Measure_FirstCDRAttempt.value) ||
-                    (GenericAnalyticMeasureEnum[item].value == GenericAnalyticMeasureEnum.Measure_ABR.value) ||
-                    (GenericAnalyticMeasureEnum[item].value == GenericAnalyticMeasureEnum.Measure_ASR.value) ||
-                    (GenericAnalyticMeasureEnum[item].value == GenericAnalyticMeasureEnum.Measure_NER.value) ||
-                    (GenericAnalyticMeasureEnum[item].value == GenericAnalyticMeasureEnum.Measure_Attempts.value) ||
-                    (GenericAnalyticMeasureEnum[item].value == GenericAnalyticMeasureEnum.Measure_SuccessfulAttempts.value) ||
-                    (GenericAnalyticMeasureEnum[item].value == GenericAnalyticMeasureEnum.Measure_FailedAttempts.value) ||
-                    (GenericAnalyticMeasureEnum[item].value == GenericAnalyticMeasureEnum.Measure_DeliveredAttempts.value))
-                {
-                    measureFieldsValues.push(GenericAnalyticMeasureEnum[item].value);
-                    $scope.measures.push(GenericAnalyticMeasureEnum[item]);
-                }
-                
-            }
+            $scope.measures.push(GenericAnalyticMeasureEnum.FirstCDRAttempt);
+            $scope.measures.push(GenericAnalyticMeasureEnum.ABR);
+            $scope.measures.push(GenericAnalyticMeasureEnum.ASR);
+            $scope.measures.push(GenericAnalyticMeasureEnum.NER);
+            $scope.measures.push(GenericAnalyticMeasureEnum.Attempts);
+            $scope.measures.push(GenericAnalyticMeasureEnum.SuccessfulAttempts);
+            $scope.measures.push(GenericAnalyticMeasureEnum.FailedAttempts);
+            $scope.measures.push(GenericAnalyticMeasureEnum.DeliveredAttempts);
         }
-
     }
     appControllers.controller('Carrier_CarrierSummaryController', CarrierSummaryController);
 

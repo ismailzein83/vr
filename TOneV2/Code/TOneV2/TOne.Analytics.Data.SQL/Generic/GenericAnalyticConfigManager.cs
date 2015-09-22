@@ -202,7 +202,7 @@ namespace TOne.Analytics.Data.SQL
                    GetColumnsExpressions = new List<Func<AnalyticQuery,MeasureValueExpression>>{
                         (query) =>
                        {
-                           string s = "";
+                           string s = "Attempts";
                            foreach (AnalyticDimension dimension in query.DimensionFields)
                            {
                                if (dimension == AnalyticDimension.Supplier || dimension == AnalyticDimension.PortOut || dimension == AnalyticDimension.GateWayOut
@@ -230,7 +230,7 @@ namespace TOne.Analytics.Data.SQL
                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>>{
                         (query) =>
                        {
-                           string s = "";
+                           string s = "Attempts";
                            foreach (AnalyticDimension dimension in query.DimensionFields)
                            {
                                if (dimension == AnalyticDimension.Supplier || dimension == AnalyticDimension.PortOut || dimension == AnalyticDimension.GateWayOut
@@ -257,7 +257,7 @@ namespace TOne.Analytics.Data.SQL
                     GetColumnsExpressions = new List<Func<AnalyticQuery,MeasureValueExpression>>{
                         (query) =>
                        {
-                           string s = "";
+                           string s = "Attempts";
                            foreach (AnalyticDimension dimension in query.DimensionFields)
                            {
                                if (dimension == AnalyticDimension.Supplier || dimension == AnalyticDimension.PortOut || dimension == AnalyticDimension.GateWayOut

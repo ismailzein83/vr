@@ -82,7 +82,7 @@ namespace TOne.Analytics.Data.SQL
 			                                                    WHERE
 			                                                    FirstCDRAttempt BETWEEN @FromDate AND @ToDate
                                                                 #FILTERPART#
-			                                                    GROUP BY #GROUPBYPART#)
+			                                                    #GROUPBYPART#)
                                                                 SELECT * INTO #TEMPTABLE# FROM AllResult
                                                             END ");
 
@@ -247,7 +247,12 @@ namespace TOne.Analytics.Data.SQL
             queryBuilder.Replace("#SELECTPART#", selectPartBuilder.ToString());
             queryBuilder.Replace("#JOINPART#", joinPartBuilder.ToString());
             queryBuilder.Replace("#FILTERPART#", filterPartBuilder.ToString());
-            queryBuilder.Replace("#GROUPBYPART#", groupByPartBuilder.ToString());
+
+            if(groupByPartBuilder.Length > 0)
+                queryBuilder.Replace("#GROUPBYPART#", "GROUP BY " + groupByPartBuilder);
+            else
+                queryBuilder.Replace("#GROUPBYPART#", "");
+
             queryBuilder.Replace("#CTEPART#", ctePartBuilder.ToString());
 
             return queryBuilder.ToString();

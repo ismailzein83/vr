@@ -2,8 +2,8 @@
 
     "use strict";
 
-    GenericAnalyticSubGridController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticDimensionEnum', 'AnalyticsService'];
-    function GenericAnalyticSubGridController($scope, GenericAnalyticAPIService, GenericAnalyticDimensionEnum, analyticsService) {
+    GenericAnalyticSubGridController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticDimensionEnum'];
+    function GenericAnalyticSubGridController($scope, GenericAnalyticAPIService, GenericAnalyticDimensionEnum) {
         var filter = {};
         var measureFields = [];
         var selectedGroupKeys = [] , parentGroupKeys = [];
@@ -16,7 +16,6 @@
                 measureFields.push(item.value);
             });
 
-            //measureFields = analyticsService.getGenericAnalyticMeasureValues();
             $scope.measures = $scope.viewScope.measures;
 
             $scope.selectedGroupKey;
@@ -44,19 +43,47 @@
 
         function retrieveData(groupKey, withSummary) {
             filter = {};
-            buildFilter($scope);
 
+            buildFilter($scope);
+            
+            $scope.selectedfilters = $scope.gridParentScope.selectedfilters;
             var filterResult = [];
 
-            for (var prop in filter)
-                filterResult.push({ Dimension: parseInt(prop), FilterValues: filter[prop] });
+            for (var prop in  $scope.gridParentScope.selectedfilters) {
+                filterResult.push($scope.gridParentScope.selectedfilters[prop]);
+            }
+
+            for (var prop in filter) {
+
+                var x = 0;
+
+                for (var i = 0, len = filterResult.length; i < len; i++) {
+                    if (parseInt(prop) == filterResult[i].Dimension) {
+                        var y = 0;
+                        for (var j = 0, len2 = filterResult[i].FilterValues.length; j < len2; j++) {
+
+                            if (filterResult[i].FilterValues[j] == filter[prop][0]) {
+                                y = 1;
+                                break;
+                            }
+                        }
+                        if (y == 0)
+                            filterResult[i].FilterValues.push(filter[prop][0]);
+                        x = 1;
+                    }
+                }
+
+                if(x == 0)
+                    filterResult.push({ Dimension: parseInt(prop), FilterValues: filter[prop] });
+            }
+
             var query = {
                 Filters: filterResult,
                 DimensionFields: [$scope.selectedGroupKey.value],
                 MeasureFields: measureFields,
                 FromTime: $scope.viewScope.fromDate,
                 ToTime: $scope.viewScope.toDate,
-                Currency: $scope.viewScope.optionsCurrencies == null ? null : $scope.viewScope.optionsCurrencies.selectedvalues
+                Currency: $scope.viewScope.Currency
             };
             return groupKey.gridAPI.retrieveData(query);
         }
@@ -65,12 +92,13 @@
 
             if (scope == $scope.viewScope)
                 return;
+
             var parentGroupKeys;
-            if (scope.gridParentScope == $scope.viewScope)
+            if (scope.gridParentScope == $scope.viewScope) 
                 parentGroupKeys = scope.gridParentScope.selectedobject.selecteddimensions;
             else
                 parentGroupKeys = [scope.gridParentScope.selectedGroupKey];
-
+            
             for (var i = 0; i < parentGroupKeys.length; i++) {
                 var groupKey = parentGroupKeys[i];
 
@@ -91,12 +119,8 @@
             defineScope();
             loadGroupKeys();
             $scope.selectedGroupKey = $scope.dimensions[0];
-
-           
         }
 
-        //GenericAnalyticDimensionEnum
-        //$scope.gridParentScope.groupKeys
         function loadGroupKeys() {
 
             for (var prop in $scope.viewScope.groupKeys) {
