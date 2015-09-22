@@ -154,7 +154,7 @@ namespace Vanrise.Integration.Business
             {
                 DataMapper mapper = (DataMapper)generatedType.GetConstructor(Type.EmptyTypes).Invoke(null);
                 mapper.SetLogger(_logger);
-                outputResult = mapper.MapData(data, outputItems);
+                outputResult = mapper.MapData(dataSourceId, data, outputItems);
                 _logger.WriteInformation("Mapped data successfully with output result {0}", outputResult.Result);
             }
             catch(Exception ex)
@@ -222,7 +222,7 @@ namespace Vanrise.Integration.Business
 
         private string BuildCustomClass(string customCode, string className)
         {
-            string code = (new StringBuilder()).Append(@"public override Vanrise.Integration.Entities.MappingOutput MapData(Vanrise.Integration.Entities.IImportedData data, Vanrise.Integration.Entities.MappedBatchItemsToEnqueue mappedBatches)
+            string code = (new StringBuilder()).Append(@"public override Vanrise.Integration.Entities.MappingOutput MapData(int dataSourceId, Vanrise.Integration.Entities.IImportedData data, Vanrise.Integration.Entities.MappedBatchItemsToEnqueue mappedBatches)
                                                             {").Append(customCode).Append("}").ToString();
 
             string classDefinition = new StringBuilder().Append(@"

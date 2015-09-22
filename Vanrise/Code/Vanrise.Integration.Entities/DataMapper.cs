@@ -9,7 +9,7 @@ namespace Vanrise.Integration.Entities
 {    
     public abstract class DataMapper
     {
-        public abstract MappingOutput MapData(IImportedData data, MappedBatchItemsToEnqueue mappedBatches);
+        public abstract MappingOutput MapData(int dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches);
 
         private IDataSourceLogger _logger;
         public void SetLogger(IDataSourceLogger logger)
