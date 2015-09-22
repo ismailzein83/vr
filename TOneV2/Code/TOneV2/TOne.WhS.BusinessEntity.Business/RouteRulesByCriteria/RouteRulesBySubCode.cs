@@ -9,11 +9,11 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class RouteRulesBySubCode : RouteRulesByOneId<string>
     {
-        protected override bool IsRuleMatched(RouteRule rule, out IEnumerable<string> ids)
+        protected override bool IsRuleMatched(IRouteCriteria rule, out IEnumerable<string> ids)
         {
-            if (rule.Criteria.HasCodeFilter() && !rule.Criteria.HasCustomerFilter())
+            if (rule.RouteCriteria.HasCodeFilter() && !rule.RouteCriteria.HasCustomerFilter())
             {
-                ids = rule.Criteria.Codes.Where(code => code.WithSubCodes).Select(code => code.Code);
+                ids = rule.RouteCriteria.Codes.Where(code => code.WithSubCodes).Select(code => code.Code);
                 return ids.Count() > 0;
             }
             else
@@ -29,7 +29,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return (id != null);
         }
 
-        public override RouteRule GetMostMatchedRule(int? customerId, int? productId, string code, long saleZoneId)
+        public override IRouteCriteria GetMostMatchedRule(int? customerId, int? productId, string code, long saleZoneId)
         {
             if (code != null)
             {
@@ -37,7 +37,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 while (codeIterator.Length > 1)
                 {
                     string parentCode = codeIterator.ToString();
-                    RouteRule rule = base.GetMostMatchedRule(customerId, productId, parentCode, saleZoneId);
+                    IRouteCriteria rule = base.GetMostMatchedRule(customerId, productId, parentCode, saleZoneId);
                     if (rule != null)
                         return rule;
                     codeIterator.Remove(codeIterator.Length - 1, 1);

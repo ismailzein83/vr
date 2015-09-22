@@ -9,9 +9,9 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public abstract class RouteRulesByOneId<T> : RouteRulesByCriteria
     {
-        Dictionary<T, List<RouteRule>> _rulesById = new Dictionary<T, List<RouteRule>>();
+        Dictionary<T, List<IRouteCriteria>> _rulesById = new Dictionary<T, List<IRouteCriteria>>();
 
-        public override void SetSource(List<RouteRule> rules)
+        public override void SetSource(List<IRouteCriteria> rules)
         {
             foreach (var rule in rules)
             {
@@ -20,20 +20,20 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     foreach (var id in ids)
                     {
-                        List<RouteRule> zoneRules = GetOrCreateDictionaryItem(id, _rulesById);
+                        List<IRouteCriteria> zoneRules = GetOrCreateDictionaryItem(id, _rulesById);
                         zoneRules.Add(rule);
                     }
                 }
             }
         }
 
-        protected abstract bool IsRuleMatched(RouteRule rule, out IEnumerable<T> ids);
+        protected abstract bool IsRuleMatched(IRouteCriteria rule, out IEnumerable<T> ids);
 
         protected abstract bool IsIdAvailable(int? customerId, int? productId, string code, long saleZoneId, out T id);
 
-        public override RouteRule GetMostMatchedRule(int? customerId, int? productId, string code, long saleZoneId)
+        public override IRouteCriteria GetMostMatchedRule(int? customerId, int? productId, string code, long saleZoneId)
         {
-            List<RouteRule> rules;
+            List<IRouteCriteria> rules;
             T id;
             if (IsIdAvailable(customerId, productId, code, saleZoneId, out id))
             {
@@ -41,7 +41,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     foreach (var r in rules)
                     {
-                        if (!RouteRuleManager.IsAnyFilterExcludedInRuleCriteria(r.Criteria, customerId, code, saleZoneId))
+                        if (!RouteRuleManager.IsAnyFilterExcludedInRuleCriteria(r.RouteCriteria, customerId, code, saleZoneId))
                             return r;
                     }
                 }

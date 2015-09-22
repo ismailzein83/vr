@@ -59,9 +59,13 @@
     <Compile Include="PricingProduct\PricingRule.cs" />
     <Compile Include="PricingProduct\PricingRuleCriteria.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoutingProduct\RouteOptionRule\BlockRouteOptionRule.cs" />
+    <Compile Include="RoutingProduct\RouteOptionRule\BlockRouteOptionRuleSettings.cs" />
+    <Compile Include="RoutingProduct\RouteOptionRule\StructuredBlockRouteOptionRules.cs" />
     <Compile Include="RoutingProduct\RoutingProduct.cs" />
     <Compile Include="RoutingProduct\RoutingProductQuery.cs" />
     <Compile Include="RoutingProduct\RoutingProductSettings.cs" />
+    <Compile Include="RoutingProduct\RoutingRule\IRouteCriteria.cs" />
     <Compile Include="RoutingProduct\RoutingRule\RouteRule.cs" />
     <Compile Include="RoutingProduct\RoutingRule\RouteRulesByCriteria.cs" />
     <Compile Include="RoutingProduct\RoutingRule\RouteRuleCriteria.cs" />

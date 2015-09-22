@@ -9,13 +9,13 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class RouteRulesByCustomerSubCode : RouteRulesByTwoIds<int, string>
     {
-        protected override bool IsRuleMatched(RouteRule rule, out IEnumerable<int> ids1, out IEnumerable<string> ids2)
+        protected override bool IsRuleMatched(IRouteCriteria rule, out IEnumerable<int> ids1, out IEnumerable<string> ids2)
         {
-            if (rule.Criteria.HasCustomerFilter() && rule.Criteria.HasCodeFilter())
+            if (rule.RouteCriteria.HasCustomerFilter() && rule.RouteCriteria.HasCodeFilter())
             {
                 CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                ids1 = carrierAccountManager.GetCustomerIds(rule.Criteria.CustomersGroupConfigId.Value, rule.Criteria.CustomerGroupSettings);
-                ids2 = rule.Criteria.Codes.Where(code => code.WithSubCodes).Select(code => code.Code);
+                ids1 = carrierAccountManager.GetCustomerIds(rule.RouteCriteria.CustomersGroupConfigId.Value, rule.RouteCriteria.CustomerGroupSettings);
+                ids2 = rule.RouteCriteria.Codes.Where(code => code.WithSubCodes).Select(code => code.Code);
                 return ids2.Count() > 0;
             }
             else
@@ -42,7 +42,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
-        public override RouteRule GetMostMatchedRule(int? customerId, int? productId, string code, long saleZoneId)
+        public override IRouteCriteria GetMostMatchedRule(int? customerId, int? productId, string code, long saleZoneId)
         {
             if (code != null)
             {
@@ -50,7 +50,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 while (codeIterator.Length > 1)
                 {
                     string parentCode = codeIterator.ToString();
-                    RouteRule rule = base.GetMostMatchedRule(customerId, productId, parentCode, saleZoneId);
+                    IRouteCriteria rule = base.GetMostMatchedRule(customerId, productId, parentCode, saleZoneId);
                     if (rule != null)
                         return rule;
                     codeIterator.Remove(codeIterator.Length - 1, 1);

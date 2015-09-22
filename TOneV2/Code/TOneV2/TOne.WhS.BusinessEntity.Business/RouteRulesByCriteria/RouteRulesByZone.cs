@@ -9,11 +9,11 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class RouteRulesByZone : RouteRulesByOneId<long>
     {
-        protected override bool IsRuleMatched(RouteRule rule, out IEnumerable<long> ids)
+        protected override bool IsRuleMatched(IRouteCriteria rule, out IEnumerable<long> ids)
         {
-            if (rule.Criteria.HasZoneFilter() && rule.Criteria.RoutingProductId == null && !rule.Criteria.HasCustomerFilter())
+            if (rule.RouteCriteria.HasZoneFilter() && rule.RouteCriteria.RoutingProductId == null && !rule.RouteCriteria.HasCustomerFilter())
             {
-                ids = rule.Criteria.ZoneIds;
+                ids = rule.RouteCriteria.ZoneIds;
                 return true;
             }
             else

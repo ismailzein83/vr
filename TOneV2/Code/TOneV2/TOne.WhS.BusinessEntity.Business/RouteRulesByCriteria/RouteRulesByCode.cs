@@ -8,12 +8,12 @@ using TOne.WhS.BusinessEntity.Entities;
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class RouteRulesByCode : RouteRulesByOneId<string>
-    {      
-        protected override bool IsRuleMatched(RouteRule rule, out IEnumerable<string> ids)
+    {
+        protected override bool IsRuleMatched(IRouteCriteria rule, out IEnumerable<string> ids)
         {
-            if (rule.Criteria.HasCodeFilter() && !rule.Criteria.HasCustomerFilter())
+            if (rule.RouteCriteria.HasCodeFilter() && !rule.RouteCriteria.HasCustomerFilter())
             {
-                ids = rule.Criteria.Codes.Select(code => code.Code);
+                ids = rule.RouteCriteria.Codes.Select(code => code.Code);
                 return true;
             }
             else

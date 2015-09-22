@@ -10,9 +10,11 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public abstract bool IsEmpty();
 
-        public abstract void SetSource(List<RouteRule> rules);
+        public abstract void SetSource(List<IRouteCriteria> rules);
 
-        public abstract RouteRule GetMostMatchedRule(int? customerId, int? productId, string code, long saleZoneId);
+        public abstract IRouteCriteria GetMostMatchedRule(int? customerId, int? productId, string code, long saleZoneId);
+
+        public RouteRulesByCriteria NextRuleSet { get; set; }
 
         protected Q GetOrCreateDictionaryItem<T, Q>(T itemKey, Dictionary<T, Q> dictionary)
         {

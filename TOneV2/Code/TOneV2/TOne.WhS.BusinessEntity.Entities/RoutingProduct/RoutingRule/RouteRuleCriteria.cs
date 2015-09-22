@@ -5,11 +5,11 @@ using System.Text;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class RouteRuleCriteria
+    public class RouteCriteria
     {
         public int? RoutingProductId { get; set; }
 
-        public List<RouteRuleCriteriaCode> Codes { get; set; }
+        public List<RouteCriteriaCode> Codes { get; set; }
 
         public List<string> ExcludedCodes { get; set; }
 
@@ -41,7 +41,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         }
     }
 
-    public class RouteRuleCriteriaCode
+    public class RouteCriteriaCode
     {
         public string Code { get; set; }
 

@@ -9,24 +9,24 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class RouteRulesByOthers : RouteRulesByCriteria
     {
-        List<RouteRule> _rulesByOthers = new List<RouteRule>();
+        List<IRouteCriteria> _rulesByOthers = new List<IRouteCriteria>();
 
-        public override void SetSource(List<RouteRule> rules)
+        public override void SetSource(List<IRouteCriteria> rules)
         {
             foreach (var rule in rules)
             {
-                if (rule.Criteria.RoutingProductId == null && !rule.Criteria.HasCustomerFilter() && !rule.Criteria.HasZoneFilter() && !rule.Criteria.HasCodeFilter())
+                if (rule.RouteCriteria.RoutingProductId == null && !rule.RouteCriteria.HasCustomerFilter() && !rule.RouteCriteria.HasZoneFilter() && !rule.RouteCriteria.HasCodeFilter())
                 {
                     _rulesByOthers.Add(rule);
                 }
             }
         }
 
-        public override RouteRule GetMostMatchedRule(int? customerId, int? productId, string code, long saleZoneId)
+        public override IRouteCriteria GetMostMatchedRule(int? customerId, int? productId, string code, long saleZoneId)
         {
             foreach (var r in _rulesByOthers)
             {
-                if (!RouteRuleManager.IsAnyFilterExcludedInRuleCriteria(r.Criteria, customerId, code, saleZoneId))
+                if (!RouteRuleManager.IsAnyFilterExcludedInRuleCriteria(r.RouteCriteria, customerId, code, saleZoneId))
                     return r;
             }
             return null;

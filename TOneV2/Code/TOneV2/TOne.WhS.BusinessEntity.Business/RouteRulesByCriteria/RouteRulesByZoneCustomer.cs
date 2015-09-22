@@ -9,13 +9,13 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class RouteRulesByCustomerZone : RouteRulesByTwoIds<int, long>
     {
-        protected override bool IsRuleMatched(RouteRule rule, out IEnumerable<int> ids1, out IEnumerable<long> ids2)
+        protected override bool IsRuleMatched(IRouteCriteria rule, out IEnumerable<int> ids1, out IEnumerable<long> ids2)
         {
-            if (rule.Criteria.HasCustomerFilter() && rule.Criteria.HasZoneFilter())
+            if (rule.RouteCriteria.HasCustomerFilter() && rule.RouteCriteria.HasZoneFilter())
             {
                 CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                ids1 = carrierAccountManager.GetCustomerIds(rule.Criteria.CustomersGroupConfigId.Value, rule.Criteria.CustomerGroupSettings);
-                ids2 = rule.Criteria.ZoneIds;
+                ids1 = carrierAccountManager.GetCustomerIds(rule.RouteCriteria.CustomersGroupConfigId.Value, rule.RouteCriteria.CustomerGroupSettings);
+                ids2 = rule.RouteCriteria.ZoneIds;
                 return true;
             }
             else

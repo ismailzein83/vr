@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlockRouteOptionRuleBehavior.cs" />
     <Compile Include="RouteRuleSettings\AutomaticRouteRuleSettings.cs" />
     <Compile Include="RouteRuleSettings\BlockRouteRuleSettings.cs" />
     <Compile Include="RouteRuleSettings\FixedRouteRuleSettings.cs" />
@@ -57,6 +58,9 @@
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BlockRouteOptionRuleSettings\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

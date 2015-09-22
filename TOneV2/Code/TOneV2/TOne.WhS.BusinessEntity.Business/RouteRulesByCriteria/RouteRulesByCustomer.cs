@@ -9,12 +9,12 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class RouteRulesByCustomer : RouteRulesByOneId<int>
     {
-        protected override bool IsRuleMatched(RouteRule rule, out IEnumerable<int> ids)
+        protected override bool IsRuleMatched(IRouteCriteria rule, out IEnumerable<int> ids)
         {
-            if (rule.Criteria.HasCustomerFilter() && !rule.Criteria.HasZoneFilter() && !rule.Criteria.HasCodeFilter())
+            if (rule.RouteCriteria.HasCustomerFilter() && !rule.RouteCriteria.HasZoneFilter() && !rule.RouteCriteria.HasCodeFilter())
             {
                 CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                ids = carrierAccountManager.GetCustomerIds(rule.Criteria.CustomersGroupConfigId.Value, rule.Criteria.CustomerGroupSettings);
+                ids = carrierAccountManager.GetCustomerIds(rule.RouteCriteria.CustomersGroupConfigId.Value, rule.RouteCriteria.CustomerGroupSettings);
                 return true;
             }
             else
