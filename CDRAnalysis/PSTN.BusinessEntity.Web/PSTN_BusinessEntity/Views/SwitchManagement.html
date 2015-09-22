@@ -20,6 +20,17 @@
                 <vr-columns width="normal">
                     <vr-textbox label="Area Code" value="areaCode"></vr-textbox>
                 </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-select label="Data Source"
+                               datasource="dataSources"
+                               selectedvalues="selectedDataSources"
+                               datavaluefield="DataSourceId"
+                               datatextfield="Name"
+                               entityname="Data Source"
+                               ismultipleselection>
+                    </vr-select>
+                </vr-columns>
             </vr-row>
         </div>
         <vr-row removeline>
@@ -47,6 +58,7 @@
                     <vr-datagridcolumn headertext="'Type'" field="'TypeDescription'" type="'Text'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Area Code'" field="'AreaCode'" type="'Text'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Time Offset'" field="'TimeOffset'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Data Source'" field="'DataSourceName'" type="'Text'"></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
         </vr-row>

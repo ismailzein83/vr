@@ -1,6 +1,6 @@
-﻿SwitchEditorController.$inject = ["$scope", "SwitchAPIService", "UtilsService", "VRNavigationService", "VRNotificationService"];
+﻿SwitchEditorController.$inject = ["$scope", "SwitchAPIService", "DataSourceAPIService", "UtilsService", "VRNavigationService", "VRNotificationService"];
 
-function SwitchEditorController($scope, SwitchAPIService, UtilsService, VRNavigationService, VRNotificationService) {
+function SwitchEditorController($scope, SwitchAPIService, DataSourceAPIService, UtilsService, VRNavigationService, VRNotificationService) {
 
     var switchID = undefined;
 
@@ -24,6 +24,8 @@ function SwitchEditorController($scope, SwitchAPIService, UtilsService, VRNaviga
         $scope.selectedType = undefined;
         $scope.areaCode = undefined;
         $scope.timeOffset = undefined;
+        $scope.dataSources = [];
+        $scope.selectedDataSource = undefined;
 
         $scope.saveSwitch = function () {
             if (editMode)
@@ -57,11 +59,8 @@ function SwitchEditorController($scope, SwitchAPIService, UtilsService, VRNaviga
     function load() {
         $scope.isGettingData = true;
 
-        return SwitchAPIService.GetSwitchTypes()
-            .then(function (response) {
-                angular.forEach(response, function (item) {
-                    $scope.types.push(item);
-                });
+        return UtilsService.waitMultipleAsyncOperations([loadSwitchTypes, loadDataSources])
+            .then(function () {
 
                 if (editMode) {
                     return SwitchAPIService.GetSwitchByID(switchID)
@@ -84,11 +83,30 @@ function SwitchEditorController($scope, SwitchAPIService, UtilsService, VRNaviga
             });
     }
 
+    function loadSwitchTypes() {
+        return SwitchAPIService.GetSwitchTypes()
+            .then(function (response) {
+                angular.forEach(response, function (item) {
+                    $scope.types.push(item);
+                });
+            });
+    }
+
+    function loadDataSources() {
+        return DataSourceAPIService.GetDataSources()
+            .then(function (response) {
+                angular.forEach(response, function (item) {
+                    $scope.dataSources.push(item);
+                });
+            });
+    }
+
     function fillScopeFromSwitchObject(switchObject) {
         $scope.name = switchObject.Name;
         $scope.selectedType = UtilsService.getItemByVal($scope.types, switchObject.TypeID, "ID");
         $scope.areaCode = switchObject.AreaCode;
         $scope.timeOffset = switchObject.TimeOffset;
+        $scope.selectedDataSource = UtilsService.getItemByVal($scope.dataSources, switchObject.DataSourceID, "DataSourceId");
     }
 
     function updateSwitch() {
@@ -131,7 +149,8 @@ function SwitchEditorController($scope, SwitchAPIService, UtilsService, VRNaviga
             Name: $scope.name,
             TypeID: ($scope.selectedType != undefined) ? $scope.selectedType.ID : null,
             AreaCode: $scope.areaCode,
-            TimeOffset: $scope.timeOffset
+            TimeOffset: $scope.timeOffset,
+            DataSourceID: $scope.selectedDataSource.DataSourceId
         };
     }
 }

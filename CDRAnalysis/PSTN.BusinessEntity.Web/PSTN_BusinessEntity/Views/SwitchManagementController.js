@@ -1,6 +1,6 @@
-﻿SwitchManagementController.$inject = ["$scope", "SwitchAPIService", "UtilsService", "VRNotificationService", "VRModalService"];
+﻿SwitchManagementController.$inject = ["$scope", "SwitchAPIService", "DataSourceAPIService", "UtilsService", "VRNotificationService", "VRModalService"];
 
-function SwitchManagementController($scope, SwitchAPIService, UtilsService, VRNotificationService, VRModalService) {
+function SwitchManagementController($scope, SwitchAPIService, DataSourceAPIService, UtilsService, VRNotificationService, VRModalService) {
 
     var gridAPI = undefined;
 
@@ -14,6 +14,8 @@ function SwitchManagementController($scope, SwitchAPIService, UtilsService, VRNo
         $scope.types = [];
         $scope.selectedTypes = [];
         $scope.areaCode = undefined;
+        $scope.dataSources = [];
+        $scope.selectedDataSources = [];
 
         // grid vars
         $scope.switches = [];
@@ -35,6 +37,8 @@ function SwitchManagementController($scope, SwitchAPIService, UtilsService, VRNo
                     switchObject.TypeDescription = (switchObject.TypeID != null) ?
                         UtilsService.getItemByVal($scope.types, switchObject.TypeID, "ID").Name : null;
 
+                    switchObject.DataSourceName = UtilsService.getItemByVal($scope.dataSources, switchObject.DataSourceID, "DataSourceId").Name;
+
                     gridAPI.itemAdded(switchObject);
                 };
             };
@@ -46,16 +50,17 @@ function SwitchManagementController($scope, SwitchAPIService, UtilsService, VRNo
         $scope.gridReady = function (api) {
             gridAPI = api;
 
-            if ($scope.types.length > 0) // types are loaded
+            if ($scope.types.length > 0 && $scope.dataSources.length > 0) // types and data sources are loaded
                 return retrieveData();
         }
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return SwitchAPIService.GetFilteredSwitches(dataRetrievalInput)
                 .then(function (response) {
-                    
+
                     angular.forEach(response.Data, function (item) {
-                        item.TypeDescription = (item.TypeID != null) ? UtilsService.getItemByVal($scope.types, item.TypeID, "ID").Name : null;
+                        item.TypeDescription = UtilsService.getItemByVal($scope.types, item.TypeID, "ID").Name;
+                        item.DataSourceName = UtilsService.getItemByVal($scope.dataSources, item.DataSourceID, "DataSourceId").Name;
                     });
 
                     onResponseReady(response);
@@ -71,11 +76,8 @@ function SwitchManagementController($scope, SwitchAPIService, UtilsService, VRNo
     function load() {
         $scope.isLoadingFilters = true;
 
-        return SwitchAPIService.GetSwitchTypes()
-            .then(function (response) {
-                angular.forEach(response, function (item) {
-                    $scope.types.push(item);
-                });
+        return UtilsService.waitMultipleAsyncOperations([loadSwitchTypes, loadDataSources])
+            .then(function () {
 
                 if (gridAPI != undefined)
                     return retrieveData();
@@ -88,11 +90,30 @@ function SwitchManagementController($scope, SwitchAPIService, UtilsService, VRNo
             });
     }
 
+    function loadSwitchTypes() {
+        return SwitchAPIService.GetSwitchTypes()
+            .then(function (response) {
+                angular.forEach(response, function (item) {
+                    $scope.types.push(item);
+                });
+            });
+    }
+    
+    function loadDataSources() {
+        return DataSourceAPIService.GetDataSources()
+            .then(function (response) {
+                angular.forEach(response, function (item) {
+                    $scope.dataSources.push(item);
+                });
+            });
+    }
+
     function retrieveData() {
         var query = {
             Name: $scope.name,
             SelectedTypeIDs: UtilsService.getPropValuesFromArray($scope.selectedTypes, "ID"),
-            AreaCode: $scope.areaCode
+            AreaCode: $scope.areaCode,
+            SelectedDataSourceIDs: UtilsService.getPropValuesFromArray($scope.selectedDataSources, "DataSourceId")
         };
 
         gridAPI.retrieveData(query);
@@ -119,6 +140,8 @@ function SwitchManagementController($scope, SwitchAPIService, UtilsService, VRNo
                 
                 switchObject.TypeDescription = (switchObject.TypeID != null) ?
                     UtilsService.getItemByVal($scope.types, switchObject.TypeID, "ID").Name : null;
+
+                switchObject.DataSourceName = UtilsService.getItemByVal($scope.dataSources, switchObject.DataSourceID, "DataSourceId").Name;
 
                 gridAPI.itemUpdated(switchObject);
             };

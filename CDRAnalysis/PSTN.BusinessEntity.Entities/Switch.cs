@@ -13,5 +13,7 @@ namespace PSTN.BusinessEntity.Entities
         public string AreaCode { get; set; }
 
         public string TimeOffset { get; set; }
+
+        public int DataSourceID { get; set; }
     }
 }
