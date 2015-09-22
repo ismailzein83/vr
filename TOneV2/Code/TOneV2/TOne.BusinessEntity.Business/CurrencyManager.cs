@@ -23,5 +23,39 @@ namespace TOne.BusinessEntity.Business
         {
             return _dataManager.GetCurrencies();
         }
+
+        public List<Currency> GetVisibleCurrencies()
+        {
+            return _dataManager.GetVisibleCurrencies();
+        }
+
+        public Currency GetCurrencyByCarrierId(string carrierId)
+        {
+            return _dataManager.GetCurrencyByCarrierId(carrierId);
+        }
+
+        public IEnumerable<CurrencyFactor> GetCurrenciesFactor(string customerId)
+        {
+            List<Currency> visibleCurrencies = GetVisibleCurrencies();
+            Currency customerCurrency = GetCurrencyByCarrierId(customerId);
+            List<CurrencyFactor> currencyFactors = new List<CurrencyFactor>();
+
+            foreach (Currency currency in visibleCurrencies)
+            {
+                CurrencyFactor currencyFactor = new CurrencyFactor();
+                if (currency.CurrencyID.Equals(customerCurrency.CurrencyID))
+                    currencyFactor.IsMain = true;
+                currencyFactor.CurrencyId = currency.CurrencyID;
+                currencyFactor.CurrencyFator = GetExchangeFactor(customerCurrency, currency);
+                currencyFactors.Add(currencyFactor);
+            }
+
+            return currencyFactors;
+        }
+
+        double GetExchangeFactor(Currency fromCurrency, Currency toCurrency)
+        {
+            return toCurrency.LastRate / fromCurrency.LastRate;
+        }
     }
 }

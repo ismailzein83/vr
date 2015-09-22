@@ -58,6 +58,7 @@
     <Compile Include="BasePriceListDetail.cs" />
     <Compile Include="CommissionsByCustomer.cs" />
     <Compile Include="CommissionsBySupplier.cs" />
+    <Compile Include="CurrencyFactor.cs" />
     <Compile Include="CustomerCommissionQuery.cs" />
     <Compile Include="CustomerCommissionsByZone.cs" />
     <Compile Include="CustomerCommission.cs" />
