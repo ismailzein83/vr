@@ -1,6 +1,6 @@
-﻿RoutingProductManagementController.$inject = ['$scope', 'RoutingProductAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService'];
+﻿RoutingProductManagementController.$inject = ['$scope', 'WhS_BE_RoutingProductAPIService', 'WhS_BE_SaleZonePackageAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService'];
 
-function RoutingProductManagementController($scope, RoutingProductAPIService, UtilsService, VRModalService, VRNotificationService) {
+function RoutingProductManagementController($scope, WhS_BE_RoutingProductAPIService, WhS_BE_SaleZonePackageAPIService, UtilsService, VRModalService, VRNotificationService) {
 
     var gridApi;
 
@@ -11,6 +11,8 @@ function RoutingProductManagementController($scope, RoutingProductAPIService, Ut
 
         $scope.routingProducts = [];
         $scope.gridMenuActions = [];
+
+        $scope.saleZonePackages = [];
 
         defineMenuActions();
 
@@ -37,7 +39,17 @@ function RoutingProductManagementController($scope, RoutingProductAPIService, Ut
     }
 
     function load() {
+        $scope.isLoadingFilterData = true;
 
+        WhS_BE_SaleZonePackageAPIService.GetSaleZonePackages().then(function (response) {
+            angular.forEach(response, function (item) {
+                $scope.saleZonePackages.push(item);
+            });
+        }).catch(function (error) {
+            VRNotificationService.notifyExceptionWithClose(error, $scope);
+        }).finally(function () {
+            $scope.isLoadingFilterData = false;
+        });
     }
 
     function retrieveData() {
@@ -96,4 +108,4 @@ function RoutingProductManagementController($scope, RoutingProductAPIService, Ut
     }
 }
 
-appControllers.controller('WhS_BusinessEntity_RoutingProductManagementController', RoutingProductManagementController);
+appControllers.controller('WhS_BE_RoutingProductManagementController', RoutingProductManagementController);

@@ -10,10 +10,10 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public int SaleZoneGroupConfigId { get; set; }
 
-        public SaleZoneGroupSettings Zones { get; set; }
+        public SaleZoneGroupSettings SaleZoneGroupSettings { get; set; }
 
         public int SuppliersGroupConfigId { get; set; }
 
-        public SupplierGroupSettings Suppliers { get; set; }
+        public SupplierGroupSettings SupplierGroupSettings { get; set; }
     }    
 }

@@ -7,12 +7,12 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public abstract class SaleZoneGroup
+    public abstract class SaleZoneGroupBehavior
     {
         public abstract List<SaleZone> GetZones(int saleZonePackageId, SaleZoneGroupSettings settings);
     }
 
-    public class SelectiveSaleZones : SaleZoneGroup
+    public class SelectiveSaleZonesBehavior : SaleZoneGroupBehavior
     {
         public override List<SaleZone> GetZones(int saleZonePackageId, SaleZoneGroupSettings settings)
         {
@@ -23,7 +23,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
     }
 
-    public class AllSaleZones : SaleZoneGroup
+    public class AllSaleZonesBehavior : SaleZoneGroupBehavior
     {
         public override List<SaleZone> GetZones(int saleZonePackageId, SaleZoneGroupSettings settings)
         {

@@ -7,12 +7,12 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public abstract class SupplierGroup
+    public abstract class SupplierGroupBehavior
     {
         public abstract List<CarrierAccount> GetSuppliers(SupplierGroupSettings settings);
     }
 
-    public class SelectiveSuppliers : SupplierGroup
+    public class SelectiveSuppliersBehavior : SupplierGroupBehavior
     {
         public override List<CarrierAccount> GetSuppliers(SupplierGroupSettings settings)
         {
@@ -23,7 +23,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
     }
 
-    public class AllSuppliers : SupplierGroup
+    public class AllSuppliersBehavior : SupplierGroupBehavior
     {
         public override List<CarrierAccount> GetSuppliers(SupplierGroupSettings settings)
         {

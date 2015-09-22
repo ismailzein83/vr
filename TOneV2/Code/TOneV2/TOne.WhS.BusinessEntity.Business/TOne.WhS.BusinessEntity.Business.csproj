@@ -75,10 +75,10 @@
     <Compile Include="RouteRulesByCriteria\RouteRulesByZoneProduct.cs" />
     <Compile Include="RoutingProductManager.cs" />
     <Compile Include="SaleCodeManager.cs" />
-    <Compile Include="SaleZoneGroup.cs" />
+    <Compile Include="SaleZoneGroupBehavior.cs" />
     <Compile Include="SaleZoneManager.cs" />
     <Compile Include="SaleZonePackageManager.cs" />
-    <Compile Include="SupplierGroup.cs" />
+    <Compile Include="SupplierGroupBehavior.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Data\TOne.WhS.BusinessEntity.Data.csproj">

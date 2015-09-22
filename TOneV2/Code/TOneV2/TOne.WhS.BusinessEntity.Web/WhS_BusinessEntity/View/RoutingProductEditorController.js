@@ -105,9 +105,9 @@ function RoutingProductEditorController($scope, WhS_BE_RoutingProductAPIService,
             SaleZonePackageId: $scope.selectedSaleZonePackage.SaleZonePackageId,
             Settings: {
                 SaleZoneGroupConfigId: $scope.selectedSaleZoneGroupTemplate.TemplateConfigID,
-                Zones: $scope.saleZoneGroups.getData(),
+                SaleZoneGroupSettings: $scope.saleZoneGroups.getData(),
                 SuppliersGroupConfigId: $scope.selectedSupplierGroupTemplate.TemplateConfigID,
-                Suppliers: $scope.suppliersGroup.getData()
+                SupplierGroupSettings: $scope.suppliersGroup.getData()
             }
         };
 
@@ -161,4 +161,4 @@ function RoutingProductEditorController($scope, WhS_BE_RoutingProductAPIService,
         });
     }
 }
-appControllers.controller('WhS_BusinessEntity_RoutingProductEditorController', RoutingProductEditorController);
+appControllers.controller('WhS_BE_RoutingProductEditorController', RoutingProductEditorController);
