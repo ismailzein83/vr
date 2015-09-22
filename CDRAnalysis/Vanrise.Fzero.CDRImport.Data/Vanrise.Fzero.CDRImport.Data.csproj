@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CDRDataManagerFactory.cs" />
+    <Compile Include="IStagingCDRDataManager.cs" />
     <Compile Include="ICDRDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
