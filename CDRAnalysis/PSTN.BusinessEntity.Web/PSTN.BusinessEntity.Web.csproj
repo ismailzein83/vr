@@ -123,6 +123,7 @@
   <ItemGroup />
   <ItemGroup>
     <Compile Include="Controllers\SwitchController.cs" />
+    <Compile Include="Controllers\SwitchTrunkController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -140,11 +141,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="PSTN_BusinessEntity\Constants\SwitchTrunkDirectionEnum.js" />
+    <Content Include="PSTN_BusinessEntity\Constants\SwitchTrunkTypeEnum.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchAPIService.js" />
+    <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchTrunkAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Views\SwitchEditor.html" />
     <Content Include="PSTN_BusinessEntity\Views\SwitchEditorController.js" />
     <Content Include="PSTN_BusinessEntity\Views\SwitchManagement.html" />
     <Content Include="PSTN_BusinessEntity\Views\SwitchManagementController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\SwitchTrunkManagement.html" />
+    <Content Include="PSTN_BusinessEntity\Views\SwitchTrunkManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,9 +1,7 @@
 ﻿using PSTN.BusinessEntity.Entities;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Threading;
 
 namespace PSTN.BusinessEntity.Data.SQL
 {
@@ -33,8 +31,12 @@ namespace PSTN.BusinessEntity.Data.SQL
         }
         
         public Switch GetSwitchByID(int switchID) {
-            Switch mySwitch = GetItemSP("PSTN_BE.sp_Switch_GetByID", SwitchMapper, switchID);
-            return mySwitch;
+            return GetItemSP("PSTN_BE.sp_Switch_GetByID", SwitchMapper, switchID);
+        }
+
+        public List<Switch> GetSwitches()
+        {
+            return GetItemsSP("PSTN_BE.sp_Switch_GetAll", SwitchMapper);
         }
 
         public bool UpdateSwitch(Switch switchObject)
