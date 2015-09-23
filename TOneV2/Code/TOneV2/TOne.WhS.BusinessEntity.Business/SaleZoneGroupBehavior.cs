@@ -9,26 +9,23 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public abstract class SaleZoneGroupBehavior
     {
-        public abstract List<SaleZone> GetZones(int saleZonePackageId, SaleZoneGroupSettings settings);
+        public abstract List<long> GetZoneIds(SaleZoneGroupSettings settings);
     }
 
     public class SelectiveSaleZonesBehavior : SaleZoneGroupBehavior
     {
-        public override List<SaleZone> GetZones(int saleZonePackageId, SaleZoneGroupSettings settings)
+        public override List<long> GetZoneIds(SaleZoneGroupSettings settings)
         {
-            SelectiveSaleZonesSettings selectiveSettings = settings as SelectiveSaleZonesSettings;
-
-            ISaleZoneManager saleZoneManager = BEManagerFactory.GetManager<ISaleZoneManager>();
-            return saleZoneManager.GetZones(selectiveSettings.ZoneIds);
+            return (settings as SelectiveSaleZonesSettings).ZoneIds;
         }
     }
 
-    public class AllSaleZonesBehavior : SaleZoneGroupBehavior
-    {
-        public override List<SaleZone> GetZones(int saleZonePackageId, SaleZoneGroupSettings settings)
-        {
-            ISaleZoneManager saleZoneManager = BEManagerFactory.GetManager<ISaleZoneManager>();
-            return saleZoneManager.GetPackageZones(saleZonePackageId);
-        }
-    }
+    //public class AllSaleZonesBehavior : SaleZoneGroupBehavior
+    //{
+    //    public override List<SaleZone> GetZones(int saleZonePackageId, SaleZoneGroupSettings settings)
+    //    {
+    //        ISaleZoneManager saleZoneManager = BEManagerFactory.GetManager<ISaleZoneManager>();
+    //        return saleZoneManager.GetPackageZones(saleZonePackageId);
+    //    }
+    //}
 }

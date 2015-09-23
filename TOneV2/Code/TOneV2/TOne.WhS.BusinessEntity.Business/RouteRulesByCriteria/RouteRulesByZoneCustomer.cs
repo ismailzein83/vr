@@ -15,7 +15,8 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
                 ids1 = carrierAccountManager.GetCustomerIds(rule.RouteCriteria.CustomersGroupConfigId.Value, rule.RouteCriteria.CustomerGroupSettings);
-                ids2 = rule.RouteCriteria.ZoneIds;
+                SaleZoneManager saleZoneManager = new SaleZoneManager();
+                ids2 = saleZoneManager.GetSaleZoneIds(rule.RouteCriteria.SaleZoneGroupConfigId.Value, rule.RouteCriteria.SaleZoneGroupSettings);
                 return true;
             }
             else

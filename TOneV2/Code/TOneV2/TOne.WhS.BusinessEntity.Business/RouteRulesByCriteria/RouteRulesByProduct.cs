@@ -11,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         protected override bool IsRuleMatched(IRouteCriteria rule, out IEnumerable<int> ids)
         {
-            if (rule.RouteCriteria.RoutingProductId != null && !rule.RouteCriteria.HasZoneFilter())
+            if (rule.RouteCriteria.RoutingProductId.HasValue && !rule.RouteCriteria.HasZoneFilter())
             {
                 ids = new List<int> { rule.RouteCriteria.RoutingProductId.Value };
                 return true;

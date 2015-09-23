@@ -11,11 +11,20 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         protected override bool IsRuleMatched(IRouteCriteria rule, out IEnumerable<int> ids1, out IEnumerable<long> ids2)
         {
-             if (rule.RouteCriteria.RoutingProductId != null && rule.RouteCriteria.HasZoneFilter())
+             if (rule.RouteCriteria.RoutingProductId.HasValue && rule.RouteCriteria.HasZoneFilter())
              {
                  ids1 = new List<int> { rule.RouteCriteria.RoutingProductId.Value };
-                 ids2 = rule.RouteCriteria.ZoneIds;
-                 return true;
+                 SaleZoneManager saleZoneManager = new SaleZoneManager();
+                 ids2 = saleZoneManager.GetSaleZoneIds(rule.RouteCriteria.SaleZoneGroupConfigId.Value, rule.RouteCriteria.SaleZoneGroupSettings);
+                 //validate that rule zones are available in routing product's zones. and remove the ones that are not there
+                 RoutingProductManager routingProductManager = new RoutingProductManager();
+                 RoutingProduct routingProduct = routingProductManager.GetRoutingProduct(rule.RouteCriteria.RoutingProductId.Value);
+                 if(routingProduct.Settings.SaleZoneGroupConfigId.HasValue)
+                 {
+                     List<long> routingProductZoneIds = saleZoneManager.GetSaleZoneIds(routingProduct.Settings.SaleZoneGroupConfigId.Value, routingProduct.Settings.SaleZoneGroupSettings);
+                     ids2 = ids2.Where(id => routingProductZoneIds.Contains(id));                 
+                 }
+                 return ids2.Count() > 0;
              }
              else
              {

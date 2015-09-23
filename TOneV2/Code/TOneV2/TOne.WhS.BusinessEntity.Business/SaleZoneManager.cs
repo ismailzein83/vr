@@ -58,6 +58,17 @@ namespace TOne.WhS.BusinessEntity.Business
             return manager.GetTemplateConfigurations(Constants.SaleZoneGroupConfigType);
         }
 
+        public List<long> GetSaleZoneIds(int zoneGroupConfigId, SaleZoneGroupSettings saleZoneGroupSettings)
+        {
+            TemplateConfigManager templateConfigManager = new TemplateConfigManager();
+            SaleZoneGroupBehavior saleZoneGroupBehavior = templateConfigManager.GetBehavior<SaleZoneGroupBehavior>(zoneGroupConfigId);
+            if (saleZoneGroupBehavior != null)
+                return saleZoneGroupBehavior.GetZoneIds(saleZoneGroupSettings);
+            else
+                return null;
+        }
+
+
         public List<SaleZoneInfo> GetSaleZonesInfo(int packageId, string filter)
         {
             ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();

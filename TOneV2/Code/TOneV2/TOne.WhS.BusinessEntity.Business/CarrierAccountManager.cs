@@ -21,24 +21,10 @@ namespace TOne.WhS.BusinessEntity.Business
             return manager.GetTemplateConfigurations(Constants.CustomerGroupConfigType);
         }
 
-        private CustomerGroupBehavior GetCustomersGroupBehavior(int configId)
-        {
-            var allTemplates = GetCustomersGroupTemplates();
-            if(allTemplates != null)
-            {
-                Vanrise.Entities.TemplateConfig templateConfig = allTemplates.FirstOrDefault(itm => itm.TemplateConfigID == configId);
-                if(templateConfig != null)
-                {
-                    Type t = Type.GetType(templateConfig.BehaviorFQTN);
-                    return Activator.CreateInstance(t) as CustomerGroupBehavior;
-                }
-            }
-            return null;
-        }
-
         public List<int> GetCustomerIds(int customersGroupConfigId, CustomerGroupSettings customerGroupSettings)
         {
-            CustomerGroupBehavior customerGroupBehavior = GetCustomersGroupBehavior(customersGroupConfigId);
+            TemplateConfigManager templateConfigManager = new TemplateConfigManager();
+            CustomerGroupBehavior customerGroupBehavior = templateConfigManager.GetBehavior<CustomerGroupBehavior>(customersGroupConfigId);
             if (customerGroupBehavior != null)
                 return customerGroupBehavior.GetCustomerIds(customerGroupSettings);
             else

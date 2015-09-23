@@ -13,7 +13,8 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             if (rule.RouteCriteria.HasZoneFilter() && rule.RouteCriteria.RoutingProductId == null && !rule.RouteCriteria.HasCustomerFilter())
             {
-                ids = rule.RouteCriteria.ZoneIds;
+                SaleZoneManager saleZoneManager = new SaleZoneManager();
+                ids = saleZoneManager.GetSaleZoneIds(rule.RouteCriteria.SaleZoneGroupConfigId.Value, rule.RouteCriteria.SaleZoneGroupSettings);
                 return true;
             }
             else

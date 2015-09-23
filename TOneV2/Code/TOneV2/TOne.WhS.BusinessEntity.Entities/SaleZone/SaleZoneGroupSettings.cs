@@ -10,7 +10,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public bool IsAllExcept { get; set; }
 
-        //public int SaleZonePackageId { get; set; }
+        public int? SaleZonePackageId { get; set; }
     }
 
     public class SelectiveSaleZonesSettings : SaleZoneGroupSettings
