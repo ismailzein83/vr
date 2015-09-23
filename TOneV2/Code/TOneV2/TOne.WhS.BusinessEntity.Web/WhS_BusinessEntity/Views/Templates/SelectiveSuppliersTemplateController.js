@@ -8,7 +8,7 @@ function SelectiveSuppliersTemplateController($scope, WhS_BE_CarrierAccountAPISe
     function defineScope() {
 
         $scope.suppliers = [];
-
+        $scope.selectedSuppliers=[];
         $scope.supplierGroups.getData = function () {
 
             return {
@@ -25,7 +25,7 @@ function SelectiveSuppliersTemplateController($scope, WhS_BE_CarrierAccountAPISe
     var isFormLoaded;
     function loadForm() {
 
-        if ($scope.supplierGroups.data == undefined || isFormLoaded)
+        if ($scope.supplierGroups.data == undefined || isFormLoaded || $scope.suppliers.length==0)
             return;
 
         var data = $scope.supplierGroups.data;
@@ -41,8 +41,7 @@ function SelectiveSuppliersTemplateController($scope, WhS_BE_CarrierAccountAPISe
     }
 
     function load() {
-        WhS_BE_CarrierAccountAPIService.GetSuppliers().then(function (response) {
-
+        WhS_BE_CarrierAccountAPIService.GetCarrierAccounts(false,true).then(function (response) {
             angular.forEach(response, function (item) {
                 $scope.suppliers.push(item);
             });
