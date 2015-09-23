@@ -1,18 +1,19 @@
-﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_SwitchTrunkEditorController" vr-loader="isGettingData" width="'50%'">
+﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_SwitchTrunkEditorController" vr-loader="isGettingData" width="'25%'">
 
     <vr-modalbody>
         <vr-form name="formSwitchTrunkEditor">
 
             <vr-row>
-                <vr-columns width="1/4row">
+                <vr-columns width="1/2row">
                     <vr-textbox label="Name" value="name" isrequired></vr-textbox>
                 </vr-columns>
 
-                <vr-columns width="1/4row">
+                <vr-columns width="1/2row">
                     <vr-textbox label="Symbol" value="symbol" isrequired></vr-textbox>
                 </vr-columns>
-
-                <vr-columns width="1/4row">
+            </vr-row>
+            <vr-row>
+                <vr-columns width="1/2row">
                     <vr-select label="Switch"
                                datasource="switches"
                                selectedvalues="selectedSwitch"
@@ -23,7 +24,7 @@
                     </vr-select>
                 </vr-columns>
 
-                <vr-columns width="1/4row">
+                <vr-columns width="1/2row">
                     <vr-select label="Type"
                                datasource="types"
                                selectedvalues="selectedType"
@@ -33,8 +34,9 @@
                                isrequired>
                     </vr-select>
                 </vr-columns>
-
-                <vr-columns width="1/4row">
+            </vr-row>
+            <vr-row>
+                <vr-columns width="1/2row">
                     <vr-select label="Direction"
                                datasource="directions"
                                selectedvalues="selectedDirection"

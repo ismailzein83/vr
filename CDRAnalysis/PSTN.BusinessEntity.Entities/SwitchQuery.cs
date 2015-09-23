@@ -9,7 +9,5 @@ namespace PSTN.BusinessEntity.Entities
         public List<int> SelectedTypeIDs { get; set; }
 
         public string AreaCode { get; set; }
-
-        public List<int> SelectedDataSourceIDs { get; set; }
     }
 }

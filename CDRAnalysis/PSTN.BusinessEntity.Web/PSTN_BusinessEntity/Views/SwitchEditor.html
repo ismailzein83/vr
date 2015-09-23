@@ -1,14 +1,14 @@
-﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_SwitchEditorController" vr-loader="isGettingData" width="'50%'">
+﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_SwitchEditorController" vr-loader="isGettingData" width="'25%'">
 
     <vr-modalbody>
         <vr-form name="formSwitchEditor">
 
             <vr-row>
-                <vr-columns width="1/4row">
+                <vr-columns width="1/2row">
                     <vr-textbox label="Name" value="name" isrequired></vr-textbox>
                 </vr-columns>
 
-                <vr-columns width="1/4row">
+                <vr-columns width="1/2row">
                     <vr-select label="Type"
                                datasource="types"
                                selectedvalues="selectedType"
@@ -18,16 +18,18 @@
                                isrequired>
                     </vr-select>
                 </vr-columns>
-
-                <vr-columns width="1/4row">
+            </vr-row>
+            <vr-row>
+                <vr-columns width="1/2row">
                     <vr-textbox label="Area Code" value="areaCode" isrequired></vr-textbox>
                 </vr-columns>
 
-                <vr-columns width="1/4row">
+                <vr-columns width="1/2row">
                     <vr-textbox label="Time Offset" value="timeOffset" customvalidate="validateTimeOffset" isrequired></vr-textbox>
                 </vr-columns>
-
-                <vr-columns width="1/4row">
+            </vr-row>
+            <vr-row>
+                <vr-columns width="1/2row">
                     <vr-select label="Data Source"
                                datasource="dataSources"
                                selectedvalues="selectedDataSource"
@@ -36,6 +38,10 @@
                                entityname="Data Source"
                                isrequired>
                     </vr-select>
+                </vr-columns>
+
+                <vr-columns width="1/2row">
+                    <vr-button type="Add" data-onclick="addDataSource" standalone></vr-button>
                 </vr-columns>
             </vr-row>
 

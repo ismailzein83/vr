@@ -27,10 +27,7 @@ namespace PSTN.BusinessEntity.Data.SQL
                 string typeIDs = (input.Query.SelectedTypeIDs != null && input.Query.SelectedTypeIDs.Count() > 0) ?
                     string.Join<int>(",", input.Query.SelectedTypeIDs) : null;
 
-                string dataSourceIDs = (input.Query.SelectedDataSourceIDs != null && input.Query.SelectedDataSourceIDs.Count() > 0) ?
-                    string.Join<int>(",", input.Query.SelectedDataSourceIDs) : null;
-
-                ExecuteNonQuerySP("PSTN_BE.sp_Switch_CreateTempByFiltered", tempTableName, input.Query.Name, typeIDs, input.Query.AreaCode, dataSourceIDs);
+                ExecuteNonQuerySP("PSTN_BE.sp_Switch_CreateTempByFiltered", tempTableName, input.Query.Name, typeIDs, input.Query.AreaCode);
 
             }, (reader) => SwitchMapper(reader), mapper);
         }
@@ -92,7 +89,7 @@ namespace PSTN.BusinessEntity.Data.SQL
             switchObject.Name = reader["Name"] as string;
             switchObject.TypeID = (int)reader["TypeID"];
             switchObject.AreaCode = reader["AreaCode"] as string;
-            switchObject.TimeOffset =   TimeSpan.Parse (reader["TimeOffset"] as string);
+            switchObject.TimeOffset = TimeSpan.Parse(reader["TimeOffset"] as string);
             switchObject.DataSourceID = (int)reader["DataSourceID"];
 
             return switchObject;
