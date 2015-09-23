@@ -75,11 +75,11 @@
     <Compile Include="RouteRulesByCriteria\RouteRulesByZoneProduct.cs" />
     <Compile Include="RoutingProductManager.cs" />
     <Compile Include="SaleCodeManager.cs" />
-    <Compile Include="SaleZoneGroupBehavior.cs" />
+    <Compile Include="SelectiveSaleZonesBehavior.cs" />
     <Compile Include="SaleZoneManager.cs" />
     <Compile Include="SaleZonePackageManager.cs" />
     <Compile Include="SupplierCodeManager.cs" />
-    <Compile Include="SupplierGroupBehavior.cs" />
+    <Compile Include="SelectiveSuppliersBehavior.cs" />
     <Compile Include="SupplierPriceListManager.cs" />
     <Compile Include="SupplierRateManager.cs" />
     <Compile Include="SupplierZoneManager.cs" />

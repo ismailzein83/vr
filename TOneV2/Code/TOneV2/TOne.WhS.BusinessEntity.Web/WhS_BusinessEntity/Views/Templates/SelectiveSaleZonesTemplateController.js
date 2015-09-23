@@ -17,6 +17,7 @@ function SelectiveSaleZonesTemplateController($scope, WhS_BE_SaleZoneAPIService,
 
             return {
                 $type: "TOne.WhS.BusinessEntity.Entities.SelectiveSaleZonesSettings, TOne.WhS.BusinessEntity.Entities",
+                SaleZonePackageId: $scope.saleZoneGroups.saleZonePackageId,
                 ZoneIds: UtilsService.getPropValuesFromArray($scope.selectedSaleZones, "SaleZoneId")
             };
         };

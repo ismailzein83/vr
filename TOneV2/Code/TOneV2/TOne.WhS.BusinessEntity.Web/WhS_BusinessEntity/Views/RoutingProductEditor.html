@@ -11,17 +11,20 @@
                     <vr-columns width="1/2row">
                         <vr-textbox value="routingProductName" label="Name" isrequired></vr-textbox>
                     </vr-columns>
-                    <vr-columns width="1/2row">
-                        <vr-select datatextfield="Name" datavaluefield="SaleZonePackageId"
-                                    label="Sale Zone Package" datasource="saleZonePackages" selectedvalues="selectedSaleZonePackage" onselectionchanged="saleZonePackageOnSelectionChanged"></vr-select>
-                    </vr-columns>
                 </vr-row>
             </div>
             <div ng-show="saleZonesSelected">
                 <vr-row>
                     <vr-columns width="1/2row">
+                        <vr-select datatextfield="Name" datavaluefield="SaleZonePackageId"
+                                   label="Sale Zone Package" datasource="saleZonePackages" selectedvalues="selectedSaleZonePackage" onselectionchanged="saleZonePackageOnSelectionChanged">
+                        </vr-select>
+                    </vr-columns>
+                </vr-row>
+                <vr-row ng-show="selectedSaleZonePackage">
+                    <vr-columns width="1/2row">
                         <vr-select datatextfield="Name" datavaluefield="TemplateConfigID"
-                                   label="Type" datasource="saleZoneGroupTemplates" selectedvalues="selectedSaleZoneGroupTemplate"></vr-select>
+                                   label="Filter Type" datasource="saleZoneGroupTemplates" selectedvalues="selectedSaleZoneGroupTemplate" hideremoveicon></vr-select>
                     </vr-columns>
                 </vr-row>
                 <vr-row>
@@ -32,7 +35,7 @@
                 <vr-row>
                     <vr-columns width="1/2row">
                         <vr-select datatextfield="Name" datavaluefield="TemplateConfigID"
-                                   label="Type" datasource="supplierGroupTemplates" selectedvalues="selectedSupplierGroupTemplate"></vr-select>
+                                   label="Filter Type" datasource="supplierGroupTemplates" selectedvalues="selectedSupplierGroupTemplate" hideremoveicon></vr-select>
                     </vr-columns>
                 </vr-row>
                 <vr-row>

@@ -71,6 +71,7 @@
     <Compile Include="RoutingProduct\RoutingRule\RouteRuleCriteria.cs" />
     <Compile Include="RoutingProduct\RoutingRule\RouteRuleSettings.cs" />
     <Compile Include="RoutingProduct\RoutingRule\StructuredRouteRules.cs" />
+    <Compile Include="SaleZone\SaleZoneGroupBehavior.cs" />
     <Compile Include="SaleZone\SaleZoneInfo.cs" />
     <Compile Include="SaleZone\SaleCode.cs" />
     <Compile Include="SaleZone\SaleRate.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="CarrierAccount\CarrierAccountSupplierSettings.cs" />
     <Compile Include="CarrierAccount\SuppliersGroupSettings.cs" />
     <Compile Include="SaleZone\SaleZoneService.cs" />
+    <Compile Include="CarrierAccount\SupplierGroupBehavior.cs" />
     <Compile Include="SupplierZone\SupplierCode.cs" />
     <Compile Include="SupplierZone\SupplierRate.cs" />
     <Compile Include="SupplierZone\SupplierZone.cs" />
