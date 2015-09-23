@@ -11,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         public override List<CarrierAccount> GetSuppliers(SupplierGroupSettings settings)
         {
-            SelectiveSupplierSettings selectiveSettings = settings as SelectiveSupplierSettings;
+            SelectiveSuppliersSettings selectiveSettings = settings as SelectiveSuppliersSettings;
 
             ICarrierAccountManager carrierAccountManager = BEManagerFactory.GetManager<ICarrierAccountManager>();
             return carrierAccountManager.GetSuppliers(selectiveSettings.SupplierIds);

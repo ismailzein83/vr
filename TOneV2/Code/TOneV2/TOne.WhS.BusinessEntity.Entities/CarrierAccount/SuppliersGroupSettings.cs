@@ -11,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         
     }
 
-    public class SelectiveSupplierSettings : SupplierGroupSettings
+    public class SelectiveSuppliersSettings : SupplierGroupSettings
     {
         public List<int> SupplierIds { get; set; }
     }

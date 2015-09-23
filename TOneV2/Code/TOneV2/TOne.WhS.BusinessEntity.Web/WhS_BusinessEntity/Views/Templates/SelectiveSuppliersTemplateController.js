@@ -1,62 +1,57 @@
-﻿SelectiveSuppliersTemplateController.$inject = ['$scope', 'WhS_BE_SaleZoneAPIService', 'UtilsService', 'VRNotificationService'];
+﻿SelectiveSuppliersTemplateController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'UtilsService', 'VRNotificationService'];
 
-function SelectiveSuppliersTemplateController($scope, WhS_BE_SaleZoneAPIService, UtilsService, VRNotificationService) {
+function SelectiveSuppliersTemplateController($scope, WhS_BE_CarrierAccountAPIService, UtilsService, VRNotificationService) {
 
     defineScope();
     load();
 
     function defineScope() {
 
-        $scope.searchZones = function (filter) {
-            return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo($scope.saleZoneGroups.saleZonePackageId, filter);
-        }
+        $scope.suppliers = [];
 
-        $scope.selectedSaleZones = [];
-
-        $scope.saleZoneGroups.getData = function () {
+        $scope.supplierGroups.getData = function () {
 
             return {
-                $type: "TOne.WhS.BusinessEntity.Entities.SelectiveSaleZonesSettings, TOne.WhS.BusinessEntity.Entities",
-                ZoneIds: UtilsService.getPropValuesFromArray($scope.selectedSaleZones, "SaleZoneId")
+                $type: "TOne.WhS.BusinessEntity.Entities.SelectiveSuppliersSettings, TOne.WhS.BusinessEntity.Entities",
+                SupplierIds: UtilsService.getPropValuesFromArray($scope.selectedSuppliers, "CarrierAccountId")
             };
         };
 
-        $scope.saleZoneGroups.loadTemplateData = function () {
+        $scope.supplierGroups.loadTemplateData = function () {
             loadForm();
-        }
-
-        $scope.saleZoneGroups.resetSaleZoneSelection = function () {
-            $scope.selectedSaleZones = [];
         }
     }
 
     var isFormLoaded;
     function loadForm() {
 
-        if ($scope.saleZoneGroups.data == undefined || isFormLoaded)
+        if ($scope.supplierGroups.data == undefined || isFormLoaded)
             return;
 
-        var data = $scope.saleZoneGroups.data;
+        var data = $scope.supplierGroups.data;
         if (data != null) {
 
-            if ($scope.saleZoneGroups.data.ZoneIds != undefined)
-            {
-                var input = { PackageId: $scope.saleZoneGroups.saleZonePackageId, SaleZoneIds: $scope.saleZoneGroups.data.ZoneIds };
-                WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {
-                    angular.forEach(response, function (item) {
-                        $scope.selectedSaleZones.push(item);
-                    });
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                });
-            }
+            angular.forEach($scope.saleZoneGroups.data.SupplierIds, function (item) {
+                var selectedSupplier = UtilsService.getItemByVal($scope.suppliers, item, "CarrierAccountId");
+                $scope.selectedSuppliers.push(selectedSupplier);
+            });
         }
 
         isFormLoaded = true;
     }
 
     function load() {
-        loadForm();
+        WhS_BE_CarrierAccountAPIService.GetSuppliers().then(function (response) {
+
+            angular.forEach(response, function (item) {
+                $scope.suppliers.push(item);
+            });
+
+            loadForm();
+        }).catch(function (error) {
+            VRNotificationService.notifyException(error, $scope);
+        });;
+        
     }
 }
 appControllers.controller('WhS_BE_SelectiveSuppliersTemplateController', SelectiveSuppliersTemplateController);
