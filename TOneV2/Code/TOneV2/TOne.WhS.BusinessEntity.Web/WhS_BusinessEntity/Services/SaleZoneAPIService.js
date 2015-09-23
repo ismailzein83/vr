@@ -3,6 +3,7 @@ app.service('WhS_BE_SaleZoneAPIService', function (BaseAPIService) {
 
     return ({
         GetSaleZonesInfo: GetSaleZonesInfo,
+        GetSaleZonesInfoByIds: GetSaleZonesInfoByIds
     });
      
 
@@ -13,11 +14,8 @@ app.service('WhS_BE_SaleZoneAPIService', function (BaseAPIService) {
         });
     }
 
-    function GetSaleZonesInfoByIds(packageId, saleZoneIds) {
-        return BaseAPIService.get("/api/SaleZone/GetSaleZonesInfoByIds", {
-            packageId: packageId,
-            saleZoneIds: saleZoneIds
-        });
+    function GetSaleZonesInfoByIds(input) {
+        return BaseAPIService.post("/api/SaleZone/GetSaleZonesInfoByIds", input);
     }
 
 });

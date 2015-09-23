@@ -119,5 +119,25 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             object prepareToApplySaleZones =FinishDBApplyStream(dbApplyStream);
            ApplySaleZonesForDB(prepareToApplySaleZones);
         }
+
+        public List<SaleZoneInfo> GetSaleZonesInfo(int packageId, string filter)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleZoneInfo_GetFiltered", SaleZoneInfoMapper, packageId, filter);
+        }
+
+        public List<SaleZoneInfo> GetSaleZonesInfoByIds(int packageId, List<long> saleZoneIds)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleZoneInfo_GetByPackageAndZoneIds", SaleZoneInfoMapper, packageId, string.Join(",", saleZoneIds));
+        }
+
+        SaleZoneInfo SaleZoneInfoMapper(IDataReader reader)
+        {
+            SaleZoneInfo saleZoneInfo = new SaleZoneInfo
+            {
+                SaleZoneId = (long)reader["ID"],
+                Name = reader["Name"] as string,
+            };
+            return saleZoneInfo;
+        }
     }
 }

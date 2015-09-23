@@ -11,11 +11,32 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 {
     public class SaleZoneController : BaseAPIController
     {
+        //[HttpGet]
+        //public List<SaleZone> GetSaleZonesByPackage(int packageId,DateTime effectiveDate)
+        //{
+        //    SaleZoneManager manager = new SaleZoneManager();
+        //    return manager.GetSaleZones(packageId, effectiveDate);
+        //}
+
         [HttpGet]
-        public List<SaleZone> GetSaleZonesByPackage(int packageId,DateTime effectiveDate)
+        public List<SaleZoneInfo> GetSaleZonesInfo(int packageId, string filter)
         {
             SaleZoneManager manager = new SaleZoneManager();
-            return manager.GetSaleZones(packageId, effectiveDate);
+            return manager.GetSaleZonesInfo(packageId, filter);
         }
+
+        [HttpPost]
+        public List<SaleZoneInfo> GetSaleZonesInfoByIds(SaleZoneInput input)
+        {
+            SaleZoneManager manager = new SaleZoneManager();
+            return manager.GetSaleZonesInfoByIds(input.PackageId, input.SaleZoneIds);
+        }
+    }
+
+    public class SaleZoneInput
+    {
+        public int PackageId { get; set; }
+
+        public List<long> SaleZoneIds { get; set; }
     }
 }

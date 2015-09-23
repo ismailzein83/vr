@@ -10,6 +10,7 @@ using Vanrise.Web.Base;
 
 namespace TOne.WhS.BusinessEntity.Web.Controllers
 {
+    [JSONWithTypeAttribute]
     public class RoutingProductController : BaseAPIController
     {
         [HttpPost]

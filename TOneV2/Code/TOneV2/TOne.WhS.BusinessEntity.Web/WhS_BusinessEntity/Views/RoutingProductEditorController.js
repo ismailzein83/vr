@@ -32,6 +32,12 @@ function RoutingProductEditorController($scope, WhS_BE_RoutingProductAPIService,
             $scope.modalContext.closeModal()
         };
 
+        $scope.saleZonePackageOnSelectionChanged = function ()
+        {
+            if ($scope.selectedSaleZonePackage != undefined)
+                $scope.saleZoneGroups.saleZonePackageId = $scope.selectedSaleZonePackage.SaleZonePackageId;
+        }
+
         $scope.saleZoneGroupTemplates = [];
         $scope.selectedSaleZoneGroupTemplate = undefined;
 
@@ -121,6 +127,7 @@ function RoutingProductEditorController($scope, WhS_BE_RoutingProductAPIService,
         $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, routingProductObj.Settings.SaleZoneGroupConfigId, "TemplateConfigID");
         $scope.selectedSupplierGroupTemplate = UtilsService.getItemByVal($scope.supplierGroupTemplates, routingProductObj.Settings.SupplierGroupConfigId, "TemplateConfigID");
 
+        $scope.saleZoneGroups.saleZonePackageId = routingProductObj.SaleZonePackageId;
         $scope.saleZoneGroups.data = routingProductObj.Settings.SaleZoneGroupSettings;
 
         if ($scope.saleZoneGroups.loadTemplateData != undefined)

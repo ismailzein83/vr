@@ -16,5 +16,9 @@ namespace TOne.WhS.BusinessEntity.Data
         object InitialiazeStreamForDBApply();
         void WriteRecordToStream(SaleZone record, object dbApplyStream);
         object FinishDBApplyStream(object dbApplyStream);
+
+        List<SaleZoneInfo> GetSaleZonesInfo(int packageId, string filter);
+
+        List<SaleZoneInfo> GetSaleZonesInfoByIds(int packageId, List<long> saleZoneIds);
     }
 }

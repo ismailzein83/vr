@@ -1,6 +1,6 @@
-﻿SelectiveSuppliersTemplateController.$inject = ['$scope', 'SaleZoneAPIService', 'UtilsService', 'VRNotificationService'];
+﻿SelectiveSuppliersTemplateController.$inject = ['$scope', 'WhS_BE_SaleZoneAPIService', 'UtilsService', 'VRNotificationService'];
 
-function SelectiveSuppliersTemplateController($scope, SaleZoneAPIService, UtilsService, VRNotificationService) {
+function SelectiveSuppliersTemplateController($scope, WhS_BE_SaleZoneAPIService, UtilsService, VRNotificationService) {
 
     defineScope();
     load();
@@ -8,7 +8,7 @@ function SelectiveSuppliersTemplateController($scope, SaleZoneAPIService, UtilsS
     function defineScope() {
 
         $scope.searchZones = function (filter) {
-            return SaleZoneAPIService.GetSalesZonesInfo($scope.saleZoneGroups.saleZonePackageId, filter);
+            return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo($scope.saleZoneGroups.saleZonePackageId, filter);
         }
 
         $scope.selectedSaleZones = [];
@@ -21,11 +21,11 @@ function SelectiveSuppliersTemplateController($scope, SaleZoneAPIService, UtilsS
             };
         };
 
-        $scope.dataSourceAdapter.loadTemplateData = function () {
+        $scope.saleZoneGroups.loadTemplateData = function () {
             loadForm();
         }
 
-        $scope.dataSourceAdapter.resetSaleZoneSelection = function () {
+        $scope.saleZoneGroups.resetSaleZoneSelection = function () {
             $scope.selectedSaleZones = [];
         }
     }
@@ -38,13 +38,18 @@ function SelectiveSuppliersTemplateController($scope, SaleZoneAPIService, UtilsS
 
         var data = $scope.saleZoneGroups.data;
         if (data != null) {
-            SaleZoneAPIService.GetSaleZonesInfoByIds($scope.saleZoneGroups.saleZonePackageId, $scope.saleZoneGroups.data.ZoneIds).then(function (response) {
-                angular.forEach(response, function (item) {
-                    $scope.selectedSaleZones.push(item);
+
+            if ($scope.saleZoneGroups.data.ZoneIds != undefined)
+            {
+                var input = { PackageId: $scope.saleZoneGroups.saleZonePackageId, SaleZoneIds: $scope.saleZoneGroups.data.ZoneIds };
+                WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {
+                    angular.forEach(response, function (item) {
+                        $scope.selectedSaleZones.push(item);
+                    });
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            });
+            }
         }
 
         isFormLoaded = true;
