@@ -56,6 +56,10 @@
     <Compile Include="ISaleCodeDataManager.cs" />
     <Compile Include="ISaleZoneDataManager.cs" />
     <Compile Include="ISaleZonePackageDataManager.cs" />
+    <Compile Include="ISupplierCodeDataManager.cs" />
+    <Compile Include="ISupplierPriceListDataManager.cs" />
+    <Compile Include="ISupplierRateDataManager.cs" />
+    <Compile Include="ISupplierZoneDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

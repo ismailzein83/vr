@@ -78,7 +78,11 @@
     <Compile Include="SaleZoneGroupBehavior.cs" />
     <Compile Include="SaleZoneManager.cs" />
     <Compile Include="SaleZonePackageManager.cs" />
+    <Compile Include="SupplierCodeManager.cs" />
     <Compile Include="SupplierGroupBehavior.cs" />
+    <Compile Include="SupplierPriceListManager.cs" />
+    <Compile Include="SupplierRateManager.cs" />
+    <Compile Include="SupplierZoneManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Data\TOne.WhS.BusinessEntity.Data.csproj">
