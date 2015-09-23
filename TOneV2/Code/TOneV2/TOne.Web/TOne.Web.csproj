@@ -461,6 +461,14 @@
       <Project>{4810623c-c3e8-47b0-880c-68bd57d139cf}</Project>
       <Name>TOne.WhS.CodePreparation.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SupplierPriceList.Data.SQL\TOne.WhS.SupplierPriceList.Data.SQL.csproj">
+      <Project>{7b2361d9-b37e-482e-8eba-9d88ac7d6829}</Project>
+      <Name>TOne.WhS.SupplierPriceList.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SupplierPriceList.Web\TOne.WhS.SupplierPriceList.Web.csproj">
+      <Project>{31916b09-a29f-4d55-9669-efb6b0d9635b}</Project>
+      <Name>TOne.WhS.SupplierPriceList.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
