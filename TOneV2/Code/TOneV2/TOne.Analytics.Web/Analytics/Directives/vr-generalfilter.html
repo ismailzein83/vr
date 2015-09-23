@@ -34,7 +34,8 @@
         </vr-select>
     </vr-columns>
 
-    <vr-columns width="normal" ng-if="ctrl.filtervalues.indexOf(ctrl.GenericAnalyticDimensionEnum.PortIn) > -1 || ctrl.filtervalues.indexOf(ctrl.GenericAnalyticDimensionEnum.PortOut) > -1 ">
+    <vr-columns width="normal" ng-if="ctrl.filtervalues.indexOf(ctrl.GenericAnalyticDimensionEnum.PortIn) > -1 || 
+                ctrl.filtervalues.indexOf(ctrl.GenericAnalyticDimensionEnum.PortOut) > -1 ">
         <vr-choices islabelswitch selectedindex="ctrl.selectedConnectionIndex" onselectionchanged="ctrl.onSelectionChanged()">
             <vr-choice isselected="inSelected">In</vr-choice>
             <vr-choice isselected="outSelected">Out</vr-choice>

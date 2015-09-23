@@ -2,8 +2,8 @@
 
     "use strict";
 
-    GenericAnalyticSubGridController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticDimensionEnum'];
-    function GenericAnalyticSubGridController($scope, GenericAnalyticAPIService, GenericAnalyticDimensionEnum) {
+    GenericAnalyticSubGridController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticDimensionEnum', 'GenericAnalyticService'];
+    function GenericAnalyticSubGridController($scope, GenericAnalyticAPIService, GenericAnalyticDimensionEnum, GenericAnalyticService) {
         var filter = {};
         var measureFields = [];
         var selectedGroupKeys = [] , parentGroupKeys = [];
@@ -38,6 +38,13 @@
                     return true;
                 else 
                     return false;
+            };
+
+            $scope.getColor = function (dataItem, coldef) {
+                if ($scope.gridParentScope.params != undefined)
+                    return GenericAnalyticService.getMeasureColor(dataItem, coldef, $scope.gridParentScope.params);
+                else
+                    return GenericAnalyticService.getMeasureColor(dataItem, coldef, $scope.viewScope.params);
             };
         }
 

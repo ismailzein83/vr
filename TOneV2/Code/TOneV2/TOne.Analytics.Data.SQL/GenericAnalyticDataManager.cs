@@ -322,7 +322,7 @@ namespace TOne.Analytics.Data.SQL
             AnalyticRecord record = new AnalyticRecord()
             {
                 DimensionValues = new AnalyticDimensionValue[dimensionsConfig.Count],
-                MeasureValues = new Object[measureFieldsConfig.Count]
+                MeasureValues = new Dictionary<AnalyticMeasureField, object>() // Object[measureFieldsConfig.Count]
             };
 
             var index = 0;
@@ -347,7 +347,8 @@ namespace TOne.Analytics.Data.SQL
             foreach (var measureFieldConfig in measureFieldsConfig)
             {                
                 if (measureFieldConfig.Value.GetMeasureValue != null)
-                    record.MeasureValues[index] = measureFieldConfig.Value.GetMeasureValue(reader, record);
+                    //record.MeasureValues[index] = measureFieldConfig.Value.GetMeasureValue(reader, record);
+                    record.MeasureValues[measureFieldConfig.Key] = measureFieldConfig.Value.GetMeasureValue(reader, record);
 
                 index++;
             }

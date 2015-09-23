@@ -2,7 +2,8 @@
 
     "use strict";
 
-    function vrDirectiveObj(analyticsService, BusinessEntityAPIService, ZonesService, CarrierAccountConnectionAPIService, CarrierTypeEnum, GenericAnalyticDimensionEnum, CurrencyAPIService) {
+    function vrDirectiveObj(analyticsService, BusinessEntityAPIService, ZonesService, CarrierAccountConnectionAPIService, CarrierTypeEnum,
+        GenericAnalyticDimensionEnum, CurrencyAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',

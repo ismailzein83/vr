@@ -10,6 +10,8 @@ namespace TOne.Analytics.Entities
     {
         public AnalyticDimensionValue[] DimensionValues { get; set; }
 
-        public Object[] MeasureValues { get; set; }
+        //public Object[] MeasureValues { get; set; }
+
+        public Dictionary<AnalyticMeasureField,Object> MeasureValues { get; set; }
     }
 }

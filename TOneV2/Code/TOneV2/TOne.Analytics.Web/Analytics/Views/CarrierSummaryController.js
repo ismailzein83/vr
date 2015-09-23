@@ -15,13 +15,13 @@
             $scope.filterKeys = [];
             $scope.measures = [];
             $scope.selectedobject = {};
-            $scope.showResult = false;
+
             loadGroupKeys();
             loadFilterKeys();
             loadMeasures();
+
             $scope.searchClicked = function () {
                 return retrieveData();
-                
             };
         }
 
@@ -34,7 +34,6 @@
                     ToTime: $scope.selectedobject.todate,
                     Currency: $scope.selectedobject.currency
                 };
-                $scope.showResult = true;
                 return $scope.subViewConnector.retrieveData(query);
         }
 
@@ -64,6 +63,7 @@
             $scope.measures.push(GenericAnalyticMeasureEnum.SuccessfulAttempts);
             $scope.measures.push(GenericAnalyticMeasureEnum.FailedAttempts);
             $scope.measures.push(GenericAnalyticMeasureEnum.DeliveredAttempts);
+            $scope.measures.push(GenericAnalyticMeasureEnum.ACD);
         }
     }
     appControllers.controller('Carrier_CarrierSummaryController', CarrierSummaryController);

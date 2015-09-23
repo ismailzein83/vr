@@ -13,5 +13,8 @@
     Date: { name: "Date", value: 11, description: "Date", type: "Text" },
     Hour: { name: "Hour", value: 12, description: "Hour", type: "Number" },
     SupplierZone: { name: "SupplierZone", value: 13, description: "SupplierZone", type: "Text" },
-    Currency: { name: "Currency", value: 14, description: "Currency", type: "Text" }
+    Currency: { name: "Currency", value: 14, description: "Currency", type: "Text" },
+    ASR: { name: "ASR", value: 15, description: "ASR", type: "Text" },
+    ACD: { name: "ACD", value: 16, description: "ACD", type: "Text" },
+    Attempts: { name: "Attempts", value: 17, description: "Attempts", type: "Text" }
 });

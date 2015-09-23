@@ -2,15 +2,21 @@
 
     "use strict";
 
-    genericAnalyticGridController.$inject = ['$scope', 'GenericAnalyticAPIService'];
-    function genericAnalyticGridController($scope, GenericAnalyticAPIService) {
+    genericAnalyticGridController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticMeasureEnum', 'VRModalService', 'GenericAnalyticService'];
+    function genericAnalyticGridController($scope, GenericAnalyticAPIService, GenericAnalyticMeasureEnum, vrModalService, GenericAnalyticService) {
         var gridApi;
         var measureFieldsValues = [];
-
+        var parameters = {
+            asr: 50,
+            acd: 20,
+            attempts: 2
+        };
         defineScope();
         function defineScope() {
             
             $scope.datasource = [];
+            $scope.params = parameters;
+            defineMenuActions();
 
             $scope.gridReady = function (api) {
                 gridApi = api;
@@ -20,20 +26,32 @@
                 groupKeys:[]
             }
 
+            var fixedDimensions = [];
             var selectedGroupKeys = [];
 
             $scope.subViewConnector.getValue = function () {
                 return "GetValue";
             };
+
             $scope.subViewConnector.retrieveData = function (value) {
                 $scope.subViewConnector.value = value;
-
+                measureFieldsValues.length = 0;
                 if (gridApi == undefined)
                     return;
 
                 var groupKeys = [];
+                fixedDimensions.length = 0;
+
                 value.DimensionFields.forEach(function (group) {
                     groupKeys.push(group.value);
+                });
+
+                if (value.FixedDimensionFields == undefined)
+                    value.FixedDimensionFields = [];
+
+                value.FixedDimensionFields.forEach(function (group) {
+                    groupKeys.push(group.value);
+                    fixedDimensions.push(group);
                 });
 
                 selectedGroupKeys = value.DimensionFields;
@@ -50,7 +68,6 @@
                     ToTime: value.ToTime,
                     Currency: value.Currency
                 }
-
                 $scope.selectedMeasures = value.MeasureFields;
                 $scope.fromDate = value.FromTime;
                 $scope.toDate = value.ToTime;
@@ -63,10 +80,16 @@
                 return GenericAnalyticAPIService.GetFiltered(dataRetrievalInput)
                 .then(function (response) {
                     $scope.currentSearchCriteria.groupKeys.length = 0;
+
                     selectedGroupKeys.forEach(function (group) {
                         $scope.currentSearchCriteria.groupKeys.push(group);
                     });
+
+                    fixedDimensions.forEach(function (group) {
+                        $scope.currentSearchCriteria.groupKeys.push(group);
+                    });
                     //gridApi.setSummary(response.Summary);
+
                     onResponseReady(response);
                 });
             };
@@ -74,6 +97,35 @@
             $scope.checkExpandablerow = function (groupKeys) {
                 return groupKeys.length !== $scope.groupKeys.length;
             };
+
+            $scope.getColor = function (dataItem, coldef) {
+
+                return GenericAnalyticService.getMeasureColor(dataItem, coldef, parameters);
+            };
+        }
+
+        function defineMenuActions() {
+            $scope.gridMenuActions = [{
+                name: "Settings",
+                clicked: function () {
+                    showGenericAnalyticGridSettings();
+                }
+            }];
+        }
+
+        function showGenericAnalyticGridSettings() {
+
+            vrModalService.showModal('/Client/Modules/Analytics/Views/GenericAnalytic/GenericAnalyticGridSettings.html', parameters, {
+                useModalTemplate: true,
+                width: "40%",
+                maxHeight: "190px",
+                title: "Settings",
+                onScopeReady: function (modalScope) {
+                    modalScope.onSaveSettings = function (settings) {
+                        parameters = settings;
+                    };
+                }
+            });
         }
     }
     appControllers.controller('GenericAnalyticGridController', genericAnalyticGridController);
