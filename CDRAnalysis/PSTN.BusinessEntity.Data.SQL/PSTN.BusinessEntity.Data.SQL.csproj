@@ -58,6 +58,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SwitchDataManager.cs" />
     <Compile Include="SwitchTrunkDataManager.cs" />
+    <Compile Include="SwitchTypeDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PSTN.BusinessEntity.Data\PSTN.BusinessEntity.Data.csproj">
