@@ -61,7 +61,10 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
         static string configuredDirectory = ConfigurationManager.AppSettings["LoadCDRsDirectory"];
 
-        class CallPartie
+        const int minimumGapBetweenRepeatedCDRs = 5;
+
+
+        struct CallPartie
         {
             public string CDPN { get; set; }
 
@@ -83,7 +86,6 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
         protected override void DoWork(UnifyRepeatedCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            int minimumGapBetweenRepeatedCDRs = 5;
             DateTime? currentConnectDateTime = null;
             CDR currentCDR = new CDR();
             Dictionary<CallPartie, List<RelatedCDR>> unifiedCDRs = new Dictionary<CallPartie, List<RelatedCDR>>();
@@ -105,20 +107,20 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                             CallPartie callPartie;
                             RelatedCDR relatedCDR;
 
-                            var firstConnectDateTime = stagingCDRs.First().ConnectDateTime.Value;
-                            var CurrentStagingCDRs = stagingCDRs.Where(x => ToPositive(x.ConnectDateTime.Value.Subtract(currentConnectDateTime.Value).TotalSeconds) <= minimumGapBetweenRepeatedCDRs);
-                            stagingCDRs = stagingCDRs.Except(CurrentStagingCDRs).ToList();
-
-                            foreach (var stagingCDR in CurrentStagingCDRs)
+                            foreach (var stagingCDR in stagingCDRs)
                             {
                                 if (currentConnectDateTime != null)
                                 {
                                     PrepareUnifiedCDR(stagingCDR, out relatedCDRs, out callPartie, out relatedCDR);
 
+
                                     if (unifiedCDRs.TryGetValue(callPartie, out relatedCDRs))
                                     {
-                                        relatedCDRs.Add(relatedCDR);
-                                        unifiedCDRs[callPartie] = relatedCDRs;
+                                        if (ToPositive(stagingCDR.ConnectDateTime.Value.Subtract(currentConnectDateTime.Value).TotalSeconds) > minimumGapBetweenRepeatedCDRs)
+                                        {
+                                            relatedCDRs.Add(relatedCDR);
+                                            unifiedCDRs[callPartie] = relatedCDRs;
+                                        }
                                     }
 
                                     else
@@ -135,7 +137,11 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                                     unifiedCDRs.Add(callPartie, relatedCDRs);
                                 }
                             }
-                            inputArgument.OutputQueue.Enqueue(BuildCDRBatch(unifiedCDRs));
+
+                            inputArgument.OutputQueue.Enqueue(BuildCDRBatch(unifiedCDRs, currentConnectDateTime.Value));
+
+                            currentConnectDateTime = null;
+
 
                         });
                 }
@@ -147,40 +153,46 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
         }
 
-        private CDRBatch BuildCDRBatch(Dictionary<CallPartie, List<RelatedCDR>> unifiedCDRs)
+        private CDRBatch BuildCDRBatch(Dictionary<CallPartie, List<RelatedCDR>> unifiedCDRs, DateTime maximumConnectDateTime)
         {
             List<CDR> cdrBatch = new List<CDR>();
 
-            foreach (KeyValuePair<CallPartie, List<RelatedCDR>> entry in unifiedCDRs)
+            foreach (KeyValuePair<CallPartie, List<RelatedCDR>> unifiedCDR in unifiedCDRs)
             {
-                cdrBatch.Add(new CDR()
+
+                foreach (var subunifiedCDR in unifiedCDR.Value)
                 {
-                    CallType = CallType.IncomingVoiceCall,
-                    ConnectDateTime = entry.Value.First().ConnectDateTime,
-                    Destination = entry.Key.CDPN,
-                    MSISDN = entry.Key.CGPN,
-                    DisconnectDateTime = entry.Value.First().DisconnectDateTime,
-                    DurationInSeconds = entry.Value.First().DurationInSeconds,
-                    InTrunk = entry.Value.First().InTrunkSymbol,
-                    OutTrunk = entry.Value.First().OutTrunkSymbol
+                    if (ToPositive(subunifiedCDR.ConnectDateTime.Value.Subtract(maximumConnectDateTime).TotalSeconds) > minimumGapBetweenRepeatedCDRs)
+                    {
+                        cdrBatch.Add(new CDR()
+                        {
+                            CallType = CallType.IncomingVoiceCall,
+                            ConnectDateTime = subunifiedCDR.ConnectDateTime,
+                            Destination = unifiedCDR.Key.CDPN,
+                            MSISDN = unifiedCDR.Key.CGPN,
+                            DisconnectDateTime = subunifiedCDR.DisconnectDateTime,
+                            DurationInSeconds = subunifiedCDR.DurationInSeconds,
+                            InTrunk = subunifiedCDR.InTrunkSymbol,
+                            OutTrunk = subunifiedCDR.OutTrunkSymbol
+                        }
+                   );
+
+
+
+                        cdrBatch.Add(new CDR()
+                        {
+                            CallType = CallType.OutgoingVoiceCall,
+                            ConnectDateTime = subunifiedCDR.ConnectDateTime,
+                            Destination = unifiedCDR.Key.CGPN,
+                            MSISDN = unifiedCDR.Key.CDPN,
+                            DisconnectDateTime = subunifiedCDR.DisconnectDateTime,
+                            DurationInSeconds = subunifiedCDR.DurationInSeconds,
+                            InTrunk = subunifiedCDR.InTrunkSymbol,
+                            OutTrunk = subunifiedCDR.OutTrunkSymbol
+                        }
+                            );
+                    }
                 }
-                    );
-
-
-
-                cdrBatch.Add(new CDR()
-                {
-                    CallType = CallType.OutgoingVoiceCall,
-                    ConnectDateTime = entry.Value.First().ConnectDateTime,
-                    Destination = entry.Key.CGPN,
-                    MSISDN = entry.Key.CDPN,
-                    DisconnectDateTime = entry.Value.First().DisconnectDateTime,
-                    DurationInSeconds = entry.Value.First().DurationInSeconds,
-                    InTrunk = entry.Value.First().InTrunkSymbol,
-                    OutTrunk = entry.Value.First().OutTrunkSymbol
-                }
-                    );
-
             }
 
 
