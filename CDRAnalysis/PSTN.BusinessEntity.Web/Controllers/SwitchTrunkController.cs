@@ -1,5 +1,6 @@
 ﻿using PSTN.BusinessEntity.Business;
 using PSTN.BusinessEntity.Entities;
+using System.Collections.Generic;
 using System.Web.Http;
 using Vanrise.Entities;
 
@@ -21,6 +22,13 @@ namespace PSTN.BusinessEntity.Web.Controllers
             return manager.GetSwitchTrunkByID(trunkID);
         }
 
+        [HttpGet]
+        public List<SwitchTrunkInfo> GetSwitchTrunksBySwitchID(int switchID)
+        {
+            SwitchTrunkManager manager = new SwitchTrunkManager();
+            return manager.GetSwitchTrunksBySwitchID(switchID);
+        }
+
         [HttpPost]
         public InsertOperationOutput<SwitchTrunkDetail> AddSwitchTrunk(SwitchTrunk trunkObject)
         {
@@ -40,6 +48,13 @@ namespace PSTN.BusinessEntity.Web.Controllers
         {
             SwitchTrunkManager manager = new SwitchTrunkManager();
             return manager.DeleteSwitchTrunk(trunkID);
+        }
+
+        [HttpGet]
+        public UpdateOperationOutput<SwitchTrunkDetail> LinkToTrunk(int switchTrunkID, int linkedToTrunkID)
+        {
+            SwitchTrunkManager manager = new SwitchTrunkManager();
+            return manager.LinkToTrunk(switchTrunkID, linkedToTrunkID);
         }
     }
 }

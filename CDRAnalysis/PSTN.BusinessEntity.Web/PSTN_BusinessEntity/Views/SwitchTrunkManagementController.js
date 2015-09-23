@@ -18,6 +18,11 @@ function SwitchTrunkManagementController($scope, SwitchTrunkAPIService, SwitchAP
         $scope.selectedTypes = [];
         $scope.directions = UtilsService.getArrayEnum(SwitchTrunkDirectionEnum);
         $scope.selectedDirections = [];
+        $scope.linkedToTrunkObjects = [
+            { value: true, description: "Linked" },
+            { value: false, description: "Unlinked" }
+        ];
+        $scope.selectedLinkedToTrunkObjects = [];
 
         // grid vars
         $scope.trunks = [];
@@ -101,7 +106,8 @@ function SwitchTrunkManagementController($scope, SwitchTrunkAPIService, SwitchAP
             Symbol: $scope.symbol,
             SelectedSwitchIDs: UtilsService.getPropValuesFromArray($scope.selectedSwitches, "ID"),
             SelectedTypes: UtilsService.getPropValuesFromArray($scope.selectedTypes, "value"),
-            SelectedDirections: UtilsService.getPropValuesFromArray($scope.selectedDirections, "value")
+            SelectedDirections: UtilsService.getPropValuesFromArray($scope.selectedDirections, "value"),
+            IsLinkedToTrunk: ($scope.selectedLinkedToTrunkObjects.length == 1) ? $scope.selectedLinkedToTrunkObjects[0].value : null
         };
 
         gridAPI.retrieveData(query);
@@ -116,6 +122,10 @@ function SwitchTrunkManagementController($scope, SwitchTrunkAPIService, SwitchAP
             {
                 name: "Delete",
                 clicked: deleteTrunk
+            },
+            {
+                name: "Link to Trunk",
+                clicked: linkToTrunk
             }
         ];
     }
@@ -159,6 +169,32 @@ function SwitchTrunkManagementController($scope, SwitchTrunkAPIService, SwitchAP
                         });
                 }
             });
+    }
+
+    function linkToTrunk(gridObject) {
+        var modalSettings = {};
+
+        var parameters = {
+            TrunkID: gridObject.ID,
+            SwitchID: gridObject.SwitchID
+        };
+
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.title = "Link " + gridObject.Name + " to a Trunk";
+
+            modalScope.onSwitchTrunkUpdated = function (trunkObject) {
+
+                var type = UtilsService.getEnum(SwitchTrunkTypeEnum, "value", trunkObject.Type);
+                trunkObject.TypeDescription = type.description;
+
+                var direction = UtilsService.getEnum(SwitchTrunkDirectionEnum, "value", trunkObject.Direction);
+                trunkObject.DirectionDescription = direction.description;
+
+                gridAPI.itemUpdated(trunkObject);
+            };
+        };
+
+        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/LinkToTrunk.html", parameters, modalSettings);
     }
 }
 

@@ -48,6 +48,7 @@
     <Compile Include="Switch.cs" />
     <Compile Include="SwitchQuery.cs" />
     <Compile Include="SwitchTrunk.cs" />
+    <Compile Include="SwitchTrunkInfo.cs" />
     <Compile Include="SwitchType.cs" />
     <Compile Include="SwitchTrunkDetail.cs" />
     <Compile Include="SwitchTrunkDetailQuery.cs" />

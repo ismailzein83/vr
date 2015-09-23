@@ -37,6 +37,12 @@ namespace PSTN.BusinessEntity.Business
             return dataManager.GetSwitches();
         }
 
+        public List<Switch> GetSwitchesToLinkTo(int switchID)
+        {
+            ISwitchDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchDataManager>();
+            return dataManager.GetSwitchesToLinkTo(switchID);
+        }
+
         public UpdateOperationOutput<Switch> UpdateSwitch(Switch switchObject)
         {
             ISwitchDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchDataManager>();

@@ -1,5 +1,6 @@
 ﻿using PSTN.BusinessEntity.Data;
 using PSTN.BusinessEntity.Entities;
+using System.Collections.Generic;
 using Vanrise.Entities;
 
 namespace PSTN.BusinessEntity.Business
@@ -16,6 +17,12 @@ namespace PSTN.BusinessEntity.Business
         {
             ISwitchTrunkDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchTrunkDataManager>();
             return dataManager.GetSwitchTrunkByID(trunkID);
+        }
+
+        public List<SwitchTrunkInfo> GetSwitchTrunksBySwitchID(int switchID)
+        {
+            ISwitchTrunkDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchTrunkDataManager>();
+            return dataManager.GetSwitchTrunksBySwitchID(switchID);
         }
 
         public InsertOperationOutput<SwitchTrunkDetail> AddSwitchTrunk(SwitchTrunk trunkObject)
@@ -78,6 +85,22 @@ namespace PSTN.BusinessEntity.Business
                 deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
 
             return deleteOperationOutput;
+        }
+
+        public UpdateOperationOutput<SwitchTrunkDetail> LinkToTrunk(int switchTrunkID, int linkedToTrunkID)
+        {
+            ISwitchTrunkDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchTrunkDataManager>();
+
+            dataManager.UnlinkSwitchTrunk(linkedToTrunkID, linkedToTrunkID);
+
+            dataManager.LinkSwitchTrunks(switchTrunkID, linkedToTrunkID);
+
+            UpdateOperationOutput<SwitchTrunkDetail> updateOperationOutput = new UpdateOperationOutput<SwitchTrunkDetail>();
+
+            updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+            updateOperationOutput.UpdatedObject = dataManager.GetSwitchTrunkByID(switchTrunkID);
+
+            return updateOperationOutput;
         }
     }
 }

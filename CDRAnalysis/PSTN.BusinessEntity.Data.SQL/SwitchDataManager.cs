@@ -44,7 +44,11 @@ namespace PSTN.BusinessEntity.Data.SQL
         public List<Switch> GetSwitches()
         {
             return GetItemsSP("PSTN_BE.sp_Switch_GetAll", SwitchMapper);
-        
+        }
+
+        public List<Switch> GetSwitchesToLinkTo(int switchID)
+        {
+            return GetItemsSP("PSTN_BE.sp_Switch_GetToLinkTo", SwitchMapper, switchID);
         }
 
         public bool UpdateSwitch(Switch switchObject)

@@ -42,6 +42,16 @@
                                ismultipleselection>
                     </vr-select>
                 </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-select label="Linked To Trunk"
+                               datasource="linkedToTrunkObjects"
+                               selectedvalues="selectedLinkedToTrunkObjects"
+                               datavaluefield="value"
+                               datatextfield="description"
+                               ismultipleselection>
+                    </vr-select>
+                </vr-columns>
             </vr-row>
         </div>
         <vr-row removeline>
@@ -70,6 +80,7 @@
                     <vr-datagridcolumn headertext="'Switch'" field="'SwitchName'" type="'Text'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Type'" field="'TypeDescription'" type="'Text'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Direction'" field="'DirectionDescription'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Linked To'" field="'LinkedToTrunkName'" type="'Text'"></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
         </vr-row>

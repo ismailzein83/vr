@@ -26,7 +26,7 @@ namespace PSTN.BusinessEntity.Data.SQL
                 string directions = (input.Query.SelectedDirections != null && input.Query.SelectedDirections.Count > 0) ?
                     string.Join(",", input.Query.SelectedDirections.Select(n => (int)n)) : null;
 
-                ExecuteNonQuerySP("PSTN_BE.sp_SwitchTrunk_CreateTempByFiltered", tempTableName, input.Query.Name, input.Query.Symbol, switchIDs, types, directions);
+                ExecuteNonQuerySP("PSTN_BE.sp_SwitchTrunk_CreateTempByFiltered", tempTableName, input.Query.Name, input.Query.Symbol, switchIDs, types, directions, input.Query.IsLinkedToTrunk);
 
             }, (reader) => SwitchTrunkDetailMapper(reader), mapper);
         }
@@ -34,6 +34,11 @@ namespace PSTN.BusinessEntity.Data.SQL
         public SwitchTrunkDetail GetSwitchTrunkByID(int trunkID)
         {
             return GetItemSP("PSTN_BE.sp_SwitchTrunk_GetByID", SwitchTrunkDetailMapper, trunkID);
+        }
+
+        public List<SwitchTrunkInfo> GetSwitchTrunksBySwitchID(int switchID)
+        {
+            return GetItemsSP("PSTN_BE.sp_SwitchTrunk_GetBySwitchID", SwitchTrunkInfoMapper, switchID);
         }
 
         public bool AddSwitchTrunk(SwitchTrunk trunkObject, out int insertedID)
@@ -58,6 +63,16 @@ namespace PSTN.BusinessEntity.Data.SQL
             return (recordsEffected > 0);
         }
 
+        public void UnlinkSwitchTrunk(int switchTrunkID, int linkedToTrunkID)
+        {
+            ExecuteNonQuerySP("PSTN_BE.sp_SwitchTrunk_Unlink", switchTrunkID, linkedToTrunkID);
+        }
+
+        public void LinkSwitchTrunks(int switchTrunkID, int linkedToTrunkID)
+        {
+            ExecuteNonQuerySP("PSTN_BE.sp_SwitchTrunk_LinkToTrunk", switchTrunkID, linkedToTrunkID);
+        }
+
         #region Mappers
 
         SwitchTrunkDetail SwitchTrunkDetailMapper(IDataReader reader)
@@ -71,6 +86,18 @@ namespace PSTN.BusinessEntity.Data.SQL
             trunk.SwitchName = reader["SwitchName"] as string;
             trunk.Type = (SwitchTrunkType)reader["Type"];
             trunk.Direction = (SwitchTrunkDirection)reader["Direction"];
+            trunk.LinkedToTrunkID = GetReaderValue<int?>(reader, "LinkedToTrunkID");
+            trunk.LinkedToTrunkName = GetReaderValue<string>(reader, "LinkedToTrunkName");
+
+            return trunk;
+        }
+
+        SwitchTrunkInfo SwitchTrunkInfoMapper(IDataReader reader)
+        {
+            SwitchTrunkInfo trunk = new SwitchTrunkInfo();
+
+            trunk.ID = (int)reader["ID"];
+            trunk.Name = reader["Name"] as string;
 
             return trunk;
         }

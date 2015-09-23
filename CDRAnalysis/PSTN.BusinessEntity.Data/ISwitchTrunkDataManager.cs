@@ -1,4 +1,5 @@
 ﻿using PSTN.BusinessEntity.Entities;
+using System.Collections.Generic;
 
 namespace PSTN.BusinessEntity.Data
 {
@@ -8,10 +9,16 @@ namespace PSTN.BusinessEntity.Data
 
         SwitchTrunkDetail GetSwitchTrunkByID(int trunkID);
 
+        List<SwitchTrunkInfo> GetSwitchTrunksBySwitchID(int switchID);
+
         bool AddSwitchTrunk(SwitchTrunk trunkObject, out int insertedID);
 
         bool UpdateSwitchTrunk(SwitchTrunk trunkObject);
 
         bool DeleteSwitchTrunk(int trunkID);
+
+        void UnlinkSwitchTrunk(int switchTrunkID, int linkedToTrunkID);
+
+        void LinkSwitchTrunks(int switchTrunkID, int linkedToTrunkID);
     }
 }

@@ -3,9 +3,11 @@
     return ({
         GetFilteredSwitchTrunks: GetFilteredSwitchTrunks,
         GetSwitchTrunkByID: GetSwitchTrunkByID,
+        GetSwitchTrunksBySwitchID: GetSwitchTrunksBySwitchID,
         AddSwitchTrunk: AddSwitchTrunk,
         UpdateSwitchTrunk: UpdateSwitchTrunk,
-        DeleteSwitchTrunk: DeleteSwitchTrunk
+        DeleteSwitchTrunk: DeleteSwitchTrunk,
+        LinkToTrunk: LinkToTrunk
     });
 
     function GetFilteredSwitchTrunks(input) {
@@ -15,6 +17,12 @@
     function GetSwitchTrunkByID(trunkID) {
         return BaseAPIService.get("/api/SwitchTrunk/GetSwitchTrunkByID", {
             trunkID: trunkID
+        });
+    }
+
+    function GetSwitchTrunksBySwitchID(switchID) {
+        return BaseAPIService.get("/api/SwitchTrunk/GetSwitchTrunksBySwitchID", {
+            switchID: switchID
         });
     }
 
@@ -29,6 +37,13 @@
     function DeleteSwitchTrunk(trunkID) {
         return BaseAPIService.get("/api/SwitchTrunk/DeleteSwitchTrunk", {
             trunkID: trunkID
+        });
+    }
+
+    function LinkToTrunk(switchTrunkID, linkedToTrunkID) {
+        return BaseAPIService.get("/api/SwitchTrunk/LinkToTrunk", {
+            switchTrunkID: switchTrunkID,
+            linkedToTrunkID: linkedToTrunkID
         });
     }
 });
