@@ -125,6 +125,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
                                     else
                                     {
+                                        relatedCDRs = new List<RelatedCDR>();
                                         relatedCDRs.Add(relatedCDR);
                                         unifiedCDRs.Add(callPartie, relatedCDRs);
                                     }
@@ -162,7 +163,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
                 foreach (var subunifiedCDR in unifiedCDR.Value)
                 {
-                    if (ToPositive(subunifiedCDR.ConnectDateTime.Value.Subtract(maximumConnectDateTime).TotalSeconds) > minimumGapBetweenRepeatedCDRs)
+                    if (ToPositive(subunifiedCDR.ConnectDateTime.Value.Subtract(maximumConnectDateTime).TotalSeconds) >= minimumGapBetweenRepeatedCDRs)
                     {
                         cdrBatch.Add(new CDR()
                         {
@@ -210,7 +211,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
         private static double ToPositive(double seconds)
         {
-            var difference = seconds < 0 ? seconds : -seconds;
+            var difference = seconds > 0 ? seconds : -seconds;
             return difference;
         }
 

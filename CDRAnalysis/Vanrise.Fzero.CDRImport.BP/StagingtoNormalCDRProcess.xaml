@@ -74,6 +74,7 @@
       <Parallel.Variables>
         <Variable x:TypeArguments="vq:BaseQueue(vfce:StagingCDRBatch)" Name="stagingCDRQueue" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadStagingCDRsStatus" />
+        <Variable x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)" Name="cdrQueue" />
       </Parallel.Variables>
       <vfcba1:LoadStagingCDRs sap2010:WorkflowViewState.IdRef="LoadStagingCDRs_1">
         <vfcba1:LoadStagingCDRs.FromDate>
@@ -97,28 +98,56 @@
           </InArgument>
         </vfcba1:LoadStagingCDRs.ToDate>
       </vfcba1:LoadStagingCDRs>
+      <vfcba1:UnifyRepeatedCDRs Status="{x:Null}" sap2010:WorkflowViewState.IdRef="UnifyRepeatedCDRs_1">
+        <vfcba1:UnifyRepeatedCDRs.FromDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
+          </InArgument>
+        </vfcba1:UnifyRepeatedCDRs.FromDate>
+        <vfcba1:UnifyRepeatedCDRs.InputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vfce:StagingCDRBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:StagingCDRBatch)">stagingCDRQueue</mca:CSharpReference>
+          </InOutArgument>
+        </vfcba1:UnifyRepeatedCDRs.InputQueue>
+        <vfcba1:UnifyRepeatedCDRs.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpReference>
+          </InOutArgument>
+        </vfcba1:UnifyRepeatedCDRs.OutputQueue>
+        <vfcba1:UnifyRepeatedCDRs.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadStagingCDRsStatus</mca:CSharpValue>
+          </InArgument>
+        </vfcba1:UnifyRepeatedCDRs.PreviousActivityStatus>
+        <vfcba1:UnifyRepeatedCDRs.ToDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
+          </InArgument>
+        </vfcba1:UnifyRepeatedCDRs.ToDate>
+      </vfcba1:UnifyRepeatedCDRs>
     </Parallel>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2">
       <InArgument x:TypeArguments="x:String">
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("Staging to Normal CDR Finished")</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>d0xDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5DRFJJbXBvcnQuQlBcU3RhZ2luZ3RvTm9ybWFsQ0RSUHJvY2Vzcy54YW1sC0MDaw4CAQFEBUgRAgEXSQVkEAIBBWUFaRECAQJGCUZ1AgEYTgdjIAIBBmcJZ3YCAQNRDVFbAgETWw1bdgIBD1YNVnwCAQtgDWBZAgEH</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0xDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5DRFJJbXBvcnQuQlBcU3RhZ2luZ3RvTm9ybWFsQ0RSUHJvY2Vzcy54YW1sEUMDhwEOAgEBRAVIEQIBNUkFgAEQAgEFgQEFhQERAgECRglGdQIBNk8HZCACASBlB38iAgEGgwEJgwF2AgEDUg1SWwIBMFwNXHYCAStXDVd8AgEmYQ1hWQIBIXcNd24CARttDW18AgEWaA1oWwIBEXINcm4CAQx8DXxZAgEH</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="314,62" />
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="554,62" />
       <sap2010:ViewStateData Id="LoadStagingCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="314,86" />
-      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="314,62" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="336,414">
+      <sap2010:ViewStateData Id="UnifyRepeatedCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
+      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="554,62" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,414">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Fzero.CDRImport.BP.StagingtoNormalCDRProcess_1" sap:VirtualizedContainerService.HintSize="376,494" />
+      <sap2010:ViewStateData Id="Vanrise.Fzero.CDRImport.BP.StagingtoNormalCDRProcess_1" sap:VirtualizedContainerService.HintSize="616,494" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
