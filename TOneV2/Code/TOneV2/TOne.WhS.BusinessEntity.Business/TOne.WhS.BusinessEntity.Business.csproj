@@ -60,6 +60,7 @@
     <Compile Include="CarrierAccountManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RouteOptionRuleManager.cs" />
     <Compile Include="RouteRuleManager.cs" />
     <Compile Include="RouteRulesByCriteria\BaseClasses\RouteRulesByOneId.cs" />
     <Compile Include="RouteRulesByCriteria\BaseClasses\RouteRulesByTwoIds.cs" />
