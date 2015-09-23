@@ -14,5 +14,25 @@ namespace Vanrise.Common
             ITemplateConfigDataManager manager = CommonDataManagerFactory.GetDataManager<ITemplateConfigDataManager>();
             return manager.GetTemplateConfigurations(configType);
         }
+
+        public List<Entities.TemplateConfig> GetAllTemplateConfigurations()
+        {
+            throw new NotImplementedException();
+        }
+
+        public T GetBehavior<T>(int configId) where T : class
+        {
+            var allTemplates = GetAllTemplateConfigurations();
+            if (allTemplates != null)
+            {
+                Vanrise.Entities.TemplateConfig templateConfig = allTemplates.FirstOrDefault(itm => itm.TemplateConfigID == configId);
+                if (templateConfig != null)
+                {
+                    Type t = Type.GetType(templateConfig.BehaviorFQTN);
+                    return Activator.CreateInstance(t) as T;
+                }
+            }
+            return null;
+        }
     }
 }
