@@ -9,5 +9,18 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class SupplierPriceListDataManager : BaseTOneDataManager, ISupplierPriceListDataManager
     {
+        public SupplierPriceListDataManager()
+            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
+        {
+
+        }
+        public bool AddSupplierPriceList(int supplierAccountId)
+        {
+            object priceListID;
+
+            int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SupplierPriceList_Insert",  out priceListID,supplierAccountId);
+           // insertedId = (int)priceListID;
+            return (recordesEffected > 0);
+        }
     }
 }

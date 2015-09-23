@@ -1,41 +1,26 @@
-﻿SupplierPriceListController.$inject = ['$scope'];
+﻿SupplierPriceListController.$inject = ['$scope', 'WhS_SupPL_SupplierPriceListAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcessService'];
 
-function SupplierPriceListController($scope) {
+function SupplierPriceListController($scope, WhS_SupPL_SupplierPriceListAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcessService) {
     defineScope();
-    //loadParameters();
-    //load();
+    loadParameters();
+    load();
     function loadParameters() {
     }
     function defineScope() {
-
-        $scope.saleZonePackages = [];
-        $scope.selectedSaleZonePackage;
+        $scope.selectedSupplier;
         $scope.effectiveDate = new Date();
         $scope.zoneList;
-        console.log("Test");
         $scope.upload = function () {
-            return WhS_CodePrep_CodePrepAPIService.UploadSaleZonesList($scope.selectedSaleZonePackage.SaleZonePackageId, $scope.zoneList.fileId, $scope.effectiveDate).then(function (response) {
+            return WhS_SupPL_SupplierPriceListAPIService.UploadSaleZonesList($scope.selectedSupplier.CarrierAccountId, $scope.zoneList.fileId, $scope.effectiveDate).then(function (response) {
                 if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value)
                     return BusinessProcessService.openProcessTracking(response.ProcessInstanceId);
             });
         }
+        $scope.onselectionchanged = function () {
+        }
     }
     function load() {
-        loadSaleZonePackages();
+     
     }
-    function loadSaleZonePackages() {
-        $scope.isInitializing = true;
-        return WhS_BE_SaleZonePackageAPIService.GetSaleZonePackages().then(function (response) {
-            for (var i = 0; i < response.length; i++)
-                $scope.saleZonePackages.push(response[i]);
-        }).finally(function () {
-            $scope.isInitializing = false;
-        });
-    }
-
-
 };
-
-
-
 appControllers.controller('WhS_SupPL_SupplierPriceListController', SupplierPriceListController);

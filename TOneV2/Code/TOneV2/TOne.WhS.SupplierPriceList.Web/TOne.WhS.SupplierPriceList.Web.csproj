@@ -107,6 +107,12 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Client">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -116,11 +122,9 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="WhS_SupplierPriceList\Services\" />
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="Controllers\SupplierPriceListController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -128,8 +132,14 @@
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SupplierPriceList.BP.Arguments\TOne.WhS.SupplierPriceList.BP.Arguments.csproj">
+      <Project>{05b7b8cf-6d2a-4bef-ae8b-af5fc3940baa}</Project>
+      <Name>TOne.WhS.SupplierPriceList.BP.Arguments</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WhS_SupplierPriceList\Constant\ModuleConfig.js" />
+    <Content Include="WhS_SupplierPriceList\Services\SupplierPriceListAPIService.js" />
     <Content Include="WhS_SupplierPriceList\Views\SupplierPriceList.html" />
     <Content Include="WhS_SupplierPriceList\Views\SupplierPriceListController.js" />
   </ItemGroup>

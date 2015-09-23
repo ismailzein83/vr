@@ -125,6 +125,8 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CarrierAccountController.cs" />
     <Compile Include="Controllers\RoutingProductController.cs" />
     <Compile Include="Controllers\SaleZoneController.cs" />
     <Compile Include="Controllers\SaleZonePackageController.cs" />
@@ -145,6 +147,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WhS_BusinessEntity\Constant\ModuleConfig.js" />
+    <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-carrieraccount-directive.js" />
+    <Content Include="WhS_BusinessEntity\Services\CarrierAccountAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\RoutingProductAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\SaleZoneAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\SaleZonePackageAPIService.js" />

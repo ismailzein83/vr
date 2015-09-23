@@ -433,6 +433,18 @@
       <Project>{3ee2e4dc-7474-4cf9-87eb-3dea72c97496}</Project>
       <Name>TOne.WhS.CodePreparation.BP</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SupplierPriceList.BP.Activities\TOne.WhS.SupplierPriceList.BP.Activities.csproj">
+      <Project>{f7438737-d6bb-4dbc-beff-813a524e6eca}</Project>
+      <Name>TOne.WhS.SupplierPriceList.BP.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SupplierPriceList.BP.Arguments\TOne.WhS.SupplierPriceList.BP.Arguments.csproj">
+      <Project>{05b7b8cf-6d2a-4bef-ae8b-af5fc3940baa}</Project>
+      <Name>TOne.WhS.SupplierPriceList.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SupplierPriceList.BP\TOne.WhS.SupplierPriceList.BP.csproj">
+      <Project>{9aff405d-99a3-4316-a3a9-1f0db11eb785}</Project>
+      <Name>TOne.WhS.SupplierPriceList.BP</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

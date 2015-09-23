@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 
@@ -14,7 +15,11 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             throw new NotImplementedException();
         }
-
+        public List<CarrierAccountInfo> GetCarrierAccounts(bool getCustomers, bool getSuppliers)
+        {
+            ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
+            return dataManager.GetCarrierAccounts(getCustomers, getSuppliers);
+        }
         public List<Vanrise.Entities.TemplateConfig> GetCustomersGroupTemplates()
         {
             TemplateConfigManager manager = new TemplateConfigManager();

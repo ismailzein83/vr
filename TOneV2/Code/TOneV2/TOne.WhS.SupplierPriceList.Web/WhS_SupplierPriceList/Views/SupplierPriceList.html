@@ -5,8 +5,8 @@
                 <vr-columns width="fullrow">
                     <vr-row>
                         <vr-columns width="normal">
-                            <vr-select datasource="saleZonePackages" datatextfield="Name" datavaluefield="SaleZonePackageId" selectedvalues="selectedSaleZonePackage" isrequired label="Zone Packages"></vr-select>
-                        </vr-columns>
+                            <vr-whs-be-carrieraccount type="'Supplier'" label="Supplier" selectedvalues="selectedSupplier" onselectionchanged="onselectionchanged"></vr-whs-be-carrieraccount>
+                            </vr-columns>
                         <vr-columns width="normal">
                             <vr-label>Upload File</vr-label>
                             <vr-fileupload extension="reports" value="zoneList" isrequired> </vr-fileupload>

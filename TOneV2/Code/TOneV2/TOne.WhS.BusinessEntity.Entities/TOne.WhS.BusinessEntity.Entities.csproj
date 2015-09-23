@@ -52,6 +52,7 @@
     <Compile Include="BusinessManagers\ICarrierAccountManager.cs" />
     <Compile Include="CarrierAccount\CarrierAccount.cs" />
     <Compile Include="CarrierAccount\CarrierAccountCustomerSettings.cs" />
+    <Compile Include="CarrierAccount\CarrierAccountInfo.cs" />
     <Compile Include="CarrierAccount\CustomerGroupBehavior.cs" />
     <Compile Include="CarrierAccount\CustomerGroupSettings.cs" />
     <Compile Include="PricingProduct\PricingProduct.cs" />
