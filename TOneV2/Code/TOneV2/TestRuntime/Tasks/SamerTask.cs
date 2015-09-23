@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.CodePreparation.BP.Arguments;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
@@ -31,14 +32,27 @@ namespace TestRuntime.Tasks
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
 
-            BPClient bpClient = new BPClient();
-            bpClient.CreateNewProcess(new CreateProcessInput
-            {
-                InputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput
-                {
-                    RepricingDay = DateTime.Parse("2014-03-01")
-                }
-            });
+            //BPClient bpClient = new BPClient();
+            //bpClient.CreateNewProcess(new CreateProcessInput
+            //{
+            //    InputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput
+            //    {
+            //        RepricingDay = DateTime.Parse("2014-03-01")
+            //    }
+            //});
+
+            
+
+            //BPClient bpClient = new BPClient();
+            //bpClient.CreateNewProcess(new CreateProcessInput
+            //{
+            //    InputArguments = new CodePreparationProcessInput{
+            //        EffectiveDate=DateTime.Now,
+            //        FileId=10,
+            //        SaleZonePackageId=1
+            //    }
+                
+            //});
 
         }
     }

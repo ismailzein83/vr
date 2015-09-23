@@ -129,6 +129,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Validate',
                     class: 'glyphicon glyphicon-ok-circle'
                 };
+            case 'Upload':
+                return {
+                    text: 'Upload',
+                    class: 'glyphicon glyphicon-upload'
+                };
         }
     }
 }]);

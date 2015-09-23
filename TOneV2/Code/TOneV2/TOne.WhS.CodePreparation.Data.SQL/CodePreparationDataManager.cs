@@ -14,5 +14,10 @@ namespace TOne.WhS.CodePreparation.Data.SQL
         {
 
         }
+
+        public bool UploadSaleZonesList(int SaleZonePackageId, int fileId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

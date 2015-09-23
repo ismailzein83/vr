@@ -109,5 +109,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             dr["ID"] = saleZone.SaleZoneId;
             dr["EED"] = saleZone.EndEffectiveDate;
         }
+
+
+        public void InsertSaleZones(List<SaleZone> saleZones)
+        {
+            object dbApplyStream = InitialiazeStreamForDBApply();
+            foreach (SaleZone saleZone in saleZones)
+               WriteRecordToStream(saleZone, dbApplyStream);
+            object prepareToApplySaleZones =FinishDBApplyStream(dbApplyStream);
+           ApplySaleZonesForDB(prepareToApplySaleZones);
+        }
     }
 }

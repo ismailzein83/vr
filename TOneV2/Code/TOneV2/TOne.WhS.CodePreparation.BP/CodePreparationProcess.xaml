@@ -1,11 +1,16 @@
 ﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.CodePreparation.BP.CodePreparationProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:twbe="clr-namespace:TOne.WhS.BusinessEntity.Entities;assembly=TOne.WhS.BusinessEntity.Entities"
  xmlns:twcba="clr-namespace:TOne.WhS.CodePreparation.BP.Arguments;assembly=TOne.WhS.CodePreparation.BP.Arguments"
+ xmlns:twcba1="clr-namespace:TOne.WhS.CodePreparation.BP.Activities;assembly=TOne.WhS.CodePreparation.BP.Activities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="Input" Type="InArgument(twcba:CodePreparationProcessInput)" />
@@ -20,22 +25,193 @@
       <x:String>System.Linq</x:String>
       <x:String>System.Text</x:String>
       <x:String>TOne.WhS.CodePreparation.BP.Arguments</x:String>
+      <x:String>TOne.WhS.BusinessEntity.Entities</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
-      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
       <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.CodePreparation.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.CodePreparation.BP.Arguments</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.WhS.CodePreparation.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))" Name="NewZonesOrCodes" />
+      <Variable x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))" Name="DeletedZonesOrCodes" />
+      <Variable x:TypeArguments="scg:List(twbe:SaleZone)" Name="ZonesToAdd" />
+      <Variable x:TypeArguments="scg:List(twbe:SaleZone)" Name="ZonesToDelete" />
+      <Variable x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))" Name="ZonesToAddDictionary" />
+      <Variable x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))" Name="ZonesToDeleteDictionary" />
+      <Variable x:TypeArguments="scg:List(twbe:SaleCode)" Name="CodesToAdd" />
+      <Variable x:TypeArguments="scg:List(twbe:SaleCode)" Name="CodesToDelete" />
+      <Variable x:TypeArguments="scg:List(twbe:SaleZone)" Name="SaleZones" />
+    </Sequence.Variables>
+    <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2" Text="Code Preparation Begin Process " />
+    <twcba1:ReadDataFromExcel sap2010:WorkflowViewState.IdRef="ReadDataFromExcel_1">
+      <twcba1:ReadDataFromExcel.DeletedZonesOrCodes>
+        <OutArgument x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))">
+          <mca:CSharpReference x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))">DeletedZonesOrCodes</mca:CSharpReference>
+        </OutArgument>
+      </twcba1:ReadDataFromExcel.DeletedZonesOrCodes>
+      <twcba1:ReadDataFromExcel.EffectiveDate>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveDate</mca:CSharpValue>
+        </InArgument>
+      </twcba1:ReadDataFromExcel.EffectiveDate>
+      <twcba1:ReadDataFromExcel.FileId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.FileId</mca:CSharpValue>
+        </InArgument>
+      </twcba1:ReadDataFromExcel.FileId>
+      <twcba1:ReadDataFromExcel.NewZonesOrCodes>
+        <OutArgument x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))">
+          <mca:CSharpReference x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))">NewZonesOrCodes</mca:CSharpReference>
+        </OutArgument>
+      </twcba1:ReadDataFromExcel.NewZonesOrCodes>
+    </twcba1:ReadDataFromExcel>
+    <twcba1:GenerateSaleZones sap2010:WorkflowViewState.IdRef="GenerateSaleZones_1">
+      <twcba1:GenerateSaleZones.DeletedZonesOrCodes>
+        <InArgument x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))">
+          <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))">DeletedZonesOrCodes</mca:CSharpValue>
+        </InArgument>
+      </twcba1:GenerateSaleZones.DeletedZonesOrCodes>
+      <twcba1:GenerateSaleZones.EffectiveDate>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveDate</mca:CSharpValue>
+        </InArgument>
+      </twcba1:GenerateSaleZones.EffectiveDate>
+      <twcba1:GenerateSaleZones.NewZonesOrCodes>
+        <InArgument x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))">
+          <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))">NewZonesOrCodes</mca:CSharpValue>
+        </InArgument>
+      </twcba1:GenerateSaleZones.NewZonesOrCodes>
+      <twcba1:GenerateSaleZones.SaleZonePackageId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.SaleZonePackageId</mca:CSharpValue>
+        </InArgument>
+      </twcba1:GenerateSaleZones.SaleZonePackageId>
+      <twcba1:GenerateSaleZones.SaleZones>
+        <OutArgument x:TypeArguments="scg:List(twbe:SaleZone)">
+          <mca:CSharpReference x:TypeArguments="scg:List(twbe:SaleZone)">SaleZones</mca:CSharpReference>
+        </OutArgument>
+      </twcba1:GenerateSaleZones.SaleZones>
+      <twcba1:GenerateSaleZones.ZonesToAdd>
+        <OutArgument x:TypeArguments="scg:List(twbe:SaleZone)">
+          <mca:CSharpReference x:TypeArguments="scg:List(twbe:SaleZone)">ZonesToAdd</mca:CSharpReference>
+        </OutArgument>
+      </twcba1:GenerateSaleZones.ZonesToAdd>
+      <twcba1:GenerateSaleZones.ZonesToAddDictionary>
+        <OutArgument x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))">
+          <mca:CSharpReference x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))">ZonesToAddDictionary</mca:CSharpReference>
+        </OutArgument>
+      </twcba1:GenerateSaleZones.ZonesToAddDictionary>
+      <twcba1:GenerateSaleZones.ZonesToDelete>
+        <OutArgument x:TypeArguments="scg:List(twbe:SaleZone)">
+          <mca:CSharpReference x:TypeArguments="scg:List(twbe:SaleZone)">ZonesToDelete</mca:CSharpReference>
+        </OutArgument>
+      </twcba1:GenerateSaleZones.ZonesToDelete>
+      <twcba1:GenerateSaleZones.ZonesToDeleteDictionary>
+        <OutArgument x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))">
+          <mca:CSharpReference x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))">ZonesToDeleteDictionary</mca:CSharpReference>
+        </OutArgument>
+      </twcba1:GenerateSaleZones.ZonesToDeleteDictionary>
+    </twcba1:GenerateSaleZones>
+    <twcba1:ApplySaleZonesForDB sap2010:WorkflowViewState.IdRef="ApplySaleZonesForDB_1">
+      <twcba1:ApplySaleZonesForDB.ZonesToAdd>
+        <InArgument x:TypeArguments="scg:List(twbe:SaleZone)">
+          <mca:CSharpValue x:TypeArguments="scg:List(twbe:SaleZone)">ZonesToAdd</mca:CSharpValue>
+        </InArgument>
+      </twcba1:ApplySaleZonesForDB.ZonesToAdd>
+      <twcba1:ApplySaleZonesForDB.ZonesToDelete>
+        <InArgument x:TypeArguments="scg:List(twbe:SaleZone)">
+          <mca:CSharpValue x:TypeArguments="scg:List(twbe:SaleZone)">ZonesToDelete</mca:CSharpValue>
+        </InArgument>
+      </twcba1:ApplySaleZonesForDB.ZonesToDelete>
+    </twcba1:ApplySaleZonesForDB>
+    <twcba1:GenerateSaleCodes sap2010:WorkflowViewState.IdRef="GenerateSaleCodes_1">
+      <twcba1:GenerateSaleCodes.CodesToAdd>
+        <OutArgument x:TypeArguments="scg:List(twbe:SaleCode)">
+          <mca:CSharpReference x:TypeArguments="scg:List(twbe:SaleCode)">CodesToAdd</mca:CSharpReference>
+        </OutArgument>
+      </twcba1:GenerateSaleCodes.CodesToAdd>
+      <twcba1:GenerateSaleCodes.CodesToDelete>
+        <OutArgument x:TypeArguments="scg:List(twbe:SaleCode)">
+          <mca:CSharpReference x:TypeArguments="scg:List(twbe:SaleCode)">CodesToDelete</mca:CSharpReference>
+        </OutArgument>
+      </twcba1:GenerateSaleCodes.CodesToDelete>
+      <twcba1:GenerateSaleCodes.EffectiveDate>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveDate</mca:CSharpValue>
+        </InArgument>
+      </twcba1:GenerateSaleCodes.EffectiveDate>
+      <twcba1:GenerateSaleCodes.SaleZonePackageId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.SaleZonePackageId</mca:CSharpValue>
+        </InArgument>
+      </twcba1:GenerateSaleCodes.SaleZonePackageId>
+      <twcba1:GenerateSaleCodes.SaleZones>
+        <InArgument x:TypeArguments="scg:List(twbe:SaleZone)">
+          <mca:CSharpValue x:TypeArguments="scg:List(twbe:SaleZone)">SaleZones</mca:CSharpValue>
+        </InArgument>
+      </twcba1:GenerateSaleCodes.SaleZones>
+      <twcba1:GenerateSaleCodes.ZonesToAddDictionary>
+        <InArgument x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))">
+          <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))">ZonesToAddDictionary</mca:CSharpValue>
+        </InArgument>
+      </twcba1:GenerateSaleCodes.ZonesToAddDictionary>
+      <twcba1:GenerateSaleCodes.ZonesToDeleteDictionary>
+        <InArgument x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))">
+          <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))">ZonesToDeleteDictionary</mca:CSharpValue>
+        </InArgument>
+      </twcba1:GenerateSaleCodes.ZonesToDeleteDictionary>
+    </twcba1:GenerateSaleCodes>
+    <twcba1:ApplySaleCodesForDB sap2010:WorkflowViewState.IdRef="ApplySaleCodesForDB_1">
+      <twcba1:ApplySaleCodesForDB.CodesToAdd>
+        <InArgument x:TypeArguments="scg:List(twbe:SaleCode)">
+          <mca:CSharpValue x:TypeArguments="scg:List(twbe:SaleCode)">CodesToAdd</mca:CSharpValue>
+        </InArgument>
+      </twcba1:ApplySaleCodesForDB.CodesToAdd>
+      <twcba1:ApplySaleCodesForDB.CodesToDelete>
+        <InArgument x:TypeArguments="scg:List(twbe:SaleCode)">
+          <mca:CSharpValue x:TypeArguments="scg:List(twbe:SaleCode)">CodesToDelete</mca:CSharpValue>
+        </InArgument>
+      </twcba1:ApplySaleCodesForDB.CodesToDelete>
+    </twcba1:ApplySaleCodesForDB>
+    <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1" Text="Complete " />
+    <sads:DebugSymbol.Symbol>d1FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxDb2RlUHJlcGFyYXRpb25Qcm9jZXNzLnhhbWwiNAPFAQ4CAQFABUBnAwGRAkEFViADAeQBVwWFASADAYABhgEFkQEiAgFpkgEFtgEgAgEbtwEFwgEiAgEEwwEFwwFRAgECQENAZAMBkgJJC0leAwGGAlMLU4kBAwH7AU4LTlQDAfABRAtEjQEDAeUBaQtpXwMB2QFfC19eAwHOAXgLeI4BAwHDAWQLZIEBAwG4AXMLc2oDAa0BWgtahQEDAaIBggELggGRAQMBlwFuC25pAwGMAX0LfW0DAYEBiQELiQFiAgF1jgELjgFlAgFqlQELlQFqAgFemgELmgFtAgFTpAELpAFfAgFInwELnwFeAgE9rgELrgGGAQIBMrMBC7MBiQECASepAQupAWECARy6AQu6AWICARC/AQu/AWUCAQXDAUPDAU4CAQM=</sads:DebugSymbol.Symbol>
+  </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="TOne.WhS.CodePreparation.BP.CodePreparationProcess_1" sap:VirtualizedContainerService.HintSize="440,440" />
+      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="211,62" />
+      <sap2010:ViewStateData Id="ReadDataFromExcel_1" sap:VirtualizedContainerService.HintSize="211,22" />
+      <sap2010:ViewStateData Id="GenerateSaleZones_1" sap:VirtualizedContainerService.HintSize="211,22" />
+      <sap2010:ViewStateData Id="ApplySaleZonesForDB_1" sap:VirtualizedContainerService.HintSize="211,22" />
+      <sap2010:ViewStateData Id="GenerateSaleCodes_1" sap:VirtualizedContainerService.HintSize="211,22" />
+      <sap2010:ViewStateData Id="ApplySaleCodesForDB_1" sap:VirtualizedContainerService.HintSize="211,22" />
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="211,62" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="233,598">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.WhS.CodePreparation.BP.CodePreparationProcess_1" sap:VirtualizedContainerService.HintSize="273,678" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

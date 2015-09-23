@@ -110,5 +110,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             dr["ID"] = saleCode.SaleCodeId;
             dr["EED"] = saleCode.EndEffectiveDate;
         }
+
+        public void InsertSaleCodes(List<SaleCode> saleCodes)
+        {
+            object dbApplyStream = InitialiazeStreamForDBApply();
+            foreach (SaleCode saleCode in saleCodes)
+                WriteRecordToStream(saleCode, dbApplyStream);
+            object prepareToApplySaleCodes = FinishDBApplyStream(dbApplyStream);
+            ApplySaleCodesForDB(prepareToApplySaleCodes);
+        }
     }
 }

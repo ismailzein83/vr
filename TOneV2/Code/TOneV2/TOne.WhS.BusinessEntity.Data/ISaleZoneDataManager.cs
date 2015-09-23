@@ -4,14 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Data;
 
 namespace TOne.WhS.BusinessEntity.Data
 {
-    public interface ISaleZoneDataManager : IDataManager, IBulkApplyDataManager<SaleZone>
+    public interface ISaleZoneDataManager : IDataManager
     {
         List<SaleZone> GetSaleZones(int packageId,DateTime effectiveDate);
         void ApplySaleZonesForDB(object preparedSaleZones);
         void DeleteSaleZones(List<SaleZone> saleZones);
+        void InsertSaleZones(List<SaleZone> saleZones);
+        object InitialiazeStreamForDBApply();
+        void WriteRecordToStream(SaleZone record, object dbApplyStream);
+        object FinishDBApplyStream(object dbApplyStream);
     }
 }

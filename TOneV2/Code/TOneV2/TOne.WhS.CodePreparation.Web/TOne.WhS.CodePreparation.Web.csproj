@@ -107,6 +107,12 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Client">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -120,6 +126,10 @@
     <ProjectReference Include="..\..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.CodePreparation.BP.Arguments\TOne.WhS.CodePreparation.BP.Arguments.csproj">
+      <Project>{ac6889a0-853c-4ff2-b2e4-a5b358065ec3}</Project>
+      <Name>TOne.WhS.CodePreparation.BP.Arguments</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.CodePreparation.Business\TOne.WhS.CodePreparation.Business.csproj">
       <Project>{5cd2b9f2-360c-4439-a537-836f681d3e2d}</Project>
@@ -136,8 +146,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="WhS_CodePreparation\View\CodePreparation.html" />
-    <Content Include="WhS_CodePreparation\View\CodePreparationController.js" />
+    <Content Include="WhS_CodePreparation\Services\CodePreparationAPIService.js" />
+    <Content Include="WhS_CodePreparation\Views\CodePreparation.html" />
+    <Content Include="WhS_CodePreparation\Views\CodePreparationController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
