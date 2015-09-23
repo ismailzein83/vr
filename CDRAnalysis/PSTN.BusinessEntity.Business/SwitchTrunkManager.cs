@@ -91,7 +91,7 @@ namespace PSTN.BusinessEntity.Business
         {
             ISwitchTrunkDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchTrunkDataManager>();
 
-            dataManager.UnlinkSwitchTrunk(linkedToTrunkID, linkedToTrunkID);
+            dataManager.UnlinkSwitchTrunk(switchTrunkID, linkedToTrunkID);
 
             dataManager.LinkSwitchTrunks(switchTrunkID, linkedToTrunkID);
 
