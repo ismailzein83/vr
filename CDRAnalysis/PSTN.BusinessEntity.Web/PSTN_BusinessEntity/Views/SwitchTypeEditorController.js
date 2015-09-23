@@ -3,6 +3,7 @@
 function SwitchTypeEditorController($scope, SwitchTypeAPIService, VRNavigationService, VRNotificationService, VRModalService) {
 
     var switchTypeID = undefined;
+    var editMode = undefined;
 
     loadParameters();
     defineScope();

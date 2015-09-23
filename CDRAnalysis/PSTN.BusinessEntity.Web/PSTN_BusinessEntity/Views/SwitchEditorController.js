@@ -3,6 +3,8 @@
 function SwitchEditorController($scope, SwitchAPIService, DataSourceAPIService, UtilsService, VRNavigationService, VRNotificationService, VRModalService) {
 
     var switchID = undefined;
+    var editMode = undefined;
+    var addedSwitchTypes = [];
 
     loadParameters();
     defineScope();
@@ -69,6 +71,22 @@ function SwitchEditorController($scope, SwitchAPIService, DataSourceAPIService, 
 
             VRModalService.showModal("/Client/Modules/Integration/Views/DataSourceEditor.html", null, settings);
         }
+
+        $scope.addSwitchType = function () {
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.title = "Add a Switch Type";
+
+                modalScope.onSwitchTypeAdded = function (switchTypeObject) {
+                    $scope.types.push(switchTypeObject);
+                    $scope.selectedType = switchTypeObject;
+                    addedSwitchTypes.push(switchTypeObject);
+                };
+            };
+
+            VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/SwitchTypeEditor.html", null, settings);
+        }
     }
 
     function load() {
@@ -131,7 +149,7 @@ function SwitchEditorController($scope, SwitchAPIService, DataSourceAPIService, 
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Switch", response, "Name")) {
                     if ($scope.onSwitchUpdated != undefined)
-                        $scope.onSwitchUpdated(response.UpdatedObject);
+                        $scope.onSwitchUpdated(response.UpdatedObject, addedSwitchTypes);
 
                     $scope.modalContext.closeModal();
                 }
@@ -148,7 +166,7 @@ function SwitchEditorController($scope, SwitchAPIService, DataSourceAPIService, 
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Switch", response, "Name")) {
                     if ($scope.onSwitchAdded != undefined)
-                        $scope.onSwitchAdded(response.InsertedObject);
+                        $scope.onSwitchAdded(response.InsertedObject, addedSwitchTypes);
 
                     $scope.modalContext.closeModal();
                 }

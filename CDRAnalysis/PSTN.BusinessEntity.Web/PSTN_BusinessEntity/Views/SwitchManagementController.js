@@ -30,7 +30,9 @@ function SwitchManagementController($scope, SwitchAPIService, UtilsService, VRNo
             settings.onScopeReady = function (modalScope) {
                 modalScope.title = "Add a Switch";
 
-                modalScope.onSwitchAdded = function (switchObject) {
+                modalScope.onSwitchAdded = function (switchObject, addedSwitchTypes) {
+
+                    addNewSwitchTypes(addedSwitchTypes);
 
                     switchObject.TypeDescription = (switchObject.TypeID != null) ?
                         UtilsService.getItemByVal($scope.types, switchObject.TypeID, "ID").Name : null;
@@ -121,8 +123,10 @@ function SwitchManagementController($scope, SwitchAPIService, UtilsService, VRNo
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Edit Switch: " + gridObject.Name;
 
-            modalScope.onSwitchUpdated = function (switchObject) {
+            modalScope.onSwitchUpdated = function (switchObject, addedSwitchTypes) {
                 
+                addNewSwitchTypes(addedSwitchTypes);
+
                 switchObject.TypeDescription = (switchObject.TypeID != null) ?
                     UtilsService.getItemByVal($scope.types, switchObject.TypeID, "ID").Name : null;
 
@@ -148,6 +152,12 @@ function SwitchManagementController($scope, SwitchAPIService, UtilsService, VRNo
                         });
                 }
             });
+    }
+
+    function addNewSwitchTypes(addedSwitchTypes) {
+        angular.forEach(addedSwitchTypes, function (item) {
+            $scope.types.push(item);
+        });
     }
 }
 

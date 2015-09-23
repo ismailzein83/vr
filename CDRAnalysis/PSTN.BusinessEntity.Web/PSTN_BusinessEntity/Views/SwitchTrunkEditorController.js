@@ -3,6 +3,7 @@
 function SwitchTrunkEditorController($scope, SwitchTrunkAPIService, SwitchAPIService, SwitchTrunkTypeEnum, SwitchTrunkDirectionEnum, UtilsService, VRNavigationService, VRNotificationService) {
 
     var trunkID = undefined;
+    var editMode = undefined;
 
     loadParameters();
     defineScope();
