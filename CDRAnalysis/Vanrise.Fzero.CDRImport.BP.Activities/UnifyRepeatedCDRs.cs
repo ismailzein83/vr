@@ -8,6 +8,7 @@ using Vanrise.Fzero.CDRImport.Business;
 using Vanrise.Fzero.CDRImport.Data;
 using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Queueing;
+using System.Configuration;
 
 namespace Vanrise.Fzero.CDRImport.BP.Activities
 {
@@ -18,7 +19,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
     {
         public BaseQueue<StagingCDRBatch> InputQueue { get; set; }
 
-        //public BaseQueue<NumberProfileBatch> OutputQueue { get; set; }
+        public BaseQueue<CDRBatch> OutputQueue { get; set; }
         
         public DateTime FromDate { get; set; }
         
@@ -32,178 +33,119 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
         #region Arguments
 
-        //[RequiredArgument]
-        //public InOutArgument<BaseQueue<CDRBatch>> InputQueue { get; set; }
+        [RequiredArgument]
+        public InOutArgument<BaseQueue<StagingCDRBatch>> InputQueue { get; set; }
 
-        //[RequiredArgument]
-        //public InOutArgument<BaseQueue<NumberProfileBatch>> OutputQueue { get; set; }
+        [RequiredArgument]
+        public InOutArgument<BaseQueue<CDRBatch>> OutputQueue { get; set; }
 
-        //[RequiredArgument]
-        //public InArgument<DateTime> FromDate { get; set; }
-
-
-        //[RequiredArgument]
-        //public InArgument<DateTime> ToDate { get; set; }
-
-        //public InArgument<List<StrategyExecutionInfo>> StrategiesExecutionInfo { get; set; }
+        [RequiredArgument]
+        public InArgument<DateTime> FromDate { get; set; }
 
 
-        //public InArgument<NumberProfileParameters> Parameters { get; set; }
+        [RequiredArgument]
+        public InArgument<DateTime> ToDate { get; set; }
+
 
         #endregion
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
-            //if (this.OutputQueue.Get(context) == null)
-            //    this.OutputQueue.Set(context, new MemoryQueue<NumberProfileBatch>());
+            if (this.OutputQueue.Get(context) == null)
+                this.OutputQueue.Set(context, new MemoryQueue<CDRBatch>());
 
 
 
             base.OnBeforeExecute(context, handle);
         }
 
+        static string configuredDirectory = ConfigurationManager.AppSettings["LoadCDRsDirectory"];
+
         protected override void DoWork(UnifyRepeatedCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            //    IClassDataManager manager = FraudDataManagerFactory.GetDataManager<IClassDataManager>();
-            //    IStrategyDataManager strategyManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
-            //    INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
-            //    int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"]);
-            //    var callClasses = manager.GetCallClasses();
-                
-            //List<Strategy> strategies = new List<Strategy>();
-            //if(inputArgument.StrategiesExecutionInfo!=null)
-            //    foreach (var i in inputArgument.StrategiesExecutionInfo)
-            //    {
-            //        strategies.Add(i.Strategy);
-            //    }
+            List<CDR> cdrBatch = new List<CDR>();
+            CDR currentCDR = new CDR();
+            string currentCGPN = null ;
+            string currentCDPN = null;
 
-            //    var aggregateDefinitions = strategies.Count >0 ?
-            //        new AggregateManager(strategies as IEnumerable<INumberProfileParameters>).GetAggregateDefinitions(callClasses)
-            //        :
-            //        new AggregateManager(new List<INumberProfileParameters> { inputArgument.Parameters }).GetAggregateDefinitions(callClasses)
-            //        ;
-            //    string currentAccountNumber = null;
+            int cdrsCount = 0;
+            int totalCount = 0;
 
-            //    HashSet<string> IMEIs = new HashSet<string>();
-             
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            {
+                bool hasItem = false;
+                do
+                {
 
-            //    List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
-            //    int cdrsCount = 0;
-            //    int numberProfilesCount = 0;
-            //    DoWhilePreviousRunning(previousActivityStatus, handle, () =>
-            //    {
-            //        bool hasItem = false;
-            //        do
-            //        {
+                    hasItem = inputArgument.InputQueue.TryDequeue(
+                        (stagingcdrBatch) =>
+                        {
+                            var serializedCDRs = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(stagingcdrBatch.StagingCDRBatchFilePath));
+                            System.IO.File.Delete(stagingcdrBatch.StagingCDRBatchFilePath);
+                            var stagingCDRs = Vanrise.Common.ProtoBufSerializer.Deserialize<List<StagingCDR>>(serializedCDRs);
+                            foreach (var stagingCDR in stagingCDRs)
+                            {
+                                if (currentCGPN != stagingCDR.CGPN || currentCDPN !=stagingCDR.CDPN)
+                                {
+                                    if (currentCGPN != null && currentCDPN!=null)
+                                    {
+                                        cdrBatch.Add(currentCDR);
+                                        if (cdrBatch.Count >= 100000)
+                                        {
+                                            totalCount += cdrBatch.Count;
+                                            inputArgument.OutputQueue.Enqueue(BuildCDRBatch(cdrBatch));
+                                            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} CDRs Unified", totalCount);
+                                            cdrBatch = new List<CDR>();
+                                        }
+                                    }
+                                    currentCGPN = stagingCDR.CGPN;
+                                    currentCDPN = stagingCDR.CDPN;
+                                    
+                                    
+                                   // currentCDR.
 
-            //            hasItem = inputArgument.InputQueue.TryDequeue(
-            //                (cdrBatch) =>
-            //                {
-            //                    var serializedCDRs = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(cdrBatch.CDRBatchFilePath));
-            //                    System.IO.File.Delete(cdrBatch.CDRBatchFilePath);
-            //                    var cdrs = Vanrise.Common.ProtoBufSerializer.Deserialize<List<CDR>>(serializedCDRs);
-            //                    foreach (var cdr in cdrs)
-            //                    {
-            //                        if (currentAccountNumber != cdr.MSISDN)
-            //                        {
-            //                            if (currentAccountNumber != null)
-            //                            {
-            //                                FinishNumberProfileProcessing(currentAccountNumber, ref numberProfileBatch, ref numberProfilesCount, inputArgument, handle, batchSize, aggregateDefinitions, IMEIs);
-            //                            }
-            //                            IMEIs = new HashSet<string>();
-            //                            currentAccountNumber = cdr.MSISDN;
-            //                            foreach (var aggregateDef in aggregateDefinitions)
-            //                            {
-            //                                aggregateDef.Aggregation.Reset();
-            //                                aggregateDef.Aggregation.EvaluateCDR(cdr);
-            //                            }
-            //                        }
-            //                        else
-            //                        {
-            //                            IMEIs.Add(cdr.IMEI);
-            //                            foreach (var aggregateDef in aggregateDefinitions)
-            //                            {
-            //                                aggregateDef.Aggregation.EvaluateCDR(cdr);
-            //                            }
-            //                        }
-            //                    }
-            //                    cdrsCount += cdrs.Count;
-            //                    handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} CDRs profiled", cdrsCount);
+                                }
+                                else
+                                {
+                                   
+                                }
+                            }
+                            cdrsCount += stagingCDRs.Count;
+                            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} CDRs profiled", cdrsCount);
 
-            //                });
-            //        }
-            //        while (!ShouldStop(handle) && hasItem);
-            //    });
-            //    if (currentAccountNumber != null)
-            //        FinishNumberProfileProcessing(currentAccountNumber, ref numberProfileBatch, ref numberProfilesCount, inputArgument, handle, 0, aggregateDefinitions, IMEIs);
+                        });
+                }
+                while (!ShouldStop(handle) && hasItem);
+            });
+            if (cdrBatch.Count > 0)
+            {
+                inputArgument.OutputQueue.Enqueue(BuildCDRBatch(cdrBatch));
+            }
 
-            //    handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs from Database to Memory");
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs from Database to Memory");
 
            
         }
 
-        //private void FinishNumberProfileProcessing(string accountNumber, ref List<NumberProfile> numberProfileBatch, ref int numberProfilesCount, UnifyRepeatedCDRsInput inputArgument, AsyncActivityHandle handle, int batchSize, List<AggregateDefinition> AggregateDefinitions,HashSet<string> IMEIs)
-        //{
-
-        //    //if (inputArgument.StrategiesExecutionInfo != null)
-        //    //{
-        //    //    foreach (var strategyExecutionInfo in inputArgument.StrategiesExecutionInfo)
-        //    //    {
-        //    //        NumberProfile numberProfile = new NumberProfile()
-        //    //        {
-        //    //            AccountNumber = accountNumber,
-        //    //            FromDate = inputArgument.FromDate,
-        //    //            ToDate = inputArgument.ToDate,
-        //    //            StrategyId = strategyExecutionInfo.Strategy.Id,
-        //    //            StrategyExecutionID= strategyExecutionInfo.StrategyExecution.ID,
-        //    //            IMEIs =IMEIs
-        //    //        };
-        //    //        foreach (var aggregateDef in AggregateDefinitions)
-        //    //        {
-        //    //            numberProfile.AggregateValues.Add(aggregateDef.Name, aggregateDef.Aggregation.GetResult(strategyExecutionInfo.Strategy));
-        //    //        }
-        //    //        numberProfileBatch.Add(numberProfile);
-        //    //    }
-        //    //}
-        //    //else
-        //    //{
-        //    //    NumberProfile numberProfile = new NumberProfile()
-        //    //    {
-        //    //        AccountNumber = accountNumber,
-        //    //        FromDate = inputArgument.FromDate,
-        //    //        ToDate = inputArgument.ToDate,
-        //    //        IMEIs = IMEIs
-        //    //    };
-        //    //    foreach (var aggregateDef in AggregateDefinitions)
-        //    //    {
-        //    //        numberProfile.AggregateValues.Add(aggregateDef.Name, aggregateDef.Aggregation.GetResult(inputArgument.Parameters));
-        //    //    }
-        //    //    numberProfileBatch.Add(numberProfile);
-        //    //}
-
-
-        //    //if (numberProfileBatch.Count >= batchSize)
-        //    //{
-        //    //    numberProfilesCount += numberProfileBatch.Count;
-        //    //    handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} Number Profiles Sent", numberProfilesCount);
-        //    //    inputArgument.OutputQueue.Enqueue(new NumberProfileBatch()
-        //    //    {
-        //    //        NumberProfiles = numberProfileBatch
-        //    //    });
-        //    //    numberProfileBatch = new List<NumberProfile>();
-        //    //}
-        //}
+        private CDRBatch BuildCDRBatch(List<CDR> cdrs)
+        {
+            var cdrsBytes = Vanrise.Common.Compressor.Compress(Vanrise.Common.ProtoBufSerializer.Serialize(cdrs));
+            string filePath = !String.IsNullOrEmpty(configuredDirectory) ? System.IO.Path.Combine(configuredDirectory, Guid.NewGuid().ToString()) : System.IO.Path.GetTempFileName();
+            System.IO.File.WriteAllBytes(filePath, cdrsBytes);
+            return new CDRBatch
+            {
+                CDRBatchFilePath = filePath
+            };
+        }
 
         protected override UnifyRepeatedCDRsInput GetInputArgument2(System.Activities.AsyncCodeActivityContext context)
         {
             return new UnifyRepeatedCDRsInput
             {
-                //InputQueue = this.InputQueue.Get(context),
-                //OutputQueue = this.OutputQueue.Get(context),
-                //FromDate = this.FromDate.Get(context),
-                //ToDate = this.ToDate.Get(context),
-                //StrategiesExecutionInfo = this.StrategiesExecutionInfo.Get(context),
-                //Parameters = this.Parameters.Get(context)
+                InputQueue = this.InputQueue.Get(context),
+                OutputQueue = this.OutputQueue.Get(context),
+                FromDate = this.FromDate.Get(context),
+                ToDate = this.ToDate.Get(context)
             };
         }
 
