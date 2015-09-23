@@ -6,22 +6,22 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public abstract class RouteRulesByCriteria
+    public abstract class RouteRulesByCriteria<T> where T : IRouteCriteria
     {
         public abstract bool IsEmpty();
 
-        public abstract void SetSource(List<IRouteCriteria> rules);
+        public abstract void SetSource(List<T> rules);
 
-        public abstract IRouteCriteria GetMostMatchedRule(int? customerId, int? productId, string code, long saleZoneId);
+        public abstract T GetMostMatchedRule(int? customerId, int? productId, string code, long saleZoneId);
 
-        public RouteRulesByCriteria NextRuleSet { get; set; }
+        public RouteRulesByCriteria<T> NextRuleSet { get; set; }
 
-        protected Q GetOrCreateDictionaryItem<T, Q>(T itemKey, Dictionary<T, Q> dictionary)
+        protected R GetOrCreateDictionaryItem<Q, R>(Q itemKey, Dictionary<Q, R> dictionary)
         {
-            Q value;
+            R value;
             if(!dictionary.TryGetValue(itemKey, out value))
             {
-                value = Activator.CreateInstance<Q>();
+                value = Activator.CreateInstance<R>();
                 dictionary.Add(itemKey, value);
             }
             return value;

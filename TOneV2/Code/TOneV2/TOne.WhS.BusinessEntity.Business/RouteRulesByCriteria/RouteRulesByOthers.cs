@@ -7,11 +7,11 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class RouteRulesByOthers : RouteRulesByCriteria
+    public class RouteRulesByOthers<T> : RouteRulesByCriteria<T> where T : IRouteCriteria
     {
-        List<IRouteCriteria> _rulesByOthers = new List<IRouteCriteria>();
+        List<T> _rulesByOthers = new List<T>();
 
-        public override void SetSource(List<IRouteCriteria> rules)
+        public override void SetSource(List<T> rules)
         {
             foreach (var rule in rules)
             {
@@ -22,14 +22,14 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
-        public override IRouteCriteria GetMostMatchedRule(int? customerId, int? productId, string code, long saleZoneId)
+        public override T GetMostMatchedRule(int? customerId, int? productId, string code, long saleZoneId)
         {
             foreach (var r in _rulesByOthers)
             {
                 if (!RouteRuleManager.IsAnyFilterExcludedInRuleCriteria(r.RouteCriteria, customerId, code, saleZoneId))
                     return r;
             }
-            return null;
+            return default(T);
         }
 
         public override bool IsEmpty()

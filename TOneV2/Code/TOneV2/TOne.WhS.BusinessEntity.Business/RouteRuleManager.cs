@@ -9,21 +9,21 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class RouteRuleManager
     {
-        public StructuredRouteRules StructureRules(List<IRouteCriteria> rules)
+        public StructuredRouteRules<T> StructureRules<T>(List<T> rules) where T : IRouteCriteria
         {
-            List<RouteRulesByCriteria> routeRulesByCriteria = new List<RouteRulesByCriteria>();
-            routeRulesByCriteria.Add(new RouteRulesByCustomerCode());
-            routeRulesByCriteria.Add(new RouteRulesByCustomerSubCode());
-            routeRulesByCriteria.Add(new RouteRulesByCode());
-            routeRulesByCriteria.Add(new RouteRulesBySubCode());
-            routeRulesByCriteria.Add(new RouteRulesByCustomerZone());
-            routeRulesByCriteria.Add(new RouteRulesByProductZone());
-            routeRulesByCriteria.Add(new RouteRulesByZone());
-            routeRulesByCriteria.Add(new RouteRulesByCustomer());
-            routeRulesByCriteria.Add(new RouteRulesByProduct());
-            routeRulesByCriteria.Add(new RouteRulesByOthers());
-            StructuredRouteRules structuredRouteRules = new StructuredRouteRules();
-            RouteRulesByCriteria current = null;
+            List<RouteRulesByCriteria<T>> routeRulesByCriteria = new List<RouteRulesByCriteria<T>>();
+            routeRulesByCriteria.Add(new RouteRulesByCustomerCode<T>());
+            routeRulesByCriteria.Add(new RouteRulesByCustomerSubCode<T>());
+            routeRulesByCriteria.Add(new RouteRulesByCode<T>());
+            routeRulesByCriteria.Add(new RouteRulesBySubCode<T>());
+            routeRulesByCriteria.Add(new RouteRulesByCustomerZone<T>());
+            routeRulesByCriteria.Add(new RouteRulesByProductZone<T>());
+            routeRulesByCriteria.Add(new RouteRulesByZone<T>());
+            routeRulesByCriteria.Add(new RouteRulesByCustomer<T>());
+            routeRulesByCriteria.Add(new RouteRulesByProduct<T>());
+            routeRulesByCriteria.Add(new RouteRulesByOthers<T>());
+            StructuredRouteRules<T> structuredRouteRules = new StructuredRouteRules<T>();
+            RouteRulesByCriteria<T> current = null;
             foreach (var r in routeRulesByCriteria)
             {
                 r.SetSource(rules);
@@ -39,16 +39,16 @@ namespace TOne.WhS.BusinessEntity.Business
             return structuredRouteRules;
         }
 
-        public IRouteCriteria GetMostMatchedRule(StructuredRouteRules rules, int? customerId, int? productId, string code, long saleZoneId)
+        public T GetMostMatchedRule<T>(StructuredRouteRules<T> rules, int? customerId, int? productId, string code, long saleZoneId) where T : IRouteCriteria
         {
             return GetMostMatchedRule(rules.FirstRuleSet, customerId, productId, code, saleZoneId);
         }
 
-        public IRouteCriteria GetMostMatchedRule(RouteRulesByCriteria routeRulesByCriteria, int? customerId, int? productId, string code, long saleZoneId)
+        public T GetMostMatchedRule<T>(RouteRulesByCriteria<T> routeRulesByCriteria, int? customerId, int? productId, string code, long saleZoneId) where T : IRouteCriteria
         {
             if (routeRulesByCriteria == null)
-                return null;
-            IRouteCriteria rule = routeRulesByCriteria.GetMostMatchedRule(customerId, productId, code, saleZoneId);
+                return default(T);
+            T rule = routeRulesByCriteria.GetMostMatchedRule(customerId, productId, code, saleZoneId);
             if (rule != null)
                 return rule;
             else

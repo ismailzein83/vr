@@ -7,9 +7,9 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class RouteRulesByCustomerSubCode : RouteRulesByTwoIds<int, string>
+    public class RouteRulesByCustomerSubCode<T> : RouteRulesByTwoIds<T, int, string> where T : IRouteCriteria
     {
-        protected override bool IsRuleMatched(IRouteCriteria rule, out IEnumerable<int> ids1, out IEnumerable<string> ids2)
+        protected override bool IsRuleMatched(T rule, out IEnumerable<int> ids1, out IEnumerable<string> ids2)
         {
             if (rule.RouteCriteria.HasCustomerFilter() && rule.RouteCriteria.HasCodeFilter())
             {
@@ -42,7 +42,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
-        public override IRouteCriteria GetMostMatchedRule(int? customerId, int? productId, string code, long saleZoneId)
+        public override T GetMostMatchedRule(int? customerId, int? productId, string code, long saleZoneId)
         {
             if (code != null)
             {
@@ -50,13 +50,13 @@ namespace TOne.WhS.BusinessEntity.Business
                 while (codeIterator.Length > 1)
                 {
                     string parentCode = codeIterator.ToString();
-                    IRouteCriteria rule = base.GetMostMatchedRule(customerId, productId, parentCode, saleZoneId);
+                    T rule = base.GetMostMatchedRule(customerId, productId, parentCode, saleZoneId);
                     if (rule != null)
                         return rule;
                     codeIterator.Remove(codeIterator.Length - 1, 1);
                 }
             }
-            return null;
+            return default(T);
         }
     }
 }

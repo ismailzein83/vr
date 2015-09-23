@@ -7,9 +7,9 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class RouteRulesByCustomerCode : RouteRulesByTwoIds<int, string>
+    public class RouteRulesByCustomerCode<T> : RouteRulesByTwoIds<T, int, string> where T : IRouteCriteria
     {
-        protected override bool IsRuleMatched(IRouteCriteria rule, out IEnumerable<int> ids1, out IEnumerable<string> ids2)
+        protected override bool IsRuleMatched(T rule, out IEnumerable<int> ids1, out IEnumerable<string> ids2)
         {
             if (rule.RouteCriteria.HasCustomerFilter() && rule.RouteCriteria.HasCodeFilter())
             {

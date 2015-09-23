@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class StructuredRouteRules
+    public class StructuredRouteRules<T> where T : IRouteCriteria
     {
-        public RouteRulesByCriteria FirstRuleSet { get; set; }
+        public RouteRulesByCriteria<T> FirstRuleSet { get; set; }
     }
 }

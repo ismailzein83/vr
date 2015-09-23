@@ -13,8 +13,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 
     public class SupplierBlockRouteOptionRules
     {
-        public StructuredRouteRules AllSupplierZonesRules { get; set; }
+        public StructuredRouteRules<BlockRouteOptionRule> AllSupplierZonesRules { get; set; }
 
-        public Dictionary<long, StructuredRouteRules> RulesBySupplierZones { get; set; }
+        public Dictionary<long, StructuredRouteRules<BlockRouteOptionRule>> RulesBySupplierZones { get; set; }
     }
 }

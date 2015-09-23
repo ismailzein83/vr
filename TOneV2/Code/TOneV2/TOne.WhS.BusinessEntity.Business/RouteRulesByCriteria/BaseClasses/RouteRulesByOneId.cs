@@ -7,34 +7,34 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public abstract class RouteRulesByOneId<T> : RouteRulesByCriteria
+    public abstract class RouteRulesByOneId<T,Q> : RouteRulesByCriteria<T> where T : IRouteCriteria
     {
-        Dictionary<T, List<IRouteCriteria>> _rulesById = new Dictionary<T, List<IRouteCriteria>>();
+        Dictionary<Q, List<T>> _rulesById = new Dictionary<Q, List<T>>();
 
-        public override void SetSource(List<IRouteCriteria> rules)
+        public override void SetSource(List<T> rules)
         {
             foreach (var rule in rules)
             {
-                IEnumerable<T> ids;
+                IEnumerable<Q> ids;
                 if (IsRuleMatched(rule, out ids))
                 {
                     foreach (var id in ids)
                     {
-                        List<IRouteCriteria> zoneRules = GetOrCreateDictionaryItem(id, _rulesById);
+                        List<T> zoneRules = GetOrCreateDictionaryItem(id, _rulesById);
                         zoneRules.Add(rule);
                     }
                 }
             }
         }
 
-        protected abstract bool IsRuleMatched(IRouteCriteria rule, out IEnumerable<T> ids);
+        protected abstract bool IsRuleMatched(T rule, out IEnumerable<Q> ids);
 
-        protected abstract bool IsIdAvailable(int? customerId, int? productId, string code, long saleZoneId, out T id);
+        protected abstract bool IsIdAvailable(int? customerId, int? productId, string code, long saleZoneId, out Q id);
 
-        public override IRouteCriteria GetMostMatchedRule(int? customerId, int? productId, string code, long saleZoneId)
+        public override T GetMostMatchedRule(int? customerId, int? productId, string code, long saleZoneId)
         {
-            List<IRouteCriteria> rules;
-            T id;
+            List<T> rules;
+            Q id;
             if (IsIdAvailable(customerId, productId, code, saleZoneId, out id))
             {
                 if (_rulesById.TryGetValue(id, out rules))
@@ -46,7 +46,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     }
                 }
             }
-            return null;
+            return default(T);
         }
 
         public override bool IsEmpty()
