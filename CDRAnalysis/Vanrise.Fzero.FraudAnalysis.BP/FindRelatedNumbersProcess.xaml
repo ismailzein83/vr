@@ -9,6 +9,7 @@
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vfce="clr-namespace:Vanrise.Fzero.CDRImport.Entities;assembly=Vanrise.Fzero.CDRImport.Entities"
  xmlns:vffba="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Arguments;assembly=Vanrise.Fzero.FraudAnalysis.BP.Arguments"
  xmlns:vffba1="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Activities;assembly=Vanrise.Fzero.FraudAnalysis.BP.Activities"
  xmlns:vffe="clr-namespace:Vanrise.Fzero.FraudAnalysis.Entities;assembly=Vanrise.Fzero.FraudAnalysis.Entities"
@@ -30,6 +31,7 @@
       <x:String>Vanrise.Fzero.FraudAnalysis.BP.Arguments</x:String>
       <x:String>Vanrise.Queueing</x:String>
       <x:String>Vanrise.BusinessProcess</x:String>
+      <x:String>Vanrise.Fzero.CDRImport.Entities</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -61,6 +63,7 @@
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP</AssemblyReference>
+      <AssemblyReference>Vanrise.Fzero.CDRImport.Entities</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
@@ -76,7 +79,7 @@
     </vffba1:GetAccountNumbersByIMEI>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
       <Parallel.Variables>
-        <Variable x:TypeArguments="vq:BaseQueue(vffe:CDRBatch)" Name="cdrQueue" />
+        <Variable x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)" Name="cdrQueue" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadCDRsStatus" />
       </Parallel.Variables>
       <vffba1:LoadCDRs sap2010:WorkflowViewState.IdRef="LoadCDRs_1">
@@ -86,8 +89,8 @@
           </InArgument>
         </vffba1:LoadCDRs.FromDate>
         <vffba1:LoadCDRs.OutputQueue>
-          <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:CDRBatch)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:CDRBatch)">cdrQueue</mca:CSharpReference>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpReference>
           </InOutArgument>
         </vffba1:LoadCDRs.OutputQueue>
         <vffba1:LoadCDRs.Status>
@@ -108,8 +111,8 @@
           </InArgument>
         </vffba1:FindRelatedNumbersthroughIMEIs.AccountNumbersByIMEI>
         <vffba1:FindRelatedNumbersthroughIMEIs.InputQueue>
-          <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:CDRBatch)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:CDRBatch)">cdrQueue</mca:CSharpReference>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpReference>
           </InOutArgument>
         </vffba1:FindRelatedNumbersthroughIMEIs.InputQueue>
         <vffba1:FindRelatedNumbersthroughIMEIs.PreviousActivityStatus>
@@ -119,7 +122,7 @@
         </vffba1:FindRelatedNumbersthroughIMEIs.PreviousActivityStatus>
       </vffba1:FindRelatedNumbersthroughIMEIs>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d1BDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbmRSZWxhdGVkTnVtYmVyc1Byb2Nlc3MueGFtbA1CA3sOAgEBRgVMJgIBKE0FeRACAQJJC0l2AgEpUgdnGQIBE2gHeC8CAQNVDVVbAgEjXw1fbwIBHloNWm4CARlkDWRZAgEUdQ11ZwIBDnANcG4CAQlrDWtwAgEE</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1BDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbmRSZWxhdGVkTnVtYmVyc1Byb2Nlc3MueGFtbA1FA34OAgEBSQVPJgIBKFAFfBACAQJMC0x2AgEpVQdqGQIBE2sHey8CAQNYDVhbAgEjYg1ibwIBHl0NXW4CARlnDWdZAgEUeA14ZwIBDnMNc24CAQluDW5wAgEE</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

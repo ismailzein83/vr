@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.Fzero.FraudAnalysis.Entities
+namespace Vanrise.Fzero.CDRImport.Entities
 {
     public class CDRBatch
     {

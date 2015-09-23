@@ -12,7 +12,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 {
     #region Arguments Classes
 
-    public class LoadCDRsInput
+    public class LoadStagingCDRsInput
     {
         public BaseQueue<StagingCDRBatch> OutputQueue { get; set; }
 
@@ -28,7 +28,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
     
 
-    public sealed class LoadStagingCDRs : BaseAsyncActivity<LoadCDRsInput>
+    public sealed class LoadStagingCDRs : BaseAsyncActivity<LoadStagingCDRsInput>
     {
         #region Arguments
 
@@ -53,9 +53,9 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
             base.OnBeforeExecute(context, handle);
         }
 
-        static string configuredDirectory = ConfigurationManager.AppSettings["LoadCDRsDirectory"];
+        static string configuredDirectory = ConfigurationManager.AppSettings["LoadStagingCDRsDirectory"];
 
-        protected override void DoWork(LoadCDRsInput inputArgument, AsyncActivityHandle handle)
+        protected override void DoWork(LoadStagingCDRsInput inputArgument, AsyncActivityHandle handle)
         {
             List<StagingCDR> cdrs = new List<StagingCDR>();
             int totalCount = 0;
@@ -91,9 +91,9 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
             };
         }
 
-        protected override LoadCDRsInput GetInputArgument(AsyncCodeActivityContext context)
+        protected override LoadStagingCDRsInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            return new LoadCDRsInput
+            return new LoadStagingCDRsInput
             {
                 FromDate = this.FromDate.Get(context),
                 ToDate = this.ToDate.Get(context),

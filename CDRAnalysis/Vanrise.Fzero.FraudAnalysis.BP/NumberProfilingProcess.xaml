@@ -9,6 +9,7 @@
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vfce="clr-namespace:Vanrise.Fzero.CDRImport.Entities;assembly=Vanrise.Fzero.CDRImport.Entities"
  xmlns:vffba="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Arguments;assembly=Vanrise.Fzero.FraudAnalysis.BP.Arguments"
  xmlns:vffba1="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Activities;assembly=Vanrise.Fzero.FraudAnalysis.BP.Activities"
  xmlns:vffe="clr-namespace:Vanrise.Fzero.FraudAnalysis.Entities;assembly=Vanrise.Fzero.FraudAnalysis.Entities"
@@ -30,6 +31,7 @@
       <x:String>Vanrise.BusinessProcess</x:String>
       <x:String>Vanrise.Fzero.FraudAnalysis.Entities</x:String>
       <x:String>Vanrise.Fzero.FraudAnalysis.BP.Arguments</x:String>
+      <x:String>Vanrise.Fzero.CDRImport.Entities</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -61,6 +63,7 @@
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP</AssemblyReference>
+      <AssemblyReference>Vanrise.Fzero.CDRImport.Entities</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
@@ -74,7 +77,7 @@
         <Variable x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)" Name="numberProfileQueue" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="createNumberProfilesStatus" />
         <Variable x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)" Name="numberProfileToStoreQueue" />
-        <Variable x:TypeArguments="vq:BaseQueue(vffe:CDRBatch)" Name="cdrQueue" />
+        <Variable x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)" Name="cdrQueue" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadCDRsStatus" />
         <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="preparedNumberProfilesQueue" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareNumberProfilesStatus" />
@@ -86,8 +89,8 @@
           </InArgument>
         </vffba1:LoadCDRs.FromDate>
         <vffba1:LoadCDRs.OutputQueue>
-          <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:CDRBatch)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:CDRBatch)">cdrQueue</mca:CSharpReference>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpReference>
           </InOutArgument>
         </vffba1:LoadCDRs.OutputQueue>
         <vffba1:LoadCDRs.Status>
@@ -108,8 +111,8 @@
           </InArgument>
         </vffba1:CreateNumberProfiles.FromDate>
         <vffba1:CreateNumberProfiles.InputQueue>
-          <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:CDRBatch)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:CDRBatch)">cdrQueue</mca:CSharpReference>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpReference>
           </InOutArgument>
         </vffba1:CreateNumberProfiles.InputQueue>
         <vffba1:CreateNumberProfiles.OutputQueue>
@@ -178,25 +181,25 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("Ended Profiling")</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXE51bWJlclByb2ZpbGluZ1Byb2Nlc3MueGFtbBtCA7YBDgIBAUMFRxEDAaMBSAWvARACAQWwAQW0ARECAQJFCUVpAwGkAVIHZxkCAX5oB4wBJQIBPo0BB6IBMAIBGaMBB64BKAIBBrIBCbIBZwIBA1UNVVsDAZoBXw1fbwMBkQFaDVpuAwGIAWQNZFkCAX96DXpvAgF1fw1/ZwIBbHANcG4CAWNrDWtbAgFahAENhAF7AgFRdQ11ggECAUiJAQ2JAVkCAT+aAQ2aAXMCATWQAQ2QAXoCASyfAQ2fAXwCASOVAQ2VAXwCARqrAQ2rAXQCARCmAQ2mAXQCAQc=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXE51bWJlclByb2ZpbGluZ1Byb2Nlc3MueGFtbBtFA7kBDgIBAUYFShEDAaMBSwWyARACAQWzAQW3ARECAQJICUhpAwGkAVUHahkCAX5rB48BJQIBPpABB6UBMAIBGaYBB7EBKAIBBrUBCbUBZwIBA1gNWFsDAZoBYg1ibwMBkQFdDV1uAwGIAWcNZ1kCAX99DX1vAgF1ggENggFnAgFscw1zbgIBY24NblsCAVqHAQ2HAXsCAVF4DXiCAQIBSIwBDYwBWQIBP50BDZ0BcwIBNZMBDZMBegIBLKIBDaIBfAIBI5gBDZgBfAIBGq4BDa4BdAIBEKkBDakBdAIBBw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="1033.6,62.4" />
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="1034,62" />
       <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="CreateNumberProfiles_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareNumberProfilesForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyNumberProfilesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1033.6,86.4" />
-      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="1033.6,62.4" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1056,416">
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1034,86" />
+      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="1034,62" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1056,414">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ProfileNumber_1" sap:VirtualizedContainerService.HintSize="1096,496" />
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ProfileNumber_1" sap:VirtualizedContainerService.HintSize="1096,494" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -14,25 +14,20 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
     #region Arguments Classes
 
-    public class CreateNumberProfilesInput
+    public class UnifyRepeatedCDRsInput
     {
-        //public BaseQueue<CDRBatch> InputQueue { get; set; }
+        public BaseQueue<StagingCDRBatch> InputQueue { get; set; }
 
         //public BaseQueue<NumberProfileBatch> OutputQueue { get; set; }
         
-        //public DateTime FromDate { get; set; }
+        public DateTime FromDate { get; set; }
         
-        //public DateTime ToDate { get; set; }
-
-        //public List<StrategyExecutionInfo> StrategiesExecutionInfo { get; set; }
-
-        //public NumberProfileParameters Parameters { get; set; }
-
+        public DateTime ToDate { get; set; }
     }
 
     #endregion
 
-    public class CreateNumberProfiles : DependentAsyncActivity<CreateNumberProfilesInput>
+    public class UnifyRepeatedCDRs : DependentAsyncActivity<UnifyRepeatedCDRsInput>
     {
 
         #region Arguments
@@ -67,7 +62,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
             base.OnBeforeExecute(context, handle);
         }
 
-        protected override void DoWork(CreateNumberProfilesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        protected override void DoWork(UnifyRepeatedCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             //    IClassDataManager manager = FraudDataManagerFactory.GetDataManager<IClassDataManager>();
             //    IStrategyDataManager strategyManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
@@ -147,7 +142,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
            
         }
 
-        //private void FinishNumberProfileProcessing(string accountNumber, ref List<NumberProfile> numberProfileBatch, ref int numberProfilesCount, CreateNumberProfilesInput inputArgument, AsyncActivityHandle handle, int batchSize, List<AggregateDefinition> AggregateDefinitions,HashSet<string> IMEIs)
+        //private void FinishNumberProfileProcessing(string accountNumber, ref List<NumberProfile> numberProfileBatch, ref int numberProfilesCount, UnifyRepeatedCDRsInput inputArgument, AsyncActivityHandle handle, int batchSize, List<AggregateDefinition> AggregateDefinitions,HashSet<string> IMEIs)
         //{
 
         //    //if (inputArgument.StrategiesExecutionInfo != null)
@@ -199,9 +194,9 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
         //    //}
         //}
 
-        protected override CreateNumberProfilesInput GetInputArgument2(System.Activities.AsyncCodeActivityContext context)
+        protected override UnifyRepeatedCDRsInput GetInputArgument2(System.Activities.AsyncCodeActivityContext context)
         {
-            return new CreateNumberProfilesInput
+            return new UnifyRepeatedCDRsInput
             {
                 //InputQueue = this.InputQueue.Get(context),
                 //OutputQueue = this.OutputQueue.Get(context),

@@ -53,6 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Batches\CDRBatch.cs" />
     <Compile Include="Batches\StagingCDRBatch.cs" />
     <Compile Include="ImportedStagingCDRBatch.cs" />
     <Compile Include="StagingCDR.cs" />

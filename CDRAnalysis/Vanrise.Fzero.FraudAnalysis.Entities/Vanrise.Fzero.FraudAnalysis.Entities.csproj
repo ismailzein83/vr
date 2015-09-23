@@ -86,7 +86,6 @@
     <Compile Include="BTSCases.cs" />
     <Compile Include="DailyVolumeLoose.cs" />
     <Compile Include="AccountCaseType.cs" />
-    <Compile Include="Batches\CDRBatch.cs" />
     <Compile Include="LinesDetected.cs" />
     <Compile Include="BlockedLines.cs" />
     <Compile Include="FilterDefinitionInfo.cs" />

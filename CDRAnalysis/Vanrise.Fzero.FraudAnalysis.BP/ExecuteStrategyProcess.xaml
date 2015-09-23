@@ -12,6 +12,7 @@
  xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:vc="clr-namespace:Vanrise.Common;assembly=Vanrise.Common"
+ xmlns:vfce="clr-namespace:Vanrise.Fzero.CDRImport.Entities;assembly=Vanrise.Fzero.CDRImport.Entities"
  xmlns:vffba="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Arguments;assembly=Vanrise.Fzero.FraudAnalysis.BP.Arguments"
  xmlns:vffba1="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Activities;assembly=Vanrise.Fzero.FraudAnalysis.BP.Activities"
  xmlns:vffe="clr-namespace:Vanrise.Fzero.FraudAnalysis.Entities;assembly=Vanrise.Fzero.FraudAnalysis.Entities"
@@ -33,6 +34,7 @@
       <x:String>Vanrise.Fzero.FraudAnalysis.Entities</x:String>
       <x:String>Vanrise.Queueing</x:String>
       <x:String>Vanrise.BusinessProcess</x:String>
+      <x:String>Vanrise.Fzero.CDRImport.Entities</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -64,6 +66,7 @@
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP</AssemblyReference>
+      <AssemblyReference>Vanrise.Fzero.CDRImport.Entities</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
@@ -117,7 +120,7 @@
               <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="createNumberProfilesStatus" />
               <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="GetStrategyExecutionDetailStatus" />
               <Variable x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)" Name="numberProfileToStoreQueue" />
-              <Variable x:TypeArguments="vq:BaseQueue(vffe:CDRBatch)" Name="cdrQueue" />
+              <Variable x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)" Name="cdrQueue" />
               <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadCDRsStatus" />
               <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="preparedStrategyExecutionDetailsQueue" />
               <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="preparedNumberProfilesQueue" />
@@ -131,8 +134,8 @@
                 </InArgument>
               </vffba1:LoadCDRs.FromDate>
               <vffba1:LoadCDRs.OutputQueue>
-                <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:CDRBatch)">
-                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:CDRBatch)">cdrQueue</mca:CSharpReference>
+                <InOutArgument x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">
+                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpReference>
                 </InOutArgument>
               </vffba1:LoadCDRs.OutputQueue>
               <vffba1:LoadCDRs.Status>
@@ -153,8 +156,8 @@
                 </InArgument>
               </vffba1:CreateNumberProfiles.FromDate>
               <vffba1:CreateNumberProfiles.InputQueue>
-                <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:CDRBatch)">
-                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:CDRBatch)">cdrQueue</mca:CSharpReference>
+                <InOutArgument x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">
+                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpReference>
                 </InOutArgument>
               </vffba1:CreateNumberProfiles.InputQueue>
               <vffba1:CreateNumberProfiles.OutputQueue>
@@ -269,7 +272,7 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbC9FA5ECDgIBAUkFTREDAd4CTgVoKQMBzgJpBY8CCgIBAksJS5UBAwHfAmALYGMDAdsCVgtWYAMB2AJbC1uEAQMB1QJRC1FZAwHSAmULZVcDAc8CbAtsmQECAQNwCYQCFAIBC4cCCY0CJAIBBnEL9wEWAgEU+AEL/AEXAgEQ/QELgwIcAgEMigIPigKDAQIBCIcCZIcCgQECAQd/DZQBHwMBlQKVAQ25ASsDAbIBugEN1AEyAgFr1QEN6gFAAgEy6wEN9gE4AgEV+gEP+gGaAQIBEYACEYACiQECAQ2CAROCAWEDAcACjAETjAF1AwGyAocBE4cBdAMBpAKRARORAV8DAZYCpwETpwFtAwGHAp0BE50BdAMB+QGxAROxAYQBAwHrAZgBE5gBYQMB3QGsAROsAYEBAwHPAaIBE6IBiAEDAcEBtgETtgFfAwGzAb0BE70BgAEDAaQBxwETxwF5AwGWAdEBE9EBhAEDAYgBwgETwgGcAQIBeswBE8wBhwECAWziARPiAX8CAV3YARPYAZQBAgFP5wET5wGMAQIBQd0BE90BjAECATPzARPzAYQBAgEk7gET7gGEAQIBFg==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbC9IA5QCDgIBAUwFUBEDAd4CUQVrKQMBzgJsBZICCgIBAk4JTpUBAwHfAmMLY2MDAdsCWQtZYAMB2AJeC16EAQMB1QJUC1RZAwHSAmgLaFcDAc8CbwtvmQECAQNzCYcCFAIBC4oCCZACJAIBBnQL+gEWAgEU+wEL/wEXAgEQgAILhgIcAgEMjQIPjQKDAQIBCIoCZIoCgQECAQeCAQ2XAR8DAZUCmAENvAErAwGyAb0BDdcBMgIBa9gBDe0BQAIBMu4BDfkBOAIBFf0BD/0BmgECARGDAhGDAokBAgENhQEThQFhAwHAAo8BE48BdQMBsgKKAROKAXQDAaQClAETlAFfAwGWAqoBE6oBbQMBhwKgAROgAXQDAfkBtAETtAGEAQMB6wGbARObAWEDAd0BrwETrwGBAQMBzwGlAROlAYgBAwHBAbkBE7kBXwMBswHAARPAAYABAwGkAcoBE8oBeQMBlgHUARPUAYQBAwGIAcUBE8UBnAECAXrPARPPAYcBAgFs5QET5QF/AgFd2wET2wGUAQIBT+oBE+oBjAECAUHgARPgAYwBAgEz9gET9gGEAQIBJPEBE/EBhAECARY=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

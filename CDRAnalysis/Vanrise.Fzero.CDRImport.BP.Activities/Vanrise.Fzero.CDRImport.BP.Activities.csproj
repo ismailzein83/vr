@@ -59,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplyNumberProfilesToDB.cs" />
-    <Compile Include="CreateNumberProfiles.cs" />
+    <Compile Include="UnifyRepeatedCDRs.cs" />
     <Compile Include="LoadStagingCDRs.cs" />
     <Compile Include="PrepareNumberProfilesForDBApply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
