@@ -123,14 +123,16 @@ function SwitchTrunkGridTemplateController($scope, SwitchTrunkAPIService, Switch
         VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/SwitchTrunkEditor.html", parameters, modalSettings);
     }
 
-    function deleteTrunk(gridObject) { // ?
+    function deleteTrunk(gridObject) {
+
         VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response == true) {
+
                     return SwitchTrunkAPIService.DeleteSwitchTrunk(gridObject.ID)
                         .then(function (deletionResponse) {
-                            VRNotificationService.notifyOnItemDeleted("Switch Trunk", deletionResponse);
-                            return retrieveData(); // ?
+                            if (VRNotificationService.notifyOnItemDeleted("Switch Trunk", deletionResponse))
+                                gridAPI.itemDeleted(gridObject);
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);

@@ -115,15 +115,16 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
         VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/SwitchEditor.html", parameters, modalSettings);
     }
 
-    function deleteSwitch(gridObject) { // ?
+    function deleteSwitch(gridObject) {
 
         VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response == true) {
+
                     return SwitchAPIService.DeleteSwitch(gridObject.ID)
                         .then(function (deletionResponse) {
-                            VRNotificationService.notifyOnItemDeleted("Switch", deletionResponse);
-                            return retrieveData(); // ?
+                            if (VRNotificationService.notifyOnItemDeleted("Switch", deletionResponse))
+                                gridAPI.itemDeleted(gridObject);
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);

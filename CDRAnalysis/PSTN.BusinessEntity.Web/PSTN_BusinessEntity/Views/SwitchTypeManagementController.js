@@ -97,15 +97,16 @@ function SwitchTypeManagementController($scope, SwitchTypeAPIService, VRNotifica
         VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/SwitchTypeEditor.html", parameters, modalSettings);
     }
 
-    function deleteSwitchType(gridObject) { // ?
+    function deleteSwitchType(gridObject) {
 
         VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response == true) {
+
                     return SwitchTypeAPIService.DeleteSwitchType(gridObject.ID)
                         .then(function (deletionResponse) {
-                            VRNotificationService.notifyOnItemDeleted("Switch Type", deletionResponse);
-                            return retrieveData(); // ?
+                            if (VRNotificationService.notifyOnItemDeleted("Switch Type", deletionResponse))
+                                gridAPI.itemDeleted(gridObject);
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);
