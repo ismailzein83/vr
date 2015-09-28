@@ -2,8 +2,8 @@
 
     "use strict";
 
-    GHourlyReportController.$inject = ['$scope', 'GenericAnalyticDimensionEnum', 'GenericAnalyticMeasureEnum'];
-    function GHourlyReportController($scope, GenericAnalyticDimensionEnum, GenericAnalyticMeasureEnum) {
+    GTrafficMonitorController.$inject = ['$scope', 'GenericAnalyticDimensionEnum', 'GenericAnalyticMeasureEnum'];
+    function GTrafficMonitorController($scope, GenericAnalyticDimensionEnum, GenericAnalyticMeasureEnum) {
 
         load();
 
@@ -18,7 +18,6 @@
             $scope.selectedobject = {};
 
             loadGroupKeys();
-            loadFixedGroupKeys();
             loadFilterKeys();
             loadMeasures();
 
@@ -58,19 +57,11 @@
             $scope.groupKeys.push(GenericAnalyticDimensionEnum.CodeBuy);
         }
 
-        function loadFixedGroupKeys() {
-            $scope.fixedgroupKeys.push(GenericAnalyticDimensionEnum.Hour);
-            $scope.fixedgroupKeys.push(GenericAnalyticDimensionEnum.Date);
-        }
-
         function loadFilterKeys() {
             $scope.filterKeys.push(GenericAnalyticDimensionEnum.Customer);
             $scope.filterKeys.push(GenericAnalyticDimensionEnum.Supplier);
-            $scope.filterKeys.push(GenericAnalyticDimensionEnum.Zone);
             $scope.filterKeys.push(GenericAnalyticDimensionEnum.CodeGroup);
             $scope.filterKeys.push(GenericAnalyticDimensionEnum.Switch);
-            $scope.filterKeys.push(GenericAnalyticDimensionEnum.PortIn);
-            $scope.filterKeys.push(GenericAnalyticDimensionEnum.PortOut);
             $scope.filterKeys.push(GenericAnalyticDimensionEnum.ASR);
             $scope.filterKeys.push(GenericAnalyticDimensionEnum.ACD);
             $scope.filterKeys.push(GenericAnalyticDimensionEnum.Attempts);
@@ -79,17 +70,19 @@
         function loadMeasures() {
             $scope.measures.push(GenericAnalyticMeasureEnum.DeliveredAttempts);
             $scope.measures.push(GenericAnalyticMeasureEnum.SuccessfulAttempts);
-            $scope.measures.push(GenericAnalyticMeasureEnum.ASR);
-            $scope.measures.push(GenericAnalyticMeasureEnum.NER);
-            $scope.measures.push(GenericAnalyticMeasureEnum.ACD);
-            $scope.measures.push(GenericAnalyticMeasureEnum.GrayArea);
-            $scope.measures.push(GenericAnalyticMeasureEnum.GreenArea);
-            $scope.measures.push(GenericAnalyticMeasureEnum.CapacityUsageDetails);
             $scope.measures.push(GenericAnalyticMeasureEnum.FailedAttempts);
             $scope.measures.push(GenericAnalyticMeasureEnum.DurationsInSeconds);
+            $scope.measures.push(GenericAnalyticMeasureEnum.CeiledDuration);
+            $scope.measures.push(GenericAnalyticMeasureEnum.ASR);
+            $scope.measures.push(GenericAnalyticMeasureEnum.ABR);
+            $scope.measures.push(GenericAnalyticMeasureEnum.NER);
+            $scope.measures.push(GenericAnalyticMeasureEnum.ACD);
+            $scope.measures.push(GenericAnalyticMeasureEnum.PDDInSeconds);
+            $scope.measures.push(GenericAnalyticMeasureEnum.PGAD);
+            $scope.measures.push(GenericAnalyticMeasureEnum.MaxDurationInSeconds);
             $scope.measures.push(GenericAnalyticMeasureEnum.LastCDRAttempt);
         }
     }
-    appControllers.controller('Analytics_GHourlyReportController', GHourlyReportController);
+    appControllers.controller('Analytics_GTrafficMonitorController', GTrafficMonitorController);
 
 })(appControllers);

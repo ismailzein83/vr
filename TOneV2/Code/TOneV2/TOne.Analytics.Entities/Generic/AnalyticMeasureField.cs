@@ -33,6 +33,8 @@ namespace TOne.Analytics.Entities
         BillingNumberOfCalls = 22,
         CostNets = 23,
         SaleNets = 24,
-        Profit = 25
+        Profit = 25,
+        CapacityUsageDetails = 26,
+        PricedDuration = 27
     }
 }

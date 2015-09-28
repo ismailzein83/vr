@@ -24,5 +24,7 @@
     BillingNumberOfCalls: { name: "BillingNumberOfCalls", value: 22, description: "Billing Number Of Calls", type: "Number" },
     CostNets: { name: "CostNets", value: 23, description: "Cost Nets", type: "Number" },
     SaleNets: { name: "SaleNets", value: 24, description: "Sale Nets", type: "Number" },
-    Profit: { name: "Profit", value: 25, description: "Profit", type: "Number" }
+    Profit: { name: "Profit", value: 25, description: "Profit", type: "Number" },
+    CapacityUsageDetails: { name: "CapacityUsageDetails", value: 26, description: "Capacity Usage Details", type: "MultiProgress" },
+    PricedDuration: { name: "PricedDuration", value: 27, description: "Priced Duration", type: "Number" }
 });

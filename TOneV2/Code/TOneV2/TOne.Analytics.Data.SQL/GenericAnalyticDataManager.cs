@@ -175,7 +175,7 @@ namespace TOne.Analytics.Data.SQL
 
                             //Measures related to Billing
                             if (measureField == AnalyticMeasureField.BillingNumberOfCalls || measureField == AnalyticMeasureField.CostNets ||
-                                measureField == AnalyticMeasureField.SaleNets || measureField == AnalyticMeasureField.Profit)
+                                measureField == AnalyticMeasureField.SaleNets || measureField == AnalyticMeasureField.Profit || measureField == AnalyticMeasureField.PricedDuration)
                             {
                                 if(!lstCTEStatements.Contains(CTEStatement.Billing))
                                 {

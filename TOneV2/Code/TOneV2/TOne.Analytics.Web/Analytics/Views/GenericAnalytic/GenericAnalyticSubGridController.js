@@ -6,7 +6,7 @@
     function GenericAnalyticSubGridController($scope, GenericAnalyticAPIService, GenericAnalyticDimensionEnum, GenericAnalyticService) {
         var filter = {};
         var measureFields = [];
-        var selectedGroupKeys = [] , parentGroupKeys = [];
+        var parentGroupKeys = [];
         
         load();
 

@@ -12,8 +12,12 @@
                 filtervalues: "=",
                 selectedobject: "="
             },
-            controller: function () {
+            controller: function ($attrs) {
                 var ctrl = this;
+
+                ctrl.isrequired = function () {
+                    return $attrs.isrequired != undefined;
+                }
 
                 function onLoad() {
                     ctrl.GenericAnalyticDimensionEnum = GenericAnalyticDimensionEnum;

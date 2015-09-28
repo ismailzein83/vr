@@ -202,12 +202,16 @@ namespace TOne.Analytics.Data.SQL
                    GetColumnsExpressions = new List<Func<AnalyticQuery,MeasureValueExpression>>{
                         (query) =>
                        {
-                           string s = "Attempts";
+                           string s = "NumberOfCalls";
+                           bool filterSupplier = false;
+                           foreach (DimensionFilter dimensionFilter in query.Filters)
+                           {
+                               if (dimensionFilter.Dimension == AnalyticDimension.Supplier)
+                                   filterSupplier = true;
+                           }
                            foreach (AnalyticDimension dimension in query.DimensionFields)
                            {
-                               if (dimension == AnalyticDimension.Supplier || dimension == AnalyticDimension.PortOut || dimension == AnalyticDimension.GateWayOut
-                                   //|| (filter.SupplierIds != null && filter.SupplierIds.Count != 0)
-                                   )
+                               if (dimension == AnalyticDimension.Supplier || dimension == AnalyticDimension.PortOut || dimension == AnalyticDimension.GateWayOut || filterSupplier)
                                    s = "Attempts";
                                else
                                    s = "NumberOfCalls";
@@ -230,12 +234,16 @@ namespace TOne.Analytics.Data.SQL
                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>>{
                         (query) =>
                        {
-                           string s = "Attempts";
+                           string s = "NumberOfCalls";
+                           bool filterSupplier = false;
+                           foreach (DimensionFilter dimensionFilter in query.Filters)
+                           {
+                               if (dimensionFilter.Dimension == AnalyticDimension.Supplier)
+                                   filterSupplier = true;
+                           }
                            foreach (AnalyticDimension dimension in query.DimensionFields)
                            {
-                               if (dimension == AnalyticDimension.Supplier || dimension == AnalyticDimension.PortOut || dimension == AnalyticDimension.GateWayOut
-                                   //|| (filter.SupplierIds != null && filter.SupplierIds.Count != 0)
-                                   )
+                               if (dimension == AnalyticDimension.Supplier || dimension == AnalyticDimension.PortOut || dimension == AnalyticDimension.GateWayOut || filterSupplier)
                                    s = "Attempts";
                                else
                                    s = "NumberOfCalls";
@@ -257,12 +265,16 @@ namespace TOne.Analytics.Data.SQL
                     GetColumnsExpressions = new List<Func<AnalyticQuery,MeasureValueExpression>>{
                         (query) =>
                        {
-                           string s = "Attempts";
+                           string s = "NumberOfCalls";                            
+                           bool filterSupplier = false;
+                           foreach (DimensionFilter dimensionFilter in query.Filters)
+                           {
+                               if (dimensionFilter.Dimension == AnalyticDimension.Supplier)
+                                   filterSupplier = true;
+                           }
                            foreach (AnalyticDimension dimension in query.DimensionFields)
                            {
-                               if (dimension == AnalyticDimension.Supplier || dimension == AnalyticDimension.PortOut || dimension == AnalyticDimension.GateWayOut
-                                   //|| (filter.SupplierIds != null && filter.SupplierIds.Count != 0)
-                                   )
+                               if (dimension == AnalyticDimension.Supplier || dimension == AnalyticDimension.PortOut || dimension == AnalyticDimension.GateWayOut || filterSupplier)
                                    s = "Attempts";
                                else
                                    s = "NumberOfCalls";
@@ -476,6 +488,14 @@ namespace TOne.Analytics.Data.SQL
                     MappedSQLColumn = MeasureValueExpression.SaleNets_Expression.ColumnAlias,
                     GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.SaleNets_Expression.ColumnAlias)
                 });
+            
+            s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.PricedDuration,
+                new AnalyticMeasureFieldConfig
+                {
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.PricedDuration_Expression },
+                    MappedSQLColumn = MeasureValueExpression.PricedDuration_Expression.ColumnAlias,
+                    GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.PricedDuration_Expression.ColumnAlias)
+                });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.Profit,
                 new AnalyticMeasureFieldConfig
@@ -490,6 +510,24 @@ namespace TOne.Analytics.Data.SQL
                         var costNets = GetReaderValue<double>(reader, MeasureValueExpression.CostNets_Expression.ColumnAlias);
                         var saleNets = GetReaderValue<double>(reader, MeasureValueExpression.SaleNets_Expression.ColumnAlias);
                         return saleNets - costNets;
+                    }
+                });
+
+            s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.CapacityUsageDetails,
+                new AnalyticMeasureFieldConfig
+                {
+                    GetColumnsExpressions = new List<Func<AnalyticQuery, MeasureValueExpression>> {
+                                    (query) => MeasureValueExpression.DurationsInSeconds_Expression,
+                                    (query) => MeasureValueExpression.UtilizationInSeconds_Expression,
+                                    (query) => MeasureValueExpression.NominalCapacityInE1s_Expression
+                                            },
+                    GetMeasureValue = (reader, record) =>
+                    {
+                        var nominalCapacity = GetReaderValue<int>(reader, MeasureValueExpression.NominalCapacityInE1s_Expression.ColumnAlias);
+                        var utilizationInMinutes = GetReaderValue<Decimal>(reader, MeasureValueExpression.UtilizationInSeconds_Expression.ColumnAlias) / 60;
+                        var durationInMinutes = GetReaderValue<Decimal>(reader, MeasureValueExpression.DurationsInSeconds_Expression.ColumnAlias) / 60;
+                        return (nominalCapacity > 0 ? ((utilizationInMinutes - durationInMinutes * 100) / nominalCapacity) : 0).ToString() + "|"
+                            + (nominalCapacity > 0 ? ((durationInMinutes * 100) / nominalCapacity) : 0).ToString();
                     }
                 });
         }

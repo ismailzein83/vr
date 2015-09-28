@@ -55,15 +55,18 @@
         }
 
         function loadMeasures() {
-            $scope.measures.push(GenericAnalyticMeasureEnum.FirstCDRAttempt);
-            $scope.measures.push(GenericAnalyticMeasureEnum.ABR);
-            $scope.measures.push(GenericAnalyticMeasureEnum.ASR);
-            $scope.measures.push(GenericAnalyticMeasureEnum.NER);
             $scope.measures.push(GenericAnalyticMeasureEnum.Attempts);
             $scope.measures.push(GenericAnalyticMeasureEnum.SuccessfulAttempts);
-            $scope.measures.push(GenericAnalyticMeasureEnum.FailedAttempts);
-            $scope.measures.push(GenericAnalyticMeasureEnum.DeliveredAttempts);
+            $scope.measures.push(GenericAnalyticMeasureEnum.DurationsInSeconds);
+            $scope.measures.push(GenericAnalyticMeasureEnum.ASR);
             $scope.measures.push(GenericAnalyticMeasureEnum.ACD);
+            $scope.measures.push(GenericAnalyticMeasureEnum.NER);
+            $scope.measures.push(GenericAnalyticMeasureEnum.PDDInSeconds);
+            $scope.measures.push(GenericAnalyticMeasureEnum.PricedDuration);
+            $scope.measures.push(GenericAnalyticMeasureEnum.NumberOfCalls);
+            $scope.measures.push(GenericAnalyticMeasureEnum.SaleNets);
+            $scope.measures.push(GenericAnalyticMeasureEnum.CostNets);
+            $scope.measures.push(GenericAnalyticMeasureEnum.Profit);            
         }
     }
     appControllers.controller('Carrier_CarrierSummaryController', CarrierSummaryController);
