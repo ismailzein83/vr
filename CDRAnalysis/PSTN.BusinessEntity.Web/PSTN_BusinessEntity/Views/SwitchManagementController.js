@@ -30,13 +30,7 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
             settings.onScopeReady = function (modalScope) {
                 modalScope.title = "Add a Switch";
 
-                modalScope.onSwitchAdded = function (switchObject, addedSwitchTypes) {
-
-                    addNewSwitchTypes(addedSwitchTypes);
-
-                    switchObject.TypeDescription = (switchObject.TypeID != null) ?
-                        UtilsService.getItemByVal($scope.types, switchObject.TypeID, "ID").Name : null;
-
+                modalScope.onSwitchAdded = function (switchObject) {
                     gridAPI.itemAdded(switchObject);
                 };
             };
@@ -47,19 +41,12 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
         // grid functions
         $scope.gridReady = function (api) {
             gridAPI = api;
-
-            if ($scope.types.length > 0) // types are loaded
-                return retrieveData();
+            return retrieveData();
         }
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return SwitchAPIService.GetFilteredSwitches(dataRetrievalInput)
                 .then(function (response) {
-
-                    angular.forEach(response.Data, function (item) {
-                        item.TypeDescription = UtilsService.getItemByVal($scope.types, item.TypeID, "ID").Name;
-                    });
-
                     onResponseReady(response);
                 })
                 .catch(function (error) {
@@ -78,9 +65,6 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
                 angular.forEach(response, function (item) {
                     $scope.types.push(item);
                 });
-
-                if (gridAPI != undefined)
-                    return retrieveData();
             })
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
@@ -123,13 +107,7 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Edit Switch: " + gridObject.Name;
 
-            modalScope.onSwitchUpdated = function (switchObject, addedSwitchTypes) {
-                
-                addNewSwitchTypes(addedSwitchTypes);
-
-                switchObject.TypeDescription = (switchObject.TypeID != null) ?
-                    UtilsService.getItemByVal($scope.types, switchObject.TypeID, "ID").Name : null;
-
+            modalScope.onSwitchUpdated = function (switchObject) {
                 gridAPI.itemUpdated(switchObject);
             };
         };
@@ -152,12 +130,6 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
                         });
                 }
             });
-    }
-
-    function addNewSwitchTypes(addedSwitchTypes) {
-        angular.forEach(addedSwitchTypes, function (item) {
-            $scope.types.push(item);
-        });
     }
 }
 

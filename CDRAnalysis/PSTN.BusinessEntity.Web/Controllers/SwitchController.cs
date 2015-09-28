@@ -16,35 +16,35 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        public Switch GetSwitchByID(int switchID)
+        public SwitchDetail GetSwitchByID(int switchID)
         {
             SwitchManager manager = new SwitchManager();
             return manager.GetSwitchByID(switchID);
         }
 
         [HttpGet]
-        public List<Switch> GetSwitches()
+        public List<SwitchInfo> GetSwitches()
         {
             SwitchManager manager = new SwitchManager();
             return manager.GetSwitches();
         }
 
         [HttpGet]
-        public List<Switch> GetSwitchesToLinkTo(int switchID)
+        public List<SwitchInfo> GetSwitchesToLinkTo(int switchID)
         {
             SwitchManager manager = new SwitchManager();
             return manager.GetSwitchesToLinkTo(switchID);
         }
 
         [HttpPost]
-        public UpdateOperationOutput<Switch> UpdateSwitch(Switch switchObject)
+        public UpdateOperationOutput<SwitchDetail> UpdateSwitch(Switch switchObject)
         {
             SwitchManager manager = new SwitchManager();
             return manager.UpdateSwitch(switchObject);
         }
 
         [HttpPost]
-        public InsertOperationOutput<Switch> AddSwitch(Switch switchObject)
+        public InsertOperationOutput<SwitchDetail> AddSwitch(Switch switchObject)
         {
             SwitchManager manager = new SwitchManager();
             return manager.AddSwitch(switchObject);

@@ -9,7 +9,7 @@ namespace PSTN.BusinessEntity.Data.SQL
     {
         public SwitchTrunkDataManager() : base("CDRDBConnectionString") { }
 
-        public Vanrise.Entities.BigResult<SwitchTrunkDetail> GetFilteredSwitchTrunks(Vanrise.Entities.DataRetrievalInput<SwitchTrunkDetailQuery> input)
+        public Vanrise.Entities.BigResult<SwitchTrunkDetail> GetFilteredSwitchTrunks(Vanrise.Entities.DataRetrievalInput<SwitchTrunkQuery> input)
         {
             Dictionary<string, string> mapper = new Dictionary<string, string>();
             mapper.Add("TypeDescription", "Type");
@@ -63,7 +63,7 @@ namespace PSTN.BusinessEntity.Data.SQL
             return (recordsEffected > 0);
         }
 
-        public void UnlinkSwitchTrunk(int switchTrunkID, int linkedToTrunkID)
+        public void UnlinkSwitchTrunks(int switchTrunkID, int linkedToTrunkID)
         {
             ExecuteNonQuerySP("PSTN_BE.sp_SwitchTrunk_Unlink", switchTrunkID, linkedToTrunkID);
         }

@@ -7,42 +7,42 @@ namespace PSTN.BusinessEntity.Business
 {
     public class SwitchManager
     {
-        public Vanrise.Entities.IDataRetrievalResult<Switch> GetFilteredSwitches(Vanrise.Entities.DataRetrievalInput<SwitchQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<SwitchDetail> GetFilteredSwitches(Vanrise.Entities.DataRetrievalInput<SwitchQuery> input)
         {
             ISwitchDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchDataManager>();
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredSwitches(input));
         }
 
-        public Switch GetSwitchByID(int switchID)
+        public SwitchDetail GetSwitchByID(int switchID)
         {
             ISwitchDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchDataManager>();
             return dataManager.GetSwitchByID(switchID);
         }
 
-        public Switch GetSwitchByDataSourceID(int dataSourceID)
+        public SwitchDetail GetSwitchByDataSourceID(int dataSourceID)
         {
             ISwitchDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchDataManager>();
             return dataManager.GetSwitchByDataSourceID(dataSourceID);
         }
 
-        public List<Switch> GetSwitches()
+        public List<SwitchInfo> GetSwitches()
         {
             ISwitchDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchDataManager>();
             return dataManager.GetSwitches();
         }
 
-        public List<Switch> GetSwitchesToLinkTo(int switchID)
+        public List<SwitchInfo> GetSwitchesToLinkTo(int switchID)
         {
             ISwitchDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchDataManager>();
             return dataManager.GetSwitchesToLinkTo(switchID);
         }
 
-        public UpdateOperationOutput<Switch> UpdateSwitch(Switch switchObject)
+        public UpdateOperationOutput<SwitchDetail> UpdateSwitch(Switch switchObject)
         {
             ISwitchDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchDataManager>();
 
             bool updated = dataManager.UpdateSwitch(switchObject);
-            UpdateOperationOutput<Switch> updateOperationOutput = new UpdateOperationOutput<Switch>();
+            UpdateOperationOutput<SwitchDetail> updateOperationOutput = new UpdateOperationOutput<SwitchDetail>();
 
             updateOperationOutput.Result = UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
@@ -50,7 +50,7 @@ namespace PSTN.BusinessEntity.Business
             if (updated)
             {
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = switchObject;
+                updateOperationOutput.UpdatedObject = dataManager.GetSwitchByID(switchObject.ID);
             }
             else
             {
@@ -60,9 +60,9 @@ namespace PSTN.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-        public InsertOperationOutput<Switch> AddSwitch(Switch switchObject)
+        public InsertOperationOutput<SwitchDetail> AddSwitch(Switch switchObject)
         {
-            InsertOperationOutput<Switch> insertOperationOutput = new InsertOperationOutput<Switch>();
+            InsertOperationOutput<SwitchDetail> insertOperationOutput = new InsertOperationOutput<SwitchDetail>();
 
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
@@ -75,7 +75,7 @@ namespace PSTN.BusinessEntity.Business
             {
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 switchObject.ID = switchID;
-                insertOperationOutput.InsertedObject = switchObject;
+                insertOperationOutput.InsertedObject = dataManager.GetSwitchByID(switchObject.ID);
             }
             else
             {

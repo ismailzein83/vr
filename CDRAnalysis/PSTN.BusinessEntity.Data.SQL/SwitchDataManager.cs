@@ -1,8 +1,8 @@
 ﻿using PSTN.BusinessEntity.Entities;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System;
 
 namespace PSTN.BusinessEntity.Data.SQL
 {
@@ -10,7 +10,7 @@ namespace PSTN.BusinessEntity.Data.SQL
     {
         public SwitchDataManager() : base("CDRDBConnectionString") { }
 
-        public Vanrise.Entities.BigResult<Switch> GetFilteredSwitches(Vanrise.Entities.DataRetrievalInput<SwitchQuery> input)
+        public Vanrise.Entities.BigResult<SwitchDetail> GetFilteredSwitches(Vanrise.Entities.DataRetrievalInput<SwitchQuery> input)
         {
             Dictionary<string, string> mapper = new Dictionary<string, string>();
             mapper.Add("TypeDescription", "TypeID");
@@ -26,23 +26,23 @@ namespace PSTN.BusinessEntity.Data.SQL
             }, (reader) => SwitchMapper(reader), mapper);
         }
         
-        public Switch GetSwitchByID(int switchID) {
+        public SwitchDetail GetSwitchByID(int switchID) {
             return GetItemSP("PSTN_BE.sp_Switch_GetByID", SwitchMapper, switchID);
         }
 
-        public Switch GetSwitchByDataSourceID(int DataSourceID)
+        public SwitchDetail GetSwitchByDataSourceID(int DataSourceID)
         {
             return GetItemSP("PSTN_BE.sp_Switch_GetByDataSourceID", SwitchMapper, DataSourceID);
         }
 
-        public List<Switch> GetSwitches()
+        public List<SwitchInfo> GetSwitches()
         {
-            return GetItemsSP("PSTN_BE.sp_Switch_GetAll", SwitchMapper);
+            return GetItemsSP("PSTN_BE.sp_Switch_GetAll", SwitchInfoMapper);
         }
 
-        public List<Switch> GetSwitchesToLinkTo(int switchID)
+        public List<SwitchInfo> GetSwitchesToLinkTo(int switchID)
         {
-            return GetItemsSP("PSTN_BE.sp_Switch_GetToLinkTo", SwitchMapper, switchID);
+            return GetItemsSP("PSTN_BE.sp_Switch_GetToLinkTo", SwitchInfoMapper, switchID);
         }
 
         public bool UpdateSwitch(Switch switchObject)
@@ -69,26 +69,27 @@ namespace PSTN.BusinessEntity.Data.SQL
 
         #region Mappers
 
-        SwitchType SwitchTypeMapper(IDataReader reader)
+        SwitchDetail SwitchMapper(IDataReader reader)
         {
-            SwitchType type = new SwitchType();
-            
-            type.ID = (int)reader["ID"];
-            type.Name = reader["Name"] as string;
-
-            return type;
-        }
-
-        Switch SwitchMapper(IDataReader reader)
-        {
-            Switch switchObject = new Switch();
+            SwitchDetail switchObject = new SwitchDetail();
 
             switchObject.ID = (int)reader["ID"];
             switchObject.Name = reader["Name"] as string;
             switchObject.TypeID = (int)reader["TypeID"];
+            switchObject.TypeName = reader["TypeName"] as string;
             switchObject.AreaCode = reader["AreaCode"] as string;
             switchObject.TimeOffset = TimeSpan.Parse(reader["TimeOffset"] as string);
-            switchObject.DataSourceID = (int)reader["DataSourceID"];
+            switchObject.DataSourceID = GetReaderValue<int?>(reader, "DataSourceID");
+
+            return switchObject;
+        }
+
+        SwitchInfo SwitchInfoMapper(IDataReader reader)
+        {
+            SwitchInfo switchObject = new SwitchInfo();
+
+            switchObject.ID = (int)reader["ID"];
+            switchObject.Name = reader["Name"] as string;
 
             return switchObject;
         }

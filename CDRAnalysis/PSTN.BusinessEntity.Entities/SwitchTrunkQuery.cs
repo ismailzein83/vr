@@ -2,7 +2,7 @@
 
 namespace PSTN.BusinessEntity.Entities
 {
-    public class SwitchTrunkDetailQuery
+    public class SwitchTrunkQuery
     {
         public string Name { get; set; }
 

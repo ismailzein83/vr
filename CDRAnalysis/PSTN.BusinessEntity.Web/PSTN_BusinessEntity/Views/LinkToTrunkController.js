@@ -26,14 +26,12 @@ function LinkToTrunkController($scope, SwitchAPIService, SwitchTrunkAPIService, 
         $scope.selectedSwitchTrunk = undefined;
 
         $scope.saveSwitchTrunk = function () {
-            console.log(switchTrunkID);
-            console.log($scope.selectedSwitchTrunk.ID);
 
             return SwitchTrunkAPIService.LinkToTrunk(switchTrunkID, $scope.selectedSwitchTrunk.ID)
                 .then(function (response) {
                     if (VRNotificationService.notifyOnItemUpdated("Switch Trunk", response)) {
                         if ($scope.onSwitchTrunkUpdated != undefined)
-                            $scope.onSwitchTrunkUpdated(response.UpdatedObject);
+                            $scope.onSwitchTrunkUpdated(response.UpdatedObject, $scope.selectedSwitchTrunk.ID);
 
                         $scope.modalContext.closeModal();
                     }
@@ -51,6 +49,7 @@ function LinkToTrunkController($scope, SwitchAPIService, SwitchTrunkAPIService, 
 
             if ($scope.selectedSwitch != undefined) {
                 $scope.switchTrunks = [];
+                $scope.selectedSwitchTrunk = undefined;
                 $scope.isGettingData = true;
 
                 SwitchTrunkAPIService.GetSwitchTrunksBySwitchID($scope.selectedSwitch.ID)

@@ -5,15 +5,15 @@ namespace PSTN.BusinessEntity.Data
 {
     public interface ISwitchDataManager : IDataManager
     {
-        Vanrise.Entities.BigResult<Switch> GetFilteredSwitches(Vanrise.Entities.DataRetrievalInput<SwitchQuery> input);
+        Vanrise.Entities.BigResult<SwitchDetail> GetFilteredSwitches(Vanrise.Entities.DataRetrievalInput<SwitchQuery> input);
 
-        Switch GetSwitchByID(int switchID);
+        SwitchDetail GetSwitchByID(int switchID);
 
-        List<Switch> GetSwitches();
+        List<SwitchInfo> GetSwitches();
 
-        List<Switch> GetSwitchesToLinkTo(int switchID);
+        List<SwitchInfo> GetSwitchesToLinkTo(int switchID);
 
-        Switch GetSwitchByDataSourceID(int dataSourceID);
+        SwitchDetail GetSwitchByDataSourceID(int dataSourceID);
 
         bool UpdateSwitch(Switch switchObject);
 

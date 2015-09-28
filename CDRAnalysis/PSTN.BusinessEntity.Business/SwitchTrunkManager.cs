@@ -7,7 +7,7 @@ namespace PSTN.BusinessEntity.Business
 {
     public class SwitchTrunkManager
     {
-        public Vanrise.Entities.IDataRetrievalResult<SwitchTrunkDetail> GetFilteredSwitchTrunks(Vanrise.Entities.DataRetrievalInput<SwitchTrunkDetailQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<SwitchTrunkDetail> GetFilteredSwitchTrunks(Vanrise.Entities.DataRetrievalInput<SwitchTrunkQuery> input)
         {
             ISwitchTrunkDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchTrunkDataManager>();
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredSwitchTrunks(input));
@@ -91,7 +91,7 @@ namespace PSTN.BusinessEntity.Business
         {
             ISwitchTrunkDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchTrunkDataManager>();
 
-            dataManager.UnlinkSwitchTrunk(switchTrunkID, linkedToTrunkID);
+            dataManager.UnlinkSwitchTrunks(switchTrunkID, linkedToTrunkID);
 
             dataManager.LinkSwitchTrunks(switchTrunkID, linkedToTrunkID);
 

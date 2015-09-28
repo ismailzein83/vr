@@ -4,7 +4,6 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
 
     var switchID = undefined;
     var editMode = undefined;
-    var addedSwitchTypes = [];
 
     loadParameters();
     defineScope();
@@ -81,7 +80,6 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
                 modalScope.onSwitchTypeAdded = function (switchTypeObject) {
                     $scope.types.push(switchTypeObject);
                     $scope.selectedType = switchTypeObject;
-                    addedSwitchTypes.push(switchTypeObject);
                 };
             };
 
@@ -149,7 +147,7 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Switch", response, "Name")) {
                     if ($scope.onSwitchUpdated != undefined)
-                        $scope.onSwitchUpdated(response.UpdatedObject, addedSwitchTypes);
+                        $scope.onSwitchUpdated(response.UpdatedObject);
 
                     $scope.modalContext.closeModal();
                 }
@@ -166,7 +164,7 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Switch", response, "Name")) {
                     if ($scope.onSwitchAdded != undefined)
-                        $scope.onSwitchAdded(response.InsertedObject, addedSwitchTypes);
+                        $scope.onSwitchAdded(response.InsertedObject);
 
                     $scope.modalContext.closeModal();
                 }
@@ -183,7 +181,7 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
             TypeID: ($scope.selectedType != undefined) ? $scope.selectedType.ID : null,
             AreaCode: $scope.areaCode,
             TimeOffset: $scope.timeOffset,
-            DataSourceID: $scope.selectedDataSource.DataSourceId
+            DataSourceID: ($scope.selectedDataSource != undefined) ? $scope.selectedDataSource.DataSourceId : null
         };
     }
 

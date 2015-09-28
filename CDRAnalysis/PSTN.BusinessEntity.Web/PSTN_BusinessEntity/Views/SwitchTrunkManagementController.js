@@ -182,7 +182,7 @@ function SwitchTrunkManagementController($scope, SwitchTrunkAPIService, SwitchAP
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Link " + gridObject.Name + " to a Trunk";
 
-            modalScope.onSwitchTrunkUpdated = function (trunkObject) {
+            modalScope.onSwitchTrunkUpdated = function (trunkObject, linkedToTrunkID) {
 
                 var type = UtilsService.getEnum(SwitchTrunkTypeEnum, "value", trunkObject.Type);
                 trunkObject.TypeDescription = type.description;
@@ -191,6 +191,14 @@ function SwitchTrunkManagementController($scope, SwitchTrunkAPIService, SwitchAP
                 trunkObject.DirectionDescription = direction.description;
 
                 gridAPI.itemUpdated(trunkObject);
+
+                var linkedToTrunkObject = UtilsService.getItemByVal($scope.trunks, linkedToTrunkID, "ID");
+
+                if (linkedToTrunkObject != null) {
+                    linkedToTrunkObject.LinkedToTrunkID = trunkObject.ID;
+                    linkedToTrunkObject.LinkedToTrunkName = trunkObject.Name;
+                    gridAPI.itemUpdated(linkedToTrunkObject);
+                }
             };
         };
 

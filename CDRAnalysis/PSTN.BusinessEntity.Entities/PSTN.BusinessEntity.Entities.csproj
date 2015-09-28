@@ -46,12 +46,14 @@
     <Compile Include="Enums.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Switch.cs" />
+    <Compile Include="SwitchDetail.cs" />
+    <Compile Include="SwitchInfo.cs" />
     <Compile Include="SwitchQuery.cs" />
     <Compile Include="SwitchTrunk.cs" />
     <Compile Include="SwitchTrunkInfo.cs" />
     <Compile Include="SwitchType.cs" />
     <Compile Include="SwitchTrunkDetail.cs" />
-    <Compile Include="SwitchTrunkDetailQuery.cs" />
+    <Compile Include="SwitchTrunkQuery.cs" />
     <Compile Include="SwitchTypeQuery.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

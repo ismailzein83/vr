@@ -5,7 +5,7 @@ namespace PSTN.BusinessEntity.Data
 {
     public interface ISwitchTrunkDataManager : IDataManager
     {
-        Vanrise.Entities.BigResult<SwitchTrunkDetail> GetFilteredSwitchTrunks(Vanrise.Entities.DataRetrievalInput<SwitchTrunkDetailQuery> input);
+        Vanrise.Entities.BigResult<SwitchTrunkDetail> GetFilteredSwitchTrunks(Vanrise.Entities.DataRetrievalInput<SwitchTrunkQuery> input);
 
         SwitchTrunkDetail GetSwitchTrunkByID(int trunkID);
 
@@ -17,7 +17,7 @@ namespace PSTN.BusinessEntity.Data
 
         bool DeleteSwitchTrunk(int trunkID);
 
-        void UnlinkSwitchTrunk(int switchTrunkID, int linkedToTrunkID);
+        void UnlinkSwitchTrunks(int switchTrunkID, int linkedToTrunkID);
 
         void LinkSwitchTrunks(int switchTrunkID, int linkedToTrunkID);
     }
