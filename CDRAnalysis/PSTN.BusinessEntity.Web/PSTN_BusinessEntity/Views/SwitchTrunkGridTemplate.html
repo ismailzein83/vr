@@ -1,0 +1,22 @@
+﻿<div ng-controller="PSTN_BE_SwitchTrunkGridTemplateController">
+    <vr-row>
+        <vr-columns width="fullrow">
+
+            <vr-datagrid datasource="trunks"
+                         on-ready="gridReady"
+                         dataretrievalfunction="dataRetrievalFunction"
+                         pagingtype="'PagingOnScroll'"
+                         menuactions="gridMenuActions"
+                         idfield="ID">
+
+                <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Symbol'" field="'Symbol'" type="'Text'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Switch'" field="'SwitchName'" type="'Text'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Type'" field="'TypeDescription'" type="'Text'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Direction'" field="'DirectionDescription'" type="'Text'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Linked To'" field="'LinkedToTrunkName'" type="'Text'"></vr-datagridcolumn>
+            </vr-datagrid>
+
+        </vr-columns>
+    </vr-row>
+</div>
