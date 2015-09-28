@@ -9,11 +9,11 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public int? RoutingProductId { get; set; }
 
-        public List<string> ExcludedCodes { get; set; }
-
         public int? CodeCriteriaGroupId { get; set; }
 
         public CodeCriteriaGroupSettings CodeCriteriaGroupSettings { get; set; }
+
+        public List<string> ExcludedCodes { get; set; }
 
         public int? SaleZoneGroupConfigId { get; set; }
 
@@ -25,7 +25,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public bool HasCustomerFilter()
         {
-            return this.CustomersGroupConfigId.HasValue && (this.CustomerGroupSettings == null || !this.CustomerGroupSettings.IsAllExcept); 
+            return this.CustomersGroupConfigId.HasValue; 
         }
 
         public bool HasCodeFilter()
@@ -35,7 +35,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public bool HasZoneFilter()
         {
-            return this.SaleZoneGroupConfigId.HasValue && (this.SaleZoneGroupSettings == null || !this.SaleZoneGroupSettings.IsAllExcept);
+            return this.SaleZoneGroupConfigId.HasValue;
         }
     }
 }

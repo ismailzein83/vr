@@ -8,8 +8,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public abstract class SaleZoneGroupSettings
     {
-        public bool IsAllExcept { get; set; }
-
         public int? SaleZonePackageId { get; set; }
     }
 

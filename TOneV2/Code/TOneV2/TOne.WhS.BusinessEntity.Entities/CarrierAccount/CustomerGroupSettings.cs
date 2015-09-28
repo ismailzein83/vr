@@ -8,7 +8,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class CustomerGroupSettings
     {
-        public bool IsAllExcept { get; set; }
     }
 
     public class SelectiveCustomersSettings : CustomerGroupSettings
