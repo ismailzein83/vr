@@ -25,16 +25,18 @@ function SelectiveSuppliersTemplateController($scope, WhS_BE_CarrierAccountAPISe
     var isFormLoaded;
     function loadForm() {
 
-        if ($scope.supplierGroups.data == undefined || isFormLoaded || $scope.suppliers.length==0)
+        if ($scope.supplierGroups.data == undefined || isFormLoaded)
             return;
 
         var data = $scope.supplierGroups.data;
         if (data != null) {
-
-            angular.forEach($scope.saleZoneGroups.data.SupplierIds, function (item) {
-                var selectedSupplier = UtilsService.getItemByVal($scope.suppliers, item, "CarrierAccountId");
-                $scope.selectedSuppliers.push(selectedSupplier);
-            });
+            if ($scope.suppliers.length != 0)
+            {
+                angular.forEach($scope.supplierGroups.data.SupplierIds, function (item) {
+                    var selectedSupplier = UtilsService.getItemByVal($scope.suppliers, item, "CarrierAccountId");
+                    $scope.selectedSuppliers.push(selectedSupplier);
+                });
+            }
         }
 
         isFormLoaded = true;

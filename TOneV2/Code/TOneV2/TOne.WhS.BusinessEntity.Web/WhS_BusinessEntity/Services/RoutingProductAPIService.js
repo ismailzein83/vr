@@ -8,7 +8,8 @@ app.service('WhS_BE_RoutingProductAPIService', function (BaseAPIService) {
         AddRoutingProduct: AddRoutingProduct,
         UpdateRoutingProduct: UpdateRoutingProduct,
         GetSaleZoneGroupTemplates: GetSaleZoneGroupTemplates,
-        GetSupplierGroupTemplates: GetSupplierGroupTemplates
+        GetSupplierGroupTemplates: GetSupplierGroupTemplates,
+        DeleteRoutingProduct: DeleteRoutingProduct
     });
 
 
@@ -36,5 +37,9 @@ app.service('WhS_BE_RoutingProductAPIService', function (BaseAPIService) {
 
     function GetSupplierGroupTemplates() {
         return BaseAPIService.get("/api/RoutingProduct/GetSupplierGroupTemplates");
+    }
+
+    function DeleteRoutingProduct(routingProductId) {
+        return BaseAPIService.get("/api/RoutingProduct/DeleteRoutingProduct", { routingProductId: routingProductId });
     }
 });

@@ -60,6 +60,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return (recordesEffected > 0);
         }
 
+        public bool Delete(int routingProductId)
+        {
+            int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_RoutingProduct_Delete", routingProductId);
+            return (recordesEffected > 0);
+        }
+
         Entities.RoutingProduct RoutingProductMapper(IDataReader reader)
         {
             Entities.RoutingProduct routingProduct = new Entities.RoutingProduct

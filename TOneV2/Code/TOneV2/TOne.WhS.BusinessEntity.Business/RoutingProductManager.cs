@@ -63,5 +63,22 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return updateOperationOutput;
         }
+
+        public TOne.Entities.DeleteOperationOutput<object> DeleteRoutingProduct(int routingProductId)
+        {
+            IRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
+
+            TOne.Entities.DeleteOperationOutput<object> deleteOperationOutput = new TOne.Entities.DeleteOperationOutput<object>();
+            deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Failed;
+
+            bool deleteActionSucc = dataManager.Delete(routingProductId);
+
+            if (deleteActionSucc)
+            {
+                deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Succeeded;
+            }
+
+            return deleteOperationOutput;
+        }
     }
 }

@@ -53,6 +53,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         {
             RoutingProductManager manager = new RoutingProductManager();
             return manager.UpdateRoutingProduct(routingProduct);
+        }
+
+        [HttpGet]
+        public TOne.Entities.DeleteOperationOutput<object> DeleteRoutingProduct(int routingProductId)
+        {
+            RoutingProductManager manager = new RoutingProductManager();
+            return manager.DeleteRoutingProduct(routingProductId);
         } 
     }
 }

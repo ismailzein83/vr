@@ -105,7 +105,20 @@ function RoutingProductManagementController($scope, WhS_BE_RoutingProductAPIServ
     }
 
     function deleteRoutingProduct(routingProduct) {
+        VRNotificationService.showConfirmation()
+            .then(function (response) {
+                if (response) {
 
+                    return WhS_BE_RoutingProductAPIService.DeleteRoutingProduct(routingProduct.RoutingProductId)
+                        .then(function (deletionResponse) {
+                            VRNotificationService.notifyOnItemDeleted("Routing Product", deletionResponse);
+                            return retrieveData();
+                        })
+                        .catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                }
+            });
     }
 }
 
