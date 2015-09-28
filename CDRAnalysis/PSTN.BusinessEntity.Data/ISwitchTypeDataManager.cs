@@ -9,6 +9,8 @@ namespace PSTN.BusinessEntity.Data
 {
     public interface ISwitchTypeDataManager : IDataManager
     {
+        List<SwitchType> GetSwitchTypes();
+
         Vanrise.Entities.BigResult<SwitchType> GetFilteredSwitchTypes(Vanrise.Entities.DataRetrievalInput<SwitchTypeQuery> input);
 
         SwitchType GetSwitchTypeByID(int switchTypeID);

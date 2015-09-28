@@ -1,6 +1,6 @@
-﻿SwitchManagementController.$inject = ["$scope", "SwitchAPIService", "UtilsService", "VRNotificationService", "VRModalService"];
+﻿SwitchManagementController.$inject = ["$scope", "SwitchAPIService", "SwitchTypeAPIService", "UtilsService", "VRNotificationService", "VRModalService"];
 
-function SwitchManagementController($scope, SwitchAPIService, UtilsService, VRNotificationService, VRModalService) {
+function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIService, UtilsService, VRNotificationService, VRModalService) {
 
     var gridAPI = undefined;
 
@@ -73,7 +73,7 @@ function SwitchManagementController($scope, SwitchAPIService, UtilsService, VRNo
     function load() {
         $scope.isLoadingFilters = true;
 
-        return SwitchAPIService.GetSwitchTypes()
+        return SwitchTypeAPIService.GetSwitchTypes()
             .then(function (response) {
                 angular.forEach(response, function (item) {
                     $scope.types.push(item);

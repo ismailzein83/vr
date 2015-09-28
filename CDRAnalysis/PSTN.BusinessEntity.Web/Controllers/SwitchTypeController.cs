@@ -11,6 +11,13 @@ namespace PSTN.BusinessEntity.Web.Controllers
 {
     public class SwitchTypeController : Vanrise.Web.Base.BaseAPIController
     {
+        [HttpGet]
+        public List<SwitchType> GetSwitchTypes()
+        {
+            SwitchTypeManager manager = new SwitchTypeManager();
+            return manager.GetSwitchTypes();
+        }
+
         [HttpPost]
         public object GetFilteredSwitchTypes(Vanrise.Entities.DataRetrievalInput<SwitchTypeQuery> input)
         {

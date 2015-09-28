@@ -10,12 +10,6 @@ namespace PSTN.BusinessEntity.Data.SQL
     {
         public SwitchDataManager() : base("CDRDBConnectionString") { }
 
-        public List<SwitchType> GetSwitchTypes()
-        {
-            //Thread.Sleep(3000);
-            return GetItemsSP("PSTN_BE.sp_SwitchType_GetAll", SwitchTypeMapper);
-        }
-
         public Vanrise.Entities.BigResult<Switch> GetFilteredSwitches(Vanrise.Entities.DataRetrievalInput<SwitchQuery> input)
         {
             Dictionary<string, string> mapper = new Dictionary<string, string>();

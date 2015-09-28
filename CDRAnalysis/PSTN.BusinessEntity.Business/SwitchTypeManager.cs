@@ -11,6 +11,12 @@ namespace PSTN.BusinessEntity.Business
 {
     public class SwitchTypeManager
     {
+        public List<SwitchType> GetSwitchTypes()
+        {
+            ISwitchTypeDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchTypeDataManager>();
+            return dataManager.GetSwitchTypes();
+        }
+
         public Vanrise.Entities.IDataRetrievalResult<SwitchType> GetFilteredSwitchTypes(Vanrise.Entities.DataRetrievalInput<SwitchTypeQuery> input)
         {
             ISwitchTypeDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchTypeDataManager>();
