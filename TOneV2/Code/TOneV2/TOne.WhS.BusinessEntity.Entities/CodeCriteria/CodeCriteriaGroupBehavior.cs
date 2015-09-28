@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public abstract class BlockRouteOptionRuleSettings
+    public abstract class CodeCriteriaGroupBehavior
     {
+        public abstract List<CodeCriteria> GetCodeCriterias(CodeCriteriaGroupSettings settings);
     }
 }

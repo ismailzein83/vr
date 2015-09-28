@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.WhS.Routing.Entities
+namespace TOne.WhS.BusinessEntity.Entities
 {
-    public abstract class BlockRouteOptionRuleBehavior
+    public abstract class RouteOptionRuleBehavior
     {
-        public abstract BlockRouteOptionRuleBehaviorOutput Execute(BusinessEntity.Entities.BlockRouteOptionRule ruleDefinition);
+        public abstract BlockRouteOptionRuleBehaviorOutput Execute(BusinessEntity.Entities.RouteOptionRule ruleDefinition);
     }
 
     public class BlockRouteOptionRuleBehaviorOutput

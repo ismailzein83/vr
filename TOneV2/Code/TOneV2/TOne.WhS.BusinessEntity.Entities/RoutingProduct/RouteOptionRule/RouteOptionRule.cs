@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class BlockRouteOptionRule : IRouteCriteria
+    public class RouteOptionRule : IRouteCriteria
     {
         public RouteCriteria RouteCriteria { get; set; }
 
         public int Type { get; set; }
 
-        public BlockRouteOptionRuleSettings Settings { get; set; }
+        public RouteOptionRuleSettings Settings { get; set; }
 
         public DateTime BeginEffectiveDate { get; set; }
 

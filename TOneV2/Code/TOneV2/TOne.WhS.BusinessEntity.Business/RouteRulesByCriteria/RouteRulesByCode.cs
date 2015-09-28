@@ -13,7 +13,9 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             if (rule.RouteCriteria.HasCodeFilter() && !rule.RouteCriteria.HasCustomerFilter())
             {
-                ids = rule.RouteCriteria.Codes.Select(code => code.Code);
+                CodeManager codeManager = new CodeManager();
+                List<CodeCriteria> codeCriterias = codeManager.GetCodeCriterias(rule.RouteCriteria.CodeCriteriaGroupId.Value, rule.RouteCriteria.CodeCriteriaGroupSettings);
+                ids = codeCriterias.Select(code => code.Code);
                 return true;
             }
             else

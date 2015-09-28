@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.WhS.Routing.Business
+namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class AutomaticRouteRuleBehavior : Entities.RouteRuleBehavior
+    public abstract class RouteOptionRuleSettings
     {
-        
     }
 }

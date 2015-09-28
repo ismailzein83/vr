@@ -44,7 +44,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return GetMostMatchedRule(rules.FirstRuleSet, customerId, productId, code, saleZoneId);
         }
 
-        public T GetMostMatchedRule<T>(RouteRulesByCriteria<T> routeRulesByCriteria, int? customerId, int? productId, string code, long saleZoneId) where T : IRouteCriteria
+        T GetMostMatchedRule<T>(RouteRulesByCriteria<T> routeRulesByCriteria, int? customerId, int? productId, string code, long saleZoneId) where T : IRouteCriteria
         {
             if (routeRulesByCriteria == null)
                 return default(T);

@@ -10,8 +10,14 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         public const string SaleZoneGroupConfigType = "WhS_BE_SaleZoneGroup";
 
+        public const string CodeGroupConfigType = "WhS_BE_CodeGroup";
+
         public const string SupplierGroupConfigType = "WhS_BE_SupplierGroup";
 
         public const string CustomerGroupConfigType = "WhS_BE_CustomersGroup";
+
+        public const string RouteRuleConfigType = "WhS_BE_RouteRule";
+
+        public const string RouteOptionRuleConfigType = "WhS_BE_RouteOptionRule";
     }
 }

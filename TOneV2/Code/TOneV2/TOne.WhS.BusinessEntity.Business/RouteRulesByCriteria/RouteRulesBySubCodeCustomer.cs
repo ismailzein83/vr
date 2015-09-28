@@ -15,7 +15,9 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
                 ids1 = carrierAccountManager.GetCustomerIds(rule.RouteCriteria.CustomersGroupConfigId.Value, rule.RouteCriteria.CustomerGroupSettings);
-                ids2 = rule.RouteCriteria.Codes.Where(code => code.WithSubCodes).Select(code => code.Code);
+                CodeManager codeManager = new CodeManager();
+                List<CodeCriteria> codeCriterias = codeManager.GetCodeCriterias(rule.RouteCriteria.CodeCriteriaGroupId.Value, rule.RouteCriteria.CodeCriteriaGroupSettings);
+                ids2 = codeCriterias.Where(code => code.WithSubCodes).Select(code => code.Code);
                 return ids2.Count() > 0;
             }
             else
