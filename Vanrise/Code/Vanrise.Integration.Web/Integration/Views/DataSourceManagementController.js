@@ -72,7 +72,7 @@ function DataSourceManagementController($scope, DataSourceAPIService, DataSource
             gridApi.itemUpdated(dataSource);
         }
 
-        DataSourceService.openDataSourceEditor(dataSourceObj.DataSourceId, dataSourceObj.TaskId, onDataSourceUpdated);
+        DataSourceService.editDataSource(dataSourceObj, onDataSourceUpdated);
     }
 
     function deleteDataSource(dataSourceObj) {

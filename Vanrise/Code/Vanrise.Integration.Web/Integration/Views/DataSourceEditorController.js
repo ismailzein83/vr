@@ -4,7 +4,7 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
 
     var editMode;
     var dataSourceId;
-    var taskId;
+    var taskId = 0;
     loadParameters();
     defineScope();
     load();
@@ -12,11 +12,9 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
         dataSourceId = undefined;
-        taskId = undefined;
 
         if (parameters != undefined && parameters != null) {
             dataSourceId = parameters.dataSourceId;
-            taskId = parameters.taskId;
         }
 
         editMode = (dataSourceId != undefined);
@@ -140,12 +138,12 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
             Name: $scope.dataSourceName,
             AdapterTypeId: $scope.selectedAdapterType.AdapterTypeId,
             AdapterState: $scope.dataSourceAdapter.adapterState.getData(),
-            TaskId: (taskId != null) ? taskId : 0,
+            TaskId: taskId,
             Settings: { AdapterArgument: $scope.dataSourceAdapter.argument.getData(), MapperCustomCode: $scope.customCode, ExecutionFlowId: $scope.selectedExecutionFlow.ExecutionFlowId }
         };
 
         var taskData = {
-            TaskId: (taskId != null) ? taskId : 0,
+            TaskId: taskId,
             Name: 'Data Source Task',
             IsEnabled: $scope.isEnabled,
             TaskType: 0,
@@ -163,6 +161,8 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
     }
 
     function fillScopeFromDataSourceObj(dataSourceObj) {
+        taskId = dataSourceObj.TaskData.TaskId;
+
         $scope.selectedAdapterType = UtilsService.getItemByVal($scope.adapterTypes, dataSourceObj.DataSourceData.AdapterTypeId, "AdapterTypeId");
         $scope.dataSourceName = dataSourceObj.DataSourceData.Name;
 

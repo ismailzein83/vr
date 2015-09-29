@@ -7,7 +7,7 @@ app.service('DataSourceService', ['UtilsService', 'VRModalService', 'Integration
             getExecutionStatusDescription: getExecutionStatusDescription,
             getMappingResultDescription: getMappingResultDescription,
             getExecutionStatusColor: getExecutionStatusColor,
-            openDataSourceEditor: openDataSourceEditor
+            editDataSource: editDataSource
         });
 
         function getExecutionStatusDescription(executionStatusValue) {
@@ -39,12 +39,11 @@ app.service('DataSourceService', ['UtilsService', 'VRModalService', 'Integration
             return color;
         }
 
-        function openDataSourceEditor(dataSourceId, taskId, onDataSourceUpdated) {
+        function editDataSource(dataSourceObj, onDataSourceUpdated) {
             var modalSettings = {
             };
             var parameters = {
-                dataSourceId: dataSourceId,
-                taskId: taskId
+                dataSourceId: dataSourceObj.DataSourceId
             };
 
             modalSettings.onScopeReady = function (modalScope) {
