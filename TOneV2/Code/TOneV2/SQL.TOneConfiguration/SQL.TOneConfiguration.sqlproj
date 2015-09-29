@@ -152,6 +152,8 @@
     <Build Include="sec\Stored Procedures\sp_OrgChart_CreateTempByName.sql" />
     <Build Include="sec\Stored Procedures\sp_Group_CreateTempByName.sql" />
     <Build Include="sec\Stored Procedures\sp_User_UpdateLastLogin.sql" />
+    <Build Include="common\Tables\TemplateConfig.sql" />
+    <Build Include="common\Stored Procedures\sp_TemplateConfig_GetByConfigType.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
