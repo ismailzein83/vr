@@ -19,7 +19,9 @@ SELECT ca.CarrierAccountId,
 	ca.SupplierPaymentType,
 	ca.NameSuffix,
 	ca.CarrierGroups,
-	ca.CarrierGroupID
+	ca.CarrierGroupID,
+	ca.RepresentsASwitch,
+	ca.IsOriginatingZonesEnabled
 FROM
 	CarrierAccount ca
 	INNER JOIN CarrierProfile cp on ca.ProfileID = cp.ProfileID

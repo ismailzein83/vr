@@ -3,7 +3,7 @@
 -- Create date: <2015-07-21>
 -- Description:	<procedure for retrieving all profiles>
 -- =============================================
-CREATE PROCEDURE [BEntity].[SP_CarrierProfile_CreateTempForFiltered]
+CREATE PROCEDURE [BEntity].[SP_CarrierProfile_CreateTempByFiltered]
 	@TempTableName varchar(200),	
 	@Name VARCHAR(30) =  NULL,
 	@CompanyName VARCHAR(50) = NULL,

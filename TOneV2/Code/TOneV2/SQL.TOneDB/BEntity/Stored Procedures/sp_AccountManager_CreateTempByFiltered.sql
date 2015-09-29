@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [BEntity].[sp_AccountManager_CreateTempForAssignedCarriers]
+CREATE PROCEDURE [BEntity].[sp_AccountManager_CreateTempByFiltered]
 	@TempTableName VARCHAR(200),
 	@ManagerId INT,
 	@UserIds [BEntity].[MemberIdType] READONLY

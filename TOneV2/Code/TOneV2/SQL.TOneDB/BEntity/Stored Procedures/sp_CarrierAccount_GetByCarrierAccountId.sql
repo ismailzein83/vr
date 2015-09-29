@@ -25,7 +25,8 @@ SELECT ca.CarrierAccountId,
 	ca.CarrierGroups,
 	ca.GMTTime,
 	ca.IsCustomerCeiling,
-	ca.IsSupplierCeiling
+	ca.IsSupplierCeiling,
+	ca.RepresentsASwitch
 FROM CarrierAccount ca
 		INNER JOIN CarrierProfile cp on ca.ProfileID = cp.ProfileID
 		LEFT OUTER JOIN

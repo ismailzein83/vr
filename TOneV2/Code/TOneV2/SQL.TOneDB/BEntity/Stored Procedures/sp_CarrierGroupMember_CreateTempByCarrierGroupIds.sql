@@ -45,7 +45,9 @@ BEGIN
 						ca.CustomerPaymentType,
 						ca.SupplierPaymentType,
 						ca.NameSuffix,
-						'' as CarrierAccountName
+						'' as CarrierAccountName,
+						ca.IsCustomerCeiling,
+						ca.IsSupplierCeiling
 			FROM CarrierAccount  as ca WITH(NOLOCK) Join CarrierAccountIDs as caIds on ca.CarrierAccountID = caIds.CarrierAccountID
 										INNER JOIN CarrierProfile cp on ca.ProfileID = cp.ProfileID
 										WHERE 

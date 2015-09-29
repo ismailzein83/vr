@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [BEntity].[SP_CarrierAccount_CreateTempForFiltered]
+CREATE PROCEDURE [BEntity].[SP_CarrierAccount_CreateTempByFiltered]
 	@TempTableName varchar(200),	
 	@Name VARCHAR(30) =  NULL,
 	@CompanyName VARCHAR(50) = NULL

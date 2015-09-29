@@ -32,7 +32,9 @@ SELECT ca.CarrierAccountId,
 			ca.AccountType,
 			ca.CustomerPaymentType,
 			ca.SupplierPaymentType,
-			ca.NameSuffix
+			ca.NameSuffix,
+			ca.IsCustomerCeiling,
+			ca.IsSupplierCeiling
 FROM CarrierAccount  as ca WITH(NOLOCK) Join CarrierAccountIDs AS caIds ON ca.CarrierAccountID = caIds.CarrierAccountID
 										INNER JOIN CarrierProfile cp ON ca.ProfileID = cp.ProfileID
 										

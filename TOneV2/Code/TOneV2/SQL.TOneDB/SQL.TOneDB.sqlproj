@@ -219,12 +219,9 @@
     <Build Include="BEntity\Stored Procedures\sp_CarrierProfile_Update_4.sql" />
     <Build Include="BEntity\Stored Procedures\sp_CarrierProfile_Insert_4.sql" />
     <Build Include="BEntity\Stored Procedures\sp_CarrierProfile_GetByProfileId_4.sql" />
-    <Build Include="BEntity\Stored Procedures\SP_CarrierProfile_CreateTempForFiltered_4.sql" />
     <Build Include="BEntity\Stored Procedures\sp_CarrierGroup_GetAll_4.sql" />
-    <Build Include="BEntity\Stored Procedures\SP_CarrierAccount_CreateTempForFiltered_4.sql" />
     <Build Include="BEntity\Stored Procedures\sp_AccountManager_GetCarriers_4.sql" />
     <Build Include="BEntity\Stored Procedures\sp_AccountManager_GetAssignedCarriers_4.sql" />
-    <Build Include="BEntity\Stored Procedures\sp_AccountManager_CreateTempForAssignedCarriers_4.sql" />
     <Build Include="BEntity\Stored Procedures\sp_AccountManager_AssignCarriers_4.sql" />
     <Build Include="Analytics\Stored Procedures\SP_BillingStats_GetTrafficVolumes_4.sql" />
     <Build Include="BEntity\User Defined Types\UpdatedAccountManagerCarriersType_4.sql" />
@@ -282,5 +279,23 @@
     <Build Include="BEntity\Stored Procedures\sp_PriceList_GetByCustomerID.sql" />
     <Build Include="Billing\Stored Procedures\sp_BillingCDRCost_CreateTempBySupplierID.sql" />
     <Build Include="BEntity\Stored Procedures\sp_CurrencyExchangeRate_GetByExchangeDate.sql" />
+    <Build Include="Billing\Stored Procedures\sp_BillingInvoice_CreateTempByCustomerID.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_ToDConsideration_GetSale.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_ToDConsideration_GetCost.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Tariff_GetSale.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Tariff_GetCost.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Rate_GetSaleByCustomer.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Rate_GetCostBySupplier.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Currency_GetVisible.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Currency_GetCurrencyIdByCarrierId.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Currency_GetCurrencyByCarrierId.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Commission_GetSale.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Commission_GetCost.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Commision_CreateTempBySupplier.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Commision_CreateTempByCustomer.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Code_GetBySupplier.sql" />
+    <Build Include="BEntity\Stored Procedures\SP_CarrierProfile_CreateTempByFiltered.sql" />
+    <Build Include="BEntity\Stored Procedures\SP_CarrierAccount_CreateTempByFiltered.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_AccountManager_CreateTempByFiltered.sql" />
   </ItemGroup>
 </Project>

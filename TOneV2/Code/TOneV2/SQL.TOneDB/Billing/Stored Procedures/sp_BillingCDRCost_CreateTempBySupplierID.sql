@@ -12,51 +12,37 @@ AS
 BEGIN
 	IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 	BEGIN
-		SET @From = DATEADD(DAY, 0, DATEDIFF(DAY, 0, @From))
-		SET @To = DATEADD(S, -1, DATEADD(DAY, 1, DATEDIFF(DAY, 0, @To)))
+		declare @SupplierGMTTime int
+		set @SupplierGMTTime = (select GMTTime from dbo.CarrierAccount where CarrierAccountID = @SupplierID);
 
-		DECLARE @SupplierGMTTime INT
-		SET @SupplierGMTTime = (SELECT GMTTime FROM dbo.CarrierAccount WHERE CarrierAccountID = @SupplierID);
-
-		DECLARE @Result TABLE
+		declare @Result table
 		(
-			[Day] DATETIME,
-			DurationInMinutes NUMERIC(13, 4),
-			Amount FLOAT,
-			CurrencyID VARCHAR(3)
+			[Day] date,
+			Amount float null,
+			CurrencyID varchar(3) null,
+			DurationInMinutes numeric(13, 4) null
 		)
 
-		INSERT INTO @Result
-		SELECT
-			CONVERT(VARCHAR(10), DATEADD(MI, -@SupplierGMTTime, main.Attempt), 121) AS [Day],
-			ISNULL((SUM(cost.DurationInSeconds) / 60.0), 0) AS DurationInMinutes,
-			SUM(cost.Net) AS Amount,
-			cost.CurrencyID
-		FROM dbo.Billing_CDR_Main main WITH(NOLOCK, INDEX(IX_Billing_CDR_Main_Attempt, IX_Billing_CDR_Main_Supplier))
-		LEFT JOIN dbo.Billing_CDR_Cost cost ON main.ID = cost.ID
-		WHERE main.SupplierID = @SupplierID
-			AND main.Attempt >= @From
-			AND main.Attempt <= @To
-		GROUP BY CONVERT(VARCHAR(10), DATEADD(MI, -@SupplierGMTTime, main.Attempt), 121),
-			cost.CurrencyID
-		ORDER BY CONVERT(VARCHAR(10), DATEADD(MI, -@SupplierGMTTime, main.Attempt), 121)
+		insert into @Result ([Day], Amount, CurrencyID, DurationInMinutes)
 
-		-- The insert operation is done
+		select
+			CAST((DATEADD(M, -@SupplierGMTTime, main.Attempt)) as date) as [Day],
+			SUM(cost.Net) as Amount,
+			cost.CurrencyID,
+			SUM(cost.DurationInSeconds) / 60 as DurationInMinutes
+			
+		from Billing_CDR_Main main with(nolock, index(IX_Billing_CDR_Main_Attempt, IX_Billing_CDR_Main_Supplier))
+		left join Billing_CDR_Cost cost with(nolock) on cost.ID = main.ID
 
-		SELECT
-			CASE
-				WHEN @SupplierGMTTime <= 0 THEN CONVERT(VARCHAR(10), [Day], 121)
-				WHEN @SupplierGMTTime > 0 THEN CONVERT(VARCHAR(10), [Day] + 1, 121)
-			END AS [Day],
-			DurationInMinutes,
-			Amount,
-			CurrencyID
+		where main.SupplierID = @SupplierID
+			and main.Attempt >= @From
+			and main.Attempt <= @To
+
+		group by CAST((DATEADD(M, -@SupplierGMTTime, main.Attempt)) as date), cost.CurrencyID
+
+		order by CAST((DATEADD(M, -@SupplierGMTTime, main.Attempt)) as date)
 		
-		INTO #RESULT
-		
-		FROM @Result
-
-		ORDER BY [Day]
+		select * into #RESULT from @Result
 		
 		DECLARE @sql VARCHAR(1000)
 		SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';
