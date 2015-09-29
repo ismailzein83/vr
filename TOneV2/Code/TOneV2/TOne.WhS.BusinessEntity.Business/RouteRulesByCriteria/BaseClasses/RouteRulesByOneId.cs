@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -20,7 +21,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     foreach (var id in ids)
                     {
-                        List<T> zoneRules = GetOrCreateDictionaryItem(id, _rulesById);
+                        List<T> zoneRules = _rulesById.GetOrCreateItem(id);
                         zoneRules.Add(rule);
                     }
                 }

@@ -10,8 +10,14 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public PricingRuleCriteria Criteria { get; set; }
 
+        public int TypeConfigId { get; set; }
+
+        public PricingRuleSettings Settings { get; set; }
+
         public DateTime BeginEffectiveDate { get; set; }
 
         public DateTime? EndEffectiveDate { get; set; }
+
+        public string Description { get; set; }
     }
 }

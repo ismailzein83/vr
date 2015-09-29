@@ -10,7 +10,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public RouteCriteria RouteCriteria { get; set; }
 
-        public int Type { get; set; }
+        public int TypeConfigId { get; set; }
 
         public RouteOptionRuleSettings Settings { get; set; }
 
@@ -18,6 +18,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public DateTime? EndEffectiveDate { get; set; }
 
-        public string Reason { get; set; }
+        public string Description { get; set; }
     }
 }

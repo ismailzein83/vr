@@ -8,10 +8,10 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public abstract class RouteOptionRuleBehavior
     {
-        public abstract BlockRouteOptionRuleBehaviorOutput Execute(BusinessEntity.Entities.RouteOptionRule ruleDefinition);
+        public abstract RouteOptionRuleBehaviorOutput Evaluate(BusinessEntity.Entities.RouteOptionRule ruleDefinition);
     }
 
-    public class BlockRouteOptionRuleBehaviorOutput
+    public class RouteOptionRuleBehaviorOutput
     {
         public List<SupplierWithZones> SuppliersWithZones { get; set; }
     }

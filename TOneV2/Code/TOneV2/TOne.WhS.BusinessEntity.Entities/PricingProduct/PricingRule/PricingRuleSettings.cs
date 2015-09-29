@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class PricingRuleCriteria
+    public class PricingRuleSettings
     {
-        public int? PricingProductId { get; set; }
-
-
     }
 }

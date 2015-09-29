@@ -16,28 +16,18 @@ namespace TOne.WhS.BusinessEntity.Business
             Dictionary<int, SupplierRules> rulesBySuppliers = new Dictionary<int, SupplierRules>();
             foreach(var rule in rules)
             {
-                RouteOptionRuleBehavior optionRuleBehavior = templateConfigManager.GetBehavior<RouteOptionRuleBehavior>(rule.Type);
-                var ruleSuppliersWithZones = optionRuleBehavior.Execute(rule);
+                RouteOptionRuleBehavior optionRuleBehavior = templateConfigManager.GetBehavior<RouteOptionRuleBehavior>(rule.TypeConfigId);
+                var ruleSuppliersWithZones = optionRuleBehavior.Evaluate(rule);
                 if(ruleSuppliersWithZones != null && ruleSuppliersWithZones.SuppliersWithZones != null)
                 {
                     foreach (var supplierWithZones in ruleSuppliersWithZones.SuppliersWithZones)
                     {
-                        SupplierRules supplierRules;
-                        if (!rulesBySuppliers.TryGetValue(supplierWithZones.SupplierId, out supplierRules))
-                        {
-                            supplierRules = new SupplierRules() { RulesBySupplierZones = new Dictionary<long, List<RouteOptionRule>>() };
-                            rulesBySuppliers.Add(supplierWithZones.SupplierId, supplierRules);
-                        }
+                        SupplierRules supplierRules = rulesBySuppliers.GetOrCreateItem(supplierWithZones.SupplierId);                        
                         if (supplierWithZones.SupplierZones != null && supplierWithZones.SupplierZones.Count > 0)
                         {
                             foreach(var supplierZoneId in supplierWithZones.SupplierZones)
                             {
-                                List<RouteOptionRule> zoneRules;
-                                if(!supplierRules.RulesBySupplierZones.TryGetValue(supplierZoneId, out zoneRules))
-                                {
-                                    zoneRules = new List<RouteOptionRule>();
-                                    supplierRules.RulesBySupplierZones.Add(supplierZoneId, zoneRules);
-                                }
+                                List<RouteOptionRule> zoneRules = supplierRules.RulesBySupplierZones.GetOrCreateItem(supplierZoneId);
                                 zoneRules.Add(rule);
                             }
                         }

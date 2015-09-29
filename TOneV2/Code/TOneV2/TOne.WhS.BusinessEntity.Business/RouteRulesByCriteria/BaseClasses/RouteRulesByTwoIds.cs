@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -21,10 +22,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     foreach (var id1 in ids1)
                     {
-                        Dictionary<R, List<T>> rulesById2 = GetOrCreateDictionaryItem(id1, _rulesById1Id2);
+                        Dictionary<R, List<T>> rulesById2 =_rulesById1Id2.GetOrCreateItem(id1);
                         foreach (var id2 in ids2)
                         {
-                            List<T> codeRules = GetOrCreateDictionaryItem(id2, rulesById2);
+                            List<T> codeRules = rulesById2.GetOrCreateItem(id2);
                             codeRules.Add(rule);
                         }
                     }
