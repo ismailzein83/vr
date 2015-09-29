@@ -1,6 +1,6 @@
-﻿DataSourceManagementController.$inject = ['$scope', 'DataSourceAPIService', 'VRModalService', 'VRNotificationService'];
+﻿DataSourceManagementController.$inject = ['$scope', 'DataSourceAPIService', 'DataSourceService', 'VRModalService', 'VRNotificationService'];
 
-function DataSourceManagementController($scope, DataSourceAPIService, VRModalService, VRNotificationService) {
+function DataSourceManagementController($scope, DataSourceAPIService, DataSourceService, VRModalService, VRNotificationService) {
     var gridApi;
 
     defineScope();
@@ -67,20 +67,12 @@ function DataSourceManagementController($scope, DataSourceAPIService, VRModalSer
     }
 
     function editDataSource(dataSourceObj) {
-        var modalSettings = {
-        };
-        var parameters = {
-            dataSourceId: dataSourceObj.DataSourceId,
-            taskId: dataSourceObj.TaskId
-        };
+        
+        var onDataSourceUpdated = function (dataSource) {
+            gridApi.itemUpdated(dataSource);
+        }
 
-        modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Data Source";
-            modalScope.onDataSourceUpdated = function (dataSource) {
-                gridApi.itemUpdated(dataSource);
-            };
-        };
-        VRModalService.showModal('/Client/Modules/Integration/Views/DataSourceEditor.html', parameters, modalSettings);
+        DataSourceService.openDataSourceEditor(dataSourceObj.DataSourceId, dataSourceObj.TaskId, onDataSourceUpdated);
     }
 
     function deleteDataSource(dataSourceObj) {
