@@ -15,7 +15,7 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
 
         // functions
         $scope.switchTrunkGridConnector.loadTemplateData = function () {
-            loadGrid();
+            return loadGrid(); // the search button uses the promise object to display its loader
         }
 
         $scope.switchTrunkGridConnector.onTrunkAdded = function (trunkObject) {
@@ -25,7 +25,7 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
 
         $scope.gridReady = function (api) {
             gridAPI = api;
-            loadGrid();
+            return loadGrid();
         }
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {

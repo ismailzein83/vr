@@ -1,6 +1,6 @@
-﻿SwitchEditorController.$inject = ["$scope", "SwitchAPIService", "SwitchTypeAPIService", "DataSourceAPIService", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService"];
+﻿SwitchEditorController.$inject = ["$scope", "SwitchAPIService", "SwitchTypeAPIService", "DataSourceAPIService", "DataSourceService", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService"];
 
-function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, DataSourceAPIService, UtilsService, VRNavigationService, VRNotificationService, VRModalService) {
+function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, DataSourceAPIService, DataSourceService, UtilsService, VRNavigationService, VRNotificationService, VRModalService) {
 
     var switchID = undefined;
     var editMode = undefined;
@@ -57,18 +57,13 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
         }
 
         $scope.addDataSource = function () {
-            var settings = {};
 
-            settings.onScopeReady = function (modalScope) {
-                modalScope.title = "Add a Data Source";
+            var eventHandler = function (dataSourceObject) {
+                $scope.dataSources.push(dataSourceObject);
+                $scope.selectedDataSource = dataSourceObject;
+            }
 
-                modalScope.onDataSourceAdded = function (dataSource) {
-                    $scope.dataSources.push(dataSource);
-                    $scope.selectedDataSource = dataSource;
-                };
-            };
-
-            VRModalService.showModal("/Client/Modules/Integration/Views/DataSourceEditor.html", null, settings);
+            DataSourceService.addDataSource(eventHandler);
         }
 
         $scope.addSwitchType = function () {

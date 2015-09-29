@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading;
 
 namespace PSTN.BusinessEntity.Data.SQL
 {
@@ -11,6 +12,8 @@ namespace PSTN.BusinessEntity.Data.SQL
 
         public Vanrise.Entities.BigResult<SwitchTrunkDetail> GetFilteredSwitchTrunks(Vanrise.Entities.DataRetrievalInput<SwitchTrunkQuery> input)
         {
+            //Thread.Sleep(5000);
+
             Dictionary<string, string> mapper = new Dictionary<string, string>();
             mapper.Add("TypeDescription", "Type");
             mapper.Add("DirectionDescription", "Direction");

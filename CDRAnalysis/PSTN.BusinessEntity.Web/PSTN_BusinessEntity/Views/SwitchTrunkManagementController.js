@@ -26,7 +26,7 @@ function SwitchTrunkManagementController($scope, SwitchAPIService, SwitchService
 
         // filter functions
         $scope.searchClicked = function () {
-            loadGrid();
+            return loadGrid();
         }
 
         $scope.addTrunk = function () {
@@ -73,7 +73,7 @@ function SwitchTrunkManagementController($scope, SwitchAPIService, SwitchService
         $scope.switchTrunkGridConnector.data = getFilterObject();
 
         if ($scope.switchTrunkGridConnector.loadTemplateData != undefined) {
-            $scope.switchTrunkGridConnector.loadTemplateData();
+            return $scope.switchTrunkGridConnector.loadTemplateData();
         }
     }
 
