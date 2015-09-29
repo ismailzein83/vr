@@ -14,12 +14,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
 
         }
-        public bool AddSupplierPriceList(int supplierAccountId)
+        public bool AddSupplierPriceList(int supplierAccountId, out int supplierPriceListId)
         {
             object priceListID;
 
             int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SupplierPriceList_Insert",  out priceListID,supplierAccountId);
-           // insertedId = (int)priceListID;
+            supplierPriceListId = (int)priceListID;
             return (recordesEffected > 0);
         }
     }

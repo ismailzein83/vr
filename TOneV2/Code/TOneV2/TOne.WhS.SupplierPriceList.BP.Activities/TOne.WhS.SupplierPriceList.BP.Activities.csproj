@@ -36,11 +36,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Cells, Version=8.2.2.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\Aspose.Cells.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.DurableInstancing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Activities" />
@@ -50,12 +55,25 @@
     <Reference Include="Vanrise.BusinessProcess">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Caching">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\..\Vanrise\Code\Vanrise.Data.SQL\bin\Debug\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplySupplierCodesForDB.cs" />
     <Compile Include="ApplySupplierPriceListForDB.cs" />
+    <Compile Include="ApplySupplierRatesForDB.cs" />
+    <Compile Include="ApplySupplierZonesForDB.cs" />
+    <Compile Include="PrepareSupplierCode.cs" />
+    <Compile Include="PrepareSupplierRate.cs" />
+    <Compile Include="PrepareSupplierZones.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadDataFromExcel.cs" />
   </ItemGroup>
@@ -63,6 +81,14 @@
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
       <Project>{5635598e-8526-4bb4-9d1b-87a6b3b1ce72}</Project>
       <Name>TOne.WhS.BusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
+      <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
+      <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SupplierPriceList.Entities\TOne.WhS.SupplierPriceList.Entities.csproj">
+      <Project>{0940dc86-5421-4324-87cd-3f3ad458f4f6}</Project>
+      <Name>TOne.WhS.SupplierPriceList.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

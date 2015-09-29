@@ -8,6 +8,6 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ISupplierPriceListDataManager:IDataManager
     {
-        bool AddSupplierPriceList(int supplierAccountId);
+        bool AddSupplierPriceList(int supplierAccountId, out int supplierPriceListId);
     }
 }

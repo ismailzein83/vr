@@ -12,11 +12,14 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
     public class ApplySupplierPriceListForDB:CodeActivity
     {
         public InArgument<int> SupplierAccountId { get; set; }
+        public OutArgument<int> SupplierPriceListId { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
             DateTime startApplying= DateTime.Now;
             SupplierPriceListManager manager = new SupplierPriceListManager();
-            manager.AddSupplierPriceList(SupplierAccountId.Get(context));
+            int supplierPriceListId;
+            manager.AddSupplierPriceList(SupplierAccountId.Get(context), out supplierPriceListId);
+            SupplierPriceListId.Set(context, supplierPriceListId);
             TimeSpan spent = DateTime.Now.Subtract(startApplying);
             context.WriteTrackingMessage(LogEntryType.Information, "Apply Supplier PriceList For DB done and Takes: {0}", spent);
         }

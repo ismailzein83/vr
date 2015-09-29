@@ -47,6 +47,10 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Vanrise.BusinessProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess.Entities">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
@@ -61,6 +65,10 @@
     </XamlAppDef>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
+      <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
+      <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.SupplierPriceList.BP.Activities\TOne.WhS.SupplierPriceList.BP.Activities.csproj">
       <Project>{f7438737-d6bb-4dbc-beff-813a524e6eca}</Project>
       <Name>TOne.WhS.SupplierPriceList.BP.Activities</Name>
@@ -68,6 +76,10 @@
     <ProjectReference Include="..\TOne.WhS.SupplierPriceList.BP.Arguments\TOne.WhS.SupplierPriceList.BP.Arguments.csproj">
       <Project>{05b7b8cf-6d2a-4bef-ae8b-af5fc3940baa}</Project>
       <Name>TOne.WhS.SupplierPriceList.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SupplierPriceList.Entities\TOne.WhS.SupplierPriceList.Entities.csproj">
+      <Project>{0940dc86-5421-4324-87cd-3f3ad458f4f6}</Project>
+      <Name>TOne.WhS.SupplierPriceList.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

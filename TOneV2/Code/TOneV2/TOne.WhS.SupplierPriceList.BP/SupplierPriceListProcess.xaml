@@ -8,8 +8,10 @@
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:twbe="clr-namespace:TOne.WhS.BusinessEntity.Entities;assembly=TOne.WhS.BusinessEntity.Entities"
  xmlns:twsba="clr-namespace:TOne.WhS.SupplierPriceList.BP.Arguments;assembly=TOne.WhS.SupplierPriceList.BP.Arguments"
  xmlns:twsba1="clr-namespace:TOne.WhS.SupplierPriceList.BP.Activities;assembly=TOne.WhS.SupplierPriceList.BP.Activities"
+ xmlns:twse="clr-namespace:TOne.WhS.SupplierPriceList.Entities;assembly=TOne.WhS.SupplierPriceList.Entities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="Input" Type="InArgument(twsba:SupplierPriceListProcessInput)" />
@@ -42,11 +44,22 @@
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.SupplierPriceList.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.SupplierPriceList.BP.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.WhS.SupplierPriceList.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.SupplierPriceList.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="scg:Dictionary(x:String, scg:List(twse:SupplierPriceList))" Name="SupplierZonesDictionary" />
+      <Variable x:TypeArguments="scg:List(twbe:SupplierZone)" Name="SupplierZones" />
+      <Variable x:TypeArguments="x:Int32" Name="SupplierPriceListId" />
+      <Variable x:TypeArguments="scg:List(twbe:SupplierCode)" Name="SupplierCodes" />
+      <Variable x:TypeArguments="scg:List(twbe:SupplierRate)" Name="SupplierRates" />
+      <Variable x:TypeArguments="scg:List(x:Int64)" Name="OldSupplierZonesIds" />
+    </Sequence.Variables>
     <twsba1:ReadDataFromExcel sap2010:WorkflowViewState.IdRef="ReadDataFromExcel_1">
       <twsba1:ReadDataFromExcel.EffectiveDate>
         <InArgument x:TypeArguments="s:DateTime">
@@ -58,35 +71,192 @@
           <mca:CSharpValue x:TypeArguments="x:Int32">Input.FileId</mca:CSharpValue>
         </InArgument>
       </twsba1:ReadDataFromExcel.FileId>
+      <twsba1:ReadDataFromExcel.PriceListDictionary>
+        <OutArgument x:TypeArguments="scg:Dictionary(x:String, scg:List(twse:SupplierPriceList))">
+          <mca:CSharpReference x:TypeArguments="scg:Dictionary(x:String, scg:List(twse:SupplierPriceList))">SupplierZonesDictionary</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:ReadDataFromExcel.PriceListDictionary>
     </twsba1:ReadDataFromExcel>
-    <twsba1:ApplySupplierPriceListForDB>
+    <twsba1:ApplySupplierPriceListForDB sap2010:WorkflowViewState.IdRef="ApplySupplierPriceListForDB_1">
       <twsba1:ApplySupplierPriceListForDB.SupplierAccountId>
         <InArgument x:TypeArguments="x:Int32">
           <mca:CSharpValue x:TypeArguments="x:Int32">Input.SupplierAccountId</mca:CSharpValue>
         </InArgument>
       </twsba1:ApplySupplierPriceListForDB.SupplierAccountId>
-      <sap2010:WorkflowViewState.IdRef>ApplySupplierPriceListForDB_1</sap2010:WorkflowViewState.IdRef>
+      <twsba1:ApplySupplierPriceListForDB.SupplierPriceListId>
+        <OutArgument x:TypeArguments="x:Int32">
+          <mca:CSharpReference x:TypeArguments="x:Int32">SupplierPriceListId</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:ApplySupplierPriceListForDB.SupplierPriceListId>
     </twsba1:ApplySupplierPriceListForDB>
-    <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1">
-      <InArgument x:TypeArguments="x:String">
-        <mca:CSharpValue x:TypeArguments="x:String">"Testing"+ Input.FileId</mca:CSharpValue>
-      </InArgument>
-    </WriteLine>
-    <sads:DebugSymbol.Symbol>d1VDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXFN1cHBsaWVyUHJpY2VMaXN0UHJvY2Vzcy54YW1sCDEDTA4CAQEyBT0gAgEIPgVFKgIBBUYFShECAQI1CzVeAgELOgs6VAIBCUELQV8CAQZICUheAgED</sads:DebugSymbol.Symbol>
+    <twsba1:PrepareSupplierZones sap2010:WorkflowViewState.IdRef="PrepareSupplierZones_1">
+      <twsba1:PrepareSupplierZones.EffectiveDate>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveDate</mca:CSharpValue>
+        </InArgument>
+      </twsba1:PrepareSupplierZones.EffectiveDate>
+      <twsba1:PrepareSupplierZones.PriceListDictionary>
+        <InArgument x:TypeArguments="scg:Dictionary(x:String, scg:List(twse:SupplierPriceList))">
+          <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, scg:List(twse:SupplierPriceList))">SupplierZonesDictionary</mca:CSharpValue>
+        </InArgument>
+      </twsba1:PrepareSupplierZones.PriceListDictionary>
+      <twsba1:PrepareSupplierZones.SupplierId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.SupplierAccountId</mca:CSharpValue>
+        </InArgument>
+      </twsba1:PrepareSupplierZones.SupplierId>
+      <twsba1:PrepareSupplierZones.SupplierZones>
+        <OutArgument x:TypeArguments="scg:List(twbe:SupplierZone)">
+          <mca:CSharpReference x:TypeArguments="scg:List(twbe:SupplierZone)">SupplierZones</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:PrepareSupplierZones.SupplierZones>
+    </twsba1:PrepareSupplierZones>
+    <twsba1:ApplySupplierZonesForDB sap2010:WorkflowViewState.IdRef="ApplySupplierZonesForDB_1">
+      <twsba1:ApplySupplierZonesForDB.EffectiveDate>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveDate</mca:CSharpValue>
+        </InArgument>
+      </twsba1:ApplySupplierZonesForDB.EffectiveDate>
+      <twsba1:ApplySupplierZonesForDB.OldSupplierZones>
+        <OutArgument x:TypeArguments="scg:List(x:Int64)">
+          <mca:CSharpReference x:TypeArguments="scg:List(x:Int64)">OldSupplierZonesIds</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:ApplySupplierZonesForDB.OldSupplierZones>
+      <twsba1:ApplySupplierZonesForDB.SupplierId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.SupplierAccountId</mca:CSharpValue>
+        </InArgument>
+      </twsba1:ApplySupplierZonesForDB.SupplierId>
+      <twsba1:ApplySupplierZonesForDB.SupplierZones>
+        <InOutArgument x:TypeArguments="scg:List(twbe:SupplierZone)">
+          <mca:CSharpReference x:TypeArguments="scg:List(twbe:SupplierZone)">SupplierZones</mca:CSharpReference>
+        </InOutArgument>
+      </twsba1:ApplySupplierZonesForDB.SupplierZones>
+    </twsba1:ApplySupplierZonesForDB>
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+        <twsba1:PrepareSupplierCode Status="{x:Null}" sap2010:WorkflowViewState.IdRef="PrepareSupplierCode_1">
+          <twsba1:PrepareSupplierCode.EffectiveDate>
+            <InArgument x:TypeArguments="s:DateTime">
+              <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveDate</mca:CSharpValue>
+            </InArgument>
+          </twsba1:PrepareSupplierCode.EffectiveDate>
+          <twsba1:PrepareSupplierCode.PriceListDictionary>
+            <InArgument x:TypeArguments="scg:Dictionary(x:String, scg:List(twse:SupplierPriceList))">
+              <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, scg:List(twse:SupplierPriceList))">SupplierZonesDictionary</mca:CSharpValue>
+            </InArgument>
+          </twsba1:PrepareSupplierCode.PriceListDictionary>
+          <twsba1:PrepareSupplierCode.SupplierCodes>
+            <OutArgument x:TypeArguments="scg:List(twbe:SupplierCode)">
+              <mca:CSharpReference x:TypeArguments="scg:List(twbe:SupplierCode)">SupplierCodes</mca:CSharpReference>
+            </OutArgument>
+          </twsba1:PrepareSupplierCode.SupplierCodes>
+          <twsba1:PrepareSupplierCode.SupplierZones>
+            <InArgument x:TypeArguments="scg:List(twbe:SupplierZone)">
+              <mca:CSharpValue x:TypeArguments="scg:List(twbe:SupplierZone)">SupplierZones</mca:CSharpValue>
+            </InArgument>
+          </twsba1:PrepareSupplierCode.SupplierZones>
+        </twsba1:PrepareSupplierCode>
+        <twsba1:ApplySupplierCodesForDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplySupplierCodesForDB_1">
+          <twsba1:ApplySupplierCodesForDB.EffectiveDate>
+            <InArgument x:TypeArguments="s:DateTime">
+              <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveDate</mca:CSharpValue>
+            </InArgument>
+          </twsba1:ApplySupplierCodesForDB.EffectiveDate>
+          <twsba1:ApplySupplierCodesForDB.OldSupplierZones>
+            <InArgument x:TypeArguments="scg:List(x:Int64)">
+              <mca:CSharpValue x:TypeArguments="scg:List(x:Int64)">OldSupplierZonesIds</mca:CSharpValue>
+            </InArgument>
+          </twsba1:ApplySupplierCodesForDB.OldSupplierZones>
+          <twsba1:ApplySupplierCodesForDB.SupplierCodes>
+            <InArgument x:TypeArguments="scg:List(twbe:SupplierCode)">
+              <mca:CSharpValue x:TypeArguments="scg:List(twbe:SupplierCode)">SupplierCodes</mca:CSharpValue>
+            </InArgument>
+          </twsba1:ApplySupplierCodesForDB.SupplierCodes>
+        </twsba1:ApplySupplierCodesForDB>
+      </Sequence>
+      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+        <twsba1:PrepareSupplierRate Status="{x:Null}" sap2010:WorkflowViewState.IdRef="PrepareSupplierRate_1">
+          <twsba1:PrepareSupplierRate.EffectiveDate>
+            <InArgument x:TypeArguments="s:DateTime">
+              <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveDate</mca:CSharpValue>
+            </InArgument>
+          </twsba1:PrepareSupplierRate.EffectiveDate>
+          <twsba1:PrepareSupplierRate.PriceListDictionary>
+            <InArgument x:TypeArguments="scg:Dictionary(x:String, scg:List(twse:SupplierPriceList))">
+              <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, scg:List(twse:SupplierPriceList))">SupplierZonesDictionary</mca:CSharpValue>
+            </InArgument>
+          </twsba1:PrepareSupplierRate.PriceListDictionary>
+          <twsba1:PrepareSupplierRate.SupplierPriceListId>
+            <InArgument x:TypeArguments="x:Int32">
+              <mca:CSharpValue x:TypeArguments="x:Int32">SupplierPriceListId</mca:CSharpValue>
+            </InArgument>
+          </twsba1:PrepareSupplierRate.SupplierPriceListId>
+          <twsba1:PrepareSupplierRate.SupplierRates>
+            <OutArgument x:TypeArguments="scg:List(twbe:SupplierRate)">
+              <mca:CSharpReference x:TypeArguments="scg:List(twbe:SupplierRate)">SupplierRates</mca:CSharpReference>
+            </OutArgument>
+          </twsba1:PrepareSupplierRate.SupplierRates>
+          <twsba1:PrepareSupplierRate.SupplierZones>
+            <InArgument x:TypeArguments="scg:List(twbe:SupplierZone)">
+              <mca:CSharpValue x:TypeArguments="scg:List(twbe:SupplierZone)">SupplierZones</mca:CSharpValue>
+            </InArgument>
+          </twsba1:PrepareSupplierRate.SupplierZones>
+        </twsba1:PrepareSupplierRate>
+        <twsba1:ApplySupplierRatesForDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplySupplierRatesForDB_1">
+          <twsba1:ApplySupplierRatesForDB.EffectiveDate>
+            <InArgument x:TypeArguments="s:DateTime">
+              <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveDate</mca:CSharpValue>
+            </InArgument>
+          </twsba1:ApplySupplierRatesForDB.EffectiveDate>
+          <twsba1:ApplySupplierRatesForDB.OldSupplierZones>
+            <InArgument x:TypeArguments="scg:List(x:Int64)">
+              <mca:CSharpValue x:TypeArguments="scg:List(x:Int64)">OldSupplierZonesIds</mca:CSharpValue>
+            </InArgument>
+          </twsba1:ApplySupplierRatesForDB.OldSupplierZones>
+          <twsba1:ApplySupplierRatesForDB.SupplierRates>
+            <InArgument x:TypeArguments="scg:List(twbe:SupplierRate)">
+              <mca:CSharpValue x:TypeArguments="scg:List(twbe:SupplierRate)">SupplierRates</mca:CSharpValue>
+            </InArgument>
+          </twsba1:ApplySupplierRatesForDB.SupplierRates>
+        </twsba1:ApplySupplierRatesForDB>
+      </Sequence>
+    </Parallel>
+    <sads:DebugSymbol.Symbol>d1VDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXFN1cHBsaWVyUHJpY2VMaXN0UHJvY2Vzcy54YW1sKDYD4gEOAgEBPwVPIAMB1AFQBVsqAwHDAVwFcSMDAaIBcgWHASYDAYEBiAEF4AEQAgECQgtCXgMB5QFHC0dUAwHdAUwLTJoBAwHVAVgLWGMDAcwBUwtTXwMBxAFuC25xAwG7AWkLaV8DAbMBXwtfXgMBqwFkC2SSAQMBowGEAQuEAXEDAZoBfwt/XwMBkgF1C3VeAwGKAXoLem0DAYIBiQEHsQESAgFGsgEH3wESAgEDigEJnwEmAgFgoAEJsAEqAgFHswEJzQEmAgEdzgEJ3gEqAgEEnAEPnAFtAgF5jQEPjQFiAgFxlwEPlwF1AgFpkgEPkgGWAQIBYaMBD6MBYgIBWK0BD60BbQIBUKgBD6gBaQIBSMABD8ABXwIBPsoBD8oBbQIBNrYBD7YBYgIBLrsBD7sBlgECASbFAQ/FAXUCAR7RAQ/RAWICARXbAQ/bAW0CAQ3WAQ/WAWkCAQU=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="ReadDataFromExcel_1" sap:VirtualizedContainerService.HintSize="211,22" />
-      <sap2010:ViewStateData Id="ApplySupplierPriceListForDB_1" sap:VirtualizedContainerService.HintSize="211,22" />
-      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="211,62" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="233,310">
+      <sap2010:ViewStateData Id="ReadDataFromExcel_1" sap:VirtualizedContainerService.HintSize="598,22" />
+      <sap2010:ViewStateData Id="ApplySupplierPriceListForDB_1" sap:VirtualizedContainerService.HintSize="598,22" />
+      <sap2010:ViewStateData Id="PrepareSupplierZones_1" sap:VirtualizedContainerService.HintSize="598,22" />
+      <sap2010:ViewStateData Id="ApplySupplierZonesForDB_1" sap:VirtualizedContainerService.HintSize="598,22" />
+      <sap2010:ViewStateData Id="PrepareSupplierCode_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ApplySupplierCodesForDB_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,208">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.SupplierPriceListProcess_1" sap:VirtualizedContainerService.HintSize="273,390" />
+      <sap2010:ViewStateData Id="PrepareSupplierRate_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ApplySupplierRatesForDB_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="222,208">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="598,254" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="620,626">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.SupplierPriceListProcess_1" sap:VirtualizedContainerService.HintSize="660,706" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
