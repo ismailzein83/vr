@@ -58,10 +58,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplyNumberProfilesToDB.cs" />
+    <Compile Include="ApplyUnifiedCDRsToDB.cs" />
     <Compile Include="UnifyRepeatedCDRs.cs" />
     <Compile Include="LoadStagingCDRs.cs" />
-    <Compile Include="PrepareNumberProfilesForDBApply.cs" />
+    <Compile Include="PrepareUnifiedCDRsForDBApply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

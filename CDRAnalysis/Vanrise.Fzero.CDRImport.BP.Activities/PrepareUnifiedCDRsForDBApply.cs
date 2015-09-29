@@ -8,7 +8,7 @@ using Vanrise.Queueing;
 namespace Vanrise.Fzero.CDRImport.BP.Activities
 {
     #region Argument Classes
-    public class PrepareNumberProfilesForDBApplyInput
+    public class PrepareUnifiedCDRsForDBApplyInput
     {
         //public BaseQueue<NumberProfileBatch> InputQueue { get; set; }
 
@@ -16,7 +16,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
     }
 
     #endregion
-    public sealed class PrepareNumberProfilesForDBApply : DependentAsyncActivity<PrepareNumberProfilesForDBApplyInput>
+    public sealed class PrepareUnifiedCDRsForDBApply : DependentAsyncActivity<PrepareUnifiedCDRsForDBApplyInput>
     {
         //[RequiredArgument]
         //public InArgument<BaseQueue<NumberProfileBatch>> InputQueue { get; set; }
@@ -24,15 +24,15 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
         //[RequiredArgument]
         //public InOutArgument<BaseQueue<Object>> OutputQueue { get; set; }
 
-        protected override void DoWork(PrepareNumberProfilesForDBApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        protected override void DoWork(PrepareUnifiedCDRsForDBApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             //INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
             //PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, numberProfilesBatch => numberProfilesBatch.NumberProfiles);
         }
 
-        protected override PrepareNumberProfilesForDBApplyInput GetInputArgument2(AsyncCodeActivityContext context)
+        protected override PrepareUnifiedCDRsForDBApplyInput GetInputArgument2(AsyncCodeActivityContext context)
         {
-            return new PrepareNumberProfilesForDBApplyInput
+            return new PrepareUnifiedCDRsForDBApplyInput
             {
                 //InputQueue = this.InputQueue.Get(context),
                 //OutputQueue = this.OutputQueue.Get(context)
