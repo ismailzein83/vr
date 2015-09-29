@@ -36,8 +36,15 @@ function SwitchTrunkManagementController($scope, SwitchAPIService, SwitchTrunkTy
     }
 
     function load() {
-        loadGrid();
 
+        loadFilters()
+            .then(function () {
+                setFiltersToDefaultValues();
+                loadGrid();
+            });
+    }
+
+    function loadFilters() {
         $scope.isLoadingFilters = true;
 
         return SwitchAPIService.GetSwitches()
@@ -54,11 +61,15 @@ function SwitchTrunkManagementController($scope, SwitchAPIService, SwitchTrunkTy
             });
     }
 
+    function setFiltersToDefaultValues() {
+    }
+
     function loadGrid() {
         $scope.switchTrunkGridConnector.data = getFilterObject();
 
-        if ($scope.switchTrunkGridConnector.loadTemplateData != undefined)
+        if ($scope.switchTrunkGridConnector.loadTemplateData != undefined) {
             $scope.switchTrunkGridConnector.loadTemplateData();
+        }
     }
 
     function getFilterObject() {

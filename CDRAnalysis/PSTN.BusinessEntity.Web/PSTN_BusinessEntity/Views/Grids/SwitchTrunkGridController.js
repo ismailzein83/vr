@@ -1,6 +1,6 @@
-﻿SwitchTrunkGridTemplateController.$inject = ["$scope", "SwitchTrunkAPIService", "SwitchTrunkTypeEnum", "SwitchTrunkDirectionEnum", "UtilsService", "VRNotificationService", "VRModalService"];
+﻿SwitchTrunkGridController.$inject = ["$scope", "SwitchTrunkAPIService", "SwitchService", "SwitchTrunkTypeEnum", "SwitchTrunkDirectionEnum", "UtilsService", "VRNotificationService", "VRModalService"];
 
-function SwitchTrunkGridTemplateController($scope, SwitchTrunkAPIService, SwitchTrunkTypeEnum, SwitchTrunkDirectionEnum, UtilsService, VRNotificationService, VRModalService) {
+function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService, SwitchTrunkTypeEnum, SwitchTrunkDirectionEnum, UtilsService, VRNotificationService, VRModalService) {
 
     var gridAPI = undefined;
 
@@ -72,8 +72,8 @@ function SwitchTrunkGridTemplateController($scope, SwitchTrunkAPIService, Switch
 
     function loadGrid() {
 
-        if ($scope.switchTrunkGridConnector.data == undefined) return;
-        return retrieveData();
+        if ($scope.switchTrunkGridConnector.data != undefined && gridAPI != undefined)
+            return retrieveData();
     }
 
     function retrieveData() {
@@ -99,28 +99,19 @@ function SwitchTrunkGridTemplateController($scope, SwitchTrunkAPIService, Switch
     }
 
     function editTrunk(gridObject) {
-        var modalSettings = {};
 
-        var parameters = {
-            TrunkID: gridObject.ID
+        var eventHandler = function (trunkObject) {
+
+            var type = UtilsService.getEnum(SwitchTrunkTypeEnum, "value", trunkObject.Type);
+            trunkObject.TypeDescription = type.description;
+
+            var direction = UtilsService.getEnum(SwitchTrunkDirectionEnum, "value", trunkObject.Direction);
+            trunkObject.DirectionDescription = direction.description;
+
+            gridAPI.itemUpdated(trunkObject);
         };
 
-        modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Switch Trunk: " + gridObject.Name;
-
-            modalScope.onTrunkUpdated = function (trunkObject) {
-
-                var type = UtilsService.getEnum(SwitchTrunkTypeEnum, "value", trunkObject.Type);
-                trunkObject.TypeDescription = type.description;
-
-                var direction = UtilsService.getEnum(SwitchTrunkDirectionEnum, "value", trunkObject.Direction);
-                trunkObject.DirectionDescription = direction.description;
-
-                gridAPI.itemUpdated(trunkObject);
-            };
-        };
-
-        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/SwitchTrunkEditor.html", parameters, modalSettings);
+        SwitchService.editSwitchTrunk(gridObject, eventHandler);
     }
 
     function deleteTrunk(gridObject) {
@@ -176,4 +167,4 @@ function SwitchTrunkGridTemplateController($scope, SwitchTrunkAPIService, Switch
     }
 }
 
-appControllers.controller("PSTN_BE_SwitchTrunkGridTemplateController", SwitchTrunkGridTemplateController);
+appControllers.controller("PSTN_BE_SwitchTrunkGridController", SwitchTrunkGridController);

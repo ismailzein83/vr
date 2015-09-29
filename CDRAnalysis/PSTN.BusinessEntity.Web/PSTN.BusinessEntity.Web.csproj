@@ -147,6 +147,7 @@
     <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchTrunkAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchTypeAPIService.js" />
+    <Content Include="PSTN_BusinessEntity\Services\SwitchService.js" />
     <Content Include="PSTN_BusinessEntity\Views\LinkToTrunk.html" />
     <Content Include="PSTN_BusinessEntity\Views\LinkToTrunkController.js" />
     <Content Include="PSTN_BusinessEntity\Views\SwitchEditor.html" />
@@ -155,8 +156,8 @@
     <Content Include="PSTN_BusinessEntity\Views\SwitchManagementController.js" />
     <Content Include="PSTN_BusinessEntity\Views\SwitchTrunkEditor.html" />
     <Content Include="PSTN_BusinessEntity\Views\SwitchTrunkEditorController.js" />
-    <Content Include="PSTN_BusinessEntity\Views\SwitchTrunkGridTemplate.html" />
-    <Content Include="PSTN_BusinessEntity\Views\SwitchTrunkGridTemplateController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\Grids\SwitchTrunkGrid.html" />
+    <Content Include="PSTN_BusinessEntity\Views\Grids\SwitchTrunkGridController.js" />
     <Content Include="PSTN_BusinessEntity\Views\SwitchTrunkManagement.html" />
     <Content Include="PSTN_BusinessEntity\Views\SwitchTrunkManagementController.js" />
     <Content Include="PSTN_BusinessEntity\Views\SwitchTypeEditor.html" />
