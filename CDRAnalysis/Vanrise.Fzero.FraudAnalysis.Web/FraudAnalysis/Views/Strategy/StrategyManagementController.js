@@ -150,10 +150,6 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
         };
 
         var settings = {
-            useModalTemplate: true,
-            width: "95%",
-            maxHeight:"800px"
-
         };
 
         settings.onScopeReady = function (modalScope) {
