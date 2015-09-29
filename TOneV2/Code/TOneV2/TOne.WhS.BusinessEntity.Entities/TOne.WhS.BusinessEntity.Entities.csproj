@@ -63,7 +63,8 @@
     <Compile Include="PricingProduct\PricingRule.cs" />
     <Compile Include="PricingProduct\PricingRuleCriteria.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RouteRuleQuery.cs" />
+    <Compile Include="RoutingProductInfo.cs" />
+    <Compile Include="RoutingProduct\RoutingRule\RouteRuleQuery.cs" />
     <Compile Include="RoutingProduct\RouteOptionRule\RouteOptionRule.cs" />
     <Compile Include="RoutingProduct\RouteOptionRule\RouteOptionRuleBehavior.cs" />
     <Compile Include="RoutingProduct\RouteOptionRule\RouteOptionRuleSettings.cs" />

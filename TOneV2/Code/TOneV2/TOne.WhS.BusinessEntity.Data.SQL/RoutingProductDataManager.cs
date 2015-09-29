@@ -42,6 +42,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemSP("TOneWhS_BE.sp_RoutingProduct_Get", RoutingProductMapper, routingProductId);
         }
 
+        public List<Entities.RoutingProductInfo> GetRoutingProducts()
+        {
+            return GetItemsSP("TOneWhS_BE.sp_RoutingProduct_GetAll", RoutingProductInfoMapper);
+        }
+
         public bool Insert(Entities.RoutingProduct routingProduct, out int insertedId)
         {
             object routingProductId;
@@ -77,6 +82,17 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             };
 
             return routingProduct;
+        }
+
+        Entities.RoutingProductInfo RoutingProductInfoMapper(IDataReader reader)
+        {
+            Entities.RoutingProductInfo routingProductInfo = new Entities.RoutingProductInfo
+            {
+                RoutingProductId = (int)reader["ID"],
+                Name = reader["Name"] as string,              
+            };
+
+            return routingProductInfo;
         }
     }
 }

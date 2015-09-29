@@ -18,20 +18,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         {
             RoutingProductManager manager = new RoutingProductManager();
             return GetWebResponse(input, manager.GetFilteredRoutingProducts(input));
-        }        
-
-        [HttpGet]
-        public List<TemplateConfig> GetSaleZoneGroupTemplates()
-        {
-            SaleZoneManager manager = new SaleZoneManager();
-            return manager.GetSaleZoneGroupTemplates();
         }
 
         [HttpGet]
-        public List<TemplateConfig> GetSupplierGroupTemplates()
+        public List<RoutingProductInfo> GetRoutingProducts()
         {
-            CarrierAccountManager manager = new CarrierAccountManager();
-            return manager.GetSupplierGroupTemplates();
+            RoutingProductManager manager = new RoutingProductManager();
+            return manager.GetRoutingProducts();
         }
 
         [HttpGet]

@@ -23,6 +23,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return dataManager.GetRoutingProduct(routingProductId);
         }
 
+        public List<RoutingProductInfo> GetRoutingProducts()
+        {
+            IRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
+            return dataManager.GetRoutingProducts();
+        }
+
         public TOne.Entities.InsertOperationOutput<RoutingProduct> AddRoutingProduct(RoutingProduct routingProduct)
         {
             TOne.Entities.InsertOperationOutput<RoutingProduct> insertOperationOutput = new TOne.Entities.InsertOperationOutput<RoutingProduct>();

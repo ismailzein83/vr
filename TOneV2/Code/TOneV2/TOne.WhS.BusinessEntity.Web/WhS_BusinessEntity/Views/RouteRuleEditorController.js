@@ -1,6 +1,6 @@
-﻿RouteRuleEditorController.$inject = ['$scope', 'WhS_BE_RouteRuleAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService'];
+﻿RouteRuleEditorController.$inject = ['$scope', 'WhS_BE_RouteRuleAPIService', 'WhS_BE_RoutingProductAPIService', 'WhS_BE_SaleZoneAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService'];
 
-function RouteRuleEditorController($scope, WhS_BE_RouteRuleAPIService, UtilsService, VRNotificationService, VRNavigationService) {
+function RouteRuleEditorController($scope, WhS_BE_RouteRuleAPIService, WhS_BE_RoutingProductAPIService, WhS_BE_SaleZoneAPIService, UtilsService, VRNotificationService, VRNavigationService) {
 
     var editMode;
     var routeRuleId;
@@ -32,38 +32,36 @@ function RouteRuleEditorController($scope, WhS_BE_RouteRuleAPIService, UtilsServ
             $scope.modalContext.closeModal()
         };
 
-        //$scope.saleZonePackageOnSelectionChanged = function () {
-        //    if ($scope.selectedSaleZonePackage != undefined)
-        //        $scope.saleZoneGroups.saleZonePackageId = $scope.selectedSaleZonePackage.SaleZonePackageId;
-        //}
+        $scope.routingProductsOnSelectionChanged = function () {
+            if ($scope.selectedSaleZonePackage != undefined)
+            {
+                //Hide the section of customer and code
+            }
+        }
 
-        //$scope.saleZoneGroupTemplates = [];
-        //$scope.selectedSaleZoneGroupTemplate = undefined;
+        $scope.saleZoneGroupTemplates = [];
+        $scope.selectedSaleZoneGroupTemplate = undefined;
 
-        //$scope.supplierGroupTemplates = [];
-        //$scope.selectedSupplierGroupTemplate = undefined;
+        $scope.routingProducts = [];
+        $scope.selectedRoutingProduct = undefined;
 
-        //$scope.saleZonePackages = [];
-        //$scope.selectedSaleZonePackage = undefined;
-
-        //$scope.saleZoneGroups = {};
-        //$scope.supplierGroups = {};
+        $scope.saleZoneGroups = {};
     }
 
     function load() {
-        //$scope.isGettingData = true;
-        //return UtilsService.waitMultipleAsyncOperations([loadSaleZonePackages, loadSaleZoneGroupTemplates, loadSupplierGroupTemplates]).then(function () {
-        //    if (editMode) {
-        //        getRoutingProduct();
-        //    }
-        //    else {
-        //        $scope.isGettingData = false;
-        //    }
+        $scope.isGettingData = true;
+        return UtilsService.waitMultipleAsyncOperations([loadRoutingProducts, loadSaleZoneGroupTemplates]).then(function () {
+            if (editMode) {
+                getRouteRule();
+            }
+            else {
+                $scope.isGettingData = false;
+            }
 
-        //}).catch(function (error) {
-        //    VRNotificationService.notifyExceptionWithClose(error, $scope);
-        //    $scope.isGettingData = false;
-        //});
+        }).catch(function (error) {
+            VRNotificationService.notifyExceptionWithClose(error, $scope);
+            $scope.isGettingData = false;
+        });
     }
 
     function getRouteRule() {
@@ -78,41 +76,27 @@ function RouteRuleEditorController($scope, WhS_BE_RouteRuleAPIService, UtilsServ
         });
     }
 
-    //function loadSaleZonePackages() {
-    //    return WhS_BE_SaleZonePackageAPIService.GetSaleZonePackages().then(function (response) {
-    //        angular.forEach(response, function (item) {
-    //            $scope.saleZonePackages.push(item);
-    //        });
-    //    });
-    //}
+    function loadRoutingProducts() {
+        return WhS_BE_RoutingProductAPIService.GetRoutingProducts().then(function (response) {
+            angular.forEach(response, function (item) {
+                $scope.RoutingProducts.push(item);
+            });
+        });
+    }
 
-    //function loadSaleZoneGroupTemplates() {
-    //    return WhS_BE_RoutingProductAPIService.GetSaleZoneGroupTemplates().then(function (response) {
+    function loadSaleZoneGroupTemplates() {
+        return WhS_BE_SaleZoneAPIService.GetSaleZoneGroupTemplates().then(function (response) {
 
-    //        var defSaleZoneSelection = { TemplateConfigID: -1, Name: 'All Sale Zones', TemplateURL: '' };
-    //        $scope.saleZoneGroupTemplates.push(defSaleZoneSelection);
+            var defSaleZoneSelection = { TemplateConfigID: -1, Name: 'All Sale Zones', TemplateURL: '' };
+            $scope.saleZoneGroupTemplates.push(defSaleZoneSelection);
 
-    //        angular.forEach(response, function (item) {
-    //            $scope.saleZoneGroupTemplates.push(item);
-    //        });
+            angular.forEach(response, function (item) {
+                $scope.saleZoneGroupTemplates.push(item);
+            });
 
-    //        $scope.selectedSaleZoneGroupTemplate = defSaleZoneSelection;
-    //    });
-    //}
-
-    //function loadSupplierGroupTemplates() {
-    //    return WhS_BE_RoutingProductAPIService.GetSupplierGroupTemplates().then(function (response) {
-
-    //        var defSupplierSelection = { TemplateConfigID: -1, Name: 'All Suppliers', TemplateURL: '' };
-    //        $scope.supplierGroupTemplates.push(defSupplierSelection);
-
-    //        angular.forEach(response, function (item) {
-    //            $scope.supplierGroupTemplates.push(item);
-    //        });
-
-    //        $scope.selectedSupplierGroupTemplate = defSupplierSelection;
-    //    });
-    //}
+            $scope.selectedSaleZoneGroupTemplate = defSaleZoneSelection;
+        });
+    }
 
     function buildRoutingProductObjFromScope() {
 

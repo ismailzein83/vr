@@ -8,7 +8,9 @@
             </vr-choices>
             <div ng-show="criteriaSelected">
                 <vr-row>
-                    
+                    <vr-select datatextfield="Name" datavaluefield="RoutingProductId"
+                               label="Routing Product" datasource="routingProducts" selectedvalues="selectedRoutingProduct" onselectionchanged="routingProductsOnSelectionChanged">
+                    </vr-select>
                 </vr-row>
             </div>
             <div ng-show="settingsSelected">

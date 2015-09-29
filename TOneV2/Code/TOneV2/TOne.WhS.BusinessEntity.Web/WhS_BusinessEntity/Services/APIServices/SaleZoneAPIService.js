@@ -18,4 +18,8 @@ app.service('WhS_BE_SaleZoneAPIService', function (BaseAPIService) {
         return BaseAPIService.post("/api/SaleZone/GetSaleZonesInfoByIds", input);
     }
 
+    function GetSaleZoneGroupTemplates() {
+        return BaseAPIService.get("/api/SaleZone/GetSaleZoneGroupTemplates");
+    }
+
 });

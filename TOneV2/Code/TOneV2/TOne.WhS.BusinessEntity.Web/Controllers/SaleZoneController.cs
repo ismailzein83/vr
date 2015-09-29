@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Http;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Entities;
 using Vanrise.Web.Base;
 
 namespace TOne.WhS.BusinessEntity.Web.Controllers
@@ -30,6 +31,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         {
             SaleZoneManager manager = new SaleZoneManager();
             return manager.GetSaleZonesInfoByIds(input.PackageId, input.SaleZoneIds);
+        }
+
+        [HttpGet]
+        public List<TemplateConfig> GetSaleZoneGroupTemplates()
+        {
+            SaleZoneManager manager = new SaleZoneManager();
+            return manager.GetSaleZoneGroupTemplates();
         }
     }
 
