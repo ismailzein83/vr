@@ -57,7 +57,12 @@ namespace Vanrise.Security.Business
         private SecurityToken GetSecurityToken()
         {
             //TODO: handle the exception Key Not found in case the auth-toekn was null
-            string token = HttpContext.Current.Request.Headers[SecurityContext.SECURITY_TOKEN_NAME];
+            string token = null;
+            if (HttpContext.Current.Request.Headers[SecurityContext.SECURITY_TOKEN_NAME] != null)
+                token = HttpContext.Current.Request.Headers[SecurityContext.SECURITY_TOKEN_NAME];
+            else if (HttpContext.Current.Request.Params[SECURITY_TOKEN_NAME] != null) 
+                token =  HttpUtility.HtmlDecode(HttpContext.Current.Request.Params[SECURITY_TOKEN_NAME]);
+            
             string decryptedKey = Common.Cryptography.Decrypt(token, ConfigurationManager.AppSettings[SecurityContext.SECURITY_ENCRYPTION_SECRETE_KEY]);
             
             return Common.Serializer.Deserialize<SecurityToken>(decryptedKey);

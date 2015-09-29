@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.Analytics.Entities;
+using TOne.BusinessEntity.Business;
 using TOne.Entities;    
 
 namespace TOne.Analytics.Business.BillingReports
@@ -46,12 +47,11 @@ namespace TOne.Analytics.Business.BillingReports
             list.Add("FromDate", new RdlcParameter { Value = parameters.FromTime.ToString(), IsVisible = true });
             list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.ToString(), IsVisible = true });
             list.Add("Title", new RdlcParameter { Value = "Zone Summary", IsVisible = true });
-            list.Add("Currency", new RdlcParameter { Value = "[USD] United States Dollars", IsVisible = true });
+            list.Add("Currency", new RdlcParameter { Value =  parameters.CurrencyId, IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
-            list.Add("Customer", new RdlcParameter { Value = "", IsVisible = true });
-            list.Add("Supplier", new RdlcParameter { Value = "", IsVisible = true });
+            list.Add("Customer", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.CustomerId , "Customers"), IsVisible = true });
+            list.Add("Supplier", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.SupplierId, "Suppliers"), IsVisible = true });
             list.Add("DigitRate", new RdlcParameter { Value = "4", IsVisible = true });
-
             list.Add("NormalNet", new RdlcParameter { Value = parameters.NormalNet.ToString(), IsVisible = true });
             list.Add("NormalDuration", new RdlcParameter { Value = parameters.NormalDuration.ToString(), IsVisible = true });
             list.Add("OffPeakNet", new RdlcParameter { Value = parameters.OffPeakNet.ToString(), IsVisible = true });

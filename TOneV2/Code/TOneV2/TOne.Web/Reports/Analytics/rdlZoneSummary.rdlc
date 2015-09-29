@@ -2396,10 +2396,10 @@
           <Height>0.375in</Height>
           <Width>1in</Width>
           <ZIndex>3</ZIndex>
-          <Visibility>
-            <Hidden>true</Hidden>
-          </Visibility>
           <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
             <PaddingTop>2pt</PaddingTop>
@@ -2427,10 +2427,10 @@
           <Height>0.375in</Height>
           <Width>2.62499in</Width>
           <ZIndex>4</ZIndex>
-          <Visibility>
-            <Hidden>true</Hidden>
-          </Visibility>
           <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
             <PaddingTop>2pt</PaddingTop>
@@ -2591,11 +2591,11 @@
           <Height>0.375in</Height>
           <Width>1in</Width>
           <ZIndex>10</ZIndex>
-          <Visibility>
-            <Hidden>=IIF(Parameters!Customer.Value = "", True, False)</Hidden>
-          </Visibility>
           <DataElementOutput>NoOutput</DataElementOutput>
           <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
             <PaddingTop>2pt</PaddingTop>
@@ -2623,11 +2623,11 @@
           <Height>0.375in</Height>
           <Width>1in</Width>
           <ZIndex>11</ZIndex>
-          <Visibility>
-            <Hidden>=IIF(Parameters!Supplier.Value = "", True, False)</Hidden>
-          </Visibility>
           <DataElementOutput>NoOutput</DataElementOutput>
           <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
             <PaddingTop>2pt</PaddingTop>
@@ -2651,11 +2651,14 @@
             </Paragraph>
           </Paragraphs>
           <Top>1.125in</Top>
-          <Left>1in</Left>
+          <Left>1.01389in</Left>
           <Height>0.375in</Height>
           <Width>2.75in</Width>
           <ZIndex>12</ZIndex>
           <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
             <PaddingTop>2pt</PaddingTop>
@@ -2684,6 +2687,9 @@
           <Width>2.75in</Width>
           <ZIndex>13</ZIndex>
           <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
             <PaddingTop>2pt</PaddingTop>

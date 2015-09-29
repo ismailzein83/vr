@@ -25,6 +25,7 @@ namespace TOne.Web.Reports.Analytics
               
                 string customer = Request.QueryString["customer"];
                 string supplier = Request.QueryString["supplier"];
+                string currency = Request.QueryString["currency"];
 
                 bool groupByCustomer = (Request.QueryString["groupByCustomer"] != null) ? (Request.QueryString["groupByCustomer"] == "true") : false;
                 bool isCost = (Request.QueryString["isCost"] != null) ? (Request.QueryString["isCost"] == "true") : false;
@@ -54,7 +55,7 @@ namespace TOne.Web.Reports.Analytics
                 parameters.IsService = service;
                 parameters.IsCommission = commission;
                 parameters.GroupBySupplier = bySupplier;
-                parameters.CurrencyId = "USD";
+                parameters.CurrencyId = currency;
                 parameters.Margin = margin;
                 parameters.ZoneId = zoneId;
                 parameters.IsExchange = isExchange;

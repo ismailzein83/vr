@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.Analytics.Entities;
+using TOne.BusinessEntity.Business;
 using TOne.Entities;
 
 namespace TOne.Analytics.Business.BillingReports
@@ -12,8 +13,12 @@ namespace TOne.Analytics.Business.BillingReports
     {
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(TOne.Entities.ReportParameters parameters)
         {
+            AccountManagerManager am = new AccountManagerManager();
+            List<string> suppliersIds =  am.GetMyAssignedSupplierIds();
+            List<string> customersIds = am.GetMyAssignedCustomerIds() ;
+
             BillingStatisticManager manager = new BillingStatisticManager();
-            List<ZoneProfitFormatted> zoneProfit = manager.GetZoneProfit(parameters.FromTime, parameters.ToTime, parameters.CustomerId, parameters.SupplierId, parameters.GroupByCustomer, parameters.SupplierAMUId, parameters.CustomerAMUId);
+            List<ZoneProfitFormatted> zoneProfit = manager.GetZoneProfit(parameters.FromTime, parameters.ToTime, parameters.CustomerId, parameters.SupplierId, parameters.GroupByCustomer, suppliersIds, customersIds, parameters.CurrencyId);
 
             //List<CarrierSummaryDailyFormatted> zs = manager.GetDailyCarrierSummary(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2015-05-01 00:00:00"), null, null, false, true, null , null );
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();
@@ -29,13 +34,14 @@ namespace TOne.Analytics.Business.BillingReports
             list.Add("FromDate", new RdlcParameter { Value = parameters.FromTime.ToString(), IsVisible = true });
             list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.ToString(), IsVisible = true });
             list.Add("Title", new RdlcParameter { Value = "Zone Profit", IsVisible = true });
-            list.Add("Currency", new RdlcParameter { Value = "[USD] United States Dollars", IsVisible = true });
+            list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyId, IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
-            list.Add("Customer", new RdlcParameter { Value = "", IsVisible = true });
-            list.Add("Supplier", new RdlcParameter { Value = "", IsVisible = true });
+            list.Add("Customer", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.CustomerId, "Customers"), IsVisible = true });
+            list.Add("Supplier", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.SupplierId, "Suppliers"), IsVisible = true });
             list.Add("DigitRate", new RdlcParameter { Value = "4", IsVisible = true });
             
             return list;
         }
+
     }
 }

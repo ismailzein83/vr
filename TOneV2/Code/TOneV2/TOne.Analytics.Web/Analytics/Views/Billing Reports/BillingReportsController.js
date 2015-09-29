@@ -1,6 +1,6 @@
-﻿BillingReportsController.$inject = ['$scope', 'ReportAPIService', 'CarrierAccountAPIService', 'ZonesService', 'BillingStatisticsAPIService', 'MainService', 'BaseAPIService', 'UtilsService'];
+﻿BillingReportsController.$inject = ['$scope', 'ReportAPIService', 'CarrierAccountAPIService', 'ZonesService', 'BillingStatisticsAPIService', 'MainService', 'BaseAPIService', 'UtilsService', 'AnalyticsService', 'CurrencyAPIService', 'SecurityService'];
 
-function BillingReportsController($scope, ReportAPIService, CarrierAccountAPIService, ZonesService, BillingStatisticsAPIService, MainService, BaseAPIService, UtilsService) {
+function BillingReportsController($scope, ReportAPIService, CarrierAccountAPIService, ZonesService, BillingStatisticsAPIService, MainService, BaseAPIService, UtilsService, analyticsService, currencyAPIService, SecurityService) {
 
     defineScope();
     load();
@@ -18,10 +18,14 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
     $scope.optionsSuppliers = [];
     $scope.optionsZone = [];
     $scope.reportsTypes = [];
+    $scope.optionsCurrencies = []; 
+    $scope.periods = analyticsService.getPeriods();
+    $scope.selectedPeriod = $scope.periods[1];
     $scope.params = {
         groupByCustomer: false,
-        customer: null,
-        supplier: null,
+        selectedCustomers: [],
+        selectedSuppliers: [],
+        selectedCurrency : null ,
         zone: null,
         isCost: false,
         service: false,
@@ -30,6 +34,14 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
         margin: 10,
         isExchange: false,
         top: 10
+    }
+    $scope.periodSelectionChanged = function () {
+        if ($scope.selectedPeriod != undefined && $scope.selectedPeriod.value != -1) {
+            var date = $scope.selectedPeriod.getInterval();
+            $scope.fromDate = date.from;
+            $scope.toDate = date.to;
+        }
+
     }
     function defineScope() {
 
@@ -53,11 +65,14 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
             paramsurl += "&margin=" + $scope.params.margin;
             paramsurl += "&top=" + $scope.params.top;
             paramsurl += "&zone=" + (($scope.params.zone == null) ? 0 : $scope.params.zone.ZoneId);
-            paramsurl += "&customer=" + (($scope.params.customer == null) ? "" : $scope.params.customer.CarrierAccountID);
-            paramsurl += "&supplier=" + (($scope.params.supplier == null) ? "" : $scope.params.supplier.CarrierAccountID);
+            paramsurl += "&customer=" + (($scope.params.selectedCustomers.length == 0 ) ? "" : getIdsList($scope.params.selectedCustomers) );
+            paramsurl += "&supplier=" + (($scope.params.selectedSuppliers.length == 0) ? "" :  getIdsList($scope.params.selectedSuppliers));
+            paramsurl += "&currency=" + (($scope.params.selectedCurrency == null) ? "USD" : $scope.params.selectedCurrency.CurrencyID);
+            paramsurl += "&Auth-Token="  +encodeURIComponent( SecurityService.getUserToken() ) ;
+
 
             if (!$scope.reporttype.ParameterSettings.CustomerIdNotOptional)
-                window.open("/Reports/Analytics/BillingReports.aspx?" + paramsurl, "_blank", "width=1000, height=600,scrollbars=1");
+                window.open("/Reports/Analytics/BillingReports.aspx?" + paramsurl , "_blank", "width=1000, height=600,scrollbars=1");
             else
                 return $scope.export();
         }
@@ -65,9 +80,9 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
 
             $scope.params = {              
                 groupByCustomer: false,
-                customer: null,
-                supplier: null,
-                zone: null,
+                selectedCustomers: [],
+                selectedSuppliers: [],
+                selectedCurrency: $scope.optionsCurrencies[getMainCurrencyIndex($scope.optionsCurrencies)],
                 isCost: false,
                 service: false,
                 commission: false,
@@ -81,25 +96,50 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
 
     function load() {
         loadReportTypes();
-        loadCustomers();
-        loadSuppliers();
+        loadCurrencies();
+
+        //loadCustomers();
+        //loadSuppliers();
     }
 
+    function getIdsList(tab) {
+        var list = [] ;
+        for (var i = 0; i < tab.length ; i++)
+            list[list.length] = tab[i].CarrierAccountID;
+        return list.join(",");
+    }
+    function loadCurrencies() {
+        currencyAPIService.GetVisibleCurrencies().then(function (response) {
+            $scope.optionsCurrencies = response;
+            $scope.params.selectedCurrency = $scope.optionsCurrencies[getMainCurrencyIndex($scope.optionsCurrencies)];
+
+        });
+    }
     function loadReportTypes() {
         ReportAPIService.GetAllReportDefinition().then(function (response) {
             $scope.reportsTypes = response;
         });
     }
-    function loadCustomers() {
-        CarrierAccountAPIService.GetCarriers(1, true).then(function (response) {
-            $scope.optionsCustomers = response;
-        });
+    function getMainCurrencyIndex(Currencies) {
+        var index = -1;
+        for (var i = 0; i < Currencies.length ; i++)
+            if (Currencies[i].IsMainCurrency == "Y") {
+                index = i;
+                return index;
+            }
+        return index;
     }
-    function loadSuppliers() {
-        CarrierAccountAPIService.GetCarriers(2,false).then(function (response) {
-            $scope.optionsSuppliers = response;
-        });
-    }
+
+    //function loadCustomers() {
+    //    CarrierAccountAPIService.GetCarriers(1, true).then(function (response) {
+    //        $scope.optionsCustomers = response;
+    //    });
+    //}
+    //function loadSuppliers() {
+    //    CarrierAccountAPIService.GetCarriers(2,false).then(function (response) {
+    //        $scope.optionsSuppliers = response;
+    //    });
+    //}
 
 };
 

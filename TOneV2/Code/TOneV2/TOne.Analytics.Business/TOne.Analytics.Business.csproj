@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="BillingReports\CarrierProfileReportGenerator.cs" />
     <Compile Include="BillingReports\CarrierSummaryProfitReportGenerator.cs" />
+    <Compile Include="BillingReports\ReportHelpers.cs" />
     <Compile Include="BillingReports\RoutingAnalysisReportGenerator.cs" />
     <Compile Include="BillingReports\CustomerRoutingReportGenerator.cs" />
     <Compile Include="BillingReports\CustomerSummaryReportGenerator.cs" />

@@ -18,5 +18,12 @@ namespace TOne.BusinessEntity.Web.Controllers
             CurrencyManager manager = new CurrencyManager();
             return manager.GetCurrencies();
         }
+
+        [HttpGet]
+        public List<Currency> GetVisibleCurrencies()
+        {
+            CurrencyManager manager = new CurrencyManager();
+            return manager.GetVisibleCurrencies();
+        }
     }
 }

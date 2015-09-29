@@ -13,9 +13,8 @@ namespace TOne.Entities
         public string Name { get; set; }
 
         public string ReportURL { get; set; }
-
+        public string Description { get; set; }
         public ReportParameterSettings ParameterSettings { get; set; }
-
         public string ReportGeneratorFQTN { get; set; }
 
         IReportGenerator _reportGenerator;

@@ -1477,7 +1477,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -1650,7 +1649,7 @@
               </Style>
             </Paragraph>
           </Paragraphs>
-          <Top>0.5in</Top>
+          <Top>0.38194in</Top>
           <Left>2.75in</Left>
           <Height>0.375in</Height>
           <Width>4.62499in</Width>
@@ -1679,8 +1678,8 @@
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>0.875in</Top>
-          <Left>0.125in</Left>
+          <Top>1.55556in</Top>
+          <Left>3.60417in</Left>
           <Height>0.375in</Height>
           <Width>1in</Width>
           <ZIndex>3</ZIndex>
@@ -1707,8 +1706,8 @@
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>0.875in</Top>
-          <Left>1.125in</Left>
+          <Top>1.55556in</Top>
+          <Left>4.60417in</Left>
           <Height>0.375in</Height>
           <Width>2.62499in</Width>
           <ZIndex>4</ZIndex>
@@ -1846,6 +1845,76 @@
           <Width>1.50001in</Width>
           <ZIndex>9</ZIndex>
           <Style>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+        <Textbox Name="textbox51">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>Customer:</Value>
+                  <Style>
+                    <FontSize>14pt</FontSize>
+                    <Color>DarkRed</Color>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style />
+            </Paragraph>
+          </Paragraphs>
+          <Top>1in</Top>
+          <Left>0.03547in</Left>
+          <Height>0.375in</Height>
+          <Width>1in</Width>
+          <ZIndex>10</ZIndex>
+          <Visibility>
+            <Hidden>=IIF(Parameters!GroupByCustomer.Value = "true" And Parameters!Customer.Value = "Multiple Customers"  , True, False)</Hidden>
+          </Visibility>
+          <DataElementOutput>NoOutput</DataElementOutput>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+        <Textbox Name="textbox48">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>=Parameters!Customer.Value</Value>
+                  <Style>
+                    <FontSize>14pt</FontSize>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style />
+            </Paragraph>
+          </Paragraphs>
+          <Top>1in</Top>
+          <Left>1.03547in</Left>
+          <Height>0.375in</Height>
+          <Width>2.62499in</Width>
+          <ZIndex>11</ZIndex>
+          <Visibility>
+            <Hidden>=IIF(Parameters!GroupByCustomer.Value = "true" And Parameters!Customer.Value = "Multiple Customers"  , True, False)</Hidden>
+          </Visibility>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
             <PaddingTop>2pt</PaddingTop>
@@ -2009,8 +2078,6 @@
     </ReportParameter>
     <ReportParameter Name="Currency">
       <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
       <Prompt>Currency</Prompt>
     </ReportParameter>
     <ReportParameter Name="LogoPath">

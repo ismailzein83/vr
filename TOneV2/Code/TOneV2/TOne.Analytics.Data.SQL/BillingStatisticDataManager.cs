@@ -13,16 +13,26 @@ namespace TOne.Analytics.Data.SQL
 {
     partial class BillingStatisticDataManager : BaseTOneDataManager, IBillingStatisticDataManager
     {
-        public List<ZoneProfit> GetZoneProfit(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool groupByCustomer, int? supplierAMUId, int? customerAMUId)
+        public List<ZoneProfit> GetZoneProfit(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool groupByCustomer, List<string> supplierIds, List<string> customerIds, string currencyId)
         {
+
+            string suppliersIds = null;
+            if ( supplierIds != null &&  supplierIds.Count() > 0)
+                suppliersIds = string.Join<string>(",", supplierIds);
+            string customersIds = null;
+            if (customerIds != null && customerIds.Count() > 0)
+                customersIds = string.Join<string>(",", customerIds);
+
             return GetItemsSP("Analytics.SP_BillingRep_GetZoneProfits", (reader) => ZoneProfitMapper(reader, groupByCustomer),
                 fromDate,
                 toDate,
                 (customerId == null || customerId == "") ? null : customerId,
                 (supplierId == null || supplierId == "") ? null : supplierId,
                 groupByCustomer,
-                (supplierAMUId == 0) ? (object)DBNull.Value : supplierAMUId,
-                (customerAMUId == 0) ? (object)DBNull.Value : customerAMUId);
+                customersIds,
+                suppliersIds,
+                currencyId 
+                );
         }
         public List<ZoneSummary> GetZoneSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier, out double services)
         {
