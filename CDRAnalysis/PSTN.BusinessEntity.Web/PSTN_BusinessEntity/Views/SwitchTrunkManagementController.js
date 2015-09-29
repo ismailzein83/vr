@@ -1,6 +1,6 @@
-﻿SwitchTrunkManagementController.$inject = ["$scope", "SwitchAPIService", "SwitchTrunkTypeEnum", "SwitchTrunkDirectionEnum", "UtilsService", "VRNotificationService", "VRModalService"];
+﻿SwitchTrunkManagementController.$inject = ["$scope", "SwitchAPIService", "SwitchService", "SwitchTrunkTypeEnum", "SwitchTrunkDirectionEnum", "UtilsService", "VRNotificationService", "VRModalService"];
 
-function SwitchTrunkManagementController($scope, SwitchAPIService, SwitchTrunkTypeEnum, SwitchTrunkDirectionEnum, UtilsService, VRNotificationService, VRModalService) {
+function SwitchTrunkManagementController($scope, SwitchAPIService, SwitchService, SwitchTrunkTypeEnum, SwitchTrunkDirectionEnum, UtilsService, VRNotificationService, VRModalService) {
     
     defineScope();
     load();
@@ -30,8 +30,13 @@ function SwitchTrunkManagementController($scope, SwitchAPIService, SwitchTrunkTy
         }
 
         $scope.addTrunk = function () {
-            if ($scope.switchTrunkGridConnector.addTrunk != undefined)
-                $scope.switchTrunkGridConnector.addTrunk();
+
+            var eventHandler = function (trunkObject) {
+                if ($scope.switchTrunkGridConnector.onTrunkAdded != undefined)
+                    $scope.switchTrunkGridConnector.onTrunkAdded(trunkObject);
+            }
+
+            SwitchService.addSwitchTrunk(eventHandler);
         }
     }
 

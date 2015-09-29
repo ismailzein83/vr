@@ -18,25 +18,9 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
             loadGrid();
         }
 
-        $scope.switchTrunkGridConnector.addTrunk = function () {
-            var settings = {};
-
-            settings.onScopeReady = function (modalScope) {
-                modalScope.title = "Add a Switch Trunk";
-
-                modalScope.onTrunkAdded = function (trunkObject) {
-
-                    var type = UtilsService.getEnum(SwitchTrunkTypeEnum, "value", trunkObject.Type);
-                    trunkObject.TypeDescription = type.description;
-
-                    var direction = UtilsService.getEnum(SwitchTrunkDirectionEnum, "value", trunkObject.Direction);
-                    trunkObject.DirectionDescription = direction.description;
-
-                    gridAPI.itemAdded(trunkObject);
-                };
-            };
-
-            VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/SwitchTrunkEditor.html", null, settings);
+        $scope.switchTrunkGridConnector.onTrunkAdded = function (trunkObject) {
+            setTrunkDescriptions(trunkObject);
+            gridAPI.itemAdded(trunkObject);
         }
 
         $scope.gridReady = function (api) {
@@ -101,13 +85,7 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
     function editTrunk(gridObject) {
 
         var eventHandler = function (trunkObject) {
-
-            var type = UtilsService.getEnum(SwitchTrunkTypeEnum, "value", trunkObject.Type);
-            trunkObject.TypeDescription = type.description;
-
-            var direction = UtilsService.getEnum(SwitchTrunkDirectionEnum, "value", trunkObject.Direction);
-            trunkObject.DirectionDescription = direction.description;
-
+            setTrunkDescriptions(trunkObject);
             gridAPI.itemUpdated(trunkObject);
         };
 
@@ -116,20 +94,11 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
 
     function deleteTrunk(gridObject) {
 
-        VRNotificationService.showConfirmation()
-            .then(function (response) {
-                if (response == true) {
+        var eventHandler = function (deletedTrunkObject) {
+            gridAPI.itemDeleted(deletedTrunkObject);
+        }
 
-                    return SwitchTrunkAPIService.DeleteSwitchTrunk(gridObject.ID)
-                        .then(function (deletionResponse) {
-                            if (VRNotificationService.notifyOnItemDeleted("Switch Trunk", deletionResponse))
-                                gridAPI.itemDeleted(gridObject);
-                        })
-                        .catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                        });
-                }
-            });
+        SwitchService.deleteSwitchTrunk(gridObject, eventHandler);
     }
 
     function linkToTrunk(gridObject) {
@@ -164,6 +133,15 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
         };
 
         VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/LinkToTrunk.html", parameters, modalSettings);
+    }
+
+    function setTrunkDescriptions(trunkObject) {
+
+        var type = UtilsService.getEnum(SwitchTrunkTypeEnum, "value", trunkObject.Type);
+        trunkObject.TypeDescription = type.description;
+
+        var direction = UtilsService.getEnum(SwitchTrunkDirectionEnum, "value", trunkObject.Direction);
+        trunkObject.DirectionDescription = direction.description;
     }
 }
 
