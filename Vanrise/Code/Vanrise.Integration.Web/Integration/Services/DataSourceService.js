@@ -7,7 +7,8 @@ app.service('DataSourceService', ['UtilsService', 'VRModalService', 'Integration
             getExecutionStatusDescription: getExecutionStatusDescription,
             getMappingResultDescription: getMappingResultDescription,
             getExecutionStatusColor: getExecutionStatusColor,
-            editDataSource: editDataSource
+            editDataSource: editDataSource,
+            addDataSource: addDataSource
         });
 
         function getExecutionStatusDescription(executionStatusValue) {
@@ -51,5 +52,17 @@ app.service('DataSourceService', ['UtilsService', 'VRModalService', 'Integration
                 modalScope.onDataSourceUpdated = onDataSourceUpdated;
             };
             VRModalService.showModal('/Client/Modules/Integration/Views/DataSourceEditor.html', parameters, modalSettings);
+        }
+
+        function addDataSource(onDataSourceAdded) {
+            var modalSettings = {
+            };
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.title = "Add a Data Source";
+                modalScope.onDataSourceAdded = onDataSourceAdded;
+            };
+
+            VRModalService.showModal('/Client/Modules/Integration/Views/DataSourceEditor.html', null, modalSettings);
         }
 }]);
