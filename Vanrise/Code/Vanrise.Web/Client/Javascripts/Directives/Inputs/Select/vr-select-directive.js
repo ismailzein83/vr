@@ -43,6 +43,7 @@
                 datasource: '=',
                 selectedvalues: '=',
                 onselectionchanged: '=',
+                onaddclicked:"=",
                 hint: '@'
             },
             controller: function ($scope, $element, $attrs) {
@@ -165,6 +166,15 @@
                     return utilsService.getItemIndexByVal(controller.selectedvalues, getObjectValue(item), controller.datavaluefield);
                 }
 
+                function onAddhandler() {
+                    var onAddHandler = $scope.$parent.$eval($attrs.onaddclicked);
+                    onAddHandler();
+                }
+
+                function includeOnAddHandler() {
+                    var onAddHandler = $scope.$parent.$eval($attrs.onaddclicked);
+                    return (onAddHandler != undefined && typeof (onAddHandler) == 'function');
+                }
                 function clearFilter(e) {
                     muteAction(e);
                     controller.filtername = '';
@@ -236,10 +246,11 @@
                     clearFilter: clearFilter,
                     selectFirstItem: selectFirstItem,
                     getLabel: getLabel,
-                    getSelectedSectionClass:getSelectedSectionClass
+                    getSelectedSectionClass: getSelectedSectionClass,
+                    onAddhandler: onAddhandler,
+                    includeOnAddHandler: includeOnAddHandler
                 });
                 //Exports
-
                 setTimeout(function () {
                     $('div[name=' + $attrs.id + ']').on('show.bs.dropdown', function () {
                         vrSelectSharedObject.onOpenDropDown($attrs.id);
@@ -343,7 +354,7 @@
                                             + ' aria-expanded="true"  ' + validateButtonClass + '>'
                                             + '<span style="float: left; margin: 0px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;display: inline-block;width:calc(100% - 11px ); " ng-style="!ctrl.isHideRemoveIcon() ? {\'width\':\'calc(100% - 11px)\'}:{\'width\':\'100%\'} " >{{ctrl.getLabel()}}</span>'
                                             + (noCaret === true ? '' : '<span style="position:absolute;top:13px;right:5px" class="caret"></span>')
-                                            + '</button><span ng-hide="ctrl.isHideRemoveIcon()"  ng-if="!ctrl.isMultiple() &&  ctrl.selectedvalues != undefined && ctrl.selectedvalues.length != 0  "  class="glyphicon glyphicon-remove hand-cursor" style="position: absolute;right: 15px;top: 10px;font-size: 11px;" aria-hidden="true" ng-click="ctrl.clearAllSelected($event,true);"></span>';
+                                            + '</button><span ng-hide="ctrl.isHideRemoveIcon()"  ng-if="!ctrl.isMultiple() &&  ctrl.selectedvalues != undefined && ctrl.selectedvalues.length != 0  "  class="glyphicon glyphicon-remove hand-cursor" style="position: absolute;right: 15px;top: 10px;font-size: 11px;" aria-hidden="true" ng-click="ctrl.clearAllSelected($event,true);"></span> <span ng-if="ctrl.includeOnAddHandler() && ctrl.isDropDownOpened()" ng-click="ctrl.onAddhandler()" style="position: absolute; padding: 5px 2px; font-size: 12px;" class="glyphicon glyphicon-plus hand-cursor"></span>';
                         divDropdown.prepend(buttonTemplate);
                     }
 
@@ -401,6 +412,8 @@
                         ctrl.selectValue = function (e, item) {
                             selectItem(e, item);
                         };
+
+
 
                         $scope.$watch(function () {
 
