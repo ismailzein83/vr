@@ -76,6 +76,7 @@
     <Compile Include="Data\IDataManager.cs" />
     <Compile Include="Data\ITemplateConfigDataManager.cs" />
     <Compile Include="Data\IVRFileDataManager.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Logging\HandleLoggerException.cs" />
     <Compile Include="TemplateConfigManager.cs" />
     <Compile Include="VRFileManager.cs" />
