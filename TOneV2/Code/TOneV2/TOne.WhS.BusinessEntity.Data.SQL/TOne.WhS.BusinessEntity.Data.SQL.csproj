@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="CarrierAccountDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RouteRuleDataManager.cs" />
     <Compile Include="RoutingProductDataManager.cs" />
     <Compile Include="SaleCodeDataManager.cs" />
     <Compile Include="SaleZoneDataManager.cs" />

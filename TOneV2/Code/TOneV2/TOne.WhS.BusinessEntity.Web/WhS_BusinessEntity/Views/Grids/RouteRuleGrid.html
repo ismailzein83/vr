@@ -1,0 +1,16 @@
+﻿<div ng-controller="WhS_BE_RouteRuleGridController">
+    <vr-row>
+        <vr-columns colnum="12" simplecol>
+            <vr-datagrid datasource="routeRules"
+                            dataretrievalfunction="dataRetrievalFunction"
+                            pagingtype="'PagingOnScroll'"
+                            on-ready="gridReady"
+                            menuactions="gridMenuActions"
+                            idfield="RouteRuleId">
+
+                <vr-datagridcolumn headertext="'Id'" field="'RouteRuleId'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Description'" field="'Description'"></vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-columns>
+    </vr-row>
+</div>

@@ -1,0 +1,31 @@
+﻿<div vr-modalcontent ng-controller="WhS_BE_RouteRuleEditorController" vr-loader="isGettingData">
+    <vr-modalbody width="'50%'">
+        <vr-form name="formRouteRuleEditor">
+            <vr-choices selectedindex="0">
+                <vr-choice isselected="criteriaSelected">Criteria</vr-choice>
+                <vr-choice isselected="settingsSelected">Settings</vr-choice>
+                <vr-choice isselected="schedulerSelected">Scheduler</vr-choice>
+            </vr-choices>
+            <div ng-show="criteriaSelected">
+                <vr-row>
+                    
+                </vr-row>
+            </div>
+            <div ng-show="settingsSelected">
+                
+            </div>
+            <div ng-show="schedulerSelected">
+                
+            </div>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formRouteRuleEditor" data-onclick="SaveRouteRule"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>

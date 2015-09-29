@@ -127,6 +127,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CarrierAccountController.cs" />
+    <Compile Include="Controllers\RouteRuleController.cs" />
     <Compile Include="Controllers\RoutingProductController.cs" />
     <Compile Include="Controllers\SaleZoneController.cs" />
     <Compile Include="Controllers\SaleZonePackageController.cs" />
@@ -149,10 +150,18 @@
   <ItemGroup>
     <Content Include="WhS_BusinessEntity\Constant\ModuleConfig.js" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-carrieraccount-directive.js" />
-    <Content Include="WhS_BusinessEntity\Services\CarrierAccountAPIService.js" />
-    <Content Include="WhS_BusinessEntity\Services\RoutingProductAPIService.js" />
-    <Content Include="WhS_BusinessEntity\Services\SaleZoneAPIService.js" />
-    <Content Include="WhS_BusinessEntity\Services\SaleZonePackageAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\CarrierAccountAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\RouteRuleAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\RoutingProductAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\SaleZoneAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\SaleZonePackageAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\MainService.js" />
+    <Content Include="WhS_BusinessEntity\Views\Grids\RouteRuleGrid.html" />
+    <Content Include="WhS_BusinessEntity\Views\Grids\RouteRuleGridController.js" />
+    <Content Include="WhS_BusinessEntity\Views\RouteRuleEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\RouteRuleEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Views\RouteRuleManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\RouteRuleManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\RoutingProductEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\RoutingProductEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\RoutingProductManagement.html" />

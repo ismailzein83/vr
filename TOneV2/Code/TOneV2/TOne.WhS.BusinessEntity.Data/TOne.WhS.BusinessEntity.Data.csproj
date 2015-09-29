@@ -53,6 +53,7 @@
     <Compile Include="BEDataManagerFactory.cs" />
     <Compile Include="ICarrierAccountDataManager.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="IRouteRuleDataManager.cs" />
     <Compile Include="IRoutingProductDataManager.cs" />
     <Compile Include="ISaleCodeDataManager.cs" />
     <Compile Include="ISaleZoneDataManager.cs" />

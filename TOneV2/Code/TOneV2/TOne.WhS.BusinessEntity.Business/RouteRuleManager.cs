@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
@@ -63,6 +64,29 @@ namespace TOne.WhS.BusinessEntity.Business
         static bool IsItemInList<T>(T item, List<T> list)
         {
             return item != null && list != null && list.Contains(item);
+        }
+
+        public Vanrise.Entities.IDataRetrievalResult<RouteRule> GetFilteredRouteRules(Vanrise.Entities.DataRetrievalInput<RouteRuleQuery> input)
+        {
+            IRouteRuleDataManager dataManager = BEDataManagerFactory.GetDataManager<IRouteRuleDataManager>();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredRouteRules(input));
+        }
+
+        public TOne.Entities.DeleteOperationOutput<object> DeleteRouteRule(int routeRuleId)
+        {
+            IRouteRuleDataManager dataManager = BEDataManagerFactory.GetDataManager<IRouteRuleDataManager>();
+
+            TOne.Entities.DeleteOperationOutput<object> deleteOperationOutput = new TOne.Entities.DeleteOperationOutput<object>();
+            deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Failed;
+
+            bool deleteActionSucc = dataManager.Delete(routeRuleId);
+
+            if (deleteActionSucc)
+            {
+                deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Succeeded;
+            }
+
+            return deleteOperationOutput;
         }
     }
 }

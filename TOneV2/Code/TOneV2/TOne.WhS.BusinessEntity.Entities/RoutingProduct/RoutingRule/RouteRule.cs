@@ -8,6 +8,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class RouteRule : IRouteCriteria
     {
+        public int RouteRuleId { get; set; }
+
         public RouteCriteria RouteCriteria { get; set; }
 
         public int TypeConfigId { get; set; }
