@@ -45,6 +45,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Data">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data.MySQL">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Data.MySQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.Entities">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
     </Reference>
@@ -56,6 +65,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Runtime">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Business">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Entities">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="StagingCDRImportActivator.cs" />
@@ -63,6 +81,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.BP.Arguments\Vanrise.Fzero.CDRImport.BP.Arguments.csproj">
+      <Project>{8c629dfd-0e97-4205-9f18-2a25962de38f}</Project>
+      <Name>Vanrise.Fzero.CDRImport.BP.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Data\Vanrise.Fzero.CDRImport.Data.csproj">
       <Project>{73e469c6-3ccb-4414-8ef1-3ea3600f1eba}</Project>
       <Name>Vanrise.Fzero.CDRImport.Data</Name>

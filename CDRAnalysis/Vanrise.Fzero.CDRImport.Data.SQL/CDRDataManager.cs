@@ -56,5 +56,25 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                     FieldSeparator = ','
                 });
         }
+
+        public void ApplyCDRsToDB(object preparedCDRs)
+        {
+            InsertBulkToTable(preparedCDRs as BaseBulkInsertInfo);
+        }
+
+        public object FinishDBApplyStream(object dbApplyStream)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public object InitialiazeStreamForDBApply()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void WriteRecordToStream(CDR record, object dbApplyStream)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
