@@ -148,6 +148,10 @@
     <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchTrunkAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchTypeAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Services\SwitchService.js" />
+    <Content Include="PSTN_BusinessEntity\Views\ProcessInputTemplate\Normal\FindRelatedNumbersProcessInput.html" />
+    <Content Include="PSTN_BusinessEntity\Views\ProcessInputTemplate\Normal\FindRelatedNumbersProcessInputController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\ProcessInputTemplate\Scheduled\FindRelatedNumbersProcessInput_Scheduled.html" />
+    <Content Include="PSTN_BusinessEntity\Views\ProcessInputTemplate\Scheduled\FindRelatedNumbersProcessInput_ScheduledController.js" />
     <Content Include="PSTN_BusinessEntity\Views\SwitchEditor.html" />
     <Content Include="PSTN_BusinessEntity\Views\SwitchEditorController.js" />
     <Content Include="PSTN_BusinessEntity\Views\SwitchManagement.html" />
