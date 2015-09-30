@@ -43,8 +43,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code.cs" />
+    <Compile Include="CodesByCode.cs" />
+    <Compile Include="Enumerations.cs" />
+    <Compile Include="PriceListByZone.cs" />
+    <Compile Include="PriceListCodeItem.cs" />
+    <Compile Include="PriceListRateItem.cs" />
+    <Compile Include="PriceListZoneItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rate.cs" />
+    <Compile Include="RatesByZone.cs" />
     <Compile Include="SupplierPriceList.cs" />
+    <Compile Include="Zone.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

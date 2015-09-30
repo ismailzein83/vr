@@ -82,5 +82,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SupplierZone_Update", supplierId, effectiveDate);
             return (recordesEffected > 0);
         }
+
+        public int ReserveIDRange(int numberOfIDs)
+        {
+            return (int)ExecuteScalarSP("TOneWhS_BE.sp_SupplierZoneIDManager_ReserveIDRange", numberOfIDs);
+        }
     }
 }

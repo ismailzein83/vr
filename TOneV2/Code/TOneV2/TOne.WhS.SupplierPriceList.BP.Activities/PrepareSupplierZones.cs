@@ -12,6 +12,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
     public class PrepareSupplierZones:CodeActivity
     {
         public InArgument<int> SupplierId { get; set; }
+
         public InArgument<DateTime> EffectiveDate { get; set; }
         public InArgument<Dictionary<String, List<TOne.WhS.SupplierPriceList.Entities.SupplierPriceList>>> PriceListDictionary { get; set; }
         public OutArgument<List<SupplierZone>> SupplierZones { get; set; }

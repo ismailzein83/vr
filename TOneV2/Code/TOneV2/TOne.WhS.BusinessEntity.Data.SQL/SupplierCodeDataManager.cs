@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,6 +65,25 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 zoneIds = string.Join<long>(",", supplierZoneIds);
             int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SupplierCode_Update", zoneIds, effectiveDate);
             return (recordesEffected > 0);
+        }
+
+
+        public List<SupplierCode> GetSupplierCodes(DateTime minimumDate)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetByDate", SupplierCodeMapper, minimumDate);
+        }
+        SupplierCode SupplierCodeMapper(IDataReader reader)
+        {
+            SupplierCode supplierCode = new SupplierCode
+            {
+                Code = GetReaderValue<string>(reader, "Code"),
+                SupplierCodeId = GetReaderValue<int>(reader, "ID"),
+                ZoneId = (long)reader["ZoneID"],
+                BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BED"),
+                EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED"),
+                
+            };
+            return supplierCode;
         }
     }
 }

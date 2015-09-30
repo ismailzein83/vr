@@ -20,5 +20,12 @@ namespace TOne.WhS.BusinessEntity.Business
             ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
             return dataManager.UpdateSupplierCodes(supplierZoneIds, effectiveDate);
         }
+
+        public List<SupplierCode> GetSupplierCodes(DateTime minimumDate)
+        {
+            ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
+            return dataManager.GetSupplierCodes(minimumDate);
+        }
+
     }
 }

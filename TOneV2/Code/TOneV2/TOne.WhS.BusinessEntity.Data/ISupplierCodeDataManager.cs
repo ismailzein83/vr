@@ -11,5 +11,6 @@ namespace TOne.WhS.BusinessEntity.Data
     {
         void InsertSupplierCodes(List<SupplierCode> supplierCodes);
         bool UpdateSupplierCodes(List<long> supplierZoneIds, DateTime effectiveDate);
+        List<SupplierCode> GetSupplierCodes(DateTime minimumDate);
     }
 }
