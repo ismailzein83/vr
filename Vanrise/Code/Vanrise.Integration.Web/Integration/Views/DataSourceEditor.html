@@ -23,7 +23,10 @@
                     </vr-columns>
                 </vr-row>
                 <vr-row>
-                    <div ng-include="selectedAdapterType.Info.AdapterTemplateURL"></div>
+                    <vr-columns width="fullrow">
+                        <div ng-include="selectedAdapterType.Info.AdapterTemplateURL"></div>
+                    </vr-columns>
+
                 </vr-row>
             </div>
             <div ng-show="mappperSettignsSelected">
@@ -45,7 +48,9 @@
                     </vr-columns>
                 </vr-row>
                 <vr-row>
-                    <div ng-include="'/Client/Modules/Runtime/Views/TriggerTemplates/TimerTriggerTemplate.html'"></div>
+                    <vr-columns width="fullrow">
+                        <div ng-include="'/Client/Modules/Runtime/Views/TriggerTemplates/TimerTriggerTemplate.html'"></div>
+                    </vr-columns>
                 </vr-row>
             </div>
             <div ng-show="executionFlowSettignsSelected">
