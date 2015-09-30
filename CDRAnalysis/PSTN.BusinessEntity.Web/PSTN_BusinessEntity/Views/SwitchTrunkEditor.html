@@ -20,6 +20,7 @@
                                        selectedvalues="selectedSwitch"
                                        datavaluefield="ID"
                                        datatextfield="Name"
+                                       onselectionchanged="onSwitchChanged"
                                        entityname="Switch"
                                        isrequired>
                             </vr-select>
@@ -60,8 +61,7 @@
                                        datavaluefield="ID"
                                        datatextfield="Name"
                                        onselectionchanged="onSwitchToLinkToChanged"
-                                       entityname="Switch"
-                                       hideremoveicon>
+                                       entityname="Switch">
                             </vr-select>
                         </vr-columns>
 
@@ -71,8 +71,7 @@
                                        selectedvalues="selectedTrunkToLinkTo"
                                        datavaluefield="ID"
                                        datatextfield="Name"
-                                       entityname="Trunk"
-                                       hideremoveicon>
+                                       entityname="Trunk">
                             </vr-select>
                         </vr-columns>
                     </vr-section>
