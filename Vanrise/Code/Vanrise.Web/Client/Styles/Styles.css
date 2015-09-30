@@ -270,6 +270,9 @@ inp
         margin-bottom:10px !important ;
     }
 }
+.empty-line-col {
+    top:25px;
+}
 .dropdown-item{
     height: 37px !important;
     font-size: 20px;
@@ -1135,11 +1138,44 @@ input.ui-grid-filter-input[type="text"] {
     border-bottom: transparent;
 }
 
+.panel-vr > .panel-heading label {
+    font-weight: bold;
+}
+
 .panel-vr > .panel-body {   
     border:1px solid #ddd;
      border-radius: 0px 4px 4px 4px;
     
 }
+/* panel-vr-child */
+.panel-vr.panel-vr-child > .panel-heading {
+    background: transparent none repeat scroll 0% 0%;
+    border-radius: 0px;
+    border-width: 0px 0px 1px;
+    border-style: solid;
+    border-color: #666;
+    border-image: none;
+    margin: 0px;
+    position: static;
+    overflow: initial;
+    padding: 4px 6px 4px 0px ;
+}
+
+.panel-vr.panel-vr-child > .panel-heading label {    
+    font-weight: bold;
+    font-size: 12px;
+    top: 17px;
+    background-color: #FFF;
+    padding: 0px 5px 0px 0px;
+    position: relative;
+}
+.panel-vr.panel-vr-child > .panel-body {   
+   border: 0px none !important;
+   border-radius: 0px ;
+   padding:0px;
+   margin:0px -10px;
+}
+
 .fieldset-vr{
     margin-top:10px;
 }

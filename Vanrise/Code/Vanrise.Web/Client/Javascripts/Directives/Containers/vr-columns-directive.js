@@ -31,8 +31,12 @@
                 if (tAttrs.colnumsm != undefined) {
                     nbrcolsm = tAttrs.colnumsm;
                 }
+                var emptyline=""
+                if (tAttrs.withemptyline != undefined) {
+                    emptyline = " empty-line-col ";
+                }
                 var otherCol = ' col-md-' + numberOfColumns + ' col-sm-' + nbrcolsm;
-                var newElement = '<div class="col-lg-' + numberOfColumns + otherCol + ' " >' + tElement.context.innerHTML + '</div>';
+                var newElement = '<div class="col-lg-' + numberOfColumns + otherCol + emptyline + ' " >' + tElement.context.innerHTML + '</div>';
                 tElement.html(newElement);
             }
         };
