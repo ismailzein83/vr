@@ -17,9 +17,7 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
         if ($scope.dataItem != undefined) {
             $scope.dataItem.onTrunkAdded = onTrunkAdded;
         }
-
-        if ($scope.dataItem == undefined) {
-
+        else {
             $scope.switchTrunkGridConnector.loadTemplateData = function () {
                 return loadGrid(); // the search button uses the promise object to display its loader
             }
@@ -67,15 +65,7 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
 
     function retrieveData() {
         var query = ($scope.dataItem != undefined) ?
-            {
-                Name: null,
-                Symbol: null,
-                SelectedSwitchIDs: [$scope.dataItem.ID],
-                SelectedTypes: null,
-                SelectedDirections: null,
-                IsLinkedToTrunk: null
-            }
-            : $scope.switchTrunkGridConnector.data;
+            { SelectedSwitchIDs: [$scope.dataItem.ID] } : $scope.switchTrunkGridConnector.data;
 
         return gridAPI.retrieveData(query);
     }

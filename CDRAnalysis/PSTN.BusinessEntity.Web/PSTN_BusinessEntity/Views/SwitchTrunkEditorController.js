@@ -2,8 +2,9 @@
 
 function SwitchTrunkEditorController($scope, SwitchTrunkAPIService, SwitchAPIService, SwitchTrunkTypeEnum, SwitchTrunkDirectionEnum, UtilsService, VRNavigationService, VRNotificationService) {
 
-    var trunkID = undefined;
-    var editMode = undefined;
+    var trunkID;
+    var switchID;
+    var editMode;
     var currentlyLinkedToTrunkHasBeenSet = false;
     var currentlyLinkedToTrunkID;
 
@@ -14,8 +15,10 @@ function SwitchTrunkEditorController($scope, SwitchTrunkAPIService, SwitchAPISer
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
 
-        if (parameters != undefined && parameters != null)
+        if (parameters != undefined && parameters != null) {
             trunkID = parameters.TrunkID;
+            switchID = parameters.SwitchID;
+        }
 
         editMode = (trunkID != undefined);
     }
@@ -133,8 +136,12 @@ function SwitchTrunkEditorController($scope, SwitchTrunkAPIService, SwitchAPISer
                             VRNotificationService.notifyExceptionWithClose(error, $scope);
                         });
                 }
-                else
+                else {
+                    if (switchID != undefined && switchID != null)
+                        $scope.selectedSwitch = UtilsService.getItemByVal($scope.switches, switchID, "ID");
+
                     $scope.isGettingData = false;
+                }
             })
             .catch(function (error) {
                 $scope.isGettingData = false;

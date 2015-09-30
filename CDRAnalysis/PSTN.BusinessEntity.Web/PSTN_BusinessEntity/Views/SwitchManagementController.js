@@ -149,13 +149,14 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
 
     function addTrunk(dataItem) {
 
-        gridAPI.expandRow(dataItem);
+        //gridAPI.expandRow(dataItem);
+
         var eventHandler = function (trunkObject) {
             if (dataItem.onTrunkAdded != undefined)
                 dataItem.onTrunkAdded(trunkObject);
         }
 
-        SwitchService.addSwitchTrunk(eventHandler);
+        SwitchService.addSwitchTrunk(dataItem.ID, eventHandler);
     }
 }
 

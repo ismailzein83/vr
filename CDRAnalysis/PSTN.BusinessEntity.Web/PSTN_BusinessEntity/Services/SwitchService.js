@@ -21,15 +21,19 @@
         VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/SwitchTrunkEditor.html", parameters, modalSettings);
     }
 
-    function addSwitchTrunk(eventHandler) {
+    function addSwitchTrunk(switchID, eventHandler) {
         var modalSettings = {};
+
+        var parameters = {
+            SwitchID: switchID
+        }
 
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Add Switch Trunk";
             modalScope.onTrunkAdded = eventHandler;
         };
 
-        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/SwitchTrunkEditor.html", null, modalSettings);
+        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/SwitchTrunkEditor.html", parameters, modalSettings);
     }
 
     function deleteSwitchTrunk(trunkObject, eventHandler) {

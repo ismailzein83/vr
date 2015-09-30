@@ -36,7 +36,7 @@ function SwitchTrunkManagementController($scope, SwitchAPIService, SwitchService
                     $scope.switchTrunkGridConnector.onTrunkAdded(trunkObject);
             }
 
-            SwitchService.addSwitchTrunk(eventHandler);
+            SwitchService.addSwitchTrunk(null, eventHandler);
         }
     }
 
