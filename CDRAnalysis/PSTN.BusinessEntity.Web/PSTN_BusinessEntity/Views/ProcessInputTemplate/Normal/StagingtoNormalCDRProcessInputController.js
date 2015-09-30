@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-FindRelatedNumbersProcessInputController.$inject = ['$scope', '$http', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+StagingtoNormalCDRProcessInputController.$inject = ['$scope', '$http', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function FindRelatedNumbersProcessInputController($scope, $http, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
+function StagingtoNormalCDRProcessInputController($scope, $http, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
 
     defineScope();
 
@@ -22,7 +22,7 @@ function FindRelatedNumbersProcessInputController($scope, $http, $routeParams, n
 
             $scope.createProcessInputObjects.push({
                 InputArguments: {
-                    $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.FindRelatedNumbersProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
+                    $type: "Vanrise.Fzero.CDRImport.BP.Arguments.StagingtoNormalCDRProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
                     FromDate: new Date($scope.fromDate),
                     ToDate: new Date($scope.toDate)
                 }
@@ -33,7 +33,7 @@ function FindRelatedNumbersProcessInputController($scope, $http, $routeParams, n
     }
 }
 
-appControllers.controller('FraudAnalysis_FindRelatedNumbersProcessInputController', FindRelatedNumbersProcessInputController)
+appControllers.controller('FraudAnalysis_StagingtoNormalCDRProcessInputController', StagingtoNormalCDRProcessInputController)
 
 
 
