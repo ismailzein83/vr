@@ -1,0 +1,155 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceListProcess"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:twsba="clr-namespace:TOne.WhS.SupplierPriceList.BP.Arguments;assembly=TOne.WhS.SupplierPriceList.BP.Arguments"
+ xmlns:twsba1="clr-namespace:TOne.WhS.SupplierPriceList.BP.Activities;assembly=TOne.WhS.SupplierPriceList.BP.Activities"
+ xmlns:twse="clr-namespace:TOne.WhS.SupplierPriceList.Entities;assembly=TOne.WhS.SupplierPriceList.Entities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(twsba:SupplierPriceListProcessInput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>TOne.WhS.SupplierPriceList.BP.Arguments</x:String>
+      <x:String>TOne.WhS.SupplierPriceList.Entities</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.SupplierPriceList.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.SupplierPriceList.BP.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.WhS.SupplierPriceList.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.WhS.SupplierPriceList.BP</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence>
+    <Sequence.Variables>
+      <Variable x:TypeArguments="s:Nullable(s:DateTime)" Name="MinimumDate" />
+      <Variable x:TypeArguments="twse:PriceListByZone" Name="PriceListByZone" />
+      <Variable x:TypeArguments="scg:List(twse:Zone)" Name="Zones" />
+    </Sequence.Variables>
+    <twsba1:ReadFromExcelProcess>
+      <twsba1:ReadFromExcelProcess.EffectiveDate>
+        <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveDate</mca:CSharpValue>
+        </InArgument>
+      </twsba1:ReadFromExcelProcess.EffectiveDate>
+      <twsba1:ReadFromExcelProcess.FileId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.FileId</mca:CSharpValue>
+        </InArgument>
+      </twsba1:ReadFromExcelProcess.FileId>
+      <twsba1:ReadFromExcelProcess.MinimumDate>
+        <OutArgument x:TypeArguments="s:Nullable(s:DateTime)">
+          <mca:CSharpReference x:TypeArguments="s:Nullable(s:DateTime)">MinimumDate</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:ReadFromExcelProcess.MinimumDate>
+      <twsba1:ReadFromExcelProcess.PriceListByZone>
+        <OutArgument x:TypeArguments="twse:PriceListByZone">
+          <mca:CSharpReference x:TypeArguments="twse:PriceListByZone">PriceListByZone</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:ReadFromExcelProcess.PriceListByZone>
+      <sap2010:WorkflowViewState.IdRef>ReadFromExcelProcess_1</sap2010:WorkflowViewState.IdRef>
+    </twsba1:ReadFromExcelProcess>
+    <twsba1:ProcessZones>
+      <twsba1:ProcessZones.EffectiveDate>
+        <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveDate</mca:CSharpValue>
+        </InArgument>
+      </twsba1:ProcessZones.EffectiveDate>
+      <twsba1:ProcessZones.PriceListByZone>
+        <InArgument x:TypeArguments="twse:PriceListByZone">
+          <mca:CSharpValue x:TypeArguments="twse:PriceListByZone">PriceListByZone</mca:CSharpValue>
+        </InArgument>
+      </twsba1:ProcessZones.PriceListByZone>
+      <twsba1:ProcessZones.SupplierId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.SupplierAccountId</mca:CSharpValue>
+        </InArgument>
+      </twsba1:ProcessZones.SupplierId>
+      <twsba1:ProcessZones.Zones>
+        <OutArgument x:TypeArguments="scg:List(twse:Zone)">
+          <mca:CSharpReference x:TypeArguments="scg:List(twse:Zone)">Zones</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:ProcessZones.Zones>
+      <sap2010:WorkflowViewState.IdRef>ProcessZones_1</sap2010:WorkflowViewState.IdRef>
+    </twsba1:ProcessZones>
+    <Parallel>
+      <twsba1:ProcessRates Status="{x:Null}">
+        <twsba1:ProcessRates.MinimumDate>
+          <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+            <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">MinimumDate</mca:CSharpValue>
+          </InArgument>
+        </twsba1:ProcessRates.MinimumDate>
+        <twsba1:ProcessRates.Zones>
+          <InOutArgument x:TypeArguments="scg:List(twse:Zone)">
+            <mca:CSharpReference x:TypeArguments="scg:List(twse:Zone)">Zones</mca:CSharpReference>
+          </InOutArgument>
+        </twsba1:ProcessRates.Zones>
+        <sap2010:WorkflowViewState.IdRef>ProcessRates_1</sap2010:WorkflowViewState.IdRef>
+      </twsba1:ProcessRates>
+      <twsba1:ProcessCodes Status="{x:Null}">
+        <twsba1:ProcessCodes.MinimumDate>
+          <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+            <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">MinimumDate</mca:CSharpValue>
+          </InArgument>
+        </twsba1:ProcessCodes.MinimumDate>
+        <twsba1:ProcessCodes.Zones>
+          <InOutArgument x:TypeArguments="scg:List(twse:Zone)">
+            <mca:CSharpReference x:TypeArguments="scg:List(twse:Zone)">Zones</mca:CSharpReference>
+          </InOutArgument>
+        </twsba1:ProcessCodes.Zones>
+        <sap2010:WorkflowViewState.IdRef>ProcessCodes_1</sap2010:WorkflowViewState.IdRef>
+      </twsba1:ProcessCodes>
+      <sap2010:WorkflowViewState.IdRef>Parallel_1</sap2010:WorkflowViewState.IdRef>
+    </Parallel>
+    <sap2010:WorkflowViewState.IdRef>Sequence_1</sap2010:WorkflowViewState.IdRef>
+    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0UHJvY2Vzcy54YW1sEjUDiAEOAgEBOwVRIwIBLlIFaBsCARlpBYUBEAIBAkgLSGoCAT4+Cz5qAgE5QwtDVAIBNE0LTWwCAS9fC19fAgEpVQtVagIBJFoLWmQCAR9kC2RhAgEaagd2HQIBDncHgwEdAgEDbQ1tZAIBFHINcmMCAQ96DXpkAgEJfw1/YwIBBA==</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.IdRef>TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceListProcess_1</sap2010:WorkflowViewState.IdRef>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="ReadFromExcelProcess_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="ProcessZones_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="ProcessRates_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ProcessCodes_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,334">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceListProcess_1" sap:VirtualizedContainerService.HintSize="616,414" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>
