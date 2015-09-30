@@ -32,7 +32,7 @@ function SwitchTypeManagementController($scope, SwitchTypeAPIService, VRNotifica
                 };
             };
 
-            VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/SwitchTypeEditor.html", null, settings);
+            VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Type/SwitchTypeEditor.html", null, settings);
         }
 
         // grid functions
@@ -94,7 +94,7 @@ function SwitchTypeManagementController($scope, SwitchTypeAPIService, VRNotifica
             };
         };
 
-        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/SwitchTypeEditor.html", parameters, modalSettings);
+        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Type/SwitchTypeEditor.html", parameters, modalSettings);
     }
 
     function deleteSwitchType(gridObject) {

@@ -156,20 +156,20 @@
     <Content Include="PSTN_BusinessEntity\Views\ProcessInputTemplate\Normal\StagingtoNormalCDRProcessInputController.js" />
     <Content Include="PSTN_BusinessEntity\Views\ProcessInputTemplate\Scheduled\StagingtoNormalCDRProcessInput_Scheduled.html" />
     <Content Include="PSTN_BusinessEntity\Views\ProcessInputTemplate\Scheduled\StagingtoNormalCDRProcessInput_ScheduledController.js" />
-    <Content Include="PSTN_BusinessEntity\Views\SwitchEditor.html" />
-    <Content Include="PSTN_BusinessEntity\Views\SwitchEditorController.js" />
-    <Content Include="PSTN_BusinessEntity\Views\SwitchManagement.html" />
-    <Content Include="PSTN_BusinessEntity\Views\SwitchManagementController.js" />
-    <Content Include="PSTN_BusinessEntity\Views\SwitchTrunkEditor.html" />
-    <Content Include="PSTN_BusinessEntity\Views\SwitchTrunkEditorController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\Switch\SwitchEditor.html" />
+    <Content Include="PSTN_BusinessEntity\Views\Switch\SwitchEditorController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\Switch\SwitchManagement.html" />
+    <Content Include="PSTN_BusinessEntity\Views\Switch\SwitchManagementController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\Trunk\SwitchTrunkEditor.html" />
+    <Content Include="PSTN_BusinessEntity\Views\Trunk\SwitchTrunkEditorController.js" />
     <Content Include="PSTN_BusinessEntity\Views\Grids\SwitchTrunkGrid.html" />
     <Content Include="PSTN_BusinessEntity\Views\Grids\SwitchTrunkGridController.js" />
-    <Content Include="PSTN_BusinessEntity\Views\SwitchTrunkManagement.html" />
-    <Content Include="PSTN_BusinessEntity\Views\SwitchTrunkManagementController.js" />
-    <Content Include="PSTN_BusinessEntity\Views\SwitchTypeEditor.html" />
-    <Content Include="PSTN_BusinessEntity\Views\SwitchTypeEditorController.js" />
-    <Content Include="PSTN_BusinessEntity\Views\SwitchTypeManagement.html" />
-    <Content Include="PSTN_BusinessEntity\Views\SwitchTypeManagementController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\Trunk\SwitchTrunkManagement.html" />
+    <Content Include="PSTN_BusinessEntity\Views\Trunk\SwitchTrunkManagementController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\Type\SwitchTypeEditor.html" />
+    <Content Include="PSTN_BusinessEntity\Views\Type\SwitchTypeEditorController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\Type\SwitchTypeManagement.html" />
+    <Content Include="PSTN_BusinessEntity\Views\Type\SwitchTypeManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

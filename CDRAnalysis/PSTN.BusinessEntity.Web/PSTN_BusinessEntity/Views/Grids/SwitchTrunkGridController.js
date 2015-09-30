@@ -59,13 +59,13 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
     function loadGrid() {
 
         if ($scope.dataItem != undefined
-            || ($scope.switchTrunkGridConnector.data != undefined && gridAPI != undefined))
+            || ($scope.switchTrunkGridConnector.query != undefined && gridAPI != undefined))
             return retrieveData();
     }
 
     function retrieveData() {
         var query = ($scope.dataItem != undefined) ?
-            { SelectedSwitchIDs: [$scope.dataItem.ID] } : $scope.switchTrunkGridConnector.data;
+            { SelectedSwitchIDs: [$scope.dataItem.ID] } : $scope.switchTrunkGridConnector.query;
 
         return gridAPI.retrieveData(query);
     }
@@ -109,7 +109,7 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
             }
 
             var secondTrunkObject = UtilsService.getItemByVal($scope.trunks, secondTrunkID, "ID");
-            var linkedToSecondTrunkID = secondTrunkObject.LinkedToTrunkID;
+            var linkedToSecondTrunkID = (secondTrunkObject != null) ? secondTrunkObject.LinkedToTrunkID : null;
 
             if (secondTrunkObject != null) {
                 var clonedSecondTrunkObject = UtilsService.cloneObject(secondTrunkObject, true);

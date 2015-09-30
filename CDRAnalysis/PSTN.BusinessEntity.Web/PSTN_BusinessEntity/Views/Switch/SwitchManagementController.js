@@ -37,7 +37,7 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
                 };
             };
 
-            VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/SwitchEditor.html", null, settings);
+            VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Switch/SwitchEditor.html", null, settings);
         }
 
         // grid functions
@@ -54,14 +54,6 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
                 .catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });
-        }
-
-        $scope.validateAreaCode = function (value) {
-            if (value == undefined || value == "") return null;
-
-            if (value.length > 7 || isNaN(parseInt(value))) return "Max of 7 digits";
-
-            return null;
         }
 
         defineMenuActions();
@@ -126,7 +118,7 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
             };
         };
 
-        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/SwitchEditor.html", parameters, modalSettings);
+        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Switch/SwitchEditor.html", parameters, modalSettings);
     }
 
     function deleteSwitch(gridObject) {
@@ -149,7 +141,7 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
 
     function addTrunk(dataItem) {
 
-        //gridAPI.expandRow(dataItem);
+        gridAPI.expandRow(dataItem);
 
         var eventHandler = function (trunkObject) {
             if (dataItem.onTrunkAdded != undefined)

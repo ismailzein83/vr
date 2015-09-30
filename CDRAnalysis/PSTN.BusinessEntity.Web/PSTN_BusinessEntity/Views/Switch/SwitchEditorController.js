@@ -39,14 +39,6 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
             $scope.modalContext.closeModal()
         }
 
-        $scope.validateAreaCode = function (value) {
-            if (value == undefined || value == "") return null;
-
-            if (value.length > 7 || isNaN(parseInt(value))) return "Max of 7 digits";
-
-            return null;
-        }
-
         $scope.validateTimeOffset = function (value) {
 
             if (value == undefined) return null;

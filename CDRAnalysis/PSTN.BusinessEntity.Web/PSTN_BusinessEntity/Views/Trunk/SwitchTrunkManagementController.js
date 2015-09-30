@@ -70,7 +70,7 @@ function SwitchTrunkManagementController($scope, SwitchAPIService, SwitchService
     }
 
     function loadGrid() {
-        $scope.switchTrunkGridConnector.data = getFilterObject();
+        $scope.switchTrunkGridConnector.query = getFilterObject();
 
         if ($scope.switchTrunkGridConnector.loadTemplateData != undefined) {
             return $scope.switchTrunkGridConnector.loadTemplateData();
