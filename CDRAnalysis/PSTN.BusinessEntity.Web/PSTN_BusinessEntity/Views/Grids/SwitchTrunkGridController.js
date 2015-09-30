@@ -82,8 +82,6 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
 
         var eventHandler = function (firstTrunkObject, linkedToFirstTrunkID, secondTrunkID) {
 
-            console.log(firstTrunkObject);
-
             setTrunkDescriptions(firstTrunkObject);
             gridAPI.itemUpdated(firstTrunkObject);
 
@@ -91,6 +89,8 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
                 var linkedToFirstTrunkObject = UtilsService.getItemByVal($scope.trunks, linkedToFirstTrunkID, "ID");
 
                 if (linkedToFirstTrunkObject != null) {
+                    linkedToFirstTrunkObject = UtilsService.cloneObject(linkedToFirstTrunkObject, true);
+
                     linkedToFirstTrunkObject.LinkedToTrunkID = null;
                     linkedToFirstTrunkObject.LinkedToTrunkName = null;
 
@@ -101,19 +101,21 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
             var secondTrunkObject = UtilsService.getItemByVal($scope.trunks, secondTrunkID, "ID");
             var linkedToSecondTrunkID = secondTrunkObject.LinkedToTrunkID;
 
-            console.log(secondTrunkObject);
-
             if (secondTrunkObject != null) {
-                secondTrunkObject.LinkedToTrunkID = firstTrunkObject.ID;
-                secondTrunkObject.LinkedToTrunkName = firstTrunkObject.Name;
+                var clonedSecondTrunkObject = UtilsService.cloneObject(secondTrunkObject, true);
 
-                gridAPI.itemUpdated(secondTrunkObject);
+                clonedSecondTrunkObject.LinkedToTrunkID = firstTrunkObject.ID;
+                clonedSecondTrunkObject.LinkedToTrunkName = firstTrunkObject.Name;
+
+                gridAPI.itemUpdated(clonedSecondTrunkObject);
             }
 
             if (linkedToSecondTrunkID != null) {
                 var linkedToSecondTrunkObject = UtilsService.getItemByVal($scope.trunks, linkedToSecondTrunkID, "ID");
 
                 if (linkedToSecondTrunkObject != null) {
+                    linkedToSecondTrunkObject = UtilsService.cloneObject(linkedToSecondTrunkObject, true);
+
                     linkedToSecondTrunkObject.LinkedToTrunkID = null;
                     linkedToSecondTrunkObject.LinkedToTrunkName = null;
 
@@ -121,27 +123,6 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
                 }
             }
         }
-
-        /*
-        var eventHandler = function (trunkObject, linkedToTrunkID) {
-
-            setTrunkDescriptions(trunkObject);
-            gridAPI.itemUpdated(trunkObject);
-
-            var linkedToTrunkObject = UtilsService.getItemByVal($scope.trunks, linkedToTrunkID, "ID");
-            console.log(trunkObject);
-
-            if (linkedToTrunkObject != null) {
-                console.log("in");
-                linkedToTrunkObject.LinkedToTrunkID = trunkObject.ID;
-                linkedToTrunkObject.LinkedToTrunkName = trunkObject.Name;
-
-                console.log(linkedToTrunkObject);
-
-                gridAPI.itemUpdated(linkedToTrunkObject);
-            }
-        };
-        */
 
         SwitchService.editSwitchTrunk(gridObject, eventHandler);
     }
