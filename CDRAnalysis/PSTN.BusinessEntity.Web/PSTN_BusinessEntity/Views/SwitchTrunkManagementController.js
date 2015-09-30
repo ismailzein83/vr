@@ -7,9 +7,9 @@ function SwitchTrunkManagementController($scope, SwitchAPIService, SwitchService
 
     function defineScope() {
 
-        // filter vars
         $scope.switchTrunkGridConnector = {};
 
+        // filter vars
         $scope.name = undefined;
         $scope.symbol = undefined;
         $scope.switches = [];

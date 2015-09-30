@@ -47,6 +47,10 @@
                     <vr-datagridcolumn headertext="'Switch Type'" field="'TypeName'" type="'Text'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Area Code'" field="'AreaCode'" type="'Text'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Time Offset'" field="'TimeOffset'" type="'Text'"></vr-datagridcolumn>
+
+                    <vr-datagridexpandablerow>
+                        <div ng-include="'/Client/Modules/PSTN_BusinessEntity/Views/Grids/SwitchTrunkGrid.html'"></div>
+                    </vr-datagridexpandablerow>
                 </vr-datagrid>
             </vr-columns>
         </vr-row>

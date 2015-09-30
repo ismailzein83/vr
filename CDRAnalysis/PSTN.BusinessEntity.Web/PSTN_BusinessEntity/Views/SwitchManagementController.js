@@ -1,6 +1,6 @@
-﻿SwitchManagementController.$inject = ["$scope", "SwitchAPIService", "SwitchTypeAPIService", "UtilsService", "VRNotificationService", "VRModalService"];
+﻿SwitchManagementController.$inject = ["$scope", "SwitchAPIService", "SwitchTypeAPIService", "SwitchService", "UtilsService", "VRNotificationService", "VRModalService"];
 
-function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIService, UtilsService, VRNotificationService, VRModalService) {
+function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIService, SwitchService, UtilsService, VRNotificationService, VRModalService) {
 
     var gridAPI = undefined;
 
@@ -8,6 +8,8 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
     load();
 
     function defineScope() {
+
+        $scope.switchTrunkGridConnector = {};
 
         // filter vars
         $scope.name = undefined;
@@ -101,6 +103,10 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
             {
                 name: "Delete",
                 clicked: deleteSwitch
+            },
+            {
+                name: "Add a Trunk",
+                clicked: addTrunk
             }
         ];
     }
@@ -139,6 +145,15 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
                         });
                 }
             });
+    }
+
+    function addTrunk(gridObject) {
+
+        var eventHandler = function (trunkObject) {
+            $scope.switchTrunkGridConnector.onTrunkAdded(trunkObject);
+        }
+
+        SwitchService.addSwitchTrunk(eventHandler);
     }
 }
 

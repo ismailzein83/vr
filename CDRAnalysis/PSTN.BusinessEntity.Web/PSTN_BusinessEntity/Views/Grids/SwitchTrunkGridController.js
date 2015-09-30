@@ -14,13 +14,17 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
         $scope.gridMenuActions = [];
 
         // functions
-        $scope.switchTrunkGridConnector.loadTemplateData = function () {
-            return loadGrid(); // the search button uses the promise object to display its loader
+        if ($scope.dataItem != undefined) {
+            $scope.viewScope.switchTrunkGridConnector.onTrunkAdded = addTrunk;
         }
 
-        $scope.switchTrunkGridConnector.onTrunkAdded = function (trunkObject) {
-            setTrunkDescriptions(trunkObject);
-            gridAPI.itemAdded(trunkObject);
+        if ($scope.dataItem == undefined) {
+
+            $scope.switchTrunkGridConnector.loadTemplateData = function () {
+                return loadGrid(); // the search button uses the promise object to display its loader
+            }
+
+            $scope.switchTrunkGridConnector.onTrunkAdded = addTrunk;
         }
 
         $scope.gridReady = function (api) {
@@ -56,12 +60,23 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
 
     function loadGrid() {
 
-        if ($scope.switchTrunkGridConnector.data != undefined && gridAPI != undefined)
+        if ($scope.dataItem != undefined
+            || ($scope.switchTrunkGridConnector.data != undefined && gridAPI != undefined))
             return retrieveData();
     }
 
     function retrieveData() {
-        var query = $scope.switchTrunkGridConnector.data;
+        var query = ($scope.dataItem != undefined) ?
+            {
+                Name: null,
+                Symbol: null,
+                SelectedSwitchIDs: [$scope.dataItem.ID],
+                SelectedTypes: null,
+                SelectedDirections: null,
+                IsLinkedToTrunk: null
+            }
+            : $scope.switchTrunkGridConnector.data;
+
         return gridAPI.retrieveData(query);
     }
 
@@ -76,6 +91,11 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
                 clicked: deleteTrunk
             }
         ];
+    }
+
+    function addTrunk(trunkObject) {
+        setTrunkDescriptions(trunkObject);
+        gridAPI.itemAdded(trunkObject);
     }
 
     function editTrunk(gridObject) {
