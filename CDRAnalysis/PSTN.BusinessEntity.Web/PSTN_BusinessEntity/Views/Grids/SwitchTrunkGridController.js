@@ -15,7 +15,7 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
 
         // functions
         if ($scope.dataItem != undefined) {
-            $scope.viewScope.switchTrunkGridConnector.onTrunkAdded = addTrunk;
+            $scope.dataItem.onTrunkAdded = onTrunkAdded;
         }
 
         if ($scope.dataItem == undefined) {
@@ -24,7 +24,7 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
                 return loadGrid(); // the search button uses the promise object to display its loader
             }
 
-            $scope.switchTrunkGridConnector.onTrunkAdded = addTrunk;
+            $scope.switchTrunkGridConnector.onTrunkAdded = onTrunkAdded;
         }
 
         $scope.gridReady = function (api) {
@@ -93,7 +93,7 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
         ];
     }
 
-    function addTrunk(trunkObject) {
+    function onTrunkAdded(trunkObject) {
         setTrunkDescriptions(trunkObject);
         gridAPI.itemAdded(trunkObject);
     }
