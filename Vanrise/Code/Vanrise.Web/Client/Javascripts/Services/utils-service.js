@@ -434,6 +434,10 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         return '/api/' + moduleName + '/' + controllerName + '/' + actionName;
     }
 
+    function cloneObject(obj) {
+        return JSON.parse(JSON.stringify(obj));
+    }
+
     return ({
         replaceAll: replaceAll,
         waitMultipleAsyncOperations: waitMultipleAsyncOperations,
@@ -457,7 +461,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         getEnumPropertyAsArray: getEnumPropertyAsArray,
         fillArray: fillArray,
         cloneDateTime: cloneDateTime,
-        getServiceURL: getServiceURL
+        getServiceURL: getServiceURL,
+        cloneObject: cloneObject
     });
 
 }]);
