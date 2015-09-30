@@ -140,6 +140,10 @@
       <Project>{026c2d4e-9fbf-491d-be9a-4249168a33fe}</Project>
       <Name>PSTN.BusinessEntity.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.BP.Arguments\Vanrise.Fzero.CDRImport.BP.Arguments.csproj">
+      <Project>{8c629dfd-0e97-4205-9f18-2a25962de38f}</Project>
+      <Name>Vanrise.Fzero.CDRImport.BP.Arguments</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="PSTN_BusinessEntity\Constants\SwitchTrunkDirectionEnum.js" />

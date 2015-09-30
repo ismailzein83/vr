@@ -19,7 +19,7 @@ StagingtoNormalCDRProcessInput_Scheduled($scope, $http, $routeParams, notify, VR
 
         $scope.schedulerTaskAction.processInputArguments.getData = function () {
             return {
-                $type: "Vanrise.Fzero.CDRImport.BP.Arguments.StagingtoNormalCDRProcess, Vanrise.Fzero.FraudAnalysis.BP.Arguments"
+                $type: "Vanrise.Fzero.CDRImport.BP.Arguments.StagingtoNormalCDRProcess, Vanrise.Fzero.CDRImport.BP.Arguments"
             };
         };
 

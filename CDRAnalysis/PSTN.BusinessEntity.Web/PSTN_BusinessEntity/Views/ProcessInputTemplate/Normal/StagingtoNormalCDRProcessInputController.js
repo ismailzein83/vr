@@ -22,7 +22,7 @@ function StagingtoNormalCDRProcessInputController($scope, $http, $routeParams, n
 
             $scope.createProcessInputObjects.push({
                 InputArguments: {
-                    $type: "Vanrise.Fzero.CDRImport.BP.Arguments.StagingtoNormalCDRProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
+                    $type: "Vanrise.Fzero.CDRImport.BP.Arguments.StagingtoNormalCDRProcessInput, Vanrise.Fzero.CDRImport.BP.Arguments",
                     FromDate: new Date($scope.fromDate),
                     ToDate: new Date($scope.toDate)
                 }
