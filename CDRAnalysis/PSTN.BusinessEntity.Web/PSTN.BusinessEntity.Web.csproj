@@ -148,8 +148,6 @@
     <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchTrunkAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchTypeAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Services\SwitchService.js" />
-    <Content Include="PSTN_BusinessEntity\Views\LinkToTrunk.html" />
-    <Content Include="PSTN_BusinessEntity\Views\LinkToTrunkController.js" />
     <Content Include="PSTN_BusinessEntity\Views\SwitchEditor.html" />
     <Content Include="PSTN_BusinessEntity\Views\SwitchEditorController.js" />
     <Content Include="PSTN_BusinessEntity\Views\SwitchManagement.html" />
