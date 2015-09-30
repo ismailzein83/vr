@@ -35,7 +35,10 @@
                 </div>
                 <div>
                     <vr-row>
-                        <div ng-include="selectedTriggerType.Info.URL"></div>
+                        <vr-columns width="fullrow">
+                            <div ng-include="selectedTriggerType.Info.URL"></div>
+                        </vr-columns>
+
                     </vr-row>
                 </div>
             </div>
@@ -50,7 +53,9 @@
                 </div>
                 <div>
                     <vr-row>
-                        <div ng-include="selectedActionType.Info.URL"></div>
+                        <vr-columns width="fullrow">
+                            <div ng-include="selectedActionType.Info.URL"></div>
+                        </vr-columns>
                     </vr-row>
                 </div>
             </div>
