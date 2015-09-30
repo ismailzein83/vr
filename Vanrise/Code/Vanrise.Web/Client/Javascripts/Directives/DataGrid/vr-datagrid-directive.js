@@ -629,7 +629,14 @@
                 if (ctrl.onReady != null)
                     ctrl.onReady(gridApi);
             }, 1000);
-            
+
+            gridApi.expandRow = function (dataItem) {
+                ctrl.expandRow(dataItem);
+            };
+
+            gridApi.collapseRow = function (dataItem) {
+                ctrl.collapseRow(dataItem);
+            };            
         }
 
         function setMaxHeight(maxHeight) {
@@ -727,22 +734,13 @@
                 calculateDataColumnsSectionWidth();
             };
 
-            ctrl.expandRow = function (rowIndex, dataItem) {
+            ctrl.expandRow = function (dataItem) {
                 dataItem.expandableRowTemplate = expandableRowTemplate;
-                //if (dataItem.expandableRowContext == undefined)
-                //{                        
-                //    var expandableRowDiv = $element.find("divExpandableRowContent_" + rowIndex)
-                //    expandableRowDiv.append(expandableRowTemplate);
-                //    //var divScope = $scope.$root.$new();
-                //    //divScope.dataItem = dataItem;
-                //    $compile($element.contents())($scope);
-                //    dataItem.expandableRowContext = {};
-                //    console.log(dataItem);
-                //}                    
+                dataItem.isRowExpanded = true;
             };
 
-            ctrl.collapseRow = function (rowIndex) {
-
+            ctrl.collapseRow = function (dataItem) {
+                dataItem.isRowExpanded = false;
             };
         }
 
