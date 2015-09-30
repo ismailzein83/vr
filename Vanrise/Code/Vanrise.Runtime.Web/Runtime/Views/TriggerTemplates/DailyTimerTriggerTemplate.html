@@ -1,18 +1,18 @@
 ﻿<div ng-controller="Runtime_DailyTimeTriggerTemplateController">
-        <vr-row>
-            <vr-columns width="1/2row">
-                <vr-datetimepicker label="Runs at" type="time" value="selectedTime"></vr-datetimepicker>
-            </vr-columns>
-            <vr-columns colnum="2">
-                <div style="top:25px;position:absolute;">
-                    <vr-button type="Add" data-onclick="addTime" standalone />
-                </div>
-            </vr-columns>
-            <vr-columns colnum="4">
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-datetimepicker label="Runs at" type="time" value="selectedTime"></vr-datetimepicker>
+        </vr-columns>
+        <vr-columns colnum="2" withemptyline>
+            <vr-button type="Add" data-onclick="addTime" standalone />
+        </vr-columns>
+        <vr-columns colnum="4">
+            <div style="max-height:78px;overflow-y: auto;">
                 <span class="label custom-label" style="min-width: 60px; margin: 2px;" ng-repeat="time in selectedTimes">
                     {{time.Hour}} : {{time.Minute}}
                     <span class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="removeTime(time)"></span>
                 </span>
-            </vr-columns>
-        </vr-row>
+            </div>
+        </vr-columns>
+    </vr-row>
 </div>
