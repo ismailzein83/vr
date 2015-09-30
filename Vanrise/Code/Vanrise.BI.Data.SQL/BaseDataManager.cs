@@ -178,8 +178,8 @@ namespace Vanrise.BI.Data.SQL
                 rowsPart=string.Format(@",{0} ON ROWS", rowsPartValue);
             string query = string.Format(@"select {{{0}}} ON COLUMNS                               
                                     {1} 
-                                    FROM [{2}]
-                                    WHERE {3}", columnsPart, rowsPart, CubeName, filtersPart);
+                                    FROM (SELECT {3} ON COLUMNS  FROM [{2}])
+                                    ", columnsPart, rowsPart, CubeName, filtersPart);
 
             if (!String.IsNullOrEmpty(expressionsPart))
                 return String.Format(@"WITH {0}
@@ -318,7 +318,7 @@ namespace Vanrise.BI.Data.SQL
 
         protected string GetDateFilter(DateTime fromDate, DateTime toDate)
         {
-            return String.Format("{0}.&[{1:yyyy-MM-dd}T00:00:00] : {0}.&[{2:yyyy-MM-dd}T00:00:00]", DateTimeColumns.DATE, fromDate, toDate);
+            return String.Format("Filter({0}.AllMembers, ({0}.CurrentMember.member_caption>='{1:yyyy-MM-dd} 00:00:00' And {0}.CurrentMember.member_caption<='{2:yyyy-MM-dd} 00:00:00'))", DateTimeColumns.DATE, fromDate, toDate);
         }
 
         #endregion
