@@ -21,5 +21,5 @@ SELECT cdrs.[CGPN]
       ,cdrs.[DisconnectDateTime]
 FROM	StagingCDR cdrs with(nolock,index=IX_StagingCDRS_ConnectDateTime)
 WHERE	cdrs.connectDateTime between @From and @To 
-ORDER BY cdrs.CGPN, cdrs.CDPN
+ORDER BY cdrs.connectDateTime
 END

@@ -21,13 +21,22 @@ BEGIN
 			SELECT CONVERT(INT, ParsedString) FROM [FraudAnalysis].[ParseStringList](@SelectedTypeIDs)
 		END
 		
-		SELECT ID, Name, TypeID, AreaCode, TimeOffset
+		SELECT s.ID,
+			s.Name,
+			s.TypeID,
+			st.Name AS TypeName,
+			s.AreaCode,
+			s.TimeOffset,
+			s.DataSourceID
 		
-		INTO #RESULT FROM PSTN_BE.Switch
+		INTO #RESULT
 		
-		WHERE (@Name IS NULL OR Name LIKE '%' + @Name + '%')
-			AND (@SelectedTypeIDs IS NULL OR TypeID IN (SELECT TypeID FROM @TypeIDsTable))
-			AND (@AreaCode IS NULL OR AreaCode LIKE '%' + @AreaCode + '%')
+		FROM PSTN_BE.Switch s
+		INNER JOIN PSTN_BE.SwitchType st ON st.ID = s.TypeID
+		
+		WHERE (@Name IS NULL OR s.Name LIKE '%' + @Name + '%')
+			AND (@SelectedTypeIDs IS NULL OR s.TypeID IN (SELECT TypeID FROM @TypeIDsTable))
+			AND (@AreaCode IS NULL OR s.AreaCode LIKE '%' + @AreaCode + '%')
 			
 		DECLARE @sql VARCHAR(1000)
 		SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';

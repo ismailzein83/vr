@@ -23,7 +23,7 @@
 	
 
 		Select distinct CaseID 
-		from CDRAnalysisMobile_Wf.FraudAnalysis.StrategyExecutionDetails details
+		from FraudAnalysis.StrategyExecutionDetails details
 		inner join FraudAnalysis.StrategyExecution exe on details.StrategyExecutionID=exe.ID
 		where 
 		--exe.StrategyID in (SELECT StrategyID FROM @StrategyIDsTable) and  

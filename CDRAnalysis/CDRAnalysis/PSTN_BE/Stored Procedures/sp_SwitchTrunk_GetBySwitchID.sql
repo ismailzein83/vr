@@ -3,24 +3,17 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [PSTN_BE].[sp_Switch_GetByID]
+CREATE PROCEDURE [PSTN_BE].[sp_SwitchTrunk_GetBySwitchID]
 	@SwitchID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
 	
-	SELECT s.ID,
-		s.Name,
-		s.TypeID,
-		st.Name AS TypeName,
-		s.AreaCode,
-		s.TimeOffset,
-		s.DataSourceID
+	SELECT ID, Name
 	
-	FROM PSTN_BE.Switch s
-	INNER JOIN PSTN_BE.SwitchType st ON st.ID = s.TypeID
+	FROM PSTN_BE.SwitchTrunk
 	
-	WHERE s.ID = @SwitchID
+	WHERE SwitchID = @SwitchID
 	
 	SET NOCOUNT OFF;
 END

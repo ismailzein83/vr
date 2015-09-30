@@ -15,10 +15,13 @@ BEGIN
 		t.SwitchID,
 		s.Name AS SwitchName,
 		t.[Type],
-		t.Direction
+		t.Direction,
+		t.LinkedToTrunkID,
+		linkedTrunks.Name AS LinkedToTrunkName
 		
 	FROM PSTN_BE.SwitchTrunk t
 	INNER JOIN PSTN_BE.Switch s ON s.ID = t.SwitchID
+	LEFT JOIN PSTN_BE.SwitchTrunk linkedTrunks ON linkedTrunks.ID = t.LinkedToTrunkID
 	
 	WHERE t.ID = @ID
 	

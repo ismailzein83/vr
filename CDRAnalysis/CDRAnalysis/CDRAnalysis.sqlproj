@@ -143,7 +143,6 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_DeleteByCaseIDs.sql" />
     <Build Include="dbo\Stored Procedures\LKUPtable_GenerateMergeScript.sql" />
     <Build Include="PSTN_BE\Tables\SwitchType.sql" />
-    <Build Include="PSTN_BE\Tables\SwitchTrunkLink.sql" />
     <Build Include="PSTN_BE\Tables\SwitchTrunk.sql" />
     <Build Include="PSTN_BE\Tables\Switch.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_SwitchType_GetAll.sql" />
@@ -159,5 +158,18 @@
     <Build Include="PSTN_BE\Stored Procedures\sp_Switch_GetByID.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_Switch_GetAll.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_StagingCDR_GetByConnectDateTime.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_SwitchType_Update.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_SwitchType_Insert.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_SwitchType_GetByID.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_SwitchType_Delete.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_SwitchType_CreateTempByName.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_Update.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_Unlink.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_LinkToTrunk.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_GetBySwitchID.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_Delete.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_Switch_GetToLinkTo.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_Switch_GetByDataSourceID.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_Switch_Delete.sql" />
   </ItemGroup>
 </Project>

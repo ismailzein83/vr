@@ -9,7 +9,8 @@ CREATE PROCEDURE [PSTN_BE].[sp_SwitchTrunk_CreateTempByFiltered]
 	@Symbol NVARCHAR(50) = NULL,
 	@SelectedSwitchIDs VARCHAR(MAX) = NULL,
 	@SelectedTypes VARCHAR(MAX) = NULL,
-	@SelectedDirections VARCHAR(MAX) = NULL
+	@SelectedDirections VARCHAR(MAX) = NULL,
+	@IsLinkedToTrunk BIT = NULL
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -43,18 +44,22 @@ BEGIN
 			t.SwitchID,
 			s.Name AS SwitchName,
 			t.[Type],
-			t.Direction
+			t.Direction,
+			t.LinkedToTrunkID,
+			linkedTrunks.Name AS LinkedToTrunkName
 		
 		INTO #RESULT
 		
 		FROM PSTN_BE.SwitchTrunk t
 		INNER JOIN PSTN_BE.Switch s ON s.ID = t.SwitchID
+		LEFT JOIN PSTN_BE.SwitchTrunk linkedTrunks ON linkedTrunks.ID = t.LinkedToTrunkID
 		
 		WHERE (@Name IS NULL OR t.Name LIKE '%' + @Name + '%')
 			AND (@Symbol IS NULL OR t.Symbol LIKE '%' + @Symbol + '%')
 			AND (@SelectedSwitchIDs IS NULL OR t.SwitchID IN (SELECT SwitchID FROM @SwitchIDsTable))
 			AND (@SelectedTypes IS NULL OR t.[Type] IN (SELECT [Type] FROM @TypesTable))
 			AND (@SelectedDirections IS NULL OR t.Direction IN (SELECT Direction FROM @DirectionsTable))
+			AND (@IsLinkedToTrunk IS NULL OR (@IsLinkedToTrunk = 0 AND t.LinkedToTrunkID IS NULL) OR (@IsLinkedToTrunk = 1 AND t.LinkedToTrunkID IS NOT NULL))
 			
 		DECLARE @sql VARCHAR(1000)
 		SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';
