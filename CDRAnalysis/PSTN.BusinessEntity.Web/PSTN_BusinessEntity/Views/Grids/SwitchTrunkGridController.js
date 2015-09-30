@@ -62,7 +62,7 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
 
     function retrieveData() {
         var query = $scope.switchTrunkGridConnector.data;
-        gridAPI.retrieveData(query);
+        return gridAPI.retrieveData(query);
     }
 
     function defineMenuActions() {
