@@ -27,19 +27,21 @@
                 </vr-row>
             </div>
             <div ng-show="mappperSettignsSelected">
-                <vr-label>Write your custom code here</vr-label>
+                <label style="margin-top:15px; font-weight: bold; font-size: 12px;">Custom Code</label>
                 <textarea ng-model="customCode" rows="15" cols="64" style="margin-top: 15px;"></textarea>
             </div>
             <div ng-show="schedulerSettignsSelected">
                 <vr-row>
-                    <vr-switch value="isEnabled" label="Enabled"></vr-switch>
+                    <vr-columns>
+                        <vr-switch value="isEnabled" label="Enabled"></vr-switch>
+                    </vr-columns>
                 </vr-row>
                 <vr-row>
                     <vr-columns width="1/2row">
-                        <vr-datetimepicker value="startEffDate" label="Start Eff Date" isrequired></vr-datetimepicker>
+                        <vr-datetimepicker value="startEffDate" label="Start Effective Date" isrequired></vr-datetimepicker>
                     </vr-columns>
                     <vr-columns width="1/2row">
-                        <vr-datetimepicker value="endEffDate" label="End Eff Date"></vr-datetimepicker>
+                        <vr-datetimepicker value="endEffDate" label="End Effective Date"></vr-datetimepicker>
                     </vr-columns>
                 </vr-row>
                 <vr-row>
@@ -52,7 +54,10 @@
                         <vr-select datasource="executionFlows" datatextfield="Name" datavaluefield="ExecutionFlowId" label="Associated Flow" selectedvalues="selectedExecutionFlow" isrequired></vr-select>
                     </vr-columns>
                     <vr-columns colnum="6">
-                        <vr-button type="Add" data-onclick="addExecutionFlow" standalone></vr-button>
+                        <div style="top:25px;position:absolute;">
+                            <vr-button type="Add" data-onclick="addExecutionFlow" standalone></vr-button>
+                        </div>
+
                     </vr-columns>
                 </vr-row>
             </div>

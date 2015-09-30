@@ -3,15 +3,24 @@
         <div>
             <vr-row>
                 <vr-columns width="1/2row">
-                    <vr-select datatextfield="Title" datavaluefield="BPDefinitionID"
+                    <vr-select label="Workflow Name" datatextfield="Title" datavaluefield="BPDefinitionID"
                                datasource="bpDefinitions" selectedvalues="selectedBPDefintion"></vr-select>
                 </vr-columns>
             </vr-row>
         </div>
         <div>
-            <vr-row>
-                <div ng-include="selectedBPDefintion.Configuration.ScheduleTemplateURL" />
+            <vr-row ng-show="selectedBPDefintion">
+                <vr-columns width="fullrow">
+                    <div style="width:100%;border-bottom:1px solid #666666;">
+                        <label style="font-weight: bold; font-size: 13px; margin-top: 5px; margin-top: 5px; top: 12px; background-color: #FFF; padding: 0px 7px; left: 10px; position: relative;">Settings</label>
+                    </div>
+                </vr-columns>
             </vr-row>
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <div ng-include="selectedBPDefintion.Configuration.ScheduleTemplateURL" />
+            </vr-row>
+            </vr-columns>
         </div>
     </vr-section>
 </div>
