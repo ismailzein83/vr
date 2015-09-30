@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Activities;
+using System.Collections.Generic;
 using Vanrise.BusinessProcess;
 using Vanrise.Fzero.CDRImport.Data;
 using Vanrise.Fzero.CDRImport.Entities;
@@ -27,7 +28,12 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
         protected override void DoWork(PrepareUnifiedCDRsForDBApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
-            //PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, cdrsBatch => cdrsBatch.CDRBatchFilePath);
+            PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, cdrBatch =>
+                {
+                    var serializedCDRs = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(cdrBatch.CDRBatchFilePath));
+                    System.IO.File.Delete(cdrBatch.CDRBatchFilePath);
+                    return Vanrise.Common.ProtoBufSerializer.Deserialize<List<CDR>>(serializedCDRs);
+                });
         }
 
         protected override PrepareUnifiedCDRsForDBApplyInput GetInputArgument2(AsyncCodeActivityContext context)
