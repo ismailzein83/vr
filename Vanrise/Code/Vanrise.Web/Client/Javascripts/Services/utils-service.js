@@ -434,8 +434,28 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         return '/api/' + moduleName + '/' + controllerName + '/' + actionName;
     }
 
-    function cloneObject(obj) {
-        return JSON.parse(JSON.stringify(obj));
+    function cloneObject(obj, withoutHashKey) {        
+        var newObj = internalClone(obj, withoutHashKey);      
+        return newObj;
+    }
+
+    function internalClone(obj, withoutHashKey) {
+        if (obj === null || typeof (obj) !== 'object' || 'isActiveClone' in obj)
+            return obj;
+
+        var temp = obj.constructor(); // changed
+
+        for (var key in obj) {
+            if (key == '$$hashKey' && withoutHashKey)
+                continue;
+            if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                obj['isActiveClone'] = null;
+                temp[key] = internalClone(obj[key], withoutHashKey);
+                delete obj['isActiveClone'];
+            }
+        }
+
+        return temp;
     }
 
     return ({
