@@ -174,7 +174,8 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                             DisconnectDateTime = subunifiedCDR.DisconnectDateTime,
                             DurationInSeconds = subunifiedCDR.DurationInSeconds,
                             InTrunk = subunifiedCDR.InTrunkSymbol,
-                            OutTrunk = subunifiedCDR.OutTrunkSymbol
+                            OutTrunk = subunifiedCDR.OutTrunkSymbol,
+                            SwitchID=subunifiedCDR.SwitchID
                         }
                    );
 
@@ -189,7 +190,8 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                             DisconnectDateTime = subunifiedCDR.DisconnectDateTime,
                             DurationInSeconds = subunifiedCDR.DurationInSeconds,
                             InTrunk = subunifiedCDR.InTrunkSymbol,
-                            OutTrunk = subunifiedCDR.OutTrunkSymbol
+                            OutTrunk = subunifiedCDR.OutTrunkSymbol,
+                            SwitchID = subunifiedCDR.SwitchID
                         }
                             );
                     }
