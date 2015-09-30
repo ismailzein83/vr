@@ -19,5 +19,7 @@ namespace PSTN.BusinessEntity.Entities
         public SwitchTrunkType Type { get; set; }
 
         public SwitchTrunkDirection Direction { get; set; }
+
+        public int? LinkedToTrunkID { get; set; }
     }
 }

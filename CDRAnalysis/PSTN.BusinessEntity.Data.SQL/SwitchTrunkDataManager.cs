@@ -8,15 +8,18 @@ namespace PSTN.BusinessEntity.Data.SQL
 {
     public class SwitchTrunkDataManager : Vanrise.Data.SQL.BaseSQLDataManager, ISwitchTrunkDataManager
     {
-        public SwitchTrunkDataManager() : base("CDRDBConnectionString") { }
+        private Dictionary<string, string> _mapper;
+
+        public SwitchTrunkDataManager() : base("CDRDBConnectionString") {
+            _mapper = new Dictionary<string, string>();
+
+            _mapper.Add("TypeDescription", "Type");
+            _mapper.Add("DirectionDescription", "Direction");
+        }
 
         public Vanrise.Entities.BigResult<SwitchTrunkDetail> GetFilteredSwitchTrunks(Vanrise.Entities.DataRetrievalInput<SwitchTrunkQuery> input)
         {
             //Thread.Sleep(5000);
-
-            Dictionary<string, string> mapper = new Dictionary<string, string>();
-            mapper.Add("TypeDescription", "Type");
-            mapper.Add("DirectionDescription", "Direction");
 
             return RetrieveData(input, (tempTableName) =>
             {
@@ -31,7 +34,7 @@ namespace PSTN.BusinessEntity.Data.SQL
 
                 ExecuteNonQuerySP("PSTN_BE.sp_SwitchTrunk_CreateTempByFiltered", tempTableName, input.Query.Name, input.Query.Symbol, switchIDs, types, directions, input.Query.IsLinkedToTrunk);
 
-            }, (reader) => SwitchTrunkDetailMapper(reader), mapper);
+            }, (reader) => SwitchTrunkDetailMapper(reader), _mapper);
         }
 
         public SwitchTrunkDetail GetSwitchTrunkByID(int trunkID)
@@ -66,14 +69,14 @@ namespace PSTN.BusinessEntity.Data.SQL
             return (recordsEffected > 0);
         }
 
-        public void UnlinkSwitchTrunks(int switchTrunkID, int linkedToTrunkID)
+        public void UnlinkSwitchTrunk(int trunkID)
         {
-            ExecuteNonQuerySP("PSTN_BE.sp_SwitchTrunk_Unlink", switchTrunkID, linkedToTrunkID);
+            ExecuteNonQuerySP("PSTN_BE.sp_SwitchTrunk_Unlink", trunkID);
         }
 
-        public void LinkSwitchTrunks(int switchTrunkID, int linkedToTrunkID)
+        public void LinkSwitchTrunks(int trunkID, int linkedToTrunkID)
         {
-            ExecuteNonQuerySP("PSTN_BE.sp_SwitchTrunk_LinkToTrunk", switchTrunkID, linkedToTrunkID);
+            ExecuteNonQuerySP("PSTN_BE.sp_SwitchTrunk_LinkToTrunk", trunkID, linkedToTrunkID);
         }
 
         #region Mappers

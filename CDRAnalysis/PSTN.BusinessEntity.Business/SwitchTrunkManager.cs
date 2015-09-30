@@ -39,6 +39,15 @@ namespace PSTN.BusinessEntity.Business
             if (inserted)
             {
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
+
+                if (trunkObject.LinkedToTrunkID != null)
+                {
+                    int linkedToTrunkID = (int)trunkObject.LinkedToTrunkID;
+
+                    dataManager.UnlinkSwitchTrunk(linkedToTrunkID);
+                    dataManager.LinkSwitchTrunks(trunkID, linkedToTrunkID);
+                }
+
                 insertOperationOutput.InsertedObject = dataManager.GetSwitchTrunkByID(trunkID);
             }
             else
@@ -57,11 +66,23 @@ namespace PSTN.BusinessEntity.Business
             updateOperationOutput.UpdatedObject = null;
 
             ISwitchTrunkDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchTrunkDataManager>();
+            
             bool updated = dataManager.UpdateSwitchTrunk(trunkObject);
 
             if (updated)
             {
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+
+                dataManager.UnlinkSwitchTrunk(trunkObject.ID);
+
+                if (trunkObject.LinkedToTrunkID != null)
+                {
+                    int linkedToTrunkID = (int)trunkObject.LinkedToTrunkID;
+                    dataManager.UnlinkSwitchTrunk(linkedToTrunkID);
+
+                    dataManager.LinkSwitchTrunks(trunkObject.ID, linkedToTrunkID);
+                }
+
                 updateOperationOutput.UpdatedObject = dataManager.GetSwitchTrunkByID(trunkObject.ID);
             }
             else
@@ -85,22 +106,6 @@ namespace PSTN.BusinessEntity.Business
                 deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
 
             return deleteOperationOutput;
-        }
-
-        public UpdateOperationOutput<SwitchTrunkDetail> LinkToTrunk(int switchTrunkID, int linkedToTrunkID)
-        {
-            ISwitchTrunkDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchTrunkDataManager>();
-
-            dataManager.UnlinkSwitchTrunks(switchTrunkID, linkedToTrunkID);
-
-            dataManager.LinkSwitchTrunks(switchTrunkID, linkedToTrunkID);
-
-            UpdateOperationOutput<SwitchTrunkDetail> updateOperationOutput = new UpdateOperationOutput<SwitchTrunkDetail>();
-
-            updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-            updateOperationOutput.UpdatedObject = dataManager.GetSwitchTrunkByID(switchTrunkID);
-
-            return updateOperationOutput;
         }
     }
 }

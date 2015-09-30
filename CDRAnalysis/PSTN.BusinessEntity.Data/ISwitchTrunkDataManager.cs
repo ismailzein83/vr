@@ -17,7 +17,7 @@ namespace PSTN.BusinessEntity.Data
 
         bool DeleteSwitchTrunk(int trunkID);
 
-        void UnlinkSwitchTrunks(int switchTrunkID, int linkedToTrunkID);
+        void UnlinkSwitchTrunk(int trunkID);
 
         void LinkSwitchTrunks(int switchTrunkID, int linkedToTrunkID);
     }

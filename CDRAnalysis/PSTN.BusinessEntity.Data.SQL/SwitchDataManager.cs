@@ -8,14 +8,17 @@ namespace PSTN.BusinessEntity.Data.SQL
 {
     public class SwitchDataManager : Vanrise.Data.SQL.BaseSQLDataManager, ISwitchDataManager
     {
-        public SwitchDataManager() : base("CDRDBConnectionString") { }
+        private Dictionary<string, string> _mapper;
+
+        public SwitchDataManager() : base("CDRDBConnectionString") {
+            _mapper = new Dictionary<string, string>();
+
+            _mapper.Add("TypeDescription", "TypeID");
+            _mapper.Add("DataSourceName", "DataSourceID");
+        }
 
         public Vanrise.Entities.BigResult<SwitchDetail> GetFilteredSwitches(Vanrise.Entities.DataRetrievalInput<SwitchQuery> input)
         {
-            Dictionary<string, string> mapper = new Dictionary<string, string>();
-            mapper.Add("TypeDescription", "TypeID");
-            mapper.Add("DataSourceName", "DataSourceID");
-
             return RetrieveData(input, (tempTableName) =>
             {
                 string typeIDs = (input.Query.SelectedTypeIDs != null && input.Query.SelectedTypeIDs.Count() > 0) ?
@@ -23,7 +26,7 @@ namespace PSTN.BusinessEntity.Data.SQL
 
                 ExecuteNonQuerySP("PSTN_BE.sp_Switch_CreateTempByFiltered", tempTableName, input.Query.Name, typeIDs, input.Query.AreaCode);
 
-            }, (reader) => SwitchMapper(reader), mapper);
+            }, (reader) => SwitchMapper(reader), _mapper);
         }
         
         public SwitchDetail GetSwitchByID(int switchID) {

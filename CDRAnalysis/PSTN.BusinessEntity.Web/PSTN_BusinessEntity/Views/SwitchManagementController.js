@@ -54,6 +54,14 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
                 });
         }
 
+        $scope.validateAreaCode = function (value) {
+            if (value == undefined || value == "") return null;
+
+            if (value.length > 7 || isNaN(parseInt(value))) return "Max of 7 digits";
+
+            return null;
+        }
+
         defineMenuActions();
     }
 

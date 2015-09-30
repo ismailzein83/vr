@@ -74,20 +74,74 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
             {
                 name: "Delete",
                 clicked: deleteTrunk
-            },
-            {
-                name: "Link to Trunk",
-                clicked: linkToTrunk
             }
         ];
     }
 
     function editTrunk(gridObject) {
 
-        var eventHandler = function (trunkObject) {
+        var eventHandler = function (firstTrunkObject, linkedToFirstTrunkID, secondTrunkID) {
+
+            console.log(firstTrunkObject);
+
+            setTrunkDescriptions(firstTrunkObject);
+            gridAPI.itemUpdated(firstTrunkObject);
+
+            if (linkedToFirstTrunkID != null) {
+                var linkedToFirstTrunkObject = UtilsService.getItemByVal($scope.trunks, linkedToFirstTrunkID, "ID");
+
+                if (linkedToFirstTrunkObject != null) {
+                    linkedToFirstTrunkObject.LinkedToTrunkID = null;
+                    linkedToFirstTrunkObject.LinkedToTrunkName = null;
+
+                    gridAPI.itemUpdated(linkedToFirstTrunkObject);
+                }
+            }
+
+            var secondTrunkObject = UtilsService.getItemByVal($scope.trunks, secondTrunkID, "ID");
+            var linkedToSecondTrunkID = secondTrunkObject.LinkedToTrunkID;
+
+            console.log(secondTrunkObject);
+
+            if (secondTrunkObject != null) {
+                secondTrunkObject.LinkedToTrunkID = firstTrunkObject.ID;
+                secondTrunkObject.LinkedToTrunkName = firstTrunkObject.Name;
+
+                gridAPI.itemUpdated(secondTrunkObject);
+            }
+
+            if (linkedToSecondTrunkID != null) {
+                var linkedToSecondTrunkObject = UtilsService.getItemByVal($scope.trunks, linkedToSecondTrunkID, "ID");
+
+                if (linkedToSecondTrunkObject != null) {
+                    linkedToSecondTrunkObject.LinkedToTrunkID = null;
+                    linkedToSecondTrunkObject.LinkedToTrunkName = null;
+
+                    gridAPI.itemUpdated(linkedToSecondTrunkObject);
+                }
+            }
+        }
+
+        /*
+        var eventHandler = function (trunkObject, linkedToTrunkID) {
+
             setTrunkDescriptions(trunkObject);
             gridAPI.itemUpdated(trunkObject);
+
+            var linkedToTrunkObject = UtilsService.getItemByVal($scope.trunks, linkedToTrunkID, "ID");
+            console.log(trunkObject);
+
+            if (linkedToTrunkObject != null) {
+                console.log("in");
+                linkedToTrunkObject.LinkedToTrunkID = trunkObject.ID;
+                linkedToTrunkObject.LinkedToTrunkName = trunkObject.Name;
+
+                console.log(linkedToTrunkObject);
+
+                gridAPI.itemUpdated(linkedToTrunkObject);
+            }
         };
+        */
 
         SwitchService.editSwitchTrunk(gridObject, eventHandler);
     }
@@ -99,40 +153,6 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
         }
 
         SwitchService.deleteSwitchTrunk(gridObject, eventHandler);
-    }
-
-    function linkToTrunk(gridObject) {
-        var modalSettings = {};
-
-        var parameters = {
-            TrunkID: gridObject.ID,
-            SwitchID: gridObject.SwitchID
-        };
-
-        modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Link " + gridObject.Name + " to a Trunk";
-
-            modalScope.onSwitchTrunkUpdated = function (trunkObject, linkedToTrunkID) {
-
-                var type = UtilsService.getEnum(SwitchTrunkTypeEnum, "value", trunkObject.Type);
-                trunkObject.TypeDescription = type.description;
-
-                var direction = UtilsService.getEnum(SwitchTrunkDirectionEnum, "value", trunkObject.Direction);
-                trunkObject.DirectionDescription = direction.description;
-
-                gridAPI.itemUpdated(trunkObject);
-
-                var linkedToTrunkObject = UtilsService.getItemByVal($scope.trunks, linkedToTrunkID, "ID");
-
-                if (linkedToTrunkObject != null) {
-                    linkedToTrunkObject.LinkedToTrunkID = trunkObject.ID;
-                    linkedToTrunkObject.LinkedToTrunkName = trunkObject.Name;
-                    gridAPI.itemUpdated(linkedToTrunkObject);
-                }
-            };
-        };
-
-        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/LinkToTrunk.html", parameters, modalSettings);
     }
 
     function setTrunkDescriptions(trunkObject) {

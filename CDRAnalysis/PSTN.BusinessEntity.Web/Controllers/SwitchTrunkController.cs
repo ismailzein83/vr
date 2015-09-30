@@ -49,12 +49,5 @@ namespace PSTN.BusinessEntity.Web.Controllers
             SwitchTrunkManager manager = new SwitchTrunkManager();
             return manager.DeleteSwitchTrunk(trunkID);
         }
-
-        [HttpGet]
-        public UpdateOperationOutput<SwitchTrunkDetail> LinkToTrunk(int switchTrunkID, int linkedToTrunkID)
-        {
-            SwitchTrunkManager manager = new SwitchTrunkManager();
-            return manager.LinkToTrunk(switchTrunkID, linkedToTrunkID);
-        }
     }
 }

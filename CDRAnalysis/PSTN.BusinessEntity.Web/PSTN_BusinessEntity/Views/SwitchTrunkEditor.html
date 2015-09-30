@@ -4,47 +4,78 @@
         <vr-form name="formSwitchTrunkEditor">
 
             <vr-row>
-                <vr-columns width="1/2row">
-                    <vr-textbox label="Trunk Name" value="name" isrequired></vr-textbox>
-                </vr-columns>
+                <vr-columns width="fullrow">
+                    <vr-section title="Trunk Info">
+                        <vr-columns width="fullrow">
+                            <vr-textbox label="Trunk Name" value="name" isrequired></vr-textbox>
+                        </vr-columns>
 
-                <vr-columns width="1/2row">
-                    <vr-textbox label="Trunk Symbol" value="symbol" isrequired></vr-textbox>
+                        <vr-columns width="1/2row">
+                            <vr-textbox label="Trunk Symbol" value="symbol" isrequired></vr-textbox>
+                        </vr-columns>
+
+                        <vr-columns width="1/2row">
+                            <vr-select label="Switch"
+                                       datasource="switches"
+                                       selectedvalues="selectedSwitch"
+                                       datavaluefield="ID"
+                                       datatextfield="Name"
+                                       entityname="Switch"
+                                       isrequired>
+                            </vr-select>
+                        </vr-columns>
+
+                        <vr-columns width="1/2row">
+                            <vr-select label="Trunk Type"
+                                       datasource="types"
+                                       selectedvalues="selectedType"
+                                       datavaluefield="value"
+                                       datatextfield="description"
+                                       entityname="Type"
+                                       isrequired>
+                            </vr-select>
+                        </vr-columns>
+
+                        <vr-columns width="1/2row">
+                            <vr-select label="Trunk Direction"
+                                       datasource="directions"
+                                       selectedvalues="selectedDirection"
+                                       datavaluefield="value"
+                                       datatextfield="description"
+                                       entityname="Direction"
+                                       isrequired>
+                            </vr-select>
+                        </vr-columns>
+                    </vr-section>
                 </vr-columns>
             </vr-row>
-            <vr-row>
-                <vr-columns width="1/2row">
-                    <vr-select label="Switch"
-                               datasource="switches"
-                               selectedvalues="selectedSwitch"
-                               datavaluefield="ID"
-                               datatextfield="Name"
-                               entityname="Switch"
-                               isrequired>
-                    </vr-select>
-                </vr-columns>
 
-                <vr-columns width="1/2row">
-                    <vr-select label="Trunk Type"
-                               datasource="types"
-                               selectedvalues="selectedType"
-                               datavaluefield="value"
-                               datatextfield="description"
-                               entityname="Type"
-                               isrequired>
-                    </vr-select>
-                </vr-columns>
-            </vr-row>
             <vr-row>
-                <vr-columns width="1/2row">
-                    <vr-select label="Trunk Direction"
-                               datasource="directions"
-                               selectedvalues="selectedDirection"
-                               datavaluefield="value"
-                               datatextfield="description"
-                               entityname="Direction"
-                               isrequired>
-                    </vr-select>
+                <vr-columns width="fullrow">
+                    <vr-section title="Link To Trunk">
+                        <vr-columns width="1/2row">
+                            <vr-select label="Switch"
+                                       datasource="switchesToLinkTo"
+                                       selectedvalues="selectedSwitchToLinkTo"
+                                       datavaluefield="ID"
+                                       datatextfield="Name"
+                                       onselectionchanged="onSwitchToLinkToChanged"
+                                       entityname="Switch"
+                                       hideremoveicon>
+                            </vr-select>
+                        </vr-columns>
+
+                        <vr-columns width="1/2row">
+                            <vr-select label="Linked-To Trunk"
+                                       datasource="trunksToLinkTo"
+                                       selectedvalues="selectedTrunkToLinkTo"
+                                       datavaluefield="ID"
+                                       datatextfield="Name"
+                                       entityname="Trunk"
+                                       hideremoveicon>
+                            </vr-select>
+                        </vr-columns>
+                    </vr-section>
                 </vr-columns>
             </vr-row>
 

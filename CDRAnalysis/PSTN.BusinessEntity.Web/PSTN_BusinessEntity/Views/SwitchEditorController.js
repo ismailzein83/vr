@@ -2,8 +2,8 @@
 
 function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, DataSourceAPIService, DataSourceService, UtilsService, VRNavigationService, VRNotificationService, VRModalService) {
 
-    var switchID = undefined;
-    var editMode = undefined;
+    var switchID;
+    var editMode;
 
     loadParameters();
     defineScope();
@@ -24,7 +24,7 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
         $scope.types = [];
         $scope.selectedType = undefined;
         $scope.areaCode = undefined;
-        $scope.timeOffset = undefined;
+        $scope.timeOffset = (!editMode) ? "00.00:00:00" : null;
         $scope.dataSources = [];
         $scope.selectedDataSource = undefined;
 
@@ -37,6 +37,14 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
 
         $scope.close = function () {
             $scope.modalContext.closeModal()
+        }
+
+        $scope.validateAreaCode = function (value) {
+            if (value == undefined || value == "") return null;
+
+            if (value.length > 7 || isNaN(parseInt(value))) return "Max of 7 digits";
+
+            return null;
         }
 
         $scope.validateTimeOffset = function (value) {
