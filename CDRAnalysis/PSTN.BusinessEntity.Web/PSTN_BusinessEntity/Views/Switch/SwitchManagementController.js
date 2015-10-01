@@ -1,6 +1,6 @@
-﻿SwitchManagementController.$inject = ["$scope", "SwitchAPIService", "SwitchTypeAPIService", "SwitchService", "UtilsService", "VRNotificationService", "VRModalService"];
+﻿SwitchManagementController.$inject = ["$scope", "SwitchAPIService", "SwitchTypeAPIService", "PSTN_BE_Service", "UtilsService", "VRNotificationService", "VRModalService"];
 
-function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIService, SwitchService, UtilsService, VRNotificationService, VRModalService) {
+function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIService, PSTN_BE_Service, UtilsService, VRNotificationService, VRModalService) {
 
     var gridAPI = undefined;
 
@@ -143,12 +143,12 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
 
         gridAPI.expandRow(dataItem);
 
-        var eventHandler = function (trunkObject) {
+        var onTrunkAdded = function (trunkObject) {
             if (dataItem.onTrunkAdded != undefined)
                 dataItem.onTrunkAdded(trunkObject);
         }
 
-        SwitchService.addSwitchTrunk(dataItem.ID, eventHandler);
+        PSTN_BE_Service.addSwitchTrunk(dataItem.ID, onTrunkAdded);
     }
 }
 

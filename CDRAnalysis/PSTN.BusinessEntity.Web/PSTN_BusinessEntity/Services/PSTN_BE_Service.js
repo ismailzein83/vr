@@ -1,4 +1,4 @@
-﻿app.service("SwitchService", ["SwitchTrunkAPIService", "VRModalService", "VRNotificationService", function (SwitchTrunkAPIService, VRModalService, VRNotificationService) {
+﻿app.service("PSTN_BE_Service", ["SwitchTrunkAPIService", "VRModalService", "VRNotificationService", function (SwitchTrunkAPIService, VRModalService, VRNotificationService) {
     
     return ({
         editSwitchTrunk: editSwitchTrunk,
@@ -6,7 +6,7 @@
         deleteSwitchTrunk: deleteSwitchTrunk
     });
 
-    function editSwitchTrunk(trunkObject, eventHandler) {
+    function editSwitchTrunk(trunkObject, onTrunkUpdated) {
         var modalSettings = {};
 
         var parameters = {
@@ -15,13 +15,13 @@
 
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = (trunkObject.Name != undefined) ? "Edit Switch Trunk: " + trunkObject.Name : "Edit Switch Trunk";
-            modalScope.onTrunkUpdated = eventHandler;
+            modalScope.onTrunkUpdated = onTrunkUpdated;
         };
 
         VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Trunk/SwitchTrunkEditor.html", parameters, modalSettings);
     }
 
-    function addSwitchTrunk(switchID, eventHandler) {
+    function addSwitchTrunk(switchID, onTrunkAdded) {
         var modalSettings = {};
 
         var parameters = {
@@ -30,13 +30,13 @@
 
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Add Switch Trunk";
-            modalScope.onTrunkAdded = eventHandler;
+            modalScope.onTrunkAdded = onTrunkAdded;
         };
 
         VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Trunk/SwitchTrunkEditor.html", parameters, modalSettings);
     }
 
-    function deleteSwitchTrunk(trunkObject, eventHandler) {
+    function deleteSwitchTrunk(trunkObject, onTrunkDeleted) {
 
         VRNotificationService.showConfirmation()
             .then(function (response) {
@@ -45,7 +45,7 @@
                     return SwitchTrunkAPIService.DeleteSwitchTrunk(trunkObject.ID)
                         .then(function (deletionResponse) {
                             if (VRNotificationService.notifyOnItemDeleted("Switch Trunk", deletionResponse))
-                                eventHandler(trunkObject);
+                                onTrunkDeleted(trunkObject);
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);

@@ -58,12 +58,12 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
 
         $scope.addDataSource = function () {
 
-            var eventHandler = function (dataSourceObject) {
+            var onDataSourceAdded = function (dataSourceObject) {
                 $scope.dataSources.push(dataSourceObject);
                 $scope.selectedDataSource = dataSourceObject;
             }
 
-            DataSourceService.addDataSource(eventHandler);
+            DataSourceService.addDataSource(onDataSourceAdded);
         }
 
         $scope.addSwitchType = function () {

@@ -1,6 +1,6 @@
-﻿SwitchTrunkGridController.$inject = ["$scope", "SwitchTrunkAPIService", "SwitchService", "SwitchTrunkTypeEnum", "SwitchTrunkDirectionEnum", "UtilsService", "VRNotificationService", "VRModalService"];
+﻿SwitchTrunkGridController.$inject = ["$scope", "SwitchTrunkAPIService", "PSTN_BE_Service", "SwitchTrunkTypeEnum", "SwitchTrunkDirectionEnum", "UtilsService", "VRNotificationService", "VRModalService"];
 
-function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService, SwitchTrunkTypeEnum, SwitchTrunkDirectionEnum, UtilsService, VRNotificationService, VRModalService) {
+function SwitchTrunkGridController($scope, SwitchTrunkAPIService, PSTN_BE_Service, SwitchTrunkTypeEnum, SwitchTrunkDirectionEnum, UtilsService, VRNotificationService, VRModalService) {
 
     var gridAPI = undefined;
 
@@ -90,7 +90,7 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
 
     function editTrunk(gridObject) {
 
-        var eventHandler = function (firstTrunkObject, linkedToFirstTrunkID, secondTrunkID) {
+        var onTrunkUpdated = function (firstTrunkObject, linkedToFirstTrunkID, secondTrunkID) {
 
             setTrunkDescriptions(firstTrunkObject);
             gridAPI.itemUpdated(firstTrunkObject);
@@ -134,16 +134,16 @@ function SwitchTrunkGridController($scope, SwitchTrunkAPIService, SwitchService,
             }
         }
 
-        SwitchService.editSwitchTrunk(gridObject, eventHandler);
+        PSTN_BE_Service.editSwitchTrunk(gridObject, onTrunkUpdated);
     }
 
     function deleteTrunk(gridObject) {
 
-        var eventHandler = function (deletedTrunkObject) {
+        var onTrunkDeleted = function (deletedTrunkObject) {
             gridAPI.itemDeleted(deletedTrunkObject);
         }
 
-        SwitchService.deleteSwitchTrunk(gridObject, eventHandler);
+        PSTN_BE_Service.deleteSwitchTrunk(gridObject, onTrunkDeleted);
     }
 
     function setTrunkDescriptions(trunkObject) {
