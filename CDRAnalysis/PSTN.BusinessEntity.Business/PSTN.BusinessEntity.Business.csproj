@@ -54,6 +54,9 @@
     <Compile Include="NormalizationRuleManager.cs" />
     <Compile Include="Normalization\Actions\SubstringActionBehavior.cs" />
     <Compile Include="Normalization\Actions\AddPrefixActionBehavior.cs" />
+    <Compile Include="Normalization\RulesByCriteria\RulesBySwitchTrunkLength.cs" />
+    <Compile Include="Normalization\RulesByCriteria\RulesBySwitchTrunkPrefixLength.cs" />
+    <Compile Include="Normalization\RulesByCriteria\RulesBySwitchTrunkPrefix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SwitchManager.cs" />
     <Compile Include="SwitchTrunkManager.cs" />
