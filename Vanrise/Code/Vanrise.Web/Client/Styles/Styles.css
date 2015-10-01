@@ -466,6 +466,15 @@ Use this for keyframe animations
     position: relative;
     border-radius: 15px;
 }
+.modal-body  .panel-body{
+    padding : 0px ;
+}
+.modal-body .panel-vr .panel-body{
+    padding : 15px ;
+}
+.modal-body .fieldset-vr .panel-body {
+    padding: 15px;
+}
 .modal-dialog .action-bar{
    
     border-radius: 0px !important;
