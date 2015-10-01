@@ -148,6 +148,7 @@
   <ItemGroup>
     <Content Include="PSTN_BusinessEntity\Constants\SwitchTrunkDirectionEnum.js" />
     <Content Include="PSTN_BusinessEntity\Constants\SwitchTrunkTypeEnum.js" />
+    <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-trunkgrid-directive.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchTrunkAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchTypeAPIService.js" />
