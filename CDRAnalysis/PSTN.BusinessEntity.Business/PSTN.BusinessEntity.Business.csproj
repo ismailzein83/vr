@@ -51,6 +51,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NormalizationRuleManager.cs" />
+    <Compile Include="Normalization\Actions\SubstringActionBehavior.cs" />
+    <Compile Include="Normalization\Actions\AddPrefixActionBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SwitchManager.cs" />
     <Compile Include="SwitchTrunkManager.cs" />
@@ -68,6 +71,10 @@
     <ProjectReference Include="..\PSTN.BusinessEntity.Entities\PSTN.BusinessEntity.Entities.csproj">
       <Project>{026c2d4e-9fbf-491d-be9a-4249168a33fe}</Project>
       <Name>PSTN.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Entities\Vanrise.Fzero.CDRImport.Entities.csproj">
+      <Project>{8ea7f723-709a-480a-9ecf-be40c336a0cb}</Project>
+      <Name>Vanrise.Fzero.CDRImport.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

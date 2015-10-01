@@ -76,11 +76,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExecutionFlows\AllFlows.cs" />
     <Compile Include="StagingCDRImportActivator.cs" />
     <Compile Include="CDRImportActivator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StagingCDRNormalizationActivator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PSTN.BusinessEntity.Business\PSTN.BusinessEntity.Business.csproj">
+      <Project>{737d629a-9316-47c3-8320-e54364f30fb9}</Project>
+      <Name>PSTN.BusinessEntity.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Fzero.CDRImport.BP.Arguments\Vanrise.Fzero.CDRImport.BP.Arguments.csproj">
       <Project>{8c629dfd-0e97-4205-9f18-2a25962de38f}</Project>
       <Name>Vanrise.Fzero.CDRImport.BP.Arguments</Name>
