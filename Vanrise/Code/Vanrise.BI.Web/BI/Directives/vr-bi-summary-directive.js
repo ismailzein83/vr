@@ -57,7 +57,8 @@ app.directive('vrBiSummary', ['UtilsService', 'BIConfigurationAPIService', 'BIAP
                                   + '<vr-label isValue="{{value.value}}">{{value.value | number:2}}</vr-label>'
                                 + '</div>'
                                 +'<div class="circle-unit" >'
-                                  + '<vr-label isValue="{{value.value}}">({{value.description.Unit}})</vr-label>'
+                                  + '<vr-label isValue="{{value.value}}" ng-show="value.description.Unit.length!=0">({{value.description.Unit}})</vr-label>'
+                                  + '<vr-label  ng-show="value.description.Unit.length==0"></vr-label>'
                                 + '</div>'
                                 
                             + '</div>'

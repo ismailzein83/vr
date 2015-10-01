@@ -5,14 +5,23 @@
     <vr-columns width="normal" ng-show=" selectedOperationType.value == 'TopEntities'">
         <vr-select datasource="Entities" datatextfield="Name" datavaluefield="DisplayName" label="Entity" selectedvalues="selectedEntityType" isrequired hidefilterbox></vr-select>
     </vr-columns>
-    <vr-columns width="normal" ng-show=" selectedOperationType.value == 'TopEntities'">
+    <vr-columns width="normal" ng-show=" selectedOperationType.value == 'TopEntities' && isPieChart">
         <vr-select datasource="Measures" datatextfield="Name" datavaluefield="DisplayName" label="Measures" selectedvalues="selectedMeasureType" hidefilterbox></vr-select>
     </vr-columns>
-    <vr-columns width="normal" ng-show=" selectedOperationType.value == 'MeasuresGroupedByTime'">
-        <vr-select datasource="Measures" datatextfield="Name" datavaluefield="DisplayName" label="Measures" selectedvalues="selectedMeasureTypes" ismultipleselection hidefilterbox></vr-select>
+    <vr-columns width="normal" ng-show=" selectedOperationType.value == 'MeasuresGroupedByTime' || !isPieChart">
+        <vr-select datasource="Measures" datatextfield="Name" datavaluefield="DisplayName" label="Measures" selectedvalues="selectedMeasureTypes" onselectionchanged="onSelectionChanged" ismultipleselection hidefilterbox></vr-select>
     </vr-columns>
-    <vr-columns width="normal" ng-show=" selectedOperationType.value == 'MeasuresGroupedByTime'">
+    <vr-columns width="small" ng-show=" selectedOperationType.value == 'TopEntities'">
+        <vr-switch value="isPieChart" label="Pie Chart"></vr-switch>
+    </vr-columns>
+    <vr-columns width="normal" ng-show=" selectedOperationType.value == 'TopEntities' && !isPieChart ">
+        <vr-select datasource="selectedMeasureTypes" datatextfield="Name" datavaluefield="DisplayName" label="Top Measure" selectedvalues="selectedTopMeasure" isrequired hidefilterbox></vr-select>
+    </vr-columns>
+    <vr-columns width="normal" ng-show=" selectedOperationType.value == 'MeasuresGroupedByTime' || !isPieChart">
         <vr-select datasource="definitionTypes" datatextfield="value" datavaluefield="description" label="Chart Type" selectedvalues="selectedDefinitionType" hidefilterbox></vr-select>
+    </vr-columns>
+    <vr-columns width="normal" ng-show=" selectedOperationType.value == 'TopEntities'">
+        <vr-textbox value="topRecords" type="number" label="Number Of Records" minvalue="1"></vr-textbox>
     </vr-columns>
 
 </div>

@@ -30,7 +30,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         {
             DateTime startApplying = DateTime.Now;
             SupplierCodeManager manager = new SupplierCodeManager();
-            manager.UpdateSupplierCodes(inputArgument.OldSupplierZones, inputArgument.EffectiveDate);
+           // manager.UpdateSupplierCodes(inputArgument.OldSupplierZones, inputArgument.EffectiveDate);
          //   manager.InsertSupplierCodes(inputArgument.SupplierCodes);
             TimeSpan spent = DateTime.Now.Subtract(startApplying);
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Apply Supplier Codes  done and takes:{0}", spent);

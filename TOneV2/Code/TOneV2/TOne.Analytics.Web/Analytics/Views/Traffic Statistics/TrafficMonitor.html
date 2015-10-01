@@ -12,7 +12,7 @@
                 </vr-columns>
             </vr-row>
             <vr-row removeline>
-                <vr-columns colnum="fullrow" ng-if="basicSelected">
+                <vr-columns colnum="fullrow">
                     <vr-row>
                         <vr-columns width="normal">
                             <vr-select label="Group By" datasource="groupKeys"
@@ -29,33 +29,17 @@
                         <vr-columns width="normal">
                             <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired customvalidate="customvalidateTestTo"></vr-datetimepicker>
                         </vr-columns>
-                    </vr-row>
-                </vr-columns>
-                <vr-columns colnum="fullrow" ng-show="advancedSelected">
-                    <vr-row>
-                        <vr-columns width="normal">
-                            <vr-select label="Group By" datasource="groupKeys"
-                                       datatextfield="description" datavaluefield="value" selectedvalues="selectedGroupKeys" customvalidate="customvalidateSelectGroup" ismultipleselection isrequired></vr-select>
-                        </vr-columns>
-                        <vr-columns width="normal">
-                            <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Period"
-                                       selectedvalues="selectedPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
-                        </vr-columns>
-                        <vr-columns width="normal">
-                            <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired customvalidate="customvalidateTestFrom"></vr-datetimepicker>
-                        </vr-columns>
-                        <vr-columns width="normal">
-                            <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired customvalidate="customvalidateTestTo"></vr-datetimepicker>
-                        </vr-columns>
-                        <vr-columns width="normal">
+
+
+                        <vr-columns width="normal" ng-show="advancedSelected">
                             <vr-select label="Switches" datasource="switches"
                                        datatextfield="Name" datavaluefield="SwitchId" selectedvalues="selectedSwitches" ismultipleselection></vr-select>
                         </vr-columns>
-                        <vr-columns width="normal">
+                        <vr-columns width="normal" ng-show="advancedSelected">
                             <vr-select label="Code Groups" datasource="codeGroups"
                                        datatextfield="Name" datavaluefield="Code" selectedvalues="selectedCodeGroups" ismultipleselection></vr-select>
                         </vr-columns>
-                        <vr-columns width="normal">
+                        <vr-columns width="normal" ng-show="advancedSelected">
                             <vr-be-carriergroup type="'Customer'" selectedvalues="selectedCustomers"></vr-be-carriergroup>
                         </vr-columns>
                         <vr-columns width="normal">
@@ -63,20 +47,19 @@
                         </vr-columns>
 
 
-                        <vr-columns width="normal">
+                        <vr-columns width="normal" ng-show="advancedSelected">
                             <vr-textbox value="asr" label="ASR"></vr-textbox>
                         </vr-columns>
-                        <vr-columns width="normal">
+                        <vr-columns width="normal" ng-show="advancedSelected">
                             <vr-textbox value="acd" label="ACD"></vr-textbox>
                         </vr-columns>
 
-                        <vr-columns width="normal">
+                        <vr-columns width="normal" ng-show="advancedSelected">
                             <vr-textbox value="attempts" label="Attempts"></vr-textbox>
                         </vr-columns>
                     </vr-row>
-
-
                 </vr-columns>
+                
             </vr-row>
         </div>
 

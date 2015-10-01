@@ -16,6 +16,17 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
         $scope.selectedDefinitionType;
         $scope.selectedMeasureTypes = [];
         $scope.selectedMeasureType;
+        $scope.selectedTopMeasure;
+        $scope.onSelectionChanged = function () {
+            if ($scope.selectedTopMeasure == undefined)
+                $scope.selectedTopMeasure = $scope.selectedMeasureTypes[0];
+            else {
+                if (!UtilsService.contains($scope.selectedMeasureTypes, $scope.selectedTopMeasure))
+                    $scope.selectedTopMeasure = $scope.selectedMeasureTypes[0];
+            }
+        }
+        $scope.topRecords = 10;
+        $scope.isPieChart = true;
         defineTimeDimensionTypes();
         $scope.subViewConnector.getValue = function () {
             return getSubViewValue();
@@ -23,33 +34,28 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
         $scope.subViewConnector.setValue = function (value) {
             $scope.subViewConnector.value = value;
         }
-
-
     }
     function getSubViewValue() {
         var measureTypes = [];
-       
-        switch ($scope.selectedOperationType.value) {
-            case "TopEntities":
-                if ($scope.selectedEntityType == undefined || $scope.selectedEntityType == null || $scope.selectedMeasureType == undefined)
-                    return false;
-                else {
-                    measureTypes.push($scope.selectedMeasureType.Name);
-                    break;
-                }
-               
-
-            case "MeasuresGroupedByTime":
-                if ($scope.selectedMeasureTypes == undefined || $scope.selectedMeasureTypes.length == 0)
-                    return false;
-                else
-                {
-                 for (var i = 0; i < $scope.selectedMeasureTypes.length; i++) 
-                     measureTypes.push($scope.selectedMeasureTypes[i].Name);
-                 break;
-                    }
+        if ($scope.selectedOperationType.value=="TopEntities" && $scope.isPieChart){
+            if ($scope.selectedEntityType == undefined || $scope.selectedEntityType == null || $scope.selectedMeasureType == undefined)
+                return false;
+            else {
+                measureTypes.push($scope.selectedMeasureType.Name);
+            }
         }
-
+        else if($scope.selectedOperationType.value== "MeasuresGroupedByTime" ||  !$scope.isPieChart){
+            if ($scope.selectedMeasureTypes == undefined || $scope.selectedMeasureTypes.length == 0)
+                return false;
+            else
+            {
+                for (var i = 0; i < $scope.selectedMeasureTypes.length; i++) 
+                    measureTypes.push($scope.selectedMeasureTypes[i].Name);
+            }
+        }
+        var topMeasure = null;
+        if ($scope.selectedTopMeasure != undefined)
+            topMeasure = $scope.selectedTopMeasure.Name;
         var entityType = null;
         if ($scope.selectedEntityType != undefined && $scope.selectedOperationType.value != "MeasuresGroupedByTime")
             entityType = $scope.selectedEntityType.Name;
@@ -58,8 +64,10 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
             OperationType: $scope.selectedOperationType.value,
             EntityType: entityType,
             MeasureTypes: measureTypes,
-            TopMeasure: measureTypes[0],
+            TopMeasure: topMeasure,
             DefinitionType: $scope.selectedDefinitionType.value,
+            IsPieChart: $scope.isPieChart,
+            TopRecords: $scope.topRecords
         };
     }
     function setSubViewValue(settings) {
@@ -69,6 +77,7 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
             if($scope.definitionTypes[i].value==settings.DefinitionType)
                 $scope.selectedDefinitionType = $scope.definitionTypes[i];
         }
+        $scope.isPieChart = settings.IsPieChart;
        
         for (i = 0; i < $scope.Entities.length; i++) {
             
@@ -78,6 +87,7 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
             }
         }
        
+        $scope.topRecords = settings.TopRecords;
         for (var i = 0; i < $scope.operationTypes.length; i++) {
           
                 if($scope.operationTypes[i].value==settings.OperationType)
@@ -89,11 +99,17 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
 
                 if (measureType == $scope.Measures[j].Name)
                 {
-                    if ($scope.selectedOperationType.value == "TopEntities")
+                    if ($scope.selectedOperationType.value == "TopEntities" && settings.IsPieChart)
                         $scope.selectedMeasureType = $scope.Measures[j];
                     else
+                    {
                         $scope.selectedMeasureTypes.push($scope.Measures[j]);
+                        if ($scope.Measures[j].Name == settings.TopMeasure)
+                            $scope.selectedTopMeasure = $scope.Measures[j];
+                    }
+                       
                 }
+                
                 
 
             }

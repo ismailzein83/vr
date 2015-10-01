@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.WhS.BusinessEntity.Data;
 
-namespace TOne.WhS.BusinessEntity.Business
+namespace TOne.WhS.SupplierPriceList.Data.SQL
 {
-    public class SupplierPriceListManager
+    class ImportPriceListDataManager
     {
-       
     }
 }

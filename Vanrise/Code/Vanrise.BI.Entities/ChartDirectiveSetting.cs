@@ -14,6 +14,8 @@ namespace Vanrise.BI.Entities
         public string TopMeasure { get; set; }
         public string DefinitionType { get; set; }
         public string Title { get; set; }
+        public bool IsPieChart { get; set; }
+        public int TopRecords { get; set; }
         public override List<string> GetMeasures()
         {
             return MeasureTypes;

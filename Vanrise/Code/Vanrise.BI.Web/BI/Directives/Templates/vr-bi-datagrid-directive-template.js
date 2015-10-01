@@ -12,13 +12,17 @@ function VrDatagridDirectiveTemplateController($scope, TimeDimensionTypeEnum,BIC
         $scope.Measures = [];
         $scope.Entities = [];
         $scope.selectedEntityType;
-       
+        $scope.topRecords = 10;
         $scope.selectedMeasureTypes = [];
         $scope.selectedTopMeasure;
         defineTimeDimensionTypes();
         $scope.onSelectionChanged = function () {
             if ($scope.selectedTopMeasure==undefined)
-            $scope.selectedTopMeasure = $scope.selectedMeasureTypes[0];
+                $scope.selectedTopMeasure = $scope.selectedMeasureTypes[0];
+            else {
+                if (!UtilsService.contains($scope.selectedMeasureTypes, $scope.selectedTopMeasure))
+                    $scope.selectedTopMeasure = $scope.selectedMeasureTypes[0];
+            }
         }
         $scope.subViewConnector.getValue = function () {
             return getSubViewValue();
@@ -47,7 +51,8 @@ function VrDatagridDirectiveTemplateController($scope, TimeDimensionTypeEnum,BIC
             OperationType: $scope.selectedOperationType.value,
             EntityType: entityType,
             MeasureTypes: measureTypes,
-            TopMeasure: topMeasure
+            TopMeasure: topMeasure,
+            TopRecords: $scope.topRecords
         };
     }
 
@@ -60,6 +65,7 @@ function VrDatagridDirectiveTemplateController($scope, TimeDimensionTypeEnum,BIC
 
             }
         }
+        $scope.topRecords = settings.TopRecords;
         for (var i = 0; i < settings.MeasureTypes.length; i++) {
             var measureType=settings.MeasureTypes[i];
             for (j = 0; j < $scope.Measures.length; j++) {

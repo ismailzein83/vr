@@ -17,9 +17,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         {
             DateTime startApplying= DateTime.Now;
             SupplierPriceListManager manager = new SupplierPriceListManager();
-            int supplierPriceListId;
-            manager.AddSupplierPriceList(SupplierAccountId.Get(context), out supplierPriceListId);
-            SupplierPriceListId.Set(context, supplierPriceListId);
+           // int supplierPriceListId;
+            //manager.AddSupplierPriceList(SupplierAccountId.Get(context), out supplierPriceListId);
+            //SupplierPriceListId.Set(context, supplierPriceListId);
             TimeSpan spent = DateTime.Now.Subtract(startApplying);
             context.WriteTrackingMessage(LogEntryType.Information, "Apply Supplier PriceList For DB done and Takes: {0}", spent);
         }

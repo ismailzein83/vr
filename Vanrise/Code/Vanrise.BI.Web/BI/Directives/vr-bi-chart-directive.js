@@ -103,15 +103,17 @@ app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEleme
             if (!ctrl.isAllowed)
                 return;
             ctrl.isGettingData = true;
+            console.log(ctrl);
             return BIVisualElementService.retrieveWidgetData(ctrl, settings,filter)
-
+          
                 .then(function (response) {
-                    if (ctrl.isDateTimeGroupedData) {
-                                BIUtilitiesService.fillDateTimeProperties(response, filter.timeDimensionType.value, filter.fromDate, filter.toDate, false);
-                                refreshChart(response);
-                            }
-                            else
-                                refreshPIEChart(response);
+                    if (settings.IsPieChart && settings.OperationType=="TopEntities")
+                        refreshPIEChart(response);
+                    else
+                    {
+                        BIUtilitiesService.fillDateTimeProperties(response, filter.timeDimensionType.value, filter.fromDate, filter.toDate, false);
+                        refreshChart(response);
+                    }              
                 }).finally(function () {
                     ctrl.isGettingData = false;
                 });
@@ -135,12 +137,16 @@ app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEleme
         }
 
         function refreshChart(response) {
+            console.log(response);
             var chartDefinition = {
                 type: settings.DefinitionType,
                 yAxisTitle: "Value"
             };
-            var xAxisDefinition = { titlePath: "dateTimeValue", groupNamePath: "dateTimeGroupValue" };
-
+            var xAxisDefinition;
+            switch (settings.OperationType) {
+                case "TopEntities": xAxisDefinition = { titlePath: "EntityName" }; break;
+                case "MeasuresGroupedByTime": xAxisDefinition = { titlePath: "dateTimeValue", groupNamePath: "dateTimeGroupValue" }; break;
+            }
             var seriesDefinitions = [];
             for (var i = 0; i < directiveSettings.MeasureTypes.length; i++) {
                 var measureType = directiveSettings.MeasureTypes[i];

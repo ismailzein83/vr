@@ -18,6 +18,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public List<Zone> Zones { get; set; }
         public DateTime? MinimumDate { get; set; }
         public int SupplierId { get; set; }
+        public List<Code> CodesToBeDeleted { get; set; }
     }
 
     #endregion
@@ -26,6 +27,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public InOutArgument<List<Zone>> Zones { get; set; }
         public InArgument<DateTime?> MinimumDate { get; set; }
         public InArgument<int> SupplierId { get; set; }
+
+        public OutArgument<List<Code>> CodesToBeDeleted { get; set; }
         protected override void DoWork(ProcessCodesInput inputArgument, AsyncActivityHandle handle)
         {
             DateTime startPreparing = DateTime.Now;
@@ -178,18 +181,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                                       }
                                   }
                               }
-                              //foreach (var obj in codesByCode)
-                              //{
-                              //    zone.Codes.Add(new Code
-                              //    {
-                              //        BeginEffectiveDate = obj.Value.BeginEffectiveDate,
-                              //        EndEffectiveDate = code.EED,
-                              //        Status = TOne.WhS.SupplierPriceList.Entities.Status.Updated,
-                              //        CodeValue = matchedCode.CodeValue,
-                              //        ZoneId = matchedCode.ZoneId,
-                              //        SupplierCodeId = matchedCode.SupplierCodeId
-                              //    });
-                              //}
+
                           }
                           
 
@@ -200,8 +192,16 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 }
 
             }
-            
-            
+            List<Code> codesToBeDeleted=new List<Code>();
+            foreach (var obj in codesByCode)
+            {
+                foreach (Code code in obj.Value)
+                {
+                    code.EndEffectiveDate = inputArgument.MinimumDate;
+                    codesToBeDeleted.Add(code);
+                }
+                    
+            }
             TimeSpan spent = DateTime.Now.Subtract(startPreparing);
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "ProcessCodes done and takes:{0}", spent);
         }
@@ -213,6 +213,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 Zones = this.Zones.Get(context),
                 MinimumDate = this.MinimumDate.Get(context),
                 SupplierId = this.SupplierId.Get(context),
+                CodesToBeDeleted = this.CodesToBeDeleted.Get(context),
             };
         }
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, Vanrise.BusinessProcess.AsyncActivityHandle handle)

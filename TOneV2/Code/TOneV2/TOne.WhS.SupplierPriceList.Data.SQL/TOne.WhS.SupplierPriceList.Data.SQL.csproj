@@ -53,8 +53,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImportPriceListDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupplierCodeDataManager.cs" />
+    <Compile Include="SupplierPriceListDataManager.cs" />
     <Compile Include="SupplierRateDataManager.cs" />
     <Compile Include="SupplierZoneDataManager.cs" />
   </ItemGroup>
@@ -62,6 +64,10 @@
     <ProjectReference Include="..\TOne.Data.SQL\TOne.Data.SQL.csproj">
       <Project>{f0bcbe72-f000-46ae-85a4-79155751c767}</Project>
       <Name>TOne.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
+      <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
+      <Name>TOne.WhS.BusinessEntity.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.SupplierPriceList.Data\TOne.WhS.SupplierPriceList.Data.csproj">
       <Project>{81edf44d-73a3-4abf-8085-f9a69917b986}</Project>
