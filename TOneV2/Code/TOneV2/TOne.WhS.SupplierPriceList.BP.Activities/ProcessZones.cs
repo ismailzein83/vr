@@ -34,34 +34,30 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             foreach (var zone in priceListByZone)
             {
-                SupplierZone supplierZone=null;
+                Zone addZone = new Zone
+                {
+                    SupplierId = supplierId,
+                    NewRate = zone.Value.Rate,
+                    NewCodes = zone.Value.Codes,
+                };
+                SupplierZone supplierZone;
                 if (existingZonesDictionary.TryGetValue(zone.Key, out supplierZone))
                 {
-                    zones.Add(new Zone
-                    {
-                        SupplierId = supplierId,
-                        Status = Status.NotChanged,
-                        Name = supplierZone.Name,
-                        SupplierZoneId = supplierZone.SupplierZoneId,
-                        BeginEffectiveDate = supplierZone.BeginEffectiveDate,
-                        EndEffectiveDate = supplierZone.EndEffectiveDate,
-                        NewRate = zone.Value.Rate,
-                        NewCodes=zone.Value.Codes
-                    });
+                        addZone.Status = Status.NotChanged;
+                        addZone.Name = supplierZone.Name;
+                        addZone.SupplierZoneId = supplierZone.SupplierZoneId;
+                        addZone.BeginEffectiveDate = supplierZone.BeginEffectiveDate;
+                        addZone.EndEffectiveDate = supplierZone.EndEffectiveDate;
                 }
                 else
                 {
-                    zones.Add(new Zone
-                    {
-                        SupplierId = supplierId,
-                        Status = Status.New,
-                        Name = zone.Key,
-                        BeginEffectiveDate = zone.Value.BED,
-                        EndEffectiveDate = zone.Value.EED,
-                        NewRate = zone.Value.Rate,
-                        NewCodes = zone.Value.Codes
-                    });
+                    addZone.Status = Status.New;
+                    addZone.Name = zone.Key;
+                    addZone.BeginEffectiveDate = zone.Value.BED;
+                    addZone.EndEffectiveDate = zone.Value.EED;
                 }
+                zones.Add(addZone);
+
             }
             int lastTakenId = manager.ReserveIDRange(zones.Where(x=>x.Status==Status.New).Count());
 

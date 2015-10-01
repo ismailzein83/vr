@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.SupplierPriceList.Business;
 using Vanrise.BusinessProcess;
 using Vanrise.Common;
 
@@ -31,7 +31,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             DateTime startApplying = DateTime.Now;
             SupplierCodeManager manager = new SupplierCodeManager();
             manager.UpdateSupplierCodes(inputArgument.OldSupplierZones, inputArgument.EffectiveDate);
-            manager.InsertSupplierCodes(inputArgument.SupplierCodes);
+         //   manager.InsertSupplierCodes(inputArgument.SupplierCodes);
             TimeSpan spent = DateTime.Now.Subtract(startApplying);
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Apply Supplier Codes  done and takes:{0}", spent);
         }

@@ -10,18 +10,7 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SupplierCodeManager
     {
-        public void InsertSupplierCodes(List<SupplierCode> supplierCodes)
-        {
-            ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
-            dataManager.InsertSupplierCodes(supplierCodes);
-        }
-        public bool UpdateSupplierCodes(List<long> supplierZoneIds, DateTime effectiveDate)
-        {
-            ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
-            return dataManager.UpdateSupplierCodes(supplierZoneIds, effectiveDate);
-        }
-
-        public List<SupplierCode> GetSupplierCodes(DateTime minimumDate)
+        public List<SupplierCode> GetSupplierCodes(int supplierId,DateTime minimumDate)
         {
             ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
             return dataManager.GetSupplierCodes(minimumDate);

@@ -27,9 +27,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
        protected override void DoWork(ApplySupplierRateInput inputArgument, AsyncActivityHandle handle)
        {
            DateTime startApplying = DateTime.Now;
-           SupplierRateManager manager = new SupplierRateManager();
-           manager.UpdateSupplierRates(inputArgument.OldSupplierZones, inputArgument.EffectiveDate);
-           manager.InsertSupplierRates(inputArgument.SupplierRates);
+        //   SupplierRateManager manager = new SupplierRateManager();
+         //  manager.UpdateSupplierRates(inputArgument.OldSupplierZones, inputArgument.EffectiveDate);
+         //  manager.InsertSupplierRates(inputArgument.SupplierRates);
            TimeSpan spent = DateTime.Now.Subtract(startApplying);
            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Apply Supplier Rates  done and takes:{0}", spent);
        }

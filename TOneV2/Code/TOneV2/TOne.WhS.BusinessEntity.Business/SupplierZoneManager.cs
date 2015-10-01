@@ -10,21 +10,13 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SupplierZoneManager
     {
-        public void InsertSupplierZones(List<SupplierZone> supplierZones)
-        {
-            ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
-            dataManager.InsertSupplierZones(supplierZones);
-        }
+       
         public List<SupplierZone> GetSupplierZones(int supplierId, DateTime effectiveDate)
         {
             ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
             return dataManager.GetSupplierZones(supplierId, effectiveDate);
         }
-        public bool UpdateSupplierZones(int supplierId, DateTime effectiveDate)
-        {
-            ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
-            return dataManager.UpdateSupplierZones(supplierId, effectiveDate);
-        }
+      
         public int ReserveIDRange(int numberOfIDs)
         {
             ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();

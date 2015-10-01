@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.BusinessProcess;
+using TOne.WhS.SupplierPriceList.Business;
+using TOne.WhS.BusinessEntity.Business;
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
     public class ApplySupplierZonesForDB:CodeActivity
@@ -19,16 +20,16 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             DateTime startApplying = DateTime.Now;
-            SupplierZoneManager manager = new SupplierZoneManager();
-            List<SupplierZone> oldSuplierZones = manager.GetSupplierZones(SupplierId.Get(context), EffectiveDate.Get(context));
+          ///  SupplierZoneManager manager = new SupplierZoneManager();
+           // List<SupplierZone> oldSuplierZones = manager.GetSupplierZones(SupplierId.Get(context), EffectiveDate.Get(context));
             List<long> oldSuplierZonesIds = new List<long>();
-            foreach (SupplierZone supplierZone in oldSuplierZones)
-                oldSuplierZonesIds.Add(supplierZone.SupplierZoneId);
+         //   foreach (SupplierZone supplierZone in oldSuplierZones)
+           //     oldSuplierZonesIds.Add(supplierZone.SupplierZoneId);
 
-            manager.UpdateSupplierZones(SupplierId.Get(context), EffectiveDate.Get(context));
-            manager.InsertSupplierZones(SupplierZones.Get(context));
-            List<SupplierZone> suplierZones = manager.GetSupplierZones(SupplierId.Get(context), EffectiveDate.Get(context));
-            SupplierZones.Set(context, suplierZones);
+          //  manager.UpdateSupplierZones(SupplierId.Get(context), EffectiveDate.Get(context));
+           // manager.InsertSupplierZones(SupplierZones.Get(context));
+          //  List<SupplierZone> suplierZones = manager.GetSupplierZones(SupplierId.Get(context), EffectiveDate.Get(context));
+         //   SupplierZones.Set(context, suplierZones);
             OldSupplierZones.Set(context, oldSuplierZonesIds);
             
             TimeSpan spent = DateTime.Now.Subtract(startApplying);

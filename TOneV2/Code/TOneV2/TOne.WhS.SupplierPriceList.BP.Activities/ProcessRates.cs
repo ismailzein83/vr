@@ -17,6 +17,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
     {
         public List<Zone> Zones { get; set; }
         public DateTime? MinimumDate { get; set; }
+        public int SupplierId { get; set; }
     }
 
     #endregion
@@ -24,11 +25,12 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
     {
        public InOutArgument<List<Zone>> Zones { get; set; }
        public InArgument<DateTime?> MinimumDate { get; set; }
+       public InArgument<int> SupplierId { get; set; }
        protected override void DoWork(ProcessRatesInput inputArgument, AsyncActivityHandle handle)
        {
            DateTime startPreparing = DateTime.Now;
            SupplierRateManager manager = new SupplierRateManager();
-           List<SupplierRate> existingRates = manager.GetSupplierRates((DateTime)inputArgument.MinimumDate);
+           List<SupplierRate> existingRates = manager.GetSupplierRates(inputArgument.SupplierId,(DateTime)inputArgument.MinimumDate);
            RatesByZone ratesByZone = new RatesByZone();
            //convert existingrates to dictionary
            foreach (SupplierRate rate in existingRates)
@@ -75,92 +77,74 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                }
                else if (zone.Status == TOne.WhS.SupplierPriceList.Entities.Status.NotChanged)
                {
-                     List<Rate> matchedRates=null;
+                     List<Rate> matchedRates;
                      ratesByZone.TryGetValue(zone.SupplierZoneId,out matchedRates);
-
                      foreach (Rate matchedRate in matchedRates)
                         {
+                            Rate rate = new Rate
+                            {
+                                ZoneId = matchedRate.ZoneId,
+                                SupplierRateId = matchedRate.SupplierRateId,
+                                PriceListId = matchedRate.PriceListId
+                            };
+
                             if (zone.NewRate.Rate == matchedRate.NormalRate && zone.BeginEffectiveDate == matchedRate.BeginEffectiveDate && zone.EndEffectiveDate == matchedRate.EndEffectiveDate)
                             {
-                                zone.Rates.Add(new Rate{
-                                    ZoneId=matchedRate.ZoneId,
-                                    SupplierRateId=matchedRate.SupplierRateId,
-                                    Status=TOne.WhS.SupplierPriceList.Entities.Status.NotChanged,
-                                    NormalRate=matchedRate.NormalRate,
-                                    BeginEffectiveDate=matchedRate.BeginEffectiveDate,
-                                    EndEffectiveDate=matchedRate.EndEffectiveDate,
-                                    Parent=zone,
-                                    PriceListId=matchedRate.PriceListId
-                                });
+                                rate.Status = TOne.WhS.SupplierPriceList.Entities.Status.NotChanged;
+                                rate.NormalRate = matchedRate.NormalRate;
+                                rate.BeginEffectiveDate = matchedRate.BeginEffectiveDate;
+                                rate.EndEffectiveDate = matchedRate.EndEffectiveDate;
+                                zone.Rates.Add(rate);
                             }
                             else if (zone.NewRate.Rate == matchedRate.NormalRate)
                              {
+                                 
+
                                  if (matchedRate.BeginEffectiveDate == zone.BeginEffectiveDate && (matchedRate.EndEffectiveDate < zone.EndEffectiveDate || matchedRate.EndEffectiveDate > zone.EndEffectiveDate || matchedRate.EndEffectiveDate==null))
                                     {
-                                         zone.Rates.Add(new Rate
-                                         {
-                                             ZoneId = matchedRate.ZoneId,
-                                             SupplierRateId = matchedRate.SupplierRateId,
-                                             Status = TOne.WhS.SupplierPriceList.Entities.Status.Updated,
-                                             NormalRate = matchedRate.NormalRate,
-                                             BeginEffectiveDate = matchedRate.BeginEffectiveDate,
-                                             EndEffectiveDate = zone.EndEffectiveDate,
-                                             Parent = zone,
-                                             PriceListId = matchedRate.PriceListId
-                                         });
+                                        rate.Status = TOne.WhS.SupplierPriceList.Entities.Status.Updated;
+                                        rate.NormalRate = matchedRate.NormalRate;
+                                        rate.BeginEffectiveDate = matchedRate.BeginEffectiveDate;
+                                        rate.EndEffectiveDate = zone.EndEffectiveDate;
+                                        zone.Rates.Add(rate);
                                     }
                                  else if (matchedRate.BeginEffectiveDate < zone.BeginEffectiveDate)
                                  {
                                      if (matchedRate.EndEffectiveDate < zone.BeginEffectiveDate)
                                      {
-                                         zone.Rates.Add(new Rate
-                                         {
-                                             ZoneId = matchedRate.ZoneId,
-                                             Status = TOne.WhS.SupplierPriceList.Entities.Status.New,
-                                             NormalRate = zone.NewRate.Rate,
-                                             BeginEffectiveDate = zone.BeginEffectiveDate,
-                                             EndEffectiveDate = zone.EndEffectiveDate,
-                                             Parent = zone,
-                                             PriceListId = matchedRate.PriceListId
-                                         });
+                                         rate.Status = TOne.WhS.SupplierPriceList.Entities.Status.New;
+                                         rate.NormalRate = zone.NewRate.Rate;
+                                         rate.BeginEffectiveDate = zone.BeginEffectiveDate;
+                                         rate.EndEffectiveDate = zone.EndEffectiveDate;
+                                         zone.Rates.Add(rate);
                                      }
                                      else if (matchedRate.EndEffectiveDate > zone.BeginEffectiveDate && matchedRate.EndEffectiveDate < zone.EndEffectiveDate)
                                      {
-                                         zone.Rates.Add(new Rate
+                                         rate.Status = TOne.WhS.SupplierPriceList.Entities.Status.Updated;
+                                         rate.NormalRate = matchedRate.NormalRate;
+                                         rate.BeginEffectiveDate = matchedRate.BeginEffectiveDate;
+                                         rate.EndEffectiveDate = zone.EndEffectiveDate;
+                                         zone.Rates.Add(rate);
+
+                                         Rate newRate = new Rate
                                          {
                                              ZoneId = matchedRate.ZoneId,
                                              SupplierRateId = matchedRate.SupplierRateId,
-                                             Status = TOne.WhS.SupplierPriceList.Entities.Status.Updated,
-                                             NormalRate = matchedRate.NormalRate,
-                                             BeginEffectiveDate = matchedRate.BeginEffectiveDate,
-                                             EndEffectiveDate = zone.BeginEffectiveDate,
-                                             Parent = zone,
-                                             PriceListId = matchedRate.PriceListId
-                                         });
-                                         zone.Rates.Add(new Rate
-                                         {
-                                             ZoneId = matchedRate.ZoneId,
+                                             PriceListId = matchedRate.PriceListId,
                                              Status = TOne.WhS.SupplierPriceList.Entities.Status.New,
                                              NormalRate = matchedRate.NormalRate,
                                              BeginEffectiveDate = zone.BeginEffectiveDate,
                                              EndEffectiveDate = zone.EndEffectiveDate,
-                                             Parent = zone,
-                                             PriceListId = matchedRate.PriceListId
-                                         });
+                                         };
+                                         zone.Rates.Add(rate);
                                      }
                                      else if (matchedRate.EndEffectiveDate > zone.EndEffectiveDate || matchedRate.EndEffectiveDate==null)
                                      {
-                                         zone.Rates.Add(new Rate
-                                         {
-                                             ZoneId = matchedRate.ZoneId,
-                                             SupplierRateId = matchedRate.SupplierRateId,
-                                             Status = TOne.WhS.SupplierPriceList.Entities.Status.Updated,
-                                             NormalRate = matchedRate.NormalRate,
-                                             BeginEffectiveDate = matchedRate.BeginEffectiveDate,
-                                             EndEffectiveDate = zone.EndEffectiveDate,
-                                             Parent = zone,
-                                             PriceListId = matchedRate.PriceListId
-                                         });
+                                         rate.Status = TOne.WhS.SupplierPriceList.Entities.Status.Updated;
+                                         rate.NormalRate = matchedRate.NormalRate;
+                                         rate.BeginEffectiveDate = matchedRate.BeginEffectiveDate;
+                                         rate.EndEffectiveDate = zone.EndEffectiveDate;
+                                         zone.Rates.Add(rate);
                                      }
                                  }
                               }
@@ -192,6 +176,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
            return new ProcessRatesInput
            {
                Zones = this.Zones.Get(context),
+               SupplierId = this.SupplierId.Get(context),
                MinimumDate = this.MinimumDate.Get(context)
            };
        }

@@ -9,8 +9,6 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ISupplierCodeDataManager:IDataManager
     {
-        void InsertSupplierCodes(List<SupplierCode> supplierCodes);
-        bool UpdateSupplierCodes(List<long> supplierZoneIds, DateTime effectiveDate);
         List<SupplierCode> GetSupplierCodes(DateTime minimumDate);
     }
 }

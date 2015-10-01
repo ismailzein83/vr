@@ -17,6 +17,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
     {
         public List<Zone> Zones { get; set; }
         public DateTime? MinimumDate { get; set; }
+        public int SupplierId { get; set; }
     }
 
     #endregion
@@ -24,13 +25,13 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
     {
         public InOutArgument<List<Zone>> Zones { get; set; }
         public InArgument<DateTime?> MinimumDate { get; set; }
-
+        public InArgument<int> SupplierId { get; set; }
         protected override void DoWork(ProcessCodesInput inputArgument, AsyncActivityHandle handle)
         {
             DateTime startPreparing = DateTime.Now;
 
             SupplierCodeManager manager = new SupplierCodeManager();
-            List<SupplierCode> existingCodes = manager.GetSupplierCodes((DateTime)inputArgument.MinimumDate);
+            List<SupplierCode> existingCodes = manager.GetSupplierCodes(inputArgument.SupplierId, (DateTime)inputArgument.MinimumDate);
 
             CodesByCode codesByCode = new CodesByCode();
             foreach (SupplierCode code in existingCodes)
@@ -100,6 +101,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                           {
                               foreach (Code matchedCode in matchedCodes)
                               {
+                                  codesByCode.Remove(code.Code);
                                   if (matchedCode.ZoneId == zone.SupplierZoneId && matchedCode.BeginEffectiveDate == code.BED && matchedCode.EndEffectiveDate == code.EED)
                                   {
                                       zone.Codes.Add(new Code
@@ -111,9 +113,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                                           ZoneId = matchedCode.ZoneId,
                                           SupplierCodeId = matchedCode.SupplierCodeId
                                       });
+                                      codesByCode.Remove(code.Code);
 
                                   }else if (matchedCode.ZoneId == zone.SupplierZoneId)
                                   {
+                                      
                                       if (matchedCode.BeginEffectiveDate == code.BED && (matchedCode.EndEffectiveDate < code.EED || matchedCode.EndEffectiveDate > code.EED || code.EED == null))
                                       {
                                           zone.Codes.Add(new Code
@@ -174,6 +178,18 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                                       }
                                   }
                               }
+                              //foreach (var obj in codesByCode)
+                              //{
+                              //    zone.Codes.Add(new Code
+                              //    {
+                              //        BeginEffectiveDate = obj.Value.BeginEffectiveDate,
+                              //        EndEffectiveDate = code.EED,
+                              //        Status = TOne.WhS.SupplierPriceList.Entities.Status.Updated,
+                              //        CodeValue = matchedCode.CodeValue,
+                              //        ZoneId = matchedCode.ZoneId,
+                              //        SupplierCodeId = matchedCode.SupplierCodeId
+                              //    });
+                              //}
                           }
                           
 
@@ -184,7 +200,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 }
 
             }
-
+            
+            
             TimeSpan spent = DateTime.Now.Subtract(startPreparing);
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "ProcessCodes done and takes:{0}", spent);
         }
@@ -194,7 +211,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             return new ProcessCodesInput
             {
                 Zones = this.Zones.Get(context),
-                MinimumDate = this.MinimumDate.Get(context)
+                MinimumDate = this.MinimumDate.Get(context),
+                SupplierId = this.SupplierId.Get(context),
             };
         }
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, Vanrise.BusinessProcess.AsyncActivityHandle handle)
