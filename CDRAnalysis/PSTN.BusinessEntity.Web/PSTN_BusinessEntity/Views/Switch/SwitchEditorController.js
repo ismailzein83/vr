@@ -78,7 +78,7 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
                 };
             };
 
-            VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/SwitchTypeEditor.html", null, settings);
+            VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Type/SwitchTypeEditor.html", null, settings);
         }
     }
 
