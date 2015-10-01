@@ -87,7 +87,6 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
         protected override void DoWork(UnifyRepeatedCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             DateTime? currentConnectDateTime = null;
-            CDR currentCDR = new CDR();
             Dictionary<CallPartie, List<RelatedCDR>> unifiedCDRs = new Dictionary<CallPartie, List<RelatedCDR>>();
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>

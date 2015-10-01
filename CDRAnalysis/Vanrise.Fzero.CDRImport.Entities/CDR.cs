@@ -36,7 +36,7 @@ namespace Vanrise.Fzero.CDRImport.Entities
         public int? ServiceType { get; set; }
         public string ServiceVASName { get; set; }
 
-        public int SwitchID { get; set; }
+        public int? SwitchID { get; set; }
 
     }
 }
