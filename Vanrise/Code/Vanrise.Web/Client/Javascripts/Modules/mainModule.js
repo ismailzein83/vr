@@ -27,14 +27,14 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
     //$animate.enabled(false, $('#sidebar-wrapper'));
     $animate.enabled(true, $('#collapsedmenu'));
 
-    $scope.toogled = false;
+    $scope.toogled = true;
     $scope.toggledpanel = function () {
 
         $scope.toogled = !$scope.toogled;
 
 
     }
-    $scope.pinned = false;
+    $scope.pinned = true;
     $scope.pinpanel = function () {
 
         $scope.pinned = !$scope.pinned;
