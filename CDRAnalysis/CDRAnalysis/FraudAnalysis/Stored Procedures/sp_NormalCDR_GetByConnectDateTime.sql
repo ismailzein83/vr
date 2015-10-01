@@ -13,7 +13,7 @@ BEGIN
 SELECT  cdrs.[Id] ,cdrs.[MSISDN] ,cdrs.[IMSI] ,cdrs.[ConnectDateTime] ,cdrs.[Destination] ,
 		cdrs.[DurationInSeconds] ,cdrs.[DisconnectDateTime] ,cdrs.[Call_Class]  ,cdrs.[IsOnNet] ,
 		cdrs.[Call_Type] ,cdrs.[Sub_Type] ,cdrs.[IMEI]
-		,cdrs.[BTS_Id]  ,cdrs.[Cell_Id]  ,cdrs.[SwitchRecordId]  ,cdrs.[Up_Volume]  ,cdrs.[Down_Volume] ,
+		,cdrs.[BTS_Id]  ,cdrs.[Cell_Id]  ,cdrs.[SwitchId]  ,cdrs.[Up_Volume]  ,cdrs.[Down_Volume] ,
 		cdrs.[Cell_Latitude]  ,cdrs.[Cell_Longitude]  ,cdrs.[In_Trunk]  ,cdrs.[Out_Trunk]  ,cdrs.[Service_Type]  ,cdrs.[Service_VAS_Name] 
                                                 
 FROM	NormalCDR cdrs with(nolock,index=IX_NormalCDR_MSISDN)
