@@ -13,7 +13,7 @@
     [IMEI]               VARCHAR (20)    NULL,
     [BTS_Id]             INT             NULL,
     [Cell_Id]            VARCHAR (20)    NULL,
-    [SwitchRecordId]     INT             NULL,
+    [SwitchId]           INT             NULL,
     [Up_Volume]          DECIMAL (18, 2) NULL,
     [Down_Volume]        DECIMAL (18, 2) NULL,
     [Cell_Latitude]      DECIMAL (18, 8) NULL,
@@ -23,6 +23,8 @@
     [Service_Type]       INT             NULL,
     [Service_VAS_Name]   VARCHAR (50)    NULL
 );
+
+
 
 
 
