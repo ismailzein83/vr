@@ -107,9 +107,6 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="TOne.Entities">
-      <HintPath>..\TOne.Entities\bin\Debug\TOne.Entities.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
@@ -138,6 +135,10 @@
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">
+      <Project>{60da66bd-017d-43a2-82dc-ed7db8751d23}</Project>
+      <Name>TOne.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
       <Project>{5635598e-8526-4bb4-9d1b-87a6b3b1ce72}</Project>
       <Name>TOne.WhS.BusinessEntity.Business</Name>
@@ -150,6 +151,7 @@
   <ItemGroup>
     <Content Include="WhS_BusinessEntity\Constant\ModuleConfig.js" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-carrieraccount-directive.js" />
+    <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-selectivesalezones-directive.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CarrierAccountAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\RouteRuleAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\RoutingProductAPIService.js" />
