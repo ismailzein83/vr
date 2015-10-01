@@ -26,14 +26,14 @@ namespace PSTN.BusinessEntity.Data.SQL
 
                 ExecuteNonQuerySP("PSTN_BE.sp_Switch_CreateTempByFiltered", tempTableName, input.Query.Name, typeIDs, input.Query.AreaCode);
 
-            }, (reader) => SwitchMapper(reader), _mapper);
+            }, (reader) => SwitchDetailMapper(reader), _mapper);
         }
         
         public SwitchDetail GetSwitchByID(int switchID) {
-            return GetItemSP("PSTN_BE.sp_Switch_GetByID", SwitchMapper, switchID);
+            return GetItemSP("PSTN_BE.sp_Switch_GetByID", SwitchDetailMapper, switchID);
         }
 
-        public SwitchDetail GetSwitchByDataSourceID(int DataSourceID)
+        public Switch GetSwitchByDataSourceID(int DataSourceID)
         {
             return GetItemSP("PSTN_BE.sp_Switch_GetByDataSourceID", SwitchMapper, DataSourceID);
         }
@@ -72,7 +72,22 @@ namespace PSTN.BusinessEntity.Data.SQL
 
         #region Mappers
 
-        SwitchDetail SwitchMapper(IDataReader reader)
+        Switch SwitchMapper(IDataReader reader)
+        {
+            Switch switchObject = new Switch();
+
+            switchObject.ID = (int)reader["ID"];
+            switchObject.Name = reader["Name"] as string;
+            switchObject.TypeID = (int)reader["TypeID"];
+            switchObject.AreaCode = reader["AreaCode"] as string;
+            switchObject.TimeOffset = TimeSpan.Parse(reader["TimeOffset"] as string);
+            switchObject.DataSourceID = GetReaderValue<int?>(reader, "DataSourceID");
+
+            return switchObject;
+        }
+
+
+        SwitchDetail SwitchDetailMapper(IDataReader reader)
         {
             SwitchDetail switchObject = new SwitchDetail();
 

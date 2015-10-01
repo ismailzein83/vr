@@ -12,7 +12,7 @@ namespace Vanrise.Fzero.CDRImport.Entities
 
         public string CGPN { get; set; }
         public string CDPN { get; set; }
-        public int SwitchID { get; set; }
+        public int? SwitchID { get; set; }
         public string InTrunkSymbol { get; set; }
         public string OutTrunkSymbol { get; set; }
         public decimal? DurationInSeconds { get; set; }

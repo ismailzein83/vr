@@ -13,7 +13,7 @@ namespace PSTN.BusinessEntity.Data
 
         List<SwitchInfo> GetSwitchesToLinkTo(int switchID);
 
-        SwitchDetail GetSwitchByDataSourceID(int dataSourceID);
+        Switch GetSwitchByDataSourceID(int dataSourceID);
 
         bool UpdateSwitch(Switch switchObject);
 
