@@ -17,13 +17,15 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 
         }
 
-        public void InsertPriceListObject(List<Zone> supplierZones,List<Code> codesToBeDeleted)
+        public void InsertPriceListObject(List<Zone> supplierZones,List<Code> codesToBeDeleted,int supplierId,int priceListId)
         {
-           
+            GenerateTempTablesName(supplierId);
+
             CreateTempTableForSupplierZones(tempZoneTable);
             CreateTempTableForSupplierCodes(tempCodeTable);
             CreateTempTableForSupplierRates(tempRateTable);
 
+       
 
             object dbApplyStreamZones = InitialiazeZonesStreamForDBApply();
             object dbApplyStreamCodes = InitialiazeCodesStreamForDBApply();
@@ -37,6 +39,8 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                 }
                 foreach (Rate rate in zone.Rates)
                 {
+                     if (rate.Status == Status.New)
+                        rate.PriceListId = priceListId;
                     WriteRecordToRatesStream(rate, dbApplyStreamRates);
                 }
             }
@@ -70,6 +74,8 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 	                             [BED] [datetime] NOT NULL,
 	                             [EED] [datetime] NULL,
                                  [IsUpdated] [Bit] Null)
+                                ALTER TABLE #TempTable#
+                                ADD PRIMARY KEY (ID)
                              END ");
             queryBuilder.Replace("#TempTable#", tempTable);
             ExecuteNonQueryText(queryBuilder.ToString(), (cmd) =>
@@ -91,6 +97,8 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 	                             [BED] [datetime] NOT NULL,
 	                             [EED] [datetime] NULL,
                                  [IsUpdated] [Bit] Null)
+                                 ALTER TABLE #TempTable#
+                                 ADD PRIMARY KEY (ID)
                                 END
                                 ");
             queryBuilder.Replace("#TempTable#", tempTable);
@@ -106,13 +114,16 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                             IF NOT OBJECT_ID('#TempTable#', N'U') IS NOT NULL
 	                            BEGIN
                                      CREATE TABLE #TempTable# ( 
-                        	        [ID] [bigint] IDENTITY(1,1) NOT NULL,
-	                                [PriceListID] [int] NOT NULL,
-	                                [ZoneID] [bigint] NOT NULL,
-	                                [Rate] [decimal](9, 5) NOT NULL,
-	                                [BED] [datetime] NOT NULL,
-	                                [EED] [datetime] NULL,
-                                    [IsUpdated] [Bit] Null)
+                        	           [ID] [bigint] IDENTITY(1,1) NOT NULL,
+	                                   [PriceListID] [int] NOT NULL,
+	                                   [ZoneID] [bigint] NOT NULL,
+	                                   [Rate] [decimal](9, 5) NOT NULL,
+	                                   [BED] [datetime] NOT NULL,
+	                                   [EED] [datetime] NULL,
+                                       [IsUpdated] [Bit] Null)
+                                    ALTER TABLE #TempTable#
+                                    ADD PRIMARY KEY (ID)
+
                                 END
                              
                                 ");
@@ -243,20 +254,20 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 
         public void MergingDataAndFinalizing()
         {
-            ExecuteNonQueryText(BuildApplyZonesQuery(tempZoneTable), (cmd) =>
-            {
-            });
-            ExecuteNonQueryText(BuildApplyCodesQuery(tempCodeTable), (cmd) =>
-            {
-            });
-            ExecuteNonQueryText(BuildApplyRatesQuery(tempRateTable), (cmd) =>
-            {
-            });
+            ExecuteNonQueryText(BuildApplyZonesQuery(tempZoneTable),null);
+            ExecuteNonQueryText(BuildApplyCodesQuery(tempCodeTable),null);
+            ExecuteNonQueryText(BuildApplyRatesQuery(tempRateTable),null);
 
         }
 
-        const string tempZoneTable = "[dbo].[TempTableForSupplierZones_TOneWhS]";
-        const string tempCodeTable = "[dbo].[TempTableForSupplierCodes_TOneWhS]";
-        const string tempRateTable = "[dbo].[TempTableForSupplierRates_TOneWhS]";
+        private void GenerateTempTablesName(int supplierID)
+        {
+            this.tempZoneTable= String.Format("[dbo].[TempTableForSupplierZones_{0}_{1}]", supplierID, Guid.NewGuid());
+            this.tempCodeTable = String.Format("[dbo].[TempTableForSupplierZones_{0}_{1}]", supplierID, Guid.NewGuid());
+            this.tempRateTable = String.Format("[dbo].[TempTableForSupplierZones_{0}_{1}]", supplierID, Guid.NewGuid());
+        }
+        private string tempZoneTable;
+        private string tempCodeTable;
+        private string tempRateTable;
     }
 }

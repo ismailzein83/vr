@@ -37,7 +37,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
                 DateTime? eEDDateFromExcel=null;
                 if (worksheet.Cells[count, 4].Value != null)
-                    Convert.ToDateTime(worksheet.Cells[count, 4].StringValue);
+                   eEDDateFromExcel= Convert.ToDateTime(worksheet.Cells[count, 4].StringValue);
                 if (minimumDate == null)
                     minimumDate = effectiveDate.HasValue ? effectiveDate : bEDDateFromExcel;
                 else if (!effectiveDate.HasValue && minimumDate > bEDDateFromExcel)

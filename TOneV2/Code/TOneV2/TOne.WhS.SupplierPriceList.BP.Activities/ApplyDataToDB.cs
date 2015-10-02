@@ -29,14 +29,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 context.WriteTrackingMessage(LogEntryType.Information, "Failed to insert supplier price list and takes:{0}", stop);
                 return;
             }
-            foreach (Zone zone in zones)
-            {
-                foreach (Rate rate in zone.Rates)
-                    if (rate.Status == Status.New)
-                        rate.PriceListId = priceListId;
-            }
+            
             ImportPriceListManager importPriceListManager = new ImportPriceListManager();
-            importPriceListManager.InsertPriceListObject(zones, CodesToBeDeleted.Get(context));
+            importPriceListManager.InsertPriceListObject(zones, CodesToBeDeleted.Get(context), SupplierId.Get(context), priceListId);
 
             TimeSpan spent = DateTime.Now.Subtract(startApplying);
             context.WriteTrackingMessage(LogEntryType.Information, "Apply Date To DB  done and takes:{0}", spent);

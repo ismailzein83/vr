@@ -65,7 +65,6 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         SupplierCodeId = code.SupplierCodeId,
 
                     });
-                    codesByCode.Add(code.Code, codes);
                 }
             }
 

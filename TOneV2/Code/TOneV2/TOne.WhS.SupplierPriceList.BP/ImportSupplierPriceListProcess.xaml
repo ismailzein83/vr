@@ -41,12 +41,12 @@
       <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.SupplierPriceList.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.SupplierPriceList.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.SupplierPriceList.Entities</AssemblyReference>
-      <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.SupplierPriceList.BP</AssemblyReference>
     </sco:Collection>
@@ -85,6 +85,11 @@
           <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveDate</mca:CSharpValue>
         </InArgument>
       </twsba1:ProcessZones.EffectiveDate>
+      <twsba1:ProcessZones.MinimumDate>
+        <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">MinimumDate</mca:CSharpValue>
+        </InArgument>
+      </twsba1:ProcessZones.MinimumDate>
       <twsba1:ProcessZones.PriceListByZone>
         <InArgument x:TypeArguments="twse:PriceListByZone">
           <mca:CSharpValue x:TypeArguments="twse:PriceListByZone">PriceListByZone</mca:CSharpValue>
@@ -145,7 +150,7 @@
         </twsba1:ProcessCodes.Zones>
       </twsba1:ProcessCodes>
     </Parallel>
-    <twsba1:ApplyDataToDB>
+    <twsba1:ApplyDataToDB CodesToBeDeleted="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyDataToDB_1">
       <twsba1:ApplyDataToDB.SupplierId>
         <InArgument x:TypeArguments="x:Int32">
           <mca:CSharpValue x:TypeArguments="x:Int32">Input.SupplierAccountId</mca:CSharpValue>
@@ -156,9 +161,8 @@
           <mca:CSharpValue x:TypeArguments="scg:List(twse:Zone)">Zones</mca:CSharpValue>
         </InArgument>
       </twsba1:ApplyDataToDB.Zones>
-      <sap2010:WorkflowViewState.IdRef>ApplyDataToDB_1</sap2010:WorkflowViewState.IdRef>
     </twsba1:ApplyDataToDB>
-    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0UHJvY2Vzcy54YW1sGDYDogEOAgEBPAVRIwIBT1IFZxsCATpoBZMBEAIBDZQBBaABHAIBAkkLSWoCAV8/Cz9qAgFaRAtEVAIBVU4LTmwCAVBfC19fAgFKVQtVagIBRVoLWmQCAUBkC2RhAgE7bAd8HQIBJ30HkgEdAgEOlwELlwFfAgEInAELnAFZAgEDdA10YQIBNG8Nb2QCAS55DXljAgEogAENgAFuAgEhigENigFhAgEbhQENhQFkAgEVjwENjwFjAgEP</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0UHJvY2Vzcy54YW1sGTYDpgEOAgEBPAVRIwIBVFIFbBsCATptBZgBEAIBDZkBBaQBHAIBAkkLSWoCAWQ/Cz9qAgFfRAtEVAIBWk4LTmwCAVVkC2RfAgFPWgtaYgIBSlULVWoCAUVfC19kAgFAaQtpYQIBO3EHgQEdAgEnggEHlwEdAgEOnAELnAFfAgEIoQELoQFZAgEDeQ15YQIBNHQNdGQCAS5+DX5jAgEohQENhQFuAgEhjwENjwFhAgEbigENigFkAgEVlAENlAFjAgEP</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

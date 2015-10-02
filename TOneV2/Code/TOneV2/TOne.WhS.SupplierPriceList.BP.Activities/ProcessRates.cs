@@ -58,7 +58,6 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                        ZoneId = rate.ZoneId,
                        PriceListId = rate.PriceListId
                    });
-                   ratesByZone.Add(rate.ZoneId, rates);
                }
            }
 

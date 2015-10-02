@@ -3,12 +3,12 @@ app.service('WhS_SupPL_SupplierPriceListAPIService', function (BaseAPIService) {
 
     return ({
 
-        UploadSaleZonesList: UploadSaleZonesList,
+        UploadSupplierPriceList: UploadSupplierPriceList,
     });
 
 
-    function UploadSaleZonesList(supplierAccountId, fileId, effectiveDate) {
-        return BaseAPIService.get("/api/SupplierPriceList/UploadSaleZonesList", {
+    function UploadSupplierPriceList(supplierAccountId, fileId, effectiveDate) {
+        return BaseAPIService.get("/api/SupplierPriceList/UploadSupplierPriceList", {
             supplierAccountId: supplierAccountId,
             fileId: fileId,
             effectiveDate: effectiveDate

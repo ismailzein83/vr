@@ -9,6 +9,6 @@ namespace TOne.WhS.SupplierPriceList.Data
 {
     public interface IImportPriceListDataManager:IDataManager
     {
-        void InsertPriceListObject(List<Zone> supplierZones, List<Code> codesToBeDeleted);
+        void InsertPriceListObject(List<Zone> supplierZones, List<Code> codesToBeDeleted,int supplierId,int priceListId);
     }
 }

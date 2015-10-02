@@ -10,10 +10,10 @@ namespace TOne.WhS.SupplierPriceList.Business
 {
    public class ImportPriceListManager
     {
-       public void InsertPriceListObject(List<Zone> supplierZones,List<Code> codesToBeDeleted)
+       public void InsertPriceListObject(List<Zone> supplierZones,List<Code> codesToBeDeleted, int supplierId, int priceListId)
        {
            IImportPriceListDataManager dataManager = SupPLDataManagerFactory.GetDataManager<IImportPriceListDataManager>();
-           dataManager.InsertPriceListObject(supplierZones, codesToBeDeleted);
+           dataManager.InsertPriceListObject(supplierZones, codesToBeDeleted, supplierId,priceListId);
        }
     }
 }

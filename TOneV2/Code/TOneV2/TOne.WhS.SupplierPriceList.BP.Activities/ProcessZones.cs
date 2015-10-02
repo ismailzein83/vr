@@ -17,6 +17,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public InArgument<DateTime?> EffectiveDate { get; set; }
         public InArgument<PriceListByZone> PriceListByZone { get; set; }
         public OutArgument<List<Zone>> Zones { get; set; }
+        public InArgument<DateTime?> MinimumDate { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
             DateTime startPreparing = DateTime.Now;
@@ -24,7 +25,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             DateTime? effectiveDate = EffectiveDate.Get(context);
             PriceListByZone priceListByZone = PriceListByZone.Get(context);
             SupplierZoneManager manager = new SupplierZoneManager();
-            List<SupplierZone> existingZones = manager.GetSupplierZones(supplierId, (DateTime)effectiveDate);
+            List<SupplierZone> existingZones = manager.GetSupplierZones(supplierId, (DateTime)MinimumDate.Get(context));
             Dictionary<string,SupplierZone> existingZonesDictionary=new Dictionary<string,SupplierZone>(); 
             foreach(SupplierZone supplierZone in existingZones)
                 if(!existingZonesDictionary.ContainsKey(supplierZone.Name))
