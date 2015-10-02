@@ -74,19 +74,21 @@ when not matched by source then
 	delete;
 set identity_insert [BI].[SchemaConfiguration] off;
 
---[sec].[Module]----
+--[sec].[Module]------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Administration',null,null,null,'/images/menu-icons/Administration.png',null,1),
-(2,'Fraud Analysis',null,null,null,'/images/menu-icons/other.png',null,1),
-(3,'Workflow Management',null,null,null,'/images/menu-icons/Business Entities.png',null,1),
-(4,'Data Sources',null,null,null,'/images/menu-icons/plug.png',null,1),
-(5,'Reports',null,null,null,'/images/menu-icons/busines intel.png',null,1),
-(6,'Business Intelligence','Business Intelligence','BI',null,'/images/menu-icons/busines intel.png',19,1),
-(7,'Dynamic Management','Dynamic Management','Dynamic Management',1,null,16,0)
+(1,'Administration','Administration','Administration',null,'/images/menu-icons/Administration.png',10,0),
+(2,'Fraud Analysis','Fraud Analysis','Fraud Analysis',null,'/images/menu-icons/other.png',11,0),
+(3,'Workflow','Workflow','Workflow',null,'/images/menu-icons/Business Entities.png',12,0),
+(4,'Data Sources','Data Sources','Data Sources',null,'/images/menu-icons/plug.png',13,0),
+(5,'Reports','Reports','Reports',null,'/images/menu-icons/busines intel.png',14,0),
+(6,'Business Intelligence','Business Intelligence','BI',null,'/images/menu-icons/busines intel.png',15,1),
+(7,'Dynamic Management','Dynamic Management','Dynamic Management',1,null,15,0),
+(8,'Infrastructure','Infrastructure','Infrastructure',1,null,14,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -102,30 +104,35 @@ when not matched by source then
 	delete;
 set identity_insert [sec].[Module] off;
 
---[sec].[View]----
+--[sec].[View]--------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(3,'Users','Users','#/view/Security/Views/UserManagement',1,'Root/Administration Module/Users:View',null,null,0,null),
-(4,'Groups','Groups','#/view/Security/Views/GroupManagement',1,'Root/Administration Module/Groups:View',null,null,0,null),
-(5,'System Entities','System Entities','#/view/Security/Views/BusinessEntityManagement',1,'Root/Administration Module/System Entities:View',null,null,0,null),
-(8,'Suspicious Numbers','Suspicious Numbers','#/view/FraudAnalysis/Views/SuspiciousAnalysis/SuspicionAnalysis',2,'Root/Suspicion Analysis Module:View',null,null,0,2),
-(11,'History','Business Process History','#/view/BusinessProcess/Views/BPHistory',3,'Root/Business Process Module/History:View',null,null,0,null),
-(13,'Scheduler Service','Scheduler Service','#/view/Runtime/Views/SchedulerTaskManagement',3,'Root/Business Process Module/Management:View',null,null,0,null),
-(17,'Management','Business Process Management','#/view/BusinessProcess/Views/BPDefinitionManagement',3,'Root/Business Process Module/Management:View',null,null,0,null),
-(18,'Dashboard','Dashboard','#/view/FraudAnalysis/Views/Output/Dashboard',5,'Root/Dashboard Module:View',null,null,0,3),
-(25,'Strategy Management','Strategy Management','#/view/FraudAnalysis/Views/Strategy/StrategyManagement',2,'Root/Strategy Module:View',null,null,0,1),
-(26,'Datasource Management','Datasource Management','#/view/Integration/Views/DataSourceManagement',4,'Root/Integration Module:View',null,null,0,null),
-(27,'Logs','Logs','#/view/Integration/Views/DataSourceLogManagement',4,'Root/Integration Module:View',null,null,0,null),
-(28,'Imported Batches','Imported Batches','#/view/Integration/Views/DataSourceImportedBatchManagement',4,'Root/Integration Module:View',null,null,0,null),
-(29,'Cases Productivity','Cases Productivity','#/view/FraudAnalysis/Views/Reports/CasesProductivity',5,'Root/Reporting Module:View',null,null,0,1),
-(30,'Blocked Lines','Blocked Lines','#/view/FraudAnalysis/Views/Reports/BlockedLines',5,'Root/Reporting Module:View',null,null,0,2),
-(31,'Lines Detected','Lines Detected','#/view/FraudAnalysis/Views/Reports/LinesDetected',5,'Root/Reporting Module:View',null,null,0,3),
-(34,'Cancel Cases','Cancel Cases','#/view/FraudAnalysis/Views/SuspiciousAnalysis/CancelCases',2,'Root/Suspicion Analysis Module:View',null,null,0,3),
-(40,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',7,'Root/Administration Module/Dynamic Pages:View',null,null,0,10),
-(41,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',7,'Root/Administration Module/Dynamic Pages:View',null,null,0,11)
+(1,'Users','Users','#/view/Security/Views/UserManagement',1,'Root/Administration Module/Users:View',null,null,0,10),
+(2,'Groups','Groups','#/view/Security/Views/GroupManagement',1,'Root/Administration Module/Groups:View',null,null,0,11),
+(3,'System Entities','System Entities','#/view/Security/Views/BusinessEntityManagement',1,'Root/Administration Module/System Entities:View',null,null,0,12),
+(4,'Suspicious Numbers','Suspicious Numbers','#/view/FraudAnalysis/Views/SuspiciousAnalysis/SuspicionAnalysis',2,'Root/Suspicion Analysis Module:View',null,null,0,11),
+(5,'History','Business Process History','#/view/BusinessProcess/Views/BPHistory',3,'Root/Business Process Module/History:View',null,null,0,12),
+(6,'Scheduler Service','Scheduler Service','#/view/Runtime/Views/SchedulerTaskManagement',3,'Root/Business Process Module/Management:View',null,null,0,10),
+(7,'Management','Business Process Management','#/view/BusinessProcess/Views/BPDefinitionManagement',3,'Root/Business Process Module/Management:View',null,null,0,11),
+(8,'Dashboard','Dashboard','#/view/FraudAnalysis/Views/Output/Dashboard',5,'Root/Dashboard Module:View',null,null,0,13),
+(9,'Strategies','Strategies','#/view/FraudAnalysis/Views/Strategy/StrategyManagement',2,'Root/Strategy Module:View',null,null,0,10),
+(10,'Datasources','Datasources','#/view/Integration/Views/DataSourceManagement',4,'Root/Integration Module:View',null,null,0,10),
+(11,'Logs','Logs','#/view/Integration/Views/DataSourceLogManagement',4,'Root/Integration Module:View',null,null,0,12),
+(12,'Imported Batches','Imported Batches','#/view/Integration/Views/DataSourceImportedBatchManagement',4,'Root/Integration Module:View',null,null,0,11),
+(13,'Cases Productivity','Cases Productivity','#/view/FraudAnalysis/Views/Reports/CasesProductivity',5,'Root/Reporting Module:View',null,null,0,12),
+(14,'Blocked Lines','Blocked Lines','#/view/FraudAnalysis/Views/Reports/BlockedLines',5,'Root/Reporting Module:View',null,null,0,10),
+(15,'Lines Detected','Lines Detected','#/view/FraudAnalysis/Views/Reports/LinesDetected',5,'Root/Reporting Module:View',null,null,0,11),
+(16,'Cancel Cases','Cancel Cases','#/view/FraudAnalysis/Views/SuspiciousAnalysis/CancelCases',2,'Root/Suspicion Analysis Module:View',null,null,0,12),
+(17,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',7,'Root/Administration Module/Dynamic Pages:View',null,null,0,10),
+(18,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',7,'Root/Administration Module/Dynamic Pages:View',null,null,0,11),
+(19,'Switches','Switches','#/view/PSTN_BusinessEntity/Views/Switch/SwitchManagement',8,'Root/PSTN_BusinessEntity Module:View',null,null,0,12),
+(20,'Trunks','Trunks','#/view/PSTN_BusinessEntity/Views/Trunk/SwitchTrunkManagement',8,'Root/PSTN_BusinessEntity Module:View',null,null,0,10),
+(21,'Switch Types','Switch Types','#/view/PSTN_BusinessEntity/Views/Type/SwitchTypeManagement',8,'Root/PSTN_BusinessEntity Module:View',null,null,0,11),
+(22,'Ranking Pages','Ranking Pages','#/view/Security/Views/Pages/RankingPageManagement',1,'Root/Administration Module:View',null,null,0,13)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -140,7 +147,6 @@ when not matched by target then
 when not matched by source then
 	delete;
 set identity_insert [sec].[View] off;
-
 
 --[sec].[BusinessEntityModule]-----
 set nocount on;
