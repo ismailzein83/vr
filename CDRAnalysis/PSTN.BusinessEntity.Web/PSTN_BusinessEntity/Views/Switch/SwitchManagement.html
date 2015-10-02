@@ -3,11 +3,11 @@
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
             <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-textbox label="Switch Name" value="name"></vr-textbox>
+                    <vr-textbox label="Name" value="name"></vr-textbox>
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-select label="Switch Type"
+                    <vr-select label="Type"
                                datasource="types"
                                selectedvalues="selectedTypes"
                                datavaluefield="ID"
@@ -43,13 +43,13 @@
                              menuactions="gridMenuActions"
                              idfield="ID">
 
-                    <vr-datagridcolumn headertext="'Switch Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Switch Type'" field="'TypeName'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Type'" field="'TypeName'" type="'Text'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Area Code'" field="'AreaCode'" type="'Text'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Time Offset'" field="'TimeOffset'" type="'Text'"></vr-datagridcolumn>
 
                     <vr-datagridexpandablerow>
-                        <div ng-include="'/Client/Modules/PSTN_BusinessEntity/Views/Grids/SwitchTrunkGrid.html'"></div>
+                        <!--<vr-pstn-be-trunkgrid switchid="{{dataItem.ID}}" pagingtype="Pager"></vr-pstn-be-trunkgrid>-->
                     </vr-datagridexpandablerow>
                 </vr-datagrid>
             </vr-columns>

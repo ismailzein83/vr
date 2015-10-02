@@ -2,12 +2,12 @@
 
 function SwitchTrunkManagementController($scope, SwitchAPIService, PSTN_BE_Service, SwitchTrunkTypeEnum, SwitchTrunkDirectionEnum, UtilsService, VRNotificationService, VRModalService) {
     
+    var trunkGridAPI;
+
     defineScope();
     load();
 
     function defineScope() {
-
-        $scope.switchTrunkGridConnector = {};
 
         // filter vars
         $scope.name = undefined;
@@ -26,30 +26,41 @@ function SwitchTrunkManagementController($scope, SwitchAPIService, PSTN_BE_Servi
 
         // filter functions
         $scope.searchClicked = function () {
-            return loadGrid();
+            if (trunkGridAPI != undefined) {
+                var query = getFilterObject();
+                trunkGridAPI.retrieveData(query);
+            }
         }
 
         $scope.addTrunk = function () {
 
             var onTrunkAdded = function (trunkObject) {
-                if ($scope.switchTrunkGridConnector.onTrunkAdded != undefined)
-                    $scope.switchTrunkGridConnector.onTrunkAdded(trunkObject);
+                if (trunkGridAPI != undefined)
+                    trunkGridAPI.onTrunkAdded(trunkObject);
             }
 
             PSTN_BE_Service.addSwitchTrunk(null, onTrunkAdded);
+        }
+
+        // directive functions
+        $scope.onTrunkGridReady = function (api) {
+            trunkGridAPI = api;
+            trunkGridAPI.retrieveData({});
         }
     }
 
     function load() {
 
-        loadFilters()
-            .then(function () {
-                setFiltersToDefaultValues();
-                loadGrid();
-            });
+        loadFilters().then(function () {
+            setFiltersToDefaultValues();
+
+            if (trunkGridAPI != undefined)
+                trunkGridAPI.retrieveData(getFilterObject());
+        });
     }
 
     function loadFilters() {
+
         $scope.isLoadingFilters = true;
 
         return SwitchAPIService.GetSwitches()
@@ -67,14 +78,7 @@ function SwitchTrunkManagementController($scope, SwitchAPIService, PSTN_BE_Servi
     }
 
     function setFiltersToDefaultValues() {
-    }
 
-    function loadGrid() {
-        $scope.switchTrunkGridConnector.query = getFilterObject();
-
-        if ($scope.switchTrunkGridConnector.loadTemplateData != undefined) {
-            return $scope.switchTrunkGridConnector.loadTemplateData();
-        }
     }
 
     function getFilterObject() {

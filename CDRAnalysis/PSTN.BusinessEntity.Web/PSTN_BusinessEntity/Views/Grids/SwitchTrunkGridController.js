@@ -2,7 +2,7 @@
 
 function SwitchTrunkGridController($scope, SwitchTrunkAPIService, PSTN_BE_Service, SwitchTrunkTypeEnum, SwitchTrunkDirectionEnum, UtilsService, VRNotificationService, VRModalService) {
 
-    var gridAPI = undefined;
+    var gridAPI;
 
     defineScope();
     load();
