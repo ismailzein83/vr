@@ -20,7 +20,7 @@ namespace Vanrise.Integration.Business
             return datamanager.GetDataSources();
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<Vanrise.Integration.Entities.DataSource> GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<object> input)
+        public Vanrise.Entities.IDataRetrievalResult<Vanrise.Integration.Entities.DataSource> GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<DataSourceQuery> input)
         {
             IDataSourceDataManager dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredDataSources(input));

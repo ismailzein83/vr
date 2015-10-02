@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.Data
 {
@@ -10,7 +11,7 @@ namespace Vanrise.Integration.Data
     {
         List<Vanrise.Integration.Entities.DataSource> GetDataSources();
 
-        Vanrise.Entities.BigResult<Vanrise.Integration.Entities.DataSource> GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<object> input);
+        Vanrise.Entities.BigResult<Vanrise.Integration.Entities.DataSource> GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<DataSourceQuery> input);
 
         Vanrise.Integration.Entities.DataSource GetDataSource(int dataSourceId);
 

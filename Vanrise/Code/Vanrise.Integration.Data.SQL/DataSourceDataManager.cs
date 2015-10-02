@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Data.SQL;
+using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.Data.SQL
 {
@@ -28,14 +29,16 @@ namespace Vanrise.Integration.Data.SQL
             return GetItemsSP("integration.sp_DataSource_GetAll", DataSourceMapper);
         }
 
-        public Vanrise.Entities.BigResult<Vanrise.Integration.Entities.DataSource> GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<object> input)
+        public Vanrise.Entities.BigResult<Vanrise.Integration.Entities.DataSource> GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<DataSourceQuery> input)
         {
-            Action<string> createTempTableAction = (tempTableName) =>
+            return RetrieveData(input, (tempTableName) =>
             {
-                ExecuteNonQuerySP("integration.sp_DataSource_CreateTemp", tempTableName);
-            };
+                string adapterTypeIDs = (input.Query.AdapterTypeIDs != null && input.Query.AdapterTypeIDs.Count() > 0) ?
+                    string.Join<int>(",", input.Query.AdapterTypeIDs) : null;
 
-            return RetrieveData(input, createTempTableAction, DataSourceMapper, _columnMapper);
+                ExecuteNonQuerySP("integration.sp_DataSource_CreateTemp", tempTableName, input.Query.Name, adapterTypeIDs, input.Query.IsEnabled);
+
+            }, (reader) => DataSourceMapper(reader), _columnMapper);
         }
 
         public Entities.DataSource GetDataSource(int dataSourceId)
@@ -91,16 +94,15 @@ namespace Vanrise.Integration.Data.SQL
                 DataSourceId = (int)reader["ID"],
                 Name = reader["Name"] as string,
                 AdapterTypeId = (int)reader["AdapterID"],
+                AdapterName = reader["AdapterName"] as string,
                 AdapterInfo = Common.Serializer.Deserialize<Vanrise.Integration.Entities.AdapterTypeInfo>(reader["Info"] as string),
                 AdapterState = reader["AdapterState"] != DBNull.Value ? Common.Serializer.Deserialize<Vanrise.Integration.Entities.BaseAdapterState>(reader["AdapterState"] as string): null,
                 TaskId = (int)reader["TaskId"],
+                IsEnabled = (bool)reader["IsEnabled"],
                 Settings = Common.Serializer.Deserialize<Vanrise.Integration.Entities.DataSourceSettings>(reader["Settings"] as string)
             };
 
             return dataSource;
         }
-
-
-
     }
 }

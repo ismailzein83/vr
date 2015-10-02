@@ -1,18 +1,48 @@
 ﻿<vr-panel ng-controller="Integration_DataSourceManagementController">
+    
     <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-textbox label="Name" value="name"></vr-textbox>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-select label="Type"
+                               datasource="adapterTypes"
+                               selectedvalues="selectedAdapterTypes"
+                               datavaluefield="AdapterTypeId"
+                               datatextfield="Name"
+                               entityname="Type"
+                               ismultipleselection>
+                    </vr-select>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-select label="Status"
+                               datasource="statuses"
+                               selectedvalues="selectedStatuses"
+                               datavaluefield="value"
+                               datatextfield="description"
+                               entityname="Status"
+                               ismultipleselection>
+                    </vr-select>
+                </vr-columns>
+            </vr-row>
+        </div>
         <vr-row removeline>
-            <div style="margin-top:30px">
-                <vr-actionbar showcollapsebutton="true">
-                    <div transclude-to="buttons">
-                        <vr-button type="Add" data-onclick="AddNewDataSource"></vr-button>
-                    </div>
-                </vr-actionbar>
-            </div>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked" isasynchronous="true"></vr-button>
+                    <vr-button type="Add" data-onclick="AddNewDataSource"></vr-button>
+                </div>
+            </vr-actionbar>
         </vr-row>
     </vr-form>
+    
     <div vr-loader="isGettingData">
         <vr-row>
-            <vr-columns colnum="12" simplecol>
+            <vr-columns colnum="12">
 
                 <vr-datagrid datasource="dataSources"
                              dataretrievalfunction="dataRetrievalFunction"
@@ -21,8 +51,11 @@
                              menuactions="gridMenuActions"
                              idfield="DataSourceId">
 
-                    <vr-datagridcolumn headertext="'Data Source Id'" field="'DataSourceId'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Data Source Name'" field="'Name'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Type'" field="'AdapterName'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Enabled'">
+                        <vr-icon icontype="dataItem.IsEnabled"></vr-icon>
+                    </vr-datagridcolumn>
                 </vr-datagrid>
 
             </vr-columns>

@@ -1,6 +1,6 @@
-﻿DataSourceManagementController.$inject = ['$scope', 'DataSourceAPIService', 'DataSourceService', 'VRModalService', 'VRNotificationService'];
+﻿DataSourceManagementController.$inject = ['$scope', 'DataSourceAPIService', 'DataSourceService', "UtilsService", 'VRModalService', 'VRNotificationService'];
 
-function DataSourceManagementController($scope, DataSourceAPIService, DataSourceService, VRModalService, VRNotificationService) {
+function DataSourceManagementController($scope, DataSourceAPIService, DataSourceService, UtilsService, VRModalService, VRNotificationService) {
     var gridApi;
 
     defineScope();
@@ -10,7 +10,21 @@ function DataSourceManagementController($scope, DataSourceAPIService, DataSource
         $scope.gridMenuActions = [];
         $scope.dataSources = [];
 
+        // filter vars
+        $scope.name = undefined;
+        $scope.adapterTypes = [];
+        $scope.selectedAdapterTypes = [];
+        $scope.statuses = [
+            { value: true, description: "Enabled" },
+            { value: false, description: "Disabled" }
+        ];
+        $scope.selectedStatuses = [];
+
         defineMenuActions();
+
+        $scope.searchClicked = function () {
+            return retrieveData();
+        }
 
         $scope.gridReady = function (api) {
             gridApi = api;
@@ -32,10 +46,27 @@ function DataSourceManagementController($scope, DataSourceAPIService, DataSource
     }
 
     function load() {
+        $scope.isLoadingFilters = true;
+
+        return DataSourceAPIService.GetDataSourceAdapterTypes()
+            .then(function (responseArray) {
+                angular.forEach(responseArray, function (item) {
+                    $scope.adapterTypes.push(item);
+                });
+            })
+            .catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            })
+            .finally(function () {
+                $scope.isLoadingFilters = false;
+            });
     }
 
     function retrieveData() {
         var query = {
+            Name: $scope.name,
+            AdapterTypeIDs: UtilsService.getPropValuesFromArray($scope.selectedAdapterTypes, "AdapterTypeId"),
+            IsEnabled: ($scope.selectedStatuses.length == 1) ? $scope.selectedStatuses[0].value : null
         };
 
         return gridApi.retrieveData(query);

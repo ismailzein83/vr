@@ -56,6 +56,7 @@
     <Compile Include="DataSourceImportedBatchQuery.cs" />
     <Compile Include="DataSourceLog.cs" />
     <Compile Include="DataSourceLogQuery.cs" />
+    <Compile Include="DataSourceQuery.cs" />
     <Compile Include="IDataSourceLogger.cs" />
     <Compile Include="IDataSourceManager.cs" />
     <Compile Include="ImportedBatchEntry.cs" />

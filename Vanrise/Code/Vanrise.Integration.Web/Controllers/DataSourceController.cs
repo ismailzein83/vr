@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using Vanrise.Integration.Business;
+using Vanrise.Integration.Entities;
 using Vanrise.Queueing.Entities;
 using Vanrise.Web.Base;
 
@@ -20,7 +21,7 @@ namespace Vanrise.Integration.Web.Controllers
         }
 
         [HttpPost]
-        public object GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<object> input)
+        public object GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<DataSourceQuery> input)
         {
             DataSourceManager manager = new DataSourceManager();
             return GetWebResponse(input, manager.GetFilteredDataSources(input));
