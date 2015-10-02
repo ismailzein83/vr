@@ -18,10 +18,10 @@ namespace Vanrise.Fzero.DevRuntime
         static void Main(string[] args)
         {
 
-            string GetNormalCDRFlow = AllFlows.GetNormalCDRFlow();
-            string GetNormalCDRNormalizationFlow = AllFlows.GetNormalCDRNormalizationFlow();
-            string GetStagingCDRFlow = AllFlows.GetStagingCDRFlow();
-            string GetStagingCDRNormalizationFlow = AllFlows.GetStagingCDRNormalizationFlow();
+            //string GetNormalCDRFlow = AllFlows.GetNormalCDRFlow();
+            //string GetNormalCDRNormalizationFlow = AllFlows.GetNormalCDRNormalizationFlow();
+            //string GetStagingCDRFlow = AllFlows.GetStagingCDRFlow();
+            //string GetStagingCDRNormalizationFlow = AllFlows.GetStagingCDRNormalizationFlow();
 
 
 
