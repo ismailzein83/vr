@@ -26,8 +26,8 @@ with Recompile
 			SUM(bs.cost_nets / ISNULL(ERC.Rate, 1)) AS  CostNet,
 			SUM((bs.sale_nets / ISNULL(ERC.Rate,1)) - (bs.cost_nets / ISNULL(ERC.Rate, 1))) AS Profit
 		    FROM Billing_Stats bs  WITH(NOLOCK,INDEX(IX_Billing_Stats_Date))
-		    LEFT JOIN @ExchangeRates ERC ON ERC.Currency = bs.Cost_Currency AND ERC.Date = bs.CallDate			
-            LEFT JOIN @ExchangeRates ERS ON ERS.Currency = bs.Sale_Currency AND ERS.Date = bs.CallDate
+		    LEFT JOIN @ExchangeRates ERC ON ERC.Currency collate SQL_Latin1_General_CP1_CI_AS = bs.Cost_Currency AND ERC.Date = bs.CallDate			
+            LEFT JOIN @ExchangeRates ERS ON ERS.Currency collate SQL_Latin1_General_CP1_CI_AS = bs.Sale_Currency AND ERS.Date = bs.CallDate
             WHERE bs.calldate =@fromdate --AND bs.calldate<@ToDate
 			GROUP BY 
 			    bs.calldate

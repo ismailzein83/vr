@@ -60,7 +60,7 @@ BEGIN
                      (c.EndEffectiveDate IS NULL OR c.EndEffectiveDate >@EffectiveON)
    
                SELECT r.*,ROW_NUMBER() OVER ( ORDER BY ZoneNAme ) AS RowNumber INTO #result2  FROM #result1 r WHERE 1=1    
-                AND (@CodeGroup IS NULL OR CodeGroup IN (SELECT ParsedString FROM dbo.ParseStringList(@CodeGroup))) 
+                AND (@CodeGroup IS NULL OR CodeGroup collate SQL_Latin1_General_CP1256_CI_AS IN (SELECT ParsedString FROM dbo.ParseStringList(@CodeGroup))) 
                 AND (@Code IS NULL OR Code LIKE ''+@Code+'%')
                 AND (@Zone IS NULL OR ZoneName LIKE '%'+@Zone+'%')
                 AND  RN=1  
@@ -118,7 +118,7 @@ BEGIN
                      (c.EndEffectiveDate IS NULL OR c.EndEffectiveDate >@EffectiveON)
    
                SELECT r.*,ROW_NUMBER() OVER ( ORDER BY ZoneNAme ) AS RowNumber INTO #result21  FROM #result11 r WHERE 1=1    
-                 AND (@CodeGroup IS NULL OR CodeGroup IN (SELECT ParsedString FROM dbo.ParseStringList(@CodeGroup)))  
+                 AND (@CodeGroup IS NULL OR CodeGroup collate SQL_Latin1_General_CP1256_CI_AS IN (SELECT ParsedString FROM dbo.ParseStringList(@CodeGroup)))  
                  AND (@Code IS NULL OR Code LIKE ''+@Code+'%')
                  AND (@Zone IS NULL OR ZoneName LIKE '%'+@Zone+'%')
                  AND  RN=1  

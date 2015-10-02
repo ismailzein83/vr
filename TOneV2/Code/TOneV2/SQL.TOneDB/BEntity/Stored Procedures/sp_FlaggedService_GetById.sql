@@ -7,6 +7,6 @@ CREATE PROCEDURE [BEntity].[sp_FlaggedService_GetById]
 @FlaggedServiceID TINYINT
 AS
 BEGIN
-	SELECT [FlaggedServiceID], [Symbol] FROM [FlaggedService]
+	SELECT [FlaggedServiceID], [Symbol], [ServiceColor] FROM [FlaggedService]
 	WHERE FlaggedServiceID = @FlaggedServiceID
 END

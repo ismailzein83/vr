@@ -9,9 +9,9 @@ CREATE  PROCEDURE [Analytics].[SP_BillingRep_GetZoneSummary](
 	@Cost bit = 1,
 	@CurrencyID varchar(3),
 	@SupplierGroup VARCHAR(max)=NULL,
-	@CustomerGroup VARCHAR(max)=NULL,	
-	@SupplierAmuID int = NULL,
-	@CustomerAmuID int = NULL,
+	@CustomerGroup VARCHAR(max)=NULL,		
+	@CustomerAmuID VARCHAR(max)=NULL,
+	@SupplierAmuID VARCHAR(max)=NULL,
 	@GroupBySupplier bit = 0
 )
 
@@ -40,30 +40,34 @@ DECLARE @SupplierIDs TABLE( CarrierAccountID VARCHAR(5) )
 
 IF(@CustomerAMUID IS NOT NULL)
 	BEGIN
-		DECLARE @customerAmuFlag VARCHAR(20)
-		SET @customerAmuFlag = (SELECT Flag FROM AMU WHERE ID = @CustomerAMUID)
-		INSERT INTO @CustomerIDs
-		SELECT ac.CarrierAccountID
-		FROM AMU_Carrier ac
-		WHERE ac.AMUCarrierType = 0
-		AND ac.AMUID IN (
-			SELECT ID FROM AMU
-			WHERE Flag LIKE @customerAmuFlag + '%'
-			)
+		--DECLARE @customerAmuFlag VARCHAR(20)
+		--SET @customerAmuFlag = (SELECT Flag FROM AMU WHERE ID = @CustomerAMUID)
+		--INSERT INTO @CustomerIDs
+		--SELECT ac.CarrierAccountID
+		--FROM AMU_Carrier ac
+		--WHERE ac.AMUCarrierType = 0
+		--AND ac.AMUID IN (
+		--	SELECT ID FROM AMU
+		--	WHERE Flag LIKE @customerAmuFlag + '%'
+		--	)
+		INSERT INTO @CustomerIDs (CarrierAccountID)
+		select  ParsedString  from [BEntity].[ParseStringList](@CustomerAMUID)	
 	END
 
 	IF(@SupplierAMUID IS NOT NULL)
 	BEGIN	
-		DECLARE @supplierAmuFlag VARCHAR(20)
-		SET @supplierAmuFlag = (SELECT Flag FROM AMU WHERE ID = @SupplierAMUID)
-		INSERT INTO @SupplierIDs
-		SELECT ac.CarrierAccountID
-		FROM AMU_Carrier ac
-		WHERE ac.AMUCarrierType = 1
-		AND ac.AMUID IN (
-			SELECT ID FROM AMU
-			WHERE Flag LIKE @supplierAmuFlag + '%'
-			)
+		--DECLARE @supplierAmuFlag VARCHAR(20)
+		--SET @supplierAmuFlag = (SELECT Flag FROM AMU WHERE ID = @SupplierAMUID)
+		--INSERT INTO @SupplierIDs
+		--SELECT ac.CarrierAccountID
+		--FROM AMU_Carrier ac
+		--WHERE ac.AMUCarrierType = 1
+		--AND ac.AMUID IN (
+		--	SELECT ID FROM AMU
+		--	WHERE Flag LIKE @supplierAmuFlag + '%'
+		--	)
+		INSERT INTO @SupplierIDs (CarrierAccountID)
+		select  ParsedString  from [BEntity].[ParseStringList](@SupplierAmuID)	
 	END
 	
 	DECLARE @SuppliersIDs TABLE (SupplierId varchar(10))

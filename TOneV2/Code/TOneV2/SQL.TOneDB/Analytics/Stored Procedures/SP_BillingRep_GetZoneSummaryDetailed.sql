@@ -2,17 +2,17 @@
 
 
 
-create PROCEDURE [Analytics].[SP_BillingRep_GetZoneSummaryDetailed](
+CREATE PROCEDURE [Analytics].[SP_BillingRep_GetZoneSummaryDetailed](
 	@FromDate Datetime ,
 	@ToDate Datetime ,
-	@CustomerID varchar(5)=NULL,
-	@SupplierID varchar(5)=NULL,
+	@CustomersID VARCHAR(max)=NULL,
+	@SuppliersID VARCHAR(max)=NULL,
 	@Cost bit = 0,
 	@CurrencyID varchar(3),
 	@SupplierGroup VARCHAR(max)=NULL,
 	@CustomerGroup VARCHAR(max)=NULL,
-	@CustomerAmuID int = NULL,
-	@SupplierAmuID int = NULL,
+	@CustomerAmuID VARCHAR(max)=NULL,
+	@SupplierAmuID VARCHAR(max)=NULL,
 	@GroupBySupplier bit = 0
 )
 
@@ -24,32 +24,43 @@ DECLARE @SupplierIDs TABLE( CarrierAccountID VARCHAR(5) )
 
 IF(@CustomerAMUID IS NOT NULL)
 	BEGIN
-		DECLARE @customerAmuFlag VARCHAR(20)
-		SET @customerAmuFlag = (SELECT Flag FROM AMU WHERE ID = @CustomerAMUID)
-		INSERT INTO @CustomerIDs
-		SELECT ac.CarrierAccountID
-		FROM AMU_Carrier ac
-		WHERE ac.AMUCarrierType = 0
-		AND ac.AMUID IN (
-			SELECT ID FROM AMU
-			WHERE Flag LIKE @customerAmuFlag + '%'
-			)
+		--DECLARE @customerAmuFlag VARCHAR(20)
+		--SET @customerAmuFlag = (SELECT Flag FROM AMU WHERE ID = @CustomerAMUID)
+		--INSERT INTO @CustomerIDs
+		--SELECT ac.CarrierAccountID
+		--FROM AMU_Carrier ac
+		--WHERE ac.AMUCarrierType = 0
+		--AND ac.AMUID IN (
+		--	SELECT ID FROM AMU
+		--	WHERE Flag LIKE @customerAmuFlag + '%'
+		--	)
+		INSERT INTO @CustomerIDs (CarrierAccountID)
+		select  ParsedString  from [BEntity].[ParseStringList](@CustomerAMUID)	
 	END
 
 	IF(@SupplierAMUID IS NOT NULL)
 	BEGIN	
-		DECLARE @supplierAmuFlag VARCHAR(20)
-		SET @supplierAmuFlag = (SELECT Flag FROM AMU WHERE ID = @SupplierAMUID)
-		INSERT INTO @SupplierIDs
-		SELECT ac.CarrierAccountID
-		FROM AMU_Carrier ac
-		WHERE ac.AMUCarrierType = 1
-		AND ac.AMUID IN (
-			SELECT ID FROM AMU
-			WHERE Flag LIKE @supplierAmuFlag + '%'
-			)
+		--DECLARE @supplierAmuFlag VARCHAR(20)
+		--SET @supplierAmuFlag = (SELECT Flag FROM AMU WHERE ID = @SupplierAMUID)
+		--INSERT INTO @SupplierIDs
+		--SELECT ac.CarrierAccountID
+		--FROM AMU_Carrier ac
+		--WHERE ac.AMUCarrierType = 1
+		--AND ac.AMUID IN (
+		--	SELECT ID FROM AMU
+		--	WHERE Flag LIKE @supplierAmuFlag + '%'
+		--	)
+		INSERT INTO @SupplierIDs (CarrierAccountID)
+		select  ParsedString  from [BEntity].[ParseStringList](@SupplierAmuID)	
 	END
-
+	DECLARE @SuppliersIDs TABLE (SupplierId varchar(10))
+		INSERT INTO @SuppliersIDs (SupplierId)
+		select  ParsedString  from [BEntity].[ParseStringList](@SuppliersID)
+		
+	DECLARE @CustomersIDs TABLE (CustomerId varchar(10))
+		INSERT INTO @CustomersIDs (CustomerId)
+		select  ParsedString  from [BEntity].[ParseStringList](@CustomersID)
+		
 DECLARE @ExchangeRates TABLE(
 		CurrencyIn VARCHAR(3) COLLATE SQL_Latin1_General_CP1256_CI_AS,
 		CurrencyOut VARCHAR(3) COLLATE SQL_Latin1_General_CP1256_CI_AS,
@@ -72,7 +83,7 @@ BEGIN
 	BEGIN 
 		DECLARE @NumberOfDays INT 
 		SET @NumberOfDays = DATEDIFF(dd,@FromDate,@ToDate) + 1
-		IF (@CustomerID IS NULL AND @SupplierID IS NULL)
+		IF (@CustomersID IS NULL AND @SuppliersID IS NULL)
 		BEGIN 
 			SELECT
 				Z.Name AS Zone,
@@ -104,13 +115,13 @@ BEGIN
 			WHERE bs.calldate >=@FromDate AND bs.calldate<=@ToDate
 			AND(@CustomerAmuID IS NULL OR bs.CustomerID IN (SELECT * FROM @CustomerIDs))
 			AND(@SupplierAmuID IS NULL OR bs.SupplierID IN (SELECT * FROM @SupplierIDs))
-			AND(@SupplierGroup IS  NULL OR ','+@SupplierGroup+',' LIKE '%,'+bs.SupplierID+',%')
-			AND(@CustomerGroup IS NULL  OR ','+@CustomerGroup+',' LIKE+'%,'+ bs.CustomerID+',%' )
+			--AND(@SupplierGroup IS  NULL OR ','+@SupplierGroup+',' LIKE '%,'+bs.SupplierID+',%')
+			--AND(@CustomerGroup IS NULL  OR ','+@CustomerGroup+',' LIKE+'%,'+ bs.CustomerID+',%' )
 			GROUP BY Z.ZoneID,z.Name,bs.SupplierID
 			ORDER BY Z.Name ASC 
 		END
 		ELSE
-			IF (@CustomerID IS NULL AND @SupplierID IS NOT NULL)
+			IF (@CustomersID IS NULL AND @SuppliersID IS NOT NULL)
 			BEGIN 
 				SELECT
 					Z.Name AS Zone,
@@ -141,14 +152,14 @@ BEGIN
 				LEFT JOIN @ExchangeRates ERC ON ERC.CurrencyIn = bs.Cost_Currency AND ERC.CurrencyOut = @CurrencyID AND ERC.Date = bs.CallDate
 				WHERE bs.calldate >=@FromDate AND bs.calldate<=@ToDate
 					 AND(@CustomerAmuID IS NULL OR bs.CustomerID IN (SELECT * FROM @CustomerIDs))
-					 AND bs.SupplierID=@SupplierID
-					 AND (@SupplierGroup IS NULL OR ','+@SupplierGroup+',' LIKE '%,'+bs.SupplierID+',%')
-					 AND (@CustomerGroup IS NULL OR ','+@CustomerGroup+',' LIKE+'%,'+ bs.CustomerID+',%' ) 
+					 AND bs.SupplierID in (SELECT * FROM @SuppliersIDs )
+					-- AND (@SupplierGroup IS NULL OR ','+@SupplierGroup+',' LIKE '%,'+bs.SupplierID+',%')
+					 --AND (@CustomerGroup IS NULL OR ','+@CustomerGroup+',' LIKE+'%,'+ bs.CustomerID+',%' ) 
 				GROUP BY z.ZoneID,Z.Name,bs.SupplierID
 				ORDER BY Z.Name ASC
 			END
 			ELSE 
-				IF(@CustomerID IS NOT NULL AND @SupplierID IS NULL)
+				IF(@CustomersID IS NOT NULL AND @SuppliersID IS NULL)
 				BEGIN 
 					SELECT
 						Z.Name AS Zone,
@@ -179,14 +190,14 @@ BEGIN
 					JOIN @ExchangeRates ERC ON ERC.CurrencyIn = bs.Cost_Currency AND ERC.CurrencyOut = @CurrencyID AND ERC.Date = BS.CallDate
 					WHERE bs.calldate >=@FromDate AND bs.calldate<=@ToDate
 						 AND(@SupplierAmuID IS NULL OR bs.SupplierID IN (SELECT * FROM @SupplierIDs))
-						 AND bs.CustomerID=@CustomerID
+						 AND bs.CustomerID in (SELECT * FROM @CustomersIDs )
 						 AND (@SupplierGroup IS NULL OR ','+@SupplierGroup+',' LIKE '%,'+bs.SupplierID+',%')
 						 AND (@CustomerGroup IS NULL OR ','+@CustomerGroup+',' LIKE+'%,'+ bs.CustomerID+',%' ) 
 					GROUP BY Z.Name,Z.ZoneID,bs.SupplierID
 					ORDER BY Z.Name ASC 
 				END
 				ELSE
-					IF(@CustomerID IS NOT NULL AND @SupplierID IS NOT NULL)
+					IF(@CustomersID IS NOT NULL AND @SuppliersID IS NOT NULL)
 					BEGIN 
 						SELECT
 							Z.Name AS Zone,
@@ -216,8 +227,8 @@ BEGIN
 						LEFT JOIN Zone Z WITH(NOLOCK INDEX(PK_Zone)) ON Z.ZoneID=bs.SaleZoneID   
 						LEFT JOIN @ExchangeRates ERC ON ERC.CurrencyIn = bs.Cost_Currency AND ERC.CurrencyOut = @CurrencyID AND ERC.Date = bs.CallDate
 						WHERE bs.calldate >=@FromDate AND bs.calldate<=@ToDate
-							 AND bs.CustomerID=@CustomerID 
-							 AND bs.SupplierID=@SupplierID
+							 AND bs.CustomerID in (SELECT * FROM @CustomersIDs )
+                             AND bs.SupplierID in (SELECT * FROM @SuppliersIDs )
 							 AND (@SupplierGroup IS NULL OR ','+@SupplierGroup+',' LIKE '%,'+bs.SupplierID+',%')
 							 AND (@CustomerGroup IS NULL OR ','+@CustomerGroup+',' LIKE+'%,'+ bs.CustomerID+',%' ) 
 						GROUP BY Z.Name,Z.ZoneID,bs.SupplierID
@@ -228,12 +239,12 @@ BEGIN
 				FROM CarrierAccount ca 
 				JOIN CarrierProfile cp ON cp.ProfileID = ca.ProfileID
 				LEFT JOIN @ExchangeRates ER ON ER.CurrencyIn = cp.CurrencyID AND ER.CurrencyOut = @CurrencyID AND ER.Date = @FromDate
-				WHERE ca.CarrierAccountID = @CustomerID OR @CustomerID IS NULL
+				WHERE ca.CarrierAccountID in (SELECT * FROM @CustomersIDs ) OR @CustomersID IS NULL
 				
 	END 
 	ELSE 
 	BEGIN 
-		IF(@CustomerID IS NULL AND @SupplierID IS NULL)
+		IF(@CustomersID IS NULL AND @SuppliersID IS NULL)
 			BEGIN 
 				SELECT 
 					Z.Name AS Zone,
@@ -266,13 +277,13 @@ BEGIN
 				WHERE bs.calldate>=@FromDate AND bs.calldate<=@ToDate
 				AND(@CustomerAmuID IS NULL OR bs.CustomerID IN (SELECT * FROM @CustomerIDs))
 				AND(@SupplierAmuID IS NULL OR bs.SupplierID IN (SELECT * FROM @SupplierIDs))
-                AND (@SupplierGroup IS NULL OR ','+@SupplierGroup+',' LIKE '%,'+bs.SupplierID+',%')
-			    AND (@CustomerGroup IS NULL OR ','+@CustomerGroup+',' LIKE+'%,'+ bs.CustomerID+',%' ) 
+                --AND (@SupplierGroup IS NULL OR ','+@SupplierGroup+',' LIKE '%,'+bs.SupplierID+',%')
+			    --AND (@CustomerGroup IS NULL OR ','+@CustomerGroup+',' LIKE+'%,'+ bs.CustomerID+',%' ) 
 				GROUP BY Z.Name,Z.ZoneID,bs.CustomerID
 				ORDER BY Z.Name ASC
 			END
 			ELSE
-				IF(@CustomerID IS NULL AND @SupplierID IS NOT NULL)
+				IF(@CustomersID IS NULL AND @SuppliersID IS NOT NULL)
 				BEGIN 
 					SELECT 
 						Z.Name AS Zone,
@@ -304,14 +315,14 @@ BEGIN
 					LEFT JOIN @ExchangeRates ERS ON ERS.CurrencyIn = bs.Sale_Currency AND ERS.CurrencyOut = @CurrencyID AND ERS.Date = bs.CallDate
 					WHERE bs.calldate>=@FromDate AND bs.calldate<=@ToDate
 						 AND(@CustomerAmuID IS NULL OR bs.CustomerID IN (SELECT * FROM @CustomerIDs))
-						 AND bs.SupplierID=@SupplierID
+						 AND bs.SupplierID in (SELECT * FROM @SuppliersIDs )
 						 AND (@SupplierGroup IS NULL OR ','+@SupplierGroup+',' LIKE '%,'+bs.SupplierID+',%')
 						 AND (@CustomerGroup IS NULL OR ','+@CustomerGroup+',' LIKE+'%,'+ bs.CustomerID+',%' ) 
 					GROUP BY Z.Name,Z.ZoneID,bs.CustomerID
 					ORDER BY Z.Name ASC
 				END
 				ELSE 
-					IF(@CustomerID IS NOT NULL AND @SupplierID IS NULL)
+					IF(@CustomersID IS NOT NULL AND @SuppliersID IS NULL)
 					BEGIN 
 						SELECT 
 								Z.Name AS Zone,
@@ -342,7 +353,7 @@ BEGIN
 							LEFT JOIN @ExchangeRates ERS ON ERS.CurrencyIn = bs.Sale_Currency AND ERS.CurrencyOut = @CurrencyID AND ERS.Date = bs.CallDate
 							WHERE bs.calldate>=@FromDate AND bs.calldate<=@ToDate
 								 AND(@SupplierAmuID IS NULL OR bs.SupplierID IN (SELECT * FROM @SupplierIDs))
-								 AND bs.CustomerID=@CustomerID
+								 AND bs.CustomerID in (SELECT * FROM @CustomersIDs )
 						         AND (@SupplierGroup IS NULL OR ','+@SupplierGroup+',' LIKE '%,'+bs.SupplierID+',%')
 								 AND (@CustomerGroup IS NULL OR ','+@CustomerGroup+',' LIKE+'%,'+ bs.CustomerID+',%' ) 
 							GROUP BY Z.Name,Z.ZoneID,bs.CustomerID
@@ -350,7 +361,7 @@ BEGIN
 						
 					END
 					ELSE
-						IF(@CustomerID IS NOT NULL AND @SupplierID IS NOT NULL)
+						IF(@CustomersID IS NOT NULL AND @SuppliersID IS NOT NULL)
 						BEGIN 
 							SELECT 
 								Z.Name AS Zone,
@@ -380,8 +391,8 @@ BEGIN
 							LEFT JOIN Zone Z WITH(NOLOCK INDEX(PK_Zone)) ON Z.ZoneID=bs.SaleZoneID
 							LEFT JOIN @ExchangeRates ERS ON ERS.CurrencyIn = bs.Sale_Currency AND ERS.CurrencyOut = @CurrencyID AND ERS.Date = bs.CallDate
 							WHERE bs.calldate>=@FromDate AND bs.calldate<=@ToDate
-								 AND bs.CustomerID=@CustomerID
-								 AND bs.SupplierID=@SupplierID
+								 AND bs.CustomerID in (SELECT * FROM @CustomersIDs )
+								 AND bs.SupplierID in (SELECT * FROM @SuppliersIDs )
 								 AND (@SupplierGroup IS NULL OR ','+@SupplierGroup+',' LIKE '%,'+bs.SupplierID+',%')
 								 AND (@CustomerGroup IS NULL OR ','+@CustomerGroup+',' LIKE+'%,'+ bs.CustomerID+',%' ) 					
 							GROUP BY Z.Name,Z.ZoneID,bs.CustomerID
@@ -395,7 +406,7 @@ BEGIN
 	BEGIN 
 		DECLARE @NumberOfDays1 INT 
 		SET @NumberOfDays1 = DATEDIFF(dd,@FromDate,@ToDate) + 1
-		IF (@CustomerID IS NULL AND @SupplierID IS NULL)
+		IF (@CustomersID IS NULL AND @SuppliersID IS NULL)
 		BEGIN 
 			SELECT
 				Z.Name AS Zone,
@@ -434,7 +445,7 @@ BEGIN
 			ORDER BY Z.Name ASC 
 		END
 		ELSE
-			IF (@CustomerID IS NULL AND @SupplierID IS NOT NULL)
+			IF (@CustomersID IS NULL AND @SuppliersID IS NOT NULL)
 			BEGIN 
 				SELECT
 					Z.Name AS Zone,
@@ -466,14 +477,14 @@ BEGIN
 				LEFT JOIN @ExchangeRates ERC ON ERC.CurrencyIn = bs.Cost_Currency AND ERC.CurrencyOut = @CurrencyID AND ERC.Date = bs.CallDate
 				WHERE bs.calldate >=@FromDate AND bs.calldate<=@ToDate
 					 AND(@CustomerAmuID IS NULL OR bs.CustomerID IN (SELECT * FROM @CustomerIDs))
-					 AND bs.SupplierID=@SupplierID
-					 AND (@SupplierGroup IS NULL OR ','+@SupplierGroup+',' LIKE '%,'+bs.SupplierID+',%')
-					 AND (@CustomerGroup IS NULL OR ','+@CustomerGroup+',' LIKE+'%,'+ bs.CustomerID+',%' ) 
+					 AND bs.SupplierID in (SELECT * FROM @SuppliersIDs )
+					 --AND (@SupplierGroup IS NULL OR ','+@SupplierGroup+',' LIKE '%,'+bs.SupplierID+',%')
+					 --AND (@CustomerGroup IS NULL OR ','+@CustomerGroup+',' LIKE+'%,'+ bs.CustomerID+',%' ) 
 				GROUP BY z.ZoneID,Z.Name,bs.SupplierID
 				ORDER BY Z.Name ASC
 			END
 			ELSE 
-				IF(@CustomerID IS NOT NULL AND @SupplierID IS NULL)
+				IF(@CustomersID IS NOT NULL AND @SuppliersID IS NULL)
 				BEGIN 
 					SELECT
 						Z.Name AS Zone,
@@ -505,14 +516,14 @@ BEGIN
 					JOIN @ExchangeRates ERC ON ERC.CurrencyIn = bs.Cost_Currency AND ERC.CurrencyOut = @CurrencyID AND ERC.Date = BS.CallDate
 					WHERE bs.calldate >=@FromDate AND bs.calldate<=@ToDate
 						 AND(@SupplierAmuID IS NULL OR bs.SupplierID IN (SELECT * FROM @SupplierIDs))
-						 AND bs.CustomerID=@CustomerID
-						 AND (@SupplierGroup IS NULL OR ','+@SupplierGroup+',' LIKE '%,'+bs.SupplierID+',%')
-						 AND (@CustomerGroup IS NULL OR ','+@CustomerGroup+',' LIKE+'%,'+ bs.CustomerID+',%' ) 
+						 AND bs.CustomerID in (SELECT * FROM @CustomersIDs )
+						 --AND (@SupplierGroup IS NULL OR ','+@SupplierGroup+',' LIKE '%,'+bs.SupplierID+',%')
+						 --AND (@CustomerGroup IS NULL OR ','+@CustomerGroup+',' LIKE+'%,'+ bs.CustomerID+',%' ) 
 					GROUP BY Z.Name,Z.ZoneID,bs.SupplierID
 					ORDER BY Z.Name ASC 
 				END
 				ELSE
-					IF(@CustomerID IS NOT NULL AND @SupplierID IS NOT NULL)
+					IF(@CustomersID IS NOT NULL AND @SuppliersID IS NOT NULL)
 					BEGIN 
 						SELECT
 							Z.Name AS Zone,
@@ -543,24 +554,24 @@ BEGIN
 						LEFT JOIN Zone Z WITH(NOLOCK INDEX(PK_Zone)) ON Z.ZoneID=bs.CostZoneID   
 						LEFT JOIN @ExchangeRates ERC ON ERC.CurrencyIn = bs.Cost_Currency AND ERC.CurrencyOut = @CurrencyID AND ERC.Date = bs.CallDate
 						WHERE bs.calldate >=@FromDate AND bs.calldate<=@ToDate
-							 AND bs.CustomerID=@CustomerID 
-							 AND bs.SupplierID=@SupplierID
-							 AND (@SupplierGroup IS NULL OR ','+@SupplierGroup+',' LIKE '%,'+bs.SupplierID+',%')
-							 AND (@CustomerGroup IS NULL OR ','+@CustomerGroup+',' LIKE+'%,'+ bs.CustomerID+',%' ) 
+						     AND bs.CustomerID in (SELECT * FROM @CustomersIDs )
+                             AND bs.SupplierID in (SELECT * FROM @SuppliersIDs )
+							-- AND (@SupplierGroup IS NULL OR ','+@SupplierGroup+',' LIKE '%,'+bs.SupplierID+',%')
+							-- AND (@CustomerGroup IS NULL OR ','+@CustomerGroup+',' LIKE+'%,'+ bs.CustomerID+',%' ) 
 						GROUP BY Z.Name,Z.ZoneID,bs.SupplierID
 						ORDER BY Z.Name ASC 
 					END
 
-				SELECT ((SUM((isnull(ca.Services,0) +isnull(ca.ConnectionFees,0))/ISNULL(ER.Rate, 1)))*@NumberOfDays1) AS Services
+				SELECT  ((SUM((isnull(ca.Services,0) +isnull(ca.ConnectionFees,0))/ISNULL(ER.Rate, 1)))*@NumberOfDays1) AS Services
 				FROM CarrierAccount ca 
 				JOIN CarrierProfile cp ON cp.ProfileID = ca.ProfileID
 				LEFT JOIN @ExchangeRates ER ON ER.CurrencyIn = cp.CurrencyID AND ER.CurrencyOut = @CurrencyID AND ER.Date = @FromDate
-				WHERE ca.CarrierAccountID = @CustomerID OR @CustomerID IS NULL
+				WHERE ca.CarrierAccountID in (SELECT * FROM @CustomersIDs ) OR @CustomersID IS NULL
 				
 	END 
 	ELSE 
 	BEGIN 
-		IF(@CustomerID IS NULL AND @SupplierID IS NULL)
+		IF(@CustomersID IS NULL AND @SuppliersID IS NULL)
 			BEGIN 
 				SELECT 
 					Z.Name AS Zone,
@@ -594,13 +605,13 @@ BEGIN
 				WHERE bs.calldate>=@FromDate AND bs.calldate<=@ToDate
 				AND(@CustomerAmuID IS NULL OR bs.CustomerID IN (SELECT * FROM @CustomerIDs))
 				AND(@SupplierAmuID IS NULL OR bs.SupplierID IN (SELECT * FROM @SupplierIDs))
-                AND (@SupplierGroup IS NULL OR ','+@SupplierGroup+',' LIKE '%,'+bs.SupplierID+',%')
-			    AND (@CustomerGroup IS NULL OR ','+@CustomerGroup+',' LIKE+'%,'+ bs.CustomerID+',%' ) 
+                --AND (@SupplierGroup IS NULL OR ','+@SupplierGroup+',' LIKE '%,'+bs.SupplierID+',%')
+			    --AND (@CustomerGroup IS NULL OR ','+@CustomerGroup+',' LIKE+'%,'+ bs.CustomerID+',%' ) 
 				GROUP BY Z.Name,Z.ZoneID,bs.CustomerID, bs.SupplierID
 				ORDER BY Z.Name ASC
 			END
 			ELSE
-				IF(@CustomerID IS NULL AND @SupplierID IS NOT NULL)
+				IF(@CustomersID IS NULL AND @SuppliersID IS NOT NULL)
 				BEGIN 
 					SELECT 
 						Z.Name AS Zone,
@@ -633,14 +644,14 @@ BEGIN
 					LEFT JOIN @ExchangeRates ERS ON ERS.CurrencyIn = bs.Sale_Currency AND ERS.CurrencyOut = @CurrencyID AND ERS.Date = bs.CallDate
 					WHERE bs.calldate>=@FromDate AND bs.calldate<=@ToDate
 						 AND(@CustomerAmuID IS NULL OR bs.CustomerID IN (SELECT * FROM @CustomerIDs))
-						 AND bs.SupplierID=@SupplierID
+						 AND bs.SupplierID in (SELECT * FROM @SuppliersIDs )
 						 AND (@SupplierGroup IS NULL OR ','+@SupplierGroup+',' LIKE '%,'+bs.SupplierID+',%')
 						 AND (@CustomerGroup IS NULL OR ','+@CustomerGroup+',' LIKE+'%,'+ bs.CustomerID+',%' ) 
 					GROUP BY Z.Name,Z.ZoneID,bs.CustomerID, bs.SupplierID
 					ORDER BY Z.Name ASC
 				END
 				ELSE 
-					IF(@CustomerID IS NOT NULL AND @SupplierID IS NULL)
+					IF(@CustomersID IS NOT NULL AND @SuppliersID IS NULL)
 					BEGIN 
 						SELECT 
 								Z.Name AS Zone,
@@ -672,7 +683,7 @@ BEGIN
 							LEFT JOIN @ExchangeRates ERS ON ERS.CurrencyIn = bs.Sale_Currency AND ERS.CurrencyOut = @CurrencyID AND ERS.Date = bs.CallDate
 							WHERE bs.calldate>=@FromDate AND bs.calldate<=@ToDate
 								 AND(@SupplierAmuID IS NULL OR bs.SupplierID IN (SELECT * FROM @SupplierIDs))
-								 AND bs.CustomerID=@CustomerID
+								 AND bs.CustomerID in (SELECT * FROM @CustomersIDs )
 						         AND (@SupplierGroup IS NULL OR ','+@SupplierGroup+',' LIKE '%,'+bs.SupplierID+',%')
 								 AND (@CustomerGroup IS NULL OR ','+@CustomerGroup+',' LIKE+'%,'+ bs.CustomerID+',%' ) 
 							GROUP BY Z.Name,Z.ZoneID,bs.CustomerID, bs.SupplierID
@@ -680,7 +691,7 @@ BEGIN
 						
 					END
 					ELSE
-						IF(@CustomerID IS NOT NULL AND @SupplierID IS NOT NULL)
+						IF(@CustomersID IS NOT NULL AND @SuppliersID IS NOT NULL)
 						BEGIN 
 							SELECT 
 								Z.Name AS Zone,
@@ -711,10 +722,10 @@ BEGIN
 							LEFT JOIN Zone Z WITH(NOLOCK INDEX(PK_Zone)) ON Z.ZoneID=bs.SaleZoneID
 							LEFT JOIN @ExchangeRates ERS ON ERS.CurrencyIn = bs.Sale_Currency AND ERS.CurrencyOut = @CurrencyID AND ERS.Date = bs.CallDate
 							WHERE bs.calldate>=@FromDate AND bs.calldate<=@ToDate
-								 AND bs.CustomerID=@CustomerID
-								 AND bs.SupplierID=@SupplierID
-								 AND (@SupplierGroup IS NULL OR ','+@SupplierGroup+',' LIKE '%,'+bs.SupplierID+',%')
-								 AND (@CustomerGroup IS NULL OR ','+@CustomerGroup+',' LIKE+'%,'+ bs.CustomerID+',%' ) 					
+								AND bs.CustomerID in (SELECT * FROM @CustomersIDs )
+                                AND bs.SupplierID in (SELECT * FROM @SuppliersIDs )
+								AND (@SupplierGroup IS NULL OR ','+@SupplierGroup+',' LIKE '%,'+bs.SupplierID+',%')
+								AND (@CustomerGroup IS NULL OR ','+@CustomerGroup+',' LIKE+'%,'+ bs.CustomerID+',%' ) 					
 							GROUP BY Z.Name,Z.ZoneID,bs.CustomerID, bs.SupplierID
 							ORDER BY Z.Name ASC
 						END	

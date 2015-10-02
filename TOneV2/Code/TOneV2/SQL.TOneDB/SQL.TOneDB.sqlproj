@@ -297,5 +297,7 @@
     <Build Include="BEntity\Stored Procedures\SP_CarrierProfile_CreateTempByFiltered.sql" />
     <Build Include="BEntity\Stored Procedures\SP_CarrierAccount_CreateTempByFiltered.sql" />
     <Build Include="BEntity\Stored Procedures\sp_AccountManager_CreateTempByFiltered.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_SaleMarketPrice_GetAll.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_PriceList_GetByID.sql" />
   </ItemGroup>
 </Project>
