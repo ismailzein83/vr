@@ -10,6 +10,10 @@
 
             var editMode;
             var routeRuleId;
+
+            var saleZoneGroupSettingsDirectiveAPI;
+            var saleZoneGroupSettings = {};
+
             loadParameters();
             defineScope();
             load();
@@ -24,6 +28,16 @@
             }
 
             function defineScope() {
+                $scope.onSaleZoneGroupSettingsDirectiveLoaded = function (api) {
+                    saleZoneGroupSettingsDirectiveAPI = api;
+
+                    if (saleZoneGroupSettings != undefined)
+                    {
+                        saleZoneGroupSettingsDirectiveAPI.setData(saleZoneGroupSettings);
+                        saleZoneGroupSettings = undefined;
+                    }
+                }
+
                 $scope.SaveRouteRule = function () {
                     if (editMode) {
                         return updateRouteRule();
@@ -42,8 +56,6 @@
                         //Hide the section of customer and code
                     }
                 }
-
-                $scope.saleZoneGroupSettings = {};
 
                 $scope.saleZoneGroupTemplates = [];
                 $scope.selectedSaleZoneGroupTemplate = undefined;
@@ -107,7 +119,7 @@
                     RouteCriteria: {
                         RoutingProductId: $scope.selectedRoutingProduct.RoutingProductId,
                         SaleZoneGroupConfigId: $scope.selectedSaleZoneGroupTemplate.TemplateConfigID != -1 ? $scope.selectedSaleZoneGroupTemplate.TemplateConfigID : null,
-                        SaleZoneGroupSettings: $scope.saleZoneGroupSettings
+                        SaleZoneGroupSettings: onSaleZoneGroupSettingsDirectiveAPI.getData()
                     }
                 };
 
@@ -122,7 +134,7 @@
                 if (routeRuleObj.RouteCriteria.SaleZoneGroupConfigId != null)
                 {
                     $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, routeRuleObj.RouteCriteria.SaleZoneGroupConfigId, "TemplateConfigID");
-                    $scope.saleZoneGroupSettings = routeRuleObj.RouteCriteria.SaleZoneGroupSettings;
+                    saleZoneGroupSettings = routeRuleObj.RouteCriteria.SaleZoneGroupSettings;
                 }
             }
 

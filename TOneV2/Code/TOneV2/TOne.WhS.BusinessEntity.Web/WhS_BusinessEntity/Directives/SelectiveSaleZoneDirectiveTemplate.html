@@ -1,0 +1,7 @@
+﻿<div style="display:inline-block;width: calc(100% - 18px);" vr-loader="isGettingData">
+    <span ng-if="showSaleZonePackage">under construction</span>
+
+    <vr-select ismultipleselection isrequired label="Sale Zone" datasource="searchZones" selectedvalues="selectedSaleZones"
+               onselectionchanged="onselectionvalueschanged" datatextfield="Name" datavaluefield="SaleZoneId" entityname="Sale Zone">
+    </vr-select>
+</div>

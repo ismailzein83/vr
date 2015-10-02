@@ -4,25 +4,19 @@ app.directive('vrWhsBeSelectivesalezones', ['WhS_BE_SaleZoneAPIService', 'UtilsS
     var directiveDefinitionObject = {
         restrict: 'E',
         scope: {
-            salezonepackageid: "=",
-            salezonegroupsettings: "="
+            onloaded: '=',
+            salezonepackageid: "="
         },
         controller: function ($scope, $element, $attrs) {
+            $scope.isGettingData = false;
+
             var ctrl = this;
             $scope.selectedSaleZones = [];
 
             $scope.showSaleZonePackage = ctrl.salezonepackageid === undefined;
 
-            var beSaleZonesCtr = new beSaleZones(ctrl, $scope.selectedSaleZones, WhS_BE_SaleZoneAPIService);
+            var beSaleZonesCtr = new beSaleZones(ctrl, $scope, WhS_BE_SaleZoneAPIService);
             beSaleZonesCtr.initializeController();
-
-            $scope.onselectionvalueschanged = function () {
-                ctrl.salezonegroupsettings = {
-                    $type: "TOne.WhS.BusinessEntity.Entities.SelectiveSaleZonesSettings, TOne.WhS.BusinessEntity.Entities",
-                    SaleZonePackageId: ctrl.salezonepackageid,
-                    ZoneIds: UtilsService.getPropValuesFromArray($scope.selectedSaleZones, "SaleZoneId")
-                };
-            }
 
             $scope.searchZones = function (filter) {
                 return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo(ctrl.salezonepackageid, filter);
@@ -37,37 +31,63 @@ app.directive('vrWhsBeSelectivesalezones', ['WhS_BE_SaleZoneAPIService', 'UtilsS
                 }
             }
         },
-        template: function (element, attrs) {
+        templateUrl: function (element, attrs) {
             return getBeSelectiveSaleZonesTemplate(attrs);
         }
 
     };
 
     function getBeSelectiveSaleZonesTemplate(attrs) {
-        return '<div style="display:inline-block;width: calc(100% - 18px);">'
-            + '<span ng-if="showSaleZonePackage">I am here</span>'
-                   + ' <vr-select ismultipleselection isrequired label="Sale Zone" datasource="searchZones" selectedvalues="selectedSaleZones" onselectionchanged="onselectionvalueschanged" datatextfield="Name" datavaluefield="SaleZoneId"'
-                   + 'entityname="Sale Zone"></vr-select></div>';
+        return '/Client/Modules/WhS_BusinessEntity/Directives/SelectiveSaleZoneDirectiveTemplate.html';
     }
 
-    function beSaleZones(ctrl, selectedSaleZones, WhS_BE_SaleZoneAPIService) {
+    function beSaleZones(ctrl, $scope, WhS_BE_SaleZoneAPIService) {
         
         function initializeController() {
-            if (ctrl.salezonegroupsettings !== undefined && ctrl.salezonegroupsettings.ZoneIds !== undefined &&
-                ctrl.salezonegroupsettings.ZoneIds !== null && ctrl.salezonegroupsettings.ZoneIds.length > 0)
-            {
-                var input = { PackageId: ctrl.salezonepackageid, SaleZoneIds: ctrl.salezonegroupsettings.ZoneIds };
+            //Load default data if any
 
-                WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {
-                    angular.forEach(response, function (item) {
-                        selectedSaleZones.push(item);
-                    });
-                });
+            //Prepare and initiate the API stating the directive as ready to be used
+            defineAPI();
+        }
+
+        function defineAPI()
+        {
+            var api = {};
+
+            api.getData = function()
+            {
+                return {
+                    $type: "TOne.WhS.BusinessEntity.Entities.SelectiveSaleZonesSettings, TOne.WhS.BusinessEntity.Entities",
+                    SaleZonePackageId: ctrl.salezonepackageid,
+                    ZoneIds: UtilsService.getPropValuesFromArray($scope.selectedSaleZones, "SaleZoneId")
+                };
             }
+
+            api.setData = function (salezonegroupsettings)
+            {
+                $scope.isGettingData = true;
+                if (salezonegroupsettings !== undefined && salezonegroupsettings.ZoneIds !== undefined &&
+                    salezonegroupsettings.ZoneIds !== null && salezonegroupsettings.ZoneIds.length > 0) {
+                    var input = { PackageId: ctrl.salezonepackageid, SaleZoneIds: salezonegroupsettings.ZoneIds };
+
+                    WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {
+                        angular.forEach(response, function (item) {
+                            $scope.selectedSaleZones.push(item);
+                        });
+                    }).catch(function (error) {
+                        //TODO handle the case of exceptions
+                        
+                    }).finally(function () {
+                        $scope.isGettingData = false;
+                    });
+                }
+            }
+
+            if (ctrl.onloaded != null)
+                ctrl.onloaded(api);
         }
 
         this.initializeController = initializeController;
-
     }
     return directiveDefinitionObject;
 }]);

@@ -30,7 +30,6 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         [HttpPost]
         public List<SaleZoneInfo> GetSaleZonesInfoByIds(SaleZoneInput input)
         {
-            Thread.Sleep(3000);
             SaleZoneManager manager = new SaleZoneManager();
             return manager.GetSaleZonesInfoByIds(input.PackageId, input.SaleZoneIds);
         }
