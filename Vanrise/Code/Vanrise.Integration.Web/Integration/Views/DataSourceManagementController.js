@@ -100,6 +100,7 @@ function DataSourceManagementController($scope, DataSourceAPIService, DataSource
     function editDataSource(dataSourceObj) {
         
         var onDataSourceUpdated = function (dataSource) {
+            console.log(dataSource);
             gridApi.itemUpdated(dataSource);
         }
 

@@ -205,8 +205,11 @@ function DataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskA
         DataSourceAPIService.UpdateDataSource(dataSourceObject)
         .then(function (response) {
             if (VRNotificationService.notifyOnItemUpdated("Data Source", response)) {
-                if ($scope.onDataSourceUpdated != undefined)
+                if ($scope.onDataSourceUpdated != undefined) {
+                    console.log(response.UpdatedObject);
+
                     $scope.onDataSourceUpdated(response.UpdatedObject);
+                }
                 $scope.modalContext.closeModal();
             }
         }).catch(function (error) {

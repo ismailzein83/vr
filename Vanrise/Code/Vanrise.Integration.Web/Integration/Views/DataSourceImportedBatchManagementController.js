@@ -75,11 +75,13 @@ function DataSourceImportedBatchManagementController($scope, DataSourceImportedB
 
         var query = {
             DataSourceId: $scope.selectedDataSource.DataSourceId,
-            BatchName: ($scope.batchName != undefined) ? $scope.batchName : null,
+            BatchName: ($scope.batchName != undefined && $scope.batchName != "") ? $scope.batchName : null,
             MappingResults: getMappedMappingResults(),
             From: $scope.selectedFromDateTime,
             To: $scope.selectedToDateTime
         };
+
+        console.log(query);
 
         return gridApi.retrieveData(query);
     }
