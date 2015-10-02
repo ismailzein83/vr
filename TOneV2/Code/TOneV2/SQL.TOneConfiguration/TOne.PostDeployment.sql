@@ -141,7 +141,7 @@ as (select * from (values
 (17,'Carrier Account','CarrierAccount Managments','#/view/BusinessEntity/Views/CarrierAccountManagement',3,null,null,null,0,11),
 (35,'System Entities','System Entities','#/view/Security/Views/BusinessEntityManagement',5,'Root/Administration Module/System Entities:View',null,null,0,12),
 (39,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',23,'Root/Administration Module/Dynamic Pages:View',null,null,0,11),
-(41,'History','History','#/view/BusinessProcess/Views/BPHistory',10,null,null,null,0,11),
+(41,'Log','Log History','#/view/BusinessProcess/Views/BPHistory',10,null,null,null,0,11),
 (42,'Management','Management','#/view/BusinessProcess/Views/BPDefinitionManagement',10,null,null,null,0,10),
 (43,'Scheduler Service','Scheduler Service','#/view/Runtime/Views/SchedulerTaskManagement',5,null,null,null,0,14),
 (69,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',23,'Root/Administration Module/Dynamic Pages:View',null,null,0,10),
@@ -171,9 +171,9 @@ as (select * from (values
 (279,'Rate Analysis','Rate Analysis','#/view/BusinessEntity/Views/Rate Analysis/RateAnalysis',3,null,null,null,0,null),
 (287,'Supplier TOD','Supplier TOD','#/view/BusinessEntity/Views/PurchaseArea/SupplierTODManagement',18,null,null,null,0,11),
 (288,'Supplier Invoice','Supplier Invoice','#/view/Billing/Views/SupplierInvoiceManagement',11,null,null,null,0,10),
-(297,	'Supplier Commission',	'Supplier Commission',	'#/view/BusinessEntity/Views/PurchaseArea/SupplierCommissionManagement',	18,	NULL,	NULL,	NULL,	0,	NULL),
-(299,	'Customer Commission',	'Customer Commission',	'#/view/BusinessEntity/Views/SalesArea/CustomerCommissionManagement',	19,	NULL,	NULL,	NULL,	0,	NULL),
-(307,	'Generic Analytic',	'Generic Analytic',	'#/view/Analytics/Views/GenericAnalytic/GenericAnalytic',	21,	NULL,	NULL,	NULL,	0,	12)
+(297,'Supplier Commission',	'Supplier Commission',	'#/view/BusinessEntity/Views/PurchaseArea/SupplierCommissionManagement',	18,	NULL,	NULL,	NULL,	0,	NULL),
+(299,'Customer Commission',	'Customer Commission',	'#/view/BusinessEntity/Views/SalesArea/CustomerCommissionManagement',	19,	NULL,	NULL,	NULL,	0,	NULL),
+(307,'Generic Analytic',	'Generic Analytic',	'#/view/Analytics/Views/GenericAnalytic/GenericAnalytic',	21,	NULL,	NULL,	NULL,	0,	12)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank]))
 merge	[sec].[View] as t
