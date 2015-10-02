@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
-using Vanrise.Common.Data;
 
 namespace TOne.WhS.SupplierPriceList.Data
 {

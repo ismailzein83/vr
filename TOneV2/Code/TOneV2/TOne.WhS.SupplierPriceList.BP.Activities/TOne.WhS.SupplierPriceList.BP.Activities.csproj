@@ -68,11 +68,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplyDataToDB.cs" />
-    <Compile Include="ApplySupplierCodesForDB.cs" />
-    <Compile Include="ApplySupplierPriceListForDB.cs" />
-    <Compile Include="ApplySupplierRatesForDB.cs" />
-    <Compile Include="ApplySupplierZonesForDB.cs" />
-    <Compile Include="ApplySupplierZonesToDB.cs" />
     <Compile Include="ProcessCodes.cs" />
     <Compile Include="ProcessRates.cs" />
     <Compile Include="ProcessZones.cs" />

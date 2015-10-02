@@ -9,6 +9,6 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ISupplierRateDataManager:IDataManager
     {
-        List<SupplierRate> GetSupplierRates(DateTime minimumDate);
+        List<SupplierRate> GetSupplierRates(int supplierId,DateTime minimumDate);
     }
 }

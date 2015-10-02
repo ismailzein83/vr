@@ -18,16 +18,16 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
           
         }
 
-        public List<SupplierCode> GetSupplierCodes(DateTime minimumDate)
+        public List<SupplierCode> GetSupplierCodes(int supplierId,DateTime minimumDate)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetByDate", SupplierCodeMapper, minimumDate);
+            return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetByDate", SupplierCodeMapper, supplierId,minimumDate);
         }
         SupplierCode SupplierCodeMapper(IDataReader reader)
         {
             SupplierCode supplierCode = new SupplierCode
             {
                 Code = GetReaderValue<string>(reader, "Code"),
-                SupplierCodeId = GetReaderValue<int>(reader, "ID"),
+                SupplierCodeId = GetReaderValue<long>(reader, "ID"),
                 ZoneId = (long)reader["ZoneID"],
                 BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BED"),
                 EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED"),

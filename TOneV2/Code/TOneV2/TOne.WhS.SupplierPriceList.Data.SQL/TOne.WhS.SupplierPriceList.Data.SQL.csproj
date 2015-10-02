@@ -55,10 +55,7 @@
   <ItemGroup>
     <Compile Include="ImportPriceListDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SupplierCodeDataManager.cs" />
     <Compile Include="SupplierPriceListDataManager.cs" />
-    <Compile Include="SupplierRateDataManager.cs" />
-    <Compile Include="SupplierZoneDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.Data.SQL\TOne.Data.SQL.csproj">

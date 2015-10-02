@@ -14,7 +14,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public List<SupplierRate> GetSupplierRates(int supplierId,DateTime minimumDate)
         {
             ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
-            return dataManager.GetSupplierRates(minimumDate);
+            return dataManager.GetSupplierRates(supplierId,minimumDate);
         }
     }
 }

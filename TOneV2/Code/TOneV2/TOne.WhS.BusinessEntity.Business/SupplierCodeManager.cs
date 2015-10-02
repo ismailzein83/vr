@@ -13,7 +13,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public List<SupplierCode> GetSupplierCodes(int supplierId,DateTime minimumDate)
         {
             ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
-            return dataManager.GetSupplierCodes(minimumDate);
+            return dataManager.GetSupplierCodes(supplierId,minimumDate);
         }
 
     }

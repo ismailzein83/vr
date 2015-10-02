@@ -445,6 +445,10 @@
       <Project>{9aff405d-99a3-4316-a3a9-1f0db11eb785}</Project>
       <Name>TOne.WhS.SupplierPriceList.BP</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SupplierPriceList.Data.SQL\TOne.WhS.SupplierPriceList.Data.SQL.csproj">
+      <Project>{7b2361d9-b37e-482e-8eba-9d88ac7d6829}</Project>
+      <Name>TOne.WhS.SupplierPriceList.Data.SQL</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

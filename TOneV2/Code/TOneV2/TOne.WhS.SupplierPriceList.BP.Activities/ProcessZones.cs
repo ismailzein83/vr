@@ -59,7 +59,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 zones.Add(addZone);
 
             }
-            int lastTakenId = manager.ReserveIDRange(zones.Where(x=>x.Status==Status.New).Count());
+            long lastTakenId = manager.ReserveIDRange(zones.Where(x => x.Status == Status.New).Count());
 
             foreach (Zone zone in zones)
             {

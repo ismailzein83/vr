@@ -16,6 +16,7 @@
     <x:Property Name="Input" Type="InArgument(twsba:SupplierPriceListProcessInput)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceListProcess_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System</x:String>
@@ -50,13 +51,13 @@
       <AssemblyReference>TOne.WhS.SupplierPriceList.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="s:Nullable(s:DateTime)" Name="MinimumDate" />
       <Variable x:TypeArguments="twse:PriceListByZone" Name="PriceListByZone" />
       <Variable x:TypeArguments="scg:List(twse:Zone)" Name="Zones" />
     </Sequence.Variables>
-    <twsba1:ReadFromExcelProcess>
+    <twsba1:ReadFromExcelProcess sap2010:WorkflowViewState.IdRef="ReadFromExcelProcess_1">
       <twsba1:ReadFromExcelProcess.EffectiveDate>
         <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
           <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveDate</mca:CSharpValue>
@@ -77,9 +78,8 @@
           <mca:CSharpReference x:TypeArguments="twse:PriceListByZone">PriceListByZone</mca:CSharpReference>
         </OutArgument>
       </twsba1:ReadFromExcelProcess.PriceListByZone>
-      <sap2010:WorkflowViewState.IdRef>ReadFromExcelProcess_1</sap2010:WorkflowViewState.IdRef>
     </twsba1:ReadFromExcelProcess>
-    <twsba1:ProcessZones>
+    <twsba1:ProcessZones sap2010:WorkflowViewState.IdRef="ProcessZones_1">
       <twsba1:ProcessZones.EffectiveDate>
         <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
           <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveDate</mca:CSharpValue>
@@ -100,41 +100,66 @@
           <mca:CSharpReference x:TypeArguments="scg:List(twse:Zone)">Zones</mca:CSharpReference>
         </OutArgument>
       </twsba1:ProcessZones.Zones>
-      <sap2010:WorkflowViewState.IdRef>ProcessZones_1</sap2010:WorkflowViewState.IdRef>
     </twsba1:ProcessZones>
-    <Parallel>
-      <twsba1:ProcessRates Status="{x:Null}">
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+      <Parallel.Variables>
+        <Variable x:TypeArguments="scg:List(twse:Code)" Name="CodesToBeDeleted" />
+      </Parallel.Variables>
+      <twsba1:ProcessRates Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessRates_1">
         <twsba1:ProcessRates.MinimumDate>
           <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
             <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">MinimumDate</mca:CSharpValue>
           </InArgument>
         </twsba1:ProcessRates.MinimumDate>
+        <twsba1:ProcessRates.SupplierId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.SupplierAccountId</mca:CSharpValue>
+          </InArgument>
+        </twsba1:ProcessRates.SupplierId>
         <twsba1:ProcessRates.Zones>
           <InOutArgument x:TypeArguments="scg:List(twse:Zone)">
             <mca:CSharpReference x:TypeArguments="scg:List(twse:Zone)">Zones</mca:CSharpReference>
           </InOutArgument>
         </twsba1:ProcessRates.Zones>
-        <sap2010:WorkflowViewState.IdRef>ProcessRates_1</sap2010:WorkflowViewState.IdRef>
       </twsba1:ProcessRates>
-      <twsba1:ProcessCodes Status="{x:Null}">
+      <twsba1:ProcessCodes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessCodes_1">
+        <twsba1:ProcessCodes.CodesToBeDeleted>
+          <OutArgument x:TypeArguments="scg:List(twse:Code)">
+            <mca:CSharpReference x:TypeArguments="scg:List(twse:Code)">CodesToBeDeleted</mca:CSharpReference>
+          </OutArgument>
+        </twsba1:ProcessCodes.CodesToBeDeleted>
         <twsba1:ProcessCodes.MinimumDate>
           <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
             <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">MinimumDate</mca:CSharpValue>
           </InArgument>
         </twsba1:ProcessCodes.MinimumDate>
+        <twsba1:ProcessCodes.SupplierId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.SupplierAccountId</mca:CSharpValue>
+          </InArgument>
+        </twsba1:ProcessCodes.SupplierId>
         <twsba1:ProcessCodes.Zones>
           <InOutArgument x:TypeArguments="scg:List(twse:Zone)">
             <mca:CSharpReference x:TypeArguments="scg:List(twse:Zone)">Zones</mca:CSharpReference>
           </InOutArgument>
         </twsba1:ProcessCodes.Zones>
-        <sap2010:WorkflowViewState.IdRef>ProcessCodes_1</sap2010:WorkflowViewState.IdRef>
       </twsba1:ProcessCodes>
-      <sap2010:WorkflowViewState.IdRef>Parallel_1</sap2010:WorkflowViewState.IdRef>
     </Parallel>
-    <sap2010:WorkflowViewState.IdRef>Sequence_1</sap2010:WorkflowViewState.IdRef>
-    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0UHJvY2Vzcy54YW1sEjUDiAEOAgEBOwVRIwIBLlIFaBsCARlpBYUBEAIBAkgLSGoCAT4+Cz5qAgE5QwtDVAIBNE0LTWwCAS9fC19fAgEpVQtVagIBJFoLWmQCAR9kC2RhAgEaagd2HQIBDncHgwEdAgEDbQ1tZAIBFHINcmMCAQ96DXpkAgEJfw1/YwIBBA==</sads:DebugSymbol.Symbol>
+    <twsba1:ApplyDataToDB>
+      <twsba1:ApplyDataToDB.SupplierId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.SupplierAccountId</mca:CSharpValue>
+        </InArgument>
+      </twsba1:ApplyDataToDB.SupplierId>
+      <twsba1:ApplyDataToDB.Zones>
+        <InArgument x:TypeArguments="scg:List(twse:Zone)">
+          <mca:CSharpValue x:TypeArguments="scg:List(twse:Zone)">Zones</mca:CSharpValue>
+        </InArgument>
+      </twsba1:ApplyDataToDB.Zones>
+      <sap2010:WorkflowViewState.IdRef>ApplyDataToDB_1</sap2010:WorkflowViewState.IdRef>
+    </twsba1:ApplyDataToDB>
+    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0UHJvY2Vzcy54YW1sGDYDogEOAgEBPAVRIwIBT1IFZxsCATpoBZMBEAIBDZQBBaABHAIBAkkLSWoCAV8/Cz9qAgFaRAtEVAIBVU4LTmwCAVBfC19fAgFKVQtVagIBRVoLWmQCAUBkC2RhAgE7bAd8HQIBJ30HkgEdAgEOlwELlwFfAgEInAELnAFZAgEDdA10YQIBNG8Nb2QCAS55DXljAgEogAENgAFuAgEhigENigFhAgEbhQENhQFkAgEVjwENjwFjAgEP</sads:DebugSymbol.Symbol>
   </Sequence>
-  <sap2010:WorkflowViewState.IdRef>TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceListProcess_1</sap2010:WorkflowViewState.IdRef>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="ReadFromExcelProcess_1" sap:VirtualizedContainerService.HintSize="554,22" />
@@ -142,14 +167,15 @@
       <sap2010:ViewStateData Id="ProcessRates_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ProcessCodes_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,334">
+      <sap2010:ViewStateData Id="ApplyDataToDB_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,396">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceListProcess_1" sap:VirtualizedContainerService.HintSize="616,414" />
+      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceListProcess_1" sap:VirtualizedContainerService.HintSize="616,476" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

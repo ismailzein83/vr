@@ -10,6 +10,6 @@ namespace TOne.WhS.BusinessEntity.Data
     public interface ISupplierZoneDataManager:IDataManager
     {
         List<SupplierZone> GetSupplierZones(int supplierId, DateTime effectiveDate);
-        int ReserveIDRange(int numberOfIDs);
+        long ReserveIDRange(int numberOfIDs);
     }
 }

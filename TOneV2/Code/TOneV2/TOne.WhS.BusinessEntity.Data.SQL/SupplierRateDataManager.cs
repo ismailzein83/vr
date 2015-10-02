@@ -16,9 +16,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
           
         }
-        public List<SupplierRate> GetSupplierRates(DateTime minimumDate)
+        public List<SupplierRate> GetSupplierRates(int supplierId,DateTime minimumDate)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SupplierRate_GetByDate", SupplierRateMapper, minimumDate);
+            return GetItemsSP("TOneWhS_BE.sp_SupplierRate_GetByDate", SupplierRateMapper,supplierId, minimumDate);
         }
         SupplierRate SupplierRateMapper(IDataReader reader)
         {
@@ -27,7 +27,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 NormalRate = GetReaderValue<decimal>(reader, "Rate"),
                 SupplierRateId = (long)reader["ID"],
                 ZoneId = (long)reader["ZoneID"],
-                PriceListId = GetReaderValue<int>(reader, "BED"),
+                PriceListId = GetReaderValue<int>(reader, "PriceListID"),
                 BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BED"),
                 EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED")
             };

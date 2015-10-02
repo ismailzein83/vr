@@ -35,9 +35,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
 
 
-        public int ReserveIDRange(int numberOfIDs)
+        public long ReserveIDRange(int numberOfIDs)
         {
-            return (int)ExecuteScalarSP("TOneWhS_BE.sp_SupplierZoneIDManager_ReserveIDRange", numberOfIDs);
+            object  lastIndex=ExecuteScalarSP("TOneWhS_BE.sp_SupplierZoneIDManager_ReserveIDRange", numberOfIDs);
+            return (long)lastIndex;
         }
     }
 }

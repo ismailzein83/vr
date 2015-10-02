@@ -65,6 +65,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
            foreach (Zone zone in  inputArgument.Zones)
            {
+               if (zone.Rates == null || zone.Rates.Count==0){
+                    zone.Rates=new List<Rate>();
+               }
                if(zone.Status==TOne.WhS.SupplierPriceList.Entities.Status.New)
                {
                    zone.Rates.Add(new Rate
@@ -72,7 +75,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                        BeginEffectiveDate = zone.BeginEffectiveDate,
                        EndEffectiveDate = zone.EndEffectiveDate,
                        NormalRate = zone.NewRate.Rate,
-                       ZoneId = zone.SupplierZoneId
+                       ZoneId = zone.SupplierZoneId,
+                       Status = TOne.WhS.SupplierPriceList.Entities.Status.New,
                    });
                }
                else if (zone.Status == TOne.WhS.SupplierPriceList.Entities.Status.NotChanged)

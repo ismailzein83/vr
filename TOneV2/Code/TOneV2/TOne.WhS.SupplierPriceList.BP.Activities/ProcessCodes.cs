@@ -63,6 +63,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         CodeValue = code.Code,
                         ZoneId = code.ZoneId,
                         SupplierCodeId = code.SupplierCodeId,
+
                     });
                     codesByCode.Add(code.Code, codes);
                 }
@@ -70,6 +71,10 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             foreach (Zone zone in inputArgument.Zones)
             {
+                if (zone.Codes == null || zone.Codes.Count == 0)
+                {
+                    zone.Codes = new List<Code>();
+                }
                 if (zone.Status == TOne.WhS.SupplierPriceList.Entities.Status.New)
                 {
                     foreach(PriceListCodeItem code in zone.NewCodes){
@@ -78,7 +83,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         BeginEffectiveDate = code.BED,
                         EndEffectiveDate = code.EED,
                         CodeValue=code.Code,
-                        ZoneId = zone.SupplierZoneId
+                        ZoneId = zone.SupplierZoneId,
+                        Status = TOne.WhS.SupplierPriceList.Entities.Status.New,
                     });
                     }
                     
@@ -220,6 +226,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         {
             if (this.Zones.Get(context) == null)
                 this.Zones.Set(context, new List<Zone>());
+            if (this.CodesToBeDeleted.Get(context) == null)
+                this.CodesToBeDeleted.Set(context, new List<Code>());
 
             base.OnBeforeExecute(context, handle);
         }

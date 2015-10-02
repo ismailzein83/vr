@@ -33,8 +33,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             DateTime? minimumDate=null;
             while (count < worksheet.Cells.Rows.Count)
             {
-                DateTime? bEDDateFromExcel = worksheet.Cells[count, 3].DateTimeValue;
-                DateTime? eEDDateFromExcel = worksheet.Cells[count, 4].DateTimeValue;
+                DateTime? bEDDateFromExcel = Convert.ToDateTime(worksheet.Cells[count, 3].StringValue);
+
+                DateTime? eEDDateFromExcel=null;
+                if (worksheet.Cells[count, 4].Value != null)
+                    Convert.ToDateTime(worksheet.Cells[count, 4].StringValue);
                 if (minimumDate == null)
                     minimumDate = effectiveDate.HasValue ? effectiveDate : bEDDateFromExcel;
                 else if (!effectiveDate.HasValue && minimumDate > bEDDateFromExcel)
@@ -64,6 +67,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     priceListZoneItem.EED = eEDDateFromExcel;
                     priceListByZone.Add(zoneName, priceListZoneItem);
                 }
+                if (priceListZoneItem.Codes == null || priceListZoneItem.Codes.Count == 0)
+                    priceListZoneItem.Codes = new List<PriceListCodeItem>();
                 priceListZoneItem.Codes.Add(code);
 
                 if (code.BED < priceListZoneItem.BED)
