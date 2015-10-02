@@ -119,9 +119,9 @@
                 var routeRule = {
                     RouteRuleId: (routeRuleId != null) ? routeRuleId : 0,
                     RouteCriteria: {
-                        RoutingProductId: $scope.selectedRoutingProduct.RoutingProductId,
+                        RoutingProductId: $scope.selectedRoutingProduct != undefined ? $scope.selectedRoutingProduct.RoutingProductId: null,
                         SaleZoneGroupConfigId: $scope.selectedSaleZoneGroupTemplate.TemplateConfigID != -1 ? $scope.selectedSaleZoneGroupTemplate.TemplateConfigID : null,
-                        SaleZoneGroupSettings: saleZoneGroupSettingsDirectiveAPI.getData()
+                        SaleZoneGroupSettings: saleZoneGroupSettingsDirectiveAPI != undefined ? saleZoneGroupSettingsDirectiveAPI.getData() : null
                     }
                 };
 

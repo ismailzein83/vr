@@ -1,5 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeSelectivesalezones', ['WhS_BE_SaleZoneAPIService', 'UtilsService', function (WhS_BE_SaleZoneAPIService, UtilsService) {
+app.directive('vrWhsBeSelectivesalezones', ['WhS_BE_SaleZoneAPIService', 'WhS_BE_SaleZonePackageAPIService', 'UtilsService',
+    function (WhS_BE_SaleZoneAPIService, WhS_BE_SaleZonePackageAPIService, UtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -12,13 +13,22 @@ app.directive('vrWhsBeSelectivesalezones', ['WhS_BE_SaleZoneAPIService', 'UtilsS
             var ctrl = this;
             $scope.selectedSaleZones = [];
 
-            $scope.showSaleZonePackage = ctrl.salezonepackageid === undefined;
+            $scope.saleZonePackages = [];
+            $scope.selectedSaleZonePackage = undefined;
+
+            $scope.showSaleZonePackage = ctrl.salezonepackageid == undefined;
 
             var beSaleZonesCtor = new beSaleZones(ctrl, $scope, WhS_BE_SaleZoneAPIService);
             beSaleZonesCtor.initializeController();
 
             $scope.searchZones = function (filter) {
-                return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo(ctrl.salezonepackageid, filter);
+                var packageId;
+                if (ctrl.salezonepackageid == undefined)
+                    packageId = $scope.selectedSaleZonePackage.SaleZonePackageId;
+                else
+                    packageId = ctrl.salezonepackageid;
+
+                return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo(packageId, filter);
             }
         },
         controllerAs: 'ctrl',
@@ -37,16 +47,14 @@ app.directive('vrWhsBeSelectivesalezones', ['WhS_BE_SaleZoneAPIService', 'UtilsS
     };
 
     function getBeSelectiveSaleZonesTemplate(attrs) {
-        return '/Client/Modules/WhS_BusinessEntity/Directives/SelectiveSaleZoneDirectiveTemplate.html';
+        return '/Client/Modules/WhS_BusinessEntity/Directives/Templates/SelectiveSaleZoneDirectiveTemplate.html';
     }
 
     function beSaleZones(ctrl, $scope, WhS_BE_SaleZoneAPIService) {
         
         function initializeController() {
-            //Load default data if any
-
-            //Prepare and initiate the API stating the directive as ready to be used
-            defineAPI();
+            
+            loadSaleZonePackages();
         }
 
         function defineAPI()
@@ -57,7 +65,7 @@ app.directive('vrWhsBeSelectivesalezones', ['WhS_BE_SaleZoneAPIService', 'UtilsS
             {
                 return {
                     $type: "TOne.WhS.BusinessEntity.Entities.SelectiveSaleZonesSettings, TOne.WhS.BusinessEntity.Entities",
-                    SaleZonePackageId: ctrl.salezonepackageid,
+                    SaleZonePackageId: ctrl.salezonepackageid == undefined ? $scope.selectedSaleZonePackage.SaleZonePackageId : ctrl.salezonepackageid,
                     ZoneIds: UtilsService.getPropValuesFromArray($scope.selectedSaleZones, "SaleZoneId")
                 };
             }
@@ -65,8 +73,21 @@ app.directive('vrWhsBeSelectivesalezones', ['WhS_BE_SaleZoneAPIService', 'UtilsS
             api.setData = function (saleZoneGroupSettings)
             {
                 $scope.isLoadingDirective = true;
+
+                var packageId;
+
+                if (ctrl.salezonepackageid == undefined)
+                {
+                    $scope.selectedSaleZonePackage = UtilsService.getItemByVal($scope.saleZonePackages, saleZoneGroupSettings.SaleZonePackageId, "SaleZonePackageId");
+                    packageId = saleZoneGroupSettings.SaleZonePackageId;
+                }
+                else
+                {
+                    packageId = ctrl.salezonepackageid;
+                }
+
                 if (saleZoneGroupSettings.ZoneIds.length > 0) {
-                    var input = { PackageId: ctrl.salezonepackageid, SaleZoneIds: saleZoneGroupSettings.ZoneIds };
+                    var input = { PackageId: packageId, SaleZoneIds: saleZoneGroupSettings.ZoneIds };
 
                     WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {
                         angular.forEach(response, function (item) {
@@ -83,6 +104,22 @@ app.directive('vrWhsBeSelectivesalezones', ['WhS_BE_SaleZoneAPIService', 'UtilsS
 
             if (ctrl.onloaded != null)
                 ctrl.onloaded(api);
+        }
+
+        function loadSaleZonePackages() {
+            $scope.isLoadingDirective = true;
+            return WhS_BE_SaleZonePackageAPIService.GetSaleZonePackages().then(function (response) {
+                angular.forEach(response, function (item) {
+                    $scope.saleZonePackages.push(item);
+                });
+            }).catch(function (error) {
+                //TODO handle the case of exceptions
+
+            }).finally(function () {
+                $scope.isLoadingDirective = false;
+                //Prepare and initiate the API stating the directive as ready to be used
+                defineAPI();
+            });
         }
 
         this.initializeController = initializeController;

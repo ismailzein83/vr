@@ -150,7 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_BusinessEntity\Constant\ModuleConfig.js" />
-    <Content Include="WhS_BusinessEntity\Directives\SelectiveSaleZoneDirectiveTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\Templates\SelectiveSaleZoneDirectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-carrieraccount-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-selectivesalezones-directive.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CarrierAccountAPIService.js" />
