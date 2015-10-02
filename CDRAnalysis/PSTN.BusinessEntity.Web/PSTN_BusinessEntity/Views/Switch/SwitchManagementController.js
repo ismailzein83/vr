@@ -49,6 +49,12 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return SwitchAPIService.GetFilteredSwitches(dataRetrievalInput)
                 .then(function (response) {
+                    if (response.Data != undefined) {
+                        for (var i = 0; i < response.Data.length; i++) {
+                            setDataItemExtension(response.Data[i]);
+                        }
+                        console.log(i);
+                    }
                     onResponseReady(response);
                 })
                 .catch(function (error) {
@@ -57,6 +63,15 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
         }
 
         defineMenuActions();
+    }
+
+    function setDataItemExtension(dataItem) {
+        var extensionObject = {};
+        extensionObject.onTrunkGridReady = function (api) {
+            extensionObject.trunkGridAPI = api;
+            extensionObject.onTrunkGridReady = undefined;
+        };
+        dataItem.extensionObject = extensionObject;
     }
 
     function load() {
@@ -144,8 +159,9 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
         gridAPI.expandRow(dataItem);
 
         var onTrunkAdded = function (trunkObject) {
-            if (dataItem.onTrunkAdded != undefined)
-                dataItem.onTrunkAdded(trunkObject);
+            console.log(dataItem);
+            if (dataItem.extensionObject.trunkGridAPI.onTrunkAdded != undefined)
+                dataItem.extensionObject.trunkGridAPI.onTrunkAdded(trunkObject);
         }
 
         PSTN_BE_Service.addSwitchTrunk(dataItem.ID, onTrunkAdded);

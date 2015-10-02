@@ -1,6 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "SwitchTrunkAPIService", "SwitchTrunkTypeEnum", "SwitchTrunkDirectionEnum", "UtilsService", "VRNotificationService", function (PSTN_BE_Service, SwitchTrunkAPIService, SwitchTrunkTypeEnum, SwitchTrunkDirectionEnum, UtilsService, VRNotificationService) {
+app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "SwitchTrunkAPIService", "SwitchTrunkTypeEnum", "SwitchTrunkDirectionEnum", "UtilsService", "VRNotificationService",
+    function (PSTN_BE_Service, SwitchTrunkAPIService, SwitchTrunkTypeEnum, SwitchTrunkDirectionEnum, UtilsService, VRNotificationService) {
     
     var directiveDefinitionObject = {
 
@@ -11,27 +12,59 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "SwitchTrunkAPIService", 
             pagingtype: "@"
         },
         controller: function ($scope, $element, $attrs) {
-            console.log("controller");
-
             var ctrl = this;
-            var gridAPI;
-            $scope.trunks = [];
+            var trunkGrid = new TrunkGrid($scope, ctrl);
+            trunkGrid.defineScope();
+        },
+        controllerAs: "ctrl",
+        bindToController: true,
+        compile: function (element, attrs) {
            
-            var gridFunctions = new GridFunctions($scope, ctrl, gridAPI, PSTN_BE_Service, SwitchTrunkTypeEnum, SwitchTrunkDirectionEnum, UtilsService);
-            gridFunctions.defineMenuActions();
+        },
+        template: function (element, attrs) {
+            
+            return getTemplate(attrs);
+        }
+
+    };
+
+    function TrunkGrid($scope, ctrl) {
+
+        var gridAPI;
+        this.defineScope = defineScope;
+
+        function defineScope()
+        {
+            $scope.trunks = [];
 
             $scope.onGridReady = function (api) {
-                console.log("onGridReady");
+
                 gridAPI = api;
 
-                var directiveAPI = gridFunctions.getDirectiveAPI();
+                var directiveAPI = getDirectiveAPI();
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(directiveAPI);
 
                 if (ctrl.switchid != undefined)
                     return directiveAPI.retrieveData({});
-            }
+
+                function getDirectiveAPI() {
+                    var directiveAPI = {};
+
+                    directiveAPI.retrieveData = function (filterObject) {
+                        var query = (ctrl.switchid != undefined) ? { SelectedSwitchIDs: [ctrl.switchid] } : filterObject;
+                        return gridAPI.retrieveData(query);
+                    }
+
+                    directiveAPI.onTrunkAdded = function (trunkObject) {
+                        setTrunkDescriptions(trunkObject);
+                        gridAPI.itemAdded(trunkObject);
+                    }
+
+                    return directiveAPI;
+                }
+            };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
 
@@ -39,7 +72,7 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "SwitchTrunkAPIService", 
                     .then(function (response) {
 
                         angular.forEach(response.Data, function (item) {
-                            helperFunctions.setTrunkDescriptions(item);
+                            setTrunkDescriptions(item);
                         });
 
                         onResponseReady(response);
@@ -47,26 +80,10 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "SwitchTrunkAPIService", 
                     .catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
                     });
-            }
+            };
 
-            console.log("controller");
-        },
-        controllerAs: "ctrl",
-        bindToController: true,
-        compile: function (element, attrs) {
-            console.log("compile");
-        },
-        template: function (element, attrs) {
-            console.log("template");
-            return getTemplate(attrs);
+            defineMenuActions();
         }
-
-    };
-
-    function GridFunctions($scope, ctrl, gridAPI, PSTN_BE_Service, SwitchTrunkTypeEnum, SwitchTrunkDirectionEnum, UtilsService) {
-
-        this.getDirectiveAPI = getDirectiveAPI;
-        this.defineMenuActions = defineMenuActions;
 
         function editTrunk(gridObject) {
 
@@ -84,23 +101,23 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "SwitchTrunkAPIService", 
             }
 
             PSTN_BE_Service.editSwitchTrunk(gridObject, onTrunkUpdated);
-        }
 
-        function updateDataItem(dataItemID, linkedToTrunkID, linkedToTrunkName) {
+            function updateDataItem(dataItemID, linkedToTrunkID, linkedToTrunkName) {
 
-            if (dataItemID != null) {
-                var dataItem = UtilsService.getItemByVal($scope.trunks, dataItemID, "ID");
+                if (dataItemID != null) {
+                    var dataItem = UtilsService.getItemByVal($scope.trunks, dataItemID, "ID");
 
-                if (dataItem != null) {
-                    dataItem = UtilsService.cloneObject(dataItem, true);
+                    if (dataItem != null) {
+                        dataItem = UtilsService.cloneObject(dataItem, true);
 
-                    dataItem.LinkedToTrunkID = linkedToTrunkID;
-                    dataItem.LinkedToTrunkName = linkedToTrunkName;
+                        dataItem.LinkedToTrunkID = linkedToTrunkID;
+                        dataItem.LinkedToTrunkName = linkedToTrunkName;
 
-                    gridAPI.itemUpdated(dataItem);
+                        gridAPI.itemUpdated(dataItem);
+                    }
                 }
             }
-        }
+        }               
 
         function deleteTrunk(gridObject) {
 
@@ -110,23 +127,7 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "SwitchTrunkAPIService", 
 
             PSTN_BE_Service.deleteSwitchTrunk(gridObject, onTrunkDeleted);
         }
-
-        function getDirectiveAPI() {
-            var directiveAPI = {};
-
-            directiveAPI.retrieveData = function (filterObject) {
-                var query = (ctrl.switchid != undefined) ? { SelectedSwitchIDs: [ctrl.switchid] } : filterObject;
-                return gridAPI.retrieveData(query);
-            }
-
-            directiveAPI.onTrunkAdded = function (trunkObject) {
-                setTrunkDescriptions(trunkObject);
-                gridAPI.itemAdded(trunkObject);
-            }
-
-            return directiveAPI;
-        }
-
+        
         function setTrunkDescriptions(trunkObject) {
 
             var type = UtilsService.getEnum(SwitchTrunkTypeEnum, "value", trunkObject.Type);
