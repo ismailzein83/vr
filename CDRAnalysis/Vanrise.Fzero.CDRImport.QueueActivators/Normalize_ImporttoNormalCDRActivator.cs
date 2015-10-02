@@ -2,9 +2,9 @@
 using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Queueing.Entities;
 
-namespace Vanrise.Fzero.CDRImport.Business
+namespace Vanrise.Fzero.CDRImport.QueueActivators
 {
-    public class CDRNormalizationActivator : QueueActivator
+    public class Normalize_ImporttoNormalCDRActivator : QueueActivator
     {
         public override void ProcessItem(PersistentQueueItem item, ItemsToEnqueue outputItems)
         {

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Queueing.Entities;
 
-namespace Vanrise.Fzero.CDRImport.Business
+namespace Vanrise.Fzero.CDRImport.QueueActivators
 {
-    public class StagingCDRNormalizationActivator : QueueActivator
+    public class Normalize_ImporttoStagingCDRActivator : QueueActivator
     {
        
         public override void ProcessItem(PersistentQueueItem item, ItemsToEnqueue outputItems)
