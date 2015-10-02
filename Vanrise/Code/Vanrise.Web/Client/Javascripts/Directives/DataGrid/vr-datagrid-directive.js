@@ -652,8 +652,17 @@
                 pagingOnScrollEnabled = true;
                 if (ctrl.maxheight1=undefined)
                     setMaxHeight(ctrl.maxheight);
-                else
-                    setMaxHeight("500px");
+                else {
+
+                    var sh = screen.height;
+                    var h;
+                    if (isInModal() == true)
+                        h = screen.height * 0.3;
+                    else
+                        h = screen.height * 0.55;
+
+                    setMaxHeight(h+"px");
+                }
             }
 
             //this event is called by the vrDatagridrows directive
@@ -688,9 +697,19 @@
 
             };
         }
+        function isInModal() {
+            return ($(ctrl.el).find("#gridBodyContainer").parents('.modal-body').length > 0)
+        }
 
         function getPageSize() {
-            return 25;
+            var h;
+            if (isInModal() == true)
+                h = screen.height * 0.3;
+            else
+                h = screen.height * 0.55;
+
+            var pagesize = (Math.ceil(parseInt((h / 25) * 1.5) / 10) * 10) < 25 ? 25 : (Math.ceil(parseInt((h / 25) * 1.5) / 10) * 10);
+            return pagesize;
         }
         function getScrollbarWidth() {
             var outer = document.createElement("div");
