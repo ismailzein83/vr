@@ -49,8 +49,17 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
                 return false;
             else
             {
-                for (var i = 0; i < $scope.selectedMeasureTypes.length; i++) 
+                for (var i = 0; i < $scope.selectedMeasureTypes.length; i++)
+                {
                     measureTypes.push($scope.selectedMeasureTypes[i].Name);
+                    if($scope.selectedMeasureTypes[i].Name== $scope.selectedTopMeasure.Name)
+                    {
+                        var swap = measureTypes[0];
+                        measureTypes[0] = $scope.selectedMeasureTypes[i].Name;
+                        measureTypes[i] = swap;
+                    }
+                }
+                   
             }
         }
         var topMeasure = null;
@@ -59,6 +68,7 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
         var entityType = null;
         if ($scope.selectedEntityType != undefined && $scope.selectedOperationType.value != "MeasuresGroupedByTime")
             entityType = $scope.selectedEntityType.Name;
+
         return {
             $type: "Vanrise.BI.Entities.ChartDirectiveSetting, Vanrise.BI.Entities",
             OperationType: $scope.selectedOperationType.value,

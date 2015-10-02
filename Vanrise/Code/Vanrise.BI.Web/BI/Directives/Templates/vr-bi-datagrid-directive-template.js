@@ -42,6 +42,11 @@ function VrDatagridDirectiveTemplateController($scope, TimeDimensionTypeEnum,BIC
         var measureTypes = [];
         for (var i = 0; i < $scope.selectedMeasureTypes.length; i++) {
             measureTypes.push($scope.selectedMeasureTypes[i].Name);
+            if ($scope.selectedMeasureTypes[i].Name == $scope.selectedTopMeasure.Name) {
+                var swap = measureTypes[0];
+                measureTypes[0] = $scope.selectedMeasureTypes[i].Name;
+                measureTypes[i] = swap;
+            }
         }    
         var entityType = null;
         if ($scope.selectedEntityType != undefined && $scope.selectedOperationType.value != "MeasuresGroupedByTime")
