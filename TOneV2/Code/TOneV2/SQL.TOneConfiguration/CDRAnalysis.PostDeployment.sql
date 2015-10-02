@@ -83,9 +83,9 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1,'Administration','Administration','Administration',null,'/images/menu-icons/Administration.png',10,0),
 (2,'Fraud Analysis','Fraud Analysis','Fraud Analysis',null,'/images/menu-icons/other.png',11,0),
-(3,'Workflow','Workflow','Workflow',null,'/images/menu-icons/Business Entities.png',12,0),
+(3,'Workflow','Workflow','Workflow','Workflow','/images/menu-icons/Business Entities.png',12,0),
 (4,'Data Sources','Data Sources','Data Sources',null,'/images/menu-icons/plug.png',13,0),
-(5,'Reports','Reports','Reports',null,'/images/menu-icons/busines intel.png',14,0),
+(5,'Reports','Reports','Reports','Reports','/images/menu-icons/busines intel.png',14,0),
 (6,'Business Intelligence','Business Intelligence','BI',null,'/images/menu-icons/busines intel.png',15,1),
 (7,'Dynamic Management','Dynamic Management','Dynamic Management',1,null,15,0),
 (8,'Infrastructure','Infrastructure','Infrastructure',1,null,14,0)
