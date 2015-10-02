@@ -4,25 +4,44 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [integration].[sp_DataSource_CreateTemp]
-	@TempTableName VARCHAR(200)
+	@TempTableName VARCHAR(200),
+	@Name VARCHAR(50) = NULL,
+	@AdapterTypeIDs VARCHAR(MAX) = NULL,
+	@IsEnabled BIT = NULL
 AS
 BEGIN
 	SET NOCOUNT ON;
 
     IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
+    
+		IF @AdapterTypeIDs IS NOT NULL
+		BEGIN
+			DECLARE @AdapterTypeIDsTable TABLE (AdapterTypeID INT)
+			INSERT INTO @AdapterTypeIDsTable (AdapterTypeID)
+			SELECT CONVERT(INT, ParsedString) FROM bp.[ParseStringList](@AdapterTypeIDs)
+		END
+    
 	    BEGIN
 			SELECT ds.[ID],
 			ds.[Name],
 			ds.[adapterID],
+			at.Name AS AdapterName,
 			ds.[AdapterState],
 			ad.[Info],
 			ds.[TaskId],
+			st.IsEnabled,
 			ds.[Settings]
 			
 			INTO #RESULT
 			
 			FROM [integration].[DataSource] AS ds
 			JOIN adapterType AS ad ON ds.adapterID = ad.ID
+			INNER JOIN integration.AdapterType at ON at.ID = ds.AdapterID
+			INNER JOIN runtime.ScheduleTask st ON st.ID = ds.TaskId
+			
+			WHERE (@Name IS NULL OR ds.Name LIKE '%' + @Name + '%')
+				AND (@AdapterTypeIDs IS NULL OR at.ID IN (SELECT AdapterTypeID FROM @AdapterTypeIDsTable))
+				AND (@IsEnabled IS NULL OR st.IsEnabled = @IsEnabled)
 			
 			DECLARE @sql VARCHAR(1000)
 			SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';
