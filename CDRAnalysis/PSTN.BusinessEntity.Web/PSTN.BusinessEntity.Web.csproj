@@ -165,6 +165,7 @@
     <Content Include="PSTN_BusinessEntity\Views\Trunk\SwitchTrunkEditorController.js" />
     <Content Include="PSTN_BusinessEntity\Views\Grids\SwitchTrunkGrid.html" />
     <Content Include="PSTN_BusinessEntity\Views\Grids\SwitchTrunkGridController.js" />
+    <Content Include="PSTN_BusinessEntity\Directives\SwitchTrunkGridTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Views\Trunk\SwitchTrunkManagement.html" />
     <Content Include="PSTN_BusinessEntity\Views\Trunk\SwitchTrunkManagementController.js" />
     <Content Include="PSTN_BusinessEntity\Views\Type\SwitchTypeEditor.html" />

@@ -99,7 +99,7 @@ namespace PSTN.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-        public DeleteOperationOutput<object> DeleteSwitchTrunk(int trunkID)
+        public DeleteOperationOutput<object> DeleteSwitchTrunk(int trunkID, int? linkedToTrunkID)
         {
             DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
             deleteOperationOutput.Result = DeleteOperationResult.Failed;
@@ -107,6 +107,12 @@ namespace PSTN.BusinessEntity.Business
             ISwitchTrunkDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchTrunkDataManager>();
 
             bool deleted = dataManager.DeleteSwitchTrunk(trunkID);
+
+            if (linkedToTrunkID != null)
+            {
+                int id = (int)linkedToTrunkID;
+                dataManager.UnlinkSwitchTrunk(id);
+            }
 
             if (deleted)
                 deleteOperationOutput.Result = DeleteOperationResult.Succeeded;

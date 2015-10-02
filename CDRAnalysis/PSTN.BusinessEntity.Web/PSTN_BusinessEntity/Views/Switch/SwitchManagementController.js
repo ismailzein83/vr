@@ -2,14 +2,12 @@
 
 function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIService, PSTN_BE_Service, UtilsService, VRNotificationService, VRModalService) {
 
-    var gridAPI = undefined;
+    var gridAPI;
 
     defineScope();
     load();
 
     function defineScope() {
-
-        $scope.switchTrunkGridConnector = {};
 
         // filter vars
         $scope.name = undefined;
@@ -49,12 +47,13 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return SwitchAPIService.GetFilteredSwitches(dataRetrievalInput)
                 .then(function (response) {
+
                     if (response.Data != undefined) {
                         for (var i = 0; i < response.Data.length; i++) {
                             setDataItemExtension(response.Data[i]);
                         }
-                        console.log(i);
                     }
+
                     onResponseReady(response);
                 })
                 .catch(function (error) {
@@ -67,10 +66,16 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
 
     function setDataItemExtension(dataItem) {
         var extensionObject = {};
+
         extensionObject.onTrunkGridReady = function (api) {
             extensionObject.trunkGridAPI = api;
+
+            var query = { SelectedSwitchIDs: [dataItem.ID] };
+            extensionObject.trunkGridAPI.retrieveData(query);
+
             extensionObject.onTrunkGridReady = undefined;
         };
+
         dataItem.extensionObject = extensionObject;
     }
 
@@ -159,7 +164,6 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
         gridAPI.expandRow(dataItem);
 
         var onTrunkAdded = function (trunkObject) {
-            console.log(dataItem);
             if (dataItem.extensionObject.trunkGridAPI.onTrunkAdded != undefined)
                 dataItem.extensionObject.trunkGridAPI.onTrunkAdded(trunkObject);
         }

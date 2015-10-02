@@ -8,11 +8,11 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "SwitchTrunkAPIService", 
         restrict: "E",
         scope: {
             onReady: "=",
-            switchid: "@",
-            pagingtype: "@"
+            switchid: "@"
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
+
             var trunkGrid = new TrunkGrid($scope, ctrl);
             trunkGrid.defineScope();
         },
@@ -21,10 +21,7 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "SwitchTrunkAPIService", 
         compile: function (element, attrs) {
            
         },
-        template: function (element, attrs) {
-            
-            return getTemplate(attrs);
-        }
+        templateUrl: "/Client/Modules/PSTN_BusinessEntity/Directives/SwitchTrunkGridTemplate.html"
 
     };
 
@@ -38,28 +35,28 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "SwitchTrunkAPIService", 
             $scope.trunks = [];
 
             $scope.onGridReady = function (api) {
-
                 gridAPI = api;
 
-                var directiveAPI = getDirectiveAPI();
-
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
-                    ctrl.onReady(directiveAPI);
-
-                if (ctrl.switchid != undefined)
-                    return directiveAPI.retrieveData({});
+                    ctrl.onReady(getDirectiveAPI());
 
                 function getDirectiveAPI() {
                     var directiveAPI = {};
 
-                    directiveAPI.retrieveData = function (filterObject) {
-                        var query = (ctrl.switchid != undefined) ? { SelectedSwitchIDs: [ctrl.switchid] } : filterObject;
+                    directiveAPI.retrieveData = function (query) {
                         return gridAPI.retrieveData(query);
                     }
 
                     directiveAPI.onTrunkAdded = function (trunkObject) {
                         setTrunkDescriptions(trunkObject);
                         gridAPI.itemAdded(trunkObject);
+
+                        var linkedToTrunkID = trunkObject.LinkedToTrunkID;
+                        updateDataItem(linkedToTrunkID, trunkObject.ID, trunkObject.Name);
+
+                        var linkedToTheLinkedToTrunkObject = UtilsService.getItemByVal($scope.trunks, linkedToTrunkID, "LinkedToTrunkID");
+                        if (linkedToTheLinkedToTrunkObject != null)
+                            updateDataItem(linkedToTheLinkedToTrunkObject.ID, null, null);
                     }
 
                     return directiveAPI;
@@ -88,46 +85,49 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "SwitchTrunkAPIService", 
         function editTrunk(gridObject) {
 
             var onTrunkUpdated = function (firstTrunkObject, linkedToFirstTrunkID, secondTrunkID) {
+                console.log(secondTrunkID);
 
                 setTrunkDescriptions(firstTrunkObject);
                 gridAPI.itemUpdated(firstTrunkObject);
 
                 updateDataItem(linkedToFirstTrunkID, null, null);
-                updateDataItem(secondTrunkID, firstTrunkObject.LinkedToTrunkID, firstTrunkObject.LinkedToTrunkName);
 
-                var secondTrunkObject = UtilsService.getItemByVal(ctrl.datasource, secondTrunkID, "ID");
+                var secondTrunkObject = UtilsService.getItemByVal($scope.trunks, secondTrunkID, "ID");
                 var linkedToSecondTrunkID = (secondTrunkObject != null) ? secondTrunkObject.LinkedToTrunkID : null;
+
                 updateDataItem(linkedToSecondTrunkID, null, null);
+                updateDataItem(secondTrunkID, firstTrunkObject.ID, firstTrunkObject.Name);
             }
 
             PSTN_BE_Service.editSwitchTrunk(gridObject, onTrunkUpdated);
-
-            function updateDataItem(dataItemID, linkedToTrunkID, linkedToTrunkName) {
-
-                if (dataItemID != null) {
-                    var dataItem = UtilsService.getItemByVal($scope.trunks, dataItemID, "ID");
-
-                    if (dataItem != null) {
-                        dataItem = UtilsService.cloneObject(dataItem, true);
-
-                        dataItem.LinkedToTrunkID = linkedToTrunkID;
-                        dataItem.LinkedToTrunkName = linkedToTrunkName;
-
-                        gridAPI.itemUpdated(dataItem);
-                    }
-                }
-            }
         }               
 
         function deleteTrunk(gridObject) {
 
-            var onTrunkDeleted = function (deletedTrunkObject) {
+            var onTrunkDeleted = function (deletedTrunkObject, linkedToTrunkID) {
                 gridAPI.itemDeleted(deletedTrunkObject);
+                updateDataItem(linkedToTrunkID, null, null);
             }
 
             PSTN_BE_Service.deleteSwitchTrunk(gridObject, onTrunkDeleted);
         }
         
+        function updateDataItem(dataItemID, linkedToTrunkID, linkedToTrunkName) {
+
+            if (dataItemID != null) {
+                var dataItem = UtilsService.getItemByVal($scope.trunks, dataItemID, "ID");
+
+                if (dataItem != null) {
+                    dataItem = UtilsService.cloneObject(dataItem, true);
+
+                    dataItem.LinkedToTrunkID = linkedToTrunkID;
+                    dataItem.LinkedToTrunkName = linkedToTrunkName;
+
+                    gridAPI.itemUpdated(dataItem);
+                }
+            }
+        }
+
         function setTrunkDescriptions(trunkObject) {
 
             var type = UtilsService.getEnum(SwitchTrunkTypeEnum, "value", trunkObject.Type);
@@ -149,30 +149,6 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "SwitchTrunkAPIService", 
                }
             ];
         }
-    }
-
-    function getTemplate(attrs) {
-
-        var pagingType = (attrs.pagingtype != undefined) ? attrs.pagingtype : 'PagingOnScroll';
-
-        return '<vr-row>'
-            + '<vr-columns width="fullrow">'
-                + '<vr-datagrid datasource="trunks" '
-                    + ' on-ready="onGridReady" '
-                    + ' dataretrievalfunction="dataRetrievalFunction" '
-                    + ' pagingtype="\'' + pagingType + '\'" '
-                    + ' menuactions="gridMenuActions" '
-                    + ' idfield="ID" >'
-
-                        + '<vr-datagridcolumn headertext="\'Name\'" field="\'Name\'" type="\'Text\'"></vr-datagridcolumn>'
-                        + '<vr-datagridcolumn headertext="\'Symbol\'" field="\'Symbol\'" type="\'Text\'"></vr-datagridcolumn>'
-                        + '<vr-datagridcolumn headertext="\'Switch\'" field="\'SwitchName\'" type="\'Text\'"></vr-datagridcolumn>'
-                        + '<vr-datagridcolumn headertext="\'Type\'" field="\'TypeDescription\'" type="\'Text\'"></vr-datagridcolumn>'
-                        + '<vr-datagridcolumn headertext="\'Direction\'" field="\'DirectionDescription\'" type="\'Text\'"></vr-datagridcolumn>'
-                        + '<vr-datagridcolumn headertext="\'Linked-To Trunk\'" field="\'LinkedToTrunkName\'" type="\'Text\'"></vr-datagridcolumn>'
-                + '</vr-datagrid>'
-            + '</vr-columns>'
-        + '</vr-row>';
     }
 
     return directiveDefinitionObject;

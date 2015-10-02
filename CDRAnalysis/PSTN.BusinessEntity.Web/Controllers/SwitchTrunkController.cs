@@ -44,10 +44,10 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        public DeleteOperationOutput<object> DeleteSwitchTrunk(int trunkID)
+        public DeleteOperationOutput<object> DeleteSwitchTrunk(int trunkID, int? linkedToTrunkID)
         {
             SwitchTrunkManager manager = new SwitchTrunkManager();
-            return manager.DeleteSwitchTrunk(trunkID);
+            return manager.DeleteSwitchTrunk(trunkID, linkedToTrunkID);
         }
     }
 }

@@ -42,10 +42,10 @@
             .then(function (response) {
                 if (response == true) {
 
-                    return SwitchTrunkAPIService.DeleteSwitchTrunk(trunkObject.ID)
+                    return SwitchTrunkAPIService.DeleteSwitchTrunk(trunkObject.ID, trunkObject.LinkedToTrunkID)
                         .then(function (deletionResponse) {
                             if (VRNotificationService.notifyOnItemDeleted("Switch Trunk", deletionResponse))
-                                onTrunkDeleted(trunkObject);
+                                onTrunkDeleted(trunkObject, trunkObject.LinkedToTrunkID);
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);

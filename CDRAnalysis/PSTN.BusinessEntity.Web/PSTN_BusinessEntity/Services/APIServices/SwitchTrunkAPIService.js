@@ -34,9 +34,10 @@
         return BaseAPIService.post("/api/SwitchTrunk/UpdateSwitchTrunk", trunkObject);
     }
 
-    function DeleteSwitchTrunk(trunkID) {
+    function DeleteSwitchTrunk(trunkID, linkedToTrunkID) {
         return BaseAPIService.get("/api/SwitchTrunk/DeleteSwitchTrunk", {
-            trunkID: trunkID
+            trunkID: trunkID,
+            linkedToTrunkID: linkedToTrunkID
         });
     }
 
