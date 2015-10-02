@@ -13,7 +13,12 @@ namespace Vanrise.Rules.Business
         {
             StructuredRules structuredRules = new StructuredRules();
             BaseRuleSet current = null;
-            foreach (var ruleSet in ruleSets)
+
+            List<BaseRuleSet> rulesSets2 = new List<BaseRuleSet>();
+            rulesSets2.AddRange(ruleSets);
+            rulesSets2.Add(new Entities.RuleSets.RuleSetByOthers());
+
+            foreach (var ruleSet in rulesSets2)
             {
                 for (int i = rules.Count - 1; i >= 0; i--)
                 {

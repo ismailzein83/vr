@@ -8,7 +8,7 @@ namespace Vanrise.Rules.Entities
 {
     public abstract class BaseRuleSet
     {
-        public abstract BaseRule GetMatchedRule(Object obj);
+        public abstract BaseRule GetMatchedRule(Object target);
 
         public abstract bool AddRuleIfMatched(BaseRule rule);
 
