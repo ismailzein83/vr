@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Integration.Entities
 {
-    public class DataSourceQuery
+    public class DataSourceInfo
     {
+        public int DataSourceID { get; set; }
+
         public string Name { get; set; }
-
-        public List<int> AdapterTypeIDs { get; set; }
-
-        public bool? IsEnabled { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace Vanrise.Integration.Business
 {
     public class DataSourceManager : IDataSourceManager
     {
-        public List<Vanrise.Integration.Entities.DataSource> GetDataSources()
+        public List<Vanrise.Integration.Entities.DataSourceInfo> GetDataSources()
         {
             IDataSourceDataManager datamanager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
             return datamanager.GetDataSources();

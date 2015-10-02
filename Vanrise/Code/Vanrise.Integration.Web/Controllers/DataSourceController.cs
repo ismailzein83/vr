@@ -14,7 +14,7 @@ namespace Vanrise.Integration.Web.Controllers
     public class DataSourceController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpGet]
-        public List<Vanrise.Integration.Entities.DataSource> GetDataSources()
+        public List<Vanrise.Integration.Entities.DataSourceInfo> GetDataSources()
         {
             DataSourceManager manager = new DataSourceManager();
             return manager.GetDataSources();

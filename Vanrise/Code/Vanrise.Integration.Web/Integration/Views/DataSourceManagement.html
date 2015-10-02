@@ -19,7 +19,7 @@
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-select label="Status"
+                    <vr-select label="Scheduler Task Status"
                                datasource="statuses"
                                selectedvalues="selectedStatuses"
                                datavaluefield="value"
@@ -53,7 +53,7 @@
 
                     <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Type'" field="'AdapterName'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Enabled'">
+                    <vr-datagridcolumn headertext="'Scheduler Task Enabled'" field="'IsEnabled'">
                         <vr-icon icontype="dataItem.IsEnabled"></vr-icon>
                     </vr-datagridcolumn>
                 </vr-datagrid>

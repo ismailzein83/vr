@@ -26,6 +26,9 @@ namespace Vanrise.Integration.Data.SQL
 
         public Vanrise.Entities.BigResult<DataSourceImportedBatch> GetFilteredDataSourceImportedBatches(Vanrise.Entities.DataRetrievalInput<DataSourceImportedBatchQuery> input)
         {
+            Dictionary<string, string> mapper = new Dictionary<string, string>();
+            mapper.Add("MappingResultDescription", "MappingResult");
+
             DataTable dtMappingResults = BuildMappingResultsTable(input.Query.MappingResults);
 
             Action<string> createTempTableAction = (tempTableName) =>
@@ -45,7 +48,7 @@ namespace Vanrise.Integration.Data.SQL
                 });
             };
 
-            return RetrieveData(input, createTempTableAction, DataSourceImportedBatchMapper);
+            return RetrieveData(input, createTempTableAction, DataSourceImportedBatchMapper, mapper);
         }
 
         Vanrise.Integration.Entities.DataSourceImportedBatch DataSourceImportedBatchMapper(IDataReader reader)

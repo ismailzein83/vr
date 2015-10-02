@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Data.SQL;
 using Vanrise.Integration.Entities;
 
@@ -24,9 +22,9 @@ namespace Vanrise.Integration.Data.SQL
 
         }
 
-        public List<Entities.DataSource> GetDataSources()
+        public List<Entities.DataSourceInfo> GetDataSources()
         {
-            return GetItemsSP("integration.sp_DataSource_GetAll", DataSourceMapper);
+            return GetItemsSP("integration.sp_DataSource_GetAll", DataSourceInfoMapper);
         }
 
         public Vanrise.Entities.BigResult<Vanrise.Integration.Entities.DataSource> GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<DataSourceQuery> input)
@@ -103,6 +101,17 @@ namespace Vanrise.Integration.Data.SQL
             };
 
             return dataSource;
+        }
+
+        DataSourceInfo DataSourceInfoMapper(IDataReader reader)
+        {
+            DataSourceInfo dataSourceInfo = new DataSourceInfo
+            {
+                DataSourceID = (int)reader["ID"],
+                Name = reader["Name"] as string
+            };
+
+            return dataSourceInfo;
         }
     }
 }

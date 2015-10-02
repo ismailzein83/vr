@@ -4,7 +4,7 @@
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingForm">
             <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-select label="Data Source" datatextfield="Name" datavaluefield="ID" datasource="dataSources" selectedvalues="selectedDataSource" isrequired></vr-select>
+                    <vr-select label="Data Source" datatextfield="Name" datavaluefield="DataSourceID" datasource="dataSources" selectedvalues="selectedDataSource" isrequired></vr-select>
                 </vr-columns>
 
                 <vr-columns width="normal">
@@ -50,7 +50,7 @@
                     <vr-datagridcolumn headertext="'Records Count'" field="'RecordsCount'" widthfactor="3"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Mapping Result'" field="'MappingResultDescription'" widthfactor="5"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Mapper Message'" field="'MapperMessage'" widthfactor="17"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Execution Status'" field="'ExecutionStatusDescription'" getcolor="getStatusColor" widthfactor="5"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Execution Status'" field="'ExecutionStatusDescription'" getcolor="getStatusColor" widthfactor="5" disablesorting></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Log Entry Time'" field="'LogEntryTime'" type="'Datetime'" widthfactor="5"></vr-datagridcolumn>
 
                     <vr-datagridexpandablerow>

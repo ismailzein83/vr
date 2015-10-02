@@ -9,7 +9,7 @@ namespace Vanrise.Integration.Data
 {
     public interface IDataSourceDataManager : IDataManager
     {
-        List<Vanrise.Integration.Entities.DataSource> GetDataSources();
+        List<Vanrise.Integration.Entities.DataSourceInfo> GetDataSources();
 
         Vanrise.Entities.BigResult<Vanrise.Integration.Entities.DataSource> GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<DataSourceQuery> input);
 

@@ -54,6 +54,7 @@
     <Compile Include="DataMapper.cs" />
     <Compile Include="DataSourceImportedBatch.cs" />
     <Compile Include="DataSourceImportedBatchQuery.cs" />
+    <Compile Include="DataSourceInfo.cs" />
     <Compile Include="DataSourceLog.cs" />
     <Compile Include="DataSourceLogQuery.cs" />
     <Compile Include="DataSourceQuery.cs" />
