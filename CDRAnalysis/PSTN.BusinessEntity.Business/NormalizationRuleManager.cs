@@ -19,44 +19,23 @@ namespace PSTN.BusinessEntity.Business
 
         }
 
-        public StructuredNormalizationRules StructureRules(List<NormalizationRule> rules) 
+        IEnumerable<Vanrise.Rules.Entities.BaseRuleSet> GetRuleSets()
         {
-            List<NormalizationRulesByCriteria> rulesByCriteria = new List<NormalizationRulesByCriteria>() ;
-            rulesByCriteria.Add(new Normalization.RulesByCriteria.RulesBySwitchTrunkPrefixLength());
-            rulesByCriteria.Add(new Normalization.RulesByCriteria.RulesBySwitchTrunkPrefix());
-            rulesByCriteria.Add(new Normalization.RulesByCriteria.RulesBySwitchTrunkLength());
-
-            StructuredNormalizationRules structuredRules = new StructuredNormalizationRules();
-            NormalizationRulesByCriteria current = null;
-            foreach (var r in rulesByCriteria)
-            {
-                r.SetSource(rules);
-                if (!r.IsEmpty())
-                {
-                    if (current != null)
-                        current.NextRuleSet = r;
-                    else
-                        structuredRules.FirstRuleSet = r;
-                    current = r;
-                }
-            }
-            return structuredRules;
+            List<Vanrise.Rules.Entities.BaseRuleSet> ruleSets = new List<Vanrise.Rules.Entities.BaseRuleSet>();
+            ruleSets.Add(new Entities.Normalization.RuleSets.RuleSetBySwitchTrunkLength());
+            ruleSets.Add(new Entities.Normalization.RuleSets.RuleSetBySwitchTrunk());
+            ruleSets.Add(new Entities.Normalization.RuleSets.RuleSetBySwitchLength());
+            ruleSets.Add(new Entities.Normalization.RuleSets.RuleSetByTrunkLength());
+            ruleSets.Add(new Entities.Normalization.RuleSets.RuleSetBySwitch());
+            ruleSets.Add(new Entities.Normalization.RuleSets.RuleSetByTrunk());
+            ruleSets.Add(new Entities.Normalization.RuleSets.RuleSetByLength());
+            return ruleSets;
         }
 
-        public NormalizationRule GetMostMatchedRule(StructuredNormalizationRules rules, int switchId, int trunkId, string phoneNumber)
+        public NormalizationRule GetMostMatchedRule(Vanrise.Rules.Entities.StructuredRules rules, CDRToNormalizeInfo cdr)
         {
-            return GetMostMatchedRule(rules.FirstRuleSet, switchId, trunkId, phoneNumber);
-        }
-
-        NormalizationRule GetMostMatchedRule(NormalizationRulesByCriteria rulesByCriteria, int switchId, int trunkId, string phoneNumber)
-        {
-            if (rulesByCriteria == null)
-                return null;
-            NormalizationRule rule = rulesByCriteria.GetMostMatchedRule(switchId, trunkId, phoneNumber);
-            if (rule != null)
-                return rule;
-            else
-                return GetMostMatchedRule(rulesByCriteria.NextRuleSet, switchId, trunkId, phoneNumber);
+            Vanrise.Rules.Business.RuleManager ruleManager = new Vanrise.Rules.Business.RuleManager();
+            return ruleManager.GetMostMatchedRule(rules, cdr) as NormalizationRule;
         }
     }
 }
