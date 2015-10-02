@@ -161,8 +161,7 @@ as (select * from (values
 (5,'Dashboard Module',1,0,'["View"]'),
 (6,'Business Process Module',1,0,'["View"]'),
 (7,'Integration Module',1,0,'["View"]'),
-(8,'Administration Module',1,0,'["View","Add","Edit", "Delete", "Full Control"]'),
-(9,'Reporting Module',1,0,'["View"]')
+(8,'Administration Module',1,0,'["View","Add","Edit", "Delete", "Full Control"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[ParentId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntityModule] as t
