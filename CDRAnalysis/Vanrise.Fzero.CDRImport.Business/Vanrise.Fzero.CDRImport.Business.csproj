@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="CDRNormalizationActivator.cs" />
     <Compile Include="ExecutionFlows\AllFlows.cs" />
+    <Compile Include="Mappers\AllMappers.cs" />
     <Compile Include="StagingCDRImportActivator.cs" />
     <Compile Include="CDRImportActivator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
