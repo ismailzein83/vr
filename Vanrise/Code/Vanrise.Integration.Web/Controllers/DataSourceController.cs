@@ -28,7 +28,7 @@ namespace Vanrise.Integration.Web.Controllers
         }
 
         [HttpGet]
-        public Vanrise.Integration.Entities.DataSource GetDataSource(int dataSourceId)
+        public Vanrise.Integration.Entities.DataSourceDetail GetDataSource(int dataSourceId)
         {
             DataSourceManager manager = new DataSourceManager();
             return manager.GetDataSource(dataSourceId);
@@ -63,14 +63,14 @@ namespace Vanrise.Integration.Web.Controllers
         }
 
         [HttpPost]
-        public Vanrise.Entities.InsertOperationOutput<Vanrise.Integration.Entities.DataSource> AddDataSource(DataSourceWrapper dataSourceWrapper)
+        public Vanrise.Entities.InsertOperationOutput<Vanrise.Integration.Entities.DataSourceDetail> AddDataSource(DataSourceWrapper dataSourceWrapper)
         {
             DataSourceManager manager = new DataSourceManager();
             return manager.AddDataSource(dataSourceWrapper.DataSourceData, dataSourceWrapper.TaskData);
         }
 
         [HttpPost]
-        public Vanrise.Entities.UpdateOperationOutput<Vanrise.Integration.Entities.DataSource> UpdateDataSource(DataSourceWrapper dataSourceWrapper)
+        public Vanrise.Entities.UpdateOperationOutput<Vanrise.Integration.Entities.DataSourceDetail> UpdateDataSource(DataSourceWrapper dataSourceWrapper)
         {
             DataSourceManager manager = new DataSourceManager();
             return manager.UpdateDataSource(dataSourceWrapper.DataSourceData, dataSourceWrapper.TaskData);

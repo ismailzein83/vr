@@ -20,13 +20,13 @@ namespace Vanrise.Integration.Business
             return datamanager.GetDataSources();
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<Vanrise.Integration.Entities.DataSource> GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<DataSourceQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<Vanrise.Integration.Entities.DataSourceDetail> GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<DataSourceQuery> input)
         {
             IDataSourceDataManager dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredDataSources(input));
         }
 
-        public Vanrise.Integration.Entities.DataSource GetDataSource(int dataSourceId)
+        public Vanrise.Integration.Entities.DataSourceDetail GetDataSource(int dataSourceId)
         {
             IDataSourceDataManager datamanager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
             return datamanager.GetDataSource(dataSourceId);
@@ -44,10 +44,10 @@ namespace Vanrise.Integration.Business
             return datamanager.GetDataSourceAdapterTypes();
         }
 
-        public Vanrise.Entities.InsertOperationOutput<Vanrise.Integration.Entities.DataSource> AddDataSource(Vanrise.Integration.Entities.DataSource dataSourceObject, 
+        public Vanrise.Entities.InsertOperationOutput<Vanrise.Integration.Entities.DataSourceDetail> AddDataSource(Vanrise.Integration.Entities.DataSource dataSourceObject, 
             Vanrise.Runtime.Entities.SchedulerTask taskObject)
         {
-            InsertOperationOutput<Vanrise.Integration.Entities.DataSource> insertOperationOutput = new InsertOperationOutput<Vanrise.Integration.Entities.DataSource>();
+            InsertOperationOutput<Vanrise.Integration.Entities.DataSourceDetail> insertOperationOutput = new InsertOperationOutput<Vanrise.Integration.Entities.DataSourceDetail>();
 
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
@@ -68,21 +68,20 @@ namespace Vanrise.Integration.Business
                 if (dataSourceInsertActionSucc)
                 {
                     insertOperationOutput.Result = InsertOperationResult.Succeeded;
-                    dataSourceObject.DataSourceId = dataSourceId;
-                    insertOperationOutput.InsertedObject = dataSourceObject;
+                    insertOperationOutput.InsertedObject = dataManager.GetDataSource(dataSourceId);
                 }
             }
 
             return insertOperationOutput;
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<Vanrise.Integration.Entities.DataSource> UpdateDataSource(Vanrise.Integration.Entities.DataSource dataSourceObject,
+        public Vanrise.Entities.UpdateOperationOutput<Vanrise.Integration.Entities.DataSourceDetail> UpdateDataSource(Vanrise.Integration.Entities.DataSource dataSourceObject,
              Vanrise.Runtime.Entities.SchedulerTask taskObject)
         {
             IDataSourceDataManager dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
 
             bool dataSourceUpdateActionSucc = dataManager.UpdateDataSource(dataSourceObject);
-            UpdateOperationOutput<Vanrise.Integration.Entities.DataSource> updateOperationOutput = new UpdateOperationOutput<Vanrise.Integration.Entities.DataSource>();
+            UpdateOperationOutput<Vanrise.Integration.Entities.DataSourceDetail> updateOperationOutput = new UpdateOperationOutput<Vanrise.Integration.Entities.DataSourceDetail>();
 
             updateOperationOutput.Result = UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
@@ -96,7 +95,7 @@ namespace Vanrise.Integration.Business
                 if (dataSourceUpdateActionSucc)
                 {
                     updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                    updateOperationOutput.UpdatedObject = dataSourceObject;
+                    updateOperationOutput.UpdatedObject = dataManager.GetDataSource(dataSourceObject.DataSourceId);
                 }
             }
             

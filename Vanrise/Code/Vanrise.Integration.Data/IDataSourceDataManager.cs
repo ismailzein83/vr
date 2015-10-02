@@ -11,9 +11,9 @@ namespace Vanrise.Integration.Data
     {
         List<Vanrise.Integration.Entities.DataSourceInfo> GetDataSources();
 
-        Vanrise.Entities.BigResult<Vanrise.Integration.Entities.DataSource> GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<DataSourceQuery> input);
+        Vanrise.Entities.BigResult<Vanrise.Integration.Entities.DataSourceDetail> GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<DataSourceQuery> input);
 
-        Vanrise.Integration.Entities.DataSource GetDataSource(int dataSourceId);
+        Vanrise.Integration.Entities.DataSourceDetail GetDataSource(int dataSourceId);
 
         Vanrise.Integration.Entities.DataSource GetDataSourcebyTaskId(int taskId);
 
