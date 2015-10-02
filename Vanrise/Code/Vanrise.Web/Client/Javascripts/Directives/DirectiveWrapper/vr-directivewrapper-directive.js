@@ -18,15 +18,24 @@ app.directive('vrDirectivewrapper', ['$compile', function ($compile) {
 
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
-                    var directive = $scope.$eval(iAttrs.directive);
-                    var newElement = '<' + directive;
-                    for (var prop in iAttrs.$attr) {
-                        if (iAttrs.$attr[prop] != "directive")
-                            newElement += ' ' + iAttrs.$attr[prop] + '="' + iAttrs[prop] + '"';
-                    }
-                    newElement += ' ></' + directive + '>';
-                    iElem.html(newElement);
-                    $compile(iElem.contents())($scope);
+                   
+                    $scope.$watch(iAttrs.directive, function () {
+                        var directive = $scope.$eval(iAttrs.directive);
+                        var newElement = "";
+                        if (directive != "")
+                        {
+                            newElement = '<' + directive;
+                            for (var prop in iAttrs.$attr) {
+                                if (iAttrs.$attr[prop] != "directive")
+                                    newElement += ' ' + iAttrs.$attr[prop] + '="' + iAttrs[prop] + '"';
+                            }
+                            newElement += ' ></' + directive + '>';                          
+                        }
+                        iElem.html(newElement);
+                        $compile(iElem.contents())($scope);
+                    });
+                   
+                   
                 }
             }
         }

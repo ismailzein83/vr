@@ -11,5 +11,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int RoutingProductId { get; set; }
 
         public string Name { get; set; }
+
+        public int SaleZonePackageId { get; set; }
     }
 }

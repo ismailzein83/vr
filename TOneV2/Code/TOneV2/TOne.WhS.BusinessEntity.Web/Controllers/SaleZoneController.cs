@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Http;
 using TOne.WhS.BusinessEntity.Business;
@@ -29,6 +30,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         [HttpPost]
         public List<SaleZoneInfo> GetSaleZonesInfoByIds(SaleZoneInput input)
         {
+            Thread.Sleep(3000);
             SaleZoneManager manager = new SaleZoneManager();
             return manager.GetSaleZonesInfoByIds(input.PackageId, input.SaleZoneIds);
         }

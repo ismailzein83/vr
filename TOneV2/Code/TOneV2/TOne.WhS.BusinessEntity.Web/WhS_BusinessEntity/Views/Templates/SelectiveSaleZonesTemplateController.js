@@ -1,62 +1,67 @@
-﻿SelectiveSaleZonesTemplateController.$inject = ['$scope', 'WhS_BE_SaleZoneAPIService', 'UtilsService', 'VRNotificationService'];
+﻿(function (appControllers) {
 
-function SelectiveSaleZonesTemplateController($scope, WhS_BE_SaleZoneAPIService, UtilsService, VRNotificationService) {
+    "use strict";
 
-    defineScope();
-    load();
+    selectiveSaleZonesTemplateController.$inject = ['$scope', 'WhS_BE_SaleZoneAPIService', 'UtilsService', 'VRNotificationService'];
 
-    function defineScope() {
+    function selectiveSaleZonesTemplateController($scope, WhS_BE_SaleZoneAPIService, UtilsService, VRNotificationService) {
+        defineScope();
+        load();
 
-        $scope.searchZones = function (filter) {
-            return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo($scope.saleZoneGroups.saleZonePackageId, filter);
-        }
+        function defineScope() {
 
-        $scope.selectedSaleZones = [];
+            $scope.searchZones = function (filter) {
+                return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo($scope.saleZoneGroups.saleZonePackageId, filter);
+            }
 
-        $scope.saleZoneGroups.getData = function () {
-
-            return {
-                $type: "TOne.WhS.BusinessEntity.Entities.SelectiveSaleZonesSettings, TOne.WhS.BusinessEntity.Entities",
-                SaleZonePackageId: $scope.saleZoneGroups.saleZonePackageId,
-                ZoneIds: UtilsService.getPropValuesFromArray($scope.selectedSaleZones, "SaleZoneId")
-            };
-        };
-
-        $scope.saleZoneGroups.loadTemplateData = function () {
-            loadForm();
-        }
-
-        $scope.saleZoneGroups.resetSaleZoneSelection = function () {
             $scope.selectedSaleZones = [];
-        }
-    }
 
-    var isFormLoaded;
-    function loadForm() {
+            $scope.saleZoneGroups.getData = function () {
 
-        if ($scope.saleZoneGroups.data == undefined || isFormLoaded)
-            return;
+                return {
+                    $type: "TOne.WhS.BusinessEntity.Entities.SelectiveSaleZonesSettings, TOne.WhS.BusinessEntity.Entities",
+                    SaleZonePackageId: $scope.saleZoneGroups.saleZonePackageId,
+                    ZoneIds: UtilsService.getPropValuesFromArray($scope.selectedSaleZones, "SaleZoneId")
+                };
+            };
 
-        var data = $scope.saleZoneGroups.data;
-        if (data != null) {
+            $scope.saleZoneGroups.loadTemplateData = function () {
+                loadForm();
+            }
 
-            if ($scope.saleZoneGroups.data.ZoneIds != undefined) {
-                var input = { PackageId: $scope.saleZoneGroups.saleZonePackageId, SaleZoneIds: $scope.saleZoneGroups.data.ZoneIds };
-                WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {
-                    angular.forEach(response, function (item) {
-                        $scope.selectedSaleZones.push(item);
-                    });
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                });
+            $scope.saleZoneGroups.resetSaleZoneSelection = function () {
+                $scope.selectedSaleZones = [];
             }
         }
 
-        isFormLoaded = true;
+        var isFormLoaded;
+        function loadForm() {
+
+            if ($scope.saleZoneGroups.data == undefined || isFormLoaded)
+                return;
+
+            var data = $scope.saleZoneGroups.data;
+            if (data != null) {
+
+                if ($scope.saleZoneGroups.data.ZoneIds != undefined) {
+                    var input = { PackageId: $scope.saleZoneGroups.saleZonePackageId, SaleZoneIds: $scope.saleZoneGroups.data.ZoneIds };
+                    WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {
+                        angular.forEach(response, function (item) {
+                            $scope.selectedSaleZones.push(item);
+                        });
+                    }).catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    });
+                }
+            }
+
+            isFormLoaded = true;
+        }
+
+        function load() {
+            loadForm();
+        }
     }
 
-    function load() {
-        loadForm();
-    }
-}
-appControllers.controller('WhS_BE_SelectiveSaleZonesTemplateController', SelectiveSaleZonesTemplateController);
+    appControllers.controller('WhS_BE_SelectiveSaleZonesTemplateController', selectiveSaleZonesTemplateController);
+})(appControllers);

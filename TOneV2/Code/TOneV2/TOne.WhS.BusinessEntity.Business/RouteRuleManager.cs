@@ -72,6 +72,54 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredRouteRules(input));
         }
 
+        public RouteRule GetRouteRule(int routeRuleId)
+        {
+            IRouteRuleDataManager dataManager = BEDataManagerFactory.GetDataManager<IRouteRuleDataManager>();
+            return dataManager.GetRouteRule(routeRuleId);
+        }
+
+
+        public TOne.Entities.InsertOperationOutput<RouteRule> AddRouteRule(RouteRule routeRule)
+        {
+            TOne.Entities.InsertOperationOutput<RouteRule> insertOperationOutput = new TOne.Entities.InsertOperationOutput<RouteRule>();
+
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+
+            int routeRuleId = -1;
+
+            IRouteRuleDataManager dataManager = BEDataManagerFactory.GetDataManager<IRouteRuleDataManager>();
+            bool insertActionSucc = dataManager.Insert(routeRule, out routeRuleId);
+
+            if (insertActionSucc)
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                routeRule.RouteRuleId = routeRuleId;
+                insertOperationOutput.InsertedObject = routeRule;
+            }
+
+            return insertOperationOutput;
+        }
+
+        public TOne.Entities.UpdateOperationOutput<RouteRule> UpdateRouteRule(RouteRule routeRule)
+        {
+            IRouteRuleDataManager dataManager = BEDataManagerFactory.GetDataManager<IRouteRuleDataManager>();
+
+            bool updateActionSucc = dataManager.Update(routeRule);
+            TOne.Entities.UpdateOperationOutput<RouteRule> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<RouteRule>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = routeRule;
+            }
+
+            return updateOperationOutput;
+        }
+
         public TOne.Entities.DeleteOperationOutput<object> DeleteRouteRule(int routeRuleId)
         {
             IRouteRuleDataManager dataManager = BEDataManagerFactory.GetDataManager<IRouteRuleDataManager>();

@@ -1,22 +1,28 @@
-﻿
-(function (appControllers) {
+﻿(function (appControllers) {
 
     "use strict";
-    serviceObj.$inject = ['BaseAPIService', 'UtilsService', 'WhS_BE_ModuleConfig'];
+    carrierAccountAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_BE_ModuleConfig'];
 
-    function serviceObj(baseApiService, UtilsService, WhS_BE_ModuleConfig) {
+    function carrierAccountAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig) {
 
         function GetCarrierAccounts(getCustomers,getSuppliers) {
-            return baseApiService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierAccount", "GetCarrierAccounts"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierAccount", "GetCarrierAccounts"), {
                 getCustomers: getCustomers,
                 getSuppliers: getSuppliers
             });
 
         }
+
+        function GetSupplierGroupTemplates() {
+            return BaseAPIService.get("/api/CarrierAccount/GetSupplierGroupTemplates");
+        }
+
         return ({
-            GetCarrierAccounts: GetCarrierAccounts
+            GetCarrierAccounts: GetCarrierAccounts,
+            GetSupplierGroupTemplates: GetSupplierGroupTemplates
         });
     }
-    appControllers.service('WhS_BE_CarrierAccountAPIService', serviceObj);
+
+    appControllers.service('WhS_BE_CarrierAccountAPIService', carrierAccountAPIService);
 
 })(appControllers);

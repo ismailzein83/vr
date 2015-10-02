@@ -1,125 +1,129 @@
-﻿RoutingProductManagementController.$inject = ['$scope', 'WhS_BE_RoutingProductAPIService', 'WhS_BE_SaleZonePackageAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService'];
+﻿(function (appControllers) {
 
-function RoutingProductManagementController($scope, WhS_BE_RoutingProductAPIService, WhS_BE_SaleZonePackageAPIService, UtilsService, VRModalService, VRNotificationService) {
+    "use strict";
 
-    var gridApi;
+    routingProductManagementController.$inject = ['$scope', 'WhS_BE_RoutingProductAPIService', 'WhS_BE_SaleZonePackageAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService'];
 
-    defineScope();
-    load();
+    function routingProductManagementController($scope, WhS_BE_RoutingProductAPIService, WhS_BE_SaleZonePackageAPIService, UtilsService, VRModalService, VRNotificationService) {
+        var gridApi;
 
-    function defineScope() {
+        defineScope();
+        load();
 
-        $scope.routingProducts = [];
-        $scope.gridMenuActions = [];
+        function defineScope() {
 
-        $scope.saleZonePackages = [];
-        $scope.selectedSaleZonePackages = [];
+            $scope.routingProducts = [];
+            $scope.gridMenuActions = [];
 
-        defineMenuActions();
+            $scope.saleZonePackages = [];
+            $scope.selectedSaleZonePackages = [];
 
-        $scope.gridReady = function (api) {
-            gridApi = api;
-            return retrieveData();
-        };
+            defineMenuActions();
 
-        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            return WhS_BE_RoutingProductAPIService.GetFilteredRoutingProducts(dataRetrievalInput)
-                .then(function (response) {
-                    onResponseReady(response);
-                })
-                .catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                });
-        };
+            $scope.gridReady = function (api) {
+                gridApi = api;
+                return retrieveData();
+            };
 
-        $scope.searchClicked = function () {
-            return retrieveData();
-        };
+            $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                return WhS_BE_RoutingProductAPIService.GetFilteredRoutingProducts(dataRetrievalInput)
+                    .then(function (response) {
+                        onResponseReady(response);
+                    })
+                    .catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    });
+            };
 
-        $scope.AddNewRoutingProduct = AddNewRoutingProduct;
-    }
+            $scope.searchClicked = function () {
+                return retrieveData();
+            };
 
-    function load() {
-        $scope.isLoadingFilterData = true;
-
-        WhS_BE_SaleZonePackageAPIService.GetSaleZonePackages().then(function (response) {
-            angular.forEach(response, function (item) {
-                $scope.saleZonePackages.push(item);
-            });
-        }).catch(function (error) {
-            VRNotificationService.notifyExceptionWithClose(error, $scope);
-        }).finally(function () {
-            $scope.isLoadingFilterData = false;
-        });
-    }
-
-    function retrieveData() {
-        var query = {
-            Name: $scope.name,
-            SaleZonePackageIds: UtilsService.getPropValuesFromArray($scope.selectedSaleZonePackages, "SaleZonePackageId")
-        };
-
-        return gridApi.retrieveData(query);
-    }
-
-    function defineMenuActions() {
-        $scope.gridMenuActions = [{
-            name: "Edit",
-            clicked: editRoutingProduct,
-        },
-        {
-            name: "Delete",
-            clicked: deleteRoutingProduct,
+            $scope.AddNewRoutingProduct = AddNewRoutingProduct;
         }
-        ];
-    }
 
-    function AddNewRoutingProduct() {
+        function load() {
+            $scope.isLoadingFilterData = true;
 
-        var settings = {};
-
-        settings.onScopeReady = function (modalScope) {
-            modalScope.title = "New Routing Product";
-            modalScope.onRoutingProductAdded = function (routingProduct) {
-                gridApi.itemAdded(routingProduct);
-            };
-        };
-        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RoutingProductEditor.html', null, settings);
-
-    }
-
-    function editRoutingProduct(routingProduct) {
-        var modalSettings = {
-        };
-        var parameters = {
-            routingProductId: routingProduct.RoutingProductId
-        };
-
-        modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Routing Product: " + routingProduct.Name;
-            modalScope.onRoutingProductUpdated = function (routingProduct) {
-                gridApi.itemUpdated(routingProduct);
-            };
-        };
-        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RoutingProductEditor.html', parameters, modalSettings);
-    }
-
-    function deleteRoutingProduct(routingProduct) {
-        VRNotificationService.showConfirmation()
-            .then(function (response) {
-                if (response) {
-
-                    return WhS_BE_RoutingProductAPIService.DeleteRoutingProduct(routingProduct.RoutingProductId)
-                        .then(function (deletionResponse) {
-                            VRNotificationService.notifyOnItemDeleted("Routing Product", deletionResponse);
-                            return retrieveData();
-                        })
-                        .catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                        });
-                }
+            WhS_BE_SaleZonePackageAPIService.GetSaleZonePackages().then(function (response) {
+                angular.forEach(response, function (item) {
+                    $scope.saleZonePackages.push(item);
+                });
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.isLoadingFilterData = false;
             });
-    }
-}
+        }
 
-appControllers.controller('WhS_BE_RoutingProductManagementController', RoutingProductManagementController);
+        function retrieveData() {
+            var query = {
+                Name: $scope.name,
+                SaleZonePackageIds: UtilsService.getPropValuesFromArray($scope.selectedSaleZonePackages, "SaleZonePackageId")
+            };
+
+            return gridApi.retrieveData(query);
+        }
+
+        function defineMenuActions() {
+            $scope.gridMenuActions = [{
+                name: "Edit",
+                clicked: editRoutingProduct,
+            },
+            {
+                name: "Delete",
+                clicked: deleteRoutingProduct,
+            }
+            ];
+        }
+
+        function AddNewRoutingProduct() {
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.title = "New Routing Product";
+                modalScope.onRoutingProductAdded = function (routingProduct) {
+                    gridApi.itemAdded(routingProduct);
+                };
+            };
+            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RoutingProductEditor.html', null, settings);
+
+        }
+
+        function editRoutingProduct(routingProduct) {
+            var modalSettings = {
+            };
+            var parameters = {
+                routingProductId: routingProduct.RoutingProductId
+            };
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.title = "Edit Routing Product: " + routingProduct.Name;
+                modalScope.onRoutingProductUpdated = function (routingProduct) {
+                    gridApi.itemUpdated(routingProduct);
+                };
+            };
+            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RoutingProductEditor.html', parameters, modalSettings);
+        }
+
+        function deleteRoutingProduct(routingProduct) {
+            VRNotificationService.showConfirmation()
+                .then(function (response) {
+                    if (response) {
+
+                        return WhS_BE_RoutingProductAPIService.DeleteRoutingProduct(routingProduct.RoutingProductId)
+                            .then(function (deletionResponse) {
+                                VRNotificationService.notifyOnItemDeleted("Routing Product", deletionResponse);
+                                return retrieveData();
+                            })
+                            .catch(function (error) {
+                                VRNotificationService.notifyException(error, $scope);
+                            });
+                    }
+                });
+        }
+    }
+
+    appControllers.controller('WhS_BE_RoutingProductManagementController', routingProductManagementController);
+})(appControllers);

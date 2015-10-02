@@ -3,7 +3,8 @@ app.service('WhS_BE_SaleZoneAPIService', function (BaseAPIService) {
 
     return ({
         GetSaleZonesInfo: GetSaleZonesInfo,
-        GetSaleZonesInfoByIds: GetSaleZonesInfoByIds
+        GetSaleZonesInfoByIds: GetSaleZonesInfoByIds,
+        GetSaleZoneGroupTemplates: GetSaleZoneGroupTemplates
     });
      
 

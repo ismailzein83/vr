@@ -51,18 +51,18 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             object routingProductId;
 
-            int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_RoutingProduct_Insert", out routingProductId, routingProduct.Name, routingProduct.SaleZonePackageId,
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_RoutingProduct_Insert", out routingProductId, routingProduct.Name, routingProduct.SaleZonePackageId,
                 Vanrise.Common.Serializer.Serialize(routingProduct.Settings));
 
             insertedId = (int)routingProductId;
-            return (recordesEffected > 0);
+            return (recordsEffected > 0);
         }
 
         public bool Update(Entities.RoutingProduct routingProduct)
         {
-            int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_RoutingProduct_Update", routingProduct.RoutingProductId, routingProduct.Name, routingProduct.SaleZonePackageId,
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_RoutingProduct_Update", routingProduct.RoutingProductId, routingProduct.Name, routingProduct.SaleZonePackageId,
                 Vanrise.Common.Serializer.Serialize(routingProduct.Settings));
-            return (recordesEffected > 0);
+            return (recordsEffected > 0);
         }
 
         public bool Delete(int routingProductId)
@@ -89,7 +89,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             Entities.RoutingProductInfo routingProductInfo = new Entities.RoutingProductInfo
             {
                 RoutingProductId = (int)reader["ID"],
-                Name = reader["Name"] as string,              
+                Name = reader["Name"] as string,
+                SaleZonePackageId = (int)reader["SaleZonePackageID"]
             };
 
             return routingProductInfo;

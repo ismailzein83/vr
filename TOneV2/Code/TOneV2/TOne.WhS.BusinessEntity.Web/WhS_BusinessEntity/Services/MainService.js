@@ -13,7 +13,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'VRModalService
 
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "New Route Rule";
-            modalScope.onRoutingProductAdded = onRouteRuleAdded;
+            modalScope.onRouteRuleAdded = onRouteRuleAdded;
         };
 
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RouteRuleEditor.html', null, settings);
@@ -23,7 +23,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'VRModalService
         var modalSettings = {
         };
         var parameters = {
-            routingProductId: routeRuleObj.RouteRuleId
+            routeRuleId: routeRuleObj.RouteRuleId
         };
 
         modalSettings.onScopeReady = function (modalScope) {
@@ -33,12 +33,11 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'VRModalService
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RouteRuleEditor.html', parameters, modalSettings);
     }
 
-    function deleteRouteRule() {
+    function deleteRouteRule(routeRuleObj) {
         VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response) {
-
-                    return WhS_BE_RouteRuleAPIService.DeleteRouteRule(routeRuleObj.RoutRuleId)
+                    return WhS_BE_RouteRuleAPIService.DeleteRouteRule(routeRuleObj.RouteRuleId)
                         .then(function (deletionResponse) {
                             VRNotificationService.notifyOnItemDeleted("Route Rule", deletionResponse);
                         })

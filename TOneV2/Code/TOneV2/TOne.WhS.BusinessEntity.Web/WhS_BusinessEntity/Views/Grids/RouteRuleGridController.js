@@ -1,80 +1,84 @@
-﻿RouteRuleGridController.$inject = ['$scope', 'WhS_BE_MainService', 'WhS_BE_RouteRuleAPIService', 'VRNotificationService'];
+﻿(function (appControllers) {
 
-function RouteRuleGridController($scope, WhS_BE_MainService, WhS_BE_RouteRuleAPIService, VRNotificationService) {
+    "use strict";
 
-    var gridApi = undefined;
+    routeRuleGridController.$inject = ['$scope', 'WhS_BE_MainService', 'WhS_BE_RouteRuleAPIService', 'VRNotificationService'];
 
-    defineScope();
+    function routeRuleGridController($scope, WhS_BE_MainService, WhS_BE_RouteRuleAPIService, VRNotificationService) {
+        var gridApi = undefined;
 
-    function defineScope() {
+        defineScope();
 
-        $scope.routeRules = [];
-        $scope.gridMenuActions = [];
+        function defineScope() {
 
-        defineMenuActions();
+            $scope.routeRules = [];
+            $scope.gridMenuActions = [];
 
-        $scope.routeRuleGridConnector.loadTemplateData = function () {
-            return loadGrid();
+            defineMenuActions();
+
+            $scope.routeRuleGridConnector.loadTemplateData = function () {
+                return loadGrid();
+            }
+
+            $scope.routeRuleGridConnector.onRouteRuleAdded = function (routeRuleObj) {
+                gridApi.itemAdded(routeRuleObj);
+            };
+
+            $scope.gridReady = function (api) {
+                gridApi = api;
+                return loadGrid();
+            };
+
+            $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                return WhS_BE_RouteRuleAPIService.GetFilteredRouteRules(dataRetrievalInput)
+                    .then(function (response) {
+                        onResponseReady(response);
+                    })
+                    .catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    });
+            };
         }
 
-        $scope.routeRuleGridConnector.onRouteRuleAdded = function (routeRuleObj) {
-            gridApi.itemAdded(routeRuleObj);
-        };
-
-        $scope.gridReady = function (api) {
-            gridApi = api;
-            return loadGrid();
-        };
-
-        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            return WhS_BE_RouteRuleAPIService.GetFilteredRouteRules(dataRetrievalInput)
-                .then(function (response) {
-                    onResponseReady(response);
-                })
-                .catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                });
-        };
-    }
-
-    function loadGrid() {
-        if ($scope.routeRuleGridConnector.data !== undefined && gridApi != undefined)
-            return retrieveData();
-    }
-
-    function retrieveData() {
-        var query = {
-
-        };
-
-        return gridApi.retrieveData(query);
-    }
-
-    function defineMenuActions() {
-        $scope.gridMenuActions = [{
-            name: "Edit",
-            clicked: editRouteRule,
-        },
-        {
-            name: "Delete",
-            clicked: deleteRouteRule,
-        }
-        ];
-    }
-
-    function editRouteRule(routeRuleObj) {
-        var onRouteRuleUpdated = function (routeRule) {
-            gridApi.itemUpdated(routeRule);
+        function loadGrid() {
+            if ($scope.routeRuleGridConnector.data !== undefined && gridApi != undefined)
+                return retrieveData();
         }
 
-        WhS_BE_MainService.editRouteRule(routeRuleObj, onRouteRuleUpdated);
+        function retrieveData() {
+            var query = {
+
+            };
+
+            return gridApi.retrieveData(query);
+        }
+
+        function defineMenuActions() {
+            $scope.gridMenuActions = [{
+                name: "Edit",
+                clicked: editRouteRule,
+            },
+            {
+                name: "Delete",
+                clicked: deleteRouteRule,
+            }
+            ];
+        }
+
+        function editRouteRule(routeRuleObj) {
+            var onRouteRuleUpdated = function (routeRule) {
+                gridApi.itemUpdated(routeRule);
+            }
+
+            WhS_BE_MainService.editRouteRule(routeRuleObj, onRouteRuleUpdated);
+        }
+
+        function deleteRouteRule(routeRuleObj) {
+            WhS_BE_MainService.deleteRouteRule(routeRuleObj);
+            //TODO: This is to refresh the Grid after delete, should be removed when centralized
+            retrieveData();
+        }
     }
 
-    function deleteRouteRule(routeRuleObj) {
-        WhS_BE_MainService.deleteRouteRule(routeRuleObj);
-        //TODO: This is to refresh the Grid after delete, should be removed when centralized
-        retrieveData();
-    }
-}
-
-appControllers.controller('WhS_BE_RouteRuleGridController', RouteRuleGridController);
+    appControllers.controller('WhS_BE_RouteRuleGridController', routeRuleGridController);
+})(appControllers);

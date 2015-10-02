@@ -1,45 +1,50 @@
-﻿RouteRuleManagementController.$inject = ['$scope', 'WhS_BE_RouteRuleAPIService', 'WhS_BE_MainService', 'UtilsService', 'VRModalService', 'VRNotificationService'];
+﻿(function (appControllers) {
 
-function RouteRuleManagementController($scope, WhS_BE_RouteRuleAPIService, WhS_BE_MainService, UtilsService, VRModalService, VRNotificationService) {
+    "use strict";
 
-    defineScope();
-    load();
+    routeRuleManagementController.$inject = ['$scope', 'WhS_BE_RouteRuleAPIService', 'WhS_BE_MainService', 'UtilsService', 'VRModalService', 'VRNotificationService'];
 
-    function defineScope() {
+    function routeRuleManagementController($scope, WhS_BE_RouteRuleAPIService, WhS_BE_MainService, UtilsService, VRModalService, VRNotificationService) {
 
-        $scope.routeRuleGridConnector = {};
+        defineScope();
+        load();
 
-        $scope.searchClicked = function () {
-            return load();
-        };
+        function defineScope() {
 
-        $scope.AddNewRouteRule = AddNewRouteRule;
-    }
+            $scope.routeRuleGridConnector = {};
 
-    function load() {
-        loadGrid();
-    }
+            $scope.searchClicked = function () {
+                return load();
+            };
 
-    function loadGrid() {
-        $scope.routeRuleGridConnector.data = getFilterObject();
+            $scope.AddNewRouteRule = AddNewRouteRule;
+        }
 
-        if ($scope.routeRuleGridConnector.loadTemplateData != undefined) {
-            return $scope.routeRuleGridConnector.loadTemplateData();
+        function load() {
+            loadGrid();
+        }
+
+        function loadGrid() {
+            $scope.routeRuleGridConnector.data = getFilterObject();
+
+            if ($scope.routeRuleGridConnector.loadTemplateData != undefined) {
+                return $scope.routeRuleGridConnector.loadTemplateData();
+            }
+        }
+
+        function getFilterObject() {
+            return null;
+        }
+
+        function AddNewRouteRule() {
+            var onRouteRuleAdded = function (routeRuleObj) {
+                if ($scope.routeRuleGridConnector.onRouteRuleAdded != undefined)
+                    $scope.routeRuleGridConnector.onRouteRuleAdded(routeRuleObj);
+            };
+
+            WhS_BE_MainService.addRouteRule(onRouteRuleAdded);
         }
     }
 
-    function getFilterObject() {
-        return null;
-    }
-
-    function AddNewRouteRule() {
-        var onRouteRuleAdded = function (routeRuleObj) {
-            if ($scope.routeRuleGridConnector.onRouteRuleAdded != undefined)
-                $scope.routeRuleGridConnector.onRouteRuleAdded(routeRuleObj);
-        };
-
-        WhS_BE_MainService.addRouteRule(onRouteRuleAdded);
-    }
-}
-
-appControllers.controller('WhS_BE_RouteRuleManagementController', RouteRuleManagementController);
+    appControllers.controller('WhS_BE_RouteRuleManagementController', routeRuleManagementController);
+})(appControllers);
