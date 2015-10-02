@@ -8,15 +8,14 @@ app.directive('vrWhsBeSelectivesalezones', ['WhS_BE_SaleZoneAPIService', 'UtilsS
             salezonepackageid: "="
         },
         controller: function ($scope, $element, $attrs) {
-            $scope.isGettingData = false;
 
             var ctrl = this;
             $scope.selectedSaleZones = [];
 
             $scope.showSaleZonePackage = ctrl.salezonepackageid === undefined;
 
-            var beSaleZonesCtr = new beSaleZones(ctrl, $scope, WhS_BE_SaleZoneAPIService);
-            beSaleZonesCtr.initializeController();
+            var beSaleZonesCtor = new beSaleZones(ctrl, $scope, WhS_BE_SaleZoneAPIService);
+            beSaleZonesCtor.initializeController();
 
             $scope.searchZones = function (filter) {
                 return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo(ctrl.salezonepackageid, filter);
@@ -63,12 +62,11 @@ app.directive('vrWhsBeSelectivesalezones', ['WhS_BE_SaleZoneAPIService', 'UtilsS
                 };
             }
 
-            api.setData = function (salezonegroupsettings)
+            api.setData = function (saleZoneGroupSettings)
             {
-                $scope.isGettingData = true;
-                if (salezonegroupsettings !== undefined && salezonegroupsettings.ZoneIds !== undefined &&
-                    salezonegroupsettings.ZoneIds !== null && salezonegroupsettings.ZoneIds.length > 0) {
-                    var input = { PackageId: ctrl.salezonepackageid, SaleZoneIds: salezonegroupsettings.ZoneIds };
+                $scope.isLoadingDirective = true;
+                if (saleZoneGroupSettings.ZoneIds.length > 0) {
+                    var input = { PackageId: ctrl.salezonepackageid, SaleZoneIds: saleZoneGroupSettings.ZoneIds };
 
                     WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {
                         angular.forEach(response, function (item) {
@@ -78,7 +76,7 @@ app.directive('vrWhsBeSelectivesalezones', ['WhS_BE_SaleZoneAPIService', 'UtilsS
                         //TODO handle the case of exceptions
                         
                     }).finally(function () {
-                        $scope.isGettingData = false;
+                        $scope.isLoadingDirective = false;
                     });
                 }
             }

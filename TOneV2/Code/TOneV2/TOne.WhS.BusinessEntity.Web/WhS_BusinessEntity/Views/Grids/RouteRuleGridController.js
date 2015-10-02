@@ -74,9 +74,12 @@
         }
 
         function deleteRouteRule(routeRuleObj) {
-            WhS_BE_MainService.deleteRouteRule(routeRuleObj);
-            //TODO: This is to refresh the Grid after delete, should be removed when centralized
-            retrieveData();
+            var onRouteRuleDeleted = function () {
+                //TODO: This is to refresh the Grid after delete, should be removed when centralized
+                retrieveData();
+            };
+
+            WhS_BE_MainService.deleteRouteRule(routeRuleObj, onRouteRuleDeleted);
         }
     }
 

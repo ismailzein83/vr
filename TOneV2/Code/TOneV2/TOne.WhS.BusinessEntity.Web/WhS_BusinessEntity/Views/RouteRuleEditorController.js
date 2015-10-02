@@ -12,7 +12,7 @@
             var routeRuleId;
 
             var saleZoneGroupSettingsDirectiveAPI;
-            var saleZoneGroupSettings = {};
+            var saleZoneGroupSettings;
 
             loadParameters();
             defineScope();
@@ -62,6 +62,8 @@
 
                 $scope.routingProducts = [];
                 $scope.selectedRoutingProduct = undefined;
+
+                $scope.saleZoneGroupSettings = {};
             }
 
             function load() {
@@ -119,7 +121,7 @@
                     RouteCriteria: {
                         RoutingProductId: $scope.selectedRoutingProduct.RoutingProductId,
                         SaleZoneGroupConfigId: $scope.selectedSaleZoneGroupTemplate.TemplateConfigID != -1 ? $scope.selectedSaleZoneGroupTemplate.TemplateConfigID : null,
-                        SaleZoneGroupSettings: onSaleZoneGroupSettingsDirectiveAPI.getData()
+                        SaleZoneGroupSettings: saleZoneGroupSettingsDirectiveAPI.getData()
                     }
                 };
 
