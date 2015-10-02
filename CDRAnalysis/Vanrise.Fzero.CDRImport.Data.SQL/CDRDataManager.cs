@@ -50,7 +50,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
         public void WriteRecordToStream(CDR record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("0^{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}",
+            streamForBulkInsert.WriteRecord("0^{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^{22}^{23}",
                                      record.MSISDN
                                    , record.IMSI
                                    , record.ConnectDateTime
@@ -69,10 +69,12 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                                    , record.DownVolume
                                    , record.CellLatitude
                                    , record.CellLongitude
-                                   , record.InTrunk
-                                   , record.OutTrunk
+                                   , record.InTrunkSymbol
+                                   , record.OutTrunkSymbol
                                    , record.ServiceType
                                    , record.ServiceVASName
+                                   , record.InTrunkId
+                                   , record.OutTrunkId
                                     );
 
         }

@@ -59,8 +59,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     normalCDR.DownVolume = GetReaderValue<Decimal?>(reader, "Down_Volume");
                     normalCDR.CellLatitude = GetReaderValue<Decimal?>(reader, "Cell_Latitude");
                     normalCDR.CellLongitude = GetReaderValue<Decimal?>(reader, "Cell_Longitude");
-                    normalCDR.InTrunk = reader["In_Trunk"] as string;
-                    normalCDR.OutTrunk = reader["Out_Trunk"] as string;
+                    normalCDR.InTrunkSymbol = reader["In_Trunk"] as string;
+                    normalCDR.OutTrunkSymbol = reader["Out_Trunk"] as string;
+                    normalCDR.InTrunkId = GetReaderValue<int?>(reader, "InTrunkID");
+                    normalCDR.OutTrunkId = GetReaderValue<int?>(reader, "OutTrunkID");
                     normalCDR.ServiceType = GetReaderValue<int?>(reader, "Service_Type");
                     normalCDR.ServiceVASName = reader["Service_VAS_Name"] as string;
                     normalCDR.Destination = reader["Destination"] as string;

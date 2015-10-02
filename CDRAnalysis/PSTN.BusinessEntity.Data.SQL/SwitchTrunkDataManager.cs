@@ -42,6 +42,12 @@ namespace PSTN.BusinessEntity.Data.SQL
             return GetItemSP("PSTN_BE.sp_SwitchTrunk_GetByID", SwitchTrunkDetailMapper, trunkID);
         }
 
+        public SwitchTrunkInfo GetSwitchTrunkBySymbol(string symbol)
+        {
+            return GetItemSP("PSTN_BE.sp_SwitchTrunk_GetBySymbol", SwitchTrunkInfoMapper, symbol);
+        }
+
+
         public List<SwitchTrunkInfo> GetSwitchTrunksBySwitchID(int switchID)
         {
             return GetItemsSP("PSTN_BE.sp_SwitchTrunk_GetBySwitchID", SwitchTrunkInfoMapper, switchID);

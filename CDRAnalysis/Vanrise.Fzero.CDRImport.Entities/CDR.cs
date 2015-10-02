@@ -31,11 +31,12 @@ namespace Vanrise.Fzero.CDRImport.Entities
         public decimal? DownVolume { get; set; }
         public decimal? CellLatitude { get; set; }
         public decimal? CellLongitude { get; set; }
-        public string InTrunk { get; set; }
-        public string OutTrunk { get; set; }
+        public string InTrunkSymbol { get; set; }
+        public string OutTrunkSymbol { get; set; }
+        public int? InTrunkId { get; set; }
+        public int? OutTrunkId { get; set; }
         public int? ServiceType { get; set; }
         public string ServiceVASName { get; set; }
-
         public int? SwitchID { get; set; }
 
     }

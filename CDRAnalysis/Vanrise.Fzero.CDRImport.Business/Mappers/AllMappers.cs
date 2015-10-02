@@ -15,6 +15,9 @@ namespace Vanrise.Fzero.CDRImport.Business.Mappers
 
         public static void MovingtoStaggingCDRsDS_FileorFTP()
         {
+            //PSTN.BusinessEntity.Business.SwitchTrunkManager switchTrunkManager = new PSTN.BusinessEntity.Business.SwitchTrunkManager();
+            //PSTN.BusinessEntity.Entities.SwitchTrunkInfo currentTrunk;
+
             //PSTN.BusinessEntity.Business.SwitchManager switchManager = new PSTN.BusinessEntity.Business.SwitchManager();
             //PSTN.BusinessEntity.Entities.Switch currentSwitch;
             //currentSwitch = switchManager.GetSwitchByDataSourceID(dataSourceId);
@@ -50,6 +53,29 @@ namespace Vanrise.Fzero.CDRImport.Business.Mappers
 
             //    stagingCDR.InTrunkSymbol = reader["InTrunkSymbol"] as string;
             //    stagingCDR.OutTrunkSymbol = reader["OutTrunkSymbol"] as string;
+
+            //    if (stagingCDR.InTrunkSymbol != string.Empty)
+            //        currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(stagingCDR.InTrunkSymbol);
+
+            //    if (currentTrunk != null)
+            //    {
+            //        stagingCDR.InTrunkId = currentTrunk.ID;
+            //        currentTrunk = null;
+            //    }
+
+
+
+            //    if (stagingCDR.OutTrunkSymbol != string.Empty)
+            //        currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(stagingCDR.OutTrunkSymbol);
+
+            //    if (currentTrunk != null)
+            //    {
+            //        stagingCDR.OutTrunkId = currentTrunk.ID;
+            //        currentTrunk = null;
+            //    }
+
+
+
             //    stagingCDR.SwitchID = SwitchId.Value;
             //    index = Utils.GetReaderValue<int?>(reader, "ID").ToString();
             //    batch.StagingCDRs.Add(stagingCDR);
@@ -65,6 +91,10 @@ namespace Vanrise.Fzero.CDRImport.Business.Mappers
 
         public static void NormlaizingandMovingtoStaggingCDRsDS_FileorFTP()
         {
+            //PSTN.BusinessEntity.Business.SwitchTrunkManager switchTrunkManager = new PSTN.BusinessEntity.Business.SwitchTrunkManager();
+            //PSTN.BusinessEntity.Entities.SwitchTrunkInfo currentTrunk;
+            
+            
             //PSTN.BusinessEntity.Business.SwitchManager switchManager = new PSTN.BusinessEntity.Business.SwitchManager();
 
             //PSTN.BusinessEntity.Entities.Switch currentSwitch;
@@ -107,6 +137,27 @@ namespace Vanrise.Fzero.CDRImport.Business.Mappers
 
             //    stagingCDR.InTrunkSymbol = reader["InTrunkSymbol"] as string;
             //    stagingCDR.OutTrunkSymbol = reader["OutTrunkSymbol"] as string;
+
+            //    if (stagingCDR.InTrunkSymbol != string.Empty)
+            //        currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(stagingCDR.InTrunkSymbol);
+
+            //    if (currentTrunk != null)
+            //    {
+            //        stagingCDR.InTrunkId = currentTrunk.ID;
+            //        currentTrunk = null;
+            //    }
+
+
+
+            //    if (stagingCDR.OutTrunkSymbol != string.Empty)
+            //        currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(stagingCDR.OutTrunkSymbol);
+
+            //    if (currentTrunk != null)
+            //    {
+            //        stagingCDR.OutTrunkId = currentTrunk.ID;
+            //        currentTrunk = null;
+            //    }
+
             //    stagingCDR.SwitchID = SwitchId;
             //    index = Utils.GetReaderValue<int?>(reader, "ID").ToString();
             //    batch.StagingCDRs.Add(stagingCDR);
@@ -122,6 +173,9 @@ namespace Vanrise.Fzero.CDRImport.Business.Mappers
 
         public static void ImportingCDR_FileorFTP()
         {
+            //PSTN.BusinessEntity.Business.SwitchTrunkManager switchTrunkManager = new PSTN.BusinessEntity.Business.SwitchTrunkManager();
+            //PSTN.BusinessEntity.Entities.SwitchTrunkInfo currentTrunk;
+
             //Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch batch = new Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch();
             //batch.CDRs = new List<Vanrise.Fzero.CDRImport.Entities.CDR>();
             //System.IO.StreamReader sr = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data)).StreamReader;
@@ -137,8 +191,29 @@ namespace Vanrise.Fzero.CDRImport.Business.Mappers
             //    cdr.SubType = i.Substring(165, 10).Trim();
             //    cdr.IMEI = i.Substring(105, 20).Trim();
             //    cdr.CellId = i.Substring(252, 22).Trim();
-            //    cdr.InTrunk = i.Substring(414, 20).Trim();
-            //    cdr.OutTrunk = i.Substring(394, 20).Trim();
+            //    cdr.InTrunkSymbol = i.Substring(414, 20).Trim();
+            //    cdr.OutTrunkSymbol = i.Substring(394, 20).Trim();
+
+            //    if (cdr.InTrunkSymbol != string.Empty)
+            //        currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(cdr.InTrunkSymbol);
+
+            //    if (currentTrunk != null)
+            //    {
+            //        cdr.InTrunkId = currentTrunk.ID;
+            //        currentTrunk = null;
+            //    }
+
+
+
+            //    if (cdr.OutTrunkSymbol != string.Empty)
+            //        currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(cdr.OutTrunkSymbol);
+
+            //    if (currentTrunk != null)
+            //    {
+            //        cdr.OutTrunkId = currentTrunk.ID;
+            //        currentTrunk = null;
+            //    }
+
 
 
             //    DateTime ConnectDateTime;
@@ -189,6 +264,9 @@ namespace Vanrise.Fzero.CDRImport.Business.Mappers
 
         public static void NormlaizingandImportingCDR_FileorFTP()
         {
+            //PSTN.BusinessEntity.Business.SwitchTrunkManager switchTrunkManager = new PSTN.BusinessEntity.Business.SwitchTrunkManager();
+            //PSTN.BusinessEntity.Entities.SwitchTrunkInfo currentTrunk;
+
             //Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch batch = new Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch();
             //batch.CDRs = new List<Vanrise.Fzero.CDRImport.Entities.CDR>();
             //System.IO.StreamReader sr = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data)).StreamReader;
@@ -204,8 +282,28 @@ namespace Vanrise.Fzero.CDRImport.Business.Mappers
             //    cdr.SubType = i.Substring(165, 10).Trim();
             //    cdr.IMEI = i.Substring(105, 20).Trim();
             //    cdr.CellId = i.Substring(252, 22).Trim();
-            //    cdr.InTrunk = i.Substring(414, 20).Trim();
-            //    cdr.OutTrunk = i.Substring(394, 20).Trim();
+            //    cdr.InTrunkSymbol = i.Substring(414, 20).Trim();
+            //    cdr.OutTrunkSymbol = i.Substring(394, 20).Trim();
+
+            //    if (cdr.InTrunkSymbol != string.Empty)
+            //        currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(cdr.InTrunkSymbol);
+
+            //    if (currentTrunk != null)
+            //    {
+            //        cdr.InTrunkId = currentTrunk.ID;
+            //        currentTrunk = null;
+            //    }
+
+
+
+            //    if (cdr.OutTrunkSymbol != string.Empty)
+            //        currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(cdr.OutTrunkSymbol);
+
+            //    if (currentTrunk != null)
+            //    {
+            //        cdr.OutTrunkId = currentTrunk.ID;
+            //        currentTrunk = null;
+            //    }
 
 
             //    DateTime ConnectDateTime;
@@ -259,6 +357,9 @@ namespace Vanrise.Fzero.CDRImport.Business.Mappers
         # region SQL Mappers
         public static void MovingtoStaggingCDRsDS_SQL()
         {
+            //PSTN.BusinessEntity.Business.SwitchTrunkManager switchTrunkManager = new PSTN.BusinessEntity.Business.SwitchTrunkManager();
+            //PSTN.BusinessEntity.Entities.SwitchTrunkInfo currentTrunk;
+
             //PSTN.BusinessEntity.Business.SwitchManager switchManager = new PSTN.BusinessEntity.Business.SwitchManager();
             //PSTN.BusinessEntity.Entities.Switch currentSwitch;
             //currentSwitch = switchManager.GetSwitchByDataSourceID(dataSourceId);
@@ -292,6 +393,27 @@ namespace Vanrise.Fzero.CDRImport.Business.Mappers
 
             //    stagingCDR.InTrunkSymbol = reader["InTrunkSymbol"] as string;
             //    stagingCDR.OutTrunkSymbol = reader["OutTrunkSymbol"] as string;
+
+            //    if (stagingCDR.InTrunkSymbol != string.Empty)
+            //        currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(stagingCDR.InTrunkSymbol);
+
+            //    if (currentTrunk != null)
+            //    {
+            //        stagingCDR.InTrunkId = currentTrunk.ID;
+            //        currentTrunk = null;
+            //    }
+
+
+
+            //    if (stagingCDR.OutTrunkSymbol != string.Empty)
+            //        currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(stagingCDR.OutTrunkSymbol);
+
+            //    if (currentTrunk != null)
+            //    {
+            //        stagingCDR.OutTrunkId = currentTrunk.ID;
+            //        currentTrunk = null;
+            //    }
+
             //    stagingCDR.SwitchID = currentSwitch.ID;
 
             //    index = Utils.GetReaderValue<int?>(reader, "ID").ToString();
@@ -312,6 +434,9 @@ namespace Vanrise.Fzero.CDRImport.Business.Mappers
 
         public static void ImportingCDR_SQL()
         {
+            //PSTN.BusinessEntity.Business.SwitchTrunkManager switchTrunkManager = new PSTN.BusinessEntity.Business.SwitchTrunkManager();
+            //PSTN.BusinessEntity.Entities.SwitchTrunkInfo currentTrunk;
+
             //LogVerbose("Started");
             //Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch batch = new Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch();
             //batch.CDRs = new List<Vanrise.Fzero.CDRImport.Entities.CDR>();
@@ -342,8 +467,30 @@ namespace Vanrise.Fzero.CDRImport.Business.Mappers
             //    normalCDR.DownVolume = Utils.GetReaderValue<Decimal?>(reader, "Down_Volume");
             //    normalCDR.CellLatitude = Utils.GetReaderValue<Decimal?>(reader, "Cell_Latitude");
             //    normalCDR.CellLongitude = Utils.GetReaderValue<Decimal?>(reader, "Cell_Longitude");
-            //    normalCDR.InTrunk = reader["In_Trunk"] as string;
-            //    normalCDR.OutTrunk = reader["Out_Trunk"] as string;
+            //    normalCDR.InTrunkSymbol = reader["In_Trunk"] as string;
+            //    normalCDR.OutTrunkSymbol = reader["Out_Trunk"] as string;
+
+            //    if (normalCDR.InTrunkSymbol != string.Empty)
+            //        currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(normalCDR.InTrunkSymbol);
+
+            //    if (currentTrunk != null)
+            //    {
+            //        normalCDR.InTrunkId = currentTrunk.ID;
+            //        currentTrunk = null;
+            //    }
+
+
+
+            //    if (normalCDR.OutTrunkSymbol != string.Empty)
+            //        currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(normalCDR.OutTrunkSymbol);
+
+            //    if (currentTrunk != null)
+            //    {
+            //        normalCDR.OutTrunkId = currentTrunk.ID;
+            //        currentTrunk = null;
+            //    }
+
+
             //    normalCDR.ServiceType = Utils.GetReaderValue<int?>(reader, "Service_Type");
             //    normalCDR.ServiceVASName = reader["Service_VAS_Name"] as string;
             //    normalCDR.Destination = reader["Destination"] as string;

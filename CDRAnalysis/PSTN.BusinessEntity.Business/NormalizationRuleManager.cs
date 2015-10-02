@@ -9,16 +9,31 @@ namespace PSTN.BusinessEntity.Business
 {
     public class NormalizationRuleManager
     {
-        static Vanrise.Rules.Entities.StructuredRules _rules = (new NormalizationRuleManager()).GetStructuredRules();
         public void Normalize(Vanrise.Fzero.CDRImport.Entities.StagingCDR cdr)
         {
 
-            CDRToNormalizeInfo cdrInfo = new CDRToNormalizeInfo { PhoneNumber = cdr.CDPN, SwitchId = cdr.SwitchID.Value };
-            NormalizationRule matchRule = GetMostMatchedRule(_rules, cdrInfo);
-            if(matchRule != null)
+            CDRToNormalizeInfo cdrInfo1 = new CDRToNormalizeInfo { PhoneNumber = cdr.CDPN, SwitchId = cdr.SwitchID.Value , PhoneNumberType= NormalizationPhoneNumberType.CDPN,    TrunkId=cdr.InTrunkId.Value };
+
+            CDRToNormalizeInfo cdrInfo2 = new CDRToNormalizeInfo { PhoneNumber = cdr.CGPN, SwitchId = cdr.SwitchID.Value, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.OutTrunkId.Value };
+
+            NormalizationRule matchRule1 = GetMostMatchedRule(_rules, cdrInfo1);
+            if (matchRule1 != null)
             {
                 string phoneNumber = cdr.CDPN;
-                foreach (var actionSettings in matchRule.Settings.Actions)
+                foreach (var actionSettings in matchRule1.Settings.Actions)
+                {
+                    var behavior = GetActionBehavior(actionSettings.BehaviorId);
+                    behavior.Execute(actionSettings, ref phoneNumber);
+                }
+                cdr.CDPN = phoneNumber;
+            }
+
+
+            NormalizationRule matchRule2 = GetMostMatchedRule(_rules, cdrInfo2);
+            if(matchRule2 != null)
+            {
+                string phoneNumber = cdr.CDPN;
+                foreach (var actionSettings in matchRule2.Settings.Actions)
                 {
                     var behavior = GetActionBehavior(actionSettings.BehaviorId);
                     behavior.Execute(actionSettings, ref phoneNumber);
@@ -28,6 +43,15 @@ namespace PSTN.BusinessEntity.Business
                 
         }
 
+        public void Normalize(Vanrise.Fzero.CDRImport.Entities.CDR cdr)
+        {
+
+        }
+
+
+
+        static Vanrise.Rules.Entities.StructuredRules _rules = (new NormalizationRuleManager()).GetStructuredRules();
+
         NormalizationRuleActionBehavior GetActionBehavior(int behaviorId)
         {
             Vanrise.Common.TemplateConfigManager templateConfigManager = new Vanrise.Common.TemplateConfigManager();
@@ -35,10 +59,7 @@ namespace PSTN.BusinessEntity.Business
         }
 
         
-        public void Normalize(Vanrise.Fzero.CDRImport.Entities.CDR cdr)
-        {
-
-        }
+       
 
         public Vanrise.Rules.Entities.StructuredRules GetStructuredRules()
         {

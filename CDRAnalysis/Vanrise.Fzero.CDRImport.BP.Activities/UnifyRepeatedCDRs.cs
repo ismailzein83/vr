@@ -78,6 +78,8 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
             public int? SwitchID { get; set; }
             public string InTrunkSymbol { get; set; }
             public string OutTrunkSymbol { get; set; }
+            public int? InTrunkId { get; set; }
+            public int? OutTrunkId { get; set; }
             public decimal? DurationInSeconds { get; set; }
             public DateTime? DisconnectDateTime { get; set; }
             public DateTime? ConnectDateTime { get; set; }
@@ -172,8 +174,10 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                             MSISDN = unifiedCDR.Key.CGPN,
                             DisconnectDateTime = subunifiedCDR.DisconnectDateTime,
                             DurationInSeconds = subunifiedCDR.DurationInSeconds,
-                            InTrunk = subunifiedCDR.InTrunkSymbol,
-                            OutTrunk = subunifiedCDR.OutTrunkSymbol,
+                            InTrunkSymbol = subunifiedCDR.InTrunkSymbol,
+                            OutTrunkSymbol = subunifiedCDR.OutTrunkSymbol,
+                            InTrunkId=subunifiedCDR.InTrunkId,
+                            OutTrunkId = subunifiedCDR.OutTrunkId,
                             SwitchID=subunifiedCDR.SwitchID
                         }
                    );
@@ -188,8 +192,10 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                             MSISDN = unifiedCDR.Key.CDPN,
                             DisconnectDateTime = subunifiedCDR.DisconnectDateTime,
                             DurationInSeconds = subunifiedCDR.DurationInSeconds,
-                            InTrunk = subunifiedCDR.InTrunkSymbol,
-                            OutTrunk = subunifiedCDR.OutTrunkSymbol,
+                            InTrunkSymbol = subunifiedCDR.InTrunkSymbol,
+                            OutTrunkSymbol = subunifiedCDR.OutTrunkSymbol,
+                            InTrunkId = subunifiedCDR.InTrunkId,
+                            OutTrunkId = subunifiedCDR.OutTrunkId,
                             SwitchID = subunifiedCDR.SwitchID
                         }
                             );
@@ -227,6 +233,8 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                 DurationInSeconds = stagingCDR.DurationInSeconds,
                 InTrunkSymbol = stagingCDR.InTrunkSymbol,
                 OutTrunkSymbol = stagingCDR.OutTrunkSymbol,
+                InTrunkId = stagingCDR.InTrunkId,
+                OutTrunkId = stagingCDR.OutTrunkId,
                 SwitchID = stagingCDR.SwitchID
             };
         }

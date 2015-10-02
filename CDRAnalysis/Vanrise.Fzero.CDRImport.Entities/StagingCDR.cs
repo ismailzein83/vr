@@ -15,9 +15,10 @@ namespace Vanrise.Fzero.CDRImport.Entities
         public int? SwitchID { get; set; }
         public string InTrunkSymbol { get; set; }
         public string OutTrunkSymbol { get; set; }
+        public int? InTrunkId { get; set; }
+        public int? OutTrunkId { get; set; }
         public decimal? DurationInSeconds { get; set; }
         public DateTime? DisconnectDateTime { get; set; }
-
         public DateTime? ConnectDateTime { get; set; }
 
     }
