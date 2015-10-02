@@ -2393,8 +2393,9 @@
             </Paragraph>
           </Paragraphs>
           <Top>1.875in</Top>
+          <Left>0.03125in</Left>
           <Height>0.375in</Height>
-          <Width>1in</Width>
+          <Width>0.96875in</Width>
           <ZIndex>3</ZIndex>
           <Style>
             <Border>
@@ -2425,7 +2426,7 @@
           <Top>1.875in</Top>
           <Left>1in</Left>
           <Height>0.375in</Height>
-          <Width>2.62499in</Width>
+          <Width>2.46875in</Width>
           <ZIndex>4</ZIndex>
           <Style>
             <Border>
@@ -2588,8 +2589,9 @@
             </Paragraph>
           </Paragraphs>
           <Top>1.125in</Top>
+          <Left>0.03125in</Left>
           <Height>0.375in</Height>
-          <Width>1in</Width>
+          <Width>0.96875in</Width>
           <ZIndex>10</ZIndex>
           <DataElementOutput>NoOutput</DataElementOutput>
           <Style>
@@ -2620,9 +2622,13 @@
             </Paragraph>
           </Paragraphs>
           <Top>1.5in</Top>
+          <Left>0.03125in</Left>
           <Height>0.375in</Height>
-          <Width>1in</Width>
+          <Width>0.96875in</Width>
           <ZIndex>11</ZIndex>
+          <Visibility>
+            <Hidden>=IIF(Parameters!GroupeBySupplier.Value = "true"  , True, False)</Hidden>
+          </Visibility>
           <DataElementOutput>NoOutput</DataElementOutput>
           <Style>
             <Border>
@@ -2651,9 +2657,9 @@
             </Paragraph>
           </Paragraphs>
           <Top>1.125in</Top>
-          <Left>1.01389in</Left>
+          <Left>1in</Left>
           <Height>0.375in</Height>
-          <Width>2.75in</Width>
+          <Width>2.46875in</Width>
           <ZIndex>12</ZIndex>
           <Style>
             <Border>
@@ -2684,8 +2690,11 @@
           <Top>1.5in</Top>
           <Left>1in</Left>
           <Height>0.375in</Height>
-          <Width>2.75in</Width>
+          <Width>2.46875in</Width>
           <ZIndex>13</ZIndex>
+          <Visibility>
+            <Hidden>=IIF(Parameters!GroupeBySupplier.Value = "true"  , True, False)</Hidden>
+          </Visibility>
           <Style>
             <Border>
               <Style>None</Style>

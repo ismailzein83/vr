@@ -34,11 +34,18 @@ namespace TOne.Analytics.Data.SQL
                 currencyId 
                 );
         }
-        public List<ZoneSummary> GetZoneSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier, out double services)
+        public List<ZoneSummary> GetZoneSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, List<string> customerIds, List<string> supplierIds, bool groupBySupplier, out double services)
         {
             List<ZoneSummary> lstZoneSummary = new List<ZoneSummary>();
             services = 0;
             double servicesFees = 0;
+            string suppliersIds = null;
+            if (supplierIds != null && supplierIds.Count() > 0)
+                suppliersIds = string.Join<string>(",", supplierIds);
+            string customersIds = null;
+            if (customerIds != null && customerIds.Count() > 0)
+                customersIds = string.Join<string>(",", customerIds);
+
             ExecuteReaderSP("Analytics.SP_BillingRep_GetZoneSummary", (reader) =>
             {
                 while (reader.Read())
@@ -74,8 +81,8 @@ namespace TOne.Analytics.Data.SQL
                currencyId,
                (supplierGroup == null || supplierGroup == "") ? null : supplierGroup,
                (customerGroup == null || customerGroup == "") ? null : customerGroup,
-               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
-               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
+               customersIds,
+               suppliersIds,
                groupBySupplier);
             services = servicesFees;
             return lstZoneSummary;
@@ -94,11 +101,17 @@ namespace TOne.Analytics.Data.SQL
             //   groupBySupplier
             //   );
         }
-        public List<ZoneSummaryDetailed> GetZoneSummaryDetailed(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier, out double services)
+        public List<ZoneSummaryDetailed> GetZoneSummaryDetailed(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup,List<string> customerIds, List<string> supplierIds, bool groupBySupplier, out double services)
         {
             List<ZoneSummaryDetailed> lstZoneSummaryDetailed = new List<ZoneSummaryDetailed>();
             services = 0;
             double servicesFees = 0;
+            string suppliersIds = null;
+            if (supplierIds != null && supplierIds.Count() > 0)
+                suppliersIds = string.Join<string>(",", supplierIds);
+            string customersIds = null;
+            if (customerIds != null && customerIds.Count() > 0)
+                customersIds = string.Join<string>(",", customerIds);
             ExecuteReaderSP("Analytics.SP_BillingRep_GetZoneSummaryDetailed", (reader) =>
             {
                 while (reader.Read())
@@ -140,9 +153,9 @@ namespace TOne.Analytics.Data.SQL
                isCost,
                currencyId,
                (supplierGroup == null || supplierGroup == "") ? null : supplierGroup,
-               (customerGroup == null || customerGroup == "") ? null : customerGroup,
-               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
-               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
+               (customerGroup == null || customerGroup == "") ? null : customerGroup,               
+               customersIds,
+               suppliersIds,
                groupBySupplier);
             services = servicesFees;
             return lstZoneSummaryDetailed;

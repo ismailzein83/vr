@@ -76,6 +76,7 @@ namespace TOne.Entities
         public double TotalSale { get; set; }
         public double TotalCost { get; set; }
         public double TotalProfit { get; set; }
+        public string CurrencyDescription { get; set; }
 
     }
 }

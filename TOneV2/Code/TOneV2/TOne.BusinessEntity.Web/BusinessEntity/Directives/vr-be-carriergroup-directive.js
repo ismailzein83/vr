@@ -65,6 +65,7 @@ app.directive('vrBeCarriergroup', ['VRModalService', 'UtilsService', 'VRNotifica
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
                     $scope.$watch('ctrl.selectedvalues.length', function () {
+                         $scope.selectedCarrierValues = ctrl.selectedvalues;
                         if (iAttrs.onselectionchanged != undefined) {
                             var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onselectionchanged);
                             if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
@@ -95,7 +96,7 @@ app.directive('vrBeCarriergroup', ['VRModalService', 'UtilsService', 'VRNotifica
            
         return '<div style="display:inline-block;width: calc(100% - 18px);">'
                    + '<vr-label >' + label + '</vr-label>'
-               + ' <vr-select  ismultipleselection  datasource="datasource" selectedvalues="selectedCarrierValues" onselectionchanged="onselectionvalueschanged" datatextfield="Name" datavaluefield="CarrierAccountID"'
+               + '<vr-select  ismultipleselection  datasource="datasource" selectedvalues="selectedCarrierValues" onselectionchanged="onselectionvalueschanged" datatextfield="Name" datavaluefield="CarrierAccountID"'
                + 'entityname="' + label + '"></vr-select></div>'
                + ' <span class="glyphicon glyphicon-th hand-cursor"  aria-hidden="true" ng-click="openTreePopup()"></span></div>';
     }

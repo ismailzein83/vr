@@ -3009,6 +3009,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>ZoneSummaryDetailed</DataSetName>
+        <Left>0.01389in</Left>
         <Height>1.5in</Height>
         <Width>17.1217in</Width>
         <Style />
@@ -3017,7 +3018,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
     <Height>1.5in</Height>
     <Style />
   </Body>
-  <Width>17.1217in</Width>
+  <Width>17.13559in</Width>
   <Page>
     <PageHeader>
       <Height>2.25in</Height>
@@ -3042,6 +3043,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
             </Paragraph>
           </Paragraphs>
           <Top>0.0625in</Top>
+          <Left>0.01389in</Left>
           <Height>0.25in</Height>
           <Width>1.37499in</Width>
           <Style>
@@ -3069,7 +3071,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
             </Paragraph>
           </Paragraphs>
           <Top>0.0625in</Top>
-          <Left>8.375in</Left>
+          <Left>8.38889in</Left>
           <Height>0.25in</Height>
           <Width>0.99999in</Width>
           <ZIndex>1</ZIndex>
@@ -3100,7 +3102,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
             </Paragraph>
           </Paragraphs>
           <Top>0.5in</Top>
-          <Left>6.625in</Left>
+          <Left>6.63889in</Left>
           <Height>0.5in</Height>
           <Width>4.62499in</Width>
           <ZIndex>2</ZIndex>
@@ -3128,15 +3130,15 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>1.8125in</Top>
-          <Left>0.125in</Left>
+          <Top>1.73611in</Top>
+          <Left>0.02778in</Left>
           <Height>0.375in</Height>
           <Width>1in</Width>
           <ZIndex>3</ZIndex>
-          <Visibility>
-            <Hidden>true</Hidden>
-          </Visibility>
           <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
             <PaddingTop>2pt</PaddingTop>
@@ -3159,15 +3161,15 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>1.8125in</Top>
-          <Left>1.125in</Left>
+          <Top>1.73611in</Top>
+          <Left>1.02778in</Left>
           <Height>0.375in</Height>
-          <Width>2.62499in</Width>
+          <Width>2.75in</Width>
           <ZIndex>4</ZIndex>
-          <Visibility>
-            <Hidden>true</Hidden>
-          </Visibility>
           <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
             <PaddingTop>2pt</PaddingTop>
@@ -3178,7 +3180,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
           <Source>Database</Source>
           <Value>=Code.Base64ToImage(Parameters!LogoPath.Value)</Value>
           <MIMEType>image/jpeg</MIMEType>
-          <Left>13.875in</Left>
+          <Left>13.88889in</Left>
           <Height>0.71in</Height>
           <Width>2.21in</Width>
           <ZIndex>5</ZIndex>
@@ -3204,7 +3206,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
             </Paragraph>
           </Paragraphs>
           <Top>1in</Top>
-          <Left>13.875in</Left>
+          <Left>13.88889in</Left>
           <Height>0.25in</Height>
           <Width>0.74999in</Width>
           <ZIndex>6</ZIndex>
@@ -3235,7 +3237,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
             </Paragraph>
           </Paragraphs>
           <Top>1.25in</Top>
-          <Left>13.875in</Left>
+          <Left>13.88889in</Left>
           <Height>0.25in</Height>
           <Width>0.74999in</Width>
           <ZIndex>7</ZIndex>
@@ -3265,7 +3267,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
             </Paragraph>
           </Paragraphs>
           <Top>1in</Top>
-          <Left>14.625in</Left>
+          <Left>14.63889in</Left>
           <Height>0.25in</Height>
           <Width>1.50001in</Width>
           <ZIndex>8</ZIndex>
@@ -3296,7 +3298,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
           </Paragraphs>
           <rd:DefaultName>textbox2</rd:DefaultName>
           <Top>1.25in</Top>
-          <Left>14.625in</Left>
+          <Left>14.63889in</Left>
           <Height>0.25in</Height>
           <Width>1.50001in</Width>
           <ZIndex>9</ZIndex>
@@ -3325,11 +3327,15 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
             </Paragraph>
           </Paragraphs>
           <Top>1in</Top>
+          <Left>0.02778in</Left>
           <Height>0.375in</Height>
           <Width>1in</Width>
           <ZIndex>10</ZIndex>
           <DataElementOutput>NoOutput</DataElementOutput>
           <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
             <PaddingTop>2pt</PaddingTop>
@@ -3353,15 +3359,19 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>1.375in</Top>
+          <Top>1.36111in</Top>
+          <Left>0.02778in</Left>
           <Height>0.375in</Height>
           <Width>1in</Width>
           <ZIndex>11</ZIndex>
           <Visibility>
-            <Hidden>=IIF(Parameters!Supplier.Value = "", True, False)</Hidden>
+            <Hidden>=IIF(Parameters!GroupeBySupplier.Value = "true" And (Parameters!Supplier.Value = "Multiple Suppliers" Or Parameters!Supplier.Value = "All Suppliers" ) , True, False)</Hidden>
           </Visibility>
           <DataElementOutput>NoOutput</DataElementOutput>
           <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
             <PaddingTop>2pt</PaddingTop>
@@ -3385,11 +3395,14 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
             </Paragraph>
           </Paragraphs>
           <Top>1in</Top>
-          <Left>1.01389in</Left>
+          <Left>1.02778in</Left>
           <Height>0.375in</Height>
           <Width>2.75in</Width>
           <ZIndex>12</ZIndex>
           <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
             <PaddingTop>2pt</PaddingTop>
@@ -3412,12 +3425,18 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>1.375in</Top>
-          <Left>1in</Left>
+          <Top>1.36111in</Top>
+          <Left>1.02778in</Left>
           <Height>0.375in</Height>
           <Width>2.75in</Width>
           <ZIndex>13</ZIndex>
+          <Visibility>
+            <Hidden>=IIF(Parameters!GroupeBySupplier.Value = "true" And (Parameters!Supplier.Value = "Multiple Suppliers" Or Parameters!Supplier.Value = "All Suppliers" ) , True, False)</Hidden>
+          </Visibility>
           <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
             <PaddingTop>2pt</PaddingTop>

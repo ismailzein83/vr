@@ -13,10 +13,14 @@ namespace TOne.Analytics.Business.BillingReports
     {
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(TOne.Entities.ReportParameters parameters)
         {
+            AccountManagerManager am = new AccountManagerManager();
+            List<string> suppliersIds = am.GetMyAssignedSupplierIds();
+            List<string> customersIds = am.GetMyAssignedCustomerIds();
+
             BillingStatisticManager manager = new BillingStatisticManager();
             double service = 0;
-            List<ZoneSummaryFormatted> zoneSummaries = 
-                manager.GetZoneSummary(parameters.FromTime, parameters.ToTime, parameters.CustomerId, parameters.SupplierId, parameters.IsCost, parameters.CurrencyId, parameters.SupplierGroup, parameters.CustomerGroup, parameters.CustomerAMUId, parameters.SupplierAMUId, parameters.GroupBySupplier, out service);
+            List<ZoneSummaryFormatted> zoneSummaries =
+                manager.GetZoneSummary(parameters.FromTime, parameters.ToTime, parameters.CustomerId, parameters.SupplierId, parameters.IsCost, parameters.CurrencyId, parameters.SupplierGroup, parameters.CustomerGroup, customersIds , suppliersIds, parameters.GroupBySupplier, out service);
             
             decimal services = 0;
             if (parameters.IsCost)
@@ -34,7 +38,6 @@ namespace TOne.Analytics.Business.BillingReports
 
             parameters.TotalAmount = parameters.OffPeakNet + parameters.NormalNet;
 
-            //List<ZoneSummaryFormatted> zs = manager.getZoneSummray(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2015-05-01 00:00:00"), null, null, false, "USD", null, null, null, null, true);
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();
             dataSources.Add("ZoneSummaries", zoneSummaries);
             return dataSources;
@@ -47,7 +50,7 @@ namespace TOne.Analytics.Business.BillingReports
             list.Add("FromDate", new RdlcParameter { Value = parameters.FromTime.ToString(), IsVisible = true });
             list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.ToString(), IsVisible = true });
             list.Add("Title", new RdlcParameter { Value = "Zone Summary", IsVisible = true });
-            list.Add("Currency", new RdlcParameter { Value =  parameters.CurrencyId, IsVisible = true });
+            list.Add("Currency", new RdlcParameter { Value =  parameters.CurrencyDescription, IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
             list.Add("Customer", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.CustomerId , "Customers"), IsVisible = true });
             list.Add("Supplier", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.SupplierId, "Suppliers"), IsVisible = true });

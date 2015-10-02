@@ -68,6 +68,8 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
             paramsurl += "&customer=" + (($scope.params.selectedCustomers.length == 0 ) ? "" : getIdsList($scope.params.selectedCustomers) );
             paramsurl += "&supplier=" + (($scope.params.selectedSuppliers.length == 0) ? "" :  getIdsList($scope.params.selectedSuppliers));
             paramsurl += "&currency=" + (($scope.params.selectedCurrency == null) ? "USD" : $scope.params.selectedCurrency.CurrencyID);
+            paramsurl += "&currencyDesc=" + (($scope.params.selectedCurrency == null) ? "United States Dollars" :encodeURIComponent( $scope.params.selectedCurrency.Name));
+
             paramsurl += "&Auth-Token="  +encodeURIComponent( SecurityService.getUserToken() ) ;
 
 
@@ -83,7 +85,7 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
                 selectedCustomers: [],
                 selectedSuppliers: [],
                 selectedCurrency: $scope.optionsCurrencies[getMainCurrencyIndex($scope.optionsCurrencies)],
-                isCost: false,
+               // isCost: false,
                 service: false,
                 commission: false,
                 bySupplier: false,
