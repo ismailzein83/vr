@@ -27,21 +27,17 @@ BEGIN
 			ds.[adapterID],
 			at.Name AS AdapterName,
 			ds.[AdapterState],
-			ad.[Info],
+			at.[Info],
 			ds.[TaskId],
 			st.IsEnabled,
-			ds.[Settings]
-			
-			INTO #RESULT
-			
-			FROM [integration].[DataSource] AS ds
-			JOIN adapterType AS ad ON ds.adapterID = ad.ID
-			INNER JOIN integration.AdapterType at ON at.ID = ds.AdapterID
-			INNER JOIN runtime.ScheduleTask st ON st.ID = ds.TaskId
-			
-			WHERE (@Name IS NULL OR ds.Name LIKE '%' + @Name + '%')
-				AND (@AdapterTypeIDs IS NULL OR at.ID IN (SELECT AdapterTypeID FROM @AdapterTypeIDsTable))
-				AND (@IsEnabled IS NULL OR st.IsEnabled = @IsEnabled)
+			ds.[Settings]			
+			INTO #RESULT			
+			FROM	[integration].[DataSource] AS ds
+					INNER JOIN integration.AdapterType at ON at.ID = ds.AdapterID
+					INNER JOIN runtime.ScheduleTask st ON st.ID = ds.TaskId			
+			WHERE	(@Name IS NULL OR ds.Name LIKE '%' + @Name + '%')
+					AND (@AdapterTypeIDs IS NULL OR at.ID IN (SELECT AdapterTypeID FROM @AdapterTypeIDsTable))
+					AND (st.IsEnabled = isnull(@IsEnabled,st.IsEnabled))
 			
 			DECLARE @sql VARCHAR(1000)
 			SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';
