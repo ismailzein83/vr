@@ -63,28 +63,6 @@ when not matched by source then
 	delete;
 set identity_insert [queue].[ExecutionFlowDefinition] off;
 
---[queue].[ExecutionFlow]---------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-set identity_insert [queue].[ExecutionFlow] on;
-;with cte_data([ID],[Name],[ExecutionFlowDefinitionID])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'CDR Import Execution Flow',1),
-(4,	'Staging CDR Import',	2)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[ExecutionFlowDefinitionID]))
-merge	[queue].[ExecutionFlow] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[ExecutionFlowDefinitionID] = s.[ExecutionFlowDefinitionID]
-when not matched by target then
-	insert([ID],[Name],[ExecutionFlowDefinitionID])
-	values(s.[ID],s.[Name],s.[ExecutionFlowDefinitionID])
-when not matched by source then
-	delete;
-set identity_insert [queue].[ExecutionFlow] off;
+
 
 
