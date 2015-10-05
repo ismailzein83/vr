@@ -44,6 +44,31 @@ namespace Vanrise.Integration.Data.SQL
             return GetItemSP("integration.sp_DataSource_Get", DataSourceDetailMapper, dataSourceId);
         }
 
+
+
+
+        //public List<Entities.DataSource> GetDataSources()
+        //{
+        //    return GetItemsSP("integration.sp_DataSource_GetAll", DataSourceMapper);
+        //}
+
+        //public Entities.DataSource GetDataSource(int dataSourceId)
+        //{
+        //    return GetItemSP("integration.sp_DataSource_Get", DataSourceMapper, dataSourceId);
+        //}
+
+
+
+
+
+
+
+
+
+
+
+
+
         public Entities.DataSource GetDataSourcebyTaskId(int taskId)
         {
             return GetItemSP("integration.sp_DataSource_GetByTaskId", DataSourceMapper, taskId);
