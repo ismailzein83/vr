@@ -42,12 +42,12 @@
 
         function loadGrid() {
             if ($scope.pricingProductGridConnector.data !== undefined && gridApi != undefined)
-                return retrieveData();
+                return retrieveData($scope.pricingProductGridConnector.data);
         }
 
-        function retrieveData() {
+        function retrieveData(data) {
             var query = {
-
+                Name:data.name
             };
 
             return gridApi.retrieveData(query);

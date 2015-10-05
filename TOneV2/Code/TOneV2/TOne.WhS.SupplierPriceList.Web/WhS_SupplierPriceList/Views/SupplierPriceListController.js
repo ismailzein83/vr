@@ -2,6 +2,7 @@
 
 function SupplierPriceListController($scope, WhS_SupPL_SupplierPriceListAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcessService) {
     defineScope();
+    var carrierAccountDirectiveAPI;
     loadParameters();
     load();
     function loadParameters() {
@@ -16,7 +17,17 @@ function SupplierPriceListController($scope, WhS_SupPL_SupplierPriceListAPIServi
                     return BusinessProcessService.openProcessTracking(response.ProcessInstanceId);
             });
         }
+        $scope.onCarrierAccountDirectiveLoaded = function (api) {
+            carrierAccountDirectiveAPI = api;
+           // $scope.selectedSupplier=carrierAccountDirectiveAPI.getData();
+        }
         $scope.onselectionchanged = function () {
+            if (carrierAccountDirectiveAPI != undefined) {
+                $scope.selectedSupplier = carrierAccountDirectiveAPI.getData();
+                console.log(carrierAccountDirectiveAPI.getData());
+                console.log($scope.selectedSupplier);
+            }
+           
         }
     }
     function load() {

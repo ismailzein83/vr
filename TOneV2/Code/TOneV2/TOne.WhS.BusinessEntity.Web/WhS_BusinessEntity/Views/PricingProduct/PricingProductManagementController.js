@@ -33,7 +33,11 @@
         }
 
         function getFilterObject() {
-            return null;
+
+            var data = {
+                name: $scope.name,
+            };
+            return data;
         }
 
         function AddNewPricingProduct() {
