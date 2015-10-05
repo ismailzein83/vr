@@ -39,6 +39,8 @@ function SwitchTrunkEditorController($scope, SwitchTrunkAPIService, SwitchAPISer
         $scope.trunksToLinkTo = [];
         $scope.selectedTrunkToLinkTo = undefined;
 
+        $scope.disableSwitchMenu = false;
+
         $scope.onSwitchChanged = function () {
 
             $scope.switchesToLinkTo = [];
@@ -137,8 +139,10 @@ function SwitchTrunkEditorController($scope, SwitchTrunkAPIService, SwitchAPISer
                         });
                 }
                 else {
-                    if (switchID != undefined && switchID != null)
+                    if (switchID != undefined && switchID != null) {
                         $scope.selectedSwitch = UtilsService.getItemByVal($scope.switches, switchID, "ID");
+                        $scope.disableSwitchMenu = true;
+                    }
 
                     $scope.isGettingData = false;
                 }
@@ -163,7 +167,7 @@ function SwitchTrunkEditorController($scope, SwitchTrunkAPIService, SwitchAPISer
 
         return SwitchTrunkAPIService.UpdateSwitchTrunk(trunkObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Switch Trunk", response, "Name")) {
+                if (VRNotificationService.notifyOnItemUpdated("Switch Trunk", response, "Name or Symbol")) {
                     if ($scope.onTrunkUpdated != undefined)
                         $scope.onTrunkUpdated(response.UpdatedObject, currentlyLinkedToTrunkID, trunkObject.LinkedToTrunkID);
 
@@ -180,7 +184,8 @@ function SwitchTrunkEditorController($scope, SwitchTrunkAPIService, SwitchAPISer
 
         return SwitchTrunkAPIService.AddSwitchTrunk(trunkObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Switch Trunk", response, "Name")) {
+
+                if (VRNotificationService.notifyOnItemAdded("Switch Trunk", response, "Name or Symbol")) {
                     if ($scope.onTrunkAdded != undefined)
                         $scope.onTrunkAdded(response.InsertedObject);
 

@@ -43,6 +43,11 @@ namespace PSTN.BusinessEntity.Data.SQL
             return GetItemsSP("PSTN_BE.sp_Switch_GetAll", SwitchInfoMapper);
         }
 
+        public List<SwitchAssignedDataSource> GetSwitchAssignedDataSources()
+        {
+            return GetItemsSP("PSTN_BE.sp_Switch_GetSwitchAssignedDataSources", SwitchAssignedDataSourceMapper);
+        }
+
         public List<SwitchInfo> GetSwitchesToLinkTo(int switchID)
         {
             return GetItemsSP("PSTN_BE.sp_Switch_GetToLinkTo", SwitchInfoMapper, switchID);
@@ -72,7 +77,7 @@ namespace PSTN.BusinessEntity.Data.SQL
 
         #region Mappers
 
-        Switch SwitchMapper(IDataReader reader)
+        private Switch SwitchMapper(IDataReader reader)
         {
             Switch switchObject = new Switch();
 
@@ -86,8 +91,16 @@ namespace PSTN.BusinessEntity.Data.SQL
             return switchObject;
         }
 
+        private SwitchAssignedDataSource SwitchAssignedDataSourceMapper(IDataReader reader)
+        {
+            SwitchAssignedDataSource dataSourceObject = new SwitchAssignedDataSource();
 
-        SwitchDetail SwitchDetailMapper(IDataReader reader)
+            dataSourceObject.DataSourceID = (int)reader["DataSourceID"];
+
+            return dataSourceObject;
+        }
+
+        private SwitchDetail SwitchDetailMapper(IDataReader reader)
         {
             SwitchDetail switchObject = new SwitchDetail();
 
@@ -102,7 +115,7 @@ namespace PSTN.BusinessEntity.Data.SQL
             return switchObject;
         }
 
-        SwitchInfo SwitchInfoMapper(IDataReader reader)
+        private SwitchInfo SwitchInfoMapper(IDataReader reader)
         {
             SwitchInfo switchObject = new SwitchInfo();
 

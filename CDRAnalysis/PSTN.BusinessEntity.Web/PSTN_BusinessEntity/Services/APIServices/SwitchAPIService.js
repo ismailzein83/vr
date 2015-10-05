@@ -5,6 +5,7 @@
         GetSwitchByID: GetSwitchByID,
         GetSwitches: GetSwitches,
         GetSwitchesToLinkTo: GetSwitchesToLinkTo,
+        GetSwitchAssignedDataSources: GetSwitchAssignedDataSources,
         UpdateSwitch: UpdateSwitch,
         AddSwitch: AddSwitch,
         DeleteSwitch: DeleteSwitch
@@ -28,6 +29,10 @@
         return BaseAPIService.get("/api/Switch/GetSwitchesToLinkTo", {
             switchID: switchID
         });
+    }
+
+    function GetSwitchAssignedDataSources() {
+        return BaseAPIService.get("/api/Switch/GetSwitchAssignedDataSources");
     }
 
     function UpdateSwitch(switchObject) {

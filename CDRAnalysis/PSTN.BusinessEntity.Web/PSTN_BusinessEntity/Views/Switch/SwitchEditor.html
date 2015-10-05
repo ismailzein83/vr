@@ -36,10 +36,11 @@
                     <vr-select label="Data Source"
                                datasource="dataSources"
                                selectedvalues="selectedDataSource"
-                               datavaluefield="DataSourceId"
+                               datavaluefield="DataSourceID"
                                datatextfield="Name"
                                entityname="Data Source"
-                               onaddclicked="addDataSource">
+                               onaddclicked="addDataSource"
+                               onselectionchanged="onDataSourceChanged">
                     </vr-select>
                 </vr-columns>
             </vr-row>

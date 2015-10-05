@@ -15,15 +15,17 @@
                         </vr-columns>
 
                         <vr-columns width="1/2row">
-                            <vr-select label="Switch"
-                                       datasource="switches"
-                                       selectedvalues="selectedSwitch"
-                                       datavaluefield="ID"
-                                       datatextfield="Name"
-                                       onselectionchanged="onSwitchChanged"
-                                       entityname="Switch"
-                                       isrequired>
-                            </vr-select>
+                            <div vr-disabled="disableSwitchMenu">
+                                <vr-select label="Switch"
+                                           datasource="switches"
+                                           selectedvalues="selectedSwitch"
+                                           datavaluefield="ID"
+                                           datatextfield="Name"
+                                           onselectionchanged="onSwitchChanged"
+                                           entityname="Switch"
+                                           isrequired>
+                                </vr-select>
+                            </div>
                         </vr-columns>
 
                         <vr-columns width="1/2row">

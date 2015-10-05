@@ -85,7 +85,6 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "SwitchTrunkAPIService", 
         function editTrunk(gridObject) {
 
             var onTrunkUpdated = function (firstTrunkObject, linkedToFirstTrunkID, secondTrunkID) {
-                console.log(secondTrunkID);
 
                 setTrunkDescriptions(firstTrunkObject);
                 gridAPI.itemUpdated(firstTrunkObject);

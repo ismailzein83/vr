@@ -80,28 +80,33 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
 
             VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Type/SwitchTypeEditor.html", null, settings);
         }
+
+        $scope.onDataSourceChanged = function () {
+        }
     }
 
     function load() {
         $scope.isGettingData = true;
 
-        return UtilsService.waitMultipleAsyncOperations([loadSwitchTypes, loadDataSources])
+        UtilsService.waitMultipleAsyncOperations([loadSwitchTypes, loadDataSources])
             .then(function () {
 
                 if (editMode) {
                     return SwitchAPIService.GetSwitchByID(switchID)
                         .then(function (response) {
+
                             fillScopeFromSwitchObject(response);
+
+                            loadSwitchAssignedDataSources();
                         })
                         .catch(function (error) {
-                            VRNotificationService.notifyExceptionWithClose(error, $scope);
-                        })
-                        .finally(function () {
                             $scope.isGettingData = false;
+                            VRNotificationService.notifyExceptionWithClose(error, $scope);
                         });
                 }
-                else
-                    $scope.isGettingData = false;
+                else {
+                    loadSwitchAssignedDataSources();
+                }
             })
             .catch(function (error) {
                 $scope.isGettingData = false;
@@ -120,10 +125,35 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
 
     function loadDataSources() {
         return DataSourceAPIService.GetDataSources()
-            .then(function (response) {
-                angular.forEach(response, function (item) {
+            .then(function (responseArray) {
+
+                angular.forEach(responseArray, function (item) {
                     $scope.dataSources.push(item);
                 });
+            });
+    }
+
+    function loadSwitchAssignedDataSources() {
+
+        return SwitchAPIService.GetSwitchAssignedDataSources()
+            .then(function (responseArray) {
+
+                var selectedDataSourceIndex = ($scope.selectedDataSource != undefined) ?
+                    UtilsService.getItemIndexByVal($scope.dataSources, $scope.selectedDataSource.DataSourceID, "DataSourceID") : -1;
+
+                angular.forEach(responseArray, function (item) {
+                    var index = UtilsService.getItemIndexByVal($scope.dataSources, item.DataSourceID, "DataSourceID");
+
+                    if (index > -1 && index != selectedDataSourceIndex) {
+                        $scope.dataSources.splice(index, 1);
+                    }
+                });
+            })
+            .catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            })
+            .finally(function () {
+                $scope.isGettingData = false;
             });
     }
 
@@ -132,7 +162,9 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
         $scope.selectedType = UtilsService.getItemByVal($scope.types, switchObject.TypeID, "ID");
         $scope.areaCode = switchObject.AreaCode;
         $scope.timeOffset = switchObject.TimeOffset;
-        $scope.selectedDataSource = UtilsService.getItemByVal($scope.dataSources, switchObject.DataSourceID, "DataSourceId");
+
+        var dataSourceIndex = UtilsService.getItemIndexByVal($scope.dataSources, switchObject.DataSourceID, "DataSourceID");
+        $scope.selectedDataSource = (dataSourceIndex > 0) ? $scope.dataSources[dataSourceIndex] : undefined;
     }
 
     function updateSwitch() {
@@ -170,13 +202,14 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
     }
 
     function buildSwitchObjectFromScope() {
+
         return {
             ID: switchID,
             Name: $scope.name,
             TypeID: ($scope.selectedType != undefined) ? $scope.selectedType.ID : null,
             AreaCode: $scope.areaCode,
             TimeOffset: $scope.timeOffset,
-            DataSourceID: ($scope.selectedDataSource != undefined) ? $scope.selectedDataSource.DataSourceId : null
+            DataSourceID: ($scope.selectedDataSource != undefined) ? $scope.selectedDataSource.DataSourceID : null
         };
     }
 

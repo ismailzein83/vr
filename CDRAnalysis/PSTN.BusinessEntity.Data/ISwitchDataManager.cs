@@ -15,6 +15,8 @@ namespace PSTN.BusinessEntity.Data
 
         Switch GetSwitchByDataSourceID(int dataSourceID);
 
+        List<SwitchAssignedDataSource> GetSwitchAssignedDataSources();
+
         bool UpdateSwitch(Switch switchObject);
 
         bool AddSwitch(Switch switchObject, out int insertedID);
