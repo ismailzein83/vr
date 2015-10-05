@@ -19,8 +19,8 @@
                         <vr-section title="Sale Zone">
                             <vr-row>
                                 <vr-columns width="1/2row">
-                                    <vr-select hideremoveicon datatextfield="Name" datavaluefield="TemplateConfigID"
-                                               label="Grouping Type" datasource="saleZoneGroupTemplates" selectedvalues="selectedSaleZoneGroupTemplate">
+                                    <vr-select hideremoveicon datatextfield="Name" datavaluefield="TemplateConfigID" label="Filter Type" datasource="saleZoneGroupTemplates" 
+                                               selectedvalues="selectedSaleZoneGroupTemplate" onselectionchanged="saleZoneGroupOnSelectionChanged">
                                     </vr-select>
                                 </vr-columns>
                                 <vr-columns width="1/2row">

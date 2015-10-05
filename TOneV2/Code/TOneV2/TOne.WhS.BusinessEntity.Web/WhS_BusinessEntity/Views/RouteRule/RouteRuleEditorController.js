@@ -121,7 +121,7 @@
                     RouteCriteria: {
                         RoutingProductId: $scope.selectedRoutingProduct != undefined ? $scope.selectedRoutingProduct.RoutingProductId: null,
                         SaleZoneGroupConfigId: $scope.selectedSaleZoneGroupTemplate.TemplateConfigID != -1 ? $scope.selectedSaleZoneGroupTemplate.TemplateConfigID : null,
-                        SaleZoneGroupSettings: saleZoneGroupSettingsDirectiveAPI != undefined ? saleZoneGroupSettingsDirectiveAPI.getData() : null
+                        SaleZoneGroupSettings: $scope.selectedSaleZoneGroupTemplate.TemplateConfigID != -1 ? saleZoneGroupSettingsDirectiveAPI.getData() : null
                     }
                 };
 
