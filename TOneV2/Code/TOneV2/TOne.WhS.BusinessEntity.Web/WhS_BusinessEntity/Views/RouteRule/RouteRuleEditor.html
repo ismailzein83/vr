@@ -1,5 +1,5 @@
 ﻿<div vr-modalcontent ng-controller="WhS_BE_RouteRuleEditorController" vr-loader="isGettingData">
-    <vr-modalbody width="'50%'">
+    <vr-modalbody width="'70%'">
         <vr-form name="formRouteRuleEditor">
             <vr-choices selectedindex="0">
                 <vr-choice isselected="criteriaSelected">Criteria</vr-choice>
@@ -15,7 +15,7 @@
                     </vr-columns>
                 </vr-row>
                 <vr-row>
-                    <vr-columns width="fullrow">
+                    <vr-columns width="1/2row">
                         <vr-section title="Sale Zone">
                             <vr-row>
                                 <vr-columns width="1/2row">
@@ -26,6 +26,20 @@
                                 <vr-columns width="1/2row">
                                     <vr-directivewrapper directive="selectedSaleZoneGroupTemplate.Editor" onloaded="onSaleZoneGroupSettingsDirectiveLoaded"
                                                          salezonepackageid="selectedRoutingProduct.SaleZonePackageId"></vr-directivewrapper>
+                                </vr-columns>
+                            </vr-row>
+                        </vr-section>
+                    </vr-columns>
+                    <vr-columns width="1/2row">
+                        <vr-section title="Customers">
+                            <vr-row>
+                                <vr-columns width="1/2row">
+                                    <vr-select hideremoveicon datatextfield="Name" datavaluefield="TemplateConfigID" label="Filter Type" datasource="customerGroupTemplates"
+                                               selectedvalues="selectedCustomerGroupTemplate">
+                                    </vr-select>
+                                </vr-columns>
+                                <vr-columns width="1/2row">
+                                    <vr-directivewrapper directive="selectedCustomerGroupTemplate.Editor" onloaded="onCustomerGroupSettingsDirectiveLoaded"></vr-directivewrapper>
                                 </vr-columns>
                             </vr-row>
                         </vr-section>

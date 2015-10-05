@@ -9,6 +9,7 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ISaleZoneDataManager : IDataManager
     {
+        List<SaleZone> GetSaleZones(int packageId);
         List<SaleZone> GetSaleZones(int packageId,DateTime effectiveDate);
         void ApplySaleZonesForDB(object preparedSaleZones);
         void DeleteSaleZones(List<SaleZone> saleZones);

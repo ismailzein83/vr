@@ -15,4 +15,9 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public List<long> ZoneIds { get; set; }
     }
+
+    public class AllExceptSaleZonesSettings : SaleZoneGroupSettings
+    {
+        public List<long> ZoneIds { get; set; }
+    }
 }

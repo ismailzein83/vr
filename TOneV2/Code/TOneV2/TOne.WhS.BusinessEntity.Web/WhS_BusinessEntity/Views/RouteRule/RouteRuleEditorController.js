@@ -14,6 +14,9 @@
             var saleZoneGroupSettingsDirectiveAPI;
             var saleZoneGroupSettings;
 
+            var customerGroupSettingsDirectiveAPI;
+            var customerGroupSettings;
+
             loadParameters();
             defineScope();
             load();
@@ -38,6 +41,15 @@
                     }
                 }
 
+                $scope.onCustomerGroupSettingsDirectiveLoaded = function (api) {
+                    customerGroupSettingsDirectiveAPI = api;
+
+                    if (customerGroupSettings != undefined) {
+                        customerGroupSettingsDirectiveAPI.setData(customerGroupSettings);
+                        customerGroupSettings = undefined;
+                    }
+                }
+
                 $scope.SaveRouteRule = function () {
                     if (editMode) {
                         return updateRouteRule();
@@ -59,6 +71,9 @@
 
                 $scope.saleZoneGroupTemplates = [];
                 $scope.selectedSaleZoneGroupTemplate = undefined;
+
+                $scope.customerGroupTemplates = [];
+                $scope.selectedCustomerGroupTemplate = undefined;
 
                 $scope.routingProducts = [];
                 $scope.selectedRoutingProduct = undefined;
@@ -119,7 +134,9 @@
                     RouteCriteria: {
                         RoutingProductId: $scope.selectedRoutingProduct != undefined ? $scope.selectedRoutingProduct.RoutingProductId: null,
                         SaleZoneGroupConfigId: $scope.selectedSaleZoneGroupTemplate.TemplateConfigID != -1 ? $scope.selectedSaleZoneGroupTemplate.TemplateConfigID : null,
-                        SaleZoneGroupSettings: $scope.selectedSaleZoneGroupTemplate.TemplateConfigID != -1 ? saleZoneGroupSettingsDirectiveAPI.getData() : null
+                        SaleZoneGroupSettings: $scope.selectedSaleZoneGroupTemplate.TemplateConfigID != -1 ? saleZoneGroupSettingsDirectiveAPI.getData() : null,
+                        CustomersGroupConfigId: $scope.selectedCustomerGroupTemplate.TemplateConfigID != -1 ? $scope.selectedCustomerGroupTemplate.TemplateConfigID : null,
+                        CustomerGroupSettings: $scope.selectedCustomerGroupTemplate.TemplateConfigID != -1 ? customerGroupSettingsDirectiveAPI.getData() : null
                     }
                 };
 
@@ -135,6 +152,11 @@
                 {
                     $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, routeRuleObj.RouteCriteria.SaleZoneGroupConfigId, "TemplateConfigID");
                     saleZoneGroupSettings = routeRuleObj.RouteCriteria.SaleZoneGroupSettings;
+                }
+
+                if (routeRuleObj.RouteCriteria.CustomersGroupConfigId != null) {
+                    $scope.selectedCustomerGroupTemplate = UtilsService.getItemByVal($scope.customerGroupTemplates, routeRuleObj.RouteCriteria.CustomersGroupConfigId, "TemplateConfigID");
+                    customerGroupSettings = routeRuleObj.RouteCriteria.CustomerGroupSettings;
                 }
             }
 

@@ -11,6 +11,12 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SaleZoneManager
     {
+        public List<SaleZone> GetSaleZones(int packageId)
+        {
+            ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
+            return dataManager.GetSaleZones(packageId);
+        }
+
         public List<SaleZone> GetSaleZones(int packageId,DateTime effectiveDate)
         {
             ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();

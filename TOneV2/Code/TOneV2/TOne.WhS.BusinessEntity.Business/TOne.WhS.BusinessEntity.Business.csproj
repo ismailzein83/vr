@@ -54,6 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AllExceptSaleZonesBehavior.cs" />
     <Compile Include="CarrierAccountManager.cs" />
     <Compile Include="CodeManager.cs" />
     <Compile Include="Constants.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="RouteRulesByCriteria\RouteRulesByZoneProduct.cs" />
     <Compile Include="RoutingProductManager.cs" />
     <Compile Include="SaleCodeManager.cs" />
+    <Compile Include="SelectiveCustomerBehavior.cs" />
     <Compile Include="SelectiveSaleZonesBehavior.cs" />
     <Compile Include="SaleZoneManager.cs" />
     <Compile Include="SaleZonePackageManager.cs" />

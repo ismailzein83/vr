@@ -1,0 +1,69 @@
+﻿'use strict';
+app.directive('vrWhsBeSelectivecustomers', ['UtilsService',
+    function (UtilsService) {
+
+        var directiveDefinitionObject = {
+            restrict: 'E',
+            scope: {
+                onloaded: '='
+            },
+            controller: function ($scope, $element, $attrs) {
+
+                var ctrl = this;
+
+                var beCustomersCtor = new beCustomers(ctrl, $scope);
+                beCustomersCtor.initializeController();
+
+            },
+            controllerAs: 'ctrl',
+            bindToController: true,
+            compile: function (element, attrs) {
+                return {
+                    pre: function ($scope, iElem, iAttrs, ctrl) {
+
+                    }
+                }
+            },
+            templateUrl: function (element, attrs) {
+                return getBeSelectiveCustomersTemplate(attrs);
+            }
+
+        };
+
+        function getBeSelectiveCustomersTemplate(attrs) {
+            return '/Client/Modules/WhS_BusinessEntity/Directives/Templates/SelectiveCustomersDirectiveTemplate.html';
+        }
+
+        function beCustomers(ctrl, $scope) {
+            var carrierAccountDirectiveAPI;
+
+            function initializeController() {
+                $scope.onCarrierAccountDirectiveLoaded = function (api) {
+                    carrierAccountDirectiveAPI = api;
+                    defineAPI();
+                }
+
+            }
+
+            function defineAPI() {
+                var api = {};
+
+                api.getData = function () {
+                    return {
+                        $type: "TOne.WhS.BusinessEntity.Entities.SelectiveCustomersSettings, TOne.WhS.BusinessEntity.Entities",
+                        CustomerIds: UtilsService.getPropValuesFromArray($scope.selectedCustomers, "CarrierAccountId")
+                    };
+                }
+
+                api.setData = function (customerGroupSettings) {
+                    carrierAccountDirectiveAPI.setData(customerGroupSettings.CustomerIds);
+                }
+
+                if (ctrl.onloaded != null)
+                    ctrl.onloaded(api);
+            }
+
+            this.initializeController = initializeController;
+        }
+        return directiveDefinitionObject;
+    }]);
