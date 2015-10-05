@@ -120,7 +120,9 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="WhS_BusinessEntity\Views\Pricing Product\Grids\" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CarrierAccountController.cs" />
@@ -161,6 +163,8 @@
     <Content Include="WhS_BusinessEntity\Services\MainService.js" />
     <Content Include="WhS_BusinessEntity\Views\Grids\RouteRuleGrid.html" />
     <Content Include="WhS_BusinessEntity\Views\Grids\RouteRuleGridController.js" />
+    <Content Include="WhS_BusinessEntity\Views\Pricing Product\PricingProductManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\Pricing Product\PricingProductManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\RouteRuleEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\RouteRuleEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\RouteRuleManagement.html" />
