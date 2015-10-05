@@ -22,6 +22,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetSupplierGroupTemplates")]
         public List<TemplateConfig> GetSupplierGroupTemplates()
         {
             CarrierAccountManager manager = new CarrierAccountManager();

@@ -47,7 +47,7 @@ app.directive('vrWhsBeSelectivesalezones', ['WhS_BE_SaleZoneAPIService', 'WhS_BE
     };
 
     function getBeSelectiveSaleZonesTemplate(attrs) {
-        return '/Client/Modules/WhS_BusinessEntity/Directives/Templates/SelectiveSaleZoneDirectiveTemplate.html';
+        return '/Client/Modules/WhS_BusinessEntity/Directives/Templates/SelectiveSaleZonesDirectiveTemplate.html';
     }
 
     function beSaleZones(ctrl, $scope, WhS_BE_SaleZoneAPIService) {

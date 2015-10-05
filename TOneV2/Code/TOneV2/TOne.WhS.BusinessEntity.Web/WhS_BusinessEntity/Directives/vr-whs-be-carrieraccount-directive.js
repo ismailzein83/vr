@@ -1,10 +1,11 @@
 ﻿'use strict';
-app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', function ( WhS_BE_CarrierAccountAPIService) {
+app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'UtilsService', function (WhS_BE_CarrierAccountAPIService, UtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
         scope: {
             type: "=",
+            onloaded: '=',
             label: "@",
             selectedvalues: "=",
             ismultipleselection:"@"
@@ -13,7 +14,7 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', funct
             var ctrl = this;
             $scope.selectedCarrierValues = [];
             $scope.datasource = [];
-            var beCarrierGroup = new BeCarrierGroup(ctrl, $scope.datasource, WhS_BE_CarrierAccountAPIService);
+            var beCarrierGroup = new BeCarrierGroup(ctrl, $scope, WhS_BE_CarrierAccountAPIService);
             beCarrierGroup.initializeController();
             $scope.onselectionvalueschanged = function () {
                 ctrl.selectedvalues = $scope.selectedCarrierValues;
@@ -55,17 +56,17 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', funct
                 label = "Carriers";
         }
         if (attrs.ismultipleselection != undefined)
-            return '<div style="display:inline-block;width: calc(100% - 18px);">'
+            return '<div style="display:inline-block;width: calc(100% - 18px);" vr-loader="isLoadingDirective">'
                        + '<vr-label >' + label + '</vr-label>'
                    + ' <vr-select ismultipleselection datasource="datasource" selectedvalues="selectedCarrierValues" onselectionchanged="onselectionvalueschanged" datatextfield="Name" datavaluefield="CarrierAccountId"'
                    + 'entityname="' + label + '"></vr-select></div>'
                    + ' <span class="glyphicon glyphicon-th hand-cursor"  aria-hidden="true" ng-click="openTreePopup()"></span></div>';
         else
-            return'<div><vr-label >' + label + '</vr-label>'
+            return '<div vr-loader="isLoadingDirective"><vr-label >' + label + '</vr-label>'
                + ' <vr-select datasource="datasource" selectedvalues="selectedCarrierValues" onselectionchanged="onselectionvalueschanged" datatextfield="Name" datavaluefield="CarrierAccountId"'
                + 'entityname="' + label + '"></vr-select></div>';
     }
-    function BeCarrierGroup(ctrl, datasource, WhS_BE_CarrierAccountAPIService) {
+    function BeCarrierGroup(ctrl, $scope, WhS_BE_CarrierAccountAPIService) {
         var getCustomers = false;
         var getSuppliers = false;
         if (ctrl.type == "Customer")
@@ -78,15 +79,42 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', funct
         }
         function initializeController() {
             loadCarriers();
+            
         }
 
         function loadCarriers() {
-
+            $scope.isLoadingDirective = true;
             return WhS_BE_CarrierAccountAPIService.GetCarrierAccounts(getCustomers, getSuppliers).then(function (response) {
                 angular.forEach(response, function (itm) {
-                    datasource.push(itm);
+                    $scope.datasource.push(itm);
                 });
+            }).catch(function (error) {
+                //TODO handle the case of exceptions
+                        
+            }).finally(function () {
+                $scope.isLoadingDirective = false;
+                defineAPI();
             });
+        }
+        function defineAPI() {
+            var api = {};
+            api.getData = function()
+            {
+                return $scope.selectedCarrierValues;
+            }
+
+            api.setData = function (selectedIds) {
+                
+                for (var i = 0; i < selectedIds.length; i++)
+                {
+                    var selectedCarrierValue = UtilsService.getItemByVal($scope.datasource, selectedIds[i], "CarrierAccountId");
+                    if (selectedCarrierValue!=null)
+                     $scope.selectedCarrierValues.push(selectedCarrierValue);
+                }
+            }
+
+            if (ctrl.onloaded != null)
+                ctrl.onloaded(api);
         }
 
         this.initializeController = initializeController;

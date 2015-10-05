@@ -10,6 +10,13 @@
 
             var editMode;
             var routingProductId;
+
+            var saleZoneGroupSettingsDirectiveAPI;
+            var saleZoneGroupSettings;
+
+            var supplierGroupSettingsDirectiveAPI;
+            var supplierGroupSettings;
+
             loadParameters();
             defineScope();
             load();
@@ -25,6 +32,25 @@
             }
 
             function defineScope() {
+
+                $scope.onSaleZoneGroupSettingsDirectiveLoaded = function (api) {
+                    saleZoneGroupSettingsDirectiveAPI = api;
+
+                    if (saleZoneGroupSettings != undefined) {
+                        saleZoneGroupSettingsDirectiveAPI.setData(saleZoneGroupSettings);
+                        saleZoneGroupSettings = undefined;
+                    }
+                }
+
+                $scope.onSupplierGroupSettingsDirectiveLoaded = function (api) {
+                    supplierGroupSettingsDirectiveAPI = api;
+
+                    if (supplierGroupSettings != undefined) {
+                        supplierGroupSettingsDirectiveAPI.setData(supplierGroupSettings);
+                        supplierGroupSettings = undefined;
+                    }
+                }
+
                 $scope.SaveRoutingProduct = function () {
                     if (editMode) {
                         return updateRoutingProduct();
@@ -38,10 +64,8 @@
                     $scope.modalContext.closeModal()
                 };
 
-                $scope.saleZonePackageOnSelectionChanged = function () {
-                    if ($scope.selectedSaleZonePackage != undefined)
-                        $scope.saleZoneGroups.saleZonePackageId = $scope.selectedSaleZonePackage.SaleZonePackageId;
-                }
+                $scope.saleZonePackages = [];
+                $scope.selectedSaleZonePackage = undefined;
 
                 $scope.saleZoneGroupTemplates = [];
                 $scope.selectedSaleZoneGroupTemplate = undefined;
@@ -49,11 +73,6 @@
                 $scope.supplierGroupTemplates = [];
                 $scope.selectedSupplierGroupTemplate = undefined;
 
-                $scope.saleZonePackages = [];
-                $scope.selectedSaleZonePackage = undefined;
-
-                $scope.saleZoneGroups = {};
-                $scope.supplierGroups = {};
             }
 
             function load() {
@@ -95,7 +114,7 @@
             function loadSaleZoneGroupTemplates() {
                 return WhS_BE_SaleZoneAPIService.GetSaleZoneGroupTemplates().then(function (response) {
 
-                    var defSaleZoneSelection = { TemplateConfigID: -1, Name: 'All Sale Zones', Editor: '' };
+                    var defSaleZoneSelection = { TemplateConfigID: -1, Name: 'No Filter', Editor: '' };
                     $scope.saleZoneGroupTemplates.push(defSaleZoneSelection);
 
                     angular.forEach(response, function (item) {
@@ -109,7 +128,7 @@
             function loadSupplierGroupTemplates() {
                 return WhS_BE_CarrierAccountAPIService.GetSupplierGroupTemplates().then(function (response) {
 
-                    var defSupplierSelection = { TemplateConfigID: -1, Name: 'All Suppliers', Editor: '' };
+                    var defSupplierSelection = { TemplateConfigID: -1, Name: 'No Filter', Editor: '' };
                     $scope.supplierGroupTemplates.push(defSupplierSelection);
 
                     angular.forEach(response, function (item) {
@@ -128,9 +147,9 @@
                     SaleZonePackageId: $scope.selectedSaleZonePackage.SaleZonePackageId,
                     Settings: {
                         SaleZoneGroupConfigId: $scope.selectedSaleZoneGroupTemplate.TemplateConfigID != -1 ? $scope.selectedSaleZoneGroupTemplate.TemplateConfigID : null,
-                        SaleZoneGroupSettings: $scope.saleZoneGroups.getData != undefined ? $scope.saleZoneGroups.getData() : null,
+                        SaleZoneGroupSettings: $scope.selectedSaleZoneGroupTemplate.TemplateConfigID != -1 ? saleZoneGroupSettingsDirectiveAPI.getData() : null,
                         SupplierGroupConfigId: $scope.selectedSupplierGroupTemplate.TemplateConfigID != -1 ? $scope.selectedSupplierGroupTemplate.TemplateConfigID : null,
-                        SupplierGroupSettings: $scope.supplierGroups.getData != undefined ? $scope.supplierGroups.getData() : null
+                        SupplierGroupSettings: $scope.selectedSupplierGroupTemplate.TemplateConfigID != -1 ? supplierGroupSettingsDirectiveAPI.getData() : null
                     }
                 };
 
@@ -142,22 +161,16 @@
                 $scope.selectedSaleZonePackage = UtilsService.getItemByVal($scope.saleZonePackages, routingProductObj.SaleZonePackageId, "SaleZonePackageId");
 
                 if (routingProductObj.Settings.SaleZoneGroupConfigId != null)
+                {
                     $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, routingProductObj.Settings.SaleZoneGroupConfigId, "TemplateConfigID");
-
+                    saleZoneGroupSettings = routingProductObj.Settings.SaleZoneGroupSettings;
+                }
+                    
                 if (routingProductObj.Settings.SupplierGroupConfigId != null)
+                {
                     $scope.selectedSupplierGroupTemplate = UtilsService.getItemByVal($scope.supplierGroupTemplates, routingProductObj.Settings.SupplierGroupConfigId, "TemplateConfigID");
-
-                $scope.saleZoneGroups.saleZonePackageId = routingProductObj.SaleZonePackageId;
-                $scope.saleZoneGroups.data = routingProductObj.Settings.SaleZoneGroupSettings;
-
-                if ($scope.saleZoneGroups.loadTemplateData != undefined)
-                    $scope.saleZoneGroups.loadTemplateData();
-
-                $scope.supplierGroups.data = routingProductObj.Settings.SupplierGroupSettings;
-
-                if ($scope.supplierGroups.loadTemplateData != undefined)
-                    $scope.supplierGroups.loadTemplateData();
-
+                    supplierGroupSettings = routingProductObj.Settings.SupplierGroupSettings;
+                }
             }
 
             function insertRoutingProduct() {

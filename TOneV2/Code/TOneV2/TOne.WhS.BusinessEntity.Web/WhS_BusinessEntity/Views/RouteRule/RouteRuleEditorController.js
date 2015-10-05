@@ -62,8 +62,6 @@
 
                 $scope.routingProducts = [];
                 $scope.selectedRoutingProduct = undefined;
-
-                $scope.saleZoneGroupSettings = {};
             }
 
             function load() {

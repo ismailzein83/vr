@@ -14,7 +14,7 @@
         }
 
         function GetSupplierGroupTemplates() {
-            return BaseAPIService.get("/api/CarrierAccount/GetSupplierGroupTemplates");
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierAccount", "GetSupplierGroupTemplates"));
         }
 
         return ({
