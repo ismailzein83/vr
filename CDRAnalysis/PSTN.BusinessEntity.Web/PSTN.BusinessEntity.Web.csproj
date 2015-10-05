@@ -153,6 +153,10 @@
     <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchTrunkAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchTypeAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Services\PSTN_BE_Service.js" />
+    <Content Include="PSTN_BusinessEntity\Directives\NormalizationRuleGridTemplate.html" />
+    <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-normalizationrulegrid.js" />
+    <Content Include="PSTN_BusinessEntity\Views\NormalizationRule\NormalizationRuleManagementController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\NormalizationRule\NormalizationRuleManagement.html" />
     <Content Include="PSTN_BusinessEntity\Views\ProcessInputTemplate\Normal\StagingtoNormalCDRProcessInput.html" />
     <Content Include="PSTN_BusinessEntity\Views\ProcessInputTemplate\Normal\StagingtoNormalCDRProcessInputController.js" />
     <Content Include="PSTN_BusinessEntity\Views\ProcessInputTemplate\Scheduled\StagingtoNormalCDRProcessInput_Scheduled.html" />

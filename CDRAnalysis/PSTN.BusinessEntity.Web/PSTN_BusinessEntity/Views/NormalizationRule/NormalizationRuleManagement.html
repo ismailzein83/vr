@@ -1,0 +1,22 @@
+﻿<vr-panel ng-controller="PSTN_BusinessEntity_NormalizationRuleManagementController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-datetimepicker label="BED" value="beginEffectiveDate" type="dateTime"></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-datetimepicker label="EED" value="endEffectiveDate" type="dateTime"></vr-datetimepicker>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked" isasynchronous="true"></vr-button>
+                    <vr-button type="Add" data-onclick="addNormalizationRule"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+    </vr-form>
+</vr-panel>
