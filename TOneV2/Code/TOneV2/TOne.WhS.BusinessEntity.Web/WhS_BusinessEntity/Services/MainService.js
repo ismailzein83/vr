@@ -16,7 +16,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'VRModalService
             modalScope.onRouteRuleAdded = onRouteRuleAdded;
         };
 
-        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RouteRuleEditor.html', null, settings);
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RouteRule/RouteRuleEditor.html', null, settings);
     }
 
     function editRouteRule(routeRuleObj, onRouteRuleUpdated) {
@@ -30,7 +30,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'VRModalService
             modalScope.title = "Edit Route Rule";
             modalScope.onRouteRuleUpdated = onRouteRuleUpdated;
         };
-        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RouteRuleEditor.html', parameters, modalSettings);
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RouteRule/RouteRuleEditor.html', parameters, modalSettings);
     }
 
     function deleteRouteRule(routeRuleObj, onRouteRuleDeleted) {

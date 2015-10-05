@@ -121,7 +121,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="WhS_BusinessEntity\Views\Grids\" />
     <Folder Include="WhS_BusinessEntity\Views\Pricing Product\Grids\" />
+    <Folder Include="WhS_BusinessEntity\Views\RoutingProduct\Grids\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
@@ -161,18 +163,18 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleZoneAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleZonePackageAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\MainService.js" />
-    <Content Include="WhS_BusinessEntity\Views\Grids\RouteRuleGrid.html" />
-    <Content Include="WhS_BusinessEntity\Views\Grids\RouteRuleGridController.js" />
+    <Content Include="WhS_BusinessEntity\Views\RouteRule\Grids\RouteRuleGrid.html" />
+    <Content Include="WhS_BusinessEntity\Views\RouteRule\Grids\RouteRuleGridController.js" />
     <Content Include="WhS_BusinessEntity\Views\Pricing Product\PricingProductManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\Pricing Product\PricingProductManagementController.js" />
-    <Content Include="WhS_BusinessEntity\Views\RouteRuleEditor.html" />
-    <Content Include="WhS_BusinessEntity\Views\RouteRuleEditorController.js" />
-    <Content Include="WhS_BusinessEntity\Views\RouteRuleManagement.html" />
-    <Content Include="WhS_BusinessEntity\Views\RouteRuleManagementController.js" />
-    <Content Include="WhS_BusinessEntity\Views\RoutingProductEditor.html" />
-    <Content Include="WhS_BusinessEntity\Views\RoutingProductEditorController.js" />
-    <Content Include="WhS_BusinessEntity\Views\RoutingProductManagement.html" />
-    <Content Include="WhS_BusinessEntity\Views\RoutingProductManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\RouteRule\RouteRuleEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\RouteRule\RouteRuleEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Views\RouteRule\RouteRuleManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\RouteRule\RouteRuleManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\Templates\SelectiveSaleZonesTemplate.html" />
     <Content Include="WhS_BusinessEntity\Views\Templates\SelectiveSaleZonesTemplateController.js" />
     <Content Include="WhS_BusinessEntity\Views\Templates\SelectiveSuppliersTemplate.html" />

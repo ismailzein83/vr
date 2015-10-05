@@ -87,7 +87,7 @@
                     gridApi.itemAdded(routingProduct);
                 };
             };
-            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RoutingProductEditor.html', null, settings);
+            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RoutingProduct/RoutingProductEditor.html', null, settings);
 
         }
 
@@ -104,7 +104,7 @@
                     gridApi.itemUpdated(routingProduct);
                 };
             };
-            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RoutingProductEditor.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RoutingProduct/RoutingProductEditor.html', parameters, modalSettings);
         }
 
         function deleteRoutingProduct(routingProduct) {
