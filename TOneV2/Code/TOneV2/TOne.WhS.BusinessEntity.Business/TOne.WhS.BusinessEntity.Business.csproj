@@ -41,6 +41,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Caching">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Vanrise.Common\bin\Debug\Vanrise.Common.dll</HintPath>
@@ -75,11 +78,13 @@
     <Compile Include="RouteRulesByCriteria\RouteRulesByZoneCustomer.cs" />
     <Compile Include="RouteRulesByCriteria\RouteRulesByZoneProduct.cs" />
     <Compile Include="RoutingProductManager.cs" />
-    <Compile Include="SaleCodeManager.cs" />
+    <Compile Include="SaleZone\SaleCodeManager.cs" />
+    <Compile Include="SaleZone\SaleZoneCacheManager.cs" />
+    <Compile Include="SaleZone\SaleZonePackageCacheManager.cs" />
     <Compile Include="SelectiveCustomerBehavior.cs" />
     <Compile Include="SelectiveSaleZonesBehavior.cs" />
-    <Compile Include="SaleZoneManager.cs" />
-    <Compile Include="SaleZonePackageManager.cs" />
+    <Compile Include="SaleZone\SaleZoneManager.cs" />
+    <Compile Include="SaleZone\SaleZonePackageManager.cs" />
     <Compile Include="SupplierCodeManager.cs" />
     <Compile Include="SelectiveSuppliersBehavior.cs" />
     <Compile Include="SupplierPriceListManager.cs" />

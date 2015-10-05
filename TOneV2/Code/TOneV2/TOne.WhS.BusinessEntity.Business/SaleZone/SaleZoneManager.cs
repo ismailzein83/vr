@@ -17,6 +17,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return dataManager.GetSaleZones(packageId);
         }
 
+        public List<SaleZone> GetCachedSaleZones(int packageId)
+        {
+            string cacheName = String.Format("GetCachedSaleZones_{0}", packageId);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleZoneCacheManager>().GetOrCreateObject(cacheName, () => GetSaleZones(packageId));
+        }
+
         public List<SaleZone> GetSaleZones(int packageId,DateTime effectiveDate)
         {
             ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
@@ -75,16 +81,23 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
 
-        public List<SaleZoneInfo> GetSaleZonesInfo(int packageId, string filter)
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(int packageId, string filter)
         {
-            ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
-            return dataManager.GetSaleZonesInfo(packageId, filter);
+            string filterLower = filter != null ? filter.ToLower() : null;
+            List<SaleZone> allZones = GetCachedSaleZones(packageId);
+            if (allZones != null)
+                return allZones.Where(itm => filterLower == null || itm.Name.Contains(filterLower)).Select(itm => new SaleZoneInfo { SaleZoneId = itm.SaleZoneId, Name = itm.Name });
+            else
+                return null;
         }
 
-        public List<SaleZoneInfo> GetSaleZonesInfoByIds(int packageId, List<long> saleZoneIds)
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfoByIds(int packageId, List<long> saleZoneIds)
         {
-            ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
-            return dataManager.GetSaleZonesInfoByIds(packageId, saleZoneIds);
+            List<SaleZone> allZones = GetCachedSaleZones(packageId);
+            if (allZones != null)
+                return allZones.Where(itm => saleZoneIds == null || saleZoneIds.Contains(itm.SaleZoneId)).Select(itm => new SaleZoneInfo { SaleZoneId = itm.SaleZoneId, Name = itm.Name });
+            else
+                return null;
         }
     }
 }

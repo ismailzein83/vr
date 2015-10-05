@@ -21,14 +21,14 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         //}
 
         [HttpGet]
-        public List<SaleZoneInfo> GetSaleZonesInfo(int packageId, string filter)
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(int packageId, string filter)
         {
             SaleZoneManager manager = new SaleZoneManager();
             return manager.GetSaleZonesInfo(packageId, filter);
         }
 
         [HttpPost]
-        public List<SaleZoneInfo> GetSaleZonesInfoByIds(SaleZoneInput input)
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfoByIds(SaleZoneInput input)
         {
             SaleZoneManager manager = new SaleZoneManager();
             return manager.GetSaleZonesInfoByIds(input.PackageId, input.SaleZoneIds);

@@ -15,5 +15,11 @@ namespace TOne.WhS.BusinessEntity.Business
             ISaleZonePackageDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZonePackageDataManager>();
             return dataManager.GetSaleZonePackages();
         }
+
+        public List<SaleZonePackage> GetCachedSaleZonePackages()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleZonePackageCacheManager>().GetOrCreateObject("GetCachedSaleZonePackages",
+                () => GetSaleZonePackages());
+        }
     }
 }
