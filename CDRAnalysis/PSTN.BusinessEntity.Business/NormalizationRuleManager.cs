@@ -1,4 +1,5 @@
 ﻿using PSTN.BusinessEntity.Entities;
+using PSTN.BusinessEntity.Entities.Normalization.Actions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,15 +13,12 @@ namespace PSTN.BusinessEntity.Business
         public void Normalize(Vanrise.Fzero.CDRImport.Entities.StagingCDR cdr)
         {
 
-            CDRToNormalizeInfo cdrInfo1 = new CDRToNormalizeInfo { PhoneNumber = cdr.CDPN, SwitchId = cdr.SwitchID.Value , PhoneNumberType= NormalizationPhoneNumberType.CDPN,    TrunkId=cdr.InTrunkId.Value };
-
-            CDRToNormalizeInfo cdrInfo2 = new CDRToNormalizeInfo { PhoneNumber = cdr.CGPN, SwitchId = cdr.SwitchID.Value, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.OutTrunkId.Value };
-
-            NormalizationRule matchRule1 = GetMostMatchedRule(_rules, cdrInfo1);
-            if (matchRule1 != null)
+            CDRToNormalizeInfo cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CGPN, SwitchId = cdr.SwitchID.Value, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId.Value };
+            NormalizationRule matchRule_CGPN = GetMostMatchedRule(_rules, cdrInfo_CGPN);
+            if (matchRule_CGPN != null)
             {
                 string phoneNumber = cdr.CDPN;
-                foreach (var actionSettings in matchRule1.Settings.Actions)
+                foreach (var actionSettings in matchRule_CGPN.Settings.Actions)
                 {
                     var behavior = GetActionBehavior(actionSettings.BehaviorId);
                     behavior.Execute(actionSettings, ref phoneNumber);
@@ -29,22 +27,49 @@ namespace PSTN.BusinessEntity.Business
             }
 
 
-            NormalizationRule matchRule2 = GetMostMatchedRule(_rules, cdrInfo2);
-            if(matchRule2 != null)
+            CDRToNormalizeInfo cdrInfo_CDPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CDPN, SwitchId = cdr.SwitchID.Value, PhoneNumberType = NormalizationPhoneNumberType.CDPN, TrunkId = cdr.OutTrunkId.Value };
+            NormalizationRule matchRule_CDPN = GetMostMatchedRule(_rules, cdrInfo_CDPN);
+            if (matchRule_CDPN != null)
             {
                 string phoneNumber = cdr.CDPN;
-                foreach (var actionSettings in matchRule2.Settings.Actions)
+                foreach (var actionSettings in matchRule_CDPN.Settings.Actions)
                 {
                     var behavior = GetActionBehavior(actionSettings.BehaviorId);
                     behavior.Execute(actionSettings, ref phoneNumber);
                 }
                 cdr.CDPN = phoneNumber;
             }
-                
+
         }
 
         public void Normalize(Vanrise.Fzero.CDRImport.Entities.CDR cdr)
         {
+            CDRToNormalizeInfo cdrInfo_MSISDN = new CDRToNormalizeInfo { PhoneNumber = cdr.MSISDN, SwitchId = cdr.SwitchID.Value, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId.Value };
+            NormalizationRule matchRule_MSISDN = GetMostMatchedRule(_rules, cdrInfo_MSISDN);
+            if (matchRule_MSISDN != null)
+            {
+                string phoneNumber = cdr.MSISDN;
+                foreach (var actionSettings in matchRule_MSISDN.Settings.Actions)
+                {
+                    var behavior = GetActionBehavior(actionSettings.BehaviorId);
+                    behavior.Execute(actionSettings, ref phoneNumber);
+                }
+                cdr.MSISDN = phoneNumber;
+            }
+
+
+            CDRToNormalizeInfo cdrInfo_Destination = new CDRToNormalizeInfo { PhoneNumber = cdr.Destination, SwitchId = cdr.SwitchID.Value, PhoneNumberType = NormalizationPhoneNumberType.CDPN, TrunkId = cdr.OutTrunkId.Value };
+            NormalizationRule matchRule_Destination = GetMostMatchedRule(_rules, cdrInfo_Destination);
+            if (matchRule_Destination != null)
+            {
+                string phoneNumber = cdr.Destination;
+                foreach (var actionSettings in matchRule_Destination.Settings.Actions)
+                {
+                    var behavior = GetActionBehavior(actionSettings.BehaviorId);
+                    behavior.Execute(actionSettings, ref phoneNumber);
+                }
+                cdr.Destination = phoneNumber;
+            }
 
         }
 
@@ -58,13 +83,49 @@ namespace PSTN.BusinessEntity.Business
             return templateConfigManager.GetBehavior<NormalizationRuleActionBehavior>(behaviorId);
         }
 
-        
-       
+
+
 
         public Vanrise.Rules.Entities.StructuredRules GetStructuredRules()
         {
             List<Vanrise.Rules.Entities.BaseRule> rules = new List<Vanrise.Rules.Entities.BaseRule>();//GEt rules from database
-            rules.Add(new NormalizationRule { Criteria = new NormalizationRuleCriteria { SwitchIds= new List<int> { 2, 4 }, PhoneNumberPrefix = "961" } });
+            rules.Add(new NormalizationRule
+            {
+                Criteria = new NormalizationRuleCriteria { PhoneNumberType = NormalizationPhoneNumberType.CGPN, PhoneNumberLength = 8, PhoneNumberPrefix = "177", SwitchIds = new List<int>() { 3 }, TrunkIds = new List<int>() { 142 } },
+                Settings = new NormalizationRuleSettings() { Actions = new List<NormalizationRuleActionSettings>() { new AddPrefixActionSettings() { BehaviorId = 1, Prefix = "0" } } }
+            });
+            rules.Add(new NormalizationRule
+            {
+                Criteria = new NormalizationRuleCriteria { PhoneNumberType = NormalizationPhoneNumberType.CGPN, PhoneNumberLength = 8, PhoneNumberPrefix = "181", SwitchIds = new List<int>() { 3 }, TrunkIds = new List<int>() { 143 } },
+                Settings = new NormalizationRuleSettings() { Actions = new List<NormalizationRuleActionSettings>() { new AddPrefixActionSettings() { BehaviorId = 1, Prefix = "0" } } }
+            });
+
+            rules.Add(new NormalizationRule
+            {
+                Criteria = new NormalizationRuleCriteria { PhoneNumberType = NormalizationPhoneNumberType.CGPN, PhoneNumberLength = 10, PhoneNumberPrefix = "727", SwitchIds = new List<int>() { 3 }, TrunkIds = new List<int>() { 144 } },
+                Settings = new NormalizationRuleSettings() { Actions = new List<NormalizationRuleActionSettings>() { new AddPrefixActionSettings() { BehaviorId = 1, Prefix = "0" } } }
+            });
+
+            rules.Add(new NormalizationRule
+            {
+                Criteria = new NormalizationRuleCriteria { PhoneNumberType = NormalizationPhoneNumberType.CGPN, PhoneNumberLength = 7, PhoneNumberPrefix = "765", SwitchIds = new List<int>() { 3 }, TrunkIds = new List<int>() { 145 } },
+                Settings = new NormalizationRuleSettings() { Actions = new List<NormalizationRuleActionSettings>() { new AddPrefixActionSettings() { BehaviorId = 1, Prefix = "01" } } }
+            });
+
+            rules.Add(new NormalizationRule
+            {
+                Criteria = new NormalizationRuleCriteria { PhoneNumberType = NormalizationPhoneNumberType.CDPN, PhoneNumberLength = 10, PhoneNumberPrefix = "999", SwitchIds = new List<int>() { 3 }, TrunkIds = new List<int>() { 147 } },
+                Settings = new NormalizationRuleSettings() { Actions = new List<NormalizationRuleActionSettings>() { new SubstringActionSettings() { BehaviorId = 2, StartIndex = 0, Length = 3 }, new AddPrefixActionSettings() { BehaviorId = 1, Prefix = "01" } } }
+            });
+
+            rules.Add(new NormalizationRule
+            {
+                Criteria = new NormalizationRuleCriteria { PhoneNumberType = NormalizationPhoneNumberType.CDPN, PhoneNumberLength = 7, PhoneNumberPrefix = "778", SwitchIds = new List<int>() { 3 }, TrunkIds = new List<int>() { 148 } },
+                Settings = new NormalizationRuleSettings() { Actions = new List<NormalizationRuleActionSettings>() { new AddPrefixActionSettings() { BehaviorId = 1, Prefix = "01" } } }
+            });
+
+
+
             var ruleSets = GetRuleSets();
             Vanrise.Rules.Business.RuleManager ruleManager = new Vanrise.Rules.Business.RuleManager();
             return ruleManager.StructureRules(rules, ruleSets);
