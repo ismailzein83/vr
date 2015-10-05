@@ -121,12 +121,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="WhS_BusinessEntity\Views\Grids\" />
     <Folder Include="WhS_BusinessEntity\Views\RoutingProduct\Grids\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CarrierAccountController.cs" />
+    <Compile Include="Controllers\CustomerPricingProductController.cs" />
     <Compile Include="Controllers\PricingProductController.cs" />
     <Compile Include="Controllers\RouteRuleController.cs" />
     <Compile Include="Controllers\RoutingProductController.cs" />
@@ -169,6 +169,10 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleZoneAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleZonePackageAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\MainService.js" />
+    <Content Include="WhS_BusinessEntity\Views\PricingProduct\CustomerPricingProductManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\PricingProduct\CustomerPricingProductManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\PricingProduct\Grids\CustomerPricingProductGrid.html" />
+    <Content Include="WhS_BusinessEntity\Views\PricingProduct\Grids\CustomerPricingProductGridController.js" />
     <Content Include="WhS_BusinessEntity\Views\PricingProduct\Grids\PricingProductGrid.html" />
     <Content Include="WhS_BusinessEntity\Views\PricingProduct\Grids\PricingProductGridController.js" />
     <Content Include="WhS_BusinessEntity\Views\PricingProduct\PricingProductEditor.html" />
