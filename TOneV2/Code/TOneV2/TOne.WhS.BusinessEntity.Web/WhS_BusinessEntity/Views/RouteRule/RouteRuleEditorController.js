@@ -104,7 +104,7 @@
             function loadSaleZoneGroupTemplates() {
                 return WhS_BE_SaleZoneAPIService.GetSaleZoneGroupTemplates().then(function (response) {
 
-                    var defSaleZoneSelection = { TemplateConfigID: -1, Name: 'No Filter', TemplateURL: '' };
+                    var defSaleZoneSelection = { TemplateConfigID: -1, Name: 'No Filter', Editor: '' };
                     $scope.saleZoneGroupTemplates.push(defSaleZoneSelection);
 
                     angular.forEach(response, function (item) {

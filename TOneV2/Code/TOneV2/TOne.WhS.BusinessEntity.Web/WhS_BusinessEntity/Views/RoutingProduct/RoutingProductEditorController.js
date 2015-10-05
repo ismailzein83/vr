@@ -95,7 +95,7 @@
             function loadSaleZoneGroupTemplates() {
                 return WhS_BE_SaleZoneAPIService.GetSaleZoneGroupTemplates().then(function (response) {
 
-                    var defSaleZoneSelection = { TemplateConfigID: -1, Name: 'All Sale Zones', TemplateURL: '' };
+                    var defSaleZoneSelection = { TemplateConfigID: -1, Name: 'All Sale Zones', Editor: '' };
                     $scope.saleZoneGroupTemplates.push(defSaleZoneSelection);
 
                     angular.forEach(response, function (item) {
@@ -109,7 +109,7 @@
             function loadSupplierGroupTemplates() {
                 return WhS_BE_CarrierAccountAPIService.GetSupplierGroupTemplates().then(function (response) {
 
-                    var defSupplierSelection = { TemplateConfigID: -1, Name: 'All Suppliers', TemplateURL: '' };
+                    var defSupplierSelection = { TemplateConfigID: -1, Name: 'All Suppliers', Editor: '' };
                     $scope.supplierGroupTemplates.push(defSupplierSelection);
 
                     angular.forEach(response, function (item) {

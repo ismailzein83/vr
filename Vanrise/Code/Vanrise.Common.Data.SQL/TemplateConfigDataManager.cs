@@ -28,8 +28,9 @@ namespace Vanrise.Common.Data.SQL
                 TemplateConfigID = (int)reader["ID"],
                 Name = reader["Name"] as string,
                 ConfigType = reader["ConfigType"] as string,
-                TemplateURL = reader["TemplateURL"] as string,
-                BehaviorFQTN = reader["BehaviorFQTN"] as string
+                Editor = reader["Editor"] as string,
+                BehaviorFQTN = reader["BehaviorFQTN"] as string,
+                Settings = reader["Settings"] as string
             };
 
             return templateConfig;

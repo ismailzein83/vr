@@ -14,8 +14,10 @@ namespace Vanrise.Entities
 
         public string ConfigType { get; set; }
 
-        public string TemplateURL { get; set; }
+        public string Editor { get; set; }
 
         public string BehaviorFQTN { get; set; }
+
+        public string Settings { get; set; }
     }
 }
