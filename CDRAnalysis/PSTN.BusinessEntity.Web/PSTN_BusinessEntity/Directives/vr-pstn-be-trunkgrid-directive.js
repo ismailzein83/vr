@@ -7,8 +7,7 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "SwitchTrunkAPIService", 
 
         restrict: "E",
         scope: {
-            onReady: "=",
-            switchid: "@"
+            onReady: "="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;

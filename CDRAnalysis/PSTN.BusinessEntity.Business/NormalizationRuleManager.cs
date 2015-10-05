@@ -1,10 +1,7 @@
-﻿using PSTN.BusinessEntity.Entities;
+﻿using PSTN.BusinessEntity.Data;
+using PSTN.BusinessEntity.Entities;
 using PSTN.BusinessEntity.Entities.Normalization.Actions;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PSTN.BusinessEntity.Business
 {
@@ -73,8 +70,6 @@ namespace PSTN.BusinessEntity.Business
 
         }
 
-
-
         static Vanrise.Rules.Entities.StructuredRules _rules = (new NormalizationRuleManager()).GetStructuredRules();
 
         NormalizationRuleActionBehavior GetActionBehavior(int behaviorId)
@@ -82,9 +77,6 @@ namespace PSTN.BusinessEntity.Business
             Vanrise.Common.TemplateConfigManager templateConfigManager = new Vanrise.Common.TemplateConfigManager();
             return templateConfigManager.GetBehavior<NormalizationRuleActionBehavior>(behaviorId);
         }
-
-
-
 
         public Vanrise.Rules.Entities.StructuredRules GetStructuredRules()
         {
@@ -148,6 +140,12 @@ namespace PSTN.BusinessEntity.Business
         {
             Vanrise.Rules.Business.RuleManager ruleManager = new Vanrise.Rules.Business.RuleManager();
             return ruleManager.GetMostMatchedRule(rules, cdr) as NormalizationRule;
+        }
+
+        public Vanrise.Entities.IDataRetrievalResult<NormalizationRuleDetail> GetFilteredNormalizationRules(Vanrise.Entities.DataRetrievalInput<NormalizationRuleQuery> input)
+        {
+            INormalizationRuleDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<INormalizationRuleDataManager>();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredNormalizationRules(input));
         }
     }
 }

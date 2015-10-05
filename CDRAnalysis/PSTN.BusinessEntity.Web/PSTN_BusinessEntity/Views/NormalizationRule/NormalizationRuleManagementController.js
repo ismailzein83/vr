@@ -2,10 +2,21 @@
 
 function NormalizationRuleManagementController($scope) {
 
+    var gridAPI;
+
     defineScope();
     load();
 
     function defineScope() {
+
+        $scope.onNormalizationRuleGridReady = function (api) {
+            gridAPI = api;
+            retrieveData();
+        };
+
+        $scope.searchClicked = function () {
+            retrieveData();
+        };
 
     }
 
@@ -13,16 +24,18 @@ function NormalizationRuleManagementController($scope) {
 
     }
 
-    function loadFilters() {
-        
-    }
-
-    function setFiltersToDefaultValues() {
-
+    function retrieveData() {
+        if (gridAPI != undefined) {
+            var query = getFilterObject();
+            return gridAPI.retrieveData(query);
+        }
     }
 
     function getFilterObject() {
-        
+        return {
+            BeginEffectiveDate: $scope.beginEffectiveDate,
+            EndEffectiveDate: $scope.endEffectiveDate
+        };
     }
 }
 

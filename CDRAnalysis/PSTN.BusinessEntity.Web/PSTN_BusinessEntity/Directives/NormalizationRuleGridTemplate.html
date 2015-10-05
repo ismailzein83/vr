@@ -1,1 +1,16 @@
-﻿
+﻿<vr-row>
+    <vr-columns width="fullrow">
+        <vr-datagrid datasource="normalizationRules"
+                     on-ready="onGridReady"
+                     dataretrievalfunction="dataRetrievalFunction"
+                     pagingtype="'PagingOnScroll'"
+                     menuactions="gridMenuActions"
+                     idfield="NormalizationRuleId">
+
+            <vr-datagridcolumn headertext="'ID'" field="'NormalizationRuleId'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'BED'" field="'BeginEffectiveDate'" type="'Datetime'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'EED'" field="'EndEffectiveDate'" type="'Datetime'"></vr-datagridcolumn>
+
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>
