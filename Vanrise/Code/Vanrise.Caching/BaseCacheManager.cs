@@ -139,11 +139,15 @@ namespace Vanrise.Caching
     public abstract class BaseCacheManager : BaseCacheManager<Object>
     {
         ConcurrentDictionary<string, object> _cacheDictionary = new ConcurrentDictionary<string, object>();
+
         protected override ConcurrentDictionary<string, object> GetCacheDictionary(object parameter)
         {
             return _cacheDictionary;
         }
 
-        
+        public T GetOrCreateObject<T>(string cacheName, Func<T> createObject)
+        {
+            return base.GetOrCreateObject(cacheName, null, createObject);
+        }
     }
 }
