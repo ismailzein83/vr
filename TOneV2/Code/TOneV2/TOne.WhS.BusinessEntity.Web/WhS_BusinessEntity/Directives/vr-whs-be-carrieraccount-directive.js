@@ -7,8 +7,8 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'Util
             type: "=",
             onloaded: '=',
             label: "@",
-            selectedvalues: "=",
-            ismultipleselection:"@"
+            ismultipleselection: "@",
+            onselectionchanged:'='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -16,8 +16,13 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'Util
             $scope.datasource = [];
             var beCarrierGroup = new BeCarrierGroup(ctrl, $scope, WhS_BE_CarrierAccountAPIService);
             beCarrierGroup.initializeController();
-            $scope.onselectionvalueschanged = function () {
-                ctrl.selectedvalues = $scope.selectedCarrierValues;
+            $scope.onselectionchanged = function () {
+                if (ctrl.onselectionchanged != undefined) {
+                    var onvaluechangedMethod = $scope.$parent.$eval(ctrl.onselectionchanged);
+                    if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
+                        onvaluechangedMethod();
+                    }
+                }
 
             }
 
@@ -27,14 +32,6 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'Util
         compile: function (element, attrs) {
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
-                    $scope.$watch('ctrl.selectedvalues.length', function () {
-                        if (iAttrs.onselectionchanged != undefined) {
-                            var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onselectionchanged);
-                            if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
-                                onvaluechangedMethod();
-                            }
-                        }
-                    });
                 }
             }
         },
@@ -58,12 +55,12 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'Util
         if (attrs.ismultipleselection != undefined)
             return '<div style="display:inline-block;width: calc(100% - 18px);" vr-loader="isLoadingDirective">'
                        + '<vr-label >' + label + '</vr-label>'
-                   + ' <vr-select ismultipleselection datasource="datasource" selectedvalues="selectedCarrierValues" onselectionchanged="onselectionvalueschanged" datatextfield="Name" datavaluefield="CarrierAccountId"'
+                   + ' <vr-select ismultipleselection datasource="datasource" selectedvalues="selectedCarrierValues" onselectionchanged="onselectionchanged" datatextfield="Name" datavaluefield="CarrierAccountId"'
                    + 'entityname="' + label + '"></vr-select></div>'
                    + ' <span class="glyphicon glyphicon-th hand-cursor"  aria-hidden="true" ng-click="openTreePopup()"></span></div>';
         else
             return '<div vr-loader="isLoadingDirective"><vr-label >' + label + '</vr-label>'
-               + ' <vr-select datasource="datasource" selectedvalues="selectedCarrierValues" onselectionchanged="onselectionvalueschanged" datatextfield="Name" datavaluefield="CarrierAccountId"'
+               + ' <vr-select datasource="datasource" selectedvalues="selectedCarrierValues" onselectionchanged="onselectionchanged" datatextfield="Name" datavaluefield="CarrierAccountId"'
                + 'entityname="' + label + '"></vr-select></div>';
     }
     function BeCarrierGroup(ctrl, $scope, WhS_BE_CarrierAccountAPIService) {
