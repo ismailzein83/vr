@@ -1,6 +1,6 @@
 ﻿"use strict"
 
-app.directive("vrPstnBeNormalizationrulegrid", ["NormalizationRuleAPIService", "VRNotificationService", function (NormalizationRuleAPIService, VRNotificationService) {
+app.directive("vrPstnBeNormalizationrulegrid", ["PSTN_BE_Service", "NormalizationRuleAPIService", "VRNotificationService", function (PSTN_BE_Service, NormalizationRuleAPIService, VRNotificationService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -18,7 +18,7 @@ app.directive("vrPstnBeNormalizationrulegrid", ["NormalizationRuleAPIService", "
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/PSTN_BusinessEntity/Directives/NormalizationRuleGridTemplate.html"
+        templateUrl: "/Client/Modules/PSTN_BusinessEntity/Directives/Templates/NormalizationRuleGridTemplate.html"
     };
 
 
@@ -67,7 +67,12 @@ app.directive("vrPstnBeNormalizationrulegrid", ["NormalizationRuleAPIService", "
         }
 
         function editNormalizationRule(dataItem) {
+            
+            var onNormalizationRuleUpdated = function (normalizationRuleObject) {
+                gridAPI.itemUpdated(normalizationRuleObject);
+            }
 
+            PSTN_BE_Service.editNormalizationRule(dataItem, onNormalizationRuleUpdated);
         }
 
         function deleteNormalizationRule(dataItem) {

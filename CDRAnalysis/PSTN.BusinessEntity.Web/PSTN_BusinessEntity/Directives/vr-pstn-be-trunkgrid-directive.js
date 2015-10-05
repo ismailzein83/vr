@@ -20,7 +20,7 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "SwitchTrunkAPIService", 
         compile: function (element, attrs) {
            
         },
-        templateUrl: "/Client/Modules/PSTN_BusinessEntity/Directives/SwitchTrunkGridTemplate.html"
+        templateUrl: "/Client/Modules/PSTN_BusinessEntity/Directives/Templates/SwitchTrunkGridTemplate.html"
 
     };
 

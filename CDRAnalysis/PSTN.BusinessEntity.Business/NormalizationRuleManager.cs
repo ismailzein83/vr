@@ -2,6 +2,7 @@
 using PSTN.BusinessEntity.Entities;
 using PSTN.BusinessEntity.Entities.Normalization.Actions;
 using System.Collections.Generic;
+using Vanrise.Common;
 
 namespace PSTN.BusinessEntity.Business
 {
@@ -146,6 +147,12 @@ namespace PSTN.BusinessEntity.Business
         {
             INormalizationRuleDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<INormalizationRuleDataManager>();
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredNormalizationRules(input));
+        }
+
+        public List<Vanrise.Entities.TemplateConfig> GetNormalizationRuleActionBehaviorTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.NormalizationRuleActionBehaviorConfigType);
         }
     }
 }

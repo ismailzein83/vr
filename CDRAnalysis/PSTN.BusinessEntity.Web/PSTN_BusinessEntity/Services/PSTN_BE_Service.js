@@ -3,7 +3,8 @@
     return ({
         editSwitchTrunk: editSwitchTrunk,
         addSwitchTrunk: addSwitchTrunk,
-        deleteSwitchTrunk: deleteSwitchTrunk
+        deleteSwitchTrunk: deleteSwitchTrunk,
+        editNormalizationRule: editNormalizationRule
     });
 
     function editSwitchTrunk(trunkObject, onTrunkUpdated) {
@@ -52,5 +53,20 @@
                         });
                 }
             });
+    }
+
+    function editNormalizationRule(normalizationRuleObject, onNormalizationRuleUpdated) {
+        var modalSettings = {};
+
+        var parameters = {
+            NormalizationRuleId: normalizationRuleObject.Id
+        };
+
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.title = (normalizationRuleObject.Name != undefined) ? "Edit Normalization Rule: " + normalizationRuleObject.Name : "Edit Normalization Rule";
+            modalScope.onNormalizationRuleUpdated = onNormalizationRuleUpdated;
+        };
+
+        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/NormalizationRule/NormalizationRuleEditor.html", parameters, modalSettings);
     }
 }]);

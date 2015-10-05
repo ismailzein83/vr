@@ -45,6 +45,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Data.SQL">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Common.Data.SQL.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
@@ -57,6 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="NormalizationRuleManager.cs" />
     <Compile Include="Normalization\Actions\SubstringActionBehavior.cs" />
     <Compile Include="Normalization\Actions\AddPrefixActionBehavior.cs" />

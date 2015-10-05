@@ -107,6 +107,13 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.Data.SQL">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Common.Data.SQL.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Vanrise\Code\Vanrise.Entities\bin\Debug\Vanrise.Entities.dll</HintPath>
@@ -155,8 +162,10 @@
     <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchTrunkAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchTypeAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Services\PSTN_BE_Service.js" />
-    <Content Include="PSTN_BusinessEntity\Directives\NormalizationRuleGridTemplate.html" />
+    <Content Include="PSTN_BusinessEntity\Directives\Templates\NormalizationRuleGridTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-normalizationrulegrid-directive.js" />
+    <Content Include="PSTN_BusinessEntity\Views\NormalizationRule\NormalizationRuleEditor.html" />
+    <Content Include="PSTN_BusinessEntity\Views\NormalizationRule\NormalizationRuleEditorController.js" />
     <Content Include="PSTN_BusinessEntity\Views\NormalizationRule\NormalizationRuleManagementController.js" />
     <Content Include="PSTN_BusinessEntity\Views\NormalizationRule\NormalizationRuleManagement.html" />
     <Content Include="PSTN_BusinessEntity\Views\ProcessInputTemplate\Normal\StagingtoNormalCDRProcessInput.html" />
@@ -171,7 +180,7 @@
     <Content Include="PSTN_BusinessEntity\Views\Trunk\SwitchTrunkEditorController.js" />
     <Content Include="PSTN_BusinessEntity\Views\Grids\SwitchTrunkGrid.html" />
     <Content Include="PSTN_BusinessEntity\Views\Grids\SwitchTrunkGridController.js" />
-    <Content Include="PSTN_BusinessEntity\Directives\SwitchTrunkGridTemplate.html" />
+    <Content Include="PSTN_BusinessEntity\Directives\Templates\SwitchTrunkGridTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Views\Trunk\SwitchTrunkManagement.html" />
     <Content Include="PSTN_BusinessEntity\Views\Trunk\SwitchTrunkManagementController.js" />
     <Content Include="PSTN_BusinessEntity\Views\Type\SwitchTypeEditor.html" />
