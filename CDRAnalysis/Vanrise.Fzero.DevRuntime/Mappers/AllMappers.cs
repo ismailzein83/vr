@@ -361,7 +361,7 @@ namespace Vanrise.Fzero.CDRImport.Business.Mappers
         public static void MovingtoStaggingCDRsDS_SQL()
         {
             //PSTN.BusinessEntity.Business.SwitchTrunkManager switchTrunkManager = new PSTN.BusinessEntity.Business.SwitchTrunkManager();
-            //PSTN.BusinessEntity.Entities.SwitchTrunkInfo currentTrunk=null;
+            //PSTN.BusinessEntity.Entities.SwitchTrunkInfo currentTrunk = null;
 
             //PSTN.BusinessEntity.Business.SwitchManager switchManager = new PSTN.BusinessEntity.Business.SwitchManager();
             //PSTN.BusinessEntity.Entities.Switch currentSwitch;
@@ -398,23 +398,21 @@ namespace Vanrise.Fzero.CDRImport.Business.Mappers
             //    stagingCDR.OutTrunkSymbol = reader["OutTrunkSymbol"] as string;
 
             //    if (stagingCDR.InTrunkSymbol != string.Empty)
+            //    {
+            //        LogVerbose("before check: 1 ");
             //        currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(stagingCDR.InTrunkSymbol);
 
-            //    if (currentTrunk != null)
-            //    {
+            //        LogVerbose("currentTrunk.ID 1: " + currentTrunk.ID);
             //        stagingCDR.InTrunkId = currentTrunk.ID;
-            //        currentTrunk = null;
             //    }
 
-
-
             //    if (stagingCDR.OutTrunkSymbol != string.Empty)
+            //    {
+            //        LogVerbose("before check: 2 ");
             //        currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(stagingCDR.OutTrunkSymbol);
 
-            //    if (currentTrunk != null)
-            //    {
+            //        LogVerbose("currentTrunk.ID 2: " + currentTrunk.ID);
             //        stagingCDR.OutTrunkId = currentTrunk.ID;
-            //        currentTrunk = null;
             //    }
 
             //    stagingCDR.SwitchID = currentSwitch.ID;
