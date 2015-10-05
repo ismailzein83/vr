@@ -1,0 +1,16 @@
+﻿<div ng-controller="WhS_BE_PricingProductGridController">
+    <vr-row>
+        <vr-columns colnum="12" simplecol>
+            <vr-datagrid datasource="pricingProducts"
+                         dataretrievalfunction="dataRetrievalFunction"
+                         pagingtype="'PagingOnScroll'"
+                         on-ready="gridReady"
+                         menuactions="gridMenuActions"
+                         idfield="PricingProductId">
+
+                <vr-datagridcolumn headertext="'Id'" field="'PricingProductId'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Description'" field="'Description'"></vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-columns>
+    </vr-row>
+</div>
