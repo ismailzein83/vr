@@ -51,7 +51,7 @@ app.directive('vrWhsBeSelectivesuppliers', ['UtilsService',
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.BusinessEntity.Entities.SelectiveSuppliersSettings, TOne.WhS.BusinessEntity.Entities",
-                        SupplierIds: UtilsService.getPropValuesFromArray($scope.selectedSuppliers, "CarrierAccountId")
+                        SupplierIds: UtilsService.getPropValuesFromArray(carrierAccountDirectiveAPI.getData(), "CarrierAccountId")
                     };
                 }
 

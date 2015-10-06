@@ -1978,3 +1978,8 @@ opacity:0.9 ;
 .big-data-grid .vr-remote-footer{
      width:3000px !important;
 }
+
+vr-switch[type="inline"] > div {
+
+    display:inline-block ;
+}

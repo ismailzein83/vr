@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -135,6 +136,13 @@ namespace TOne.WhS.BusinessEntity.Business
             }
 
             return deleteOperationOutput;
+        }
+
+
+        public List<Vanrise.Entities.TemplateConfig> GetCodeCriteriaGroupTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.CodeCriteriaGroupConfigType);
         }
     }
 }

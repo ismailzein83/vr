@@ -35,12 +35,17 @@
             return BaseAPIService.get("/api/RouteRule/DeleteRouteRule", { routeRuleId: routeRuleId });
         }
 
+        function GetCodeCriteriaGroupTemplates() {
+            return BaseAPIService.get("/api/RouteRule/GetCodeCriteriaGroupTemplates");
+        }
+
         return ({
             GetFilteredRouteRules: GetFilteredRouteRules,
             AddRouteRule: AddRouteRule,
             UpdateRouteRule: UpdateRouteRule,
             DeleteRouteRule: DeleteRouteRule,
-            GetRouteRule: GetRouteRule
+            GetRouteRule: GetRouteRule,
+            GetCodeCriteriaGroupTemplates: GetCodeCriteriaGroupTemplates
         });
     }
 

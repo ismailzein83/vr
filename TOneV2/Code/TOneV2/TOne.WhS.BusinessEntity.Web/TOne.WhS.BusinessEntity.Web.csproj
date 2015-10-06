@@ -157,6 +157,7 @@
     <Content Include="WhS_BusinessEntity\Constant\ModuleConfig.js" />
     <Content Include="WhS_BusinessEntity\Directives\Templates\CustomerPricingProductGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Templates\PricingProductDirectiveTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\Templates\SelectiveCodeCriteriaDirectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Templates\SelectiveCustomersDirectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Templates\SelectiveSaleZonesDirectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Templates\SelectiveSuppliersDirectiveTemplate.html" />
@@ -164,6 +165,7 @@
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-carrieraccount-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-customerpricingproductgrid-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-pricingproductgrid-directive.js" />
+    <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-selectivecodecriteria-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-selectivecustomers-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-pricingproducts-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-selectivesalezones-directive.js" />

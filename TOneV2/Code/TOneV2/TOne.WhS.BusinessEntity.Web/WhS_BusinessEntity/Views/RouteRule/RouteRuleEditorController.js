@@ -17,6 +17,9 @@
             var customerGroupSettingsDirectiveAPI;
             var customerGroupSettings;
 
+            var codeCriteriaGroupSettingsDirectiveAPI;
+            var codeCriteriaGroupSettings;
+
             loadParameters();
             defineScope();
             load();
@@ -50,6 +53,15 @@
                     }
                 }
 
+                $scope.onCodeCriteriaGroupSettingsDirectiveLoaded = function (api) {
+                    codeCriteriaGroupSettingsDirectiveAPI = api;
+
+                    if (codeCriteriaGroupSettings != undefined) {
+                        codeCriteriaGroupSettingsDirectiveAPI.setData(codeCriteriaGroupSettings);
+                        codeCriteriaGroupSettings = undefined;
+                    }
+                }
+
                 $scope.SaveRouteRule = function () {
                     if (editMode) {
                         return updateRouteRule();
@@ -58,6 +70,29 @@
                         return insertRouteRule();
                     }
                 };
+
+                //TODO: make the validation below a custom validation
+                $scope.addExcludedCode = function () {
+                    var codeIsValid = true;
+
+                    if ($scope.excludedCode == undefined || $scope.excludedCode.length == 0) {
+                        codeIsValid = false;
+                    }
+                    else {
+                        angular.forEach($scope.excludedCodes, function (item) {
+                            if ($scope.excludedCode === item) {
+                                codeIsValid = false;
+                            }
+                        });
+                    }
+
+                    if (codeIsValid)
+                        $scope.excludedCodes.push($scope.excludedCode);
+                }
+
+                $scope.removeExcludedCode = function (codeToRemove) {
+                    $scope.excludedCodes.splice($scope.excludedCodes.indexOf(codeToRemove), 1);
+                }
 
                 $scope.close = function () {
                     $scope.modalContext.closeModal()
@@ -75,13 +110,18 @@
                 $scope.customerGroupTemplates = [];
                 $scope.selectedCustomerGroupTemplate = undefined;
 
+                $scope.codeCriteriaGroupTemplates = [];
+                $scope.selectedCodeCriteriaGroupTemplate = undefined;
+
                 $scope.routingProducts = [];
                 $scope.selectedRoutingProduct = undefined;
+
+                $scope.excludedCodes = [];
             }
 
             function load() {
                 $scope.isGettingData = true;
-                return UtilsService.waitMultipleAsyncOperations([loadRoutingProducts, loadSaleZoneGroupTemplates, loadCustomerGroupTemplates]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([loadRoutingProducts, loadSaleZoneGroupTemplates, loadCustomerGroupTemplates, loadCodeCriteriaGroupTemplates]).then(function () {
                     if (editMode) {
                         getRouteRule();
                     }
@@ -142,15 +182,32 @@
                 });
             }
 
+            function loadCodeCriteriaGroupTemplates() {
+                return WhS_BE_RouteRuleAPIService.GetCodeCriteriaGroupTemplates().then(function (response) {
+
+                    var defCodeCriteriaSelection = { TemplateConfigID: -1, Name: 'No Filter', Editor: '' };
+                    $scope.codeCriteriaGroupTemplates.push(defCodeCriteriaSelection);
+
+                    angular.forEach(response, function (item) {
+                        $scope.codeCriteriaGroupTemplates.push(item);
+                    });
+
+                    $scope.selectedCodeCriteriaGroupTemplate = defCodeCriteriaSelection;
+                });
+            }
+
             function buildRouteRuleObjFromScope() {
                 var routeRule = {
                     RouteRuleId: (routeRuleId != null) ? routeRuleId : 0,
                     RouteCriteria: {
-                        RoutingProductId: $scope.selectedRoutingProduct != undefined ? $scope.selectedRoutingProduct.RoutingProductId: null,
+                        RoutingProductId: $scope.selectedRoutingProduct != undefined ? $scope.selectedRoutingProduct.RoutingProductId : null,
+                        ExcludedCodes: $scope.excludedCodes,
                         SaleZoneGroupConfigId: $scope.selectedSaleZoneGroupTemplate.TemplateConfigID != -1 ? $scope.selectedSaleZoneGroupTemplate.TemplateConfigID : null,
                         SaleZoneGroupSettings: $scope.selectedSaleZoneGroupTemplate.TemplateConfigID != -1 ? saleZoneGroupSettingsDirectiveAPI.getData() : null,
                         CustomersGroupConfigId: $scope.selectedCustomerGroupTemplate.TemplateConfigID != -1 ? $scope.selectedCustomerGroupTemplate.TemplateConfigID : null,
-                        CustomerGroupSettings: $scope.selectedCustomerGroupTemplate.TemplateConfigID != -1 ? customerGroupSettingsDirectiveAPI.getData() : null
+                        CustomerGroupSettings: $scope.selectedCustomerGroupTemplate.TemplateConfigID != -1 ? customerGroupSettingsDirectiveAPI.getData() : null,
+                        CodeCriteriaGroupId: $scope.selectedCodeCriteriaGroupTemplate.TemplateConfigID != -1 ? $scope.selectedCodeCriteriaGroupTemplate.TemplateConfigID : null,
+                        CodeCriteriaGroupSettings: $scope.selectedCodeCriteriaGroupTemplate.TemplateConfigID != -1 ? codeCriteriaGroupSettingsDirectiveAPI.getData() : null
                     }
                 };
 
@@ -162,6 +219,10 @@
                 if (routeRuleObj.RouteCriteria.RoutingProductId != null)
                     $scope.selectedRoutingProduct = UtilsService.getItemByVal($scope.routingProducts, routeRuleObj.RouteCriteria.RoutingProductId, "RoutingProductId");
 
+                angular.forEach(routeRuleObj.RouteCriteria.ExcludedCodes, function (item) {
+                    $scope.excludedCodes.push(item);
+                });
+
                 if (routeRuleObj.RouteCriteria.SaleZoneGroupConfigId != null)
                 {
                     $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, routeRuleObj.RouteCriteria.SaleZoneGroupConfigId, "TemplateConfigID");
@@ -171,6 +232,11 @@
                 if (routeRuleObj.RouteCriteria.CustomersGroupConfigId != null) {
                     $scope.selectedCustomerGroupTemplate = UtilsService.getItemByVal($scope.customerGroupTemplates, routeRuleObj.RouteCriteria.CustomersGroupConfigId, "TemplateConfigID");
                     customerGroupSettings = routeRuleObj.RouteCriteria.CustomerGroupSettings;
+                }
+
+                if (routeRuleObj.RouteCriteria.CodeCriteriaGroupId != null) {
+                    $scope.selectedCodeCriteriaGroupTemplate = UtilsService.getItemByVal($scope.codeCriteriaGroupTemplates, routeRuleObj.RouteCriteria.CodeCriteriaGroupId, "TemplateConfigID");
+                    codeCriteriaGroupSettings = routeRuleObj.RouteCriteria.CodeCriteriaGroupSettings;
                 }
             }
 

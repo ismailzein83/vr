@@ -36,7 +36,6 @@ app.directive('vrDatagridrows', [function () {
                             drillDownLevel++;
                         parentScope = parentScope.$parent;
                     }
-                    console.log(drillDownLevel);
                     scope.ctrl.ngClassLevel = "drill-down-level-" + drillDownLevel +rotateclass;
                     //console.log('drillDownLevel' + drillDownLevel);
 

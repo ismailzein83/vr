@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Http;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Entities;
 using Vanrise.Web.Base;
 
 namespace TOne.WhS.BusinessEntity.Web.Controllers
@@ -46,6 +47,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         {
             RouteRuleManager manager = new RouteRuleManager();
             return manager.DeleteRouteRule(routeRuleId);
-        } 
+        }
+
+        [HttpGet]
+        public List<TemplateConfig> GetCodeCriteriaGroupTemplates()
+        {
+            RouteRuleManager manager = new RouteRuleManager();
+            return manager.GetCodeCriteriaGroupTemplates();
+        }
     }
 }

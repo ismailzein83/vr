@@ -19,5 +19,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public const string RouteRuleConfigType = "WhS_BE_RouteRule";
 
         public const string RouteOptionRuleConfigType = "WhS_BE_RouteOptionRule";
+
+        public const string CodeCriteriaGroupConfigType = "WhS_BE_CodeCriteriaGroup";
     }
 }

@@ -10,7 +10,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
     }
 
-    public class SelectiveCodeCriteriasSettings
+    public class SelectiveCodeCriteriaSettings : CodeCriteriaGroupSettings
     {
         public List<CodeCriteria> Codes { get; set; }
     }
