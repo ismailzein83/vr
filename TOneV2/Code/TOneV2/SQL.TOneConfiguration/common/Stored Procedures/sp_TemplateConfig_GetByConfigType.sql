@@ -15,8 +15,9 @@ BEGIN
 	SELECT [ID]
       ,[Name]
       ,[ConfigType]
-      ,[TemplateURL]
+      ,[Editor]
       ,[BehaviorFQTN]
+	  ,[Settings]
       from common.TemplateConfig
       where ConfigType = @ConfigType
 END
