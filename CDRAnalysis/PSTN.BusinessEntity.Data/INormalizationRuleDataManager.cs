@@ -8,6 +8,8 @@ namespace PSTN.BusinessEntity.Data
 
         NormalizationRule GetNormalizationRuleByID(int normalizationRuleId);
 
+        NormalizationRuleDetail GetNormalizationRuleDetailByID(int normalizationRuleId);
+
         bool AddNormalizationRule(NormalizationRule normalizationRuleObj, out int insertedID);
     }
 }

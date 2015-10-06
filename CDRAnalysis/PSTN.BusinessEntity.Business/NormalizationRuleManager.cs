@@ -185,8 +185,7 @@ namespace PSTN.BusinessEntity.Business
                 
                 NormalizationRuleDetail detail = new NormalizationRuleDetail();
                 detail.NormalizationRuleId = normalizationRuleId;
-                //detail.BeginEffectiveDate = 
-                //insertOperationOutput.InsertedObject = normalizationRuleDetail;
+                insertOperationOutput.InsertedObject = dataManager.GetNormalizationRuleDetailByID(normalizationRuleId);
             }
             else
             {

@@ -6,7 +6,7 @@ app.directive("vrPstnBeAddprefix", [function () {
         restrict: "E",
         scope: {
             onloaded: "=",
-            readonly: "@"
+            behaviorid: "@"
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -36,9 +36,6 @@ app.directive("vrPstnBeAddprefix", [function () {
         this.initializeController = initializeController;
 
         $scope.numberPrefix = undefined;
-        $scope.isReadOnly = (ctrl.readonly != undefined && ctrl.readonly == true);
-        console.log(ctrl.readonly != undefined);
-        console.log(ctrl.readonly == true);
 
         function initializeController() {
             defineAPI();
@@ -50,6 +47,7 @@ app.directive("vrPstnBeAddprefix", [function () {
             api.getData = function () {
                 return {
                     $type: "PSTN.BusinessEntity.Business.Normalization.Actions.AddPrefixActionBehavior, PSTN.BusinessEntity.Entities",
+                    BehaviorId: ctrl.behaviorid,
                     Prefix: $scope.numberPrefix
                 };
             }

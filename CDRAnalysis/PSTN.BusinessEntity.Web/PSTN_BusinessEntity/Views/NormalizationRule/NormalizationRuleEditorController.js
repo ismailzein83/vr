@@ -39,7 +39,7 @@ function NormalizationRuleEditorController($scope, NormalizationRuleAPIService, 
         $scope.templates = [];
         $scope.selectedTemplate = undefined;
 
-        $scope.addedActions = [];
+        $scope.actions = [];
 
         $scope.onNormalizationRuleActionSettingsDirectiveLoaded = function (api) {
             normalizationRuleActionSettingsDirectiveAPI = api;
@@ -52,20 +52,22 @@ function NormalizationRuleEditorController($scope, NormalizationRuleAPIService, 
 
         $scope.addAction = function () {
             var action = {
-                ActionId: $scope.addedActions.length + 1,
+                ActionId: $scope.actions.length + 1,
+                BehaviorId: $scope.selectedTemplate.TemplateConfigID,
                 Editor: $scope.selectedTemplate.Editor,
                 Data: normalizationRuleActionSettingsDirectiveAPI.getData()
             };
 
-            $scope.addedActions.push(action);
+            $scope.actions.push(action);
+            console.log($scope.actions);
         }
 
         $scope.removeAction = function ($event, action) {
             $event.preventDefault();
             $event.stopPropagation();
             
-            var index = UtilsService.getItemIndexByVal($scope.addedActions, action.ActionId, 'ActionId');
-            $scope.addedActions.splice(index, 1);
+            var index = UtilsService.getItemIndexByVal($scope.actions, action.ActionId, 'ActionId');
+            $scope.actions.splice(index, 1);
         };
 
         $scope.onDirectiveLoaded = function (api) {
@@ -148,11 +150,22 @@ function NormalizationRuleEditorController($scope, NormalizationRuleAPIService, 
                 PhoneNumberPrefix: $scope.numberPrefix
             },
             Settings: {
-                Actions: ($scope.actions.length > 0) ? $scope.actions : null
+                Actions: ($scope.actions.length > 0) ? getActions() : null
             }
         };
 
         return normalizationRuleObj;
+    }
+
+    function getActions() {
+        var array = [];
+
+        angular.forEach($scope.actions, function (item) {
+            item.Data.BehaviorId = item.BehaviorId;
+            array.push(item.Data);
+        });
+
+        return array;
     }
 
     function updateNormalizationRule() {
@@ -174,6 +187,9 @@ function NormalizationRuleEditorController($scope, NormalizationRuleAPIService, 
 
     function insertNormalizationRule() {
         var normalizationRuleObj = buildNormalizationRuleObjFromScope();
+        console.log(normalizationRuleObj);
+
+        return;
 
         return NormalizationRuleAPIService.AddNormalizationRule(normalizationRuleObj)
             .then(function (response) {
