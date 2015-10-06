@@ -41,6 +41,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Rules">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Rules.Entities">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Rules.Entities.dll</HintPath>
     </Reference>
