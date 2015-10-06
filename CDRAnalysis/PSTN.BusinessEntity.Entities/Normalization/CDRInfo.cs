@@ -8,12 +8,12 @@ namespace PSTN.BusinessEntity.Entities
 {
     public class CDRToNormalizeInfo
     {
-        public int SwitchId { get; set; }
+        public int? SwitchId { get; set; }
 
-        public int TrunkId { get; set; }
+        public int? TrunkId { get; set; }
 
         public string PhoneNumber { get; set; }
 
-        public NormalizationPhoneNumberType PhoneNumberType { get; set; }
+        public NormalizationPhoneNumberType? PhoneNumberType { get; set; }
     }
 }

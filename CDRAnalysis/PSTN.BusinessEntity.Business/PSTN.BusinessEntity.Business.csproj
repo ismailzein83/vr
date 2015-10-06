@@ -52,11 +52,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Rules.Business">
-      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Rules.Business.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Rules.Entities">
-      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Rules.Entities.dll</HintPath>
+    <Reference Include="Vanrise.Rules">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

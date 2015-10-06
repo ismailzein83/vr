@@ -118,9 +118,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Vanrise\Code\Vanrise.Entities\bin\Debug\Vanrise.Entities.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Rules.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Vanrise.Rules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Rules.Entities.dll</HintPath>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
     </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>

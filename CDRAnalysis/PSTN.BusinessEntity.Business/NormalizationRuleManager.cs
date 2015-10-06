@@ -13,21 +13,9 @@ namespace PSTN.BusinessEntity.Business
         {
 
 
-            //CDRToNormalizeInfo cdrInfo_CGPN = new CDRToNormalizeInfo();
+            //CDRToNormalizeInfo cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CGPN, SwitchId = cdr.SwitchID, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId };
 
-            //if (cdr.SwitchID.HasValue && cdr.InTrunkId.HasValue)
-            //    cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CGPN, SwitchId = cdr.SwitchID.Value, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId.Value };
-
-            //else if (!cdr.SwitchID.HasValue && cdr.InTrunkId.HasValue)
-            //    cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CGPN, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId.Value };
-
-            //else if (cdr.SwitchID.HasValue && !cdr.InTrunkId.HasValue)
-            //    cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CGPN, SwitchId = cdr.SwitchID.Value, PhoneNumberType = NormalizationPhoneNumberType.CGPN };
-
-            //else if (!cdr.SwitchID.HasValue && !cdr.InTrunkId.HasValue)
-            //    cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CGPN, PhoneNumberType = NormalizationPhoneNumberType.CGPN };
-
-
+           
             //NormalizationRule matchRule_CGPN = GetMostMatchedRule(_rules, cdrInfo_CGPN);
             //if (matchRule_CGPN != null)
             //{
@@ -42,20 +30,9 @@ namespace PSTN.BusinessEntity.Business
 
 
 
-            //CDRToNormalizeInfo cdrInfo_CDPN = new CDRToNormalizeInfo();
+            //CDRToNormalizeInfo cdrInfo_CDPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CDPN, SwitchId = cdr.SwitchID, PhoneNumberType = NormalizationPhoneNumberType.CDPN, TrunkId = cdr.InTrunkId };
 
-            //if (cdr.SwitchID.HasValue && cdr.InTrunkId.HasValue)
-            //    cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CDPN, SwitchId = cdr.SwitchID.Value, PhoneNumberType = NormalizationPhoneNumberType.CDPN, TrunkId = cdr.InTrunkId.Value };
-
-            //else if (!cdr.SwitchID.HasValue && cdr.InTrunkId.HasValue)
-            //    cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CDPN, PhoneNumberType = NormalizationPhoneNumberType.CDPN, TrunkId = cdr.InTrunkId.Value };
-
-            //else if (cdr.SwitchID.HasValue && !cdr.InTrunkId.HasValue)
-            //    cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CDPN, SwitchId = cdr.SwitchID.Value, PhoneNumberType = NormalizationPhoneNumberType.CDPN };
-
-            //else if (!cdr.SwitchID.HasValue && !cdr.InTrunkId.HasValue)
-            //    cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CDPN, PhoneNumberType = NormalizationPhoneNumberType.CDPN };
-
+           
 
             //NormalizationRule matchRule_CDPN = GetMostMatchedRule(_rules, cdrInfo_CDPN);
             //if (matchRule_CDPN != null)
@@ -73,21 +50,8 @@ namespace PSTN.BusinessEntity.Business
 
         public void Normalize(Vanrise.Fzero.CDRImport.Entities.CDR cdr)
         {
-            //int switchId = 0;
-            //if (cdr.SwitchID.HasValue)
-            //    switchId = cdr.SwitchID.Value;
 
-
-            //int inTrunkId = 0;
-            //if (cdr.InTrunkId.HasValue)
-            //    inTrunkId = cdr.InTrunkId.Value;
-
-            //int outTrunkId = 0;
-            //if (cdr.OutTrunkId.HasValue)
-            //    outTrunkId = cdr.OutTrunkId.Value;
-
-
-            //CDRToNormalizeInfo cdrInfo_MSISDN = new CDRToNormalizeInfo { PhoneNumber = cdr.MSISDN, SwitchId = switchId, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = inTrunkId };
+            //CDRToNormalizeInfo cdrInfo_MSISDN = new CDRToNormalizeInfo { PhoneNumber = cdr.MSISDN, SwitchId = cdr.SwitchID, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId };
             //NormalizationRule matchRule_MSISDN = GetMostMatchedRule(_rules, cdrInfo_MSISDN);
             //if (matchRule_MSISDN != null)
             //{
@@ -101,7 +65,7 @@ namespace PSTN.BusinessEntity.Business
             //}
 
 
-            //CDRToNormalizeInfo cdrInfo_Destination = new CDRToNormalizeInfo { PhoneNumber = cdr.Destination, SwitchId = switchId, PhoneNumberType = NormalizationPhoneNumberType.CDPN, TrunkId = outTrunkId };
+            //CDRToNormalizeInfo cdrInfo_Destination = new CDRToNormalizeInfo { PhoneNumber = cdr.Destination, SwitchId = cdr.SwitchID, PhoneNumberType = NormalizationPhoneNumberType.CDPN, TrunkId = cdr.OutTrunkId };
             //NormalizationRule matchRule_Destination = GetMostMatchedRule(_rules, cdrInfo_Destination);
             //if (matchRule_Destination != null)
             //{
@@ -116,7 +80,7 @@ namespace PSTN.BusinessEntity.Business
 
         }
 
-        static Vanrise.Rules.Entities.StructuredRules _rules = (new NormalizationRuleManager()).GetStructuredRules();
+        static Vanrise.Rules.RuleTree _rules = (new NormalizationRuleManager()).GetStructuredRules();
 
         NormalizationRuleActionBehavior GetActionBehavior(int behaviorId)
         {
@@ -124,9 +88,9 @@ namespace PSTN.BusinessEntity.Business
             return templateConfigManager.GetBehavior<NormalizationRuleActionBehavior>(behaviorId);
         }
 
-        public Vanrise.Rules.Entities.StructuredRules GetStructuredRules()
-        {
-            List<Vanrise.Rules.Entities.BaseRule> rules = new List<Vanrise.Rules.Entities.BaseRule>();//GEt rules from database
+        public Vanrise.Rules.RuleTree GetStructuredRules()
+        {            
+            List<Vanrise.Rules.BaseRule> rules = new List<Vanrise.Rules.BaseRule>();//GEt rules from database
             rules.Add(new NormalizationRule
             {
                 Criteria = new NormalizationRuleCriteria { PhoneNumberType = NormalizationPhoneNumberType.CGPN, PhoneNumberLength = 8, PhoneNumberPrefix = "177", SwitchIds = new List<int>() { 3 }, TrunkIds = new List<int>() { 142 } },
@@ -164,28 +128,24 @@ namespace PSTN.BusinessEntity.Business
 
 
 
-            var ruleSets = GetRuleSets();
-            Vanrise.Rules.Business.RuleManager ruleManager = new Vanrise.Rules.Business.RuleManager();
-            return ruleManager.StructureRules(rules, ruleSets);
+            var ruleStructureBehaviors = GetRuleStructureBehaviors();
+            return new Vanrise.Rules.RuleTree(rules, ruleStructureBehaviors);
         }
 
-        IEnumerable<Vanrise.Rules.Entities.BaseRuleSet> GetRuleSets()
+        IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetRuleStructureBehaviors()
         {
-            List<Vanrise.Rules.Entities.BaseRuleSet> ruleSets = new List<Vanrise.Rules.Entities.BaseRuleSet>();
-            ruleSets.Add(new Entities.Normalization.RuleSets.RuleSetBySwitchTrunkLength());
-            ruleSets.Add(new Entities.Normalization.RuleSets.RuleSetBySwitchTrunk());
-            ruleSets.Add(new Entities.Normalization.RuleSets.RuleSetBySwitchLength());
-            ruleSets.Add(new Entities.Normalization.RuleSets.RuleSetByTrunkLength());
-            ruleSets.Add(new Entities.Normalization.RuleSets.RuleSetBySwitch());
-            ruleSets.Add(new Entities.Normalization.RuleSets.RuleSetByTrunk());
-            ruleSets.Add(new Entities.Normalization.RuleSets.RuleSetByLength());
-            return ruleSets;
+            List<Vanrise.Rules.BaseRuleStructureBehavior> ruleStructureBehaviors = new List<Vanrise.Rules.BaseRuleStructureBehavior>();
+            ruleStructureBehaviors.Add(new Entities.Normalization.StructureRuleBehaviors.RuleBehaviorByNumberType());
+            ruleStructureBehaviors.Add(new Entities.Normalization.StructureRuleBehaviors.RuleBehaviorBySwitch());
+            ruleStructureBehaviors.Add(new Entities.Normalization.StructureRuleBehaviors.RuleBehaviorByTrunk());
+            ruleStructureBehaviors.Add(new Entities.Normalization.StructureRuleBehaviors.RuleBehaviorByNumberPrefix());
+            ruleStructureBehaviors.Add(new Entities.Normalization.StructureRuleBehaviors.RuleBehaviorByNumberLength());
+            return ruleStructureBehaviors;
         }
 
-        public NormalizationRule GetMostMatchedRule(Vanrise.Rules.Entities.StructuredRules rules, CDRToNormalizeInfo cdr)
+        public NormalizationRule GetMostMatchedRule(Vanrise.Rules.RuleTree ruleTree, CDRToNormalizeInfo cdr)
         {
-            Vanrise.Rules.Business.RuleManager ruleManager = new Vanrise.Rules.Business.RuleManager();
-            return ruleManager.GetMostMatchedRule(rules, cdr) as NormalizationRule;
+            return ruleTree.GetMatchRule(cdr) as NormalizationRule;
         }
 
         public Vanrise.Entities.IDataRetrievalResult<NormalizationRuleDetail> GetFilteredNormalizationRules(Vanrise.Entities.DataRetrievalInput<NormalizationRuleQuery> input)
