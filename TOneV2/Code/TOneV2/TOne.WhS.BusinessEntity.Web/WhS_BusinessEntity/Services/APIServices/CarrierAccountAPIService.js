@@ -17,9 +17,14 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierAccount", "GetSupplierGroupTemplates"));
         }
 
+        function GetCustomerGroupTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierAccount", "GetCustomerGroupTemplates"));
+        }
+
         return ({
             GetCarrierAccounts: GetCarrierAccounts,
-            GetSupplierGroupTemplates: GetSupplierGroupTemplates
+            GetSupplierGroupTemplates: GetSupplierGroupTemplates,
+            GetCustomerGroupTemplates: GetCustomerGroupTemplates
         });
     }
 

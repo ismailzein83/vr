@@ -1,5 +1,5 @@
-﻿<div vr-modalcontent ng-controller="WhS_BE_RouteRuleEditorController" vr-loader="isGettingData">
-    <vr-modalbody width="'70%'">
+﻿<div vr-modalcontent ng-controller="WhS_BE_RouteRuleEditorController" vr-loader="isGettingData" width="'70%'">
+    <vr-modalbody>
         <vr-form name="formRouteRuleEditor">
             <vr-choices selectedindex="0">
                 <vr-choice isselected="criteriaSelected">Criteria</vr-choice>
@@ -8,7 +8,7 @@
             </vr-choices>
             <div ng-show="criteriaSelected">
                 <vr-row>
-                    <vr-columns width="1/2row">
+                    <vr-columns width="1/4row">
                         <vr-select datatextfield="Name" datavaluefield="RoutingProductId"
                                    label="Routing Product" datasource="routingProducts" selectedvalues="selectedRoutingProduct" onselectionchanged="routingProductsOnSelectionChanged">
                         </vr-select>
@@ -19,7 +19,7 @@
                         <vr-section title="Sale Zone">
                             <vr-row>
                                 <vr-columns width="1/2row">
-                                    <vr-select hideremoveicon datatextfield="Name" datavaluefield="TemplateConfigID" label="Filter Type" datasource="saleZoneGroupTemplates" 
+                                    <vr-select hideremoveicon datatextfield="Name" datavaluefield="TemplateConfigID" label="Filter Type" datasource="saleZoneGroupTemplates"
                                                selectedvalues="selectedSaleZoneGroupTemplate">
                                     </vr-select>
                                 </vr-columns>
@@ -47,10 +47,10 @@
                 </vr-row>
             </div>
             <div ng-show="settingsSelected">
-                
+
             </div>
             <div ng-show="schedulerSelected">
-                
+
             </div>
         </vr-form>
     </vr-modalbody>

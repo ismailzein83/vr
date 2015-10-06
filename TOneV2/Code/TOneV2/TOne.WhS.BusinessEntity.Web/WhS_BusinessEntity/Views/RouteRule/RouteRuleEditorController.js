@@ -2,10 +2,10 @@
 
     "use strict";
 
-    routeRuleEditorController.$inject = ['$scope', 'WhS_BE_RouteRuleAPIService', 'WhS_BE_RoutingProductAPIService', 'WhS_BE_SaleZoneAPIService',
+    routeRuleEditorController.$inject = ['$scope', 'WhS_BE_RouteRuleAPIService', 'WhS_BE_RoutingProductAPIService', 'WhS_BE_SaleZoneAPIService', 'WhS_BE_CarrierAccountAPIService',
         'UtilsService', 'VRNotificationService', 'VRNavigationService'];
 
-    function routeRuleEditorController($scope, WhS_BE_RouteRuleAPIService, WhS_BE_RoutingProductAPIService, WhS_BE_SaleZoneAPIService,
+    function routeRuleEditorController($scope, WhS_BE_RouteRuleAPIService, WhS_BE_RoutingProductAPIService, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccountAPIService,
         UtilsService, VRNotificationService, VRNavigationService) {
 
             var editMode;
@@ -81,7 +81,7 @@
 
             function load() {
                 $scope.isGettingData = true;
-                return UtilsService.waitMultipleAsyncOperations([loadRoutingProducts, loadSaleZoneGroupTemplates]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([loadRoutingProducts, loadSaleZoneGroupTemplates, loadCustomerGroupTemplates]).then(function () {
                     if (editMode) {
                         getRouteRule();
                     }
@@ -125,6 +125,20 @@
                     });
 
                     $scope.selectedSaleZoneGroupTemplate = defSaleZoneSelection;
+                });
+            }
+
+            function loadCustomerGroupTemplates() {
+                return WhS_BE_CarrierAccountAPIService.GetCustomerGroupTemplates().then(function (response) {
+
+                    var defCustomerSelection = { TemplateConfigID: -1, Name: 'No Filter', Editor: '' };
+                    $scope.customerGroupTemplates.push(defCustomerSelection);
+
+                    angular.forEach(response, function (item) {
+                        $scope.customerGroupTemplates.push(item);
+                    });
+
+                    $scope.selectedCustomerGroupTemplate = defCustomerSelection;
                 });
             }
 

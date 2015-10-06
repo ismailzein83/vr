@@ -41,5 +41,11 @@ namespace TOne.WhS.BusinessEntity.Business
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.SupplierGroupConfigType);
         }
+
+        public List<Vanrise.Entities.TemplateConfig> GetCustomerGroupTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.CustomerGroupConfigType);
+        }
     }
 }
