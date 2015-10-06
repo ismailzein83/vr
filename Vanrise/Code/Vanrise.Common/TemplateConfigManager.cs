@@ -17,7 +17,8 @@ namespace Vanrise.Common
 
         public List<Entities.TemplateConfig> GetAllTemplateConfigurations()
         {
-            throw new NotImplementedException();
+            ITemplateConfigDataManager manager = CommonDataManagerFactory.GetDataManager<ITemplateConfigDataManager>();
+            return manager.GetTemplateConfigurations();
         }
 
         public T GetBehavior<T>(int configId) where T : class

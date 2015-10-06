@@ -154,6 +154,7 @@
     <Build Include="sec\Stored Procedures\sp_User_UpdateLastLogin.sql" />
     <Build Include="common\Tables\TemplateConfig.sql" />
     <Build Include="common\Stored Procedures\sp_TemplateConfig_GetByConfigType.sql" />
+    <Build Include="common\Stored Procedures\sp_TemplateConfig_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

@@ -10,5 +10,6 @@ namespace Vanrise.Common.Data
     public interface ITemplateConfigDataManager : IDataManager
     {
         List<TemplateConfig> GetTemplateConfigurations(string configType);
+        List<Entities.TemplateConfig> GetTemplateConfigurations();
     }
 }
