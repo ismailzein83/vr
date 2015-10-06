@@ -11,63 +11,107 @@ namespace PSTN.BusinessEntity.Business
         public void Normalize(Vanrise.Fzero.CDRImport.Entities.StagingCDR cdr)
         {
 
-            CDRToNormalizeInfo cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CGPN, SwitchId = cdr.SwitchID.Value, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId.Value };
-            NormalizationRule matchRule_CGPN = GetMostMatchedRule(_rules, cdrInfo_CGPN);
-            if (matchRule_CGPN != null)
-            {
-                string phoneNumber = cdr.CDPN;
-                foreach (var actionSettings in matchRule_CGPN.Settings.Actions)
-                {
-                    var behavior = GetActionBehavior(actionSettings.BehaviorId);
-                    behavior.Execute(actionSettings, ref phoneNumber);
-                }
-                cdr.CDPN = phoneNumber;
-            }
+
+            //CDRToNormalizeInfo cdrInfo_CGPN = new CDRToNormalizeInfo();
+
+            //if (cdr.SwitchID.HasValue && cdr.InTrunkId.HasValue)
+            //    cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CGPN, SwitchId = cdr.SwitchID.Value, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId.Value };
+
+            //else if (!cdr.SwitchID.HasValue && cdr.InTrunkId.HasValue)
+            //    cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CGPN, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId.Value };
+
+            //else if (cdr.SwitchID.HasValue && !cdr.InTrunkId.HasValue)
+            //    cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CGPN, SwitchId = cdr.SwitchID.Value, PhoneNumberType = NormalizationPhoneNumberType.CGPN };
+
+            //else if (!cdr.SwitchID.HasValue && !cdr.InTrunkId.HasValue)
+            //    cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CGPN, PhoneNumberType = NormalizationPhoneNumberType.CGPN };
 
 
-            CDRToNormalizeInfo cdrInfo_CDPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CDPN, SwitchId = cdr.SwitchID.Value, PhoneNumberType = NormalizationPhoneNumberType.CDPN, TrunkId = cdr.OutTrunkId.Value };
-            NormalizationRule matchRule_CDPN = GetMostMatchedRule(_rules, cdrInfo_CDPN);
-            if (matchRule_CDPN != null)
-            {
-                string phoneNumber = cdr.CDPN;
-                foreach (var actionSettings in matchRule_CDPN.Settings.Actions)
-                {
-                    var behavior = GetActionBehavior(actionSettings.BehaviorId);
-                    behavior.Execute(actionSettings, ref phoneNumber);
-                }
-                cdr.CDPN = phoneNumber;
-            }
+            //NormalizationRule matchRule_CGPN = GetMostMatchedRule(_rules, cdrInfo_CGPN);
+            //if (matchRule_CGPN != null)
+            //{
+            //    string phoneNumber = cdr.CDPN;
+            //    foreach (var actionSettings in matchRule_CGPN.Settings.Actions)
+            //    {
+            //        var behavior = GetActionBehavior(actionSettings.BehaviorId);
+            //        behavior.Execute(actionSettings, ref phoneNumber);
+            //    }
+            //    cdr.CDPN = phoneNumber;
+            //}
+
+
+
+            //CDRToNormalizeInfo cdrInfo_CDPN = new CDRToNormalizeInfo();
+
+            //if (cdr.SwitchID.HasValue && cdr.InTrunkId.HasValue)
+            //    cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CDPN, SwitchId = cdr.SwitchID.Value, PhoneNumberType = NormalizationPhoneNumberType.CDPN, TrunkId = cdr.InTrunkId.Value };
+
+            //else if (!cdr.SwitchID.HasValue && cdr.InTrunkId.HasValue)
+            //    cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CDPN, PhoneNumberType = NormalizationPhoneNumberType.CDPN, TrunkId = cdr.InTrunkId.Value };
+
+            //else if (cdr.SwitchID.HasValue && !cdr.InTrunkId.HasValue)
+            //    cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CDPN, SwitchId = cdr.SwitchID.Value, PhoneNumberType = NormalizationPhoneNumberType.CDPN };
+
+            //else if (!cdr.SwitchID.HasValue && !cdr.InTrunkId.HasValue)
+            //    cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CDPN, PhoneNumberType = NormalizationPhoneNumberType.CDPN };
+
+
+            //NormalizationRule matchRule_CDPN = GetMostMatchedRule(_rules, cdrInfo_CDPN);
+            //if (matchRule_CDPN != null)
+            //{
+            //    string phoneNumber = cdr.CDPN;
+            //    foreach (var actionSettings in matchRule_CDPN.Settings.Actions)
+            //    {
+            //        var behavior = GetActionBehavior(actionSettings.BehaviorId);
+            //        behavior.Execute(actionSettings, ref phoneNumber);
+            //    }
+            //    cdr.CDPN = phoneNumber;
+            //}
 
         }
 
         public void Normalize(Vanrise.Fzero.CDRImport.Entities.CDR cdr)
         {
-            CDRToNormalizeInfo cdrInfo_MSISDN = new CDRToNormalizeInfo { PhoneNumber = cdr.MSISDN, SwitchId = cdr.SwitchID.Value, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId.Value };
-            NormalizationRule matchRule_MSISDN = GetMostMatchedRule(_rules, cdrInfo_MSISDN);
-            if (matchRule_MSISDN != null)
-            {
-                string phoneNumber = cdr.MSISDN;
-                foreach (var actionSettings in matchRule_MSISDN.Settings.Actions)
-                {
-                    var behavior = GetActionBehavior(actionSettings.BehaviorId);
-                    behavior.Execute(actionSettings, ref phoneNumber);
-                }
-                cdr.MSISDN = phoneNumber;
-            }
+            //int switchId = 0;
+            //if (cdr.SwitchID.HasValue)
+            //    switchId = cdr.SwitchID.Value;
 
 
-            CDRToNormalizeInfo cdrInfo_Destination = new CDRToNormalizeInfo { PhoneNumber = cdr.Destination, SwitchId = cdr.SwitchID.Value, PhoneNumberType = NormalizationPhoneNumberType.CDPN, TrunkId = cdr.OutTrunkId.Value };
-            NormalizationRule matchRule_Destination = GetMostMatchedRule(_rules, cdrInfo_Destination);
-            if (matchRule_Destination != null)
-            {
-                string phoneNumber = cdr.Destination;
-                foreach (var actionSettings in matchRule_Destination.Settings.Actions)
-                {
-                    var behavior = GetActionBehavior(actionSettings.BehaviorId);
-                    behavior.Execute(actionSettings, ref phoneNumber);
-                }
-                cdr.Destination = phoneNumber;
-            }
+            //int inTrunkId = 0;
+            //if (cdr.InTrunkId.HasValue)
+            //    inTrunkId = cdr.InTrunkId.Value;
+
+            //int outTrunkId = 0;
+            //if (cdr.OutTrunkId.HasValue)
+            //    outTrunkId = cdr.OutTrunkId.Value;
+
+
+            //CDRToNormalizeInfo cdrInfo_MSISDN = new CDRToNormalizeInfo { PhoneNumber = cdr.MSISDN, SwitchId = switchId, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = inTrunkId };
+            //NormalizationRule matchRule_MSISDN = GetMostMatchedRule(_rules, cdrInfo_MSISDN);
+            //if (matchRule_MSISDN != null)
+            //{
+            //    string phoneNumber = cdr.MSISDN;
+            //    foreach (var actionSettings in matchRule_MSISDN.Settings.Actions)
+            //    {
+            //        var behavior = GetActionBehavior(actionSettings.BehaviorId);
+            //        behavior.Execute(actionSettings, ref phoneNumber);
+            //    }
+            //    cdr.MSISDN = phoneNumber;
+            //}
+
+
+            //CDRToNormalizeInfo cdrInfo_Destination = new CDRToNormalizeInfo { PhoneNumber = cdr.Destination, SwitchId = switchId, PhoneNumberType = NormalizationPhoneNumberType.CDPN, TrunkId = outTrunkId };
+            //NormalizationRule matchRule_Destination = GetMostMatchedRule(_rules, cdrInfo_Destination);
+            //if (matchRule_Destination != null)
+            //{
+            //    string phoneNumber = cdr.Destination;
+            //    foreach (var actionSettings in matchRule_Destination.Settings.Actions)
+            //    {
+            //        var behavior = GetActionBehavior(actionSettings.BehaviorId);
+            //        behavior.Execute(actionSettings, ref phoneNumber);
+            //    }
+            //    cdr.Destination = phoneNumber;
+            //}
 
         }
 

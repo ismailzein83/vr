@@ -19,7 +19,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
             foreach (StagingCDR cdr in cdrs)
             {
-                stream.WriteRecord("{0},{1},{2},{3},{4},{5},{6},{7}",
+                stream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}",
                                  cdr.CGPN
                                   , cdr.CDPN
                                   , cdr.SwitchID
@@ -28,6 +28,8 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                                   , cdr.ConnectDateTime
                                   , cdr.DurationInSeconds
                                   , cdr.DisconnectDateTime
+                                  , cdr.InTrunkId
+                                  , cdr.OutTrunkId
                                 
                 );
             }
@@ -41,7 +43,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                     Stream = stream,
                     TabLock = true,
                     KeepIdentity = false,
-                    FieldSeparator = ','
+                    FieldSeparator = '^'
                 });
         }
 
