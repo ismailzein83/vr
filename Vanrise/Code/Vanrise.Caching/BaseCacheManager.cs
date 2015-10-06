@@ -151,5 +151,15 @@ namespace Vanrise.Caching
         {
             return base.GetOrCreateObject(cacheName, dummyParameterType, createObject);
         }
+
+        protected virtual bool ShouldSetCacheExpired()
+        {
+            return false;
+        }
+
+        protected override bool ShouldSetCacheExpired(object parameter)
+        {
+            return ShouldSetCacheExpired();
+        }
     }
 }

@@ -521,5 +521,28 @@ namespace Vanrise.Data.SQL
         }
         
         #endregion
+
+        #region Caching Methods
+
+        protected bool IsDataUpdated(string tableName, ref object lastReceivedDataInfo)
+        {
+            string query = String.Format("select MAX(timestamp) from {0}", tableName);
+            var rslt = ExecuteScalarText(query, null);
+            if (rslt == null)
+                return false;
+            else
+            {
+                byte[] newTimeStamp = (byte[])rslt;
+                if (lastReceivedDataInfo == null || !newTimeStamp.SequenceEqual((byte[])lastReceivedDataInfo))
+                {
+                    lastReceivedDataInfo = newTimeStamp;
+                    return true;
+                }
+                else
+                    return false;
+            }
+        }
+
+        #endregion
     }
 }
