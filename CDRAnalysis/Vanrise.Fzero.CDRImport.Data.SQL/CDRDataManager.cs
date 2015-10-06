@@ -20,7 +20,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                 WriteRecordToStream(cdr, dbApplyStream);
             }
 
-            FinishDBApplyStream(dbApplyStream);
+            ApplyCDRsToDB(FinishDBApplyStream(dbApplyStream));
         }
 
         public void ApplyCDRsToDB(object preparedCDRs)
@@ -58,7 +58,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                                    , record.DurationInSeconds
                                    , record.DisconnectDateTime
                                    , record.CallClass
-                                   , record.IsOnNet
+                                   , null
                                    , (int) record.CallType
                                    , record.SubType
                                    , record.IMEI

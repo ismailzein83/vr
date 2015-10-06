@@ -29,7 +29,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             //host.Start();
 
             Mappers.AllMappers.FillData();
-            Vanrise.Integration.Entities.MappingOutput output = Mappers.AllMappers.MovingtoStaggingCDRsDS_SQL(); 
+            Vanrise.Integration.Entities.MappingOutput output = Mappers.AllMappers.ImportingCDR_SQL(); 
 
         }
     }

@@ -20,9 +20,9 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
         public static void FillData()
         {
             SqlConnection connection = new SqlConnection();
-            connection.ConnectionString = "Data Source=192.168.110.185;Initial Catalog=CDRAnalysisMobile_WF;User ID=development;Password=dev!123;";
+            connection.ConnectionString = "Data Source=192.168.110.185;Initial Catalog=CDRAnalysisMobile_Research;User ID=development;Password=dev!123;";
             SqlCommand command = new SqlCommand(
-              "SELECT [ID] ,[CGPN]  ,[CDPN] ,[InTrunkSymbol]  ,[OutTrunkSymbol]  ,[ConnectDateTime]  ,[DurationInSeconds]  ,[DisconnectDateTime] FROM [dbo].[PSTNSampleData] Where ID>0;",
+              "SELECT [Id] ,[MSISDN]  ,[IMSI]  ,[ConnectDateTime]  ,[Destination]  ,[DurationInSeconds]  ,[DisconnectDateTime]   ,[Call_Class]   ,[IsOnNet]  ,[Call_Type]   ,[Sub_Type]   ,[IMEI]   ,[BTS_Id]   ,[Cell_Id]   ,[SwitchRecordId]  ,[Up_Volume]   ,[Down_Volume]   ,[Cell_Latitude]   ,[Cell_Longitude]      ,[In_Trunk]  ,[Out_Trunk]    ,[Service_Type]   ,[Service_VAS_Name]  FROM [dbo].[NormalCDRZein];",
               connection);
             command.Connection = connection;
             connection.Open();
@@ -37,7 +37,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
 
         public class mappedBatches
         {
-            public static void Add(string activatorName, Vanrise.Fzero.CDRImport.Entities.ImportedStagingCDRBatch batch)
+            public static void Add(string activatorName, object batch)
             {
             }
         }
@@ -56,7 +56,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
 
 
         # region SQL Mappers
-        public static Vanrise.Integration.Entities.MappingOutput MovingtoStaggingCDRsDS_SQL()
+        public static Vanrise.Integration.Entities.MappingOutput StaggingCDRs_SQL()
         {
             PSTN.BusinessEntity.Business.SwitchTrunkManager switchTrunkManager = new PSTN.BusinessEntity.Business.SwitchTrunkManager();
             PSTN.BusinessEntity.Entities.SwitchTrunkInfo currentTrunk = new PSTN.BusinessEntity.Entities.SwitchTrunkInfo();
@@ -86,44 +86,49 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
             string index = ImportedData.LastImportedId;
             while (reader.Read())
             {
-                Vanrise.Fzero.CDRImport.Entities.StagingCDR stagingCDR = new Vanrise.Fzero.CDRImport.Entities.StagingCDR();
-                stagingCDR.CDPN = reader["CDPN"] as string;
-                stagingCDR.CGPN = reader["CGPN"] as string;
-                stagingCDR.ConnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "ConnectDateTime");
-                if (stagingCDR.ConnectDateTime != null)
-                    stagingCDR.ConnectDateTime = stagingCDR.ConnectDateTime.Value.Add(TimeOffset);
-                stagingCDR.DurationInSeconds = Utils.GetReaderValue<Decimal?>(reader, "DurationInSeconds");
-                stagingCDR.DisconnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
+                Vanrise.Fzero.CDRImport.Entities.StagingCDR cdr = new Vanrise.Fzero.CDRImport.Entities.StagingCDR();
+                cdr.CDPN = reader["CDPN"] as string;
+                cdr.CGPN = reader["CGPN"] as string;
+                cdr.ConnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "ConnectDateTime");
+                if (cdr.ConnectDateTime != null)
+                    cdr.ConnectDateTime = cdr.ConnectDateTime.Value.Add(TimeOffset);
+                cdr.DurationInSeconds = Utils.GetReaderValue<Decimal?>(reader, "DurationInSeconds");
+                cdr.DisconnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
 
-                if (stagingCDR.DisconnectDateTime != null)
-                    stagingCDR.DisconnectDateTime = stagingCDR.DisconnectDateTime.Value.Add(TimeOffset);
+                if (cdr.DisconnectDateTime != null)
+                    cdr.DisconnectDateTime = cdr.DisconnectDateTime.Value.Add(TimeOffset);
 
-                stagingCDR.InTrunkSymbol = reader["InTrunkSymbol"] as string;
-                stagingCDR.OutTrunkSymbol = reader["OutTrunkSymbol"] as string;
+                cdr.InTrunkSymbol = reader["InTrunkSymbol"] as string;
+                cdr.OutTrunkSymbol = reader["OutTrunkSymbol"] as string;
 
 
-                if (stagingCDR.InTrunkSymbol != string.Empty)
+                if (cdr.InTrunkSymbol != null && cdr.InTrunkSymbol != string.Empty)
                 {
-                    currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(stagingCDR.InTrunkSymbol);
-                    stagingCDR.InTrunkId = currentTrunk.ID;
+                    currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(cdr.InTrunkSymbol);
+                    if (currentTrunk != null)
+                        cdr.InTrunkId = currentTrunk.ID;
                 }
 
-                if (stagingCDR.OutTrunkSymbol != string.Empty)
+                if (cdr.OutTrunkSymbol != null && cdr.OutTrunkSymbol != string.Empty)
                 {
-                    currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(stagingCDR.OutTrunkSymbol);
-                    stagingCDR.OutTrunkId = currentTrunk.ID;
+                    currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(cdr.OutTrunkSymbol);
+                    if (currentTrunk != null)
+                        cdr.OutTrunkId = currentTrunk.ID;
                 }
 
-                stagingCDR.SwitchID = SwitchId;
+                cdr.SwitchID = SwitchId;
 
                 index = Utils.GetReaderValue<int?>(reader, "ID").ToString();
 
-                batch.StagingCDRs.Add(stagingCDR);
+                batch.StagingCDRs.Add(cdr);
 
             }
 
             ImportedData.LastImportedId = index;
-            mappedBatches.Add("Save CDRs", batch);
+            mappedBatches.Add("Save CDRs", batch); // Save Without Normalization
+
+            mappedBatches.Add("Normalize CDRs", batch); // Normalize then Save
+
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
@@ -131,7 +136,8 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
             return result;
         }
 
-        public static Vanrise.Integration.Entities.MappingOutput Normalizing_MovingtoStaggingCDRsDS_SQL()
+
+        public static Vanrise.Integration.Entities.MappingOutput ImportingCDR_SQL()
         {
             PSTN.BusinessEntity.Business.SwitchTrunkManager switchTrunkManager = new PSTN.BusinessEntity.Business.SwitchTrunkManager();
             PSTN.BusinessEntity.Entities.SwitchTrunkInfo currentTrunk = new PSTN.BusinessEntity.Entities.SwitchTrunkInfo();
@@ -154,136 +160,83 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
 
 
             LogVerbose("Started");
-            Vanrise.Fzero.CDRImport.Entities.ImportedStagingCDRBatch batch = new Vanrise.Fzero.CDRImport.Entities.ImportedStagingCDRBatch();
-            batch.StagingCDRs = new List<Vanrise.Fzero.CDRImport.Entities.StagingCDR>();
+            Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch batch = new Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch();
+            batch.CDRs = new List<Vanrise.Fzero.CDRImport.Entities.CDR>();
             Vanrise.Integration.Entities.DBReaderImportedData ImportedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
+
             IDataReader reader = ImportedData.Reader;
             string index = ImportedData.LastImportedId;
+
             while (reader.Read())
             {
-                Vanrise.Fzero.CDRImport.Entities.StagingCDR stagingCDR = new Vanrise.Fzero.CDRImport.Entities.StagingCDR();
-                stagingCDR.CDPN = reader["CDPN"] as string;
-                stagingCDR.CGPN = reader["CGPN"] as string;
-                stagingCDR.ConnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "ConnectDateTime");
-                if (stagingCDR.ConnectDateTime != null)
-                    stagingCDR.ConnectDateTime = stagingCDR.ConnectDateTime.Value.Add(TimeOffset);
-                stagingCDR.DurationInSeconds = Utils.GetReaderValue<Decimal?>(reader, "DurationInSeconds");
-                stagingCDR.DisconnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
+                Vanrise.Fzero.CDRImport.Entities.CDR cdr = new Vanrise.Fzero.CDRImport.Entities.CDR();
+                cdr.CallType = Utils.GetReaderValue<Vanrise.Fzero.CDRImport.Entities.CallType>(reader, "Call_Type");
+                cdr.BTSId = Utils.GetReaderValue<int?>(reader, "BTS_Id");
 
-                if (stagingCDR.DisconnectDateTime != null)
-                    stagingCDR.DisconnectDateTime = stagingCDR.DisconnectDateTime.Value.Add(TimeOffset);
+                cdr.ConnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "ConnectDateTime");
+                if (cdr.ConnectDateTime != null)
+                    cdr.ConnectDateTime = cdr.ConnectDateTime.Value.Add(TimeOffset);
 
-                stagingCDR.InTrunkSymbol = reader["InTrunkSymbol"] as string;
-                stagingCDR.OutTrunkSymbol = reader["OutTrunkSymbol"] as string;
+                cdr.DurationInSeconds = Utils.GetReaderValue<Decimal?>(reader, "DurationInSeconds");
+
+                cdr.DisconnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
+                if (cdr.DisconnectDateTime != null)
+                    cdr.DisconnectDateTime = cdr.DisconnectDateTime.Value.Add(TimeOffset);
+
+                cdr.Id = (int)reader["Id"];
+                cdr.IMSI = reader["IMSI"] as string;
+                cdr.CallClass = reader["Call_Class"] as string;
+                cdr.IsOnNet = Utils.GetReaderValue<Byte?>(reader, "IsOnNet");
+                cdr.SubType = reader["Sub_Type"] as string;
+                cdr.IMEI = reader["IMEI"] as string;
+                cdr.CellId = reader["Cell_Id"] as string;
+                cdr.UpVolume = Utils.GetReaderValue<Decimal?>(reader, "Up_Volume");
+                cdr.DownVolume = Utils.GetReaderValue<Decimal?>(reader, "Down_Volume");
+                cdr.CellLatitude = Utils.GetReaderValue<Decimal?>(reader, "Cell_Latitude");
+                cdr.CellLongitude = Utils.GetReaderValue<Decimal?>(reader, "Cell_Longitude");
+
+                cdr.InTrunkSymbol = reader["In_Trunk"] as string;
+                cdr.OutTrunkSymbol = reader["Out_Trunk"] as string;
 
 
-                if (stagingCDR.InTrunkSymbol != string.Empty)
+                if (cdr.InTrunkSymbol != null && cdr.InTrunkSymbol != string.Empty)
                 {
-                    currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(stagingCDR.InTrunkSymbol);
-                    stagingCDR.InTrunkId = currentTrunk.ID;
+                    currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(cdr.InTrunkSymbol);
+                    if (currentTrunk != null)
+                        cdr.InTrunkId = currentTrunk.ID;
                 }
 
-                if (stagingCDR.OutTrunkSymbol != string.Empty)
+                if (cdr.OutTrunkSymbol != null && cdr.OutTrunkSymbol != string.Empty)
                 {
-                    currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(stagingCDR.OutTrunkSymbol);
-                    stagingCDR.OutTrunkId = currentTrunk.ID;
+                    currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(cdr.OutTrunkSymbol);
+                    if (currentTrunk != null)
+                        cdr.OutTrunkId = currentTrunk.ID;
                 }
 
-                stagingCDR.SwitchID = SwitchId;
+                cdr.SwitchID = SwitchId;
 
-                index = Utils.GetReaderValue<int?>(reader, "ID").ToString();
 
-                batch.StagingCDRs.Add(stagingCDR);
+                cdr.ServiceType = Utils.GetReaderValue<int?>(reader, "Service_Type");
+                cdr.ServiceVASName = reader["Service_VAS_Name"] as string;
+                cdr.Destination = reader["Destination"] as string;
+                cdr.MSISDN = reader["MSISDN"] as string;
 
+                index = cdr.Id.ToString();
+
+                batch.CDRs.Add(cdr);
             }
 
             ImportedData.LastImportedId = index;
-            mappedBatches.Add("Normalize CDRs", batch);
+
+            mappedBatches.Add("CDR Import", batch);// Save Without Normalization
+
+            mappedBatches.Add("Normalize CDRs", batch); // Normalize then Save
+
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
             LogVerbose("Finished");
             return result;
-        }
-
-        public static void ImportingCDR_SQL()
-        {
-            //PSTN.BusinessEntity.Business.SwitchTrunkManager switchTrunkManager = new PSTN.BusinessEntity.Business.SwitchTrunkManager();
-            //PSTN.BusinessEntity.Entities.SwitchTrunkInfo currentTrunk=null;
-
-            //LogVerbose("Started");
-            //Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch batch = new Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch();
-            //batch.CDRs = new List<Vanrise.Fzero.CDRImport.Entities.CDR>();
-            //LogVerbose("1");
-            //Vanrise.Integration.Entities.DBReaderImportedData ImportedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
-
-            //IDataReader reader = ImportedData.Reader;
-            //string index = ImportedData.LastImportedId;
-
-            //while (reader.Read())
-            //{
-
-            //    Vanrise.Fzero.CDRImport.Entities.CDR normalCDR = new Vanrise.Fzero.CDRImport.Entities.CDR();
-
-            //    normalCDR.CallType = Utils.GetReaderValue<Vanrise.Fzero.CDRImport.Entities.CallTypeEnum>(reader, "Call_Type");
-            //    normalCDR.BTSId = Utils.GetReaderValue<int?>(reader, "BTS_Id");
-            //    normalCDR.ConnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "ConnectDateTime");
-            //    normalCDR.Id = (int)reader["Id"];
-            //    normalCDR.IMSI = reader["IMSI"] as string;
-            //    normalCDR.DurationInSeconds = Utils.GetReaderValue<Decimal?>(reader, "DurationInSeconds");
-            //    normalCDR.DisconnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
-            //    normalCDR.CallClass = reader["Call_Class"] as string;
-            //    normalCDR.IsOnNet = Utils.GetReaderValue<short?>(reader, "IsOnNet");
-            //    normalCDR.SubType = reader["Sub_Type"] as string;
-            //    normalCDR.IMEI = reader["IMEI"] as string;
-            //    normalCDR.CellId = reader["Cell_Id"] as string;
-            //    normalCDR.UpVolume = Utils.GetReaderValue<Decimal?>(reader, "Up_Volume");
-            //    normalCDR.DownVolume = Utils.GetReaderValue<Decimal?>(reader, "Down_Volume");
-            //    normalCDR.CellLatitude = Utils.GetReaderValue<Decimal?>(reader, "Cell_Latitude");
-            //    normalCDR.CellLongitude = Utils.GetReaderValue<Decimal?>(reader, "Cell_Longitude");
-            //    normalCDR.InTrunkSymbol = reader["In_Trunk"] as string;
-            //    normalCDR.OutTrunkSymbol = reader["Out_Trunk"] as string;
-
-            //    if (normalCDR.InTrunkSymbol != string.Empty)
-            //        currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(normalCDR.InTrunkSymbol);
-
-            //    if (currentTrunk != null)
-            //    {
-            //        normalCDR.InTrunkId = currentTrunk.ID;
-            //        currentTrunk = null;
-            //    }
-
-
-
-            //    if (normalCDR.OutTrunkSymbol != string.Empty)
-            //        currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(normalCDR.OutTrunkSymbol);
-
-            //    if (currentTrunk != null)
-            //    {
-            //        normalCDR.OutTrunkId = currentTrunk.ID;
-            //        currentTrunk = null;
-            //    }
-
-
-            //    normalCDR.ServiceType = Utils.GetReaderValue<int?>(reader, "Service_Type");
-            //    normalCDR.ServiceVASName = reader["Service_VAS_Name"] as string;
-            //    normalCDR.Destination = reader["Destination"] as string;
-            //    normalCDR.MSISDN = reader["MSISDN"] as string;
-
-            //    index = normalCDR.Id.ToString();
-
-            //    batch.CDRs.Add(normalCDR);
-            //}
-
-            //ImportedData.LastImportedId = index;
-
-            //mappedBatches.Add("CDR Import", batch);
-
-
-            //Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
-            //result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
-            //LogVerbose("Finished");
-            //return result;
         }
         # endregion
 
@@ -633,7 +586,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
 
         # endregion
 
-       
+
 
 
 
