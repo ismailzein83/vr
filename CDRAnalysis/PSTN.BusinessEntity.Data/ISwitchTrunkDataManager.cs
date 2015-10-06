@@ -13,6 +13,8 @@ namespace PSTN.BusinessEntity.Data
 
         List<SwitchTrunkInfo> GetSwitchTrunksBySwitchID(int switchID);
 
+        List<SwitchTrunkInfo> GetSwitchTrunks();
+
         bool AddSwitchTrunk(SwitchTrunk trunkObject, out int insertedID);
 
         bool UpdateSwitchTrunk(SwitchTrunk trunkObject);

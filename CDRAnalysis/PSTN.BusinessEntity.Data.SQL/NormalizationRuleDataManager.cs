@@ -23,12 +23,27 @@ namespace PSTN.BusinessEntity.Data.SQL
             {
                 ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_CreateTempByFiltered", tempTableName, input.Query.BeginEffectiveDate, input.Query.EndEffectiveDate);
 
-            }, (reader) => NormalizationRuleMapper(reader), _mapper);
+            }, (reader) => NormalizationRuleDetailMapper(reader), _mapper);
+        }
+
+        public NormalizationRule GetNormalizationRuleByID(int normalizationRuleId)
+        {
+            return GetItemSP("PSTN_BE.sp_NormalizationRule_GetByID", NormalizationRuleMapper);
+        }
+
+        public bool AddNormalizationRule(NormalizationRule normalizationRuleObj, out int insertedID)
+        {
+            object normalizationRuleId;
+
+            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_Insert", out normalizationRuleId, normalizationRuleObj.Criteria, normalizationRuleObj.Settings);
+
+            insertedID = (recordsAffected > 0) ? (int)normalizationRuleId : -1;
+            return (recordsAffected > 0);
         }
 
         #region Mappers
 
-        private NormalizationRuleDetail NormalizationRuleMapper(IDataReader reader)
+        private NormalizationRuleDetail NormalizationRuleDetailMapper(IDataReader reader)
         {
             NormalizationRuleDetail normalizationRuleDetail = new NormalizationRuleDetail();
 
@@ -37,6 +52,17 @@ namespace PSTN.BusinessEntity.Data.SQL
             normalizationRuleDetail.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED");
             
             return normalizationRuleDetail;
+        }
+
+        private NormalizationRule NormalizationRuleMapper(IDataReader reader)
+        {
+            NormalizationRule normalizationRule = new NormalizationRule();
+
+            normalizationRule.NormalizationRuleId = (int)reader["ID"];
+            normalizationRule.Criteria = Vanrise.Common.Serializer.Deserialize<NormalizationRuleCriteria>(reader["Criteria"] as string);
+            normalizationRule.Settings = Vanrise.Common.Serializer.Deserialize<NormalizationRuleSettings>(reader["Settings"] as string);
+
+            return normalizationRule;
         }
 
         #endregion

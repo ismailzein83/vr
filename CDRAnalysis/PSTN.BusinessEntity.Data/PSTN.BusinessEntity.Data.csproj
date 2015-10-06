@@ -48,6 +48,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules.Entities">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Rules.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IDataManager.cs" />

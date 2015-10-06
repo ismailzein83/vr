@@ -4,6 +4,7 @@
         GetFilteredSwitchTrunks: GetFilteredSwitchTrunks,
         GetSwitchTrunkByID: GetSwitchTrunkByID,
         GetSwitchTrunksBySwitchID: GetSwitchTrunksBySwitchID,
+        GetSwitchTrunks: GetSwitchTrunks,
         AddSwitchTrunk: AddSwitchTrunk,
         UpdateSwitchTrunk: UpdateSwitchTrunk,
         DeleteSwitchTrunk: DeleteSwitchTrunk,
@@ -24,6 +25,10 @@
         return BaseAPIService.get("/api/SwitchTrunk/GetSwitchTrunksBySwitchID", {
             switchID: switchID
         });
+    }
+
+    function GetSwitchTrunks() {
+        return BaseAPIService.get("/api/SwitchTrunk/GetSwitchTrunks");
     }
 
     function AddSwitchTrunk(trunkObject) {

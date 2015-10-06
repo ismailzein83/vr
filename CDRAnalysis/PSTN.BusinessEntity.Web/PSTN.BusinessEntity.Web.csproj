@@ -118,6 +118,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Vanrise\Code\Vanrise.Entities\bin\Debug\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Rules.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -154,8 +158,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="PSTN_BusinessEntity\Constants\PhoneNumberTypeEnum.js" />
     <Content Include="PSTN_BusinessEntity\Constants\SwitchTrunkDirectionEnum.js" />
     <Content Include="PSTN_BusinessEntity\Constants\SwitchTrunkTypeEnum.js" />
+    <Content Include="PSTN_BusinessEntity\Directives\Templates\AddPrefixDirectiveTemplate.html" />
+    <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-addprefix-directive.js" />
     <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-trunkgrid-directive.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\NormalizationRuleAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchAPIService.js" />

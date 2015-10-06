@@ -21,5 +21,19 @@ namespace PSTN.BusinessEntity.Web.Controllers
             NormalizationRuleManager manager = new NormalizationRuleManager();
             return manager.GetNormalizationRuleActionBehaviorTemplates();
         }
+
+        [HttpGet]
+        public NormalizationRule GetNormalizationRuleByID(int normalizationRuleId)
+        {
+            NormalizationRuleManager manager = new NormalizationRuleManager();
+            return manager.GetNormalizationRuleByID(normalizationRuleId);
+        }
+
+        [HttpPost]
+        public InsertOperationOutput<NormalizationRuleDetail> AddNormalizationRule(NormalizationRule normalizationRuleObj)
+        {
+            NormalizationRuleManager manager = new NormalizationRuleManager();
+            return manager.AddNormalizationRule(normalizationRuleObj);
+        }
     }
 }

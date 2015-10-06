@@ -31,6 +31,12 @@ namespace PSTN.BusinessEntity.Business
             return dataManager.GetSwitchTrunksBySwitchID(switchID);
         }
 
+        public List<SwitchTrunkInfo> GetSwitchTrunks()
+        {
+            ISwitchTrunkDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchTrunkDataManager>();
+            return dataManager.GetSwitchTrunks();
+        }
+
         public InsertOperationOutput<SwitchTrunkDetail> AddSwitchTrunk(SwitchTrunk trunkObject)
         {
             InsertOperationOutput<SwitchTrunkDetail> insertOperationOutput = new InsertOperationOutput<SwitchTrunkDetail>();

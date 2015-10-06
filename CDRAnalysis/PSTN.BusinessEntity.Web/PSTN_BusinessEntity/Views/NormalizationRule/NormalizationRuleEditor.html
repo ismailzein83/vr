@@ -1,20 +1,52 @@
-﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_NormalizationRuleEditorController" vr-loader="isGettingData" width="'50%'">
+﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_NormalizationRuleEditorController" vr-loader="isGettingData" width="'25%'">
     <vr-modalbody>
         <vr-form name="formNormalizationRuleEditor">
 
             <vr-row>
                 <vr-columns width="fullrow">
                     <vr-section title="Criteria">
-                        <vr-columns width="normal">
-                            <vr-select label="Behavior"
-                                       datasource="templates"
-                                       selectedvalues="selectedTemplate"
-                                       datavaluefield="TemplateConfigID"
+
+                        <vr-columns width="1/2row">
+                            <vr-select label="Switch"
+                                       datasource="switches"
+                                       selectedvalues="selectedSwitches"
+                                       datavaluefield="ID"
                                        datatextfield="Name"
-                                       entityname="Behavior"
-                                       isrequired>
+                                       entityname="Switch"
+                                       ismultipleselection>
                             </vr-select>
                         </vr-columns>
+
+                        <vr-columns width="1/2row">
+                            <vr-select label="Trunk"
+                                       datasource="trunks"
+                                       selectedvalues="selectedTrunks"
+                                       datavaluefield="ID"
+                                       datatextfield="Name"
+                                       entityname="Trunk"
+                                       ismultipleselection>
+                            </vr-select>
+                        </vr-columns>
+
+                        <vr-columns width="1/2row">
+                            <vr-select label="Number Type"
+                                       datasource="numberTypes"
+                                       selectedvalues="selectedNumberTypes"
+                                       datavaluefield="value"
+                                       datatextfield="description"
+                                       entityname="Number Type"
+                                       ismultipleselection>
+                            </vr-select>
+                        </vr-columns>
+
+                        <vr-columns width="1/2row">
+                            <vr-textbox label="Number Length" value="numberLength"></vr-textbox>
+                        </vr-columns>
+
+                        <vr-columns width="1/2row">
+                            <vr-textbox label="Number Prefix" value="numberPrefix"></vr-textbox>
+                        </vr-columns>
+
                     </vr-section>
                 </vr-columns>
             </vr-row>
@@ -22,6 +54,55 @@
             <vr-row>
                 <vr-columns width="fullrow">
                     <vr-section title="Actions">
+
+                        <vr-row>
+                            <vr-columns width="1/2row">
+                                <vr-select label="Behavior"
+                                           datasource="templates"
+                                           selectedvalues="selectedTemplate"
+                                           datavaluefield="TemplateConfigID"
+                                           datatextfield="Name"
+                                           entityname="Behavior"
+                                           hideremoveicon
+                                           isrequired>
+                                </vr-select>
+                            </vr-columns>
+
+                            <vr-columns width="1/2row">
+                                <div style="top:25px;position:absolute;" vr-disabled="selectedTemplate == undefined">
+                                    <vr-button type="Add" data-onclick="addAction" standalone></vr-button>
+                                </div>
+                            </vr-columns>
+                        </vr-row>
+
+                        <vr-row>
+                            <vr-columns width="fullrow">
+                                <vr-directivewrapper directive="selectedTemplate.Editor"
+                                                     onloaded="onNormalizationRuleActionSettingsDirectiveLoaded">
+                                </vr-directivewrapper>
+                            </vr-columns>
+                        </vr-row>
+
+                        <vr-row>
+                            <vr-columns width="fullrow">
+
+                                <ul class="list-group dragbelzone" ng-sortable="itemsSortable" ng-show="addedActions.length > 0">
+                                    <li ng-repeat="action in addedActions" class="list-group-item list-custom" style="margin:1px;">
+                                        <i class="glyphicon glyphicon-th-list handeldrag"></i>
+                                        <div style="display:inline-block;">
+
+                                            <vr-directivewrapper directive="action.Editor"
+                                                                 onloaded="onDirectiveLoaded"
+                                                                 readonly="true">
+                                            </vr-directivewrapper>
+
+                                        </div>
+                                        <i class="glyphicon glyphicon-remove hand-cursor" style="float:right;padding:5px;cursor:default" ng-click="removeAction($event, action)"></i>
+                                    </li>
+                                </ul>
+
+                            </vr-columns>
+                        </vr-row>
 
                     </vr-section>
                 </vr-columns>

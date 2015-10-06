@@ -29,6 +29,13 @@ namespace PSTN.BusinessEntity.Web.Controllers
             return manager.GetSwitchTrunksBySwitchID(switchID);
         }
 
+        [HttpGet]
+        public List<SwitchTrunkInfo> GetSwitchTrunks()
+        {
+            SwitchTrunkManager manager = new SwitchTrunkManager();
+            return manager.GetSwitchTrunks();
+        }
+
         [HttpPost]
         public InsertOperationOutput<SwitchTrunkDetail> AddSwitchTrunk(SwitchTrunk trunkObject)
         {

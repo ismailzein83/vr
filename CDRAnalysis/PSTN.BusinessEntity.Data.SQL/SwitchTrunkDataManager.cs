@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Threading;
 
 namespace PSTN.BusinessEntity.Data.SQL
 {
@@ -19,8 +18,6 @@ namespace PSTN.BusinessEntity.Data.SQL
 
         public Vanrise.Entities.BigResult<SwitchTrunkDetail> GetFilteredSwitchTrunks(Vanrise.Entities.DataRetrievalInput<SwitchTrunkQuery> input)
         {
-            //Thread.Sleep(5000);
-
             return RetrieveData(input, (tempTableName) =>
             {
                 string switchIDs = (input.Query.SelectedSwitchIDs != null && input.Query.SelectedSwitchIDs.Count() > 0) ?
@@ -47,10 +44,14 @@ namespace PSTN.BusinessEntity.Data.SQL
             return GetItemSP("PSTN_BE.sp_SwitchTrunk_GetBySymbol", SwitchTrunkInfoMapper, symbol);
         }
 
-
         public List<SwitchTrunkInfo> GetSwitchTrunksBySwitchID(int switchID)
         {
             return GetItemsSP("PSTN_BE.sp_SwitchTrunk_GetBySwitchID", SwitchTrunkInfoMapper, switchID);
+        }
+
+        public List<SwitchTrunkInfo> GetSwitchTrunks()
+        {
+            return GetItemsSP("PSTN_BE.sp_SwitchTrunk_GetAll", SwitchTrunkInfoMapper);
         }
 
         public bool AddSwitchTrunk(SwitchTrunk trunkObject, out int insertedID)
