@@ -3,6 +3,7 @@ using PSTN.BusinessEntity.Entities;
 using PSTN.BusinessEntity.Entities.Normalization.Actions;
 using System.Collections.Generic;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace PSTN.BusinessEntity.Business
 {
@@ -193,10 +194,46 @@ namespace PSTN.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredNormalizationRules(input));
         }
 
+        public NormalizationRule GetNormalizationRuleByID(int normalizationRuleId)
+        {
+            INormalizationRuleDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<INormalizationRuleDataManager>();
+            return dataManager.GetNormalizationRuleByID(normalizationRuleId);
+        }
+
         public List<Vanrise.Entities.TemplateConfig> GetNormalizationRuleActionBehaviorTemplates()
         {
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.NormalizationRuleActionBehaviorConfigType);
+        
+        }
+
+        public InsertOperationOutput<NormalizationRuleDetail> AddNormalizationRule(NormalizationRule normalizationRuleObj)
+        {
+            InsertOperationOutput<NormalizationRuleDetail> insertOperationOutput = new InsertOperationOutput<NormalizationRuleDetail>();
+
+            insertOperationOutput.Result = InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+            int normalizationRuleId = -1;
+
+            INormalizationRuleDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<INormalizationRuleDataManager>();
+            bool inserted = dataManager.AddNormalizationRule(normalizationRuleObj, out normalizationRuleId);
+
+            if (inserted)
+            {
+                insertOperationOutput.Result = InsertOperationResult.Succeeded;
+                normalizationRuleObj.NormalizationRuleId = normalizationRuleId;
+                
+                NormalizationRuleDetail detail = new NormalizationRuleDetail();
+                detail.NormalizationRuleId = normalizationRuleId;
+                //detail.BeginEffectiveDate = 
+                //insertOperationOutput.InsertedObject = normalizationRuleDetail;
+            }
+            else
+            {
+                insertOperationOutput.Result = InsertOperationResult.SameExists;
+            }
+
+            return insertOperationOutput;
         }
     }
 }
