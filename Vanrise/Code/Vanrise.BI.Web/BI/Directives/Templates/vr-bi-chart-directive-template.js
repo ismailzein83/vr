@@ -19,10 +19,13 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
         $scope.selectedTopMeasure;
         $scope.onSelectionChanged = function () {
             if ($scope.selectedTopMeasure == undefined)
-                $scope.selectedTopMeasure = $scope.selectedMeasureTypes[0];
+                $scope.selectedMeasureType!=undefined?$scope.selectedTopMeasure=$scope.selectedMeasureType: $scope.selectedTopMeasure = $scope.selectedMeasureTypes[0];
             else {
-                if (!UtilsService.contains($scope.selectedMeasureTypes, $scope.selectedTopMeasure))
+
+                if ($scope.selectedMeasureTypes.length>0 &&!UtilsService.contains($scope.selectedMeasureTypes, $scope.selectedTopMeasure))
                     $scope.selectedTopMeasure = $scope.selectedMeasureTypes[0];
+                else
+                    $scope.selectedTopMeasure = $scope.selectedMeasureType
             }
         }
         $scope.topRecords = 10;
@@ -66,6 +69,7 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
         if ($scope.selectedTopMeasure != undefined)
             topMeasure = $scope.selectedTopMeasure.Name;
         var entityType = null;
+        console.log($scope.selectedTopMeasure);
         if ($scope.selectedEntityType != undefined && $scope.selectedOperationType.value != "MeasuresGroupedByTime")
             entityType = $scope.selectedEntityType.Name;
 
