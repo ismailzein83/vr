@@ -10,10 +10,15 @@ namespace Vanrise.Common
     {
         public static Q GetOrCreateItem<T, Q>(this Dictionary<T, Q> dictionary, T itemKey)
         {
+            return GetOrCreateItem(dictionary, itemKey, () => Activator.CreateInstance<Q>());
+        }
+
+        public static Q GetOrCreateItem<T, Q>(this Dictionary<T, Q> dictionary, T itemKey, Func<Q> createInstance)
+        {
             Q value;
-            if(!dictionary.TryGetValue(itemKey, out value))
+            if (!dictionary.TryGetValue(itemKey, out value))
             {
-                value = Activator.CreateInstance<Q>();
+                value = createInstance();
                 dictionary.Add(itemKey, value);
             }
             return value;

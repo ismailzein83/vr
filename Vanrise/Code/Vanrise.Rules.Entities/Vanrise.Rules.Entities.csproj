@@ -45,11 +45,14 @@
   <ItemGroup>
     <Compile Include="BaseRule.cs" />
     <Compile Include="BaseRuleSet.cs" />
+    <Compile Include="RuleSetBy1Filter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RuleSetNode.cs" />
     <Compile Include="RuleSets\RuleSet0Dim.cs" />
     <Compile Include="RuleSets\RuleSet1Dim.cs" />
     <Compile Include="RuleSets\RuleSet3Dim.cs" />
     <Compile Include="RuleSets\RuleSet2Dim.cs" />
+    <Compile Include="RuleSetTree.cs" />
     <Compile Include="StructuredRules.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -60,7 +63,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
