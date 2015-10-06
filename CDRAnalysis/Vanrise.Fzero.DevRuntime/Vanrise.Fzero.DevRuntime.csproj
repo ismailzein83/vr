@@ -241,7 +241,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ITask.cs" />
-    <Compile Include="Mappers\AllMappers.cs" />
+    <Compile Include="Mappers\FTP_File_Mappers.cs" />
+    <Compile Include="Mappers\SQLMappers.cs" />
     <Compile Include="Tasks\IsmailTask.cs" />
     <Compile Include="Tasks\MortadaTask.cs" />
     <Compile Include="Tasks\HaririTask.cs" />
