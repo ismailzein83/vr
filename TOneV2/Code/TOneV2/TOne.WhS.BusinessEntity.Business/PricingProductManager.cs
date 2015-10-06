@@ -15,7 +15,11 @@ namespace TOne.WhS.BusinessEntity.Business
             IPricingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IPricingProductDataManager>();
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredPricingProducts(input));
         }
-
+       public List<PricingProductInfo> GetAllPricingProduct()
+       {
+           IPricingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IPricingProductDataManager>();
+           return dataManager.GetAllPricingProduct();
+       }
        public PricingProduct GetPricingProduct(int pricingProductId)
         {
             IPricingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IPricingProductDataManager>();

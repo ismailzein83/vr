@@ -37,6 +37,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return RetrieveData(input, createTempTableAction, PricingProductMapper, _columnMapper);
         }
+        public List<PricingProductInfo> GetAllPricingProduct()
+        {
+            return GetItemsSP("TOneWhS_BE.sp_PricingProduct_GetAll", PricingProductInfoMapper);
+        }
 
         public Entities.PricingProduct GetPricingProduct(int pricingProductId)
         {
@@ -76,6 +80,16 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 DefaultRoutingProductId = (int)reader["DefaultRoutingProductID"],
                 SaleZonePackageId = (int)reader["SaleZonePackageID"],
                 Settings = ((reader["Settings"] as string) != null) ? Vanrise.Common.Serializer.Deserialize<PricingProductSettings>(reader["Settings"] as string) : null,
+            };
+
+            return pricingProduct;
+        }
+        PricingProductInfo PricingProductInfoMapper(IDataReader reader)
+        {
+            PricingProductInfo pricingProduct = new PricingProductInfo
+            {
+                PricingProductId = (int)reader["ID"],
+                Name = reader["Name"] as string,
             };
 
             return pricingProduct;

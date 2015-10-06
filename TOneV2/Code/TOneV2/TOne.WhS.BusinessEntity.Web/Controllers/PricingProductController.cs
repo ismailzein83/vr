@@ -18,6 +18,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
              PricingProductManager manager = new PricingProductManager();
              return GetWebResponse(input, manager.GetFilteredPricingProducts(input));
          }
+          [HttpGet]
+         public List<PricingProductInfo> GetAllPricingProduct()
+         {
+             PricingProductManager manager = new PricingProductManager();
+             return manager.GetAllPricingProduct();
+         }
+         
          [HttpGet]
          public PricingProduct GetPricingProduct(int pricingProductId)
          {

@@ -14,7 +14,9 @@
                 pricingProductId: pricingProductId
             });
         }
-
+        function GetAllPricingProduct() {
+            return BaseAPIService.get("/api/PricingProduct/GetAllPricingProduct");
+        }
         function AddPricingProduct(pricingProductObject) {
             return BaseAPIService.post("/api/PricingProduct/AddPricingProduct", pricingProductObject);
         }
@@ -31,7 +33,8 @@
             AddPricingProduct: AddPricingProduct,
             UpdatePricingProduct: UpdatePricingProduct,
             DeletePricingProduct: DeletePricingProduct,
-            GetPricingProduct: GetPricingProduct
+            GetPricingProduct: GetPricingProduct,
+            GetAllPricingProduct: GetAllPricingProduct
         });
     }
 

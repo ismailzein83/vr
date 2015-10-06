@@ -1,0 +1,21 @@
+﻿<vr-row>
+    <vr-columns width="fullrow">
+        <vr-datagrid datasource="customerPricingProducts"
+                     on-ready="onGridReady"
+                     dataretrievalfunction="dataRetrievalFunction"
+                     pagingtype="'PagingOnScroll'"
+                     menuactions="gridMenuActions"
+                     idfield="ID">
+
+            <vr-datagridcolumn headertext="'ID'" field="'CustomerPricingProductId'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Customer Name'" field="'CustomerName'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Pricing Product Name'" field="'PricingProductName'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'AllDestinations'" field="'AllDestinations'" type="'Text'">
+                <vr-icon icontype="dataItem.AllDestinations"></vr-icon>
+            </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'BED'" field="'BED'" type="'Datetime'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'EED'" field="'EED'" type="'Datetime'"></vr-datagridcolumn>
+
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>

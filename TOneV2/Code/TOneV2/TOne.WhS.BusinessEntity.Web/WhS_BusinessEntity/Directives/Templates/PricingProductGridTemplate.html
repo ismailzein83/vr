@@ -1,5 +1,4 @@
-﻿<div ng-controller="WhS_BE_PricingProductGridController">
-    <vr-row>
+﻿<vr-row>
         <vr-columns colnum="12" simplecol>
             <vr-datagrid datasource="pricingProducts"
                          dataretrievalfunction="dataRetrievalFunction"
@@ -9,7 +8,11 @@
                          idfield="PricingProductId">
                 <vr-datagridcolumn headertext="'Id'" field="'PricingProductId'"></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Description'" field="'Name'"></vr-datagridcolumn>
+
+                <vr-datagridexpandablerow>
+                    <vr-whs-be-customerpricingproductgrid on-ready="dataItem.extensionObject.onGridReady"></vr-whs-be-customerpricingproductgrid>
+                </vr-datagridexpandablerow>
             </vr-datagrid>
+
         </vr-columns>
     </vr-row>
-</div>

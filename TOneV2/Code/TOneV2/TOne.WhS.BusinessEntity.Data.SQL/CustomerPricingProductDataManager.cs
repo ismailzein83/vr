@@ -15,7 +15,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         static CustomerPricingProductDataManager()
         {
-            _columnMapper.Add("CustomerId", "ID");
+            _columnMapper.Add("CustomerPricingProductId", "ID");
         }
 
         public CustomerPricingProductDataManager()
@@ -69,6 +69,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
                 AllDestinations = GetReaderValue<bool>(reader, "AllDestinations"),
+                CustomerName = reader["CustomerName"] as string,
+                PricingProductName = reader["PricingProductName"] as string,
             };
 
             return customerPricingProduct;

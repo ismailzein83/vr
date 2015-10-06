@@ -5,7 +5,7 @@
     customerPricingProductManagementController.$inject = ['$scope', 'WhS_BE_CustomerPricingProductAPIService', 'WhS_BE_MainService', 'UtilsService', 'VRModalService', 'VRNotificationService'];
 
     function customerPricingProductManagementController($scope, WhS_BE_CustomerPricingProductAPIService, WhS_BE_MainService, UtilsService, VRModalService, VRNotificationService) {
-
+        var gridAPI;
         defineScope();
         load();
 
@@ -18,18 +18,18 @@
             };
 
             $scope.AddNewCustomerPricingProduct = AddNewCustomerPricingProduct;
+
+            $scope.onGridReady = function (api) {
+                gridAPI = api;
+                var filter = {
+
+                }
+                api.loadGrid(filter);
+                
+            }
         }
 
         function load() {
-            loadGrid();
-        }
-
-        function loadGrid() {
-            $scope.pricingProductGridConnector.data = getFilterObject();
-
-            if ($scope.pricingProductGridConnector.loadTemplateData != undefined) {
-                return $scope.pricingProductGridConnector.loadTemplateData();
-            }
         }
 
         function getFilterObject() {
@@ -40,13 +40,13 @@
             return data;
         }
 
-        function AddNewPricingProduct() {
+        function AddNewCustomerPricingProduct() {
             var onPricingProductAdded = function (pricingProductObj) {
-                if ($scope.pricingProductGridConnector.onPricingProductAdded != undefined)
-                    $scope.pricingProductGridConnector.onPricingProductAdded(pricingProductObj);
+                if (gridAPI != undefined)
+                    gridAPI.onCustomerPricingProductAdded(pricingProductObj);
             };
 
-            WhS_BE_MainService.addPricingProduct(onPricingProductAdded);
+            WhS_BE_MainService.addCustomerPricingProduct(onPricingProductAdded);
         }
     }
 

@@ -7,7 +7,8 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService','WhS_BE_PricingP
         deleteRouteRule: deleteRouteRule,
         addPricingProduct: addPricingProduct,
         editPricingProduct: editPricingProduct,
-        deletePricingProduct: deletePricingProduct
+        deletePricingProduct: deletePricingProduct,
+        addCustomerPricingProduct: addCustomerPricingProduct
     });
 
     function addRouteRule(onRouteRuleAdded)
@@ -91,6 +92,17 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService','WhS_BE_PricingP
                         });
                 }
             });
+    }
+
+    function addCustomerPricingProduct(onCustomerPricingProductAdded) {
+        var settings = {};
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = "Customer Pricing Product";
+            modalScope.onCustomerPricingProductAdded = onCustomerPricingProductAdded;
+        };
+
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingProduct/CustomerPricingProductEditor.html', null, settings);
     }
 
 }]);

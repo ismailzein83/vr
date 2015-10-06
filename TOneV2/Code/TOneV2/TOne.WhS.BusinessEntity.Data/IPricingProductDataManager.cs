@@ -10,7 +10,7 @@ namespace TOne.WhS.BusinessEntity.Data
     public interface IPricingProductDataManager:IDataManager
     {
         Vanrise.Entities.BigResult<PricingProduct> GetFilteredPricingProducts(Vanrise.Entities.DataRetrievalInput<PricingProductQuery> input);
-
+        List<PricingProductInfo> GetAllPricingProduct();
         PricingProduct GetPricingProduct(int pricingProductId);
         bool Insert(PricingProduct pricingProduct, out int insertedId);
 

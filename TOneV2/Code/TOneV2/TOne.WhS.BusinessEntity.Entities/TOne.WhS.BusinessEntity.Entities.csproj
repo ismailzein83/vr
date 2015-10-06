@@ -60,6 +60,7 @@
     <Compile Include="CodeCriteria\CodeCriteriaGroupSettings.cs" />
     <Compile Include="PricingProduct\CustomerPricingProduct.cs" />
     <Compile Include="PricingProduct\CustomerPricingProductQuery.cs" />
+    <Compile Include="PricingProduct\PricingProductInfo.cs" />
     <Compile Include="PricingProduct\PricingProductQuery.cs" />
     <Compile Include="PricingProduct\PricingProduct.cs" />
     <Compile Include="PricingProduct\PricingProductSettings.cs" />

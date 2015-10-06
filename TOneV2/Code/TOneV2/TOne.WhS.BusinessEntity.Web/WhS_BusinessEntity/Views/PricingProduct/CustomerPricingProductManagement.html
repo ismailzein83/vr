@@ -16,11 +16,11 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
-                    <vr-button type="Add" data-onclick="AddNewPricingProduct"></vr-button>
+                    <vr-button type="Add" data-onclick="AddNewCustomerPricingProduct"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
-        <div ng-include="'/Client/Modules/WhS_BusinessEntity/Views/PricingProduct/Grids/CustomerPricingProductGrid.html'"></div>
+        <vr-whs-be-customerpricingproductgrid on-ready="onGridReady"></vr-whs-be-customerpricingproductgrid>
     </vr-form>
 
 </vr-panel>
