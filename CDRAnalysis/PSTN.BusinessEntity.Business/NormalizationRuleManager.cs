@@ -13,38 +13,38 @@ namespace PSTN.BusinessEntity.Business
         {
 
 
-            //CDRToNormalizeInfo cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CGPN, SwitchId = cdr.SwitchID, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId };
-
-           
-            //NormalizationRule matchRule_CGPN = GetMostMatchedRule(_rules, cdrInfo_CGPN);
-            //if (matchRule_CGPN != null)
-            //{
-            //    string phoneNumber = cdr.CDPN;
-            //    foreach (var actionSettings in matchRule_CGPN.Settings.Actions)
-            //    {
-            //        var behavior = GetActionBehavior(actionSettings.BehaviorId);
-            //        behavior.Execute(actionSettings, ref phoneNumber);
-            //    }
-            //    cdr.CDPN = phoneNumber;
-            //}
+            CDRToNormalizeInfo cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CGPN, SwitchId = cdr.SwitchID, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId };
 
 
+            NormalizationRule matchRule_CGPN = GetMostMatchedRule(_rules, cdrInfo_CGPN);
+            if (matchRule_CGPN != null)
+            {
+                string phoneNumber = cdr.CDPN;
+                foreach (var actionSettings in matchRule_CGPN.Settings.Actions)
+                {
+                    var behavior = GetActionBehavior(actionSettings.BehaviorId);
+                    behavior.Execute(actionSettings, ref phoneNumber);
+                }
+                cdr.CDPN = phoneNumber;
+            }
 
-            //CDRToNormalizeInfo cdrInfo_CDPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CDPN, SwitchId = cdr.SwitchID, PhoneNumberType = NormalizationPhoneNumberType.CDPN, TrunkId = cdr.InTrunkId };
 
-           
 
-            //NormalizationRule matchRule_CDPN = GetMostMatchedRule(_rules, cdrInfo_CDPN);
-            //if (matchRule_CDPN != null)
-            //{
-            //    string phoneNumber = cdr.CDPN;
-            //    foreach (var actionSettings in matchRule_CDPN.Settings.Actions)
-            //    {
-            //        var behavior = GetActionBehavior(actionSettings.BehaviorId);
-            //        behavior.Execute(actionSettings, ref phoneNumber);
-            //    }
-            //    cdr.CDPN = phoneNumber;
-            //}
+            CDRToNormalizeInfo cdrInfo_CDPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CDPN, SwitchId = cdr.SwitchID, PhoneNumberType = NormalizationPhoneNumberType.CDPN, TrunkId = cdr.InTrunkId };
+
+
+
+            NormalizationRule matchRule_CDPN = GetMostMatchedRule(_rules, cdrInfo_CDPN);
+            if (matchRule_CDPN != null)
+            {
+                string phoneNumber = cdr.CDPN;
+                foreach (var actionSettings in matchRule_CDPN.Settings.Actions)
+                {
+                    var behavior = GetActionBehavior(actionSettings.BehaviorId);
+                    behavior.Execute(actionSettings, ref phoneNumber);
+                }
+                cdr.CDPN = phoneNumber;
+            }
 
         }
 
