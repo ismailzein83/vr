@@ -145,9 +145,11 @@ namespace Vanrise.Caching
             return _cacheDictionary;
         }
 
+        object dummyParameterType = new object();
+
         public T GetOrCreateObject<T>(string cacheName, Func<T> createObject)
         {
-            return base.GetOrCreateObject(cacheName, null, createObject);
+            return base.GetOrCreateObject(cacheName, dummyParameterType, createObject);
         }
     }
 }
