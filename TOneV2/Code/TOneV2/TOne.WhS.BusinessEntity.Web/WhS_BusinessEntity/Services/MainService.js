@@ -1,5 +1,5 @@
 ﻿
-app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService','WhS_BE_PricingProductAPIService', 'VRModalService', 'VRNotificationService', function (WhS_BE_RouteRuleAPIService,WhS_BE_PricingProductAPIService, VRModalService, VRNotificationService) {
+app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService','WhS_BE_PricingProductAPIService','WhS_BE_CustomerPricingProductAPIService', 'VRModalService', 'VRNotificationService', function (WhS_BE_RouteRuleAPIService,WhS_BE_PricingProductAPIService,WhS_BE_CustomerPricingProductAPIService, VRModalService, VRNotificationService) {
 
     return ({
         addRouteRule: addRouteRule,
@@ -8,7 +8,8 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService','WhS_BE_PricingP
         addPricingProduct: addPricingProduct,
         editPricingProduct: editPricingProduct,
         deletePricingProduct: deletePricingProduct,
-        addCustomerPricingProduct: addCustomerPricingProduct
+        addCustomerPricingProduct: addCustomerPricingProduct,
+        deleteCustomerPricingProduct: deleteCustomerPricingProduct
     });
 
     function addRouteRule(onRouteRuleAdded)
@@ -78,14 +79,14 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService','WhS_BE_PricingP
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingProduct/PricingProductEditor.html', parameters, modalSettings);
     }
 
-    function deletePricingProduct(pricingProductObj, onPricingProductDeleted) {
+    function deletePricingProduct($scope,pricingProductObj, onPricingProductDeleted) {
         VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response) {
                     return WhS_BE_PricingProductAPIService.DeletePricingProduct(pricingProductObj.PricingProductId)
                         .then(function (deletionResponse) {
                             VRNotificationService.notifyOnItemDeleted("Pricing Product", deletionResponse);
-                            onPricingProductDeleted();
+                            onPricingProductDeleted(pricingProductObj);
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);
@@ -103,6 +104,22 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService','WhS_BE_PricingP
         };
 
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingProduct/CustomerPricingProductEditor.html', null, settings);
+    }
+
+    function deleteCustomerPricingProduct($scope,customerPricingProductObj, onCustomerPricingProductDeleted) {
+        VRNotificationService.showConfirmation()
+            .then(function (response) {
+                if (response) {
+                    return WhS_BE_CustomerPricingProductAPIService.DeleteCustomerPricingProduct(customerPricingProductObj.CustomerPricingProductId)
+                        .then(function (deletionResponse) {
+                            VRNotificationService.notifyOnItemDeleted("Customer Pricing Product", deletionResponse);
+                            onCustomerPricingProductDeleted(customerPricingProductObj);
+                        })
+                        .catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                }
+            });
     }
 
 }]);

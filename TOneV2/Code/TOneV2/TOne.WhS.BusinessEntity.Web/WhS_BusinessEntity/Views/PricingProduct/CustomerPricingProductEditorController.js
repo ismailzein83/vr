@@ -27,13 +27,14 @@
                 carrierAccountDirectiveAPI = api;
             }
             $scope.onPricingProductsSelectionChanged = function () {
+             
                   if (pricingProductDirectiveAPI!=undefined)
-                   $scope.selectedPricingProduct = pricingProductDirectiveAPI.getData();
+                      $scope.selectedPricingProduct = pricingProductDirectiveAPI.getData();
             }
-            $scope.selectedSuppliers;
+            $scope.selectedSupplier;
             $scope.onCarrierAccountSelectionChanged = function () {
                 if (carrierAccountDirectiveAPI != undefined)
-                    $scope.selectedSuppliers = carrierAccountDirectiveAPI.getData();
+                    $scope.selectedSupplier = carrierAccountDirectiveAPI.getData();
             }
             $scope.beginEffectiveDate = new Date();
             $scope.endEffectiveDate;
@@ -59,17 +60,19 @@
             });
 
         }
-    }
-    function buildPricingProductObjFromScope() {
-        var obj = {
-            CustomerId:$scope.selectedSuppliers.CarrierAccountId,
-            PricingProductId: $scope.selectedSuppliers
-       AllDestinations { get; set; }
-        BED { get; set; }
-       EED { get; set; }
+        function buildPricingProductObjFromScope() {
+            var obj = {
+                CustomerId: $scope.selectedSupplier.CarrierAccountId,
+                CustomerName: $scope.selectedSupplier.Name,
+                PricingProductId: $scope.selectedPricingProduct.PricingProductId,
+                PricingProductName:$scope.selectedPricingProduct.Name,
+                BED: $scope.beginEffectiveDate,
+                EED: $scope.endEffectiveDate
 
-        };
-        return obj;
+            };
+            return obj;
+        }
     }
+  
     appControllers.controller('WhS_BE_CustomerPricingProductEditorController', customerPricingProductEditorController);
 })(appControllers);

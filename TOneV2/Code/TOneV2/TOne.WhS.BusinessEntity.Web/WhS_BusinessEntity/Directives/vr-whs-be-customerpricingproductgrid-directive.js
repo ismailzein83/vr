@@ -1,13 +1,14 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeCustomerpricingproductgrid", [ "UtilsService", "VRNotificationService","WhS_BE_CustomerPricingProductAPIService",
-function ( UtilsService, VRNotificationService,WhS_BE_CustomerPricingProductAPIService) {
+app.directive("vrWhsBeCustomerpricingproductgrid", [ "UtilsService", "VRNotificationService","WhS_BE_CustomerPricingProductAPIService",'WhS_BE_MainService',
+function (UtilsService, VRNotificationService, WhS_BE_CustomerPricingProductAPIService, WhS_BE_MainService) {
 
         var directiveDefinitionObject = {
 
             restrict: "E",
             scope: {
-                onReady: "="
+                onReady: "=",
+
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -60,12 +61,12 @@ function ( UtilsService, VRNotificationService,WhS_BE_CustomerPricingProductAPIS
             }
 
             function deleteCustomerPricingProduct(gridObject) {
-
-                var onCustomerPricingProductDeleted = function (gridObject) {
+                var onCustomerPricingProduc
+                tDeleted = function (gridObject) {
                     gridAPI.itemDeleted(gridObject);
                 }
 
-                PSTN_BE_Service.deleteSwitchTrunk(gridObject, onCustomerPricingProductDeleted);
+                WhS_BE_MainService.deleteCustomerPricingProduct($scope,gridObject, onCustomerPricingProductDeleted);
             }
 
             function defineMenuActions() {

@@ -1,6 +1,6 @@
-﻿<div style="display:inline-block;width: calc(100% - 18px);" vr-loader="isLoadingDirective" ng-if="ctrl.ismultipleselection!=undefined">
-    <vr-select datatextfield="Name" ismultipleselection datavaluefield="PricingProductId" label="Pricing Product" datasource="pricingProducts" selectedvalues="selectedPricingProducts" onselectionchanged="onselectionchanged"></vr-select>
+﻿<div style="display:inline-block;width: calc(100% - 18px);" vr-loader="isLoadingDirective" ng-show="ctrl.ismultipleselection!=undefined">
+    <vr-select datatextfield="Name" ismultipleselection datavaluefield="PricingProductId" label="Pricing Product" datasource="pricingProducts"  selectedvalues="selectedPricingProducts" onselectionchanged="onselectionchanged"></vr-select>
 </div>
-<div style="display:inline-block;width: calc(100% - 18px);" vr-loader="isLoadingDirective" ng-if="ctrl.ismultipleselection==undefined">
-    <vr-select datatextfield="Name" datavaluefield="PricingProductId" label="Pricing Product" datasource="pricingProducts" selectedvalues="selectedPricingProducts" onselectionchanged="onselectionchanged"></vr-select>
+<div style="display:inline-block;width: calc(100% - 18px);" vr-loader="isLoadingDirective" ng-show="ctrl.ismultipleselection==undefined">
+    <vr-select datatextfield="Name" datavaluefield="PricingProductId" label="Pricing Product" datasource="pricingProducts" selectedvalues="selectedPricingProducts"  onselectionchanged="onselectionchanged"></vr-select>
 </div>

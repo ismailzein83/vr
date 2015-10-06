@@ -8,7 +8,8 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'Util
             onloaded: '=',
             label: "@",
             ismultipleselection: "@",
-            onselectionchanged:'='
+            onselectionchanged: '=',
+            isrequired:'@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -52,15 +53,20 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'Util
             else if (attrs.type == "'Both'")
                 label = "Carriers";
         }
+
+        var required = "";
+        if (attrs.isrequired != undefined)
+            required = "isrequired";
+
         if (attrs.ismultipleselection != undefined)
             return '<div style="display:inline-block;width: calc(100% - 18px);" vr-loader="isLoadingDirective">'
                        + '<vr-label >' + label + '</vr-label>'
-                   + ' <vr-select ismultipleselection datasource="datasource" selectedvalues="selectedCarrierValues" onselectionchanged="onselectionchanged" datatextfield="Name" datavaluefield="CarrierAccountId"'
+                   + ' <vr-select ismultipleselection datasource="datasource" ' + required + ' selectedvalues="selectedCarrierValues" onselectionchanged="onselectionchanged" datatextfield="Name" datavaluefield="CarrierAccountId"'
                    + 'entityname="' + label + '"></vr-select></div>'
                    + ' <span class="glyphicon glyphicon-th hand-cursor"  aria-hidden="true" ng-click="openTreePopup()"></span></div>';
         else
             return '<div vr-loader="isLoadingDirective"><vr-label >' + label + '</vr-label>'
-               + ' <vr-select datasource="datasource" selectedvalues="selectedCarrierValues" onselectionchanged="onselectionchanged" datatextfield="Name" datavaluefield="CarrierAccountId"'
+               + ' <vr-select datasource="datasource" selectedvalues="selectedCarrierValues" ' + required + ' onselectionchanged="onselectionchanged" datatextfield="Name" datavaluefield="CarrierAccountId"'
                + 'entityname="' + label + '"></vr-select></div>';
     }
     function BeCarrierGroup(ctrl, $scope, WhS_BE_CarrierAccountAPIService) {
