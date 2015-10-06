@@ -145,5 +145,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             };
             return saleZoneInfo;
         }
+
+
+        public bool AreZonesUpdated(ref object lastReceivedDataInfo)
+        {
+            return IsDataUpdated("TOneWhS_BE.SaleZone", ref lastReceivedDataInfo);
+        }
     }
 }

@@ -22,6 +22,14 @@ namespace TestRuntime
     {
         public void Execute()
         {
+            var saleZoneDataManager = new SaleZoneDataManager();
+            byte[] lastReceivedTimeStamp = null;
+            while(true)
+            {
+                bool isDataUpdated = saleZoneDataManager.IsDataUpdated(ref lastReceivedTimeStamp);
+                Console.WriteLine(isDataUpdated);
+                Console.ReadKey();
+            }
             ////TOne.LCR.Data.SQL.CodeDataManager codeDataManager = new TOne.LCR.Data.SQL.CodeDataManager();
             ////TOne.LCR.Data.SQL.CodeMatchDataManager codeMatchDataManager = new TOne.LCR.Data.SQL.CodeMatchDataManager();
             ////List<SupplierCodeInfo> suppliersCodeInfo = codeDataManager.GetActiveSupplierCodeInfo(DateTime.Today, DateTime.Today);
@@ -238,6 +246,20 @@ namespace TestRuntime
             };
             BPClient processManager = new BPClient();
             processManager.CreateNewProcess(input);
+        }
+    }
+
+    public class SaleZoneDataManager : Vanrise.Data.SQL.BaseSQLDataManager
+    {
+        public SaleZoneDataManager() : base("TOneV2DBConnString")
+        {
+
+        }
+
+
+        public bool IsDataUpdated(ref byte[] lastReceivedTimeStamp)
+        {
+            return IsDataUpdated("TOneWhS_BE.SaleZone", ref lastReceivedTimeStamp);
         }
     }
 }
