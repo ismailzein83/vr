@@ -53,9 +53,12 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "SwitchTrunkAPIService", 
                         var linkedToTrunkID = trunkObject.LinkedToTrunkID;
                         updateDataItem(linkedToTrunkID, trunkObject.ID, trunkObject.Name);
 
-                        var linkedToTheLinkedToTrunkObject = UtilsService.getItemByVal($scope.trunks, linkedToTrunkID, "LinkedToTrunkID");
-                        if (linkedToTheLinkedToTrunkObject != null)
-                            updateDataItem(linkedToTheLinkedToTrunkObject.ID, null, null);
+                        if (linkedToTrunkID != null) {
+                            var linkedToTheLinkedToTrunkObject = UtilsService.getItemByVal($scope.trunks, linkedToTrunkID, "LinkedToTrunkID");
+
+                            if (linkedToTheLinkedToTrunkObject != null)
+                                updateDataItem(linkedToTheLinkedToTrunkObject.ID, null, null);
+                        }
                     }
 
                     return directiveAPI;
