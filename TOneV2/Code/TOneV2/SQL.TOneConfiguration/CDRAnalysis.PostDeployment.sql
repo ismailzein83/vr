@@ -88,7 +88,7 @@ as (select * from (values
 (5,'Reports','Reports','Reports',null,'/images/menu-icons/busines intel.png',14,0),
 (6,'Business Intelligence','Business Intelligence','BI',null,'/images/menu-icons/busines intel.png',15,1),
 (7,'Dynamic Management','Dynamic Management','Dynamic Management',1,null,15,0),
-(8,'Infrastructure','Infrastructure','Infrastructure',1,null,14,0)
+(8,'Network Infrastructure','Network Infrastructure','Network Infrastructure',1,null,14,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
