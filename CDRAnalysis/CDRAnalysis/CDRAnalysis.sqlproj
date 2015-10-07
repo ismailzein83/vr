@@ -171,5 +171,16 @@
     <Build Include="PSTN_BE\Stored Procedures\sp_Switch_GetToLinkTo.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_Switch_GetByDataSourceID.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_Switch_Delete.sql" />
+    <Build Include="PSTN_BE\Tables\NormalizationRule.sql" />
+    <Build Include="dbo\Tables\PSTNSampleData2.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_GetBySymbol.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_GetAll.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_Switch_GetSwitchAssignedDataSources.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_NormalizationRule_Update.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_NormalizationRule_Insert.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_NormalizationRule_GetDetailByID.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_NormalizationRule_GetByID.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_NormalizationRule_Delete.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_NormalizationRule_CreateTempByFiltered.sql" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-﻿CREATE TABLE [FraudAnalysis].[NormalCDR] (
+CREATE TABLE [FraudAnalysis].[NormalCDR] (
     [ID]                 INT             IDENTITY (1, 1) NOT NULL,
     [MSISDN]             VARCHAR (30)    NULL,
     [IMSI]               VARCHAR (20)    NULL,
@@ -21,8 +21,12 @@
     [In_Trunk]           VARCHAR (20)    NULL,
     [Out_Trunk]          VARCHAR (20)    NULL,
     [Service_Type]       INT             NULL,
-    [Service_VAS_Name]   VARCHAR (50)    NULL
+    [Service_VAS_Name]   VARCHAR (50)    NULL,
+    [InTrunkID]          INT             NULL,
+    [OutTrunkID]         INT             NULL
 );
+
+
 
 
 
@@ -37,5 +41,5 @@ CREATE CLUSTERED INDEX [IX_NormalCDR_MSISDN]
 
 
 GO
-
+EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'ID for Normal CDR', @level0type = N'SCHEMA', @level0name = N'FraudAnalysis', @level1type = N'TABLE', @level1name = N'NormalCDR', @level2type = N'COLUMN', @level2name = N'ID';
 

@@ -12,7 +12,7 @@ CREATE PROCEDURE [PSTN_BE].[sp_SwitchTrunk_Update]
 	@Direction INT
 AS
 BEGIN
-	IF NOT EXISTS (SELECT 1 FROM PSTN_BE.SwitchTrunk WHERE Name = @Name AND ID != @ID)
+	IF NOT EXISTS (SELECT 1 FROM PSTN_BE.SwitchTrunk WHERE (Name = @Name OR Symbol = @Symbol) AND ID != @ID)
 	BEGIN
 		UPDATE PSTN_BE.SwitchTrunk
 		SET Name = @Name,
