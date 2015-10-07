@@ -32,13 +32,13 @@ namespace Vanrise.BI.Web.Controllers
             return manager.GetMeasureValues(timeDimensionType, fromDate, toDate, measureTypesNames);
         }
         [HttpGet]
-        public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(string entityType, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, [FromUri] string[] measureTypesIDs)
+        public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(List<string> entityType, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, [FromUri] string[] measureTypesIDs)
         {
             GenericEntityManager manager = new GenericEntityManager();
             return manager.GetEntityMeasuresValues(entityType, entityId, timeDimensionType, fromDate, toDate, measureTypesIDs);
         }
         [HttpGet]
-        public IEnumerable<EntityRecord> GetTopEntities(string entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, [FromUri] string[] measureTypesNames)
+        public IEnumerable<EntityRecord> GetTopEntities([FromUri] List<string> entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, [FromUri] string[] measureTypesNames)
         {
             GenericEntityManager manager = new GenericEntityManager();
             return manager.GetTopEntities(entityTypeName, topByMeasureTypeName, fromDate, toDate, topCount, measureTypesNames);
@@ -60,7 +60,7 @@ namespace Vanrise.BI.Web.Controllers
         }
 
         [HttpGet]
-         public HttpResponseMessage ExportTopEntities(string entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, [FromUri] string[] measureTypesNames)
+         public HttpResponseMessage ExportTopEntities(List<string> entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, [FromUri] string[] measureTypesNames)
         {
             GenericEntityManager manager = new GenericEntityManager();
             IEnumerable<EntityRecord> records=manager.GetTopEntities(entityTypeName, topByMeasureTypeName, fromDate, toDate, topCount, measureTypesNames);

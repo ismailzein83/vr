@@ -9,7 +9,7 @@ namespace Vanrise.BI.Entities
    public class ChartDirectiveSetting:BIWidgetSetting
     {
         public string OperationType { get; set; }
-        public string EntityType { get; set; }
+        public List<String> EntityType { get; set; }
         public List<string> MeasureTypes { get; set; }
         public string TopMeasure { get; set; }
         public string DefinitionType { get; set; }

@@ -11,7 +11,8 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
     function defineScope() {
         $scope.Measures = [];
         $scope.Entities = [];
-        $scope.selectedEntityType ;
+        
+        $scope.selectedEntitiesType=[];
         $scope.definitionTypes = [];
         $scope.selectedDefinitionType;
         $scope.selectedMeasureTypes = [];
@@ -41,7 +42,7 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
     function getSubViewValue() {
         var measureTypes = [];
         if ($scope.selectedOperationType.value=="TopEntities" && $scope.isPieChart){
-            if ($scope.selectedEntityType == undefined || $scope.selectedEntityType == null || $scope.selectedMeasureType == undefined)
+            if ($scope.selectedEntitiesType.length==0 || $scope.selectedMeasureType == undefined)
                 return false;
             else {
                 measureTypes.push($scope.selectedMeasureType.Name);
@@ -68,10 +69,13 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
         var topMeasure = null;
         if ($scope.selectedTopMeasure != undefined)
             topMeasure = $scope.selectedTopMeasure.Name;
-        var entityType = null;
-        console.log($scope.selectedTopMeasure);
-        if ($scope.selectedEntityType != undefined && $scope.selectedOperationType.value != "MeasuresGroupedByTime")
-            entityType = $scope.selectedEntityType.Name;
+        var entityType = [];
+       
+        if ($scope.selectedEntitiesType.length > 0 && $scope.selectedOperationType.value != "MeasuresGroupedByTime")
+        {
+            for (var i = 0; i < $scope.selectedEntitiesType.length; i++)
+                entityType.push($scope.selectedEntitiesType[i].Name);
+        }
 
         return {
             $type: "Vanrise.BI.Entities.ChartDirectiveSetting, Vanrise.BI.Entities",
@@ -94,10 +98,11 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
         $scope.isPieChart = settings.IsPieChart;
        
         for (i = 0; i < $scope.Entities.length; i++) {
-            
-            if ($scope.Entities[i].Name == settings.EntityType) {
-                $scope.selectedEntityType = $scope.Entities[i];
-            
+            for (j = 0; j < settings.EntityType.length; j++) {
+                if ($scope.Entities[i].Name == settings.EntityType[j] && !UtilsService.contains($scope.selectedEntitiesType, $scope.Entities[i])) {
+                    $scope.selectedEntitiesType.push($scope.Entities[i]);
+
+                }
             }
         }
        
@@ -197,7 +202,7 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
             angular.forEach(response, function (itm) {
                 $scope.Entities.push(itm);
             });
-            $scope.selectedEntityType = $scope.Entities[0];
+            $scope.selectedEntitiesType.push($scope.Entities[0])  ;
         });
     }
 

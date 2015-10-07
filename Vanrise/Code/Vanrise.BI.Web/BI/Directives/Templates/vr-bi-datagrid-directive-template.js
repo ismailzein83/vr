@@ -11,9 +11,10 @@ function VrDatagridDirectiveTemplateController($scope, TimeDimensionTypeEnum,BIC
     function defineScope() {
         $scope.Measures = [];
         $scope.Entities = [];
-        $scope.selectedEntityType;
+        $scope.selectedEntitiesType = [];
         $scope.topRecords = 10;
         $scope.selectedMeasureTypes = [];
+
         $scope.selectedTopMeasure;
         defineTimeDimensionTypes();
         $scope.onSelectionChanged = function () {
@@ -32,7 +33,7 @@ function VrDatagridDirectiveTemplateController($scope, TimeDimensionTypeEnum,BIC
     function getSubViewValue() {
 
         switch ($scope.selectedOperationType.value) {
-            case "TopEntities": if ($scope.selectedEntityType == undefined || $scope.selectedEntityType == null || $scope.selectedMeasureTypes == undefined || $scope.selectedMeasureTypes.length == 0) return false;
+            case "TopEntities": if ($scope.selectedEntitiesType.length == 0  || $scope.selectedMeasureTypes == undefined || $scope.selectedMeasureTypes.length == 0) return false;
             case "MeasuresGroupedByTime": if ($scope.selectedMeasureTypes == undefined ||$scope.selectedMeasureTypes.length == 0) return false;
         }
         
@@ -48,9 +49,14 @@ function VrDatagridDirectiveTemplateController($scope, TimeDimensionTypeEnum,BIC
                 measureTypes[i] = swap;
             }
         }    
-        var entityType = null;
-        if ($scope.selectedEntityType != undefined && $scope.selectedOperationType.value != "MeasuresGroupedByTime")
-            entityType = $scope.selectedEntityType.Name;
+        var entityType = [];
+        if ($scope.selectedEntitiesType.length > 0 && $scope.selectedOperationType.value != "MeasuresGroupedByTime")
+        {
+            for (var i = 0; i < $scope.selectedEntitiesType.length; i++)
+                entityType.push($scope.selectedEntitiesType[i].Name);
+        
+        }
+           
         return {
             $type: "Vanrise.BI.Entities.DataGridDirectiveSetting, Vanrise.BI.Entities",
             OperationType: $scope.selectedOperationType.value,
@@ -64,10 +70,11 @@ function VrDatagridDirectiveTemplateController($scope, TimeDimensionTypeEnum,BIC
     function setSubViewValue(settings) {
         
         for (var i = 0; i < $scope.Entities.length; i++) {
+            for (j = 0; j < settings.EntityType.length; j++) {
+                if ($scope.Entities[i].Name == settings.EntityType[j] && !UtilsService.contains($scope.selectedEntitiesType, $scope.Entities[i])) {
+                    $scope.selectedEntitiesType.push($scope.Entities[i]);
 
-            if ($scope.Entities[i].Name == settings.EntityType) {
-                $scope.selectedEntityType = $scope.Entities[i];
-
+                }
             }
         }
         $scope.topRecords = settings.TopRecords;
@@ -161,7 +168,7 @@ function VrDatagridDirectiveTemplateController($scope, TimeDimensionTypeEnum,BIC
             angular.forEach(response, function (itm) {
                 $scope.Entities.push(itm);
             });
-            $scope.selectedEntityType = $scope.Entities[0];
+            $scope.selectedEntitiesType.push($scope.Entities[0]);
         });
     }
 

@@ -8,11 +8,11 @@ namespace Vanrise.BI.Entities
 {
     public class EntityRecord
     {
-        public string EntityId { get; set; }
+        public List<string> EntityId { get; set; }
 
-        public string EntityName { get; set; }
+        public List<string> EntityName { get; set; }
 
-        public string EntityType { get; set; }
+        public List<string> EntityType { get; set; }
 
         public Decimal[] Values { get; set; }
     }

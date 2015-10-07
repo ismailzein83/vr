@@ -44,8 +44,8 @@ app.directive('vrBiDatagrid', ['UtilsService', 'BIAPIService', 'BIUtilitiesServi
     function getDataGridTemplate(previewmode) {
         if (previewmode != 'true') {
             return '<vr-section title="{{ctrl.title}}"><div ng-if="ctrl.isAllowed==false" ng-class="\'gridpermission\'"><div  style="padding-top:115px;"><div   class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> You Don\'t Have Permission, Please Contact Your Administrator..!!</div></div></div><div ng-if="ctrl.isAllowed" vr-loader="ctrl.isGettingData"><vr-datagrid  onexport="ctrl.onexport" datasource="ctrl.data" on-ready="ctrl.onGridReady" maxheight="300px">'
-                                        + '<vr-datagridcolumn  ng-show="ctrl.isTopEntities" headertext="ctrl.entityType.description" field="\'EntityName\'"'// isclickable="\'true\'" \onclicked="openReportEntityModal"
-                                    +'  ></vr-datagridcolumn>'
+                                        + '<vr-datagridcolumn  ng-show="ctrl.isTopEntities" ng-repeat="entityType in ctrl.entityType" headertext="entityType.DisplayName" field="\'EntityName[\' + $index + \']\'"'  // isclickable="\'true\'" \onclicked="openReportEntityModal"
+                                    + '  columnindex="$index"></vr-datagridcolumn>'
                                         + '<vr-datagridcolumn ng-show="ctrl.isDateTimeGroupedData" headertext="\'Time\'" field="\'dateTimeValue\'"></vr-datagridcolumn>'
                                         + '<vr-datagridcolumn ng-repeat="measureType in ctrl.measureTypes" headertext="measureType.DisplayName" field="\'Values[\' + $index + \']\'" type="\'Number\'"></vr-datagridcolumn>'
                                     + '</vr-datagrid></div></vr-section>';
@@ -60,7 +60,7 @@ app.directive('vrBiDatagrid', ['UtilsService', 'BIAPIService', 'BIUtilitiesServi
 
         var gridAPI;
         var measures = [];
-        var entity;
+        var entity=[];
         function initializeController() {
             UtilsService.waitMultipleAsyncOperations([loadMeasures, loadEntities])
            .then(function () {
@@ -72,7 +72,7 @@ app.directive('vrBiDatagrid', ['UtilsService', 'BIAPIService', 'BIUtilitiesServi
                ctrl.onexport = function () {
                   
                    return BIVisualElementService.exportWidgetData(ctrl, ctrl.settings, ctrl.filter).then(function (response) {
-
+                       
                        return UtilsService.downloadFile(response.data, response.headers);
                    });
                }
@@ -131,8 +131,10 @@ app.directive('vrBiDatagrid', ['UtilsService', 'BIAPIService', 'BIUtilitiesServi
         }
         function loadEntities() {
             return BIConfigurationAPIService.GetEntities().then(function (response) {
-                entity = UtilsService.getItemByVal(response, settings.EntityType, 'Name');
+                for (var i = 0; i < settings.EntityType.length; i++)
+                    entity.push(UtilsService.getItemByVal(response, settings.EntityType[i], 'Name'));
             });
+          
         }
         this.initializeController = initializeController;
         this.defineAPI = defineAPI;

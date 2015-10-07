@@ -50,17 +50,14 @@ app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEleme
     function BIChart(ctrl, settings, retrieveDataOnLoad, BIAPIService, BIVisualElementService, BIConfigurationAPIService, VRModalService, UtilsService, VRNotificationService) {
         var chartAPI;
         var measures = [];
-        var entity;
+        var entity=[];
         var directiveSettings = {};
         getClassType();
         function getClassType() {
-            switch(settings.OperationType)
-            {
-                case "TopEntities": ctrl.class = "piechartpermission"; break;
-                case "MeasuresGroupedByTime": ctrl.class = "chartpermission"; break;
-            }
-
-           
+            if (settings.OperationType == "TopEntities" && settings.IsPieChart)
+                ctrl.class = "piechartpermission";
+            else
+                ctrl.class = "chartpermission"; 
         }
         function initializeController() {
             UtilsService.waitMultipleAsyncOperations([loadMeasures, loadEntities])
@@ -103,7 +100,6 @@ app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEleme
             if (!ctrl.isAllowed)
                 return;
             ctrl.isGettingData = true;
-            console.log(ctrl);
             return BIVisualElementService.retrieveWidgetData(ctrl, settings,filter)
           
                 .then(function (response) {
@@ -123,7 +119,7 @@ app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEleme
         function refreshPIEChart(response) {
             var chartDefinition = {
                 type: "pie",
-                title: directiveSettings.EntityType.DisplayName,
+                title: directiveSettings.EntityType[0].DisplayName,
                 yAxisTitle: "Value"
             };
 
@@ -137,7 +133,6 @@ app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEleme
         }
 
         function refreshChart(response) {
-            console.log(response);
             var chartDefinition = {
                 type: settings.DefinitionType,
                 yAxisTitle: "Value"
@@ -170,7 +165,8 @@ app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEleme
         }
         function loadEntities() {
             return BIConfigurationAPIService.GetEntities().then(function (response) {
-                    entity = UtilsService.getItemByVal(response, settings.EntityType, 'Name');
+                for (var i = 0; i < settings.EntityType.length; i++)
+                    entity.push( UtilsService.getItemByVal(response, settings.EntityType[i], 'Name'));
             });
         }
         this.initializeController = initializeController;

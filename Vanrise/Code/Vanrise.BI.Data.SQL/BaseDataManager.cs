@@ -230,7 +230,7 @@ namespace Vanrise.BI.Data.SQL
             return string.Format("({0})", queryBuilder);
         }
 
-        protected string BuildQueryColumnFilter(string columnName, string columnValue)
+        protected string BuildQueryColumnFilter(List<string> columnName,string columnValue)
         {
             return String.Format("{0}.&[{1}]", columnName, columnValue);
         }

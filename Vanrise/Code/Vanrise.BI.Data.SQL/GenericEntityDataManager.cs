@@ -25,22 +25,22 @@ namespace Vanrise.BI.Data.SQL
         {
             return GetTimeValuesRecord(timeDimensionType, fromDate, toDate, null, measureTypeNames, customerIds, supplierIds, customerColumnId);
         }
-        public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(string entityTypeName, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, List<String> customerIds, List<String> supplierIds,string customerColumnId, params string[] measureTypesNames)
+        public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(List<string> entityTypeName, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, List<String> customerIds, List<String> supplierIds,string customerColumnId, params string[] measureTypesNames)
         {
-            string entityIdColumn;
-            string entityNameColumn;
+            List<string> entityIdColumn;
+            List<string> entityNameColumn;
             GetEntityColumns(entityTypeName, out entityIdColumn, out entityNameColumn);
             string[] additionalFilters = new string[] { BuildQueryColumnFilter(entityIdColumn, entityId) };
             return GetTimeValuesRecord(timeDimensionType, fromDate, toDate, additionalFilters, measureTypesNames, customerIds, supplierIds, customerColumnId);
         }
-        public IEnumerable<EntityRecord> GetTopEntities(string entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, List<String> queryFilter, params string[] measureTypesNames)
+        public IEnumerable<EntityRecord> GetTopEntities(List<string> entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, List<String> queryFilter, params string[] measureTypesNames)
         {
             List<EntityRecord> rslt = new List<EntityRecord>();
             string topMeasureColExp;
             string topMeasureColumn = GetMeasureColumn(topByMeasureTypeName, out topMeasureColExp);
 
-            string entityIdColumn;
-            string entityNameColumn;
+            List<string> entityIdColumn;
+            List<string> entityNameColumn;
             GetEntityColumns(entityTypeName, out entityIdColumn, out entityNameColumn);
 
             string[] measureColumns;
@@ -64,19 +64,29 @@ namespace Vanrise.BI.Data.SQL
                 rowsPart = BuildQueryTopRowsParts(topMeasureColumn, topCount, entityNameColumn);
             string filtersPart = GetDateFilter(fromDate, toDate);
             string query = BuildQuery(columnsPart, rowsPart, filtersPart, expressionsPart);
-            string entityName = GetEntityName(entityTypeName, out entityName);
+            List<string> entityName;
+            GetEntityName(entityTypeName, out entityName);
             ExecuteReaderMDX(query, (reader) =>
             {
                 while (reader.Read())
                 {
-                    string EntityId = null;
-                     if (queryFilter != null)
-                         EntityId = reader[GetRowColumnToRead(entityIdColumn)] as string;
+                    List<string> EntityId = new List<string>();
+
+                    foreach (string entity in entityIdColumn)
+                    {
+                        if (queryFilter != null)
+                            EntityId.Add(reader[GetRowColumnToRead(entity)] as string);
+                    }
+                    List<string> EntityName = new List<string>();
+                    foreach (string entity in entityNameColumn)
+                    {
+                            EntityName.Add(reader[GetRowColumnToRead(entity)] as string);
+                    }
                     EntityRecord entityValue = new EntityRecord
                     {
 
                         EntityId = EntityId,
-                        EntityName = reader[GetRowColumnToRead(entityNameColumn)] as string,
+                        EntityName = EntityName,
                         EntityType = entityName,
                         Values = new Decimal[measureColumns.Length]
                     };
@@ -92,21 +102,59 @@ namespace Vanrise.BI.Data.SQL
        
 
         #region Private Methods
-        protected string BuildQueryTopRowsParts(string columnBy, int count,  string columnsName)
+        protected string BuildQueryTopRowsParts(string columnBy, int count,  List<string> columnsNames)
         {
-            return String.Format(@"TopCount({0}.CHILDREN, {1}, {2})", columnsName, count, columnBy);
+            StringBuilder columns=new StringBuilder();;
+            foreach (string value in columnsNames){
+                if(columns.Length==0)
+                {
+                    columns.Append(String.Format("{0}.CHILDREN",value));
+                }
+                else{
+                    columns.Append(String.Format("* {0}.CHILDREN",value));
+                } 
+
+            }
+            return String.Format(@"TopCount({0}, {1}, {2})", columns.ToString(), count, columnBy);
         }
 
-        protected string BuildQueryTopRows(string columnBy, int count, List<String> queryFilter, string entityIdColumn, string entityNameColumn)
+        protected string BuildQueryTopRows(string columnBy, int count, List<String> queryFilter, List<string> entityIdColumn, List<string> entityNameColumn)
         {
             return String.Format(@"TopCount({0}, {1}, {2})", BuildQueryRows(queryFilter, entityIdColumn, entityNameColumn), count, columnBy);
         }
-        protected string BuildQueryRows(List<String> queryFilter, string entityIdColumn, string entityNameColumn)
+        protected string BuildQueryRows(List<String> queryFilter, List<string> entityIdColumn, List<string> entityNameColumn)
         {
             StringBuilder queryBuilder = null;
-            String FilterValue = BuildQueryRowsFilter(entityIdColumn, queryFilter);
+         
             queryBuilder = new StringBuilder();
-            queryBuilder.AppendFormat("Filter({0}.CHILDREN as FilterValue,{1} ) * {2}.CHILDREN", entityIdColumn, FilterValue,entityNameColumn);
+            StringBuilder columns = new StringBuilder();
+            foreach (string value in entityNameColumn)
+            {
+                if (columns.Length == 0)
+                {
+                    columns.AppendFormat("{0}.CHILDREN", value);
+                }
+                else
+                {
+                    columns.AppendFormat("* {0}.CHILDREN", value);
+                }
+
+            }
+            StringBuilder ids = new StringBuilder();
+            foreach (string id in entityIdColumn)
+            {
+                String FilterValue = BuildQueryRowsFilter(id, queryFilter);
+                if (ids.Length == 0)
+                {
+                    ids.AppendFormat("Filter({0}.CHILDREN as FilterValue,{1} )", id, FilterValue);
+                }
+                else
+                {
+                    ids.AppendFormat("* Filter({0}.CHILDREN as FilterValue,{1} )", id, FilterValue);
+                }
+
+            }
+            queryBuilder.AppendFormat("{0} * {1}", ids.ToString(), columns.ToString());
             return queryBuilder.ToString();
         }
         protected string BuildQueryRowsFilter(string entityIdColumn, List<String> queryFilter)
@@ -124,30 +172,35 @@ namespace Vanrise.BI.Data.SQL
         }
 
 
-       private string GetEntityName(string entityTypeName,out string entityName){
-           entityName = null;
+        private void GetEntityName(List<string> entitiesTypeName, out List<string> entitiesName)
+        {
+            entitiesName = new List<string>();
            foreach (BIConfiguration<BIConfigurationEntity> obj in _entityDefinitions)
             {
-                if (entityTypeName == obj.Name)
-                {
-                 return  obj.Name;
-                }
+                foreach (string entityName in entitiesTypeName)
+                    if (entityName == obj.Name)
+                    {
+                        entitiesName.Add(obj.Name);
+                    }
             }
-           return null;
        }
 
-        void GetEntityColumns(string entityTypeName, out string idColumn, out string nameColumn)
+       void GetEntityColumns(List<string> entitiesTypeName, out List<string> idsColumn, out List<string> namesColumn)
         {
-            idColumn = null;
-            nameColumn = null;
+            idsColumn = new List<string>();
+            namesColumn = new List<string>();
 
             foreach (BIConfiguration<BIConfigurationEntity> obj in _entityDefinitions)
             {
-                if (entityTypeName == obj.Name)
+                foreach (string entityTypeName in entitiesTypeName)
                 {
-                    idColumn = obj.Configuration.ColumnID;
-                    nameColumn = obj.Configuration.ColumnName;
+                    if (entityTypeName == obj.Name)
+                    {
+                        idsColumn.Add(obj.Configuration.ColumnID);
+                        namesColumn.Add(obj.Configuration.ColumnName);
+                    }
                 }
+       
             }
 
         }

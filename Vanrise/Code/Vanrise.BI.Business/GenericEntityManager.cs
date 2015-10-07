@@ -56,7 +56,7 @@ namespace Vanrise.BI.Business
             return dataManager.GetMeasureValues(timeDimensionType, fromDate, toDate, customerIds, supplierIds,customerColumnId, measureTypeNames);
         }
 
-        public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(string entityType, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params string[] measureTypes)
+        public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(List<string> entityType, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params string[] measureTypes)
         {
             IBIConfigurationDataManager configurations = BIDataManagerFactory.GetDataManager<IBIConfigurationDataManager>();
             IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
@@ -67,7 +67,7 @@ namespace Vanrise.BI.Business
             string customerColumnId = null;
             return dataManager.GetEntityMeasuresValues(entityType, entityId, timeDimensionType, fromDate, toDate, customerIds, supplierIds,customerColumnId, measureTypes);
         }
-        public IEnumerable<EntityRecord> GetTopEntities(string entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, params string[] measureTypesNames)
+        public IEnumerable<EntityRecord> GetTopEntities(List<string> entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, params string[] measureTypesNames)
         {
             List<String> queryFilter = new List<String>();
             IBIConfigurationDataManager configurations = BIDataManagerFactory.GetDataManager<IBIConfigurationDataManager>();
@@ -76,7 +76,8 @@ namespace Vanrise.BI.Business
           
             foreach (BIConfiguration<BIConfigurationEntity> entity in entities)
             {
-                if (entityTypeName==entity.Name && entity.Configuration.BehaviorFQTN != null)
+                foreach (string entityType in entityTypeName)
+                    if (entityType == entity.Name && entity.Configuration.BehaviorFQTN != null)
                 {
                     var myObject = (IDimensionBehavior)Activator.CreateInstance(Type.GetType(entity.Configuration.BehaviorFQTN));
                     queryFilter=  myObject.GetFilteredValues();

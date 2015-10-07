@@ -3,7 +3,7 @@
         <vr-select datasource="operationTypes" datatextfield="description" datavaluefield="value" label="Data Type" selectedvalues="selectedOperationType" isrequired hidefilterbox></vr-select>
     </vr-columns>
     <vr-columns width="normal" ng-show=" selectedOperationType.value == 'TopEntities'">
-        <vr-select datasource="Entities" datatextfield="Name" datavaluefield="DisplayName" label="Entity" selectedvalues="selectedEntityType" isrequired hidefilterbox></vr-select>
+        <vr-select datasource="Entities" datatextfield="Name" datavaluefield="DisplayName" label="Entity" selectedvalues="selectedEntitiesType" ismultipleselection isrequired hidefilterbox></vr-select>
     </vr-columns>
     <vr-columns width="normal" ng-show=" selectedOperationType.value == 'TopEntities' && isPieChart">
         <vr-select datasource="Measures" datatextfield="Name" datavaluefield="DisplayName" label="Measures" selectedvalues="selectedMeasureType" onselectionchanged="onSelectionChanged" hidefilterbox></vr-select>
