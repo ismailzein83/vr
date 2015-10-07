@@ -33,5 +33,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             };
             return saleZonePackage;
         }
+
+
+        public bool AreZonePackagesUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_BE.SaleZonePackage", ref updateHandle);
+        }
     }
 }

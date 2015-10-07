@@ -11,6 +11,21 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SaleZoneManager
     {
+        #region Private Classes
+        
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            ISaleZoneDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired()
+            {
+                return _dataManager.AreZonesUpdated(ref _updateHandle);
+            }
+        }
+
+        #endregion
+
         public List<SaleZone> GetSaleZones(int packageId)
         {
             ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
@@ -20,8 +35,10 @@ namespace TOne.WhS.BusinessEntity.Business
         public List<SaleZone> GetCachedSaleZones(int packageId)
         {
             string cacheName = String.Format("GetCachedSaleZones_{0}", packageId);
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleZoneCacheManager>().GetOrCreateObject(cacheName, () => GetSaleZones(packageId));
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, () => GetSaleZones(packageId));
         }
+
+        
 
         public List<SaleZone> GetSaleZones(int packageId,DateTime effectiveDate)
         {
@@ -95,7 +112,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             List<SaleZone> allZones = GetCachedSaleZones(packageId);
             if (allZones != null)
-                return allZones.Where(itm => saleZoneIds == null || saleZoneIds.Contains(itm.SaleZoneId)).Select(itm => new SaleZoneInfo { SaleZoneId = itm.SaleZoneId, Name = itm.Name });
+                return allZones.Where(itm => saleZoneIds.Contains(itm.SaleZoneId)).Select(itm => new SaleZoneInfo { SaleZoneId = itm.SaleZoneId, Name = itm.Name });
             else
                 return null;
         }

@@ -80,8 +80,6 @@
     <Compile Include="RouteRulesByCriteria\RouteRulesByZoneProduct.cs" />
     <Compile Include="RoutingProductManager.cs" />
     <Compile Include="SaleZone\SaleCodeManager.cs" />
-    <Compile Include="SaleZone\SaleZoneCacheManager.cs" />
-    <Compile Include="SaleZone\SaleZonePackageCacheManager.cs" />
     <Compile Include="SelectiveCodeCriteriaBehavior.cs" />
     <Compile Include="SelectiveCustomerBehavior.cs" />
     <Compile Include="SelectiveSaleZonesBehavior.cs" />

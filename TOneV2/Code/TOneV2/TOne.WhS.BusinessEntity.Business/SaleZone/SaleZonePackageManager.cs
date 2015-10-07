@@ -10,16 +10,40 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SaleZonePackageManager
     {
-        public List<SaleZonePackage> GetSaleZonePackages()
+        #region Private Classes
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            ISaleZonePackageDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZonePackageDataManager>();
-            return dataManager.GetSaleZonePackages();
+            ISaleZonePackageDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISaleZonePackageDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreZonePackagesUpdated(ref _updateHandle);
+            }
         }
 
-        public List<SaleZonePackage> GetCachedSaleZonePackages()
+        #endregion
+
+        public List<SaleZonePackage> GetSaleZonePackages()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleZonePackageCacheManager>().GetOrCreateObject("GetCachedSaleZonePackages",
-                () => GetSaleZonePackages());
+            return GetCachedSaleZonePackages();
+
         }
+
+        #region Private Method
+
+        List<SaleZonePackage> GetCachedSaleZonePackages()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSaleZonePackages",
+               () =>
+               {
+                   ISaleZonePackageDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZonePackageDataManager>();
+                   return dataManager.GetSaleZonePackages();
+               });
+
+        }
+
+        #endregion
     }
 }

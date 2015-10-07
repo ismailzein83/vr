@@ -23,7 +23,7 @@ namespace TestRuntime
         public void Execute()
         {
             var saleZoneDataManager = new SaleZoneDataManager();
-            byte[] lastReceivedTimeStamp = null;
+            object lastReceivedTimeStamp = null;
             while(true)
             {
                 bool isDataUpdated = saleZoneDataManager.IsDataUpdated(ref lastReceivedTimeStamp);
@@ -257,7 +257,7 @@ namespace TestRuntime
         }
 
 
-        public bool IsDataUpdated(ref byte[] lastReceivedTimeStamp)
+        public bool IsDataUpdated(ref object lastReceivedTimeStamp)
         {
             return IsDataUpdated("TOneWhS_BE.SaleZone", ref lastReceivedTimeStamp);
         }

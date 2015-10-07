@@ -10,5 +10,7 @@ namespace TOne.WhS.BusinessEntity.Data
     public interface ISaleZonePackageDataManager:IDataManager
     {
          List<SaleZonePackage> GetSaleZonePackages();
+
+         bool AreZonePackagesUpdated(ref object updateHandle);
     }
 }

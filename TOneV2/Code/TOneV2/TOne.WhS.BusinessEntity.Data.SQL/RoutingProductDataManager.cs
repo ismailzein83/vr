@@ -95,5 +95,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return routingProductInfo;
         }
+
+
+        public bool AreRoutingProductsUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_BE.RoutingProduct", ref updateHandle);
+        }
     }
 }
