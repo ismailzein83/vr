@@ -2,8 +2,8 @@
 
     "use strict";
 
-    GHourlyReportController.$inject = ['$scope', 'GenericAnalyticDimensionEnum', 'GenericAnalyticMeasureEnum'];
-    function GHourlyReportController($scope, GenericAnalyticDimensionEnum, GenericAnalyticMeasureEnum) {
+    GHourlyReportController.$inject = ['$scope', 'GenericAnalyticDimensionEnum', 'GenericAnalyticMeasureEnum', 'UtilsService', 'VRNotificationService'];
+    function GHourlyReportController($scope, GenericAnalyticDimensionEnum, GenericAnalyticMeasureEnum, UtilsService, VRNotificationService) {
 
         load();
 
@@ -15,16 +15,23 @@
             $scope.fixedgroupKeys = [];
             $scope.filterKeys = [];
             $scope.measures = [];
+            $scope.measureChart = [];
+
             $scope.selectedobject = {};
 
             loadGroupKeys();
             loadFixedGroupKeys();
             loadFilterKeys();
             loadMeasures();
+            loadMeasuresChart();
 
             $scope.searchClicked = function () {
-                return retrieveData();
-            };
+                return UtilsService.waitMultipleAsyncOperations([retrieveData, retrieveDataChart]).finally(function () {
+
+                    }).catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    });
+                };
         }
 
         function retrieveData() {
@@ -37,7 +44,21 @@
                 ToTime: $scope.selectedobject.todate,
                 Currency: $scope.selectedobject.currency
             };
+            
             return $scope.subViewConnector.retrieveData(query);
+        }
+
+        function retrieveDataChart() {
+            var query = {
+                Filters: $scope.selectedobject.selectedfilters,
+                FixedDimensionFields: $scope.fixedgroupKeys,
+                FromTime: $scope.selectedobject.fromdate,
+                ToTime: $scope.selectedobject.todate,
+                Currency: $scope.selectedobject.currency,
+                MeasureChart: $scope.measureChart
+            };
+
+            return $scope.subViewConnector.retrieveDataChart(query);
         }
 
         function load() {
@@ -60,7 +81,6 @@
 
         function loadFixedGroupKeys() {
             $scope.fixedgroupKeys.push(GenericAnalyticDimensionEnum.Hour);
-            $scope.fixedgroupKeys.push(GenericAnalyticDimensionEnum.Date);
         }
 
         function loadFilterKeys() {
@@ -88,6 +108,34 @@
             $scope.measures.push(GenericAnalyticMeasureEnum.FailedAttempts);
             $scope.measures.push(GenericAnalyticMeasureEnum.DurationsInSeconds);
             $scope.measures.push(GenericAnalyticMeasureEnum.LastCDRAttempt);
+        }
+
+        function loadMeasuresChart() {
+            $scope.measureChart.push({
+                measure: (GenericAnalyticMeasureEnum.SuccessfulAttempts)
+            });
+
+            $scope.measureChart.push({
+                measure: (GenericAnalyticMeasureEnum.ASR)
+            });
+
+            $scope.measureChart.push({
+                measure: (GenericAnalyticMeasureEnum.ACD)
+            });
+
+            $scope.measureChart.push({
+                measure: (GenericAnalyticMeasureEnum.NER)
+            });
+
+            for (var i = 0; i < $scope.measureChart.length; i++) {
+                setChartApi($scope.measureChart[i]);
+            }
+        }
+
+        function setChartApi(chartFunction) {
+            chartFunction.chartSelectedEntityReady = function (api) {
+                chartFunction.API = api;
+            }
         }
     }
     appControllers.controller('Analytics_GHourlyReportController', GHourlyReportController);

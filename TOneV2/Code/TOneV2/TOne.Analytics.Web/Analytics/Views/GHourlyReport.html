@@ -1,7 +1,7 @@
 ﻿<vr-panel ng-controller="Analytics_GHourlyReportController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
-            <vr-an-generalfilter dimensionsvalues="groupKeys" filtervalues="filterKeys" selectedobject="selectedobject" isrequired></vr-an-generalfilter>
+            <vr-an-generalfilter dimensionsvalues="groupKeys" filtervalues="filterKeys" selectedobject="selectedobject"></vr-an-generalfilter>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
@@ -12,6 +12,9 @@
         </vr-row>
         <div>
             <vr-row>
+                
+                <div ng-include="'/Client/Modules/Analytics/Views/GenericAnalytic/GenericAnalyticChart.html'"></div>
+
                 <vr-columns colnum="12">
                     <div ng-include="'/Client/Modules/Analytics/Views/GenericAnalytic/GenericAnalyticGrid.html'"></div>
                 </vr-columns>

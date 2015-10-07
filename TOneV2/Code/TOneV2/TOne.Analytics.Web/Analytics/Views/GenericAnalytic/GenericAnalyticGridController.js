@@ -2,8 +2,8 @@
 
     "use strict";
 
-    genericAnalyticGridController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticMeasureEnum', 'VRModalService', 'GenericAnalyticService'];
-    function genericAnalyticGridController($scope, GenericAnalyticAPIService, GenericAnalyticMeasureEnum, vrModalService, GenericAnalyticService) {
+    genericAnalyticGridController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticDimensionEnum', 'VRModalService', 'GenericAnalyticService'];
+    function genericAnalyticGridController($scope, GenericAnalyticAPIService, GenericAnalyticDimensionEnum, vrModalService, GenericAnalyticService) {
         var gridApi;
         var measureFieldsValues = [];
         var parameters = {
@@ -45,17 +45,22 @@
                 value.DimensionFields.forEach(function (group) {
                     groupKeys.push(group.value);
                 });
-
+                
                 if (value.FixedDimensionFields == undefined)
                     value.FixedDimensionFields = [];
 
                 value.FixedDimensionFields.forEach(function (group) {
                     groupKeys.push(group.value);
                     fixedDimensions.push(group);
+
+                    if (group == GenericAnalyticDimensionEnum.Hour) {
+                        groupKeys.push(GenericAnalyticDimensionEnum.Date.value);
+                        fixedDimensions.push(GenericAnalyticDimensionEnum.Date);
+                    }
                 });
 
                 selectedGroupKeys = value.DimensionFields;
-
+                
                 for (var i = 0, len = value.MeasureFields.length; i < len; i++) {
                     measureFieldsValues.push(value.MeasureFields[i].value);
                 }
@@ -77,6 +82,7 @@
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                
                 return GenericAnalyticAPIService.GetFiltered(dataRetrievalInput)
                 .then(function (response) {
                     $scope.currentSearchCriteria.groupKeys.length = 0;
@@ -90,6 +96,7 @@
                     });
                     //gridApi.setSummary(response.Summary);
 
+                    //$scope.subViewConnector.renderChart(response);
                     onResponseReady(response);
                 });
             };

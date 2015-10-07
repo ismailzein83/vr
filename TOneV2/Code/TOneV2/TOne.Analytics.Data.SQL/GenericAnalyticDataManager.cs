@@ -59,7 +59,7 @@ namespace TOne.Analytics.Data.SQL
                 var measureField = input.Query.MeasureFields[i];
                 var measureFieldConfig = measureFieldsConfig[measureField];
                 if (measureFieldConfig.MappedSQLColumn != null)
-                    columnsMappings.Add(String.Format("MeasureValues[{0}]", i), measureFieldConfig.MappedSQLColumn);
+                    columnsMappings.Add(String.Format("MeasureValues.{0}", input.Query.MeasureFields[i]), measureFieldConfig.MappedSQLColumn);
             }
 
             return RetrieveData(input, createTempTableIfNotExistsAction, (reader) => AnalyticRecordMapper(reader, dimensionsConfig, measureFieldsConfig), columnsMappings);

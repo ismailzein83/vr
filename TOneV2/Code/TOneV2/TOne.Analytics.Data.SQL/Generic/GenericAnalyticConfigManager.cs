@@ -159,8 +159,8 @@ namespace TOne.Analytics.Data.SQL
             s_AllDimensionsConfig.Add(AnalyticDimension.Date,
                 new AnalyticDimensionConfig
                 {
-                    IdColumn = "dateadd(dd,0, datediff(dd,0,LastCDRAttempt))",
-                    NameColumn = "dateadd(dd,0, datediff(dd,0,LastCDRAttempt))",
+                    IdColumn = "CONVERT(VARCHAR(10),dateadd(dd,0, datediff(dd,0,LastCDRAttempt)),101)",
+                    NameColumn = "CONVERT(VARCHAR(10),dateadd(dd,0, datediff(dd,0,LastCDRAttempt)),101)",
                     JoinStatements = null,
                     GroupByStatements = new List<string>() { "dateadd(dd,0, datediff(dd,0,LastCDRAttempt))" }
                 });
@@ -377,6 +377,7 @@ namespace TOne.Analytics.Data.SQL
                         (query) => MeasureValueExpression.SuccessfulAttempts_Expression,
                         (query) => MeasureValueExpression.DurationsInSeconds_Expression
                     },
+                    MappedSQLColumn = "Measure_ACD",
                     GetMeasureValue = (reader, record) =>
                     {
                         var successfulAttempts = GetReaderValue<int>(reader, MeasureValueExpression.SuccessfulAttempts_Expression.ColumnAlias);
@@ -392,6 +393,7 @@ namespace TOne.Analytics.Data.SQL
                                     (query) => MeasureValueExpression.Attempts_Expression,
                                     (query) => MeasureValueExpression.DeliveredAttempts_Expression
                                 },
+                    MappedSQLColumn = "Measure_DeliveredASR",
                     GetMeasureValue = (reader, record) =>
                     {
                         var attempts = GetReaderValue<int>(reader, MeasureValueExpression.Attempts_Expression.ColumnAlias);
@@ -440,6 +442,7 @@ namespace TOne.Analytics.Data.SQL
                         (query) => MeasureValueExpression.UtilizationInSeconds_Expression,
                         (query) => MeasureValueExpression.NominalCapacityInE1s_Expression
                     },
+                    MappedSQLColumn = "Measure_GreenArea",
                     GetMeasureValue = (reader, record) => 
                         {
                             var nominalCapacity = GetReaderValue<int>(reader, MeasureValueExpression.NominalCapacityInE1s_Expression.ColumnAlias);
@@ -456,6 +459,7 @@ namespace TOne.Analytics.Data.SQL
                         (query) => MeasureValueExpression.UtilizationInSeconds_Expression,
                         (query) => MeasureValueExpression.NominalCapacityInE1s_Expression
                     },
+                    MappedSQLColumn = "Measure_GrayArea",
                     GetMeasureValue = (reader, record) =>
                     {
                         var nominalCapacity = GetReaderValue<int>(reader, MeasureValueExpression.NominalCapacityInE1s_Expression.ColumnAlias);
@@ -521,6 +525,7 @@ namespace TOne.Analytics.Data.SQL
                                     (query) => MeasureValueExpression.UtilizationInSeconds_Expression,
                                     (query) => MeasureValueExpression.NominalCapacityInE1s_Expression
                                             },
+                    MappedSQLColumn = "Measure_CapacityUsageDetails",
                     GetMeasureValue = (reader, record) =>
                     {
                         var nominalCapacity = GetReaderValue<int>(reader, MeasureValueExpression.NominalCapacityInE1s_Expression.ColumnAlias);
