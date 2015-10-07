@@ -1,9 +1,12 @@
 ﻿<div style="display:inline-block;width: calc(100% - 18px);" vr-loader="isLoadingDirective">
-    <vr-select ng-show="showSaleZonePackage" datatextfield="Name" datavaluefield="SaleZonePackageId"
-               label="Sale Zone Package" datasource="saleZonePackages" selectedvalues="selectedSaleZonePackage">
-    </vr-select>
-
-    <vr-select ismultipleselection isrequired label="Sale Zone" datasource="searchZones" selectedvalues="selectedSaleZones"
-               datatextfield="Name" datavaluefield="SaleZoneId" entityname="Sale Zone">
-    </vr-select>
+    <vr-columns colnum="4">
+        <vr-select ng-show="showSaleZonePackage" datatextfield="Name" datavaluefield="SaleZonePackageId"
+                   label="Sale Zone Package" datasource="saleZonePackages" selectedvalues="selectedSaleZonePackage">
+        </vr-select>
+    </vr-columns>
+    <vr-columns colnum="4">
+        <vr-select ismultipleselection isrequired label="Sale Zone" datasource="searchZones" selectedvalues="selectedSaleZones"
+                   datatextfield="Name" datavaluefield="SaleZoneId" entityname="Sale Zone">
+        </vr-select>
+    </vr-columns>
 </div>
