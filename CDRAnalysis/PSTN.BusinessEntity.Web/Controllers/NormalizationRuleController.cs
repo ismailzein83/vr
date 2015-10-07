@@ -3,9 +3,11 @@ using PSTN.BusinessEntity.Entities;
 using System.Collections.Generic;
 using System.Web.Http;
 using Vanrise.Entities;
+using Vanrise.Web.Base;
 
 namespace PSTN.BusinessEntity.Web.Controllers
 {
+    [JSONWithTypeAttribute]
     public class NormalizationRuleController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpPost]
@@ -34,6 +36,20 @@ namespace PSTN.BusinessEntity.Web.Controllers
         {
             NormalizationRuleManager manager = new NormalizationRuleManager();
             return manager.AddNormalizationRule(normalizationRuleObj);
+        }
+
+        [HttpPost]
+        public UpdateOperationOutput<NormalizationRuleDetail> UpdateNormalizationRule(NormalizationRule normalizationRuleObj)
+        {
+            NormalizationRuleManager manager = new NormalizationRuleManager();
+            return manager.UpdateNormalizationRule(normalizationRuleObj);
+        }
+
+        [HttpGet]
+        public DeleteOperationOutput<object> DeleteNormalizationRule(int normalizationRuleId)
+        {
+            NormalizationRuleManager manager = new NormalizationRuleManager();
+            return manager.DeleteNormalizationRule(normalizationRuleId);
         }
     }
 }

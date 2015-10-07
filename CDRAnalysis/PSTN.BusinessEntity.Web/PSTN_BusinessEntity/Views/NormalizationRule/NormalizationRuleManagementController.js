@@ -1,21 +1,30 @@
-﻿NormalizationRuleManagementController.$inject = ["$scope"];
+﻿NormalizationRuleManagementController.$inject = ["$scope", "PSTN_BE_Service"];
 
-function NormalizationRuleManagementController($scope) {
+function NormalizationRuleManagementController($scope, PSTN_BE_Service) {
 
-    var gridAPI;
+    var directiveGridAPI;
 
     defineScope();
     load();
 
     function defineScope() {
 
-        $scope.onNormalizationRuleGridReady = function (api) {
-            gridAPI = api;
+        $scope.onDirectiveGridReady = function (api) {
+            directiveGridAPI = api;
             retrieveData();
         };
 
-        $scope.searchClicked = function () {
+        $scope.onSearchClicked = function () {
             retrieveData();
+        };
+
+        $scope.addNormalizationRule = function () {
+
+            var onNormalizationRuleAdded = function (normalizationRuleObj) {
+                directiveGridAPI.onNormalizationRuleAdded(normalizationRuleObj);
+            };
+
+            PSTN_BE_Service.addNormalizationRule(onNormalizationRuleAdded);
         };
 
     }
@@ -25,9 +34,9 @@ function NormalizationRuleManagementController($scope) {
     }
 
     function retrieveData() {
-        if (gridAPI != undefined) {
+        if (directiveGridAPI != undefined) {
             var query = getFilterObject();
-            return gridAPI.retrieveData(query);
+            return directiveGridAPI.retrieveData(query);
         }
     }
 

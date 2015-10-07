@@ -30,21 +30,20 @@
 
                         <vr-columns width="1/2row">
                             <vr-select label="Number Type"
-                                       datasource="numberTypes"
-                                       selectedvalues="selectedNumberTypes"
+                                       datasource="phoneNumberTypes"
+                                       selectedvalues="selectedPhoneNumberType"
                                        datavaluefield="value"
                                        datatextfield="description"
-                                       entityname="Number Type"
-                                       ismultipleselection>
+                                       entityname="Number Type">
                             </vr-select>
                         </vr-columns>
 
                         <vr-columns width="1/2row">
-                            <vr-textbox label="Number Length" value="numberLength"></vr-textbox>
+                            <vr-textbox label="Number Length" value="phoneNumberLength"></vr-textbox>
                         </vr-columns>
 
                         <vr-columns width="1/2row">
-                            <vr-textbox label="Number Prefix" value="numberPrefix"></vr-textbox>
+                            <vr-textbox label="Number Prefix" value="phoneNumberPrefix"></vr-textbox>
                         </vr-columns>
 
                     </vr-section>
@@ -58,27 +57,27 @@
                         <vr-row>
                             <vr-columns width="1/2row">
                                 <vr-select label="Behavior"
-                                           datasource="templates"
-                                           selectedvalues="selectedTemplate"
+                                           datasource="normalizationRuleActionSettingsTemplates"
+                                           selectedvalues="selectedNormalizationRuleActionSettingsTemplate"
+                                           onselectionchanged="onNormalizationRuleActionSettingsTemplateChanged"
                                            datavaluefield="TemplateConfigID"
                                            datatextfield="Name"
                                            entityname="Behavior"
-                                           hideremoveicon
-                                           isrequired>
+                                           hideremoveicon>
                                 </vr-select>
                             </vr-columns>
 
                             <vr-columns width="1/2row">
-                                <div style="top:25px;position:absolute;" vr-disabled="selectedTemplate == undefined">
-                                    <vr-button type="Add" data-onclick="addAction" standalone></vr-button>
+                                <div style="top:25px;position:absolute;" vr-disabled="isAddButtonDisabled">
+                                    <vr-button type="Add" data-onclick="addNormalizationRuleActionSettingsObjToList" standalone></vr-button>
                                 </div>
                             </vr-columns>
                         </vr-row>
 
                         <vr-row>
                             <vr-columns width="fullrow">
-                                <vr-directivewrapper directive="selectedTemplate.Editor"
-                                                     behaviorid="selectedTemplate.TemplateConfigID"
+                                <vr-directivewrapper directive="selectedNormalizationRuleActionSettingsTemplate.Editor"
+                                                     behaviorid="selectedNormalizationRuleActionSettingsTemplate.TemplateConfigID"
                                                      onloaded="onNormalizationRuleActionSettingsDirectiveLoaded">
                                 </vr-directivewrapper>
                             </vr-columns>
@@ -87,16 +86,16 @@
                         <vr-row>
                             <vr-columns width="fullrow">
 
-                                <ul class="list-group dragbelzone" ng-sortable="itemsSortable" ng-show="actions.length > 0">
-                                    <li ng-repeat="action in actions" class="list-group-item list-custom" style="margin:1px;">
+                                <ul class="list-group dragbelzone" ng-sortable="itemsSortable" ng-show="normalizationRuleActionSettingsList.length > 0">
+                                    <li ng-repeat="normalizationRuleActionSettingsObj in normalizationRuleActionSettingsList" class="list-group-item list-custom" style="margin:1px;">
                                         <i class="glyphicon glyphicon-th-list handeldrag"></i>
-                                        <div style="display:inline-block;">
-                                            <vr-directivewrapper directive="action.Editor"
-                                                                 behaviorid="action.BehaviorId"
-                                                                 onloaded="onDirectiveLoaded">
+                                        <div style="display:inline-block;" vr-disabled="true">
+                                            <vr-directivewrapper directive="normalizationRuleActionSettingsObj.Editor"
+                                                                 behaviorid="normalizationRuleActionSettingsObj.BehaviorId"
+                                                                 onloaded="onListItemDirectiveLoaded">
                                             </vr-directivewrapper>
                                         </div>
-                                        <i class="glyphicon glyphicon-remove hand-cursor" style="float:right;padding:5px;cursor:default" ng-click="removeAction($event, action)"></i>
+                                        <i class="glyphicon glyphicon-remove hand-cursor" style="float:right;padding:5px;cursor:default" ng-click="removeNormalizationRuleActionSettingsObjFromList($event, normalizationRuleActionSettingsObj)"></i>
                                     </li>
                                 </ul>
 

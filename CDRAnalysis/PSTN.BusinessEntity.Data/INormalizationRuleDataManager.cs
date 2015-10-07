@@ -11,5 +11,9 @@ namespace PSTN.BusinessEntity.Data
         NormalizationRuleDetail GetNormalizationRuleDetailByID(int normalizationRuleId);
 
         bool AddNormalizationRule(NormalizationRule normalizationRuleObj, out int insertedID);
+
+        bool UpdateNormalizationRule(NormalizationRule normalizationRuleObj);
+
+        bool DeleteNormalizationRule(int normalizationRuleId);
     }
 }

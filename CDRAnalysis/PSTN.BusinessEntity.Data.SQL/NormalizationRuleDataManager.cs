@@ -28,22 +28,40 @@ namespace PSTN.BusinessEntity.Data.SQL
 
         public NormalizationRule GetNormalizationRuleByID(int normalizationRuleId)
         {
-            return GetItemSP("PSTN_BE.sp_NormalizationRule_GetByID", NormalizationRuleMapper);
+            return GetItemSP("PSTN_BE.sp_NormalizationRule_GetByID", NormalizationRuleMapper, normalizationRuleId);
         }
 
         public NormalizationRuleDetail GetNormalizationRuleDetailByID(int normalizationRuleId)
         {
-            return GetItemSP("PSTN_BE.sp_NormalizationRule_GetDetailByID", NormalizationRuleDetailMapper);
+            return GetItemSP("PSTN_BE.sp_NormalizationRule_GetDetailByID", NormalizationRuleDetailMapper, normalizationRuleId);
         }
 
         public bool AddNormalizationRule(NormalizationRule normalizationRuleObj, out int insertedID)
         {
             object normalizationRuleId;
 
-            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_Insert", out normalizationRuleId, normalizationRuleObj.Criteria, normalizationRuleObj.Settings);
+            string serializedCriteria = Vanrise.Common.Serializer.Serialize(normalizationRuleObj.Criteria);
+            string serializedSettings = Vanrise.Common.Serializer.Serialize(normalizationRuleObj.Settings);
+
+            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_Insert", out normalizationRuleId, serializedCriteria, serializedSettings);
 
             insertedID = (recordsAffected > 0) ? (int)normalizationRuleId : -1;
             return (recordsAffected > 0);
+        }
+
+        public bool UpdateNormalizationRule(NormalizationRule normalizationRuleObj)
+        {
+            string serializedCriteria = Vanrise.Common.Serializer.Serialize(normalizationRuleObj.Criteria);
+            string serializedSettings = Vanrise.Common.Serializer.Serialize(normalizationRuleObj.Settings);
+
+            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_Update", normalizationRuleObj.NormalizationRuleId, serializedCriteria, serializedSettings);
+            return (recordsAffected > 0);
+        }
+
+        public bool DeleteNormalizationRule(int normalizationRuleId)
+        {
+            int recordsEffected = ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_Delete", normalizationRuleId);
+            return (recordsEffected > 0);
         }
 
         #region Mappers

@@ -21,7 +21,6 @@ app.directive("vrPstnBeNormalizationrulegrid", ["PSTN_BE_Service", "Normalizatio
         templateUrl: "/Client/Modules/PSTN_BusinessEntity/Directives/Templates/NormalizationRuleGridTemplate.html"
     };
 
-
     function NormalizationRuleGrid($scope, ctrl) {
 
         var gridAPI;
@@ -68,15 +67,19 @@ app.directive("vrPstnBeNormalizationrulegrid", ["PSTN_BE_Service", "Normalizatio
 
         function editNormalizationRule(dataItem) {
             
-            var onNormalizationRuleUpdated = function (normalizationRuleObject) {
-                gridAPI.itemUpdated(normalizationRuleObject);
+            var onNormalizationRuleUpdated = function (normalizationRuleObj) {
+                gridAPI.itemUpdated(normalizationRuleObj);
             }
 
             PSTN_BE_Service.editNormalizationRule(dataItem, onNormalizationRuleUpdated);
         }
 
         function deleteNormalizationRule(dataItem) {
+            var onNormalizationRuleDeleted = function (normalizationRuleObj) {
+                gridAPI.itemDeleted(normalizationRuleObj);
+            }
 
+            PSTN_BE_Service.deleteNormalizationRule(dataItem, onNormalizationRuleDeleted);
         }
 
         function defineMenuActions() {

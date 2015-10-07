@@ -1,210 +1,260 @@
-﻿NormalizationRuleEditorController.$inject = ["$scope", "NormalizationRuleAPIService", "SwitchAPIService", "SwitchTrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "UtilsService", "VRNavigationService", "VRNotificationService"];
+﻿(function (appControllers) {
+    
+    "use strict";
 
-function NormalizationRuleEditorController($scope, NormalizationRuleAPIService, SwitchAPIService, SwitchTrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, UtilsService, VRNavigationService, VRNotificationService) {
+    NormalizationRuleEditorController.$inject = ["$scope", "NormalizationRuleAPIService", "SwitchAPIService", "SwitchTrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "UtilsService", "VRNavigationService", "VRNotificationService"];
 
-    var normalizationRuleId;
-    var editMode;
+    function NormalizationRuleEditorController($scope, NormalizationRuleAPIService, SwitchAPIService, SwitchTrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, UtilsService, VRNavigationService, VRNotificationService) {
 
-    var normalizationRuleActionSettingsDirectiveAPI;
-    var normalizationRuleActionSettings;
+        var editMode;
+        var normalizationRuleId;
 
-    loadParameters();
-    defineScope();
-    load();
+        var normalizationRuleActionSettingsDirectiveAPI;
+        var normalizationRuleActionSettings;
+        var normalizationRuleActionSettingsDataObject;
 
-    function loadParameters() {
-        var parameters = VRNavigationService.getParameters($scope);
+        loadParameters();
+        defineScope();
+        load();
 
-        if (parameters != undefined && parameters != null) {
-            normalizationRuleId = parameters.NormalizationRuleId;
-        }
+        function loadParameters() {
+            var parameters = VRNavigationService.getParameters($scope);
 
-        editMode = (normalizationRuleId != undefined);
-    }
-
-    function defineScope() {
-
-        $scope.switches = [];
-        $scope.selectedSwitches = [];
-
-        $scope.trunks = [];
-        $scope.selectedTrunks = [];
-
-        $scope.numberTypes = UtilsService.getArrayEnum(PSTN_BE_PhoneNumberTypeEnum);
-        $scope.selectedNumberTypes = [];
-
-        $scope.numberLength = undefined;
-        $scope.numberPrefix = undefined;
-
-        $scope.templates = [];
-        $scope.selectedTemplate = undefined;
-
-        $scope.actions = [];
-
-        $scope.onNormalizationRuleActionSettingsDirectiveLoaded = function (api) {
-            normalizationRuleActionSettingsDirectiveAPI = api;
-
-            if (normalizationRuleActionSettings != undefined) {
-                normalizationRuleActionSettingsDirectiveAPI.setData(normalizationRuleActionSettings);
-                normalizationRuleActionSettings = undefined;
+            if (parameters != undefined && parameters != null) {
+                normalizationRuleId = parameters.NormalizationRuleId;
             }
+
+            editMode = (normalizationRuleId != undefined);
         }
 
-        $scope.addAction = function () {
-            var action = {
-                ActionId: $scope.actions.length + 1,
-                BehaviorId: $scope.selectedTemplate.TemplateConfigID,
-                Editor: $scope.selectedTemplate.Editor,
-                Data: normalizationRuleActionSettingsDirectiveAPI.getData()
+        function defineScope() {
+
+            $scope.switches = [];
+            $scope.selectedSwitches = [];
+
+            $scope.trunks = [];
+            $scope.selectedTrunks = [];
+
+            $scope.phoneNumberTypes = UtilsService.getArrayEnum(PSTN_BE_PhoneNumberTypeEnum);
+            $scope.selectedPhoneNumberType = undefined;
+
+            $scope.phoneNumberLength = undefined;
+            $scope.phoneNumberPrefix = undefined;
+
+            $scope.normalizationRuleActionSettingsTemplates = [];
+            $scope.selectedNormalizationRuleActionSettingsTemplate = undefined;
+            $scope.isAddButtonDisabled = true;
+
+            $scope.normalizationRuleActionSettingsList = [];
+
+            $scope.onNormalizationRuleActionSettingsTemplateChanged = function () {
+                $scope.isAddButtonDisabled = ($scope.selectedNormalizationRuleActionSettingsTemplate == undefined);
+            }
+
+            $scope.onNormalizationRuleActionSettingsDirectiveLoaded = function (api) {
+                normalizationRuleActionSettingsDirectiveAPI = api;
+
+                if (normalizationRuleActionSettings != undefined) {
+                    normalizationRuleActionSettingsDirectiveAPI.setData(normalizationRuleActionSettings);
+                    normalizationRuleActionSettings = undefined;
+                }
+            }
+
+            $scope.addNormalizationRuleActionSettingsObjToList = function () {
+
+                var normalizationRuleActionSettingsObj = {
+                    ObjectId: $scope.normalizationRuleActionSettingsList.length + 1,
+                    Editor: $scope.selectedNormalizationRuleActionSettingsTemplate.Editor,
+                    Data: normalizationRuleActionSettingsDirectiveAPI.getData()
+                };
+
+                $scope.normalizationRuleActionSettingsList.push(normalizationRuleActionSettingsObj);
+            }
+
+            $scope.removeNormalizationRuleActionSettingsObjFromList = function ($event, normalizationRuleActionSettingsObj) {
+                $event.preventDefault();
+                $event.stopPropagation();
+
+                var index = UtilsService.getItemIndexByVal($scope.normalizationRuleActionSettingsList, normalizationRuleActionSettingsObj.ActionId, 'ObjectId');
+                $scope.normalizationRuleActionSettingsList.splice(index, 1);
             };
 
-            $scope.actions.push(action);
-            console.log($scope.actions);
-        }
+            $scope.onListItemDirectiveLoaded = function (api) {
 
-        $scope.removeAction = function ($event, action) {
-            $event.preventDefault();
-            $event.stopPropagation();
-            
-            var index = UtilsService.getItemIndexByVal($scope.actions, action.ActionId, 'ActionId');
-            $scope.actions.splice(index, 1);
-        };
-
-        $scope.onDirectiveLoaded = function (api) {
-            var data = normalizationRuleActionSettingsDirectiveAPI.getData();
-            api.setData(data);
-        }
-
-        $scope.saveNormalizationRule = function () {
-            if (editMode)
-                return updateNormalizationRule();
-            else
-                return insertNormalizationRule();
-        };
-
-        $scope.close = function () {
-            $scope.modalContext.closeModal();
-        };
-    }
-
-    function load() {
-        $scope.isGettingData = true;
-
-        UtilsService.waitMultipleAsyncOperations([loadSwitches, loadTrunks, loadTemplates])
-            .then(function () {
-                // code goes here
-            })
-            .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            })
-            .finally(function () {
-                $scope.isGettingData = false;
-            });
-    }
-
-    function loadSwitches() {
-        return SwitchAPIService.GetSwitches()
-            .then(function (responseArray) {
-                angular.forEach(responseArray, function (item) {
-                    $scope.switches.push(item);
-                });
-            });
-    }
-
-    function loadTrunks() {
-        return SwitchTrunkAPIService.GetSwitchTrunks()
-            .then(function (responseArray) {
-                angular.forEach(responseArray, function (item) {
-                    $scope.trunks.push(item);
-                });
-            });
-    }
-
-    function loadTemplates() {
-        return NormalizationRuleAPIService.GetNormalizationRuleActionBehaviorTemplates()
-            .then(function (responseArray) {
-                angular.forEach(responseArray, function (item) {
-                    $scope.templates.push(item);
-                });
-            });
-    }
-
-    function fillScopeFromNormalizationRuleObj(trunkObj) {
-        $scope.name = trunkObj.Name;
-        $scope.symbol = trunkObj.Symbol;
-        $scope.selectedSwitch = UtilsService.getItemByVal($scope.switches, trunkObj.SwitchID, "ID");
-        $scope.selectedType = UtilsService.getEnum(SwitchTrunkTypeEnum, "value", trunkObj.Type);
-        $scope.selectedDirection = UtilsService.getEnum(SwitchTrunkDirectionEnum, "value", trunkObj.Direction);
-        currentlyLinkedToTrunkID = trunkObj.LinkedToTrunkID;
-    }
-
-    function buildNormalizationRuleObjFromScope() {
-
-        var normalizationRuleObj = {
-            NormalizationRuleId: (normalizationRuleId != undefined) ? normalizationRuleId : null,
-            Criteria: {
-                SwitchIds: UtilsService.getPropValuesFromArray($scope.selectedSwitches, "ID"),
-                TrunkIds: UtilsService.getPropValuesFromArray($scope.selectedTrunks, "ID"),
-                PhoneNumberType: ($scope.selectedNumberTypes.length == 1) ? $scope.selectedNumberTypes[0].value : null,
-                PhoneNumberLength: $scope.numberLength,
-                PhoneNumberPrefix: $scope.numberPrefix
-            },
-            Settings: {
-                Actions: ($scope.actions.length > 0) ? getActions() : null
+                if (normalizationRuleActionSettingsDirectiveAPI != undefined)
+                    var data = normalizationRuleActionSettingsDirectiveAPI.getData();
+                
+                api.setData(data);
             }
-        };
 
-        return normalizationRuleObj;
-    }
+            $scope.saveNormalizationRule = function () {
+                if (editMode)
+                    return updateNormalizationRule();
+                else
+                    return insertNormalizationRule();
+            };
 
-    function getActions() {
-        var array = [];
+            $scope.close = function () {
+                $scope.modalContext.closeModal();
+            };
+        }
 
-        angular.forEach($scope.actions, function (item) {
-            item.Data.BehaviorId = item.BehaviorId;
-            array.push(item.Data);
-        });
+        function load() {
+            $scope.isGettingData = true;
 
-        return array;
-    }
+            UtilsService.waitMultipleAsyncOperations([loadSwitches, loadTrunks, loadTemplates])
+                .then(function () {
+                    if (editMode) {
+                        NormalizationRuleAPIService.GetNormalizationRuleByID(normalizationRuleId)
+                            .then(function (responseObject) {
+                                fillScopeFromNormalizationRuleObj(responseObject);
+                            })
+                            .catch(function (error) {
+                                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                            })
+                            .finally(function () {
+                                $scope.isGettingData = false;
+                            });
+                    }
+                    else {
+                        $scope.isGettingData = false;
+                    }
+                })
+                .catch(function (error) {
+                    $scope.isGettingData = false;
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                });
+        }
 
-    function updateNormalizationRule() {
-        var normalizationRuleObj = buildNormalizationRuleObjFromScope();
+        function loadSwitches() {
+            return SwitchAPIService.GetSwitches()
+                .then(function (responseArray) {
+                    angular.forEach(responseArray, function (item) {
+                        $scope.switches.push(item);
+                    });
+                });
+        }
 
-        return NormalizationRuleAPIService.UpdateNormalizationRule(normalizationRuleObj)
-            .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Normalization Rule", response, "Name")) {
-                    if ($scope.onNormalizationRuleUpdated != undefined)
-                        $scope.onNormalizationRuleUpdated(response.UpdatedObj);
+        function loadTrunks() {
+            return SwitchTrunkAPIService.GetSwitchTrunks()
+                .then(function (responseArray) {
+                    angular.forEach(responseArray, function (item) {
+                        $scope.trunks.push(item);
+                    });
+                });
+        }
 
-                    $scope.modalContext.closeModal();
+        function loadTemplates() {
+            return NormalizationRuleAPIService.GetNormalizationRuleActionBehaviorTemplates()
+                .then(function (responseArray) {
+                    angular.forEach(responseArray, function (item) {
+                        $scope.normalizationRuleActionSettingsTemplates.push(item);
+                    });
+                });
+        }
+
+        function fillScopeFromNormalizationRuleObj(normalizationRuleObj) {
+            $scope.selectedSwitches = (normalizationRuleObj.Criteria.SwitchIds != null) ?
+                getItemsByPropValues($scope.switches, normalizationRuleObj.Criteria.SwitchIds, "ID") : [];
+
+            $scope.selectedTrunks = (normalizationRuleObj.Criteria.TrunkIds != null) ?
+                getItemsByPropValues($scope.trunks, normalizationRuleObj.Criteria.TrunkIds, "ID") : [];
+
+            $scope.selectedPhoneNumberType = (normalizationRuleObj.Criteria.PhoneNumberType != null) ?
+                UtilsService.getItemByVal($scope.phoneNumberTypes, normalizationRuleObj.Criteria.PhoneNumberType, "value") : undefined;
+
+            $scope.phoneNumberLength = normalizationRuleObj.Criteria.PhoneNumberLength;
+            $scope.phoneNumberPrefix = normalizationRuleObj.Criteria.PhoneNumberPrefix;
+
+            console.log(normalizationRuleObj.Settings.Actions);
+            addFetchedNormalizationRuleActionSettingsToList(normalizationRuleObj.Settings.Actions);
+        }
+
+        function buildNormalizationRuleObjFromScope() {
+
+            var normalizationRuleObj = {
+                NormalizationRuleId: (normalizationRuleId != undefined) ? normalizationRuleId : null,
+                Criteria: {
+                    SwitchIds: UtilsService.getPropValuesFromArray($scope.selectedSwitches, "ID"),
+                    TrunkIds: UtilsService.getPropValuesFromArray($scope.selectedTrunks, "ID"),
+                    PhoneNumberType: ($scope.selectedPhoneNumberType != undefined) ? $scope.selectedPhoneNumberType.value : null,
+                    PhoneNumberLength: $scope.phoneNumberLength,
+                    PhoneNumberPrefix: $scope.phoneNumberPrefix
+                },
+                Settings: {
+                    Actions: ($scope.normalizationRuleActionSettingsList.length > 0) ? UtilsService.getPropValuesFromArray($scope.normalizationRuleActionSettingsList, "Data") : null
                 }
-            })
-            .catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            });
+            };
+
+            return normalizationRuleObj;
+        }
+
+        function updateNormalizationRule() {
+            var normalizationRuleObj = buildNormalizationRuleObjFromScope();
+
+            return NormalizationRuleAPIService.UpdateNormalizationRule(normalizationRuleObj)
+                .then(function (response) {
+                    if (VRNotificationService.notifyOnItemUpdated("Normalization Rule", response)) {
+                        if ($scope.onNormalizationRuleUpdated != undefined)
+                            $scope.onNormalizationRuleUpdated(response.UpdatedObject);
+
+                        $scope.modalContext.closeModal();
+                    }
+                })
+                .catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                });
+        }
+
+        function insertNormalizationRule() {
+            var normalizationRuleObj = buildNormalizationRuleObjFromScope();
+
+            return NormalizationRuleAPIService.AddNormalizationRule(normalizationRuleObj)
+                .then(function (responseObject) {
+
+                    if (VRNotificationService.notifyOnItemAdded("Normalization Rule", responseObject)) {
+                        if ($scope.onNormalizationRuleAdded != undefined)
+                            $scope.onNormalizationRuleAdded(responseObject.InsertedObject);
+
+                        $scope.modalContext.closeModal();
+                    }
+                })
+                .catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                });
+        }
+
+        function getItemsByPropValues(array, values, propName) {
+            if (array == undefined || array == null || values == undefined || values == null || propName == undefined || propName == null) return [];
+
+            var matchingItems = [];
+            
+            for (var i = 0; i < array.length; i++) {
+                var propValue = array[i][propName];
+
+                if (UtilsService.contains(values, propValue))
+                    matchingItems.push(array[i]);
+            }
+
+            return matchingItems;
+        }
+
+        function addFetchedNormalizationRuleActionSettingsToList(array) {
+            if (array == undefined || array == null) return;
+
+            for (var i = 0; i < array.length; i++) {
+                var normalizationRuleActionSettingsObj = {
+                    ObjectId: i + 1,
+                    Editor: UtilsService.getItemByVal($scope.normalizationRuleActionSettingsTemplates, array[i].BehaviorId, "TemplateConfigID").Editor,
+                    Data: array[i]
+                };
+
+                normalizationRuleActionSettingsDataObject = normalizationRuleActionSettingsObj.Data;
+                $scope.normalizationRuleActionSettingsList.push(normalizationRuleActionSettingsObj);
+            }
+        }
     }
 
-    function insertNormalizationRule() {
-        var normalizationRuleObj = buildNormalizationRuleObjFromScope();
-        console.log(normalizationRuleObj);
+    appControllers.controller("PSTN_BusinessEntity_NormalizationRuleEditorController", NormalizationRuleEditorController);
 
-        return;
-
-        return NormalizationRuleAPIService.AddNormalizationRule(normalizationRuleObj)
-            .then(function (response) {
-
-                if (VRNotificationService.notifyOnItemAdded("Normalization Rule", response, "Name")) {
-                    if ($scope.onNormalizationRuleAdded != undefined)
-                        $scope.onNormalizationRuleAdded(response.InsertedObj);
-
-                    $scope.modalContext.closeModal();
-                }
-            })
-            .catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            });
-    }
-}
-
-appControllers.controller("PSTN_BusinessEntity_NormalizationRuleEditorController", NormalizationRuleEditorController);
+})(appControllers);

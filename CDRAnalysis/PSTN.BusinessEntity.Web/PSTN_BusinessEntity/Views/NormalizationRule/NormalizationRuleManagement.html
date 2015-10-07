@@ -13,12 +13,12 @@
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked" isasynchronous="true"></vr-button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="onSearchClicked" isasynchronous="true"></vr-button>
                     <vr-button type="Add" data-onclick="addNormalizationRule"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
     </vr-form>
 
-    <vr-pstn-be-normalizationrulegrid on-ready="onNormalizationRuleGridReady"></vr-pstn-be-normalizationrulegrid>
+    <vr-pstn-be-normalizationrulegrid on-ready="onDirectiveGridReady"></vr-pstn-be-normalizationrulegrid>
 </vr-panel>
