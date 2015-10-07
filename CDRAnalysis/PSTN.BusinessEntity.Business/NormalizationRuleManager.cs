@@ -217,12 +217,43 @@ namespace PSTN.BusinessEntity.Business
                 detail.NormalizationRuleId = normalizationRuleId;
                 insertOperationOutput.InsertedObject = dataManager.GetNormalizationRuleDetailByID(normalizationRuleId);
             }
-            else
-            {
-                insertOperationOutput.Result = InsertOperationResult.SameExists;
-            }
 
             return insertOperationOutput;
+        }
+
+        public UpdateOperationOutput<NormalizationRuleDetail> UpdateNormalizationRule(NormalizationRule normalizationRuleObj)
+        {
+            UpdateOperationOutput<NormalizationRuleDetail> updateOperationOutput = new UpdateOperationOutput<NormalizationRuleDetail>();
+
+            updateOperationOutput.Result = UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            INormalizationRuleDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<INormalizationRuleDataManager>();
+
+            bool updated = dataManager.UpdateNormalizationRule(normalizationRuleObj);
+
+            if (updated)
+            {
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = dataManager.GetNormalizationRuleDetailByID(normalizationRuleObj.NormalizationRuleId);
+            }
+
+            return updateOperationOutput;
+        }
+
+        public DeleteOperationOutput<object> DeleteNormalizationRule(int normalizationRuleId)
+        {
+            DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
+            deleteOperationOutput.Result = DeleteOperationResult.Failed;
+
+            INormalizationRuleDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<INormalizationRuleDataManager>();
+
+            bool deleted = dataManager.DeleteNormalizationRule(normalizationRuleId);
+
+            if (deleted)
+                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+
+            return deleteOperationOutput;
         }
     }
 }
