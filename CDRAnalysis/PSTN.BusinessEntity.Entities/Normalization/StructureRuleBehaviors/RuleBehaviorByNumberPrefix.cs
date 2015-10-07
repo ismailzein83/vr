@@ -11,7 +11,10 @@ namespace PSTN.BusinessEntity.Entities.Normalization.StructureRuleBehaviors
         protected override void GetPrefixesFromRule(Vanrise.Rules.BaseRule rule, out IEnumerable<string> prefixes)
         {
             NormalizationRule normalizationRule = rule as NormalizationRule;
-            prefixes = new List<string> { normalizationRule.Criteria.PhoneNumberPrefix };
+            if (normalizationRule.Criteria.PhoneNumberPrefix != null)
+                prefixes = new List<string> { normalizationRule.Criteria.PhoneNumberPrefix };
+            else
+                prefixes = null;
         }
 
         protected override bool TryGetValueToCompareFromTarget(object target, out string value)
