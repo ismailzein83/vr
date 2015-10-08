@@ -2,11 +2,25 @@
     <vr-row>
         <vr-columns width="fullrow">
             <vr-section title="Criteria">
-                <vr-label>Switches:</vr-label> {{dataItem.SwitchNames}}<br />
-                <vr-label>Trunks:</vr-label> {{dataItem.TrunkNames}}<br />
-                <vr-label>Number Type:</vr-label> {{dataItem.PhoneNumberTypeDescription}}<br />
-                <vr-label>Number Length:</vr-label> {{dataItem.PhoneNumberLength}}<br />
-                <vr-label>Number Prefix:</vr-label> {{dataItem.PhoneNumberPrefix}}
+                <div ng-if="showSwitches">
+                    <vr-label>Switches:</vr-label> {{dataItem.SwitchNames}}
+                </div>
+
+                <div ng-if="showTrunks">
+                    <vr-label>Trunks:</vr-label> {{dataItem.TrunkNames}}
+                </div>
+
+                <div ng-if="showPhoneNumberType">
+                    <vr-label>Number Type:</vr-label> {{dataItem.PhoneNumberTypeDescription}}<br />
+                </div>
+
+                <div ng-if="showPhoneNumberLength">
+                    <vr-label>Number Length:</vr-label> {{dataItem.PhoneNumberLength}}<br />
+                </div>
+
+                <div ng-if="showPhoneNumberPrefix">
+                    <vr-label>Number Prefix:</vr-label> {{dataItem.PhoneNumberPrefix}}
+                </div>
             </vr-section>
         </vr-columns>
     </vr-row>

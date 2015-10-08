@@ -22,23 +22,18 @@ namespace PSTN.BusinessEntity.Data.SQL
             return GetItemsSP("PSTN_BE.sp_NormalizationRule_GetEffective", NormalizationRuleMapper);
         }
 
-        public Vanrise.Entities.BigResult<NormalizationRuleDetail> GetFilteredNormalizationRules(Vanrise.Entities.DataRetrievalInput<NormalizationRuleQuery> input)
+        public Vanrise.Entities.BigResult<NormalizationRule> GetFilteredNormalizationRules(Vanrise.Entities.DataRetrievalInput<NormalizationRuleQuery> input)
         {
             return RetrieveData(input, (tempTableName) =>
             {
                 ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_CreateTempByFiltered", tempTableName, input.Query.BeginEffectiveDate, input.Query.EndEffectiveDate);
 
-            }, (reader) => NormalizationRuleDetailMapper(reader), _mapper);
+            }, (reader) => NormalizationRuleMapper(reader), _mapper);
         }
 
         public NormalizationRule GetNormalizationRuleByID(int normalizationRuleId)
         {
             return GetItemSP("PSTN_BE.sp_NormalizationRule_GetByID", NormalizationRuleMapper, normalizationRuleId);
-        }
-
-        public NormalizationRuleDetail GetNormalizationRuleDetailByID(int normalizationRuleId)
-        {
-            return GetItemSP("PSTN_BE.sp_NormalizationRule_GetDetailByID", NormalizationRuleDetailMapper, normalizationRuleId);
         }
 
         public bool AddNormalizationRule(NormalizationRule normalizationRuleObj, out int insertedID)
@@ -70,24 +65,6 @@ namespace PSTN.BusinessEntity.Data.SQL
         }
         
         #region Mappers
-
-        private NormalizationRuleDetail NormalizationRuleDetailMapper(IDataReader reader)
-        {
-            NormalizationRuleDetail normalizationRuleDetail = new NormalizationRuleDetail();
-
-            normalizationRuleDetail.NormalizationRuleId = (int)reader["ID"];
-            normalizationRuleDetail.BeginEffectiveDate = (DateTime)reader["BED"];
-            normalizationRuleDetail.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED");
-            
-            NormalizationRuleCriteria criteria = Vanrise.Common.Serializer.Deserialize<NormalizationRuleCriteria>(reader["Criteria"] as string);
-            normalizationRuleDetail.SwitchCount = (criteria.SwitchIds != null) ? criteria.SwitchIds.Count : 0;
-            normalizationRuleDetail.TrunkCount = (criteria.TrunkIds != null) ? criteria.TrunkIds.Count : 0;
-            normalizationRuleDetail.PhoneNumberType = criteria.PhoneNumberType;
-            normalizationRuleDetail.PhoneNumberLength = criteria.PhoneNumberLength;
-            normalizationRuleDetail.PhoneNumberPrefix = criteria.PhoneNumberPrefix;
-
-            return normalizationRuleDetail;
-        }
 
         private NormalizationRule NormalizationRuleMapper(IDataReader reader)
         {

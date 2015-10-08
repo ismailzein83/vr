@@ -43,8 +43,9 @@ app.directive("vrPstnBeNormalizationrulegrid", ["PSTN_BE_Service", "Normalizatio
                         return gridAPI.retrieveData(query);
                     }
 
-                    directiveAPI.onNormalizationRuleAdded = function (trunkObject) {
-                        gridAPI.itemAdded(trunkObject);
+                    directiveAPI.onNormalizationRuleAdded = function (normalizationRuleObj) {
+                        setPhoneNumberTypeDescripton(normalizationRuleObj);
+                        gridAPI.itemAdded(normalizationRuleObj);
                     }
 
                     return directiveAPI;
@@ -57,8 +58,7 @@ app.directive("vrPstnBeNormalizationrulegrid", ["PSTN_BE_Service", "Normalizatio
                     .then(function (responseArray) {
 
                         angular.forEach(responseArray.Data, function (item) {
-                            var phoneNumberType = UtilsService.getEnum(PSTN_BE_PhoneNumberTypeEnum, item.PhoneNumberType);
-                            item.PhoneNumberTypeDescription = phoneNumberType.description;
+                            setPhoneNumberTypeDescripton(item);
                         });
 
                         onResponseReady(responseArray);
@@ -74,6 +74,7 @@ app.directive("vrPstnBeNormalizationrulegrid", ["PSTN_BE_Service", "Normalizatio
         function editNormalizationRule(dataItem) {
             
             var onNormalizationRuleUpdated = function (normalizationRuleObj) {
+                setPhoneNumberTypeDescripton(normalizationRuleObj);
                 gridAPI.itemUpdated(normalizationRuleObj);
             }
 
@@ -100,6 +101,11 @@ app.directive("vrPstnBeNormalizationrulegrid", ["PSTN_BE_Service", "Normalizatio
                    clicked: deleteNormalizationRule
                }
             ];
+        }
+
+        function setPhoneNumberTypeDescripton(dataItem) {
+            var phoneNumberType = UtilsService.getEnum(PSTN_BE_PhoneNumberTypeEnum, dataItem.PhoneNumberType);
+            dataItem.PhoneNumberTypeDescription = phoneNumberType.description;
         }
     }
 

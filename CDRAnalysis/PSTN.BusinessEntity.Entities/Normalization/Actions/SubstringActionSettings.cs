@@ -11,5 +11,10 @@ namespace PSTN.BusinessEntity.Entities.Normalization.Actions
         public int StartIndex { get; set; }
 
         public int Length { get; set; }
+
+        public override string GetDescription()
+        {
+            return string.Format("Substring: Start Index = {0}, Length = {1}", StartIndex, Length);
+        }
     }
 }

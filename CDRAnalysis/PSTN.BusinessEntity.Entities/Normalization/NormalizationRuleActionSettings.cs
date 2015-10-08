@@ -9,5 +9,7 @@ namespace PSTN.BusinessEntity.Entities
     public abstract class NormalizationRuleActionSettings
     {
         public int BehaviorId { get; set; }
+
+        public abstract string GetDescription();
     }
 }

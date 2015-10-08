@@ -1,5 +1,6 @@
 ﻿using PSTN.BusinessEntity.Data;
 using PSTN.BusinessEntity.Entities;
+using PSTN.BusinessEntity.Entities.Normalization.Actions;
 using System.Collections.Generic;
 using Vanrise.Common;
 using Vanrise.Entities;
@@ -115,27 +116,23 @@ namespace PSTN.BusinessEntity.Business
         public Vanrise.Entities.IDataRetrievalResult<NormalizationRuleDetail> GetFilteredNormalizationRules(Vanrise.Entities.DataRetrievalInput<NormalizationRuleQuery> input)
         {
             INormalizationRuleDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<INormalizationRuleDataManager>();
-            BigResult<NormalizationRuleDetail> bigResult = dataManager.GetFilteredNormalizationRules(input);
+            BigResult<NormalizationRule> normalizationRules = dataManager.GetFilteredNormalizationRules(input);
 
+            BigResult<NormalizationRuleDetail> normalizationRuleDetails = new BigResult<NormalizationRuleDetail>();
+            normalizationRuleDetails.ResultKey = normalizationRules.ResultKey;
+            normalizationRuleDetails.TotalCount = normalizationRules.TotalCount;
 
+            List<NormalizationRuleDetail> data = new List<NormalizationRuleDetail>();
 
-            SwitchManager switchManager = new SwitchManager();
-            
-            List<int> switchIds = new List<int>();
-            switchIds.Add(30);
-            switchIds.Add(31);
+            foreach (NormalizationRule normalizationRule in normalizationRules.Data)
+            {
+                NormalizationRuleDetail normalizationRuleDetail = GetNormalizationRuleDetail(normalizationRule);
+                data.Add(normalizationRuleDetail);
+            }
 
-            List<SwitchInfo> switches = switchManager.GetSwitchesByIds(switchIds);
+            normalizationRuleDetails.Data = data;
 
-            SwitchTrunkManager trunkManager = new SwitchTrunkManager();
-
-            List<int> trunkIds = new List<int>();
-            trunkIds.Add(1);
-            trunkIds.Add(2);
-
-            List<SwitchTrunkInfo> trunks = trunkManager.GetSwitchTrunksByIds(trunkIds);
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, bigResult);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, normalizationRuleDetails);
         }
 
         public NormalizationRule GetNormalizationRuleByID(int normalizationRuleId)
@@ -168,7 +165,9 @@ namespace PSTN.BusinessEntity.Business
 
                 NormalizationRuleDetail detail = new NormalizationRuleDetail();
                 detail.NormalizationRuleId = normalizationRuleId;
-                insertOperationOutput.InsertedObject = dataManager.GetNormalizationRuleDetailByID(normalizationRuleId);
+
+                NormalizationRule normalizationRule = dataManager.GetNormalizationRuleByID(normalizationRuleId);
+                insertOperationOutput.InsertedObject = GetNormalizationRuleDetail(normalizationRule);
             }
 
             return insertOperationOutput;
@@ -188,7 +187,9 @@ namespace PSTN.BusinessEntity.Business
             if (updated)
             {
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = dataManager.GetNormalizationRuleDetailByID(normalizationRuleObj.NormalizationRuleId);
+
+                NormalizationRule normalizationRule = dataManager.GetNormalizationRuleByID(normalizationRuleObj.NormalizationRuleId);
+                updateOperationOutput.UpdatedObject = GetNormalizationRuleDetail(normalizationRule);
             }
 
             return updateOperationOutput;
@@ -208,5 +209,83 @@ namespace PSTN.BusinessEntity.Business
 
             return deleteOperationOutput;
         }
+
+        private NormalizationRuleDetail GetNormalizationRuleDetail(NormalizationRule normalizationRule)
+        {
+            NormalizationRuleDetail normalizationRuleDetail = new NormalizationRuleDetail();
+
+            normalizationRuleDetail.NormalizationRuleId = normalizationRule.NormalizationRuleId;
+            normalizationRuleDetail.BeginEffectiveDate = normalizationRule.BeginEffectiveDate;
+            normalizationRuleDetail.EndEffectiveDate = normalizationRule.EndEffectiveDate;
+
+            if (normalizationRule.Criteria.SwitchIds != null)
+            {
+                normalizationRuleDetail.SwitchCount = normalizationRule.Criteria.SwitchIds.Count;
+
+                SwitchManager switchManager = new SwitchManager();
+                List<SwitchInfo> switches = switchManager.GetSwitchesByIds(normalizationRule.Criteria.SwitchIds);
+                List<string> switchNames = GetSwitchNames(switches);
+                normalizationRuleDetail.SwitchNames = string.Join<string>(", ", switchNames);
+            }
+            else
+            {
+                normalizationRuleDetail.SwitchCount = 0;
+            }
+
+            if (normalizationRule.Criteria.TrunkIds != null)
+            {
+                normalizationRuleDetail.TrunkCount = normalizationRule.Criteria.TrunkIds.Count;
+
+                SwitchTrunkManager trunkManager = new SwitchTrunkManager();
+                List<SwitchTrunkInfo> trunks = trunkManager.GetSwitchTrunksByIds(normalizationRule.Criteria.TrunkIds);
+                List<string> trunkNames = GetTrunkNames(trunks);
+                normalizationRuleDetail.TrunkNames = string.Join<string>(", ", trunkNames);
+            }
+            else
+            {
+                normalizationRuleDetail.TrunkCount = 0;
+            }
+
+            normalizationRuleDetail.PhoneNumberType = normalizationRule.Criteria.PhoneNumberType;
+            normalizationRuleDetail.PhoneNumberLength = normalizationRule.Criteria.PhoneNumberLength;
+            normalizationRuleDetail.PhoneNumberPrefix = normalizationRule.Criteria.PhoneNumberPrefix;
+
+            if (normalizationRule.Settings.Actions != null)
+            {
+                normalizationRuleDetail.ActionDescriptions = new List<string>();
+
+                foreach (var action in normalizationRule.Settings.Actions)
+                {   
+                    normalizationRuleDetail.ActionDescriptions.Add(action.GetDescription());
+                }
+            }
+
+            return normalizationRuleDetail;
+        }
+
+        private List<string> GetSwitchNames(List<SwitchInfo> switches)
+        {
+            List<string> switchNames = new List<string>();
+
+            foreach (SwitchInfo switchInfo in switches)
+            {
+                switchNames.Add(switchInfo.Name);
+            }
+
+            return switchNames;
+        }
+
+        private List<string> GetTrunkNames(List<SwitchTrunkInfo> trunks)
+        {
+            List<string> trunkNames = new List<string>();
+
+            foreach (SwitchTrunkInfo trunk in trunks)
+            {
+                trunkNames.Add(trunk.Name);
+            }
+
+            return trunkNames;
+        }
+
     }
 }
