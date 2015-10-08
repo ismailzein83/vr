@@ -28,8 +28,8 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             //RuntimeHost host = new RuntimeHost(runtimeServices);
             //host.Start();
 
-            Mappers.FTP_File_Mappers.FillData();
-            Vanrise.Integration.Entities.MappingOutput output = Mappers.FTP_File_Mappers.ImportingCDR_FileorFTP(); 
+            Mappers.SQLMappers.FillData();
+            Vanrise.Integration.Entities.MappingOutput output = Mappers.SQLMappers.StaggingCDRs_SQL(); 
 
         }
     }

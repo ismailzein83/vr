@@ -14,16 +14,15 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
     public class SQLMappers
     {
 
-        static int dataSourceId = 23;
+        static int dataSourceId = 24;
         static DBReaderImportedData data = new DBReaderImportedData();
         
         public static void FillData()
         {
             SqlConnection connection = new SqlConnection();
-            connection.ConnectionString = "Data Source=192.168.110.185;Initial Catalog=CDRAnalysisMobile_Research;User ID=development;Password=dev!123;";
+            connection.ConnectionString = "Data Source=192.168.110.185;Initial Catalog=CDRAnalysisMobile_WF;User ID=development;Password=dev!123;";
             SqlCommand command = new SqlCommand(
-              "SELECT [Id] ,[MSISDN]  ,[IMSI]  ,[ConnectDateTime]  ,[Destination]  ,[DurationInSeconds]  ,[DisconnectDateTime]   ,[Call_Class]   ,[IsOnNet]  ,[Call_Type]   ,[Sub_Type]   ,[IMEI]   ,[BTS_Id]   ,[Cell_Id]   ,[SwitchRecordId]  ,[Up_Volume]   ,[Down_Volume]   ,[Cell_Latitude]   ,[Cell_Longitude]      ,[In_Trunk]  ,[Out_Trunk]    ,[Service_Type]   ,[Service_VAS_Name]  FROM [dbo].[NormalCDRZein];",
-              connection);
+              "SELECT [ID]      ,[CGPN]      ,[CDPN]      ,[InTrunkSymbol]      ,[OutTrunkSymbol]      ,[ConnectDateTime]      ,[DurationInSeconds]      ,[DisconnectDateTime]  FROM [dbo].[PSTNSampleData];",      connection);
             command.Connection = connection;
             connection.Open();
             data.Reader = command.ExecuteReader();
@@ -101,21 +100,18 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
                 cdr.InTrunkSymbol = reader["InTrunkSymbol"] as string;
                 cdr.OutTrunkSymbol = reader["OutTrunkSymbol"] as string;
 
-
                 if (cdr.InTrunkSymbol != null && cdr.InTrunkSymbol != string.Empty)
                 {
                     currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(cdr.InTrunkSymbol);
                     if (currentTrunk != null)
                         cdr.InTrunkId = currentTrunk.ID;
                 }
-
                 if (cdr.OutTrunkSymbol != null && cdr.OutTrunkSymbol != string.Empty)
                 {
                     currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(cdr.OutTrunkSymbol);
                     if (currentTrunk != null)
                         cdr.OutTrunkId = currentTrunk.ID;
                 }
-
                 cdr.SwitchID = SwitchId;
 
                 index = Utils.GetReaderValue<int?>(reader, "ID").ToString();
