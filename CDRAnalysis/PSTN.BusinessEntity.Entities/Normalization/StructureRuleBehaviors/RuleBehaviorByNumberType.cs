@@ -11,10 +11,7 @@ namespace PSTN.BusinessEntity.Entities.Normalization.StructureRuleBehaviors
         protected override void GetKeysFromRule(Vanrise.Rules.BaseRule rule, out IEnumerable<NormalizationPhoneNumberType> keys)
         {
             NormalizationRule normalizationRule = rule as NormalizationRule;
-            if (normalizationRule.Criteria.PhoneNumberType.HasValue)
-                keys = new List<NormalizationPhoneNumberType> { normalizationRule.Criteria.PhoneNumberType.Value };
-            else
-                keys = null;
+            keys = new List<NormalizationPhoneNumberType> { normalizationRule.Criteria.PhoneNumberType };
         }
 
         protected override bool TryGetKeyFromTarget(object target, out NormalizationPhoneNumberType key)
