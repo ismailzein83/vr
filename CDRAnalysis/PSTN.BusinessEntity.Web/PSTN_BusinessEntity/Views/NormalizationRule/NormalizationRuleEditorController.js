@@ -43,6 +43,9 @@
 
             $scope.normalizationRuleActionSettingsList = [];
 
+            $scope.beginEffectiveDate = Date.now();
+            $scope.endEffectiveDate = undefined;
+
             $scope.onNormalizationRuleActionSettingsTemplateChanged = function () {
                 $scope.isAddButtonDisabled = ($scope.selectedNormalizationRuleActionSettingsTemplate == undefined);
             }
@@ -140,6 +143,9 @@
             $scope.phoneNumberPrefix = normalizationRuleObj.Criteria.PhoneNumberPrefix;
 
             addFetchedNormalizationRuleActionSettingsToList(normalizationRuleObj.Settings.Actions);
+
+            $scope.beginEffectiveDate = normalizationRuleObj.BeginEffectiveDate;
+            $scope.endEffectiveDate = normalizationRuleObj.EndEffectiveDate;
         }
 
         function getItemsByPropValues(array, values, propName) {
@@ -237,7 +243,9 @@
                 },
                 Settings: {
                     Actions: ($scope.normalizationRuleActionSettingsList.length > 0) ? getNormalizationRuleActionSettings() : null
-                }
+                },
+                BeginEffectiveDate: $scope.beginEffectiveDate,
+                EndEffectiveDate: $scope.endEffectiveDate
             };
 
             return normalizationRuleObj;

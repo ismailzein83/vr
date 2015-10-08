@@ -48,7 +48,7 @@ namespace PSTN.BusinessEntity.Data.SQL
             string serializedCriteria = Vanrise.Common.Serializer.Serialize(normalizationRuleObj.Criteria);
             string serializedSettings = Vanrise.Common.Serializer.Serialize(normalizationRuleObj.Settings);
 
-            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_Insert", out normalizationRuleId, serializedCriteria, serializedSettings);
+            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_Insert", out normalizationRuleId, serializedCriteria, serializedSettings, normalizationRuleObj.BeginEffectiveDate, normalizationRuleObj.EndEffectiveDate);
 
             insertedID = (recordsAffected > 0) ? (int)normalizationRuleId : -1;
             return (recordsAffected > 0);
@@ -59,7 +59,7 @@ namespace PSTN.BusinessEntity.Data.SQL
             string serializedCriteria = Vanrise.Common.Serializer.Serialize(normalizationRuleObj.Criteria);
             string serializedSettings = Vanrise.Common.Serializer.Serialize(normalizationRuleObj.Settings);
 
-            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_Update", normalizationRuleObj.NormalizationRuleId, serializedCriteria, serializedSettings);
+            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_Update", normalizationRuleObj.NormalizationRuleId, serializedCriteria, serializedSettings, normalizationRuleObj.BeginEffectiveDate, normalizationRuleObj.EndEffectiveDate);
             return (recordsAffected > 0);
         }
 
@@ -89,6 +89,8 @@ namespace PSTN.BusinessEntity.Data.SQL
             normalizationRule.NormalizationRuleId = (int)reader["ID"];
             normalizationRule.Criteria = Vanrise.Common.Serializer.Deserialize<NormalizationRuleCriteria>(reader["Criteria"] as string);
             normalizationRule.Settings = Vanrise.Common.Serializer.Deserialize<NormalizationRuleSettings>(reader["Settings"] as string);
+            normalizationRule.BeginEffectiveDate = (DateTime)reader["BED"];
+            normalizationRule.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED");
 
             return normalizationRule;
         }
