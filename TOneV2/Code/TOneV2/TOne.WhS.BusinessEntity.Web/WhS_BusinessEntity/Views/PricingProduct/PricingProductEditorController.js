@@ -8,21 +8,21 @@
 
         var editMode;
         var pricingProductId;
+        var saleZonePackagesDirectiveAPI;
+        var routingProductDirectiveAPI;
         loadParameters();
         defineScope();
         load();
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-
             if (parameters != undefined && parameters != null) {
-                pricingProductId = parameters.pricingProductId;
+                pricingProductId = parameters.PricingProductId;
             }
             editMode = (pricingProductId != undefined);
         }
 
         function defineScope() {
-
             $scope.SavePricingProduct = function () {
                 if (editMode) {
                     return updatePricingProduct();
@@ -35,6 +35,22 @@
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
+            $scope.onSaleZonePackagesDirectiveLoaded = function (api) {
+                saleZonePackagesDirectiveAPI = api;
+            }
+            $scope.onRoutingProductDirectiveLoaded = function (api) {
+                routingProductDirectiveAPI = api;
+            }
+            $scope.onselectionchanged = function () {
+                if (saleZonePackagesDirectiveAPI != undefined) {
+                    $scope.salezonepackageid = saleZonePackagesDirectiveAPI.getData().SaleZonePackageId;
+
+                }
+            }
+            $scope.onselectionchanged1 = function () {
+                if (routingProductDirectiveAPI != undefined)  
+                    console.log(routingProductDirectiveAPI.getData());
+            }
         }
 
         function load() {
@@ -49,17 +65,27 @@
 
         function getPricingProduct() {
             return WhS_BE_PricingProductAPIService.GetPricingProduct(pricingProductId).then(function (pricingProduct) {
-                console.log(pricingProduct);
+                fillScopeFromPricingProductObj(pricingProduct);
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
+
                 $scope.isGettingData = false;
             });
         }
 
         function buildPricingProductObjFromScope() {
+            var salezonepackageid;
+            var routingProductId;
+            if (saleZonePackagesDirectiveAPI != undefined)
+                salezonepackageid = saleZonePackagesDirectiveAPI.getData().SaleZonePackageId;
+            if (routingProductDirectiveAPI != undefined)
+                routingProductId = routingProductDirectiveAPI.getData().RoutingProductId;
             var pricingProduct = {
                 PricingProductId: (pricingProductId != null) ? pricingProductId : 0,
+                Name: $scope.name,
+                SaleZonePackageId: salezonepackageid,
+                DefaultRoutingProductId: routingProductId
             };
 
             return pricingProduct;
@@ -79,7 +105,14 @@
             });
 
         }
-
+        function fillScopeFromPricingProductObj(pricingProductObj) {
+            
+            if (saleZonePackagesDirectiveAPI != undefined)
+                saleZonePackagesDirectiveAPI.setData(pricingProductObj.SaleZonePackageId);
+            if (routingProductDirectiveAPI != undefined)
+                routingProductDirectiveAPI.setData(pricingProductObj.DefaultRoutingProductId);
+            $scope.name = pricingProductObj.Name;
+        }
         function updatePricingProduct() {
             var pricingProductObject = buildPricingProductObjFromScope();
             WhS_BE_PricingProductAPIService.UpdatePricingProduct(pricingProductObject)

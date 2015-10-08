@@ -26,7 +26,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             RoutingProductManager manager = new RoutingProductManager();
             return manager.GetRoutingProducts();
         }
-
+        [HttpGet]
+        public List<RoutingProductInfo> GetRoutingProductsInfoBySaleZonePackage(int saleZonePackage)
+        {
+            RoutingProductManager manager = new RoutingProductManager();
+            return manager.GetRoutingProductsInfoBySaleZonePackage(saleZonePackage);
+        }
+        
         [HttpGet]
         public RoutingProduct GetRoutingProduct(int routingProductId)
         {

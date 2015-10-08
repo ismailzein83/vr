@@ -165,6 +165,8 @@
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-carrieraccount-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-customerpricingproductgrid-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-pricingproductgrid-directive.js" />
+    <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-routingproduct-directive.js" />
+    <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-salezonepackages-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-selectivecodecriteria-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-selectivecustomers-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-pricingproducts-directive.js" />

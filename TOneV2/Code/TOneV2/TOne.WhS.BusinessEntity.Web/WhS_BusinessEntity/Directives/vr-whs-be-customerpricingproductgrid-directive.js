@@ -61,8 +61,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerPricingProductAPIS
             }
 
             function deleteCustomerPricingProduct(gridObject) {
-                var onCustomerPricingProduc
-                tDeleted = function (gridObject) {
+                var onCustomerPricingProductDeleted = function (gridObject) {
                     gridAPI.itemDeleted(gridObject);
                 }
 

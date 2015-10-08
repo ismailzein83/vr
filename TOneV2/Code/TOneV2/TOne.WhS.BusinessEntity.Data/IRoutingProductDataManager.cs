@@ -10,7 +10,7 @@ namespace TOne.WhS.BusinessEntity.Data
     public interface IRoutingProductDataManager : IDataManager
     {
         Vanrise.Entities.BigResult<Entities.RoutingProduct> GetFilteredRoutingProducts(Vanrise.Entities.DataRetrievalInput<Entities.RoutingProductQuery> input);
-
+        List<RoutingProductInfo> GetRoutingProductsInfoBySaleZonePackage(int saleZonePackage);
         RoutingProduct GetRoutingProduct(int routingProductId);
 
         List<RoutingProductInfo> GetRoutingProducts();

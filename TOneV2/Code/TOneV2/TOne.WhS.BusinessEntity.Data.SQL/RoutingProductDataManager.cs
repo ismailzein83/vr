@@ -101,5 +101,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return base.IsDataUpdated("TOneWhS_BE.RoutingProduct", ref updateHandle);
         }
+
+
+        public List<Entities.RoutingProductInfo> GetRoutingProductsInfoBySaleZonePackage(int saleZonePackage)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_RoutingProduct_GetBySaleZonePackage", RoutingProductInfoMapper, saleZonePackage);
+        }
     }
 }

@@ -22,7 +22,11 @@ namespace TOne.WhS.BusinessEntity.Business
             IRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
             return dataManager.GetRoutingProduct(routingProductId);
         }
-
+        public List<RoutingProductInfo> GetRoutingProductsInfoBySaleZonePackage(int saleZonePackage)
+        {
+            IRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
+            return dataManager.GetRoutingProductsInfoBySaleZonePackage(saleZonePackage);
+        }
         public List<RoutingProductInfo> GetRoutingProducts()
         {
             IRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
