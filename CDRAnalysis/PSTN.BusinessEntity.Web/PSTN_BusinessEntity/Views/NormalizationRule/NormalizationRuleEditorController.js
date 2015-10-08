@@ -67,7 +67,10 @@
                     Editor: $scope.selectedNormalizationRuleActionSettingsTemplate.Editor,
                     Data: normalizationRuleActionSettingsDirectiveAPI.getData()
                 };
-
+                normalizationRuleActionSettingsObj.onListItemDirectiveLoaded = function (api) {
+                        var data = normalizationRuleActionSettingsDirectiveAPI.getData();
+                        api.setData(data);     
+                }
                 $scope.normalizationRuleActionSettingsList.push(normalizationRuleActionSettingsObj);
             }
 
@@ -79,13 +82,13 @@
                 $scope.normalizationRuleActionSettingsList.splice(index, 1);
             };
 
-            $scope.onListItemDirectiveLoaded = function (api) {
+            //$scope.onListItemDirectiveLoaded = function (api) {
 
-                if (normalizationRuleActionSettingsDirectiveAPI != undefined)
-                    var data = normalizationRuleActionSettingsDirectiveAPI.getData();
+            //    if (normalizationRuleActionSettingsDirectiveAPI != undefined)
+            //        var data = normalizationRuleActionSettingsDirectiveAPI.getData();
                 
-                api.setData(data);
-            }
+            //    api.setData(data);
+            //}
 
             $scope.saveNormalizationRule = function () {
                 if (editMode)
@@ -166,7 +169,6 @@
             $scope.phoneNumberLength = normalizationRuleObj.Criteria.PhoneNumberLength;
             $scope.phoneNumberPrefix = normalizationRuleObj.Criteria.PhoneNumberPrefix;
 
-            console.log(normalizationRuleObj.Settings.Actions);
             addFetchedNormalizationRuleActionSettingsToList(normalizationRuleObj.Settings.Actions);
         }
 
@@ -249,9 +251,15 @@
                     Data: array[i]
                 };
 
-                normalizationRuleActionSettingsDataObject = normalizationRuleActionSettingsObj.Data;
-                $scope.normalizationRuleActionSettingsList.push(normalizationRuleActionSettingsObj);
+                addAPIObj(normalizationRuleActionSettingsObj);
             }
+        }
+
+        function addAPIObj(obj) {
+            obj.onListItemDirectiveLoaded = function (api) {
+                api.setData(obj.Data);
+            }
+            $scope.normalizationRuleActionSettingsList.push(obj);
         }
     }
 
