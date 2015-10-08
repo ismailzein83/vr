@@ -192,7 +192,10 @@ namespace PSTN.BusinessEntity.Business
         public Vanrise.Entities.IDataRetrievalResult<NormalizationRuleDetail> GetFilteredNormalizationRules(Vanrise.Entities.DataRetrievalInput<NormalizationRuleQuery> input)
         {
             INormalizationRuleDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<INormalizationRuleDataManager>();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredNormalizationRules(input));
+
+            BigResult<NormalizationRuleDetail> bigResult = dataManager.GetFilteredNormalizationRules(input);
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, bigResult);
         }
 
         public NormalizationRule GetNormalizationRuleByID(int normalizationRuleId)
@@ -205,7 +208,6 @@ namespace PSTN.BusinessEntity.Business
         {
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.NormalizationRuleActionBehaviorConfigType);
-
         }
 
         public InsertOperationOutput<NormalizationRuleDetail> AddNormalizationRule(NormalizationRule normalizationRuleObj)
@@ -251,7 +253,7 @@ namespace PSTN.BusinessEntity.Business
 
             return updateOperationOutput;
         }
-
+        
         public DeleteOperationOutput<object> DeleteNormalizationRule(int normalizationRuleId)
         {
             DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
