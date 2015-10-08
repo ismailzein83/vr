@@ -10,7 +10,11 @@ namespace PSTN.BusinessEntity.Business
 {
     public class NormalizationRuleManager
     {
-
+        static Vanrise.Rules.RuleTree _rules ;
+        static NormalizationRuleManager()
+        {
+            _rules = (new NormalizationRuleManager()).GetStructuredRules();
+        }
         public List<NormalizationRule> GetEffectiveRules()
         {
             INormalizationRuleDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<INormalizationRuleDataManager>();
@@ -101,7 +105,7 @@ namespace PSTN.BusinessEntity.Business
             }
         }
 
-        static Vanrise.Rules.RuleTree _rules = (new NormalizationRuleManager()).GetStructuredRules();
+        
 
         NormalizationRuleActionBehavior GetActionBehavior(int behaviorId)
         {
