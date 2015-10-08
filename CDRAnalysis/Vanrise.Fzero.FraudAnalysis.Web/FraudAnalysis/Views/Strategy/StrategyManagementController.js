@@ -132,7 +132,10 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
     }
 
     function addNewStrategy() {
-        var settings = {};
+        var settings = {
+            useModalTemplate: true,
+            width: "80%"
+        };
 
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "New Strategy";
@@ -150,6 +153,8 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
         };
 
         var settings = {
+            useModalTemplate: true,
+            width: "80%"
         };
 
         settings.onScopeReady = function (modalScope) {
