@@ -68,7 +68,7 @@ namespace PSTN.BusinessEntity.Data.SQL
             int recordsEffected = ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_Delete", normalizationRuleId);
             return (recordsEffected > 0);
         }
-
+        
         #region Mappers
 
         private NormalizationRuleDetail NormalizationRuleDetailMapper(IDataReader reader)
@@ -78,6 +78,13 @@ namespace PSTN.BusinessEntity.Data.SQL
             normalizationRuleDetail.NormalizationRuleId = (int)reader["ID"];
             normalizationRuleDetail.BeginEffectiveDate = (DateTime)reader["BED"];
             normalizationRuleDetail.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED");
+            
+            NormalizationRuleCriteria criteria = Vanrise.Common.Serializer.Deserialize<NormalizationRuleCriteria>(reader["Criteria"] as string);
+            normalizationRuleDetail.SwitchCount = criteria.SwitchIds.Count;
+            normalizationRuleDetail.TrunkCount = criteria.TrunkIds.Count;
+            normalizationRuleDetail.PhoneNumberType = criteria.PhoneNumberType;
+            normalizationRuleDetail.PhoneNumberLength = criteria.PhoneNumberLength;
+            normalizationRuleDetail.PhoneNumberPrefix = criteria.PhoneNumberPrefix;
             
             return normalizationRuleDetail;
         }

@@ -1,6 +1,6 @@
-﻿NormalizationRuleManagementController.$inject = ["$scope", "PSTN_BE_Service"];
+﻿NormalizationRuleManagementController.$inject = ["$scope", "PSTN_BE_Service", "SwitchAPIService", "SwitchTrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "UtilsService"];
 
-function NormalizationRuleManagementController($scope, PSTN_BE_Service) {
+function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAPIService, SwitchTrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, UtilsService) {
 
     var directiveGridAPI;
 
@@ -9,13 +9,26 @@ function NormalizationRuleManagementController($scope, PSTN_BE_Service) {
 
     function defineScope() {
 
+        $scope.switches = [];
+        $scope.selectedSwitches = [];
+
+        $scope.trunks = [];
+        $scope.selectedTrunks = [];
+
+        $scope.phoneNumberTypes = UtilsService.getArrayEnum(PSTN_BE_PhoneNumberTypeEnum);
+        $scope.selectedPhoneNumberTypes = [];
+
+        $scope.phoneNumberLength = undefined;
+        $scope.phoneNumberPrefix = undefined;
+
         $scope.onDirectiveGridReady = function (api) {
             directiveGridAPI = api;
-            retrieveData();
+            directiveGridAPI.retrieveData({});
         };
 
         $scope.onSearchClicked = function () {
-            retrieveData();
+            var query = getFilterObject();
+            return directiveGridAPI.retrieveData(query);
         };
 
         $scope.addNormalizationRule = function () {
@@ -30,20 +43,44 @@ function NormalizationRuleManagementController($scope, PSTN_BE_Service) {
     }
 
     function load() {
+        $scope.isLoadingFilters = true;
 
+        UtilsService.waitMultipleAsyncOperations([loadSwitches, loadTrunks])
+            .catch(function (error) {
+                VRNotficationService.notifyException(error, $scope);
+            })
+            .finally(function () {
+                $scope.isLoadingFilters = false;
+            });
     }
 
-    function retrieveData() {
-        if (directiveGridAPI != undefined) {
-            var query = getFilterObject();
-            return directiveGridAPI.retrieveData(query);
-        }
+    function loadSwitches() {
+        return SwitchAPIService.GetSwitches()
+            .then(function (responseArray) {
+                angular.forEach(responseArray, function (item) {
+                    $scope.switches.push(item);
+                });
+            });
+    }
+
+    function loadTrunks() {
+        return SwitchTrunkAPIService.GetSwitchTrunks()
+            .then(function (responseArray) {
+                angular.forEach(responseArray, function (item) {
+                    $scope.trunks.push(item);
+                });
+            });
     }
 
     function getFilterObject() {
         return {
             BeginEffectiveDate: $scope.beginEffectiveDate,
-            EndEffectiveDate: $scope.endEffectiveDate
+            EndEffectiveDate: $scope.endEffectiveDate,
+            SwitchIds: UtilsService.getPropValuesFromArray($scope.selectedSwitches, "ID"),
+            TrunkIds: UtilsService.getPropValuesFromArray($scope.selectedTrunks, "ID"),
+            PhoneNumberType: ($scope.selectedPhoneNumberTypes.length == 1) ? $scope.selectedPhoneNumberTypes[0].value : null,
+            PhoneNumberLength: $scope.phoneNumberLength,
+            PhoneNumberPrefix: $scope.phoneNumberPrefix
         };
     }
 }

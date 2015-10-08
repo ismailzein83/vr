@@ -1,6 +1,6 @@
 ﻿"use strict"
 
-app.directive("vrPstnBeNormalizationrulegrid", ["PSTN_BE_Service", "NormalizationRuleAPIService", "VRNotificationService", function (PSTN_BE_Service, NormalizationRuleAPIService, VRNotificationService) {
+app.directive("vrPstnBeNormalizationrulegrid", ["PSTN_BE_Service", "NormalizationRuleAPIService", "PSTN_BE_PhoneNumberTypeEnum", "UtilsService", "VRNotificationService", function (PSTN_BE_Service, NormalizationRuleAPIService, PSTN_BE_PhoneNumberTypeEnum, UtilsService, VRNotificationService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -54,8 +54,14 @@ app.directive("vrPstnBeNormalizationrulegrid", ["PSTN_BE_Service", "Normalizatio
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
 
                 return NormalizationRuleAPIService.GetFilteredNormalizationRules(dataRetrievalInput)
-                    .then(function (response) {
-                        onResponseReady(response);
+                    .then(function (responseArray) {
+
+                        angular.forEach(responseArray.Data, function (item) {
+                            var phoneNumberType = UtilsService.getEnum(PSTN_BE_PhoneNumberTypeEnum, item.PhoneNumberType);
+                            item.PhoneNumberTypeDescription = phoneNumberType.description;
+                        });
+
+                        onResponseReady(responseArray);
                     })
                     .catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);

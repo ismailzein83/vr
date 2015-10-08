@@ -183,6 +183,8 @@
     <Content Include="PSTN_BusinessEntity\Views\Switch\SwitchEditorController.js" />
     <Content Include="PSTN_BusinessEntity\Views\Switch\SwitchManagement.html" />
     <Content Include="PSTN_BusinessEntity\Views\Switch\SwitchManagementController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\Templates\NormalizationRuleDescriptionTemplate.html" />
+    <Content Include="PSTN_BusinessEntity\Views\Templates\NormalizationRuleDescriptionTemplateController.js" />
     <Content Include="PSTN_BusinessEntity\Views\Trunk\SwitchTrunkEditor.html" />
     <Content Include="PSTN_BusinessEntity\Views\Trunk\SwitchTrunkEditorController.js" />
     <Content Include="PSTN_BusinessEntity\Views\Grids\SwitchTrunkGrid.html" />

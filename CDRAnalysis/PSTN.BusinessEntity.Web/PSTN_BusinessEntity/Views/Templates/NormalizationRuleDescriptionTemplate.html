@@ -1,0 +1,23 @@
+﻿<div ng-controller="PSTN_BE_NormalizationRuleDescriptionTemplateController" style="font-size:14px;">
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-section title="Criteria">
+                <vr-label>Switches:</vr-label> {{dataItem.SwitchNames}}<br />
+                <vr-label>Trunks:</vr-label> {{dataItem.TrunkNames}}<br />
+                <vr-label>Number Type:</vr-label> {{dataItem.PhoneNumberTypeDescription}}<br />
+                <vr-label>Number Length:</vr-label> {{dataItem.PhoneNumberLength}}<br />
+                <vr-label>Number Prefix:</vr-label> {{dataItem.PhoneNumberPrefix}}
+            </vr-section>
+        </vr-columns>
+    </vr-row>
+
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-section title="Actions">
+                <div ng-repeat="actionDescription in dataItem.ActionDescriptions">
+                    {{actionDescription}}
+                </div>
+            </vr-section>
+        </vr-columns>
+    </vr-row>
+</div>

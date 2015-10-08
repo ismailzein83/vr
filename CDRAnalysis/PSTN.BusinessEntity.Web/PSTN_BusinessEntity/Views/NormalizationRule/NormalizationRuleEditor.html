@@ -3,10 +3,22 @@
         <vr-form name="formNormalizationRuleEditor">
 
             <vr-choices selectedindex="selectedTabIndex">
+                <vr-choice isselected="infoSelected">Info</vr-choice>
                 <vr-choice isselected="criteriaSelected">Criteria</vr-choice>
                 <vr-choice isselected="actionsSelected">Actions</vr-choice>
-                <vr-choice isselected="infoSelected">Info</vr-choice>
             </vr-choices>
+
+            <div ng-show="infoSelected">
+                <vr-row>
+                    <vr-columns width="1/2row">
+                        <vr-datetimepicker label="BED" value="beginEffectiveDate" type="dateTime" isrequired></vr-datetimepicker>
+                    </vr-columns>
+
+                    <vr-columns width="1/2row">
+                        <vr-datetimepicker label="EED" value="endEffectiveDate" type="dateTime"></vr-datetimepicker>
+                    </vr-columns>
+                </vr-row>
+            </div>
 
             <div ng-show="criteriaSelected">
                 <vr-row>
@@ -95,18 +107,6 @@
 
                             </vr-columns>
                         </vr-row>
-                    </vr-columns>
-                </vr-row>
-            </div>
-
-            <div ng-show="infoSelected">
-                <vr-row>
-                    <vr-columns width="1/2row">
-                        <vr-datetimepicker label="BED" value="beginEffectiveDate" type="dateTime" isrequired></vr-datetimepicker>
-                    </vr-columns>
-
-                    <vr-columns width="1/2row">
-                        <vr-datetimepicker label="EED" value="endEffectiveDate" type="dateTime"></vr-datetimepicker>
                     </vr-columns>
                 </vr-row>
             </div>
