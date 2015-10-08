@@ -9,10 +9,6 @@
         var editMode;
         var normalizationRuleId;
 
-        var normalizationRuleActionSettingsDirectiveAPI;
-        var normalizationRuleActionSettings;
-        var normalizationRuleActionSettingsDataObject;
-
         loadParameters();
         defineScope();
         load();
@@ -51,44 +47,18 @@
                 $scope.isAddButtonDisabled = ($scope.selectedNormalizationRuleActionSettingsTemplate == undefined);
             }
 
-            $scope.onNormalizationRuleActionSettingsDirectiveLoaded = function (api) {
-                normalizationRuleActionSettingsDirectiveAPI = api;
-
-                if (normalizationRuleActionSettings != undefined) {
-                    normalizationRuleActionSettingsDirectiveAPI.setData(normalizationRuleActionSettings);
-                    normalizationRuleActionSettings = undefined;
-                }
+            $scope.addNormalizationRuleActionSettingsListItem = function () {
+                var listItem = getNormalizationRuleActionSettingsListItem(null);
+                $scope.normalizationRuleActionSettingsList.push(listItem);
             }
 
-            $scope.addNormalizationRuleActionSettingsObjToList = function () {
-
-                var normalizationRuleActionSettingsObj = {
-                    ObjectId: $scope.normalizationRuleActionSettingsList.length + 1,
-                    Editor: $scope.selectedNormalizationRuleActionSettingsTemplate.Editor,
-                    Data: normalizationRuleActionSettingsDirectiveAPI.getData()
-                };
-                normalizationRuleActionSettingsObj.onListItemDirectiveLoaded = function (api) {
-                        var data = normalizationRuleActionSettingsDirectiveAPI.getData();
-                        api.setData(data);     
-                }
-                $scope.normalizationRuleActionSettingsList.push(normalizationRuleActionSettingsObj);
-            }
-
-            $scope.removeNormalizationRuleActionSettingsObjFromList = function ($event, normalizationRuleActionSettingsObj) {
+            $scope.removeNormalizationRuleActionSettingsListItem = function ($event, normalizationRuleActionSettingsListItem) {
                 $event.preventDefault();
                 $event.stopPropagation();
 
-                var index = UtilsService.getItemIndexByVal($scope.normalizationRuleActionSettingsList, normalizationRuleActionSettingsObj.ActionId, 'ObjectId');
+                var index = UtilsService.getItemIndexByVal($scope.normalizationRuleActionSettingsList, normalizationRuleActionSettingsListItem.ListItemId, 'ListItemId');
                 $scope.normalizationRuleActionSettingsList.splice(index, 1);
             };
-
-            //$scope.onListItemDirectiveLoaded = function (api) {
-
-            //    if (normalizationRuleActionSettingsDirectiveAPI != undefined)
-            //        var data = normalizationRuleActionSettingsDirectiveAPI.getData();
-                
-            //    api.setData(data);
-            //}
 
             $scope.saveNormalizationRule = function () {
                 if (editMode)
@@ -172,23 +142,51 @@
             addFetchedNormalizationRuleActionSettingsToList(normalizationRuleObj.Settings.Actions);
         }
 
-        function buildNormalizationRuleObjFromScope() {
+        function getItemsByPropValues(array, values, propName) {
+            if (array == undefined || array == null || values == undefined || values == null || propName == undefined || propName == null) return [];
 
-            var normalizationRuleObj = {
-                NormalizationRuleId: (normalizationRuleId != undefined) ? normalizationRuleId : null,
-                Criteria: {
-                    SwitchIds: UtilsService.getPropValuesFromArray($scope.selectedSwitches, "ID"),
-                    TrunkIds: UtilsService.getPropValuesFromArray($scope.selectedTrunks, "ID"),
-                    PhoneNumberType: ($scope.selectedPhoneNumberType != undefined) ? $scope.selectedPhoneNumberType.value : null,
-                    PhoneNumberLength: $scope.phoneNumberLength,
-                    PhoneNumberPrefix: $scope.phoneNumberPrefix
-                },
-                Settings: {
-                    Actions: ($scope.normalizationRuleActionSettingsList.length > 0) ? UtilsService.getPropValuesFromArray($scope.normalizationRuleActionSettingsList, "Data") : null
-                }
+            var matchingItems = [];
+
+            for (var i = 0; i < array.length; i++) {
+                var propValue = array[i][propName];
+
+                if (UtilsService.contains(values, propValue))
+                    matchingItems.push(array[i]);
+            }
+
+            return matchingItems;
+        }
+
+        function addFetchedNormalizationRuleActionSettingsToList(array) {
+            if (array == undefined || array == null) return;
+
+            angular.forEach(array, function (item) {
+                var listItem = getNormalizationRuleActionSettingsListItem(item);
+                $scope.normalizationRuleActionSettingsList.push(listItem);
+            });
+        }
+
+        function getNormalizationRuleActionSettingsListItem(normalizationRuleActionSettingsObj) {
+
+            var item = {
+                ListItemId: $scope.normalizationRuleActionSettingsList.length + 1,
+                BehaviorId: (normalizationRuleActionSettingsObj != null) ?
+                    normalizationRuleActionSettingsObj.BehaviorId : $scope.selectedNormalizationRuleActionSettingsTemplate.TemplateConfigID,
+                Editor: (normalizationRuleActionSettingsObj != null) ?
+                    UtilsService.getItemByVal($scope.normalizationRuleActionSettingsTemplates, normalizationRuleActionSettingsObj.BehaviorId, "TemplateConfigID").Editor :
+                    $scope.selectedNormalizationRuleActionSettingsTemplate.Editor,
+                Data: (normalizationRuleActionSettingsObj != null) ? normalizationRuleActionSettingsObj : {}
             };
 
-            return normalizationRuleObj;
+            item.onNormalizationRuleActionSettingsDirectiveAPILoaded = function (api) {
+                item.normalizationRuleActionSettingsDirectiveAPI = api;
+                item.normalizationRuleActionSettingsDirectiveAPI.setData(item.Data);
+
+                item.onNormalizationRuleActionSettingsDirectiveAPILoaded = undefined;
+                item.Data = undefined;
+            }
+
+            return item;
         }
 
         function updateNormalizationRule() {
@@ -226,40 +224,33 @@
                 });
         }
 
-        function getItemsByPropValues(array, values, propName) {
-            if (array == undefined || array == null || values == undefined || values == null || propName == undefined || propName == null) return [];
+        function buildNormalizationRuleObjFromScope() {
 
-            var matchingItems = [];
-            
-            for (var i = 0; i < array.length; i++) {
-                var propValue = array[i][propName];
+            var normalizationRuleObj = {
+                NormalizationRuleId: (normalizationRuleId != undefined) ? normalizationRuleId : null,
+                Criteria: {
+                    SwitchIds: UtilsService.getPropValuesFromArray($scope.selectedSwitches, "ID"),
+                    TrunkIds: UtilsService.getPropValuesFromArray($scope.selectedTrunks, "ID"),
+                    PhoneNumberType: ($scope.selectedPhoneNumberType != undefined) ? $scope.selectedPhoneNumberType.value : null,
+                    PhoneNumberLength: $scope.phoneNumberLength,
+                    PhoneNumberPrefix: $scope.phoneNumberPrefix
+                },
+                Settings: {
+                    Actions: ($scope.normalizationRuleActionSettingsList.length > 0) ? getNormalizationRuleActionSettings() : null
+                }
+            };
 
-                if (UtilsService.contains(values, propValue))
-                    matchingItems.push(array[i]);
-            }
-
-            return matchingItems;
+            return normalizationRuleObj;
         }
 
-        function addFetchedNormalizationRuleActionSettingsToList(array) {
-            if (array == undefined || array == null) return;
+        function getNormalizationRuleActionSettings() {
+            var normalizationRulActionSettings = [];
 
-            for (var i = 0; i < array.length; i++) {
-                var normalizationRuleActionSettingsObj = {
-                    ObjectId: i + 1,
-                    Editor: UtilsService.getItemByVal($scope.normalizationRuleActionSettingsTemplates, array[i].BehaviorId, "TemplateConfigID").Editor,
-                    Data: array[i]
-                };
+            angular.forEach($scope.normalizationRuleActionSettingsList, function (item) {
+                normalizationRulActionSettings.push(item.normalizationRuleActionSettingsDirectiveAPI.getData());
+            });
 
-                addAPIObj(normalizationRuleActionSettingsObj);
-            }
-        }
-
-        function addAPIObj(obj) {
-            obj.onListItemDirectiveLoaded = function (api) {
-                api.setData(obj.Data);
-            }
-            $scope.normalizationRuleActionSettingsList.push(obj);
+            return normalizationRulActionSettings;
         }
     }
 

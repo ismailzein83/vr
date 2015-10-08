@@ -36,7 +36,7 @@ app.directive("vrPstnBeAddprefix", [function () {
         this.initializeController = initializeController;
 
         $scope.numberPrefix = undefined;
-
+        
         function initializeController() {
             defineAPI();
         }
