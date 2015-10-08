@@ -119,7 +119,6 @@ as (select * from (values
 (5,'Log','Log History','#/view/BusinessProcess/Views/BPHistory',3,'Root/Business Process Module/History:View',null,null,0,12),
 (6,'Scheduler Service','Scheduler Service','#/view/Runtime/Views/SchedulerTaskManagement',3,'Root/Business Process Module/Management:View',null,null,0,10),
 (7,'Management','Business Process Management','#/view/BusinessProcess/Views/BPDefinitionManagement',3,'Root/Business Process Module/Management:View',null,null,0,11),
-(8,'Dashboard','Dashboard','#/view/FraudAnalysis/Views/Output/Dashboard',5,'Root/Dashboard Module:View',null,null,0,13),
 (9,'Strategies','Strategies','#/view/FraudAnalysis/Views/Strategy/StrategyManagement',2,'Root/Strategy Module:View',null,null,0,10),
 (10,'Management','DataSources Management','#/view/Integration/Views/DataSourceManagement',4,'Root/Integration Module:View',null,null,0,10),
 (11,'Log','Log History','#/view/Integration/Views/DataSourceLogManagement',4,'Root/Integration Module:View',null,null,0,12),
