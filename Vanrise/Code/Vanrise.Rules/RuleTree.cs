@@ -70,7 +70,7 @@ namespace Vanrise.Rules
         BaseRule GetFirstMatchRuleFromNode(RuleNode node, object target)
         {    
             RuleNode parentNode = node.ParentNode;
-            if(parentNode != null)
+            if(parentNode != null)//not root node
             {
                 foreach (var rule in node.Rules)
                 {
