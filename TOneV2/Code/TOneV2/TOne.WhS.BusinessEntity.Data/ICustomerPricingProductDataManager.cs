@@ -9,9 +9,9 @@ namespace TOne.WhS.BusinessEntity.Data
 {
    public interface ICustomerPricingProductDataManager:IDataManager
     {
-       Vanrise.Entities.BigResult<CustomerPricingProduct> GetFilteredCustomerPricingProducts(Vanrise.Entities.DataRetrievalInput<CustomerPricingProductQuery> input);
+       Vanrise.Entities.BigResult<CustomerPricingProductDetail> GetFilteredCustomerPricingProducts(Vanrise.Entities.DataRetrievalInput<CustomerPricingProductQuery> input);
 
-       CustomerPricingProduct GetCustomerPricingProduct(int customerPricingProductId);
+       CustomerPricingProductDetail GetCustomerPricingProduct(int customerPricingProductId);
        bool Insert(CustomerPricingProduct customerPricingProduct, out int insertedId);
 
        bool Delete(int customerPricingProductId);

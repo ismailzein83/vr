@@ -18,13 +18,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredCustomerPricingProducts(input));
         }
         [HttpGet]
-        public CustomerPricingProduct GetCustomerPricingProduct(int customerPricingProductId)
+        public CustomerPricingProductDetail GetCustomerPricingProduct(int customerPricingProductId)
         {
             CustomerPricingProductManager manager = new CustomerPricingProductManager();
             return manager.GetCustomerPricingProduct(customerPricingProductId);
         }
         [HttpPost]
-        public TOne.Entities.InsertOperationOutput<CustomerPricingProduct> AddCustomerPricingProduct(CustomerPricingProduct customerPricingProduct)
+        public TOne.Entities.InsertOperationOutput<CustomerPricingProductDetail> AddCustomerPricingProduct(CustomerPricingProduct customerPricingProduct)
         {
             CustomerPricingProductManager manager = new CustomerPricingProductManager();
             return manager.AddCustomerPricingProduct(customerPricingProduct);

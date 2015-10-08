@@ -69,7 +69,7 @@ namespace Vanrise.BI.Business
         }
         public IEnumerable<EntityRecord> GetTopEntities(List<string> entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, params string[] measureTypesNames)
         {
-            List<String> queryFilter = new List<String>();
+          List<DimensionFilter> queryFilter = new  List<DimensionFilter>();
             IBIConfigurationDataManager configurations = BIDataManagerFactory.GetDataManager<IBIConfigurationDataManager>();
             IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
             List<BIConfiguration<BIConfigurationEntity>> entities = configurations.GetEntities();
@@ -80,7 +80,16 @@ namespace Vanrise.BI.Business
                     if (entityType == entity.Name && entity.Configuration.BehaviorFQTN != null)
                 {
                     var myObject = (IDimensionBehavior)Activator.CreateInstance(Type.GetType(entity.Configuration.BehaviorFQTN));
-                    queryFilter=  myObject.GetFilteredValues();
+                        List<string> data=myObject.GetFilteredValues();
+                        if(data.Count>0)
+                        {
+                           queryFilter.Add(new DimensionFilter
+                             {
+                                Name = entity.Name,
+                               Data = data
+                             });
+                        }
+                    
                     
                 }
                 

@@ -17,7 +17,7 @@ namespace Vanrise.BI.Data
 
         IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(List<string> entityTypeName, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, List<String> supplierIds, List<String> customerIds, string customerColumnId, params string[] measureTypeNames);
 
-        IEnumerable<EntityRecord> GetTopEntities(List<string> entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, List<String> queryFilter, params string[] measureTypesNames);
+        IEnumerable<EntityRecord> GetTopEntities(List<string> entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, List<DimensionFilter> queryFilter, params string[] measureTypesNames);
 
         Decimal[] GetMeasureValues(DateTime fromDate, DateTime toDate, params string[] measureTypeNames);
         

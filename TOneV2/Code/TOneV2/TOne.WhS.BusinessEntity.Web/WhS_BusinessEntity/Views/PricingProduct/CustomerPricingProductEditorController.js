@@ -8,8 +8,18 @@
 
         var pricingProductDirectiveAPI;
         var carrierAccountDirectiveAPI;
+        var pricingProductId;
+       
         defineScope();
+        loadParameters();
         load();
+        function loadParameters(){
+            var parameters = VRNavigationService.getParameters($scope);
+            if (parameters != undefined && parameters != null) {
+                pricingProductId = parameters.PricingProductId;
+            }
+            $scope.disablePricingProduct = (pricingProductId != undefined);
+        }
         function defineScope() {
 
             $scope.SavePricingProduct = function () {
@@ -21,7 +31,8 @@
             };
             $scope.onPricingProductsDirectiveLoaded = function (api) {
                 pricingProductDirectiveAPI = api;
-               
+                if ($scope.disablePricingProduct)
+                    pricingProductDirectiveAPI.setData(pricingProductId);
             }
             $scope.onCarrierAccountDirectiveLoaded = function (api) {
                 carrierAccountDirectiveAPI = api;
@@ -31,10 +42,10 @@
                   if (pricingProductDirectiveAPI!=undefined)
                       $scope.selectedPricingProduct = pricingProductDirectiveAPI.getData();
             }
-            $scope.selectedSupplier;
+            $scope.selectedCustomers;
             $scope.onCarrierAccountSelectionChanged = function () {
                 if (carrierAccountDirectiveAPI != undefined)
-                    $scope.selectedSupplier = carrierAccountDirectiveAPI.getData();
+                    $scope.selectedCustomers = carrierAccountDirectiveAPI.getData();
             }
             $scope.beginEffectiveDate = new Date();
             $scope.endEffectiveDate;
@@ -43,7 +54,8 @@
         }
 
         function load() {
- 
+            if ($scope.disablePricingProduct && pricingProductDirectiveAPI != undefined)
+                pricingProductDirectiveAPI.setData(pricingProductId);
         }
 
         function insertPricingProduct() {
@@ -62,8 +74,8 @@
         }
         function buildPricingProductObjFromScope() {
             var obj = {
-                CustomerId: $scope.selectedSupplier.CarrierAccountId,
-                CustomerName: $scope.selectedSupplier.Name,
+                CustomerId: $scope.selectedCustomers.CarrierAccountId,
+                CustomerName: $scope.selectedCustomers.Name,
                 PricingProductId: $scope.selectedPricingProduct.PricingProductId,
                 PricingProductName:$scope.selectedPricingProduct.Name,
                 BED: $scope.beginEffectiveDate,

@@ -18,7 +18,7 @@ app.directive('vrWhsBeRoutingproduct', ['WhS_BE_RoutingProductAPIService', 'Util
                 $scope.selectedRoutingProducts;
                 if ($attrs.ismultipleselection!=undefined)
                     $scope.selectedRoutingProducts = [];
-
+                $scope.filteredRoutingProducts = [];
                    
                 $scope.routingProducts = [];
                 var beRoutingProductObject = new beRoutingProduct(ctrl, $scope, $attrs);
@@ -42,17 +42,12 @@ app.directive('vrWhsBeRoutingproduct', ['WhS_BE_RoutingProductAPIService', 'Util
                         $scope.$watch('ctrl.salezonepackageid', function () {
                             if (ctrl.salezonepackageid != undefined) { 
                                 $scope.isLoadingDirective = true;
-                                WhS_BE_RoutingProductAPIService.GetRoutingProductsInfoBySaleZonePackage(ctrl.salezonepackageid).then(function (response) {
-                                    $scope.routingProducts.length=0;
-                                    angular.forEach(response, function (itm) {
-                                        $scope.routingProducts.push(itm);
-                                    });
-                                }).catch(function (error) {
-                                    //TODO handle the case of exceptions
-
-                                }).finally(function () {
-                                    $scope.isLoadingDirective = false;
-                                });
+                                $scope.filteredRoutingProducts.length = 0;
+                                for (var i = 0; i < $scope.routingProducts.length; i++) {
+                                    if ($scope.routingProducts[i].SaleZonePackageId == ctrl.salezonepackageid)
+                                        $scope.filteredRoutingProducts.push($scope.routingProducts[i]);
+                                }
+                                $scope.isLoadingDirective = false;
                             }
                            
                         });
@@ -69,15 +64,18 @@ app.directive('vrWhsBeRoutingproduct', ['WhS_BE_RoutingProductAPIService', 'Util
         function getBeRoutingProductTemplate(attrs) {
 
             var multipleselection = "";
-            if (attrs.ismultipleselection != undefined)
-                multipleselection = "ismultipleselection"
+            var label = "Routing Product";
+            if (attrs.ismultipleselection != undefined) {
+                label = "Routing Products";
+                multipleselection = "ismultipleselection";
+            }
             var required = "";
             if (attrs.isrequired != undefined)
                 required = "isrequired";
 
             return '<div  vr-loader="isLoadingDirective">'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="RoutingProductId" '
-            + required + ' label="Routing Products" datasource="routingProducts" selectedvalues="selectedRoutingProducts"  onselectionchanged="onselectionchanged" entityName="Routing Products"></vr-select>'
+            + required + ' label="' + label + '" datasource="filteredRoutingProducts" selectedvalues="selectedRoutingProducts"  onselectionchanged="onselectionchanged" entityName="' + label + '"></vr-select>'
                + '</div>'
         }
 
@@ -105,8 +103,6 @@ app.directive('vrWhsBeRoutingproduct', ['WhS_BE_RoutingProductAPIService', 'Util
                     }
                     else {
                         var selectedRoutingProduct = UtilsService.getItemByVal($scope.routingProducts, selectedIds, "RoutingProductId");
-                        console.log($scope.routingProducts);
-                        console.log(selectedIds);
                         if (selectedRoutingProduct != null)
                             $scope.selectedRoutingProducts=selectedRoutingProduct;
                     }
@@ -117,27 +113,20 @@ app.directive('vrWhsBeRoutingproduct', ['WhS_BE_RoutingProductAPIService', 'Util
                     ctrl.onloaded(api);
             }
             function loadRoutingProducts() {
-                if ($attrs.salezonepackageid == undefined)
-                {
                     $scope.isLoadingDirective = true;
                     return WhS_BE_RoutingProductAPIService.GetRoutingProducts().then(function (response) {
                         angular.forEach(response, function (itm) {
                             $scope.routingProducts.push(itm);
                         });
+                        if ($attrs.salezonepackageid == undefined)
+                            $scope.filteredRoutingProducts = $scope.routingProducts;
                     }).catch(function (error) {
                         //TODO handle the case of exceptions
 
                     }).finally(function () {
                         $scope.isLoadingDirective = false;
                         defineAPI();
-                    });
-                }
-                else
-                {
-                    defineAPI();
-                }
-             
-               
+                    });  
             }
             this.initializeController = initializeController;
         }

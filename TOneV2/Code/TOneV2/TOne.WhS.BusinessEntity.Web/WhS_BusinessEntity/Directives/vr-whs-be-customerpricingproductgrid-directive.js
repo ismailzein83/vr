@@ -8,12 +8,12 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerPricingProductAPIS
             restrict: "E",
             scope: {
                 onReady: "=",
-
+                pricingproductid:'='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var customerPricingProductGrid = new CustomerPricingProductGrid($scope, ctrl);
+                var customerPricingProductGrid = new CustomerPricingProductGrid($scope, ctrl, $attrs);
                 customerPricingProductGrid.initializeController();
             },
             controllerAs: "ctrl",
@@ -46,6 +46,8 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerPricingProductAPIS
 
                         return directiveAPI;
                     }
+                    
+                   
                 };
 
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {

@@ -6,15 +6,17 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class PricingProduct
+    public class PricingProductDetail
     {
         public int PricingProductId { get; set; }
 
         public string Name { get; set; }
 
         public int SaleZonePackageId { get; set; }
+        public string SaleZonePackageName { get; set; }
 
         public int? DefaultRoutingProductId { get; set; }
+        public string DefaultRoutingProductName { get; set; }
 
         public PricingProductSettings Settings { get; set; }
     }

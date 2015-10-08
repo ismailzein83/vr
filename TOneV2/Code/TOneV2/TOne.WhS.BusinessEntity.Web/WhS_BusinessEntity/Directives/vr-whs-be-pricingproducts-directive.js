@@ -1,14 +1,16 @@
 ﻿'use strict';
-app.directive('vrWhsBePricingproducts', ['WhS_BE_PricingProductAPIService', 'UtilsService',
-    function (WhS_BE_PricingProductAPIService, UtilsService) {
+app.directive('vrWhsBePricingproducts', ['WhS_BE_PricingProductAPIService', 'UtilsService','$compile',
+function (WhS_BE_PricingProductAPIService, UtilsService,$compile) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
                 onloaded: '=',
                 ismultipleselection: "@",
+                isdisabled:"=",
                 onselectionchanged: '=',
-                isrequired: "@"
+                isrequired: "@",
+               
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -16,7 +18,7 @@ app.directive('vrWhsBePricingproducts', ['WhS_BE_PricingProductAPIService', 'Uti
 
                 $scope.selectedPricingProducts = [];
                 $scope.pricingProducts = [];
-                var bePricingProductObject = new bePricingProduct(ctrl, $scope);
+                var bePricingProductObject = new bePricingProduct(ctrl, $scope, $attrs);
                 bePricingProductObject.initializeController();
                 $scope.onselectionchanged = function () {
 
@@ -31,36 +33,36 @@ app.directive('vrWhsBePricingproducts', ['WhS_BE_PricingProductAPIService', 'Uti
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
-
-                    }
-                }
-            },
-            template: function (element, attrs) {
-                return getBePricingProductsTemplate(attrs);
+            link: function preLink($scope, iElement, iAttrs) {
+                var ctrl = $scope.ctrl;
+                $scope.$watch('ctrl.isdisabled', function () {
+                    var template = getBePricingProductsTemplate(iAttrs, ctrl);
+                    iElement.html(template);
+                    $compile(iElement.contents())($scope);
+                });
             }
 
         };
 
 
-        function getBePricingProductsTemplate(attrs) {
-          
+        function getBePricingProductsTemplate(attrs, ctrl) {
+
                 var multipleselection = "";
                 if (attrs.ismultipleselection != undefined)
                     multipleselection = "ismultipleselection"
                 var required = "";
                 if (attrs.isrequired != undefined)
                     required = "isrequired";
-               
+                var disabled = "";
+                if (ctrl.isdisabled)
+                    disabled = "vr-disabled='true'"
                 return '<div  vr-loader="isLoadingDirective">'
                     + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="PricingProductId" '
-                + required +' label="Pricing Product" datasource="pricingProducts" selectedvalues="selectedPricingProducts"  onselectionchanged="onselectionchanged"></vr-select>'
+                + required + ' label="Pricing Product" datasource="pricingProducts" selectedvalues="selectedPricingProducts"  onselectionchanged="onselectionchanged" ' + disabled + '></vr-select>'
                    + '</div>'
         }
 
-        function bePricingProduct(ctrl, $scope) {
+        function bePricingProduct(ctrl, $scope, $attrs) {
 
             function initializeController() {
 
@@ -75,10 +77,18 @@ app.directive('vrWhsBePricingproducts', ['WhS_BE_PricingProductAPIService', 'Uti
                 }
 
                 api.setData = function (selectedIds) {
-                    for (var i = 0; i < selectedIds.length; i++) {
-                        var selectedPricingProduct = UtilsService.getItemByVal($scope.pricingProducts, selectedIds[i], "PricingProductId");
+                   
+                    if ($attrs.ismultipleselection) {
+                        for (var i = 0; i < selectedIds.length; i++) {
+                            var selectedPricingProduct = UtilsService.getItemByVal($scope.pricingProducts, selectedIds[i], "PricingProductId");
+                            if (selectedPricingProduct != null)
+                                $scope.selectedPricingProducts.push(selectedPricingProduct);
+                        }
+                    }
+                    else {
+                        var selectedPricingProduct = UtilsService.getItemByVal($scope.pricingProducts, selectedIds, "PricingProductId");
                         if (selectedPricingProduct != null)
-                            $scope.selectedPricingProducts.push(selectedPricingProduct);
+                            $scope.selectedPricingProducts=selectedPricingProduct;
                     }
                 }
 

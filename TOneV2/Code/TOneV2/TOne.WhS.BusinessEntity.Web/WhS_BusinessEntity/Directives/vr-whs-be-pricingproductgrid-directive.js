@@ -84,6 +84,10 @@ function (UtilsService, VRNotificationService, WhS_BE_PricingProductAPIService,W
            {
                name: "Delete",
                clicked: deletePricingProduct,
+           },
+           {
+               name: "Assign Customer",
+               clicked:assignCustomer
            }
             ];
         }
@@ -95,7 +99,19 @@ function (UtilsService, VRNotificationService, WhS_BE_PricingProductAPIService,W
 
             WhS_BE_MainService.editPricingProduct(pricingProductObj, onPricingProductUpdated);
         }
-
+        function assignCustomer(dataItem) {
+            gridAPI.expandRow(dataItem);
+            var query = {
+                PricingProductId: dataItem.PricingProductId
+            }
+            if (dataItem.extensionObject.custormerPricingProductGridAPI!=undefined)
+             dataItem.extensionObject.custormerPricingProductGridAPI.loadGrid(query);
+            var onCustomerPricingProductAdded = function (customerPricingProductObj) {
+                if (dataItem.extensionObject.custormerPricingProductGridAPI != undefined)
+                    dataItem.extensionObject.custormerPricingProductGridAPI.onCustomerPricingProductAdded(customerPricingProductObj);
+            };
+            WhS_BE_MainService.addCustomerPricingProduct(onCustomerPricingProductAdded,dataItem);
+        }
         function deletePricingProduct(pricingProductObj) {
             var onPricingProductDeleted = function () {
                 //TODO: This is to refresh the Grid after delete, should be removed when centralized

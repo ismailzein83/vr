@@ -24,7 +24,7 @@
                 }
                 api.loadGrid(filter);
             }
-            $scope.selectedSupplier;
+            $scope.selectedCustomers;
             $scope.effectiveDate;
             $scope.selectedPricingProduct;
             $scope.onCarrierAccountDirectiveLoaded = function (api) {
@@ -35,7 +35,7 @@
             }
             $scope.onCarrierAccountSelectionChanged = function () {
                 if (carrierAccountDirectiveAPI != undefined)
-                $scope.selectedSupplier = carrierAccountDirectiveAPI.getData();
+                    $scope.selectedCustomers = carrierAccountDirectiveAPI.getData();
             }
             $scope.onPricingProductsSelectionChanged = function () {
                 if (pricingProductsDirectiveAPI!=undefined)
@@ -47,14 +47,14 @@
         }
 
         function getFilterObject() {
-            var selectedSupplier;
+            var selectedCustomers;
             var selectedPricingProduct;
-            if ($scope.selectedSupplier != undefined)
-                selectedSupplier = $scope.selectedSupplier.CarrierAccountId;
+            if ($scope.selectedCustomers != undefined)
+                selectedCustomers = $scope.selectedCustomers.CarrierAccountId;
             if ($scope.selectedPricingProduct != undefined)
                 selectedPricingProduct=$scope.selectedPricingProduct.PricingProductId;
             var data = {
-                CustomerId: selectedSupplier,
+                CustomerId: selectedCustomers,
                 PricingProductId: selectedPricingProduct,
                 EffectiveDate: $scope.effectiveDate
             };
@@ -62,12 +62,12 @@
         }
 
         function AddNewCustomerPricingProduct() {
-            var onPricingProductAdded = function (pricingProductObj) {
+            var onCustomerPricingProductAdded = function (customerPricingProductObj) {
                 if (gridAPI != undefined)
-                    gridAPI.onCustomerPricingProductAdded(pricingProductObj);
+                    gridAPI.onCustomerPricingProductAdded(customerPricingProductObj);
             };
 
-            WhS_BE_MainService.addCustomerPricingProduct(onPricingProductAdded);
+            WhS_BE_MainService.addCustomerPricingProduct(onCustomerPricingProductAdded);
         }
     }
 

@@ -95,15 +95,21 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService','WhS_BE_PricingP
             });
     }
 
-    function addCustomerPricingProduct(onCustomerPricingProductAdded) {
+    function addCustomerPricingProduct(onCustomerPricingProductAdded, dataItem) {
         var settings = {};
 
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "Customer Pricing Product";
             modalScope.onCustomerPricingProductAdded = onCustomerPricingProductAdded;
         };
-
-        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingProduct/CustomerPricingProductEditor.html', null, settings);
+        var parameters=null;
+        if (dataItem != undefined) {
+             parameters = {
+                 PricingProductId: dataItem.PricingProductId,
+            };
+        }
+            
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingProduct/CustomerPricingProductEditor.html', parameters, settings);
     }
 
     function deleteCustomerPricingProduct($scope,customerPricingProductObj, onCustomerPricingProductDeleted) {

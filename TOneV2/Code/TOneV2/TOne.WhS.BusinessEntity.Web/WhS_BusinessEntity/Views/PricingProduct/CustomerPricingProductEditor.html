@@ -1,18 +1,19 @@
 ﻿<div vr-modalcontent ng-controller="WhS_BE_CustomerPricingProductEditorController" vr-loader="isGettingData">
     <vr-modalbody width="'50%'">
         <vr-form name="formPricingProductEditor">
-
             <div>
                 <vr-row>
                     <vr-columns width="1/2row">
-                        <vr-whs-be-pricingproducts onloaded="onPricingProductsDirectiveLoaded" onselectionchanged="onPricingProductsSelectionChanged" isrequired></vr-whs-be-pricingproducts>
-                        <vr-datetimepicker type="dateTime" value="beginEffectiveDate" label="Begin Effective Date" isrequired></vr-datetimepicker>
-
+                        <vr-whs-be-pricingproducts onloaded="onPricingProductsDirectiveLoaded" onselectionchanged="onPricingProductsSelectionChanged" isdisabled="disablePricingProduct" isrequired></vr-whs-be-pricingproducts>
                     </vr-columns>
                     <vr-columns width="1/2row">
-                        <vr-whs-be-carrieraccount isrequired type="'Supplier'" onloaded="onCarrierAccountDirectiveLoaded" onselectionchanged="onCarrierAccountSelectionChanged" selectedvalues="selectedSuppliers" isrequired></vr-whs-be-carrieraccount>
-
-                      <vr-datetimepicker type="dateTime" value="endEffectiveDate" label="End Effective Date"></vr-datetimepicker>
+                        <vr-whs-be-carrieraccount isrequired type="'Customer'" onloaded="onCarrierAccountDirectiveLoaded" onselectionchanged="onCarrierAccountSelectionChanged" selectedvalues="selectedCustomers" isrequired></vr-whs-be-carrieraccount>
+                    </vr-columns>
+                    <vr-columns width="1/2row">
+                        <vr-datetimepicker type="dateTime" value="beginEffectiveDate" label="Begin Effective Date" isrequired></vr-datetimepicker>
+                    </vr-columns>
+                    <vr-columns width="1/2row">
+                        <vr-datetimepicker type="dateTime" value="endEffectiveDate" label="End Effective Date"></vr-datetimepicker>
                     </vr-columns>
                 </vr-row>
             </div>

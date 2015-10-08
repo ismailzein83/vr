@@ -42,14 +42,8 @@
                 routingProductDirectiveAPI = api;
             }
             $scope.onselectionchanged = function () {
-                if (saleZonePackagesDirectiveAPI != undefined) {
-                    $scope.salezonepackageid = saleZonePackagesDirectiveAPI.getData().SaleZonePackageId;
-
-                }
             }
             $scope.onselectionchanged1 = function () {
-                if (routingProductDirectiveAPI != undefined)  
-                    console.log(routingProductDirectiveAPI.getData());
             }
         }
 
@@ -79,13 +73,10 @@
             var routingProductId;
             if (saleZonePackagesDirectiveAPI != undefined)
                 salezonepackageid = saleZonePackagesDirectiveAPI.getData().SaleZonePackageId;
-            if (routingProductDirectiveAPI != undefined)
-                routingProductId = routingProductDirectiveAPI.getData().RoutingProductId;
             var pricingProduct = {
                 PricingProductId: (pricingProductId != null) ? pricingProductId : 0,
                 Name: $scope.name,
                 SaleZonePackageId: salezonepackageid,
-                DefaultRoutingProductId: routingProductId
             };
 
             return pricingProduct;
@@ -106,12 +97,9 @@
 
         }
         function fillScopeFromPricingProductObj(pricingProductObj) {
-            
-            if (saleZonePackagesDirectiveAPI != undefined)
-                saleZonePackagesDirectiveAPI.setData(pricingProductObj.SaleZonePackageId);
-            if (routingProductDirectiveAPI != undefined)
-                routingProductDirectiveAPI.setData(pricingProductObj.DefaultRoutingProductId);
             $scope.name = pricingProductObj.Name;
+                saleZonePackagesDirectiveAPI.setData(pricingProductObj.SaleZonePackageId);
+                 
         }
         function updatePricingProduct() {
             var pricingProductObject = buildPricingProductObjFromScope();

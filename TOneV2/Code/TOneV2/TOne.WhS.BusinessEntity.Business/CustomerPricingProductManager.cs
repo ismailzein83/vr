@@ -10,22 +10,22 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class CustomerPricingProductManager
     {
-        public Vanrise.Entities.IDataRetrievalResult<CustomerPricingProduct> GetFilteredCustomerPricingProducts(Vanrise.Entities.DataRetrievalInput<CustomerPricingProductQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<CustomerPricingProductDetail> GetFilteredCustomerPricingProducts(Vanrise.Entities.DataRetrievalInput<CustomerPricingProductQuery> input)
         {
             ICustomerPricingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerPricingProductDataManager>();
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredCustomerPricingProducts(input));
         }
 
-        public CustomerPricingProduct GetCustomerPricingProduct(int customerPricingProductId)
+        public CustomerPricingProductDetail GetCustomerPricingProduct(int customerPricingProductId)
         {
             ICustomerPricingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerPricingProductDataManager>();
             return dataManager.GetCustomerPricingProduct(customerPricingProductId);
         }
 
 
-        public TOne.Entities.InsertOperationOutput<CustomerPricingProduct> AddCustomerPricingProduct(CustomerPricingProduct customerPricingProduct)
+        public TOne.Entities.InsertOperationOutput<CustomerPricingProductDetail> AddCustomerPricingProduct(CustomerPricingProduct customerPricingProduct)
         {
-            TOne.Entities.InsertOperationOutput<CustomerPricingProduct> insertOperationOutput = new TOne.Entities.InsertOperationOutput<CustomerPricingProduct>();
+            TOne.Entities.InsertOperationOutput<CustomerPricingProductDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<CustomerPricingProductDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
@@ -34,12 +34,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
             ICustomerPricingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerPricingProductDataManager>();
             bool insertActionSucc = dataManager.Insert(customerPricingProduct, out customerPricingProductId);
-
             if (insertActionSucc)
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 customerPricingProduct.CustomerPricingProductId = customerPricingProductId;
-                insertOperationOutput.InsertedObject = customerPricingProduct;
+                insertOperationOutput.InsertedObject = dataManager.GetCustomerPricingProduct(customerPricingProductId);
             }
 
             return insertOperationOutput;

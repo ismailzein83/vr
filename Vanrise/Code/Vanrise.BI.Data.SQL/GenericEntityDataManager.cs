@@ -33,7 +33,7 @@ namespace Vanrise.BI.Data.SQL
             string[] additionalFilters = new string[] { BuildQueryColumnFilter(entityIdColumn, entityId) };
             return GetTimeValuesRecord(timeDimensionType, fromDate, toDate, additionalFilters, measureTypesNames, customerIds, supplierIds, customerColumnId);
         }
-        public IEnumerable<EntityRecord> GetTopEntities(List<string> entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, List<String> queryFilter, params string[] measureTypesNames)
+        public IEnumerable<EntityRecord> GetTopEntities(List<string> entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, List<DimensionFilter> queryFilter, params string[] measureTypesNames)
         {
             List<EntityRecord> rslt = new List<EntityRecord>();
             string topMeasureColExp;
@@ -58,7 +58,7 @@ namespace Vanrise.BI.Data.SQL
 
             string columnsPart = BuildQueryColumnsPart(measureColumns);
             string rowsPart = "";
-            if (queryFilter != null)
+            if (queryFilter != null && queryFilter.Count>0)
                 rowsPart = BuildQueryTopRows(topMeasureColumn, topCount, queryFilter, entityIdColumn, entityNameColumn);
             else
                 rowsPart = BuildQueryTopRowsParts(topMeasureColumn, topCount, entityNameColumn);
@@ -118,11 +118,11 @@ namespace Vanrise.BI.Data.SQL
             return String.Format(@"TopCount({0}, {1}, {2})", columns.ToString(), count, columnBy);
         }
 
-        protected string BuildQueryTopRows(string columnBy, int count, List<String> queryFilter, List<string> entityIdColumn, List<string> entityNameColumn)
+        protected string BuildQueryTopRows(string columnBy, int count, List<DimensionFilter> queryFilter, List<string> entityIdColumn, List<string> entityNameColumn)
         {
             return String.Format(@"TopCount({0}, {1}, {2})", BuildQueryRows(queryFilter, entityIdColumn, entityNameColumn), count, columnBy);
         }
-        protected string BuildQueryRows(List<String> queryFilter, List<string> entityIdColumn, List<string> entityNameColumn)
+        protected string BuildQueryRows(List<DimensionFilter> queryFilter, List<string> entityIdColumn, List<string> entityNameColumn)
         {
             StringBuilder queryBuilder = null;
          
@@ -143,21 +143,32 @@ namespace Vanrise.BI.Data.SQL
             StringBuilder ids = new StringBuilder();
             foreach (string id in entityIdColumn)
             {
-                String FilterValue = BuildQueryRowsFilter(id, queryFilter);
-                if (ids.Length == 0)
+                foreach (var value in queryFilter)
                 {
-                    ids.AppendFormat("Filter({0}.CHILDREN as FilterValue,{1} )", id, FilterValue);
+                    foreach (BIConfiguration<BIConfigurationEntity> obj in _entityDefinitions)
+                    {
+                        if (obj.Name == value.Name && obj.Configuration.ColumnID == id)
+                        {
+                            String FilterValue = BuildQueryRowsFilter(id, value.Data);
+                            if (ids.Length == 0)
+                            {
+                                ids.AppendFormat("Filter({0}.CHILDREN as FilterValue,{1} )", id, FilterValue);
+                            }
+                            else
+                            {
+                                ids.AppendFormat("* Filter({0}.CHILDREN as FilterValue,{1} )", id, FilterValue);
+                            }
+                        }
+                    }
                 }
-                else
-                {
-                    ids.AppendFormat("* Filter({0}.CHILDREN as FilterValue,{1} )", id, FilterValue);
-                }
+                
+                
 
             }
             queryBuilder.AppendFormat("{0} * {1}", ids.ToString(), columns.ToString());
             return queryBuilder.ToString();
         }
-        protected string BuildQueryRowsFilter(string entityIdColumn, List<String> queryFilter)
+        protected string BuildQueryRowsFilter(string entityIdColumn, List<string> queryFilter)
         {
             StringBuilder queryBuilder = null;
             foreach (var value in queryFilter)

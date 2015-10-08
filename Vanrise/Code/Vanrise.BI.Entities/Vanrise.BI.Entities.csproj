@@ -51,6 +51,7 @@
     <Compile Include="ChartDirectiveSetting.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="DataGridDirectiveSetting.cs" />
+    <Compile Include="DimensionFilter.cs" />
     <Compile Include="EntityRecord.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="GenericEntity.cs" />

@@ -24,7 +24,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         }
 
-        public Vanrise.Entities.BigResult<Entities.CustomerPricingProduct> GetFilteredCustomerPricingProducts(Vanrise.Entities.DataRetrievalInput<Entities.CustomerPricingProductQuery> input)
+        public Vanrise.Entities.BigResult<Entities.CustomerPricingProductDetail> GetFilteredCustomerPricingProducts(Vanrise.Entities.DataRetrievalInput<Entities.CustomerPricingProductQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
@@ -35,13 +35,13 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 ExecuteNonQuerySP("TOneWhS_BE.sp_CustomerPricingProduct_CreateTempByFiltered", tempTableName, input.Query.CustomerId,input.Query.PricingProductId,input.Query.EffectiveDate);
             };
 
-            return RetrieveData(input, createTempTableAction, CustomerPricingProductMapper, _columnMapper);
+            return RetrieveData(input, createTempTableAction, CustomerPricingProductDetailMapper, _columnMapper);
         }
 
 
-        public CustomerPricingProduct GetCustomerPricingProduct(int customerPricingProductId)
+        public CustomerPricingProductDetail GetCustomerPricingProduct(int customerPricingProductId)
         {
-            return GetItemSP("TOneWhS_BE.sp_CustomerPricingProduct_Get", CustomerPricingProductMapper, customerPricingProductId);
+            return GetItemSP("TOneWhS_BE.sp_CustomerPricingProduct_Get", CustomerPricingProductDetailMapper, customerPricingProductId);
         }
 
         public bool Insert(Entities.CustomerPricingProduct customerPricingProduct, out int insertedId)
@@ -59,9 +59,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CustomerPricingProduct_Delete", customerPricingProductId);
             return (recordesEffected > 0);
         }
-        CustomerPricingProduct CustomerPricingProductMapper(IDataReader reader)
+        CustomerPricingProductDetail CustomerPricingProductDetailMapper(IDataReader reader)
         {
-            CustomerPricingProduct customerPricingProduct = new CustomerPricingProduct
+            CustomerPricingProductDetail customerPricingProductDetail = new CustomerPricingProductDetail
             {
                 CustomerPricingProductId = (int)reader["ID"],
                 CustomerId = (int)reader["CustomerID"],
@@ -73,7 +73,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 PricingProductName = reader["PricingProductName"] as string,
             };
 
-            return customerPricingProduct;
+            return customerPricingProductDetail;
         }
     }
 }

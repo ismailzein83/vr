@@ -58,6 +58,8 @@
     <Compile Include="CodeCriteria\CodeCriteria.cs" />
     <Compile Include="CodeCriteria\CodeCriteriaGroupBehavior.cs" />
     <Compile Include="CodeCriteria\CodeCriteriaGroupSettings.cs" />
+    <Compile Include="PricingProduct\CustomerPricingProductDetail.cs" />
+    <Compile Include="PricingProduct\PricingProductDetail.cs" />
     <Compile Include="PricingProduct\CustomerPricingProduct.cs" />
     <Compile Include="PricingProduct\CustomerPricingProductQuery.cs" />
     <Compile Include="PricingProduct\PricingProductInfo.cs" />
