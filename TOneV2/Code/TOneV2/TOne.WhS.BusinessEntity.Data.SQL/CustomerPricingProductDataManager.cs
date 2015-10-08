@@ -75,5 +75,25 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return customerPricingProductDetail;
         }
+        CustomerPricingProduct CustomerPricingProductMapper(IDataReader reader)
+        {
+            CustomerPricingProduct customerPricingProduct = new CustomerPricingProduct
+            {
+                CustomerPricingProductId = (int)reader["ID"],
+                CustomerId = (int)reader["CustomerID"],
+                PricingProductId = (int)reader["PricingProductID"],
+                BED = GetReaderValue<DateTime>(reader, "BED"),
+                EED = GetReaderValue<DateTime?>(reader, "EED"),
+                AllDestinations = GetReaderValue<bool>(reader, "AllDestinations"),
+            };
+
+            return customerPricingProduct;
+        }
+
+
+        public List<CustomerPricingProduct> GetCustomerPricingProductByCustomerID(int customerId)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_CustomerPricingProduct_GetByCustomer", CustomerPricingProductMapper, customerId);
+        }
     }
 }

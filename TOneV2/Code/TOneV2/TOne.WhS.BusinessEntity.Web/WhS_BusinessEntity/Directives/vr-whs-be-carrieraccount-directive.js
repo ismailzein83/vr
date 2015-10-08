@@ -13,7 +13,10 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'Util
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            $scope.selectedCarrierValues = [];
+
+            $scope.selectedCarrierValues;
+            if ($attrs.ismultipleselection != undefined)
+                $scope.selectedCarrierValues = [];
             $scope.datasource = [];
             var beCarrierGroup = new BeCarrierGroup(ctrl, $scope, WhS_BE_CarrierAccountAPIService);
             beCarrierGroup.initializeController();
@@ -107,12 +110,16 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'Util
             }
 
             api.setData = function (selectedIds) {
-                
-                for (var i = 0; i < selectedIds.length; i++)
-                {
-                    var selectedCarrierValue = UtilsService.getItemByVal($scope.datasource, selectedIds[i], "CarrierAccountId");
-                    if (selectedCarrierValue!=null)
-                     $scope.selectedCarrierValues.push(selectedCarrierValue);
+                if ($attrs.ismultipleselection) {
+                    for (var i = 0; i < selectedIds.length; i++) {
+                        var selectedCarrierValue = UtilsService.getItemByVal($scope.datasource, selectedIds[i], "CarrierAccountId");
+                        if (selectedCarrierValue != null)
+                            $scope.selectedCarrierValues.push(selectedCarrierValue);
+                    }
+                } else {
+                    var selectedCarrierValue = UtilsService.getItemByVal($scope.datasource, selectedIds, "CarrierAccountId");
+                    if (selectedCarrierValue != null)
+                        $scope.selectedCarrierValues=selectedCarrierValue;
                 }
             }
 

@@ -44,7 +44,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 SupplierZone supplierZone;
                 if (existingZonesDictionary.TryGetValue(zone.Key, out supplierZone))
                 {
-                        addZone.Status = Status.NotChanged;
+                        addZone.Status = TOne.WhS.SupplierPriceList.Entities.Status.NotChanged;
                         addZone.Name = supplierZone.Name;
                         addZone.SupplierZoneId = supplierZone.SupplierZoneId;
                         addZone.BeginEffectiveDate = supplierZone.BeginEffectiveDate;
@@ -52,7 +52,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 }
                 else
                 {
-                    addZone.Status = Status.New;
+                    addZone.Status = TOne.WhS.SupplierPriceList.Entities.Status.New;
                     addZone.Name = zone.Key;
                     addZone.BeginEffectiveDate = zone.Value.BED;
                     addZone.EndEffectiveDate = zone.Value.EED;
@@ -60,11 +60,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 zones.Add(addZone);
 
             }
-            long lastTakenId = manager.ReserveIDRange(zones.Where(x => x.Status == Status.New).Count());
+            long lastTakenId = manager.ReserveIDRange(zones.Where(x => x.Status == TOne.WhS.SupplierPriceList.Entities.Status.New).Count());
 
             foreach (Zone zone in zones)
             {
-                if (zone.Status == Status.New)
+                if (zone.Status == TOne.WhS.SupplierPriceList.Entities.Status.New)
                     zone.SupplierZoneId = lastTakenId++;
             }
             foreach (var zone in existingZonesDictionary)
@@ -75,7 +75,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     zones.Add(new Zone
                     {
                         SupplierId = supplierId,
-                        Status = Status.Updated,
+                        Status = TOne.WhS.SupplierPriceList.Entities.Status.Updated,
                         Name = zone.Key,
                         SupplierZoneId=zone.Value.SupplierZoneId,
                         BeginEffectiveDate = zone.Value.BeginEffectiveDate,

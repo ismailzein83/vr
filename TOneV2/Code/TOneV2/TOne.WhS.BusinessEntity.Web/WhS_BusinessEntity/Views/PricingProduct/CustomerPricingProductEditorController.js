@@ -21,7 +21,7 @@
             $scope.disablePricingProduct = (pricingProductId != undefined);
         }
         function defineScope() {
-
+            $scope.allDistinations = false;
             $scope.SavePricingProduct = function () {
                     return insertPricingProduct();
             };
@@ -79,7 +79,8 @@
                 PricingProductId: $scope.selectedPricingProduct.PricingProductId,
                 PricingProductName:$scope.selectedPricingProduct.Name,
                 BED: $scope.beginEffectiveDate,
-                EED: $scope.endEffectiveDate
+                EED: $scope.endEffectiveDate,
+                AllDestinations:$scope.allDistinations
 
             };
             return obj;

@@ -16,7 +16,10 @@ function (WhS_BE_PricingProductAPIService, UtilsService,$compile) {
 
                 var ctrl = this;
 
-                $scope.selectedPricingProducts = [];
+                $scope.selectedPricingProducts;
+                if ($attrs.ismultipleselection != undefined)
+                    $scope.selectedPricingProducts = [];
+
                 $scope.pricingProducts = [];
                 var bePricingProductObject = new bePricingProduct(ctrl, $scope, $attrs);
                 bePricingProductObject.initializeController();

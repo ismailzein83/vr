@@ -25,14 +25,107 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public TOne.Entities.InsertOperationOutput<CustomerPricingProductDetail> AddCustomerPricingProduct(CustomerPricingProduct customerPricingProduct)
         {
+
             TOne.Entities.InsertOperationOutput<CustomerPricingProductDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<CustomerPricingProductDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
 
             int customerPricingProductId = -1;
-
             ICustomerPricingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerPricingProductDataManager>();
+            List<CustomerPricingProduct> customerPricingProductList = dataManager.GetCustomerPricingProductByCustomerID(customerPricingProduct.CustomerId);
+            List<CustomerPricingProduct> customerPricingProductObject=new List<CustomerPricingProduct>();
+            foreach (CustomerPricingProduct obj in customerPricingProductList)
+            {
+                if (obj.PricingProductId == customerPricingProduct.PricingProductId)
+                {
+                    if(obj.BED==customerPricingProduct.BED && (obj.EED<customerPricingProduct.EED || obj.EED>customerPricingProduct.EED))
+                    {
+                        customerPricingProductObject.Add(new CustomerPricingProduct
+                        {
+                            AllDestinations = obj.AllDestinations,
+                            CustomerId = obj.CustomerId,
+                            BED = obj.BED,
+                            CustomerPricingProductId = obj.CustomerPricingProductId,
+                            EED = customerPricingProduct.EED,
+                            PricingProductId = obj.PricingProductId
+                        });
+                    }
+                    else if (obj.BED < customerPricingProduct.BED)
+                    {
+                        if (obj.EED < customerPricingProduct.BED)
+                        {
+                            customerPricingProductObject.Add(new CustomerPricingProduct
+                            {
+                                AllDestinations = customerPricingProduct.AllDestinations,
+                                CustomerId = customerPricingProduct.CustomerId,
+                                BED = customerPricingProduct.BED,
+                                EED = customerPricingProduct.EED,
+                                PricingProductId = customerPricingProduct.PricingProductId
+                            });
+
+                        }
+                        else if (obj.EED > customerPricingProduct.BED && obj.EED < customerPricingProduct.EED)
+                        {
+                            customerPricingProductObject.Add(new CustomerPricingProduct
+                            {
+                                AllDestinations = obj.AllDestinations,
+                                CustomerId = obj.CustomerId,
+                                BED = obj.BED,
+                                EED = customerPricingProduct.BED,
+                                CustomerPricingProductId=obj.CustomerPricingProductId,
+                                PricingProductId = obj.PricingProductId
+                            });
+                            customerPricingProductObject.Add(new CustomerPricingProduct
+                            {
+                                AllDestinations = customerPricingProduct.AllDestinations,
+                                CustomerId = customerPricingProduct.CustomerId,
+                                BED = customerPricingProduct.BED,
+                                EED = customerPricingProduct.EED,
+                                PricingProductId = customerPricingProduct.PricingProductId
+                            });
+
+                        }
+                        else if (obj.EED > customerPricingProduct.EED || obj.EED == null)
+                        {
+                            customerPricingProductObject.Add(new CustomerPricingProduct
+                            {
+                                BED = obj.BED,
+                                EED = customerPricingProduct.EED,
+                                AllDestinations = obj.AllDestinations,
+                                CustomerId = obj.CustomerId,
+                                CustomerPricingProductId = obj.CustomerPricingProductId,
+                                PricingProductId = obj.PricingProductId
+                            });
+
+                        }
+                    }
+                }
+                else if (obj.PricingProductId != customerPricingProduct.PricingProductId)
+                {
+                    if (obj.BED == customerPricingProduct.BED && (obj.EED < customerPricingProduct.EED || obj.EED > customerPricingProduct.EED))
+                    {
+                        customerPricingProductObject.Add(new CustomerPricingProduct
+                        {
+                            AllDestinations = obj.AllDestinations,
+                            CustomerId = obj.CustomerId,
+                            BED = obj.BED,
+                            CustomerPricingProductId = obj.CustomerPricingProductId,
+                            EED = customerPricingProduct.BED,
+                            PricingProductId = obj.PricingProductId
+                        });
+                        customerPricingProductObject.Add(new CustomerPricingProduct
+                        {
+                            AllDestinations = customerPricingProduct.AllDestinations,
+                            CustomerId = customerPricingProduct.CustomerId,
+                            BED = customerPricingProduct.BED,
+                            EED = customerPricingProduct.EED,
+                            PricingProductId = customerPricingProduct.PricingProductId
+                        });
+                    }
+                }
+
+            }
             bool insertActionSucc = dataManager.Insert(customerPricingProduct, out customerPricingProductId);
             if (insertActionSucc)
             {

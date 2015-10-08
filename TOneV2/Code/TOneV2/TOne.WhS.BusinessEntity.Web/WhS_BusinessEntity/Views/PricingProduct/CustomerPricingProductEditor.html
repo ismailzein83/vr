@@ -7,13 +7,16 @@
                         <vr-whs-be-pricingproducts onloaded="onPricingProductsDirectiveLoaded" onselectionchanged="onPricingProductsSelectionChanged" isdisabled="disablePricingProduct" isrequired></vr-whs-be-pricingproducts>
                     </vr-columns>
                     <vr-columns width="1/2row">
-                        <vr-whs-be-carrieraccount isrequired type="'Customer'" onloaded="onCarrierAccountDirectiveLoaded" onselectionchanged="onCarrierAccountSelectionChanged" selectedvalues="selectedCustomers" isrequired></vr-whs-be-carrieraccount>
+                        <vr-whs-be-carrieraccount  type="'Customer'" onloaded="onCarrierAccountDirectiveLoaded" onselectionchanged="onCarrierAccountSelectionChanged" selectedvalues="selectedCustomers" isrequired></vr-whs-be-carrieraccount>
                     </vr-columns>
                     <vr-columns width="1/2row">
                         <vr-datetimepicker type="dateTime" value="beginEffectiveDate" label="Begin Effective Date" isrequired></vr-datetimepicker>
                     </vr-columns>
                     <vr-columns width="1/2row">
                         <vr-datetimepicker type="dateTime" value="endEffectiveDate" label="End Effective Date"></vr-datetimepicker>
+                    </vr-columns>
+                    <vr-columns width="1/2row">
+                        <vr-switch value="allDistinations" label="All Distinations"></vr-switch>
                     </vr-columns>
                 </vr-row>
             </div>

@@ -156,7 +156,6 @@
   <ItemGroup>
     <Content Include="WhS_BusinessEntity\Constant\ModuleConfig.js" />
     <Content Include="WhS_BusinessEntity\Directives\Templates\CustomerPricingProductGridTemplate.html" />
-    <Content Include="WhS_BusinessEntity\Directives\Templates\PricingProductDirectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Templates\SelectiveCodeCriteriaDirectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Templates\SelectiveCustomersDirectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Templates\SelectiveSaleZonesDirectiveTemplate.html" />

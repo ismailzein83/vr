@@ -13,7 +13,7 @@ namespace TOne.WhS.BusinessEntity.Data
 
        CustomerPricingProductDetail GetCustomerPricingProduct(int customerPricingProductId);
        bool Insert(CustomerPricingProduct customerPricingProduct, out int insertedId);
-
+       List<CustomerPricingProduct> GetCustomerPricingProductByCustomerID(int customerId);
        bool Delete(int customerPricingProductId);
     }
 }
