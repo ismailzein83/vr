@@ -14,7 +14,7 @@ namespace PSTN.BusinessEntity.Entities
 
         public List<int> TrunkIds { get; set; }
 
-        public NormalizationPhoneNumberType? PhoneNumberType { get; set; }
+        public NormalizationPhoneNumberType PhoneNumberType { get; set; }
 
         public int? PhoneNumberLength { get; set; }
 
