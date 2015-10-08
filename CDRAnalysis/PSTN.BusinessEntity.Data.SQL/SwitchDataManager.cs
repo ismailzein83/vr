@@ -38,6 +38,12 @@ namespace PSTN.BusinessEntity.Data.SQL
             return GetItemSP("PSTN_BE.sp_Switch_GetByDataSourceID", SwitchMapper, DataSourceID);
         }
 
+        public List<SwitchInfo> GetSwitchesByIds(List<int> switchIds)
+        {
+            string commaSeparatedSwitchIds = string.Join<int>(",", switchIds);
+            return GetItemsSP("PSTN_BE_sp_Switch_GetByIDs", SwitchInfoMapper, commaSeparatedSwitchIds);
+        }
+
         public List<SwitchInfo> GetSwitches()
         {
             return GetItemsSP("PSTN_BE.sp_Switch_GetAll", SwitchInfoMapper);

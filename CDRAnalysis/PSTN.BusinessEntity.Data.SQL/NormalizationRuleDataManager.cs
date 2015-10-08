@@ -80,8 +80,8 @@ namespace PSTN.BusinessEntity.Data.SQL
             normalizationRuleDetail.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED");
             
             NormalizationRuleCriteria criteria = Vanrise.Common.Serializer.Deserialize<NormalizationRuleCriteria>(reader["Criteria"] as string);
-            normalizationRuleDetail.SwitchCount = criteria.SwitchIds.Count;
-            normalizationRuleDetail.TrunkCount = criteria.TrunkIds.Count;
+            normalizationRuleDetail.SwitchCount = (criteria.SwitchIds != null) ? criteria.SwitchIds.Count : 0;
+            normalizationRuleDetail.TrunkCount = (criteria.TrunkIds != null) ? criteria.TrunkIds.Count : 0;
             normalizationRuleDetail.PhoneNumberType = criteria.PhoneNumberType;
             normalizationRuleDetail.PhoneNumberLength = criteria.PhoneNumberLength;
             normalizationRuleDetail.PhoneNumberPrefix = criteria.PhoneNumberPrefix;

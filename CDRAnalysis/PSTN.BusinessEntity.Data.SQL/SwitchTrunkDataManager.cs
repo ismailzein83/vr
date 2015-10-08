@@ -54,6 +54,12 @@ namespace PSTN.BusinessEntity.Data.SQL
             return GetItemsSP("PSTN_BE.sp_SwitchTrunk_GetAll", SwitchTrunkInfoMapper);
         }
 
+        public List<SwitchTrunkInfo> GetSwitchTrunksByIds(List<int> trunkIds)
+        {
+            string commaSeparatedTrunkIds = string.Join<int>(",", trunkIds);
+            return GetItemsSP("PSTN_BE.sp_SwitchTrunk_GetByIDs", SwitchTrunkInfoMapper, commaSeparatedTrunkIds);
+        }
+
         public bool AddSwitchTrunk(SwitchTrunk trunkObject, out int insertedID)
         {
             object trunkID;

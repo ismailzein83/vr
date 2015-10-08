@@ -117,8 +117,23 @@ namespace PSTN.BusinessEntity.Business
         public Vanrise.Entities.IDataRetrievalResult<NormalizationRuleDetail> GetFilteredNormalizationRules(Vanrise.Entities.DataRetrievalInput<NormalizationRuleQuery> input)
         {
             INormalizationRuleDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<INormalizationRuleDataManager>();
-
             BigResult<NormalizationRuleDetail> bigResult = dataManager.GetFilteredNormalizationRules(input);
+
+            SwitchManager switchManager = new SwitchManager();
+            
+            List<int> switchIds = new List<int>();
+            switchIds.Add(30);
+            switchIds.Add(31);
+
+            List<SwitchInfo> switches = switchManager.GetSwitchesByIds(switchIds);
+
+            SwitchTrunkManager trunkManager = new SwitchTrunkManager();
+
+            List<int> trunkIds = new List<int>();
+            trunkIds.Add(1);
+            trunkIds.Add(2);
+
+            List<SwitchTrunkInfo> trunks = trunkManager.GetSwitchTrunksByIds(trunkIds);
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, bigResult);
         }
