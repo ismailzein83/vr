@@ -37,35 +37,6 @@ when not matched by source then
 	delete;
 set identity_insert [FraudAnalysis].[CallClass] off;
 
---[FraudAnalysis].[CallType]------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-set identity_insert [FraudAnalysis].[CallType] on;
-;with cte_data([ID],[Code],[Description])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,1,'outgoing Voice'),
-(2,2,'Incoming Voice Call'),
-(3,29,'call Forward'),
-(4,30,'Incoming Sms'),
-(5,31,'Outgoing Sms'),
-(6,26,'Roaming call forward')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Code],[Description]))
-merge	[FraudAnalysis].[CallType] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Code] = s.[Code],[Description] = s.[Description]
-when not matched by target then
-	insert([ID],[Code],[Description])
-	values(s.[ID],s.[Code],s.[Description])
-when not matched by source then
-	delete;
-set identity_insert [FraudAnalysis].[CallType] off;
-
-
 --[FraudAnalysis].[CaseStatus]----------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
@@ -115,58 +86,6 @@ when not matched by target then
 when not matched by source then
 	delete;
 set identity_insert [FraudAnalysis].[Period] off;
-
-
---[FraudAnalysis].[SubType]-------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-set identity_insert [FraudAnalysis].[SubType] on;
-;with cte_data([ID],[Description])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Prepaid'),
-(2,'Postpaid')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Description]))
-merge	[FraudAnalysis].[SubType] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Description] = s.[Description]
-when not matched by target then
-	insert([ID],[Description])
-	values(s.[ID],s.[Description])
-when not matched by source then
-	delete;
-set identity_insert [FraudAnalysis].[SubType] off;
-
-
---[FraudAnalysis].[SuspicionLevel]------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-set identity_insert [FraudAnalysis].[SuspicionLevel] on;
-;with cte_data([ID],[Name])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Clean'),
-(2,'Suspicious'),
-(3,'Highly Suspicious'),
-(4,'Fraud')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name]))
-merge	[FraudAnalysis].[SuspicionLevel] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name]
-when not matched by target then
-	insert([ID],[Name])
-	values(s.[ID],s.[Name])
-when not matched by source then
-	delete;
-set identity_insert [FraudAnalysis].[SuspicionLevel] off;
 
 
 
