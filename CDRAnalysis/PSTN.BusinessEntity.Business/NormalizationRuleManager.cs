@@ -10,6 +10,13 @@ namespace PSTN.BusinessEntity.Business
 {
     public class NormalizationRuleManager
     {
+
+        public List<NormalizationRule> GetEffectiveRules()
+        {
+            INormalizationRuleDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<INormalizationRuleDataManager>();
+            return dataManager.GetEffective();
+        }
+
         public void Normalize(Vanrise.Fzero.CDRImport.Entities.StagingCDR cdr)
         {
             CDRToNormalizeInfo cdrInfo_CGPN = CreateCGPN_CDR(cdr);
@@ -93,7 +100,7 @@ namespace PSTN.BusinessEntity.Business
                 cdr.CGPN = phoneNumber;
             }
         }
-        
+
         static Vanrise.Rules.RuleTree _rules = (new NormalizationRuleManager()).GetStructuredRules();
 
         NormalizationRuleActionBehavior GetActionBehavior(int behaviorId)
@@ -105,31 +112,35 @@ namespace PSTN.BusinessEntity.Business
         public Vanrise.Rules.RuleTree GetStructuredRules()
         {            
             List<Vanrise.Rules.BaseRule> rules = new List<Vanrise.Rules.BaseRule>();//GEt rules from database
-
-            rules.Add(new NormalizationRule
-            {
-                Criteria = new NormalizationRuleCriteria { PhoneNumberType = NormalizationPhoneNumberType.CGPN, SwitchIds = new List<int>() { 3 }, TrunkIds = new List<int>() { 142 }, PhoneNumberLength = null, PhoneNumberPrefix = null },
-                Settings = new NormalizationRuleSettings() { Actions = new List<NormalizationRuleActionSettings>() { new AddPrefixActionSettings() { BehaviorId = 1, Prefix = "xx" } } }
-            });
-
-            rules.Add(new NormalizationRule
-            {
-                Criteria = new NormalizationRuleCriteria { PhoneNumberType = NormalizationPhoneNumberType.CGPN, PhoneNumberLength = 8, PhoneNumberPrefix = "177", SwitchIds = new List<int>() { 3 }, TrunkIds = new List<int>() { 142 } },
-                Settings = new NormalizationRuleSettings() { Actions = new List<NormalizationRuleActionSettings>() { new AddPrefixActionSettings() { BehaviorId = 1, Prefix = "xxxx" } } }
-            });
+            rules.AddRange(GetEffectiveRules());
 
 
-            rules.Add(new NormalizationRule
-            {
-                Criteria = new NormalizationRuleCriteria { PhoneNumberType = NormalizationPhoneNumberType.CGPN, PhoneNumberPrefix = "177", SwitchIds = new List<int>() { 3 }, TrunkIds = new List<int>() { 142 }, PhoneNumberLength = null },
-                Settings = new NormalizationRuleSettings() { Actions = new List<NormalizationRuleActionSettings>() { new AddPrefixActionSettings() { BehaviorId = 1, Prefix = "xxx" } } }
-            });
+            //foreach
 
-            rules.Add(new NormalizationRule
-            {
-                Criteria = new NormalizationRuleCriteria { PhoneNumberType = NormalizationPhoneNumberType.CGPN, SwitchIds = new List<int>() { 3 }, PhoneNumberLength = null, PhoneNumberPrefix = null, TrunkIds = null },
-                Settings = new NormalizationRuleSettings() { Actions = new List<NormalizationRuleActionSettings>() { new AddPrefixActionSettings() { BehaviorId = 1, Prefix = "x" } } }
-            });
+            //rules.Add(new NormalizationRule
+            //{
+            //    Criteria = new NormalizationRuleCriteria { PhoneNumberType = NormalizationPhoneNumberType.CGPN, SwitchIds = new List<int>() { 3 }, TrunkIds = new List<int>() { 142 }, PhoneNumberLength = null, PhoneNumberPrefix = null },
+            //    Settings = new NormalizationRuleSettings() { Actions = new List<NormalizationRuleActionSettings>() { new AddPrefixActionSettings() { BehaviorId = 1, Prefix = "xx" } } }
+            //});
+
+            //rules.Add(new NormalizationRule
+            //{
+            //    Criteria = new NormalizationRuleCriteria { PhoneNumberType = NormalizationPhoneNumberType.CGPN, PhoneNumberLength = 8, PhoneNumberPrefix = "177", SwitchIds = new List<int>() { 3 }, TrunkIds = new List<int>() { 142 } },
+            //    Settings = new NormalizationRuleSettings() { Actions = new List<NormalizationRuleActionSettings>() { new AddPrefixActionSettings() { BehaviorId = 1, Prefix = "xxxx" } } }
+            //});
+
+
+            //rules.Add(new NormalizationRule
+            //{
+            //    Criteria = new NormalizationRuleCriteria { PhoneNumberType = NormalizationPhoneNumberType.CGPN, PhoneNumberPrefix = "177", SwitchIds = new List<int>() { 3 }, TrunkIds = new List<int>() { 142 }, PhoneNumberLength = null },
+            //    Settings = new NormalizationRuleSettings() { Actions = new List<NormalizationRuleActionSettings>() { new AddPrefixActionSettings() { BehaviorId = 1, Prefix = "xxx" } } }
+            //});
+
+            //rules.Add(new NormalizationRule
+            //{
+            //    Criteria = new NormalizationRuleCriteria { PhoneNumberType = NormalizationPhoneNumberType.CGPN, SwitchIds = new List<int>() { 3 }, PhoneNumberLength = null, PhoneNumberPrefix = null, TrunkIds = null },
+            //    Settings = new NormalizationRuleSettings() { Actions = new List<NormalizationRuleActionSettings>() { new AddPrefixActionSettings() { BehaviorId = 1, Prefix = "x" } } }
+            //});
           
 
 
@@ -194,7 +205,7 @@ namespace PSTN.BusinessEntity.Business
         {
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.NormalizationRuleActionBehaviorConfigType);
-        
+
         }
 
         public InsertOperationOutput<NormalizationRuleDetail> AddNormalizationRule(NormalizationRule normalizationRuleObj)
@@ -212,7 +223,7 @@ namespace PSTN.BusinessEntity.Business
             {
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 normalizationRuleObj.NormalizationRuleId = normalizationRuleId;
-                
+
                 NormalizationRuleDetail detail = new NormalizationRuleDetail();
                 detail.NormalizationRuleId = normalizationRuleId;
                 insertOperationOutput.InsertedObject = dataManager.GetNormalizationRuleDetailByID(normalizationRuleId);

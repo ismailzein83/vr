@@ -17,6 +17,11 @@ namespace PSTN.BusinessEntity.Data.SQL
             _mapper.Add("EndEffectiveDate", "EED");
         }
 
+        public List<NormalizationRule> GetEffective()
+        {
+            return GetItemsSP("PSTN_BE.sp_NormalizationRule_GetEffective", NormalizationRuleMapper);
+        }
+
         public Vanrise.Entities.BigResult<NormalizationRuleDetail> GetFilteredNormalizationRules(Vanrise.Entities.DataRetrievalInput<NormalizationRuleQuery> input)
         {
             return RetrieveData(input, (tempTableName) =>
