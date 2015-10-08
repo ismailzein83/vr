@@ -1,10 +1,8 @@
 ﻿using PSTN.BusinessEntity.Data;
 using PSTN.BusinessEntity.Entities;
-using PSTN.BusinessEntity.Entities.Normalization.Actions;
 using System.Collections.Generic;
 using Vanrise.Common;
 using Vanrise.Entities;
-using System.Linq;
 
 namespace PSTN.BusinessEntity.Business
 {
@@ -118,6 +116,8 @@ namespace PSTN.BusinessEntity.Business
         {
             INormalizationRuleDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<INormalizationRuleDataManager>();
             BigResult<NormalizationRuleDetail> bigResult = dataManager.GetFilteredNormalizationRules(input);
+
+
 
             SwitchManager switchManager = new SwitchManager();
             

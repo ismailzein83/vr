@@ -41,7 +41,7 @@ namespace PSTN.BusinessEntity.Data.SQL
         public List<SwitchInfo> GetSwitchesByIds(List<int> switchIds)
         {
             string commaSeparatedSwitchIds = string.Join<int>(",", switchIds);
-            return GetItemsSP("PSTN_BE_sp_Switch_GetByIDs", SwitchInfoMapper, commaSeparatedSwitchIds);
+            return GetItemsSP("PSTN_BE.sp_Switch_GetByIDs", SwitchInfoMapper, commaSeparatedSwitchIds);
         }
 
         public List<SwitchInfo> GetSwitches()

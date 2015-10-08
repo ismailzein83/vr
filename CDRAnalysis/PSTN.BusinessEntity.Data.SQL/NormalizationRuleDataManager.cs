@@ -85,7 +85,7 @@ namespace PSTN.BusinessEntity.Data.SQL
             normalizationRuleDetail.PhoneNumberType = criteria.PhoneNumberType;
             normalizationRuleDetail.PhoneNumberLength = criteria.PhoneNumberLength;
             normalizationRuleDetail.PhoneNumberPrefix = criteria.PhoneNumberPrefix;
-            
+
             return normalizationRuleDetail;
         }
 
