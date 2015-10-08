@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class RouteRule : IRouteCriteria
+    public class RouteRule : Vanrise.Rules.BaseRule, IRouteCriteria
     {
         public int RouteRuleId { get; set; }
 
@@ -21,6 +21,14 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DateTime? EndEffectiveDate { get; set; }
 
         public string Description { get; set; }
+
+        public override bool IsAnyCriteriaExcluded(object target)
+        {
+            RouteIdentifier routeIdentifier = target as RouteIdentifier;
+            if (this.RouteCriteria.ExcludedCodes != null && this.RouteCriteria.ExcludedCodes.Contains(routeIdentifier.Code))
+                return true;
+            return false;
+        }
 
     }
 }

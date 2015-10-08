@@ -55,6 +55,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AllExceptSaleZonesBehavior.cs" />
@@ -78,6 +81,8 @@
     <Compile Include="RouteRulesByCriteria\RouteRulesByZone.cs" />
     <Compile Include="RouteRulesByCriteria\RouteRulesByZoneCustomer.cs" />
     <Compile Include="RouteRulesByCriteria\RouteRulesByZoneProduct.cs" />
+    <Compile Include="RouteRules\StructureRuleBehaviors\RuleBehaviorByCode.cs" />
+    <Compile Include="RouteRules\StructureRuleBehaviors\RuleBehaviorByZone.cs" />
     <Compile Include="RoutingProductManager.cs" />
     <Compile Include="SaleZone\SaleCodeManager.cs" />
     <Compile Include="SelectiveCodeCriteriaBehavior.cs" />
