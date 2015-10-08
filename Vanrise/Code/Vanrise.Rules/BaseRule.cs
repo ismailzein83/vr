@@ -8,5 +8,9 @@ namespace Vanrise.Rules
 {
     public abstract class BaseRule
     {
+        public virtual bool IsAnyCriteriaExcluded(object target)
+        {
+            return false;
+        }
     }
 }

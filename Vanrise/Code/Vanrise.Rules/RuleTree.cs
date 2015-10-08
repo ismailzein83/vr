@@ -53,15 +53,34 @@ namespace Vanrise.Rules
 
         BaseRule GetMatchRule(RuleNode parentNode, object target)
         {
-            if (parentNode.Behavior == null)
-                return parentNode.Rules[0];
+            if (parentNode.Behavior == null)//last node in the tree
+                return GetFirstMatchRuleFromNode(parentNode, target);
+
             RuleNode matchChildNode = parentNode.Behavior.GetMatchedNode(target);
             if (matchChildNode != null)
                 return GetMatchRule(matchChildNode, target);
             else if (parentNode.UnMatchedRulesNode != null)
                 return GetMatchRule(parentNode.UnMatchedRulesNode, target);
             else
-                return parentNode.Rules[0];
+                return GetFirstMatchRuleFromNode(parentNode, target);
+        }
+
+        BaseRule GetFirstMatchRuleFromNode(RuleNode node, object target)
+        {    
+            RuleNode parentNode = node.ParentNode;
+            if(parentNode != null)
+            {
+                foreach (var rule in node.Rules)
+                {
+                    if (!rule.IsAnyCriteriaExcluded(target))
+                        return rule;
+                }
+                if (!node.IsUnMatchedRulesNode && parentNode.UnMatchedRulesNode != null)
+                    return GetMatchRule(parentNode, target);
+                else
+                    return GetFirstMatchRuleFromNode(parentNode, target);
+            }
+            return null;
         }
     }
 }

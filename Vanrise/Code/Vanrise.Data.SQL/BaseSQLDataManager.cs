@@ -526,7 +526,7 @@ namespace Vanrise.Data.SQL
 
         protected bool IsDataUpdated(string tableName, ref object lastReceivedDataInfo)
         {
-            string query = String.Format("select MAX(timestamp) from {0}", tableName);
+            string query = String.Format("select MAX(timestamp) from {0} with(nolock)", tableName);
             var rslt = ExecuteScalarText(query, null);
             if (rslt == null)
                 return false;

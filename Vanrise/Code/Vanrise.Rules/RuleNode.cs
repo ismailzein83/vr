@@ -10,10 +10,14 @@ namespace Vanrise.Rules
     {
         public List<BaseRule> Rules { get; set; }
 
+        internal RuleNode ParentNode { get; set; }
+
         internal List<RuleNode> ChildNodes { get; set; }
 
         internal RuleNode UnMatchedRulesNode { get; set; }
 
         internal BaseRuleStructureBehavior Behavior { get; set; }
+
+        internal bool IsUnMatchedRulesNode { get; set; }
     }
 }
