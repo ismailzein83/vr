@@ -14,6 +14,6 @@ namespace PSTN.BusinessEntity.Entities
 
         public string PhoneNumber { get; set; }
 
-        public NormalizationPhoneNumberType? PhoneNumberType { get; set; }
+        public NormalizationPhoneNumberType PhoneNumberType { get; set; }
     }
 }

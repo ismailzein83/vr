@@ -33,6 +33,7 @@ namespace Vanrise.Rules
                 {
                     if (node.Rules != null && node.Rules.Count() > 0)
                     {
+                        node.ParentNode = parentNode;
                         StructureRules(node, (behaviorIndex + 1));
                         parentNode.ChildNodes.Add(node);
                     }
@@ -41,6 +42,7 @@ namespace Vanrise.Rules
             if (notMatchedRules != null && notMatchedRules.Count > 0)
             {
                 parentNode.UnMatchedRulesNode = new RuleNode();
+                parentNode.UnMatchedRulesNode.ParentNode = parentNode;
                 parentNode.UnMatchedRulesNode.Rules = notMatchedRules;
                 StructureRules(parentNode.UnMatchedRulesNode, (behaviorIndex + 1));
             }

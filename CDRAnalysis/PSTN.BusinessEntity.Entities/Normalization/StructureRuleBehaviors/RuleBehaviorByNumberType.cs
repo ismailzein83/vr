@@ -17,16 +17,8 @@ namespace PSTN.BusinessEntity.Entities.Normalization.StructureRuleBehaviors
         protected override bool TryGetKeyFromTarget(object target, out NormalizationPhoneNumberType key)
         {
             CDRToNormalizeInfo cdr = target as CDRToNormalizeInfo;
-            if (cdr.PhoneNumberType.HasValue)
-            {
-                key = cdr.PhoneNumberType.Value;
-                return true;
-            }
-            else
-            {
-                key = default(NormalizationPhoneNumberType);
-                return false;
-            }
+            key = cdr.PhoneNumberType;
+            return true;
         }
     }
 }
