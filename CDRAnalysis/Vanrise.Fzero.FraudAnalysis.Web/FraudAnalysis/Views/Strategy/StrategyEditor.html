@@ -1,5 +1,5 @@
-﻿<vr-modalcontent ng-controller="FraudAnalysis_StrategyEditorController"  >
-    <vr-modalbody maxheight="'1200px'"  vr-loader="isGettingData" >
+﻿<vr-modalcontent ng-controller="FraudAnalysis_StrategyEditorController">
+    <vr-modalbody maxheight="'1200px'" vr-loader="isGettingData">
         <vr-form name="formStrategyEditor">
             <vr-row removeline>
                 <vr-columns width="normal">
@@ -151,7 +151,7 @@
             </vr-row>
         </vr-form>
     </vr-modalbody>
-    <vr-row removeline>
+    <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
                 <vr-button type="Save" formname="formStrategyEditor" data-onclick="SaveStrategy"></vr-button>
@@ -159,7 +159,7 @@
             </div>
         </vr-actionbar>
 
-    </vr-row>
+    </div>
 </vr-modalcontent>
 
 
