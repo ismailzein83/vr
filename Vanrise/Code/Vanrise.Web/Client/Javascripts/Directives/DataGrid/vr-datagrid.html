@@ -63,7 +63,7 @@
 </div>
 <div id="rowTemplate">
     <div style="white-space:nowrap" ng-style="{'background-color': dataItem.isRowExpanded ? '#F5F5F5' : 'Transparent', 'font-weight' :dataItem.isRowExpanded ? 'bolder' : 'normal', 'border-right': '1px solid #D0D0D0', 'border-left': '1px solid #D0D0D0'}">
-        <div style="margin:-2px" ng-style="{'width': $parent.ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-show="$parent.ctrl.expandableColumnWidth != undefined" >
+        <div style="margin:-2px" ng-style="{'width': $parent.ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-show="$parent.ctrl.expandableColumnWidth != undefined " ng-class="ctrl.showExpandCollapseTriger(dataItem)">
             <label style="height: 9px;" class=" hand-cursor" ng-click="$parent.ctrl.expandRow(dataItem)" ng-show="!dataItem.isRowExpanded">
                 <span class="glyphicon glyphicon-plus" style="top: -2px; left: 4px"></span>
             </label>

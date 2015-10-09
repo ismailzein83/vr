@@ -93,6 +93,8 @@
             }
             else
                 ctrl.rotateHeader = $attrs.rotate;
+            ctrl.expandabelcol = $attrs.hideexpand;
+           // console.log(ctrl.expandabelcol);
             var hasActionMenu = $attrs.menuactions != undefined;
             var actionsAttribute = hasActionMenu ? $scope.$parent.$eval($attrs.menuactions) : undefined;
             var dataGridObj = new DataGrid(ctrl, $scope);
@@ -745,15 +747,23 @@
         }
 
         function defineExpandableRow() {
-            ctrl.setExpandableRowTemplate = function (template) {
+            ctrl.setExpandableRowTemplate = function (template, isexpandble) {
                 expandableRowTemplate = template;
                 expandableColumnWidth = 2;
                 ctrl.expandableColumnWidth = expandableColumnWidth + '%';
                 ctrl.expandableSectionWidth = (100 - expandableColumnWidth) + '%';
                 calculateDataColumnsSectionWidth();
             };
-
+            ctrl.showExpandCollapseTriger = function (dataItem) {
+                var classexpande ="";
+                if (ctrl.expandabelcol != undefined) {
+                    if (dataItem[ctrl.expandabelcol] == false)
+                        classexpande = "hide-expande";
+                }
+                return classexpande;
+            }
             ctrl.expandRow = function (dataItem) {
+                
                 dataItem.expandableRowTemplate = expandableRowTemplate;
                 dataItem.isRowExpanded = true;
             };
