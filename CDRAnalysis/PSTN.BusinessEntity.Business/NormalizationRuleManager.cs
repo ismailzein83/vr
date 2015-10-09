@@ -12,10 +12,7 @@ namespace PSTN.BusinessEntity.Business
     public class NormalizationRuleManager
     {
         static Vanrise.Rules.RuleTree _rules;
-        static NormalizationRuleManager()
-        {
-            _rules = (new NormalizationRuleManager()).GetStructuredRules();
-        }
+        
         public List<NormalizationRule> GetEffectiveRules()
         {
             INormalizationRuleDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<INormalizationRuleDataManager>();
@@ -24,6 +21,8 @@ namespace PSTN.BusinessEntity.Business
 
         public void Normalize(Vanrise.Fzero.CDRImport.Entities.StagingCDR cdr)
         {
+            _rules = (new NormalizationRuleManager()).GetStructuredRules();
+
             CDRToNormalizeInfo cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CGPN, SwitchId = cdr.SwitchID, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId };
             NormalizationRule matchRule_CGPN = GetMostMatchedRule(_rules, cdrInfo_CGPN);
             if (matchRule_CGPN != null)
@@ -54,6 +53,7 @@ namespace PSTN.BusinessEntity.Business
 
         public void Normalize(Vanrise.Fzero.CDRImport.Entities.CDR cdr)
         {
+            _rules = (new NormalizationRuleManager()).GetStructuredRules();
 
             CDRToNormalizeInfo cdrInfo_MSISDN = new CDRToNormalizeInfo { PhoneNumber = cdr.MSISDN, SwitchId = cdr.SwitchID, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId };
             NormalizationRule matchRule_MSISDN = GetMostMatchedRule(_rules, cdrInfo_MSISDN);
@@ -126,14 +126,30 @@ namespace PSTN.BusinessEntity.Business
                 {
                     return listToFilter.Where(itm =>
                         (
+                            input.Query.PhoneNumberTypes == null ||
+                            input.Query.PhoneNumberTypes.Contains(itm.PhoneNumberType)
+                        )
+                        &&
+                        (
                             input.Query.EffectiveDate == null ||
                             (itm.BeginEffectiveDate <= input.Query.EffectiveDate && itm.EndEffectiveDate >= input.Query.EffectiveDate)
                         )
                         &&
                         (
-                            input.Query.PhoneNumberTypes == null ||
-                            input.Query.PhoneNumberTypes.Contains(itm.PhoneNumberType))
-                        );
+                            input.Query.PhoneNumberPrefix == null ||
+                            itm.PhoneNumberPrefix.Contains(input.Query.PhoneNumberPrefix)
+                        )
+                        &&
+                        (
+                            input.Query.PhoneNumberLength == null ||
+                            itm.PhoneNumberLength == input.Query.PhoneNumberLength
+                        )
+                        &&
+                        (
+                            input.Query.Description == null ||
+                            itm.Description.Contains(input.Query.Description)
+                        )
+                    );
                 };
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allNormalizationRules.Select(NormalizationRuleDetailMapper).ToBigResult(input, filterResult));
@@ -258,6 +274,8 @@ namespace PSTN.BusinessEntity.Business
                     normalizationRuleDetail.ActionDescriptions.Add(action.GetDescription());
                 }
             }
+
+            normalizationRuleDetail.Description = normalizationRule.Description;
 
             return normalizationRuleDetail;
         }

@@ -9,7 +9,7 @@ namespace PSTN.BusinessEntity.Entities
 
         public DateTime? EffectiveDate { get; set; }
 
-        public string phoneNumberPrefix { get; set; }
+        public string PhoneNumberPrefix { get; set; }
 
         public int? PhoneNumberLength { get; set; }
 

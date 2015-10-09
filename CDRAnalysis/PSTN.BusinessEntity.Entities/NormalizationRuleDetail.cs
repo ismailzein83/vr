@@ -26,5 +26,7 @@ namespace PSTN.BusinessEntity.Entities
         public string PhoneNumberPrefix { get; set; }
 
         public List<string> ActionDescriptions { get; set; }
+
+        public string Description { get; set; }
     }
 }
