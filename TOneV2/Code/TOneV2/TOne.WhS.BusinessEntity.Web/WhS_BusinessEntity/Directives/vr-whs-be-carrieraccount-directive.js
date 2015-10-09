@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'UtilsService', function (WhS_BE_CarrierAccountAPIService, UtilsService) {
+app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'UtilsService', '$compile', function (WhS_BE_CarrierAccountAPIService, UtilsService, $compile) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -9,7 +9,8 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'Util
             label: "@",
             ismultipleselection: "@",
             onselectionchanged: '=',
-            isrequired:'@'
+            isrequired: '@',
+            isdisabled: "=",
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -18,7 +19,7 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'Util
             if ($attrs.ismultipleselection != undefined)
                 $scope.selectedCarrierValues = [];
             $scope.datasource = [];
-            var beCarrierGroup = new BeCarrierGroup(ctrl, $scope, WhS_BE_CarrierAccountAPIService);
+            var beCarrierGroup = new BeCarrierGroup(ctrl, $scope, WhS_BE_CarrierAccountAPIService, $attrs);
             beCarrierGroup.initializeController();
             $scope.onselectionchanged = function () {
                 if (ctrl.onselectionchanged != undefined) {
@@ -33,18 +34,17 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'Util
         },
         controllerAs: 'ctrl',
         bindToController: true,
-        compile: function (element, attrs) {
-            return {
-                pre: function ($scope, iElem, iAttrs, ctrl) {
-                }
-            }
-        },
-        template: function (element, attrs) {
-            return getBeCarrierGroupTemplate(attrs);
+        link: function preLink($scope, iElement, iAttrs) {
+            var ctrl = $scope.ctrl;
+            $scope.$watch('ctrl.isdisabled', function () {
+                var template = getBeCarrierGroupTemplate(iAttrs, ctrl);
+                iElement.html(template);
+                $compile(iElement.contents())($scope);
+            });
         }
 
     };
-    function getBeCarrierGroupTemplate(attrs) {
+    function getBeCarrierGroupTemplate(attrs, ctrl) {
         var label;
         if (attrs.label != undefined)
             label = attrs.label;
@@ -56,6 +56,9 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'Util
             else if (attrs.type == "'Both'")
                 label = "Carriers";
         }
+        var disabled = "";
+        if (ctrl.isdisabled)
+            disabled = "vr-disabled='true'"
 
         var required = "";
         if (attrs.isrequired != undefined)
@@ -64,15 +67,15 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'Util
         if (attrs.ismultipleselection != undefined)
             return '<div style="display:inline-block;width: calc(100% - 18px);" vr-loader="isLoadingDirective">'
                        + '<vr-label >' + label + '</vr-label>'
-                   + ' <vr-select ismultipleselection datasource="datasource" ' + required + ' selectedvalues="selectedCarrierValues" onselectionchanged="onselectionchanged" datatextfield="Name" datavaluefield="CarrierAccountId"'
+                   + ' <vr-select ismultipleselection datasource="datasource" ' + required + ' selectedvalues="selectedCarrierValues" ' + disabled + ' onselectionchanged="onselectionchanged" datatextfield="Name" datavaluefield="CarrierAccountId"'
                    + 'entityname="' + label + '"></vr-select></div>'
                    + ' <span class="glyphicon glyphicon-th hand-cursor"  aria-hidden="true" ng-click="openTreePopup()"></span></div>';
         else
             return '<div vr-loader="isLoadingDirective"><vr-label >' + label + '</vr-label>'
-               + ' <vr-select datasource="datasource" selectedvalues="selectedCarrierValues" ' + required + ' onselectionchanged="onselectionchanged" datatextfield="Name" datavaluefield="CarrierAccountId"'
+               + ' <vr-select datasource="datasource" selectedvalues="selectedCarrierValues" ' + required + ' onselectionchanged="onselectionchanged"  ' + disabled + ' datatextfield="Name" datavaluefield="CarrierAccountId"'
                + 'entityname="' + label + '"></vr-select></div>';
     }
-    function BeCarrierGroup(ctrl, $scope, WhS_BE_CarrierAccountAPIService) {
+    function BeCarrierGroup(ctrl, $scope, WhS_BE_CarrierAccountAPIService, $attrs) {
         var getCustomers = false;
         var getSuppliers = false;
         if (ctrl.type == "Customer")
@@ -110,7 +113,9 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'Util
             }
 
             api.setData = function (selectedIds) {
-                if ($attrs.ismultipleselection) {
+
+               
+                if ($attrs.ismultipleselection!=undefined) {
                     for (var i = 0; i < selectedIds.length; i++) {
                         var selectedCarrierValue = UtilsService.getItemByVal($scope.datasource, selectedIds[i], "CarrierAccountId");
                         if (selectedCarrierValue != null)
@@ -119,7 +124,7 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'Util
                 } else {
                     var selectedCarrierValue = UtilsService.getItemByVal($scope.datasource, selectedIds, "CarrierAccountId");
                     if (selectedCarrierValue != null)
-                        $scope.selectedCarrierValues=selectedCarrierValue;
+                        $scope.selectedCarrierValues = selectedCarrierValue;
                 }
             }
 

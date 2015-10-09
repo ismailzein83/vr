@@ -9,7 +9,9 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService','WhS_BE_PricingP
         editPricingProduct: editPricingProduct,
         deletePricingProduct: deletePricingProduct,
         addCustomerPricingProduct: addCustomerPricingProduct,
-        deleteCustomerPricingProduct: deleteCustomerPricingProduct
+        deleteCustomerPricingProduct: deleteCustomerPricingProduct,
+        addCarrierAccount: addCarrierAccount,
+        editCarrierAccount: editCarrierAccount
     });
 
     function addRouteRule(onRouteRuleAdded)
@@ -106,6 +108,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService','WhS_BE_PricingP
         if (dataItem != undefined) {
              parameters = {
                  PricingProductId: dataItem.PricingProductId,
+                 CarrierAccountId: dataItem.CarrierAccountId
             };
         }
             
@@ -126,6 +129,29 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService','WhS_BE_PricingP
                         });
                 }
             });
+    }
+    function addCarrierAccount(onCarrierAccountAdded) {
+        var settings = {};
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = "New Carrier Account";
+            modalScope.onCarrierAccountAdded = onCarrierAccountAdded;
+        };
+
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierAccountEditor.html', null, settings);
+    }
+    function editCarrierAccount(carrierAccountObj, onCarrierAccountUpdated) {
+        var modalSettings = {
+        };
+        var parameters = {
+            CarrierAccountId: carrierAccountObj.CarrierAccountId,
+        };
+
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.title = "Edit Pricing Product";
+            modalScope.onCarrierAccountUpdated = onCarrierAccountUpdated;
+        };
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierAccountEditor.html', parameters, modalSettings);
     }
 
 }]);

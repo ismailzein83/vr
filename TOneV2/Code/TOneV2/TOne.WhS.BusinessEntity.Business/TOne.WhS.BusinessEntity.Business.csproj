@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="AllExceptSaleZonesBehavior.cs" />
     <Compile Include="CarrierAccountManager.cs" />
+    <Compile Include="CarrierProfileManager.cs" />
     <Compile Include="CodeManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CustomerPricingProductManager.cs" />

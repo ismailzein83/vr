@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,9 +10,9 @@ using Vanrise.Data.SQL;
 
 namespace TOne.WhS.BusinessEntity.Data.SQL
 {
-    public class CustomerPricingProductDataManager:BaseSQLDataManager,ICustomerPricingProductDataManager
+    public class CustomerPricingProductDataManager : BaseSQLDataManager, ICustomerPricingProductDataManager
     {
-         private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
+        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
 
         static CustomerPricingProductDataManager()
         {
@@ -32,7 +33,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 //if (input.Query.SaleZonePackageIds != null)
                 //    saleZonePackageIdsParam = string.Join(",", input.Query.SaleZonePackageIds);
 
-                ExecuteNonQuerySP("TOneWhS_BE.sp_CustomerPricingProduct_CreateTempByFiltered", tempTableName, input.Query.CustomerId,input.Query.PricingProductId,input.Query.EffectiveDate);
+                ExecuteNonQuerySP("TOneWhS_BE.sp_CustomerPricingProduct_CreateTempByFiltered", tempTableName, input.Query.CustomerId, input.Query.PricingProductId, input.Query.EffectiveDate);
             };
 
             return RetrieveData(input, createTempTableAction, CustomerPricingProductDetailMapper, _columnMapper);
@@ -44,15 +45,57 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemSP("TOneWhS_BE.sp_CustomerPricingProduct_Get", CustomerPricingProductDetailMapper, customerPricingProductId);
         }
 
-        public bool Insert(Entities.CustomerPricingProduct customerPricingProduct, out int insertedId)
+        public bool Insert(List<CustomerPricingProduct> customerPricingProduct)
         {
-            object customerPricingProductId;
 
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CustomerPricingProduct_Insert", out customerPricingProductId, customerPricingProduct.CustomerId, customerPricingProduct.PricingProductId, customerPricingProduct.AllDestinations, customerPricingProduct.BED,
-              customerPricingProduct.EED);
-            insertedId = (int)customerPricingProductId;
+            DataTable table = BuildUpdatedCarriersTable(customerPricingProduct);
+
+            int recordsEffected = ExecuteNonQuerySPCmd("TOneWhS_BE.sp_CustomerPricingProduct_Insert", (cmd) =>
+            {
+                var tableParameter = new SqlParameter("@UpdatedCustomerPricingProducts", SqlDbType.Structured);
+                tableParameter.Value = table;
+                cmd.Parameters.Add(tableParameter);
+            });
             return (recordsEffected > 0);
         }
+        private DataTable BuildUpdatedCarriersTable(List<CustomerPricingProduct> customerPricingProducts)
+        {
+            DataTable table = new DataTable();
+
+            table.Columns.Add("ID", typeof(int));
+            table.Columns.Add("CustomerId", typeof(int));
+            table.Columns.Add("PricingProductId", typeof(int));
+            table.Columns.Add("AllDestinations", typeof(bool));
+            table.Columns.Add("BED", typeof(DateTime));
+            DataColumn column;
+            column = new DataColumn("EED", typeof(DateTime));
+            column.AllowDBNull = true;
+            table.Columns.Add(column);
+
+            table.BeginLoadData();
+            foreach (var customerPricingProduct in customerPricingProducts)
+            {
+
+                DataRow row = table.NewRow();
+                row["ID"] = customerPricingProduct.CustomerPricingProductId == 0 ? 0 : customerPricingProduct.CustomerPricingProductId;
+                row["CustomerId"] = customerPricingProduct.CustomerId;
+                row["PricingProductId"] = customerPricingProduct.PricingProductId;
+                row["AllDestinations"] = customerPricingProduct.AllDestinations;
+                row["BED"] = customerPricingProduct.BED;
+                if (customerPricingProduct.EED.HasValue)
+                    row["EED"] = customerPricingProduct.EED.Value;
+
+                table.Rows.Add(row);
+            }
+
+            table.EndLoadData();
+
+            return table;
+        }
+
+
+
+
 
         public bool Delete(int customerPricingProductId)
         {

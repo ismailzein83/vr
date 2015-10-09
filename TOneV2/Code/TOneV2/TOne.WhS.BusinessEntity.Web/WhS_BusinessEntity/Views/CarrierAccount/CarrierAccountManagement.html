@@ -1,0 +1,29 @@
+﻿<vr-panel ng-controller="WhS_BE_CarrierAccountManagementController">
+
+    <vr-form name="formFilter" vr-loader="isLoadingFilterData">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns colnum="2">
+                    <vr-textbox value="name" label="Name"></vr-textbox>
+                </vr-columns>
+                <vr-columns colnum="2">
+                    <vr-whs-be-carrieraccount type="'Both'" onloaded="onCarrierAccountDirectiveLoaded" onselectionchanged="onCarrierAccountSelectionChanged" selectedvalues="selectedCarriers"></vr-whs-be-carrieraccount>
+                </vr-columns>
+                <vr-columns colnum="2">
+                    <vr-select  datatextfield="description" datavaluefield="value" label="Carrier Type" datasource="carrierAccountTypes"
+                               selectedvalues="selectedCarrierAccountType"></vr-columns>
+
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                    <vr-button type="Add" data-onclick="AddNewCarrierAccount"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-whs-be-carrieraccountgrid on-ready="onGridReady"></vr-whs-be-carrieraccountgrid>
+    </vr-form>
+
+</vr-panel>

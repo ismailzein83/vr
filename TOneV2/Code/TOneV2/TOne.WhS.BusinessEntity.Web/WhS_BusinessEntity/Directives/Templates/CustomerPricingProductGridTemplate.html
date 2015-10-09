@@ -8,7 +8,7 @@
                      idfield="ID">
 
             <vr-datagridcolumn headertext="'ID'" field="'CustomerPricingProductId'" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Customer Name'" field="'CustomerName'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Customer Name'" field="'CustomerName'" type="'Text'" ng-show="!hideCustomerColumn"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Pricing Product Name'" field="'PricingProductName'" type="'Text'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'All Destinations'" field="'AllDestinations'" type="'Text'">
                 <vr-icon icontype="dataItem.AllDestinations"></vr-icon>

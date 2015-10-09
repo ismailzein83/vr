@@ -11,9 +11,19 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class CarrierAccountManager
     {
+        public Vanrise.Entities.IDataRetrievalResult<CarrierAccountDetail> GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input)
+        {
+            ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredCarrierAccounts(input));
+        }
         public List<CarrierAccount> GetAllCustomers()
         {
             throw new NotImplementedException();
+        }
+        public CarrierAccountDetail GetCarrierAccount(int carrierAccountId)
+        {
+            ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
+            return dataManager.GetCarrierAccount(carrierAccountId);
         }
         public List<CarrierAccountInfo> GetCarrierAccounts(bool getCustomers, bool getSuppliers)
         {

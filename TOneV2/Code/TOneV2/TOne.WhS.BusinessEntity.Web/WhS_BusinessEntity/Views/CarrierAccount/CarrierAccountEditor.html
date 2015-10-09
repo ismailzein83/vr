@@ -1,6 +1,6 @@
-﻿<div vr-modalcontent ng-controller="WhS_BE_PricingProductEditorController" vr-loader="isGettingData">
+﻿<div vr-modalcontent ng-controller="WhS_BE_CarrierAccountEditorController" vr-loader="isGettingData">
     <vr-modalbody width="'50%'">
-        <vr-form name="formPricingProductEditor">
+        <vr-form name="formCarrierAccountEditor">
             <vr-choices selectedindex="0">
                 <vr-choice isselected="criteriaSelected">Definition</vr-choice>
                 <vr-choice isselected="settingsSelected">Settings</vr-choice>
@@ -11,13 +11,17 @@
                         <vr-textbox value="name" label="Name" isrequired></vr-textbox>
                     </vr-columns>
                     <vr-columns width="1/2row">
-                        <vr-whs-be-salezonepackages onloaded="onSaleZonePackagesDirectiveLoaded" onselectionchanged="onselectionchanged" isrequired></vr-whs-be-salezonepackages>
+                        <vr-whs-be-carrierprofile  isrequired onloaded="onCarrierProfileDirectiveLoaded" onselectionchanged="onCarrierProfileSelectionChanged" selectedvalues="selectedProfile"></vr-whs-be-carrierprofile>
                     </vr-columns>
+                    <vr-columns width="1/2row">
+                        <vr-select hideremoveicon datatextfield="description" isrequired datavaluefield="value" label="Carrier Type" datasource="carrierAccountTypes"
+                                   selectedvalues="selectedCarrierAccountType"></vr-columns>
+                    
 
                 </vr-row>
                 <vr-row>
                     <vr-columns width="fullrow">
-                      
+
                     </vr-columns>
                 </vr-row>
             </div>
@@ -29,7 +33,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formPricingProductEditor" data-onclick="SavePricingProduct"></vr-button>
+                <vr-button type="Save" formname="formCarrierAccountEditor" data-onclick="SaveCarrierAccount"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>

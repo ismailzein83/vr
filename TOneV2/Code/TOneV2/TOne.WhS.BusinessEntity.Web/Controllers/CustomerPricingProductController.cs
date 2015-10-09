@@ -24,10 +24,10 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return manager.GetCustomerPricingProduct(customerPricingProductId);
         }
         [HttpPost]
-        public TOne.Entities.InsertOperationOutput<CustomerPricingProductDetail> AddCustomerPricingProduct(CustomerPricingProduct customerPricingProduct)
+        public TOne.Entities.InsertOperationOutput<CustomerPricingProductDetail> AddCustomerPricingProduct(List<CustomerPricingProduct> customerPricingProducts)
         {
             CustomerPricingProductManager manager = new CustomerPricingProductManager();
-            return manager.AddCustomerPricingProduct(customerPricingProduct);
+            return manager.AddCustomerPricingProduct(customerPricingProducts);
         }
         [HttpGet]
         public TOne.Entities.DeleteOperationOutput<object> DeleteCustomerPricingProduct(int customerPricingProductId)

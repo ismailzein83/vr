@@ -8,7 +8,8 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerPricingProductAPIS
             restrict: "E",
             scope: {
                 onReady: "=",
-                pricingproductid:'='
+                pricingproductid: '=',
+                hidecustomercolumn:'@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -25,11 +26,14 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerPricingProductAPIS
 
         };
 
-        function CustomerPricingProductGrid($scope, ctrl) {
+        function CustomerPricingProductGrid($scope, ctrl, $attrs) {
             var gridAPI;
             this.initializeController = initializeController;
             function initializeController() {
                 $scope.customerPricingProducts = [];
+                $scope.hideCustomerColumn = false;
+                if ($attrs.hidecustomercolumn != undefined)
+                    $scope.hideCustomerColumn = true;
                 $scope.onGridReady = function (api) {  
                     gridAPI = api;
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")

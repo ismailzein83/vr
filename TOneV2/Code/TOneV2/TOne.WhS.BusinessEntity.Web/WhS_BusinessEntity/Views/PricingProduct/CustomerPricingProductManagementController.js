@@ -63,8 +63,8 @@
 
         function AddNewCustomerPricingProduct() {
             var onCustomerPricingProductAdded = function (customerPricingProductObj) {
-                if (gridAPI != undefined)
-                    gridAPI.onCustomerPricingProductAdded(customerPricingProductObj);
+                //if (gridAPI != undefined)
+                //    gridAPI.onCustomerPricingProductAdded(customerPricingProductObj);
             };
 
             WhS_BE_MainService.addCustomerPricingProduct(onCustomerPricingProductAdded);

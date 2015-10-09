@@ -1,0 +1,18 @@
+﻿<vr-row>
+    <vr-columns width="fullrow">
+        <vr-datagrid datasource="carrierProfiles"
+                     on-ready="onGridReady"
+                     dataretrievalfunction="dataRetrievalFunction"
+                     pagingtype="'PagingOnScroll'"
+                     menuactions="gridMenuActions"
+                     idfield="CarrierProfileId"
+                     >
+
+            <vr-datagridcolumn headertext="'ID'" field="'CarrierProfileId'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Profile Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridexpandablerow>
+                <vr-whs-be-carrieraccountgrid on-ready="dataItem.extensionObject.onGridReady" hideprofilecolumn></vr-whs-be-carrieraccountgrid>
+            </vr-datagridexpandablerow>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>

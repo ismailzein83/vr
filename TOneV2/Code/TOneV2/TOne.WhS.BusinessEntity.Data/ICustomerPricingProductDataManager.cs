@@ -12,7 +12,7 @@ namespace TOne.WhS.BusinessEntity.Data
        Vanrise.Entities.BigResult<CustomerPricingProductDetail> GetFilteredCustomerPricingProducts(Vanrise.Entities.DataRetrievalInput<CustomerPricingProductQuery> input);
 
        CustomerPricingProductDetail GetCustomerPricingProduct(int customerPricingProductId);
-       bool Insert(CustomerPricingProduct customerPricingProduct, out int insertedId);
+       bool Insert(List<CustomerPricingProduct> customerPricingProduct);
        List<CustomerPricingProduct> GetCustomerPricingProductByCustomerID(int customerId);
        bool Delete(int customerPricingProductId);
     }

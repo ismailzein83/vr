@@ -9,6 +9,7 @@
         var pricingProductDirectiveAPI;
         var carrierAccountDirectiveAPI;
         var pricingProductId;
+        var carrierAccountId;
        
         defineScope();
         loadParameters();
@@ -17,11 +18,14 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 pricingProductId = parameters.PricingProductId;
+                carrierAccountId = parameters.CarrierAccountId;
             }
             $scope.disablePricingProduct = (pricingProductId != undefined);
+            $scope.disableCarrierAccount = (carrierAccountId != undefined);
+
         }
         function defineScope() {
-            $scope.allDistinations = false;
+            $scope.allDestinations = false;
             $scope.SavePricingProduct = function () {
                     return insertPricingProduct();
             };
@@ -36,6 +40,8 @@
             }
             $scope.onCarrierAccountDirectiveLoaded = function (api) {
                 carrierAccountDirectiveAPI = api;
+                if ($scope.disableCarrierAccount)
+                    carrierAccountDirectiveAPI.setData([carrierAccountId]);
             }
             $scope.onPricingProductsSelectionChanged = function () {
              
@@ -56,6 +62,9 @@
         function load() {
             if ($scope.disablePricingProduct && pricingProductDirectiveAPI != undefined)
                 pricingProductDirectiveAPI.setData(pricingProductId);
+            if ($scope.disableCarrierAccount && carrierAccountDirectiveAPI != undefined)
+                carrierAccountDirectiveAPI.setData([carrierAccountId]);
+           
         }
 
         function insertPricingProduct() {
@@ -73,16 +82,18 @@
 
         }
         function buildPricingProductObjFromScope() {
-            var obj = {
-                CustomerId: $scope.selectedCustomers.CarrierAccountId,
-                CustomerName: $scope.selectedCustomers.Name,
-                PricingProductId: $scope.selectedPricingProduct.PricingProductId,
-                PricingProductName:$scope.selectedPricingProduct.Name,
-                BED: $scope.beginEffectiveDate,
-                EED: $scope.endEffectiveDate,
-                AllDestinations:$scope.allDistinations
-
-            };
+            var obj = [];
+            for (var i = 0; i < $scope.selectedCustomers.length; i++) {
+                obj.push({
+                    CustomerId: $scope.selectedCustomers[i].CarrierAccountId,
+                    CustomerName: $scope.selectedCustomers.Name,
+                    PricingProductId: $scope.selectedPricingProduct.PricingProductId,
+                    PricingProductName: $scope.selectedPricingProduct.Name,
+                    BED: $scope.beginEffectiveDate,
+                    EED: $scope.endEffectiveDate,
+                    AllDestinations: $scope.allDestinations
+                });
+            }
             return obj;
         }
     }

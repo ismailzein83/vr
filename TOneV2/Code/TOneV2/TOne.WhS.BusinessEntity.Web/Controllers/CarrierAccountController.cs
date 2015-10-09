@@ -13,6 +13,22 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "CarrierAccount")]
     public class WhSBE_CarrierAccountController : BaseAPIController
     {
+
+        [HttpPost]
+        [Route("GetFilteredCarrierAccounts")]
+        public object GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input)
+        {
+            CarrierAccountManager manager = new CarrierAccountManager();
+            return GetWebResponse(input, manager.GetFilteredCarrierAccounts(input));
+        }
+
+        [HttpGet]
+        [Route("GetCarrierAccount")]
+        public CarrierAccountDetail GetCarrierAccount(int carrierAccountId)
+        {
+            CarrierAccountManager manager = new CarrierAccountManager();
+            return manager.GetCarrierAccount(carrierAccountId);
+        }
         [HttpGet]
         [Route("GetCarrierAccounts")]
         public List<CarrierAccountInfo> GetCarrierAccounts(bool getCustomers, bool getSuppliers)

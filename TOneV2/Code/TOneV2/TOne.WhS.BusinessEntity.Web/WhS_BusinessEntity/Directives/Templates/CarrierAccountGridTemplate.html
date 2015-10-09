@@ -1,0 +1,20 @@
+﻿<vr-row>
+    <vr-columns width="fullrow">
+        <vr-datagrid datasource="carrierAccounts"
+                     on-ready="onGridReady"
+                     dataretrievalfunction="dataRetrievalFunction"
+                     pagingtype="'PagingOnScroll'"
+                     menuactions="gridMenuActions"
+                     idfield="CarrierAccountId"
+                     showexpand="isExpandable">
+
+            <vr-datagridcolumn headertext="'ID'" field="'CarrierAccountId'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Account Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Profile Name'" field="'CarrierProfileName'" type="'Text'" ng-show="!hideProfileColumn"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Account Type'" field="'AccountTypeDescription'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridexpandablerow>
+                <vr-whs-be-customerpricingproductgrid on-ready="dataItem.extensionObject.onGridReady" hidecustomercolumn ></vr-whs-be-customerpricingproductgrid>
+            </vr-datagridexpandablerow>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>

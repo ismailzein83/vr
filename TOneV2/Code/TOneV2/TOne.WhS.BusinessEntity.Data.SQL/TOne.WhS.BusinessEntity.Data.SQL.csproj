@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CarrierAccountDataManager.cs" />
+    <Compile Include="CarrierProfileDataManager.cs" />
     <Compile Include="CustomerPricingProductDataManager.cs" />
     <Compile Include="PricingProductDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

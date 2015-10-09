@@ -131,6 +131,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CarrierAccountController.cs" />
+    <Compile Include="Controllers\CarrierProfileController.cs" />
     <Compile Include="Controllers\CustomerPricingProductController.cs" />
     <Compile Include="Controllers\PricingProductController.cs" />
     <Compile Include="Controllers\RouteRuleController.cs" />
@@ -158,7 +159,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WhS_BusinessEntity\Constant\CarrierAccountTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ModuleConfig.js" />
+    <Content Include="WhS_BusinessEntity\Directives\Templates\CarrierAccountGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\Templates\CarrierProfileGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Templates\CustomerPricingProductGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Templates\SelectiveCodeCriteriaDirectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Templates\SelectiveCustomersDirectiveTemplate.html" />
@@ -166,6 +170,9 @@
     <Content Include="WhS_BusinessEntity\Directives\Templates\SelectiveSuppliersDirectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-allexceptsalezones-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-carrieraccount-directive.js" />
+    <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-carrieraccountgrid-directive.js" />
+    <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-carrierprofile-directive.js" />
+    <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-carrierprofilegrid-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-customerpricingproductgrid-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-pricingproductgrid-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-routingproduct-directive.js" />
@@ -176,6 +183,7 @@
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-selectivesalezones-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-selectivesuppliers-directive.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CarrierAccountAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\CarrierProfileAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CustomerPricingProductAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\PricingProductAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\RouteRuleAPIService.js" />
@@ -183,6 +191,12 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleZoneAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleZonePackageAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\MainService.js" />
+    <Content Include="WhS_BusinessEntity\Views\CarrierAccount\CarrierAccountEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\CarrierAccount\CarrierAccountEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Views\CarrierAccount\CarrierAccountManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\CarrierAccount\CarrierAccountManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\CarrierAccount\CarrierProfileManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\CarrierAccount\CarrierProfileManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\PricingProduct\CustomerPricingProductEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\PricingProduct\CustomerPricingProductEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\PricingProduct\CustomerPricingProductManagement.html" />
