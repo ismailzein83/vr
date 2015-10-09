@@ -23,9 +23,9 @@ namespace TOne.WhS.BusinessEntity.Business
                     foreach (var supplierWithZones in ruleSuppliersWithZones.SuppliersWithZones)
                     {
                         SupplierRules supplierRules = rulesBySuppliers.GetOrCreateItem(supplierWithZones.SupplierId);                        
-                        if (supplierWithZones.SupplierZones != null && supplierWithZones.SupplierZones.Count > 0)
+                        if (supplierWithZones.SupplierZoneIds != null && supplierWithZones.SupplierZoneIds.Count > 0)
                         {
-                            foreach(var supplierZoneId in supplierWithZones.SupplierZones)
+                            foreach(var supplierZoneId in supplierWithZones.SupplierZoneIds)
                             {
                                 List<RouteOptionRule> zoneRules = supplierRules.RulesBySupplierZones.GetOrCreateItem(supplierZoneId);
                                 zoneRules.Add(rule);

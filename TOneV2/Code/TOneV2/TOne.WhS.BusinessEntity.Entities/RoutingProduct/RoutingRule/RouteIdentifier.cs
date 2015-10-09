@@ -14,6 +14,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public int CustomerId { get; set; }
 
-        public int RoutingProductId { get; set; }
+        public int? RoutingProductId { get; set; }
     }
 }

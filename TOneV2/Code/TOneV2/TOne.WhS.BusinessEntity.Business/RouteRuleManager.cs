@@ -11,6 +11,30 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class RouteRuleManager
     {
+        public Vanrise.Rules.RuleTree GetStructuredRules()
+        {
+            List<Vanrise.Rules.BaseRule> rules = null;
+            //TODO: get rules from database
+
+            var ruleStructureBehaviors = GetRuleStructureBehaviors();
+            return new Vanrise.Rules.RuleTree(rules, ruleStructureBehaviors);
+        }
+
+        IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetRuleStructureBehaviors()
+        {
+            List<Vanrise.Rules.BaseRuleStructureBehavior> ruleStructureBehaviors = new List<Vanrise.Rules.BaseRuleStructureBehavior>();
+            ruleStructureBehaviors.Add(new RouteRules.StructureRuleBehaviors.RuleBehaviorByCode());
+            ruleStructureBehaviors.Add(new RouteRules.StructureRuleBehaviors.RuleBehaviorByZone());
+            ruleStructureBehaviors.Add(new RouteRules.StructureRuleBehaviors.RuleBehaviorByCustomer());
+            ruleStructureBehaviors.Add(new RouteRules.StructureRuleBehaviors.RuleBehaviorByRoutingProduct());
+            return ruleStructureBehaviors;
+        }
+
+        public RouteRule GetMostMatchedRule(Vanrise.Rules.RuleTree ruleTree, RouteIdentifier routeIdentifier)
+        {
+            return ruleTree.GetMatchRule(routeIdentifier) as RouteRule;
+        }
+
         public StructuredRouteRules<T> StructureRules<T>(List<T> rules) where T : IRouteCriteria
         {
             List<RouteRulesByCriteria<T>> routeRulesByCriteria = new List<RouteRulesByCriteria<T>>();

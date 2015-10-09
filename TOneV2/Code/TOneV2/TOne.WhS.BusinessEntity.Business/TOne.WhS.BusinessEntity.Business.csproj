@@ -82,6 +82,8 @@
     <Compile Include="RouteRulesByCriteria\RouteRulesByZoneCustomer.cs" />
     <Compile Include="RouteRulesByCriteria\RouteRulesByZoneProduct.cs" />
     <Compile Include="RouteRules\StructureRuleBehaviors\RuleBehaviorByCode.cs" />
+    <Compile Include="RouteRules\StructureRuleBehaviors\RuleBehaviorByCustomer.cs" />
+    <Compile Include="RouteRules\StructureRuleBehaviors\RuleBehaviorByRoutingProduct.cs" />
     <Compile Include="RouteRules\StructureRuleBehaviors\RuleBehaviorByZone.cs" />
     <Compile Include="RoutingProductManager.cs" />
     <Compile Include="SaleZone\SaleCodeManager.cs" />

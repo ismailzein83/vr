@@ -15,11 +15,4 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public List<SupplierWithZones> SuppliersWithZones { get; set; }
     }
-
-    public class SupplierWithZones
-    {
-        public int SupplierId { get; set; }
-
-        public List<long> SupplierZones { get; set; }
-    }
 }

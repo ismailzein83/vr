@@ -58,6 +58,9 @@
     <Compile Include="CarrierAccount\CarrierAccountInfo.cs" />
     <Compile Include="CarrierAccount\CustomerGroupBehavior.cs" />
     <Compile Include="CarrierAccount\CustomerGroupSettings.cs" />
+    <Compile Include="CarrierAccount\SupplierWithZones.cs" />
+    <Compile Include="CarrierAccount\SuppliersWithZonesGroupBehavior.cs" />
+    <Compile Include="CarrierAccount\SuppliersWithZonesGroupSettings.cs" />
     <Compile Include="CodeCriteria\CodeCriteria.cs" />
     <Compile Include="CodeCriteria\CodeCriteriaGroupBehavior.cs" />
     <Compile Include="CodeCriteria\CodeCriteriaGroupSettings.cs" />
@@ -73,6 +76,7 @@
     <Compile Include="PricingProduct\PricingRule\PricingRuleCriteria.cs" />
     <Compile Include="PricingProduct\PricingRule\PricingRuleSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoutingProduct\RouteOptionRule\RouteOptionRuleCriteria.cs" />
     <Compile Include="RoutingProduct\RoutingProductInfo.cs" />
     <Compile Include="RoutingProduct\RoutingRule\RouteIdentifier.cs" />
     <Compile Include="RoutingProduct\RoutingRule\RouteRuleQuery.cs" />
