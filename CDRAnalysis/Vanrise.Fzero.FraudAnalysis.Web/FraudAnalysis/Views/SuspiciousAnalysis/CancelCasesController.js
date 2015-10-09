@@ -71,10 +71,10 @@ function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIServ
         }
 
 
-        
 
 
-        
+
+
 
 
     }
@@ -97,7 +97,9 @@ function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIServ
                     return CaseManagementAPIService.CancelAccountCases(accountCaseObject)
                                           .then(function (response) {
                                               if (VRNotificationService.notifyOnItemUpdated("Account Cases", response)) {
+                                                  return retrieveData();
                                               }
+
                                           }).catch(function (error) {
                                               VRNotificationService.notifyException(error, $scope);
                                           });
@@ -115,11 +117,12 @@ function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIServ
                     angular.forEach($scope.selectedCases, function (item) {
                         selectedCaseIDs.push(item.CaseID);
                     });
-                   
+
                     console.log(selectedCaseIDs)
                     return CaseManagementAPIService.CancelSelectedAccountCases(selectedCaseIDs)
                                           .then(function (response) {
                                               if (VRNotificationService.notifyOnItemUpdated("Account Cases", response)) {
+                                                  return retrieveData();
                                               }
                                           }).catch(function (error) {
                                               VRNotificationService.notifyException(error, $scope);
