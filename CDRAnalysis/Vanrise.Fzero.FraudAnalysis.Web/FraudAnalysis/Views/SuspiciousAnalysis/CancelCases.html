@@ -29,10 +29,36 @@
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="false" >
                 <div transclude-to="buttons">
-                    <vr-button type="Cancel" formname="formCancel" data-onclick="cancelClicked"></vr-button>
+                    <vr-button type="Cancel All" formname="formCancel" data-onclick="cancelClicked" ng-show="cases.length">Cancel All</vr-button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
 
     </vr-form>
+
+    <div>
+        <vr-row>
+            <vr-columns width="fullrow" simplecol>
+                <vr-datagrid datasource="cases"
+                             on-ready="onGridReady"
+                             dataretrievalfunction="dataRetrievalFunction"
+                             pagingtype="'PagingOnScroll'"
+                             maxheight="150px"
+                             idfield="CaseID">
+
+                    <vr-datagridcolumn headertext="'Case ID'" field="'CaseID'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Account Number'" field="'AccountNumber'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Status'" field="'CaseStatusDescription'" type="'Text'" getcolor="getCaseStatusColor"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Create Time'" field="'CreatedTime'" type="'Datetime'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Status Update Time'" field="'StatusUpdatedTime'" type="'Datetime'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Valid Till'" field="'ValidTill'" type="'Datetime'"></vr-datagridcolumn>
+                  
+                </vr-datagrid>
+                
+            </vr-columns>
+        </vr-row>
+    </div>
+
+
 </vr-panel>

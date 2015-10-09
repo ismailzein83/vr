@@ -37,6 +37,15 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredCasesByAccountNumber(input));
         }
 
+
+
+        [HttpPost]
+        public object GetFilteredCasesByFilters(DataRetrievalInput<CancelAccountCasesResultQuery> input)
+        {
+            CaseManagmentManager manager = new CaseManagmentManager();
+            return GetWebResponse(input, manager.GetFilteredCasesByFilters(input));
+        }
+
         [HttpPost]
         public object GetFilteredDetailsByCaseID(DataRetrievalInput<CaseDetailQuery> input)
         {

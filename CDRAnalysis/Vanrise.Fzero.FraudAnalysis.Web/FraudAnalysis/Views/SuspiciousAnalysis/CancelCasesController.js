@@ -1,8 +1,11 @@
 ﻿"use strict";
 
-CancelCasesController.$inject = ["$scope", "CaseManagementAPIService", "StrategyAPIService", "VRNotificationService", "UtilsService"];
+CancelCasesController.$inject = ["$scope", "CaseManagementAPIService", "StrategyAPIService", "VRNotificationService", "LabelColorsEnum", "UtilsService", "CaseStatusEnum"];
 
-function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIService, VRNotificationService, UtilsService) {
+function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIService, VRNotificationService, LabelColorsEnum, UtilsService, CaseStatusEnum) {
+
+    var gridAPI;
+
     definescope();
     load();
 
@@ -17,11 +20,60 @@ function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIServ
         $scope.strategies = [];
         $scope.selectedStrategies = [];
 
+        $scope.searchClicked = function () {
+            return retrieveData();
+        }
+
+        $scope.cases = [];
+
+
+        $scope.onGridReady = function (api) {
+            gridAPI = api;
+        }
+
+
+
+        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+
+            return CaseManagementAPIService.GetFilteredCasesByFilters(dataRetrievalInput)
+            .then(function (response) {
+
+                angular.forEach(response.Data, function (item) {
+                    var caseStatus = UtilsService.getEnum(CaseStatusEnum, "value", item.StatusID);
+                    item.CaseStatusDescription = caseStatus.description;
+                });
+
+                onResponseReady(response);
+            })
+            .catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
+        }
+
+
+
+        $scope.getCaseStatusColor = function (dataItem) {
+
+            if (dataItem.StatusID == CaseStatusEnum.Open.value) return LabelColorsEnum.New.color;
+            else if (dataItem.StatusID == CaseStatusEnum.Pending.value) return LabelColorsEnum.Processing.color;
+            else if (dataItem.StatusID == CaseStatusEnum.ClosedFraud.value) return LabelColorsEnum.Error.color;
+            else if (dataItem.StatusID == CaseStatusEnum.ClosedWhitelist.value) return LabelColorsEnum.Success.color;
+        }
+
         $scope.cancelClicked = function () {
             return cancelCases();
         }
 
     }
+
+
+    function retrieveData() {
+
+        var query = buildAccountCaseObjectFromScope();
+
+        return gridAPI.retrieveData(query);
+    }
+
 
     function cancelCases() {
         VRNotificationService.showConfirmation()

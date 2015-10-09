@@ -146,6 +146,29 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, AccountCaseMapper, _columnMapper);
         }
 
+
+        public BigResult<AccountCase> GetFilteredCasesByFilters(Vanrise.Entities.DataRetrievalInput<CancelAccountCasesResultQuery> input)
+        {
+
+
+
+            string strategyIDsString = null;
+            if (input.Query.StrategyIDs != null)
+                strategyIDsString = string.Join(",", input.Query.StrategyIDs);
+
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+
+
+
+                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_CreateTempByFilters", tempTableName, input.Query.AccountNumber, input.Query.From, input.Query.To, strategyIDsString);
+            };
+
+            return RetrieveData(input, createTempTableAction, AccountCaseMapper, _columnMapper);
+        }
+
+
+
         public BigResult<AccountSuspicionDetail> GetFilteredDetailsByCaseID(Vanrise.Entities.DataRetrievalInput<CaseDetailQuery> input)
         {
 

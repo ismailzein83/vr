@@ -46,6 +46,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         BigResult<AccountCase> GetFilteredCasesByAccountNumber(Vanrise.Entities.DataRetrievalInput<AccountCaseResultQuery> input);
 
+        BigResult<AccountCase> GetFilteredCasesByFilters(Vanrise.Entities.DataRetrievalInput<CancelAccountCasesResultQuery> input);
+
         BigResult<DailyVolumeLoose> GetDailyVolumeLooses(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input);
 
         List<int> DeleteAccountCases_ByCaseIDs(List<int> caseIDs);

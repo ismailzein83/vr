@@ -89,6 +89,13 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     class: "glyphicon  glyphicon-remove-circle"
                 };
 
+            case "Cancel All":
+                return {
+                    text: "Cancel All",
+                    class: "glyphicon  glyphicon-remove-circle"
+                };
+
+
             case "No":
                 return {
                     text: "No",

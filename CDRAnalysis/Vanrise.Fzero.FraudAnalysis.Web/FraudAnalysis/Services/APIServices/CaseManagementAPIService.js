@@ -11,7 +11,8 @@
         GetAccountStatus: GetAccountStatus,
         GetFilteredAccountCaseLogsByCaseID: GetFilteredAccountCaseLogsByCaseID,
         UpdateAccountCase: UpdateAccountCase,
-        CancelAccountCases: CancelAccountCases
+        CancelAccountCases: CancelAccountCases,
+        GetFilteredCasesByFilters: GetFilteredCasesByFilters
     });
 
 
@@ -27,7 +28,6 @@
         return BaseAPIService.get("/api/CaseManagement/GetOperatorType");
     }
 
-    /* *** New Functions *** */
 
     function GetFilteredAccountSuspicionSummaries(input) {
         return BaseAPIService.post("/api/CaseManagement/GetFilteredAccountSuspicionSummaries", input);
@@ -39,6 +39,10 @@
 
     function GetFilteredCasesByAccountNumber(input) {
         return BaseAPIService.post("/api/CaseManagement/GetFilteredCasesByAccountNumber", input);
+    }
+
+    function GetFilteredCasesByFilters(input) {
+        return BaseAPIService.post("/api/CaseManagement/GetFilteredCasesByFilters", input);
     }
 
     function GetFilteredDetailsByCaseID(input) {
