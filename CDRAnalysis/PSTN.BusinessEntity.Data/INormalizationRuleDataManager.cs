@@ -10,7 +10,7 @@ namespace PSTN.BusinessEntity.Data
 
         List<NormalizationRule> GetNormalizationRules();
 
-        NormalizationRule GetNormalizationRuleByID(int normalizationRuleId);
+        NormalizationRule GetNormalizationRuleById(int normalizationRuleId);
 
         bool AddNormalizationRule(NormalizationRule normalizationRuleObj, out int insertedID);
 

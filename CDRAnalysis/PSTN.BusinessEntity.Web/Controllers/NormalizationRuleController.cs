@@ -25,10 +25,10 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        public NormalizationRule GetNormalizationRuleByID(int normalizationRuleId)
+        public NormalizationRule GetNormalizationRuleById(int normalizationRuleId)
         {
             NormalizationRuleManager manager = new NormalizationRuleManager();
-            return manager.GetNormalizationRuleByID(normalizationRuleId);
+            return manager.GetNormalizationRuleById(normalizationRuleId);
         }
 
         [HttpPost]

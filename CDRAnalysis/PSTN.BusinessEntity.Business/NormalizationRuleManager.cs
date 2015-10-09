@@ -1,17 +1,17 @@
 ﻿using PSTN.BusinessEntity.Data;
 using PSTN.BusinessEntity.Entities;
 using PSTN.BusinessEntity.Entities.Normalization.Actions;
-using System.Collections.Generic;
-using Vanrise.Common;
-using System.Linq;
-using Vanrise.Entities;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace PSTN.BusinessEntity.Business
 {
     public class NormalizationRuleManager
     {
-        static Vanrise.Rules.RuleTree _rules ;
+        static Vanrise.Rules.RuleTree _rules;
         static NormalizationRuleManager()
         {
             _rules = (new NormalizationRuleManager()).GetStructuredRules();
@@ -91,7 +91,7 @@ namespace PSTN.BusinessEntity.Business
         }
 
         public Vanrise.Rules.RuleTree GetStructuredRules()
-        {            
+        {
             List<Vanrise.Rules.BaseRule> rules = new List<Vanrise.Rules.BaseRule>();//GEt rules from database
             rules.AddRange(GetEffectiveRules());
 
@@ -122,20 +122,24 @@ namespace PSTN.BusinessEntity.Business
             if (allNormalizationRules == null)
                 return null;
 
-            //TODO: Phone number type should be a list and not one record
             Func<IEnumerable<NormalizationRuleDetail>, IEnumerable<NormalizationRuleDetail>> filterResult = (listToFilter) =>
                 {
                     return listToFilter.Where(itm =>
-                        (input.Query.EffectiveDate == null ||
-                        (itm.BeginEffectiveDate <= input.Query.EffectiveDate && itm.EndEffectiveDate >= input.Query.EffectiveDate))
-                        && input.Query.PhoneNumberType == null ||
-                        input.Query.PhoneNumberType == itm.PhoneNumberType);
+                        (
+                            input.Query.EffectiveDate == null ||
+                            (itm.BeginEffectiveDate <= input.Query.EffectiveDate && itm.EndEffectiveDate >= input.Query.EffectiveDate)
+                        )
+                        &&
+                        (
+                            input.Query.PhoneNumberTypes == null ||
+                            input.Query.PhoneNumberTypes.Contains(itm.PhoneNumberType))
+                        );
                 };
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allNormalizationRules.Select(NormalizationRuleDetailMapper).ToBigResult(input, filterResult));
         }
 
-        public NormalizationRule GetNormalizationRuleByID(int normalizationRuleId)
+        public NormalizationRule GetNormalizationRuleById(int normalizationRuleId)
         {
             var allNormalizationRules = GetCachedNormalizationRules();
             return allNormalizationRules.Find(x => x.NormalizationRuleId == normalizationRuleId);
@@ -162,13 +166,7 @@ namespace PSTN.BusinessEntity.Business
             {
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 normalizationRuleObj.NormalizationRuleId = normalizationRuleId;
-
-                NormalizationRuleDetail detail = new NormalizationRuleDetail();
-                detail.NormalizationRuleId = normalizationRuleId;
-
-                //TODO: check this , you need to remove this call
-                NormalizationRule normalizationRule = dataManager.GetNormalizationRuleByID(normalizationRuleId);
-                insertOperationOutput.InsertedObject = NormalizationRuleDetailMapper(normalizationRule);
+                insertOperationOutput.InsertedObject = NormalizationRuleDetailMapper(normalizationRuleObj);
             }
 
             return insertOperationOutput;
@@ -188,15 +186,12 @@ namespace PSTN.BusinessEntity.Business
             if (updated)
             {
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-
-                //TODO: check also this, you need to remove it as no need for it
-                NormalizationRule normalizationRule = dataManager.GetNormalizationRuleByID(normalizationRuleObj.NormalizationRuleId);
-                updateOperationOutput.UpdatedObject = NormalizationRuleDetailMapper(normalizationRule);
+                updateOperationOutput.UpdatedObject = NormalizationRuleDetailMapper(normalizationRuleObj);
             }
 
             return updateOperationOutput;
         }
-        
+
         public DeleteOperationOutput<object> DeleteNormalizationRule(int normalizationRuleId)
         {
             DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
@@ -259,12 +254,33 @@ namespace PSTN.BusinessEntity.Business
                 normalizationRuleDetail.ActionDescriptions = new List<string>();
 
                 foreach (var action in normalizationRule.Settings.Actions)
-                {   
+                {
                     normalizationRuleDetail.ActionDescriptions.Add(action.GetDescription());
                 }
             }
 
             return normalizationRuleDetail;
+        }
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            INormalizationRuleDataManager _dataManager = PSTNBEDataManagerFactory.GetDataManager<INormalizationRuleDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreNormalizationRulesUpdated(ref _updateHandle);
+            }
+        }
+
+        private List<NormalizationRule> GetCachedNormalizationRules()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetNormalizationRules",
+               () =>
+               {
+                   INormalizationRuleDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<INormalizationRuleDataManager>();
+                   return dataManager.GetNormalizationRules();
+               });
         }
 
         private List<string> GetSwitchNames(List<SwitchInfo> switches)
@@ -291,29 +307,6 @@ namespace PSTN.BusinessEntity.Business
             return trunkNames;
         }
 
-
-        List<NormalizationRule> GetCachedNormalizationRules()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetNormalizationRules",
-               () =>
-               {
-                   INormalizationRuleDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<INormalizationRuleDataManager>();
-                   return dataManager.GetNormalizationRules();
-               });
-        }
-
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            INormalizationRuleDataManager _dataManager = PSTNBEDataManagerFactory.GetDataManager<INormalizationRuleDataManager>();
-            object _updateHandle;
-
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return _dataManager.AreNormalizationRulesUpdated(ref _updateHandle);
-            }
-        }
-
         #endregion
-
     }
 }

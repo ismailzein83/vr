@@ -36,7 +36,7 @@ namespace PSTN.BusinessEntity.Data.SQL
             return GetItemsSP("PSTN_BE.sp_NormalizationRule_GetAll", NormalizationRuleMapper);
         }
 
-        public NormalizationRule GetNormalizationRuleByID(int normalizationRuleId)
+        public NormalizationRule GetNormalizationRuleById(int normalizationRuleId)
         {
             return GetItemSP("PSTN_BE.sp_NormalizationRule_GetByID", NormalizationRuleMapper, normalizationRuleId);
         }

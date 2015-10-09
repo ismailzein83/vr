@@ -5,7 +5,7 @@ namespace PSTN.BusinessEntity.Entities
 {
     public class NormalizationRuleQuery
     {
-        public NormalizationPhoneNumberType? PhoneNumberType { get; set; }
+        public List<NormalizationPhoneNumberType> PhoneNumberTypes { get; set; }
 
         public DateTime? EffectiveDate { get; set; }
 

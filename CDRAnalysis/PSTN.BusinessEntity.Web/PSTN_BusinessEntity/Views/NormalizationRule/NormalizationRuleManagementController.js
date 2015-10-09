@@ -80,7 +80,7 @@ function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAP
     function getFilterObj() {
 
         var filterObj = {
-            PhoneNumberType: ($scope.selectedPhoneNumberTypes.length == 1) ? $scope.selectedPhoneNumberTypes[0].value : null,
+            PhoneNumberTypes: UtilsService.getPropValuesFromArray($scope.selectedPhoneNumberTypes, "value"),
             EffectiveDate: $scope.effectiveDate
         };
 

@@ -81,7 +81,7 @@
             UtilsService.waitMultipleAsyncOperations([loadSwitches, loadTrunks, loadTemplates])
                 .then(function () {
                     if (editMode) {
-                        NormalizationRuleAPIService.GetNormalizationRuleByID(normalizationRuleId)
+                        NormalizationRuleAPIService.GetNormalizationRuleById(normalizationRuleId)
                             .then(function (responseObject) {
                                 fillScopeFromNormalizationRuleObj(responseObject);
                             })

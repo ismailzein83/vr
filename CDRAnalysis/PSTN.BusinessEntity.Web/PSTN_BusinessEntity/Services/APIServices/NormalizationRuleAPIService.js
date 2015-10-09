@@ -3,7 +3,7 @@
     return ({
         GetFilteredNormalizationRules: GetFilteredNormalizationRules,
         GetNormalizationRuleActionBehaviorTemplates: GetNormalizationRuleActionBehaviorTemplates,
-        GetNormalizationRuleByID: GetNormalizationRuleByID,
+        GetNormalizationRuleById: GetNormalizationRuleById,
         AddNormalizationRule: AddNormalizationRule,
         UpdateNormalizationRule: UpdateNormalizationRule,
         DeleteNormalizationRule: DeleteNormalizationRule
@@ -17,8 +17,8 @@
         return BaseAPIService.get("/api/NormalizationRule/GetNormalizationRuleActionBehaviorTemplates");
     }
 
-    function GetNormalizationRuleByID(normalizationRuleId) {
-        return BaseAPIService.get("/api/NormalizationRule/GetNormalizationRuleByID", {
+    function GetNormalizationRuleById(normalizationRuleId) {
+        return BaseAPIService.get("/api/NormalizationRule/GetNormalizationRuleById", {
             normalizationRuleId: normalizationRuleId
         });
     }
