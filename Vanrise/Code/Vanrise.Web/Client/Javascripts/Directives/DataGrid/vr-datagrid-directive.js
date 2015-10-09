@@ -93,7 +93,7 @@
             }
             else
                 ctrl.rotateHeader = $attrs.rotate;
-            ctrl.expandabelcol = $attrs.hideexpand;
+            ctrl.expandabelcol = $attrs.showexpand;
            // console.log(ctrl.expandabelcol);
             var hasActionMenu = $attrs.menuactions != undefined;
             var actionsAttribute = hasActionMenu ? $scope.$parent.$eval($attrs.menuactions) : undefined;
@@ -755,10 +755,10 @@
                 calculateDataColumnsSectionWidth();
             };
             ctrl.showExpandCollapseTriger = function (dataItem) {
-                var classexpande ="";
+                var classexpande = "hide-expande";
                 if (ctrl.expandabelcol != undefined) {
-                    if (dataItem[ctrl.expandabelcol] == false)
-                        classexpande = "hide-expande";
+                    if (dataItem[ctrl.expandabelcol] == true)
+                        classexpande = "";
                 }
                 return classexpande;
             }
