@@ -87,5 +87,16 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
             CaseManagmentManager manager = new CaseManagmentManager();
             return manager.CancelAccountCases(input);
         }
+
+        [HttpPost]
+        public UpdateOperationOutput<AccountCase> CancelSelectedAccountCases(List<int> caseIds)
+        {
+            CaseManagmentManager manager = new CaseManagmentManager();
+            return manager.CancelSelectedAccountCases(caseIds);
+        }
+
+
+
+        
     }
 }

@@ -26,6 +26,8 @@ function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIServ
 
         $scope.cases = [];
 
+        $scope.selectedCases = [];
+
 
         $scope.onGridReady = function (api) {
             gridAPI = api;
@@ -64,6 +66,17 @@ function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIServ
             return cancelCases();
         }
 
+        $scope.cancelSelectedClicked = function () {
+            return cancelSelectedCases();
+        }
+
+
+        
+
+
+        
+
+
     }
 
 
@@ -91,6 +104,30 @@ function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIServ
                 }
             });
     }
+
+    function cancelSelectedCases() {
+        VRNotificationService.showConfirmation()
+            .then(function (response) {
+                if (response == true) {
+
+                    var selectedCaseIDs = [];
+
+                    angular.forEach($scope.selectedCases, function (item) {
+                        selectedCaseIDs.push(item.CaseID);
+                    });
+                   
+                    console.log(selectedCaseIDs)
+                    return CaseManagementAPIService.CancelSelectedAccountCases(selectedCaseIDs)
+                                          .then(function (response) {
+                                              if (VRNotificationService.notifyOnItemUpdated("Account Cases", response)) {
+                                              }
+                                          }).catch(function (error) {
+                                              VRNotificationService.notifyException(error, $scope);
+                                          });
+                }
+            });
+    }
+
 
 
     function load() {
@@ -123,6 +160,15 @@ function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIServ
         };
         return accountCaseObject;
     }
+
+    $scope.checkIfItemsSelected = function () {
+        $scope.selectedCases.length = 0;
+        angular.forEach($scope.cases, function (item) {
+            if (item.isSelected)
+                $scope.selectedCases.push(item);
+        });
+    }
+
 }
 
 appControllers.controller("FraudAnalysis_CancelCasesController", CancelCasesController);

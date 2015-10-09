@@ -12,9 +12,15 @@
         GetFilteredAccountCaseLogsByCaseID: GetFilteredAccountCaseLogsByCaseID,
         UpdateAccountCase: UpdateAccountCase,
         CancelAccountCases: CancelAccountCases,
-        GetFilteredCasesByFilters: GetFilteredCasesByFilters
+        GetFilteredCasesByFilters: GetFilteredCasesByFilters,
+        CancelSelectedAccountCases: CancelSelectedAccountCases
     });
 
+
+
+    function CancelSelectedAccountCases(caseIds) {
+        return BaseAPIService.post("/api/CaseManagement/CancelSelectedAccountCases", caseIds);
+    }
 
     function CancelAccountCases(input) {
         return BaseAPIService.post("/api/CaseManagement/CancelAccountCases", input);

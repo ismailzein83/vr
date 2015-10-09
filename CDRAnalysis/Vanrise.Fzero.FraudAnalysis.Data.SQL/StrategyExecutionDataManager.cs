@@ -142,7 +142,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_DeleteByFilters", accountNumber, fromDate, toDate, StrategiesCommaSeperatedList);
         }
 
-      
+        public void DeleteStrategyExecutionDetails_ByCaseIDs(List<int> caseIds)
+        {
+            string CasesCommaSeperatedList = null;
+
+            if (caseIds != null)
+                CasesCommaSeperatedList = string.Join(",", caseIds);
+
+            ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_DeleteByCaseIDs", CasesCommaSeperatedList);
+        }
 
 
         #region Private Members

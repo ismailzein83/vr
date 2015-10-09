@@ -21,6 +21,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         void DeleteStrategyExecutionDetails_ByFilters(string accountNumber, DateTime? fromDate, DateTime? toDate, List<int> strategyIDs);
 
-        
+        void DeleteStrategyExecutionDetails_ByCaseIDs(List<int> caseIds);
+
     }
 }

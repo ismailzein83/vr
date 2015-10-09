@@ -132,6 +132,23 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return updateOperationOutput;
         }
 
+
+        public Vanrise.Entities.UpdateOperationOutput<AccountCase> CancelSelectedAccountCases(List<int> CaseIDs)
+        {
+            Vanrise.Entities.UpdateOperationOutput<AccountCase> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountCase>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            IStrategyExecutionDataManager strategyExecutionDataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
+            ICaseManagementDataManager caseManagementDataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
+            strategyExecutionDataManager.DeleteStrategyExecutionDetails_ByCaseIDs(CaseIDs);
+            caseManagementDataManager.DeleteAccountCases_ByCaseIDs(CaseIDs);
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+            return updateOperationOutput;
+        }
+
         public bool UpdateAccountCase(string accountNumber, CaseStatus caseStatus, DateTime? validTill, string reason)
         {
             ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
