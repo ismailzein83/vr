@@ -6,7 +6,9 @@ namespace PSTN.BusinessEntity.Data
     public interface INormalizationRuleDataManager : IDataManager
     {
         List<NormalizationRule> GetEffective();
-        Vanrise.Entities.BigResult<NormalizationRule> GetFilteredNormalizationRules(Vanrise.Entities.DataRetrievalInput<NormalizationRuleQuery> input);
+        //Vanrise.Entities.BigResult<NormalizationRule> GetFilteredNormalizationRules(Vanrise.Entities.DataRetrievalInput<NormalizationRuleQuery> input);
+
+        List<NormalizationRule> GetNormalizationRules();
 
         NormalizationRule GetNormalizationRuleByID(int normalizationRuleId);
 
@@ -15,5 +17,7 @@ namespace PSTN.BusinessEntity.Data
         bool UpdateNormalizationRule(NormalizationRule normalizationRuleObj);
 
         bool DeleteNormalizationRule(int normalizationRuleId);
+
+        bool AreNormalizationRulesUpdated(ref object updateHandle);
     }
 }
