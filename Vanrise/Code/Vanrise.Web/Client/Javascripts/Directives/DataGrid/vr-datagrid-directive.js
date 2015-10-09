@@ -93,7 +93,7 @@
             }
             else
                 ctrl.rotateHeader = $attrs.rotate;
-            ctrl.expandabelcol = $attrs.showexpand;
+            ctrl.expandabelcol = $attrs.showexpand!=undefined?$attrs.showexpand:true;
            // console.log(ctrl.expandabelcol);
             var hasActionMenu = $attrs.menuactions != undefined;
             var actionsAttribute = hasActionMenu ? $scope.$parent.$eval($attrs.menuactions) : undefined;
@@ -757,7 +757,7 @@
             ctrl.showExpandCollapseTriger = function (dataItem) {
                 var classexpande = "hide-expande";
                 if (ctrl.expandabelcol != undefined) {
-                    if (dataItem[ctrl.expandabelcol] == true)
+                    if (dataItem[ctrl.expandabelcol] == true || ctrl.expandabelcol==true)
                         classexpande = "";
                 }
                 return classexpande;
