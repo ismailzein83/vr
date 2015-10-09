@@ -17,6 +17,12 @@
             $scope.datasource = [];
             $scope.params = parameters;
             defineMenuActions();
+            $scope.sortField = $scope.measures[0].name;
+
+            if ($scope.periods.length > 0 || $scope.groupKeys.length > 0)
+                $scope.sortField = 'DimensionValues[0].Name';
+            else
+                $scope.sortField = 'MeasureValues.' + $scope.measures[0].name;
 
             $scope.gridReady = function (api) {
                 gridApi = api;
@@ -32,8 +38,9 @@
             $scope.subViewConnector.getValue = function () {
                 return "GetValue";
             };
-
+            
             $scope.subViewConnector.retrieveData = function (value) {
+                
                 $scope.subViewConnector.value = value;
                 measureFieldsValues.length = 0;
                 if (gridApi == undefined)
@@ -48,17 +55,16 @@
                 
                 if (value.FixedDimensionFields == undefined)
                     value.FixedDimensionFields = [];
+                else {
+                    groupKeys.push(value.FixedDimensionFields.value);
+                    fixedDimensions.push(value.FixedDimensionFields);
 
-                value.FixedDimensionFields.forEach(function (group) {
-                    groupKeys.push(group.value);
-                    fixedDimensions.push(group);
-
-                    if (group == GenericAnalyticDimensionEnum.Hour) {
+                    if (value.FixedDimensionFields == GenericAnalyticDimensionEnum.Hour) {
                         groupKeys.push(GenericAnalyticDimensionEnum.Date.value);
                         fixedDimensions.push(GenericAnalyticDimensionEnum.Date);
                     }
-                });
-
+                 }
+                
                 selectedGroupKeys = value.DimensionFields;
                 
                 for (var i = 0, len = value.MeasureFields.length; i < len; i++) {
@@ -68,11 +74,13 @@
                 var query = {
                     Filters: value.Filters,
                     DimensionFields: groupKeys,
+                    //DimensionFields: [],
                     MeasureFields: measureFieldsValues,
                     FromTime: value.FromTime,
                     ToTime: value.ToTime,
                     Currency: value.Currency
                 }
+                
                 $scope.selectedMeasures = value.MeasureFields;
                 $scope.fromDate = value.FromTime;
                 $scope.toDate = value.ToTime;
@@ -82,11 +90,10 @@
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                
                 return GenericAnalyticAPIService.GetFiltered(dataRetrievalInput)
                 .then(function (response) {
                     $scope.currentSearchCriteria.groupKeys.length = 0;
-
+                    
                     selectedGroupKeys.forEach(function (group) {
                         $scope.currentSearchCriteria.groupKeys.push(group);
                     });

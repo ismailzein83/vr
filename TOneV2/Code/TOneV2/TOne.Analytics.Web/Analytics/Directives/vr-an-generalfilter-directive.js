@@ -10,6 +10,7 @@
             scope: {
                 dimensionsvalues: "=",
                 filtervalues: "=",
+                periods: "=",
                 selectedobject: "="
             },
             controller: function ($attrs) {
@@ -17,6 +18,10 @@
 
                 ctrl.isrequired = function () {
                     return $attrs.isrequired != undefined;
+                }
+
+                ctrl.isreq = function () {
+                    return (ctrl.periods.length > 0);
                 }
 
                 function onLoad() {
@@ -58,6 +63,7 @@
                     ctrl.selectedobject = {
                         selecteddimensions: [],
                         selectedfilters: [],
+                        selectedperiod: null,
                         fromdate: new Date(2013, 1, 1),
                         todate: new Date(),
                         currency: (ctrl.currency.selectedvalues == null || ctrl.currency.selectedvalues == "" ) ? null : ctrl.currency.selectedvalues.CurrencyID

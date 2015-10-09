@@ -182,6 +182,33 @@ namespace TOne.Analytics.Data.SQL
                     JoinStatements = new List<string>() {"LEFT JOIN @ExchangeRates ERC ON ERC.Currency = bs.Cost_Currency AND ERC.Date = bs.CallDate LEFT JOIN @ExchangeRates ERS ON ERS.Currency = bs.Sale_Currency AND ERS.Date = bs.CallDate"},
                     GroupByStatements = new List<string>() { " datepart(hour,LastCDRAttempt)" }
                 });
+
+            s_AllDimensionsConfig.Add(AnalyticDimension.Day,
+                new AnalyticDimensionConfig
+                {
+                    IdColumn = "CONVERT(VARCHAR(10), FirstCDRAttempt,121)",
+                    NameColumn = "CONVERT(VARCHAR(10),FirstCDRAttempt,121)",
+                    JoinStatements = null,
+                    GroupByStatements = new List<string>() { "CONVERT(VARCHAR(10), FirstCDRAttempt,121)" }
+                });
+
+            s_AllDimensionsConfig.Add(AnalyticDimension.Week,
+                new AnalyticDimensionConfig
+                {
+                    IdColumn = "cast(datepart(yyyy, FirstCDRAttempt) AS varchar) + ', Week ' + cast(datepart(wk, FirstCDRAttempt) AS varchar)",
+                    NameColumn = "cast(datepart(yyyy, FirstCDRAttempt) AS varchar) +  ', Week '  + cast(datepart(wk, FirstCDRAttempt) AS varchar)",
+                    JoinStatements = null,
+                    GroupByStatements = new List<string>() { "cast(datepart(yyyy, FirstCDRAttempt) AS varchar) +  ', Week '  + cast(datepart(wk, FirstCDRAttempt) AS varchar)" }
+                });
+
+            s_AllDimensionsConfig.Add(AnalyticDimension.Month,
+                new AnalyticDimensionConfig
+                {
+                    IdColumn = "CONVERT(VARCHAR(7), FirstCDRAttempt,121)",
+                    NameColumn = "CONVERT(VARCHAR(7),FirstCDRAttempt,121)",
+                    JoinStatements = null,
+                    GroupByStatements = new List<string>() { "CONVERT(VARCHAR(7), FirstCDRAttempt,121)" }
+                });
         }
 
         private static void FillMeasureFieldsConfig()

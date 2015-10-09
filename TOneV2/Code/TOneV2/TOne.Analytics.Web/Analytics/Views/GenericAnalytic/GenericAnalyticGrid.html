@@ -1,6 +1,8 @@
 ﻿
+
 <div ng-controller="GenericAnalyticGridController">
-    <vr-datagrid datasource="datasource" defaultsortbyfieldname="'DimensionValues[0].Name'" pagingtype="'Pager'"
+   
+    <vr-datagrid datasource="datasource" defaultsortbyfieldname="sortField" pagingtype="'Pager'"
                  menuactions="gridMenuActions" dataretrievalfunction="dataRetrievalFunction" on-ready="gridReady">
 
         <vr-datagridcolumn ng-repeat="groupKey in currentSearchCriteria.groupKeys" ng-if="selectedMeasures.length > 0" headertext="groupKey.description" type="groupKey.type"

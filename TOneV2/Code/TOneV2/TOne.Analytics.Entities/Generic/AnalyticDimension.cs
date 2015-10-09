@@ -22,6 +22,9 @@ namespace TOne.Analytics.Entities
         Date = 11,
         Hour = 12,
         SupplierZone = 13,
-        Currency = 14
+        Currency = 14,
+        Day =18,
+        Week = 19,
+        Month = 20
     }
 }
