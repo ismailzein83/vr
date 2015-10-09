@@ -133,7 +133,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     COUNT(DISTINCT ac.AccountNumber) AS BlockedLinesCount,
                     #DATE_DAY#
                     STUFF((
-                        SELECT ', ' + ac1.[AccountNumber]
+                        SELECT distinct ', ' + ac1.[AccountNumber]
                         
                         FROM [FraudAnalysis].[AccountCase] ac1
                         INNER JOIN FraudAnalysis.StrategyExecutionDetails sed1 ON sed1.CaseID = ac1.ID
