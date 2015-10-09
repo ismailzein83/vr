@@ -93,8 +93,7 @@
             }
             else
                 ctrl.rotateHeader = $attrs.rotate;
-            ctrl.expandabelcol = $attrs.showexpand!=undefined?$attrs.showexpand:true;
-           // console.log(ctrl.expandabelcol);
+            ctrl.expandabelcol = $attrs.showexpand ;
             var hasActionMenu = $attrs.menuactions != undefined;
             var actionsAttribute = hasActionMenu ? $scope.$parent.$eval($attrs.menuactions) : undefined;
             var dataGridObj = new DataGrid(ctrl, $scope);
@@ -755,10 +754,10 @@
                 calculateDataColumnsSectionWidth();
             };
             ctrl.showExpandCollapseTriger = function (dataItem) {
-                var classexpande = "hide-expande";
+                var classexpande ="" ;
                 if (ctrl.expandabelcol != undefined) {
-                    if (dataItem[ctrl.expandabelcol] == true || ctrl.expandabelcol==true)
-                        classexpande = "";
+                    if (dataItem[ctrl.expandabelcol] == false)
+                        classexpande ="hide-expande";
                 }
                 return classexpande;
             }
