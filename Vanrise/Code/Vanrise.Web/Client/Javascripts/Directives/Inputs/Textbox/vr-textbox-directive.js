@@ -41,9 +41,14 @@
 
                         var isUserChange;
                         $scope.$watch('ctrl.value', function (newValue, oldValue) {
-                        
+                            
                             if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
                                 return;
+
+                            if (newValue == "") {
+                                ctrl.value = null;
+                            }
+                               
                             isUserChange = false;//reset the flag
                             if (iAttrs.type === TextboxTypeEnum.Number.name) {
                                 var arr = String(newValue).split("");
