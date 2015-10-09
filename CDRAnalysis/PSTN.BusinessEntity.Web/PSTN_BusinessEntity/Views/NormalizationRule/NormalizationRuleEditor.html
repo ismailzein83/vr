@@ -3,19 +3,16 @@
         <vr-form name="formNormalizationRuleEditor">
 
             <vr-choices>
-                <vr-choice isselected="infoSelected">Info</vr-choice>
+                <vr-choice isselected="definitionSelected">Definition</vr-choice>
                 <vr-choice isselected="criteriaSelected">Criteria</vr-choice>
                 <vr-choice isselected="actionsSelected">Actions</vr-choice>
+                <vr-choice isselected="scheduleSettingsSelected">Schedule Settings</vr-choice>
             </vr-choices>
 
-            <div ng-show="infoSelected">
+            <div ng-show="definitionSelected">
                 <vr-row>
-                    <vr-columns width="1/3row">
-                        <vr-datetimepicker label="Begin Effective Date" value="beginEffectiveDate" type="dateTime" isrequired></vr-datetimepicker>
-                    </vr-columns>
-
-                    <vr-columns width="1/3row">
-                        <vr-datetimepicker label="End Effective Date" value="endEffectiveDate" type="dateTime"></vr-datetimepicker>
+                    <vr-columns width="fullrow">
+                        <vr-textarea label="Description" value="description"></vr-textarea>
                     </vr-columns>
                 </vr-row>
             </div>
@@ -71,13 +68,13 @@
                     <vr-columns width="fullrow">
                         <vr-row>
                             <vr-columns width="1/3row">
-                                <vr-select label="Behavior"
+                                <vr-select label="Action Type"
                                            datasource="normalizationRuleActionSettingsTemplates"
                                            selectedvalues="selectedNormalizationRuleActionSettingsTemplate"
                                            onselectionchanged="onNormalizationRuleActionSettingsTemplateChanged"
                                            datavaluefield="TemplateConfigID"
                                            datatextfield="Name"
-                                           entityname="Behavior"
+                                           entityname="Action Type"
                                            hideremoveicon>
                                 </vr-select>
                             </vr-columns>
@@ -107,6 +104,18 @@
 
                             </vr-columns>
                         </vr-row>
+                    </vr-columns>
+                </vr-row>
+            </div>
+
+            <div ng-show="scheduleSettingsSelected">
+                <vr-row>
+                    <vr-columns width="1/3row">
+                        <vr-datetimepicker label="Begin Effective Date" value="beginEffectiveDate" type="dateTime" isrequired></vr-datetimepicker>
+                    </vr-columns>
+
+                    <vr-columns width="1/3row">
+                        <vr-datetimepicker label="End Effective Date" value="endEffectiveDate" type="dateTime"></vr-datetimepicker>
                     </vr-columns>
                 </vr-row>
             </div>

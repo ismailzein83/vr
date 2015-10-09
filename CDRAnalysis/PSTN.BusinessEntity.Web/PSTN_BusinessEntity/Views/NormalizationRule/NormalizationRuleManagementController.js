@@ -32,7 +32,6 @@ function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAP
 
         $scope.onSearchClicked = function () {
             var query = getFilterObj();
-            console.log(query);
             return directiveGridAPI.retrieveData(query);
         };
 

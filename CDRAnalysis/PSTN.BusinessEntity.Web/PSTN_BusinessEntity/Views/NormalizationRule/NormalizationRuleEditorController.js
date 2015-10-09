@@ -130,6 +130,8 @@
         }
 
         function fillScopeFromNormalizationRuleObj(normalizationRuleObj) {
+            $scope.description = normalizationRuleObj.Description;
+
             $scope.selectedSwitches = (normalizationRuleObj.Criteria.SwitchIds != null) ?
                 getItemsByPropValues($scope.switches, normalizationRuleObj.Criteria.SwitchIds, "ID") : [];
 
@@ -244,6 +246,7 @@
                 Settings: {
                     Actions: ($scope.normalizationRuleActionSettingsList.length > 0) ? getNormalizationRuleActionSettings() : null
                 },
+                Description: $scope.description,
                 BeginEffectiveDate: $scope.beginEffectiveDate,
                 EndEffectiveDate: $scope.endEffectiveDate
             };

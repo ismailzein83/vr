@@ -1,37 +1,46 @@
-﻿<div ng-controller="PSTN_BE_NormalizationRuleDescriptionTemplateController" style="font-size:14px;">
-    <vr-row>
-        <vr-columns width="fullrow">
-            <vr-section title="Criteria">
-                <div ng-if="showSwitches">
-                    <vr-label>Switches:</vr-label> {{dataItem.SwitchNames}}
-                </div>
+﻿<div ng-controller="PSTN_BE_NormalizationRuleDescriptionTemplateController">
+    <vr-row ng-show="showCriteria">
+        <vr-columns width="1/2row">
+            <div style="background-color:white;">
+                <vr-section title="Criteria">
+                    <div ng-if="showSwitches">
+                        <vr-label>Switches: </vr-label>
+                        <vr-label isvalue>{{dataItem.SwitchNames}}</vr-label>
+                    </div>
 
-                <div ng-if="showTrunks">
-                    <vr-label>Trunks:</vr-label> {{dataItem.TrunkNames}}
-                </div>
+                    <div ng-if="showTrunks">
+                        <vr-label>Trunks: </vr-label>
+                        <vr-label isvalue>{{dataItem.TrunkNames}}</vr-label>
+                    </div>
 
-                <div ng-if="showPhoneNumberType">
-                    <vr-label>Number Type:</vr-label> {{dataItem.PhoneNumberTypeDescription}}<br />
-                </div>
+                    <div ng-if="showPhoneNumberType">
+                        <vr-label>Number Type: </vr-label>
+                        <vr-label isvalue>{{dataItem.PhoneNumberTypeDescription}}</vr-label>
+                    </div>
 
-                <div ng-if="showPhoneNumberLength">
-                    <vr-label>Number Length:</vr-label> {{dataItem.PhoneNumberLength}}<br />
-                </div>
+                    <div ng-if="showPhoneNumberLength">
+                        <vr-label>Number Length: </vr-label>
+                        <vr-label isvalue>{{dataItem.PhoneNumberLength}}</vr-label>
+                    </div>
 
-                <div ng-if="showPhoneNumberPrefix">
-                    <vr-label>Number Prefix:</vr-label> {{dataItem.PhoneNumberPrefix}}
-                </div>
-            </vr-section>
+                    <div ng-if="showPhoneNumberPrefix">
+                        <vr-label>Number Prefix: </vr-label>
+                        <vr-label isvalue>{{dataItem.PhoneNumberPrefix}}</vr-label>
+                    </div>
+                </vr-section>
+            </div>
         </vr-columns>
     </vr-row>
 
-    <vr-row>
-        <vr-columns width="fullrow">
-            <vr-section title="Actions">
-                <div ng-repeat="actionDescription in dataItem.ActionDescriptions">
-                    {{actionDescription}}
-                </div>
-            </vr-section>
+    <vr-row ng-show="showActions">
+        <vr-columns width="1/2row">
+            <div style="background-color:white;">
+                <vr-section title="Actions">
+                    <div ng-repeat="actionDescription in dataItem.ActionDescriptions">
+                        <vr-label isvalue>{{actionDescription}}</vr-label>
+                    </div>
+                </vr-section>
+            </div>
         </vr-columns>
     </vr-row>
 </div>

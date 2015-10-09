@@ -137,7 +137,7 @@ namespace PSTN.BusinessEntity.Business
                         &&
                         (
                             input.Query.PhoneNumberPrefix == null ||
-                            itm.PhoneNumberPrefix.Contains(input.Query.PhoneNumberPrefix)
+                            (itm.PhoneNumberPrefix != null && itm.PhoneNumberPrefix.Contains(input.Query.PhoneNumberPrefix))
                         )
                         &&
                         (
@@ -147,7 +147,7 @@ namespace PSTN.BusinessEntity.Business
                         &&
                         (
                             input.Query.Description == null ||
-                            itm.Description.Contains(input.Query.Description)
+                            (itm.Description != null && itm.Description.Contains(input.Query.Description))
                         )
                     );
                 };
