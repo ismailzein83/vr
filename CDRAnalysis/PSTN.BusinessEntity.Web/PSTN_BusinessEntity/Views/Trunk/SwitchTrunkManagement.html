@@ -2,6 +2,15 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
             <vr-row removeline>
+                <vr-columns width="fullrow">
+                    <vr-choices-filter selectedindex="selectedFilternIndex">
+                        <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
+                        <vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
+                    </vr-choices-filter>
+
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
                 <vr-columns width="normal">
                     <vr-textbox label="Name" value="name"></vr-textbox>
                 </vr-columns>
@@ -22,7 +31,7 @@
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-select label="Type"
+                    <vr-select label="Type" ng-show="advancedSelected"
                                datasource="types"
                                selectedvalues="selectedTypes"
                                datavaluefield="value"
@@ -33,7 +42,7 @@
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-select label="Direction"
+                    <vr-select label="Direction" ng-show="advancedSelected"
                                datasource="directions"
                                selectedvalues="selectedDirections"
                                datavaluefield="value"
@@ -44,7 +53,7 @@
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-select label="Linked-To Trunk"
+                    <vr-select label="Linked-To Trunk" ng-show="advancedSelected"
                                datasource="linkedToTrunkObjects"
                                selectedvalues="selectedLinkedToTrunkObjects"
                                datavaluefield="value"
