@@ -13,24 +13,35 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         public Vanrise.Entities.IDataRetrievalResult<RoutingProduct> GetFilteredRoutingProducts(Vanrise.Entities.DataRetrievalInput<RoutingProductQuery> input)
         {
-            IRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredRoutingProducts(input));
+            var allRoutingProducts = GetCachedRoutingProducts();
+
+            Func<IEnumerable<RoutingProduct>, IEnumerable<RoutingProduct>> filterResult = (listToFilter) =>
+            {
+                return listToFilter.Where(itm =>
+                 (input.Query.Name == null || itm.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                 &&
+                 (input.Query.SaleZonePackageIds == null || input.Query.SaleZonePackageIds.Contains(itm.SaleZonePackageId)));
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRoutingProducts.ToBigResult(input, filterResult));
         }
 
         public RoutingProduct GetRoutingProduct(int routingProductId)
         {
-            IRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
-            return dataManager.GetRoutingProduct(routingProductId);
+            List<RoutingProduct> routingProducts = GetCachedRoutingProducts();
+            return routingProducts.Find(x => x.RoutingProductId == routingProductId);
         }
-        public List<RoutingProductInfo> GetRoutingProductsInfoBySaleZonePackage(int saleZonePackage)
+
+        public List<RoutingProductInfo> GetRoutingProductsInfoBySaleZonePackage(int saleZonePackageId)
         {
-            IRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
-            return dataManager.GetRoutingProductsInfoBySaleZonePackage(saleZonePackage);
+            List<RoutingProduct> routingProducts = GetCachedRoutingProducts();
+            return routingProducts.Where(x => x.SaleZonePackageId == saleZonePackageId).Select(RoutingProductInfoMapper).ToList();
         }
+        
         public List<RoutingProductInfo> GetRoutingProducts()
         {
-            IRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
-            return dataManager.GetRoutingProducts();
+            List<RoutingProduct> routingProducts = GetCachedRoutingProducts();
+            return routingProducts.Select(RoutingProductInfoMapper).ToList();
         }
 
         public TOne.Entities.InsertOperationOutput<RoutingProduct> AddRoutingProduct(RoutingProduct routingProduct)
@@ -90,5 +101,40 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return deleteOperationOutput;
         }
+
+        #region Private Members
+
+        List<RoutingProduct> GetCachedRoutingProducts()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRoutingProducts",
+               () =>
+               {
+                   IRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
+                   return dataManager.GetRoutingProducts();
+               });
+        }
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IRoutingProductDataManager _dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreRoutingProductsUpdated(ref _updateHandle);
+            }
+        }
+
+        private RoutingProductInfo RoutingProductInfoMapper(RoutingProduct routingProduct)
+        {
+            return new RoutingProductInfo()
+            {
+                RoutingProductId = routingProduct.RoutingProductId,
+                Name = routingProduct.Name,
+                SaleZonePackageId = routingProduct.SaleZonePackageId
+            };
+        }
+
+        #endregion
     }
 }

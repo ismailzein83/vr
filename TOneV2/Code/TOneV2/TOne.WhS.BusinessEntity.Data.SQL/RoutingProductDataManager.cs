@@ -42,9 +42,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemSP("TOneWhS_BE.sp_RoutingProduct_Get", RoutingProductMapper, routingProductId);
         }
 
-        public List<Entities.RoutingProductInfo> GetRoutingProducts()
+        public List<Entities.RoutingProduct> GetRoutingProducts()
         {
-            return GetItemsSP("TOneWhS_BE.sp_RoutingProduct_GetAll", RoutingProductInfoMapper);
+            return GetItemsSP("TOneWhS_BE.sp_RoutingProduct_GetAll", RoutingProductMapper);
         }
 
         public bool Insert(Entities.RoutingProduct routingProduct, out int insertedId)
@@ -84,17 +84,17 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return routingProduct;
         }
 
-        Entities.RoutingProductInfo RoutingProductInfoMapper(IDataReader reader)
-        {
-            Entities.RoutingProductInfo routingProductInfo = new Entities.RoutingProductInfo
-            {
-                RoutingProductId = (int)reader["ID"],
-                Name = reader["Name"] as string,
-                SaleZonePackageId = (int)reader["SaleZonePackageID"]
-            };
+        //Entities.RoutingProductInfo RoutingProductInfoMapper(IDataReader reader)
+        //{
+        //    Entities.RoutingProductInfo routingProductInfo = new Entities.RoutingProductInfo
+        //    {
+        //        RoutingProductId = (int)reader["ID"],
+        //        Name = reader["Name"] as string,
+        //        SaleZonePackageId = (int)reader["SaleZonePackageID"]
+        //    };
 
-            return routingProductInfo;
-        }
+        //    return routingProductInfo;
+        //}
 
 
         public bool AreRoutingProductsUpdated(ref object updateHandle)
@@ -103,9 +103,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
 
 
-        public List<Entities.RoutingProductInfo> GetRoutingProductsInfoBySaleZonePackage(int saleZonePackage)
-        {
-            return GetItemsSP("TOneWhS_BE.sp_RoutingProduct_GetBySaleZonePackage", RoutingProductInfoMapper, saleZonePackage);
-        }
+        //public List<Entities.RoutingProductInfo> GetRoutingProductsInfoBySaleZonePackage(int saleZonePackage)
+        //{
+        //    return GetItemsSP("TOneWhS_BE.sp_RoutingProduct_GetBySaleZonePackage", RoutingProductInfoMapper, saleZonePackage);
+        //}
     }
 }
