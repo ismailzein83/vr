@@ -9,17 +9,21 @@ function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAP
 
     function defineScope() {
 
+        $scope.phoneNumberTypes = UtilsService.getArrayEnum(PSTN_BE_PhoneNumberTypeEnum);
+        $scope.selectedPhoneNumberTypes = [];
+
+        $scope.effectiveDate = undefined;
+
+        $scope.phoneNumberPrefix = undefined;
+        $scope.phoneNumberLength = undefined;
+
         $scope.switches = [];
         $scope.selectedSwitches = [];
 
         $scope.trunks = [];
         $scope.selectedTrunks = [];
 
-        $scope.phoneNumberTypes = UtilsService.getArrayEnum(PSTN_BE_PhoneNumberTypeEnum);
-        $scope.selectedPhoneNumberTypes = [];
-
-        $scope.phoneNumberLength = undefined;
-        $scope.phoneNumberPrefix = undefined;
+        $scope.description = undefined;
 
         $scope.onDirectiveGridReady = function (api) {
             directiveGridAPI = api;
@@ -27,7 +31,8 @@ function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAP
         };
 
         $scope.onSearchClicked = function () {
-            var query = getFilterObject();
+            var query = getFilterObj();
+            console.log(query);
             return directiveGridAPI.retrieveData(query);
         };
 
@@ -72,16 +77,22 @@ function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAP
             });
     }
 
-    function getFilterObject() {
-        return {
-            BeginEffectiveDate: $scope.beginEffectiveDate,
-            EndEffectiveDate: $scope.endEffectiveDate,
-            SwitchIds: UtilsService.getPropValuesFromArray($scope.selectedSwitches, "ID"),
-            TrunkIds: UtilsService.getPropValuesFromArray($scope.selectedTrunks, "ID"),
+    function getFilterObj() {
+
+        var filterObj = {
             PhoneNumberType: ($scope.selectedPhoneNumberTypes.length == 1) ? $scope.selectedPhoneNumberTypes[0].value : null,
-            PhoneNumberLength: $scope.phoneNumberLength,
-            PhoneNumberPrefix: $scope.phoneNumberPrefix
+            EffectiveDate: $scope.effectiveDate
         };
+
+        if ($scope.selectedTabIndex == 1) {
+            filterObj.PhoneNumberPrefix = $scope.phoneNumberPrefix;
+            filterObj.PhoneNumberLength = $scope.phoneNumberLength;
+            filterObj.SwitchIds = UtilsService.getPropValuesFromArray($scope.selectedSwitches, "ID");
+            filterObj.TrunkIds = UtilsService.getPropValuesFromArray($scope.selectedTrunks, "ID");
+            filterObj.Description = $scope.description;
+        }
+
+        return filterObj;
     }
 }
 

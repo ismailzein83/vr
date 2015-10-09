@@ -5,16 +5,18 @@
                      dataretrievalfunction="dataRetrievalFunction"
                      pagingtype="'PagingOnScroll'"
                      menuactions="gridMenuActions"
-                     idfield="NormalizationRuleId">
+                     idfield="NormalizationRuleId"
+                     defaultsortbyfieldname="'NormalizationRuleId'"
+                     defaultsortdirection="'ASC'">
 
-            <vr-datagridcolumn headertext="'ID'" field="'NormalizationRuleId'" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'BED'" field="'BeginEffectiveDate'" type="'Datetime'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'EED'" field="'EndEffectiveDate'" type="'Datetime'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Number Type'" field="'PhoneNumberTypeDescription'" type="'Text'" disablesorting></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Number Prefix'" field="'PhoneNumberPrefix'" type="'Text'" disablesorting></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Number Length'" field="'PhoneNumberLength'" type="'Number'" numberprecision="'NoDecimal'" disablesorting></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Switches'" field="'SwitchCount'" type="'Number'" numberprecision="'NoDecimal'" disablesorting></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Trunks'" field="'TrunkCount'" type="'Number'" numberprecision="'NoDecimal'" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Begin Effective Date'" field="'BeginEffectiveDate'" type="'Datetime'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'End Effective Date'" field="'EndEffectiveDate'" type="'Datetime'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Description'" field="'Description'" type="'Text'"></vr-datagridcolumn>
 
             <vr-datagridexpandablerow>
                 <div ng-include="'/Client/Modules/PSTN_BusinessEntity/Views/Templates/NormalizationRuleDescriptionTemplate.html'"></div>

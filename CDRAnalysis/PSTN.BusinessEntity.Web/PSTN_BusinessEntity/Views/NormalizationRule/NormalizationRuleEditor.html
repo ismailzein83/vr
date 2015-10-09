@@ -1,8 +1,8 @@
-﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_NormalizationRuleEditorController" vr-loader="isGettingData" width="'25%'">
+﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_NormalizationRuleEditorController" vr-loader="isGettingData" width="'35%'">
     <vr-modalbody>
         <vr-form name="formNormalizationRuleEditor">
 
-            <vr-choices selectedindex="selectedTabIndex">
+            <vr-choices>
                 <vr-choice isselected="infoSelected">Info</vr-choice>
                 <vr-choice isselected="criteriaSelected">Criteria</vr-choice>
                 <vr-choice isselected="actionsSelected">Actions</vr-choice>
@@ -10,19 +10,19 @@
 
             <div ng-show="infoSelected">
                 <vr-row>
-                    <vr-columns width="1/2row">
-                        <vr-datetimepicker label="BED" value="beginEffectiveDate" type="dateTime" isrequired></vr-datetimepicker>
+                    <vr-columns width="1/3row">
+                        <vr-datetimepicker label="Begin Effective Date" value="beginEffectiveDate" type="dateTime" isrequired></vr-datetimepicker>
                     </vr-columns>
 
-                    <vr-columns width="1/2row">
-                        <vr-datetimepicker label="EED" value="endEffectiveDate" type="dateTime"></vr-datetimepicker>
+                    <vr-columns width="1/3row">
+                        <vr-datetimepicker label="End Effective Date" value="endEffectiveDate" type="dateTime"></vr-datetimepicker>
                     </vr-columns>
                 </vr-row>
             </div>
 
             <div ng-show="criteriaSelected">
                 <vr-row>
-                    <vr-columns width="1/2row">
+                    <vr-columns width="1/3row">
                         <vr-select label="Switch"
                                     datasource="switches"
                                     selectedvalues="selectedSwitches"
@@ -33,34 +33,34 @@
                         </vr-select>
                     </vr-columns>
 
-                    <vr-columns width="1/2row">
+                    <vr-columns width="1/3row">
                         <vr-select label="Trunk"
-                                    datasource="trunks"
-                                    selectedvalues="selectedTrunks"
-                                    datavaluefield="ID"
-                                    datatextfield="Name"
-                                    entityname="Trunk"
-                                    ismultipleselection>
+                                   datasource="trunks"
+                                   selectedvalues="selectedTrunks"
+                                   datavaluefield="ID"
+                                   datatextfield="Name"
+                                   entityname="Trunk"
+                                   ismultipleselection>
                         </vr-select>
                     </vr-columns>
 
-                    <vr-columns width="1/2row">
+                    <vr-columns width="1/3row">
                         <vr-select label="Number Type"
-                                    datasource="phoneNumberTypes"
-                                    selectedvalues="selectedPhoneNumberType"
-                                    datavaluefield="value"
-                                    datatextfield="description"
-                                    entityname="Number Type"
-                                    hideremoveicon
-                                    isrequired>
+                                   datasource="phoneNumberTypes"
+                                   selectedvalues="selectedPhoneNumberType"
+                                   datavaluefield="value"
+                                   datatextfield="description"
+                                   entityname="Number Type"
+                                   hideremoveicon
+                                   isrequired>
                         </vr-select>
                     </vr-columns>
 
-                    <vr-columns width="1/2row">
+                    <vr-columns width="1/3row">
                         <vr-textbox label="Number Length" value="phoneNumberLength" type="number" maxlength="2" minvalue="1" maxvalue="99"></vr-textbox>
                     </vr-columns>
 
-                    <vr-columns width="1/2row">
+                    <vr-columns width="1/3row">
                         <vr-textbox label="Number Prefix" value="phoneNumberPrefix"></vr-textbox>
                     </vr-columns>
                 </vr-row>
@@ -70,19 +70,19 @@
                 <vr-row>
                     <vr-columns width="fullrow">
                         <vr-row>
-                            <vr-columns width="1/2row">
+                            <vr-columns width="1/3row">
                                 <vr-select label="Behavior"
-                                            datasource="normalizationRuleActionSettingsTemplates"
-                                            selectedvalues="selectedNormalizationRuleActionSettingsTemplate"
-                                            onselectionchanged="onNormalizationRuleActionSettingsTemplateChanged"
-                                            datavaluefield="TemplateConfigID"
-                                            datatextfield="Name"
-                                            entityname="Behavior"
-                                            hideremoveicon>
+                                           datasource="normalizationRuleActionSettingsTemplates"
+                                           selectedvalues="selectedNormalizationRuleActionSettingsTemplate"
+                                           onselectionchanged="onNormalizationRuleActionSettingsTemplateChanged"
+                                           datavaluefield="TemplateConfigID"
+                                           datatextfield="Name"
+                                           entityname="Behavior"
+                                           hideremoveicon>
                                 </vr-select>
                             </vr-columns>
 
-                            <vr-columns width="1/2row">
+                            <vr-columns width="1/3row">
                                 <div style="top:25px;position:absolute;" vr-disabled="isAddButtonDisabled">
                                     <vr-button type="Add" data-onclick="addNormalizationRuleActionSettingsListItem" standalone></vr-button>
                                 </div>

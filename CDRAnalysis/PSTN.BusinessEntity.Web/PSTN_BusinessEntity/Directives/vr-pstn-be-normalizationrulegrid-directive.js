@@ -104,7 +104,7 @@ app.directive("vrPstnBeNormalizationrulegrid", ["PSTN_BE_Service", "Normalizatio
         }
 
         function setPhoneNumberTypeDescripton(dataItem) {
-            var phoneNumberType = UtilsService.getEnum(PSTN_BE_PhoneNumberTypeEnum, dataItem.PhoneNumberType);
+            var phoneNumberType = UtilsService.getEnum(PSTN_BE_PhoneNumberTypeEnum, "value", dataItem.PhoneNumberType);
             dataItem.PhoneNumberTypeDescription = phoneNumberType.description;
         }
     }

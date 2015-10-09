@@ -14,6 +14,8 @@ namespace PSTN.BusinessEntity.Entities
 
         public NormalizationRuleSettings Settings { get; set; }
 
+        public string Description { get; set; }
+
         public DateTime BeginEffectiveDate { get; set; }
 
         public DateTime? EndEffectiveDate { get; set; }

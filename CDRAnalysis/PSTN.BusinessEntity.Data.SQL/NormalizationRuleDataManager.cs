@@ -26,7 +26,7 @@ namespace PSTN.BusinessEntity.Data.SQL
         {
             return RetrieveData(input, (tempTableName) =>
             {
-                ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_CreateTempByFiltered", tempTableName, input.Query.BeginEffectiveDate, input.Query.EndEffectiveDate);
+                ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_CreateTempByFiltered", tempTableName, input.Query.EffectiveDate);
 
             }, (reader) => NormalizationRuleMapper(reader), _mapper);
         }
@@ -73,6 +73,7 @@ namespace PSTN.BusinessEntity.Data.SQL
             normalizationRule.NormalizationRuleId = (int)reader["ID"];
             normalizationRule.Criteria = Vanrise.Common.Serializer.Deserialize<NormalizationRuleCriteria>(reader["Criteria"] as string);
             normalizationRule.Settings = Vanrise.Common.Serializer.Deserialize<NormalizationRuleSettings>(reader["Settings"] as string);
+            //normalizationRule.Description = GetReaderValue<string>(reader, "Description");
             normalizationRule.BeginEffectiveDate = (DateTime)reader["BED"];
             normalizationRule.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED");
 
