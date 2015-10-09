@@ -754,11 +754,13 @@
                 calculateDataColumnsSectionWidth();
             };
             ctrl.showExpandCollapseTriger = function (dataItem) {
-                var classexpande ="" ;
+                var classexpande = "" ;
                 if (ctrl.expandabelcol != undefined) {
                     if (dataItem[ctrl.expandabelcol] == false)
-                        classexpande ="hide-expande";
+                        classexpande = "hide-expande";
                 }
+                else
+                    classexpande = "";
                 return classexpande;
             }
             ctrl.expandRow = function (dataItem) {
