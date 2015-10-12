@@ -11,7 +11,7 @@ namespace PSTN.BusinessEntity.Data
 
         SwitchTrunkInfo GetSwitchTrunkBySymbol(string symbol);
 
-        List<SwitchTrunkInfo> GetSwitchTrunksBySwitchID(int switchID);
+        List<SwitchTrunkInfo> GetTrunksBySwitchIds(TrunkFilter trunkFilterObj);
 
         List<SwitchTrunkInfo> GetSwitchTrunks();
 

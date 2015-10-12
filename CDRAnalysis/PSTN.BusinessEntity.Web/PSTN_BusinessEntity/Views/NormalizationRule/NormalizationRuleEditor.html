@@ -23,6 +23,7 @@
                         <vr-select label="Switch"
                                     datasource="switches"
                                     selectedvalues="selectedSwitches"
+                                    onselectionchanged="onSelectedSwitchesChanged"
                                     datavaluefield="ID"
                                     datatextfield="Name"
                                     entityname="Switch"
@@ -32,7 +33,7 @@
 
                     <vr-columns width="1/3row">
                         <vr-select label="Trunk"
-                                   datasource="trunks"
+                                   datasource="getSwitchRelatedTrunks"
                                    selectedvalues="selectedTrunks"
                                    datavaluefield="ID"
                                    datatextfield="Name"

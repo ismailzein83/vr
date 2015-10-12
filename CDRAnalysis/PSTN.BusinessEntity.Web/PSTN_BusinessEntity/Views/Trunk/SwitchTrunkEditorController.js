@@ -65,7 +65,7 @@ function SwitchTrunkEditorController($scope, SwitchTrunkAPIService, SwitchAPISer
                 
                 $scope.isGettingData = true;
 
-                SwitchTrunkAPIService.GetSwitchTrunksBySwitchID($scope.selectedSwitchToLinkTo.ID)
+                SwitchTrunkAPIService.GetTrunksBySwitchIds([$scope.selectedSwitchToLinkTo.ID])
                     .then(function (responseArray) {
                         angular.forEach(responseArray, function (item) {
                             $scope.trunksToLinkTo.push(item);

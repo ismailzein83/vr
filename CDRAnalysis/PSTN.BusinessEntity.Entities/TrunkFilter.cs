@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace PSTN.BusinessEntity.Entities
 {
-    public class SwitchTrunkInfo
+    public class TrunkFilter
     {
-        public int ID { get; set; }
+        public List<int> SwitchIds { get; set; }
 
-        public string Name { get; set; }
-
-        public int SwitchId { get; set; }
+        public string TrunkNameFilter { get; set; }
     }
 }

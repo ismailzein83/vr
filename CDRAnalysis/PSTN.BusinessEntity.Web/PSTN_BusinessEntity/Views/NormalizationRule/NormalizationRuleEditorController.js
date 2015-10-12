@@ -46,6 +46,32 @@
             $scope.beginEffectiveDate = Date.now();
             $scope.endEffectiveDate = undefined;
 
+            $scope.onSelectedSwitchesChanged = function () {
+
+                if ($scope.selectedSwitches == undefined || $scope.selectedSwitches.length == 0)
+                    return;
+
+                var selectedSwitchIds = UtilsService.getPropValuesFromArray($scope.selectedSwitches, "ID");
+
+                for (var i = 0; i < $scope.selectedTrunks.length; i++) {
+                    var item = $scope.selectedTrunks[i];
+
+                    if (!UtilsService.contains(selectedSwitchIds, item.SwitchId)) {
+                        $scope.selectedTrunks.splice(i, 1);
+                    }
+                }
+            }
+
+            $scope.getSwitchRelatedTrunks = function (trunkNameFilter) {
+
+                var trunkFilterObj = {
+                    SwitchIds: UtilsService.getPropValuesFromArray($scope.selectedSwitches, "ID"),
+                    TrunkNameFilter: trunkNameFilter
+                };
+
+                return SwitchTrunkAPIService.GetTrunksBySwitchIds(trunkFilterObj);
+            }
+
             $scope.onNormalizationRuleActionSettingsTemplateChanged = function () {
                 $scope.isAddButtonDisabled = ($scope.selectedNormalizationRuleActionSettingsTemplate == undefined);
             }

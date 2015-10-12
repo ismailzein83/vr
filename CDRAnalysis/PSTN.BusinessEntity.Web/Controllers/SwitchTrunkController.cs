@@ -22,11 +22,11 @@ namespace PSTN.BusinessEntity.Web.Controllers
             return manager.GetSwitchTrunkByID(trunkID);
         }
 
-        [HttpGet]
-        public List<SwitchTrunkInfo> GetSwitchTrunksBySwitchID(int switchID)
+        [HttpPost]
+        public List<SwitchTrunkInfo> GetTrunksBySwitchIds(TrunkFilter trunkFilterObj)
         {
             SwitchTrunkManager manager = new SwitchTrunkManager();
-            return manager.GetSwitchTrunksBySwitchID(switchID);
+            return manager.GetTrunksBySwitchIds(trunkFilterObj);
         }
 
         [HttpGet]

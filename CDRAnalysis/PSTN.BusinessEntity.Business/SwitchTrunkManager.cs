@@ -25,10 +25,10 @@ namespace PSTN.BusinessEntity.Business
             return dataManager.GetSwitchTrunkBySymbol(symbol);
         }
 
-        public List<SwitchTrunkInfo> GetSwitchTrunksBySwitchID(int switchID)
+        public List<SwitchTrunkInfo> GetTrunksBySwitchIds(TrunkFilter trunkFilterObj)
         {
             ISwitchTrunkDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchTrunkDataManager>();
-            return dataManager.GetSwitchTrunksBySwitchID(switchID);
+            return dataManager.GetTrunksBySwitchIds(trunkFilterObj);
         }
 
         public List<SwitchTrunkInfo> GetSwitchTrunks()

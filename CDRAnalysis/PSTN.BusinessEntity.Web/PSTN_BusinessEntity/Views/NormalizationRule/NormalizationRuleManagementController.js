@@ -1,6 +1,6 @@
-﻿NormalizationRuleManagementController.$inject = ["$scope", "PSTN_BE_Service", "SwitchAPIService", "SwitchTrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "UtilsService"];
+﻿NormalizationRuleManagementController.$inject = ["$scope", "PSTN_BE_Service", "SwitchAPIService", "SwitchTrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "UtilsService", "VRNotificationService"];
 
-function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAPIService, SwitchTrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, UtilsService) {
+function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAPIService, SwitchTrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, UtilsService, VRNotificationService) {
 
     var directiveGridAPI;
 
@@ -51,7 +51,7 @@ function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAP
 
         UtilsService.waitMultipleAsyncOperations([loadSwitches, loadTrunks])
             .catch(function (error) {
-                VRNotficationService.notifyException(error, $scope);
+                VRNotificationService.notifyException(error, $scope);
             })
             .finally(function () {
                 $scope.isLoadingFilters = false;

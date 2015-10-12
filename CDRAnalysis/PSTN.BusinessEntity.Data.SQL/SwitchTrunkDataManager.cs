@@ -44,9 +44,10 @@ namespace PSTN.BusinessEntity.Data.SQL
             return GetItemSP("PSTN_BE.sp_SwitchTrunk_GetBySymbol", SwitchTrunkInfoMapper, symbol);
         }
 
-        public List<SwitchTrunkInfo> GetSwitchTrunksBySwitchID(int switchID)
+        public List<SwitchTrunkInfo> GetTrunksBySwitchIds(TrunkFilter trunkFilterObj)
         {
-            return GetItemsSP("PSTN_BE.sp_SwitchTrunk_GetBySwitchID", SwitchTrunkInfoMapper, switchID);
+            string switchIdsString = (trunkFilterObj.SwitchIds != null) ? string.Join<int>(",", trunkFilterObj.SwitchIds) : null;
+            return GetItemsSP("PSTN_BE.sp_SwitchTrunk_GetBySwitchIDs", SwitchTrunkInfoMapper, switchIdsString, trunkFilterObj.TrunkNameFilter);
         }
 
         public List<SwitchTrunkInfo> GetSwitchTrunks()
@@ -117,6 +118,7 @@ namespace PSTN.BusinessEntity.Data.SQL
 
             trunk.ID = (int)reader["ID"];
             trunk.Name = reader["Name"] as string;
+            trunk.SwitchId = (int)reader["SwitchID"];
 
             return trunk;
         }
