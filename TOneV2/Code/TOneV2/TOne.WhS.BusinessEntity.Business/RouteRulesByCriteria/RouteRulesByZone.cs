@@ -11,10 +11,10 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         protected override bool IsRuleMatched(T rule, out IEnumerable<long> ids)
         {
-            if (rule.RouteCriteria.HasZoneFilter() && rule.RouteCriteria.RoutingProductId == null && !rule.RouteCriteria.HasCustomerFilter())
+            if (rule.Criteria.HasZoneFilter() && rule.Criteria.RoutingProductId == null && !rule.Criteria.HasCustomerFilter())
             {
                 SaleZoneManager saleZoneManager = new SaleZoneManager();
-                ids = saleZoneManager.GetSaleZoneIds(rule.RouteCriteria.SaleZoneGroupConfigId.Value, rule.RouteCriteria.SaleZoneGroupSettings);
+                ids = saleZoneManager.GetSaleZoneIds(rule.Criteria.SaleZoneGroupConfigId.Value, rule.Criteria.SaleZoneGroupSettings);
                 return true;
             }
             else

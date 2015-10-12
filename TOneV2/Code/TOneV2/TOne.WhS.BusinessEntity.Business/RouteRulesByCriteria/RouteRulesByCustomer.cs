@@ -11,10 +11,10 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         protected override bool IsRuleMatched(T rule, out IEnumerable<int> ids)
         {
-            if (rule.RouteCriteria.HasCustomerFilter() && !rule.RouteCriteria.HasZoneFilter() && !rule.RouteCriteria.HasCodeFilter())
+            if (rule.Criteria.HasCustomerFilter() && !rule.Criteria.HasZoneFilter() && !rule.Criteria.HasCodeFilter())
             {
                 CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                ids = carrierAccountManager.GetCustomerIds(rule.RouteCriteria.CustomersGroupConfigId.Value, rule.RouteCriteria.CustomerGroupSettings);
+                ids = carrierAccountManager.GetCustomerIds(rule.Criteria.CustomersGroupConfigId.Value, rule.Criteria.CustomerGroupSettings);
                 return true;
             }
             else

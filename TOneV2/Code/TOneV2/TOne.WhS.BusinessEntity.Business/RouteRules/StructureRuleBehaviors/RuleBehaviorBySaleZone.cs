@@ -7,15 +7,15 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business.RouteRules.StructureRuleBehaviors
 {
-    public class RuleBehaviorByZone : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByKey<long>
+    public class RuleBehaviorBySaleZone : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByKey<long>
     {
         protected override void GetKeysFromRule(Vanrise.Rules.BaseRule rule, out IEnumerable<long> keys)
         {
-            RouteRule routeRule = rule as RouteRule;
-            if (routeRule.RouteCriteria.SaleZoneGroupConfigId.HasValue)
+            IRuleSaleZoneCriteria ruleSaleZoneCriteria = rule as RouteRule;
+            if (ruleSaleZoneCriteria.SaleZoneGroupSettings != null)
             {
                 SaleZoneManager saleZoneManager = new SaleZoneManager();
-                keys = saleZoneManager.GetSaleZoneIds(routeRule.RouteCriteria.SaleZoneGroupConfigId.Value, routeRule.RouteCriteria.SaleZoneGroupSettings);
+                keys = saleZoneManager.GetSaleZoneIds(ruleSaleZoneCriteria.SaleZoneGroupSettings);
             }
             else
                 keys = null;

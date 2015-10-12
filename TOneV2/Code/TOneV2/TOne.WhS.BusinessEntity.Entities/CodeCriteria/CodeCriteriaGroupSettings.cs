@@ -8,6 +8,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public abstract class CodeCriteriaGroupSettings
     {
+        public int ConfigId { get; set; }
     }
 
     public class SelectiveCodeCriteriaSettings : CodeCriteriaGroupSettings

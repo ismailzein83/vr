@@ -15,7 +15,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             foreach (var rule in rules)
             {
-                if (rule.RouteCriteria.RoutingProductId == null && !rule.RouteCriteria.HasCustomerFilter() && !rule.RouteCriteria.HasZoneFilter() && !rule.RouteCriteria.HasCodeFilter())
+                if (rule.Criteria.RoutingProductId == null && !rule.Criteria.HasCustomerFilter() && !rule.Criteria.HasZoneFilter() && !rule.Criteria.HasCodeFilter())
                 {
                     _rulesByOthers.Add(rule);
                 }
@@ -26,7 +26,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             foreach (var r in _rulesByOthers)
             {
-                if (!RouteRuleManager.IsAnyFilterExcludedInRuleCriteria(r.RouteCriteria, customerId, code, saleZoneId))
+                if (!RouteRuleManager.IsAnyFilterExcludedInRuleCriteria(r.Criteria, customerId, code, saleZoneId))
                     return r;
             }
             return default(T);

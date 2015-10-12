@@ -11,12 +11,12 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         protected override bool IsRuleMatched(T rule, out IEnumerable<int> ids1, out IEnumerable<string> ids2)
         {
-            if (rule.RouteCriteria.HasCustomerFilter() && rule.RouteCriteria.HasCodeFilter())
+            if (rule.Criteria.HasCustomerFilter() && rule.Criteria.HasCodeFilter())
             {
                 CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                ids1 = carrierAccountManager.GetCustomerIds(rule.RouteCriteria.CustomersGroupConfigId.Value, rule.RouteCriteria.CustomerGroupSettings);
+                ids1 = carrierAccountManager.GetCustomerIds(rule.Criteria.CustomersGroupConfigId.Value, rule.Criteria.CustomerGroupSettings);
                 CodeManager codeManager = new CodeManager();
-                List<CodeCriteria> codeCriterias = codeManager.GetCodeCriterias(rule.RouteCriteria.CodeCriteriaGroupId.Value, rule.RouteCriteria.CodeCriteriaGroupSettings);
+                List<CodeCriteria> codeCriterias = codeManager.GetCodeCriterias(rule.Criteria.CodeCriteriaGroupId.Value, rule.Criteria.CodeCriteriaGroupSettings);
                 ids2 = codeCriterias.Select(code => code.Code);
                 return true;
             }

@@ -23,19 +23,5 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public CustomerGroupSettings CustomerGroupSettings { get; set; }
 
-        public bool HasCustomerFilter()
-        {
-            return this.CustomersGroupConfigId.HasValue; 
-        }
-
-        public bool HasCodeFilter()
-        {
-            return this.CodeCriteriaGroupId.HasValue;
-        }
-
-        public bool HasZoneFilter()
-        {
-            return this.SaleZoneGroupConfigId.HasValue;
-        }
     }
 }

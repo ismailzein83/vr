@@ -8,6 +8,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class CustomerGroupSettings
     {
+        public int ConfigId { get; set; }
     }
 
     public class SelectiveCustomersSettings : CustomerGroupSettings

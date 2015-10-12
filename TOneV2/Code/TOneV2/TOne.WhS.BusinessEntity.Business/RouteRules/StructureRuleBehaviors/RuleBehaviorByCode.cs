@@ -48,15 +48,15 @@ namespace TOne.WhS.BusinessEntity.Business.RouteRules.StructureRuleBehaviors
         {
             protected override void GetKeysFromRule(Vanrise.Rules.BaseRule rule, out IEnumerable<string> keys)
             {
-                RouteRule routeRule = rule as RouteRule;
-                if (routeRule.RouteCriteria.CodeCriteriaGroupId.HasValue)
+                keys = null;
+                IRuleCodeCriteria ruleCodeCriteria = rule as IRuleCodeCriteria;
+                if (ruleCodeCriteria.CodeCriteriaGroupSettings != null)
                 {
                     CodeManager codeManager = new CodeManager();
-                    List<CodeCriteria> codeCriterias = codeManager.GetCodeCriterias(routeRule.RouteCriteria.CodeCriteriaGroupId.Value, routeRule.RouteCriteria.CodeCriteriaGroupSettings);
-                    keys = codeCriterias.Where(code => !code.WithSubCodes).Select(code => code.Code);
+                    List<CodeCriteria> codeCriterias = codeManager.GetCodeCriterias(ruleCodeCriteria.CodeCriteriaGroupSettings.ConfigId, ruleCodeCriteria.CodeCriteriaGroupSettings);
+                    if (codeCriterias != null)
+                        keys = codeCriterias.Where(code => !code.WithSubCodes).Select(code => code.Code);
                 }
-                else
-                    keys= null;
             }
 
             protected override bool TryGetKeyFromTarget(object target, out string key)
@@ -71,15 +71,15 @@ namespace TOne.WhS.BusinessEntity.Business.RouteRules.StructureRuleBehaviors
         {
             protected override void GetPrefixesFromRule(Vanrise.Rules.BaseRule rule, out IEnumerable<string> prefixes)
             {
-                RouteRule routeRule = rule as RouteRule;
-                if (routeRule.RouteCriteria.CodeCriteriaGroupId.HasValue)
+                prefixes = null;
+                IRuleCodeCriteria ruleCodeCriteria = rule as IRuleCodeCriteria;
+                if (ruleCodeCriteria.CodeCriteriaGroupSettings != null)
                 {
                     CodeManager codeManager = new CodeManager();
-                    List<CodeCriteria> codeCriterias = codeManager.GetCodeCriterias(routeRule.RouteCriteria.CodeCriteriaGroupId.Value, routeRule.RouteCriteria.CodeCriteriaGroupSettings);
-                    prefixes = codeCriterias.Where(code => code.WithSubCodes).Select(code => code.Code);
-                }
-                else
-                    prefixes = null;
+                    List<CodeCriteria> codeCriterias = codeManager.GetCodeCriterias(ruleCodeCriteria.CodeCriteriaGroupSettings.ConfigId, ruleCodeCriteria.CodeCriteriaGroupSettings);
+                    if(codeCriterias != null)
+                        prefixes = codeCriterias.Where(code => code.WithSubCodes).Select(code => code.Code);
+                }                    
             }
 
             protected override bool TryGetValueToCompareFromTarget(object target, out string value)

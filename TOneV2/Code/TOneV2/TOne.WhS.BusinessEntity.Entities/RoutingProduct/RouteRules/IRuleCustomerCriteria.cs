@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public abstract class SuppliersWithZonesGroupSettings
+    public interface IRuleCustomerCriteria
     {
-        public int ConfigId { get; set; }
+        CustomerGroupSettings CustomerGroupSettings { get; }
     }
 }

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public interface IRouteCriteria
+    public interface IRuleCodeCriteria
     {
-        RouteCriteria RouteCriteria { get; set; }
+        CodeCriteriaGroupSettings CodeCriteriaGroupSettings { get; }
     }
 }

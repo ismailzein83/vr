@@ -50,7 +50,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     {
                         foreach (var r in codeRules)
                         {
-                            if (!RouteRuleManager.IsAnyFilterExcludedInRuleCriteria(r.RouteCriteria, customerId, code, saleZoneId))
+                            if (!RouteRuleManager.IsAnyFilterExcludedInRuleCriteria(r.Criteria, customerId, code, saleZoneId))
                             {
                                 return r;
                             }

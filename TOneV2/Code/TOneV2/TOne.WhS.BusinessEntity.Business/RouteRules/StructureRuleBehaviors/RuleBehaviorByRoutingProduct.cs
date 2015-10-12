@@ -11,10 +11,10 @@ namespace TOne.WhS.BusinessEntity.Business.RouteRules.StructureRuleBehaviors
     {
         protected override void GetKeysFromRule(Vanrise.Rules.BaseRule rule, out IEnumerable<int> keys)
         {
-            RouteRule routeRule = rule as RouteRule;
-            if (routeRule.RouteCriteria.RoutingProductId.HasValue)
+            IRuleRoutingProductCriteria ruleRoutingProductCriteria = rule as IRuleRoutingProductCriteria;
+            if (ruleRoutingProductCriteria.RoutingProductId.HasValue)
             {
-                keys = new List<int> { routeRule.RouteCriteria.RoutingProductId.Value };
+                keys = new List<int> { ruleRoutingProductCriteria.RoutingProductId.Value };
             }
             else
                 keys = null;

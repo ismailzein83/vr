@@ -11,11 +11,11 @@ namespace TOne.WhS.BusinessEntity.Business.RouteRules.StructureRuleBehaviors
     {
         protected override void GetKeysFromRule(Vanrise.Rules.BaseRule rule, out IEnumerable<int> keys)
         {
-            RouteRule routeRule = rule as RouteRule;
-            if (routeRule.RouteCriteria.CustomersGroupConfigId.HasValue)
+            IRuleCustomerCriteria ruleCustomerCriteria = rule as IRuleCustomerCriteria;
+            if (ruleCustomerCriteria.CustomerGroupSettings != null)
             {
                 CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                keys = carrierAccountManager.GetCustomerIds(routeRule.RouteCriteria.CustomersGroupConfigId.Value, routeRule.RouteCriteria.CustomerGroupSettings);
+                keys = carrierAccountManager.GetCustomerIds(ruleCustomerCriteria.CustomerGroupSettings.ConfigId, ruleCustomerCriteria.CustomerGroupSettings);
             }
             else
                 keys = null;

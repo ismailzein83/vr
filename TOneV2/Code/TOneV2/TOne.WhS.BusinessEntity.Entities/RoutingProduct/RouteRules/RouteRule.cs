@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class RouteRule : Vanrise.Rules.BaseRule, IRouteCriteria
+    public class RouteRule : Vanrise.Rules.BaseRule, IRuleCustomerCriteria, IRuleCodeCriteria, IRuleSaleZoneCriteria, IRuleRoutingProductCriteria
     {
         public int RouteRuleId { get; set; }
 
@@ -30,5 +30,25 @@ namespace TOne.WhS.BusinessEntity.Entities
             return false;
         }
 
+
+        public CustomerGroupSettings CustomerGroupSettings
+        {
+            get { return this.RouteCriteria != null ? this.RouteCriteria.CustomerGroupSettings : null; }
+        }
+
+        public CodeCriteriaGroupSettings CodeCriteriaGroupSettings
+        {
+            get { return this.RouteCriteria != null ? this.RouteCriteria.CodeCriteriaGroupSettings : null; }
+        }
+
+        public SaleZoneGroupSettings SaleZoneGroupSettings
+        {
+            get { return this.RouteCriteria != null ? this.RouteCriteria.SaleZoneGroupSettings : null; }
+        }
+
+        public int? RoutingProductId
+        {
+            get { return this.RouteCriteria != null ? this.RouteCriteria.RoutingProductId : null; }
+        }
     }
 }

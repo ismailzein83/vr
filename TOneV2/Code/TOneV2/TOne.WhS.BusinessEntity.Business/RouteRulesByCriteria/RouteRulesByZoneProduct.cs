@@ -11,14 +11,14 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         protected override bool IsRuleMatched(T rule, out IEnumerable<int> ids1, out IEnumerable<long> ids2)
         {
-             if (rule.RouteCriteria.RoutingProductId.HasValue && rule.RouteCriteria.HasZoneFilter())
+             if (rule.Criteria.RoutingProductId.HasValue && rule.Criteria.HasZoneFilter())
              {
-                 ids1 = new List<int> { rule.RouteCriteria.RoutingProductId.Value };
+                 ids1 = new List<int> { rule.Criteria.RoutingProductId.Value };
                  SaleZoneManager saleZoneManager = new SaleZoneManager();
-                 ids2 = saleZoneManager.GetSaleZoneIds(rule.RouteCriteria.SaleZoneGroupConfigId.Value, rule.RouteCriteria.SaleZoneGroupSettings);
+                 ids2 = saleZoneManager.GetSaleZoneIds(rule.Criteria.SaleZoneGroupConfigId.Value, rule.Criteria.SaleZoneGroupSettings);
                  //validate that rule zones are available in routing product's zones. and remove the ones that are not there
                  RoutingProductManager routingProductManager = new RoutingProductManager();
-                 RoutingProduct routingProduct = routingProductManager.GetRoutingProduct(rule.RouteCriteria.RoutingProductId.Value);
+                 RoutingProduct routingProduct = routingProductManager.GetRoutingProduct(rule.Criteria.RoutingProductId.Value);
                  if(routingProduct.Settings.SaleZoneGroupConfigId.HasValue)
                  {
                      List<long> routingProductZoneIds = saleZoneManager.GetSaleZoneIds(routingProduct.Settings.SaleZoneGroupConfigId.Value, routingProduct.Settings.SaleZoneGroupSettings);

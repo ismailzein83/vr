@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public abstract class SuppliersWithZonesGroupSettings
+    public class RouteOptionIdentifier : RouteIdentifier
     {
-        public int ConfigId { get; set; }
+        public int SupplierId { get; set; }
+
+        public long SupplierZoneId { get; set; }
     }
 }

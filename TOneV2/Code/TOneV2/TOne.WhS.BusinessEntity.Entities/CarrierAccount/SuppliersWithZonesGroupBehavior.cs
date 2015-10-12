@@ -8,6 +8,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public abstract class SuppliersWithZonesGroupBehavior
     {
-        public abstract List<SupplierWithZones> GetSuppliersWithZones(SupplierGroupSettings settings);
+        public abstract List<SupplierWithZones> GetSuppliersWithZones(SuppliersWithZonesGroupSettings settings);
     }
 }

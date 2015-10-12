@@ -11,10 +11,10 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         protected override bool IsRuleMatched(T rule, out IEnumerable<string> ids)
         {
-            if (rule.RouteCriteria.HasCodeFilter() && !rule.RouteCriteria.HasCustomerFilter())
+            if (rule.Criteria.HasCodeFilter() && !rule.Criteria.HasCustomerFilter())
             {
                 CodeManager codeManager = new CodeManager();
-                List<CodeCriteria> codeCriterias = codeManager.GetCodeCriterias(rule.RouteCriteria.CodeCriteriaGroupId.Value, rule.RouteCriteria.CodeCriteriaGroupSettings);
+                List<CodeCriteria> codeCriterias = codeManager.GetCodeCriterias(rule.Criteria.CodeCriteriaGroupId.Value, rule.Criteria.CodeCriteriaGroupSettings);
                 ids = codeCriterias.Select(code => code.Code);
                 return true;
             }
