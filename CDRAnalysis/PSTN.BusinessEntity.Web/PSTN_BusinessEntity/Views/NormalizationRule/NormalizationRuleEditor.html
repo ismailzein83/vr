@@ -91,14 +91,14 @@
 
                                 <ul class="list-group dragbelzone" ng-sortable="itemsSortable" ng-show="normalizationRuleActionSettingsList.length > 0">
                                     <li ng-repeat="item in normalizationRuleActionSettingsList" class="list-group-item list-custom" style="margin:1px;">
-                                        <i class="glyphicon glyphicon-th-list handeldrag"></i>
+                                        <i class="glyphicon glyphicon-th-list handeldrag" style="display:inline-block;vertical-align:middle;float: none;"></i>
                                         <div style="display:inline-block;">
                                             <vr-directivewrapper directive="item.Editor"
                                                                  behaviorid="item.BehaviorId"
                                                                  onloaded="item.onNormalizationRuleActionSettingsDirectiveAPILoaded">
                                             </vr-directivewrapper>
                                         </div>
-                                        <i class="glyphicon glyphicon-remove hand-cursor" style="float:right;padding:5px;cursor:default" ng-click="removeNormalizationRuleActionSettingsListItem($event, item)"></i>
+                                        <i class="glyphicon glyphicon-remove hand-cursor" style="float:right;padding:5px;cursor:default;" ng-click="removeNormalizationRuleActionSettingsListItem($event, item)"></i>
                                     </li>
                                 </ul>
 

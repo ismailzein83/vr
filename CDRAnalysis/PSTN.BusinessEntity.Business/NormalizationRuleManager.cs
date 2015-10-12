@@ -115,12 +115,7 @@ namespace PSTN.BusinessEntity.Business
         {
             var allNormalizationRules = GetCachedNormalizationRules();
 
-            if (allNormalizationRules == null)
-                return null;
-
-            Func<IEnumerable<NormalizationRule>, IEnumerable<NormalizationRuleDetail>> filterResult = (listToFilter) =>
-                {
-                    listToFilter.Where(item =>
+            Func<NormalizationRule, bool> filterResult = (item) =>
                         (
                             input.Query.PhoneNumberTypes == null ||
                             input.Query.PhoneNumberTypes.Contains(item.Criteria.PhoneNumberType)
@@ -145,21 +140,22 @@ namespace PSTN.BusinessEntity.Business
                         )
                         &&
                         (
-                            input.Query.SwitchIds == null
+                            input.Query.SwitchIds == null ||
+                            (item.Criteria.SwitchIds != null && ListContains(input.Query.SwitchIds, item.Criteria.SwitchIds))
                         )
                         &&
                         (
-                            input.Query.TrunkIds == null
+                            input.Query.TrunkIds == null ||
+                            (item.Criteria.TrunkIds != null && ListContains(input.Query.TrunkIds, item.Criteria.TrunkIds))
                         )
                         &&
                         (
                             input.Query.Description == null ||
                             (item.Description != null && item.Description.Contains(input.Query.Description))
-                        )
-                    );
-                };
+                        );
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, GetMappedNormalizationRules(allNormalizationRules).ToBigResult(input, filterResult));
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allNormalizationRules.ToBigResult(input, filterResult, NormalizationRuleDetailMapper));
         }
 
         public NormalizationRule GetNormalizationRuleById(int normalizationRuleId)
@@ -232,7 +228,7 @@ namespace PSTN.BusinessEntity.Business
 
         #region Private Members
 
-        private List<NormalizationRuleDetail> GetMappedNormalizationRules(List<NormalizationRule> normalizationRules)
+        private List<NormalizationRuleDetail> GetNormalizationRuleDetails(IEnumerable<NormalizationRule> normalizationRules)
         {
             List<NormalizationRuleDetail> normalizationRuleDetails = new List<NormalizationRuleDetail>();
 
@@ -342,6 +338,17 @@ namespace PSTN.BusinessEntity.Business
             }
 
             return trunkNames;
+        }
+
+        private bool ListContains(List<int> filterIds, List<int> itemIds)
+        {
+            foreach (int itemId in itemIds)
+            {
+                if (filterIds.Contains(itemId))
+                    return true;
+            }
+
+            return false;
         }
 
         #endregion
