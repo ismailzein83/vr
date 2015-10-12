@@ -214,6 +214,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
 
                 cdr.ServiceType = Utils.GetReaderValue<int?>(reader, "Service_Type");
                 cdr.ServiceVASName = reader["Service_VAS_Name"] as string;
+                cdr.ReleaseCode = reader["ReleaseCode"] as string;
                 cdr.Destination = reader["Destination"] as string;
                 cdr.MSISDN = reader["MSISDN"] as string;
 

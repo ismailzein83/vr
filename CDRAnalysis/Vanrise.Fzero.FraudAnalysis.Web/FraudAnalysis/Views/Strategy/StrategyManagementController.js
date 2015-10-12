@@ -147,9 +147,9 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
         VRModalService.showModal('/Client/Modules/FraudAnalysis/Views/Strategy/StrategyEditor.html', null, settings);
     }
 
-    function editStrategy(strategy) {
+    function editStrategy(gridObject) {
         var params = {
-            strategyId: strategy.Id
+            strategyId: gridObject.Id
         };
 
         var settings = {
@@ -158,7 +158,7 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
         };
 
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Strategy";
+            modalScope.title = "Edit Strategy: " + gridObject.Name;
             modalScope.onStrategyUpdated = function (strategy) {
                 fillStrategy(strategy);
                 mainGridAPI.itemUpdated(strategy);

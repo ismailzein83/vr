@@ -92,7 +92,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
                 cdr.CellId = i.Substring(252, 22).Trim();
                 cdr.InTrunkSymbol = i.Substring(414, 20).Trim();
                 cdr.OutTrunkSymbol = i.Substring(394, 20).Trim();
-
+                cdr.ReleaseCode = i.Substring(274, 50).Trim();
 
                 if (cdr.InTrunkSymbol != null && cdr.InTrunkSymbol != string.Empty)
                 {
