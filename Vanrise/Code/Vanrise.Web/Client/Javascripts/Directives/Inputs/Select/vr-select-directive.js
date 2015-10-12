@@ -3,7 +3,7 @@
     "use strict";
 
     function vrSelectDirective(selectService, baseDirService, validationMessagesEnum, utilsService) {
-        
+
         var openedDropDownIds = [], rootScope;
         var vrSelectSharedObject = {
             onOpenDropDown: function (idAttribute) {
@@ -43,7 +43,7 @@
                 datasource: '=',
                 selectedvalues: '=',
                 onselectionchanged: '=',
-                onaddclicked:"=",
+                onaddclicked: "=",
                 hint: '@'
             },
             controller: function ($scope, $element, $attrs) {
@@ -55,13 +55,13 @@
                 //Configuration
                 angular.extend(this, {
                     ValidationMessagesEnum: validationMessagesEnum,
-                    limitcharactercount : $attrs.limitcharactercount,
-                    limitHeight : (($attrs.limitheight != undefined) ? 'limit-height' : ''),
-                    selectlbl : $attrs.selectlbl,
-                    filtername : '',
-                    showloading : false,
+                    limitcharactercount: $attrs.limitcharactercount,
+                    limitHeight: (($attrs.limitheight != undefined) ? 'limit-height' : ''),
+                    selectlbl: $attrs.selectlbl,
+                    filtername: '',
+                    showloading: false,
                     data: [],
-                    hint : (($attrs.hint != undefined) ? $attrs.hint : undefined )
+                    hint: (($attrs.hint != undefined) ? $attrs.hint : undefined)
                 });
                 //Configuration
 
@@ -189,7 +189,7 @@
 
                 function getLabel() {
 
-                    if (! isMultiple()) {
+                    if (!isMultiple()) {
 
                         var lastValue;
                         if (Object.prototype.toString.call(controller.selectedvalues) === '[object Array]')
@@ -267,10 +267,10 @@
                         $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
                     });
                 }, 100);
-                setTimeout(function() {
+                setTimeout(function () {
                     if ($('div[name=' + $attrs.id + ']').parents('.modal-body').length > 0) {
 
-                        $('div[name=' + $attrs.id + ']').on('click', '.dropdown-toggle', function() {
+                        $('div[name=' + $attrs.id + ']').on('click', '.dropdown-toggle', function () {
 
                             var self = $(this);
                             var selfHeight = $(this).parent().height();
@@ -278,15 +278,15 @@
                             var dropDown = self.parent().find('ul');
                             $(dropDown).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: 'auto' });
                         });
-                        var fixDropdownPosition = function() {
+                        var fixDropdownPosition = function () {
                             $('.drop-down-inside-modal').find('.dropdown-menu').hide();
                             $('.drop-down-inside-modal').removeClass("open");
 
                         };
-                        $('div[name=' + $attrs.id + ']').parents('div').scroll(function() {
+                        $('div[name=' + $attrs.id + ']').parents('div').scroll(function () {
                             fixDropdownPosition();
                         });
-                        $(window).resize(function() {
+                        $(window).resize(function () {
                             fixDropdownPosition();
                         });
                     }
