@@ -11,7 +11,8 @@
             hideheader: '=',
             noverticallines: '@',
             idfield: '@',
-            onexport:'='
+            onexport: '=',
+            showexpand:'='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -93,7 +94,8 @@
             }
             else
                 ctrl.rotateHeader = $attrs.rotate;
-            ctrl.expandabelcol = $attrs.showexpand ;
+            //console.log(ctrl.showexpand)
+           // ctrl.expandabelcol = $attrs.showexpand != undefined? $scope.$eval(ctrl.showexpand) : undefined;
             var hasActionMenu = $attrs.menuactions != undefined;
             var actionsAttribute = hasActionMenu ? $scope.$parent.$eval($attrs.menuactions) : undefined;
             var dataGridObj = new DataGrid(ctrl, $scope);
@@ -753,15 +755,14 @@
                 ctrl.expandableSectionWidth = (100 - expandableColumnWidth) + '%';
                 calculateDataColumnsSectionWidth();
             };
-            ctrl.showExpandCollapseTriger = function (dataItem) {
-                var classexpande = "" ;
-                if (ctrl.expandabelcol != undefined) {
-                    if (dataItem[ctrl.expandabelcol] == false)
-                        classexpande = "hide-expande";
+            ctrl.showExpandCollapseIcon = function (dataItem) {
+                if (ctrl.showexpand != undefined && typeof (ctrl.showexpand) == 'function') {
+                    var showExpand = ctrl.showexpand(dataItem);
+                    return showExpand;
                 }
-                else
-                    classexpande = "";
-                return classexpande;
+
+                return true;
+               
             }
             ctrl.expandRow = function (dataItem) {
                 
