@@ -11,7 +11,7 @@ namespace PSTN.BusinessEntity.Business
 {
     public class NormalizationRuleManager
     {
-        static Vanrise.Rules.RuleTree _rules;
+        static Vanrise.Rules.RuleTree _rules = (new NormalizationRuleManager()).GetStructuredRules();
         
         public List<NormalizationRule> GetEffectiveRules()
         {
@@ -21,8 +21,6 @@ namespace PSTN.BusinessEntity.Business
 
         public void Normalize(Vanrise.Fzero.CDRImport.Entities.StagingCDR cdr)
         {
-            _rules = (new NormalizationRuleManager()).GetStructuredRules();
-
             CDRToNormalizeInfo cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CGPN, SwitchId = cdr.SwitchID, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId };
             NormalizationRule matchRule_CGPN = GetMostMatchedRule(_rules, cdrInfo_CGPN);
             if (matchRule_CGPN != null)
@@ -53,8 +51,6 @@ namespace PSTN.BusinessEntity.Business
 
         public void Normalize(Vanrise.Fzero.CDRImport.Entities.CDR cdr)
         {
-            _rules = (new NormalizationRuleManager()).GetStructuredRules();
-
             CDRToNormalizeInfo cdrInfo_MSISDN = new CDRToNormalizeInfo { PhoneNumber = cdr.MSISDN, SwitchId = cdr.SwitchID, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId };
             NormalizationRule matchRule_MSISDN = GetMostMatchedRule(_rules, cdrInfo_MSISDN);
             if (matchRule_MSISDN != null)

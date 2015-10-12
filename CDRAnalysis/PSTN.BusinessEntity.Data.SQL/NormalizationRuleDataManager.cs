@@ -7,14 +7,9 @@ namespace PSTN.BusinessEntity.Data.SQL
 {
     public class NormalizationRuleDataManager : Vanrise.Data.SQL.BaseSQLDataManager, INormalizationRuleDataManager
     {
-        //private Dictionary<string, string> _mapper;
 
         public NormalizationRuleDataManager() : base("CDRDBConnectionString")
         {
-            //_mapper = new Dictionary<string, string>();
-            //_mapper.Add("NormalizationRuleId", "ID");
-            //_mapper.Add("BeginEffectiveDate", "BED");
-            //_mapper.Add("EndEffectiveDate", "EED");
         }
 
         public List<NormalizationRule> GetEffective()
@@ -22,14 +17,6 @@ namespace PSTN.BusinessEntity.Data.SQL
             return GetItemsSP("PSTN_BE.sp_NormalizationRule_GetEffective", NormalizationRuleMapper);
         }
 
-        //public Vanrise.Entities.BigResult<NormalizationRule> GetFilteredNormalizationRules(Vanrise.Entities.DataRetrievalInput<NormalizationRuleQuery> input)
-        //{
-        //    return RetrieveData(input, (tempTableName) =>
-        //    {
-        //        ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_CreateTempByFiltered", tempTableName, input.Query.EffectiveDate);
-
-        //    }, (reader) => NormalizationRuleMapper(reader), _mapper);
-        //}
 
         public List<NormalizationRule> GetNormalizationRules()
         {
