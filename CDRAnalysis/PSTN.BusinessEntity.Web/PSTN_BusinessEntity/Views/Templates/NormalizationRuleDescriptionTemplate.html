@@ -1,6 +1,6 @@
 ﻿<div ng-controller="PSTN_BE_NormalizationRuleDescriptionTemplateController">
-    <vr-row ng-show="showCriteria">
-        <vr-columns width="1/2row">
+    <vr-row >
+        <vr-columns width="1/2row" ng-show="showCriteria">
             <div style="background-color:white;">
                 <vr-section title="Criteria">
                     <div ng-if="showSwitches">
@@ -30,10 +30,8 @@
                 </vr-section>
             </div>
         </vr-columns>
-    </vr-row>
-
-    <vr-row ng-show="showActions">
-        <vr-columns width="1/2row">
+  
+        <vr-columns width="1/2row" ng-show="showActions">
             <div style="background-color:white;">
                 <vr-section title="Actions">
                     <div ng-repeat="actionDescription in dataItem.ActionDescriptions">
