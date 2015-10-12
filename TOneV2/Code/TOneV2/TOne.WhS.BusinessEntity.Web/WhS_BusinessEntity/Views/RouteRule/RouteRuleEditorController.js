@@ -202,12 +202,9 @@
                     RouteCriteria: {
                         RoutingProductId: $scope.selectedRoutingProduct != undefined ? $scope.selectedRoutingProduct.RoutingProductId : null,
                         ExcludedCodes: $scope.excludedCodes,
-                        SaleZoneGroupConfigId: $scope.selectedSaleZoneGroupTemplate.TemplateConfigID != -1 ? $scope.selectedSaleZoneGroupTemplate.TemplateConfigID : null,
-                        SaleZoneGroupSettings: $scope.selectedSaleZoneGroupTemplate.TemplateConfigID != -1 ? saleZoneGroupSettingsDirectiveAPI.getData() : null,
-                        CustomersGroupConfigId: $scope.selectedCustomerGroupTemplate.TemplateConfigID != -1 ? $scope.selectedCustomerGroupTemplate.TemplateConfigID : null,
-                        CustomerGroupSettings: $scope.selectedCustomerGroupTemplate.TemplateConfigID != -1 ? customerGroupSettingsDirectiveAPI.getData() : null,
-                        CodeCriteriaGroupId: $scope.selectedCodeCriteriaGroupTemplate.TemplateConfigID != -1 ? $scope.selectedCodeCriteriaGroupTemplate.TemplateConfigID : null,
-                        CodeCriteriaGroupSettings: $scope.selectedCodeCriteriaGroupTemplate.TemplateConfigID != -1 ? codeCriteriaGroupSettingsDirectiveAPI.getData() : null
+                        SaleZoneGroupSettings: getSaleZoneGroupSettings(),
+                        CustomerGroupSettings: getCustomersGroupSettings(),
+                        CodeCriteriaGroupSettings: getCodeCriteriaGroupSettings()
                     }
                 };
 
@@ -223,20 +220,22 @@
                     $scope.excludedCodes.push(item);
                 });
 
-                if (routeRuleObj.RouteCriteria.SaleZoneGroupConfigId != null)
+                if (routeRuleObj.RouteCriteria != null)
                 {
-                    $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, routeRuleObj.RouteCriteria.SaleZoneGroupConfigId, "TemplateConfigID");
-                    saleZoneGroupSettings = routeRuleObj.RouteCriteria.SaleZoneGroupSettings;
-                }
+                    if (routeRuleObj.RouteCriteria.SaleZoneGroupSettings != null && routeRuleObj.RouteCriteria.SaleZoneGroupSettings.ConfigId != null) {
+                        $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, routeRuleObj.RouteCriteria.SaleZoneGroupSettings.ConfigId, "TemplateConfigID");
+                        saleZoneGroupSettings = routeRuleObj.RouteCriteria.SaleZoneGroupSettings;
+                    }
 
-                if (routeRuleObj.RouteCriteria.CustomersGroupConfigId != null) {
-                    $scope.selectedCustomerGroupTemplate = UtilsService.getItemByVal($scope.customerGroupTemplates, routeRuleObj.RouteCriteria.CustomersGroupConfigId, "TemplateConfigID");
-                    customerGroupSettings = routeRuleObj.RouteCriteria.CustomerGroupSettings;
-                }
+                    if (routeRuleObj.RouteCriteria.CustomerGroupSettings != null && routeRuleObj.RouteCriteria.CustomerGroupSettings.ConfigId != null) {
+                        $scope.selectedCustomerGroupTemplate = UtilsService.getItemByVal($scope.customerGroupTemplates, routeRuleObj.RouteCriteria.CustomerGroupSettings.ConfigId, "TemplateConfigID");
+                        customerGroupSettings = routeRuleObj.RouteCriteria.CustomerGroupSettings;
+                    }
 
-                if (routeRuleObj.RouteCriteria.CodeCriteriaGroupId != null) {
-                    $scope.selectedCodeCriteriaGroupTemplate = UtilsService.getItemByVal($scope.codeCriteriaGroupTemplates, routeRuleObj.RouteCriteria.CodeCriteriaGroupId, "TemplateConfigID");
-                    codeCriteriaGroupSettings = routeRuleObj.RouteCriteria.CodeCriteriaGroupSettings;
+                    if (routeRuleObj.RouteCriteria.CodeCriteriaGroupSettings != null && routeRuleObj.RouteCriteria.CodeCriteriaGroupSettings.ConfigId != null) {
+                        $scope.selectedCodeCriteriaGroupTemplate = UtilsService.getItemByVal($scope.codeCriteriaGroupTemplates, routeRuleObj.RouteCriteria.CodeCriteriaGroupSettings.ConfigId, "TemplateConfigID");
+                        codeCriteriaGroupSettings = routeRuleObj.RouteCriteria.CodeCriteriaGroupSettings;
+                    }
                 }
             }
 
@@ -267,6 +266,37 @@
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });
+            }
+
+            function getSaleZoneGroupSettings()
+            {
+                if ($scope.selectedSaleZoneGroupTemplate.TemplateConfigID != -1) {
+                    var settings = saleZoneGroupSettingsDirectiveAPI.getData();
+                    settings.ConfigId = $scope.selectedSaleZoneGroupTemplate.TemplateConfigID;
+                    return settings;
+                }
+                else
+                    return null;
+            }
+
+            function getCustomersGroupSettings() {
+                if ($scope.selectedCustomerGroupTemplate.TemplateConfigID != -1) {
+                    var settings = customerGroupSettingsDirectiveAPI.getData();
+                    settings.ConfigId = $scope.selectedCustomerGroupTemplate.TemplateConfigID;
+                    return settings;
+                }
+                else
+                    return null;
+            }
+
+            function getCodeCriteriaGroupSettings() {
+                if ($scope.selectedCodeCriteriaGroupTemplate.TemplateConfigID != -1) {
+                    var settings = codeCriteriaGroupSettingsDirectiveAPI.getData();
+                    settings.ConfigId = $scope.selectedCodeCriteriaGroupTemplate.TemplateConfigID;
+                    return settings;
+                }
+                else
+                    return null;
             }
 
     }

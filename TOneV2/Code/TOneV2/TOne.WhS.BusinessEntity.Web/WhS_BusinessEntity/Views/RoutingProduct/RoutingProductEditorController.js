@@ -146,10 +146,8 @@
                     Name: $scope.routingProductName,
                     SaleZonePackageId: $scope.selectedSaleZonePackage.SaleZonePackageId,
                     Settings: {
-                        SaleZoneGroupConfigId: $scope.selectedSaleZoneGroupTemplate.TemplateConfigID != -1 ? $scope.selectedSaleZoneGroupTemplate.TemplateConfigID : null,
-                        SaleZoneGroupSettings: $scope.selectedSaleZoneGroupTemplate.TemplateConfigID != -1 ? saleZoneGroupSettingsDirectiveAPI.getData() : null,
-                        SupplierGroupConfigId: $scope.selectedSupplierGroupTemplate.TemplateConfigID != -1 ? $scope.selectedSupplierGroupTemplate.TemplateConfigID : null,
-                        SupplierGroupSettings: $scope.selectedSupplierGroupTemplate.TemplateConfigID != -1 ? supplierGroupSettingsDirectiveAPI.getData() : null
+                        SaleZoneGroupSettings: getSaleZoneGroupSettings(),
+                        SupplierGroupSettings: getSuppliersGroupSettings()
                     }
                 };
 
@@ -160,16 +158,17 @@
                 $scope.routingProductName = routingProductObj.Name;
                 $scope.selectedSaleZonePackage = UtilsService.getItemByVal($scope.saleZonePackages, routingProductObj.SaleZonePackageId, "SaleZonePackageId");
 
-                if (routingProductObj.Settings.SaleZoneGroupConfigId != null)
+                if (routingProductObj.Settings != null)
                 {
-                    $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, routingProductObj.Settings.SaleZoneGroupConfigId, "TemplateConfigID");
-                    saleZoneGroupSettings = routingProductObj.Settings.SaleZoneGroupSettings;
-                }
-                    
-                if (routingProductObj.Settings.SupplierGroupConfigId != null)
-                {
-                    $scope.selectedSupplierGroupTemplate = UtilsService.getItemByVal($scope.supplierGroupTemplates, routingProductObj.Settings.SupplierGroupConfigId, "TemplateConfigID");
-                    supplierGroupSettings = routingProductObj.Settings.SupplierGroupSettings;
+                    if (routingProductObj.Settings.SaleZoneGroupSettings != null && routingProductObj.Settings.SaleZoneGroupSettings.ConfigId != null) {
+                        $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, routingProductObj.Settings.SaleZoneGroupSettings.ConfigId, "TemplateConfigID");
+                        saleZoneGroupSettings = routingProductObj.Settings.SaleZoneGroupSettings;
+                    }
+
+                    if (routingProductObj.Settings != null && routingProductObj.Settings.SupplierGroupSettings != null && routingProductObj.Settings.SupplierGroupSettings.ConfigId != null) {
+                        $scope.selectedSupplierGroupTemplate = UtilsService.getItemByVal($scope.supplierGroupTemplates, routingProductObj.Settings.SupplierGroupSettings.ConfigId, "TemplateConfigID");
+                        supplierGroupSettings = routingProductObj.Settings.SupplierGroupSettings;
+                    }
                 }
             }
 
@@ -200,6 +199,26 @@
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });
+            }
+
+            function getSaleZoneGroupSettings() {
+                if ($scope.selectedSaleZoneGroupTemplate.TemplateConfigID != -1) {
+                    var settings = saleZoneGroupSettingsDirectiveAPI.getData();
+                    settings.ConfigId = $scope.selectedSaleZoneGroupTemplate.TemplateConfigID;
+                    return settings;
+                }
+                else
+                    return null;
+            }
+
+            function getSuppliersGroupSettings() {
+                if ($scope.selectedSupplierGroupTemplate.TemplateConfigID != -1) {
+                    var settings = supplierGroupSettingsDirectiveAPI.getData();
+                    settings.ConfigId = $scope.selectedSupplierGroupTemplate.TemplateConfigID;
+                    return settings;
+                }
+                else
+                    return null;
             }
     }
 

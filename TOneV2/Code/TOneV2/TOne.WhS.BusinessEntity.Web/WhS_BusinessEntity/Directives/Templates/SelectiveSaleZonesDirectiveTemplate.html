@@ -1,6 +1,6 @@
 ﻿<div style="display:inline-block;width: calc(100% - 18px);" vr-loader="isLoadingDirective">
-    <vr-columns colnum="4">
-        <vr-select ng-show="showSaleZonePackage" datatextfield="Name" datavaluefield="SaleZonePackageId"
+    <vr-columns colnum="4" ng-show="showSaleZonePackage">
+        <vr-select datatextfield="Name" datavaluefield="SaleZonePackageId"
                    label="Sale Zone Package" datasource="saleZonePackages" selectedvalues="selectedSaleZonePackage">
         </vr-select>
     </vr-columns>

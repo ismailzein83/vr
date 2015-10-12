@@ -14,11 +14,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public List<RoutingProductZone> Zones { get; set; }
 
-        public int? SaleZoneGroupConfigId { get; set; }
-
         public SaleZoneGroupSettings SaleZoneGroupSettings { get; set; }
-
-        public int? SupplierGroupConfigId { get; set; }
 
         public SupplierGroupSettings SupplierGroupSettings { get; set; }
     } 
