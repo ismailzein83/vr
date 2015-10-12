@@ -46,7 +46,7 @@
                                 return;
 
                             if (newValue == "") {
-                                ctrl.value = null;
+                                ctrl.value = undefined;
                             }
                                
                             isUserChange = false;//reset the flag

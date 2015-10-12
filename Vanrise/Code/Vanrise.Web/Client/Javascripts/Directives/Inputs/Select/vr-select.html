@@ -83,7 +83,7 @@
 
     </div>
     <span ng-if="ctrl.includeOnAddHandler() && ctrl.isDropDownOpened()" ng-click="ctrl.onAddhandler()" style="position: absolute; padding: 5px 2px; font-size: 12px;right:-2px;top:25px" class="glyphicon glyphicon-plus hand-cursor"></span>
-    <span ng-if="ctrl.hint!=undefined" ng-mouseenter="ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>
+    <span ng-if="ctrl.hint!=undefined" ng-show="ctrl.hint!=undefined && ctrl.hint!=''" ng-mouseenter="ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>
 
 </div>
 

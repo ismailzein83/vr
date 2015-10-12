@@ -385,7 +385,7 @@
                             ctrl.selectedvalues = [];
                             ctrl.selectedvalues.length = 0;
                             if (isSingle != undefined)
-                                ctrl.selectedvalues = null;
+                                ctrl.selectedvalues = undefined;
                         };
 
                         function selectItem(e, item) {
