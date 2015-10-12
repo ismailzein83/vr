@@ -122,37 +122,48 @@ namespace PSTN.BusinessEntity.Business
             if (allNormalizationRules == null)
                 return null;
 
-            Func<IEnumerable<NormalizationRuleDetail>, IEnumerable<NormalizationRuleDetail>> filterResult = (listToFilter) =>
+            Func<IEnumerable<NormalizationRule>, IEnumerable<NormalizationRuleDetail>> filterResult = (listToFilter) =>
                 {
-                    return listToFilter.Where(itm =>
+                    listToFilter.Where(item =>
                         (
                             input.Query.PhoneNumberTypes == null ||
-                            input.Query.PhoneNumberTypes.Contains(itm.PhoneNumberType)
+                            input.Query.PhoneNumberTypes.Contains(item.Criteria.PhoneNumberType)
                         )
                         &&
                         (
                             input.Query.EffectiveDate == null ||
-                            (itm.BeginEffectiveDate <= input.Query.EffectiveDate && itm.EndEffectiveDate >= input.Query.EffectiveDate)
+                            (
+                                item.BeginEffectiveDate <= input.Query.EffectiveDate &&
+                                (item.EndEffectiveDate == null || item.EndEffectiveDate >= input.Query.EffectiveDate)
+                            )
                         )
                         &&
                         (
                             input.Query.PhoneNumberPrefix == null ||
-                            (itm.PhoneNumberPrefix != null && itm.PhoneNumberPrefix.Contains(input.Query.PhoneNumberPrefix))
+                            (item.Criteria.PhoneNumberPrefix != null && item.Criteria.PhoneNumberPrefix.Contains(input.Query.PhoneNumberPrefix))
                         )
                         &&
                         (
                             input.Query.PhoneNumberLength == null ||
-                            itm.PhoneNumberLength == input.Query.PhoneNumberLength
+                            (item.Criteria.PhoneNumberLength != null && item.Criteria.PhoneNumberLength == input.Query.PhoneNumberLength)
+                        )
+                        &&
+                        (
+                            input.Query.SwitchIds == null
+                        )
+                        &&
+                        (
+                            input.Query.TrunkIds == null
                         )
                         &&
                         (
                             input.Query.Description == null ||
-                            (itm.Description != null && itm.Description.Contains(input.Query.Description))
+                            (item.Description != null && item.Description.Contains(input.Query.Description))
                         )
                     );
                 };
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allNormalizationRules.Select(NormalizationRuleDetailMapper).ToBigResult(input, filterResult));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, GetMappedNormalizationRules(allNormalizationRules).ToBigResult(input, filterResult));
         }
 
         public NormalizationRule GetNormalizationRuleById(int normalizationRuleId)
@@ -224,6 +235,18 @@ namespace PSTN.BusinessEntity.Business
         }
 
         #region Private Members
+
+        private List<NormalizationRuleDetail> GetMappedNormalizationRules(List<NormalizationRule> normalizationRules)
+        {
+            List<NormalizationRuleDetail> normalizationRuleDetails = new List<NormalizationRuleDetail>();
+
+            foreach (NormalizationRule normalizationRule in normalizationRules)
+            {
+                normalizationRuleDetails.Add(NormalizationRuleDetailMapper(normalizationRule));
+            }
+
+            return normalizationRuleDetails;
+        }
 
         private NormalizationRuleDetail NormalizationRuleDetailMapper(NormalizationRule normalizationRule)
         {
