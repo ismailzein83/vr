@@ -170,7 +170,7 @@
             $scope.phoneNumberLength = normalizationRuleObj.Criteria.PhoneNumberLength;
             $scope.phoneNumberPrefix = normalizationRuleObj.Criteria.PhoneNumberPrefix;
 
-            addFetchedNormalizationRuleActionSettingsToList(normalizationRuleObj.Settings.Actions);
+            addRetrievedNormalizationRuleActionSettingsToList(normalizationRuleObj.Settings.Actions);
 
             $scope.beginEffectiveDate = normalizationRuleObj.BeginEffectiveDate;
             $scope.endEffectiveDate = normalizationRuleObj.EndEffectiveDate;
@@ -191,7 +191,7 @@
             return matchingItems;
         }
 
-        function addFetchedNormalizationRuleActionSettingsToList(array) {
+        function addRetrievedNormalizationRuleActionSettingsToList(array) {
             if (array == undefined || array == null) return;
 
             angular.forEach(array, function (item) {

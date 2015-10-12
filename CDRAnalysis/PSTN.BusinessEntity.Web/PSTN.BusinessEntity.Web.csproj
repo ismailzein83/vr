@@ -162,8 +162,10 @@
     <Content Include="PSTN_BusinessEntity\Constants\SwitchTrunkDirectionEnum.js" />
     <Content Include="PSTN_BusinessEntity\Constants\SwitchTrunkTypeEnum.js" />
     <Content Include="PSTN_BusinessEntity\Directives\Templates\AddPrefixDirectiveTemplate.html" />
+    <Content Include="PSTN_BusinessEntity\Directives\Templates\SubstringDirectiveTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-addprefix-directive.js" />
     <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-trunkgrid-directive.js" />
+    <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-substring-directive.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\NormalizationRuleAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchTrunkAPIService.js" />

@@ -17,7 +17,6 @@ namespace PSTN.BusinessEntity.Data.SQL
             return GetItemsSP("PSTN_BE.sp_NormalizationRule_GetEffective", NormalizationRuleMapper);
         }
 
-
         public List<NormalizationRule> GetNormalizationRules()
         {
             return GetItemsSP("PSTN_BE.sp_NormalizationRule_GetAll", NormalizationRuleMapper);
@@ -35,7 +34,7 @@ namespace PSTN.BusinessEntity.Data.SQL
             string serializedCriteria = Vanrise.Common.Serializer.Serialize(normalizationRuleObj.Criteria);
             string serializedSettings = Vanrise.Common.Serializer.Serialize(normalizationRuleObj.Settings);
 
-            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_Insert", out normalizationRuleId, serializedCriteria, serializedSettings, normalizationRuleObj.BeginEffectiveDate, normalizationRuleObj.EndEffectiveDate);
+            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_Insert", out normalizationRuleId, serializedCriteria, serializedSettings, normalizationRuleObj.Description, normalizationRuleObj.BeginEffectiveDate, normalizationRuleObj.EndEffectiveDate);
 
             insertedID = (recordsAffected > 0) ? (int)normalizationRuleId : -1;
             return (recordsAffected > 0);
@@ -46,7 +45,7 @@ namespace PSTN.BusinessEntity.Data.SQL
             string serializedCriteria = Vanrise.Common.Serializer.Serialize(normalizationRuleObj.Criteria);
             string serializedSettings = Vanrise.Common.Serializer.Serialize(normalizationRuleObj.Settings);
 
-            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_Update", normalizationRuleObj.NormalizationRuleId, serializedCriteria, serializedSettings, normalizationRuleObj.BeginEffectiveDate, normalizationRuleObj.EndEffectiveDate);
+            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_Update", normalizationRuleObj.NormalizationRuleId, serializedCriteria, serializedSettings, normalizationRuleObj.Description, normalizationRuleObj.BeginEffectiveDate, normalizationRuleObj.EndEffectiveDate);
             return (recordsAffected > 0);
         }
 
