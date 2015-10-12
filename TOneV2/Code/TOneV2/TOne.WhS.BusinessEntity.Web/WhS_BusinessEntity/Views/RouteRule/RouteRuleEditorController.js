@@ -105,16 +105,9 @@
                 }
 
                 $scope.saleZoneGroupTemplates = [];
-                $scope.selectedSaleZoneGroupTemplate = undefined;
-
                 $scope.customerGroupTemplates = [];
-                $scope.selectedCustomerGroupTemplate = undefined;
-
                 $scope.codeCriteriaGroupTemplates = [];
-                $scope.selectedCodeCriteriaGroupTemplate = undefined;
-
                 $scope.routingProducts = [];
-                $scope.selectedRoutingProduct = undefined;
 
                 $scope.excludedCodes = [];
             }
@@ -156,43 +149,25 @@
 
             function loadSaleZoneGroupTemplates() {
                 return WhS_BE_SaleZoneAPIService.GetSaleZoneGroupTemplates().then(function (response) {
-
-                    var defSaleZoneSelection = { TemplateConfigID: -1, Name: 'No Filter', Editor: '' };
-                    $scope.saleZoneGroupTemplates.push(defSaleZoneSelection);
-
                     angular.forEach(response, function (item) {
                         $scope.saleZoneGroupTemplates.push(item);
                     });
-
-                    $scope.selectedSaleZoneGroupTemplate = defSaleZoneSelection;
                 });
             }
 
             function loadCustomerGroupTemplates() {
                 return WhS_BE_CarrierAccountAPIService.GetCustomerGroupTemplates().then(function (response) {
-
-                    var defCustomerSelection = { TemplateConfigID: -1, Name: 'No Filter', Editor: '' };
-                    $scope.customerGroupTemplates.push(defCustomerSelection);
-
                     angular.forEach(response, function (item) {
                         $scope.customerGroupTemplates.push(item);
                     });
-
-                    $scope.selectedCustomerGroupTemplate = defCustomerSelection;
                 });
             }
 
             function loadCodeCriteriaGroupTemplates() {
                 return WhS_BE_RouteRuleAPIService.GetCodeCriteriaGroupTemplates().then(function (response) {
-
-                    var defCodeCriteriaSelection = { TemplateConfigID: -1, Name: 'No Filter', Editor: '' };
-                    $scope.codeCriteriaGroupTemplates.push(defCodeCriteriaSelection);
-
                     angular.forEach(response, function (item) {
                         $scope.codeCriteriaGroupTemplates.push(item);
                     });
-
-                    $scope.selectedCodeCriteriaGroupTemplate = defCodeCriteriaSelection;
                 });
             }
 
@@ -270,7 +245,7 @@
 
             function getSaleZoneGroupSettings()
             {
-                if ($scope.selectedSaleZoneGroupTemplate.TemplateConfigID != -1) {
+                if ($scope.selectedSaleZoneGroupTemplate != undefined) {
                     var settings = saleZoneGroupSettingsDirectiveAPI.getData();
                     settings.ConfigId = $scope.selectedSaleZoneGroupTemplate.TemplateConfigID;
                     return settings;
@@ -280,7 +255,7 @@
             }
 
             function getCustomersGroupSettings() {
-                if ($scope.selectedCustomerGroupTemplate.TemplateConfigID != -1) {
+                if ($scope.selectedCustomerGroupTemplate != undefined) {
                     var settings = customerGroupSettingsDirectiveAPI.getData();
                     settings.ConfigId = $scope.selectedCustomerGroupTemplate.TemplateConfigID;
                     return settings;
@@ -290,7 +265,7 @@
             }
 
             function getCodeCriteriaGroupSettings() {
-                if ($scope.selectedCodeCriteriaGroupTemplate.TemplateConfigID != -1) {
+                if ($scope.selectedCodeCriteriaGroupTemplate != undefined) {
                     var settings = codeCriteriaGroupSettingsDirectiveAPI.getData();
                     settings.ConfigId = $scope.selectedCodeCriteriaGroupTemplate.TemplateConfigID;
                     return settings;

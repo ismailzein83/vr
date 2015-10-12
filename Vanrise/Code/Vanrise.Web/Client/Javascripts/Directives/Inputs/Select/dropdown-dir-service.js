@@ -31,6 +31,7 @@
         if (attrs.entityname == undefined) attrs.$set("entityname", "");
         if (attrs.selectlbl == undefined) attrs.$set("selectlbl", "Selected " + attrs.entityname + " :");
         if (attrs.placeholder == undefined) attrs.$set("placeholder", "Select " + attrs.entityname + "...");
+        if (attrs.text != undefined) attrs.$set("placeholder", attrs.text);
         if (attrs.selectplaceholder == undefined) attrs.$set("selectplaceholder", attrs.entityname + " selected");
 
         return attrs;

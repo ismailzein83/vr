@@ -68,11 +68,7 @@
                 $scope.selectedSaleZonePackage = undefined;
 
                 $scope.saleZoneGroupTemplates = [];
-                $scope.selectedSaleZoneGroupTemplate = undefined;
-
                 $scope.supplierGroupTemplates = [];
-                $scope.selectedSupplierGroupTemplate = undefined;
-
             }
 
             function load() {
@@ -113,29 +109,17 @@
 
             function loadSaleZoneGroupTemplates() {
                 return WhS_BE_SaleZoneAPIService.GetSaleZoneGroupTemplates().then(function (response) {
-
-                    var defSaleZoneSelection = { TemplateConfigID: -1, Name: 'No Filter', Editor: '' };
-                    $scope.saleZoneGroupTemplates.push(defSaleZoneSelection);
-
                     angular.forEach(response, function (item) {
                         $scope.saleZoneGroupTemplates.push(item);
                     });
-
-                    $scope.selectedSaleZoneGroupTemplate = defSaleZoneSelection;
                 });
             }
 
             function loadSupplierGroupTemplates() {
                 return WhS_BE_CarrierAccountAPIService.GetSupplierGroupTemplates().then(function (response) {
-
-                    var defSupplierSelection = { TemplateConfigID: -1, Name: 'No Filter', Editor: '' };
-                    $scope.supplierGroupTemplates.push(defSupplierSelection);
-
                     angular.forEach(response, function (item) {
                         $scope.supplierGroupTemplates.push(item);
                     });
-
-                    $scope.selectedSupplierGroupTemplate = defSupplierSelection;
                 });
             }
 
@@ -202,7 +186,7 @@
             }
 
             function getSaleZoneGroupSettings() {
-                if ($scope.selectedSaleZoneGroupTemplate.TemplateConfigID != -1) {
+                if ($scope.selectedSaleZoneGroupTemplate != undefined) {
                     var settings = saleZoneGroupSettingsDirectiveAPI.getData();
                     settings.ConfigId = $scope.selectedSaleZoneGroupTemplate.TemplateConfigID;
                     return settings;
@@ -212,7 +196,7 @@
             }
 
             function getSuppliersGroupSettings() {
-                if ($scope.selectedSupplierGroupTemplate.TemplateConfigID != -1) {
+                if ($scope.selectedSupplierGroupTemplate != undefined) {
                     var settings = supplierGroupSettingsDirectiveAPI.getData();
                     settings.ConfigId = $scope.selectedSupplierGroupTemplate.TemplateConfigID;
                     return settings;
