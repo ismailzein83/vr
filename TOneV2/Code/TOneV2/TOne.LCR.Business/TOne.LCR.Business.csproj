@@ -68,11 +68,12 @@
     <Compile Include="RouteRules\RouteOptionActions\BlockRouteOptionAction.cs" />
     <Compile Include="RouteRules\RouteOptionActions\CheckRateOptionAtion.cs" />
     <Compile Include="RouteRules\RouteRuleManager.cs" />
+    <Compile Include="ZoneRateManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TOne.BusinessEntity.Data\TOne.BusinessEntity.Data.csproj">
-      <Project>{fe3e9123-4e75-42db-b98c-b37a472aad9a}</Project>
-      <Name>TOne.BusinessEntity.Data</Name>
+    <ProjectReference Include="..\TOne.BusinessEntity.Business\TOne.BusinessEntity.Business.csproj">
+      <Project>{bdc9694f-88b7-492d-9865-304e774a5776}</Project>
+      <Name>TOne.BusinessEntity.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.BusinessEntity.Entities\TOne.BusinessEntity.Entities.csproj">
       <Project>{70ce755d-00ae-4e12-8f07-e4df91346293}</Project>

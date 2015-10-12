@@ -11,6 +11,8 @@ namespace TOne.BusinessEntity.Data
     {
         List<Currency> GetCurrencies();
 
+        Dictionary<string, Currency> GetCurrenciesDictionary();
+
         List<Currency> GetVisibleCurrencies();
 
         Currency GetCurrencyByCarrierId(string carrierId);

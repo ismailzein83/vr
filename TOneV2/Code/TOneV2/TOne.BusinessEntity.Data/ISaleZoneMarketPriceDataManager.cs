@@ -7,10 +7,9 @@ using TOne.BusinessEntity.Entities;
 
 namespace TOne.BusinessEntity.Data
 {
-    public interface IPriceListDataManager : IDataManager
+    public interface ISaleZoneMarketPriceDataManager : IDataManager
     {
-        List<PriceList> GetPriceList();
-
-        PriceList GetPriceListById(int priceListId);
+        IEnumerable<SaleZoneMarketPrice> GetSaleZoneMarketPrices();
+        SaleZoneMarketPrices GetAllSaleZoneMarketPrices();
     }
 }

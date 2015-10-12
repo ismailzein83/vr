@@ -43,5 +43,20 @@ namespace TOne.BusinessEntity.Data.SQL
         {
             return GetItemSP("[BEntity].[sp_Currency_GetCurrencyByCarrierId]", CurrencyMapper, carrierId);
         }
+        
+        public Dictionary<string, Currency> GetCurrenciesDictionary()
+        {
+            Dictionary<string, Currency> currencies = new Dictionary<string, Currency>();
+            ExecuteReaderSP("[BEntity].[sp_Currency_GetVisible]", (reader) =>
+            {
+                while (reader.Read())
+                {
+                    Currency currency = CurrencyMapper(reader);
+                    if (!currencies.ContainsKey(currency.CurrencyID))
+                        currencies.Add(currency.CurrencyID, currency);
+                }
+            });
+            return currencies;
+        }
     }
 }

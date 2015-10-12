@@ -10,7 +10,9 @@ namespace TOne.BusinessEntity.Entities
     {
         public string CurrencyId { get; set; }
 
-        public double CurrencyFator { get; set; }
+        public double Factor { get; set; }
+
+        public string Name { get; set; }
 
         public bool IsMain { get; set; }
     }

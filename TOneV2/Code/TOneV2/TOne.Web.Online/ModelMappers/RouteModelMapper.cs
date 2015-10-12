@@ -9,6 +9,16 @@ namespace TOne.Web.Online.ModelMappers
 {
     public class RouteModelMapper
     {
+        public static List<RouteModel> MapRouteModel(List<RouteInfo> routeInfos)
+        {
+            List<RouteModel> models = new List<RouteModel>();
+            if (routeInfos != null && routeInfos.Count > 0)
+                foreach (var routeInfo in routeInfos)
+                {
+                    models.Add(MapRoutingModel(routeInfo));
+                }
+            return models;
+        }
         private static RouteModel MapRoutingModel(RouteInfo routeInfo)
         {
             return new RouteModel
@@ -33,18 +43,6 @@ namespace TOne.Web.Online.ModelMappers
                 SupplierInfoString = routeOptionInfo.SupplierInfoString
             };
         }
-
-        public static List<RouteModel> MapRouteModel(List<RouteInfo> routeInfos)
-        {
-            List<RouteModel> models = new List<RouteModel>();
-            if (routeInfos != null && routeInfos.Count > 0)
-                foreach (var routeInfo in routeInfos)
-                {
-                    models.Add(MapRoutingModel(routeInfo));
-                }
-            return models;
-        }
-
         private static List<RouteOptionModel> MapOptionModels(List<RouteOptionInfo> options)
         {
             List<RouteOptionModel> result = new List<RouteOptionModel>();
@@ -54,6 +52,7 @@ namespace TOne.Web.Online.ModelMappers
             }
             return result;
         }
+
 
     }
 }

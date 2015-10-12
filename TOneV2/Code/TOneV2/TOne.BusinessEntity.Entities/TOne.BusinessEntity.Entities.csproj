@@ -67,6 +67,7 @@
     <Compile Include="CustomerToDConsiderationByZone.cs" />
     <Compile Include="ExchangeRate.cs" />
     <Compile Include="CustomerRateByZone.cs" />
+    <Compile Include="SaleZoneMarketPrice.cs" />
     <Compile Include="SupplierCommission.cs" />
     <Compile Include="SupplierCommissionQuery.cs" />
     <Compile Include="SupplierCommissionsByZone.cs" />

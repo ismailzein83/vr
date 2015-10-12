@@ -50,9 +50,14 @@
     <Compile Include="ActionExecutionStep.cs" />
     <Compile Include="CloneHelper.cs" />
     <Compile Include="CodeCustomers.cs" />
+    <Compile Include="SaleLCR\CustomerSaleZone.cs" />
+    <Compile Include="SaleLCR\CustomerSaleZones.cs" />
     <Compile Include="RoutingFilter.cs" />
     <Compile Include="RoutingRulesFilter.cs" />
     <Compile Include="RoutingRules\RouteRuleTimeExecutionSetting.cs" />
+    <Compile Include="SaleLCR\SaleRate.cs" />
+    <Compile Include="SaleLCR\SupplierLCR.cs" />
+    <Compile Include="SaleLCR\SupplierZoneRate.cs" />
     <Compile Include="SaleZoneMatches.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="RoutingRuleActionType.cs" />

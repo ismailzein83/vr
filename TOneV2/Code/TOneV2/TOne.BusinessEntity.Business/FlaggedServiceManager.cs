@@ -86,6 +86,11 @@ namespace TOne.BusinessEntity.Business
                 }
             }
         }
+
+        public FlaggedService GetServiceFlag(short id)
+        {
+            return _dataManager.GetServiceFlag(id);
+        }
         #endregion
     }
 }

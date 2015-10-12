@@ -4,7 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using TOne.LCR.Business;
+using TOne.LCR.Entities;
 using TOne.LCR.Entities.Routing;
+using TOne.Web.Online.ModelMappers;
 using TOne.Web.Online.Models;
 
 namespace TOne.Web.Online.Controllers
@@ -32,6 +34,13 @@ namespace TOne.Web.Online.Controllers
             List<RouteModel> routeModels = new List<RouteModel>();
             routeModels = ModelMappers.RouteModelMapper.MapRouteModel(routeInfos);
             return routeModels;
+        }
+
+        [HttpGet]
+        public List<SaleZoneRateModel> GetCustomerLCR(string customerId, string zoneName)
+        {
+            ZoneRateManager manager = new ZoneRateManager();
+            return SaleZoneRateModelMapper.MapSaleZoneRateModels(manager.GetCustomerSaleZones(customerId, zoneName));
         }
     }
 }

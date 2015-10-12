@@ -6,7 +6,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.BusinessEntity.Data;
 using TOne.Data.SQL;
 using TOne.LCR.Entities;
 using TOne.LCR.Entities.Routing;

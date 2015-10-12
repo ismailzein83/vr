@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,5 +25,25 @@ namespace TOne.BusinessEntity.Data.SQL
                 }
                 );
         }
+
+        public PriceList GetPriceListById(int priceListId)
+        {
+            return GetItemSP("[BEntity].[sp_PriceList_GetByID]", PriceListMapper, priceListId);
+        }
+
+        PriceList PriceListMapper(IDataReader reader)
+        {
+            return new PriceList()
+            {
+                PriceListID = (int)reader["PriceListID"],
+                Description = reader["Description"] as string,
+                BeginEffectiveDate = reader["BeginEffectiveDate"] as Nullable<DateTime>,
+                EndEffectiveDate = reader["EndEffectiveDate"] as Nullable<DateTime>,
+                CurrencyId = reader["CurrencyId"] as string
+            };
+        }
+
+
+
     }
 }

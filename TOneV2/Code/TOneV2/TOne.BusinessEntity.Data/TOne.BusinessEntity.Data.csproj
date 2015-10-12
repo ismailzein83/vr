@@ -72,6 +72,7 @@
     <Compile Include="IRateDataManager.cs" />
     <Compile Include="IFlaggedServiceDataManager.cs" />
     <Compile Include="ISaleRateDataManager.cs" />
+    <Compile Include="ISaleZoneMarketPriceDataManager.cs" />
     <Compile Include="ISupplierCommissionDataManager.cs" />
     <Compile Include="ISupplierRateDataManager.cs" />
     <Compile Include="ISupplierTODDataManager.cs" />

@@ -71,6 +71,10 @@
     <Compile Include="ZoneRateDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.BusinessEntity.Business\TOne.BusinessEntity.Business.csproj">
+      <Project>{bdc9694f-88b7-492d-9865-304e774a5776}</Project>
+      <Name>TOne.BusinessEntity.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.BusinessEntity.Data\TOne.BusinessEntity.Data.csproj">
       <Project>{fe3e9123-4e75-42db-b98c-b37a472aad9a}</Project>
       <Name>TOne.BusinessEntity.Data</Name>

@@ -11,6 +11,8 @@ namespace TOne.BusinessEntity.Entities
         public int PriceListID { get; set; }
         public string Description { get; set; }
         public string UserName { get; set; }
+        public string CurrencyId { get; set; }
+        public Nullable<DateTime> EndEffectiveDate { get; set; }
         public Nullable<DateTime> BeginEffectiveDate { get; set; }
     }
 }

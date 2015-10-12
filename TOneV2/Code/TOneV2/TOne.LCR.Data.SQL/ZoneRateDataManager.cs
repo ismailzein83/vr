@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using TOne.BusinessEntity.Business;
 using TOne.BusinessEntity.Entities;
 using TOne.Data.SQL;
 using TOne.LCR.Entities;
@@ -13,6 +14,7 @@ namespace TOne.LCR.Data.SQL
 {
     public class ZoneRateDataManager : RoutingDataManager, IZoneRateDataManager
     {
+
         public void InsertZoneRates(bool isSupplierZoneRates, List<ZoneRate> zoneRates)
         {
             string filePath = GetFilePathForBulkInsert();
@@ -133,6 +135,44 @@ namespace TOne.LCR.Data.SQL
 
         }
 
+        public CustomerSaleZones GetCustomerSaleZones(string customerId, string zoneName)
+        {
+            CustomerSaleZones customerSaleZones = new CustomerSaleZones();
+            int previousZoneId = 0;
+            this.RoutingDatabaseType = Entities.RoutingDatabaseType.Current;
+            ExecuteReaderText(string.Format(query_GetSaleZoneLCR, zoneName, customerId),
+                (reader) =>
+                {
+                    while (reader.Read())
+                    {
+                        CustomerSaleZone customerSaleZone;
+                        int zoneId = (int)reader["OurZoneId"];
+                        if (!customerSaleZones.TryGetValue(zoneId, out customerSaleZone))
+                        {
+                            customerSaleZone = CustomerSaleZoneMapper(reader);
+                            customerSaleZone.ZoneId = zoneId;
+                            customerSaleZones.Add(zoneId, customerSaleZone);
+                            previousZoneId = zoneId;
+                        }
+                        SupplierLCR supplierLcr = SupplierLCRMapper(reader);
+                        customerSaleZone.SuppliersLcr.Add(supplierLcr);
+                    }
+                }, null);
+
+            return customerSaleZones;
+        }
+
+        private void FilterSupplierRates(CustomerSaleZone customerSaleZone)
+        {
+            List<SupplierLCR> sortedLCR = new List<SupplierLCR>(customerSaleZone.SuppliersLcr.OrderBy(r => r.Rate).Take(3));
+            List<SupplierLCR> finalLCR = new List<SupplierLCR>();
+            foreach (var supplierLCR in sortedLCR)
+            {
+                finalLCR.Add(supplierLCR);
+            }
+            customerSaleZone.SuppliersLcr = finalLCR;
+        }
+
         private DataTable BuildZoneInfoTable(IEnumerable<int> zoneIds)
         {
             DataTable dtZoneInfo = new DataTable();
@@ -148,6 +188,30 @@ namespace TOne.LCR.Data.SQL
             return dtZoneInfo;
         }
 
+        CustomerSaleZone CustomerSaleZoneMapper(IDataReader reader)
+        {
+            return new CustomerSaleZone()
+            {
+                Rate = Convert.ToDecimal(reader["OurRate"]),
+                ServiceFlag = GetReaderValue<short>(reader, "OurServiceFlag"),
+                ZoneName = reader["OurZoneName"] as string,
+                SuppliersLcr = new List<SupplierLCR>(),
+                PriceListId = (int)reader["OurPriceListId"]
+            };
+        }
+        SupplierLCR SupplierLCRMapper(IDataReader reader)
+        {
+            return new SupplierLCR()
+            {
+                ZoneId = (int)reader["ZoneID"],
+                Rate = Convert.ToDecimal(reader["NormalRate"]),
+                ServiceFlag = GetReaderValue<short>(reader, "ServicesFlag"),
+                SupplierId = reader["SupplierId"] as string,
+                ZoneName = reader["Name"] as string,
+                IsCodeGroup = GetReaderValue<bool>(reader, "IsCodeGroup"),
+                PriceListId = (int)reader["PriceListId"]
+            };
+        }
 
         #region Queries
 
@@ -163,13 +227,38 @@ namespace TOne.LCR.Data.SQL
                                         JOIN @ZoneList z ON z.ID = zr.ZoneID
                                         order by zr.ZoneID";
 
+        const string query_GetSaleZoneLCR = @"
+                                            WITH filteredZones AS (
+                                            SELECT * FROM (SELECT DISTINCT  z.ZoneID,z.Name FROM 
+                                               (SELECT	DISTINCT OurZoneID 
+	                                            FROM	ZoneMatch with (nolock)) zm  
+	                                            JOIN	ZoneInfo z WITH(NoLock) on zm.OurZoneID = z.ZoneID
+	                                            WHERE	z.Name like '{0}%'
+		                                            ) fz
+	                                            ) 
+
+                                            SELECT	fz.Name OurZoneName,
+		                                            zm.OurZoneID,
+		                                            czr.ServicesFlag OurServiceFlag,
+		                                            czr.NormalRate OurRate, 
+                                                    czr.PriceListId OurPriceListId,
+		                                            zm.SupplierID,
+		                                            zr.NormalRate, 
+		                                            zr.ServicesFlag,
+		                                            zr.RateID, 
+		                                            zr.ZoneID, 
+		                                            z.Name, 
+		                                            zr.PricelistID, 
+		                                            zm.IsCodeGroup
+                                            FROM	ZoneMatch zm WITH (NOLOCK) 
+                                            JOIN	filteredZones fz on zm.OurZoneID = fz.ZoneID 
+                                            JOIN	SupplierZoneRate zr WITH (NOLOCK) ON zm.SupplierZoneID = zr.ZoneID
+                                            JOIN	CustomerZoneRate czr with (nolock) on czr.ZoneID = fz.ZoneId
+                                            JOIN	ZoneInfo z WITH (NOLOCK) ON z.ZoneID = zm.SupplierZoneID 
+                                            where	customerid = '{1}'
+                                            ORDER BY zm.OurZoneID, zr.NormalRate";
+
         #endregion
-
-
-
-
-
-
 
     }
 }

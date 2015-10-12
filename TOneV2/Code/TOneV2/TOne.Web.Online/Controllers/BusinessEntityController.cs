@@ -18,7 +18,7 @@ namespace TOne.Web.Online.Controllers
         public List<CarrierInfo> GetCarriers(CarrierType carrierType = CarrierType.Exchange)
         {
             CarrierAccountManager manager = new CarrierAccountManager();
-            return manager.GetCarriers(carrierType,false);
+            return manager.GetCarriers(carrierType, false);
         }
 
         [HttpGet]
@@ -95,6 +95,13 @@ namespace TOne.Web.Online.Controllers
                 sb.Append(previous);
             }
             return sb.ToString();
+        }
+
+        [HttpGet]
+        public List<CurrencyFactor> GetCustomerExchangeRate(string customerId)
+        {
+            CurrencyManager manager = new CurrencyManager();
+            return manager.GetCurrenciesFactor(customerId).ToList();
         }
     }
 }

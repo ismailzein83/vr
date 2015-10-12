@@ -16,5 +16,7 @@ namespace TOne.LCR.Data
 
         SupplierZoneRates GetSupplierZoneRates(IEnumerable<Int32> lstZoneIds);
 
+        CustomerSaleZones GetCustomerSaleZones(string customerId, string zoneName);
+
     }
 }

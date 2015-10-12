@@ -8,7 +8,7 @@ using TOne.BusinessEntity.Entities;
 
 namespace TOne.BusinessEntity.Business
 {
-   public class PriceListManager
+    public class PriceListManager
     {
         IPriceListDataManager _dataManager;
         public PriceListManager()
@@ -18,6 +18,11 @@ namespace TOne.BusinessEntity.Business
         public List<PriceList> GetPriceList()
         {
             return _dataManager.GetPriceList();
+        }
+
+        public PriceList GetPriceListById(int priceListId)
+        {
+            return _dataManager.GetPriceListById(priceListId);
         }
     }
 }

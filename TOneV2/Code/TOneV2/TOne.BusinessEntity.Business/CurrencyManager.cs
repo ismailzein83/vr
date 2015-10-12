@@ -29,6 +29,11 @@ namespace TOne.BusinessEntity.Business
             return _dataManager.GetVisibleCurrencies();
         }
 
+        public Dictionary<string, Currency> GetCurrenciesDictionary()
+        {
+            return _dataManager.GetCurrenciesDictionary();
+        }
+
         public Currency GetCurrencyByCarrierId(string carrierId)
         {
             return _dataManager.GetCurrencyByCarrierId(carrierId);
@@ -46,14 +51,15 @@ namespace TOne.BusinessEntity.Business
                 if (currency.CurrencyID.Equals(customerCurrency.CurrencyID))
                     currencyFactor.IsMain = true;
                 currencyFactor.CurrencyId = currency.CurrencyID;
-                currencyFactor.CurrencyFator = GetExchangeFactor(customerCurrency, currency);
+                currencyFactor.Factor = GetExchangeFactor(customerCurrency, currency);
+                currencyFactor.Name = currency.Name;
                 currencyFactors.Add(currencyFactor);
             }
 
             return currencyFactors;
         }
 
-        double GetExchangeFactor(Currency fromCurrency, Currency toCurrency)
+        public double GetExchangeFactor(Currency fromCurrency, Currency toCurrency)
         {
             return toCurrency.LastRate / fromCurrency.LastRate;
         }
