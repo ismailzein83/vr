@@ -15,33 +15,30 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             var allRoutingProducts = GetCachedRoutingProducts();
 
-            Func<IEnumerable<RoutingProduct>, IEnumerable<RoutingProduct>> filterResult = (listToFilter) =>
-            {
-                return listToFilter.Where(itm =>
-                 (input.Query.Name == null || itm.Name.ToLower().Contains(input.Query.Name.ToLower()))
+            Func<RoutingProduct, bool> filterExpression = (prod) =>
+                 (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
                  &&
-                 (input.Query.SaleZonePackageIds == null || input.Query.SaleZonePackageIds.Contains(itm.SaleZonePackageId)));
-            };
+                 (input.Query.SaleZonePackageIds == null || input.Query.SaleZonePackageIds.Contains(prod.SaleZonePackageId));
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRoutingProducts.ToBigResult(input, filterResult));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRoutingProducts.ToBigResult(input, filterExpression));
         }
 
         public RoutingProduct GetRoutingProduct(int routingProductId)
         {
             List<RoutingProduct> routingProducts = GetCachedRoutingProducts();
-            return routingProducts.Find(x => x.RoutingProductId == routingProductId);
+            return routingProducts.FindRecord(x => x.RoutingProductId == routingProductId);
         }
 
-        public List<RoutingProductInfo> GetRoutingProductsInfoBySaleZonePackage(int saleZonePackageId)
+        public IEnumerable<RoutingProductInfo> GetRoutingProductsInfoBySaleZonePackage(int saleZonePackageId)
         {
             List<RoutingProduct> routingProducts = GetCachedRoutingProducts();
-            return routingProducts.Where(x => x.SaleZonePackageId == saleZonePackageId).Select(RoutingProductInfoMapper).ToList();
+            return routingProducts.MapRecords(RoutingProductInfoMapper, x => x.SaleZonePackageId == saleZonePackageId);
         }
-        
-        public List<RoutingProductInfo> GetRoutingProducts()
+
+        public IEnumerable<RoutingProductInfo> GetRoutingProducts()
         {
             List<RoutingProduct> routingProducts = GetCachedRoutingProducts();
-            return routingProducts.Select(RoutingProductInfoMapper).ToList();
+            return routingProducts.MapRecords(RoutingProductInfoMapper);
         }
 
         public TOne.Entities.InsertOperationOutput<RoutingProduct> AddRoutingProduct(RoutingProduct routingProduct)

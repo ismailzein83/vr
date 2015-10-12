@@ -21,13 +21,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        public List<RoutingProductInfo> GetRoutingProducts()
+        public IEnumerable<RoutingProductInfo> GetRoutingProducts()
         {
             RoutingProductManager manager = new RoutingProductManager();
             return manager.GetRoutingProducts();
         }
         [HttpGet]
-        public List<RoutingProductInfo> GetRoutingProductsInfoBySaleZonePackage(int saleZonePackageId)
+        public IEnumerable<RoutingProductInfo> GetRoutingProductsInfoBySaleZonePackage(int saleZonePackageId)
         {
             RoutingProductManager manager = new RoutingProductManager();
             return manager.GetRoutingProductsInfoBySaleZonePackage(saleZonePackageId);

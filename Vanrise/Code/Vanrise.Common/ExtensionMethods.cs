@@ -24,37 +24,100 @@ namespace Vanrise.Common
             return value;
         }
 
-        public static Vanrise.Entities.BigResult<T> ToBigResult<T>(this IEnumerable<T> allRecords, Vanrise.Entities.DataRetrievalInput input, Func<IEnumerable<T>, IEnumerable<T>> filterResult)
+        public static Vanrise.Entities.BigResult<T> ToBigResult<T>(this IEnumerable<T> allRecords, Vanrise.Entities.DataRetrievalInput input, Func<T, bool> filterExpression)
         {
             if (allRecords == null)
                 return null;
 
-            allRecords = filterResult(allRecords);
+            IEnumerable<T> filteredResults = allRecords.ApplyFiltering<T>(filterExpression);
+            IEnumerable<T> processedResults = filteredResults.ApplySortingAndPaging(input);
 
             Vanrise.Entities.BigResult<T> rslt = new Vanrise.Entities.BigResult<T>
             {
-                TotalCount = allRecords.Count()
+                TotalCount = filteredResults.Count(),
+                Data = processedResults
             };
-
-            if (input.FromRow.HasValue && input.ToRow.HasValue)
-            {
-                int pageSize = (input.ToRow.Value - input.FromRow.Value) + 1;
-                rslt.Data = allRecords.ToList().Skip(input.FromRow.Value - 1).Take(pageSize);
-            }
-            else
-            {
-                rslt.Data = allRecords;
-            }
-
-            Func<T, Object> selector = x => typeof(T).InvokeMember(input.SortByColumnName, System.Reflection.BindingFlags.GetProperty, null, x, null);
-
-            if (input.IsSortDescending)
-                rslt.Data = rslt.Data.OrderByDescending(selector);
-            else
-                rslt.Data = rslt.Data.OrderBy(selector);
 
             return rslt;
         }
 
+        public static Vanrise.Entities.BigResult<Q> ToBigResult<T,Q>(this IEnumerable<T> allRecords, Vanrise.Entities.DataRetrievalInput input, 
+            Func<T, bool> filterExpression, Func<T,Q> mapper)
+        {
+            IEnumerable<T> filteredResults = allRecords.ApplyFiltering(filterExpression);
+            IEnumerable<Q> processedResults = filteredResults.Select(mapper).ApplySortingAndPaging(input);
+
+            Vanrise.Entities.BigResult<Q> rslt = new Vanrise.Entities.BigResult<Q>
+            {
+                TotalCount = filteredResults.Count(),
+                Data = processedResults
+            };
+
+            return rslt;
+        }
+
+        public static T FindRecord<T>(this IEnumerable<T> list, Func<T, bool> predicate)
+        {
+            if (list == null)
+                return default(T);
+
+            return list.FirstOrDefault(predicate);
+        }
+
+        public static IEnumerable<T> FindAllRecords<T>(this IEnumerable<T> list, Func<T, bool> predicate)
+        {
+            if (list == null)
+                return null;
+
+            return list.Where(predicate);
+        }
+
+        public static IEnumerable<Q> MapRecords<T, Q>(this IEnumerable<T> list, Func<T, Q> mappingExpression)
+        {
+            if (list == null)
+                return null;
+
+            return list.Select(mappingExpression);
+        }
+
+        public static IEnumerable<Q> MapRecords<T, Q>(this IEnumerable<T> list, Func<T, Q> mappingExpression, Func<T, bool> filterExpression)
+        {
+            if (list == null)
+                return null;
+
+            IEnumerable<T> filteredResults = list.Where(filterExpression);
+
+            if (filteredResults == null)
+                return null;
+
+            return filteredResults.Select(mappingExpression);
+        }
+
+        private static IEnumerable<T> ApplyFiltering<T>(this IEnumerable<T> allRecords, Func<T, bool> filterExpression)
+        {
+            return allRecords.Where(filterExpression);
+        }
+
+        private static IEnumerable<T> ApplySortingAndPaging<T>(this IEnumerable<T> allRecords, Vanrise.Entities.DataRetrievalInput input)
+        {
+
+            Func<T, Object> selector = x => typeof(T).InvokeMember(input.SortByColumnName, System.Reflection.BindingFlags.GetProperty, null, x, null);
+
+            if (input.IsSortDescending)
+                allRecords = allRecords.OrderByDescending(selector);
+            else
+                allRecords = allRecords.OrderBy(selector);
+
+            if (input.FromRow.HasValue && input.ToRow.HasValue)
+            {
+                int pageSize = (input.ToRow.Value - input.FromRow.Value) + 1;
+                allRecords = allRecords.ToList().Skip(input.FromRow.Value - 1).Take(pageSize);
+            }
+
+            return allRecords;
+        }
+        
     }
+
+   
 }
