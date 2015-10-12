@@ -94,7 +94,7 @@ function (UtilsService, VRNotificationService, WhS_BE_PricingProductAPIService,W
 
         function editPricingProduct(pricingProductObj) {
             var onPricingProductUpdated = function (pricingProduct) {
-                gridApi.itemUpdated(pricingProduct);
+                gridAPI.itemUpdated(pricingProduct);
             }
 
             WhS_BE_MainService.editPricingProduct(pricingProductObj, onPricingProductUpdated);

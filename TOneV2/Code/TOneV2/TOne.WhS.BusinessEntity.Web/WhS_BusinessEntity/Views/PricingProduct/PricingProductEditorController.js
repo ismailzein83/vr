@@ -9,7 +9,7 @@
         var editMode;
         var pricingProductId;
         var saleZonePackagesDirectiveAPI;
-        var routingProductDirectiveAPI;
+
         loadParameters();
         defineScope();
         load();
@@ -35,26 +35,27 @@
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
-            $scope.onSaleZonePackagesDirectiveLoaded = function (api) {
+
+            $scope.onSaleZonePackagesDirectiveReady = function (api) {
                 saleZonePackagesDirectiveAPI = api;
-            }
-            $scope.onRoutingProductDirectiveLoaded = function (api) {
-                routingProductDirectiveAPI = api;
-            }
-            $scope.onselectionchanged = function () {
-            }
-            $scope.onselectionchanged1 = function () {
+                load();
             }
         }
 
         function load() {
             $scope.isGettingData = true;
+
+            if (saleZonePackagesDirectiveAPI == undefined)
+                return;
+
+            saleZonePackagesDirectiveAPI.load().then(function () {
                 if (editMode) {
                     getPricingProduct();
                 }
-                else {
-                    $scope.isGettingData = false;
-                }
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.isGettingData = false;
+            });
         }
 
         function getPricingProduct() {
@@ -63,23 +64,24 @@
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
-
                 $scope.isGettingData = false;
-            });
+            });;
         }
 
         function buildPricingProductObjFromScope() {
-            var salezonepackageid;
-            var routingProductId;
-            if (saleZonePackagesDirectiveAPI != undefined)
-                salezonepackageid = saleZonePackagesDirectiveAPI.getData().SaleZonePackageId;
             var pricingProduct = {
                 PricingProductId: (pricingProductId != null) ? pricingProductId : 0,
                 Name: $scope.name,
-                SaleZonePackageId: salezonepackageid,
+                SaleZonePackageId: saleZonePackagesDirectiveAPI.getData().SaleZonePackageId,
             };
 
             return pricingProduct;
+        }
+
+
+        function fillScopeFromPricingProductObj(pricingProductObj) {
+            $scope.name = pricingProductObj.Name;
+            saleZonePackagesDirectiveAPI.setData(pricingProductObj.SaleZonePackageId);
         }
 
         function insertPricingProduct() {
@@ -96,11 +98,7 @@
             });
 
         }
-        function fillScopeFromPricingProductObj(pricingProductObj) {
-            $scope.name = pricingProductObj.Name;
-                saleZonePackagesDirectiveAPI.setData(pricingProductObj.SaleZonePackageId);
-                 
-        }
+
         function updatePricingProduct() {
             var pricingProductObject = buildPricingProductObjFromScope();
             WhS_BE_PricingProductAPIService.UpdatePricingProduct(pricingProductObject)

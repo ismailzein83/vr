@@ -77,7 +77,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             {
                 PricingProductId = (int)reader["ID"],
                 Name = reader["Name"] as string,
-                DefaultRoutingProductId = (int)reader["DefaultRoutingProductID"],
+                DefaultRoutingProductId = GetReaderValue<int>(reader, "DefaultRoutingProductID"),
                 SaleZonePackageId = (int)reader["SaleZonePackageID"],
                 Settings = ((reader["Settings"] as string) != null) ? Vanrise.Common.Serializer.Deserialize<PricingProductSettings>(reader["Settings"] as string) : null,
             };

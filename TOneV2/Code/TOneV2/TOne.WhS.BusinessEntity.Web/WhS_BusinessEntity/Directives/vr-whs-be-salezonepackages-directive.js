@@ -5,7 +5,7 @@ app.directive('vrWhsBeSalezonepackages', ['WhS_BE_SaleZonePackageAPIService', 'U
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
-                onloaded: '=',
+                onReady: '=',
                 ismultipleselection: "@",
                 onselectionchanged: '=',
                 isrequired: "@"
@@ -55,7 +55,7 @@ app.directive('vrWhsBeSalezonepackages', ['WhS_BE_SaleZonePackageAPIService', 'U
             if (attrs.isrequired != undefined)
                 required = "isrequired";
 
-            return '<div  vr-loader="isLoadingDirective">'
+            return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SaleZonePackageId" '
             + required + ' label="Sale Zone Packages" datasource="saleZonePackages" selectedvalues="selectedSaleZonePackages"  onselectionchanged="onselectionchanged" entityName="Sale Zone Package"></vr-select>'
                + '</div>'
@@ -64,12 +64,19 @@ app.directive('vrWhsBeSalezonepackages', ['WhS_BE_SaleZonePackageAPIService', 'U
         function beSaleZonePackage(ctrl, $scope, $attrs) {
 
             function initializeController() {
-
-                loadSaleZonePackages();
+                defineAPI();
             }
 
             function defineAPI() {
                 var api = {};
+
+                api.load = function () {
+                    return WhS_BE_SaleZonePackageAPIService.GetSaleZonePackages().then(function (response) {
+                        angular.forEach(response, function (itm) {
+                            $scope.saleZonePackages.push(itm);
+                        });
+                    });
+                }
 
                 api.getData = function () {
                     return $scope.selectedSaleZonePackages;
@@ -90,24 +97,10 @@ app.directive('vrWhsBeSalezonepackages', ['WhS_BE_SaleZonePackageAPIService', 'U
                     
                 }
 
-                if (ctrl.onloaded != null)
-                    ctrl.onloaded(api);
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
             }
-            function loadSaleZonePackages() {
-                $scope.isLoadingDirective = true;
-                return WhS_BE_SaleZonePackageAPIService.GetSaleZonePackages().then(function (response) {
-                    angular.forEach(response, function (itm) {
-                        $scope.saleZonePackages.push(itm);
-                    });
-
-                }).catch(function (error) {
-                    //TODO handle the case of exceptions
-
-                }).finally(function () {
-                    $scope.isLoadingDirective = false;
-                    defineAPI();
-                });
-            }
+            
             this.initializeController = initializeController;
         }
         return directiveDefinitionObject;

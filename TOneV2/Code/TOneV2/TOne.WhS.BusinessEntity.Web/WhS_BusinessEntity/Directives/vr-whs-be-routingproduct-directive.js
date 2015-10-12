@@ -5,7 +5,7 @@ app.directive('vrWhsBeRoutingproduct', ['WhS_BE_RoutingProductAPIService', 'Util
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
-                onloaded: '=',
+                onReady: '=',
                 ismultipleselection: "@",
                 onselectionchanged: '=',
                 isrequired: "@",
