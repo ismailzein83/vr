@@ -43,15 +43,20 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
 
             if (value == undefined) return null;
 
-            if (value.length == 0) return null;
-
             var offset = value.split(".");
 
             if (offset.length == 1 && validateTime(offset[0]))
                 return null;
 
-            else if (offset.length == 2 && validateInteger(offset[0], 99) && validateTime(offset[1]))
-                return null;
+            else if (offset.length == 2) {
+                var days = offset[0].split("-");
+
+                if (days.length == 1 && validateInteger(days[0], 99) && validateTime(offset[1]))
+                    return null;
+
+                else if (days.length == 2 && days[0].length == 0 && validateInteger(days[1], 99) && validateTime(offset[1]))
+                    return null;
+            }
 
             return "Format: DD.HH:MM:SS";
         }
