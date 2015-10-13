@@ -348,31 +348,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
-        private DailyVolumeLoose DailyVolumeLoosesMapper(IDataReader reader)
-        {
-            var dailyVolumeLoose = new DailyVolumeLoose();
-            dailyVolumeLoose.DateDay = (DateTime)reader["DateDay"];
-            dailyVolumeLoose.Volume = GetReaderValue<decimal>(reader, "Volume");
-            return dailyVolumeLoose;
-        }
-
-        private BTSCases BTSCasesMapper(IDataReader reader)
-        {
-            var bTSCases = new BTSCases();
-            bTSCases.CountCases = (int)reader["CountCases"];
-            bTSCases.BTS_Id = GetReaderValue<int?>(reader, "BTS_Id");
-            return bTSCases;
-        }
-
-
-        private BTSHighValueCases BTSHighValueCasesMapper(IDataReader reader)
-        {
-            var bTSHighValueCases = new BTSHighValueCases();
-            bTSHighValueCases.Volume = (decimal)reader["Volume"];
-            bTSHighValueCases.BTS_Id = GetReaderValue<int?>(reader, "BTS_Id");
-            return bTSHighValueCases;
-        }
-
         #endregion
     }
 }

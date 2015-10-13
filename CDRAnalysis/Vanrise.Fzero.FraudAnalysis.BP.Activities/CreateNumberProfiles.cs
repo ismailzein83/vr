@@ -20,9 +20,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         public BaseQueue<CDRBatch> InputQueue { get; set; }
 
         public BaseQueue<NumberProfileBatch> OutputQueue { get; set; }
-        
+
         public DateTime FromDate { get; set; }
-        
+
         public DateTime ToDate { get; set; }
 
         public List<StrategyExecutionInfo> StrategiesExecutionInfo { get; set; }
@@ -68,49 +68,92 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             base.OnBeforeExecute(context, handle);
         }
 
+        private HashSet<string> fillWhiteNumbers(string MaxWhiteNumber, ref bool GotAllWhiteNumbers)
+        {
+            IAccountStatusDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountStatusDataManager>();
+             List<CaseStatus> caseStatuses = new List<CaseStatus>();
+            caseStatuses.Add(CaseStatus.ClosedWhiteList);
+
+            List<string> numbers= dataManager.GetAccountStatusByFilters(caseStatuses, MaxWhiteNumber);
+
+            if (numbers.Count == 0)
+                GotAllWhiteNumbers = true;
+
+            return numbers.ToHashSet();
+        }
+
         protected override void DoWork(CreateNumberProfilesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-                IClassDataManager manager = FraudDataManagerFactory.GetDataManager<IClassDataManager>();
-                IStrategyDataManager strategyManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
-                INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
-                int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"]);
-                var callClasses = manager.GetCallClasses();
-                
+
+            HashSet<string> WhiteNumbers = new HashSet<string>();
+            string MaxWhiteNumber = string.Empty;
+            bool GotAllWhiteNumbers = false;
+            bool FoundinWhiteNumbers = false;
+
+            IClassDataManager manager = FraudDataManagerFactory.GetDataManager<IClassDataManager>();
+            IStrategyDataManager strategyManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+            INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
+            int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"]);
+            var callClasses = manager.GetCallClasses();
+
             List<Strategy> strategies = new List<Strategy>();
-            if(inputArgument.StrategiesExecutionInfo!=null)
+            if (inputArgument.StrategiesExecutionInfo != null)
                 foreach (var i in inputArgument.StrategiesExecutionInfo)
                 {
                     strategies.Add(i.Strategy);
                 }
 
-                var aggregateDefinitions = strategies.Count >0 ?
-                    new AggregateManager(strategies as IEnumerable<INumberProfileParameters>).GetAggregateDefinitions(callClasses)
-                    :
-                    new AggregateManager(new List<INumberProfileParameters> { inputArgument.Parameters }).GetAggregateDefinitions(callClasses)
-                    ;
-                string currentAccountNumber = null;
+            var aggregateDefinitions = strategies.Count > 0 ?
+                new AggregateManager(strategies as IEnumerable<INumberProfileParameters>).GetAggregateDefinitions(callClasses)
+                :
+                new AggregateManager(new List<INumberProfileParameters> { inputArgument.Parameters }).GetAggregateDefinitions(callClasses)
+                ;
+            string currentAccountNumber = null;
 
-                HashSet<string> IMEIs = new HashSet<string>();
-             
+            HashSet<string> IMEIs = new HashSet<string>();
 
-                List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
-                int cdrsCount = 0;
-                int numberProfilesCount = 0;
-                DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+
+            List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
+            int cdrsCount = 0;
+            int numberProfilesCount = 0;
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            {
+                bool hasItem = false;
+                do
                 {
-                    bool hasItem = false;
-                    do
-                    {
 
-                        hasItem = inputArgument.InputQueue.TryDequeue(
-                            (cdrBatch) =>
+                    hasItem = inputArgument.InputQueue.TryDequeue(
+                        (cdrBatch) =>
+                        {
+                            var serializedCDRs = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(cdrBatch.CDRBatchFilePath));
+                            System.IO.File.Delete(cdrBatch.CDRBatchFilePath);
+                            var cdrs = Vanrise.Common.ProtoBufSerializer.Deserialize<List<CDR>>(serializedCDRs);
+                            foreach (var cdr in cdrs)
                             {
-                                var serializedCDRs = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(cdrBatch.CDRBatchFilePath));
-                                System.IO.File.Delete(cdrBatch.CDRBatchFilePath);
-                                var cdrs = Vanrise.Common.ProtoBufSerializer.Deserialize<List<CDR>>(serializedCDRs);
-                                foreach (var cdr in cdrs)
+                                if (currentAccountNumber != cdr.MSISDN)
                                 {
-                                    if (currentAccountNumber != cdr.MSISDN)
+                                    if (WhiteNumbers.Count == 0)
+                                    {
+                                        if (!GotAllWhiteNumbers)
+                                        {
+                                            WhiteNumbers= fillWhiteNumbers(MaxWhiteNumber, ref GotAllWhiteNumbers);
+                                            if (WhiteNumbers.Contains(cdr.MSISDN))
+                                            {
+                                                FoundinWhiteNumbers = true;
+                                            }
+                                        }
+                                    }
+
+                                    else
+                                    {
+                                        if (WhiteNumbers.Contains(cdr.MSISDN))
+                                        {
+                                            FoundinWhiteNumbers = true;
+                                        }
+                                    }
+
+
+                                    if (!FoundinWhiteNumbers)
                                     {
                                         if (currentAccountNumber != null)
                                         {
@@ -124,31 +167,34 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                             aggregateDef.Aggregation.EvaluateCDR(cdr);
                                         }
                                     }
-                                    else
+
+
+                                }
+                                else
+                                {
+                                    IMEIs.Add(cdr.IMEI);
+                                    foreach (var aggregateDef in aggregateDefinitions)
                                     {
-                                        IMEIs.Add(cdr.IMEI);
-                                        foreach (var aggregateDef in aggregateDefinitions)
-                                        {
-                                            aggregateDef.Aggregation.EvaluateCDR(cdr);
-                                        }
+                                        aggregateDef.Aggregation.EvaluateCDR(cdr);
                                     }
                                 }
-                                cdrsCount += cdrs.Count;
-                                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} CDRs profiled", cdrsCount);
+                            }
+                            cdrsCount += cdrs.Count;
+                            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} CDRs profiled", cdrsCount);
 
-                            });
-                    }
-                    while (!ShouldStop(handle) && hasItem);
-                });
-                if (currentAccountNumber != null)
-                    FinishNumberProfileProcessing(currentAccountNumber, ref numberProfileBatch, ref numberProfilesCount, inputArgument, handle, 0, aggregateDefinitions, IMEIs);
+                        });
+                }
+                while (!ShouldStop(handle) && hasItem);
+            });
+            if (currentAccountNumber != null)
+                FinishNumberProfileProcessing(currentAccountNumber, ref numberProfileBatch, ref numberProfilesCount, inputArgument, handle, 0, aggregateDefinitions, IMEIs);
 
-                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs from Database to Memory");
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs from Database to Memory");
 
-           
+
         }
 
-        private void FinishNumberProfileProcessing(string accountNumber, ref List<NumberProfile> numberProfileBatch, ref int numberProfilesCount, CreateNumberProfilesInput inputArgument, AsyncActivityHandle handle, int batchSize, List<AggregateDefinition> AggregateDefinitions,HashSet<string> IMEIs)
+        private void FinishNumberProfileProcessing(string accountNumber, ref List<NumberProfile> numberProfileBatch, ref int numberProfilesCount, CreateNumberProfilesInput inputArgument, AsyncActivityHandle handle, int batchSize, List<AggregateDefinition> AggregateDefinitions, HashSet<string> IMEIs)
         {
 
             if (inputArgument.StrategiesExecutionInfo != null)
@@ -161,8 +207,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                         FromDate = inputArgument.FromDate,
                         ToDate = inputArgument.ToDate,
                         StrategyId = strategyExecutionInfo.Strategy.Id,
-                        StrategyExecutionID= strategyExecutionInfo.StrategyExecution.ID,
-                        IMEIs =IMEIs
+                        StrategyExecutionID = strategyExecutionInfo.StrategyExecution.ID,
+                        IMEIs = IMEIs
                     };
                     foreach (var aggregateDef in AggregateDefinitions)
                     {

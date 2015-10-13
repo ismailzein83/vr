@@ -10,6 +10,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
     {
 
         void LoadAccountStatus(Action<AccountStatus> onBatchReady, List<CaseStatus> caseStatuses);
-
+        List<string> GetAccountStatusByFilters(List<CaseStatus> caseStatuses, string MaxAccountNumber);
     }
 }
