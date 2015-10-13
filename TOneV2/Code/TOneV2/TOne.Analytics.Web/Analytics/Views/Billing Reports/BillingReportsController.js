@@ -6,8 +6,7 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
     load();
 
     $scope.export = function () {
-
-            return BillingStatisticsAPIService.ExportCarrierProfile($scope.params.fromDate, $scope.params.toDate, $scope.params.top, $scope.params.customer.CarrierAccountID).then(function (response) {
+        return BillingStatisticsAPIService.ExportCarrierProfile($scope.fromDate, $scope.toDate, $scope.params.top, $scope.params.customer.CarrierAccountID, $scope.params.selectedCurrency.CurrencyID, $scope.params.selectedCurrency.Name).then(function (response) {
                  UtilsService.downloadFile(response.data, response.headers);
             });
         
@@ -16,7 +15,7 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
     $scope.reportsTypes = [];
     $scope.optionsCustomers = [];
     $scope.optionsSuppliers = [];
-    $scope.optionsZone = [];
+   // $scope.optionsZone = [];
     $scope.reportsTypes = [];
     $scope.optionsCurrencies = []; 
     $scope.periods = analyticsService.getPeriods();
@@ -24,9 +23,10 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
     $scope.params = {
         groupByCustomer: false,
         selectedCustomers: [],
+        customer: null,
         selectedSuppliers: [],
         selectedCurrency : null ,
-        zone: null,
+        zones: [],
         isCost: false,
         service: false,
         commission: false,
@@ -64,9 +64,9 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
             paramsurl += "&isExchange=" + $scope.params.isExchange;
             paramsurl += "&margin=" + $scope.params.margin;
             paramsurl += "&top=" + $scope.params.top;
-            paramsurl += "&zone=" + (($scope.params.zone == null) ? 0 : $scope.params.zone.ZoneId);
-            paramsurl += "&customer=" + (($scope.params.selectedCustomers.length == 0 ) ? "" : getIdsList($scope.params.selectedCustomers) );
-            paramsurl += "&supplier=" + (($scope.params.selectedSuppliers.length == 0) ? "" :  getIdsList($scope.params.selectedSuppliers));
+            paramsurl += "&zone=" + (($scope.params.zones.length == 0) ? "" : getIdsList($scope.params.zones, 'ZoneId'));
+            paramsurl += "&customer=" + (($scope.params.selectedCustomers.length == 0) ? "" : getIdsList($scope.params.selectedCustomers, 'CarrierAccountID'));
+            paramsurl += "&supplier=" + (($scope.params.selectedSuppliers.length == 0) ? "" : getIdsList($scope.params.selectedSuppliers, 'CarrierAccountID'));
             paramsurl += "&currency=" + (($scope.params.selectedCurrency == null) ? "USD" : $scope.params.selectedCurrency.CurrencyID);
             paramsurl += "&currencyDesc=" + (($scope.params.selectedCurrency == null) ? "United States Dollars" :encodeURIComponent( $scope.params.selectedCurrency.Name));
 
@@ -84,8 +84,10 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
                 groupByCustomer: false,
                 selectedCustomers: [],
                 selectedSuppliers: [],
+                customer: null,
                 selectedCurrency: $scope.optionsCurrencies[getMainCurrencyIndex($scope.optionsCurrencies)],
-               // isCost: false,
+                // isCost: false,
+                zones: [],
                 service: false,
                 commission: false,
                 bySupplier: false,
@@ -100,15 +102,16 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
         loadReportTypes();
         loadCurrencies();
 
-        //loadCustomers();
+        loadCustomers();
         //loadSuppliers();
     }
 
-    function getIdsList(tab) {
-        var list = [] ;
-        for (var i = 0; i < tab.length ; i++)
-            list[list.length] = tab[i].CarrierAccountID;
-        return list.join(",");
+    function getIdsList(tab, attname) {
+        var list = [];
+        for (var i = 0; i < tab.length ; i++) 
+            list[list.length] = tab[i][attname];        
+        return list.join(",");        
+        
     }
     function loadCurrencies() {
         currencyAPIService.GetVisibleCurrencies().then(function (response) {
@@ -132,11 +135,11 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
         return index;
     }
 
-    //function loadCustomers() {
-    //    CarrierAccountAPIService.GetCarriers(1, true).then(function (response) {
-    //        $scope.optionsCustomers = response;
-    //    });
-    //}
+    function loadCustomers() {
+        CarrierAccountAPIService.GetCarriers(1, true).then(function (response) {
+            $scope.optionsCustomers = response;
+        });
+    }
     //function loadSuppliers() {
     //    CarrierAccountAPIService.GetCarriers(2,false).then(function (response) {
     //        $scope.optionsSuppliers = response;

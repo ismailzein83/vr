@@ -20,7 +20,7 @@ namespace TOne.Analytics.Business.BillingReports
             BillingStatisticManager manager = new BillingStatisticManager();
             double service = 0;
             List<ZoneSummaryFormatted> zoneSummaries =
-                manager.GetZoneSummary(parameters.FromTime, parameters.ToTime, parameters.CustomerId, parameters.SupplierId, parameters.IsCost, parameters.CurrencyId, parameters.SupplierGroup, parameters.CustomerGroup, customersIds , suppliersIds, parameters.GroupBySupplier, out service);
+                manager.GetZoneSummary(parameters.FromTime, parameters.ToTime, parameters.CustomersId, parameters.SuppliersId, parameters.IsCost, parameters.CurrencyId, parameters.SupplierGroup, parameters.CustomerGroup, customersIds , suppliersIds, parameters.GroupBySupplier, out service);
             
             decimal services = 0;
             if (parameters.IsCost)
@@ -52,8 +52,8 @@ namespace TOne.Analytics.Business.BillingReports
             list.Add("Title", new RdlcParameter { Value = "Zone Summary", IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value =  parameters.CurrencyDescription, IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
-            list.Add("Customer", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.CustomerId , "Customers"), IsVisible = true });
-            list.Add("Supplier", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.SupplierId, "Suppliers"), IsVisible = true });
+            list.Add("Customer", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.CustomersId , "Customers"), IsVisible = true });
+            list.Add("Supplier", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.SuppliersId, "Suppliers"), IsVisible = true });
             list.Add("DigitRate", new RdlcParameter { Value = "4", IsVisible = true });
             list.Add("NormalNet", new RdlcParameter { Value = parameters.NormalNet.ToString(), IsVisible = true });
             list.Add("NormalDuration", new RdlcParameter { Value = parameters.NormalDuration.ToString(), IsVisible = true });

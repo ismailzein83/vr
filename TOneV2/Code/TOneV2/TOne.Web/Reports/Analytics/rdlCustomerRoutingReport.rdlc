@@ -1078,7 +1078,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -1310,36 +1309,6 @@
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
-        <Textbox Name="txtCurrency">
-          <CanGrow>true</CanGrow>
-          <KeepTogether>true</KeepTogether>
-          <Paragraphs>
-            <Paragraph>
-              <TextRuns>
-                <TextRun>
-                  <Value>=Parameters!Currency.Value</Value>
-                  <Style>
-                    <FontSize>14pt</FontSize>
-                  </Style>
-                </TextRun>
-              </TextRuns>
-              <Style />
-            </Paragraph>
-          </Paragraphs>
-          <Top>0.75in</Top>
-          <Left>6in</Left>
-          <Height>0.375in</Height>
-          <Width>2.62499in</Width>
-          <Visibility>
-            <Hidden>true</Hidden>
-          </Visibility>
-          <Style>
-            <PaddingLeft>2pt</PaddingLeft>
-            <PaddingRight>2pt</PaddingRight>
-            <PaddingTop>2pt</PaddingTop>
-            <PaddingBottom>2pt</PaddingBottom>
-          </Style>
-        </Textbox>
         <Textbox Name="txtDate">
           <CanGrow>true</CanGrow>
           <KeepTogether>true</KeepTogether>
@@ -1360,7 +1329,6 @@
           <Top>0.1875in</Top>
           <Height>0.25in</Height>
           <Width>1.37499in</Width>
-          <ZIndex>1</ZIndex>
           <Style>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
@@ -1389,7 +1357,7 @@
           <Left>3.25in</Left>
           <Height>0.25in</Height>
           <Width>0.99999in</Width>
-          <ZIndex>2</ZIndex>
+          <ZIndex>1</ZIndex>
           <Style>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
@@ -1416,11 +1384,11 @@
               </Style>
             </Paragraph>
           </Paragraphs>
-          <Top>0.625in</Top>
+          <Top>0.61111in</Top>
           <Left>1.5in</Left>
           <Height>0.375in</Height>
           <Width>4.62499in</Width>
-          <ZIndex>3</ZIndex>
+          <ZIndex>2</ZIndex>
           <Style>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
@@ -1435,7 +1403,7 @@
           <Left>6.5in</Left>
           <Height>0.71in</Height>
           <Width>2.21in</Width>
-          <ZIndex>4</ZIndex>
+          <ZIndex>3</ZIndex>
           <Style />
         </Image>
         <Textbox Name="textbox1">
@@ -1456,10 +1424,11 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>textbox1</rd:DefaultName>
-          <Top>1in</Top>
+          <Top>1.23958in</Top>
+          <Left>0.03262in</Left>
           <Height>0.375in</Height>
           <Width>1in</Width>
-          <ZIndex>5</ZIndex>
+          <ZIndex>4</ZIndex>
           <Visibility>
             <Hidden>=IIF(Parameters!Customer.Value = "", True, False)</Hidden>
           </Visibility>
@@ -1489,10 +1458,11 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>textbox3</rd:DefaultName>
-          <Top>1.375in</Top>
+          <Top>1.61458in</Top>
+          <Left>0.03262in</Left>
           <Height>0.375in</Height>
           <Width>1in</Width>
-          <ZIndex>6</ZIndex>
+          <ZIndex>5</ZIndex>
           <Visibility>
             <Hidden>=IIF(Parameters!Supplier.Value = "", True, False)</Hidden>
           </Visibility>
@@ -1520,11 +1490,11 @@
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>1in</Top>
-          <Left>1in</Left>
+          <Top>1.23958in</Top>
+          <Left>1.03262in</Left>
           <Height>0.375in</Height>
           <Width>2.75in</Width>
-          <ZIndex>7</ZIndex>
+          <ZIndex>6</ZIndex>
           <Style>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
@@ -1548,11 +1518,11 @@
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>1.375in</Top>
-          <Left>1in</Left>
+          <Top>1.61458in</Top>
+          <Left>1.03262in</Left>
           <Height>0.375in</Height>
           <Width>2.75in</Width>
-          <ZIndex>8</ZIndex>
+          <ZIndex>7</ZIndex>
           <Style>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
@@ -1583,7 +1553,7 @@
           <Left>7.125in</Left>
           <Height>0.25in</Height>
           <Width>0.74999in</Width>
-          <ZIndex>9</ZIndex>
+          <ZIndex>8</ZIndex>
           <Style>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
@@ -1614,7 +1584,7 @@
           <Left>7.125in</Left>
           <Height>0.25in</Height>
           <Width>0.74999in</Width>
-          <ZIndex>10</ZIndex>
+          <ZIndex>9</ZIndex>
           <Style>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
@@ -1644,7 +1614,7 @@
           <Left>7.875in</Left>
           <Height>0.25in</Height>
           <Width>1.5in</Width>
-          <ZIndex>11</ZIndex>
+          <ZIndex>10</ZIndex>
           <Style>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
@@ -1675,8 +1645,70 @@
           <Left>7.875in</Left>
           <Height>0.25in</Height>
           <Width>1.5in</Width>
+          <ZIndex>11</ZIndex>
+          <Style>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+        <Textbox Name="lblCurrency">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>Currency:</Value>
+                  <Style>
+                    <FontSize>14pt</FontSize>
+                    <Color>DarkRed</Color>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style />
+            </Paragraph>
+          </Paragraphs>
+          <Top>2.1875in</Top>
+          <Height>0.375in</Height>
+          <Width>1in</Width>
           <ZIndex>12</ZIndex>
           <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+        <Textbox Name="txtCurrency">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>=Parameters!Currency.Value</Value>
+                  <Style>
+                    <FontSize>14pt</FontSize>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style />
+            </Paragraph>
+          </Paragraphs>
+          <Top>2.1875in</Top>
+          <Left>1in</Left>
+          <Height>0.375in</Height>
+          <Width>4.17707in</Width>
+          <ZIndex>13</ZIndex>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
             <PaddingTop>2pt</PaddingTop>

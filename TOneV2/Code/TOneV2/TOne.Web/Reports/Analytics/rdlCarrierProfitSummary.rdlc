@@ -115,6 +115,7 @@
                       </Style>
                     </Textbox>
                     <ColSpan>7</ColSpan>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell />

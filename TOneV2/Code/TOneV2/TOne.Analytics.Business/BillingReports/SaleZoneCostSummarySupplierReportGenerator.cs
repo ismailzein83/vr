@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.Analytics.Entities;
+using TOne.BusinessEntity.Business;
 using TOne.Entities;
 
 namespace TOne.Analytics.Business.BillingReports
@@ -12,8 +13,12 @@ namespace TOne.Analytics.Business.BillingReports
     {
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(TOne.Entities.ReportParameters parameters)
         {
+            AccountManagerManager am = new AccountManagerManager();
+            List<string> suppliersIds = am.GetMyAssignedSupplierIds();
+            List<string> customersIds = am.GetMyAssignedCustomerIds();
+
             BillingStatisticManager manager = new BillingStatisticManager();
-            List<SaleZoneCostSummarySupplierFormatted> saleZoneCostSummarySupplier = manager.GetSaleZoneCostSummarySupplier(parameters.FromTime, parameters.ToTime, parameters.SupplierAMUId, parameters.CustomerAMUId);
+            List<SaleZoneCostSummarySupplierFormatted> saleZoneCostSummarySupplier = manager.GetSaleZoneCostSummarySupplier(parameters.FromTime, parameters.ToTime, customersIds, suppliersIds , parameters.CurrencyId);
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();
             dataSources.Add("SaleZoneCostSummarySupplier", saleZoneCostSummarySupplier);
             return dataSources;
@@ -27,7 +32,7 @@ namespace TOne.Analytics.Business.BillingReports
             list.Add("Title", new RdlcParameter { Value = "Sale Cost Summary", IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
             list.Add("DigitRate", new RdlcParameter { Value = "2", IsVisible = true });
-            list.Add("Currency", new RdlcParameter { Value = "[USD] United States Dollars", IsVisible = true });
+            list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyDescription, IsVisible = true });
 
             return list;
         }

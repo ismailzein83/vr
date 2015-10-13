@@ -60,7 +60,7 @@ namespace TOne.Analytics.Web.Controllers
         [HttpPost]
         public object ExportCarrierProfile(ExportCarrierProfileInput input)
         {
-            return GetExcelResponse(__billingStatisticsManager.ExportCarrierProfile(input.FromDate, input.ToDate, input.CustomerId, input.TopDestination));
+            return GetExcelResponse(__billingStatisticsManager.ExportCarrierProfile(input.FromDate, input.ToDate, input.CustomerId, input.TopDestination, input.CurrencyId, input.CurrencyName));
         }
 
     }
@@ -71,6 +71,8 @@ namespace TOne.Analytics.Web.Controllers
         public DateTime ToDate { get; set; }
         public int TopDestination { get; set; }
         public string CustomerId { get; set; }
+        public string CurrencyId { get; set; }
+        public string CurrencyName { get; set; }
     }
 
     public class ExportInOutTraffic

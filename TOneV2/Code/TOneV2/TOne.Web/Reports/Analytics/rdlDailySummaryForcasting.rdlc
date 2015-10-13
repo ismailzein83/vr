@@ -1706,14 +1706,14 @@
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>1in</Top>
+          <Top>1.5in</Top>
           <Height>0.375in</Height>
-          <Width>1in</Width>
+          <Width>0.90624in</Width>
           <ZIndex>3</ZIndex>
-          <Visibility>
-            <Hidden>true</Hidden>
-          </Visibility>
           <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
             <PaddingTop>2pt</PaddingTop>
@@ -1736,15 +1736,15 @@
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>1in</Top>
-          <Left>1in</Left>
+          <Top>1.5in</Top>
+          <Left>0.93402in</Left>
           <Height>0.375in</Height>
-          <Width>2.62499in</Width>
+          <Width>5.19097in</Width>
           <ZIndex>4</ZIndex>
-          <Visibility>
-            <Hidden>true</Hidden>
-          </Visibility>
           <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
             <PaddingTop>2pt</PaddingTop>

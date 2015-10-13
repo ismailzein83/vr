@@ -24,7 +24,7 @@ namespace TOne.Web.Reports.Analytics
 
                 List<MonthTraffic> monthTrafficSale = manager.GetMonthTraffic(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2013-05-01 00:00:00"), "C060", true);
 
-                List<CarrierProfileReport> carrierProfile1 = manager.GetCarrierProfileMTDAndMTA(DateTime.Parse("2012-06-01 00:00:00"), DateTime.Parse("2015-06-01 00:00:00"), "C060", false);
+                List<CarrierProfileReport> carrierProfile1 = manager.GetCarrierProfileMTDAndMTA(DateTime.Parse("2012-06-01 00:00:00"), DateTime.Parse("2015-06-01 00:00:00"), "C060", false , "USD");
 
                 ReportDataSource dsMonthTrafficSale = new ReportDataSource("MonthTrafficSale", monthTrafficSale);
                 ReportDataSource cp1 = new ReportDataSource("CarrierProfile1", carrierProfile1);

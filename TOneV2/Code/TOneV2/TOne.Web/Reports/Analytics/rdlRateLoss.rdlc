@@ -1731,8 +1731,8 @@
           </Paragraphs>
           <Top>1.75in</Top>
           <Left>1in</Left>
-          <Height>0.25in</Height>
-          <Width>2.75in</Width>
+          <Height>0.375in</Height>
+          <Width>4.44792in</Width>
           <Style>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
@@ -1968,7 +1968,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>Currency</Value>
+                  <Value>Currency:</Value>
                   <Style>
                     <FontSize>14pt</FontSize>
                     <Color>DarkRed</Color>
@@ -1976,7 +1976,7 @@
                 </TextRun>
               </TextRuns>
               <Style>
-                <TextAlign>Right</TextAlign>
+                <TextAlign>Left</TextAlign>
               </Style>
             </Paragraph>
           </Paragraphs>
@@ -1985,6 +1985,9 @@
           <Width>0.99999in</Width>
           <ZIndex>9</ZIndex>
           <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
             <PaddingTop>2pt</PaddingTop>

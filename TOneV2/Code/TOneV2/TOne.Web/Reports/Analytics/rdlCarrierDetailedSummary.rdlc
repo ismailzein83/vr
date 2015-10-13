@@ -1905,12 +1905,15 @@
               </Style>
             </Paragraph>
           </Paragraphs>
-          <Top>1.40625in</Top>
-          <Left>0.20834in</Left>
+          <Top>0.76042in</Top>
+          <Left>5.79167in</Left>
           <Height>0.5in</Height>
-          <Width>8.66666in</Width>
+          <Width>3.87499in</Width>
           <ZIndex>2</ZIndex>
           <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
             <PaddingTop>2pt</PaddingTop>
@@ -2043,6 +2046,63 @@
           <Height>0.25in</Height>
           <Width>1.5in</Width>
           <ZIndex>7</ZIndex>
+          <Style>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+        <Textbox Name="lblCurrency">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>Currency:</Value>
+                  <Style>
+                    <FontSize>14pt</FontSize>
+                    <Color>DarkRed</Color>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style />
+            </Paragraph>
+          </Paragraphs>
+          <Top>1.61458in</Top>
+          <Left>0.03125in</Left>
+          <Height>0.375in</Height>
+          <Width>1in</Width>
+          <ZIndex>8</ZIndex>
+          <Style>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+        <Textbox Name="txtCurrency">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>=Parameters!Currency.Value</Value>
+                  <Style>
+                    <FontSize>14pt</FontSize>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style />
+            </Paragraph>
+          </Paragraphs>
+          <Top>1.61458in</Top>
+          <Left>1.03125in</Left>
+          <Height>0.375in</Height>
+          <Width>4.25in</Width>
+          <ZIndex>9</ZIndex>
           <Style>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
@@ -2232,6 +2292,11 @@
       <DataType>Integer</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>DigitRate</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Currency">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
   <Code>    Public Function Base64ToImage(ByVal base64String As String) As Byte()

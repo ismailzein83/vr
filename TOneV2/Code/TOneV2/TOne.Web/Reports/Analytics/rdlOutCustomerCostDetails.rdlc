@@ -72,7 +72,10 @@
                       <rd:DefaultName>Carrier</rd:DefaultName>
                       <ZIndex>16</ZIndex>
                       <Style>
-                        <BackgroundColor>SlateGray</BackgroundColor>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <BackgroundColor>MidnightBlue</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -759,14 +762,15 @@
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>1in</Top>
+          <Top>1.32292in</Top>
+          <Left>0.03308in</Left>
           <Height>0.375in</Height>
           <Width>1in</Width>
           <ZIndex>3</ZIndex>
-          <Visibility>
-            <Hidden>true</Hidden>
-          </Visibility>
           <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
             <PaddingTop>2pt</PaddingTop>
@@ -789,15 +793,15 @@
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>1in</Top>
-          <Left>1in</Left>
+          <Top>1.32292in</Top>
+          <Left>1.03308in</Left>
           <Height>0.375in</Height>
-          <Width>2.62499in</Width>
+          <Width>4.29166in</Width>
           <ZIndex>4</ZIndex>
-          <Visibility>
-            <Hidden>true</Hidden>
-          </Visibility>
           <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
             <PaddingTop>2pt</PaddingTop>

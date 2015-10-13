@@ -1,19 +1,22 @@
 ﻿<vr-panel ng-controller="Analytics_BillingReportsController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
-            <vr-row >
-                <vr-columns colnum="2">
+            <vr-row>
+                <vr-columns colnum="4">
                     <vr-select datatextfield="Name" datavaluefield="ReportDefinitionId"
                                datasource="reportsTypes" selectedvalues="reporttype" onselectionchanged="resetReportParams" hint="{{reporttype.Description}}"></vr-select>
-                </vr-columns>    
-                <!--<vr-columns colnum="6" ng-show="reporttype.Description">
-                    <vr-label>{{reporttype.Description}}</vr-label>
-                </vr-columns>-->            
+                </vr-columns>
+               
             </vr-row>
             <vr-row ng-show="reporttype">
                 <vr-columns colnum="2" ng-if="reporttype.ParameterSettings.RequiresCustomerId">
-                    <vr-be-carriergroup ng-if="reporttype.ParameterSettings.CustomerIdNotOptional == true" type="'Customer'" isrequired isassignedcarrier="'True'" selectedvalues="params.selectedCustomers"></vr-be-carriergroup>
-                    <vr-be-carriergroup ng-if="reporttype.ParameterSettings.CustomerIdNotOptional != true" type="'Customer'" isassignedcarrier="'True'" selectedvalues="params.selectedCustomers"></vr-be-carriergroup>
+                    <div ng-if="reporttype.ParameterSettings.RequiresSingleCustomer == false">
+                        <vr-be-carriergroup ng-if="reporttype.ParameterSettings.CustomerIdNotOptional == true" type="'Customer'" isrequired isassignedcarrier="'True'" selectedvalues="params.selectedCustomers"></vr-be-carriergroup>
+                        <vr-be-carriergroup ng-if="reporttype.ParameterSettings.CustomerIdNotOptional != true" type="'Customer'" isassignedcarrier="'True'" selectedvalues="params.selectedCustomers"></vr-be-carriergroup>
+                    </div>
+                    <div ng-if="reporttype.ParameterSettings.RequiresSingleCustomer == true">
+                        <vr-select datasource="optionsCustomers" entityname="Customer" label="Customer" ng-if="reporttype.ParameterSettings.CustomerIdNotOptional == true" isrequired selectedvalues="params.customer" datatextfield="Name" datavaluefield="CarrierAccountID"></vr-select>
+                    </div>
                 </vr-columns>
                 <vr-columns colnum="2" ng-if="reporttype.ParameterSettings.RequiresSupplierId">
                     <vr-be-carriergroup type="'Supplier'" isassignedcarrier="'True'" selectedvalues="params.selectedSuppliers"></vr-be-carriergroup>
@@ -22,10 +25,10 @@
                     <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Period"
                                selectedvalues="selectedPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
                 </vr-columns>
-                <vr-columns colnum="2" >
+                <vr-columns colnum="2">
                     <vr-datetimepicker type="date" label="From" value="fromDate" isrequired></vr-datetimepicker>
                 </vr-columns>
-                <vr-columns colnum="2" >
+                <vr-columns colnum="2">
                     <vr-datetimepicker type="date" label="To" value="toDate" isrequired></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns colnum="2">
@@ -42,9 +45,11 @@
 
                 <vr-columns colnum="2" ng-show="reporttype.ParameterSettings.RequiresZoneId">
                     <vr-label>Zone</vr-label>
-                    <vr-select hideselectedvaluessection="true" datasource="optionsZones"
+                    <!--<vr-select ismultipleselection datasource="optionsZones"
                                selectedvalues="params.zone" datatextfield="Name" datavaluefield="ZoneId"
-                               entityname="Zone"></vr-select>
+                               entityname="Zone"></vr-select>-->
+                    <vr-select ismultipleselection datasource="optionsZones" selectedvalues="params.zones" datatextfield="Name" datavaluefield="ZoneId"
+                               entityname="Zones"></vr-select>
                 </vr-columns>
 
                 <vr-columns colnum="2" ng-if="reporttype.ParameterSettings.RequiresMargin">
@@ -77,8 +82,8 @@
                     <vr-label>Exchange accounts</vr-label>
                     <vr-switch value="params.isExchange"></vr-switch>
                 </vr-columns>
-                <vr-columns colnum="2" ng-if="reporttype.ParameterSettings.RequiresTop" >
-                    <vr-textbox type="number" label="Top" value="params.top"></vr-textbox>
+                <vr-columns colnum="2" ng-if="reporttype.ParameterSettings.RequiresTop">
+                    <vr-textbox type="number" label="Top" value="params.top" ></vr-textbox>
                 </vr-columns>
             </vr-row>
         </div>
@@ -94,4 +99,3 @@
     </vr-row>
 </vr-panel>
 
-   

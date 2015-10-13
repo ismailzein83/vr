@@ -93,11 +93,12 @@ app.directive('vrBeCarriergroup', ['VRModalService', 'UtilsService', 'VRNotifica
             else if (attrs.type == "'Exchange'")
                 label = "Carriers";
         }
+        var isrequired = attrs.isrequired != undefined ? "isrequired" : "";
            
         return '<div style="display:inline-block;width: calc(100% - 18px);">'
                    + '<vr-label >' + label + '</vr-label>'
                + '<vr-select  ismultipleselection  datasource="datasource" selectedvalues="selectedCarrierValues" onselectionchanged="onselectionvalueschanged" datatextfield="Name" datavaluefield="CarrierAccountID"'
-               + 'entityname="' + label + '"></vr-select></div>'
+               + 'entityname="' + label + '" ' + isrequired + ' ></vr-select></div>'
                + ' <span class="glyphicon glyphicon-th hand-cursor"  aria-hidden="true" ng-click="openTreePopup()"></span></div>';
     }
     function BeCarrierGroup(ctrl, VRModalService, UtilsService, VRNotificationService, CarrierAccountAPIService, CarrierGroupAPIService, CarrierTypeEnum,datasource) {

@@ -23,8 +23,8 @@ namespace TOne.Web.Reports.Analytics
                 DateTime from = DateTime.ParseExact(Request.QueryString["fromDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
                 DateTime to = DateTime.ParseExact(Request.QueryString["toDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
               
-                string customer = Request.QueryString["customer"];
-                string supplier = Request.QueryString["supplier"];
+                string customers = Request.QueryString["customer"];
+                string suppliers = Request.QueryString["supplier"];
                 string currency = Request.QueryString["currency"];
 
                 bool groupByCustomer = (Request.QueryString["groupByCustomer"] != null) ? (Request.QueryString["groupByCustomer"] == "true") : false;
@@ -36,7 +36,7 @@ namespace TOne.Web.Reports.Analytics
                 
                 int margin = (Request.QueryString["margin"] != null) ? Convert.ToInt32(Request.QueryString["margin"]) : 10;
                 int top = (Request.QueryString["top"] != null) ? Convert.ToInt32(Request.QueryString["top"]) : 10;
-                int zoneId = (Request.QueryString["zone"] != null) ? Convert.ToInt32(Request.QueryString["zone"]) : 0;
+                string zones = Request.QueryString["zone"];
                 string currencyDesc = Request.QueryString["currencyDesc"];
 
                 ReportDefinitionManager managerReport = new ReportDefinitionManager();
@@ -51,15 +51,15 @@ namespace TOne.Web.Reports.Analytics
                 parameters.FromTime = from;
                 parameters.ToTime = to;
                 parameters.GroupByCustomer = groupByCustomer;
-                parameters.CustomerId = customer;
-                parameters.SupplierId = supplier;
+                parameters.CustomersId = customers;
+                parameters.SuppliersId = suppliers;
                 parameters.IsCost = isCost;
                 parameters.IsService = service;
                 parameters.IsCommission = commission;
                 parameters.GroupBySupplier = bySupplier;
                 parameters.CurrencyId = currency;
                 parameters.Margin = margin;
-                parameters.ZoneId = zoneId;
+                parameters.ZonesId = zones;
                 parameters.IsExchange = isExchange;
                 parameters.Top = top;
                 parameters.CurrencyDescription = String.Format("[{0}] {1}", currency, currencyDesc);

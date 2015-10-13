@@ -12,9 +12,9 @@ namespace TOne.Entities
 
         public DateTime ToTime { get; set; }
 
-        public string CustomerId { get; set; }
+        public string CustomersId { get; set; }
 
-        public string SupplierId { get; set; }
+        public string SuppliersId { get; set; }
 
         public bool GroupByCustomer { get; set; }
 
@@ -50,7 +50,7 @@ namespace TOne.Entities
 
         public int Margin { get; set; }
 
-        public int ZoneId { get; set; }
+        public string ZonesId { get; set; }
 
         public int Top { get; set; }
 

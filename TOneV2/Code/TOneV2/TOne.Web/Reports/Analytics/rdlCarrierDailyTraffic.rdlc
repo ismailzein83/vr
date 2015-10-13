@@ -825,7 +825,8 @@
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>1in</Top>
+          <Top>1.4375in</Top>
+          <Left>0.03125in</Left>
           <Height>0.375in</Height>
           <Width>1in</Width>
           <ZIndex>3</ZIndex>
@@ -852,10 +853,10 @@
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>1in</Top>
-          <Left>1in</Left>
+          <Top>1.4375in</Top>
+          <Left>1.03125in</Left>
           <Height>0.375in</Height>
-          <Width>2.62499in</Width>
+          <Width>3.73957in</Width>
           <ZIndex>4</ZIndex>
           <Style>
             <PaddingLeft>2pt</PaddingLeft>

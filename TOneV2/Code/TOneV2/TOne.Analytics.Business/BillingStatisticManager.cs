@@ -43,9 +43,9 @@ namespace TOne.Analytics.Business
             return FormatZoneProfits(_datamanager.GetZoneProfit(fromDate, toDate, customerId, supplierId, groupByCustomer, supplierIds, customerIds, currencyId));
         }
 
-        public List<DailySummaryFormatted> GetDailySummary(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        public List<DailySummaryFormatted> GetDailySummary(DateTime fromDate, DateTime toDate, List<string> customerIds, List<string> supplierIds, string currencyId)
         {
-            return FormatDailySummaries(_datamanager.GetDailySummary(fromDate, toDate, customerAMUId, supplierAMUId));
+            return FormatDailySummaries(_datamanager.GetDailySummary(fromDate, toDate, customerIds, supplierIds, currencyId));
         }
         private string GetExcelColumnName(int columnNumber)
         {
@@ -63,17 +63,17 @@ namespace TOne.Analytics.Business
             return columnName;
         }
 
-        public ExcelResult ExportCarrierProfile(DateTime fromDate, DateTime toDate, string customerId, int topDestination)
+        public ExcelResult ExportCarrierProfile(DateTime fromDate, DateTime toDate, string customerId, int topDestination, string CurrencyId, string CurrencyName)
         {
             // Monthly Traffic Carrier As Customer (Amount,Durations) , Top N Destinations (Amount,Durations)  (3 datatables)
-            List<CarrierProfileReport> lstCarrierProfileMTDMTASale = GetCarrierProfileMTDAndMTA(fromDate, toDate, customerId, true);
-            List<CarrierProfileReport> lstCarrierProfileSaleAmount = GetCarrierProfile(fromDate, toDate, customerId, topDestination, true, true);
-            List<CarrierProfileReport> lstCarrierProfileSale = GetCarrierProfile(fromDate, toDate, customerId, topDestination, true, false);
+            List<CarrierProfileReport> lstCarrierProfileMTDMTASale = GetCarrierProfileMTDAndMTA(fromDate, toDate, customerId, true, CurrencyId);
+            List<CarrierProfileReport> lstCarrierProfileSaleAmount = GetCarrierProfile(fromDate, toDate, customerId, topDestination, true, true, CurrencyId);
+            List<CarrierProfileReport> lstCarrierProfileSale = GetCarrierProfile(fromDate, toDate, customerId, topDestination, true, false, CurrencyId);
 
             // Monthly Traffic Carrier As Supplier (Amount,Durations) , Top N Destinations (Amount,Durations) (3 datatables)
-            List<CarrierProfileReport> lstCarrierProfileMTDMTA = GetCarrierProfileMTDAndMTA(fromDate, toDate, customerId, false);
-            List<CarrierProfileReport> lstCarrierProfileAmount = GetCarrierProfile(fromDate, toDate, customerId, topDestination, false, true);
-            List<CarrierProfileReport> lstCarrierProfile = GetCarrierProfile(fromDate, toDate, customerId, topDestination, false, false);
+            List<CarrierProfileReport> lstCarrierProfileMTDMTA = GetCarrierProfileMTDAndMTA(fromDate, toDate, customerId, false, CurrencyId);
+            List<CarrierProfileReport> lstCarrierProfileAmount = GetCarrierProfile(fromDate, toDate, customerId, topDestination, false, true, CurrencyId);
+            List<CarrierProfileReport> lstCarrierProfile = GetCarrierProfile(fromDate, toDate, customerId, topDestination, false, false, CurrencyId);
 
             //export to excel
             ////////////////////////////////
@@ -87,16 +87,16 @@ namespace TOne.Analytics.Business
             style.Font.Color = Color.FromArgb(255, 0, 0); ;
             style.Font.Size = 14;
             style.Font.IsBold = true;
+            string currency = String.Format("Currency: [{0}] {1}", CurrencyId, CurrencyName);
+            string chartTitle = "Monthly Traffic " + _bemanager.GetCarrirAccountName(customerId) + " As Customer " + currency;
+            CreateWorkSheetMTDMTA(wbk, "Monthly Traffic as Customer", lstCarrierProfileMTDMTASale, fromDate, toDate, topDestination, chartTitle, style, currency);
+            CreateWorkSheet(wbk, "Traf Top Dest Amt  Cus", lstCarrierProfileSaleAmount, fromDate, toDate, topDestination, "Traffic Top Destination Amount Customer", style);
+            CreateWorkSheet(wbk, "Traf Top Dest Dur Cus", lstCarrierProfileSale, fromDate, toDate, topDestination, "Traffic Top Destination Duration Customer", style);
 
-            string chartTitle = "Monthly Traffic " + _bemanager.GetCarrirAccountName(customerId) + " As Customer";
-            CreateWorkSheetMTDMTA(wbk, "Monthly Traffic as Customer", lstCarrierProfileMTDMTASale, fromDate, toDate, topDestination, chartTitle, style);
-            CreateWorkSheet(wbk, "Traf Top Dest Dur Cus", lstCarrierProfileSaleAmount, fromDate, toDate, topDestination, "Traffic Top Destination Duration Customer", style);
-            CreateWorkSheet(wbk, "Traf Top Dest Amt Cus", lstCarrierProfileSale, fromDate, toDate, topDestination, "Traffic Top Destination Amount Customer", style);
-
-            chartTitle = "Monthly Traffic " + _bemanager.GetCarrirAccountName(customerId) + " As Supplier";
-            CreateWorkSheetMTDMTA(wbk, "Monthly Traffic as Supplier", lstCarrierProfileMTDMTA, fromDate, toDate, topDestination, chartTitle, style);
-            CreateWorkSheet(wbk, "Traf Top Dest Dur Sup", lstCarrierProfileAmount, fromDate, toDate, topDestination, "Traffic Top Destination Duration Supplier", style);
-            CreateWorkSheet(wbk, "Traf Top Dest Amt Sup", lstCarrierProfile, fromDate, toDate, topDestination, "Traffic Top Destination Amount Supplier", style);
+            chartTitle = "Monthly Traffic " + _bemanager.GetCarrirAccountName(customerId) + " As Supplier " + currency;
+            CreateWorkSheetMTDMTA(wbk, "Monthly Traffic as Supplier", lstCarrierProfileMTDMTA, fromDate, toDate, topDestination, chartTitle, style, currency);
+            CreateWorkSheet(wbk, "Traf Top Dest Amt Sup", lstCarrierProfileAmount, fromDate, toDate, topDestination, "Traffic Top Destination Amount Supplier", style);
+            CreateWorkSheet(wbk, "Traf Top Dest Dur Sup", lstCarrierProfile, fromDate, toDate, topDestination, "Traffic Top Destination Duration  Supplier", style);
 
             ExcelResult excelResult = new ExcelResult
             {
@@ -104,7 +104,7 @@ namespace TOne.Analytics.Business
             };
             return excelResult;
         }
-        private void CreateWorkSheetMTDMTA(Workbook workbook, string workSheetName, List<CarrierProfileReport> lstCarrierProfileReport, DateTime fromDate, DateTime toDate, int topDestination, string chartTitle, Style style)
+        private void CreateWorkSheetMTDMTA(Workbook workbook, string workSheetName, List<CarrierProfileReport> lstCarrierProfileReport, DateTime fromDate, DateTime toDate, int topDestination, string chartTitle, Style style , string currency)
         {
             Worksheet worksheet = workbook.Worksheets.Add(workSheetName);
             int lstCarrierProfileCount = lstCarrierProfileReport.Count();
@@ -116,8 +116,17 @@ namespace TOne.Analytics.Business
                 worksheet.Cells.SetColumnWidth(0, 4);
 
                 int HeaderIndex = 2;
-                worksheet.Cells[2, 1].PutValue("Duration");
-                worksheet.Cells[3, 1].PutValue("Amount");
+                worksheet.Cells[2, 1].PutValue("Amount");
+                worksheet.Cells[3, 1].PutValue("Duration");
+                Range range = worksheet.Cells.CreateRange("B1:D1");
+                Style s = workbook.Styles[workbook.Styles.Add()];
+                s.Font.Name = "Times New Roman";
+                s.Font.Size = 14;
+                s.Font.IsBold = true;
+                range.SetStyle(s);
+                range.PutValue(currency , false , true);
+                //Merge range into a single cell
+                range.Merge();
                 for (int i = 0; i < lstCarrierProfileCount; i++)
                 {
                     worksheet.Cells[1, HeaderIndex].PutValue(lstCarrierProfileReport[i].MonthYear);
@@ -148,11 +157,10 @@ namespace TOne.Analytics.Business
             }
         }
 
-        private void CreateWorkSheet(Workbook workbook, string workSheetName, List<CarrierProfileReport> lstCarrierProfileReport, DateTime fromDate, DateTime toDate, int topDestination, string chartTitle, Style style)
+        private void CreateWorkSheet(Workbook workbook, string workSheetName, List<CarrierProfileReport> lstCarrierProfileReport, DateTime fromDate, DateTime toDate, int topDestination, string chartTitle, Style style )
         {
             Worksheet worksheet = workbook.Worksheets.Add(workSheetName);
             int lstCarrierProfileCount = lstCarrierProfileReport.Count();
-
             if (lstCarrierProfileCount > 0)
             {
                 int DaysInTillDays = DateTime.DaysInMonth(toDate.Year, toDate.Month);
@@ -228,9 +236,9 @@ namespace TOne.Analytics.Business
                 chart.Title.Text = chartTitle;
             }
         }
-        public List<SupplierCostDetailsFormatted> GetSupplierCostDetails(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        public List<SupplierCostDetailsFormatted> GetSupplierCostDetails(DateTime fromDate, DateTime toDate, List<string> customerIds,List<string> supplierIds,  string CurrencyId)
         {
-            List<SupplierCostDetails> lstSuppplierCostDetails = _datamanager.GetSupplierCostDetails(fromDate, toDate, customerAMUId, supplierAMUId);
+            List<SupplierCostDetails> lstSuppplierCostDetails = _datamanager.GetSupplierCostDetails(fromDate, toDate, customerIds , supplierIds, CurrencyId);
 
             List<SupplierCostDetails> lstSuppplierCostDetailsGrouped = AddGroupNames(lstSuppplierCostDetails);
 
@@ -249,17 +257,17 @@ namespace TOne.Analytics.Business
             return lstSupplierCostDetailsFormatted;
         }
 
-        public List<SaleZoneCostSummaryFormatted> GetSaleZoneCostSummary(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        public List<SaleZoneCostSummaryFormatted> GetSaleZoneCostSummary(DateTime fromDate, DateTime toDate, List<string> customersIds, List<string> suppliersIds, string currencyId)
         {
-            return FormatSaleZoneCostSummary(_datamanager.GetSaleZoneCostSummary(fromDate, toDate, supplierAMUId, customerAMUId));
+            return FormatSaleZoneCostSummary(_datamanager.GetSaleZoneCostSummary(fromDate, toDate, customersIds, suppliersIds, currencyId));
         }
-        public List<SaleZoneCostSummaryServiceFormatted> GetSaleZoneCostSummaryService(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        public List<SaleZoneCostSummaryServiceFormatted> GetSaleZoneCostSummaryService(DateTime fromDate, DateTime toDate, List<string> customersIds, List<string> suppliersIds, string currencyId)
         {
-            return FormatSaleZoneCostSummaryService(_datamanager.GetSaleZoneCostSummaryService(fromDate, toDate, supplierAMUId, customerAMUId));
+            return FormatSaleZoneCostSummaryService(_datamanager.GetSaleZoneCostSummaryService(fromDate, toDate, customersIds, suppliersIds, currencyId));
         }
-        public List<SaleZoneCostSummarySupplierFormatted> GetSaleZoneCostSummarySupplier(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        public List<SaleZoneCostSummarySupplierFormatted> GetSaleZoneCostSummarySupplier(DateTime fromDate, DateTime toDate, List<string> customersIds, List<string> suppliersIds, string currencyId)
         {
-            return FormatSaleZoneCostSummarySupplier(_datamanager.GetSaleZoneCostSummarySupplier(fromDate, toDate, supplierAMUId, customerAMUId));
+            return FormatSaleZoneCostSummarySupplier(_datamanager.GetSaleZoneCostSummarySupplier(fromDate, toDate, customersIds, suppliersIds , currencyId));
         }
 
         public List<ZoneSummaryFormatted> GetZoneSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, List<string> customersIds, List<string> suppliersIds, bool groupBySupplier, out double services)
@@ -271,52 +279,52 @@ namespace TOne.Analytics.Business
             return FormatZoneSummariesDetailed(_datamanager.GetZoneSummaryDetailed(fromDate, toDate, customerId, supplierId, isCost, currencyId, supplierGroup, customerGroup, customersIds, suppliersIds, groupBySupplier, out services));
         }
 
-        public List<CarrierLostFormatted> GetCarrierLost(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int margin, int? supplierAMUId, int? customerAMUId)
+        public List<CarrierLostFormatted> GetCarrierLost(DateTime fromDate, DateTime toDate, string customerId, string supplierId, string currencyId , int margin, List<string> customersIds, List<string> suppliersIds)
         {
-            return FormatCarrierLost(_datamanager.GetCarrierLost(fromDate, toDate, customerId, supplierId, margin, supplierAMUId, customerAMUId));
+            return FormatCarrierLost(_datamanager.GetCarrierLost(fromDate, toDate, customerId, supplierId, margin, currencyId,  customersIds , suppliersIds));
         }
         public List<MonthTraffic> GetMonthTraffic(DateTime fromDate, DateTime toDate, string carrierAccountID, bool isSale)
         {
             return _datamanager.GetMonthTraffic(fromDate, toDate, carrierAccountID, isSale);
         }
 
-        public List<CarrierProfileReport> GetCarrierProfileMTDAndMTA(DateTime fromDate, DateTime toDate, string carrierAccountID, bool isSale)
+        public List<CarrierProfileReport> GetCarrierProfileMTDAndMTA(DateTime fromDate, DateTime toDate, string carrierAccountID, bool isSale, string CurrencyId)
         {
-            return _datamanager.GetCarrierProfileMTDAndMTA(fromDate, toDate, carrierAccountID, isSale);
+            return _datamanager.GetCarrierProfileMTDAndMTA(fromDate, toDate, carrierAccountID, isSale, CurrencyId);
         }
 
-        public List<CarrierProfileReport> GetCarrierProfile(DateTime fromDate, DateTime toDate, string carrierAccountID, int topDestination, bool isSale, bool isAmount)
+        public List<CarrierProfileReport> GetCarrierProfile(DateTime fromDate, DateTime toDate, string carrierAccountID, int topDestination, bool isSale, bool isAmount, string currencyId)
         {
-            return _datamanager.GetCarrierProfile(fromDate, toDate, carrierAccountID, topDestination, isSale, isAmount);
+            return _datamanager.GetCarrierProfile(fromDate, toDate, carrierAccountID, topDestination, isSale, isAmount ,  currencyId);
         }
 
-        public List<CarrierSummaryDailyFormatted> GetDailyCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, bool isGroupedByDay, int? customerAMUId, int? supplierAMUId)
+        public List<CarrierSummaryDailyFormatted> GetDailyCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, bool isGroupedByDay, List<string> customersIds, List<string> suppliersIds , string currencyId)
         {
-            return FormatCarrieresSummaryDaily(_datamanager.GetDailyCarrierSummary(fromDate, toDate, customerId, supplierId, isCost, isGroupedByDay, supplierAMUId, customerAMUId), isGroupedByDay);
+            return FormatCarrieresSummaryDaily(_datamanager.GetDailyCarrierSummary(fromDate, toDate, customerId, supplierId, isCost, isGroupedByDay, customersIds, suppliersIds, currencyId), isGroupedByDay);
         }
 
-        public List<RateLossFormatted> GetRateLoss(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? zoneId, int? customerAMUId, int? supplierAMUId)
+        public List<RateLossFormatted> GetRateLoss(DateTime fromDate, DateTime toDate, string customerId, string supplierId, string zonesId,  List<string> customersIds, List<string> suppliersIds , string currencyId)
         {
-            return FormatRateLosses(_datamanager.GetRateLoss(fromDate, toDate, customerId, supplierId, zoneId, supplierAMUId, customerAMUId));
+            return FormatRateLosses(_datamanager.GetRateLoss(fromDate, toDate, customerId, supplierId, zonesId, customersIds, suppliersIds, currencyId));
         }
 
-        public List<CarrierSummaryFormatted> GetCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? customerAMUId, int? supplierAMUId)
+        public List<CarrierSummaryFormatted> GetCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, List<string> customersIds, List<string> suppliersIds, string currencyId)
         {
-            List<CarrierSummaryFormatted> lstCarrierSummaryFormatted = FormatCarrierSummaries(_datamanager.GetCarrierSummary(fromDate, toDate, customerId, supplierId, supplierAMUId, customerAMUId));
+            List<CarrierSummaryFormatted> lstCarrierSummaryFormatted = FormatCarrierSummaries(_datamanager.GetCarrierSummary(fromDate, toDate, customerId, supplierId, customersIds, suppliersIds, currencyId));
             lstCarrierSummaryFormatted = lstCarrierSummaryFormatted.OrderBy(x => x.Customer).ToList<CarrierSummaryFormatted>();
             return lstCarrierSummaryFormatted;
         }
 
-        public List<DetailedCarrierSummaryFormatted> GetDetailedCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? customerAMUId, int? supplierAMUId)
+        public List<DetailedCarrierSummaryFormatted> GetDetailedCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, List<string> customersIds, List<string> suppliersIds, string currencyId)
         {
-            List<DetailedCarrierSummary> lstDetailedCarrierSummary = _datamanager.GetCarrierDetailedSummary(fromDate, toDate, customerId, supplierId, supplierAMUId, customerAMUId);
+            List<DetailedCarrierSummary> lstDetailedCarrierSummary = _datamanager.GetCarrierDetailedSummary(fromDate, toDate, customerId, supplierId, customersIds, suppliersIds, currencyId);
             lstDetailedCarrierSummary = lstDetailedCarrierSummary.OrderBy(x => x.SaleZoneName).ToList();
             return FormatDetailedCarrierSummaries(lstDetailedCarrierSummary);
         }
 
-        public List<CustomerSummaryFormatted> GetCustomerSummary(DateTime fromDate, DateTime toDate, string customerId, int? customerAMUId, int? supplierAMUId)
+        public List<CustomerSummaryFormatted> GetCustomerSummary(DateTime fromDate, DateTime toDate, string customerId,  List<string> customersIds, List<string> suppliersIds, string currencyId)
         {
-            List<CustomerSummary> customerSummaries = _datamanager.GetCustomerSummary(fromDate, toDate, customerId, customerAMUId, supplierAMUId);
+            List<CustomerSummary> customerSummaries = _datamanager.GetCustomerSummary(fromDate, toDate, customerId, customersIds, suppliersIds, currencyId);
 
             List<CustomerServices> customerServices = _datamanager.GetCustomerServices(fromDate, toDate);
             List<CustomerSummaryFormatted> customerSummariesFormatted = new List<CustomerSummaryFormatted>();
@@ -392,13 +400,13 @@ namespace TOne.Analytics.Business
             return saleAmountSummary.OrderByDescending(s => s.SaleAmount).Take(10).ToList();
         }
 
-        public List<DailyForcastingFormatted> GetDailyForcasting(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        public List<DailyForcastingFormatted> GetDailyForcasting(DateTime fromDate, DateTime toDate, List<string> customersIds, List<string> suppliersIds, string currencyId)
         {
-            return FormatDailyForcastingSummaries(_datamanager.GetDailyForcasting(fromDate, toDate, supplierAMUId, customerAMUId));
+            return FormatDailyForcastingSummaries(_datamanager.GetDailyForcasting(fromDate, toDate, customersIds, suppliersIds, currencyId));
         }
-        public List<ExchangeCarrierFormatted> GetExchangeCarriers(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId, bool IsExchange)
+        public List<ExchangeCarrierFormatted> GetExchangeCarriers(DateTime fromDate, DateTime toDate, List<string> customersIds, List<string> suppliersIds, bool IsExchange , string currencyId)
         {
-            List<ExchangeCarriers> baseList = _datamanager.GetExchangeCarriers(fromDate, toDate, supplierAMUId, customerAMUId);
+            List<ExchangeCarriers> baseList = _datamanager.GetExchangeCarriers(fromDate, toDate, customersIds, suppliersIds, currencyId);
 
             List<ExchangeCarrierProfit> ecpList = new List<ExchangeCarrierProfit>();
             foreach (var row in baseList)
@@ -915,7 +923,7 @@ namespace TOne.Analytics.Business
                 if (ca.CarrierGroupID.HasValue)
                 {
                     _cmanager.GetAllCarrierGroups().TryGetValue(ca.CarrierGroupID.Value, out cg);
-                    customerGroupName = cg.Name;
+                    customerGroupName = (cg != null) ? cg.Name : "Others";
                 }
             }
 

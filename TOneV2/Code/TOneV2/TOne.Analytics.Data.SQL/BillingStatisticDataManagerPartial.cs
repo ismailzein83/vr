@@ -12,14 +12,22 @@ namespace TOne.Analytics.Data.SQL
 {
     partial class BillingStatisticDataManager : BaseTOneDataManager, IBillingStatisticDataManager
     {
-        public List<CustomerSummary> GetCustomerSummary(DateTime fromDate, DateTime toDate, string customerId, int? customerAMUId, int? supplierAMUId)
+        public List<CustomerSummary> GetCustomerSummary(DateTime fromDate, DateTime toDate, string customerId,  List<string> customerIds, List<string> supplierIds, string currencyId)
         {
+            string suppliersIds = null;
+            if (supplierIds != null && supplierIds.Count() > 0)
+                suppliersIds = string.Join<string>(",", supplierIds);
+            string customersIds = null;
+            if (customerIds != null && customerIds.Count() > 0)
+                customersIds = string.Join<string>(",", customerIds);
+
             return GetItemsSP("Analytics.SP_BillingRep_GetCustomerSummary", CustomerSummaryMapper,
                (customerId == null || customerId == "") ? null : customerId,
                fromDate,
                toDate,
-               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
-               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId
+               customersIds,
+               suppliersIds,
+               currencyId
                );
         }
         public List<CustomerServices> GetCustomerServices(DateTime fromDate, DateTime toDate)
@@ -30,72 +38,117 @@ namespace TOne.Analytics.Data.SQL
             );
         }
 
-        public List<CustomerRouting> GetCustomerRouting(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? customerAMUId, int? supplierAMUId)
+        public List<CustomerRouting> GetCustomerRouting(DateTime fromDate, DateTime toDate, string customerId, string supplierId, List<string> customerIds, List<string> supplierIds, string currencyId)
         {
+            string suppliersIds = null;
+            if (supplierIds != null && supplierIds.Count() > 0)
+                suppliersIds = string.Join<string>(",", supplierIds);
+            string customersIds = null;
+            if (customerIds != null && customerIds.Count() > 0)
+                customersIds = string.Join<string>(",", customerIds);
             return GetItemsSP("Analytics.SP_BillingRep_GetCustomerRouting", CustomerRoutingMapper,               
                fromDate,
                toDate,
                (customerId == null || customerId == "") ? null : customerId,
                (supplierId == null || supplierId == "") ? null : supplierId,
-               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
-               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId
+               customersIds,
+               suppliersIds,
+               currencyId
                );
         }
 
-        public List<RoutingAnalysis> GetRoutingAnalysis(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? top, int? customerAMUId, int? supplierAMUId)
+        public List<RoutingAnalysis> GetRoutingAnalysis(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? top, List<string> supplierIds, List<string> customerIds, string currencyId)
         {
+            string suppliersIds = null;
+            if (supplierIds != null && supplierIds.Count() > 0)
+                suppliersIds = string.Join<string>(",", supplierIds);
+            string customersIds = null;
+            if (customerIds != null && customerIds.Count() > 0)
+                customersIds = string.Join<string>(",", customerIds); 
+
             return GetItemsSP("Analytics.SP_BillingRep_GetRoutingAnalysis", RoutingAnalysisMapper,
                fromDate,
                toDate,
                (customerId == null || customerId == "") ? null : customerId,
                (supplierId == null || supplierId == "") ? null : supplierId,
                (top == null || top == 0) ? null : top,
-               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
-               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId
+               customersIds,
+               suppliersIds,
+               currencyId
                );
         }
 
-        public List<SupplierCostDetails> GetSupplierCostDetails(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        public List<SupplierCostDetails> GetSupplierCostDetails(DateTime fromDate, DateTime toDate, List<string> supplierIds, List<string> customerIds, string currencyId)
         {
+            string suppliersIds = null;
+            if (supplierIds != null && supplierIds.Count() > 0)
+                suppliersIds = string.Join<string>(",", supplierIds);
+            string customersIds = null;
+            if (customerIds != null && customerIds.Count() > 0)
+                customersIds = string.Join<string>(",", customerIds);
+
             return GetItemsSP("Analytics.SP_BillingRep_GetSupplierCostDetails", SupplierCostDetailsMapper,
                fromDate,
                toDate,
-               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
-               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
+               customersIds,
+               suppliersIds,
+               currencyId
                );
         }
 
-        public List<SaleZoneCostSummary> GetSaleZoneCostSummary(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        public List<SaleZoneCostSummary> GetSaleZoneCostSummary(DateTime fromDate, DateTime toDate, List<string> customerIds, List<string> supplierIds, string CurrencyId)
         {
+            string suppliersIds = null;
+            if (supplierIds != null && supplierIds.Count() > 0)
+                suppliersIds = string.Join<string>(",", supplierIds);
+            string customersIds = null;
+            if (customerIds != null && customerIds.Count() > 0)
+                customersIds = string.Join<string>(",", customerIds);
+
             return GetItemsSP("Analytics.SP_BillingRep_GetSaleZoneCostSummary", SaleZoneCostSummaryMapper,
                fromDate,
                toDate,
                "AverageCost",
-               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
-               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
+               customersIds,
+               suppliersIds,
+               CurrencyId
                );
         }
 
-        public List<SaleZoneCostSummaryService> GetSaleZoneCostSummaryService(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        public List<SaleZoneCostSummaryService> GetSaleZoneCostSummaryService(DateTime fromDate, DateTime toDate, List<string> customerIds, List<string> supplierIds, string CurrencyId)
         {
+            string suppliersIds = null;
+            if (supplierIds != null && supplierIds.Count() > 0)
+                suppliersIds = string.Join<string>(",", supplierIds);
+            string customersIds = null;
+            if (customerIds != null && customerIds.Count() > 0)
+                customersIds = string.Join<string>(",", customerIds);
             return GetItemsSP("Analytics.SP_BillingRep_GetSaleZoneCostSummary", SaleZoneCostSummaryServiceMapper,
                fromDate,
                toDate,
                "Service",
-               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
-               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
-               );
+               customersIds,
+               suppliersIds,
+               CurrencyId
+            );
         }
 
-        public List<SaleZoneCostSummarySupplier> GetSaleZoneCostSummarySupplier(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        public List<SaleZoneCostSummarySupplier> GetSaleZoneCostSummarySupplier(DateTime fromDate, DateTime toDate, List<string> customerIds, List<string> supplierIds, string CurrencyId)
         {
+            string suppliersIds = null;
+            if (supplierIds != null && supplierIds.Count() > 0)
+                suppliersIds = string.Join<string>(",", supplierIds);
+            string customersIds = null;
+            if (customerIds != null && customerIds.Count() > 0)
+                customersIds = string.Join<string>(",", customerIds);
             return GetItemsSP("Analytics.SP_BillingRep_GetSaleZoneCostSummary", SaleZoneCostSummarySupplierMapper,
                fromDate,
                toDate,
                "Supplier",
-               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
-               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
-               );
+               customersIds,
+               suppliersIds,
+               CurrencyId
+              );
         }
 
 

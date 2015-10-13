@@ -244,7 +244,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -639,14 +638,15 @@
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>1in</Top>
+          <Top>1.42708in</Top>
+          <Left>0.03125in</Left>
           <Height>0.375in</Height>
           <Width>1in</Width>
           <ZIndex>3</ZIndex>
-          <Visibility>
-            <Hidden>true</Hidden>
-          </Visibility>
           <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
             <PaddingTop>2pt</PaddingTop>
@@ -669,15 +669,15 @@
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>1in</Top>
-          <Left>1in</Left>
+          <Top>1.42708in</Top>
+          <Left>1.03125in</Left>
           <Height>0.375in</Height>
-          <Width>2.62499in</Width>
+          <Width>3.39582in</Width>
           <ZIndex>4</ZIndex>
-          <Visibility>
-            <Hidden>true</Hidden>
-          </Visibility>
           <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
             <PaddingTop>2pt</PaddingTop>

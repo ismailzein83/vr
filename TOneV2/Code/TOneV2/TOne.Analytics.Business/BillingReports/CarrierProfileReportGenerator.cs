@@ -15,7 +15,7 @@ namespace TOne.Analytics.Business.BillingReports
 
             BillingStatisticManager manager = new BillingStatisticManager();
             List<CarrierProfileReport> carrierProfile =
-                manager.GetCarrierProfileMTDAndMTA(parameters.FromTime, parameters.ToTime,parameters.CustomerId,true);
+                manager.GetCarrierProfileMTDAndMTA(parameters.FromTime, parameters.ToTime,parameters.CustomersId,true ,parameters.CurrencyId);
 
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();
             dataSources.Add("CarrierProfile", carrierProfile);

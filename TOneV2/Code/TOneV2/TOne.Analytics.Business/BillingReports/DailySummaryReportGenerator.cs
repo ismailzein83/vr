@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.Analytics.Entities;
+using TOne.BusinessEntity.Business;
 using TOne.Entities;
 
 namespace TOne.Analytics.Business.BillingReports
@@ -12,8 +13,12 @@ namespace TOne.Analytics.Business.BillingReports
     {
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(TOne.Entities.ReportParameters parameters)
         {
+            AccountManagerManager am = new AccountManagerManager();
+            List<string> suppliersIds = am.GetMyAssignedSupplierIds();
+            List<string> customersIds = am.GetMyAssignedCustomerIds();
+
             BillingStatisticManager manager = new BillingStatisticManager();
-            List<DailySummaryFormatted> dailySummary = manager.GetDailySummary(parameters.FromTime, parameters.ToTime, parameters.SupplierAMUId, parameters.CustomerAMUId);
+            List<DailySummaryFormatted> dailySummary = manager.GetDailySummary(parameters.FromTime, parameters.ToTime,  customersIds , suppliersIds, parameters.CurrencyId);
 
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();
             dataSources.Add("DailySummary", dailySummary);
@@ -24,14 +29,11 @@ namespace TOne.Analytics.Business.BillingReports
         {
 
             Dictionary<string, RdlcParameter> list = new Dictionary<string, RdlcParameter>();
-            //list.Add("GroupByCustomer", new RdlcParameter() { Value = parameters.GroupByCustomer.ToString(), IsVisible = false });
             list.Add("FromDate", new RdlcParameter { Value = parameters.FromTime.ToString(), IsVisible = true });
             list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.ToString(), IsVisible = true });
             list.Add("Title", new RdlcParameter { Value = "Daily Summary", IsVisible = true });
-            list.Add("Currency", new RdlcParameter { Value = "[USD] United States Dollars", IsVisible = true });
+            list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyDescription, IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
-            //list.Add("Customer", new RdlcParameter { Value = "", IsVisible = true });
-            //list.Add("Supplier", new RdlcParameter { Value = "", IsVisible = true });
             list.Add("DigitRate", new RdlcParameter { Value = "4", IsVisible = true });
 
             return list;

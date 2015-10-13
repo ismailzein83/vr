@@ -192,21 +192,35 @@ namespace TOne.Analytics.Data.SQL
             });
 
         }
-        public List<CarrierLost> GetCarrierLost(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int margin, int? supplierAMUId, int? customerAMUId)
+        public List<CarrierLost> GetCarrierLost(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int margin, string currencyId, List<string> customerIds, List<string> supplierIds)
         {
+            string suppliersIds = null;
+            if (supplierIds != null && supplierIds.Count() > 0)
+                suppliersIds = string.Join<string>(",", supplierIds);
+            string customersIds = null;
+            if (customerIds != null && customerIds.Count() > 0)
+                customersIds = string.Join<string>(",", customerIds);
+
             return GetItemsSP("Analytics.SP_BillingRep_GetCarrierLostReport", CarrierLostMapper,
             fromDate,
             toDate,
             (customerId == null || customerId == "") ? null : customerId,
             (supplierId == null || supplierId == "") ? null : supplierId,
-            margin,
-            (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
-            (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
+            margin,            
+            customersIds,
+            suppliersIds,
+            currencyId
             );
 
         }
-        public List<CarrierSummaryDaily> GetDailyCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, bool isGroupedByDay, int? customerAMUId, int? supplierAMUId)
+        public List<CarrierSummaryDaily> GetDailyCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, bool isGroupedByDay, List<string> customerIds, List<string> supplierIds, string currencyId)
         {
+            string suppliersIds = null;
+            if (supplierIds != null && supplierIds.Count() > 0)
+                suppliersIds = string.Join<string>(",", supplierIds);
+            string customersIds = null;
+            if (customerIds != null && customerIds.Count() > 0)
+                customersIds = string.Join<string>(",", customerIds);
             return GetItemsSP("Analytics.SP_billingRep_GetDailyCarrierSummary", CarrierSummaryDailyMapper,
                  fromDate,
                  toDate,
@@ -214,86 +228,142 @@ namespace TOne.Analytics.Data.SQL
                  (supplierId == null || supplierId == "") ? null : supplierId,
                  isCost,
                  isGroupedByDay,
-                 (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
-                 (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
+                 customersIds,
+                 suppliersIds,
+                 currencyId
              );
         }
-        public List<DailySummary> GetDailySummary(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        public List<DailySummary> GetDailySummary(DateTime fromDate, DateTime toDate, List<string> customerIds, List<string> supplierIds , string currencyId)
         {
+            string suppliersIds = null;
+            if (supplierIds != null && supplierIds.Count() > 0)
+                suppliersIds = string.Join<string>(",", supplierIds);
+            string customersIds = null;
+            if (customerIds != null && customerIds.Count() > 0)
+                customersIds = string.Join<string>(",", customerIds);
+           
             return GetItemsSP("Analytics.SP_BillingRep_GetDailySummary", DailySummaryMapper,
               fromDate,
               toDate,
-              (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
-              (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
+              customersIds,
+              suppliersIds,
+              currencyId
               );
         }
-        public List<RateLoss> GetRateLoss(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? zoneId, int? customerAMUId, int? supplierAMUId)
+        public List<RateLoss> GetRateLoss(DateTime fromDate, DateTime toDate, string customerId, string supplierId, string zonesId, List<string> customerIds, List<string> supplierIds , string currencyId)
         {
+            string suppliersIds = null;
+            if (supplierIds != null && supplierIds.Count() > 0)
+                suppliersIds = string.Join<string>(",", supplierIds);
+            string customersIds = null;
+            if (customerIds != null && customerIds.Count() > 0)
+                customersIds = string.Join<string>(",", customerIds);
 
             return GetItemsSP("Analytics.SP_BillingRep_GetRateLoss", RateLossMapper,
               fromDate,
               toDate,
               (customerId == null || customerId == "") ? null : customerId,
               (supplierId == null || supplierId == "") ? null : supplierId,
-              (zoneId == null || zoneId == 0) ? (object)DBNull.Value : zoneId,
-              (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
-              (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
+              (zonesId == null || zonesId == "") ? null : zonesId,
+              customersIds,
+              suppliersIds ,
+              currencyId
               );
         }
-        public List<CarrierSummary> GetCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? customerAMUId, int? supplierAMUId)
+        public List<CarrierSummary> GetCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, List<string> customerIds, List<string> supplierIds, string CurrencyId)
         {
+            string suppliersIds = null;
+            if (supplierIds != null && supplierIds.Count() > 0)
+                suppliersIds = string.Join<string>(",", supplierIds);
+            string customersIds = null;
+            if (customerIds != null && customerIds.Count() > 0)
+                customersIds = string.Join<string>(",", customerIds);
+
+
             return GetItemsSP("Analytics.SP_BillingRep_GetCarrierSummary", CarrierSummaryMapper,
               fromDate,
               toDate,
               (customerId == null || customerId == "") ? null : customerId,
               (supplierId == null || supplierId == "") ? null : supplierId,
-              (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
-              (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId
+              customersIds,
+              suppliersIds,
+              CurrencyId
               );
         }
-        public List<DetailedCarrierSummary> GetCarrierDetailedSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? customerAMUId, int? supplierAMUId)
+        public List<DetailedCarrierSummary> GetCarrierDetailedSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, List<string> customerIds, List<string> supplierIds, string CurrencyId)
         {
+            string suppliersIds = null;
+            if (supplierIds != null && supplierIds.Count() > 0)
+                suppliersIds = string.Join<string>(",", supplierIds);
+            string customersIds = null;
+            if (customerIds != null && customerIds.Count() > 0)
+                customersIds = string.Join<string>(",", customerIds);
+
             return GetItemsSP("Analytics.SP_BillingRep_GetDetailedCarrierSummary", CarrierDetailedSummaryMapper,
               fromDate,
               toDate,
               (customerId == null || customerId == "") ? null : customerId,
               (supplierId == null || supplierId == "") ? null : supplierId,
-              (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
-              (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId
+              customersIds,
+              suppliersIds,
+              CurrencyId
               );
         }
-        public List<DailyForcasting> GetDailyForcasting(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        public List<DailyForcasting> GetDailyForcasting(DateTime fromDate, DateTime toDate,  List<string> customerIds, List<string> supplierIds, string CurrencyId)
         {
+             string suppliersIds = null;
+            if (supplierIds != null && supplierIds.Count() > 0)
+                suppliersIds = string.Join<string>(",", supplierIds);
+            string customersIds = null;
+            if (customerIds != null && customerIds.Count() > 0)
+                customersIds = string.Join<string>(",", customerIds);
 
             return GetItemsSP("Analytics.SP_BillingRep_GetDailySummaryForcasting", DailyForcastingMapper,
               fromDate,
               toDate,
-              (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
-              (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId);
+              customersIds,
+              suppliersIds,
+              CurrencyId
+              );
         }
-        public List<ExchangeCarriers> GetExchangeCarriers(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        public List<ExchangeCarriers> GetExchangeCarriers(DateTime fromDate, DateTime toDate,   List<string> customerIds, List<string> supplierIds , string CurrencyId)
         {
+            string suppliersIds = null;
+            if (supplierIds != null && supplierIds.Count() > 0)
+                suppliersIds = string.Join<string>(",", supplierIds);
+            string customersIds = null;
+            if (customerIds != null && customerIds.Count() > 0)
+                customersIds = string.Join<string>(",", customerIds);
 
             return GetItemsSP("Analytics.SP_BillingRep_GetExchangeCarriersSummary", ExchangeCarriersMapper,
-           fromDate,
-           toDate,
-           (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
-           (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId);
+               fromDate,
+               toDate,
+               customersIds,
+               suppliersIds,
+               CurrencyId
+           );
         }
-        public List<CarrierProfileReport> GetCarrierProfileMTDAndMTA(DateTime fromDate, DateTime toDate, string customerId, bool isSale)
+        public List<CarrierProfileReport> GetCarrierProfileMTDAndMTA(DateTime fromDate, DateTime toDate, string customerId, bool isSale, string currencyId)
         {
-            string query = String.Format(@"SELECT 
+            string query = String.Format(@"
+                    {4}
+
+                    SELECT 
                     Convert(varchar(7), BS.CallDate,121) AS [Month],
                     IsNull(SUM(BS.SaleDuration) / 60.0,0) AS Durations,
                     IsNull(SUM({0}),0) AS Amount
-                From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date,IX_Billing_Stats_{1})), Zone z (NOLOCK) 
+                From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date,IX_Billing_Stats_{1})), Zone z (NOLOCK) ,  @ExchangeRates as ERC  , @ExchangeRates as ERS 
                 WHERE BS.CallDate BETWEEN @FromDate AND @ToDate  AND {2} = @CustomerId AND z.ZoneID = {3}
+                And ERC.Currency = bs.Cost_Currency AND ERC.Date = bs.CallDate
+                And ERS.Currency = bs.Sale_Currency AND ERS.Date = bs.CallDate 
                 GROUP BY Convert(varchar(7), BS.CallDate,121)
                 ORDER BY Convert(varchar(7), BS.CallDate,121) DESC",
-            isSale ? "BS.Sale_Nets / dbo.GetExchangeRate(BS.Sale_Currency, BS.CallDate) " : "BS.Cost_Nets / dbo.GetExchangeRate(BS.Sale_Currency, BS.CallDate) ",
+            isSale ?  " BS.Sale_Nets / ISNULL(ERS.Rate, 1)  " : " BS.Cost_Nets / ISNULL(ERC.Rate, 1) ",
             isSale ? "Customer" : "Supplier",
             isSale ? "BS.CustomerID" : "BS.SupplierID",
-            isSale ? "BS.SaleZoneID" : "BS.CostZoneID");
+            isSale ? "BS.SaleZoneID" : "BS.CostZoneID",
+            CurrencyQuery(fromDate, toDate, currencyId)
+            );
 
             return GetItemsText(query, CarrierProfileMTDAndMTAMapper,
             (cmd) =>
@@ -303,31 +373,39 @@ namespace TOne.Analytics.Data.SQL
                 cmd.Parameters.Add(new SqlParameter("@CustomerId", customerId));
             });
         }
-        public List<CarrierProfileReport> GetCarrierProfile(DateTime fromDate, DateTime toDate, string customerId, int topDestination, bool isSale, bool isAmount)
+        public List<CarrierProfileReport> GetCarrierProfile(DateTime fromDate, DateTime toDate, string customerId, int topDestination, bool isSale, bool isAmount ,string  currencyId)
         {
             string DurationField = "BS.SaleDuration / 60.0";
-            string AmountField = isSale ? "CAST( BS.Sale_Nets / CAST(dbo.GetExchangeRate(BS.Sale_Currency, BS.CallDate) as decimal(13,4))  as decimal(13,4))  " : "CAST( BS.Cost_Nets / CAST(dbo.GetExchangeRate(BS.Sale_Currency, BS.CallDate) as decimal(13,4))  as decimal(13,4)) ";
+            string AmountField = isSale ? "BS.Sale_Nets / ISNULL(ERS.Rate, 1) " : "BS.Cost_Nets / ISNULL(ERC.Rate, 1) ";
+            string Exchangetable = isSale ?  "ERS" : "ERC" ;
+            string CurrencyFiled = isSale ? "Sale_Currency" : "Cost_Currency";
             string amountDuration = isAmount ? AmountField : DurationField;
             string carrier = isSale ? "Customer" : "Supplier";
             string carrierId = isSale ? "BS.CustomerID" : "BS.SupplierID";
             string saleZone = isSale ? "BS.SaleZoneID" : "BS.CostZoneID";
-            string query = String.Format(@";WITH OrderedZones AS (SELECT TOP (@TopDestination) z.ZoneID, z.Name 
-                From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date,IX_Billing_Stats_{1})),
+            string query = String.Format(@"{4} ;WITH OrderedZones AS (SELECT TOP (@TopDestination) z.ZoneID, z.Name 
+                From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date,IX_Billing_Stats_{1})) , @ExchangeRates as {5},
                 Zone z (NOLOCK) WHERE bs.CallDate 
-                BETWEEN @FromDate AND @ToDate AND {2} = @CustomerId AND z.ZoneID = {3} 
+                BETWEEN @FromDate AND @ToDate AND {2} = @CustomerId AND z.ZoneID = {3} AND {5}.Currency = BS.{6}  
                 GROUP BY z.ZoneID, z.Name 
                 ORDER BY SUM({0}) DESC ) 
                 
                 SELECT z.Name,Year(bs.CallDate) AS YearDuration, 
                 MONTH(BS.CallDate) AS MonthDuration, 
-                SUM({0})/60 AS SaleDuration 
-                From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date,IX_Billing_Stats_{1})), OrderedZones z 
+                cast( (SUM({0} )/60 ) as decimal(13,4) ) AS SaleDuration 
+                From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date,IX_Billing_Stats_{1})), OrderedZones z , @ExchangeRates as ERC, @ExchangeRates as ERS
+
                 WHERE bs.CallDate BETWEEN @FromDate AND @ToDate AND {2} = @CustomerId AND z.ZoneID = {3} 
+                And ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate 
+                And ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate
                 GROUP BY z.Name , Year(bs.CallDate), MONTH(BS.CallDate)",
                 amountDuration,
                 carrier,
                 carrierId,
-                saleZone
+                saleZone,
+                CurrencyQuery(fromDate, toDate, currencyId),
+                Exchangetable,
+                CurrencyFiled
                 );
 
             return GetItemsText(query, CarrierProfileMapper,
@@ -1227,6 +1305,19 @@ namespace TOne.Analytics.Data.SQL
             }
             //put a breakpoint here and check datatable
             return dataTable;
+        }
+
+        private string CurrencyQuery(DateTime FromDate, DateTime TillDate, string currencyId)
+        {
+
+            StringBuilder SQL = new StringBuilder();
+            SQL.Append(@"DECLARE @MainExchangeRates TABLE( Currency VARCHAR(3), Date SMALLDATETIME,Rate FLOAT PRIMARY KEY(Currency, Date) ) ");
+            SQL.Append(@"DECLARE @ExchangeRates TABLE( Currency VARCHAR(3), Date SMALLDATETIME, Rate FLOAT PRIMARY KEY(Currency, Date) ) ");
+            SQL.AppendFormat(@"INSERT INTO @MainExchangeRates SELECT * FROM dbo.GetDailyExchangeRates('{0}','{1}')", FromDate.Date.ToString("yyyy-MM-dd"), TillDate.Date.ToString("yyyy-MM-dd"));
+            SQL.AppendFormat(@" INSERT INTO @ExchangeRates Select exRate1.Currency , exRate1.Date , exRate1.Rate/ exRate2.Rate as Rate 
+                                from @MainExchangeRates as exRate1 
+                                join @MainExchangeRates as exRate2 on exRate2.Currency = '{0}' and exRate1.Date = exRate2.Date ", currencyId);
+            return SQL.ToString();
         }
 
         #endregion

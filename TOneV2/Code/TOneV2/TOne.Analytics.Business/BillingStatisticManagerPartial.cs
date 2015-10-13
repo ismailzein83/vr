@@ -12,10 +12,10 @@ namespace TOne.Analytics.Business
     public partial class BillingStatisticManager
     {
 
-        public List<CustomerRoutingFormatted> GetCustomerRouting(DateTime fromDate, DateTime toDate, string customerId, string supplierId,  int? supplierAMUId, int? customerAMUId)
+        public List<CustomerRoutingFormatted> GetCustomerRouting(DateTime fromDate, DateTime toDate, string customerId, string supplierId, List<string> customerIds, List<string> supplierIds, string currencyId)
         {
 
-           List<CustomerRouting> list = _datamanager.GetCustomerRouting(fromDate, toDate, customerId, supplierId, supplierAMUId, customerAMUId);
+            List<CustomerRouting> list = _datamanager.GetCustomerRouting(fromDate, toDate, customerId, supplierId, customerIds, supplierIds, currencyId);
            var result = list.GroupBy(s => new { s.CustomerID, s.SupplierID, s.SaleZone, s.CostZone })
            .Select(s =>
                new
@@ -54,10 +54,10 @@ namespace TOne.Analytics.Business
 
         }
 
-        public List<RoutingAnalysisFormatted> GetRoutingAnalysis(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? top, int? customerAMUId, int? supplierAMUId)
+        public List<RoutingAnalysisFormatted> GetRoutingAnalysis(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? top, List<string> customerIds, List<string> supplierIds, string currencyId)
         {
 
-            return FormatRoutingsAnalyics(_datamanager.GetRoutingAnalysis(fromDate, toDate, customerId, supplierId, top, supplierAMUId, customerAMUId));
+            return FormatRoutingsAnalyics(_datamanager.GetRoutingAnalysis(fromDate, toDate, customerId, supplierId, top, customerIds, supplierIds, currencyId));
         }
 
         #region PrivateMethode
