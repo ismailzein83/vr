@@ -5,7 +5,7 @@ app.directive('vrWhsBeSelectivesuppliers', ['UtilsService',
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
-                onloaded: '='
+                onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -38,15 +38,21 @@ app.directive('vrWhsBeSelectivesuppliers', ['UtilsService',
             var carrierAccountDirectiveAPI;
 
             function initializeController() {
-                $scope.onCarrierAccountDirectiveLoaded = function (api) {
+                $scope.onCarrierAccountDirectiveReady = function (api) {
                     carrierAccountDirectiveAPI = api;
-                    defineAPI();
+                    carrierAccountDirectiveAPI.load().then(function () {
+                        defineAPI();
+                    });
                 }
                 
             }
 
             function defineAPI() {
                 var api = {};
+
+                api.load = function () {
+
+                }
 
                 api.getData = function () {
                     return {
@@ -59,8 +65,8 @@ app.directive('vrWhsBeSelectivesuppliers', ['UtilsService',
                     carrierAccountDirectiveAPI.setData(supplierGroupSettings.SupplierIds);
                 }
 
-                if (ctrl.onloaded != null)
-                    ctrl.onloaded(api);
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
             }
 
             this.initializeController = initializeController;

@@ -11,11 +11,13 @@
             var editMode;
             var routingProductId;
 
+            var appendixData;
+
+            var saleZonePackageDirectiveAPI;
+
             var saleZoneGroupSettingsDirectiveAPI;
-            var saleZoneGroupSettings;
 
             var supplierGroupSettingsDirectiveAPI;
-            var supplierGroupSettings;
 
             loadParameters();
             defineScope();
@@ -33,22 +35,38 @@
 
             function defineScope() {
 
-                $scope.onSaleZoneGroupSettingsDirectiveLoaded = function (api) {
+                $scope.onSaleZonePackagesDirectiveReady = function (api) {
+                    saleZonePackageDirectiveAPI = api;
+                    load();
+                }
+
+                $scope.onSaleZoneGroupSettingsDirectiveReady = function (api) {
                     saleZoneGroupSettingsDirectiveAPI = api;
 
-                    if (saleZoneGroupSettings != undefined) {
-                        saleZoneGroupSettingsDirectiveAPI.setData(saleZoneGroupSettings);
-                        saleZoneGroupSettings = undefined;
+                    if (appendixData != undefined) {
+                        loadAppendixDirectives();
+                    }
+                    else
+                    {
+                        $scope.saleZonesAppendixLoader = true;
+                        saleZoneGroupSettingsDirectiveAPI.load().catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        }).finally(function () {
+                            $scope.saleZonesAppendixLoader = false;
+                        });
                     }
                 }
 
-                $scope.onSupplierGroupSettingsDirectiveLoaded = function (api) {
+                $scope.onSupplierGroupSettingsDirectiveReady = function (api) {
                     supplierGroupSettingsDirectiveAPI = api;
 
-                    if (supplierGroupSettings != undefined) {
-                        supplierGroupSettingsDirectiveAPI.setData(supplierGroupSettings);
-                        supplierGroupSettings = undefined;
-                    }
+                    if (appendixData != undefined)
+                        loadAppendixDirectives();
+                }
+
+                $scope.onSaleZonePackageSelectionChanged = function () {
+                    if (saleZonePackageDirectiveAPI != undefined && saleZonePackageDirectiveAPI.getData() != undefined)
+                        $scope.selectedSaleZonePackageId = saleZonePackageDirectiveAPI.getData().SaleZonePackageId;
                 }
 
                 $scope.SaveRoutingProduct = function () {
@@ -64,15 +82,16 @@
                     $scope.modalContext.closeModal()
                 };
 
-                $scope.saleZonePackages = [];
-                $scope.selectedSaleZonePackage = undefined;
-
                 $scope.saleZoneGroupTemplates = [];
                 $scope.supplierGroupTemplates = [];
             }
 
             function load() {
                 $scope.isGettingData = true;
+
+                if (saleZonePackageDirectiveAPI == undefined)
+                    return;
+
                 return UtilsService.waitMultipleAsyncOperations([loadSaleZonePackages, loadSaleZoneGroupTemplates, loadSupplierGroupTemplates]).then(function () {
                     if (editMode) {
                         getRoutingProduct();
@@ -91,20 +110,17 @@
                 return WhS_BE_RoutingProductAPIService.GetRoutingProduct(routingProductId).then(function (routingProduct) {
 
                     fillScopeFromRoutingProductObj(routingProduct);
+                    appendixData = routingProduct;
+                    loadAppendixDirectives();
 
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                }).finally(function () {
                     $scope.isGettingData = false;
                 });
             }
 
             function loadSaleZonePackages() {
-                return WhS_BE_SaleZonePackageAPIService.GetSaleZonePackages().then(function (response) {
-                    angular.forEach(response, function (item) {
-                        $scope.saleZonePackages.push(item);
-                    });
-                });
+                return saleZonePackageDirectiveAPI.load();
             }
 
             function loadSaleZoneGroupTemplates() {
@@ -115,6 +131,16 @@
                 });
             }
 
+            function loadSaleZoneGroupSettings()
+            {
+                return saleZoneGroupSettingsDirectiveAPI.load();
+            }
+
+            function loadSuplierGroupSettings()
+            {
+                return supplierGroupSettingsDirectiveAPI.load();
+            }
+
             function loadSupplierGroupTemplates() {
                 return WhS_BE_CarrierAccountAPIService.GetSupplierGroupTemplates().then(function (response) {
                     angular.forEach(response, function (item) {
@@ -123,12 +149,28 @@
                 });
             }
 
+            function loadAppendixDirectives() {
+                if (saleZoneGroupSettingsDirectiveAPI == undefined || supplierGroupSettingsDirectiveAPI == undefined)
+                    return;
+
+                UtilsService.waitMultipleAsyncOperations([loadSaleZoneGroupSettings, loadSuplierGroupSettings]).then(function () {
+                    saleZoneGroupSettingsDirectiveAPI.setData(appendixData.Settings.SaleZoneGroupSettings);
+                    supplierGroupSettingsDirectiveAPI.setData(appendixData.Settings.SupplierGroupSettings);
+                    appendixData = undefined;
+
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                }).finally(function () {
+                    $scope.isGettingData = false;
+                });
+            }
+
             function buildRoutingProductObjFromScope() {
 
                 var routingProduct = {
                     RoutingProductId: (routingProductId != null) ? routingProductId : 0,
                     Name: $scope.routingProductName,
-                    SaleZonePackageId: $scope.selectedSaleZonePackage.SaleZonePackageId,
+                    SaleZonePackageId: saleZonePackageDirectiveAPI.getData().SaleZonePackageId,
                     Settings: {
                         SaleZoneGroupSettings: getSaleZoneGroupSettings(),
                         SupplierGroupSettings: getSuppliersGroupSettings()
@@ -140,18 +182,16 @@
 
             function fillScopeFromRoutingProductObj(routingProductObj) {
                 $scope.routingProductName = routingProductObj.Name;
-                $scope.selectedSaleZonePackage = UtilsService.getItemByVal($scope.saleZonePackages, routingProductObj.SaleZonePackageId, "SaleZonePackageId");
+                saleZonePackageDirectiveAPI.setData(routingProductObj.SaleZonePackageId);
 
                 if (routingProductObj.Settings != null)
                 {
                     if (routingProductObj.Settings.SaleZoneGroupSettings != null && routingProductObj.Settings.SaleZoneGroupSettings.ConfigId != null) {
                         $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, routingProductObj.Settings.SaleZoneGroupSettings.ConfigId, "TemplateConfigID");
-                        saleZoneGroupSettings = routingProductObj.Settings.SaleZoneGroupSettings;
                     }
 
                     if (routingProductObj.Settings != null && routingProductObj.Settings.SupplierGroupSettings != null && routingProductObj.Settings.SupplierGroupSettings.ConfigId != null) {
                         $scope.selectedSupplierGroupTemplate = UtilsService.getItemByVal($scope.supplierGroupTemplates, routingProductObj.Settings.SupplierGroupSettings.ConfigId, "TemplateConfigID");
-                        supplierGroupSettings = routingProductObj.Settings.SupplierGroupSettings;
                     }
                 }
             }

@@ -5,7 +5,7 @@ app.directive('vrWhsBeSelectivecodecriteria', ['UtilsService',
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
-                onloaded: '='
+                onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -59,6 +59,10 @@ app.directive('vrWhsBeSelectivecodecriteria', ['UtilsService',
             function defineAPI() {
                 var api = {};
 
+                api.load = function () {
+
+                }
+
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.BusinessEntity.Entities.SelectiveCodeCriteriaSettings, TOne.WhS.BusinessEntity.Entities",
@@ -72,8 +76,8 @@ app.directive('vrWhsBeSelectivecodecriteria', ['UtilsService',
                     });
                 }
 
-                if (ctrl.onloaded != null)
-                    ctrl.onloaded(api);
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
             }
 
             this.initializeController = initializeController;

@@ -5,7 +5,7 @@ app.directive('vrWhsBeSelectivecustomers', ['UtilsService',
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
-                onloaded: '='
+                onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -40,13 +40,19 @@ app.directive('vrWhsBeSelectivecustomers', ['UtilsService',
             function initializeController() {
                 $scope.onCarrierAccountDirectiveLoaded = function (api) {
                     carrierAccountDirectiveAPI = api;
-                    defineAPI();
+                    api.load().then(function () {
+                        defineAPI();
+                    });
                 }
-
             }
 
             function defineAPI() {
                 var api = {};
+
+                api.load = function () {
+
+                }
+
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.BusinessEntity.Entities.SelectiveCustomersSettings, TOne.WhS.BusinessEntity.Entities",
@@ -58,8 +64,8 @@ app.directive('vrWhsBeSelectivecustomers', ['UtilsService',
                     carrierAccountDirectiveAPI.setData(customerGroupSettings.CustomerIds);
                 }
 
-                if (ctrl.onloaded != null)
-                    ctrl.onloaded(api);
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
             }
 
             this.initializeController = initializeController;

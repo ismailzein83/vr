@@ -5,7 +5,7 @@ app.directive('vrWhsBeAllexceptsalezones', ['WhS_BE_SaleZoneAPIService', 'WhS_BE
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
-                onloaded: '=',
+                onReady: '=',
                 salezonepackageid: "="
             },
             controller: function ($scope, $element, $attrs) {
@@ -53,12 +53,19 @@ app.directive('vrWhsBeAllexceptsalezones', ['WhS_BE_SaleZoneAPIService', 'WhS_BE
         function beSaleZones(ctrl, $scope, WhS_BE_SaleZoneAPIService) {
 
             function initializeController() {
-
-                loadSaleZonePackages();
+                defineAPI();
             }
 
             function defineAPI() {
                 var api = {};
+
+                api.load = function () {
+                    return WhS_BE_SaleZonePackageAPIService.GetSaleZonePackages().then(function (response) {
+                        angular.forEach(response, function (item) {
+                            $scope.saleZonePackages.push(item);
+                        });
+                    });
+                }
 
                 api.getData = function () {
                     return {
@@ -69,8 +76,6 @@ app.directive('vrWhsBeAllexceptsalezones', ['WhS_BE_SaleZoneAPIService', 'WhS_BE
                 }
 
                 api.setData = function (saleZoneGroupSettings) {
-                    $scope.isLoadingDirective = true;
-
                     var packageId;
 
                     if (ctrl.salezonepackageid == undefined) {
@@ -90,31 +95,12 @@ app.directive('vrWhsBeAllexceptsalezones', ['WhS_BE_SaleZoneAPIService', 'WhS_BE
                             });
                         }).catch(function (error) {
                             //TODO handle the case of exceptions
-
-                        }).finally(function () {
-                            $scope.isLoadingDirective = false;
                         });
                     }
                 }
 
-                if (ctrl.onloaded != null)
-                    ctrl.onloaded(api);
-            }
-
-            function loadSaleZonePackages() {
-                $scope.isLoadingDirective = true;
-                return WhS_BE_SaleZonePackageAPIService.GetSaleZonePackages().then(function (response) {
-                    angular.forEach(response, function (item) {
-                        $scope.saleZonePackages.push(item);
-                    });
-                }).catch(function (error) {
-                    //TODO handle the case of exceptions
-
-                }).finally(function () {
-                    $scope.isLoadingDirective = false;
-                    //Prepare and initiate the API stating the directive as ready to be used
-                    defineAPI();
-                });
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
             }
 
             this.initializeController = initializeController;

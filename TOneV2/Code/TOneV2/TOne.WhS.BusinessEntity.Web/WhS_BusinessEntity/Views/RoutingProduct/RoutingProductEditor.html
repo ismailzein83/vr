@@ -16,19 +16,17 @@
             <div ng-show="saleZonesSelected">
                 <vr-row>
                     <vr-columns width="1/4row">
-                        <vr-select datatextfield="Name" datavaluefield="SaleZonePackageId" label="Sale Zone Package" datasource="saleZonePackages"
-                                   selectedvalues="selectedSaleZonePackage" isrequired>
-                        </vr-select>
+                        <vr-whs-be-salezonepackages on-ready="onSaleZonePackagesDirectiveReady" onselectionchanged="onSaleZonePackageSelectionChanged" isrequired />
                     </vr-columns>
                 </vr-row>
-                <vr-row ng-show="selectedSaleZonePackage">
+                <vr-row ng-show="selectedSaleZonePackageId">
                     <vr-columns width="1/4row">
                         <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" text="No Filter"
                                    label="Filter Type" datasource="saleZoneGroupTemplates" selectedvalues="selectedSaleZoneGroupTemplate"></vr-select>
                     </vr-columns>
-                    <vr-columns width="3/4row" ng-if="selectedSaleZoneGroupTemplate">
-                        <vr-directivewrapper directive="selectedSaleZoneGroupTemplate.Editor" onloaded="onSaleZoneGroupSettingsDirectiveLoaded"
-                                             salezonepackageid="selectedSaleZonePackage.SaleZonePackageId"></vr-directivewrapper>
+                    <vr-columns width="3/4row" ng-if="selectedSaleZoneGroupTemplate" vr-loader="saleZonesAppendixLoader">
+                        <vr-directivewrapper directive="selectedSaleZoneGroupTemplate.Editor" on-ready="onSaleZoneGroupSettingsDirectiveReady"
+                                             salezonepackageid="selectedSaleZonePackageId"></vr-directivewrapper>
                     </vr-columns>
                 </vr-row>
             </div>
@@ -40,8 +38,8 @@
                     </vr-columns>
                 </vr-row>
                 <vr-row>
-                    <vr-columns width="1/2row" ng-if="selectedSupplierGroupTemplate">
-                        <vr-directivewrapper directive="selectedSupplierGroupTemplate.Editor" onloaded="onSupplierGroupSettingsDirectiveLoaded"></vr-directivewrapper>
+                    <vr-columns width="1/2row" ng-if="selectedSupplierGroupTemplate" vr-loader="suppliersAppendixLoader">
+                        <vr-directivewrapper directive="selectedSupplierGroupTemplate.Editor" on-ready="onSupplierGroupSettingsDirectiveReady"></vr-directivewrapper>
                     </vr-columns>
                 </vr-row>
             </div>

@@ -73,7 +73,7 @@ app.directive('vrWhsBeRoutingproduct', ['WhS_BE_RoutingProductAPIService', 'Util
             if (attrs.isrequired != undefined)
                 required = "isrequired";
 
-            return '<div  vr-loader="isLoadingDirective">'
+            return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="RoutingProductId" '
             + required + ' label="' + label + '" datasource="filteredRoutingProducts" selectedvalues="selectedRoutingProducts"  onselectionchanged="onselectionchanged" entityName="' + label + '"></vr-select>'
                + '</div>'
@@ -82,12 +82,21 @@ app.directive('vrWhsBeRoutingproduct', ['WhS_BE_RoutingProductAPIService', 'Util
         function beRoutingProduct(ctrl, $scope, $attrs) {
 
             function initializeController() {
-                
-                loadRoutingProducts();
+                defineAPI();
             }
 
             function defineAPI() {
                 var api = {};
+
+                api.load = function () {
+                    return WhS_BE_RoutingProductAPIService.GetRoutingProducts().then(function (response) {
+                        angular.forEach(response, function (itm) {
+                            $scope.routingProducts.push(itm);
+                        });
+                        if ($attrs.salezonepackageid == undefined)
+                            $scope.filteredRoutingProducts = $scope.routingProducts;
+                    });
+                }
 
                 api.getData = function () {
                     return $scope.selectedRoutingProducts;
@@ -109,25 +118,10 @@ app.directive('vrWhsBeRoutingproduct', ['WhS_BE_RoutingProductAPIService', 'Util
                       
                 }
 
-                if (ctrl.onloaded != null)
-                    ctrl.onloaded(api);
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
             }
-            function loadRoutingProducts() {
-                    $scope.isLoadingDirective = true;
-                    return WhS_BE_RoutingProductAPIService.GetRoutingProducts().then(function (response) {
-                        angular.forEach(response, function (itm) {
-                            $scope.routingProducts.push(itm);
-                        });
-                        if ($attrs.salezonepackageid == undefined)
-                            $scope.filteredRoutingProducts = $scope.routingProducts;
-                    }).catch(function (error) {
-                        //TODO handle the case of exceptions
 
-                    }).finally(function () {
-                        $scope.isLoadingDirective = false;
-                        defineAPI();
-                    });  
-            }
             this.initializeController = initializeController;
         }
         return directiveDefinitionObject;
