@@ -8,6 +8,11 @@ namespace Vanrise.Common
 {
     public static class ExtensionMethods
     {
+        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> source)
+        {
+            return new HashSet<T>(source);
+        }
+
         public static Q GetOrCreateItem<T, Q>(this Dictionary<T, Q> dictionary, T itemKey)
         {
             return GetOrCreateItem(dictionary, itemKey, () => Activator.CreateInstance<Q>());
