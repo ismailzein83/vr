@@ -6,15 +6,11 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class PricingRuleCriteria
+    public class SalePricingRuleCriteria
     {
-        public int? PricingProductId { get; set; }
-
-        public int? SaleZoneGroupConfigId { get; set; }
+        public int? SellingProductId { get; set; }
 
         public SaleZoneGroupSettings SaleZoneGroupSettings { get; set; }
-
-        public int? CustomersGroupConfigId { get; set; }
 
         public CustomerGroupSettings CustomerGroupSettings { get; set; }
     }

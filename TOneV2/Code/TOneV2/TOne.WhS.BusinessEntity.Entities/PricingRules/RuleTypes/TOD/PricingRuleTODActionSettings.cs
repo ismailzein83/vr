@@ -6,13 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class CustomerGroupSettings
+    public abstract class PricingRuleTODActionSettings
     {
         public int ConfigId { get; set; }
-    }
-
-    public class SelectiveCustomersSettings : CustomerGroupSettings
-    {
-        public List<int> CustomerIds { get; set; }
     }
 }

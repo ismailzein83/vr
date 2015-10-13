@@ -8,7 +8,7 @@ using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class RouteOptionRuleManager
+    public class RouteOptionRuleManager : Vanrise.Rules.RuleManager<RouteOptionRule>
     {
         public Vanrise.Rules.RuleTree GetStructuredRules()
         {

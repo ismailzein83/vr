@@ -11,7 +11,11 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         public override List<int> GetCustomerIds(CustomerGroupSettings settings)
         {
-            throw new NotImplementedException();
+            SelectiveCustomersSettings selectiveCustomersSettings = settings as SelectiveCustomersSettings;
+            if (selectiveCustomersSettings == null)
+                throw new Exception(String.Format("{0} is not of type  TOne.WhS.BusinessEntity.Entities.SelectiveCustomersSettings", settings));
+
+            return selectiveCustomersSettings.CustomerIds;
         }
     }
 }

@@ -93,7 +93,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
         }
 
         function defineMenuActions() {
-            var assignPricingProductObj = [
+            var menuActionsWithPricingProduct = [
                         {
                             name: "Edit",
                             clicked: editCarrierAccount,
@@ -103,24 +103,20 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                             clicked: assignNew
                         }
             ];
-            var assignCustomersObj = [
+            var defaultMenuActions = [
                         {
                             name: "Edit",
                             clicked: editCarrierAccount,
-                        },
-                       {
-                           name: "Assign Customers",
-                           clicked: assignNew
-                       }
+                        }
             ];
 
             $scope.gridMenuActions = function (dataItem) {
-                if (dataItem.CarrierAccountId != undefined)
+                if (dataItem.AccountType == WhS_Be_CarrierAccountEnum.Customer.value || dataItem.AccountType == WhS_Be_CarrierAccountEnum.Exchange.value)
                 {
-                    return assignPricingProductObj;
+                    return menuActionsWithPricingProduct;
                 }
                 else {  
-                    return assignCustomersObj;
+                    return defaultMenuActions;
                 }
             }
         }

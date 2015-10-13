@@ -62,16 +62,21 @@
   <ItemGroup>
     <Compile Include="AllExceptSaleZonesBehavior.cs" />
     <Compile Include="CarrierAccountManager.cs" />
+    <Compile Include="CarrierAccounts\SuppliersWithZones\SelectiveSuppliersWithZonesBehavior.cs" />
     <Compile Include="CarrierProfileManager.cs" />
     <Compile Include="CodeManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CustomerPricingProductManager.cs" />
     <Compile Include="PricingProductManager.cs" />
+    <Compile Include="PricingRules\RuleTypes\ExtraCharge\Actions\PercentageExtraChargeBehavior.cs" />
+    <Compile Include="PricingRules\RuleTypes\ExtraCharge\Actions\FixedExtraChargeBehavior.cs" />
+    <Compile Include="PricingRules\RuleTypes\Tariff\RegularTariffBehavior.cs" />
+    <Compile Include="PricingRules\RuleTypes\TOD\RegularTODBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RouteOptionRuleManager.cs" />
+    <Compile Include="RouteOptionRules\RouteOptionRuleManager.cs" />
     <Compile Include="RouteOptionRules\StructureRuleBehaviors\RuleBehaviorBySupplier.cs" />
     <Compile Include="RouteOptionRules\StructureRuleBehaviors\RuleBehaviorBySupplierZone.cs" />
-    <Compile Include="RouteRuleManager.cs" />
+    <Compile Include="RouteRules\RouteRuleManager.cs" />
     <Compile Include="RouteRules\StructureRuleBehaviors\RuleBehaviorByCode.cs" />
     <Compile Include="RouteRules\StructureRuleBehaviors\RuleBehaviorByCustomer.cs" />
     <Compile Include="RouteRules\StructureRuleBehaviors\RuleBehaviorByRoutingProduct.cs" />
