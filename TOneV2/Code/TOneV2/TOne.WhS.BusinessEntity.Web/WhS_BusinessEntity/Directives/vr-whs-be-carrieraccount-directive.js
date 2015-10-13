@@ -92,14 +92,21 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'Util
 
         function defineAPI() {
             var api = {};
-            api.getData = function()
+
+            api.load = function () {
+                return WhS_BE_CarrierAccountAPIService.GetCarrierAccountsInfo(getCustomers, getSuppliers).then(function (response) {
+                    angular.forEach(response, function (itm) {
+                        $scope.datasource.push(itm);
+                    });
+                });
+            }
+
+            api.getData = function ()
             {
                 return $scope.selectedCarrierValues;
             }
 
             api.setData = function (selectedIds) {
-
-               
                 if ($attrs.ismultipleselection!=undefined) {
                     for (var i = 0; i < selectedIds.length; i++) {
                         var selectedCarrierValue = UtilsService.getItemByVal($scope.datasource, selectedIds[i], "CarrierAccountId");
@@ -112,17 +119,6 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'Util
                         $scope.selectedCarrierValues = selectedCarrierValue;
                 }
             }
-
-            api.load = function () {
-                return WhS_BE_CarrierAccountAPIService.GetCarrierAccountsInfo(getCustomers, getSuppliers).then(function (response) {
-                    angular.forEach(response, function (itm) {
-                        $scope.datasource.push(itm);
-                    });
-                }).catch(function (error) {
-                }).finally(function () {
-                });
-            }
-
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
