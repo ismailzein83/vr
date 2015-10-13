@@ -30,6 +30,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         public NumberProfileParameters Parameters { get; set; }
 
+        public bool IncludeWhiteList { get; set; }
+
     }
 
     #endregion
@@ -57,6 +59,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         public InArgument<NumberProfileParameters> Parameters { get; set; }
 
+        [RequiredArgument]
+        public InArgument<bool> IncludeWhiteList { get; set; }
+
+
         #endregion
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
@@ -69,17 +75,24 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             base.OnBeforeExecute(context, handle);
         }
 
-        private bool GetWhiteNumbers(string fromAccountNumber, out HashSet<string> whiteListNumbers, out string maxWhiteListNumber)
+        private bool GetWhiteNumbers(string fromAccountNumber, out HashSet<string> whiteListNumbers, out string maxWhiteListNumber, bool IncludeWhiteList)
         {
+            if (IncludeWhiteList)
+            {
+                maxWhiteListNumber = null;
+                whiteListNumbers = null;
+                return false;
+            }
+
             IAccountStatusDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountStatusDataManager>();
              List<CaseStatus> caseStatuses = new List<CaseStatus>();
             caseStatuses.Add(CaseStatus.ClosedWhiteList);
 
-            int nbOfRecords = 10000;
+            int nbOfRecords = 2;
 
-            List<string> numbers = dataManager.GetAccountStatusByFilters(caseStatuses, fromAccountNumber, nbOfRecords);
+            List<string> numbers = dataManager.GetAccountNumberByStatus(caseStatuses, fromAccountNumber, nbOfRecords);
 
-            if (numbers != null && numbers.Count == 0)
+            if (numbers != null && numbers.Count >= 0)
             {
                 maxWhiteListNumber = numbers.Max();
                 whiteListNumbers = numbers.ToHashSet();
@@ -142,7 +155,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                             {
                                 if (currentAccountNumber != cdr.MSISDN)
                                 {
-                                    if (currentAccountNumber != null && !isCurrentAccountNumberInWhiteList)
+                                    if (currentAccountNumber != null && (!isCurrentAccountNumberInWhiteList )   )
                                     {
                                         FinishNumberProfileProcessing(currentAccountNumber, ref numberProfileBatch, ref numberProfilesCount, inputArgument, handle, batchSize, aggregateDefinitions, IMEIs);
                                     }
@@ -150,18 +163,18 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                                     currentAccountNumber = cdr.MSISDN;
 
-                                    if (maxWhiteListNumber != null && String.Compare(maxWhiteListNumber, currentAccountNumber) < 0 && hasMoreWhiteListNumbers)
+                                    if ((String.Compare(maxWhiteListNumber, currentAccountNumber) < 0 && hasMoreWhiteListNumbers) )
                                     {
-                                        hasMoreWhiteListNumbers = GetWhiteNumbers(currentAccountNumber, out whiteListNumbers, out maxWhiteListNumber);
+                                        hasMoreWhiteListNumbers = GetWhiteNumbers(currentAccountNumber, out whiteListNumbers, out maxWhiteListNumber, inputArgument.IncludeWhiteList);
                                     }
 
-                                    if (whiteListNumbers != null && whiteListNumbers.Contains(currentAccountNumber))
+                                    if ((whiteListNumbers != null && whiteListNumbers.Contains(currentAccountNumber) ))
                                         isCurrentAccountNumberInWhiteList = true;
                                     else
                                         isCurrentAccountNumberInWhiteList = false;
 
 
-                                    if (!isCurrentAccountNumberInWhiteList)
+                                    if (!isCurrentAccountNumberInWhiteList )
                                     {
                                         foreach (var aggregateDef in aggregateDefinitions)
                                         {
@@ -172,7 +185,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                 }
                                 else
                                 {
-                                    if (!isCurrentAccountNumberInWhiteList)
+                                    if (!isCurrentAccountNumberInWhiteList )
                                     {
                                         IMEIs.Add(cdr.IMEI);
                                         foreach (var aggregateDef in aggregateDefinitions)
@@ -258,7 +271,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 FromDate = this.FromDate.Get(context),
                 ToDate = this.ToDate.Get(context),
                 StrategiesExecutionInfo = this.StrategiesExecutionInfo.Get(context),
-                Parameters = this.Parameters.Get(context)
+                Parameters = this.Parameters.Get(context),
+                IncludeWhiteList = this.IncludeWhiteList.Get(context)
             };
         }
 

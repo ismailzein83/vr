@@ -47,6 +47,7 @@
       <AssemblyReference>System.Activities.Presentation</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
       <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
       <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
@@ -60,13 +61,13 @@
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing.Entities</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>Vanrise.Fzero.CDRImport.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.Business</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP</AssemblyReference>
-      <AssemblyReference>Vanrise.Fzero.CDRImport.Entities</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
@@ -155,6 +156,11 @@
                   <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
                 </InArgument>
               </vffba1:CreateNumberProfiles.FromDate>
+              <vffba1:CreateNumberProfiles.IncludeWhiteList>
+                <InArgument x:TypeArguments="x:Boolean">
+                  <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IncludeWhiteList</mca:CSharpValue>
+                </InArgument>
+              </vffba1:CreateNumberProfiles.IncludeWhiteList>
               <vffba1:CreateNumberProfiles.InputQueue>
                 <InOutArgument x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">
                   <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpReference>
@@ -272,7 +278,7 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbC9IA5QCDgIBAUwFUBEDAd4CUQVrKQMBzgJsBZICCgIBAk4JTpUBAwHfAmMLY2MDAdsCWQtZYAMB2AJeC16EAQMB1QJUC1RZAwHSAmgLaFcDAc8CbwtvmQECAQNzCYcCFAIBC4oCCZACJAIBBnQL+gEWAgEU+wEL/wEXAgEQgAILhgIcAgEMjQIPjQKDAQIBCIoCZIoCgQECAQeCAQ2XAR8DAZUCmAENvAErAwGyAb0BDdcBMgIBa9gBDe0BQAIBMu4BDfkBOAIBFf0BD/0BmgECARGDAhGDAokBAgENhQEThQFhAwHAAo8BE48BdQMBsgKKAROKAXQDAaQClAETlAFfAwGWAqoBE6oBbQMBhwKgAROgAXQDAfkBtAETtAGEAQMB6wGbARObAWEDAd0BrwETrwGBAQMBzwGlAROlAYgBAwHBAbkBE7kBXwMBswHAARPAAYABAwGkAcoBE8oBeQMBlgHUARPUAYQBAwGIAcUBE8UBnAECAXrPARPPAYcBAgFs5QET5QF/AgFd2wET2wGUAQIBT+oBE+oBjAECAUHgARPgAYwBAgEz9gET9gGEAQIBJPEBE/EBhAECARY=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbDBJA5oCDgIBAU0FUREDAewCUgVsKQMB3AJtBZgCCgIBAk8JT5UBAwHtAmQLZGMDAekCWgtaYAMB5gJfC1+EAQMB4wJVC1VZAwHgAmkLaVcDAd0CcAtwmQECAQN0CY0CFAIBC5ACCZYCJAIBBnULgAIWAgEUgQILhQIXAgEQhgILjAIcAgEMkwIPkwKDAQIBCJACZJACgQECAQeDAQ2YAR8DAaMCmQENwgErAwGyAcMBDd0BMgIBa94BDfMBQAIBMvQBDf8BOAIBFYMCD4MCmgECARGJAhGJAokBAgENhgEThgFhAwHOApABE5ABdQMBwAKLAROLAXQDAbIClQETlQFfAwGkArABE7ABbQMBlQKmAROmAXQDAYcCugETugGEAQMB+QGcAROcAWEDAesBtQETtQGBAQMB3QGrAROrAYgBAwHPAaEBE6EBaAMBwQG/ARO/AV8DAbMBxgETxgGAAQMBpAHQARPQAXkDAZYB2gET2gGEAQMBiAHLARPLAZwBAgF61QET1QGHAQIBbOsBE+sBfwIBXeEBE+EBlAECAU/wARPwAYwBAgFB5gET5gGMAQIBM/wBE/wBhAECAST3ARP3AYQBAgEW</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

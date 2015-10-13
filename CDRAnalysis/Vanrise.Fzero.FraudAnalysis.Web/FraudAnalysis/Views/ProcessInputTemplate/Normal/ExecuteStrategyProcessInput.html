@@ -1,12 +1,13 @@
 ﻿<div ng-controller="FraudAnalysis_ExecuteStrategyProcessInputController">
     <vr-form name="formCreateProcessInput">
         <vr-row removeline>
-            <vr-columns width="1/4row">
-                <vr-select datasource="periods" datatextfield="Name" datavaluefield="Id" label="Period" selectedvalues="selectedPeriod" isrequired  hideremoveicon  onselectionchanged="selectedPeriodChanged"></vr-select>
-            </vr-columns>
 
             <vr-columns width="1/4row">
                 <vr-select datasource="strategies" datatextfield="name" datavaluefield="id" label="Strategy" ismultipleselection selectedvalues="selectedStrategies" isrequired>  </vr-select>
+            </vr-columns>
+
+            <vr-columns width="1/4row">
+                <vr-select datasource="periods" datatextfield="Name" datavaluefield="Id" label="Period" selectedvalues="selectedPeriod" isrequired hideremoveicon onselectionchanged="selectedPeriodChanged"></vr-select>
             </vr-columns>
 
             <vr-columns width="1/4row">
@@ -17,11 +18,19 @@
                 <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired></vr-datetimepicker>
             </vr-columns>
 
+        </vr-row>
+        <vr-row removeline>
+
             <vr-columns width="1/4row">
                 <vr-switch value="overridePrevious" label="Override Previous">  </vr-switch>
             </vr-columns>
 
+
+            <vr-columns width="1/4row">
+                <vr-switch value="includeWhiteList" label="Include White List">  </vr-switch>
+            </vr-columns>
+
         </vr-row>
-       
+
     </vr-form>
 </div>

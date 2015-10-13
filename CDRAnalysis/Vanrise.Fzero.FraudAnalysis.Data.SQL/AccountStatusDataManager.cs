@@ -50,7 +50,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
-        public List<string> GetAccountStatusByFilters(List<CaseStatus> caseStatuses, string fromAccountNumber, int nbOfRecords)
+        public List<string> GetAccountNumberByStatus(List<CaseStatus> caseStatuses, string fromAccountNumber, int nbOfRecords)
         {
             List<int> selectedCasesStatusIds = new List<int>();
             foreach (var i in caseStatuses)

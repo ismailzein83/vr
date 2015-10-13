@@ -75,7 +75,8 @@ function ExecuteStrategyProcessInputController ($scope, $http, StrategyAPIServic
                 StrategyIds: $scope.selectedStrategyIds,
                 FromDate: new Date(fromDate),
                 ToDate: new Date(toDate),
-                OverridePrevious: $scope.overridePrevious
+                OverridePrevious: $scope.overridePrevious,
+                IncludeWhiteList: $scope.includeWhiteList
             }
         });
     }

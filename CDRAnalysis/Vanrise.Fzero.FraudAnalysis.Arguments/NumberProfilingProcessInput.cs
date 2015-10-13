@@ -39,5 +39,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 
         }
 
+        public bool IncludeWhiteList { get; set; }
+
     }
 }

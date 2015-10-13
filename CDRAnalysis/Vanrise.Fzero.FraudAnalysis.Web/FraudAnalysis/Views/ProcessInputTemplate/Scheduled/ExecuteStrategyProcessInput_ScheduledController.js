@@ -27,7 +27,8 @@ function ExecuteStrategyProcessInput_Scheduled($scope, $http, StrategyAPIService
             return {
                 $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
                 StrategyIds: $scope.selectedStrategyIds,
-                OverridePrevious: false
+                OverridePrevious: false,
+                IncludeWhiteList: false
             };
         };
     }
