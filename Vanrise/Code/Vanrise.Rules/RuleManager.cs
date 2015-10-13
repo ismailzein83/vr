@@ -111,11 +111,21 @@ namespace Vanrise.Rules
         }
 
         #region Private Methods
-        
+
+        static ConcurrentDictionary<string, int> s_ruleTypesIds = new ConcurrentDictionary<string, int>();
+
         private int GetRuleTypeId()
         {
-            IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
-            return ruleDataManager.GetRuleTypeId(typeof(T).FullName);
+            string ruleType = typeof(T).FullName;
+            int ruleTypeId;
+            if(!s_ruleTypesIds.TryGetValue(ruleType, out ruleTypeId))
+            {
+                IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
+                ruleTypeId = ruleDataManager.GetRuleTypeId(ruleType);
+                s_ruleTypesIds.TryAdd(ruleType, ruleTypeId);
+            }
+
+            return ruleTypeId;
         }
 
         #endregion
@@ -125,20 +135,14 @@ namespace Vanrise.Rules
         private class CacheManager : Vanrise.Caching.BaseCacheManager<int>
         {
             IRuleDataManager _dataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
-            ConcurrentDictionary<int, RuleTypeUpdateHandle> _updateHandlesByRuleType = new ConcurrentDictionary<int, RuleTypeUpdateHandle>();
+            ConcurrentDictionary<int, Object> _updateHandlesByRuleType = new ConcurrentDictionary<int, Object>();
 
             protected override bool ShouldSetCacheExpired(int parameter)
             {
-                RuleTypeUpdateHandle ruleTypeUpdateHandle;
-                if(!_updateHandlesByRuleType.TryGetValue(parameter, out ruleTypeUpdateHandle))
-                {
-                    ruleTypeUpdateHandle = new RuleTypeUpdateHandle ();
-                    if (!_updateHandlesByRuleType.TryAdd(parameter, ruleTypeUpdateHandle))
-                        ruleTypeUpdateHandle = _updateHandlesByRuleType[parameter];
-                }
-                object updateHandle = ruleTypeUpdateHandle.UpdateHandle;
+                Object updateHandle;
+                _updateHandlesByRuleType.TryGetValue(parameter, out updateHandle);
                 bool isCacheExpired = _dataManager.AreRulesUpdated(parameter, ref updateHandle);
-                ruleTypeUpdateHandle.UpdateHandle = updateHandle;
+                _updateHandlesByRuleType.AddOrUpdate(parameter, updateHandle, (key, existingHandle) => updateHandle);
                 return isCacheExpired;
             }
 
