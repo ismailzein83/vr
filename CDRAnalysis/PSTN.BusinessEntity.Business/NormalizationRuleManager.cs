@@ -170,6 +170,12 @@ namespace PSTN.BusinessEntity.Business
             return manager.GetTemplateConfigurations(Constants.NormalizationRuleActionBehaviorConfigType);
         }
 
+        public List<Vanrise.Entities.TemplateConfig> GetNormalizationRuleTypeTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.NormalizationRuleTypeConfigType);
+        }
+
         public InsertOperationOutput<NormalizationRuleDetail> AddNormalizationRule(NormalizationRule normalizationRuleObj)
         {
             InsertOperationOutput<NormalizationRuleDetail> insertOperationOutput = new InsertOperationOutput<NormalizationRuleDetail>();

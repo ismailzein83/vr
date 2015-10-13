@@ -25,6 +25,13 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
+        public List<TemplateConfig> GetNormalizationRuleTypeTemplates()
+        {
+            NormalizationRuleManager manager = new NormalizationRuleManager();
+            return manager.GetNormalizationRuleTypeTemplates();
+        }
+
+        [HttpGet]
         public NormalizationRule GetNormalizationRuleById(int normalizationRuleId)
         {
             NormalizationRuleManager manager = new NormalizationRuleManager();

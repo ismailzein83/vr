@@ -8,6 +8,7 @@
 
         var editMode;
         var normalizationRuleId;
+        var normalizationRuleTypeDirectiveAPI;
 
         loadParameters();
         defineScope();
@@ -45,6 +46,18 @@
 
             $scope.beginEffectiveDate = Date.now();
             $scope.endEffectiveDate = undefined;
+
+            /* Just do it */
+
+            $scope.normalizationRuleTypeTemplates = [];
+            $scope.selectedNormalizationRuleTypeTemplate = undefined;
+
+            $scope.onNormalizationRuleTypeDirectiveAPILoaded = function (api) {
+                normalizationRuleTypeDirectiveAPI = api;
+                console.log(api.getData());
+            }
+
+            /* Just do it */
 
             $scope.onSelectedSwitchesChanged = function () {
 
@@ -109,7 +122,7 @@
         function load() {
             $scope.isGettingData = true;
 
-            UtilsService.waitMultipleAsyncOperations([loadSwitches, loadTrunks, loadTemplates])
+            UtilsService.waitMultipleAsyncOperations([loadSwitches, loadTrunks, loadTemplates, loadNormalizationRuleTypeTemplates])
                 .then(function () {
                     if (editMode) {
                         NormalizationRuleAPIService.GetNormalizationRuleById(normalizationRuleId)
@@ -152,11 +165,24 @@
         }
 
         function loadTemplates() {
+
             return NormalizationRuleAPIService.GetNormalizationRuleActionBehaviorTemplates()
                 .then(function (responseArray) {
                     angular.forEach(responseArray, function (item) {
                         $scope.normalizationRuleActionSettingsTemplates.push(item);
                     });
+                });
+        }
+
+        function loadNormalizationRuleTypeTemplates() {
+
+            return NormalizationRuleAPIService.GetNormalizationRuleTypeTemplates()
+                .then(function (response) {
+                    angular.forEach(response, function (item) {
+                        $scope.normalizationRuleTypeTemplates.push(item);
+                    });
+
+                    console.log($scope.normalizationRuleTypeTemplates);
                 });
         }
 
