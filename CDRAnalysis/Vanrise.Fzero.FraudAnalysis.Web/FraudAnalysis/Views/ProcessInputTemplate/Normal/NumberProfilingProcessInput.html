@@ -1,16 +1,20 @@
 ﻿<div ng-controller="FraudAnalysis_NumberProfilingProcessInputController">
     <vr-form name="formCreateProcessInput">
         <vr-row removeline>
-            <vr-columns width="1/3row">
+            <vr-columns width="1/4row">
                 <vr-select datasource="periods" datatextfield="Name" datavaluefield="Id" label="Period" selectedvalues="selectedPeriod" isrequired></vr-select>
             </vr-columns>
 
-            <vr-columns width="1/3row">
+            <vr-columns width="1/4row">
                 <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired></vr-datetimepicker>
             </vr-columns>
 
-            <vr-columns width="1/3row">
+            <vr-columns width="1/4row">
                 <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired></vr-datetimepicker>
+            </vr-columns>
+
+            <vr-columns width="1/4row">
+                <vr-switch value="includeWhiteList" label="Include White List">  </vr-switch>
             </vr-columns>
 
 

@@ -42,6 +42,7 @@ function NumberProfilingProcessInput_Scheduled($scope, $http, StrategyAPIService
             return {
                 $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.NumberProfilingProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
                 PeriodId: $scope.selectedPeriod.Id,
+                IncludeWhiteList: false,
                 Parameters: { GapBetweenConsecutiveCalls: $scope.gapBetweenConsecutiveCalls, GapBetweenFailedConsecutiveCalls: $scope.gapBetweenFailedConsecutiveCalls, MaxLowDurationCall: $scope.maxLowDurationCall, MinimumCountofCallsinActiveHour: $scope.minCountofCallsinActiveHour, PeakHoursIds: $scope.PeakHoursIds }
             };
         };

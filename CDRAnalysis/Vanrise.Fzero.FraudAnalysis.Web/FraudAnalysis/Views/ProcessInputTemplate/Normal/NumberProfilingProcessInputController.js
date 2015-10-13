@@ -56,6 +56,7 @@ function NumberProfilingProcessInputController($scope, $http, StrategyAPIService
                             FromDate: new Date(fromDate),
                             ToDate: new Date(toDate),
                             PeriodId: $scope.selectedPeriod.Id,
+                            IncludeWhiteList :  $scope.includeWhiteList,
                             Parameters: { GapBetweenConsecutiveCalls: $scope.gapBetweenConsecutiveCalls, GapBetweenFailedConsecutiveCalls: $scope.gapBetweenFailedConsecutiveCalls, MaxLowDurationCall: $scope.maxLowDurationCall, MinimumCountofCallsinActiveHour: $scope.minCountofCallsinActiveHour, PeakHoursIds: $scope.PeakHoursIds }
                         }
                     });
@@ -76,6 +77,7 @@ function NumberProfilingProcessInputController($scope, $http, StrategyAPIService
                             FromDate: new Date(fromDate),
                             ToDate: new Date(toDate),
                             PeriodId: $scope.selectedPeriod.Id,
+                            IncludeWhiteList: $scope.includeWhiteList,
                             Parameters: { GapBetweenConsecutiveCalls: $scope.gapBetweenConsecutiveCalls, GapBetweenFailedConsecutiveCalls: $scope.gapBetweenFailedConsecutiveCalls, MaxLowDurationCall: $scope.maxLowDurationCall, MinimumCountofCallsinActiveHour: $scope.minCountofCallsinActiveHour, PeakHoursIds: $scope.PeakHoursIds }
                         }
                     });

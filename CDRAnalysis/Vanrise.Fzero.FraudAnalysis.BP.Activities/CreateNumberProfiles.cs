@@ -88,7 +88,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
              List<CaseStatus> caseStatuses = new List<CaseStatus>();
             caseStatuses.Add(CaseStatus.ClosedWhiteList);
 
-            int nbOfRecords = 2;
+            int nbOfRecords = 10000;
 
             List<string> numbers = dataManager.GetAccountNumberByStatus(caseStatuses, fromAccountNumber, nbOfRecords);
 

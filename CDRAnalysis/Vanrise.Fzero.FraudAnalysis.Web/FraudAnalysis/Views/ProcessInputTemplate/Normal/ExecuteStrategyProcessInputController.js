@@ -10,7 +10,6 @@ function ExecuteStrategyProcessInputController ($scope, $http, StrategyAPIServic
     load();
 
     function defineScope() {
-
         var yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
 
