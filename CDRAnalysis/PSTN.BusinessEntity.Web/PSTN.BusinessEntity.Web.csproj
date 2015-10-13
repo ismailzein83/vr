@@ -135,8 +135,8 @@
   <ItemGroup>
     <Compile Include="Controllers\NormalizationRuleController.cs" />
     <Compile Include="Controllers\SwitchController.cs" />
-    <Compile Include="Controllers\SwitchTrunkController.cs" />
-    <Compile Include="Controllers\SwitchTypeController.cs" />
+    <Compile Include="Controllers\TrunkController.cs" />
+    <Compile Include="Controllers\TypeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -159,8 +159,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="PSTN_BusinessEntity\Constants\PhoneNumberTypeEnum.js" />
-    <Content Include="PSTN_BusinessEntity\Constants\SwitchTrunkDirectionEnum.js" />
-    <Content Include="PSTN_BusinessEntity\Constants\SwitchTrunkTypeEnum.js" />
+    <Content Include="PSTN_BusinessEntity\Constants\TrunkDirectionEnum.js" />
+    <Content Include="PSTN_BusinessEntity\Constants\TrunkTypeEnum.js" />
     <Content Include="PSTN_BusinessEntity\Directives\Templates\AddPrefixDirectiveTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Directives\Templates\SubstringDirectiveTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-addprefix-directive.js" />
@@ -168,8 +168,8 @@
     <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-substring-directive.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\NormalizationRuleAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchAPIService.js" />
-    <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchTrunkAPIService.js" />
-    <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchTypeAPIService.js" />
+    <Content Include="PSTN_BusinessEntity\Services\APIServices\TrunkAPIService.js" />
+    <Content Include="PSTN_BusinessEntity\Services\APIServices\TypeAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Services\PSTN_BE_Service.js" />
     <Content Include="PSTN_BusinessEntity\Directives\Templates\NormalizationRuleGridTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-normalizationrulegrid-directive.js" />
@@ -187,17 +187,15 @@
     <Content Include="PSTN_BusinessEntity\Views\Switch\SwitchManagementController.js" />
     <Content Include="PSTN_BusinessEntity\Views\Templates\NormalizationRuleDescriptionTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Views\Templates\NormalizationRuleDescriptionTemplateController.js" />
-    <Content Include="PSTN_BusinessEntity\Views\Trunk\SwitchTrunkEditor.html" />
-    <Content Include="PSTN_BusinessEntity\Views\Trunk\SwitchTrunkEditorController.js" />
-    <Content Include="PSTN_BusinessEntity\Views\Grids\SwitchTrunkGrid.html" />
-    <Content Include="PSTN_BusinessEntity\Views\Grids\SwitchTrunkGridController.js" />
-    <Content Include="PSTN_BusinessEntity\Directives\Templates\SwitchTrunkGridTemplate.html" />
-    <Content Include="PSTN_BusinessEntity\Views\Trunk\SwitchTrunkManagement.html" />
-    <Content Include="PSTN_BusinessEntity\Views\Trunk\SwitchTrunkManagementController.js" />
-    <Content Include="PSTN_BusinessEntity\Views\Type\SwitchTypeEditor.html" />
-    <Content Include="PSTN_BusinessEntity\Views\Type\SwitchTypeEditorController.js" />
-    <Content Include="PSTN_BusinessEntity\Views\Type\SwitchTypeManagement.html" />
-    <Content Include="PSTN_BusinessEntity\Views\Type\SwitchTypeManagementController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\Trunk\TrunkEditor.html" />
+    <Content Include="PSTN_BusinessEntity\Views\Trunk\TrunkEditorController.js" />
+    <Content Include="PSTN_BusinessEntity\Directives\Templates\TrunkGridTemplate.html" />
+    <Content Include="PSTN_BusinessEntity\Views\Trunk\TrunkManagement.html" />
+    <Content Include="PSTN_BusinessEntity\Views\Trunk\TrunkManagementController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\Type\TypeEditor.html" />
+    <Content Include="PSTN_BusinessEntity\Views\Type\TypeEditorController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\Type\TypeManagement.html" />
+    <Content Include="PSTN_BusinessEntity\Views\Type\TypeManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

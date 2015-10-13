@@ -7,22 +7,22 @@ namespace PSTN.BusinessEntity.Data
     {
         Vanrise.Entities.BigResult<SwitchDetail> GetFilteredSwitches(Vanrise.Entities.DataRetrievalInput<SwitchQuery> input);
 
-        SwitchDetail GetSwitchByID(int switchID);
+        SwitchDetail GetSwitchById(int switchId);
 
         List<SwitchInfo> GetSwitches();
 
-        List<SwitchInfo> GetSwitchesToLinkTo(int switchID);
+        List<SwitchInfo> GetSwitchesToLinkTo(int switchId);
 
-        Switch GetSwitchByDataSourceID(int dataSourceID);
+        Switch GetSwitchByDataSourceId(int dataSourceId);
 
         List<SwitchInfo> GetSwitchesByIds(List<int> switchIds);
 
         List<SwitchAssignedDataSource> GetSwitchAssignedDataSources();
 
-        bool UpdateSwitch(Switch switchObject);
+        bool UpdateSwitch(Switch switchObj);
 
-        bool AddSwitch(Switch switchObject, out int insertedID);
+        bool AddSwitch(Switch switchObj, out int insertedId);
 
-        bool DeleteSwitch(int switchID);
+        bool DeleteSwitch(int switchId);
     }
 }

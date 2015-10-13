@@ -1,8 +1,8 @@
-﻿SwitchEditorController.$inject = ["$scope", "SwitchAPIService", "SwitchTypeAPIService", "DataSourceAPIService", "DataSourceService", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService"];
+﻿SwitchEditorController.$inject = ["$scope", "SwitchAPIService", "TypeAPIService", "DataSourceAPIService", "DataSourceService", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService"];
 
-function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, DataSourceAPIService, DataSourceService, UtilsService, VRNavigationService, VRNotificationService, VRModalService) {
+function SwitchEditorController($scope, SwitchAPIService, TypeAPIService, DataSourceAPIService, DataSourceService, UtilsService, VRNavigationService, VRNotificationService, VRModalService) {
 
-    var switchID;
+    var switchId;
     var editMode;
 
     loadParameters();
@@ -13,9 +13,9 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
         var parameters = VRNavigationService.getParameters($scope);
 
         if (parameters != undefined && parameters != null)
-            switchID = parameters.SwitchID;
+            switchId = parameters.SwitchId;
 
-        editMode = (switchID != undefined);
+        editMode = (switchId != undefined);
     }
 
     function defineScope() {
@@ -69,9 +69,9 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
 
         $scope.addDataSource = function () {
 
-            var onDataSourceAdded = function (dataSourceObject) {
-                $scope.dataSources.push(dataSourceObject);
-                $scope.selectedDataSource = dataSourceObject;
+            var onDataSourceAdded = function (dataSourceObj) {
+                $scope.dataSources.push(dataSourceObj);
+                $scope.selectedDataSource = dataSourceObj;
             }
 
             DataSourceService.addDataSource(onDataSourceAdded);
@@ -83,9 +83,9 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
             settings.onScopeReady = function (modalScope) {
                 modalScope.title = "Add a Switch Type";
 
-                modalScope.onSwitchTypeAdded = function (switchTypeObject) {
-                    $scope.types.push(switchTypeObject);
-                    $scope.selectedType = switchTypeObject;
+                modalScope.onSwitchTypeAdded = function (switchTypeObj) {
+                    $scope.types.push(switchTypeObj);
+                    $scope.selectedType = switchTypeObj;
                 };
             };
 
@@ -103,10 +103,10 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
             .then(function () {
 
                 if (editMode) {
-                    return SwitchAPIService.GetSwitchByID(switchID)
+                    return SwitchAPIService.GetSwitchById(switchId)
                         .then(function (response) {
 
-                            fillScopeFromSwitchObject(response);
+                            fillScopeFromSwitchObj(response);
 
                             loadSwitchAssignedDataSources();
                         })
@@ -126,7 +126,7 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
     }
 
     function loadSwitchTypes() {
-        return SwitchTypeAPIService.GetSwitchTypes()
+        return TypeAPIService.GetTypes()
             .then(function (response) {
                 angular.forEach(response, function (item) {
                     $scope.types.push(item);
@@ -136,9 +136,9 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
 
     function loadDataSources() {
         return DataSourceAPIService.GetDataSources()
-            .then(function (responseArray) {
+            .then(function (response) {
 
-                angular.forEach(responseArray, function (item) {
+                angular.forEach(response, function (item) {
                     $scope.dataSources.push(item);
                 });
             });
@@ -147,13 +147,13 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
     function loadSwitchAssignedDataSources() {
 
         return SwitchAPIService.GetSwitchAssignedDataSources()
-            .then(function (responseArray) {
+            .then(function (response) {
 
                 var selectedDataSourceIndex = ($scope.selectedDataSource != undefined) ?
-                    UtilsService.getItemIndexByVal($scope.dataSources, $scope.selectedDataSource.DataSourceID, "DataSourceID") : -1;
+                    UtilsService.getItemIndexByVal($scope.dataSources, $scope.selectedDataSource.DataSourceId, "DataSourceId") : -1;
 
-                angular.forEach(responseArray, function (item) {
-                    var index = UtilsService.getItemIndexByVal($scope.dataSources, item.DataSourceID, "DataSourceID");
+                angular.forEach(response, function (item) {
+                    var index = UtilsService.getItemIndexByVal($scope.dataSources, item.DataSourceId, "DataSourceId");
 
                     if (index > -1 && index != selectedDataSourceIndex) {
                         $scope.dataSources.splice(index, 1);
@@ -168,20 +168,20 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
             });
     }
 
-    function fillScopeFromSwitchObject(switchObject) {
-        $scope.name = switchObject.Name;
-        $scope.selectedType = UtilsService.getItemByVal($scope.types, switchObject.TypeID, "ID");
-        $scope.areaCode = switchObject.AreaCode;
-        $scope.timeOffset = switchObject.TimeOffset;
+    function fillScopeFromSwitchObj(switchObj) {
+        $scope.name = switchObj.Name;
+        $scope.selectedType = UtilsService.getItemByVal($scope.types, switchObj.TypeId, "TypeId");
+        $scope.areaCode = switchObj.AreaCode;
+        $scope.timeOffset = switchObj.TimeOffset;
 
-        var dataSourceIndex = UtilsService.getItemIndexByVal($scope.dataSources, switchObject.DataSourceID, "DataSourceID");
+        var dataSourceIndex = UtilsService.getItemIndexByVal($scope.dataSources, switchObj.DataSourceId, "DataSourceId");
         $scope.selectedDataSource = (dataSourceIndex > 0) ? $scope.dataSources[dataSourceIndex] : undefined;
     }
 
     function updateSwitch() {
-        var switchObject = buildSwitchObjectFromScope();
+        var switchObj = buildSwitchObjFromScope();
 
-        return SwitchAPIService.UpdateSwitch(switchObject)
+        return SwitchAPIService.UpdateSwitch(switchObj)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Switch", response, "Name")) {
                     if ($scope.onSwitchUpdated != undefined)
@@ -196,9 +196,9 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
     }
 
     function insertSwitch() {
-        var switchObject = buildSwitchObjectFromScope();
+        var switchObj = buildSwitchObjFromScope();
 
-        return SwitchAPIService.AddSwitch(switchObject)
+        return SwitchAPIService.AddSwitch(switchObj)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Switch", response, "Name")) {
                     if ($scope.onSwitchAdded != undefined)
@@ -212,15 +212,15 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
             });
     }
 
-    function buildSwitchObjectFromScope() {
+    function buildSwitchObjFromScope() {
 
         return {
-            ID: switchID,
+            SwitchId: switchId,
             Name: $scope.name,
-            TypeID: ($scope.selectedType != undefined) ? $scope.selectedType.ID : null,
+            TypeId: ($scope.selectedType != undefined) ? $scope.selectedType.TypeId : null,
             AreaCode: $scope.areaCode,
             TimeOffset: $scope.timeOffset,
-            DataSourceID: ($scope.selectedDataSource != undefined) ? $scope.selectedDataSource.DataSourceID : null
+            DataSourceId: ($scope.selectedDataSource != undefined) ? $scope.selectedDataSource.DataSourceId : null
         };
     }
 

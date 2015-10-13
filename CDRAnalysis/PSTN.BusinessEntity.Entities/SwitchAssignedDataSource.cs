@@ -8,6 +8,6 @@ namespace PSTN.BusinessEntity.Entities
 {
     public class SwitchAssignedDataSource
     {
-        public int DataSourceID { get; set; }
+        public int DataSourceId { get; set; }
     }
 }

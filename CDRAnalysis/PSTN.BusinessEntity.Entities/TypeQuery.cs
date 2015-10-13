@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 
 namespace PSTN.BusinessEntity.Entities
 {
-    public class SwitchTrunkInfo
+    public class TypeQuery
     {
-        public int ID { get; set; }
-
         public string Name { get; set; }
-
-        public int SwitchId { get; set; }
     }
 }

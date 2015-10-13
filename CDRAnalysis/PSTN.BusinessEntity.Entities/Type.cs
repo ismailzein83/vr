@@ -1,9 +1,9 @@
 ﻿
 namespace PSTN.BusinessEntity.Entities
 {
-    public class SwitchType
+    public class Type
     {
-        public int ID { get; set; }
+        public int TypeId { get; set; }
 
         public string Name { get; set; }
     }

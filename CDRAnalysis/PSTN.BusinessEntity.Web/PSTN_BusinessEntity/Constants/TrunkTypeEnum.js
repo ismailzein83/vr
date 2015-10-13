@@ -1,4 +1,4 @@
-﻿app.constant("SwitchTrunkTypeEnum", {
+﻿app.constant("TrunkTypeEnum", {
     Local: { value: 0, description: "Local" },
     Transit: { value: 1, description: "Transit" },
     International: { value: 2, description: "International" },

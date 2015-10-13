@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_SwitchTrunkEditorController" vr-loader="isGettingData" width="'25%'">
+﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_TrunkEditorController" vr-loader="isGettingData" width="'25%'">
 
     <vr-modalbody>
         <vr-form name="formSwitchTrunkEditor">
@@ -19,7 +19,7 @@
                                 <vr-select label="Switch"
                                            datasource="switches"
                                            selectedvalues="selectedSwitch"
-                                           datavaluefield="ID"
+                                           datavaluefield="SwitchId"
                                            datatextfield="Name"
                                            onselectionchanged="onSwitchChanged"
                                            entityname="Switch"
@@ -60,7 +60,7 @@
                             <vr-select label="Switch"
                                        datasource="switchesToLinkTo"
                                        selectedvalues="selectedSwitchToLinkTo"
-                                       datavaluefield="ID"
+                                       datavaluefield="SwitchId"
                                        datatextfield="Name"
                                        onselectionchanged="onSwitchToLinkToChanged"
                                        entityname="Switch">
@@ -71,7 +71,7 @@
                             <vr-select label="Linked-To Trunk"
                                        datasource="trunksToLinkTo"
                                        selectedvalues="selectedTrunkToLinkTo"
-                                       datavaluefield="ID"
+                                       datavaluefield="TrunkId"
                                        datatextfield="Name"
                                        entityname="Trunk">
                             </vr-select>

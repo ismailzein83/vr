@@ -8,16 +8,16 @@ namespace PSTN.BusinessEntity.Entities
 {
     public class Switch
     {
-        public int ID { get; set; }
+        public int SwitchId { get; set; }
 
         public string Name { get; set; }
 
-        public int TypeID { get; set; }
+        public int TypeId { get; set; }
 
         public string AreaCode { get; set; }
 
         public TimeSpan TimeOffset { get; set; }
 
-        public int? DataSourceID { get; set; }
+        public int? DataSourceId { get; set; }
     }
 }

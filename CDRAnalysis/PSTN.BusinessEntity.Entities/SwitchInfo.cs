@@ -3,7 +3,7 @@ namespace PSTN.BusinessEntity.Entities
 {
     public class SwitchInfo
     {
-        public int ID { get; set; }
+        public int SwitchId { get; set; }
 
         public string Name { get; set; }
     }

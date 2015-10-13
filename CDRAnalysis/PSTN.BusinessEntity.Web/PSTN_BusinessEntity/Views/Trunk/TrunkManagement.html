@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="PSTN_BusinessEntity_SwitchTrunkManagementController">
+﻿<vr-panel ng-controller="PSTN_BusinessEntity_TrunkManagementController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
             <vr-row removeline>
@@ -23,7 +23,7 @@
                     <vr-select label="Switch"
                                datasource="switches"
                                selectedvalues="selectedSwitches"
-                               datavaluefield="ID"
+                               datavaluefield="SwitchId"
                                datatextfield="Name"
                                entityname="Switch"
                                ismultipleselection>
@@ -54,8 +54,8 @@
 
                 <vr-columns width="normal">
                     <vr-select label="Linked-To Trunk" ng-show="advancedSelected"
-                               datasource="linkedToTrunkObjects"
-                               selectedvalues="selectedLinkedToTrunkObjects"
+                               datasource="linkedToTrunkObjs"
+                               selectedvalues="selectedLinkedToTrunkObjs"
                                datavaluefield="value"
                                datatextfield="description"
                                ismultipleselection>

@@ -21,21 +21,21 @@ namespace PSTN.BusinessEntity.Data.SQL
         {
             return RetrieveData(input, (tempTableName) =>
             {
-                string typeIDs = (input.Query.SelectedTypeIDs != null && input.Query.SelectedTypeIDs.Count() > 0) ?
-                    string.Join<int>(",", input.Query.SelectedTypeIDs) : null;
+                string typeIDs = (input.Query.SelectedTypeIds != null && input.Query.SelectedTypeIds.Count() > 0) ?
+                    string.Join<int>(",", input.Query.SelectedTypeIds) : null;
 
                 ExecuteNonQuerySP("PSTN_BE.sp_Switch_CreateTempByFiltered", tempTableName, input.Query.Name, typeIDs, input.Query.AreaCode);
 
             }, (reader) => SwitchDetailMapper(reader), _mapper);
         }
         
-        public SwitchDetail GetSwitchByID(int switchID) {
-            return GetItemSP("PSTN_BE.sp_Switch_GetByID", SwitchDetailMapper, switchID);
+        public SwitchDetail GetSwitchById(int switchId) {
+            return GetItemSP("PSTN_BE.sp_Switch_GetByID", SwitchDetailMapper, switchId);
         }
 
-        public Switch GetSwitchByDataSourceID(int DataSourceID)
+        public Switch GetSwitchByDataSourceId(int DataSourceId)
         {
-            return GetItemSP("PSTN_BE.sp_Switch_GetByDataSourceID", SwitchMapper, DataSourceID);
+            return GetItemSP("PSTN_BE.sp_Switch_GetByDataSourceID", SwitchMapper, DataSourceId);
         }
 
         public List<SwitchInfo> GetSwitchesByIds(List<int> switchIds)
@@ -54,30 +54,31 @@ namespace PSTN.BusinessEntity.Data.SQL
             return GetItemsSP("PSTN_BE.sp_Switch_GetSwitchAssignedDataSources", SwitchAssignedDataSourceMapper);
         }
 
-        public List<SwitchInfo> GetSwitchesToLinkTo(int switchID)
+        public List<SwitchInfo> GetSwitchesToLinkTo(int switchId)
         {
-            return GetItemsSP("PSTN_BE.sp_Switch_GetToLinkTo", SwitchInfoMapper, switchID);
+            return GetItemsSP("PSTN_BE.sp_Switch_GetToLinkTo", SwitchInfoMapper, switchId);
         }
 
-        public bool UpdateSwitch(Switch switchObject)
+        public bool UpdateSwitch(Switch switchObj)
         {
-            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_Switch_Update", switchObject.ID, switchObject.Name, switchObject.TypeID, switchObject.AreaCode, switchObject.TimeOffset.ToString(), switchObject.DataSourceID);
+            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_Switch_Update", switchObj.SwitchId, switchObj.Name, switchObj.TypeId, switchObj.AreaCode, switchObj.TimeOffset.ToString(), switchObj.DataSourceId);
+
             return (recordsAffected > 0);
         }
 
-        public bool AddSwitch(Switch switchObject, out int insertedID)
+        public bool AddSwitch(Switch switchObj, out int insertedId)
         {
-            object switchID;
+            object switchId;
 
-            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_Switch_Insert", out switchID, switchObject.Name, switchObject.TypeID, switchObject.AreaCode, switchObject.TimeOffset.ToString(), switchObject.DataSourceID);
+            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_Switch_Insert", out switchId, switchObj.Name, switchObj.TypeId, switchObj.AreaCode, switchObj.TimeOffset.ToString(), switchObj.DataSourceId);
 
-            insertedID = (recordsAffected > 0) ? (int)switchID : -1;
+            insertedId = (recordsAffected > 0) ? (int)switchId : -1;
             return (recordsAffected > 0);
         }
 
-        public bool DeleteSwitch(int switchID)
+        public bool DeleteSwitch(int switchId)
         {
-            int recordsEffected = ExecuteNonQuerySP("PSTN_BE.sp_Switch_Delete", switchID);
+            int recordsEffected = ExecuteNonQuerySP("PSTN_BE.sp_Switch_Delete", switchId);
             return (recordsEffected > 0);
         }
 
@@ -87,12 +88,12 @@ namespace PSTN.BusinessEntity.Data.SQL
         {
             Switch switchObject = new Switch();
 
-            switchObject.ID = (int)reader["ID"];
+            switchObject.SwitchId = (int)reader["ID"];
             switchObject.Name = reader["Name"] as string;
-            switchObject.TypeID = (int)reader["TypeID"];
+            switchObject.TypeId = (int)reader["TypeID"];
             switchObject.AreaCode = reader["AreaCode"] as string;
             switchObject.TimeOffset = TimeSpan.Parse(reader["TimeOffset"] as string);
-            switchObject.DataSourceID = GetReaderValue<int?>(reader, "DataSourceID");
+            switchObject.DataSourceId = GetReaderValue<int?>(reader, "DataSourceID");
 
             return switchObject;
         }
@@ -101,7 +102,7 @@ namespace PSTN.BusinessEntity.Data.SQL
         {
             SwitchAssignedDataSource dataSourceObject = new SwitchAssignedDataSource();
 
-            dataSourceObject.DataSourceID = (int)reader["DataSourceID"];
+            dataSourceObject.DataSourceId = (int)reader["DataSourceID"];
 
             return dataSourceObject;
         }
@@ -110,13 +111,13 @@ namespace PSTN.BusinessEntity.Data.SQL
         {
             SwitchDetail switchObject = new SwitchDetail();
 
-            switchObject.ID = (int)reader["ID"];
+            switchObject.SwitchId = (int)reader["ID"];
             switchObject.Name = reader["Name"] as string;
-            switchObject.TypeID = (int)reader["TypeID"];
+            switchObject.TypeId = (int)reader["TypeID"];
             switchObject.TypeName = reader["TypeName"] as string;
             switchObject.AreaCode = reader["AreaCode"] as string;
             switchObject.TimeOffset = TimeSpan.Parse(reader["TimeOffset"] as string);
-            switchObject.DataSourceID = GetReaderValue<int?>(reader, "DataSourceID");
+            switchObject.DataSourceId = GetReaderValue<int?>(reader, "DataSourceID");
 
             return switchObject;
         }
@@ -125,7 +126,7 @@ namespace PSTN.BusinessEntity.Data.SQL
         {
             SwitchInfo switchObject = new SwitchInfo();
 
-            switchObject.ID = (int)reader["ID"];
+            switchObject.SwitchId = (int)reader["ID"];
             switchObject.Name = reader["Name"] as string;
 
             return switchObject;

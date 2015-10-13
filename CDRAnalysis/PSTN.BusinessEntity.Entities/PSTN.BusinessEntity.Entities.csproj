@@ -71,12 +71,12 @@
     <Compile Include="SwitchDetail.cs" />
     <Compile Include="SwitchInfo.cs" />
     <Compile Include="SwitchQuery.cs" />
-    <Compile Include="SwitchTrunk.cs" />
-    <Compile Include="SwitchTrunkInfo.cs" />
-    <Compile Include="SwitchType.cs" />
-    <Compile Include="SwitchTrunkDetail.cs" />
-    <Compile Include="SwitchTrunkQuery.cs" />
-    <Compile Include="SwitchTypeQuery.cs" />
+    <Compile Include="Trunk.cs" />
+    <Compile Include="TrunkInfo.cs" />
+    <Compile Include="Type.cs" />
+    <Compile Include="TrunkDetail.cs" />
+    <Compile Include="TrunkQuery.cs" />
+    <Compile Include="TypeQuery.cs" />
     <Compile Include="TrunkFilter.cs" />
   </ItemGroup>
   <ItemGroup />

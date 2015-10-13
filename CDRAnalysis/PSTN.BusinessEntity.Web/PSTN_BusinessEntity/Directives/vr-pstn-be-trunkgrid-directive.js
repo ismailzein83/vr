@@ -1,9 +1,9 @@
 ﻿"use strict";
 
-app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "SwitchTrunkAPIService", "SwitchTrunkTypeEnum", "SwitchTrunkDirectionEnum", "UtilsService", "VRNotificationService",
-    function (PSTN_BE_Service, SwitchTrunkAPIService, SwitchTrunkTypeEnum, SwitchTrunkDirectionEnum, UtilsService, VRNotificationService) {
+app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "TrunkAPIService", "TrunkTypeEnum", "TrunkDirectionEnum", "UtilsService", "VRNotificationService",
+    function (PSTN_BE_Service, TrunkAPIService, TrunkTypeEnum, TrunkDirectionEnum, UtilsService, VRNotificationService) {
     
-    var directiveDefinitionObject = {
+    var directiveDefinitionObj = {
 
         restrict: "E",
         scope: {
@@ -20,7 +20,7 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "SwitchTrunkAPIService", 
         compile: function (element, attrs) {
            
         },
-        templateUrl: "/Client/Modules/PSTN_BusinessEntity/Directives/Templates/SwitchTrunkGridTemplate.html"
+        templateUrl: "/Client/Modules/PSTN_BusinessEntity/Directives/Templates/TrunkGridTemplate.html"
 
     };
 
@@ -46,18 +46,18 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "SwitchTrunkAPIService", 
                         return gridAPI.retrieveData(query);
                     }
 
-                    directiveAPI.onTrunkAdded = function (trunkObject) {
-                        setTrunkDescriptions(trunkObject);
-                        gridAPI.itemAdded(trunkObject);
+                    directiveAPI.onTrunkAdded = function (trunkObj) {
+                        setTrunkDescriptions(trunkObj);
+                        gridAPI.itemAdded(trunkObj);
 
-                        var linkedToTrunkID = trunkObject.LinkedToTrunkID;
-                        updateDataItem(linkedToTrunkID, trunkObject.ID, trunkObject.Name);
+                        var linkedToTrunkId = trunkObj.LinkedToTrunkId;
+                        updateDataItem(linkedToTrunkId, trunkObj.TrunkId, trunkObj.Name);
 
-                        if (linkedToTrunkID != null) {
-                            var linkedToTheLinkedToTrunkObject = UtilsService.getItemByVal($scope.trunks, linkedToTrunkID, "LinkedToTrunkID");
+                        if (linkedToTrunkId != null) {
+                            var linkedToTheLinkedToTrunkObj = UtilsService.getItemByVal($scope.trunks, linkedToTrunkId, "LinkedToTrunkId");
 
-                            if (linkedToTheLinkedToTrunkObject != null)
-                                updateDataItem(linkedToTheLinkedToTrunkObject.ID, null, null);
+                            if (linkedToTheLinkedToTrunkObj != null)
+                                updateDataItem(linkedToTheLinkedToTrunkObj.TrunkId, null, null);
                         }
                     }
 
@@ -67,7 +67,7 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "SwitchTrunkAPIService", 
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
 
-                return SwitchTrunkAPIService.GetFilteredSwitchTrunks(dataRetrievalInput)
+                return TrunkAPIService.GetFilteredTrunks(dataRetrievalInput)
                     .then(function (response) {
 
                         angular.forEach(response.Data, function (item) {
@@ -84,44 +84,44 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "SwitchTrunkAPIService", 
             defineMenuActions();
         }
 
-        function editTrunk(gridObject) {
+        function editTrunk(gridObj) {
 
-            var onTrunkUpdated = function (firstTrunkObject, linkedToFirstTrunkID, secondTrunkID) {
+            var onTrunkUpdated = function (firstTrunkObj, linkedToFirstTrunkId, secondTrunkId) {
 
-                setTrunkDescriptions(firstTrunkObject);
-                gridAPI.itemUpdated(firstTrunkObject);
+                setTrunkDescriptions(firstTrunkObj);
+                gridAPI.itemUpdated(firstTrunkObj);
 
-                updateDataItem(linkedToFirstTrunkID, null, null);
+                updateDataItem(linkedToFirstTrunkId, null, null);
 
-                var secondTrunkObject = UtilsService.getItemByVal($scope.trunks, secondTrunkID, "ID");
-                var linkedToSecondTrunkID = (secondTrunkObject != null) ? secondTrunkObject.LinkedToTrunkID : null;
+                var secondTrunkObj = UtilsService.getItemByVal($scope.trunks, secondTrunkId, "TrunkId");
+                var linkedToSecondTrunkId = (secondTrunkObj != null) ? secondTrunkObj.LinkedToTrunkId : null;
 
-                updateDataItem(linkedToSecondTrunkID, null, null);
-                updateDataItem(secondTrunkID, firstTrunkObject.ID, firstTrunkObject.Name);
+                updateDataItem(linkedToSecondTrunkId, null, null);
+                updateDataItem(secondTrunkId, firstTrunkObj.TrunkId, firstTrunkObj.Name);
             }
 
-            PSTN_BE_Service.editSwitchTrunk(gridObject, onTrunkUpdated);
+            PSTN_BE_Service.editTrunk(gridObj, onTrunkUpdated);
         }               
 
-        function deleteTrunk(gridObject) {
+        function deleteTrunk(gridObj) {
 
-            var onTrunkDeleted = function (deletedTrunkObject, linkedToTrunkID) {
-                gridAPI.itemDeleted(deletedTrunkObject);
-                updateDataItem(linkedToTrunkID, null, null);
+            var onTrunkDeleted = function (deletedTrunkObj, linkedToTrunkId) {
+                gridAPI.itemDeleted(deletedTrunkObj);
+                updateDataItem(linkedToTrunkId, null, null);
             }
 
-            PSTN_BE_Service.deleteSwitchTrunk(gridObject, onTrunkDeleted);
+            PSTN_BE_Service.deleteTrunk(gridObj, onTrunkDeleted);
         }
         
-        function updateDataItem(dataItemID, linkedToTrunkID, linkedToTrunkName) {
+        function updateDataItem(dataItemId, linkedToTrunkId, linkedToTrunkName) {
 
-            if (dataItemID != null) {
-                var dataItem = UtilsService.getItemByVal($scope.trunks, dataItemID, "ID");
+            if (dataItemId != null) {
+                var dataItem = UtilsService.getItemByVal($scope.trunks, dataItemId, "TrunkId");
 
                 if (dataItem != null) {
                     dataItem = UtilsService.cloneObject(dataItem, true);
 
-                    dataItem.LinkedToTrunkID = linkedToTrunkID;
+                    dataItem.LinkedToTrunkId = linkedToTrunkId;
                     dataItem.LinkedToTrunkName = linkedToTrunkName;
 
                     gridAPI.itemUpdated(dataItem);
@@ -129,13 +129,13 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "SwitchTrunkAPIService", 
             }
         }
 
-        function setTrunkDescriptions(trunkObject) {
+        function setTrunkDescriptions(trunkObj) {
 
-            var type = UtilsService.getEnum(SwitchTrunkTypeEnum, "value", trunkObject.Type);
-            trunkObject.TypeDescription = type.description;
+            var type = UtilsService.getEnum(TrunkTypeEnum, "value", trunkObj.Type);
+            trunkObj.TypeDescription = type.description;
 
-            var direction = UtilsService.getEnum(SwitchTrunkDirectionEnum, "value", trunkObject.Direction);
-            trunkObject.DirectionDescription = direction.description;
+            var direction = UtilsService.getEnum(TrunkDirectionEnum, "value", trunkObj.Direction);
+            trunkObj.DirectionDescription = direction.description;
         }
 
         function defineMenuActions() {
@@ -152,6 +152,6 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "SwitchTrunkAPIService", 
         }
     }
 
-    return directiveDefinitionObject;
+    return directiveDefinitionObj;
 
 }]);

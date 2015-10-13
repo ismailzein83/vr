@@ -266,8 +266,8 @@ namespace PSTN.BusinessEntity.Business
             {
                 normalizationRuleDetail.TrunkCount = normalizationRule.Criteria.TrunkIds.Count;
 
-                SwitchTrunkManager trunkManager = new SwitchTrunkManager();
-                List<SwitchTrunkInfo> trunks = trunkManager.GetSwitchTrunksByIds(normalizationRule.Criteria.TrunkIds);
+                TrunkManager trunkManager = new TrunkManager();
+                List<TrunkInfo> trunks = trunkManager.GetTrunksByIds(normalizationRule.Criteria.TrunkIds);
                 List<string> trunkNames = GetTrunkNames(trunks);
                 normalizationRuleDetail.TrunkNames = string.Join<string>(", ", trunkNames);
             }
@@ -328,11 +328,11 @@ namespace PSTN.BusinessEntity.Business
             return switchNames;
         }
 
-        private List<string> GetTrunkNames(List<SwitchTrunkInfo> trunks)
+        private List<string> GetTrunkNames(List<TrunkInfo> trunks)
         {
             List<string> trunkNames = new List<string>();
 
-            foreach (SwitchTrunkInfo trunk in trunks)
+            foreach (TrunkInfo trunk in trunks)
             {
                 trunkNames.Add(trunk.Name);
             }

@@ -1,54 +1,56 @@
-﻿app.service("PSTN_BE_Service", ["SwitchTrunkAPIService", "NormalizationRuleAPIService", "VRModalService", "VRNotificationService", function (SwitchTrunkAPIService, NormalizationRuleAPIService, VRModalService, VRNotificationService) {
+﻿app.service("PSTN_BE_Service", ["TrunkAPIService", "NormalizationRuleAPIService", "VRModalService", "VRNotificationService", function (TrunkAPIService, NormalizationRuleAPIService, VRModalService, VRNotificationService) {
     
     return ({
-        editSwitchTrunk: editSwitchTrunk,
-        addSwitchTrunk: addSwitchTrunk,
-        deleteSwitchTrunk: deleteSwitchTrunk,
+        editTrunk: editTrunk,
+        addTrunk: addTrunk,
+        deleteTrunk: deleteTrunk,
         editNormalizationRule: editNormalizationRule,
         addNormalizationRule: addNormalizationRule,
         deleteNormalizationRule: deleteNormalizationRule
     });
 
-    function editSwitchTrunk(trunkObject, onTrunkUpdated) {
+    function editTrunk(trunkObj, onTrunkUpdated) {
         var modalSettings = {};
 
         var parameters = {
-            TrunkID: trunkObject.ID
+            TrunkId: trunkObj.TrunkId
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = (trunkObject.Name != undefined) ? "Edit Switch Trunk: " + trunkObject.Name : "Edit Switch Trunk";
+            modalScope.title = (trunkObj.Name != undefined) ? "Edit Switch Trunk: " + trunkObj.Name : "Edit Switch Trunk";
             modalScope.onTrunkUpdated = onTrunkUpdated;
         };
 
-        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Trunk/SwitchTrunkEditor.html", parameters, modalSettings);
+        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Trunk/TrunkEditor.html", parameters, modalSettings);
     }
 
-    function addSwitchTrunk(switchID, onTrunkAdded) {
+    function addTrunk(switchId, onTrunkAdded) {
         var modalSettings = {};
 
         var parameters = {
-            SwitchID: switchID
+            SwitchId: switchId
         }
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Add Switch Trunk";
+            modalScope.title = "Add Trunk";
             modalScope.onTrunkAdded = onTrunkAdded;
         };
 
-        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Trunk/SwitchTrunkEditor.html", parameters, modalSettings);
+        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Trunk/TrunkEditor.html", parameters, modalSettings);
     }
 
-    function deleteSwitchTrunk(trunkObject, onTrunkDeleted) {
+    function deleteTrunk(trunkObj, onTrunkDeleted) {
 
         VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response == true) {
 
-                    return SwitchTrunkAPIService.DeleteSwitchTrunk(trunkObject.ID, trunkObject.LinkedToTrunkID)
+                    trunkObj.LinkedToTrunkId = (trunkObj.LinkedToTrunkId != null) ? trunkObj.LinkedToTrunkId : -1;
+
+                    return TrunkAPIService.DeleteTrunk(trunkObj.TrunkId, trunkObj.LinkedToTrunkId)
                         .then(function (deletionResponse) {
-                            if (VRNotificationService.notifyOnItemDeleted("Switch Trunk", deletionResponse))
-                                onTrunkDeleted(trunkObject, trunkObject.LinkedToTrunkID);
+                            if (VRNotificationService.notifyOnItemDeleted("Trunk", deletionResponse))
+                                onTrunkDeleted(trunkObj, trunkObj.LinkedToTrunkId);
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);
@@ -57,15 +59,15 @@
             });
     }
 
-    function editNormalizationRule(normalizationRuleObject, onNormalizationRuleUpdated) {
+    function editNormalizationRule(normalizationRuleObj, onNormalizationRuleUpdated) {
         var modalSettings = {};
 
         var parameters = {
-            NormalizationRuleId: normalizationRuleObject.NormalizationRuleId
+            NormalizationRuleId: normalizationRuleObj.NormalizationRuleId
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = (normalizationRuleObject.Name != undefined) ? "Edit Normalization Rule: " + normalizationRuleObject.Name : "Edit Normalization Rule";
+            modalScope.title = (normalizationRuleObj.Name != undefined) ? "Edit Normalization Rule: " + normalizationRuleObj.Name : "Edit Normalization Rule";
             modalScope.onNormalizationRuleUpdated = onNormalizationRuleUpdated;
         };
 
@@ -83,16 +85,16 @@
         VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/NormalizationRule/NormalizationRuleEditor.html", null, modalSettings);
     }
 
-    function deleteNormalizationRule(normalizationRuleObject, onNormalizationRuleDeleted) {
+    function deleteNormalizationRule(normalizationRuleObj, onNormalizationRuleDeleted) {
 
         VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response == true) {
 
-                    return NormalizationRuleAPIService.DeleteNormalizationRule(normalizationRuleObject.NormalizationRuleId)
+                    return NormalizationRuleAPIService.DeleteNormalizationRule(normalizationRuleObj.NormalizationRuleId)
                         .then(function (deletionResponse) {
                             if (VRNotificationService.notifyOnItemDeleted("Normalization Rule", deletionResponse))
-                                onNormalizationRuleDeleted(normalizationRuleObject);
+                                onNormalizationRuleDeleted(normalizationRuleObj);
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);

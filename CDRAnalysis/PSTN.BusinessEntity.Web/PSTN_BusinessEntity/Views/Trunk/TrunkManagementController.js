@@ -1,6 +1,6 @@
-﻿SwitchTrunkManagementController.$inject = ["$scope", "SwitchAPIService", "PSTN_BE_Service", "SwitchTrunkTypeEnum", "SwitchTrunkDirectionEnum", "UtilsService", "VRNotificationService", "VRModalService"];
+﻿TrunkManagementController.$inject = ["$scope", "PSTN_BE_Service", "SwitchAPIService", "TrunkTypeEnum", "TrunkDirectionEnum", "UtilsService", "VRNotificationService", "VRModalService"];
 
-function SwitchTrunkManagementController($scope, SwitchAPIService, PSTN_BE_Service, SwitchTrunkTypeEnum, SwitchTrunkDirectionEnum, UtilsService, VRNotificationService, VRModalService) {
+function TrunkManagementController($scope, PSTN_BE_Service, SwitchAPIService, TrunkTypeEnum, TrunkDirectionEnum, UtilsService, VRNotificationService, VRModalService) {
     
     var trunkGridAPI;
 
@@ -14,32 +14,32 @@ function SwitchTrunkManagementController($scope, SwitchAPIService, PSTN_BE_Servi
         $scope.symbol = undefined;
         $scope.switches = [];
         $scope.selectedSwitches = [];
-        $scope.types = UtilsService.getArrayEnum(SwitchTrunkTypeEnum);
+        $scope.types = UtilsService.getArrayEnum(TrunkTypeEnum);
         $scope.selectedTypes = [];
-        $scope.directions = UtilsService.getArrayEnum(SwitchTrunkDirectionEnum);
+        $scope.directions = UtilsService.getArrayEnum(TrunkDirectionEnum);
         $scope.selectedDirections = [];
-        $scope.linkedToTrunkObjects = [
+        $scope.linkedToTrunkObjs = [
             { value: true, description: "Linked" },
             { value: false, description: "Unlinked" }
         ];
-        $scope.selectedLinkedToTrunkObjects = [];
+        $scope.selectedLinkedToTrunkObjs = [];
 
         // filter functions
         $scope.searchClicked = function () {
             if (trunkGridAPI != undefined) {
-                var query = getFilterObject();
+                var query = getFilterObj();
                 trunkGridAPI.retrieveData(query);
             }
         }
 
         $scope.addTrunk = function () {
 
-            var onTrunkAdded = function (trunkObject) {
+            var onTrunkAdded = function (trunkObj) {
                 if (trunkGridAPI != undefined)
-                    trunkGridAPI.onTrunkAdded(trunkObject);
+                    trunkGridAPI.onTrunkAdded(trunkObj);
             }
 
-            PSTN_BE_Service.addSwitchTrunk(null, onTrunkAdded);
+            PSTN_BE_Service.addTrunk(null, onTrunkAdded);
         }
 
         // directive functions
@@ -55,7 +55,7 @@ function SwitchTrunkManagementController($scope, SwitchAPIService, PSTN_BE_Servi
             setFiltersToDefaultValues();
 
             if (trunkGridAPI != undefined)
-                trunkGridAPI.retrieveData(getFilterObject());
+                trunkGridAPI.retrieveData(getFilterObj());
         });
     }
 
@@ -81,16 +81,16 @@ function SwitchTrunkManagementController($scope, SwitchAPIService, PSTN_BE_Servi
 
     }
 
-    function getFilterObject() {
+    function getFilterObj() {
         return {
             Name: $scope.name,
             Symbol: $scope.symbol,
-            SelectedSwitchIDs: UtilsService.getPropValuesFromArray($scope.selectedSwitches, "ID"),
+            SelectedSwitchIds: UtilsService.getPropValuesFromArray($scope.selectedSwitches, "SwitchId"),
             SelectedTypes: UtilsService.getPropValuesFromArray($scope.selectedTypes, "value"),
             SelectedDirections: UtilsService.getPropValuesFromArray($scope.selectedDirections, "value"),
-            IsLinkedToTrunk: ($scope.selectedLinkedToTrunkObjects.length == 1) ? $scope.selectedLinkedToTrunkObjects[0].value : null
+            IsLinkedToTrunk: ($scope.selectedLinkedToTrunkObjs.length == 1) ? $scope.selectedLinkedToTrunkObjs[0].value : null
         };
     }
 }
 
-appControllers.controller("PSTN_BusinessEntity_SwitchTrunkManagementController", SwitchTrunkManagementController);
+appControllers.controller("PSTN_BusinessEntity_TrunkManagementController", TrunkManagementController);

@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace PSTN.BusinessEntity.Entities
 {
-    public class SwitchTrunk
+    public class Trunk
     {
-        public int ID { get; set; }
+        public int TrunkId { get; set; }
 
         public string Name { get; set; }
 
         public string Symbol { get; set; }
 
-        public int SwitchID { get; set; }
+        public int SwitchId { get; set; }
 
-        public SwitchTrunkType Type { get; set; }
+        public TrunkType Type { get; set; }
 
-        public SwitchTrunkDirection Direction { get; set; }
+        public TrunkDirection Direction { get; set; }
 
-        public int? LinkedToTrunkID { get; set; }
+        public int? LinkedToTrunkId { get; set; }
     }
 }

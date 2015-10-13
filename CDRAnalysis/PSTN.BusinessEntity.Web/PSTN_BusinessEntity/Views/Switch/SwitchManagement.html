@@ -10,7 +10,7 @@
                     <vr-select label="Type"
                                datasource="types"
                                selectedvalues="selectedTypes"
-                               datavaluefield="ID"
+                               datavaluefield="TypeId"
                                datatextfield="Name"
                                entityname="Type"
                                ismultipleselection>
@@ -41,7 +41,7 @@
                              dataretrievalfunction="dataRetrievalFunction"
                              pagingtype="'PagingOnScroll'"
                              menuactions="gridMenuActions"
-                             idfield="ID">
+                             idfield="SwitchId">
 
                     <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Type'" field="'TypeName'" type="'Text'"></vr-datagridcolumn>
@@ -49,7 +49,7 @@
                     <vr-datagridcolumn headertext="'Time Offset'" field="'TimeOffset'" type="'Text'"></vr-datagridcolumn>
 
                     <vr-datagridexpandablerow>
-                        <vr-pstn-be-trunkgrid on-ready="dataItem.extensionObject.onTrunkGridReady"></vr-pstn-be-trunkgrid>
+                        <vr-pstn-be-trunkgrid on-ready="dataItem.extensionObj.onTrunkGridReady"></vr-pstn-be-trunkgrid>
                     </vr-datagridexpandablerow>
                 </vr-datagrid>
             </vr-columns>

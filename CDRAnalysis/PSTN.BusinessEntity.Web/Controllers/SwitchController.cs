@@ -16,10 +16,10 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        public SwitchDetail GetSwitchByID(int switchID)
+        public SwitchDetail GetSwitchById(int switchId)
         {
             SwitchManager manager = new SwitchManager();
-            return manager.GetSwitchByID(switchID);
+            return manager.GetSwitchById(switchId);
         }
 
         [HttpGet]
@@ -30,10 +30,10 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        public List<SwitchInfo> GetSwitchesToLinkTo(int switchID)
+        public List<SwitchInfo> GetSwitchesToLinkTo(int switchId)
         {
             SwitchManager manager = new SwitchManager();
-            return manager.GetSwitchesToLinkTo(switchID);
+            return manager.GetSwitchesToLinkTo(switchId);
         }
 
         [HttpGet]
@@ -44,24 +44,24 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpPost]
-        public UpdateOperationOutput<SwitchDetail> UpdateSwitch(Switch switchObject)
+        public UpdateOperationOutput<SwitchDetail> UpdateSwitch(Switch switchObj)
         {
             SwitchManager manager = new SwitchManager();
-            return manager.UpdateSwitch(switchObject);
+            return manager.UpdateSwitch(switchObj);
         }
 
         [HttpPost]
-        public InsertOperationOutput<SwitchDetail> AddSwitch(Switch switchObject)
+        public InsertOperationOutput<SwitchDetail> AddSwitch(Switch switchObj)
         {
             SwitchManager manager = new SwitchManager();
-            return manager.AddSwitch(switchObject);
+            return manager.AddSwitch(switchObj);
         }
 
         [HttpGet]
-        public DeleteOperationOutput<object> DeleteSwitch(int switchID)
+        public DeleteOperationOutput<object> DeleteSwitch(int switchId)
         {
             SwitchManager manager = new SwitchManager();
-            return manager.DeleteSwitch(switchID);
+            return manager.DeleteSwitch(switchId);
         }
     }
 }

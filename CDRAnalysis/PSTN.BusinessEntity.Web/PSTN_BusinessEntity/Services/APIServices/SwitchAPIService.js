@@ -2,7 +2,7 @@
 
     return ({
         GetFilteredSwitches: GetFilteredSwitches,
-        GetSwitchByID: GetSwitchByID,
+        GetSwitchById: GetSwitchById,
         GetSwitches: GetSwitches,
         GetSwitchesToLinkTo: GetSwitchesToLinkTo,
         GetSwitchAssignedDataSources: GetSwitchAssignedDataSources,
@@ -15,9 +15,9 @@
         return BaseAPIService.post("/api/Switch/GetFilteredSwitches", input);
     }
 
-    function GetSwitchByID(switchID) {
-        return BaseAPIService.get("/api/Switch/GetSwitchByID", {
-            switchID: switchID
+    function GetSwitchById(switchId) {
+        return BaseAPIService.get("/api/Switch/GetSwitchById", {
+            switchId: switchId
         });
     }
 
@@ -25,9 +25,9 @@
         return BaseAPIService.get("/api/Switch/GetSwitches");
     }
 
-    function GetSwitchesToLinkTo(switchID) {
+    function GetSwitchesToLinkTo(switchId) {
         return BaseAPIService.get("/api/Switch/GetSwitchesToLinkTo", {
-            switchID: switchID
+            switchId: switchId
         });
     }
 
@@ -35,17 +35,17 @@
         return BaseAPIService.get("/api/Switch/GetSwitchAssignedDataSources");
     }
 
-    function UpdateSwitch(switchObject) {
-        return BaseAPIService.post("/api/Switch/UpdateSwitch", switchObject);
+    function UpdateSwitch(switchObj) {
+        return BaseAPIService.post("/api/Switch/UpdateSwitch", switchObj);
     }
 
-    function AddSwitch(switchObject) {
-        return BaseAPIService.post("/api/Switch/AddSwitch", switchObject);
+    function AddSwitch(switchObj) {
+        return BaseAPIService.post("/api/Switch/AddSwitch", switchObj);
     }
 
-    function DeleteSwitch(switchID) {
+    function DeleteSwitch(switchId) {
         return BaseAPIService.get("/api/Switch/DeleteSwitch", {
-            switchID: switchID
+            switchId: switchId
         });
     }
 });

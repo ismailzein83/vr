@@ -1,6 +1,6 @@
-﻿SwitchTypeManagementController.$inject = ["$scope", "SwitchTypeAPIService", "VRNotificationService", "VRModalService"];
+﻿TypeManagementController.$inject = ["$scope", "TypeAPIService", "VRNotificationService", "VRModalService"];
 
-function SwitchTypeManagementController($scope, SwitchTypeAPIService, VRNotificationService, VRModalService) {
+function TypeManagementController($scope, TypeAPIService, VRNotificationService, VRModalService) {
 
     var gridAPI = undefined;
 
@@ -13,7 +13,7 @@ function SwitchTypeManagementController($scope, SwitchTypeAPIService, VRNotifica
         $scope.name = undefined;
 
         // grid vars
-        $scope.switchTypes = [];
+        $scope.types = [];
         $scope.gridMenuActions = [];
 
         // filter functions
@@ -21,28 +21,28 @@ function SwitchTypeManagementController($scope, SwitchTypeAPIService, VRNotifica
             return retrieveData();
         }
 
-        $scope.addSwitchType = function () {
+        $scope.addType = function () {
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = "Add a Switch Type";
+                modalScope.title = "Add Switch Type";
 
-                modalScope.onSwitchTypeAdded = function (switchTypeObject) {
-                    gridAPI.itemAdded(switchTypeObject);
+                modalScope.onTypeAdded = function (typeObj) {
+                    gridAPI.itemAdded(typeObj);
                 };
             };
 
-            VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Type/SwitchTypeEditor.html", null, settings);
+            VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Type/TypeEditor.html", null, settings);
         }
 
         // grid functions
-        $scope.gridReady = function (api) {
+        $scope.onGridReady = function (api) {
             gridAPI = api;
             return retrieveData();
         }
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            return SwitchTypeAPIService.GetFilteredSwitchTypes(dataRetrievalInput)
+            return TypeAPIService.GetFilteredTypes(dataRetrievalInput)
                 .then(function (response) {
                     onResponseReady(response);
                 })
@@ -70,43 +70,43 @@ function SwitchTypeManagementController($scope, SwitchTypeAPIService, VRNotifica
         $scope.gridMenuActions = [
             {
                 name: "Edit",
-                clicked: editSwitchType
+                clicked: editType
             },
             {
                 name: "Delete",
-                clicked: deleteSwitchType
+                clicked: deleteType
             }
         ];
     }
 
-    function editSwitchType(gridObject) {
+    function editType(gridObj) {
         var modalSettings = {};
 
         var parameters = {
-            SwitchTypeID: gridObject.ID
+            TypeId: gridObj.TypeId
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Switch Type: " + gridObject.Name;
+            modalScope.title = "Edit Switch Type: " + gridObj.Name;
 
-            modalScope.onSwitchTypeUpdated = function (switchTypeObject) {
-                gridAPI.itemUpdated(switchTypeObject);
+            modalScope.onTypeUpdated = function (TypeObj) {
+                gridAPI.itemUpdated(TypeObj);
             };
         };
 
-        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Type/SwitchTypeEditor.html", parameters, modalSettings);
+        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Type/TypeEditor.html", parameters, modalSettings);
     }
 
-    function deleteSwitchType(gridObject) {
+    function deleteType(gridObj) {
 
         VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response == true) {
 
-                    return SwitchTypeAPIService.DeleteSwitchType(gridObject.ID)
+                    return TypeAPIService.DeleteType(gridObj.TypeId)
                         .then(function (deletionResponse) {
                             if (VRNotificationService.notifyOnItemDeleted("Switch Type", deletionResponse))
-                                gridAPI.itemDeleted(gridObject);
+                                gridAPI.itemDeleted(gridObj);
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);
@@ -116,4 +116,4 @@ function SwitchTypeManagementController($scope, SwitchTypeAPIService, VRNotifica
     }
 }
 
-appControllers.controller("PSTN_BusinessEntity_SwitchTypeManagementController", SwitchTypeManagementController);
+appControllers.controller("PSTN_BusinessEntity_TypeManagementController", TypeManagementController);

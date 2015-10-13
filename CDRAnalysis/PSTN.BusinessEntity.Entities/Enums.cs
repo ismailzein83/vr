@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PSTN.BusinessEntity.Entities
 {
-    public enum SwitchTrunkType
+    public enum TrunkType
     {
         Local = 0,
         Transit = 1,
@@ -15,7 +15,7 @@ namespace PSTN.BusinessEntity.Entities
         Wireless = 4
     }
 
-    public enum SwitchTrunkDirection {
+    public enum TrunkDirection {
         In = 0,
         Out = 1,
         InOut = 2,

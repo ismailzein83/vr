@@ -1,6 +1,6 @@
-﻿SwitchManagementController.$inject = ["$scope", "SwitchAPIService", "SwitchTypeAPIService", "PSTN_BE_Service", "UtilsService", "VRNotificationService", "VRModalService"];
+﻿SwitchManagementController.$inject = ["$scope", "PSTN_BE_Service", "SwitchAPIService", "TypeAPIService", "UtilsService", "VRNotificationService", "VRModalService"];
 
-function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIService, PSTN_BE_Service, UtilsService, VRNotificationService, VRModalService) {
+function SwitchManagementController($scope, PSTN_BE_Service, SwitchAPIService, TypeAPIService, UtilsService, VRNotificationService, VRModalService) {
 
     var gridAPI;
 
@@ -28,10 +28,10 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = "Add a Switch";
+                modalScope.title = "Add Switch";
 
-                modalScope.onSwitchAdded = function (switchObject) {
-                    gridAPI.itemAdded(switchObject);
+                modalScope.onSwitchAdded = function (switchObj) {
+                    gridAPI.itemAdded(switchObj);
                 };
             };
 
@@ -65,24 +65,24 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
     }
 
     function setDataItemExtension(dataItem) {
-        var extensionObject = {};
+        var extensionObj = {};
 
-        extensionObject.onTrunkGridReady = function (api) {
-            extensionObject.trunkGridAPI = api;
+        extensionObj.onTrunkGridReady = function (api) {
+            extensionObj.trunkGridAPI = api;
 
-            var query = { SelectedSwitchIDs: [dataItem.ID] };
-            extensionObject.trunkGridAPI.retrieveData(query);
+            var query = { SelectedSwitchIds: [dataItem.SwitchId] };
+            extensionObj.trunkGridAPI.retrieveData(query);
 
-            extensionObject.onTrunkGridReady = undefined;
+            extensionObj.onTrunkGridReady = undefined;
         };
 
-        dataItem.extensionObject = extensionObject;
+        dataItem.extensionObj = extensionObj;
     }
 
     function load() {
         $scope.isLoadingFilters = true;
 
-        return SwitchTypeAPIService.GetSwitchTypes()
+        return TypeAPIService.GetTypes()
             .then(function (response) {
                 angular.forEach(response, function (item) {
                     $scope.types.push(item);
@@ -99,7 +99,7 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
     function retrieveData() {
         var query = {
             Name: $scope.name,
-            SelectedTypeIDs: UtilsService.getPropValuesFromArray($scope.selectedTypes, "ID"),
+            SelectedTypeIds: UtilsService.getPropValuesFromArray($scope.selectedTypes, "TypeId"),
             AreaCode: $scope.areaCode,
         };
 
@@ -117,40 +117,40 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
                 clicked: deleteSwitch
             },
             {
-                name: "Add a Trunk",
+                name: "Add Trunk",
                 clicked: addTrunk
             }
         ];
     }
     
-    function editSwitch(gridObject) {
+    function editSwitch(gridObj) {
         var modalSettings = {};
 
         var parameters = {
-            SwitchID: gridObject.ID
+            SwitchId: gridObj.SwitchId
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Switch: " + gridObject.Name;
+            modalScope.title = "Edit Switch: " + gridObj.Name;
 
-            modalScope.onSwitchUpdated = function (switchObject) {
-                gridAPI.itemUpdated(switchObject);
+            modalScope.onSwitchUpdated = function (switchObj) {
+                gridAPI.itemUpdated(switchObj);
             };
         };
 
         VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Switch/SwitchEditor.html", parameters, modalSettings);
     }
 
-    function deleteSwitch(gridObject) {
+    function deleteSwitch(gridObj) {
 
         VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response == true) {
 
-                    return SwitchAPIService.DeleteSwitch(gridObject.ID)
+                    return SwitchAPIService.DeleteSwitch(gridObj.SwitchId)
                         .then(function (deletionResponse) {
                             if (VRNotificationService.notifyOnItemDeleted("Switch", deletionResponse))
-                                gridAPI.itemDeleted(gridObject);
+                                gridAPI.itemDeleted(gridObj);
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);
@@ -163,12 +163,12 @@ function SwitchManagementController($scope, SwitchAPIService, SwitchTypeAPIServi
 
         gridAPI.expandRow(dataItem);
 
-        var onTrunkAdded = function (trunkObject) {
-            if (dataItem.extensionObject.trunkGridAPI.onTrunkAdded != undefined)
-                dataItem.extensionObject.trunkGridAPI.onTrunkAdded(trunkObject);
+        var onTrunkAdded = function (trunkObj) {
+            if (dataItem.extensionObj.trunkGridAPI.onTrunkAdded != undefined)
+                dataItem.extensionObj.trunkGridAPI.onTrunkAdded(trunkObj);
         }
 
-        PSTN_BE_Service.addSwitchTrunk(dataItem.ID, onTrunkAdded);
+        PSTN_BE_Service.addTrunk(dataItem.SwitchId, onTrunkAdded);
     }
 }
 

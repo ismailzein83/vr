@@ -52,17 +52,17 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
         public static Vanrise.Integration.Entities.MappingOutput ImportingCDR_FileorFTP()
         {
 
-            PSTN.BusinessEntity.Business.SwitchTrunkManager switchTrunkManager = new PSTN.BusinessEntity.Business.SwitchTrunkManager();
-            PSTN.BusinessEntity.Entities.SwitchTrunkInfo currentTrunk = new PSTN.BusinessEntity.Entities.SwitchTrunkInfo();
+            PSTN.BusinessEntity.Business.TrunkManager switchTrunkManager = new PSTN.BusinessEntity.Business.TrunkManager();
+            PSTN.BusinessEntity.Entities.TrunkInfo currentTrunk = new PSTN.BusinessEntity.Entities.TrunkInfo();
 
             PSTN.BusinessEntity.Business.SwitchManager switchManager = new PSTN.BusinessEntity.Business.SwitchManager();
             PSTN.BusinessEntity.Entities.Switch currentSwitch;
-            currentSwitch = switchManager.GetSwitchByDataSourceID(dataSourceId);
+            currentSwitch = switchManager.GetSwitchByDataSourceId(dataSourceId);
             int? SwitchId = null;
             TimeSpan TimeOffset = new TimeSpan();
             if (currentSwitch != null)
             {
-                SwitchId = currentSwitch.ID;
+                SwitchId = currentSwitch.SwitchId;
                 TimeOffset = currentSwitch.TimeOffset;
             }
 
@@ -96,16 +96,16 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
 
                 if (cdr.InTrunkSymbol != null && cdr.InTrunkSymbol != string.Empty)
                 {
-                    currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(cdr.InTrunkSymbol);
+                    currentTrunk = switchTrunkManager.GetTrunkBySymbol(cdr.InTrunkSymbol);
                     if (currentTrunk != null)
-                        cdr.InTrunkId = currentTrunk.ID;
+                        cdr.InTrunkId = currentTrunk.TrunkId;
                 }
 
                 if (cdr.OutTrunkSymbol != null && cdr.OutTrunkSymbol != string.Empty)
                 {
-                    currentTrunk = switchTrunkManager.GetSwitchTrunkBySymbol(cdr.OutTrunkSymbol);
+                    currentTrunk = switchTrunkManager.GetTrunkBySymbol(cdr.OutTrunkSymbol);
                     if (currentTrunk != null)
-                        cdr.OutTrunkId = currentTrunk.ID;
+                        cdr.OutTrunkId = currentTrunk.TrunkId;
                 }
 
 

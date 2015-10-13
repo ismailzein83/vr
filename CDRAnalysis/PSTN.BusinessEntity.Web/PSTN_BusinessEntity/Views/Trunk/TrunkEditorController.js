@@ -1,12 +1,12 @@
-﻿SwitchTrunkEditorController.$inject = ["$scope", "SwitchTrunkAPIService", "SwitchAPIService", "SwitchTrunkTypeEnum", "SwitchTrunkDirectionEnum", "UtilsService", "VRNavigationService", "VRNotificationService"];
+﻿TrunkEditorController.$inject = ["$scope", "TrunkAPIService", "SwitchAPIService", "TrunkTypeEnum", "TrunkDirectionEnum", "UtilsService", "VRNavigationService", "VRNotificationService"];
 
-function SwitchTrunkEditorController($scope, SwitchTrunkAPIService, SwitchAPIService, SwitchTrunkTypeEnum, SwitchTrunkDirectionEnum, UtilsService, VRNavigationService, VRNotificationService) {
+function TrunkEditorController($scope, TrunkAPIService, SwitchAPIService, TrunkTypeEnum, TrunkDirectionEnum, UtilsService, VRNavigationService, VRNotificationService) {
 
-    var trunkID;
-    var switchID;
+    var trunkId;
+    var switchId;
     var editMode;
     var currentlyLinkedToTrunkHasBeenSet = false;
-    var currentlyLinkedToTrunkID;
+    var currentlyLinkedToTrunkId;
 
     loadParameters();
     defineScope();
@@ -16,11 +16,11 @@ function SwitchTrunkEditorController($scope, SwitchTrunkAPIService, SwitchAPISer
         var parameters = VRNavigationService.getParameters($scope);
 
         if (parameters != undefined && parameters != null) {
-            trunkID = parameters.TrunkID;
-            switchID = parameters.SwitchID;
+            trunkId = parameters.TrunkId;
+            switchId = parameters.SwitchId;
         }
 
-        editMode = (trunkID != undefined);
+        editMode = (trunkId != undefined);
     }
 
     function defineScope() {
@@ -29,9 +29,9 @@ function SwitchTrunkEditorController($scope, SwitchTrunkAPIService, SwitchAPISer
         $scope.symbol = undefined;
         $scope.switches = [];
         $scope.selectedSwitch = undefined;
-        $scope.types = UtilsService.getArrayEnum(SwitchTrunkTypeEnum);
+        $scope.types = UtilsService.getArrayEnum(TrunkTypeEnum);
         $scope.selectedType = undefined;
-        $scope.directions = UtilsService.getArrayEnum(SwitchTrunkDirectionEnum);
+        $scope.directions = UtilsService.getArrayEnum(TrunkDirectionEnum);
         $scope.selectedDirection = undefined;
 
         $scope.switchesToLinkTo = [];
@@ -51,7 +51,7 @@ function SwitchTrunkEditorController($scope, SwitchTrunkAPIService, SwitchAPISer
             });
 
             if ($scope.selectedSwitch != undefined) {
-                var index = UtilsService.getItemIndexByVal($scope.switchesToLinkTo, $scope.selectedSwitch.ID, "ID");
+                var index = UtilsService.getItemIndexByVal($scope.switchesToLinkTo, $scope.selectedSwitch.SwitchId, "SwitchId");
                 $scope.switchesToLinkTo.splice(index, 1);
             }
         }
@@ -66,24 +66,24 @@ function SwitchTrunkEditorController($scope, SwitchTrunkAPIService, SwitchAPISer
                 $scope.isGettingData = true;
                 
                 var trunkFilterObj = {
-                    SwitchIds: [$scope.selectedSwitchToLinkTo.ID],
+                    SwitchIds: [$scope.selectedSwitchToLinkTo.SwitchId],
                     TrunkNameFilter: null
                 };
 
-                SwitchTrunkAPIService.GetTrunksBySwitchIds(trunkFilterObj)
-                    .then(function (responseArray) {
+                TrunkAPIService.GetTrunksBySwitchIds(trunkFilterObj)
+                    .then(function (response) {
 
-                        angular.forEach(responseArray, function (item) {
+                        angular.forEach(response, function (item) {
                             $scope.trunksToLinkTo.push(item);
                         });
 
                         // remove the trunk that's being edited from the list of trunks to link to
-                        var index = UtilsService.getItemIndexByVal($scope.trunksToLinkTo, trunkID, "ID");
+                        var index = UtilsService.getItemIndexByVal($scope.trunksToLinkTo, trunkId, "TrunkId");
                         if (index >= 0)
                             $scope.trunksToLinkTo.splice(index, 1);
 
-                        if (!currentlyLinkedToTrunkHasBeenSet && currentlyLinkedToTrunkID != null) {
-                            $scope.selectedTrunkToLinkTo = UtilsService.getItemByVal($scope.trunksToLinkTo, currentlyLinkedToTrunkID, "ID");
+                        if (!currentlyLinkedToTrunkHasBeenSet && currentlyLinkedToTrunkId != null) {
+                            $scope.selectedTrunkToLinkTo = UtilsService.getItemByVal($scope.trunksToLinkTo, currentlyLinkedToTrunkId, "TrunkId");
                             currentlyLinkedToTrunkHasBeenSet = true;
                         }
                     })
@@ -118,14 +118,14 @@ function SwitchTrunkEditorController($scope, SwitchTrunkAPIService, SwitchAPISer
                 });
 
                 if (editMode) {
-                    return SwitchTrunkAPIService.GetSwitchTrunkByID(trunkID)
+                    return TrunkAPIService.GetTrunkById(trunkId)
                         .then(function (response) {
-                            fillScopeFromTrunkObject(response);
+                            fillScopeFromTrunkObj(response);
 
-                            if (response.LinkedToTrunkID != null) {
-                                return SwitchTrunkAPIService.GetSwitchTrunkByID(response.LinkedToTrunkID)
-                                    .then(function (responseObject) {
-                                        $scope.selectedSwitchToLinkTo = UtilsService.getItemByVal($scope.switchesToLinkTo, responseObject.SwitchID, "ID");
+                            if (response.LinkedToTrunkId != null) {
+                                return TrunkAPIService.GetTrunkById(response.LinkedToTrunkId)
+                                    .then(function (response) {
+                                        $scope.selectedSwitchToLinkTo = UtilsService.getItemByVal($scope.switchesToLinkTo, response.SwitchId, "SwitchId");
                                     })
                                     .catch(function (error) {
                                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -145,8 +145,8 @@ function SwitchTrunkEditorController($scope, SwitchTrunkAPIService, SwitchAPISer
                         });
                 }
                 else {
-                    if (switchID != undefined && switchID != null) {
-                        $scope.selectedSwitch = UtilsService.getItemByVal($scope.switches, switchID, "ID");
+                    if (switchId != undefined && switchId != null) {
+                        $scope.selectedSwitch = UtilsService.getItemByVal($scope.switches, switchId, "SwitchId");
                         $scope.disableSwitchMenu = true;
                     }
 
@@ -159,23 +159,23 @@ function SwitchTrunkEditorController($scope, SwitchTrunkAPIService, SwitchAPISer
             });
     }
 
-    function fillScopeFromTrunkObject(trunkObject) {
-        $scope.name = trunkObject.Name;
-        $scope.symbol = trunkObject.Symbol;
-        $scope.selectedSwitch = UtilsService.getItemByVal($scope.switches, trunkObject.SwitchID, "ID");
-        $scope.selectedType = UtilsService.getEnum(SwitchTrunkTypeEnum, "value", trunkObject.Type);
-        $scope.selectedDirection = UtilsService.getEnum(SwitchTrunkDirectionEnum, "value", trunkObject.Direction);
-        currentlyLinkedToTrunkID = trunkObject.LinkedToTrunkID;
+    function fillScopeFromTrunkObj(trunkObj) {
+        $scope.name = trunkObj.Name;
+        $scope.symbol = trunkObj.Symbol;
+        $scope.selectedSwitch = UtilsService.getItemByVal($scope.switches, trunkObj.SwitchId, "SwitchId");
+        $scope.selectedType = UtilsService.getEnum(TrunkTypeEnum, "value", trunkObj.Type);
+        $scope.selectedDirection = UtilsService.getEnum(TrunkDirectionEnum, "value", trunkObj.Direction);
+        currentlyLinkedToTrunkId = trunkObj.LinkedToTrunkId;
     }
 
     function updateTrunk() {
-        var trunkObject = buildTrunkObjectFromScope();
+        var trunkObj = buildTrunkObjFromScope();
 
-        return SwitchTrunkAPIService.UpdateSwitchTrunk(trunkObject)
+        return TrunkAPIService.UpdateTrunk(trunkObj)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Switch Trunk", response, "Name or Symbol")) {
                     if ($scope.onTrunkUpdated != undefined)
-                        $scope.onTrunkUpdated(response.UpdatedObject, currentlyLinkedToTrunkID, trunkObject.LinkedToTrunkID);
+                        $scope.onTrunkUpdated(response.UpdatedObject, currentlyLinkedToTrunkId, trunkObj.LinkedToTrunkId);
 
                     $scope.modalContext.closeModal();
                 }
@@ -186,9 +186,9 @@ function SwitchTrunkEditorController($scope, SwitchTrunkAPIService, SwitchAPISer
     }
 
     function insertTrunk() {
-        var trunkObject = buildTrunkObjectFromScope();
+        var trunkObj = buildTrunkObjFromScope();
 
-        return SwitchTrunkAPIService.AddSwitchTrunk(trunkObject)
+        return TrunkAPIService.AddTrunk(trunkObj)
             .then(function (response) {
 
                 if (VRNotificationService.notifyOnItemAdded("Switch Trunk", response, "Name or Symbol")) {
@@ -203,17 +203,17 @@ function SwitchTrunkEditorController($scope, SwitchTrunkAPIService, SwitchAPISer
             });
     }
 
-    function buildTrunkObjectFromScope() {
+    function buildTrunkObjFromScope() {
         return {
-            ID: trunkID,
+            TrunkId: trunkId,
             Name: $scope.name,
             Symbol: $scope.symbol,
-            SwitchID: $scope.selectedSwitch.ID,
+            SwitchId: $scope.selectedSwitch.SwitchId,
             Type: $scope.selectedType.value,
             Direction: $scope.selectedDirection.value,
-            LinkedToTrunkID: ($scope.selectedTrunkToLinkTo != undefined) ? $scope.selectedTrunkToLinkTo.ID : null
+            LinkedToTrunkId: ($scope.selectedTrunkToLinkTo != undefined) ? $scope.selectedTrunkToLinkTo.TrunkId : null
         };
     }
 }
 
-appControllers.controller("PSTN_BusinessEntity_SwitchTrunkEditorController", SwitchTrunkEditorController);
+appControllers.controller("PSTN_BusinessEntity_TrunkEditorController", TrunkEditorController);
