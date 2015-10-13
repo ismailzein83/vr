@@ -118,14 +118,19 @@ namespace Vanrise.Caching
                     return;
                 if (ShouldSetCacheExpired(parameter))
                 {
-                    ConcurrentDictionary<string, object> cacheDictionary = GetCacheDictionary(parameter);
-                    if (cacheDictionary != null)
-                        cacheDictionary.Clear();
+                    SetCacheExpired(parameter);
                 }
 
                     
                 cacheDictionaryInfo.LastExpirationCheckTime = DateTime.Now;
             }            
+        }
+
+        public void SetCacheExpired(ParamType parameter)
+        {
+            ConcurrentDictionary<string, object> cacheDictionary = GetCacheDictionary(parameter);
+            if (cacheDictionary != null)
+                cacheDictionary.Clear();
         }
 
         private class CacheDictionaryInfo
@@ -160,6 +165,11 @@ namespace Vanrise.Caching
         protected override bool ShouldSetCacheExpired(object parameter)
         {
             return ShouldSetCacheExpired();
+        }
+
+        public void SetCacheExpired()
+        {
+            base.SetCacheExpired(dummyParameterType);
         }
     }
 }
