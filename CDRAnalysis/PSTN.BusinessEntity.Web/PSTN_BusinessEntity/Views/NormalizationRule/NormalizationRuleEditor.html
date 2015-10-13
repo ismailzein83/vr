@@ -21,13 +21,13 @@
                 <vr-row>
                     <vr-columns width="1/3row">
                         <vr-select label="Switch"
-                                    datasource="switches"
-                                    selectedvalues="selectedSwitches"
-                                    onselectionchanged="onSelectedSwitchesChanged"
-                                    datavaluefield="ID"
-                                    datatextfield="Name"
-                                    entityname="Switch"
-                                    ismultipleselection>
+                                   datasource="switches"
+                                   selectedvalues="selectedSwitches"
+                                   onselectionchanged="onSelectedSwitchesChanged"
+                                   datavaluefield="ID"
+                                   datatextfield="Name"
+                                   entityname="Switch"
+                                   ismultipleselection>
                         </vr-select>
                     </vr-columns>
 
@@ -37,6 +37,7 @@
                                    selectedvalues="selectedTrunks"
                                    datavaluefield="ID"
                                    datatextfield="Name"
+                                   filtername="trunkNameFilter"
                                    entityname="Trunk"
                                    ismultipleselection>
                         </vr-select>
@@ -100,8 +101,8 @@
                                                                  onloaded="item.onNormalizationRuleActionSettingsDirectiveAPILoaded">
                                             </vr-directivewrapper>
                                         </div>
-                                       
-                                        
+
+
                                     </li>
                                 </ul>
 

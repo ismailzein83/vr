@@ -53,13 +53,18 @@
 
                 var selectedSwitchIds = UtilsService.getPropValuesFromArray($scope.selectedSwitches, "ID");
 
-                for (var i = 0; i < $scope.selectedTrunks.length; i++) {
-                    var item = $scope.selectedTrunks[i];
+                var tempSelectedTrunks =   UtilsService.cloneObject(  $scope.selectedTrunks, true);
 
-                    if (!UtilsService.contains(selectedSwitchIds, item.SwitchId)) {
-                        $scope.selectedTrunks.splice(i, 1);
+                angular.forEach(tempSelectedTrunks, function (trunk) {
+                    if (!UtilsService.contains(selectedSwitchIds, trunk.SwitchId)) {
+                        var index = UtilsService.getItemIndexByVal($scope.selectedTrunks, trunk.ID, "ID");
+                        if (index > -1)
+                            $scope.selectedTrunks.splice(index, 1);
                     }
-                }
+                });
+
+                tempSelectedTrunks.length = 0;
+
             }
 
             $scope.getSwitchRelatedTrunks = function (trunkNameFilter) {
