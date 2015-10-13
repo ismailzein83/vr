@@ -50,7 +50,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
-        public List<string> GetAccountStatusByFilters(List<CaseStatus> caseStatuses, string MaxAccountNumber)
+        public List<string> GetAccountStatusByFilters(List<CaseStatus> caseStatuses, string fromAccountNumber, int nbOfRecords)
         {
             List<int> selectedCasesStatusIds = new List<int>();
             foreach (var i in caseStatuses)
@@ -58,10 +58,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 selectedCasesStatusIds.Add((int)i);
             }
 
-            return GetItemsSP("FraudAnalysis.sp_AccountStatus_GetByFilters", (reader) =>
+            return GetItemsSP("FraudAnalysis.bp_AccountStatus_GetNumbersByStatuses", (reader) =>
             {
                 return reader["AccountNumber"] as string;
-            }, string.Join(",", selectedCasesStatusIds), MaxAccountNumber);
+            }, string.Join(",", selectedCasesStatusIds), fromAccountNumber, nbOfRecords);
         }
 
     }

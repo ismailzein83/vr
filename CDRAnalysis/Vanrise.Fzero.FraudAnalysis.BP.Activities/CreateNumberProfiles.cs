@@ -9,6 +9,7 @@ using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Queueing;
+using System.Linq;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
@@ -68,27 +69,36 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             base.OnBeforeExecute(context, handle);
         }
 
-        private HashSet<string> fillWhiteNumbers(string MaxWhiteNumber, ref bool GotAllWhiteNumbers)
+        private bool GetWhiteNumbers(string fromAccountNumber, out HashSet<string> whiteListNumbers, out string maxWhiteListNumber)
         {
             IAccountStatusDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountStatusDataManager>();
              List<CaseStatus> caseStatuses = new List<CaseStatus>();
             caseStatuses.Add(CaseStatus.ClosedWhiteList);
 
-            List<string> numbers= dataManager.GetAccountStatusByFilters(caseStatuses, MaxWhiteNumber);
+            int nbOfRecords = 10000;
 
-            if (numbers.Count == 0)
-                GotAllWhiteNumbers = true;
+            List<string> numbers = dataManager.GetAccountStatusByFilters(caseStatuses, fromAccountNumber, nbOfRecords);
 
-            return numbers.ToHashSet();
+            if (numbers != null && numbers.Count == 0)
+            {
+                maxWhiteListNumber = numbers.Max();
+                whiteListNumbers = numbers.ToHashSet();
+                return whiteListNumbers.Count >= nbOfRecords;
+            }
+            else
+            {
+                maxWhiteListNumber = null;
+                whiteListNumbers = null;
+                return false;
+            }
         }
 
         protected override void DoWork(CreateNumberProfilesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
 
-            HashSet<string> WhiteNumbers = new HashSet<string>();
-            string MaxWhiteNumber = string.Empty;
-            bool GotAllWhiteNumbers = false;
-            bool FoundinWhiteNumbers = false;
+            HashSet<string> whiteListNumbers = null;
+            string maxWhiteListNumber = null;
+            bool hasMoreWhiteListNumbers = true;
 
             IClassDataManager manager = FraudDataManagerFactory.GetDataManager<IClassDataManager>();
             IStrategyDataManager strategyManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
@@ -109,6 +119,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 new AggregateManager(new List<INumberProfileParameters> { inputArgument.Parameters }).GetAggregateDefinitions(callClasses)
                 ;
             string currentAccountNumber = null;
+            bool isCurrentAccountNumberInWhiteList = false;
 
             HashSet<string> IMEIs = new HashSet<string>();
 
@@ -121,7 +132,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 bool hasItem = false;
                 do
                 {
-
                     hasItem = inputArgument.InputQueue.TryDequeue(
                         (cdrBatch) =>
                         {
@@ -132,50 +142,43 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                             {
                                 if (currentAccountNumber != cdr.MSISDN)
                                 {
-                                    if (WhiteNumbers.Count == 0)
+                                    if (currentAccountNumber != null && !isCurrentAccountNumberInWhiteList)
                                     {
-                                        if (!GotAllWhiteNumbers)
-                                        {
-                                            WhiteNumbers= fillWhiteNumbers(MaxWhiteNumber, ref GotAllWhiteNumbers);
-                                            if (WhiteNumbers.Contains(cdr.MSISDN))
-                                            {
-                                                FoundinWhiteNumbers = true;
-                                            }
-                                        }
+                                        FinishNumberProfileProcessing(currentAccountNumber, ref numberProfileBatch, ref numberProfilesCount, inputArgument, handle, batchSize, aggregateDefinitions, IMEIs);
+                                    }
+                                    IMEIs = new HashSet<string>();
+
+                                    currentAccountNumber = cdr.MSISDN;
+
+                                    if (maxWhiteListNumber != null && String.Compare(maxWhiteListNumber, currentAccountNumber) < 0 && hasMoreWhiteListNumbers)
+                                    {
+                                        hasMoreWhiteListNumbers = GetWhiteNumbers(currentAccountNumber, out whiteListNumbers, out maxWhiteListNumber);
                                     }
 
+                                    if (whiteListNumbers != null && whiteListNumbers.Contains(currentAccountNumber))
+                                        isCurrentAccountNumberInWhiteList = true;
                                     else
-                                    {
-                                        if (WhiteNumbers.Contains(cdr.MSISDN))
-                                        {
-                                            FoundinWhiteNumbers = true;
-                                        }
-                                    }
+                                        isCurrentAccountNumberInWhiteList = false;
 
 
-                                    if (!FoundinWhiteNumbers)
+                                    if (!isCurrentAccountNumberInWhiteList)
                                     {
-                                        if (currentAccountNumber != null)
-                                        {
-                                            FinishNumberProfileProcessing(currentAccountNumber, ref numberProfileBatch, ref numberProfilesCount, inputArgument, handle, batchSize, aggregateDefinitions, IMEIs);
-                                        }
-                                        IMEIs = new HashSet<string>();
-                                        currentAccountNumber = cdr.MSISDN;
                                         foreach (var aggregateDef in aggregateDefinitions)
                                         {
                                             aggregateDef.Aggregation.Reset();
                                             aggregateDef.Aggregation.EvaluateCDR(cdr);
                                         }
                                     }
-
-
                                 }
                                 else
                                 {
-                                    IMEIs.Add(cdr.IMEI);
-                                    foreach (var aggregateDef in aggregateDefinitions)
+                                    if (!isCurrentAccountNumberInWhiteList)
                                     {
-                                        aggregateDef.Aggregation.EvaluateCDR(cdr);
+                                        IMEIs.Add(cdr.IMEI);
+                                        foreach (var aggregateDef in aggregateDefinitions)
+                                        {
+                                            aggregateDef.Aggregation.EvaluateCDR(cdr);
+                                        }
                                     }
                                 }
                             }
