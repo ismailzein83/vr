@@ -52,6 +52,9 @@
                 if (editMode) {
                     getPricingProduct();
                 }
+                else {
+                    $scope.isGettingData = false;
+                }
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.isGettingData = false;
