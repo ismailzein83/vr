@@ -8,11 +8,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 {
     public interface ICaseManagementDataManager : IDataManager 
     {
-        List<StrategyCases> GetStrategyCases(DateTime fromDate, DateTime toDate);
-
-        BigResult<BTSCases> GetBTSCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input);
-
-        BigResult<BTSHighValueCases> GetTop10BTSHighValue(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input);
 
         AccountCase GetLastAccountCaseByAccountNumber(string accountNumber);
 
@@ -42,13 +37,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         BigResult<AccountCaseLog> GetFilteredAccountCaseLogsByCaseID(Vanrise.Entities.DataRetrievalInput<AccountCaseLogResultQuery> input);
 
-        BigResult<CasesSummary> GetCasesSummary(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input);
-
         BigResult<AccountCase> GetFilteredCasesByAccountNumber(Vanrise.Entities.DataRetrievalInput<AccountCaseResultQuery> input);
 
         BigResult<AccountCase> GetFilteredCasesByFilters(Vanrise.Entities.DataRetrievalInput<CancelAccountCasesResultQuery> input);
-
-        BigResult<DailyVolumeLoose> GetDailyVolumeLooses(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input);
 
         List<int> DeleteAccountCases_ByCaseIDs(List<int> caseIDs);
 

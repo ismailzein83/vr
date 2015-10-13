@@ -276,46 +276,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         #endregion
 
-        public BigResult<CasesSummary> GetCasesSummary(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
-        {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_GetStatusSummary", tempTableName, input.Query.FromDate, input.Query.ToDate);
-            };
-            return RetrieveData(input, createTempTableAction, CasesSummaryMapper);
-        }
-
-        public BigResult<DailyVolumeLoose> GetDailyVolumeLooses(DataRetrievalInput<DashboardResultQuery> input)
-        {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                ExecuteNonQuerySP("FraudAnalysis.sp_NormalCDR_GetSuspicionDailyVolume", tempTableName, input.Query.FromDate, input.Query.ToDate);
-            };
-            return RetrieveData(input, createTempTableAction, DailyVolumeLoosesMapper);
-        }
-
-        public BigResult<BTSCases> GetBTSCases(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
-        {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_GetTopTenBTS", tempTableName, input.Query.FromDate, input.Query.ToDate);
-            };
-            return RetrieveData(input, createTempTableAction, BTSCasesMapper);
-        }
-
-        public List<StrategyCases> GetStrategyCases(DateTime fromDate, DateTime toDate)
-        {
-            return GetItemsSP("FraudAnalysis.sp_AccountCase_GetFraudCasesPerStrategy", StrategyCasesMapper, fromDate, toDate);
-        }
-
-        public BigResult<BTSHighValueCases> GetTop10BTSHighValue(Vanrise.Entities.DataRetrievalInput<DashboardResultQuery> input)
-        {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_GetTopTenHighValueBTS", tempTableName, input.Query.FromDate, input.Query.ToDate);
-            };
-            return RetrieveData(input, createTempTableAction, BTSHighValueCasesMapper);
-        }
 
         public List<int> DeleteAccountCases_ByCaseIDs(List<int> caseIDs)
         {
@@ -387,13 +347,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return log;
         }
 
-        private CasesSummary CasesSummaryMapper(IDataReader reader)
-        {
-            var casesSummary = new CasesSummary();
-            casesSummary.CountCases = (int)reader["CountCases"];
-            casesSummary.StatusName = reader["StatusName"] as string;
-            return casesSummary;
-        }
 
         private DailyVolumeLoose DailyVolumeLoosesMapper(IDataReader reader)
         {
@@ -411,13 +364,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return bTSCases;
         }
 
-        private StrategyCases StrategyCasesMapper(IDataReader reader)
-        {
-            var strategyCases = new StrategyCases();
-            strategyCases.CountCases = (int)reader["CountCases"] ;
-            strategyCases.StrategyName = reader["StrategyName"] as string;
-            return strategyCases;
-        }
 
         private BTSHighValueCases BTSHighValueCasesMapper(IDataReader reader)
         {

@@ -26,6 +26,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             IAccountStatusDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountStatusDataManager>();
             AccountNumbersByIMEI accountNumbersByIMEI = new AccountNumbersByIMEI();
+            List<CaseStatus> caseStatuses = new List<CaseStatus>();
+            caseStatuses.Add(CaseStatus.Open);
+            caseStatuses.Add(CaseStatus.Pending);
+            caseStatuses.Add(CaseStatus.ClosedFraud);
 
             dataManager.LoadAccountStatus(((accountStatus) =>
                 {
@@ -45,8 +49,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                 accountNumbersByIMEI.Add(imei, accountNumbers);
                             }
                     }
-                    
-                }));
+
+                }), caseStatuses);
 
 
             context.SetValue(AccountNumbersByIMEI, accountNumbersByIMEI);

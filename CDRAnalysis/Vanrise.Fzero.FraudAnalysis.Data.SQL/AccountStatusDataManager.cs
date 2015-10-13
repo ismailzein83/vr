@@ -17,8 +17,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
-        public void LoadAccountStatus(Action<AccountStatus> onBatchReady)
+        public void LoadAccountStatus(Action<AccountStatus> onBatchReady, List<CaseStatus> caseStatuses)
         {
+            List<int> selectedCasesStatusIds = new List<int>();
+            foreach (var i in caseStatuses)
+            {
+                selectedCasesStatusIds.Add((int)i);
+            }
+
+
             ExecuteReaderSP("FraudAnalysis.sp_AccountStatus_GetByStatuses", (reader) =>
             {
                 while (reader.Read())
@@ -27,10 +34,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
                     string accountInfo = GetReaderValue<string>(reader, "AccountInfo");
                     if (accountInfo == null)
-                        accountStatus.AccountInfo = new AccountInfo() { IMEIs = new HashSet<string>()};
+                        accountStatus.AccountInfo = new AccountInfo() { IMEIs = new HashSet<string>() };
                     else
                         accountStatus.AccountInfo = Vanrise.Common.Serializer.Deserialize<AccountInfo>(accountInfo);
-
 
                     accountStatus.AccountNumber = reader["AccountNumber"] as string;
                     accountStatus.Status = GetReaderValue<CaseStatus>(reader, "Status");
@@ -40,7 +46,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
 
             }
-               );
+            , string.Join(",", selectedCasesStatusIds));
         }
 
     }

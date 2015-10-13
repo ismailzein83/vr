@@ -140,7 +140,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\CaseManagementController.cs" />
-    <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\NumberProfileController.cs" />
     <Compile Include="Controllers\NormalCDRController.cs" />
     <Compile Include="Controllers\ReportingController.cs" />
@@ -196,7 +195,6 @@
     <Content Include="FraudAnalysis\Constants\SuspicionLevelEnum.js" />
     <Content Include="FraudAnalysis\Constants\HourEnum.js" />
     <Content Include="FraudAnalysis\Services\APIServices\CaseManagementAPIService.js" />
-    <Content Include="FraudAnalysis\Services\APIServices\DashboardAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\NumberProfileAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\NormalCDRAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\ReportingAPIService.js" />
@@ -219,8 +217,6 @@
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\Includes\CaseOccuranceGridController.js" />
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\SuspicionAnalysis.html" />
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\SuspicionAnalysisController.js" />
-    <Content Include="FraudAnalysis\Views\OutPut\Dashboard.html" />
-    <Content Include="FraudAnalysis\Views\OutPut\DashboardController.js" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\ExecuteStrategyProcessInput_Scheduled.html" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\ExecuteStrategyProcessInput_ScheduledController.js" />
     <Content Include="FraudAnalysis\Views\Reports\LinesDetected.html" />
