@@ -9,13 +9,12 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface IPricingProductDataManager:IDataManager
     {
-        Vanrise.Entities.BigResult<PricingProduct> GetFilteredPricingProducts(Vanrise.Entities.DataRetrievalInput<PricingProductQuery> input);
-        List<PricingProductInfo> GetAllPricingProduct();
-        PricingProduct GetPricingProduct(int pricingProductId);
+        List<PricingProductDetail> GetPricingProducts();
         bool Insert(PricingProduct pricingProduct, out int insertedId);
 
         bool Update(PricingProduct pricingProduct);
 
         bool Delete(int pricingProductId);
+        bool ArePricingProductsUpdated(ref object updateHandle);
     }
 }

@@ -33,26 +33,19 @@
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
-            $scope.onPricingProductsDirectiveLoaded = function (api) {
+            $scope.onPricingProductsDirectiveReady = function (api) {
                 pricingProductDirectiveAPI = api;
+                load();
                 if ($scope.disablePricingProduct)
                     pricingProductDirectiveAPI.setData(pricingProductId);
             }
-            $scope.onCarrierAccountDirectiveLoaded = function (api) {
+            $scope.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
+                load();
                 if ($scope.disableCarrierAccount)
                     carrierAccountDirectiveAPI.setData([carrierAccountId]);
             }
-            $scope.onPricingProductsSelectionChanged = function () {
-             
-                  if (pricingProductDirectiveAPI!=undefined)
-                      $scope.selectedPricingProduct = pricingProductDirectiveAPI.getData();
-            }
-            $scope.selectedCustomers;
-            $scope.onCarrierAccountSelectionChanged = function () {
-                if (carrierAccountDirectiveAPI != undefined)
-                    $scope.selectedCustomers = carrierAccountDirectiveAPI.getData();
-            }
+
             $scope.beginEffectiveDate = new Date();
             $scope.endEffectiveDate;
 
@@ -60,11 +53,29 @@
         }
 
         function load() {
-            if ($scope.disablePricingProduct && pricingProductDirectiveAPI != undefined)
-                pricingProductDirectiveAPI.setData(pricingProductId);
-            if ($scope.disableCarrierAccount && carrierAccountDirectiveAPI != undefined)
-                carrierAccountDirectiveAPI.setData([carrierAccountId]);
+            $scope.isGettingData = true;
+            if (carrierAccountDirectiveAPI == undefined || pricingProductDirectiveAPI == undefined)
+                return;
+
+            UtilsService.waitMultipleAsyncOperations([loadPricingProducts, loadCarrierAccounts]).then(function () {
+                if ($scope.disablePricingProduct && pricingProductDirectiveAPI != undefined)
+                    pricingProductDirectiveAPI.setData(pricingProductId);
+                if ($scope.disableCarrierAccount && carrierAccountDirectiveAPI != undefined)
+                    carrierAccountDirectiveAPI.setData([carrierAccountId]);
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.isGettingData = false;
+            }).finally(function () {
+                $scope.isGettingData = false;
+            });
            
+           
+        }
+        function loadPricingProducts() {
+            return pricingProductDirectiveAPI.load();
+        }
+        function loadCarrierAccounts() {
+            return carrierAccountDirectiveAPI.load();
         }
 
         function insertPricingProduct() {
@@ -87,12 +98,14 @@
         }
         function buildPricingProductObjFromScope() {
             var obj = [];
-            for (var i = 0; i < $scope.selectedCustomers.length; i++) {
+            var selectedCustomers = carrierAccountDirectiveAPI.getData();
+            var selectedPricingProduct = pricingProductDirectiveAPI.getData();
+            for (var i = 0; i < selectedCustomers.length; i++) {
                 obj.push({
-                    CustomerId: $scope.selectedCustomers[i].CarrierAccountId,
-                    CustomerName: $scope.selectedCustomers.Name,
-                    PricingProductId: $scope.selectedPricingProduct.PricingProductId,
-                    PricingProductName: $scope.selectedPricingProduct.Name,
+                    CustomerId: selectedCustomers[i].CarrierAccountId,
+                    CustomerName: selectedCustomers[i].Name,
+                    PricingProductId: selectedPricingProduct.PricingProductId,
+                    PricingProductName: selectedPricingProduct.Name,
                     BED: $scope.beginEffectiveDate,
                     EED: $scope.endEffectiveDate,
                     AllDestinations: $scope.allDestinations

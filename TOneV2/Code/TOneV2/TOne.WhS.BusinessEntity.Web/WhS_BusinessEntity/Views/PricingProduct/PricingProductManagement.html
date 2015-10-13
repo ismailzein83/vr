@@ -1,15 +1,17 @@
 ﻿<vr-panel ng-controller="WhS_BE_PricingProductManagementController">
 
-    <vr-form name="formFilter" vr-loader="isLoadingFilterData">
+    <vr-form name="formFilter" vr-loader="isGettingData">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns colnum="2">
                     <vr-textbox value="name" label="Name"></vr-textbox>
                 </vr-columns>
-                <!--<vr-columns colnum="2">
-                    <vr-select ismultipleselection datatextfield="Name" datavaluefield="SaleZonePackageId"
-                               label="Sale Zone Packages" datasource="saleZonePackages" selectedvalues="selectedSaleZonePackages"></vr-select>
-                </vr-columns>-->
+                <vr-columns colnum="2">
+                    <vr-whs-be-salezonepackages on-ready="onSaleZonePackageDirectiveReady" ismultipleselection></vr-whs-be-salezonepackages>
+                </vr-columns>
+                <vr-columns colnum="2">
+                    <vr-whs-be-routingproduct on-ready="onRoutingProductDirectiveReady" ismultipleselection></vr-whs-be-routingproduct>
+                </vr-columns>
             </vr-row>
         </div>
         <vr-row removeline>

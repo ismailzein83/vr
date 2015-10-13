@@ -20,8 +20,7 @@
                 carrierProfileId = parameters.CarrierProfileId
             }
             editMode = (carrierAccountId != undefined);
-            $scope.disablePricingProduct = (parameters != undefined);
-            $scope.disableCarrierProfile = (carrierProfileId != undefined);
+            $scope.disableCarrierProfile = ((carrierProfileId != undefined) && !editMode);
 
         }
         function defineScope() {
@@ -36,8 +35,6 @@
             $scope.onCarrierProfileDirectiveReady = function (api) {
                 carrierProfileDirectiveAPI = api;
                 load();
-                if (carrierProfileId != undefined)
-                    carrierProfileDirectiveAPI.setData(carrierProfileId);
             }
 
             $scope.close = function () {
@@ -50,11 +47,22 @@
 
         function load() {
             $scope.isGettingData = true;
-            defineCarrierAccountTypes();
+            if (carrierProfileDirectiveAPI == undefined)
+                return;
 
+            defineCarrierAccountTypes();
+           
             carrierProfileDirectiveAPI.load().then(function () {
-                if (editMode) {
-                    getCarrierAccount();
+                if ($scope.disableCarrierProfile && carrierProfileId != undefined)
+                {
+                    carrierProfileDirectiveAPI.setData(carrierProfileId);
+                    $scope.isGettingData = false;
+                }   
+                else if (editMode) {
+                  getCarrierAccount();
+                }
+                else {
+                    $scope.isGettingData = false;
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -71,12 +79,25 @@
                 $scope.isGettingData = false;
             });
         }
+
+        function buildCarrierAccountObjFromScope() {
+            var obj = {
+                CarrierAccountId: (carrierAccountId != null) ? carrierAccountId : 0,
+                Name: $scope.name,
+                AccountType: $scope.selectedCarrierAccountType.value,
+                CarrierProfileId:carrierProfileDirectiveAPI.getData().CarrierProfileId,
+                SupplierSettings: {},
+                CustomerSettings: {},
+            };
+            return obj;
+        }
+
         function fillScopeFromCarrierAccountObj(carrierAccountObj) {
             $scope.name = carrierAccountObj.Name;
             for (var i = 0; i < $scope.carrierAccountTypes.length; i++)
                 if (carrierAccountObj.AccountType == $scope.carrierAccountTypes[i].value)
                     $scope.selectedCarrierAccountType = $scope.carrierAccountTypes[i];
-            if (carrierProfileDirectiveAPI != undefined)
+            if (carrierProfileId != undefined)
                 carrierProfileDirectiveAPI.setData(carrierProfileId);
         }
         function insertCarrierAccount() {
@@ -93,20 +114,7 @@
             });
 
         }
-        function buildCarrierAccountObjFromScope() {
-            var carrierProfileId;
-            if (carrierProfileDirectiveAPI != undefined)
-                carrierProfileId = carrierProfileDirectiveAPI.getData().CarrierProfileId;
-            var obj = {
-                     CarrierAccountId: (carrierAccountId != null) ? carrierAccountId : 0,
-                    Name: $scope.name,
-                    AccountType: $scope.selectedCarrierAccountType.value,
-                    CarrierProfileId: carrierProfileId,
-                    SupplierSettings: {},
-                    CustomerSettings: {},
-                };
-            return obj;
-        }
+      
         function defineCarrierAccountTypes() {
             $scope.carrierAccountTypes = [];
             for (var p in WhS_Be_CarrierAccountEnum)

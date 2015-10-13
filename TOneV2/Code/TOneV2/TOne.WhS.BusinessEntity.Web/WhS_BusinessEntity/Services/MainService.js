@@ -83,7 +83,8 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService','WhS_BE_PricingP
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingProduct/PricingProductEditor.html', parameters, modalSettings);
     }
 
-    function deletePricingProduct($scope,pricingProductObj, onPricingProductDeleted) {
+    function deletePricingProduct($scope, pricingProductObj, onPricingProductDeleted) {
+
         VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response) {

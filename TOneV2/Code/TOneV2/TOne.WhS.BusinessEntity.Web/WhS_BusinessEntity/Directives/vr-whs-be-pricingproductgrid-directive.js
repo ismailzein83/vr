@@ -66,7 +66,7 @@ function (UtilsService, VRNotificationService, WhS_BE_PricingProductAPIService,W
         function setDataItemExtension(dataItem) {
             var extensionObject = {};
             var query = {
-                PricingProductId: dataItem.PricingProductId
+                PricingProductsIds: [dataItem.PricingProductId]
             }
             extensionObject.onGridReady = function (api) {
                 extensionObject.custormerPricingProductGridAPI = api;
@@ -102,7 +102,7 @@ function (UtilsService, VRNotificationService, WhS_BE_PricingProductAPIService,W
         function assignCustomer(dataItem) {
             gridAPI.expandRow(dataItem);
             var query = {
-                PricingProductId: dataItem.PricingProductId
+                PricingProductsIds: [dataItem.PricingProductId]
             }
             if (dataItem.extensionObject.custormerPricingProductGridAPI!=undefined)
              dataItem.extensionObject.custormerPricingProductGridAPI.loadGrid(query);
@@ -113,12 +113,11 @@ function (UtilsService, VRNotificationService, WhS_BE_PricingProductAPIService,W
             WhS_BE_MainService.addCustomerPricingProduct(onCustomerPricingProductAdded,dataItem);
         }
         function deletePricingProduct(pricingProductObj) {
-            var onPricingProductDeleted = function () {
-                //TODO: This is to refresh the Grid after delete, should be removed when centralized
-                retrieveData();
+            var onPricingProductDeleted = function (gridObject) {
+                gridAPI.itemDeleted(gridObject);
             };
 
-            WhS_BE_MainService.deletePricingProduct(pricingProductObj, onPricingProductDeleted);
+            WhS_BE_MainService.deletePricingProduct($scope,pricingProductObj, onPricingProductDeleted);
         }
     }
 

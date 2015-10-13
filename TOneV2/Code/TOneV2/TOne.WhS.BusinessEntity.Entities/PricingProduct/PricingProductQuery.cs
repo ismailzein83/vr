@@ -9,5 +9,8 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class PricingProductQuery
     {
         public string Name { get; set; }
+        public List<int> SaleZonePackagesIds { get; set; }
+
+        public List<int?> RoutingProductsIds { get; set; }
     }
 }

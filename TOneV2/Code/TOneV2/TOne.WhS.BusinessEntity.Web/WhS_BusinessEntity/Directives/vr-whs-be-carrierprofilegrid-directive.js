@@ -67,7 +67,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
 
             var extensionObject = {};
             var query = {
-                CarrierProfileId: dataItem.CarrierProfileId,
+                CarrierProfilesIds: [dataItem.CarrierProfileId],
             }
             extensionObject.onGridReady = function (api) {
                 extensionObject.carrierAccountGridAPI = api;
@@ -100,7 +100,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
         function addCarrierAccount(dataItem) {
             gridAPI.expandRow(dataItem);
             var query = {
-                CarrierProfileId: dataItem.CarrierProfileId,
+                CarrierProfilesIds: [dataItem.CarrierProfileId],
             }
             if (dataItem.extensionObject.carrierAccountGridAPI != undefined)
                 dataItem.extensionObject.carrierAccountGridAPI.loadGrid(query);

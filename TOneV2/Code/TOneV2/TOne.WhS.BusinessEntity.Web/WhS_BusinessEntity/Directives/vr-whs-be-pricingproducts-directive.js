@@ -5,7 +5,7 @@ function (WhS_BE_PricingProductAPIService, UtilsService,$compile) {
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
-                onloaded: '=',
+                onReady: '=',
                 ismultipleselection: "@",
                 isdisabled:"=",
                 onselectionchanged: '=',
@@ -69,7 +69,7 @@ function (WhS_BE_PricingProductAPIService, UtilsService,$compile) {
 
             function initializeController() {
 
-                loadPricingProducts();
+                defineAPI();
             }
 
             function defineAPI() {
@@ -94,24 +94,21 @@ function (WhS_BE_PricingProductAPIService, UtilsService,$compile) {
                             $scope.selectedPricingProducts=selectedPricingProduct;
                     }
                 }
+                api.load = function () {
+                    return WhS_BE_PricingProductAPIService.GetAllPricingProduct().then(function (response) {
+                        angular.forEach(response, function (itm) {
+                            $scope.pricingProducts.push(itm);
+                        });
+                    }).catch(function (error) {
 
-                if (ctrl.onloaded != null)
-                    ctrl.onloaded(api);
-            }
-            function loadPricingProducts() {
-                $scope.isLoadingDirective = true;
-                return WhS_BE_PricingProductAPIService.GetAllPricingProduct().then(function (response) {
-                    angular.forEach(response, function (itm) {
-                        $scope.pricingProducts.push(itm);
+                    }).finally(function () {
+                       
                     });
-                }).catch(function (error) {
-                    //TODO handle the case of exceptions
-
-                }).finally(function () {
-                    $scope.isLoadingDirective = false;
-                    defineAPI();
-                });
+                }
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
             }
+
             this.initializeController = initializeController;
         }
         return directiveDefinitionObject;

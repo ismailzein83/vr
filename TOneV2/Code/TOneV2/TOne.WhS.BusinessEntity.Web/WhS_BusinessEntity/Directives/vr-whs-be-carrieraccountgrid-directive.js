@@ -31,9 +31,17 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
         this.initializeController = initializeController;
 
         function initializeController() {
-            $scope.hideProfileColumn = false;
+            $scope.hideprofilecolumn=false;
             if ($attrs.hideprofilecolumn != undefined)
-                $scope.hideProfileColumn = true;
+            {
+                $scope.hideprofilecolumn=true;
+            }
+            $scope.isExpandable = function (dataItem) {
+                if (dataItem.AccountType == WhS_Be_CarrierAccountEnum.Supplier.value)
+                    return  false;
+                return true
+            }
+            
             $scope.carrierAccounts = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -55,14 +63,9 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                     .then(function (response) {
                         if (response.Data != undefined) {
                             for (var i = 0; i < response.Data.length; i++) {
-                                if (response.Data[i].AccountType == WhS_Be_CarrierAccountEnum.Exchange.value || response.Data[i].AccountType == WhS_Be_CarrierAccountEnum.Customer.value) {
+                                if (response.Data[i].AccountType != WhS_Be_CarrierAccountEnum.Supplier.value) {
                                     setDataItemExtension(response.Data[i]);
-                                    response.Data[i].isExpandable = true;
                                 }
-                                else {
-                                    response.Data[i].isExpandable = false;
-                                }
-                                
                             }
                         }
                         onResponseReady(response);
@@ -78,7 +81,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
             
             var extensionObject = {};
             var query = {
-                CustomerId: dataItem.CarrierAccountId,
+                CustomersIds: [dataItem.CarrierAccountId],
             }
             extensionObject.onGridReady = function (api) {
                 extensionObject.custormerPricingProductGridAPI = api;
@@ -130,12 +133,12 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
             WhS_BE_MainService.editCarrierAccount(carrierAccountObj, onCarrierAccountUpdated);
         }
         function assignNew(dataItem) {
-            if (!dataItem.isExpandable)
+            if (dataItem.AccountType == WhS_Be_CarrierAccountEnum.Supplier.value)
                 return;
 
             gridAPI.expandRow(dataItem);
             var query = {
-                CarrierAccountId: dataItem.CarrierAccountId,
+                CustomersIds: [dataItem.CarrierAccountId],
             }
             if (dataItem.extensionObject.custormerPricingProductGridAPI != undefined)
                 dataItem.extensionObject.custormerPricingProductGridAPI.loadGrid(query);
@@ -147,7 +150,6 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
         }
         function deleteCarrierAccount(carrierAccountObj) {
             var onCarrierAccountDeleted = function () {
-                //TODO: This is to refresh the Grid after delete, should be removed when centralized
                 retrieveData();
             };
 

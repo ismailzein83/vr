@@ -5,25 +5,34 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
-
+using Vanrise.Common;
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class CustomerPricingProductManager
     {
         public Vanrise.Entities.IDataRetrievalResult<CustomerPricingProductDetail> GetFilteredCustomerPricingProducts(Vanrise.Entities.DataRetrievalInput<CustomerPricingProductQuery> input)
         {
-            ICustomerPricingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerPricingProductDataManager>();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredCustomerPricingProducts(input));
+
+            var allCustomerPricingProducts = GetCachedCustomerPricingProducts();
+
+            Func<CustomerPricingProductDetail, bool> filterExpression = (prod) =>
+                 (input.Query.EffectiveDate == null || (prod.BED<input.Query.EffectiveDate && (prod.EED==null || prod.EED>input.Query.EffectiveDate)))
+                 &&
+                 (input.Query.CustomersIds == null || input.Query.CustomersIds.Contains(prod.CustomerId))
+                  &&
+                 (input.Query.PricingProductsIds == null || input.Query.PricingProductsIds.Contains(prod.PricingProductId));
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCustomerPricingProducts.ToBigResult(input, filterExpression));
         }
 
         public CustomerPricingProductDetail GetCustomerPricingProduct(int customerPricingProductId)
         {
-            ICustomerPricingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerPricingProductDataManager>();
-            return dataManager.GetCustomerPricingProduct(customerPricingProductId);
+            List<CustomerPricingProductDetail> customerPricingProducts = GetCachedCustomerPricingProducts();
+            return customerPricingProducts.FindRecord(x => x.CustomerPricingProductId == customerPricingProductId);
         }
 
 
-        public TOne.Entities.InsertOperationOutput<List<CustomerPricingProductClass>> AddCustomerPricingProduct(List<CustomerPricingProduct> customerPricingProducts)
+        public TOne.Entities.InsertOperationOutput<List<CustomerPricingProductClass>> AddCustomerPricingProduct(List<CustomerPricingProductDetail> customerPricingProducts)
         {
 
             TOne.Entities.InsertOperationOutput<List<CustomerPricingProductClass>> insertOperationOutput = new TOne.Entities.InsertOperationOutput<List<CustomerPricingProductClass>>();
@@ -33,102 +42,121 @@ namespace TOne.WhS.BusinessEntity.Business
 
           //  int customerPricingProductId = -1;
             ICustomerPricingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerPricingProductDataManager>();
-            List<CustomerPricingProduct> customerPricingProductObject = new List<CustomerPricingProduct>();
+            List<CustomerPricingProductDetail> customerPricingProductObject = new List<CustomerPricingProductDetail>();
 
             #region Insertion Rules
-            foreach (CustomerPricingProduct customerPricingProduct in customerPricingProducts)
+            foreach (CustomerPricingProductDetail customerPricingProduct in customerPricingProducts)
                 {
-                    List<CustomerPricingProduct> customerPricingProductList = dataManager.GetCustomerPricingProductByCustomerID(customerPricingProduct.CustomerId);
-                    if (customerPricingProductList==null || customerPricingProductList.Count == 0)
+                    List<CustomerPricingProductDetail> cashedCustomerPricingProducts = GetCachedCustomerPricingProducts();
+
+
+                    IEnumerable<CustomerPricingProductDetail> customerPricingProductList = cashedCustomerPricingProducts.FindAllRecords(x => x.CustomerId == customerPricingProduct.CustomerId);
+                    if (customerPricingProductList == null || customerPricingProductList.Count() == 0)
                     {
-                        customerPricingProductObject.Add(new CustomerPricingProduct
+                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                         {
                             AllDestinations = customerPricingProduct.AllDestinations,
                             CustomerId = customerPricingProduct.CustomerId,
                             BED = customerPricingProduct.BED,
                             EED = customerPricingProduct.EED,
-                            PricingProductId = customerPricingProduct.PricingProductId
+                            PricingProductId = customerPricingProduct.PricingProductId,
+                            CustomerName = customerPricingProduct.CustomerName,
+                            PricingProductName = customerPricingProduct.PricingProductName
                         });
                     }
                     else
                     {
-                        foreach (CustomerPricingProduct obj in customerPricingProductList)
+                        foreach (CustomerPricingProductDetail obj in customerPricingProductList)
                         {
                             if (obj.PricingProductId == customerPricingProduct.PricingProductId)
                             {
                                 if (obj.BED == customerPricingProduct.BED && (obj.EED < customerPricingProduct.EED || obj.EED > customerPricingProduct.EED || obj.EED == null))
                                 {
-                                    customerPricingProductObject.Add(new CustomerPricingProduct
+                                    customerPricingProductObject.Add(new CustomerPricingProductDetail
                                     {
                                         AllDestinations = obj.AllDestinations,
                                         CustomerId = obj.CustomerId,
                                         BED = obj.BED,
                                         CustomerPricingProductId = obj.CustomerPricingProductId,
                                         EED = customerPricingProduct.EED,
-                                        PricingProductId = obj.PricingProductId
+                                        PricingProductId = obj.PricingProductId,
+                                        CustomerName = obj.CustomerName,
+                                        PricingProductName = obj.PricingProductName
                                     });
                                 }
                                 else if (obj.BED < customerPricingProduct.BED)
                                 {
                                     if (obj.EED < customerPricingProduct.BED)
                                     {
-                                        customerPricingProductObject.Add(new CustomerPricingProduct
+                                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                                         {
                                             AllDestinations = customerPricingProduct.AllDestinations,
                                             CustomerId = customerPricingProduct.CustomerId,
                                             BED = customerPricingProduct.BED,
                                             EED = customerPricingProduct.EED,
-                                            PricingProductId = customerPricingProduct.PricingProductId
+                                            PricingProductId = customerPricingProduct.PricingProductId,
+                                            CustomerName = customerPricingProduct.CustomerName,
+                                            PricingProductName = customerPricingProduct.PricingProductName
                                         });
 
                                     }
                                     else if (obj.EED > customerPricingProduct.BED && (obj.EED < customerPricingProduct.EED || customerPricingProduct.EED == null))
                                     {
-                                        customerPricingProductObject.Add(new CustomerPricingProduct
+                                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                                         {
                                             AllDestinations = obj.AllDestinations,
                                             CustomerId = obj.CustomerId,
                                             BED = obj.BED,
                                             EED = customerPricingProduct.BED,
                                             CustomerPricingProductId = obj.CustomerPricingProductId,
-                                            PricingProductId = obj.PricingProductId
+                                            PricingProductId = obj.PricingProductId,
+                                            CustomerName = obj.CustomerName,
+                                            PricingProductName = obj.PricingProductName
                                         });
-                                        customerPricingProductObject.Add(new CustomerPricingProduct
+                                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                                         {
                                             AllDestinations = customerPricingProduct.AllDestinations,
                                             CustomerId = customerPricingProduct.CustomerId,
                                             BED = customerPricingProduct.BED,
                                             EED = customerPricingProduct.EED,
-                                            PricingProductId = customerPricingProduct.PricingProductId
+                                            PricingProductId = customerPricingProduct.PricingProductId,
+                                            CustomerName = customerPricingProduct.CustomerName,
+                                            PricingProductName = customerPricingProduct.PricingProductName
                                         });
 
                                     }
                                     else if (obj.EED > customerPricingProduct.EED || obj.EED == null)
                                     {
-                                        customerPricingProductObject.Add(new CustomerPricingProduct
+                                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                                         {
                                             BED = obj.BED,
                                             EED = customerPricingProduct.BED,
                                             AllDestinations = obj.AllDestinations,
                                             CustomerId = obj.CustomerId,
                                             CustomerPricingProductId = obj.CustomerPricingProductId,
-                                            PricingProductId = obj.PricingProductId
+                                            PricingProductId = obj.PricingProductId,
+                                            CustomerName = obj.CustomerName,
+                                            PricingProductName = obj.PricingProductName
                                         });
-                                        customerPricingProductObject.Add(new CustomerPricingProduct
+                                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                                         {
                                             BED = customerPricingProduct.BED,
                                             EED = customerPricingProduct.EED,
                                             AllDestinations = customerPricingProduct.AllDestinations,
                                             CustomerId = customerPricingProduct.CustomerId,
-                                            PricingProductId = customerPricingProduct.PricingProductId
+                                            PricingProductId = customerPricingProduct.PricingProductId,
+                                            CustomerName = customerPricingProduct.CustomerName,
+                                            PricingProductName = customerPricingProduct.PricingProductName
                                         });
-                                        customerPricingProductObject.Add(new CustomerPricingProduct
+                                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                                         {
                                             BED = (DateTime)customerPricingProduct.EED,
                                             EED = obj.EED,
                                             AllDestinations = obj.AllDestinations,
                                             CustomerId = obj.CustomerId,
-                                            PricingProductId = obj.PricingProductId
+                                            PricingProductId = obj.PricingProductId,
+                                            CustomerName = obj.CustomerName,
+                                            PricingProductName = obj.PricingProductName
                                         });
 
                                     }
@@ -137,51 +165,61 @@ namespace TOne.WhS.BusinessEntity.Business
                                 {
                                     if (obj.EED < customerPricingProduct.EED || customerPricingProduct.EED == null)
                                     {
-                                        customerPricingProductObject.Add(new CustomerPricingProduct
+                                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                                         {
                                             BED = obj.BED,
                                             EED = obj.BED,
                                             AllDestinations = customerPricingProduct.AllDestinations,
                                             CustomerId = customerPricingProduct.CustomerId,
                                             CustomerPricingProductId = obj.CustomerPricingProductId,
-                                            PricingProductId = customerPricingProduct.PricingProductId
+                                            PricingProductId = customerPricingProduct.PricingProductId,
+                                            CustomerName = customerPricingProduct.CustomerName,
+                                            PricingProductName = customerPricingProduct.PricingProductName
                                         });
-                                        customerPricingProductObject.Add(new CustomerPricingProduct
+                                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                                         {
                                             BED = customerPricingProduct.BED,
                                             EED = customerPricingProduct.EED,
                                             AllDestinations = customerPricingProduct.AllDestinations,
                                             CustomerId = customerPricingProduct.CustomerId,
-                                            PricingProductId = customerPricingProduct.PricingProductId
+                                            PricingProductId = customerPricingProduct.PricingProductId,
+                                            CustomerName = customerPricingProduct.CustomerName,
+                                            PricingProductName = customerPricingProduct.PricingProductName
                                         });
                                     }
                                     else if (obj.EED > customerPricingProduct.EED || obj.EED == null)
                                     {
-                                        customerPricingProductObject.Add(new CustomerPricingProduct
+                                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                                         {
                                             BED = obj.BED,
                                             EED = obj.BED,
                                             AllDestinations = customerPricingProduct.AllDestinations,
                                             CustomerId = customerPricingProduct.CustomerId,
                                             CustomerPricingProductId = obj.CustomerPricingProductId,
-                                            PricingProductId = customerPricingProduct.PricingProductId
+                                            PricingProductId = customerPricingProduct.PricingProductId,
+                                            CustomerName = customerPricingProduct.CustomerName,
+                                            PricingProductName = customerPricingProduct.PricingProductName
                                         });
-                                        customerPricingProductObject.Add(new CustomerPricingProduct
+                                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                                         {
                                             BED = customerPricingProduct.BED,
                                             EED = customerPricingProduct.EED,
                                             AllDestinations = customerPricingProduct.AllDestinations,
                                             CustomerId = customerPricingProduct.CustomerId,
-                                            PricingProductId = customerPricingProduct.PricingProductId
+                                            PricingProductId = customerPricingProduct.PricingProductId,
+                                            CustomerName = customerPricingProduct.CustomerName,
+                                            PricingProductName = customerPricingProduct.PricingProductName
                                         });
-                                        customerPricingProductObject.Add(new CustomerPricingProduct
+                                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                                         {
                                             BED =(DateTime) customerPricingProduct.EED,
                                             EED = obj.EED,
                                             AllDestinations = customerPricingProduct.AllDestinations,
                                             CustomerId = customerPricingProduct.CustomerId,
                                             CustomerPricingProductId = obj.CustomerPricingProductId,
-                                            PricingProductId = customerPricingProduct.PricingProductId
+                                            PricingProductId = customerPricingProduct.PricingProductId,
+                                            CustomerName = customerPricingProduct.CustomerName,
+                                            PricingProductName = customerPricingProduct.PricingProductName
                                         });
                                     }
                                 }
@@ -192,42 +230,50 @@ namespace TOne.WhS.BusinessEntity.Business
                                 {
                                     if (obj.EED < customerPricingProduct.EED || customerPricingProduct.EED == null)
                                     {
-                                        customerPricingProductObject.Add(new CustomerPricingProduct
+                                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                                         {
                                             AllDestinations = obj.AllDestinations,
                                             CustomerId = obj.CustomerId,
                                             BED = obj.BED,
                                             CustomerPricingProductId = obj.CustomerPricingProductId,
                                             EED = customerPricingProduct.BED,
-                                            PricingProductId = obj.PricingProductId
+                                            PricingProductId = obj.PricingProductId,
+                                            CustomerName = obj.CustomerName,
+                                            PricingProductName = obj.PricingProductName
                                         });
-                                        customerPricingProductObject.Add(new CustomerPricingProduct
+                                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                                         {
                                             AllDestinations = customerPricingProduct.AllDestinations,
                                             CustomerId = customerPricingProduct.CustomerId,
                                             BED = customerPricingProduct.BED,
                                             EED = customerPricingProduct.EED,
-                                            PricingProductId = customerPricingProduct.PricingProductId
+                                            PricingProductId = customerPricingProduct.PricingProductId,
+                                            CustomerName = customerPricingProduct.CustomerName,
+                                            PricingProductName = customerPricingProduct.PricingProductName
                                         });
                                     }
                                     else if(obj.EED > customerPricingProduct.EED ||obj.EED == null)
                                     {
-                                        customerPricingProductObject.Add(new CustomerPricingProduct
+                                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                                         {
                                             AllDestinations = obj.AllDestinations,
                                             CustomerId = obj.CustomerId,
                                             BED = obj.BED,
                                             CustomerPricingProductId = obj.CustomerPricingProductId,
                                             EED = customerPricingProduct.BED,
-                                            PricingProductId = obj.PricingProductId
+                                            PricingProductId = obj.PricingProductId,
+                                            CustomerName = obj.CustomerName,
+                                            PricingProductName = obj.PricingProductName
                                         });
-                                        customerPricingProductObject.Add(new CustomerPricingProduct
+                                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                                         {
                                             AllDestinations = customerPricingProduct.AllDestinations,
                                             CustomerId = customerPricingProduct.CustomerId,
                                             BED = (DateTime)customerPricingProduct.EED,
                                             EED = obj.EED,
-                                            PricingProductId = customerPricingProduct.PricingProductId
+                                            PricingProductId = customerPricingProduct.PricingProductId,
+                                            CustomerName = customerPricingProduct.CustomerName,
+                                            PricingProductName = customerPricingProduct.PricingProductName
                                         });
                                     }
                                     
@@ -236,51 +282,61 @@ namespace TOne.WhS.BusinessEntity.Business
                                 {
                                     if (obj.EED > customerPricingProduct.EED || obj.EED == null)
                                     {
-                                        customerPricingProductObject.Add(new CustomerPricingProduct
+                                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                                         {
                                             AllDestinations = obj.AllDestinations,
                                             CustomerId = obj.CustomerId,
                                             BED = obj.BED,
                                             CustomerPricingProductId = obj.CustomerPricingProductId,
                                             EED = obj.BED,
-                                            PricingProductId = obj.PricingProductId
+                                            PricingProductId = obj.PricingProductId,
+                                            CustomerName = obj.CustomerName,
+                                            PricingProductName = obj.PricingProductName
                                         });
-                                        customerPricingProductObject.Add(new CustomerPricingProduct
+                                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                                         {
                                             AllDestinations = customerPricingProduct.AllDestinations,
                                             CustomerId = customerPricingProduct.CustomerId,
                                             BED = customerPricingProduct.BED,
                                             EED = customerPricingProduct.EED,
-                                            PricingProductId = customerPricingProduct.PricingProductId
+                                            PricingProductId = customerPricingProduct.PricingProductId,
+                                            CustomerName = customerPricingProduct.CustomerName,
+                                            PricingProductName = customerPricingProduct.PricingProductName
                                         });
-                                        customerPricingProductObject.Add(new CustomerPricingProduct
+                                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                                         {
                                             AllDestinations = obj.AllDestinations,
                                             CustomerId = obj.CustomerId,
                                             BED =(DateTime) customerPricingProduct.EED,
                                             EED = obj.EED,
-                                            PricingProductId = obj.PricingProductId
+                                            PricingProductId = obj.PricingProductId,
+                                            CustomerName = obj.CustomerName,
+                                            PricingProductName = obj.PricingProductName
                                         });
 
                                     }
                                     else if (obj.EED < customerPricingProduct.EED || customerPricingProduct.EED==null)
                                     {
-                                        customerPricingProductObject.Add(new CustomerPricingProduct
+                                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                                         {
                                             AllDestinations = obj.AllDestinations,
                                             CustomerId = obj.CustomerId,
                                             BED = obj.BED,
                                             CustomerPricingProductId = obj.CustomerPricingProductId,
                                             EED = obj.BED,
-                                            PricingProductId = obj.PricingProductId
+                                            PricingProductId = obj.PricingProductId,
+                                            CustomerName = obj.CustomerName,
+                                            PricingProductName = obj.PricingProductName
                                         });
-                                        customerPricingProductObject.Add(new CustomerPricingProduct
+                                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                                         {
                                             AllDestinations = customerPricingProduct.AllDestinations,
                                             CustomerId = customerPricingProduct.CustomerId,
                                             BED = customerPricingProduct.BED,
                                             EED = customerPricingProduct.EED,
-                                            PricingProductId = customerPricingProduct.PricingProductId
+                                            PricingProductId = customerPricingProduct.PricingProductId,
+                                            CustomerName = customerPricingProduct.CustomerName,
+                                            PricingProductName = customerPricingProduct.PricingProductName
                                         });
                                     }
                                 }
@@ -288,50 +344,60 @@ namespace TOne.WhS.BusinessEntity.Business
                                      
                                      if (obj.EED > customerPricingProduct.EED || obj.EED == null)
                                     {
-                                        customerPricingProductObject.Add(new CustomerPricingProduct
+                                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                                         {
                                             AllDestinations = obj.AllDestinations,
                                             CustomerId = obj.CustomerId,
                                             BED = obj.BED,
                                             CustomerPricingProductId = obj.CustomerPricingProductId,
                                             EED = customerPricingProduct.BED,
-                                            PricingProductId = obj.PricingProductId
+                                            PricingProductId = obj.PricingProductId,
+                                            CustomerName = obj.CustomerName,
+                                            PricingProductName = obj.PricingProductName
                                         });
-                                        customerPricingProductObject.Add(new CustomerPricingProduct
+                                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                                         {
                                             AllDestinations = customerPricingProduct.AllDestinations,
                                             CustomerId = customerPricingProduct.CustomerId,
                                             BED = customerPricingProduct.BED,
                                             EED = customerPricingProduct.EED,
-                                            PricingProductId = customerPricingProduct.PricingProductId
+                                            PricingProductId = customerPricingProduct.PricingProductId,
+                                            CustomerName = customerPricingProduct.CustomerName,
+                                            PricingProductName = customerPricingProduct.PricingProductName
                                         });
-                                        customerPricingProductObject.Add(new CustomerPricingProduct
+                                        customerPricingProductObject.Add(new CustomerPricingProductDetail
                                         {
                                             AllDestinations = obj.AllDestinations,
                                             CustomerId = obj.CustomerId,
                                             BED = (DateTime)customerPricingProduct.EED,
                                             EED = obj.EED,
-                                            PricingProductId = obj.PricingProductId
+                                            PricingProductId = obj.PricingProductId,
+                                            CustomerName = obj.CustomerName,
+                                            PricingProductName = obj.PricingProductName
                                         });
                                     }
                                      else if (obj.EED < customerPricingProduct.EED)
                                      {
-                                         customerPricingProductObject.Add(new CustomerPricingProduct
+                                         customerPricingProductObject.Add(new CustomerPricingProductDetail
                                          {
                                              AllDestinations = obj.AllDestinations,
                                              CustomerId = obj.CustomerId,
                                              BED = obj.BED,
                                              CustomerPricingProductId = obj.CustomerPricingProductId,
                                              EED = customerPricingProduct.BED,
-                                             PricingProductId = obj.PricingProductId
+                                             PricingProductId = obj.PricingProductId,
+                                             CustomerName = obj.CustomerName,
+                                             PricingProductName = obj.PricingProductName
                                          });
-                                         customerPricingProductObject.Add(new CustomerPricingProduct
+                                         customerPricingProductObject.Add(new CustomerPricingProductDetail
                                          {
                                              AllDestinations = customerPricingProduct.AllDestinations,
                                              CustomerId = customerPricingProduct.CustomerId,
                                              BED = customerPricingProduct.BED,
                                              EED = customerPricingProduct.EED,
-                                             PricingProductId = customerPricingProduct.PricingProductId
+                                             PricingProductId = customerPricingProduct.PricingProductId,
+                                             CustomerName = customerPricingProduct.CustomerName,
+                                             PricingProductName = customerPricingProduct.PricingProductName
                                          });
                                      }
                                      
@@ -346,7 +412,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
             #endregion
 
-            List<CustomerPricingProduct> insertedObjects = new List<CustomerPricingProduct>();
+            List<CustomerPricingProductDetail> insertedObjects = new List<CustomerPricingProductDetail>();
 
             List<CustomerPricingProductClass> returnedData=new List<CustomerPricingProductClass>();
             bool insertActionSucc = dataManager.Insert(customerPricingProductObject, out  insertedObjects);
@@ -356,7 +422,7 @@ namespace TOne.WhS.BusinessEntity.Business
             // //   customerPricingProducts.CustomerPricingProductId = customerPricingProductId;
             //    insertOperationOutput.InsertedObject = dataManager.GetCustomerPricingProduct(customerPricingProductId);
             //}
-            foreach (CustomerPricingProduct customerPricingProduct in customerPricingProductObject)
+            foreach (CustomerPricingProductDetail customerPricingProduct in customerPricingProductObject)
             {
                 if (customerPricingProduct.CustomerPricingProductId != 0)
                 {
@@ -368,11 +434,13 @@ namespace TOne.WhS.BusinessEntity.Business
                         CustomerPricingProductId=customerPricingProduct.CustomerPricingProductId,
                         EED=customerPricingProduct.EED,
                         PricingProductId = customerPricingProduct.PricingProductId,
+                        CustomerName = customerPricingProduct.CustomerName,
+                        PricingProductName = customerPricingProduct.PricingProductName
 
                     });
                 }
             }
-            foreach (CustomerPricingProduct customerPricingProduct in insertedObjects)
+            foreach (CustomerPricingProductDetail customerPricingProduct in insertedObjects)
             {
                 returnedData.Add(new CustomerPricingProductClass
                 {
@@ -383,6 +451,8 @@ namespace TOne.WhS.BusinessEntity.Business
                     CustomerPricingProductId = customerPricingProduct.CustomerPricingProductId,
                     EED = customerPricingProduct.EED,
                     PricingProductId = customerPricingProduct.PricingProductId,
+                    CustomerName = customerPricingProduct.CustomerName,
+                    PricingProductName=customerPricingProduct.PricingProductName
                 });
             }
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
@@ -407,10 +477,35 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return deleteOperationOutput;
         }
+        #region Private Members
+
+        List<CustomerPricingProductDetail> GetCachedCustomerPricingProducts()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCustomerPricingProducts",
+               () =>
+               {
+                   ICustomerPricingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerPricingProductDataManager>();
+                   return dataManager.GetCustomerPricingProducts();
+               });
+        }
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            ICustomerPricingProductDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICustomerPricingProductDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreCustomerPricingProductsUpdated(ref _updateHandle);
+            }
+        }
+        #endregion
     }
     public enum Status { New = 0, Updated = 1 }
-    public class CustomerPricingProductClass : CustomerPricingProduct
+    public class CustomerPricingProductClass : CustomerPricingProductDetail
     {
         public Status Status { get; set; }
     }
+
+
 }

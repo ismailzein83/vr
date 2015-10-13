@@ -25,6 +25,7 @@
             return BaseAPIService.post("/api/PricingProduct/UpdatePricingProduct", pricingProductObject);
         }
         function DeletePricingProduct(pricingProductId) {
+            
             return BaseAPIService.get("/api/PricingProduct/DeletePricingProduct", { pricingProductId: pricingProductId });
         }
 

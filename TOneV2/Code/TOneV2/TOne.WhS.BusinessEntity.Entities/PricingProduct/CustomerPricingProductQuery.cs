@@ -8,8 +8,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class CustomerPricingProductQuery
     {
-        public int? CustomerId{get;set;}
-        public int? PricingProductId { get; set; }
+        public List<int> CustomersIds{get;set;}
+        public List<int> PricingProductsIds { get; set; }
         public DateTime? EffectiveDate { get; set; }
     }
 }

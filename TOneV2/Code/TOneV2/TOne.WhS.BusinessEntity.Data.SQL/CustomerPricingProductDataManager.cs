@@ -12,12 +12,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class CustomerPricingProductDataManager : BaseSQLDataManager, ICustomerPricingProductDataManager
     {
-        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
-
-        static CustomerPricingProductDataManager()
-        {
-            _columnMapper.Add("CustomerPricingProductId", "ID");
-        }
 
         public CustomerPricingProductDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
@@ -25,19 +19,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         }
 
-        public Vanrise.Entities.BigResult<Entities.CustomerPricingProductDetail> GetFilteredCustomerPricingProducts(Vanrise.Entities.DataRetrievalInput<Entities.CustomerPricingProductQuery> input)
-        {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                //string saleZonePackageIdsParam = null;
-                //if (input.Query.SaleZonePackageIds != null)
-                //    saleZonePackageIdsParam = string.Join(",", input.Query.SaleZonePackageIds);
-
-                ExecuteNonQuerySP("TOneWhS_BE.sp_CustomerPricingProduct_CreateTempByFiltered", tempTableName, input.Query.CustomerId, input.Query.PricingProductId, input.Query.EffectiveDate);
-            };
-
-            return RetrieveData(input, createTempTableAction, CustomerPricingProductDetailMapper, _columnMapper);
-        }
 
 
         public CustomerPricingProductDetail GetCustomerPricingProduct(int customerPricingProductId)
@@ -45,12 +26,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemSP("TOneWhS_BE.sp_CustomerPricingProduct_Get", CustomerPricingProductDetailMapper, customerPricingProductId);
         }
 
-        public bool Insert(List<CustomerPricingProduct> customerPricingProduct, out List<CustomerPricingProduct> insertedObjects)
+        public bool Insert(List<CustomerPricingProductDetail> customerPricingProduct, out List<CustomerPricingProductDetail> insertedObjects)
         {
 
             DataTable table = BuildUpdatedCarriersTable(customerPricingProduct);
 
-           insertedObjects= GetItemsSPCmd("TOneWhS_BE.sp_CustomerPricingProduct_Insert", CustomerPricingProductMapper, (cmd) =>
+            insertedObjects = GetItemsSPCmd("TOneWhS_BE.sp_CustomerPricingProduct_Insert", CustomerPricingProductDetailMapper, (cmd) =>
             {
                 var tableParameter = new SqlParameter("@UpdatedCustomerPricingProducts", SqlDbType.Structured);
                 tableParameter.Value = table;
@@ -67,7 +48,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return true;
         }
-        private DataTable BuildUpdatedCarriersTable(List<CustomerPricingProduct> customerPricingProducts)
+        private DataTable BuildUpdatedCarriersTable(List<CustomerPricingProductDetail> customerPricingProducts)
         {
             DataTable table = new DataTable();
 
@@ -127,25 +108,16 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return customerPricingProductDetail;
         }
-        CustomerPricingProduct CustomerPricingProductMapper(IDataReader reader)
-        {
-            CustomerPricingProduct customerPricingProduct = new CustomerPricingProduct
-            {
-                CustomerPricingProductId = (int)reader["ID"],
-                CustomerId = (int)reader["CustomerID"],
-                PricingProductId = (int)reader["PricingProductID"],
-                BED = GetReaderValue<DateTime>(reader, "BED"),
-                EED = GetReaderValue<DateTime?>(reader, "EED"),
-                AllDestinations = GetReaderValue<bool>(reader, "AllDestinations"),
-            };
 
-            return customerPricingProduct;
+        public bool AreCustomerPricingProductsUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_BE.CustomerPricingProduct", ref updateHandle);
         }
 
-
-        public List<CustomerPricingProduct> GetCustomerPricingProductByCustomerID(int customerId)
+        public List<CustomerPricingProductDetail> GetCustomerPricingProducts()
         {
-            return GetItemsSP("TOneWhS_BE.sp_CustomerPricingProduct_GetByCustomer", CustomerPricingProductMapper, customerId);
+            return GetItemsSP("TOneWhS_BE.sp_CustomerPricingProduct_GetAll", CustomerPricingProductDetailMapper);
         }
+
     }
 }

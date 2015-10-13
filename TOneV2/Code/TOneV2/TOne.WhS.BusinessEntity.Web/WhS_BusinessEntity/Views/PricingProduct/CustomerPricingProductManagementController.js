@@ -9,12 +9,11 @@
         var carrierAccountDirectiveAPI;
         var pricingProductsDirectiveAPI;
         defineScope();
-        load();
 
         function defineScope() {
             $scope.searchClicked = function () {
-                if (carrierAccountDirectiveAPI != undefined && pricingProductsDirectiveAPI != undefined && gridAPI != undefined)
-                    gridAPI.loadGrid(getFilterObject());
+                if (!$scope.isGettingData && gridAPI != undefined)
+               return  gridAPI.loadGrid(getFilterObject());
             };
 
             $scope.AddNewCustomerPricingProduct = AddNewCustomerPricingProduct;
@@ -24,38 +23,41 @@
                 }
                 api.loadGrid(filter);
             }
-            $scope.selectedCustomers;
             $scope.effectiveDate;
-            $scope.selectedPricingProduct;
-            $scope.onCarrierAccountDirectiveLoaded = function (api) {
+            $scope.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
+                load();
             }
-            $scope.onPricingProductsDirectiveLoaded = function (api) {
+            $scope.onPricingProductsDirectiveReady = function (api) {
                 pricingProductsDirectiveAPI = api;
-            }
-            $scope.onCarrierAccountSelectionChanged = function () {
-                if (carrierAccountDirectiveAPI != undefined)
-                    $scope.selectedCustomers = carrierAccountDirectiveAPI.getData();
-            }
-            $scope.onPricingProductsSelectionChanged = function () {
-                if (pricingProductsDirectiveAPI!=undefined)
-                $scope.selectedPricingProduct = pricingProductsDirectiveAPI.getData();
+                load();
             }
         }
 
         function load() {
+            $scope.isGettingData = true;
+            if (carrierAccountDirectiveAPI == undefined || pricingProductsDirectiveAPI == undefined)
+                return;
+
+            UtilsService.waitMultipleAsyncOperations([loadPricingProducts,loadCarrierAccounts]).then(function () {
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.isGettingData = false;
+            }).finally(function () {
+                $scope.isGettingData = false;
+            });
+        }
+        function loadPricingProducts() {
+          return  pricingProductsDirectiveAPI.load();
+        }
+        function loadCarrierAccounts() {
+           return carrierAccountDirectiveAPI.load();
         }
 
         function getFilterObject() {
-            var selectedCustomers;
-            var selectedPricingProduct;
-            if ($scope.selectedCustomers != undefined)
-                selectedCustomers = $scope.selectedCustomers.CarrierAccountId;
-            if ($scope.selectedPricingProduct != undefined)
-                selectedPricingProduct=$scope.selectedPricingProduct.PricingProductId;
             var data = {
-                CustomerId: selectedCustomers,
-                PricingProductId: selectedPricingProduct,
+                CustomersIds: UtilsService.getPropValuesFromArray(carrierAccountDirectiveAPI.getData(), "CarrierAccountId"),
+                PricingProductsIds: UtilsService.getPropValuesFromArray(pricingProductsDirectiveAPI.getData(), "PricingProductId"),
                 EffectiveDate: $scope.effectiveDate
             };
             return data;
@@ -69,10 +71,8 @@
                         gridAPI.onCustomerPricingProductAdded(customerPricingProductObj[i]);
                     else if (customerPricingProductObj[i].Status == 1 && gridAPI != undefined)
                     {
-                        gridAPI.onCustomerPricingProductUpdated(cloneObject(customerPricingProductObj[i], true));
+                        gridAPI.onCustomerPricingProductUpdated(customerPricingProductObj[i]);
                     }
-                      
-                    console.log(customerPricingProductObj[i]);
                 }
               
                 

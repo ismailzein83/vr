@@ -11,40 +11,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class PricingProductDataManager : BaseSQLDataManager, IPricingProductDataManager
     {
-        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
-
-        static PricingProductDataManager()
-        {
-            _columnMapper.Add("PricingProductId", "ID");
-        }
-
+     
         public PricingProductDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
-        }
-
-        public Vanrise.Entities.BigResult<PricingProduct> GetFilteredPricingProducts(Vanrise.Entities.DataRetrievalInput<PricingProductQuery> input)
-        {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                //string saleZonePackageIdsParam = null;
-                //if (input.Query.SaleZonePackageIds != null)
-                //    saleZonePackageIdsParam = string.Join(",", input.Query.SaleZonePackageIds);
-
-                ExecuteNonQuerySP("TOneWhS_BE.sp_PricingProduct_CreateTempByFiltered", tempTableName, input.Query.Name);
-            };
-
-            return RetrieveData(input, createTempTableAction, PricingProductMapper, _columnMapper);
-        }
-        public List<PricingProductInfo> GetAllPricingProduct()
-        {
-            return GetItemsSP("TOneWhS_BE.sp_PricingProduct_GetAll", PricingProductInfoMapper);
-        }
-
-        public Entities.PricingProduct GetPricingProduct(int pricingProductId)
-        {
-            return GetItemSP("TOneWhS_BE.sp_PricingProduct_Get", PricingProductMapper, pricingProductId);
         }
 
         public bool Insert(PricingProduct pricingProduct, out int insertedId)
@@ -71,28 +42,31 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return (recordesEffected > 0);
         }
 
-        PricingProduct PricingProductMapper(IDataReader reader)
+        PricingProductDetail PricingProductDetailMapper(IDataReader reader)
         {
-            PricingProduct pricingProduct = new PricingProduct
+            PricingProductDetail pricingProductDetail = new PricingProductDetail
             {
                 PricingProductId = (int)reader["ID"],
                 Name = reader["Name"] as string,
-                DefaultRoutingProductId = GetReaderValue<int>(reader, "DefaultRoutingProductID"),
+                DefaultRoutingProductId = GetReaderValue<int?>(reader, "DefaultRoutingProductID"),
                 SaleZonePackageId = (int)reader["SaleZonePackageID"],
                 Settings = ((reader["Settings"] as string) != null) ? Vanrise.Common.Serializer.Deserialize<PricingProductSettings>(reader["Settings"] as string) : null,
+                SaleZonePackageName = reader["SaleZonePackageName"] as string,
+                DefaultRoutingProductName = reader["DefaultRoutingProductName"] as string,
             };
-
-            return pricingProduct;
+            return pricingProductDetail;
         }
-        PricingProductInfo PricingProductInfoMapper(IDataReader reader)
-        {
-            PricingProductInfo pricingProduct = new PricingProductInfo
-            {
-                PricingProductId = (int)reader["ID"],
-                Name = reader["Name"] as string,
-            };
 
-            return pricingProduct;
+
+        public bool ArePricingProductsUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_BE.PricingProduct", ref updateHandle);
+        }
+
+
+        public List<PricingProductDetail> GetPricingProducts()
+        {
+            return GetItemsSP("TOneWhS_BE.sp_PricingProduct_GetAll", PricingProductDetailMapper);
         }
     }
 }

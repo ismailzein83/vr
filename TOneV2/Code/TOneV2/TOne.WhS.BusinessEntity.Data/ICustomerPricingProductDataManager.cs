@@ -9,11 +9,9 @@ namespace TOne.WhS.BusinessEntity.Data
 {
    public interface ICustomerPricingProductDataManager:IDataManager
     {
-       Vanrise.Entities.BigResult<CustomerPricingProductDetail> GetFilteredCustomerPricingProducts(Vanrise.Entities.DataRetrievalInput<CustomerPricingProductQuery> input);
-
-       CustomerPricingProductDetail GetCustomerPricingProduct(int customerPricingProductId);
-       bool Insert(List<CustomerPricingProduct> customerPricingProduct,out List<CustomerPricingProduct> insertedObjects);
-       List<CustomerPricingProduct> GetCustomerPricingProductByCustomerID(int customerId);
+       bool Insert(List<CustomerPricingProductDetail> customerPricingProduct,out List<CustomerPricingProductDetail> insertedObjects);
        bool Delete(int customerPricingProductId);
+       bool AreCustomerPricingProductsUpdated(ref object updateHandle);
+       List<CustomerPricingProductDetail> GetCustomerPricingProducts();
     }
 }

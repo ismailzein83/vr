@@ -19,28 +19,28 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
              return GetWebResponse(input, manager.GetFilteredPricingProducts(input));
          }
           [HttpGet]
-         public List<PricingProductInfo> GetAllPricingProduct()
+         public IEnumerable<PricingProductInfo> GetAllPricingProduct()
          {
              PricingProductManager manager = new PricingProductManager();
              return manager.GetAllPricingProduct();
          }
          
          [HttpGet]
-         public PricingProduct GetPricingProduct(int pricingProductId)
+         public PricingProductDetail GetPricingProduct(int pricingProductId)
          {
              PricingProductManager manager = new PricingProductManager();
              return manager.GetPricingProduct(pricingProductId);
          }
 
          [HttpPost]
-         public TOne.Entities.InsertOperationOutput<PricingProduct> AddPricingProduct(PricingProduct pricingProduct)
+         public TOne.Entities.InsertOperationOutput<PricingProductDetail> AddPricingProduct(PricingProduct pricingProduct)
          {
              PricingProductManager manager = new PricingProductManager();
              return manager.AddPricingProduct(pricingProduct);
          }
 
          [HttpPost]
-         public TOne.Entities.UpdateOperationOutput<PricingProduct> UpdatePricingProduct(PricingProduct pricingProduct)
+         public TOne.Entities.UpdateOperationOutput<PricingProductDetail> UpdatePricingProduct(PricingProduct pricingProduct)
          {
              PricingProductManager manager = new PricingProductManager();
              return manager.UpdatePricingProduct(pricingProduct);
