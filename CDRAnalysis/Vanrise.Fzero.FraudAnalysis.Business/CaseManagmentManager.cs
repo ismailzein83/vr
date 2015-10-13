@@ -138,7 +138,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             dataManager.InsertAccountCaseHistory(caseID, userID, caseStatus, reason);
 
-            dataManager.InsertOrUpdateAccountStatus(accountNumber, caseStatus);
+            dataManager.InsertOrUpdateAccountStatus(accountNumber, caseStatus, validTill);
 
             dataManager.LinkDetailToCase(accountNumber, caseID, caseStatus);
 
