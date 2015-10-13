@@ -87,7 +87,7 @@ function BrandManagementController($scope, BrandAPIService, VRNotificationServic
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Switch Brand: " + gridObj.Name;
+            modalScope.title = "Edit Brand: " + gridObj.Name;
 
             modalScope.onBrandUpdated = function (BrandObj) {
                 gridAPI.itemUpdated(BrandObj);

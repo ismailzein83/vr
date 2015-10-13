@@ -2,9 +2,9 @@
     
     "use strict";
 
-    NormalizationRuleEditorController.$inject = ["$scope", "NormalizationRuleAPIService", "SwitchAPIService", "SwitchTrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "UtilsService", "VRNavigationService", "VRNotificationService"];
+    NormalizationRuleEditorController.$inject = ["$scope", "NormalizationRuleAPIService", "SwitchAPIService", "TrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "UtilsService", "VRNavigationService", "VRNotificationService"];
 
-    function NormalizationRuleEditorController($scope, NormalizationRuleAPIService, SwitchAPIService, SwitchTrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, UtilsService, VRNavigationService, VRNotificationService) {
+    function NormalizationRuleEditorController($scope, NormalizationRuleAPIService, SwitchAPIService, TrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, UtilsService, VRNavigationService, VRNotificationService) {
 
         var editMode;
         var normalizationRuleId;
@@ -51,13 +51,13 @@
                 if ($scope.selectedSwitches == undefined || $scope.selectedSwitches.length == 0)
                     return;
 
-                var selectedSwitchIds = UtilsService.getPropValuesFromArray($scope.selectedSwitches, "ID");
+                var selectedSwitchIds = UtilsService.getPropValuesFromArray($scope.selectedSwitches, "SwitchId");
 
                 var tempSelectedTrunks =   UtilsService.cloneObject(  $scope.selectedTrunks, true);
 
                 angular.forEach(tempSelectedTrunks, function (trunk) {
                     if (!UtilsService.contains(selectedSwitchIds, trunk.SwitchId)) {
-                        var index = UtilsService.getItemIndexByVal($scope.selectedTrunks, trunk.ID, "ID");
+                        var index = UtilsService.getItemIndexByVal($scope.selectedTrunks, trunk.TrunkId, "TrunkId");
                         if (index > -1)
                             $scope.selectedTrunks.splice(index, 1);
                     }
@@ -70,11 +70,11 @@
             $scope.getSwitchRelatedTrunks = function (trunkNameFilter) {
 
                 var trunkFilterObj = {
-                    SwitchIds: UtilsService.getPropValuesFromArray($scope.selectedSwitches, "ID"),
+                    SwitchIds: UtilsService.getPropValuesFromArray($scope.selectedSwitches, "SwitchId"),
                     TrunkNameFilter: trunkNameFilter
                 };
 
-                return SwitchTrunkAPIService.GetTrunksBySwitchIds(trunkFilterObj);
+                return TrunkAPIService.GetTrunksBySwitchIds(trunkFilterObj);
             }
 
             $scope.onNormalizationRuleActionSettingsTemplateChanged = function () {
@@ -143,7 +143,7 @@
         }
 
         function loadTrunks() {
-            return SwitchTrunkAPIService.GetSwitchTrunks()
+            return TrunkAPIService.GetTrunks()
                 .then(function (responseArray) {
                     angular.forEach(responseArray, function (item) {
                         $scope.trunks.push(item);
@@ -164,10 +164,10 @@
             $scope.description = normalizationRuleObj.Description;
 
             $scope.selectedSwitches = (normalizationRuleObj.Criteria.SwitchIds != null) ?
-                getItemsByPropValues($scope.switches, normalizationRuleObj.Criteria.SwitchIds, "ID") : [];
+                getItemsByPropValues($scope.switches, normalizationRuleObj.Criteria.SwitchIds, "SwitchId") : [];
 
             $scope.selectedTrunks = (normalizationRuleObj.Criteria.TrunkIds != null) ?
-                getItemsByPropValues($scope.trunks, normalizationRuleObj.Criteria.TrunkIds, "ID") : [];
+                getItemsByPropValues($scope.trunks, normalizationRuleObj.Criteria.TrunkIds, "TrunkId") : [];
 
             $scope.selectedPhoneNumberType = (normalizationRuleObj.Criteria.PhoneNumberType != null) ?
                 UtilsService.getItemByVal($scope.phoneNumberTypes, normalizationRuleObj.Criteria.PhoneNumberType, "value") : undefined;
@@ -268,8 +268,8 @@
             var normalizationRuleObj = {
                 NormalizationRuleId: (normalizationRuleId != undefined) ? normalizationRuleId : null,
                 Criteria: {
-                    SwitchIds: UtilsService.getPropValuesFromArray($scope.selectedSwitches, "ID"),
-                    TrunkIds: UtilsService.getPropValuesFromArray($scope.selectedTrunks, "ID"),
+                    SwitchIds: UtilsService.getPropValuesFromArray($scope.selectedSwitches, "SwitchId"),
+                    TrunkIds: UtilsService.getPropValuesFromArray($scope.selectedTrunks, "TrunkId"),
                     PhoneNumberType: ($scope.selectedPhoneNumberType != undefined) ? $scope.selectedPhoneNumberType.value : null,
                     PhoneNumberLength: $scope.phoneNumberLength,
                     PhoneNumberPrefix: $scope.phoneNumberPrefix

@@ -1,6 +1,6 @@
-﻿NormalizationRuleManagementController.$inject = ["$scope", "PSTN_BE_Service", "SwitchAPIService", "SwitchTrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "UtilsService", "VRNotificationService"];
+﻿NormalizationRuleManagementController.$inject = ["$scope", "PSTN_BE_Service", "SwitchAPIService", "TrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "UtilsService", "VRNotificationService"];
 
-function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAPIService, SwitchTrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, UtilsService, VRNotificationService) {
+function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAPIService, TrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, UtilsService, VRNotificationService) {
 
     var directiveGridAPI;
 
@@ -68,7 +68,7 @@ function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAP
     }
 
     function loadTrunks() {
-        return SwitchTrunkAPIService.GetSwitchTrunks()
+        return TrunkAPIService.GetTrunks()
             .then(function (responseArray) {
                 angular.forEach(responseArray, function (item) {
                     $scope.trunks.push(item);
@@ -86,8 +86,8 @@ function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAP
         if ($scope.selectedTabIndex == 1) {
             filterObj.PhoneNumberPrefix = $scope.phoneNumberPrefix;
             filterObj.PhoneNumberLength = $scope.phoneNumberLength;
-            filterObj.SwitchIds = UtilsService.getPropValuesFromArray($scope.selectedSwitches, "ID");
-            filterObj.TrunkIds = UtilsService.getPropValuesFromArray($scope.selectedTrunks, "ID");
+            filterObj.SwitchIds = UtilsService.getPropValuesFromArray($scope.selectedSwitches, "SwitchId");
+            filterObj.TrunkIds = UtilsService.getPropValuesFromArray($scope.selectedTrunks, "TrunkId");
             filterObj.Description = $scope.description;
         }
 

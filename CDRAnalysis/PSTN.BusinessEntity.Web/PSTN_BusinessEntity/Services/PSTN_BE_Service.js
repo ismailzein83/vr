@@ -17,7 +17,7 @@
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = (trunkObj.Name != undefined) ? "Edit Switch Trunk: " + trunkObj.Name : "Edit Switch Trunk";
+            modalScope.title = (trunkObj.Name != undefined) ? "Edit Trunk: " + trunkObj.Name : "Edit Trunk";
             modalScope.onTrunkUpdated = onTrunkUpdated;
         };
 
