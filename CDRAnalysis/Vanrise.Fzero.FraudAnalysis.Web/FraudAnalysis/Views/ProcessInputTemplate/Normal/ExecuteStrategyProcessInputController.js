@@ -42,16 +42,7 @@ function ExecuteStrategyProcessInputController ($scope, $http, StrategyAPIServic
                 while (runningDate < $scope.toDate) {
                     var fromDate = new Date(runningDate);
                     var toDate = new Date(runningDate.setHours(runningDate.getHours() + 1));
-
-                    $scope.createProcessInputObjects.push({
-                        InputArguments: {
-                            $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
-                            StrategyIds: $scope.selectedStrategyIds,
-                            FromDate: new Date(fromDate),
-                            ToDate: new Date(toDate),
-                            OverridePrevious: $scope.overridePrevious
-                        }
-                    });
+                    createProcessInputObjects(fromDate, toDate);
                     runningDate = new Date(toDate);
                 }
 
@@ -62,17 +53,7 @@ function ExecuteStrategyProcessInputController ($scope, $http, StrategyAPIServic
                 while (runningDate < $scope.toDate) {
                     var fromDate = new Date(runningDate);
                     var toDate = new Date(runningDate.setHours(runningDate.getHours() + 24));
-
-                    $scope.createProcessInputObjects.push({
-                        InputArguments: {
-                            $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
-                            StrategyIds: $scope.selectedStrategyIds,
-                            FromDate: new Date(fromDate),
-                            ToDate: new Date(toDate),
-                            OverridePrevious: $scope.overridePrevious
-                        }
-                    });
-
+                    createProcessInputObjects(fromDate, toDate);
                     runningDate = new Date(toDate);
                 }
 
@@ -85,6 +66,21 @@ function ExecuteStrategyProcessInputController ($scope, $http, StrategyAPIServic
 
 
     }
+
+
+    function createProcessInputObjects(fromDate, toDate) {
+        $scope.createProcessInputObjects.push({
+            InputArguments: {
+                $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
+                StrategyIds: $scope.selectedStrategyIds,
+                FromDate: new Date(fromDate),
+                ToDate: new Date(toDate),
+                OverridePrevious: $scope.overridePrevious
+            }
+        });
+    }
+
+
 
     function load()
     {
