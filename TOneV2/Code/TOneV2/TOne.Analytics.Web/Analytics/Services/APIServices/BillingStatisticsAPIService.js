@@ -63,13 +63,15 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService, DataRetriev
         });
     }
 
-    function ExportCarrierProfile(fromDate, toDate, topDestination, customerId) {
+    function ExportCarrierProfile(fromDate, toDate, topDestination, customerId ,currencyID , CurrencyName) {
         return BaseAPIService.post("/api/BillingStatistics/ExportCarrierProfile",
             {
                 FromDate: fromDate,
                 ToDate: toDate,
                 TopDestination: topDestination,
-                CustomerId: customerId
+                CustomerId: customerId ,
+                CurrencyID: currencyID,
+                CurrencyName: CurrencyName
             },
             {
                 responseTypeAsBufferArray: true,
