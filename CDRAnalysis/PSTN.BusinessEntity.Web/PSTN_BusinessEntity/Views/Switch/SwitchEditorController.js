@@ -45,9 +45,15 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchTypeAPIService, 
 
             var offset = value.split(".");
 
-            if (offset.length == 1 && validateTime(offset[0]))
-                return null;
+            if (offset.length == 1) {
+                var time = offset[0].split("-");
 
+                if (time.length == 1 && validateTime(time[0]))
+                    return null;
+
+                else if (time.length == 2 && time[0].length == 0 && validateTime(time[1]))
+                    return null;
+            }
             else if (offset.length == 2) {
                 var days = offset[0].split("-");
 
