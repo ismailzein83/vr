@@ -15,11 +15,11 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
     $scope.reportsTypes = [];
     $scope.optionsCustomers = [];
     $scope.optionsSuppliers = [];
-   // $scope.optionsZone = [];
     $scope.reportsTypes = [];
     $scope.optionsCurrencies = []; 
     $scope.periods = analyticsService.getPeriods();
     $scope.selectedPeriod = $scope.periods[1];
+    var selectedPeriod;
     $scope.params = {
         groupByCustomer: false,
         selectedCustomers: [],
@@ -43,6 +43,23 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
         }
 
     }
+    $scope.onValueChanged = function () {
+        if ($scope.selectedPeriod != selectedPeriod) {
+            var customize = {
+                value: -1,
+                description: "Customize"
+            }
+            selectedPeriod = $scope.selectedPeriod;
+            $scope.selectedPeriod = customize;
+        }
+    }
+
+    $scope.customvalidateTestFrom = function (fromDate) {
+        return UtilsService.validateDates(fromDate, $scope.toDate);
+    };
+    $scope.customvalidateTestTo = function (toDate) {
+        return UtilsService.validateDates($scope.fromDate, toDate);
+    };
     function defineScope() {
 
         $scope.fromDate = '01/01/2013';
