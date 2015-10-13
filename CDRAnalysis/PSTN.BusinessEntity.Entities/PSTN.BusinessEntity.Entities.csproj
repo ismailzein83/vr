@@ -60,6 +60,16 @@
     <Compile Include="Normalization\NormalizationRuleActionSettings.cs" />
     <Compile Include="Normalization\NormalizationRuleCriteria.cs" />
     <Compile Include="Normalization\NormalizationRuleSettings.cs" />
+    <Compile Include="Normalization\RuleTypes\NormalizeNumber\Actions\AddPrefixActionSettings.cs" />
+    <Compile Include="Normalization\RuleTypes\NormalizeNumber\Actions\SubstringActionSettings.cs" />
+    <Compile Include="Normalization\RuleTypes\NormalizeNumber\NormalizationRuleAdjustNumberActionBehavior.cs" />
+    <Compile Include="Normalization\RuleTypes\NormalizeNumber\NormalizationRuleAdjustNumberActionSettings.cs" />
+    <Compile Include="Normalization\RuleTypes\NormalizeNumber\NormalizationRuleAdjustNumberSettings.cs" />
+    <Compile Include="Normalization\RuleTypes\NormalizeNumber\NormalizationRuleAdjustNumberTarget.cs" />
+    <Compile Include="Normalization\RuleTypes\SetArea\NormalizationRuleSetAreaBehavior.cs" />
+    <Compile Include="Normalization\RuleTypes\SetArea\NormalizationRuleSetAreaSettings.cs" />
+    <Compile Include="Normalization\RuleTypes\SetArea\NormalizationRuleSetAreaTarget.cs" />
+    <Compile Include="Normalization\RuleTypes\SetArea\Settings\SetAreaPrefixSettings.cs" />
     <Compile Include="Normalization\StructureRuleBehaviors\RuleBehaviorByNumberLength.cs" />
     <Compile Include="Normalization\StructureRuleBehaviors\RuleBehaviorByNumberPrefix.cs" />
     <Compile Include="Normalization\StructureRuleBehaviors\RuleBehaviorByNumberType.cs" />

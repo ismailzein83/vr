@@ -64,6 +64,9 @@
     <Compile Include="NormalizationRuleManager.cs" />
     <Compile Include="Normalization\Actions\SubstringActionBehavior.cs" />
     <Compile Include="Normalization\Actions\AddPrefixActionBehavior.cs" />
+    <Compile Include="Normalization\RuleTypes\NormalizeNumber\Actions\AddPrefixActionBehavior.cs" />
+    <Compile Include="Normalization\RuleTypes\NormalizeNumber\Actions\SubstringActionBehavior.cs" />
+    <Compile Include="Normalization\RuleTypes\SetArea\Behaviors\SetAreaPrefixBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SwitchManager.cs" />
     <Compile Include="TrunkManager.cs" />
@@ -87,6 +90,7 @@
       <Name>Vanrise.Fzero.CDRImport.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
