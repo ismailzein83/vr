@@ -12,7 +12,7 @@ namespace PSTN.BusinessEntity.Entities
 
         public string Name { get; set; }
 
-        public int TypeId { get; set; }
+        public int BrandId { get; set; }
 
         public string AreaCode { get; set; }
 

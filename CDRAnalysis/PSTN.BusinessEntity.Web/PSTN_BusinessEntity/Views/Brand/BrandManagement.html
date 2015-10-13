@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="PSTN_BusinessEntity_TypeManagementController">
+﻿<vr-panel ng-controller="PSTN_BusinessEntity_BrandManagementController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
@@ -11,7 +11,7 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked" isasynchronous="true"></vr-button>
-                    <vr-button type="Add" data-onclick="addType"></vr-button>
+                    <vr-button type="Add" data-onclick="addBrand"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
@@ -21,12 +21,12 @@
         <vr-row>
             <vr-columns width="fullrow">
 
-                <vr-datagrid datasource="types"
+                <vr-datagrid datasource="brands"
                              on-ready="onGridReady"
                              dataretrievalfunction="dataRetrievalFunction"
                              pagingtype="'PagingOnScroll'"
                              menuactions="gridMenuActions"
-                             idfield="TypeId">
+                             idfield="BrandId">
 
                     <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
                 </vr-datagrid>

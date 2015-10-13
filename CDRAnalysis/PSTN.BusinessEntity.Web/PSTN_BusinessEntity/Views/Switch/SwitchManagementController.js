@@ -1,6 +1,6 @@
-﻿SwitchManagementController.$inject = ["$scope", "PSTN_BE_Service", "SwitchAPIService", "TypeAPIService", "UtilsService", "VRNotificationService", "VRModalService"];
+﻿SwitchManagementController.$inject = ["$scope", "PSTN_BE_Service", "SwitchAPIService", "BrandAPIService", "UtilsService", "VRNotificationService", "VRModalService"];
 
-function SwitchManagementController($scope, PSTN_BE_Service, SwitchAPIService, TypeAPIService, UtilsService, VRNotificationService, VRModalService) {
+function SwitchManagementController($scope, PSTN_BE_Service, SwitchAPIService, BrandAPIService, UtilsService, VRNotificationService, VRModalService) {
 
     var gridAPI;
 
@@ -11,8 +11,8 @@ function SwitchManagementController($scope, PSTN_BE_Service, SwitchAPIService, T
 
         // filter vars
         $scope.name = undefined;
-        $scope.types = [];
-        $scope.selectedTypes = [];
+        $scope.brands = [];
+        $scope.selectedBrands = [];
         $scope.areaCode = undefined;
 
         // grid vars
@@ -82,10 +82,10 @@ function SwitchManagementController($scope, PSTN_BE_Service, SwitchAPIService, T
     function load() {
         $scope.isLoadingFilters = true;
 
-        return TypeAPIService.GetTypes()
+        return BrandAPIService.GetBrands()
             .then(function (response) {
                 angular.forEach(response, function (item) {
-                    $scope.types.push(item);
+                    $scope.brands.push(item);
                 });
             })
             .catch(function (error) {
@@ -99,7 +99,7 @@ function SwitchManagementController($scope, PSTN_BE_Service, SwitchAPIService, T
     function retrieveData() {
         var query = {
             Name: $scope.name,
-            SelectedTypeIds: UtilsService.getPropValuesFromArray($scope.selectedTypes, "TypeId"),
+            SelectedBrandIds: UtilsService.getPropValuesFromArray($scope.selectedBrands, "BrandId"),
             AreaCode: $scope.areaCode,
         };
 

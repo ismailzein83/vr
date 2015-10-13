@@ -1,9 +1,9 @@
 ﻿
 namespace PSTN.BusinessEntity.Entities
 {
-    public class Type
+    public class Brand
     {
-        public int TypeId { get; set; }
+        public int BrandId { get; set; }
 
         public string Name { get; set; }
     }

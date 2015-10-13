@@ -1,6 +1,6 @@
-﻿TypeManagementController.$inject = ["$scope", "TypeAPIService", "VRNotificationService", "VRModalService"];
+﻿BrandManagementController.$inject = ["$scope", "BrandAPIService", "VRNotificationService", "VRModalService"];
 
-function TypeManagementController($scope, TypeAPIService, VRNotificationService, VRModalService) {
+function BrandManagementController($scope, BrandAPIService, VRNotificationService, VRModalService) {
 
     var gridAPI = undefined;
 
@@ -13,7 +13,7 @@ function TypeManagementController($scope, TypeAPIService, VRNotificationService,
         $scope.name = undefined;
 
         // grid vars
-        $scope.types = [];
+        $scope.brands = [];
         $scope.gridMenuActions = [];
 
         // filter functions
@@ -21,18 +21,18 @@ function TypeManagementController($scope, TypeAPIService, VRNotificationService,
             return retrieveData();
         }
 
-        $scope.addType = function () {
+        $scope.addBrand = function () {
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = "Add Switch Type";
+                modalScope.title = "Add Brand";
 
-                modalScope.onTypeAdded = function (typeObj) {
-                    gridAPI.itemAdded(typeObj);
+                modalScope.onBrandAdded = function (BrandObj) {
+                    gridAPI.itemAdded(BrandObj);
                 };
             };
 
-            VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Type/TypeEditor.html", null, settings);
+            VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Brand/BrandEditor.html", null, settings);
         }
 
         // grid functions
@@ -42,7 +42,7 @@ function TypeManagementController($scope, TypeAPIService, VRNotificationService,
         }
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            return TypeAPIService.GetFilteredTypes(dataRetrievalInput)
+            return BrandAPIService.GetFilteredBrands(dataRetrievalInput)
                 .then(function (response) {
                     onResponseReady(response);
                 })
@@ -70,42 +70,42 @@ function TypeManagementController($scope, TypeAPIService, VRNotificationService,
         $scope.gridMenuActions = [
             {
                 name: "Edit",
-                clicked: editType
+                clicked: editBrand
             },
             {
                 name: "Delete",
-                clicked: deleteType
+                clicked: deleteBrand
             }
         ];
     }
 
-    function editType(gridObj) {
+    function editBrand(gridObj) {
         var modalSettings = {};
 
         var parameters = {
-            TypeId: gridObj.TypeId
+            BrandId: gridObj.BrandId
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Switch Type: " + gridObj.Name;
+            modalScope.title = "Edit Switch Brand: " + gridObj.Name;
 
-            modalScope.onTypeUpdated = function (TypeObj) {
-                gridAPI.itemUpdated(TypeObj);
+            modalScope.onBrandUpdated = function (BrandObj) {
+                gridAPI.itemUpdated(BrandObj);
             };
         };
 
-        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Type/TypeEditor.html", parameters, modalSettings);
+        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Brand/BrandEditor.html", parameters, modalSettings);
     }
 
-    function deleteType(gridObj) {
+    function deleteBrand(gridObj) {
 
         VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response == true) {
 
-                    return TypeAPIService.DeleteType(gridObj.TypeId)
+                    return BrandAPIService.DeleteBrand(gridObj.BrandId)
                         .then(function (deletionResponse) {
-                            if (VRNotificationService.notifyOnItemDeleted("Switch Type", deletionResponse))
+                            if (VRNotificationService.notifyOnItemDeleted("Switch Brand", deletionResponse))
                                 gridAPI.itemDeleted(gridObj);
                         })
                         .catch(function (error) {
@@ -116,4 +116,4 @@ function TypeManagementController($scope, TypeAPIService, VRNotificationService,
     }
 }
 
-appControllers.controller("PSTN_BusinessEntity_TypeManagementController", TypeManagementController);
+appControllers.controller("PSTN_BusinessEntity_BrandManagementController", BrandManagementController);

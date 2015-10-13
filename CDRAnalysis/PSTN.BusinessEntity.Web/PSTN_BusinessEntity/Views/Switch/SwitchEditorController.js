@@ -1,6 +1,6 @@
-﻿SwitchEditorController.$inject = ["$scope", "SwitchAPIService", "TypeAPIService", "DataSourceAPIService", "DataSourceService", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService"];
+﻿SwitchEditorController.$inject = ["$scope", "SwitchAPIService", "BrandAPIService", "DataSourceAPIService", "DataSourceService", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService"];
 
-function SwitchEditorController($scope, SwitchAPIService, TypeAPIService, DataSourceAPIService, DataSourceService, UtilsService, VRNavigationService, VRNotificationService, VRModalService) {
+function SwitchEditorController($scope, SwitchAPIService, BrandAPIService, DataSourceAPIService, DataSourceService, UtilsService, VRNavigationService, VRNotificationService, VRModalService) {
 
     var switchId;
     var editMode;
@@ -21,8 +21,8 @@ function SwitchEditorController($scope, SwitchAPIService, TypeAPIService, DataSo
     function defineScope() {
 
         $scope.name = undefined;
-        $scope.types = [];
-        $scope.selectedType = undefined;
+        $scope.brands = [];
+        $scope.selectedBrand = undefined;
         $scope.areaCode = undefined;
         $scope.timeOffset = (!editMode) ? "00.00:00:00" : null;
         $scope.dataSources = [];
@@ -77,19 +77,19 @@ function SwitchEditorController($scope, SwitchAPIService, TypeAPIService, DataSo
             DataSourceService.addDataSource(onDataSourceAdded);
         }
 
-        $scope.addSwitchType = function () {
+        $scope.addBrand = function () {
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = "Add a Switch Type";
+                modalScope.title = "Add Brand";
 
-                modalScope.onSwitchTypeAdded = function (switchTypeObj) {
-                    $scope.types.push(switchTypeObj);
-                    $scope.selectedType = switchTypeObj;
+                modalScope.onBrandAdded = function (brandObj) {
+                    $scope.brands.push(brandObj);
+                    $scope.selectedBrand = brandObj;
                 };
             };
 
-            VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Type/SwitchTypeEditor.html", null, settings);
+            VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Brand/BrandEditor.html", null, settings);
         }
 
         $scope.onDataSourceChanged = function () {
@@ -99,7 +99,7 @@ function SwitchEditorController($scope, SwitchAPIService, TypeAPIService, DataSo
     function load() {
         $scope.isGettingData = true;
 
-        UtilsService.waitMultipleAsyncOperations([loadSwitchTypes, loadDataSources])
+        UtilsService.waitMultipleAsyncOperations([loadBrands, loadDataSources])
             .then(function () {
 
                 if (editMode) {
@@ -125,11 +125,11 @@ function SwitchEditorController($scope, SwitchAPIService, TypeAPIService, DataSo
             });
     }
 
-    function loadSwitchTypes() {
-        return TypeAPIService.GetTypes()
+    function loadBrands() {
+        return BrandAPIService.GetBrands()
             .then(function (response) {
                 angular.forEach(response, function (item) {
-                    $scope.types.push(item);
+                    $scope.brands.push(item);
                 });
             });
     }
@@ -170,7 +170,7 @@ function SwitchEditorController($scope, SwitchAPIService, TypeAPIService, DataSo
 
     function fillScopeFromSwitchObj(switchObj) {
         $scope.name = switchObj.Name;
-        $scope.selectedType = UtilsService.getItemByVal($scope.types, switchObj.TypeId, "TypeId");
+        $scope.selectedBrand = UtilsService.getItemByVal($scope.brands, switchObj.BrandId, "BrandId");
         $scope.areaCode = switchObj.AreaCode;
         $scope.timeOffset = switchObj.TimeOffset;
 
@@ -217,7 +217,7 @@ function SwitchEditorController($scope, SwitchAPIService, TypeAPIService, DataSo
         return {
             SwitchId: switchId,
             Name: $scope.name,
-            TypeId: ($scope.selectedType != undefined) ? $scope.selectedType.TypeId : null,
+            BrandId: ($scope.selectedBrand != undefined) ? $scope.selectedBrand.BrandId : null,
             AreaCode: $scope.areaCode,
             TimeOffset: $scope.timeOffset,
             DataSourceId: ($scope.selectedDataSource != undefined) ? $scope.selectedDataSource.DataSourceId : null

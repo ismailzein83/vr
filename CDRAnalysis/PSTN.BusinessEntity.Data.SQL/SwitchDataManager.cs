@@ -13,18 +13,19 @@ namespace PSTN.BusinessEntity.Data.SQL
         public SwitchDataManager() : base("CDRDBConnectionString") {
             _mapper = new Dictionary<string, string>();
 
-            _mapper.Add("TypeDescription", "TypeID");
+            //_mapper.Add("BrandDescription", "TypeID");
             _mapper.Add("DataSourceName", "DataSourceID");
+            _mapper.Add("BrandName", "TypeName");
         }
 
         public Vanrise.Entities.BigResult<SwitchDetail> GetFilteredSwitches(Vanrise.Entities.DataRetrievalInput<SwitchQuery> input)
         {
             return RetrieveData(input, (tempTableName) =>
             {
-                string typeIDs = (input.Query.SelectedTypeIds != null && input.Query.SelectedTypeIds.Count() > 0) ?
-                    string.Join<int>(",", input.Query.SelectedTypeIds) : null;
+                string brandIds = (input.Query.SelectedBrandIds != null && input.Query.SelectedBrandIds.Count() > 0) ?
+                    string.Join<int>(",", input.Query.SelectedBrandIds) : null;
 
-                ExecuteNonQuerySP("PSTN_BE.sp_Switch_CreateTempByFiltered", tempTableName, input.Query.Name, typeIDs, input.Query.AreaCode);
+                ExecuteNonQuerySP("PSTN_BE.sp_Switch_CreateTempByFiltered", tempTableName, input.Query.Name, brandIds, input.Query.AreaCode);
 
             }, (reader) => SwitchDetailMapper(reader), _mapper);
         }
@@ -61,7 +62,7 @@ namespace PSTN.BusinessEntity.Data.SQL
 
         public bool UpdateSwitch(Switch switchObj)
         {
-            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_Switch_Update", switchObj.SwitchId, switchObj.Name, switchObj.TypeId, switchObj.AreaCode, switchObj.TimeOffset.ToString(), switchObj.DataSourceId);
+            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_Switch_Update", switchObj.SwitchId, switchObj.Name, switchObj.BrandId, switchObj.AreaCode, switchObj.TimeOffset.ToString(), switchObj.DataSourceId);
 
             return (recordsAffected > 0);
         }
@@ -70,7 +71,7 @@ namespace PSTN.BusinessEntity.Data.SQL
         {
             object switchId;
 
-            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_Switch_Insert", out switchId, switchObj.Name, switchObj.TypeId, switchObj.AreaCode, switchObj.TimeOffset.ToString(), switchObj.DataSourceId);
+            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_Switch_Insert", out switchId, switchObj.Name, switchObj.BrandId, switchObj.AreaCode, switchObj.TimeOffset.ToString(), switchObj.DataSourceId);
 
             insertedId = (recordsAffected > 0) ? (int)switchId : -1;
             return (recordsAffected > 0);
@@ -90,7 +91,7 @@ namespace PSTN.BusinessEntity.Data.SQL
 
             switchObject.SwitchId = (int)reader["ID"];
             switchObject.Name = reader["Name"] as string;
-            switchObject.TypeId = (int)reader["TypeID"];
+            switchObject.BrandId = (int)reader["TypeID"];
             switchObject.AreaCode = reader["AreaCode"] as string;
             switchObject.TimeOffset = TimeSpan.Parse(reader["TimeOffset"] as string);
             switchObject.DataSourceId = GetReaderValue<int?>(reader, "DataSourceID");
@@ -113,8 +114,8 @@ namespace PSTN.BusinessEntity.Data.SQL
 
             switchObject.SwitchId = (int)reader["ID"];
             switchObject.Name = reader["Name"] as string;
-            switchObject.TypeId = (int)reader["TypeID"];
-            switchObject.TypeName = reader["TypeName"] as string;
+            switchObject.BrandId = (int)reader["TypeID"];
+            switchObject.BrandName = reader["TypeName"] as string;
             switchObject.AreaCode = reader["AreaCode"] as string;
             switchObject.TimeOffset = TimeSpan.Parse(reader["TimeOffset"] as string);
             switchObject.DataSourceId = GetReaderValue<int?>(reader, "DataSourceID");

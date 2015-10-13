@@ -7,12 +7,12 @@
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-select label="Type"
-                               datasource="types"
-                               selectedvalues="selectedTypes"
-                               datavaluefield="TypeId"
+                    <vr-select label="Brand"
+                               datasource="brands"
+                               selectedvalues="selectedBrands"
+                               datavaluefield="BrandId"
                                datatextfield="Name"
-                               entityname="Type"
+                               entityname="Brand"
                                ismultipleselection>
                     </vr-select>
                 </vr-columns>
@@ -44,7 +44,7 @@
                              idfield="SwitchId">
 
                     <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Type'" field="'TypeName'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Brand'" field="'BrandName'" type="'Text'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Area Code'" field="'AreaCode'" type="'Text'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Time Offset'" field="'TimeOffset'" type="'Text'"></vr-datagridcolumn>
 

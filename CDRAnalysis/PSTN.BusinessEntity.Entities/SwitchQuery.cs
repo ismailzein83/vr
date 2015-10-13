@@ -6,7 +6,7 @@ namespace PSTN.BusinessEntity.Entities
     {
         public string Name { get; set; }
 
-        public List<int> SelectedTypeIds { get; set; }
+        public List<int> SelectedBrandIds { get; set; }
 
         public string AreaCode { get; set; }
     }

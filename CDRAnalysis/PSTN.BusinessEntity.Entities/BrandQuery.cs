@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PSTN.BusinessEntity.Entities
 {
-    public class TypeQuery
+    public class BrandQuery
     {
         public string Name { get; set; }
     }

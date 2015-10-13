@@ -57,7 +57,7 @@
     <Compile Include="INormalizationRuleDataManager.cs" />
     <Compile Include="ISwitchDataManager.cs" />
     <Compile Include="ITrunkDataManager.cs" />
-    <Compile Include="ITypeDataManager.cs" />
+    <Compile Include="IBrandDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PSTNBEDataManagerFactory.cs" />
   </ItemGroup>

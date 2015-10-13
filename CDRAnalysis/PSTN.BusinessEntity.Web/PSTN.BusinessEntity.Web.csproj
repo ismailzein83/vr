@@ -136,7 +136,7 @@
     <Compile Include="Controllers\NormalizationRuleController.cs" />
     <Compile Include="Controllers\SwitchController.cs" />
     <Compile Include="Controllers\TrunkController.cs" />
-    <Compile Include="Controllers\TypeController.cs" />
+    <Compile Include="Controllers\BrandController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -169,7 +169,7 @@
     <Content Include="PSTN_BusinessEntity\Services\APIServices\NormalizationRuleAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\TrunkAPIService.js" />
-    <Content Include="PSTN_BusinessEntity\Services\APIServices\TypeAPIService.js" />
+    <Content Include="PSTN_BusinessEntity\Services\APIServices\BrandAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Services\PSTN_BE_Service.js" />
     <Content Include="PSTN_BusinessEntity\Directives\Templates\NormalizationRuleGridTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-normalizationrulegrid-directive.js" />
@@ -192,10 +192,10 @@
     <Content Include="PSTN_BusinessEntity\Directives\Templates\TrunkGridTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Views\Trunk\TrunkManagement.html" />
     <Content Include="PSTN_BusinessEntity\Views\Trunk\TrunkManagementController.js" />
-    <Content Include="PSTN_BusinessEntity\Views\Type\TypeEditor.html" />
-    <Content Include="PSTN_BusinessEntity\Views\Type\TypeEditorController.js" />
-    <Content Include="PSTN_BusinessEntity\Views\Type\TypeManagement.html" />
-    <Content Include="PSTN_BusinessEntity\Views\Type\TypeManagementController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\Brand\BrandEditor.html" />
+    <Content Include="PSTN_BusinessEntity\Views\Brand\BrandEditorController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\Brand\BrandManagement.html" />
+    <Content Include="PSTN_BusinessEntity\Views\Brand\BrandManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
