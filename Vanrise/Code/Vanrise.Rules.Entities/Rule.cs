@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Rules.Entities
 {
-    public abstract class RuleStructurer
+    public class Rule
     {
-        //public abstract List<RuleSetNode> StructureRules(List<BaseRule rule);
+        public int RuleId { get; set; }
 
-         
+        public int TypeId { get; set; }
+
+        public string RuleDetails { get; set; }
     }
 }

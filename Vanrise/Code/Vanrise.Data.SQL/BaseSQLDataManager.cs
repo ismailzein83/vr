@@ -526,13 +526,28 @@ namespace Vanrise.Data.SQL
 
         protected bool IsDataUpdated(string tableName, ref object lastReceivedDataInfo)
         {
-            string query = String.Format("select MAX(timestamp) from {0} with(nolock)", tableName);
-            var rslt = ExecuteScalarText(query, null);
-            if (rslt == null)
+            string query = String.Format("SELECT MAX(timestamp) FROM {0} WITH(NOLOCK)", tableName);
+            var newReceivedDataInfo = ExecuteScalarText(query, null);
+            return IsDataUpdated(ref lastReceivedDataInfo, newReceivedDataInfo);
+        }
+
+        protected bool IsDataUpdated<T>(string tableName, string columnName, T columnValue, ref object lastReceivedDataInfo)
+        {
+            string query = String.Format("SELECT MAX(timestamp) FROM {0} WITH(NOLOCK) WHERE {1} = @ColumnValue", tableName, columnName);
+            var newReceivedDataInfo = ExecuteScalarText(query, (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@ColumnValue", columnValue));
+                });
+            return IsDataUpdated(ref lastReceivedDataInfo, newReceivedDataInfo);
+        }
+
+        bool IsDataUpdated(ref object lastReceivedDataInfo, object newReceivedDataInfo)
+        {
+            if (newReceivedDataInfo == null)
                 return false;
             else
             {
-                byte[] newTimeStamp = (byte[])rslt;
+                byte[] newTimeStamp = (byte[])newReceivedDataInfo;
                 if (lastReceivedDataInfo == null || !newTimeStamp.SequenceEqual((byte[])lastReceivedDataInfo))
                 {
                     lastReceivedDataInfo = newTimeStamp;

@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.Rules.Entities
+namespace Vanrise.Rules.Data
 {
-    public abstract class BaseRule
+    public interface IDataManager
     {
-        public abstract bool EvaluateAdvancedConditions(Object target);
     }
 }
