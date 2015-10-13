@@ -1,7 +1,7 @@
 ﻿<vr-panel ng-controller="Analytics_GHourlyReportController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
-            <vr-an-generalfilter dimensionsvalues="groupKeys" filtervalues="filterKeys" periods="periods"  selectedobject="selectedobject"></vr-an-generalfilter>
+            <vr-an-generalfilter dimensionsvalues="groupKeys" filtervalues="filterKeys" periods="periods" selectedobject="selectedobject"></vr-an-generalfilter>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
@@ -12,10 +12,10 @@
         </vr-row>
         <div>
             <vr-row>
-
                 <vr-an-generalchart filters="selectedobject.selectedfilters" fixeddimensionfields="selectedobject.selectedperiod" fromtime="selectedobject.fromdate" totime="selectedobject.todate"
                                     currency="selectedobject.currency" measurechart="measureChart" data-on-ready="onReadyGeneralChart"></vr-an-generalchart>
-
+            </vr-row>
+            <vr-row>
                 <vr-columns colnum="12">
                     <div ng-include="'/Client/Modules/Analytics/Views/GenericAnalytic/GenericAnalyticGrid.html'"></div>
                 </vr-columns>
