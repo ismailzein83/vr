@@ -44,14 +44,16 @@
                     if (appendixData != undefined) {
                         loadAppendixDirectives();
                     }
-                    else if (saleZoneGroupSettingsDirectiveAPI.load() != undefined) {
-                        $scope.saleZonesAppendixLoader = true;
-                        saleZoneGroupSettingsDirectiveAPI.load().catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                        }).finally(function () {
-                            $scope.saleZonesAppendixLoader = false;
-                        });
-
+                    else {
+                        var promise = saleZoneGroupSettingsDirectiveAPI.load();
+                        if (promise != undefined) {
+                            $scope.saleZonesAppendixLoader = true;
+                            promise.catch(function (error) {
+                                VRNotificationService.notifyException(error, $scope);
+                            }).finally(function () {
+                                $scope.saleZonesAppendixLoader = false;
+                            });
+                        }
                     }
                 }
 
@@ -141,18 +143,6 @@
                 });
             }
 
-            function loadSaleZoneGroupSettings()
-            {
-                if ($scope.selectedSaleZoneGroupTemplate != undefined)
-                    return saleZoneGroupSettingsDirectiveAPI.load();
-            }
-
-            function loadSuplierGroupSettings()
-            {
-                if ($scope.selectedSupplierGroupTemplate != undefined)
-                    return supplierGroupSettingsDirectiveAPI.load();
-            }
-
             function loadSupplierGroupTemplates() {
                 return WhS_BE_CarrierAccountAPIService.GetSupplierGroupTemplates().then(function (response) {
                     angular.forEach(response, function (item) {
@@ -162,13 +152,27 @@
             }
 
             function loadAppendixDirectives() {
-                if ((saleZoneGroupSettingsDirectiveAPI == undefined && $scope.selectedSaleZoneGroupTemplate != undefined) ||
-                    supplierGroupSettingsDirectiveAPI == undefined && $scope.selectedSupplierGroupTemplate != undefined)
-                {
-                    return;
+
+                var loadOperations = [];
+                var setDirectivesDataOperations = [];
+                if ($scope.selectedSaleZoneGroupTemplate != undefined) {
+                    if (saleZoneGroupSettingsDirectiveAPI == undefined)
+                        return;
+                    loadOperations.push(saleZoneGroupSettingsDirectiveAPI.load);
+
+                    setDirectivesDataOperations.push(setSaleZoneGroupSettingsDirective);
                 }
 
-                UtilsService.waitMultipleAsyncOperations([loadSaleZoneGroupSettings, loadSuplierGroupSettings]).then(function () {
+                if ($scope.selectedSupplierGroupTemplate != undefined) {
+                    if (supplierGroupSettingsDirectiveAPI == undefined)
+                        return;
+
+                    loadOperations.push(supplierGroupSettingsDirectiveAPI.load);
+
+                    setDirectivesDataOperations.push(setSupplierGroupSettingsDirective);
+                }
+
+                UtilsService.waitMultipleAsyncOperations(loadOperations).then(function () {
 
                     setAppendixDirectives();
 
@@ -176,29 +180,28 @@
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.isGettingData = false;
                 });
-            }
 
-            function setAppendixDirectives()
-            {
-                UtilsService.waitMultipleAsyncOperations([setSaleZoneGroupSettingsDirective, setSupplierGroupSettingsDirective]).then(function () {
-                    appendixData = undefined;
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                }).finally(function () {
-                    $scope.isGettingData = false;
-                });
-            }
+                function setAppendixDirectives() {
+                    UtilsService.waitMultipleAsyncOperations(setDirectivesDataOperations).then(function () {
+                        appendixData = undefined;
+                    }).catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    }).finally(function () {
+                        $scope.isGettingData = false;
+                    });
+                }
 
-            function setSaleZoneGroupSettingsDirective()
-            {
-                if ($scope.selectedSaleZoneGroupTemplate != undefined)
-                    return saleZoneGroupSettingsDirectiveAPI.setData(appendixData.Settings.SaleZoneGroupSettings);
-            }
+                function setSaleZoneGroupSettingsDirective() {                    
+                        return saleZoneGroupSettingsDirectiveAPI.setData(appendixData.Settings.SaleZoneGroupSettings);
+                }
 
-            function setSupplierGroupSettingsDirective() {
-                if ($scope.selectedSupplierGroupTemplate != undefined)
-                    return supplierGroupSettingsDirectiveAPI.setData(appendixData.Settings.SupplierGroupSettings);
+                function setSupplierGroupSettingsDirective() {                    
+                        return supplierGroupSettingsDirectiveAPI.setData(appendixData.Settings.SupplierGroupSettings);
+                }
             }
+                    
+
+           
 
             function buildRoutingProductObjFromScope() {
 
