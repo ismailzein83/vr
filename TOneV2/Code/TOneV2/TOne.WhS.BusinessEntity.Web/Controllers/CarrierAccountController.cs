@@ -30,8 +30,8 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return manager.GetCarrierAccount(carrierAccountId);
         }
         [HttpGet]
-        [Route("GetCarrierAccounts")]
-        public List<CarrierAccountInfo> GetCarrierAccounts(bool getCustomers, bool getSuppliers)
+        [Route("GetCarrierAccountsInfo")]
+        public IEnumerable<CarrierAccountInfo> GetCarrierAccountsInfo(bool getCustomers, bool getSuppliers)
         {
             CarrierAccountManager manager = new CarrierAccountManager();
             return manager.GetCarrierAccounts(getCustomers, getSuppliers);
@@ -51,6 +51,24 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         {
             CarrierAccountManager manager = new CarrierAccountManager();
             return manager.GetCustomerGroupTemplates();
+        }
+
+
+        [HttpPost]
+        [Route("AddCarrierAccount")]
+        public TOne.Entities.InsertOperationOutput<CarrierAccountDetail> AddCarrierAccount(CarrierAccount carrierAccount)
+        {
+            CarrierAccountManager manager = new CarrierAccountManager();
+            return manager.AddCarrierAccount(carrierAccount);
+        }
+
+
+        [HttpPost]
+        [Route("UpdateCarrierAccount")]
+        public TOne.Entities.UpdateOperationOutput<CarrierAccountDetail> UpdateCarrierAccount(CarrierAccount carrierAccount)
+        {
+            CarrierAccountManager manager = new CarrierAccountManager();
+            return manager.UpdateCarrierAccount(carrierAccount);
         }
     }
 }

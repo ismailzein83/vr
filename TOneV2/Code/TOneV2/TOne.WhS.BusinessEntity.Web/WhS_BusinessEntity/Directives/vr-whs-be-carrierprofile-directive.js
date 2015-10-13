@@ -5,7 +5,7 @@ function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile) {
     var directiveDefinitionObject = {
         restrict: 'E',
         scope: {
-            onloaded: '=',
+            onReady: '=',
             ismultipleselection: "@",
             isdisabled: "=",
             onselectionchanged: '=',
@@ -69,7 +69,7 @@ function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile) {
 
         function initializeController() {
 
-            loadCarrierProfiles();
+            defineAPI();
         }
 
         function defineAPI() {
@@ -94,23 +94,19 @@ function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile) {
                         $scope.selectedCarrierProfiles = selectedCarrierProfile;
                 }
             }
+            api.load = function () {
+                return WhS_BE_CarrierProfileAPIService.GetCarrierProfilesInfo().then(function (response) {
+                    angular.forEach(response, function (itm) {
+                        $scope.carrierProfiles.push(itm);
+                    });
+                }).catch(function (error) {
+                }).finally(function () {
 
-            if (ctrl.onloaded != null)
-                ctrl.onloaded(api);
-        }
-        function loadCarrierProfiles() {
-            $scope.isLoadingDirective = true;
-            return WhS_BE_CarrierProfileAPIService.GetAllCarrierProfiles().then(function (response) {
-                angular.forEach(response, function (itm) {
-                    $scope.carrierProfiles.push(itm);
                 });
-            }).catch(function (error) {
-                //TODO handle the case of exceptions
+            }
 
-            }).finally(function () {
-                $scope.isLoadingDirective = false;
-                defineAPI();
-            });
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
         }
         this.initializeController = initializeController;
     }

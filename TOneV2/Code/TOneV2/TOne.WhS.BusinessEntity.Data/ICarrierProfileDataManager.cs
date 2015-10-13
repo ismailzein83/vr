@@ -9,9 +9,9 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ICarrierProfileDataManager:IDataManager
     {
-        Vanrise.Entities.BigResult<CarrierProfile> GetFilteredCarrierProfiles(Vanrise.Entities.DataRetrievalInput<CarrierProfileQuery> input);
-        CarrierProfile GetCarrierProfile(int carrierProfileId);
-        List<CarrierProfileInfo> GetAllCarrierProfiles();
-
+        List<CarrierProfile> GetCarrierProfiles();
+        bool Insert(CarrierProfile carrierProfile, out int carrierProfileId);
+        bool Update(CarrierProfile carrierProfile);
+        bool AreCarrierProfilesUpdated(ref object updateHandle);
     }
 }

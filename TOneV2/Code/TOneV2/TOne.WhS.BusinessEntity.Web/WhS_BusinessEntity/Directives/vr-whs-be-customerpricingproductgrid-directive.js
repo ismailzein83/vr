@@ -47,6 +47,9 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerPricingProductAPIS
                         directiveAPI.onCustomerPricingProductAdded = function (customerPricingProductObject) {
                             gridAPI.itemAdded(customerPricingProductObject);
                         }
+                        directiveAPI.onCustomerPricingProductUpdated = function (customerPricingProductObject) {
+                             gridAPI.itemUpdated(customerPricingProductObject);
+                        }
 
                         return directiveAPI;
                     }

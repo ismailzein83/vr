@@ -71,11 +71,15 @@
             var pricingProductObject = buildPricingProductObjFromScope();
             return WhS_BE_CustomerPricingProductAPIService.AddCustomerPricingProduct(pricingProductObject)
             .then(function (response) {
+               
                 if (VRNotificationService.notifyOnItemAdded("Customer Pricing Product", response)) {
-                    if ($scope.onCustomerPricingProductAdded != undefined)
-                        $scope.onCustomerPricingProductAdded(response.InsertedObject);
-                    $scope.modalContext.closeModal();
+                    {
+                        if ($scope.onCustomerPricingProductAdded != undefined)
+                            $scope.onCustomerPricingProductAdded(response.InsertedObject);
+                        $scope.modalContext.closeModal();
+                    }
                 }
+               
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
@@ -96,7 +100,8 @@
             }
             return obj;
         }
-    }
+        }
+        
   
     appControllers.controller('WhS_BE_CustomerPricingProductEditorController', customerPricingProductEditorController);
 })(appControllers);

@@ -15,14 +15,22 @@
             });
 
         }
-        function GetAllCarrierProfiles() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierProfile", "GetAllCarrierProfiles"));
+        function GetCarrierProfilesInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierProfile", "GetCarrierProfilesInfo"));
 
         }
+        function UpdateCarrierProfile(carrierProfileObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierProfile", "UpdateCarrierProfile"), carrierProfileObject);
+        }
+        function AddCarrierProfile(carrierProfileObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierProfile", "AddCarrierProfile"), carrierProfileObject);
+        }
         return ({
-            GetAllCarrierProfiles: GetAllCarrierProfiles,
+            GetCarrierProfilesInfo: GetCarrierProfilesInfo,
             GetFilteredCarrierProfiles: GetFilteredCarrierProfiles,
-            GetCarrierProfile: GetCarrierProfile
+            GetCarrierProfile: GetCarrierProfile,
+            AddCarrierProfile:AddCarrierProfile,
+            UpdateCarrierProfile: UpdateCarrierProfile
         });
     }
 

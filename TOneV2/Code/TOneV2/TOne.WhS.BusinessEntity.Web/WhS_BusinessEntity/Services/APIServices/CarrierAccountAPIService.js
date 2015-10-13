@@ -15,8 +15,8 @@
             });
 
         }
-        function GetCarrierAccounts(getCustomers,getSuppliers) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierAccount", "GetCarrierAccounts"), {
+        function GetCarrierAccountsInfo(getCustomers, getSuppliers) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierAccount", "GetCarrierAccountsInfo"), {
                 getCustomers: getCustomers,
                 getSuppliers: getSuppliers
             });
@@ -30,13 +30,20 @@
         function GetCustomerGroupTemplates() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierAccount", "GetCustomerGroupTemplates"));
         }
-
+        function AddCarrierAccount(carrierAccountObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierAccount", "AddCarrierAccount"), carrierAccountObject);
+        }
+        function UpdateCarrierAccount(carrierAccountObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierAccount", "UpdateCarrierAccount"), carrierAccountObject);
+        }
         return ({
-            GetCarrierAccounts: GetCarrierAccounts,
+            GetCarrierAccountsInfo: GetCarrierAccountsInfo,
             GetSupplierGroupTemplates: GetSupplierGroupTemplates,
             GetCustomerGroupTemplates: GetCustomerGroupTemplates,
             GetFilteredCarrierAccounts: GetFilteredCarrierAccounts,
-            GetCarrierAccount: GetCarrierAccount
+            GetCarrierAccount: GetCarrierAccount,
+            AddCarrierAccount: AddCarrierAccount,
+            UpdateCarrierAccount: UpdateCarrierAccount
         });
     }
 

@@ -10,9 +10,9 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ICarrierAccountDataManager:IDataManager
     {
-        List<CarrierAccountInfo> GetCarrierAccounts(bool getCustomers, bool getSuppliers);
-        Vanrise.Entities.BigResult<CarrierAccountDetail> GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input);
-        CarrierAccountDetail GetCarrierAccount(int carrierAccountId);
-
+        List<CarrierAccountDetail> GetCarrierAccounts();
+        bool Insert(CarrierAccount carrierAccount,out int carrierAccountId);
+        bool Update(CarrierAccount carrierAccount);
+        bool AreCarrierAccountsUpdated(ref object updateHandle);
     }
 }

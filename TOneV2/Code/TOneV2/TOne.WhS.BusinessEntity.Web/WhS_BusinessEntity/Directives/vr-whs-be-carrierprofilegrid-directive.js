@@ -84,19 +84,15 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                 clicked: editCarrierProfile,
             },
            {
-               name: "Delete",
-               clicked: deleteCarrierProfile,
-           },
-           {
                name: "New Carrier Account",
                clicked: addCarrierAccount
            }
             ];
         }
 
-        function editCarrierProfile(carrierAccountObj) {
+        function editCarrierProfile(carrierProfileObj) {
             var onCarrierProfileUpdated = function (carrierProfile) {
-                gridApi.itemUpdated(carrierProfile);
+                gridAPI.itemUpdated(carrierProfile);
             }
 
             WhS_BE_MainService.editCarrierProfile(carrierProfileObj, onCarrierProfileUpdated);

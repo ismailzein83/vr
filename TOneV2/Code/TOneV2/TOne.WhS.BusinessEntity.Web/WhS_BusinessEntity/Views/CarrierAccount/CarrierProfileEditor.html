@@ -1,0 +1,34 @@
+﻿<div vr-modalcontent ng-controller="WhS_BE_CarrierProfileEditorController" vr-loader="isGettingData">
+    <vr-modalbody width="'50%'">
+        <vr-form name="formCarrierProfileEditor">
+            <vr-choices selectedindex="0">
+                <vr-choice isselected="definitionSelected">Definition</vr-choice>
+                <vr-choice isselected="settingsSelected">Settings</vr-choice>
+            </vr-choices>
+            <div ng-show="definitionSelected">
+                <vr-row>
+                    <vr-columns width="1/2row">
+                        <vr-textbox value="name" label="Name" isrequired></vr-textbox>
+                    </vr-columns>
+                </vr-row>
+                <vr-row>
+                    <vr-columns width="fullrow">
+
+                    </vr-columns>
+                </vr-row>
+            </div>
+            <div ng-show="settingsSelected">
+
+            </div>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formCarrierProfileEditor" data-onclick="SaveCarrierProfile"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>

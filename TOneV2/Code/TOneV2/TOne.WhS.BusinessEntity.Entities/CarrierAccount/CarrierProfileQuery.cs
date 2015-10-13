@@ -8,7 +8,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
    public class CarrierProfileQuery
     {
-       public int? CarrierProfileId { get; set; }
+       public List<int> CarrierProfileIds { get; set; }
        public string Name { get; set; }
     }
 }

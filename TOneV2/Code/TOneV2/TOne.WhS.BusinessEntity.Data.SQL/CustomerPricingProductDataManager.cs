@@ -45,18 +45,27 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemSP("TOneWhS_BE.sp_CustomerPricingProduct_Get", CustomerPricingProductDetailMapper, customerPricingProductId);
         }
 
-        public bool Insert(List<CustomerPricingProduct> customerPricingProduct)
+        public bool Insert(List<CustomerPricingProduct> customerPricingProduct, out List<CustomerPricingProduct> insertedObjects)
         {
 
             DataTable table = BuildUpdatedCarriersTable(customerPricingProduct);
 
-            int recordsEffected = ExecuteNonQuerySPCmd("TOneWhS_BE.sp_CustomerPricingProduct_Insert", (cmd) =>
+           insertedObjects= GetItemsSPCmd("TOneWhS_BE.sp_CustomerPricingProduct_Insert", CustomerPricingProductMapper, (cmd) =>
             {
                 var tableParameter = new SqlParameter("@UpdatedCustomerPricingProducts", SqlDbType.Structured);
                 tableParameter.Value = table;
                 cmd.Parameters.Add(tableParameter);
+
             });
-            return (recordsEffected > 0);
+
+            //int recordsEffected = ExecuteNonQuerySPCmd("TOneWhS_BE.sp_CustomerPricingProduct_Insert", (cmd) =>
+            //{
+            //    var tableParameter = new SqlParameter("@UpdatedCustomerPricingProducts", SqlDbType.Structured);
+            //    tableParameter.Value = table;
+            //    cmd.Parameters.Add(tableParameter);
+            //});
+
+            return true;
         }
         private DataTable BuildUpdatedCarriersTable(List<CustomerPricingProduct> customerPricingProducts)
         {

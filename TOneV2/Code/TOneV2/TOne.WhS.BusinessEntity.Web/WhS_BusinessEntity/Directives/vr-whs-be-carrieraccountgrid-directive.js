@@ -96,10 +96,6 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                             clicked: editCarrierAccount,
                         },
                         {
-                            name: "Delete",
-                            clicked: deleteCarrierAccount,
-                        },
-                        {
                             name: "Assign Pricing Product",
                             clicked: assignNew
                         }
@@ -108,10 +104,6 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                         {
                             name: "Edit",
                             clicked: editCarrierAccount,
-                        },
-                        {
-                            name: "Delete",
-                            clicked: deleteCarrierAccount,
                         },
                        {
                            name: "Assign Customers",
@@ -132,7 +124,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
         
         function editCarrierAccount(carrierAccountObj) {
             var onCarrierAccountUpdated = function (carrierAccount) {
-                gridApi.itemUpdated(carrierAccount);
+                gridAPI.itemUpdated(carrierAccount);
             }
 
             WhS_BE_MainService.editCarrierAccount(carrierAccountObj, onCarrierAccountUpdated);

@@ -24,7 +24,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return manager.GetCustomerPricingProduct(customerPricingProductId);
         }
         [HttpPost]
-        public TOne.Entities.InsertOperationOutput<CustomerPricingProductDetail> AddCustomerPricingProduct(List<CustomerPricingProduct> customerPricingProducts)
+        public TOne.Entities.InsertOperationOutput<List<CustomerPricingProductClass>> AddCustomerPricingProduct(List<CustomerPricingProduct> customerPricingProducts)
         {
             CustomerPricingProductManager manager = new CustomerPricingProductManager();
             return manager.AddCustomerPricingProduct(customerPricingProducts);

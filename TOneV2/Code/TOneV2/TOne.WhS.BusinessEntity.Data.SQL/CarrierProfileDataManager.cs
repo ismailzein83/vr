@@ -11,51 +11,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class CarrierProfileDataManager : BaseSQLDataManager, ICarrierProfileDataManager
     {
-        
-        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
-
-        static CarrierProfileDataManager()
-        {
-            _columnMapper.Add("CarrierProfileId", "ID");
-        }
         public CarrierProfileDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
         }
-        public Vanrise.Entities.BigResult<Entities.CarrierProfile> GetFilteredCarrierProfiles(Vanrise.Entities.DataRetrievalInput<Entities.CarrierProfileQuery> input)
-        {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                //string saleZonePackageIdsParam = null;
-                //if (input.Query.SaleZonePackageIds != null)
-                //    saleZonePackageIdsParam = string.Join(",", input.Query.SaleZonePackageIds);
-
-                ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierProfile_CreateTempByFiltered", tempTableName, input.Query.CarrierProfileId, input.Query.Name);
-            };
-
-            return RetrieveData(input, createTempTableAction, CarrierProfileMapper, _columnMapper);
-        }
-
-        public CarrierProfile GetCarrierProfile(int carrierProfileId)
-        {
-            return GetItemSP("TOneWhS_BE.sp_CarrierProfile_Get", CarrierProfileMapper, carrierProfileId);
-        }
-
-        public List<CarrierProfileInfo> GetAllCarrierProfiles()
-        {
-            return GetItemsSP("TOneWhS_BE.sp_CarrierProfile_GetAll", CarrierProfileInfoMapper);
-        }
-        private CarrierProfileInfo CarrierProfileInfoMapper(IDataReader reader)
-        {
-            CarrierProfileInfo carrierProfileInfo = new CarrierProfileInfo
-            {
-                CarrierProfileId = (int)reader["ID"],
-                Name = reader["Name"] as string
-            };
-            return carrierProfileInfo;
-        }
-
         private CarrierProfile CarrierProfileMapper(IDataReader reader)
         {
             CarrierProfile carrierProfile = new CarrierProfile
@@ -65,6 +25,30 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
               
             };
             return carrierProfile;
+        }
+        public bool Insert(CarrierProfile carrierProfile, out int insertedId)
+        {
+            object carrierProfileId;
+
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierProfile_Insert", out carrierProfileId, carrierProfile.Name, Vanrise.Common.Serializer.Serialize(carrierProfile.Settings));
+            insertedId = (int)carrierProfileId;
+            return (recordsEffected > 0);
+        }
+        public bool Update(CarrierProfile carrierProfile)
+        {
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierProfile_Update", carrierProfile.CarrierProfileId, carrierProfile.Name, Vanrise.Common.Serializer.Serialize(carrierProfile.Settings));
+            return (recordsEffected > 0);
+        }
+
+        public bool AreCarrierProfilesUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_BE.CarrierProfile", ref updateHandle);
+        }
+
+
+        public List<CarrierProfile> GetCarrierProfiles()
+        {
+            return GetItemsSP("TOneWhS_BE.sp_CarrierProfile_GetAll", CarrierProfileMapper);
         }
     }
 }

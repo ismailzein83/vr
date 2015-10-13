@@ -29,12 +29,26 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllCarrierProfiles")]
-        public List<CarrierProfileInfo> GetAllCarrierProfiles()
+        [Route("GetCarrierProfilesInfo")]
+        public IEnumerable<CarrierProfileInfo> GetCarrierProfilesInfo()
         {
             CarrierProfileManager manager = new CarrierProfileManager();
-            return manager.GetAllCarrierProfiles();
+            return manager.GetCarrierProfilesInfo();
         }
 
+        [HttpPost]
+        [Route("AddCarrierProfile")]
+        public TOne.Entities.InsertOperationOutput<CarrierProfile> AddCarrierProfile(CarrierProfile carrierProfile)
+        {
+            CarrierProfileManager manager = new CarrierProfileManager();
+            return manager.AddCarrierProfile(carrierProfile);
+        }
+        [HttpPost]
+        [Route("UpdateCarrierProfile")]
+        public TOne.Entities.UpdateOperationOutput<CarrierProfile> UpdateCarrierProfile(CarrierProfile carrierProfile)
+        {
+            CarrierProfileManager manager = new CarrierProfileManager();
+            return manager.UpdateCarrierProfile(carrierProfile);
+        }
     }
 }

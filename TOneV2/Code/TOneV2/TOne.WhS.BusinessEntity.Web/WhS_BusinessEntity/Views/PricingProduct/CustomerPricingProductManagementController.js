@@ -63,8 +63,19 @@
 
         function AddNewCustomerPricingProduct() {
             var onCustomerPricingProductAdded = function (customerPricingProductObj) {
-                //if (gridAPI != undefined)
-                //    gridAPI.onCustomerPricingProductAdded(customerPricingProductObj);
+
+                for (var i = 0; i < customerPricingProductObj.length; i++) {
+                    if (customerPricingProductObj[i].Status == 0 && gridAPI != undefined)
+                        gridAPI.onCustomerPricingProductAdded(customerPricingProductObj[i]);
+                    else if (customerPricingProductObj[i].Status == 1 && gridAPI != undefined)
+                    {
+                        gridAPI.onCustomerPricingProductUpdated(cloneObject(customerPricingProductObj[i], true));
+                    }
+                      
+                    console.log(customerPricingProductObj[i]);
+                }
+              
+                
             };
 
             WhS_BE_MainService.addCustomerPricingProduct(onCustomerPricingProductAdded);

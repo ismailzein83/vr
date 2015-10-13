@@ -5,7 +5,7 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'Util
         restrict: 'E',
         scope: {
             type: "=",
-            onloaded: '=',
+            onReady: '=',
             label: "@",
             ismultipleselection: "@",
             onselectionchanged: '=',
@@ -87,24 +87,9 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'Util
             getSuppliers = true;
         }
         function initializeController() {
-            loadCarriers();
-            
+            defineAPI();
         }
 
-        function loadCarriers() {
-            $scope.isLoadingDirective = true;
-            return WhS_BE_CarrierAccountAPIService.GetCarrierAccounts(getCustomers, getSuppliers).then(function (response) {
-                angular.forEach(response, function (itm) {
-                    $scope.datasource.push(itm);
-                });
-            }).catch(function (error) {
-                //TODO handle the case of exceptions
-                        
-            }).finally(function () {
-                $scope.isLoadingDirective = false;
-                defineAPI();
-            });
-        }
         function defineAPI() {
             var api = {};
             api.getData = function()
@@ -128,8 +113,19 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'Util
                 }
             }
 
-            if (ctrl.onloaded != null)
-                ctrl.onloaded(api);
+            api.load = function () {
+                return WhS_BE_CarrierAccountAPIService.GetCarrierAccountsInfo(getCustomers, getSuppliers).then(function (response) {
+                    angular.forEach(response, function (itm) {
+                        $scope.datasource.push(itm);
+                    });
+                }).catch(function (error) {
+                }).finally(function () {
+                });
+            }
+
+
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
         }
 
         this.initializeController = initializeController;

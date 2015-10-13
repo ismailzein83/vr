@@ -11,7 +11,9 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService','WhS_BE_PricingP
         addCustomerPricingProduct: addCustomerPricingProduct,
         deleteCustomerPricingProduct: deleteCustomerPricingProduct,
         addCarrierAccount: addCarrierAccount,
-        editCarrierAccount: editCarrierAccount
+        editCarrierAccount: editCarrierAccount,
+        addCarrierProfile:addCarrierProfile,
+        editCarrierProfile: editCarrierProfile
     });
 
     function addRouteRule(onRouteRuleAdded)
@@ -130,21 +132,28 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService','WhS_BE_PricingP
                 }
             });
     }
-    function addCarrierAccount(onCarrierAccountAdded) {
+    function addCarrierAccount(onCarrierAccountAdded, dataItem) {
         var settings = {};
 
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "New Carrier Account";
             modalScope.onCarrierAccountAdded = onCarrierAccountAdded;
         };
-
-        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierAccountEditor.html', null, settings);
+        var parameters;
+        if (dataItem != undefined)
+        {
+            parameters = {
+                CarrierProfileId: dataItem.CarrierProfileId,
+            };
+        }
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierAccountEditor.html', parameters, settings);
     }
     function editCarrierAccount(carrierAccountObj, onCarrierAccountUpdated) {
         var modalSettings = {
         };
         var parameters = {
             CarrierAccountId: carrierAccountObj.CarrierAccountId,
+            CarrierProfileId: carrierAccountObj.CarrierProfileId,
         };
 
         modalSettings.onScopeReady = function (modalScope) {
@@ -152,6 +161,31 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService','WhS_BE_PricingP
             modalScope.onCarrierAccountUpdated = onCarrierAccountUpdated;
         };
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierAccountEditor.html', parameters, modalSettings);
+    }
+
+    function addCarrierProfile(onCarrierProfileAdded) {
+        var settings = {};
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = "New Carrier Profile";
+            modalScope.onCarrierProfileAdded = onCarrierProfileAdded;
+        };
+
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierProfileEditor.html', null, settings);
+    }
+    
+    function editCarrierProfile(carrierProfileObj, onCarrierProfileUpdated) {
+        var modalSettings = {
+        };
+        var parameters = {
+            CarrierProfileId: carrierProfileObj.CarrierProfileId,
+        };
+
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.title = "Edit Carrier Profile";
+            modalScope.onCarrierProfileUpdated = onCarrierProfileUpdated;
+        };
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierProfileEditor.html', parameters, modalSettings);
     }
 
 }]);

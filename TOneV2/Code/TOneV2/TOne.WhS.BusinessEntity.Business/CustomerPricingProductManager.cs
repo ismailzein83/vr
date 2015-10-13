@@ -23,21 +23,23 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
 
-        public TOne.Entities.InsertOperationOutput<CustomerPricingProductDetail> AddCustomerPricingProduct(List<CustomerPricingProduct> customerPricingProducts)
+        public TOne.Entities.InsertOperationOutput<List<CustomerPricingProductClass>> AddCustomerPricingProduct(List<CustomerPricingProduct> customerPricingProducts)
         {
 
-            TOne.Entities.InsertOperationOutput<CustomerPricingProductDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<CustomerPricingProductDetail>();
+            TOne.Entities.InsertOperationOutput<List<CustomerPricingProductClass>> insertOperationOutput = new TOne.Entities.InsertOperationOutput<List<CustomerPricingProductClass>>();
 
-            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
-            insertOperationOutput.InsertedObject = null;
+            //insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            //insertOperationOutput.InsertedObject = null;
 
-            int customerPricingProductId = -1;
+          //  int customerPricingProductId = -1;
             ICustomerPricingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerPricingProductDataManager>();
             List<CustomerPricingProduct> customerPricingProductObject = new List<CustomerPricingProduct>();
-                foreach (CustomerPricingProduct customerPricingProduct in customerPricingProducts)
+
+            #region Insertion Rules
+            foreach (CustomerPricingProduct customerPricingProduct in customerPricingProducts)
                 {
                     List<CustomerPricingProduct> customerPricingProductList = dataManager.GetCustomerPricingProductByCustomerID(customerPricingProduct.CustomerId);
-                    if (customerPricingProductList==null && customerPricingProductList.Count == 0)
+                    if (customerPricingProductList==null || customerPricingProductList.Count == 0)
                     {
                         customerPricingProductObject.Add(new CustomerPricingProduct
                         {
@@ -338,18 +340,54 @@ namespace TOne.WhS.BusinessEntity.Business
                             }
                         }
                     }
-                    
-                
 
-            }
-            bool insertActionSucc = dataManager.Insert(customerPricingProductObject);
-            if (insertActionSucc)
+
+
+                }
+            #endregion
+
+            List<CustomerPricingProduct> insertedObjects = new List<CustomerPricingProduct>();
+
+            List<CustomerPricingProductClass> returnedData=new List<CustomerPricingProductClass>();
+            bool insertActionSucc = dataManager.Insert(customerPricingProductObject, out  insertedObjects);
+            //if (insertActionSucc)
+            //{
+            //    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+            // //   customerPricingProducts.CustomerPricingProductId = customerPricingProductId;
+            //    insertOperationOutput.InsertedObject = dataManager.GetCustomerPricingProduct(customerPricingProductId);
+            //}
+            foreach (CustomerPricingProduct customerPricingProduct in customerPricingProductObject)
             {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-             //   customerPricingProducts.CustomerPricingProductId = customerPricingProductId;
-                insertOperationOutput.InsertedObject = dataManager.GetCustomerPricingProduct(customerPricingProductId);
-            }
+                if (customerPricingProduct.CustomerPricingProductId != 0)
+                {
+                    returnedData.Add(new CustomerPricingProductClass{
+                        AllDestinations=customerPricingProduct.AllDestinations,
+                        Status= Status.Updated,
+                        BED=customerPricingProduct.BED,
+                        CustomerId=customerPricingProduct.CustomerId,
+                        CustomerPricingProductId=customerPricingProduct.CustomerPricingProductId,
+                        EED=customerPricingProduct.EED,
+                        PricingProductId = customerPricingProduct.PricingProductId,
 
+                    });
+                }
+            }
+            foreach (CustomerPricingProduct customerPricingProduct in insertedObjects)
+            {
+                returnedData.Add(new CustomerPricingProductClass
+                {
+                    AllDestinations = customerPricingProduct.AllDestinations,
+                    Status = Status.New,
+                    BED = customerPricingProduct.BED,
+                    CustomerId = customerPricingProduct.CustomerId,
+                    CustomerPricingProductId = customerPricingProduct.CustomerPricingProductId,
+                    EED = customerPricingProduct.EED,
+                    PricingProductId = customerPricingProduct.PricingProductId,
+                });
+            }
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+            // //   customerPricingProducts.CustomerPricingProductId = customerPricingProductId;
+                insertOperationOutput.InsertedObject = returnedData;
             return insertOperationOutput;
         }
 
@@ -369,5 +407,10 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return deleteOperationOutput;
         }
+    }
+    public enum Status { New = 0, Updated = 1 }
+    public class CustomerPricingProductClass : CustomerPricingProduct
+    {
+        public Status Status { get; set; }
     }
 }
