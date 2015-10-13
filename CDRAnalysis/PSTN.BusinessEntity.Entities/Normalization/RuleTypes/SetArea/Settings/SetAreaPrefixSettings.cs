@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PSTN.BusinessEntity.Entities.Normalization.RuleTypes.SetArea.Settings
 {
-    public class SetAreaPrefixSettings : NormalizationRuleSetAreaSettings
+    public class SetAreaPrefixSettings : NormalizationRuleSetAreaActionSettings
     {
         public int PrefixLength { get; set; }
     }

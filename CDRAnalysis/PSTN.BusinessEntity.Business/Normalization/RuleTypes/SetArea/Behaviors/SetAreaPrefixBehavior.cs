@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace PSTN.BusinessEntity.Business.Normalization.RuleTypes.SetArea.Behaviors
 {
-    public class SetAreaPrefixBehavior : NormalizationRuleSetAreaBehavior
+    public class SetAreaPrefixBehavior : NormalizationRuleSetAreaActionBehavior
     {
-        public override void Execute(NormalizationRuleSetAreaSettings settings, NormalizationRuleSetAreaTarget target)
+        public override void Execute(NormalizationRuleSetAreaActionSettings settings, NormalizationRuleSetAreaTarget target)
         {
             SetAreaPrefixSettings setAreaPrefixSettings = settings as SetAreaPrefixSettings;
             if(setAreaPrefixSettings == null)
