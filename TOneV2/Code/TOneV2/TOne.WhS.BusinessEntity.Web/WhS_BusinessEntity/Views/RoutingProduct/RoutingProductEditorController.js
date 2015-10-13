@@ -11,7 +11,7 @@
             var editMode;
             var routingProductId;
 
-            var appendixData;
+            var directiveAppendixData;
 
             var saleZonePackageDirectiveAPI;
             var saleZoneGroupSettingsDirectiveAPI;
@@ -41,8 +41,8 @@
                 $scope.onSaleZoneGroupSettingsDirectiveReady = function (api) {
                     saleZoneGroupSettingsDirectiveAPI = api;
 
-                    if (appendixData != undefined) {
-                        loadAppendixDirectives();
+                    if (directiveAppendixData != undefined) {
+                        tryLoadAppendixDirectives();
                     }
                     else {
                         var promise = saleZoneGroupSettingsDirectiveAPI.load();
@@ -60,17 +60,21 @@
                 $scope.onSupplierGroupSettingsDirectiveReady = function (api) {
                     supplierGroupSettingsDirectiveAPI = api;
 
-                    if (appendixData != undefined)
+                    if (directiveAppendixData != undefined)
                     {
-                        loadAppendixDirectives();
+                        tryLoadAppendixDirectives();
                     }
-                    else if (supplierGroupSettingsDirectiveAPI.load() != undefined) {
-                        $scope.suppliersAppendixLoader = true;
-                        supplierGroupSettingsDirectiveAPI.load().catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                        }).finally(function () {
-                            $scope.suppliersAppendixLoader = false;
-                        });
+                    else {
+                        var promise = supplierGroupSettingsDirectiveAPI.load();
+                        if (promise != undefined)
+                        {
+                            $scope.suppliersAppendixLoader = true;
+                            promise.catch(function (error) {
+                                VRNotificationService.notifyException(error, $scope);
+                            }).finally(function () {
+                                $scope.suppliersAppendixLoader = false;
+                            });
+                        }
                     }
                 }
 
@@ -122,8 +126,8 @@
                 return WhS_BE_RoutingProductAPIService.GetRoutingProduct(routingProductId).then(function (routingProduct) {
 
                     fillScopeFromRoutingProductObj(routingProduct);
-                    appendixData = routingProduct;
-                    loadAppendixDirectives();
+                    directiveAppendixData = routingProduct;
+                    tryLoadAppendixDirectives();
 
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -151,7 +155,7 @@
                 });
             }
 
-            function loadAppendixDirectives() {
+            function tryLoadAppendixDirectives() {
 
                 var loadOperations = [];
                 var setDirectivesDataOperations = [];
@@ -183,7 +187,7 @@
 
                 function setAppendixDirectives() {
                     UtilsService.waitMultipleAsyncOperations(setDirectivesDataOperations).then(function () {
-                        appendixData = undefined;
+                        directiveAppendixData = undefined;
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     }).finally(function () {
@@ -192,11 +196,11 @@
                 }
 
                 function setSaleZoneGroupSettingsDirective() {                    
-                        return saleZoneGroupSettingsDirectiveAPI.setData(appendixData.Settings.SaleZoneGroupSettings);
+                        return saleZoneGroupSettingsDirectiveAPI.setData(directiveAppendixData.Settings.SaleZoneGroupSettings);
                 }
 
                 function setSupplierGroupSettingsDirective() {                    
-                        return supplierGroupSettingsDirectiveAPI.setData(appendixData.Settings.SupplierGroupSettings);
+                    return supplierGroupSettingsDirectiveAPI.setData(directiveAppendixData.Settings.SupplierGroupSettings);
                 }
             }
                     
@@ -224,11 +228,11 @@
 
                 if (routingProductObj.Settings != null)
                 {
-                    if (routingProductObj.Settings.SaleZoneGroupSettings != null && routingProductObj.Settings.SaleZoneGroupSettings.ConfigId != null) {
+                    if (routingProductObj.Settings.SaleZoneGroupSettings != null) {
                         $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, routingProductObj.Settings.SaleZoneGroupSettings.ConfigId, "TemplateConfigID");
                     }
 
-                    if (routingProductObj.Settings != null && routingProductObj.Settings.SupplierGroupSettings != null && routingProductObj.Settings.SupplierGroupSettings.ConfigId != null) {
+                    if (routingProductObj.Settings.SupplierGroupSettings != null) {
                         $scope.selectedSupplierGroupTemplate = UtilsService.getItemByVal($scope.supplierGroupTemplates, routingProductObj.Settings.SupplierGroupSettings.ConfigId, "TemplateConfigID");
                     }
                 }
