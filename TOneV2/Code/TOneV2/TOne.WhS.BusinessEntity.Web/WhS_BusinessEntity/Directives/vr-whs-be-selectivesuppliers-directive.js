@@ -38,20 +38,28 @@ app.directive('vrWhsBeSelectivesuppliers', ['UtilsService',
             var carrierAccountDirectiveAPI;
 
             function initializeController() {
+
                 $scope.onCarrierAccountDirectiveReady = function (api) {
                     carrierAccountDirectiveAPI = api;
-                    carrierAccountDirectiveAPI.load().then(function () {
-                        defineAPI();
-                    });
+                    declareDirectiveAsReady();
                 }
                 
+                declareDirectiveAsReady();
+            }
+
+            function declareDirectiveAsReady()
+            {
+                if (carrierAccountDirectiveAPI == undefined)
+                    return;
+
+                defineAPI();
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function () {
-
+                    return carrierAccountDirectiveAPI.load();
                 }
 
                 api.getData = function () {
@@ -62,7 +70,7 @@ app.directive('vrWhsBeSelectivesuppliers', ['UtilsService',
                 }
 
                 api.setData = function (supplierGroupSettings) {
-                    carrierAccountDirectiveAPI.setData(supplierGroupSettings.SupplierIds);
+                    return carrierAccountDirectiveAPI.setData(supplierGroupSettings.SupplierIds);
                 }
 
                 if (ctrl.onReady != null)

@@ -38,19 +38,26 @@ app.directive('vrWhsBeSelectivecustomers', ['UtilsService',
             var carrierAccountDirectiveAPI;
 
             function initializeController() {
-                $scope.onCarrierAccountDirectiveLoaded = function (api) {
+                $scope.onCarrierAccountDirectiveReady = function (api) {
                     carrierAccountDirectiveAPI = api;
-                    api.load().then(function () {
-                        defineAPI();
-                    });
+                    declareDirectiveAsReady();
                 }
+
+                declareDirectiveAsReady();
+            }
+
+            function declareDirectiveAsReady() {
+                if (carrierAccountDirectiveAPI == undefined)
+                    return;
+
+                defineAPI();
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function () {
-
+                    return carrierAccountDirectiveAPI.load();
                 }
 
                 api.getData = function () {

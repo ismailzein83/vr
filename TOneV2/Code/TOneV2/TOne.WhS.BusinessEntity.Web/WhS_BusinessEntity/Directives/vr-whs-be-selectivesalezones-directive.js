@@ -94,12 +94,10 @@ app.directive('vrWhsBeSelectivesalezones', ['WhS_BE_SaleZoneAPIService', 'WhS_BE
                 if (saleZoneGroupSettings.ZoneIds.length > 0) {
                     var input = { PackageId: packageId, SaleZoneIds: saleZoneGroupSettings.ZoneIds };
 
-                    WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {
+                    return WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {
                         angular.forEach(response, function (item) {
                             $scope.selectedSaleZones.push(item);
                         });
-                    }).catch(function (error) {
-                        //TODO handle the case of exceptions
                     });
                 }
             }

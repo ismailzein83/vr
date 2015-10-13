@@ -50,7 +50,6 @@ app.directive('vrWhsBeSelectivecodecriteria', ['UtilsService',
         }
 
         function beCodeCriteria(ctrl, $scope) {
-            var carrierAccountDirectiveAPI;
 
             function initializeController() {
                 defineAPI();
@@ -60,7 +59,7 @@ app.directive('vrWhsBeSelectivecodecriteria', ['UtilsService',
                 var api = {};
 
                 api.load = function () {
-
+                    
                 }
 
                 api.getData = function () {
