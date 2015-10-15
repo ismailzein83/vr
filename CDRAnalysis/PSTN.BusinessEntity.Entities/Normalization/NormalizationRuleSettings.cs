@@ -12,8 +12,6 @@ namespace PSTN.BusinessEntity.Entities
     {
         public NormalizationRuleType RuleType { get; set; }
 
-        public int ConfigId { get; set; }
-
         public List<NormalizationRuleActionSettings> Actions { get; set; }
     }
 }

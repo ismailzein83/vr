@@ -92,7 +92,7 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
 
             api.getData = function () {
                 return {
-                    $type: "PSTN.BusinessEntity.Entities.Normalization.RuleTypes.NormalizeNumber.NormalizationRuleAdjustNumberSettings, PSTN.BusinessEntity.Entities",
+                    $type: "PSTN.BusinessEntity.Entities.NormalizationRuleAdjustNumberSettings, PSTN.BusinessEntity.Entities",
                     Actions: ($scope.actions.length > 0) ? getActions() : null
                 };
             }

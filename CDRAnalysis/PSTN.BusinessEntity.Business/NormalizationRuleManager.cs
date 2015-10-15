@@ -229,16 +229,16 @@ namespace PSTN.BusinessEntity.Business
             return allNormalizationRules.Find(x => x.NormalizationRuleId == normalizationRuleId);
         }
 
-        public List<Vanrise.Entities.TemplateConfig> GetNormalizationRuleActionBehaviorTemplates()
-        {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.NormalizationRuleActionBehaviorConfigType);
-        }
-
         public List<Vanrise.Entities.TemplateConfig> GetNormalizationRuleAdjustNumberActionSettingsTemplates()
         {
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.AdjustNumberActionConfigType);
+        }
+
+        public List<Vanrise.Entities.TemplateConfig> GetNormalizationRuleSetAreaSettingsTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.SetAreaConfigType);
         }
 
         public InsertOperationOutput<NormalizationRuleDetail> AddNormalizationRule(NormalizationRule normalizationRuleObj)

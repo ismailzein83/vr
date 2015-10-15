@@ -7,20 +7,22 @@
     function NormalizationRuleEditorController($scope, NormalizationRuleAPIService, SwitchAPIService, TrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, PSTN_BE_NormalizationRuleTypeEnum, UtilsService, VRNavigationService, VRNotificationService) {
 
         var editMode;
-        var normalizationRuleId;
+        var ruleId;
         var ruleTypeDirectiveAPI;
+        var ruleTypeDirectiveData;
 
         loadParameters();
         defineScope();
+        load();
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null) {
-                normalizationRuleId = parameters.NormalizationRuleId;
+                ruleId = parameters.NormalizationRuleId;
             }
 
-            editMode = (normalizationRuleId != undefined);
+            editMode = (ruleId != undefined);
         }
 
         function defineScope() {
@@ -37,26 +39,11 @@
             $scope.phoneNumberLength = undefined;
             $scope.phoneNumberPrefix = undefined;
 
-            $scope.normalizationRuleActionSettingsTemplates = [];
-            $scope.selectedNormalizationRuleActionSettingsTemplate = undefined;
-            $scope.isAddButtonDisabled = true;
-
-            $scope.normalizationRuleActionSettingsList = [];
-
-            $scope.beginEffectiveDate = Date.now();
-            $scope.endEffectiveDate = undefined;
-
-            /* Settings */
-
             $scope.ruleTypes = UtilsService.getArrayEnum(PSTN_BE_NormalizationRuleTypeEnum);
             $scope.selectedRuleType = undefined;
 
-            $scope.onRuleTypeDirectiveLoaded = function (api) {
-                ruleTypeDirectiveAPI = api;
-                load();
-            }
-
-            /* Settings */
+            $scope.beginEffectiveDate = Date.now();
+            $scope.endEffectiveDate = undefined;
 
             $scope.onSelectedSwitchesChanged = function () {
 
@@ -89,21 +76,11 @@
                 return TrunkAPIService.GetTrunksBySwitchIds(trunkFilterObj);
             }
 
-            $scope.onNormalizationRuleActionSettingsTemplateChanged = function () {
-                $scope.isAddButtonDisabled = ($scope.selectedNormalizationRuleActionSettingsTemplate == undefined);
-            }
+            $scope.onRuleTypeDirectiveLoaded = function (api) {
+                ruleTypeDirectiveAPI = api;
 
-            $scope.addNormalizationRuleActionSettingsListItem = function () {
-                var listItem = getNormalizationRuleActionSettingsListItem(null);
-                $scope.normalizationRuleActionSettingsList.push(listItem);
-            }
-
-            $scope.removeNormalizationRuleActionSettingsListItem = function ($event, normalizationRuleActionSettingsListItem) {
-                $event.preventDefault();
-                $event.stopPropagation();
-
-                var index = UtilsService.getItemIndexByVal($scope.normalizationRuleActionSettingsList, normalizationRuleActionSettingsListItem.ListItemId, 'ListItemId');
-                $scope.normalizationRuleActionSettingsList.splice(index, 1);
+                if (editMode)
+                    ruleTypeDirectiveAPI.setData(ruleTypeDirectiveData);
             };
 
             $scope.saveNormalizationRule = function () {
@@ -120,19 +97,14 @@
 
         function load() {
 
-            if (ruleTypeDirectiveAPI == undefined)
-                return;
-
             $scope.isGettingData = true;
 
-            UtilsService.waitMultipleAsyncOperations([loadSwitches, loadTrunks, loadTemplates])
+            UtilsService.waitMultipleAsyncOperations([loadSwitches, loadTrunks])
                 .then(function () {
                     if (editMode) {
-                        NormalizationRuleAPIService.GetNormalizationRuleById(normalizationRuleId)
-                            .then(function (responseObject) {
-
-
-                                fillScopeFromNormalizationRuleObj(responseObject);
+                        NormalizationRuleAPIService.GetNormalizationRuleById(ruleId)
+                            .then(function (response) {
+                                fillScopeFromNormalizationRuleObj(response);
                             })
                             .catch(function (error) {
                                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -169,37 +141,26 @@
                 });
         }
 
-        function loadTemplates() {
+        function fillScopeFromNormalizationRuleObj(rule) {
+            $scope.description = rule.Description;
 
-            return NormalizationRuleAPIService.GetNormalizationRuleActionBehaviorTemplates()
-                .then(function (responseArray) {
-                    angular.forEach(responseArray, function (item) {
-                        $scope.normalizationRuleActionSettingsTemplates.push(item);
-                    });
-                });
-        }
+            $scope.selectedSwitches = (rule.Criteria.SwitchIds != null) ?
+                getItemsByPropValues($scope.switches, rule.Criteria.SwitchIds, "SwitchId") : [];
 
-        function fillScopeFromNormalizationRuleObj(normalizationRuleObj) {
-            $scope.description = normalizationRuleObj.Description;
+            $scope.selectedTrunks = (rule.Criteria.TrunkIds != null) ?
+                getItemsByPropValues($scope.trunks, rule.Criteria.TrunkIds, "TrunkId") : [];
 
-            $scope.selectedSwitches = (normalizationRuleObj.Criteria.SwitchIds != null) ?
-                getItemsByPropValues($scope.switches, normalizationRuleObj.Criteria.SwitchIds, "SwitchId") : [];
+            $scope.selectedPhoneNumberType = (rule.Criteria.PhoneNumberType != null) ?
+                UtilsService.getItemByVal($scope.phoneNumberTypes, rule.Criteria.PhoneNumberType, "value") : undefined;
 
-            $scope.selectedTrunks = (normalizationRuleObj.Criteria.TrunkIds != null) ?
-                getItemsByPropValues($scope.trunks, normalizationRuleObj.Criteria.TrunkIds, "TrunkId") : [];
+            $scope.phoneNumberLength = rule.Criteria.PhoneNumberLength;
+            $scope.phoneNumberPrefix = rule.Criteria.PhoneNumberPrefix;
 
-            $scope.selectedPhoneNumberType = (normalizationRuleObj.Criteria.PhoneNumberType != null) ?
-                UtilsService.getItemByVal($scope.phoneNumberTypes, normalizationRuleObj.Criteria.PhoneNumberType, "value") : undefined;
+            ruleTypeDirectiveData = rule.Settings;
+            $scope.selectedRuleType = UtilsService.getItemByVal($scope.ruleTypes, rule.Settings.RuleType, "value");
 
-            $scope.phoneNumberLength = normalizationRuleObj.Criteria.PhoneNumberLength;
-            $scope.phoneNumberPrefix = normalizationRuleObj.Criteria.PhoneNumberPrefix;
-
-            addRetrievedNormalizationRuleActionSettingsToList(normalizationRuleObj.Settings.Actions);
-
-            ruleTypeDirectiveAPI.setData(normalizationRuleObj.Settings);
-
-            $scope.beginEffectiveDate = normalizationRuleObj.BeginEffectiveDate;
-            $scope.endEffectiveDate = normalizationRuleObj.EndEffectiveDate;
+            $scope.beginEffectiveDate = rule.BeginEffectiveDate;
+            $scope.endEffectiveDate = rule.EndEffectiveDate;
         }
 
         function getItemsByPropValues(array, values, propName) {
@@ -215,38 +176,6 @@
             }
 
             return matchingItems;
-        }
-
-        function addRetrievedNormalizationRuleActionSettingsToList(array) {
-            if (array == undefined || array == null) return;
-
-            angular.forEach(array, function (item) {
-                var listItem = getNormalizationRuleActionSettingsListItem(item);
-                $scope.normalizationRuleActionSettingsList.push(listItem);
-            });
-        }
-
-        function getNormalizationRuleActionSettingsListItem(normalizationRuleActionSettingsObj) {
-
-            var item = {
-                ListItemId: $scope.normalizationRuleActionSettingsList.length + 1,
-                BehaviorId: (normalizationRuleActionSettingsObj != null) ?
-                    normalizationRuleActionSettingsObj.BehaviorId : $scope.selectedNormalizationRuleActionSettingsTemplate.TemplateConfigID,
-                Editor: (normalizationRuleActionSettingsObj != null) ?
-                    UtilsService.getItemByVal($scope.normalizationRuleActionSettingsTemplates, normalizationRuleActionSettingsObj.BehaviorId, "TemplateConfigID").Editor :
-                    $scope.selectedNormalizationRuleActionSettingsTemplate.Editor,
-                Data: (normalizationRuleActionSettingsObj != null) ? normalizationRuleActionSettingsObj : {}
-            };
-
-            item.onNormalizationRuleActionSettingsDirectiveAPILoaded = function (api) {
-                item.normalizationRuleActionSettingsDirectiveAPI = api;
-                item.normalizationRuleActionSettingsDirectiveAPI.setData(item.Data);
-
-                item.onNormalizationRuleActionSettingsDirectiveAPILoaded = undefined;
-                item.Data = undefined;
-            }
-
-            return item;
         }
 
         function updateNormalizationRule() {
@@ -268,9 +197,7 @@
 
         function insertNormalizationRule() {
             var normalizationRuleObj = buildNormalizationRuleObjFromScope();
-
             console.log(normalizationRuleObj);
-            return;
 
             return NormalizationRuleAPIService.AddNormalizationRule(normalizationRuleObj)
                 .then(function (responseObject) {
@@ -290,7 +217,7 @@
         function buildNormalizationRuleObjFromScope() {
 
             var normalizationRuleObj = {
-                NormalizationRuleId: (normalizationRuleId != undefined) ? normalizationRuleId : null,
+                NormalizationRuleId: (ruleId != undefined) ? ruleId : null,
                 Criteria: {
                     SwitchIds: UtilsService.getPropValuesFromArray($scope.selectedSwitches, "SwitchId"),
                     TrunkIds: UtilsService.getPropValuesFromArray($scope.selectedTrunks, "TrunkId"),
@@ -298,26 +225,13 @@
                     PhoneNumberLength: $scope.phoneNumberLength,
                     PhoneNumberPrefix: $scope.phoneNumberPrefix
                 },
-                Settings: {
-                    Actions: ($scope.normalizationRuleActionSettingsList.length > 0) ? getNormalizationRuleActionSettings() : null
-                },
-                OtherSettings: ruleTypeDirectiveAPI.getData(),
+                Settings: ruleTypeDirectiveAPI.getData(),
                 Description: $scope.description,
                 BeginEffectiveDate: $scope.beginEffectiveDate,
                 EndEffectiveDate: $scope.endEffectiveDate
             };
-
+            normalizationRuleObj.Settings.RuleType = $scope.selectedRuleType.value;
             return normalizationRuleObj;
-        }
-
-        function getNormalizationRuleActionSettings() {
-            var normalizationRulActionSettings = [];
-
-            angular.forEach($scope.normalizationRuleActionSettingsList, function (item) {
-                normalizationRulActionSettings.push(item.normalizationRuleActionSettingsDirectiveAPI.getData());
-            });
-
-            return normalizationRulActionSettings;
         }
     }
 

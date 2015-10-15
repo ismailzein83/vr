@@ -5,7 +5,6 @@
             <vr-choices>
                 <vr-choice isselected="definitionSelected">Definition</vr-choice>
                 <vr-choice isselected="criteriaSelected">Criteria</vr-choice>
-                <vr-choice isselected="actionsSelected">Actions</vr-choice>
                 <vr-choice isselected="settingsSelected">Settings</vr-choice>
                 <vr-choice isselected="scheduleSettingsSelected">Schedule Settings</vr-choice>
             </vr-choices>
@@ -62,51 +61,6 @@
 
                     <vr-columns width="normal">
                         <vr-textbox label="Number Prefix" value="phoneNumberPrefix"></vr-textbox>
-                    </vr-columns>
-                </vr-row>
-            </div>
-
-            <div ng-show="actionsSelected">
-                <vr-row>
-                    <vr-columns width="fullrow">
-                        <vr-row>
-                            <vr-columns width="1/3row">
-                                <vr-select label="Action Type"
-                                           datasource="normalizationRuleActionSettingsTemplates"
-                                           selectedvalues="selectedNormalizationRuleActionSettingsTemplate"
-                                           onselectionchanged="onNormalizationRuleActionSettingsTemplateChanged"
-                                           datavaluefield="TemplateConfigID"
-                                           datatextfield="Name"
-                                           entityname="Action Type"
-                                           hideremoveicon>
-                                </vr-select>
-                            </vr-columns>
-
-                            <vr-columns width="1/3row">
-                                <div style="top:25px;position:absolute;" vr-disabled="isAddButtonDisabled">
-                                    <vr-button type="Add" data-onclick="addNormalizationRuleActionSettingsListItem" standalone></vr-button>
-                                </div>
-                            </vr-columns>
-                        </vr-row>
-
-                        <vr-row>
-                            <vr-columns width="fullrow">
-
-                                <ul class="list-group dragbelzone" ng-sortable="itemsSortable" ng-show="normalizationRuleActionSettingsList.length > 0">
-                                    <li ng-repeat="item in normalizationRuleActionSettingsList" class="list-group-item list-custom" style="margin:1px;">
-                                        <i class="glyphicon glyphicon-th-list handeldrag" style="display:inline-block;vertical-align:middle;float: none;"></i>
-                                        <i class="glyphicon glyphicon-remove hand-cursor" style="float:right;padding:5px;cursor:default;" ng-click="removeNormalizationRuleActionSettingsListItem($event, item)"></i>
-                                        <div style="display:inline-block; width:100% ">
-                                            <vr-directivewrapper directive="item.Editor"
-                                                                 behaviorid="item.BehaviorId"
-                                                                 onloaded="item.onNormalizationRuleActionSettingsDirectiveAPILoaded">
-                                            </vr-directivewrapper>
-                                        </div>
-                                    </li>
-                                </ul>
-
-                            </vr-columns>
-                        </vr-row>
                     </vr-columns>
                 </vr-row>
             </div>

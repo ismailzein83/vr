@@ -25,17 +25,17 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        public List<TemplateConfig> GetNormalizationRuleActionBehaviorTemplates()
-        {
-            NormalizationRuleManager manager = new NormalizationRuleManager();
-            return manager.GetNormalizationRuleActionBehaviorTemplates();
-        }
-
-        [HttpGet]
         public List<TemplateConfig> GetNormalizationRuleAdjustNumberActionSettingsTemplates()
         {
             NormalizationRuleManager manager = new NormalizationRuleManager();
             return manager.GetNormalizationRuleAdjustNumberActionSettingsTemplates();
+        }
+
+        [HttpGet]
+        public List<TemplateConfig> GetNormalizationRuleSetAreaSettingsTemplates()
+        {
+            NormalizationRuleManager manager = new NormalizationRuleManager();
+            return manager.GetNormalizationRuleSetAreaSettingsTemplates();
         }
 
         [HttpPost]
