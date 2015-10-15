@@ -158,6 +158,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="PSTN_BusinessEntity\Constants\NormalizationRuleTypeEnum.js" />
     <Content Include="PSTN_BusinessEntity\Constants\PhoneNumberTypeEnum.js" />
     <Content Include="PSTN_BusinessEntity\Constants\TrunkDirectionEnum.js" />
     <Content Include="PSTN_BusinessEntity\Constants\TrunkTypeEnum.js" />
@@ -165,7 +166,7 @@
     <Content Include="PSTN_BusinessEntity\Directives\Templates\NormalizeNumberDirectiveTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Directives\Templates\SubstringDirectiveTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-addprefix-directive.js" />
-    <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-normalizenumber-directive.js" />
+    <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-adjustnumber-directive.js" />
     <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-trunkgrid-directive.js" />
     <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-substring-directive.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\NormalizationRuleAPIService.js" />
