@@ -25,7 +25,7 @@
         }
 
         function defineScope() {
-
+             
             $scope.switches = [];
             $scope.selectedSwitches = [];
 
