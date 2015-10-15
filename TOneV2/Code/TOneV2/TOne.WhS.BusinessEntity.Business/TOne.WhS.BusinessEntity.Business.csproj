@@ -68,6 +68,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="CustomerPricingProductManager.cs" />
     <Compile Include="PricingProductManager.cs" />
+    <Compile Include="PricingRules\SalePricingRuleManager.cs" />
     <Compile Include="PricingRules\RuleTypes\ExtraCharge\Actions\PercentageExtraChargeBehavior.cs" />
     <Compile Include="PricingRules\RuleTypes\ExtraCharge\Actions\FixedExtraChargeBehavior.cs" />
     <Compile Include="PricingRules\RuleTypes\Tariff\RegularTariffBehavior.cs" />
