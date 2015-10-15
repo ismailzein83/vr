@@ -119,7 +119,6 @@ as (select * from (values
 (5,'Log','Log History','#/view/BusinessProcess/Views/BPHistory',3,'Root/Business Process Module/History:View',null,null,0,12),
 (6,'Scheduler Service','Scheduler Service','#/view/Runtime/Views/SchedulerTaskManagement',3,'Root/Business Process Module/Management:View',null,null,0,10),
 (7,'Management','Business Process Management','#/view/BusinessProcess/Views/BPDefinitionManagement',3,'Root/Business Process Module/Management:View',null,null,0,11),
-(23,'Normalization Rules','Normalization Rules','#/view/PSTN_BusinessEntity/Views/NormalizationRule/NormalizationRuleManagement',3,'Root/PSTN_BusinessEntity Module:View',null,null,0,13),
 (9,'Strategies','Strategies','#/view/FraudAnalysis/Views/Strategy/StrategyManagement',2,'Root/Strategy Module:View',null,null,0,10),
 (10,'Management','DataSources Management','#/view/Integration/Views/DataSourceManagement',4,'Root/Integration Module:View',null,null,0,10),
 (11,'Log','Log History','#/view/Integration/Views/DataSourceLogManagement',4,'Root/Integration Module:View',null,null,0,12),
@@ -130,10 +129,11 @@ as (select * from (values
 (16,'Cancel Cases','Cancel Cases','#/view/FraudAnalysis/Views/SuspiciousAnalysis/CancelCases',2,'Root/Suspicion Analysis Module:View',null,null,0,12),
 (17,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',7,'Root/Administration Module/Dynamic Pages:View',null,null,0,10),
 (18,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',7,'Root/Administration Module/Dynamic Pages:View',null,null,0,11),
-(19,'Switches','Switches','#/view/PSTN_BusinessEntity/Views/Switch/SwitchManagement',8,'Root/PSTN_BusinessEntity Module:View',null,null,0,12),
-(20,'Trunks','Trunks','#/view/PSTN_BusinessEntity/Views/Trunk/SwitchTrunkManagement',8,'Root/PSTN_BusinessEntity Module:View',null,null,0,10),
-(21,'Switch Brands','Switch Brands','#/view/PSTN_BusinessEntity/Views/Type/SwitchTypeManagement',8,'Root/PSTN_BusinessEntity Module:View',null,null,0,11),
-(22,'Ranking Pages','Ranking Pages','#/view/Security/Views/Pages/RankingPageManagement',1,'Root/Administration Module:View',null,null,0,13)
+(19,'Switches','Switches','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchManagement',8,'Root/PSTN_BusinessEntity Module:View',null,null,0,12),
+(20,'Trunks','Trunks','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/TrunkManagement',8,'Root/PSTN_BusinessEntity Module:View',null,null,0,10),
+(21,'Switch Brands','Switch Brands','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchBrandManagement',8,'Root/PSTN_BusinessEntity Module:View',null,null,0,11),
+(22,'Ranking Pages','Ranking Pages','#/view/Security/Views/Pages/RankingPageManagement',1,'Root/Administration Module:View',null,null,0,13),
+(23,'Normalization Rule','Normalization Rule','#/view/PSTN_BusinessEntity/Views/Normalization/NormalizationRuleManagement',3,'Root/PSTN_BusinessEntity Module:View',null,null,0,13)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank]))
 merge	[sec].[View] as t
