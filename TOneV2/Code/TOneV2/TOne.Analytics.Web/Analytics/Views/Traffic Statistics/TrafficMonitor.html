@@ -88,7 +88,7 @@
         <vr-row>
             <vr-columns colnum="12" simplecol>
                 <vr-datagrid on-ready="onMainGridReady" datasource="data"
-                             menuactions="gridMenuActions" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'">
+                             menuactions="gridMenuActions" dataretrievalfunction="dataRetrievalFunction" pagingtype="'Pager'" defaultsortbyfieldname="'Attempts'" defaultsortdirection="'DESC'">
                     <vr-datagridcolumn ng-repeat="groupKey in currentSearchCriteria.groupKeys" headertext="groupKey.gridHeader" field="'GroupKeyValues[' + $index + '].Name'" columnindex="$index" widthfactor="15" enablehiding="'false'" isclickable="'true'" tag="groupKey" onclicked="onGroupKeyClicked"></vr-datagridcolumn>
                     <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.fieldName" summaryfield="measure.propertyName" type="measure.type" tag="measure" getcolor="getColor"></vr-datagridcolumn>
                     <vr-datagridexpandablerow>
