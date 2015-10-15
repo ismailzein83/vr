@@ -163,7 +163,7 @@
     <Content Include="PSTN_BusinessEntity\Constants\TrunkDirectionEnum.js" />
     <Content Include="PSTN_BusinessEntity\Constants\TrunkTypeEnum.js" />
     <Content Include="PSTN_BusinessEntity\Directives\Templates\AddPrefixDirectiveTemplate.html" />
-    <Content Include="PSTN_BusinessEntity\Directives\Templates\NormalizeNumberDirectiveTemplate.html" />
+    <Content Include="PSTN_BusinessEntity\Directives\Templates\AdjustNumberDirectiveTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Directives\Templates\SubstringDirectiveTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-addprefix-directive.js" />
     <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-adjustnumber-directive.js" />
