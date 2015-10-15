@@ -13,7 +13,8 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService','WhS_BE_PricingP
         addCarrierAccount: addCarrierAccount,
         editCarrierAccount: editCarrierAccount,
         addCarrierProfile:addCarrierProfile,
-        editCarrierProfile: editCarrierProfile
+        editCarrierProfile: editCarrierProfile,
+        addPricingRule: addPricingRule
     });
 
     function addRouteRule(onRouteRuleAdded)
@@ -187,6 +188,21 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService','WhS_BE_PricingP
             modalScope.onCarrierProfileUpdated = onCarrierProfileUpdated;
         };
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierProfileEditor.html', parameters, modalSettings);
+    }
+
+    function addPricingRule(onPricingRuleAdded, dataItem) {
+        var settings = {};
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = "New Carrier Account";
+            modalScope.onPricingRuleAdded = onPricingRuleAdded;
+        };
+        var parameters;
+        if (dataItem != undefined) {
+            parameters = {
+            };
+        }
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingRule/PricingRuleEditor.html', parameters, settings);
     }
 
 }]);

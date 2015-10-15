@@ -186,6 +186,7 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\CarrierProfileAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CustomerPricingProductAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\PricingProductAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\PricingRuleAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\RouteRuleAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\RoutingProductAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleZoneAPIService.js" />
@@ -206,6 +207,10 @@
     <Content Include="WhS_BusinessEntity\Directives\Templates\PricingProductGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Views\PricingProduct\PricingProductEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\PricingProduct\PricingProductEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Views\PricingRule\PricingRuleEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\PricingRule\PricingRuleEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Views\PricingRule\PricingRuleManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\PricingRule\PricingRuleManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\RouteRule\Grids\RouteRuleGrid.html" />
     <Content Include="WhS_BusinessEntity\Views\RouteRule\Grids\RouteRuleGridController.js" />
     <Content Include="WhS_BusinessEntity\Views\PricingProduct\PricingProductManagement.html" />

@@ -86,7 +86,6 @@
     <Compile Include="PricingRules\RuleTypes\ExtraCharge\PricingRuleExtraChargeActionSettings.cs" />
     <Compile Include="PricingRules\RuleTypes\ExtraCharge\PricingRuleExtraChargeSettings.cs" />
     <Compile Include="PricingRules\RuleTypes\ExtraCharge\PricingRuleExtraChargeTarget.cs" />
-    <Compile Include="PricingRules\RuleTypes\Tariff\PricingRuleTariffActionSettings.cs" />
     <Compile Include="PricingRules\RuleTypes\Tariff\PricingRuleTariffBehavior.cs" />
     <Compile Include="PricingRules\RuleTypes\Tariff\PricingRuleTariffSettings.cs" />
     <Compile Include="PricingRules\RuleTypes\Tariff\PricingRuleTariffTarget.cs" />
