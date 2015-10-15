@@ -51,33 +51,12 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
 
         public static Vanrise.Integration.Entities.MappingOutput ImportingCDR_FileorFTP()
         {
-
-            PSTN.BusinessEntity.Business.TrunkManager switchTrunkManager = new PSTN.BusinessEntity.Business.TrunkManager();
-            PSTN.BusinessEntity.Entities.TrunkInfo currentTrunk = new PSTN.BusinessEntity.Entities.TrunkInfo();
-
-            PSTN.BusinessEntity.Business.SwitchManager switchManager = new PSTN.BusinessEntity.Business.SwitchManager();
-            PSTN.BusinessEntity.Entities.Switch currentSwitch;
-            currentSwitch = switchManager.GetSwitchByDataSourceId(dataSourceId);
-            int? SwitchId = null;
-            TimeSpan TimeOffset = new TimeSpan();
-            if (currentSwitch != null)
-            {
-                SwitchId = currentSwitch.SwitchId;
-                TimeOffset = currentSwitch.TimeOffset;
-            }
-
-            else
-                LogVerbose("No Switch associated to this Datasource");
-
-
             LogVerbose("Started");
             Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch batch = new Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch();
             batch.CDRs = new List<Vanrise.Fzero.CDRImport.Entities.CDR>();
             Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
 
             System.IO.StreamReader sr = ImportedData.StreamReader;
-
-
             while (!sr.EndOfStream)
             {
                 var i = sr.ReadLine();
@@ -94,27 +73,11 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
                 cdr.OutTrunkSymbol = i.Substring(394, 20).Trim();
                 cdr.ReleaseCode = i.Substring(274, 50).Trim();
 
-                if (cdr.InTrunkSymbol != null && cdr.InTrunkSymbol != string.Empty)
-                {
-                    currentTrunk = switchTrunkManager.GetTrunkBySymbol(cdr.InTrunkSymbol);
-                    if (currentTrunk != null)
-                        cdr.InTrunkId = currentTrunk.TrunkId;
-                }
-
-                if (cdr.OutTrunkSymbol != null && cdr.OutTrunkSymbol != string.Empty)
-                {
-                    currentTrunk = switchTrunkManager.GetTrunkBySymbol(cdr.OutTrunkSymbol);
-                    if (currentTrunk != null)
-                        cdr.OutTrunkId = currentTrunk.TrunkId;
-                }
-
-
 
                 DateTime ConnectDateTime;
                 if (DateTime.TryParseExact(i.Substring(221, 14).Trim(), "yyyyMddHHmmss", System.Globalization.CultureInfo.InvariantCulture,
                                            System.Globalization.DateTimeStyles.None, out ConnectDateTime))
-                    cdr.ConnectDateTime = ConnectDateTime.Add(TimeOffset); 
-
+                    cdr.ConnectDateTime = ConnectDateTime; 
 
 
                 int callType = 0;
@@ -145,11 +108,8 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
                 if (decimal.TryParse(i.Substring(598, 10).Trim(), out downVolume))
                     cdr.DownVolume = downVolume;
 
-                cdr.SwitchID = SwitchId;
-
                 batch.CDRs.Add(cdr);
             }
-            //mappedBatches.Add("CDR Import", batch);// Save Without Normalization
 
             mappedBatches.Add("Normalize CDRs", batch); // Normalize then Save
 

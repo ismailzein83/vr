@@ -16,13 +16,13 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
 
         static int dataSourceId = 24;
         static DBReaderImportedData data = new DBReaderImportedData();
-        
+
         public static void FillData()
         {
             SqlConnection connection = new SqlConnection();
             connection.ConnectionString = "Data Source=192.168.110.185;Initial Catalog=CDRAnalysisMobile_WF;User ID=development;Password=dev!123;";
             SqlCommand command = new SqlCommand(
-              "SELECT [ID]      ,[CGPN]      ,[CDPN]      ,[InTrunkSymbol]      ,[OutTrunkSymbol]      ,[ConnectDateTime]      ,[DurationInSeconds]      ,[DisconnectDateTime]  FROM [dbo].[PSTNSampleData];",      connection);
+              "SELECT [ID]      ,[CGPN]      ,[CDPN]      ,[InTrunkSymbol]      ,[OutTrunkSymbol]      ,[ConnectDateTime]      ,[DurationInSeconds]      ,[DisconnectDateTime]  FROM [dbo].[PSTNSampleData];", connection);
             command.Connection = connection;
             connection.Open();
             data.Reader = command.ExecuteReader();
@@ -74,13 +74,11 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
                 cdr.InTrunkSymbol = reader["InTrunkSymbol"] as string;
                 cdr.OutTrunkSymbol = reader["OutTrunkSymbol"] as string;
                 index = Utils.GetReaderValue<int?>(reader, "ID").ToString();
-
                 batch.StagingCDRs.Add(cdr);
-
             }
 
             ImportedData.LastImportedId = index;
-            mappedBatches.Add("Normalize CDRs", batch); // Normalize then Save
+            mappedBatches.Add("Normalize CDRs", batch); 
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
@@ -88,29 +86,8 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
             return result;
         }
 
-
         public static Vanrise.Integration.Entities.MappingOutput ImportingCDR_SQL()
         {
-            PSTN.BusinessEntity.Business.TrunkManager switchTrunkManager = new PSTN.BusinessEntity.Business.TrunkManager();
-            PSTN.BusinessEntity.Entities.TrunkInfo currentTrunk = new PSTN.BusinessEntity.Entities.TrunkInfo();
-
-            PSTN.BusinessEntity.Business.SwitchManager switchManager = new PSTN.BusinessEntity.Business.SwitchManager();
-            PSTN.BusinessEntity.Entities.Switch currentSwitch;
-            currentSwitch = switchManager.GetSwitchByDataSourceId(dataSourceId);
-            int? SwitchId = null;
-            TimeSpan TimeOffset = new TimeSpan();
-            if (currentSwitch != null)
-            {
-                SwitchId = currentSwitch.SwitchId;
-                TimeOffset = currentSwitch.TimeOffset;
-            }
-
-            else
-                LogVerbose("No Switch associated to this Datasource");
-
-
-
-
             LogVerbose("Started");
             Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch batch = new Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch();
             batch.CDRs = new List<Vanrise.Fzero.CDRImport.Entities.CDR>();
@@ -122,20 +99,9 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
             while (reader.Read())
             {
                 Vanrise.Fzero.CDRImport.Entities.CDR cdr = new Vanrise.Fzero.CDRImport.Entities.CDR();
+                cdr.Id = (int)reader["Id"];
                 cdr.CallType = Utils.GetReaderValue<Vanrise.Fzero.CDRImport.Entities.CallType>(reader, "Call_Type");
                 cdr.BTSId = Utils.GetReaderValue<int?>(reader, "BTS_Id");
-
-                cdr.ConnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "ConnectDateTime");
-                if (cdr.ConnectDateTime != null)
-                    cdr.ConnectDateTime = cdr.ConnectDateTime.Value.Add(TimeOffset);
-
-                cdr.DurationInSeconds = Utils.GetReaderValue<Decimal?>(reader, "DurationInSeconds");
-
-                cdr.DisconnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
-                if (cdr.DisconnectDateTime != null)
-                    cdr.DisconnectDateTime = cdr.DisconnectDateTime.Value.Add(TimeOffset);
-
-                cdr.Id = (int)reader["Id"];
                 cdr.IMSI = reader["IMSI"] as string;
                 cdr.CallClass = reader["Call_Class"] as string;
                 cdr.IsOnNet = Utils.GetReaderValue<Byte?>(reader, "IsOnNet");
@@ -146,28 +112,11 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
                 cdr.DownVolume = Utils.GetReaderValue<Decimal?>(reader, "Down_Volume");
                 cdr.CellLatitude = Utils.GetReaderValue<Decimal?>(reader, "Cell_Latitude");
                 cdr.CellLongitude = Utils.GetReaderValue<Decimal?>(reader, "Cell_Longitude");
-
+                cdr.ConnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "ConnectDateTime");
+                cdr.DurationInSeconds = Utils.GetReaderValue<Decimal?>(reader, "DurationInSeconds");
+                cdr.DisconnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
                 cdr.InTrunkSymbol = reader["In_Trunk"] as string;
                 cdr.OutTrunkSymbol = reader["Out_Trunk"] as string;
-
-
-                if (cdr.InTrunkSymbol != null && cdr.InTrunkSymbol != string.Empty)
-                {
-                    currentTrunk = switchTrunkManager.GetTrunkBySymbol(cdr.InTrunkSymbol);
-                    if (currentTrunk != null)
-                        cdr.InTrunkId = currentTrunk.TrunkId;
-                }
-
-                if (cdr.OutTrunkSymbol != null && cdr.OutTrunkSymbol != string.Empty)
-                {
-                    currentTrunk = switchTrunkManager.GetTrunkBySymbol(cdr.OutTrunkSymbol);
-                    if (currentTrunk != null)
-                        cdr.OutTrunkId = currentTrunk.TrunkId;
-                }
-
-                cdr.SwitchID = SwitchId;
-
-
                 cdr.ServiceType = Utils.GetReaderValue<int?>(reader, "Service_Type");
                 cdr.ServiceVASName = reader["Service_VAS_Name"] as string;
                 cdr.ReleaseCode = reader["ReleaseCode"] as string;
@@ -181,10 +130,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
 
             ImportedData.LastImportedId = index;
 
-            //mappedBatches.Add("CDR Import", batch);// Save Without Normalization
-
-            mappedBatches.Add("Normalize CDRs", batch); // Normalize then Save
-
+            mappedBatches.Add("Normalize CDRs", batch); 
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
