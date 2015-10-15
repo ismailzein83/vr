@@ -2,9 +2,9 @@
 
     "use strict";
 
-    pricingRuleManagementController.$inject = ['$scope', 'WhS_BE_PricingRuleAPIService', 'WhS_BE_MainService', 'UtilsService', 'VRModalService', 'VRNotificationService'];
+    salePricingRuleManagementController.$inject = ['$scope', 'WhS_BE_SalePricingRuleAPIService', 'WhS_BE_MainService', 'UtilsService', 'VRModalService', 'VRNotificationService'];
 
-    function pricingRuleManagementController($scope, WhS_BE_PricingRuleAPIService, WhS_BE_MainService, UtilsService, VRModalService, VRNotificationService) {
+    function salePricingRuleManagementController($scope, WhS_BE_SalePricingRuleAPIService, WhS_BE_MainService, UtilsService, VRModalService, VRNotificationService) {
         var gridAPI;
         defineScope();
 
@@ -21,7 +21,7 @@
                 }
                 api.loadGrid(filter);
             }
-            $scope.AddNewPricingRule = AddNewPricingRule;
+            $scope.AddNewSalePricingRule = AddNewSalePricingRule;
         }
 
         function load() {
@@ -50,15 +50,15 @@
             return data;
         }
 
-        function AddNewPricingRule() {
-            var onPricingRuleAdded = function (pricingRuleObj) {
+        function AddNewSalePricingRule() {
+            var onSalePricingRuleAdded = function (salePricingRuleObj) {
                 if ( gridAPI != undefined)
-                  gridAPI.onPricingRuleAdded(pricingRuleObj);
+                  gridAPI.onSalePricingRuleAdded(salePricingRuleObj);
             };
 
-            WhS_BE_MainService.addPricingRule(onPricingRuleAdded);
+            WhS_BE_MainService.addSalePricingRule(onSalePricingRuleAdded);
         }
     }
 
-    appControllers.controller('WhS_BE_PricingRuleManagementController', pricingRuleManagementController);
+    appControllers.controller('WhS_BE_SalePricingRuleManagementController', salePricingRuleManagementController);
 })(appControllers);

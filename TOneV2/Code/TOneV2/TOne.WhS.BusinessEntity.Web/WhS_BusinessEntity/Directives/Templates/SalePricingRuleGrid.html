@@ -1,0 +1,15 @@
+﻿<vr-row>
+    <vr-columns colnum="12" simplecol>
+        <vr-datagrid datasource="salePricingRules"
+                     dataretrievalfunction="dataRetrievalFunction"
+                     pagingtype="'PagingOnScroll'"
+                     on-ready="gridReady"
+                     menuactions="gridMenuActions"
+                     idfield="PricingProductId">
+            <vr-datagridcolumn headertext="'Description'" field="'Description'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Rule Type'" field="'Settings.RuleType'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Selling Product Id'" field="'Criteria.SellingProductId'"></vr-datagridcolumn>
+        </vr-datagrid>
+
+    </vr-columns>
+</vr-row>

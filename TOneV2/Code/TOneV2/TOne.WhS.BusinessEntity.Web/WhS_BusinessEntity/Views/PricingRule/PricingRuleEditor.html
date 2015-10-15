@@ -1,9 +1,32 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿<div vr-modalcontent ng-controller="WhS_BE_PricingRuleEditorController" vr-loader="isGettingData" width="'70%'">
+    <vr-modalbody>
+        <vr-form name="formPricingRuleEditor">
+            <vr-choices selectedindex="0">
+                <vr-choice isselected="criteriaSelected">Criteria</vr-choice>
+                <vr-choice isselected="settingsSelected">Settings</vr-choice>
+                <vr-choice isselected="schedulerSelected">Scheduler</vr-choice>
+            </vr-choices>
+            <div ng-show="criteriaSelected">
+                <vr-row>
+                    <vr-columns width="1/4row">
+                    </vr-columns>
+                </vr-row>
+            </div>
+            <div ng-show="settingsSelected">
 
-</body>
-</html>
+            </div>
+            <div ng-show="schedulerSelected">
+
+            </div>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formPricingRuleEditor" data-onclick="SavePricingRule"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>

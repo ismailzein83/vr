@@ -115,6 +115,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules.Web">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Web.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -136,6 +139,7 @@
     <Compile Include="Controllers\PricingProductController.cs" />
     <Compile Include="Controllers\RouteRuleController.cs" />
     <Compile Include="Controllers\RoutingProductController.cs" />
+    <Compile Include="Controllers\SalePricingRuleController.cs" />
     <Compile Include="Controllers\SaleZoneController.cs" />
     <Compile Include="Controllers\SaleZonePackageController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -164,6 +168,7 @@
     <Content Include="WhS_BusinessEntity\Directives\Templates\CarrierAccountGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Templates\CarrierProfileGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Templates\CustomerPricingProductGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\Templates\SalePricingRuleGrid.html" />
     <Content Include="WhS_BusinessEntity\Directives\Templates\SelectiveCodeCriteriaDirectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Templates\SelectiveCustomersDirectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Templates\SelectiveSaleZonesDirectiveTemplate.html" />
@@ -176,6 +181,7 @@
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-customerpricingproductgrid-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-pricingproductgrid-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-routingproduct-directive.js" />
+    <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-salepricingrulegrid-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-salezonepackages-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-selectivecodecriteria-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\vr-whs-be-selectivecustomers-directive.js" />
@@ -186,7 +192,7 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\CarrierProfileAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CustomerPricingProductAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\PricingProductAPIService.js" />
-    <Content Include="WhS_BusinessEntity\Services\APIServices\PricingRuleAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\SalePricingRuleAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\RouteRuleAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\RoutingProductAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleZoneAPIService.js" />
@@ -209,8 +215,10 @@
     <Content Include="WhS_BusinessEntity\Views\PricingProduct\PricingProductEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\PricingRule\PricingRuleEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\PricingRule\PricingRuleEditorController.js" />
-    <Content Include="WhS_BusinessEntity\Views\PricingRule\PricingRuleManagement.html" />
-    <Content Include="WhS_BusinessEntity\Views\PricingRule\PricingRuleManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\PricingRule\PurchasePricingRuleManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\PricingRule\PurchasePricingRuleManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\PricingRule\SalePricingRuleManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\PricingRule\SalePricingRuleManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\RouteRule\Grids\RouteRuleGrid.html" />
     <Content Include="WhS_BusinessEntity\Views\RouteRule\Grids\RouteRuleGridController.js" />
     <Content Include="WhS_BusinessEntity\Views\PricingProduct\PricingProductManagement.html" />

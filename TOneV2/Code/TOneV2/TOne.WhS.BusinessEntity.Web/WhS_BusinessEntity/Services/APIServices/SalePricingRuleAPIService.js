@@ -1,14 +1,14 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    pricingRuleAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_BE_ModuleConfig'];
+    salePricingRuleAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_BE_ModuleConfig'];
 
-    function pricingRuleAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig) {
+    function salePricingRuleAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig) {
 
-        //function GetFilteredCarrierProfiles(input) {
-        //    return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierProfile", "GetFilteredCarrierProfiles"), input);
-        //}
 
+        function GetFilteredSalePricingRules(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SalePricingRule", "GetFilteredSalePricingRules"), input);
+        }
         //function GetCarrierProfile(carrierProfileId) {
         //    return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierProfile", "GetCarrierProfile"), {
         //        carrierProfileId: carrierProfileId
@@ -22,14 +22,16 @@
         //function UpdateCarrierProfile(carrierProfileObject) {
         //    return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierProfile", "UpdateCarrierProfile"), carrierProfileObject);
         //}
-        function AddPricingRule(pricingRuleObj) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "PricingRule", "AddPricingRule"), pricingRuleObj);
+
+        function AddRule(pricingRuleObj) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SalePricingRule", "AddRule"), pricingRuleObj);
         }
         return ({
-            AddPricingRule: AddPricingRule,
+            AddRule: AddRule,
+            GetFilteredSalePricingRules: GetFilteredSalePricingRules
         });
     }
 
-    appControllers.service('WhS_BE_PricingRuleAPIService', pricingRuleAPIService);
+    appControllers.service('WhS_BE_SalePricingRuleAPIService', salePricingRuleAPIService);
 
 })(appControllers);
