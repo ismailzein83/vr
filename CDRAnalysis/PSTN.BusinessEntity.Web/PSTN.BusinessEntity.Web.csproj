@@ -187,8 +187,8 @@
     <Content Include="PSTN_BusinessEntity\Views\NetworkInfrastructure\SwitchEditorController.js" />
     <Content Include="PSTN_BusinessEntity\Views\NetworkInfrastructure\SwitchManagement.html" />
     <Content Include="PSTN_BusinessEntity\Views\NetworkInfrastructure\SwitchManagementController.js" />
-    <Content Include="PSTN_BusinessEntity\Views\Templates\NormalizationRuleDescriptionTemplate.html" />
-    <Content Include="PSTN_BusinessEntity\Views\Templates\NormalizationRuleDescriptionTemplateController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\Templates\NormalizationRuleSummaryTemplate.html" />
+    <Content Include="PSTN_BusinessEntity\Views\Templates\NormalizationRuleSummaryTemplateController.js" />
     <Content Include="PSTN_BusinessEntity\Views\NetworkInfrastructure\TrunkEditor.html" />
     <Content Include="PSTN_BusinessEntity\Views\NetworkInfrastructure\TrunkEditorController.js" />
     <Content Include="PSTN_BusinessEntity\Directives\Templates\TrunkGridTemplate.html" />

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    NormalizationRuleDescriptionTemplateController.$inject = ["$scope"];
+    NormalizationRuleSummaryTemplateController.$inject = ["$scope"];
 
-    function NormalizationRuleDescriptionTemplateController($scope) {
+    function NormalizationRuleSummaryTemplateController($scope) {
 
         defineScope();
         load();
@@ -25,6 +25,6 @@
 
     }
 
-    appControllers.controller("PSTN_BE_NormalizationRuleDescriptionTemplateController", NormalizationRuleDescriptionTemplateController);
+    appControllers.controller("PSTN_BE_NormalizationRuleSummaryTemplateController", NormalizationRuleSummaryTemplateController);
 
 })(appControllers);
