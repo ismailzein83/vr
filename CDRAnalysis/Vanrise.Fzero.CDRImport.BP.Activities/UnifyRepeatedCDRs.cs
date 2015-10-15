@@ -83,6 +83,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
             public decimal? DurationInSeconds { get; set; }
             public DateTime? DisconnectDateTime { get; set; }
             public DateTime? ConnectDateTime { get; set; }
+            public string AreaCode { get; set; }
         }
 
 
@@ -178,7 +179,8 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                             OutTrunkSymbol = subunifiedCDR.OutTrunkSymbol,
                             InTrunkId=subunifiedCDR.InTrunkId,
                             OutTrunkId = subunifiedCDR.OutTrunkId,
-                            SwitchID=subunifiedCDR.SwitchID
+                            SwitchID=subunifiedCDR.SwitchID,
+                            AreaCode = subunifiedCDR.AreaCode
                         }
                    );
 
@@ -196,7 +198,8 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                             OutTrunkSymbol = subunifiedCDR.OutTrunkSymbol,
                             InTrunkId = subunifiedCDR.InTrunkId,
                             OutTrunkId = subunifiedCDR.OutTrunkId,
-                            SwitchID = subunifiedCDR.SwitchID
+                            SwitchID = subunifiedCDR.SwitchID,
+                            AreaCode = subunifiedCDR.AreaCode
                         }
                             );
                     }
@@ -235,7 +238,8 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                 OutTrunkSymbol = stagingCDR.OutTrunkSymbol,
                 InTrunkId = stagingCDR.InTrunkId,
                 OutTrunkId = stagingCDR.OutTrunkId,
-                SwitchID = stagingCDR.SwitchID
+                SwitchID = stagingCDR.SwitchID,
+                AreaCode = stagingCDR.AreaCode
             };
         }
 

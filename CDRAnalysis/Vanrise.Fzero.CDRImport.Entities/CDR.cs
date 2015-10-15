@@ -43,6 +43,7 @@ namespace Vanrise.Fzero.CDRImport.Entities
         public string ServiceVASName { get; set; }
         public int? SwitchID { get; set; }
         public string ReleaseCode { get; set; }
+        public string AreaCode { get; set; }
 
     }
 }

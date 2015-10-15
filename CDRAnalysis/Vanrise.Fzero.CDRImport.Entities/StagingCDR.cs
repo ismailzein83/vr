@@ -21,6 +21,6 @@ namespace Vanrise.Fzero.CDRImport.Entities
         public DateTime? ConnectDateTime { get; set; }
         public int? InTrunkId { get; set; }
         public int? OutTrunkId { get; set; }
-
+        public string AreaCode { get; set; }
     }
 }

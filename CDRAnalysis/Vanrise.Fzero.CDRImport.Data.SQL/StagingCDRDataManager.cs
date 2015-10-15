@@ -19,7 +19,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
             foreach (StagingCDR cdr in cdrs)
             {
-                stream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}",
+                stream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}",
                                  cdr.CGPN
                                   , cdr.CDPN
                                   , cdr.SwitchID
@@ -30,6 +30,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                                   , cdr.DisconnectDateTime
                                   , cdr.InTrunkId
                                   , cdr.OutTrunkId
+                                  , cdr.AreaCode
                                 
                 );
             }
@@ -65,6 +66,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                     stagingCDR.ConnectDateTime = GetReaderValue<DateTime?>(reader, "ConnectDateTime");
                     stagingCDR.InTrunkSymbol = reader["InTrunkSymbol"] as string;
                     stagingCDR.OutTrunkSymbol = reader["OutTrunkSymbol"] as string;
+                    stagingCDR.AreaCode = reader["AreaCode"] as string;
                     stagingCDR.DurationInSeconds = GetReaderValue<Decimal?>(reader, "DurationInSeconds");
                     stagingCDR.DisconnectDateTime = GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
                     stagingCDR.SwitchID = GetReaderValue<int>(reader, "SwitchID");
