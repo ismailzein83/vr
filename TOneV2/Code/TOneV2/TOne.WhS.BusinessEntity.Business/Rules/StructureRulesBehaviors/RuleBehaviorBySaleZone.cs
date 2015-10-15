@@ -5,27 +5,29 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 
-namespace TOne.WhS.BusinessEntity.Business.RouteRules.StructureRuleBehaviors
+namespace TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors
 {
     public class RuleBehaviorBySaleZone : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByKey<long>
     {
         protected override void GetKeysFromRule(Vanrise.Rules.BaseRule rule, out IEnumerable<long> keys)
         {
             IRuleSaleZoneCriteria ruleSaleZoneCriteria = rule as RouteRule;
-            if (ruleSaleZoneCriteria.SaleZoneGroupSettings != null)
-            {
-                SaleZoneManager saleZoneManager = new SaleZoneManager();
-                keys = saleZoneManager.GetSaleZoneIds(ruleSaleZoneCriteria.SaleZoneGroupSettings);
-            }
-            else
-                keys = null;
+            keys = ruleSaleZoneCriteria.SaleZoneIds;
         }
 
         protected override bool TryGetKeyFromTarget(object target, out long key)
         {
-            RouteIdentifier routeIdentifier = target as RouteIdentifier;
-            key = routeIdentifier.SaleZoneId;
-            return true;
+            IRuleSaleZoneTarget ruleSaleZoneTarget = target as IRuleSaleZoneTarget;
+            if (ruleSaleZoneTarget.SaleZoneId.HasValue)
+            {
+                key = ruleSaleZoneTarget.SaleZoneId.Value;
+                return true;
+            }
+            else
+            {
+                key = 0;
+                return false;
+            }
         }
     }
 }

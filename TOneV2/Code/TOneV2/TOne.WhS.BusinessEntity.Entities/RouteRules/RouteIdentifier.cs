@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class RouteIdentifier : Vanrise.Rules.BaseRuleTargetIdentifier
+    public class RouteIdentifier : Vanrise.Rules.BaseRuleTarget, IRuleSaleZoneTarget, IRuleCodeTarget, IRuleCustomerTarget, IRuleRoutingProductTarget
     {
         public string Code { get; set; }
 
@@ -15,5 +15,15 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int CustomerId { get; set; }
 
         public int? RoutingProductId { get; set; }
+
+        long? IRuleSaleZoneTarget.SaleZoneId
+        {
+            get { return this.SaleZoneId; }
+        }
+
+        int? IRuleCustomerTarget.CustomerId
+        {
+            get { return this.CustomerId; }
+        }
     }
 }

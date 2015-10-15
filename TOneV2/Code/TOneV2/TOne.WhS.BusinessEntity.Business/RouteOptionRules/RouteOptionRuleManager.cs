@@ -22,12 +22,12 @@ namespace TOne.WhS.BusinessEntity.Business
         IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetRuleStructureBehaviors()
         {
             List<Vanrise.Rules.BaseRuleStructureBehavior> ruleStructureBehaviors = new List<Vanrise.Rules.BaseRuleStructureBehavior>();
-            ruleStructureBehaviors.Add(new RouteOptionRules.StructureRuleBehaviors.RuleBehaviorBySupplierZone());
-            ruleStructureBehaviors.Add(new RouteOptionRules.StructureRuleBehaviors.RuleBehaviorBySupplier());
-            ruleStructureBehaviors.Add(new RouteRules.StructureRuleBehaviors.RuleBehaviorByCode());
-            ruleStructureBehaviors.Add(new RouteRules.StructureRuleBehaviors.RuleBehaviorBySaleZone());
-            ruleStructureBehaviors.Add(new RouteRules.StructureRuleBehaviors.RuleBehaviorByCustomer());
-            ruleStructureBehaviors.Add(new RouteRules.StructureRuleBehaviors.RuleBehaviorByRoutingProduct());
+            ruleStructureBehaviors.Add(new Rules.StructureRuleBehaviors.RuleBehaviorBySupplierZone());
+            ruleStructureBehaviors.Add(new Rules.StructureRuleBehaviors.RuleBehaviorBySupplier());
+            ruleStructureBehaviors.Add(new Rules.StructureRuleBehaviors.RuleBehaviorByCode());
+            ruleStructureBehaviors.Add(new Rules.StructureRuleBehaviors.RuleBehaviorBySaleZone());
+            ruleStructureBehaviors.Add(new Rules.StructureRuleBehaviors.RuleBehaviorByCustomer());
+            ruleStructureBehaviors.Add(new Rules.StructureRuleBehaviors.RuleBehaviorByRoutingProduct());
             return ruleStructureBehaviors;
         }
 

@@ -11,7 +11,11 @@ namespace TOne.WhS.BusinessEntity.Business.PricingRules
     {
         protected override IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetBehaviors()
         {
-            throw new NotImplementedException();
+            List<Vanrise.Rules.BaseRuleStructureBehavior> behaviors = new List<Vanrise.Rules.BaseRuleStructureBehavior>();
+            behaviors.Add(new Rules.StructureRuleBehaviors.RuleBehaviorByCustomer());
+            behaviors.Add(new Rules.StructureRuleBehaviors.RuleBehaviorBySaleZone());
+
+            return behaviors;
         }
         public Vanrise.Entities.IDataRetrievalResult<SalePricingRule> GetFilteredSalePricingRules(Vanrise.Entities.DataRetrievalInput<object> input)
         {

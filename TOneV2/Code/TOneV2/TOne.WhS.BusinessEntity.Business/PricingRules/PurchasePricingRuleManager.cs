@@ -11,7 +11,11 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         protected override IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetBehaviors()
         {
-            throw new NotImplementedException();
+            List<Vanrise.Rules.BaseRuleStructureBehavior> behaviors = new List<Vanrise.Rules.BaseRuleStructureBehavior>();
+            behaviors.Add(new Rules.StructureRuleBehaviors.RuleBehaviorBySupplier());
+            behaviors.Add(new Rules.StructureRuleBehaviors.RuleBehaviorBySupplierZone());
+
+            return behaviors;
         }
     }
 }

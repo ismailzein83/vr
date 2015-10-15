@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public interface IRuleCustomerCriteria
+    public class SupplierGroupContext
     {
-        CustomerGroupSettings CustomerGroupSettings { get; }
     }
 }

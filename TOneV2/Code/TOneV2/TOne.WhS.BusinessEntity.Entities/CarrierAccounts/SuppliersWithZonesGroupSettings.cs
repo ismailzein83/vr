@@ -9,5 +9,10 @@ namespace TOne.WhS.BusinessEntity.Entities
     public abstract class SuppliersWithZonesGroupSettings
     {
         public int ConfigId { get; set; }
+
+        public virtual IEnumerable<SupplierWithZones> GetSuppliersWithZones(SuppliersWithZonesGroupContext context)
+        {
+            return null;
+        }
     }    
 }

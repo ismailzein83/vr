@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class RouteOptionRule : Vanrise.Rules.BaseRule, IRuleCustomerCriteria, IRuleCodeCriteria, IRuleSaleZoneCriteria, IRuleRoutingProductCriteria
+    public class RouteOptionRule : Vanrise.Rules.BaseRule, IRuleSupplierCriteria, IRuleSupplierZoneCriteria, IRuleCustomerCriteria, IRuleCodeCriteria, IRuleSaleZoneCriteria, IRuleRoutingProductCriteria
     {
         public RouteOptionRuleCriteria Criteria { get; set; }
 
@@ -24,24 +24,52 @@ namespace TOne.WhS.BusinessEntity.Entities
             return false;
         }
 
-        public CustomerGroupSettings CustomerGroupSettings
+        public IEnumerable<int> SupplierIds
         {
-            get { return this.Criteria != null ? this.Criteria.CustomerGroupSettings : null; }
+            get
+            {
+                if(this.Criteria != null && this.Criteria.SuppliersWithZonesGroupSettings != null)
+                {
+                    var suppliersWithZones = this.Criteria.SuppliersWithZonesGroupSettings.GetSuppliersWithZones(null);
+                    if (suppliersWithZones != null)
+                        return suppliersWithZones.Select(itm => itm.SupplierId);
+                }
+                return null;
+            }
         }
 
-        public CodeCriteriaGroupSettings CodeCriteriaGroupSettings
+        public IEnumerable<long> SupplierZoneIds
         {
-            get { return this.Criteria != null ? this.Criteria.CodeCriteriaGroupSettings : null; }
+            get
+            {
+                if (this.Criteria != null && this.Criteria.SuppliersWithZonesGroupSettings != null)
+                {
+                    var suppliersWithZones = this.Criteria.SuppliersWithZonesGroupSettings.GetSuppliersWithZones(null);
+                    if (suppliersWithZones != null)
+                        return suppliersWithZones.SelectMany(itm => itm.SupplierZoneIds != null ? itm.SupplierZoneIds : new List<long>());
+                }
+                return null;
+            }
         }
 
-        public SaleZoneGroupSettings SaleZoneGroupSettings
+        public IEnumerable<long> SaleZoneIds
         {
-            get { return this.Criteria != null ? this.Criteria.SaleZoneGroupSettings : null; }
+            get { return this.Criteria != null && this.Criteria.SaleZoneGroupSettings != null ? this.Criteria.SaleZoneGroupSettings.GetZoneIds(null) : null; }
         }
 
-        public int? RoutingProductId
+        public IEnumerable<CodeCriteria> CodeCriterias
         {
-            get { return this.Criteria != null ? this.Criteria.RoutingProductId : null; }
+            get { return this.Criteria != null && this.Criteria.CodeCriteriaGroupSettings != null ? this.Criteria.CodeCriteriaGroupSettings.GetCodeCriterias(null) : null; }
+        }
+
+        public IEnumerable<int> CustomerIds
+        {
+            get { return this.Criteria != null && this.Criteria.CustomerGroupSettings != null ? this.Criteria.CustomerGroupSettings.GetCustomerIds(null) : null; }
+        }
+
+        public IEnumerable<int> RoutingProductIds
+        {
+            get { return this.Criteria != null && this.Criteria.RoutingProductId.HasValue ? new List<int> { this.Criteria.RoutingProductId.Value } : null; }
         }
     }
 }

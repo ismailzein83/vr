@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 
-namespace TOne.WhS.BusinessEntity.Business.RouteRules.StructureRuleBehaviors
+namespace TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors
 {
     public class RuleBehaviorByCode : Vanrise.Rules.BaseRuleStructureBehavior
     {
@@ -50,20 +50,24 @@ namespace TOne.WhS.BusinessEntity.Business.RouteRules.StructureRuleBehaviors
             {
                 keys = null;
                 IRuleCodeCriteria ruleCodeCriteria = rule as IRuleCodeCriteria;
-                if (ruleCodeCriteria.CodeCriteriaGroupSettings != null)
-                {
-                    CodeManager codeManager = new CodeManager();
-                    List<CodeCriteria> codeCriterias = codeManager.GetCodeCriterias(ruleCodeCriteria.CodeCriteriaGroupSettings.ConfigId, ruleCodeCriteria.CodeCriteriaGroupSettings);
-                    if (codeCriterias != null)
-                        keys = codeCriterias.Where(code => !code.WithSubCodes).Select(code => code.Code);
-                }
+                IEnumerable<CodeCriteria> codeCriterias = ruleCodeCriteria.CodeCriterias;
+                if (codeCriterias != null)
+                    keys = codeCriterias.Where(code => !code.WithSubCodes).Select(code => code.Code);
             }
 
             protected override bool TryGetKeyFromTarget(object target, out string key)
             {
-                RouteIdentifier routeIdentifier = target as RouteIdentifier;
-                key = routeIdentifier.Code;
-                return true;
+                IRuleCodeTarget ruleCodeTarget = target as IRuleCodeTarget;
+                if (ruleCodeTarget.Code != null)
+                {
+                    key = ruleCodeTarget.Code;
+                    return true;
+                }
+                else
+                {
+                    key = null;
+                    return false;
+                }
             }
         }
 
@@ -73,20 +77,24 @@ namespace TOne.WhS.BusinessEntity.Business.RouteRules.StructureRuleBehaviors
             {
                 prefixes = null;
                 IRuleCodeCriteria ruleCodeCriteria = rule as IRuleCodeCriteria;
-                if (ruleCodeCriteria.CodeCriteriaGroupSettings != null)
-                {
-                    CodeManager codeManager = new CodeManager();
-                    List<CodeCriteria> codeCriterias = codeManager.GetCodeCriterias(ruleCodeCriteria.CodeCriteriaGroupSettings.ConfigId, ruleCodeCriteria.CodeCriteriaGroupSettings);
-                    if(codeCriterias != null)
-                        prefixes = codeCriterias.Where(code => code.WithSubCodes).Select(code => code.Code);
-                }                    
+                IEnumerable<CodeCriteria> codeCriterias = ruleCodeCriteria.CodeCriterias;
+                if (codeCriterias != null)
+                    prefixes = codeCriterias.Where(code => code.WithSubCodes).Select(code => code.Code);
             }
 
             protected override bool TryGetValueToCompareFromTarget(object target, out string value)
             {
-                RouteIdentifier routeIdentifier = target as RouteIdentifier;
-                value = routeIdentifier.Code;
-                return true;
+                IRuleCodeTarget ruleCodeTarget = target as IRuleCodeTarget;
+                if (ruleCodeTarget.Code != null)
+                {
+                    value = ruleCodeTarget.Code;
+                    return true;
+                }
+                else
+                {
+                    value = null;
+                    return false;
+                }
             }
         }
 

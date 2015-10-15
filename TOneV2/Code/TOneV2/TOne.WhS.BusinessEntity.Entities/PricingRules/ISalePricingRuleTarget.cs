@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public abstract class PricingRuleTarget : Vanrise.Rules.BaseRuleTarget
+    public interface ISalePricingRuleTarget : IRuleCustomerTarget, IRuleSaleZoneTarget
     {
-        public abstract PricingRuleType RuleType { get; }
     }
 }

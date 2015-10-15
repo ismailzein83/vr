@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class RouteOptionIdentifier : RouteIdentifier, IRuleSupplierTarget, IRuleSupplierZoneTarget
+    public class PurchasePricingRuleTariffTarget : PricingRuleTariffTarget, IPurchasePricingRuleTarget
     {
         public int SupplierId { get; set; }
 

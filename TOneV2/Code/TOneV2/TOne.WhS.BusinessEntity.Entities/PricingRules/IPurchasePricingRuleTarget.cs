@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public interface IRuleCodeCriteria
+    public interface IPurchasePricingRuleTarget : IRuleSupplierTarget, IRuleSupplierZoneTarget
     {
-        CodeCriteriaGroupSettings CodeCriteriaGroupSettings { get; }
+        
     }
 }

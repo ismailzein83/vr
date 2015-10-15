@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public interface IRuleRoutingProductCriteria
+    public class SuppliersWithZonesGroupContext
     {
-        int? RoutingProductId { get; }
     }
 }

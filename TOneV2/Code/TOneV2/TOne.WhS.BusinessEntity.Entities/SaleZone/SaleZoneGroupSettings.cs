@@ -11,6 +11,11 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int ConfigId { get; set; }
 
         public int? SaleZonePackageId { get; set; }
+
+        public virtual IEnumerable<long> GetZoneIds(SaleZoneGroupContext context)
+        {
+            return null;
+        }
     }
 
     public class SelectiveSaleZonesSettings : SaleZoneGroupSettings

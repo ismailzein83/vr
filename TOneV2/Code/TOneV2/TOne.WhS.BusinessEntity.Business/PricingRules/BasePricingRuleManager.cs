@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public abstract class BasePricingRuleManager<T> : Vanrise.Rules.RuleManager<T> where T : BasePricingRule
     {
-        public T GetMatchRule(PricingRuleTargetIdentifier target)
+        public T GetMatchRule(PricingRuleTarget target)
         {
             var ruleTree = GetRuleTree(target.RuleType);
             if (ruleTree == null)

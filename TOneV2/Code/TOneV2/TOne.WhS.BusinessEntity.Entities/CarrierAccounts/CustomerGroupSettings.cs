@@ -9,6 +9,11 @@ namespace TOne.WhS.BusinessEntity.Entities
     public abstract class CustomerGroupSettings
     {
         public int ConfigId { get; set; }
+
+        public virtual IEnumerable<int> GetCustomerIds(CustomerGroupContext context)
+        {
+            return null;
+        }
     }
 
     public class SelectiveCustomersSettings : CustomerGroupSettings

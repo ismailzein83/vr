@@ -5,27 +5,22 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 
-namespace TOne.WhS.BusinessEntity.Business.RouteRules.StructureRuleBehaviors
+namespace TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors
 {
     public class RuleBehaviorByRoutingProduct : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByKey<int>
     {
         protected override void GetKeysFromRule(Vanrise.Rules.BaseRule rule, out IEnumerable<int> keys)
         {
             IRuleRoutingProductCriteria ruleRoutingProductCriteria = rule as IRuleRoutingProductCriteria;
-            if (ruleRoutingProductCriteria.RoutingProductId.HasValue)
-            {
-                keys = new List<int> { ruleRoutingProductCriteria.RoutingProductId.Value };
-            }
-            else
-                keys = null;
+            keys = ruleRoutingProductCriteria.RoutingProductIds;
         }
 
         protected override bool TryGetKeyFromTarget(object target, out int key)
         {
-            RouteIdentifier routeIdentifier = target as RouteIdentifier;
-            if (routeIdentifier.RoutingProductId.HasValue)
+            IRuleRoutingProductTarget ruleRoutingProductTarget = target as IRuleRoutingProductTarget;
+            if (ruleRoutingProductTarget.RoutingProductId.HasValue)
             {
-                key = routeIdentifier.RoutingProductId.Value;
+                key = ruleRoutingProductTarget.RoutingProductId.Value;
                 return true;
             }
             else

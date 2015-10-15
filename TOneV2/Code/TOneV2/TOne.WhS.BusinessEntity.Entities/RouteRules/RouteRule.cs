@@ -28,25 +28,24 @@ namespace TOne.WhS.BusinessEntity.Entities
             return false;
         }
 
-
-        public CustomerGroupSettings CustomerGroupSettings
+        public IEnumerable<long> SaleZoneIds
         {
-            get { return this.RouteCriteria != null ? this.RouteCriteria.CustomerGroupSettings : null; }
+            get { return this.RouteCriteria != null && this.RouteCriteria.SaleZoneGroupSettings != null ? this.RouteCriteria.SaleZoneGroupSettings.GetZoneIds(null) : null; }
         }
 
-        public CodeCriteriaGroupSettings CodeCriteriaGroupSettings
+        public IEnumerable<CodeCriteria> CodeCriterias
         {
-            get { return this.RouteCriteria != null ? this.RouteCriteria.CodeCriteriaGroupSettings : null; }
+            get { return this.RouteCriteria != null && this.RouteCriteria.CodeCriteriaGroupSettings != null ? this.RouteCriteria.CodeCriteriaGroupSettings.GetCodeCriterias(null) : null; }
         }
 
-        public SaleZoneGroupSettings SaleZoneGroupSettings
+        public IEnumerable<int> CustomerIds
         {
-            get { return this.RouteCriteria != null ? this.RouteCriteria.SaleZoneGroupSettings : null; }
+            get { return this.RouteCriteria != null && this.RouteCriteria.CustomerGroupSettings != null ? this.RouteCriteria.CustomerGroupSettings.GetCustomerIds(null) : null; }
         }
 
-        public int? RoutingProductId
+        public IEnumerable<int> RoutingProductIds
         {
-            get { return this.RouteCriteria != null ? this.RouteCriteria.RoutingProductId : null; }
+            get { return this.RouteCriteria != null && this.RouteCriteria.RoutingProductId.HasValue ? new List<int> { this.RouteCriteria.RoutingProductId.Value} : null; }
         }
     }
 }

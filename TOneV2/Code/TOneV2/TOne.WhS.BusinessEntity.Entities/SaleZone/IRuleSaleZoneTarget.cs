@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public interface IRuleSaleZoneCriteria
+    public interface IRuleSaleZoneTarget
     {
-        SaleZoneGroupSettings SaleZoneGroupSettings { get; }
+        long? SaleZoneId { get; }
     }
 }
