@@ -263,16 +263,16 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
             chartData.push(dataItem);
             othersValue -= itm.Data[measure.propertyName];
         });
-        chartData.sort(function (a, b) {
-            if (a.value > b.value) {
-                return 1;
-            }
-            if (a.value < b.value) {
-                return -1;
-            }
-            // a must be equal to b
-            return 0;
-        });
+        //chartData.sort(function (a, b) {
+        //    if (a.value > b.value) {
+        //        return 1;
+        //    }
+        //    if (a.value < b.value) {
+        //        return -1;
+        //    }
+        //    // a must be equal to b
+        //    return 0;
+        //});
         chartData.push({
             entityName: "Others",
             value: othersValue

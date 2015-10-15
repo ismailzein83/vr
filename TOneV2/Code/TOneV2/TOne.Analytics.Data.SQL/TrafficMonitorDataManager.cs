@@ -103,7 +103,7 @@ namespace TOne.Analytics.Data.SQL
 			                FROM TrafficStats ts WITH(NOLOCK ,INDEX(IX_TrafficStats_DateTimeFirst)) {1}
 			                WHERE {2} AND  ts.FirstCDRAttempt BETWEEN @FromDate AND @ToDate 
 			                 )
-                           SELECT * FROM AllResult ORDER BY Attempts END  ", columnName, joinStatement.Count != 0 ? string.Join(" ", joinStatement) : null,trafficStatisticCommon.GetColumnFilter(filterByColumn, columnFilterValue));
+                           SELECT * FROM AllResult ORDER BY Attempts DESC END  ", columnName, joinStatement.Count != 0 ? string.Join(" ", joinStatement) : null,trafficStatisticCommon.GetColumnFilter(filterByColumn, columnFilterValue));
             return GetItemsText(query, TrafficStatisticChartMapper,
                 (cmd) =>
                 {
@@ -176,7 +176,7 @@ namespace TOne.Analytics.Data.SQL
 			                        FirstCDRAttempt BETWEEN @FromDate AND @ToDate
                                     #FILTER#
 			                        GROUP BY #GROUPBYPART#)
-                            SELECT * INTO #TEMPTABLE# FROM AllResult
+                            SELECT * INTO #TEMPTABLE# FROM AllResult 
                             END");
             StringBuilder groupKeysSelectPart = new StringBuilder();
             StringBuilder groupKeysGroupByPart = new StringBuilder();
@@ -234,7 +234,7 @@ namespace TOne.Analytics.Data.SQL
 				                           , Sum(ts.NumberOfCalls) AS NumberOfCalls
 				                           , SUM(ts.DeliveredNumberOfCalls) AS DeliveredNumberOfCalls
                                         , Max(ts.LastCDRAttempt) as LastCDRAttempt
-				                           , AVG(ts.PGAD) AS PGAD FROM {0} ts", tempTableName);
+				                           , AVG(ts.PGAD) AS PGAD FROM {0} ts ", tempTableName);
             return GetItemText(query, TrafficStatisticMapper, null);
 
 
