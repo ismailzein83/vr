@@ -12,7 +12,6 @@
 
         loadParameters();
         defineScope();
-        load();
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
@@ -54,6 +53,7 @@
 
             $scope.onRuleTypeDirectiveLoaded = function (api) {
                 ruleTypeDirectiveAPI = api;
+                load();
             }
 
             /* Settings */
@@ -119,6 +119,10 @@
         }
 
         function load() {
+
+            if (ruleTypeDirectiveAPI == undefined)
+                return;
+
             $scope.isGettingData = true;
 
             UtilsService.waitMultipleAsyncOperations([loadSwitches, loadTrunks, loadTemplates])
@@ -126,6 +130,8 @@
                     if (editMode) {
                         NormalizationRuleAPIService.GetNormalizationRuleById(normalizationRuleId)
                             .then(function (responseObject) {
+
+
                                 fillScopeFromNormalizationRuleObj(responseObject);
                             })
                             .catch(function (error) {
@@ -189,6 +195,8 @@
             $scope.phoneNumberPrefix = normalizationRuleObj.Criteria.PhoneNumberPrefix;
 
             addRetrievedNormalizationRuleActionSettingsToList(normalizationRuleObj.Settings.Actions);
+
+            ruleTypeDirectiveAPI.setData(normalizationRuleObj.Settings);
 
             $scope.beginEffectiveDate = normalizationRuleObj.BeginEffectiveDate;
             $scope.endEffectiveDate = normalizationRuleObj.EndEffectiveDate;
@@ -293,9 +301,7 @@
                 Settings: {
                     Actions: ($scope.normalizationRuleActionSettingsList.length > 0) ? getNormalizationRuleActionSettings() : null
                 },
-                OtherSettings: {
-                    Actions: ruleTypeDirectiveAPI.getData()
-                },
+                OtherSettings: ruleTypeDirectiveAPI.getData(),
                 Description: $scope.description,
                 BeginEffectiveDate: $scope.beginEffectiveDate,
                 EndEffectiveDate: $scope.endEffectiveDate

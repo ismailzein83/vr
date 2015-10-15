@@ -93,12 +93,15 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
             api.getData = function () {
                 return {
                     $type: "PSTN.BusinessEntity.Entities.Normalization.RuleTypes.NormalizeNumber.NormalizationRuleAdjustNumberSettings, PSTN.BusinessEntity.Entities",
-                    Data: ($scope.actions.length > 0) ? getActions() : null
+                    Actions: ($scope.actions.length > 0) ? getActions() : null
                 };
             }
 
-            api.setData = function (actionList) {
-                angular.forEach(actionList, function (item) {
+            api.setData = function (adjustNumberSettings) {
+                if (adjustNumberSettings == undefined || adjustNumberSettings == null)
+                    return;
+
+                angular.forEach(adjustNumberSettings.Actions, function (item) {
                     var action = getActionItem(item);
                     $scope.actions.push(action);
                 });
@@ -136,7 +139,6 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
                 actionItem.ActionDirectiveAPI = api;
                 actionItem.ActionDirectiveAPI.setData(actionItem.Data);
 
-                actionItem.ConfigId = undefined;
                 actionItem.Data = undefined;
                 actionItem.onActionDirectiveAPILoaded = undefined;
             }

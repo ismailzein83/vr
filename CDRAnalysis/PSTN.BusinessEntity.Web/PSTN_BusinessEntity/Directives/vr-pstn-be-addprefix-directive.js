@@ -46,7 +46,7 @@ app.directive("vrPstnBeAddprefix", [function () {
 
             api.getData = function () {
                 return {
-                    $type: "PSTN.BusinessEntity.Entities.Normalization.Actions.AddPrefixActionSettings, PSTN.BusinessEntity.Entities",
+                    $type: "PSTN.BusinessEntity.Entities.Normalization.RuleTypes.NormalizeNumber.Actions.AddPrefixActionSettings, PSTN.BusinessEntity.Entities",
                     ConfigId: ctrl.configid,
                     Prefix: $scope.numberPrefix
                 };

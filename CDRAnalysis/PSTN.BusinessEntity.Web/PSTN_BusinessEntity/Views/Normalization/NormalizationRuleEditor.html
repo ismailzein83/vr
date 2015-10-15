@@ -20,7 +20,7 @@
               
             <div ng-show="criteriaSelected">
                 <vr-row>
-                    <vr-columns width="1/3row">
+                    <vr-columns width="normal">
                         <vr-select label="Switch"
                                    datasource="switches"
                                    selectedvalues="selectedSwitches"
@@ -32,7 +32,7 @@
                         </vr-select>
                     </vr-columns>
 
-                    <vr-columns width="1/3row">
+                    <vr-columns width="normal">
                         <vr-select label="Trunk"
                                    datasource="getSwitchRelatedTrunks"
                                    selectedvalues="selectedTrunks"
@@ -44,7 +44,7 @@
                         </vr-select>
                     </vr-columns>
 
-                    <vr-columns width="1/3row">
+                    <vr-columns width="normal">
                         <vr-select label="Number Type"
                                    datasource="phoneNumberTypes"
                                    selectedvalues="selectedPhoneNumberType"
@@ -56,11 +56,11 @@
                         </vr-select>
                     </vr-columns>
 
-                    <vr-columns width="1/3row">
+                    <vr-columns width="normal">
                         <vr-textbox label="Number Length" value="phoneNumberLength" type="number" maxlength="2" minvalue="1" maxvalue="99"></vr-textbox>
                     </vr-columns>
 
-                    <vr-columns width="1/3row">
+                    <vr-columns width="normal">
                         <vr-textbox label="Number Prefix" value="phoneNumberPrefix"></vr-textbox>
                     </vr-columns>
                 </vr-row>
