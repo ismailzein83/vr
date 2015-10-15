@@ -57,6 +57,18 @@
                         </vr-columns>
 
                         <vr-columns width="normal">
+                            <vr-select label="Type"
+                                       datasource="ruleTypes"
+                                       selectedvalues="selectedRuleTypes"
+                                       datavaluefield="value"
+                                       datatextfield="description"
+                                       entityname="Type"
+                                       ismultipleselection
+                                       ng-show="advancedSelected">
+                            </vr-select>
+                        </vr-columns>
+
+                        <vr-columns width="normal">
                             <vr-textbox label="Description" value="description" ng-show="advancedSelected"></vr-textbox>
                         </vr-columns>
                     </vr-row>

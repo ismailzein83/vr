@@ -40,7 +40,6 @@ namespace PSTN.BusinessEntity.Business
         //  }
         //}
 
-
         public void Normalize(Vanrise.Fzero.CDRImport.Entities.StagingCDR cdr)
         {
             NormalizationRuleAdjustNumberTarget cdrInfo_CGPN = new NormalizationRuleAdjustNumberTarget { PhoneNumber = cdr.CGPN, SwitchId = cdr.SwitchID, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId };
@@ -162,7 +161,6 @@ namespace PSTN.BusinessEntity.Business
             Vanrise.Common.TemplateConfigManager templateConfigManager = new Vanrise.Common.TemplateConfigManager();
             return templateConfigManager.GetBehavior<Entities.NormalizationRuleSetAreaBehavior>(behaviorId);
         }
-        
 
         IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetRuleStructureBehaviors()
         {
@@ -211,6 +209,11 @@ namespace PSTN.BusinessEntity.Business
                         (
                             input.Query.TrunkIds == null ||
                             (item.Criteria.TrunkIds != null && ListContains(input.Query.TrunkIds, item.Criteria.TrunkIds))
+                        )
+                        &&
+                        (
+                            input.Query.RuleTypes == null ||
+                            input.Query.RuleTypes.Contains(item.Settings.RuleType)
                         )
                         &&
                         (

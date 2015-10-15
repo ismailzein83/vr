@@ -17,6 +17,8 @@ namespace PSTN.BusinessEntity.Entities
 
         public List<int> TrunkIds { get; set; }
 
+        public List<NormalizationRuleType> RuleTypes { get; set; }
+
         public string Description { get; set; }
     }
 }
