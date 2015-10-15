@@ -5,8 +5,8 @@ app.directive("vrPstnBeNormalizenumber", [function () {
     var directiveDefinitionObj = {
         restrict: "E",
         scope: {
-            onloaded: "=",
-            configid: "="
+            configid: "=",
+            onloaded: "="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -31,10 +31,46 @@ app.directive("vrPstnBeNormalizenumber", [function () {
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;
 
-        $scope.message = "Mohamad";
-
         function initializeController() {
-            defineAPI();
+            defineScope();
+
+            load().then(function () {
+                defineAPI();
+            });
+        }
+
+        // private members
+
+        var normalizationRuleAdjustNumberSettingsDirectiveAPI;
+
+        function defineScope() {
+
+            $scope.templates = [];
+            $scope.selectedNormalizationRuleAdjustNumberActionSettingsTemplate = undefined;
+            $scope.disableAddButton = true;
+
+            $scope.normalizationRuleAdjustNumberActionSettingsList = [];
+
+            $scope.onTemplateChanged = function () {
+                $scope.disableAddButton = ($scope.selectedTemplate == undefined);
+            }
+        }
+
+        function load() {
+            $scope.isLoadingTemplates = true;
+
+            NormalizationRuleAPIService.GetNormalizationRuleAdjustNumberActionSettingsTemplates()
+                .then(function (response) {
+                    angular.forEach(response, function (item) {
+                        $scope.normalizationRuleAdjustNumberActionSettingsTemplates.push(item);
+                    });
+                })
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+                .finally(function () {
+                    $scope.isLoadingTemplates = false;
+                }); 
         }
 
         function defineAPI() {
@@ -43,13 +79,12 @@ app.directive("vrPstnBeNormalizenumber", [function () {
             api.getData = function () {
                 return {
                     $type: "PSTN.BusinessEntity.Entities.Normalization.NormalizationRuleSettings, PSTN.BusinessEntity.Entities",
-                    ConfigId: ctrl.configid,
-                    Message: $scope.message
+                    ConfigId: ctrl.configid
                 };
             }
 
             api.setData = function (normalizationRuleSettings) {
-                $scope.message = normalizationRuleSettings.Message;
+
             }
 
             if (ctrl.onloaded != null)

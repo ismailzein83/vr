@@ -8,7 +8,7 @@
 
         var editMode;
         var normalizationRuleId;
-        var normalizationRuleTypeDirectiveAPI;
+        var normalizationRuleSettingsDirectiveAPI;
 
         loadParameters();
         defineScope();
@@ -47,17 +47,16 @@
             $scope.beginEffectiveDate = Date.now();
             $scope.endEffectiveDate = undefined;
 
-            /* Just do it */
+            /* Settings */
 
-            $scope.normalizationRuleTypeTemplates = [];
-            $scope.selectedNormalizationRuleTypeTemplate = undefined;
+            $scope.normalizationRuleSettingsTemplates = [];
+            $scope.selectedNormalizationRuleSettingsTemplate = undefined;
 
-            $scope.onNormalizationRuleTypeDirectiveAPILoaded = function (api) {
-                normalizationRuleTypeDirectiveAPI = api;
-                console.log(api.getData());
+            $scope.onNormalizationRuleSettingsDirectiveAPILoaded = function (api) {
+                normalizationRuleSettingsDirectiveAPI = api;
             }
 
-            /* Just do it */
+            /* Settings */
 
             $scope.onSelectedSwitchesChanged = function () {
 
@@ -122,7 +121,7 @@
         function load() {
             $scope.isGettingData = true;
 
-            UtilsService.waitMultipleAsyncOperations([loadSwitches, loadTrunks, loadTemplates, loadNormalizationRuleTypeTemplates])
+            UtilsService.waitMultipleAsyncOperations([loadSwitches, loadTrunks, loadTemplates, loadNormalizationRuleSettingsTemplates])
                 .then(function () {
                     if (editMode) {
                         NormalizationRuleAPIService.GetNormalizationRuleById(normalizationRuleId)
@@ -174,15 +173,13 @@
                 });
         }
 
-        function loadNormalizationRuleTypeTemplates() {
+        function loadNormalizationRuleSettingsTemplates() {
 
-            return NormalizationRuleAPIService.GetNormalizationRuleTypeTemplates()
+            return NormalizationRuleAPIService.GetNormalizationRuleSettingsTemplates()
                 .then(function (response) {
                     angular.forEach(response, function (item) {
-                        $scope.normalizationRuleTypeTemplates.push(item);
+                        $scope.normalizationRuleSettingsTemplates.push(item);
                     });
-
-                    console.log($scope.normalizationRuleTypeTemplates);
                 });
         }
 

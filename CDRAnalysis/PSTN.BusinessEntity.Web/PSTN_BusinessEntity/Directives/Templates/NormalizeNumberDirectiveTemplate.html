@@ -1,12 +1,12 @@
-﻿<vr-row>
+﻿<vr-row vr-loader="isLoadingTemplates">
     <vr-columns width="fullrow">
 
         <vr-row>
-            <vr-columns width="1/3row">
+            <vr-columns width="normal">
                 <vr-select label="Action Type"
-                           datasource="normalizationRuleActionSettingsTemplates"
-                           selectedvalues="selectedNormalizationRuleActionSettingsTemplate"
-                           onselectionchanged="onNormalizationRuleActionSettingsTemplateChanged"
+                           datasource="normalizationRuleAdjustNumberActionSettingsTemplates"
+                           selectedvalues="selectedNormalizationRuleAdjustNumberActionSettingsTemplate"
+                           onselectionchanged="onNormalizationRuleAdjustNumberActionSettingsTemplateChanged"
                            datavaluefield="TemplateConfigID"
                            datatextfield="Name"
                            entityname="Action Type"
@@ -14,9 +14,9 @@
                 </vr-select>
             </vr-columns>
 
-            <vr-columns width="1/3row">
-                <div style="top:25px;position:absolute;" vr-disabled="isAddButtonDisabled">
-                    <vr-button type="Add" data-onclick="addNormalizationRuleActionSettingsListItem" standalone></vr-button>
+            <vr-columns width="normal">
+                <div style="position: absolute; top: 25px;" vr-disabled="disableAddButton">
+                    <vr-button type="Add" data-onclick="addNormalizationRuleAdjustNumberActionSettingsListItem" standalone></vr-button>
                 </div>
             </vr-columns>
         </vr-row>
@@ -28,7 +28,8 @@
                     <li ng-repeat="item in normalizationRuleActionSettingsList" class="list-group-item list-custom" style="margin:1px;">
                         <i class="glyphicon glyphicon-th-list handeldrag" style="display:inline-block;vertical-align:middle;float: none;"></i>
                         <i class="glyphicon glyphicon-remove hand-cursor" style="float:right;padding:5px;cursor:default;" ng-click="removeNormalizationRuleActionSettingsListItem($event, item)"></i>
-                        <div style="display:inline-block; width:100% ">
+
+                        <div style="display:inline-block; width:100%">
                             <vr-directivewrapper directive="item.Editor"
                                                  behaviorid="item.BehaviorId"
                                                  onloaded="item.onNormalizationRuleActionSettingsDirectiveAPILoaded">
@@ -39,5 +40,6 @@
 
             </vr-columns>
         </vr-row>
+
     </vr-columns>
 </vr-row>

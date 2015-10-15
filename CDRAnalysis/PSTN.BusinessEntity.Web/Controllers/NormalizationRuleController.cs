@@ -18,6 +18,13 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
+        public NormalizationRule GetNormalizationRuleById(int normalizationRuleId)
+        {
+            NormalizationRuleManager manager = new NormalizationRuleManager();
+            return manager.GetNormalizationRuleById(normalizationRuleId);
+        }
+
+        [HttpGet]
         public List<TemplateConfig> GetNormalizationRuleActionBehaviorTemplates()
         {
             NormalizationRuleManager manager = new NormalizationRuleManager();
@@ -25,19 +32,12 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        public List<TemplateConfig> GetNormalizationRuleTypeTemplates()
+        public List<TemplateConfig> GetNormalizationRuleSettingsTemplates()
         {
             NormalizationRuleManager manager = new NormalizationRuleManager();
-            return manager.GetNormalizationRuleTypeTemplates();
+            return manager.GetNormalizationRuleSettingsTemplates();
         }
-
-        [HttpGet]
-        public NormalizationRule GetNormalizationRuleById(int normalizationRuleId)
-        {
-            NormalizationRuleManager manager = new NormalizationRuleManager();
-            return manager.GetNormalizationRuleById(normalizationRuleId);
-        }
-
+        
         [HttpPost]
         public InsertOperationOutput<NormalizationRuleDetail> AddNormalizationRule(NormalizationRule normalizationRuleObj)
         {

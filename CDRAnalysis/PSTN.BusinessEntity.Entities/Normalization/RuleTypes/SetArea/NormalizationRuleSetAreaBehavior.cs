@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace PSTN.BusinessEntity.Entities
 {
-    public abstract class NormalizationRuleSetAreaActionSettings
+    public abstract class NormalizationRuleSetAreaBehavior
     {
-        public int ConfigId { get; set; }
+        public abstract void Execute(NormalizationRuleSetAreaSettings settings, NormalizationRuleSetAreaTarget target);
     }
 }

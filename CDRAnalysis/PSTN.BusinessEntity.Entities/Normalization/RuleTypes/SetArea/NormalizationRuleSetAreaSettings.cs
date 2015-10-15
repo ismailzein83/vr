@@ -8,6 +8,6 @@ namespace PSTN.BusinessEntity.Entities
 {
     public class NormalizationRuleSetAreaSettings : NormalizationRuleSettings
     {
-        public NormalizationRuleActionSettings Action { get; set; }
+        public int ConfigId { get; set; }
     }
 }

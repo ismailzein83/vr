@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_NormalizationRuleEditorController" vr-loader="isGettingData" width="'40%'">
+﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_NormalizationRuleEditorController" vr-loader="isGettingData" width="'75%'">
     <vr-modalbody>
         <vr-form name="formNormalizationRuleEditor">
 
@@ -111,13 +111,14 @@
                 </vr-row>
             </div>
 
+            <vr-ruletype></vr-ruletype>
+
             <div ng-show="settingsSelected">
                 <vr-row>
-                    <vr-columns width="1/3row">
+                    <vr-columns width="normal">
                         <vr-select label="Rule Type"
-                                   datasource="normalizationRuleTypeTemplates"
-                                   selectedvalues="selectedNormalizationRuleTypeTemplate"
-                                   onselectionchanged="myTempFunction"
+                                   datasource="normalizationRuleSettingsTemplates"
+                                   selectedvalues="selectedNormalizationRuleSettingsTemplate"
                                    datavaluefield="TemplateConfigID"
                                    datatextfield="Name"
                                    entityname="Rule Type"
@@ -128,9 +129,9 @@
 
                 <vr-row>
                     <vr-columns width="fullrow">
-                        <vr-directivewrapper directive="selectedNormalizationRuleTypeTemplate.Editor"
-                                             configid="selectedNormalizationRuleTypeTemplate.TemplateConfigID"
-                                             onloaded="onNormalizationRuleTypeDirectiveAPILoaded">
+                        <vr-directivewrapper directive="selectedNormalizationRuleSettingsTemplate.Editor"
+                                             configid="selectedNormalizationRuleSettingsTemplate.TemplateConfigID"
+                                             onloaded="onNormalizationRuleSettingsDirectiveAPILoaded">
                         </vr-directivewrapper>
                     </vr-columns>
                 </vr-row>
