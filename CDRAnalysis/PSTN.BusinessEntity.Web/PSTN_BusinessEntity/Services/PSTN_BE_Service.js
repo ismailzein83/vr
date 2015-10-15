@@ -71,7 +71,7 @@
             modalScope.onNormalizationRuleUpdated = onNormalizationRuleUpdated;
         };
 
-        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/NormalizationRule/NormalizationRuleEditor.html", parameters, modalSettings);
+        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Normalization/NormalizationRuleEditor.html", parameters, modalSettings);
     }
 
     function addNormalizationRule(onNormalizationRuleAdded) {
@@ -82,7 +82,7 @@
             modalScope.onNormalizationRuleAdded = onNormalizationRuleAdded;
         };
 
-        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/NormalizationRule/NormalizationRuleEditor.html", null, modalSettings);
+        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Normalization/NormalizationRuleEditor.html", null, modalSettings);
     }
 
     function deleteNormalizationRule(normalizationRuleObj, onNormalizationRuleDeleted) {
