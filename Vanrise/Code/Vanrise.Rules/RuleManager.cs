@@ -89,13 +89,12 @@ namespace Vanrise.Rules
 
         public Dictionary<int, T> GetAllRules()
         {
-            int ruleTypeId = GetRuleTypeId();
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedRules", ruleTypeId,
+            return GetCachedOrCreate("GetCachedRules",
                () =>
                {
                    
                    IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
-                   IEnumerable<Entities.Rule> ruleEntities = ruleDataManager.GetRulesByType(ruleTypeId);
+                   IEnumerable<Entities.Rule> ruleEntities = ruleDataManager.GetRulesByType(GetRuleTypeId());
                    Dictionary<int, T> rules = new Dictionary<int, T>();
                    if (ruleEntities != null)
                    {
@@ -108,6 +107,11 @@ namespace Vanrise.Rules
                    }
                    return rules;
                });
+        }
+
+        protected R GetCachedOrCreate<R>(string cacheName, Func<R> createObject)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, GetRuleTypeId(), createObject);
         }
 
         #region Private Methods

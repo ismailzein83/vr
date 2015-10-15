@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="BaseRule.cs" />
     <Compile Include="BaseRuleStructureBehavior.cs" />
+    <Compile Include="BaseRuleTargetIdentifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuleManager.cs" />
     <Compile Include="RuleNode.cs" />

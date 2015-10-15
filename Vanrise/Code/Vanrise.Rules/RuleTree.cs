@@ -48,12 +48,12 @@ namespace Vanrise.Rules
             }
         }
 
-        public BaseRule GetMatchRule(object target)
+        public BaseRule GetMatchRule(BaseRuleTargetIdentifier target)
         {
             return GetMatchRule(this, target);
         }
 
-        BaseRule GetMatchRule(RuleNode parentNode, object target)
+        BaseRule GetMatchRule(RuleNode parentNode, BaseRuleTargetIdentifier target)
         {
             if (parentNode.Behavior == null)//last node in the tree
                 return GetFirstMatchRuleFromNode(parentNode, target);
@@ -67,15 +67,17 @@ namespace Vanrise.Rules
                 return GetFirstMatchRuleFromNode(parentNode, target);
         }
 
-        BaseRule GetFirstMatchRuleFromNode(RuleNode node, object target)
+        BaseRule GetFirstMatchRuleFromNode(RuleNode node, BaseRuleTargetIdentifier target)
         {    
             RuleNode parentNode = node.ParentNode;
             if(parentNode != null)//not root node
             {
                 foreach (var rule in node.Rules)
                 {
-                    if (!rule.IsAnyCriteriaExcluded(target))
-                        return rule;
+
+                    if (!IsRuleMatched(rule, target))
+                        continue;
+                    return rule;
                 }
                 if (!node.IsUnMatchedRulesNode && parentNode.UnMatchedRulesNode != null)
                     return GetMatchRule(parentNode, target);
@@ -83,6 +85,23 @@ namespace Vanrise.Rules
                     return GetFirstMatchRuleFromNode(parentNode, target);
             }
             return null;
+        }
+
+        bool IsRuleMatched(BaseRule rule, BaseRuleTargetIdentifier target)
+        {
+            if (target.EffectiveOn.HasValue
+                        &&
+                        (target.EffectiveOn.Value < rule.BeginEffectiveTime
+                        ||
+                        (rule.EndEffectiveTime.HasValue && target.EffectiveOn.Value >= rule.EndEffectiveTime.Value)
+                        )
+                      )
+                return false;
+
+            if (rule.IsAnyCriteriaExcluded(target))
+                return false;
+            
+            return true;
         }
     }
 }
