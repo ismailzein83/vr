@@ -21,7 +21,7 @@
             modalScope.onTrunkUpdated = onTrunkUpdated;
         };
 
-        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Trunk/TrunkEditor.html", parameters, modalSettings);
+        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/NetworkInfrastructure/TrunkEditor.html", parameters, modalSettings);
     }
 
     function addTrunk(switchId, onTrunkAdded) {
@@ -36,7 +36,7 @@
             modalScope.onTrunkAdded = onTrunkAdded;
         };
 
-        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Trunk/TrunkEditor.html", parameters, modalSettings);
+        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/NetworkInfrastructure/TrunkEditor.html", parameters, modalSettings);
     }
 
     function deleteTrunk(trunkObj, onTrunkDeleted) {

@@ -1,6 +1,6 @@
-﻿SwitchManagementController.$inject = ["$scope", "PSTN_BE_Service", "SwitchAPIService", "BrandAPIService", "UtilsService", "VRNotificationService", "VRModalService"];
+﻿SwitchManagementController.$inject = ["$scope", "PSTN_BE_Service", "SwitchAPIService", "SwitchBrandAPIService", "UtilsService", "VRNotificationService", "VRModalService"];
 
-function SwitchManagementController($scope, PSTN_BE_Service, SwitchAPIService, BrandAPIService, UtilsService, VRNotificationService, VRModalService) {
+function SwitchManagementController($scope, PSTN_BE_Service, SwitchAPIService, SwitchBrandAPIService, UtilsService, VRNotificationService, VRModalService) {
 
     var gridAPI;
 
@@ -35,7 +35,7 @@ function SwitchManagementController($scope, PSTN_BE_Service, SwitchAPIService, B
                 };
             };
 
-            VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Switch/SwitchEditor.html", null, settings);
+            VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchEditor.html", null, settings);
         }
 
         // grid functions
@@ -82,7 +82,7 @@ function SwitchManagementController($scope, PSTN_BE_Service, SwitchAPIService, B
     function load() {
         $scope.isLoadingFilters = true;
 
-        return BrandAPIService.GetBrands()
+        return SwitchBrandAPIService.GetBrands()
             .then(function (response) {
                 angular.forEach(response, function (item) {
                     $scope.brands.push(item);
@@ -138,7 +138,7 @@ function SwitchManagementController($scope, PSTN_BE_Service, SwitchAPIService, B
             };
         };
 
-        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Switch/SwitchEditor.html", parameters, modalSettings);
+        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchEditor.html", parameters, modalSettings);
     }
 
     function deleteSwitch(gridObj) {

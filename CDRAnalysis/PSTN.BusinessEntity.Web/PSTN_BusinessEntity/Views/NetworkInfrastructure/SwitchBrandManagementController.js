@@ -42,7 +42,7 @@ function SwitchBrandManagementController($scope, SwitchBrandAPIService, VRNotifi
         }
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            return SwtichBrandAPIService.GetFilteredBrands(dataRetrievalInput)
+            return SwitchBrandAPIService.GetFilteredBrands(dataRetrievalInput)
                 .then(function (response) {
                     onResponseReady(response);
                 })

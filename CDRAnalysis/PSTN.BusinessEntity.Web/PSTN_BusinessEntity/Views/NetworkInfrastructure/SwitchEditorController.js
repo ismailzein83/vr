@@ -1,6 +1,6 @@
-﻿SwitchEditorController.$inject = ["$scope", "SwitchAPIService", "BrandAPIService", "DataSourceAPIService", "DataSourceService", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService"];
+﻿SwitchEditorController.$inject = ["$scope", "SwitchAPIService", "SwitchBrandAPIService", "DataSourceAPIService", "DataSourceService", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService"];
 
-function SwitchEditorController($scope, SwitchAPIService, BrandAPIService, DataSourceAPIService, DataSourceService, UtilsService, VRNavigationService, VRNotificationService, VRModalService) {
+function SwitchEditorController($scope, SwitchAPIService, SwitchBrandAPIService, DataSourceAPIService, DataSourceService, UtilsService, VRNavigationService, VRNotificationService, VRModalService) {
 
     var switchId;
     var editMode;
@@ -126,7 +126,7 @@ function SwitchEditorController($scope, SwitchAPIService, BrandAPIService, DataS
     }
 
     function loadBrands() {
-        return BrandAPIService.GetBrands()
+        return SwitchBrandAPIService.GetBrands()
             .then(function (response) {
                 angular.forEach(response, function (item) {
                     $scope.brands.push(item);
