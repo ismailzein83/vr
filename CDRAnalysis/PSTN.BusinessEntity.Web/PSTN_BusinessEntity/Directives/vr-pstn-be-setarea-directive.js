@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrPstnBeSetArea", ["NormalizationRuleAPIService", "VRNotificationService", function (NormalizationRuleAPIService, VRNotificationService) {
+app.directive("vrPstnBeSetarea", ["NormalizationRuleAPIService", "UtilsService", "VRNotificationService", function (NormalizationRuleAPIService, UtilsService, VRNotificationService) {
 
     var directiveDefinitionObj = {
         restrict: "E",
@@ -34,7 +34,7 @@ app.directive("vrPstnBeSetArea", ["NormalizationRuleAPIService", "VRNotification
         function initializeController() {
             defineScope();
 
-            loadActionTemplates().then(function () {
+            loadTemplates().then(function () {
                 defineAPI();
             });
         }
@@ -42,11 +42,20 @@ app.directive("vrPstnBeSetArea", ["NormalizationRuleAPIService", "VRNotification
         // private members
 
         var directiveAPI;
+        var directiveData;
 
         function defineScope() {
 
             $scope.templates = [];
             $scope.selectedTemplate = undefined;
+
+            $scope.onDirectiveLoaded = function (api) {
+                directiveAPI = api;
+                
+                if (directiveData != undefined) {
+                    directiveAPI.setData(directiveData);
+                }
+            }
         }
 
         function loadTemplates() {
@@ -70,17 +79,23 @@ app.directive("vrPstnBeSetArea", ["NormalizationRuleAPIService", "VRNotification
             var api = {};
 
             api.getData = function () {
-                return {
-                    $type: "PSTN.BusinessEntity.Entities.NormalizationRuleSetAreaSettings, PSTN.BusinessEntity.Entities",
-                    Data: directiveAPI.getData()
-                };
+                var data = directiveAPI.getData();
+                data.ConfigId = $scope.selectedTemplate.TemplateConfigID;
+
+                return data;
             }
 
             api.setData = function (setAreaSettings) {
                 if (setAreaSettings == undefined || setAreaSettings == null)
                     return;
 
-                directiveAPI.setData(setAreaSettings);
+                if (directiveAPI != undefined) {
+                    directiveAPI.setData(setAreaSettings);
+                }
+                else {
+                    directiveData = setAreaSettings;
+                    $scope.selectedTemplate = UtilsService.getItemByVal($scope.templates, setAreaSettings.ConfigId, "TemplateConfigID");
+                }
             }
 
             if (ctrl.onloaded != null)

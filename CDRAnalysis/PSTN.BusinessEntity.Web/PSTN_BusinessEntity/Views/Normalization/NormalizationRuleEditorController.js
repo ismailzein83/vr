@@ -197,7 +197,6 @@
 
         function insertNormalizationRule() {
             var normalizationRuleObj = buildNormalizationRuleObjFromScope();
-            console.log(normalizationRuleObj);
 
             return NormalizationRuleAPIService.AddNormalizationRule(normalizationRuleObj)
                 .then(function (responseObject) {
@@ -230,7 +229,9 @@
                 BeginEffectiveDate: $scope.beginEffectiveDate,
                 EndEffectiveDate: $scope.endEffectiveDate
             };
+
             normalizationRuleObj.Settings.RuleType = $scope.selectedRuleType.value;
+
             return normalizationRuleObj;
         }
     }
