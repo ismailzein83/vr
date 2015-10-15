@@ -32,12 +32,12 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        public List<TemplateConfig> GetNormalizationRuleSettingsTemplates()
+        public List<TemplateConfig> GetNormalizationRuleAdjustNumberActionSettingsTemplates()
         {
             NormalizationRuleManager manager = new NormalizationRuleManager();
-            return manager.GetNormalizationRuleSettingsTemplates();
+            return manager.GetNormalizationRuleAdjustNumberActionSettingsTemplates();
         }
-        
+
         [HttpPost]
         public InsertOperationOutput<NormalizationRuleDetail> AddNormalizationRule(NormalizationRule normalizationRuleObj)
         {

@@ -2,13 +2,13 @@
     
     "use strict";
 
-    NormalizationRuleEditorController.$inject = ["$scope", "NormalizationRuleAPIService", "SwitchAPIService", "TrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "UtilsService", "VRNavigationService", "VRNotificationService"];
+    NormalizationRuleEditorController.$inject = ["$scope", "NormalizationRuleAPIService", "SwitchAPIService", "TrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "PSTN_BE_NormalizationRuleTypeEnum", "UtilsService", "VRNavigationService", "VRNotificationService"];
 
-    function NormalizationRuleEditorController($scope, NormalizationRuleAPIService, SwitchAPIService, TrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, UtilsService, VRNavigationService, VRNotificationService) {
+    function NormalizationRuleEditorController($scope, NormalizationRuleAPIService, SwitchAPIService, TrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, PSTN_BE_NormalizationRuleTypeEnum, UtilsService, VRNavigationService, VRNotificationService) {
 
         var editMode;
         var normalizationRuleId;
-        var normalizationRuleSettingsDirectiveAPI;
+        var ruleTypeDirectiveAPI;
 
         loadParameters();
         defineScope();
@@ -49,11 +49,11 @@
 
             /* Settings */
 
-            $scope.normalizationRuleSettingsTemplates = [];
-            $scope.selectedNormalizationRuleSettingsTemplate = undefined;
+            $scope.ruleTypes = UtilsService.getArrayEnum(PSTN_BE_NormalizationRuleTypeEnum);
+            $scope.selectedRuleType = undefined;
 
-            $scope.onNormalizationRuleSettingsDirectiveAPILoaded = function (api) {
-                normalizationRuleSettingsDirectiveAPI = api;
+            $scope.onRuleTypeDirectiveLoaded = function (api) {
+                ruleTypeDirectiveAPI = api;
             }
 
             /* Settings */
@@ -121,7 +121,7 @@
         function load() {
             $scope.isGettingData = true;
 
-            UtilsService.waitMultipleAsyncOperations([loadSwitches, loadTrunks, loadTemplates, loadNormalizationRuleSettingsTemplates])
+            UtilsService.waitMultipleAsyncOperations([loadSwitches, loadTrunks, loadTemplates])
                 .then(function () {
                     if (editMode) {
                         NormalizationRuleAPIService.GetNormalizationRuleById(normalizationRuleId)
@@ -169,16 +169,6 @@
                 .then(function (responseArray) {
                     angular.forEach(responseArray, function (item) {
                         $scope.normalizationRuleActionSettingsTemplates.push(item);
-                    });
-                });
-        }
-
-        function loadNormalizationRuleSettingsTemplates() {
-
-            return NormalizationRuleAPIService.GetNormalizationRuleSettingsTemplates()
-                .then(function (response) {
-                    angular.forEach(response, function (item) {
-                        $scope.normalizationRuleSettingsTemplates.push(item);
                     });
                 });
         }
@@ -271,6 +261,9 @@
         function insertNormalizationRule() {
             var normalizationRuleObj = buildNormalizationRuleObjFromScope();
 
+            console.log(normalizationRuleObj);
+            return;
+
             return NormalizationRuleAPIService.AddNormalizationRule(normalizationRuleObj)
                 .then(function (responseObject) {
 
@@ -299,6 +292,9 @@
                 },
                 Settings: {
                     Actions: ($scope.normalizationRuleActionSettingsList.length > 0) ? getNormalizationRuleActionSettings() : null
+                },
+                OtherSettings: {
+                    Actions: ruleTypeDirectiveAPI.getData()
                 },
                 Description: $scope.description,
                 BeginEffectiveDate: $scope.beginEffectiveDate,

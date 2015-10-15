@@ -111,16 +111,14 @@
                 </vr-row>
             </div>
 
-            <vr-ruletype></vr-ruletype>
-
             <div ng-show="settingsSelected">
                 <vr-row>
                     <vr-columns width="normal">
                         <vr-select label="Rule Type"
-                                   datasource="normalizationRuleSettingsTemplates"
-                                   selectedvalues="selectedNormalizationRuleSettingsTemplate"
-                                   datavaluefield="TemplateConfigID"
-                                   datatextfield="Name"
+                                   datasource="ruleTypes"
+                                   selectedvalues="selectedRuleType"
+                                   datavaluefield="value"
+                                   datatextfield="description"
                                    entityname="Rule Type"
                                    hideremoveicon>
                         </vr-select>
@@ -129,9 +127,8 @@
 
                 <vr-row>
                     <vr-columns width="fullrow">
-                        <vr-directivewrapper directive="selectedNormalizationRuleSettingsTemplate.Editor"
-                                             configid="selectedNormalizationRuleSettingsTemplate.TemplateConfigID"
-                                             onloaded="onNormalizationRuleSettingsDirectiveAPILoaded">
+                        <vr-directivewrapper directive="selectedRuleType.editor"
+                                             onloaded="onRuleTypeDirectiveLoaded">
                         </vr-directivewrapper>
                     </vr-columns>
                 </vr-row>

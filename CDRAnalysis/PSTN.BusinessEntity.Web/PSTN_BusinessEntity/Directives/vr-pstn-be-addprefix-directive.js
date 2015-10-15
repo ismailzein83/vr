@@ -5,8 +5,8 @@ app.directive("vrPstnBeAddprefix", [function () {
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
-            onloaded: "=",
-            behaviorid: "="
+            configid: "=",
+            onloaded: "="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -47,7 +47,7 @@ app.directive("vrPstnBeAddprefix", [function () {
             api.getData = function () {
                 return {
                     $type: "PSTN.BusinessEntity.Entities.Normalization.Actions.AddPrefixActionSettings, PSTN.BusinessEntity.Entities",
-                    BehaviorId: ctrl.behaviorid,
+                    ConfigId: ctrl.configid,
                     Prefix: $scope.numberPrefix
                 };
             }
