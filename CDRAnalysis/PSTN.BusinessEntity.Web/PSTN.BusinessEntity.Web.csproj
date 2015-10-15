@@ -131,7 +131,11 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="PSTN_BusinessEntity\Views\Brand\" />
+    <Folder Include="PSTN_BusinessEntity\Views\Switch\" />
+    <Folder Include="PSTN_BusinessEntity\Views\Trunk\" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\NormalizationRuleController.cs" />
     <Compile Include="Controllers\SwitchController.cs" />
@@ -183,21 +187,21 @@
     <Content Include="PSTN_BusinessEntity\Views\ProcessInputTemplate\Normal\StagingtoNormalCDRProcessInputController.js" />
     <Content Include="PSTN_BusinessEntity\Views\ProcessInputTemplate\Scheduled\StagingtoNormalCDRProcessInput_Scheduled.html" />
     <Content Include="PSTN_BusinessEntity\Views\ProcessInputTemplate\Scheduled\StagingtoNormalCDRProcessInput_ScheduledController.js" />
-    <Content Include="PSTN_BusinessEntity\Views\Switch\SwitchEditor.html" />
-    <Content Include="PSTN_BusinessEntity\Views\Switch\SwitchEditorController.js" />
-    <Content Include="PSTN_BusinessEntity\Views\Switch\SwitchManagement.html" />
-    <Content Include="PSTN_BusinessEntity\Views\Switch\SwitchManagementController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\NetworkInfrastructure\SwitchEditor.html" />
+    <Content Include="PSTN_BusinessEntity\Views\NetworkInfrastructure\SwitchEditorController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\NetworkInfrastructure\SwitchManagement.html" />
+    <Content Include="PSTN_BusinessEntity\Views\NetworkInfrastructure\SwitchManagementController.js" />
     <Content Include="PSTN_BusinessEntity\Views\Templates\NormalizationRuleDescriptionTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Views\Templates\NormalizationRuleDescriptionTemplateController.js" />
-    <Content Include="PSTN_BusinessEntity\Views\Trunk\TrunkEditor.html" />
-    <Content Include="PSTN_BusinessEntity\Views\Trunk\TrunkEditorController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\NetworkInfrastructure\TrunkEditor.html" />
+    <Content Include="PSTN_BusinessEntity\Views\NetworkInfrastructure\TrunkEditorController.js" />
     <Content Include="PSTN_BusinessEntity\Directives\Templates\TrunkGridTemplate.html" />
-    <Content Include="PSTN_BusinessEntity\Views\Trunk\TrunkManagement.html" />
-    <Content Include="PSTN_BusinessEntity\Views\Trunk\TrunkManagementController.js" />
-    <Content Include="PSTN_BusinessEntity\Views\Brand\BrandEditor.html" />
-    <Content Include="PSTN_BusinessEntity\Views\Brand\BrandEditorController.js" />
-    <Content Include="PSTN_BusinessEntity\Views\Brand\BrandManagement.html" />
-    <Content Include="PSTN_BusinessEntity\Views\Brand\BrandManagementController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\NetworkInfrastructure\TrunkManagement.html" />
+    <Content Include="PSTN_BusinessEntity\Views\NetworkInfrastructure\TrunkManagementController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\NetworkInfrastructure\BrandEditor.html" />
+    <Content Include="PSTN_BusinessEntity\Views\NetworkInfrastructure\BrandEditorController.js" />
+    <Content Include="PSTN_BusinessEntity\Views\NetworkInfrastructure\BrandManagement.html" />
+    <Content Include="PSTN_BusinessEntity\Views\NetworkInfrastructure\BrandManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
