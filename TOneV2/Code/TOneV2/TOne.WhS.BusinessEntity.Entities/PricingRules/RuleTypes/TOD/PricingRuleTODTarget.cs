@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class PricingRuleTODTarget
+    public class PricingRuleTODTarget : PricingRuleTargetIdentifier
     {
         public DateTime Time { get; set; }
 
@@ -15,5 +15,10 @@ namespace TOne.WhS.BusinessEntity.Entities
         public Dictionary<string, Decimal> OtherRates { get; set; }
 
         public Decimal RateToUse { get; set; }
+
+        public override PricingRuleType RuleType
+        {
+            get { return PricingRuleType.TOD; }
+        }
     }
 }

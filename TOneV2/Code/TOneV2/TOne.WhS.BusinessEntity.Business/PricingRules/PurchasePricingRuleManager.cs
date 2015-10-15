@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 
-namespace TOne.WhS.BusinessEntity.Business.PricingRules
+namespace TOne.WhS.BusinessEntity.Business
 {
-    public class SalePricingRuleManager : BasePricingRuleManager<SalePricingRule>
+    public class PurchasePricingRuleManager : BasePricingRuleManager<PurchasePricingRule>
     {
         protected override IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetBehaviors()
         {

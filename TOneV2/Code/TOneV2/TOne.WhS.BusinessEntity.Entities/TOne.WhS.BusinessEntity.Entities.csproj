@@ -80,6 +80,7 @@
     <Compile Include="PricingProduct\PricingProduct.cs" />
     <Compile Include="PricingProduct\PricingProductSettings.cs" />
     <Compile Include="PricingRules\BasePricingRule.cs" />
+    <Compile Include="PricingRules\PricingRuleTarget.cs" />
     <Compile Include="PricingRules\RuleTypes\ExtraCharge\Actions\FixedExtraChargeSettings.cs" />
     <Compile Include="PricingRules\RuleTypes\ExtraCharge\Actions\PercentageExtraChargeSettings.cs" />
     <Compile Include="PricingRules\RuleTypes\ExtraCharge\PricingRuleExtraChargeActionBehavior.cs" />

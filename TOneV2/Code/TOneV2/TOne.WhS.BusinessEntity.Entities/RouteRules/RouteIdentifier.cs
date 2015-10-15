@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class RouteIdentifier
+    public class RouteIdentifier : Vanrise.Rules.BaseRuleTargetIdentifier
     {
         public string Code { get; set; }
 

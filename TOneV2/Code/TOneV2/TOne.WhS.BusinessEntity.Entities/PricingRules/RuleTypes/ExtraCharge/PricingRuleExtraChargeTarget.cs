@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class PricingRuleExtraChargeTarget
+    public class PricingRuleExtraChargeTarget : PricingRuleTargetIdentifier
     {
         public Decimal Rate { get; set; }
+
+        public override PricingRuleType RuleType
+        {
+            get { return PricingRuleType.ExtraCharge; }
+        }
     }
 }
