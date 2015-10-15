@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace PSTN.BusinessEntity.Entities
 {
-    public class CDRToNormalizeInfo : Vanrise.Rules.BaseRuleTarget
+    public abstract class NormalizationRuleTarget : Vanrise.Rules.BaseRuleTarget
     {
+        public abstract NormalizationRuleType RuleType { get; }
+
         public int? SwitchId { get; set; }
 
         public int? TrunkId { get; set; }

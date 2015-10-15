@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace PSTN.BusinessEntity.Entities
 {
-    public class NormalizationRuleSetAreaTarget : Vanrise.Rules.BaseRuleTargetIdentifier
+    public class NormalizationRuleSetAreaTarget : NormalizationRuleTarget
     {
-        public string PhoneNumber { get; set; }
-
         public string AreaCode { get; set; }
+
+        public override NormalizationRuleType RuleType
+        {
+            get { return NormalizationRuleType.SetArea; }
+        }
     }
 }

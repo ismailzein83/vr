@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace PSTN.BusinessEntity.Entities
 {
-    public class NormalizationRuleAdjustNumberTarget : Vanrise.Rules.BaseRuleTargetIdentifier
-    {
-        public string PhoneNumber { get; set; }
+    public class NormalizationRuleAdjustNumberTarget : NormalizationRuleTarget
+    {        
+        public override NormalizationRuleType RuleType
+        {
+            get { return NormalizationRuleType.AdjustNumber; }
+        }
     }
 }

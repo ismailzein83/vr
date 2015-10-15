@@ -44,7 +44,9 @@ namespace Vanrise.Fzero.CDRImport.Entities
         public int? SwitchID { get; set; }
         public string ReleaseCode { get; set; }
         public string AreaCode { get; set; }
-       
 
+        public string MSISDNAreaCode { get; set; }
+
+        public string DestinationAreaCode { get; set; }
     }
 }

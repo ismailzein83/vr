@@ -22,7 +22,10 @@ namespace Vanrise.Fzero.CDRImport.Entities
         public int? InTrunkId { get; set; }
         public int? OutTrunkId { get; set; }
         public string AreaCode { get; set; }
-       
+
+        public string CGPNAreaCode { get; set; }
+
+        public string CDPNAreaCode { get; set; }
 
     }
 }
