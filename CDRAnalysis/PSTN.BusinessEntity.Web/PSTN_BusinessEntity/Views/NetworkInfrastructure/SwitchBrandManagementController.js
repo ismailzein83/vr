@@ -1,6 +1,6 @@
-﻿BrandManagementController.$inject = ["$scope", "BrandAPIService", "VRNotificationService", "VRModalService"];
+﻿SwitchBrandManagementController.$inject = ["$scope", "SwitchBrandAPIService", "VRNotificationService", "VRModalService"];
 
-function BrandManagementController($scope, BrandAPIService, VRNotificationService, VRModalService) {
+function SwitchBrandManagementController($scope, SwitchBrandAPIService, VRNotificationService, VRModalService) {
 
     var gridAPI = undefined;
 
@@ -32,7 +32,7 @@ function BrandManagementController($scope, BrandAPIService, VRNotificationServic
                 };
             };
 
-            VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Brand/BrandEditor.html", null, settings);
+            VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchBrandEditor.html", null, settings);
         }
 
         // grid functions
@@ -42,7 +42,7 @@ function BrandManagementController($scope, BrandAPIService, VRNotificationServic
         }
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            return BrandAPIService.GetFilteredBrands(dataRetrievalInput)
+            return SwtichBrandAPIService.GetFilteredBrands(dataRetrievalInput)
                 .then(function (response) {
                     onResponseReady(response);
                 })
@@ -94,7 +94,7 @@ function BrandManagementController($scope, BrandAPIService, VRNotificationServic
             };
         };
 
-        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Brand/BrandEditor.html", parameters, modalSettings);
+        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchBrandEditor.html", parameters, modalSettings);
     }
 
     function deleteBrand(gridObj) {
@@ -103,7 +103,7 @@ function BrandManagementController($scope, BrandAPIService, VRNotificationServic
             .then(function (response) {
                 if (response == true) {
 
-                    return BrandAPIService.DeleteBrand(gridObj.BrandId)
+                    return SwitchBrandAPIService.DeleteBrand(gridObj.BrandId)
                         .then(function (deletionResponse) {
                             if (VRNotificationService.notifyOnItemDeleted("Switch Brand", deletionResponse))
                                 gridAPI.itemDeleted(gridObj);
@@ -116,4 +116,4 @@ function BrandManagementController($scope, BrandAPIService, VRNotificationServic
     }
 }
 
-appControllers.controller("PSTN_BusinessEntity_BrandManagementController", BrandManagementController);
+appControllers.controller("PSTN_BusinessEntity_SwitchBrandManagementController", SwitchBrandManagementController);

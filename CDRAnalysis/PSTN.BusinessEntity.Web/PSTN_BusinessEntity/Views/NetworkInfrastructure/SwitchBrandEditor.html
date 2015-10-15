@@ -1,7 +1,7 @@
-﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_BrandEditorController" vr-loader="isGettingData" width="'25%'">
+﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_SwitchBrandEditorController" vr-loader="isGettingData" width="'25%'">
 
     <vr-modalbody>
-        <vr-form name="formBrandEditor">
+        <vr-form name="formSwitchBrandEditor">
             <vr-row>
                 <vr-columns width="1/2row">
                     <vr-textbox label="Name" value="name" isrequired></vr-textbox>
@@ -13,7 +13,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formBrandEditor" data-onclick="saveBrand"></vr-button>
+                <vr-button type="Save" formname="formSwitchBrandEditor" data-onclick="saveBrand"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>

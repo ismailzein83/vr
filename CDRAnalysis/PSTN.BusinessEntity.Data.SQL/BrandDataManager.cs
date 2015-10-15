@@ -8,12 +8,12 @@ namespace PSTN.BusinessEntity.Data.SQL
     {
         public BrandDataManager() : base("CDRDBConnectionString") { }
 
-        public List<Brand> GetBrands()
+        public List<SwitchBrand> GetBrands()
         {
             return GetItemsSP("PSTN_BE.sp_SwitchType_GetAll", BrandMapper);
         }
 
-        public Vanrise.Entities.BigResult<Brand> GetFilteredBrands(Vanrise.Entities.DataRetrievalInput<BrandQuery> input)
+        public Vanrise.Entities.BigResult<SwitchBrand> GetFilteredBrands(Vanrise.Entities.DataRetrievalInput<SwitchBrandQuery> input)
         {
             return RetrieveData(input, (tempTableName) =>
             {
@@ -21,12 +21,12 @@ namespace PSTN.BusinessEntity.Data.SQL
             }, (reader) => BrandMapper(reader));
         }
 
-        public Brand GetBrandById(int brandId)
+        public SwitchBrand GetBrandById(int brandId)
         {
             return GetItemSP("PSTN_BE.sp_SwitchType_GetByID", BrandMapper, brandId);
         }
 
-        public bool AddBrand(Brand brandObj, out int insertedId)
+        public bool AddBrand(SwitchBrand brandObj, out int insertedId)
         {
             object brandId;
 
@@ -36,7 +36,7 @@ namespace PSTN.BusinessEntity.Data.SQL
             return (recordsAffected > 0);
         }
 
-        public bool UpdateBrand(Brand brandObj)
+        public bool UpdateBrand(SwitchBrand brandObj)
         {
             int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_SwitchType_Update", brandObj.BrandId, brandObj.Name);
             return (recordsAffected > 0);
@@ -50,9 +50,9 @@ namespace PSTN.BusinessEntity.Data.SQL
 
         #region Mappers
 
-        Brand BrandMapper(IDataReader reader)
+        SwitchBrand BrandMapper(IDataReader reader)
         {
-            Brand type = new Brand();
+            SwitchBrand type = new SwitchBrand();
 
             type.BrandId = (int)reader["ID"];
             type.Name = reader["Name"] as string;

@@ -1,4 +1,4 @@
-﻿app.service("BrandAPIService", function (BaseAPIService) {
+﻿app.service("SwitchBrandAPIService", function (BaseAPIService) {
 
     return ({
         GetBrands: GetBrands,
@@ -10,29 +10,29 @@
     });
 
     function GetBrands() {
-        return BaseAPIService.get("/api/Brand/GetBrands");
+        return BaseAPIService.get("/api/SwitchBrand/GetBrands");
     }
 
     function GetFilteredBrands(input) {
-        return BaseAPIService.post("/api/Brand/GetFilteredBrands", input);
+        return BaseAPIService.post("/api/SwitchBrand/GetFilteredBrands", input);
     }
 
     function GetBrandById(brandId) {
-        return BaseAPIService.get("/api/Brand/GetBrandById", {
+        return BaseAPIService.get("/api/SwitchBrand/GetBrandById", {
             brandId: brandId
         });
     }
 
     function AddBrand(brandObj) {
-        return BaseAPIService.post("/api/Brand/AddBrand", brandObj);
+        return BaseAPIService.post("/api/SwitchBrand/AddBrand", brandObj);
     }
 
     function UpdateBrand(brandObj) {
-        return BaseAPIService.post("/api/Brand/UpdateBrand", brandObj);
+        return BaseAPIService.post("/api/SwitchBrand/UpdateBrand", brandObj);
     }
 
     function DeleteBrand(brandId) {
-        return BaseAPIService.get("/api/Brand/DeleteBrand", {
+        return BaseAPIService.get("/api/SwitchBrand/DeleteBrand", {
             brandId: brandId
         });
     }

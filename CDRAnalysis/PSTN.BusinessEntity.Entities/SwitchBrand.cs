@@ -1,7 +1,7 @@
 ﻿
 namespace PSTN.BusinessEntity.Entities
 {
-    public class Brand
+    public class SwitchBrand
     {
         public int BrandId { get; set; }
 

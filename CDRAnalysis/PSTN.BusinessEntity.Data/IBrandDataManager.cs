@@ -5,15 +5,15 @@ namespace PSTN.BusinessEntity.Data
 {
     public interface IBrandDataManager : IDataManager
     {
-        List<Brand> GetBrands();
+        List<SwitchBrand> GetBrands();
 
-        Vanrise.Entities.BigResult<Brand> GetFilteredBrands(Vanrise.Entities.DataRetrievalInput<BrandQuery> input);
+        Vanrise.Entities.BigResult<SwitchBrand> GetFilteredBrands(Vanrise.Entities.DataRetrievalInput<SwitchBrandQuery> input);
 
-        Brand GetBrandById(int brandId);
+        SwitchBrand GetBrandById(int brandId);
 
-        bool AddBrand(Brand brandObj, out int insertedId);
+        bool AddBrand(SwitchBrand brandObj, out int insertedId);
 
-        bool UpdateBrand(Brand brandObj);
+        bool UpdateBrand(SwitchBrand brandObj);
 
         bool DeleteBrand(int brandId);
     }

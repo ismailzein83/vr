@@ -7,27 +7,27 @@ namespace PSTN.BusinessEntity.Business
 {
     public class BrandManager
     {
-        public List<Brand> GetBrands()
+        public List<SwitchBrand> GetBrands()
         {
             IBrandDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<IBrandDataManager>();
             return dataManager.GetBrands();
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<Brand> GetFilteredBrands(Vanrise.Entities.DataRetrievalInput<BrandQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<SwitchBrand> GetFilteredBrands(Vanrise.Entities.DataRetrievalInput<SwitchBrandQuery> input)
         {
             IBrandDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<IBrandDataManager>();
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredBrands(input));
         }
 
-        public Brand GetBrandById(int brandId)
+        public SwitchBrand GetBrandById(int brandId)
         {
             IBrandDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<IBrandDataManager>();
             return dataManager.GetBrandById(brandId);
         }
 
-        public InsertOperationOutput<Brand> AddBrand(Brand brandObj)
+        public InsertOperationOutput<SwitchBrand> AddBrand(SwitchBrand brandObj)
         {
-            InsertOperationOutput<Brand> insertOperationOutput = new InsertOperationOutput<Brand>();
+            InsertOperationOutput<SwitchBrand> insertOperationOutput = new InsertOperationOutput<SwitchBrand>();
 
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
@@ -50,9 +50,9 @@ namespace PSTN.BusinessEntity.Business
             return insertOperationOutput;
         }
 
-        public UpdateOperationOutput<Brand> UpdateBrand(Brand brandObj)
+        public UpdateOperationOutput<SwitchBrand> UpdateBrand(SwitchBrand brandObj)
         {
-            UpdateOperationOutput<Brand> updateOperationOutput = new UpdateOperationOutput<Brand>();
+            UpdateOperationOutput<SwitchBrand> updateOperationOutput = new UpdateOperationOutput<SwitchBrand>();
 
             updateOperationOutput.Result = UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;

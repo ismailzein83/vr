@@ -1,6 +1,6 @@
-﻿BrandEditorController.$inject = ["$scope", "BrandAPIService", "VRNavigationService", "VRNotificationService", "VRModalService"];
+﻿SwitchBrandEditorController.$inject = ["$scope", "SwitchBrandAPIService", "VRNavigationService", "VRNotificationService", "VRModalService"];
 
-function BrandEditorController($scope, BrandAPIService, VRNavigationService, VRNotificationService, VRModalService) {
+function SwitchBrandEditorController($scope, SwitchBrandAPIService, VRNavigationService, VRNotificationService, VRModalService) {
 
     var brandId = undefined;
     var editMode = undefined;
@@ -39,7 +39,7 @@ function BrandEditorController($scope, BrandAPIService, VRNavigationService, VRN
         if (editMode) {
             $scope.isGettingData = true;
 
-            BrandAPIService.GetBrandById(brandId)
+            SwitchBrandAPIService.GetBrandById(brandId)
                 .then(function (response) {
                     fillScopeFromBrandObj(response);
                 })
@@ -59,7 +59,7 @@ function BrandEditorController($scope, BrandAPIService, VRNavigationService, VRN
     function updateBrand() {
         var brandObj = buildBrandObjFromScope();
 
-        return BrandAPIService.UpdateBrand(brandObj)
+        return SwitchBrandAPIService.UpdateBrand(brandObj)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Switch Brand", response, "Name")) {
                     if ($scope.onBrandUpdated != undefined)
@@ -76,7 +76,7 @@ function BrandEditorController($scope, BrandAPIService, VRNavigationService, VRN
     function insertBrand() {
         var brandObj = buildBrandObjFromScope();
 
-        return BrandAPIService.AddBrand(brandObj)
+        return SwitchBrandAPIService.AddBrand(brandObj)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Switch Brand", response, "Name")) {
                     if ($scope.onBrandAdded != undefined)
@@ -98,4 +98,4 @@ function BrandEditorController($scope, BrandAPIService, VRNavigationService, VRN
     }
 }
 
-appControllers.controller("PSTN_BusinessEntity_BrandEditorController", BrandEditorController);
+appControllers.controller("PSTN_BusinessEntity_SwitchBrandEditorController", SwitchBrandEditorController);

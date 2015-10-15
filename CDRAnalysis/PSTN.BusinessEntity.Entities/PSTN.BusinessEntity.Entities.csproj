@@ -84,10 +84,10 @@
     <Compile Include="SwitchQuery.cs" />
     <Compile Include="Trunk.cs" />
     <Compile Include="TrunkInfo.cs" />
-    <Compile Include="Brand.cs" />
+    <Compile Include="SwitchBrand.cs" />
     <Compile Include="TrunkDetail.cs" />
     <Compile Include="TrunkQuery.cs" />
-    <Compile Include="BrandQuery.cs" />
+    <Compile Include="SwitchBrandQuery.cs" />
     <Compile Include="TrunkFilter.cs" />
   </ItemGroup>
   <ItemGroup />

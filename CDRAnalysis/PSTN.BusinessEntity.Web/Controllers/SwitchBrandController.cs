@@ -6,38 +6,38 @@ using Vanrise.Entities;
 
 namespace PSTN.BusinessEntity.Web.Controllers
 {
-    public class BrandController : Vanrise.Web.Base.BaseAPIController
+    public class SwitchBrandController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpGet]
-        public List<Brand> GetBrands()
+        public List<SwitchBrand> GetBrands()
         {
             BrandManager manager = new BrandManager();
             return manager.GetBrands();
         }
 
         [HttpPost]
-        public object GetFilteredBrands(Vanrise.Entities.DataRetrievalInput<BrandQuery> input)
+        public object GetFilteredBrands(Vanrise.Entities.DataRetrievalInput<SwitchBrandQuery> input)
         {
             BrandManager manager = new BrandManager();
             return GetWebResponse(input, manager.GetFilteredBrands(input));
         }
 
         [HttpGet]
-        public Brand GetBrandById(int brandId)
+        public SwitchBrand GetBrandById(int brandId)
         {
             BrandManager manager = new BrandManager();
             return manager.GetBrandById(brandId);
         }
 
         [HttpPost]
-        public InsertOperationOutput<Brand> AddBrand(Brand brandObj)
+        public InsertOperationOutput<SwitchBrand> AddBrand(SwitchBrand brandObj)
         {
             BrandManager manager = new BrandManager();
             return manager.AddBrand(brandObj);
         }
 
         [HttpPost]
-        public UpdateOperationOutput<Brand> UpdateBrand(Brand brandObj)
+        public UpdateOperationOutput<SwitchBrand> UpdateBrand(SwitchBrand brandObj)
         {
             BrandManager manager = new BrandManager();
             return manager.UpdateBrand(brandObj);
