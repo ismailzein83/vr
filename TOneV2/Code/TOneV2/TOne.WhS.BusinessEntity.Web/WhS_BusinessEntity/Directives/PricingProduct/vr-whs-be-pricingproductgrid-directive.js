@@ -20,7 +20,7 @@ function (UtilsService, VRNotificationService, WhS_BE_PricingProductAPIService,W
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/Templates/PricingProductGridTemplate.html"
+        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingProduct/Templates/PricingProductGridTemplate.html"
 
     };
 

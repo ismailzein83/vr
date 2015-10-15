@@ -2,10 +2,18 @@
     <vr-modalbody>
         <vr-form name="formPricingRuleEditor">
             <vr-choices selectedindex="0">
+                <vr-choice isselected="definitionSelected">Definition</vr-choice>
                 <vr-choice isselected="criteriaSelected">Criteria</vr-choice>
                 <vr-choice isselected="settingsSelected">Settings</vr-choice>
                 <vr-choice isselected="schedulerSelected">Scheduler</vr-choice>
             </vr-choices>
+            <div ng-show="definitionSelected">
+                <vr-row>
+                    <vr-columns width="fullrow">
+                        <vr-textarea label="Description" value="description"></vr-textarea>
+                    </vr-columns>
+                </vr-row>
+            </div>
             <div ng-show="criteriaSelected">
                 <vr-row>
                     <vr-columns width="1/4row">
@@ -13,10 +21,36 @@
                 </vr-row>
             </div>
             <div ng-show="settingsSelected">
+                <vr-row>
+                    <vr-columns width="1/2row">
+                        <vr-select label="Pricing Rule Type"
+                                   datasource="pricingRuleTypes"
+                                   selectedvalues="selectedPricingRuleType"
+                                   datavaluefield="value"
+                                   datatextfield="description"
+                                   entityname="Pricing Rule Type">
+                        </vr-select>
+                    </vr-columns>
+                </vr-row>
+                <vr-row>
+                    <vr-columns width="fullrow" ng-show="selectedPricingRuleType">
+                        <vr-directivewrapper directive="selectedPricingRuleType.directive" on-ready="onPricingRuleTypeDirectiveReady"></vr-directivewrapper>
+                    </vr-columns>
+                </vr-row>
+               
 
+               
             </div>
             <div ng-show="schedulerSelected">
+                <vr-row>
+                    <vr-columns width="1/3row">
+                        <vr-datetimepicker label="Begin Effective Date" value="beginEffectiveDate" type="dateTime" isrequired></vr-datetimepicker>
+                    </vr-columns>
 
+                    <vr-columns width="1/3row">
+                        <vr-datetimepicker label="End Effective Date" value="endEffectiveDate" type="dateTime"></vr-datetimepicker>
+                    </vr-columns>
+                </vr-row>
             </div>
         </vr-form>
     </vr-modalbody>

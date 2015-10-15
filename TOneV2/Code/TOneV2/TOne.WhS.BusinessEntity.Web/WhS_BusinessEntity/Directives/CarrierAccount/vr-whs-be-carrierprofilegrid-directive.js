@@ -20,7 +20,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/Templates/CarrierProfileGridTemplate.html"
+        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/CarrierAccount/Templates/CarrierProfileGridTemplate.html"
 
     };
 

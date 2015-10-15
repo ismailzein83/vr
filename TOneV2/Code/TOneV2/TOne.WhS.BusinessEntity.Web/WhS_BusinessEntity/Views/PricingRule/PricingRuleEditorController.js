@@ -2,21 +2,25 @@
 
     "use strict";
 
-    pricingRuleEditorController.$inject = ['$scope', 'WhS_BE_SalePricingRuleAPIService',  'UtilsService', 'VRNotificationService', 'VRNavigationService'];
+    pricingRuleEditorController.$inject = ['$scope', 'WhS_BE_SalePricingRuleAPIService',  'UtilsService', 'VRNotificationService', 'VRNavigationService','WhS_Be_PricingRuleTypeEnum'];
 
-    function pricingRuleEditorController($scope, WhS_BE_SalePricingRuleAPIService, UtilsService, VRNotificationService, VRNavigationService) {
+    function pricingRuleEditorController($scope, WhS_BE_SalePricingRuleAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_Be_PricingRuleTypeEnum) {
 
-        var editMode;  
+        var editMode;
+        var pricingType;
         loadParameters();
         defineScope();
+
         load();
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null) {
+                pricingType = parameters.PricingType;
             }
-            editMode = (parameters != undefined);
+            console.log(parameters);
+            editMode = (pricingType != undefined);
         }
 
         function defineScope() {
@@ -29,14 +33,24 @@
                     return insertPricingRule();
                 }
             };
+            $scope.onPricingRuleTypeDirectiveReady = function (api) {
+                console.log(api);
+                api.load();
+            }
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
+            $scope.selectedPricingRuleType;
         }
 
         function load() {
+            definePricingRuleTypes();
         }
-
+        function definePricingRuleTypes() {
+            $scope.pricingRuleTypes = [];
+            for (var p in WhS_Be_PricingRuleTypeEnum)
+                $scope.pricingRuleTypes.push(WhS_Be_PricingRuleTypeEnum[p]);
+        }
         function getPricingRule() {
             return WhS_BE_SalePricingRuleAPIService.GetRule(pricingRuleId).then(function (pricingRule) {
                 fillScopeFromPricingRuleObj(pricingRule);

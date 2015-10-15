@@ -1,5 +1,5 @@
 ﻿
-app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService','WhS_BE_PricingProductAPIService','WhS_BE_CustomerPricingProductAPIService', 'VRModalService', 'VRNotificationService', function (WhS_BE_RouteRuleAPIService,WhS_BE_PricingProductAPIService,WhS_BE_CustomerPricingProductAPIService, VRModalService, VRNotificationService) {
+app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_PricingProductAPIService', 'WhS_BE_CustomerPricingProductAPIService', 'VRModalService', 'VRNotificationService', 'WhS_Be_PricingTypeEnum', function (WhS_BE_RouteRuleAPIService, WhS_BE_PricingProductAPIService, WhS_BE_CustomerPricingProductAPIService, VRModalService, VRNotificationService, WhS_Be_PricingTypeEnum) {
 
     return ({
         addRouteRule: addRouteRule,
@@ -197,12 +197,10 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService','WhS_BE_PricingP
             modalScope.title = "New Sale Pricing Rule";
             modalScope.onSalePricingRuleAdded = onSalePricingRuleAdded;
         };
-        var parameters;
-        if (dataItem != undefined) {
-            parameters = {
-                PricingRuleType:"Sale"
+        var  parameters = {
+                PricingType: WhS_Be_PricingTypeEnum.Sale
             };
-        }
+        
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingRule/PricingRuleEditor.html', parameters, settings);
     }
 

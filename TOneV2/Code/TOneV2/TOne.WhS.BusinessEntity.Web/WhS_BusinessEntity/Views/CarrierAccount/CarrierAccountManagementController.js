@@ -2,9 +2,9 @@
 
     "use strict";
 
-    carrierAccountManagementController.$inject = ['$scope', 'WhS_BE_MainService', 'UtilsService', 'VRNotificationService','WhS_Be_CarrierAccountEnum'];
+    carrierAccountManagementController.$inject = ['$scope', 'WhS_BE_MainService', 'UtilsService', 'VRNotificationService', 'WhS_Be_CarrierAccountTypeEnum'];
 
-    function carrierAccountManagementController($scope, WhS_BE_MainService, UtilsService, VRNotificationService,WhS_Be_CarrierAccountEnum) {
+    function carrierAccountManagementController($scope, WhS_BE_MainService, UtilsService, VRNotificationService, WhS_Be_CarrierAccountTypeEnum) {
         var gridAPI;
         var carrierAccountDirectiveAPI;
         var carrierProfileDirectiveAPI;
@@ -81,8 +81,8 @@
         }
         function defineCarrierAccountTypes() {
                 $scope.carrierAccountTypes = [];
-                for (var p in WhS_Be_CarrierAccountEnum)
-                    $scope.carrierAccountTypes.push(WhS_Be_CarrierAccountEnum[p]);
+                for (var p in WhS_Be_CarrierAccountTypeEnum)
+                    $scope.carrierAccountTypes.push(WhS_Be_CarrierAccountTypeEnum[p]);
             
         }
         function AddNewCarrierAccount() {

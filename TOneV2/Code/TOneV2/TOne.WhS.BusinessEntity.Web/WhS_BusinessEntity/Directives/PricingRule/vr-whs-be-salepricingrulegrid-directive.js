@@ -20,7 +20,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SalePricingRuleAPIService,
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/Templates/SalePricingRuleGrid.html"
+        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Templates/SalePricingRuleGrid.html"
 
     };
 
@@ -30,7 +30,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SalePricingRuleAPIService,
         this.initializeController = initializeController;
 
         function initializeController() {
-            $scope.carrierProfiles = [];
+            $scope.salePricingRules = [];
             $scope.gridReady = function (api) {
                 gridAPI = api;
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")

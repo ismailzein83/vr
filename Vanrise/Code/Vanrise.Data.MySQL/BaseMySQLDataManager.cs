@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,7 +31,18 @@ namespace Vanrise.Data.MySQL
 
         protected string GetFilePathForBulkInsert()
         {
-            return System.IO.Path.GetTempFileName();
+            string configuredDirectory = ConfigurationManager.AppSettings["BCPTempFilesDirectory"];
+            if (!String.IsNullOrEmpty(configuredDirectory))
+            {
+                string filePath = Path.Combine(configuredDirectory, Guid.NewGuid().ToString());
+                using (var stream = File.Create(filePath))
+                {
+                    stream.Close();
+                }
+                return filePath;
+            }
+            else
+                return System.IO.Path.GetTempFileName();
         }
     }
 }

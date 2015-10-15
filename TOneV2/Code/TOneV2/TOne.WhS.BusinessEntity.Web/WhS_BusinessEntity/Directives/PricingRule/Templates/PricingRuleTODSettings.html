@@ -1,0 +1,10 @@
+﻿<div style="display:inline-block;width: calc(100% - 18px);">
+    <vr-columns width="1/2row">
+        <vr-select datatextfield="Name" datavaluefield="TemplateConfigID"
+                   label="TOD Settings" datasource="pricingRuleTODSettings" selectedvalues="selectedPricingRuleTODSetting">
+        </vr-select>
+    </vr-columns>
+    <vr-columns width="1/2row" ng-show="selectedPricingRuleTODSetting" vr-loader="codeCriteriaAppendixLoader">
+        <vr-directivewrapper directive="selectedPricingRuleTODSetting.Editor" on-ready="onPricingRuleTODSettingsDirectiveReady"></vr-directivewrapper>
+    </vr-columns>
+</div>
