@@ -43,7 +43,7 @@ namespace Vanrise.Rules.Data.SQL
 
         public bool AreRulesUpdated(int ruleTypeId, ref object updateHandle)
         {
-            return base.IsDataUpdated("rules.Rule", "TypeID", ruleTypeId, ref updateHandle);
+            return base.IsDataUpdated("rules.[Rule]", "TypeID", ruleTypeId, ref updateHandle);
         }
 
         private Entities.Rule RuleMapper(IDataReader reader)
