@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PSTN.BusinessEntity.Entities
 {
-    public class CDRToNormalizeInfo
+    public class CDRToNormalizeInfo : Vanrise.Rules.BaseRuleTargetIdentifier
     {
         public int? SwitchId { get; set; }
 
