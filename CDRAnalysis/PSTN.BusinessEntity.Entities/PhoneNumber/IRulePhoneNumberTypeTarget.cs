@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace PSTN.BusinessEntity.Entities
 {
-    public abstract class NormalizationRuleActionBehavior
+    public interface IRulePhoneNumberTypeTarget
     {
-        public abstract void Execute(NormalizationRuleActionSettings actionSettings, ref string phoneNumber);
+        NormalizationPhoneNumberType? PhoneNumberType { get; }
     }
 }

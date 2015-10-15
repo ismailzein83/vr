@@ -1,6 +1,5 @@
 ﻿using PSTN.BusinessEntity.Data;
 using PSTN.BusinessEntity.Entities;
-using PSTN.BusinessEntity.Entities.Normalization.Actions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -168,11 +167,11 @@ namespace PSTN.BusinessEntity.Business
         IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetRuleStructureBehaviors()
         {
             List<Vanrise.Rules.BaseRuleStructureBehavior> ruleStructureBehaviors = new List<Vanrise.Rules.BaseRuleStructureBehavior>();
-            ruleStructureBehaviors.Add(new Entities.Normalization.StructureRuleBehaviors.RuleBehaviorByNumberType());
-            ruleStructureBehaviors.Add(new Entities.Normalization.StructureRuleBehaviors.RuleBehaviorBySwitch());
-            ruleStructureBehaviors.Add(new Entities.Normalization.StructureRuleBehaviors.RuleBehaviorByTrunk());
-            ruleStructureBehaviors.Add(new Entities.Normalization.StructureRuleBehaviors.RuleBehaviorByNumberPrefix());
-            ruleStructureBehaviors.Add(new Entities.Normalization.StructureRuleBehaviors.RuleBehaviorByNumberLength());
+            ruleStructureBehaviors.Add(new Rules.StructureRulesBehaviors.RuleBehaviorByNumberType());
+            ruleStructureBehaviors.Add(new Rules.StructureRulesBehaviors.RuleBehaviorBySwitch());
+            ruleStructureBehaviors.Add(new Rules.StructureRulesBehaviors.RuleBehaviorByTrunk());
+            ruleStructureBehaviors.Add(new Rules.StructureRulesBehaviors.RuleBehaviorByNumberPrefix());
+            ruleStructureBehaviors.Add(new Rules.StructureRulesBehaviors.RuleBehaviorByNumberLength());
             return ruleStructureBehaviors;
         }       
 
@@ -351,15 +350,15 @@ namespace PSTN.BusinessEntity.Business
             normalizationRuleDetail.PhoneNumberLength = normalizationRule.Criteria.PhoneNumberLength;
             normalizationRuleDetail.PhoneNumberPrefix = normalizationRule.Criteria.PhoneNumberPrefix;
 
-            if (normalizationRule.Settings.Actions != null)
-            {
-                normalizationRuleDetail.ActionDescriptions = new List<string>();
+            //if (normalizationRule.Settings.Actions != null)
+            //{
+            //    normalizationRuleDetail.ActionDescriptions = new List<string>();
 
-                foreach (var action in normalizationRule.Settings.Actions)
-                {
-                    normalizationRuleDetail.ActionDescriptions.Add(action.GetDescription());
-                }
-            }
+            //    foreach (var action in normalizationRule.Settings.Actions)
+            //    {
+            //        normalizationRuleDetail.ActionDescriptions.Add(action.GetDescription());
+            //    }
+            //}
 
             normalizationRuleDetail.Description = normalizationRule.Description;
 

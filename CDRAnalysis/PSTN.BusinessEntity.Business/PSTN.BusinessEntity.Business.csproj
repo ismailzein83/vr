@@ -62,12 +62,15 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="NormalizationRuleManager.cs" />
-    <Compile Include="Normalization\Actions\SubstringActionBehavior.cs" />
-    <Compile Include="Normalization\Actions\AddPrefixActionBehavior.cs" />
     <Compile Include="Normalization\RuleTypes\NormalizeNumber\Actions\AddPrefixActionBehavior.cs" />
     <Compile Include="Normalization\RuleTypes\NormalizeNumber\Actions\SubstringActionBehavior.cs" />
     <Compile Include="Normalization\RuleTypes\SetArea\Behaviors\SetAreaPrefixBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rules\StructureRulesBehaviors\RuleBehaviorByNumberLength.cs" />
+    <Compile Include="Rules\StructureRulesBehaviors\RuleBehaviorByNumberPrefix.cs" />
+    <Compile Include="Rules\StructureRulesBehaviors\RuleBehaviorByNumberType.cs" />
+    <Compile Include="Rules\StructureRulesBehaviors\RuleBehaviorBySwitch.cs" />
+    <Compile Include="Rules\StructureRulesBehaviors\RuleBehaviorByTrunk.cs" />
     <Compile Include="SwitchManager.cs" />
     <Compile Include="TrunkManager.cs" />
     <Compile Include="BrandManager.cs" />

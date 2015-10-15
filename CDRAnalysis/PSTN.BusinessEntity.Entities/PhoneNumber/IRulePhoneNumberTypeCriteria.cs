@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace PSTN.BusinessEntity.Entities
 {
-    public interface IRulePhoneNumberLengthTarget
+    public interface IRulePhoneNumberTypeCriteria
     {
-        int? PhoneNumberLength { get; }
+        IEnumerable<NormalizationPhoneNumberType> PhoneNumberTypes { get; }
     }
 }

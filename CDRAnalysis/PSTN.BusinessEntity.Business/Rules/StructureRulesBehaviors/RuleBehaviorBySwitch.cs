@@ -1,25 +1,26 @@
-﻿using System;
+﻿using PSTN.BusinessEntity.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PSTN.BusinessEntity.Entities.Normalization.StructureRuleBehaviors
+namespace PSTN.BusinessEntity.Business.Rules.StructureRulesBehaviors
 {
     public class RuleBehaviorBySwitch : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByKey<int>
     {
         protected override void GetKeysFromRule(Vanrise.Rules.BaseRule rule, out IEnumerable<int> keys)
         {
-            NormalizationRule normalizationRule = rule as NormalizationRule;
-            keys = normalizationRule.Criteria.SwitchIds;
+            IRuleSwitchCriteria ruleSwitchCriteria = rule as IRuleSwitchCriteria;
+            keys = ruleSwitchCriteria.SwitchIds;
         }
 
         protected override bool TryGetKeyFromTarget(object target, out int key)
         {
-            CDRToNormalizeInfo cdr = target as CDRToNormalizeInfo;
-            if(cdr.SwitchId.HasValue)
+            IRuleSwitchTarget ruleSwitchTarget = target as IRuleSwitchTarget;
+            if (ruleSwitchTarget.SwitchId.HasValue)
             {
-                key = cdr.SwitchId.Value;
+                key = ruleSwitchTarget.SwitchId.Value;
                 return true;
             }
             else

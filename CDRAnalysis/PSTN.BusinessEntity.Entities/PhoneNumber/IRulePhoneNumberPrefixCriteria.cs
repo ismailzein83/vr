@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace PSTN.BusinessEntity.Entities
 {
-    public abstract class NormalizationRuleActionSettings
+    public interface IRulePhoneNumberPrefixCriteria
     {
-        public int BehaviorId { get; set; }
-
-        public abstract string GetDescription();
+        IEnumerable<string> PhoneNumberPrefixes { get; }
     }
 }

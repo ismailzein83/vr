@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace PSTN.BusinessEntity.Entities
 {
-    public enum NormalizationRuleType { AdjustNumber = 0, SetArea = 1 }
-
-    public class NormalizationRuleSettings
+    public interface IRulePhoneNumberTarget
     {
-        public NormalizationRuleType RuleType { get; set; }
+        string PhoneNumber { get;}
     }
 }

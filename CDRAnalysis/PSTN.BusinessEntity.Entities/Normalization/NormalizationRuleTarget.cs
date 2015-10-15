@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PSTN.BusinessEntity.Entities
 {
-    public abstract class NormalizationRuleTarget : Vanrise.Rules.BaseRuleTarget
+    public abstract class NormalizationRuleTarget : Vanrise.Rules.BaseRuleTarget, IRulePhoneNumberTypeTarget, IRuleSwitchTarget, IRuleTrunkTarget, IRulePhoneNumberTarget
     {
         public abstract NormalizationRuleType RuleType { get; }
 
@@ -17,5 +17,10 @@ namespace PSTN.BusinessEntity.Entities
         public string PhoneNumber { get; set; }
 
         public NormalizationPhoneNumberType PhoneNumberType { get; set; }
+
+        NormalizationPhoneNumberType? IRulePhoneNumberTypeTarget.PhoneNumberType
+        {
+            get { return this.PhoneNumberType; }
+        }
     }
 }

@@ -1,25 +1,26 @@
-﻿using System;
+﻿using PSTN.BusinessEntity.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PSTN.BusinessEntity.Entities.Normalization.StructureRuleBehaviors
+namespace PSTN.BusinessEntity.Business.Rules.StructureRulesBehaviors
 {
     public class RuleBehaviorByTrunk : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByKey<int>
     {
         protected override void GetKeysFromRule(Vanrise.Rules.BaseRule rule, out IEnumerable<int> keys)
         {
-            NormalizationRule normalizationRule = rule as NormalizationRule;
-            keys = normalizationRule.Criteria.TrunkIds;
+            IRuleTrunkCriteria tuleTrunkCriteria = rule as IRuleTrunkCriteria;
+            keys = tuleTrunkCriteria.TrunkIds;
         }
 
         protected override bool TryGetKeyFromTarget(object target, out int key)
         {
-            CDRToNormalizeInfo cdr = target as CDRToNormalizeInfo;
-            if (cdr.TrunkId.HasValue)
+            IRuleTrunkTarget ruleTrunkTarget = target as IRuleTrunkTarget;
+            if (ruleTrunkTarget.TrunkId.HasValue)
             {
-                key = cdr.TrunkId.Value;
+                key = ruleTrunkTarget.TrunkId.Value;
                 return true;
             }
             else
