@@ -4,7 +4,7 @@ using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Fzero.CDRImport.QueueActivators
 {
-    public class Normalize_ImporttoNormalCDRActivator : QueueActivator
+    public class NormalizeCDRActivator : QueueActivator
     {
         public override void ProcessItem(PersistentQueueItem item, ItemsToEnqueue outputItems)
         {

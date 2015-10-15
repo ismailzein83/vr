@@ -73,11 +73,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ImporttoNormalCDRActivator.cs" />
-    <Compile Include="Normalize_ImporttoNormalCDRActivator.cs" />
+    <Compile Include="SaveCDRActivator.cs" />
+    <Compile Include="NormalizeCDRActivator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ImporttoStagingCDRActivator.cs" />
-    <Compile Include="Normalize_ImporttoStagingCDRActivator.cs" />
+    <Compile Include="SaveStagingCDRActivator.cs" />
+    <Compile Include="NormalizeStagingCDRActivator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PSTN.BusinessEntity.Business\PSTN.BusinessEntity.Business.csproj">
