@@ -38,7 +38,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 BEGIN
                     SELECT 0 ClosedoverGenerated,
                         s.Name AS StrategyName,
-                        COUNT(ach.ID) AS GeneratedCases,
+                        SUM(CASE WHEN ach.Status = 1 THEN 1 ELSE 0 END) AS GeneratedCases,
                         SUM(CASE WHEN ach.Status = 3 THEN 1 WHEN ach.Status = 4 THEN 1 ELSE 0 END) AS ClosedCases,
                         SUM(CASE WHEN ach.Status = 3 THEN 1 ELSE 0 END) AS FraudCases
                         #SELECT_CLAUSE#
