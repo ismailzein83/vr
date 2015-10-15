@@ -89,7 +89,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public bool Delete(int customerPricingProductId)
         {
-            int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CustomerPricingProduct_Delete", customerPricingProductId);
+            int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CustomerPricingProduct_Delete", customerPricingProductId,DateTime.Now);
             return (recordesEffected > 0);
         }
         CustomerPricingProductDetail CustomerPricingProductDetailMapper(IDataReader reader)

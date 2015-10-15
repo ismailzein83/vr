@@ -9,7 +9,8 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerPricingProductAPIS
             scope: {
                 onReady: "=",
                 pricingproductid: '=',
-                hidecustomercolumn:'@'
+                hidecustomercolumn: '@',
+                hidepricingproductcolumn: '@',
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -34,6 +35,10 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerPricingProductAPIS
                 $scope.hideCustomerColumn = false;
                 if ($attrs.hidecustomercolumn != undefined)
                     $scope.hideCustomerColumn = true;
+                $scope.hidePricingProductColumn = false;
+                if ($attrs.hidepricingproductcolumn != undefined)
+                    $scope.hidePricingProductColumn = true;
+
                 $scope.onGridReady = function (api) {  
                     gridAPI = api;
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
@@ -71,7 +76,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerPricingProductAPIS
 
             function deleteCustomerPricingProduct(gridObject) {
                 var onCustomerPricingProductDeleted = function (gridObject) {
-                    gridAPI.itemDeleted(gridObject);
+                    gridAPI.itemUpdated(gridObject);
                 }
 
                 WhS_BE_MainService.deleteCustomerPricingProduct($scope,gridObject, onCustomerPricingProductDeleted);

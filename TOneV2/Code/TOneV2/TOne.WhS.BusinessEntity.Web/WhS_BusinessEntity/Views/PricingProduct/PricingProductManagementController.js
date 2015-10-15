@@ -27,7 +27,6 @@
             }
             $scope.onRoutingProductDirectiveReady = function (api) {
                 routingProductDirectiveAPI = api;
-                console.log(api);
                 load();
             }
             $scope.AddNewPricingProduct = AddNewPricingProduct;

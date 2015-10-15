@@ -461,21 +461,25 @@ namespace TOne.WhS.BusinessEntity.Business
             return insertOperationOutput;
         }
 
-        public TOne.Entities.DeleteOperationOutput<object> DeleteCustomerPricingProduct(int customerPricingProductId)
+        public TOne.Entities.UpdateOperationOutput<object> DeleteCustomerPricingProduct(int customerPricingProductId)
         {
             ICustomerPricingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerPricingProductDataManager>();
 
-            TOne.Entities.DeleteOperationOutput<object> deleteOperationOutput = new TOne.Entities.DeleteOperationOutput<object>();
-            deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Failed;
+            TOne.Entities.UpdateOperationOutput<object> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<object>();
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
 
-            bool deleteActionSucc = dataManager.Delete(customerPricingProductId);
+            bool updateActionSucc = dataManager.Delete(customerPricingProductId);
 
-            if (deleteActionSucc)
+            if (updateActionSucc)
             {
-                deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Succeeded;
+                 List<CustomerPricingProductDetail> customerPricingProducts = GetCachedCustomerPricingProducts();
+                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                 updateOperationOutput.UpdatedObject = customerPricingProducts.FindRecord(x => x.CustomerPricingProductId == customerPricingProductId);
+
+
             }
 
-            return deleteOperationOutput;
+            return updateOperationOutput;
         }
         #region Private Members
 

@@ -31,10 +31,10 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
         this.initializeController = initializeController;
 
         function initializeController() {
-            $scope.hideprofilecolumn=false;
+            $scope.hideProfileColumn = false;
             if ($attrs.hideprofilecolumn != undefined)
             {
-                $scope.hideprofilecolumn=true;
+                $scope.hideProfileColumn = true;
             }
             $scope.isExpandable = function (dataItem) {
                 if (dataItem.AccountType == WhS_Be_CarrierAccountEnum.Supplier.value)
@@ -140,7 +140,15 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                 dataItem.extensionObject.custormerPricingProductGridAPI.loadGrid(query);
             var onCustomerPricingProductAdded = function (customerPricingProductObj) {
                 if (dataItem.extensionObject.custormerPricingProductGridAPI != undefined)
-                    dataItem.extensionObject.custormerPricingProductGridAPI.onCustomerPricingProductAdded(customerPricingProductObj);
+                {
+                    for (var i = 0; i < customerPricingProductObj.length; i++) {
+                        if (customerPricingProductObj[i].Status == 0 && gridAPI != undefined)
+                            dataItem.extensionObject.custormerPricingProductGridAPI.onCustomerPricingProductAdded(customerPricingProductObj[i]);
+                        else if (customerPricingProductObj[i].Status == 1 && gridAPI != undefined) {
+                            dataItem.extensionObject.custormerPricingProductGridAPI.onCustomerPricingProductUpdated(customerPricingProductObj[i]);
+                        }
+                    }
+                }
             };
             WhS_BE_MainService.addCustomerPricingProduct(onCustomerPricingProductAdded, dataItem);
         }

@@ -30,7 +30,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return manager.AddCustomerPricingProduct(customerPricingProducts);
         }
         [HttpGet]
-        public TOne.Entities.DeleteOperationOutput<object> DeleteCustomerPricingProduct(int customerPricingProductId)
+        public TOne.Entities.UpdateOperationOutput<object> DeleteCustomerPricingProduct(int customerPricingProductId)
         {
             CustomerPricingProductManager manager = new CustomerPricingProductManager();
             return manager.DeleteCustomerPricingProduct(customerPricingProductId);

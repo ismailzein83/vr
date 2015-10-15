@@ -108,7 +108,15 @@ function (UtilsService, VRNotificationService, WhS_BE_PricingProductAPIService,W
              dataItem.extensionObject.custormerPricingProductGridAPI.loadGrid(query);
             var onCustomerPricingProductAdded = function (customerPricingProductObj) {
                 if (dataItem.extensionObject.custormerPricingProductGridAPI != undefined)
-                    dataItem.extensionObject.custormerPricingProductGridAPI.onCustomerPricingProductAdded(customerPricingProductObj);
+                {
+                    for (var i = 0; i < customerPricingProductObj.length; i++) {
+                        if (customerPricingProductObj[i].Status == 0 && gridAPI != undefined)
+                            dataItem.extensionObject.custormerPricingProductGridAPI.onCustomerPricingProductAdded(customerPricingProductObj[i]);
+                        else if (customerPricingProductObj[i].Status == 1 && gridAPI != undefined) {
+                            dataItem.extensionObject.custormerPricingProductGridAPI.onCustomerPricingProductUpdated(customerPricingProductObj[i]);
+                        }
+                    }
+                }
             };
             WhS_BE_MainService.addCustomerPricingProduct(onCustomerPricingProductAdded,dataItem);
         }

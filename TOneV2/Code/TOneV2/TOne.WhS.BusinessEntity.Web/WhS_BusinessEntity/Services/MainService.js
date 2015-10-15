@@ -125,7 +125,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService','WhS_BE_PricingP
                     return WhS_BE_CustomerPricingProductAPIService.DeleteCustomerPricingProduct(customerPricingProductObj.CustomerPricingProductId)
                         .then(function (deletionResponse) {
                             VRNotificationService.notifyOnItemDeleted("Customer Pricing Product", deletionResponse);
-                            onCustomerPricingProductDeleted(customerPricingProductObj);
+                            onCustomerPricingProductDeleted(deletionResponse.UpdatedObject);
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);
@@ -158,7 +158,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService','WhS_BE_PricingP
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Pricing Product";
+            modalScope.title = "Edit Carrier Account";
             modalScope.onCarrierAccountUpdated = onCarrierAccountUpdated;
         };
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierAccountEditor.html', parameters, modalSettings);
