@@ -8,9 +8,9 @@ using TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.TOD.Settings;
 
 namespace TOne.WhS.BusinessEntity.Business.PricingRules.RuleTypes.TOD
 {
-    public class RegularTODBehavior :PricingRuleTODActionBehavior
+    public class RegularTODBehavior :PricingRuleTODBehavior
     {
-        public override void Execute(PricingRuleTODActionSettings settings, PricingRuleTODTarget target)
+        public override void Execute(PricingRuleTODSettings settings, PricingRuleTODTarget target)
         {
             RegularTODSettings regularTODSettings = settings as RegularTODSettings;
         }

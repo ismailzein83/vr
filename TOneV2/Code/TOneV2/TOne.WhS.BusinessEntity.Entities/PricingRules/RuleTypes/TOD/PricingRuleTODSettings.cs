@@ -8,6 +8,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class PricingRuleTODSettings : PricingRuleSettings
     {
-        public PricingRuleTODActionSettings Action { get; set; }
+        public int ConfigId { get; set; }
     }
 }

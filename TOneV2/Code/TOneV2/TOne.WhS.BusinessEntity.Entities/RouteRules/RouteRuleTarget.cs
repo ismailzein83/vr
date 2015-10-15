@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public abstract class PricingRuleTODActionSettings
+    public class RouteRuleTarget
     {
-        public int ConfigId { get; set; }
+        public bool IsBlock { get; set; }
+
+        public List<RouteOptionRuleTarget> Options { get; set; }
     }
 }

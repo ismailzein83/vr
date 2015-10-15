@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public abstract class PricingRuleTariffActionBehavior
+    public abstract class PricingRuleTODBehavior
     {
-        public abstract void Execute(PricingRuleTariffActionSettings settings, PricingRuleTariffTarget target);
+        public abstract void Execute(PricingRuleTODSettings settings, PricingRuleTODTarget target);
     }
 }

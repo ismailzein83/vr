@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.TOD.Settings
 {
-    public class RegularTODSettings : PricingRuleTODActionSettings
+    public class RegularTODSettings : PricingRuleTODSettings
     {
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.Tariff.Settings
 {
-    public class RegularTariffSettings : PricingRuleTariffActionSettings
+    public class RegularTariffSettings : PricingRuleTariffSettings
     {
         public Decimal CallFee { get; set; }
 

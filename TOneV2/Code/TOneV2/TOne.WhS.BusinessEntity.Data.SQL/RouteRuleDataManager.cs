@@ -69,7 +69,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             {
                 RouteRuleId = (int)reader["ID"],
                 RouteCriteria = Vanrise.Common.Serializer.Deserialize<Entities.RouteCriteria>(reader["Criteria"] as string),
-                TypeConfigId = (int)reader["TypeConfigID"],
+                //TypeConfigId = (int)reader["TypeConfigID"],
                 Settings = (reader["RuleSettings"] as string) != null ? Vanrise.Common.Serializer.Deserialize<Entities.RouteRuleSettings>(reader["RuleSettings"] as string): null,
                 Description = reader["Description"] as string,
                 BeginEffectiveDate = (DateTime)reader["BED"],

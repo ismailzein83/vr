@@ -8,5 +8,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public abstract class RouteRuleSettings
     {
+        public int ConfigId { get; set; }
     }
 }

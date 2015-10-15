@@ -10,9 +10,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public int RouteRuleId { get; set; }
 
-        public RouteCriteria RouteCriteria { get; set; }
-
-        public int TypeConfigId { get; set; }
+        public RouteCriteria RouteCriteria { get; set; }        
 
         public RouteRuleSettings Settings { get; set; }
 

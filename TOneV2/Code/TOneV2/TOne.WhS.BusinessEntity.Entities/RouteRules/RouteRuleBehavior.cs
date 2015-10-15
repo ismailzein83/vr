@@ -8,7 +8,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public abstract class RouteRuleBehavior
     {
-        public virtual void Execute(BusinessEntity.Entities.RouteRule ruleDefinition)
+        public virtual void Execute(RouteRuleSettings settings, RouteRuleTarget target)
         {
 
         }

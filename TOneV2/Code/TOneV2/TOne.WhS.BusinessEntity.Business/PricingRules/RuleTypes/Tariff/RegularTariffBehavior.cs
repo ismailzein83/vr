@@ -8,9 +8,9 @@ using TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.Tariff.Settings;
 
 namespace TOne.WhS.BusinessEntity.Business.PricingRules.RuleTypes.Tariff
 {
-    public class RegularTariffBehavior : PricingRuleTariffActionBehavior
+    public class RegularTariffBehavior : PricingRuleTariffBehavior
     {
-        public override void Execute(PricingRuleTariffActionSettings settings, PricingRuleTariffTarget target)
+        public override void Execute(PricingRuleTariffSettings settings, PricingRuleTariffTarget target)
         {
             RegularTariffSettings regularTariffSettings = settings as RegularTariffSettings;
         }
