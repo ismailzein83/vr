@@ -8,8 +8,10 @@ namespace PSTN.BusinessEntity.Entities
 {
     public enum NormalizationRuleType { AdjustNumber = 0, SetArea = 1 }
 
-    public class NormalizationRuleSettings
+    public abstract class NormalizationRuleSettings
     {
         public NormalizationRuleType RuleType { get; set; }
+
+        public abstract string GetDescription();
     }
 }

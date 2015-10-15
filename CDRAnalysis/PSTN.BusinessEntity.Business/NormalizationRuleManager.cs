@@ -353,15 +353,7 @@ namespace PSTN.BusinessEntity.Business
             normalizationRuleDetail.PhoneNumberLength = normalizationRule.Criteria.PhoneNumberLength;
             normalizationRuleDetail.PhoneNumberPrefix = normalizationRule.Criteria.PhoneNumberPrefix;
 
-            //if (normalizationRule.Settings.Actions != null)
-            //{
-            //    normalizationRuleDetail.ActionDescriptions = new List<string>();
-
-            //    foreach (var action in normalizationRule.Settings.Actions)
-            //    {
-            //        normalizationRuleDetail.ActionDescriptions.Add(action.GetDescription());
-            //    }
-            //}
+            normalizationRuleDetail.SettingsDescription = (normalizationRule.Settings != null) ? normalizationRule.Settings.GetDescription() : null;
 
             normalizationRuleDetail.Description = normalizationRule.Description;
 
