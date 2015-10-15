@@ -177,10 +177,10 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                             DurationInSeconds = subunifiedCDR.DurationInSeconds,
                             InTrunkSymbol = subunifiedCDR.InTrunkSymbol,
                             OutTrunkSymbol = subunifiedCDR.OutTrunkSymbol,
-                            InTrunkId=subunifiedCDR.InTrunkId,
+                            InTrunkId = subunifiedCDR.InTrunkId,
                             OutTrunkId = subunifiedCDR.OutTrunkId,
-                            SwitchID=subunifiedCDR.SwitchID,
-                            AreaCode = subunifiedCDR.AreaCode
+                            SwitchID = subunifiedCDR.SwitchID,
+                            AreaCode = subunifiedCDR.AreaCode,
                         }
                    );
 
@@ -199,7 +199,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                             InTrunkId = subunifiedCDR.InTrunkId,
                             OutTrunkId = subunifiedCDR.OutTrunkId,
                             SwitchID = subunifiedCDR.SwitchID,
-                            AreaCode = subunifiedCDR.AreaCode
+                            AreaCode = subunifiedCDR.AreaCode,
                         }
                             );
                     }
@@ -239,7 +239,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                 InTrunkId = stagingCDR.InTrunkId,
                 OutTrunkId = stagingCDR.OutTrunkId,
                 SwitchID = stagingCDR.SwitchID,
-                AreaCode = stagingCDR.AreaCode
+                AreaCode = stagingCDR.AreaCode,
             };
         }
 

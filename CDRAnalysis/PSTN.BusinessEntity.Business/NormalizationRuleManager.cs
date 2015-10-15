@@ -19,6 +19,19 @@ namespace PSTN.BusinessEntity.Business
             return dataManager.GetEffective();
         }
 
+
+        //public void FindSwitch_ApplyTimeOffset(Vanrise.Fzero.CDRImport.Entities.StagingCDR cdr, )
+        //{
+          
+
+
+        //  foreach (var i in cdrs)
+        //  {
+
+        //  }
+        //}
+
+
         public void Normalize(Vanrise.Fzero.CDRImport.Entities.StagingCDR cdr)
         {
             CDRToNormalizeInfo cdrInfo_CGPN = new CDRToNormalizeInfo { PhoneNumber = cdr.CGPN, SwitchId = cdr.SwitchID, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId  };

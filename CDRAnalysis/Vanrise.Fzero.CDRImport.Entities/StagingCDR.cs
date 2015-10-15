@@ -7,8 +7,8 @@ namespace Vanrise.Fzero.CDRImport.Entities
 
         static StagingCDR()
         {
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(StagingCDR), "CGPN", "CDPN", "SwitchID", "InTrunkSymbol", "OutTrunkSymbol", "DurationInSeconds", 
-"DisconnectDateTime", "ConnectDateTime", "InTrunkId", "OutTrunkId");
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(StagingCDR), "CGPN", "CDPN", "SwitchID", "InTrunkSymbol", "OutTrunkSymbol", "DurationInSeconds",
+"DisconnectDateTime", "ConnectDateTime", "InTrunkId", "OutTrunkId", "AreaCode");
         }
 
         public string CGPN { get; set; }
@@ -22,5 +22,7 @@ namespace Vanrise.Fzero.CDRImport.Entities
         public int? InTrunkId { get; set; }
         public int? OutTrunkId { get; set; }
         public string AreaCode { get; set; }
+       
+
     }
 }

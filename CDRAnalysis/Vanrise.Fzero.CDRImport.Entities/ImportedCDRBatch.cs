@@ -19,6 +19,8 @@ namespace Vanrise.Fzero.CDRImport.Entities
 
         public List<CDR> CDRs { get; set; }
 
+        public int Datasource { get; set; }
+
         public override int GetRecordCount()
         {
             return CDRs.Count;

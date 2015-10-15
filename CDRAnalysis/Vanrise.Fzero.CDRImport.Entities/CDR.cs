@@ -11,8 +11,8 @@ namespace Vanrise.Fzero.CDRImport.Entities
 
                 "Id", "MSISDN", "IMSI", "ConnectDateTime", "Destination", "DurationInSeconds", 
                 "DisconnectDateTime", "CallClass", "IsOnNet", "CallType", "SubType", "IMEI", "BTSId", 
-                "CellId", "UpVolume", "DownVolume", "CellLatitude", "CellLongitude", "InTrunkSymbol", "OutTrunkSymbol", 
-                "InTrunkId", "OutTrunkId", "ServiceType", "ServiceVASName", "SwitchID", "ReleaseCode"
+                "CellId", "UpVolume", "DownVolume", "CellLatitude", "CellLongitude", "InTrunkSymbol", "OutTrunkSymbol",
+                "InTrunkId", "OutTrunkId", "ServiceType", "ServiceVASName", "SwitchID", "ReleaseCode", "AreaCode"
                 
                 );
         }
@@ -44,6 +44,7 @@ namespace Vanrise.Fzero.CDRImport.Entities
         public int? SwitchID { get; set; }
         public string ReleaseCode { get; set; }
         public string AreaCode { get; set; }
+       
 
     }
 }

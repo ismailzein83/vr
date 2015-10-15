@@ -57,26 +57,6 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
         # region SQL Mappers
         public static Vanrise.Integration.Entities.MappingOutput StaggingCDRs_SQL()
         {
-            PSTN.BusinessEntity.Business.TrunkManager switchTrunkManager = new PSTN.BusinessEntity.Business.TrunkManager();
-            PSTN.BusinessEntity.Entities.TrunkInfo currentTrunk = new PSTN.BusinessEntity.Entities.TrunkInfo();
-
-            PSTN.BusinessEntity.Business.SwitchManager switchManager = new PSTN.BusinessEntity.Business.SwitchManager();
-            PSTN.BusinessEntity.Entities.Switch currentSwitch;
-            currentSwitch = switchManager.GetSwitchByDataSourceId(dataSourceId);
-            int? SwitchId = null;
-            TimeSpan TimeOffset = new TimeSpan();
-            if (currentSwitch != null)
-            {
-                SwitchId = currentSwitch.SwitchId;
-                TimeOffset = currentSwitch.TimeOffset;
-            }
-
-            else
-                LogVerbose("No Switch associated to this Datasource");
-
-
-
-
             LogVerbose("Started");
             Vanrise.Fzero.CDRImport.Entities.ImportedStagingCDRBatch batch = new Vanrise.Fzero.CDRImport.Entities.ImportedStagingCDRBatch();
             batch.StagingCDRs = new List<Vanrise.Fzero.CDRImport.Entities.StagingCDR>();
@@ -89,31 +69,10 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
                 cdr.CDPN = reader["CDPN"] as string;
                 cdr.CGPN = reader["CGPN"] as string;
                 cdr.ConnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "ConnectDateTime");
-                if (cdr.ConnectDateTime != null)
-                    cdr.ConnectDateTime = cdr.ConnectDateTime.Value.Add(TimeOffset);
                 cdr.DurationInSeconds = Utils.GetReaderValue<Decimal?>(reader, "DurationInSeconds");
                 cdr.DisconnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
-
-                if (cdr.DisconnectDateTime != null)
-                    cdr.DisconnectDateTime = cdr.DisconnectDateTime.Value.Add(TimeOffset);
-
                 cdr.InTrunkSymbol = reader["InTrunkSymbol"] as string;
                 cdr.OutTrunkSymbol = reader["OutTrunkSymbol"] as string;
-
-                if (cdr.InTrunkSymbol != null && cdr.InTrunkSymbol != string.Empty)
-                {
-                    currentTrunk = switchTrunkManager.GetTrunkBySymbol(cdr.InTrunkSymbol);
-                    if (currentTrunk != null)
-                        cdr.InTrunkId = currentTrunk.TrunkId;
-                }
-                if (cdr.OutTrunkSymbol != null && cdr.OutTrunkSymbol != string.Empty)
-                {
-                    currentTrunk = switchTrunkManager.GetTrunkBySymbol(cdr.OutTrunkSymbol);
-                    if (currentTrunk != null)
-                        cdr.OutTrunkId = currentTrunk.TrunkId;
-                }
-                cdr.SwitchID = SwitchId;
-
                 index = Utils.GetReaderValue<int?>(reader, "ID").ToString();
 
                 batch.StagingCDRs.Add(cdr);
@@ -121,10 +80,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
             }
 
             ImportedData.LastImportedId = index;
-            //mappedBatches.Add("Save CDRs", batch); // Save Without Normalization
-
             mappedBatches.Add("Normalize CDRs", batch); // Normalize then Save
-
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
