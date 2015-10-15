@@ -132,7 +132,7 @@ as (select * from (values
 (18,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',7,'Root/Administration Module/Dynamic Pages:View',null,null,0,11),
 (19,'Switches','Switches','#/view/PSTN_BusinessEntity/Views/Switch/SwitchManagement',8,'Root/PSTN_BusinessEntity Module:View',null,null,0,12),
 (20,'Trunks','Trunks','#/view/PSTN_BusinessEntity/Views/Trunk/SwitchTrunkManagement',8,'Root/PSTN_BusinessEntity Module:View',null,null,0,10),
-(21,'Switch Types','Switch Types','#/view/PSTN_BusinessEntity/Views/Type/SwitchTypeManagement',8,'Root/PSTN_BusinessEntity Module:View',null,null,0,11),
+(21,'Switch Brands','Switch Brands','#/view/PSTN_BusinessEntity/Views/Type/SwitchTypeManagement',8,'Root/PSTN_BusinessEntity Module:View',null,null,0,11),
 (22,'Ranking Pages','Ranking Pages','#/view/Security/Views/Pages/RankingPageManagement',1,'Root/Administration Module:View',null,null,0,13)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank]))
