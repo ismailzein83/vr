@@ -100,7 +100,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return whereClause.ToString();
         }
 
-        
+
         private List<int> GetCaseStatusListAsIntList(List<CaseStatus> items)
         {
             List<int> list = new List<int>();

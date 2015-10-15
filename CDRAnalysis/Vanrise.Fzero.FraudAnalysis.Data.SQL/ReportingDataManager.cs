@@ -159,7 +159,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             ");
 
             query.Replace("#TEMP_TABLE_NAME#", tempTableName);
-            query.Replace("#DATE_DAY#", (!groupDaily) ? "NULL AS DateDay," : "CAST(se.ExecutionDate AS DATE) AS DateDay,");
+            query.Replace("#DATE_DAY#", (!groupDaily) ? "NULL AS DateDay," : "CAST(ac.StatusUpdatedTime AS DATE) AS DateDay,");
             query.Replace("#INNER_WHERE_CLAUSE#", GetInnerWhereClauseFilteredBlockedLines(groupDaily));
             query.Replace("#OUTER_WHERE_CLAUSE#", GetOuterWhereClauseFilteredBlockedLines(strategyIDs));
             query.Replace("#GROUP_BY_CLAUSE#", GetGroupByClauseFilteredBlockedLines(groupDaily));
@@ -173,7 +173,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             whereClause.Append("WHERE Status = 3");
             whereClause.Append(" AND se1.StrategyId = StrategyId");
-            whereClause.Append((!groupDaily) ? null : " AND CAST(se1.ExecutionDate AS DATE) = CAST(se.ExecutionDate AS DATE)");
+            whereClause.Append((!groupDaily) ? null : " AND CAST(ac1.StatusUpdatedTime AS DATE) = CAST(ac.StatusUpdatedTime AS DATE)");
 
             return whereClause.ToString();
         }
@@ -197,7 +197,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             StringBuilder groupByClause = new StringBuilder();
 
             groupByClause.Append("GROUP BY s.Name, se.StrategyId");
-            groupByClause.Append((!groupDaily) ? null : ", CAST(se.ExecutionDate AS DATE)");
+            groupByClause.Append((!groupDaily) ? null : ", CAST(ac.StatusUpdatedTime AS DATE)");
 
             return groupByClause.ToString();
         }
@@ -250,7 +250,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             linesDetected.AccountNumber = reader["AccountNumber"] as string;
             linesDetected.ReasonofBlocking = reader["ReasonofBlocking"] as string;
             linesDetected.ActiveDays = (int)reader["ActiveDays"];
-            linesDetected.GeneratedCases = (int)reader["GeneratedCases"];
+            linesDetected.Occurrences = (int)reader["Occurrences"];
             linesDetected.Volume = (decimal)reader["Volume"];
             return linesDetected;
         }

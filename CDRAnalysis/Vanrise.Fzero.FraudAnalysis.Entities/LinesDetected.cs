@@ -11,7 +11,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public int ActiveDays { get; set; }
 
-        public int GeneratedCases { get; set; }
+        public int Occurrences { get; set; }
 
         public string ReasonofBlocking { get; set; }
 
