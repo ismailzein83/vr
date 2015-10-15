@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Rules
 {
-    public class BaseRuleTargetIdentifier
+    public class BaseRuleTarget
     {
         public DateTime? EffectiveOn { get; set; }
     }

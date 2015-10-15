@@ -48,12 +48,12 @@ namespace Vanrise.Rules
             }
         }
 
-        public BaseRule GetMatchRule(BaseRuleTargetIdentifier target)
+        public BaseRule GetMatchRule(BaseRuleTarget target)
         {
             return GetMatchRule(this, target);
         }
 
-        BaseRule GetMatchRule(RuleNode parentNode, BaseRuleTargetIdentifier target)
+        BaseRule GetMatchRule(RuleNode parentNode, BaseRuleTarget target)
         {
             if (parentNode.Behavior == null)//last node in the tree
                 return GetFirstMatchRuleFromNode(parentNode, target);
@@ -67,7 +67,7 @@ namespace Vanrise.Rules
                 return GetFirstMatchRuleFromNode(parentNode, target);
         }
 
-        BaseRule GetFirstMatchRuleFromNode(RuleNode node, BaseRuleTargetIdentifier target)
+        BaseRule GetFirstMatchRuleFromNode(RuleNode node, BaseRuleTarget target)
         {    
             RuleNode parentNode = node.ParentNode;
             if(parentNode != null)//not root node
@@ -87,7 +87,7 @@ namespace Vanrise.Rules
             return null;
         }
 
-        bool IsRuleMatched(BaseRule rule, BaseRuleTargetIdentifier target)
+        bool IsRuleMatched(BaseRule rule, BaseRuleTarget target)
         {
             if (target.EffectiveOn.HasValue
                         &&
