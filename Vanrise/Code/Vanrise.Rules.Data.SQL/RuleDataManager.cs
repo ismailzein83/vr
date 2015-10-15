@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,27 +18,43 @@ namespace Vanrise.Rules.Data.SQL
 
         public bool AddRule(Entities.Rule rule, out int ruleId)
         {
-            throw new NotImplementedException();
+            object insertedId;
+            int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_Insert", out insertedId, rule.TypeId, rule.RuleDetails);
+            ruleId = (recordesEffected > 0) ? (int)insertedId : -1;
+            return (recordesEffected > 0);
         }
 
         public bool UpdateRule(Entities.Rule ruleEntity)
         {
-            throw new NotImplementedException();
+            int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_Update", ruleEntity.RuleId, ruleEntity.TypeId, ruleEntity.RuleDetails);
+            return (recordesEffected > 0);
         }
 
         public bool DeleteRule(int ruleId)
         {
-            throw new NotImplementedException();
+            int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_Delete", ruleId);
+            return (recordesEffected > 0);
         }
 
         public IEnumerable<Entities.Rule> GetRulesByType(int ruleTypeId)
         {
-            throw new NotImplementedException();
+            return GetItemsSP("rules.sp_Rule_GetByType",RuleMapper, ruleTypeId);
         }
 
         public bool AreRulesUpdated(int ruleTypeId, ref object updateHandle)
         {
             return base.IsDataUpdated("rules.Rule", "TypeID", ruleTypeId, ref updateHandle);
+        }
+
+        private Entities.Rule RuleMapper(IDataReader reader)
+        {
+            Entities.Rule instance = new Entities.Rule
+            {
+                RuleId = (int)reader["ID"],
+                TypeId = GetReaderValue<int>(reader, "TypeID"),
+                RuleDetails = reader["RuleDetails"] as string,
+            };
+            return instance;
         }
 
 
