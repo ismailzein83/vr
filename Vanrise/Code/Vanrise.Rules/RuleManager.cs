@@ -10,9 +10,17 @@ using Vanrise.Rules.Data;
 
 namespace Vanrise.Rules
 {
-    public class RuleManager<T> where T : BaseRule
+    public abstract class RuleManager<T> : RuleManager<T, T> where T : BaseRule
     {
-        public Vanrise.Entities.InsertOperationOutput<T> AddRule(T rule)
+        protected override T MapRuleTODetails(T rule)
+        {
+            return rule;
+        }
+    }
+    public abstract class RuleManager<T, Q> where T : BaseRule
+    {
+        protected abstract Q MapRuleTODetails(T rule);
+        public Vanrise.Entities.InsertOperationOutput<Q> AddRule(T rule)
         {
             int ruleTypeId = GetRuleTypeId();
             Entities.Rule ruleEntity = new Entities.Rule
@@ -21,19 +29,19 @@ namespace Vanrise.Rules
                 RuleDetails = Serializer.Serialize(rule)
             };
             IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
-            InsertOperationOutput<T> insertOperationOutput = new InsertOperationOutput<T>();
+            InsertOperationOutput<Q> insertOperationOutput = new InsertOperationOutput<Q>();
             int ruleId;
             if (ruleDataManager.AddRule(ruleEntity, out ruleId))
             {
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 rule.RuleId = ruleId;
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(ruleTypeId);
-                insertOperationOutput.InsertedObject = rule;
+                insertOperationOutput.InsertedObject = MapRuleTODetails(rule);
             }
             return insertOperationOutput;
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<T> UpdateRule(T rule)
+        public Vanrise.Entities.UpdateOperationOutput<Q> UpdateRule(T rule)
         {
             int ruleTypeId = GetRuleTypeId();
             Entities.Rule ruleEntity = new Entities.Rule
@@ -43,19 +51,19 @@ namespace Vanrise.Rules
                 RuleDetails = Serializer.Serialize(rule)
             };
             IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
-            UpdateOperationOutput<T> updateOperationOutput = new UpdateOperationOutput<T>();
+            UpdateOperationOutput<Q> updateOperationOutput = new UpdateOperationOutput<Q>();
             if (ruleDataManager.UpdateRule(ruleEntity))
             {
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(ruleTypeId);
-                updateOperationOutput.UpdatedObject = rule;
+                updateOperationOutput.UpdatedObject =  MapRuleTODetails(rule);
             }
             return updateOperationOutput;
         }
 
-        public Vanrise.Entities.DeleteOperationOutput<T> DeleteRule(int ruleId)
+        public Vanrise.Entities.DeleteOperationOutput<Q> DeleteRule(int ruleId)
         {
-            DeleteOperationOutput<T> deleteOperationOutput = new DeleteOperationOutput<T>();
+            DeleteOperationOutput<Q> deleteOperationOutput = new DeleteOperationOutput<Q>();
             IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
 
             if (ruleDataManager.DeleteRule(ruleId))

@@ -34,9 +34,12 @@ namespace Vanrise.Common.Data.SQL
                 Name = reader["Name"] as string,
                 ConfigType = reader["ConfigType"] as string,
                 Editor = reader["Editor"] as string,
-                BehaviorFQTN = reader["BehaviorFQTN"] as string,
-                Settings = reader["Settings"] as string
+                BehaviorFQTN = reader["BehaviorFQTN"] as string
             };
+
+            string settingsAsString = reader["Settings"] as string;
+            if (settingsAsString != null)
+                templateConfig.Settings = Serializer.Deserialize(settingsAsString);
 
             return templateConfig;
         }

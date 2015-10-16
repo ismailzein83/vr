@@ -18,6 +18,6 @@ namespace Vanrise.Entities
 
         public string BehaviorFQTN { get; set; }
 
-        public string Settings { get; set; }
+        public Object Settings { get; set; }
     }
 }
