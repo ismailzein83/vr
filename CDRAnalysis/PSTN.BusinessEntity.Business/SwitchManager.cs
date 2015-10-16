@@ -2,6 +2,7 @@
 using PSTN.BusinessEntity.Entities;
 using System.Collections.Generic;
 using Vanrise.Entities;
+using Vanrise.Common;
 
 namespace PSTN.BusinessEntity.Business
 {
@@ -15,32 +16,31 @@ namespace PSTN.BusinessEntity.Business
 
         public SwitchDetail GetSwitchById(int switchId)
         {
-            ISwitchDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchDataManager>();
-            return dataManager.GetSwitchById(switchId);
+            List<Switch> switches = GetCachedSwitches();
+            return switches.MapRecord(SwitchDetailMapper, x => x.SwitchId == switchId);
         }
 
         public Switch GetSwitchByDataSourceId(int dataSourceId)
         {
-            ISwitchDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchDataManager>();
-            return dataManager.GetSwitchByDataSourceId(dataSourceId);
+            List<Switch> switches = GetCachedSwitches();
+            return switches.FindRecord(x => x.DataSourceId == dataSourceId);
+        }
+        public IEnumerable<SwitchInfo> GetSwitches()
+        {
+            List<Switch> switches = GetCachedSwitches();
+            return switches.MapRecords(SwitchInfoMapper);
         }
 
-        public List<SwitchInfo> GetSwitches()
+        public IEnumerable<SwitchInfo> GetSwitchesToLinkTo(int switchId)
         {
-            ISwitchDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchDataManager>();
-            return dataManager.GetSwitches();
+            List<Switch> switches = GetCachedSwitches();
+            return switches.MapRecords(SwitchInfoMapper, x => x.SwitchId == switchId);
         }
 
-        public List<SwitchInfo> GetSwitchesToLinkTo(int switchId)
+        public IEnumerable<SwitchInfo> GetSwitchesByIds(List<int> switchIds)
         {
-            ISwitchDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchDataManager>();
-            return dataManager.GetSwitchesToLinkTo(switchId);
-        }
-
-        public List<SwitchInfo> GetSwitchesByIds(List<int> switchIds)
-        {
-            ISwitchDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchDataManager>();
-            return dataManager.GetSwitchesByIds(switchIds);
+            List<Switch> switches = GetCachedSwitches();
+            return switches.MapRecords(SwitchInfoMapper, x => switchIds.Contains(x.SwitchId));
         }
 
         public List<SwitchAssignedDataSource> GetSwitchAssignedDataSources()
@@ -62,7 +62,7 @@ namespace PSTN.BusinessEntity.Business
             if (updated)
             {
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = dataManager.GetSwitchById(switchObj.SwitchId);
+                updateOperationOutput.UpdatedObject = SwitchDetailMapper(switchObj);
             }
             else
             {
@@ -87,7 +87,7 @@ namespace PSTN.BusinessEntity.Business
             {
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 switchObj.SwitchId = switchId;
-                insertOperationOutput.InsertedObject = dataManager.GetSwitchById(switchObj.SwitchId);
+                insertOperationOutput.InsertedObject = SwitchDetailMapper(switchObj);
             }
             else
             {
@@ -111,5 +111,55 @@ namespace PSTN.BusinessEntity.Business
 
             return deleteOperationOutput;
         }
+
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            ISwitchDataManager _dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreSwitchesUpdated(ref _updateHandle);
+            }
+        }
+
+        private List<Switch> GetCachedSwitches()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSwitches",
+               () =>
+               {
+                   ISwitchDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchDataManager>();
+                   return dataManager.GetSwitches();
+               });
+        }
+
+        private SwitchInfo SwitchInfoMapper(Switch switchObject)
+        {
+            SwitchInfo switchInfo = new SwitchInfo();
+
+            switchInfo.SwitchId = switchObject.SwitchId;
+            switchInfo.Name = switchObject.Name;
+
+            return switchInfo;
+        }
+
+        private SwitchDetail SwitchDetailMapper(Switch switchObject)
+        {
+            SwitchDetail switchDetail = new SwitchDetail();
+            BrandManager manager = new BrandManager();
+
+            switchDetail.SwitchId = switchObject.SwitchId;
+            switchDetail.Name = switchObject.Name;
+            switchDetail.BrandId = switchObject.BrandId;
+            switchDetail.BrandName = manager.GetBrandById(switchObject.BrandId).Name;
+            switchDetail.AreaCode = switchObject.AreaCode;
+            switchDetail.TimeOffset = switchObject.TimeOffset;
+            switchDetail.DataSourceId = switchObject.DataSourceId;
+
+            return switchDetail;
+        }
+
+
     }
 }

@@ -85,6 +85,23 @@ namespace Vanrise.Common
             return list.Select(mappingExpression);
         }
 
+
+        public static Q MapRecord<T, Q>(this IEnumerable<T> list, Func<T, Q> mappingExpression, Func<T, bool> filterExpression)
+        {
+            if (list == null)
+                return default(Q);
+
+
+            IEnumerable<T> filteredResults = list.Where(filterExpression);
+
+            if (filteredResults == null)
+                return default(Q);
+
+            return filteredResults.Select(mappingExpression).First();
+
+
+        }
+
         public static IEnumerable<Q> MapRecords<T, Q>(this IEnumerable<T> list, Func<T, Q> mappingExpression, Func<T, bool> filterExpression)
         {
             if (list == null)

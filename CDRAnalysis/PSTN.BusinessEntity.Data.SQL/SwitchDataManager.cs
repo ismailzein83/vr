@@ -10,56 +10,37 @@ namespace PSTN.BusinessEntity.Data.SQL
     {
         private Dictionary<string, string> _mapper;
 
-        public SwitchDataManager() : base("CDRDBConnectionString") {
+        public SwitchDataManager()
+            : base("CDRDBConnectionString")
+        {
             _mapper = new Dictionary<string, string>();
-
-            //_mapper.Add("BrandDescription", "TypeID");
             _mapper.Add("DataSourceName", "DataSourceID");
             _mapper.Add("BrandName", "TypeName");
         }
 
-        public Vanrise.Entities.BigResult<SwitchDetail> GetFilteredSwitches(Vanrise.Entities.DataRetrievalInput<SwitchQuery> input)
+        //public Vanrise.Entities.BigResult<SwitchDetail> GetFilteredSwitches(Vanrise.Entities.DataRetrievalInput<SwitchQuery> input)
+        //{
+        //    return RetrieveData(input, (tempTableName) =>
+        //    {
+        //        string brandIds = (input.Query.SelectedBrandIds != null && input.Query.SelectedBrandIds.Count() > 0) ?
+        //            string.Join<int>(",", input.Query.SelectedBrandIds) : null;
+
+        //        ExecuteNonQuerySP("PSTN_BE.sp_Switch_CreateTempByFiltered", tempTableName, input.Query.Name, brandIds, input.Query.AreaCode);
+
+        //    }, (reader) => SwitchDetailMapper(reader), _mapper);
+        //}
+
+
+        public List<Switch> GetSwitches()
         {
-            return RetrieveData(input, (tempTableName) =>
-            {
-                string brandIds = (input.Query.SelectedBrandIds != null && input.Query.SelectedBrandIds.Count() > 0) ?
-                    string.Join<int>(",", input.Query.SelectedBrandIds) : null;
-
-                ExecuteNonQuerySP("PSTN_BE.sp_Switch_CreateTempByFiltered", tempTableName, input.Query.Name, brandIds, input.Query.AreaCode);
-
-            }, (reader) => SwitchDetailMapper(reader), _mapper);
-        }
-        
-        public SwitchDetail GetSwitchById(int switchId) {
-            return GetItemSP("PSTN_BE.sp_Switch_GetByID", SwitchDetailMapper, switchId);
-        }
-
-        public Switch GetSwitchByDataSourceId(int DataSourceId)
-        {
-            return GetItemSP("PSTN_BE.sp_Switch_GetByDataSourceID", SwitchMapper, DataSourceId);
-        }
-
-        public List<SwitchInfo> GetSwitchesByIds(List<int> switchIds)
-        {
-            string commaSeparatedSwitchIds = string.Join<int>(",", switchIds);
-            return GetItemsSP("PSTN_BE.sp_Switch_GetByIDs", SwitchInfoMapper, commaSeparatedSwitchIds);
-        }
-
-        public List<SwitchInfo> GetSwitches()
-        {
-            return GetItemsSP("PSTN_BE.sp_Switch_GetAll", SwitchInfoMapper);
+            return GetItemsSP("PSTN_BE.sp_Switch_GetAll", SwitchMapper);
         }
 
         public List<SwitchAssignedDataSource> GetSwitchAssignedDataSources()
         {
             return GetItemsSP("PSTN_BE.sp_Switch_GetSwitchAssignedDataSources", SwitchAssignedDataSourceMapper);
         }
-
-        public List<SwitchInfo> GetSwitchesToLinkTo(int switchId)
-        {
-            return GetItemsSP("PSTN_BE.sp_Switch_GetToLinkTo", SwitchInfoMapper, switchId);
-        }
-
+      
         public bool UpdateSwitch(Switch switchObj)
         {
             int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_Switch_Update", switchObj.SwitchId, switchObj.Name, switchObj.BrandId, switchObj.AreaCode, switchObj.TimeOffset.ToString(), switchObj.DataSourceId);
@@ -82,6 +63,12 @@ namespace PSTN.BusinessEntity.Data.SQL
             int recordsEffected = ExecuteNonQuerySP("PSTN_BE.sp_Switch_Delete", switchId);
             return (recordsEffected > 0);
         }
+
+        public bool AreSwitchesUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("PSTN_BE.Switch", ref updateHandle);
+        }
+
 
         #region Mappers
 
@@ -108,30 +95,9 @@ namespace PSTN.BusinessEntity.Data.SQL
             return dataSourceObject;
         }
 
-        private SwitchDetail SwitchDetailMapper(IDataReader reader)
-        {
-            SwitchDetail switchObject = new SwitchDetail();
+       
 
-            switchObject.SwitchId = (int)reader["ID"];
-            switchObject.Name = reader["Name"] as string;
-            switchObject.BrandId = (int)reader["TypeID"];
-            switchObject.BrandName = reader["TypeName"] as string;
-            switchObject.AreaCode = reader["AreaCode"] as string;
-            switchObject.TimeOffset = TimeSpan.Parse(reader["TimeOffset"] as string);
-            switchObject.DataSourceId = GetReaderValue<int?>(reader, "DataSourceID");
-
-            return switchObject;
-        }
-
-        private SwitchInfo SwitchInfoMapper(IDataReader reader)
-        {
-            SwitchInfo switchObject = new SwitchInfo();
-
-            switchObject.SwitchId = (int)reader["ID"];
-            switchObject.Name = reader["Name"] as string;
-
-            return switchObject;
-        }
+       
 
         #endregion
     }

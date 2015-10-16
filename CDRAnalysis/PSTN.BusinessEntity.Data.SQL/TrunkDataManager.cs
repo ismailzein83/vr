@@ -9,7 +9,9 @@ namespace PSTN.BusinessEntity.Data.SQL
     {
         private Dictionary<string, string> _mapper;
 
-        public TrunkDataManager() : base("CDRDBConnectionString") {
+        public TrunkDataManager()
+            : base("CDRDBConnectionString")
+        {
             _mapper = new Dictionary<string, string>();
 
             _mapper.Add("TypeDescription", "Type");

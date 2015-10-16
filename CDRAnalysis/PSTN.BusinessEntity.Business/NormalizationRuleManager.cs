@@ -327,7 +327,7 @@ namespace PSTN.BusinessEntity.Business
                 normalizationRuleDetail.SwitchCount = normalizationRule.Criteria.SwitchIds.Count;
 
                 SwitchManager switchManager = new SwitchManager();
-                List<SwitchInfo> switches = switchManager.GetSwitchesByIds(normalizationRule.Criteria.SwitchIds);
+                IEnumerable<SwitchInfo> switches = switchManager.GetSwitchesByIds(normalizationRule.Criteria.SwitchIds);
                 List<string> switchNames = GetSwitchNames(switches);
                 normalizationRuleDetail.SwitchNames = string.Join<string>(", ", switchNames);
             }

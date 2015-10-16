@@ -8,7 +8,8 @@ namespace PSTN.BusinessEntity.Data.SQL
     public class NormalizationRuleDataManager : Vanrise.Data.SQL.BaseSQLDataManager, INormalizationRuleDataManager
     {
 
-        public NormalizationRuleDataManager() : base("CDRDBConnectionString")
+        public NormalizationRuleDataManager()
+            : base("CDRDBConnectionString")
         {
         }
 
@@ -59,7 +60,7 @@ namespace PSTN.BusinessEntity.Data.SQL
         {
             return base.IsDataUpdated("PSTN_BE.NormalizationRule", ref updateHandle);
         }
-        
+
         #region Mappers
 
         private NormalizationRule NormalizationRuleMapper(IDataReader reader)
