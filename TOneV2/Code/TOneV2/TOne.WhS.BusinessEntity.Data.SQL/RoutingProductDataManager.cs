@@ -42,7 +42,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemSP("TOneWhS_BE.sp_RoutingProduct_Get", RoutingProductMapper, routingProductId);
         }
 
-        public List<Entities.RoutingProduct> GetRoutingProducts()
+        public IEnumerable<Entities.RoutingProduct> GetRoutingProducts()
         {
             return GetItemsSP("TOneWhS_BE.sp_RoutingProduct_GetAll", RoutingProductMapper);
         }

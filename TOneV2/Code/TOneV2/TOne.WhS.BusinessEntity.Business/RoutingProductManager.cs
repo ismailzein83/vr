@@ -23,22 +23,16 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRoutingProducts.ToBigResult(input, filterExpression));
         }
 
-        public RoutingProduct GetRoutingProduct(int routingProductId)
-        {
-            List<RoutingProduct> routingProducts = GetCachedRoutingProducts();
-            return routingProducts.FindRecord(x => x.RoutingProductId == routingProductId);
-        }
-
         public IEnumerable<RoutingProductInfo> GetRoutingProductsInfoBySaleZonePackage(int saleZonePackageId)
         {
-            List<RoutingProduct> routingProducts = GetCachedRoutingProducts();
+            var routingProducts = GetCachedRoutingProducts();
             return routingProducts.MapRecords(RoutingProductInfoMapper, x => x.SaleZonePackageId == saleZonePackageId);
         }
 
-        public IEnumerable<RoutingProductInfo> GetRoutingProducts()
+        public IEnumerable<RoutingProductInfo> GetRoutingProductsInfo()
         {
-            List<RoutingProduct> routingProducts = GetCachedRoutingProducts();
-            return routingProducts.MapRecords(RoutingProductInfoMapper);
+            var allRoutingProducts = GetCachedRoutingProducts();
+            return allRoutingProducts.MapRecords(RoutingProductInfoMapper);
         }
 
         public TOne.Entities.InsertOperationOutput<RoutingProduct> AddRoutingProduct(RoutingProduct routingProduct)
@@ -99,17 +93,38 @@ namespace TOne.WhS.BusinessEntity.Business
             return deleteOperationOutput;
         }
 
-        #region Private Members
+        public RoutingProduct GetRoutingProduct(int routingProductId)
+        {
+            var allRoutingProducts = GetCachedRoutingProducts();
+            return allRoutingProducts.FindRecord(routingProductId);
+        }
 
-        List<RoutingProduct> GetCachedRoutingProducts()
+        public Dictionary<int, RoutingProduct> GetCachedRoutingProducts()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRoutingProducts",
                () =>
                {
                    IRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
-                   return dataManager.GetRoutingProducts();
+                   IEnumerable<RoutingProduct> routingProducts = dataManager.GetRoutingProducts();
+                   return routingProducts.ToDictionary(kvp => kvp.RoutingProductId, kvp => kvp);
                });
         }
+
+        #region Private Methods
+        
+        private RoutingProductInfo RoutingProductInfoMapper(RoutingProduct routingProduct)
+        {
+            return new RoutingProductInfo()
+            {
+                RoutingProductId = routingProduct.RoutingProductId,
+                Name = routingProduct.Name,
+                SaleZonePackageId = routingProduct.SaleZonePackageId
+            };
+        }
+
+        #endregion
+
+        #region Private Classes
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
@@ -120,16 +135,6 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 return _dataManager.AreRoutingProductsUpdated(ref _updateHandle);
             }
-        }
-
-        private RoutingProductInfo RoutingProductInfoMapper(RoutingProduct routingProduct)
-        {
-            return new RoutingProductInfo()
-            {
-                RoutingProductId = routingProduct.RoutingProductId,
-                Name = routingProduct.Name,
-                SaleZonePackageId = routingProduct.SaleZonePackageId
-            };
         }
 
         #endregion

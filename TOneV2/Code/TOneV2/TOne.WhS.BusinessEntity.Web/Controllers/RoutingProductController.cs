@@ -24,7 +24,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public IEnumerable<RoutingProductInfo> GetRoutingProducts()
         {
             RoutingProductManager manager = new RoutingProductManager();
-            return manager.GetRoutingProducts();
+            return manager.GetRoutingProductsInfo();
         }
         [HttpGet]
         public IEnumerable<RoutingProductInfo> GetRoutingProductsInfoBySaleZonePackage(int saleZonePackageId)

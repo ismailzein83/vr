@@ -13,7 +13,7 @@ namespace TOne.WhS.BusinessEntity.Data
         //List<RoutingProductInfo> GetRoutingProductsInfoBySaleZonePackage(int saleZonePackage);
         RoutingProduct GetRoutingProduct(int routingProductId);
 
-        List<RoutingProduct> GetRoutingProducts();
+        IEnumerable<RoutingProduct> GetRoutingProducts();
 
         bool Insert(RoutingProduct routingProduct, out int insertedId);
 
