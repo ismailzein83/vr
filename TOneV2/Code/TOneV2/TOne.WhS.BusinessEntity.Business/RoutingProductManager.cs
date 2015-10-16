@@ -96,7 +96,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public RoutingProduct GetRoutingProduct(int routingProductId)
         {
             var allRoutingProducts = GetCachedRoutingProducts();
-            return allRoutingProducts.FindRecord(routingProductId);
+            return allRoutingProducts.GetRecord(routingProductId);
         }
 
         public Dictionary<int, RoutingProduct> GetCachedRoutingProducts()
