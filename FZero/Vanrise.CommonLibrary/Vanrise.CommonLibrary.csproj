@@ -75,6 +75,7 @@
     <None Include="Documents\Application Workflow and Services.docx" />
     <None Include="Documents\Database Schema Documentation.docx" />
     <None Include="Documents\Fzero Clients Installation Guide.docx" />
+    <None Include="Documents\Fzero Installation Guide.docx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
