@@ -1,10 +1,9 @@
 ﻿
 
-
-
-
-CREATE PROCEDURE [FraudAnalysis].[sp_AccountStatus_GetByStatuses] 
-@CaseStatusIDs varchar(100)
+CREATE PROCEDURE [FraudAnalysis].[bp_AccountStatus_GetNumbersByStatuses] 
+@CaseStatusIDs varchar(100), 
+@FromAccountNumber varchar(50),
+@Top int
 AS
 BEGIN
 
@@ -17,10 +16,9 @@ DECLARE @CaseStatusIDsTable TABLE (CaseStatusID INT);
 			END
 
 
-SELECT accStatus.[AccountNumber]
-      ,accStatus.[Status]
-      ,accStatus.[AccountInfo]
+SELECT TOP (@Top) accStatus.[AccountNumber]
   FROM [FraudAnalysis].[AccountStatus] accStatus
 WHERE	(@CaseStatusIDs is null or accStatus.[Status] in (SELECT CaseStatusID FROM @CaseStatusIDsTable) ) 
-
+and accStatus.AccountNumber >= @FromAccountNumber and (accStatus.validTill >= GETDATE() or accStatus.validTill is null) 
+order by accStatus.[AccountNumber]
 END

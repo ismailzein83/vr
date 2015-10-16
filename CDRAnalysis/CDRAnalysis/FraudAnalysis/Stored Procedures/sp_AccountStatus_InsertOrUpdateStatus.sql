@@ -5,10 +5,11 @@
 -- =============================================
 CREATE PROCEDURE [FraudAnalysis].[sp_AccountStatus_InsertOrUpdateStatus]
 	@AccountNumber VARCHAR(50),
-	@StatusID INT
+	@StatusID INT,
+	@ValidTill DATETIME = NULL
 AS
 BEGIN
-	UPDATE AccountStatus SET [Status] = @StatusID WHERE AccountNumber = @AccountNumber
+	UPDATE AccountStatus SET [Status] = @StatusID, ValidTill = @ValidTill WHERE AccountNumber = @AccountNumber
 	
 	IF @@ROWCOUNT = 0
 	BEGIN

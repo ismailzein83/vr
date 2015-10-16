@@ -111,7 +111,6 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_GetLastByAccountNumber.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecution_Override.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionDetails_CreateTempByCaseID.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_GetFraudCasesPerStrategy.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_CreateTempByAccountNumber.sql" />
     <Build Include="FraudAnalysis\Tables\RelatedNumbers.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionDetails_CreateTempByAccountNumber.sql" />
@@ -129,16 +128,12 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_RelatedNumbers_GetRelatedNumbersByAccountNumber.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_RelatedNumbers_CreateTempTable.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_NumberProfile_CreateTempByAccountNumber.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_NormalCDR_GetSuspicionDailyVolume.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_NormalCDR_GetByConnectDateTime.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_NormalCDR_CreateTempByMSISDN.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_InsertOrUpdateStatus.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_GetSummaryByAccountNumber.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_GetStatusByAccountNumber.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_GetByStatuses.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_GetTopTenHighValueBTS.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_GetTopTenBTS.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_GetStatusSummary.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_GetBlockedLines.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_DeleteByCaseIDs.sql" />
     <Build Include="dbo\Stored Procedures\LKUPtable_GenerateMergeScript.sql" />
@@ -147,15 +142,12 @@
     <Build Include="PSTN_BE\Tables\Switch.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_SwitchType_GetAll.sql" />
     <Build Include="Security\PSTN_BE.sql" />
-    <Build Include="PSTN_BE\Stored Procedures\sp_Switch_CreateTempByFiltered.sql" />
     <Build Include="FraudAnalysis\Tables\StagingCDR.sql" />
     <Build Include="dbo\Tables\PSTNSampleData.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_Insert.sql" />
-    <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_GetByID.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_CreateTempByFiltered.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_Switch_Update.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_Switch_Insert.sql" />
-    <Build Include="PSTN_BE\Stored Procedures\sp_Switch_GetByID.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_Switch_GetAll.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_StagingCDR_GetByConnectDateTime.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_SwitchType_Update.sql" />
@@ -166,21 +158,19 @@
     <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_Update.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_Unlink.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_LinkToTrunk.sql" />
-    <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_GetBySwitchID.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_Delete.sql" />
-    <Build Include="PSTN_BE\Stored Procedures\sp_Switch_GetToLinkTo.sql" />
-    <Build Include="PSTN_BE\Stored Procedures\sp_Switch_GetByDataSourceID.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_Switch_Delete.sql" />
     <Build Include="PSTN_BE\Tables\NormalizationRule.sql" />
     <Build Include="dbo\Tables\PSTNSampleData2.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_GetBySymbol.sql" />
-    <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_GetAll.sql" />
-    <Build Include="PSTN_BE\Stored Procedures\sp_Switch_GetSwitchAssignedDataSources.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_NormalizationRule_Update.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_NormalizationRule_Insert.sql" />
-    <Build Include="PSTN_BE\Stored Procedures\sp_NormalizationRule_GetDetailByID.sql" />
-    <Build Include="PSTN_BE\Stored Procedures\sp_NormalizationRule_GetByID.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_NormalizationRule_Delete.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_NormalizationRule_CreateTempByFiltered.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_GetBySwitchIDs.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_GetByIDs.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionDetails_DeleteByCaseIDs.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_CreateTempByFilters.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\bp_AccountStatus_GetNumbersByStatuses.sql" />
   </ItemGroup>
 </Project>

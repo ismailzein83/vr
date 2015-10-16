@@ -8,8 +8,12 @@
     [DurationInSeconds]  NUMERIC (13, 4) NOT NULL,
     [DisconnectDateTime] DATETIME        NULL,
     [InTrunkID]          INT             NULL,
-    [OutTrunkID]         INT             NULL
+    [OutTrunkID]         INT             NULL,
+    [CGPNAreaCode]       VARCHAR (10)    NULL,
+    [CDPNAreaCode]       VARCHAR (10)    NULL
 );
+
+
 
 
 

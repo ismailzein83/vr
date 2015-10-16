@@ -25,11 +25,14 @@ BEGIN
 			Up_Volume,
 			Down_Volume,
 			Service_Type,
-			Service_VAS_Name
+			Service_VAS_Name,
+			ReleaseCode,
+			MSISDNAreaCode,
+			DestinationAreaCode
 			
 		INTO #RESULT
 		
-		FROM FraudAnalysis.NormalCDR AS cdr
+		FROM FraudAnalysis.NormalCDR AS cdr with(nolock,index=IX_NormalCDR_MSISDN)
 		
 		WHERE MSISDN = @MSISDN
 		AND ConnectDateTime >= @FromDate

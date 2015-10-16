@@ -15,7 +15,7 @@ BEGIN
 	BEGIN
 		SELECT ac.AccountNumber,
 			SUM(cdr.DurationInSeconds) / 60 AS Volume,
-			COUNT(DISTINCT ac.ID) AS GeneratedCases,
+			COUNT(DISTINCT details.ID) AS Occurrences,
 			ac.Reason AS ReasonofBlocking,
 			COUNT(DISTINCT CAST(cdr.connectdatetime AS DATE)) AS ActiveDays,
 			COUNT(DISTINCT ac.AccountNumber) AS BlockedLinesCount
@@ -24,6 +24,8 @@ BEGIN
 		
 		FROM FraudAnalysis.AccountCase AS ac WITH(NOLOCK)
 		INNER JOIN FraudAnalysis.NormalCDR AS cdr WITH(NOLOCK, INDEX = IX_NormalCDR_MSISDN) ON ac.AccountNumber = cdr.MSISDN
+		Inner join FraudAnalysis.StrategyExecutionDetails as details  WITH(NOLOCK) on details.CaseID = ac.ID
+
 		
 		WHERE ac.[Status] = 3
 		AND cdr.Call_Type = 1

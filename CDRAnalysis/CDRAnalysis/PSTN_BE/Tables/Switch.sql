@@ -5,8 +5,11 @@
     [AreaCode]     VARCHAR (10)   NOT NULL,
     [TimeOffset]   VARCHAR (50)   NOT NULL,
     [DataSourceID] INT            NULL,
+    [timestamp]    ROWVERSION     NULL,
     CONSTRAINT [PK_Switch] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

@@ -15,7 +15,7 @@ SELECT  cdrs.[Id] ,cdrs.[MSISDN] ,cdrs.[IMSI] ,cdrs.[ConnectDateTime] ,cdrs.[Des
 		cdrs.[Call_Type] ,cdrs.[Sub_Type] ,cdrs.[IMEI]
 		,cdrs.[BTS_Id]  ,cdrs.[Cell_Id]  ,cdrs.[SwitchId]  ,cdrs.[Up_Volume]  ,cdrs.[Down_Volume] ,
 		cdrs.[Cell_Latitude]  ,cdrs.[Cell_Longitude]  ,cdrs.[In_Trunk]  ,cdrs.[Out_Trunk]  ,cdrs.[Service_Type]  ,cdrs.[Service_VAS_Name] 
-		,cdrs.[InTrunkID], cdrs.[OutTrunkID]
+		,cdrs.[InTrunkID], cdrs.[OutTrunkID], cdrs.[ReleaseCode], cdrs.MSISDNAreaCode, cdrs.DestinationAreaCode
                                                 
 FROM	NormalCDR cdrs with(nolock,index=IX_NormalCDR_MSISDN)
 		--LEFT JOIN [FraudAnalysis].AccountCase WhiteNbs with(nolock) ON WhiteNbs.AccountNumber = cdrs.MSISDN AND StatusId=4 and ValidTill >= getdate()

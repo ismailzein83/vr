@@ -2,8 +2,11 @@
     [AccountNumber] VARCHAR (50)   NOT NULL,
     [Status]        INT            NOT NULL,
     [AccountInfo]   NVARCHAR (MAX) NULL,
+    [ValidTill]     DATETIME       NULL,
     CONSTRAINT [PK_AccountStatus] PRIMARY KEY CLUSTERED ([AccountNumber] ASC)
 );
+
+
 
 
 
