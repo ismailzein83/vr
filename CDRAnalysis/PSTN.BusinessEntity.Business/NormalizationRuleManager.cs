@@ -382,7 +382,7 @@ namespace PSTN.BusinessEntity.Business
                });
         }
 
-        private List<string> GetSwitchNames(List<SwitchInfo> switches)
+        private List<string> GetSwitchNames(IEnumerable<SwitchInfo> switches)
         {
             List<string> switchNames = new List<string>();
 

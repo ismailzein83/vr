@@ -23,14 +23,14 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        public List<SwitchInfo> GetSwitches()
+        public IEnumerable<SwitchInfo> GetSwitches()
         {
             SwitchManager manager = new SwitchManager();
             return manager.GetSwitches();
         }
 
         [HttpGet]
-        public List<SwitchInfo> GetSwitchesToLinkTo(int switchId)
+        public IEnumerable<SwitchInfo> GetSwitchesToLinkTo(int switchId)
         {
             SwitchManager manager = new SwitchManager();
             return manager.GetSwitchesToLinkTo(switchId);
