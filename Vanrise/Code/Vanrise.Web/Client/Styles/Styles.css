@@ -1168,6 +1168,7 @@ input.ui-grid-filter-input[type="text"] {
     position: static;
     overflow: initial;
     padding: 4px 6px 4px 0px ;
+    margin-top: -17px;
 }
 
 .panel-vr.panel-vr-child > .panel-heading label {    
