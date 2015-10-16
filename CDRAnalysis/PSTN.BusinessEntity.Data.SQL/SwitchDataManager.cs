@@ -24,11 +24,6 @@ namespace PSTN.BusinessEntity.Data.SQL
             return GetItemsSP("PSTN_BE.sp_Switch_GetAll", SwitchMapper);
         }
 
-        public List<int> GetSwitchAssignedDataSources()
-        {
-            return GetItemsSP("PSTN_BE.sp_Switch_GetSwitchAssignedDataSources", (reader) => { return (int)reader["DataSourceID"]; });
-        }
-      
         public bool UpdateSwitch(Switch switchObj)
         {
             int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_Switch_Update", switchObj.SwitchId, switchObj.Name, switchObj.BrandId, switchObj.AreaCode, switchObj.TimeOffset.ToString(), switchObj.DataSourceId);

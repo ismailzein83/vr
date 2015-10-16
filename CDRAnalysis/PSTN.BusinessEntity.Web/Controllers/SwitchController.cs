@@ -37,7 +37,7 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        public List<int> GetSwitchAssignedDataSources()
+        public IEnumerable<int> GetSwitchAssignedDataSources()
         {
             SwitchManager manager = new SwitchManager();
             return manager.GetSwitchAssignedDataSources();

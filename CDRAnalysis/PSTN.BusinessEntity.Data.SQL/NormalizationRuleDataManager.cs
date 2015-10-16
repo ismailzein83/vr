@@ -18,38 +18,6 @@ namespace PSTN.BusinessEntity.Data.SQL
             return GetItemsSP("PSTN_BE.sp_NormalizationRule_GetEffective", NormalizationRuleMapper);
         }
 
-        public List<NormalizationRule> GetNormalizationRules()
-        {
-            return GetItemsSP("PSTN_BE.sp_NormalizationRule_GetAll", NormalizationRuleMapper);
-        }
-
-        public NormalizationRule GetNormalizationRuleById(int normalizationRuleId)
-        {
-            return GetItemSP("PSTN_BE.sp_NormalizationRule_GetByID", NormalizationRuleMapper, normalizationRuleId);
-        }
-
-        public bool AddNormalizationRule(NormalizationRule normalizationRuleObj, out int insertedID)
-        {
-            object normalizationRuleId;
-
-            string serializedCriteria = Vanrise.Common.Serializer.Serialize(normalizationRuleObj.Criteria);
-            string serializedSettings = Vanrise.Common.Serializer.Serialize(normalizationRuleObj.Settings);
-
-            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_Insert", out normalizationRuleId, serializedCriteria, serializedSettings, normalizationRuleObj.Description, normalizationRuleObj.BeginEffectiveTime, normalizationRuleObj.EndEffectiveTime);
-
-            insertedID = (recordsAffected > 0) ? (int)normalizationRuleId : -1;
-            return (recordsAffected > 0);
-        }
-
-        public bool UpdateNormalizationRule(NormalizationRule normalizationRuleObj)
-        {
-            string serializedCriteria = Vanrise.Common.Serializer.Serialize(normalizationRuleObj.Criteria);
-            string serializedSettings = Vanrise.Common.Serializer.Serialize(normalizationRuleObj.Settings);
-
-            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_Update", normalizationRuleObj.RuleId, serializedCriteria, serializedSettings, normalizationRuleObj.Description, normalizationRuleObj.BeginEffectiveTime, normalizationRuleObj.EndEffectiveTime);
-            return (recordsAffected > 0);
-        }
-
         public bool DeleteNormalizationRule(int normalizationRuleId)
         {
             int recordsEffected = ExecuteNonQuerySP("rules.sp_Rule_Delete", normalizationRuleId);

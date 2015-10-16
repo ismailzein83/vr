@@ -6,7 +6,6 @@ namespace PSTN.BusinessEntity.Data
     public interface ISwitchDataManager : IDataManager
     {
         List<Switch> GetSwitches();
-        List<int> GetSwitchAssignedDataSources();
         bool UpdateSwitch(Switch switchObj);
         bool AddSwitch(Switch switchObj, out int insertedId);
         bool DeleteSwitch(int switchId);

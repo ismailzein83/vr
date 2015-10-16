@@ -20,7 +20,7 @@ namespace PSTN.BusinessEntity.Business
                 return ruleTree.GetMatchRule(target) as NormalizationRule;
         }
 
-        Vanrise.Rules.RuleTree GetRuleTree(NormalizationRuleType ruleType)
+        RuleTree GetRuleTree(NormalizationRuleType ruleType)
         {
             return GetCachedOrCreate(String.Format("GetRuleTree_{0}", ruleType),
                 () =>
@@ -30,17 +30,6 @@ namespace PSTN.BusinessEntity.Business
                     return new Vanrise.Rules.RuleTree(rules, GetRuleStructureBehaviors());
                 });
         }
-
-        //public void FindSwitch_ApplyTimeOffset(Vanrise.Fzero.CDRImport.Entities.StagingCDR cdr, )
-        //{
-          
-
-
-        //  foreach (var i in cdrs)
-        //  {
-
-        //  }
-        //}
 
         public void Normalize(Vanrise.Fzero.CDRImport.Entities.StagingCDR cdr)
         {
@@ -164,7 +153,7 @@ namespace PSTN.BusinessEntity.Business
             return templateConfigManager.GetBehavior<Entities.NormalizationRuleSetAreaBehavior>(behaviorId);
         }
 
-        IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetRuleStructureBehaviors()
+        IEnumerable<BaseRuleStructureBehavior> GetRuleStructureBehaviors()
         {
             List<Vanrise.Rules.BaseRuleStructureBehavior> ruleStructureBehaviors = new List<Vanrise.Rules.BaseRuleStructureBehavior>();
             ruleStructureBehaviors.Add(new Rules.StructureRulesBehaviors.RuleBehaviorByNumberType());
@@ -175,7 +164,7 @@ namespace PSTN.BusinessEntity.Business
             return ruleStructureBehaviors;
         }       
 
-        public Vanrise.Entities.IDataRetrievalResult<NormalizationRuleDetail> GetFilteredNormalizationRules(Vanrise.Entities.DataRetrievalInput<NormalizationRuleQuery> input)
+        public IDataRetrievalResult<NormalizationRuleDetail> GetFilteredNormalizationRules(Vanrise.Entities.DataRetrievalInput<NormalizationRuleQuery> input)
         {
             Func<NormalizationRuleDetail, bool> filterExpression = (item) =>
                 (
@@ -230,13 +219,13 @@ namespace PSTN.BusinessEntity.Business
             return detail;
         }
 
-        public List<Vanrise.Entities.TemplateConfig> GetNormalizationRuleAdjustNumberActionSettingsTemplates()
+        public List<TemplateConfig> GetNormalizationRuleAdjustNumberActionSettingsTemplates()
         {
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.AdjustNumberActionConfigType);
         }
 
-        public List<Vanrise.Entities.TemplateConfig> GetNormalizationRuleSetAreaSettingsTemplates()
+        public List<TemplateConfig> GetNormalizationRuleSetAreaSettingsTemplates()
         {
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.SetAreaConfigType);
