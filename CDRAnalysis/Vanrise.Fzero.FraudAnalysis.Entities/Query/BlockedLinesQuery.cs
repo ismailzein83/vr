@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class BlockedLinesResultQuery
+    public class BlockedLinesQuery
     {
         public List<int> StrategyIDs { get; set; }
 

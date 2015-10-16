@@ -89,7 +89,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                );
         }
 
-        public BigResult<CDR> GetNormalCDRs(Vanrise.Entities.DataRetrievalInput<NormalCDRResultQuery> input)
+        public BigResult<CDR> GetNormalCDRs(Vanrise.Entities.DataRetrievalInput<NormalCDRQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {

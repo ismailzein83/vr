@@ -4,14 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class LinesDetectedResultQuery
+    public class AccountCaseQuery
     {
-        public DateTime? FromDate { get; set; }
-
-        public DateTime? ToDate { get; set; }
-
+        public string AccountNumber { get; set; }
     }
 }

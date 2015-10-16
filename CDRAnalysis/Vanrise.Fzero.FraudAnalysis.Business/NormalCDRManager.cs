@@ -6,7 +6,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class NormalCDRManager
     {
-        public Vanrise.Entities.IDataRetrievalResult<CDR> GetNormalCDRs(Vanrise.Entities.DataRetrievalInput<NormalCDRResultQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<CDR> GetNormalCDRs(Vanrise.Entities.DataRetrievalInput<NormalCDRQuery> input)
         {
             INormalCDRDataManager manager = FraudDataManagerFactory.GetDataManager<INormalCDRDataManager>();
 

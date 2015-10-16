@@ -7,15 +7,11 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class CaseProductivityResultQuery
+    public class LinesDetectedQuery
     {
-        public List<int> StrategyIDs { get; set; }
-
         public DateTime? FromDate { get; set; }
 
         public DateTime? ToDate { get; set; }
-
-        public bool GroupDaily { get; set; }
 
     }
 }

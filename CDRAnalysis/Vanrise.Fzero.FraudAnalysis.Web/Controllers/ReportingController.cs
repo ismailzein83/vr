@@ -9,7 +9,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
     public class ReportingController : BaseAPIController
     {
         [HttpPost]
-        public object GetFilteredCasesProductivity(Vanrise.Entities.DataRetrievalInput<CaseProductivityResultQuery> input)
+        public object GetFilteredCasesProductivity(Vanrise.Entities.DataRetrievalInput<CaseProductivityQuery> input)
         {
 
             ReportingManager manager = new ReportingManager();
@@ -20,7 +20,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
 
         [HttpPost]
-        public object GetFilteredBlockedLines(Vanrise.Entities.DataRetrievalInput<BlockedLinesResultQuery> input)
+        public object GetFilteredBlockedLines(Vanrise.Entities.DataRetrievalInput<BlockedLinesQuery> input)
         {
 
             ReportingManager manager = new ReportingManager();
@@ -30,7 +30,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
 
         [HttpPost]
-        public object GetFilteredLinesDetected(Vanrise.Entities.DataRetrievalInput<LinesDetectedResultQuery> input)
+        public object GetFilteredLinesDetected(Vanrise.Entities.DataRetrievalInput<LinesDetectedQuery> input)
         {
 
             ReportingManager manager = new ReportingManager();

@@ -52,7 +52,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                                     );
         }
 
-        public BigResult<NumberProfile> GetNumberProfiles(Vanrise.Entities.DataRetrievalInput<NumberProfileResultQuery> input)
+        public BigResult<NumberProfile> GetNumberProfiles(Vanrise.Entities.DataRetrievalInput<NumberProfileQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {

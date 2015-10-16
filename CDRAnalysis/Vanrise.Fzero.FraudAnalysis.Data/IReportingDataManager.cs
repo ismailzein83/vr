@@ -5,11 +5,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 {
     public interface IReportingDataManager : IDataManager 
     {
-        BigResult<CaseProductivity> GetFilteredCasesProductivity(Vanrise.Entities.DataRetrievalInput<CaseProductivityResultQuery> input);
+        BigResult<CaseProductivity> GetFilteredCasesProductivity(Vanrise.Entities.DataRetrievalInput<CaseProductivityQuery> input);
 
-        BigResult<BlockedLines> GetFilteredBlockedLines(Vanrise.Entities.DataRetrievalInput<BlockedLinesResultQuery> input);
+        BigResult<BlockedLines> GetFilteredBlockedLines(Vanrise.Entities.DataRetrievalInput<BlockedLinesQuery> input);
 
-        BigResult<LinesDetected> GetFilteredLinesDetected(Vanrise.Entities.DataRetrievalInput<LinesDetectedResultQuery> input);
+        BigResult<LinesDetected> GetFilteredLinesDetected(Vanrise.Entities.DataRetrievalInput<LinesDetectedQuery> input);
         
     }
 }

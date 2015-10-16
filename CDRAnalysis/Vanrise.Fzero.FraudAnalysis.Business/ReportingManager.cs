@@ -6,7 +6,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class ReportingManager
     {
-        public Vanrise.Entities.IDataRetrievalResult<CaseProductivity> GetFilteredCasesProductivity(Vanrise.Entities.DataRetrievalInput<CaseProductivityResultQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<CaseProductivity> GetFilteredCasesProductivity(Vanrise.Entities.DataRetrievalInput<CaseProductivityQuery> input)
         {
             IReportingDataManager manager = FraudDataManagerFactory.GetDataManager<IReportingDataManager>();
 
@@ -15,7 +15,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, casesProductivity);
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<BlockedLines> GetFilteredBlockedLines(Vanrise.Entities.DataRetrievalInput<BlockedLinesResultQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<BlockedLines> GetFilteredBlockedLines(Vanrise.Entities.DataRetrievalInput<BlockedLinesQuery> input)
         {
             IReportingDataManager manager = FraudDataManagerFactory.GetDataManager<IReportingDataManager>();
 
@@ -24,7 +24,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, blockedLines);
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<LinesDetected> GetFilteredLinesDetected(Vanrise.Entities.DataRetrievalInput<LinesDetectedResultQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<LinesDetected> GetFilteredLinesDetected(Vanrise.Entities.DataRetrievalInput<LinesDetectedQuery> input)
         {
             IReportingDataManager manager = FraudDataManagerFactory.GetDataManager<IReportingDataManager>();
 

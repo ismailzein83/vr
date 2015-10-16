@@ -6,14 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class CancelAccountCasesResultQuery
+    public class RelatedNumberQuery
     {
         public string AccountNumber { get; set; }
-
-        public DateTime From { get; set; }
-
-        public DateTime To { get; set; }
-
-        public List<int> StrategyIDs { get; set; }
     }
 }

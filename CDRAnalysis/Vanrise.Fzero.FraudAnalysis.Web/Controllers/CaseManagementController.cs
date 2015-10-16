@@ -31,7 +31,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         }
 
         [HttpPost]
-        public object GetFilteredCasesByAccountNumber(DataRetrievalInput<AccountCaseResultQuery> input)
+        public object GetFilteredCasesByAccountNumber(DataRetrievalInput<AccountCaseQuery> input)
         {
             CaseManagmentManager manager = new CaseManagmentManager();
             return GetWebResponse(input, manager.GetFilteredCasesByAccountNumber(input));
@@ -40,7 +40,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
 
         [HttpPost]
-        public object GetFilteredCasesByFilters(DataRetrievalInput<CancelAccountCasesResultQuery> input)
+        public object GetFilteredCasesByFilters(DataRetrievalInput<CancelAccountCasesQuery> input)
         {
             CaseManagmentManager manager = new CaseManagmentManager();
             return GetWebResponse(input, manager.GetFilteredCasesByFilters(input));
@@ -68,21 +68,21 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         }
 
         [HttpPost]
-        public object GetFilteredAccountCaseLogsByCaseID(DataRetrievalInput<AccountCaseLogResultQuery> input)
+        public object GetFilteredAccountCaseLogsByCaseID(DataRetrievalInput<AccountCaseLogQuery> input)
         {
             CaseManagmentManager manager = new CaseManagmentManager();
             return GetWebResponse(input, manager.GetFilteredAccountCaseLogsByCaseID(input));
         }
 
         [HttpPost]
-        public UpdateOperationOutput<AccountSuspicionSummary> UpdateAccountCase(AccountCaseUpdateResultQuery input)
+        public UpdateOperationOutput<AccountSuspicionSummary> UpdateAccountCase(AccountCaseUpdateQuery input)
         {
             CaseManagmentManager manager = new CaseManagmentManager();
             return manager.UpdateAccountCase(input);
         }
 
         [HttpPost]
-        public UpdateOperationOutput<AccountCase> CancelAccountCases(CancelAccountCasesResultQuery input)
+        public UpdateOperationOutput<AccountCase> CancelAccountCases(CancelAccountCasesQuery input)
         {
             CaseManagmentManager manager = new CaseManagmentManager();
             return manager.CancelAccountCases(input);

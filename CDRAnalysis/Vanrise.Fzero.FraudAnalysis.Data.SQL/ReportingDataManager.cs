@@ -20,7 +20,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         #region Get Filtered Cases Productivity
 
-        public BigResult<CaseProductivity> GetFilteredCasesProductivity(DataRetrievalInput<CaseProductivityResultQuery> input)
+        public BigResult<CaseProductivity> GetFilteredCasesProductivity(DataRetrievalInput<CaseProductivityQuery> input)
         {
 
             Action<string> createTempTableAction = (tempTableName) =>
@@ -110,7 +110,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         #region Get Filtered Blocked Lines
 
-        public BigResult<BlockedLines> GetFilteredBlockedLines(DataRetrievalInput<BlockedLinesResultQuery> input)
+        public BigResult<BlockedLines> GetFilteredBlockedLines(DataRetrievalInput<BlockedLinesQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
@@ -206,7 +206,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         #region Get Filtered Lines Detected
         
-        public BigResult<LinesDetected> GetFilteredLinesDetected(DataRetrievalInput<LinesDetectedResultQuery> input)
+        public BigResult<LinesDetected> GetFilteredLinesDetected(DataRetrievalInput<LinesDetectedQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {

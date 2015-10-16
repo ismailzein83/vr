@@ -10,7 +10,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
     {
 
         [HttpPost]
-        public object GetNormalCDRs(Vanrise.Entities.DataRetrievalInput<NormalCDRResultQuery> input)
+        public object GetNormalCDRs(Vanrise.Entities.DataRetrievalInput<NormalCDRQuery> input)
         {
             NormalCDRManager manager = new NormalCDRManager();
 

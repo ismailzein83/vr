@@ -12,6 +12,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         
 
-        BigResult<CDR> GetNormalCDRs(Vanrise.Entities.DataRetrievalInput<NormalCDRResultQuery> input);
+        BigResult<CDR> GetNormalCDRs(Vanrise.Entities.DataRetrievalInput<NormalCDRQuery> input);
     }
 }

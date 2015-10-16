@@ -8,6 +8,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
     {
         void ApplyNumberProfilesToDB(object preparedNumberProfiles);
 
-        BigResult<NumberProfile> GetNumberProfiles(Vanrise.Entities.DataRetrievalInput<NumberProfileResultQuery> input);
+        BigResult<NumberProfile> GetNumberProfiles(Vanrise.Entities.DataRetrievalInput<NumberProfileQuery> input);
     }
 }

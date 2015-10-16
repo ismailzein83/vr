@@ -4,10 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class RelatedNumberResultQuery
+    public class NormalCDRQuery
     {
-        public string AccountNumber { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public string MSISDN { get; set; }
+
     }
 }

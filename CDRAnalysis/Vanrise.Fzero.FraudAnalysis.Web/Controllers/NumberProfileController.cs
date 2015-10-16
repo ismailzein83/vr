@@ -11,7 +11,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Web.Controllers
     {
 
         [HttpPost]
-        public object GetNumberProfiles(Vanrise.Entities.DataRetrievalInput<NumberProfileResultQuery> input)
+        public object GetNumberProfiles(Vanrise.Entities.DataRetrievalInput<NumberProfileQuery> input)
         {
             NumberProfileManager manager = new NumberProfileManager();
 
