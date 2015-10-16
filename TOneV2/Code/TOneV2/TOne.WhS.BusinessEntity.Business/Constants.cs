@@ -16,9 +16,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public const string CustomerGroupConfigType = "WhS_BE_CustomersGroup";
 
-        public const string RouteRuleConfigType = "WhS_BE_RouteRule";
+        public const string RouteRuleConfigType = "WhS_BE_RouteRuleSettingType";
 
-        public const string RouteOptionRuleConfigType = "WhS_BE_RouteOptionRule";
+        public const string RouteOptionRuleConfigType = "WhS_BE_RouteOptionRuleSettingType";
 
         public const string CodeCriteriaGroupConfigType = "WhS_BE_CodeCriteriaGroup";
 
