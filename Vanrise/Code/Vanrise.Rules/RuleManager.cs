@@ -10,16 +10,16 @@ using Vanrise.Rules.Data;
 
 namespace Vanrise.Rules
 {
-    public abstract class RuleManager<T> : RuleManager<T, T> where T : BaseRule
+    public abstract class RuleManager<T> : RuleManager<T, T> where T : BaseRule 
     {
-        protected override T MapRuleToDetails(T rule)
+        protected override T MapToDetails(T rule)
         {
             return rule;
         }
     }
-    public abstract class RuleManager<T, Q> where T : BaseRule
+    public abstract class RuleManager<T, Q> where T : BaseRule where Q: class
     {
-        protected abstract Q MapRuleToDetails(T rule);
+        protected abstract Q MapToDetails(T rule);
         public Vanrise.Entities.InsertOperationOutput<Q> AddRule(T rule)
         {
             int ruleTypeId = GetRuleTypeId();
@@ -36,7 +36,7 @@ namespace Vanrise.Rules
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 rule.RuleId = ruleId;
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(ruleTypeId);
-                insertOperationOutput.InsertedObject = MapRuleToDetails(rule);
+                insertOperationOutput.InsertedObject = MapToDetails(rule);
             }
             return insertOperationOutput;
         }
@@ -56,7 +56,7 @@ namespace Vanrise.Rules
             {
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(ruleTypeId);
-                updateOperationOutput.UpdatedObject =  MapRuleToDetails(rule);
+                updateOperationOutput.UpdatedObject =  MapToDetails(rule);
             }
             return updateOperationOutput;
         }
@@ -76,17 +76,17 @@ namespace Vanrise.Rules
             return deleteOperationOutput;
         }
 
-        public T GetRule(int ruleId)
+        public Q GetRule(int ruleId)
         {
             var allRules = GetAllRules();
-            T rule;
+            Q rule;
             if (allRules != null && allRules.TryGetValue(ruleId, out rule))
                 return rule;
             else
                 return null;
         }
 
-        public IEnumerable<T> GetFilteredRules(Func<T, bool> filter)
+        public IEnumerable<Q> GetFilteredRules(Func<Q, bool> filter)
         {
             var allRules = GetAllRules();
             if (allRules == null)
@@ -95,7 +95,7 @@ namespace Vanrise.Rules
                 return allRules.Values.FindAllRecords(filter);
         }
 
-        public Dictionary<int, T> GetAllRules()
+        public Dictionary<int, Q> GetAllRules()
         {
             return GetCachedOrCreate("GetCachedRules",
                () =>
@@ -103,14 +103,15 @@ namespace Vanrise.Rules
                    
                    IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
                    IEnumerable<Entities.Rule> ruleEntities = ruleDataManager.GetRulesByType(GetRuleTypeId());
-                   Dictionary<int, T> rules = new Dictionary<int, T>();
+                   Dictionary<int, Q> rules = new Dictionary<int, Q>();
                    if (ruleEntities != null)
                    {
                        foreach (var ruleEntity in ruleEntities)
                        {
                            T rule = Serializer.Deserialize<T>(ruleEntity.RuleDetails);
                            rule.RuleId = ruleEntity.RuleId;
-                           rules.Add(rule.RuleId, rule);
+                           Q ruleDetail = MapToDetails(rule);
+                           rules.Add(rule.RuleId, ruleDetail);
                        }
                    }
                    return rules;
