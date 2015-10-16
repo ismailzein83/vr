@@ -13,5 +13,7 @@ namespace Vanrise.Rules.Entities
         public int TypeId { get; set; }
 
         public string RuleDetails { get; set; }
+        public DateTime BED { get; set; }
+        public DateTime? EED { get; set; }
     }
 }

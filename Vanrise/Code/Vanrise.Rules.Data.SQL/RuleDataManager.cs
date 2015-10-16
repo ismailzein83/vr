@@ -19,14 +19,14 @@ namespace Vanrise.Rules.Data.SQL
         public bool AddRule(Entities.Rule rule, out int ruleId)
         {
             object insertedId;
-            int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_Insert", out insertedId, rule.TypeId, rule.RuleDetails);
+            int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_Insert", out insertedId, rule.TypeId, rule.RuleDetails, rule.BED, rule.EED);
             ruleId = (recordesEffected > 0) ? (int)insertedId : -1;
             return (recordesEffected > 0);
         }
 
         public bool UpdateRule(Entities.Rule ruleEntity)
         {
-            int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_Update", ruleEntity.RuleId, ruleEntity.TypeId, ruleEntity.RuleDetails);
+            int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_Update", ruleEntity.RuleId, ruleEntity.TypeId, ruleEntity.RuleDetails, ruleEntity.BED, ruleEntity.EED);
             return (recordesEffected > 0);
         }
 
@@ -53,6 +53,8 @@ namespace Vanrise.Rules.Data.SQL
                 RuleId = (int)reader["ID"],
                 TypeId = GetReaderValue<int>(reader, "TypeID"),
                 RuleDetails = reader["RuleDetails"] as string,
+                BED = GetReaderValue<DateTime>(reader, "BED"),
+                EED=  GetReaderValue<DateTime?>(reader, "EED"),
             };
             return instance;
         }

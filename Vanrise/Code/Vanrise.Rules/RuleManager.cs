@@ -26,7 +26,9 @@ namespace Vanrise.Rules
             Entities.Rule ruleEntity = new Entities.Rule
             {
                 TypeId = ruleTypeId,
-                RuleDetails = Serializer.Serialize(rule)
+                RuleDetails = Serializer.Serialize(rule),
+                BED=rule.BeginEffectiveTime,
+                EED=rule.EndEffectiveTime
             };
             IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
             InsertOperationOutput<Q> insertOperationOutput = new InsertOperationOutput<Q>();
@@ -48,7 +50,9 @@ namespace Vanrise.Rules
             {
                 RuleId = rule.RuleId,
                 TypeId = ruleTypeId,
-                RuleDetails = Serializer.Serialize(rule)
+                RuleDetails = Serializer.Serialize(rule),
+                EED=rule.EndEffectiveTime,
+                BED=rule.BeginEffectiveTime
             };
             IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
             UpdateOperationOutput<Q> updateOperationOutput = new UpdateOperationOutput<Q>();
