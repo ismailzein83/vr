@@ -16,7 +16,6 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         $rootScope.effectivePermissionsWrapper = response;
     }
     );
-    
     $scope.userDisplayName = userInfo.UserDisplayName;
     
  
@@ -127,22 +126,19 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         VRModalService.showModal('/Client/Modules/Security/Views/EditProfile.html', null, modalSettings);
     }
    
-
-
     $scope.menuItemsCurrent = null;
-    $scope.setIndex = function (item, e) {
-        var $this = angular.element(e.currentTarget);
-         
+   
+    $scope.setIndex = function (item) {
         if ($scope.menuItemsCurrent != null && $scope.menuItemsCurrent.Id == item.Id) {
             $scope.menuItemsCurrent = null;
 
         }
-        else {           
-         //   $($this).parent().find('.panel-body').first().stop(true, true).slideDown(300);
+        else {
             $scope.menuItemsCurrent = item;
         }
-
     }
+
+   
     $scope.menusubItemsCurrent = null;
     $scope.setIndexSub = function (o) {
         if ($scope.menusubItemsCurrent != null && $scope.menusubItemsCurrent.Id == o.Id) {
