@@ -13,18 +13,19 @@ app.directive('vrWhsBeSelectivesalezones', ['WhS_BE_SaleZoneAPIService', 'WhS_BE
          
           
             var ctrl = this;
-            $scope.isPackageDefined = (ctrl.salezonepackageid != undefined);
+            
             $scope.selectedSaleZones = [];
 
             $scope.saleZonePackages = [];
             $scope.selectedSaleZonePackage = undefined;
 
             $scope.showSaleZonePackage = ctrl.salezonepackageid == undefined;
+            $scope.isPackageDefined = !$scope.showSaleZonePackage;
 
             var beSaleZonesCtor = new beSaleZones(ctrl, $scope, WhS_BE_SaleZoneAPIService);
             beSaleZonesCtor.initializeController();
             $scope.onSaleZonePackageValueChanged = function () {
-                $scope.isPackageDefined=($scope.selectedSaleZonePackage != undefined);
+                $scope.isPackageDefined = (!$scope.showSaleZonePackage || $scope.selectedSaleZonePackage != undefined);
             }
             $scope.searchZones = function (filter) {
                 var packageId;
@@ -56,7 +57,7 @@ app.directive('vrWhsBeSelectivesalezones', ['WhS_BE_SaleZoneAPIService', 'WhS_BE
     };
 
     function getBeSelectiveSaleZonesTemplate(attrs) {
-        return '/Client/Modules/WhS_BusinessEntity/Directives/Templates/SelectiveSaleZonesDirectiveTemplate.html';
+        return '/Client/Modules/WhS_BusinessEntity/Directives/SaleZone/Templates/SelectiveSaleZonesDirectiveTemplate.html';
     }
 
     function beSaleZones(ctrl, $scope, WhS_BE_SaleZoneAPIService) {

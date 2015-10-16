@@ -46,7 +46,7 @@ app.directive('vrWhsBeSelectivecodecriteria', ['UtilsService',
         };
 
         function getBeSelectiveCodeCriteriaTemplate(attrs) {
-            return '/Client/Modules/WhS_BusinessEntity/Directives/Templates/SelectiveCodeCriteriaDirectiveTemplate.html';
+            return '/Client/Modules/WhS_BusinessEntity/Directives/CodeCriteria/Templates/SelectiveCodeCriteriaDirectiveTemplate.html';
         }
 
         function beCodeCriteria(ctrl, $scope) {

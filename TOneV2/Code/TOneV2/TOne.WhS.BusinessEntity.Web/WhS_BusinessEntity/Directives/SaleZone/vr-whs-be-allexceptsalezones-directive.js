@@ -17,9 +17,14 @@ app.directive('vrWhsBeAllexceptsalezones', ['WhS_BE_SaleZoneAPIService', 'WhS_BE
                 $scope.selectedSaleZonePackage = undefined;
 
                 $scope.showSaleZonePackage = ctrl.salezonepackageid == undefined;
+                $scope.isPackageDefined = !$scope.showSaleZonePackage;
 
                 var beSaleZonesCtor = new beSaleZones(ctrl, $scope, WhS_BE_SaleZoneAPIService);
                 beSaleZonesCtor.initializeController();
+
+                $scope.onSaleZonePackageValueChanged = function () {
+                    $scope.isPackageDefined = (!$scope.showSaleZonePackage || $scope.selectedSaleZonePackage != undefined);
+                }
 
                 $scope.searchZones = function (filter) {
                     var packageId;
@@ -41,13 +46,13 @@ app.directive('vrWhsBeAllexceptsalezones', ['WhS_BE_SaleZoneAPIService', 'WhS_BE
                 }
             },
             templateUrl: function (element, attrs) {
-                return getBeSelectiveSaleZonesTemplate(attrs);
+                return getBeAllExceptSaleZonesTemplate(attrs);
             }
 
         };
 
-        function getBeSelectiveSaleZonesTemplate(attrs) {
-            return '/Client/Modules/WhS_BusinessEntity/Directives/Templates/SelectiveSaleZonesDirectiveTemplate.html';
+        function getBeAllExceptSaleZonesTemplate(attrs) {
+            return '/Client/Modules/WhS_BusinessEntity/Directives/SaleZone/Templates/SelectiveSaleZonesDirectiveTemplate.html';
         }
 
         function beSaleZones(ctrl, $scope, WhS_BE_SaleZoneAPIService) {
