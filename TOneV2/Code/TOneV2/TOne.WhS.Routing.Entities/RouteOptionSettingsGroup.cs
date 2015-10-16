@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class BlockRouteRuleSettings : RouteRuleSettings
+    public abstract class RouteOptionSettingsGroup
     {
+        public abstract IEnumerable<RouteOptionSettings> GetOptionSettings(RouteOptionSettingsContext context);
     }
 }

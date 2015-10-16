@@ -41,14 +41,27 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Rules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RouteRuleBehaviors\FixedRouteRuleBehavior.cs" />
-    <Compile Include="RouteRuleBehaviors\AutomaticRouteRuleBehavior.cs" />
-    <Compile Include="RouteRuleBehaviors\BlockRouteRuleBehavior.cs" />
+    <Compile Include="RouteBuildManager.cs" />
+    <Compile Include="RouteOptionRules\RouteOptionRuleExecutionContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RouteRules\BlockRouteRule.cs" />
+    <Compile Include="RouteRules\Filters\OptionFilterLoss.cs" />
+    <Compile Include="RouteRules\Orders\OptionOrderByRate.cs" />
+    <Compile Include="RouteRules\Percentages\FixedOptionPercentage.cs" />
+    <Compile Include="RouteRules\RegularRouteRule.cs" />
+    <Compile Include="RouteRules\RouteRuleExecutionContext.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
+      <Project>{5635598e-8526-4bb4-9d1b-87a6b3b1ce72}</Project>
+      <Name>TOne.WhS.BusinessEntity.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>

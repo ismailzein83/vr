@@ -41,15 +41,22 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Rules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RouteRuleSettings\AutomaticRouteRuleSettings.cs" />
-    <Compile Include="RouteRuleSettings\BlockRouteRuleSettings.cs" />
-    <Compile Include="RouteRuleSettings\FixedRouteRuleSettings.cs" />
+    <Compile Include="IBuildRoutesContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Route.cs" />
+    <Compile Include="RouteOption.cs" />
     <Compile Include="RouteRuleSettings\RouteRuleOptionFilterSettings.cs" />
     <Compile Include="RouteRuleSettings\RouteRuleOptionOrderSettings.cs" />
     <Compile Include="RouteRuleSettings\RouteRuleOptionPercentageSettings.cs" />
+    <Compile Include="RouteOptionSettings.cs" />
+    <Compile Include="RouteOptionSettingsGroup.cs" />
+    <Compile Include="RouteOptionSettingsContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">

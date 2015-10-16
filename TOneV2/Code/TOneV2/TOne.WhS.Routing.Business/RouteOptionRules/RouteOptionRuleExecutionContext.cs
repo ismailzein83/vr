@@ -5,10 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 
-namespace TOne.WhS.Routing.Business
+namespace TOne.WhS.Routing.Business.RouteOptionRules
 {
-    public class FixedRouteRuleBehavior : RouteRuleBehavior
+    public class RouteOptionRuleExecutionContext : IRouteOptionRuleExecutionContext
     {
-        
     }
 }

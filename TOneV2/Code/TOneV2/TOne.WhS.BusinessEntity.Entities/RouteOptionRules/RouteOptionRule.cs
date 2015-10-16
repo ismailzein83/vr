@@ -10,16 +10,14 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public RouteOptionRuleCriteria Criteria { get; set; }
 
-        public int TypeConfigId { get; set; }
-
         public RouteOptionRuleSettings Settings { get; set; }
 
         public string Description { get; set; }
 
         public override bool IsAnyCriteriaExcluded(object target)
         {
-            RouteIdentifier routeIdentifier = target as RouteIdentifier;
-            if (this.Criteria.ExcludedCodes != null && this.Criteria.ExcludedCodes.Contains(routeIdentifier.Code))
+            IRuleCodeTarget ruleCodeTarget = target as IRuleCodeTarget;
+            if (this.Criteria.ExcludedCodes != null && this.Criteria.ExcludedCodes.Contains(ruleCodeTarget.Code))
                 return true;
             return false;
         }

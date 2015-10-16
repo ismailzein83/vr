@@ -8,5 +8,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public abstract class RouteOptionRuleSettings
     {
+        public int ConfigId { get; set; }
+
+        public abstract void Execute(IRouteOptionRuleExecutionContext context, RouteOptionRuleTarget target);
     }
 }

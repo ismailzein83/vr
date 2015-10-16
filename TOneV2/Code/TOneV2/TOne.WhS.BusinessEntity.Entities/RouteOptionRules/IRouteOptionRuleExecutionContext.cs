@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public interface IRuleRoutingProductTarget
+    public interface IRouteOptionRuleExecutionContext
     {
-        int? RoutingProductId { get; }
     }
 }

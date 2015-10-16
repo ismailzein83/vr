@@ -22,8 +22,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public override bool IsAnyCriteriaExcluded(object target)
         {
-            RouteIdentifier routeIdentifier = target as RouteIdentifier;
-            if (this.RouteCriteria.ExcludedCodes != null && this.RouteCriteria.ExcludedCodes.Contains(routeIdentifier.Code))
+            IRuleCodeTarget ruleCodeTarget = target as IRuleCodeTarget;
+            if (this.RouteCriteria.ExcludedCodes != null && this.RouteCriteria.ExcludedCodes.Contains(ruleCodeTarget.Code))
                 return true;
             return false;
         }
