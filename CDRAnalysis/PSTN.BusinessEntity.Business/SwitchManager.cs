@@ -1,8 +1,10 @@
 ﻿using PSTN.BusinessEntity.Data;
 using PSTN.BusinessEntity.Entities;
+using System;
 using System.Collections.Generic;
-using Vanrise.Entities;
+using System.Linq;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace PSTN.BusinessEntity.Business
 {
@@ -10,43 +12,49 @@ namespace PSTN.BusinessEntity.Business
     {
         public Vanrise.Entities.IDataRetrievalResult<SwitchDetail> GetFilteredSwitches(Vanrise.Entities.DataRetrievalInput<SwitchQuery> input)
         {
-            ISwitchDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchDataManager>();
-            //return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredSwitches(input));
+            var allSwitches = GetCachedSwitches();
 
+            Func<Switch, bool> filterExpression = (switchObject) =>
+                 (input.Query.Name == null || switchObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                 &&
+                 (input.Query.SelectedBrandIds.Contains(switchObject.BrandId))
+                 &&
+                 (input.Query.AreaCode == null || input.Query.AreaCode.Contains(switchObject.AreaCode));
 
-            return null;
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSwitches.ToBigResult(input, filterExpression, SwitchDetailMapper));
         }
+
 
         public SwitchDetail GetSwitchById(int switchId)
         {
-            List<Switch> switches = GetCachedSwitches();
+            var switches = GetCachedSwitches();
             return switches.MapRecord(SwitchDetailMapper, x => x.SwitchId == switchId);
         }
 
         public Switch GetSwitchByDataSourceId(int dataSourceId)
         {
-            List<Switch> switches = GetCachedSwitches();
+            var switches = GetCachedSwitches();
             return switches.FindRecord(x => x.DataSourceId == dataSourceId);
         }
         public IEnumerable<SwitchInfo> GetSwitches()
         {
-            List<Switch> switches = GetCachedSwitches();
+            var switches = GetCachedSwitches();
             return switches.MapRecords(SwitchInfoMapper);
         }
 
         public IEnumerable<SwitchInfo> GetSwitchesToLinkTo(int switchId)
         {
-            List<Switch> switches = GetCachedSwitches();
+            var switches = GetCachedSwitches();
             return switches.MapRecords(SwitchInfoMapper, x => x.SwitchId == switchId);
         }
 
         public IEnumerable<SwitchInfo> GetSwitchesByIds(List<int> switchIds)
         {
-            List<Switch> switches = GetCachedSwitches();
+            var switches = GetCachedSwitches();
             return switches.MapRecords(SwitchInfoMapper, x => switchIds.Contains(x.SwitchId));
         }
 
-        public List<SwitchAssignedDataSource> GetSwitchAssignedDataSources()
+        public List<int> GetSwitchAssignedDataSources()
         {
             ISwitchDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchDataManager>();
             return dataManager.GetSwitchAssignedDataSources();
@@ -127,13 +135,14 @@ namespace PSTN.BusinessEntity.Business
             }
         }
 
-        private List<Switch> GetCachedSwitches()
+        private Dictionary<int, Switch> GetCachedSwitches()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSwitches",
                () =>
                {
                    ISwitchDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchDataManager>();
-                   return dataManager.GetSwitches();
+                   IEnumerable<Switch> switches = dataManager.GetSwitches();
+                   return switches.ToDictionary(kvp => kvp.SwitchId, kvp => kvp);
                });
         }
 

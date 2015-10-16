@@ -153,7 +153,7 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchBrandAPIService,
                     UtilsService.getItemIndexByVal($scope.dataSources, $scope.selectedDataSource.DataSourceId, "DataSourceId") : -1;
 
                 angular.forEach(response, function (item) {
-                    var index = UtilsService.getItemIndexByVal($scope.dataSources, item.DataSourceId, "DataSourceId");
+                    var index = UtilsService.getItemIndexByVal($scope.dataSources, item, "DataSourceId");
 
                     if (index > -1 && index != selectedDataSourceIndex) {
                         $scope.dataSources.splice(index, 1);

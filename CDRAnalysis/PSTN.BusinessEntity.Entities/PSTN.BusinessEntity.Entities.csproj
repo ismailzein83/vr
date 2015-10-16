@@ -75,7 +75,6 @@
     <Compile Include="Switch\IRuleSwitchCriteria.cs" />
     <Compile Include="Switch\IRuleSwitchTarget.cs" />
     <Compile Include="Switch\Switch.cs" />
-    <Compile Include="Switch\SwitchAssignedDataSource.cs" />
     <Compile Include="Switch\SwitchDetail.cs" />
     <Compile Include="Switch\SwitchInfo.cs" />
     <Compile Include="Switch\SwitchQuery.cs" />

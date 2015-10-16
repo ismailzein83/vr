@@ -18,27 +18,15 @@ namespace PSTN.BusinessEntity.Data.SQL
             _mapper.Add("BrandName", "TypeName");
         }
 
-        //public Vanrise.Entities.BigResult<SwitchDetail> GetFilteredSwitches(Vanrise.Entities.DataRetrievalInput<SwitchQuery> input)
-        //{
-        //    return RetrieveData(input, (tempTableName) =>
-        //    {
-        //        string brandIds = (input.Query.SelectedBrandIds != null && input.Query.SelectedBrandIds.Count() > 0) ?
-        //            string.Join<int>(",", input.Query.SelectedBrandIds) : null;
-
-        //        ExecuteNonQuerySP("PSTN_BE.sp_Switch_CreateTempByFiltered", tempTableName, input.Query.Name, brandIds, input.Query.AreaCode);
-
-        //    }, (reader) => SwitchDetailMapper(reader), _mapper);
-        //}
-
 
         public List<Switch> GetSwitches()
         {
             return GetItemsSP("PSTN_BE.sp_Switch_GetAll", SwitchMapper);
         }
 
-        public List<SwitchAssignedDataSource> GetSwitchAssignedDataSources()
+        public List<int> GetSwitchAssignedDataSources()
         {
-            return GetItemsSP("PSTN_BE.sp_Switch_GetSwitchAssignedDataSources", SwitchAssignedDataSourceMapper);
+            return GetItemsSP("PSTN_BE.sp_Switch_GetSwitchAssignedDataSources", (reader) => { return (int)reader["DataSourceID"]; });
         }
       
         public bool UpdateSwitch(Switch switchObj)
@@ -85,19 +73,6 @@ namespace PSTN.BusinessEntity.Data.SQL
 
             return switchObject;
         }
-
-        private SwitchAssignedDataSource SwitchAssignedDataSourceMapper(IDataReader reader)
-        {
-            SwitchAssignedDataSource dataSourceObject = new SwitchAssignedDataSource();
-
-            dataSourceObject.DataSourceId = (int)reader["DataSourceID"];
-
-            return dataSourceObject;
-        }
-
-       
-
-       
 
         #endregion
     }
