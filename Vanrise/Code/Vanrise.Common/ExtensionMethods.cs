@@ -67,7 +67,7 @@ namespace Vanrise.Common
             return rslt;
         }
 
-        public static T FindRecord<Q, T>(this Dictionary<Q, T> dic, Q key)
+        public static T GetRecord<Q, T>(this Dictionary<Q, T> dic, Q key)
         {
             T entity;
 
@@ -75,6 +75,14 @@ namespace Vanrise.Common
                 return entity;
 
             return default(T);
+        }
+
+        public static T FindRecord<Q, T>(this Dictionary<Q, T> dic, Func<T, bool> predicate)
+        {
+            if (dic == null)
+                return default(T);
+
+            return dic.Values.FirstOrDefault(predicate);
         }
 
         public static IEnumerable<T> FindAllRecords<Q, T>(this Dictionary<Q, T> dic, Func<T, bool> predicate)
