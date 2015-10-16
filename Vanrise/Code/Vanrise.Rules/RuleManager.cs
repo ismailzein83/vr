@@ -12,14 +12,14 @@ namespace Vanrise.Rules
 {
     public abstract class RuleManager<T> : RuleManager<T, T> where T : BaseRule
     {
-        protected override T MapRuleTODetails(T rule)
+        protected override T MapRuleToDetails(T rule)
         {
             return rule;
         }
     }
     public abstract class RuleManager<T, Q> where T : BaseRule
     {
-        protected abstract Q MapRuleTODetails(T rule);
+        protected abstract Q MapRuleToDetails(T rule);
         public Vanrise.Entities.InsertOperationOutput<Q> AddRule(T rule)
         {
             int ruleTypeId = GetRuleTypeId();
@@ -36,7 +36,7 @@ namespace Vanrise.Rules
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 rule.RuleId = ruleId;
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(ruleTypeId);
-                insertOperationOutput.InsertedObject = MapRuleTODetails(rule);
+                insertOperationOutput.InsertedObject = MapRuleToDetails(rule);
             }
             return insertOperationOutput;
         }
@@ -56,7 +56,7 @@ namespace Vanrise.Rules
             {
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(ruleTypeId);
-                updateOperationOutput.UpdatedObject =  MapRuleTODetails(rule);
+                updateOperationOutput.UpdatedObject =  MapRuleToDetails(rule);
             }
             return updateOperationOutput;
         }
