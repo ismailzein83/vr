@@ -14,11 +14,16 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "PricingRule", "GetPricingRuleTariffTemplates"));
 
         }
+        function GetPricingRuleExtraChargeTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "PricingRule", "GetPricingRuleExtraChargeTemplates"));
+
+        }
 
        
         return ({
             GetPricingRuleTODTemplates: GetPricingRuleTODTemplates,
-            GetPricingRuleTariffTemplates: GetPricingRuleTariffTemplates
+            GetPricingRuleTariffTemplates: GetPricingRuleTariffTemplates,
+            GetPricingRuleExtraChargeTemplates: GetPricingRuleExtraChargeTemplates
         });
     }
 

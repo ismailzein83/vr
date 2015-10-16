@@ -198,7 +198,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
             modalScope.onSalePricingRuleAdded = onSalePricingRuleAdded;
         };
         var  parameters = {
-                PricingType: WhS_Be_PricingTypeEnum.Sale
+            PricingType: WhS_Be_PricingTypeEnum.Sale
             };
         
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingRule/PricingRuleEditor.html', parameters, settings);

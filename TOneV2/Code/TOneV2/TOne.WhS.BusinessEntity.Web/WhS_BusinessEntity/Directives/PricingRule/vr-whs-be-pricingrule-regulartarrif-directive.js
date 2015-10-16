@@ -44,6 +44,13 @@ function (UtilsService, $compil) {
             var api = {};
 
             api.getData = function () {
+                var obj = {
+                    CallFee: $scope.callFee,
+                    FirstPeriod: $scope.firstPeriod,
+                    FirstPeriodRate: $scope.firstPeriodRate,
+                    FractionUnit: $scope.fractionUnit
+                }
+                return obj;
             }
 
             api.setData = function (selectedIds) {

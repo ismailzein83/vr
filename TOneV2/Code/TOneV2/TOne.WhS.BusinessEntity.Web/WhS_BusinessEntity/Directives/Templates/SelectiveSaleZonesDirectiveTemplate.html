@@ -1,12 +1,12 @@
 ﻿<div style="display:inline-block;width: calc(100% - 18px);">
     <vr-columns colnum="4" ng-show="showSaleZonePackage">
         <vr-select datatextfield="Name" datavaluefield="SaleZonePackageId"
-                   label="Sale Zone Package" datasource="saleZonePackages" selectedvalues="selectedSaleZonePackage">
+                   label="Sale Zone Package" datasource="saleZonePackages" selectedvalues="selectedSaleZonePackage" onselectionchanged="onSaleZonePackageValueChanged">
         </vr-select>
     </vr-columns>
-    <vr-columns colnum="4">
+    <vr-columns colnum="4" ng-show="isPackageDefined">
         <vr-select ismultipleselection isrequired label="Sale Zone" datasource="searchZones" selectedvalues="selectedSaleZones"
-                   datatextfield="Name" datavaluefield="SaleZoneId" entityname="Sale Zone">
+                   datatextfield="Name" datavaluefield="SaleZoneId" entityname="Sale Zone" >
         </vr-select>
     </vr-columns>
 </div>

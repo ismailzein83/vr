@@ -1,0 +1,30 @@
+﻿<div style="display:inline-block;width: calc(100% - 18px);">
+    <vr-row>
+        <vr-columns width="1/4row">
+            <vr-select datatextfield="Name" datavaluefield="TemplateConfigID"
+                       label="Extra Charge Type" datasource="pricingRuleExtraChargeTemplates" selectedvalues="selectedPricingRuleExtraChargeTemplate" onselectionchanged="onActionTemplateChanged">
+            </vr-select>
+        </vr-columns>
+        <vr-columns width="normal">
+            <div style="position: absolute; top: 25px;" vr-disabled="disableAddButton">
+                <vr-button type="Add" data-onclick="addAction" standalone></vr-button>
+            </div>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="1/2row">
+           
+                <ul class="list-group dragbelzone" ng-sortable="itemsSortable" ng-show="actions.length > 0">
+                    <li ng-repeat="action in actions" class="list-group-item list-custom" style="margin:1px;">
+                        <i class="glyphicon glyphicon-th-list handeldrag" style="display:inline-block;vertical-align:middle;float: none;"></i>
+
+                        <i class="glyphicon glyphicon-remove hand-cursor" style="float:right;padding:5px;cursor:default;" ng-click="removeAction($event, action)"></i>
+
+                        <div style="display:inline-block; width:100%; margin-top:-10px">
+                            <vr-directivewrapper directive="action.Editor" on-ready="action.onPricingRuleExtraChargeTemplateDirectiveReady"></vr-directivewrapper>
+                        </div>
+                    </li>
+                </ul>
+        </vr-columns>
+    </vr-row>
+</div>

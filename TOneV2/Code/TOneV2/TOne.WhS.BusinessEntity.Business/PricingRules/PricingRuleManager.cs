@@ -20,5 +20,10 @@ namespace TOne.WhS.BusinessEntity.Business.PricingRules
            TemplateConfigManager manager = new TemplateConfigManager();
            return manager.GetTemplateConfigurations(TOne.WhS.BusinessEntity.Business.Constants.PricingRuleTariffSettingsConfigType);
        }
+       public List<TemplateConfig> GetPricingRuleExtraChargeTemplates()
+       {
+           TemplateConfigManager manager = new TemplateConfigManager();
+           return manager.GetTemplateConfigurations(TOne.WhS.BusinessEntity.Business.Constants.PricingRuleExtraChargeSettingsConfigType);
+       }
     }
 }

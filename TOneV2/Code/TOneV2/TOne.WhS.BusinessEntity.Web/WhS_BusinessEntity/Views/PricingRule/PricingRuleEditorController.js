@@ -2,12 +2,16 @@
 
     "use strict";
 
-    pricingRuleEditorController.$inject = ['$scope', 'WhS_BE_SalePricingRuleAPIService',  'UtilsService', 'VRNotificationService', 'VRNavigationService','WhS_Be_PricingRuleTypeEnum'];
+    pricingRuleEditorController.$inject = ['$scope', 'WhS_BE_SalePricingRuleAPIService',  'UtilsService', 'VRNotificationService', 'VRNavigationService','WhS_Be_PricingRuleTypeEnum','WhS_BE_CarrierAccountAPIService','WhS_BE_SaleZoneAPIService','WhS_Be_PricingTypeEnum'];
 
-    function pricingRuleEditorController($scope, WhS_BE_SalePricingRuleAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_Be_PricingRuleTypeEnum) {
+    function pricingRuleEditorController($scope, WhS_BE_SalePricingRuleAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_Be_PricingRuleTypeEnum, WhS_BE_CarrierAccountAPIService, WhS_BE_SaleZoneAPIService, WhS_Be_PricingTypeEnum) {
 
         var editMode;
         var pricingType;
+        var directiveAppendixData;
+        var pricingRuleTypeDirectiveAPI;
+        var saleZoneGroupSettingsDirectiveAPI;
+        var customerGroupSettingsDirectiveAPI;
         loadParameters();
         defineScope();
 
@@ -25,7 +29,9 @@
 
         function defineScope() {
 
-            $scope.PricingRule = function () {
+            $scope.SavePricingRule = function () {
+                console.log(pricingRuleTypeDirectiveAPI.getData());
+                return;
                 if (editMode) {
                     return updatePricingRule();
                 }
@@ -34,18 +40,73 @@
                 }
             };
             $scope.onPricingRuleTypeDirectiveReady = function (api) {
-                console.log(api);
+                pricingRuleTypeDirectiveAPI = api;
                 api.load();
             }
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
             $scope.selectedPricingRuleType;
+
+            $scope.onSaleZoneGroupSettingsDirectiveReady = function (api) {
+                saleZoneGroupSettingsDirectiveAPI = api;
+
+                if (directiveAppendixData != undefined) {
+                    tryLoadAppendixDirectives();
+                } else {
+                    var promise = saleZoneGroupSettingsDirectiveAPI.load();
+                    if (promise != undefined) {
+                        $scope.saleZonesAppendixLoader = true;
+                        promise.catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        }).finally(function () {
+                            $scope.saleZonesAppendixLoader = false;
+                        });
+                    }
+                }
+            }
+
+            $scope.onCustomerGroupSettingsDirectiveReady = function (api) {
+                customerGroupSettingsDirectiveAPI = api;
+                if (directiveAppendixData != undefined) {
+                    tryLoadAppendixDirectives();
+                } else {
+                    var promise = customerGroupSettingsDirectiveAPI.load();
+                    if (promise != undefined)
+                    {
+                        $scope.customersAppendixLoader = true;
+                        promise.catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        }).finally(function () {
+                            $scope.customersAppendixLoader = false;
+                        });
+                    }
+                }
+            }
+            $scope.isCustomerShown = function () {
+                if (pricingType.value == WhS_Be_PricingTypeEnum.Sale.value)
+                    return true;
+                return false;
+            }
+
         }
 
         function load() {
-            definePricingRuleTypes();
+            $scope.isGettingData = true;
+
+            return UtilsService.waitMultipleAsyncOperations([loadSaleZoneGroupTemplates, loadCustomerGroupTemplates, definePricingRuleTypes]).then(function () {
+               
+                    $scope.isGettingData = false;
+     
+
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.isGettingData = false;
+            });
+
+           
         }
+
         function definePricingRuleTypes() {
             $scope.pricingRuleTypes = [];
             for (var p in WhS_Be_PricingRuleTypeEnum)
@@ -98,6 +159,78 @@
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
+        }
+
+
+        function loadSaleZoneGroupTemplates() {
+            $scope.saleZoneGroupTemplates = [];
+            return WhS_BE_SaleZoneAPIService.GetSaleZoneGroupTemplates().then(function (response) {
+                angular.forEach(response, function (item) {
+                    $scope.saleZoneGroupTemplates.push(item);
+                });
+            });
+        }
+
+        function loadCustomerGroupTemplates() {
+            $scope.customerGroupTemplates = [];
+            return WhS_BE_CarrierAccountAPIService.GetCustomerGroupTemplates().then(function (response) {
+                angular.forEach(response, function (item) {
+                    $scope.customerGroupTemplates.push(item);
+                });
+            });
+        }
+        function tryLoadAppendixDirectives() {
+            var loadOperations = [];
+            var setDirectivesDataOperations = [];
+
+            if ($scope.selectedSaleZoneGroupTemplate != undefined) {
+                if (saleZoneGroupSettingsDirectiveAPI == undefined)
+                    return;
+                loadOperations.push(saleZoneGroupSettingsDirectiveAPI.load);
+
+                setDirectivesDataOperations.push(setSaleZoneGroupSettingsDirective);
+            }
+            if ($scope.selectedSupplierGroupTemplate != undefined) {
+                if (supplierGroupSettingsDirectiveAPI == undefined)
+                    return;
+
+                loadOperations.push(supplierGroupSettingsDirectiveAPI.load);
+
+                setDirectivesDataOperations.push(setSupplierGroupSettingsDirective);
+            }
+
+            UtilsService.waitMultipleAsyncOperations(loadOperations).then(function () {
+
+                setAppendixDirectives();
+
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.isGettingData = false;
+            });
+
+            function setAppendixDirectives() {
+                UtilsService.waitMultipleAsyncOperations(setDirectivesDataOperations).then(function () {
+                    directiveAppendixData = undefined;
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                }).finally(function () {
+                    $scope.isGettingData = false;
+                });
+            }
+        }
+        function setSaleZoneGroupSettingsDirective() {
+            return saleZoneGroupSettingsDirectiveAPI.setData(appendixData.RouteCriteria.SaleZoneGroupSettings);
+        }
+
+        function setCustomerGroupSettingsDirective() {
+            return customerGroupSettingsDirectiveAPI.setData(appendixData.RouteCriteria.CustomerGroupSettings);
+        }
+        function loadSaleZoneGroupSettings() {
+            return saleZoneGroupSettingsDirectiveAPI.load();
+        }
+
+        function loadCustomerGroupSettings() {
+            return customerGroupSettingsDirectiveAPI.load();
         }
 
       

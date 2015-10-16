@@ -10,7 +10,10 @@ app.directive('vrWhsBeSelectivesalezones', ['WhS_BE_SaleZoneAPIService', 'WhS_BE
         },
         controller: function ($scope, $element, $attrs) {
 
+         
+          
             var ctrl = this;
+            $scope.isPackageDefined = (ctrl.salezonepackageid != undefined);
             $scope.selectedSaleZones = [];
 
             $scope.saleZonePackages = [];
@@ -20,13 +23,19 @@ app.directive('vrWhsBeSelectivesalezones', ['WhS_BE_SaleZoneAPIService', 'WhS_BE
 
             var beSaleZonesCtor = new beSaleZones(ctrl, $scope, WhS_BE_SaleZoneAPIService);
             beSaleZonesCtor.initializeController();
-
+            $scope.onSaleZonePackageValueChanged = function () {
+                $scope.isPackageDefined=($scope.selectedSaleZonePackage != undefined);
+            }
             $scope.searchZones = function (filter) {
                 var packageId;
-                if (ctrl.salezonepackageid == undefined)
+                if (ctrl.salezonepackageid == undefined && $scope.selectedSaleZonePackage != undefined)
+                {
                     packageId = $scope.selectedSaleZonePackage.SaleZonePackageId;
-                else
+                }    
+                else {
                     packageId = ctrl.salezonepackageid;
+                }
+                   
 
                 return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo(packageId, filter);
             }

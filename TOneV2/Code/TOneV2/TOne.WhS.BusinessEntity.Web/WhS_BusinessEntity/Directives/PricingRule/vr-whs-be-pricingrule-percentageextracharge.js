@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBePricingruleTariffsettings', ['UtilsService', '$compile', 'WhS_BE_PricingRuleAPIService',
-function (UtilsService, $compil, WhS_BE_PricingRuleAPIService) {
+app.directive('vrWhsBePricingrulePercentageextracharge', ['UtilsService', '$compile',
+function (UtilsService, $compil) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -10,10 +10,8 @@ function (UtilsService, $compil, WhS_BE_PricingRuleAPIService) {
         controller: function ($scope, $element, $attrs) {
 
             var ctrl = this;
-            $scope.pricingRuleTariffSettings = [];
-            console.log("Tarrif");
-            var bePricingRuleTariffSettingObject = new bePricingRuleTariffSetting(ctrl, $scope, $attrs);
-            bePricingRuleTariffSettingObject.initializeController();
+            var bePricingRulePercentageExtraChargeObject = new bePricingRulePercentageExtraCharge(ctrl, $scope, $attrs);
+            bePricingRulePercentageExtraChargeObject.initializeController();
             $scope.onselectionchanged = function () {
 
                 if (ctrl.onselectionchanged != undefined) {
@@ -30,38 +28,37 @@ function (UtilsService, $compil, WhS_BE_PricingRuleAPIService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Templates/PricingRuleTariffSettings.html"
+        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Templates/PricingRulePercentageExtraChargeTemplate.html"
 
     };
 
 
-    function bePricingRuleTariffSetting(ctrl, $scope, $attrs) {
-        var pricingRuleTariffTemplateDirectiveAPI;
+    function bePricingRulePercentageExtraCharge(ctrl, $scope, $attrs) {
+
         function initializeController() {
-            $scope.onPricingRuleTariffTemplateDirectiveReady = function (api) {
-                pricingRuleTariffTemplateDirectiveAPI = api;
-            }
+
             defineAPI();
         }
-
 
         function defineAPI() {
             var api = {};
 
             api.getData = function () {
-                return pricingRuleTariffTemplateDirectiveAPI.getData();
+                var obj = {
+                    FromRate: $scope.fromRate,
+                    ToRate: $scope.toRate,
+                    ExtraPercentage: $scope.extraPercentage
+                }
+                return obj;
             }
 
-            api.setData = function (selectedIds) {
-
+            api.setData = function (selectedobj) {
+                $scope.fromRate = selectedobj.FromRate;
+                $scope.toRate = selectedobj.ToRate
+                $scope.extraAmount = selectedobj.ExtraAmount
 
             }
             api.load = function () {
-                return WhS_BE_PricingRuleAPIService.GetPricingRuleTariffTemplates().then(function (response) {
-                    angular.forEach(response, function (itm) {
-                        $scope.pricingRuleTariffSettings.push(itm);
-                    });
-                })
             }
 
             if (ctrl.onReady != null)

@@ -27,6 +27,15 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
              return manager.GetPricingRuleTariffTemplates(); 
          }
 
+         [HttpGet]
+         [Route("GetPricingRuleExtraChargeTemplates")]
+         public List<TemplateConfig> GetPricingRuleExtraChargeTemplates()
+         {
+             PricingRuleManager manager = new PricingRuleManager();
+             return manager.GetPricingRuleExtraChargeTemplates(); 
+         }
+
+         
          
     }
 }

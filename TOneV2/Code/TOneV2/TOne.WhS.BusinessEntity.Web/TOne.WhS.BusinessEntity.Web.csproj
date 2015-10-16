@@ -171,11 +171,17 @@
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierAccountGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierProfileGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingProduct\Templates\CustomerPricingProductGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\PricingRuleExtraChargeSettings.html" />
+    <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\PricingRuleFixedExtraChargeTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\PricingRulePercentageExtraChargeTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\PricingRuleRegularTariffTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\PricingRuleTariffSettings.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\PricingRuleTODSettings.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\SalePricingRuleCriteriaTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\SalePricingRuleGrid.html" />
+    <Content Include="WhS_BusinessEntity\Directives\PricingRule\vr-whs-be-pricingrule-extrachargesettings-directive.js" />
+    <Content Include="WhS_BusinessEntity\Directives\PricingRule\vr-whs-be-pricingrule-fixedextracharge-directive.js" />
+    <Content Include="WhS_BusinessEntity\Directives\PricingRule\vr-whs-be-pricingrule-percentageextracharge.js" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\vr-whs-be-pricingrule-regulartarrif-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\vr-whs-be-pricingrule-tariffsettings-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\Templates\SelectiveCodeCriteriaDirectiveTemplate.html" />
