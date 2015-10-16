@@ -11,20 +11,8 @@ namespace Vanrise.Fzero.CDRImport.Business.ExecutionFlows
 {
     public static class AllFlows
     {
-        public static string GetImporttoNormalCDRFlow()
-        {
-            QueueExecutionFlowTree queueFlowTree = new QueueExecutionFlowTree
-            {
-                Activities = new List<BaseExecutionActivity>
-                {                    
-                    new QueueStageExecutionActivity { StageName = "CDR Import",  QueueName = "CDRQueue", QueueTypeFQTN = typeof(ImportedCDRBatch).AssemblyQualifiedName,
-                        QueueSettings = new QueueSettings { QueueActivatorFQTN = typeof(SaveCDRActivator).AssemblyQualifiedName} }
-                }
-            };
-            return Vanrise.Common.Serializer.Serialize(queueFlowTree);
-        }
-
-        public static string GetNormalize_ImporttoNormalCDRFlow()
+       
+        public static string GetCDRFlow()
         {
             QueueExecutionFlowTree queueFlowTree = new QueueExecutionFlowTree
             {
@@ -39,7 +27,7 @@ namespace Vanrise.Fzero.CDRImport.Business.ExecutionFlows
             return Vanrise.Common.Serializer.Serialize(queueFlowTree);
         }
 
-        public static string GetNormalize_ImporttoStagingCDRFlow()
+        public static string GetStagingCDRFlow()
         {
             QueueExecutionFlowTree queueFlowTree = new QueueExecutionFlowTree
             {
@@ -60,23 +48,5 @@ namespace Vanrise.Fzero.CDRImport.Business.ExecutionFlows
             return Vanrise.Common.Serializer.Serialize(queueFlowTree);
         }
 
-        public static string GetImporttoStagingCDRFlow()
-        {
-            QueueExecutionFlowTree queueFlowTree = new QueueExecutionFlowTree
-            {
-                Activities = new List<BaseExecutionActivity>
-                {
-                    new SequenceExecutionActivity
-                    {
-                        Activities = new List<BaseExecutionActivity>
-                        {     
-                            new QueueStageExecutionActivity { StageName = "Save CDRs",  QueueName = "StoreCDRQueue", QueueTypeFQTN = typeof(ImportedStagingCDRBatch).AssemblyQualifiedName,
-                                QueueSettings = new QueueSettings { QueueActivatorFQTN = typeof(SaveStagingCDRActivator).AssemblyQualifiedName} }
-                        }
-                    }
-                }
-            };
-            return Vanrise.Common.Serializer.Serialize(queueFlowTree);
-        }
     }
 }

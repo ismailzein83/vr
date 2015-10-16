@@ -66,7 +66,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     normalCDR.ServiceType = GetReaderValue<int?>(reader, "Service_Type");
                     normalCDR.ServiceVASName = reader["Service_VAS_Name"] as string;
                     normalCDR.ReleaseCode = reader["ReleaseCode"] as string;
-                    normalCDR.AreaCode = reader["AreaCode"] as string;
+                    normalCDR.MSISDNAreaCode = reader["MSISDNAreaCode"] as string;
+                    normalCDR.DestinationAreaCode = reader["DestinationAreaCode"] as string;
                     normalCDR.Destination = reader["Destination"] as string;
                     normalCDR.MSISDN = reader["MSISDN"] as string;
 
@@ -116,7 +117,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             normalCDR.ServiceVASName = reader["Service_VAS_Name"] as string;
             normalCDR.Destination = reader["Destination"] as string;
             normalCDR.ReleaseCode = reader["ReleaseCode"] as string;
-            normalCDR.AreaCode = reader["AreaCode"] as string;
+            normalCDR.MSISDNAreaCode = reader["MSISDNAreaCode"] as string;
+            normalCDR.DestinationAreaCode = reader["DestinationAreaCode"] as string;
             return normalCDR;
         }
 

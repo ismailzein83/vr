@@ -78,6 +78,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
             }
 
             ImportedData.LastImportedId = index;
+            batch.Datasource = dataSourceId;
             mappedBatches.Add("Normalize CDRs", batch); 
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();

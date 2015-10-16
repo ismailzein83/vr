@@ -8,8 +8,7 @@ namespace Vanrise.Fzero.CDRImport.Entities
     {
         static ImportedCDRBatch()
         {
-            CDR dummy = new CDR();
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(ImportedCDRBatch), "CDRs");           
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(ImportedCDRBatch), "CDRs", "Datasource");           
         }
 
         public override string GenerateDescription()
