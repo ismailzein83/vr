@@ -175,7 +175,7 @@ namespace PSTN.BusinessEntity.Business
 
         public Vanrise.Entities.IDataRetrievalResult<NormalizationRuleDetail> GetFilteredNormalizationRules(Vanrise.Entities.DataRetrievalInput<NormalizationRuleQuery> input)
         {
-            var allNormalizationRules = GetCachedNormalizationRules();
+            //var allNormalizationRules = GetCachedNormalizationRules();
 
             Func<NormalizationRule, bool> filterResult = (item) =>
                         (
@@ -221,8 +221,9 @@ namespace PSTN.BusinessEntity.Business
                             (item.Description != null && item.Description.Contains(input.Query.Description))
                         );
 
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, GetFilteredRules(filterResult).ToBigResult(input, filterResult, NormalizationRuleDetailMapper));
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allNormalizationRules.ToBigResult(input, filterResult, NormalizationRuleDetailMapper));
+            //return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allNormalizationRules.ToBigResult(input, filterResult, NormalizationRuleDetailMapper));
         }
 
         public NormalizationRule GetNormalizationRuleById(int normalizationRuleId)
@@ -353,7 +354,7 @@ namespace PSTN.BusinessEntity.Business
             normalizationRuleDetail.PhoneNumberLength = normalizationRule.Criteria.PhoneNumberLength;
             normalizationRuleDetail.PhoneNumberPrefix = normalizationRule.Criteria.PhoneNumberPrefix;
 
-            normalizationRuleDetail.SettingsDescription = (normalizationRule.Settings != null) ? normalizationRule.Settings.GetDescription() : null;
+            normalizationRuleDetail.Descriptions = (normalizationRule.Settings != null) ? normalizationRule.Settings.GetDescriptions() : null;
 
             normalizationRuleDetail.Description = normalizationRule.Description;
 

@@ -122,6 +122,24 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules.Business">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Rules.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Rules.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Data.SQL">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Rules.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Rules.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Web, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Rules.Web.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -133,6 +151,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Controllers\NormalizationRuleController.cs" />
     <Compile Include="Controllers\SwitchController.cs" />
     <Compile Include="Controllers\TrunkController.cs" />
@@ -160,6 +179,7 @@
   <ItemGroup>
     <Content Include="PSTN_BusinessEntity\Constants\NormalizationRuleTypeEnum.js" />
     <Content Include="PSTN_BusinessEntity\Constants\PhoneNumberTypeEnum.js" />
+    <Content Include="PSTN_BusinessEntity\Constants\PSTN_BE_ModuleConfig.js" />
     <Content Include="PSTN_BusinessEntity\Constants\TrunkDirectionEnum.js" />
     <Content Include="PSTN_BusinessEntity\Constants\TrunkTypeEnum.js" />
     <Content Include="PSTN_BusinessEntity\Directives\Templates\SetAreaPrefixDirectiveTemplate.html" />

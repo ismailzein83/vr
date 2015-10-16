@@ -7,10 +7,12 @@ using Vanrise.Web.Base;
 
 namespace PSTN.BusinessEntity.Web.Controllers
 {
+    [RoutePrefix(Constants.ROUTE_PREFIX + "NormalizationRule")]
     [JSONWithTypeAttribute]
-    public class NormalizationRuleController : Vanrise.Web.Base.BaseAPIController
+    public class NormalizationRuleController : Vanrise.Rules.Web.Controllers.BaseRuleController<NormalizationRule, NormalizationRuleManager>
     {
         [HttpPost]
+        [Route("GetFilteredNormalizationRules")]
         public object GetFilteredNormalizationRules(Vanrise.Entities.DataRetrievalInput<NormalizationRuleQuery> input)
         {
             NormalizationRuleManager manager = new NormalizationRuleManager();
@@ -18,6 +20,7 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetNormalizationRuleById")]
         public NormalizationRule GetNormalizationRuleById(int normalizationRuleId)
         {
             NormalizationRuleManager manager = new NormalizationRuleManager();
@@ -25,6 +28,7 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetNormalizationRuleAdjustNumberActionSettingsTemplates")]
         public List<TemplateConfig> GetNormalizationRuleAdjustNumberActionSettingsTemplates()
         {
             NormalizationRuleManager manager = new NormalizationRuleManager();
@@ -32,6 +36,7 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetNormalizationRuleSetAreaSettingsTemplates")]
         public List<TemplateConfig> GetNormalizationRuleSetAreaSettingsTemplates()
         {
             NormalizationRuleManager manager = new NormalizationRuleManager();
@@ -39,6 +44,7 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpPost]
+        [Route("AddNormalizationRule")]
         public InsertOperationOutput<NormalizationRuleDetail> AddNormalizationRule(NormalizationRule normalizationRuleObj)
         {
             NormalizationRuleManager manager = new NormalizationRuleManager();
@@ -46,6 +52,7 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpPost]
+        [Route("UpdateNormalizationRule")]
         public UpdateOperationOutput<NormalizationRuleDetail> UpdateNormalizationRule(NormalizationRule normalizationRuleObj)
         {
             NormalizationRuleManager manager = new NormalizationRuleManager();
@@ -53,6 +60,7 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
+        [Route("DeleteNormalizationRule")]
         public DeleteOperationOutput<object> DeleteNormalizationRule(int normalizationRuleId)
         {
             NormalizationRuleManager manager = new NormalizationRuleManager();

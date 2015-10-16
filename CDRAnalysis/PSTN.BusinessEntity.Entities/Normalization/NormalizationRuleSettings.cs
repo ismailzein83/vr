@@ -12,6 +12,6 @@ namespace PSTN.BusinessEntity.Entities
     {
         public NormalizationRuleType RuleType { get; set; }
 
-        public abstract string GetDescription();
+        public abstract List<string> GetDescriptions();
     }
 }

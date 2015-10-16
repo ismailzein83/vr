@@ -9,6 +9,7 @@
         var editMode;
         var ruleId;
         var ruleTypeDirectiveAPI;
+        var directiveLoadCount = 0;
         var ruleTypeDirectiveData;
 
         loadParameters();
@@ -77,9 +78,11 @@
             }
 
             $scope.onRuleTypeDirectiveLoaded = function (api) {
+                directiveLoadCount++;
+
                 ruleTypeDirectiveAPI = api;
 
-                if (editMode)
+                if (editMode && directiveLoadCount == 1)
                     ruleTypeDirectiveAPI.setData(ruleTypeDirectiveData);
             };
 

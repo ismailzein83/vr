@@ -1,44 +1,54 @@
-﻿app.service("NormalizationRuleAPIService", function (BaseAPIService) {
+﻿(function (appControllers) {
 
-    return ({
-        GetFilteredNormalizationRules: GetFilteredNormalizationRules,
-        GetNormalizationRuleById: GetNormalizationRuleById,
-        GetNormalizationRuleAdjustNumberActionSettingsTemplates: GetNormalizationRuleAdjustNumberActionSettingsTemplates,
-        GetNormalizationRuleSetAreaSettingsTemplates: GetNormalizationRuleSetAreaSettingsTemplates,
-        AddNormalizationRule: AddNormalizationRule,
-        UpdateNormalizationRule: UpdateNormalizationRule,
-        DeleteNormalizationRule: DeleteNormalizationRule
-    });
+    "use strict";
 
-    function GetFilteredNormalizationRules(input) {
-        return BaseAPIService.post("/api/NormalizationRule/GetFilteredNormalizationRules", input);
-    }
+    normalizationRuleAPIService.$inject = ["BaseAPIService", "UtilsService", "PSTN_BE_ModuleConfig"];
 
-    function GetNormalizationRuleById(normalizationRuleId) {
-        return BaseAPIService.get("/api/NormalizationRule/GetNormalizationRuleById", {
-            normalizationRuleId: normalizationRuleId
+    function normalizationRuleAPIService(BaseAPIService, UtilsService, PSTN_BE_ModuleConfig) {
+
+        function GetFilteredNormalizationRules(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "NormalizationRule", "GetFilteredNormalizationRules"), input);
+        }
+        
+        function GetNormalizationRuleById(normalizationRuleId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "NormalizationRule", "GetNormalizationRuleById"), {
+                normalizationRuleId: normalizationRuleId
+            });
+        }
+
+        function GetNormalizationRuleAdjustNumberActionSettingsTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "NormalizationRule", "GetNormalizationRuleAdjustNumberActionSettingsTemplates"));
+        }
+
+        function GetNormalizationRuleSetAreaSettingsTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "NormalizationRule", "GetNormalizationRuleSetAreaSettingsTemplates"));
+        }
+
+        function AddNormalizationRule(normalizationRuleObj) {
+            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "NormalizationRule", "AddNormalizationRule"), normalizationRuleObj);
+        }
+
+        function UpdateNormalizationRule(normalizationRuleObj) {
+            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "NormalizationRule", "UpdateNormalizationRule"), normalizationRuleObj);
+        }
+
+        function DeleteNormalizationRule(normalizationRuleId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "NormalizationRule", "DeleteNormalizationRule"), {
+                normalizationRuleId: normalizationRuleId
+            });
+        }
+
+        return ({
+            GetFilteredNormalizationRules: GetFilteredNormalizationRules,
+            GetNormalizationRuleById: GetNormalizationRuleById,
+            GetNormalizationRuleAdjustNumberActionSettingsTemplates: GetNormalizationRuleAdjustNumberActionSettingsTemplates,
+            GetNormalizationRuleSetAreaSettingsTemplates: GetNormalizationRuleSetAreaSettingsTemplates,
+            AddNormalizationRule: AddNormalizationRule,
+            UpdateNormalizationRule: UpdateNormalizationRule,
+            DeleteNormalizationRule: DeleteNormalizationRule
         });
     }
 
-    function GetNormalizationRuleAdjustNumberActionSettingsTemplates() {
-        return BaseAPIService.get("/api/NormalizationRule/GetNormalizationRuleAdjustNumberActionSettingsTemplates");
-    }
+    appControllers.service("NormalizationRuleAPIService", normalizationRuleAPIService);
 
-    function GetNormalizationRuleSetAreaSettingsTemplates() {
-        return BaseAPIService.get("/api/NormalizationRule/GetNormalizationRuleSetAreaSettingsTemplates");
-    }
-
-    function AddNormalizationRule(normalizationRuleObj) {
-        return BaseAPIService.post("/api/NormalizationRule/AddNormalizationRule", normalizationRuleObj);
-    }
-
-    function UpdateNormalizationRule(normalizationRuleObj) {
-        return BaseAPIService.post("/api/NormalizationRule/UpdateNormalizationRule", normalizationRuleObj);
-    }
-
-    function DeleteNormalizationRule(normalizationRuleId) {
-        return BaseAPIService.get("/api/NormalizationRule/DeleteNormalizationRule", {
-            normalizationRuleId: normalizationRuleId
-        });
-    }
-});
+})(appControllers);

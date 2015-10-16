@@ -34,7 +34,9 @@
         <vr-columns width="1/2row" ng-show="showSettings">
             <div style="background-color: white;">
                 <vr-section title="Settings">
-                    <vr-label isvalue>{{dataItem.SettingsDescription}}</vr-label>
+                    <div ng-repeat="description in dataItem.Descriptions">
+                        <vr-label isvalue>{{description}}</vr-label>
+                    </div>
                 </vr-section>
             </div>
         </vr-columns>

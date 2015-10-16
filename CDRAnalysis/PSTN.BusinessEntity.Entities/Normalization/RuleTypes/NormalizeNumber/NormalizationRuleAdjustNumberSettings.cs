@@ -10,18 +10,18 @@ namespace PSTN.BusinessEntity.Entities
     {
         public List<NormalizationRuleAdjustNumberActionSettings> Actions { get; set; }
 
-        public override string GetDescription()
+        public override List<string> GetDescriptions()
         {
             if (this.Actions == null) return null;
 
-            List<string> descriptionList = new List<string>();
+            List<string> descriptions = new List<string>();
 
             foreach (NormalizationRuleAdjustNumberActionSettings action in this.Actions)
             {
-                descriptionList.Add(action.GetDescription());
+                descriptions.Add(action.GetDescription());
             }
 
-            return string.Join<string>(" | ", descriptionList);
+            return descriptions;
         }
     }
 }

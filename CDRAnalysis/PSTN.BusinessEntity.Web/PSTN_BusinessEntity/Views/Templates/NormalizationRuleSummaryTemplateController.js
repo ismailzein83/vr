@@ -17,7 +17,7 @@
             $scope.showPhoneNumberLength = ($scope.dataItem.PhoneNumberLength != undefined);
             $scope.showPhoneNumberPrefix = ($scope.dataItem.PhoneNumberPrefix != undefined);
 
-            $scope.showSettings = $scope.dataItem.SettingsDescription != undefined;
+            $scope.showSettings = $scope.dataItem.Descriptions != undefined;
         }
 
         function load() { }

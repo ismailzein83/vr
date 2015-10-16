@@ -10,9 +10,13 @@ namespace PSTN.BusinessEntity.Entities.Normalization.RuleTypes.SetArea.Settings
     {
         public int PrefixLength { get; set; }
 
-        public override string GetDescription()
+        public override List<string> GetDescriptions()
         {
-            return "Set Area Prefix: Prefix Length = " + this.PrefixLength;
+            List<string> descriptions = new List<string>();
+
+            descriptions.Add("Set Area Prefix: Prefix Length = " + this.PrefixLength);
+
+            return descriptions;
         }
     }
 }
