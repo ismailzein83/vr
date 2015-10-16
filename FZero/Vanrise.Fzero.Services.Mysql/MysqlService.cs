@@ -51,7 +51,7 @@ namespace Vanrise.Fzero.Services.Mysql
             try
             {
                 base.RequestAdditionalTime(int.Parse(System.Configuration.ConfigurationManager.AppSettings["RequestAdditionalTime"].ToString()));
-                Debugger.Launch(); // launch and attach debugger
+                //Debugger.Launch(); // launch and attach debugger
 
                 // Create a timer with a ten second interval.
                 aTimer = new System.Timers.Timer(int.Parse(System.Configuration.ConfigurationManager.AppSettings["TimerInterval"].ToString()));// 60 minutes
