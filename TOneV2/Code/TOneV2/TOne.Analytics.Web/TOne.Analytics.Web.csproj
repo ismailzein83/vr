@@ -155,8 +155,10 @@
     <Content Include="Analytics\Constants\VolumeReportsTimePeriodEnum.js" />
     <Content Include="Analytics\Directives\vr-an-generalchart-directive.js" />
     <Content Include="Analytics\Directives\vr-an-generalfilter-directive.js" />
+    <Content Include="Analytics\Directives\vr-an-generalgrid-directive.js" />
     <Content Include="Analytics\Directives\vr-generalchart.html" />
     <Content Include="Analytics\Directives\vr-generalfilter.html" />
+    <Content Include="Analytics\Directives\vr-generalgrid.html" />
     <Content Include="Analytics\Factory\FilterFactory.js" />
     <Content Include="Analytics\Services\APIServices\AnalyticsAPIService.js" />
     <Content Include="Analytics\Services\AnalyticsService.js" />

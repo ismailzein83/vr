@@ -2,8 +2,8 @@
 
     "use strict";
 
-    GenericAnalyticSubGridController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticDimensionEnum', 'GenericAnalyticService'];
-    function GenericAnalyticSubGridController($scope, GenericAnalyticAPIService, GenericAnalyticDimensionEnum, GenericAnalyticService) {
+    GenericAnalyticSubGridController.$inject = ['$scope', 'GenericAnalyticAPIService', 'GenericAnalyticDimensionEnum','GenericAnalyticMeasureEnum', 'GenericAnalyticService'];
+    function GenericAnalyticSubGridController($scope, GenericAnalyticAPIService, GenericAnalyticDimensionEnum, GenericAnalyticMeasureEnum, GenericAnalyticService) {
         var filter = {};
         var measureFields = [];
         var parentGroupKeys = [];
@@ -11,12 +11,17 @@
         load();
 
         function defineScope() {
-
-            $scope.viewScope.measures.forEach(function (item) {
-                measureFields.push(item.value);
+            console.log($scope.dataItem);
+            Object.getOwnPropertyNames($scope.dataItem.MeasureValues).forEach(function (item) {
+                measureFields.push(GenericAnalyticMeasureEnum[item].value);
             });
+            $scope.measures = Object.getOwnPropertyNames($scope.dataItem.MeasureValues);
+            
+            //$scope.viewScope.measures.forEach(function (item) {
+            //    measureFields.push(item.value);            
+            //});
+            //$scope.measures = $scope.viewScope.measures;
 
-            $scope.measures = $scope.viewScope.measures;
 
             $scope.selectedGroupKey;
             $scope.dimensions = [];
@@ -130,6 +135,7 @@
 
         function loadGroupKeys() {
 
+            console.log($scope.gridParentScope);
             for (var prop in $scope.viewScope.groupKeys) {
                 var groupKey = {
                     name: $scope.viewScope.groupKeys[prop].name,

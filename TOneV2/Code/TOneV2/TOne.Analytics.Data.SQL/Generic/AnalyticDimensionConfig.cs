@@ -16,6 +16,8 @@ namespace TOne.Analytics.Data.SQL
 
         public List<string> GroupByStatements { get; set; }
 
+        public string ExpressionSummary { get; set; }
+
         //public string CTEStatement { get; set; }
     }
 }

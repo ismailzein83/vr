@@ -12,12 +12,15 @@ namespace TOne.Analytics.Data.SQL
 {
     public class GenericAnalyticDataManager : BaseTOneDataManager, IGenericAnalyticDataManager
     {
-        public Vanrise.Entities.BigResult<AnalyticRecord> GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
+        public AnalyticSummaryBigResult<AnalyticRecord> GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
+        //public Vanrise.Entities.BigResult<AnalyticRecord> GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
         {
             GenericAnalyticConfigManager _manager = new GenericAnalyticConfigManager();
             Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsConfig = _manager.GetGroupFieldsConfig(input.Query.DimensionFields);
 
             Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsFilterConfig = new Dictionary<AnalyticDimension,AnalyticDimensionConfig>();
+
+            string tempTable = null;
 
             List<AnalyticDimension> fields = new List<AnalyticDimension>();
             foreach (DimensionFilter add in input.Query.Filters)
@@ -30,6 +33,7 @@ namespace TOne.Analytics.Data.SQL
 
             Action<string> createTempTableIfNotExistsAction = (tempTableName) =>
             {
+                tempTable = tempTableName;
                 string query = BuildAnalyticSummaryQuery(input, tempTableName, dimensionsConfig, measureFieldsConfig, dimensionsFilterConfig);
 
                 if(input.Query.Currency != null)
@@ -61,9 +65,66 @@ namespace TOne.Analytics.Data.SQL
                 if (measureFieldConfig.MappedSQLColumn != null)
                     columnsMappings.Add(String.Format("MeasureValues.{0}", input.Query.MeasureFields[i]), measureFieldConfig.MappedSQLColumn);
             }
+            
+            //return RetrieveData(input, createTempTableIfNotExistsAction, (reader) => AnalyticRecordMapper(reader, dimensionsConfig, measureFieldsConfig), columnsMappings);
+            //AnalyticSummaryBigResult<AnalyticRecord> rslt = RetrieveData(input, createTempTableIfNotExistsAction, (reader) => AnalyticRecordMapper(reader, dimensionsConfig, measureFieldsConfig), columnsMappings);
 
-            return RetrieveData(input, createTempTableIfNotExistsAction, (reader) => AnalyticRecordMapper(reader, dimensionsConfig, measureFieldsConfig), columnsMappings);
+
+
+            AnalyticSummaryBigResult<AnalyticRecord> rslt = RetrieveData(input, createTempTableIfNotExistsAction, (reader) => AnalyticRecordMapper(reader, dimensionsConfig, measureFieldsConfig)
+            , columnsMappings, new AnalyticSummaryBigResult<AnalyticRecord>()) as AnalyticSummaryBigResult<AnalyticRecord>;
+
+            if (input.Query.WithSummary)
+                rslt.Summary = GetSummary(input, tempTable, dimensionsConfig, measureFieldsConfig);
+            return rslt;
         }
+
+        private AnalyticRecord GetSummary(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input, string tempTableName,
+            Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsConfig,
+            Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig> measureFieldsConfig)
+        {
+
+            StringBuilder queryBuilder = new StringBuilder(@"SELECT #SELECTPART# FROM #TEMPTABLE# ts");
+
+            StringBuilder selectPartBuilder = new StringBuilder();
+            //foreach (AnalyticDimension groupField in input.Query.DimensionFields)
+            //{
+            //    AnalyticDimensionConfig groupFieldConfig = dimensionsConfig[groupField];
+
+            //    if (!String.IsNullOrEmpty(groupFieldConfig.IdColumn))
+            //        AddColumnToSelectPart(selectPartBuilder, String.Format("{0}(DimensionId_{1}) AS DimensionId_{1}", groupFieldConfig.ExpressionSummary, groupField));
+
+            //    if (!String.IsNullOrEmpty(groupFieldConfig.NameColumn))
+            //        AddColumnToSelectPart(selectPartBuilder, String.Format("{0}(DimensionName_{1}) AS DimensionName_{1}", groupFieldConfig.ExpressionSummary, groupField));
+            //}
+
+            //adding Measures related parts to the query
+            List<string> addedMeasureColumns = new List<string>();
+            foreach (AnalyticMeasureField measureField in input.Query.MeasureFields)
+            {
+                AnalyticMeasureFieldConfig measureFieldConfig = measureFieldsConfig[measureField];
+                if (measureFieldConfig.GetColumnsExpressions != null)
+                {
+                    foreach (var exp in measureFieldConfig.GetColumnsExpressions)
+                    {
+                        var measureColumn = exp(input.Query);
+                        if (!addedMeasureColumns.Contains(measureColumn.ColumnAlias))
+                        {
+                            AddColumnToSelectPart(selectPartBuilder,
+                                String.Format("{0}({1}) AS {1}",measureColumn.ExpressionSummary, measureColumn.ColumnAlias));
+
+                            addedMeasureColumns.Add(measureColumn.ColumnAlias);
+                        }
+                    }
+                }
+            }
+
+            queryBuilder.Replace("#TEMPTABLE#", tempTableName);
+            queryBuilder.Replace("#SELECTPART#", selectPartBuilder.ToString());
+
+            return GetItemText(queryBuilder.ToString(), (reader) => AnalyticRecordMapper(reader,null, measureFieldsConfig), null);
+        }
+
 
         private string BuildAnalyticSummaryQuery(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input, string tempTableName, 
             Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsConfig, 
@@ -321,11 +382,12 @@ namespace TOne.Analytics.Data.SQL
         {
             AnalyticRecord record = new AnalyticRecord()
             {
-                DimensionValues = new AnalyticDimensionValue[dimensionsConfig.Count],
+                DimensionValues = dimensionsConfig != null ? new AnalyticDimensionValue[dimensionsConfig.Count] : new AnalyticDimensionValue[0],
                 MeasureValues = new Dictionary<AnalyticMeasureField, object>() // Object[measureFieldsConfig.Count]
             };
 
             var index = 0;
+            if (dimensionsConfig != null)
             foreach (var groupFieldConfig in dimensionsConfig)
             {
                 object id = GetReaderValue<object>(reader, String.Format("DimensionId_{0}", groupFieldConfig.Key));
@@ -352,6 +414,9 @@ namespace TOne.Analytics.Data.SQL
 
                 index++;
             }
+
+            index = 0;
+
 
             return record;
         }

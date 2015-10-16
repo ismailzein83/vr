@@ -1,7 +1,7 @@
 ﻿<vr-panel ng-controller="Analytics_GHourlyReportController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
-            <vr-an-generalfilter dimensionsvalues="groupKeys" filtervalues="filterKeys" periods="periods" selectedobject="selectedobject"></vr-an-generalfilter>
+            <vr-an-generalfilter dimensions="dimensions" filters="filters" periods="periods" selectedobject="selectedobject"></vr-an-generalfilter>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
@@ -12,12 +12,16 @@
         </vr-row>
         <div>
             <vr-row>
-                <vr-an-generalchart filters="selectedobject.selectedfilters" fixeddimensionfields="selectedobject.selectedperiod" fromtime="selectedobject.fromdate" totime="selectedobject.todate"
-                                    currency="selectedobject.currency" measurechart="measureChart" data-on-ready="onReadyGeneralChart"></vr-an-generalchart>
+                <vr-an-generalchart filters="selectedobject.selectedfilters" periods="selectedobject.selectedperiod" fromdate="selectedobject.fromdate"
+                                    todate="selectedobject.todate" currency="selectedobject.currency" measurechart="measureChart" data-on-ready="onReadyGeneralChart"></vr-an-generalchart>
             </vr-row>
             <vr-row>
                 <vr-columns colnum="12">
-                    <div ng-include="'/Client/Modules/Analytics/Views/GenericAnalytic/GenericAnalyticGrid.html'"></div>
+                    <vr-an-generalgrid dimensions="selectedobject.selecteddimensions" filters="selectedobject.selectedfilters" periods="selectedobject.selectedperiod"
+                                       measures="measures" fromdate="selectedobject.fromdate" todate="selectedobject.todate"
+                                       currency="selectedobject.currency" withsummary on-ready="onReadyGeneralGrid"></vr-an-generalgrid>
+
+                    <!--<div ng-include="'/Client/Modules/Analytics/Views/GenericAnalytic/GenericAnalyticGrid.html'"></div>-->
                 </vr-columns>
             </vr-row>
         </div>

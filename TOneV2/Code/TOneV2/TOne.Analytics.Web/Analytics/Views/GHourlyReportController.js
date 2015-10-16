@@ -7,23 +7,29 @@
 
         load();
         var chartApi;
+        var gridApi;
         function defineScope() {
             $scope.onReadyGeneralChart = function (api) {
                 chartApi = api;
             }
+
+            $scope.onReadyGeneralGrid = function (api) {
+                gridApi = api;
+            }
+
             $scope.subViewConnector = {};
 
-            $scope.groupKeys = [];
+            $scope.dimensions = [];
             $scope.periods = [];            
-            $scope.filterKeys = [];
+            $scope.filters = [];
             $scope.measures = [];
             $scope.measureChart = [];
             
             $scope.selectedobject = {};
 
-            loadGroupKeys();
-            loadFixedGroupKeys();
-            loadFilterKeys();
+            loadDimensions();
+            loadPeriods();
+            loadFilters();
             loadMeasures();
             loadMeasuresChart();
 
@@ -38,16 +44,20 @@
         }
 
         function retrieveData() {
-            var query = {
-                Filters: $scope.selectedobject.selectedfilters,
-                DimensionFields: $scope.selectedobject.selecteddimensions,
-                FixedDimensionFields: $scope.selectedobject.selectedperiod,
-                MeasureFields: $scope.measures,
-                FromTime: $scope.selectedobject.fromdate,
-                ToTime: $scope.selectedobject.todate,
-                Currency: $scope.selectedobject.currency
-            };
-            return $scope.subViewConnector.retrieveData(query);
+            
+            gridApi.LoadGrid();
+
+            //var query = {
+            //    Filters: $scope.selectedobject.selectedfilters,
+            //    DimensionFields: $scope.selectedobject.selecteddimensions,
+            //    FixedDimensionFields: $scope.selectedobject.selectedperiod,
+            //    MeasureFields: $scope.measures,
+            //    FromTime: $scope.selectedobject.fromdate,
+            //    ToTime: $scope.selectedobject.todate,
+            //    Currency: $scope.selectedobject.currency,
+            //    WithSummary: true
+            //};
+            //return $scope.subViewConnector.retrieveData(query);
         }
 
         function retrieveDataChart() {
@@ -58,38 +68,38 @@
             defineScope();
         }
 
-        function loadGroupKeys() {
-            $scope.groupKeys.push(GenericAnalyticDimensionEnum.Customer);
-            $scope.groupKeys.push(GenericAnalyticDimensionEnum.Supplier);
-            $scope.groupKeys.push(GenericAnalyticDimensionEnum.Zone);
-            $scope.groupKeys.push(GenericAnalyticDimensionEnum.CodeGroup);
-            $scope.groupKeys.push(GenericAnalyticDimensionEnum.Switch);
-            $scope.groupKeys.push(GenericAnalyticDimensionEnum.GateWayIn);
-            $scope.groupKeys.push(GenericAnalyticDimensionEnum.GateWayOut);
-            $scope.groupKeys.push(GenericAnalyticDimensionEnum.PortIn);
-            $scope.groupKeys.push(GenericAnalyticDimensionEnum.PortOut);
-            $scope.groupKeys.push(GenericAnalyticDimensionEnum.CodeSales);
-            $scope.groupKeys.push(GenericAnalyticDimensionEnum.CodeBuy);
+        function loadDimensions() {
+            $scope.dimensions.push(GenericAnalyticDimensionEnum.Customer);
+            $scope.dimensions.push(GenericAnalyticDimensionEnum.Supplier);
+            $scope.dimensions.push(GenericAnalyticDimensionEnum.Zone);
+            $scope.dimensions.push(GenericAnalyticDimensionEnum.CodeGroup);
+            $scope.dimensions.push(GenericAnalyticDimensionEnum.Switch);
+            $scope.dimensions.push(GenericAnalyticDimensionEnum.GateWayIn);
+            $scope.dimensions.push(GenericAnalyticDimensionEnum.GateWayOut);
+            $scope.dimensions.push(GenericAnalyticDimensionEnum.PortIn);
+            $scope.dimensions.push(GenericAnalyticDimensionEnum.PortOut);
+            $scope.dimensions.push(GenericAnalyticDimensionEnum.CodeSales);
+            $scope.dimensions.push(GenericAnalyticDimensionEnum.CodeBuy);
         }
 
-        function loadFixedGroupKeys() {
+        function loadPeriods() {
             $scope.periods.push(GenericAnalyticDimensionEnum.Hour);
             $scope.periods.push(GenericAnalyticDimensionEnum.Day);
             //$scope.periods.push(GenericAnalyticDimensionEnum.Week);
             //$scope.periods.push(GenericAnalyticDimensionEnum.Month);
         }
 
-        function loadFilterKeys() {
-            $scope.filterKeys.push(GenericAnalyticDimensionEnum.Customer);
-            $scope.filterKeys.push(GenericAnalyticDimensionEnum.Supplier);
-            $scope.filterKeys.push(GenericAnalyticDimensionEnum.Zone);
-            $scope.filterKeys.push(GenericAnalyticDimensionEnum.CodeGroup);
-            $scope.filterKeys.push(GenericAnalyticDimensionEnum.Switch);
-            $scope.filterKeys.push(GenericAnalyticDimensionEnum.PortIn);
-            $scope.filterKeys.push(GenericAnalyticDimensionEnum.PortOut);
-            $scope.filterKeys.push(GenericAnalyticDimensionEnum.ASR);
-            $scope.filterKeys.push(GenericAnalyticDimensionEnum.ACD);
-            $scope.filterKeys.push(GenericAnalyticDimensionEnum.Attempts);
+        function loadFilters() {
+            $scope.filters.push(GenericAnalyticDimensionEnum.Customer);
+            $scope.filters.push(GenericAnalyticDimensionEnum.Supplier);
+            $scope.filters.push(GenericAnalyticDimensionEnum.Zone);
+            $scope.filters.push(GenericAnalyticDimensionEnum.CodeGroup);
+            $scope.filters.push(GenericAnalyticDimensionEnum.Switch);
+            $scope.filters.push(GenericAnalyticDimensionEnum.PortIn);
+            $scope.filters.push(GenericAnalyticDimensionEnum.PortOut);
+            $scope.filters.push(GenericAnalyticDimensionEnum.ASR);
+            $scope.filters.push(GenericAnalyticDimensionEnum.ACD);
+            $scope.filters.push(GenericAnalyticDimensionEnum.Attempts);
         }
 
         function loadMeasures() {

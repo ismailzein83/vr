@@ -27,4 +27,11 @@ namespace TOne.Analytics.Entities
         Week = 19,
         Month = 20
     }
+
+    public enum AnalyticSummary
+    {
+        Sum,
+        Max,
+        Avg
+    }
 }

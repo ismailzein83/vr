@@ -28,32 +28,34 @@ namespace TOne.Analytics.Data.SQL
 
         public string JoinStatement { get; set; }
 
+        public string ExpressionSummary { get; set; }
+
         #region Measure Values Columns
 
-        public static MeasureValueExpression FirstCDRAttempt_Expression = new MeasureValueExpression { ColumnAlias = "Measure_FirstCDRAttempt", Expression = "CONVERT(VARCHAR(10),Min(ts.FirstCDRAttempt),110)" };
-        public static MeasureValueExpression Attempts_Expression = new MeasureValueExpression { ColumnAlias = "Measure_Attempts", Expression = "Sum(ts.Attempts)" };
-        public static MeasureValueExpression SuccessfulAttempts_Expression = new MeasureValueExpression { ColumnAlias = "Measure_SuccessfulAttempts", Expression = "Sum(ts.SuccessfulAttempts)" };
-        public static MeasureValueExpression FailedAttempts_Expression = new MeasureValueExpression { ColumnAlias = "Measure_FailedAttempts", Expression = "Sum(ts.Attempts-ts.SuccessfulAttempts)" };
-        public static MeasureValueExpression DeliveredAttempts_Expression = new MeasureValueExpression { ColumnAlias = "Measure_DeliveredAttempts", Expression = "Sum(ts.DeliveredAttempts)" };
-        public static MeasureValueExpression DurationsInSeconds_Expression = new MeasureValueExpression { ColumnAlias = "Measure_DurationInSeconds", Expression = "Sum(ts.DurationsInSeconds)" };
-        public static MeasureValueExpression PDDInSeconds_Expression = new MeasureValueExpression { ColumnAlias = "Measure_PDDInSeconds", Expression = "AVG(ts.PDDInSeconds)" };
-        public static MeasureValueExpression UtilizationInSeconds_Expression = new MeasureValueExpression { ColumnAlias = "Measure_UtilizationInSeconds", Expression = "AVG(ts.UtilizationInSeconds)" };
-        public static MeasureValueExpression NumberOfCalls_Expression = new MeasureValueExpression { ColumnAlias = "Measure_NumberOfCalls", Expression = "Sum(ts.NumberOfCalls)" };
-        public static MeasureValueExpression DeliveredNumberOfCalls_Expression = new MeasureValueExpression { ColumnAlias = "Measure_DeliveredNumberOfCalls", Expression = "Sum(ts.DeliveredNumberOfCalls)" };
-        public static MeasureValueExpression CeiledDuration_Expression = new MeasureValueExpression { ColumnAlias = "Measure_CeiledDuration", Expression = "Sum(ts.CeiledDuration)" };
-        public static MeasureValueExpression LastCDRAttempt_Expression = new MeasureValueExpression { ColumnAlias = "Measure_LastCDRAttempt", Expression = "CONVERT(VARCHAR(10),DATEADD(ms,-datepart(ms,Max(LastCDRAttempt)),Max(LastCDRAttempt)),110)" };
-        public static MeasureValueExpression MaxDurationInSeconds_Expression = new MeasureValueExpression { ColumnAlias = "Measure_MaxDurationInSeconds", Expression = "CONVERT(DECIMAL(10,2),Max (ts.MaxDurationInSeconds)/60.0)" };
-        public static MeasureValueExpression PGAD_Expression = new MeasureValueExpression { ColumnAlias = "Measure_PGAD", Expression = "CONVERT(DECIMAL(10,2),Avg(ts.PGAD))" };
-        public static MeasureValueExpression AveragePDD_Expression = new MeasureValueExpression { ColumnAlias = "Measure_AveragePDD", Expression = "CONVERT(DECIMAL(10,2),Avg(ts.PDDinSeconds))" };
+        public static MeasureValueExpression FirstCDRAttempt_Expression = new MeasureValueExpression { ColumnAlias = "Measure_FirstCDRAttempt", Expression = "CONVERT(VARCHAR(10),Min(ts.FirstCDRAttempt),110)", ExpressionSummary = AnalyticSummary.Max.ToString("G") };
+        public static MeasureValueExpression Attempts_Expression = new MeasureValueExpression { ColumnAlias = "Measure_Attempts", Expression = "Sum(ts.Attempts)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
+        public static MeasureValueExpression SuccessfulAttempts_Expression = new MeasureValueExpression { ColumnAlias = "Measure_SuccessfulAttempts", Expression = "Sum(ts.SuccessfulAttempts)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
+        public static MeasureValueExpression FailedAttempts_Expression = new MeasureValueExpression { ColumnAlias = "Measure_FailedAttempts", Expression = "Sum(ts.Attempts-ts.SuccessfulAttempts)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
+        public static MeasureValueExpression DeliveredAttempts_Expression = new MeasureValueExpression { ColumnAlias = "Measure_DeliveredAttempts", Expression = "Sum(ts.DeliveredAttempts)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
+        public static MeasureValueExpression DurationsInSeconds_Expression = new MeasureValueExpression { ColumnAlias = "Measure_DurationInSeconds", Expression = "Sum(ts.DurationsInSeconds)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
+        public static MeasureValueExpression PDDInSeconds_Expression = new MeasureValueExpression { ColumnAlias = "Measure_PDDInSeconds", Expression = "AVG(ts.PDDInSeconds)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
+        public static MeasureValueExpression UtilizationInSeconds_Expression = new MeasureValueExpression { ColumnAlias = "Measure_UtilizationInSeconds", Expression = "AVG(ts.UtilizationInSeconds)", ExpressionSummary = AnalyticSummary.Avg.ToString("G") };
+        public static MeasureValueExpression NumberOfCalls_Expression = new MeasureValueExpression { ColumnAlias = "Measure_NumberOfCalls", Expression = "Sum(ts.NumberOfCalls)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
+        public static MeasureValueExpression DeliveredNumberOfCalls_Expression = new MeasureValueExpression { ColumnAlias = "Measure_DeliveredNumberOfCalls", Expression = "Sum(ts.DeliveredNumberOfCalls)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
+        public static MeasureValueExpression CeiledDuration_Expression = new MeasureValueExpression { ColumnAlias = "Measure_CeiledDuration", Expression = "Sum(ts.CeiledDuration)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
+        public static MeasureValueExpression LastCDRAttempt_Expression = new MeasureValueExpression { ColumnAlias = "Measure_LastCDRAttempt", Expression = "CONVERT(VARCHAR(10),DATEADD(ms,-datepart(ms,Max(LastCDRAttempt)),Max(LastCDRAttempt)),110)", ExpressionSummary = AnalyticSummary.Max.ToString("G") };
+        public static MeasureValueExpression MaxDurationInSeconds_Expression = new MeasureValueExpression { ColumnAlias = "Measure_MaxDurationInSeconds", Expression = "CONVERT(DECIMAL(10,2),Max (ts.MaxDurationInSeconds)/60.0)", ExpressionSummary = AnalyticSummary.Max.ToString("G") };
+        public static MeasureValueExpression PGAD_Expression = new MeasureValueExpression { ColumnAlias = "Measure_PGAD", Expression = "CONVERT(DECIMAL(10,2),Avg(ts.PGAD))", ExpressionSummary = AnalyticSummary.Avg.ToString("G") };
+        public static MeasureValueExpression AveragePDD_Expression = new MeasureValueExpression { ColumnAlias = "Measure_AveragePDD", Expression = "CONVERT(DECIMAL(10,2),Avg(ts.PDDinSeconds))", ExpressionSummary = AnalyticSummary.Avg.ToString("G") };
 
-        public static MeasureValueExpression NominalCapacityInE1s_Expression = new MeasureValueExpression { ColumnAlias = "Measure_NominalCapacityInE1s", Expression = " sum(isnull(CustCA.NominalCapacityInE1s,0))*30*60", JoinStatement = " LEFT JOIN CarrierAccount AS CustCA WITH (NOLOCK) ON ts.CustomerID = CustCA.CarrierAccountID" };
+        public static MeasureValueExpression NominalCapacityInE1s_Expression = new MeasureValueExpression { ColumnAlias = "Measure_NominalCapacityInE1s", Expression = " sum(isnull(CustCA.NominalCapacityInE1s,0))*30*60", JoinStatement = " LEFT JOIN CarrierAccount AS CustCA WITH (NOLOCK) ON ts.CustomerID = CustCA.CarrierAccountID", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
 
-        public static MeasureValueExpression BillingNumberOfCalls_Expression = new MeasureValueExpression { ColumnAlias = "Measure_BillingNumberOfCalls", Expression = "ISNULL(SUM(BS.NumberOfCalls), 0)" };
-        public static MeasureValueExpression CostNets_Expression = new MeasureValueExpression { ColumnAlias = "Measure_CostNets", Expression = "ISNULL(SUM(BS.Cost_Nets / ISNULL(BS.CCLastRate,1)), 0)" };
-        public static MeasureValueExpression SaleNets_Expression = new MeasureValueExpression { ColumnAlias = "Measure_SaleNets", Expression = "ISNULL(SUM(BS.Sale_Nets / ISNULL(BS.CSLastRate,1)), 0)" };
-        public static MeasureValueExpression SaleRate_Expression = new MeasureValueExpression { ColumnAlias = "Measure_SaleRate", Expression = "ISNULL(SUM(BS.Sale_Rate / ISNULL(BS.CSLastRate,1)), 0)" };
-        public static MeasureValueExpression CostRate_Expression = new MeasureValueExpression { ColumnAlias = "Measure_CostRate", Expression = "ISNULL(SUM(BS.Cost_Rate / ISNULL(BS.CCLastRate,1)), 0)" };
-        public static MeasureValueExpression PricedDuration_Expression = new MeasureValueExpression { ColumnAlias = "Measure_PricedDuration", Expression = "ISNULL(SUM(BS.CostDuration) / 60, 0)" };
+        public static MeasureValueExpression BillingNumberOfCalls_Expression = new MeasureValueExpression { ColumnAlias = "Measure_BillingNumberOfCalls", Expression = "ISNULL(SUM(BS.NumberOfCalls), 0)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
+        public static MeasureValueExpression CostNets_Expression = new MeasureValueExpression { ColumnAlias = "Measure_CostNets", Expression = "ISNULL(SUM(BS.Cost_Nets / ISNULL(BS.CCLastRate,1)), 0)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
+        public static MeasureValueExpression SaleNets_Expression = new MeasureValueExpression { ColumnAlias = "Measure_SaleNets", Expression = "ISNULL(SUM(BS.Sale_Nets / ISNULL(BS.CSLastRate,1)), 0)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
+        public static MeasureValueExpression SaleRate_Expression = new MeasureValueExpression { ColumnAlias = "Measure_SaleRate", Expression = "ISNULL(SUM(BS.Sale_Rate / ISNULL(BS.CSLastRate,1)), 0)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
+        public static MeasureValueExpression CostRate_Expression = new MeasureValueExpression { ColumnAlias = "Measure_CostRate", Expression = "ISNULL(SUM(BS.Cost_Rate / ISNULL(BS.CCLastRate,1)), 0)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
+        public static MeasureValueExpression PricedDuration_Expression = new MeasureValueExpression { ColumnAlias = "Measure_PricedDuration", Expression = "ISNULL(SUM(BS.CostDuration) / 60, 0)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
 
         #endregion
     }

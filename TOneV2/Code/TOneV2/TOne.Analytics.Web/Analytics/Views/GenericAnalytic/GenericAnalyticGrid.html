@@ -9,7 +9,7 @@
                            field="'DimensionValues[' + $index + '].Name'" columnindex="$index" widthfactor="15"></vr-datagridcolumn>
 
         <vr-datagridcolumn ng-repeat="measure in selectedMeasures" ng-if="selectedMeasures.length > 0" headertext="measure.description" type="measure.type"
-                           field="'MeasureValues.' + measure.name + ''" tag="measure" getcolor="getColor"></vr-datagridcolumn>
+                           field="'MeasureValues.' + measure.name + ''" tag="measure" summaryfield="'MeasureValues.' + measure.name + ''" getcolor="getColor"></vr-datagridcolumn>
 
         <vr-datagridexpandablerow ng-show="checkExpandablerow(currentSearchCriteria.groupKeys)">
             <div ng-include="'/Client/Modules/Analytics/Views/GenericAnalytic/GenericAnalyticSubGrid.html'"></div>

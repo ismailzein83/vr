@@ -2,14 +2,14 @@
 
     "use strict";
 
-    function vrDirectiveObj(analyticsService, BusinessEntityAPIService, ZonesService, CarrierAccountConnectionAPIService, CarrierTypeEnum,
+    function vrDirectiveObj(analyticsService, UtilsService, VRNotificationService, BusinessEntityAPIService, ZonesService, CarrierAccountConnectionAPIService, CarrierTypeEnum,
         GenericAnalyticDimensionEnum, CurrencyAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
-                dimensionsvalues: "=",
-                filtervalues: "=",
+                dimensions: "=",
+                filters: "=",
                 periods: "=",
                 selectedobject: "="
             },
@@ -26,7 +26,7 @@
 
                 function onLoad() {
                     ctrl.GenericAnalyticDimensionEnum = GenericAnalyticDimensionEnum;
-
+                    ctrl.isInitializing = true;
                     ctrl.switches = [];
                     ctrl.selectedSwitches = [];
 
@@ -69,10 +69,12 @@
                         currency: (ctrl.currency.selectedvalues == null || ctrl.currency.selectedvalues == "" ) ? null : ctrl.currency.selectedvalues.CurrencyID
                     };
 
-                    loadSwitches();
-                    loadCodeGroups();
-                    loadCurrencies();
-                    loadConnections();
+                    UtilsService.waitMultipleAsyncOperations([loadSwitches, loadCodeGroups, loadCurrencies, loadConnections]).finally(function () {
+                        ctrl.isInitializing = false;
+
+                    }).catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    });
                 }
 
                 function loadSwitches() {
@@ -158,7 +160,7 @@
         return directiveDefinitionObject;
     }
     
-    vrDirectiveObj.$inject = ['AnalyticsService', 'BusinessEntityAPIService_temp', 'ZonesService', 'CarrierAccountConnectionAPIService','CarrierTypeEnum', 'GenericAnalyticDimensionEnum','CurrencyAPIService'];
+    vrDirectiveObj.$inject = ['AnalyticsService', 'UtilsService', 'VRNotificationService', 'BusinessEntityAPIService_temp', 'ZonesService', 'CarrierAccountConnectionAPIService','CarrierTypeEnum', 'GenericAnalyticDimensionEnum','CurrencyAPIService'];
     
     app.directive('vrAnGeneralfilter', vrDirectiveObj);
 

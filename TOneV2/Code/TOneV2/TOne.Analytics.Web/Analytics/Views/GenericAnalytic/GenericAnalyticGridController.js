@@ -11,6 +11,7 @@
             acd: 20,
             attempts: 2
         };
+        var isSummary = false;
         defineScope();
         function defineScope() {
             
@@ -40,7 +41,7 @@
             };
             
             $scope.subViewConnector.retrieveData = function (value) {
-                
+                isSummary = value.WithSummary;
                 $scope.subViewConnector.value = value;
                 measureFieldsValues.length = 0;
                 if (gridApi == undefined)
@@ -74,11 +75,11 @@
                 var query = {
                     Filters: value.Filters,
                     DimensionFields: groupKeys,
-                    //DimensionFields: [],
                     MeasureFields: measureFieldsValues,
                     FromTime: value.FromTime,
                     ToTime: value.ToTime,
-                    Currency: value.Currency
+                    Currency: value.Currency,
+                    WithSummary: value.WithSummary
                 }
                 
                 $scope.selectedMeasures = value.MeasureFields;
@@ -90,8 +91,10 @@
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                console.log(dataRetrievalInput);
                 return GenericAnalyticAPIService.GetFiltered(dataRetrievalInput)
                 .then(function (response) {
+                    console.log(response);
                     $scope.currentSearchCriteria.groupKeys.length = 0;
                     
                     selectedGroupKeys.forEach(function (group) {
@@ -101,9 +104,10 @@
                     fixedDimensions.forEach(function (group) {
                         $scope.currentSearchCriteria.groupKeys.push(group);
                     });
-                    //gridApi.setSummary(response.Summary);
 
-                    //$scope.subViewConnector.renderChart(response);
+                    if (isSummary)
+                        gridApi.setSummary(response.Summary);
+
                     onResponseReady(response);
                 });
             };

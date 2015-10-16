@@ -8,9 +8,9 @@
             restrict: 'E',
             scope: {
                 filters: "=",
-                fixeddimensionfields: "=",
-                fromtime: "=",
-                totime: "=",
+                periods: "=",
+                fromdate: "=",
+                todate: "=",
                 currency: "=",
                 measurechart: "=",
                 onReady: '='
@@ -31,30 +31,19 @@
 
                 api.LoadChart = function () {
 
-                    var groupKeys = [];
+                    var dimensions = [];
                     var measureChartValues = [];
-                    if (ctrl.fixeddimensionfields == undefined)
-                        ctrl.fixeddimensionfields = null;
+                    if (ctrl.periods == undefined)
+                        ctrl.periods = null;
 
-                    //ctrl.fixeddimensionfields.forEach(function (group) {
-                    //    groupKeys.push(group.value);
+                    if (ctrl.periods != null) {
+                        dimensions.push(ctrl.periods.value);
 
-                    //    if (group == GenericAnalyticDimensionEnum.Hour) {
-                    //        groupKeys.push(GenericAnalyticDimensionEnum.Date.value);
-                    //        isHour = true;
-                    //    }
-                    //});
-
-                    if (ctrl.fixeddimensionfields != null) {
-                        groupKeys.push(ctrl.fixeddimensionfields.value);
-
-                        if (ctrl.fixeddimensionfields == GenericAnalyticDimensionEnum.Hour) {
-                            groupKeys.push(GenericAnalyticDimensionEnum.Date.value);
+                        if (ctrl.periods == GenericAnalyticDimensionEnum.Hour) {
+                            dimensions.push(GenericAnalyticDimensionEnum.Date.value);
                             isHour = true;
                         }
                     }
- 
-
 
                     for (var i = 0, len = ctrl.measurechart.length; i < len; i++) {
                         measureChartValues.push(ctrl.measurechart[i].measure.value);
@@ -62,18 +51,16 @@
 
                     var query = {
                         Filters: ctrl.filters,
-                        DimensionFields: groupKeys,
+                        DimensionFields: dimensions,
                         MeasureFields: measureChartValues,
-                        FromTime: ctrl.fromtime,
-                        ToTime: ctrl.totime,
+                        FromTime: ctrl.fromdate,
+                        ToTime: ctrl.todate,
                         Currency: ctrl.currency
                     }
 
+                    var sortField;
 
-
-                    var sortField = ctrl.measurechart[0].measure.name;
-
-                    if (groupKeys.length > 0)
+                    if (dimensions.length > 0)
                         sortField = 'DimensionValues[0].Name';
                     else
                         sortField = 'MeasureValues.' + ctrl.measurechart[0].measure.name;
@@ -82,7 +69,6 @@
                         DataRetrievalResultType: 0,
                         IsSortDescending: false,
                         ResultKey: null,
-                        //SortByColumnName: 'DimensionValues[0].Name',
                         SortByColumnName: sortField,
                         Query: query
                     }
@@ -147,7 +133,7 @@
                                         if (y == 0) {
                                             //insert new data values
                                             var values = {};
-                                            values[ctrl.fixeddimensionfields.name] = response.Data[i].DimensionValues[0].Name;
+                                            values[ctrl.periods.name] = response.Data[i].DimensionValues[0].Name;
                                             for (var k = 0; k < dates.length; k++) {
                                                 if (response.Data[i].DimensionValues[1].Name == dates[k])
                                                     values['date' + k + 'Value'] = response.Data[i].MeasureValues[ctrl.measurechart[x].measure.name];
@@ -163,7 +149,7 @@
                                         }
                                     }
 
-                                    var title = "Traffic by " + ctrl.fixeddimensionfields.description + " for " + ctrl.measurechart[x].measure.description;
+                                    var title = "Traffic by " + ctrl.periods.description + " for " + ctrl.measurechart[x].measure.description;
                                     chartDefinition.push({
                                         type: "column",
                                         title: title,
@@ -174,13 +160,9 @@
                                 
 
                                 var xAxisDefinition = {
-                                    titlePath: ctrl.fixeddimensionfields.name,
+                                    titlePath: ctrl.periods.name,
                                     isDateTime: false
                                 };
-                                console.log(chartData);
-                                console.log(chartDefinition);
-                                console.log(seriesDefinitions);
-                                console.log(xAxisDefinition);
                                 for (var i = 0, len = ctrl.measurechart.length; i < len; i++) {
                                     if (ctrl.measurechart[i].API != undefined)
                                         ctrl.measurechart[i].API.renderChart(chartData[i], chartDefinition[i], seriesDefinitions, xAxisDefinition);
@@ -195,12 +177,12 @@
                                 for (var x = 0; x < ctrl.measurechart.length; x++) {
                                     for (var i = 0; i < response.Data.length; i++) {
                                         var values = {};
-                                        values[ctrl.fixeddimensionfields.name] = response.Data[i].DimensionValues[0].Name;
+                                        values[ctrl.periods.name] = response.Data[i].DimensionValues[0].Name;
                                         values[ctrl.measurechart[x].measure.name] = response.Data[i].MeasureValues[ctrl.measurechart[x].measure.name];
                                         chartData[x].push(values);
                                     }
 
-                                    var title = "Traffic by " + ctrl.fixeddimensionfields.description + " for " + ctrl.measurechart[x].measure.description;
+                                    var title = "Traffic by " + ctrl.periods.description + " for " + ctrl.measurechart[x].measure.description;
                                     chartDefinition.push({
                                         type: "column",
                                         title: title,
@@ -217,7 +199,7 @@
 
                                 }
                                 var xAxisDefinition = {
-                                    titlePath: ctrl.fixeddimensionfields.name,
+                                    titlePath: ctrl.periods.name,
                                     isDateTime: false
                                 };
 

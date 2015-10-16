@@ -52,7 +52,8 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = "ISNULL(ts.OurZoneID,'N/A')",
                     NameColumn = "z.Name",
                     JoinStatements = new List<string>() { " JOIN Zone z WITH (NOLOCK) ON z.ZoneID = ts.OurZoneID " },
-                    GroupByStatements = new List<string>() { " ts.OurZoneID, z.Name " }
+                    GroupByStatements = new List<string>() { " ts.OurZoneID, z.Name " },
+                    ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.SupplierZone,
@@ -61,7 +62,8 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = "ISNULL(ts.SupplierZoneID,'N/A')",
                     NameColumn = "z.Name",
                     JoinStatements = new List<string>() { " JOIN Zone z WITH (NOLOCK) ON z.ZoneID = ts.SupplierZoneID " },
-                    GroupByStatements = new List<string>() { " ts.SupplierZoneID, z.Name " }
+                    GroupByStatements = new List<string>() { " ts.SupplierZoneID, z.Name " },
+                    ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.Customer,
@@ -71,7 +73,8 @@ namespace TOne.Analytics.Data.SQL
                     NameColumn = "ISNULL(case when cust.NameSuffix != '' THEN  custProf.Name + '(' + cust.NameSuffix + ')' else custProf.Name end,'N/A')",
                     JoinStatements = new List<string>() { @"LEFT JOIN CarrierAccount cust WITH (NOLOCK) ON cust.CarrierAccountID = ts.CustomerID
                                                             LEFT JOIN CarrierProfile custProf on cust.ProfileID = custProf.ProfileID " },
-                    GroupByStatements = new List<string>() { " ts.CustomerID, cust.NameSuffix, custProf.Name " }
+                    GroupByStatements = new List<string>() { " ts.CustomerID, cust.NameSuffix, custProf.Name " },
+                    ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.Supplier,
@@ -81,7 +84,8 @@ namespace TOne.Analytics.Data.SQL
                     NameColumn = "ISNULL(case when supp.NameSuffix != '' THEN  suppProf.Name + '(' + supp.NameSuffix + ')' else suppProf.Name end,'N/A')",
                     JoinStatements = new List<string>() { @"LEFT JOIN CarrierAccount supp WITH (NOLOCK) ON supp.CarrierAccountID = ts.SupplierID
                                                             LEFT JOIN CarrierProfile suppProf on supp.ProfileID = suppProf.ProfileID " },
-                    GroupByStatements = new List<string>() { " ts.SupplierID, supp.NameSuffix, suppProf.Name " }
+                    GroupByStatements = new List<string>() { " ts.SupplierID, supp.NameSuffix, suppProf.Name " },
+                    ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.CodeGroup,
@@ -90,7 +94,8 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = "ourz.CodeGroup",
                     NameColumn = "c.Name",
                     JoinStatements = new List<string>() { @" LEFT JOIN  OurZones ourz ON ts.OurZoneID = ourz.ZoneID LEFT JOIN CodeGroup c ON ourz.CodeGroup = c.Code" },
-                    GroupByStatements = new List<string>() { " ourz.CodeGroup,  c.Name" }
+                    GroupByStatements = new List<string>() { " ourz.CodeGroup,  c.Name" },
+                    ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.Switch,
@@ -99,7 +104,8 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = "ts.SwitchID",
                     NameColumn = "sw.Name",
                     JoinStatements = new List<string>() { @"JOIN Switch sw WITH (NOLOCK) ON sw.SwitchID = ts.SwitchID" },
-                    GroupByStatements = new List<string>() { "ts.SwitchID, sw.Name" }
+                    GroupByStatements = new List<string>() { "ts.SwitchID, sw.Name" },
+                    ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.GateWayIn,
@@ -108,7 +114,8 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = "ISNULL(cscIn.GateWayID,0)",
                     NameColumn = "ISNULL(cscIn.GateWayName,'N/A')",
                     JoinStatements = new List<string>() { @"LEFT JOIN SwitchConnectivity cscIn  ON (','+cscIn.Details+',' LIKE '%,'+ts.Port_IN +',%' ) AND(ts.SwitchID = cscIn.SwitchID) AND ts.CustomerID = cscIn.CarrierAccount " },
-                    GroupByStatements = new List<string>() { "cscIn.GateWayID, cscIn.GateWayName" }
+                    GroupByStatements = new List<string>() { "cscIn.GateWayID, cscIn.GateWayName" },
+                    ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.GateWayOut,
@@ -117,7 +124,8 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = "ISNULL(cscOut.GateWayID,0)",
                     NameColumn = "ISNULL(cscOut.GateWayName,'N/A')",
                     JoinStatements = new List<string>() { @"LEFT JOIN SwitchConnectivity cscOut ON  (','+cscOut.Details+',' LIKE '%,'+ts.Port_OUT +',%') AND (ts.SwitchID = cscOut.SwitchID)  AND ts.SupplierID  = cscOut.CarrierAccount" },
-                    GroupByStatements = new List<string>() { "cscOut.GateWayID, cscOut.GateWayName" }
+                    GroupByStatements = new List<string>() { "cscOut.GateWayID, cscOut.GateWayName" },
+                    ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.PortIn,
@@ -126,7 +134,8 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = "ts.Port_IN",
                     NameColumn = "ts.Port_IN",
                     JoinStatements = null,
-                    GroupByStatements = new List<string>() { "ts.Port_IN" }
+                    GroupByStatements = new List<string>() { "ts.Port_IN" },
+                    ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.PortOut,
@@ -135,7 +144,8 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = "ts.Port_OUT",
                     NameColumn = "ts.Port_OUT",
                     JoinStatements = null,
-                    GroupByStatements = new List<string>() { "ts.Port_OUT" }
+                    GroupByStatements = new List<string>() { "ts.Port_OUT" },
+                    ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.CodeSales,
@@ -144,7 +154,8 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = "ts.OurCode",
                     NameColumn = "ts.OurCode",
                     JoinStatements = null,
-                    GroupByStatements = new List<string>() { "ts.OurCode" }
+                    GroupByStatements = new List<string>() { "ts.OurCode" },
+                    ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.CodeBuy,
@@ -153,7 +164,8 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = "ISNULL(ts.SupplierCode,'N/A')",
                     NameColumn = "ISNULL(ts.SupplierCode,'N/A')",
                     JoinStatements = null,
-                    GroupByStatements = new List<string>() { "ts.SupplierCode" }
+                    GroupByStatements = new List<string>() { "ts.SupplierCode" },
+                    ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.Date,
@@ -162,7 +174,8 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = "CONVERT(VARCHAR(10),dateadd(dd,0, datediff(dd,0,LastCDRAttempt)),101)",
                     NameColumn = "CONVERT(VARCHAR(10),dateadd(dd,0, datediff(dd,0,LastCDRAttempt)),101)",
                     JoinStatements = null,
-                    GroupByStatements = new List<string>() { "dateadd(dd,0, datediff(dd,0,LastCDRAttempt))" }
+                    GroupByStatements = new List<string>() { "dateadd(dd,0, datediff(dd,0,LastCDRAttempt))" },
+                    ExpressionSummary = AnalyticSummary.Max.ToString("G")
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.Hour,
@@ -171,7 +184,8 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = " datepart(hour,LastCDRAttempt)",
                     NameColumn = " datepart(hour,LastCDRAttempt)",
                     JoinStatements = null,
-                    GroupByStatements = new List<string>() { " datepart(hour,LastCDRAttempt)" }
+                    GroupByStatements = new List<string>() { " datepart(hour,LastCDRAttempt)" },
+                    ExpressionSummary = AnalyticSummary.Max.ToString("G")
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.Currency,
@@ -180,7 +194,8 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = "ts.SupplierID",
                     NameColumn = "ts.SupplierID",
                     JoinStatements = new List<string>() {"LEFT JOIN @ExchangeRates ERC ON ERC.Currency = bs.Cost_Currency AND ERC.Date = bs.CallDate LEFT JOIN @ExchangeRates ERS ON ERS.Currency = bs.Sale_Currency AND ERS.Date = bs.CallDate"},
-                    GroupByStatements = new List<string>() { " datepart(hour,LastCDRAttempt)" }
+                    GroupByStatements = new List<string>() { " datepart(hour,LastCDRAttempt)" },
+                    ExpressionSummary = AnalyticSummary.Max.ToString("G")
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.Day,
@@ -189,7 +204,8 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = "CONVERT(VARCHAR(10), FirstCDRAttempt,121)",
                     NameColumn = "CONVERT(VARCHAR(10),FirstCDRAttempt,121)",
                     JoinStatements = null,
-                    GroupByStatements = new List<string>() { "CONVERT(VARCHAR(10), FirstCDRAttempt,121)" }
+                    GroupByStatements = new List<string>() { "CONVERT(VARCHAR(10), FirstCDRAttempt,121)" },
+                    ExpressionSummary = AnalyticSummary.Max.ToString("G")
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.Week,
@@ -198,7 +214,8 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = "cast(datepart(yyyy, FirstCDRAttempt) AS varchar) + ', Week ' + cast(datepart(wk, FirstCDRAttempt) AS varchar)",
                     NameColumn = "cast(datepart(yyyy, FirstCDRAttempt) AS varchar) +  ', Week '  + cast(datepart(wk, FirstCDRAttempt) AS varchar)",
                     JoinStatements = null,
-                    GroupByStatements = new List<string>() { "cast(datepart(yyyy, FirstCDRAttempt) AS varchar) +  ', Week '  + cast(datepart(wk, FirstCDRAttempt) AS varchar)" }
+                    GroupByStatements = new List<string>() { "cast(datepart(yyyy, FirstCDRAttempt) AS varchar) +  ', Week '  + cast(datepart(wk, FirstCDRAttempt) AS varchar)" },
+                    ExpressionSummary = AnalyticSummary.Max.ToString("G")
                 });
 
             s_AllDimensionsConfig.Add(AnalyticDimension.Month,
@@ -207,7 +224,8 @@ namespace TOne.Analytics.Data.SQL
                     IdColumn = "CONVERT(VARCHAR(7), FirstCDRAttempt,121)",
                     NameColumn = "CONVERT(VARCHAR(7),FirstCDRAttempt,121)",
                     JoinStatements = null,
-                    GroupByStatements = new List<string>() { "CONVERT(VARCHAR(7), FirstCDRAttempt,121)" }
+                    GroupByStatements = new List<string>() { "CONVERT(VARCHAR(7), FirstCDRAttempt,121)" },
+                    ExpressionSummary = AnalyticSummary.Max.ToString("G")
                 });
         }
 
@@ -246,7 +264,8 @@ namespace TOne.Analytics.Data.SQL
                            return new MeasureValueExpression
                            {
                                Expression = String.Format("Case WHEN SUM(ts.{0})>0 THEN CONVERT(DECIMAL(10,2),SUM(ts.SuccessfulAttempts)*100.0/Sum(ts.{0})) ELSE 0 END ", s),
-                               ColumnAlias = "Measure_ABR"
+                               ColumnAlias = "Measure_ABR",
+                               ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                            };
                        }
                    },
@@ -278,7 +297,8 @@ namespace TOne.Analytics.Data.SQL
                            return new MeasureValueExpression
                            {
                                Expression = String.Format("Case WHEN (Sum(ts.{0})-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))>0 THEN CONVERT(DECIMAL(10,2),SUM(ts.SuccessfulAttempts)*100.0/(Sum(ts.{0})-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))) ELSE 0 END ", s),
-                               ColumnAlias = "Measure_ASR"
+                               ColumnAlias = "Measure_ASR",
+                               ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                            };
                        }
                    },
@@ -309,7 +329,8 @@ namespace TOne.Analytics.Data.SQL
                            return new MeasureValueExpression
                            {
                                Expression = String.Format("Case WHEN (Sum(ts.{0})-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))>0 THEN CONVERT(DECIMAL(10,2),SUM(ts.DeliveredNumberOfCalls)*100.0/(Sum(ts.{0})-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))) ELSE 0 END ", s),
-                               ColumnAlias = "Measure_NER"
+                               ColumnAlias = "Measure_NER",
+                               ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                            };
                        }
                    },
