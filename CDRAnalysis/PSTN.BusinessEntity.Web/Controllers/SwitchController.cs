@@ -26,7 +26,7 @@ namespace PSTN.BusinessEntity.Web.Controllers
         public IEnumerable<SwitchInfo> GetSwitches()
         {
             SwitchManager manager = new SwitchManager();
-            return manager.GetSwitches();
+            return manager.GetAllSwitches();
         }
 
         [HttpGet]

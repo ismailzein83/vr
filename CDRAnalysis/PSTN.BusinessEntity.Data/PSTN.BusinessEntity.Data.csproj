@@ -54,7 +54,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IDataManager.cs" />
-    <Compile Include="INormalizationRuleDataManager.cs" />
     <Compile Include="ISwitchDataManager.cs" />
     <Compile Include="ITrunkDataManager.cs" />
     <Compile Include="IBrandDataManager.cs" />

@@ -47,7 +47,7 @@ namespace PSTN.BusinessEntity.Business
             return switches.FindRecord(x => x.DataSourceId == dataSourceId);
         }
        
-        public IEnumerable<SwitchInfo> GetSwitches()
+        public IEnumerable<SwitchInfo> GetAllSwitches()
         {
             var switches = GetCachedSwitches();
             return switches.MapRecords(SwitchInfoMapper);

@@ -10,7 +10,7 @@ using Vanrise.Rules;
 namespace PSTN.BusinessEntity.Business
 {
     public class NormalizationRuleManager : Vanrise.Rules.RuleManager<NormalizationRule, NormalizationRuleDetail>
-    { 
+    {
         public NormalizationRule GetMatchRule(NormalizationRuleTarget target)
         {
             var ruleTree = GetRuleTree(target.RuleType);
@@ -241,21 +241,9 @@ namespace PSTN.BusinessEntity.Business
             return UpdateRule(normalizationRuleObj);
         }
 
-        public DeleteOperationOutput<object> DeleteNormalizationRule(int normalizationRuleId)
+        public DeleteOperationOutput<NormalizationRuleDetail> DeleteNormalizationRule(int ruleId)
         {
-            //return DeleteRule(normalizationRuleId);
-
-            DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
-            deleteOperationOutput.Result = DeleteOperationResult.Failed;
-
-            INormalizationRuleDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<INormalizationRuleDataManager>();
-
-            bool deleted = dataManager.DeleteNormalizationRule(normalizationRuleId);
-
-            if (deleted)
-                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
-
-            return deleteOperationOutput;
+            return DeleteRule(ruleId);
         }
 
         protected override NormalizationRuleDetail MapToDetails(NormalizationRule rule)

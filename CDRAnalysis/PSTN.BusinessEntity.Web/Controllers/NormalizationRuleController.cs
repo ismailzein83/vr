@@ -61,7 +61,7 @@ namespace PSTN.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("DeleteNormalizationRule")]
-        public DeleteOperationOutput<object> DeleteNormalizationRule(int normalizationRuleId)
+        public DeleteOperationOutput<NormalizationRuleDetail> DeleteNormalizationRule(int normalizationRuleId)
         {
             NormalizationRuleManager manager = new NormalizationRuleManager();
             return manager.DeleteNormalizationRule(normalizationRuleId);
