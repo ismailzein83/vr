@@ -7,38 +7,47 @@ using Vanrise.Entities;
 
 namespace Vanrise.Rules.Web.Controllers
 {
-    public abstract class BaseRuleController<T,Q> : Vanrise.Web.Base.BaseAPIController where T : BaseRule where Q : RuleManager<T>
+    public abstract class BaseRuleController<T, Q> : Vanrise.Web.Base.BaseAPIController
+        where T : BaseRule
+        where Q : RuleManager<T>
+    {
+    }
+
+    public abstract class BaseRuleController<T, Q, R> : Vanrise.Web.Base.BaseAPIController
+        where T : BaseRule
+        where Q : class
+        where R : RuleManager<T, Q>
     {
 
         [HttpPost]
         [Route("AddRule")]
-        public InsertOperationOutput<T> AddRule(T rule)
+        public InsertOperationOutput<Q> AddRule(T rule)
         {
-            Q manager = Activator.CreateInstance<Q>();
+            R manager = Activator.CreateInstance<R>();
             return manager.AddRule(rule);
         }
 
         [HttpPost]
         [Route("UpdateRule")]
-        public Vanrise.Entities.UpdateOperationOutput<T> UpdateRule(T rule)
+        public Vanrise.Entities.UpdateOperationOutput<Q> UpdateRule(T rule)
         {
-            Q manager = Activator.CreateInstance<Q>();
+            R manager = Activator.CreateInstance<R>();
             return manager.UpdateRule(rule);
         }
 
         [HttpPost]
         [Route("DeleteRule")]
-        public Vanrise.Entities.DeleteOperationOutput<T> DeleteRule(int ruleId)
+        public Vanrise.Entities.DeleteOperationOutput<Q> DeleteRule(int ruleId)
         {
-            Q manager = Activator.CreateInstance<Q>();
+            R manager = Activator.CreateInstance<R>();
             return manager.DeleteRule(ruleId);
         }
 
         [HttpGet]
         [Route("GetRule")]
-        public T GetRule(int ruleId)
+        public Q GetRule(int ruleId)
         {
-            Q manager = Activator.CreateInstance<Q>();
+            R manager = Activator.CreateInstance<R>();
             return manager.GetRule(ruleId);
         }
     }
