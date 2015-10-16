@@ -8,17 +8,11 @@ namespace PSTN.BusinessEntity.Entities
 {
     public class NormalizationRule : Vanrise.Rules.BaseRule, IRulePhoneNumberTypeCriteria, IRuleSwitchCriteria, IRuleTrunkCriteria, IRulePhoneNumberPrefixCriteria, IRulePhoneNumberLengthCriteria
     {
-        public int NormalizationRuleId { get; set; }
-
         public NormalizationRuleCriteria Criteria { get; set; }
 
         public NormalizationRuleSettings Settings { get; set; }
 
         public string Description { get; set; }
-
-        public DateTime BeginEffectiveDate { get; set; }
-
-        public DateTime? EndEffectiveDate { get; set; }
 
         public IEnumerable<NormalizationPhoneNumberType> PhoneNumberTypes
         {

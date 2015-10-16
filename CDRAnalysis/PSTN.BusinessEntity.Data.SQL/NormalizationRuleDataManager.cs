@@ -9,7 +9,7 @@ namespace PSTN.BusinessEntity.Data.SQL
     {
 
         public NormalizationRuleDataManager()
-            : base("CDRDBConnectionString")
+            : base("ConfigurationDBConnString")
         {
         }
 
@@ -35,7 +35,7 @@ namespace PSTN.BusinessEntity.Data.SQL
             string serializedCriteria = Vanrise.Common.Serializer.Serialize(normalizationRuleObj.Criteria);
             string serializedSettings = Vanrise.Common.Serializer.Serialize(normalizationRuleObj.Settings);
 
-            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_Insert", out normalizationRuleId, serializedCriteria, serializedSettings, normalizationRuleObj.Description, normalizationRuleObj.BeginEffectiveDate, normalizationRuleObj.EndEffectiveDate);
+            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_Insert", out normalizationRuleId, serializedCriteria, serializedSettings, normalizationRuleObj.Description, normalizationRuleObj.BeginEffectiveTime, normalizationRuleObj.EndEffectiveTime);
 
             insertedID = (recordsAffected > 0) ? (int)normalizationRuleId : -1;
             return (recordsAffected > 0);
@@ -46,13 +46,13 @@ namespace PSTN.BusinessEntity.Data.SQL
             string serializedCriteria = Vanrise.Common.Serializer.Serialize(normalizationRuleObj.Criteria);
             string serializedSettings = Vanrise.Common.Serializer.Serialize(normalizationRuleObj.Settings);
 
-            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_Update", normalizationRuleObj.NormalizationRuleId, serializedCriteria, serializedSettings, normalizationRuleObj.Description, normalizationRuleObj.BeginEffectiveDate, normalizationRuleObj.EndEffectiveDate);
+            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_Update", normalizationRuleObj.RuleId, serializedCriteria, serializedSettings, normalizationRuleObj.Description, normalizationRuleObj.BeginEffectiveTime, normalizationRuleObj.EndEffectiveTime);
             return (recordsAffected > 0);
         }
 
         public bool DeleteNormalizationRule(int normalizationRuleId)
         {
-            int recordsEffected = ExecuteNonQuerySP("PSTN_BE.sp_NormalizationRule_Delete", normalizationRuleId);
+            int recordsEffected = ExecuteNonQuerySP("rules.sp_Rule_Delete", normalizationRuleId);
             return (recordsEffected > 0);
         }
 
@@ -67,12 +67,12 @@ namespace PSTN.BusinessEntity.Data.SQL
         {
             NormalizationRule normalizationRule = new NormalizationRule();
 
-            normalizationRule.NormalizationRuleId = (int)reader["ID"];
+            normalizationRule.RuleId = (int)reader["ID"];
             normalizationRule.Criteria = Vanrise.Common.Serializer.Deserialize<NormalizationRuleCriteria>(reader["Criteria"] as string);
             normalizationRule.Settings = Vanrise.Common.Serializer.Deserialize<NormalizationRuleSettings>(reader["Settings"] as string);
             normalizationRule.Description = GetReaderValue<string>(reader, "Description");
-            normalizationRule.BeginEffectiveDate = (DateTime)reader["BED"];
-            normalizationRule.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED");
+            normalizationRule.BeginEffectiveTime = (DateTime)reader["BED"];
+            normalizationRule.EndEffectiveTime = GetReaderValue<DateTime?>(reader, "EED");
 
             return normalizationRule;
         }

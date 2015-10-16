@@ -5,18 +5,18 @@
                      dataretrievalfunction="dataRetrievalFunction"
                      pagingtype="'PagingOnScroll'"
                      menuactions="gridMenuActions"
-                     idfield="NormalizationRuleId"
-                     defaultsortbyfieldname="'NormalizationRuleId'"
+                     idfield="Entity.NormalizationRuleId"
+                     defaultsortbyfieldname="'Entity.RuleId'"
                      defaultsortdirection="'ASC'">
 
             <vr-datagridcolumn headertext="'Number Type'" field="'PhoneNumberTypeDescription'" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Number Prefix'" field="'PhoneNumberPrefix'" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Number Length'" field="'PhoneNumberLength'" type="'Number'" numberprecision="'NoDecimal'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Number Prefix'" field="'Entity.Criteria.PhoneNumberPrefix'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Number Length'" field="'Entity.Criteria.PhoneNumberLength'" type="'Number'" numberprecision="'NoDecimal'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Switches'" field="'SwitchCount'" type="'Number'" numberprecision="'NoDecimal'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Trunks'" field="'TrunkCount'" type="'Number'" numberprecision="'NoDecimal'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Begin Effective Date'" field="'BeginEffectiveDate'" type="'Datetime'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'End Effective Date'" field="'EndEffectiveDate'" type="'Datetime'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Description'" field="'Description'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Begin Effective Date'" field="'Entity.BeginEffectiveTime'" type="'Datetime'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'End Effective Date'" field="'Entity.EndEffectiveTime'" type="'Datetime'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'" type="'Text'"></vr-datagridcolumn>
 
             <vr-datagridexpandablerow>
                 <div ng-include="'/Client/Modules/PSTN_BusinessEntity/Views/Templates/NormalizationRuleSummaryTemplate.html'"></div>

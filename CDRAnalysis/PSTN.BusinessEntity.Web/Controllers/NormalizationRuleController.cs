@@ -9,7 +9,7 @@ namespace PSTN.BusinessEntity.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "NormalizationRule")]
     [JSONWithTypeAttribute]
-    public class NormalizationRuleController : Vanrise.Rules.Web.Controllers.BaseRuleController<NormalizationRule, NormalizationRuleManager>
+    public class NormalizationRuleController : Vanrise.Rules.Web.Controllers.BaseRuleController<NormalizationRule, NormalizationRuleDetail, NormalizationRuleManager>
     {
         [HttpPost]
         [Route("GetFilteredNormalizationRules")]
@@ -21,7 +21,7 @@ namespace PSTN.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetNormalizationRuleById")]
-        public NormalizationRule GetNormalizationRuleById(int normalizationRuleId)
+        public NormalizationRuleDetail GetNormalizationRuleById(int normalizationRuleId)
         {
             NormalizationRuleManager manager = new NormalizationRuleManager();
             return manager.GetNormalizationRuleById(normalizationRuleId);

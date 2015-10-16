@@ -62,8 +62,10 @@
     function editNormalizationRule(normalizationRuleObj, onNormalizationRuleUpdated) {
         var modalSettings = {};
 
+        console.log(normalizationRuleObj);
+
         var parameters = {
-            NormalizationRuleId: normalizationRuleObj.NormalizationRuleId
+            RuleId: normalizationRuleObj.Entity.RuleId
         };
 
         modalSettings.onScopeReady = function (modalScope) {
@@ -85,16 +87,16 @@
         VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Normalization/NormalizationRuleEditor.html", null, modalSettings);
     }
 
-    function deleteNormalizationRule(normalizationRuleObj, onNormalizationRuleDeleted) {
+    function deleteNormalizationRule(ruleDetail, onNormalizationRuleDeleted) {
 
         VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response == true) {
 
-                    return NormalizationRuleAPIService.DeleteNormalizationRule(normalizationRuleObj.NormalizationRuleId)
+                    return NormalizationRuleAPIService.DeleteNormalizationRule(ruleDetail.Entity.RuleId)
                         .then(function (deletionResponse) {
                             if (VRNotificationService.notifyOnItemDeleted("Normalization Rule", deletionResponse))
-                                onNormalizationRuleDeleted(normalizationRuleObj);
+                                onNormalizationRuleDeleted(ruleDetail);
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);

@@ -20,7 +20,7 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null) {
-                ruleId = parameters.NormalizationRuleId;
+                ruleId = parameters.RuleId;
             }
 
             editMode = (ruleId != undefined);
@@ -145,25 +145,26 @@
         }
 
         function fillScopeFromNormalizationRuleObj(rule) {
-            $scope.description = rule.Description;
 
-            $scope.selectedSwitches = (rule.Criteria.SwitchIds != null) ?
-                getItemsByPropValues($scope.switches, rule.Criteria.SwitchIds, "SwitchId") : [];
+            $scope.description = rule.Entity.Description;
 
-            $scope.selectedTrunks = (rule.Criteria.TrunkIds != null) ?
-                getItemsByPropValues($scope.trunks, rule.Criteria.TrunkIds, "TrunkId") : [];
+            $scope.selectedSwitches = (rule.Entity.Criteria.SwitchIds != null) ?
+                getItemsByPropValues($scope.switches, rule.Entity.Criteria.SwitchIds, "SwitchId") : [];
 
-            $scope.selectedPhoneNumberType = (rule.Criteria.PhoneNumberType != null) ?
-                UtilsService.getItemByVal($scope.phoneNumberTypes, rule.Criteria.PhoneNumberType, "value") : undefined;
+            $scope.selectedTrunks = (rule.Entity.Criteria.TrunkIds != null) ?
+                getItemsByPropValues($scope.trunks, rule.Entity.Criteria.TrunkIds, "TrunkId") : [];
 
-            $scope.phoneNumberLength = rule.Criteria.PhoneNumberLength;
-            $scope.phoneNumberPrefix = rule.Criteria.PhoneNumberPrefix;
+            $scope.selectedPhoneNumberType = (rule.Entity.Criteria.PhoneNumberType != null) ?
+                UtilsService.getItemByVal($scope.phoneNumberTypes, rule.Entity.Criteria.PhoneNumberType, "value") : undefined;
 
-            ruleTypeDirectiveData = rule.Settings;
-            $scope.selectedRuleType = UtilsService.getItemByVal($scope.ruleTypes, rule.Settings.RuleType, "value");
+            $scope.phoneNumberLength = rule.Entity.Criteria.PhoneNumberLength;
+            $scope.phoneNumberPrefix = rule.Entity.Criteria.PhoneNumberPrefix;
 
-            $scope.beginEffectiveDate = rule.BeginEffectiveDate;
-            $scope.endEffectiveDate = rule.EndEffectiveDate;
+            ruleTypeDirectiveData = rule.Entity.Settings;
+            $scope.selectedRuleType = UtilsService.getItemByVal($scope.ruleTypes, rule.Entity.Settings.RuleType, "value");
+
+            $scope.beginEffectiveTime = rule.Entity.BeginEffectiveTime;
+            $scope.endEffectiveTime = rule.Entity.EndEffectiveTime;
         }
 
         function getItemsByPropValues(array, values, propName) {
@@ -218,8 +219,8 @@
 
         function buildNormalizationRuleObjFromScope() {
 
-            var normalizationRuleObj = {
-                NormalizationRuleId: (ruleId != undefined) ? ruleId : null,
+            var rule = {
+                RuleId: (ruleId != undefined) ? ruleId : null,
                 Criteria: {
                     SwitchIds: UtilsService.getPropValuesFromArray($scope.selectedSwitches, "SwitchId"),
                     TrunkIds: UtilsService.getPropValuesFromArray($scope.selectedTrunks, "TrunkId"),
@@ -229,13 +230,13 @@
                 },
                 Settings: ruleTypeDirectiveAPI.getData(),
                 Description: $scope.description,
-                BeginEffectiveDate: $scope.beginEffectiveDate,
-                EndEffectiveDate: $scope.endEffectiveDate
+                BeginEffectiveTime: $scope.beginEffectiveTime,
+                EndEffectiveTime: $scope.endEffectiveTime
             };
 
-            normalizationRuleObj.Settings.RuleType = $scope.selectedRuleType.value;
+            rule.Settings.RuleType = $scope.selectedRuleType.value;
 
-            return normalizationRuleObj;
+            return rule;
         }
     }
 

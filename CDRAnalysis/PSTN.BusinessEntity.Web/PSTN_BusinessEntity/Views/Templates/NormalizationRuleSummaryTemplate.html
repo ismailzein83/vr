@@ -15,17 +15,17 @@
 
                     <div ng-if="showPhoneNumberType">
                         <vr-label>Number Type: </vr-label>
-                        <vr-label isvalue>{{dataItem.PhoneNumberTypeDescription}}</vr-label>
+                        <vr-label isvalue>{{dataItem.Entity.Criteria.PhoneNumberTypeDescription}}</vr-label>
                     </div>
 
                     <div ng-if="showPhoneNumberLength">
                         <vr-label>Number Length: </vr-label>
-                        <vr-label isvalue>{{dataItem.PhoneNumberLength}}</vr-label>
+                        <vr-label isvalue>{{dataItem.Entity.Criteria.PhoneNumberLength}}</vr-label>
                     </div>
 
                     <div ng-if="showPhoneNumberPrefix">
                         <vr-label>Number Prefix: </vr-label>
-                        <vr-label isvalue>{{dataItem.PhoneNumberPrefix}}</vr-label>
+                        <vr-label isvalue>{{dataItem.Entity.Criteria.PhoneNumberPrefix}}</vr-label>
                     </div>
                 </vr-section>
             </div>
