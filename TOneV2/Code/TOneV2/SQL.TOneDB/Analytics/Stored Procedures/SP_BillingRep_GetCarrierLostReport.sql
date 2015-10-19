@@ -1,60 +1,66 @@
 ﻿
-Create PROCEDURE [Analytics].[SP_BillingRep_GetCarrierLostReport]
+CREATE PROCEDURE [Analytics].[SP_BillingRep_GetCarrierLostReport]
 (
 	@FromDate Datetime,
 	@ToDate Datetime,
-	@CustomerID varchar(5)=NULL,
-	@SupplierID varchar(5)=NULL,
+	@CustomersID VARCHAR(max)=NULL,
+	@SuppliersID VARCHAR(max)=NULL,
 	@Margin int,
-	@CustomerAmuID int = NULL,
-	@SupplierAmuID int = NULL
+	@CustomerAmuID VARCHAR(max)=NULL,
+	@SupplierAmuID VARCHAR(max)=NULL,
+	@CurrencyID varchar(3)
 )
 WITH RECOMPILE
 AS
  
 
-	DECLARE @ExchangeRates TABLE(
+IF(@CurrencyID IS NULL)
+	BEGIN
+		Select @CurrencyID = CurrencyID From Currency as c where c.IsMainCurrency = 'Y'
+	END
+	
+	DECLARE @MainExchangeRates TABLE(
 		Currency VARCHAR(3),
 		Date SMALLDATETIME,
 		Rate FLOAT
 		PRIMARY KEY(Currency, Date)
 	)
 	
-	INSERT INTO @ExchangeRates SELECT * FROM dbo.GetDailyExchangeRates(@FromDate, @ToDate)
+	DECLARE @ExchangeRates TABLE(
+		Currency VARCHAR(3),
+		Date SMALLDATETIME,
+		Rate FLOAT
+		PRIMARY KEY(Currency, Date)
+	)
+
+    INSERT INTO @MainExchangeRates SELECT * FROM dbo.GetDailyExchangeRates(@FromDate, @ToDate)
+
+    INSERT INTO @ExchangeRates Select exRate1.Currency , exRate1.Date , exRate1.Rate/ exRate2.Rate as Rate from @MainExchangeRates as exRate1 join @MainExchangeRates as exRate2 on exRate2.Currency = @CurrencyID and exRate1.Date = exRate2.Date
 	
 	DECLARE @CustomerIDs TABLE( CarrierAccountID VARCHAR(5) )
 	DECLARE @SupplierIDs TABLE( CarrierAccountID VARCHAR(5) )
 
 	
-	
-	IF(@CustomerAMUID IS NOT NULL)
+    IF(@CustomerAMUID IS NOT NULL)
 	BEGIN
-		DECLARE @customerAmuFlag VARCHAR(20)
-		SET @customerAmuFlag = (SELECT Flag FROM AMU WHERE ID = @CustomerAMUID)
-		INSERT INTO @CustomerIDs
-		SELECT ac.CarrierAccountID
-		FROM AMU_Carrier ac
-		WHERE ac.AMUCarrierType = 0
-		AND ac.AMUID IN (
-			SELECT ID FROM AMU
-			WHERE Flag LIKE @customerAmuFlag + '%'
-			)
+		INSERT INTO @CustomerIDs (CarrierAccountID)
+		select  ParsedString  from [BEntity].[ParseStringList](@CustomerAMUID)	
 	END
 
 	IF(@SupplierAMUID IS NOT NULL)
 	BEGIN	
-		DECLARE @supplierAmuFlag VARCHAR(20)
-		SET @supplierAmuFlag = (SELECT Flag FROM AMU WHERE ID = @SupplierAMUID)
-		INSERT INTO @SupplierIDs
-		SELECT ac.CarrierAccountID
-		FROM AMU_Carrier ac
-		WHERE ac.AMUCarrierType = 1
-		AND ac.AMUID IN (
-			SELECT ID FROM AMU
-			WHERE Flag LIKE @supplierAmuFlag + '%'
-			)
+		INSERT INTO @SupplierIDs (CarrierAccountID)
+		select  ParsedString  from [BEntity].[ParseStringList](@SupplierAmuID)	
 	END
 	
+	DECLARE @SuppliersIDs TABLE (SupplierId varchar(10))
+		INSERT INTO @SuppliersIDs (SupplierId)
+		select  ParsedString  from [BEntity].[ParseStringList](@SuppliersID)
+		
+	DECLARE @CustomersIDs TABLE (CustomerId varchar(10))
+		INSERT INTO @CustomersIDs (CustomerId)
+		select  ParsedString  from [BEntity].[ParseStringList](@CustomersID)
+		
 	SELECT  bs.CustomerID AS CustomerID,
 			bs.SaleZoneID AS SaleZoneID,
 			bs.CostZoneID AS CostZoneID,
@@ -69,8 +75,8 @@ AS
 		JOIN CarrierAccount cas ON cas.CarrierAccountID = bs.SupplierID AND cas.IsPassThroughSupplier ='N'
 	    WHERE	  bs.CallDate >= @FromDate
 			AND	  bs.CallDate <= @ToDate
-			AND  (@CustomerID IS NULL OR  bs.CustomerID = @CustomerID)
-			AND  (@SupplierID IS NULL OR  bs.SupplierID = @SupplierID)
+			AND  (@CustomersID IS NULL OR  bs.CustomerID IN (SELECT * FROM @CustomersIDs))
+			AND  (@SuppliersID IS NULL OR  bs.SupplierID IN (SELECT * FROM @SuppliersIDs))
 			AND(@CustomerAmuID IS NULL OR bs.CustomerID IN (SELECT * FROM @CustomerIDs))
 		    AND(@SupplierAmuID IS NULL OR bs.SupplierID IN (SELECT * FROM @SupplierIDs))	
 		GROUP BY

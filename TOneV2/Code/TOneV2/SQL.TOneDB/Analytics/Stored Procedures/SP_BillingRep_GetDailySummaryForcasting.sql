@@ -2,41 +2,50 @@
 CREATE PROCEDURE [Analytics].[SP_BillingRep_GetDailySummaryForcasting](
 	@FromDate Datetime ,
 	@ToDate Datetime ,
-	@CustomerAmuID int = NULL,
-	@SupplierAmuID int = NULL 
+	@CustomerAmuID varchar(max),
+	@SupplierAmuID varchar(max),
+	@CurrencyID varchar(3) = NULL
 )
 with Recompile
 	AS 
 
 
-		DECLARE @ExchangeRates TABLE(
-						Currency VARCHAR(3),
-						Date SMALLDATETIME,
-						Rate FLOAT
-						PRIMARY KEY(Currency, Date)
-						)
+	IF(@CurrencyID IS NULL)
+	BEGIN
+		Select @CurrencyID = CurrencyID From Currency as c where c.IsMainCurrency = 'Y'
+	END
+	
+	DECLARE @MainExchangeRates TABLE(
+		Currency VARCHAR(3),
+		Date SMALLDATETIME,
+		Rate FLOAT
+		PRIMARY KEY(Currency, Date)
+	)
+	
+	DECLARE @ExchangeRates TABLE(
+		Currency VARCHAR(3),
+		Date SMALLDATETIME,
+		Rate FLOAT
+		PRIMARY KEY(Currency, Date)
+	)
 
-		INSERT INTO @ExchangeRates SELECT * FROM dbo.GetDailyExchangeRates(@FromDate, @ToDate)
+    INSERT INTO @MainExchangeRates SELECT * FROM dbo.GetDailyExchangeRates(@FromDate, @ToDate)
+
+    INSERT INTO @ExchangeRates Select exRate1.Currency , exRate1.Date , exRate1.Rate/ exRate2.Rate as Rate from @MainExchangeRates as exRate1 join @MainExchangeRates as exRate2 on exRate2.Currency = @CurrencyID and exRate1.Date = exRate2.Date
 
 		DECLARE @CustomerIDs TABLE( CarrierAccountID VARCHAR(5) )
 		DECLARE @SupplierIDs TABLE( CarrierAccountID VARCHAR(5) )
 
 		IF(@CustomerAMUID IS NOT NULL)
 		BEGIN
-			INSERT INTO @CustomerIDs
-			SELECT ac.CarrierAccountID
-			FROM AMU_Carrier ac
-			WHERE ac.AMUCarrierType = 0
-			AND ac.AMUID = @CustomerAMUID
+			INSERT INTO @CustomerIDs (CarrierAccountID)
+			select  ParsedString  from [BEntity].[ParseStringList](@CustomerAMUID)	
 		END
 
 		IF(@SupplierAMUID IS NOT NULL)
 		BEGIN	
-			INSERT INTO @SupplierIDs
-			SELECT ac.CarrierAccountID
-			FROM AMU_Carrier ac
-			WHERE ac.AMUCarrierType = 1
-			AND ac.AMUID = @SupplierAMUID
+			INSERT INTO @SupplierIDs (CarrierAccountID)
+			select  ParsedString  from [BEntity].[ParseStringList](@SupplierAmuID)
 		END
 	
            SELECT 
