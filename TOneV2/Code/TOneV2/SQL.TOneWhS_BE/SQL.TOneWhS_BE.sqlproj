@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>SQL.TOneWhS_BE</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{32b9f6e3-d55c-46af-96f7-8a811b7b38a0}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>SQL.TOneWhS_BE</RootNamespace>
+    <AssemblyName>SQL.TOneWhS_BE</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <!-- VS10 without SP1 will not have VisualStudioVersion set, so do that here -->
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <!-- Default to the v10.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="TOneWhS_BE\" />
+    <Folder Include="TOneWhS_BE\Tables\" />
+    <Folder Include="TOneWhS_BE\Functions\" />
+    <Folder Include="TOneWhS_BE\Stored Procedures\" />
+    <Folder Include="TOneWhS_BE\User Defined Types\" />
+    <Folder Include="Security\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="TOneWhS_BE\Tables\SaleZonePackage.sql" />
+    <Build Include="TOneWhS_BE\Tables\CarrierAccount.sql" />
+    <Build Include="TOneWhS_BE\Tables\CarrierProfile.sql" />
+    <Build Include="TOneWhS_BE\Tables\CurrencyExchangeRate.sql" />
+    <Build Include="TOneWhS_BE\Tables\Currency.sql" />
+    <Build Include="TOneWhS_BE\Tables\RouteOptionRule.sql" />
+    <Build Include="TOneWhS_BE\Tables\PricingRule.sql" />
+    <Build Include="TOneWhS_BE\Tables\RouteRule.sql" />
+    <Build Include="TOneWhS_BE\Tables\PricingProduct.sql" />
+    <Build Include="TOneWhS_BE\Tables\SupplierZone.sql" />
+    <Build Include="TOneWhS_BE\Tables\SupplierCode.sql" />
+    <Build Include="TOneWhS_BE\Tables\SaleCode.sql" />
+    <Build Include="TOneWhS_BE\Tables\SaleZone.sql" />
+    <Build Include="TOneWhS_BE\Tables\CodeGroup.sql" />
+    <Build Include="TOneWhS_BE\Tables\Country.sql" />
+    <Build Include="TOneWhS_BE\Tables\SupplierZoneService.sql" />
+    <Build Include="TOneWhS_BE\Tables\SaleZoneService.sql" />
+    <Build Include="TOneWhS_BE\Tables\CustomerPricingProduct.sql" />
+    <Build Include="TOneWhS_BE\Tables\RoutingProduct.sql" />
+    <Build Include="TOneWhS_BE\Tables\ZoneServiceConfig.sql" />
+    <Build Include="TOneWhS_BE\Tables\CustomerZone.sql" />
+    <Build Include="TOneWhS_BE\Tables\SupplierZoneIDManager.sql" />
+    <Build Include="TOneWhS_BE\Tables\SalePriceList.sql" />
+    <Build Include="TOneWhS_BE\Tables\SupplierPriceList.sql" />
+    <Build Include="TOneWhS_BE\Tables\SupplierRate.sql" />
+    <Build Include="TOneWhS_BE\Tables\SaleRate.sql" />
+    <Build Include="TOneWhS_BE\Functions\ParseStringList.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierCode_Update.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_RouteRule_CreateTempByFiltered.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRate_Update.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZone_Update.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZone_GetBySupplierId.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_RouteRule_Get.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_RouteRule_Update.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_RouteRule_Insert.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_RoutingProduct_Delete.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierPriceList_Insert.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleZoneInfo_GetByPackageAndZoneIds.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleZoneInfo_GetFiltered.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_RoutingProduct_Get.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_RoutingProduct_CreateTempByFiltered.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_RoutingProduct_Update.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_RoutingProduct_Insert.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_Update.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleZone_Update.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierCode_GetByDate.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_ByZondId.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleZone_GetByPackageAndEffectiveDate.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_CarrierProfile_Update.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleZonePackage_GetAll.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_CarrierAccount_Update.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_CarrierProfile_Insert.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_CarrierAccount_Insert.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_CarrierProfile_GetAll.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_CarrierAccount_GetAll.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRate_GetByDate.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_RoutingProduct_GetBySaleZonePackage.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_RoutingProduct_GetAll.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_CustomerPricingProduct_Delete.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_CustomerPricingProduct_Insert.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_PricingProduct_GetAll.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_CustomerPricingProduct_GetAll.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleZone_GetByPackage.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_RouteRule_Delete.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_PricingProduct_Delete.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_PricingProduct_Update.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZoneIDManager_ReserveIDRange.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_PricingProduct_Insert.sql" />
+    <Build Include="TOneWhS_BE\User Defined Types\CustomerPricingProduct.sql" />
+    <Build Include="TOneWhS_BE\User Defined Types\IntIDType.sql" />
+    <Build Include="TOneWhS_BE\User Defined Types\SaleData.sql" />
+    <Build Include="Security\TOneWhS_BE.sql" />
+  </ItemGroup>
+</Project>

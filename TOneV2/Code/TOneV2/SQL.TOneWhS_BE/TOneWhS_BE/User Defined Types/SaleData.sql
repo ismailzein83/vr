@@ -1,0 +1,4 @@
+﻿CREATE TYPE [TOneWhS_BE].[SaleData] AS TABLE (
+    [ID]  BIGINT   NOT NULL,
+    [EED] DATETIME NULL);
+

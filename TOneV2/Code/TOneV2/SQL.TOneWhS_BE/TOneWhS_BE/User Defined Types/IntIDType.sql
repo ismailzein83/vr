@@ -1,0 +1,4 @@
+﻿CREATE TYPE [TOneWhS_BE].[IntIDType] AS TABLE (
+    [ID] INT NOT NULL,
+    PRIMARY KEY CLUSTERED ([ID] ASC));
+
