@@ -21,7 +21,7 @@ namespace PSTN.BusinessEntity.Business
                });
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<SwitchDetail> GetFilteredSwitches(Vanrise.Entities.DataRetrievalInput<SwitchQuery> input)
+        public IDataRetrievalResult<SwitchDetail> GetFilteredSwitches(DataRetrievalInput<SwitchQuery> input)
         {
             var allSwitches = GetCachedSwitches();
 

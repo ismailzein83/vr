@@ -23,14 +23,14 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpPost]
-        public List<TrunkInfo> GetTrunksBySwitchIds(TrunkFilter trunkFilterObj)
+        public IEnumerable<TrunkInfo> GetTrunksBySwitchIds(TrunkFilter trunkFilterObj)
         {
             TrunkManager manager = new TrunkManager();
             return manager.GetTrunksBySwitchIds(trunkFilterObj);
         }
 
         [HttpGet]
-        public List<TrunkInfo> GetTrunks()
+        public IEnumerable<TrunkInfo> GetTrunks()
         {
             TrunkManager manager = new TrunkManager();
             return manager.GetTrunks();

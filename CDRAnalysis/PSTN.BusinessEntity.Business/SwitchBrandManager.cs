@@ -114,7 +114,6 @@ namespace PSTN.BusinessEntity.Business
         }
 
 
-
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ISwitchBrandDataManager _dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchBrandDataManager>();

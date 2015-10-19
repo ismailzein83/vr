@@ -279,7 +279,7 @@ namespace PSTN.BusinessEntity.Business
                 detail.TrunkCount = rule.Criteria.TrunkIds.Count;
 
                 TrunkManager trunkManager = new TrunkManager();
-                List<TrunkInfo> trunks = trunkManager.GetTrunksByIds(rule.Criteria.TrunkIds);
+                IEnumerable<TrunkInfo> trunks = trunkManager.GetTrunksByIds(rule.Criteria.TrunkIds);
                 List<string> trunkNames = GetTrunkNames(trunks);
 
                 detail.TrunkNames = string.Join<string>(", ", trunkNames);
@@ -306,7 +306,7 @@ namespace PSTN.BusinessEntity.Business
             return switchNames;
         }
 
-        private List<string> GetTrunkNames(List<TrunkInfo> trunks)
+        private List<string> GetTrunkNames(IEnumerable<TrunkInfo> trunks)
         {
             List<string> trunkNames = new List<string>();
 

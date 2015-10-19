@@ -1,46 +1,83 @@
 ﻿using PSTN.BusinessEntity.Data;
 using PSTN.BusinessEntity.Entities;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using Vanrise.Common;
 using Vanrise.Entities;
 
 namespace PSTN.BusinessEntity.Business
 {
     public class TrunkManager
     {
-        public Vanrise.Entities.IDataRetrievalResult<TrunkDetail> GetFilteredTrunks(Vanrise.Entities.DataRetrievalInput<TrunkQuery> input)
+        private Dictionary<int, Trunk> GetCachedTrunks()
         {
-            ITrunkDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ITrunkDataManager>();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredTrunks(input));
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetTrunks",
+               () =>
+               {
+                   ITrunkDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ITrunkDataManager>();
+                   IEnumerable<Trunk> trunks = dataManager.GetTrunks();
+                   return trunks.ToDictionary(kvp => kvp.TrunkId, kvp => kvp);
+               });
         }
+
+        public IDataRetrievalResult<TrunkDetail> GetFilteredTrunks(DataRetrievalInput<TrunkQuery> input)
+        {
+            var allTrunks = GetCachedTrunks();
+
+            Func<Trunk, bool> filterExpression = (trunkObject) =>
+                 (input.Query.Name == null || trunkObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                 &&
+
+                 (input.Query.Symbol == null || trunkObject.Symbol.ToLower().Contains(input.Query.Symbol.ToLower()))
+                 &&
+
+                  ((input.Query.SelectedSwitchIds != null ? input.Query.SelectedSwitchIds.Contains(trunkObject.SwitchId) : input.Query.SelectedSwitchIds == null))
+
+                   &&
+                  ((input.Query.SelectedTypes != null ? input.Query.SelectedTypes.Contains(trunkObject.Type) : input.Query.SelectedTypes == null))
+
+                   &&
+                  ((input.Query.SelectedDirections != null ? input.Query.SelectedDirections.Contains(trunkObject.Direction) : input.Query.SelectedDirections == null))
+
+
+                 &&
+                 ((input.Query.IsLinkedToTrunk == null) || (input.Query.IsLinkedToTrunk == true && trunkObject.LinkedToTrunkId != null) || (input.Query.IsLinkedToTrunk == false && trunkObject.LinkedToTrunkId == null));
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allTrunks.ToBigResult(input, filterExpression, TrunkDetailMapper));
+        }
+
 
         public TrunkDetail GetTrunkById(int trunkId)
         {
-            ITrunkDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ITrunkDataManager>();
-            return dataManager.GetTrunkById(trunkId);
+            var trunks = GetCachedTrunks();
+            return trunks.MapRecord(TrunkDetailMapper, x => x.TrunkId == trunkId);
         }
+
 
         public TrunkInfo GetTrunkBySymbol(string symbol)
         {
-            ITrunkDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ITrunkDataManager>();
-            return dataManager.GetTrunkBySymbol(symbol);
+            var trunks = GetCachedTrunks();
+            return trunks.MapRecord(TrunkInfoMapper, x => x.Symbol == symbol);
         }
 
-        public List<TrunkInfo> GetTrunksBySwitchIds(TrunkFilter trunkFilterObj)
+
+        public IEnumerable<TrunkInfo> GetTrunksBySwitchIds(TrunkFilter trunkFilterObj)
         {
-            ITrunkDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ITrunkDataManager>();
-            return dataManager.GetTrunksBySwitchIds(trunkFilterObj);
+            var trunks = GetCachedTrunks();
+            return trunks.MapRecords(TrunkInfoMapper, x => trunkFilterObj.SwitchIds.Contains(x.SwitchId));
         }
 
-        public List<TrunkInfo> GetTrunks()
+        public IEnumerable<TrunkInfo> GetTrunks()
         {
-            ITrunkDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ITrunkDataManager>();
-            return dataManager.GetTrunks();
+            var trunks = GetCachedTrunks();
+            return trunks.MapRecords(TrunkInfoMapper);
         }
 
-        public List<TrunkInfo> GetTrunksByIds(List<int> trunkIds)
+        public IEnumerable<TrunkInfo> GetTrunksByIds(List<int> trunkIds)
         {
-            ITrunkDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ITrunkDataManager>();
-            return dataManager.GetTrunksByIds(trunkIds);
+            var trunks = GetCachedTrunks();
+            return trunks.MapRecords(TrunkInfoMapper, x => trunkIds.Contains(x.TrunkId));
         }
 
         public InsertOperationOutput<TrunkDetail> AddTrunk(Trunk trunkObj)
@@ -66,7 +103,7 @@ namespace PSTN.BusinessEntity.Business
                     dataManager.LinkTrunks(trunkId, linkedToTrunkId);
                 }
 
-                insertOperationOutput.InsertedObject = dataManager.GetTrunkById(trunkId);
+                insertOperationOutput.InsertedObject = GetTrunkById(trunkId);
             }
             else
             {
@@ -79,7 +116,7 @@ namespace PSTN.BusinessEntity.Business
         public UpdateOperationOutput<TrunkDetail> UpdateTrunk(Trunk trunkObj)
         {
             UpdateOperationOutput<TrunkDetail> updateOperationOutput = new UpdateOperationOutput<TrunkDetail>();
-            
+
             updateOperationOutput.Result = UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
@@ -101,7 +138,7 @@ namespace PSTN.BusinessEntity.Business
                     dataManager.LinkTrunks(trunkObj.TrunkId, linkedToTrunkId);
                 }
 
-                updateOperationOutput.UpdatedObject = dataManager.GetTrunkById(trunkObj.TrunkId);
+                updateOperationOutput.UpdatedObject = GetTrunkById(trunkObj.TrunkId);
             }
             else
             {
@@ -131,5 +168,47 @@ namespace PSTN.BusinessEntity.Business
 
             return deleteOperationOutput;
         }
+
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            ITrunkDataManager _dataManager = PSTNBEDataManagerFactory.GetDataManager<ITrunkDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreTrunksUpdated(ref _updateHandle);
+            }
+        }
+              
+        TrunkDetail TrunkDetailMapper(Trunk trunk)
+        {
+            SwitchManager manager= new SwitchManager();
+            SwitchDetail currentSwitch = manager.GetSwitchById(trunk.SwitchId);
+            TrunkDetail currentTrunk = GetTrunkById(trunk.TrunkId);
+            TrunkDetail trunkDetail = new TrunkDetail();
+            trunkDetail.TrunkId = trunk.TrunkId;
+            trunkDetail.Name = trunk.Name;
+            trunkDetail.Symbol = trunk.Symbol;
+            trunkDetail.SwitchId = trunk.SwitchId;
+            trunkDetail.SwitchName = (currentSwitch !=null ?currentSwitch.Name : string.Empty );
+            trunkDetail.Type = trunk.Type;
+            trunkDetail.Direction = trunk.Direction;
+            trunkDetail.LinkedToTrunkId = trunk.LinkedToTrunkId;
+            trunkDetail.LinkedToTrunkName = (currentTrunk != null ? currentTrunk.Name : string.Empty);
+            return trunkDetail;
+        }
+
+        TrunkInfo TrunkInfoMapper(Trunk trunk)
+        {
+            TrunkInfo trunkInfo = new TrunkInfo();
+
+            trunkInfo.TrunkId = trunk.TrunkId;
+            trunkInfo.Name = trunk.Name;
+            trunkInfo.SwitchId = trunk.SwitchId;
+
+            return trunkInfo;
+        }
+
     }
 }
