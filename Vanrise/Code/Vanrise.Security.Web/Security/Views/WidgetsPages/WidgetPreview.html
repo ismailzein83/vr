@@ -6,11 +6,11 @@
                            selectedvalues="selectedPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
             </vr-columns>
             <vr-columns width="normal">
-                <vr-datetimepicker type="date" value="fromDate" label="From" isrequired onblurdatetime="onBlurChanged" customvalidate="customvalidateFrom"></vr-datetimepicker>
+                <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired onblurdatetime="onBlurChanged" customvalidate="customvalidateFrom"></vr-datetimepicker>
             </vr-columns>
 
             <vr-columns width="normal">
-                <vr-datetimepicker type="date" value="toDate" label="To" isrequired onblurdatetime="onBlurChanged" customvalidate="customvalidateTo"></vr-datetimepicker>
+                <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired onblurdatetime="onBlurChanged" customvalidate="customvalidateTo"></vr-datetimepicker>
             </vr-columns>
             <vr-columns width="normal">
                 <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Grouped By"

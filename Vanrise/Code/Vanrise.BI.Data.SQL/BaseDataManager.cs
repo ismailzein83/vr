@@ -318,7 +318,7 @@ namespace Vanrise.BI.Data.SQL
 
         protected string GetDateFilter(DateTime fromDate, DateTime toDate)
         {
-            return String.Format("Filter({0}.AllMembers, ({0}.CurrentMember.member_caption>='{1:yyyy-MM-dd} 00:00:00' And {0}.CurrentMember.member_caption<='{2:yyyy-MM-dd} 00:00:00'))", DateTimeColumns.DATE, fromDate, toDate);
+            return String.Format("Filter({0}.AllMembers, ({0}.CurrentMember.member_caption>='{1:yyyy-MM-dd HH:mm:ss}' And {0}.CurrentMember.member_caption<='{2:yyyy-MM-dd HH:mm:ss} '))", DateTimeColumns.DATE, fromDate, toDate);
         }
 
         #endregion
