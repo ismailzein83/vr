@@ -117,7 +117,6 @@
     <Compile Include="Generic\AnalyticMeasureField.cs" />
     <Compile Include="Generic\AnalyticQuery.cs" />
     <Compile Include="Generic\AnalyticRecord.cs" />
-    <Compile Include="Generic\AnalyticSummary.cs" />
     <Compile Include="Generic\AnalyticSummaryBigResult.cs" />
     <Compile Include="HourlyReport.cs" />
     <Compile Include="HourlyReportInput.cs" />
