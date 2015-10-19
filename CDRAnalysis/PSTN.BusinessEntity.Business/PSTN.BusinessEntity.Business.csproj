@@ -80,6 +80,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="NormalizationRuleManager.cs" />
     <Compile Include="Normalization\RuleTypes\NormalizeNumber\Actions\AddPrefixActionBehavior.cs" />
+    <Compile Include="Normalization\RuleTypes\NormalizeNumber\Actions\ReplaceStringActionBehavior.cs" />
     <Compile Include="Normalization\RuleTypes\NormalizeNumber\Actions\SubstringActionBehavior.cs" />
     <Compile Include="Normalization\RuleTypes\SetArea\Behaviors\SetAreaPrefixBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

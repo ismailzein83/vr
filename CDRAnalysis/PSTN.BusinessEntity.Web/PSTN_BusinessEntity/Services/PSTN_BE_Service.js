@@ -1,4 +1,4 @@
-﻿app.service("PSTN_BE_Service", ["TrunkAPIService", "NormalizationRuleAPIService", "VRModalService", "VRNotificationService", function (TrunkAPIService, NormalizationRuleAPIService, VRModalService, VRNotificationService) {
+﻿app.service("PSTN_BE_Service", ["TrunkAPIService", "NormalizationRuleAPIService", "PSTN_BE_NormalizationRuleTypeEnum", "UtilsService", "VRModalService", "VRNotificationService", function (TrunkAPIService, NormalizationRuleAPIService, PSTN_BE_NormalizationRuleTypeEnum, UtilsService, VRModalService, VRNotificationService) {
     
     return ({
         editTrunk: editTrunk,
@@ -59,30 +59,36 @@
             });
     }
 
-    function editNormalizationRule(normalizationRuleObj, onNormalizationRuleUpdated) {
+    function editNormalizationRule(normalizationRuleDetail, onNormalizationRuleUpdated) {
         var modalSettings = {};
 
         var parameters = {
-            RuleId: normalizationRuleObj.Entity.RuleId
+            NormalizationRuleId: normalizationRuleDetail.Entity.RuleId,
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = (normalizationRuleObj.Name != undefined) ? "Edit Normalization Rule: " + normalizationRuleObj.Name : "Edit Normalization Rule";
+            var normalizationRuleType = UtilsService.getEnum(PSTN_BE_NormalizationRuleTypeEnum, "value", normalizationRuleDetail.Entity.Settings.RuleType);
+            modalScope.title = "Edit " + normalizationRuleType.description + " Rule";
+
             modalScope.onNormalizationRuleUpdated = onNormalizationRuleUpdated;
         };
 
         VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Normalization/NormalizationRuleEditor.html", parameters, modalSettings);
     }
 
-    function addNormalizationRule(onNormalizationRuleAdded) {
+    function addNormalizationRule(normalizationRuleType, onNormalizationRuleAdded) {
         var modalSettings = {};
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Add Normalization Rule";
+            modalScope.title = "Add " + normalizationRuleType.description + " Rule";
             modalScope.onNormalizationRuleAdded = onNormalizationRuleAdded;
         };
 
-        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Normalization/NormalizationRuleEditor.html", null, modalSettings);
+        var parameters = {
+            NormalizationRuleType: normalizationRuleType
+        };
+
+        VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Normalization/NormalizationRuleEditor.html", parameters, modalSettings);
     }
 
     function deleteNormalizationRule(ruleDetail, onNormalizationRuleDeleted) {

@@ -1,8 +1,8 @@
-﻿NormalizationRuleManagementController.$inject = ["$scope", "PSTN_BE_Service", "SwitchAPIService", "TrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "PSTN_BE_NormalizationRuleTypeEnum", "UtilsService", "VRNotificationService"];
+﻿NormalizationRuleManagementController.$inject = ["$scope", "PSTN_BE_Service", "SwitchAPIService", "TrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "PSTN_BE_NormalizationRuleTypeEnum", "UtilsService", "ValuesAPIService", "VRNotificationService"];
 
-function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAPIService, TrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, PSTN_BE_NormalizationRuleTypeEnum, UtilsService, VRNotificationService) {
+function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAPIService, TrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, PSTN_BE_NormalizationRuleTypeEnum, UtilsService, ValuesAPIService, VRNotificationService) {
 
-    var directiveGridAPI;
+    var gridAPI;
 
     defineScope();
     load();
@@ -29,24 +29,16 @@ function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAP
         $scope.description = undefined;
 
         $scope.onDirectiveGridReady = function (api) {
-            directiveGridAPI = api;
-            directiveGridAPI.retrieveData({});
+            gridAPI = api;
+            gridAPI.retrieveData({});
         };
 
         $scope.onSearchClicked = function () {
             var query = getFilterObj();
-            return directiveGridAPI.retrieveData(query);
+            return gridAPI.retrieveData(query);
         };
 
-        $scope.addNormalizationRule = function () {
-
-            var onNormalizationRuleAdded = function (normalizationRuleObj) {
-                directiveGridAPI.onNormalizationRuleAdded(normalizationRuleObj);
-            };
-
-            PSTN_BE_Service.addNormalizationRule(onNormalizationRuleAdded);
-        };
-
+        defineAddButtonMenuActions();
     }
 
     function load() {
@@ -96,6 +88,32 @@ function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAP
         }
 
         return filterObj;
+    }
+
+    function defineAddButtonMenuActions() {
+        $scope.addButtonMenuActions = [
+            {
+                name: "Normalize Number Rule",
+                clicked: function () {
+                    addNormalizationRule(PSTN_BE_NormalizationRuleTypeEnum.AdjustNumber);
+                }
+            },
+            {
+                name: "Set Area Rule",
+                clicked: function () {
+                    addNormalizationRule(PSTN_BE_NormalizationRuleTypeEnum.SetArea);
+                }
+            }
+        ];
+    }
+
+    function addNormalizationRule(ruleType) {
+
+        var onNormalizationRuleAdded = function (normalizationRuleDetail) {
+            gridAPI.onNormalizationRuleAdded(normalizationRuleDetail);
+        };
+
+        PSTN_BE_Service.addNormalizationRule(ruleType, onNormalizationRuleAdded);
     }
 }
 

@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Normalization\AdjustNumber\AddPrefixActionSettings.cs" />
+    <Compile Include="Normalization\AdjustNumber\ReplaceStringActionSettings.cs" />
     <Compile Include="Normalization\AdjustNumber\SubstringActionSettings.cs" />
     <Compile Include="Normalization\SetArea\SetAreaPrefixSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -7,10 +7,11 @@
     function NormalizationRuleEditorController($scope, NormalizationRuleAPIService, SwitchAPIService, TrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, PSTN_BE_NormalizationRuleTypeEnum, UtilsService, VRNavigationService, VRNotificationService) {
 
         var editMode;
-        var ruleId;
-        var ruleTypeDirectiveAPI;
-        var directiveLoadCount = 0;
-        var ruleTypeDirectiveData;
+        var normalizationRuleId;
+        var normalizationRuleType;
+
+        var normalizationRuleSettingsDirectiveAPI;
+        var normalizationRuleSettingsDirectiveData;
 
         loadParameters();
         defineScope();
@@ -20,10 +21,11 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null) {
-                ruleId = parameters.RuleId;
+                normalizationRuleId = parameters.NormalizationRuleId;
+                normalizationRuleType = parameters.NormalizationRuleType;
             }
 
-            editMode = (ruleId != undefined);
+            editMode = (normalizationRuleId != undefined);
         }
 
         function defineScope() {
@@ -40,8 +42,9 @@
             $scope.phoneNumberLength = undefined;
             $scope.phoneNumberPrefix = undefined;
 
-            $scope.ruleTypes = UtilsService.getArrayEnum(PSTN_BE_NormalizationRuleTypeEnum);
-            $scope.selectedRuleType = undefined;
+            if (!editMode) {
+                showSelectedNormalizationRuleType();
+            }
 
             $scope.beginEffectiveDate = Date.now();
             $scope.endEffectiveDate = undefined;
@@ -77,13 +80,11 @@
                 return TrunkAPIService.GetTrunksBySwitchIds(trunkFilterObj);
             }
 
-            $scope.onRuleTypeDirectiveLoaded = function (api) {
-                directiveLoadCount++;
+            $scope.onNormalizationRuleSettingsDirectiveLoaded = function (api) {
+                normalizationRuleSettingsDirectiveAPI = api;
 
-                ruleTypeDirectiveAPI = api;
-
-                if (editMode && directiveLoadCount == 1)
-                    ruleTypeDirectiveAPI.setData(ruleTypeDirectiveData);
+                if (editMode)
+                    normalizationRuleSettingsDirectiveAPI.setData(normalizationRuleSettingsDirectiveData);
             };
 
             $scope.saveNormalizationRule = function () {
@@ -105,7 +106,7 @@
             UtilsService.waitMultipleAsyncOperations([loadSwitches, loadTrunks])
                 .then(function () {
                     if (editMode) {
-                        NormalizationRuleAPIService.GetNormalizationRuleById(ruleId)
+                        NormalizationRuleAPIService.GetNormalizationRuleById(normalizationRuleId)
                             .then(function (response) {
                                 fillScopeFromNormalizationRuleObj(response);
                             })
@@ -160,8 +161,10 @@
             $scope.phoneNumberLength = rule.Entity.Criteria.PhoneNumberLength;
             $scope.phoneNumberPrefix = rule.Entity.Criteria.PhoneNumberPrefix;
 
-            ruleTypeDirectiveData = rule.Entity.Settings;
-            $scope.selectedRuleType = UtilsService.getItemByVal($scope.ruleTypes, rule.Entity.Settings.RuleType, "value");
+            normalizationRuleSettingsDirectiveData = rule.Entity.Settings;
+            var ruleType = UtilsService.getEnum(PSTN_BE_NormalizationRuleTypeEnum, "value", rule.Entity.Settings.RuleType);
+            normalizationRuleType = ruleType;
+            showSelectedNormalizationRuleType();
 
             $scope.beginEffectiveTime = rule.Entity.BeginEffectiveTime;
             $scope.endEffectiveTime = rule.Entity.EndEffectiveTime;
@@ -202,6 +205,8 @@
         function insertNormalizationRule() {
             var normalizationRuleObj = buildNormalizationRuleObjFromScope();
 
+            console.log(normalizationRuleObj);
+
             return NormalizationRuleAPIService.AddNormalizationRule(normalizationRuleObj)
                 .then(function (responseObject) {
 
@@ -219,8 +224,8 @@
 
         function buildNormalizationRuleObjFromScope() {
 
-            var rule = {
-                RuleId: (ruleId != undefined) ? ruleId : null,
+            var normalizationRule = {
+                RuleId: (normalizationRuleId != undefined) ? normalizationRuleId : null,
                 Criteria: {
                     SwitchIds: UtilsService.getPropValuesFromArray($scope.selectedSwitches, "SwitchId"),
                     TrunkIds: UtilsService.getPropValuesFromArray($scope.selectedTrunks, "TrunkId"),
@@ -228,15 +233,20 @@
                     PhoneNumberLength: $scope.phoneNumberLength,
                     PhoneNumberPrefix: $scope.phoneNumberPrefix
                 },
-                Settings: ruleTypeDirectiveAPI.getData(),
+                Settings: normalizationRuleSettingsDirectiveAPI.getData(),
                 Description: $scope.description,
                 BeginEffectiveTime: $scope.beginEffectiveTime,
                 EndEffectiveTime: $scope.endEffectiveTime
             };
 
-            rule.Settings.RuleType = $scope.selectedRuleType.value;
+            normalizationRule.Settings.RuleType = normalizationRuleType.value;
 
-            return rule;
+            return normalizationRule;
+        }
+
+        function showSelectedNormalizationRuleType() {
+            $scope.isAdjustNumberRule = (normalizationRuleType.value == PSTN_BE_NormalizationRuleTypeEnum.AdjustNumber.value);
+            $scope.isSetAreaRule = (normalizationRuleType.value == PSTN_BE_NormalizationRuleTypeEnum.SetArea.value);
         }
     }
 

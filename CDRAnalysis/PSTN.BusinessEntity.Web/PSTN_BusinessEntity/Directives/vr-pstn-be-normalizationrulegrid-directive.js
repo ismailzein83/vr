@@ -43,9 +43,8 @@ app.directive("vrPstnBeNormalizationrulegrid", ["PSTN_BE_Service", "Normalizatio
                         return gridAPI.retrieveData(query);
                     }
 
-                    directiveAPI.onNormalizationRuleAdded = function (normalizationRuleObj) {
-                        setPhoneNumberTypeDescripton(normalizationRuleObj);
-                        gridAPI.itemAdded(normalizationRuleObj);
+                    directiveAPI.onNormalizationRuleAdded = function (normalizationRuleDetail) {
+                        gridAPI.itemAdded(normalizationRuleDetail);
                     }
 
                     return directiveAPI;
@@ -56,11 +55,6 @@ app.directive("vrPstnBeNormalizationrulegrid", ["PSTN_BE_Service", "Normalizatio
 
                 return NormalizationRuleAPIService.GetFilteredNormalizationRules(dataRetrievalInput)
                     .then(function (responseArray) {
-
-                        angular.forEach(responseArray.Data, function (item) {
-                            setPhoneNumberTypeDescripton(item);
-                        });
-
                         onResponseReady(responseArray);
                     })
                     .catch(function (error) {
@@ -74,7 +68,6 @@ app.directive("vrPstnBeNormalizationrulegrid", ["PSTN_BE_Service", "Normalizatio
         function editNormalizationRule(dataItem) {
             
             var onNormalizationRuleUpdated = function (normalizationRuleObj) {
-                setPhoneNumberTypeDescripton(normalizationRuleObj);
                 gridAPI.itemUpdated(normalizationRuleObj);
             }
 
@@ -101,11 +94,6 @@ app.directive("vrPstnBeNormalizationrulegrid", ["PSTN_BE_Service", "Normalizatio
                    clicked: deleteNormalizationRule
                }
             ];
-        }
-
-        function setPhoneNumberTypeDescripton(dataItem) {
-            var phoneNumberType = UtilsService.getEnum(PSTN_BE_PhoneNumberTypeEnum, "value", dataItem.Entity.Criteria.PhoneNumberType);
-            dataItem.PhoneNumberTypeDescription = phoneNumberType.description;
         }
     }
 

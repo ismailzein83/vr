@@ -66,24 +66,15 @@
             </div>
 
             <div ng-show="settingsSelected">
-                <vr-row>
-                    <vr-columns width="normal">
-                        <vr-select label="Rule Type"
-                                   datasource="ruleTypes"
-                                   selectedvalues="selectedRuleType"
-                                   datavaluefield="value"
-                                   datatextfield="description"
-                                   entityname="Rule Type"
-                                   isrequired>
-                        </vr-select>
+                <vr-row ng-if="isAdjustNumberRule">
+                    <vr-columns width="fullrow">
+                        <vr-pstn-be-adjustnumber onloaded="onNormalizationRuleSettingsDirectiveLoaded"></vr-pstn-be-adjustnumber>
                     </vr-columns>
                 </vr-row>
 
-                <vr-row>
+                <vr-row ng-if="isSetAreaRule">
                     <vr-columns width="fullrow">
-                        <vr-directivewrapper directive="selectedRuleType.editor"
-                                             onloaded="onRuleTypeDirectiveLoaded">
-                        </vr-directivewrapper>
+                        <vr-pstn-be-setarea onloaded="onNormalizationRuleSettingsDirectiveLoaded"></vr-pstn-be-setarea>
                     </vr-columns>
                 </vr-row>
             </div>

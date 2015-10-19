@@ -57,6 +57,7 @@
     <Compile Include="Normalization\NormalizationRuleSettings.cs" />
     <Compile Include="Normalization\NormalizationRuleTarget.cs" />
     <Compile Include="Normalization\RuleTypes\NormalizeNumber\Actions\AddPrefixActionSettings.cs" />
+    <Compile Include="Normalization\RuleTypes\NormalizeNumber\Actions\ReplaceStringActionSettings.cs" />
     <Compile Include="Normalization\RuleTypes\NormalizeNumber\Actions\SubstringActionSettings.cs" />
     <Compile Include="Normalization\RuleTypes\NormalizeNumber\NormalizationRuleAdjustNumberActionBehavior.cs" />
     <Compile Include="Normalization\RuleTypes\NormalizeNumber\NormalizationRuleAdjustNumberActionSettings.cs" />

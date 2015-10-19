@@ -186,11 +186,13 @@
     <Content Include="PSTN_BusinessEntity\Constants\PSTN_BE_ModuleConfig.js" />
     <Content Include="PSTN_BusinessEntity\Constants\TrunkDirectionEnum.js" />
     <Content Include="PSTN_BusinessEntity\Constants\TrunkTypeEnum.js" />
+    <Content Include="PSTN_BusinessEntity\Directives\Templates\ReplaceStringDirectiveTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Directives\Templates\SetAreaPrefixDirectiveTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Directives\Templates\SetAreaDirectiveTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Directives\Templates\AddPrefixDirectiveTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Directives\Templates\AdjustNumberDirectiveTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Directives\Templates\SubstringDirectiveTemplate.html" />
+    <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-replacestring-directive.js" />
     <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-setareaprefix-directive.js" />
     <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-addprefix-directive.js" />
     <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-adjustnumber-directive.js" />
