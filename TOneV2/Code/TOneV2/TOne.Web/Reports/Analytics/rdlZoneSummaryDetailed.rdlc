@@ -3365,7 +3365,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
           <Width>1in</Width>
           <ZIndex>11</ZIndex>
           <Visibility>
-            <Hidden>=IIF(Parameters!GroupeBySupplier.Value = "true" And (Parameters!Supplier.Value = "Multiple Suppliers" Or Parameters!Supplier.Value = "All Suppliers" ) , True, False)</Hidden>
+            <Hidden>=IIF(Parameters!GroupeBySupplier.Value = "true"  , True, False)</Hidden>
           </Visibility>
           <DataElementOutput>NoOutput</DataElementOutput>
           <Style>
@@ -3431,7 +3431,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
           <Width>2.75in</Width>
           <ZIndex>13</ZIndex>
           <Visibility>
-            <Hidden>=IIF(Parameters!GroupeBySupplier.Value = "true" And (Parameters!Supplier.Value = "Multiple Suppliers" Or Parameters!Supplier.Value = "All Suppliers" ) , True, False)</Hidden>
+            <Hidden>=IIF(Parameters!GroupeBySupplier.Value = "true"  , True, False)</Hidden>
           </Visibility>
           <Style>
             <Border>
