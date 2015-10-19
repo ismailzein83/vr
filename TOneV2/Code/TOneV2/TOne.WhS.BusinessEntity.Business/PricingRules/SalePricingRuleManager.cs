@@ -26,14 +26,17 @@ namespace TOne.WhS.BusinessEntity.Business.PricingRules
                  // &&
                  //(input.Query.CarrierAccountsIds == null || input.Query.CarrierAccountsIds.Contains(prod.CarrierAccountId))
                  //  &&
-                 (input.Query == null || input.Query=="");
+                 (input.Query == null || !input.Query.Equals("{}"));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, GetFilteredRules(filterExpression).ToBigResult(input, filterExpression));
         }
 
         protected override SalePricingRuleDetail MapToDetails(SalePricingRule rule)
         {
-            throw new NotImplementedException();
+            return new SalePricingRuleDetail
+            {
+                Entity = rule
+            };
         }
     }
 }

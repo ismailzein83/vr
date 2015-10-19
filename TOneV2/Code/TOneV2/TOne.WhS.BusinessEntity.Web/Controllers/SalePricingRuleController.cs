@@ -11,8 +11,8 @@ using Vanrise.Web.Base;
 
 namespace TOne.WhS.BusinessEntity.Web.Controllers
 {
-   [RoutePrefix(Constants.ROUTE_PREFIX + "SalePricingRule")]
    [JSONWithTypeAttribute]
+   [RoutePrefix(Constants.ROUTE_PREFIX + "SalePricingRule")]
     public class WhSBE_SalePricingRuleController : BaseRuleController<SalePricingRule,SalePricingRuleDetail, SalePricingRuleManager>
     {
        [HttpPost]
