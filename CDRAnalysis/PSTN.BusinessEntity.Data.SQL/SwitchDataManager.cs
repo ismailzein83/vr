@@ -24,13 +24,6 @@ namespace PSTN.BusinessEntity.Data.SQL
             return GetItemsSP("PSTN_BE.sp_Switch_GetAll", SwitchMapper);
         }
 
-        public bool UpdateSwitch(Switch switchObj)
-        {
-            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_Switch_Update", switchObj.SwitchId, switchObj.Name, switchObj.BrandId, switchObj.AreaCode, switchObj.TimeOffset.ToString(), switchObj.DataSourceId);
-
-            return (recordsAffected > 0);
-        }
-
         public bool AddSwitch(Switch switchObj, out int insertedId)
         {
             object switchId;
@@ -38,6 +31,13 @@ namespace PSTN.BusinessEntity.Data.SQL
             int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_Switch_Insert", out switchId, switchObj.Name, switchObj.BrandId, switchObj.AreaCode, switchObj.TimeOffset.ToString(), switchObj.DataSourceId);
 
             insertedId = (recordsAffected > 0) ? (int)switchId : -1;
+            return (recordsAffected > 0);
+        }
+
+        public bool UpdateSwitch(Switch switchObj)
+        {
+            int recordsAffected = ExecuteNonQuerySP("PSTN_BE.sp_Switch_Update", switchObj.SwitchId, switchObj.Name, switchObj.BrandId, switchObj.AreaCode, switchObj.TimeOffset.ToString(), switchObj.DataSourceId);
+
             return (recordsAffected > 0);
         }
 

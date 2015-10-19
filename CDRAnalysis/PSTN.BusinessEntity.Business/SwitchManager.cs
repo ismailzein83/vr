@@ -71,29 +71,6 @@ namespace PSTN.BusinessEntity.Business
             return switches.MapRecords(SwitchDetailMapper, x => x.DataSourceId != null).Select(x=>x.DataSourceId.Value);
         }
 
-        public UpdateOperationOutput<SwitchDetail> UpdateSwitch(Switch switchObj)
-        {
-            ISwitchDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchDataManager>();
-
-            bool updated = dataManager.UpdateSwitch(switchObj);
-            UpdateOperationOutput<SwitchDetail> updateOperationOutput = new UpdateOperationOutput<SwitchDetail>();
-
-            updateOperationOutput.Result = UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
-
-            if (updated)
-            {
-                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = SwitchDetailMapper(switchObj);
-            }
-            else
-            {
-                updateOperationOutput.Result = UpdateOperationResult.SameExists;
-            }
-
-            return updateOperationOutput;
-        }
-
         public InsertOperationOutput<SwitchDetail> AddSwitch(Switch switchObj)
         {
             InsertOperationOutput<SwitchDetail> insertOperationOutput = new InsertOperationOutput<SwitchDetail>();
@@ -117,6 +94,29 @@ namespace PSTN.BusinessEntity.Business
             }
 
             return insertOperationOutput;
+        }
+
+        public UpdateOperationOutput<SwitchDetail> UpdateSwitch(Switch switchObj)
+        {
+            ISwitchDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchDataManager>();
+
+            bool updated = dataManager.UpdateSwitch(switchObj);
+            UpdateOperationOutput<SwitchDetail> updateOperationOutput = new UpdateOperationOutput<SwitchDetail>();
+
+            updateOperationOutput.Result = UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updated)
+            {
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = SwitchDetailMapper(switchObj);
+            }
+            else
+            {
+                updateOperationOutput.Result = UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
         }
 
         public DeleteOperationOutput<object> DeleteSwitch(int switchId)
@@ -163,7 +163,7 @@ namespace PSTN.BusinessEntity.Business
             switchDetail.SwitchId = switchObject.SwitchId;
             switchDetail.Name = switchObject.Name;
             switchDetail.BrandId = switchObject.BrandId;
-            switchDetail.BrandName = manager.GetBrandById(switchObject.BrandId).Name;
+            switchDetail.BrandName = manager.GetSwitchBrandById(switchObject.BrandId).Name;
             switchDetail.AreaCode = switchObject.AreaCode;
             switchDetail.TimeOffset = switchObject.TimeOffset;
             switchDetail.DataSourceId = switchObject.DataSourceId;

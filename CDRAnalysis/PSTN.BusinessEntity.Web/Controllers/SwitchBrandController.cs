@@ -9,24 +9,24 @@ namespace PSTN.BusinessEntity.Web.Controllers
     public class SwitchBrandController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpGet]
-        public List<SwitchBrand> GetBrands()
+        public IEnumerable<SwitchBrand> GetBrands()
         {
             SwitchBrandManager manager = new SwitchBrandManager();
-            return manager.GetBrands();
+            return manager.GetAllSwitchBrands();
         }
 
         [HttpPost]
         public object GetFilteredBrands(Vanrise.Entities.DataRetrievalInput<SwitchBrandQuery> input)
         {
             SwitchBrandManager manager = new SwitchBrandManager();
-            return GetWebResponse(input, manager.GetFilteredBrands(input));
+            return GetWebResponse(input, manager.GetFilteredSwitchBrands(input));
         }
 
         [HttpGet]
         public SwitchBrand GetBrandById(int brandId)
         {
             SwitchBrandManager manager = new SwitchBrandManager();
-            return manager.GetBrandById(brandId);
+            return manager.GetSwitchBrandById(brandId);
         }
 
         [HttpPost]

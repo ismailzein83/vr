@@ -1,28 +1,77 @@
 ﻿using PSTN.BusinessEntity.Data;
 using PSTN.BusinessEntity.Entities;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using Vanrise.Common;
 using Vanrise.Entities;
 
 namespace PSTN.BusinessEntity.Business
 {
     public class SwitchBrandManager
     {
-        public List<SwitchBrand> GetBrands()
+        private Dictionary<int, SwitchBrand> GetCachedSwitchBrands()
         {
-            ISwitchBrandDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchBrandDataManager>();
-            return dataManager.GetBrands();
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSwitchBrands",
+               () =>
+               {
+                   ISwitchBrandDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchBrandDataManager>();
+                   IEnumerable<SwitchBrand> switchBrands = dataManager.GetSwitchBrands();
+                   return switchBrands.ToDictionary(kvp => kvp.BrandId, kvp => kvp);
+               });
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<SwitchBrand> GetFilteredBrands(Vanrise.Entities.DataRetrievalInput<SwitchBrandQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<SwitchBrand> GetFilteredSwitchBrands(Vanrise.Entities.DataRetrievalInput<SwitchBrandQuery> input)
         {
-            ISwitchBrandDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchBrandDataManager>();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredBrands(input));
+            var allSwitchBrands = GetCachedSwitchBrands();
+
+            Func<SwitchBrand, bool> filterExpression = (switchObject) => (input.Query.Name == null || switchObject.Name.ToLower().Contains(input.Query.Name.ToLower()));
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSwitchBrands.ToBigResult(input, filterExpression));
         }
 
-        public SwitchBrand GetBrandById(int brandId)
+        public SwitchBrand GetSwitchBrandById(int switchBrandId)
         {
+            var switchBrands = GetCachedSwitchBrands();
+            return switchBrands.GetRecord(switchBrandId);
+        }
+
+        public IEnumerable<SwitchBrand> GetAllSwitchBrands()
+        {
+            var switchBrands = GetCachedSwitchBrands();
+
+            List<SwitchBrand> allBrands = new List<SwitchBrand>();
+
+            foreach (KeyValuePair<int, SwitchBrand> pair in switchBrands)
+            {
+
+                allBrands.Add(new SwitchBrand() { BrandId = pair.Key, Name = pair.Value.Name });
+            }
+            return allBrands;
+
+        }
+
+        public UpdateOperationOutput<SwitchBrand> UpdateBrand(SwitchBrand brandObj)
+        {
+            UpdateOperationOutput<SwitchBrand> updateOperationOutput = new UpdateOperationOutput<SwitchBrand>();
+
+            updateOperationOutput.Result = UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
             ISwitchBrandDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchBrandDataManager>();
-            return dataManager.GetBrandById(brandId);
+            bool updated = dataManager.UpdateBrand(brandObj);
+
+            if (updated)
+            {
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = brandObj;
+            }
+            else
+            {
+                updateOperationOutput.Result = UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
         }
 
         public InsertOperationOutput<SwitchBrand> AddBrand(SwitchBrand brandObj)
@@ -50,29 +99,6 @@ namespace PSTN.BusinessEntity.Business
             return insertOperationOutput;
         }
 
-        public UpdateOperationOutput<SwitchBrand> UpdateBrand(SwitchBrand brandObj)
-        {
-            UpdateOperationOutput<SwitchBrand> updateOperationOutput = new UpdateOperationOutput<SwitchBrand>();
-
-            updateOperationOutput.Result = UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
-
-            ISwitchBrandDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchBrandDataManager>();
-            bool updated = dataManager.UpdateBrand(brandObj);
-
-            if (updated)
-            {
-                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = brandObj;
-            }
-            else
-            {
-                updateOperationOutput.Result = UpdateOperationResult.SameExists;
-            }
-
-            return updateOperationOutput;
-        }
-
         public DeleteOperationOutput<object> DeleteBrand(int brandId)
         {
             DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
@@ -86,5 +112,19 @@ namespace PSTN.BusinessEntity.Business
 
             return deleteOperationOutput;
         }
+
+
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            ISwitchBrandDataManager _dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchBrandDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreSwitchBrandsUpdated(ref _updateHandle);
+            }
+        }
+        
     }
 }

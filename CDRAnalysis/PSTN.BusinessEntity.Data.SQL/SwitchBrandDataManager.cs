@@ -8,22 +8,9 @@ namespace PSTN.BusinessEntity.Data.SQL
     {
         public SwitchBrandDataManager() : base("CDRDBConnectionString") { }
 
-        public List<SwitchBrand> GetBrands()
+        public List<SwitchBrand> GetSwitchBrands()
         {
             return GetItemsSP("PSTN_BE.sp_SwitchBrand_GetAll", BrandMapper);
-        }
-
-        public Vanrise.Entities.BigResult<SwitchBrand> GetFilteredBrands(Vanrise.Entities.DataRetrievalInput<SwitchBrandQuery> input)
-        {
-            return RetrieveData(input, (tempTableName) =>
-            {
-                ExecuteNonQuerySP("PSTN_BE.sp_SwitchBrand_CreateTempByName", tempTableName, input.Query.Name);
-            }, (reader) => BrandMapper(reader));
-        }
-
-        public SwitchBrand GetBrandById(int brandId)
-        {
-            return GetItemSP("PSTN_BE.sp_SwitchBrand_GetByID", BrandMapper, brandId);
         }
 
         public bool AddBrand(SwitchBrand brandObj, out int insertedId)
@@ -46,6 +33,11 @@ namespace PSTN.BusinessEntity.Data.SQL
         {
             int recordsEffected = ExecuteNonQuerySP("PSTN_BE.sp_SwitchBrand_Delete", brandId);
             return (recordsEffected > 0);
+        }
+
+        public bool AreSwitchBrandsUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("PSTN_BE.SwitchBrand", ref updateHandle);
         }
 
         #region Mappers
