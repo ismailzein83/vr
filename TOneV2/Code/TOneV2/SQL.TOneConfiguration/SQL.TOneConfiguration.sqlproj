@@ -72,6 +72,9 @@
     <Folder Include="common\" />
     <Folder Include="common\Tables\" />
     <Folder Include="common\Stored Procedures\" />
+    <Folder Include="rules\" />
+    <Folder Include="rules\Tables\" />
+    <Folder Include="rules\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -155,6 +158,14 @@
     <Build Include="common\Tables\TemplateConfig.sql" />
     <Build Include="common\Stored Procedures\sp_TemplateConfig_GetByConfigType.sql" />
     <Build Include="common\Stored Procedures\sp_TemplateConfig_GetAll.sql" />
+    <Build Include="rules\Tables\Rule.sql" />
+    <Build Include="rules\Tables\RuleType.sql" />
+    <Build Include="rules\Stored Procedures\sp_Rule_Update.sql" />
+    <Build Include="rules\Stored Procedures\sp_Rule_Delete.sql" />
+    <Build Include="rules\Stored Procedures\sp_Rule_GetByType.sql" />
+    <Build Include="rules\Stored Procedures\sp_Rule_Insert.sql" />
+    <Build Include="rules\Stored Procedures\sp_RuleType_InsertIfNotExistsAndGetID.sql" />
+    <Build Include="Security\rules.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

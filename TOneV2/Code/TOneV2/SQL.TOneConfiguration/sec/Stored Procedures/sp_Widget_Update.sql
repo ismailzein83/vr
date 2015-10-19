@@ -8,7 +8,7 @@ CREATE PROCEDURE [sec].[sp_Widget_Update]
 	@WidgetDefinitionId int,
 	@Name nvarchar(50),
 	@Title  nvarchar(50),
-	@Setting nvarchar(1000)
+	@Setting nvarchar(max)
 	
 AS
 BEGIN

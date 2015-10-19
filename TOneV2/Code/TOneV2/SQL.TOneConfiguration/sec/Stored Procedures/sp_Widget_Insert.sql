@@ -9,7 +9,7 @@ CREATE PROCEDURE [sec].[sp_Widget_Insert]
 	@WidgetDefinitionId int,
 	@Name nvarchar(50),
 	@Title nvarchar(50),
-	@Setting nvarchar(1000),
+	@Setting nvarchar(max),
 	@Id int out
 AS
 BEGIN

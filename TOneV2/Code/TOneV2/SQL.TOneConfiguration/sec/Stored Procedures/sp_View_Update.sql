@@ -11,7 +11,7 @@ CREATE PROCEDURE [sec].[sp_View_Update]
 	@Module INT,
 	@RequiredPermissions NVARCHAR(1000),
 	@Audience NVARCHAR(255),
-	@Content NVARCHAR(1000),
+	@Content NVARCHAR(max),
 	@Type INT
 	
 AS

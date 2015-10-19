@@ -11,7 +11,7 @@ CREATE PROCEDURE [sec].[sp_View_Insert]
 	@Module int,
 	@RequiredPermissions nvarchar(1000),
 	@Audience nvarchar(255),
-	@Content nvarchar(1000),
+	@Content nvarchar(max),
 	@Type int,
 	@pageID int out
 	
