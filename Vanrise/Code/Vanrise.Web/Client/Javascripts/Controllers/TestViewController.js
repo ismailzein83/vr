@@ -4,14 +4,21 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout, Ut
 
     $scope.buttonMenuActions = [
                         {
-                            name: "Edit",
+                            name: "TOD Rule",
                             clicked: function () {
                                 return ValuesAPIService.Get().then(function (response) {
                                 });
                             },
                         },
                         {
-                            name: "Assign Pricing Product",
+                            name: "Tariff Rule",
+                            clicked: function () {
+                                return ValuesAPIService.Get().then(function (response) {
+                                });
+                            }
+                        },
+                        {
+                            name: "Extra Charge",
                             clicked: function () {
                                 return ValuesAPIService.Get().then(function (response) {
                                 });
