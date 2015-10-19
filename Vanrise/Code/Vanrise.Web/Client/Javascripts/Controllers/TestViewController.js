@@ -91,7 +91,6 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout, Ut
     setTimeout(function () {
         $scope.$apply(function () {
             $scope.effectiveOn2 = UtilsService.cloneDateTime($scope.effectiveOn);
-            console.log()
         })
     },2000)
     $scope.headers = ["value","name"];
@@ -203,7 +202,9 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout, Ut
     $scope.choicesReady = function (api) {
         choicesApi = api;
     };
-
+    $scope.test = function () {
+       alert("test")
+    };
     $scope.selectChoice = function () {
         //$scope.testObj.choiceSelectedIndex = 
         // choicesApi.selectChoice();

@@ -32,15 +32,14 @@
         </vr-columns>
 
         <vr-columns width="normal">
-            <vr-datetimepicker type="dateTime" value="effectiveOn" label="Time from" ></vr-datetimepicker>{{effectiveOn}}
+            <vr-datetimepicker type="dateTime" value="effectiveOn" label="Time from"></vr-datetimepicker>{{effectiveOn}}
         </vr-columns>
         <vr-columns width="normal">
-            <vr-datetimepicker type="dateTime" value="effectiveOn2" label="Time On" ></vr-datetimepicker>{{effectiveOn2}}
+            <vr-datetimepicker type="dateTime" value="effectiveOn2" label="Time On"></vr-datetimepicker>{{effectiveOn2}}
         </vr-columns>
-        <vr-columns width="normal" ng-repeat="c in colorlist">
-            <vr-label color="{{c.color}}"> info test </vr-label>
+        <vr-columns width="normal" >
+            <vr-check value="checkvalue" ></vr-check>{{checkvalue}}
         </vr-columns>
-        {{colorlist.length}}
     </vr-row>
     <div class="row fileupload-buttonbar">
         <div class="col-lg-4">
@@ -115,9 +114,43 @@
     </vr-row>
 
 </vr-form>
+
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-section title="Timer Trigger" collapsible>
+
+           
+            <vr-row removeline>
+                <vr-columns width="fullrow">
+                    <vr-section title="Settings" level="2" collapsible>
+                        <vr-form>
+                            <vr-row removeline>
+                                <vr-columns width="1/2row">
+                                    <vr-columns width="1/2row">
+                                        <vr-datetimepicker label="Runs at" type="time" value="selectedTime"></vr-datetimepicker>
+                                    </vr-columns>
+                                    <vr-columns colnum="2" withemptyline>
+                                        <vr-button type="Add" data-onclick="addTime" standalone />
+                                    </vr-columns>
+                                </vr-columns>
+                                <vr-columns width="1/2row">
+                                    <vr-select label="Type" isrequired datasource="[]" selectedvalues="selectedType"
+                                               datatextfield="name" datavaluefield="value" onaddclicked="test">
+                                    </vr-select>
+                                </vr-columns>
+                            </vr-row>
+                        </vr-form>
+                    </vr-section>
+                </vr-columns>
+            </vr-row>
+        </vr-section>
+    </vr-columns>
+</vr-row>
+
+
 <vr-row>
     <vr-columns width="fullrow">
-        <div class="wrapper" >
+        <div class="wrapper">
             <div class="content">
                 <div class="box">
                     <div class="vertical-text" get-style pullrigth><label>Skills</label></div>
@@ -202,7 +235,7 @@
                     </div>
                 </div>
                 <div class="box">
-                    <div class="vertical-text" get-style ><label>contact</label></div>
+                    <div class="vertical-text" get-style><label>contact</label></div>
                 </div>
 
             </div>
@@ -242,8 +275,8 @@
                     </div>
                     <div ng-if="b.type=='leaf' && b.rotated == true" style=" display: block;  height: 100%; width: 100%;">
                         <div class="vertical-text" get-style position="{{b.position}}"><label>{{b.lable}}</label></div>
-                                <!--<div>onther one</div>-->
-                        
+                        <!--<div>onther one</div>-->
+
                     </div>
                 </div>
             </div>
@@ -277,9 +310,11 @@
     .content .box:last-child {
         border-right: 1px solid;
     }
+
     .groupe-list .groupe-cell:last-child {
         border-left: 1px solid;
     }
+
     .content:last-child {
         border-bottom: 1px solid;
     }
@@ -289,7 +324,7 @@
         -moz-transform: rotate(-90deg);
         -webkit-transform: rotate(-90deg);
         transform: rotate(-90deg);
-        width:33px;
+        width: 33px;
         -moz-transform-origin: center bottom;
         position: relative;
     }
