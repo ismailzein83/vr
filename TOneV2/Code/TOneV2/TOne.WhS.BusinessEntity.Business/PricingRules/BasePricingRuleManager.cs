@@ -7,8 +7,11 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public abstract class BasePricingRuleManager<T> : Vanrise.Rules.RuleManager<T> where T : BasePricingRule
+    public abstract class BasePricingRuleManager<T, Q> : Vanrise.Rules.RuleManager<T,Q>
+        where T : BasePricingRule
+        where Q : class
     {
+       
         public T GetMatchRule(PricingRuleTarget target)
         {
             var ruleTree = GetRuleTree(target.RuleType);

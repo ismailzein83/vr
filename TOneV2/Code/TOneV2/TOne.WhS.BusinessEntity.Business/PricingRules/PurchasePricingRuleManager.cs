@@ -7,7 +7,7 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class PurchasePricingRuleManager : BasePricingRuleManager<PurchasePricingRule>
+    public class PurchasePricingRuleManager : BasePricingRuleManager<PurchasePricingRule, PurchasePricingRuleDetail>
     {
         protected override IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetBehaviors()
         {
@@ -16,6 +16,11 @@ namespace TOne.WhS.BusinessEntity.Business
             behaviors.Add(new Rules.StructureRuleBehaviors.RuleBehaviorBySupplierZone());
 
             return behaviors;
+        }
+
+        protected override PurchasePricingRuleDetail MapToDetails(PurchasePricingRule rule)
+        {
+            throw new NotImplementedException();
         }
     }
 }

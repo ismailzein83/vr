@@ -12,16 +12,6 @@ function (UtilsService, $compil) {
             var ctrl = this;
             var bePricingRuleFixedExtraChargeObject = new bePricingRuleFixedExtraCharge(ctrl, $scope, $attrs);
             bePricingRuleFixedExtraChargeObject.initializeController();
-            $scope.onselectionchanged = function () {
-
-                if (ctrl.onselectionchanged != undefined) {
-                    var onvaluechangedMethod = $scope.$parent.$eval(ctrl.onselectionchanged);
-                    if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
-                        onvaluechangedMethod();
-                    }
-                }
-
-            }
         },
         controllerAs: 'ctrl',
         bindToController: true,
@@ -45,6 +35,7 @@ function (UtilsService, $compil) {
 
             api.getData = function () {
                 var obj = {
+                    $type: "TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.ExtraCharge.Actions.FixedExtraChargeSettings, TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.ExtraCharge.Actions",
                     FromRate: $scope.fromRate,
                     ToRate: $scope.toRate,
                     ExtraAmount: $scope.extraAmount
@@ -53,6 +44,7 @@ function (UtilsService, $compil) {
             }
 
             api.setData = function (selectedobj) {
+              
                 $scope.fromRate = selectedobj.FromRate;
                 $scope.toRate = selectedobj.ToRate
                 $scope.extraAmount = selectedobj.ExtraAmount

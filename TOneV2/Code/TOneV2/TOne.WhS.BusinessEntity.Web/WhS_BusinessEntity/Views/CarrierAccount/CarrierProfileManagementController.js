@@ -13,7 +13,7 @@
         function defineScope() {
             $scope.searchClicked = function () {
                 if (!$scope.isGettingData && gridAPI != undefined)
-                    gridAPI.loadGrid(getFilterObject());
+                   return gridAPI.loadGrid(getFilterObject());
             };
 
             $scope.onGridReady = function (api) {

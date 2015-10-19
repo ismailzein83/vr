@@ -58,6 +58,9 @@
     <Reference Include="Vanrise.Rules">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Business.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AllExceptSaleZonesBehavior.cs" />

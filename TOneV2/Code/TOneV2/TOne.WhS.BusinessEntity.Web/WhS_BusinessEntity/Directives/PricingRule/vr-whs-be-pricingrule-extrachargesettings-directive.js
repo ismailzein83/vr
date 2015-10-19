@@ -26,6 +26,7 @@ function (UtilsService, $compil, WhS_BE_PricingRuleAPIService) {
 
     function bePricingRuleExtraChargeSetting(ctrl, $scope, $attrs) {
         var pricingRuleExtraChargeTemplateDirectiveAPI;
+
         function initializeController() {
 
             $scope.disableAddButton = true;
@@ -47,6 +48,7 @@ function (UtilsService, $compil, WhS_BE_PricingRuleAPIService) {
             defineAPI();
 
         }
+
         function getActionItem(dbAction) {
 
             var actionItem = {
@@ -75,7 +77,11 @@ function (UtilsService, $compil, WhS_BE_PricingRuleAPIService) {
             var api = {};
 
             api.getData = function () {
-                return getActions();
+                var obj = {
+                    Actions: getActions(),
+                   // $type: "TOne.WhS.BusinessEntity.Entities.PricingRuleExtraChargeSettings,TOne.WhS.BusinessEntity.Entities",
+                }
+                return obj;
             }
             function getActions() {
                 var actionList = [];
@@ -112,6 +118,7 @@ function (UtilsService, $compil, WhS_BE_PricingRuleAPIService) {
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
+
         this.initializeController = initializeController;
     }
     return directiveDefinitionObject;

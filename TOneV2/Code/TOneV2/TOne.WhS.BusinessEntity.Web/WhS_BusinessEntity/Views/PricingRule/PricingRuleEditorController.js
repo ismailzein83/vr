@@ -8,10 +8,9 @@
 
         var editMode;
         var pricingType;
-        var directiveAppendixData;
+
         var pricingRuleTypeDirectiveAPI;
-        var saleZoneGroupSettingsDirectiveAPI;
-        var customerGroupSettingsDirectiveAPI;
+        var criteriaDirectiveAPI;
         loadParameters();
         defineScope();
 
@@ -24,14 +23,17 @@
                 pricingType = parameters.PricingType;
             }
             console.log(parameters);
-            editMode = (pricingType != undefined);
+            editMode = (pricingType == undefined);
         }
 
         function defineScope() {
+            $scope.onCriteriaDirectiveReady = function (api) {
+                console.log(api);
+                criteriaDirectiveAPI = api;
+                load();
+            }
 
             $scope.SavePricingRule = function () {
-                console.log(pricingRuleTypeDirectiveAPI.getData());
-                return;
                 if (editMode) {
                     return updatePricingRule();
                 }
@@ -48,41 +50,8 @@
             };
             $scope.selectedPricingRuleType;
 
-            $scope.onSaleZoneGroupSettingsDirectiveReady = function (api) {
-                saleZoneGroupSettingsDirectiveAPI = api;
+           
 
-                if (directiveAppendixData != undefined) {
-                    tryLoadAppendixDirectives();
-                } else {
-                    var promise = saleZoneGroupSettingsDirectiveAPI.load();
-                    if (promise != undefined) {
-                        $scope.saleZonesAppendixLoader = true;
-                        promise.catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                        }).finally(function () {
-                            $scope.saleZonesAppendixLoader = false;
-                        });
-                    }
-                }
-            }
-
-            $scope.onCustomerGroupSettingsDirectiveReady = function (api) {
-                customerGroupSettingsDirectiveAPI = api;
-                if (directiveAppendixData != undefined) {
-                    tryLoadAppendixDirectives();
-                } else {
-                    var promise = customerGroupSettingsDirectiveAPI.load();
-                    if (promise != undefined)
-                    {
-                        $scope.customersAppendixLoader = true;
-                        promise.catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                        }).finally(function () {
-                            $scope.customersAppendixLoader = false;
-                        });
-                    }
-                }
-            }
             $scope.isCustomerShown = function () {
                 if (pricingType.value == WhS_Be_PricingTypeEnum.Sale.value)
                     return true;
@@ -93,18 +62,18 @@
 
         function load() {
             $scope.isGettingData = true;
+            if (criteriaDirectiveAPI == undefined)
+                return;
+            //criteriaDirectiveAPI.load().catch(function (error) {
+            //    VRNotificationService.notifyException(error, $scope);
+            //    $scope.isGettingData = false;
+            //}).finally(function () {
 
-            return UtilsService.waitMultipleAsyncOperations([loadSaleZoneGroupTemplates, loadCustomerGroupTemplates, definePricingRuleTypes]).then(function () {
-               
-                    $scope.isGettingData = false;
-     
-
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.isGettingData = false;
-            });
-
-           
+            //    $scope.isGettingData = false;
+            //});
+          //  $scope.isGettingData = true;
+            definePricingRuleTypes();
+            $scope.isGettingData = false;
         }
 
         function definePricingRuleTypes() {
@@ -123,9 +92,18 @@
 
 
         function buildPricingRuleObjFromScope() {
+            var settings = pricingRuleTypeDirectiveAPI.getData();
+            settings.RuleType = $scope.selectedPricingRuleType.value;
+            var criteria=criteriaDirectiveAPI.getData();
+            criteria.CriteriaType=pricingType.value
             var pricingRule = {
-            };
-
+                Settings: settings,
+                Description: $scope.description,
+                Criteria: criteria,
+                BeginEffectiveTime: $scope.beginEffectiveDate,
+                EndEffectiveTime: $scope.endEffectiveDate
+            }
+         
             return pricingRule;
         }
 
@@ -133,6 +111,7 @@
         }
 
         function insertPricingRule() {
+
             var pricingRuleObject = buildPricingRuleObjFromScope();
             return WhS_BE_SalePricingRuleAPIService.AddRule(pricingRuleObject)
             .then(function (response) {
@@ -162,76 +141,9 @@
         }
 
 
-        function loadSaleZoneGroupTemplates() {
-            $scope.saleZoneGroupTemplates = [];
-            return WhS_BE_SaleZoneAPIService.GetSaleZoneGroupTemplates().then(function (response) {
-                angular.forEach(response, function (item) {
-                    $scope.saleZoneGroupTemplates.push(item);
-                });
-            });
-        }
-
-        function loadCustomerGroupTemplates() {
-            $scope.customerGroupTemplates = [];
-            return WhS_BE_CarrierAccountAPIService.GetCustomerGroupTemplates().then(function (response) {
-                angular.forEach(response, function (item) {
-                    $scope.customerGroupTemplates.push(item);
-                });
-            });
-        }
-        function tryLoadAppendixDirectives() {
-            var loadOperations = [];
-            var setDirectivesDataOperations = [];
-
-            if ($scope.selectedSaleZoneGroupTemplate != undefined) {
-                if (saleZoneGroupSettingsDirectiveAPI == undefined)
-                    return;
-                loadOperations.push(saleZoneGroupSettingsDirectiveAPI.load);
-
-                setDirectivesDataOperations.push(setSaleZoneGroupSettingsDirective);
-            }
-            if ($scope.selectedSupplierGroupTemplate != undefined) {
-                if (supplierGroupSettingsDirectiveAPI == undefined)
-                    return;
-
-                loadOperations.push(supplierGroupSettingsDirectiveAPI.load);
-
-                setDirectivesDataOperations.push(setSupplierGroupSettingsDirective);
-            }
-
-            UtilsService.waitMultipleAsyncOperations(loadOperations).then(function () {
-
-                setAppendixDirectives();
-
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.isGettingData = false;
-            });
-
-            function setAppendixDirectives() {
-                UtilsService.waitMultipleAsyncOperations(setDirectivesDataOperations).then(function () {
-                    directiveAppendixData = undefined;
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                }).finally(function () {
-                    $scope.isGettingData = false;
-                });
-            }
-        }
-        function setSaleZoneGroupSettingsDirective() {
-            return saleZoneGroupSettingsDirectiveAPI.setData(appendixData.RouteCriteria.SaleZoneGroupSettings);
-        }
-
-        function setCustomerGroupSettingsDirective() {
-            return customerGroupSettingsDirectiveAPI.setData(appendixData.RouteCriteria.CustomerGroupSettings);
-        }
-        function loadSaleZoneGroupSettings() {
-            return saleZoneGroupSettingsDirectiveAPI.load();
-        }
-
-        function loadCustomerGroupSettings() {
-            return customerGroupSettingsDirectiveAPI.load();
-        }
+       
+        
+       
 
       
 

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class PurchasePricingRuleCriteria : PricingRuleCriteria
+   public class PurchasePricingRuleDetail 
     {
-        public SuppliersWithZonesGroupSettings SuppliersWithZonesGroupSettings { get; set; }
+        public PurchasePricingRule Entity { get; set; }
     }
 }

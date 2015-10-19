@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SalePricingRuleCriteria
+    public class SalePricingRuleCriteria : PricingRuleCriteria
     {
         public int? SellingProductId { get; set; }
 

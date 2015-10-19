@@ -24,7 +24,8 @@
         //}
 
         function AddRule(pricingRuleObj) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SalePricingRule", "AddRule"), pricingRuleObj);
+            console.log(pricingRuleObj);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SalePricingRule", "AddSalePricingRule"), pricingRuleObj);
         }
         return ({
             AddRule: AddRule,
