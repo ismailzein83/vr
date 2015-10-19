@@ -7,29 +7,46 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
     });
 
     function getTemplate(attrs) {
+
+        var actionsMenuTemplate = ''
+          + '<ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show="ctrl.showMenuActions" ng-style="{\'position\': \'absolute\', \'top\': \'18px\'} " >'
+       + ' <li role="presentation">'
+       + '     <div ng-repeat="action in ctrl.menuActions" class="mark-select " style="padding-left: 2px; ">'
+         + '       <div class=" hand-cursor" ng-click="ctrl.menuActionClicked(action)"><span style="font-size:11px">{{action.name}}</span>'
+         + '<img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin-left:3px" ng-show="action.isSubmitting" /></div>'
+        + '    </div>'
+       + ' </li>'
+ + '   </ul>';
+
         var type = attrs.type;
+
         var buttonAttributes = getButtonAttributes(type);
         if (type == "Login") {            
-            return '<button style="width:100%" type="button" class="btn btn-danger login-btn"'
-            + 'aria-label="Left Align" ng-click="ctrl.onInternalClick()" ng-disabled="ctrl.isDisabled()">' + buttonAttributes.text
+            return '<div style="position:relative;display:inline-block;width:100%" ng-mouseleave="ctrl.showMenuActions = false"  >'
+                + '<button style="width:100%" type="button" class="btn btn-danger login-btn"'
+            + 'aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()">' + buttonAttributes.text
                 + '<span style="padding-left:4px"  aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
                 + '<img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin-left:3px" ng-show="ctrl.showLoader()" />'
-                + '</button>';
+                + '</button>'
+                + actionsMenuTemplate + '</div>';
 
         }
         else if (attrs.standalone != undefined) {
-            return '<div style="display:inline-block" title="' + buttonAttributes.text + '"'
-           + ' aria-label="Left Align" ng-click="ctrl.onInternalClick()" ng-disabled="ctrl.isDisabled()">' 
+            return '<div style="position:relative;display:inline-block" ng-mouseleave="ctrl.showMenuActions = false"  title="' + buttonAttributes.text + '" '               
+           + ' aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()">'
                + '<span style="padding-left:4px;font-size:24px" class="' + buttonAttributes.class + ' hand-cursor" aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
                + '<img src="Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin-left:3px" ng-show="ctrl.showLoader()" />'
-               + '</div>';
+                + actionsMenuTemplate + '</div>';
         }
         else {
-            return '<button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom"'
-            + 'aria-label="Left Align" ng-click="ctrl.onInternalClick()" ng-disabled="ctrl.isDisabled()">' + buttonAttributes.text
+            return '<div style="position:relative;display:inline-block" ng-mouseleave="ctrl.showMenuActions = false"  >'
+                +'<button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom"'
+            + 'aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()">' + buttonAttributes.text
                 + '<span style="padding-left:4px" class="' + buttonAttributes.class + ' aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
                 + '<img src="Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin-left:3px" ng-show="ctrl.showLoader()" />'
-                + '</button>';
+                
+                + '</button>'
+                + actionsMenuTemplate + '</div>';
 
         }
     }

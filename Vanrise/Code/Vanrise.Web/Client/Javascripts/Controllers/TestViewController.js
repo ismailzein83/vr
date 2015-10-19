@@ -1,7 +1,23 @@
 ﻿'use strict'
 
 var TestViewController = function ($scope, $http, ValuesAPIService, $timeout, UtilsService, LabelColorsEnum) {
-    
+
+    $scope.buttonMenuActions = [
+                        {
+                            name: "Edit",
+                            clicked: function () {
+                                return ValuesAPIService.Get().then(function (response) {
+                                });
+                            },
+                        },
+                        {
+                            name: "Assign Pricing Product",
+                            clicked: function () {
+                                return ValuesAPIService.Get().then(function (response) {
+                                });
+                            }
+                        }
+    ];
     $scope.timeObj = {
         hours: 23,
         minutes: 23

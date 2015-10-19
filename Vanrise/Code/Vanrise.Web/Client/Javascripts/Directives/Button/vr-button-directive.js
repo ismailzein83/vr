@@ -11,22 +11,37 @@ app.directive('vrButton', ['ButtonDirService', 'SecurityService', function (Butt
             formname: '@',
             permissions: '@'
         },
-        controller: function ($scope, $element) {
+        controller: function ($scope, $element, $attrs) {
             
             var isSubmitting = false;
             var ctrl = this;
            
-            this.onInternalClick = function () {
-                if (this.onclick != undefined && typeof (this.onclick) == 'function') {
-                    var promise = this.onclick();//this function should return a promise in case it is performing asynchronous task
-                    if (promise != undefined && promise != null) {
-                        isSubmitting = true;
-                        promise.finally(function () {
-                            isSubmitting = false;
-                        });
+            this.onInternalClick = function (evnt) {
+                if (ctrl.menuActions != undefined)
+                    ctrl.showMenuActions = true;
+                else {
+                    if (this.onclick != undefined && typeof (this.onclick) == 'function') {
+                        var promise = this.onclick();//this function should return a promise in case it is performing asynchronous task
+                        if (promise != undefined && promise != null) {
+                            isSubmitting = true;
+                            promise.finally(function () {
+                                isSubmitting = false;
+                            });
+                        }
                     }
                 }
             };
+
+            ctrl.menuActionClicked = function (action) {
+                var promise = action.clicked();//this function should return a promise in case it is performing asynchronous task
+                if (promise != undefined && promise != null) {
+                    action.isSubmitting = true;
+                    promise.finally(function () {
+                        action.isSubmitting = false;
+                    });
+                }
+            };
+
             $scope.$on('submit' + this.formname, function () {
                 if (ctrl.formname != undefined) {
                     var form = $scope.$parent.$eval(ctrl.formname);
@@ -57,6 +72,7 @@ app.directive('vrButton', ['ButtonDirService', 'SecurityService', function (Butt
                 return isDisabled;
             };
 
+            ctrl.menuActions = $attrs.menuactions != undefined ? $scope.$parent.$eval($attrs.menuactions) : undefined;
             
         },
         controllerAs: 'ctrl',
