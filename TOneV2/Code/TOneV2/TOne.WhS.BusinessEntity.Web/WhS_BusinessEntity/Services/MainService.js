@@ -14,7 +14,8 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
         editCarrierAccount: editCarrierAccount,
         addCarrierProfile:addCarrierProfile,
         editCarrierProfile: editCarrierProfile,
-        addSalePricingRule: addSalePricingRule
+        addSalePricingRule: addSalePricingRule,
+        editSalePricingRule: editSalePricingRule
     });
 
     function addRouteRule(onRouteRuleAdded)
@@ -190,18 +191,37 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierProfileEditor.html', parameters, modalSettings);
     }
 
-    function addSalePricingRule(onSalePricingRuleAdded, dataItem) {
+    function addSalePricingRule(onSalePricingRuleAdded, type) {
         var settings = {};
 
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "New Sale Pricing Rule";
             modalScope.onSalePricingRuleAdded = onSalePricingRuleAdded;
         };
-        var  parameters = {
-            PricingType: WhS_Be_PricingTypeEnum.Sale
-            };
+        var  parameters={
+            PricingType: WhS_Be_PricingTypeEnum.Sale.value  
+        };
+        if (type != undefined) {
+            parameters.PricingRuleType = type;
+        }
+        
+        
         
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingRule/PricingRuleEditor.html', parameters, settings);
     }
+    function editSalePricingRule(salePricingRuleObj, onSalePricingRuleUpdated) {
+        var settings = {};
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = "Edite Sale Pricing Rule";
+            modalScope.onSalePricingRuleUpdated = onSalePricingRuleUpdated;
+        };
+        var parameters = {
+            RuleId: salePricingRuleObj.RuleId
+        };
+
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingRule/PricingRuleEditor.html', parameters, settings);
+    }
+    
 
 }]);
