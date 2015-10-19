@@ -142,7 +142,9 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                                 }
                             }
 
-                            inputArgument.OutputQueue.Enqueue(BuildCDRBatch(unifiedCDRs, currentConnectDateTime.Value));
+                            var cdrBatch = BuildCDRBatch(unifiedCDRs, currentConnectDateTime.Value);
+                            if (cdrBatch != null)
+                                inputArgument.OutputQueue.Enqueue(cdrBatch);
 
                             currentConnectDateTime = null;
 
@@ -163,10 +165,10 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
             foreach (KeyValuePair<CallPartie, List<RelatedCDR>> unifiedCDR in unifiedCDRs)
             {
-
+                int CountItems = 0;
                 foreach (var subunifiedCDR in unifiedCDR.Value)
                 {
-                    if (ToPositive(subunifiedCDR.ConnectDateTime.Value.Subtract(maximumConnectDateTime).TotalSeconds) >= minimumGapBetweenRepeatedCDRs)
+                    if ((CountItems == 0) || (CountItems > 0 && ToPositive(subunifiedCDR.ConnectDateTime.Value.Subtract(maximumConnectDateTime).TotalSeconds) >= minimumGapBetweenRepeatedCDRs))
                     {
                         cdrBatch.Add(new CDR()
                         {
@@ -206,17 +208,23 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                         }
                             );
                     }
+
+                    CountItems++;
                 }
             }
 
-
-            var cdrsBytes = Vanrise.Common.Compressor.Compress(Vanrise.Common.ProtoBufSerializer.Serialize(cdrBatch));
-            string filePath = !String.IsNullOrEmpty(configuredDirectory) ? System.IO.Path.Combine(configuredDirectory, Guid.NewGuid().ToString()) : System.IO.Path.GetTempFileName();
-            System.IO.File.WriteAllBytes(filePath, cdrsBytes);
-            return new CDRBatch
+            if (cdrBatch.Count > 0)
             {
-                CDRBatchFilePath = filePath
-            };
+                var cdrsBytes = Vanrise.Common.Compressor.Compress(Vanrise.Common.ProtoBufSerializer.Serialize(cdrBatch));
+                string filePath = !String.IsNullOrEmpty(configuredDirectory) ? System.IO.Path.Combine(configuredDirectory, Guid.NewGuid().ToString()) : System.IO.Path.GetTempFileName();
+                System.IO.File.WriteAllBytes(filePath, cdrsBytes);
+                return new CDRBatch
+                {
+                    CDRBatchFilePath = filePath
+                };
+            }
+            else
+                return null;
 
 
 
