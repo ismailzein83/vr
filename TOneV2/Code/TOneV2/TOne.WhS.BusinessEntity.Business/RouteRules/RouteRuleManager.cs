@@ -10,7 +10,7 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class RouteRuleManager : Vanrise.Rules.RuleManager<RouteRule>
+    public class RouteRuleManager : Vanrise.Rules.RuleManager<RouteRule, RouteRuleDetail>
     {        
         public RouteRule GetMatchRule(RouteRuleTarget target)
         {
@@ -81,80 +81,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public Vanrise.Entities.IDataRetrievalResult<RouteRule> GetFilteredRouteRules(Vanrise.Entities.DataRetrievalInput<RouteRuleQuery> input)
         {
-            IRouteRuleDataManager dataManager = BEDataManagerFactory.GetDataManager<IRouteRuleDataManager>();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredRouteRules(input));
+            var routeRules = base.GetAllRules();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeRules.ToBigResult(input, null));
         }
 
-        public RouteRule GetRouteRule(int routeRuleId)
+        protected override RouteRuleDetail MapToDetails(RouteRule rule)
         {
-            IRouteRuleDataManager dataManager = BEDataManagerFactory.GetDataManager<IRouteRuleDataManager>();
-            return dataManager.GetRouteRule(routeRuleId);
-        }
-
-
-        public TOne.Entities.InsertOperationOutput<RouteRule> AddRouteRule(RouteRule routeRule)
-        {
-            TOne.Entities.InsertOperationOutput<RouteRule> insertOperationOutput = new TOne.Entities.InsertOperationOutput<RouteRule>();
-
-            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
-            insertOperationOutput.InsertedObject = null;
-
-            int routeRuleId = -1;
-
-            IRouteRuleDataManager dataManager = BEDataManagerFactory.GetDataManager<IRouteRuleDataManager>();
-            bool insertActionSucc = dataManager.Insert(routeRule, out routeRuleId);
-
-            if (insertActionSucc)
+            return new RouteRuleDetail()
             {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                routeRule.RouteRuleId = routeRuleId;
-                insertOperationOutput.InsertedObject = routeRule;
-            }
-
-            return insertOperationOutput;
-        }
-
-        public TOne.Entities.UpdateOperationOutput<RouteRule> UpdateRouteRule(RouteRule routeRule)
-        {
-            IRouteRuleDataManager dataManager = BEDataManagerFactory.GetDataManager<IRouteRuleDataManager>();
-
-            bool updateActionSucc = dataManager.Update(routeRule);
-            TOne.Entities.UpdateOperationOutput<RouteRule> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<RouteRule>();
-
-            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
-
-            if (updateActionSucc)
-            {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = routeRule;
-            }
-
-            return updateOperationOutput;
-        }
-
-        public TOne.Entities.DeleteOperationOutput<object> DeleteRouteRule(int routeRuleId)
-        {
-            IRouteRuleDataManager dataManager = BEDataManagerFactory.GetDataManager<IRouteRuleDataManager>();
-
-            TOne.Entities.DeleteOperationOutput<object> deleteOperationOutput = new TOne.Entities.DeleteOperationOutput<object>();
-            deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Failed;
-
-            bool deleteActionSucc = dataManager.Delete(routeRuleId);
-
-            if (deleteActionSucc)
-            {
-                deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Succeeded;
-            }
-
-            return deleteOperationOutput;
-        }
-
-
-        public List<Vanrise.Entities.TemplateConfig> GetCodeCriteriaGroupTemplates()
-        {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.CodeCriteriaGroupConfigType);
+                Rule = rule
+            };
         }
     }
 }

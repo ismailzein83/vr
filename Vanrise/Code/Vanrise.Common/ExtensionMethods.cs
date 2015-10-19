@@ -218,6 +218,9 @@ namespace Vanrise.Common
 
         private static IEnumerable<T> ApplyFiltering<T>(this IEnumerable<T> list, Func<T, bool> filterExpression)
         {
+            if (filterExpression == null)
+                return list;
+
             return list.Where(filterExpression);
         }
 

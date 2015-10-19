@@ -79,10 +79,16 @@
                 }
 
                 $scope.onSaleZonePackageSelectionChanged = function () {
-                    if (saleZonePackageDirectiveAPI != undefined && saleZonePackageDirectiveAPI.getData() != undefined)
-                        $scope.selectedSaleZonePackageId = saleZonePackageDirectiveAPI.getData().SaleZonePackageId;
+                    if (saleZonePackageDirectiveAPI != undefined)
+                    {
+                        var saleZonePackageObj = saleZonePackageDirectiveAPI.getData();
+                        if (saleZonePackageObj != undefined)
+                            $scope.selectedSaleZonePackageId = saleZonePackageDirectiveAPI.getData().SaleZonePackageId;
+                    }
                     else
+                    {
                         $scope.selectedSaleZonePackageId = undefined;
+                    }
                 }
 
                 $scope.SaveRoutingProduct = function () {
@@ -108,7 +114,7 @@
                 if (saleZonePackageDirectiveAPI == undefined)
                     return;
 
-                return UtilsService.waitMultipleAsyncOperations([loadSaleZonePackages, loadSaleZoneGroupTemplates, loadSupplierGroupTemplates]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([saleZonePackageDirectiveAPI.load, loadSaleZoneGroupTemplates, loadSupplierGroupTemplates]).then(function () {
                     if (editMode) {
                         getRoutingProduct();
                     }
@@ -133,10 +139,6 @@
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.isGettingData = false;
                 });
-            }
-
-            function loadSaleZonePackages() {
-                return saleZonePackageDirectiveAPI.load();
             }
 
             function loadSaleZoneGroupTemplates() {
@@ -204,9 +206,6 @@
                 }
             }
                     
-
-           
-
             function buildRoutingProductObjFromScope() {
 
                 var routingProduct = {

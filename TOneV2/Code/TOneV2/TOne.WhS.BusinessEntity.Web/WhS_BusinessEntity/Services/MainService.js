@@ -34,7 +34,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
         var modalSettings = {
         };
         var parameters = {
-            routeRuleId: routeRuleObj.RouteRuleId
+            routeRuleId: routeRuleObj.RuleId
         };
 
         modalSettings.onScopeReady = function (modalScope) {
@@ -48,7 +48,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
         VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response) {
-                    return WhS_BE_RouteRuleAPIService.DeleteRouteRule(routeRuleObj.RouteRuleId)
+                    return WhS_BE_RouteRuleAPIService.DeleteRouteRule(routeRuleObj.RuleId)
                         .then(function (deletionResponse) {
                             VRNotificationService.notifyOnItemDeleted("Route Rule", deletionResponse);
                             onRouteRuleDeleted();

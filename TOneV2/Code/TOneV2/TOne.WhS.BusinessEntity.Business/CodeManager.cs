@@ -19,5 +19,11 @@ namespace TOne.WhS.BusinessEntity.Business
             else
                 return null;
         }
+
+        public List<Vanrise.Entities.TemplateConfig> GetCodeCriteriaGroupTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.CodeCriteriaGroupConfigType);
+        }
     }
 }

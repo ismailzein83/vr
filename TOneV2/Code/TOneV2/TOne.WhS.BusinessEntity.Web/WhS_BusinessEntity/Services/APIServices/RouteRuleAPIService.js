@@ -1,50 +1,42 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    routeRuleAPIService.$inject = ['BaseAPIService'];
+    routeRuleAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_BE_ModuleConfig'];
 
-    function routeRuleAPIService(BaseAPIService) {
+    function routeRuleAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig) {
 
         function GetFilteredRouteRules(input) {
-            return BaseAPIService.post("/api/RouteRule/GetFilteredRouteRules", input);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "GetFilteredRouteRules", input));
         }
 
         function GetRouteRule(routeRuleId) {
-            return BaseAPIService.get("/api/RouteRule/GetRouteRule", {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "GetRouteRule", {
                 routeRuleId: routeRuleId
-            });
+            }));
         }
 
         function AddRouteRule(routeRuleObject) {
-            return BaseAPIService.post("/api/RouteRule/AddRouteRule", routeRuleObject);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "AddRouteRule", routeRuleObject));
         }
 
         function UpdateRouteRule(routeRuleObject) {
-            return BaseAPIService.post("/api/RouteRule/UpdateRouteRule", routeRuleObject);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "UpdateRouteRule", routeRuleObject));
         }
 
-        //function GetSaleZoneGroupTemplates() {
-        //    return BaseAPIService.get("/api/RoutingProduct/GetSaleZoneGroupTemplates");
-        //}
-
-        //function GetSupplierGroupTemplates() {
-        //    return BaseAPIService.get("/api/RoutingProduct/GetSupplierGroupTemplates");
-        //}
-
-        function DeleteRouteRule(routeRuleId) {
-            return BaseAPIService.get("/api/RouteRule/DeleteRouteRule", { routeRuleId: routeRuleId });
+        function DeleteRouteRule(ruleId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "DeleteRouteRule", { ruleId: ruleId }));
         }
 
         function GetCodeCriteriaGroupTemplates() {
-            return BaseAPIService.get("/api/RouteRule/GetCodeCriteriaGroupTemplates");
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "GetCodeCriteriaGroupTemplates"));
         }
 
         return ({
             GetFilteredRouteRules: GetFilteredRouteRules,
+            GetRouteRule: GetRouteRule,
             AddRouteRule: AddRouteRule,
             UpdateRouteRule: UpdateRouteRule,
             DeleteRouteRule: DeleteRouteRule,
-            GetRouteRule: GetRouteRule,
             GetCodeCriteriaGroupTemplates: GetCodeCriteriaGroupTemplates
         });
     }

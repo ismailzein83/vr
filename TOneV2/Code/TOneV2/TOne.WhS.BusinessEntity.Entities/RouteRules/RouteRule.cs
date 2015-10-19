@@ -14,10 +14,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public RouteRuleSettings Settings { get; set; }
 
-        public DateTime BeginEffectiveDate { get; set; }
-
-        public DateTime? EndEffectiveDate { get; set; }
-
         public string Description { get; set; }
 
         public override bool IsAnyCriteriaExcluded(object target)

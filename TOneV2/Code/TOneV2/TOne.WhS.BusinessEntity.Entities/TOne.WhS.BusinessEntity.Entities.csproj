@@ -125,6 +125,7 @@
     <Compile Include="CodeCriteria\IRuleCodeCriteria.cs" />
     <Compile Include="CarrierAccounts\IRuleCustomerCriteria.cs" />
     <Compile Include="RouteOptionRules\RouteOptionRuleTypeSettings.cs" />
+    <Compile Include="RouteRules\RouteRuleDetail.cs" />
     <Compile Include="RouteRules\IRouteRuleExecutionContext.cs" />
     <Compile Include="RouteRules\RouteRuleTypeSettings.cs" />
     <Compile Include="RoutingProduct\IRuleRoutingProductCriteria.cs" />
