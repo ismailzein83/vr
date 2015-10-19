@@ -21,7 +21,7 @@ namespace PSTN.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetNormalizationRuleById")]
-        public NormalizationRuleDetail GetNormalizationRuleById(int normalizationRuleId)
+        public NormalizationRule GetNormalizationRuleById(int normalizationRuleId)
         {
             NormalizationRuleManager manager = new NormalizationRuleManager();
             return manager.GetNormalizationRuleById(normalizationRuleId);

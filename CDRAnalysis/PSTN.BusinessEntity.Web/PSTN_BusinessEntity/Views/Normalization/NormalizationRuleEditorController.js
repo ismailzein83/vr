@@ -147,27 +147,27 @@
 
         function fillScopeFromNormalizationRuleObj(rule) {
 
-            $scope.description = rule.Entity.Description;
+            $scope.description = rule.Description;
 
-            $scope.selectedSwitches = (rule.Entity.Criteria.SwitchIds != null) ?
-                getItemsByPropValues($scope.switches, rule.Entity.Criteria.SwitchIds, "SwitchId") : [];
+            $scope.selectedSwitches = (rule.Criteria.SwitchIds != null) ?
+                getItemsByPropValues($scope.switches, rule.Criteria.SwitchIds, "SwitchId") : [];
 
-            $scope.selectedTrunks = (rule.Entity.Criteria.TrunkIds != null) ?
-                getItemsByPropValues($scope.trunks, rule.Entity.Criteria.TrunkIds, "TrunkId") : [];
+            $scope.selectedTrunks = (rule.Criteria.TrunkIds != null) ?
+                getItemsByPropValues($scope.trunks, rule.Criteria.TrunkIds, "TrunkId") : [];
 
-            $scope.selectedPhoneNumberType = (rule.Entity.Criteria.PhoneNumberType != null) ?
-                UtilsService.getItemByVal($scope.phoneNumberTypes, rule.Entity.Criteria.PhoneNumberType, "value") : undefined;
+            $scope.selectedPhoneNumberType = (rule.Criteria.PhoneNumberType != null) ?
+                UtilsService.getItemByVal($scope.phoneNumberTypes, rule.Criteria.PhoneNumberType, "value") : undefined;
 
-            $scope.phoneNumberLength = rule.Entity.Criteria.PhoneNumberLength;
-            $scope.phoneNumberPrefix = rule.Entity.Criteria.PhoneNumberPrefix;
+            $scope.phoneNumberLength = rule.Criteria.PhoneNumberLength;
+            $scope.phoneNumberPrefix = rule.Criteria.PhoneNumberPrefix;
 
-            normalizationRuleSettingsDirectiveData = rule.Entity.Settings;
-            var ruleType = UtilsService.getEnum(PSTN_BE_NormalizationRuleTypeEnum, "value", rule.Entity.Settings.RuleType);
+            normalizationRuleSettingsDirectiveData = rule.Settings;
+            var ruleType = UtilsService.getEnum(PSTN_BE_NormalizationRuleTypeEnum, "value", rule.Settings.RuleType);
             normalizationRuleType = ruleType;
             showSelectedNormalizationRuleType();
 
-            $scope.beginEffectiveTime = rule.Entity.BeginEffectiveTime;
-            $scope.endEffectiveTime = rule.Entity.EndEffectiveTime;
+            $scope.beginEffectiveTime = rule.BeginEffectiveTime;
+            $scope.endEffectiveTime = rule.EndEffectiveTime;
         }
 
         function getItemsByPropValues(array, values, propName) {
@@ -204,8 +204,6 @@
 
         function insertNormalizationRule() {
             var normalizationRuleObj = buildNormalizationRuleObjFromScope();
-
-            console.log(normalizationRuleObj);
 
             return NormalizationRuleAPIService.AddNormalizationRule(normalizationRuleObj)
                 .then(function (responseObject) {

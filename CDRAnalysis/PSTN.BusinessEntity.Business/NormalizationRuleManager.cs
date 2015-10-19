@@ -212,10 +212,10 @@ namespace PSTN.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, GetFilteredRules(filterExpression).ToBigResult(input, filterExpression, NormalizationRuleDetailMapper));
         }
 
-        public NormalizationRuleDetail GetNormalizationRuleById(int normalizationRuleId)
+        public NormalizationRule GetNormalizationRuleById(int normalizationRuleId)
         {
-            NormalizationRuleDetail detail = GetRuleDetail(normalizationRuleId);
-            return detail;
+            NormalizationRule rule = GetRule(normalizationRuleId);
+            return rule;
         }
 
         public List<TemplateConfig> GetNormalizationRuleAdjustNumberActionSettingsTemplates()
