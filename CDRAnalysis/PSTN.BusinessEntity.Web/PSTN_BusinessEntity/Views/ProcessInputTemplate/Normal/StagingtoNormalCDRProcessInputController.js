@@ -19,7 +19,6 @@ function StagingtoNormalCDRProcessInputController($scope, $http, $routeParams, n
         $scope.createProcessInput.getData = function () {
 
             $scope.createProcessInputObjects.length = 0;
-
             $scope.createProcessInputObjects.push({
                 InputArguments: {
                     $type: "Vanrise.Fzero.CDRImport.BP.Arguments.StagingtoNormalCDRProcessInput, Vanrise.Fzero.CDRImport.BP.Arguments",

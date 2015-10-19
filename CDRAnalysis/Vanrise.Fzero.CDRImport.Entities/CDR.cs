@@ -47,3 +47,7 @@ namespace Vanrise.Fzero.CDRImport.Entities
         public string DestinationAreaCode { get; set; }
     }
 }
+
+
+
+

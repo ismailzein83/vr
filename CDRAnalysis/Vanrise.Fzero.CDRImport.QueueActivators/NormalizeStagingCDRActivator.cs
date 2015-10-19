@@ -55,6 +55,7 @@ namespace Vanrise.Fzero.CDRImport.QueueActivators
 
 
                 normalizationManager.Normalize(cdr);
+                normalizationManager.SetAreaCode(cdr);
             }
 
             outputItems.Add("Save CDRs", cdrBatch);

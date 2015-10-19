@@ -52,6 +52,7 @@ namespace Vanrise.Fzero.CDRImport.QueueActivators
                 cdr.SwitchID = SwitchId;
 
                 normalizationManager.Normalize(cdr);
+                normalizationManager.SetAreaCode(cdr);
             }
 
             outputItems.Add("CDR Import", cdrBatch);
