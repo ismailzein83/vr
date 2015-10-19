@@ -45,10 +45,10 @@ namespace Vanrise.Rules.Web.Controllers
 
         [HttpGet]
         [Route("GetRule")]
-        public Q GetRule(int ruleId)
+        public T GetRule(int ruleId)
         {
             R manager = Activator.CreateInstance<R>();
-            return manager.GetRuleDetail(ruleId);
+            return manager.GetRule(ruleId);
         }
     }
 }
