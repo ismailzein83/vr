@@ -25,8 +25,7 @@ namespace PSTN.BusinessEntity.Business
             return GetCachedOrCreate(String.Format("GetRuleTree_{0}", ruleType),
                 () =>
                 {
-                    var details = GetFilteredRules(rule => rule.Entity.Settings.RuleType == ruleType);
-                    IEnumerable<BaseRule> rules = details.Select(x => x.Entity);
+                    var rules = GetFilteredRules(rule => rule.Settings.RuleType == ruleType);
                     return new Vanrise.Rules.RuleTree(rules, GetRuleStructureBehaviors());
                 });
         }
@@ -166,56 +165,56 @@ namespace PSTN.BusinessEntity.Business
 
         public IDataRetrievalResult<NormalizationRuleDetail> GetFilteredNormalizationRules(Vanrise.Entities.DataRetrievalInput<NormalizationRuleQuery> input)
         {
-            Func<NormalizationRuleDetail, bool> filterExpression = (item) =>
+            Func<NormalizationRule, bool> filterExpression = (item) =>
                 (
                     input.Query.PhoneNumberTypes == null ||
-                    input.Query.PhoneNumberTypes.Contains(item.Entity.Criteria.PhoneNumberType)
+                    input.Query.PhoneNumberTypes.Contains(item.Criteria.PhoneNumberType)
                 )
                 &&
                 (
                     input.Query.EffectiveDate == null ||
                     (
-                        item.Entity.BeginEffectiveTime <= input.Query.EffectiveDate &&
-                        (item.Entity.EndEffectiveTime == null || item.Entity.EndEffectiveTime >= input.Query.EffectiveDate)
+                        item.BeginEffectiveTime <= input.Query.EffectiveDate &&
+                        (item.EndEffectiveTime == null || item.EndEffectiveTime >= input.Query.EffectiveDate)
                     )
                 )
                 &&
                 (
                     input.Query.PhoneNumberPrefix == null ||
-                    (item.Entity.Criteria.PhoneNumberPrefix != null && item.Entity.Criteria.PhoneNumberPrefix.Contains(input.Query.PhoneNumberPrefix))
+                    (item.Criteria.PhoneNumberPrefix != null && item.Criteria.PhoneNumberPrefix.Contains(input.Query.PhoneNumberPrefix))
                 )
                 &&
                 (
                     input.Query.PhoneNumberLength == null ||
-                    (item.Entity.Criteria.PhoneNumberLength != null && item.Entity.Criteria.PhoneNumberLength == input.Query.PhoneNumberLength)
+                    (item.Criteria.PhoneNumberLength != null && item.Criteria.PhoneNumberLength == input.Query.PhoneNumberLength)
                 )
                 &&
                 (
                     input.Query.SwitchIds == null ||
-                    (item.Entity.Criteria.SwitchIds != null && ListContains(input.Query.SwitchIds, item.Entity.Criteria.SwitchIds))
+                    (item.Criteria.SwitchIds != null && ListContains(input.Query.SwitchIds, item.Criteria.SwitchIds))
                 )
                 &&
                 (
                     input.Query.TrunkIds == null ||
-                    (item.Entity.Criteria.TrunkIds != null && ListContains(input.Query.TrunkIds, item.Entity.Criteria.TrunkIds))
+                    (item.Criteria.TrunkIds != null && ListContains(input.Query.TrunkIds, item.Criteria.TrunkIds))
                 )
                 &&
                 (
                     input.Query.RuleTypes == null ||
-                    input.Query.RuleTypes.Contains(item.Entity.Settings.RuleType)
+                    input.Query.RuleTypes.Contains(item.Settings.RuleType)
                 )
                 &&
                 (
                     input.Query.Description == null ||
-                    (item.Entity.Description != null && item.Entity.Description.Contains(input.Query.Description))
+                    (item.Description != null && item.Description.Contains(input.Query.Description))
                 );
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, GetFilteredRules(filterExpression).ToBigResult(input, filterExpression));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, GetFilteredRules(filterExpression).ToBigResult(input, filterExpression, NormalizationRuleDetailMapper));
         }
 
         public NormalizationRuleDetail GetNormalizationRuleById(int normalizationRuleId)
         {
-            NormalizationRuleDetail detail = GetRule(normalizationRuleId);
+            NormalizationRuleDetail detail = GetRuleDetail(normalizationRuleId);
             return detail;
         }
 
@@ -258,6 +257,7 @@ namespace PSTN.BusinessEntity.Business
             NormalizationRuleDetail detail = new NormalizationRuleDetail();
             detail.Entity = rule;
 
+            detail.PhoneNumberTypeDescription = rule.Criteria.PhoneNumberType.ToString();
 
             if (rule.Criteria.SwitchIds != null)
             {

@@ -7,6 +7,8 @@ namespace PSTN.BusinessEntity.Entities
     {
         public NormalizationRule Entity { get; set; }
 
+        public string PhoneNumberTypeDescription { get; set; }
+
         public string SwitchNames { get; set; }
 
         public int SwitchCount { get; set; }
