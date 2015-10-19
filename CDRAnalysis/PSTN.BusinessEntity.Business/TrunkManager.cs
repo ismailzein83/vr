@@ -189,10 +189,6 @@ namespace PSTN.BusinessEntity.Business
               
         TrunkDetail TrunkDetailMapper(Trunk trunk)
         {
-
-            if (trunk == null)
-                return null;
-
             SwitchManager manager= new SwitchManager();
             SwitchDetail currentSwitch = manager.GetSwitchById(trunk.SwitchId);
             Trunk currentTrunk = null;
@@ -214,9 +210,6 @@ namespace PSTN.BusinessEntity.Business
 
         TrunkInfo TrunkInfoMapper(Trunk trunk)
         {
-            if (trunk == null)
-                return null;
-
             TrunkInfo trunkInfo = new TrunkInfo();
 
             trunkInfo.TrunkId = trunk.TrunkId;
