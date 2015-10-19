@@ -6,9 +6,12 @@
     [Direction]       INT            NOT NULL,
     [Type]            INT            NOT NULL,
     [LinkedToTrunkID] INT            NULL,
+    [timestamp]       ROWVERSION     NULL,
     CONSTRAINT [PK_SwitchTrunk] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_SwitchTrunk_Switch] FOREIGN KEY ([SwitchID]) REFERENCES [PSTN_BE].[Switch] ([ID])
 );
+
+
 
 
 
