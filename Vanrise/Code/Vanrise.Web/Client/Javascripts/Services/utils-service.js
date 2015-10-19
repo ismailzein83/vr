@@ -468,6 +468,14 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
     }
 
 
+    function buildTitleForAddEditor(entityType) {
+        return "New " + entityType;
+    }
+
+    function buildTitleForUpdateEditor(entityType, entityTitle) {
+        return "Edit " + entityType + ": " + entityTitle;
+    }
+
     function escapeRegExp(string) {
         return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
     }
@@ -498,6 +506,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         cloneObject: cloneObject,
         guid: guid,
         escapeRegExp: escapeRegExp,
+        buildTitleForAddEditor: buildTitleForAddEditor,
+        buildTitleForUpdateEditor: buildTitleForUpdateEditor
     });
 
 }]);
