@@ -103,7 +103,7 @@ namespace Vanrise.Common
             if (filteredResults == null)
                 return default(R);
 
-            return filteredResults.Select(mappingExpression).First();
+            return filteredResults.Select(mappingExpression).FirstOrDefault();
         }
 
         public static IEnumerable<M> MapRecords<Q, T, M>(this Dictionary<Q, T> dic, Func<T, M> mappingExpression)
