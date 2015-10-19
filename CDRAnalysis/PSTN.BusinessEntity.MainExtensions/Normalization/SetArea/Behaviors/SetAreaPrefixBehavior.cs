@@ -1,5 +1,5 @@
 ﻿using PSTN.BusinessEntity.Entities;
-using PSTN.BusinessEntity.Entities.Normalization.RuleTypes.SetArea.Settings;
+using PSTN.BusinessEntity.MainExtensions.Normalization.SetArea;
 using System;
 using System.Collections.Generic;
 using System.Linq;

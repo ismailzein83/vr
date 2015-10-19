@@ -1,5 +1,5 @@
 ﻿using PSTN.BusinessEntity.Entities;
-using PSTN.BusinessEntity.Entities.Normalization.RuleTypes.NormalizeNumber.Actions;
+using PSTN.BusinessEntity.MainExtensions.Normalization.AdjustNumber;
 using System;
 using System.Collections.Generic;
 using System.Linq;

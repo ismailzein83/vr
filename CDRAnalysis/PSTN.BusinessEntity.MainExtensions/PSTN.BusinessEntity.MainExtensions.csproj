@@ -41,12 +41,20 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Rules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Normalization\AdjustNumber\AddPrefixActionSettings.cs" />
-    <Compile Include="Normalization\AdjustNumber\ReplaceStringActionSettings.cs" />
-    <Compile Include="Normalization\AdjustNumber\SubstringActionSettings.cs" />
-    <Compile Include="Normalization\SetArea\SetAreaPrefixSettings.cs" />
+    <Compile Include="Normalization\AdjustNumber\Actions\AddPrefixActionSettings.cs" />
+    <Compile Include="Normalization\AdjustNumber\Actions\ReplaceStringActionSettings.cs" />
+    <Compile Include="Normalization\AdjustNumber\Actions\SubstringActionSettings.cs" />
+    <Compile Include="Normalization\AdjustNumber\Behaviors\AddPrefixActionBehavior.cs" />
+    <Compile Include="Normalization\AdjustNumber\Behaviors\ReplaceStringActionBehavior.cs" />
+    <Compile Include="Normalization\AdjustNumber\Behaviors\SubstringActionBehavior.cs" />
+    <Compile Include="Normalization\SetArea\Behaviors\SetAreaPrefixBehavior.cs" />
+    <Compile Include="Normalization\SetArea\Settings\SetAreaPrefixSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -55,6 +63,7 @@
       <Name>PSTN.BusinessEntity.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

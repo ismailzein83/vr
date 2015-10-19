@@ -56,9 +56,6 @@
     <Compile Include="Normalization\NormalizationRuleCriteria.cs" />
     <Compile Include="Normalization\NormalizationRuleSettings.cs" />
     <Compile Include="Normalization\NormalizationRuleTarget.cs" />
-    <Compile Include="Normalization\RuleTypes\NormalizeNumber\Actions\AddPrefixActionSettings.cs" />
-    <Compile Include="Normalization\RuleTypes\NormalizeNumber\Actions\ReplaceStringActionSettings.cs" />
-    <Compile Include="Normalization\RuleTypes\NormalizeNumber\Actions\SubstringActionSettings.cs" />
     <Compile Include="Normalization\RuleTypes\NormalizeNumber\NormalizationRuleAdjustNumberActionBehavior.cs" />
     <Compile Include="Normalization\RuleTypes\NormalizeNumber\NormalizationRuleAdjustNumberActionSettings.cs" />
     <Compile Include="Normalization\RuleTypes\NormalizeNumber\NormalizationRuleAdjustNumberSettings.cs" />
@@ -66,7 +63,6 @@
     <Compile Include="Normalization\RuleTypes\SetArea\NormalizationRuleSetAreaBehavior.cs" />
     <Compile Include="Normalization\RuleTypes\SetArea\NormalizationRuleSetAreaSettings.cs" />
     <Compile Include="Normalization\RuleTypes\SetArea\NormalizationRuleSetAreaTarget.cs" />
-    <Compile Include="Normalization\RuleTypes\SetArea\Settings\SetAreaPrefixSettings.cs" />
     <Compile Include="IRule\IRulePhoneNumberLengthCriteria.cs" />
     <Compile Include="IRule\IRulePhoneNumberPrefixCriteria.cs" />
     <Compile Include="IRule\IRulePhoneNumberTarget.cs" />
