@@ -53,7 +53,7 @@
                 </vr-columns>
 
                 <vr-columns colnum="2" ng-if="reporttype.ParameterSettings.RequiresMargin">
-                    <vr-textbox type="number" label="Margin %" value="params.margin"></vr-textbox>
+                    <vr-textbox type="number" minvalue="0" maxvalue="100" label="Margin %" value="params.margin" isrequired></vr-textbox>
                 </vr-columns>
                 <vr-columns colnum="2" ng-if="reporttype.ParameterSettings.RequiresGroupByCustomer">
                     <vr-label>Group By Customer</vr-label>
