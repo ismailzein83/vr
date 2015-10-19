@@ -44,6 +44,8 @@ namespace TOne.Entities
 
         public bool RequiresTop { get; set; }
 
+        public bool RequiresPageBreak { get; set; }
+
         public bool CustomerIdNotOptional { get; set; }
 
         public bool RequiresSingleCustomer { get; set; }

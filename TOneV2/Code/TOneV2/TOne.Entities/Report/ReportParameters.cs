@@ -71,12 +71,15 @@ namespace TOne.Entities
         public string InterpolatedPercProfit { get; set; }
         public bool IsExchange { get; set; }
 
+        public bool PageBreak { get; set; }
 
         public decimal TotalDuration { get; set; }
         public double TotalSale { get; set; }
         public double TotalCost { get; set; }
         public double TotalProfit { get; set; }
         public string CurrencyDescription { get; set; }
+
+
 
     }
 }

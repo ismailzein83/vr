@@ -32,7 +32,10 @@ namespace TOne.Web.Reports.Analytics
                 bool service = (Request.QueryString["service"] != null) ? (Request.QueryString["service"] == "true") : false;
                 bool commission = (Request.QueryString["commission"] != null) ? (Request.QueryString["commission"] == "true") : false;
                 bool bySupplier = (Request.QueryString["bySupplier"] != null) ? (Request.QueryString["bySupplier"] == "true") : false;
-                bool isExchange = (Request.QueryString["isExchange"] != null) ? (Request.QueryString["isExchange"] == "true") : false;                
+                bool isExchange = (Request.QueryString["isExchange"] != null) ? (Request.QueryString["isExchange"] == "true") : false;
+
+                bool pageBreak = (Request.QueryString["pageBreak"] != null) ? (Request.QueryString["pageBreak"] == "true") : false;                
+
                 
                 int margin = (Request.QueryString["margin"] != null) ? Convert.ToInt32(Request.QueryString["margin"]) : 10;
                 int top = (Request.QueryString["top"] != null) ? Convert.ToInt32(Request.QueryString["top"]) : 10;
@@ -63,6 +66,7 @@ namespace TOne.Web.Reports.Analytics
                 parameters.IsExchange = isExchange;
                 parameters.Top = top;
                 parameters.CurrencyDescription = String.Format("[{0}] {1}", currency, currencyDesc);
+                parameters.PageBreak = pageBreak;
                          
 
                 IReportGenerator r = rdlc.GetReportGenerator();

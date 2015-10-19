@@ -33,7 +33,8 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
         bySupplier: false,
         margin: 10,
         isExchange: false,
-        top: 10
+        top: 10,
+        pageBreak:false
     }
     $scope.periodSelectionChanged = function () {
         if ($scope.selectedPeriod != undefined && $scope.selectedPeriod.value != -1) {
@@ -86,6 +87,7 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
             paramsurl += "&supplier=" + (($scope.params.selectedSuppliers.length == 0) ? "" : getIdsList($scope.params.selectedSuppliers, 'CarrierAccountID'));
             paramsurl += "&currency=" + (($scope.params.selectedCurrency == null) ? "USD" : $scope.params.selectedCurrency.CurrencyID);
             paramsurl += "&currencyDesc=" + (($scope.params.selectedCurrency == null) ? "United States Dollars" :encodeURIComponent( $scope.params.selectedCurrency.Name));
+            paramsurl += "&pageBreak=" + $scope.params.pageBreak;
 
             paramsurl += "&Auth-Token="  +encodeURIComponent( SecurityService.getUserToken() ) ;
 
@@ -110,7 +112,8 @@ function BillingReportsController($scope, ReportAPIService, CarrierAccountAPISer
                 bySupplier: false,
                 margin: 10,
                 isExchange: false,
-                top: 10
+                top: 10,
+                pageBreak: false
             }
         }
     }
