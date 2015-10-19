@@ -48,10 +48,16 @@ namespace PSTN.BusinessEntity.Business
         }
 
 
-        public TrunkDetail GetTrunkById(int trunkId)
+        public TrunkDetail GetTrunkDetialById(int trunkId)
         {
             var trunks = GetCachedTrunks();
             return trunks.MapRecord(TrunkDetailMapper, x => x.TrunkId == trunkId);
+        }
+
+        public Trunk GetTrunkById(int trunkId)
+        {
+            var trunks = GetCachedTrunks();
+            return trunks.GetRecord(trunkId);
         }
 
 
@@ -103,7 +109,7 @@ namespace PSTN.BusinessEntity.Business
                     dataManager.LinkTrunks(trunkId, linkedToTrunkId);
                 }
 
-                insertOperationOutput.InsertedObject = GetTrunkById(trunkId);
+                insertOperationOutput.InsertedObject = GetTrunkDetialById(trunkId);
             }
             else
             {
@@ -138,7 +144,7 @@ namespace PSTN.BusinessEntity.Business
                     dataManager.LinkTrunks(trunkObj.TrunkId, linkedToTrunkId);
                 }
 
-                updateOperationOutput.UpdatedObject = GetTrunkById(trunkObj.TrunkId);
+                updateOperationOutput.UpdatedObject = GetTrunkDetialById(trunkObj.TrunkId);
             }
             else
             {
@@ -185,7 +191,10 @@ namespace PSTN.BusinessEntity.Business
         {
             SwitchManager manager= new SwitchManager();
             SwitchDetail currentSwitch = manager.GetSwitchById(trunk.SwitchId);
-            TrunkDetail currentTrunk = GetTrunkById(trunk.TrunkId);
+            Trunk currentTrunk = null;
+            if (trunk.LinkedToTrunkId.HasValue)
+                currentTrunk=GetTrunkById(trunk.LinkedToTrunkId.Value);
+
             TrunkDetail trunkDetail = new TrunkDetail();
             trunkDetail.TrunkId = trunk.TrunkId;
             trunkDetail.Name = trunk.Name;

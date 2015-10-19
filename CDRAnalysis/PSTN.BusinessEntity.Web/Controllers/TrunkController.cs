@@ -19,7 +19,7 @@ namespace PSTN.BusinessEntity.Web.Controllers
         public TrunkDetail GetTrunkById(int trunkId)
         {
             TrunkManager manager = new TrunkManager();
-            return manager.GetTrunkById(trunkId);
+            return manager.GetTrunkDetialById(trunkId);
         }
 
         [HttpPost]
