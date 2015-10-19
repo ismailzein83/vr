@@ -7,7 +7,7 @@ using Vanrise.Entities;
 
 namespace Vanrise.Rules.Web.Controllers
 {
-    public abstract class BaseRuleController<T, Q> : Vanrise.Web.Base.BaseAPIController
+    public abstract class BaseRuleController<T, Q> : BaseRuleController<T,T,Q>
         where T : BaseRule
         where Q : RuleManager<T>
     {
@@ -48,7 +48,7 @@ namespace Vanrise.Rules.Web.Controllers
         public Q GetRule(int ruleId)
         {
             R manager = Activator.CreateInstance<R>();
-            return manager.GetRule(ruleId);
+            return manager.GetRuleDetail(ruleId);
         }
     }
 }

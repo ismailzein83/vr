@@ -80,17 +80,26 @@ namespace Vanrise.Rules
             return deleteOperationOutput;
         }
 
-        public Q GetRule(int ruleId)
+        public T GetRule(int ruleId)
         {
             var allRules = GetAllRules();
-            Q rule;
+            T rule;
             if (allRules != null && allRules.TryGetValue(ruleId, out rule))
                 return rule;
             else
                 return null;
         }
 
-        public IEnumerable<Q> GetFilteredRules(Func<Q, bool> filter)
+        public Q GetRuleDetail(int ruleId)
+        {
+            var rule = GetRule(ruleId);
+            if (rule != null)
+                return MapToDetails(rule);
+            else
+                return null;
+        }
+
+        public IEnumerable<T> GetFilteredRules(Func<T, bool> filter)
         {
             var allRules = GetAllRules();
             if (allRules == null)
@@ -99,7 +108,7 @@ namespace Vanrise.Rules
                 return allRules.Values.FindAllRecords(filter);
         }
 
-        public Dictionary<int, Q> GetAllRules()
+        public Dictionary<int, T> GetAllRules()
         {
             return GetCachedOrCreate("GetCachedRules",
                () =>
@@ -107,15 +116,14 @@ namespace Vanrise.Rules
                    
                    IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
                    IEnumerable<Entities.Rule> ruleEntities = ruleDataManager.GetRulesByType(GetRuleTypeId());
-                   Dictionary<int, Q> rules = new Dictionary<int, Q>();
+                   Dictionary<int, T> rules = new Dictionary<int, T>();
                    if (ruleEntities != null)
                    {
                        foreach (var ruleEntity in ruleEntities)
                        {
                            T rule = Serializer.Deserialize<T>(ruleEntity.RuleDetails);
                            rule.RuleId = ruleEntity.RuleId;
-                           Q ruleDetail = MapToDetails(rule);
-                           rules.Add(rule.RuleId, ruleDetail);
+                           rules.Add(rule.RuleId, rule);
                        }
                    }
                    return rules;
