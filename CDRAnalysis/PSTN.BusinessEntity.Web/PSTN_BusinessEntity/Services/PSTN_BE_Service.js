@@ -62,8 +62,6 @@
     function editNormalizationRule(normalizationRuleObj, onNormalizationRuleUpdated) {
         var modalSettings = {};
 
-        console.log(normalizationRuleObj);
-
         var parameters = {
             RuleId: normalizationRuleObj.Entity.RuleId
         };
