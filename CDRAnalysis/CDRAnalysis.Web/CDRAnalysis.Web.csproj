@@ -346,6 +346,10 @@
       <Project>{026c2d4e-9fbf-491d-be9a-4249168a33fe}</Project>
       <Name>PSTN.BusinessEntity.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PSTN.BusinessEntity.MainExtensions\PSTN.BusinessEntity.MainExtensions.csproj">
+      <Project>{f11e0c25-a8c8-41dd-bf43-f0a6ac742079}</Project>
+      <Name>PSTN.BusinessEntity.MainExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PSTN.BusinessEntity.Web\PSTN.BusinessEntity.Web.csproj">
       <Project>{54c7baa5-24c5-4a02-85ed-6a06c1ef1f6a}</Project>
       <Name>PSTN.BusinessEntity.Web</Name>

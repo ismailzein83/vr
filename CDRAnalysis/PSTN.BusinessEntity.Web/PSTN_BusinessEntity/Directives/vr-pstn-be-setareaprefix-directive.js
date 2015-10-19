@@ -45,7 +45,7 @@ app.directive("vrPstnBeSetareaprefix", [function () {
 
             api.getData = function () {
                 return {
-                    $type: "PSTN.BusinessEntity.Entities.Normalization.RuleTypes.SetArea.Settings.SetAreaPrefixSettings, PSTN.BusinessEntity.Entities",
+                    $type: "PSTN.BusinessEntity.MainExtensions.Normalization.SetArea.SetAreaPrefixSettings, PSTN.BusinessEntity.MainExtensions",
                     PrefixLength: $scope.prefixLength
                 };
             }

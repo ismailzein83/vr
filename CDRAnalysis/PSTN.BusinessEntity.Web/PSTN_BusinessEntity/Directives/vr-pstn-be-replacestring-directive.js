@@ -47,8 +47,8 @@ app.directive("vrPstnBeReplacestring", [function () {
 
             api.getData = function () {
                 return {
-                    $type: "PSTN.BusinessEntity.Entities.Normalization.RuleTypes.NormalizeNumber.Actions.ReplaceStringActionSettings, PSTN.BusinessEntity.Entities",
-                    configid: ctrl.configid,
+                    $type: "PSTN.BusinessEntity.MainExtensions.Normalization.AdjustNumber.ReplaceStringActionSettings, PSTN.BusinessEntity.MainExtensions",
+                    ConfigId: ctrl.configid,
                     StringToReplace: $scope.stringToReplace,
                     NewString: $scope.newString
                 };

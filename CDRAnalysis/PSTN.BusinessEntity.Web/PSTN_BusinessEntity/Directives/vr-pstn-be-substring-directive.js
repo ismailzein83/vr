@@ -47,7 +47,7 @@ app.directive("vrPstnBeSubstring", [function () {
 
             api.getData = function () {
                 return {
-                    $type: "PSTN.BusinessEntity.Entities.Normalization.RuleTypes.NormalizeNumber.Actions.SubstringActionSettings, PSTN.BusinessEntity.Entities",
+                    $type: "PSTN.BusinessEntity.MainExtensions.Normalization.AdjustNumber.SubstringActionSettings, PSTN.BusinessEntity.MainExtensions",
                     ConfigId: ctrl.configid,
                     StartIndex: $scope.startIndex,
                     Length: $scope.length
