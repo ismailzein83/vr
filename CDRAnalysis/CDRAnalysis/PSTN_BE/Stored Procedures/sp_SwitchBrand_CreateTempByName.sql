@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [PSTN_BE].[sp_SwitchType_CreateTempByName]
+CREATE PROCEDURE [PSTN_BE].[sp_SwitchBrand_CreateTempByName]
 	@TempTableName VARCHAR(200) = NULL,
 	@Name VARCHAR(50) = NULL
 AS
@@ -14,7 +14,7 @@ BEGIN
     BEGIN
 		SELECT ID, Name
 		
-		INTO #RESULT FROM PSTN_BE.SwitchType
+		INTO #RESULT FROM PSTN_BE.SwitchBrand
 		
 		WHERE (@Name IS NULL OR Name LIKE '%' + @Name + '%')
 			

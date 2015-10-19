@@ -4,9 +4,9 @@ using System.Data;
 
 namespace PSTN.BusinessEntity.Data.SQL
 {
-    public class BrandDataManager : Vanrise.Data.SQL.BaseSQLDataManager, IBrandDataManager
+    public class SwitchBrandDataManager : Vanrise.Data.SQL.BaseSQLDataManager, ISwitchBrandDataManager
     {
-        public BrandDataManager() : base("CDRDBConnectionString") { }
+        public SwitchBrandDataManager() : base("CDRDBConnectionString") { }
 
         public List<SwitchBrand> GetBrands()
         {

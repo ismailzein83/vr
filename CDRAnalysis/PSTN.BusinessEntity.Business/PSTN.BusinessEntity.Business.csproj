@@ -90,7 +90,7 @@
     <Compile Include="Rules\StructureRulesBehaviors\RuleBehaviorByTrunk.cs" />
     <Compile Include="SwitchManager.cs" />
     <Compile Include="TrunkManager.cs" />
-    <Compile Include="BrandManager.cs" />
+    <Compile Include="SwitchBrandManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">

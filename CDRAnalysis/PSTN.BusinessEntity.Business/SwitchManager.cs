@@ -158,7 +158,7 @@ namespace PSTN.BusinessEntity.Business
         private SwitchDetail SwitchDetailMapper(Switch switchObject)
         {
             SwitchDetail switchDetail = new SwitchDetail();
-            BrandManager manager = new BrandManager();
+            SwitchBrandManager manager = new SwitchBrandManager();
 
             switchDetail.SwitchId = switchObject.SwitchId;
             switchDetail.Name = switchObject.Name;

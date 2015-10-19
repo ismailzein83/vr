@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PSTN.BusinessEntity.Data
 {
-    public interface IBrandDataManager : IDataManager
+    public interface ISwitchBrandDataManager : IDataManager
     {
         List<SwitchBrand> GetBrands();
 

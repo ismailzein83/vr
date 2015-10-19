@@ -11,42 +11,42 @@ namespace PSTN.BusinessEntity.Web.Controllers
         [HttpGet]
         public List<SwitchBrand> GetBrands()
         {
-            BrandManager manager = new BrandManager();
+            SwitchBrandManager manager = new SwitchBrandManager();
             return manager.GetBrands();
         }
 
         [HttpPost]
         public object GetFilteredBrands(Vanrise.Entities.DataRetrievalInput<SwitchBrandQuery> input)
         {
-            BrandManager manager = new BrandManager();
+            SwitchBrandManager manager = new SwitchBrandManager();
             return GetWebResponse(input, manager.GetFilteredBrands(input));
         }
 
         [HttpGet]
         public SwitchBrand GetBrandById(int brandId)
         {
-            BrandManager manager = new BrandManager();
+            SwitchBrandManager manager = new SwitchBrandManager();
             return manager.GetBrandById(brandId);
         }
 
         [HttpPost]
         public InsertOperationOutput<SwitchBrand> AddBrand(SwitchBrand brandObj)
         {
-            BrandManager manager = new BrandManager();
+            SwitchBrandManager manager = new SwitchBrandManager();
             return manager.AddBrand(brandObj);
         }
 
         [HttpPost]
         public UpdateOperationOutput<SwitchBrand> UpdateBrand(SwitchBrand brandObj)
         {
-            BrandManager manager = new BrandManager();
+            SwitchBrandManager manager = new SwitchBrandManager();
             return manager.UpdateBrand(brandObj);
         }
 
         [HttpGet]
         public DeleteOperationOutput<object> DeleteBrand(int brandId)
         {
-            BrandManager manager = new BrandManager();
+            SwitchBrandManager manager = new SwitchBrandManager();
             return manager.DeleteBrand(brandId);
         }
     }

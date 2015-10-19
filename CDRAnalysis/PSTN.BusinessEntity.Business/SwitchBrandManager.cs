@@ -5,23 +5,23 @@ using Vanrise.Entities;
 
 namespace PSTN.BusinessEntity.Business
 {
-    public class BrandManager
+    public class SwitchBrandManager
     {
         public List<SwitchBrand> GetBrands()
         {
-            IBrandDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<IBrandDataManager>();
+            ISwitchBrandDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchBrandDataManager>();
             return dataManager.GetBrands();
         }
 
         public Vanrise.Entities.IDataRetrievalResult<SwitchBrand> GetFilteredBrands(Vanrise.Entities.DataRetrievalInput<SwitchBrandQuery> input)
         {
-            IBrandDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<IBrandDataManager>();
+            ISwitchBrandDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchBrandDataManager>();
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredBrands(input));
         }
 
         public SwitchBrand GetBrandById(int brandId)
         {
-            IBrandDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<IBrandDataManager>();
+            ISwitchBrandDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchBrandDataManager>();
             return dataManager.GetBrandById(brandId);
         }
 
@@ -33,7 +33,7 @@ namespace PSTN.BusinessEntity.Business
             insertOperationOutput.InsertedObject = null;
             int brandId = -1;
 
-            IBrandDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<IBrandDataManager>();
+            ISwitchBrandDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchBrandDataManager>();
             bool inserted = dataManager.AddBrand(brandObj, out brandId);
 
             if (inserted)
@@ -57,7 +57,7 @@ namespace PSTN.BusinessEntity.Business
             updateOperationOutput.Result = UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
-            IBrandDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<IBrandDataManager>();
+            ISwitchBrandDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchBrandDataManager>();
             bool updated = dataManager.UpdateBrand(brandObj);
 
             if (updated)
@@ -78,7 +78,7 @@ namespace PSTN.BusinessEntity.Business
             DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
             deleteOperationOutput.Result = DeleteOperationResult.InUse;
 
-            IBrandDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<IBrandDataManager>();
+            ISwitchBrandDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchBrandDataManager>();
             bool deleted = dataManager.DeleteBrand(brandId);
 
             if (deleted)
