@@ -190,7 +190,6 @@ function TrunkEditorController($scope, TrunkAPIService, SwitchAPIService, TrunkT
 
         return TrunkAPIService.AddTrunk(trunkObj)
             .then(function (response) {
-
                 if (VRNotificationService.notifyOnItemAdded("Switch Trunk", response, "Name or Symbol")) {
                     if ($scope.onTrunkAdded != undefined)
                         $scope.onTrunkAdded(response.InsertedObject);

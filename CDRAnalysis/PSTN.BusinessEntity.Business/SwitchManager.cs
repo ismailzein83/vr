@@ -28,7 +28,7 @@ namespace PSTN.BusinessEntity.Business
             Func<Switch, bool> filterExpression = (switchObject) =>
                  (input.Query.Name == null || switchObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
                  &&
-                 (input.Query.SelectedBrandIds.Contains(switchObject.BrandId))
+                  ((input.Query.SelectedBrandIds != null ? input.Query.SelectedBrandIds.Contains(switchObject.BrandId) : input.Query.SelectedBrandIds == null))
                  &&
                  (input.Query.AreaCode == null || input.Query.AreaCode.Contains(switchObject.AreaCode));
 
