@@ -325,19 +325,19 @@
             if (item.isDeleted) {//delete the item from the original data source
                 var deletedItemIndex = ctrl.datasource.indexOf(item);
                 if (deletedItemIndex < 0 && ctrl.idfield != undefined)//if item is not found by object, try to find it by id
-                    deletedItemIndex = UtilsService.getItemIndexByVal(ctrl.datasource, item[ctrl.idfield], ctrl.idfield);
+                    deletedItemIndex = UtilsService.getItemIndexByVal(ctrl.datasource, eval('item.' + ctrl.idfield), ctrl.idfield);
                 if (deletedItemIndex >= 0)
                     ctrl.datasource.splice(deletedItemIndex, 1);
             }
 
             if (ctrl.idfield != undefined) {
                 //remove the item if exists in the updatedItems array
-                var itemIndexInUpdatedItems = UtilsService.getItemIndexByVal(ctrl.updateItems, item[ctrl.idfield], ctrl.idfield);
+                var itemIndexInUpdatedItems = UtilsService.getItemIndexByVal(ctrl.updateItems, eval('item.' + ctrl.idfield), ctrl.idfield);
                 if(itemIndexInUpdatedItems >= 0)
                     ctrl.updateItems.splice(itemIndexInUpdatedItems, 1);
 
                 //update the item in the datasource array if exists
-                var itemIndexInDataSource = UtilsService.getItemIndexByVal(ctrl.datasource, item[ctrl.idfield], ctrl.idfield);
+                var itemIndexInDataSource = UtilsService.getItemIndexByVal(ctrl.datasource, eval('item.' + ctrl.idfield), ctrl.idfield);
                 if (itemIndexInDataSource >= 0)
                     ctrl.datasource[itemIndexInDataSource] = item;
             }            
