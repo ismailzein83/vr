@@ -19,4 +19,11 @@ namespace Vanrise.Fzero.CDRImport.Entities
         International = 2
     };
 
+    public enum OperatorType
+    {
+        Both = 0,
+        Mobile = 1,
+        PSTN = 2
+    };
+
 }

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using Vanrise.Fzero.Business;
-using Vanrise.Fzero.Entities;
 using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities.ResultQuery;

@@ -187,7 +187,6 @@
   <ItemGroup>
     <Content Include="FraudAnalysis\Constants\CaseStatusEnum.js" />
     <Content Include="FraudAnalysis\Constants\KindEnum.js" />
-    <Content Include="FraudAnalysis\Constants\OperatorTypeEnum.js" />
     <Content Include="FraudAnalysis\Constants\StatusEnum.js" />
     <Content Include="FraudAnalysis\Constants\PercentageEnum.js" />
     <Content Include="FraudAnalysis\Constants\CallTypeEnum.js" />

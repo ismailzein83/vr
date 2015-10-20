@@ -134,7 +134,7 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
     function addNewStrategy() {
         var settings = {
             useModalTemplate: true,
-            width: "95%"
+            width: '95%'
         };
 
         settings.onScopeReady = function (modalScope) {
@@ -154,7 +154,7 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
 
         var settings = {
             useModalTemplate: true,
-            width: "95%"
+            width:'95%'
         };
 
         settings.onScopeReady = function (modalScope) {

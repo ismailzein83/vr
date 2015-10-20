@@ -1,5 +1,5 @@
 ﻿using System;
-using Vanrise.Fzero.Entities;
+using Vanrise.Fzero.CDRImport.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
@@ -29,6 +29,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public string ToolTip { get; set; }
 
-        public OperatorTypeEnum OperatorTypeAllowed { get; set; }
+        public OperatorType OperatorTypeAllowed { get; set; }
     }
 }

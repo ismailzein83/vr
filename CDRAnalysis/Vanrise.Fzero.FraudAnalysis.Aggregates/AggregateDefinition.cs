@@ -1,5 +1,5 @@
 ﻿
-using Vanrise.Fzero.Entities;
+using Vanrise.Fzero.CDRImport.Entities;
 namespace Vanrise.Fzero.FraudAnalysis.Aggregates
 {
     public class AggregateDefinition
@@ -10,7 +10,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Aggregates
 
         public IAggregate Aggregation { get; set; }
 
-        public OperatorTypeEnum OperatorTypeAllowed { get; set; }
+        public OperatorType OperatorTypeAllowed { get; set; }
 
     }
 }

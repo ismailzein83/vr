@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Fzero.CDRImport.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {
@@ -42,6 +43,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         public const string _CountFailConsecutiveCalls = "Count Fail Consecutive Calls";
         public const string _CountInLowDurationCalls = "Count In Low Duration Calls";
 
+        public const string _DiffDestZones = "Different Destination Zones";
+        public const string _DiffSourcesZones = "Differrent Sources Zones";
+
 
         public const string _Filter_1 = "Filter_1";
         public const string _Filter_2 = "Filter_2";
@@ -61,8 +65,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         public const string _Filter_16 = "Filter_16";
         public const string _Filter_17 = "Filter_17";
         public const string _Filter_18 = "Filter_18";
-     
+        public const string _Filter_19 = "Filter_19";
+        public const string _Filter_20 = "Filter_20";
 
+
+        public const OperatorType _DefaultOperatorType =  OperatorType.PSTN;
 
     }
 }

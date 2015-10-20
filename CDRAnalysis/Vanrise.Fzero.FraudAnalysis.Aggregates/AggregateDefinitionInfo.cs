@@ -1,4 +1,4 @@
-﻿using Vanrise.Fzero.Entities;
+﻿using Vanrise.Fzero.CDRImport.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Aggregates
 {
@@ -9,7 +9,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Aggregates
 
         public string Name { get; set; }
 
-        public OperatorTypeEnum OperatorTypeAllowed { get; set; }
+        public OperatorType OperatorTypeAllowed { get; set; }
 
         public string NumberPrecision { get; set; }
 
