@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PSTN.BusinessEntity.Business.Normalization.RuleTypes.NormalizeNumber.Actions
+namespace PSTN.BusinessEntity.MainExtensions.Normalization.RuleTypes.NormalizeNumber.Actions
 {
     public class AddPrefixActionBehavior : NormalizationRuleAdjustNumberActionBehavior
     {

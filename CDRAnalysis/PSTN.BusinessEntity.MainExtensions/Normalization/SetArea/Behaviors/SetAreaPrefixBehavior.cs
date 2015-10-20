@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PSTN.BusinessEntity.Business.Normalization.RuleTypes.SetArea.Behaviors
+namespace PSTN.BusinessEntity.MainExtensions.Normalization.RuleTypes.SetArea.Behaviors
 {
     public class SetAreaPrefixBehavior : NormalizationRuleSetAreaBehavior
     {
