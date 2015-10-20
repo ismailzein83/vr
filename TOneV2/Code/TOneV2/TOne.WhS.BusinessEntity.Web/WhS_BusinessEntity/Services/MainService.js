@@ -48,17 +48,17 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RouteRule/RouteRuleEditor.html', parameters, modalSettings);
     }
 
-    function deleteRouteRule(routeRuleObj, onRouteRuleDeleted) {
+    function deleteRouteRule(scope, ruleId, onRouteRuleDeleted) {
         VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response) {
-                    return WhS_BE_RouteRuleAPIService.DeleteRouteRule(routeRuleObj.RuleId)
+                    return WhS_BE_RouteRuleAPIService.DeleteRule(ruleId)
                         .then(function (deletionResponse) {
                             VRNotificationService.notifyOnItemDeleted("Route Rule", deletionResponse);
                             onRouteRuleDeleted();
                         })
                         .catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
+                            VRNotificationService.notifyException(error, scope);
                         });
                 }
             });

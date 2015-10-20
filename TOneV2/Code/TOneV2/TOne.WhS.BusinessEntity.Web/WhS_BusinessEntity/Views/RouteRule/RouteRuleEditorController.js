@@ -105,15 +105,33 @@
                 if (routingProductDirectiveAPI != undefined) {
                     var routingProductObj = routingProductDirectiveAPI.getData();
                     if (routingProductObj != undefined)
+                    {
                         $scope.selectedSaleZonePackageId = routingProductDirectiveAPI.getData().SaleZonePackageId;
+                        $scope.showSaleZoneSection = true;
+                        $scope.showRouteRuleCriteriaTypes = $scope.showCustomerSection = $scope.showExecludedCodeSection = $scope.showIncludedCodeSection = false;
+                    }
+                    else
+                    {
+                        $scope.showSaleZoneSection = false;
+                        $scope.showRouteRuleCriteriaTypes = $scope.showCustomerSection = $scope.showExecludedCodeSection = $scope.showIncludedCodeSection = true;
+                    }
                 }
                 else {
                     $scope.selectedSaleZonePackageId = undefined;
                 }
             }
 
-            $scope.onRouteRuleCrieriaTypeSelectionChanged = function () {
-                
+            $scope.onRouteRuleCriteriaTypeSelectionChanged = function () {
+                if ($scope.selectedRouteRuleCriteriaType == WhS_Be_RouteRuleCriteriaTypeEnum.SaleZone)
+                {
+                    $scope.showSaleZoneSection = $scope.showCustomerSection = $scope.showExecludedCodeSection = true;
+                    $scope.showIncludedCodeSection = false;
+                }
+                else
+                {
+                    $scope.showIncludedCodeSection = $scope.showCustomerSection = $scope.showExecludedCodeSection = true;
+                    $scope.showSaleZoneSection = false;
+                }
             }
 
             $scope.saleZoneGroupTemplates = [];
@@ -133,7 +151,7 @@
             if (routingProductDirectiveAPI == undefined)
                 return;
 
-            $scope.routeRuleCrieriaTypes = UtilsService.getArrayEnum(WhS_Be_RouteRuleCriteriaTypeEnum);
+            loadEnums();
 
             return UtilsService.waitMultipleAsyncOperations([routingProductDirectiveAPI.load, loadSaleZoneGroupTemplates, loadCustomerGroupTemplates, loadCodeCriteriaGroupTemplates]).then(function () {
                 if (editMode) {
@@ -149,10 +167,17 @@
             });
         }
 
+        function loadEnums()
+        {
+            $scope.routeRuleCriteriaTypes = UtilsService.getArrayEnum(WhS_Be_RouteRuleCriteriaTypeEnum);
+            $scope.selectedRouteRuleCriteriaType = UtilsService.getEnum(WhS_Be_RouteRuleCriteriaTypeEnum, 'value', 'SaleZone');
+        }
+
         function getRouteRule() {
             return WhS_BE_RouteRuleAPIService.GetRule(routeRuleId).then(function (routeRule) {
                 appendixDirectiveData = routeRule;
                 fillScopeFromRouteRuleObj(routeRule);
+                tryLoadAppendixDirectives();
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.isGettingData = false;
@@ -253,7 +278,7 @@
             var routeRule = {
                 RuleId: (routeRuleId != null) ? routeRuleId : 0,
                 Criteria: {
-                    RoutingProductId: routingProductDirectiveAPI.getData().RoutingProductId,
+                    RoutingProductId: routingProductDirectiveAPI.getData() != undefined ? routingProductDirectiveAPI.getData().RoutingProductId : null,
                     ExcludedCodes: $scope.excludedCodes,
                     SaleZoneGroupSettings: getSaleZoneGroupSettings(),
                     CustomerGroupSettings: getCustomersGroupSettings(),
@@ -274,6 +299,9 @@
                 angular.forEach(routeRuleObj.Criteria.ExcludedCodes, function (item) {
                     $scope.excludedCodes.push(item);
                 });
+
+                if (routeRuleObj.Criteria.CodeCriteriaGroupSettings != null)
+                    $scope.selectedRouteRuleCriteriaType = UtilsService.getEnum(WhS_Be_RouteRuleCriteriaTypeEnum, 'value', 'Code');                    
 
                 if (routeRuleObj.Criteria.SaleZoneGroupSettings != null)
                     $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, routeRuleObj.Criteria.SaleZoneGroupSettings.ConfigId, "TemplateConfigID");

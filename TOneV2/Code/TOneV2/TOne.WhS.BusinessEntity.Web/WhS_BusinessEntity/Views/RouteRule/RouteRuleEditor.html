@@ -9,14 +9,14 @@
             <div ng-show="criteriaSelected">
                 <vr-row>
                     <vr-columns width="1/2row">
-                        <vr-select datatextfield="Description" datavaluefield="value" label="Filter By" datasource="routeRuleCrieriaTypes"
-                                   selectedvalues="selectedRouteRuleCrieriaType" onselectionchanged="onRouteRuleCrieriaTypeSelectionChanged" />
-                    </vr-columns>
-                    <vr-columns width="1/4row">
                         <vr-whs-be-routingproduct on-ready="onRoutingProductDirectiveReady" onselectionchanged="onRoutingProductSelectionChanged" />
                     </vr-columns>
+                    <vr-columns width="1/2row" ng-show="showRouteRuleCriteriaTypes">
+                        <vr-select datatextfield="description" datavaluefield="value" label="Filter By" datasource="routeRuleCriteriaTypes"
+                                   selectedvalues="selectedRouteRuleCriteriaType" onselectionchanged="onRouteRuleCriteriaTypeSelectionChanged" hideremoveicon />
+                    </vr-columns>
                 </vr-row>
-                <vr-row ng-if="showSaleZoneSection">
+                <vr-row ng-show="showSaleZoneSection">
                     <vr-columns width="fullrow">
                         <vr-section title="Sale Zone">
                             <vr-row>
@@ -32,8 +32,8 @@
                             </vr-row>
                         </vr-section>
                     </vr-columns>
-                </vr-row>            
-                <vr-row ng-if="showCustomerSection">
+                </vr-row>
+                <vr-row ng-show="showCustomerSection">
                     <vr-columns width="fullrow">
                         <vr-section title="Customers">
                             <vr-row>
@@ -49,25 +49,21 @@
                         </vr-section>
                     </vr-columns>
                 </vr-row>
-                <vr-row ng-if="showIncludedCodeSection">
+                <vr-row ng-show="showIncludedCodeSection">
                     <vr-columns width="fullrow">
                         <vr-section title="Inlcuded Codes">
-                            <vr-row>
-                                <vr-columns width="1/4row">
-                                    <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Filter Type" datasource="codeCriteriaGroupTemplates" text="No Filter"
-                                               selectedvalues="selectedCodeCriteriaGroupTemplate">
-                                    </vr-select>
-                                </vr-columns>
-                            </vr-row>
-                            <vr-row>
-                                <vr-columns width="1/2row" ng-if="selectedCodeCriteriaGroupTemplate" vr-loader="codeCriteriaAppendixLoader">
-                                    <vr-directivewrapper directive="selectedCodeCriteriaGroupTemplate.Editor" on-ready="onCodeCriteriaGroupSettingsDirectiveReady"></vr-directivewrapper>
-                                </vr-columns>
-                            </vr-row>
+                            <vr-columns width="1/4row">
+                                <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Filter Type" datasource="codeCriteriaGroupTemplates" text="No Filter"
+                                           selectedvalues="selectedCodeCriteriaGroupTemplate">
+                                </vr-select>
+                            </vr-columns>
+                            <vr-columns width="3/4row" ng-if="selectedCodeCriteriaGroupTemplate" vr-loader="codeCriteriaAppendixLoader">
+                                <vr-directivewrapper directive="selectedCodeCriteriaGroupTemplate.Editor" on-ready="onCodeCriteriaGroupSettingsDirectiveReady"></vr-directivewrapper>
+                            </vr-columns>
                         </vr-section>
                     </vr-columns>
                 </vr-row>
-                <vr-row ng-if="showExecludedCodeSection">
+                <vr-row ng-show="showExecludedCodeSection">
                     <vr-columns width="fullrow">
                         <vr-section title="Execluded Codes">
                             <vr-columns width="1/2row">
@@ -114,7 +110,7 @@
             </div>
         </vr-form>
     </vr-modalbody>
-    <div>        
+    <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
                 <vr-button type="Save" formname="formRouteRuleEditor" data-onclick="SaveRouteRule"></vr-button>

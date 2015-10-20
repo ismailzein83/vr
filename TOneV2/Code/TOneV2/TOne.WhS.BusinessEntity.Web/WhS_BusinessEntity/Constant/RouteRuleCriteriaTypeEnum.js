@@ -1,4 +1,4 @@
 ﻿app.constant('WhS_Be_RouteRuleCriteriaTypeEnum', {
-    SaleZone: { value: 0, description: "Sale Zone" },
-    Code: { value: 1, description: "Code"}
+    SaleZone: { value: "SaleZone", description: "Sale Zone" },
+    Code: { value: "Code", description: "Code"}
 });
