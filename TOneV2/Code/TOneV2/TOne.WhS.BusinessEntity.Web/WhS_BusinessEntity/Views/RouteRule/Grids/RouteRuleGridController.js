@@ -79,7 +79,7 @@
                 retrieveData();
             };
 
-            WhS_BE_MainService.deleteRouteRule(routeRuleObj, onRouteRuleDeleted);
+            WhS_BE_MainService.deleteRule(routeRuleObj, onRouteRuleDeleted);
         }
     }
 

@@ -10,21 +10,21 @@
         }
 
         function GetRule(routeRuleId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "GetRouteRule"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "GetRule"), {
                 ruleId: routeRuleId
             });
         }
 
         function AddRule(routeRuleObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "AddRouteRule"), routeRuleObject);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "AddRule"), routeRuleObject);
         }
 
         function UpdateRule(routeRuleObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "UpdateRouteRule"), routeRuleObject);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "UpdateRule"), routeRuleObject);
         }
 
         function DeleteRule(ruleId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "DeleteRouteRule"), { ruleId: ruleId });
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "DeleteRule"), { ruleId: ruleId });
         }
 
         function GetCodeCriteriaGroupTemplates() {

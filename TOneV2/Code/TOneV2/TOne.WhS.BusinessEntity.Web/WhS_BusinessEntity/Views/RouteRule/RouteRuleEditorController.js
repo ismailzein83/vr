@@ -144,7 +144,7 @@
         }
 
         function getRouteRule() {
-            return WhS_BE_RouteRuleAPIService.GetRouteRule(routeRuleId).then(function (routeRule) {
+            return WhS_BE_RouteRuleAPIService.GetRule(routeRuleId).then(function (routeRule) {
                 fillScopeFromRouteRuleObj(routeRule);
                 directiveAppendixData = routeRule;
                 tryLoadAppendixDirectives();
@@ -248,7 +248,7 @@
         function buildRouteRuleObjFromScope() {
             var routeRule = {
                 RuleId: (routeRuleId != null) ? routeRuleId : 0,
-                RouteCriteria: {
+                Criteria: {
                     RoutingProductId: $scope.selectedRoutingProduct != undefined ? $scope.selectedRoutingProduct.RoutingProductId : null,
                     ExcludedCodes: $scope.excludedCodes,
                     SaleZoneGroupSettings: getSaleZoneGroupSettings(),
@@ -287,7 +287,7 @@
 
         function insertRouteRule() {
             var routeRuleObject = buildRouteRuleObjFromScope();
-            return WhS_BE_RouteRuleAPIService.AddRouteRule(routeRuleObject)
+            return WhS_BE_RouteRuleAPIService.AddRule(routeRuleObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Route Rule", response)) {
                     if ($scope.onRouteRuleAdded != undefined)
@@ -302,7 +302,7 @@
 
         function updateRouteRule() {
             var routeRuleObject = buildRouteRuleObjFromScope();
-            WhS_BE_RouteRuleAPIService.UpdateRouteRule(routeRuleObject)
+            WhS_BE_RouteRuleAPIService.UpdateRule(routeRuleObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Route Rule", response)) {
                     if ($scope.onRouteRuleUpdated != undefined)
