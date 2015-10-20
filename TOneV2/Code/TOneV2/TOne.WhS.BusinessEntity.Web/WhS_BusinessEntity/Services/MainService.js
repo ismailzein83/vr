@@ -1,5 +1,5 @@
 ﻿
-app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_PricingProductAPIService', 'WhS_BE_CustomerPricingProductAPIService', 'VRModalService', 'VRNotificationService', 'WhS_Be_PricingTypeEnum','WhS_BE_SalePricingRuleAPIService', function (WhS_BE_RouteRuleAPIService, WhS_BE_PricingProductAPIService, WhS_BE_CustomerPricingProductAPIService, VRModalService, VRNotificationService, WhS_Be_PricingTypeEnum, WhS_BE_SalePricingRuleAPIService) {
+app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_PricingProductAPIService', 'WhS_BE_CustomerPricingProductAPIService', 'VRModalService', 'VRNotificationService', 'WhS_Be_PricingTypeEnum','WhS_BE_SalePricingRuleAPIService','UtilsService', function (WhS_BE_RouteRuleAPIService, WhS_BE_PricingProductAPIService, WhS_BE_CustomerPricingProductAPIService, VRModalService, VRNotificationService, WhS_Be_PricingTypeEnum, WhS_BE_SalePricingRuleAPIService,UtilsService) {
 
     return ({
         addRouteRule: addRouteRule,
@@ -16,7 +16,10 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
         editCarrierProfile: editCarrierProfile,
         addSalePricingRule: addSalePricingRule,
         editSalePricingRule: editSalePricingRule,
-        deleteSalePricingRule: deleteSalePricingRule
+        deleteSalePricingRule: deleteSalePricingRule,
+        addPurchasePricingRule: addPurchasePricingRule,
+        editPurchasePricingRule: editPurchasePricingRule,
+        deletePurchasePricingRule: deletePurchasePricingRule
     });
 
     function addRouteRule(onRouteRuleAdded)
@@ -196,8 +199,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
         var settings = {};
 
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = "New Sale Pricing Rule";
-            modalScope.onSalePricingRuleAdded = onSalePricingRuleAdded;
+            modalScope.onPricingRuleAdded = onSalePricingRuleAdded;
         };
         var  parameters={
             PricingType: WhS_Be_PricingTypeEnum.Sale.value  
@@ -210,15 +212,14 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
         
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingRule/PricingRuleEditor.html', parameters, settings);
     }
-    function editSalePricingRule(salePricingRuleObj, onSalePricingRuleUpdated) {
+    function editSalePricingRule(ruleId, onSalePricingRuleUpdated) {
         var settings = {};
 
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edite Sale Pricing Rule";
-            modalScope.onSalePricingRuleUpdated = onSalePricingRuleUpdated;
+            modalScope.onPricingRuleUpdated = onSalePricingRuleUpdated;
         };
         var parameters = {
-            RuleId: salePricingRuleObj.RuleId
+            RuleId: ruleId
         };
 
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingRule/PricingRuleEditor.html', parameters, settings);
@@ -239,5 +240,49 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
                 }
             });
     }
+    function addPurchasePricingRule(onPurchasePricingRuleAdded, type) {
+        var settings = {};
 
+        settings.onScopeReady = function (modalScope) {
+            modalScope.onPricingRuleAdded = onPurchasePricingRuleAdded;
+        };
+        var parameters = {
+            PricingType: WhS_Be_PricingTypeEnum.Purchase.value
+        };
+        if (type != undefined) {
+            parameters.PricingRuleType = type;
+        }
+
+
+
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingRule/PricingRuleEditor.html', parameters, settings);
+    }
+    function editPurchasePricingRule(ruleId, onPurchasePricingRuleUpdated) {
+        var settings = {};
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.onPricingRuleUpdated = onPurchasePricingRuleUpdated;
+        };
+        var parameters = {
+            RuleId: ruleId
+        };
+
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingRule/PricingRuleEditor.html', parameters, settings);
+    }
+
+    function deletePurchasePricingRule($scope, purchasePricingRuleObj, onPurchasePricingRuleDeleted) {
+        VRNotificationService.showConfirmation()
+            .then(function (response) {
+                if (response) {
+                    return WhS_BE_SalePricingRuleAPIService.DeleteRule(purchasePricingRuleObj.RuleId)
+                        .then(function (deletionResponse) {
+                            VRNotificationService.notifyOnItemDeleted("Purchase Pricing Rule", deletionResponse);
+                            onPurchasePricingRuleDeleted(purchasePricingRuleObj);
+                        })
+                        .catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                }
+            });
+    }
 }]);
