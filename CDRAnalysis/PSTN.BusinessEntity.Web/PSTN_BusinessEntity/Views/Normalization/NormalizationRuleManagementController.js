@@ -95,25 +95,25 @@ function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAP
             {
                 name: "Normalize Number Rule",
                 clicked: function () {
-                    addNormalizationRule(PSTN_BE_NormalizationRuleTypeEnum.AdjustNumber);
+                    addNormalizationRule(PSTN_BE_NormalizationRuleTypeEnum.AdjustNumber.value);
                 }
             },
             {
                 name: "Set Area Rule",
                 clicked: function () {
-                    addNormalizationRule(PSTN_BE_NormalizationRuleTypeEnum.SetArea);
+                    addNormalizationRule(PSTN_BE_NormalizationRuleTypeEnum.SetArea.value);
                 }
             }
         ];
     }
 
-    function addNormalizationRule(ruleType) {
+    function addNormalizationRule(ruleTypeValue) {
 
         var onNormalizationRuleAdded = function (normalizationRuleDetail) {
             gridAPI.onNormalizationRuleAdded(normalizationRuleDetail);
         };
 
-        PSTN_BE_Service.addNormalizationRule(ruleType, onNormalizationRuleAdded);
+        PSTN_BE_Service.addNormalizationRule(ruleTypeValue, onNormalizationRuleAdded);
     }
 }
 

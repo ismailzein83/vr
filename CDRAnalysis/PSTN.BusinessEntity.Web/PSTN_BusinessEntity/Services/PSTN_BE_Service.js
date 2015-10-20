@@ -75,17 +75,15 @@
         VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Normalization/NormalizationRuleEditor.html", parameters, modalSettings);
     }
 
-    function addNormalizationRule(normalizationRuleType, onNormalizationRuleAdded) {
+    function addNormalizationRule(normalizationRuleTypeValue, onNormalizationRuleAdded) {
         var modalSettings = {};
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = UtilsService.buildTitleForAddEditor(normalizationRuleType.title + " Normalization Rule");
-
             modalScope.onNormalizationRuleAdded = onNormalizationRuleAdded;
         };
 
         var parameters = {
-            NormalizationRuleTypeValue: normalizationRuleType.value
+            NormalizationRuleTypeValue: normalizationRuleTypeValue
         };
 
         VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Normalization/NormalizationRuleEditor.html", parameters, modalSettings);

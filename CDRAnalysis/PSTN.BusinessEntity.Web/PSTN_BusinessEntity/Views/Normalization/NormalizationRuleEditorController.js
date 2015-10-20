@@ -185,6 +185,7 @@
         }
 
         function setDefaultValues() {
+            $scope.title = UtilsService.buildTitleForAddEditor(normalizationRuleType.title + " Normalization Rule");
             $scope.normalizationRuleSettingsDirective = normalizationRuleType.directive;
         }
 
@@ -206,6 +207,7 @@
 
             normalizationRuleType = UtilsService.getEnum(PSTN_BE_NormalizationRuleTypeEnum, "value", rule.Settings.RuleType);
             $scope.normalizationRuleSettingsDirective = normalizationRuleType.directive;
+            $scope.title = UtilsService.buildTitleForUpdateEditor(normalizationRuleType.title + " Normalization Rule");
 
             $scope.beginEffectiveTime = rule.BeginEffectiveTime;
             $scope.endEffectiveTime = rule.EndEffectiveTime;
