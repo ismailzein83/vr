@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SaleRateManager
     {
-        public List<SalePriceListRate> GetRates(DateTime effectiveOn, bool isEffectiveInFuture)
+        public List<SalePriceListRate> GetRates(DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             throw new NotImplementedException();
         }

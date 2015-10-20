@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SalePriceListManager
     {
-        public SalePriceListRate GetPriceList(int priceListId)
+        public SalePriceList GetPriceList(int priceListId)
         {
             throw new NotImplementedException();
         }

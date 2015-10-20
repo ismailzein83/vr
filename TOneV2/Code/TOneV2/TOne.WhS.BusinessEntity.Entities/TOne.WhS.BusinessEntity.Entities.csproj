@@ -173,6 +173,7 @@
     <Compile Include="SupplierZone\IRuleSupplierZoneCriteria.cs" />
     <Compile Include="SupplierZone\IRuleSupplierZoneTarget.cs" />
     <Compile Include="SupplierZone\SupplierCode.cs" />
+    <Compile Include="SupplierZone\SupplierPriceList.cs" />
     <Compile Include="SupplierZone\SupplierRate.cs" />
     <Compile Include="SupplierZone\SupplierZone.cs" />
   </ItemGroup>

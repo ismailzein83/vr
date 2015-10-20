@@ -25,10 +25,8 @@ namespace TOne.WhS.Routing.Business
             throw new NotImplementedException();
         }
 
-        public List<CustomerZoneRate> GetCustomerZoneRates(int customerId, DateTime effectiveOn, bool isEffectiveInFuture)
-        {
-            List<CustomerZoneRate> customerZoneRates = new List<CustomerZoneRate>();
-
+        public void  BuildCustomerZoneRates(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture, Action<CustomerZoneRate> onCustomerZoneRateAvailable)
+        {            
             CustomerZoneManager customerZoneManager = new CustomerZoneManager();
             CustomerZones customerZones = customerZoneManager.GetCustomerZones(customerId, effectiveOn, isEffectiveInFuture);
             
@@ -76,21 +74,44 @@ namespace TOne.WhS.Routing.Business
                         SaleZoneId = customerZone.ZoneId,
                         Rate = pricingRulesResult != null ? pricingRulesResult.Rate : zoneRate.NormalRate
                     };
-                    customerZoneRates.Add(customerZoneRate);
+                    onCustomerZoneRateAvailable(customerZoneRate);
                 }
             }
-
-            return customerZoneRates;
         }
 
-        SalePriceListRatesByOwner GetRatesByOwner(DateTime effectiveOn, bool isEffectiveInFuture)
+        public void BuildSupplierZoneRates(DateTime? effectiveOn, bool isEffectiveInFuture, Action<SupplierZoneRate> onSupplierZoneRateAvailable)
         {
-            SaleRateManager saleRateManager = new SaleRateManager();
-            var rates = saleRateManager.GetRates(effectiveOn, isEffectiveInFuture);
-            throw new NotImplementedException();
-        }
+            SupplierRateManager supplierRateManager = new SupplierRateManager();
+            var supplierRates = supplierRateManager.GetRates(effectiveOn, isEffectiveInFuture);
+            SupplierPriceListManager supplierPriceListManager = new SupplierPriceListManager();
+            PurchasePricingRuleManager purchasePricingRuleManager = new PurchasePricingRuleManager();
+            if(supplierRates != null)
+            {
+                foreach(var supplierRate in supplierRates)
+                {
+                    var priceList = supplierPriceListManager.GetPriceList(supplierRate.PriceListId);
+                    PurchasePricingRulesInput purchasePricingRulesInput = new PurchasePricingRulesInput
+                    {
+                        SupplierId = priceList.SupplierId,
+                        SupplierZoneId = supplierRate.ZoneId,
+                        Rate = supplierRate,
+                        EffectiveOn = effectiveOn,
+                        IsEffectiveInFuture = isEffectiveInFuture
+                    };
+                    var pricingRulesResult = purchasePricingRuleManager.ApplyPricingRules(purchasePricingRulesInput);
 
-        public List<CodeMatches> BuildCodeMatches(IEnumerable<SaleCode> saleCodes, IEnumerable<SupplierCode> supplierCodes)
+                    SupplierZoneRate supplierZoneRate = new SupplierZoneRate
+                    {
+                        SupplierId = priceList.SupplierId,
+                        SupplierZoneId = supplierRate.ZoneId,
+                        Rate = pricingRulesResult != null ? pricingRulesResult.Rate : supplierRate.NormalRate
+                    };
+                    onSupplierZoneRateAvailable(supplierZoneRate);
+                }
+            }
+        }
+        
+        public void BuildCodeMatches(IEnumerable<SaleCode> saleCodes, IEnumerable<SupplierCode> supplierCodes, Action<CodeMatches> onCodeMatchesAvailable)
         {
             List<SaleCodeIterator> saleCodeIterators;
             HashSet<string> distinctSaleCodes;
@@ -99,80 +120,15 @@ namespace TOne.WhS.Routing.Business
             StructuresSaleCodes(saleCodes, out saleCodeIterators, out distinctSaleCodes);
             StructuresSupplierCodes(supplierCodes, out supplierCodeIterators, out distinctSupplierCodes);
 
-            List<CodeMatches> allCodeMatches = new List<CodeMatches>();
             foreach(string code in distinctSupplierCodes)
             {
-                BuildAndAddCodeMatches(allCodeMatches, code, false, saleCodeIterators, supplierCodeIterators);
+                BuildAndAddCodeMatches(code, false, saleCodeIterators, supplierCodeIterators, onCodeMatchesAvailable);
             }
             foreach (string code in distinctSaleCodes)
             {
                 if (distinctSupplierCodes.Contains(code))
                     continue;
-                BuildAndAddCodeMatches(allCodeMatches, code, true, saleCodeIterators, supplierCodeIterators);
-            }
-            return allCodeMatches;
-        }
-
-        private void BuildAndAddCodeMatches(List<CodeMatches> allCodeMatches, string code, bool isSaleCode, List<SaleCodeIterator> saleCodeIterators, List<SupplierCodeIterator> supplierCodeIterators)
-        {
-            List<SaleCodeMatch> saleCodeMatches = new List<SaleCodeMatch>();
-            foreach(var saleCodeIterator in saleCodeIterators)
-            {
-                SaleCode matchSaleCode = isSaleCode ? saleCodeIterator.CodeIterator.GetExactMatch(code) : saleCodeIterator.CodeIterator.GetLongestMatch(code);
-                if (matchSaleCode != null)
-                    saleCodeMatches.Add(new SaleCodeMatch
-                        {
-                            SaleCode = matchSaleCode.Code,
-                            SaleZoneId = matchSaleCode.ZoneId
-                        });
-            }
-        }
-
-        void StructuresSaleCodes(IEnumerable<SaleCode> saleCodes, out List<SaleCodeIterator> saleCodeIterators, out HashSet<string> distinctSaleCodes)
-        {
-            saleCodeIterators = new List<SaleCodeIterator>();
-            SaleZoneManager saleZoneManager = new SaleZoneManager();
-            distinctSaleCodes = new HashSet<string>();
-            Dictionary<int, List<SaleCode>> saleCodesBySellingNumberPlan = new Dictionary<int, List<SaleCode>>();
-            foreach (var saleCode in saleCodes)
-            {
-                distinctSaleCodes.Add(saleCode.Code);
-                SaleZone saleZone = saleZoneManager.GetSaleZone(saleCode.ZoneId);
-                List<SaleCode> currentSaleCodes = saleCodesBySellingNumberPlan.GetOrCreateItem(saleZone.SaleZonePackageId);
-                currentSaleCodes.Add(saleCode);
-            }
-            foreach (var saleCodeEntry in saleCodesBySellingNumberPlan)
-            {
-                SaleCodeIterator codeIterator = new SaleCodeIterator
-                {
-                    SellingNumberPlanId = saleCodeEntry.Key,
-                    CodeIterator = new CodeIterator<SaleCode>(saleCodeEntry.Value)
-                };
-                saleCodeIterators.Add(codeIterator);
-            }
-        }
-
-        void StructuresSupplierCodes(IEnumerable<SupplierCode> supplierCodes, out List<SupplierCodeIterator> supplierCodeIterators, out HashSet<string> distinctSupplierCodes)
-        {
-            supplierCodeIterators = new List<SupplierCodeIterator>();
-            SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
-            distinctSupplierCodes = new HashSet<string>();
-            Dictionary<int, List<SupplierCode>> supplierCodesBySupplier = new Dictionary<int, List<SupplierCode>>();
-            foreach (var supplierCode in supplierCodes)
-            {
-                distinctSupplierCodes.Add(supplierCode.Code);
-                SupplierZone supplierZone = supplierZoneManager.GetSupplierZone(supplierCode.ZoneId);
-                List<SupplierCode> currentSupplierCodes = supplierCodesBySupplier.GetOrCreateItem(supplierZone.SupplierId);
-                currentSupplierCodes.Add(supplierCode);
-            }
-            foreach (var supplierCodeEntry in supplierCodesBySupplier)
-            {
-                SupplierCodeIterator codeIterator = new SupplierCodeIterator
-                {
-                    SupplierId = supplierCodeEntry.Key,
-                    CodeIterator = new CodeIterator<SupplierCode>(supplierCodeEntry.Value)
-                };
-                supplierCodeIterators.Add(codeIterator);
+                BuildAndAddCodeMatches(code, true, saleCodeIterators, supplierCodeIterators, onCodeMatchesAvailable);
             }
         }
 
@@ -382,6 +338,104 @@ namespace TOne.WhS.Routing.Business
                 }
             }
             return route;
+        }
+
+        SalePriceListRatesByOwner GetRatesByOwner(DateTime? effectiveOn, bool isEffectiveInFuture)
+        {
+            SaleRateManager saleRateManager = new SaleRateManager();
+            var rates = saleRateManager.GetRates(effectiveOn, isEffectiveInFuture);
+            throw new NotImplementedException();
+        }
+
+
+        private void BuildAndAddCodeMatches(string code, bool isSaleCode, List<SaleCodeIterator> saleCodeIterators, List<SupplierCodeIterator> supplierCodeIterators, Action<CodeMatches> onCodeMatchesAvailable)
+        {
+            List<SaleCodeMatch> saleCodeMatches = new List<SaleCodeMatch>();
+            foreach (var saleCodeIterator in saleCodeIterators)
+            {
+                SaleCode matchSaleCode = isSaleCode ? saleCodeIterator.CodeIterator.GetExactMatch(code) : saleCodeIterator.CodeIterator.GetLongestMatch(code);
+                if (matchSaleCode != null)
+                    saleCodeMatches.Add(new SaleCodeMatch
+                    {
+                        SaleCode = matchSaleCode.Code,
+                        SaleZoneId = matchSaleCode.ZoneId,
+                        SellingNumberPlanId = saleCodeIterator.SellingNumberPlanId
+                    });
+            }
+            if (saleCodeMatches.Count > 0)
+            {
+                SupplierCodeMatchBySupplier supplierCodeMatches = new SupplierCodeMatchBySupplier();
+                foreach (var supplierCodeIterator in supplierCodeIterators)
+                {
+                    SupplierCode matchSupplierCode = supplierCodeIterator.CodeIterator.GetLongestMatch(code);
+                    if (matchSupplierCode != null)
+                        supplierCodeMatches.Add(supplierCodeIterator.SupplierId,
+                            new List<SupplierCodeMatch> 
+                            { 
+                                new  SupplierCodeMatch
+                                {
+                                    SupplierId = supplierCodeIterator.SupplierId,
+                                    SupplierCode = matchSupplierCode.Code,
+                                    SupplierZoneId = matchSupplierCode.ZoneId
+                                }
+                            });
+                }
+                CodeMatches codeMatches = new CodeMatches
+                {
+                    Code = code,
+                    SaleCodeMatches = saleCodeMatches,
+                    SupplierCodeMatches = supplierCodeMatches
+                };
+                onCodeMatchesAvailable(codeMatches);
+            }
+        }
+
+        void StructuresSaleCodes(IEnumerable<SaleCode> saleCodes, out List<SaleCodeIterator> saleCodeIterators, out HashSet<string> distinctSaleCodes)
+        {
+            saleCodeIterators = new List<SaleCodeIterator>();
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
+            distinctSaleCodes = new HashSet<string>();
+            Dictionary<int, List<SaleCode>> saleCodesBySellingNumberPlan = new Dictionary<int, List<SaleCode>>();
+            foreach (var saleCode in saleCodes)
+            {
+                distinctSaleCodes.Add(saleCode.Code);
+                SaleZone saleZone = saleZoneManager.GetSaleZone(saleCode.ZoneId);
+                List<SaleCode> currentSaleCodes = saleCodesBySellingNumberPlan.GetOrCreateItem(saleZone.SellingNumberPlanId);
+                currentSaleCodes.Add(saleCode);
+            }
+            foreach (var saleCodeEntry in saleCodesBySellingNumberPlan)
+            {
+                SaleCodeIterator codeIterator = new SaleCodeIterator
+                {
+                    SellingNumberPlanId = saleCodeEntry.Key,
+                    CodeIterator = new CodeIterator<SaleCode>(saleCodeEntry.Value)
+                };
+                saleCodeIterators.Add(codeIterator);
+            }
+        }
+
+        void StructuresSupplierCodes(IEnumerable<SupplierCode> supplierCodes, out List<SupplierCodeIterator> supplierCodeIterators, out HashSet<string> distinctSupplierCodes)
+        {
+            supplierCodeIterators = new List<SupplierCodeIterator>();
+            SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
+            distinctSupplierCodes = new HashSet<string>();
+            Dictionary<int, List<SupplierCode>> supplierCodesBySupplier = new Dictionary<int, List<SupplierCode>>();
+            foreach (var supplierCode in supplierCodes)
+            {
+                distinctSupplierCodes.Add(supplierCode.Code);
+                SupplierZone supplierZone = supplierZoneManager.GetSupplierZone(supplierCode.ZoneId);
+                List<SupplierCode> currentSupplierCodes = supplierCodesBySupplier.GetOrCreateItem(supplierZone.SupplierId);
+                currentSupplierCodes.Add(supplierCode);
+            }
+            foreach (var supplierCodeEntry in supplierCodesBySupplier)
+            {
+                SupplierCodeIterator codeIterator = new SupplierCodeIterator
+                {
+                    SupplierId = supplierCodeEntry.Key,
+                    CodeIterator = new CodeIterator<SupplierCode>(supplierCodeEntry.Value)
+                };
+                supplierCodeIterators.Add(codeIterator);
+            }
         }
 
         #endregion

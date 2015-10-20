@@ -102,10 +102,10 @@
     <Compile Include="SelectiveSaleZonesBehavior.cs" />
     <Compile Include="SaleZone\SaleZoneManager.cs" />
     <Compile Include="SaleZone\SaleZonePackageManager.cs" />
-    <Compile Include="SupplierCodeManager.cs" />
+    <Compile Include="SupplierZone\SupplierCodeManager.cs" />
     <Compile Include="SelectiveSuppliersBehavior.cs" />
-    <Compile Include="SupplierPriceListManager.cs" />
-    <Compile Include="SupplierRateManager.cs" />
+    <Compile Include="SupplierZone\SupplierPriceListManager.cs" />
+    <Compile Include="SupplierZone\SupplierRateManager.cs" />
     <Compile Include="SupplierZone\SupplierZoneManager.cs" />
   </ItemGroup>
   <ItemGroup>

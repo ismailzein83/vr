@@ -10,7 +10,12 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public long SaleZoneId { get; set; }
 
+        /// <summary>
+        /// shoud be removed
+        /// </summary>
         public int SaleZonePackageId { get; set; }
+
+        public int SellingNumberPlanId { get; set; }
 
         public string Name { get; set; }
 
