@@ -15,7 +15,7 @@ namespace Vanrise.Fzero.CDRImport.QueueActivators
 
 
             PSTN.BusinessEntity.Business.TrunkManager switchTrunkManager = new PSTN.BusinessEntity.Business.TrunkManager();
-            PSTN.BusinessEntity.Entities.TrunkInfo currentTrunk = new PSTN.BusinessEntity.Entities.TrunkInfo();
+            PSTN.BusinessEntity.Entities.Trunk currentTrunk = new PSTN.BusinessEntity.Entities.Trunk();
 
             PSTN.BusinessEntity.Business.SwitchManager switchManager = new PSTN.BusinessEntity.Business.SwitchManager();
             PSTN.BusinessEntity.Entities.Switch currentSwitch;

@@ -54,10 +54,10 @@ namespace PSTN.BusinessEntity.Business
         }
 
 
-        public TrunkInfo GetTrunkBySymbol(string symbol)
+        public Trunk GetTrunkBySymbol(string symbol)
         {
             var trunks = GetCachedTrunks();
-            return trunks.MapRecord(TrunkInfoMapper, x => x.Symbol == symbol);
+            return trunks.FindRecord(x => x.Symbol == symbol);
         }
 
 

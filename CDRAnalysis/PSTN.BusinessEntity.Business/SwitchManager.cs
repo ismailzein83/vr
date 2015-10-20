@@ -53,12 +53,6 @@ namespace PSTN.BusinessEntity.Business
             return switches.MapRecords(SwitchInfoMapper);
         }
 
-        public IEnumerable<SwitchInfo> GetSwitchesToLinkTo(int switchId)
-        {
-            var switches = GetCachedSwitches();
-            return switches.MapRecords(SwitchInfoMapper, x => x.SwitchId != switchId);
-        }
-
         public IEnumerable<SwitchInfo> GetSwitchesByIds(List<int> switchIds)
         {
             var switches = GetCachedSwitches();
@@ -68,7 +62,7 @@ namespace PSTN.BusinessEntity.Business
         public IEnumerable<int> GetSwitchAssignedDataSources()
         {
             var switches = GetCachedSwitches();
-            return switches.MapRecords(SwitchDetailMapper, x => x.DataSourceId != null).Select(x=>x.Entity.DataSourceId.Value);
+            return switches.FindAllRecords( x => x.DataSourceId != null).Select(x=>x.DataSourceId.Value);
         }
 
         public InsertOperationOutput<SwitchDetail> AddSwitch(Switch switchObj)

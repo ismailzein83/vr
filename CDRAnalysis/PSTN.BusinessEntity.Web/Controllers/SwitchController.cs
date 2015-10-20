@@ -30,13 +30,6 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<SwitchInfo> GetSwitchesToLinkTo(int switchId)
-        {
-            SwitchManager manager = new SwitchManager();
-            return manager.GetSwitchesToLinkTo(switchId);
-        }
-
-        [HttpGet]
         public IEnumerable<int> GetSwitchAssignedDataSources()
         {
             SwitchManager manager = new SwitchManager();
