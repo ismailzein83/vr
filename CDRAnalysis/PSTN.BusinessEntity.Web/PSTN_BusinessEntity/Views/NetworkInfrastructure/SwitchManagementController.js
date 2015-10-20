@@ -28,7 +28,7 @@ function SwitchManagementController($scope, PSTN_BE_Service, SwitchAPIService, S
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = "Add Switch";
+                modalScope.title = UtilsService.buildTitleForAddEditor("Switch");
 
                 modalScope.onSwitchAdded = function (switchObj) {
                     gridAPI.itemAdded(switchObj);
@@ -131,7 +131,7 @@ function SwitchManagementController($scope, PSTN_BE_Service, SwitchAPIService, S
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Switch: " + gridObj.Name;
+            modalScope.title = UtilsService.buildTitleForUpdateEditor("Switch", gridObj.Name);
 
             modalScope.onSwitchUpdated = function (switchObj) {
                 gridAPI.itemUpdated(switchObj);

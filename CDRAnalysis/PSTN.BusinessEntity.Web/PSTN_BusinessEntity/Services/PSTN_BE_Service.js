@@ -17,7 +17,7 @@
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = (trunkObj.Name != undefined) ? "Edit Trunk: " + trunkObj.Name : "Edit Trunk";
+            modalScope.title = UtilsService.buildTitleForUpdateEditor("Trunk", trunkObj.Name);
             modalScope.onTrunkUpdated = onTrunkUpdated;
         };
 
@@ -32,7 +32,7 @@
         }
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Add Trunk";
+            modalScope.title = UtilsService.buildTitleForAddEditor("Trunk");
             modalScope.onTrunkAdded = onTrunkAdded;
         };
 
@@ -68,7 +68,7 @@
 
         modalSettings.onScopeReady = function (modalScope) {
             var normalizationRuleType = UtilsService.getEnum(PSTN_BE_NormalizationRuleTypeEnum, "value", normalizationRuleDetail.Entity.Settings.RuleType);
-            modalScope.title = "Edit " + normalizationRuleType.description + " Rule";
+            modalScope.title = UtilsService.buildTitleForUpdateEditor("Normalization Rule", normalizationRuleDetail.Description);
 
             modalScope.onNormalizationRuleUpdated = onNormalizationRuleUpdated;
         };
@@ -76,16 +76,18 @@
         VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Normalization/NormalizationRuleEditor.html", parameters, modalSettings);
     }
 
-    function addNormalizationRule(normalizationRuleType, onNormalizationRuleAdded) {
+    function addNormalizationRule(normalizationRuleTypeValue, onNormalizationRuleAdded) {
         var modalSettings = {};
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Add " + normalizationRuleType.description + " Rule";
+            var normalizationRuleType = UtilsService.getEnum(PSTN_BE_NormalizationRuleTypeEnum, "value", normalizationRuleTypeValue);
+            modalScope.title = UtilsService.buildTitleForAddEditor("Normalization Rule");
+
             modalScope.onNormalizationRuleAdded = onNormalizationRuleAdded;
         };
 
         var parameters = {
-            NormalizationRuleType: normalizationRuleType
+            NormalizationRuleTypeValue: normalizationRuleTypeValue
         };
 
         VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Normalization/NormalizationRuleEditor.html", parameters, modalSettings);

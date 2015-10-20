@@ -1,6 +1,6 @@
-﻿SwitchBrandManagementController.$inject = ["$scope", "SwitchBrandAPIService", "VRNotificationService", "VRModalService"];
+﻿SwitchBrandManagementController.$inject = ["$scope", "SwitchBrandAPIService", "UtilsService", "VRNotificationService", "VRModalService"];
 
-function SwitchBrandManagementController($scope, SwitchBrandAPIService, VRNotificationService, VRModalService) {
+function SwitchBrandManagementController($scope, SwitchBrandAPIService, UtilsService, VRNotificationService, VRModalService) {
 
     var gridAPI = undefined;
 
@@ -25,7 +25,7 @@ function SwitchBrandManagementController($scope, SwitchBrandAPIService, VRNotifi
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = "Add Brand";
+                modalScope.title = UtilsService.buildTitleForAddEditor("Switch Brand");
 
                 modalScope.onBrandAdded = function (BrandObj) {
                     gridAPI.itemAdded(BrandObj);
@@ -87,7 +87,7 @@ function SwitchBrandManagementController($scope, SwitchBrandAPIService, VRNotifi
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Brand: " + gridObj.Name;
+            modalScope.title = UtilsService.buildTitleForUpdateEditor("Switch Brand", gridObj.Name);
 
             modalScope.onBrandUpdated = function (BrandObj) {
                 gridAPI.itemUpdated(BrandObj);
