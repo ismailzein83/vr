@@ -246,7 +246,7 @@ namespace PSTN.BusinessEntity.Business
 
                 SwitchManager switchManager = new SwitchManager();
                 IEnumerable<SwitchInfo> switches = switchManager.GetSwitchesByIds(rule.Criteria.SwitchIds);
-                List<string> switchNames = GetSwitchNames(switches);
+                List<string> switchNames = switches.Select(x => x.Name).ToList();
 
                 detail.SwitchNames = string.Join<string>(", ", switchNames);
             }
@@ -261,7 +261,7 @@ namespace PSTN.BusinessEntity.Business
 
                 TrunkManager trunkManager = new TrunkManager();
                 IEnumerable<TrunkInfo> trunks = trunkManager.GetTrunksByIds(rule.Criteria.TrunkIds);
-                List<string> trunkNames = GetTrunkNames(trunks);
+                List<string> trunkNames = trunks.Select(x => x.Name).ToList();
 
                 detail.TrunkNames = string.Join<string>(", ", trunkNames);
             }
@@ -273,30 +273,6 @@ namespace PSTN.BusinessEntity.Business
             detail.Descriptions = (rule.Settings != null) ? rule.Settings.GetDescriptions() : null;
 
             return detail;
-        }
-
-        private List<string> GetSwitchNames(IEnumerable<SwitchInfo> switches)
-        {
-            List<string> switchNames = new List<string>();
-
-            foreach (SwitchInfo switchInfo in switches)
-            {
-                switchNames.Add(switchInfo.Name);
-            }
-
-            return switchNames;
-        }
-
-        private List<string> GetTrunkNames(IEnumerable<TrunkInfo> trunks)
-        {
-            List<string> trunkNames = new List<string>();
-
-            foreach (TrunkInfo trunk in trunks)
-            {
-                trunkNames.Add(trunk.Name);
-            }
-
-            return trunkNames;
         }
 
         private bool ListContains(List<int> filterIds, List<int> itemIds)
