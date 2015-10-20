@@ -60,7 +60,8 @@ function (UtilsService, $compil, WhS_BE_PricingRuleAPIService) {
                     UtilsService.getItemByVal($scope.pricingRuleExtraChargeTemplates, dbAction.ConfigId, "TemplateConfigID").Editor :
                     $scope.selectedPricingRuleExtraChargeTemplate.Editor,
 
-                Data: (dbAction != null) ? dbAction : {}
+                Data: (dbAction != null) ? dbAction : {},
+                Name: $scope.selectedPricingRuleExtraChargeTemplate.Name
             };
 
             actionItem.onPricingRuleExtraChargeTemplateDirectiveReady = function (api) {

@@ -29,14 +29,39 @@ namespace TOne.WhS.Routing.Business
             CustomerZoneManager customerZoneManager = new CustomerZoneManager();
             CustomerZones customerZones = customerZoneManager.GetCustomerZones(customerId, effectiveOn, futureEntities);
             
-            CustomerPricingProductManager customerSellingProductManager = new CustomerPricingProductManager();
-            CustomerPricingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, effectiveOn, futureEntities);
             SalePriceListRatesByOwner ratesByOwner = GetRatesByOwner(effectiveOn, futureEntities);
 
             SalePriceListRatesByZone customerRates;
             ratesByOwner.RatesByCustomers.TryGetValue(customerId, out customerRates);
 
-            SalePriceListRatesByZone sellingProductRates;
+            CustomerPricingProductManager customerSellingProductManager = new CustomerPricingProductManager();
+            CustomerPricingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, effectiveOn, futureEntities);
+            SalePriceListRatesByZone sellingProductRates = null;
+            if (customerSellingProduct != null)
+                ratesByOwner.RatesByPricingProduct.TryGetValue(customerSellingProduct.PricingProductId, out sellingProductRates);
+
+            SalePricingRuleManager salePricingRuleManager = new SalePricingRuleManager();
+            foreach(var customerZone in customerZones.Zones)
+            {
+                SalePriceListRate zoneRate;
+                if (!customerRates.TryGetValue(customerZone.ZoneId, out zoneRate))
+                {
+                    if (sellingProductRates != null)
+                        sellingProductRates.TryGetValue(customerZone.ZoneId, out zoneRate);
+                }
+                if(zoneRate != null)
+                {
+                    PricingRuleTariffTarget tariffTarget = new PricingRuleTariffTarget
+                    {
+                         Rate = zoneRate
+                    };
+                    var tariffPricingRule = salePricingRuleManager.GetMatchRule(tariffTarget);
+                    if(tariffPricingRule != null)
+                    {
+                      //  (tariffPricingRule.Settings as PricingRuleTariffSettings).e
+                    }
+                }
+            }
 
             return null;
         }

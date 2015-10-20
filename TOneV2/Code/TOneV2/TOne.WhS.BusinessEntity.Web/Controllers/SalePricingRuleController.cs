@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Business.PricingRules;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Entities;

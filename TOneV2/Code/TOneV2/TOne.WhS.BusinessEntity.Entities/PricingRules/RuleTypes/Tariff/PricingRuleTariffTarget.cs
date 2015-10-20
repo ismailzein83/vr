@@ -8,7 +8,9 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class PricingRuleTariffTarget : PricingRuleTarget
     {
-        public Decimal Rate { get; set; }
+        public IRate Rate { get; set; }
+
+        public Decimal EffectiveRateValue { get; set; }
 
         public Decimal TotalAmount { get; set; }
 
