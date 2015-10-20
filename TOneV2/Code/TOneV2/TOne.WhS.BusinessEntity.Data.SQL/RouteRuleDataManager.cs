@@ -52,7 +52,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public bool Update(Entities.RouteRule routeRule)
         {
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_RouteRule_Update", routeRule.RouteRuleId, Vanrise.Common.Serializer.Serialize(routeRule.RouteCriteria),
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_RouteRule_Update", routeRule.RuleId, Vanrise.Common.Serializer.Serialize(routeRule.RouteCriteria),
                 0, null, null, DateTime.Now, null, null);
             return (recordsEffected > 0);
         }
@@ -67,7 +67,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             Entities.RouteRule routeRule = new Entities.RouteRule
             {
-                RouteRuleId = (int)reader["ID"],
+                RuleId = (int)reader["ID"],
                 RouteCriteria = Vanrise.Common.Serializer.Deserialize<Entities.RouteCriteria>(reader["Criteria"] as string),
                 //TypeConfigId = (int)reader["TypeConfigID"],
                 Settings = (reader["RuleSettings"] as string) != null ? Vanrise.Common.Serializer.Deserialize<Entities.RouteRuleSettings>(reader["RuleSettings"] as string): null,

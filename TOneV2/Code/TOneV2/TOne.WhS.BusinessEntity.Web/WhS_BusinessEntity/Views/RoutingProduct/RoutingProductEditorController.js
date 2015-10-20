@@ -3,10 +3,10 @@
     "use strict";
 
     routingProductEditorController.$inject = ['$scope', 'WhS_BE_RoutingProductAPIService', 'WhS_BE_SaleZonePackageAPIService', 'WhS_BE_SaleZoneAPIService', 'WhS_BE_CarrierAccountAPIService',
-        'UtilsService', 'VRNotificationService', 'VRNavigationService'];
+        'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
 
     function routingProductEditorController($scope, WhS_BE_RoutingProductAPIService, WhS_BE_SaleZonePackageAPIService, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccountAPIService,
-        UtilsService, VRNotificationService, VRNavigationService) {
+        UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
 
             var editMode;
             var routingProductId;
@@ -41,41 +41,19 @@
                 $scope.onSaleZoneGroupSettingsDirectiveReady = function (api) {
                     saleZoneGroupSettingsDirectiveAPI = api;
 
-                    if (directiveAppendixData != undefined) {
+                    if (directiveAppendixData != undefined)
                         tryLoadAppendixDirectives();
-                    }
-                    else {
-                        var promise = saleZoneGroupSettingsDirectiveAPI.load();
-                        if (promise != undefined) {
-                            $scope.saleZonesAppendixLoader = true;
-                            promise.catch(function (error) {
-                                VRNotificationService.notifyException(error, $scope);
-                            }).finally(function () {
-                                $scope.saleZonesAppendixLoader = false;
-                            });
-                        }
-                    }
+                    else
+                        VRUIUtilsService.loadDirective($scope, saleZoneGroupSettingsDirectiveAPI, 'saleZonesAppendixLoader');
                 }
 
                 $scope.onSupplierGroupSettingsDirectiveReady = function (api) {
                     supplierGroupSettingsDirectiveAPI = api;
 
                     if (directiveAppendixData != undefined)
-                    {
                         tryLoadAppendixDirectives();
-                    }
-                    else {
-                        var promise = supplierGroupSettingsDirectiveAPI.load();
-                        if (promise != undefined)
-                        {
-                            $scope.suppliersAppendixLoader = true;
-                            promise.catch(function (error) {
-                                VRNotificationService.notifyException(error, $scope);
-                            }).finally(function () {
-                                $scope.suppliersAppendixLoader = false;
-                            });
-                        }
-                    }
+                    else
+                        VRUIUtilsService.loadDirective($scope, supplierGroupSettingsDirectiveAPI, 'suppliersAppendixLoader');
                 }
 
                 $scope.onSaleZonePackageSelectionChanged = function () {

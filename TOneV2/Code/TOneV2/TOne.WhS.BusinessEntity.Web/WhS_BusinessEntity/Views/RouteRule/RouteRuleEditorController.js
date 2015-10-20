@@ -3,10 +3,10 @@
     "use strict";
 
     routeRuleEditorController.$inject = ['$scope', 'WhS_BE_RouteRuleAPIService', 'WhS_BE_RoutingProductAPIService', 'WhS_BE_SaleZoneAPIService', 'WhS_BE_CarrierAccountAPIService',
-        'UtilsService', 'VRNotificationService', 'VRNavigationService'];
+        'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
 
     function routeRuleEditorController($scope, WhS_BE_RouteRuleAPIService, WhS_BE_RoutingProductAPIService, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccountAPIService,
-        UtilsService, VRNotificationService, VRNavigationService) {
+        UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
 
         var editMode;
         var routeRuleId;
@@ -41,60 +41,28 @@
             $scope.onSaleZoneGroupSettingsDirectiveReady = function (api) {
                 saleZoneGroupSettingsDirectiveAPI = api;
 
-                if (directiveAppendixData != undefined) {
+                if (directiveAppendixData != undefined)
                     tryLoadAppendixDirectives();
-                }
                 else
-                {
-                    var promise = saleZoneGroupSettingsDirectiveAPI.load();
-                    if (promise != undefined) {
-                        $scope.saleZonesAppendixLoader = true;
-                        promise.catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                        }).finally(function () {
-                            $scope.saleZonesAppendixLoader = false;
-                        });
-                    }
-                }
+                    VRUIUtilsService.loadDirective($scope, saleZoneGroupSettingsDirectiveAPI, 'saleZonesAppendixLoader');
             }
 
             $scope.onCustomerGroupSettingsDirectiveReady = function (api) {
                 customerGroupSettingsDirectiveAPI = api;
 
-                if (directiveAppendixData != undefined) {
+                if (directiveAppendixData != undefined)
                     tryLoadAppendixDirectives();
-                }
                 else
-                {
-                    var promise = customerGroupSettingsDirectiveAPI.load();
-                    if(promise != undefined) {
-                        $scope.customersAppendixLoader = true;
-                        promise.catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                        }).finally(function () {
-                            $scope.customersAppendixLoader = false;
-                        });
-                    }
-                }
+                    VRUIUtilsService.loadDirective($scope, customerGroupSettingsDirectiveAPI, 'customersAppendixLoader');
             }
 
             $scope.onCodeCriteriaGroupSettingsDirectiveReady = function (api) {
                 codeCriteriaGroupSettingsDirectiveAPI = api;
 
-                if (directiveAppendixData != undefined) {
+                if (directiveAppendixData != undefined)
                     tryLoadAppendixDirectives();
-                }
-                else {
-                    var promise = codeCriteriaGroupSettingsDirectiveAPI.load();
-                    if (promise != undefined) {
-                        $scope.codeCriteriaAppendixLoader = true;
-                        promise.catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                        }).finally(function () {
-                            $scope.codeCriteriaAppendixLoader = false;
-                        });
-                    }
-                }
+                else
+                    VRUIUtilsService.loadDirective($scope, codeCriteriaGroupSettingsDirectiveAPI, 'codeCriteriaAppendixLoader');
             }
 
             $scope.SaveRouteRule = function () {
