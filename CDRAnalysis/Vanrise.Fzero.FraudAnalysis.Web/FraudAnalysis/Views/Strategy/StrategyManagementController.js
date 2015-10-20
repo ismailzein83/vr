@@ -138,7 +138,7 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
         };
 
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = "New Strategy";
+            modalScope.title = UtilsService.buildTitleForAddEditor("Strategy") ;
             modalScope.onStrategyAdded = function (strategy) {
                 fillStrategy(strategy);
                 mainGridAPI.itemAdded(strategy);
@@ -158,7 +158,7 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
         };
 
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Strategy: " + gridObject.Name;
+            modalScope.title = UtilsService.buildTitleForUpdateEditor("Strategy", gridObject.Name);
             modalScope.onStrategyUpdated = function (strategy) {
                 fillStrategy(strategy);
                 mainGridAPI.itemUpdated(strategy);
