@@ -472,8 +472,13 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         return "New " + entityType;
     }
 
-    function buildTitleForUpdateEditor(entityType, entityTitle) {
-        return "Edit " + entityType + ": " + entityTitle;
+    function buildTitleForUpdateEditor(entityTitle, entityType) {
+        var title = "Edit "
+        if (entityType!=undefined)
+            title += entityType + ": " + entityTitle;
+        else
+            title += entityTitle
+        return title;
     }
 
     function escapeRegExp(string) {
