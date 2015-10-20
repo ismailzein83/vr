@@ -80,6 +80,7 @@
     <Compile Include="CodeCriteria\CodeCriteriaGroupContext.cs" />
     <Compile Include="CodeCriteria\CodeCriteriaGroupSettings.cs" />
     <Compile Include="CodeCriteria\IRuleCodeTarget.cs" />
+    <Compile Include="ICode.cs" />
     <Compile Include="IRate.cs" />
     <Compile Include="PricingProduct\CustomerPricingProductDetail.cs" />
     <Compile Include="PricingProduct\PricingProductDetail.cs" />

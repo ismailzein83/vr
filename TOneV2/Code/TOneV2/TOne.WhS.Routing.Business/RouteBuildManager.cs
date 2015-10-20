@@ -7,6 +7,7 @@ using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Business.RouteRules;
 using TOne.WhS.Routing.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.Routing.Business
 {
@@ -87,6 +88,92 @@ namespace TOne.WhS.Routing.Business
             SaleRateManager saleRateManager = new SaleRateManager();
             var rates = saleRateManager.GetRates(effectiveOn, isEffectiveInFuture);
             throw new NotImplementedException();
+        }
+
+        public List<CodeMatches> BuildCodeMatches(IEnumerable<SaleCode> saleCodes, IEnumerable<SupplierCode> supplierCodes)
+        {
+            List<SaleCodeIterator> saleCodeIterators;
+            HashSet<string> distinctSaleCodes;
+            List<SupplierCodeIterator> supplierCodeIterators;
+            HashSet<string> distinctSupplierCodes;
+            StructuresSaleCodes(saleCodes, out saleCodeIterators, out distinctSaleCodes);
+            StructuresSupplierCodes(supplierCodes, out supplierCodeIterators, out distinctSupplierCodes);
+
+            List<CodeMatches> allCodeMatches = new List<CodeMatches>();
+            foreach(string code in distinctSupplierCodes)
+            {
+                BuildAndAddCodeMatches(allCodeMatches, code, false, saleCodeIterators, supplierCodeIterators);
+            }
+            foreach (string code in distinctSaleCodes)
+            {
+                if (distinctSupplierCodes.Contains(code))
+                    continue;
+                BuildAndAddCodeMatches(allCodeMatches, code, true, saleCodeIterators, supplierCodeIterators);
+            }
+            return allCodeMatches;
+        }
+
+        private void BuildAndAddCodeMatches(List<CodeMatches> allCodeMatches, string code, bool isSaleCode, List<SaleCodeIterator> saleCodeIterators, List<SupplierCodeIterator> supplierCodeIterators)
+        {
+            List<SaleCodeMatch> saleCodeMatches = new List<SaleCodeMatch>();
+            foreach(var saleCodeIterator in saleCodeIterators)
+            {
+                SaleCode matchSaleCode = isSaleCode ? saleCodeIterator.CodeIterator.GetExactMatch(code) : saleCodeIterator.CodeIterator.GetLongestMatch(code);
+                if (matchSaleCode != null)
+                    saleCodeMatches.Add(new SaleCodeMatch
+                        {
+                            SaleCode = matchSaleCode.Code,
+                            SaleZoneId = matchSaleCode.ZoneId
+                        });
+            }
+        }
+
+        void StructuresSaleCodes(IEnumerable<SaleCode> saleCodes, out List<SaleCodeIterator> saleCodeIterators, out HashSet<string> distinctSaleCodes)
+        {
+            saleCodeIterators = new List<SaleCodeIterator>();
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
+            distinctSaleCodes = new HashSet<string>();
+            Dictionary<int, List<SaleCode>> saleCodesBySellingNumberPlan = new Dictionary<int, List<SaleCode>>();
+            foreach (var saleCode in saleCodes)
+            {
+                distinctSaleCodes.Add(saleCode.Code);
+                SaleZone saleZone = saleZoneManager.GetSaleZone(saleCode.ZoneId);
+                List<SaleCode> currentSaleCodes = saleCodesBySellingNumberPlan.GetOrCreateItem(saleZone.SaleZonePackageId);
+                currentSaleCodes.Add(saleCode);
+            }
+            foreach (var saleCodeEntry in saleCodesBySellingNumberPlan)
+            {
+                SaleCodeIterator codeIterator = new SaleCodeIterator
+                {
+                    SellingNumberPlanId = saleCodeEntry.Key,
+                    CodeIterator = new CodeIterator<SaleCode>(saleCodeEntry.Value)
+                };
+                saleCodeIterators.Add(codeIterator);
+            }
+        }
+
+        void StructuresSupplierCodes(IEnumerable<SupplierCode> supplierCodes, out List<SupplierCodeIterator> supplierCodeIterators, out HashSet<string> distinctSupplierCodes)
+        {
+            supplierCodeIterators = new List<SupplierCodeIterator>();
+            SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
+            distinctSupplierCodes = new HashSet<string>();
+            Dictionary<int, List<SupplierCode>> supplierCodesBySupplier = new Dictionary<int, List<SupplierCode>>();
+            foreach (var supplierCode in supplierCodes)
+            {
+                distinctSupplierCodes.Add(supplierCode.Code);
+                SupplierZone supplierZone = supplierZoneManager.GetSupplierZone(supplierCode.ZoneId);
+                List<SupplierCode> currentSupplierCodes = supplierCodesBySupplier.GetOrCreateItem(supplierZone.SupplierId);
+                currentSupplierCodes.Add(supplierCode);
+            }
+            foreach (var supplierCodeEntry in supplierCodesBySupplier)
+            {
+                SupplierCodeIterator codeIterator = new SupplierCodeIterator
+                {
+                    SupplierId = supplierCodeEntry.Key,
+                    CodeIterator = new CodeIterator<SupplierCode>(supplierCodeEntry.Value)
+                };
+                supplierCodeIterators.Add(codeIterator);
+            }
         }
 
         public IEnumerable<CustomerRoute> BuildRoutes(IBuildCustomerRoutesContext context, string routeCode, out IEnumerable<PricingProductRoute> pricingProductRoutes)
@@ -295,6 +382,24 @@ namespace TOne.WhS.Routing.Business
                 }
             }
             return route;
+        }
+
+        #endregion
+
+        #region Private Classes
+
+        private class SaleCodeIterator
+        {
+            public int SellingNumberPlanId { get; set; }
+
+            public CodeIterator<SaleCode> CodeIterator { get; set; }
+        }
+
+        private class SupplierCodeIterator
+        {
+            public int SupplierId { get; set; }
+
+            public CodeIterator<SupplierCode> CodeIterator { get; set; }
         }
 
         #endregion

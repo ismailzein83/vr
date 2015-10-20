@@ -17,6 +17,11 @@ namespace TOne.WhS.BusinessEntity.Business
             ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
             return dataManager.GetSupplierZones(supplierId, effectiveDate);
         }
+        public SupplierZone GetSupplierZone(long zoneId)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public long ReserveIDRange(int numberOfIDs)
         {

@@ -47,6 +47,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeMatches.cs" />
     <Compile Include="IBuildCustomerRoutesContext.cs" />
     <Compile Include="IBuildRoutingProductRoutesContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

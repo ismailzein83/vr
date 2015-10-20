@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SaleCode
+    public class SaleCode : ICode
     {
         public long SaleCodeId { get; set; }
 
