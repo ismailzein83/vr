@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class Route
+    public class BaseRoute
     {
-        public int CustomerId { get; set; }
-
         public string Code { get; set; }
 
         public long SaleZoneId { get; set; }

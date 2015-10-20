@@ -24,5 +24,7 @@ namespace TOne.WhS.BusinessEntity.Data
 
 
         bool AreZonesUpdated(ref object updateHandle);
+
+        IEnumerable<SaleZone> GetAllSaleZones();
     }
 }

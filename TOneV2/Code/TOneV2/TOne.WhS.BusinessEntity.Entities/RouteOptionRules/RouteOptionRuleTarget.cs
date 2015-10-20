@@ -24,6 +24,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public bool FilterOption { get; set; }
 
+        public int? ExecutedRuleId { get; set; }
+
         #region Interfaces
         
         string IRuleCodeTarget.Code

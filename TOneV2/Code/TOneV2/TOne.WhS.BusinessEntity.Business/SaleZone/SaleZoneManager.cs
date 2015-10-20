@@ -38,7 +38,28 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, () => GetSaleZones(packageId));
         }
 
-        
+        public SaleZone GetSaleZone(long saleZoneId)
+        {
+            return GetAllSaleZones().GetRecord(saleZoneId);
+        }
+
+        public Dictionary<long, SaleZone> GetAllSaleZones()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllSaleZones", () =>
+                {
+                    ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
+                    IEnumerable<SaleZone> allSaleZones = dataManager.GetAllSaleZones();
+                    Dictionary<long, SaleZone> allSaleZonesDic = new Dictionary<long, SaleZone>();
+                    if(allSaleZones != null)
+                    {
+                        foreach(var saleZone in allSaleZones)
+                        {
+                            allSaleZonesDic.Add(saleZone.SaleZoneId, saleZone);
+                        }
+                    }
+                    return allSaleZonesDic;
+                });
+        }
 
         public List<SaleZone> GetSaleZones(int packageId,DateTime effectiveDate)
         {

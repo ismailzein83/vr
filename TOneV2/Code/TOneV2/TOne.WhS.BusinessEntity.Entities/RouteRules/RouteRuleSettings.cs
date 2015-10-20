@@ -13,10 +13,5 @@ namespace TOne.WhS.BusinessEntity.Entities
         public virtual void Execute(IRouteRuleExecutionContext context, RouteRuleTarget target)
         {
         }
-
-        public virtual void ApplyOptionsOrder(IRouteRuleExecutionContext context, RouteRuleTarget target)
-        {
-
-        }
     }
 }

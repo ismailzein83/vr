@@ -6,20 +6,16 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class RouteOption
+    public class RoutingProductRoute
     {
-        public int SupplierId { get; set; }
+        public int RoutingProductId { get; set; }
 
-        public string SupplierCode { get; set; }
-
-        public long SupplierZoneId { get; set; }
-
-        public Decimal SupplierRate { get; set; }
-
-        public Decimal Percentage { get; set; }
+        public long SaleZoneId { get; set; }
 
         public bool IsBlocked { get; set; }
 
         public int ExecutedRuleId { get; set; }
+
+        public List<RoutingProductRouteOption> Options { get; set; }
     }
 }

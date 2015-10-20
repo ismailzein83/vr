@@ -1,27 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Routing.Business.RouteOptionRules;
 
 namespace TOne.WhS.Routing.Business.RouteRules
 {
     public class RouteRuleExecutionContext : IRouteRuleExecutionContext
     {
         RouteRule _routeRule;
+        internal List<RouteOptionRuleTarget> _options = new List<RouteOptionRuleTarget>();
         public RouteRuleExecutionContext(RouteRule routeRule)
         {
             _routeRule = routeRule;
         }
 
-        public List<SupplierCodeMatch> SupplierCodeMatches
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public SupplierCodeMatchBySupplier SupplierCodeMatches { get; internal set; }
+
+        public SupplierZoneRatesByZone SupplierZoneRates { get; internal set; }
 
         public RouteRule RouteRule
         {
@@ -30,5 +30,31 @@ namespace TOne.WhS.Routing.Business.RouteRules
                 return _routeRule;
             }
         }
+
+        public int? NumberOfOptions { get; internal set; }
+
+        public bool TryAddOption(RouteOptionRuleTarget optionTarget)
+        {
+            RouteOptionRuleManager routeOptionRuleManager = new RouteOptionRuleManager();
+            var routeOptionRule = routeOptionRuleManager.GetMatchRule(optionTarget);
+            if (routeOptionRule != null)
+            {
+                optionTarget.ExecutedRuleId = routeOptionRule.RuleId;
+                RouteOptionRuleExecutionContext routeOptionRuleExecutionContext = new RouteOptionRuleExecutionContext();
+                routeOptionRule.Settings.Execute(routeOptionRuleExecutionContext, optionTarget);
+                if (optionTarget.BlockOption)
+                    return false;
+            }
+            _options.Add(optionTarget);
+            return true;
+        }
+
+        public ReadOnlyCollection<RouteOptionRuleTarget> GetOptions()
+        {
+            return _options.AsReadOnly();
+        }
+
+
+        
     }
 }

@@ -70,6 +70,7 @@
     <Compile Include="CodeManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CustomerPricingProductManager.cs" />
+    <Compile Include="CustomerZoneManager.cs" />
     <Compile Include="PricingProductManager.cs" />
     <Compile Include="PricingRules\BasePricingRuleManager.cs" />
     <Compile Include="PricingRules\PricingRuleManager.cs" />
@@ -89,6 +90,8 @@
     <Compile Include="Rules\StructureRulesBehaviors\RuleBehaviorByRoutingProduct.cs" />
     <Compile Include="Rules\StructureRulesBehaviors\RuleBehaviorBySaleZone.cs" />
     <Compile Include="RoutingProductManager.cs" />
+    <Compile Include="SaleZone\SalePriceListManager.cs" />
+    <Compile Include="SaleZone\SaleRateManager.cs" />
     <Compile Include="SaleZone\SaleCodeManager.cs" />
     <Compile Include="SelectiveCodeCriteriaBehavior.cs" />
     <Compile Include="SelectiveCustomerBehavior.cs" />

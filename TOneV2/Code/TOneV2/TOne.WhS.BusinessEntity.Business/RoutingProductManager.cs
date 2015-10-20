@@ -13,7 +13,7 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         public Vanrise.Entities.IDataRetrievalResult<RoutingProduct> GetFilteredRoutingProducts(Vanrise.Entities.DataRetrievalInput<RoutingProductQuery> input)
         {
-            var allRoutingProducts = GetCachedRoutingProducts();
+            var allRoutingProducts = GetAllRoutingProducts();
 
             Func<RoutingProduct, bool> filterExpression = (prod) =>
                  (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
@@ -25,13 +25,13 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public IEnumerable<RoutingProductInfo> GetRoutingProductsInfoBySaleZonePackage(int saleZonePackageId)
         {
-            var routingProducts = GetCachedRoutingProducts();
+            var routingProducts = GetAllRoutingProducts();
             return routingProducts.MapRecords(RoutingProductInfoMapper, x => x.SaleZonePackageId == saleZonePackageId);
         }
 
         public IEnumerable<RoutingProductInfo> GetRoutingProductsInfo()
         {
-            var allRoutingProducts = GetCachedRoutingProducts();
+            var allRoutingProducts = GetAllRoutingProducts();
             return allRoutingProducts.MapRecords(RoutingProductInfoMapper);
         }
 
@@ -95,11 +95,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public RoutingProduct GetRoutingProduct(int routingProductId)
         {
-            var allRoutingProducts = GetCachedRoutingProducts();
+            var allRoutingProducts = GetAllRoutingProducts();
             return allRoutingProducts.GetRecord(routingProductId);
         }
 
-        public Dictionary<int, RoutingProduct> GetCachedRoutingProducts()
+        public Dictionary<int, RoutingProduct> GetAllRoutingProducts()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRoutingProducts",
                () =>

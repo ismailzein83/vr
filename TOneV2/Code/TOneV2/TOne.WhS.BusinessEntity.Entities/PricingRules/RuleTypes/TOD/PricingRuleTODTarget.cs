@@ -10,11 +10,9 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public DateTime Time { get; set; }
 
-        public Decimal NormalRate { get; set; }
+        public IRate Rate { get; set; }
 
-        public Dictionary<string, Decimal> OtherRates { get; set; }
-
-        public Decimal RateToUse { get; set; }
+        public Decimal RateValueToUse { get; set; }
 
         public override PricingRuleType RuleType
         {

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class RouteCriteria
+    public class RouteRuleCriteria
     {
         public int? RoutingProductId { get; set; }
 

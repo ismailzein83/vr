@@ -31,6 +31,11 @@ namespace TOne.WhS.BusinessEntity.Business
             return customerPricingProducts.FindRecord(x => x.CustomerPricingProductId == customerPricingProductId);
         }
 
+        public CustomerPricingProduct GetEffectiveSellingProduct(int customerId, DateTime effectiveOn, bool futureEntities)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public TOne.Entities.InsertOperationOutput<List<CustomerPricingProductClass>> AddCustomerPricingProduct(List<CustomerPricingProductDetail> customerPricingProducts)
         {

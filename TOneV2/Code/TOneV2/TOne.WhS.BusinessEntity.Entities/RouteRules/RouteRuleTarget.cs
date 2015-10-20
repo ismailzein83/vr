@@ -20,8 +20,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public bool BlockRoute { get; set; }
 
-        public List<RouteOptionRuleTarget> Options { get; set; }
-
         #region Interfaces
 
         long? IRuleSaleZoneTarget.SaleZoneId

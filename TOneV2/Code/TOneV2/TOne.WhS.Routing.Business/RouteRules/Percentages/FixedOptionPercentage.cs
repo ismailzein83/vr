@@ -15,7 +15,8 @@ namespace TOne.WhS.Routing.Business.RouteRules.Percentages
         {
             Decimal totalTakenPercentage = 0;
             int percentagesCount = this.Percentages.Count;
-            int optionsCount = target.Options.Count;
+            var options = context.GetOptions();
+            int optionsCount = options.Count;
             for (int i = 0; i < optionsCount; i++)
             {
                 Decimal optionPercentage = 0;
@@ -24,7 +25,7 @@ namespace TOne.WhS.Routing.Business.RouteRules.Percentages
                     optionPercentage = 100 - totalTakenPercentage;
                 else
                     optionPercentage = Math.Min(this.Percentages[i], 100 - totalTakenPercentage);
-                target.Options[i].Percentage = optionPercentage;
+                options[i].Percentage = optionPercentage;
                 totalTakenPercentage -= optionPercentage;
 
                 if (totalTakenPercentage == 100)
