@@ -7,8 +7,9 @@
     function salePricingRuleManagementController($scope, WhS_BE_SalePricingRuleAPIService, WhS_BE_MainService, UtilsService, VRModalService, VRNotificationService, WhS_Be_PricingRuleTypeEnum) {
         var gridAPI;
         defineScope();
-
+        load();
         function defineScope() {
+            $scope.selectedPricingRuleTypes = [];
             $scope.searchClicked = function () {
                 if (!$scope.isGettingData && gridAPI != undefined)
                     return gridAPI.loadGrid(getFilterObject());
@@ -43,6 +44,7 @@
         }
 
         function load() {
+            definePricingRuleTypes();
             //$scope.isGettingData = true;
             //if (carrierAccountDirectiveAPI == undefined || pricingProductsDirectiveAPI == undefined)
             //    return;
@@ -64,17 +66,22 @@
 
         function getFilterObject() {
             var data = {
+                RuleTypes: UtilsService.getPropValuesFromArray($scope.selectedPricingRuleTypes, "value"),
+                Description:$scope.description
             };
             return data;
         }
-
+        function definePricingRuleTypes() {
+            $scope.pricingRuleTypes = [];
+            for (var p in WhS_Be_PricingRuleTypeEnum)
+                $scope.pricingRuleTypes.push(WhS_Be_PricingRuleTypeEnum[p]);
+        }
         function AddNewSalePricingRule(value) {
-            var onSalePricingRuleAdded = function (salePricingRuleObj) {
-                if ( gridAPI != undefined)
-                    gridAPI.onSalePricingRuleAdded(salePricingRuleObj);
+            var onPricingRuleAdded = function (salePricingRuleObj) {
+                    gridAPI.onPricingRuleAdded(salePricingRuleObj);
             };
 
-            WhS_BE_MainService.addSalePricingRule(onSalePricingRuleAdded,value);
+            WhS_BE_MainService.addSalePricingRule(onPricingRuleAdded, value);
         }
     }
 

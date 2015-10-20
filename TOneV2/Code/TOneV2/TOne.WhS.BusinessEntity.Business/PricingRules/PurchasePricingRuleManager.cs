@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
-
+using Vanrise.Common;
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class PurchasePricingRuleManager : BasePricingRuleManager<PurchasePricingRule, PurchasePricingRuleDetail, PurchasePricingRulesInput>
@@ -18,6 +18,14 @@ namespace TOne.WhS.BusinessEntity.Business
             return behaviors;
         }
 
+        public Vanrise.Entities.IDataRetrievalResult<PurchasePricingRuleDetail> GetFilteredPurchasePricingRules(Vanrise.Entities.DataRetrievalInput<PurchasePricingRuleQuery> input)
+        {
+            Func<PurchasePricingRule, bool> filterExpression = (prod) =>
+                (input.Query.Description == null || prod.Description.ToLower().Contains(input.Query.Description.ToLower()))
+                &&
+                (input.Query.RuleTypes == null || input.Query.RuleTypes.Contains(prod.Settings.RuleType));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, base.GetFilteredRules(filterExpression).ToBigResult(input, filterExpression, MapToDetails));
+        }
         protected override PurchasePricingRuleDetail MapToDetails(PurchasePricingRule rule)
         {
             throw new NotImplementedException();

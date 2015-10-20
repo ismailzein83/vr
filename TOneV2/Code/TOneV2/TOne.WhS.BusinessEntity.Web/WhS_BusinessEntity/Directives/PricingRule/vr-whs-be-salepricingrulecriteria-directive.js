@@ -61,10 +61,18 @@ function (WhS_BE_SalePricingRuleAPIService, UtilsService, $compile, WhS_BE_SaleZ
             var api = {};
 
             api.getData = function () {
-                var saleZoneGroupSettings=saleZoneGroupSettingsDirectiveAPI.getData();
-                saleZoneGroupSettings.ConfigId = $scope.selectedSaleZoneGroupTemplate.TemplateConfigID;
-                var customerGroupSettings=customerGroupSettingsDirectiveAPI.getData();
-                customerGroupSettings.ConfigId=$scope.selectedCustomerGroupTemplate.TemplateConfigID;
+                var saleZoneGroupSettings;
+                if (saleZoneGroupSettingsDirectiveAPI != undefined) {
+                    saleZoneGroupSettings = saleZoneGroupSettingsDirectiveAPI.getData();
+                    saleZoneGroupSettings.ConfigId = $scope.selectedSaleZoneGroupTemplate.TemplateConfigID;
+                }
+                   
+                var customerGroupSettings;
+                if (customerGroupSettingsDirectiveAPI != undefined)
+                {
+                    customerGroupSettings = customerGroupSettingsDirectiveAPI.getData();
+                    customerGroupSettings.ConfigId = $scope.selectedCustomerGroupTemplate.TemplateConfigID;
+                }
                 var obj={
                     SaleZoneGroupSettings: saleZoneGroupSettings,
                     CustomerGroupSettings: customerGroupSettings
@@ -73,8 +81,10 @@ function (WhS_BE_SalePricingRuleAPIService, UtilsService, $compile, WhS_BE_SaleZ
             }
 
             api.setData = function (criteria) {
-                $scope.selectedSaleZoneGroupTemplate=UtilsService.getItemByVal($scope.saleZoneGroupTemplates, criteria.SaleZoneGroupSettings.ConfigId, "TemplateConfigID")
-                $scope.selectedCustomerGroupTemplate = UtilsService.getItemByVal($scope.customerGroupTemplates, criteria.CustomerGroupSettings.ConfigId, "TemplateConfigID")
+                if (criteria.SaleZoneGroupSettings!=null)
+                    $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, criteria.SaleZoneGroupSettings.ConfigId, "TemplateConfigID")
+                if (criteria.CustomerGroupSettings != null)
+                  $scope.selectedCustomerGroupTemplate = UtilsService.getItemByVal($scope.customerGroupTemplates, criteria.CustomerGroupSettings.ConfigId, "TemplateConfigID")
                 directiveAppendixData = {
                     SaleZoneGroupSettings: criteria.SaleZoneGroupSettings,
                     CustomerGroupSettings: criteria.CustomerGroupSettings

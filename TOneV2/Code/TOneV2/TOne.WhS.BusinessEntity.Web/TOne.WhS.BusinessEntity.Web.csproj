@@ -138,6 +138,7 @@
     <Compile Include="Controllers\CustomerPricingProductController.cs" />
     <Compile Include="Controllers\PricingProductController.cs" />
     <Compile Include="Controllers\PricingRuleController.cs" />
+    <Compile Include="Controllers\PurchasePricingRuleController.cs" />
     <Compile Include="Controllers\RouteRuleController.cs" />
     <Compile Include="Controllers\RoutingProductController.cs" />
     <Compile Include="Controllers\SalePricingRuleController.cs" />
@@ -178,6 +179,7 @@
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\PricingRuleRegularTariffTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\PricingRuleTariffSettings.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\PricingRuleTODSettings.html" />
+    <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\PurchasePricingRuleGrid.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\SalePricingRuleCriteriaTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\SalePricingRuleGrid.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\vr-whs-be-pricingrule-extrachargesettings-directive.js" />
@@ -187,6 +189,7 @@
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\vr-whs-be-pricingrule-tariffsettings-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\CodeCriteria\Templates\SelectiveCodeCriteriaDirectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\SelectiveCustomersDirectiveTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\PricingRule\vr-whs-be-purchasepricingrulegrid-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleZone\Templates\SelectiveSaleZonesDirectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\SelectiveSuppliersDirectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\vr-whs-be-pricingrule-todsettings-directive.js" />
@@ -211,6 +214,7 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\CustomerPricingProductAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\PricingProductAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\PricingRuleAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\PurchasePricingRuleAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SalePricingRuleAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\RouteRuleAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\RoutingProductAPIService.js" />

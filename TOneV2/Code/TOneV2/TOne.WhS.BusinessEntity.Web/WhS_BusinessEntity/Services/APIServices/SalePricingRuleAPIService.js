@@ -9,16 +9,6 @@
         function GetFilteredSalePricingRules(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SalePricingRule", "GetFilteredSalePricingRules"), input);
         }
-        //function GetCarrierProfile(carrierProfileId) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierProfile", "GetCarrierProfile"), {
-        //        carrierProfileId: carrierProfileId
-        //    });
-
-        //}
-        //function GetCarrierProfilesInfo() {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierProfile", "GetCarrierProfilesInfo"));
-
-        //}
         function GetRule(ruleId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SalePricingRule", "GetRule"), {
                 ruleId: ruleId
@@ -26,6 +16,9 @@
         }
         function AddRule(pricingRuleObj) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SalePricingRule", "AddRule"), pricingRuleObj);
+        }
+        function UpdateRule(pricingRuleObj) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SalePricingRule", "UpdateRule"), pricingRuleObj);
         }
         function DeleteRule(ruleId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SalePricingRule", "DeleteRule"), {
@@ -35,6 +28,7 @@
         return ({
             AddRule: AddRule,
             GetRule: GetRule,
+            UpdateRule:UpdateRule,
             DeleteRule:DeleteRule,
             GetFilteredSalePricingRules: GetFilteredSalePricingRules
         });

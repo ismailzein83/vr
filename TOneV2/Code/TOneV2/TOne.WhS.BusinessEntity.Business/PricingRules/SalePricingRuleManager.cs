@@ -17,18 +17,17 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return behaviors;
         }
-        public Vanrise.Entities.IDataRetrievalResult<SalePricingRule> GetFilteredSalePricingRules(Vanrise.Entities.DataRetrievalInput<object> input)
+        public Vanrise.Entities.IDataRetrievalResult<SalePricingRuleDetail> GetFilteredSalePricingRules(Vanrise.Entities.DataRetrievalInput<SalePricingRuleQuery> input)
         {
             Func<SalePricingRule, bool> filterExpression = (prod) =>
-                 //(input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
-                 //&&
-                 //(input.Query.CarrierProfilesIds == null || input.Query.CarrierProfilesIds.Contains(prod.CarrierProfileId))
+                 (input.Query.Description == null || prod.Description.ToLower().Contains(input.Query.Description.ToLower()))
+                 &&
+                 (input.Query.RuleTypes == null || input.Query.RuleTypes.Contains(prod.Settings.RuleType));
                  // &&
                  //(input.Query.CarrierAccountsIds == null || input.Query.CarrierAccountsIds.Contains(prod.CarrierAccountId))
                  //  &&
-                 (input.Query == null || !input.Query.Equals("{}"));
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, GetFilteredRules(filterExpression).ToBigResult(input, filterExpression));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, base.GetFilteredRules(filterExpression).ToBigResult(input, filterExpression, MapToDetails));
         }
 
         protected override SalePricingRuleDetail MapToDetails(SalePricingRule rule)

@@ -1,1 +1,27 @@
-﻿
+﻿<vr-panel ng-controller="WhS_BE_PurchasePricingRuleManagementController">
+
+    <vr-form name="formFilter" vr-loader="isGettingData">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-textbox label="Description" value="description"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-select ismultipleselection datatextfield="description" datavaluefield="value"
+                               label="Rule Type" datasource="pricingRuleTypes" selectedvalues="selectedPricingRuleTypes"></vr-select>
+                </vr-columns>
+
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                    <vr-button type="Add" menuactions="addMenuActions"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-whs-be-purchasepricingrulegrid on-ready="onGridReady"></vr-whs-be-purchasepricingrulegrid>
+    </vr-form>
+
+</vr-panel>

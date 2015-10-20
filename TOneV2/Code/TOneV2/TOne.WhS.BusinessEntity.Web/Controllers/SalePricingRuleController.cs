@@ -18,7 +18,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
     {
        [HttpPost]
        [Route("GetFilteredSalePricingRules")]
-       public object GetFilteredSalePricingRules(Vanrise.Entities.DataRetrievalInput<object> input)
+       public object GetFilteredSalePricingRules(Vanrise.Entities.DataRetrievalInput<SalePricingRuleQuery> input)
        {
            SalePricingRuleManager manager = new SalePricingRuleManager();
            return GetWebResponse(input, manager.GetFilteredSalePricingRules(input));
@@ -43,6 +43,12 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
        {
            return base.DeleteRule(ruleId);
        }
-
+       
+        [HttpPost]
+        [Route("UpdateRule")]
+       public new UpdateOperationOutput<SalePricingRuleDetail> UpdateRule(SalePricingRule input)
+       {
+           return base.UpdateRule(input);
+       }
     }
 }
