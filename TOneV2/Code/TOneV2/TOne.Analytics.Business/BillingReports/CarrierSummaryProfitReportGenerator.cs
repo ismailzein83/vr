@@ -39,7 +39,9 @@ namespace TOne.Analytics.Business.BillingReports
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });            
             list.Add("DigitRate", new RdlcParameter { Value = "2", IsVisible = true });
             list.Add("ShowProfit", new RdlcParameter { Value = parameters.IsCommission.ToString(), IsVisible = true });
-            
+
+
+            list.Add("PageBreak", new RdlcParameter { Value = parameters.PageBreak.ToString(), IsVisible = true });
             
             return list;
         }
