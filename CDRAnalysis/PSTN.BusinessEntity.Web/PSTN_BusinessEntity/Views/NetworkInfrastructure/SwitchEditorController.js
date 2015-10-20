@@ -81,7 +81,8 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchBrandAPIService,
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = "Add Brand";
+                modalScope.title = UtilsService.buildTitleForAddEditor("Switch Brand");;
+                
 
                 modalScope.onBrandAdded = function (brandObj) {
                     $scope.brands.push(brandObj);
@@ -89,7 +90,7 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchBrandAPIService,
                 };
             };
 
-            VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Brand/BrandEditor.html", null, settings);
+            VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchBrandEditor.html", null, settings);
         }
 
         $scope.onDataSourceChanged = function () {
