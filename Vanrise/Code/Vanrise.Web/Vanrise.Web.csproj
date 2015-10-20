@@ -281,6 +281,7 @@
     <Content Include="Client\Javascripts\Services\NavigationService\vr-navigation-service.js" />
     <Content Include="Client\Javascripts\Services\NotificationService\vr-confirmation-modal.html" />
     <Content Include="Client\Javascripts\Services\NotificationService\vr-notification-service.js" />
+    <Content Include="Client\Javascripts\Services\UIUtilsService.js" />
     <Content Include="Client\Javascripts\Services\utils-service.js" />
     <Content Include="Client\Javascripts\Services\zone-service.js" />
     <Content Include="Client\Libraries\AngularExtensions\BsDateTimePickereDpendencies\css\bootstrap.css" />
