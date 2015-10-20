@@ -33,29 +33,29 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetRouteRule")]
-        public RouteRule GetRouteRule(int ruleId)
+        [Route("GetRule")]
+        public new RouteRule GetRule(int ruleId)
         {
             return base.GetRule(ruleId);
         }
 
         [HttpPost]
-        [Route("AddRouteRule")]
-        public InsertOperationOutput<RouteRuleDetail> AddRouteRule(RouteRule input)
+        [Route("AddRule")]
+        public new InsertOperationOutput<RouteRuleDetail> AddRule(RouteRule input)
         {
             return base.AddRule(input);
         }
 
         [HttpPost]
-        [Route("UpdateRouteRule")]
-        public UpdateOperationOutput<RouteRuleDetail> UpdateRouteRule(RouteRule input)
+        [Route("UpdateRule")]
+        public new UpdateOperationOutput<RouteRuleDetail> UpdateRule(RouteRule input)
         {
             return base.UpdateRule(input);
         }
 
         [HttpGet]
-        [Route("DeleteRouteRule")]
-        public DeleteOperationOutput<RouteRuleDetail> DeleteRouteRule(int ruleId)
+        [Route("DeleteRule")]
+        public new DeleteOperationOutput<RouteRuleDetail> DeleteRule(int ruleId)
         {
             return base.DeleteRule(ruleId);
         }
