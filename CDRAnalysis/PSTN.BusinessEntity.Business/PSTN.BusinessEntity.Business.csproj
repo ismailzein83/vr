@@ -102,6 +102,10 @@
       <Project>{026c2d4e-9fbf-491d-be9a-4249168a33fe}</Project>
       <Name>PSTN.BusinessEntity.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PSTN.BusinessEntity.MainExtensions\PSTN.BusinessEntity.MainExtensions.csproj">
+      <Project>{f11e0c25-a8c8-41dd-bf43-f0a6ac742079}</Project>
+      <Name>PSTN.BusinessEntity.MainExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Entities\Vanrise.Fzero.CDRImport.Entities.csproj">
       <Project>{8ea7f723-709a-480a-9ecf-be40c336a0cb}</Project>
       <Name>Vanrise.Fzero.CDRImport.Entities</Name>

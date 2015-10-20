@@ -5,7 +5,7 @@ app.directive("vrPstnBeSetarea", ["NormalizationRuleAPIService", "UtilsService",
     var directiveDefinitionObj = {
         restrict: "E",
         scope: {
-            onloaded: "="
+            onReady: "="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -33,16 +33,13 @@ app.directive("vrPstnBeSetarea", ["NormalizationRuleAPIService", "UtilsService",
 
         function initializeController() {
             defineScope();
-
-            loadTemplates().then(function () {
-                defineAPI();
-            });
+            defineAPI();
         }
 
         // private members
 
-        var directiveAPI;
-        var directiveData;
+        var setAreaSettingsDirectiveAPI;
+        var setAreaSettings;
 
         function defineScope() {
 
@@ -50,56 +47,57 @@ app.directive("vrPstnBeSetarea", ["NormalizationRuleAPIService", "UtilsService",
             $scope.selectedTemplate = undefined;
 
             $scope.onDirectiveLoaded = function (api) {
-                directiveAPI = api;
+                setAreaSettingsDirectiveAPI = api;
                 
-                if (directiveData != undefined) {
-                    directiveAPI.setData(directiveData);
+                if (setAreaSettings != undefined) {
+                    setAreaSettingsDirectiveAPI.setData(setAreaSettings);
                 }
             }
-        }
-
-        function loadTemplates() {
-            $scope.loadingTemplates = true;
-
-            return NormalizationRuleAPIService.GetNormalizationRuleSetAreaSettingsTemplates()
-                .then(function (response) {
-                    angular.forEach(response, function (item) {
-                        $scope.templates.push(item);
-                    });
-                })
-                .catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                })
-                .finally(function () {
-                    $scope.loadingTemplates = false;
-                });
         }
 
         function defineAPI() {
             var api = {};
 
+            api.load = function () {
+                return loadTemplates();
+            };
+
             api.getData = function () {
-                var data = directiveAPI.getData();
+                var data = setAreaSettingsDirectiveAPI.getData();
                 data.ConfigId = $scope.selectedTemplate.TemplateConfigID;
 
                 return data;
             }
 
-            api.setData = function (setAreaSettings) {
-                if (setAreaSettings == undefined || setAreaSettings == null)
-                    return;
-
-                if (directiveAPI != undefined) {
-                    directiveAPI.setData(setAreaSettings);
+            api.setData = function (data) {
+                if (setAreaSettingsDirectiveAPI != undefined) {
+                    setAreaSettingsDirectiveAPI.setData(setAreaSettings);
                 }
                 else {
-                    directiveData = setAreaSettings;
-                    $scope.selectedTemplate = UtilsService.getItemByVal($scope.templates, setAreaSettings.ConfigId, "TemplateConfigID");
+                    setAreaSettings = data;
+                    $scope.selectedTemplate = UtilsService.getItemByVal($scope.templates, data.ConfigId, "TemplateConfigID");
                 }
             }
 
-            if (ctrl.onloaded != null)
-                ctrl.onloaded(api);
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
+
+            function loadTemplates() {
+                $scope.loadingTemplates = true;
+
+                return NormalizationRuleAPIService.GetNormalizationRuleSetAreaSettingsTemplates()
+                    .then(function (response) {
+                        angular.forEach(response, function (item) {
+                            $scope.templates.push(item);
+                        });
+                    })
+                    .catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    })
+                    .finally(function () {
+                        $scope.loadingTemplates = false;
+                    });
+            }
         }
     }
 

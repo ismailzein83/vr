@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_NormalizationRuleEditorController" vr-loader="isGettingData" width="'75%'">
+﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_NormalizationRuleEditorController" vr-loader="isGettingData" width="'90%'">
     <vr-modalbody>
         <vr-form name="formNormalizationRuleEditor">
 
@@ -16,7 +16,7 @@
                     </vr-columns>
                 </vr-row>
             </div>
-              
+
             <div ng-show="criteriaSelected">
                 <vr-row>
                     <vr-columns width="normal">
@@ -66,15 +66,11 @@
             </div>
 
             <div ng-show="settingsSelected">
-                <vr-row ng-if="isAdjustNumberRule">
-                    <vr-columns width="fullrow">
-                        <vr-pstn-be-adjustnumber onloaded="onNormalizationRuleSettingsDirectiveLoaded"></vr-pstn-be-adjustnumber>
-                    </vr-columns>
-                </vr-row>
-
-                <vr-row ng-if="isSetAreaRule">
-                    <vr-columns width="fullrow">
-                        <vr-pstn-be-setarea onloaded="onNormalizationRuleSettingsDirectiveLoaded"></vr-pstn-be-setarea>
+                <vr-row>
+                    <vr-columns width="fullrow" vr-loader="loadingNormalizationRuleSettingsDirective">
+                        <vr-directivewrapper directive="normalizationRuleSettingsDirective"
+                                             on-ready="onNormalizationRuleSettingsDirectiveReady">
+                        </vr-directivewrapper>
                     </vr-columns>
                 </vr-row>
             </div>

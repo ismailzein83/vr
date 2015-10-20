@@ -10,9 +10,9 @@
             return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "NormalizationRule", "GetFilteredNormalizationRules"), input);
         }
         
-        function GetNormalizationRuleById(normalizationRuleId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "NormalizationRule", "GetNormalizationRuleById"), {
-                normalizationRuleId: normalizationRuleId
+        function GetRule(ruleId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "NormalizationRule", "GetRule"), {
+                ruleId: ruleId
             });
         }
 
@@ -24,28 +24,28 @@
             return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "NormalizationRule", "GetNormalizationRuleSetAreaSettingsTemplates"));
         }
 
-        function AddNormalizationRule(normalizationRuleObj) {
-            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "NormalizationRule", "AddNormalizationRule"), normalizationRuleObj);
+        function AddRule(rule) {
+            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "NormalizationRule", "AddRule"), rule);
         }
 
-        function UpdateNormalizationRule(normalizationRuleObj) {
-            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "NormalizationRule", "UpdateNormalizationRule"), normalizationRuleObj);
+        function UpdateRule(rule) {
+            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "NormalizationRule", "UpdateRule"), rule);
         }
 
-        function DeleteNormalizationRule(normalizationRuleId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "NormalizationRule", "DeleteNormalizationRule"), {
-                normalizationRuleId: normalizationRuleId
+        function DeleteRule(ruleId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "NormalizationRule", "DeleteRule"), {
+                ruleId: ruleId
             });
         }
 
         return ({
             GetFilteredNormalizationRules: GetFilteredNormalizationRules,
-            GetNormalizationRuleById: GetNormalizationRuleById,
+            GetRule: GetRule,
             GetNormalizationRuleAdjustNumberActionSettingsTemplates: GetNormalizationRuleAdjustNumberActionSettingsTemplates,
             GetNormalizationRuleSetAreaSettingsTemplates: GetNormalizationRuleSetAreaSettingsTemplates,
-            AddNormalizationRule: AddNormalizationRule,
-            UpdateNormalizationRule: UpdateNormalizationRule,
-            DeleteNormalizationRule: DeleteNormalizationRule
+            AddRule: AddRule,
+            UpdateRule: UpdateRule,
+            DeleteRule: DeleteRule
         });
     }
 

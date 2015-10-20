@@ -165,6 +165,8 @@ namespace PSTN.BusinessEntity.Business
 
         public IDataRetrievalResult<NormalizationRuleDetail> GetFilteredNormalizationRules(Vanrise.Entities.DataRetrievalInput<NormalizationRuleQuery> input)
         {
+            var normalizationRules = base.GetAllRules();
+
             Func<NormalizationRule, bool> filterExpression = (item) =>
                 (
                     input.Query.PhoneNumberTypes == null ||
@@ -209,13 +211,7 @@ namespace PSTN.BusinessEntity.Business
                     (item.Description != null && item.Description.Contains(input.Query.Description))
                 );
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, GetFilteredRules(filterExpression).ToBigResult(input, filterExpression, NormalizationRuleDetailMapper));
-        }
-
-        public NormalizationRule GetNormalizationRuleById(int normalizationRuleId)
-        {
-            NormalizationRule rule = GetRule(normalizationRuleId);
-            return rule;
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, normalizationRules.ToBigResult(input, filterExpression, NormalizationRuleDetailMapper));
         }
 
         public List<TemplateConfig> GetNormalizationRuleAdjustNumberActionSettingsTemplates()
@@ -228,21 +224,6 @@ namespace PSTN.BusinessEntity.Business
         {
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.SetAreaConfigType);
-        }
-
-        public InsertOperationOutput<NormalizationRuleDetail> AddNormalizationRule(NormalizationRule normalizationRuleObj)
-        {
-            return AddRule(normalizationRuleObj);
-        }
-
-        public UpdateOperationOutput<NormalizationRuleDetail> UpdateNormalizationRule(NormalizationRule normalizationRuleObj)
-        {
-            return UpdateRule(normalizationRuleObj);
-        }
-
-        public DeleteOperationOutput<NormalizationRuleDetail> DeleteNormalizationRule(int ruleId)
-        {
-            return DeleteRule(ruleId);
         }
 
         protected override NormalizationRuleDetail MapToDetails(NormalizationRule rule)

@@ -50,8 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums.cs" />
-    <Compile Include="NormalizationRuleDetail.cs" />
-    <Compile Include="NormalizationRuleQuery.cs" />
+    <Compile Include="Normalization\NormalizationRuleDetail.cs" />
+    <Compile Include="Query\NormalizationRuleQuery.cs" />
     <Compile Include="Normalization\NormalizationRule.cs" />
     <Compile Include="Normalization\NormalizationRuleCriteria.cs" />
     <Compile Include="Normalization\NormalizationRuleSettings.cs" />

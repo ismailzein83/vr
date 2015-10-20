@@ -3,13 +3,14 @@ using PSTN.BusinessEntity.Entities;
 using System.Collections.Generic;
 using System.Web.Http;
 using Vanrise.Entities;
+using Vanrise.Rules.Web.Controllers;
 using Vanrise.Web.Base;
 
 namespace PSTN.BusinessEntity.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "NormalizationRule")]
     [JSONWithTypeAttribute]
-    public class NormalizationRuleController : Vanrise.Rules.Web.Controllers.BaseRuleController<NormalizationRule, NormalizationRuleDetail, NormalizationRuleManager>
+    public class NormalizationRuleController : BaseRuleController<NormalizationRule, NormalizationRuleDetail, NormalizationRuleManager>
     {
         [HttpPost]
         [Route("GetFilteredNormalizationRules")]
@@ -20,11 +21,31 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetNormalizationRuleById")]
-        public NormalizationRule GetNormalizationRuleById(int normalizationRuleId)
+        [Route("GetRule")]
+        public new NormalizationRule GetRule(int ruleId)
         {
-            NormalizationRuleManager manager = new NormalizationRuleManager();
-            return manager.GetNormalizationRuleById(normalizationRuleId);
+            return base.GetRule(ruleId);
+        }
+
+        [HttpPost]
+        [Route("AddRule")]
+        public new InsertOperationOutput<NormalizationRuleDetail> AddRule(NormalizationRule input)
+        {
+            return base.AddRule(input);
+        }
+
+        [HttpPost]
+        [Route("UpdateRule")]
+        public new UpdateOperationOutput<NormalizationRuleDetail> UpdateRule(NormalizationRule input)
+        {
+            return base.UpdateRule(input);
+        }
+
+        [HttpGet]
+        [Route("DeleteRule")]
+        public new DeleteOperationOutput<NormalizationRuleDetail> DeleteRule(int ruleId)
+        {
+            return base.DeleteRule(ruleId);
         }
 
         [HttpGet]
@@ -41,30 +62,6 @@ namespace PSTN.BusinessEntity.Web.Controllers
         {
             NormalizationRuleManager manager = new NormalizationRuleManager();
             return manager.GetNormalizationRuleSetAreaSettingsTemplates();
-        }
-
-        [HttpPost]
-        [Route("AddNormalizationRule")]
-        public InsertOperationOutput<NormalizationRuleDetail> AddNormalizationRule(NormalizationRule normalizationRuleObj)
-        {
-            NormalizationRuleManager manager = new NormalizationRuleManager();
-            return manager.AddNormalizationRule(normalizationRuleObj);
-        }
-
-        [HttpPost]
-        [Route("UpdateNormalizationRule")]
-        public UpdateOperationOutput<NormalizationRuleDetail> UpdateNormalizationRule(NormalizationRule normalizationRuleObj)
-        {
-            NormalizationRuleManager manager = new NormalizationRuleManager();
-            return manager.UpdateNormalizationRule(normalizationRuleObj);
-        }
-
-        [HttpGet]
-        [Route("DeleteNormalizationRule")]
-        public DeleteOperationOutput<NormalizationRuleDetail> DeleteNormalizationRule(int normalizationRuleId)
-        {
-            NormalizationRuleManager manager = new NormalizationRuleManager();
-            return manager.DeleteNormalizationRule(normalizationRuleId);
         }
     }
 }

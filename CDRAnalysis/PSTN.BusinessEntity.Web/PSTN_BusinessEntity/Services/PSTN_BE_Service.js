@@ -79,13 +79,13 @@
         var modalSettings = {};
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = UtilsService.buildTitleForAddEditor("Normalization Rule");
+            modalScope.title = UtilsService.buildTitleForAddEditor(normalizationRuleType.title + " Normalization Rule");
 
             modalScope.onNormalizationRuleAdded = onNormalizationRuleAdded;
         };
 
         var parameters = {
-            NormalizationRuleType: normalizationRuleType
+            NormalizationRuleTypeValue: normalizationRuleType.value
         };
 
         VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Normalization/NormalizationRuleEditor.html", parameters, modalSettings);
@@ -97,7 +97,7 @@
             .then(function (response) {
                 if (response == true) {
 
-                    return NormalizationRuleAPIService.DeleteNormalizationRule(ruleDetail.Entity.RuleId)
+                    return NormalizationRuleAPIService.DeleteRule(ruleDetail.Entity.RuleId)
                         .then(function (deletionResponse) {
                             if (VRNotificationService.notifyOnItemDeleted("Normalization Rule", deletionResponse))
                                 onNormalizationRuleDeleted(ruleDetail);

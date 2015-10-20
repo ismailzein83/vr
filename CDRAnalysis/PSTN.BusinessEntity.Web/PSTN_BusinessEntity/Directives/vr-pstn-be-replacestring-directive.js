@@ -5,8 +5,7 @@ app.directive("vrPstnBeReplacestring", [function () {
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
-            configid: "=",
-            onloaded: "="
+            onReady: "="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -48,7 +47,6 @@ app.directive("vrPstnBeReplacestring", [function () {
             api.getData = function () {
                 return {
                     $type: "PSTN.BusinessEntity.MainExtensions.Normalization.AdjustNumber.ReplaceStringActionSettings, PSTN.BusinessEntity.MainExtensions",
-                    ConfigId: ctrl.configid,
                     StringToReplace: $scope.stringToReplace,
                     NewString: $scope.newString
                 };
@@ -59,8 +57,8 @@ app.directive("vrPstnBeReplacestring", [function () {
                 $scope.newString = replaceStringActionSettings.NewString;
             }
 
-            if (ctrl.onloaded != null)
-                ctrl.onloaded(api);
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
         }
     }
 

@@ -5,8 +5,7 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
     var directiveDefinitionObj = {
         restrict: "E",
         scope: {
-            configid: "=",
-            onloaded: "="
+            onReady: "="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -34,10 +33,7 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
 
         function initializeController() {
             defineScope();
-
-            loadActionTemplates().then(function () {
-                defineAPI();
-            });
+            defineAPI();
         }
 
         // private members
@@ -70,25 +66,12 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
             };
         }
 
-        function loadActionTemplates() {
-            $scope.loadingActionTemplates = true;
-
-            return NormalizationRuleAPIService.GetNormalizationRuleAdjustNumberActionSettingsTemplates()
-                .then(function (response) {
-                    angular.forEach(response, function (item) {
-                        $scope.actionTemplates.push(item);
-                    });
-                })
-                .catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                })
-                .finally(function () {
-                    $scope.loadingActionTemplates = false;
-                });
-        }
-
         function defineAPI() {
             var api = {};
+
+            api.load = function () {
+                return loadActionTemplates();
+            };
 
             api.getData = function () {
                 return {
@@ -98,26 +81,44 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
             }
 
             api.setData = function (adjustNumberSettings) {
-                if (adjustNumberSettings == undefined || adjustNumberSettings == null)
-                    return;
-
                 angular.forEach(adjustNumberSettings.Actions, function (item) {
                     var action = getActionItem(item);
                     $scope.actions.push(action);
                 });
             }
 
-            if (ctrl.onloaded != null)
-                ctrl.onloaded(api);
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
+
+            function loadActionTemplates() {
+                $scope.loadingActionTemplates = true;
+
+                return NormalizationRuleAPIService.GetNormalizationRuleAdjustNumberActionSettingsTemplates()
+                    .then(function (response) {
+                        angular.forEach(response, function (item) {
+                            $scope.actionTemplates.push(item);
+                        });
+                    })
+                    .catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    })
+                    .finally(function () {
+                        $scope.loadingActionTemplates = false;
+                    });
+            }
 
             function getActions() {
-                var actionList = [];
+                var actions = [];
 
                 angular.forEach($scope.actions, function (item) {
-                    actionList.push(item.ActionDirectiveAPI.getData());
+
+                    var action = item.ActionDirectiveAPI.getData();
+                    action.ConfigId = item.ConfigId;
+
+                    actions.push(action);
                 });
 
-                return actionList;
+                return actions;
             }
         }
 
@@ -135,12 +136,12 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
                 Data: (dbAction != null) ? dbAction : {}
             };
 
-            actionItem.onActionDirectiveAPILoaded = function (api) {
+            actionItem.onActionDirectiveAPIReady = function (api) {
                 actionItem.ActionDirectiveAPI = api;
                 actionItem.ActionDirectiveAPI.setData(actionItem.Data);
 
                 actionItem.Data = undefined;
-                actionItem.onActionDirectiveAPILoaded = undefined;
+                actionItem.onActionDirectiveAPIReady = undefined;
             }
 
             return actionItem;

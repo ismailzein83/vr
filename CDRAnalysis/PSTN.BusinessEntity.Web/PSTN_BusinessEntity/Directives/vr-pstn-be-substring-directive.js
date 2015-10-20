@@ -5,8 +5,7 @@ app.directive("vrPstnBeSubstring", [function () {
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
-            configid: "=",
-            onloaded: "="
+            onReady: "="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -48,7 +47,6 @@ app.directive("vrPstnBeSubstring", [function () {
             api.getData = function () {
                 return {
                     $type: "PSTN.BusinessEntity.MainExtensions.Normalization.AdjustNumber.SubstringActionSettings, PSTN.BusinessEntity.MainExtensions",
-                    ConfigId: ctrl.configid,
                     StartIndex: $scope.startIndex,
                     Length: $scope.length
                 };
@@ -59,8 +57,8 @@ app.directive("vrPstnBeSubstring", [function () {
                 $scope.length = substringActionSettings.Length;
             }
 
-            if (ctrl.onloaded != null)
-                ctrl.onloaded(api);
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
         }
     }
 

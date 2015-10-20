@@ -2,16 +2,17 @@
     
     "use strict";
 
-    NormalizationRuleEditorController.$inject = ["$scope", "NormalizationRuleAPIService", "SwitchAPIService", "TrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "PSTN_BE_NormalizationRuleTypeEnum", "UtilsService", "VRNavigationService", "VRNotificationService"];
+    NormalizationRuleEditorController.$inject = ["$scope", "NormalizationRuleAPIService", "SwitchAPIService", "TrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "PSTN_BE_NormalizationRuleTypeEnum", "UtilsService", "VRUIUtilsService", "VRNavigationService", "VRNotificationService"];
 
-    function NormalizationRuleEditorController($scope, NormalizationRuleAPIService, SwitchAPIService, TrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, PSTN_BE_NormalizationRuleTypeEnum, UtilsService, VRNavigationService, VRNotificationService) {
+    function NormalizationRuleEditorController($scope, NormalizationRuleAPIService, SwitchAPIService, TrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, PSTN_BE_NormalizationRuleTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
 
         var editMode;
+
         var normalizationRuleId;
         var normalizationRuleType;
 
+        var appendixDirectiveData; // normalizationRule
         var normalizationRuleSettingsDirectiveAPI;
-        var normalizationRuleSettingsDirectiveData;
 
         loadParameters();
         defineScope();
@@ -22,7 +23,7 @@
 
             if (parameters != undefined && parameters != null) {
                 normalizationRuleId = parameters.NormalizationRuleId;
-                normalizationRuleType = parameters.NormalizationRuleType;
+                normalizationRuleType = UtilsService.getEnum(PSTN_BE_NormalizationRuleTypeEnum, "value", parameters.NormalizationRuleTypeValue);
             }
 
             editMode = (normalizationRuleId != undefined);
@@ -41,10 +42,6 @@
 
             $scope.phoneNumberLength = undefined;
             $scope.phoneNumberPrefix = undefined;
-
-            if (!editMode) {
-                showSelectedNormalizationRuleType();
-            }
 
             $scope.beginEffectiveDate = Date.now();
             $scope.endEffectiveDate = undefined;
@@ -80,11 +77,15 @@
                 return TrunkAPIService.GetTrunksBySwitchIds(trunkFilterObj);
             }
 
-            $scope.onNormalizationRuleSettingsDirectiveLoaded = function (api) {
+            $scope.onNormalizationRuleSettingsDirectiveReady = function (api) {
                 normalizationRuleSettingsDirectiveAPI = api;
 
-                if (editMode)
-                    normalizationRuleSettingsDirectiveAPI.setData(normalizationRuleSettingsDirectiveData);
+                if (appendixDirectiveData != undefined) {
+                    tryLoadAppendixDirectives();
+                }
+                else {
+                    VRUIUtilsService.loadDirective($scope, normalizationRuleSettingsDirectiveAPI, $scope.loadingNormalizationRuleSettingsDirective);
+                }
             };
 
             $scope.saveNormalizationRule = function () {
@@ -106,18 +107,18 @@
             UtilsService.waitMultipleAsyncOperations([loadSwitches, loadTrunks])
                 .then(function () {
                     if (editMode) {
-                        NormalizationRuleAPIService.GetNormalizationRuleById(normalizationRuleId)
+                        NormalizationRuleAPIService.GetRule(normalizationRuleId)
                             .then(function (response) {
+                                appendixDirectiveData = response;
                                 fillScopeFromNormalizationRuleObj(response);
                             })
                             .catch(function (error) {
-                                VRNotificationService.notifyExceptionWithClose(error, $scope);
-                            })
-                            .finally(function () {
                                 $scope.isGettingData = false;
+                                VRNotificationService.notifyExceptionWithClose(error, $scope);
                             });
                     }
                     else {
+                        setDefaultValues();
                         $scope.isGettingData = false;
                     }
                 })
@@ -145,6 +146,48 @@
                 });
         }
 
+        function tryLoadAppendixDirectives() {
+
+            var loadOperations = [];
+            var setOperations = [];
+
+            if (normalizationRuleSettingsDirectiveAPI == undefined)
+                return;
+
+            loadOperations.push(normalizationRuleSettingsDirectiveAPI.load);
+            setOperations.push(setNormalizationRuleSettingsDirective);
+
+            UtilsService.waitMultipleAsyncOperations(loadOperations)
+                .then(function () {
+                    setAppendixDirectives();
+                })
+                .catch(function (error) {
+                    $scope.isGettingData = false;
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                });
+
+            function setAppendixDirectives() {
+                UtilsService.waitMultipleAsyncOperations(setOperations)
+                    .then(function () {
+                        appendixDirectiveData = undefined;
+                    })
+                    .catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    })
+                    .finally(function () {
+                        $scope.isGettingData = false;
+                    });
+            }
+
+            function setNormalizationRuleSettingsDirective() {
+                normalizationRuleSettingsDirectiveAPI.setData(appendixDirectiveData.Settings);
+            }
+        }
+
+        function setDefaultValues() {
+            $scope.normalizationRuleSettingsDirective = normalizationRuleType.directive;
+        }
+
         function fillScopeFromNormalizationRuleObj(rule) {
 
             $scope.description = rule.Description;
@@ -161,9 +204,8 @@
             $scope.phoneNumberLength = rule.Criteria.PhoneNumberLength;
             $scope.phoneNumberPrefix = rule.Criteria.PhoneNumberPrefix;
 
-            normalizationRuleSettingsDirectiveData = rule.Settings;
             normalizationRuleType = UtilsService.getEnum(PSTN_BE_NormalizationRuleTypeEnum, "value", rule.Settings.RuleType);
-            showSelectedNormalizationRuleType();
+            $scope.normalizationRuleSettingsDirective = normalizationRuleType.directive;
 
             $scope.beginEffectiveTime = rule.BeginEffectiveTime;
             $scope.endEffectiveTime = rule.EndEffectiveTime;
@@ -187,7 +229,7 @@
         function updateNormalizationRule() {
             var normalizationRuleObj = buildNormalizationRuleObjFromScope();
 
-            return NormalizationRuleAPIService.UpdateNormalizationRule(normalizationRuleObj)
+            return NormalizationRuleAPIService.UpdateRule(normalizationRuleObj)
                 .then(function (response) {
                     if (VRNotificationService.notifyOnItemUpdated("Normalization Rule", response)) {
                         if ($scope.onNormalizationRuleUpdated != undefined)
@@ -204,7 +246,7 @@
         function insertNormalizationRule() {
             var normalizationRuleObj = buildNormalizationRuleObjFromScope();
 
-            return NormalizationRuleAPIService.AddNormalizationRule(normalizationRuleObj)
+            return NormalizationRuleAPIService.AddRule(normalizationRuleObj)
                 .then(function (responseObject) {
 
                     if (VRNotificationService.notifyOnItemAdded("Normalization Rule", responseObject)) {
@@ -239,11 +281,6 @@
             normalizationRule.Settings.RuleType = normalizationRuleType.value;
 
             return normalizationRule;
-        }
-
-        function showSelectedNormalizationRuleType() {
-            $scope.isAdjustNumberRule = (normalizationRuleType.value == PSTN_BE_NormalizationRuleTypeEnum.AdjustNumber.value);
-            $scope.isSetAreaRule = (normalizationRuleType.value == PSTN_BE_NormalizationRuleTypeEnum.SetArea.value);
         }
     }
 
