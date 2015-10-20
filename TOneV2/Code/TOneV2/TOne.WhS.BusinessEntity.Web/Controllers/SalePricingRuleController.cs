@@ -24,10 +24,24 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
        }
 
        [HttpPost]
-       [Route("AddSalePricingRule")]
-       public InsertOperationOutput<SalePricingRuleDetail> AddSalePricingRule(SalePricingRule input)
+       [Route("AddRule")]
+       public new InsertOperationOutput<SalePricingRuleDetail> AddRule(SalePricingRule input)
        {
-           return AddRule(input);
+           return base.AddRule(input);
        }
+       [HttpGet]
+       [Route("GetRule")]
+       public new SalePricingRule GetRule(int ruleId)
+       {
+           return base.GetRule(ruleId);
+       }
+
+       [HttpGet]
+       [Route("DeleteRule")]
+       public new DeleteOperationOutput<SalePricingRuleDetail> DeleteRule(int ruleId)
+       {
+           return base.DeleteRule(ruleId);
+       }
+
     }
 }

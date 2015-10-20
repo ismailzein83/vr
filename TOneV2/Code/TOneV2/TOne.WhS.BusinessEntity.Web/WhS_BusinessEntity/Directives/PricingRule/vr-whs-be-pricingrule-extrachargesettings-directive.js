@@ -78,8 +78,8 @@ function (UtilsService, $compil, WhS_BE_PricingRuleAPIService) {
 
             api.getData = function () {
                 var obj = {
+                    $type: "TOne.WhS.BusinessEntity.Entities.PricingRuleExtraChargeSettings,TOne.WhS.BusinessEntity.Entities",
                     Actions: getActions(),
-                   // $type: "TOne.WhS.BusinessEntity.Entities.PricingRuleExtraChargeSettings,TOne.WhS.BusinessEntity.Entities",
                 }
                 return obj;
             }
@@ -94,17 +94,22 @@ function (UtilsService, $compil, WhS_BE_PricingRuleAPIService) {
 
                 return actionList;
             }
-            api.setData = function (selectedobjs) {
-                for(var i=0;i<selectedobjs.length;i++)
+            api.setData = function (settings) {
+                for (var i = 0; i < settings.Actions.length; i++)
                 {
-                    selectedobjs[i].onPricingRuleExtraChargeTemplateDirectiveReady = function (api) {
-                        selectedobjs[i].ActionDirectiveAPI = api;
-                        selectedobjs[i].ActionDirectiveAPI.setData(selectedobjs[i].Data);
-
-                        selectedobjs[i].Data = undefined;
-                        selectedobjs[i].onPricingRuleExtraChargeTemplateDirectiveReady = undefined;
+                    var action = settings.Actions[i];
+                    for (var j = 0; j < $scope.pricingRuleExtraChargeTemplates.length; j++)
+                        if (action.ConfigId == $scope.pricingRuleExtraChargeTemplates[j].TemplateConfigID)
+                            action.Editor = $scope.pricingRuleExtraChargeTemplates[j].Editor;
+                    addAPIFunction(action);
+                    $scope.actions.push(action);
+                }
+                function addAPIFunction(obj) {
+                    obj.onPricingRuleExtraChargeTemplateDirectiveReady = function (api) {
+                        obj.ActionDirectiveAPI = api;
+                        obj.ActionDirectiveAPI.setData(obj);
+                        obj = undefined;
                     }
-                    $scope.actions.push(selectedobjs[i]);
                 }
             }
             api.load = function () {

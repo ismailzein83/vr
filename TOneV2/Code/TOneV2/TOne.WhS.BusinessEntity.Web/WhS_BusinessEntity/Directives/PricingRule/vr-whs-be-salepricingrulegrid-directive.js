@@ -49,7 +49,6 @@ function (UtilsService, VRNotificationService, WhS_BE_SalePricingRuleAPIService,
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_SalePricingRuleAPIService.GetFilteredSalePricingRules(dataRetrievalInput)
                     .then(function (response) {
-                        console.log(response);
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -77,14 +76,14 @@ function (UtilsService, VRNotificationService, WhS_BE_SalePricingRuleAPIService,
                 gridAPI.itemUpdated(salePricingRule);
             }
 
-            WhS_BE_MainService.editCarrierProfile(salePricingRuleObj, onSalePricingRuleUpdated);
+            WhS_BE_MainService.editSalePricingRule(salePricingRuleObj, onSalePricingRuleUpdated);
         }
         function deleteSalePricingRule(salePricingRuleObj) {
-            var onSalePricingRuleDeleted = function () {
+            var onSalePricingRuleDeleted = function (salePricingRuleObj) {
                 //TODO: This is to refresh the Grid after delete, should be removed when centralized
-                retrieveData();
+                gridAPI.itemDeleted(salePricingRuleObj);
             };
-            WhS_BE_MainService.deleteSalePricingRule(salePricingRuleObj, onSalePricingRuleDeleted);
+            WhS_BE_MainService.deleteSalePricingRule($scope, salePricingRuleObj, onSalePricingRuleDeleted);
         }
     }
 

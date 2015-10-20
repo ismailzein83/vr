@@ -45,6 +45,7 @@ function (UtilsService, $compil) {
 
             api.getData = function () {
                 var obj = {
+                    $type: "TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.Tariff.Settings.RegularTariffSettings, TOne.WhS.BusinessEntity.Entities",
                     CallFee: $scope.callFee,
                     FirstPeriod: $scope.firstPeriod,
                     FirstPeriodRate: $scope.firstPeriodRate,
@@ -53,9 +54,11 @@ function (UtilsService, $compil) {
                 return obj;
             }
 
-            api.setData = function (selectedIds) {
-
-
+            api.setData = function (obj) {
+                $scope.callFee=obj.CallFee;
+                $scope.firstPeriod=obj.FirstPeriod,
+                $scope.firstPeriodRate=obj.FirstPeriodRate ,
+                $scope.fractionUnit=obj.FractionUnit
             }
             api.load = function () {
             }

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    salePricingRuleManagementController.$inject = ['$scope', 'WhS_BE_SalePricingRuleAPIService', 'WhS_BE_MainService', 'UtilsService', 'VRModalService', 'VRNotificationService'];
+    salePricingRuleManagementController.$inject = ['$scope', 'WhS_BE_SalePricingRuleAPIService', 'WhS_BE_MainService', 'UtilsService', 'VRModalService', 'VRNotificationService','WhS_Be_PricingRuleTypeEnum'];
 
-    function salePricingRuleManagementController($scope, WhS_BE_SalePricingRuleAPIService, WhS_BE_MainService, UtilsService, VRModalService, VRNotificationService) {
+    function salePricingRuleManagementController($scope, WhS_BE_SalePricingRuleAPIService, WhS_BE_MainService, UtilsService, VRModalService, VRNotificationService, WhS_Be_PricingRuleTypeEnum) {
         var gridAPI;
         defineScope();
 
@@ -14,7 +14,25 @@
                     return gridAPI.loadGrid(getFilterObject());
             };
 
-         
+            $scope.addMenuActions = [{
+                name: "TOD Rule",
+                clicked:function () {
+                    return AddNewSalePricingRule(WhS_Be_PricingRuleTypeEnum.TOD.value);
+                } 
+            },
+            {
+                name: "Tariff Rule",
+                clicked: function () {
+                    return AddNewSalePricingRule(WhS_Be_PricingRuleTypeEnum.Tariff.value);
+                }
+            },
+             {
+                 name: "Extra Charge",
+                 clicked: function () {
+                     return AddNewSalePricingRule(WhS_Be_PricingRuleTypeEnum.ExtraCharge.value);
+                 }
+             }];
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 var filter = {
@@ -50,13 +68,13 @@
             return data;
         }
 
-        function AddNewSalePricingRule() {
+        function AddNewSalePricingRule(value) {
             var onSalePricingRuleAdded = function (salePricingRuleObj) {
                 if ( gridAPI != undefined)
-                  gridAPI.onSalePricingRuleAdded(salePricingRuleObj);
+                    gridAPI.onSalePricingRuleAdded(salePricingRuleObj);
             };
 
-            WhS_BE_MainService.addSalePricingRule(onSalePricingRuleAdded);
+            WhS_BE_MainService.addSalePricingRule(onSalePricingRuleAdded,value);
         }
     }
 

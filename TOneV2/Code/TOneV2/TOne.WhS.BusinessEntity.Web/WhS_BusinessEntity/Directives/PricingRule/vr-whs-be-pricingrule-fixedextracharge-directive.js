@@ -35,7 +35,7 @@ function (UtilsService, $compil) {
 
             api.getData = function () {
                 var obj = {
-                    $type: "TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.ExtraCharge.Actions.FixedExtraChargeSettings, TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.ExtraCharge.Actions",
+                    $type: "TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.ExtraCharge.Actions.FixedExtraChargeSettings, TOne.WhS.BusinessEntity.Entities",
                     FromRate: $scope.fromRate,
                     ToRate: $scope.toRate,
                     ExtraAmount: $scope.extraAmount

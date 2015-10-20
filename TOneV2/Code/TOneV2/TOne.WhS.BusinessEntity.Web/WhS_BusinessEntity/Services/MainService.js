@@ -1,5 +1,5 @@
 ﻿
-app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_PricingProductAPIService', 'WhS_BE_CustomerPricingProductAPIService', 'VRModalService', 'VRNotificationService', 'WhS_Be_PricingTypeEnum', function (WhS_BE_RouteRuleAPIService, WhS_BE_PricingProductAPIService, WhS_BE_CustomerPricingProductAPIService, VRModalService, VRNotificationService, WhS_Be_PricingTypeEnum) {
+app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_PricingProductAPIService', 'WhS_BE_CustomerPricingProductAPIService', 'VRModalService', 'VRNotificationService', 'WhS_Be_PricingTypeEnum','WhS_BE_SalePricingRuleAPIService', function (WhS_BE_RouteRuleAPIService, WhS_BE_PricingProductAPIService, WhS_BE_CustomerPricingProductAPIService, VRModalService, VRNotificationService, WhS_Be_PricingTypeEnum, WhS_BE_SalePricingRuleAPIService) {
 
     return ({
         addRouteRule: addRouteRule,
@@ -15,7 +15,8 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
         addCarrierProfile:addCarrierProfile,
         editCarrierProfile: editCarrierProfile,
         addSalePricingRule: addSalePricingRule,
-        editSalePricingRule: editSalePricingRule
+        editSalePricingRule: editSalePricingRule,
+        deleteSalePricingRule: deleteSalePricingRule
     });
 
     function addRouteRule(onRouteRuleAdded)
@@ -223,5 +224,20 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingRule/PricingRuleEditor.html', parameters, settings);
     }
     
+    function deleteSalePricingRule($scope, salePricingRuleObj, onSalePricingRuleDeleted) {
+        VRNotificationService.showConfirmation()
+            .then(function (response) {
+                if (response) {
+                    return WhS_BE_SalePricingRuleAPIService.DeleteRule(salePricingRuleObj.RuleId)
+                        .then(function (deletionResponse) {
+                            VRNotificationService.notifyOnItemDeleted("Sale Pricing Rule", deletionResponse);
+                            onSalePricingRuleDeleted(salePricingRuleObj);
+                        })
+                        .catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                }
+            });
+    }
 
 }]);

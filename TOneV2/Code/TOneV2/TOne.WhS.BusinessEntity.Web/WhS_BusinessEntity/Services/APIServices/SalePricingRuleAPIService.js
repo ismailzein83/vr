@@ -19,16 +19,23 @@
         //    return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierProfile", "GetCarrierProfilesInfo"));
 
         //}
-        //function UpdateCarrierProfile(carrierProfileObject) {
-        //    return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierProfile", "UpdateCarrierProfile"), carrierProfileObject);
-        //}
-
+        function GetRule(ruleId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SalePricingRule", "GetRule"), {
+                ruleId: ruleId
+            });
+        }
         function AddRule(pricingRuleObj) {
-            console.log(pricingRuleObj);
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SalePricingRule", "AddSalePricingRule"), pricingRuleObj);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SalePricingRule", "AddRule"), pricingRuleObj);
+        }
+        function DeleteRule(ruleId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SalePricingRule", "DeleteRule"), {
+                ruleId: ruleId
+            });
         }
         return ({
             AddRule: AddRule,
+            GetRule: GetRule,
+            DeleteRule:DeleteRule,
             GetFilteredSalePricingRules: GetFilteredSalePricingRules
         });
     }

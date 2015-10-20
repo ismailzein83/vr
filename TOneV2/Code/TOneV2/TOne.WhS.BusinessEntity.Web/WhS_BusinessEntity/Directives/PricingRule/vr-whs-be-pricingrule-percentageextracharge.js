@@ -45,7 +45,7 @@ function (UtilsService, $compil) {
 
             api.getData = function () {
                 var obj = {
-                    $type: "TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.ExtraCharge.Actions.PercentageExtraChargeSettings, TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.ExtraCharge.Actions",
+                    $type: "TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.ExtraCharge.Actions.PercentageExtraChargeSettings, TOne.WhS.BusinessEntity.Entities",
                     FromRate: $scope.fromRate,
                     ToRate: $scope.toRate,
                     ExtraPercentage: $scope.extraPercentage
@@ -56,7 +56,7 @@ function (UtilsService, $compil) {
             api.setData = function (selectedobj) {
                 $scope.fromRate = selectedobj.FromRate;
                 $scope.toRate = selectedobj.ToRate
-                $scope.extraAmount = selectedobj.ExtraAmount
+                $scope.extraPercentage = selectedobj.ExtraPercentage
 
             }
             api.load = function () {

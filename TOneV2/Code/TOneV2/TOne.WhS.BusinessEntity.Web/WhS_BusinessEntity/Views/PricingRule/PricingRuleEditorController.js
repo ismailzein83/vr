@@ -2,15 +2,17 @@
 
     "use strict";
 
-    pricingRuleEditorController.$inject = ['$scope', 'WhS_BE_SalePricingRuleAPIService',  'UtilsService', 'VRNotificationService', 'VRNavigationService','WhS_Be_PricingRuleTypeEnum','WhS_BE_CarrierAccountAPIService','WhS_BE_SaleZoneAPIService','WhS_Be_PricingTypeEnum'];
+    pricingRuleEditorController.$inject = ['$scope', 'WhS_BE_SalePricingRuleAPIService',  'UtilsService', 'VRNotificationService', 'VRNavigationService','WhS_Be_PricingRuleTypeEnum','WhS_BE_CarrierAccountAPIService','WhS_BE_SaleZoneAPIService','WhS_Be_PricingTypeEnum','VRUIUtilsService'];
 
-    function pricingRuleEditorController($scope, WhS_BE_SalePricingRuleAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_Be_PricingRuleTypeEnum, WhS_BE_CarrierAccountAPIService, WhS_BE_SaleZoneAPIService, WhS_Be_PricingTypeEnum) {
+    function pricingRuleEditorController($scope, WhS_BE_SalePricingRuleAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_Be_PricingRuleTypeEnum, WhS_BE_CarrierAccountAPIService, WhS_BE_SaleZoneAPIService, WhS_Be_PricingTypeEnum, VRUIUtilsService) {
 
         var editMode;
+        var pricingRuleType;
         var pricingType;
-
+        var ruleId;
         var pricingRuleTypeDirectiveAPI;
         var criteriaDirectiveAPI;
+        var directiveAppendixData;
         loadParameters();
         defineScope();
 
@@ -18,19 +20,24 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-
             if (parameters != undefined && parameters != null) {
+                pricingRuleType = parameters.PricingRuleType;
                 pricingType = parameters.PricingType;
+                ruleId = parameters.RuleId
             }
-            console.log(parameters);
-            editMode = (pricingType == undefined);
-        }
 
+            editMode = (ruleId != undefined);
+        }
         function defineScope() {
             $scope.onCriteriaDirectiveReady = function (api) {
-                console.log(api);
                 criteriaDirectiveAPI = api;
-                load();
+                if (directiveAppendixData != undefined) {
+                    tryLoadAppendixDirectives();
+                }
+                else {
+                    $scope.criteriaAppendixLoader;
+                    VRUIUtilsService.loadDirective($scope, criteriaDirectiveAPI, $scope.criteriaAppendixLoader);
+                }
             }
 
             $scope.SavePricingRule = function () {
@@ -43,37 +50,45 @@
             };
             $scope.onPricingRuleTypeDirectiveReady = function (api) {
                 pricingRuleTypeDirectiveAPI = api;
-                api.load();
+                if (directiveAppendixData != undefined) {
+                    tryLoadAppendixDirectives();
+                }
+                else {
+                    $scope.pricingRuleTypeAppendixLoader;
+                    VRUIUtilsService.loadDirective($scope, pricingRuleTypeDirectiveAPI, $scope.pricingRuleTypeAppendixLoader);
+                }
             }
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
             $scope.selectedPricingRuleType;
-
-           
-
-            $scope.isCustomerShown = function () {
-                if (pricingType.value == WhS_Be_PricingTypeEnum.Sale.value)
-                    return true;
-                return false;
-            }
-
+            $scope.selectedPricingType;
         }
 
         function load() {
             $scope.isGettingData = true;
-            if (criteriaDirectiveAPI == undefined)
-                return;
-            //criteriaDirectiveAPI.load().catch(function (error) {
-            //    VRNotificationService.notifyException(error, $scope);
-            //    $scope.isGettingData = false;
-            //}).finally(function () {
-
-            //    $scope.isGettingData = false;
-            //});
-          //  $scope.isGettingData = true;
             definePricingRuleTypes();
-            $scope.isGettingData = false;
+            if (editMode)
+            {
+                getPricingRule();
+            }
+            else
+            {
+                $scope.isGettingData = false;
+                setDefaultValues();
+            }
+           
+        }
+        function setDefaultValues() {
+            for (var p in WhS_Be_PricingRuleTypeEnum) {
+                if (WhS_Be_PricingRuleTypeEnum[p].value == pricingRuleType) {
+                    $scope.selectedPricingRuleType = WhS_Be_PricingRuleTypeEnum[p];
+                }
+            }
+            if (pricingType != undefined)
+                for (var p in WhS_Be_PricingTypeEnum)
+                    if (WhS_Be_PricingTypeEnum[p].value == pricingType)
+                        $scope.selectedPricingType = WhS_Be_PricingTypeEnum[p];
         }
 
         function definePricingRuleTypes() {
@@ -81,8 +96,10 @@
             for (var p in WhS_Be_PricingRuleTypeEnum)
                 $scope.pricingRuleTypes.push(WhS_Be_PricingRuleTypeEnum[p]);
         }
+
         function getPricingRule() {
-            return WhS_BE_SalePricingRuleAPIService.GetRule(pricingRuleId).then(function (pricingRule) {
+            return WhS_BE_SalePricingRuleAPIService.GetRule(ruleId).then(function (pricingRule) {
+                directiveAppendixData = pricingRule;
                 fillScopeFromPricingRuleObj(pricingRule);
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -90,12 +107,59 @@
             });
         }
 
+        function tryLoadAppendixDirectives() {
+            console.log(directiveAppendixData)
+            var loadOperations = [];
+            var setDirectivesDataOperations = [];
+            if ($scope.selectedPricingRuleType != undefined) {
+                if (pricingRuleTypeDirectiveAPI == undefined)
+                    return;
+                loadOperations.push(pricingRuleTypeDirectiveAPI.load);
+
+                setDirectivesDataOperations.push(setPricingRuleTypeDirective);
+            }
+            if ($scope.selectedPricingType != undefined) {
+                if (criteriaDirectiveAPI == undefined)
+                    return;
+
+                loadOperations.push(criteriaDirectiveAPI.load);
+
+                setDirectivesDataOperations.push(setCriteriaDirective);
+            }
+            UtilsService.waitMultipleAsyncOperations(loadOperations).then(function () {
+
+                setAppendixDirectives();
+
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.isGettingData = false;
+            });
+
+            function setAppendixDirectives() {
+                UtilsService.waitMultipleAsyncOperations(setDirectivesDataOperations).then(function () {
+
+                    directiveAppendixData = undefined;
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                }).finally(function () {
+                    $scope.isGettingData = false;
+                });
+            }
+
+            function setPricingRuleTypeDirective() {
+                return pricingRuleTypeDirectiveAPI.setData(directiveAppendixData.Settings);
+            }
+
+            function setCriteriaDirective() {
+                return criteriaDirectiveAPI.setData(directiveAppendixData.Criteria);
+            }
+        }
 
         function buildPricingRuleObjFromScope() {
             var settings = pricingRuleTypeDirectiveAPI.getData();
             settings.RuleType = $scope.selectedPricingRuleType.value;
             var criteria=criteriaDirectiveAPI.getData();
-            criteria.CriteriaType=pricingType.value
+            criteria.CriteriaType = pricingType
             var pricingRule = {
                 Settings: settings,
                 Description: $scope.description,
@@ -103,11 +167,25 @@
                 BeginEffectiveTime: $scope.beginEffectiveDate,
                 EndEffectiveTime: $scope.endEffectiveDate
             }
-         
             return pricingRule;
         }
 
         function fillScopeFromPricingRuleObj(pricingRuleObj) {
+           
+            $scope.beginEffectiveDate = pricingRuleObj.BeginEffectiveTime;
+            $scope.endEffectiveDate = pricingRuleObj.EndEffectiveTime;
+            $scope.description = pricingRuleObj.Description;
+            for (var p in WhS_Be_PricingRuleTypeEnum) {
+                if (WhS_Be_PricingRuleTypeEnum[p].value == pricingRuleObj.Settings.RuleType) {
+                    $scope.selectedPricingRuleType = WhS_Be_PricingRuleTypeEnum[p];
+                }
+            }
+           for (var p in WhS_Be_PricingTypeEnum)
+               if (WhS_Be_PricingTypeEnum[p].value == pricingRuleObj.Criteria.CriteriaType)
+               {
+                   
+                   $scope.selectedPricingType = WhS_Be_PricingTypeEnum[p];
+               }
         }
 
         function insertPricingRule() {

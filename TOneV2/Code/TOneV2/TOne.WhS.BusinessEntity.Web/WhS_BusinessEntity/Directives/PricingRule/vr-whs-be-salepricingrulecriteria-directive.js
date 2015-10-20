@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeSalepricingrulecriteria', ['WhS_BE_SalePricingRuleAPIService', 'UtilsService', '$compile','WhS_BE_SaleZoneAPIService','WhS_BE_CarrierAccountAPIService','VRNotificationService',
-function (WhS_BE_SalePricingRuleAPIService, UtilsService, $compile, WhS_BE_SaleZoneAPIService,WhS_BE_CarrierAccountAPIService,VRNotificationService) {
+app.directive('vrWhsBeSalepricingrulecriteria', ['WhS_BE_SalePricingRuleAPIService', 'UtilsService', '$compile','WhS_BE_SaleZoneAPIService','WhS_BE_CarrierAccountAPIService','VRNotificationService','VRUIUtilsService',
+function (WhS_BE_SalePricingRuleAPIService, UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccountAPIService, VRNotificationService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -26,7 +26,7 @@ function (WhS_BE_SalePricingRuleAPIService, UtilsService, $compile, WhS_BE_SaleZ
     function beSalePricingRule(ctrl, $scope, $attrs) {
         var saleZoneGroupSettingsDirectiveAPI;
         var customerGroupSettingsDirectiveAPI;
-        var directiveAppendixData;
+        var directiveAppendixData ;
 
         function initializeController() {
             $scope.onCustomerGroupSettingsDirectiveReady = function (api) {
@@ -34,16 +34,8 @@ function (WhS_BE_SalePricingRuleAPIService, UtilsService, $compile, WhS_BE_SaleZ
                 if (directiveAppendixData != undefined) {
                     tryLoadAppendixDirectives();
                 } else {
-                    var promise = customerGroupSettingsDirectiveAPI.load();
-                    if (promise != undefined) {
-                        $scope.customersAppendixLoader = true;
-                        promise.catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                            $scope.customersAppendixLoader = false;
-                        }).finally(function () {
-                            $scope.customersAppendixLoader = false;
-                        });
-                    }
+                    $scope.customersAppendixLoader;
+                    VRUIUtilsService.loadDirective($scope, customerGroupSettingsDirectiveAPI, $scope.customersAppendixLoader);
                 }
 
             }
@@ -53,17 +45,8 @@ function (WhS_BE_SalePricingRuleAPIService, UtilsService, $compile, WhS_BE_SaleZ
                 if (directiveAppendixData != undefined) {
                     tryLoadAppendixDirectives();
                 } else {
-                    var promise = saleZoneGroupSettingsDirectiveAPI.load();
-                    if (promise != undefined) {
-                        $scope.saleZonesAppendixLoader = true;
-                        promise.catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                            $scope.saleZonesAppendixLoader = false;
-                        }).finally(function () {
-                           
-                            $scope.saleZonesAppendixLoader = false;
-                        });
-                    }
+                    $scope.saleZonesAppendixLoader;
+                    VRUIUtilsService.loadDirective($scope, saleZoneGroupSettingsDirectiveAPI, $scope.saleZonesAppendixLoader);
                 }
             }
 
@@ -78,16 +61,25 @@ function (WhS_BE_SalePricingRuleAPIService, UtilsService, $compile, WhS_BE_SaleZ
             var api = {};
 
             api.getData = function () {
+                var saleZoneGroupSettings=saleZoneGroupSettingsDirectiveAPI.getData();
+                saleZoneGroupSettings.ConfigId = $scope.selectedSaleZoneGroupTemplate.TemplateConfigID;
+                var customerGroupSettings=customerGroupSettingsDirectiveAPI.getData();
+                customerGroupSettings.ConfigId=$scope.selectedCustomerGroupTemplate.TemplateConfigID;
                 var obj={
-                    SaleZoneGroupSettings:saleZoneGroupSettingsDirectiveAPI.getData(),
-                    CustomerGroupSettings:customerGroupSettingsDirectiveAPI.getData()
+                    SaleZoneGroupSettings: saleZoneGroupSettings,
+                    CustomerGroupSettings: customerGroupSettings
                     }
             return obj;
             }
 
-            api.setData = function (selectedIds) {
-
-                
+            api.setData = function (criteria) {
+                $scope.selectedSaleZoneGroupTemplate=UtilsService.getItemByVal($scope.saleZoneGroupTemplates, criteria.SaleZoneGroupSettings.ConfigId, "TemplateConfigID")
+                $scope.selectedCustomerGroupTemplate = UtilsService.getItemByVal($scope.customerGroupTemplates, criteria.CustomerGroupSettings.ConfigId, "TemplateConfigID")
+                directiveAppendixData = {
+                    SaleZoneGroupSettings: criteria.SaleZoneGroupSettings,
+                    CustomerGroupSettings: criteria.CustomerGroupSettings
+                };
+                tryLoadAppendixDirectives();
             }
             api.load = function () {
             }
@@ -125,13 +117,13 @@ function (WhS_BE_SalePricingRuleAPIService, UtilsService, $compile, WhS_BE_SaleZ
 
                 setDirectivesDataOperations.push(setSaleZoneGroupSettingsDirective);
             }
-            if ($scope.selectedSupplierGroupTemplate != undefined) {
-                if (supplierGroupSettingsDirectiveAPI == undefined)
+            if ($scope.selectedCustomerGroupTemplate != undefined) {
+                if (customerGroupSettingsDirectiveAPI == undefined)
                     return;
 
-                loadOperations.push(supplierGroupSettingsDirectiveAPI.load);
+                loadOperations.push(customerGroupSettingsDirectiveAPI.load);
 
-                setDirectivesDataOperations.push(setSupplierGroupSettingsDirective);
+                setDirectivesDataOperations.push(setCustomerGroupSettingsDirective);
             }
 
             UtilsService.waitMultipleAsyncOperations(loadOperations).then(function () {
@@ -152,15 +144,16 @@ function (WhS_BE_SalePricingRuleAPIService, UtilsService, $compile, WhS_BE_SaleZ
                     $scope.isGettingData = false;
                 });
             }
+            function setSaleZoneGroupSettingsDirective() {
+                return saleZoneGroupSettingsDirectiveAPI.setData(directiveAppendixData.SaleZoneGroupSettings);
+            }
+
+            function setCustomerGroupSettingsDirective() {
+                return customerGroupSettingsDirectiveAPI.setData(directiveAppendixData.CustomerGroupSettings);
+            }
         }
 
-        function setSaleZoneGroupSettingsDirective() {
-            return saleZoneGroupSettingsDirectiveAPI.setData(appendixData.RouteCriteria.SaleZoneGroupSettings);
-        }
-
-        function setCustomerGroupSettingsDirective() {
-            return customerGroupSettingsDirectiveAPI.setData(appendixData.RouteCriteria.CustomerGroupSettings);
-        }
+        
 
         this.initializeController = initializeController;
     }

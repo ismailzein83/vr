@@ -11,7 +11,6 @@ function (UtilsService, $compil, WhS_BE_PricingRuleAPIService) {
 
             var ctrl = this;
             $scope.pricingRuleTariffSettings = [];
-            console.log("Tarrif");
             var bePricingRuleTariffSettingObject = new bePricingRuleTariffSetting(ctrl, $scope, $attrs);
             bePricingRuleTariffSettingObject.initializeController();
             $scope.onselectionchanged = function () {
@@ -49,11 +48,19 @@ function (UtilsService, $compil, WhS_BE_PricingRuleAPIService) {
             var api = {};
 
             api.getData = function () {
-                return pricingRuleTariffTemplateDirectiveAPI.getData();
+                var obj = pricingRuleTariffTemplateDirectiveAPI.getData();
+                obj.ConfigId = $scope.selectedPricingRuleTariffSettings.TemplateConfigID;
+                return obj;
             }
 
-            api.setData = function (selectedIds) {
-
+            api.setData = function (settings) {
+                for (var j = 0; j < $scope.pricingRuleTariffSettings.length; j++)
+                    if (settings.ConfigId == $scope.pricingRuleTariffSettings[j].TemplateConfigID)
+                        $scope.selectedPricingRuleTariffSettings = $scope.pricingRuleTariffSettings[j];
+                $scope.onPricingRuleTariffTemplateDirectiveReady = function (api) {
+                    pricingRuleTariffTemplateDirectiveAPI = api;
+                    pricingRuleTariffTemplateDirectiveAPI.setData(settings);
+                }
 
             }
             api.load = function () {
