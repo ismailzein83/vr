@@ -42,7 +42,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
             dictionary.Add(19, new FilterDefinition() { FilterId = 19, Abbreviation = Constants._Filter_19, OperatorTypeAllowed = OperatorType.PSTN, ExcludeHourly = false, MinValue = 1, MaxValue = int.MaxValue, DecimalPrecision = 0, ToolTip = "MinValue = 1, MaxValue = int.MaxValue, DecimalPrecision = 0", Label = "Count", Description = "Different Destination Zones", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual, Expression = CalculateDifferentDestinationZones });
-            dictionary.Add(19, new FilterDefinition() { FilterId = 20, Abbreviation = Constants._Filter_20, OperatorTypeAllowed = OperatorType.PSTN, ExcludeHourly = false, MinValue = 1, MaxValue = int.MaxValue, DecimalPrecision = 0, ToolTip = "MinValue = 1, MaxValue = int.MaxValue, DecimalPrecision = 0", Label = "Count", Description = "Different Source Zones", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual, Expression = CalculateDifferentSourceZones });
+            dictionary.Add(20, new FilterDefinition() { FilterId = 20, Abbreviation = Constants._Filter_20, OperatorTypeAllowed = OperatorType.PSTN, ExcludeHourly = false, MinValue = 1, MaxValue = int.MaxValue, DecimalPrecision = 0, ToolTip = "MinValue = 1, MaxValue = int.MaxValue, DecimalPrecision = 0", Label = "Count", Description = "Different Source Zones", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual, Expression = CalculateDifferentSourceZones });
 
 
             return dictionary.Where(x => x.Value.OperatorTypeAllowed == Constants._DefaultOperatorType || x.Value.OperatorTypeAllowed == OperatorType.Both).OrderBy(x => x.Value.FilterId).ToDictionary(i => i.Key, i => i.Value);

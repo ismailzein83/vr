@@ -69,7 +69,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         public const string _Filter_20 = "Filter_20";
 
 
-        public const OperatorType _DefaultOperatorType =  OperatorType.PSTN;
+        public const OperatorType _DefaultOperatorType =  OperatorType.Mobile;
 
     }
 }
