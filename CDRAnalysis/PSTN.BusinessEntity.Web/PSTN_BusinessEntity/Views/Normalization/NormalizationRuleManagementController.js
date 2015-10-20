@@ -92,18 +92,21 @@ function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAP
 
     function defineAddButtonMenuActions() {
         $scope.addButtonMenuActions = [
+
+             {
+                 name: "Set Area",
+                 clicked: function () {
+                     addNormalizationRule(PSTN_BE_NormalizationRuleTypeEnum.SetArea.value);
+                 }
+             }
+,
             {
-                name: "Normalize Number Rule",
+                name: "Adjust Number",
                 clicked: function () {
                     addNormalizationRule(PSTN_BE_NormalizationRuleTypeEnum.AdjustNumber.value);
                 }
-            },
-            {
-                name: "Set Area Rule",
-                clicked: function () {
-                    addNormalizationRule(PSTN_BE_NormalizationRuleTypeEnum.SetArea.value);
-                }
             }
+
         ];
     }
 
