@@ -162,8 +162,7 @@
             $scope.phoneNumberPrefix = rule.Criteria.PhoneNumberPrefix;
 
             normalizationRuleSettingsDirectiveData = rule.Settings;
-            var ruleType = UtilsService.getEnum(PSTN_BE_NormalizationRuleTypeEnum, "value", rule.Settings.RuleType);
-            normalizationRuleType = ruleType;
+            normalizationRuleType = UtilsService.getEnum(PSTN_BE_NormalizationRuleTypeEnum, "value", rule.Settings.RuleType);
             showSelectedNormalizationRuleType();
 
             $scope.beginEffectiveTime = rule.BeginEffectiveTime;

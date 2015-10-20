@@ -67,8 +67,7 @@
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            var normalizationRuleType = UtilsService.getEnum(PSTN_BE_NormalizationRuleTypeEnum, "value", normalizationRuleDetail.Entity.Settings.RuleType);
-            modalScope.title = UtilsService.buildTitleForUpdateEditor("Normalization Rule", normalizationRuleDetail.Description);
+            modalScope.title = UtilsService.buildTitleForUpdateEditor("Normalization Rule", normalizationRuleDetail.Entity.Description);
 
             modalScope.onNormalizationRuleUpdated = onNormalizationRuleUpdated;
         };
@@ -76,18 +75,17 @@
         VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Normalization/NormalizationRuleEditor.html", parameters, modalSettings);
     }
 
-    function addNormalizationRule(normalizationRuleTypeValue, onNormalizationRuleAdded) {
+    function addNormalizationRule(normalizationRuleType, onNormalizationRuleAdded) {
         var modalSettings = {};
 
         modalSettings.onScopeReady = function (modalScope) {
-            var normalizationRuleType = UtilsService.getEnum(PSTN_BE_NormalizationRuleTypeEnum, "value", normalizationRuleTypeValue);
             modalScope.title = UtilsService.buildTitleForAddEditor("Normalization Rule");
 
             modalScope.onNormalizationRuleAdded = onNormalizationRuleAdded;
         };
 
         var parameters = {
-            NormalizationRuleTypeValue: normalizationRuleTypeValue
+            NormalizationRuleType: normalizationRuleType
         };
 
         VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/Normalization/NormalizationRuleEditor.html", parameters, modalSettings);
