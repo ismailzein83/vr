@@ -127,7 +127,7 @@ function SwitchManagementController($scope, PSTN_BE_Service, SwitchAPIService, S
         var modalSettings = {};
 
         var parameters = {
-            SwitchId: gridObj.SwitchId
+            SwitchId: gridObj.Entity.SwitchId
         };
 
         modalSettings.onScopeReady = function (modalScope) {
@@ -147,7 +147,7 @@ function SwitchManagementController($scope, PSTN_BE_Service, SwitchAPIService, S
             .then(function (response) {
                 if (response == true) {
 
-                    return SwitchAPIService.DeleteSwitch(gridObj.SwitchId)
+                    return SwitchAPIService.DeleteSwitch(gridObj.Entity.SwitchId)
                         .then(function (deletionResponse) {
                             if (VRNotificationService.notifyOnItemDeleted("Switch", deletionResponse))
                                 gridAPI.itemDeleted(gridObj);

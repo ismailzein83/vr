@@ -174,8 +174,9 @@ function TrunkEditorController($scope, TrunkAPIService, SwitchAPIService, TrunkT
         return TrunkAPIService.UpdateTrunk(trunkObj)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Switch Trunk", response, "Name or Symbol")) {
-                    if ($scope.onTrunkUpdated != undefined)
+                    if ($scope.onTrunkUpdated != undefined) {
                         $scope.onTrunkUpdated(response.UpdatedObject, currentlyLinkedToTrunkId, trunkObj.LinkedToTrunkId);
+                    }
 
                     $scope.modalContext.closeModal();
                 }

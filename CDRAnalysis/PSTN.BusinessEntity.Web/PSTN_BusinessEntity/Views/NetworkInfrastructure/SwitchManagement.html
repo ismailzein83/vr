@@ -41,12 +41,12 @@
                              dataretrievalfunction="dataRetrievalFunction"
                              pagingtype="'PagingOnScroll'"
                              menuactions="gridMenuActions"
-                             idfield="SwitchId">
+                             idfield="Entity.SwitchId">
 
-                    <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Brand'" field="'BrandName'" type="'Text'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Area Code'" field="'AreaCode'" type="'Text'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Time Offset'" field="'TimeOffset'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Area Code'" field="'Entity.AreaCode'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Time Offset'" field="'Entity.TimeOffset'" type="'Text'"></vr-datagridcolumn>
 
                     <vr-datagridexpandablerow>
                         <vr-pstn-be-trunkgrid on-ready="dataItem.extensionObj.onTrunkGridReady"></vr-pstn-be-trunkgrid>

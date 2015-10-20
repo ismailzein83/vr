@@ -13,7 +13,7 @@
         var modalSettings = {};
 
         var parameters = {
-            TrunkId: trunkObj.TrunkId
+            TrunkId: trunkObj.Entity.TrunkId
         };
 
         modalSettings.onScopeReady = function (modalScope) {
@@ -47,7 +47,7 @@
 
                     trunkObj.LinkedToTrunkId = (trunkObj.LinkedToTrunkId != null) ? trunkObj.LinkedToTrunkId : -1;
 
-                    return TrunkAPIService.DeleteTrunk(trunkObj.TrunkId, trunkObj.LinkedToTrunkId)
+                    return TrunkAPIService.DeleteTrunk(trunkObj.Entity.TrunkId, trunkObj.LinkedToTrunkId)
                         .then(function (deletionResponse) {
                             if (VRNotificationService.notifyOnItemDeleted("Trunk", deletionResponse))
                                 onTrunkDeleted(trunkObj, trunkObj.LinkedToTrunkId);

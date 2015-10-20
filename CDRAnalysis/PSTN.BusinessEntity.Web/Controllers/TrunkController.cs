@@ -16,10 +16,10 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        public TrunkDetail GetTrunkById(int trunkId)
+        public Trunk GetTrunkById(int trunkId)
         {
             TrunkManager manager = new TrunkManager();
-            return manager.GetTrunkDetialById(trunkId);
+            return manager.GetTrunkById(trunkId);
         }
 
         [HttpPost]

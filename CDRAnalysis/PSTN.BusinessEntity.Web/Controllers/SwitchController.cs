@@ -16,7 +16,7 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        public SwitchDetail GetSwitchById(int switchId)
+        public Switch GetSwitchById(int switchId)
         {
             SwitchManager manager = new SwitchManager();
             return manager.GetSwitchById(switchId);

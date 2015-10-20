@@ -35,10 +35,10 @@ namespace PSTN.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSwitches.ToBigResult(input, filterExpression, SwitchDetailMapper));
         }
         
-        public SwitchDetail GetSwitchById(int switchId)
+        public Switch GetSwitchById(int switchId)
         {
             var switches = GetCachedSwitches();
-            return switches.MapRecord(SwitchDetailMapper, x => x.SwitchId == switchId);
+            return switches.GetRecord(switchId);
         }
 
         public Switch GetSwitchByDataSourceId(int dataSourceId)
@@ -68,7 +68,7 @@ namespace PSTN.BusinessEntity.Business
         public IEnumerable<int> GetSwitchAssignedDataSources()
         {
             var switches = GetCachedSwitches();
-            return switches.MapRecords(SwitchDetailMapper, x => x.DataSourceId != null).Select(x=>x.DataSourceId.Value);
+            return switches.MapRecords(SwitchDetailMapper, x => x.DataSourceId != null).Select(x=>x.Entity.DataSourceId.Value);
         }
 
         public InsertOperationOutput<SwitchDetail> AddSwitch(Switch switchObj)
@@ -159,14 +159,8 @@ namespace PSTN.BusinessEntity.Business
         {
             SwitchDetail switchDetail = new SwitchDetail();
             SwitchBrandManager manager = new SwitchBrandManager();
-
-            switchDetail.SwitchId = switchObject.SwitchId;
-            switchDetail.Name = switchObject.Name;
-            switchDetail.BrandId = switchObject.BrandId;
+            switchDetail.Entity = switchObject;
             switchDetail.BrandName = manager.GetSwitchBrandById(switchObject.BrandId).Name;
-            switchDetail.AreaCode = switchObject.AreaCode;
-            switchDetail.TimeOffset = switchObject.TimeOffset;
-            switchDetail.DataSourceId = switchObject.DataSourceId;
 
             return switchDetail;
         }

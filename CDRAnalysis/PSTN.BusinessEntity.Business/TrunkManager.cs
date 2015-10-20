@@ -47,13 +47,6 @@ namespace PSTN.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allTrunks.ToBigResult(input, filterExpression, TrunkDetailMapper));
         }
 
-
-        public TrunkDetail GetTrunkDetialById(int trunkId)
-        {
-            var trunks = GetCachedTrunks();
-            return trunks.MapRecord(TrunkDetailMapper, x => x.TrunkId == trunkId);
-        }
-
         public Trunk GetTrunkById(int trunkId)
         {
             var trunks = GetCachedTrunks();
@@ -99,6 +92,8 @@ namespace PSTN.BusinessEntity.Business
 
             if (inserted)
             {
+
+                trunkObj.TrunkId = trunkId;
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
 
                 if (trunkObj.LinkedToTrunkId != null)
@@ -109,7 +104,7 @@ namespace PSTN.BusinessEntity.Business
                     dataManager.LinkTrunks(trunkId, linkedToTrunkId);
                 }
 
-                insertOperationOutput.InsertedObject = GetTrunkDetialById(trunkId);
+                insertOperationOutput.InsertedObject = TrunkDetailMapper(trunkObj);
             }
             else
             {
@@ -144,7 +139,7 @@ namespace PSTN.BusinessEntity.Business
                     dataManager.LinkTrunks(trunkObj.TrunkId, linkedToTrunkId);
                 }
 
-                updateOperationOutput.UpdatedObject = GetTrunkDetialById(trunkObj.TrunkId);
+                updateOperationOutput.UpdatedObject = TrunkDetailMapper(trunkObj);
             }
             else
             {
@@ -187,23 +182,17 @@ namespace PSTN.BusinessEntity.Business
             }
         }
               
-        TrunkDetail TrunkDetailMapper(Trunk trunk)
+        TrunkDetail TrunkDetailMapper(Trunk trunkObj)
         {
             SwitchManager manager= new SwitchManager();
-            SwitchDetail currentSwitch = manager.GetSwitchById(trunk.SwitchId);
+            Switch currentSwitch = manager.GetSwitchById(trunkObj.SwitchId);
             Trunk currentTrunk = null;
-            if (trunk.LinkedToTrunkId.HasValue)
-                currentTrunk=GetTrunkById(trunk.LinkedToTrunkId.Value);
+            if (trunkObj.LinkedToTrunkId.HasValue)
+                currentTrunk=GetTrunkById(trunkObj.LinkedToTrunkId.Value);
 
             TrunkDetail trunkDetail = new TrunkDetail();
-            trunkDetail.TrunkId = trunk.TrunkId;
-            trunkDetail.Name = trunk.Name;
-            trunkDetail.Symbol = trunk.Symbol;
-            trunkDetail.SwitchId = trunk.SwitchId;
+            trunkDetail.Entity = trunkObj;
             trunkDetail.SwitchName = (currentSwitch !=null ?currentSwitch.Name : string.Empty );
-            trunkDetail.Type = trunk.Type;
-            trunkDetail.Direction = trunk.Direction;
-            trunkDetail.LinkedToTrunkId = trunk.LinkedToTrunkId;
             trunkDetail.LinkedToTrunkName = (currentTrunk != null ? currentTrunk.Name : string.Empty);
             return trunkDetail;
         }

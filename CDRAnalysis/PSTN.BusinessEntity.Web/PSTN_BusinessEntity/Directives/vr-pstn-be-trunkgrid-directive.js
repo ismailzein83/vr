@@ -50,8 +50,8 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "TrunkAPIService", "Trunk
                         setTrunkDescriptions(trunkObj);
                         gridAPI.itemAdded(trunkObj);
 
-                        var linkedToTrunkId = trunkObj.LinkedToTrunkId;
-                        updateDataItem(linkedToTrunkId, trunkObj.TrunkId, trunkObj.Name);
+                        var linkedToTrunkId = trunkObj.Entity.LinkedToTrunkId;
+                        updateDataItem(linkedToTrunkId, trunkObj.Entity.TrunkId, trunkObj.Entity.Name);
 
                         if (linkedToTrunkId != null) {
                             var linkedToTheLinkedToTrunkObj = UtilsService.getItemByVal($scope.trunks, linkedToTrunkId, "LinkedToTrunkId");
@@ -93,11 +93,16 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "TrunkAPIService", "Trunk
 
                 updateDataItem(linkedToFirstTrunkId, null, null);
 
-                var secondTrunkObj = UtilsService.getItemByVal($scope.trunks, secondTrunkId, "TrunkId");
-                var linkedToSecondTrunkId = (secondTrunkObj != null) ? secondTrunkObj.LinkedToTrunkId : null;
+                var entities = UtilsService.getPropValuesFromArray($scope.trunks, "Entity");
+                var dataItemIndex = UtilsService.getItemIndexByVal(entities, secondTrunkId, "TrunkId");
+
+                var secondTrunkObj = $scope.trunks[dataItemIndex];
+                var linkedToSecondTrunkId = (secondTrunkObj != null) ? secondTrunkObj.Entity.LinkedToTrunkId : null;
+
+
 
                 updateDataItem(linkedToSecondTrunkId, null, null);
-                updateDataItem(secondTrunkId, firstTrunkObj.TrunkId, firstTrunkObj.Name);
+                updateDataItem(secondTrunkId, firstTrunkObj.Entity.TrunkId, firstTrunkObj.Entity.Name);
             }
 
             PSTN_BE_Service.editTrunk(gridObj, onTrunkUpdated);
@@ -116,12 +121,15 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "TrunkAPIService", "Trunk
         function updateDataItem(dataItemId, linkedToTrunkId, linkedToTrunkName) {
 
             if (dataItemId != null) {
-                var dataItem = UtilsService.getItemByVal($scope.trunks, dataItemId, "TrunkId");
+                var entities = UtilsService.getPropValuesFromArray($scope.trunks, "Entity");
+                var dataItemIndex = UtilsService.getItemIndexByVal(entities, dataItemId, "TrunkId");
+
+                var dataItem = $scope.trunks[dataItemIndex];
 
                 if (dataItem != null) {
                     dataItem = UtilsService.cloneObject(dataItem, true);
 
-                    dataItem.LinkedToTrunkId = linkedToTrunkId;
+                    dataItem.Entity.LinkedToTrunkId = linkedToTrunkId;
                     dataItem.LinkedToTrunkName = linkedToTrunkName;
 
                     gridAPI.itemUpdated(dataItem);
@@ -131,10 +139,10 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "TrunkAPIService", "Trunk
 
         function setTrunkDescriptions(trunkObj) {
 
-            var type = UtilsService.getEnum(TrunkTypeEnum, "value", trunkObj.Type);
+            var type = UtilsService.getEnum(TrunkTypeEnum, "value", trunkObj.Entity.Type);
             trunkObj.TypeDescription = type.description;
 
-            var direction = UtilsService.getEnum(TrunkDirectionEnum, "value", trunkObj.Direction);
+            var direction = UtilsService.getEnum(TrunkDirectionEnum, "value", trunkObj.Entity.Direction);
             trunkObj.DirectionDescription = direction.description;
         }
 
