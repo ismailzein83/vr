@@ -6,25 +6,25 @@
     function routeRuleAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig) {
 
         function GetFilteredRouteRules(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "GetFilteredRouteRules", input));
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "GetFilteredRouteRules"), input);
         }
 
         function GetRouteRule(routeRuleId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "GetRouteRule", {
-                routeRuleId: routeRuleId
-            }));
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "GetRouteRule"), {
+                ruleId: routeRuleId
+            });
         }
 
         function AddRouteRule(routeRuleObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "AddRouteRule", routeRuleObject));
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "AddRouteRule"), routeRuleObject);
         }
 
         function UpdateRouteRule(routeRuleObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "UpdateRouteRule", routeRuleObject));
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "UpdateRouteRule"), routeRuleObject);
         }
 
         function DeleteRouteRule(ruleId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "DeleteRouteRule", { ruleId: ruleId }));
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "DeleteRouteRule"), { ruleId: ruleId });
         }
 
         function GetCodeCriteriaGroupTemplates() {

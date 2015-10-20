@@ -79,17 +79,17 @@ namespace TOne.WhS.BusinessEntity.Business
             return ruleStructureBehaviors;
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<RouteRule> GetFilteredRouteRules(Vanrise.Entities.DataRetrievalInput<RouteRuleQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<RouteRuleDetail> GetFilteredRouteRules(Vanrise.Entities.DataRetrievalInput<RouteRuleQuery> input)
         {
             var routeRules = base.GetAllRules();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeRules.ToBigResult(input, null));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeRules.ToBigResult(input, null, MapToDetails));
         }
 
         protected override RouteRuleDetail MapToDetails(RouteRule rule)
         {
             return new RouteRuleDetail()
             {
-                Rule = rule
+                Entity = rule
             };
         }
     }

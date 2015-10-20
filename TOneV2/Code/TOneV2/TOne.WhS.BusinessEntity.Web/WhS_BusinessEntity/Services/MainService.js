@@ -34,7 +34,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
         var modalSettings = {
         };
         var parameters = {
-            routeRuleId: routeRuleObj.RuleId
+            routeRuleId: routeRuleObj.Entity.RuleId
         };
 
         modalSettings.onScopeReady = function (modalScope) {

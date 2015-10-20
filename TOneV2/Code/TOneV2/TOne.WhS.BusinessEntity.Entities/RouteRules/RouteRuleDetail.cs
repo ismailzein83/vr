@@ -8,6 +8,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class RouteRuleDetail
     {
-        public RouteRule Rule { get; set; }
+        public RouteRule Entity { get; set; }
     }
 }

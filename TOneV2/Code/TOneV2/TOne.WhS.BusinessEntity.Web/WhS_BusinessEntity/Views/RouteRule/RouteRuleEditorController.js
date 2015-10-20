@@ -279,7 +279,7 @@
 
         function buildRouteRuleObjFromScope() {
             var routeRule = {
-                RouteRuleId: (routeRuleId != null) ? routeRuleId : 0,
+                RuleId: (routeRuleId != null) ? routeRuleId : 0,
                 RouteCriteria: {
                     RoutingProductId: $scope.selectedRoutingProduct != undefined ? $scope.selectedRoutingProduct.RoutingProductId : null,
                     ExcludedCodes: $scope.excludedCodes,
@@ -295,15 +295,14 @@
         }
 
         function fillScopeFromRouteRuleObj(routeRuleObj) {
-            console.log(routeRuleObj);
-            if (routeRuleObj.RouteCriteria.RoutingProductId != null)
-                routingProductDirectiveAPI.setData(routeRuleObj.RouteCriteria.RoutingProductId);
-
-            angular.forEach(routeRuleObj.RouteCriteria.ExcludedCodes, function (item) {
-                $scope.excludedCodes.push(item);
-            });
-
             if (routeRuleObj.RouteCriteria != null) {
+                if (routeRuleObj.RouteCriteria.RoutingProductId != null)
+                    routingProductDirectiveAPI.setData(routeRuleObj.RouteCriteria.RoutingProductId);
+
+                angular.forEach(routeRuleObj.RouteCriteria.ExcludedCodes, function (item) {
+                    $scope.excludedCodes.push(item);
+                });
+
                 if (routeRuleObj.RouteCriteria.SaleZoneGroupSettings != null)
                     $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, routeRuleObj.RouteCriteria.SaleZoneGroupSettings.ConfigId, "TemplateConfigID");
 
@@ -313,7 +312,7 @@
                 if (routeRuleObj.RouteCriteria.CodeCriteriaGroupSettings != null)
                     $scope.selectedCodeCriteriaGroupTemplate = UtilsService.getItemByVal($scope.codeCriteriaGroupTemplates, routeRuleObj.RouteCriteria.CodeCriteriaGroupSettings.ConfigId, "TemplateConfigID");
             }
-
+            
             $scope.beginEffectiveDate = routeRuleObj.BeginEffectiveTime;
             $scope.endEffectiveDate = routeRuleObj.endEffectiveTime;
         }

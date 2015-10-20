@@ -32,32 +32,32 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return manager.GetCodeCriteriaGroupTemplates();
         }
 
+        [HttpGet]
+        [Route("GetRouteRule")]
+        public RouteRule GetRouteRule(int ruleId)
+        {
+            return base.GetRule(ruleId);
+        }
+
         [HttpPost]
-        [Route("AddRule")]
+        [Route("AddRouteRule")]
         public InsertOperationOutput<RouteRuleDetail> AddRouteRule(RouteRule input)
         {
             return base.AddRule(input);
         }
 
         [HttpPost]
-        [Route("UpdateRule")]
+        [Route("UpdateRouteRule")]
         public UpdateOperationOutput<RouteRuleDetail> UpdateRouteRule(RouteRule input)
         {
             return base.UpdateRule(input);
         }
 
-        [HttpPost]
-        [Route("DeleteRule")]
+        [HttpGet]
+        [Route("DeleteRouteRule")]
         public DeleteOperationOutput<RouteRuleDetail> DeleteRouteRule(int ruleId)
         {
             return base.DeleteRule(ruleId);
-        }
-
-        [HttpPost]
-        [Route("GetRule")]
-        public RouteRuleDetail GetRouteRule(int ruleId)
-        {
-            return base.GetRule(ruleId);
         }
     }
 }
