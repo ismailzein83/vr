@@ -161,7 +161,7 @@ namespace PSTN.BusinessEntity.Business
             ruleStructureBehaviors.Add(new Rules.StructureRulesBehaviors.RuleBehaviorByNumberPrefix());
             ruleStructureBehaviors.Add(new Rules.StructureRulesBehaviors.RuleBehaviorByNumberLength());
             return ruleStructureBehaviors;
-        }       
+        }
 
         public IDataRetrievalResult<NormalizationRuleDetail> GetFilteredNormalizationRules(Vanrise.Entities.DataRetrievalInput<NormalizationRuleQuery> input)
         {
@@ -193,12 +193,12 @@ namespace PSTN.BusinessEntity.Business
                 &&
                 (
                     input.Query.SwitchIds == null ||
-                    (item.Criteria.SwitchIds != null && ListContains(input.Query.SwitchIds, item.Criteria.SwitchIds))
+                    (item.Criteria.SwitchIds != null && input.Query.SwitchIds.Where(n => item.Criteria.SwitchIds.Contains(n)).Count() > 0)
                 )
                 &&
                 (
                     input.Query.TrunkIds == null ||
-                    (item.Criteria.TrunkIds != null && ListContains(input.Query.TrunkIds, item.Criteria.TrunkIds))
+                    (item.Criteria.TrunkIds != null && input.Query.TrunkIds.Where(n => item.Criteria.TrunkIds.Contains(n)).Count() > 0)
                 )
                 &&
                 (
@@ -274,18 +274,7 @@ namespace PSTN.BusinessEntity.Business
 
             return detail;
         }
-
-        private bool ListContains(List<int> filterIds, List<int> itemIds)
-        {
-            foreach (int itemId in itemIds)
-            {
-                if (filterIds.Contains(itemId))
-                    return true;
-            }
-
-            return false;
-        }
-
+                
         #endregion
     }
 }

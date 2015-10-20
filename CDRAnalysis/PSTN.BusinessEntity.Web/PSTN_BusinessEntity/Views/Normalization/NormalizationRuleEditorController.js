@@ -111,6 +111,7 @@
                             .then(function (response) {
                                 appendixDirectiveData = response;
                                 fillScopeFromNormalizationRuleObj(response);
+                                tryLoadAppendixDirectives();
                             })
                             .catch(function (error) {
                                 $scope.isGettingData = false;
