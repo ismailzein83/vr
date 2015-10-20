@@ -15,5 +15,10 @@ namespace TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.Tariff.Setting
         public Decimal FirstPeriodRate { get; set; }
 
         public int FractionUnit { get; set; }
+
+        public override void Execute(IPricingRuleTariffContext context, PricingRuleTariffTarget target)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

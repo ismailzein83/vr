@@ -13,5 +13,10 @@ namespace TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.ExtraCharge.Ac
         public Decimal ToRate { get; set; }
 
         public Decimal ExtraAmount { get; set; }
+
+        public override void Execute(IPricingRuleExtraChargeActionContext context, PricingRuleExtraChargeTarget target)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

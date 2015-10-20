@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class PricingRuleTariffTarget : PricingRuleTarget
+    public abstract class PricingRuleTariffTarget : PricingRuleTarget
     {
-        public IRate Rate { get; set; }
+        public Decimal Rate { get; set; }
 
-        public Decimal EffectiveRateValue { get; set; }
+        public Decimal EffectiveRate { get; set; }
 
         public Decimal TotalAmount { get; set; }
 

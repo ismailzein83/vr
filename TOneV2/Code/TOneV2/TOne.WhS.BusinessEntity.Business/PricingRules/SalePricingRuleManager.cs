@@ -7,7 +7,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class SalePricingRuleManager : BasePricingRuleManager<SalePricingRule, SalePricingRuleDetail>
+    public class SalePricingRuleManager : BasePricingRuleManager<SalePricingRule, SalePricingRuleDetail, SalePricingRulesInput>
     {
         protected override IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetBehaviors()
         {
@@ -36,6 +36,33 @@ namespace TOne.WhS.BusinessEntity.Business
             return new SalePricingRuleDetail
             {
                 Entity = rule
+            };
+        }
+
+        protected override PricingRuleTODTarget CreateTODTarget(SalePricingRulesInput input)
+        {
+            return new SalePricingRuleTODTarget
+            {
+                CustomerId = input.CustomerId,
+                SaleZoneId = input.SaleZoneId
+            };
+        }
+
+        protected override PricingRuleTariffTarget CreateTariffTarget(SalePricingRulesInput input)
+        {
+            return new SalePricingRuleTariffTarget
+            {
+                CustomerId = input.CustomerId,
+                SaleZoneId = input.SaleZoneId
+            };
+        }
+
+        protected override PricingRuleExtraChargeTarget CreateExtraChargeTarget(SalePricingRulesInput input)
+        {
+            return new SalePricingRuleExtraChargeTarget
+            {
+                CustomerId = input.CustomerId,
+                SaleZoneId = input.SaleZoneId
             };
         }
     }

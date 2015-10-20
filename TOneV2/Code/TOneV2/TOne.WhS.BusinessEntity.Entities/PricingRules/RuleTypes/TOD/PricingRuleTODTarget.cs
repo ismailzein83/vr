@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class PricingRuleTODTarget : PricingRuleTarget
+    public abstract class PricingRuleTODTarget : PricingRuleTarget
     {
         public DateTime Time { get; set; }
 

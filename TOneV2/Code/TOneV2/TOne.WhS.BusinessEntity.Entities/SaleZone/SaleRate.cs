@@ -14,6 +14,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public int PriceListId { get; set; }
 
+        public int RoutingProductId { get; set; }
+
         public decimal NormalRate { get; set; }
 
         public Dictionary<string, decimal> OtherRates { get; set; }

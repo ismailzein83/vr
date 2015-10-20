@@ -7,9 +7,10 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public abstract class BasePricingRuleManager<T, Q> : Vanrise.Rules.RuleManager<T,Q>
+    public abstract class BasePricingRuleManager<T, Q, R> : Vanrise.Rules.RuleManager<T,Q>
         where T : BasePricingRule
         where Q : class
+        where R : PricingRulesInput
     {
        
         public T GetMatchRule(PricingRuleTarget target)
@@ -32,5 +33,61 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         protected abstract IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetBehaviors();
+
+        protected abstract PricingRuleTODTarget CreateTODTarget(R input);
+        protected abstract PricingRuleTariffTarget CreateTariffTarget(R input);
+        protected abstract PricingRuleExtraChargeTarget CreateExtraChargeTarget(R input);
+
+        public PricingRulesResult ApplyPricingRules(R input)
+        {
+            PricingRulesResult result = new PricingRulesResult();
+
+            PricingRuleTODTarget todTarget = CreateTODTarget(input);
+            todTarget.Rate = input.Rate;
+            todTarget.EffectiveOn = input.EffectiveOn;
+            todTarget.IsEffectiveInFuture = input.IsEffectiveInFuture;
+
+
+            var todPricingRule = GetMatchRule(todTarget);
+            if (todPricingRule != null)
+            {
+                PricingRuleTODContext todContext = new PricingRuleTODContext();
+                (todPricingRule.Settings as PricingRuleTODSettings).Execute(todContext, todTarget);
+                result.Rate = todTarget.RateValueToUse;
+            }
+            else
+                result.Rate = input.Rate.NormalRate;
+
+            PricingRuleExtraChargeTarget extraChargeTarget = CreateExtraChargeTarget(input);
+            extraChargeTarget.Rate = result.Rate;
+            extraChargeTarget.EffectiveOn = input.EffectiveOn;
+            extraChargeTarget.IsEffectiveInFuture = input.IsEffectiveInFuture;
+
+            var extraChargePricingRule = GetMatchRule(extraChargeTarget);
+            if (extraChargePricingRule != null)
+            {
+                PricingRuleExtraChargeActionContext extraChargeContext = new PricingRuleExtraChargeActionContext();
+                foreach (var action in (extraChargePricingRule.Settings as PricingRuleExtraChargeSettings).Actions)
+                {
+                    action.Execute(extraChargeContext, extraChargeTarget);
+                }
+                result.Rate = extraChargeTarget.Rate;
+            }
+
+            PricingRuleTariffTarget tariffTarget = CreateTariffTarget(input);
+            tariffTarget.Rate = result.Rate;
+            tariffTarget.EffectiveOn = input.EffectiveOn;
+            tariffTarget.IsEffectiveInFuture = input.IsEffectiveInFuture;
+
+            var tariffPricingRule = GetMatchRule(tariffTarget);
+            if (tariffPricingRule != null)
+            {
+                PricingRuleTariffContext tariffContext = new PricingRuleTariffContext();
+                (tariffPricingRule.Settings as PricingRuleTariffSettings).Execute(tariffContext, tariffTarget);
+                result.Rate = tariffTarget.Rate;
+                result.TotalAmount = tariffTarget.TotalAmount;
+            }
+            return result;
+        }
     }
 }

@@ -7,11 +7,7 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class SaleRateManager
+    public class PricingRuleTariffContext : IPricingRuleTariffContext
     {
-        public List<SalePriceListRate> GetRates(DateTime effectiveOn, bool isEffectiveInFuture)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

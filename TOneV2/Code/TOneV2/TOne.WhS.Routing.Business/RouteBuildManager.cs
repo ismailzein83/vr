@@ -24,18 +24,20 @@ namespace TOne.WhS.Routing.Business
             throw new NotImplementedException();
         }
 
-        public List<CustomerZoneRate> GetCustomerZoneRates(int customerId, DateTime effectiveOn, bool futureEntities)
+        public List<CustomerZoneRate> GetCustomerZoneRates(int customerId, DateTime effectiveOn, bool isEffectiveInFuture)
         {
+            List<CustomerZoneRate> customerZoneRates = new List<CustomerZoneRate>();
+
             CustomerZoneManager customerZoneManager = new CustomerZoneManager();
-            CustomerZones customerZones = customerZoneManager.GetCustomerZones(customerId, effectiveOn, futureEntities);
+            CustomerZones customerZones = customerZoneManager.GetCustomerZones(customerId, effectiveOn, isEffectiveInFuture);
             
-            SalePriceListRatesByOwner ratesByOwner = GetRatesByOwner(effectiveOn, futureEntities);
+            SalePriceListRatesByOwner ratesByOwner = GetRatesByOwner(effectiveOn, isEffectiveInFuture);
 
             SalePriceListRatesByZone customerRates;
             ratesByOwner.RatesByCustomers.TryGetValue(customerId, out customerRates);
 
             CustomerPricingProductManager customerSellingProductManager = new CustomerPricingProductManager();
-            CustomerPricingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, effectiveOn, futureEntities);
+            CustomerPricingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, effectiveOn, isEffectiveInFuture);
             SalePriceListRatesByZone sellingProductRates = null;
             if (customerSellingProduct != null)
                 ratesByOwner.RatesByPricingProduct.TryGetValue(customerSellingProduct.PricingProductId, out sellingProductRates);
@@ -43,33 +45,47 @@ namespace TOne.WhS.Routing.Business
             SalePricingRuleManager salePricingRuleManager = new SalePricingRuleManager();
             foreach(var customerZone in customerZones.Zones)
             {
+                bool isPricingProductRate = false;
                 SalePriceListRate zoneRate;
                 if (!customerRates.TryGetValue(customerZone.ZoneId, out zoneRate))
                 {
                     if (sellingProductRates != null)
-                        sellingProductRates.TryGetValue(customerZone.ZoneId, out zoneRate);
+                    {
+                        if (sellingProductRates.TryGetValue(customerZone.ZoneId, out zoneRate))
+                            isPricingProductRate = true;
+                    }
                 }
                 if(zoneRate != null)
                 {
-                    PricingRuleTariffTarget tariffTarget = new PricingRuleTariffTarget
+                    SalePricingRulesInput salePricingRulesInput = new SalePricingRulesInput
                     {
-                         Rate = zoneRate
+                        CustomerId = customerId,
+                        SaleZoneId = customerZone.ZoneId,
+                        Rate = zoneRate,
+                        EffectiveOn = effectiveOn,
+                        IsEffectiveInFuture = isEffectiveInFuture
                     };
-                    var tariffPricingRule = salePricingRuleManager.GetMatchRule(tariffTarget);
-                    if(tariffPricingRule != null)
+                    var pricingRulesResult = salePricingRuleManager.ApplyPricingRules(salePricingRulesInput);
+
+                    CustomerZoneRate customerZoneRate = new CustomerZoneRate
                     {
-                      //  (tariffPricingRule.Settings as PricingRuleTariffSettings).e
-                    }
+                        CustomerId = customerId,
+                        RoutingProductId = zoneRate.RoutingProductId,
+                        SellingProductId = isPricingProductRate ? customerSellingProduct.PricingProductId : (int?)null,
+                        SaleZoneId = customerZone.ZoneId,
+                        Rate = pricingRulesResult != null ? pricingRulesResult.Rate : zoneRate.NormalRate
+                    };
+                    customerZoneRates.Add(customerZoneRate);
                 }
             }
 
-            return null;
+            return customerZoneRates;
         }
 
-
-
-        SalePriceListRatesByOwner GetRatesByOwner(DateTime effectiveOn, bool futureEntities)
+        SalePriceListRatesByOwner GetRatesByOwner(DateTime effectiveOn, bool isEffectiveInFuture)
         {
+            SaleRateManager saleRateManager = new SaleRateManager();
+            var rates = saleRateManager.GetRates(effectiveOn, isEffectiveInFuture);
             throw new NotImplementedException();
         }
 

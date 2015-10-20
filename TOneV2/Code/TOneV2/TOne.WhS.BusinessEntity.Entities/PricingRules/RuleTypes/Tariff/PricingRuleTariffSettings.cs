@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class PricingRuleTariffSettings : PricingRuleSettings
+    public abstract class PricingRuleTariffSettings : PricingRuleSettings
     {
         public int ConfigId { get; set; }
+
+        public abstract void Execute(IPricingRuleTariffContext context, PricingRuleTariffTarget target);
     }
 }
