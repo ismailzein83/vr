@@ -168,6 +168,7 @@
     <Content Include="WhS_BusinessEntity\Constant\ModuleConfig.js" />
     <Content Include="WhS_BusinessEntity\Constant\PricingRuleTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\PricingTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\RouteRuleCriteriaTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierAccountGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierProfileGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingProduct\Templates\CustomerPricingProductGridTemplate.html" />

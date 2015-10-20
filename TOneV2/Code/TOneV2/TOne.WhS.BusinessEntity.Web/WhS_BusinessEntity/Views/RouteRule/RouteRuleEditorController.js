@@ -3,15 +3,15 @@
     "use strict";
 
     routeRuleEditorController.$inject = ['$scope', 'WhS_BE_RouteRuleAPIService', 'WhS_BE_RoutingProductAPIService', 'WhS_BE_SaleZoneAPIService', 'WhS_BE_CarrierAccountAPIService',
-        'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+        'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'WhS_Be_RouteRuleCriteriaTypeEnum'];
 
     function routeRuleEditorController($scope, WhS_BE_RouteRuleAPIService, WhS_BE_RoutingProductAPIService, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccountAPIService,
-        UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+        UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, WhS_Be_RouteRuleCriteriaTypeEnum) {
 
         var editMode;
         var routeRuleId;
 
-        var directiveAppendixData;
+        var appendixDirectiveData;
 
         var routingProductDirectiveAPI;
         var saleZoneGroupSettingsDirectiveAPI;
@@ -41,7 +41,7 @@
             $scope.onSaleZoneGroupSettingsDirectiveReady = function (api) {
                 saleZoneGroupSettingsDirectiveAPI = api;
 
-                if (directiveAppendixData != undefined)
+                if (appendixDirectiveData != undefined)
                     tryLoadAppendixDirectives();
                 else
                     VRUIUtilsService.loadDirective($scope, saleZoneGroupSettingsDirectiveAPI, 'saleZonesAppendixLoader');
@@ -50,7 +50,7 @@
             $scope.onCustomerGroupSettingsDirectiveReady = function (api) {
                 customerGroupSettingsDirectiveAPI = api;
 
-                if (directiveAppendixData != undefined)
+                if (appendixDirectiveData != undefined)
                     tryLoadAppendixDirectives();
                 else
                     VRUIUtilsService.loadDirective($scope, customerGroupSettingsDirectiveAPI, 'customersAppendixLoader');
@@ -59,7 +59,7 @@
             $scope.onCodeCriteriaGroupSettingsDirectiveReady = function (api) {
                 codeCriteriaGroupSettingsDirectiveAPI = api;
 
-                if (directiveAppendixData != undefined)
+                if (appendixDirectiveData != undefined)
                     tryLoadAppendixDirectives();
                 else
                     VRUIUtilsService.loadDirective($scope, codeCriteriaGroupSettingsDirectiveAPI, 'codeCriteriaAppendixLoader');
@@ -112,6 +112,10 @@
                 }
             }
 
+            $scope.onRouteRuleCrieriaTypeSelectionChanged = function () {
+                
+            }
+
             $scope.saleZoneGroupTemplates = [];
             $scope.customerGroupTemplates = [];
             $scope.codeCriteriaGroupTemplates = [];
@@ -129,6 +133,8 @@
             if (routingProductDirectiveAPI == undefined)
                 return;
 
+            $scope.routeRuleCrieriaTypes = UtilsService.getArrayEnum(WhS_Be_RouteRuleCriteriaTypeEnum);
+
             return UtilsService.waitMultipleAsyncOperations([routingProductDirectiveAPI.load, loadSaleZoneGroupTemplates, loadCustomerGroupTemplates, loadCodeCriteriaGroupTemplates]).then(function () {
                 if (editMode) {
                     getRouteRule();
@@ -145,10 +151,8 @@
 
         function getRouteRule() {
             return WhS_BE_RouteRuleAPIService.GetRule(routeRuleId).then(function (routeRule) {
+                appendixDirectiveData = routeRule;
                 fillScopeFromRouteRuleObj(routeRule);
-                directiveAppendixData = routeRule;
-                tryLoadAppendixDirectives();
-
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.isGettingData = false;
@@ -223,7 +227,7 @@
             function setAppendixDirectives() {
                 UtilsService.waitMultipleAsyncOperations(setDirectivesDataOperations).then(function () {
 
-                    directiveAppendixData = undefined;
+                    appendixDirectiveData = undefined;
 
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -233,15 +237,15 @@
             }
 
             function setSaleZoneGroupSettingsDirective() {
-                return saleZoneGroupSettingsDirectiveAPI.setData(directiveAppendixData.RouteCriteria.SaleZoneGroupSettings);
+                return saleZoneGroupSettingsDirectiveAPI.setData(appendixDirectiveData.Criteria.SaleZoneGroupSettings);
             }
 
             function setCustomerGroupSettingsDirective() {
-                return customerGroupSettingsDirectiveAPI.setData(directiveAppendixData.RouteCriteria.CustomerGroupSettings);
+                return customerGroupSettingsDirectiveAPI.setData(appendixDirectiveData.Criteria.CustomerGroupSettings);
             }
 
             function setCodeCriteriaGroupSettingsDirective() {
-                return codeCriteriaGroupSettingsDirectiveAPI.setData(directiveAppendixData.RouteCriteria.CodeCriteriaGroupSettings);
+                return codeCriteriaGroupSettingsDirectiveAPI.setData(appendixDirectiveData.Criteria.CodeCriteriaGroupSettings);
             }
         }
 
@@ -249,7 +253,7 @@
             var routeRule = {
                 RuleId: (routeRuleId != null) ? routeRuleId : 0,
                 Criteria: {
-                    RoutingProductId: $scope.selectedRoutingProduct != undefined ? $scope.selectedRoutingProduct.RoutingProductId : null,
+                    RoutingProductId: routingProductDirectiveAPI.getData().RoutingProductId,
                     ExcludedCodes: $scope.excludedCodes,
                     SaleZoneGroupSettings: getSaleZoneGroupSettings(),
                     CustomerGroupSettings: getCustomersGroupSettings(),
@@ -263,22 +267,22 @@
         }
 
         function fillScopeFromRouteRuleObj(routeRuleObj) {
-            if (routeRuleObj.RouteCriteria != null) {
-                if (routeRuleObj.RouteCriteria.RoutingProductId != null)
-                    routingProductDirectiveAPI.setData(routeRuleObj.RouteCriteria.RoutingProductId);
+            if (routeRuleObj.Criteria != null) {
+                if (routeRuleObj.Criteria.RoutingProductId != null)
+                    routingProductDirectiveAPI.setData(routeRuleObj.Criteria.RoutingProductId);
 
-                angular.forEach(routeRuleObj.RouteCriteria.ExcludedCodes, function (item) {
+                angular.forEach(routeRuleObj.Criteria.ExcludedCodes, function (item) {
                     $scope.excludedCodes.push(item);
                 });
 
-                if (routeRuleObj.RouteCriteria.SaleZoneGroupSettings != null)
-                    $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, routeRuleObj.RouteCriteria.SaleZoneGroupSettings.ConfigId, "TemplateConfigID");
+                if (routeRuleObj.Criteria.SaleZoneGroupSettings != null)
+                    $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, routeRuleObj.Criteria.SaleZoneGroupSettings.ConfigId, "TemplateConfigID");
 
-                if (routeRuleObj.RouteCriteria.CustomerGroupSettings != null)
-                    $scope.selectedCustomerGroupTemplate = UtilsService.getItemByVal($scope.customerGroupTemplates, routeRuleObj.RouteCriteria.CustomerGroupSettings.ConfigId, "TemplateConfigID");
+                if (routeRuleObj.Criteria.CustomerGroupSettings != null)
+                    $scope.selectedCustomerGroupTemplate = UtilsService.getItemByVal($scope.customerGroupTemplates, routeRuleObj.Criteria.CustomerGroupSettings.ConfigId, "TemplateConfigID");
 
-                if (routeRuleObj.RouteCriteria.CodeCriteriaGroupSettings != null)
-                    $scope.selectedCodeCriteriaGroupTemplate = UtilsService.getItemByVal($scope.codeCriteriaGroupTemplates, routeRuleObj.RouteCriteria.CodeCriteriaGroupSettings.ConfigId, "TemplateConfigID");
+                if (routeRuleObj.Criteria.CodeCriteriaGroupSettings != null)
+                    $scope.selectedCodeCriteriaGroupTemplate = UtilsService.getItemByVal($scope.codeCriteriaGroupTemplates, routeRuleObj.Criteria.CodeCriteriaGroupSettings.ConfigId, "TemplateConfigID");
             }
             
             $scope.beginEffectiveDate = routeRuleObj.BeginEffectiveTime;
@@ -343,7 +347,6 @@
             else
                 return null;
         }
-
     }
 
     appControllers.controller('WhS_BE_RouteRuleEditorController', routeRuleEditorController);
