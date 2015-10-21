@@ -20,4 +20,4 @@
 	WhS_CodePreparation		C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.CodePreparation.Web\WhS_CodePreparation
 	WhS_BusinessEntity		C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Web\WhS_BusinessEntity
 	WhS_SupplierPriceList	C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.SupplierPriceList.Web\WhS_SupplierPriceList	
-	WhS_Sales				C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.Sales.Web\WhS_Sales			
+	WhS_Sales				C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.Sales.Web\WhS_Sales
