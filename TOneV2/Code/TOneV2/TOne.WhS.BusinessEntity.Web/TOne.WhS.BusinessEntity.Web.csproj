@@ -128,6 +128,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="WhS_BusinessEntity\Directives\MainExtensions\SuppliersWithZonesGroups\" />
     <Folder Include="WhS_BusinessEntity\Views\PricingProduct\Grids\" />
     <Folder Include="WhS_BusinessEntity\Views\RoutingProduct\Grids\" />
   </ItemGroup>
