@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_NormalizationRuleEditorController" vr-loader="isGettingData" width="'90%'">
+﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_NormalizationRuleEditorController" vr-loader="isGettingData" >
     <vr-modalbody>
         <vr-form name="formNormalizationRuleEditor">
 
@@ -19,7 +19,7 @@
 
             <div ng-show="criteriaSelected">
                 <vr-row>
-                    <vr-columns width="normal">
+                    <vr-columns width="1/3row">
                         <vr-select label="Switch"
                                    datasource="switches"
                                    selectedvalues="selectedSwitches"
@@ -31,7 +31,7 @@
                         </vr-select>
                     </vr-columns>
 
-                    <vr-columns width="normal">
+                    <vr-columns width="1/3row">
                         <vr-select label="Trunk"
                                    datasource="getSwitchRelatedTrunks"
                                    selectedvalues="selectedTrunks"
@@ -43,7 +43,7 @@
                         </vr-select>
                     </vr-columns>
 
-                    <vr-columns width="normal">
+                    <vr-columns width="1/3row">
                         <vr-select label="Number Type"
                                    datasource="phoneNumberTypes"
                                    selectedvalues="selectedPhoneNumberType"
@@ -55,11 +55,11 @@
                         </vr-select>
                     </vr-columns>
 
-                    <vr-columns width="normal">
+                    <vr-columns width="1/3row">
                         <vr-textbox label="Number Length" value="phoneNumberLength" type="number" maxlength="2" minvalue="1" maxvalue="99"></vr-textbox>
                     </vr-columns>
 
-                    <vr-columns width="normal">
+                    <vr-columns width="1/3row">
                         <vr-textbox label="Number Prefix" value="phoneNumberPrefix"></vr-textbox>
                     </vr-columns>
                 </vr-row>
@@ -77,11 +77,11 @@
 
             <div ng-show="scheduleSettingsSelected">
                 <vr-row>
-                    <vr-columns width="normal">
+                    <vr-columns width="1/3row">
                         <vr-datetimepicker label="Begin Effective Date" value="beginEffectiveTime" type="date" isrequired></vr-datetimepicker>
                     </vr-columns>
 
-                    <vr-columns width="normal">
+                    <vr-columns width="1/3row">
                         <vr-datetimepicker label="End Effective Date" value="endEffectiveTime" type="date"></vr-datetimepicker>
                     </vr-columns>
                 </vr-row>
