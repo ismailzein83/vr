@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeRouteruleRegular', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive('vrWhsBeRouteruleRegular', ['UtilsService', 'WhS_Routing_RoutRuleSettingsAPIService', 'VRUIUtilsService',
+    function (UtilsService, WhS_Routing_RoutRuleSettingsAPIService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -86,23 +86,35 @@ app.directive('vrWhsBeRouteruleRegular', ['UtilsService', 'VRUIUtilsService',
                         loadOptionFilterSettingsGroupTemplates, loadOptionPercentageSettingsGroupTemplates);
 
                     function loadOptionSettingsGroupTemplates() {
-                        //return WhS_BE_SaleZoneAPIService.GetSaleZoneGroupTemplates().then(function (response) {
-                        //    angular.forEach(response, function (item) {
-                        //        $scope.saleZoneGroupTemplates.push(item);
-                        //    });
-                        //});
+                        return WhS_Routing_RoutRuleSettingsAPIService.GetRouteOptionSettingsGroupTemplates().then(function (response) {
+                            angular.forEach(response, function (item) {
+                                $scope.optionSettingsGroupTemplates.push(item);
+                            });
+                        });
                     }
 
                     function loadOptionOrderSettingsGroupTemplates() {
-                       
+                        return WhS_Routing_RoutRuleSettingsAPIService.GetRouteOptionOrderSettingsTemplates().then(function (response) {
+                            angular.forEach(response, function (item) {
+                                $scope.optionOrderSettingsGroupTemplates.push(item);
+                            });
+                        });
                     }
 
                     function loadOptionFilterSettingsGroupTemplates() {
-
+                        return WhS_Routing_RoutRuleSettingsAPIService.GetRouteOptionFilterSettingsTemplates().then(function (response) {
+                            angular.forEach(response, function (item) {
+                                $scope.optionFilterSettingsGroupTemnplates.push(item);
+                            });
+                        });
                     }
 
                     function loadOptionPercentageSettingsGroupTemplates() {
-
+                        return WhS_Routing_RoutRuleSettingsAPIService.GetRouteOptionPercentageSettingsTemplates().then(function (response) {
+                            angular.forEach(response, function (item) {
+                                $scope.optionPercentageSettingsGroupTemplates.push(item);
+                            });
+                        });
                     }
                 }
 

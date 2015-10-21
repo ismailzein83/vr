@@ -164,6 +164,13 @@
       <Name>TOne.WhS.Routing.Business</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="WhS_Routing\Constant\ModuleConfig.js" />
+    <Content Include="WhS_Routing\Services\APIServices\RouteRuleSettingsAPIService.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="WhS_Routing\Directives\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

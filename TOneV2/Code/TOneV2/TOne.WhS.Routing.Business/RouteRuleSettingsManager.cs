@@ -14,5 +14,23 @@ namespace TOne.WhS.Routing.Business
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.RouteOptionSettingsGroup);
         }
+
+        public List<Vanrise.Entities.TemplateConfig> GetRouteOptionOrderSettingsTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.RouteRuleOptionOrderSettings);
+        }
+
+        public List<Vanrise.Entities.TemplateConfig> GetRouteOptionFilterSettingsTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.RouteRuleOptionFilterSettings);
+        }
+
+        public List<Vanrise.Entities.TemplateConfig> GetRouteOptionPercentageSettingsTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.RouteRuleOptionPercentageSettings);
+        }
     }
 }

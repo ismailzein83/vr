@@ -10,6 +10,10 @@ namespace TOne.WhS.Routing.Business
     {
         public const string RouteOptionSettingsGroup = "WhS_BE_RouteOptionSettingsGroup";
 
-        public const string RouteRuleOptionOrderSettings = "WhS_BE_RouteOptionSettingsGroup";
+        public const string RouteRuleOptionOrderSettings = "WhS_BE_RouteRuleOptionOrderSettings";
+
+        public const string RouteRuleOptionFilterSettings = "WhS_BE_RouteRuleOptionFilterSettings";
+
+        public const string RouteRuleOptionPercentageSettings = "WhS_BE_RouteRuleOptionPercentageSettings";
     }
 }
