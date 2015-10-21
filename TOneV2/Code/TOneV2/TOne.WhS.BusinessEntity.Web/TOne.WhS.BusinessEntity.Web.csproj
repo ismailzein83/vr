@@ -180,9 +180,11 @@
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\PricingRuleRegularTariffTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\PricingRuleTariffSettings.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\PricingRuleTODSettings.html" />
+    <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\PurchasePricingRuleCriteriaTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\PurchasePricingRuleGrid.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\SalePricingRuleCriteriaTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\SalePricingRuleGrid.html" />
+    <Content Include="WhS_BusinessEntity\Directives\PricingRule\vr-whs-be-purchasepricingrulecriteria-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\vr-whs-be-pricingrule-extrachargesettings-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\vr-whs-be-pricingrule-fixedextracharge-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\vr-whs-be-pricingrule-percentageextracharge.js" />

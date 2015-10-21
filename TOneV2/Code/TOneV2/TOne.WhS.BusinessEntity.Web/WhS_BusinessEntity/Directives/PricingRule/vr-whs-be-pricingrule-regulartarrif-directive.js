@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBePricingruleRegulartariff', ['UtilsService', '$compile',
-function (UtilsService, $compil) {
+app.directive('vrWhsBePricingruleRegulartariff', ['$compile',
+function ($compile) {
 
     var directiveDefinitionObject = {
         restrict: 'E',

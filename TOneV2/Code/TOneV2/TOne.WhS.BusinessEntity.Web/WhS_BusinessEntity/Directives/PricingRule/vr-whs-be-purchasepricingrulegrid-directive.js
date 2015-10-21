@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBePurchasepricingrulegrid", ["UtilsService", "VRNotificationService", "WhS_BE_PurchasePricingRuleAPIService", "WhS_BE_MainService",
-function (UtilsService, VRNotificationService, WhS_BE_PurchasePricingRuleAPIService, WhS_BE_MainService) {
+app.directive("vrWhsBePurchasepricingrulegrid", [ "VRNotificationService", "WhS_BE_PurchasePricingRuleAPIService", "WhS_BE_MainService",
+function ( VRNotificationService, WhS_BE_PurchasePricingRuleAPIService, WhS_BE_MainService) {
 
     var directiveDefinitionObject = {
 
@@ -82,7 +82,6 @@ function (UtilsService, VRNotificationService, WhS_BE_PurchasePricingRuleAPIServ
         }
         function deletePurchasePricingRule(purchasePricingRuleObj) {
             var onPurchasePricingRuleDeleted = function (purchasePricingRuleObj) {
-                //TODO: This is to refresh the Grid after delete, should be removed when centralized
                 gridAPI.itemDeleted(purchasePricingRuleObj);
             };
             WhS_BE_MainService.deletePurchasePricingRule($scope, purchasePricingRuleObj, onPurchasePricingRuleDeleted);

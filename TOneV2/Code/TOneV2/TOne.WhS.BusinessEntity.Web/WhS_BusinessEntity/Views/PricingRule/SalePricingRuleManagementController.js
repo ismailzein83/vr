@@ -2,9 +2,9 @@
 
     "use strict";
 
-    salePricingRuleManagementController.$inject = ['$scope', 'WhS_BE_SalePricingRuleAPIService', 'WhS_BE_MainService', 'UtilsService', 'VRModalService', 'VRNotificationService','WhS_Be_PricingRuleTypeEnum'];
+    salePricingRuleManagementController.$inject = ['$scope', 'WhS_BE_MainService', 'UtilsService','WhS_Be_PricingRuleTypeEnum'];
 
-    function salePricingRuleManagementController($scope, WhS_BE_SalePricingRuleAPIService, WhS_BE_MainService, UtilsService, VRModalService, VRNotificationService, WhS_Be_PricingRuleTypeEnum) {
+    function salePricingRuleManagementController($scope, WhS_BE_MainService, UtilsService, WhS_Be_PricingRuleTypeEnum) {
         var gridAPI;
         defineScope();
         load();
@@ -45,17 +45,6 @@
 
         function load() {
             definePricingRuleTypes();
-            //$scope.isGettingData = true;
-            //if (carrierAccountDirectiveAPI == undefined || pricingProductsDirectiveAPI == undefined)
-            //    return;
-
-            //UtilsService.waitMultipleAsyncOperations([loadPricingProducts, loadCarrierAccounts]).then(function () {
-            //}).catch(function (error) {
-            //    VRNotificationService.notifyExceptionWithClose(error, $scope);
-            //    $scope.isGettingData = false;
-            //}).finally(function () {
-            //    $scope.isGettingData = false;
-            //});
         }
         function loadPricingProducts() {
             return pricingProductsDirectiveAPI.load();

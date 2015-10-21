@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBePricingrulePercentageextracharge', ['UtilsService', '$compile',
-function (UtilsService, $compil) {
+app.directive('vrWhsBePricingrulePercentageextracharge', ['$compile',
+function ( $compile) {
 
     var directiveDefinitionObject = {
         restrict: 'E',

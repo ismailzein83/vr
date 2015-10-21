@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSalepricingrulegrid", ["UtilsService", "VRNotificationService", "WhS_BE_SalePricingRuleAPIService", "WhS_BE_MainService",
-function (UtilsService, VRNotificationService, WhS_BE_SalePricingRuleAPIService, WhS_BE_MainService) {
+app.directive("vrWhsBeSalepricingrulegrid", ["VRNotificationService", "WhS_BE_SalePricingRuleAPIService", "WhS_BE_MainService",
+function ( VRNotificationService, WhS_BE_SalePricingRuleAPIService, WhS_BE_MainService) {
 
     var directiveDefinitionObject = {
 
@@ -82,7 +82,6 @@ function (UtilsService, VRNotificationService, WhS_BE_SalePricingRuleAPIService,
         }
         function deleteSalePricingRule(salePricingRuleObj) {
             var onSalePricingRuleDeleted = function (salePricingRuleObj) {
-                //TODO: This is to refresh the Grid after delete, should be removed when centralized
                 gridAPI.itemDeleted(salePricingRuleObj);
             };
             WhS_BE_MainService.deleteSalePricingRule($scope, salePricingRuleObj, onSalePricingRuleDeleted);

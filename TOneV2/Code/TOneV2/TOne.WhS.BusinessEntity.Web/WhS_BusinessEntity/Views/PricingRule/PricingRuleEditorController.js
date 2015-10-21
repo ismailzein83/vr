@@ -2,9 +2,9 @@
 
     "use strict";
 
-    pricingRuleEditorController.$inject = ['$scope', 'WhS_BE_SalePricingRuleAPIService',  'UtilsService', 'VRNotificationService', 'VRNavigationService','WhS_Be_PricingRuleTypeEnum','WhS_BE_CarrierAccountAPIService','WhS_BE_SaleZoneAPIService','WhS_Be_PricingTypeEnum','VRUIUtilsService'];
+    pricingRuleEditorController.$inject = ['$scope', 'WhS_BE_SalePricingRuleAPIService',  'UtilsService', 'VRNotificationService', 'VRNavigationService','WhS_Be_PricingRuleTypeEnum','WhS_Be_PricingTypeEnum','VRUIUtilsService'];
 
-    function pricingRuleEditorController($scope, WhS_BE_SalePricingRuleAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_Be_PricingRuleTypeEnum, WhS_BE_CarrierAccountAPIService, WhS_BE_SaleZoneAPIService, WhS_Be_PricingTypeEnum, VRUIUtilsService) {
+    function pricingRuleEditorController($scope, WhS_BE_SalePricingRuleAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_Be_PricingRuleTypeEnum, WhS_Be_PricingTypeEnum, VRUIUtilsService) {
 
         var editMode;
         var pricingRuleType;

@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeSalepricingrulecriteria', ['WhS_BE_SalePricingRuleAPIService', 'UtilsService', '$compile','WhS_BE_SaleZoneAPIService','WhS_BE_CarrierAccountAPIService','VRNotificationService','VRUIUtilsService',
-function (WhS_BE_SalePricingRuleAPIService, UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccountAPIService, VRNotificationService, VRUIUtilsService) {
+app.directive('vrWhsBeSalepricingrulecriteria', [ 'UtilsService', '$compile','WhS_BE_SaleZoneAPIService','WhS_BE_CarrierAccountAPIService','VRNotificationService','VRUIUtilsService',
+function ( UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccountAPIService, VRNotificationService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -41,7 +41,7 @@ function (WhS_BE_SalePricingRuleAPIService, UtilsService, $compile, WhS_BE_SaleZ
             }
             $scope.onSaleZoneGroupSettingsDirectiveReady = function (api) {
                 saleZoneGroupSettingsDirectiveAPI = api;
-
+               
                 if (directiveAppendixData != undefined) {
                     tryLoadAppendixDirectives();
                 } else {
@@ -50,11 +50,11 @@ function (WhS_BE_SalePricingRuleAPIService, UtilsService, $compile, WhS_BE_SaleZ
                 }
             }
 
-            UtilsService.waitMultipleAsyncOperations([loadSaleZoneGroupTemplates, loadCustomerGroupTemplates]).then(function () {
-                defineAPI();
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            });
+            declareDirectiveAsReady();
+        }
+
+        function declareDirectiveAsReady() {
+            defineAPI();
         }
 
         function defineAPI() {
@@ -92,6 +92,11 @@ function (WhS_BE_SalePricingRuleAPIService, UtilsService, $compile, WhS_BE_SaleZ
                 tryLoadAppendixDirectives();
             }
             api.load = function () {
+               return UtilsService.waitMultipleAsyncOperations([loadSaleZoneGroupTemplates, loadCustomerGroupTemplates]).then(function () {
+                    
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                });
             }
             
             if (ctrl.onReady != null)

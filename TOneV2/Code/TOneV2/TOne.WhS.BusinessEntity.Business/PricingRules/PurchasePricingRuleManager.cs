@@ -28,7 +28,12 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         protected override PurchasePricingRuleDetail MapToDetails(PurchasePricingRule rule)
         {
-            throw new NotImplementedException();
+            return new PurchasePricingRuleDetail
+            {
+                Entity = rule,
+                RuleTypeName = rule.Settings.RuleType.ToString(),
+
+            };
         }
 
         protected override PricingRuleTODTarget CreateTODTarget(PurchasePricingRulesInput input)

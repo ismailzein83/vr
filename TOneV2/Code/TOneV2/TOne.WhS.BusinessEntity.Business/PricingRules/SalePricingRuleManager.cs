@@ -34,7 +34,9 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return new SalePricingRuleDetail
             {
-                Entity = rule
+                Entity = rule,
+                RuleTypeName=rule.Settings.RuleType.ToString(),
+
             };
         }
 
