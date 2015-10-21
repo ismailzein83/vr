@@ -40,5 +40,16 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             object  lastIndex=ExecuteScalarSP("TOneWhS_BE.sp_SupplierZoneIDManager_ReserveIDRange", numberOfIDs);
             return (long)lastIndex;
         }
+
+
+        public List<SupplierZone> GetSupplierZones(DateTime effectiveDate)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SupplierZone_GetAll", SupplierZoneMapper, effectiveDate);
+        }
+
+        public bool AreSupplierZonesUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_BE.SupplierZone", ref updateHandle);
+        }
     }
 }

@@ -4,20 +4,26 @@
             <vr-columns width="1/4row">
                 <vr-whs-be-carrieraccount ismultipleselection isrequired type="'Supplier'" on-ready="onCarrierAccountDirectiveReady" onselectionchanged="onSelectionChanged"></vr-whs-be-carrieraccount>
             </vr-columns>
-            <vr-columns width="3/4row">
-                <vr-row>
+            <vr-columns width="3/4row" ng-show="suppliers.length!=0">
+                <vr-row removeline>
+
                     <div>
                         <vr-label>{{supplier.Name}}</vr-label>
                     </div>
-                    <div style="max-height:78px;overflow-y: auto;">
-                        <span class="label custom-label" style="min-width: 60px; margin: 2px;" ng-repeat="supplier in suppliers">
-                            <span style="font-size:16px">{{supplier.Name}}</span>
-                            <span style="font-size:14px;margin-left:2px" class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="removeSupplier(supplier)"></span>
-                            <span>
-
+                    <div style="max-height:78px;overflow-y: auto;" ng-repeat="supplier in suppliers">
+                        <vr-columns width="1/2row">
+                            <span class="label custom-label" style="min-width: 60px; margin: 2px;">
+                                <span style="font-size:16px">{{supplier.Name}}</span>
+                                <span style="font-size:14px;margin-left:2px" class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="removeSupplier(supplier)"></span>
                             </span>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <span>
+                                <vr-whs-be-supplierzone on-ready="supplier.onSupplierZonesDirectiveReady" supplierid="supplier.CarrierAccountId" ismultipleselection></vr-whs-be-supplierzone>
+                            </span>
+                        </vr-columns>
 
-                        </span>
+
                     </div>
                 </vr-row>
             </vr-columns>

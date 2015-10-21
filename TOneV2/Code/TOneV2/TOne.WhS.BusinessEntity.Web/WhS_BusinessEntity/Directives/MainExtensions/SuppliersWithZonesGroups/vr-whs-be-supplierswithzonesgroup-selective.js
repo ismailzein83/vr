@@ -25,6 +25,7 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService) {
 
     function beSuppliersWithZones(ctrl, $scope, $attrs) {
         var carrierAccountDirectiveAPI;
+        var supplierZonesDirectiveAPI;
         function initializeController() {
             $scope.suppliers = [];
             $scope.onCarrierAccountDirectiveReady = function (api) {
@@ -32,16 +33,27 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService) {
                 declareDirectiveAsReady()
             }
             $scope.onSelectionChanged = function () {
-                if (carrierAccountDirectiveAPI != undefined)
-                    $scope.suppliers = carrierAccountDirectiveAPI.getData();
+                if (carrierAccountDirectiveAPI != undefined) {
+                    var obj = carrierAccountDirectiveAPI.getData();
+                    $scope.suppliers.length = 0;
+                    for (var i = 0; i < obj.length; i++) {
+                        addSupplierZoneAPIFunction(obj[i]);
+                    }
+                    
+                }
             };
+            function addSupplierZoneAPIFunction(obj) {
+                obj.onSupplierZonesDirectiveReady = function (api) {
+                    obj.supplierZonesDirectiveAPI = api;
+                    obj.supplierZonesDirectiveAPI.load();
+                }
+                $scope.suppliers.push(obj);
+            }
             $scope.removeSupplier = function (supplier) {
                 var index = UtilsService.getItemIndexByVal($scope.suppliers, supplier.CarrierAccountId, 'CarrierAccountId');
                 $scope.suppliers.splice(index, 1);
             };
-
-
-
+            
         }
         function declareDirectiveAsReady() {
             if (carrierAccountDirectiveAPI == undefined)

@@ -12,11 +12,12 @@ namespace TOne.WhS.BusinessEntity.Business
     public class SupplierZoneManager
     {
 
-        //public List<SupplierZoneInfo> GetSupplierZones(int supplierId, DateTime effectiveDate)
-        //{
-        //    ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
-        //    return dataManager.GetSupplierZones(supplierId, effectiveDate);
-        //}
+        public IEnumerable<SupplierZoneInfo> GetSupplierZones(int supplierId)
+        {
+            List<SupplierZone> supplierZones = GetCachedSupplierZones();
+            return supplierZones.MapRecords(SupplierZoneInfoMapper,x => x.SupplierId == supplierId);
+           
+        }
 
         public List<SupplierZone> GetSupplierZones(int supplierId, DateTime effectiveDate)
         {
@@ -36,33 +37,33 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         #region Private Members
 
-        List<CarrierAccountDetail> GetCachedCarrierAccounts()
+        List<SupplierZone> GetCachedSupplierZones()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCarrierAccounts",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSupplierZones",
                () =>
                {
-                   ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
-                   return dataManager.GetCarrierAccounts();
+                   ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
+                   return dataManager.GetSupplierZones(DateTime.Now);
                });
         }
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            ICarrierAccountDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
+            ISupplierZoneDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
             object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreCarrierAccountsUpdated(ref _updateHandle);
+                return _dataManager.AreSupplierZonesUpdated(ref _updateHandle);
             }
         }
 
-        private CarrierAccountInfo CarrierAccountInfoMapper(CarrierAccountDetail carrierAccountDetail)
+        private SupplierZoneInfo SupplierZoneInfoMapper(SupplierZone supplierZone)
         {
-            return new CarrierAccountInfo()
+            return new SupplierZoneInfo()
             {
-                CarrierAccountId = carrierAccountDetail.CarrierAccountId,
-                Name = carrierAccountDetail.Name,
+                SupplierZoneId = supplierZone.SupplierZoneId,
+                Name = supplierZone.Name,
             };
         }
 

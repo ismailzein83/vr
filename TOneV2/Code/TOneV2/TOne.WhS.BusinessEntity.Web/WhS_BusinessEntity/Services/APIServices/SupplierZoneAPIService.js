@@ -12,7 +12,7 @@
         }
 
         return ({
-            GetFilteredRouteRules: GetFilteredRouteRules,
+            GetSupplierZones: GetSupplierZones,
         });
     }
 
