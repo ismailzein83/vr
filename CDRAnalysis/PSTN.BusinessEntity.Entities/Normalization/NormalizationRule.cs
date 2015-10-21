@@ -19,22 +19,22 @@ namespace PSTN.BusinessEntity.Entities
             get { return new List<NormalizationPhoneNumberType> { this.Criteria.PhoneNumberType }; }
         }
 
-        public IEnumerable<int> SwitchIds
+        IEnumerable<int> IRuleSwitchCriteria.SwitchIds
         {
             get { return this.Criteria.SwitchIds; }
         }
 
-        public IEnumerable<int> TrunkIds
+        IEnumerable<int> IRuleTrunkCriteria.TrunkIds
         {
             get { return this.Criteria.TrunkIds; }
         }
 
-        public IEnumerable<string> PhoneNumberPrefixes
+        IEnumerable<string> IRulePhoneNumberPrefixCriteria.PhoneNumberPrefixes
         {
             get { return this.Criteria.PhoneNumberPrefix != null ? new List<string> { this.Criteria.PhoneNumberPrefix } : null; }
         }
 
-        public IEnumerable<int> PhoneNumberLengths
+        IEnumerable<int> IRulePhoneNumberLengthCriteria.PhoneNumberLengths
         {
             get { return this.Criteria.PhoneNumberLength.HasValue ? new List<int> { this.Criteria.PhoneNumberLength.Value } : null; }
         }
