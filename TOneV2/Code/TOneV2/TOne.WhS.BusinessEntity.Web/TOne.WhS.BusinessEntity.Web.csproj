@@ -128,7 +128,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="WhS_BusinessEntity\Directives\RouteRule\Templates\" />
     <Folder Include="WhS_BusinessEntity\Views\PricingProduct\Grids\" />
     <Folder Include="WhS_BusinessEntity\Views\RoutingProduct\Grids\" />
   </ItemGroup>
@@ -193,6 +192,7 @@
     <Content Include="WhS_BusinessEntity\Directives\CodeCriteria\Templates\SelectiveCodeCriteriaDirectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\SelectiveCustomersDirectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\vr-whs-be-purchasepricingrulegrid-directive.js" />
+    <Content Include="WhS_BusinessEntity\Directives\RouteRule\Templates\RouteRuleRegularDirectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\RouteRule\vr-whs-be-routerule-block-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\RouteRule\vr-whs-be-routerule-regular-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleZone\Templates\SelectiveSaleZonesDirectiveTemplate.html" />

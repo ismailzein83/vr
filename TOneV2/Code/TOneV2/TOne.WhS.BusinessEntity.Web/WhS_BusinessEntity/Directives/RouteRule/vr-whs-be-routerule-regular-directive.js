@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeRouteruleRegular', ['UtilsService',
-    function (UtilsService) {
+app.directive('vrWhsBeRouteruleRegular', ['UtilsService', 'VRUIUtilsService',
+    function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -35,6 +35,43 @@ app.directive('vrWhsBeRouteruleRegular', ['UtilsService',
         }
 
         function beRouteRuleRegularCtor(ctrl, $scope) {
+            var appendixDirectiveData;
+
+            $scope.onOptionSettingsGroupDirectiveReady = function (api) {
+                routeOptionSettingsGroupDirectiveAPI = api;
+
+                if (appendixDirectiveData != undefined)
+                    tryLoadAppendixDirectives();
+                else
+                    VRUIUtilsService.loadDirective($scope, routeOptionSettingsGroupDirectiveAPI, 'optionSettingsAppendixLoader');
+            }
+
+            $scope.onOptionOrderSettingsGroupDirectiveReady = function (api) {
+                routeRuleOptionOrderSettingsDirectiveAPI = api;
+
+                if (appendixDirectiveData != undefined)
+                    tryLoadAppendixDirectives();
+                else
+                    VRUIUtilsService.loadDirective($scope, routeRuleOptionOrderSettingsDirectiveAPI, 'optionOrderSettingsAppendixLoader');
+            }
+
+            $scope.onOptionFilterSettingsGroupDirectiveReady = function (api) {
+                routeRuleOptionFilterSettingsDirectiveAPI = api;
+
+                if (appendixDirectiveData != undefined)
+                    tryLoadAppendixDirectives();
+                else
+                    VRUIUtilsService.loadDirective($scope, routeRuleOptionFilterSettingsDirectiveAPI, 'optionFilterSettingsAppendixLoader');
+            }
+
+            $scope.onOptionPercentageSettingsGroupDirectiveReady = function (api) {
+                routeRuleOptionPercentageSettingsDirectiveAPI = api;
+
+                if (appendixDirectiveData != undefined)
+                    tryLoadAppendixDirectives();
+                else
+                    VRUIUtilsService.loadDirective($scope, routeRuleOptionPercentageSettingsDirectiveAPI, 'optionPercentageSettingsAppendixLoader');
+            }
 
             function initializeController() {
                 defineAPI();
@@ -45,6 +82,28 @@ app.directive('vrWhsBeRouteruleRegular', ['UtilsService',
 
                 api.load = function () {
 
+                    return UtilsService.waitMultipleAsyncOperations(loadOptionSettingsGroupTemplates, loadOptionOrderSettingsGroupTemplates,
+                        loadOptionFilterSettingsGroupTemplates, loadOptionPercentageSettingsGroupTemplates);
+
+                    function loadOptionSettingsGroupTemplates() {
+                        //return WhS_BE_SaleZoneAPIService.GetSaleZoneGroupTemplates().then(function (response) {
+                        //    angular.forEach(response, function (item) {
+                        //        $scope.saleZoneGroupTemplates.push(item);
+                        //    });
+                        //});
+                    }
+
+                    function loadOptionOrderSettingsGroupTemplates() {
+                       
+                    }
+
+                    function loadOptionFilterSettingsGroupTemplates() {
+
+                    }
+
+                    function loadOptionPercentageSettingsGroupTemplates() {
+
+                    }
                 }
 
                 api.getData = function () {
@@ -58,28 +117,88 @@ app.directive('vrWhsBeRouteruleRegular', ['UtilsService',
                 }
 
                 api.setData = function (routeRuleSettings) {
-                    return UtilsService.waitMultipleAsyncOperations([setRouteOptionSettings, setRouteRuleOptionOrderSettings, setRouteRuleOptionFilterSettings, setRouteRuleOptionPercentageSettings]).then(function () {
-                        defineAPI();
-                    }).catch(function (error) {
-                        VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    });
 
-                    function setRouteOptionSettings() {
-                        routeOptionSettingsGroupDirectiveAPI.setData(routeRuleSettings.OptionsSettingsGroup);
-                    };
-                    function setRouteRuleOptionOrderSettings() {
-                        routeRuleOptionOrderSettingsDirectiveAPI.setData(routeRuleSettings.OptionOrderSettings);
-                    };
-                    function setRouteRuleOptionFilterSettings() {
-                        routeRuleOptionFilterSettingsDirectiveAPI.setData(routeRuleSettings.OptionFilterSettings);
-                    };
-                    function setRouteRuleOptionPercentageSettings() {
-                        routeRuleOptionPercentageSettingsDirectiveAPI.setData(routeRuleSettings.OptionPercentageSettings);
+                    fillScopeFromRouteRuleSettings(routeRuleSettings);
+                    appendixDirectiveData = routeRuleSettings;
+                    tryLoadAppendixDirectives();
+
+                    function fillScopeFromRouteRuleSettings(routeRuleSettings) {
+
+                        if(routeRuleSettings.OptionsSettingsGroup != null)
+                            $scope.selectedOptionSettingsGroupTemplate = UtilsService.getItemByVal($scope.optionSettingsGroupTemplates, routeRuleSettings.OptionsSettingsGroup.ConfigId, "TemplateConfigID");
+                        if(routeRuleSettings.OptionOrderSettings != null)
+                            $scope.selectedOptionOrderSettingsGroupTemplate = UtilsService.getItemByVal($scope.optionOrderSettingsGroupTemplates, routeRuleSettings.OptionOrderSettings.ConfigId, "TemplateConfigID");
+                        if (routeRuleSettings.OptionFilterSettings != null)
+                            $scope.selectedOptionFilterSettingsGroupTemplate = UtilsService.getItemByVal($scope.optionFilterSettingsGroupTemnplates, routeRuleSettings.OptionFilterSettings.ConfigId, "TemplateConfigID");
+                        if (routeRuleSettings.OptionPercentageSettings != null)
+                            $scope.selectedPercentageFilterSettingsGroupTemplate = UtilsService.getItemByVal($scope.optionPercentageSettingsGroupTemplates, routeRuleSettings.OptionPercentageSettings.ConfigId, "TemplateConfigID");
                     };
                 }
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function tryLoadAppendixDirectives() {
+                var loadOperations = [];
+                var setDirectivesDataOperations = [];
+
+                if ($scope.selectedOptionSettingsGroupTemplate != undefined) {
+                    if (routeOptionSettingsGroupDirectiveAPI == undefined)
+                        return;
+
+                    loadOperations.push(routeOptionSettingsGroupDirectiveAPI.load);
+                    setDirectivesDataOperations.push(setRouteOptionSettings);
+                }
+
+                if ($scope.selectedOptionOrderSettingsGroupTemplate != undefined) {
+                    if (routeRuleOptionOrderSettingsDirectiveAPI == undefined)
+                        return;
+
+                    loadOperations.push(routeRuleOptionOrderSettingsDirectiveAPI.load);
+                    setDirectivesDataOperations.push(setRouteRuleOptionOrderSettings);
+                }
+
+                if ($scope.selectedOptionFilterSettingsGroupTemplate != undefined) {
+                    if (routeRuleOptionFilterSettingsDirectiveAPI == undefined)
+                        return;
+
+                    loadOperations.push(routeRuleOptionFilterSettingsDirectiveAPI.load);
+                    setDirectivesDataOperations.push(setRouteRuleOptionFilterSettings);
+                }
+
+                if ($scope.selectedPercentageFilterSettingsGroupTemplate != undefined) {
+                    if (routeRuleOptionPercentageSettingsDirectiveAPI == undefined)
+                        return;
+
+                    loadOperations.push(routeRuleOptionPercentageSettingsDirectiveAPI.load);
+                    setDirectivesDataOperations.push(setRouteRuleOptionPercentageSettings);
+                }
+
+                UtilsService.waitMultipleAsyncOperations(loadOperations).then(function () {
+                    setAppendixDirectives();
+                });
+
+                function setAppendixDirectives() {
+                    function setAppendixDirectives() {
+                        UtilsService.waitMultipleAsyncOperations(setDirectivesDataOperations).then(function () {
+                            appendixDirectiveData = undefined;
+                        });
+                    }
+                }
+
+                function setRouteOptionSettings() {
+                    routeOptionSettingsGroupDirectiveAPI.setData(appendixDirectiveData.OptionsSettingsGroup);
+                };
+                function setRouteRuleOptionOrderSettings() {
+                    routeRuleOptionOrderSettingsDirectiveAPI.setData(appendixDirectiveData.OptionOrderSettings);
+                };
+                function setRouteRuleOptionFilterSettings() {
+                    routeRuleOptionFilterSettingsDirectiveAPI.setData(appendixDirectiveData.OptionFilterSettings);
+                };
+                function setRouteRuleOptionPercentageSettings() {
+                    routeRuleOptionPercentageSettingsDirectiveAPI.setData(appendixDirectiveData.OptionPercentageSettings);
+                };
             }
 
             this.initializeController = initializeController;
