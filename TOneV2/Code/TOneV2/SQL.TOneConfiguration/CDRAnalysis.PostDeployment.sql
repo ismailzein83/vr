@@ -9,9 +9,10 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
---sec.WidgetDefinition--------
+--sec.WidgetDefinition------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 set nocount on;
-set identity_insert [sec].[WidgetDefinition] on;
+set identity_insert sec.[WidgetDefinition] on;
 ;with cte_data([ID],[Name],[DirectiveName],[Setting])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +32,7 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[DirectiveName],s.[Setting])
 when not matched by source then
 	delete;
-set identity_insert [sec].[WidgetDefinition] off; 
+set identity_insert [sec].[WidgetDefinition] off;
 --[BI].[SchemaConfiguration]------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
@@ -226,6 +227,61 @@ when not matched by target then
 	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags])
 when not matched by source then
 	delete;
+
+
+
+
+	--common.TemplateConfig-----------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [common].[TemplateConfig] on;
+;with cte_data([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(9,'Add Prefix','PSTN_BE_AdjustNumberAction','vr-pstn-be-addprefix','PSTN.BusinessEntity.MainExtensions.Normalization.RuleTypes.NormalizeNumber.Actions.AddPrefixActionBehavior, PSTN.BusinessEntity.MainExtensions',null),
+(10,'Substring','PSTN_BE_AdjustNumberAction','vr-pstn-be-substring','PSTN.BusinessEntity.MainExtensions.Normalization.RuleTypes.NormalizeNumber.Actions.SubstringActionBehavior, PSTN.BusinessEntity.MainExtensions',null),
+(11,'Replace Characters','PSTN_BE_AdjustNumberAction','vr-pstn-be-replacestring','PSTN.BusinessEntity.MainExtensions.Normalization.RuleTypes.NormalizeNumber.Actions.ReplaceStringActionBehavior, PSTN.BusinessEntity.MainExtensions',null),
+(12,'Set Area Prefix','PSTN_BE_SetArea','vr-pstn-be-setareaprefix','PSTN.BusinessEntity.MainExtensions.Normalization.RuleTypes.SetArea.Behaviors.SetAreaPrefixBehavior, PSTN.BusinessEntity.MainExtensions',null)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings]))
+merge	[common].[TemplateConfig] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[ConfigType] = s.[ConfigType],[Editor] = s.[Editor],[BehaviorFQTN] = s.[BehaviorFQTN],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
+	values(s.[ID],s.[Name],s.[ConfigType],s.[Editor],s.[BehaviorFQTN],s.[Settings])
+when not matched by source then
+	delete;
+set identity_insert [common].[TemplateConfig] off;
+
+
+
+
+--rules.RuleType------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [rules].[RuleType] on;
+;with cte_data([ID],[Type])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,'PSTN.BusinessEntity.Entities.NormalizationRule')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Type]))
+merge	[rules].[RuleType] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Type] = s.[Type]
+when not matched by target then
+	insert([ID],[Type])
+	values(s.[ID],s.[Type])
+when not matched by source then
+	delete;
+set identity_insert [rules].[RuleType] off;
 
 
 
