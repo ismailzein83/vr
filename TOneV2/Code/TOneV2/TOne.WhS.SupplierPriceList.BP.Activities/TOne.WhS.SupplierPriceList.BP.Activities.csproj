@@ -59,7 +59,7 @@
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Common">
-      <HintPath>..\..\..\..\Vanrise\Code\Vanrise.Data.SQL\bin\Debug\Vanrise.Common.dll</HintPath>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
