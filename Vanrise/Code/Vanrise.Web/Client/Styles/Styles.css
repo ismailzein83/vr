@@ -171,13 +171,13 @@ font-size:12px !important;
 }
 /*bootstrap overide */
 .form-control {   
-    height: 29px ;
+    height: 26px ;
 }
 textarea.form-control {   
     height: auto ;
 }
 button.btn{
-    height: 29px !important;
+    height: 26px !important;
     padding: 4px 12px !important;
 } 
 .modal-x-lg {
