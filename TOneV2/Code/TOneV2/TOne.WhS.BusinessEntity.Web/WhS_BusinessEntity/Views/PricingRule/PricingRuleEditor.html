@@ -1,5 +1,5 @@
 ﻿<div vr-modalcontent ng-controller="WhS_BE_PricingRuleEditorController" vr-loader="isGettingData" >
-    <vr-modalbody>
+    <vr-modalbody maxheight="'500px'">
         <vr-form name="formPricingRuleEditor">
             <vr-choices selectedindex="0">
                 <vr-choice isselected="definitionSelected">Definition</vr-choice>
@@ -25,7 +25,7 @@
                 <vr-row vr-loader="pricingRuleTypeAppendixLoader">
                     <vr-directivewrapper directive="selectedPricingRuleType.directive" on-ready="onPricingRuleTypeDirectiveReady"></vr-directivewrapper>
                 </vr-row>
-               
+
             </div>
             <div ng-show="schedulerSelected">
                 <vr-row>

@@ -62,67 +62,38 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService) {
             defineAPI();
         }
 
-
-        function getActionItem(dbAction) {
-
-            var actionItem = {
-                ActionId: $scope.actions.length + 1,
-
-                ConfigId: (dbAction != null) ? dbAction.ConfigId : $scope.selectedPricingRuleExtraChargeTemplate.TemplateConfigID,
-
-                Editor: (dbAction != null) ?
-                    UtilsService.getItemByVal($scope.pricingRuleExtraChargeTemplates, dbAction.ConfigId, "TemplateConfigID").Editor :
-                    $scope.selectedPricingRuleExtraChargeTemplate.Editor,
-
-                Data: (dbAction != null) ? dbAction : {},
-                Name: $scope.selectedPricingRuleExtraChargeTemplate.Name
-            };
-
-            actionItem.onPricingRuleExtraChargeTemplateDirectiveReady = function (api) {
-                actionItem.ActionDirectiveAPI = api;
-                actionItem.ActionDirectiveAPI.setData(actionItem.Data);
-
-                actionItem.Data = undefined;
-                actionItem.onPricingRuleExtraChargeTemplateDirectiveReady = undefined;
-            }
-            return actionItem;
-        }
-
         function defineAPI() {
             var api = {};
 
             api.getData = function () {
+                var suppliersWithZones = [];
+                for (var i = 0; i < $scope.suppliers.length; i++)
+                {
+                    suppliersWithZones.push({
+                        SupplierId: $scope.suppliers[i].CarrierAccountId,
+                        SupplierZoneIds: UtilsService.getPropValuesFromArray($scope.suppliers[i].supplierZonesDirectiveAPI.getData(), "SupplierZoneId"),
+                    });
+                }
                 var obj = {
-                    $type: "TOne.WhS.BusinessEntity.Entities.PricingRuleExtraChargeSettings,TOne.WhS.BusinessEntity.Entities",
-                    Actions: getActions(),
+                    $type: "TOne.WhS.BusinessEntity.MainExtensions.SuppliersWithZonesGroups.SelectiveSuppliersWithZonesGroup,TOne.WhS.BusinessEntity.MainExtensions",
+                    SuppliersWithZones: suppliersWithZones,
                 }
                 return obj;
             }
-            function getActions() {
-                var actionList = [];
-
-                angular.forEach($scope.actions, function (item) {
-                    var obj = item.ActionDirectiveAPI.getData();
-                    obj.ConfigId = item.ConfigId;
-                    actionList.push(obj);
-                });
-
-                return actionList;
-            }
-            api.setData = function (settings) {
-                for (var i = 0; i < settings.Actions.length; i++) {
-                    var action = settings.Actions[i];
-                    for (var j = 0; j < $scope.pricingRuleExtraChargeTemplates.length; j++)
-                        if (action.ConfigId == $scope.pricingRuleExtraChargeTemplates[j].TemplateConfigID)
-                            action.Editor = $scope.pricingRuleExtraChargeTemplates[j].Editor;
-                    addAPIFunction(action);
-                    $scope.actions.push(action);
+            
+            api.setData = function (suppliersWithZones) {
+                var supplierIds = [];
+                for (var i = 0; i < suppliersWithZones.length; i++) {
+                    var obj = suppliersWithZones[i];
+                    supplierIds.push(obj.SupplierId);
+                    carrierAccountDirectiveAPI.setData(supplierIds);
+                    addAPIFunction(obj);
                 }
                 function addAPIFunction(obj) {
-                    obj.onPricingRuleExtraChargeTemplateDirectiveReady = function (api) {
-                        obj.ActionDirectiveAPI = api;
-                        obj.ActionDirectiveAPI.setData(obj);
-                        obj = undefined;
+                    obj.onSupplierZonesDirectiveReady = function (api) {
+                        obj.supplierZonesDirectiveAPI = api;
+                        obj.supplierZonesDirectiveAPI.load();
+                        obj.supplierZonesDirectiveAPI.setData(obj.SupplierZoneIds);
                     }
                 }
             }

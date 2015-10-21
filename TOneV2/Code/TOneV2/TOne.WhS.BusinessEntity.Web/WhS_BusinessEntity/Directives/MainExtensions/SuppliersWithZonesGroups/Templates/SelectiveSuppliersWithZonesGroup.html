@@ -10,11 +10,11 @@
                     <div>
                         <vr-label>{{supplier.Name}}</vr-label>
                     </div>
-                    <div style="max-height:78px;overflow-y: auto;" ng-repeat="supplier in suppliers">
+                    <div  ng-repeat="supplier in suppliers">
                         <vr-columns width="1/2row">
                             <span class="label custom-label" style="min-width: 60px; margin: 2px;">
-                                <span style="font-size:16px">{{supplier.Name}}</span>
-                                <span style="font-size:14px;margin-left:2px" class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="removeSupplier(supplier)"></span>
+                                <span style="font-size:14px">{{supplier.Name}}</span>
+                                <span style="font-size:12px;margin-left:2px" class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="removeSupplier(supplier)"></span>
                             </span>
                         </vr-columns>
                         <vr-columns width="1/2row">
