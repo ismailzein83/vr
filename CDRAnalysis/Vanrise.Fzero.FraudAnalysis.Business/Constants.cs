@@ -68,8 +68,5 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         public const string _Filter_19 = "Filter_19";
         public const string _Filter_20 = "Filter_20";
 
-
-        public const OperatorType _DefaultOperatorType =  OperatorType.Mobile;
-
     }
 }

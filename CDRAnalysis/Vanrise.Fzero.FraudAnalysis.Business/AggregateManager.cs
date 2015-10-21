@@ -4,6 +4,8 @@ using System.Linq;
 using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Fzero.FraudAnalysis.Aggregates;
 using Vanrise.Fzero.FraudAnalysis.Entities;
+using Vanrise.Fzero.Entities;
+using Vanrise.Fzero.Business;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {
@@ -427,7 +429,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
 
-            return AggregateDefinitions.Where(x => x.OperatorTypeAllowed == Constants._DefaultOperatorType || x.OperatorTypeAllowed == OperatorType.Mobile).ToList();
+            return AggregateDefinitions.Where(x => x.OperatorTypeAllowed == GlobalConstants._DefaultOperatorType || x.OperatorTypeAllowed == OperatorType.Mobile).ToList();
         }
 
         public List<AggregateDefinitionInfo> GetAggregateDefinitionsInfo()
@@ -464,7 +466,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 28, Name = Constants._DiffSourcesZones, OperatorTypeAllowed = OperatorType.PSTN, NumberPrecision = Constants._NoDecimal });
 
 
-            return AggregateDefinitionsInfo.Where(x => x.OperatorTypeAllowed == Constants._DefaultOperatorType || x.OperatorTypeAllowed == OperatorType.Both).ToList();
+            return AggregateDefinitionsInfo.Where(x => x.OperatorTypeAllowed == GlobalConstants._DefaultOperatorType || x.OperatorTypeAllowed == OperatorType.Both).ToList();
         }
 
     }

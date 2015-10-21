@@ -1,7 +1,7 @@
 ﻿
 namespace Vanrise.Fzero.Entities
 {
-    public enum OperatorTypeEnum
+    public enum OperatorType
     {
         Both = 0,
         Mobile = 1,

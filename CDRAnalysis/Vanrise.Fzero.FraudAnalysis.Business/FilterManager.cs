@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
+using Vanrise.Fzero.Business;
+using Vanrise.Fzero.Entities;
 
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
@@ -45,7 +47,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             dictionary.Add(20, new FilterDefinition() { FilterId = 20, Abbreviation = Constants._Filter_20, OperatorTypeAllowed = OperatorType.PSTN, ExcludeHourly = false, MinValue = 1, MaxValue = int.MaxValue, DecimalPrecision = 0, ToolTip = "MinValue = 1, MaxValue = int.MaxValue, DecimalPrecision = 0", Label = "Count", Description = "Different Source Zones", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual, Expression = CalculateDifferentSourceZones });
 
 
-            return dictionary.Where(x => x.Value.OperatorTypeAllowed == Constants._DefaultOperatorType || x.Value.OperatorTypeAllowed == OperatorType.Both).OrderBy(x => x.Value.FilterId).ToDictionary(i => i.Key, i => i.Value);
+            return dictionary.Where(x => x.Value.OperatorTypeAllowed == GlobalConstants._DefaultOperatorType || x.Value.OperatorTypeAllowed == OperatorType.Both).OrderBy(x => x.Value.FilterId).ToDictionary(i => i.Key, i => i.Value);
         }
 
         public Dictionary<int, FilterDefinition> GetCriteriaDefinitions()
