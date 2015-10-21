@@ -236,6 +236,8 @@
     <Content Include="WhS_BusinessEntity\Views\CarrierAccount\CarrierProfileEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\CarrierAccount\CarrierProfileManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\CarrierAccount\CarrierProfileManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\Country\CountryManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\Country\CountryManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\PricingProduct\CustomerPricingProductEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\PricingProduct\CustomerPricingProductEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\PricingProduct\CustomerPricingProductManagement.html" />

@@ -1,0 +1,21 @@
+﻿<vr-panel ng-controller="WhS_BE_CountryManagementController">
+    <vr-form name="formFilter" vr-loader="isGettingData">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-textbox value="name" label="Name"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                    <!--<vr-button type="Add" data-onclick="AddNewCarrierProfile"></vr-button>-->
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <!--<vr-whs-be-carrierprofilegrid on-ready="onGridReady"></vr-whs-be-carrierprofilegrid>-->
+    </vr-form>
+
+</vr-panel>
