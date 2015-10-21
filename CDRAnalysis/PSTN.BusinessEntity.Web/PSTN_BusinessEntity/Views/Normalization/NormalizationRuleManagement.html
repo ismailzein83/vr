@@ -25,6 +25,17 @@
                         </vr-columns>
 
                         <vr-columns width="normal">
+                            <vr-select label="Type"
+                                       datasource="ruleTypes"
+                                       selectedvalues="selectedRuleTypes"
+                                       datavaluefield="value"
+                                       datatextfield="description"
+                                       entityname="Type"
+                                       ismultipleselection>
+                            </vr-select>
+                        </vr-columns>
+
+                        <vr-columns width="normal">
                             <vr-textbox label="Number Prefix" value="phoneNumberPrefix" ng-show="advancedSelected"></vr-textbox>
                         </vr-columns>
 
@@ -51,18 +62,6 @@
                                        datavaluefield="TrunkId"
                                        datatextfield="Name"
                                        entityname="Trunk"
-                                       ismultipleselection
-                                       ng-show="advancedSelected">
-                            </vr-select>
-                        </vr-columns>
-
-                        <vr-columns width="normal">
-                            <vr-select label="Type"
-                                       datasource="ruleTypes"
-                                       selectedvalues="selectedRuleTypes"
-                                       datavaluefield="value"
-                                       datatextfield="description"
-                                       entityname="Type"
                                        ismultipleselection
                                        ng-show="advancedSelected">
                             </vr-select>

@@ -75,7 +75,8 @@ function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAP
 
         var filterObj = {
             PhoneNumberTypes: UtilsService.getPropValuesFromArray($scope.selectedPhoneNumberTypes, "value"),
-            EffectiveDate: $scope.effectiveDate
+            EffectiveDate: $scope.effectiveDate,
+            RuleTypes: UtilsService.getPropValuesFromArray($scope.selectedRuleTypes, "value")
         };
 
         if ($scope.selectedTabIndex == 1) {
@@ -83,7 +84,6 @@ function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAP
             filterObj.PhoneNumberLength = $scope.phoneNumberLength;
             filterObj.SwitchIds = UtilsService.getPropValuesFromArray($scope.selectedSwitches, "SwitchId");
             filterObj.TrunkIds = UtilsService.getPropValuesFromArray($scope.selectedTrunks, "TrunkId");
-            filterObj.RuleTypes = UtilsService.getPropValuesFromArray($scope.selectedRuleTypes, "value");
             filterObj.Description = $scope.description;
         }
 

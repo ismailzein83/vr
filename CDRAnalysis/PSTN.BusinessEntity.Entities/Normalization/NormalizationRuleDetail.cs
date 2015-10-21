@@ -9,6 +9,8 @@ namespace PSTN.BusinessEntity.Entities
 
         public string PhoneNumberTypeDescription { get; set; }
 
+        public string RuleTypeDescription { get; set; }
+
         public string SwitchNames { get; set; }
 
         public int SwitchCount { get; set; }

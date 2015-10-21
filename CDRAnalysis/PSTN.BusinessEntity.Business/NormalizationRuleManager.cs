@@ -2,6 +2,7 @@
 using PSTN.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Vanrise.Common;
 using Vanrise.Entities;
@@ -240,6 +241,9 @@ namespace PSTN.BusinessEntity.Business
 
             detail.PhoneNumberTypeDescription = rule.Criteria.PhoneNumberType.ToString();
 
+            DescriptionAttribute descriptionAttribute = Vanrise.Common.Utilities.GetEnumAttribute<NormalizationRuleType, DescriptionAttribute>(rule.Settings.RuleType);
+            detail.RuleTypeDescription = descriptionAttribute.Description;
+
             if (rule.Criteria.SwitchIds != null)
             {
                 detail.SwitchCount = rule.Criteria.SwitchIds.Count;
@@ -274,7 +278,7 @@ namespace PSTN.BusinessEntity.Business
 
             return detail;
         }
-                
+        
         #endregion
     }
 }
