@@ -63,6 +63,9 @@ namespace TOne.Analytics.Business.BillingReports
             list.Add("TotalCost", new RdlcParameter { Value = parameters.TotalCost.ToString(), IsVisible = true });
             list.Add("TotalProfit", new RdlcParameter { Value = parameters.TotalProfit.ToString(), IsVisible = true });
 
+
+            list.Add("PageBreak", new RdlcParameter { Value = parameters.PageBreak.ToString(), IsVisible = true });
+
             return list;
         }
     }

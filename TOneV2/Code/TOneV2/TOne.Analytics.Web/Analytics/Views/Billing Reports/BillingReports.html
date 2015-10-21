@@ -54,11 +54,7 @@
 
                 <vr-columns colnum="2" ng-if="reporttype.ParameterSettings.RequiresMargin">
                     <vr-textbox type="number" minvalue="0" maxvalue="100" label="Margin %" value="params.margin" isrequired></vr-textbox>
-                </vr-columns>
-                <vr-columns colnum="2" ng-if="reporttype.ParameterSettings.RequiresPageBreak">
-                    <vr-label>Page Break</vr-label>
-                    <vr-switch value="params.pageBreak"></vr-switch>
-                </vr-columns>
+                </vr-columns>                
                 <vr-columns colnum="2" ng-if="reporttype.ParameterSettings.RequiresGroupByCustomer">
                     <vr-label>Group By Customer</vr-label>
                     <vr-switch value="params.groupByCustomer"></vr-switch>
@@ -88,6 +84,10 @@
                 </vr-columns>
                 <vr-columns colnum="2" ng-if="reporttype.ParameterSettings.RequiresTop">
                     <vr-textbox type="number" label="Top" value="params.top" ></vr-textbox>
+                </vr-columns>
+                <vr-columns colnum="2" ng-if="reporttype.ParameterSettings.RequiresPageBreak">
+                    <vr-label>Page Break</vr-label>
+                    <vr-switch value="params.pageBreak"></vr-switch>
                 </vr-columns>
             </vr-row>
         </div>
