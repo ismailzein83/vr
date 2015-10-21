@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBePurchasepricingrulecriteria', ['UtilsService', '$compile', 'WhS_BE_PricingRuleAPIService',
-function (UtilsService, $compile, WhS_BE_PricingRuleAPIService) {
+app.directive('vrWhsBePurchasepricingrulecriteria', ['UtilsService', '$compile', 'WhS_BE_PricingRuleAPIService','WhS_BE_CarrierAccountAPIService','VRUIUtilsService',
+function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, WhS_BE_CarrierAccountAPIService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -9,9 +9,8 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService) {
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            $scope.pricingRuleExtraChargeTemplates = [];
-            var bePricingRuleExtraChargeSettingObject = new bePricingRuleExtraChargeSetting(ctrl, $scope, $attrs);
-            bePricingRuleExtraChargeSettingObject.initializeController();
+            var bePurchasePricingRuleCriteriaObject = new bePurchasePricingRuleCriteria(ctrl, $scope, $attrs);
+            bePurchasePricingRuleCriteriaObject.initializeController();
 
         },
         controllerAs: 'ctrl',
@@ -24,105 +23,91 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService) {
     };
 
 
-    function bePricingRuleExtraChargeSetting(ctrl, $scope, $attrs) {
-        var pricingRuleExtraChargeTemplateDirectiveAPI;
-        var carrierAccountDirectiveAPI;
+    function bePurchasePricingRuleCriteria(ctrl, $scope, $attrs) {
+        var suppliersWithZonesGroupsDirectiveAPI;
+        var directiveAppendixData;
         function initializeController() {
-            $scope.suppliers = [];
-            $scope.onCarrierAccountDirectiveReady = function (api) {
-                carrierAccountDirectiveAPI = api;
-                declareDirectiveAsReady()
+            $scope.purchasePricingRuleCriteriaTemplates = [];
+            $scope.onSuppliersWithZonesGroupsDirectiveReady = function (api) {
+                suppliersWithZonesGroupsDirectiveAPI = api;
+                if (directiveAppendixData != undefined) {
+                    tryLoadAppendixDirectives();
+                } else {
+                    $scope.suppliersWithZonesAppendixLoader;
+                    VRUIUtilsService.loadDirective($scope, suppliersWithZonesGroupsDirectiveAPI, $scope.suppliersWithZonesAppendixLoader);
+                }
             }
             $scope.onSelectionChanged = function () {
                 if (carrierAccountDirectiveAPI!=undefined)
                     $scope.suppliers = carrierAccountDirectiveAPI.getData();
             };
-            $scope.removeSupplier = function ( supplier) {
-                var index = UtilsService.getItemIndexByVal( $scope.suppliers, supplier.CarrierAccountId, 'CarrierAccountId');
-                $scope.suppliers.splice(index, 1);
-            };
-
-           
-
+            declareDirectiveAsReady();
         }
         function declareDirectiveAsReady() {
-            if (carrierAccountDirectiveAPI == undefined)
-                return;
-
             defineAPI();
         }
-
-
-        function getActionItem(dbAction) {
-
-            var actionItem = {
-                ActionId: $scope.actions.length + 1,
-
-                ConfigId: (dbAction != null) ? dbAction.ConfigId : $scope.selectedPricingRuleExtraChargeTemplate.TemplateConfigID,
-
-                Editor: (dbAction != null) ?
-                    UtilsService.getItemByVal($scope.pricingRuleExtraChargeTemplates, dbAction.ConfigId, "TemplateConfigID").Editor :
-                    $scope.selectedPricingRuleExtraChargeTemplate.Editor,
-
-                Data: (dbAction != null) ? dbAction : {},
-                Name: $scope.selectedPricingRuleExtraChargeTemplate.Name
-            };
-
-            actionItem.onPricingRuleExtraChargeTemplateDirectiveReady = function (api) {
-                actionItem.ActionDirectiveAPI = api;
-                actionItem.ActionDirectiveAPI.setData(actionItem.Data);
-
-                actionItem.Data = undefined;
-                actionItem.onPricingRuleExtraChargeTemplateDirectiveReady = undefined;
-            }
-            return actionItem;
-        }
-
         function defineAPI() {
             var api = {};
 
             api.getData = function () {
-                var obj = {
-                    $type: "TOne.WhS.BusinessEntity.Entities.PricingRuleExtraChargeSettings,TOne.WhS.BusinessEntity.Entities",
-                    Actions: getActions(),
-                }
+                var obj = suppliersWithZonesGroupsDirectiveAPI.getData();
+                obj.ConfigId = $scope.selectedSuppliersWithZonesStettingsTemplate.TemplateConfigID;
                 return obj;
             }
-            function getActions() {
-                var actionList = [];
-
-                angular.forEach($scope.actions, function (item) {
-                    var obj = item.ActionDirectiveAPI.getData();
-                    obj.ConfigId = item.ConfigId;
-                    actionList.push(obj);
-                });
-
-                return actionList;
-            }
             api.setData = function (settings) {
-                for (var i = 0; i < settings.Actions.length; i++) {
-                    var action = settings.Actions[i];
-                    for (var j = 0; j < $scope.pricingRuleExtraChargeTemplates.length; j++)
-                        if (action.ConfigId == $scope.pricingRuleExtraChargeTemplates[j].TemplateConfigID)
-                            action.Editor = $scope.pricingRuleExtraChargeTemplates[j].Editor;
-                    addAPIFunction(action);
-                    $scope.actions.push(action);
-                }
-                function addAPIFunction(obj) {
-                    obj.onPricingRuleExtraChargeTemplateDirectiveReady = function (api) {
-                        obj.ActionDirectiveAPI = api;
-                        obj.ActionDirectiveAPI.setData(obj);
-                        obj = undefined;
-                    }
-                }
+
             }
             api.load = function () {
-                return carrierAccountDirectiveAPI.load();     
+                return loadSuppliersWithZonesGroupsTemplates();
             }
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
+        function loadSuppliersWithZonesGroupsTemplates() {
+            $scope.suppliersWithZonesStettingsTemplates = [];
+            return WhS_BE_CarrierAccountAPIService.GetSuppliersWithZonesGroupsTemplates().then(function (response) {
+                angular.forEach(response, function (item) {
+                    $scope.suppliersWithZonesStettingsTemplates.push(item);
+                });
+            });
+        }
+        function tryLoadAppendixDirectives() {
+            var loadOperations = [];
+            var setDirectivesDataOperations = [];
+
+            if ($scope.selectedSuppliersWithZonesStettingsTemplate != undefined) {
+                if (suppliersWithZonesGroupsDirectiveAPI == undefined)
+                    return;
+
+                loadOperations.push(suppliersWithZonesGroupsDirectiveAPI.load);
+
+                setDirectivesDataOperations.push(setSuppliersWithZinesStettingsDirective);
+            }
+
+            UtilsService.waitMultipleAsyncOperations(loadOperations).then(function () {
+
+                setAppendixDirectives();
+
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.isGettingData = false;
+            });
+
+            function setAppendixDirectives() {
+                UtilsService.waitMultipleAsyncOperations(setDirectivesDataOperations).then(function () {
+                    directiveAppendixData = undefined;
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                }).finally(function () {
+                    $scope.isGettingData = false;
+                });
+            }
+            function setSuppliersWithZinesStettingsDirective() {
+                return suppliersWithZonesGroupsDirectiveAPI.setData(directiveAppendixData.SuppliersWithZones);
+            }
+        }
+        
 
         this.initializeController = initializeController;
     }

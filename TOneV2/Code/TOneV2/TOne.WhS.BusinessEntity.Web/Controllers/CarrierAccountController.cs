@@ -70,5 +70,12 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CarrierAccountManager manager = new CarrierAccountManager();
             return manager.UpdateCarrierAccount(carrierAccount);
         }
+        [HttpGet]
+        [Route("GetSuppliersWithZonesGroupsTemplates")]
+        public List<TemplateConfig> GetSuppliersWithZonesGroupsTemplates()
+        {
+            CarrierAccountManager manager = new CarrierAccountManager();
+            return manager.GetSuppliersWithZonesGroupsTemplates();
+        }
     }
 }

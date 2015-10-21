@@ -36,6 +36,10 @@
         function UpdateCarrierAccount(carrierAccountObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierAccount", "UpdateCarrierAccount"), carrierAccountObject);
         }
+        function GetSuppliersWithZonesGroupsTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierAccount", "GetSuppliersWithZonesGroupsTemplates"));
+        }
+
         return ({
             GetCarrierAccountsInfo: GetCarrierAccountsInfo,
             GetSupplierGroupTemplates: GetSupplierGroupTemplates,
@@ -43,7 +47,8 @@
             GetFilteredCarrierAccounts: GetFilteredCarrierAccounts,
             GetCarrierAccount: GetCarrierAccount,
             AddCarrierAccount: AddCarrierAccount,
-            UpdateCarrierAccount: UpdateCarrierAccount
+            UpdateCarrierAccount: UpdateCarrierAccount,
+            GetSuppliersWithZonesGroupsTemplates: GetSuppliersWithZonesGroupsTemplates
         });
     }
 
