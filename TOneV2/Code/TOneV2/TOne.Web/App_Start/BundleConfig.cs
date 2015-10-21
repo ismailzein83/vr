@@ -24,7 +24,8 @@ namespace TOne.Web
                 "~/Client/Modules/CDR", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/WhS_CodePreparation", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/WhS_BusinessEntity", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/WhS_SupplierPriceList", "*.js", true));
+                "~/Client/Modules/WhS_SupplierPriceList", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/WhS_Sales", "*.js", true));
         }
     }
 }
