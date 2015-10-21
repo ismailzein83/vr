@@ -41,15 +41,14 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Vanrise\Code\Vanrise.Common\bin\Debug\Vanrise.Common.dll</HintPath>
+    <Reference Include="Vanrise.Common">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Data">
-      <HintPath>..\..\..\..\Vanrise\Code\Vanrise.Data.SQL\bin\Debug\Vanrise.Data.dll</HintPath>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Data.SQL">
-      <HintPath>..\..\..\..\Vanrise\Code\Vanrise.Data.SQL\bin\Debug\Vanrise.Data.SQL.dll</HintPath>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
