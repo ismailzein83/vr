@@ -471,6 +471,10 @@
       <Project>{c483ccbc-de5f-4fe0-a837-24d7e5b60273}</Project>
       <Name>TOne.WhS.BusinessEntity.Data.SQL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.MainExtensions\TOne.WhS.BusinessEntity.MainExtensions.csproj">
+      <Project>{31d4e637-c2d3-49b2-ae0a-0658aeddd9dd}</Project>
+      <Name>TOne.WhS.BusinessEntity.MainExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Web\TOne.WhS.BusinessEntity.Web.csproj">
       <Project>{6f10d0c6-72aa-483c-9a10-bc78d053fc42}</Project>
       <Name>TOne.WhS.BusinessEntity.Web</Name>
